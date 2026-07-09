@@ -1,0 +1,552 @@
+# ResearchSpec PRD：面向 ARSU 的 Agent-Neutral Spec-Driven 论文写作框架
+
+## 0. 文档状态与事实源
+
+本文是 ResearchSpec 吸收 ARSU 前的需求级 PRD。它定义产品目标、核心用户、
+合同族职责、ARSU workflow 对齐要求、非目标和验收口径。
+
+本文不定义字段级 schema、validator 细节、CLI 参数形状或 adapter 具体写盘
+协议。这些内容应在后续 specs 或实现任务中单独落地。
+
+事实源：
+
+- ResearchSpec 项目：`/home/joshua/Workspace/Code/JavaScript/ResearchSpec`
+- ARSU 项目：`/home/joshua/Workspace/Code/Skill/academic-research-skills-universal`
+- ARS 上游 checkout：`/home/joshua/Workspace/Code/Skill/academic-research-skills-universal/vendor/ars`
+- Workflow-contract 设计输入：`docs/arsu_workflow_contract_design.md`
+- 架构方向输入：`docs/arch_design_proposal.md`
+- 项目级 agent 指令：`AGENTS.md`
+
+### 0.1 Current-State Policy
+
+ARSU-derived 内容不默认要求 current-state-only。
+
+上游 ARS 包含大量 version、history、changelog、migration、issue/PR 和
+schema-version 文本。ARSU 已经选择尊重上游设计。ResearchSpec 吸收 ARSU 时
+也应继承这个策略：
+
+- 不因为 ARSU-derived 文件包含历史或版本文本而使转换、验证或发布失败。
+- 可以把这些文本记录为 diagnostics 或 risk findings。
+- 不把广泛 current-only cleanup 作为默认转换目标。
+- ResearchSpec 自己编写的 contracts、wrappers、schemas、validators 和 adapter
+  指令仍应描述当前有效行为。
+
+### 0.2 旧模型替代说明
+
+早期轻量 Markdown-only 模型中的 `plan.md`、`draft-map.md`、`decisions.md`、
+`flows/`、`patches/` 不再作为 PRD 的目标合同结构。对应职责迁移到
+`workflow.yaml`、`state.yaml`、append-only ledgers、`changes/` 和
+`draft-patches/`。
+
+## 1. 产品定位
+
+ResearchSpec 是服务 ARSU 的 agent-neutral、spec-driven 论文写作合同框架。
+
+它的核心职责是把 ARSU 的科研、写作、审稿和 pipeline skills 放到同一套稳定
+文件合同之上，让不同 agent 可以通过文件协作，而不是依赖特定聊天上下文、
+Claude Code 运行假设或某个模型 API。
+
+一句话定义：
+
+> ResearchSpec is an agent-neutral, spec-driven framework layer for ARSU-powered
+> academic paper writing workflows.
+
+ResearchSpec 应成为：
+
+- ARSU-derived skill artifacts 的宿主与维护层。
+- 面向 `deep-research`、`academic-paper`、`academic-paper-reviewer`、
+  `academic-pipeline` 的统一合同框架。
+- 研究意图、来源、主张、文稿结构、workflow state、artifacts、gates、
+  decisions 和 patches 的文件化协议。
+- ARSU converter / update / validation 的产品边界。
+- 跨 agent、跨会话、跨工具目录的 handoff 基础设施。
+
+ResearchSpec 不再以“泛用超轻量科研合同初始化器”为主要目标。
+
+## 2. 用户与核心场景
+
+### 2.1 研究者
+
+研究者需要把论文写作过程中的研究问题、文献来源、主张边界、文稿结构、审稿
+反馈、修改决策和最终产物放到可审查的合同包中。
+
+ResearchSpec 对研究者的价值：
+
+- Agent 可以理解当前论文项目状态。
+- 高影响变更需要以 proposed change 或 human decision 形式出现。
+- 研究主张、来源和文稿产物之间可追踪。
+- 换 agent、换会话或恢复中断时，不丢失阶段状态。
+
+### 2.2 ARSU 维护者
+
+维护者需要把 ARSU 吸收到 ResearchSpec，并持续从 ARS upstream 生成、刷新和验证
+ARSU-derived 产物。
+
+ResearchSpec 对维护者的价值：
+
+- ARSU 产物由 converter 和验证规则维护，而不是长期手工复制。
+- 上游历史/version 文本可作为 diagnostics 处理，不阻断常规转换。
+- 每个 ARSU skill wrapper 都能声明需要哪些 contracts、读取哪些 artifacts、
+  可以写哪些 ledgers 或 patches。
+
+### 2.3 Agent Wrapper / Adapter 作者
+
+Wrapper 作者需要把 ARSU skills 安装到不同 agent 工具中，但不希望核心合同绑定
+Claude Code、Codex 或任何特定 runtime。
+
+ResearchSpec 对 wrapper 作者的价值：
+
+- 核心合同是文件协议。
+- Adapter 只负责渲染和写文件。
+- Skill wrapper 通过 contract preflight 获取最小必要上下文。
+- 产物通过 artifact registry、decision ledger 和 gate ledger 连接。
+
+### 2.4 跨会话 Handoff 使用者
+
+用户或 agent 可能从另一个会话、另一个工具或一个中断的 pipeline 继续工作。
+
+ResearchSpec 对 handoff 的价值：
+
+- `runs/current/state.yaml` 提供当前 run position。
+- `runs/current/artifact-registry.json` 提供已生成 artifact 的索引。
+- `runs/current/decision-ledger.jsonl` 和 `runs/current/gate-ledger.jsonl`
+  提供可恢复的决策和门禁记录。
+- `runs/current/handoff.md` 可作为渲染视图，但不是事实源。
+
+## 3. 产品需求
+
+### 3.1 Typed Contract Workspace
+
+ResearchSpec 必须创建并维护 typed file-contract workspace。
+
+需求：
+
+- Markdown 用于人类可读的研究意图、proposal、说明和 handoff。
+- YAML/JSON/JSONL 用于 machine-facing contracts、state、registry、ledger
+  和 patch payload。
+- Draft、review report、integrity report、figure、table、PDF 和 process summary
+  是 artifacts，不是研究意图事实源。
+- `handoff.md` 是渲染视图，不是可写事实源。
+
+### 3.2 ARSU Workflow Support
+
+ResearchSpec 必须支持 ARSU 的核心 workflow，而不是把 ARSU 当作旧合同模型上的
+附加插件。
+
+需求：
+
+- 支持 `academic-pipeline` 的 10-stage 主流程。
+- 支持 `deep-research` 的 6 个 phases 和 8 个 modes。
+- 支持 `academic-paper` 的 8 个 phases 和 11 个 modes。
+- 支持 `academic-paper-reviewer` 的 3 个 phases 和 6 个 modes。
+- 完整 matrix 以 `docs/arsu_workflow_contract_design.md` 为准。
+- ResearchSpec core 提供通用 contract/runtime primitives，不把某一条论文
+  pipeline 硬编码为所有项目唯一流程。
+
+### 3.3 Contract Preflight
+
+每个 converted ARSU skill wrapper 必须在执行前进行 ResearchSpec contract
+preflight。
+
+需求：
+
+- 定位当前项目的 `researchspec/`。
+- 读取 `researchspec/specs/workflow.yaml` 和
+  `researchspec/runs/current/state.yaml`。
+- 识别当前 skill、stage、phase、mode 和允许写入范围。
+- 只加载当前阶段需要的 contracts 和 artifact refs。
+- 在执行前检查 pending decisions 和 blocking gate entries。
+- 生成小而明确的 stage input packet，供 agent 进行语义工作。
+- 当 state 存在时，不允许 wrapper 从聊天上下文推断 stage truth。
+
+### 3.4 Artifact Registry
+
+ResearchSpec 必须提供 artifact registry 作为跨 skill 产物索引。
+
+需求：
+
+- 所有重要 ARSU 输出都应注册为 artifacts。
+- Registry 记录 artifact 的路径、类型、producer、stage/mode、校验信息和验证状态。
+- Draft、bibliography、synthesis、integrity report、review report、revision roadmap、
+  response to reviewers、formatted paper 和 process summary 都是 artifact。
+- 下游 skill 通过 registry 引用 artifacts，而不是猜测文件名或依赖聊天历史。
+
+### 3.5 Decision Ledger
+
+ResearchSpec 必须让 human decisions 成为一等运行记录。
+
+需求：
+
+- 高影响研究选择必须进入 `decision-ledger` 或 proposed change。
+- 典型高影响选择包括研究问题、目标产出、贡献范围、claim strength、稿件结构、
+  review-response strategy、limitations 和 gate override。
+- Agent 不应静默改变这些内容。
+- 已确认 decision 应可被后续 wrappers 读取，避免重复询问或违背人类决定。
+
+### 3.6 Gate Ledger
+
+ResearchSpec 必须区分 advisory feedback 和 blocking gates。
+
+需求：
+
+- Integrity、review、compliance 和 finalization 相关阻断性检查写入 `gate-ledger`。
+- 普通建议性评论不应伪装成 blocking gate。
+- Gate 记录应足以恢复当前 blocker、verdict 和后续动作。
+- Stage 2.5 pre-review integrity 与 Stage 4.5 final integrity 必须可被 pipeline
+  识别为不同 gate。
+
+### 3.7 Contract Patch
+
+ResearchSpec 必须使用 proposed contract patch 管理高影响合同变更。
+
+需求：
+
+- Agent 可以提出 contract patch，但不应直接改写核心 specs。
+- Contract patch 用于修改研究问题、scope、claim、manuscript structure、
+  target output、review-response strategy 或 accepted limitations。
+- Human 接受后，patch 才能进入 specs。
+- 拒绝或修改的 patch 应保留审查痕迹。
+
+### 3.8 Draft Patch
+
+ResearchSpec 必须为 manuscript revision 提供 draft patch 机制。
+
+需求：
+
+- Revision skill 输出应使用 `draft-patches/<patch-id>.json` 记录可审查的稿件修改。
+- Draft patch 应继承 ARS/ARSU 中有价值的 block/hash discipline。
+- 修改稿件正文和修改研究合同是两件事：正文 patch 不应绕过 contract patch。
+
+### 3.9 Adapter-Neutral Delivery
+
+ResearchSpec 必须保持 agent-neutral。
+
+需求：
+
+- Core contracts 不依赖 Claude Code、Codex、Cursor、Gemini CLI 或其他单一工具。
+- Tool adapters 只负责渲染和写入 skill/command/prompt 文件。
+- Adapter 不应调用 LLM API。
+- Adapter 不应把平台特定权限、hook 或上下文假设写进核心合同。
+
+### 3.10 Converter / Update / Validation
+
+ResearchSpec 必须最终拥有 ARSU-derived 产物的转换、刷新和验证入口。
+
+需求：
+
+- ARSU-derived artifacts 应由 converter-owned rules 生成。
+- Update 流程应能检测 generated output drift。
+- Validation 应检查合同块、wrapper preflight、artifact registration、ledger writes
+  和禁止写入范围。
+- 上游 version/history 文本只作为 diagnostics，不作为默认阻断项。
+
+## 4. 合同层需求
+
+ResearchSpec 默认合同空间：
+
+```text
+researchspec/
+  config.yaml
+
+  specs/
+    project.md
+    sources.yaml
+    claims.yaml
+    manuscript.yaml
+    workflow.yaml
+
+  runs/
+    current/
+      state.yaml
+      artifact-registry.json
+      decision-ledger.jsonl
+      gate-ledger.jsonl
+      handoff.md
+
+  changes/
+    <change-id>/
+      proposal.md
+      contract-patch.yaml
+      tasks.md
+
+  draft-patches/
+    <patch-id>.json
+```
+
+### 4.1 Project Spec
+
+`researchspec/specs/project.md` 描述研究意图、scope、目标产出、领域语境、
+全局约束和 human control points。
+
+需求：
+
+- 适合人类阅读和修改。
+- 被所有 ARSU skills 读取。
+- 高影响修改必须经 contract patch 或明确 human decision。
+
+### 4.2 Sources Spec
+
+`researchspec/specs/sources.yaml` 描述 source registry、citation keys、literature
+corpus、source roles、verification status 和 source provenance。
+
+需求：
+
+- 被 research、writing、integrity 和 review 阶段读取。
+- 可由 source importers、research phases 或 accepted patches 更新。
+- 不替代 Zotero 或其他文献管理器，只提供 agent 可消费的来源合同。
+
+### 4.3 Claims Spec
+
+`researchspec/specs/claims.yaml` 描述 claim IDs、support、strength、limits、
+wording constraints 和 do-not-claim 边界。
+
+需求：
+
+- 写作、审查、integrity 和 finalization 必须读取。
+- Agent 不得提升 claim strength 或扩大 scope，除非通过 accepted patch。
+- Review 和 synthesis 可以提出 claim patch。
+
+### 4.4 Manuscript Spec
+
+`researchspec/specs/manuscript.yaml` 描述 manuscript type、outline、section
+contracts、draft artifact refs、venue/format profile refs。
+
+需求：
+
+- 写作、revision、review 和 finalization 必须读取。
+- 稿件结构变化属于高影响变更。
+- 正文 artifact 不应替代 manuscript spec。
+
+### 4.5 Workflow Spec
+
+`researchspec/specs/workflow.yaml` 描述当前选择的 ARSU workflow、stage graph
+reference、entry point、mode choices 和 partial-entry 配置。
+
+需求：
+
+- 支持从 idea、sources、draft、review comments 或 finalization 进入。
+- 支持 `academic-pipeline` 作为 ARSU 默认 stage graph。
+- 不把 pipeline stage graph 写死为 ResearchSpec core 的唯一流程。
+
+### 4.6 Run State
+
+`researchspec/runs/current/state.yaml` 描述当前 run state、active stage、blockers、
+pending confirmations、resume target 和下一步恢复信息。
+
+需求：
+
+- 是 wrapper 判断当前执行位置的事实源。
+- 与 research specs 分离，避免 workflow 状态污染研究意图。
+- 每次 gate 或 stage transition 后应可恢复。
+
+### 4.7 Artifact Registry
+
+`researchspec/runs/current/artifact-registry.json` 描述所有关键 artifacts 的注册
+记录。
+
+需求：
+
+- 是跨 skill artifact 查找的事实源。
+- 支持 ARS handoff schemas 到 ResearchSpec artifacts 的映射。
+- 支持 hash/drift/check receipts 的后续 schema 化。
+
+### 4.8 Decision Ledger
+
+`researchspec/runs/current/decision-ledger.jsonl` 是 append-only human decision
+记录。
+
+需求：
+
+- 记录 branch choices、overrides、accepted limitations、review outcome 和关键确认。
+- 不作为散文式聊天记录。
+- 可被 pipeline resume、review、revision 和 process summary 使用。
+
+### 4.9 Gate Ledger
+
+`researchspec/runs/current/gate-ledger.jsonl` 是 append-only gate record。
+
+需求：
+
+- 记录 integrity、compliance、citation、claim、review 或 finalization gate。
+- 明确 blocking 与 advisory 的差异。
+- 支持 pipeline 阶段阻断和恢复。
+
+### 4.10 Handoff View
+
+`researchspec/runs/current/handoff.md` 是给人类和 agent 读取的渲染视图。
+
+需求：
+
+- 从 specs、state、registry 和 ledgers 渲染。
+- 不允许作为 runtime SSOT。
+- 不应被 wrapper 当作唯一可写状态。
+
+### 4.11 Changes
+
+`researchspec/changes/<change-id>/contract-patch.yaml` 与同目录 proposal/tasks
+描述 proposed contract changes。
+
+需求：
+
+- 用于人类审查高影响研究变更。
+- Accepted changes 才能进入 specs。
+- Rejected 或 modified changes 应保留足够审查痕迹。
+
+### 4.12 Draft Patches
+
+`researchspec/draft-patches/<patch-id>.json` 描述稿件正文修改。
+
+需求：
+
+- 支持 revision mode 和 response-to-reviewers workflow。
+- 与 contract patch 分离。
+- 保留 block/hash 级审查能力。
+
+## 5. ARSU Workflow 对齐需求
+
+完整 workflow-contract mapping 见 `docs/arsu_workflow_contract_design.md`。本 PRD
+只声明产品需求层面的对齐目标。
+
+### 5.1 Academic Pipeline
+
+ResearchSpec 必须支持 `academic-pipeline` 的 10-stage 主流程：
+
+1. Research
+2. Write
+3. Integrity
+4. Review
+5. Revise
+6. Re-review
+7. Re-revise
+8. Final Integrity
+9. Finalize
+10. Process Summary
+
+需求：
+
+- Stage 2 不得跳过 pre-review integrity 直接进入 review。
+- Revision 后不得直接 finalize，必须经过 final integrity。
+- Review/revision branch choices 必须进入 decision ledger。
+- Integrity 和 final integrity 必须进入 gate ledger。
+- Process summary 应从 artifact registry、decision ledger 和 gate ledger 生成。
+
+### 5.2 Deep Research
+
+ResearchSpec 必须支持 `deep-research` 的 Scoping、Investigation、Analysis、
+Composition、Review、Revision 六个 phases，以及 full、quick、review、
+lit-review、three-way-scan、fact-check、socratic、systematic-review 八个 modes。
+
+需求：
+
+- RQ Brief 和 Methodology Blueprint 进入 artifact registry，并可提出 project patch。
+- Bibliography 和 literature corpus 对齐 `sources.yaml`。
+- Synthesis Report 进入 artifact registry，并可提出 claims/project patch。
+- Fact-check 和 systematic-review 相关阻断发现可进入 gate ledger。
+
+### 5.3 Academic Paper
+
+ResearchSpec 必须支持 `academic-paper` 的 Config、Research、Architecture、
+Argumentation、Drafting、Citations、Abstract、Peer Review、Format 相关流程，以及
+full、outline-only、revision、abstract-only、lit-review、format-convert、
+citation-check、plan、revision-coach、disclosure、rebuttal-audit 十一个 modes。
+
+需求：
+
+- Paper Draft 作为 artifact 注册，并由 `manuscript.yaml` 引用。
+- Citation check 可写 advisory 或 blocking gate。
+- Revision mode 输出 draft patch、revised draft、apply report 和 response artifacts。
+- Format-convert 不应改变研究语义 specs。
+
+### 5.4 Academic Paper Reviewer
+
+ResearchSpec 必须支持 `academic-paper-reviewer` 的 Field Analysis、Panel Review、
+Editorial Synthesis 三个 phases，以及 full、re-review、quick、methodology-focus、
+guided、calibration 六个 modes。
+
+需求：
+
+- Reviewer skill 对 manuscript 内容保持 read-only。
+- Review report、Editorial Decision、Revision Roadmap 作为 artifacts 注册。
+- Review outcome 和 branch choice 进入 decision ledger。
+- Re-review 输出 verification review、R&R traceability 和 residual decision。
+
+### 5.5 ARS Handoff Schemas
+
+ResearchSpec 必须保留 ARS handoff schemas 的语义，但运行态事实源迁移到
+ResearchSpec contracts、registries 和 ledgers。
+
+需求：
+
+- RQ Brief 映射到 project spec 和 artifact registry。
+- Bibliography / literature corpus 映射到 sources spec。
+- Paper Draft 映射到 manuscript spec 和 artifact registry。
+- Integrity Report 映射到 gate ledger 和 artifact registry。
+- Review Report / Revision Roadmap 映射到 artifact registry、changes 和 draft patches。
+- Response to Reviewers 映射到 artifact registry 和 decision/gate ledgers。
+- Material Passport 拆分到 state、artifact registry、decision ledger 和 gate ledger。
+
+## 6. 非目标与约束
+
+ResearchSpec 不做：
+
+- 不调用 LLM API。
+- 不绑定 Claude Code、Codex、Cursor 或任何单一 agent runtime。
+- 不替代 Zotero、LaTeX、Quarto、Overleaf、Word 或论文编辑器。
+- 不做 web app、database-first research platform 或 citation manager。
+- 不默认清理 ARSU-derived 上游 history/version/changelog 文本。
+- 不把 ARS Material Passport 继续作为 ResearchSpec runtime SSOT。
+- 不让 `handoff.md`、draft、review report 或 integrity report 成为 research specs 的事实源。
+- 不在 PRD 中冻结字段级 schema、validator 行为或 CLI wire shape。
+
+关键约束：
+
+- Files are the interface。
+- Human decides, agent proposes。
+- High-impact research changes go through contract patch or explicit decision。
+- LLM 负责语义判断、写作、解释和策略；脚本负责 schema validation、hash、registry、
+  ledger append、gate transition 和 rendering。
+- Converter-owned output 优先于长期手工维护 generated artifacts。
+
+## 7. 验收标准与后续 Specs
+
+### 7.1 PRD 验收标准
+
+本 PRD 可作为下一阶段设计输入，当且仅当：
+
+- 产品定位明确为 ARSU-facing framework layer。
+- 合同族职责覆盖 specs、state、artifact registry、decision ledger、gate ledger、
+  changes 和 draft patches。
+- `academic-pipeline`、`deep-research`、`academic-paper`、
+  `academic-paper-reviewer` 的支持要求已在需求层声明。
+- Material Passport 不再是 ResearchSpec runtime SSOT。
+- ARSU-derived current-state cleanup 明确不是默认目标。
+- 旧轻量 Markdown-only 合同结构不再作为目标事实源。
+- 字段级 schema 留给后续 specs，没有在 PRD 中提前冻结。
+
+### 7.2 后续 Specs
+
+PRD 之后应拆出以下可实现 specs：
+
+1. ResearchSpec contract workspace layout and init/update behavior。
+2. `sources.yaml`、`claims.yaml`、`manuscript.yaml`、`workflow.yaml` 的 schema。
+3. `state.yaml` run-state schema。
+4. `artifact-registry.json` schema。
+5. `decision-ledger.jsonl` 与 `gate-ledger.jsonl` schema。
+6. `contract-patch.yaml` schema 与 human review flow。
+7. `draft-patches/<patch-id>.json` schema，继承 ARS revision patch discipline。
+8. ARSU wrapper contract preflight protocol。
+9. Converter changes，将 Contract Inputs / Contract Outputs / Writes Allowed 注入
+   ARSU-derived skill artifacts。
+10. Adapter-neutral skill delivery rules。
+
+### 7.3 实现优先级建议
+
+建议后续实现顺序：
+
+1. 固化 contract workspace layout。
+2. 实现最小 schemas 和 validators。
+3. 实现 artifact registry、decision ledger、gate ledger 的 append/read/render
+   primitives。
+4. 实现 wrapper preflight。
+5. 改造 ARSU converter，使生成产物带有 ResearchSpec contract blocks。
+6. 将 `academic-pipeline` 作为首个端到端验收路径。
