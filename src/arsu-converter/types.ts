@@ -1,0 +1,176 @@
+export interface FileRecord {
+  path: string;
+  category: string;
+  reason: string;
+}
+
+export interface SkillGroupInventory {
+  entry: string;
+  agents: string[];
+  references: string[];
+  templates: string[];
+  examples: string[];
+  scripts: string[];
+}
+
+export interface Inventory {
+  source_root: string;
+  source_commit: string;
+  skill_groups: Record<string, SkillGroupInventory>;
+  shared: FileRecord[];
+  excluded: FileRecord[];
+  needs_review: FileRecord[];
+}
+
+export interface Finding {
+  path: string;
+  line: number;
+  term: string;
+  category: string;
+}
+
+export interface DependencyRef {
+  source_path: string;
+  output_path: string;
+  kind: "shared" | "cross_skill" | "local";
+}
+
+export interface CopiedFile {
+  group: string;
+  source_path: string;
+  output_path: string;
+  transform_rule: string;
+  sha256: string;
+}
+
+export interface MissingDependency {
+  owner_group: string;
+  source_path: string;
+  referenced_from: string;
+  reason: string;
+}
+
+export interface SkillConversion {
+  name: string;
+  entry: string;
+  files: CopiedFile[];
+  dependency_copies: DependencyRef[];
+  findings: Finding[];
+  missing_dependencies: MissingDependency[];
+  needs_review: Array<Record<string, string | number>>;
+  contract_injection: ContractInjectionResult;
+}
+
+export interface SourceVersion {
+  root: string;
+  commit: string;
+  branch: string;
+  remote_url: string;
+  dirty: boolean;
+}
+
+export interface ValidationResult {
+  ok: boolean;
+  errors: string[];
+  warnings: string[];
+}
+
+export interface IdempotenceResult {
+  ok: boolean;
+  errors: string[];
+  drift_paths: string[];
+}
+
+export interface ContractProfile {
+  profile_id: string;
+  required_contracts: string[];
+  artifact_reads: string[];
+  writes_allowed: string[];
+  ledgers: string[];
+  notes: string[];
+  full_matrix_injection: false;
+}
+
+export interface ContractInjectionResult {
+  injected: boolean;
+  profile_id: string;
+  marker: string;
+}
+
+export interface ContractCompatibilityManifest {
+  schema_version: string;
+  compatibility_kind: string;
+  source: string;
+  output: string;
+  material_passport_policy: string;
+  skill_groups: Record<string, ContractProfile>;
+}
+
+export interface OutputFileRecord {
+  group: string;
+  source_path: string;
+  output_path: string;
+  transform_rule: string;
+  sha256: string;
+}
+
+export interface RiskFinding {
+  group: string;
+  path: string;
+  line: number;
+  category: string;
+  term: string;
+  source_reason: string;
+  blocking: boolean;
+}
+
+export interface ConversionResult {
+  source_root: string;
+  source_version: SourceVersion;
+  output_root: string;
+  skill_groups: Record<string, SkillConversion>;
+  inventory: Inventory;
+  contract_manifest: ContractCompatibilityManifest;
+  validation: ValidationResult | null;
+}
+
+export interface ConversionManifest {
+  converter_version: string;
+  output_kind: "final";
+  source_root: string;
+  output_root: string;
+  source_commit: string;
+  source_version: SourceVersion;
+  generated_at: string;
+  generated_groups: string[];
+  skill_groups: Record<string, {
+    entry: string;
+    files: OutputFileRecord[];
+    dependency_copies: DependencyRef[];
+    missing_dependencies: MissingDependency[];
+    risk_findings: RiskFinding[];
+    contract_injection: ContractInjectionResult;
+  }>;
+  output_files: OutputFileRecord[];
+  excluded: FileRecord[];
+  unclassified_files: FileRecord[];
+  risk_findings: RiskFinding[];
+  contract_compatibility: {
+    manifest_path: string;
+    compatibility_kind: string;
+    generated_groups: string[];
+    material_passport_policy: string;
+    full_matrix_injection: false;
+  };
+  validation_summary: ValidationResult;
+}
+
+export class ArsuConverterError extends Error {
+  constructor(
+    readonly code: string,
+    message: string,
+    readonly details: string[] = [],
+  ) {
+    super(message);
+  }
+}

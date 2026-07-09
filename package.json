@@ -9,6 +9,7 @@
   },
   "files": [
     "dist",
+    "skills",
     "README.md",
     "LICENSE"
   ],
@@ -16,7 +17,10 @@
     "build": "tsc -p tsconfig.json",
     "test": "tsc -p tsconfig.json && node --test \"dist/tests/**/*.test.js\"",
     "check": "tsc -p tsconfig.json",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "arsu:convert": "node dist/src/arsu-converter/cli.js convert",
+    "arsu:check": "node dist/src/arsu-converter/cli.js check",
+    "arsu:idempotence": "node dist/src/arsu-converter/cli.js idempotence"
   },
   "engines": {
     "node": ">=20.19.0"

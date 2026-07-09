@@ -1,0 +1,129 @@
+{
+  "schema_version": "0.1",
+  "compatibility_kind": "researchspec-preflight-v1",
+  "source": "vendor/ars",
+  "output": "skills/arsu",
+  "material_passport_policy": "compatibility_artifact_only_not_runtime_ssot",
+  "skill_groups": {
+    "academic-paper": {
+      "profile_id": "researchspec-preflight-v1",
+      "required_contracts": [
+        "researchspec/specs/workflow.yaml",
+        "researchspec/runs/current/state.yaml",
+        "researchspec/specs/project.md",
+        "researchspec/specs/sources.yaml",
+        "researchspec/specs/claims.yaml",
+        "researchspec/specs/manuscript.yaml"
+      ],
+      "artifact_reads": [
+        "researchspec/runs/current/artifact-registry.json"
+      ],
+      "writes_allowed": [
+        "artifact files declared by the current ARSU stage or mode",
+        "researchspec/changes/<change-id>/contract-patch.yaml for high-impact semantic proposals",
+        "researchspec/draft-patches/<patch-id>.json for manuscript text revisions"
+      ],
+      "ledgers": [
+        "researchspec/runs/current/decision-ledger.jsonl for human-confirmed decisions",
+        "researchspec/runs/current/gate-ledger.jsonl for validation and gate outcomes"
+      ],
+      "notes": [
+        "academic-paper uses the shared first-slice ResearchSpec preflight profile.",
+        "Load only stage/mode-relevant contracts into agent context.",
+        "Treat ARS Material Passport as an imported compatibility artifact, not runtime truth.",
+        "Full per-stage and per-mode matrix injection is intentionally deferred."
+      ],
+      "full_matrix_injection": false
+    },
+    "academic-paper-reviewer": {
+      "profile_id": "researchspec-preflight-v1",
+      "required_contracts": [
+        "researchspec/specs/workflow.yaml",
+        "researchspec/runs/current/state.yaml",
+        "researchspec/specs/project.md",
+        "researchspec/specs/sources.yaml",
+        "researchspec/specs/claims.yaml",
+        "researchspec/specs/manuscript.yaml"
+      ],
+      "artifact_reads": [
+        "researchspec/runs/current/artifact-registry.json"
+      ],
+      "writes_allowed": [
+        "artifact files declared by the current ARSU stage or mode",
+        "researchspec/changes/<change-id>/contract-patch.yaml for high-impact semantic proposals",
+        "researchspec/draft-patches/<patch-id>.json for manuscript text revisions"
+      ],
+      "ledgers": [
+        "researchspec/runs/current/decision-ledger.jsonl for human-confirmed decisions",
+        "researchspec/runs/current/gate-ledger.jsonl for validation and gate outcomes"
+      ],
+      "notes": [
+        "academic-paper-reviewer uses the shared first-slice ResearchSpec preflight profile.",
+        "Load only stage/mode-relevant contracts into agent context.",
+        "Treat ARS Material Passport as an imported compatibility artifact, not runtime truth.",
+        "Full per-stage and per-mode matrix injection is intentionally deferred."
+      ],
+      "full_matrix_injection": false
+    },
+    "academic-pipeline": {
+      "profile_id": "researchspec-preflight-v1",
+      "required_contracts": [
+        "researchspec/specs/workflow.yaml",
+        "researchspec/runs/current/state.yaml",
+        "researchspec/specs/project.md",
+        "researchspec/specs/sources.yaml",
+        "researchspec/specs/claims.yaml",
+        "researchspec/specs/manuscript.yaml"
+      ],
+      "artifact_reads": [
+        "researchspec/runs/current/artifact-registry.json"
+      ],
+      "writes_allowed": [
+        "artifact files declared by the current ARSU stage or mode",
+        "researchspec/changes/<change-id>/contract-patch.yaml for high-impact semantic proposals",
+        "researchspec/draft-patches/<patch-id>.json for manuscript text revisions"
+      ],
+      "ledgers": [
+        "researchspec/runs/current/decision-ledger.jsonl for human-confirmed decisions",
+        "researchspec/runs/current/gate-ledger.jsonl for validation and gate outcomes"
+      ],
+      "notes": [
+        "academic-pipeline uses the shared first-slice ResearchSpec preflight profile.",
+        "Load only stage/mode-relevant contracts into agent context.",
+        "Treat ARS Material Passport as an imported compatibility artifact, not runtime truth.",
+        "Full per-stage and per-mode matrix injection is intentionally deferred."
+      ],
+      "full_matrix_injection": false
+    },
+    "deep-research": {
+      "profile_id": "researchspec-preflight-v1",
+      "required_contracts": [
+        "researchspec/specs/workflow.yaml",
+        "researchspec/runs/current/state.yaml",
+        "researchspec/specs/project.md",
+        "researchspec/specs/sources.yaml",
+        "researchspec/specs/claims.yaml",
+        "researchspec/specs/manuscript.yaml"
+      ],
+      "artifact_reads": [
+        "researchspec/runs/current/artifact-registry.json"
+      ],
+      "writes_allowed": [
+        "artifact files declared by the current ARSU stage or mode",
+        "researchspec/changes/<change-id>/contract-patch.yaml for high-impact semantic proposals",
+        "researchspec/draft-patches/<patch-id>.json for manuscript text revisions"
+      ],
+      "ledgers": [
+        "researchspec/runs/current/decision-ledger.jsonl for human-confirmed decisions",
+        "researchspec/runs/current/gate-ledger.jsonl for validation and gate outcomes"
+      ],
+      "notes": [
+        "deep-research uses the shared first-slice ResearchSpec preflight profile.",
+        "Load only stage/mode-relevant contracts into agent context.",
+        "Treat ARS Material Passport as an imported compatibility artifact, not runtime truth.",
+        "Full per-stage and per-mode matrix injection is intentionally deferred."
+      ],
+      "full_matrix_injection": false
+    }
+  }
+}

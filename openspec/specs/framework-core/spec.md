@@ -1,4 +1,11 @@
-## ADDED Requirements
+## Purpose
+
+ResearchSpec provides a minimal TypeScript CLI framework for creating and
+checking local file-based contract workspaces. This capability covers the first
+framework slice: package scaffold, user-facing `init` / `status` / `check`
+commands, workspace discovery, and basic workspace validation.
+
+## Requirements
 
 ### Requirement: TypeScript CLI Project Scaffold
 

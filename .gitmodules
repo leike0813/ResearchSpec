@@ -1,0 +1,3 @@
+[submodule "vendor/ars"]
+	path = vendor/ars
+	url = https://github.com/Imbad0202/academic-research-skills
