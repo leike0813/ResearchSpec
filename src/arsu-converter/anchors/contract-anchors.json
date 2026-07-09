@@ -1,0 +1,749 @@
+{
+  "schema_version": "researchspec.arsu.contract-anchors.v0",
+  "upstream_source": "vendor/ars",
+  "audited_commit": "becfcc40c6e9e93c187cf4a088333f83373e002d",
+  "anchors": [
+    {
+      "id": "anchor.pipeline.skill.resume-from-passport",
+      "source_path": "academic-pipeline/SKILL.md",
+      "owner_skill": "academic-pipeline",
+      "contract_category": "material_passport_runtime_ssot",
+      "severity": "required",
+      "match_hints": {
+        "snippets": [
+          "Loads the Material Passport (Schema 9)",
+          "resume_from_passport=<hash>"
+        ],
+        "keywords": [
+          "pending_decision",
+          "reset_boundary"
+        ]
+      },
+      "replacement_intent": "Route resume state through ResearchSpec run state, decision ledger, and gate ledger; treat the ARS Material Passport boundary entry as a compatibility artifact.",
+      "future_template_id": "material-passport-resume-to-researchspec-runtime"
+    },
+    {
+      "id": "anchor.pipeline.skill.orchestrator-state-tracking",
+      "source_path": "academic-pipeline/SKILL.md",
+      "owner_skill": "academic-pipeline",
+      "contract_category": "material_passport_runtime_ssot",
+      "severity": "required",
+      "match_hints": {
+        "snippets": [
+          "state tracking via Material Passport",
+          "pipeline_orchestrator_agent"
+        ],
+        "keywords": [
+          "state_tracker_agent",
+          "integrity_verification_agent"
+        ]
+      },
+      "replacement_intent": "Make ResearchSpec workflow/state/registry/ledger contracts the runtime SSOT while preserving ARS stage graph semantics.",
+      "future_template_id": "pipeline-state-tracking-researchspec-runtime"
+    },
+    {
+      "id": "anchor.pipeline.skill.phase-boundary-enforcement",
+      "source_path": "academic-pipeline/SKILL.md",
+      "owner_skill": "academic-pipeline",
+      "contract_category": "phase_directory_boundaries",
+      "severity": "recommended",
+      "match_hints": {
+        "snippets": [
+          "Phase Boundary blocks on downstream Bucket A agents",
+          "scripts/check_pipeline_integrity.py"
+        ],
+        "keywords": [
+          "PreToolUse",
+          "write-scope guard"
+        ]
+      },
+      "replacement_intent": "Translate ARS phase directory fences into ResearchSpec contract input/output/write guidance and diagnostics instead of ARS hook assumptions.",
+      "future_template_id": "phase-boundary-to-contract-preflight"
+    },
+    {
+      "id": "anchor.pipeline.orchestrator.reset-boundary-ledger",
+      "source_path": "academic-pipeline/agents/pipeline_orchestrator_agent.md",
+      "owner_skill": "academic-pipeline",
+      "contract_category": "material_passport_runtime_ssot",
+      "severity": "required",
+      "match_hints": {
+        "headings": [
+          "Passport Reset Boundary (v3.6.3+, opt-in)"
+        ],
+        "snippets": [
+          "state_tracker` stages a new `kind: boundary` entry",
+          "[PASSPORT-RESET:"
+        ],
+        "keywords": [
+          "reset_boundary[]",
+          "sole machine-stable handoff anchor"
+        ]
+      },
+      "replacement_intent": "Move reset/resume lifecycle to ResearchSpec state and ledgers; retain PASSPORT-RESET tags only as imported compatibility evidence.",
+      "future_template_id": "reset-boundary-ledger-to-researchspec-state"
+    },
+    {
+      "id": "anchor.pipeline.orchestrator.schema-handoff-table",
+      "source_path": "academic-pipeline/agents/pipeline_orchestrator_agent.md",
+      "owner_skill": "academic-pipeline",
+      "contract_category": "handoff_artifacts",
+      "severity": "required",
+      "match_hints": {
+        "headings": [
+          "4. Transition Management"
+        ],
+        "snippets": [
+          "All artifacts must carry a Material Passport (Schema 9)",
+          "Stage 2.5 -> 3"
+        ],
+        "keywords": [
+          "Schema 5",
+          "Schema 7",
+          "Schema 8"
+        ]
+      },
+      "replacement_intent": "Map ARS schema handoffs to ResearchSpec artifacts, specs, registry entries, decision ledger entries, gate ledger entries, and draft patches.",
+      "future_template_id": "ars-schema-handoff-to-researchspec-contracts"
+    },
+    {
+      "id": "anchor.pipeline.orchestrator.revision-patch-toolchain",
+      "source_path": "academic-pipeline/agents/pipeline_orchestrator_agent.md",
+      "owner_skill": "academic-pipeline",
+      "contract_category": "revision_patch",
+      "severity": "required",
+      "match_hints": {
+        "snippets": [
+          "the writer's deliverable is a **patch document**",
+          "scripts/ars_anchorize_draft.py",
+          "scripts/ars_apply_revision_patch.py"
+        ],
+        "keywords": [
+          "revision_patch_round",
+          "apply report"
+        ]
+      },
+      "replacement_intent": "Route patch generation and application through ResearchSpec draft-patches and deterministic local helpers, not ARS script paths embedded in prompts.",
+      "future_template_id": "revision-patch-toolchain-to-researchspec-draft-patches"
+    },
+    {
+      "id": "anchor.pipeline.orchestrator.submission-package-gate",
+      "source_path": "academic-pipeline/agents/pipeline_orchestrator_agent.md",
+      "owner_skill": "academic-pipeline",
+      "contract_category": "integrity_gate",
+      "severity": "recommended",
+      "match_hints": {
+        "headings": [
+          "Submission-Package Terminal Gate (#394 slice 4 — Stage 5, post-formatter)"
+        ],
+        "snippets": [
+          "**Resolve the policy.** Read `terminal_policies.submission_package` from the Material Passport",
+          "scripts/verify_submission_package.py"
+        ],
+        "keywords": [
+          "gate",
+          "policy"
+        ]
+      },
+      "replacement_intent": "Move package gate policy selection and results into ResearchSpec gate ledger entries and artifact registry records.",
+      "future_template_id": "submission-package-gate-to-researchspec-gate-ledger"
+    },
+    {
+      "id": "anchor.pipeline.state-tracker.version-passport",
+      "source_path": "academic-pipeline/agents/state_tracker_agent.md",
+      "owner_skill": "academic-pipeline",
+      "contract_category": "artifact_provenance",
+      "severity": "recommended",
+      "match_hints": {
+        "snippets": [
+          "Every material artifact produced by the pipeline carries a version label",
+          "Material Passport (Schema 9 in `shared/handoff_schemas.md`)"
+        ],
+        "keywords": [
+          "version_label",
+          "current_version"
+        ]
+      },
+      "replacement_intent": "Store version labels, provenance, and verification state in ResearchSpec artifact registry and gate ledger projections.",
+      "future_template_id": "artifact-version-passport-to-registry"
+    },
+    {
+      "id": "anchor.pipeline.reference.passport-reset-protocol",
+      "source_path": "academic-pipeline/references/passport_as_reset_boundary.md",
+      "owner_skill": "academic-pipeline",
+      "contract_category": "material_passport_runtime_ssot",
+      "severity": "required",
+      "match_hints": {
+        "headings": [
+          "The reset boundary protocol"
+        ],
+        "snippets": [
+          "Material Passport ledger (`compliance_history[]` + new `reset_boundary` entries) is append-only",
+          "Reset tag is the sole machine-stable handoff"
+        ],
+        "keywords": [
+          "Schema 9",
+          "resume"
+        ]
+      },
+      "replacement_intent": "Replace reset-boundary SSOT claims with ResearchSpec state/ledger ownership while retaining ARS passport fields as compatibility payload.",
+      "future_template_id": "passport-reset-protocol-to-researchspec-ledgers"
+    },
+    {
+      "id": "anchor.shared.handoff.schema-convention",
+      "source_path": "shared/handoff_schemas.md",
+      "owner_skill": "shared",
+      "contract_category": "handoff_artifacts",
+      "severity": "required",
+      "match_hints": {
+        "snippets": [
+          "All schemas use Markdown-based structured output",
+          "HANDOFF_INCOMPLETE"
+        ],
+        "keywords": [
+          "validate required fields",
+          "handoff"
+        ]
+      },
+      "replacement_intent": "Keep ARS schema payloads as artifacts but make ResearchSpec YAML/JSON/JSONL contracts the stable runtime interfaces.",
+      "future_template_id": "handoff-schema-convention-to-researchspec-contracts"
+    },
+    {
+      "id": "anchor.shared.handoff.schema9-material-passport",
+      "source_path": "shared/handoff_schemas.md",
+      "owner_skill": "shared",
+      "contract_category": "material_passport_runtime_ssot",
+      "severity": "required",
+      "match_hints": {
+        "headings": [
+          "Schema 9: Material Passport (cross-stage metadata)",
+          "Material Passport"
+        ],
+        "snippets": [
+          "Schema 9 gains an append-only `reset_boundary[]` ledger",
+          "audit_artifact[]` ledger"
+        ],
+        "keywords": [
+          "compliance_history",
+          "slr_lineage"
+        ]
+      },
+      "replacement_intent": "Split Material Passport responsibilities across ResearchSpec state, artifact registry, decision ledger, and gate ledger.",
+      "future_template_id": "material-passport-schema9-to-researchspec-runtime"
+    },
+    {
+      "id": "anchor.shared.handoff.schema11-commitments",
+      "source_path": "shared/handoff_schemas.md",
+      "owner_skill": "shared",
+      "contract_category": "commitment_ledger",
+      "severity": "required",
+      "match_hints": {
+        "headings": [
+          "Schema 11: R&R Traceability Matrix"
+        ],
+        "snippets": [
+          "Schema 11 is carried forward via Material Passport",
+          "commitment_extracted"
+        ],
+        "keywords": [
+          "fulfillment_status",
+          "Response to Reviewers"
+        ]
+      },
+      "replacement_intent": "Project reviewer commitments into ResearchSpec changes, draft patches, artifact registry records, and decision ledger entries.",
+      "future_template_id": "schema11-commitments-to-researchspec-change-patches"
+    },
+    {
+      "id": "anchor.shared.handoff.invariants",
+      "source_path": "shared/handoff_schemas.md",
+      "owner_skill": "shared",
+      "contract_category": "gate_policy",
+      "severity": "required",
+      "match_hints": {
+        "headings": [
+          "Validation Rules"
+        ],
+        "snippets": [
+          "Each handoff artifact MUST carry a Material Passport (Schema 9)",
+          "Passport freshness"
+        ],
+        "keywords": [
+          "Integrity gating",
+          "STALE"
+        ]
+      },
+      "replacement_intent": "Move cross-schema validation and freshness checks to ResearchSpec validators and gate ledger entries.",
+      "future_template_id": "cross-schema-rules-to-researchspec-validator-gates"
+    },
+    {
+      "id": "anchor.paper.skill.material-passport-state",
+      "source_path": "academic-paper/SKILL.md",
+      "owner_skill": "academic-paper",
+      "contract_category": "material_passport_runtime_ssot",
+      "severity": "required",
+      "match_hints": {
+        "snippets": [
+          "state tracking via Material Passport",
+          "academic-paper full"
+        ],
+        "keywords": [
+          "pipeline_orchestrator_agent",
+          "Mode A"
+        ]
+      },
+      "replacement_intent": "Make academic-paper read ResearchSpec state and contract inputs instead of treating Material Passport as the active state carrier.",
+      "future_template_id": "academic-paper-state-to-researchspec-runtime"
+    },
+    {
+      "id": "anchor.paper.skill.generator-evaluator-contract",
+      "source_path": "academic-paper/SKILL.md",
+      "owner_skill": "academic-paper",
+      "contract_category": "generator_evaluator_contract",
+      "severity": "required",
+      "match_hints": {
+        "headings": [
+          "v3.6.6 Generator-Evaluator Contract Protocol"
+        ],
+        "snippets": [
+          "Schema 13.1 since v3.6.6",
+          "writer_full` contract JSON"
+        ],
+        "keywords": [
+          "phase4a_output",
+          "phase6a_output"
+        ]
+      },
+      "replacement_intent": "Retain generator/evaluator semantics but source contract JSON from ResearchSpec-compatible manifests and artifact registry references.",
+      "future_template_id": "generator-evaluator-contract-to-researchspec-runtime"
+    },
+    {
+      "id": "anchor.paper.skill.rebuttal-audit-boundary",
+      "source_path": "academic-paper/SKILL.md",
+      "owner_skill": "academic-paper",
+      "contract_category": "commitment_ledger",
+      "severity": "recommended",
+      "match_hints": {
+        "snippets": [
+          "**MUST NOT** emit a Schema 11 `commitment_extracted` ledger",
+          "**MUST NOT** write to the Material Passport"
+        ],
+        "keywords": [
+          "rebuttal-audit",
+          "advisory QA report"
+        ]
+      },
+      "replacement_intent": "Represent standalone rebuttal audit outputs as advisory artifacts without mutating ResearchSpec ledgers unless a human accepts a contract change.",
+      "future_template_id": "rebuttal-audit-advisory-artifact"
+    },
+    {
+      "id": "anchor.paper.skill.revision-patch-mode",
+      "source_path": "academic-paper/SKILL.md",
+      "owner_skill": "academic-paper",
+      "contract_category": "revision_patch",
+      "severity": "required",
+      "match_hints": {
+        "snippets": [
+          "**Anchorize** the draft (`scripts/ars_anchorize_draft.py`",
+          "The writer emits a patch document"
+        ],
+        "keywords": [
+          "shared/contracts/patch/revision_patch.schema.json",
+          "apply report"
+        ]
+      },
+      "replacement_intent": "Map ARS patch mode into ResearchSpec draft-patches with block/hash traceability and explicit application decisions.",
+      "future_template_id": "academic-paper-revision-patch-to-researchspec-draft-patches"
+    },
+    {
+      "id": "anchor.paper.draft-writer.phase-boundary",
+      "source_path": "academic-paper/agents/draft_writer_agent.md",
+      "owner_skill": "academic-paper",
+      "contract_category": "phase_directory_boundaries",
+      "severity": "recommended",
+      "match_hints": {
+        "snippets": [
+          "You MAY READ files in upstream phases",
+          "scripts/check_pipeline_integrity.py"
+        ],
+        "keywords": [
+          "Phase 4 invocation",
+          "Phase 6 invocation"
+        ]
+      },
+      "replacement_intent": "Replace phase directory permissions with ResearchSpec Contract Inputs, Contract Outputs, and Writes Allowed guidance.",
+      "future_template_id": "paper-agent-phase-boundary-to-contract-io"
+    },
+    {
+      "id": "anchor.paper.draft-writer.claim-intent-passport",
+      "source_path": "academic-paper/agents/draft_writer_agent.md",
+      "owner_skill": "academic-paper",
+      "contract_category": "claims_contract",
+      "severity": "required",
+      "match_hints": {
+        "snippets": [
+          "append ONE `claim_intent_manifests[]` entry to the Material Passport",
+          "substantive claims the draft intends to make"
+        ],
+        "keywords": [
+          "planned_refs",
+          "planned_experiment_ids"
+        ]
+      },
+      "replacement_intent": "Project claim intents into ResearchSpec claims.yaml and artifact/ledger records rather than appending to Material Passport.",
+      "future_template_id": "claim-intent-manifest-to-researchspec-claims"
+    },
+    {
+      "id": "anchor.paper.draft-writer.patch-emission",
+      "source_path": "academic-paper/agents/draft_writer_agent.md",
+      "owner_skill": "academic-paper",
+      "contract_category": "revision_patch",
+      "severity": "required",
+      "match_hints": {
+        "snippets": [
+          "Write the patch as a sidecar file",
+          "You emit; you never apply"
+        ],
+        "keywords": [
+          "revision_patch_round",
+          "roadmap_item_ids"
+        ]
+      },
+      "replacement_intent": "Emit ResearchSpec draft-patches with explicit patch ids, block preconditions, roadmap traceability, and apply separation.",
+      "future_template_id": "draft-writer-patch-emission-to-researchspec-draft-patch"
+    },
+    {
+      "id": "anchor.paper.revision-coach.commitment-ledger",
+      "source_path": "academic-paper/agents/revision_coach_agent.md",
+      "owner_skill": "academic-paper",
+      "contract_category": "commitment_ledger",
+      "severity": "required",
+      "match_hints": {
+        "headings": [
+          "Pipeline Output: Schema 11 Commitment Ledger (Kong A1 / v3.11)"
+        ],
+        "snippets": [
+          "write the commitment list into `commitment_extracted` field",
+          "not user-facing markdown"
+        ],
+        "keywords": [
+          "Schema 11",
+          "re_review_mode_protocol"
+        ]
+      },
+      "replacement_intent": "Route extracted reviewer commitments into ResearchSpec change/draft patch structures and registry artifacts.",
+      "future_template_id": "revision-coach-commitments-to-researchspec-changes"
+    },
+    {
+      "id": "anchor.paper.literature-strategist.corpus-passport",
+      "source_path": "academic-paper/agents/literature_strategist_agent.md",
+      "owner_skill": "academic-paper",
+      "contract_category": "sources_contract",
+      "severity": "required",
+      "match_hints": {
+        "headings": [
+          "Reading `literature_corpus[]` from Material Passport (v3.6.5+)"
+        ],
+        "snippets": [
+          "When the input Material Passport carries a non-empty `literature_corpus[]`",
+          "MUST NOT mutate or fabricate them"
+        ],
+        "keywords": [
+          "source acquisition",
+          "source verification"
+        ]
+      },
+      "replacement_intent": "Read literature corpus from ResearchSpec sources.yaml and artifact registry, preserving trust-chain fields as source metadata.",
+      "future_template_id": "literature-corpus-passport-to-researchspec-sources"
+    },
+    {
+      "id": "anchor.paper.revision-patch-reference",
+      "source_path": "academic-paper/references/revision_patch_protocol.md",
+      "owner_skill": "academic-paper",
+      "contract_category": "revision_patch",
+      "severity": "required",
+      "match_hints": {
+        "snippets": [
+          "Toolchain:",
+          "The apply report shares the revised draft's lifecycle"
+        ],
+        "keywords": [
+          "ars_anchorize_draft.py",
+          "ars_apply_revision_patch.py"
+        ]
+      },
+      "replacement_intent": "Replace ARS script-specific patch workflow with ResearchSpec draft patch protocol and local helper ownership.",
+      "future_template_id": "revision-patch-protocol-to-researchspec"
+    },
+    {
+      "id": "anchor.reviewer.skill.rereview-schema11",
+      "source_path": "academic-paper-reviewer/SKILL.md",
+      "owner_skill": "academic-paper-reviewer",
+      "contract_category": "commitment_ledger",
+      "severity": "required",
+      "match_hints": {
+        "snippets": [
+          "R&R Traceability Matrix (Schema 11)",
+          "Author's Claim + Verified? columns"
+        ],
+        "keywords": [
+          "re-review",
+          "Pipeline Stage 3'"
+        ]
+      },
+      "replacement_intent": "Read re-review traceability from ResearchSpec artifacts/changes/draft patches rather than Material Passport-carried Schema 11 alone.",
+      "future_template_id": "reviewer-rereview-schema11-to-researchspec"
+    },
+    {
+      "id": "anchor.reviewer.skill.sprint-contract",
+      "source_path": "academic-paper-reviewer/SKILL.md",
+      "owner_skill": "academic-paper-reviewer",
+      "contract_category": "sprint_contract",
+      "severity": "required",
+      "match_hints": {
+        "snippets": [
+          "Schema 13 sprint contract",
+          "Validator: `scripts/check_sprint_contract.py`"
+        ],
+        "keywords": [
+          "panel_size",
+          "acceptance_dimensions"
+        ]
+      },
+      "replacement_intent": "Keep sprint contract semantics but source and register contract JSON through ResearchSpec artifacts, not ARS script-bound assumptions.",
+      "future_template_id": "reviewer-sprint-contract-to-researchspec-artifact"
+    },
+    {
+      "id": "anchor.reviewer.agent.sprint-contract-phase-model",
+      "source_path": "academic-paper-reviewer/agents/domain_reviewer_agent.md",
+      "owner_skill": "academic-paper-reviewer",
+      "contract_category": "sprint_contract",
+      "severity": "recommended",
+      "match_hints": {
+        "snippets": [
+          "You operate in two phases when invoked under a sprint contract",
+          "A sprint contract (JSON) under `## Contract`"
+        ],
+        "keywords": [
+          "phase1_output",
+          "Phase 2"
+        ]
+      },
+      "replacement_intent": "Inject ResearchSpec-aware sprint contract input/output guidance into reviewer agent phase prompts.",
+      "future_template_id": "reviewer-agent-sprint-phases-to-contract-io"
+    },
+    {
+      "id": "anchor.reviewer.reference.rereview-commitment-verification",
+      "source_path": "academic-paper-reviewer/references/re_review_mode_protocol.md",
+      "owner_skill": "academic-paper-reviewer",
+      "contract_category": "commitment_ledger",
+      "severity": "required",
+      "match_hints": {
+        "snippets": [
+          "Commitment Ledger Verification",
+          "Response to Reviewers (Schema 8)"
+        ],
+        "keywords": [
+          "fulfillment_status",
+          "COMMITMENT_GAP"
+        ]
+      },
+      "replacement_intent": "Verify reviewer commitments against ResearchSpec draft patches, revised draft artifacts, and response artifacts.",
+      "future_template_id": "rereview-commitment-verification-to-researchspec"
+    },
+    {
+      "id": "anchor.reviewer.reference.sprint-contract-protocol",
+      "source_path": "academic-paper-reviewer/references/sprint_contract_protocol.md",
+      "owner_skill": "academic-paper-reviewer",
+      "contract_category": "sprint_contract",
+      "severity": "required",
+      "match_hints": {
+        "snippets": [
+          "A reviewer sprint contract is a machine-checkable pre-registered acceptance criterion",
+          "Panel cardinality invariant"
+        ],
+        "keywords": [
+          "phase1_lint_failed",
+          "phase2_lint_failed"
+        ]
+      },
+      "replacement_intent": "Register sprint contract baselines and phase outputs as ResearchSpec artifacts with deterministic diagnostics.",
+      "future_template_id": "sprint-contract-protocol-to-researchspec-artifacts"
+    },
+    {
+      "id": "anchor.deep.skill.material-passport-state",
+      "source_path": "deep-research/SKILL.md",
+      "owner_skill": "deep-research",
+      "contract_category": "material_passport_runtime_ssot",
+      "severity": "required",
+      "match_hints": {
+        "snippets": [
+          "state tracking via Material Passport",
+          "pipeline_orchestrator_agent"
+        ],
+        "keywords": [
+          "Mode A",
+          "handoff"
+        ]
+      },
+      "replacement_intent": "Make deep-research consume ResearchSpec project/workflow/state contracts and register output artifacts instead of relying on Material Passport state.",
+      "future_template_id": "deep-research-state-to-researchspec-runtime"
+    },
+    {
+      "id": "anchor.deep.agent.phase-boundary",
+      "source_path": "deep-research/agents/bibliography_agent.md",
+      "owner_skill": "deep-research",
+      "contract_category": "phase_directory_boundaries",
+      "severity": "recommended",
+      "match_hints": {
+        "snippets": [
+          "You MAY READ files in `phase1_*/`",
+          "scripts/check_pipeline_integrity.py"
+        ],
+        "keywords": [
+          "phase2",
+          "write-scope guard"
+        ]
+      },
+      "replacement_intent": "Convert deep-research phase directory fences into ResearchSpec per-phase Contract Inputs/Outputs/Writes Allowed blocks.",
+      "future_template_id": "deep-research-phase-boundary-to-contract-io"
+    },
+    {
+      "id": "anchor.deep.bibliography.corpus-passport",
+      "source_path": "deep-research/agents/bibliography_agent.md",
+      "owner_skill": "deep-research",
+      "contract_category": "sources_contract",
+      "severity": "required",
+      "match_hints": {
+        "headings": [
+          "Reading `literature_corpus[]` from Material Passport (v3.6.5+)"
+        ],
+        "snippets": [
+          "When the input Material Passport carries a non-empty `literature_corpus[]`",
+          "Schema 9 `literature_corpus[]` entries carry seven trust-chain fields"
+        ],
+        "keywords": [
+          "PRE-SCREENED",
+          "trust-chain"
+        ]
+      },
+      "replacement_intent": "Map literature corpus reads to ResearchSpec sources.yaml, preserving trust-chain metadata.",
+      "future_template_id": "deep-bibliography-corpus-to-researchspec-sources"
+    },
+    {
+      "id": "anchor.deep.synthesis.claim-intent-passport",
+      "source_path": "deep-research/agents/synthesis_agent.md",
+      "owner_skill": "deep-research",
+      "contract_category": "claims_contract",
+      "severity": "required",
+      "match_hints": {
+        "snippets": [
+          "append ONE `claim_intent_manifests[]` entry to the Material Passport",
+          "substantive claims the synthesis intends to make"
+        ],
+        "keywords": [
+          "planned_refs",
+          "planned_experiment_ids"
+        ]
+      },
+      "replacement_intent": "Route synthesis claim intents into ResearchSpec claims and proposed contract patches.",
+      "future_template_id": "deep-synthesis-claims-to-researchspec-claims"
+    },
+    {
+      "id": "anchor.deep.timeline.sidecar-runtime",
+      "source_path": "deep-research/agents/timeline_extraction_agent.md",
+      "owner_skill": "deep-research",
+      "contract_category": "artifact_provenance",
+      "severity": "recommended",
+      "match_hints": {
+        "snippets": [
+          "`phase2_investigation/timeline.yaml`",
+          "shared/contracts/passport/version_records.schema.json"
+        ],
+        "keywords": [
+          "citation_provenance",
+          "version_records"
+        ]
+      },
+      "replacement_intent": "Register timeline, citation provenance, and version sidecars as ResearchSpec artifacts with source/claim links.",
+      "future_template_id": "deep-timeline-sidecars-to-artifact-registry"
+    },
+    {
+      "id": "anchor.shared.compliance.runtime-boundary",
+      "source_path": "shared/compliance_checkpoint_protocol.md",
+      "owner_skill": "shared",
+      "contract_category": "decision_ledger",
+      "severity": "recommended",
+      "match_hints": {
+        "headings": [
+          "Override Ladder (3-round friction)"
+        ],
+        "snippets": [
+          "This ladder is enforced at **runtime by `compliance_agent`**",
+          "compliance_history[]"
+        ],
+        "keywords": [
+          "Schema 12",
+          "user_override"
+        ]
+      },
+      "replacement_intent": "Move compliance override decisions into ResearchSpec decision ledger while preserving Schema 12 reports as artifacts.",
+      "future_template_id": "compliance-override-to-decision-ledger"
+    },
+    {
+      "id": "anchor.shared.ground-truth-isolation",
+      "source_path": "shared/ground_truth_isolation_pattern.md",
+      "owner_skill": "shared",
+      "contract_category": "integrity_gate",
+      "severity": "recommended",
+      "match_hints": {
+        "snippets": [
+          "chain must remain traceable through the Material Passport",
+          "Only a passed integrity gate with a verified Material Passport"
+        ],
+        "keywords": [
+          "verified_only",
+          "integrity gate"
+        ]
+      },
+      "replacement_intent": "Represent data access level and verified-only gates through ResearchSpec workflow/gate contracts.",
+      "future_template_id": "ground-truth-isolation-to-researchspec-gates"
+    },
+    {
+      "id": "anchor.shared.style-profile-carry",
+      "source_path": "shared/style_calibration_protocol.md",
+      "owner_skill": "shared",
+      "contract_category": "artifact_provenance",
+      "severity": "diagnostic",
+      "match_hints": {
+        "snippets": [
+          "Pipeline carry",
+          "Material Passport carries the Style Profile across all stages"
+        ],
+        "keywords": [
+          "Style Profile",
+          "Schema 10"
+        ]
+      },
+      "replacement_intent": "Register style profiles as ResearchSpec artifacts and manuscript constraints rather than passport-carried metadata.",
+      "future_template_id": "style-profile-to-researchspec-artifact"
+    },
+    {
+      "id": "anchor.shared.artifact-reproducibility-passport",
+      "source_path": "shared/artifact_reproducibility_pattern.md",
+      "owner_skill": "shared",
+      "contract_category": "artifact_provenance",
+      "severity": "diagnostic",
+      "match_hints": {
+        "snippets": [
+          "Material Passport (Schema 9) captures WHO",
+          "The block lives as an optional child of the Material Passport"
+        ],
+        "keywords": [
+          "repro_lock",
+          "integrity gate"
+        ]
+      },
+      "replacement_intent": "Project reproducibility locks to ResearchSpec artifact registry metadata and diagnostics.",
+      "future_template_id": "repro-lock-to-artifact-registry"
+    }
+  ]
+}

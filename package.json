@@ -20,7 +20,9 @@
     "lint": "eslint .",
     "arsu:convert": "node dist/src/arsu-converter/cli.js convert",
     "arsu:check": "node dist/src/arsu-converter/cli.js check",
-    "arsu:idempotence": "node dist/src/arsu-converter/cli.js idempotence"
+    "arsu:idempotence": "node dist/src/arsu-converter/cli.js idempotence",
+    "arsu:anchors:manifest": "node dist/src/arsu-converter/anchors/generate.js",
+    "arsu:anchors:check": "node dist/src/arsu-converter/anchors/check.js"
   },
   "engines": {
     "node": ">=20.19.0"
