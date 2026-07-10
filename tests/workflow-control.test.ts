@@ -5,11 +5,11 @@ import path from "node:path";
 import { test } from "node:test";
 import { stringify } from "yaml";
 
+import { executeArtifactSubmit, planArtifactSubmit } from "../src/core/runtime/artifact-submit.js";
 import { buildWorkflowInstructions, evaluateWorkflowControl } from "../src/core/runtime/workflow-control.js";
 import { runWorkspaceChecks } from "../src/core/validation/check.js";
 import { getWorkspaceEntries } from "../src/core/workspace/layout.js";
 import { loadWorkspaceSnapshot } from "../src/core/workspace/snapshot.js";
-import { sha256 } from "../src/core/workspace/write-plan.js";
 import { ARSU_RESEARCH_SLICE_WORKFLOW } from "../src/core/workflow/profiles/arsu-research-slice.js";
 
 void test("research slice exposes a deterministic read-only work-item frontier", async () => {
@@ -45,7 +45,10 @@ void test("research slice exposes a deterministic read-only work-item frontier",
       assert.match(instruction.packet.template, /Schema 1: RQ Brief/);
       assert.equal(instruction.packet.context, null);
       assert.equal(instruction.packet.validation.profile, "research-artifact");
-      assert.equal(instruction.packet.completion.submit_available, false);
+      assert.equal(instruction.packet.completion.submit_available, true);
+      assert.equal(instruction.packet.completion.submit?.selector, "work:rq-brief");
+      assert.equal(instruction.packet.completion.submit?.candidate_path, instruction.packet.output.resolved_path);
+      assert.equal(instruction.packet.completion.submit?.updates_state, false);
       assert.deepEqual(instruction.packet.unlocks, ["bibliography"]);
       assert.deepEqual(instruction.packet.allowed_writes, ["output_artifact", "contract_patch"]);
     }
@@ -64,15 +67,7 @@ void test("registered and hash-matched output completes one item and unlocks the
     const outputPath = path.join(workspace, "runs/current/artifacts/rq-brief.md");
     const content = "# RQ Brief\n";
     await writeFile(outputPath, content, "utf8");
-    await writeRegistry(workspace, [{
-      artifact_id: "A-rq-brief",
-      artifact_type: "rq_brief",
-      work_item_id: "rq-brief",
-      path: "researchspec/runs/current/artifacts/rq-brief.md",
-      sha256: sha256(content),
-      status: "candidate",
-      verification_state: "verified",
-    }]);
+    await submitWorkItem(workspace, "rq-brief");
 
     let snapshot = await loadWorkspaceSnapshot(workspace);
     let control = await evaluateWorkflowControl(snapshot);
@@ -121,16 +116,13 @@ void test("a completed slice reports a transition boundary without declaring a t
   const root = await createWorkspace("arsu-research-slice");
   try {
     const workspace = path.join(root, "researchspec");
-    const artifacts: Record<string, unknown>[] = [];
+    const dependencyArtifactIds: string[] = [];
     for (const node of ARSU_RESEARCH_SLICE_WORKFLOW.work_items) {
       const content = `# ${node.title}\n`;
       await writeFile(path.join(workspace, node.output.workspace_path), content, "utf8");
-      artifacts.push({
-        artifact_id: `A-${node.id}`, artifact_type: node.output.artifact_type, work_item_id: node.id,
-        path: `researchspec/${node.output.workspace_path}`, sha256: sha256(content), status: "candidate", verification_state: "verified",
-      });
+      const submittedArtifactId = await submitWorkItem(workspace, node.id, dependencyArtifactIds.slice(-1));
+      dependencyArtifactIds.push(submittedArtifactId);
     }
-    await writeRegistry(workspace, artifacts);
     const snapshot = await loadWorkspaceSnapshot(workspace);
     const control = await evaluateWorkflowControl(snapshot);
     assert.equal(snapshot.workflow?.terminal_stage_ids.length, 0);
@@ -182,11 +174,7 @@ void test("completion gate IDs are mandatory additional completion evidence", as
 
     const content = "# RQ Brief\n";
     await writeFile(path.join(workspace, "runs/current/artifacts/rq-brief.md"), content, "utf8");
-    await writeRegistry(workspace, [{
-      artifact_id: "A-rq-brief", artifact_type: "rq_brief", work_item_id: "rq-brief",
-      path: "researchspec/runs/current/artifacts/rq-brief.md", sha256: sha256(content),
-      status: "candidate", verification_state: "verified",
-    }]);
+    await submitWorkItem(workspace, "rq-brief");
 
     let control = await evaluateWorkflowControl(await loadWorkspaceSnapshot(workspace));
     assert.equal(control.work_items[0]?.state, "blocked");
@@ -236,6 +224,14 @@ async function createWorkspace(profile: "arsu-paper" | "arsu-research-slice"): P
   return root;
 }
 
-async function writeRegistry(workspace: string, artifacts: Record<string, unknown>[]): Promise<void> {
-  await writeFile(path.join(workspace, "runs/current/artifact-registry.json"), `${JSON.stringify({ schema_version: "0.1", run_id: "current", artifacts }, null, 2)}\n`, "utf8");
+async function submitWorkItem(workspace: string, workItemId: string, dependencyArtifactIds: string[] = []): Promise<string> {
+  const plan = await planArtifactSubmit({
+    snapshot: await loadWorkspaceSnapshot(workspace),
+    selector: `work:${workItemId}`,
+    payload: { schema_version: "1", dependency_artifact_ids: dependencyArtifactIds },
+    actor: { kind: "agent", name: "deep-research" },
+    now: "2026-07-10T00:00:00.000Z",
+  });
+  await executeArtifactSubmit(plan, workspace);
+  return plan.artifact.artifact_id;
 }

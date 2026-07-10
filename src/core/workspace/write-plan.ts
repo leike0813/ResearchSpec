@@ -19,6 +19,13 @@ export interface PlannedWrite {
 
 export interface WritePlan {
   operations: PlannedWrite[];
+  readPreconditions?: ReadPrecondition[];
+}
+
+export interface ReadPrecondition {
+  path: string;
+  expectedHash: string;
+  reason: string;
 }
 
 export function sha256(value: string | Uint8Array): string {
@@ -59,6 +66,11 @@ export async function executeWritePlan(plan: WritePlan): Promise<void> {
   const actionable = plan.operations.filter((operation) => operation.action === "create" || operation.action === "refresh" || operation.action === "remove-owned" || operation.action === "move");
   const transaction = actionable.map((operation) => ({ operation, temporary: `${operation.path}.researchspec-${randomUUID()}.tmp`, backup: `${operation.path}.researchspec-${randomUUID()}.bak`, hadOriginal: false, committed: false }));
   try {
+    for (const precondition of plan.readPreconditions ?? []) {
+      if (!(await exists(precondition.path)) || await hashPath(precondition.path) !== precondition.expectedHash) {
+        throw writeConflict(`Read precondition changed (${precondition.reason}): ${precondition.path}`);
+      }
+    }
     for (const entry of transaction) await verifyPrecondition(entry.operation);
     for (const entry of transaction) {
       if (entry.operation.action === "remove-owned" || entry.operation.action === "move") continue;

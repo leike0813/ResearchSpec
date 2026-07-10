@@ -701,9 +701,9 @@ academic-pipeline 硬编码进程序，而是从这里读取。
 | `instruction` / `rules` | string / list[string] | 是 | 动态工作包的语义指示与约束 |
 | `allowed_writes` | list[enum] | 是 | 仅 `output_artifact` / `contract_patch` / `draft_patch`；不含 registry、ledger、state |
 | `validation_profile` | string | 是 | instructions 返回的确定性 validation profile |
-| `completion` | object | 是 | 明确 artifact status、verification state、registry、SHA-256 和 `required_gate_ids` |
+| `completion` | object | 是 | 明确 artifact status、verification state、registry、SHA-256、`require_receipt` 和 `required_gate_ids` |
 
-节点状态固定为 `done / ready / blocked`。`done` 需要 `work_item_id` 对应的 registry entry、artifact type/path、文件、SHA-256，以及每个 `required_gate_ids` 对应的 pass/pass-with-conditions 或 accepted override。`artifact_statuses` 与 `verification_states` 是额外完成约束，不能替代 required gates；文件存在本身不构成完成。`ready` 还必须处于 active stage。当前只读控制面在 active stage 全部节点完成后返回 `stage_work_complete: true` 与 `transition_required: true`，不会修改 state 或宣告整个 run 完成。
+节点状态固定为 `done / ready / blocked`。`done` 需要 `work_item_id` 对应的 registry entry、artifact type/path、文件、SHA-256，以及每个 `required_gate_ids` 对应的 pass/pass-with-conditions 或 accepted override。`require_receipt: true` 时还必须存在 hash-trusted `artifact_submit_receipt` registry record 与严格 receipt payload，且 candidate ID/path/hash、selector、profile 和关联 ID 相互一致。`artifact_statuses` 与 `verification_states` 是额外完成约束，不能替代 required gates；文件存在或手写 registry entry 本身不构成完成。`ready` 还必须处于 active stage。当前控制面在 active stage 全部节点完成后返回 `stage_work_complete: true` 与 `transition_required: true`，不会修改 state 或宣告整个 run 完成。
 
 当前显式试验 profile `arsu-research-slice` 将 RQ Brief、Bibliography、Synthesis 三个节点放在同一非 terminal 的 `research` stage；输出分别为 `runs/current/artifacts/rq-brief.md`、`bibliography.md` 和 `synthesis-report.md`，template refs 指向 `ars:shared/handoff_schemas.md#schema-1-rq-brief` 至 Schema 3。`init` 创建派生的 artifact 父目录，但不复制 template 或创建空 artifact 文件。三个节点全部 done 后仍只到达 transition boundary。
 
@@ -887,6 +887,8 @@ payload schema 和验证状态。Downstream stages 必须通过 registry 找 art
 | `version_label` | string | 否 | 上游或人类可读版本标签 |
 | `status` | `artifact_status` | 是 | artifact 生命周期 |
 | `verification_state` | `verification_state` | 是 | 当前验证状态 |
+| `submit_receipt_artifact_id` | ref | 否 | receipt-backed workflow submission 的 receipt artifact ID |
+| `verification` | object | 否 | deterministic profile、时间、validator 与 checks；Submit records 必填 |
 | `depends_on` | list[ref] | 否 | 上游 artifact ids |
 | `derived_from` | list[ref] | 否 | 被修改/摘要/渲染的 artifact ids |
 | `related_contracts` | list[path] | 否 | 该 artifact 读过或投影到的 contracts |
@@ -916,6 +918,33 @@ payload schema 和验证状态。Downstream stages 必须通过 registry 找 art
   ]
 }
 ```
+
+#### 4.2.1 Artifact Submit DTO 与 Receipt
+
+`researchspec submit` 的输入是 strict DTO，不复用宽松 legacy registry shape：
+
+```json
+{
+  "schema_version": "1",
+  "dependency_artifact_ids": [],
+  "producer_mode": "full"
+}
+```
+
+`dependency_artifact_ids` 必须引用 path/hash 可信的 registry records，并覆盖节点声明的
+required artifact types。Candidate path/type、work item、producer Skill、stage、template ref、
+verification state 和 ID 均由 workflow/runtime 派生，payload 不得自报。
+
+确定性 ID 使用 candidate SHA-256 前 16 位：`S-<work-item>-<prefix>`、
+`A-<work-item>-<prefix>` 和 `A-submit-receipt-<work-item>-<prefix>`。Receipt 写入
+`runs/current/receipts/artifact-submit/<submission-id>.json`，记录 candidate 与依赖 hashes、
+workflow/state/registry/ledger/contracts basis hashes、validation evidence、actor 与时间。Receipt
+自身以 `artifact_type: artifact_submit_receipt` 登记，但不设置 `work_item_id`。
+
+Submit 生成的 `verification_state: verified` 只表示 `research-artifact` 确定性 profile 已验证
+普通文件与 containment、UTF-8/非空、candidate hash、template ref 和依赖可信性；它不证明
+学术结论、证据质量或 completion Gate。既有手工 registry records 继续宽松可读，但
+`require_receipt: true` 的节点只有 receipt-backed record 才能完成。
 
 ### 4.3 `researchspec/runs/current/decision-ledger.jsonl`
 

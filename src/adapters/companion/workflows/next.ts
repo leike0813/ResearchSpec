@@ -31,6 +31,7 @@ Recover enough authoritative state to recommend one verifiable next action. Keep
 \`\`\`bash
 researchspec status --json
 researchspec instructions work:rq-brief --json
+researchspec submit work:rq-brief --input submission.json --actor-kind agent --actor-name deep-research --dry-run --json
 researchspec check runtime --json
 researchspec list gates --json
 researchspec list changes --json
@@ -46,7 +47,7 @@ researchspec archive --json
 4. Otherwise inspect pending contract changes and draft patches. Prefer an item already awaiting explicit review over creating new semantic work.
 5. Otherwise run the no-selector \`archive --json\` view to identify resolved, evidence-complete items. Recommend archive only after the candidate is inspectable.
 6. Otherwise select from \`status.data.workflow_control.ready_items\` and look up details in \`status.data.workflow_control.work_items\`. If several ready items have equal priority, show their selectors and ask the user to choose; do not invent an ordering absent from the graph.
-7. Run \`researchspec instructions work:<id> --json\` for the selected item. Recommend its declared \`producer_skill\`, dependencies, output path, allowed writes, and completion policy; never reconstruct these from static Skill text.
+7. Run \`researchspec instructions work:<id> --json\` for the selected item. If its status warnings include \`candidate_unregistered\`, recommend \`researchspec-submit\`; otherwise recommend its declared \`producer_skill\`. Use returned dependencies, output path, allowed writes, validation, and completion policy; never reconstruct these from static Skill text.
 8. If \`workflow_control.configured\` is false, make “configure or migrate the workflow work-item graph” the action. If it is invalid, route to \`researchspec-check\`; do not guess from stage title.
 9. If the active stage has \`stage_work_complete: true\` and \`transition_required: true\`, report that a transition is required but unavailable in the current read-only control plane; do not claim the run is complete or edit state.
 10. Form one primary recommendation with owner skill/command, reason, blockers, required inputs, and a verifiable completion condition. Add at most two genuinely viable, lower-priority alternatives, then stop without executing.
@@ -59,7 +60,8 @@ researchspec archive --json
 | Blocking gate | Inspect and route the originating gate to \`researchspec-decide\`. |
 | Pending change or draft patch | Review/show, then decide the canonical item. |
 | Resolved archivable item | \`researchspec-archive\` after its preview gate. |
-| One ready work item | Fetch \`instructions work:<id>\` and recommend its declared producer Skill. |
+| Ready work item without candidate | Fetch \`instructions work:<id>\` and recommend its declared producer Skill. |
+| Ready item with \`candidate_unregistered\` | Recommend \`researchspec-submit work:<id>\`. |
 | Several ready work items | Ask the user to choose among their canonical \`work:<id>\` selectors. |
 | Work-item graph absent | Configure/migrate the workflow contract; do not infer a Skill. |
 | Active stage work complete | Report the pending transition boundary; do not edit state. |

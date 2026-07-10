@@ -33,6 +33,21 @@ void test("write plan preflights every operation before committing any file", as
   await cleanup(root);
 });
 
+void test("write plan rejects a changed read dependency before staging writes", async () => {
+  const root = await tempProject();
+  const basis = path.join(root, "basis.txt");
+  const target = path.join(root, "target.txt");
+  await writeFile(basis, "basis", "utf8");
+  const operation = await planFile({ path: target, content: "planned", scope: "project", ownership: "generated" });
+  await writeFile(basis, "changed", "utf8");
+  await assert.rejects(
+    () => executeWritePlan({ operations: [operation], readPreconditions: [{ path: basis, expectedHash: hash("basis"), reason: "submission basis" }] }),
+    (error: unknown) => (error as NodeJS.ErrnoException).code === "EWRITE_CONFLICT",
+  );
+  await assert.rejects(() => readFile(target), (error: unknown) => (error as NodeJS.ErrnoException).code === "ENOENT");
+  await cleanup(root);
+});
+
 function hash(value: string): string {
   return createHash("sha256").update(value).digest("hex");
 }

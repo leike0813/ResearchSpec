@@ -38,6 +38,7 @@ export const WorkflowNodeDefinitionSchema = z.looseObject({
     required_gate_ids: z.array(SafeIdSchema),
     require_registry: z.literal(true),
     require_sha256: z.literal(true),
+    require_receipt: z.boolean().default(false),
   }),
 });
 

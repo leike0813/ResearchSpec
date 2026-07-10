@@ -11,7 +11,7 @@ const CONTRACT_MARKER = "<!-- researchspec-contract-preflight:v1 -->";
 export const RESEARCHSPEC_MUTATION_OWNERSHIP = {
   stable_specs: "human_or_accepted_contract_patch",
   runtime_state: "orchestrator_or_runtime_helper",
-  artifact_registry: "runtime_helper",
+  artifact_registry: "researchspec_submit_or_deterministic_runtime",
   decision_ledger: "runtime_after_human_confirmation",
   gate_ledger: "validator_or_gate_helper",
 } as const;
@@ -26,7 +26,7 @@ export function mutationBoundaryBullets(targets: string[]): string[] {
     bullets.push("Request changes to `researchspec/runs/current/state.yaml` through the ResearchSpec orchestrator or runtime helper; do not edit run state directly.");
   }
   if (targets.includes("researchspec/runs/current/artifact-registry.json")) {
-    bullets.push("Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.");
+    bullets.push("Write only the candidate path declared by dynamic instructions. When `completion.submit_available` is true, hand the finished candidate to `researchspec-submit`; do not edit the registry or receipt directly. If Submit is unavailable, report the compatibility boundary instead of inventing a runtime write.");
   }
   if (targets.includes("researchspec/runs/current/decision-ledger.jsonl")) {
     bullets.push("After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.");
@@ -123,9 +123,13 @@ workspace. Read \`specs/workflow.yaml\` and \`runs/current/state.yaml\` first,
 then load only the contracts and artifact references needed for the current
 skill, stage, phase, or mode.
 
-Use \`runs/current/artifact-registry.json\` to read prior artifacts. Write new
-artifacts as files, then register them through the ResearchSpec runtime helper
-or wrapper protocol. Do not hand-edit state, registries, or JSONL ledgers.
+Use \`runs/current/artifact-registry.json\` to read prior artifacts. For a typed
+workflow, call \`researchspec status --json\` and
+\`researchspec instructions work:<id> --json\`; write only the declared candidate
+path. When \`completion.submit_available\` is true, hand the finished candidate
+to \`researchspec-submit\`. If the workflow is unconfigured or Submit is
+unavailable, report that boundary instead of inventing path, type, or runtime
+writes. Do not hand-edit state, registries, receipts, or JSONL ledgers.
 After human confirmation, the runtime records decisions; validators and gate
 helpers record validation or gate outcomes.
 

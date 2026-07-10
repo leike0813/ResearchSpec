@@ -3,6 +3,7 @@ import path from "node:path";
 import { z } from "zod";
 
 import { fileExists, readOptionalText } from "../../utils/fs.js";
+import { ArtifactRegistrySchema } from "../contracts/artifact.js";
 import { validateWorkflowDefinition, WorkflowDefinitionSchema, WORKFLOW_PROFILE_IDS, type WorkflowDefinition } from "../contracts/workflow.js";
 import { parseJson, parseJsonLines, parseYaml } from "../validation/parse.js";
 import type { Diagnostic } from "../validation/types.js";
@@ -13,15 +14,6 @@ const SafeId = z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]*$/).refine((value) =
 const ActorSchema = z.union([z.string().min(1), z.looseObject({ kind: z.string().min(1), name: z.string().min(1) })]);
 const SourceSchema = z.looseObject({ source_id: SafeId });
 const ClaimSchema = z.looseObject({ claim_id: SafeId });
-const ArtifactSchema = z.looseObject({
-  artifact_id: SafeId,
-  artifact_type: z.string().min(1).optional(),
-  work_item_id: SafeId.optional(),
-  path: z.string().min(1),
-  sha256: z.string().optional(),
-  status: z.string().optional(),
-  verification_state: z.string().optional(),
-});
 const DecisionSchema = z.looseObject({ event_id: SafeId, decision_id: SafeId, timestamp: z.string().min(1), actor: ActorSchema, decision_type: z.string().min(1), selected_option: z.unknown(), status: z.enum(["proposed", "accepted", "rejected", "postponed", "superseded"]) });
 const GateSchema = z.looseObject({ event_id: SafeId, gate_id: SafeId, timestamp: z.string().min(1), actor: ActorSchema, stage_id: z.string().min(1), gate_type: z.string().min(1), verdict: z.enum(["pass", "pass_with_conditions", "fail", "not_run"]), blocking: z.boolean() });
 const ConfigSchema = z.looseObject({ schema_version: z.string(), profile: z.enum(WORKFLOW_PROFILE_IDS), agent_tools: z.looseObject({ selected: z.array(z.string()), delivery: z.enum(["skills", "commands", "both"]) }) });
@@ -31,7 +23,6 @@ const ClaimsSchema = z.looseObject({ schema_version: z.string(), claims: z.array
 const ProjectSchema = z.looseObject({ schema_version: z.string(), project_id: SafeId, title: z.string(), target_output: z.string(), primary_language: z.string() });
 const ManuscriptSchema = z.looseObject({ schema_version: z.string(), manuscript_id: SafeId, title: z.string(), status: z.string(), sections: z.array(z.unknown()) });
 const StateSchema = z.looseObject({ schema_version: z.string(), run_id: SafeId, workflow_id: SafeId, status: z.enum(["not_started", "in_progress", "waiting", "blocked", "complete", "failed", "cancelled"]), active_stage_id: SafeId, pending_decisions: z.array(z.unknown()), diagnostics: z.array(z.unknown()) });
-const RegistrySchema = z.looseObject({ schema_version: z.string(), run_id: SafeId, artifacts: z.array(ArtifactSchema) });
 const ContractPatchSchema = z.looseObject({
   schema_version: z.string(), change_id: SafeId, title: z.string().min(1), status: z.enum(["proposed", "postponed", "accepted", "rejected", "applied", "superseded"]),
   created_at: z.string().min(1), created_by: ActorSchema, rationale: z.string().min(1), risk_level: z.enum(["low", "medium", "high"]), requires_human_decision: z.boolean(),
@@ -136,7 +127,7 @@ export async function loadWorkspaceSnapshot(workspace: string): Promise<Workspac
   validateDocument("specs/claims.yaml", documents["specs/claims.yaml"], ClaimsSchema, files, diagnostics);
   validateDocument("specs/manuscript.yaml", documents["specs/manuscript.yaml"], ManuscriptSchema, files, diagnostics);
   validateDocument("runs/current/state.yaml", state, StateSchema, files, diagnostics);
-  validateDocument("runs/current/artifact-registry.json", documents["runs/current/artifact-registry.json"], RegistrySchema, files, diagnostics);
+  validateDocument("runs/current/artifact-registry.json", documents["runs/current/artifact-registry.json"], ArtifactRegistrySchema, files, diagnostics);
   validateRecords(decisions, DecisionSchema, path.join(workspace, "runs/current/decision-ledger.jsonl"), "invalid_decision_event", diagnostics);
   validateRecords(gates, GateSchema, path.join(workspace, "runs/current/gate-ledger.jsonl"), "invalid_gate_event", diagnostics);
 

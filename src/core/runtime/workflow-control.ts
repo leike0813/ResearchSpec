@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { fileExists } from "../../utils/fs.js";
+import { ArtifactSubmitReceiptSchema, SubmittedArtifactRecordSchema, SubmitReceiptArtifactRecordSchema } from "../contracts/artifact.js";
 import { validateWorkflowDefinition, type WorkflowNodeDefinition } from "../contracts/workflow.js";
 import type { Diagnostic } from "../validation/types.js";
 import { latestById, type WorkspaceSnapshot } from "../workspace/snapshot.js";
@@ -75,7 +76,21 @@ export interface WorkflowInstructionPacket {
   allowed_writes: WorkflowNodeDefinition["allowed_writes"];
   forbidden_writes: string[];
   validation: { profile: string; suggested_command: string };
-  completion: { policy: WorkflowNodeDefinition["completion"]; submit_available: false };
+  completion: {
+    policy: WorkflowNodeDefinition["completion"];
+    submit_available: boolean;
+    submit?: {
+      selector: string;
+      candidate_path: string;
+      dry_run_command: string;
+      input_schema: { required: string[]; optional: string[] };
+      requires_confirmation: true;
+      requires_expected_sha256_for_noninteractive_execution: true;
+      updates_state: false;
+      appends_gate: false;
+      appends_decision: false;
+    };
+  };
   unlocks: string[];
 }
 
@@ -123,6 +138,10 @@ export async function inspectArtifacts(snapshot: WorkspaceSnapshot): Promise<Art
   return Promise.all(snapshot.artifacts.map((artifact) => inspectArtifact(snapshot, artifact)));
 }
 
+export function passedCompletionGateIds(snapshot: WorkspaceSnapshot): Set<string> {
+  return eventFacts(snapshot).passedGateIds;
+}
+
 export async function evaluateWorkflowControl(snapshot: WorkspaceSnapshot): Promise<WorkflowControlResult> {
   const workflow = snapshot.workflow;
   const nodes = workflow?.work_items ?? [];
@@ -146,7 +165,7 @@ export async function evaluateWorkflowControl(snapshot: WorkspaceSnapshot): Prom
       const candidates = inspections.filter((inspection) => inspection.artifact.work_item_id === node.id);
       const candidate = candidates[candidates.length - 1];
       if (candidate) {
-        const outputProblems = completionProblems(snapshot, node, candidate, facts);
+        const outputProblems = await completionProblems(snapshot, node, candidate, facts, inspections);
         if (outputProblems.length === 0) {
           return {
             id: node.id, selector: `work:${node.id}`, work_item_id: node.id, stage_id: node.stage_id, producer_skill: node.producer_skill, state: "done",
@@ -241,7 +260,7 @@ export async function buildWorkflowInstructions(snapshot: WorkspaceSnapshot, wor
       allowed_writes: node.allowed_writes,
       forbidden_writes: ["specs/*", "runs/current/state.yaml", "runs/current/artifact-registry.json", "runs/current/decision-ledger.jsonl", "runs/current/gate-ledger.jsonl"],
       validation: { profile: node.validation_profile, suggested_command: "researchspec check artifacts --json" },
-      completion: { policy: node.completion, submit_available: false },
+      completion: submitCapability(node, status),
       unlocks: status.unlocks,
     },
   };
@@ -257,7 +276,7 @@ export async function resolveTemplateReference(templateRef: string): Promise<Res
   return { template_ref: templateRef, source_path: sourcePath, content };
 }
 
-function completionProblems(snapshot: WorkspaceSnapshot, node: WorkflowNodeDefinition, inspection: ArtifactInspection, facts: EventFacts): MissingDependency[] {
+async function completionProblems(snapshot: WorkspaceSnapshot, node: WorkflowNodeDefinition, inspection: ArtifactInspection, facts: EventFacts, inspections: ArtifactInspection[]): Promise<MissingDependency[]> {
   const problems: MissingDependency[] = [];
   const artifact = inspection.artifact;
   const expectedPath = path.resolve(snapshot.workspace, node.output.workspace_path);
@@ -268,8 +287,83 @@ function completionProblems(snapshot: WorkspaceSnapshot, node: WorkflowNodeDefin
   if (node.completion.require_sha256 && (typeof artifact.sha256 !== "string" || inspection.hash_matches !== true)) problems.push({ kind: "output", id: node.id, reason: typeof artifact.sha256 === "string" ? "artifact_hash_mismatch" : "artifact_hash_missing" });
   if (!node.completion.artifact_statuses.includes(String(artifact.status))) problems.push({ kind: "output", id: node.id, reason: "artifact_status_not_accepted" });
   if (!node.completion.verification_states.includes(String(artifact.verification_state))) problems.push({ kind: "output", id: node.id, reason: "artifact_not_verified" });
+  if (node.completion.require_receipt) {
+    const candidateRecord = SubmittedArtifactRecordSchema.safeParse(artifact);
+    const receiptId = stringValue(artifact.submit_receipt_artifact_id);
+    const candidateId = stringValue(artifact.artifact_id);
+    const receiptInspection = receiptId ? inspections.find((item) => item.artifact.artifact_id === receiptId) : undefined;
+    const receiptRecord = receiptInspection ? SubmitReceiptArtifactRecordSchema.safeParse(receiptInspection.artifact) : undefined;
+    if (!candidateRecord.success) problems.push({ kind: "output", id: node.id, reason: "submit_candidate_record_invalid" });
+    if (!receiptId || !receiptInspection) problems.push({ kind: "output", id: node.id, reason: "submit_receipt_missing" });
+    else if (!isTrustedInspection(receiptInspection) || !receiptRecord?.success) {
+      problems.push({ kind: "output", id: node.id, reason: "submit_receipt_untrusted" });
+    } else if (!receiptInspection.resolved_path) {
+      problems.push({ kind: "output", id: node.id, reason: "submit_receipt_missing" });
+    } else {
+      try {
+        const parsed = ArtifactSubmitReceiptSchema.safeParse(JSON.parse(await readFile(receiptInspection.resolved_path, "utf8")) as unknown);
+        const related = Array.isArray(receiptInspection.artifact.related_artifact_ids) ? receiptInspection.artifact.related_artifact_ids : [];
+        const suffix = typeof artifact.sha256 === "string" ? artifact.sha256.slice(0, 16) : "";
+        const expectedCandidateId = `A-${node.id}-${suffix}`;
+        const expectedSubmissionId = `S-${node.id}-${suffix}`;
+        const expectedReceiptId = `A-submit-receipt-${node.id}-${suffix}`;
+        const expectedReceiptPath = path.resolve(snapshot.workspace, `runs/current/receipts/artifact-submit/${expectedSubmissionId}.json`);
+        if (!candidateRecord.success || !receiptRecord?.success || !parsed.success
+          || candidateId !== expectedCandidateId
+          || receiptId !== expectedReceiptId
+          || receiptInspection.resolved_path !== expectedReceiptPath
+          || parsed.data.submission_id !== expectedSubmissionId
+          || parsed.data.receipt_artifact_id !== receiptId
+          || parsed.data.selector !== `work:${node.id}`
+          || parsed.data.artifact.artifact_id !== candidateId
+          || parsed.data.artifact.artifact_type !== node.output.artifact_type
+          || parsed.data.artifact.path !== artifact.path
+          || parsed.data.artifact.sha256 !== artifact.sha256
+          || parsed.data.producer_skill !== node.producer_skill
+          || parsed.data.stage_id !== node.stage_id
+          || parsed.data.payload_schema_ref !== node.output.template_ref
+          || JSON.stringify(parsed.data.producer) !== JSON.stringify(candidateRecord.data.producer)
+          || parsed.data.submitted_at !== candidateRecord.data.created_at
+          || parsed.data.validation.profile !== node.validation_profile
+          || parsed.data.validation.outcome !== "pass"
+          || parsed.data.validation.validator.kind !== "validator"
+          || parsed.data.validation.validator.name !== `researchspec:${node.validation_profile}`
+          || candidateRecord.data.verification.profile !== node.validation_profile
+          || candidateRecord.data.verification.verified_by.kind !== "validator"
+          || candidateRecord.data.verification.verified_by.name !== `researchspec:${node.validation_profile}`
+          || JSON.stringify(candidateRecord.data.verification.checks) !== JSON.stringify(parsed.data.validation.checks)
+          || receiptRecord.data.created_at !== parsed.data.submitted_at
+          || !related.includes(candidateId)) {
+          problems.push({ kind: "output", id: node.id, reason: "submit_receipt_mismatch" });
+        }
+      } catch {
+        problems.push({ kind: "output", id: node.id, reason: "submit_receipt_invalid" });
+      }
+    }
+  }
   for (const gateId of node.completion.required_gate_ids) if (!facts.passedGateIds.has(gateId)) problems.push({ kind: "gate_id", id: gateId, reason: "completion_gate_not_passed" });
   return problems;
+}
+
+function submitCapability(node: WorkflowNodeDefinition, status: WorkItemStatus): WorkflowInstructionPacket["completion"] {
+  const available = node.validation_profile === "research-artifact";
+  return {
+    policy: node.completion,
+    submit_available: available,
+    ...(available ? {
+      submit: {
+        selector: status.selector,
+        candidate_path: status.output_path,
+        dry_run_command: `researchspec submit ${status.selector} --input <submission.json> --actor-kind <kind> --actor-name <name> --dry-run --json`,
+        input_schema: { required: ["schema_version", "dependency_artifact_ids"], optional: ["producer_mode"] },
+        requires_confirmation: true as const,
+        requires_expected_sha256_for_noninteractive_execution: true as const,
+        updates_state: false as const,
+        appends_gate: false as const,
+        appends_decision: false as const,
+      },
+    } : {}),
+  };
 }
 
 function isTrustedInspection(inspection: ArtifactInspection): boolean {

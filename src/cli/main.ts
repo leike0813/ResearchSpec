@@ -6,8 +6,8 @@ import { Command, CommanderError, InvalidArgumentError } from "commander";
 
 import {
   handleArchive, handleCheck, handleDecide, handleHandoff, handleInit, handleInstructions, handleList,
-  handlePack, handlePropose, handleShow, handleStatus, handleUpdate, type DecideOptions,
-  type HandoffOptions, type InitOptions, type PackOptions, type ProposeOptions, type UpdateOptions,
+  handlePack, handlePropose, handleShow, handleStatus, handleSubmit, handleUpdate, type DecideOptions,
+  type HandoffOptions, type InitOptions, type PackOptions, type ProposeOptions, type SubmitOptions, type UpdateOptions,
 } from "./handlers.js";
 import { presentResult } from "./presenter.js";
 import { CliError, failure, type CommandContext, type CommandResult } from "./types.js";
@@ -69,6 +69,12 @@ function registerCommands(program: Command, run: Runner): void {
     .action(async (_options: Record<string, never>, command: Command) => run("status", command, () => handleStatus(commandContext("status", command))));
   program.command("instructions <work-item>").description("Show dynamic instructions for a ready work item")
     .action(async (workItem: string, _options: Record<string, never>, command: Command) => run("instructions", command, () => handleInstructions(workItem, commandContext("instructions", command))));
+  program.command("submit <work-item>").description("Validate and atomically register a workflow-owned candidate artifact")
+    .requiredOption("--input <submission.json>", "strict artifact submission JSON")
+    .requiredOption("--actor-kind <kind>", "human, agent, script, converter, or validator")
+    .requiredOption("--actor-name <name>", "artifact producer name")
+    .option("--expected-sha256 <hash>", "bind execution to the previewed candidate SHA-256")
+    .action(async (workItem: string, options: SubmitOptions, command: Command) => run("submit", command, () => handleSubmit(workItem, options, commandContext("submit", command))));
   program.command("check [target]").description("Check all, contracts, runtime, artifacts, or tools")
     .option("--strict", "treat warnings as failures")
     .action(async (target: string | undefined, options: { strict?: boolean }, command: Command) => run("check", command, () => handleCheck(target, Boolean(options.strict), commandContext("check", command))));

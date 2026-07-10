@@ -84,8 +84,8 @@ void test("format families render machine-valid structural markers", () => {
   }
 });
 
-void test("companion manifest renders eight self-contained workflow skills with distinct metadata", () => {
-  assert.deepEqual(COMPANION_WORKFLOW_IDS, ["explore", "propose", "check", "verify", "next", "context", "decide", "archive"]);
+void test("companion manifest renders nine self-contained workflow skills with distinct metadata", () => {
+  assert.deepEqual(COMPANION_WORKFLOW_IDS, ["explore", "propose", "check", "verify", "next", "context", "decide", "submit", "archive"]);
   assert.deepEqual(COMPANION_INTENTS.map((intent) => intent.skillId), [
     "researchspec-explore",
     "researchspec-propose",
@@ -94,9 +94,10 @@ void test("companion manifest renders eight self-contained workflow skills with 
     "researchspec-next",
     "researchspec-context",
     "researchspec-decide",
+    "researchspec-submit",
     "researchspec-archive",
   ]);
-  assert.equal(new Set(COMPANION_INTENTS.map((intent) => intent.id)).size, 8);
+  assert.equal(new Set(COMPANION_INTENTS.map((intent) => intent.id)).size, 9);
   assert.equal(ARSU_COMMAND_CONTENTS.length, 4);
 
   for (const intent of COMPANION_INTENTS) {
@@ -122,6 +123,12 @@ void test("companion manifest renders eight self-contained workflow skills with 
   assert.match(next.instructions, /status\.data\.workflow_control\.work_items/);
   assert.match(next.instructions, /instructions work:<id> --json/);
   assert.match(next.instructions, /transition_required/);
+
+  const submit = COMPANION_INTENTS.find((intent) => intent.id === "submit");
+  assert.ok(submit);
+  assert.match(submit.instructions, /--expected-sha256/);
+  assert.match(submit.instructions, /receipt/);
+  assert.match(submit.instructions, /state, Gates, and Decisions/);
 });
 
 void test("Copilot uses its explicit detection paths", async () => {
@@ -131,7 +138,7 @@ void test("Copilot uses its explicit detection paths", async () => {
   await cleanup(root);
 });
 
-void test("delivery projects eight skills to 31 tools and eight wrappers to 28 command-capable tools", async () => {
+void test("delivery projects nine skills to 31 tools and nine wrappers to 28 command-capable tools", async () => {
   const root = await tempProject();
   const previousCodexHome = process.env.CODEX_HOME;
   process.env.CODEX_HOME = path.join(root, "codex-home");
@@ -139,8 +146,8 @@ void test("delivery projects eight skills to 31 tools and eight wrappers to 28 c
     const delivery = await planToolDelivery({ projectRoot: root, toolIds: TOOL_IDS, existingInstallations: [], force: false });
     const companionSkills = delivery.installations.filter((item) => item.source.startsWith("companion:") && item.source.endsWith("/SKILL.md"));
     const companionCommands = delivery.installations.filter((item) => COMPANION_WORKFLOW_IDS.some((id) => item.source === `command:${id}`));
-    assert.equal(companionSkills.length, 31 * 8);
-    assert.equal(companionCommands.length, 28 * 8);
+    assert.equal(companionSkills.length, 31 * 9);
+    assert.equal(companionCommands.length, 28 * 9);
     assert.equal(delivery.diagnostics.filter((item) => item.code === "commands_not_supported").length, 3);
   } finally {
     if (previousCodexHome === undefined) Reflect.deleteProperty(process.env, "CODEX_HOME");

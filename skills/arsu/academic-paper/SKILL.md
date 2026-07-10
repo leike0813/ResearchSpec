@@ -21,9 +21,13 @@ workspace. Read `specs/workflow.yaml` and `runs/current/state.yaml` first,
 then load only the contracts and artifact references needed for the current
 skill, stage, phase, or mode.
 
-Use `runs/current/artifact-registry.json` to read prior artifacts. Write new
-artifacts as files, then register them through the ResearchSpec runtime helper
-or wrapper protocol. Do not hand-edit state, registries, or JSONL ledgers.
+Use `runs/current/artifact-registry.json` to read prior artifacts. For a typed
+workflow, call `researchspec status --json` and
+`researchspec instructions work:<id> --json`; write only the declared candidate
+path. When `completion.submit_available` is true, hand the finished candidate
+to `researchspec-submit`. If the workflow is unconfigured or Submit is
+unavailable, report that boundary instead of inventing path, type, or runtime
+writes. Do not hand-edit state, registries, receipts, or JSONL ledgers.
 After human confirmation, the runtime records decisions; validators and gate
 helpers record validation or gate outcomes.
 

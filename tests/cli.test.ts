@@ -11,7 +11,7 @@ import { cleanup, parseEnvelope, runCli, tempProject } from "./helpers/cli.js";
 void test("help, version, and usage errors expose the complete public boundary", () => {
   const help = runCli(["--help"]);
   assert.equal(help.status, 0);
-  for (const command of ["init", "update", "status", "instructions", "check", "list", "show", "handoff", "pack", "propose", "decide", "archive"]) assert.match(help.stdout, new RegExp(`\\b${command}\\b`));
+  for (const command of ["init", "update", "status", "instructions", "submit", "check", "list", "show", "handoff", "pack", "propose", "decide", "archive"]) assert.match(help.stdout, new RegExp(`\\b${command}\\b`));
   assert.equal(runCli(["--version"]).stdout.trim(), "0.1.0");
   const invalid = runCli(["unknown", "--json"]);
   assert.equal(invalid.status, 2);
@@ -84,7 +84,11 @@ void test("research-slice init exposes dynamic status and resolved instructions"
     description: string; context: null; template: string; forbidden_writes: string[];
     output: { workspace_path: string; resolved_path: string; template_ref: string };
     validation: { profile: string; suggested_command: string };
-    completion: { submit_available: boolean; policy: { required_gate_ids: string[] } };
+    completion: {
+      submit_available: boolean;
+      submit?: { selector: string; candidate_path: string; dry_run_command: string; requires_expected_sha256_for_noninteractive_execution: boolean; updates_state: boolean };
+      policy: { required_gate_ids: string[] };
+    };
   }>(runCli(["instructions", "work:rq-brief", "--json"], root));
   assert.equal(instructions.ok, true);
   assert.equal(instructions.data?.selector, "work:rq-brief");
@@ -99,7 +103,12 @@ void test("research-slice init exposes dynamic status and resolved instructions"
   assert.ok(instructions.data?.output.resolved_path.endsWith("/researchspec/runs/current/artifacts/rq-brief.md"));
   assert.ok(instructions.data?.forbidden_writes.includes("runs/current/state.yaml"));
   assert.equal(instructions.data?.validation.profile, "research-artifact");
-  assert.equal(instructions.data?.completion.submit_available, false);
+  assert.equal(instructions.data?.completion.submit_available, true);
+  assert.equal(instructions.data?.completion.submit?.selector, "work:rq-brief");
+  assert.equal(instructions.data?.completion.submit?.candidate_path, instructions.data?.output.resolved_path);
+  assert.match(instructions.data?.completion.submit?.dry_run_command ?? "", /submit work:rq-brief/);
+  assert.equal(instructions.data?.completion.submit?.requires_expected_sha256_for_noninteractive_execution, true);
+  assert.equal(instructions.data?.completion.submit?.updates_state, false);
   assert.deepEqual(instructions.data?.completion.policy.required_gate_ids, []);
 
   const blocked = runCli(["instructions", "work:bibliography", "--json"], root);
@@ -113,6 +122,53 @@ void test("research-slice init exposes dynamic status and resolved instructions"
   const profileChange = runCli(["init", root, "--tools", "none", "--profile", "arsu-paper", "--json"]);
   assert.equal(profileChange.status, 3);
   assert.equal(parseEnvelope(profileChange).error?.code, "profile_change_requires_migration");
+  await cleanup(root);
+});
+
+void test("submit previews an exact candidate hash then atomically registers its receipt", async () => {
+  const root = await tempProject();
+  assert.equal(runCli(["init", root, "--tools", "none", "--profile", "arsu-research-slice"]).status, 0);
+  const workspace = path.join(root, "researchspec");
+  const candidatePath = path.join(workspace, "runs/current/artifacts/rq-brief.md");
+  const inputPath = path.join(root, "submission.json");
+  await writeFile(candidatePath, "# RQ Brief\n\nA bounded research question.\n", "utf8");
+  await writeFile(inputPath, `${JSON.stringify({ schema_version: "1", dependency_artifact_ids: [], producer_mode: "full" }, null, 2)}\n`, "utf8");
+  const protectedPaths = ["runs/current/state.yaml", "runs/current/gate-ledger.jsonl", "runs/current/decision-ledger.jsonl"];
+  const protectedBefore = await Promise.all(protectedPaths.map((item) => readFile(path.join(workspace, item), "utf8")));
+
+  const preview = parseEnvelope<{
+    status: string; candidate_sha256: string; artifact: { artifact_id: string };
+    receipt_artifact: { artifact_type: string }; plan: Array<{ action: string }>;
+    workflow_control_after: null; state_updated: boolean; gate_appended: boolean; decision_appended: boolean;
+  }>(runCli(["submit", "work:rq-brief", "--input", inputPath, "--actor-kind", "agent", "--actor-name", "deep-research", "--dry-run", "--json"], root));
+  assert.equal(preview.ok, true);
+  assert.equal(preview.data?.status, "would_submit");
+  assert.match(preview.data?.candidate_sha256 ?? "", /^[a-f0-9]{64}$/);
+  assert.equal(preview.data?.receipt_artifact.artifact_type, "artifact_submit_receipt");
+  assert.deepEqual(preview.data?.plan.map((item) => item.action), ["create", "refresh"]);
+  assert.equal(preview.data?.workflow_control_after, null);
+  assert.equal(preview.data?.state_updated, false);
+  assert.equal(preview.data?.gate_appended, false);
+  assert.equal(preview.data?.decision_appended, false);
+  assert.deepEqual(await Promise.all(protectedPaths.map((item) => readFile(path.join(workspace, item), "utf8"))), protectedBefore);
+
+  const missingConfirmation = runCli(["submit", "work:rq-brief", "--input", inputPath, "--actor-kind", "agent", "--actor-name", "deep-research", "--json"], root);
+  assert.equal(missingConfirmation.status, 2);
+  assert.equal(parseEnvelope(missingConfirmation).error?.code, "confirmation_required");
+
+  const confirmedArgs = ["submit", "work:rq-brief", "--input", inputPath, "--actor-kind", "agent", "--actor-name", "deep-research", "--expected-sha256", preview.data?.candidate_sha256 ?? "", "--yes", "--json"];
+  const submitted = parseEnvelope<{ status: string; workflow_control_after: { ready_items: string[] } }>(runCli(confirmedArgs, root));
+  assert.equal(submitted.ok, true);
+  assert.equal(submitted.data?.status, "submitted");
+  assert.deepEqual(submitted.data?.workflow_control_after.ready_items, ["work:bibliography"]);
+  const retried = parseEnvelope<{ status: string; plan: unknown[] }>(runCli(confirmedArgs, root));
+  assert.equal(retried.data?.status, "already_submitted");
+  assert.deepEqual(retried.data?.plan, []);
+  assert.deepEqual(await Promise.all(protectedPaths.map((item) => readFile(path.join(workspace, item), "utf8"))), protectedBefore);
+
+  const invalidActor = runCli(["submit", "work:rq-brief", "--input", inputPath, "--actor-kind", "model", "--actor-name", "bad", "--dry-run", "--json"], root);
+  assert.equal(invalidActor.status, 2);
+  assert.equal(parseEnvelope(invalidActor).error?.code, "invalid_actor_kind");
   await cleanup(root);
 });
 

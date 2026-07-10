@@ -225,7 +225,9 @@ Preflight steps:
 4. Load only the contracts required by that stage/mode.
 5. Load artifact registry entries referenced by the current state.
 6. Check pending decisions and blocking gate entries before producing new work.
-7. Render a small stage input packet for the LLM.
+7. For typed workflows, run `researchspec status --json` and
+   `researchspec instructions work:<id> --json` instead of inferring the node contract.
+8. Render a small stage input packet for the LLM.
 
 Preflight output should be an internal view containing:
 
@@ -235,6 +237,7 @@ Preflight output should be an internal view containing:
 - allowed writes for this invocation;
 - blocked/pending decisions;
 - expected output artifact types.
+- declared candidate path, deterministic validation profile, and Submit capability.
 
 Do not let converted skills infer stage truth from chat memory when
 `runs/current/state.yaml` exists.
@@ -259,10 +262,9 @@ Contract Outputs:
 - <ledger entries written>
 
 Writes Allowed:
-- artifact registry entries
-- decision-ledger entries after human confirmation
-- gate-ledger entries for validation/gate results
-- draft-patches for revision mode
+- candidate artifact path declared by dynamic instructions
+- contract or draft patch paths explicitly allowed by the workflow
+- no direct artifact-registry, receipt, state, or ledger edits by the Agent
 - no direct spec edits except through accepted contract patches
 ```
 
@@ -297,8 +299,10 @@ Use `changes/<change-id>/contract-patch.yaml` when a task proposes:
 - changing review-response strategy;
 - accepting a limitation or override that affects final claims.
 
-Low-risk artifact registration, gate receipts, and confirmed decisions may be
-written to their ledgers without a separate contract patch.
+Low-risk artifact registration does not require a contract patch, but a typed workflow candidate
+must be handed to `researchspec-submit`: dry-run, confirm the exact SHA-256, then let the runtime
+write the receipt and registry atomically. Gate receipts and confirmed decisions remain owned by
+their dedicated validators/runtime paths. ARSU Skills never hand-edit those stores.
 
 ### 6.4 Preserve Upstream Semantics
 

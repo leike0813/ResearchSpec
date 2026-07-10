@@ -53,7 +53,8 @@ CLI 必须遵守以下边界：
 非公共调用面：
 
 - wrapper input packet generation 属于内部 runtime/helper API，不作为用户命令。
-- artifact registry append 和 ledger append 属于 helper/API 行为，不作为用户日常命令。
+- artifact registry 和 ledger 的低层 append 属于 helper/API 行为；用户只能通过
+  `submit`、`decide` 等受约束的高层事务入口触发相应写入。
 - ARSU converter maintenance 属于开发者命令或脚本，不放进本文公共 CLI。
 
 ## 2. 命令风格
@@ -75,6 +76,7 @@ researchspec <command> [arguments] [options]
 | `researchspec update [path]` | 刷新用户已选择的 agent-facing files | 是 | 是 | 是 |
 | `researchspec status` | 查看当前 run 和 pending items | 否 | 是 | 否 |
 | `researchspec instructions work:<id>` | 获取 ready work item 的动态工作包 | 否 | 是 | 否 |
+| `researchspec submit work:<id>` | 校验并原子登记 workflow candidate 与 receipt | 是 | 是 | 是 |
 | `researchspec check [target]` | 检查 workspace/contracts/runtime/tools | 否 | 是 | 否 |
 | `researchspec list [type]` | 列出 changes/artifacts/gates/decisions/tools | 否 | 是 | 否 |
 | `researchspec show <item>` | 查看某个合同、artifact 或 pending item | 否 | 是 | 否 |
@@ -100,7 +102,7 @@ researchspec <command> [arguments] [options]
 | --- | --- | --- |
 | `--cwd <path>` | 全部命令 | 指定项目工作目录；默认当前目录 |
 | `--workspace <path>` | 合同相关命令 | 指定 `researchspec/` 路径；默认从 cwd 向下定位 |
-| `--json` | 查询、instructions、检查、列表、show、handoff、pack、propose、decide、archive | 输出单个 versioned JSON envelope |
+| `--json` | 查询、instructions、submit、检查、列表、show、handoff、pack、propose、decide、archive | 输出单个 versioned JSON envelope |
 | `--dry-run` | 写命令 | 只报告将写入、修改、跳过的文件，不落盘 |
 | `--force` | 写命令 | 允许覆盖 generated agent-facing files；不得绕过 human decision |
 | `--yes` | 低风险写命令 | 跳过低风险确认；不得自动接受 high-impact research decisions |
@@ -228,7 +230,7 @@ researchspec status [--json]
 researchspec instructions work:rq-brief [--json]
 ```
 
-成功输出是扁平 instruction packet：`selector`、`work_item_id`、`stage_id`、`producer_skill`、`state`、`description`、`context: null`；`output` 只保存 artifact type、workspace/resolved path 和 `template_ref`，实际解析后的 `template` 位于顶层。其余字段包括 dependencies、semantic instruction、rules、allowed/forbidden writes、`validation {profile, suggested_command}`、`completion {policy, submit_available: false}` 和 unlocks。命令不内嵌依赖文件全文，也不写 workspace；当前没有 submit 能力。
+成功输出是扁平 instruction packet：`selector`、`work_item_id`、`stage_id`、`producer_skill`、`state`、`description`、`context: null`；`output` 只保存 artifact type、workspace/resolved path 和 `template_ref`，实际解析后的 `template` 位于顶层。其余字段包括 dependencies、semantic instruction、rules、allowed/forbidden writes、`validation {profile, suggested_command}`、completion policy 和 unlocks。支持 `research-artifact` profile 的节点返回 `submit_available: true` 及 selector、candidate path、dry-run command、strict input 字段和确认/hash 要求，并明确声明不写 state、Gate 或 Decision。命令不内嵌依赖文件全文，也不写 workspace。
 
 约定错误：
 
@@ -241,6 +243,37 @@ researchspec instructions work:rq-brief [--json]
 | `work_item_blocked` | stage 或依赖尚未满足，或已登记输出失真 |
 | `work_item_already_done` | 节点已经完成；本命令不承担 revise |
 | `workflow_resource_unavailable` | `template_ref` 无法解析为随包模板 |
+
+### 6.2 `researchspec submit work:<id>`
+
+用途：对 workflow 声明路径中的候选文件执行确定性验证，并把候选 artifact 与
+submission receipt 原子登记到 registry。
+
+```bash
+researchspec submit work:rq-brief \
+  --input submission.json \
+  --actor-kind agent \
+  --actor-name deep-research \
+  [--expected-sha256 <hash>] [--dry-run] [--yes] [--json]
+```
+
+输入文件严格限定为 `schema_version: "1"`、`dependency_artifact_ids` 和可选
+`producer_mode`。路径、artifact type、stage、producer Skill、template ref 与确定性 ID
+均来自 workflow node，调用方不能覆盖。首次执行前先 dry-run；非交互写入必须同时传入
+dry-run 返回的 64 位小写 SHA-256 与 `--yes`。该确认只授权登记精确字节，不表示学术认可、
+Gate 通过或 stage 推进。
+
+成功状态为 `would_submit`、`submitted` 或 `already_submitted`。成功 envelope 返回 candidate
+hash、candidate/receipt registry records、validation、write plan、projected completion 和写后
+`workflow_control`，并以 `state_updated: false`、`gate_appended: false`、
+`decision_appended: false` 固定声明非作用域。Receipt 先创建，registry 最后刷新；相同
+work item、hash 与 provenance 的重试幂等，任何不同 revision、provenance、ID/receipt collision
+或 plan/read-precondition drift 都以 exit 3 conflict 结束，不覆盖历史。
+
+`verification_state: verified` 在此仅表示节点声明的确定性 validation profile 已通过：普通
+UTF-8 非空文件、path containment、SHA-256、template ref 与依赖 artifact 均可信。它不表示
+学术结论真实、证据充分或质量 Gate 已通过；`completion.required_gate_ids` 仍独立决定节点
+能否成为 `done`。
 
 ## 7. `researchspec check [target]`
 
@@ -505,7 +538,8 @@ researchspec archive [item] [--json] [--dry-run]
 | `researchspec/specs/*` | `init`、`decide` | `propose` 只读取；语义变更必须来自 accepted pending item |
 | `researchspec/changes/<id>/*` | `propose`、`decide` | propose create-only；decide 更新 lifecycle，machine contract 最后创建 |
 | `runs/current/state.yaml` | `init` | 后续 stage transition 由 wrapper/runtime 内部 helper 处理，不暴露为用户命令 |
-| `artifact-registry.json` | `decide` | 只在接受 draft patch 或生成 receipt 时由 CLI/helper 写入 |
+| `artifact-registry.json` | `submit`、`decide` | 只由受约束事务入口登记 candidate、receipt 或 revised artifact |
+| `runs/current/receipts/artifact-submit/*` | `submit` | deterministic create-only receipt；与 candidate/registry hash 交叉验证 |
 | `decision-ledger.jsonl` | `decide` | 记录 human decision，不允许用户手写 JSONL |
 | `gate-ledger.jsonl` | 无公共写命令 | gate event 由 validator/gate helper 产生 |
 | `runs/current/handoff.md` | `handoff` | rendered view，不是 SSOT |
@@ -545,7 +579,8 @@ Canonical selectors 为 `change:`、`patch:`、`artifact:`、`gate:`、
 `decision:`、`source:`、`claim:`、`tool:` 和 `contract:`。裸 ID 只有在所有
 index 中唯一时才可解析；歧义时返回候选 canonical selectors。
 
-Workflow work item 使用独立的 `work:<id>` selector，只由 `instructions` 和 status work-item view 消费，不进入通用 `show/list` item index。
+Workflow work item 使用独立的 `work:<id>` selector，由 `instructions`、`submit` 和 status
+work-item view 消费，不进入通用 `show/list` item index。
 
 ### 16.4 Tool delivery facts
 
@@ -553,9 +588,9 @@ Workflow work item 使用独立的 `work:<id>` selector，只由 `instructions` 
 - `tool-installation-manifest.json` 保存 generated path、scope、source、adapter
   version 和 SHA-256 ownership evidence。
 - Project-local skill 路径统一为 `<skillsDir>/skills/<skill-id>/**`；四个 ARSU
-  skill 目录递归安装，八个 self-contained companion skills 各安装一个 `SKILL.md`。
+  skill 目录递归安装，九个 self-contained companion skills 各安装一个 `SKILL.md`。
 - 28 个 command-capable tools 通过 registry formatter 生成各自 Markdown/TOML
-  格式的四个 ARSU 与八个 companion wrappers；不得用一个通用 Markdown 文件覆盖格式差异。
+  格式的四个 ARSU 与九个 companion wrappers；不得用一个通用 Markdown 文件覆盖格式差异。
 - Codex prompts 是 `$CODEX_HOME/prompts` 或 `~/.codex/prompts` 下的
   shared-global files，不因单个项目 deselect 被删除。
 - Manifest 未登记的 existing file 视为 user-owned；hash drift 默认保留，

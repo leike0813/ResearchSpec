@@ -6,6 +6,8 @@ import { stringify } from "yaml";
 import { planToolDelivery, type InstallationRecord } from "../adapters/delivery.js";
 import { detectTools, orderTools, parseToolExpression } from "../adapters/tools.js";
 import { WorkItemSelectorSchema, WORKFLOW_PROFILE_IDS, type WorkflowProfileId } from "../core/contracts/workflow.js";
+import { Sha256Schema, SubmitActorKindSchema, SubmitActorSchema } from "../core/contracts/artifact.js";
+import { ArtifactSubmitError, executeArtifactSubmit, planArtifactSubmit } from "../core/runtime/artifact-submit.js";
 import { archiveItem, decideItem, type DecisionChoice } from "../core/runtime/lifecycle.js";
 import { assertProposalBasisCurrent, ContractChangeError, planContractChangeProposal } from "../core/runtime/contract-change.js";
 import { renderHandoff } from "../core/runtime/handoff.js";
@@ -28,6 +30,7 @@ export interface HandoffOptions { stdout?: boolean; out?: string }
 export interface PackOptions { out?: string; includeArtifacts?: boolean }
 export interface DecideOptions { decision?: DecisionChoice; actorName?: string; reason?: string }
 export interface ProposeOptions { input: string; actorKind: "human" | "agent"; actorName: string }
+export interface SubmitOptions { input: string; actorKind: string; actorName: string; expectedSha256?: string }
 
 export async function handleInit(inputPath: string | undefined, options: InitOptions, context: CommandContext): Promise<CommandResult> {
   if (options.profile !== undefined && !WORKFLOW_PROFILE_IDS.includes(options.profile as WorkflowProfileId)) throw new CliError("invalid_profile", `Unknown profile: ${options.profile}`, 2, `Supported profiles: ${WORKFLOW_PROFILE_IDS.join(", ")}.`);
@@ -172,6 +175,55 @@ export async function handleInstructions(selector: string, context: CommandConte
   }
   const packet = result.packet;
   return success("instructions", packet, { stdout: [`Work item: ${packet.selector}`, `Producer skill: ${packet.producer_skill}`, `Output: ${packet.output.resolved_path}`, `Template: ${packet.output.template_ref}`, ""].join("\n") });
+}
+
+export async function handleSubmit(selector: string, options: SubmitOptions, context: CommandContext): Promise<CommandResult> {
+  if (!WorkItemSelectorSchema.safeParse(selector).success) throw new CliError("invalid_work_item_selector", `Invalid work-item selector: ${selector}`, 2, "Use the canonical form work:<safe-id>.");
+  if (options.expectedSha256 !== undefined && !Sha256Schema.safeParse(options.expectedSha256).success) throw new CliError("invalid_expected_sha256", "--expected-sha256 must be 64 lowercase hexadecimal characters.", 2);
+  if (!SubmitActorKindSchema.safeParse(options.actorKind).success) throw new CliError("invalid_actor_kind", "--actor-kind must be human, agent, script, converter, or validator.", 2);
+  const actorResult = SubmitActorSchema.safeParse({ kind: options.actorKind, name: options.actorName });
+  if (!actorResult.success) throw new CliError("invalid_submission_input", "Submit actor is invalid.", 2, undefined, actorResult.error.issues);
+  if (!context.dryRun && !context.interactive && (!context.yes || !options.expectedSha256)) {
+    throw new CliError("confirmation_required", "Non-interactive Submit requires --expected-sha256 and --yes.", 2, "Run the identical payload with --dry-run --json first; --yes authorizes registration only.");
+  }
+  const workspace = await requireWorkspace(context);
+  const inputPath = path.resolve(context.cwd, options.input);
+  let payload: unknown;
+  try { payload = JSON.parse(await readFile(inputPath, "utf8")) as unknown; }
+  catch (error) {
+    const nodeError = error as NodeJS.ErrnoException;
+    throw new CliError("invalid_submission_input", nodeError.code === "ENOENT" ? `Submission input file not found: ${inputPath}` : `Cannot read submission input: ${error instanceof Error ? error.message : String(error)}`, 2);
+  }
+  try {
+    const plan = await planArtifactSubmit({ snapshot: await loadWorkspaceSnapshot(workspace), selector, payload, actor: actorResult.data, expectedSha256: options.expectedSha256 });
+    if (!context.dryRun && plan.status !== "already_submitted" && !context.yes) {
+      const approved = await confirm({ message: `Submit ${selector} at SHA-256 ${plan.candidate_sha256} and register its receipt? This does not update state, Gates, or Decisions.`, default: false });
+      if (!approved) throw new CliError("cancelled", "Artifact submission cancelled.", 1);
+    }
+    const result = context.dryRun ? undefined : await executeArtifactSubmit(plan, workspace);
+    const status = context.dryRun ? plan.status : result?.status ?? plan.status;
+    return success("submit", {
+      status,
+      selector,
+      candidate_sha256: plan.candidate_sha256,
+      artifact: plan.artifact,
+      receipt_artifact: plan.receipt_artifact,
+      validation: plan.validation,
+      projected_completion: plan.projected_completion,
+      dry_run: context.dryRun,
+      plan: summarizePlan(plan.writePlan.operations),
+      workflow_control_after: result?.workflow_control_after ?? null,
+      state_updated: false,
+      gate_appended: false,
+      decision_appended: false,
+    }, { stdout: `${context.dryRun ? "Would submit" : status === "already_submitted" ? "Already submitted" : "Submitted"} ${selector} at ${plan.candidate_sha256}.\n` });
+  } catch (error) {
+    if (error instanceof CliError) throw error;
+    if (error instanceof ArtifactSubmitError) throw new CliError(error.code, error.message, error.kind === "usage" ? 2 : error.kind === "conflict" ? 3 : 1, undefined, error.details);
+    if ((error as NodeJS.ErrnoException).code === "EWRITE_CONFLICT") throw new CliError("submission_conflict", error instanceof Error ? error.message : String(error), 3);
+    if (isFileSystemError(error)) throw error;
+    throw new CliError("internal_error", error instanceof Error ? error.message : String(error), 4);
+  }
 }
 
 export async function handleCheck(target: string | undefined, strict: boolean, context: CommandContext): Promise<CommandResult> {

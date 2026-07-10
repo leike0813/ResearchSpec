@@ -5,12 +5,13 @@ import { decideWorkflow } from "./workflows/decide.js";
 import { exploreWorkflow } from "./workflows/explore.js";
 import { nextWorkflow } from "./workflows/next.js";
 import { proposeWorkflow } from "./workflows/propose.js";
+import { submitWorkflow } from "./workflows/submit.js";
 import { verifyWorkflow } from "./workflows/verify.js";
 import { COMPANION_WORKFLOW_IDS, type CompanionIntent, type CompanionWorkflowSource } from "./types.js";
 
 const WORKFLOWS: readonly CompanionWorkflowSource[] = [
   exploreWorkflow, proposeWorkflow, checkWorkflow, verifyWorkflow,
-  nextWorkflow, contextWorkflow, decideWorkflow, archiveWorkflow,
+  nextWorkflow, contextWorkflow, decideWorkflow, submitWorkflow, archiveWorkflow,
 ];
 
 export const COMPANION_INTENTS: readonly CompanionIntent[] = WORKFLOWS.map((workflow) => {

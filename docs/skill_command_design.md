@@ -15,7 +15,7 @@ ARSU 与 companion 是两组独立 intent。ARSU 负责文献研究、证据综�
 稿件审查、revision strategy 和 manuscript draft-patch authoring；companion 负责安全地
 导航和操作 ResearchSpec contract lifecycle。
 
-## 1. 默认 8-Skill Surface
+## 1. 默认 9-Skill Surface
 
 | ID | Skill | 主要触发 | 不负责 |
 | --- | --- | --- | --- |
@@ -26,10 +26,11 @@ ARSU 与 companion 是两组独立 intent。ARSU 负责文献研究、证据综�
 | `next` | `researchspec-next` | 跨会话恢复并给出一个首选下一步 | 执行决定、归档或 stage transition |
 | `context` | `researchspec-context` | 在 handoff stdout/write 与 pack 之间选择 | 修改 SSOT、任意备份 |
 | `decide` | `researchspec-decide` | review、dry-run、确认、accept/reject/postpone | author proposal/draft patch |
+| `submit` | `researchspec-submit` | preview、hash-bound 确认、candidate/receipt 原子登记 | 写 candidate、学术认可、Gate 或 stage transition |
 | `archive` | `researchspec-archive` | resolved evidence 检查与 lifecycle archive | 补造 receipt/gate/decision |
 
 不为 `setup`、`init`、`update`、`status`、`list`、`show`、`handoff`、`pack`、`apply`
-单独建立 skill。前两者发生在 project-local skills 可用之前；其余是八个 workflow 内部
+单独建立 skill。前两者发生在 project-local skills 可用之前；其余是九个 workflow 内部
 按意图组合的机械命令，单独暴露只会造成重叠触发或绕开安全流程。
 
 ## 2. Source Architecture 与 Skill 厚度
@@ -49,10 +50,11 @@ src/adapters/companion/
     next.ts
     context.ts
     decide.ts
+    submit.ts
     archive.ts
 ```
 
-- Workflow module 拥有完整 canonical instructions；不把八个 skill 的正文塞入一个文件。
+- Workflow module 拥有完整 canonical instructions；不把九个 skill 的正文塞入一个文件。
 - Manifest 是唯一注册表，提供稳定 ID、skill ID、description、metadata 与 workflow body。
 - `shared-guidance.ts` 只保存真正跨 workflow 的 authority、selector、confirmation 和
   failure-class 纪律，由 renderer 内联到每个 `SKILL.md`。
@@ -119,6 +121,8 @@ ready work item → transition/configuration boundary。对单个 ready 节点�
 writes 和 completion policy；不得从静态 Skill 文本重建节点协议。Ready selectors 从
 `status.data.workflow_control.ready_items` 读取，并在同一 object 的 `work_items` 中取详情；
 status 顶层没有第二份 work-items 列表。多个同优先级节点要求用户选择。
+Ready 节点存在 `candidate_unregistered` warning 时路由 `researchspec-submit`，否则路由节点
+声明的 producer Skill；不从文件名或 stage title 猜测。
 `stage_work_complete + transition_required` 只表示只读控制面到达转移边界，
 不得直接编辑 state 或宣告 run complete。
 
@@ -137,7 +141,16 @@ registry 和 ledger writes；解释 semantic effect 并明确确认后执行完�
 CLI 会二次运行与 propose 相同的 target resolver，任何 YAML/Markdown current-value drift
 都会阻断。写后复查 receipt/status/check。
 
-### 4.8 Archive
+### 4.8 Submit
+
+固定流程为 `status → instructions → submit --dry-run → exact-hash confirmation → submit
+--expected-sha256 --yes → status + check artifacts`。Input 只包含 schema version、可信依赖
+artifact IDs 与可选 producer mode；candidate path/type、producer Skill、stage、template ref 和
+IDs 全由 workflow/CLI 派生。Workflow 不编辑 candidate、registry 或 receipt，也不把
+deterministic `verified` 解释为学术认可。写后报告 state、Gate 和 Decision 均未被修改；若
+completion Gate 缺失，artifact 可已登记但节点仍 blocked。
+
+### 4.9 Archive
 
 只接受 resolved change/patch。检查 matching decision、linked blocking gate、registered
 receipt path/hash/content 和 destination collision；dry-run 后解释 source/target 与保留的
@@ -152,8 +165,8 @@ backup 或 OpenSpec change。
 <skillsDir>/skills/researchspec-<id>/SKILL.md
 ```
 
-- 31 个 registered tools 全部安装 8 个 companion skills 和 4 个 ARSU skill trees。
-- 28 个 command-capable tools 生成 8 个 companion wrappers 和 4 个 ARSU wrappers。
+- 31 个 registered tools 全部安装 9 个 companion skills 和 4 个 ARSU skill trees。
+- 28 个 command-capable tools 生成 9 个 companion wrappers 和 4 个 ARSU wrappers。
 - ForgeCode、Kimi、Mistral Vibe 只安装 skills，并产生非阻断 `commands_not_supported`。
 - Codex command prompts 延续 registry 定义的 shared-global `$CODEX_HOME/prompts` 路径。
 - Markdown/TOML/frontmatter、colon/dash 与参数注入由既有 tool formatter 决定，不新增平台特判。
@@ -165,11 +178,12 @@ generated file。旧 manifest-owned `references/cli-discipline.md` 不再是 des
 
 ## 6. 验收边界
 
-- Manifest 恰好 8 个唯一 companion IDs，skill 与 command projection parity，ARSU intents 独立。
+- Manifest 恰好 9 个唯一 companion IDs，skill 与 command projection parity，ARSU intents 独立。
 - 每个 skill 检查必要章节、关键状态分支、CLI example、confirmation、failure recovery、output
   contract 和 near-miss；不锁定全文、hash、行数或大 snapshot。
-- Delivery 从 registry 推导 31×8 和 28×8，不为具体工具复制规则。
+- Delivery 从 registry 推导 31×9 和 28×9，不为具体工具复制规则。
 - `propose → decide accept → receipt/registry/ledger → archive` 有端到端验收。
+- `instructions → candidate → submit preview/confirm → receipt/registry → next ready` 有端到端验收。
 - Dry-run 无写入、create-only/manifest ownership、drift、force、Codex shared-global 和 stale
   cleanup 均保持现有确定性契约。
 

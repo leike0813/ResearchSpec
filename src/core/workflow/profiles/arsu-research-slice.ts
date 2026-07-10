@@ -36,6 +36,7 @@ export const ARSU_RESEARCH_SLICE_WORKFLOW = {
         required_gate_ids: [],
         require_registry: true,
         require_sha256: true,
+        require_receipt: true,
       },
     },
     {
@@ -66,6 +67,7 @@ export const ARSU_RESEARCH_SLICE_WORKFLOW = {
         required_gate_ids: [],
         require_registry: true,
         require_sha256: true,
+        require_receipt: true,
       },
     },
     {
@@ -96,6 +98,7 @@ export const ARSU_RESEARCH_SLICE_WORKFLOW = {
         required_gate_ids: [],
         require_registry: true,
         require_sha256: true,
+        require_receipt: true,
       },
     },
   ],
