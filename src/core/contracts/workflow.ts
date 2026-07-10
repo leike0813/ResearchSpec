@@ -40,6 +40,28 @@ const CommonNodeShape = {
   validation_profile: z.string().min(1),
 };
 
+export const GateTemplateDefinitionSchema = z.strictObject({
+  id: SafeIdSchema,
+  stage_id: SafeIdSchema,
+  title: z.string().min(1),
+  gate_type: SafeIdSchema,
+  validator: z.strictObject({ id: SafeIdSchema, evidence: z.strictObject({ artifact_types: z.array(SafeIdSchema), contracts: z.array(WorkspacePathSchema) }) }),
+  risk_level: z.enum(["low", "medium", "high"]),
+  blocking: z.boolean(),
+  confirmation_required: z.literal(true),
+});
+
+export const TransitionTemplateDefinitionSchema = z.strictObject({
+  id: SafeIdSchema,
+  from_stage_id: SafeIdSchema,
+  effect: z.discriminatedUnion("kind", [
+    z.strictObject({ kind: z.literal("activate_stage"), stage_id: SafeIdSchema }),
+    z.strictObject({ kind: z.literal("complete_subflow") }),
+  ]),
+  requires: z.strictObject({ gate_ids: z.array(SafeIdSchema), decision_types: z.array(SafeIdSchema) }),
+  branch: z.strictObject({ decision_point_id: SafeIdSchema, option_id: SafeIdSchema }).nullable(),
+});
+
 export const WorkflowNodeDefinitionSchema = z.looseObject({
   ...CommonNodeShape,
   requires: z.looseObject(RequiresShape),
@@ -76,6 +98,8 @@ export const SubflowTemplateDefinitionSchema = z.strictObject({
   start_requires: z.strictObject({ decision_types: z.array(SafeIdSchema) }),
   work_items: z.array(WorkflowNodeTemplateSchema).min(1),
   parallel_groups: z.array(ParallelGroupDefinitionSchema),
+  gates: z.array(GateTemplateDefinitionSchema).default([]),
+  transitions: z.array(TransitionTemplateDefinitionSchema).default([]),
 });
 
 export const LegacyWorkflowDefinitionSchema = z.looseObject({
@@ -100,6 +124,8 @@ export type WorkflowNodeDefinition = z.infer<typeof WorkflowNodeDefinitionSchema
 export type WorkflowNodeTemplate = z.infer<typeof WorkflowNodeTemplateSchema>;
 export type ParallelGroupDefinition = z.infer<typeof ParallelGroupDefinitionSchema>;
 export type SubflowTemplateDefinition = z.infer<typeof SubflowTemplateDefinitionSchema>;
+export type GateTemplateDefinition = z.infer<typeof GateTemplateDefinitionSchema>;
+export type TransitionTemplateDefinition = z.infer<typeof TransitionTemplateDefinitionSchema>;
 export type LegacyWorkflowDefinition = z.infer<typeof LegacyWorkflowDefinitionSchema>;
 export type InstanceWorkflowDefinition = z.infer<typeof InstanceWorkflowDefinitionSchema>;
 export type WorkflowDefinition = z.infer<typeof WorkflowDefinitionSchema>;
@@ -143,6 +169,15 @@ function validateInstanceWorkflow(workflow: InstanceWorkflowDefinition): Workflo
     if (template.template_kind === "round" && template.parent_policy !== "required") issues.push({ code: "round_parent_policy_invalid", message: `Round template ${template.template_id} requires parent_policy required.` });
     if (template.template_kind !== "round" && template.work_items.some((item) => item.output.workspace_path_template.includes("{round_number}"))) issues.push({ code: "round_placeholder_invalid", message: `Non-round template ${template.template_id} uses round_number.` });
     validateNodeGraph(template.work_items, stageIds, template.parallel_groups, issues);
+    const gateIds = uniqueIds(template.gates.map((item) => item.id), "duplicate_gate_id", issues);
+    uniqueIds(template.transitions.map((item) => item.id), "duplicate_transition_id", issues);
+    for (const gate of template.gates) if (!stageIds.has(gate.stage_id)) issues.push({ code: "gate_stage_missing", message: `Gate ${gate.id} references missing stage: ${gate.stage_id}` });
+    for (const transition of template.transitions) {
+      if (!stageIds.has(transition.from_stage_id)) issues.push({ code: "transition_stage_missing", message: `Transition ${transition.id} references missing source stage: ${transition.from_stage_id}` });
+      if (transition.effect.kind === "activate_stage" && !stageIds.has(transition.effect.stage_id)) issues.push({ code: "transition_target_missing", message: `Transition ${transition.id} references missing target stage: ${transition.effect.stage_id}` });
+      for (const gateId of transition.requires.gate_ids) if (!gateIds.has(gateId)) issues.push({ code: "transition_gate_missing", message: `Transition ${transition.id} references missing Gate: ${gateId}` });
+      if (transition.branch && !transition.requires.decision_types.includes("workflow_branch")) issues.push({ code: "transition_branch_invalid", message: `Branch transition ${transition.id} must require workflow_branch.` });
+    }
   }
   return deduplicateIssues(issues);
 }

@@ -12,7 +12,14 @@ export const SubflowTemplateSelectorSchema = z.string().regex(new RegExp(`^subfl
 export const SubflowInstanceSelectorSchema = z.string().regex(new RegExp(`^subflow:sf-${SafeId}$`))
   .refine((value) => !value.includes(".."));
 export const SubflowSelectorSchema = z.union([SubflowTemplateSelectorSchema, SubflowInstanceSelectorSchema]);
-export const ReservedRuntimeSelectorSchema = z.string().regex(new RegExp(`^(?:gate|transition):${SafeId}$`))
+export const ScopedGateSelectorSchema = z.string().regex(new RegExp(`^gate:sf-${SafeId}/${SafeId}$`))
+  .refine((value) => !value.includes(".."));
+export const LegacyGateSelectorSchema = z.string().regex(new RegExp(`^gate:${SafeId}$`))
+  .refine((value) => !value.includes(".."));
+export const GateSelectorSchema = z.union([ScopedGateSelectorSchema, LegacyGateSelectorSchema]);
+export const TransitionSelectorSchema = z.string().regex(new RegExp(`^transition:sf-${SafeId}/${SafeId}$`))
+  .refine((value) => !value.includes(".."));
+export const ReservedRuntimeSelectorSchema = z.union([GateSelectorSchema, TransitionSelectorSchema])
   .refine((value) => !value.includes(".."));
 export const RuntimeSelectorSchema = z.union([WorkItemSelectorSchema, SubflowSelectorSchema, ReservedRuntimeSelectorSchema]);
 
@@ -21,7 +28,8 @@ export type RuntimeSelector =
   | { kind: "scoped_work"; selector: string; instanceId: string; workItemId: string }
   | { kind: "subflow_template"; selector: string; templateId: string }
   | { kind: "subflow_instance"; selector: string; instanceId: string }
-  | { kind: "reserved"; selector: string; namespace: "gate" | "transition"; id: string };
+  | { kind: "gate"; selector: string; instanceId?: string; id: string }
+  | { kind: "transition"; selector: string; instanceId: string; id: string };
 
 export function parseRuntimeSelector(value: string): RuntimeSelector | undefined {
   if (!RuntimeSelectorSchema.safeParse(value).success) return undefined;
@@ -32,7 +40,12 @@ export function parseRuntimeSelector(value: string): RuntimeSelector | undefined
   if (value.startsWith("work:")) return { kind: "legacy_work", selector: value, workItemId: value.slice("work:".length) };
   if (value.startsWith("subflow:tpl-")) return { kind: "subflow_template", selector: value, templateId: value.slice("subflow:".length) };
   if (value.startsWith("subflow:sf-")) return { kind: "subflow_instance", selector: value, instanceId: value.slice("subflow:".length) };
-  const [namespace, id] = value.split(":", 2) as ["gate" | "transition", string];
-  return { kind: "reserved", selector: value, namespace, id };
+  if (value.startsWith("gate:")) {
+    const body = value.slice("gate:".length);
+    const [instanceId, id] = body.split("/", 2);
+    return id ? { kind: "gate", selector: value, instanceId, id } : { kind: "gate", selector: value, id: body };
+  }
+  const body = value.slice("transition:".length);
+  const [instanceId, id] = body.split("/", 2);
+  return { kind: "transition", selector: value, instanceId: instanceId ?? "", id: id ?? "" };
 }
-

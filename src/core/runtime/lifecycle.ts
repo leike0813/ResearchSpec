@@ -8,6 +8,8 @@ import type { IndexedItem, WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { resolveItem } from "../workspace/snapshot.js";
 import { executeWritePlan, hashPath, sha256, type PlannedWrite } from "../workspace/write-plan.js";
 import { validateAndApplyContractOperations, validateEvidenceReferences } from "./contract-change.js";
+import { evaluateWorkflowControl } from "./workflow-control.js";
+import { GateSubmitReceiptSchema } from "../contracts/gate-transition.js";
 
 export type DecisionChoice = "accept" | "reject" | "postpone";
 
@@ -21,11 +23,12 @@ export interface DecisionOutcome {
 export async function decideItem(input: { snapshot: WorkspaceSnapshot; selector: string; decision: DecisionChoice; actorName: string; reason?: string; dryRun: boolean }): Promise<DecisionOutcome> {
   const blockingDiagnostic = input.snapshot.diagnostics.find((diagnostic) => diagnostic.blocking);
   if (blockingDiagnostic) throw new Error(`Workspace is not valid for decisions: ${blockingDiagnostic.code}`);
+  if (input.selector.startsWith("transition:")) return decideTransition(input);
   const resolved = resolveItem(input.snapshot, input.selector);
   if (!resolved.item) throw new Error(resolved.candidates.length > 1 ? `Ambiguous item: ${resolved.candidates.map((item) => item.selector).join(", ")}` : `Item not found: ${input.selector}`);
   const item = resolved.item;
   if (!(["change", "patch", "gate"] as string[]).includes(item.type)) throw new Error(`Item type cannot be decided: ${item.type}`);
-  assertSafeId(item.id, "item ID");
+  if (item.type !== "gate") assertSafeId(item.id, "item ID");
   if (item.type === "change" || item.type === "patch") {
     const currentStatus = string(record(item.value).status) || "proposed";
     if (!["proposed", "postponed"].includes(currentStatus)) throw new Error(`Item is already resolved: ${currentStatus}`);
@@ -33,6 +36,7 @@ export async function decideItem(input: { snapshot: WorkspaceSnapshot; selector:
     const gate = record(item.value);
     const existingOverride = latestDecisions(input.snapshot).find((decision) => decision.gate_id === item.id && decision.status === "accepted");
     if (gate.blocking !== true || gate.verdict === "pass" || existingOverride) throw new Error("Gate is not a pending blocking item.");
+    if (gate.schema_version === "1") await assertTrustedGateForOverride(input.snapshot, gate);
   }
   if ((input.decision === "accept" || input.decision === "reject") && !input.reason) throw new Error("--reason is required for accept or reject.");
 
@@ -51,10 +55,48 @@ export async function decideItem(input: { snapshot: WorkspaceSnapshot; selector:
     actor: { kind: "human", name: input.actorName }, decision_type: item.type === "gate" ? "gate_override" : "patch_acceptance",
     selected_option: input.decision, status: input.decision === "accept" ? "accepted" : input.decision === "reject" ? "rejected" : "postponed",
     rationale: input.reason, ...(item.type === "change" ? { change_id: item.id } : {}), ...(item.type === "patch" ? { draft_patch_id: item.id } : {}), ...(item.type === "gate" ? { gate_id: item.id } : {}),
+    ...(item.type === "gate" && typeof record(item.value).event_id === "string" ? { gate_event_id: record(item.value).event_id, gate_receipt_sha256: string(record(record(item.value).receipt).sha256) } : {}),
   };
   operations.push({ action: await fileExists(ledgerPath) ? "refresh" : "create", path: ledgerPath, relativePath: "runs/current/decision-ledger.jsonl", content: `${ledger}${JSON.stringify(event)}\n`, scope: "workspace", ownership: "user", previousHash: sha256(ledger), nextHash: sha256(`${ledger}${JSON.stringify(event)}\n`), reason: "append human decision last" });
   if (!input.dryRun) await executeWritePlan({ operations });
   return { item: item.selector, decision_id: decisionId, status: event.status as DecisionOutcome["status"], writes: operations.map((operation) => operation.path) };
+}
+
+async function assertTrustedGateForOverride(snapshot: WorkspaceSnapshot, gate: Record<string, unknown>): Promise<void> {
+  if (gate.verification_kind !== "reverification" || typeof gate.confirmed_by !== "object" || typeof gate.receipt !== "object") throw new Error("Gate override requires the latest trusted confirmed reverification.");
+  const reference = record(gate.receipt);
+  if (typeof reference.path !== "string" || typeof reference.sha256 !== "string" || typeof reference.plan_sha256 !== "string") throw new Error("Gate override receipt reference is invalid.");
+  const receiptPath = path.resolve(snapshot.workspace, reference.path);
+  try {
+    const bytes = await readFile(receiptPath);
+    const receipt = GateSubmitReceiptSchema.parse(JSON.parse(Buffer.from(bytes).toString("utf8")) as unknown);
+    if (sha256(bytes) !== reference.sha256 || receipt.plan_sha256 !== reference.plan_sha256 || receipt.event_id !== gate.event_id
+      || receipt.gate_id !== gate.gate_id || receipt.verdict !== gate.verdict || receipt.verification_kind !== gate.verification_kind
+      || JSON.stringify(receipt.evidence) !== JSON.stringify(gate.evidence) || JSON.stringify(receipt.confirmed_by) !== JSON.stringify(gate.confirmed_by)) throw new Error("receipt mismatch");
+  } catch (error) { throw new Error(`Gate override requires a trusted receipt: ${error instanceof Error ? error.message : String(error)}`); }
+}
+
+async function decideTransition(input: { snapshot: WorkspaceSnapshot; selector: string; decision: DecisionChoice; actorName: string; reason?: string; dryRun: boolean }): Promise<DecisionOutcome> {
+  const control = await evaluateWorkflowControl(input.snapshot);
+  const transition = control.transitions.find((item) => item.selector === input.selector);
+  if (!transition || transition.state !== "decision_required" || !transition.decision_point_id) throw new Error("Transition is not awaiting a branch Decision.");
+  if ((input.decision === "accept" || input.decision === "reject") && !input.reason) throw new Error("--reason is required for accept or reject.");
+  const existingAccepted = latestDecisions(input.snapshot).find((decision) => decision.decision_type === "workflow_branch" && decision.status === "accepted" && decision.decision_point_id === transition.decision_point_id);
+  if (existingAccepted) throw new Error(`Decision point is already resolved: ${transition.decision_point_id}`);
+  const now = new Date().toISOString();
+  const decisionId = `D-${randomUUID()}`;
+  const event = {
+    event_id: `E-${randomUUID()}`, decision_id: decisionId, timestamp: now, actor: { kind: "human", name: input.actorName },
+    decision_type: "workflow_branch", decision_point_id: transition.decision_point_id, transition_id: transition.transition_id,
+    subflow_instance_id: transition.subflow_instance_id, selected_option: transition.transition_node_id,
+    status: input.decision === "accept" ? "accepted" : input.decision === "reject" ? "rejected" : "postponed", rationale: input.reason,
+  };
+  const ledgerPath = path.join(input.snapshot.workspace, "runs/current/decision-ledger.jsonl");
+  const ledger = await readOptionalText(ledgerPath) ?? "";
+  const content = `${ledger}${JSON.stringify(event)}\n`;
+  const operation: PlannedWrite = { action: await fileExists(ledgerPath) ? "refresh" : "create", path: ledgerPath, relativePath: "runs/current/decision-ledger.jsonl", content, scope: "workspace", ownership: "user", previousHash: sha256(ledger), nextHash: sha256(content), reason: "append workflow branch decision" };
+  if (!input.dryRun) await executeWritePlan({ operations: [operation] });
+  return { item: input.selector, decision_id: decisionId, status: event.status as DecisionOutcome["status"], writes: [ledgerPath] };
 }
 
 export async function archiveItem(input: { snapshot: WorkspaceSnapshot; selector: string; dryRun: boolean }): Promise<{ source: string; target: string }> {

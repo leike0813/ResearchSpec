@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { TransitionReceiptReferenceSchema } from "./gate-transition.js";
 
 const SafeIdSchema = z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]*$/).refine((value) => !value.includes(".."));
 const Sha256Schema = z.string().regex(/^[a-f0-9]{64}$/);
@@ -30,6 +31,7 @@ export const SubflowInstanceStateSchema = z.strictObject({
     sha256: Sha256Schema,
     plan_sha256: Sha256Schema,
   }),
+  transition_receipts: z.array(TransitionReceiptReferenceSchema).default([]),
   started_at: z.iso.datetime(),
 });
 

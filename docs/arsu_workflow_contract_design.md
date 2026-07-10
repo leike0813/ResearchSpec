@@ -323,15 +323,16 @@ Use `changes/<change-id>/contract-patch.yaml` when a task proposes:
 - accepting a limitation or override that affects final claims.
 
 Low-risk artifact registration does not require a contract patch. Current
-implementation can hand a typed workflow candidate to the `researchspec-submit`
-Companion for dry-run and exact-hash confirmation. Target v0.1 removes that extra
-user-facing Companion: the Agent automatically performs hash-bound
-`submit work:<id>` after candidate production. This mechanical submit is not a
-Gate or academic approval.
+instance work can automatically perform hash-bound `submit work:<id>` after
+candidate production when Start authorization is trusted; manual/legacy work can
+still use the transitional Submit Companion. This mechanical submit is not a Gate
+or academic approval.
 
 Formal Gate evidence is proposed by `researchspec-verify`, shown to the user, and
-persisted by Target `submit gate:<id>` only after confirmation. ARSU Skills never
-hand-edit registry, receipts, state, or ledgers.
+persisted by current `submit gate:<instance>/<id>` only after confirmation. A challenge
+forces reverification; failed override and branch choice use Decide. The unique
+authorized transition advances through a receipt-first/state-last CLI transaction.
+ARSU Skills never hand-edit registry, receipts, state, or ledgers.
 
 ### 6.4 Preserve Upstream Semantics
 

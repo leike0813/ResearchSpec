@@ -568,8 +568,9 @@ become source-of-truth research specs.
 
 ## 9. Implementation Roadmap
 
-已有 workspace、schema、work-level control plane、artifact submit 和 contract lifecycle 保持
-为 Current implementation。Target v0.1 的剩余架构按五个 technical changes 落地：
+已有 workspace、schema、work/subflow/Gate/transition control planes、artifact submit 和
+contract lifecycle 保持为 Current implementation。Target v0.1 的剩余架构按后续 technical
+changes 落地：
 
 ### 9.1 Routing Catalog
 
@@ -582,8 +583,8 @@ become source-of-truth research specs.
 
 ### 9.3 Gate And Transition Control Plane
 
-`add-gate-transition-control-plane` 提供 `submit gate:`、`advance transition:`、Gate
-confirmation/challenge/override 和 transition receipt。
+`add-gate-transition-control-plane` 已提供 `submit gate:`、`advance transition:`、Gate
+confirmation/challenge/reverification/override、branch Decision 和 operational receipts。
 
 ### 9.4 Complete ARSU Workflow Profiles
 

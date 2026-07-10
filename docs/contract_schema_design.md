@@ -681,8 +681,8 @@ academic-pipeline 硬编码进程序。
 | `mode_profiles` | list[`ModeProfile`] | 否 | skill/mode 读写约束复用块 |
 | `human_checkpoints` | list[`HumanCheckpoint`] | 否 | 必须人类确认的节点 |
 
-Schema `0.2` 已实现 `subflow_templates`、`round` 和 `parallel_groups`；Gate/transition 字段仍由
-`add-gate-transition-control-plane` 冻结：
+Schema `0.2` 已实现 `subflow_templates`、`round`、`parallel_groups`、`gates` 和
+`transitions`；新增 arrays 与 instance transition receipt refs 缺省为空，旧 0.2 无需迁移：
 
 | 概念 | 最小语义 | 约束 |
 | --- | --- | --- |
@@ -728,16 +728,17 @@ Current `WorkflowNodeDefinition` 是 work-level `status/instructions` 的运行�
 | `validation_profile` | string | 是 | instructions 返回的确定性 validation profile |
 | `completion` | object | 是 | 明确 artifact status、verification state、registry、SHA-256、`require_receipt` 和 `required_gate_ids` |
 
-节点状态固定为 `done / ready / blocked`。`done` 需要 `work_item_id` 对应的 registry entry、artifact type/path、文件、SHA-256，以及每个 `required_gate_ids` 对应的 pass/pass-with-conditions 或 accepted override。`require_receipt: true` 时还必须存在 hash-trusted `artifact_submit_receipt` registry record 与严格 receipt payload，且 candidate ID/path/hash、selector、profile 和关联 ID 相互一致。`artifact_statuses` 与 `verification_states` 是额外完成约束，不能替代 required gates；文件存在或手写 registry entry 本身不构成完成。`ready` 还必须处于 active stage。当前控制面在 active stage 全部节点完成后返回 `stage_work_complete: true` 与 `transition_required: true`，不会修改 state 或宣告整个 run 完成。
+节点状态固定为 `done / ready / blocked`。`done` 需要 `work_item_id` 对应的 registry entry、artifact type/path、文件、SHA-256，以及每个 `required_gate_ids` 对应的 pass/pass-with-conditions 或 accepted override。`require_receipt: true` 时还必须存在 hash-trusted `artifact_submit_receipt` registry record 与严格 receipt payload，且 candidate ID/path/hash、selector、profile 和关联 ID 相互一致。`artifact_statuses` 与 `verification_states` 是额外完成约束，不能替代 required gates；文件存在或手写 registry entry 本身不构成完成。`ready` 还必须处于 active stage。当前控制面在 active stage 全部节点完成后继续计算 scoped Gate/transition frontier；只有 receipt-bound `advance` 才会修改 instance/run state。
 
 当前显式试验 profile `arsu-research-slice` 在 `init` 时只声明 partial
 `subflow:tpl-research`，不创建 instance 或 artifact。用户确认并 `start` 后，RQ Brief、
 Bibliography、Synthesis 位于该 instance 的 `research` stage，输出解析到
-`runs/current/subflows/<instance>/artifacts/`。三个节点全部 done 后仍只到达 transition boundary。
+`runs/current/subflows/<instance>/artifacts/`。三个节点 done 后进入 research-completion Gate；
+Gate pass 或可信 override 后，唯一 terminal transition 可推进 subflow complete。
 
 这个 Slice 是 Current implementation 的协议验证，不是完整 ARSU profile。`instructions`
-已支持 template/instance `subflow:` 和 scoped/legacy `work:`；`gate:`/`transition:` 当前只冻结
-selector 语法并明确返回 unavailable。
+已支持 template/instance `subflow:`、scoped/legacy `work:`、instance-scoped `gate:` 和
+`transition:` 的 status/instructions/transaction protocol。
 
 `WriteSurface` 字段：
 
@@ -877,8 +878,8 @@ Current subflow runtime 已能复算：
 - work/parallel group/join frontier；
 - start receipt、instance-scoped work 和 automatic Submit authorization。
 
-Pending Gate/transition change 再增加 proposed verdict/evidence、eligible transitions 与
-advance receipts。
+Gate/transition runtime 已能复算 proposed/confirmed verdict evidence、trusted overrides、
+branch Decisions、eligible transitions 和 Advance receipts。
 
 这些字段由 CLI transaction 写入；Human、ARSU Skill 和 Companion 都不得手写。
 

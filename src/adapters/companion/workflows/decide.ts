@@ -12,6 +12,7 @@ Record one explicit human decision and, for acceptance, apply its already-author
 
 - The user wants to accept, reject, or postpone a pending contract change or manuscript draft patch.
 - The user wants to resolve an eligible blocking gate through an explicit human override decision.
+- Multiple transition candidates require one explicit workflow-branch choice.
 - A proposal or patch has already been authored and now requires review.
 
 ## Do Not Use
@@ -22,7 +23,7 @@ Record one explicit human decision and, for acceptance, apply its already-author
 
 ## Inputs
 
-- One canonical \`change:<id>\`, \`patch:<id>\`, or eligible \`gate:<id>\` selector.
+- One canonical \`change:<id>\`, \`patch:<id>\`, eligible \`gate:<id>\`, or decision-required \`transition:<instance>/<id>\` selector.
 - Decision: accept, reject, or postpone.
 - Human actor name and rationale required for accept/reject.
 - Explicit confirmation after review of semantic impact and dry-run writes.
@@ -36,13 +37,14 @@ researchspec show change:weaken-c001 --json
 researchspec decide change:weaken-c001 --decision accept --actor-name "Research Lead" --reason "Evidence supports moderate strength" --dry-run --json
 researchspec decide change:weaken-c001 --decision accept --actor-name "Research Lead" --reason "Evidence supports moderate strength" --json
 researchspec check contracts --json
+researchspec decide transition:sf-<instance>/<node> --decision accept --actor-name "Research Lead" --reason "Selected branch" --dry-run --json
 \`\`\`
 
 ## Workflow
 
 1. If no selector is supplied, inspect \`decide --json\`, status, and relevant lists. Map pending decision events back to their change, draft patch, or gate IDs.
 2. Resolve exactly one canonical target. If multiple items remain, present title/status/risk/evidence and ask the user; do not preselect.
-3. Run \`show <selector> --json\`. For changes, inspect every target/current/proposed value and evidence reference. For draft patches, inspect base artifact/hash and operations. For gates, inspect verdict, blocking status, criteria, and linked item.
+3. Run \`show <selector> --json\` where applicable. For changes, inspect every target/current/proposed value and evidence reference. For draft patches, inspect base artifact/hash and operations. For gates, require the latest confirmed failed reverification and its trusted receipt. For transitions, inspect all candidates from status/instructions and the shared decision point.
 4. Explain what accept, reject, and postpone mean for this item. Acceptance may change stable specs or create a revised draft and receipt; rejection resolves without applying; postponement records the pending choice without resolving the item.
 5. Ask the user for the decision, actor name, and rationale. Preserve their meaning; do not strengthen a vague statement into a different rationale.
 6. Construct the complete command and run it with \`--dry-run --json\`. Never preview with placeholder actor/reason or a different decision.
@@ -59,7 +61,8 @@ researchspec check contracts --json
 | --- | --- |
 | Proposed/postponed change with valid targets | Accept, reject, or postpone after preview. |
 | Proposed/postponed draft patch with valid base | Accept, reject, or postpone after preview. |
-| Blocking unresolved gate eligible for override | Record the explicit human gate decision. |
+| Blocking failed reverification eligible for override | Bind the override to its exact Gate event and receipt. |
+| Multiple eligible transition candidates | Accept exactly one canonical transition option; reject/postpone does not select another implicitly. |
 | Already applied/rejected/superseded item | Stop; do not record a second resolution. |
 | Target/current value changed since proposal | Block acceptance; revise or supersede proposal. |
 | Missing artifact/decision evidence | Block acceptance until authoritative evidence exists. |

@@ -11,7 +11,9 @@ import { cleanup, parseEnvelope, runCli, tempProject } from "./helpers/cli.js";
 void test("help, version, and usage errors expose the complete public boundary", () => {
   const help = runCli(["--help"]);
   assert.equal(help.status, 0);
-  for (const command of ["init", "update", "status", "instructions", "start", "submit", "check", "list", "show", "handoff", "pack", "propose", "decide", "archive"]) assert.match(help.stdout, new RegExp(`\\b${command}\\b`));
+  const commands = ["init", "update", "status", "instructions", "start", "submit", "advance", "check", "list", "show", "handoff", "pack", "propose", "decide", "archive"];
+  assert.equal(commands.length, 15);
+  for (const command of commands) assert.match(help.stdout, new RegExp(`\\b${command}\\b`));
   assert.equal(runCli(["--version"]).stdout.trim(), "0.1.0");
   const invalid = runCli(["unknown", "--json"]);
   assert.equal(invalid.status, 2);

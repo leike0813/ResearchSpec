@@ -37,6 +37,8 @@ researchspec list gates --json
 researchspec list changes --json
 researchspec show change:claim-strength --json
 researchspec archive --json
+researchspec instructions gate:sf-<instance>/<node> --json
+researchspec instructions transition:sf-<instance>/<node> --json
 \`\`\`
 
 ## Workflow
@@ -50,8 +52,9 @@ researchspec archive --json
 7. If no instance is active and \`startable_subflows\` is non-empty, request \`instructions subflow:<template> --json\`, present its exact route/prerequisite/artifact/Gate/cost summary, and ask for confirmation. Do not execute Start in this read-only workflow.
 8. Otherwise request instructions for the selected canonical scoped or legacy work selector. Use returned dependencies, parallel metadata, output, allowed writes, validation, submission, and completion policy; never reconstruct them from static Skill text.
 9. If a candidate is unregistered and submission is automatic with valid start authorization, recommend the producer Skill's direct hash-bound Submit sequence. Otherwise recommend \`researchspec-submit\` for manual/legacy registration.
-10. If \`workflow_control.configured\` is false, recommend configuring or migrating the graph. If invalid, route to \`researchspec-check\`. If \`transition_required\` is true, report the unavailable transition boundary without editing state.
-11. Form one primary recommendation with owner skill/command, reason, blockers, required inputs, and a verifiable completion condition. Add at most two viable alternatives, then stop without executing.
+10. If the frontier contains a ready Gate, request its instructions and route semantic assessment/confirmation to Verify. If it contains several decision-required transitions, route the exact candidates to Decide. If it contains one ready automatic transition, return its instructions and exact dry-run/Advance sequence as the primary action; keep this navigation workflow read-only.
+11. If \`workflow_control.configured\` is false, recommend configuring or migrating the graph. If invalid, route to \`researchspec-check\`.
+12. Form one primary recommendation with owner skill/command, reason, blockers, required inputs, and a verifiable completion condition. Add at most two viable alternatives, then stop without executing.
 
 ## Decision Table
 
@@ -67,7 +70,9 @@ researchspec archive --json
 | Manual/legacy item with \`candidate_unregistered\` | Recommend \`researchspec-submit work:<id>\`. |
 | Several ready work items | Ask the user to choose among their canonical \`work:<id>\` selectors. |
 | Work-item graph absent | Configure/migrate the workflow contract; do not infer a Skill. |
-| Active stage work complete | Report the pending transition boundary; do not edit state. |
+| Ready formal Gate | Route its evidence contract and selector to Verify for user confirmation. |
+| One ready automatic transition | Recommend its receipt-bound dry-run/Advance sequence. |
+| Several transition candidates | Route their decision point and selectors to Decide. |
 
 ## Failure Recovery
 

@@ -7,15 +7,17 @@ import { planToolDelivery, type InstallationRecord } from "../adapters/delivery.
 import { detectTools, orderTools, parseToolExpression } from "../adapters/tools.js";
 import { WorkItemSelectorSchema, WORKFLOW_PROFILE_IDS, type WorkflowProfileId } from "../core/contracts/workflow.js";
 import { Sha256Schema, SubmitActorKindSchema, SubmitActorSchema } from "../core/contracts/artifact.js";
-import { RuntimeSelectorSchema, SubflowSelectorSchema, parseRuntimeSelector } from "../core/contracts/runtime-selector.js";
+import { RuntimeActorSchema } from "../core/contracts/gate-transition.js";
+import { GateSelectorSchema, RuntimeSelectorSchema, SubflowSelectorSchema, TransitionSelectorSchema, parseRuntimeSelector } from "../core/contracts/runtime-selector.js";
 import { StartActorSchema } from "../core/contracts/subflow.js";
 import { ArtifactSubmitError, executeArtifactSubmit, planArtifactSubmit } from "../core/runtime/artifact-submit.js";
+import { executeGateSubmit, executeTransitionAdvance, GateTransitionError, isSha256, planGateSubmit, planTransitionAdvance } from "../core/runtime/gate-transition-control.js";
 import { archiveItem, decideItem, type DecisionChoice } from "../core/runtime/lifecycle.js";
 import { assertProposalBasisCurrent, ContractChangeError, planContractChangeProposal } from "../core/runtime/contract-change.js";
 import { renderHandoff } from "../core/runtime/handoff.js";
 import { buildContextPack } from "../core/runtime/pack.js";
 import { buildStatus, formatStatusHuman, listItems, showItem, type ListType } from "../core/runtime/query.js";
-import { buildWorkflowInstructions } from "../core/runtime/workflow-control.js";
+import { buildGateTransitionInstructions, buildWorkflowInstructions } from "../core/runtime/workflow-control.js";
 import { buildSubflowInstructions, executeSubflowStart, planSubflowStart, SubflowStartError } from "../core/runtime/subflow-control.js";
 import { runWorkspaceChecks, type CheckTarget } from "../core/validation/check.js";
 import type { Diagnostic } from "../core/validation/types.js";
@@ -33,8 +35,9 @@ export interface HandoffOptions { stdout?: boolean; out?: string }
 export interface PackOptions { out?: string; includeArtifacts?: boolean }
 export interface DecideOptions { decision?: DecisionChoice; actorName?: string; reason?: string }
 export interface ProposeOptions { input: string; actorKind: "human" | "agent"; actorName: string }
-export interface SubmitOptions { input: string; actorKind: string; actorName: string; expectedSha256?: string }
+export interface SubmitOptions { input: string; actorKind: string; actorName: string; confirmedBy?: string; expectedSha256?: string; expectedPlanSha256?: string }
 export interface StartOptions { input: string; actorKind: string; actorName: string; confirmedBy: string; expectedPlanSha256?: string }
+export interface AdvanceOptions { actorKind: string; actorName: string; expectedPlanSha256?: string }
 
 export async function handleInit(inputPath: string | undefined, options: InitOptions, context: CommandContext): Promise<CommandResult> {
   if (options.profile !== undefined && !WORKFLOW_PROFILE_IDS.includes(options.profile as WorkflowProfileId)) throw new CliError("invalid_profile", `Unknown profile: ${options.profile}`, 2, `Supported profiles: ${WORKFLOW_PROFILE_IDS.join(", ")}.`);
@@ -167,7 +170,11 @@ export async function handleInstructions(selector: string, context: CommandConte
   const workspace = await requireWorkspace(context);
   const snapshot = await loadWorkspaceSnapshot(workspace);
   const parsed = parseRuntimeSelector(selector);
-  if (parsed?.kind === "reserved") throw new CliError("runtime_selector_unavailable", `${parsed.namespace} instructions are reserved for a later control-plane change.`, 1, undefined, { selector });
+  if (parsed?.kind === "gate" || parsed?.kind === "transition") {
+    const result = await buildGateTransitionInstructions(snapshot, selector);
+    if (!result.ok) throw new CliError(result.code, `Runtime instructions are unavailable: ${selector}`, 1, undefined, { selector, item: result.item });
+    return success("instructions", result.packet, { stdout: `${JSON.stringify(result.packet, null, 2)}\n` });
+  }
   if (parsed?.kind === "subflow_template" || parsed?.kind === "subflow_instance") {
     const result = await buildSubflowInstructions(snapshot, selector);
     if (!result.ok) throw new CliError(result.code, `Subflow instructions are unavailable: ${selector}`, 1, undefined, { selector });
@@ -218,6 +225,7 @@ export async function handleStart(selector: string, options: StartOptions, conte
 }
 
 export async function handleSubmit(selector: string, options: SubmitOptions, context: CommandContext): Promise<CommandResult> {
+  if (GateSelectorSchema.safeParse(selector).success && parseRuntimeSelector(selector)?.kind === "gate") return handleGateSubmit(selector, options, context);
   if (!WorkItemSelectorSchema.safeParse(selector).success) throw new CliError("invalid_work_item_selector", `Invalid work-item selector: ${selector}`, 2, "Use the canonical form work:<safe-id>.");
   if (options.expectedSha256 !== undefined && !Sha256Schema.safeParse(options.expectedSha256).success) throw new CliError("invalid_expected_sha256", "--expected-sha256 must be 64 lowercase hexadecimal characters.", 2);
   if (!SubmitActorKindSchema.safeParse(options.actorKind).success) throw new CliError("invalid_actor_kind", "--actor-kind must be human, agent, script, converter, or validator.", 2);
@@ -265,6 +273,54 @@ export async function handleSubmit(selector: string, options: SubmitOptions, con
     if (isFileSystemError(error)) throw error;
     throw new CliError("internal_error", error instanceof Error ? error.message : String(error), 4);
   }
+}
+
+async function handleGateSubmit(selector: string, options: SubmitOptions, context: CommandContext): Promise<CommandResult> {
+  if (!isSha256(options.expectedPlanSha256)) throw new CliError("invalid_expected_plan_sha256", "--expected-plan-sha256 must be 64 lowercase hexadecimal characters.", 2);
+  const actor = RuntimeActorSchema.safeParse({ kind: options.actorKind, name: options.actorName });
+  if (!actor.success || actor.data.kind !== "validator" || !options.confirmedBy?.trim()) throw new CliError("invalid_gate_input", "Gate submit requires a validator actor and --confirmed-by human identity.", 2, undefined, actor.success ? undefined : actor.error.issues);
+  if (!context.dryRun && !context.interactive && (!context.yes || !options.expectedPlanSha256)) throw new CliError("confirmation_required", "Non-interactive Gate submit requires --expected-plan-sha256 and --yes after explicit human confirmation.", 2);
+  const workspace = await requireWorkspace(context);
+  let payload: unknown;
+  try { payload = JSON.parse(await readFile(path.resolve(context.cwd, options.input), "utf8")) as unknown; }
+  catch (error) { throw new CliError("invalid_gate_input", `Cannot read Gate input: ${error instanceof Error ? error.message : String(error)}`, 2); }
+  try {
+    const plan = await planGateSubmit({ snapshot: await loadWorkspaceSnapshot(workspace), selector, payload, actor: actor.data, confirmedBy: options.confirmedBy, expectedPlanSha256: options.expectedPlanSha256 });
+    if (!context.dryRun && plan.status !== "already_submitted" && !context.yes) {
+      const approved = await confirm({ message: `Record the user-confirmed Gate verdict for ${selector}?`, default: false });
+      if (!approved) throw new CliError("cancelled", "Gate submission cancelled.", 1);
+    }
+    const outcome = context.dryRun ? undefined : await executeGateSubmit(plan, workspace);
+    const status = context.dryRun ? plan.status : outcome?.status ?? plan.status;
+    return success("submit", { status, selector, plan_sha256: plan.plan_sha256, event: plan.event, receipt: plan.receipt, dry_run: context.dryRun, plan: summarizePlan(plan.writePlan.operations), workflow_control_after: outcome?.workflow_control_after ?? null, state_updated: false, artifact_registry_updated: false, decision_appended: false }, { stdout: `${context.dryRun ? "Would submit" : status === "already_submitted" ? "Already submitted" : "Submitted"} ${selector}.\n` });
+  } catch (error) { throw gateTransitionCliError(error); }
+}
+
+export async function handleAdvance(selector: string, options: AdvanceOptions, context: CommandContext): Promise<CommandResult> {
+  if (!TransitionSelectorSchema.safeParse(selector).success) throw new CliError("invalid_transition_selector", `Invalid transition selector: ${selector}`, 2, "Use transition:<instance>/<node>.");
+  if (!isSha256(options.expectedPlanSha256)) throw new CliError("invalid_expected_plan_sha256", "--expected-plan-sha256 must be 64 lowercase hexadecimal characters.", 2);
+  const actor = RuntimeActorSchema.safeParse({ kind: options.actorKind, name: options.actorName });
+  if (!actor.success || !["agent", "script"].includes(actor.data.kind)) throw new CliError("invalid_advance_input", "Advance actor must be an agent or script.", 2, undefined, actor.success ? undefined : actor.error.issues);
+  if (!context.dryRun && !context.interactive && (!context.yes || !options.expectedPlanSha256)) throw new CliError("confirmation_required", "Non-interactive Advance requires --expected-plan-sha256 and --yes.", 2);
+  const workspace = await requireWorkspace(context);
+  try {
+    const plan = await planTransitionAdvance({ snapshot: await loadWorkspaceSnapshot(workspace), selector, actor: actor.data, expectedPlanSha256: options.expectedPlanSha256 });
+    if (!context.dryRun && plan.status !== "already_advanced" && !context.yes) {
+      const approved = await confirm({ message: `Advance the unique authorized transition ${selector}?`, default: false });
+      if (!approved) throw new CliError("cancelled", "Transition advance cancelled.", 1);
+    }
+    const outcome = context.dryRun ? undefined : await executeTransitionAdvance(plan, workspace);
+    const status = context.dryRun ? plan.status : outcome?.status ?? plan.status;
+    return success("advance", { status, selector, plan_sha256: plan.plan_sha256, from: plan.from, to: plan.to, receipt: plan.receipt, dry_run: context.dryRun, plan: summarizePlan(plan.writePlan.operations), workflow_control_after: outcome?.workflow_control_after ?? null, artifact_registry_updated: false, gate_appended: false, decision_appended: false }, { stdout: `${context.dryRun ? "Would advance" : status === "already_advanced" ? "Already advanced" : "Advanced"} ${selector}.\n` });
+  } catch (error) { throw gateTransitionCliError(error); }
+}
+
+function gateTransitionCliError(error: unknown): CliError {
+  if (error instanceof CliError) return error;
+  if (error instanceof GateTransitionError) return new CliError(error.code, error.message, error.kind === "usage" ? 2 : error.kind === "conflict" ? 3 : 1, undefined, error.details);
+  if ((error as NodeJS.ErrnoException).code === "EWRITE_CONFLICT") return new CliError("runtime_write_conflict", error instanceof Error ? error.message : String(error), 3);
+  if (isFileSystemError(error)) throw error;
+  return new CliError("internal_error", error instanceof Error ? error.message : String(error), 4);
 }
 
 export async function handleCheck(target: string | undefined, strict: boolean, context: CommandContext): Promise<CommandResult> {

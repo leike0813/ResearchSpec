@@ -402,7 +402,7 @@ command wrapper 只是不同 agent 工具的 adapter。目标交付量是：
 
 截至 2026-07-10，当前实现已经具备：
 
-- `init/update/status/instructions/check/list/show/handoff/pack/propose/decide/archive`，以及 `submit work:`；
+- 全部 15 个目标顶层命令，包括 `submit work:|gate:` 与 `advance transition:`；
 - typed workflow work items、`done/ready/blocked` evaluator 和动态 `instructions work:`；
 - `RQ Brief → Bibliography → Synthesis` 实验 Slice；
 - receipt-backed、hash-bound candidate submit；
@@ -414,13 +414,12 @@ command wrapper 只是不同 agent 工具的 adapter。目标交付量是：
   all/quorum parallel frontier、`instructions subflow:` 与原子 `start`；
 - instance-scoped `work:<instance>/<node>` 和由 Start confirmation 授权的 automatic
   hash-bound `submit work:`；旧静态 workspaces 保持兼容。
+- instance-scoped `gate:`/`transition:` frontier、用户确认 Gate submit、challenge 后重验、
+  receipt-bound override/branch Decision，以及 receipt-first/state-last Advance。
 
 当前实现尚不具备：
 
 - `researchspec-navigate` 以及基于 catalog 的 workspace route availability evaluation；
-- `gate:`、`transition:` 的可执行 status/instructions；
-- `submit gate:` 与 `advance`；
-- Gate 的用户确认、challenge/override 与 transition receipt；
 - 四类 ARSU 的完整 profile graphs、并行组和动态 revision rounds；
 - 4 Companion、15 CLI、31×8/28×8 的目标 surface 收敛。
 
@@ -436,8 +435,8 @@ command wrapper 只是不同 agent 工具的 adapter。目标交付量是：
 | 4 | `add-arsu-workflow-profiles` | deep-research、academic-paper、reviewer、pipeline 的完整 mode/profile graphs |
 | 5 | `consolidate-researchspec-agent-surface` | Navigate、四 Companion、旧投影清理、31×8/28×8 delivery |
 
-其中 routing catalog 与 subflow instance control plane 已实现；Gate/transition、完整 profiles
-和 surface consolidation 仍待完成。
+其中 routing catalog、subflow instance control plane 与 Gate/transition control plane 已实现；
+完整 profiles 和 surface consolidation 仍待完成。
 
 Umbrella change 只有在以下用户旅程全部通过时才能归档：Bootstrap、模糊路由、专家直达、standalone、pipeline、并行 join、Gate challenge/override、revision round、resume、context export 和 terminal completion。
 

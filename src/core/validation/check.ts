@@ -5,6 +5,7 @@ import { fileExists, isDirectory } from "../../utils/fs.js";
 import { inspectArtifacts } from "../runtime/workflow-control.js";
 import { isInstanceRunState } from "../contracts/run-state.js";
 import { SubflowStartReceiptSchema } from "../contracts/subflow.js";
+import { GateSubmitReceiptSchema, TransitionAdvanceReceiptSchema } from "../contracts/gate-transition.js";
 import { loadWorkspaceSnapshot } from "../workspace/snapshot.js";
 import type { WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { REQUIRED_DIRECTORIES } from "../workspace/layout.js";
@@ -28,7 +29,7 @@ export async function runWorkspaceChecks(workspace: string, target: CheckTarget 
     for (const inspection of await inspectArtifacts(snapshot)) diagnostics.push(...inspection.diagnostics);
   }
 
-  if (target === "all" || target === "runtime") diagnostics.push(...await inspectSubflowStartReceipts(snapshot));
+  if (target === "all" || target === "runtime") diagnostics.push(...await inspectSubflowStartReceipts(snapshot), ...await inspectGateTransitionReceipts(snapshot));
 
   if (target === "all" || target === "tools") {
     const installations = Array.isArray(snapshot.manifest.installations) ? snapshot.manifest.installations : [];
@@ -46,6 +47,29 @@ export async function runWorkspaceChecks(workspace: string, target: CheckTarget 
 
   const ok = diagnostics.every((diagnostic) => !diagnostic.blocking && (!strict || diagnostic.severity !== "warning"));
   return { ok, workspace, target, diagnostics };
+}
+
+async function inspectGateTransitionReceipts(snapshot: WorkspaceSnapshot): Promise<Diagnostic[]> {
+  const diagnostics: Diagnostic[] = [];
+  for (const event of snapshot.gates.filter((item) => item.schema_version === "1")) {
+    const reference = record(event.receipt);
+    const receiptPath = path.resolve(snapshot.workspace, typeof reference.path === "string" ? reference.path : "");
+    try {
+      const bytes = await readFile(receiptPath);
+      const receipt = GateSubmitReceiptSchema.safeParse(JSON.parse(Buffer.from(bytes).toString("utf8")) as unknown);
+      if (!receipt.success || sha256(bytes) !== reference.sha256 || receipt.data.plan_sha256 !== reference.plan_sha256 || receipt.data.event_id !== event.event_id || receipt.data.gate_id !== event.gate_id) diagnostics.push(dangling("gate_submit_receipt_mismatch", `Gate receipt does not match event ${String(event.event_id)}.`, receiptPath));
+    } catch { diagnostics.push(dangling("gate_submit_receipt_missing", `Gate receipt is missing or invalid for ${String(event.event_id)}.`, receiptPath)); }
+  }
+  if (!isInstanceRunState(snapshot.runState)) return diagnostics;
+  for (const instance of snapshot.runState.subflows) for (const reference of instance.transition_receipts) {
+    const receiptPath = path.resolve(snapshot.workspace, reference.path);
+    try {
+      const bytes = await readFile(receiptPath);
+      const receipt = TransitionAdvanceReceiptSchema.safeParse(JSON.parse(Buffer.from(bytes).toString("utf8")) as unknown);
+      if (!receipt.success || sha256(bytes) !== reference.sha256 || receipt.data.plan_sha256 !== reference.plan_sha256 || receipt.data.transition_id !== reference.transition_id || receipt.data.subflow_instance_id !== instance.instance_id) diagnostics.push(dangling("transition_receipt_mismatch", `Transition receipt does not match state for ${reference.transition_id}.`, receiptPath));
+    } catch { diagnostics.push(dangling("transition_receipt_missing", `Transition receipt is missing or invalid for ${reference.transition_id}.`, receiptPath)); }
+  }
+  return diagnostics;
 }
 
 async function inspectSubflowStartReceipts(snapshot: WorkspaceSnapshot): Promise<Diagnostic[]> {

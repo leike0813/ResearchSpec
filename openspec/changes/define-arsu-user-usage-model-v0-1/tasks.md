@@ -15,7 +15,7 @@
 
 ## 4. Gate And Transition Technical Change
 
-- [ ] 4.1 Create and implement `add-gate-transition-control-plane` with `submit gate:`, `advance transition:`, confirmation, challenge/override, receipts, and unique-transition advancement.
+- [x] 4.1 Create and implement `add-gate-transition-control-plane` with `submit gate:`, `advance transition:`, confirmation, challenge/override, receipts, and unique-transition advancement.
 
 ## 5. Complete ARSU Profiles Technical Change
 

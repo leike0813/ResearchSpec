@@ -139,9 +139,9 @@ Decide、Submit、Archive。它们在 surface consolidation 完成前仍由 type
 | Decide | Decide | 保留，增加 review branch/Gate override |
 | Verify | Verify | 保留，成为 proposed Gate verdict owner |
 
-当前 `researchspec-next` 的 blocker/pending/archive/work 优先级和
-`researchspec-submit` 的 preview/confirm 流程是已实现事实；它们将被 Navigate 和自动 work
-submit policy 吸收，而不是继续演化成更多 Companion。
+当前 `researchspec-next` 已能解释 work/Gate/transition frontier；Verify 组织 confirmed Gate
+submit，Decide 处理可信 failed-Gate override 与 workflow branch。它们仍将在 surface
+consolidation 中按既定边界合入 Navigate/四 Companion，而不会增加新 Companion。
 
 ## 6. Source Architecture 与 SSOT
 

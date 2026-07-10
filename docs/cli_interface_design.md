@@ -103,10 +103,9 @@ Target v0.1 公共命令：
 16 个。`start` 只接受可启动 subflow，`advance` 只接受可执行 transition，不提供含义模糊的
 通用 `execute`。
 
-Current implementation 当前可用的顶层命令是 `init`、`update`、`status`、
-`instructions`、`start`、`submit`（仅 `work:`）、`check`、`list`、`show`、`handoff`、`pack`、
-`propose`、`decide` 和 `archive`。下文已有命令的参数和 envelope 仍描述当前 wire contract；
-标为 Target 的 `submit gate:` 和 `advance` 只能在对应 technical changes 完成后使用。
+Current implementation 已提供全部 15 个目标顶层命令。`submit` 按 scoped selector 分派
+`work:` 与 `gate:`，`advance` 只接受唯一授权的 scoped `transition:`；下文参数和 envelope
+描述当前 wire contract。
 
 ### 2.1 Selector-Based Runtime Protocol（Target v0.1）
 
@@ -317,7 +316,7 @@ UTF-8 非空文件、path containment、SHA-256、template ref 与依赖 artifac
 学术结论真实、证据充分或质量 Gate 已通过；`completion.required_gate_ids` 仍独立决定节点
 能否成为 `done`。
 
-### 6.3 `start`（Current）与 `submit gate:` / `advance`（Target）
+### 6.3 `start`、`submit gate:` 与 `advance`（Current）
 
 ```bash
 researchspec start subflow:<id> [--dry-run] [--yes] [--json]
@@ -332,7 +331,8 @@ researchspec advance transition:<id> [--dry-run] [--yes] [--json]
   确认。它保存 verdict 与 `confirmed_by`，不把 Agent 自报文本当作 Gate。
 - `advance` 校验 Gate/Decision basis、目标 state 与 read preconditions 后执行 transition
   receipt。唯一合法 transition 可由 Agent 自动调用；多分支必须先 `decide`。
-- Gate/transition DTO、错误码和 receipt shape 仍由后续 change 冻结。
+- Gate/transition DTO、usage/domain/conflict 错误类和 operational receipt shape 已冻结；
+  receipts 不登记为 academic artifacts。
 
 ## 7. `researchspec check [target]`
 

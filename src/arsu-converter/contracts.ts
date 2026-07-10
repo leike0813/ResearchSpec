@@ -5,15 +5,15 @@ import type {
   ContractProfile,
 } from "./types.js";
 
-const PROFILE_ID = "researchspec-preflight-v2";
-const CONTRACT_MARKER = "<!-- researchspec-contract-preflight:v2 -->";
+const PROFILE_ID = "researchspec-preflight-v3";
+const CONTRACT_MARKER = "<!-- researchspec-contract-preflight:v3 -->";
 
 export const RESEARCHSPEC_MUTATION_OWNERSHIP = {
   stable_specs: "human_or_accepted_contract_patch",
   runtime_state: "orchestrator_or_runtime_helper",
   artifact_registry: "researchspec_submit_or_deterministic_runtime",
   decision_ledger: "runtime_after_human_confirmation",
-  gate_ledger: "validator_or_gate_helper",
+  gate_ledger: "researchspec_submit_gate_after_human_confirmation",
 } as const;
 
 export function mutationBoundaryBullets(targets: string[]): string[] {
@@ -32,7 +32,7 @@ export function mutationBoundaryBullets(targets: string[]): string[] {
     bullets.push("After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.");
   }
   if (targets.includes("researchspec/runs/current/gate-ledger.jsonl")) {
-    bullets.push("Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.");
+    bullets.push("Return validation findings through `researchspec-verify`; after explicit human confirmation, use `researchspec submit gate:<instance>/<node>`. Never edit the Gate ledger or receipts directly.");
   }
   return bullets;
 }
@@ -102,13 +102,13 @@ function buildProfile(skillGroup: string): ContractProfile {
     ],
     ledgers: [
       "researchspec/runs/current/decision-ledger.jsonl written by runtime after human-confirmed decisions",
-      "researchspec/runs/current/gate-ledger.jsonl written by validators or gate helpers",
+      "researchspec/runs/current/gate-ledger.jsonl written by submit gate after explicit human confirmation",
     ],
     notes: [
-      `${skillGroup} uses the shared first-slice ResearchSpec preflight profile.`,
+      `${skillGroup} uses the shared ResearchSpec runtime preflight profile.`,
       "Load only stage/mode-relevant contracts into agent context.",
       "Treat ARS Material Passport as an imported compatibility artifact, not runtime truth.",
-      "Full per-stage and per-mode matrix injection is intentionally deferred.",
+      "Per-stage and per-mode graphs are supplied by the workflow profile layer.",
     ],
     full_matrix_injection: false,
   };
@@ -124,9 +124,10 @@ then load only the contracts and artifact references needed for the current
 skill, stage, phase, or mode.
 
 Use \`runs/current/artifact-registry.json\` to read prior artifacts. Call
-\`researchspec status --json\` and request instructions for the canonical scoped
-\`work:<instance>/<node>\` selector (or legacy \`work:<id>\`). Write only the
-declared candidate path.
+\`researchspec status --json\` and consume its canonical frontier. Request
+instructions for the selected \`subflow:\`, scoped \`work:<instance>/<node>\`,
+\`gate:<instance>/<node>\`, or \`transition:<instance>/<node>\` selector. Never
+reconstruct stage, Gate, or transition order from this Skill text.
 
 After producing the candidate, inspect \`submission\` and \`completion.submit\`.
 When policy is \`automatic\`, the start authorization is valid, and Submit is
@@ -138,15 +139,23 @@ academic approval. For \`manual\`, \`legacy\`, missing authorization, or unavail
 Submit, hand the candidate to \`researchspec-submit\` or report the boundary.
 Never invent path, type, provenance, or runtime writes, and never hand-edit
 state, registries, receipts, or JSONL ledgers.
-After human confirmation, the runtime records decisions; validators and gate
-helpers record validation or gate outcomes.
+
+For a formal Gate, use \`researchspec-verify\` to produce evidence-linked findings,
+show the proposed verdict and consequences, and obtain explicit human confirmation.
+On challenge, reverify before offering an override. Submit the strict confirmed
+payload with \`researchspec submit gate:<instance>/<node>\`; Start confirmation and
+\`--yes\` are not Gate confirmation. A failed reverification may advance only after
+\`researchspec-decide\` records an override bound to that Gate event and receipt.
+
+When exactly one transition is authorized, request its instructions and run
+receipt-bound Advance dry-run followed by identical expected-plan execution. When
+multiple candidates remain, route the branch through \`researchspec-decide\`.
 
 Do not treat ARS Material Passport as ResearchSpec runtime truth. It may be
 imported or rendered as a compatibility artifact, while runtime provenance,
 decisions, gates, and resume state live in ResearchSpec registries and ledgers.
 
 This generated compatibility block uses profile \`${PROFILE_ID}\` for
-\`${skillGroup}\`. Full per-stage and per-mode matrix injection is deferred to a
-later ResearchSpec converter change.
+\`${skillGroup}\`. Per-stage and per-mode graphs remain workflow-profile data.
 `;
 }

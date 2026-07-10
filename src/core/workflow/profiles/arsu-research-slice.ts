@@ -28,6 +28,15 @@ export const ARSU_RESEARCH_SLICE_WORKFLOW = {
     stages: [{ stage_id: "research", title: "Research slice" }],
     start_requires: { decision_types: [] },
     parallel_groups: [],
+    gates: [{
+      id: "research-completion", stage_id: "research", title: "Research evidence quality", gate_type: "evidence_quality",
+      validator: { id: "researchspec-verify", evidence: { artifact_types: ["rq_brief", "bibliography", "synthesis_report"], contracts: ["specs/project.md", "specs/sources.yaml", "specs/claims.yaml"] } },
+      risk_level: "high", blocking: true, confirmation_required: true,
+    }],
+    transitions: [{
+      id: "complete-research", from_stage_id: "research", effect: { kind: "complete_subflow" },
+      requires: { gate_ids: ["research-completion"], decision_types: [] }, branch: null,
+    }],
     work_items: [
       node({
         id: "rq-brief", stage_id: "research", title: "RQ Brief", description: "Define the research question, scope, and methodological framing.", producer_skill: "deep-research",

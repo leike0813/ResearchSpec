@@ -135,7 +135,8 @@ void test("companion manifest renders nine self-contained workflow skills with d
   assert.match(next.instructions, /status\.data\.workflow_control\.work_items/);
   assert.match(next.instructions, /instructions subflow:<template> --json/);
   assert.match(next.instructions, /automatic with valid start authorization/);
-  assert.match(next.instructions, /transition_required/);
+  assert.match(next.instructions, /instructions transition:sf-<instance>\/<node> --json/);
+  assert.match(next.instructions, /decision-required transitions/);
 
   const submit = COMPANION_INTENTS.find((intent) => intent.id === "submit");
   assert.ok(submit);

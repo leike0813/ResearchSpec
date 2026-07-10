@@ -4,6 +4,7 @@ import { z } from "zod";
 
 import { fileExists, readOptionalText } from "../../utils/fs.js";
 import { ArtifactRegistrySchema } from "../contracts/artifact.js";
+import { GateEventV1Schema } from "../contracts/gate-transition.js";
 import { isInstanceRunState, RunStateSchema, type RunState } from "../contracts/run-state.js";
 import { isInstanceWorkflowDefinition, validateWorkflowDefinition, WorkflowDefinitionSchema, WORKFLOW_PROFILE_IDS, type WorkflowDefinition } from "../contracts/workflow.js";
 import { parseJson, parseJsonLines, parseYaml } from "../validation/parse.js";
@@ -16,7 +17,8 @@ const ActorSchema = z.union([z.string().min(1), z.looseObject({ kind: z.string()
 const SourceSchema = z.looseObject({ source_id: SafeId });
 const ClaimSchema = z.looseObject({ claim_id: SafeId });
 const DecisionSchema = z.looseObject({ event_id: SafeId, decision_id: SafeId, timestamp: z.string().min(1), actor: ActorSchema, decision_type: z.string().min(1), selected_option: z.unknown(), status: z.enum(["proposed", "accepted", "rejected", "postponed", "superseded"]) });
-const GateSchema = z.looseObject({ event_id: SafeId, gate_id: SafeId, timestamp: z.string().min(1), actor: ActorSchema, stage_id: z.string().min(1), gate_type: z.string().min(1), verdict: z.enum(["pass", "pass_with_conditions", "fail", "not_run"]), blocking: z.boolean() });
+const LegacyGateSchema = z.looseObject({ event_id: SafeId, gate_id: SafeId, timestamp: z.string().min(1), actor: ActorSchema, stage_id: z.string().min(1), gate_type: z.string().min(1), verdict: z.enum(["pass", "pass_with_conditions", "fail", "not_run"]), blocking: z.boolean() });
+const GateSchema = z.union([GateEventV1Schema, LegacyGateSchema]);
 const ConfigSchema = z.looseObject({ schema_version: z.string(), profile: z.enum(WORKFLOW_PROFILE_IDS), agent_tools: z.looseObject({ selected: z.array(z.string()), delivery: z.enum(["skills", "commands", "both"]) }) });
 const ManifestSchema = z.looseObject({ schema_version: z.string(), package_version: z.string(), installations: z.array(z.looseObject({ tool_id: z.string(), path: z.string(), scope: z.enum(["project", "shared-global"]), sha256: z.string(), source: z.string(), adapter_version: z.string() })) });
 const SourcesSchema = z.looseObject({ schema_version: z.string(), sources: z.array(SourceSchema) });

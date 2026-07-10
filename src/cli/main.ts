@@ -5,9 +5,9 @@ import path from "node:path";
 import { Command, CommanderError, InvalidArgumentError } from "commander";
 
 import {
-  handleArchive, handleCheck, handleDecide, handleHandoff, handleInit, handleInstructions, handleList,
+  handleAdvance, handleArchive, handleCheck, handleDecide, handleHandoff, handleInit, handleInstructions, handleList,
   handlePack, handlePropose, handleShow, handleStart, handleStatus, handleSubmit, handleUpdate, type DecideOptions,
-  type HandoffOptions, type InitOptions, type PackOptions, type ProposeOptions, type StartOptions, type SubmitOptions, type UpdateOptions,
+  type AdvanceOptions, type HandoffOptions, type InitOptions, type PackOptions, type ProposeOptions, type StartOptions, type SubmitOptions, type UpdateOptions,
 } from "./handlers.js";
 import { presentResult } from "./presenter.js";
 import { CliError, failure, type CommandContext, type CommandResult } from "./types.js";
@@ -76,12 +76,19 @@ function registerCommands(program: Command, run: Runner): void {
     .requiredOption("--confirmed-by <name>", "human who confirmed the route")
     .option("--expected-plan-sha256 <hash>", "bind execution to the previewed Start plan")
     .action(async (subflow: string, options: StartOptions, command: Command) => run("start", command, () => handleStart(subflow, options, commandContext("start", command))));
-  program.command("submit <work-item>").description("Validate and atomically register a workflow-owned candidate artifact")
-    .requiredOption("--input <submission.json>", "strict artifact submission JSON")
+  program.command("submit <runtime-item>").description("Submit a workflow-owned work candidate or confirmed Gate verdict")
+    .requiredOption("--input <payload.json>", "strict work or Gate submission JSON")
     .requiredOption("--actor-kind <kind>", "human, agent, script, converter, or validator")
     .requiredOption("--actor-name <name>", "artifact producer name")
+    .option("--confirmed-by <name>", "human who confirmed a Gate verdict")
     .option("--expected-sha256 <hash>", "bind execution to the previewed candidate SHA-256")
-    .action(async (workItem: string, options: SubmitOptions, command: Command) => run("submit", command, () => handleSubmit(workItem, options, commandContext("submit", command))));
+    .option("--expected-plan-sha256 <hash>", "bind Gate execution to the previewed plan")
+    .action(async (runtimeItem: string, options: SubmitOptions, command: Command) => run("submit", command, () => handleSubmit(runtimeItem, options, commandContext("submit", command))));
+  program.command("advance <transition>").description("Atomically advance one uniquely authorized transition")
+    .requiredOption("--actor-kind <kind>", "agent or script")
+    .requiredOption("--actor-name <name>", "transition executor name")
+    .option("--expected-plan-sha256 <hash>", "bind execution to the previewed transition plan")
+    .action(async (transition: string, options: AdvanceOptions, command: Command) => run("advance", command, () => handleAdvance(transition, options, commandContext("advance", command))));
   program.command("check [target]").description("Check all, contracts, runtime, artifacts, or tools")
     .option("--strict", "treat warnings as failures")
     .action(async (target: string | undefined, options: { strict?: boolean }, command: Command) => run("check", command, () => handleCheck(target, Boolean(options.strict), commandContext("check", command))));

@@ -92,8 +92,8 @@ export async function emitSkillGroup(
   const findings = [];
   let contractInjection: ContractInjectionResult = {
     injected: false,
-    profile_id: "researchspec-preflight-v2",
-    marker: "<!-- researchspec-contract-preflight:v2 -->",
+    profile_id: "researchspec-preflight-v3",
+    marker: "<!-- researchspec-contract-preflight:v3 -->",
   };
   let routingDescription: SkillDescriptionProjection | null = null;
 
