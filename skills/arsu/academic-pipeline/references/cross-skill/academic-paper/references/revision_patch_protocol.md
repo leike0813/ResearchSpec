@@ -1,60 +1,61 @@
 # Revision Patch Protocol (#390)
 
 **Spec:** `docs/design/2026-06-10-390-diff-patch-revision-mode-spec.md` (mechanism §3, coverage claim §4, escalation §3.6).
-<!--rs:a:323dc5aad0a2-->
-### ResearchSpec Revision Patch Reference
+<!--rs:PATCH-003-->
+**Toolchain ownership:** ResearchSpec deterministic helpers prepare block
+manifests, validate and apply `researchspec/draft-patches/<patch-id>.json`, and
+emit apply reports. Both orchestrated and phase-by-phase runs resolve inputs and
+return outputs through `researchspec/runs/current/artifact-registry.json`; users
+do not need ARS-specific script paths embedded in agent instructions.
 
-The patch protocol is ResearchSpec-owned: generate patch JSON, verify preconditions, then apply after approval.
+**What this buys:** a block not named by an operation is never passed through a
+generation step and therefore remains byte-identical. This is a deterministic
+apply guarantee, not a claim that edited blocks are correct. Structural rewrites
+remain outside ordinary patch protection and require escalation.
 
-#### Patch Contract
+## Artifacts and naming
 
-- Store operations in `researchspec/draft-patches/<patch-id>.json`.
-- Use `researchspec/runs/current/gate-ledger.jsonl` for hash/precondition failures.
-- Use `researchspec/runs/current/decision-ledger.jsonl` for apply approval and unresolved tradeoffs.
+| Artifact | Owner | Contract |
+| --- | --- | --- |
+| Base manuscript | runtime registry | immutable artifact id and content hash |
+| Block manifest | preparation helper | base hash plus stable block ids, old hashes, and excerpts |
+| Patch document | writer | `researchspec/draft-patches/<patch-id>.json` with target and traceability |
+| Revised manuscript | apply helper | new artifact; base is never overwritten |
+| Apply report | apply helper | operations, fresh ids, structural flags, and `preserved_ratio` |
 
-#### Mutation Boundary
+The revised manuscript and apply report share one lifecycle and are required
+inputs to re-review and the Stage 4.5 integrity gate.
 
-- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
+## One revision round
 
-<!--/rs:a:323dc5aad0a2-->
+1. Resolve the current manuscript artifact and run the preparation helper to
+   refresh its block manifest. Do not rewrite the manuscript afterward.
+2. Give the writer the exact manuscript, manifest, and accepted Revision Roadmap
+   or integrity correction list. The writer emits the dedicated draft-patch file.
+3. Run the apply helper. It validates the whole patch before writing and creates
+   a new manuscript plus apply report on success.
+4. Run finalizer/citation checks on the new manuscript, return both outputs for
+   registration, and re-review using the apply report as required evidence.
 
-## Mode B command sequence (one revision round)
+On stale hash, unknown target, schema failure, or precondition failure, preserve
+the base bytes and allow one full patch retry against the current manifest. A
+second failure stops for a human decision: prepare a fresh manifest and retry,
+approve full re-emission, or abort.
 
-```bash
-# 1. Anchorize / refresh the manifest (idempotent; safe on legacy drafts).
-#    Run at EVERY round entry, and rewrite nothing afterwards until apply —
-#    any rewrite (including a finalizer pass) invalidates the manifest.
-python scripts/ars_anchorize_draft.py draft.md
+On structural flags—heading rewrites/deletes, net section-count change, or
+`touched_ratio > 0.6`—stop for explicit human confirmation. Narrowing the patch
+does not require full re-emission; applying acknowledged structural operations
+keeps the flags in the report. Changing the threshold or approving full
+re-emission must be returned to the decision runtime for
+`researchspec/runs/current/decision-ledger.jsonl`.
 
-# 2. Hand the writer its revision context:
-#    draft.md + draft.md.block-manifest.json + the round's Revision Roadmap.
-#    The writer emits phase6_*/revision_patch_round1.json (never a full draft).
-
-# 3. Apply — two-phase fail-closed; output must be a NEW file.
-python scripts/ars_apply_revision_patch.py draft.md \
-    phase6_revision/revision_patch_round1.json \
-    --output draft.rev1.md
-
-# 4. Run your normal post-revision steps (finalizer / citation checks)
-#    on draft.rev1.md, then re-review with draft.rev1.md.apply-report.json
-#    attached.
-```
-
-Exit codes: `0` applied · `2` Phase 1 rejection (structured failure report on stdout; base byte-untouched) · `3` structural refusal (see escalation) · `4` post-write self-check bug.
-
-**On exit 2 (stale hash / unknown target / schema failure):** feed the failure report back to the writer for ONE re-emission of the whole patch against the current manifest. On a second failure, stop and decide: re-anchorize and retry the round, escalate to full re-emission, or abort. Never hand-edit a patch to force it through — a hash mismatch means the writer was looking at different text than the file holds.
-
-**On exit 3 (structural flags):** the patch touches structure — heading rewrites/deletes, net section-count change, or `touched_ratio` strictly above **0.6** (the #424 ship decision; `insert_after` merely *anchored* on a heading is exempt — inserting body text under a section heading is routine, not structural). Read the flags in the refusal output, then either narrow the patch, or — if the structural change is intended — re-run with the acknowledgment recorded:
-
-```bash
-python scripts/ars_apply_revision_patch.py draft.md patch.json \
-    --output draft.rev1.md --acknowledge-structural
-```
-
-`--acknowledge-structural` is a deliberate user decision, never a default; the flags stay recorded in the apply report either way. `--touched-ratio-threshold 1.0` disables the ratio trigger (the comparator is strict `>`); overriding 0.6 in pipeline runs requires a recorded user decision.
-
-**Full re-emission (escalated rounds only):** when a round genuinely demands restructuring, the round runs as legacy full re-emission after explicit confirmation — never as a silent fallback. Afterwards, re-anchorize from scratch (a NEW ID generation; the old manifest and any old patches are dead) and record the round as `mode: full_reemission_escalated`.
+After confirmed full re-emission, prepare a new block manifest, retire every
+patch tied to the old manuscript hash, and record
+`mode: full_reemission_escalated`. Apply failures and structural refusals are
+submitted to the relevant gate helper for
+`researchspec/runs/current/gate-ledger.jsonl`; no agent writes the ledger
+directly.
+<!--/rs:PATCH-003-->
 
 ## Marker lifecycle (one rule for all marker kinds)
 

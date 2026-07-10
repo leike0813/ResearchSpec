@@ -46,22 +46,17 @@ user_metadata:
 
 ## Output contract
 
-<!--rs:a:759107d9ca29-->
-### ResearchSpec Compliance Gate
-
-Schema 12 remains a compliance payload; ResearchSpec owns artifact registration and the gate verdict.
-
-#### Compliance Output
-
-- Emit the compliance report as an artifact for runtime registration.
-- Return its pass, warning, or blocking findings to the compliance gate helper.
-
-#### Mutation Boundary
-
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:759107d9ca29-->
+<!--rs:GATE-003-->
+Return a `compliance_report` conforming to
+`shared/compliance_report.schema.json` (Schema 12) as a standalone artifact. The
+orchestrator must first validate the report, then pass its path, hash, producer,
+stage, and mode to the runtime registration helper for
+`researchspec/runs/current/artifact-registry.json`. Pass the validated decision,
+tiered findings, evidence, and material gaps to the compliance gate helper for
+`researchspec/runs/current/gate-ledger.jsonl`. The compliance agent and
+orchestrator MUST NOT append the report to a Material Passport or edit either
+ResearchSpec runtime file directly.
+<!--/rs:GATE-003-->
 
 ## Dispatch logic
 

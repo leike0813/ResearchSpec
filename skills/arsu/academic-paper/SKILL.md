@@ -168,24 +168,23 @@ Phase 7: FORMAT        -> [formatter]                  -> Final Output Package
 
 academic-paper pipeline runs in 8 phases (Phase 0 intake → 7 formatting). Two invocation modes:
 
-<!--rs:a:e4b2f31f60bf-->
-### ResearchSpec Paper Runtime
+<!--rs:STATE-001-->
+**Mode A — orchestrator-driven (default):** `pipeline_orchestrator_agent` runs
+the academic-paper phases end to end. It reads the configured stage graph from
+`researchspec/specs/workflow.yaml`, reads the active phase and mode from
+`researchspec/runs/current/state.yaml`, and resolves outlines, drafts, reviews,
+and other phase inputs by artifact id through
+`researchspec/runs/current/artifact-registry.json`. The orchestrator requests
+state transitions from the ResearchSpec runtime; it does not carry state in a
+Material Passport.
 
-The academic-paper skill reads its active phase and inputs from ResearchSpec runtime state.
-
-#### Runtime Reads
-
-- Read `researchspec/specs/workflow.yaml` for phase ordering and mode constraints.
-- Read `researchspec/runs/current/state.yaml` for the active phase and invocation mode.
-- Resolve upstream research, outline, and draft artifacts through `researchspec/runs/current/artifact-registry.json`.
-
-#### Mutation Boundary
-
-- Treat `researchspec/specs/workflow.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
-- Request changes to `researchspec/runs/current/state.yaml` through the ResearchSpec orchestrator or runtime helper; do not edit run state directly.
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-
-<!--/rs:a:e4b2f31f60bf-->
+**Mode B — phase-by-phase (cross-session resume):** the user invokes one agent
+per phase across sessions. Each invocation reads the same ResearchSpec state and
+registered artifacts, performs only its assigned phase, and returns new outputs
+for runtime registration. A legacy Material Passport may be imported as
+compatibility evidence, but it never replaces the current ResearchSpec state or
+artifact records.
+<!--/rs:STATE-001-->
 
 In Mode B, **single-phase agents (Bucket A per `docs/design/2026-05-18-ars-v3.9.2-agent-phase-classification.md`) stay strictly within their assigned phase for writes**. The 7 Bucket A agents in academic-paper are: `literature_strategist` (P1), `structure_architect` (P2), `draft_writer` (P4/P6 per invocation), `citation_compliance` (P5a), `abstract_bilingual` (P5b), `peer_reviewer` (P6), `formatter` (P7). Reads from upstream phases are allowed.
 
@@ -197,26 +196,19 @@ Routing into Mode B requires explicit user signal — `/ars-<mode>` slash comman
 
 ## v3.6.6 Generator-Evaluator Contract Protocol
 
-<!--rs:a:1ee970b484f3-->
-### ResearchSpec Generator/Evaluator Contract
-
-Generator/evaluator outputs remain phase artifacts; gate outcomes belong in ResearchSpec ledgers.
-
-#### Generator Output
-
-- Emit generated contract JSON or draft artifacts for runtime registration.
-- Treat evaluator feedback as diagnostics tied to those artifacts.
-
-#### Evaluator Gate
-
-- Return pass, fail, and blocking findings to the evaluator gate helper.
-
-#### Mutation Boundary
-
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:1ee970b484f3-->
+<!--rs:REVIEW-010-->
+> This block defines the `academic-paper full` generator/evaluator split. Resolve
+> the frozen `writer_full` and `evaluator_full` contract JSON plus every Phase
+> 4a/4b and 6a/6b artifact through
+> `researchspec/runs/current/artifact-registry.json`. Preserve the four-call
+> paper-blind/paper-visible separation, mode exclusions, baseline fields, system
+> prompt text, lint rules, and writer/evaluator role distinction described
+> below. Register each accepted phase output before it is consumed downstream;
+> submit lint, disagreement, or failure-condition results to the responsible gate
+> helper for `researchspec/runs/current/gate-ledger.jsonl`. The orchestrator may
+> instantiate allowed runtime fields but must not mutate the frozen contract or
+> write runtime records directly.
+<!--/rs:REVIEW-010-->
 >
 > **Applies to `academic-paper full` mode only.** Nine non-full modes (`plan`, `outline-only`, `revision`, `revision-coach`, `abstract-only`, `lit-review`, `format-convert`, `citation-check`, `disclosure`) are byte-equivalent across v3.6.5 → v3.6.6 and do not invoke this protocol. (The later-added `rebuttal-audit` mode is likewise non-full and does not invoke this protocol.) Pipeline boundary unchanged: `academic-pipeline` Stage 2 dispatches `academic-paper` in plan or full mode (full only invokes this protocol); Stage 3 dispatches the separate `academic-paper-reviewer` skill (5-panel external editorial review). The in-pair Phase 6 evaluator under this protocol and the Stage 3 reviewer are different review layers — see design doc §5.1 audit conclusion 2.
 
@@ -371,22 +363,19 @@ Not sure? Start with `plan` — it will guide you step by step. `disclosure` is 
 - Risk flags — tone too combative, claims made without evidence, or a response that misreads the reviewer's actual point.
 - Improvement suggestions (advisory).
 
-<!--rs:a:9c17c320d570-->
-### ResearchSpec Rebuttal Audit Artifact
-
-Standalone rebuttal audits are advisory artifacts until a human accepts a change.
-
-#### Artifact Rule
-
-- Emit the audit report as an advisory artifact for runtime registration.
-- Do not mutate claims, manuscript scope, or response strategy without a decision in `researchspec/runs/current/decision-ledger.jsonl`.
-
-#### Mutation Boundary
-
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
-
-<!--/rs:a:9c17c320d570-->
+<!--rs:REVIEW-011-->
+**IRON RULE — advisory integrity boundary:** standalone `rebuttal-audit` may
+reuse comment parsing, but it remains outside Stage 4.5 integrity and produces
+only an advisory response-letter QA artifact. Return the coverage table, gap
+list, tone/evidence risks, and suggestions for registration in
+`researchspec/runs/current/artifact-registry.json`. It MUST NOT emit verified
+commitment status, apply a draft patch, mark a package `ready_to_submit`, or
+write ResearchSpec registries or ledgers. If its findings imply a change in
+accepted response strategy or claim scope, propose that change and wait for a
+human decision recorded through
+`researchspec/runs/current/decision-ledger.jsonl`; the audit itself never
+certifies acceptance.
+<!--/rs:REVIEW-011-->
 
 **Boundary vs `re-review`:** `academic-paper-reviewer`'s `re-review` mode verifies the **revised manuscript** (did the author's claimed changes actually appear in the paper) and runs inside the pipeline. `rebuttal-audit` verifies the **response letter itself** (does the rebuttal cover every comment, is its tone/evidence sound) and runs standalone, advisory. Different artifacts, different layers.
 
@@ -396,29 +385,37 @@ Standalone rebuttal audits are advisory artifacts until a human accepts a change
 
 In revision mode, `draft_writer_agent` does NOT re-emit the complete paper. The round runs **anchorize → patch → deterministic apply → finalizer**, confining the regeneration surface to the blocks the revision explicitly touches (DELEGATE-52 blast-radius containment; spec `docs/design/2026-06-10-390-diff-patch-revision-mode-spec.md`):
 
-<!--rs:a:5e4e6dba8826-->
-### ResearchSpec Revision Patch Mode
+<!--rs:PATCH-001-->
+1. **Prepare the base artifact.** Resolve the current manuscript id and hash
+   through `researchspec/runs/current/artifact-registry.json`. The deterministic
+   preparation helper assigns stable block markers where missing and emits a
+   refreshed block-manifest artifact. Nothing may rewrite the manuscript between
+   manifest creation and apply.
+2. **Emit the patch.** The writer creates
+   `researchspec/draft-patches/<patch-id>.json` with target artifact id/hash,
+   block preconditions copied from the manifest, closed operations, and non-empty
+   roadmap traceability. The writer does not re-emit the full manuscript, apply
+   operations, or update runtime records.
+3. **Apply deterministically.** The apply helper validates the entire patch
+   fail-closed before writing. A stale hash or invalid operation leaves the base
+   byte-identical. Success creates a new manuscript artifact and separate apply
+   report containing changed/fresh block ids, structural flags, operations, and
+   `preserved_ratio`; both are returned for runtime registration and are required
+   re-review inputs.
+4. **Escalate structural work, never silently fall back.** Heading rewrites,
+   section-count changes, or touched ratio above the accepted threshold stop for
+   a human choice. Return the choice to the decision runtime for
+   `researchspec/runs/current/decision-ledger.jsonl`. Only confirmed full
+   re-emission may regenerate the whole manuscript; mark it
+   `mode: full_reemission_escalated`, create fresh block ids afterward, and
+   invalidate patches tied to the prior hash.
 
-Revision mode emits structured draft patches instead of rewriting the manuscript in place.
-
-#### Patch Format
-
-- Write manuscript edits to `researchspec/draft-patches/<patch-id>.json`.
-- Include block ids, old hashes, operation type, replacement text, and reviewer-roadmap traceability.
-
-#### Apply Boundary
-
-- Apply only after the required human decision exists in `researchspec/runs/current/decision-ledger.jsonl`.
-
-#### Mutation Boundary
-
-- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
-
-<!--/rs:a:5e4e6dba8826-->
-3. **Deterministic apply** (`scripts/ars_apply_revision_patch.py`): two-phase fail-closed — one stale hash rejects the whole patch with the base byte-untouched; untouched blocks are preserved byte-identical by construction. Structural shapes (heading rewrites/deletes, section-count change, touched-ratio > 0.6) refuse without an explicit acknowledge that only the §3.6 escalation checkpoint may grant. The apply report (`preserved_ratio`, ops, fresh block IDs, structural flags) is a **required input to re-review** alongside the revised draft.
-4. **Escalation, never silent fallback:** restructure-demanding rounds go to a MANDATORY user checkpoint; a confirmed full re-emission round is provenance-stamped `mode: full_reemission_escalated` and the draft is re-anchorized afterwards (new ID generation).
-
-Orchestrated runs follow `pipeline_orchestrator_agent.md` § Revision-Round Patch Sequencing; Mode B (phase-by-phase manual) users run the same scripts by hand — exact commands in `references/revision_patch_protocol.md`. Honest boundary, stated once: patch mode removes the silent-distortion channel for text the revision does not touch; it does not make the revision itself better. The `academic-paper full` in-pair Phase 6→4 loop is NOT patch-adopted (its Phase 4b lint requires a full `## Draft Body`; Item 9 boundary, spec §5.2/§7).
+Orchestrated and phase-by-phase runs use the same preparation and apply helpers.
+Patch mode guarantees byte preservation only for untouched blocks; it does not
+guarantee the quality of edited text. Finalizer and gate checks run on the new
+registered artifact, and any failure is returned to the responsible helper
+rather than written directly to a ledger.
+<!--/rs:PATCH-001-->
 
 ---
 

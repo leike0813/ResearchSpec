@@ -263,27 +263,21 @@ User: "Research [topic]"
 
 ARS pipeline runs in 6 phases. Two invocation modes:
 
-<!--rs:a:073722889e7a-->
-### ResearchSpec Deep Research Runtime
+<!--rs:STATE-008-->
+**Mode A — orchestrator-driven (default):** `pipeline_orchestrator_agent` runs
+the deep-research phases using stable project intent from
+`researchspec/specs/project.md`, the configured stage graph from
+`researchspec/specs/workflow.yaml`, and active run state from
+`researchspec/runs/current/state.yaml`. Research briefs, bibliographies,
+synthesis outputs, and related evidence are resolved and returned by artifact id
+through `researchspec/runs/current/artifact-registry.json`.
 
-Deep-research consumes project/workflow/state contracts and registers research outputs as artifacts.
-
-#### Runtime Reads
-
-- Read research intent from `researchspec/specs/project.md`.
-- Read stage and mode from `researchspec/specs/workflow.yaml` and `researchspec/runs/current/state.yaml`.
-
-#### Runtime Writes
-
-- Emit RQ briefs, methodology blueprints, bibliographies, and synthesis outputs for runtime registration.
-
-#### Mutation Boundary
-
-- Treat `researchspec/specs/project.md`, `researchspec/specs/workflow.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
-- Request changes to `researchspec/runs/current/state.yaml` through the ResearchSpec orchestrator or runtime helper; do not edit run state directly.
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-
-<!--/rs:a:073722889e7a-->
+**Mode B — phase-by-phase (cross-session resume):** each invocation reads only
+the current ResearchSpec contracts, state, and registered inputs required for
+its assigned phase, then returns its deliverables for registration. A Material
+Passport reset tag may be used to locate legacy compatibility evidence, but it
+does not carry active ResearchSpec state.
+<!--/rs:STATE-008-->
 
 In Mode B, **single-phase agents (Bucket A per `docs/design/2026-05-18-ars-v3.9.2-agent-phase-classification.md`) stay strictly within their assigned phase for writes**. Reads from upstream phases are allowed. Multi-phase agents (Bucket B: `devils_advocate_agent`, `report_compiler_agent`) do exactly the work specified by the caller's invocation for that phase — no extension to other phases in the same call.
 

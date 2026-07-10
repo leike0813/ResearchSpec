@@ -80,22 +80,14 @@ training-time memory, citation existence proofs, or the
 `integrity_verification_agent`'s seven-mode failure checklist at Stage 2.5 or
 4.5. Once an artifact is at layer 2, downstream skills may treat it as
 provisionally reliable for argument building and paper drafting. The provenance
-<!--rs:a:52352275e976-->
-### ResearchSpec Ground Truth Provenance
-
-Ground-truth provenance is traceable through registered artifacts and canonical source records.
-
-#### Provenance Chain
-
-- Resolve evidence artifacts through `researchspec/runs/current/artifact-registry.json`.
-- Link source identity and verification metadata through `researchspec/specs/sources.yaml`.
-
-#### Mutation Boundary
-
-- Treat `researchspec/specs/sources.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-
-<!--/rs:a:52352275e976-->
+<!--rs:GATE-004-->
+chain must remain traceable through stable source ids in
+`researchspec/specs/sources.yaml` and immutable evidence artifacts registered in
+`researchspec/runs/current/artifact-registry.json`. Preserve producer, stage,
+content hash, source links, verification evidence, and supersession metadata on
+each artifact. A Material Passport may be retained as imported provenance
+evidence, but it is not the active traceability carrier.
+<!--/rs:GATE-004-->
 
 **Layer 3 — ground truth and evaluation rubrics** includes gold labels,
 reviewer scoring rubrics, calibration sets, and any material that defines what
@@ -250,25 +242,13 @@ researcher reviews the integrity agent's reports and makes go/no-go decisions
 at each gate. This pattern document explains the design reasoning behind those
 gates and the data-flow structure that makes them meaningful. Reading this
 document does not grant confidence that any specific pipeline run was clean.
-<!--rs:a:25942682a000-->
-### ResearchSpec Ground Truth Gate
-
-Data access level and verified-only constraints are workflow and gate policy.
-
-#### Gate Inputs
-
-- Read allowed data-access level and verified-only constraints from `researchspec/specs/workflow.yaml`.
-
-#### Blocking Conditions
-
-- Return unavailable, unverified, or policy-conflicting ground truth to the integrity gate helper.
-
-#### Mutation Boundary
-
-- Treat `researchspec/specs/workflow.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:25942682a000-->
+<!--rs:GATE-005-->
+Only a current PASS result from the required integrity gate does that. The gate
+must be configured by `researchspec/specs/workflow.yaml`, evaluated against the
+exact registered artifact hashes, and recorded by the responsible helper in
+`researchspec/runs/current/gate-ledger.jsonl`. A Material Passport verification
+field is compatibility evidence only and cannot grant or preserve gate passage.
+<!--/rs:GATE-005-->
 
 **Not a benchmark protocol.** All current ARS skills are `task_type:
 open-ended` because ARS targets humanities research, higher-education quality

@@ -6,22 +6,18 @@
 
 ## What this document covers
 
-<!--rs:a:6aa4ef1ee975-->
-### ResearchSpec Literature Consumer Contract
-
-Literature consumers read the canonical corpus through ResearchSpec while preserving the upstream no-mutation and fallback rules.
-
-#### Corpus Inputs
-
-- Read source ids, citation keys, inclusion state, and trust metadata from `researchspec/specs/sources.yaml`.
-- Resolve bibliography and screening artifacts through `researchspec/runs/current/artifact-registry.json`.
-
-#### Mutation Boundary
-
-- Treat `researchspec/specs/sources.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-
-<!--/rs:a:6aa4ef1ee975-->
+<!--rs:SOURCE-002-->
+This is the contract every literature-reading consumer follows after
+ResearchSpec has projected source records from
+`researchspec/specs/sources.yaml` and resolved associated corpus artifacts
+through `researchspec/runs/current/artifact-registry.json`. The resulting
+read-only `literature_corpus[]` working payload retains citation keys, titles,
+authors, dates, source pointers, inclusion state, and trust metadata required by
+the protocol below. Consumers apply the existing corpus-first,
+search-fills-gap flow, four Iron Rules, PRE-SCREENED block, and graceful parse
+fallback without mutating either the payload, the source contract, or registry
+records.
+<!--/rs:SOURCE-002-->
 
 The `corpus-first, search-fills-gap` flow has five steps; the four Iron Rules are non-negotiable; the PRE-SCREENED block is the reproducibility surface; failures are surfaced honestly via the `[CORPUS PARSE FAILURE: <cause>]` graceful fallback.
 

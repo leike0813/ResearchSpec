@@ -1,9 +1,11 @@
-import { readFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
+import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 
 import { pathExists } from "../fs-utils.js";
 import { findUncoveredRuntimeSurfaces } from "./coverage.js";
-import { compactMarkerId } from "./markers.js";
+import { isAnchorFile, normalizeReplacementBody, REPLACEMENTS_DIR } from "./io.js";
+import { isAnchorId } from "./markers.js";
 import {
   CONTRACT_ANCHORS_PATH,
   generateUpstreamManifest,
@@ -12,8 +14,8 @@ import {
   type UpstreamManifestFile,
   UPSTREAM_MANIFEST_PATH,
 } from "./manifest.js";
-import { hasReplacementTemplate } from "./templates.js";
-import type { AnchorSeverity, ContractAnchor, ContractAnchorFile, CoverageDecision } from "./types.js";
+import type { ContractAnchor, ContractAnchorFile, CoverageDecision } from "./types.js";
+import { isReplaceableAnchor } from "./types.js";
 
 export interface AnchorValidationResult {
   ok: boolean;
@@ -88,20 +90,40 @@ async function validateAnchors(
   warnings: string[],
 ): Promise<void> {
   const seen = new Set<string>();
-  const markerIds = new Set<string>();
+  const expectedBodies = new Set<string>();
+  const bodyHashes = new Map<string, string>();
   for (const anchor of anchorFile.anchors) {
     if (seen.has(anchor.id)) {
       errors.push(`Duplicate anchor id: ${anchor.id}.`);
     }
     seen.add(anchor.id);
-    const markerId = compactMarkerId(anchor.id);
-    if (markerIds.has(markerId)) errors.push(`Compact marker id collision: ${markerId}.`);
-    markerIds.add(markerId);
+    if (!isAnchorId(anchor.id)) errors.push(`Anchor id does not use the registered domain format: ${anchor.id}.`);
+    if (!anchor.name.trim()) errors.push(`Anchor ${anchor.id} must include a descriptive name.`);
 
-    if (anchor.severity === "required" || anchor.severity === "recommended") {
+    if (isReplaceableAnchor(anchor)) {
       validateSemanticProfile(anchor, errors);
-    } else if (anchor.replacement_scope !== undefined) {
-      errors.push(`Diagnostic anchor ${anchor.id} must not declare replacement_scope.`);
+      const bodyName = `${anchor.id}.md`;
+      expectedBodies.add(bodyName);
+      const bodyPath = path.join(repoRoot, REPLACEMENTS_DIR, bodyName);
+      if (!(await pathExists(bodyPath))) {
+        errors.push(`Replaceable anchor ${anchor.id} is missing body: ${bodyName}.`);
+      } else {
+        const rawBody = await readFile(bodyPath, "utf8");
+        const body = normalizeReplacementBody(rawBody);
+        if (!body) errors.push(`Replacement body is empty: ${bodyName}.`);
+        if (rawBody.includes("\r")) errors.push(`Replacement body must use LF: ${bodyName}.`);
+        if (!rawBody.endsWith("\n")) errors.push(`Replacement body must end with one newline: ${bodyName}.`);
+        if (body.includes("<!--rs:") || body.includes("<!--/rs:")) {
+          errors.push(`Replacement body must not contain runtime markers: ${bodyName}.`);
+        }
+        if (!anchor.researchspec_targets.some((target) => body.includes(target))) {
+          errors.push(`Replacement body mentions none of its ResearchSpec targets: ${bodyName}.`);
+        }
+        const hash = createHash("sha256").update(body).digest("hex");
+        const duplicate = bodyHashes.get(hash);
+        if (duplicate) errors.push(`Replacement bodies are byte-identical: ${duplicate} and ${bodyName}.`);
+        bodyHashes.set(hash, bodyName);
+      }
     }
 
     const hintCount = countHints(anchor);
@@ -118,6 +140,15 @@ async function validateAnchors(
     const content = await readFile(sourcePath, "utf8");
     validateHintPresence(anchor, content, errors, warnings);
     validateReplacementScope(anchor, content, errors);
+  }
+
+  const actualBodies = (await readdir(path.join(repoRoot, REPLACEMENTS_DIR)))
+    .filter((name) => name.endsWith(".md"));
+  for (const body of actualBodies) {
+    if (!expectedBodies.has(body)) errors.push(`Orphan replacement body: ${body}.`);
+  }
+  for (const body of expectedBodies) {
+    if (!actualBodies.includes(body)) errors.push(`Replacement body not found in asset directory: ${body}.`);
   }
 
   validateCoverageDecisions(anchorFile.coverage_decisions, errors);
@@ -226,70 +257,12 @@ function countHints(anchor: ContractAnchor): number {
   return hintValues.filter((hint) => hint.trim().length > 0).length;
 }
 
-function isAnchorFile(value: unknown): value is ContractAnchorFile {
-  if (!isRecord(value)) return false;
-  return (
-    value.schema_version === "researchspec.arsu.contract-anchors.v2" &&
-    value.upstream_source === "vendor/ars" &&
-    typeof value.audited_commit === "string" &&
-    Array.isArray(value.anchors) &&
-    value.anchors.every(isAnchor) &&
-    Array.isArray(value.coverage_decisions) &&
-    value.coverage_decisions.every(isCoverageDecision)
-  );
-}
-
-function isAnchor(value: unknown): value is ContractAnchor {
-  if (!isRecord(value)) return false;
-  return (
-    typeof value.id === "string" &&
-    typeof value.source_path === "string" &&
-    typeof value.owner_skill === "string" &&
-    typeof value.contract_category === "string" &&
-    isSeverity(value.severity) &&
-    isMatchHints(value.match_hints) &&
-    typeof value.replacement_intent === "string" &&
-    typeof value.template_id === "string" &&
-    isOptionalReplacementScope(value.replacement_scope)
-  );
-}
-
 function validateSemanticProfile(anchor: ContractAnchor, errors: string[]): void {
-  if (!anchor.replacement_intent || !anchor.template_id) {
-    errors.push(`Replaceable anchor ${anchor.id} must include replacement intent and template id.`);
-  } else if (!hasReplacementTemplate(anchor.template_id)) {
-    errors.push(`Replaceable anchor ${anchor.id} references unknown template id: ${anchor.template_id}.`);
+  if (!isReplaceableAnchor(anchor)) return;
+  if (anchor.researchspec_targets.length === 0) errors.push(`Replaceable anchor ${anchor.id} has no ResearchSpec targets.`);
+  if (!anchor.replacement_scope.start_snippet.trim() || !anchor.replacement_scope.end_snippet.trim()) {
+    errors.push(`Replaceable anchor ${anchor.id} has an empty replacement boundary.`);
   }
-}
-
-function isCoverageDecision(value: unknown): value is CoverageDecision {
-  return isRecord(value) &&
-    typeof value.id === "string" &&
-    typeof value.source_path === "string" &&
-    typeof value.match_snippet === "string" &&
-    value.disposition === "retain" &&
-    typeof value.rationale === "string";
-}
-
-function isOptionalReplacementScope(value: unknown): value is ContractAnchor["replacement_scope"] {
-  return value === undefined || (
-    isRecord(value) &&
-    typeof value.start_snippet === "string" &&
-    typeof value.end_snippet === "string"
-  );
-}
-
-function isMatchHints(value: unknown): value is ContractAnchor["match_hints"] {
-  if (!isRecord(value)) return false;
-  const allowed = new Set(["headings", "snippets", "keywords"]);
-  for (const key of Object.keys(value)) {
-    if (!allowed.has(key)) return false;
-  }
-  return (
-    isOptionalStringArray(value.headings) &&
-    isOptionalStringArray(value.snippets) &&
-    isOptionalStringArray(value.keywords)
-  );
 }
 
 function isManifest(value: unknown): value is UpstreamManifest {
@@ -342,14 +315,6 @@ function isOptionalHeadings(value: unknown): boolean {
     Array.isArray(value) &&
     value.every((item) => isRecord(item) && typeof item.level === "number" && typeof item.title === "string")
   );
-}
-
-function isOptionalStringArray(value: unknown): value is string[] | undefined {
-  return value === undefined || (Array.isArray(value) && value.every((item) => typeof item === "string"));
-}
-
-function isSeverity(value: unknown): value is AnchorSeverity {
-  return value === "required" || value === "recommended" || value === "diagnostic";
 }
 
 function isFileKind(value: unknown): value is UpstreamManifestFile["kind"] {

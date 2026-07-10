@@ -42,30 +42,68 @@ Determine the entry point from the user's first message. Use the following keywo
 
 #### Resume Mode: `resume_from_passport`
 
-<!--rs:a:b4116c66ae00-->
-### ResearchSpec Runtime Ownership
+<!--rs:STATE-005-->
+**Trigger:** user input starts with or contains `resume_from_passport=<12-hex>`.
 
-Resume handling is controlled by ResearchSpec runtime files. The ARS Material Passport can be imported as evidence, but it is not the active resume ledger.
+**Compatibility contract:** the referenced ARS Material Passport boundary is
+import evidence only. Active resume state is owned by
+`researchspec/runs/current/state.yaml`; imported files and recovered outputs are
+resolved through `researchspec/runs/current/artifact-registry.json`; human branch
+choices are recorded through the decision runtime in
+`researchspec/runs/current/decision-ledger.jsonl`; verification and blocking
+conditions are recorded by the resume gate in
+`researchspec/runs/current/gate-ledger.jsonl`.
 
-#### Before Resuming
+**Orchestrator obligations:**
 
-- Read `researchspec/runs/current/state.yaml` for current stage, mode, and resume status.
-- Resolve prior artifacts through `researchspec/runs/current/artifact-registry.json`.
-- Check `researchspec/runs/current/gate-ledger.jsonl` for unresolved blocking gates.
+1. Parse `<hash>` from user input and validate `^[0-9a-f]{12}$`.
+2. Locate the compatibility passport: prefer an explicit path in user input;
+   otherwise look in `./passports/` or `./material_passport*.yaml` relative to
+   the current working directory; if none is found, ask the user for the path.
+3. Read `reset_boundary[]` without modifying the passport. Find the
+   `kind: boundary` entry whose `hash` matches. No match is a hard error:
+   `Passport hash <hash> not found in <path>. Cannot resume.`
+4. Submit the passport path, its content hash, and the matched boundary payload
+   to the ResearchSpec resume helper. The helper owns the exclusive run-state
+   update lock and MUST atomically check whether this imported boundary has
+   already been consumed in the current run. A prior consumption is a hard
+   error and MUST identify when the boundary was resumed. Do not implement this
+   check by appending a `resume` entry to the passport.
+5. Resolve every recovered output by artifact id and recorded hash through
+   `researchspec/runs/current/artifact-registry.json`. A missing, changed, or
+   unregistered required artifact makes the resume stale and blocks automatic
+   advancement until the resume gate records a verified result.
+6. Emit the acknowledgement in this form:
 
-#### Decision Handling
+   ```text
+   ### Resume Acknowledged
+   - Hash: <hash>
+   - Source session: <session_marker> (generated <generated_at>)
+   - Recovered stage: <stage>
+   - Next stage: <next> [override: stage=<user-stage>, mode=<user-mode>]
+   ```
 
-- If a branch or override is required, stop and request a human decision.
-- After human confirmation, return the chosen branch to the runtime for decision-ledger recording before advancing.
-
-#### Mutation Boundary
-
-- Request changes to `researchspec/runs/current/state.yaml` through the ResearchSpec orchestrator or runtime helper; do not edit run state directly.
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:b4116c66ae00-->
+   Include the bracketed override only when the user supplied `stage=` or
+   `mode=`. When the imported boundary has `pending_decision`, print
+   `(pending user decision)` as `<next>` until step 8 resolves it.
+7. Honor the imported `verification_status` as evidence, not as a current gate
+   result. For `STALE` or `UNVERIFIED`, warn the user and ask whether to
+   re-verify. For `VERIFIED`, the resume gate may reuse it only after current
+   artifact hashes and required gate receipts have been checked.
+8. If `pending_decision` exists, stop and display its question and option
+   values. After the user selects a value, resolve `next_stage` and `next_mode`
+   from the matching option. Explicit `stage=` or `mode=` resume overrides take
+   precedence. Return the confirmed choice and rationale to the ResearchSpec
+   decision runtime before advancing; do not write the decision ledger directly.
+9. Ask the resume helper to atomically register the imported passport as a
+   compatibility artifact, mark the boundary consumed in run state, record any
+   human-confirmed branch, and submit verification findings to the resume gate.
+   The helper, decision runtime, and gate validator own their respective stable
+   files; the orchestrator MUST NOT edit those files or the source passport.
+10. Invoke the resolved next stage with the current ResearchSpec state and the
+    registered artifact ids required by that stage. The passport is not the
+    sole runtime input. Do not ask the user to re-summarize prior stages.
+<!--/rs:STATE-005-->
 11. Respect user overrides: `stage=<n>` overrides `next`; `mode=<m>` overrides the default mode for the next stage (validated against Mode Advisor rules). User overrides are recorded on the resume entry's `user_override` field.
 
 ### 2. Mode Recommendation
@@ -161,28 +199,67 @@ SLIM checkpoints never reset. MANDATORY checkpoints co-occur with reset when app
 
 **Reset-boundary emission sequence (flag ON, FULL checkpoint):**
 
-<!--rs:a:a988873008fb-->
-### ResearchSpec Reset Boundary
+<!--rs:STATE-004-->
+1. Ask the ResearchSpec checkpoint helper to snapshot the completed stage,
+   proposed next stage, active mode, required artifact ids and hashes, and any
+   pending decision in `researchspec/runs/current/state.yaml`. The helper owns
+   the atomic state update; the orchestrator does not edit the file directly.
+2. When `ARS_PASSPORT_RESET=1`, also emit an ARS-compatible `kind: boundary`
+   payload as a compatibility artifact. Preserve the legacy canonical hash
+   rules—RFC 8785 serialization, LF-separated boundary entries, a
+   `"000000000000"` placeholder, and the first 12 lowercase SHA-256 hex
+   characters—so external ARS readers can still verify the export. Register the
+   passport path and content hash through
+   `researchspec/runs/current/artifact-registry.json`; the export is not active
+   ResearchSpec state.
+3. If the checkpoint coincides with a mandatory user choice, preserve the
+   complete `pending_decision` question and option routing in the compatibility
+   payload, but stop for the human decision. After confirmation, return the
+   selected value and rationale to the decision runtime for
+   `researchspec/runs/current/decision-ledger.jsonl`. `next` remains advisory;
+   the chosen option's `next_stage` and `next_mode` determine routing unless an
+   explicit resume override is present.
+4. Emit the compatibility tag and user instruction as a distinct block:
 
-Checkpoint resets and resumes are ResearchSpec runtime events, not Material Passport ledger mutations.
+   ```text
+   [PASSPORT-RESET: hash=<hash>, stage=<completed>, next=<next>]
 
-#### Boundary Record
+   ### Resume Instruction
+   - Passport file: <path>
+   - To continue, start a fresh agent session and invoke:
+     resume_from_passport=<hash>
+   - ResearchSpec run state and registered artifacts remain authoritative.
+   ```
 
-- Store reset boundary state in `researchspec/runs/current/state.yaml`.
-- After human confirmation, return branch choices, overrides, and pending decisions to the runtime for decision-ledger recording.
+5. Halt after a FULL checkpoint when the configured workflow requires a fresh
+   session. Other modes may accept one in-session continuation, but the next
+   stage still loads only current ResearchSpec state and registered artifacts;
+   it must not reconstruct state from chat or use the passport as its sole input.
 
-#### Gate Record
+**Iron rules (reset boundary):**
 
-- Use `researchspec/runs/current/gate-ledger.jsonl` to record whether the recovered state is verified, stale, or blocked.
-- If an ARS reset tag exists, register it as compatibility evidence rather than consuming it as the runtime source of truth.
-
-#### Mutation Boundary
-
-- Request changes to `researchspec/runs/current/state.yaml` through the ResearchSpec orchestrator or runtime helper; do not edit run state directly.
-- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:a988873008fb-->
+1. With compatibility export disabled, no passport bytes or reset tags are
+   emitted; normal ResearchSpec checkpoint behavior is unchanged.
+2. ResearchSpec run state, artifact registration, human decisions, and gate
+   outcomes remain separated across their runtime files and are written only by
+   their responsible helpers.
+3. A compatibility passport remains append-only. Existing boundary/resume
+   entries are never deleted, reordered, or mutated.
+4. The `[PASSPORT-RESET: ...]` tag is the machine-stable identifier for legacy
+   import; the human instruction is explanatory only.
+5. Hash mismatch is a hard import error.
+6. Single consumption is enforced atomically by the ResearchSpec resume helper.
+   A legacy `kind: resume` export may mirror the result but does not establish it.
+7. Mandatory integrity and review checkpoints are never weakened. Pending
+   decisions always re-prompt and confirmed option routing takes precedence over
+   advisory defaults.
+8. Collaboration-depth output remains advisory and is registered as an artifact;
+   it never becomes a blocking state flag.
+9. If a compatibility passport is also updated, the import/export helper must
+   retain the legacy exclusive-lock guarantee for the complete read-check-append
+   sequence. A platform unable to provide that lock must refuse the compatibility
+   write, while leaving ResearchSpec state uncorrupted.
+<!--/rs:STATE-004-->
 
 Full protocol: [`../references/passport_as_reset_boundary.md`](../references/passport_as_reset_boundary.md).
 
@@ -486,31 +563,19 @@ Reference helper: `scripts/slr_lineage.py` `emit(stages, incoming_slr_lineage)`.
 | Stage 4/4' -> 4.5 | Revised/Re-Revised Draft | Schema 4 (revised) | Pass to integrity_verification_agent (final verification) |
 | Stage 4.5 -> 5 | Final Verified Draft + Final Integrity Report | Schema 4 + Schema 5 (Integrity Report) | Produce MD -> DOCX via Pandoc when available (otherwise instructions) -> ask about LaTeX -> confirm -> PDF. Carry forward `experiment_alignment_results[]` + `experiment_intake_declaration` (#260) to formatter surface + Stage 6 histogram |
 
-<!--rs:a:6b5cf894d129-->
-### ResearchSpec Handoff Projection
-
-ARS handoff schemas remain payload guidance. ResearchSpec files own the stable runtime contract.
-
-#### Projection Rules
-
-- Project research intent into `researchspec/specs/project.md`.
-- Project bibliography and corpus metadata into `researchspec/specs/sources.yaml`.
-- Project claim intent and limits into `researchspec/specs/claims.yaml`.
-- Project manuscript structure into `researchspec/specs/manuscript.yaml`.
-
-#### Runtime Records
-
-- Emit every handoff payload as an artifact for runtime registration.
-- Record decisions and gates in their ledgers; manuscript edits use `researchspec/draft-patches/<patch-id>.json`.
-
-#### Mutation Boundary
-
-- Treat `researchspec/specs/project.md`, `researchspec/specs/sources.yaml`, `researchspec/specs/claims.yaml`, `researchspec/specs/manuscript.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:6b5cf894d129-->
+<!--rs:HANDOFF-001-->
+Every handoff payload must be emitted as an artifact and returned to the runtime
+registration helper with path, hash, producer, stage, mode, version label, and
+verification status for `researchspec/runs/current/artifact-registry.json`.
+Project research intent to `researchspec/specs/project.md`, sources to
+`researchspec/specs/sources.yaml`, accepted claims to
+`researchspec/specs/claims.yaml`, and manuscript structure to
+`researchspec/specs/manuscript.yaml` only through an accepted contract patch or
+direct human edit. Human branch choices and gate results go through their
+responsible decision and gate helpers. Preserve `slr_lineage` and other useful
+Schema 9 fields as compatibility metadata on the registered artifact; a
+Material Passport is not required as the handoff carrier.
+<!--/rs:HANDOFF-001-->
 
 **Style Profile carry-through**: If a Style Profile (Schema 10) was produced during `academic-paper` intake (Step 10), carry it through all stages in the Material Passport. The Style Profile is consumed by `draft_writer_agent` (Stage 2) and optionally by `report_compiler_agent` (Stage 1, if applicable). The Style Profile does not affect integrity verification or review stages.
 
@@ -893,71 +958,94 @@ The per-pass resolution counts gain a `terminal_blocked[]` bucket recording each
 
 ## Revision-Round Patch Sequencing (#390)
 
-<!--rs:a:4df35b1d7e20-->
-### ResearchSpec Draft Patch Protocol
+<!--rs:PATCH-004-->
+When a revision stage dispatches `academic-paper` revision mode—normal review
+rounds (Stage 3 → 4 / 3' → 4') and integrity-FAIL correction rounds (Stage 2.5
+FAIL → 2 or Stage 4.5 FAIL → 5 revision)—the writer's deliverable is a
+ResearchSpec draft patch, not a re-emitted manuscript. The orchestrator owns the
+deterministic preparation, apply, registration, and gate steps around that
+patch. The Stage 4.5 FAIL route enters Stage 5's revision sub-step, not the
+PASS-path finalization handoff, and the gate that issued any FAIL must re-verify
+the applied result before finalization.
 
-Revision work emits ResearchSpec draft patches. Applying them is a separate deterministic step guarded by decisions and gates.
+**Normative order per revision round — nothing may rewrite the draft between
+steps 1 and 3:**
 
-#### Patch Inputs
+1. **Prepare the immutable base.** Resolve the current manuscript artifact and
+   its recorded hash through
+   `researchspec/runs/current/artifact-registry.json`. Run the deterministic
+   draft-patch preparation helper to assign stable block ids where missing and
+   refresh the block manifest without changing prose. Register the refreshed
+   manifest as a derived artifact before dispatch.
+2. **Dispatch the writer.** Provide the exact registered draft, its block
+   manifest, and the round's accepted Revision Roadmap. The writer emits
+   `researchspec/draft-patches/<patch-id>.json` with target artifact id, target
+   hash, block preconditions, operations, and roadmap traceability. In review
+   rounds it also emits provisional response items containing judgment content;
+   it does not apply the patch or update registries and ledgers.
+3. **Validate and apply deterministically.** The draft-patch apply helper first
+   validates schema, target artifact identity, base hash, block preconditions,
+   operation shape, and structural-change limits. Validation is fail-closed and
+   byte-preserving on rejection. A successful apply creates a new manuscript
+   artifact plus a separate apply report; it never overwrites the registered
+   base. The default structural touched-ratio threshold remains `0.6` with a
+   strict `>` comparison. A different threshold requires a human-confirmed
+   decision returned to the decision runtime for
+   `researchspec/runs/current/decision-ledger.jsonl` before apply.
+4. **Run the provenance finalizer on the apply output.** Do not run it between
+   base preparation and apply: changes to reference-status markers in that
+   interval would create hash mismatches that do not represent stale writer
+   input. After apply, resolve newly inserted bare `<!--ref:-->` markers under
+   the existing finalizer contract.
+5. **Complete mechanical response facts.** For review rounds, fill response-item
+   block ids, fresh insertion ids, word-count delta, and counters from the apply
+   report while preserving the writer's judgment text. Return the response and
+   apply report as artifacts for runtime registration, then require the apply
+   report as an input to re-review.
+6. **Surface preservation and interaction state.** Include `preserved_ratio`
+   from the apply report beside the accumulated round-trip count in the stage
+   checkpoint, for example `round-trips: 3/9 · preserved_ratio: 0.91`.
 
-- Read the current draft artifact from `researchspec/runs/current/artifact-registry.json`.
-- Read accepted revision intent from `researchspec/runs/current/decision-ledger.jsonl`.
+**Integrity-correction variant (Stage 2.5 / 4.5 FAIL).** Follow steps 1–4 and 6
+unchanged, with two differences:
 
-#### Patch Output
+- Do not create Schema 8 response items because no review round occurred.
+  Instead, every patch operation's `roadmap_item_ids` must reference the stable
+  correction ids issued by the integrity report.
+- Return the new manuscript and apply report to the same integrity gate that
+  issued the FAIL. The apply report is required evidence, not a substitute for
+  re-verification. Submit the new gate result to the gate helper for
+  `researchspec/runs/current/gate-ledger.jsonl`; do not advance on an unresolved
+  blocking result. Existing round caps remain in force.
 
-- Emit `researchspec/draft-patches/<patch-id>.json` with block ids, old hashes, operations, and roadmap traceability.
-- Do not silently apply patch operations while generating the patch.
+**Structural-revision escalation — the only path to full re-emission.** A
+pre-drafting classification that requires restructuring, or an apply-time
+structural refusal caused by heading changes, section-count change, or a
+touched ratio above the accepted threshold, MUST stop at a human checkpoint.
+Present the trigger and these choices:
 
-#### Mutation Boundary
+1. narrow or defer the structural items and re-dispatch the remaining local
+   items as a patch round;
+2. for apply-time flags only, acknowledge and apply the same patch while
+   preserving the structural flags in the apply report;
+3. re-emit the full manuscript for this round.
 
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
+Only an explicit human choice of full re-emission permits option 3. Return that
+choice and its rationale to the decision runtime before continuing. After full
+re-emission, prepare a fresh block manifest with new block ids, invalidate all
+patches tied to the prior manuscript hash, and mark the round report
+`mode: full_reemission_escalated`. Never auto-fallback to full re-emission.
 
-<!--/rs:a:4df35b1d7e20-->
-
-**Normative order per revision round — nothing may rewrite the draft between steps 1 and 3:**
-
-1. **Anchorize (manifest refresh):** `python scripts/ars_anchorize_draft.py <draft.md>` — idempotent, content-neutral; stamps any unlabeled blocks and regenerates `<draft>.block-manifest.json`. Run it at every round entry (including legacy pre-anchor drafts at revision-mode intake) so the manifest matches the exact text the writer is about to see.
-2. **Dispatch the writer** with the anchored draft + the block manifest + the round's Revision Roadmap in context. The writer emits the patch as `phase6_*/revision_patch_round<N>.json` plus provisional Schema 8 response items (see `draft_writer_agent.md` § Patch-Document Revision Emission).
-3. **Apply:** `python scripts/ars_apply_revision_patch.py <draft.md> <patch.json> --output <draft.rev<N>.md>` — two-phase fail-closed; the output is a NEW versioned artifact (supersession convention above) and the apply report lands beside it. The touched-ratio trigger defaults to the #424 ship decision (0.6, strict `>`); do not pass a different threshold without a recorded user decision.
-4. **Finalizer pass:** the Cite-Time Provenance Finalizer runs on the apply OUTPUT, resolving any newly inserted bare `<!--ref:-->` markers per its shipped contract. A finalizer pass between steps 1 and 3 would legitimately mutate `<!--ref:-->` status tokens and produce spurious hash mismatches at apply — the sequencing exists to make every hash mismatch MEAN staleness, not pipeline noise.
-5. **Complete Schema 8 mechanical fields** from the apply report (§3.5 role split): `change_block_ids` per response item (including fresh insert IDs from `ops_applied[].new_block_ids` / `fresh_block_ids`), `word_count_delta`, counters. The writer's provisional items carry the judgment content; the orchestrator fills in the post-apply facts. Then the response moves to re-review with the **apply report named as a required input** alongside it.
-6. **Surface `preserved_ratio`** from the apply report's counters next to the accumulated round-trip count in the stage checkpoint line (the #389 interaction-count budget surface; advisory, one line — e.g. `round-trips: 3/9 · preserved_ratio: 0.91`).
-
-**Integrity-correction variant (Stage 2.5 / 4.5 FAIL rounds, #89 Item 8).** A correction round follows steps 1–4 and 6 unchanged, with two destination differences. (a) **No Schema 8 response items in this round** — response items are review-round artifacts and no review round occurred; the writer maps each patch op's `roadmap_item_ids` to the integrity report's stable correction IDs instead (the `IL-<SEVERITY>-<n>` Issue List IDs, or a finding's native `EA-NNN`; see `integrity_verification_agent.md` § Issue List and `draft_writer_agent.md` § Patch-Document Revision Emission), and step 5's mechanical completion is skipped. (b) **The applied output returns to the SAME integrity gate that issued the FAIL** (Stage 2.5 or 4.5) for re-verification — never forward to review or finalization on the strength of the apply report alone; the apply report is a required input to that re-verification, not a substitute for it. The integrity gate's own caps are unchanged (max 3 correction rounds; abort after the 2nd Stage 4.5 FAIL).
-
-**Escalation gate (§3.6) — the only road to full re-emission, and it runs through the user.** Two trigger layers:
-
-- **Layer 1 (pre-drafting):** the writer returns `[PATCH-ESCALATION-REQUIRED: layer=pre_drafting, ...]` instead of a patch — a roadmap item demands restructuring.
-- **Layer 2 (apply-time):** the apply script exits 3 (`refused_structural`) — heading-block ops, section-count change, or touched-ratio above threshold on an emitted patch (the writer misclassified a structural change as local). Note the heading-anchor exemption (#424): an `insert_after` merely anchored on a heading does not flag; rewriting/deleting a heading or inserting heading-bearing text does.
-
-On either trigger, STOP and present the MANDATORY checkpoint:
-
-```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-⚠️ MANDATORY CHECKPOINT — Structural revision detected (#390)
-
-Trigger: [pre-drafting classification: items REV-00X (reason) |
-          apply-time shape flags: heading ops at indexes [...], section_count_delta=N, touched_ratio=0.NN > 0.6]
-
-Proceeding by full re-emission exposes the ENTIRE document to the
-silent-distortion risk patch mode exists to remove (DELEGATE-52) —
-for this round, every untouched paragraph is regenerated by the model.
-
-Your options:
-  (a) narrow — drop/defer the structural items, re-dispatch the writer
-      on the remaining local items as a normal patch round
-  (b) [layer 2 only] acknowledge — apply this patch as-is; the flags are
-      recorded in the apply report (--acknowledge-structural)
-  (c) re-emit in full — this round runs as legacy full re-emission,
-      provenance-stamped mode: full_reemission_escalated
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
-
-Only on explicit user choice (c) does a round run as full re-emission; afterwards **re-anchorize from scratch** (new ID generation — old patches never apply across a re-emission boundary) and record `mode: full_reemission_escalated` in the round's report so provenance never pretends a patch round happened. NEVER auto-fallback to full re-emission — not on structural flags, not on apply failure. MVP granularity is per-round, binary (one confirmed restructure item ⇒ the whole round re-emits; mixed rounds are deferred forward-scope, spec §9.3).
-
-**Apply-failure path (distinct from escalation):** a Phase 1 rejection (exit 2 — stale hash, unknown target, schema failure) feeds the structured failure report back to the writer for ONE patch re-emission against the current base (retry-once, v3.6.6 convention). Second failure → escalate to the user with three options: re-anchorize + retry the round / escalated full re-emission (checkpoint above) / abort. The base draft is byte-untouched on every rejection — there is no partial apply to clean up.
+**Apply-failure path (not structural escalation).** On stale hash, unknown
+target, schema failure, or failed block precondition, keep the base manuscript
+byte-unchanged and return the structured failure report to the writer for one
+new patch against the current registered base. A second failure stops for a
+human choice among: prepare a fresh block manifest and retry the round, approve
+full re-emission through the checkpoint above, or abort. Send failure and
+blocking findings to the responsible gate helper; artifact registration,
+decision recording, and gate-ledger writes remain owned by their ResearchSpec
+runtime helpers.
+<!--/rs:PATCH-004-->
 
 ---
 
@@ -969,35 +1057,46 @@ A **package-level** gate, explicitly NOT the ref-marker stamp path above: the v3
 
 ### Procedure (after the formatter emits the output package)
 
-<!--rs:a:96de257a1678-->
-### ResearchSpec Submission Gate
+<!--rs:GATE-002-->
+1. **Resolve the policy.** Read supported submission-package policy values from
+   `researchspec/specs/workflow.yaml`. Use the latest human-confirmed choice for
+   this run from `researchspec/runs/current/decision-ledger.jsonl`; absence
+   resolves to `advisory`. Always pass the resolved value explicitly to the
+   deterministic verifier. The orchestrator selects policy but never
+   re-evaluates package findings itself.
+2. **Resolve and verify the package inputs.** Resolve the formatted manuscript,
+   figures, tables, supplementary material, venue profile, provenance inputs,
+   and prior verifier reports by artifact id and hash through
+   `researchspec/runs/current/artifact-registry.json`. Run the local package
+   verifier with the resolved policy and exact input set so its package and
+   inputs fingerprints are reproducible. Return the new report for registration.
+3. **Gate on structured verifier tokens, never on exit code alone.** Under
+   `strict`, `TERMINAL-BLOCK policy=submission_package` starts a formatter repair
+   loop bounded to two rounds; after the second failure, stop and surface the
+   findings. `VERIFICATION-INCOMPLETE` also blocks, but missing policy inputs or
+   parsers are not formatter-fixable: ask the scholar to provide the missing
+   input or choose advisory policy. Return every pass, warning, incomplete, and
+   blocking outcome to the submission-package gate helper for
+   `researchspec/runs/current/gate-ledger.jsonl`.
+4. **Preserve the advisory path.** After a report is registered, dispatch the
+   formatter once in append-only mode to copy package advisories into
+   `provenance_summary.md`. This may add the report and advisories section but
+   must not change manuscript bytes or reference markers. Register the updated
+   provenance summary as a new artifact version.
+5. **Require freshness before reuse.** A resume, re-entry, or later finalization
+   pass may reuse a report only after the verifier confirms the current package,
+   input-set, and policy fingerprints. Stale, unreadable, null-policy, or
+   mismatched reports are re-run; a fresh report still re-emits and re-evaluates
+   its verdict. Never infer pass merely from freshness.
+6. **Recompute every pass.** The gate result is a function of current registered
+   package bytes, current resolved inputs, and the current accepted policy.
+   Package edits or policy changes invalidate prior permission. Do not cache a
+   previously granted delivery result across resume or finalization.
 
-Submission package checks produce gate-ledger records tied to registered artifacts.
-
-#### Gate Inputs
-
-- Resolve formatted manuscript, figures, tables, and supplementary files from `researchspec/runs/current/artifact-registry.json`.
-- Read package policy choices from `researchspec/runs/current/decision-ledger.jsonl` when human selection is required.
-
-#### Ledger Writes
-
-- Return pass, fail, and blocking findings to the submission-package gate helper.
-- Do not advance to delivery while a blocking gate entry remains unresolved.
-
-#### Mutation Boundary
-
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:96de257a1678-->
-2. **Run the verifier** on the package directory: `python scripts/verify_submission_package.py <package_dir> --policy <resolved>` plus `--passport` / `--venue-profile` / `--join-map` when the run has them — the SAME input set the freshness invocation (step 5) will carry, or the inputs fingerprint can never match.
-3. **Gate on stdout tokens, NEVER on exit codes.** Exit 1 also covers nonterminal advisory/heuristic fails (a strict-mode heuristic fail exits 1 with NO terminal token and must not block — heuristic findings never promote, structurally). Match each token as a line PREFIX, not full-line equality — the emitted lines carry a `strict_eligible_fails=<ids>` / `strict_eligible_not_checked=<ids>` suffix. The terminal signals are exactly:
-   - `TERMINAL-BLOCK policy=submission_package` (a strict-eligible check FAILED under `strict`) → return the package to the formatter fix loop, **bounded: 2 fix rounds**, then surface to the scholar (mirrors the revision-loop cap philosophy). One round = dispatch the formatter to remediate the named findings, then re-run the verifier; if the 2nd round still emits the token, STOP and surface — never a 3rd. Never carry a verdict across rounds.
-   - `VERIFICATION-INCOMPLETE` (a strict-eligible check is NOT-CHECKED under `strict`) → blocks emission like a fail DOES (fail-closed §5.2: a missing parser or input must not waive the one check class the scholar opted into blocking on) — but its remediation is NOT the formatter fix loop: a missing venue profile or parser is not a formatter-fixable defect. Remediation, stated plainly to the scholar: declare a venue profile (under `strict`, Family B checks without one are strict-eligible NOT-CHECKED), or — the other way out — flip `submission_package` back to `advisory` and re-finalize.
-4. **Advisory path:** after the verifier writes its report, dispatch the formatter ONCE MORE in append-only mode to write the `Submission Package Advisories` section into `provenance_summary.md` from the report's findings (any fail / warn / NOT-CHECKED — see `formatter_agent.md`); then the pipeline completes. This re-entry is advisory transcription, not a content revision (no manuscript bytes change; Invariant 13 preserved). Byte-equivalence holds for non-opting users: no manuscript, ref-marker, or formatted-artifact bytes change — the report file and the advisories section are the only additions.
-5. **Report reuse REQUIRES the freshness guard.** Before ever reusing an existing report (resume, re-entry, second finalization pass), run `--check-freshness --policy <resolved>` first, WITH the same `--venue-profile` / `--passport` / `--join-map` arguments the reuse context carries (the guard compares an inputs fingerprint too — a report produced under a different venue profile is stale). `STALE-REPORT` (fingerprint, inputs, or policy mismatch; null-stamped; missing/unreadable) → re-run the verifier; NEVER evaluate a stale report (§5.2 — the package-level analog of the `policy_hash` stamp). A FRESH report re-emits its verdict (token + exit semantics identical to a live run) — gate on that re-emitted token exactly as in step 3; "fresh" alone is never a pass.
-6. **Recompute each pass; nothing cached.** The gate verdict is a pure function of the CURRENT passport policy and the CURRENT package bytes — recomputed at every finalization pass and across every `resume_from_passport` re-entry (the C-V6(h) mirror). A previously-granted emission never survives a policy flip or a package edit without re-passing the gate.
+The orchestrator returns artifacts, human choices, and gate findings to their
+responsible runtime helpers; it does not edit the registry, decision ledger, or
+gate ledger directly.
+<!--/rs:GATE-002-->
 
 ---
 

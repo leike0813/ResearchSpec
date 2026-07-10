@@ -1,13 +1,13 @@
-import { createHash } from "node:crypto";
+import { ANCHOR_ID_PATTERN } from "./types.js";
 
-export function compactMarkerId(anchorId: string): string {
-  return createHash("sha256").update(anchorId).digest("hex").slice(0, 12);
+export function isAnchorId(value: string): boolean {
+  return ANCHOR_ID_PATTERN.test(value);
 }
 
 export function markerStart(anchorId: string): string {
-  return `<!--rs:a:${compactMarkerId(anchorId)}-->`;
+  return `<!--rs:${anchorId}-->`;
 }
 
 export function markerEnd(anchorId: string): string {
-  return `<!--/rs:a:${compactMarkerId(anchorId)}-->`;
+  return `<!--/rs:${anchorId}-->`;
 }

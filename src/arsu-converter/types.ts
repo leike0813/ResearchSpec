@@ -94,7 +94,7 @@ export interface ContractProfile {
 export interface AnchorReplacementCompatibility {
   profile_id: string;
   coverage_policy: "required_and_recommended";
-  marker: "<!--rs:a:<marker-id>-->";
+  marker: "<!--rs:<anchor-id>-->";
   diagnostic_anchor_policy: "report_only";
 }
 

@@ -1,13 +1,14 @@
 import { createHash } from "node:crypto";
 
-import { renderReplacement } from "./templates.js";
-export { markerEnd, markerStart } from "./markers.js";
+import { markerEnd, markerStart } from "./markers.js";
 import type {
   AnchorMatchRecord,
   AnchorReplacementPlan,
   SerializableAnchorMatchRecord,
   SerializableAnchorReplacementPlan,
 } from "./types.js";
+
+export { markerEnd, markerStart } from "./markers.js";
 
 export function applyAnchorReplacements(
   text: string,
@@ -19,9 +20,11 @@ export function applyAnchorReplacements(
   let rewritten = text;
   for (const span of spans) {
     const before = rewritten.slice(span.start, span.end);
-    const lineEnding = before.endsWith("\r\n") ? "\r\n" : before.endsWith("\n") ? "\n" : "";
-    const rendered = renderReplacement(span.anchor);
-    const replacement = `${rendered}${lineEnding}`;
+    const lineEnding = before.includes("\r\n") ? "\r\n" : "\n";
+    const trailingLineEnding = before.endsWith("\r\n") ? "\r\n" : before.endsWith("\n") ? "\n" : "";
+    const body = span.replacement_body.replace(/\n/g, lineEnding);
+    const rendered = [markerStart(span.anchor.id), body, markerEnd(span.anchor.id)].join(lineEnding);
+    const replacement = `${rendered}${trailingLineEnding}`;
     rewritten = `${rewritten.slice(0, span.start)}${replacement}${rewritten.slice(span.end)}`;
     markReplaced(plan, span.anchor.id, outputPath, rendered);
   }
@@ -60,15 +63,15 @@ export function serializableAnchorReplacementPlan(plan: AnchorReplacementPlan): 
 function serializableRecord(record: AnchorMatchRecord): SerializableAnchorMatchRecord {
   return {
     anchor_id: record.anchor_id,
-    marker_id: record.marker_id,
+    anchor_name: record.anchor_name,
     source_path: record.source_path,
     owner_skill: record.owner_skill,
     contract_category: record.contract_category,
     severity: record.severity,
-    template_id: record.template_id,
     semantic_role: record.semantic_role,
     researchspec_targets: [...record.researchspec_targets].sort(),
     replacement_shape: record.replacement_shape,
+    replacement_body_sha256: record.replacement_body_sha256,
     matched: record.matched,
     replacement_mode: record.replacement_mode,
     replaced: record.replaced,

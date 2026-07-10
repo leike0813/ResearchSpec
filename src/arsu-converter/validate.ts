@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import path from "node:path";
 
 import { DEFAULT_SKILL_GROUPS } from "./config.js";
@@ -132,9 +133,9 @@ function validateManifestShape(manifest: ConversionManifest): { errors: string[]
   if (manifest.contract_compatibility?.material_passport_policy !== "compatibility_artifact_only_not_runtime_ssot") {
     errors.push("Manifest contract compatibility must keep Material Passport out of runtime SSOT");
   }
-  if (requiresAnchorReplacement(manifest) && manifest.contract_compatibility?.anchor_replacement?.profile_id !== "researchspec-anchor-replacement-v2") {
+  if (requiresAnchorReplacement(manifest) && manifest.contract_compatibility?.anchor_replacement?.profile_id !== "researchspec-anchor-replacement-v3") {
     if (requiresSemanticAnchorReplacement(manifest)) {
-      errors.push("Manifest contract compatibility must declare v2 anchor replacement profile");
+      errors.push("Manifest contract compatibility must declare v3 anchor replacement profile");
     }
   }
   if (requiresAnchorReplacement(manifest) && manifest.contract_compatibility?.anchor_replacement?.coverage_policy !== "required_and_recommended") {
@@ -152,7 +153,7 @@ async function validateAnchorReplacementMarkers(outputRoot: string, manifest: Co
   if (!anchorReplacements) return requiresAnchorReplacement(manifest) ? ["Manifest missing anchor_replacements"] : [];
   const requiresSemantic = requiresSemanticAnchorReplacement(manifest);
 
-  const manifestMarkerIds = new Set(anchorReplacements.records.map((record) => record.marker_id));
+  const manifestAnchorIds = new Set(anchorReplacements.records.map((record) => record.anchor_id));
   const anchorReportPath = path.join(outputRoot, "anchor-replacement-report.md");
   const anchorReportText = await pathExists(anchorReportPath) ? await readUtf8(anchorReportPath) : "";
   if (requiresSemantic && !anchorReportText) errors.push("Missing anchor-replacement-report.md");
@@ -161,6 +162,7 @@ async function validateAnchorReplacementMarkers(outputRoot: string, manifest: Co
     if (requiresSemantic && record.semantic_role === undefined) errors.push(`Anchor replacement missing semantic role: ${record.anchor_id}`);
     if (requiresSemantic && record.researchspec_targets.length === 0) errors.push(`Anchor replacement missing ResearchSpec targets: ${record.anchor_id}`);
     if (requiresSemantic && record.replacement_shape === undefined) errors.push(`Anchor replacement missing replacement shape: ${record.anchor_id}`);
+    if (requiresSemantic && !record.replacement_body_sha256) errors.push(`Anchor replacement missing replacement body hash: ${record.anchor_id}`);
     if (requiresSemantic && (!record.before_sha256 || !record.after_sha256)) errors.push(`Anchor replacement missing before/after hash: ${record.anchor_id}`);
     if (requiresSemantic && !anchorReportText.includes(`### ${record.anchor_id}`)) {
       errors.push(`Anchor replacement report missing anchor: ${record.anchor_id}`);
@@ -189,21 +191,26 @@ async function validateAnchorReplacementMarkers(outputRoot: string, manifest: Co
       if (requiresSemantic && markerBlock.text.includes("### ResearchSpec Contract Replacement")) {
         errors.push(`Anchor replacement uses obsolete generic heading in ${outputPath}: ${record.anchor_id}`);
       }
+      if (requiresSemantic && record.replacement_body_sha256 && sha256Text(markerBlock.body) !== record.replacement_body_sha256) {
+        errors.push(`Anchor replacement body differs from dedicated asset in ${outputPath}: ${record.anchor_id}`);
+      }
       if (requiresSemantic && record.researchspec_targets.length > 0 && !record.researchspec_targets.some((target) => markerBlock.text.includes(target))) {
         errors.push(`Anchor replacement text missing declared ResearchSpec target in ${outputPath}: ${record.anchor_id}`);
       }
     }
   }
 
-  const markerRe = /<!--rs:a:([0-9a-f]{12})-->/g;
+  const markerRe = /<!--rs:((?:STATE|IO|HANDOFF|PATCH|GATE|ARTIFACT|CLAIM|DECISION|SOURCE|REVIEW)-\d{3})-->/g;
+  const oldMarkerRe = /<!--\/?rs:a:[0-9a-f]{12}-->/;
   const markdownFiles = (await collectFiles(outputRoot, outputRoot)).filter((rel) => rel.endsWith(".md"));
   for (const rel of markdownFiles) {
     if (rel === "conversion-report.md" || rel === "anchor-replacement-report.md") continue;
     const text = await readUtf8(path.join(outputRoot, rel));
+    if (oldMarkerRe.test(text)) errors.push(`Generated output retains a v2 hash marker: ${rel}`);
     for (const match of text.matchAll(markerRe)) {
-      const markerId = match[1] ?? "";
-      if (!manifestMarkerIds.has(markerId)) {
-        errors.push(`Anchor replacement marker references unknown marker id: ${rel} -> ${markerId}`);
+      const anchorId = match[1] ?? "";
+      if (!manifestAnchorIds.has(anchorId)) {
+        errors.push(`Anchor replacement marker references unknown anchor id: ${rel} -> ${anchorId}`);
       }
     }
   }
@@ -223,7 +230,7 @@ function extractMarkerBlock(
   text: string,
   anchorId: string,
   requiresSemantic: boolean,
-): { ok: boolean; text: string; errors: string[] } {
+): { ok: boolean; text: string; body: string; errors: string[] } {
   const startMarker = markerStartForManifest(anchorId, requiresSemantic);
   const endMarker = requiresSemantic ? markerEnd(anchorId) : `researchspec-anchor-replacement:end anchor_id="${anchorId}"`;
   const starts = allIndices(text, startMarker);
@@ -231,10 +238,10 @@ function extractMarkerBlock(
   const errors: string[] = [];
   if (starts.length !== 1) errors.push(`expected one start marker for ${anchorId}, found ${String(starts.length)}`);
   if (ends.length !== 1) errors.push(`expected one end marker for ${anchorId}, found ${String(ends.length)}`);
-  if (errors.length > 0) return { ok: false, text: "", errors };
+  if (errors.length > 0) return { ok: false, text: "", body: "", errors };
   const start = starts[0];
   const end = ends[0];
-  if (end < start) return { ok: false, text: "", errors: [`marker order is reversed for ${anchorId}`] };
+  if (end < start) return { ok: false, text: "", body: "", errors: [`marker order is reversed for ${anchorId}`] };
   const endExclusive = end + endMarker.length;
   if (requiresSemantic) {
     if (start > 0 && text[start - 1] !== "\n") errors.push(`start marker is not on a standalone line for ${anchorId}`);
@@ -242,7 +249,12 @@ function extractMarkerBlock(
       errors.push(`end marker is not followed by a line boundary for ${anchorId}`);
     }
   }
-  return { ok: errors.length === 0, text: text.slice(start, endExclusive), errors };
+  const body = text
+    .slice(start + startMarker.length, end)
+    .replace(/\r\n/g, "\n")
+    .replace(/\r/g, "\n")
+    .trim();
+  return { ok: errors.length === 0, text: text.slice(start, endExclusive), body, errors };
 }
 
 function allIndices(text: string, needle: string): number[] {
@@ -290,6 +302,10 @@ function markerStartForManifest(anchorId: string, requiresSemantic: boolean): st
   return requiresSemantic
     ? markerStart(anchorId)
     : `researchspec-anchor-replacement:start anchor_id="${anchorId}"`;
+}
+
+function sha256Text(text: string): string {
+  return createHash("sha256").update(text).digest("hex");
 }
 
 async function collectFiles(root: string, outputRoot: string): Promise<string[]> {

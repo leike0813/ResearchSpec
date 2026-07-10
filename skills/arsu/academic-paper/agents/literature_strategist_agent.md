@@ -249,22 +249,18 @@ This advisory never blocks lit-review output, never downgrades included sources,
 
 **Backpointer**: see [`../references/cross-skill/academic-pipeline/references/literature_corpus_consumers.md`](../references/cross-skill/academic-pipeline/references/literature_corpus_consumers.md) for the full consumer protocol, BAD/GOOD examples, and shared template.
 
-<!--rs:a:4d7408f706a8-->
-### ResearchSpec Source Corpus
-
-Literature corpus inputs are owned by ResearchSpec source contracts and registered artifacts.
-
-#### Source Reads
-
-- Read canonical source ids, citation keys, screening status, and trust metadata from `researchspec/specs/sources.yaml`.
-- Resolve bibliography reports and literature matrices through `researchspec/runs/current/artifact-registry.json`.
-
-#### Mutation Boundary
-
-- Treat `researchspec/specs/sources.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-
-<!--/rs:a:4d7408f706a8-->
+<!--rs:SOURCE-001-->
+When `researchspec/specs/sources.yaml` contains included literature sources,
+resolve their bibliography, screening, and full-text artifacts through
+`researchspec/runs/current/artifact-registry.json` and expose them to this agent
+as a read-only `literature_corpus[]` working projection. Enter the existing
+**corpus-first, search-fills-gap** flow using that projection. Preserve the five
+steps, four Iron Rules, PRE-SCREENED reproducibility block, and the formats of
+the Annotated Bibliography, Literature Matrix, Research Gap Identification, and
+Recommended Sources by Paper Section. Consumer output may propose new source
+candidates as artifacts, but this agent must not edit `sources.yaml` or the
+registered corpus in place.
+<!--/rs:SOURCE-001-->
 
 ### The four Iron Rules
 

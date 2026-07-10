@@ -1,6 +1,6 @@
 import { CONVERTER_VERSION, GENERATED_OUTPUT_PATH, VENDOR_SOURCE_PATH } from "./config.js";
 import { serializableAnchorReplacementPlan } from "./anchors/replace.js";
-import { REPLACEMENT_PROFILE_ID } from "./anchors/templates.js";
+import { REPLACEMENT_PROFILE_ID } from "./anchors/types.js";
 import type { AnchorReplacementPlan, SerializableAnchorReplacementPlan } from "./anchors/types.js";
 import type {
   ConversionManifest,
@@ -196,13 +196,13 @@ export function buildAnchorReplacementReport(plan: AnchorReplacementPlan | null)
     lines.push(
       `### ${record.anchor_id}`,
       "",
+      `- Anchor name: \`${record.anchor_name}\``,
       `- Owner skill: \`${record.owner_skill}\``,
       `- Source path: \`${record.source_path}\``,
-      `- Marker id: \`${record.marker_id}\``,
       `- Severity: \`${record.severity}\``,
       `- Semantic role: \`${record.semantic_role ?? "unknown"}\``,
       `- Replacement shape: \`${record.replacement_shape ?? "unknown"}\``,
-      `- Template id: \`${record.template_id}\``,
+      `- Replacement body SHA-256: \`${record.replacement_body_sha256 ?? "unavailable"}\``,
       `- ResearchSpec targets: ${record.researchspec_targets.map((target) => `\`${target}\``).join(", ")}`,
       `- Generated output paths: ${record.output_paths.length > 0 ? record.output_paths.map((item) => `\`${item}\``).join(", ") : "_none_"}`,
       `- Before SHA-256: \`${record.before_sha256 ?? "unavailable"}\``,

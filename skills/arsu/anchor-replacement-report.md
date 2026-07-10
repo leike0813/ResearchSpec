@@ -4,19 +4,19 @@ This report is for human audit of generated ARSU contract replacements. It is no
 
 ## Replaced Anchors
 
-### anchor.paper.draft-writer.claim-intent-passport
+### CLAIM-001
 
+- Anchor name: `paper.draft-writer.claim-intent-passport`
 - Owner skill: `academic-paper`
 - Source path: `academic-paper/agents/draft_writer_agent.md`
-- Marker id: `864203db358e`
 - Severity: `required`
 - Semantic role: `claim_contract_projection`
 - Replacement shape: `artifact_projection_block`
-- Template id: `claim-intent-manifest-to-researchspec-claims`
+- Replacement body SHA-256: `10d66d32cf9525b4f816a7bdd99c5c9fef71e53e576e984bf34fd001202435fd`
 - ResearchSpec targets: `researchspec/specs/claims.yaml`, `researchspec/changes/<change-id>/contract-patch.yaml`, `researchspec/runs/current/artifact-registry.json`
 - Generated output paths: `academic-paper/agents/draft_writer_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `academic-pipeline/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `deep-research/references/cross-skill/academic-paper/agents/draft_writer_agent.md`
 - Before SHA-256: `cd600a01478b854779f28248cfde9c4be266358c4ba2232ca4e88b4f51f22134`
-- After SHA-256: `c3dbfc8c84669703ed03f68789f678587f64973c1b62c77fbaaf757e8b78b43f`
+- After SHA-256: `f3ed9ab430fde7a67ad83e3bbbbbeb56efdaad61c0400e07f5946700d8e63507`
 
 #### Before
 
@@ -27,83 +27,108 @@ Before drafting the first prose block of the paper draft, append ONE `claim_inte
 #### After
 
 ````markdown
-<!--rs:a:864203db358e-->
-### ResearchSpec Claim Projection
-
-Claim intent is projected into ResearchSpec claim contracts or proposed contract patches.
-
-#### Claim Writes
-
-- Use `researchspec/specs/claims.yaml` for accepted claim ids, wording constraints, support, and limits.
-- Use `researchspec/changes/<change-id>/contract-patch.yaml` for high-impact changes to claim scope or strength.
-- Emit claim-intent manifests as artifacts for runtime registration.
-
-#### Mutation Boundary
-
-- Treat `researchspec/specs/claims.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-
-<!--/rs:a:864203db358e-->
+<!--rs:CLAIM-001-->
+Before drafting the first prose block of the paper, read accepted claim ids,
+allowed wording, support strength, evidence links, and limits from
+`researchspec/specs/claims.yaml`. Emit exactly ONE immutable
+`claim_intent_manifest` artifact that lists the claims this draft intends to
+make and all author-declared "must not" rules. Reuse stable ids for accepted
+claims. Any new claim, stronger wording, or changed limit must also be proposed
+through `researchspec/changes/<change-id>/contract-patch.yaml`; never edit
+`claims.yaml` from the drafting agent. Return the manifest to the runtime for
+registration in `researchspec/runs/current/artifact-registry.json`. The audit
+agent uses that registered pre-commitment for the intended ∩ emitted ∩ supported
+diff in spec §4 step 5 (D6).
+<!--/rs:CLAIM-001-->
 ````
 
-### anchor.paper.draft-writer.generator-contract-runtime
+### IO-001
 
+- Anchor name: `paper.draft-writer.phase-boundary`
 - Owner skill: `academic-paper`
 - Source path: `academic-paper/agents/draft_writer_agent.md`
-- Marker id: `3fb37f9582cb`
-- Severity: `required`
-- Semantic role: `generator_evaluator_contract`
-- Replacement shape: `checklist`
-- Template id: `writer-generator-contract-to-researchspec-runtime`
-- ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
+- Severity: `recommended`
+- Semantic role: `contract_io_boundary`
+- Replacement shape: `io_contract_block`
+- Replacement body SHA-256: `ed3b8f7e8244f7494b24c5c95d66ab63e79a70a88e9229b935ec76c22b4db4e3`
+- ResearchSpec targets: `researchspec/specs/manuscript.yaml`, `researchspec/specs/claims.yaml`, `researchspec/runs/current/artifact-registry.json`, `researchspec/draft-patches/<patch-id>.json`
 - Generated output paths: `academic-paper/agents/draft_writer_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `academic-pipeline/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `deep-research/references/cross-skill/academic-paper/agents/draft_writer_agent.md`
-- Before SHA-256: `e63341155ff9ca906c4cdcadf2c49149d211c5cda6745813b54f684c8de8ff08`
-- After SHA-256: `26381a36f108900d8dfc9b4bf5b62d26fcb0dd12b984695b304b96ae9ce41636`
+- Before SHA-256: `0208068fc817d98c4c38fb0ef2da645475a0707080ccdef4d400f91b73e3a246`
+- After SHA-256: `1bf4aa32ca7b3661994cda1900be263b4a4422b12192858a211599f30d19c5e3`
 
 #### Before
 
 ````markdown
-> Authoritative system-prompt sub-sections for the v3.6.6 writer half of the contract-gated phase split. Used by `academic-paper full` mode only. Pinned by the orchestrator block in `academic-paper/SKILL.md` § "v3.6.6 Generator-Evaluator Contract Protocol". Schema 13.1 contract template: `shared/contracts/writer/full.json`. Design spec: `docs/design/2026-04-27-ars-v3.6.6-generator-evaluator-contract-design.md` §5.
+You are a phase-scoped agent assigned to **academic-paper Phase 4 (Drafting)** OR **Phase 6 (Revision after review)** per caller invocation. You are single-phase per invocation. **In Phase 4 (and in a Phase 6 round the caller has explicitly confirmed as `full_reemission_escalated`, §3.6) your deliverable is the complete paper draft, per the Output Format below.** In a normal Phase 6 revision round your deliverable is instead a **patch document** (see § Patch-Document Revision Emission (#390)), NOT a re-emitted draft — the patch contract supersedes the full-draft Output Format for that case.
+
+You MUST NOT:
+- WRITE files in `phase{M}_*/` directories where M ≠ {your invocation's phase} (no inflate)
+- Produce content classified as a downstream-phase deliverable type (citation-compliance report, abstract, peer-review verdict, formatted manuscript) even if you can see the end-goal
+- Invoke or simulate any other agent persona's output (e.g., do not produce citation format check — that's `citation_compliance_agent`'s Phase 5a; do not produce peer-review verdict — that's `peer_reviewer_agent`'s Phase 6)
+- "Helpfully" continue past your assigned deliverable
+
+You MAY READ files in upstream phases (`phase0_*/` through `phase{N-1}_*/`) plus your own phase. For Phase 4 invocation: read Phase 0-3 (config, literature, structure, arguments). For Phase 6 invocation: read Phase 0-5 (all prior + Phase 5 citation/abstract + Phase 6 reviewer feedback).
+
+If downstream work is needed, return control to the caller. The v3.6.6 generator-evaluator contract block below also constrains your Phase 4a/4b sub-phase behavior — the Phase Boundary is about pipeline-phase scope, the v3.6.6 contract is about within-phase generator-evaluator discipline; both apply.
+
+**Enforcement (v3.9.2):** prompt-level fence + advisory verifier (`scripts/check_pipeline_integrity.py`). Since the #134 rescope (PR #294), a deterministic PreToolUse write-scope guard enforces the WRITE clause where a hook runs; where none runs, this fence is the enforcement layer.
 ````
 
 #### After
 
 ````markdown
-<!--rs:a:3fb37f9582cb-->
-### ResearchSpec Writer Phase Contract
+<!--rs:IO-001-->
+You are a phase-scoped Draft Writer assigned to Phase 4 initial drafting or one
+explicitly dispatched Phase 6 revision round. The caller's invocation determines
+the phase. Phase 4 and a human-approved `full_reemission_escalated` round may
+emit a complete manuscript; a normal Phase 6 round emits only
+`researchspec/draft-patches/<patch-id>.json`.
 
-Keep the paper-blind Phase 4a commitment and paper-visible Phase 4b drafting split; resolve their contract and outputs as registered artifacts.
+**Contract inputs:** read manuscript structure and claim limits from
+`researchspec/specs/manuscript.yaml` and `researchspec/specs/claims.yaml`.
+Resolve the exact outline, argument blueprint, bibliography, current manuscript,
+review roadmap, and other permitted upstream artifacts by id and hash through
+`researchspec/runs/current/artifact-registry.json`. Do not infer permission from
+`phase*_` directory names or consume unregistered downstream output.
 
-#### Phase Records
+**Contract outputs:** produce only the deliverable for this invocation: an
+initial draft artifact, an approved full re-emission artifact, or a draft patch.
+Do not produce citation-compliance reports, abstracts, peer-review verdicts,
+formatted manuscripts, or another agent's output. Return downstream work to the
+caller.
 
-- Resolve writer contract JSON and prior phase artifacts through `researchspec/runs/current/artifact-registry.json`.
-- Return lint and failure-condition outcomes to the gate helper for `researchspec/runs/current/gate-ledger.jsonl`.
-
-#### Mutation Boundary
-
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:3fb37f9582cb-->
+**Writes allowed:** write the new deliverable file only. Return ordinary
+artifacts to the runtime registration helper; write manuscript revision
+operations only to the dedicated draft-patch file. Do not edit stable specs,
+run state, registries, decisions, or gates directly. Contract preflight and
+runtime validation enforce this boundary; platform hooks and ARS directory
+verifiers are optional diagnostics, not the source of authority.
+<!--/rs:IO-001-->
 ````
 
-### anchor.paper.draft-writer.patch-emission
+### PATCH-002
 
+- Anchor name: `paper.draft-writer.patch-emission`
 - Owner skill: `academic-paper`
 - Source path: `academic-paper/agents/draft_writer_agent.md`
-- Marker id: `441c2013e179`
 - Severity: `required`
 - Semantic role: `draft_patch_protocol`
 - Replacement shape: `patch_protocol_block`
-- Template id: `draft-writer-patch-emission-to-researchspec-draft-patch`
+- Replacement body SHA-256: `648672343f1ccdc3b4ef890eb46219091e0fddfded6e3590264f10cb96072448`
 - ResearchSpec targets: `researchspec/draft-patches/<patch-id>.json`, `researchspec/runs/current/artifact-registry.json`
 - Generated output paths: `academic-paper/agents/draft_writer_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `academic-pipeline/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `deep-research/references/cross-skill/academic-paper/agents/draft_writer_agent.md`
-- Before SHA-256: `c02ef296df2d957dda7091ab50380f18c6d67201622cb7b8cb54de05501f398c`
-- After SHA-256: `f7c581ccd345c9625b8dccfdc5d2718da7cd6ce6a00c6601f7d996cc7d4b9323`
+- Before SHA-256: `303cf33ae73e69553a6cc6b2da370857fe0640a3a418fd7648e018d9cff493fd`
+- After SHA-256: `85813356c216eddd3aa328e65f2f2cc0b17014675cc6957ce53ae5f703d02916`
 
 #### Before
 
 ````markdown
+In **revision mode** (standalone `academic-paper` revision, which is also what pipeline revision stages dispatch), your draft deliverable is NOT a re-emitted complete paper. It is a **patch document**: a JSON list of block operations against the anchored base draft, schema `shared/contracts/patch/revision_patch.schema.json`. Full re-emission exposes every character of the paper to silent-distortion on every round (DELEGATE-52, arXiv:2604.15597); the patch shape confines exposure to the blocks your operations explicitly touch. Spec: `docs/design/2026-06-10-390-diff-patch-revision-mode-spec.md` §3.2/§3.5/§3.6. Protocol: `academic-paper/references/revision_patch_protocol.md`. This section governs revision-mode invocations only — Phase 4 initial drafting and `academic-paper full` in-pair Phase 6→4 loops are unchanged (the full-mode loop is the Item 9 boundary, spec §5.2).
+
+Your revision-invocation context carries the **anchored draft** (every block stamped `<!--block:BNNNN-->`) and its **block manifest** (`<draft>.block-manifest.json`: `base_draft_hash` + one `{block_id, old_hash, first_line_excerpt}` entry per block). The manifest is the ONLY legitimate source for every hash you emit.
+
+**Emission rules (all machine-checked at apply time — a violation rejects the whole patch):**
+
 1. **Write the patch as a sidecar file**, not fenced chat JSON: `phase6_*/revision_patch_round<N>.json` inside your write fence (#424 emission-format decision). Your chat output carries the human-facing revision log (the existing Revision Log table) and your provisional response items — never the patch body.
 2. **Copy hashes, never compute them.** `base_draft_hash` and every per-op `old_hash` are mechanical copies from the block manifest. You cannot compute SHA-256 (all Bash denied, #134) — an invented or "remembered" hash fails at apply exactly like a stale one. Use `first_line_excerpt` to sanity-check you are naming the block you think you are.
 3. **Closed op vocabulary**: `replace_block` / `insert_after` / `delete_block`. Each `block_id` appears in at most ONE op, in any role. Multi-block insertion goes inside one `insert_after.new_text`. No move op — express relocation as `delete_block` + `insert_after` (byte-identical relocations are machine-recognized as `pure_move`).
@@ -122,129 +147,151 @@ and return control to the caller. The escalation decision (re-emit in full vs na
 **Apply-failure retry (once).** If the caller feeds back a structured apply rejection (stale hash, unknown target, schema failure), re-emit the ENTIRE patch once against the manifest provided in the retry context. Do not patch the patch. A second failure escalates to the user — that path is the caller's, not yours.
 
 **Role boundary (§3.5).** You emit; you never apply. You cannot run `ars_apply_revision_patch.py` (Bash denied), and the agent that wants the change must not be the agent that lands it. Post-apply facts — fresh block IDs, `change_block_ids`, `word_count_delta` — are unknowable at emission time: emit **provisional** Schema 8 response items (response text, status, decline justifications — the judgment content) and leave the mechanical fields to the orchestrator, which completes them from the apply report.
+
+**Integrity-correction rounds (#89 Item 8).** When the caller dispatches revision mode with an **integrity correction list** instead of a Revision Roadmap (Stage 2.5 / 4.5 FAIL correction), the emission rules above apply with two differences: `roadmap_item_ids` carries the integrity report's stable correction IDs (the `IL-<SEVERITY>-<n>` Issue List IDs — `IL-SERIOUS-1`, `IL-MEDIUM-2` — or, for an experiment-alignment finding, its native `EA-NNN` ID; never invent an ID or use a bare bucket row number, which collides across severity buckets), and you emit **no provisional Schema 8 response items** — response items are review-round artifacts and no review round occurred. The correction list is the round's roadmap-equivalent: every op still publicly claims the finding it serves. Your chat output carries the Revision Log table mapping each op to its correction ID, nothing more; the applied output returns to the integrity gate for re-verification (the caller's routing, per the orchestrator's integrity-correction variant).
 ````
 
 #### After
 
 ````markdown
-<!--rs:a:441c2013e179-->
-### ResearchSpec Patch Emission
+<!--rs:PATCH-002-->
+In revision mode, emit a patch against the exact registered manuscript artifact,
+not a complete replacement draft. Resolve the base manuscript and block manifest
+by id and hash through `researchspec/runs/current/artifact-registry.json`. The
+block manifest is the only legitimate source for `base_draft_hash`, block ids,
+and per-block `old_hash` values.
 
-When revising, the writer emits patch records and leaves application to deterministic helpers.
+**Emission rules (all validated before apply):**
 
-#### Patch Output
+1. Write exactly one `researchspec/draft-patches/<patch-id>.json` file. Chat
+   output may contain the human revision log and provisional response judgments,
+   never the patch body as a second authority.
+2. Copy every base and old hash from the manifest. Never calculate, remember, or
+   invent a hash; use the first-line excerpt only as a targeting sanity check.
+3. Use the closed operation vocabulary `replace_block`, `insert_after`, and
+   `delete_block`. A block id appears in at most one operation role. Express a
+   move as delete plus insert; the apply helper may recognize byte-identical moves.
+4. `insert_after` carries the anchor block's `old_hash`; only the documented
+   document-body-start sentinel may omit it.
+5. `new_text` contains no block markers because the apply helper owns fresh id
+   assignment. Preserve the existing reference and locator marker discipline for
+   every inserted citation.
+6. Every operation has non-empty `roadmap_item_ids` identifying the accepted
+   review concern or integrity finding it serves.
 
-- Write `researchspec/draft-patches/<patch-id>.json` with stable patch id, target artifact id, block preconditions, operations, and traceability.
-- Emit supporting reviewer-roadmap or response artifacts for runtime registration.
+**Pre-drafting structural classification:** before emitting operations, identify
+roadmap items that require section split, merge, reorder, heading changes, or
+another shape outside the operation vocabulary. If any exists, emit only
+`[PATCH-ESCALATION-REQUIRED: ...]` and return control. Never silently produce a
+full draft. Full re-emission requires a human-confirmed decision returned by the
+caller through `researchspec/runs/current/decision-ledger.jsonl`.
 
-#### Mutation Boundary
+**Apply-failure retry:** when the caller returns a structured stale-hash,
+unknown-target, schema, or precondition rejection, emit one complete replacement
+patch against the new manifest. Do not patch the rejected patch. A second failure
+returns control for a human choice.
 
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
+**Role boundary:** you emit; you never apply. Mechanical post-apply facts—fresh
+block ids, changed block ids, word-count delta, counters, and preservation ratio—
+belong to the apply report. Keep response text, status judgments, and decline
+rationales provisional until the orchestrator combines them with that report.
 
-<!--/rs:a:441c2013e179-->
+**Integrity-correction rounds:** when the input is an integrity correction list,
+use each stable integrity issue id as operation traceability, emit no Schema 8
+review-response items, and return only the revision log. The caller routes the
+new manuscript and apply report back to the same integrity gate for
+re-verification. The writer does not register artifacts or write gate records.
+<!--/rs:PATCH-002-->
 ````
 
-### anchor.paper.draft-writer.phase-boundary
+### REVIEW-012
 
+- Anchor name: `paper.draft-writer.generator-contract-runtime`
 - Owner skill: `academic-paper`
 - Source path: `academic-paper/agents/draft_writer_agent.md`
-- Marker id: `a3acf40b9c5e`
-- Severity: `recommended`
-- Semantic role: `contract_io_boundary`
-- Replacement shape: `io_contract_block`
-- Template id: `paper-agent-phase-boundary-to-contract-io`
-- ResearchSpec targets: `researchspec/specs/manuscript.yaml`, `researchspec/specs/claims.yaml`, `researchspec/runs/current/artifact-registry.json`, `researchspec/draft-patches/<patch-id>.json`
+- Severity: `required`
+- Semantic role: `generator_evaluator_contract`
+- Replacement shape: `checklist`
+- Replacement body SHA-256: `f46267804a181a2e398012e84564b5c2cb208ca301eef9508898443404475468`
+- ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
 - Generated output paths: `academic-paper/agents/draft_writer_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `academic-pipeline/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `deep-research/references/cross-skill/academic-paper/agents/draft_writer_agent.md`
-- Before SHA-256: `138a42d038f6cb1615222289a359cee488cc218c199c96f2353f0971e13a5a39`
-- After SHA-256: `eed51ace894593519d9ff9a81e654f04febf12701add1e8086b8fcdc068229c6`
+- Before SHA-256: `e63341155ff9ca906c4cdcadf2c49149d211c5cda6745813b54f684c8de8ff08`
+- After SHA-256: `fa5505457e4b76646d55d68f8b3fd85cb88a2796db725034c3e3c0ccdec1cb5b`
 
 #### Before
 
 ````markdown
-You MAY READ files in upstream phases (`phase0_*/` through `phase{N-1}_*/`) plus your own phase. For Phase 4 invocation: read Phase 0-3 (config, literature, structure, arguments). For Phase 6 invocation: read Phase 0-5 (all prior + Phase 5 citation/abstract + Phase 6 reviewer feedback).
+> Authoritative system-prompt sub-sections for the v3.6.6 writer half of the contract-gated phase split. Used by `academic-paper full` mode only. Pinned by the orchestrator block in `academic-paper/SKILL.md` § "v3.6.6 Generator-Evaluator Contract Protocol". Schema 13.1 contract template: `shared/contracts/writer/full.json`. Design spec: `docs/design/2026-04-27-ars-v3.6.6-generator-evaluator-contract-design.md` §5.
 ````
 
 #### After
 
 ````markdown
-<!--rs:a:a3acf40b9c5e-->
-### ResearchSpec Drafting Contract I/O
-
-Drafting and revision agents operate on explicit ResearchSpec inputs and declared write surfaces.
-
-#### Contract Inputs
-
-- Read manuscript structure from `researchspec/specs/manuscript.yaml`.
-- Read allowed claims and evidence limits from `researchspec/specs/claims.yaml`.
-- Resolve outlines, blueprints, and drafts through `researchspec/runs/current/artifact-registry.json`.
-
-#### Writes Allowed
-
-- Initial drafting writes a registered draft artifact.
-- Revision rounds write `researchspec/draft-patches/<patch-id>.json` unless explicitly escalated to full re-emission.
-
-#### Mutation Boundary
-
-- Treat `researchspec/specs/manuscript.yaml`, `researchspec/specs/claims.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-
-<!--/rs:a:a3acf40b9c5e-->
+<!--rs:REVIEW-012-->
+> This block is the authoritative writer-side system-prompt protocol for the
+> `academic-paper full` generator/evaluator split. Resolve the frozen writer
+> contract and the exact registered Phase 4a/4b inputs and outputs through
+> `researchspec/runs/current/artifact-registry.json`. Preserve the paper-blind
+> Phase 4a pre-commitment, paper-visible Phase 4b drafting, verbatim system-prompt
+> subsections, data-delimiter rules, and lint checks below. Register an accepted
+> Phase 4a output before Phase 4b consumes it, then register the Phase 4b draft.
+> Return lint or contract failures to the gate helper for
+> `researchspec/runs/current/gate-ledger.jsonl`; the writer and orchestrator do
+> not write registry or gate records directly.
+<!--/rs:REVIEW-012-->
 ````
 
-### anchor.paper.intake.terminal-policy-passport
+### DECISION-001
 
+- Anchor name: `paper.intake.terminal-policy-passport`
 - Owner skill: `academic-paper`
 - Source path: `academic-paper/agents/intake_agent.md`
-- Marker id: `36f017b67e7e`
 - Severity: `required`
 - Semantic role: `decision_ledger_entry`
 - Replacement shape: `checklist`
-- Template id: `terminal-policy-to-researchspec-decision`
+- Replacement body SHA-256: `e8355746137f67cb2ddadbb77c04603417e0cabf0cf615fce9f11f0e6d25487c`
 - ResearchSpec targets: `researchspec/specs/workflow.yaml`, `researchspec/runs/current/decision-ledger.jsonl`
 - Generated output paths: `academic-paper/agents/intake_agent.md`
-- Before SHA-256: `8eaf97c63071b8bb1f3735e448a6e92163af7067b6d537c3ef2bf27540a6adfa`
-- After SHA-256: `f3c197e5838d19f5d97106563d7c17123383068d119648436217678871a84390`
+- Before SHA-256: `66fffc1747a10574b1ba1cbacb3fdcb5d0e8ce221b60fc4e8c4114a1c31ea0c5`
+- After SHA-256: `549b1b6a4fd6a47078e8a2a7a0a888f135427882200354f77fd74d421bdbf94c`
 
 #### Before
 
 ````markdown
 - Answer `strict` → record `strict` in the PCR `Citation Verification` row, and ensure the Material Passport carries `terminal_policies.citation_existence: strict` at the point the passport is materialized or next updated in this run (corpus creation, adapter import, or pre-finalizer setup). The finalizer remains the sole policy *evaluator* — this step only writes the scholar's declared policy, never evaluates it.
+- Answer `mark only`, or no answer → record `advisory (mark only, default)` in the PCR row and **write nothing to the passport** (per-key absence already means advisory; writing an explicit key would break byte-equivalence with pre-#392 runs for no semantic gain).
 ````
 
 #### After
 
 ````markdown
-<!--rs:a:36f017b67e7e-->
-### ResearchSpec Citation Policy Decision
-
-Citation terminal policy is a human-selected workflow decision, not a Material Passport mutation.
-
-#### Decision Handling
-
-- Read supported policy choices from `researchspec/specs/workflow.yaml`.
-- After the scholar selects a policy, return the choice to the runtime for decision-ledger recording.
-
-#### Mutation Boundary
-
-- Treat `researchspec/specs/workflow.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
-- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
-
-<!--/rs:a:36f017b67e7e-->
+<!--rs:DECISION-001-->
+- Answer `strict` → record `strict` in the PCR `Citation Verification` row and
+  return the scholar's confirmed policy choice to the ResearchSpec decision
+  runtime for `researchspec/runs/current/decision-ledger.jsonl`. The runtime
+  validates that `strict` is a supported option in
+  `researchspec/specs/workflow.yaml` and exposes the accepted decision to the
+  finalizer. This step selects policy; it never evaluates citations.
+- Answer `mark only`, or no answer → record `advisory (mark only, default)` in
+  the PCR row. Do not invent a decision-ledger entry for silence; the workflow
+  default remains advisory. No Material Passport policy mutation is required in
+  either branch.
+<!--/rs:DECISION-001-->
 ````
 
-### anchor.paper.literature-strategist.corpus-passport
+### SOURCE-001
 
+- Anchor name: `paper.literature-strategist.corpus-passport`
 - Owner skill: `academic-paper`
 - Source path: `academic-paper/agents/literature_strategist_agent.md`
-- Marker id: `4d7408f706a8`
 - Severity: `required`
 - Semantic role: `source_contract_projection`
 - Replacement shape: `artifact_projection_block`
-- Template id: `literature-corpus-passport-to-researchspec-sources`
+- Replacement body SHA-256: `ed81b9a74b5724f96458d654fc9124baa0dd368ba2f1aaf67413c62565b71f5d`
 - ResearchSpec targets: `researchspec/specs/sources.yaml`, `researchspec/runs/current/artifact-registry.json`
 - Generated output paths: `academic-paper/agents/literature_strategist_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/agents/literature_strategist_agent.md`, `academic-pipeline/references/cross-skill/academic-paper/agents/literature_strategist_agent.md`, `deep-research/references/cross-skill/academic-paper/agents/literature_strategist_agent.md`
 - Before SHA-256: `c91c0b02261c8f02fd616f201a5531d6822ad17ce31dd2a79cc2fd36dec838a8`
-- After SHA-256: `87d5a70c8806f6f0bdbf14266a7ea6c5ad710966bbce8bbcc2cf1ffd9094bf2f`
+- After SHA-256: `e722dd08b6b8bff533a975bbd4bf75a41370eb02cfac62a3f4b818f7ed71b974`
 
 #### Before
 
@@ -255,37 +302,33 @@ When the input Material Passport carries a non-empty `literature_corpus[]`, this
 #### After
 
 ````markdown
-<!--rs:a:4d7408f706a8-->
-### ResearchSpec Source Corpus
-
-Literature corpus inputs are owned by ResearchSpec source contracts and registered artifacts.
-
-#### Source Reads
-
-- Read canonical source ids, citation keys, screening status, and trust metadata from `researchspec/specs/sources.yaml`.
-- Resolve bibliography reports and literature matrices through `researchspec/runs/current/artifact-registry.json`.
-
-#### Mutation Boundary
-
-- Treat `researchspec/specs/sources.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-
-<!--/rs:a:4d7408f706a8-->
+<!--rs:SOURCE-001-->
+When `researchspec/specs/sources.yaml` contains included literature sources,
+resolve their bibliography, screening, and full-text artifacts through
+`researchspec/runs/current/artifact-registry.json` and expose them to this agent
+as a read-only `literature_corpus[]` working projection. Enter the existing
+**corpus-first, search-fills-gap** flow using that projection. Preserve the five
+steps, four Iron Rules, PRE-SCREENED reproducibility block, and the formats of
+the Annotated Bibliography, Literature Matrix, Research Gap Identification, and
+Recommended Sources by Paper Section. Consumer output may propose new source
+candidates as artifacts, but this agent must not edit `sources.yaml` or the
+registered corpus in place.
+<!--/rs:SOURCE-001-->
 ````
 
-### anchor.paper.peer-reviewer.evaluator-contract-runtime
+### REVIEW-013
 
+- Anchor name: `paper.peer-reviewer.evaluator-contract-runtime`
 - Owner skill: `academic-paper`
 - Source path: `academic-paper/agents/peer_reviewer_agent.md`
-- Marker id: `39128006ddb6`
 - Severity: `required`
 - Semantic role: `generator_evaluator_contract`
 - Replacement shape: `checklist`
-- Template id: `peer-evaluator-contract-to-researchspec-runtime`
+- Replacement body SHA-256: `f801620387415a0b8e61e520d6e1cc86e108ed28325be2ae3f2a5af94b50ec97`
 - ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
 - Generated output paths: `academic-paper/agents/peer_reviewer_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/agents/peer_reviewer_agent.md`, `academic-pipeline/references/cross-skill/academic-paper/agents/peer_reviewer_agent.md`, `deep-research/references/cross-skill/academic-paper/agents/peer_reviewer_agent.md`
 - Before SHA-256: `4ab16f5faffe69438ca13115b19eede4d3b4cea8bd173d4112910d9243820158`
-- After SHA-256: `b1d76e908c6527b3b278b0da1aae0fdde702ad8afa575793b7ed7f6e540bbc8a`
+- After SHA-256: `148d7e20c33cd60cd74f74de9feb287b02e88942fa1fb28457a9de41729e9e69`
 
 #### Before
 
@@ -298,37 +341,34 @@ Literature corpus inputs are owned by ResearchSpec source contracts and register
 #### After
 
 ````markdown
-<!--rs:a:39128006ddb6-->
-### ResearchSpec Evaluator Phase Contract
-
-Keep the paper-blind Phase 6a commitment and paper-visible Phase 6b evaluation split; resolve their contract and outputs as registered artifacts.
-
-#### Phase Records
-
-- Resolve evaluator contract JSON and writer commitments through `researchspec/runs/current/artifact-registry.json`.
-- Return evaluator decisions and blocking findings to the gate helper for `researchspec/runs/current/gate-ledger.jsonl`.
-
-#### Mutation Boundary
-
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:39128006ddb6-->
+<!--rs:REVIEW-013-->
+> This block is the authoritative evaluator-side system-prompt protocol for the
+> `academic-paper full` generator/evaluator split. Resolve the frozen evaluator
+> contract, the writer's registered pre-commitment, the draft, and exact Phase
+> 6a/6b artifacts through `researchspec/runs/current/artifact-registry.json`.
+> Preserve the distinction between this in-pair quality evaluator and the
+> external Stage 3 reviewer panel, plus the paper-blind Phase 6a commitment,
+> paper-visible Phase 6b evaluation, verbatim prompt sections, scoring plan,
+> dissent rules, and lint checks below. Register accepted phase outputs in order
+> and return blocking failures to the gate helper for
+> `researchspec/runs/current/gate-ledger.jsonl`; do not write runtime records
+> directly.
+<!--/rs:REVIEW-013-->
 ````
 
-### anchor.paper.revision-coach.commitment-ledger
+### REVIEW-014
 
+- Anchor name: `paper.revision-coach.commitment-ledger`
 - Owner skill: `academic-paper`
 - Source path: `academic-paper/agents/revision_coach_agent.md`
-- Marker id: `70b27456fa15`
 - Severity: `required`
 - Semantic role: `review_commitment_tracking`
 - Replacement shape: `schema_projection_table`
-- Template id: `revision-coach-commitments-to-researchspec-changes`
+- Replacement body SHA-256: `ba4466879e3cfafc9663d1127c26d1fd7f64a872615fe6f766cc1e0b83052c12`
 - ResearchSpec targets: `researchspec/changes/<change-id>/contract-patch.yaml`, `researchspec/draft-patches/<patch-id>.json`, `researchspec/runs/current/decision-ledger.jsonl`
 - Generated output paths: `academic-paper/agents/revision_coach_agent.md`
 - Before SHA-256: `58ab269816913477f725577ef4eec70c4c805150153c59ebf2058f7a0920680b`
-- After SHA-256: `954b5ac247ab0ac68541cdc292dd9aa5b9abcb189f46fe5ed42d0885e63a5871`
+- After SHA-256: `d31b189a44988b57c48d3fff1740fac87c04a1c053a4e0f2295b890b72cdc202`
 
 #### Before
 
@@ -339,37 +379,35 @@ Keep the paper-blind Phase 6a commitment and paper-visible Phase 6b evaluation s
 #### After
 
 ````markdown
-<!--rs:a:70b27456fa15-->
-### ResearchSpec Revision Commitment Planning
-
-Revision commitments are separated into contract changes, draft patches, and human decisions.
-
-#### Commitment Routing
-
-- Research-scope or claim commitments go to `researchspec/changes/<change-id>/contract-patch.yaml`.
-- Manuscript-text commitments go to `researchspec/draft-patches/<patch-id>.json`.
-- Tradeoffs and rejected reviewer requests go to `researchspec/runs/current/decision-ledger.jsonl`.
-
-#### Mutation Boundary
-
-- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
-
-<!--/rs:a:70b27456fa15-->
+<!--rs:REVIEW-014-->
+5. Emit the extracted commitment list as an immutable review-analysis artifact
+   keyed by `concern_id` and return it for registration in
+   `researchspec/runs/current/artifact-registry.json`. Preserve only the three
+   extraction fields at this stage; do not invent lifecycle placeholders.
+   Research-scope or claim commitments require a proposed
+   `researchspec/changes/<change-id>/contract-patch.yaml`; manuscript-edit
+   commitments become traceability inputs for
+   `researchspec/draft-patches/<patch-id>.json`; strategic acceptance, rejection,
+   or tradeoff choices wait for a human-confirmed decision in
+   `researchspec/runs/current/decision-ledger.jsonl`. Revision execution and
+   independent re-review append fulfillment evidence later; this agent does not
+   write those stable records directly.
+<!--/rs:REVIEW-014-->
 ````
 
-### anchor.paper.revision-patch-reference
+### PATCH-003
 
+- Anchor name: `paper.revision-patch-reference`
 - Owner skill: `academic-paper`
 - Source path: `academic-paper/references/revision_patch_protocol.md`
-- Marker id: `323dc5aad0a2`
 - Severity: `required`
 - Semantic role: `draft_patch_protocol`
 - Replacement shape: `patch_protocol_block`
-- Template id: `revision-patch-protocol-to-researchspec`
+- Replacement body SHA-256: `75e201c2f62966ccb1a74911be9983493d130ce80236580a39092f74ad8b6101`
 - ResearchSpec targets: `researchspec/draft-patches/<patch-id>.json`, `researchspec/runs/current/gate-ledger.jsonl`, `researchspec/runs/current/decision-ledger.jsonl`
 - Generated output paths: `academic-paper/references/revision_patch_protocol.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/references/revision_patch_protocol.md`, `academic-pipeline/references/cross-skill/academic-paper/references/revision_patch_protocol.md`, `deep-research/references/cross-skill/academic-paper/references/revision_patch_protocol.md`
-- Before SHA-256: `1ee580a6373cf5c1e338cb186fc7e1dbdb6eadc515397edb92924d8483a553b6`
-- After SHA-256: `8890ac10e77384ab659af36cab884c8bb054d251856bd8ebfb7838f7d7c7e762`
+- Before SHA-256: `e3ede67a20668bdcd50c297ba5ae8ea22eefcd26d75cad253cdc3849b00ee905`
+- After SHA-256: `bf11738182f3a08e8b5940893c732965d492093e28354abb4c67b1d6f8a60751`
 
 #### Before
 
@@ -392,43 +430,179 @@ Revision commitments are separated into contract changes, draft patches, and hum
 | Apply report | same run, sidecar | `<output>.apply-report.json` — ops applied, fresh block IDs, structural flags, `preserved_ratio` |
 
 The apply report shares the revised draft's lifecycle: it is a **required input to re-review and the Stage 4.5 integrity gate** — re-reviewers read it to see exactly which blocks changed (`ops_applied[]`, `fresh_block_ids`, `pure_move_pairs`) and which are machine-guaranteed untouched.
+
+## Mode B command sequence (one revision round)
+
+```bash
+# 1. Anchorize / refresh the manifest (idempotent; safe on legacy drafts).
+#    Run at EVERY round entry, and rewrite nothing afterwards until apply —
+#    any rewrite (including a finalizer pass) invalidates the manifest.
+python scripts/ars_anchorize_draft.py draft.md
+
+# 2. Hand the writer its revision context:
+#    draft.md + draft.md.block-manifest.json + the round's Revision Roadmap.
+#    The writer emits phase6_*/revision_patch_round1.json (never a full draft).
+
+# 3. Apply — two-phase fail-closed; output must be a NEW file.
+python scripts/ars_apply_revision_patch.py draft.md \
+    phase6_revision/revision_patch_round1.json \
+    --output draft.rev1.md
+
+# 4. Run your normal post-revision steps (finalizer / citation checks)
+#    on draft.rev1.md, then re-review with draft.rev1.md.apply-report.json
+#    attached.
+```
+
+Exit codes: `0` applied · `2` Phase 1 rejection (structured failure report on stdout; base byte-untouched) · `3` structural refusal (see escalation) · `4` post-write self-check bug.
+
+**On exit 2 (stale hash / unknown target / schema failure):** feed the failure report back to the writer for ONE re-emission of the whole patch against the current manifest. On a second failure, stop and decide: re-anchorize and retry the round, escalate to full re-emission, or abort. Never hand-edit a patch to force it through — a hash mismatch means the writer was looking at different text than the file holds.
+
+**On exit 3 (structural flags):** the patch touches structure — heading rewrites/deletes, net section-count change, or `touched_ratio` strictly above **0.6** (the #424 ship decision; `insert_after` merely *anchored* on a heading is exempt — inserting body text under a section heading is routine, not structural). Read the flags in the refusal output, then either narrow the patch, or — if the structural change is intended — re-run with the acknowledgment recorded:
+
+```bash
+python scripts/ars_apply_revision_patch.py draft.md patch.json \
+    --output draft.rev1.md --acknowledge-structural
+```
+
+`--acknowledge-structural` is a deliberate user decision, never a default; the flags stay recorded in the apply report either way. `--touched-ratio-threshold 1.0` disables the ratio trigger (the comparator is strict `>`); overriding 0.6 in pipeline runs requires a recorded user decision.
+
+**Full re-emission (escalated rounds only):** when a round genuinely demands restructuring, the round runs as legacy full re-emission after explicit confirmation — never as a silent fallback. Afterwards, re-anchorize from scratch (a NEW ID generation; the old manifest and any old patches are dead) and record the round as `mode: full_reemission_escalated`.
 ````
 
 #### After
 
 ````markdown
-<!--rs:a:323dc5aad0a2-->
-### ResearchSpec Revision Patch Reference
+<!--rs:PATCH-003-->
+**Toolchain ownership:** ResearchSpec deterministic helpers prepare block
+manifests, validate and apply `researchspec/draft-patches/<patch-id>.json`, and
+emit apply reports. Both orchestrated and phase-by-phase runs resolve inputs and
+return outputs through `researchspec/runs/current/artifact-registry.json`; users
+do not need ARS-specific script paths embedded in agent instructions.
 
-The patch protocol is ResearchSpec-owned: generate patch JSON, verify preconditions, then apply after approval.
+**What this buys:** a block not named by an operation is never passed through a
+generation step and therefore remains byte-identical. This is a deterministic
+apply guarantee, not a claim that edited blocks are correct. Structural rewrites
+remain outside ordinary patch protection and require escalation.
 
-#### Patch Contract
+## Artifacts and naming
 
-- Store operations in `researchspec/draft-patches/<patch-id>.json`.
-- Use `researchspec/runs/current/gate-ledger.jsonl` for hash/precondition failures.
-- Use `researchspec/runs/current/decision-ledger.jsonl` for apply approval and unresolved tradeoffs.
+| Artifact | Owner | Contract |
+| --- | --- | --- |
+| Base manuscript | runtime registry | immutable artifact id and content hash |
+| Block manifest | preparation helper | base hash plus stable block ids, old hashes, and excerpts |
+| Patch document | writer | `researchspec/draft-patches/<patch-id>.json` with target and traceability |
+| Revised manuscript | apply helper | new artifact; base is never overwritten |
+| Apply report | apply helper | operations, fresh ids, structural flags, and `preserved_ratio` |
 
-#### Mutation Boundary
+The revised manuscript and apply report share one lifecycle and are required
+inputs to re-review and the Stage 4.5 integrity gate.
 
-- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
+## One revision round
 
-<!--/rs:a:323dc5aad0a2-->
+1. Resolve the current manuscript artifact and run the preparation helper to
+   refresh its block manifest. Do not rewrite the manuscript afterward.
+2. Give the writer the exact manuscript, manifest, and accepted Revision Roadmap
+   or integrity correction list. The writer emits the dedicated draft-patch file.
+3. Run the apply helper. It validates the whole patch before writing and creates
+   a new manuscript plus apply report on success.
+4. Run finalizer/citation checks on the new manuscript, return both outputs for
+   registration, and re-review using the apply report as required evidence.
+
+On stale hash, unknown target, schema failure, or precondition failure, preserve
+the base bytes and allow one full patch retry against the current manifest. A
+second failure stops for a human decision: prepare a fresh manifest and retry,
+approve full re-emission, or abort.
+
+On structural flags—heading rewrites/deletes, net section-count change, or
+`touched_ratio > 0.6`—stop for explicit human confirmation. Narrowing the patch
+does not require full re-emission; applying acknowledged structural operations
+keeps the flags in the report. Changing the threshold or approving full
+re-emission must be returned to the decision runtime for
+`researchspec/runs/current/decision-ledger.jsonl`.
+
+After confirmed full re-emission, prepare a new block manifest, retire every
+patch tied to the old manuscript hash, and record
+`mode: full_reemission_escalated`. Apply failures and structural refusals are
+submitted to the relevant gate helper for
+`researchspec/runs/current/gate-ledger.jsonl`; no agent writes the ledger
+directly.
+<!--/rs:PATCH-003-->
 ````
 
-### anchor.paper.skill.generator-evaluator-contract
+### PATCH-001
 
+- Anchor name: `paper.skill.revision-patch-mode`
 - Owner skill: `academic-paper`
 - Source path: `academic-paper/SKILL.md`
-- Marker id: `1ee970b484f3`
+- Severity: `required`
+- Semantic role: `draft_patch_protocol`
+- Replacement shape: `patch_protocol_block`
+- Replacement body SHA-256: `6b3235849daf089ecce16baa7d574c7e8b686d38fadf1cbdbadf0bab32a7ce9f`
+- ResearchSpec targets: `researchspec/draft-patches/<patch-id>.json`, `researchspec/runs/current/decision-ledger.jsonl`
+- Generated output paths: `academic-paper/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper/SKILL.md`, `deep-research/references/cross-skill/academic-paper/SKILL.md`
+- Before SHA-256: `5b250e0145eec791b6f7db431c788786daee409db513fd09cbe3f15595d9c648`
+- After SHA-256: `b8248c68d7ed5e2b8edb028ffa23723522990ea2f90536ebb9e8991a6d86e96e`
+
+#### Before
+
+````markdown
+1. **Anchorize** the draft (`scripts/ars_anchorize_draft.py` — idempotent, content-neutral): every block gets a stable `<!--block:BNNNN-->` marker; a block manifest (`base_draft_hash` + per-block `old_hash`) is regenerated. Nothing may rewrite the draft between this step and apply.
+2. **The writer emits a patch document** (`shared/contracts/patch/revision_patch.schema.json`) as a sidecar file in its `phase6_*/` fence — block ops with hash preconditions copied from the manifest, each op tracing to `roadmap_item_ids`. See `agents/draft_writer_agent.md` § Patch-Document Revision Emission.
+3. **Deterministic apply** (`scripts/ars_apply_revision_patch.py`): two-phase fail-closed — one stale hash rejects the whole patch with the base byte-untouched; untouched blocks are preserved byte-identical by construction. Structural shapes (heading rewrites/deletes, section-count change, touched-ratio > 0.6) refuse without an explicit acknowledge that only the §3.6 escalation checkpoint may grant. The apply report (`preserved_ratio`, ops, fresh block IDs, structural flags) is a **required input to re-review** alongside the revised draft.
+4. **Escalation, never silent fallback:** restructure-demanding rounds go to a MANDATORY user checkpoint; a confirmed full re-emission round is provenance-stamped `mode: full_reemission_escalated` and the draft is re-anchorized afterwards (new ID generation).
+
+Orchestrated runs follow `pipeline_orchestrator_agent.md` § Revision-Round Patch Sequencing; Mode B (phase-by-phase manual) users run the same scripts by hand — exact commands in `references/revision_patch_protocol.md`. Honest boundary, stated once: patch mode removes the silent-distortion channel for text the revision does not touch; it does not make the revision itself better. The `academic-paper full` in-pair Phase 6→4 loop is NOT patch-adopted (its Phase 4b lint requires a full `## Draft Body`; Item 9 boundary, spec §5.2/§7).
+````
+
+#### After
+
+````markdown
+<!--rs:PATCH-001-->
+1. **Prepare the base artifact.** Resolve the current manuscript id and hash
+   through `researchspec/runs/current/artifact-registry.json`. The deterministic
+   preparation helper assigns stable block markers where missing and emits a
+   refreshed block-manifest artifact. Nothing may rewrite the manuscript between
+   manifest creation and apply.
+2. **Emit the patch.** The writer creates
+   `researchspec/draft-patches/<patch-id>.json` with target artifact id/hash,
+   block preconditions copied from the manifest, closed operations, and non-empty
+   roadmap traceability. The writer does not re-emit the full manuscript, apply
+   operations, or update runtime records.
+3. **Apply deterministically.** The apply helper validates the entire patch
+   fail-closed before writing. A stale hash or invalid operation leaves the base
+   byte-identical. Success creates a new manuscript artifact and separate apply
+   report containing changed/fresh block ids, structural flags, operations, and
+   `preserved_ratio`; both are returned for runtime registration and are required
+   re-review inputs.
+4. **Escalate structural work, never silently fall back.** Heading rewrites,
+   section-count changes, or touched ratio above the accepted threshold stop for
+   a human choice. Return the choice to the decision runtime for
+   `researchspec/runs/current/decision-ledger.jsonl`. Only confirmed full
+   re-emission may regenerate the whole manuscript; mark it
+   `mode: full_reemission_escalated`, create fresh block ids afterward, and
+   invalidate patches tied to the prior hash.
+
+Orchestrated and phase-by-phase runs use the same preparation and apply helpers.
+Patch mode guarantees byte preservation only for untouched blocks; it does not
+guarantee the quality of edited text. Finalizer and gate checks run on the new
+registered artifact, and any failure is returned to the responsible helper
+rather than written directly to a ledger.
+<!--/rs:PATCH-001-->
+````
+
+### REVIEW-010
+
+- Anchor name: `paper.skill.generator-evaluator-contract`
+- Owner skill: `academic-paper`
+- Source path: `academic-paper/SKILL.md`
 - Severity: `required`
 - Semantic role: `generator_evaluator_contract`
 - Replacement shape: `checklist`
-- Template id: `generator-evaluator-contract-to-researchspec-runtime`
+- Replacement body SHA-256: `d310f17e2dc856358aeda1a78d8e0136521172b26e6e2d01e3ebe3e51079635b`
 - ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
 - Generated output paths: `academic-paper/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper/SKILL.md`, `deep-research/references/cross-skill/academic-paper/SKILL.md`
 - Before SHA-256: `f946f4b2af4d0f2988d516e7be7441defc3f3b1973f80e8a545acb57260bbf94`
-- After SHA-256: `cf64c5dc0bb5d86462026692174ae0e7952cb5f085f3095a3580329d930b102b`
+- After SHA-256: `9ab811aeb22785a96119690073e3396c7ae02e75b9c0bf73f1603beb279aa0cf`
 
 #### Before
 
@@ -439,41 +613,72 @@ The patch protocol is ResearchSpec-owned: generate patch JSON, verify preconditi
 #### After
 
 ````markdown
-<!--rs:a:1ee970b484f3-->
-### ResearchSpec Generator/Evaluator Contract
-
-Generator/evaluator outputs remain phase artifacts; gate outcomes belong in ResearchSpec ledgers.
-
-#### Generator Output
-
-- Emit generated contract JSON or draft artifacts for runtime registration.
-- Treat evaluator feedback as diagnostics tied to those artifacts.
-
-#### Evaluator Gate
-
-- Return pass, fail, and blocking findings to the evaluator gate helper.
-
-#### Mutation Boundary
-
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:1ee970b484f3-->
+<!--rs:REVIEW-010-->
+> This block defines the `academic-paper full` generator/evaluator split. Resolve
+> the frozen `writer_full` and `evaluator_full` contract JSON plus every Phase
+> 4a/4b and 6a/6b artifact through
+> `researchspec/runs/current/artifact-registry.json`. Preserve the four-call
+> paper-blind/paper-visible separation, mode exclusions, baseline fields, system
+> prompt text, lint rules, and writer/evaluator role distinction described
+> below. Register each accepted phase output before it is consumed downstream;
+> submit lint, disagreement, or failure-condition results to the responsible gate
+> helper for `researchspec/runs/current/gate-ledger.jsonl`. The orchestrator may
+> instantiate allowed runtime fields but must not mutate the frozen contract or
+> write runtime records directly.
+<!--/rs:REVIEW-010-->
 ````
 
-### anchor.paper.skill.material-passport-state
+### REVIEW-011
 
+- Anchor name: `paper.skill.rebuttal-audit-boundary`
 - Owner skill: `academic-paper`
 - Source path: `academic-paper/SKILL.md`
-- Marker id: `e4b2f31f60bf`
+- Severity: `recommended`
+- Semantic role: `artifact_provenance`
+- Replacement shape: `artifact_projection_block`
+- Replacement body SHA-256: `e487e530d9cff9adbde399eb6798a5862dbe87bfbae32438f18014df9b77f017`
+- ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/decision-ledger.jsonl`
+- Generated output paths: `academic-paper/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper/SKILL.md`, `deep-research/references/cross-skill/academic-paper/SKILL.md`
+- Before SHA-256: `9c9e7b8667bdd300ce840cc9ef5290ceba98e67aa5428ee9d60ecc90a402ea70`
+- After SHA-256: `1112c9d33ff9d2da0bac46fa29ece0e82a266653377820354d12eb0032c91160`
+
+#### Before
+
+````markdown
+**IRON RULE — integrity boundary (no false certification):** `rebuttal-audit` reuses `revision_coach_agent`'s comment-parsing capability, but a standalone invocation runs **outside** the pipeline and therefore never passes Stage 4.5 final integrity. It **MUST NOT** emit a Schema 11 `commitment_extracted` ledger, **MUST NOT** write to the Material Passport, and **MUST NOT** mark the package `ready_to_submit` or any verified status. Producing a Schema 11 artifact would falsely imply the response entered the pipeline's traceability system. The output is an advisory QA report only.
+````
+
+#### After
+
+````markdown
+<!--rs:REVIEW-011-->
+**IRON RULE — advisory integrity boundary:** standalone `rebuttal-audit` may
+reuse comment parsing, but it remains outside Stage 4.5 integrity and produces
+only an advisory response-letter QA artifact. Return the coverage table, gap
+list, tone/evidence risks, and suggestions for registration in
+`researchspec/runs/current/artifact-registry.json`. It MUST NOT emit verified
+commitment status, apply a draft patch, mark a package `ready_to_submit`, or
+write ResearchSpec registries or ledgers. If its findings imply a change in
+accepted response strategy or claim scope, propose that change and wait for a
+human decision recorded through
+`researchspec/runs/current/decision-ledger.jsonl`; the audit itself never
+certifies acceptance.
+<!--/rs:REVIEW-011-->
+````
+
+### STATE-001
+
+- Anchor name: `paper.skill.material-passport-state`
+- Owner skill: `academic-paper`
+- Source path: `academic-paper/SKILL.md`
 - Severity: `required`
 - Semantic role: `runtime_state_boundary`
 - Replacement shape: `protocol_block`
-- Template id: `academic-paper-state-to-researchspec-runtime`
+- Replacement body SHA-256: `ec1f144124d0b9474f965e313b4b22e3efc15deefafe19e8fa29b73458beb3c4`
 - ResearchSpec targets: `researchspec/specs/workflow.yaml`, `researchspec/runs/current/state.yaml`, `researchspec/runs/current/artifact-registry.json`
 - Generated output paths: `academic-paper/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper/SKILL.md`, `deep-research/references/cross-skill/academic-paper/SKILL.md`
 - Before SHA-256: `a4996c0d2b682365c4675cb5bde7b106fdad529c301bff428e303b418615f63d`
-- After SHA-256: `61e627adbeae78f1c41ae43277dce71c19f7e7b10f236a2cf6a3da300f12731c`
+- After SHA-256: `d30c5ad706e74e567391b5a4c4d61dd2bd8204af1aa474a1a3134220c1eb1530`
 
 #### Before
 
@@ -486,125 +691,38 @@ Generator/evaluator outputs remain phase artifacts; gate outcomes belong in Rese
 #### After
 
 ````markdown
-<!--rs:a:e4b2f31f60bf-->
-### ResearchSpec Paper Runtime
+<!--rs:STATE-001-->
+**Mode A — orchestrator-driven (default):** `pipeline_orchestrator_agent` runs
+the academic-paper phases end to end. It reads the configured stage graph from
+`researchspec/specs/workflow.yaml`, reads the active phase and mode from
+`researchspec/runs/current/state.yaml`, and resolves outlines, drafts, reviews,
+and other phase inputs by artifact id through
+`researchspec/runs/current/artifact-registry.json`. The orchestrator requests
+state transitions from the ResearchSpec runtime; it does not carry state in a
+Material Passport.
 
-The academic-paper skill reads its active phase and inputs from ResearchSpec runtime state.
-
-#### Runtime Reads
-
-- Read `researchspec/specs/workflow.yaml` for phase ordering and mode constraints.
-- Read `researchspec/runs/current/state.yaml` for the active phase and invocation mode.
-- Resolve upstream research, outline, and draft artifacts through `researchspec/runs/current/artifact-registry.json`.
-
-#### Mutation Boundary
-
-- Treat `researchspec/specs/workflow.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
-- Request changes to `researchspec/runs/current/state.yaml` through the ResearchSpec orchestrator or runtime helper; do not edit run state directly.
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-
-<!--/rs:a:e4b2f31f60bf-->
+**Mode B — phase-by-phase (cross-session resume):** the user invokes one agent
+per phase across sessions. Each invocation reads the same ResearchSpec state and
+registered artifacts, performs only its assigned phase, and returns new outputs
+for runtime registration. A legacy Material Passport may be imported as
+compatibility evidence, but it never replaces the current ResearchSpec state or
+artifact records.
+<!--/rs:STATE-001-->
 ````
 
-### anchor.paper.skill.rebuttal-audit-boundary
+### REVIEW-003
 
-- Owner skill: `academic-paper`
-- Source path: `academic-paper/SKILL.md`
-- Marker id: `9c17c320d570`
-- Severity: `recommended`
-- Semantic role: `artifact_provenance`
-- Replacement shape: `artifact_projection_block`
-- Template id: `rebuttal-audit-advisory-artifact`
-- ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/decision-ledger.jsonl`
-- Generated output paths: `academic-paper/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper/SKILL.md`, `deep-research/references/cross-skill/academic-paper/SKILL.md`
-- Before SHA-256: `9c9e7b8667bdd300ce840cc9ef5290ceba98e67aa5428ee9d60ecc90a402ea70`
-- After SHA-256: `18ada3fe7a3c20aa95c209a92e6ca4b0cba34731c47b7bf92f278c5dcf9fbff5`
-
-#### Before
-
-````markdown
-**IRON RULE — integrity boundary (no false certification):** `rebuttal-audit` reuses `revision_coach_agent`'s comment-parsing capability, but a standalone invocation runs **outside** the pipeline and therefore never passes Stage 4.5 final integrity. It **MUST NOT** emit a Schema 11 `commitment_extracted` ledger, **MUST NOT** write to the Material Passport, and **MUST NOT** mark the package `ready_to_submit` or any verified status. Producing a Schema 11 artifact would falsely imply the response entered the pipeline's traceability system. The output is an advisory QA report only.
-````
-
-#### After
-
-````markdown
-<!--rs:a:9c17c320d570-->
-### ResearchSpec Rebuttal Audit Artifact
-
-Standalone rebuttal audits are advisory artifacts until a human accepts a change.
-
-#### Artifact Rule
-
-- Emit the audit report as an advisory artifact for runtime registration.
-- Do not mutate claims, manuscript scope, or response strategy without a decision in `researchspec/runs/current/decision-ledger.jsonl`.
-
-#### Mutation Boundary
-
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
-
-<!--/rs:a:9c17c320d570-->
-````
-
-### anchor.paper.skill.revision-patch-mode
-
-- Owner skill: `academic-paper`
-- Source path: `academic-paper/SKILL.md`
-- Marker id: `5e4e6dba8826`
-- Severity: `required`
-- Semantic role: `draft_patch_protocol`
-- Replacement shape: `patch_protocol_block`
-- Template id: `academic-paper-revision-patch-to-researchspec-draft-patches`
-- ResearchSpec targets: `researchspec/draft-patches/<patch-id>.json`, `researchspec/runs/current/decision-ledger.jsonl`
-- Generated output paths: `academic-paper/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper/SKILL.md`, `deep-research/references/cross-skill/academic-paper/SKILL.md`
-- Before SHA-256: `b21fad1685c4f1207182fd9a6ddb3d3e3103523084f005256eae31e3082cbd03`
-- After SHA-256: `b68bca8238f8e86bc2a3a3aa4842246850dd9dc6cb820d9f885a5c65e3f570c4`
-
-#### Before
-
-````markdown
-1. **Anchorize** the draft (`scripts/ars_anchorize_draft.py` — idempotent, content-neutral): every block gets a stable `<!--block:BNNNN-->` marker; a block manifest (`base_draft_hash` + per-block `old_hash`) is regenerated. Nothing may rewrite the draft between this step and apply.
-2. **The writer emits a patch document** (`shared/contracts/patch/revision_patch.schema.json`) as a sidecar file in its `phase6_*/` fence — block ops with hash preconditions copied from the manifest, each op tracing to `roadmap_item_ids`. See `agents/draft_writer_agent.md` § Patch-Document Revision Emission.
-````
-
-#### After
-
-````markdown
-<!--rs:a:5e4e6dba8826-->
-### ResearchSpec Revision Patch Mode
-
-Revision mode emits structured draft patches instead of rewriting the manuscript in place.
-
-#### Patch Format
-
-- Write manuscript edits to `researchspec/draft-patches/<patch-id>.json`.
-- Include block ids, old hashes, operation type, replacement text, and reviewer-roadmap traceability.
-
-#### Apply Boundary
-
-- Apply only after the required human decision exists in `researchspec/runs/current/decision-ledger.jsonl`.
-
-#### Mutation Boundary
-
-- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
-
-<!--/rs:a:5e4e6dba8826-->
-````
-
-### anchor.reviewer.agent.devils_advocate_reviewer.sprint-contract-phase-model
-
+- Anchor name: `reviewer.agent.devils_advocate_reviewer.sprint-contract-phase-model`
 - Owner skill: `academic-paper-reviewer`
 - Source path: `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md`
-- Marker id: `46383d1899f3`
 - Severity: `recommended`
 - Semantic role: `generator_evaluator_contract`
 - Replacement shape: `io_contract_block`
-- Template id: `reviewer-agent-sprint-phases-to-contract-io`
+- Replacement body SHA-256: `1351c9edb74f4a3d440aea118395a9969bad269ebb98bcf63837c636fecb9c43`
 - ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
 - Generated output paths: `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md`, `deep-research/references/cross-skill/academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md`
 - Before SHA-256: `8f4f7fb28a599cbccf8ec5b8030db24d4d60bd3b3c18cb9541dcb9edf1d25d00`
-- After SHA-256: `6c4a70c52dfca5803f2f627de1cc43666d3c1a11e42e09d30c18e1e25dc0ec3c`
+- After SHA-256: `f878b7f073d1ef7b6e9eb4d29c35d57746b23d438d35c77890f9d2e7eda00447`
 
 #### Before
 
@@ -615,41 +733,35 @@ You operate in two phases when invoked under a sprint contract. The orchestrator
 #### After
 
 ````markdown
-<!--rs:a:46383d1899f3-->
-### ResearchSpec Reviewer Contract I/O
-
-Preserve the paper-blind pre-commitment and paper-visible evaluation split while resolving its contracts and phase artifacts through ResearchSpec.
-
-#### Contract Inputs
-
-- Resolve manuscript, venue, and prior review context through `researchspec/runs/current/artifact-registry.json`.
-
-#### Contract Outputs
-
-- Register review reports, matrices, and diagnostics as artifacts.
-- Return blocking review findings to the review gate helper.
-
-#### Mutation Boundary
-
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:46383d1899f3-->
+<!--rs:REVIEW-003-->
+When invoked under a sprint contract, you operate in two strictly separated
+phases. The orchestrator selects the phase through the system prompt and resolves
+the sprint contract and prior phase artifacts through
+`researchspec/runs/current/artifact-registry.json`. Phase 1 is a
+paper-content-blind adversarial pre-commitment: define the challenge standard
+without seeing the paper. Its exact output must be registered before Phase 2.
+Phase 2 receives that output as read-only data and stress-tests the visible paper
+against the committed standard without silently changing the plan. Return each
+phase output for registration and submit protocol violations or blocking
+adversarial findings to the review gate helper for
+`researchspec/runs/current/gate-ledger.jsonl`. Do not write runtime files
+directly.
+<!--/rs:REVIEW-003-->
 ````
 
-### anchor.reviewer.agent.sprint-contract-phase-model
+### REVIEW-004
 
+- Anchor name: `reviewer.agent.sprint-contract-phase-model`
 - Owner skill: `academic-paper-reviewer`
 - Source path: `academic-paper-reviewer/agents/domain_reviewer_agent.md`
-- Marker id: `d50caa734220`
 - Severity: `recommended`
 - Semantic role: `generator_evaluator_contract`
 - Replacement shape: `io_contract_block`
-- Template id: `reviewer-agent-sprint-phases-to-contract-io`
+- Replacement body SHA-256: `65a7840022ebda0b424500615dedf8afd5090820ef15cd1becf554a0250be9ce`
 - ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
 - Generated output paths: `academic-paper-reviewer/agents/domain_reviewer_agent.md`
 - Before SHA-256: `8f4f7fb28a599cbccf8ec5b8030db24d4d60bd3b3c18cb9541dcb9edf1d25d00`
-- After SHA-256: `75e4516902ba70af3eadd8366448e613ae35d662dd46181b4692c90cfc23b7b7`
+- After SHA-256: `efb0b832a9248eb14ff4c0d68ed07c93531c553e8c143d688418a787de5351a7`
 
 #### Before
 
@@ -660,41 +772,33 @@ You operate in two phases when invoked under a sprint contract. The orchestrator
 #### After
 
 ````markdown
-<!--rs:a:d50caa734220-->
-### ResearchSpec Reviewer Contract I/O
-
-Preserve the paper-blind pre-commitment and paper-visible evaluation split while resolving its contracts and phase artifacts through ResearchSpec.
-
-#### Contract Inputs
-
-- Resolve manuscript, venue, and prior review context through `researchspec/runs/current/artifact-registry.json`.
-
-#### Contract Outputs
-
-- Register review reports, matrices, and diagnostics as artifacts.
-- Return blocking review findings to the review gate helper.
-
-#### Mutation Boundary
-
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:d50caa734220-->
+<!--rs:REVIEW-004-->
+When invoked under a sprint contract, you operate in two strictly separated
+phases selected by the orchestrator's system prompt. Resolve the frozen contract
+and phase artifacts through
+`researchspec/runs/current/artifact-registry.json`. Phase 1 is a
+paper-content-blind domain-accuracy pre-commitment and must be registered before
+Phase 2. Phase 2 receives that exact output as read-only data, examines the paper
+for field-specific accuracy and significance, and may deviate only through the
+declared dissent channel. Return both outputs for registration and send protocol
+violations or blocking domain findings to the review gate helper for
+`researchspec/runs/current/gate-ledger.jsonl`; do not edit runtime records.
+<!--/rs:REVIEW-004-->
 ````
 
-### anchor.reviewer.agent.eic.sprint-contract-phase-model
+### REVIEW-005
 
+- Anchor name: `reviewer.agent.eic.sprint-contract-phase-model`
 - Owner skill: `academic-paper-reviewer`
 - Source path: `academic-paper-reviewer/agents/eic_agent.md`
-- Marker id: `0315a2e071e7`
 - Severity: `recommended`
 - Semantic role: `generator_evaluator_contract`
 - Replacement shape: `io_contract_block`
-- Template id: `reviewer-agent-sprint-phases-to-contract-io`
+- Replacement body SHA-256: `116dcb3986a532c35a56c2601d6381907f0978a562964b7943a4a2e8390412ef`
 - ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
 - Generated output paths: `academic-paper-reviewer/agents/eic_agent.md`
 - Before SHA-256: `8f4f7fb28a599cbccf8ec5b8030db24d4d60bd3b3c18cb9541dcb9edf1d25d00`
-- After SHA-256: `a9f121513be11e2df4b83ef7dbec0031d6ba75396747c15eb638606ffde23783`
+- After SHA-256: `18c1d7444ae7de0cdce3eb38ac48aa54559c7bfc9916291b08774c9d50ee32c3`
 
 #### Before
 
@@ -705,41 +809,34 @@ You operate in two phases when invoked under a sprint contract. The orchestrator
 #### After
 
 ````markdown
-<!--rs:a:0315a2e071e7-->
-### ResearchSpec Reviewer Contract I/O
-
-Preserve the paper-blind pre-commitment and paper-visible evaluation split while resolving its contracts and phase artifacts through ResearchSpec.
-
-#### Contract Inputs
-
-- Resolve manuscript, venue, and prior review context through `researchspec/runs/current/artifact-registry.json`.
-
-#### Contract Outputs
-
-- Register review reports, matrices, and diagnostics as artifacts.
-- Return blocking review findings to the review gate helper.
-
-#### Mutation Boundary
-
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:0315a2e071e7-->
+<!--rs:REVIEW-005-->
+When invoked under a sprint contract, you operate in two strictly separated
+phases selected by the orchestrator's system prompt. Resolve the frozen contract
+and phase artifacts through
+`researchspec/runs/current/artifact-registry.json`. Phase 1 is a
+paper-content-blind editorial pre-commitment covering the acceptance dimensions,
+decision precedence, and oversight standard; register it before Phase 2. Phase 2
+receives that exact output as read-only data and applies the committed editorial
+standard to the visible paper. Return both outputs for registration and submit
+protocol violations, panel-level blockers, and the editorial verdict to the
+review gate helper for `researchspec/runs/current/gate-ledger.jsonl`; do not edit
+runtime records directly.
+<!--/rs:REVIEW-005-->
 ````
 
-### anchor.reviewer.agent.methodology_reviewer.sprint-contract-phase-model
+### REVIEW-006
 
+- Anchor name: `reviewer.agent.methodology_reviewer.sprint-contract-phase-model`
 - Owner skill: `academic-paper-reviewer`
 - Source path: `academic-paper-reviewer/agents/methodology_reviewer_agent.md`
-- Marker id: `391f53b80d6f`
 - Severity: `recommended`
 - Semantic role: `generator_evaluator_contract`
 - Replacement shape: `io_contract_block`
-- Template id: `reviewer-agent-sprint-phases-to-contract-io`
+- Replacement body SHA-256: `d3707290b78ef46a5bce34c819de00c84dfaac94501b97e89a09573251cca99a`
 - ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
 - Generated output paths: `academic-paper-reviewer/agents/methodology_reviewer_agent.md`
 - Before SHA-256: `8f4f7fb28a599cbccf8ec5b8030db24d4d60bd3b3c18cb9541dcb9edf1d25d00`
-- After SHA-256: `318e1b3add939f7167ea5cd99ce72cd1eca0f085b5ded658a071a9f87c409ade`
+- After SHA-256: `bc65dc35128470dbc4f1cfac021aad8964cbef3bdf08feac58416ff93b7afa3b`
 
 #### Before
 
@@ -750,41 +847,34 @@ You operate in two phases when invoked under a sprint contract. The orchestrator
 #### After
 
 ````markdown
-<!--rs:a:391f53b80d6f-->
-### ResearchSpec Reviewer Contract I/O
-
-Preserve the paper-blind pre-commitment and paper-visible evaluation split while resolving its contracts and phase artifacts through ResearchSpec.
-
-#### Contract Inputs
-
-- Resolve manuscript, venue, and prior review context through `researchspec/runs/current/artifact-registry.json`.
-
-#### Contract Outputs
-
-- Register review reports, matrices, and diagnostics as artifacts.
-- Return blocking review findings to the review gate helper.
-
-#### Mutation Boundary
-
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:391f53b80d6f-->
+<!--rs:REVIEW-006-->
+When invoked under a sprint contract, you still operate in two strictly
+separated phases. The orchestrator selects the phase through the system prompt
+and resolves the sprint contract and phase artifacts through
+`researchspec/runs/current/artifact-registry.json`. Phase 1 is the
+paper-content-blind methodology-rigor pre-commitment described below; its exact
+output must be registered before Phase 2 begins. Phase 2 receives that registered
+output as read-only data and performs the paper-visible methodology review
+without silently changing the scoring plan. Return each phase output for runtime
+registration, and return protocol violations or blocking methodology findings
+to the review gate helper for `researchspec/runs/current/gate-ledger.jsonl`.
+Do not write the registry or gate ledger directly.
+<!--/rs:REVIEW-006-->
 ````
 
-### anchor.reviewer.agent.perspective_reviewer.sprint-contract-phase-model
+### REVIEW-007
 
+- Anchor name: `reviewer.agent.perspective_reviewer.sprint-contract-phase-model`
 - Owner skill: `academic-paper-reviewer`
 - Source path: `academic-paper-reviewer/agents/perspective_reviewer_agent.md`
-- Marker id: `6f2d6d03c63c`
 - Severity: `recommended`
 - Semantic role: `generator_evaluator_contract`
 - Replacement shape: `io_contract_block`
-- Template id: `reviewer-agent-sprint-phases-to-contract-io`
+- Replacement body SHA-256: `0d56c2f9c5153bbd1ed2ccf7fe6e36f6960b3471bbaf954133071a2cb99bde70`
 - ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
 - Generated output paths: `academic-paper-reviewer/agents/perspective_reviewer_agent.md`
 - Before SHA-256: `8f4f7fb28a599cbccf8ec5b8030db24d4d60bd3b3c18cb9541dcb9edf1d25d00`
-- After SHA-256: `04f76dadf641746553d6810520d5a1457f8ab3563aaba4bbd7f5491d5ba7c539`
+- After SHA-256: `c912e2c3d249f10472cced1094bce88562b0f042e82f341bd982a6be60d4e7a7`
 
 #### Before
 
@@ -795,41 +885,34 @@ You operate in two phases when invoked under a sprint contract. The orchestrator
 #### After
 
 ````markdown
-<!--rs:a:6f2d6d03c63c-->
-### ResearchSpec Reviewer Contract I/O
-
-Preserve the paper-blind pre-commitment and paper-visible evaluation split while resolving its contracts and phase artifacts through ResearchSpec.
-
-#### Contract Inputs
-
-- Resolve manuscript, venue, and prior review context through `researchspec/runs/current/artifact-registry.json`.
-
-#### Contract Outputs
-
-- Register review reports, matrices, and diagnostics as artifacts.
-- Return blocking review findings to the review gate helper.
-
-#### Mutation Boundary
-
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:6f2d6d03c63c-->
+<!--rs:REVIEW-007-->
+When invoked under a sprint contract, you operate in two strictly separated
+phases selected by the orchestrator's system prompt. Resolve the frozen contract
+and phase artifacts through
+`researchspec/runs/current/artifact-registry.json`. Phase 1 is a
+paper-content-blind cross-disciplinary pre-commitment focused on relevance,
+framing, transferability, and overlooked perspectives; register it before Phase
+2. Phase 2 receives that exact output as read-only data and evaluates the visible
+paper without silently changing the plan or taking over the devil's-advocate
+role. Return both outputs for registration and send protocol violations or
+blocking perspective findings to the review gate helper for
+`researchspec/runs/current/gate-ledger.jsonl`; do not write runtime files.
+<!--/rs:REVIEW-007-->
 ````
 
-### anchor.reviewer.reference.rereview-commitment-verification
+### REVIEW-008
 
+- Anchor name: `reviewer.reference.rereview-commitment-verification`
 - Owner skill: `academic-paper-reviewer`
 - Source path: `academic-paper-reviewer/references/re_review_mode_protocol.md`
-- Marker id: `6fd4c82e53e6`
 - Severity: `required`
 - Semantic role: `review_commitment_tracking`
 - Replacement shape: `gate_rule_block`
-- Template id: `rereview-commitment-verification-to-researchspec`
+- Replacement body SHA-256: `88b7fe0f14165c6001529c676246655d2088e05c28b4eed39460d652dd15dcb7`
 - ResearchSpec targets: `researchspec/draft-patches/<patch-id>.json`, `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
 - Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/references/re_review_mode_protocol.md`, `academic-paper-reviewer/references/re_review_mode_protocol.md`
-- Before SHA-256: `494dd99d4d1b6d1c2c7502125e3f275a8e95fd270016bac00b1bef1b1aa5957c`
-- After SHA-256: `9855b6275c0c2312e57b2f8de7fca6cbbd18d80e01dc85f1d91baa8c35a16a6c`
+- Before SHA-256: `7c8c2df7ae376490050837455ab372d71a8f81db66ccfb4cc29c6cb7f27f888c`
+- After SHA-256: `5184e80271a5ae02e73b73d84bc35af86ffbde6647a44d31e74bcaea926ab897`
 
 #### Before
 
@@ -843,46 +926,78 @@ For each commitment, verify per-commitment `fulfillment_status`:
 - `fulfilled` — the `required_evidence_type` is present and substantively addresses the `commitment_text`. Verification site depends on `required_evidence_type`:
   - For `new_section` / `new_figure` / `new_table` / `new_citation` / `methods_paragraph` / `discussion_paragraph` / `prose_edit` — verify against the **revised manuscript** at `revision_location`. `prose_edit` items (typo fixes, terminology clarifications, equation formatting, citation-style corrections) are sentence- or paragraph-level changes; verify the specific text at `revision_location` rather than expecting a new structural block.
   - For `acknowledgment_only` — verify against the **Response to Reviewers (Schema 8)** instead of the manuscript diff. `acknowledgment_only` items by definition do not require manuscript changes; expecting a manuscript diff would produce false `not-fulfilled` classifications. The response letter must explicitly acknowledge or address the commitment in writing.
+  - For `other` — the evidence type is intentionally underspecified (escape hatch for genuinely uncategorizable commitments). Surface a soft **`EVIDENCE_TYPE_UNSPECIFIED`** advisory (advisory only, **not** a hard block): if `revision_location` is empty, prompt the author to specify it so the re-reviewer can verify; if `revision_location` is already populated, the advisory simply flags that the evidence type was left uncategorized — verify at the stated location. This is distinct from `COMMITMENT_GAP` (which fires on missing rationale for a non-`fulfilled` status); `EVIDENCE_TYPE_UNSPECIFIED` fires whenever `required_evidence_type == other`, regardless of `fulfillment_status`.
+- `partial` — required evidence exists but does not fully address the commitment (e.g., experiment run on dataset Y when reviewer asked for dataset X; 3-seed std error when 5-seed was requested with rationale provided).
+- `not-fulfilled` — required evidence is absent (rationale presence is a separate axis — see `COMMITMENT_GAP` rule below).
+- `explicitly-rejected-with-rationale` — author has explicitly declined to address the commitment; status name implies rationale, but `unfulfilled_rationale` is still the field that carries the actual rationale text (per Schema 11 Validation rule).
+
+For any commitment object with `fulfillment_status` ∈ `{partial, not-fulfilled, explicitly-rejected-with-rationale}` where the object's `unfulfilled_rationale` is empty or missing, surface a **`COMMITMENT_GAP`** entry in re-review output (advisory only, **not** a hard block — author retains final responsibility per `POSITIONING.md`). This mirrors the Schema 11 Validation rule: any non-`fulfilled` status requires a rationale on the same commitment object. Because `fulfillment_status` and `unfulfilled_rationale` are nested fields of the commitment object (not separate parallel lists), there is no index-walking step and no way to pair a status with the wrong commitment — the #268 desync failure mode is structurally absent.
+
+**A populated `residual_action` alongside one or more commitment objects with `fulfillment_status: fulfilled` is not a contradiction.** `residual_action` operates at the concern level (forward-looking: what still remains for the whole concern), while `fulfillment_status` is per-commitment (carried on each commitment object). A concern can have some commitments fully fulfilled and still carry a concern-level residual action (e.g., the core ablation was added but the concern's broader generalization claim still needs a follow-up experiment flagged in `residual_action`). Do **not** raise a gap or inconsistency flag merely because `residual_action` is non-empty while one or more commitments are `fulfilled` — see `shared/handoff_schemas.md` Schema 11 `residual_action` convention (a).
+
+This section is the verification analog of `revision_coach_agent` Step 3.5 (Kong A1). Per-commitment lifecycle gating is what closes the Kong §7.4.3 commitment-fulfillment gap.
 ````
 
 #### After
 
 ````markdown
-<!--rs:a:6fd4c82e53e6-->
-### ResearchSpec Commitment Verification
+<!--rs:REVIEW-008-->
+### Commitment Verification Against Registered Revision Evidence
 
-Commitment verification is a gate over revised draft, response, and patch artifacts.
+Run this step for every commitment-bearing concern, regardless of priority.
+Resolve the original review and roadmap, the registered revised manuscript and
+response artifacts, the relevant
+`researchspec/draft-patches/<patch-id>.json`, and its apply report through
+`researchspec/runs/current/artifact-registry.json`. Verify the evidence itself;
+do not accept an author's claim or an imported Schema 11 status as proof.
 
-#### Gate Inputs
+For each commitment, assign one `fulfillment_status`:
 
-- Read revision patches from `researchspec/draft-patches/<patch-id>.json`.
-- Resolve response letters and revised drafts via `researchspec/runs/current/artifact-registry.json`.
+- `fulfilled` — the required evidence exists and substantively satisfies the
+  commitment. Verify `new_section`, `new_figure`, `new_table`, `new_citation`,
+  `methods_paragraph`, `discussion_paragraph`, and `prose_edit` against the
+  revised manuscript and patch/apply evidence at the stated location. Verify an
+  `acknowledgment_only` commitment against the registered Response to Reviewers,
+  because no manuscript diff is expected.
+- `partial` — evidence exists but only partly satisfies the commitment.
+- `not-fulfilled` — the required evidence is absent.
+- `explicitly-rejected-with-rationale` — the author explicitly declined the
+  commitment and supplied the rationale.
 
-#### Ledger Writes
+For `required_evidence_type: other`, surface the advisory
+`EVIDENCE_TYPE_UNSPECIFIED`. If `revision_location` is absent, request it; if it
+is present, verify there while retaining the advisory. This advisory is distinct
+from a missing-rationale gap.
 
-- Return fulfilled, partially fulfilled, and unresolved findings to the commitment gate helper.
+For `partial`, `not-fulfilled`, or `explicitly-rejected-with-rationale`, require
+`unfulfilled_rationale` on the same commitment object. If missing, add an
+advisory `COMMITMENT_GAP`. Keep per-commitment status/rationale pairing intact;
+do not reconstruct parallel lists or pair by index.
 
-#### Mutation Boundary
+A concern-level `residual_action` may coexist with fulfilled individual
+commitments. It states what remains for the whole concern and is not evidence of
+a contradiction by itself.
 
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:6fd4c82e53e6-->
+Return the completed verification report as an artifact for registration. Send
+unresolved, worsened, or blocking commitment findings to the re-review gate
+helper for `researchspec/runs/current/gate-ledger.jsonl`. The reviewer does not
+apply patches or write registry/gate records directly.
+<!--/rs:REVIEW-008-->
 ````
 
-### anchor.reviewer.reference.sprint-contract-protocol
+### REVIEW-009
 
+- Anchor name: `reviewer.reference.sprint-contract-protocol`
 - Owner skill: `academic-paper-reviewer`
 - Source path: `academic-paper-reviewer/references/sprint_contract_protocol.md`
-- Marker id: `0d32f836c18b`
 - Severity: `required`
 - Semantic role: `generator_evaluator_contract`
 - Replacement shape: `artifact_projection_block`
-- Template id: `sprint-contract-protocol-to-researchspec-artifacts`
+- Replacement body SHA-256: `695ca3357465fe4d97c6432cdfc36ebe5ff710abb8dbff5f007cdd9eadb5c79a`
 - ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
 - Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/references/sprint_contract_protocol.md`, `academic-paper-reviewer/references/sprint_contract_protocol.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/references/sprint_contract_protocol.md`, `deep-research/references/cross-skill/academic-paper-reviewer/references/sprint_contract_protocol.md`
-- Before SHA-256: `93d4b1e27a69236343f2ca09e690bba5259cf9777d1089b54116f0e66f0f0bfb`
-- After SHA-256: `a06d5b482b1c3735d570a91c5791881561f1001aa708f5f48f8e8d7453ae7430`
+- Before SHA-256: `18f2761d610a2273d90963b19f490963f8600c8aa8b581e60fcab15c153f799c`
+- After SHA-256: `e041c1964d950e04dbc7f6b29df76c5c54058082ebc87a2f60f540247e33ef6c`
 
 #### Before
 
@@ -907,87 +1022,112 @@ For each reviewer in `range(panel_size)`:
    - Expected output: optional `## Scoring Plan Dissent`, `## Dimension Scores`, `## Failure Condition Checks`, `## Review Body`, `## Editorial Decision`.
 5. **Phase 2 output lint.** See §5 below.
 6. **Panel cardinality invariant.** After all reviewers complete, verify `len(usable_phase2_outputs) == panel_size`. If any reviewer was dropped, emit `[PANEL-SHRUNK]` and abort the round (see §6).
+7. Feed usable Phase 2 outputs into synthesizer (see §7).
 ````
 
 #### After
 
 ````markdown
-<!--rs:a:0d32f836c18b-->
-### ResearchSpec Sprint Protocol Artifacts
+<!--rs:REVIEW-009-->
+A reviewer sprint contract is a frozen, machine-checkable acceptance baseline.
+Resolve the selected template through
+`researchspec/runs/current/artifact-registry.json`, deep-copy it for permitted
+runtime fields, and register the instantiated contract before reviewer calls.
+The protocol prevents post-hoc standard rationalization by physically separating
+paper-blind Phase 1 from paper-visible Phase 2.
 
-Sprint baselines and phase outputs are ResearchSpec artifacts; their checks are ResearchSpec gates.
+For every reviewer required by `panel_size`:
 
-#### Artifact Projection
+1. **Prepare the contract.** Preserve baseline acceptance dimensions, failure
+   conditions, measurement procedure, override ladder, mode, stage, contract id,
+   baseline version, and panel size. Add only allowed runtime fields such as
+   `generated_at` and bounded agent amendments. Validate deterministically; on
+   failure, stop before dispatch and submit the finding to the review gate helper.
+2. **Run Phase 1 paper-blind.** Provide only the registered contract and paper
+   metadata. Require the role-specific contract paraphrase, scoring plan, and
+   terminal acknowledgement.
+3. **Lint and register Phase 1.** Apply the existing structural and content-blind
+   checks. Retry once with the specific lint gap; a second failure aborts that
+   reviewer. Register the accepted Phase 1 output before Phase 2.
+4. **Run Phase 2 paper-visible.** Re-inject the same contract, the exact registered
+   Phase 1 output inside the read-only data delimiter, and the manuscript.
+5. **Lint and register Phase 2.** Require the declared scores, failure-condition
+   checks, review body, and decision; retain the dissent limits and retry policy.
+6. **Enforce panel cardinality.** If usable Phase 2 outputs do not equal
+   `panel_size`, emit `[PANEL-SHRUNK]`, submit a blocking review-gate finding,
+   and abort the round rather than synthesizing a smaller panel.
+7. Pass only the complete registered Phase 2 panel to the editorial synthesizer.
 
-- Emit baseline, panel, and consolidated outputs for runtime registration.
-- Represent failed checks or missing evidence in `researchspec/runs/current/gate-ledger.jsonl`.
-
-#### Mutation Boundary
-
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:0d32f836c18b-->
+The orchestrator returns contract and phase artifacts to the runtime registration
+helper and gate findings to
+`researchspec/runs/current/gate-ledger.jsonl`; it does not edit either file.
+<!--/rs:REVIEW-009-->
 ````
 
-### anchor.reviewer.skill.rereview-schema11
+### REVIEW-001
 
+- Anchor name: `reviewer.skill.rereview-schema11`
 - Owner skill: `academic-paper-reviewer`
 - Source path: `academic-paper-reviewer/SKILL.md`
-- Marker id: `b9d2e46fc97a`
 - Severity: `required`
 - Semantic role: `review_commitment_tracking`
 - Replacement shape: `checklist`
-- Template id: `reviewer-rereview-schema11-to-researchspec`
+- Replacement body SHA-256: `d933c4ff8af9cbde5d517887d9d7ac959cdb9b23427422a201451acee9ff75ed`
 - ResearchSpec targets: `researchspec/draft-patches/<patch-id>.json`, `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
 - Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/SKILL.md`, `academic-paper-reviewer/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/SKILL.md`, `deep-research/references/cross-skill/academic-paper-reviewer/SKILL.md`
-- Before SHA-256: `e6706f63acec2e33eebf7c102b6e0f1b37b2a1ca7b1dd337f52aa4a2a62cdf9d`
-- After SHA-256: `2a043078121ddf818e4086c50e0da34a0870fe30577e96154925b7e7a469582a`
+- Before SHA-256: `d3e0caa77bc3053aa43336f81ce022ff312362f4618320db26d3db729c51b733`
+- After SHA-256: `a5132ac2d3ffaf4546345b7363322ab86905cfdbf95751ee0eb8c87f2140a23b`
 
 #### Before
 
 ````markdown
 Dedicated mode for Pipeline Stage 3' — verifies whether revisions address first-round review comments. Uses R&R Traceability Matrix (Schema 11) with Author's Claim + Verified? columns.
+
+**Input**: Original Revision Roadmap + Revised manuscript + Response to Reviewers (optional)
+**Output**: Verification Review Report with traceability matrix + new issues + Decision
+
+> See `references/re_review_mode_protocol.md` for full verification logic, output format template, and Socratic guidance details.
 ````
 
 #### After
 
 ````markdown
-<!--rs:a:b9d2e46fc97a-->
-### ResearchSpec Re-review Traceability
+<!--rs:REVIEW-001-->
+Dedicated mode for Pipeline Stage 3'. Re-review verifies each first-round concern
+against the exact revised manuscript, response, and applied patch evidence
+resolved through `researchspec/runs/current/artifact-registry.json`. Read
+`researchspec/draft-patches/<patch-id>.json` and its apply report when manuscript
+changes were patch-applied; do not rely on a Material Passport-carried Schema 11
+copy as the sole traceability record.
 
-Re-review checks compare commitments against ResearchSpec patch and artifact records.
+**Input:** original Revision Roadmap, registered revised-manuscript artifact,
+registered Response to Reviewers when present, relevant draft patch and apply
+report, and the prior review/commitment artifacts.
 
-#### Verification Inputs
+**Output:** an immutable Verification Review Report containing the traceability
+matrix, new issues, and decision. Return the report for runtime registration and
+submit unresolved or blocking commitment findings to the re-review gate helper
+for `researchspec/runs/current/gate-ledger.jsonl`; do not write registry or gate
+records directly.
 
-- Read applied or pending patches from `researchspec/draft-patches/<patch-id>.json`.
-- Resolve revised draft and response artifacts through `researchspec/runs/current/artifact-registry.json`.
-
-#### Gate Result
-
-- Return missing, partially satisfied, or contradicted commitments to the re-review gate helper.
-
-#### Mutation Boundary
-
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:b9d2e46fc97a-->
+> See `references/re_review_mode_protocol.md` for the verification rules, output
+> format, and Socratic guidance.
+<!--/rs:REVIEW-001-->
 ````
 
-### anchor.reviewer.skill.sprint-contract
+### REVIEW-002
 
+- Anchor name: `reviewer.skill.sprint-contract`
 - Owner skill: `academic-paper-reviewer`
 - Source path: `academic-paper-reviewer/SKILL.md`
-- Marker id: `9f0c7ac717e2`
 - Severity: `required`
 - Semantic role: `generator_evaluator_contract`
 - Replacement shape: `checklist`
-- Template id: `reviewer-sprint-contract-to-researchspec-artifact`
+- Replacement body SHA-256: `d4558b29f60b57ad02e828d51cbcffba967adaeb622b95a6c1cc529ca83b6d03`
 - ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
 - Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/SKILL.md`, `academic-paper-reviewer/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/SKILL.md`, `deep-research/references/cross-skill/academic-paper-reviewer/SKILL.md`
 - Before SHA-256: `298ff2410ac39704bbef06179f6b97818d0716e074aedbf4c28719aee43ede2e`
-- After SHA-256: `5b8cb6a388cccca78983457b3edceb15039700577a151af4be6d2cc6de35543f`
+- After SHA-256: `9fb77e7a46e9bed7073f47225fd3a0b0263e89919c12ddc52b3db4f2d16766ed`
 
 #### Before
 
@@ -998,37 +1138,24 @@ Re-review checks compare commitments against ResearchSpec patch and artifact rec
 #### After
 
 ````markdown
-<!--rs:a:9f0c7ac717e2-->
-### ResearchSpec Reviewer Sprint Artifact
-
-Sprint contracts and panel outputs are registered artifacts with gate outcomes.
-
-#### Artifact Records
-
-- Emit sprint contract JSON, reviewer panel outputs, and lint diagnostics for runtime registration.
-- Return accept, revise, reject, and blocking outcomes to the review gate helper.
-
-#### Mutation Boundary
-
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:9f0c7ac717e2-->
+<!--rs:REVIEW-002-->
+- **Schema 13 sprint contract.** Resolve the mode-specific frozen contract JSON through `researchspec/runs/current/artifact-registry.json`, then deep-copy it for runtime fields. Preserve `panel_size`, `acceptance_dimensions`, severity and cross-reviewer quantifiers, measurement procedure, override ladder, and bounded amendments. Return the instantiated contract and each phase output for registration; send lint, panel-cardinality, and failure-condition results to the review gate helper for `researchspec/runs/current/gate-ledger.jsonl`. The following synthesizer protocol and mode-specific panel sizes remain unchanged.
+<!--/rs:REVIEW-002-->
 ````
 
-### anchor.pipeline.claim-audit.output-contract
+### GATE-001
 
+- Anchor name: `pipeline.claim-audit.output-contract`
 - Owner skill: `academic-pipeline`
 - Source path: `academic-pipeline/agents/claim_ref_alignment_audit_agent.md`
-- Marker id: `33154df5bb7d`
 - Severity: `required`
 - Semantic role: `gate_policy`
 - Replacement shape: `gate_rule_block`
-- Template id: `claim-audit-to-researchspec-gate`
+- Replacement body SHA-256: `a13c2b038cc5737ea2237926128dd0ea9bdd63e318c61e0741f58d15039c7cab`
 - ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
 - Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/claim_ref_alignment_audit_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/claim_ref_alignment_audit_agent.md`, `academic-pipeline/agents/claim_ref_alignment_audit_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/claim_ref_alignment_audit_agent.md`
 - Before SHA-256: `c879665cdb2c55aa75c9c8493988fa201ee146b78e0e9c3ecdcdcee7ea206008`
-- After SHA-256: `8a4f6f7bfdb4f7d2aceb87cb52136814e2224543afd112c9726b344ee9fee717`
+- After SHA-256: `d0a4700e9b43c0c6208c5172e74bd2ffaf116aad66b476d33d2526ea4df90730`
 
 #### Before
 
@@ -1039,37 +1166,298 @@ Per audit run, populate the six aggregates:
 #### After
 
 ````markdown
-<!--rs:a:33154df5bb7d-->
-### ResearchSpec Claim Audit Output
-
-Claim-audit aggregates form one registered audit artifact whose blocking findings are gate-helper inputs.
-
-#### Audit Output
-
-- Emit all audit aggregates together as one traceable artifact.
-- Return HIGH-WARN and other blocking findings to the claim-integrity gate helper.
-
-#### Mutation Boundary
-
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:33154df5bb7d-->
+<!--rs:GATE-001-->
+Per audit run, emit one immutable claim-audit artifact containing all six
+aggregates listed below plus the pass-through claim-intent inputs and any Stage 6
+self-reflection appendix. Return the artifact path, hash, producer, stage, and
+sampling metadata to the runtime registration helper for
+`researchspec/runs/current/artifact-registry.json`. Submit HIGH-WARN constraint
+violations and other configured blockers to the claim-integrity gate helper for
+`researchspec/runs/current/gate-ledger.jsonl`; keep LOW/MED warnings as findings
+without silently promoting them. The audit agent does not mutate claim
+contracts, manifests, the registry, or the gate ledger.
+<!--/rs:GATE-001-->
 ````
 
-### anchor.pipeline.orchestrator.reset-boundary-ledger
+### GATE-002
 
+- Anchor name: `pipeline.orchestrator.submission-package-gate`
 - Owner skill: `academic-pipeline`
 - Source path: `academic-pipeline/agents/pipeline_orchestrator_agent.md`
-- Marker id: `a988873008fb`
+- Severity: `recommended`
+- Semantic role: `gate_policy`
+- Replacement shape: `gate_rule_block`
+- Replacement body SHA-256: `2ea19732275431419b97cc208635de8ee4aabbab92be9429b98b26468fbf9b60`
+- ResearchSpec targets: `researchspec/runs/current/gate-ledger.jsonl`, `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/decision-ledger.jsonl`
+- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
+- Before SHA-256: `42d9ea2b008ebe3229aa685f60ff584be9ea2250879a5180f1392ce7f11b8591`
+- After SHA-256: `9782e3604afd85ff19de3638e140e61ac77fd62940723ee99ba95954d81d641b`
+
+#### Before
+
+````markdown
+1. **Resolve the policy.** Read `terminal_policies.submission_package` from the Material Passport. Key absence — or absence of the whole `terminal_policies` object — resolves to `advisory` (the same per-key runtime convention as the existing keys). ALWAYS pass the resolved value explicitly: the CLI is never run policy-less in the pipeline (an unflagged run stamps `policy_slug: null` = a standalone unevaluated report, which can never satisfy the freshness guard below).
+2. **Run the verifier** on the package directory: `python scripts/verify_submission_package.py <package_dir> --policy <resolved>` plus `--passport` / `--venue-profile` / `--join-map` when the run has them — the SAME input set the freshness invocation (step 5) will carry, or the inputs fingerprint can never match.
+3. **Gate on stdout tokens, NEVER on exit codes.** Exit 1 also covers nonterminal advisory/heuristic fails (a strict-mode heuristic fail exits 1 with NO terminal token and must not block — heuristic findings never promote, structurally). Match each token as a line PREFIX, not full-line equality — the emitted lines carry a `strict_eligible_fails=<ids>` / `strict_eligible_not_checked=<ids>` suffix. The terminal signals are exactly:
+   - `TERMINAL-BLOCK policy=submission_package` (a strict-eligible check FAILED under `strict`) → return the package to the formatter fix loop, **bounded: 2 fix rounds**, then surface to the scholar (mirrors the revision-loop cap philosophy). One round = dispatch the formatter to remediate the named findings, then re-run the verifier; if the 2nd round still emits the token, STOP and surface — never a 3rd. Never carry a verdict across rounds.
+   - `VERIFICATION-INCOMPLETE` (a strict-eligible check is NOT-CHECKED under `strict`) → blocks emission like a fail DOES (fail-closed §5.2: a missing parser or input must not waive the one check class the scholar opted into blocking on) — but its remediation is NOT the formatter fix loop: a missing venue profile or parser is not a formatter-fixable defect. Remediation, stated plainly to the scholar: declare a venue profile (under `strict`, Family B checks without one are strict-eligible NOT-CHECKED), or — the other way out — flip `submission_package` back to `advisory` and re-finalize.
+4. **Advisory path:** after the verifier writes its report, dispatch the formatter ONCE MORE in append-only mode to write the `Submission Package Advisories` section into `provenance_summary.md` from the report's findings (any fail / warn / NOT-CHECKED — see `formatter_agent.md`); then the pipeline completes. This re-entry is advisory transcription, not a content revision (no manuscript bytes change; Invariant 13 preserved). Byte-equivalence holds for non-opting users: no manuscript, ref-marker, or formatted-artifact bytes change — the report file and the advisories section are the only additions.
+5. **Report reuse REQUIRES the freshness guard.** Before ever reusing an existing report (resume, re-entry, second finalization pass), run `--check-freshness --policy <resolved>` first, WITH the same `--venue-profile` / `--passport` / `--join-map` arguments the reuse context carries (the guard compares an inputs fingerprint too — a report produced under a different venue profile is stale). `STALE-REPORT` (fingerprint, inputs, or policy mismatch; null-stamped; missing/unreadable) → re-run the verifier; NEVER evaluate a stale report (§5.2 — the package-level analog of the `policy_hash` stamp). A FRESH report re-emits its verdict (token + exit semantics identical to a live run) — gate on that re-emitted token exactly as in step 3; "fresh" alone is never a pass.
+6. **Recompute each pass; nothing cached.** The gate verdict is a pure function of the CURRENT passport policy and the CURRENT package bytes — recomputed at every finalization pass and across every `resume_from_passport` re-entry (the C-V6(h) mirror). A previously-granted emission never survives a policy flip or a package edit without re-passing the gate.
+````
+
+#### After
+
+````markdown
+<!--rs:GATE-002-->
+1. **Resolve the policy.** Read supported submission-package policy values from
+   `researchspec/specs/workflow.yaml`. Use the latest human-confirmed choice for
+   this run from `researchspec/runs/current/decision-ledger.jsonl`; absence
+   resolves to `advisory`. Always pass the resolved value explicitly to the
+   deterministic verifier. The orchestrator selects policy but never
+   re-evaluates package findings itself.
+2. **Resolve and verify the package inputs.** Resolve the formatted manuscript,
+   figures, tables, supplementary material, venue profile, provenance inputs,
+   and prior verifier reports by artifact id and hash through
+   `researchspec/runs/current/artifact-registry.json`. Run the local package
+   verifier with the resolved policy and exact input set so its package and
+   inputs fingerprints are reproducible. Return the new report for registration.
+3. **Gate on structured verifier tokens, never on exit code alone.** Under
+   `strict`, `TERMINAL-BLOCK policy=submission_package` starts a formatter repair
+   loop bounded to two rounds; after the second failure, stop and surface the
+   findings. `VERIFICATION-INCOMPLETE` also blocks, but missing policy inputs or
+   parsers are not formatter-fixable: ask the scholar to provide the missing
+   input or choose advisory policy. Return every pass, warning, incomplete, and
+   blocking outcome to the submission-package gate helper for
+   `researchspec/runs/current/gate-ledger.jsonl`.
+4. **Preserve the advisory path.** After a report is registered, dispatch the
+   formatter once in append-only mode to copy package advisories into
+   `provenance_summary.md`. This may add the report and advisories section but
+   must not change manuscript bytes or reference markers. Register the updated
+   provenance summary as a new artifact version.
+5. **Require freshness before reuse.** A resume, re-entry, or later finalization
+   pass may reuse a report only after the verifier confirms the current package,
+   input-set, and policy fingerprints. Stale, unreadable, null-policy, or
+   mismatched reports are re-run; a fresh report still re-emits and re-evaluates
+   its verdict. Never infer pass merely from freshness.
+6. **Recompute every pass.** The gate result is a function of current registered
+   package bytes, current resolved inputs, and the current accepted policy.
+   Package edits or policy changes invalidate prior permission. Do not cache a
+   previously granted delivery result across resume or finalization.
+
+The orchestrator returns artifacts, human choices, and gate findings to their
+responsible runtime helpers; it does not edit the registry, decision ledger, or
+gate ledger directly.
+<!--/rs:GATE-002-->
+````
+
+### HANDOFF-001
+
+- Anchor name: `pipeline.orchestrator.schema-handoff-table`
+- Owner skill: `academic-pipeline`
+- Source path: `academic-pipeline/agents/pipeline_orchestrator_agent.md`
+- Severity: `required`
+- Semantic role: `handoff_projection`
+- Replacement shape: `schema_projection_table`
+- Replacement body SHA-256: `880f364d73322ba07297c6282dc64f69f031f610ac3ecb3011e6558b399c9311`
+- ResearchSpec targets: `researchspec/specs/project.md`, `researchspec/specs/sources.yaml`, `researchspec/specs/claims.yaml`, `researchspec/specs/manuscript.yaml`, `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/decision-ledger.jsonl`, `researchspec/runs/current/gate-ledger.jsonl`, `researchspec/draft-patches/<patch-id>.json`
+- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
+- Before SHA-256: `c4da59716b0f456089bd4e96ca36de57011f33eeca6c40296efa82564f89f465`
+- After SHA-256: `987869242783def418f428eed704a06c24e26a2e7996e654fa03cc79b48e8429`
+
+#### Before
+
+````markdown
+**All artifacts must carry a Material Passport (Schema 9)** with `origin_skill`, `origin_mode`, `origin_date`, `verification_status`, and `version_label`. From v3.7.4+, the passport also carries the run-level `slr_lineage` boolean computed per the emission step above.
+````
+
+#### After
+
+````markdown
+<!--rs:HANDOFF-001-->
+Every handoff payload must be emitted as an artifact and returned to the runtime
+registration helper with path, hash, producer, stage, mode, version label, and
+verification status for `researchspec/runs/current/artifact-registry.json`.
+Project research intent to `researchspec/specs/project.md`, sources to
+`researchspec/specs/sources.yaml`, accepted claims to
+`researchspec/specs/claims.yaml`, and manuscript structure to
+`researchspec/specs/manuscript.yaml` only through an accepted contract patch or
+direct human edit. Human branch choices and gate results go through their
+responsible decision and gate helpers. Preserve `slr_lineage` and other useful
+Schema 9 fields as compatibility metadata on the registered artifact; a
+Material Passport is not required as the handoff carrier.
+<!--/rs:HANDOFF-001-->
+````
+
+### PATCH-004
+
+- Anchor name: `pipeline.orchestrator.revision-patch-toolchain`
+- Owner skill: `academic-pipeline`
+- Source path: `academic-pipeline/agents/pipeline_orchestrator_agent.md`
+- Severity: `required`
+- Semantic role: `draft_patch_protocol`
+- Replacement shape: `patch_protocol_block`
+- Replacement body SHA-256: `856c8b7839a81e2599b669eaee1e8726fd47cdba2e33d24c2bc6b825963382dc`
+- ResearchSpec targets: `researchspec/draft-patches/<patch-id>.json`, `researchspec/runs/current/decision-ledger.jsonl`, `researchspec/runs/current/gate-ledger.jsonl`, `researchspec/runs/current/artifact-registry.json`
+- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
+- Before SHA-256: `cd54fc8af9aab880c01c0cbc083475c7dffdc0f0a16c83873c46017f26fc3878`
+- After SHA-256: `6947cf15ac08f41a5d7c53e0f2f6cdcfca4c0a55bac7531d786c78bd6b3bb688`
+
+#### Before
+
+````markdown
+When a revision stage dispatches `academic-paper` revision mode (Stage 3 → 4 / 3' → 4'; "Resolved next stage: 4 (mode: revision)" — and equally the integrity-FAIL correction rounds, Stage 2.5 FAIL → 2 and Stage 4.5 FAIL → 5 (revision), where the integrity correction list serves as the round's revision requirements; #89 Item 8, destination differences in the integrity-correction variant below — note the FAIL arrow lands on Stage 5's **revision** sub-step, not the PASS-path Stage 4.5 → 5 finalization handoff, and re-verification by the issuing gate is mandatory before finalization), the writer's deliverable is a **patch document**, not a re-emitted draft, and the orchestrator owns the deterministic steps around it. Spec: `docs/design/2026-06-10-390-diff-patch-revision-mode-spec.md` §3.3–§3.6. Protocol + exact commands: `academic-paper/references/revision_patch_protocol.md`. The toolchain is Slice A (#423): `scripts/ars_anchorize_draft.py` + `scripts/ars_apply_revision_patch.py`.
+
+**Normative order per revision round — nothing may rewrite the draft between steps 1 and 3:**
+
+1. **Anchorize (manifest refresh):** `python scripts/ars_anchorize_draft.py <draft.md>` — idempotent, content-neutral; stamps any unlabeled blocks and regenerates `<draft>.block-manifest.json`. Run it at every round entry (including legacy pre-anchor drafts at revision-mode intake) so the manifest matches the exact text the writer is about to see.
+2. **Dispatch the writer** with the anchored draft + the block manifest + the round's Revision Roadmap in context. The writer emits the patch as `phase6_*/revision_patch_round<N>.json` plus provisional Schema 8 response items (see `draft_writer_agent.md` § Patch-Document Revision Emission).
+3. **Apply:** `python scripts/ars_apply_revision_patch.py <draft.md> <patch.json> --output <draft.rev<N>.md>` — two-phase fail-closed; the output is a NEW versioned artifact (supersession convention above) and the apply report lands beside it. The touched-ratio trigger defaults to the #424 ship decision (0.6, strict `>`); do not pass a different threshold without a recorded user decision.
+4. **Finalizer pass:** the Cite-Time Provenance Finalizer runs on the apply OUTPUT, resolving any newly inserted bare `<!--ref:-->` markers per its shipped contract. A finalizer pass between steps 1 and 3 would legitimately mutate `<!--ref:-->` status tokens and produce spurious hash mismatches at apply — the sequencing exists to make every hash mismatch MEAN staleness, not pipeline noise.
+5. **Complete Schema 8 mechanical fields** from the apply report (§3.5 role split): `change_block_ids` per response item (including fresh insert IDs from `ops_applied[].new_block_ids` / `fresh_block_ids`), `word_count_delta`, counters. The writer's provisional items carry the judgment content; the orchestrator fills in the post-apply facts. Then the response moves to re-review with the **apply report named as a required input** alongside it.
+6. **Surface `preserved_ratio`** from the apply report's counters next to the accumulated round-trip count in the stage checkpoint line (the #389 interaction-count budget surface; advisory, one line — e.g. `round-trips: 3/9 · preserved_ratio: 0.91`).
+
+**Integrity-correction variant (Stage 2.5 / 4.5 FAIL rounds, #89 Item 8).** A correction round follows steps 1–4 and 6 unchanged, with two destination differences. (a) **No Schema 8 response items in this round** — response items are review-round artifacts and no review round occurred; the writer maps each patch op's `roadmap_item_ids` to the integrity report's stable correction IDs instead (the `IL-<SEVERITY>-<n>` Issue List IDs, or a finding's native `EA-NNN`; see `integrity_verification_agent.md` § Issue List and `draft_writer_agent.md` § Patch-Document Revision Emission), and step 5's mechanical completion is skipped. (b) **The applied output returns to the SAME integrity gate that issued the FAIL** (Stage 2.5 or 4.5) for re-verification — never forward to review or finalization on the strength of the apply report alone; the apply report is a required input to that re-verification, not a substitute for it. The integrity gate's own caps are unchanged (max 3 correction rounds; abort after the 2nd Stage 4.5 FAIL).
+
+**Escalation gate (§3.6) — the only road to full re-emission, and it runs through the user.** Two trigger layers:
+
+- **Layer 1 (pre-drafting):** the writer returns `[PATCH-ESCALATION-REQUIRED: layer=pre_drafting, ...]` instead of a patch — a roadmap item demands restructuring.
+- **Layer 2 (apply-time):** the apply script exits 3 (`refused_structural`) — heading-block ops, section-count change, or touched-ratio above threshold on an emitted patch (the writer misclassified a structural change as local). Note the heading-anchor exemption (#424): an `insert_after` merely anchored on a heading does not flag; rewriting/deleting a heading or inserting heading-bearing text does.
+
+On either trigger, STOP and present the MANDATORY checkpoint:
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚠️ MANDATORY CHECKPOINT — Structural revision detected (#390)
+
+Trigger: [pre-drafting classification: items REV-00X (reason) |
+          apply-time shape flags: heading ops at indexes [...], section_count_delta=N, touched_ratio=0.NN > 0.6]
+
+Proceeding by full re-emission exposes the ENTIRE document to the
+silent-distortion risk patch mode exists to remove (DELEGATE-52) —
+for this round, every untouched paragraph is regenerated by the model.
+
+Your options:
+  (a) narrow — drop/defer the structural items, re-dispatch the writer
+      on the remaining local items as a normal patch round
+  (b) [layer 2 only] acknowledge — apply this patch as-is; the flags are
+      recorded in the apply report (--acknowledge-structural)
+  (c) re-emit in full — this round runs as legacy full re-emission,
+      provenance-stamped mode: full_reemission_escalated
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+Only on explicit user choice (c) does a round run as full re-emission; afterwards **re-anchorize from scratch** (new ID generation — old patches never apply across a re-emission boundary) and record `mode: full_reemission_escalated` in the round's report so provenance never pretends a patch round happened. NEVER auto-fallback to full re-emission — not on structural flags, not on apply failure. MVP granularity is per-round, binary (one confirmed restructure item ⇒ the whole round re-emits; mixed rounds are deferred forward-scope, spec §9.3).
+
+**Apply-failure path (distinct from escalation):** a Phase 1 rejection (exit 2 — stale hash, unknown target, schema failure) feeds the structured failure report back to the writer for ONE patch re-emission against the current base (retry-once, v3.6.6 convention). Second failure → escalate to the user with three options: re-anchorize + retry the round / escalated full re-emission (checkpoint above) / abort. The base draft is byte-untouched on every rejection — there is no partial apply to clean up.
+````
+
+#### After
+
+````markdown
+<!--rs:PATCH-004-->
+When a revision stage dispatches `academic-paper` revision mode—normal review
+rounds (Stage 3 → 4 / 3' → 4') and integrity-FAIL correction rounds (Stage 2.5
+FAIL → 2 or Stage 4.5 FAIL → 5 revision)—the writer's deliverable is a
+ResearchSpec draft patch, not a re-emitted manuscript. The orchestrator owns the
+deterministic preparation, apply, registration, and gate steps around that
+patch. The Stage 4.5 FAIL route enters Stage 5's revision sub-step, not the
+PASS-path finalization handoff, and the gate that issued any FAIL must re-verify
+the applied result before finalization.
+
+**Normative order per revision round — nothing may rewrite the draft between
+steps 1 and 3:**
+
+1. **Prepare the immutable base.** Resolve the current manuscript artifact and
+   its recorded hash through
+   `researchspec/runs/current/artifact-registry.json`. Run the deterministic
+   draft-patch preparation helper to assign stable block ids where missing and
+   refresh the block manifest without changing prose. Register the refreshed
+   manifest as a derived artifact before dispatch.
+2. **Dispatch the writer.** Provide the exact registered draft, its block
+   manifest, and the round's accepted Revision Roadmap. The writer emits
+   `researchspec/draft-patches/<patch-id>.json` with target artifact id, target
+   hash, block preconditions, operations, and roadmap traceability. In review
+   rounds it also emits provisional response items containing judgment content;
+   it does not apply the patch or update registries and ledgers.
+3. **Validate and apply deterministically.** The draft-patch apply helper first
+   validates schema, target artifact identity, base hash, block preconditions,
+   operation shape, and structural-change limits. Validation is fail-closed and
+   byte-preserving on rejection. A successful apply creates a new manuscript
+   artifact plus a separate apply report; it never overwrites the registered
+   base. The default structural touched-ratio threshold remains `0.6` with a
+   strict `>` comparison. A different threshold requires a human-confirmed
+   decision returned to the decision runtime for
+   `researchspec/runs/current/decision-ledger.jsonl` before apply.
+4. **Run the provenance finalizer on the apply output.** Do not run it between
+   base preparation and apply: changes to reference-status markers in that
+   interval would create hash mismatches that do not represent stale writer
+   input. After apply, resolve newly inserted bare `<!--ref:-->` markers under
+   the existing finalizer contract.
+5. **Complete mechanical response facts.** For review rounds, fill response-item
+   block ids, fresh insertion ids, word-count delta, and counters from the apply
+   report while preserving the writer's judgment text. Return the response and
+   apply report as artifacts for runtime registration, then require the apply
+   report as an input to re-review.
+6. **Surface preservation and interaction state.** Include `preserved_ratio`
+   from the apply report beside the accumulated round-trip count in the stage
+   checkpoint, for example `round-trips: 3/9 · preserved_ratio: 0.91`.
+
+**Integrity-correction variant (Stage 2.5 / 4.5 FAIL).** Follow steps 1–4 and 6
+unchanged, with two differences:
+
+- Do not create Schema 8 response items because no review round occurred.
+  Instead, every patch operation's `roadmap_item_ids` must reference the stable
+  correction ids issued by the integrity report.
+- Return the new manuscript and apply report to the same integrity gate that
+  issued the FAIL. The apply report is required evidence, not a substitute for
+  re-verification. Submit the new gate result to the gate helper for
+  `researchspec/runs/current/gate-ledger.jsonl`; do not advance on an unresolved
+  blocking result. Existing round caps remain in force.
+
+**Structural-revision escalation — the only path to full re-emission.** A
+pre-drafting classification that requires restructuring, or an apply-time
+structural refusal caused by heading changes, section-count change, or a
+touched ratio above the accepted threshold, MUST stop at a human checkpoint.
+Present the trigger and these choices:
+
+1. narrow or defer the structural items and re-dispatch the remaining local
+   items as a patch round;
+2. for apply-time flags only, acknowledge and apply the same patch while
+   preserving the structural flags in the apply report;
+3. re-emit the full manuscript for this round.
+
+Only an explicit human choice of full re-emission permits option 3. Return that
+choice and its rationale to the decision runtime before continuing. After full
+re-emission, prepare a fresh block manifest with new block ids, invalidate all
+patches tied to the prior manuscript hash, and mark the round report
+`mode: full_reemission_escalated`. Never auto-fallback to full re-emission.
+
+**Apply-failure path (not structural escalation).** On stale hash, unknown
+target, schema failure, or failed block precondition, keep the base manuscript
+byte-unchanged and return the structured failure report to the writer for one
+new patch against the current registered base. A second failure stops for a
+human choice among: prepare a fresh block manifest and retry the round, approve
+full re-emission through the checkpoint above, or abort. Send failure and
+blocking findings to the responsible gate helper; artifact registration,
+decision recording, and gate-ledger writes remain owned by their ResearchSpec
+runtime helpers.
+<!--/rs:PATCH-004-->
+````
+
+### STATE-004
+
+- Anchor name: `pipeline.orchestrator.reset-boundary-ledger`
+- Owner skill: `academic-pipeline`
+- Source path: `academic-pipeline/agents/pipeline_orchestrator_agent.md`
 - Severity: `required`
 - Semantic role: `runtime_state_boundary`
 - Replacement shape: `protocol_block`
-- Template id: `reset-boundary-ledger-to-researchspec-state`
+- Replacement body SHA-256: `519ee1aa0609a43222ad9a1a2b2e7c3ec6bbce7b3aecea51f41c292f52849d5a`
 - ResearchSpec targets: `researchspec/runs/current/state.yaml`, `researchspec/runs/current/decision-ledger.jsonl`, `researchspec/runs/current/gate-ledger.jsonl`
 - Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
 - Before SHA-256: `72382a607b0750669bffe9274ede6c7f76e64853b606432c80f13122c85fb760`
-- After SHA-256: `08072a858c9f1ee5a645691ea77f3cb3425be828a667ef471432f6c2e6ca2a07`
+- After SHA-256: `c1a0395cf2d7e9e76684c23c268dae3e5d7db71c8f001ace42042909254e140a`
 
 #### Before
 
@@ -1109,43 +1497,82 @@ Claim-audit aggregates form one registered audit artifact whose blocking finding
 #### After
 
 ````markdown
-<!--rs:a:a988873008fb-->
-### ResearchSpec Reset Boundary
+<!--rs:STATE-004-->
+1. Ask the ResearchSpec checkpoint helper to snapshot the completed stage,
+   proposed next stage, active mode, required artifact ids and hashes, and any
+   pending decision in `researchspec/runs/current/state.yaml`. The helper owns
+   the atomic state update; the orchestrator does not edit the file directly.
+2. When `ARS_PASSPORT_RESET=1`, also emit an ARS-compatible `kind: boundary`
+   payload as a compatibility artifact. Preserve the legacy canonical hash
+   rules—RFC 8785 serialization, LF-separated boundary entries, a
+   `"000000000000"` placeholder, and the first 12 lowercase SHA-256 hex
+   characters—so external ARS readers can still verify the export. Register the
+   passport path and content hash through
+   `researchspec/runs/current/artifact-registry.json`; the export is not active
+   ResearchSpec state.
+3. If the checkpoint coincides with a mandatory user choice, preserve the
+   complete `pending_decision` question and option routing in the compatibility
+   payload, but stop for the human decision. After confirmation, return the
+   selected value and rationale to the decision runtime for
+   `researchspec/runs/current/decision-ledger.jsonl`. `next` remains advisory;
+   the chosen option's `next_stage` and `next_mode` determine routing unless an
+   explicit resume override is present.
+4. Emit the compatibility tag and user instruction as a distinct block:
 
-Checkpoint resets and resumes are ResearchSpec runtime events, not Material Passport ledger mutations.
+   ```text
+   [PASSPORT-RESET: hash=<hash>, stage=<completed>, next=<next>]
 
-#### Boundary Record
+   ### Resume Instruction
+   - Passport file: <path>
+   - To continue, start a fresh agent session and invoke:
+     resume_from_passport=<hash>
+   - ResearchSpec run state and registered artifacts remain authoritative.
+   ```
 
-- Store reset boundary state in `researchspec/runs/current/state.yaml`.
-- After human confirmation, return branch choices, overrides, and pending decisions to the runtime for decision-ledger recording.
+5. Halt after a FULL checkpoint when the configured workflow requires a fresh
+   session. Other modes may accept one in-session continuation, but the next
+   stage still loads only current ResearchSpec state and registered artifacts;
+   it must not reconstruct state from chat or use the passport as its sole input.
 
-#### Gate Record
+**Iron rules (reset boundary):**
 
-- Use `researchspec/runs/current/gate-ledger.jsonl` to record whether the recovered state is verified, stale, or blocked.
-- If an ARS reset tag exists, register it as compatibility evidence rather than consuming it as the runtime source of truth.
-
-#### Mutation Boundary
-
-- Request changes to `researchspec/runs/current/state.yaml` through the ResearchSpec orchestrator or runtime helper; do not edit run state directly.
-- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:a988873008fb-->
+1. With compatibility export disabled, no passport bytes or reset tags are
+   emitted; normal ResearchSpec checkpoint behavior is unchanged.
+2. ResearchSpec run state, artifact registration, human decisions, and gate
+   outcomes remain separated across their runtime files and are written only by
+   their responsible helpers.
+3. A compatibility passport remains append-only. Existing boundary/resume
+   entries are never deleted, reordered, or mutated.
+4. The `[PASSPORT-RESET: ...]` tag is the machine-stable identifier for legacy
+   import; the human instruction is explanatory only.
+5. Hash mismatch is a hard import error.
+6. Single consumption is enforced atomically by the ResearchSpec resume helper.
+   A legacy `kind: resume` export may mirror the result but does not establish it.
+7. Mandatory integrity and review checkpoints are never weakened. Pending
+   decisions always re-prompt and confirmed option routing takes precedence over
+   advisory defaults.
+8. Collaboration-depth output remains advisory and is registered as an artifact;
+   it never becomes a blocking state flag.
+9. If a compatibility passport is also updated, the import/export helper must
+   retain the legacy exclusive-lock guarantee for the complete read-check-append
+   sequence. A platform unable to provide that lock must refuse the compatibility
+   write, while leaving ResearchSpec state uncorrupted.
+<!--/rs:STATE-004-->
 ````
 
-### anchor.pipeline.orchestrator.resume-runtime
+### STATE-005
 
+- Anchor name: `pipeline.orchestrator.resume-runtime`
 - Owner skill: `academic-pipeline`
 - Source path: `academic-pipeline/agents/pipeline_orchestrator_agent.md`
-- Marker id: `b4116c66ae00`
 - Severity: `required`
 - Semantic role: `runtime_state_boundary`
 - Replacement shape: `protocol_block`
-- Template id: `material-passport-resume-to-researchspec-runtime`
+- Replacement body SHA-256: `79dce961a5271f223c43562e2853e847f7d0ab2625fdf551b43a229df557bcfc`
 - ResearchSpec targets: `researchspec/runs/current/state.yaml`, `researchspec/runs/current/decision-ledger.jsonl`, `researchspec/runs/current/gate-ledger.jsonl`, `researchspec/runs/current/artifact-registry.json`
 - Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
 - Before SHA-256: `c8adfde9beb5b3fac35351b03b749cbd4102b469601dae18a026480f5b53a758`
-- After SHA-256: `156d0a8c1ab505dc47e7157655ec2160ced516ca79e267d047c85b2f94f5a199`
+- After SHA-256: `50a3eefeb02346f1724a816f16b2987917d86ab81d07a40969647963048b93e0`
 
 #### Before
 
@@ -1194,283 +1621,244 @@ Checkpoint resets and resumes are ResearchSpec runtime events, not Material Pass
 #### After
 
 ````markdown
-<!--rs:a:b4116c66ae00-->
-### ResearchSpec Runtime Ownership
+<!--rs:STATE-005-->
+**Trigger:** user input starts with or contains `resume_from_passport=<12-hex>`.
 
-Resume handling is controlled by ResearchSpec runtime files. The ARS Material Passport can be imported as evidence, but it is not the active resume ledger.
+**Compatibility contract:** the referenced ARS Material Passport boundary is
+import evidence only. Active resume state is owned by
+`researchspec/runs/current/state.yaml`; imported files and recovered outputs are
+resolved through `researchspec/runs/current/artifact-registry.json`; human branch
+choices are recorded through the decision runtime in
+`researchspec/runs/current/decision-ledger.jsonl`; verification and blocking
+conditions are recorded by the resume gate in
+`researchspec/runs/current/gate-ledger.jsonl`.
 
-#### Before Resuming
+**Orchestrator obligations:**
 
-- Read `researchspec/runs/current/state.yaml` for current stage, mode, and resume status.
-- Resolve prior artifacts through `researchspec/runs/current/artifact-registry.json`.
-- Check `researchspec/runs/current/gate-ledger.jsonl` for unresolved blocking gates.
+1. Parse `<hash>` from user input and validate `^[0-9a-f]{12}$`.
+2. Locate the compatibility passport: prefer an explicit path in user input;
+   otherwise look in `./passports/` or `./material_passport*.yaml` relative to
+   the current working directory; if none is found, ask the user for the path.
+3. Read `reset_boundary[]` without modifying the passport. Find the
+   `kind: boundary` entry whose `hash` matches. No match is a hard error:
+   `Passport hash <hash> not found in <path>. Cannot resume.`
+4. Submit the passport path, its content hash, and the matched boundary payload
+   to the ResearchSpec resume helper. The helper owns the exclusive run-state
+   update lock and MUST atomically check whether this imported boundary has
+   already been consumed in the current run. A prior consumption is a hard
+   error and MUST identify when the boundary was resumed. Do not implement this
+   check by appending a `resume` entry to the passport.
+5. Resolve every recovered output by artifact id and recorded hash through
+   `researchspec/runs/current/artifact-registry.json`. A missing, changed, or
+   unregistered required artifact makes the resume stale and blocks automatic
+   advancement until the resume gate records a verified result.
+6. Emit the acknowledgement in this form:
 
-#### Decision Handling
+   ```text
+   ### Resume Acknowledged
+   - Hash: <hash>
+   - Source session: <session_marker> (generated <generated_at>)
+   - Recovered stage: <stage>
+   - Next stage: <next> [override: stage=<user-stage>, mode=<user-mode>]
+   ```
 
-- If a branch or override is required, stop and request a human decision.
-- After human confirmation, return the chosen branch to the runtime for decision-ledger recording before advancing.
-
-#### Mutation Boundary
-
-- Request changes to `researchspec/runs/current/state.yaml` through the ResearchSpec orchestrator or runtime helper; do not edit run state directly.
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:b4116c66ae00-->
+   Include the bracketed override only when the user supplied `stage=` or
+   `mode=`. When the imported boundary has `pending_decision`, print
+   `(pending user decision)` as `<next>` until step 8 resolves it.
+7. Honor the imported `verification_status` as evidence, not as a current gate
+   result. For `STALE` or `UNVERIFIED`, warn the user and ask whether to
+   re-verify. For `VERIFIED`, the resume gate may reuse it only after current
+   artifact hashes and required gate receipts have been checked.
+8. If `pending_decision` exists, stop and display its question and option
+   values. After the user selects a value, resolve `next_stage` and `next_mode`
+   from the matching option. Explicit `stage=` or `mode=` resume overrides take
+   precedence. Return the confirmed choice and rationale to the ResearchSpec
+   decision runtime before advancing; do not write the decision ledger directly.
+9. Ask the resume helper to atomically register the imported passport as a
+   compatibility artifact, mark the boundary consumed in run state, record any
+   human-confirmed branch, and submit verification findings to the resume gate.
+   The helper, decision runtime, and gate validator own their respective stable
+   files; the orchestrator MUST NOT edit those files or the source passport.
+10. Invoke the resolved next stage with the current ResearchSpec state and the
+    registered artifact ids required by that stage. The passport is not the
+    sole runtime input. Do not ask the user to re-summarize prior stages.
+<!--/rs:STATE-005-->
 ````
 
-### anchor.pipeline.orchestrator.revision-patch-toolchain
+### ARTIFACT-001
 
-- Owner skill: `academic-pipeline`
-- Source path: `academic-pipeline/agents/pipeline_orchestrator_agent.md`
-- Marker id: `4df35b1d7e20`
-- Severity: `required`
-- Semantic role: `draft_patch_protocol`
-- Replacement shape: `patch_protocol_block`
-- Template id: `revision-patch-toolchain-to-researchspec-draft-patches`
-- ResearchSpec targets: `researchspec/draft-patches/<patch-id>.json`, `researchspec/runs/current/decision-ledger.jsonl`, `researchspec/runs/current/gate-ledger.jsonl`, `researchspec/runs/current/artifact-registry.json`
-- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
-- Before SHA-256: `419c676a1c1ec90b9d06eafeebf3c29424ab1ab704d2825f97b8d108e7799e5f`
-- After SHA-256: `9cf3445a58e5ae3da712d92a8e18ebe038337fba96d7b4a2bdf98df7ec7be174`
-
-#### Before
-
-````markdown
-When a revision stage dispatches `academic-paper` revision mode (Stage 3 → 4 / 3' → 4'; "Resolved next stage: 4 (mode: revision)" — and equally the integrity-FAIL correction rounds, Stage 2.5 FAIL → 2 and Stage 4.5 FAIL → 5 (revision), where the integrity correction list serves as the round's revision requirements; #89 Item 8, destination differences in the integrity-correction variant below — note the FAIL arrow lands on Stage 5's **revision** sub-step, not the PASS-path Stage 4.5 → 5 finalization handoff, and re-verification by the issuing gate is mandatory before finalization), the writer's deliverable is a **patch document**, not a re-emitted draft, and the orchestrator owns the deterministic steps around it. Spec: `docs/design/2026-06-10-390-diff-patch-revision-mode-spec.md` §3.3–§3.6. Protocol + exact commands: `academic-paper/references/revision_patch_protocol.md`. The toolchain is Slice A (#423): `scripts/ars_anchorize_draft.py` + `scripts/ars_apply_revision_patch.py`.
-````
-
-#### After
-
-````markdown
-<!--rs:a:4df35b1d7e20-->
-### ResearchSpec Draft Patch Protocol
-
-Revision work emits ResearchSpec draft patches. Applying them is a separate deterministic step guarded by decisions and gates.
-
-#### Patch Inputs
-
-- Read the current draft artifact from `researchspec/runs/current/artifact-registry.json`.
-- Read accepted revision intent from `researchspec/runs/current/decision-ledger.jsonl`.
-
-#### Patch Output
-
-- Emit `researchspec/draft-patches/<patch-id>.json` with block ids, old hashes, operations, and roadmap traceability.
-- Do not silently apply patch operations while generating the patch.
-
-#### Mutation Boundary
-
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:4df35b1d7e20-->
-````
-
-### anchor.pipeline.orchestrator.schema-handoff-table
-
-- Owner skill: `academic-pipeline`
-- Source path: `academic-pipeline/agents/pipeline_orchestrator_agent.md`
-- Marker id: `6b5cf894d129`
-- Severity: `required`
-- Semantic role: `handoff_projection`
-- Replacement shape: `schema_projection_table`
-- Template id: `ars-schema-handoff-to-researchspec-contracts`
-- ResearchSpec targets: `researchspec/specs/project.md`, `researchspec/specs/sources.yaml`, `researchspec/specs/claims.yaml`, `researchspec/specs/manuscript.yaml`, `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/decision-ledger.jsonl`, `researchspec/runs/current/gate-ledger.jsonl`, `researchspec/draft-patches/<patch-id>.json`
-- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
-- Before SHA-256: `c4da59716b0f456089bd4e96ca36de57011f33eeca6c40296efa82564f89f465`
-- After SHA-256: `5f7d4f18fcafd082546ce71ed49a6b367cb6dd2897c71154d01d01f48bf6367f`
-
-#### Before
-
-````markdown
-**All artifacts must carry a Material Passport (Schema 9)** with `origin_skill`, `origin_mode`, `origin_date`, `verification_status`, and `version_label`. From v3.7.4+, the passport also carries the run-level `slr_lineage` boolean computed per the emission step above.
-````
-
-#### After
-
-````markdown
-<!--rs:a:6b5cf894d129-->
-### ResearchSpec Handoff Projection
-
-ARS handoff schemas remain payload guidance. ResearchSpec files own the stable runtime contract.
-
-#### Projection Rules
-
-- Project research intent into `researchspec/specs/project.md`.
-- Project bibliography and corpus metadata into `researchspec/specs/sources.yaml`.
-- Project claim intent and limits into `researchspec/specs/claims.yaml`.
-- Project manuscript structure into `researchspec/specs/manuscript.yaml`.
-
-#### Runtime Records
-
-- Emit every handoff payload as an artifact for runtime registration.
-- Record decisions and gates in their ledgers; manuscript edits use `researchspec/draft-patches/<patch-id>.json`.
-
-#### Mutation Boundary
-
-- Treat `researchspec/specs/project.md`, `researchspec/specs/sources.yaml`, `researchspec/specs/claims.yaml`, `researchspec/specs/manuscript.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:6b5cf894d129-->
-````
-
-### anchor.pipeline.orchestrator.submission-package-gate
-
-- Owner skill: `academic-pipeline`
-- Source path: `academic-pipeline/agents/pipeline_orchestrator_agent.md`
-- Marker id: `96de257a1678`
-- Severity: `recommended`
-- Semantic role: `gate_policy`
-- Replacement shape: `gate_rule_block`
-- Template id: `submission-package-gate-to-researchspec-gate-ledger`
-- ResearchSpec targets: `researchspec/runs/current/gate-ledger.jsonl`, `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/decision-ledger.jsonl`
-- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
-- Before SHA-256: `b3f68351cc0fff4d60f467462ed9efbd85a34244188bc0d76f87d9e7a791739e`
-- After SHA-256: `bb496da0437e9a51dde99612144644990c4eb7c2fef266615095efc06183004f`
-
-#### Before
-
-````markdown
-1. **Resolve the policy.** Read `terminal_policies.submission_package` from the Material Passport. Key absence — or absence of the whole `terminal_policies` object — resolves to `advisory` (the same per-key runtime convention as the existing keys). ALWAYS pass the resolved value explicitly: the CLI is never run policy-less in the pipeline (an unflagged run stamps `policy_slug: null` = a standalone unevaluated report, which can never satisfy the freshness guard below).
-````
-
-#### After
-
-````markdown
-<!--rs:a:96de257a1678-->
-### ResearchSpec Submission Gate
-
-Submission package checks produce gate-ledger records tied to registered artifacts.
-
-#### Gate Inputs
-
-- Resolve formatted manuscript, figures, tables, and supplementary files from `researchspec/runs/current/artifact-registry.json`.
-- Read package policy choices from `researchspec/runs/current/decision-ledger.jsonl` when human selection is required.
-
-#### Ledger Writes
-
-- Return pass, fail, and blocking findings to the submission-package gate helper.
-- Do not advance to delivery while a blocking gate entry remains unresolved.
-
-#### Mutation Boundary
-
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:96de257a1678-->
-````
-
-### anchor.pipeline.state-tracker.runtime-owner
-
+- Anchor name: `pipeline.state-tracker.version-passport`
 - Owner skill: `academic-pipeline`
 - Source path: `academic-pipeline/agents/state_tracker_agent.md`
-- Marker id: `3417bbcc5620`
-- Severity: `required`
-- Semantic role: `runtime_state_boundary`
-- Replacement shape: `protocol_block`
-- Template id: `pipeline-state-tracking-researchspec-runtime`
-- ResearchSpec targets: `researchspec/specs/workflow.yaml`, `researchspec/runs/current/state.yaml`, `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
-- Generated output paths: `academic-pipeline/agents/state_tracker_agent.md`
-- Before SHA-256: `7b72ceb990ec69e1d10fc75b24512ea1e58dab1c829019ed78e84bb1d57694c1`
-- After SHA-256: `fba3ed6eb314f3c79b6bd6fb1a90fe1913c3f98f830059f9e0c682bfe9e70a1e`
-
-#### Before
-
-````markdown
-The State Tracker is the **single source of truth** for pipeline state. No other agent may directly modify pipeline state variables.
-````
-
-#### After
-
-````markdown
-<!--rs:a:3417bbcc5620-->
-### ResearchSpec Pipeline State
-
-Keep the ARS stage graph semantics, but use ResearchSpec runtime files as the state carrier.
-
-#### State Reads
-
-- Use `researchspec/specs/workflow.yaml` for the configured stage graph.
-- Use `researchspec/runs/current/state.yaml` for current stage, mode, checkpoint, and resume metadata.
-
-#### State Writes
-
-- Emit stage outputs as artifacts for runtime registration.
-- Represent integrity and transition outcomes in `researchspec/runs/current/gate-ledger.jsonl`.
-
-#### Mutation Boundary
-
-- Treat `researchspec/specs/workflow.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
-- Request changes to `researchspec/runs/current/state.yaml` through the ResearchSpec orchestrator or runtime helper; do not edit run state directly.
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:3417bbcc5620-->
-````
-
-### anchor.pipeline.state-tracker.version-passport
-
-- Owner skill: `academic-pipeline`
-- Source path: `academic-pipeline/agents/state_tracker_agent.md`
-- Marker id: `2efe51e44a1b`
 - Severity: `recommended`
 - Semantic role: `artifact_provenance`
 - Replacement shape: `artifact_projection_block`
-- Template id: `artifact-version-passport-to-registry`
+- Replacement body SHA-256: `125b1f26b62bbd243c52d083d0b453937b43d097ff63bc4088b65e9202af66c1`
 - ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
 - Generated output paths: `academic-pipeline/agents/state_tracker_agent.md`
-- Before SHA-256: `e6bb7a341da170467b258fb6355e64c1db05317e84dead71aec82d4a68dbf8ca`
-- After SHA-256: `fe0dcead74bb35749778c4d2be471b1a8da1b95213e56179650154cda9a7eed5`
+- Before SHA-256: `eb48ce56ef73b0581071ff2d2d383a45f562b4258980ce910035f67cf2fe1cfd`
+- After SHA-256: `4e427a9af6dec7846ae33092201ac74e81c7941368efc761adebb1aacb70349d`
 
 #### Before
 
 ````markdown
 Every material artifact produced by the pipeline carries a version label. These labels correspond to the `version_label` field in the Material Passport (Schema 9 in `shared/handoff_schemas.md`).
+
+| Material | Version Format | Example | Schema Reference |
+|----------|---------------|---------|-----------------|
+| Research output | `research_v{N}` | `research_v1` (initial), `research_v2` (after keyword expansion) | Schema 1-3 |
+| Paper draft | `paper_draft_v{N}` | `paper_draft_v1` (initial), `paper_draft_v2` (post-review revision) | Schema 4 |
+| Integrity report | `integrity_{mid|final}_v{N}` | `integrity_mid_v1`, `integrity_final_v1` | Schema 5 |
+| Review report | `review_v{N}` | `review_v1` (initial review), `review_v2` (re-review after revision) | Schema 6 |
+| Revision roadmap | `roadmap_v{N}` | `roadmap_v1` (first review), `roadmap_v2` (re-review) | Schema 7 |
+| Revision | `revision_v{N}` | `revision_v1` (first revision round) | Schema 8 |
+
+**Rules**:
+- Version numbers are monotonically increasing (never reused)
+- `redo` command increments the version of the affected stage's output
+- All versions are preserved (no overwriting) — enables rollback and audit trail
+- The `current_version` pointer indicates which version is active
+- Cross-references between materials use explicit version labels (e.g., "review_v1 references paper_draft_v1")
+- Version labels in state tracker must match the Material Passport `version_label` field
 ````
 
 #### After
 
 ````markdown
-<!--rs:a:2efe51e44a1b-->
-### ResearchSpec Artifact Provenance
+<!--rs:ARTIFACT-001-->
+Every pipeline material is a versioned artifact registered in
+`researchspec/runs/current/artifact-registry.json`. Its registry record carries
+the stable artifact id, path, content hash, producer, stage, mode, version label,
+and supersession relationship. Verification status is not inferred from a
+version string; it is supported by the responsible entry in
+`researchspec/runs/current/gate-ledger.jsonl`.
 
-Version labels and verification state belong to the artifact registry and gate ledger.
+| Material | Version-label convention | Example |
+| --- | --- | --- |
+| Research output | `research_v{N}` | `research_v1`, `research_v2` |
+| Paper draft | `paper_draft_v{N}` | `paper_draft_v1`, `paper_draft_v2` |
+| Integrity report | `integrity_{mid|final}_v{N}` | `integrity_mid_v1` |
+| Review report | `review_v{N}` | `review_v1`, `review_v2` |
+| Revision roadmap | `roadmap_v{N}` | `roadmap_v1`, `roadmap_v2` |
+| Revision | `revision_v{N}` | `revision_v1` |
 
-#### Registry Projection
+**Rules:**
 
-- Return artifact path, hash, producer, stage, mode, and version label to the runtime registration helper.
-- Preserve ARS passport fields as artifact metadata when useful.
-
-#### Verification Projection
-
-- Return freshness or verification status to the responsible gate helper.
-- Do not treat a generated report title or version string as the registry source of truth.
-
-#### Mutation Boundary
-
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:2efe51e44a1b-->
+- Version numbers increase monotonically within an artifact lineage and are
+  never reused.
+- A redo creates a new artifact and supersession edge; it never overwrites a
+  prior version.
+- The registry identifies the active version while preserving all prior hashes
+  for rollback and audit.
+- Cross-artifact references use stable artifact ids plus the expected version or
+  hash, not a title alone.
+- Imported Material Passport version fields may be preserved as compatibility
+  metadata, but the registry and gate records remain authoritative.
+<!--/rs:ARTIFACT-001-->
 ````
 
-### anchor.pipeline.reference.literature-consumer-runtime
+### STATE-006
 
+- Anchor name: `pipeline.state-tracker.runtime-owner`
+- Owner skill: `academic-pipeline`
+- Source path: `academic-pipeline/agents/state_tracker_agent.md`
+- Severity: `required`
+- Semantic role: `runtime_state_boundary`
+- Replacement shape: `protocol_block`
+- Replacement body SHA-256: `5e830df08c4fb46c42f445584f0c01eb709aec35320dfb11025a1fd139d86c06`
+- ResearchSpec targets: `researchspec/specs/workflow.yaml`, `researchspec/runs/current/state.yaml`, `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
+- Generated output paths: `academic-pipeline/agents/state_tracker_agent.md`
+- Before SHA-256: `af2c12271685216e4047e8bf9797f886641df29709779b5310c612e5dced4d5c`
+- After SHA-256: `ffb890e6100669bf38c14270913a5f500e2f0eeacb8f5da3af0436e190ba5e76`
+
+#### Before
+
+````markdown
+The State Tracker is the **single source of truth** for pipeline state. No other agent may directly modify pipeline state variables.
+
+### Write Access Control
+
+| Agent | Can Update | Cannot Update |
+|-------|-----------|---------------|
+| `pipeline_orchestrator` | Request state changes via `request_update(field, value)` | Direct state mutation |
+| `state_tracker` | All fields (sole writer) | N/A (is the writer) |
+| `integrity_verification` | `integrity_report` field only (via `submit_report()`) | `pipeline_state`, `current_stage`, materials |
+| `collaboration_depth_agent` | `collaboration_depth_history[]` append-only (via `append_observer_report()`); never writes `pipeline_state`, `current_stage`, blocking flags, or materials | All other fields |
+| Sub-skill agents | Their own `stage_output` (via `submit_output()`) | Any other field |
+
+### Dialogue log references (v3.3.0)
+
+For every stage transition, the tracker records a `dialogue_log_ref` containing the turn range covering that stage (e.g. `turns #47..#91`). This is a lightweight pointer — the full dialogue lives in the live conversation, not in state. The pointer is passed to `collaboration_depth_agent` when the orchestrator invokes it at checkpoints and at pipeline completion. Turn-range entries are immutable once a stage closes.
+
+### `collaboration_depth_history[]`
+
+Append-only list. Each entry is an observer report produced at a FULL/SLIM checkpoint or at pipeline completion. Entries never gate state transitions — they are stored for the final Process Record's "Collaboration Depth Trajectory" chapter only. The tracker must reject any write request that attempts to turn observer output into a blocking condition.
+
+### State Update Protocol
+
+1. Requesting agent calls `request_update(field, new_value, reason)`
+2. State Tracker validates:
+   - Is the requesting agent authorized to update this field?
+   - Is the state transition valid? (e.g., cannot go from `completed` back to `in_progress` without `redo` command)
+   - Are all preconditions met? (e.g., cannot advance to Stage 3 without Stage 2 output)
+3. If valid -> apply update, log the change with timestamp and requester
+4. If invalid -> reject with reason, notify requesting agent
+````
+
+#### After
+
+````markdown
+<!--rs:STATE-006-->
+`researchspec/runs/current/state.yaml` is the single source of truth for active
+pipeline state. The State Tracker interprets update requests, validates
+transitions, and produces progress views, but only the ResearchSpec state helper
+may commit stable state changes.
+
+### Write Access Control
+
+| Role | May submit | Must not do |
+| --- | --- | --- |
+| `pipeline_orchestrator` | transition request with stage, mode, reason, and required artifacts | edit run state directly |
+| `state_tracker` | validated transition proposal and dashboard projection | bypass the state helper or invent artifact status |
+| integrity/gate agents | structured report and gate finding | change active stage or artifact records |
+| `collaboration_depth_agent` | advisory observer artifact | set blocking flags or pipeline state |
+| phase agents | their own output artifacts | mutate state, registries, decisions, or gates |
+
+### Dialogue and observer records
+
+Stage-transition dialogue ranges remain immutable provenance pointers. Return
+them as metadata for the runtime state update and for any collaboration-depth
+artifact; do not treat the live conversation as durable state.
+Collaboration-depth reports remain append-only registered artifacts and never
+gate transitions.
+
+### State Update Protocol
+
+1. The requesting role submits the proposed field changes, reason, expected
+   current stage, and relevant artifact ids.
+2. The State Tracker checks role authorization, workflow legality against
+   `researchspec/specs/workflow.yaml`, required artifact availability through
+   `researchspec/runs/current/artifact-registry.json`, and unresolved blocking
+   findings in `researchspec/runs/current/gate-ledger.jsonl`.
+3. If valid, return the validated transition to the state helper for one atomic
+   write with timestamp and requester metadata.
+4. If invalid, reject it with structured reasons and leave run state unchanged.
+<!--/rs:STATE-006-->
+````
+
+### SOURCE-002
+
+- Anchor name: `pipeline.reference.literature-consumer-runtime`
 - Owner skill: `academic-pipeline`
 - Source path: `academic-pipeline/references/literature_corpus_consumers.md`
-- Marker id: `6aa4ef1ee975`
 - Severity: `required`
 - Semantic role: `source_contract_projection`
 - Replacement shape: `artifact_projection_block`
-- Template id: `literature-consumer-to-researchspec-sources`
+- Replacement body SHA-256: `80638137954c2441664b05098e0fa163b3598bf2f7facb2d8e2a13f56f76c3cd`
 - ResearchSpec targets: `researchspec/specs/sources.yaml`, `researchspec/runs/current/artifact-registry.json`
 - Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/references/literature_corpus_consumers.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/references/literature_corpus_consumers.md`, `academic-pipeline/references/literature_corpus_consumers.md`, `deep-research/references/cross-skill/academic-pipeline/references/literature_corpus_consumers.md`
 - Before SHA-256: `590a6addf7c5280e4096aacd741ce56750e4ac47885a7a0db3ff9ac307477123`
-- After SHA-256: `0329e15132e988fcbf410ec7c404c1545d42bf26810cc328e7b2171324ed809b`
+- After SHA-256: `751a3cca39a155379821da24700dc3b440a2415caab1fb4903cda7b1fdb0e673`
 
 #### Before
 
@@ -1481,37 +1869,33 @@ This is the contract every literature-reading consumer agent must follow. The v3
 #### After
 
 ````markdown
-<!--rs:a:6aa4ef1ee975-->
-### ResearchSpec Literature Consumer Contract
-
-Literature consumers read the canonical corpus through ResearchSpec while preserving the upstream no-mutation and fallback rules.
-
-#### Corpus Inputs
-
-- Read source ids, citation keys, inclusion state, and trust metadata from `researchspec/specs/sources.yaml`.
-- Resolve bibliography and screening artifacts through `researchspec/runs/current/artifact-registry.json`.
-
-#### Mutation Boundary
-
-- Treat `researchspec/specs/sources.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-
-<!--/rs:a:6aa4ef1ee975-->
+<!--rs:SOURCE-002-->
+This is the contract every literature-reading consumer follows after
+ResearchSpec has projected source records from
+`researchspec/specs/sources.yaml` and resolved associated corpus artifacts
+through `researchspec/runs/current/artifact-registry.json`. The resulting
+read-only `literature_corpus[]` working payload retains citation keys, titles,
+authors, dates, source pointers, inclusion state, and trust metadata required by
+the protocol below. Consumers apply the existing corpus-first,
+search-fills-gap flow, four Iron Rules, PRE-SCREENED block, and graceful parse
+fallback without mutating either the payload, the source contract, or registry
+records.
+<!--/rs:SOURCE-002-->
 ````
 
-### anchor.pipeline.reference.passport-reset-protocol
+### STATE-007
 
+- Anchor name: `pipeline.reference.passport-reset-protocol`
 - Owner skill: `academic-pipeline`
 - Source path: `academic-pipeline/references/passport_as_reset_boundary.md`
-- Marker id: `2001afa86b8b`
 - Severity: `required`
 - Semantic role: `runtime_state_boundary`
 - Replacement shape: `protocol_block`
-- Template id: `passport-reset-protocol-to-researchspec-ledgers`
+- Replacement body SHA-256: `caf6bb31cdbc79d8f6a43c93399ccc1881be1a24ff97107b5ca0707a9fc3d3c7`
 - ResearchSpec targets: `researchspec/runs/current/state.yaml`, `researchspec/runs/current/decision-ledger.jsonl`, `researchspec/runs/current/gate-ledger.jsonl`, `researchspec/runs/current/artifact-registry.json`
 - Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/references/passport_as_reset_boundary.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/references/passport_as_reset_boundary.md`, `academic-pipeline/references/passport_as_reset_boundary.md`, `deep-research/references/cross-skill/academic-pipeline/references/passport_as_reset_boundary.md`
 - Before SHA-256: `f5373d307584b4ace1e95535a60b5b54f489d30a47bb67a2d00ee9454b8114aa`
-- After SHA-256: `287e843eccfdcbfbc82664ba666da5b5ef5048ffa99e55cd97078078a1f61ea5`
+- After SHA-256: `af93205a248942a62b31d740956db2ad6e26309bb1a50312fab9eb47763cb8c8`
 
 #### Before
 
@@ -1561,44 +1945,82 @@ Without coordination, two processes can complete step 2 in parallel before eithe
 #### After
 
 ````markdown
-<!--rs:a:2001afa86b8b-->
-### ResearchSpec Resume Protocol
+<!--rs:STATE-007-->
+ResearchSpec owns active reset and resume state. A legacy Material Passport
+`reset_boundary[]` ledger may be imported or exported as compatibility evidence,
+but it is never the current run ledger.
 
-Reset and resume semantics are preserved, but their runtime state is split across ResearchSpec state, decisions, gates, and artifacts.
+- At a checkpoint, the runtime records stage, mode, required artifact ids,
+  pending decisions, and resume status in
+  `researchspec/runs/current/state.yaml`.
+- Compatibility export may append a `kind: boundary` entry using the legacy
+  canonical hash and version fields. The exported passport is registered with
+  its path and content hash in
+  `researchspec/runs/current/artifact-registry.json`.
+- Re-running a stage creates new versioned artifacts and a new checkpoint; prior
+  artifacts and compatibility entries remain immutable.
+- A resume import may mirror successful consumption as a legacy `kind: resume`
+  entry, but single consumption is decided atomically by the ResearchSpec resume
+  helper rather than inferred from the passport alone.
 
-#### Compatibility Import
+### Computing awaiting-resume state
 
-- Emit any imported ARS Material Passport reset payload as compatibility evidence for runtime registration.
-- Project its active stage and pending branch information into `researchspec/runs/current/state.yaml`.
+The runtime considers a checkpoint awaiting resume when current run state marks
+it resumable and no later atomic state transition has consumed it. For imported
+passports, the helper checks the matching boundary and any legacy consuming
+entry as evidence, then reconciles that evidence with current ResearchSpec
+state. A disagreement is stale or conflicting evidence and must be submitted to
+the resume gate instead of guessed away.
 
-#### Runtime Ownership
+### Concurrency model
 
-- Use `researchspec/runs/current/decision-ledger.jsonl` for branch selection.
-- Use `researchspec/runs/current/gate-ledger.jsonl` for stale, unverified, or blocked recovery state.
+ResearchSpec state consumption is an atomic helper operation over the expected
+run and checkpoint identity. Two callers cannot both consume the same checkpoint;
+the second receives a hard already-consumed error.
 
-#### Mutation Boundary
+When the same operation also appends to a compatibility passport, retain the
+legacy exclusive advisory lock across the complete read, no-prior-consumption
+check, append, and durable flush. Use a bounded timeout no greater than 60
+seconds and surface lock timeout as a hard compatibility error. POSIX and
+Windows implementations must use an OS-level exclusion mechanism; if none is
+available, refuse the passport update rather than silently degrade. Failure to
+update the compatibility copy must not produce a partial ResearchSpec state
+transition—prepare and validate both sides before committing, then report any
+post-commit mirror failure as a blocking gate finding.
 
-- Request changes to `researchspec/runs/current/state.yaml` through the ResearchSpec orchestrator or runtime helper; do not edit run state directly.
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
+### Iron rules
 
-<!--/rs:a:2001afa86b8b-->
+1. Compatibility export disabled means no passport mutation.
+2. Stable ResearchSpec state changes are atomic and helper-owned.
+3. Compatibility ledgers remain append-only.
+4. The reset tag identifies imported/exported evidence, not active state.
+5. Hash mismatch blocks import.
+6. Mandatory checkpoints remain mandatory across reset.
+7. Boundary hash calculation retains the legacy placeholder and serialization
+   rules when a compatibility payload is produced.
+8. Pending decisions always re-prompt; confirmed option routing or explicit
+   overrides—not an advisory `next` value—select the next stage. Return the
+   choice to the decision runtime for
+   `researchspec/runs/current/decision-ledger.jsonl`.
+9. Verification, stale evidence, lock failures, and double-consumption attempts
+   are submitted to the resume gate for
+   `researchspec/runs/current/gate-ledger.jsonl`.
+<!--/rs:STATE-007-->
 ````
 
-### anchor.pipeline.team-handoff.passport-checklist
+### HANDOFF-002
 
+- Anchor name: `pipeline.team-handoff.passport-checklist`
 - Owner skill: `academic-pipeline`
 - Source path: `academic-pipeline/references/team_collaboration_protocol.md`
-- Marker id: `722552e4d486`
 - Severity: `recommended`
 - Semantic role: `handoff_projection`
 - Replacement shape: `schema_projection_table`
-- Template id: `team-handoff-to-researchspec-registry`
+- Replacement body SHA-256: `c5e17ebb4e0585be44de5cd7fa6dd88cb84c02181ce63efaa8b50eb530d8c02b`
 - ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/decision-ledger.jsonl`, `researchspec/runs/current/gate-ledger.jsonl`
 - Generated output paths: `academic-pipeline/references/team_collaboration_protocol.md`
 - Before SHA-256: `b7b3d15b245fd412b906ce9f391fd247a21b2e54fe3eed96fe6bbb1036c4a1aa`
-- After SHA-256: `5610fb2a62384ebb1b1c21f555f0bb243c82e2c0aea9b942a3cec266e92ddf6a`
+- After SHA-256: `bc796c7f21b228e04a55d60dee8bb0320d66f63ea14acb37b794d265545597f6`
 
 #### Before
 
@@ -1609,135 +2031,80 @@ Reset and resume semantics are preserved, but their runtime state is split acros
 #### After
 
 ````markdown
-<!--rs:a:722552e4d486-->
-### ResearchSpec Team Handoff
-
-Team handoffs resolve versioned artifacts and approvals through ResearchSpec records rather than attached Material Passports.
-
-#### Handoff Record
-
-- Resolve transferred artifacts through `researchspec/runs/current/artifact-registry.json`.
-- Return human approvals and gate receipts to their responsible runtime helpers.
-
-#### Mutation Boundary
-
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:722552e4d486-->
+<!--rs:HANDOFF-002-->
+| **Handoff checklist** | Resolve every required source, bibliography, and synthesis artifact through `researchspec/runs/current/artifact-registry.json`; verify hashes and the minimum source/theme requirements; require the responsible gate receipt from `researchspec/runs/current/gate-ledger.jsonl`; and return any human approval to the decision runtime for `researchspec/runs/current/decision-ledger.jsonl`. A Material Passport attachment is optional compatibility evidence, not a prerequisite. |
+<!--/rs:HANDOFF-002-->
 ````
 
-### anchor.pipeline.skill.orchestrator-state-tracking
+### IO-002
 
+- Anchor name: `pipeline.skill.phase-boundary-enforcement`
 - Owner skill: `academic-pipeline`
 - Source path: `academic-pipeline/SKILL.md`
-- Marker id: `1ba3243e78aa`
-- Severity: `required`
-- Semantic role: `runtime_state_boundary`
-- Replacement shape: `protocol_block`
-- Template id: `pipeline-state-tracking-researchspec-runtime`
-- ResearchSpec targets: `researchspec/specs/workflow.yaml`, `researchspec/runs/current/state.yaml`, `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
-- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/SKILL.md`, `academic-pipeline/SKILL.md`, `deep-research/references/cross-skill/academic-pipeline/SKILL.md`
-- Before SHA-256: `885ee4c094ad0a77870257e2968363063330ba64f9f6732797b64dc947132826`
-- After SHA-256: `66e4d5431b4f485cd0b934de6492d43f18ee64c928100087741a993bd892a8cf`
-
-#### Before
-
-````markdown
-**Mode A — orchestrator-driven (default):** `pipeline_orchestrator_agent` runs all stages end-to-end with state tracking via Material Passport. `state_tracker_agent`, `integrity_verification_agent`, `collaboration_depth_agent`, and `claim_ref_alignment_audit_agent` are dispatched by the orchestrator at the appropriate checkpoints.
-
-**Mode B — phase-by-phase (cross-session resume):** User invokes one phase agent at a time across sessions, typically via `ARS_PASSPORT_RESET=1` + `resume_from_passport=<hash>` (see `references/passport_as_reset_boundary.md`).
-````
-
-#### After
-
-````markdown
-<!--rs:a:1ba3243e78aa-->
-### ResearchSpec Pipeline State
-
-Keep the ARS stage graph semantics, but use ResearchSpec runtime files as the state carrier.
-
-#### State Reads
-
-- Use `researchspec/specs/workflow.yaml` for the configured stage graph.
-- Use `researchspec/runs/current/state.yaml` for current stage, mode, checkpoint, and resume metadata.
-
-#### State Writes
-
-- Emit stage outputs as artifacts for runtime registration.
-- Represent integrity and transition outcomes in `researchspec/runs/current/gate-ledger.jsonl`.
-
-#### Mutation Boundary
-
-- Treat `researchspec/specs/workflow.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
-- Request changes to `researchspec/runs/current/state.yaml` through the ResearchSpec orchestrator or runtime helper; do not edit run state directly.
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:1ba3243e78aa-->
-````
-
-### anchor.pipeline.skill.phase-boundary-enforcement
-
-- Owner skill: `academic-pipeline`
-- Source path: `academic-pipeline/SKILL.md`
-- Marker id: `4ca56b3923e8`
 - Severity: `recommended`
 - Semantic role: `contract_io_boundary`
 - Replacement shape: `io_contract_block`
-- Template id: `phase-boundary-to-contract-preflight`
+- Replacement body SHA-256: `d2cb1d7af3919463fdd7a68e4bbe64760b1d67233db272cfa9f16d89aadeb443`
 - ResearchSpec targets: `researchspec/specs/workflow.yaml`, `researchspec/runs/current/state.yaml`, `researchspec/runs/current/artifact-registry.json`
 - Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/SKILL.md`, `academic-pipeline/SKILL.md`, `deep-research/references/cross-skill/academic-pipeline/SKILL.md`
-- Before SHA-256: `507cd47d8249577c10f3ecdf590afc0477bfd1ef0e8299f7fb29e593e60f988f`
-- After SHA-256: `3d35ebeafd834c41bf79ae7acec72d5c8a92ff467bb78406b78e7db16d2e481a`
+- Before SHA-256: `a6431f1c70388ec07a0dc28a1ec2ee850e25386648beb3c32e51602da59068d9`
+- After SHA-256: `bb4d9c5abf9a7d01e543dd378fcf0c6e67bb438171c2a18752446067ffe66049`
 
 #### Before
 
 ````markdown
+In Mode B, **single-phase agents (Bucket A per `docs/design/2026-05-18-ars-v3.9.2-agent-phase-classification.md`) in the downstream skills (deep-research, academic-paper, academic-paper-reviewer) stay strictly within their assigned phase for writes**. The 5 agents in academic-pipeline itself are all cross-phase / meta by design (Bucket C/D) — they have no fence by design:
+
+- `pipeline_orchestrator_agent` (D — orchestrator, full pipeline visibility)
+- `state_tracker_agent` (D — meta state, all phases)
+- `integrity_verification_agent` (C — Stage 2.5 / 4.5 cross-skill gate)
+- `collaboration_depth_agent` (C — FULL/SLIM checkpoints + pipeline completion, advisory-only)
+- `claim_ref_alignment_audit_agent` (C — opt-in claim audit, phase-orthogonal)
+
+Routing into Mode B requires explicit user signal — `/ars-<mode>` slash command or `[direct-mode]` prefix. Ambiguous cross-phase input defaults to clarification per `.claude/CLAUDE.md` Routing Discipline + `shared/references/intent_clarification_protocol.md`. **Critically:** if `pipeline_orchestrator_agent` is dispatched on ambiguous cross-phase materials, the orchestrator itself currently cannot reconcile (this is the v3.10 conductor #134 work) — v3.9.2 routes such cases to clarification BEFORE the orchestrator runs.
+
 **Enforcement (v3.9.2):** Phase Boundary blocks on downstream Bucket A agents + advisory verifier (`scripts/check_pipeline_integrity.py`) + a deterministic PreToolUse write-scope guard in hook-enabled runtimes (#134 rescope, PR #294). Multi-phase envelope + orchestrator structured intake remain forward-scope (#134 Slices 3-5).
 ````
 
 #### After
 
 ````markdown
-<!--rs:a:4ca56b3923e8-->
-### ResearchSpec Contract I/O
+<!--rs:IO-002-->
+In phase-by-phase mode, downstream single-phase agents remain confined to the
+stage selected in `researchspec/runs/current/state.yaml`. They may read only the
+contracts and registered artifacts required by that stage and may emit only its
+declared output artifacts. The academic-pipeline orchestrator, state-tracking,
+integrity, collaboration-depth, and claim-audit roles retain their documented
+cross-stage visibility, but that visibility does not grant direct write access
+to stable ResearchSpec files.
 
-Treat phase boundaries as contract-scoped reads and writes instead of ARS directory fences.
+Routing into phase-by-phase mode still requires an explicit user signal.
+Ambiguous cross-phase requests stop for clarification before dispatch. The
+configured workflow and current run state—not an ARS phase-directory name—decide
+which stage may execute.
 
-#### Contract Inputs
-
-- Load only the workflow, run state, and registered artifacts required by the current stage or mode.
-- Do not infer permission from a `phase*_` directory name when ResearchSpec state disagrees.
-
-#### Writes Allowed
-
-- Write new deliverables as artifact files, then return them to the runtime for registration.
-- Treat script or hook checks as diagnostics; ResearchSpec contracts define the runtime boundary.
-
-#### Mutation Boundary
-
-- Treat `researchspec/specs/workflow.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
-- Request changes to `researchspec/runs/current/state.yaml` through the ResearchSpec orchestrator or runtime helper; do not edit run state directly.
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-
-<!--/rs:a:4ca56b3923e8-->
+Enforcement is contract-based: preflight checks
+`researchspec/specs/workflow.yaml`, `researchspec/runs/current/state.yaml`, and
+required entries in `researchspec/runs/current/artifact-registry.json` before
+dispatch; the runtime rejects outputs outside the selected stage. Existing
+prompt fences, local verifiers, or tool hooks may report diagnostics but do not
+replace the ResearchSpec boundary.
+<!--/rs:IO-002-->
 ````
 
-### anchor.pipeline.skill.resume-from-passport
+### STATE-002
 
+- Anchor name: `pipeline.skill.resume-from-passport`
 - Owner skill: `academic-pipeline`
 - Source path: `academic-pipeline/SKILL.md`
-- Marker id: `839696c20996`
 - Severity: `required`
 - Semantic role: `runtime_state_boundary`
 - Replacement shape: `protocol_block`
-- Template id: `material-passport-resume-to-researchspec-runtime`
+- Replacement body SHA-256: `e3e1dba0a1d5df892328109cdf32eaeaf2a031923aab557ebc5cb53f4cc18a57`
 - ResearchSpec targets: `researchspec/runs/current/state.yaml`, `researchspec/runs/current/decision-ledger.jsonl`, `researchspec/runs/current/gate-ledger.jsonl`, `researchspec/runs/current/artifact-registry.json`
 - Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/SKILL.md`, `academic-pipeline/SKILL.md`, `deep-research/references/cross-skill/academic-pipeline/SKILL.md`
 - Before SHA-256: `9d830fcc9b071b1d1fca2c5d985b809e37cfed37cc97290a34fc633ba125d01f`
-- After SHA-256: `169954e2261954b7ad239303b69390f389b236a567886abb95cb3e688eefc979`
+- After SHA-256: `3266e5fe018b712e94a2cf170ae4e6a61316d5ab912e73a8441a6a37709e02a1`
 
 #### Before
 
@@ -1753,90 +2120,152 @@ Treat phase boundaries as contract-scoped reads and writes instead of ARS direct
 #### After
 
 ````markdown
-<!--rs:a:839696c20996-->
-### ResearchSpec Runtime Ownership
-
-Resume handling is controlled by ResearchSpec runtime files. The ARS Material Passport can be imported as evidence, but it is not the active resume ledger.
-
-#### Before Resuming
-
-- Read `researchspec/runs/current/state.yaml` for current stage, mode, and resume status.
-- Resolve prior artifacts through `researchspec/runs/current/artifact-registry.json`.
-- Check `researchspec/runs/current/gate-ledger.jsonl` for unresolved blocking gates.
-
-#### Decision Handling
-
-- If a branch or override is required, stop and request a human decision.
-- After human confirmation, return the chosen branch to the runtime for decision-ledger recording before advancing.
-
-#### Mutation Boundary
-
-- Request changes to `researchspec/runs/current/state.yaml` through the ResearchSpec orchestrator or runtime helper; do not edit run state directly.
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:839696c20996-->
+<!--rs:STATE-002-->
+--> Treats `resume_from_passport=<hash>` as a compatibility import request. It
+loads the legacy Material Passport, locates the matching `kind: boundary`
+payload, and submits that payload plus the passport content hash to the
+ResearchSpec resume helper. The helper checks
+`researchspec/runs/current/state.yaml` for prior consumption and resolves
+recovered outputs through
+`researchspec/runs/current/artifact-registry.json`. If the imported boundary
+contains `pending_decision`, the user must still choose a branch before routing;
+the confirmed choice is returned to the decision runtime for
+`researchspec/runs/current/decision-ledger.jsonl`. Explicit `stage=` and `mode=`
+overrides retain precedence over option routing.
+- **Gate (compatibility emission):** `ARS_PASSPORT_RESET=1` controls only whether
+  an ARS-compatible `[PASSPORT-RESET: ...]` export is produced. ResearchSpec
+  checkpoint state remains owned by the runtime regardless of that flag.
+- **Gate (resume):** no flag is required. Resume proceeds only after the helper
+  verifies the imported boundary, current artifact hashes, unresolved gates in
+  `researchspec/runs/current/gate-ledger.jsonl`, and single-consumption state.
+- **Intent:** use a fresh agent session when context reduction is desired. The
+  runtime files, not chat recall or the imported passport alone, reconstruct the
+  run.
+- **Stage:** any stage allowed by the configured workflow and verified routing
+  decision.
+- **Reference:** `references/passport_as_reset_boundary.md` defines the legacy
+  payload and import rules.
+<!--/rs:STATE-002-->
 ````
 
-### anchor.deep.agent.phase-boundary
+### STATE-003
 
-- Owner skill: `deep-research`
-- Source path: `deep-research/agents/bibliography_agent.md`
-- Marker id: `22a0c2b104bf`
-- Severity: `recommended`
-- Semantic role: `contract_io_boundary`
-- Replacement shape: `io_contract_block`
-- Template id: `deep-research-phase-boundary-to-contract-io`
-- ResearchSpec targets: `researchspec/specs/project.md`, `researchspec/specs/sources.yaml`, `researchspec/runs/current/artifact-registry.json`
-- Generated output paths: `academic-paper/references/cross-skill/deep-research/agents/bibliography_agent.md`, `academic-paper-reviewer/references/cross-skill/deep-research/agents/bibliography_agent.md`, `academic-pipeline/references/cross-skill/deep-research/agents/bibliography_agent.md`, `deep-research/agents/bibliography_agent.md`
-- Before SHA-256: `c86966138ac074e4c739177ab0ac4c6f884ae259cc8e5fce5e51e5dd67726423`
-- After SHA-256: `a4912bb34e1cf1c1508998adc8b48c05aad8eda877db309d0ea14738bdb1314b`
+- Anchor name: `pipeline.skill.orchestrator-state-tracking`
+- Owner skill: `academic-pipeline`
+- Source path: `academic-pipeline/SKILL.md`
+- Severity: `required`
+- Semantic role: `runtime_state_boundary`
+- Replacement shape: `protocol_block`
+- Replacement body SHA-256: `d2299d92c38a7a7c2f9146b2e85dbb8da7b204510d8e48d716be7dde4571cc06`
+- ResearchSpec targets: `researchspec/specs/workflow.yaml`, `researchspec/runs/current/state.yaml`, `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
+- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/SKILL.md`, `academic-pipeline/SKILL.md`, `deep-research/references/cross-skill/academic-pipeline/SKILL.md`
+- Before SHA-256: `885ee4c094ad0a77870257e2968363063330ba64f9f6732797b64dc947132826`
+- After SHA-256: `b02915a648ff814f416f1403536c894d4297974f717c7be5153b036005eede16`
 
 #### Before
 
 ````markdown
-You MAY READ files in `phase1_*/` (Research Question Brief, Methodology Blueprint) and `phase2_*/` (own phase) for legitimate context. Downstream phases (`phase{3,4,5,6}_*/`) are not needed for your work.
+**Mode A — orchestrator-driven (default):** `pipeline_orchestrator_agent` runs all stages end-to-end with state tracking via Material Passport. `state_tracker_agent`, `integrity_verification_agent`, `collaboration_depth_agent`, and `claim_ref_alignment_audit_agent` are dispatched by the orchestrator at the appropriate checkpoints.
+
+**Mode B — phase-by-phase (cross-session resume):** User invokes one phase agent at a time across sessions, typically via `ARS_PASSPORT_RESET=1` + `resume_from_passport=<hash>` (see `references/passport_as_reset_boundary.md`).
 ````
 
 #### After
 
 ````markdown
-<!--rs:a:22a0c2b104bf-->
-### ResearchSpec Deep Research Contract I/O
+<!--rs:STATE-003-->
+**Mode A — orchestrator-driven (default):** `pipeline_orchestrator_agent` runs
+all stages end to end using `researchspec/specs/workflow.yaml` as the configured
+stage graph and `researchspec/runs/current/state.yaml` as active run state.
+`state_tracker_agent`, integrity verification, collaboration-depth observation,
+and claim-reference audit remain the specialized roles dispatched at their
+configured checkpoints; produced material is resolved and registered through
+`researchspec/runs/current/artifact-registry.json`, and gate outcomes are
+submitted to the appropriate helper for
+`researchspec/runs/current/gate-ledger.jsonl`.
 
-Deep-research phase boundaries become explicit contract input/output rules.
-
-#### Contract Inputs
-
-- Read project intent from `researchspec/specs/project.md`.
-- Read existing source corpus from `researchspec/specs/sources.yaml` when present.
-
-#### Contract Outputs
-
-- Write phase outputs as artifacts and return them to the runtime for registration.
-
-#### Mutation Boundary
-
-- Treat `researchspec/specs/project.md`, `researchspec/specs/sources.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-
-<!--/rs:a:22a0c2b104bf-->
+**Mode B — phase-by-phase (cross-session resume):** the user invokes one phase
+agent at a time. Each session resumes from current ResearchSpec state and the
+registered artifacts required by that phase. `ARS_PASSPORT_RESET=1` and
+`resume_from_passport=<hash>` remain optional compatibility export/import
+mechanisms, not the run-state source of truth.
+<!--/rs:STATE-003-->
 ````
 
-### anchor.deep.bibliography.corpus-passport
+### IO-003
 
+- Anchor name: `deep.agent.phase-boundary`
 - Owner skill: `deep-research`
 - Source path: `deep-research/agents/bibliography_agent.md`
-- Marker id: `1d37bd1ae094`
+- Severity: `recommended`
+- Semantic role: `contract_io_boundary`
+- Replacement shape: `io_contract_block`
+- Replacement body SHA-256: `0d6d1df4ae37f5662e6e0e53c5ece94bfee04670163732adc52d0466c35ccf73`
+- ResearchSpec targets: `researchspec/specs/project.md`, `researchspec/specs/sources.yaml`, `researchspec/runs/current/artifact-registry.json`
+- Generated output paths: `academic-paper/references/cross-skill/deep-research/agents/bibliography_agent.md`, `academic-paper-reviewer/references/cross-skill/deep-research/agents/bibliography_agent.md`, `academic-pipeline/references/cross-skill/deep-research/agents/bibliography_agent.md`, `deep-research/agents/bibliography_agent.md`
+- Before SHA-256: `0309480229b94876752945cbb3483dea6b34b403fa51b207640131ffc7c7087f`
+- After SHA-256: `e88d4cd811a7aa8bfb619460b291065f83e084f5844124f22ef1a58408becfa3`
+
+#### Before
+
+````markdown
+You are a single-phase agent assigned to **Phase 2 (Investigation)**. Your sole deliverable is the Annotated Bibliography (APA 7.0 format) + Search Strategy report.
+
+You MUST NOT:
+- WRITE files in `phase{M}_*/` directories where M ≠ 2 (no inflate into Phase 3 synthesis, Phase 4 drafting, Phase 5 review, Phase 6 revision — **this is the exact #133 failure pattern**)
+- Produce content classified as a downstream-phase deliverable type (synthesis, draft, review, revision) even if you can see the end-goal or the user provides an abstract
+- Invoke or simulate any other agent persona's output (e.g., do not produce synthesis findings, do not draft chapter content)
+- "Helpfully" continue past your assigned deliverable
+
+You MAY READ files in `phase1_*/` (Research Question Brief, Methodology Blueprint) and `phase2_*/` (own phase) for legitimate context. Downstream phases (`phase{3,4,5,6}_*/`) are not needed for your work.
+
+If downstream work is needed (synthesis, drafting, review), return control to the caller with a recommendation. Do not execute. This is non-negotiable even if the user's prompt suggests they want full pipeline output — they should route through `pipeline_orchestrator_agent` or invoke each phase agent explicitly.
+
+**Enforcement (v3.9.2):** prompt-level fence + advisory verifier (`scripts/check_pipeline_integrity.py`). Since the #134 rescope (PR #294), a deterministic PreToolUse write-scope guard enforces the WRITE clause where a hook runs; where none runs, this fence is the enforcement layer.
+````
+
+#### After
+
+````markdown
+<!--rs:IO-003-->
+You are the Bibliography Agent for the Investigation stage. Your sole
+deliverables are the annotated bibliography and reproducible search-strategy
+artifacts.
+
+**Contract inputs:** read research intent from `researchspec/specs/project.md`
+and source identities, inclusion state, and trust metadata from
+`researchspec/specs/sources.yaml`. Resolve the registered RQ brief, methodology
+blueprint, and any permitted existing bibliography artifacts through
+`researchspec/runs/current/artifact-registry.json`. Do not infer inputs from
+`phase*_` directories or consume downstream synthesis, draft, review, or
+revision artifacts.
+
+**Contract outputs:** emit only the annotated bibliography and search-strategy
+artifacts. Do not synthesize findings, draft manuscript content, simulate another
+agent, or continue into a downstream stage. Return any recommended downstream
+work to the caller.
+
+**Writes allowed:** write new bibliography/search artifacts and return them to
+the runtime registration helper. Do not modify `sources.yaml`, run state,
+registries, decisions, or gates directly. Prompt fences and local integrity
+scripts remain diagnostics; ResearchSpec contracts and runtime validation own
+the boundary.
+<!--/rs:IO-003-->
+````
+
+### SOURCE-003
+
+- Anchor name: `deep.bibliography.corpus-passport`
+- Owner skill: `deep-research`
+- Source path: `deep-research/agents/bibliography_agent.md`
 - Severity: `required`
 - Semantic role: `source_contract_projection`
 - Replacement shape: `artifact_projection_block`
-- Template id: `deep-bibliography-corpus-to-researchspec-sources`
+- Replacement body SHA-256: `d9cb2238fb30b7cc60fd265c2e68cfb803765d2f954a92dc474a5037b4b0f51b`
 - ResearchSpec targets: `researchspec/specs/sources.yaml`, `researchspec/runs/current/artifact-registry.json`
 - Generated output paths: `academic-paper/references/cross-skill/deep-research/agents/bibliography_agent.md`, `academic-paper-reviewer/references/cross-skill/deep-research/agents/bibliography_agent.md`, `academic-pipeline/references/cross-skill/deep-research/agents/bibliography_agent.md`, `deep-research/agents/bibliography_agent.md`
 - Before SHA-256: `2dcd0a3b130b7117e4f207ff6e7bca2ecec04e1207e44f62087a806a3af4f9c6`
-- After SHA-256: `fa757d84ee2a65d27757859af3f49724bf453b7b363f79c618cd12cdac69f4de`
+- After SHA-256: `80c255d8361c9ecdfc7c81161c6d1f951509d6a50196614d2800be10fe053b76`
 
 #### Before
 
@@ -1847,37 +2276,32 @@ When the input Material Passport carries a non-empty `literature_corpus[]`, this
 #### After
 
 ````markdown
-<!--rs:a:1d37bd1ae094-->
-### ResearchSpec Bibliography Source Contract
-
-Bibliography and corpus records are ResearchSpec source-contract material.
-
-#### Source Projection
-
-- Use `researchspec/specs/sources.yaml` for source ids, citation keys, inclusion status, and trust-chain metadata.
-- Emit annotated bibliographies, PRISMA outputs, and literature matrices for runtime registration.
-
-#### Mutation Boundary
-
-- Treat `researchspec/specs/sources.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-
-<!--/rs:a:1d37bd1ae094-->
+<!--rs:SOURCE-003-->
+When `researchspec/specs/sources.yaml` contains included literature sources,
+resolve their registered source and screening artifacts through
+`researchspec/runs/current/artifact-registry.json` and present them to the
+Bibliography Agent as a read-only `literature_corpus[]` working projection. The
+agent then runs the existing **corpus-first, search-fills-gap** flow with all
+five steps, four Iron Rules, and the PRE-SCREENED reproducibility block intact.
+External search results and proposed additions remain output artifacts until an
+accepted source-contract change is applied; the agent must not mutate
+`sources.yaml`, the registry, or the projected corpus.
+<!--/rs:SOURCE-003-->
 ````
 
-### anchor.deep.report-compiler.claim-intent-passport
+### CLAIM-002
 
+- Anchor name: `deep.report-compiler.claim-intent-passport`
 - Owner skill: `deep-research`
 - Source path: `deep-research/agents/report_compiler_agent.md`
-- Marker id: `bf4dd0376572`
 - Severity: `required`
 - Semantic role: `claim_contract_projection`
 - Replacement shape: `artifact_projection_block`
-- Template id: `deep-report-claims-to-researchspec-claims`
+- Replacement body SHA-256: `7b61ee95a0de6c36b0edbefb91393e6f3e06e27cbec8c5a03b71fabd13861e87`
 - ResearchSpec targets: `researchspec/specs/claims.yaml`, `researchspec/changes/<change-id>/contract-patch.yaml`, `researchspec/runs/current/artifact-registry.json`
 - Generated output paths: `academic-paper/references/cross-skill/deep-research/agents/report_compiler_agent.md`, `academic-paper-reviewer/references/cross-skill/deep-research/agents/report_compiler_agent.md`, `academic-pipeline/references/cross-skill/deep-research/agents/report_compiler_agent.md`, `deep-research/agents/report_compiler_agent.md`
 - Before SHA-256: `85473afda2c0be70de68028c2b5eeb6dd2308a1c97baeeab12fa102999d574bb`
-- After SHA-256: `959ecc2d6f1f6f770087785ad283b6e5713f898c4bab8c1fcb2dc5a955636c0a`
+- After SHA-256: `71a60b61e40494838d1f0ecb008d655859c0dd1a3fb5b018d3c61362aba498e6`
 
 #### Before
 
@@ -1888,38 +2312,35 @@ Before compiling the first prose block of the report, append ONE `claim_intent_m
 #### After
 
 ````markdown
-<!--rs:a:bf4dd0376572-->
-### ResearchSpec Report Claim Intent
-
-The report compiler emits a one-shot claim-intent artifact before prose; accepted claims remain contract-owned.
-
-#### Claim Intent
-
-- Read accepted claim constraints from `researchspec/specs/claims.yaml`.
-- Emit the claim-intent manifest as an artifact before the first report prose block.
-- Propose new or strengthened claims through `researchspec/changes/<change-id>/contract-patch.yaml`.
-
-#### Mutation Boundary
-
-- Treat `researchspec/specs/claims.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-
-<!--/rs:a:bf4dd0376572-->
+<!--rs:CLAIM-002-->
+Before compiling the first prose block of the report, read the accepted claim
+contract from `researchspec/specs/claims.yaml` and emit exactly ONE immutable
+`claim_intent_manifest` artifact covering the substantive claims the compiled
+report will make and every declared negative constraint. Preserve stable ids
+and limits for accepted claims. If compilation introduces a new claim or changes
+claim strength, emit a proposed
+`researchspec/changes/<change-id>/contract-patch.yaml` alongside the manifest
+rather than mutating the stable claim contract. Return the manifest to the
+runtime registration helper for
+`researchspec/runs/current/artifact-registry.json`; the audit agent reads this
+registered baseline for the intended ∩ emitted ∩ supported diff in spec §4 step
+5 (D6).
+<!--/rs:CLAIM-002-->
 ````
 
-### anchor.deep.synthesis.claim-intent-passport
+### CLAIM-003
 
+- Anchor name: `deep.synthesis.claim-intent-passport`
 - Owner skill: `deep-research`
 - Source path: `deep-research/agents/synthesis_agent.md`
-- Marker id: `616f193bd90e`
 - Severity: `required`
 - Semantic role: `claim_contract_projection`
 - Replacement shape: `artifact_projection_block`
-- Template id: `deep-synthesis-claims-to-researchspec-claims`
+- Replacement body SHA-256: `7bc7693f1c366b628d3c62b04b7477e1201557ad6229b82f59f0c8543c17f9fd`
 - ResearchSpec targets: `researchspec/specs/claims.yaml`, `researchspec/changes/<change-id>/contract-patch.yaml`, `researchspec/runs/current/artifact-registry.json`
 - Generated output paths: `academic-paper/references/cross-skill/deep-research/agents/synthesis_agent.md`, `academic-paper-reviewer/references/cross-skill/deep-research/agents/synthesis_agent.md`, `academic-pipeline/references/cross-skill/deep-research/agents/synthesis_agent.md`, `deep-research/agents/synthesis_agent.md`
 - Before SHA-256: `36472500843439df65bfe69c96070b4ebd056b9905959db6eaeda0d2ceb37517`
-- After SHA-256: `b06f2ea391bbda1d2c10a4a4f20337eff3bef87e735db66d174b346ed66c758d`
+- After SHA-256: `70ae69778d8cdd9a3864fc0fba37775857e7a9f195d775f508063287d615d0ae`
 
 #### Before
 
@@ -1930,79 +2351,73 @@ Before drafting the first prose block of the synthesis output, append ONE `claim
 #### After
 
 ````markdown
-<!--rs:a:616f193bd90e-->
-### ResearchSpec Synthesis Claim Contract
-
-Synthesis claim intent is promoted into claim contracts or proposed contract patches.
-
-#### Claim Projection
-
-- Read accepted claim ids, support strength, evidence links, and limits from `researchspec/specs/claims.yaml`.
-- Emit `researchspec/changes/<change-id>/contract-patch.yaml` when synthesis proposes a change in research meaning.
-- Emit the synthesis report as an artifact for runtime registration.
-
-#### Mutation Boundary
-
-- Treat `researchspec/specs/claims.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-
-<!--/rs:a:616f193bd90e-->
+<!--rs:CLAIM-003-->
+Before drafting the first prose block of the synthesis output, read the accepted
+claim ids, support limits, evidence links, and wording constraints from
+`researchspec/specs/claims.yaml`. Emit exactly ONE immutable
+`claim_intent_manifest` artifact listing the substantive claims this synthesis
+intends to make and every author-declared "must not" rule. Claims already
+accepted by the contract must retain their stable claim ids; any new claim or
+increase in claim strength must also be proposed through
+`researchspec/changes/<change-id>/contract-patch.yaml`, never written directly
+to `claims.yaml`. Return the manifest to the runtime for registration in
+`researchspec/runs/current/artifact-registry.json`. The audit agent reads that
+registered pre-commitment to run the three-set diff (intended ∩ emitted ∩
+supported) per spec §4 step 5 (D6).
+<!--/rs:CLAIM-003-->
 ````
 
-### anchor.deep.timeline.sidecar-runtime
+### ARTIFACT-002
 
+- Anchor name: `deep.timeline.sidecar-runtime`
 - Owner skill: `deep-research`
 - Source path: `deep-research/agents/timeline_extraction_agent.md`
-- Marker id: `138d2db2cee0`
 - Severity: `recommended`
 - Semantic role: `artifact_provenance`
 - Replacement shape: `artifact_projection_block`
-- Template id: `deep-timeline-sidecars-to-artifact-registry`
+- Replacement body SHA-256: `0ddd301167c398063c64031c581307132dfbd37aaa46c4532e4471101d128067`
 - ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/specs/sources.yaml`, `researchspec/specs/claims.yaml`
 - Generated output paths: `deep-research/agents/timeline_extraction_agent.md`
-- Before SHA-256: `f216a3027b047ba113445ee41517da8a03a198c0249365c6042cf196f13c1c4d`
-- After SHA-256: `16887de5b56069a6026a8d83ac45a25b9848d90a6337a617471c2a59a91c41b9`
+- Before SHA-256: `73967e6cef5a24b1365c643846e2a7eb9735756f593b283d78557576349dbef4`
+- After SHA-256: `1aa1996fd5e249cea9265a17971b5edee87ea0227727ee454d7cb45212309ec5`
 
 #### Before
 
 ````markdown
 - `phase2_investigation/timeline.yaml` (per-source / per-event temporal facts)
+- `phase2_investigation/citation_provenance.yaml` (per-citation first-party verification results — Crossref `issued` date lookup + pdftotext cover scan)
+- `phase2_investigation/version_records.yaml` (academic citation version-family evidence for preprint -> proceedings -> journal chains; Kong #258)
 ````
 
 #### After
 
 ````markdown
-<!--rs:a:138d2db2cee0-->
-### ResearchSpec Timeline Artifact Projection
+<!--rs:ARTIFACT-002-->
+- Emit `timeline.yaml` as the temporal-facts artifact for this Investigation-stage invocation; link every source reference to its stable source id in `researchspec/specs/sources.yaml`.
+- Emit `citation_provenance.yaml` as the first-party citation-verification artifact; include the source ids, checks performed, evidence locations, and result status without changing source records.
+- Emit `version_records.yaml` as the citation version-family artifact for preprint → proceedings → journal chains; link any claim relevance to stable ids in `researchspec/specs/claims.yaml`.
 
-Timeline, citation provenance, and version sidecars are artifacts connected to sources and claims.
-
-#### Artifact Projection
-
-- Emit timeline and provenance sidecars for runtime registration.
-- Link source evidence through `researchspec/specs/sources.yaml` and claim relevance through `researchspec/specs/claims.yaml`.
-
-#### Mutation Boundary
-
-- Treat `researchspec/specs/sources.yaml`, `researchspec/specs/claims.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-
-<!--/rs:a:138d2db2cee0-->
+Return all three paths, hashes, producer identity, and stage metadata to the
+runtime registration helper for
+`researchspec/runs/current/artifact-registry.json`. These are separate immutable
+artifacts; do not store their contents in phase state, Material Passport, or
+stable specs.
+<!--/rs:ARTIFACT-002-->
 ````
 
-### anchor.deep.skill.material-passport-state
+### STATE-008
 
+- Anchor name: `deep.skill.material-passport-state`
 - Owner skill: `deep-research`
 - Source path: `deep-research/SKILL.md`
-- Marker id: `073722889e7a`
 - Severity: `required`
 - Semantic role: `runtime_state_boundary`
 - Replacement shape: `protocol_block`
-- Template id: `deep-research-state-to-researchspec-runtime`
+- Replacement body SHA-256: `e4009546f08a467de2c2110d50185fba147b7cab1002c97ef778469303c7449d`
 - ResearchSpec targets: `researchspec/specs/project.md`, `researchspec/specs/workflow.yaml`, `researchspec/runs/current/state.yaml`, `researchspec/runs/current/artifact-registry.json`
 - Generated output paths: `academic-paper/references/cross-skill/deep-research/SKILL.md`, `academic-paper-reviewer/references/cross-skill/deep-research/SKILL.md`, `academic-pipeline/references/cross-skill/deep-research/SKILL.md`, `deep-research/SKILL.md`
 - Before SHA-256: `b2e0df17b51dcebaa974776543cb401f621b21e95d33735ea1ac0ce58b0436b3`
-- After SHA-256: `8f8ff1dd1c02084c0dbb24eb6adf24a264d00a80c8c69a6a748a6e7276563331`
+- After SHA-256: `6fe1dc3169ce7a298b41cffb5dc20340b218634036768e120fe7fc0621eb18c0`
 
 #### Before
 
@@ -2015,42 +2430,36 @@ Timeline, citation provenance, and version sidecars are artifacts connected to s
 #### After
 
 ````markdown
-<!--rs:a:073722889e7a-->
-### ResearchSpec Deep Research Runtime
+<!--rs:STATE-008-->
+**Mode A — orchestrator-driven (default):** `pipeline_orchestrator_agent` runs
+the deep-research phases using stable project intent from
+`researchspec/specs/project.md`, the configured stage graph from
+`researchspec/specs/workflow.yaml`, and active run state from
+`researchspec/runs/current/state.yaml`. Research briefs, bibliographies,
+synthesis outputs, and related evidence are resolved and returned by artifact id
+through `researchspec/runs/current/artifact-registry.json`.
 
-Deep-research consumes project/workflow/state contracts and registers research outputs as artifacts.
-
-#### Runtime Reads
-
-- Read research intent from `researchspec/specs/project.md`.
-- Read stage and mode from `researchspec/specs/workflow.yaml` and `researchspec/runs/current/state.yaml`.
-
-#### Runtime Writes
-
-- Emit RQ briefs, methodology blueprints, bibliographies, and synthesis outputs for runtime registration.
-
-#### Mutation Boundary
-
-- Treat `researchspec/specs/project.md`, `researchspec/specs/workflow.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
-- Request changes to `researchspec/runs/current/state.yaml` through the ResearchSpec orchestrator or runtime helper; do not edit run state directly.
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-
-<!--/rs:a:073722889e7a-->
+**Mode B — phase-by-phase (cross-session resume):** each invocation reads only
+the current ResearchSpec contracts, state, and registered inputs required for
+its assigned phase, then returns its deliverables for registration. A Material
+Passport reset tag may be used to locate legacy compatibility evidence, but it
+does not carry active ResearchSpec state.
+<!--/rs:STATE-008-->
 ````
 
-### anchor.shared.compliance-agent.output-passport
+### GATE-003
 
+- Anchor name: `shared.compliance-agent.output-passport`
 - Owner skill: `shared`
 - Source path: `shared/agents/compliance_agent.md`
-- Marker id: `759107d9ca29`
 - Severity: `required`
 - Semantic role: `gate_policy`
 - Replacement shape: `gate_rule_block`
-- Template id: `compliance-report-to-researchspec-gate`
+- Replacement body SHA-256: `417a7f350d1f71c079689ffc68396019ea22eac45d7e2474f923d6a9e3ad5620`
 - ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
 - Generated output paths: `academic-paper/references/shared/agents/compliance_agent.md`, `academic-paper-reviewer/references/shared/agents/compliance_agent.md`, `academic-pipeline/references/shared/agents/compliance_agent.md`, `deep-research/references/shared/agents/compliance_agent.md`
 - Before SHA-256: `19e4e6ce31b20a25097014f2feadb07fbf642696eb7cef7f61c90ae47149bf33`
-- After SHA-256: `2736bdc6fff6ac9c2b90aa97e0f6859970d0439b6731a74c70248e5f624e5023`
+- After SHA-256: `48746b9a0c92d728adfbe9e58c2cb19624303fd41e036a306d7dfa13e9495ec1`
 
 #### Before
 
@@ -2061,37 +2470,32 @@ Deep-research consumes project/workflow/state contracts and registers research o
 #### After
 
 ````markdown
-<!--rs:a:759107d9ca29-->
-### ResearchSpec Compliance Gate
-
-Schema 12 remains a compliance payload; ResearchSpec owns artifact registration and the gate verdict.
-
-#### Compliance Output
-
-- Emit the compliance report as an artifact for runtime registration.
-- Return its pass, warning, or blocking findings to the compliance gate helper.
-
-#### Mutation Boundary
-
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:759107d9ca29-->
+<!--rs:GATE-003-->
+Return a `compliance_report` conforming to
+`shared/compliance_report.schema.json` (Schema 12) as a standalone artifact. The
+orchestrator must first validate the report, then pass its path, hash, producer,
+stage, and mode to the runtime registration helper for
+`researchspec/runs/current/artifact-registry.json`. Pass the validated decision,
+tiered findings, evidence, and material gaps to the compliance gate helper for
+`researchspec/runs/current/gate-ledger.jsonl`. The compliance agent and
+orchestrator MUST NOT append the report to a Material Passport or edit either
+ResearchSpec runtime file directly.
+<!--/rs:GATE-003-->
 ````
 
-### anchor.shared.compliance.runtime-boundary
+### DECISION-002
 
+- Anchor name: `shared.compliance.runtime-boundary`
 - Owner skill: `shared`
 - Source path: `shared/compliance_checkpoint_protocol.md`
-- Marker id: `7c9478d2fb6c`
 - Severity: `recommended`
 - Semantic role: `decision_ledger_entry`
 - Replacement shape: `checklist`
-- Template id: `compliance-override-to-decision-ledger`
+- Replacement body SHA-256: `c3d6f2d74acccd020c0db0543a5f3dcf23a5c70e66f1d9a3727e126ae8ab7687`
 - ResearchSpec targets: `researchspec/runs/current/decision-ledger.jsonl`, `researchspec/runs/current/artifact-registry.json`
 - Generated output paths: `academic-paper/references/shared/compliance_checkpoint_protocol.md`, `academic-paper-reviewer/references/shared/compliance_checkpoint_protocol.md`, `academic-pipeline/references/shared/compliance_checkpoint_protocol.md`, `deep-research/references/shared/compliance_checkpoint_protocol.md`
 - Before SHA-256: `52a20afa717bdd39a4d63c6e66457f91341803a8389a874409e82e68b933b863`
-- After SHA-256: `c9d7b1a6b083394b71e407b31bcf3e62bfabca2daec7ef6e639d31a8a28f4b53`
+- After SHA-256: `01ddc9567224b3460f33caba5a11ea4ae8475de96a3da5b7216b37b0c1de0098`
 
 #### Before
 
@@ -2102,81 +2506,34 @@ Schema 12 remains a compliance payload; ResearchSpec owns artifact registration 
 #### After
 
 ````markdown
-<!--rs:a:7c9478d2fb6c-->
-### ResearchSpec Compliance Decision
-
-Human compliance overrides are explicit decision-ledger entries supported by registered reports.
-
-#### Decision Record
-
-- After human confirmation, return override choice and rationale to the runtime for decision-ledger recording.
-- Emit Schema 12 or compliance reports for runtime registration.
-
-#### Mutation Boundary
-
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
-
-<!--/rs:a:7c9478d2fb6c-->
+<!--rs:DECISION-002-->
+> **Enforcement boundary.** The compliance override ladder is evaluated by the
+> compliance decision runtime over prior accepted override decisions for the
+> same stage and run in `researchspec/runs/current/decision-ledger.jsonl`.
+> Schema 12 remains the compliance-report payload and deliberately does not
+> enforce cross-round rationale length. The runtime applies the first-, second-,
+> and third-round friction rules, stops for human confirmation, and records the
+> selected override, rationale, scope, report artifact id, and round count only
+> after confirmation. The Schema 12 report itself is returned for registration
+> in `researchspec/runs/current/artifact-registry.json`. Hand-written passport or
+> ledger content that did not pass this decision path is unaudited and cannot
+> authorize an override.
+<!--/rs:DECISION-002-->
 ````
 
-### anchor.shared.ground-truth-gate-verdict
+### GATE-004
 
+- Anchor name: `shared.ground-truth-isolation`
 - Owner skill: `shared`
 - Source path: `shared/ground_truth_isolation_pattern.md`
-- Marker id: `25942682a000`
-- Severity: `recommended`
-- Semantic role: `gate_policy`
-- Replacement shape: `gate_rule_block`
-- Template id: `ground-truth-isolation-to-researchspec-gates`
-- ResearchSpec targets: `researchspec/specs/workflow.yaml`, `researchspec/runs/current/gate-ledger.jsonl`
-- Generated output paths: `academic-paper/references/shared/ground_truth_isolation_pattern.md`, `academic-paper-reviewer/references/shared/ground_truth_isolation_pattern.md`, `academic-pipeline/references/shared/ground_truth_isolation_pattern.md`, `deep-research/references/shared/ground_truth_isolation_pattern.md`
-- Before SHA-256: `ef679f383fea1e2cca7b486ef8b495a0bf41050c09d279285883e030a11dedf5`
-- After SHA-256: `1385c34ebf040af8f9256ae1b27180a4d9fb9670fcf6eaa43d8506b276dac5bc`
-
-#### Before
-
-````markdown
-Only a passed integrity gate with a verified Material Passport does that.
-````
-
-#### After
-
-````markdown
-<!--rs:a:25942682a000-->
-### ResearchSpec Ground Truth Gate
-
-Data access level and verified-only constraints are workflow and gate policy.
-
-#### Gate Inputs
-
-- Read allowed data-access level and verified-only constraints from `researchspec/specs/workflow.yaml`.
-
-#### Blocking Conditions
-
-- Return unavailable, unverified, or policy-conflicting ground truth to the integrity gate helper.
-
-#### Mutation Boundary
-
-- Treat `researchspec/specs/workflow.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:25942682a000-->
-````
-
-### anchor.shared.ground-truth-isolation
-
-- Owner skill: `shared`
-- Source path: `shared/ground_truth_isolation_pattern.md`
-- Marker id: `52352275e976`
 - Severity: `recommended`
 - Semantic role: `artifact_provenance`
 - Replacement shape: `artifact_projection_block`
-- Template id: `ground-truth-traceability-to-researchspec-provenance`
+- Replacement body SHA-256: `7419053900a8cc2ee4b769596d080fe95cce3ab97dd05b10dee933b43ba63ef8`
 - ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/specs/sources.yaml`
 - Generated output paths: `academic-paper/references/shared/ground_truth_isolation_pattern.md`, `academic-paper-reviewer/references/shared/ground_truth_isolation_pattern.md`, `academic-pipeline/references/shared/ground_truth_isolation_pattern.md`, `deep-research/references/shared/ground_truth_isolation_pattern.md`
 - Before SHA-256: `8489fcd47b2e4871bd0a2f4044149638bcd5db48c9f201e499f783671c97c860`
-- After SHA-256: `f742ab637a0bafc9d0ae8a6334cc81836de2e6221bdc42bdb67ad3a03cc522af`
+- After SHA-256: `e0c7f54c92903aaeb9ecfc990e916171d342beb6be0c85007ee08a4443335bb0`
 
 #### Before
 
@@ -2188,37 +2545,61 @@ artifact.
 #### After
 
 ````markdown
-<!--rs:a:52352275e976-->
-### ResearchSpec Ground Truth Provenance
-
-Ground-truth provenance is traceable through registered artifacts and canonical source records.
-
-#### Provenance Chain
-
-- Resolve evidence artifacts through `researchspec/runs/current/artifact-registry.json`.
-- Link source identity and verification metadata through `researchspec/specs/sources.yaml`.
-
-#### Mutation Boundary
-
-- Treat `researchspec/specs/sources.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-
-<!--/rs:a:52352275e976-->
+<!--rs:GATE-004-->
+chain must remain traceable through stable source ids in
+`researchspec/specs/sources.yaml` and immutable evidence artifacts registered in
+`researchspec/runs/current/artifact-registry.json`. Preserve producer, stage,
+content hash, source links, verification evidence, and supersession metadata on
+each artifact. A Material Passport may be retained as imported provenance
+evidence, but it is not the active traceability carrier.
+<!--/rs:GATE-004-->
 ````
 
-### anchor.shared.handoff.invariants
+### GATE-005
 
+- Anchor name: `shared.ground-truth-gate-verdict`
+- Owner skill: `shared`
+- Source path: `shared/ground_truth_isolation_pattern.md`
+- Severity: `recommended`
+- Semantic role: `gate_policy`
+- Replacement shape: `gate_rule_block`
+- Replacement body SHA-256: `5522827370918ca2787025830476db2183d0cf0c6aba245aa6999d05099be5f8`
+- ResearchSpec targets: `researchspec/specs/workflow.yaml`, `researchspec/runs/current/gate-ledger.jsonl`
+- Generated output paths: `academic-paper/references/shared/ground_truth_isolation_pattern.md`, `academic-paper-reviewer/references/shared/ground_truth_isolation_pattern.md`, `academic-pipeline/references/shared/ground_truth_isolation_pattern.md`, `deep-research/references/shared/ground_truth_isolation_pattern.md`
+- Before SHA-256: `ef679f383fea1e2cca7b486ef8b495a0bf41050c09d279285883e030a11dedf5`
+- After SHA-256: `3926fb1121e88d1dd52bc7c2c24d0a08cde7e1a005ecbce6d715bc82ef5d7edc`
+
+#### Before
+
+````markdown
+Only a passed integrity gate with a verified Material Passport does that.
+````
+
+#### After
+
+````markdown
+<!--rs:GATE-005-->
+Only a current PASS result from the required integrity gate does that. The gate
+must be configured by `researchspec/specs/workflow.yaml`, evaluated against the
+exact registered artifact hashes, and recorded by the responsible helper in
+`researchspec/runs/current/gate-ledger.jsonl`. A Material Passport verification
+field is compatibility evidence only and cannot grant or preserve gate passage.
+<!--/rs:GATE-005-->
+````
+
+### GATE-006
+
+- Anchor name: `shared.handoff.invariants`
 - Owner skill: `shared`
 - Source path: `shared/handoff_schemas.md`
-- Marker id: `92dac59a66ca`
 - Severity: `required`
 - Semantic role: `gate_policy`
 - Replacement shape: `gate_rule_block`
-- Template id: `cross-schema-rules-to-researchspec-validator-gates`
+- Replacement body SHA-256: `3bad69d2a76f8b4e8249e4221cea71ce4a08352eab02da6f7e714113a090c6fd`
 - ResearchSpec targets: `researchspec/runs/current/gate-ledger.jsonl`, `researchspec/runs/current/artifact-registry.json`
 - Generated output paths: `academic-paper/references/shared/handoff_schemas.md`, `academic-paper-reviewer/references/shared/handoff_schemas.md`, `academic-pipeline/references/shared/handoff_schemas.md`, `deep-research/references/shared/handoff_schemas.md`
 - Before SHA-256: `e1bc4e6eec4c6a6b12d5645553e7b93dc589076b9bf8a8d6554b0b0c0f7de557`
-- After SHA-256: `1bd92f84340f3f3c897d2d0cfc09a15541e0a62a9f16d98db82381204e9032e0`
+- After SHA-256: `5d62547b8fc7115fc84874443d45142bdb99672fbe6a86e76501cc464d4d1088`
 
 #### Before
 
@@ -2237,41 +2618,51 @@ Ground-truth provenance is traceable through registered artifacts and canonical 
 #### After
 
 ````markdown
-<!--rs:a:92dac59a66ca-->
-### ResearchSpec Cross-Contract Gate
+<!--rs:GATE-006-->
+4. **Version tracking:** every handoff resolves a stable artifact id, version
+   label, content hash, and supersession relationship from
+   `researchspec/runs/current/artifact-registry.json`. Version labels increase
+   monotonically within a lineage.
+5. **Failure on missing:** missing required fields or artifacts produce
+   `HANDOFF_INCOMPLETE` with the exact gaps; consumers do not proceed partially.
+6. **Producer validation:** the producer validates payload shape before returning
+   the artifact for runtime registration.
+7. **Consumer validation:** the consumer checks payload shape, expected artifact
+   id/hash, and required upstream gate receipts before use; violations request a
+   corrected artifact rather than an in-place edit.
+8. **Integrity gating:** verification status comes from the gate entry tied to
+   the artifact hash in `researchspec/runs/current/gate-ledger.jsonl`, not from a
+   mutable payload field.
+9. **Staleness detection:** when an upstream artifact hash changes or is
+   superseded, dependent artifacts and prior gate receipts are stale until their
+   responsible helpers recompute them.
+10. **Freshness:** apply the configured freshness policy to gate timestamps and
+    current artifact hashes. Expired evidence requires re-verification.
+11. **Stage-skip eligibility:** Stage 2.5 may be skipped only when the current
+    artifact hash has a fresh VERIFIED receipt, version expectations match, the
+    workflow permits the skip, and the user confirms it. Return that confirmation
+    to the decision runtime; otherwise run full verification.
+12. **Final integrity is never skipped:** Stage 4.5 always performs its configured
+    full verification, regardless of imported Passport status or earlier gates.
 
-Cross-schema freshness and compatibility checks become ResearchSpec validator diagnostics and gate entries.
-
-#### Gate Inputs
-
-- Read artifact identities and hashes from `researchspec/runs/current/artifact-registry.json`.
-- Compare declared contract dependencies against the current ResearchSpec specs and state.
-
-#### Blocking Conditions
-
-- Return stale, missing, or incompatible dependency findings to the cross-schema gate helper.
-
-#### Mutation Boundary
-
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:92dac59a66ca-->
+Validators and runtime helpers own registry and gate writes; producer and
+consumer agents only emit payloads and findings.
+<!--/rs:GATE-006-->
 ````
 
-### anchor.shared.handoff.schema-convention
+### HANDOFF-003
 
+- Anchor name: `shared.handoff.schema-convention`
 - Owner skill: `shared`
 - Source path: `shared/handoff_schemas.md`
-- Marker id: `ece45e8714b6`
 - Severity: `required`
 - Semantic role: `handoff_projection`
 - Replacement shape: `schema_projection_table`
-- Template id: `handoff-schema-convention-to-researchspec-contracts`
+- Replacement body SHA-256: `7752e4465a0e26601e970f32c677477b867250b13159759bb6b1b0c8f30ee0be`
 - ResearchSpec targets: `researchspec/specs/project.md`, `researchspec/specs/sources.yaml`, `researchspec/specs/claims.yaml`, `researchspec/specs/manuscript.yaml`, `researchspec/runs/current/artifact-registry.json`
 - Generated output paths: `academic-paper/references/shared/handoff_schemas.md`, `academic-paper-reviewer/references/shared/handoff_schemas.md`, `academic-pipeline/references/shared/handoff_schemas.md`, `deep-research/references/shared/handoff_schemas.md`
 - Before SHA-256: `24f2f8a9080227d39b038d392b831f95ef5dc249a0ccb74644b80d965449b2a7`
-- After SHA-256: `35d066f4cbca9092a9fb98d86265a1b261cc9eae325759100c230d0c5f057486`
+- After SHA-256: `878a375843f107544a5caefcb46f9a39e7e077d470ae64167aa26df3c04fd5bb`
 
 #### Before
 
@@ -2282,43 +2673,32 @@ Cross-schema freshness and compatibility checks become ResearchSpec validator di
 #### After
 
 ````markdown
-<!--rs:a:ece45e8714b6-->
-### ResearchSpec Schema Projection
-
-ARS Markdown schemas describe payloads; ResearchSpec contracts provide stable machine-readable runtime state.
-
-#### Projection Targets
-
-- Research questions and target venue project to `researchspec/specs/project.md`.
-- Sources and corpus records project to `researchspec/specs/sources.yaml`.
-- Claims and support limits project to `researchspec/specs/claims.yaml`.
-- Draft structure and manuscript constraints project to `researchspec/specs/manuscript.yaml`.
-
-#### Artifact Rule
-
-- Keep the original ARS schema payload as a registered artifact in `researchspec/runs/current/artifact-registry.json`.
-
-#### Mutation Boundary
-
-- Treat `researchspec/specs/project.md`, `researchspec/specs/sources.yaml`, `researchspec/specs/claims.yaml`, `researchspec/specs/manuscript.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-
-<!--/rs:a:ece45e8714b6-->
+<!--rs:HANDOFF-003-->
+> **Convention**: ARS Markdown schemas remain human-readable payload formats,
+> but ResearchSpec contracts and runtime records are the stable interfaces.
+> Producers must validate every required payload field, emit the payload as an
+> artifact, and return it to the runtime for registration in
+> `researchspec/runs/current/artifact-registry.json`. Project research intent,
+> sources, claims, and manuscript constraints into their corresponding
+> `researchspec/specs/*` files only through accepted contract changes. Missing
+> required fields trigger `HANDOFF_INCOMPLETE`; consumers must not proceed with
+> a partial handoff.
+<!--/rs:HANDOFF-003-->
 ````
 
-### anchor.shared.handoff.schema11-commitments
+### REVIEW-015
 
+- Anchor name: `shared.handoff.schema11-commitments`
 - Owner skill: `shared`
 - Source path: `shared/handoff_schemas.md`
-- Marker id: `deae197cae7d`
 - Severity: `required`
 - Semantic role: `review_commitment_tracking`
 - Replacement shape: `schema_projection_table`
-- Template id: `schema11-commitments-to-researchspec-change-patches`
+- Replacement body SHA-256: `c67a47f86a3003a4f7f7b6c49913361433dbd9fdd58f3edbc5b2ab4d0a80bbfa`
 - ResearchSpec targets: `researchspec/changes/<change-id>/contract-patch.yaml`, `researchspec/draft-patches/<patch-id>.json`, `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/decision-ledger.jsonl`
 - Generated output paths: `academic-paper/references/shared/handoff_schemas.md`, `academic-paper-reviewer/references/shared/handoff_schemas.md`, `academic-pipeline/references/shared/handoff_schemas.md`, `deep-research/references/shared/handoff_schemas.md`
 - Before SHA-256: `3773a18fe88945df922430c6423aa3a96c68d8c2ffafd991abba6442aa119d87`
-- After SHA-256: `e2b7e0f2e5830bdff6d249aaeea05f93104323485cfb3af150fc9c90911c5765`
+- After SHA-256: `a20248181ddba4516b2748c317461ef39fd07141e7baea1ecad8d6599c6ff67d`
 
 #### Before
 
@@ -2329,39 +2709,32 @@ ARS Markdown schemas describe payloads; ResearchSpec contracts provide stable ma
 #### After
 
 ````markdown
-<!--rs:a:deae197cae7d-->
-### ResearchSpec Reviewer Commitment Projection
-
-Reviewer commitments become explicit changes, draft patches, artifacts, and decisions.
-
-#### Projection Rules
-
-- Scope or claim changes become `researchspec/changes/<change-id>/contract-patch.yaml`.
-- Manuscript edits become `researchspec/draft-patches/<patch-id>.json`.
-- Review reports and response matrices are registered in `researchspec/runs/current/artifact-registry.json`.
-- Strategic choices are recorded in `researchspec/runs/current/decision-ledger.jsonl`.
-
-#### Mutation Boundary
-
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
-
-<!--/rs:a:deae197cae7d-->
+<!--rs:REVIEW-015-->
+**Consumer:** academic-paper revision mode and the pipeline orchestrator resolve
+Schema 11 commitment artifacts through
+`researchspec/runs/current/artifact-registry.json`. Research-meaning commitments
+become proposed `researchspec/changes/<change-id>/contract-patch.yaml` files;
+manuscript edits trace to `researchspec/draft-patches/<patch-id>.json`; accepted
+or rejected strategic choices are returned to the decision runtime for
+`researchspec/runs/current/decision-ledger.jsonl`. An imported Material Passport
+may carry a Schema 11 compatibility copy, but it is not the cross-stage source
+of truth.
+<!--/rs:REVIEW-015-->
 ````
 
-### anchor.shared.handoff.schema9-material-passport
+### STATE-009
 
+- Anchor name: `shared.handoff.schema9-material-passport`
 - Owner skill: `shared`
 - Source path: `shared/handoff_schemas.md`
-- Marker id: `db0cf94f84b6`
 - Severity: `required`
 - Semantic role: `runtime_state_boundary`
 - Replacement shape: `artifact_projection_block`
-- Template id: `material-passport-schema9-to-researchspec-runtime`
+- Replacement body SHA-256: `8380595c46f7dce2bf9bd662d40a83609cd5aee1062a3cd17e79a102db77e2da`
 - ResearchSpec targets: `researchspec/runs/current/state.yaml`, `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/decision-ledger.jsonl`, `researchspec/runs/current/gate-ledger.jsonl`
 - Generated output paths: `academic-paper/references/shared/handoff_schemas.md`, `academic-paper-reviewer/references/shared/handoff_schemas.md`, `academic-pipeline/references/shared/handoff_schemas.md`, `deep-research/references/shared/handoff_schemas.md`
 - Before SHA-256: `66d6edfd32f6fbfc4ea2198020b68fd8bc21c91265e5fadd22b3a69e8ecd59f5`
-- After SHA-256: `ffb8de902c2ee432ff5d31313edb993ad144ea85ab9b7138d8070ea3b13e98e6`
+- After SHA-256: `de0fd8f5a8ecf77b67538faae6e9cd17de00f591def072273a3024799475b47e`
 
 #### Before
 
@@ -2372,38 +2745,30 @@ When `ARS_PASSPORT_RESET=1`, Schema 9 gains an append-only `reset_boundary[]` le
 #### After
 
 ````markdown
-<!--rs:a:db0cf94f84b6-->
-### ResearchSpec Material Passport Projection
-
-Material Passport fields are projected into ResearchSpec runtime records instead of being updated as a monolithic ledger.
-
-#### Projection Targets
-
-- Stage, mode, and resume state go to `researchspec/runs/current/state.yaml`.
-- Produced files and hashes go to `researchspec/runs/current/artifact-registry.json`.
-- Human branch choices go to `researchspec/runs/current/decision-ledger.jsonl`.
-- Verification outcomes go to `researchspec/runs/current/gate-ledger.jsonl`.
-
-#### Mutation Boundary
-
-- Request changes to `researchspec/runs/current/state.yaml` through the ResearchSpec orchestrator or runtime helper; do not edit run state directly.
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:db0cf94f84b6-->
+<!--rs:STATE-009-->
+When importing an ARS Material Passport with `ARS_PASSPORT_RESET=1`, interpret
+the following Schema 9 `reset_boundary[]` structure only as a compatibility
+payload. Project stage, mode, and consumption state into
+`researchspec/runs/current/state.yaml`; register the passport and referenced
+outputs through `researchspec/runs/current/artifact-registry.json`; return human
+branch choices to the decision runtime for
+`researchspec/runs/current/decision-ledger.jsonl`; and submit verification or
+staleness findings to the resume gate for
+`researchspec/runs/current/gate-ledger.jsonl`. Do not append to this schema as a
+substitute for those ResearchSpec-owned writes.
+<!--/rs:STATE-009-->
 ````
 
 ## Diagnostic-Only Anchors
 
-### anchor.shared.artifact-reproducibility-passport
+### ARTIFACT-003
 
 - Source path: `shared/artifact_reproducibility_pattern.md`
 - Matched: `true`
 - Severity: `diagnostic`
 - Diagnostics: _none_
 
-### anchor.shared.style-profile-carry
+### ARTIFACT-004
 
 - Source path: `shared/style_calibration_protocol.md`
 - Matched: `true`

@@ -274,23 +274,18 @@ The v3.11 deterministic citation-existence gate (#182) always *detects* unverifi
 > "Citation verification: **mark only** (default — unverifiable citations get advisory suffixes, output is never blocked) / **strict** (a citation whose exact DOI/arXiv ID provably fails lookup blocks finalization). Strict suits DOI-dense fields; mark-only suits fields citing reports, standards, or grey literature, where real-but-unindexed citations are common."
 
 **Seeding rule (byte-equivalence is load-bearing — Invariant 7):**
-<!--rs:a:36f017b67e7e-->
-### ResearchSpec Citation Policy Decision
-
-Citation terminal policy is a human-selected workflow decision, not a Material Passport mutation.
-
-#### Decision Handling
-
-- Read supported policy choices from `researchspec/specs/workflow.yaml`.
-- After the scholar selects a policy, return the choice to the runtime for decision-ledger recording.
-
-#### Mutation Boundary
-
-- Treat `researchspec/specs/workflow.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
-- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
-
-<!--/rs:a:36f017b67e7e-->
-- Answer `mark only`, or no answer → record `advisory (mark only, default)` in the PCR row and **write nothing to the passport** (per-key absence already means advisory; writing an explicit key would break byte-equivalence with pre-#392 runs for no semantic gain).
+<!--rs:DECISION-001-->
+- Answer `strict` → record `strict` in the PCR `Citation Verification` row and
+  return the scholar's confirmed policy choice to the ResearchSpec decision
+  runtime for `researchspec/runs/current/decision-ledger.jsonl`. The runtime
+  validates that `strict` is a supported option in
+  `researchspec/specs/workflow.yaml` and exposes the accepted decision to the
+  finalizer. This step selects policy; it never evaluates citations.
+- Answer `mark only`, or no answer → record `advisory (mark only, default)` in
+  the PCR row. Do not invent a decision-ledger entry for silence; the workflow
+  default remains advisory. No Material Passport policy mutation is required in
+  either branch.
+<!--/rs:DECISION-001-->
 
 **No default change anywhere** — a scholar who skips the question gets exactly today's behavior. **Plan mode is exempt** (the simplified plan-mode intake does not run Step 13, mirroring Step 12).
 

@@ -2,7 +2,16 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 
 import { CONTRACT_ANCHORS_PATH } from "./manifest.js";
-import type { ContractAnchor, ContractAnchorFile, CoverageDecision } from "./types.js";
+import type {
+  AnchorMatchHints,
+  AnchorReplacementShape,
+  AnchorSemanticRole,
+  ContractAnchor,
+  ContractAnchorFile,
+  CoverageDecision,
+} from "./types.js";
+
+export const REPLACEMENTS_DIR = "src/arsu-converter/anchors/replacements";
 
 export async function readContractAnchors(repoRoot: string): Promise<ContractAnchorFile> {
   const parsed: unknown = JSON.parse(await readFile(path.join(repoRoot, CONTRACT_ANCHORS_PATH), "utf8"));
@@ -12,10 +21,19 @@ export async function readContractAnchors(repoRoot: string): Promise<ContractAnc
   return parsed;
 }
 
-function isAnchorFile(value: unknown): value is ContractAnchorFile {
+export async function readReplacementBody(repoRoot: string, anchorId: string): Promise<string> {
+  const content = await readFile(path.join(repoRoot, REPLACEMENTS_DIR, `${anchorId}.md`), "utf8");
+  return normalizeReplacementBody(content);
+}
+
+export function normalizeReplacementBody(content: string): string {
+  return content.replace(/\r\n/g, "\n").replace(/\r/g, "\n").trim();
+}
+
+export function isAnchorFile(value: unknown): value is ContractAnchorFile {
   if (!isRecord(value)) return false;
   return (
-    value.schema_version === "researchspec.arsu.contract-anchors.v2" &&
+    value.schema_version === "researchspec.arsu.contract-anchors.v3" &&
     value.upstream_source === "vendor/ars" &&
     typeof value.audited_commit === "string" &&
     Array.isArray(value.anchors) &&
@@ -25,19 +43,27 @@ function isAnchorFile(value: unknown): value is ContractAnchorFile {
   );
 }
 
-function isAnchor(value: unknown): value is ContractAnchor {
+export function isAnchor(value: unknown): value is ContractAnchor {
   if (!isRecord(value)) return false;
-  return (
-    typeof value.id === "string" &&
+  const base = typeof value.id === "string" &&
+    typeof value.name === "string" &&
     typeof value.source_path === "string" &&
     typeof value.owner_skill === "string" &&
     typeof value.contract_category === "string" &&
-    (value.severity === "required" || value.severity === "recommended" || value.severity === "diagnostic") &&
-    isRecord(value.match_hints) &&
-    typeof value.replacement_intent === "string" &&
-    typeof value.template_id === "string" &&
-    isOptionalReplacementScope(value.replacement_scope)
-  );
+    isMatchHints(value.match_hints);
+  if (!base) return false;
+  if (value.severity === "diagnostic") {
+    return value.replacement_scope === undefined &&
+      value.semantic_role === undefined &&
+      value.researchspec_targets === undefined &&
+      value.replacement_shape === undefined;
+  }
+  return (value.severity === "required" || value.severity === "recommended") &&
+    isReplacementScope(value.replacement_scope) &&
+    isSemanticRole(value.semantic_role) &&
+    Array.isArray(value.researchspec_targets) &&
+    value.researchspec_targets.every((item) => typeof item === "string") &&
+    isReplacementShape(value.replacement_shape);
 }
 
 function isCoverageDecision(value: unknown): value is CoverageDecision {
@@ -49,12 +75,37 @@ function isCoverageDecision(value: unknown): value is CoverageDecision {
     typeof value.rationale === "string";
 }
 
-function isOptionalReplacementScope(value: unknown): value is ContractAnchor["replacement_scope"] {
-  return value === undefined || (
-    isRecord(value) &&
+function isMatchHints(value: unknown): value is AnchorMatchHints {
+  return isRecord(value) &&
+    isOptionalStringArray(value.headings) &&
+    isOptionalStringArray(value.snippets) &&
+    isOptionalStringArray(value.keywords);
+}
+
+function isReplacementScope(value: unknown): boolean {
+  return isRecord(value) &&
     typeof value.start_snippet === "string" &&
-    typeof value.end_snippet === "string"
-  );
+    typeof value.end_snippet === "string";
+}
+
+function isSemanticRole(value: unknown): value is AnchorSemanticRole {
+  return typeof value === "string" && [
+    "runtime_state_boundary", "contract_io_boundary", "handoff_projection",
+    "draft_patch_protocol", "gate_policy", "artifact_provenance",
+    "review_commitment_tracking", "generator_evaluator_contract",
+    "claim_contract_projection", "source_contract_projection", "decision_ledger_entry",
+  ].includes(value);
+}
+
+function isReplacementShape(value: unknown): value is AnchorReplacementShape {
+  return typeof value === "string" && [
+    "protocol_block", "io_contract_block", "gate_rule_block", "patch_protocol_block",
+    "artifact_projection_block", "schema_projection_table", "checklist",
+  ].includes(value);
+}
+
+function isOptionalStringArray(value: unknown): boolean {
+  return value === undefined || (Array.isArray(value) && value.every((item) => typeof item === "string"));
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

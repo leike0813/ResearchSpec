@@ -233,31 +233,27 @@ Routing into Mode B requires explicit user signal — `/ars-<mode>` slash comman
 
 ## Re-Review Mode (Verification Review)
 
-<!--rs:a:b9d2e46fc97a-->
-### ResearchSpec Re-review Traceability
+<!--rs:REVIEW-001-->
+Dedicated mode for Pipeline Stage 3'. Re-review verifies each first-round concern
+against the exact revised manuscript, response, and applied patch evidence
+resolved through `researchspec/runs/current/artifact-registry.json`. Read
+`researchspec/draft-patches/<patch-id>.json` and its apply report when manuscript
+changes were patch-applied; do not rely on a Material Passport-carried Schema 11
+copy as the sole traceability record.
 
-Re-review checks compare commitments against ResearchSpec patch and artifact records.
+**Input:** original Revision Roadmap, registered revised-manuscript artifact,
+registered Response to Reviewers when present, relevant draft patch and apply
+report, and the prior review/commitment artifacts.
 
-#### Verification Inputs
+**Output:** an immutable Verification Review Report containing the traceability
+matrix, new issues, and decision. Return the report for runtime registration and
+submit unresolved or blocking commitment findings to the re-review gate helper
+for `researchspec/runs/current/gate-ledger.jsonl`; do not write registry or gate
+records directly.
 
-- Read applied or pending patches from `researchspec/draft-patches/<patch-id>.json`.
-- Resolve revised draft and response artifacts through `researchspec/runs/current/artifact-registry.json`.
-
-#### Gate Result
-
-- Return missing, partially satisfied, or contradicted commitments to the re-review gate helper.
-
-#### Mutation Boundary
-
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:b9d2e46fc97a-->
-
-**Input**: Original Revision Roadmap + Revised manuscript + Response to Reviewers (optional)
-**Output**: Verification Review Report with traceability matrix + new issues + Decision
-
-> See `references/re_review_mode_protocol.md` for full verification logic, output format template, and Socratic guidance details.
+> See `references/re_review_mode_protocol.md` for the verification rules, output
+> format, and Socratic guidance.
+<!--/rs:REVIEW-001-->
 
 ---
 
@@ -425,22 +421,9 @@ Follows the paper's language. Academic terms remain in English. User can overrid
 ## v3.6.2 Sprint Contract Hard Gate
 
 - **Reviewer hard gate.** All reviewer modes that ship with contracts (`reviewer_full`, `reviewer_methodology_focus`) now run two-call Phase 1 (paper-content-blind) + Phase 2 (paper-visible) orchestration. See `references/sprint_contract_protocol.md`.
-<!--rs:a:9f0c7ac717e2-->
-### ResearchSpec Reviewer Sprint Artifact
-
-Sprint contracts and panel outputs are registered artifacts with gate outcomes.
-
-#### Artifact Records
-
-- Emit sprint contract JSON, reviewer panel outputs, and lint diagnostics for runtime registration.
-- Return accept, revise, reject, and blocking outcomes to the review gate helper.
-
-#### Mutation Boundary
-
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:9f0c7ac717e2-->
+<!--rs:REVIEW-002-->
+- **Schema 13 sprint contract.** Resolve the mode-specific frozen contract JSON through `researchspec/runs/current/artifact-registry.json`, then deep-copy it for runtime fields. Preserve `panel_size`, `acceptance_dimensions`, severity and cross-reviewer quantifiers, measurement procedure, override ladder, and bounded amendments. Return the instantiated contract and each phase output for registration; send lint, panel-cardinality, and failure-condition results to the review gate helper for `researchspec/runs/current/gate-ledger.jsonl`. The following synthesizer protocol and mode-specific panel sizes remain unchanged.
+<!--/rs:REVIEW-002-->
 - **Synthesizer three-step mechanical protocol.** Build cross-reviewer matrix → evaluate each failure_condition with panel-relative quantifier + expression vocabulary → resolve precedence by severity. Forbidden operations explicit in `agents/editorial_synthesizer_agent.md`.
 - **methodology_focus reduced panel.** `reviewer_methodology_focus` mode runs a 2-reviewer panel (EIC + methodology only) instead of the default 5.
 - **Templates:** `../../../assets/shared/contracts/reviewer/full.json` (panel 5) and `../../../assets/shared/contracts/reviewer/methodology_focus.json` (panel 2). Reserved modes (`reviewer_re_review`, `reviewer_calibration`, `reviewer_guided`) keep pre-v3.6.2 behaviour until follow-up patch templates land.

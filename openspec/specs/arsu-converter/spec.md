@@ -116,7 +116,7 @@ artifacts during conversion.
 
 - **WHEN** converter output is generated
 - **THEN** `skills/arsu/researchspec-contracts.json` SHALL declare anchor
-  replacement profile `researchspec-anchor-replacement-v2`
+  replacement profile `researchspec-anchor-replacement-v3`
 - **AND** it SHALL declare coverage policy `required_and_recommended`
 - **AND** it SHALL treat Material Passport content as compatibility artifacts or
   payload projection sources rather than runtime sources of truth
@@ -228,17 +228,39 @@ public user-facing CLI behavior.
 ### Requirement: ARSU contract anchor replacement
 
 The converter SHALL replace audited ARS-native contract instructions through
-robust anchors and semantic ResearchSpec replacement templates.
+stable occurrence-level anchors and complete one-to-one ResearchSpec Markdown
+replacement bodies.
 
 #### Scenario: Match evidence and replacement scope are separate
 
 - **GIVEN** an anchor has severity `required` or `recommended`
 - **WHEN** maintainers validate anchor assets
-- **THEN** the anchor SHALL reference a registered `template_id`
-- **AND** it SHALL declare unique ordered start and end snippets for the complete
-  replacement span
-- **AND** semantic role, ResearchSpec targets, and replacement shape SHALL resolve
-  from the template registry as their single source of truth
+- **THEN** the anchor SHALL declare unique ordered start and end snippets for
+  the complete replacement span
+- **AND** match evidence SHALL remain separate from explicit replacement
+  boundaries
+- **AND** semantic role, ResearchSpec targets, and replacement shape SHALL be
+  declared by that individual anchor record
+
+#### Scenario: Anchors have stable domain identities
+
+- **WHEN** maintainers validate anchor assets
+- **THEN** every anchor SHALL have one globally unique `<DOMAIN>-NNN` id from the
+  registered domain set
+- **AND** an allocated id SHALL NOT be renumbered or reused
+- **AND** runtime HTML markers SHALL use that id directly without a second hash
+  alias
+
+#### Scenario: Replaceable anchors own dedicated bodies
+
+- **GIVEN** an anchor has severity `required` or `recommended`
+- **WHEN** maintainers validate anchor assets
+- **THEN** exactly one Markdown replacement body SHALL exist at the path derived
+  from its stable id
+- **AND** that body SHALL NOT be shared with another anchor, empty, orphaned,
+  marker-containing, or byte-identical to another complete replacement body
+- **AND** renderer-injected semantic headings, shared prose macros, and common
+  mutation sections SHALL NOT be required
 
 #### Scenario: High-risk runtime surfaces have coverage decisions
 
@@ -251,16 +273,17 @@ robust anchors and semantic ResearchSpec replacement templates.
 
 - **GIVEN** an anchor has severity `diagnostic`
 - **WHEN** conversion runs
-- **THEN** conversion SHALL NOT emit replacement text for that anchor
-- **AND** its match status SHALL remain visible in the human report
+- **THEN** conversion SHALL NOT require or emit a replacement body for that
+  anchor
+- **AND** its stable id and match status SHALL remain visible in the human report
 
-#### Scenario: Anchors are matched before generated output is overwritten
+#### Scenario: Assets are validated before generated output is overwritten
 
 - **GIVEN** `vendor/ars` is a valid clean upstream checkout
 - **WHEN** a maintainer runs ARSU conversion
-- **THEN** the converter SHALL match contract anchors before deleting or
-  overwriting `skills/arsu`
-- **AND** any missing blocking anchors SHALL fail conversion before generated
+- **THEN** the converter SHALL validate coverage, match all blocking anchors,
+  and preload all dedicated bodies before deleting or overwriting `skills/arsu`
+- **AND** any anchor, body, or matching failure SHALL abort before generated
   output is touched
 
 #### Scenario: Matcher uses robust hints
@@ -269,8 +292,6 @@ robust anchors and semantic ResearchSpec replacement templates.
 - **THEN** it SHALL use the anchor source path plus robust hints such as
   headings, whitespace-tolerant snippets, and case-insensitive keywords
 - **AND** it SHALL NOT depend on source line numbers for matching
-- **AND** match evidence SHALL remain separate from explicit replacement
-  boundaries
 - **AND** ambiguous, missing, reversed, or overlapping replacement spans SHALL
   block conversion
 
@@ -279,61 +300,67 @@ robust anchors and semantic ResearchSpec replacement templates.
 - **GIVEN** an anchor has severity `required` or `recommended`
 - **WHEN** the converter cannot match that anchor in `vendor/ars`
 - **THEN** conversion SHALL fail before writing generated output
-- **AND** the diagnostic SHALL identify the missing anchor id and source path
+- **AND** the diagnostic SHALL identify the stable anchor id and source path
 
-#### Scenario: Matched anchors replace complete semantic spans
+#### Scenario: Matched anchors render exact dedicated bodies
 
 - **GIVEN** a `required` or `recommended` anchor is matched
 - **WHEN** the converter writes a generated text file
-- **THEN** the complete inclusive start/end span SHALL be replaced with the
-  renderer registered for the anchor's `template_id`
+- **THEN** the complete inclusive start/end span SHALL be replaced with that
+  anchor's dedicated Markdown body
+- **AND** the converter SHALL add only the paired stable-id markers and required
+  line-ending normalization
+- **AND** it SHALL NOT compose or append semantic prose
 - **AND** the replacement SHALL preserve the original LF or CRLF boundary
-- **AND** the visible replacement text SHALL be shaped for the anchor semantics
-- **AND** runtime HTML markers SHALL contain only a compact deterministic marker id needed for pairing
 
 #### Scenario: Replacement instructions respect mutation ownership
 
-- **WHEN** a replacement describes ResearchSpec writes
-- **THEN** stable spec changes SHALL use an accepted contract patch or direct human
-  edit
+- **WHEN** an individual replacement body describes ResearchSpec writes
+- **THEN** stable spec changes SHALL use an accepted contract patch or direct
+  human edit
 - **AND** artifact registry and state writes SHALL be assigned to runtime helpers
 - **AND** decision ledger writes SHALL require a human-confirmed decision
 - **AND** gate ledger writes SHALL be assigned to validators or gate helpers
+- **AND** a body without write semantics SHALL NOT receive an unrelated generic
+  mutation section
 
 #### Scenario: Replacement results record full maintenance metadata
 
 - **WHEN** conversion succeeds
-- **THEN** `skills/arsu/conversion-manifest.json` SHALL record semantic role,
-  ResearchSpec targets, replacement shape, template id, compact marker id,
-  before hash, and after hash for every replaceable anchor record
+- **THEN** `skills/arsu/conversion-manifest.json` SHALL record stable anchor id,
+  anchor name, semantic role, ResearchSpec targets, replacement shape,
+  replacement-body hash, before hash, and after hash for every replaceable anchor
 - **AND** those maintenance fields SHALL NOT be duplicated in runtime markers
-- **AND** `skills/arsu/conversion-report.md` SHALL summarize semantic replacement
+- **AND** `skills/arsu/conversion-report.md` SHALL summarize one-to-one replacement
   coverage
 
 #### Scenario: Human-readable replacement report is generated
 
 - **WHEN** conversion succeeds
 - **THEN** `skills/arsu/anchor-replacement-report.md` SHALL list every replaced
-  anchor with metadata, generated output paths, diagnostics, before text, and
-  after text
+  anchor with metadata, generated output paths, diagnostics, complete before
+  text, and complete after text
 - **AND** it SHALL list diagnostic-only anchors separately without an after block
 
 #### Scenario: Generated output validation checks local replacement blocks
 
 - **WHEN** maintainers run generated-output validation
-- **THEN** validation SHALL extract and verify the exact marker block for each
-  replacement record
+- **THEN** validation SHALL extract and verify the exact stable-id marker block
+  for each replacement record
+- **AND** the block body SHALL equal the dedicated Markdown asset after declared
+  normalization
 - **AND** declared target checks SHALL apply to that block rather than the entire
   output file
-- **AND** validation SHALL reject malformed marker boundaries and obsolete generic
-  replacement headings
+- **AND** validation SHALL reject malformed marker boundaries, unknown ids, old
+  hash-alias markers, and renderer-injected generic replacement headings
 
 #### Scenario: Idempotence compares semantic manifest content
 
 - **WHEN** maintainers compare current output with a clean regeneration
 - **THEN** JSON object key order and explicitly unordered collection order SHALL
   NOT cause drift
-- **AND** semantically meaningful field or output hash changes SHALL cause drift
+- **AND** replacement body, semantic field, stable id, or output hash changes
+  SHALL cause drift
 
 #### Scenario: Anchor validation is developer-only
 

@@ -166,9 +166,12 @@ async function copyTransformedFile(
   if (isTextResource(sourcePath)) {
     let text = await readUtf8(sourceFile);
     text = applyAnchorReplacements(text, sourcePath, `${groupName}/${outputPath}`, anchorReplacements);
+    const protectedAnchors = protectAnchorBlocks(text);
+    text = protectedAnchors.text;
     text = neutralizeUnresolvedMarkdownLinks(text, sourcePath, sourceToOutput, knownSourcePaths);
     text = rewriteMarkdownLinks(text, sourcePath, outputPath, sourceToOutput, knownSourcePaths);
     text = rewriteText(text, sourceToOutput, outputPath);
+    text = restoreAnchorBlocks(text, protectedAnchors.blocks);
     if (outputPath === "SKILL.md") {
       const injected = injectContractPreflight(text, groupName);
       text = injected.text;
@@ -195,6 +198,28 @@ async function copyTransformedFile(
       : [],
     contractInjection,
   };
+}
+
+function protectAnchorBlocks(text: string): { text: string; blocks: string[] } {
+  const blocks: string[] = [];
+  const protectedText = text.replace(
+    /<!--rs:((?:STATE|IO|HANDOFF|PATCH|GATE|ARTIFACT|CLAIM|DECISION|SOURCE|REVIEW)-\d{3})-->[\s\S]*?<!--\/rs:\1-->/g,
+    (block) => {
+      const index = blocks.push(block) - 1;
+      return `@@RESEARCHSPEC_ANCHOR_BLOCK_${String(index).padStart(4, "0")}@@`;
+    },
+  );
+  return { text: protectedText, blocks };
+}
+
+function restoreAnchorBlocks(text: string, blocks: string[]): string {
+  return blocks.reduce(
+    (current, block, index) => current.replace(
+      `@@RESEARCHSPEC_ANCHOR_BLOCK_${String(index).padStart(4, "0")}@@`,
+      () => block,
+    ),
+    text,
+  );
 }
 
 function buildNeedsReview(

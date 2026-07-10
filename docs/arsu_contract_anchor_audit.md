@@ -47,7 +47,7 @@ ARSU-derived 内容仍不做默认 current-only cleanup。
 - `src/arsu-converter/anchors/contract-anchors.json`
 - `src/arsu-converter/anchors/upstream-manifest.json`
 
-`contract-anchors.json` 是人工审查后的锚点表，记录未来应替换的合同文本位置、语义类别、严重性、匹配提示和替换意图。
+`contract-anchors.json` 是人工审查后的 v3 锚点表，记录稳定分类编号、合同文本位置、语义类别、严重性、匹配提示、显式替换范围和 ResearchSpec targets。每个 replaceable 锚点的完整正文位于 `src/arsu-converter/anchors/replacements/<ID>.md`。
 
 `upstream-manifest.json` 是 deterministic upstream shape baseline，记录 audited runtime file tree、frontmatter、heading tree、normalized content hash 和 contract-risk keyword hits。它用于发现上游文件结构或内容漂移。
 
@@ -155,20 +155,22 @@ Schema 11 的 `commitment_extracted` 体系非常重要，它把 reviewer commen
 - heading hints；
 - snippet hints；
 - keyword hints；
-- replacement intent；
-- template id；
+- 稳定的 `<DOMAIN>-NNN` anchor id 与描述性 name；
+- semantic role、ResearchSpec targets 与 replacement shape；
 - replacement scope 的 start/end snippets。
 
 Matcher 先用 source path 缩小范围，再组合 heading、snippet、keyword 证明语义上下文；这些证据不再隐式决定替换范围。start/end snippets 必须在窗口中唯一且顺序正确，完整行区间才会进入替换。若 source path 失效，则 upstream manifest 的 file tree drift 会先暴露结构变化。
 
+Replaceable 锚点与正文严格一对一。正文文件只包含将要插入的 Markdown fragment，不含 marker、frontmatter、共享宏或渲染器自动补充段落。转换器在写 generated output 前预加载全部正文，拒绝缺失、空白、孤立、共享、内嵌 marker 或完整 hash 相同的正文。
+
 最终 ARSU Markdown 中的注释只保留配对所需的 anchor id：
 
 ```text
-<!--rs:a:<12-hex-marker-id>-->
-<!--/rs:a:<12-hex-marker-id>-->
+<!--rs:STATE-001-->
+<!--/rs:STATE-001-->
 ```
 
-12 位 marker id 由完整 anchor id 稳定派生。完整 anchor id、template、source、severity、semantic role、targets 和 hashes 等维护信息只进入 manifest 与人类审计报告，避免污染 agent runtime context。
+稳定分类编号同时承担 anchor 与 marker 身份，不再派生第二个 hash alias。name、source、severity、semantic role、targets、replacement-body hash 和 before/after hashes 等维护信息只进入 manifest 与人类审计报告，避免污染 agent runtime context。
 
 ## 7. Manifest 设计要点
 
@@ -192,6 +194,6 @@ Manifest 记录的是上游 shape，不是 ResearchSpec 合同规格。
 
 ## 8. 维护流程
 
-上游变化时先运行 anchor checker。对于新增或漂移的高风险 occurrence，维护者必须判断其处置方式：替换、diagnostic 或 retain。新增替换需要同时提供显式 scope 和已注册 template；retain decision 必须说明其为何不是 ResearchSpec runtime ownership。
+上游变化时先运行 anchor checker。对于新增或漂移的高风险 occurrence，维护者必须判断其处置方式：替换、diagnostic 或 retain。新增替换获得所属 domain 的下一个未使用编号，并同时提供显式完整 scope、语义元数据和独立 Markdown 正文；已分配编号不得重排或复用。retain decision 必须说明其为何不是 ResearchSpec runtime ownership。
 
-转换后必须检查 human report、局部 marker block、生成物验证和两次连续 idempotence。Checker 只能验证结构和已声明规则，语义复核仍由维护者负责。
+转换后必须检查 human report 的完整 before/after、局部 marker block 与专属正文是否精确相同、生成物验证和两次连续 idempotence。Checker 只能验证结构和已声明规则，语义复核仍由维护者负责。

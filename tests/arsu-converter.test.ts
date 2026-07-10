@@ -35,7 +35,7 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
     await readFile(path.join(root, "skills/arsu/researchspec-contracts.json"), "utf8"),
   ) as { material_passport_policy?: string; anchor_replacement?: { coverage_policy?: string; profile_id?: string } };
   assert.equal(contracts.material_passport_policy, "compatibility_artifact_only_not_runtime_ssot");
-  assert.equal(contracts.anchor_replacement?.profile_id, "researchspec-anchor-replacement-v2");
+  assert.equal(contracts.anchor_replacement?.profile_id, "researchspec-anchor-replacement-v3");
   assert.equal(contracts.anchor_replacement?.coverage_policy, "required_and_recommended");
 
   const manifest = JSON.parse(
@@ -48,7 +48,16 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
       replaceable_anchors: number;
       replaced_anchors: number;
       diagnostic_anchors: number;
-      records: Array<{ anchor_id: string; semantic_role?: string; before_sha256?: string; after_sha256?: string }>;
+      records: Array<{
+        anchor_id: string;
+        anchor_name?: string;
+        semantic_role?: string;
+        replacement_body_sha256?: string;
+        before_sha256?: string;
+        after_sha256?: string;
+        marker_id?: string;
+        template_id?: string;
+      }>;
     };
   };
   assert.equal(manifest.risk_findings.some((item) => item.term === "Claude Code" && !item.blocking), true);
@@ -57,17 +66,22 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
   assert.equal(manifest.anchor_replacements.replaceable_anchors, 2);
   assert.equal(manifest.anchor_replacements.replaced_anchors, 2);
   assert.equal(manifest.anchor_replacements.diagnostic_anchors, 1);
-  assert.equal(manifest.anchor_replacements.profile_id, "researchspec-anchor-replacement-v2");
+  assert.equal(manifest.anchor_replacements.profile_id, "researchspec-anchor-replacement-v3");
   assert.equal(
-    manifest.anchor_replacements.records.some((item) => item.anchor_id === "fixture.required.material" && item.semantic_role === "runtime_state_boundary" && item.before_sha256 && item.after_sha256),
+    manifest.anchor_replacements.records.some((item) =>
+      item.anchor_id === "STATE-001" &&
+      item.anchor_name === "fixture.required.material" &&
+      item.semantic_role === "runtime_state_boundary" &&
+      item.replacement_body_sha256 && item.before_sha256 && item.after_sha256 &&
+      item.marker_id === undefined && item.template_id === undefined),
     true,
   );
-  assert.match(deepResearch, /<!--rs:a:[0-9a-f]{12}-->/);
-  assert.match(deepResearch, /<!--\/rs:a:[0-9a-f]{12}-->\n/);
+  assert.match(deepResearch, /<!--rs:STATE-001-->/);
+  assert.match(deepResearch, /<!--\/rs:STATE-001-->\n/);
   assert.doesNotMatch(deepResearch, /ResearchSpec Contract Replacement/);
-  assert.match(deepResearch, /ResearchSpec Deep Research Runtime/);
+  assert.match(deepResearch, /researchspec\/runs\/current\/state\.yaml/);
   const anchorReport = await readFile(path.join(root, "skills/arsu/anchor-replacement-report.md"), "utf8");
-  assert.match(anchorReport, /### fixture\.required\.material/);
+  assert.match(anchorReport, /### STATE-001/);
   assert.match(anchorReport, /#### Before/);
   assert.match(anchorReport, /#### After/);
   await cleanup(root);
@@ -108,7 +122,7 @@ void test("converter blocks missing required or recommended anchors before writi
     (error) =>
       error instanceof ArsuConverterError &&
       error.code === "anchor_match_failed" &&
-      error.details.includes("missing blocking anchor: fixture.required.material"),
+      error.details.includes("missing blocking anchor: STATE-001"),
   );
   assert.equal(existsSync(path.join(root, "skills/arsu")), false);
   await cleanup(root);
@@ -119,7 +133,7 @@ void test("converter reports missing diagnostic anchors without blocking convers
   await makeSource(root);
   const anchorsPath = path.join(root, "src/arsu-converter/anchors/contract-anchors.json");
   const anchors = JSON.parse(await readFile(anchorsPath, "utf8")) as { anchors: Array<{ id: string; match_hints: { snippets: string[] } }> };
-  const diagnostic = anchors.anchors.find((anchor) => anchor.id === "fixture.diagnostic.style");
+  const diagnostic = anchors.anchors.find((anchor) => anchor.id === "ARTIFACT-001");
   assert.ok(diagnostic);
   diagnostic.match_hints.snippets = ["missing diagnostic anchor text"];
   await writeFile(anchorsPath, `${JSON.stringify(anchors, null, 2)}\n`, "utf8");
@@ -127,7 +141,7 @@ void test("converter reports missing diagnostic anchors without blocking convers
   const result = await convertArsu({ repoRoot: root });
 
   assert.equal(result.validation?.ok, true);
-  assert.deepEqual(result.anchor_replacements?.missing_diagnostic, ["fixture.diagnostic.style"]);
+  assert.deepEqual(result.anchor_replacements?.missing_diagnostic, ["ARTIFACT-001"]);
   await cleanup(root);
 });
 
@@ -153,11 +167,26 @@ void test("validation reports replacement marker drift", async () => {
 
   const skillPath = path.join(root, "skills/arsu/deep-research/SKILL.md");
   const original = await readFile(skillPath, "utf8");
-  await writeFile(skillPath, original.replace(/<!--\/rs:a:[0-9a-f]{12}-->/, ""), "utf8");
+  await writeFile(skillPath, original.replace(/<!--\/rs:STATE-001-->/, ""), "utf8");
 
   const validation = await validateArsuOutput(path.join(root, "skills/arsu"));
   assert.equal(validation.ok, false);
   assert.equal(validation.errors.some((error) => error.includes("Anchor replacement marker missing")), true);
+  await cleanup(root);
+});
+
+void test("validation rejects v2 hash markers", async () => {
+  const root = await tempRepoRoot();
+  await makeSource(root);
+  await convertArsu({ repoRoot: root });
+
+  const skillPath = path.join(root, "skills/arsu/deep-research/SKILL.md");
+  const original = await readFile(skillPath, "utf8");
+  await writeFile(skillPath, original.replace("<!--rs:STATE-001-->", "<!--rs:a:0123456789ab-->"), "utf8");
+
+  const validation = await validateArsuOutput(path.join(root, "skills/arsu"));
+  assert.equal(validation.ok, false);
+  assert.equal(validation.errors.some((error) => error.includes("retains a v2 hash marker")), true);
   await cleanup(root);
 });
 
@@ -169,13 +198,14 @@ void test("validation checks declared targets inside the exact marker block", as
   const skillPath = path.join(root, "skills/arsu/deep-research/SKILL.md");
   const original = await readFile(skillPath, "utf8");
   const altered = original.replace(
-    /(<!--rs:a:[0-9a-f]{12}-->)[\s\S]*?(<!--\/rs:a:[0-9a-f]{12}-->)/,
+    /(<!--rs:STATE-001-->)[\s\S]*?(<!--\/rs:STATE-001-->)/,
     "$1\nNo declared target in this block.\n$2",
   );
   await writeFile(skillPath, altered, "utf8");
 
   const validation = await validateArsuOutput(path.join(root, "skills/arsu"));
   assert.equal(validation.ok, false);
+  assert.equal(validation.errors.some((error) => error.includes("body differs from dedicated asset")), true);
   assert.equal(validation.errors.some((error) => error.includes("text missing declared ResearchSpec target")), true);
   await cleanup(root);
 });
@@ -310,16 +340,18 @@ async function makeSourceFiles(source: string, options: { omitGroup?: string } =
 
 async function makeAnchorAssets(root: string): Promise<void> {
   await mkdir(path.join(root, "src/arsu-converter/anchors"), { recursive: true });
+  await mkdir(path.join(root, "src/arsu-converter/anchors/replacements"), { recursive: true });
   await writeFile(
     path.join(root, "src/arsu-converter/anchors/contract-anchors.json"),
     `${JSON.stringify(
       {
-        schema_version: "researchspec.arsu.contract-anchors.v2",
+        schema_version: "researchspec.arsu.contract-anchors.v3",
         upstream_source: "vendor/ars",
         audited_commit: "fixture",
         anchors: [
           {
-            id: "fixture.required.material",
+            id: "STATE-001",
+            name: "fixture.required.material",
             source_path: "deep-research/SKILL.md",
             owner_skill: "deep-research",
             contract_category: "material_passport_runtime_ssot",
@@ -328,15 +360,17 @@ async function makeAnchorAssets(root: string): Promise<void> {
               snippets: ["state tracking via Material Passport", "pipeline_orchestrator_agent"],
               keywords: ["Mode A"],
             },
-            replacement_intent: "Fixture replacement for Material Passport runtime ownership.",
-            template_id: "deep-research-state-to-researchspec-runtime",
+            semantic_role: "runtime_state_boundary",
+            researchspec_targets: ["researchspec/runs/current/state.yaml"],
+            replacement_shape: "protocol_block",
             replacement_scope: {
               start_snippet: "state tracking via Material Passport",
               end_snippet: "state tracking via Material Passport",
             },
           },
           {
-            id: "fixture.recommended.phase",
+            id: "IO-001",
+            name: "fixture.recommended.phase",
             source_path: "deep-research/agents/bibliography_agent.md",
             owner_skill: "deep-research",
             contract_category: "phase_directory_boundaries",
@@ -345,15 +379,17 @@ async function makeAnchorAssets(root: string): Promise<void> {
               snippets: ["You MAY READ files in `phase1_*/`", "scripts/check_pipeline_integrity.py"],
               keywords: ["phase2"],
             },
-            replacement_intent: "Fixture replacement for phase IO ownership.",
-            template_id: "deep-research-phase-boundary-to-contract-io",
+            semantic_role: "contract_io_boundary",
+            researchspec_targets: ["researchspec/runs/current/artifact-registry.json"],
+            replacement_shape: "io_contract_block",
             replacement_scope: {
               start_snippet: "You MAY READ files in `phase1_*/`",
               end_snippet: "scripts/check_pipeline_integrity.py",
             },
           },
           {
-            id: "fixture.diagnostic.style",
+            id: "ARTIFACT-001",
+            name: "fixture.diagnostic.style",
             source_path: "shared/style_calibration_protocol.md",
             owner_skill: "shared",
             contract_category: "artifact_provenance",
@@ -362,8 +398,6 @@ async function makeAnchorAssets(root: string): Promise<void> {
               snippets: ["Pipeline carry", "Material Passport carries the Style Profile across all stages"],
               keywords: ["Style Profile"],
             },
-            replacement_intent: "Fixture diagnostic only.",
-            template_id: "style-profile-to-researchspec-artifact",
           },
         ],
         coverage_decisions: [],
@@ -371,6 +405,16 @@ async function makeAnchorAssets(root: string): Promise<void> {
       null,
       2,
     )}\n`,
+    "utf8",
+  );
+  await writeFile(
+    path.join(root, "src/arsu-converter/anchors/replacements/STATE-001.md"),
+    "Validate `^[a-z]+$` and use `researchspec/runs/current/state.yaml` as active runtime state.\n",
+    "utf8",
+  );
+  await writeFile(
+    path.join(root, "src/arsu-converter/anchors/replacements/IO-001.md"),
+    "Resolve phase inputs through `researchspec/runs/current/artifact-registry.json`.\n",
     "utf8",
   );
 }

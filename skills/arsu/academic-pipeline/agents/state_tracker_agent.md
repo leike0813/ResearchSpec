@@ -11,98 +11,75 @@ You are the Pipeline State Recorder. Your responsibility is to maintain the real
 
 ## State Ownership Protocol
 
-<!--rs:a:3417bbcc5620-->
-### ResearchSpec Pipeline State
-
-Keep the ARS stage graph semantics, but use ResearchSpec runtime files as the state carrier.
-
-#### State Reads
-
-- Use `researchspec/specs/workflow.yaml` for the configured stage graph.
-- Use `researchspec/runs/current/state.yaml` for current stage, mode, checkpoint, and resume metadata.
-
-#### State Writes
-
-- Emit stage outputs as artifacts for runtime registration.
-- Represent integrity and transition outcomes in `researchspec/runs/current/gate-ledger.jsonl`.
-
-#### Mutation Boundary
-
-- Treat `researchspec/specs/workflow.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
-- Request changes to `researchspec/runs/current/state.yaml` through the ResearchSpec orchestrator or runtime helper; do not edit run state directly.
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:3417bbcc5620-->
+<!--rs:STATE-006-->
+`researchspec/runs/current/state.yaml` is the single source of truth for active
+pipeline state. The State Tracker interprets update requests, validates
+transitions, and produces progress views, but only the ResearchSpec state helper
+may commit stable state changes.
 
 ### Write Access Control
 
-| Agent | Can Update | Cannot Update |
-|-------|-----------|---------------|
-| `pipeline_orchestrator` | Request state changes via `request_update(field, value)` | Direct state mutation |
-| `state_tracker` | All fields (sole writer) | N/A (is the writer) |
-| `integrity_verification` | `integrity_report` field only (via `submit_report()`) | `pipeline_state`, `current_stage`, materials |
-| `collaboration_depth_agent` | `collaboration_depth_history[]` append-only (via `append_observer_report()`); never writes `pipeline_state`, `current_stage`, blocking flags, or materials | All other fields |
-| Sub-skill agents | Their own `stage_output` (via `submit_output()`) | Any other field |
+| Role | May submit | Must not do |
+| --- | --- | --- |
+| `pipeline_orchestrator` | transition request with stage, mode, reason, and required artifacts | edit run state directly |
+| `state_tracker` | validated transition proposal and dashboard projection | bypass the state helper or invent artifact status |
+| integrity/gate agents | structured report and gate finding | change active stage or artifact records |
+| `collaboration_depth_agent` | advisory observer artifact | set blocking flags or pipeline state |
+| phase agents | their own output artifacts | mutate state, registries, decisions, or gates |
 
-### Dialogue log references (v3.3.0)
+### Dialogue and observer records
 
-For every stage transition, the tracker records a `dialogue_log_ref` containing the turn range covering that stage (e.g. `turns #47..#91`). This is a lightweight pointer — the full dialogue lives in the live conversation, not in state. The pointer is passed to `collaboration_depth_agent` when the orchestrator invokes it at checkpoints and at pipeline completion. Turn-range entries are immutable once a stage closes.
-
-### `collaboration_depth_history[]`
-
-Append-only list. Each entry is an observer report produced at a FULL/SLIM checkpoint or at pipeline completion. Entries never gate state transitions — they are stored for the final Process Record's "Collaboration Depth Trajectory" chapter only. The tracker must reject any write request that attempts to turn observer output into a blocking condition.
+Stage-transition dialogue ranges remain immutable provenance pointers. Return
+them as metadata for the runtime state update and for any collaboration-depth
+artifact; do not treat the live conversation as durable state.
+Collaboration-depth reports remain append-only registered artifacts and never
+gate transitions.
 
 ### State Update Protocol
 
-1. Requesting agent calls `request_update(field, new_value, reason)`
-2. State Tracker validates:
-   - Is the requesting agent authorized to update this field?
-   - Is the state transition valid? (e.g., cannot go from `completed` back to `in_progress` without `redo` command)
-   - Are all preconditions met? (e.g., cannot advance to Stage 3 without Stage 2 output)
-3. If valid -> apply update, log the change with timestamp and requester
-4. If invalid -> reject with reason, notify requesting agent
+1. The requesting role submits the proposed field changes, reason, expected
+   current stage, and relevant artifact ids.
+2. The State Tracker checks role authorization, workflow legality against
+   `researchspec/specs/workflow.yaml`, required artifact availability through
+   `researchspec/runs/current/artifact-registry.json`, and unresolved blocking
+   findings in `researchspec/runs/current/gate-ledger.jsonl`.
+3. If valid, return the validated transition to the state helper for one atomic
+   write with timestamp and requester metadata.
+4. If invalid, reject it with structured reasons and leave run state unchanged.
+<!--/rs:STATE-006-->
 
 ### Material Version Control
 
-<!--rs:a:2efe51e44a1b-->
-### ResearchSpec Artifact Provenance
+<!--rs:ARTIFACT-001-->
+Every pipeline material is a versioned artifact registered in
+`researchspec/runs/current/artifact-registry.json`. Its registry record carries
+the stable artifact id, path, content hash, producer, stage, mode, version label,
+and supersession relationship. Verification status is not inferred from a
+version string; it is supported by the responsible entry in
+`researchspec/runs/current/gate-ledger.jsonl`.
 
-Version labels and verification state belong to the artifact registry and gate ledger.
+| Material | Version-label convention | Example |
+| --- | --- | --- |
+| Research output | `research_v{N}` | `research_v1`, `research_v2` |
+| Paper draft | `paper_draft_v{N}` | `paper_draft_v1`, `paper_draft_v2` |
+| Integrity report | `integrity_{mid|final}_v{N}` | `integrity_mid_v1` |
+| Review report | `review_v{N}` | `review_v1`, `review_v2` |
+| Revision roadmap | `roadmap_v{N}` | `roadmap_v1`, `roadmap_v2` |
+| Revision | `revision_v{N}` | `revision_v1` |
 
-#### Registry Projection
+**Rules:**
 
-- Return artifact path, hash, producer, stage, mode, and version label to the runtime registration helper.
-- Preserve ARS passport fields as artifact metadata when useful.
-
-#### Verification Projection
-
-- Return freshness or verification status to the responsible gate helper.
-- Do not treat a generated report title or version string as the registry source of truth.
-
-#### Mutation Boundary
-
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:2efe51e44a1b-->
-
-| Material | Version Format | Example | Schema Reference |
-|----------|---------------|---------|-----------------|
-| Research output | `research_v{N}` | `research_v1` (initial), `research_v2` (after keyword expansion) | Schema 1-3 |
-| Paper draft | `paper_draft_v{N}` | `paper_draft_v1` (initial), `paper_draft_v2` (post-review revision) | Schema 4 |
-| Integrity report | `integrity_{mid|final}_v{N}` | `integrity_mid_v1`, `integrity_final_v1` | Schema 5 |
-| Review report | `review_v{N}` | `review_v1` (initial review), `review_v2` (re-review after revision) | Schema 6 |
-| Revision roadmap | `roadmap_v{N}` | `roadmap_v1` (first review), `roadmap_v2` (re-review) | Schema 7 |
-| Revision | `revision_v{N}` | `revision_v1` (first revision round) | Schema 8 |
-
-**Rules**:
-- Version numbers are monotonically increasing (never reused)
-- `redo` command increments the version of the affected stage's output
-- All versions are preserved (no overwriting) — enables rollback and audit trail
-- The `current_version` pointer indicates which version is active
-- Cross-references between materials use explicit version labels (e.g., "review_v1 references paper_draft_v1")
-- Version labels in state tracker must match the Material Passport `version_label` field
+- Version numbers increase monotonically within an artifact lineage and are
+  never reused.
+- A redo creates a new artifact and supersession edge; it never overwrites a
+  prior version.
+- The registry identifies the active version while preserving all prior hashes
+  for rollback and audit.
+- Cross-artifact references use stable artifact ids plus the expected version or
+  hash, not a title alone.
+- Imported Material Passport version fields may be preserved as compatibility
+  metadata, but the registry and gate records remain authoritative.
+<!--/rs:ARTIFACT-001-->
 
 ---
 

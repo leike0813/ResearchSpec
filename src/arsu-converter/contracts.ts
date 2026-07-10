@@ -45,9 +45,9 @@ export function buildContractCompatibilityManifest(skillGroups: string[]): Contr
     output: GENERATED_OUTPUT_PATH,
     material_passport_policy: "compatibility_artifact_only_not_runtime_ssot",
     anchor_replacement: {
-      profile_id: "researchspec-anchor-replacement-v2",
+      profile_id: "researchspec-anchor-replacement-v3",
       coverage_policy: "required_and_recommended",
-      marker: "<!--rs:a:<marker-id>-->",
+      marker: "<!--rs:<anchor-id>-->",
       diagnostic_anchor_policy: "report_only",
     },
     skill_groups: Object.fromEntries(

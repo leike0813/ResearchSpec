@@ -3,15 +3,14 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 
 import { ArsuConverterError } from "../types.js";
-import { readContractAnchors } from "./io.js";
-import { compactMarkerId } from "./markers.js";
-import { getReplacementTemplate, hasReplacementTemplate, REPLACEMENT_PROFILE_ID } from "./templates.js";
+import { readContractAnchors, readReplacementBody } from "./io.js";
 import type {
   AnchorMatchRecord,
   AnchorMatchSpan,
   AnchorReplacementPlan,
   ContractAnchor,
 } from "./types.js";
+import { isReplaceableAnchor, REPLACEMENT_PROFILE_ID } from "./types.js";
 
 interface TextWindow {
   label: string;
@@ -34,6 +33,29 @@ export async function buildAnchorReplacementPlan(
   const anchorFile = await readContractAnchors(repoRoot);
   const records: AnchorMatchRecord[] = [];
   const spansBySource = new Map<string, AnchorMatchSpan[]>();
+  const replacementBodies = new Map<string, { body: string; sha256: string }>();
+  const bodyErrors: string[] = [];
+
+  for (const anchor of anchorFile.anchors) {
+    if (!isReplaceableAnchor(anchor)) continue;
+    try {
+      const body = await readReplacementBody(repoRoot, anchor.id);
+      if (!body) throw new Error("replacement body is empty");
+      if (body.includes("<!--rs:") || body.includes("<!--/rs:")) {
+        throw new Error("replacement body contains a runtime marker");
+      }
+      replacementBodies.set(anchor.id, { body, sha256: sha256Text(body) });
+    } catch (error) {
+      bodyErrors.push(`${anchor.id}: ${formatError(error)}`);
+    }
+  }
+  if (bodyErrors.length > 0) {
+    throw new ArsuConverterError(
+      "anchor_body_invalid",
+      "ARSU replacement bodies failed validation before generated output was touched.",
+      bodyErrors,
+    );
+  }
 
   for (const anchor of anchorFile.anchors) {
     const replacementMode = anchor.severity === "diagnostic" ? "diagnostic" : "replace";
@@ -44,31 +66,41 @@ export async function buildAnchorReplacementPlan(
       text = await readFile(sourceFile, "utf8");
     } catch (error) {
       diagnostics.push(`source file missing or unreadable: ${formatError(error)}`);
-      records.push(buildRecord(anchor, false, replacementMode, false, diagnostics));
-      continue;
-    }
-
-    if (replacementMode === "replace" && !hasReplacementTemplate(anchor.template_id)) {
-      diagnostics.push(`missing replacement template: ${anchor.template_id}`);
-      records.push(buildRecord(anchor, false, replacementMode, false, diagnostics));
+      records.push(buildRecord(anchor, false, replacementMode, false, diagnostics, undefined, replacementBodies.get(anchor.id)?.sha256));
       continue;
     }
 
     const match = matchAnchor(anchor, text);
     diagnostics.push(...match.diagnostics);
     if (!match.span) {
-      records.push(buildRecord(anchor, false, replacementMode, false, diagnostics));
+      records.push(buildRecord(anchor, false, replacementMode, false, diagnostics, undefined, replacementBodies.get(anchor.id)?.sha256));
       continue;
     }
 
-    if (replacementMode === "replace") {
+    if (isReplaceableAnchor(anchor)) {
+      const replacement = replacementBodies.get(anchor.id);
+      if (!replacement) throw new Error(`Replacement body was not preloaded: ${anchor.id}`);
       const list = spansBySource.get(anchor.source_path) ?? [];
-      list.push({ anchor, start: match.span.start, end: match.span.end });
+      list.push({
+        anchor,
+        replacement_body: replacement.body,
+        replacement_body_sha256: replacement.sha256,
+        start: match.span.start,
+        end: match.span.end,
+      });
       spansBySource.set(anchor.source_path, list);
     }
 
     const beforeText = text.slice(match.span.start, match.span.end);
-    records.push(buildRecord(anchor, true, replacementMode, false, diagnostics, beforeText));
+    records.push(buildRecord(
+      anchor,
+      true,
+      replacementMode,
+      false,
+      diagnostics,
+      beforeText,
+      replacementBodies.get(anchor.id)?.sha256,
+    ));
   }
 
   const overlapErrors = validateNoOverlaps(spansBySource);
@@ -128,19 +160,19 @@ function buildRecord(
   replaced: boolean,
   diagnostics: string[],
   beforeText?: string,
+  replacementBodySha256?: string,
 ): AnchorMatchRecord {
-  const template = getReplacementTemplate(anchor.template_id);
   return {
     anchor_id: anchor.id,
-    marker_id: compactMarkerId(anchor.id),
+    anchor_name: anchor.name,
     source_path: anchor.source_path,
     owner_skill: anchor.owner_skill,
     contract_category: anchor.contract_category,
     severity: anchor.severity,
-    template_id: anchor.template_id,
-    semantic_role: template?.semantic_role,
-    researchspec_targets: template?.researchspec_targets ?? [],
-    replacement_shape: template?.replacement_shape,
+    semantic_role: isReplaceableAnchor(anchor) ? anchor.semantic_role : undefined,
+    researchspec_targets: isReplaceableAnchor(anchor) ? anchor.researchspec_targets : [],
+    replacement_shape: isReplaceableAnchor(anchor) ? anchor.replacement_shape : undefined,
+    replacement_body_sha256: replacementBodySha256,
     matched,
     replacement_mode: replacementMode,
     replaced,
@@ -173,14 +205,13 @@ function matchWithinWindow(anchor: ContractAnchor, window: TextWindow): { span?:
     });
   }
 
-  if (anchor.severity === "diagnostic") {
+  if (!isReplaceableAnchor(anchor)) {
     if (snippetMatches.length === 0) return { span: { start: window.start, end: window.end }, diagnostics };
     const basis = snippetMatches[0];
     return { span: expandRangeToLineBounds(window.text, window.start, basis.start, basis.end), diagnostics };
   }
 
   const scope = anchor.replacement_scope;
-  if (!scope) return { diagnostics: ["replacement scope is missing"] };
   const startMatches = findAllSnippets(window.text, scope.start_snippet);
   const endMatches = scope.end_snippet === scope.start_snippet
     ? startMatches

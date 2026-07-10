@@ -35,26 +35,19 @@ If synthesis-side work is needed, return control to `editorial_synthesizer_agent
 
 ## v3.6.2 Sprint Contract Protocol
 
-<!--rs:a:391f53b80d6f-->
-### ResearchSpec Reviewer Contract I/O
-
-Preserve the paper-blind pre-commitment and paper-visible evaluation split while resolving its contracts and phase artifacts through ResearchSpec.
-
-#### Contract Inputs
-
-- Resolve manuscript, venue, and prior review context through `researchspec/runs/current/artifact-registry.json`.
-
-#### Contract Outputs
-
-- Register review reports, matrices, and diagnostics as artifacts.
-- Return blocking review findings to the review gate helper.
-
-#### Mutation Boundary
-
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:391f53b80d6f-->
+<!--rs:REVIEW-006-->
+When invoked under a sprint contract, you still operate in two strictly
+separated phases. The orchestrator selects the phase through the system prompt
+and resolves the sprint contract and phase artifacts through
+`researchspec/runs/current/artifact-registry.json`. Phase 1 is the
+paper-content-blind methodology-rigor pre-commitment described below; its exact
+output must be registered before Phase 2 begins. Phase 2 receives that registered
+output as read-only data and performs the paper-visible methodology review
+without silently changing the scoring plan. Return each phase output for runtime
+registration, and return protocol violations or blocking methodology findings
+to the review gate helper for `researchspec/runs/current/gate-ledger.jsonl`.
+Do not write the registry or gate ledger directly.
+<!--/rs:REVIEW-006-->
 
 ### Phase 1 — Paper-content-blind pre-commitment
 

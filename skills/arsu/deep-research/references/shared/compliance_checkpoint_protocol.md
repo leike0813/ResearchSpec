@@ -91,22 +91,19 @@ Triggered when user picks "acknowledge limitation" on a block.
 
 Round count is per-stage-per-pipeline-run, stored in `compliance_history[].user_override` entries.
 
-<!--rs:a:7c9478d2fb6c-->
-### ResearchSpec Compliance Decision
-
-Human compliance overrides are explicit decision-ledger entries supported by registered reports.
-
-#### Decision Record
-
-- After human confirmation, return override choice and rationale to the runtime for decision-ledger recording.
-- Emit Schema 12 or compliance reports for runtime registration.
-
-#### Mutation Boundary
-
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
-
-<!--/rs:a:7c9478d2fb6c-->
+<!--rs:DECISION-002-->
+> **Enforcement boundary.** The compliance override ladder is evaluated by the
+> compliance decision runtime over prior accepted override decisions for the
+> same stage and run in `researchspec/runs/current/decision-ledger.jsonl`.
+> Schema 12 remains the compliance-report payload and deliberately does not
+> enforce cross-round rationale length. The runtime applies the first-, second-,
+> and third-round friction rules, stops for human confirmation, and records the
+> selected override, rationale, scope, report artifact id, and round count only
+> after confirmation. The Schema 12 report itself is returned for registration
+> in `researchspec/runs/current/artifact-registry.json`. Hand-written passport or
+> ledger content that did not pass this decision path is unaudited and cannot
+> authorize an override.
+<!--/rs:DECISION-002-->
 
 On any successful override, the agent generates `disclosure_addendum` text and the orchestrator **auto-injects** it into the manuscript's AI disclosure section. The addendum is non-removable — this is the concrete form of the `no detection evasion` iron rule in CONTRIBUTING.md.
 

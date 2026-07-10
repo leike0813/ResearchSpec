@@ -6,28 +6,17 @@ Defines the exact data structure for every artifact passed between pipeline stag
 All agents that produce or consume these artifacts MUST conform to these schemas.
 Consuming agents should validate input and request re-generation if schema violations are found.
 
-<!--rs:a:ece45e8714b6-->
-### ResearchSpec Schema Projection
-
-ARS Markdown schemas describe payloads; ResearchSpec contracts provide stable machine-readable runtime state.
-
-#### Projection Targets
-
-- Research questions and target venue project to `researchspec/specs/project.md`.
-- Sources and corpus records project to `researchspec/specs/sources.yaml`.
-- Claims and support limits project to `researchspec/specs/claims.yaml`.
-- Draft structure and manuscript constraints project to `researchspec/specs/manuscript.yaml`.
-
-#### Artifact Rule
-
-- Keep the original ARS schema payload as a registered artifact in `researchspec/runs/current/artifact-registry.json`.
-
-#### Mutation Boundary
-
-- Treat `researchspec/specs/project.md`, `researchspec/specs/sources.yaml`, `researchspec/specs/claims.yaml`, `researchspec/specs/manuscript.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-
-<!--/rs:a:ece45e8714b6-->
+<!--rs:HANDOFF-003-->
+> **Convention**: ARS Markdown schemas remain human-readable payload formats,
+> but ResearchSpec contracts and runtime records are the stable interfaces.
+> Producers must validate every required payload field, emit the payload as an
+> artifact, and return it to the runtime for registration in
+> `researchspec/runs/current/artifact-registry.json`. Project research intent,
+> sources, claims, and manuscript constraints into their corresponding
+> `researchspec/specs/*` files only through accepted contract changes. Missing
+> required fields trigger `HANDOFF_INCOMPLETE`; consumers must not proceed with
+> a partial handoff.
+<!--/rs:HANDOFF-003-->
 
 ---
 
@@ -548,26 +537,18 @@ score_trajectory: {
 
 ### Reset Boundary Extension (v3.6.3)
 
-<!--rs:a:db0cf94f84b6-->
-### ResearchSpec Material Passport Projection
-
-Material Passport fields are projected into ResearchSpec runtime records instead of being updated as a monolithic ledger.
-
-#### Projection Targets
-
-- Stage, mode, and resume state go to `researchspec/runs/current/state.yaml`.
-- Produced files and hashes go to `researchspec/runs/current/artifact-registry.json`.
-- Human branch choices go to `researchspec/runs/current/decision-ledger.jsonl`.
-- Verification outcomes go to `researchspec/runs/current/gate-ledger.jsonl`.
-
-#### Mutation Boundary
-
-- Request changes to `researchspec/runs/current/state.yaml` through the ResearchSpec orchestrator or runtime helper; do not edit run state directly.
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:db0cf94f84b6-->
+<!--rs:STATE-009-->
+When importing an ARS Material Passport with `ARS_PASSPORT_RESET=1`, interpret
+the following Schema 9 `reset_boundary[]` structure only as a compatibility
+payload. Project stage, mode, and consumption state into
+`researchspec/runs/current/state.yaml`; register the passport and referenced
+outputs through `researchspec/runs/current/artifact-registry.json`; return human
+branch choices to the decision runtime for
+`researchspec/runs/current/decision-ledger.jsonl`; and submit verification or
+staleness findings to the resume gate for
+`researchspec/runs/current/gate-ledger.jsonl`. Do not append to this schema as a
+substitute for those ResearchSpec-owned writes.
+<!--/rs:STATE-009-->
 
 ```yaml
 reset_boundary:
@@ -822,24 +803,17 @@ See `style_calibration_protocol.md` for full consumption rules and conflict reso
 - `authors_claim` / `revision_location` / `fulfillment_status` / `unfulfilled_rationale` / `residual_action`: academic-paper revision execution (authored), then independently confirmed by re-review
 - `verified` / `status` / `quality_assessment`: academic-paper-reviewer (re-review mode)
 
-<!--rs:a:deae197cae7d-->
-### ResearchSpec Reviewer Commitment Projection
-
-Reviewer commitments become explicit changes, draft patches, artifacts, and decisions.
-
-#### Projection Rules
-
-- Scope or claim changes become `researchspec/changes/<change-id>/contract-patch.yaml`.
-- Manuscript edits become `researchspec/draft-patches/<patch-id>.json`.
-- Review reports and response matrices are registered in `researchspec/runs/current/artifact-registry.json`.
-- Strategic choices are recorded in `researchspec/runs/current/decision-ledger.jsonl`.
-
-#### Mutation Boundary
-
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
-
-<!--/rs:a:deae197cae7d-->
+<!--rs:REVIEW-015-->
+**Consumer:** academic-paper revision mode and the pipeline orchestrator resolve
+Schema 11 commitment artifacts through
+`researchspec/runs/current/artifact-registry.json`. Research-meaning commitments
+become proposed `researchspec/changes/<change-id>/contract-patch.yaml` files;
+manuscript edits trace to `researchspec/draft-patches/<patch-id>.json`; accepted
+or rejected strategic choices are returned to the decision runtime for
+`researchspec/runs/current/decision-ledger.jsonl`. An imported Material Passport
+may carry a Schema 11 compatibility copy, but it is not the cross-stage source
+of truth.
+<!--/rs:REVIEW-015-->
 
 **Purpose**: Maps every reviewer concern through the full revision cycle — what was raised, what the author claims to have done, where the change is, and whether it was independently verified.
 
@@ -916,26 +890,36 @@ Ordering: chronological by `generated_at`. A Stage 2.5 FAIL followed by backfill
 1. **Required field check**: All schema fields marked without "(optional)" or "No" in the Required column are REQUIRED. Consumer agents MUST verify all required fields are present before proceeding
 2. **Type check**: Fields must match declared types (e.g., `enum` values must be from the allowed set)
 3. **Cross-reference check**: Source IDs referenced in Synthesis must exist in Bibliography; RevisionItem IDs in Response to Reviewers must match the Revision Roadmap
-<!--rs:a:92dac59a66ca-->
-### ResearchSpec Cross-Contract Gate
+<!--rs:GATE-006-->
+4. **Version tracking:** every handoff resolves a stable artifact id, version
+   label, content hash, and supersession relationship from
+   `researchspec/runs/current/artifact-registry.json`. Version labels increase
+   monotonically within a lineage.
+5. **Failure on missing:** missing required fields or artifacts produce
+   `HANDOFF_INCOMPLETE` with the exact gaps; consumers do not proceed partially.
+6. **Producer validation:** the producer validates payload shape before returning
+   the artifact for runtime registration.
+7. **Consumer validation:** the consumer checks payload shape, expected artifact
+   id/hash, and required upstream gate receipts before use; violations request a
+   corrected artifact rather than an in-place edit.
+8. **Integrity gating:** verification status comes from the gate entry tied to
+   the artifact hash in `researchspec/runs/current/gate-ledger.jsonl`, not from a
+   mutable payload field.
+9. **Staleness detection:** when an upstream artifact hash changes or is
+   superseded, dependent artifacts and prior gate receipts are stale until their
+   responsible helpers recompute them.
+10. **Freshness:** apply the configured freshness policy to gate timestamps and
+    current artifact hashes. Expired evidence requires re-verification.
+11. **Stage-skip eligibility:** Stage 2.5 may be skipped only when the current
+    artifact hash has a fresh VERIFIED receipt, version expectations match, the
+    workflow permits the skip, and the user confirms it. Return that confirmation
+    to the decision runtime; otherwise run full verification.
+12. **Final integrity is never skipped:** Stage 4.5 always performs its configured
+    full verification, regardless of imported Passport status or earlier gates.
 
-Cross-schema freshness and compatibility checks become ResearchSpec validator diagnostics and gate entries.
-
-#### Gate Inputs
-
-- Read artifact identities and hashes from `researchspec/runs/current/artifact-registry.json`.
-- Compare declared contract dependencies against the current ResearchSpec specs and state.
-
-#### Blocking Conditions
-
-- Return stale, missing, or incompatible dependency findings to the cross-schema gate helper.
-
-#### Mutation Boundary
-
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:92dac59a66ca-->
+Validators and runtime helpers own registry and gate writes; producer and
+consumer agents only emit payloads and findings.
+<!--/rs:GATE-006-->
 
 ## `data_access_level` (v3.3.2+)
 

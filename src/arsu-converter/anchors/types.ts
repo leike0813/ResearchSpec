@@ -1,5 +1,8 @@
+export const REPLACEMENT_PROFILE_ID = "researchspec-anchor-replacement-v3" as const;
+export const ANCHOR_ID_PATTERN = /^(STATE|IO|HANDOFF|PATCH|GATE|ARTIFACT|CLAIM|DECISION|SOURCE|REVIEW)-\d{3}$/;
+
 export type AnchorSeverity = "required" | "recommended" | "diagnostic";
-export type AnchorReplacementProfileId = "researchspec-anchor-replacement-v2";
+export type AnchorReplacementProfileId = typeof REPLACEMENT_PROFILE_ID;
 export type AnchorSemanticRole =
   | "runtime_state_boundary"
   | "contract_io_boundary"
@@ -21,23 +24,40 @@ export type AnchorReplacementShape =
   | "schema_projection_table"
   | "checklist";
 
-export interface ContractAnchor {
+export interface AnchorMatchHints {
+  headings?: string[];
+  snippets?: string[];
+  keywords?: string[];
+}
+
+interface ContractAnchorBase {
   id: string;
+  name: string;
   source_path: string;
   owner_skill: string;
   contract_category: string;
-  severity: AnchorSeverity;
-  match_hints: {
-    headings?: string[];
-    snippets?: string[];
-    keywords?: string[];
-  };
-  replacement_intent: string;
-  template_id: string;
-  replacement_scope?: {
+  match_hints: AnchorMatchHints;
+}
+
+export interface ReplaceableContractAnchor extends ContractAnchorBase {
+  severity: "required" | "recommended";
+  semantic_role: AnchorSemanticRole;
+  researchspec_targets: string[];
+  replacement_shape: AnchorReplacementShape;
+  replacement_scope: {
     start_snippet: string;
     end_snippet: string;
   };
+}
+
+export interface DiagnosticContractAnchor extends ContractAnchorBase {
+  severity: "diagnostic";
+}
+
+export type ContractAnchor = ReplaceableContractAnchor | DiagnosticContractAnchor;
+
+export function isReplaceableAnchor(anchor: ContractAnchor): anchor is ReplaceableContractAnchor {
+  return anchor.severity !== "diagnostic";
 }
 
 export interface CoverageDecision {
@@ -49,7 +69,7 @@ export interface CoverageDecision {
 }
 
 export interface ContractAnchorFile {
-  schema_version: "researchspec.arsu.contract-anchors.v2";
+  schema_version: "researchspec.arsu.contract-anchors.v3";
   upstream_source: "vendor/ars";
   audited_commit: string;
   anchors: ContractAnchor[];
@@ -60,15 +80,15 @@ export type AnchorReplacementMode = "replace" | "diagnostic";
 
 export interface AnchorMatchRecord {
   anchor_id: string;
-  marker_id: string;
+  anchor_name: string;
   source_path: string;
   owner_skill: string;
   contract_category: string;
   severity: AnchorSeverity;
-  template_id: string;
   semantic_role?: AnchorSemanticRole;
   researchspec_targets: string[];
   replacement_shape?: AnchorReplacementShape;
+  replacement_body_sha256?: string;
   matched: boolean;
   replacement_mode: AnchorReplacementMode;
   replaced: boolean;
@@ -81,7 +101,9 @@ export interface AnchorMatchRecord {
 }
 
 export interface AnchorMatchSpan {
-  anchor: ContractAnchor;
+  anchor: ReplaceableContractAnchor;
+  replacement_body: string;
+  replacement_body_sha256: string;
   start: number;
   end: number;
 }

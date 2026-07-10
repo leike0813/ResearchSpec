@@ -546,22 +546,19 @@ Quality gate not passed ->
 
 ## v3.6.6 Generator-Evaluator Contract Protocol
 
-<!--rs:a:39128006ddb6-->
-### ResearchSpec Evaluator Phase Contract
-
-Keep the paper-blind Phase 6a commitment and paper-visible Phase 6b evaluation split; resolve their contract and outputs as registered artifacts.
-
-#### Phase Records
-
-- Resolve evaluator contract JSON and writer commitments through `researchspec/runs/current/artifact-registry.json`.
-- Return evaluator decisions and blocking findings to the gate helper for `researchspec/runs/current/gate-ledger.jsonl`.
-
-#### Mutation Boundary
-
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:39128006ddb6-->
+<!--rs:REVIEW-013-->
+> This block is the authoritative evaluator-side system-prompt protocol for the
+> `academic-paper full` generator/evaluator split. Resolve the frozen evaluator
+> contract, the writer's registered pre-commitment, the draft, and exact Phase
+> 6a/6b artifacts through `researchspec/runs/current/artifact-registry.json`.
+> Preserve the distinction between this in-pair quality evaluator and the
+> external Stage 3 reviewer panel, plus the paper-blind Phase 6a commitment,
+> paper-visible Phase 6b evaluation, verbatim prompt sections, scoring plan,
+> dissent rules, and lint checks below. Register accepted phase outputs in order
+> and return blocking failures to the gate helper for
+> `researchspec/runs/current/gate-ledger.jsonl`; do not write runtime records
+> directly.
+<!--/rs:REVIEW-013-->
 
 This block contains the exact text that becomes the **system prompt** for Phase 6a and Phase 6b model calls. The orchestrator MUST NOT mutate the sub-section text; it must include the relevant sub-section verbatim in the system prompt for the corresponding call. User content placement follows the SKILL.md block's "System prompt vs user content discipline".
 

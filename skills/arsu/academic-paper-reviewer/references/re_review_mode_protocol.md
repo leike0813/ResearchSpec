@@ -40,36 +40,48 @@ Priority 3 (Nice to Fix):
   -> Check but does not affect Decision
 ```
 
-<!--rs:a:6fd4c82e53e6-->
-### ResearchSpec Commitment Verification
+<!--rs:REVIEW-008-->
+### Commitment Verification Against Registered Revision Evidence
 
-Commitment verification is a gate over revised draft, response, and patch artifacts.
+Run this step for every commitment-bearing concern, regardless of priority.
+Resolve the original review and roadmap, the registered revised manuscript and
+response artifacts, the relevant
+`researchspec/draft-patches/<patch-id>.json`, and its apply report through
+`researchspec/runs/current/artifact-registry.json`. Verify the evidence itself;
+do not accept an author's claim or an imported Schema 11 status as proof.
 
-#### Gate Inputs
+For each commitment, assign one `fulfillment_status`:
 
-- Read revision patches from `researchspec/draft-patches/<patch-id>.json`.
-- Resolve response letters and revised drafts via `researchspec/runs/current/artifact-registry.json`.
+- `fulfilled` — the required evidence exists and substantively satisfies the
+  commitment. Verify `new_section`, `new_figure`, `new_table`, `new_citation`,
+  `methods_paragraph`, `discussion_paragraph`, and `prose_edit` against the
+  revised manuscript and patch/apply evidence at the stated location. Verify an
+  `acknowledgment_only` commitment against the registered Response to Reviewers,
+  because no manuscript diff is expected.
+- `partial` — evidence exists but only partly satisfies the commitment.
+- `not-fulfilled` — the required evidence is absent.
+- `explicitly-rejected-with-rationale` — the author explicitly declined the
+  commitment and supplied the rationale.
 
-#### Ledger Writes
+For `required_evidence_type: other`, surface the advisory
+`EVIDENCE_TYPE_UNSPECIFIED`. If `revision_location` is absent, request it; if it
+is present, verify there while retaining the advisory. This advisory is distinct
+from a missing-rationale gap.
 
-- Return fulfilled, partially fulfilled, and unresolved findings to the commitment gate helper.
+For `partial`, `not-fulfilled`, or `explicitly-rejected-with-rationale`, require
+`unfulfilled_rationale` on the same commitment object. If missing, add an
+advisory `COMMITMENT_GAP`. Keep per-commitment status/rationale pairing intact;
+do not reconstruct parallel lists or pair by index.
 
-#### Mutation Boundary
+A concern-level `residual_action` may coexist with fulfilled individual
+commitments. It states what remains for the whole concern and is not evidence of
+a contradiction by itself.
 
-- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
-- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
-
-<!--/rs:a:6fd4c82e53e6-->
-  - For `other` — the evidence type is intentionally underspecified (escape hatch for genuinely uncategorizable commitments). Surface a soft **`EVIDENCE_TYPE_UNSPECIFIED`** advisory (advisory only, **not** a hard block): if `revision_location` is empty, prompt the author to specify it so the re-reviewer can verify; if `revision_location` is already populated, the advisory simply flags that the evidence type was left uncategorized — verify at the stated location. This is distinct from `COMMITMENT_GAP` (which fires on missing rationale for a non-`fulfilled` status); `EVIDENCE_TYPE_UNSPECIFIED` fires whenever `required_evidence_type == other`, regardless of `fulfillment_status`.
-- `partial` — required evidence exists but does not fully address the commitment (e.g., experiment run on dataset Y when reviewer asked for dataset X; 3-seed std error when 5-seed was requested with rationale provided).
-- `not-fulfilled` — required evidence is absent (rationale presence is a separate axis — see `COMMITMENT_GAP` rule below).
-- `explicitly-rejected-with-rationale` — author has explicitly declined to address the commitment; status name implies rationale, but `unfulfilled_rationale` is still the field that carries the actual rationale text (per Schema 11 Validation rule).
-
-For any commitment object with `fulfillment_status` ∈ `{partial, not-fulfilled, explicitly-rejected-with-rationale}` where the object's `unfulfilled_rationale` is empty or missing, surface a **`COMMITMENT_GAP`** entry in re-review output (advisory only, **not** a hard block — author retains final responsibility per `POSITIONING.md`). This mirrors the Schema 11 Validation rule: any non-`fulfilled` status requires a rationale on the same commitment object. Because `fulfillment_status` and `unfulfilled_rationale` are nested fields of the commitment object (not separate parallel lists), there is no index-walking step and no way to pair a status with the wrong commitment — the #268 desync failure mode is structurally absent.
-
-**A populated `residual_action` alongside one or more commitment objects with `fulfillment_status: fulfilled` is not a contradiction.** `residual_action` operates at the concern level (forward-looking: what still remains for the whole concern), while `fulfillment_status` is per-commitment (carried on each commitment object). A concern can have some commitments fully fulfilled and still carry a concern-level residual action (e.g., the core ablation was added but the concern's broader generalization claim still needs a follow-up experiment flagged in `residual_action`). Do **not** raise a gap or inconsistency flag merely because `residual_action` is non-empty while one or more commitments are `fulfilled` — see `shared/handoff_schemas.md` Schema 11 `residual_action` convention (a).
-
-This section is the verification analog of `revision_coach_agent` Step 3.5 (Kong A1). Per-commitment lifecycle gating is what closes the Kong §7.4.3 commitment-fulfillment gap.
+Return the completed verification report as an artifact for registration. Send
+unresolved, worsened, or blocking commitment findings to the re-review gate
+helper for `researchspec/runs/current/gate-ledger.jsonl`. The reviewer does not
+apply patches or write registry/gate records directly.
+<!--/rs:REVIEW-008-->
 
 ### New Issue Detection
 
