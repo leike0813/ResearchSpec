@@ -9,9 +9,11 @@ export const ScopedWorkSelectorSchema = z.string().regex(new RegExp(`^work:sf-${
 export const WorkItemSelectorSchema = z.union([ScopedWorkSelectorSchema, LegacyWorkSelectorSchema]);
 export const SubflowTemplateSelectorSchema = z.string().regex(new RegExp(`^subflow:tpl-${SafeId}$`))
   .refine((value) => !value.includes(".."));
+export const ScopedSubflowNodeSelectorSchema = z.string().regex(new RegExp(`^subflow:sf-${SafeId}/${SafeId}$`))
+  .refine((value) => !value.includes(".."));
 export const SubflowInstanceSelectorSchema = z.string().regex(new RegExp(`^subflow:sf-${SafeId}$`))
   .refine((value) => !value.includes(".."));
-export const SubflowSelectorSchema = z.union([SubflowTemplateSelectorSchema, SubflowInstanceSelectorSchema]);
+export const SubflowSelectorSchema = z.union([SubflowTemplateSelectorSchema, ScopedSubflowNodeSelectorSchema, SubflowInstanceSelectorSchema]);
 export const ScopedGateSelectorSchema = z.string().regex(new RegExp(`^gate:sf-${SafeId}/${SafeId}$`))
   .refine((value) => !value.includes(".."));
 export const LegacyGateSelectorSchema = z.string().regex(new RegExp(`^gate:${SafeId}$`))
@@ -27,6 +29,7 @@ export type RuntimeSelector =
   | { kind: "legacy_work"; selector: string; workItemId: string }
   | { kind: "scoped_work"; selector: string; instanceId: string; workItemId: string }
   | { kind: "subflow_template"; selector: string; templateId: string }
+  | { kind: "scoped_subflow_node"; selector: string; instanceId: string; nodeId: string }
   | { kind: "subflow_instance"; selector: string; instanceId: string }
   | { kind: "gate"; selector: string; instanceId?: string; id: string }
   | { kind: "transition"; selector: string; instanceId: string; id: string };
@@ -39,6 +42,10 @@ export function parseRuntimeSelector(value: string): RuntimeSelector | undefined
   }
   if (value.startsWith("work:")) return { kind: "legacy_work", selector: value, workItemId: value.slice("work:".length) };
   if (value.startsWith("subflow:tpl-")) return { kind: "subflow_template", selector: value, templateId: value.slice("subflow:".length) };
+  if (value.startsWith("subflow:sf-") && value.includes("/")) {
+    const [instanceId, nodeId] = value.slice("subflow:".length).split("/", 2);
+    if (instanceId && nodeId) return { kind: "scoped_subflow_node", selector: value, instanceId, nodeId };
+  }
   if (value.startsWith("subflow:sf-")) return { kind: "subflow_instance", selector: value, instanceId: value.slice("subflow:".length) };
   if (value.startsWith("gate:")) {
     const body = value.slice("gate:".length);

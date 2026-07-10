@@ -29,6 +29,7 @@ void test("init dry-run and execution share a protected workspace plan", async (
   assert.equal(existsSync(path.join(root, "researchspec")), false);
 
   assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
+  assert.match(await readFile(path.join(root, "researchspec/config.yaml"), "utf8"), /^profile: arsu-v0-1$/m);
   assert.equal(runCli(["init", root, "--tools", "none", "--profile", "unknown", "--json"]).status, 2);
   for (const relative of ["config.yaml", "tool-installation-manifest.json", "specs/project.md", "runs/current/state.yaml"]) assert.equal(existsSync(path.join(root, "researchspec", relative)), true);
   const projectPath = path.join(root, "researchspec/specs/project.md");

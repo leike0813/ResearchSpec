@@ -2,6 +2,8 @@ import { lstat, readFile, realpath } from "node:fs/promises";
 import { readFileSync, realpathSync } from "node:fs";
 import path from "node:path";
 
+import { getArsuArtifactContract } from "../../arsu-converter/workflow/artifact-contracts.js";
+
 import {
   ArtifactRegistrySchema,
   ArtifactSubmitInputSchema,
@@ -62,7 +64,7 @@ export async function planArtifactSubmit(input: {
   const snapshot = input.snapshot;
   if (snapshot.diagnostics.some((item) => item.blocking)) throw new ArtifactSubmitError("workflow_invalid", "Workspace or workflow has blocking diagnostics.", "domain", { diagnostics: snapshot.diagnostics.filter((item) => item.blocking) });
   const node = selector.node;
-  if (node.validation_profile !== "research-artifact") throw new ArtifactSubmitError("candidate_validation_failed", `Unsupported validation profile: ${node.validation_profile}`, "domain");
+  if (!["research-artifact", "text-artifact", "binary-file-artifact"].includes(node.validation_profile)) throw new ArtifactSubmitError("candidate_validation_failed", `Unsupported validation profile: ${node.validation_profile}`, "domain");
 
   const candidate = await validateCandidate(snapshot, node, input.expectedSha256);
   const ids = derivedIds(selector.instanceId ? `${selector.instanceId}-${node.id}` : node.id, candidate.hash);
@@ -71,7 +73,8 @@ export async function planArtifactSubmit(input: {
   const existingCandidate = existingForWorkItem.find((item) => item.artifact_id === ids.artifactId);
   const now = input.now ?? new Date().toISOString();
   const basis = submissionBasis(snapshot, node);
-  const validationChecks = ["declared_path", "regular_file", "workspace_containment", "utf8", "non_empty", "candidate_sha256", "template_ref", "dependency_coverage"];
+  const validationChecks = ["declared_path", "regular_file", "workspace_containment", ...(node.validation_profile === "binary-file-artifact" ? ["allowed_extension"] : ["utf8"]), "non_empty", "candidate_sha256", "template_ref", "dependency_coverage"];
+  const validatorName = `researchspec:${node.validation_profile}`;
   const registryPath = path.join(snapshot.workspace, "runs/current/artifact-registry.json");
   const projectRoot = path.dirname(snapshot.workspace);
   const candidateRegistryPath = toPosix(path.relative(projectRoot, candidate.path));
@@ -95,7 +98,7 @@ export async function planArtifactSubmit(input: {
     stage_id: node.stage_id,
     payload_schema_ref: node.output.template_ref,
     dependency_artifacts: dependencies.map((item) => ({ artifact_id: String(item.artifact.artifact_id), artifact_type: String(item.artifact.artifact_type), path: String(item.artifact.path), sha256: String(item.artifact.sha256) })),
-    validation: { profile: node.validation_profile, checks: validationChecks, outcome: "pass", validator: { kind: "validator", name: "researchspec:research-artifact" } },
+    validation: { profile: node.validation_profile, checks: validationChecks, outcome: "pass", validator: { kind: "validator", name: validatorName } },
     completion_gate_ids: { required: node.completion.required_gate_ids, satisfied: satisfiedCompletionGateIds },
     basis,
     submitted_at: now,
@@ -126,7 +129,7 @@ export async function planArtifactSubmit(input: {
     payload_schema_ref: node.output.template_ref,
     created_at: verifiedAt,
     submit_receipt_artifact_id: ids.receiptArtifactId,
-    verification: { profile: node.validation_profile, verified_at: verifiedAt, verified_by: { kind: "validator", name: "researchspec:research-artifact" }, checks: validationChecks },
+    verification: { profile: node.validation_profile, verified_at: verifiedAt, verified_by: { kind: "validator", name: validatorName }, checks: validationChecks },
   });
   const receiptArtifact = SubmitReceiptArtifactRecordSchema.parse({
     artifact_id: ids.receiptArtifactId,
@@ -238,8 +241,15 @@ async function validateCandidate(snapshot: WorkspaceSnapshot, node: WorkflowNode
   if (!isInside(workspaceReal, candidateReal)) throw new ArtifactSubmitError("candidate_path_escape", "Candidate resolves outside the ResearchSpec workspace.", "domain", { path: candidatePath });
   const bytes = await readFile(candidatePath);
   if (bytes.length === 0) throw new ArtifactSubmitError("candidate_validation_failed", "Candidate is empty.", "domain");
-  try { new TextDecoder("utf-8", { fatal: true }).decode(bytes); }
-  catch { throw new ArtifactSubmitError("candidate_validation_failed", "Candidate is not valid UTF-8.", "domain"); }
+  if (node.validation_profile !== "binary-file-artifact") {
+    try { new TextDecoder("utf-8", { fatal: true }).decode(bytes); }
+    catch { throw new ArtifactSubmitError("candidate_validation_failed", "Candidate is not valid UTF-8.", "domain"); }
+  } else {
+    const artifactType = /^arsu-artifact:([a-z0-9][a-z0-9_-]*)$/.exec(node.output.template_ref)?.[1];
+    if (!artifactType) throw new ArtifactSubmitError("candidate_validation_failed", "Binary candidates require a controlled arsu-artifact reference.", "domain");
+    const contract = getArsuArtifactContract(artifactType);
+    if (contract.media_kind !== "binary" || path.extname(candidatePath).toLowerCase() !== contract.extension) throw new ArtifactSubmitError("candidate_validation_failed", `Binary candidate must use ${contract.extension}.`, "domain");
+  }
   const hash = sha256(bytes);
   if (expectedSha256 && hash !== expectedSha256) throw new ArtifactSubmitError("submission_conflict", "Candidate hash differs from the confirmed expected SHA-256.", "conflict", { expected: expectedSha256, actual: hash });
   try { await resolveTemplateReference(node.output.template_ref); }

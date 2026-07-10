@@ -9,14 +9,14 @@ agent-tool-delivery, and derived context artifacts.
 
 ### Requirement: Complete Public Command Surface
 
-ResearchSpec SHALL expose `init`, `update`, `status`, `instructions`, `submit`,
-`check`, `list`, `show`, `handoff`, `pack`, `propose`, `decide`, and `archive`
-as the complete first-version public CLI command set.
+ResearchSpec SHALL expose `init`, `update`, `status`, `instructions`, `start`,
+`submit`, `advance`, `check`, `list`, `show`, `handoff`, `pack`, `propose`,
+`decide`, and `archive` as the complete public CLI command set.
 
 #### Scenario: Help lists public commands
 
 - **WHEN** a user runs `researchspec --help`
-- **THEN** the CLI SHALL list all thirteen public commands
+- **THEN** the CLI SHALL list all fifteen public commands
 - **AND** it SHALL NOT list ARSU converter or upstream-maintenance commands
 
 #### Scenario: Unsupported syntax is a usage error
@@ -322,3 +322,24 @@ ResearchSpec SHALL expose `advance transition:<instance>/<node>` as the only pub
 
 - **WHEN** a Gate or transition is unknown, blocked, stale, ambiguous or already complete
 - **THEN** instructions SHALL return a stable domain error and SHALL NOT infer missing workflow facts
+
+### Requirement: New workspaces use the universal profile
+`researchspec init` SHALL select `arsu-v0-1` when no profile is supplied, SHALL retain explicit legacy profile selection, and SHALL not start an academic route.
+
+#### Scenario: Init uses no profile option
+- **WHEN** a new workspace is initialized without `--profile`
+- **THEN** it stores `arsu-v0-1` and leaves all external subflows unstarted
+
+### Requirement: Existing commands expose child-aware workflow state
+`status`, `instructions`, and `start` SHALL render and accept parent-scoped child subflow candidates without adding a public top-level command.
+
+#### Scenario: Pipeline child becomes ready
+- **WHEN** a parent stage makes one child node ready
+- **THEN** status and instructions expose its scoped selector and start can dry-run and execute it with normal plan-hash safeguards
+
+### Requirement: Public command surface remains fixed
+The CLI SHALL continue to expose exactly the canonical fifteen top-level commands after workflow profile support is added.
+
+#### Scenario: Help is rendered
+- **WHEN** top-level help is requested
+- **THEN** it lists init, update, status, instructions, start, submit, advance, check, list, show, handoff, pack, propose, decide, and archive exactly once

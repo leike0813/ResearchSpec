@@ -85,7 +85,7 @@ async function inspectSubflowStartReceipts(snapshot: WorkspaceSnapshot): Promise
       const bytes = await readFile(receiptPath);
       const receipt = SubflowStartReceiptSchema.safeParse(JSON.parse(Buffer.from(bytes).toString("utf8")) as unknown);
       if (sha256(bytes) !== instance.start_receipt.sha256) diagnostics.push(dangling("subflow_start_receipt_hash_mismatch", `Start receipt hash differs for ${instance.instance_id}.`, receiptPath));
-      if (!receipt.success || receipt.data.instance_id !== instance.instance_id || receipt.data.plan_sha256 !== instance.start_receipt.plan_sha256 || receipt.data.template_id !== instance.template_id || receipt.data.route_ref !== instance.route_ref) diagnostics.push(dangling("subflow_start_receipt_mismatch", `Start receipt does not match state for ${instance.instance_id}.`, receiptPath));
+      if (!receipt.success || receipt.data.instance_id !== instance.instance_id || receipt.data.plan_sha256 !== instance.start_receipt.plan_sha256 || receipt.data.template_id !== instance.template_id || receipt.data.route_ref !== instance.route_ref || receipt.data.parent_subflow_id !== instance.parent_subflow_id || (receipt.data.parent_node_id ?? null) !== (instance.parent_node_id ?? null) || receipt.data.round_number !== instance.round_number) diagnostics.push(dangling("subflow_start_receipt_mismatch", `Start receipt does not match state for ${instance.instance_id}.`, receiptPath));
     } catch {
       diagnostics.push(dangling("subflow_start_receipt_missing", `Start receipt is missing or invalid for ${instance.instance_id}.`, receiptPath));
     }

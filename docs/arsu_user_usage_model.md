@@ -416,11 +416,13 @@ command wrapper 只是不同 agent 工具的 adapter。目标交付量是：
   hash-bound `submit work:`；旧静态 workspaces 保持兼容。
 - instance-scoped `gate:`/`transition:` frontier、用户确认 Gate submit、challenge 后重验、
   receipt-bound override/branch Decision，以及 receipt-first/state-last Advance。
+- 新 workspace 默认 `arsu-v0-1`，完整覆盖 25 个 operational modes、2 个 pipeline entries，
+  并以 parent-scoped child selector、委托确认和无上限 dynamic revision rounds 组合 pipeline。
+- 受控 `arsu-artifact:` contracts，以及 receipt-backed 的 UTF-8 text 与原生 binary candidate Submit。
 
 当前实现尚不具备：
 
 - `researchspec-navigate` 以及基于 catalog 的 workspace route availability evaluation；
-- 四类 ARSU 的完整 profile graphs、并行组和动态 revision rounds；
 - 4 Companion、15 CLI、31×8/28×8 的目标 surface 收敛。
 
 因此本文中的路线、命令和数量是 Target v0.1，不是对当前 CLI help 或 generated Skill tree 的描述。
@@ -435,8 +437,8 @@ command wrapper 只是不同 agent 工具的 adapter。目标交付量是：
 | 4 | `add-arsu-workflow-profiles` | deep-research、academic-paper、reviewer、pipeline 的完整 mode/profile graphs |
 | 5 | `consolidate-researchspec-agent-surface` | Navigate、四 Companion、旧投影清理、31×8/28×8 delivery |
 
-其中 routing catalog、subflow instance control plane 与 Gate/transition control plane 已实现；
-完整 profiles 和 surface consolidation 仍待完成。
+其中 routing catalog、subflow instance control plane、Gate/transition control plane 与完整
+workflow profiles 已实现；surface consolidation 仍待完成。
 
 Umbrella change 只有在以下用户旅程全部通过时才能归档：Bootstrap、模糊路由、专家直达、standalone、pipeline、并行 join、Gate challenge/override、revision round、resume、context export 和 terminal completion。
 

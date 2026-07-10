@@ -4,8 +4,9 @@ import { z } from "zod";
 import { RouteRefSchema } from "../../arsu-converter/routing/contracts.js";
 export { WorkItemSelectorSchema } from "./runtime-selector.js";
 
-export const WORKFLOW_PROFILE_IDS = ["arsu-paper", "arsu-research-slice"] as const;
+export const WORKFLOW_PROFILE_IDS = ["arsu-v0-1", "arsu-paper", "arsu-research-slice"] as const;
 export type WorkflowProfileId = typeof WORKFLOW_PROFILE_IDS[number];
+export const DEFAULT_WORKFLOW_PROFILE_ID: WorkflowProfileId = "arsu-v0-1";
 
 const SafeIdSchema = z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]*$/).refine((value) => !value.includes(".."));
 const TemplateIdSchema = z.string().regex(/^tpl-[A-Za-z0-9][A-Za-z0-9._-]*$/);
@@ -34,6 +35,7 @@ const CommonNodeShape = {
   title: z.string().min(1),
   description: z.string().min(1),
   producer_skill: z.string().min(1),
+  producer_route_ref: RouteRefSchema.optional(),
   instruction: z.string().min(1),
   rules: z.array(z.string().min(1)),
   allowed_writes: z.array(z.enum(["output_artifact", "contract_patch", "draft_patch"])),
@@ -58,7 +60,7 @@ export const TransitionTemplateDefinitionSchema = z.strictObject({
     z.strictObject({ kind: z.literal("activate_stage"), stage_id: SafeIdSchema }),
     z.strictObject({ kind: z.literal("complete_subflow") }),
   ]),
-  requires: z.strictObject({ gate_ids: z.array(SafeIdSchema), decision_types: z.array(SafeIdSchema) }),
+  requires: z.strictObject({ gate_ids: z.array(SafeIdSchema), decision_types: z.array(SafeIdSchema), artifact_types: z.array(SafeIdSchema).optional() }),
   branch: z.strictObject({ decision_point_id: SafeIdSchema, option_id: SafeIdSchema }).nullable(),
 });
 
@@ -87,18 +89,41 @@ export const ParallelGroupDefinitionSchema = z.strictObject({
   ]),
 });
 
+export const SubflowNodeDefinitionSchema = z.strictObject({
+  id: SafeIdSchema,
+  stage_id: SafeIdSchema,
+  template_id: TemplateIdSchema,
+  depends_on: z.array(SafeIdSchema).default([]),
+  multiplicity: z.enum(["once", "next_round"]).default("once"),
+  completion: z.enum(["child_complete"]).default("child_complete"),
+});
+
+export const SubflowParallelGroupDefinitionSchema = z.strictObject({
+  id: SafeIdSchema,
+  members: z.array(z.strictObject({ subflow_node_id: SafeIdSchema, required: z.boolean() })).min(1),
+  max_concurrency: z.number().int().positive(),
+  join: z.discriminatedUnion("policy", [
+    z.strictObject({ policy: z.literal("all") }),
+    z.strictObject({ policy: z.literal("quorum"), required_count: z.number().int().positive() }),
+  ]),
+});
+
 export const SubflowTemplateDefinitionSchema = z.strictObject({
   template_id: TemplateIdSchema,
   template_kind: z.enum(["standalone", "pipeline", "round"]),
-  route_ref: RouteRefSchema,
+  visibility: z.enum(["external", "internal"]).optional(),
+  route_ref: RouteRefSchema.nullable(),
   route_coverage: z.enum(["complete", "partial"]),
   parent_policy: z.enum(["none", "optional", "required"]),
   entry_stage_id: SafeIdSchema,
   stages: z.array(z.strictObject({ stage_id: SafeIdSchema, title: z.string().min(1) })).min(1),
   start_requires: z.strictObject({ decision_types: z.array(SafeIdSchema) }),
-  work_items: z.array(WorkflowNodeTemplateSchema).min(1),
-  parallel_groups: z.array(ParallelGroupDefinitionSchema),
+  work_items: z.array(WorkflowNodeTemplateSchema).default([]),
+  parallel_groups: z.array(ParallelGroupDefinitionSchema).default([]),
+  subflow_nodes: z.array(SubflowNodeDefinitionSchema).optional(),
+  subflow_parallel_groups: z.array(SubflowParallelGroupDefinitionSchema).optional(),
   gates: z.array(GateTemplateDefinitionSchema).default([]),
+  advisory_gate_kinds: z.array(SafeIdSchema).optional(),
   transitions: z.array(TransitionTemplateDefinitionSchema).default([]),
 });
 
@@ -123,6 +148,8 @@ export const WorkflowDefinitionSchema = z.union([InstanceWorkflowDefinitionSchem
 export type WorkflowNodeDefinition = z.infer<typeof WorkflowNodeDefinitionSchema>;
 export type WorkflowNodeTemplate = z.infer<typeof WorkflowNodeTemplateSchema>;
 export type ParallelGroupDefinition = z.infer<typeof ParallelGroupDefinitionSchema>;
+export type SubflowNodeDefinition = z.infer<typeof SubflowNodeDefinitionSchema>;
+export type SubflowParallelGroupDefinition = z.infer<typeof SubflowParallelGroupDefinitionSchema>;
 export type SubflowTemplateDefinition = z.infer<typeof SubflowTemplateDefinitionSchema>;
 export type GateTemplateDefinition = z.infer<typeof GateTemplateDefinitionSchema>;
 export type TransitionTemplateDefinition = z.infer<typeof TransitionTemplateDefinitionSchema>;
@@ -162,13 +189,17 @@ function validateLegacyWorkflow(workflow: LegacyWorkflowDefinition): WorkflowDef
 
 function validateInstanceWorkflow(workflow: InstanceWorkflowDefinition): WorkflowDefinitionIssue[] {
   const issues: WorkflowDefinitionIssue[] = [];
-  uniqueIds(workflow.subflow_templates.map((item) => item.template_id), "duplicate_subflow_template_id", issues);
+  const templateIds = uniqueIds(workflow.subflow_templates.map((item) => item.template_id), "duplicate_subflow_template_id", issues);
   for (const template of workflow.subflow_templates) {
     const stageIds = uniqueIds(template.stages.map((item) => item.stage_id), "duplicate_stage_id", issues);
     if (!stageIds.has(template.entry_stage_id)) issues.push({ code: "workflow_stage_missing", message: `Template ${template.template_id} entry stage does not exist: ${template.entry_stage_id}` });
     if (template.template_kind === "round" && template.parent_policy !== "required") issues.push({ code: "round_parent_policy_invalid", message: `Round template ${template.template_id} requires parent_policy required.` });
+    if (template.visibility !== "internal" && template.route_ref === null) issues.push({ code: "external_route_missing", message: `External template ${template.template_id} requires route_ref.` });
+    if (template.visibility === "internal" && template.parent_policy !== "required") issues.push({ code: "internal_parent_policy_invalid", message: `Internal template ${template.template_id} requires parent_policy required.` });
+    if (template.work_items.length === 0 && (template.subflow_nodes ?? []).length === 0) issues.push({ code: "subflow_template_empty", message: `Template ${template.template_id} has no work or child nodes.` });
     if (template.template_kind !== "round" && template.work_items.some((item) => item.output.workspace_path_template.includes("{round_number}"))) issues.push({ code: "round_placeholder_invalid", message: `Non-round template ${template.template_id} uses round_number.` });
     validateNodeGraph(template.work_items, stageIds, template.parallel_groups, issues);
+    validateSubflowGraph(template, templateIds, stageIds, issues);
     const gateIds = uniqueIds(template.gates.map((item) => item.id), "duplicate_gate_id", issues);
     uniqueIds(template.transitions.map((item) => item.id), "duplicate_transition_id", issues);
     for (const gate of template.gates) if (!stageIds.has(gate.stage_id)) issues.push({ code: "gate_stage_missing", message: `Gate ${gate.id} references missing stage: ${gate.stage_id}` });
@@ -179,7 +210,59 @@ function validateInstanceWorkflow(workflow: InstanceWorkflowDefinition): Workflo
       if (transition.branch && !transition.requires.decision_types.includes("workflow_branch")) issues.push({ code: "transition_branch_invalid", message: `Branch transition ${transition.id} must require workflow_branch.` });
     }
   }
+  validateSubflowCompositionCycles(workflow.subflow_templates, issues);
   return deduplicateIssues(issues);
+}
+
+function validateSubflowGraph(template: SubflowTemplateDefinition, templateIds: Set<string>, stageIds: Set<string>, issues: WorkflowDefinitionIssue[]): void {
+  const childNodes = template.subflow_nodes ?? [];
+  const childGroups = template.subflow_parallel_groups ?? [];
+  const nodeIds = uniqueIds(childNodes.map((item) => item.id), "duplicate_subflow_node_id", issues);
+  const groupIds = uniqueIds(childGroups.map((item) => item.id), "duplicate_subflow_parallel_group_id", issues);
+  for (const node of childNodes) {
+    if (!stageIds.has(node.stage_id)) issues.push({ code: "subflow_node_stage_missing", message: `Child node ${node.id} references missing stage: ${node.stage_id}` });
+    if (!templateIds.has(node.template_id)) issues.push({ code: "subflow_node_template_missing", message: `Child node ${node.id} references missing template: ${node.template_id}` });
+    if (node.template_id === template.template_id) issues.push({ code: "subflow_node_self_reference", message: `Template ${template.template_id} cannot invoke itself directly.` });
+    for (const dependency of node.depends_on) if (!nodeIds.has(dependency)) issues.push({ code: "subflow_node_dependency_missing", message: `Child node ${node.id} references missing child node: ${dependency}` });
+  }
+  const membership = new Set<string>();
+  for (const group of childGroups) {
+    if (group.max_concurrency > group.members.length) issues.push({ code: "subflow_parallel_capacity_invalid", message: `Child group ${group.id} capacity exceeds members.` });
+    if (group.join.policy === "quorum" && group.join.required_count > group.members.length) issues.push({ code: "subflow_parallel_quorum_invalid", message: `Child group ${group.id} quorum exceeds members.` });
+    for (const member of group.members) {
+      if (!nodeIds.has(member.subflow_node_id)) issues.push({ code: "subflow_parallel_member_missing", message: `Child group ${group.id} references missing node: ${member.subflow_node_id}` });
+      if (membership.has(member.subflow_node_id)) issues.push({ code: "subflow_parallel_member_multiple_groups", message: `Child node ${member.subflow_node_id} belongs to multiple groups.` });
+      membership.add(member.subflow_node_id);
+    }
+  }
+  const byId = new Map(childNodes.map((node) => [node.id, node]));
+  const visiting = new Set<string>();
+  const visited = new Set<string>();
+  const visit = (id: string): void => {
+    if (visiting.has(id)) { issues.push({ code: "subflow_node_cycle", message: `Child-node graph contains a cycle involving: ${id}` }); return; }
+    if (visited.has(id)) return;
+    visiting.add(id);
+    for (const dependency of byId.get(id)?.depends_on ?? []) if (byId.has(dependency)) visit(dependency);
+    visiting.delete(id);
+    visited.add(id);
+  };
+  for (const node of childNodes) visit(node.id);
+  void groupIds;
+}
+
+function validateSubflowCompositionCycles(templates: SubflowTemplateDefinition[], issues: WorkflowDefinitionIssue[]): void {
+  const byId = new Map(templates.map((template) => [template.template_id, template]));
+  const visiting = new Set<string>();
+  const visited = new Set<string>();
+  const visit = (templateId: string): void => {
+    if (visiting.has(templateId)) { issues.push({ code: "subflow_composition_cycle", message: `Subflow template composition contains a cycle involving: ${templateId}` }); return; }
+    if (visited.has(templateId)) return;
+    visiting.add(templateId);
+    for (const node of byId.get(templateId)?.subflow_nodes ?? []) if (byId.has(node.template_id)) visit(node.template_id);
+    visiting.delete(templateId);
+    visited.add(templateId);
+  };
+  for (const template of templates) visit(template.template_id);
 }
 
 function validateNodeGraph(nodes: Array<WorkflowNodeDefinition | WorkflowNodeTemplate>, stageIds: Set<string>, groups: ParallelGroupDefinition[], issues: WorkflowDefinitionIssue[]): void {

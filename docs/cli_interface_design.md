@@ -10,10 +10,10 @@ wire contract 供迁移使用。用户从对话进入 ARSU 工作的顺序以
 
 - **Target v0.1**：15 个顶层命令和
   `status → instructions → start/submit/advance → status`。
-- **Current implementation（2026-07-10）**：已有 subflow template/instance、
-  `instructions subflow:|work:`、`start` 与 start-authorized `submit work:`；尚无
-  `submit gate:` 或 `advance`。
-- **Pending technical layer**：Gate submit、transition advance、完整 profiles 与 surface 收敛。
+- **Current implementation（2026-07-10）**：已有完整 `arsu-v0-1` profile、external 与
+  parent-scoped child subflow、`submit work:|gate:`、`advance transition:`、Decision 与
+  dynamic revision-round frontier。
+- **Pending technical layer**：Navigate 与四 Companion surface 收敛。
 
 事实源：
 
@@ -600,7 +600,7 @@ researchspec archive [item] [--json] [--dry-run]
 | `artifact-registry.json` | `submit`、`decide` | 只由受约束事务入口登记 candidate、receipt 或 revised artifact |
 | `runs/current/receipts/artifact-submit/*` | `submit` | deterministic create-only receipt；与 candidate/registry hash 交叉验证 |
 | `decision-ledger.jsonl` | `decide` | 记录 human decision，不允许用户手写 JSONL |
-| `gate-ledger.jsonl` | Current: 无公共写命令；Target: `submit gate:` | validator 提出 verdict，用户确认，CLI 原子追加 |
+| `gate-ledger.jsonl` | `submit gate:` | validator 提出 verdict，用户确认，CLI 原子追加 receipt-backed event |
 | `runs/current/handoff.md` | `handoff` | rendered view，不是 SSOT |
 | `researchspec/changes/archive/*` | `archive` | 只移动 resolved contract changes，不处理 pending changes |
 | `researchspec/draft-patches/archive/*` | `archive` | 只移动 resolved draft patches，不应用 patch |
@@ -634,7 +634,8 @@ interface CliEnvelope<T> {
 
 ### 16.3 Item selectors
 
-Current canonical selectors 为 `change:`、`patch:`、`artifact:`、`gate:`、
+Current canonical selectors 还包括 external `subflow:<template>`、parent-scoped
+`subflow:<parent>/<node>`、instance-scoped `work:`/`gate:`/`transition:`，以及 `change:`、`patch:`、`artifact:`、
 `decision:`、`source:`、`claim:`、`tool:` 和 `contract:`。裸 ID 只有在所有
 index 中唯一时才可解析；歧义时返回候选 canonical selectors。
 

@@ -15,12 +15,11 @@ surface are canonical in [ARSU User Usage Model v0.1](./arsu_user_usage_model.md
 - **Target v0.1** uses one active run, dynamic standalone/pipeline subflows,
   workflow-declared parallel groups, confirmed Gates, transitions, and revision
   round templates.
-- **Current implementation (2026-07-10)** provides an explicitly started three-work
-  research subflow, dynamic subflow/round instances, all/quorum parallel frontier,
-  scoped instructions and Start-authorized receipt-backed `submit work:`, plus the
-  typed ARSU routing catalog and nine current Companion Skills.
-- **Pending technical layers** are `submit gate:`, `advance`, complete ARSU profiles,
-  and four-Companion consolidation.
+- **Current implementation (2026-07-10)** provides the complete `arsu-v0-1` route
+  profile, nested parent-scoped child subflows, unbounded revision rounds, all/quorum
+  joins, text/binary Submit, confirmed Gates, branch Decisions, receipt-backed Advance,
+  and converter-projected guidance for the nine current Companion Skills.
+- **Pending technical layer** is Navigate and four-Companion surface consolidation.
 
 Source anchors:
 

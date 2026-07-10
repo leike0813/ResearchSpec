@@ -3,6 +3,7 @@ import { stringify } from "yaml";
 
 import type { WorkflowProfileId } from "../contracts/workflow.js";
 import { ARSU_RESEARCH_SLICE_STATE, ARSU_RESEARCH_SLICE_WORKFLOW } from "../workflow/profiles/arsu-research-slice.js";
+import { ARSU_V0_1_WORKFLOW } from "../workflow/profiles/arsu-v0-1.generated.js";
 
 export type WorkspaceFileKind = "markdown" | "yaml" | "json" | "jsonl";
 export type OverwritePolicy = "user" | "generated";
@@ -84,14 +85,19 @@ export const WORKSPACE_TEMPLATES: readonly WorkspaceTemplateDefinition[] = [
   { relativePath: "runs/current/gate-ledger.jsonl", kind: "jsonl", overwritePolicy: "user", required: true, content: "" },
 ] as const;
 
-export function getWorkspaceTemplates(profile: WorkflowProfileId = "arsu-paper"): readonly WorkspaceTemplateDefinition[] {
+export function getWorkspaceTemplates(profile: WorkflowProfileId = "arsu-v0-1"): readonly WorkspaceTemplateDefinition[] {
   if (profile === "arsu-paper") return WORKSPACE_TEMPLATES;
+  const workflow = profile === "arsu-v0-1" ? ARSU_V0_1_WORKFLOW : ARSU_RESEARCH_SLICE_WORKFLOW;
+  const state = profile === "arsu-v0-1" ? {
+    schema_version: "0.2" as const, run_id: "current", workflow_id: "arsu-v0-1", status: "not_started" as const,
+    active_stage_id: null, started_at: null, updated_at: null, subflows: [], pending_decisions: [], diagnostics: [],
+  } : ARSU_RESEARCH_SLICE_STATE;
   return WORKSPACE_TEMPLATES.map((template) => {
     if (template.relativePath === "config.yaml") {
-      return { ...template, content: `schema_version: "0.1"\nprofile: arsu-research-slice\nagent_tools:\n  selected: []\n  delivery: both\n` };
+      return { ...template, content: `schema_version: "0.1"\nprofile: ${profile}\nagent_tools:\n  selected: []\n  delivery: both\n` };
     }
-    if (template.relativePath === "specs/workflow.yaml") return { ...template, content: stringify(ARSU_RESEARCH_SLICE_WORKFLOW) };
-    if (template.relativePath === "runs/current/state.yaml") return { ...template, content: stringify(ARSU_RESEARCH_SLICE_STATE) };
+    if (template.relativePath === "specs/workflow.yaml") return { ...template, content: stringify(workflow) };
+    if (template.relativePath === "runs/current/state.yaml") return { ...template, content: stringify(state) };
     return template;
   });
 }
@@ -107,7 +113,7 @@ export function resolveInitTarget(inputPath: string | undefined, cwd: string): s
   return path.basename(base) === "researchspec" ? base : path.join(base, "researchspec");
 }
 
-export function getWorkspaceEntries(workspaceRoot: string, profile: WorkflowProfileId = "arsu-paper"): WorkspaceEntry[] {
+export function getWorkspaceEntries(workspaceRoot: string, profile: WorkflowProfileId = "arsu-v0-1"): WorkspaceEntry[] {
   const templates = getWorkspaceTemplates(profile);
   return [
     ...REQUIRED_DIRECTORIES.map((dir): WorkspaceEntry => ({ kind: "dir", path: path.join(workspaceRoot, dir) })),

@@ -4,7 +4,7 @@
 - Source: `vendor/ars`
 - Source commit: `becfcc40c6e9e93c187cf4a088333f83373e002d`
 - Output: `skills/arsu`
-- Generated at: `2026-07-10T15:38:53Z`
+- Generated at: `2026-07-10T16:19:57Z`
 - Validation: pass
 
 ## Source Checkout
@@ -24,7 +24,7 @@
 ## Contract Compatibility
 
 - Manifest: `researchspec-contracts.json`
-- Profile: `researchspec-preflight-v3`
+- Profile: `researchspec-preflight-v4`
 - Material Passport policy: `compatibility_artifact_only_not_runtime_ssot`
 - Full matrix injection: `false`
 - Anchor replacement profile: `researchspec-anchor-replacement-v3`

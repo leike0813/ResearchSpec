@@ -11,9 +11,10 @@ schema、validator、CLI 行为和 ARSU wrapper preflight 协议。
 
 - **Target v0.1**：单 active run、动态 subflow/round、parallel/join、Gate confirmation、
   transition receipt 与 selector instructions 所需的领域信息。
-- **Current implementation（2026-07-10）**：legacy/static 与 Schema 0.2 instance workflow/state
-  union、subflow/round、parallel join、receipt-backed scoped Submit，以及 typed routing catalog。
-- **Pending technical layer**：Gate/transition DTO、完整 profiles 和迁移工具。
+- **Current implementation（2026-07-10）**：legacy/static 与 additive Schema 0.2、完整
+  `arsu-v0-1` profile、parent/child/round graph、parallel join、Gate/transition receipts、
+  typed routing catalog，以及 text/binary scoped Submit。
+- **Pending technical layer**：Navigate/surface consolidation 与未来显式迁移工具。
 
 本文不是最终 JSON Schema，不冻结 TypeScript 类型、CLI wire shape 或
 converter 注入实现。后续实现可以调整字段命名细节，但不应改变本文确立
@@ -730,15 +731,15 @@ Current `WorkflowNodeDefinition` 是 work-level `status/instructions` 的运行�
 
 节点状态固定为 `done / ready / blocked`。`done` 需要 `work_item_id` 对应的 registry entry、artifact type/path、文件、SHA-256，以及每个 `required_gate_ids` 对应的 pass/pass-with-conditions 或 accepted override。`require_receipt: true` 时还必须存在 hash-trusted `artifact_submit_receipt` registry record 与严格 receipt payload，且 candidate ID/path/hash、selector、profile 和关联 ID 相互一致。`artifact_statuses` 与 `verification_states` 是额外完成约束，不能替代 required gates；文件存在或手写 registry entry 本身不构成完成。`ready` 还必须处于 active stage。当前控制面在 active stage 全部节点完成后继续计算 scoped Gate/transition frontier；只有 receipt-bound `advance` 才会修改 instance/run state。
 
-当前显式试验 profile `arsu-research-slice` 在 `init` 时只声明 partial
+兼容试验 profile `arsu-research-slice` 在显式选择时只声明 partial
 `subflow:tpl-research`，不创建 instance 或 artifact。用户确认并 `start` 后，RQ Brief、
 Bibliography、Synthesis 位于该 instance 的 `research` stage，输出解析到
 `runs/current/subflows/<instance>/artifacts/`。三个节点 done 后进入 research-completion Gate；
 Gate pass 或可信 override 后，唯一 terminal transition 可推进 subflow complete。
 
-这个 Slice 是 Current implementation 的协议验证，不是完整 ARSU profile。`instructions`
-已支持 template/instance `subflow:`、scoped/legacy `work:`、instance-scoped `gate:` 和
-`transition:` 的 status/instructions/transaction protocol。
+默认 `arsu-v0-1` 则提供 27 个 complete external route templates 与一个 internal revision-round
+template。`instructions` 已支持 template/instance/parent-scoped child `subflow:`、scoped/legacy
+`work:`、instance-scoped `gate:` 和 `transition:` 的完整 transaction protocol。
 
 `WriteSurface` 字段：
 
@@ -1092,10 +1093,9 @@ finalization 等 gate 的运行结果、阻断状态和输入输出 artifacts。
 | `next_action` | string | 否 | runtime 建议动作 |
 | `override_decision_id` | ref | 否 | 若被人工 override |
 
-Target Gate event/receipt 还必须持久化 `validator`、结构化 `evidence`、`confirmed_by`、
+Current Gate event/receipt 持久化 `validator`、结构化 `evidence`、`confirmed_by`、
 confirmation timestamp 和 basis hashes。用户质疑先产生新的 re-verification evidence；历史
-verdict 不原地改写。上述字段的 strict DTO 与 receipt linkage 尚未实现，由 Gate/transition
-technical change 冻结。
+verdict 不原地改写。failed Gate override 必须绑定最新可信重验事件和 receipt。
 
 `GateIssue` 字段：
 

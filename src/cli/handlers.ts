@@ -5,7 +5,7 @@ import { stringify } from "yaml";
 
 import { planToolDelivery, type InstallationRecord } from "../adapters/delivery.js";
 import { detectTools, orderTools, parseToolExpression } from "../adapters/tools.js";
-import { WorkItemSelectorSchema, WORKFLOW_PROFILE_IDS, type WorkflowProfileId } from "../core/contracts/workflow.js";
+import { DEFAULT_WORKFLOW_PROFILE_ID, WorkItemSelectorSchema, WORKFLOW_PROFILE_IDS, type WorkflowProfileId } from "../core/contracts/workflow.js";
 import { Sha256Schema, SubmitActorKindSchema, SubmitActorSchema } from "../core/contracts/artifact.js";
 import { RuntimeActorSchema } from "../core/contracts/gate-transition.js";
 import { GateSelectorSchema, RuntimeSelectorSchema, SubflowSelectorSchema, TransitionSelectorSchema, parseRuntimeSelector } from "../core/contracts/runtime-selector.js";
@@ -36,7 +36,7 @@ export interface PackOptions { out?: string; includeArtifacts?: boolean }
 export interface DecideOptions { decision?: DecisionChoice; actorName?: string; reason?: string }
 export interface ProposeOptions { input: string; actorKind: "human" | "agent"; actorName: string }
 export interface SubmitOptions { input: string; actorKind: string; actorName: string; confirmedBy?: string; expectedSha256?: string; expectedPlanSha256?: string }
-export interface StartOptions { input: string; actorKind: string; actorName: string; confirmedBy: string; expectedPlanSha256?: string }
+export interface StartOptions { input: string; actorKind: string; actorName: string; confirmedBy?: string; expectedPlanSha256?: string }
 export interface AdvanceOptions { actorKind: string; actorName: string; expectedPlanSha256?: string }
 
 export async function handleInit(inputPath: string | undefined, options: InitOptions, context: CommandContext): Promise<CommandResult> {
@@ -47,7 +47,7 @@ export async function handleInit(inputPath: string | undefined, options: InitOpt
   const priorSnapshot = existing ? await loadWorkspaceSnapshot(workspace) : undefined;
   const priorProfile = WORKFLOW_PROFILE_IDS.includes(priorSnapshot?.config.profile as WorkflowProfileId) ? priorSnapshot?.config.profile as WorkflowProfileId : "arsu-paper";
   if (existing && options.profile !== undefined && options.profile !== priorProfile) throw new CliError("profile_change_requires_migration", `Existing workspace uses profile ${priorProfile}; init cannot change it to ${options.profile}.`, 3, "Create an explicit contract migration instead of replacing workflow/state during init.");
-  const profile = (options.profile ?? priorProfile) as WorkflowProfileId;
+  const profile = (options.profile ?? (existing ? priorProfile : DEFAULT_WORKFLOW_PROFILE_ID)) as WorkflowProfileId;
   const configured = strings(record(priorSnapshot?.config.agent_tools).selected);
   const detected = await detectTools(projectRoot);
   const explicitTools = options.tools !== undefined;
@@ -175,7 +175,7 @@ export async function handleInstructions(selector: string, context: CommandConte
     if (!result.ok) throw new CliError(result.code, `Runtime instructions are unavailable: ${selector}`, 1, undefined, { selector, item: result.item });
     return success("instructions", result.packet, { stdout: `${JSON.stringify(result.packet, null, 2)}\n` });
   }
-  if (parsed?.kind === "subflow_template" || parsed?.kind === "subflow_instance") {
+  if (parsed?.kind === "subflow_template" || parsed?.kind === "subflow_instance" || parsed?.kind === "scoped_subflow_node") {
     const result = await buildSubflowInstructions(snapshot, selector);
     if (!result.ok) throw new CliError(result.code, `Subflow instructions are unavailable: ${selector}`, 1, undefined, { selector });
     return success("instructions", result.packet, { stdout: [`Subflow: ${selector}`, `Route: ${result.packet.route.route_ref}`, `State: ${result.packet.state}`, ""].join("\n") });
@@ -197,10 +197,12 @@ export async function handleInstructions(selector: string, context: CommandConte
 }
 
 export async function handleStart(selector: string, options: StartOptions, context: CommandContext): Promise<CommandResult> {
-  if (!SubflowSelectorSchema.safeParse(selector).success || parseRuntimeSelector(selector)?.kind !== "subflow_template") throw new CliError("invalid_subflow_selector", `Invalid start selector: ${selector}`, 2, "Use subflow:tpl-<safe-id>.");
+  const selectorKind = parseRuntimeSelector(selector)?.kind;
+  if (!SubflowSelectorSchema.safeParse(selector).success || (selectorKind !== "subflow_template" && selectorKind !== "scoped_subflow_node")) throw new CliError("invalid_subflow_selector", `Invalid start selector: ${selector}`, 2, "Use subflow:tpl-<safe-id> or a scoped child selector returned by status.");
   if (options.expectedPlanSha256 !== undefined && !Sha256Schema.safeParse(options.expectedPlanSha256).success) throw new CliError("invalid_expected_plan_sha256", "--expected-plan-sha256 must be 64 lowercase hexadecimal characters.", 2);
   const actorResult = StartActorSchema.safeParse({ kind: options.actorKind, name: options.actorName });
-  if (!actorResult.success || !options.confirmedBy.trim()) throw new CliError("invalid_start_input", "Start actor and --confirmed-by are required and must be valid.", 2, undefined, actorResult.success ? undefined : actorResult.error.issues);
+  if (!actorResult.success) throw new CliError("invalid_start_input", "Start actor is invalid.", 2, undefined, actorResult.error.issues);
+  if (selectorKind === "subflow_template" && !options.confirmedBy?.trim()) throw new CliError("invalid_start_input", "External template start requires --confirmed-by.", 2);
   if (!context.dryRun && !context.interactive && (!context.yes || !options.expectedPlanSha256)) throw new CliError("confirmation_required", "Non-interactive Start requires --expected-plan-sha256 and --yes.", 2, "Preview the identical Start input with --dry-run --json after the user confirms the route.");
   const workspace = await requireWorkspace(context);
   const inputPath = path.resolve(context.cwd, options.input);

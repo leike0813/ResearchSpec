@@ -19,7 +19,7 @@
 
 ## 5. Complete ARSU Profiles Technical Change
 
-- [ ] 5.1 Create and implement `add-arsu-workflow-profiles` for supported deep-research, academic-paper, academic-paper-reviewer, and academic-pipeline modes, including dynamic revision-round templates.
+- [x] 5.1 Create and implement `add-arsu-workflow-profiles` for supported deep-research, academic-paper, academic-paper-reviewer, and academic-pipeline modes, including dynamic revision-round templates.
 
 ## 6. Agent Surface Consolidation Technical Change
 

@@ -69,11 +69,11 @@ function registerCommands(program: Command, run: Runner): void {
     .action(async (_options: Record<string, never>, command: Command) => run("status", command, () => handleStatus(commandContext("status", command))));
   program.command("instructions <selector>").description("Show dynamic instructions for a runtime selector")
     .action(async (selector: string, _options: Record<string, never>, command: Command) => run("instructions", command, () => handleInstructions(selector, commandContext("instructions", command))));
-  program.command("start <subflow>").description("Atomically start a confirmed subflow template")
+  program.command("start <subflow>").description("Atomically start a confirmed template or delegated child subflow")
     .requiredOption("--input <start.json>", "strict subflow Start JSON")
     .requiredOption("--actor-kind <kind>", "human, agent, or script")
     .requiredOption("--actor-name <name>", "Start requester name")
-    .requiredOption("--confirmed-by <name>", "human who confirmed the route")
+    .option("--confirmed-by <name>", "human who confirmed an external route")
     .option("--expected-plan-sha256 <hash>", "bind execution to the previewed Start plan")
     .action(async (subflow: string, options: StartOptions, command: Command) => run("start", command, () => handleStart(subflow, options, commandContext("start", command))));
   program.command("submit <runtime-item>").description("Submit a workflow-owned work candidate or confirmed Gate verdict")

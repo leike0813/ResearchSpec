@@ -11,9 +11,9 @@ ResearchSpec 的 agent-facing surface 由 ARSU Skills、ResearchSpec Companion S
 - **Target v0.1**：4 个 ARSU Skills、4 个 Companion Skills、31×8 Skills 和 28×8
   thin wrappers。
 - **Current implementation（2026-07-10）**：4 个 ARSU Skills、9 个 Companion Skills；
-  `src/arsu-converter/routing/` 已拥有 typed routing catalog 和 ARSU description projections，
-  `src/adapters/companion/` 的 typed manifest 仍是 Companion 实现事实源。
-- **Pending technical layer**：Navigate、新 selector runtime，以及安全清理
+  converter 已拥有 typed routing 与 workflow/artifact catalogs，并把 parent-scoped child、
+  Gate/Decision、dynamic round preflight 投影到生成 Skills；typed Companion manifest 仍是实现事实源。
+- **Pending technical layer**：Navigate，以及安全清理
   六个被合并/移除的旧 Companion 投影。
 
 CLI 是 schema validation、path resolution、DAG/frontier、dry-run、write plan、receipt、

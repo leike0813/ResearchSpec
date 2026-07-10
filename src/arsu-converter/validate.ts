@@ -101,7 +101,7 @@ export async function validateArsuOutput(outputRoot: string): Promise<Validation
       errors.push(`Missing ${group}/SKILL.md`);
     } else {
       const skillText = await readUtf8(skillPath);
-      if (!skillText.includes("<!-- researchspec-contract-preflight:v3 -->")) {
+      if (!skillText.includes("<!-- researchspec-contract-preflight:v4 -->")) {
         errors.push(`Missing Contract Preflight block in ${group}/SKILL.md`);
       }
       const skill = getArsuSkillDefinition(group);

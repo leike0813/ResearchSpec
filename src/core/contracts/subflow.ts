@@ -20,15 +20,27 @@ export const SubflowStartReceiptSchema = z.strictObject({
   receipt_type: z.literal("subflow_start"),
   plan_sha256: Sha256Schema,
   instruction_basis_sha256: Sha256Schema,
-  selector: z.string().regex(/^subflow:tpl-[A-Za-z0-9][A-Za-z0-9._-]*$/),
+  selector: z.string().regex(/^subflow:(?:tpl-[A-Za-z0-9][A-Za-z0-9._-]*|sf-[A-Za-z0-9][A-Za-z0-9._-]*\/[A-Za-z0-9][A-Za-z0-9._-]*)$/),
   instance_id: z.string().regex(/^sf-[A-Za-z0-9][A-Za-z0-9._-]*$/),
   template_id: z.string().regex(/^tpl-[A-Za-z0-9][A-Za-z0-9._-]*$/),
-  route_ref: z.string().min(1),
+  route_ref: z.string().min(1).nullable(),
   route_coverage: z.enum(["complete", "partial"]),
   parent_subflow_id: z.string().regex(/^sf-[A-Za-z0-9][A-Za-z0-9._-]*$/).nullable(),
+  parent_node_id: SafeIdSchema.nullable().default(null),
   round_number: z.number().int().positive().nullable(),
   actor: StartActorSchema,
   confirmed_by: z.strictObject({ kind: z.literal("human"), name: z.string().trim().min(1) }),
+  authorization: z.discriminatedUnion("kind", [
+    z.strictObject({ kind: z.literal("user_confirmed") }),
+    z.strictObject({
+      kind: z.literal("parent_delegated"),
+      parent_instance_id: z.string().regex(/^sf-[A-Za-z0-9][A-Za-z0-9._-]*$/),
+      parent_node_id: SafeIdSchema,
+      parent_start_receipt_path: z.string().min(1),
+      parent_start_receipt_sha256: Sha256Schema,
+      parent_plan_sha256: Sha256Schema,
+    }),
+  ]).default({ kind: "user_confirmed" }),
   acknowledged_user_input_ids: z.array(SafeIdSchema),
   prerequisite_artifact_ids: z.array(SafeIdSchema),
   prerequisite_decision_ids: z.array(SafeIdSchema),
@@ -51,4 +63,3 @@ export type SubflowStartInput = z.infer<typeof SubflowStartInputSchema>;
 export type SubflowStartReceipt = z.infer<typeof SubflowStartReceiptSchema>;
 
 function unique(values: string[]): boolean { return new Set(values).size === values.length; }
-

@@ -155,7 +155,23 @@ function validateInstanceStateReferences(workflow: WorkflowDefinition | undefine
     ids.add(instance.instance_id);
     if (!templateIds.has(instance.template_id)) diagnostics.push({ severity: "error", code: "subflow_template_missing", message: `Instance references missing template: ${instance.template_id}`, path: file.absolutePath, blocking: true });
   }
-  for (const instance of state.subflows) if (instance.parent_subflow_id && (!ids.has(instance.parent_subflow_id) || instance.parent_subflow_id === instance.instance_id)) diagnostics.push({ severity: "error", code: "subflow_parent_invalid", message: `Instance has invalid parent: ${instance.instance_id}`, path: file.absolutePath, blocking: true });
+  for (const instance of state.subflows) {
+    if (!instance.parent_subflow_id) {
+      if (instance.parent_node_id) diagnostics.push({ severity: "error", code: "subflow_parent_node_invalid", message: `Root instance has parent node: ${instance.instance_id}`, path: file.absolutePath, blocking: true });
+      continue;
+    }
+    if (!ids.has(instance.parent_subflow_id) || instance.parent_subflow_id === instance.instance_id) {
+      diagnostics.push({ severity: "error", code: "subflow_parent_invalid", message: `Instance has invalid parent: ${instance.instance_id}`, path: file.absolutePath, blocking: true });
+      continue;
+    }
+    const parent = state.subflows.find((item) => item.instance_id === instance.parent_subflow_id);
+    const parentTemplate = parent ? workflow.subflow_templates.find((item) => item.template_id === parent.template_id) : undefined;
+    if ((parentTemplate?.subflow_nodes ?? []).length > 0) {
+      const parentNode = parentTemplate?.subflow_nodes?.find((item) => item.id === instance.parent_node_id);
+      if (!instance.parent_node_id || !parentNode || parentNode.template_id !== instance.template_id) diagnostics.push({ severity: "error", code: "subflow_parent_node_invalid", message: `Instance has invalid parent node binding: ${instance.instance_id}`, path: file.absolutePath, blocking: true });
+      if (parentNode?.multiplicity === "next_round" && instance.round_number === null) diagnostics.push({ severity: "error", code: "subflow_round_number_missing", message: `Repeatable child has no round number: ${instance.instance_id}`, path: file.absolutePath, blocking: true });
+    }
+  }
 }
 
 function parseRunState(value: unknown, file: SnapshotFile | undefined, diagnostics: Diagnostic[]): RunState | undefined {

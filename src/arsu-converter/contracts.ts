@@ -5,8 +5,8 @@ import type {
   ContractProfile,
 } from "./types.js";
 
-const PROFILE_ID = "researchspec-preflight-v3";
-const CONTRACT_MARKER = "<!-- researchspec-contract-preflight:v3 -->";
+const PROFILE_ID = "researchspec-preflight-v4";
+const CONTRACT_MARKER = "<!-- researchspec-contract-preflight:v4 -->";
 
 export const RESEARCHSPEC_MUTATION_OWNERSHIP = {
   stable_specs: "human_or_accepted_contract_patch",
@@ -125,7 +125,8 @@ skill, stage, phase, or mode.
 
 Use \`runs/current/artifact-registry.json\` to read prior artifacts. Call
 \`researchspec status --json\` and consume its canonical frontier. Request
-instructions for the selected \`subflow:\`, scoped \`work:<instance>/<node>\`,
+instructions for the selected external \`subflow:<template>\`, delegated
+\`subflow:<parent>/<node>\`, scoped \`work:<instance>/<node>\`,
 \`gate:<instance>/<node>\`, or \`transition:<instance>/<node>\` selector. Never
 reconstruct stage, Gate, or transition order from this Skill text.
 
@@ -150,6 +151,10 @@ payload with \`researchspec submit gate:<instance>/<node>\`; Start confirmation 
 When exactly one transition is authorized, request its instructions and run
 receipt-bound Advance dry-run followed by identical expected-plan execution. When
 multiple candidates remain, route the branch through \`researchspec-decide\`.
+Start a child subflow only when its parent-scoped selector is present in the
+current frontier. Parent confirmation authorizes that exact mechanical Start;
+it never confirms a Gate or branch. Revision rounds have no inferred maximum:
+after re-review, follow only the next round selector returned by status.
 
 Do not treat ARS Material Passport as ResearchSpec runtime truth. It may be
 imported or rendered as a compatibility artifact, while runtime provenance,

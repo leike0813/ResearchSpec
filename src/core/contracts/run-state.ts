@@ -18,8 +18,9 @@ export const LegacyRunStateSchema = z.looseObject({
 export const SubflowInstanceStateSchema = z.strictObject({
   instance_id: z.string().regex(/^sf-[A-Za-z0-9][A-Za-z0-9._-]*$/),
   template_id: z.string().regex(/^tpl-[A-Za-z0-9][A-Za-z0-9._-]*$/),
-  route_ref: z.string().regex(/^(?:deep-research|academic-paper|academic-paper-reviewer|academic-pipeline):[a-z0-9][a-z0-9_-]*$/),
+  route_ref: z.string().regex(/^(?:deep-research|academic-paper|academic-paper-reviewer|academic-pipeline):[a-z0-9][a-z0-9_-]*$/).nullable(),
   parent_subflow_id: z.string().regex(/^sf-[A-Za-z0-9][A-Za-z0-9._-]*$/).nullable(),
+  parent_node_id: SafeIdSchema.nullable().optional(),
   round_number: z.number().int().positive().nullable(),
   status: z.enum(["active", "waiting", "blocked", "complete", "failed", "cancelled"]),
   active_stage_id: SafeIdSchema,

@@ -11,10 +11,10 @@ surface 的 canonical 事实源。本文明确区分：
 
 - **Target v0.1**：CLI 控制平面、profile-owned workflow graph、动态 subflow/round、
   4 ARSU + 4 Companion + 15 CLI。
-- **Current implementation（2026-07-10）**：typed routing catalog、动态 research subflow
-  Slice、subflow/round instances、parallel frontier、scoped instructions/Start/Submit、九个
-  Companion 和已有 contract lifecycle。
-- **Pending technical layer**：Gate/transition、完整 profiles 与 surface consolidation。
+- **Current implementation（2026-07-10）**：typed routing/workflow/artifact catalogs、完整
+  `arsu-v0-1`、nested subflow/round、parallel frontier、scoped Start/Submit、Gate/Decision/
+  transition receipts、九个 Companion 和 contract lifecycle。
+- **Pending technical layer**：Navigate 与 surface consolidation。
 
 事实源：
 
@@ -308,8 +308,8 @@ Target v0.1 的 stage/subflow 执行复用一个 selector 循环：
 6. 唯一合法 transition 由 `advance` 执行；多分支或新语义进入 Decision。
 7. Agent 再次查询 `status`，不在本地复制状态机。
 
-Current implementation 只实现到 work-level status/instructions/submit；其余动作属于 pending
-technical layers。
+Current implementation 已完整执行上述 selector 循环；pipeline child Start 复用精确父计划的
+人类确认，但 formal Gate、override 与 branch Decision 仍保持独立人类边界。
 
 ### 4.3 Artifact Registration
 
