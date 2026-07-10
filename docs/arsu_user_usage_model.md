@@ -7,10 +7,10 @@
 本文同时使用三种状态标签：
 
 - **Target v0.1**：已经锁定的目标用户体验和职责边界。
-- **Current implementation（2026-07-10）**：仓库中已经可运行的能力。
-- **Pending technical layer**：实现 Target v0.1 仍需完成的技术 change。
+- **Current implementation（2026-07-11）**：仓库中已经可运行的能力。
+- **Acceptance status**：Target v0.1 的十一条公共 CLI 用户旅程已经通过验收。
 
-本模型由 active umbrella change `define-arsu-user-usage-model-v0-1` 管理。在全部技术层完成端到端验收前，该 change 不归档。
+本模型由 main capability specs 持续约束；原 umbrella change `define-arsu-user-usage-model-v0-1` 在全部技术层和端到端验收通过后归档。
 
 ## 1. 一句话使用模型
 
@@ -407,7 +407,8 @@ command wrapper 只是不同 agent 工具的 adapter。目标交付量是：
 - `RQ Brief → Bibliography → Synthesis` 实验 Slice；
 - receipt-backed、hash-bound candidate submit；
 - contract change / Decision / archive 的确定性事务；
-- 4 个 ARSU Skills 与 9 个 Companion Skills 的多工具投影。
+- 4 个 ARSU Skills 与 4 个 Companion Skills 的多工具投影；Navigate 从 routing catalog
+  和 CLI frontier 组合 Route、Resume、Explain、Export。
 - converter-owned routing catalog，覆盖 25 个 modes、2 个 pipeline entries、artifacts、
   prerequisites、near-misses、risk/Gate policy 和粗粒度成本，并投影 ARSU descriptions。
 - active-run `state.yaml` 下的 strict subflow/round instances、parent/round identity、
@@ -420,12 +421,10 @@ command wrapper 只是不同 agent 工具的 adapter。目标交付量是：
   并以 parent-scoped child selector、委托确认和无上限 dynamic revision rounds 组合 pipeline。
 - 受控 `arsu-artifact:` contracts，以及 receipt-backed 的 UTF-8 text 与原生 binary candidate Submit。
 
-当前实现尚不具备：
-
-- `researchspec-navigate` 以及基于 catalog 的 workspace route availability evaluation；
-- 4 Companion、15 CLI、31×8/28×8 的目标 surface 收敛。
-
-因此本文中的路线、命令和数量是 Target v0.1，不是对当前 CLI help 或 generated Skill tree 的描述。
+当前实现已经通过 bootstrap、vague/expert routing、standalone、pipeline、parallel join、
+Gate challenge/override、revision round、cross-process resume、context export 与 terminal
+completion 的公共 CLI 黑盒验收。本文中的四 Companion、十五个 CLI 和 31×8/28×8 数量
+是当前 generated delivery 的事实。
 
 ## 14. 技术层落地顺序
 
@@ -438,7 +437,7 @@ command wrapper 只是不同 agent 工具的 adapter。目标交付量是：
 | 5 | `consolidate-researchspec-agent-surface` | Navigate、四 Companion、旧投影清理、31×8/28×8 delivery |
 
 其中 routing catalog、subflow instance control plane、Gate/transition control plane 与完整
-workflow profiles 已实现；surface consolidation 仍待完成。
+workflow profiles、surface consolidation 与端到端 acceptance 已实现并通过；v0.1 不再有待实现技术层。
 
 Umbrella change 只有在以下用户旅程全部通过时才能归档：Bootstrap、模糊路由、专家直达、standalone、pipeline、并行 join、Gate challenge/override、revision round、resume、context export 和 terminal completion。
 

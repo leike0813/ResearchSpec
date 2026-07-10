@@ -11,10 +11,10 @@ surface 的 canonical 事实源。本文明确区分：
 
 - **Target v0.1**：CLI 控制平面、profile-owned workflow graph、动态 subflow/round、
   4 ARSU + 4 Companion + 15 CLI。
-- **Current implementation（2026-07-10）**：typed routing/workflow/artifact catalogs、完整
+- **Current implementation（2026-07-11）**：typed routing/workflow/artifact catalogs、完整
   `arsu-v0-1`、nested subflow/round、parallel frontier、scoped Start/Submit、Gate/Decision/
-  transition receipts、九个 Companion 和 contract lifecycle。
-- **Pending technical layer**：Navigate 与 surface consolidation。
+  transition receipts、四个 Companion、31×8/28×8 delivery 和 contract lifecycle。
+- **Acceptance status**：Target v0.1 架构已通过十一条公共 CLI 用户旅程验收，无待实现技术层。
 
 事实源：
 
@@ -162,8 +162,9 @@ Decide、Verify 四个用户意图：Navigate 统一模糊路由、恢复、状�
 
 Companion 不拥有 deterministic runtime。它消费 routing catalog 和 CLI packets，展示路线、
 证据、风险与确认点。ARSU 继续负责研究、写作、审稿和 manuscript draft-patch authoring。
-Current implementation 的 Explore/Check/Next/Context/Submit/Archive 等九个 Companion 在
-最后的 surface consolidation change 前继续兼容，但不是目标架构。
+Current implementation 已只投影 Navigate、Propose、Decide、Verify。Explore/Next/Context
+分别并入 Navigate，Check/Submit/Archive 由直接 CLI transaction 承担；旧生成文件按 manifest
+ownership 与 hash 证据安全收敛。
 
 ### 2.9 Routing Catalog And Workflow Profiles
 
@@ -544,7 +545,7 @@ ResearchSpec should instead maintain ARSU-derived skills and wrappers:
 
 ResearchSpec 目标只维护四个 companion workflows：Navigate、Propose、Decide、Verify。
 它们消费同一 contract workspace，不重新引入平行状态机，也不取代上述 ARSU semantic
-skills。当前九个 Companion 仅是迁移前实现事实。
+skills。当前实现与目标均为四个 Companion。
 
 ### 8.3 Material Passport
 

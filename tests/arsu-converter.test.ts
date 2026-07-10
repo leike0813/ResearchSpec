@@ -32,7 +32,9 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
   assert.match(deepResearch, /work:<instance>\/<node>/);
   assert.match(deepResearch, /policy is `automatic`/);
   assert.match(deepResearch, /--expected-sha256/);
-  assert.match(deepResearch, /researchspec-submit/);
+  assert.match(deepResearch, /For `manual`, `legacy`, or missing automatic authorization/);
+  assert.match(deepResearch, /run direct\s+`researchspec submit` with `--dry-run --json`/);
+  assert.doesNotMatch(deepResearch, /researchspec-submit/);
   assert.match(deepResearch, /never hand-edit\s+state, registries, receipts, or JSONL ledgers/);
   assert.match(deepResearch, /references\/shared\/handoff_schemas\.md/);
   assert.match(deepResearch, /references\/cross-skill\/academic-paper\/references\/writing_quality_check\.md/);

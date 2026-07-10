@@ -1,6 +1,6 @@
 import type { CommandContent } from "../command-renderer.js";
 
-export const COMPANION_WORKFLOW_IDS = ["explore", "propose", "check", "verify", "next", "context", "decide", "submit", "archive"] as const;
+export const COMPANION_WORKFLOW_IDS = ["navigate", "propose", "decide", "verify"] as const;
 export type CompanionWorkflowId = typeof COMPANION_WORKFLOW_IDS[number];
 export type CompanionSkillId = `researchspec-${CompanionWorkflowId}`;
 

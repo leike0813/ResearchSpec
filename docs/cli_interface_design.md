@@ -13,7 +13,7 @@ wire contract 供迁移使用。用户从对话进入 ARSU 工作的顺序以
 - **Current implementation（2026-07-10）**：已有完整 `arsu-v0-1` profile、external 与
   parent-scoped child subflow、`submit work:|gate:`、`advance transition:`、Decision 与
   dynamic revision-round frontier。
-- **Pending technical layer**：Navigate 与四 Companion surface 收敛。
+- **Acceptance status**：十五命令、Navigate、四 Companion 与 selector runtime 已通过公共 CLI 用户旅程验收。
 
 事实源：
 
@@ -650,14 +650,15 @@ selector contract；既有 governance selectors 继续服务 `list/show/propose/
 - `researchspec/config.yaml` 保存 profile 和 selected tools。
 - `tool-installation-manifest.json` 保存 generated path、scope、source、adapter
   version 和 SHA-256 ownership evidence。
-- Current implementation：Project-local skill 路径统一为
-  `<skillsDir>/skills/<skill-id>/**`；四个 ARSU skill 目录和九个 self-contained
-  Companion Skills 被投影到 31 个 registered tools，28 个 command-capable tools 同源生成
-  13 个 wrappers。
-- Target v0.1：四个 ARSU + 四个 Companion，总计 31×8 Skills 与 28×8 wrappers。
+- Current implementation / Target v0.1：Project-local skill 路径统一为
+  `<skillsDir>/skills/<skill-id>/**`；四个 ARSU 和四个 self-contained Companion Skills
+  被投影到 31 个 registered tools，28 个 command-capable tools 同源生成 8 个 wrappers，
+  总计 31×8 Skills 与 28×8 wrappers。
 - 迁移前后都不得用一个通用 Markdown 文件覆盖工具的 Markdown/TOML 格式差异。
 - Codex prompts 是 `$CODEX_HOME/prompts` 或 `~/.codex/prompts` 下的
   shared-global files，不因单个项目 deselect 被删除。
+- 明确产品退役且 manifest-owned、hash 匹配的 Codex prompt 可在 Codex 仍被选择时删除；
+  drifted prompt 始终保留并报告。
 - Manifest 未登记的 existing file 视为 user-owned；hash drift 默认保留，
   `--force` 也只能覆盖 manifest-owned generated files。
 

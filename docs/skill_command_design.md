@@ -10,11 +10,10 @@ ResearchSpec 的 agent-facing surface 由 ARSU Skills、ResearchSpec Companion S
 
 - **Target v0.1**：4 个 ARSU Skills、4 个 Companion Skills、31×8 Skills 和 28×8
   thin wrappers。
-- **Current implementation（2026-07-10）**：4 个 ARSU Skills、9 个 Companion Skills；
-  converter 已拥有 typed routing 与 workflow/artifact catalogs，并把 parent-scoped child、
-  Gate/Decision、dynamic round preflight 投影到生成 Skills；typed Companion manifest 仍是实现事实源。
-- **Pending technical layer**：Navigate，以及安全清理
-  六个被合并/移除的旧 Companion 投影。
+- **Current implementation（2026-07-11）**：4 个 ARSU Skills、4 个 Companion Skills；
+  converter 已拥有 typed routing 与 workflow/artifact catalogs，Navigate 从同一 catalog
+  投影 Route/Resume/Explain/Export，并安全清理 manifest-owned 的旧 Companion 投影。
+- **Acceptance status**：四 Companion 与 31×8/28×8 surface 已通过完整公共 CLI 用户旅程验收。
 
 CLI 是 schema validation、path resolution、DAG/frontier、dry-run、write plan、receipt、
 registry、ledger、lifecycle 和 generated ownership 的唯一确定性执行入口。ARSU Skill 负责
@@ -59,8 +58,8 @@ flowchart TD
     C -->|"调整"| U
 ```
 
-Skill 与 command wrapper descriptions 已从同一个 converter-owned routing catalog 投影。
-Navigate 后续也必须消费该 catalog。任何一个 Skill 都不得靠自身 description 声称绕过
+Skill、command wrapper descriptions 与 Navigate route reference 已从同一个 converter-owned routing catalog 投影。
+任何一个 Skill 都不得靠自身 description 声称绕过
 prerequisites、route confirmation 或 Gate policy。
 
 ## 3. Target Companion Workflow Contracts
@@ -119,13 +118,10 @@ CLI `submit gate:` 持久化。用户质疑时先 re-verify，仍失败但要求
 9. 不得手写 CLI-owned receipt、registry、ledger、state 或 manifest。
 10. 不得通过降低 claim/Gate 语义、忽略 hash drift 或扩大 allowed writes 来“修复”阻断。
 
-## 5. Current Implementation 与迁移映射
+## 5. Retired Surface 映射
 
-Current implementation 的九个 Companion 为：Explore、Propose、Check、Verify、Next、Context、
-Decide、Submit、Archive。它们在 surface consolidation 完成前仍由 typed manifest 投影，现有
-用户工作不应被本设计文档提前破坏。
-
-目标迁移如下：
+Current implementation 的 typed manifest 只投影 Navigate、Propose、Decide、Verify。旧投影
+按以下映射安全退役：
 
 | Current Companion | Target 归属 | 迁移原则 |
 | --- | --- | --- |
@@ -139,9 +135,9 @@ Decide、Submit、Archive。它们在 surface consolidation 完成前仍由 type
 | Decide | Decide | 保留，增加 review branch/Gate override |
 | Verify | Verify | 保留，成为 proposed Gate verdict owner |
 
-当前 `researchspec-next` 已能解释 work/Gate/transition frontier；Verify 组织 confirmed Gate
-submit，Decide 处理可信 failed-Gate override 与 workflow branch。它们仍将在 surface
-consolidation 中按既定边界合入 Navigate/四 Companion，而不会增加新 Companion。
+Navigate 当前直接消费 work/Gate/transition frontier；Verify 组织 confirmed Gate submit，
+Decide 处理可信 failed-Gate override 与 workflow branch。Check、Submit、Archive 继续作为
+CLI transaction 存在，不再生成同名 Companion。
 
 ## 6. Source Architecture 与 SSOT
 
@@ -173,8 +169,7 @@ renderer
 
 | 状态 | Registered tools | Skills per tool | Command-capable tools | Wrappers per tool |
 | --- | ---: | ---: | ---: | ---: |
-| Current implementation | 31 | 13（4 ARSU + 9 Companion） | 28 | 13 |
-| Target v0.1 | 31 | 8（4 ARSU + 4 Companion） | 28 | 8 |
+| Current implementation / Target v0.1 | 31 | 8（4 ARSU + 4 Companion） | 28 | 8 |
 
 ForgeCode、Kimi CLI 和 Mistral Vibe 等 skills-only 工具仍不生成 wrappers。Codex 的
 shared-global prompt ownership、manifest hash/drift protection 和工具格式化规则继续有效。

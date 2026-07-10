@@ -1,7 +1,7 @@
 import { cp, mkdir } from "node:fs/promises";
 import path from "node:path";
 
-import { injectContractPreflight } from "./contracts.js";
+import { injectContractPreflight, RESEARCHSPEC_PREFLIGHT_MARKER, RESEARCHSPEC_PREFLIGHT_PROFILE_ID } from "./contracts.js";
 import { applyAnchorReplacements } from "./anchors/replace.js";
 import { readUtf8, sha256File, writeUtf8 } from "./fs-utils.js";
 import {
@@ -92,8 +92,8 @@ export async function emitSkillGroup(
   const findings = [];
   let contractInjection: ContractInjectionResult = {
     injected: false,
-    profile_id: "researchspec-preflight-v4",
-    marker: "<!-- researchspec-contract-preflight:v4 -->",
+    profile_id: RESEARCHSPEC_PREFLIGHT_PROFILE_ID,
+    marker: RESEARCHSPEC_PREFLIGHT_MARKER,
   };
   let routingDescription: SkillDescriptionProjection | null = null;
 

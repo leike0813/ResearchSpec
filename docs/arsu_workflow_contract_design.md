@@ -15,11 +15,11 @@ surface are canonical in [ARSU User Usage Model v0.1](./arsu_user_usage_model.md
 - **Target v0.1** uses one active run, dynamic standalone/pipeline subflows,
   workflow-declared parallel groups, confirmed Gates, transitions, and revision
   round templates.
-- **Current implementation (2026-07-10)** provides the complete `arsu-v0-1` route
+- **Current implementation (2026-07-11)** provides the complete `arsu-v0-1` route
   profile, nested parent-scoped child subflows, unbounded revision rounds, all/quorum
   joins, text/binary Submit, confirmed Gates, branch Decisions, receipt-backed Advance,
-  and converter-projected guidance for the nine current Companion Skills.
-- **Pending technical layer** is Navigate and four-Companion surface consolidation.
+  and converter-projected guidance for Navigate, Propose, Decide, and Verify.
+- **Acceptance status**: the complete v0.1 public-CLI journey suite passes for standalone, pipeline, Gate, revision, resume, export, and terminal paths.
 
 Source anchors:
 
@@ -323,9 +323,9 @@ Use `changes/<change-id>/contract-patch.yaml` when a task proposes:
 
 Low-risk artifact registration does not require a contract patch. Current
 instance work can automatically perform hash-bound `submit work:<id>` after
-candidate production when Start authorization is trusted; manual/legacy work can
-still use the transitional Submit Companion. This mechanical submit is not a Gate
-or academic approval.
+candidate production when Start authorization is trusted; manual/legacy work uses
+the direct CLI Submit dry-run/confirmation/hash-bound transaction or reports the
+authority boundary. This mechanical submit is not a Gate or academic approval.
 
 Formal Gate evidence is proposed by `researchspec-verify`, shown to the user, and
 persisted by current `submit gate:<instance>/<id>` only after confirmation. A challenge

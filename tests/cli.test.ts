@@ -395,11 +395,11 @@ void test("update preserves drifted manifest-owned files", async () => {
   for (const skillId of ["deep-research", "academic-paper", "academic-paper-reviewer", "academic-pipeline"]) {
     assert.equal(existsSync(path.join(root, ".forge/skills", skillId, "SKILL.md")), true);
   }
-  for (const skillId of ["researchspec-explore", "researchspec-propose", "researchspec-check", "researchspec-verify", "researchspec-next", "researchspec-context", "researchspec-decide", "researchspec-archive"]) {
+  for (const skillId of ["researchspec-navigate", "researchspec-propose", "researchspec-decide", "researchspec-verify"]) {
     assert.equal(existsSync(path.join(root, ".forge/skills", skillId, "SKILL.md")), true);
     assert.equal(existsSync(path.join(root, ".forge/skills", skillId, "references/cli-discipline.md")), false);
   }
-  const skillPath = path.join(root, ".forge/skills/researchspec-check/SKILL.md");
+  const skillPath = path.join(root, ".forge/skills/researchspec-navigate/SKILL.md");
   await writeFile(skillPath, "user customization", "utf8");
   const update = runCli(["update", "--tools", "forgecode", "--json"], root);
   assert.equal(update.status, 0);
@@ -412,7 +412,7 @@ void test("update preserves drifted manifest-owned files", async () => {
   const manifest = JSON.parse(await readFile(manifestPath, "utf8")) as {
     installations: Array<{ tool_id: string; path: string; scope: "project" | "shared-global"; sha256: string; source: string; adapter_version: string }>;
   };
-  assert.ok(manifest.installations.some((entry) => entry.path.endsWith("researchspec-check/SKILL.md") && entry.source === "companion:researchspec-check/SKILL.md"));
+  assert.ok(manifest.installations.some((entry) => entry.path.endsWith("researchspec-navigate/SKILL.md") && entry.source === "companion:researchspec-navigate/SKILL.md"));
   const stalePath = path.join(root, ".forge/skills/researchspec-check/references/cli-discipline.md");
   const staleContent = "old generated companion reference";
   await mkdir(path.dirname(stalePath), { recursive: true });
@@ -448,10 +448,90 @@ void test("update preserves drifted manifest-owned files", async () => {
   await cleanup(root);
 });
 
+void test("update and existing-workspace init safely retire legacy local Companion projections", async () => {
+  for (const command of ["update", "init"] as const) {
+    const root = await tempProject();
+    assert.equal(runCli(["init", root, "--tools", "forgecode"]).status, 0);
+    const manifestPath = path.join(root, "researchspec/tool-installation-manifest.json");
+    const manifest = JSON.parse(await readFile(manifestPath, "utf8")) as {
+      installations: Array<{ tool_id: string; path: string; scope: "project" | "shared-global"; sha256: string; source: string; adapter_version: "1" }>;
+    };
+    const cleanPath = path.join(root, ".forge/skills/researchspec-next/SKILL.md");
+    const driftedPath = path.join(root, ".forge/skills/researchspec-submit/SKILL.md");
+    const userOwnedPath = path.join(root, ".forge/skills/researchspec-explore/SKILL.md");
+    await mkdir(path.dirname(cleanPath), { recursive: true });
+    await mkdir(path.dirname(driftedPath), { recursive: true });
+    await mkdir(path.dirname(userOwnedPath), { recursive: true });
+    await writeFile(cleanPath, "legacy next", "utf8");
+    await writeFile(driftedPath, "user-modified submit", "utf8");
+    await writeFile(userOwnedPath, "unmanifested user workflow", "utf8");
+    manifest.installations.push(
+      { tool_id: "forgecode", path: ".forge/skills/researchspec-next/SKILL.md", scope: "project", sha256: hash("legacy next"), source: "companion:researchspec-next/SKILL.md", adapter_version: "1" },
+      { tool_id: "forgecode", path: ".forge/skills/researchspec-submit/SKILL.md", scope: "project", sha256: hash("legacy submit"), source: "companion:researchspec-submit/SKILL.md", adapter_version: "1" },
+      { tool_id: "forgecode", path: ".forge/skills/researchspec-context/SKILL.md", scope: "project", sha256: hash("missing"), source: "companion:researchspec-context/SKILL.md", adapter_version: "1" },
+    );
+    await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
+
+    const result = command === "update"
+      ? runCli(["update", "--tools", "forgecode", "--force", "--json"], root)
+      : runCli(["init", root, "--tools", "forgecode", "--force", "--json"]);
+    assert.equal(result.status, 0, result.stderr || result.stdout);
+    assert.match(result.stdout, /generated_file_drift/);
+    assert.equal(existsSync(cleanPath), false);
+    assert.equal(await readFile(driftedPath, "utf8"), "user-modified submit");
+    assert.equal(await readFile(userOwnedPath, "utf8"), "unmanifested user workflow");
+    const reconciled = JSON.parse(await readFile(manifestPath, "utf8")) as typeof manifest;
+    assert.equal(reconciled.installations.some((item) => item.source.includes("researchspec-next")), false);
+    assert.equal(reconciled.installations.some((item) => item.source.includes("researchspec-context")), false);
+    assert.equal(reconciled.installations.some((item) => item.source.includes("researchspec-submit")), true);
+    assert.equal(reconciled.installations.filter((item) => item.source.startsWith("companion:") && item.path.endsWith("/SKILL.md") && !item.source.includes("researchspec-submit")).length, 4);
+    assert.equal(runCli(["update", "--tools", "forgecode", "--json"], root).status, 0);
+    await cleanup(root);
+  }
+});
+
+void test("Codex product retirement removes clean global prompts but preserves drift and deselection", async () => {
+  const root = await tempProject();
+  const codexHome = path.join(root, "codex-home");
+  const env = { CODEX_HOME: codexHome };
+  assert.equal(runCli(["init", root, "--tools", "codex"], process.cwd(), env).status, 0);
+  const manifestPath = path.join(root, "researchspec/tool-installation-manifest.json");
+  const manifest = JSON.parse(await readFile(manifestPath, "utf8")) as {
+    installations: Array<{ tool_id: string; path: string; scope: "project" | "shared-global"; sha256: string; source: string; adapter_version: "1" }>;
+  };
+  const cleanPath = path.join(codexHome, "prompts/researchspec-next.md");
+  const driftedPath = path.join(codexHome, "prompts/researchspec-submit.md");
+  await mkdir(path.dirname(cleanPath), { recursive: true });
+  await writeFile(cleanPath, "legacy next", "utf8");
+  await writeFile(driftedPath, "user-modified submit", "utf8");
+  manifest.installations.push(
+    { tool_id: "codex", path: cleanPath, scope: "shared-global", sha256: hash("legacy next"), source: "command:next", adapter_version: "1" },
+    { tool_id: "codex", path: driftedPath, scope: "shared-global", sha256: hash("legacy submit"), source: "command:submit", adapter_version: "1" },
+  );
+  await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
+
+  const update = runCli(["update", "--tools", "codex", "--force", "--json"], root, env);
+  assert.equal(update.status, 0, update.stderr || update.stdout);
+  assert.equal(existsSync(cleanPath), false);
+  assert.equal(await readFile(driftedPath, "utf8"), "user-modified submit");
+  assert.match(update.stdout, /generated_file_drift/);
+
+  const deselectedPath = path.join(codexHome, "prompts/researchspec-archive.md");
+  await writeFile(deselectedPath, "legacy archive", "utf8");
+  const afterUpdate = JSON.parse(await readFile(manifestPath, "utf8")) as typeof manifest;
+  afterUpdate.installations.push({ tool_id: "codex", path: deselectedPath, scope: "shared-global", sha256: hash("legacy archive"), source: "command:archive", adapter_version: "1" });
+  await writeFile(manifestPath, `${JSON.stringify(afterUpdate, null, 2)}\n`, "utf8");
+  assert.equal(runCli(["init", root, "--tools", "none", "--json"], process.cwd(), env).status, 0);
+  assert.equal(await readFile(deselectedPath, "utf8"), "legacy archive");
+  const afterDeselection = JSON.parse(await readFile(manifestPath, "utf8")) as typeof manifest;
+  assert.equal(afterDeselection.installations.some((item) => item.path === deselectedPath), true);
+  await cleanup(root);
+});
+
 void test("command-capable delivery emits ARSU and companion wrappers in the registered format", async () => {
   const root = await tempProject();
   assert.equal(runCli(["init", root, "--tools", "gemini"]).status, 0);
-  for (const commandId of ["deep-research", "academic-paper", "academic-paper-reviewer", "academic-pipeline", "explore", "propose", "check", "verify", "next", "context", "decide", "archive"]) {
+  for (const commandId of ["deep-research", "academic-paper", "academic-paper-reviewer", "academic-pipeline", "navigate", "propose", "decide", "verify"]) {
     const command = await readFile(path.join(root, ".gemini/commands/researchspec", `${commandId}.toml`), "utf8");
     assert.match(command, /^description = /);
     assert.match(command, /prompt = """/);

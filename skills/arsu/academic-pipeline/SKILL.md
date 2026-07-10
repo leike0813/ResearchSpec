@@ -14,7 +14,7 @@ metadata:
     - academic-paper-reviewer
 ---
 
-<!-- researchspec-contract-preflight:v4 -->
+<!-- researchspec-contract-preflight:v5 -->
 ## ResearchSpec Contract Preflight
 
 Before running this ARSU-derived skill, locate the project `researchspec/`
@@ -35,9 +35,12 @@ available, build the strict dependency payload in a temporary file, run Submit
 with `--dry-run --json`, then execute the identical selector/payload/actor with
 the returned SHA-256, `--expected-sha256`, and `--yes --json`. Re-query status
 and artifact checks. This registration is mechanical and is not Gate pass or
-academic approval. For `manual`, `legacy`, missing authorization, or unavailable
-Submit, hand the candidate to `researchspec-submit` or report the boundary.
-Never invent path, type, provenance, or runtime writes, and never hand-edit
+academic approval. For `manual`, `legacy`, or missing automatic authorization,
+build the strict payload only from dynamic instructions, run direct
+`researchspec submit` with `--dry-run --json`, present its candidate hash,
+validation, and planned writes, then obtain explicit confirmation before the
+identical expected-hash execution. If Submit or its required authority is
+unavailable, report the boundary. Never invent path, type, provenance, or runtime writes, and never hand-edit
 state, registries, receipts, or JSONL ledgers.
 
 For a formal Gate, use `researchspec-verify` to produce evidence-linked findings,
@@ -59,7 +62,7 @@ Do not treat ARS Material Passport as ResearchSpec runtime truth. It may be
 imported or rendered as a compatibility artifact, while runtime provenance,
 decisions, gates, and resume state live in ResearchSpec registries and ledgers.
 
-This generated compatibility block uses profile `researchspec-preflight-v4` for
+This generated compatibility block uses profile `researchspec-preflight-v5` for
 `academic-pipeline`. Per-stage and per-mode graphs remain workflow-profile data.
 
 # Academic Pipeline v3.15.0 — Full Academic Research Workflow Orchestrator

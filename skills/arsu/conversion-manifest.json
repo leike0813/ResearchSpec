@@ -11,7 +11,7 @@
     "remote_url": "https://github.com/Imbad0202/academic-research-skills",
     "dirty": false
   },
-  "generated_at": "2026-07-10T16:19:57Z",
+  "generated_at": "2026-07-10T21:26:24Z",
   "generated_groups": [
     "academic-paper",
     "academic-paper-reviewer",
@@ -895,7 +895,7 @@
           "source_path": "academic-paper/SKILL.md",
           "output_path": "academic-paper/SKILL.md",
           "transform_rule": "text_copy_with_dependency_rewrite_routing_description_and_contract_preflight",
-          "sha256": "18a0d168aa6986d8fbae4c7f2dbb5b5fecbb3ddf7c7d985df7caf209bf4e5926"
+          "sha256": "6d257a5e565f9f604ea6d9ec444eb7e1f5ae30ec1332a8a075bd0818af4458e7"
         },
         {
           "group": "academic-paper",
@@ -4363,7 +4363,7 @@
         {
           "group": "academic-paper",
           "path": "academic-paper/SKILL.md",
-          "line": 72,
+          "line": 75,
           "category": "platform_term",
           "term": ".claude/CLAUDE.md",
           "source_reason": "retained_runtime_marker",
@@ -4372,7 +4372,7 @@
         {
           "group": "academic-paper",
           "path": "academic-paper/SKILL.md",
-          "line": 210,
+          "line": 213,
           "category": "history_term",
           "term": "legacy",
           "source_reason": "retained_runtime_marker",
@@ -4381,7 +4381,7 @@
         {
           "group": "academic-paper",
           "path": "academic-paper/SKILL.md",
-          "line": 219,
+          "line": 222,
           "category": "platform_term",
           "term": ".claude/CLAUDE.md",
           "source_reason": "retained_runtime_marker",
@@ -4390,7 +4390,7 @@
         {
           "group": "academic-paper",
           "path": "academic-paper/SKILL.md",
-          "line": 219,
+          "line": 222,
           "category": "platform_term",
           "term": "slash command",
           "source_reason": "retained_runtime_marker",
@@ -4399,7 +4399,7 @@
         {
           "group": "academic-paper",
           "path": "academic-paper/SKILL.md",
-          "line": 221,
+          "line": 224,
           "category": "issue_reference",
           "term": "issue_or_pr_reference",
           "source_reason": "retained_runtime_marker",
@@ -4408,7 +4408,7 @@
         {
           "group": "academic-paper",
           "path": "academic-paper/SKILL.md",
-          "line": 221,
+          "line": 224,
           "category": "platform_term",
           "term": "hook",
           "source_reason": "retained_runtime_marker",
@@ -4417,7 +4417,7 @@
         {
           "group": "academic-paper",
           "path": "academic-paper/SKILL.md",
-          "line": 344,
+          "line": 347,
           "category": "issue_reference",
           "term": "issue_or_pr_reference",
           "source_reason": "retained_runtime_marker",
@@ -4426,7 +4426,7 @@
         {
           "group": "academic-paper",
           "path": "academic-paper/SKILL.md",
-          "line": 410,
+          "line": 413,
           "category": "issue_reference",
           "term": "issue_or_pr_reference",
           "source_reason": "retained_runtime_marker",
@@ -4435,7 +4435,7 @@
         {
           "group": "academic-paper",
           "path": "academic-paper/SKILL.md",
-          "line": 487,
+          "line": 490,
           "category": "issue_reference",
           "term": "issue_or_pr_reference",
           "source_reason": "retained_runtime_marker",
@@ -4444,7 +4444,7 @@
         {
           "group": "academic-paper",
           "path": "academic-paper/SKILL.md",
-          "line": 500,
+          "line": 503,
           "category": "issue_reference",
           "term": "issue_or_pr_reference",
           "source_reason": "retained_runtime_marker",
@@ -4453,7 +4453,7 @@
         {
           "group": "academic-paper",
           "path": "academic-paper/SKILL.md",
-          "line": 580,
+          "line": 583,
           "category": "history_term",
           "term": "Version Info",
           "source_reason": "retained_runtime_marker",
@@ -4462,7 +4462,7 @@
         {
           "group": "academic-paper",
           "path": "academic-paper/SKILL.md",
-          "line": 591,
+          "line": 594,
           "category": "history_term",
           "term": "Version History",
           "source_reason": "retained_runtime_marker",
@@ -4489,8 +4489,8 @@
       ],
       "contract_injection": {
         "injected": true,
-        "profile_id": "researchspec-preflight-v4",
-        "marker": "<!-- researchspec-contract-preflight:v4 -->"
+        "profile_id": "researchspec-preflight-v5",
+        "marker": "<!-- researchspec-contract-preflight:v5 -->"
       },
       "routing_description": {
         "skill_id": "academic-paper",
@@ -5219,7 +5219,7 @@
           "source_path": "academic-paper-reviewer/SKILL.md",
           "output_path": "academic-paper-reviewer/SKILL.md",
           "transform_rule": "text_copy_with_dependency_rewrite_routing_description_and_contract_preflight",
-          "sha256": "481dca439c65d8a224420dcf48a37edf205051fc574a26ca5367b2ef6c9818d0"
+          "sha256": "1fb33f5b29360d03b9fea99f5c958435e011b0e9e9043fb475088e85379d259d"
         },
         {
           "group": "academic-paper-reviewer",
@@ -8188,7 +8188,7 @@
         {
           "group": "academic-paper-reviewer",
           "path": "academic-paper-reviewer/SKILL.md",
-          "line": 72,
+          "line": 75,
           "category": "platform_term",
           "term": ".claude/CLAUDE.md",
           "source_reason": "retained_runtime_marker",
@@ -8197,7 +8197,7 @@
         {
           "group": "academic-paper-reviewer",
           "path": "academic-paper-reviewer/SKILL.md",
-          "line": 249,
+          "line": 252,
           "category": "platform_term",
           "term": ".claude/CLAUDE.md",
           "source_reason": "retained_runtime_marker",
@@ -8206,7 +8206,7 @@
         {
           "group": "academic-paper-reviewer",
           "path": "academic-paper-reviewer/SKILL.md",
-          "line": 249,
+          "line": 252,
           "category": "platform_term",
           "term": "slash command",
           "source_reason": "retained_runtime_marker",
@@ -8215,7 +8215,7 @@
         {
           "group": "academic-paper-reviewer",
           "path": "academic-paper-reviewer/SKILL.md",
-          "line": 251,
+          "line": 254,
           "category": "issue_reference",
           "term": "issue_or_pr_reference",
           "source_reason": "retained_runtime_marker",
@@ -8224,7 +8224,7 @@
         {
           "group": "academic-paper-reviewer",
           "path": "academic-paper-reviewer/SKILL.md",
-          "line": 251,
+          "line": 254,
           "category": "platform_term",
           "term": "hook",
           "source_reason": "retained_runtime_marker",
@@ -8233,7 +8233,7 @@
         {
           "group": "academic-paper-reviewer",
           "path": "academic-paper-reviewer/SKILL.md",
-          "line": 481,
+          "line": 484,
           "category": "history_term",
           "term": "Version Info",
           "source_reason": "retained_runtime_marker",
@@ -8242,7 +8242,7 @@
         {
           "group": "academic-paper-reviewer",
           "path": "academic-paper-reviewer/SKILL.md",
-          "line": 493,
+          "line": 496,
           "category": "history_term",
           "term": "Changelog",
           "source_reason": "retained_runtime_marker",
@@ -8251,8 +8251,8 @@
       ],
       "contract_injection": {
         "injected": true,
-        "profile_id": "researchspec-preflight-v4",
-        "marker": "<!-- researchspec-contract-preflight:v4 -->"
+        "profile_id": "researchspec-preflight-v5",
+        "marker": "<!-- researchspec-contract-preflight:v5 -->"
       },
       "routing_description": {
         "skill_id": "academic-paper-reviewer",
@@ -8953,7 +8953,7 @@
           "source_path": "academic-pipeline/SKILL.md",
           "output_path": "academic-pipeline/SKILL.md",
           "transform_rule": "text_copy_with_dependency_rewrite_routing_description_and_contract_preflight",
-          "sha256": "1c40616bd3b06fea19223fe3c5a6c9d37d3d63073f2f27c615cfd92973d27d8e"
+          "sha256": "e803df0545420b68fe68dacf2e56ad8743beb664890381154da524629d094003"
         },
         {
           "group": "academic-pipeline",
@@ -11831,7 +11831,7 @@
         {
           "group": "academic-pipeline",
           "path": "academic-pipeline/SKILL.md",
-          "line": 69,
+          "line": 72,
           "category": "platform_term",
           "term": ".claude/CLAUDE.md",
           "source_reason": "retained_runtime_marker",
@@ -11840,7 +11840,7 @@
         {
           "group": "academic-pipeline",
           "path": "academic-pipeline/SKILL.md",
-          "line": 109,
+          "line": 112,
           "category": "history_term",
           "term": "legacy",
           "source_reason": "retained_runtime_marker",
@@ -11849,7 +11849,7 @@
         {
           "group": "academic-pipeline",
           "path": "academic-pipeline/SKILL.md",
-          "line": 130,
+          "line": 133,
           "category": "history_term",
           "term": "legacy",
           "source_reason": "retained_runtime_marker",
@@ -11858,7 +11858,7 @@
         {
           "group": "academic-pipeline",
           "path": "academic-pipeline/SKILL.md",
-          "line": 283,
+          "line": 286,
           "category": "issue_reference",
           "term": "issue_or_pr_reference",
           "source_reason": "retained_runtime_marker",
@@ -11867,7 +11867,7 @@
         {
           "group": "academic-pipeline",
           "path": "academic-pipeline/SKILL.md",
-          "line": 419,
+          "line": 422,
           "category": "platform_term",
           "term": "hook",
           "source_reason": "retained_runtime_marker",
@@ -11876,7 +11876,7 @@
         {
           "group": "academic-pipeline",
           "path": "academic-pipeline/SKILL.md",
-          "line": 491,
+          "line": 494,
           "category": "issue_reference",
           "term": "issue_or_pr_reference",
           "source_reason": "retained_runtime_marker",
@@ -11885,7 +11885,7 @@
         {
           "group": "academic-pipeline",
           "path": "academic-pipeline/SKILL.md",
-          "line": 575,
+          "line": 578,
           "category": "issue_reference",
           "term": "issue_or_pr_reference",
           "source_reason": "retained_runtime_marker",
@@ -11894,7 +11894,7 @@
         {
           "group": "academic-pipeline",
           "path": "academic-pipeline/SKILL.md",
-          "line": 617,
+          "line": 620,
           "category": "issue_reference",
           "term": "issue_or_pr_reference",
           "source_reason": "retained_runtime_marker",
@@ -11903,7 +11903,7 @@
         {
           "group": "academic-pipeline",
           "path": "academic-pipeline/SKILL.md",
-          "line": 701,
+          "line": 704,
           "category": "history_term",
           "term": "Version Info",
           "source_reason": "retained_runtime_marker",
@@ -11912,7 +11912,7 @@
         {
           "group": "academic-pipeline",
           "path": "academic-pipeline/SKILL.md",
-          "line": 713,
+          "line": 716,
           "category": "history_term",
           "term": "Changelog",
           "source_reason": "retained_runtime_marker",
@@ -11921,8 +11921,8 @@
       ],
       "contract_injection": {
         "injected": true,
-        "profile_id": "researchspec-preflight-v4",
-        "marker": "<!-- researchspec-contract-preflight:v4 -->"
+        "profile_id": "researchspec-preflight-v5",
+        "marker": "<!-- researchspec-contract-preflight:v5 -->"
       },
       "routing_description": {
         "skill_id": "academic-pipeline",
@@ -12798,7 +12798,7 @@
           "source_path": "deep-research/SKILL.md",
           "output_path": "deep-research/SKILL.md",
           "transform_rule": "text_copy_with_dependency_rewrite_routing_description_and_contract_preflight",
-          "sha256": "654f00ae7e6f59300a04a3a431b7142d30d9805517c5a2e36d5cd78c52f8745c"
+          "sha256": "9cee96b04a781809c800d8b9a275b4448ec243b4641d5e85209350985e42cd44"
         },
         {
           "group": "deep-research",
@@ -15859,7 +15859,7 @@
         {
           "group": "deep-research",
           "path": "deep-research/SKILL.md",
-          "line": 71,
+          "line": 74,
           "category": "platform_term",
           "term": ".claude/CLAUDE.md",
           "source_reason": "retained_runtime_marker",
@@ -15868,7 +15868,7 @@
         {
           "group": "deep-research",
           "path": "deep-research/SKILL.md",
-          "line": 326,
+          "line": 329,
           "category": "history_term",
           "term": "legacy",
           "source_reason": "retained_runtime_marker",
@@ -15877,7 +15877,7 @@
         {
           "group": "deep-research",
           "path": "deep-research/SKILL.md",
-          "line": 332,
+          "line": 335,
           "category": "platform_term",
           "term": ".claude/CLAUDE.md",
           "source_reason": "retained_runtime_marker",
@@ -15886,7 +15886,7 @@
         {
           "group": "deep-research",
           "path": "deep-research/SKILL.md",
-          "line": 332,
+          "line": 335,
           "category": "platform_term",
           "term": "slash command",
           "source_reason": "retained_runtime_marker",
@@ -15895,7 +15895,7 @@
         {
           "group": "deep-research",
           "path": "deep-research/SKILL.md",
-          "line": 334,
+          "line": 337,
           "category": "issue_reference",
           "term": "issue_or_pr_reference",
           "source_reason": "retained_runtime_marker",
@@ -15904,7 +15904,7 @@
         {
           "group": "deep-research",
           "path": "deep-research/SKILL.md",
-          "line": 334,
+          "line": 337,
           "category": "platform_term",
           "term": "hook",
           "source_reason": "retained_runtime_marker",
@@ -15913,7 +15913,7 @@
         {
           "group": "deep-research",
           "path": "deep-research/SKILL.md",
-          "line": 538,
+          "line": 541,
           "category": "issue_reference",
           "term": "issue_or_pr_reference",
           "source_reason": "retained_runtime_marker",
@@ -15922,7 +15922,7 @@
         {
           "group": "deep-research",
           "path": "deep-research/SKILL.md",
-          "line": 595,
+          "line": 598,
           "category": "history_term",
           "term": "Version Info",
           "source_reason": "retained_runtime_marker",
@@ -15931,7 +15931,7 @@
         {
           "group": "deep-research",
           "path": "deep-research/SKILL.md",
-          "line": 606,
+          "line": 609,
           "category": "history_term",
           "term": "Version History",
           "source_reason": "retained_runtime_marker",
@@ -15940,8 +15940,8 @@
       ],
       "contract_injection": {
         "injected": true,
-        "profile_id": "researchspec-preflight-v4",
-        "marker": "<!-- researchspec-contract-preflight:v4 -->"
+        "profile_id": "researchspec-preflight-v5",
+        "marker": "<!-- researchspec-contract-preflight:v5 -->"
       },
       "routing_description": {
         "skill_id": "deep-research",
@@ -16669,7 +16669,7 @@
       "source_path": "academic-paper-reviewer/SKILL.md",
       "output_path": "academic-paper-reviewer/SKILL.md",
       "transform_rule": "text_copy_with_dependency_rewrite_routing_description_and_contract_preflight",
-      "sha256": "481dca439c65d8a224420dcf48a37edf205051fc574a26ca5367b2ef6c9818d0"
+      "sha256": "1fb33f5b29360d03b9fea99f5c958435e011b0e9e9043fb475088e85379d259d"
     },
     {
       "group": "academic-paper-reviewer",
@@ -17565,7 +17565,7 @@
       "source_path": "academic-paper/SKILL.md",
       "output_path": "academic-paper/SKILL.md",
       "transform_rule": "text_copy_with_dependency_rewrite_routing_description_and_contract_preflight",
-      "sha256": "18a0d168aa6986d8fbae4c7f2dbb5b5fecbb3ddf7c7d985df7caf209bf4e5926"
+      "sha256": "6d257a5e565f9f604ea6d9ec444eb7e1f5ae30ec1332a8a075bd0818af4458e7"
     },
     {
       "group": "academic-paper",
@@ -18335,7 +18335,7 @@
       "source_path": "academic-pipeline/SKILL.md",
       "output_path": "academic-pipeline/SKILL.md",
       "transform_rule": "text_copy_with_dependency_rewrite_routing_description_and_contract_preflight",
-      "sha256": "1c40616bd3b06fea19223fe3c5a6c9d37d3d63073f2f27c615cfd92973d27d8e"
+      "sha256": "e803df0545420b68fe68dacf2e56ad8743beb664890381154da524629d094003"
     },
     {
       "group": "academic-pipeline",
@@ -19217,7 +19217,7 @@
       "source_path": "deep-research/SKILL.md",
       "output_path": "deep-research/SKILL.md",
       "transform_rule": "text_copy_with_dependency_rewrite_routing_description_and_contract_preflight",
-      "sha256": "654f00ae7e6f59300a04a3a431b7142d30d9805517c5a2e36d5cd78c52f8745c"
+      "sha256": "9cee96b04a781809c800d8b9a275b4448ec243b4641d5e85209350985e42cd44"
     },
     {
       "group": "deep-research",
@@ -19266,7 +19266,7 @@
       "source_path": "generated:researchspec-contracts",
       "output_path": "researchspec-contracts.json",
       "transform_rule": "contract_compatibility_manifest",
-      "sha256": "612bd420aafa1e80e66004d86cea8a0f7502d4acfeff7970a4f95baa849817e6"
+      "sha256": "3c8a2ea9c348b45b4cc30d27774dd920665072ecea40db1e6541555442b4d877"
     },
     {
       "group": "root",
@@ -25922,7 +25922,7 @@
     {
       "group": "academic-paper-reviewer",
       "path": "academic-paper-reviewer/SKILL.md",
-      "line": 72,
+      "line": 75,
       "category": "platform_term",
       "term": ".claude/CLAUDE.md",
       "source_reason": "retained_runtime_marker",
@@ -25931,7 +25931,7 @@
     {
       "group": "academic-paper-reviewer",
       "path": "academic-paper-reviewer/SKILL.md",
-      "line": 249,
+      "line": 252,
       "category": "platform_term",
       "term": ".claude/CLAUDE.md",
       "source_reason": "retained_runtime_marker",
@@ -25940,7 +25940,7 @@
     {
       "group": "academic-paper-reviewer",
       "path": "academic-paper-reviewer/SKILL.md",
-      "line": 249,
+      "line": 252,
       "category": "platform_term",
       "term": "slash command",
       "source_reason": "retained_runtime_marker",
@@ -25949,7 +25949,7 @@
     {
       "group": "academic-paper-reviewer",
       "path": "academic-paper-reviewer/SKILL.md",
-      "line": 251,
+      "line": 254,
       "category": "issue_reference",
       "term": "issue_or_pr_reference",
       "source_reason": "retained_runtime_marker",
@@ -25958,7 +25958,7 @@
     {
       "group": "academic-paper-reviewer",
       "path": "academic-paper-reviewer/SKILL.md",
-      "line": 251,
+      "line": 254,
       "category": "platform_term",
       "term": "hook",
       "source_reason": "retained_runtime_marker",
@@ -25967,7 +25967,7 @@
     {
       "group": "academic-paper-reviewer",
       "path": "academic-paper-reviewer/SKILL.md",
-      "line": 481,
+      "line": 484,
       "category": "history_term",
       "term": "Version Info",
       "source_reason": "retained_runtime_marker",
@@ -25976,7 +25976,7 @@
     {
       "group": "academic-paper-reviewer",
       "path": "academic-paper-reviewer/SKILL.md",
-      "line": 493,
+      "line": 496,
       "category": "history_term",
       "term": "Changelog",
       "source_reason": "retained_runtime_marker",
@@ -28991,7 +28991,7 @@
     {
       "group": "academic-paper",
       "path": "academic-paper/SKILL.md",
-      "line": 72,
+      "line": 75,
       "category": "platform_term",
       "term": ".claude/CLAUDE.md",
       "source_reason": "retained_runtime_marker",
@@ -29000,7 +29000,7 @@
     {
       "group": "academic-paper",
       "path": "academic-paper/SKILL.md",
-      "line": 210,
+      "line": 213,
       "category": "history_term",
       "term": "legacy",
       "source_reason": "retained_runtime_marker",
@@ -29009,7 +29009,7 @@
     {
       "group": "academic-paper",
       "path": "academic-paper/SKILL.md",
-      "line": 219,
+      "line": 222,
       "category": "platform_term",
       "term": ".claude/CLAUDE.md",
       "source_reason": "retained_runtime_marker",
@@ -29018,7 +29018,7 @@
     {
       "group": "academic-paper",
       "path": "academic-paper/SKILL.md",
-      "line": 219,
+      "line": 222,
       "category": "platform_term",
       "term": "slash command",
       "source_reason": "retained_runtime_marker",
@@ -29027,7 +29027,7 @@
     {
       "group": "academic-paper",
       "path": "academic-paper/SKILL.md",
-      "line": 221,
+      "line": 224,
       "category": "issue_reference",
       "term": "issue_or_pr_reference",
       "source_reason": "retained_runtime_marker",
@@ -29036,7 +29036,7 @@
     {
       "group": "academic-paper",
       "path": "academic-paper/SKILL.md",
-      "line": 221,
+      "line": 224,
       "category": "platform_term",
       "term": "hook",
       "source_reason": "retained_runtime_marker",
@@ -29045,7 +29045,7 @@
     {
       "group": "academic-paper",
       "path": "academic-paper/SKILL.md",
-      "line": 344,
+      "line": 347,
       "category": "issue_reference",
       "term": "issue_or_pr_reference",
       "source_reason": "retained_runtime_marker",
@@ -29054,7 +29054,7 @@
     {
       "group": "academic-paper",
       "path": "academic-paper/SKILL.md",
-      "line": 410,
+      "line": 413,
       "category": "issue_reference",
       "term": "issue_or_pr_reference",
       "source_reason": "retained_runtime_marker",
@@ -29063,7 +29063,7 @@
     {
       "group": "academic-paper",
       "path": "academic-paper/SKILL.md",
-      "line": 487,
+      "line": 490,
       "category": "issue_reference",
       "term": "issue_or_pr_reference",
       "source_reason": "retained_runtime_marker",
@@ -29072,7 +29072,7 @@
     {
       "group": "academic-paper",
       "path": "academic-paper/SKILL.md",
-      "line": 500,
+      "line": 503,
       "category": "issue_reference",
       "term": "issue_or_pr_reference",
       "source_reason": "retained_runtime_marker",
@@ -29081,7 +29081,7 @@
     {
       "group": "academic-paper",
       "path": "academic-paper/SKILL.md",
-      "line": 580,
+      "line": 583,
       "category": "history_term",
       "term": "Version Info",
       "source_reason": "retained_runtime_marker",
@@ -29090,7 +29090,7 @@
     {
       "group": "academic-paper",
       "path": "academic-paper/SKILL.md",
-      "line": 591,
+      "line": 594,
       "category": "history_term",
       "term": "Version History",
       "source_reason": "retained_runtime_marker",
@@ -31628,7 +31628,7 @@
     {
       "group": "academic-pipeline",
       "path": "academic-pipeline/SKILL.md",
-      "line": 69,
+      "line": 72,
       "category": "platform_term",
       "term": ".claude/CLAUDE.md",
       "source_reason": "retained_runtime_marker",
@@ -31637,7 +31637,7 @@
     {
       "group": "academic-pipeline",
       "path": "academic-pipeline/SKILL.md",
-      "line": 109,
+      "line": 112,
       "category": "history_term",
       "term": "legacy",
       "source_reason": "retained_runtime_marker",
@@ -31646,7 +31646,7 @@
     {
       "group": "academic-pipeline",
       "path": "academic-pipeline/SKILL.md",
-      "line": 130,
+      "line": 133,
       "category": "history_term",
       "term": "legacy",
       "source_reason": "retained_runtime_marker",
@@ -31655,7 +31655,7 @@
     {
       "group": "academic-pipeline",
       "path": "academic-pipeline/SKILL.md",
-      "line": 283,
+      "line": 286,
       "category": "issue_reference",
       "term": "issue_or_pr_reference",
       "source_reason": "retained_runtime_marker",
@@ -31664,7 +31664,7 @@
     {
       "group": "academic-pipeline",
       "path": "academic-pipeline/SKILL.md",
-      "line": 419,
+      "line": 422,
       "category": "platform_term",
       "term": "hook",
       "source_reason": "retained_runtime_marker",
@@ -31673,7 +31673,7 @@
     {
       "group": "academic-pipeline",
       "path": "academic-pipeline/SKILL.md",
-      "line": 491,
+      "line": 494,
       "category": "issue_reference",
       "term": "issue_or_pr_reference",
       "source_reason": "retained_runtime_marker",
@@ -31682,7 +31682,7 @@
     {
       "group": "academic-pipeline",
       "path": "academic-pipeline/SKILL.md",
-      "line": 575,
+      "line": 578,
       "category": "issue_reference",
       "term": "issue_or_pr_reference",
       "source_reason": "retained_runtime_marker",
@@ -31691,7 +31691,7 @@
     {
       "group": "academic-pipeline",
       "path": "academic-pipeline/SKILL.md",
-      "line": 617,
+      "line": 620,
       "category": "issue_reference",
       "term": "issue_or_pr_reference",
       "source_reason": "retained_runtime_marker",
@@ -31700,7 +31700,7 @@
     {
       "group": "academic-pipeline",
       "path": "academic-pipeline/SKILL.md",
-      "line": 701,
+      "line": 704,
       "category": "history_term",
       "term": "Version Info",
       "source_reason": "retained_runtime_marker",
@@ -31709,7 +31709,7 @@
     {
       "group": "academic-pipeline",
       "path": "academic-pipeline/SKILL.md",
-      "line": 713,
+      "line": 716,
       "category": "history_term",
       "term": "Changelog",
       "source_reason": "retained_runtime_marker",
@@ -34337,7 +34337,7 @@
     {
       "group": "deep-research",
       "path": "deep-research/SKILL.md",
-      "line": 71,
+      "line": 74,
       "category": "platform_term",
       "term": ".claude/CLAUDE.md",
       "source_reason": "retained_runtime_marker",
@@ -34346,7 +34346,7 @@
     {
       "group": "deep-research",
       "path": "deep-research/SKILL.md",
-      "line": 326,
+      "line": 329,
       "category": "history_term",
       "term": "legacy",
       "source_reason": "retained_runtime_marker",
@@ -34355,7 +34355,7 @@
     {
       "group": "deep-research",
       "path": "deep-research/SKILL.md",
-      "line": 332,
+      "line": 335,
       "category": "platform_term",
       "term": ".claude/CLAUDE.md",
       "source_reason": "retained_runtime_marker",
@@ -34364,7 +34364,7 @@
     {
       "group": "deep-research",
       "path": "deep-research/SKILL.md",
-      "line": 332,
+      "line": 335,
       "category": "platform_term",
       "term": "slash command",
       "source_reason": "retained_runtime_marker",
@@ -34373,7 +34373,7 @@
     {
       "group": "deep-research",
       "path": "deep-research/SKILL.md",
-      "line": 334,
+      "line": 337,
       "category": "issue_reference",
       "term": "issue_or_pr_reference",
       "source_reason": "retained_runtime_marker",
@@ -34382,7 +34382,7 @@
     {
       "group": "deep-research",
       "path": "deep-research/SKILL.md",
-      "line": 334,
+      "line": 337,
       "category": "platform_term",
       "term": "hook",
       "source_reason": "retained_runtime_marker",
@@ -34391,7 +34391,7 @@
     {
       "group": "deep-research",
       "path": "deep-research/SKILL.md",
-      "line": 538,
+      "line": 541,
       "category": "issue_reference",
       "term": "issue_or_pr_reference",
       "source_reason": "retained_runtime_marker",
@@ -34400,7 +34400,7 @@
     {
       "group": "deep-research",
       "path": "deep-research/SKILL.md",
-      "line": 595,
+      "line": 598,
       "category": "history_term",
       "term": "Version Info",
       "source_reason": "retained_runtime_marker",
@@ -34409,7 +34409,7 @@
     {
       "group": "deep-research",
       "path": "deep-research/SKILL.md",
-      "line": 606,
+      "line": 609,
       "category": "history_term",
       "term": "Version History",
       "source_reason": "retained_runtime_marker",
@@ -34418,7 +34418,7 @@
   ],
   "contract_compatibility": {
     "manifest_path": "researchspec-contracts.json",
-    "compatibility_kind": "researchspec-preflight-v4",
+    "compatibility_kind": "researchspec-preflight-v5",
     "generated_groups": [
       "academic-paper",
       "academic-paper-reviewer",

@@ -11,10 +11,9 @@
 
 - **Target v0.1**：4 个 ARSU Skills、4 个 Companion Skills、15 个 CLI 命令和
   selector-based 运行协议。
-- **Current implementation（2026-07-10）**：实验研究 Slice、动态 work instructions、
-  `submit work:`、九个当前 Companion 及已有 contract lifecycle。
-- **Pending technical layer**：routing catalog、subflow instances、Gate/transition、
-  完整 ARSU profiles 和 surface consolidation。
+- **Current implementation（2026-07-11）**：完整 routing/workflow catalogs、subflow/round、
+  Gate/transition、`arsu-v0-1`、四个 Companion、十五个 CLI 和 31×8/28×8 delivery。
+- **Acceptance status**：Target v0.1 的十一条公共 CLI 用户旅程已通过，产品技术层完整。
 
 本文不定义字段级 schema、validator 细节、CLI 参数形状或 adapter 具体写盘
 协议。这些内容应在后续 specs 或实现任务中单独落地。
@@ -283,8 +282,8 @@ ResearchSpec 必须最终拥有 ARSU-derived 产物的转换、刷新和验证�
   Companion 不得复制这些能力。
 - Target delivery 是 31 个 tools 各 8 个 Skills，28 个 command-capable tools 各 8 个薄
   wrappers。Wrapper 是 adapter，不是新的产品能力。
-- Current implementation 的九个 Companion 在 surface consolidation change 完成前继续存在；
-  不得把它们误写为 Target v0.1。
+- Current implementation 已由 typed manifest 投影四个 Companion；六个旧投影仅在检测到
+  manifest ownership 且 hash 匹配时安全清理，用户漂移始终保留并诊断。
 
 ## 4. 合同层需求
 

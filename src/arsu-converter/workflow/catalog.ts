@@ -74,7 +74,7 @@ function formalGates(route: ArsuRouteDefinition): GateTemplateDefinition[] {
   if (route.gate_policy.level !== "required") return [];
   return route.gate_policy.gate_kinds.map((kind) => ({
     id: `gate-${slug(kind)}`, stage_id: "work", title: `${route.title}: ${kind}`, gate_type: kind,
-    validator: { id: "researchspec-verify", evidence: { artifact_types: route.primary_artifact_types.map(slug), contracts: routeContracts(route).filter((item) => item.startsWith("specs/")) } },
+    validator: { id: "researchspec-verify", evidence: { artifact_types: route.primary_artifact_types, contracts: routeContracts(route).filter((item) => item.startsWith("specs/")) } },
     risk_level: route.risk_level, blocking: true, confirmation_required: true,
   }));
 }
@@ -110,7 +110,7 @@ function pipelineGates(): GateTemplateDefinition[] {
   return [
     { id: "pre-review-integrity", stage_id: "pre-review", title: "Pre-review integrity", gate_type: "integrity", validator: { id: "researchspec-verify", evidence: { artifact_types: ["integrity_report", "paper_draft"], contracts: ["specs/project.md", "specs/manuscript.yaml"] } }, risk_level: "high", blocking: true, confirmation_required: true },
     { id: "review-confirmation", stage_id: "review", title: "Review quality and editorial outcome", gate_type: "review", validator: { id: "researchspec-verify", evidence: { artifact_types: ["review_report", "editorial_decision"], contracts: ["specs/project.md", "specs/manuscript.yaml"] } }, risk_level: "high", blocking: true, confirmation_required: true },
-    { id: "final-integrity", stage_id: "final-integrity", title: "Final integrity", gate_type: "final_integrity", validator: { id: "researchspec-verify", evidence: { artifact_types: ["final_integrity_report", "revised_draft", "paper_draft"], contracts: ["specs/project.md", "specs/manuscript.yaml"] } }, risk_level: "high", blocking: true, confirmation_required: true },
+    { id: "final-integrity", stage_id: "final-integrity", title: "Final integrity", gate_type: "final_integrity", validator: { id: "researchspec-verify", evidence: { artifact_types: ["final_integrity_report", "paper_draft"], contracts: ["specs/project.md", "specs/manuscript.yaml"] } }, risk_level: "high", blocking: true, confirmation_required: true },
   ];
 }
 

@@ -23,9 +23,9 @@
 
 ## 6. Agent Surface Consolidation Technical Change
 
-- [ ] 6.1 Create and implement `consolidate-researchspec-agent-surface`, add Navigate, retire six superseded Companion projections safely, and reach 31×8 Skills / 28×8 wrappers.
+- [x] 6.1 Create and implement `consolidate-researchspec-agent-surface`, add Navigate, retire six superseded Companion projections safely, and reach 31×8 Skills / 28×8 wrappers.
 
 ## 7. End-To-End Acceptance And Archive
 
-- [ ] 7.1 Validate bootstrap, vague routing, expert direct route, standalone, pipeline, parallel join, Gate challenge/override, revision round, resume, context export, and terminal journeys.
-- [ ] 7.2 Confirm all three umbrella capability specs are implemented by the technical changes, then archive `define-arsu-user-usage-model-v0-1`.
+- [x] 7.1 Validate bootstrap, vague routing, expert direct route, standalone, pipeline, parallel join, Gate challenge/override, revision round, resume, context export, and terminal journeys.
+- [x] 7.2 Confirm all three umbrella capability specs are implemented by the technical changes, then archive `define-arsu-user-usage-model-v0-1`.

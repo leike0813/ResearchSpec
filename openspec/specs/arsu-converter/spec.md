@@ -381,11 +381,13 @@ ResearchSpec SHALL generate ARSU contract preflight guidance that consumes gener
 - **THEN** guidance SHALL perform Submit dry-run followed by execution bound to the returned exact hash
 - **AND** it SHALL query status/check afterward without asking for per-artifact confirmation
 
-#### Scenario: Manual or legacy work uses Submit Companion
+#### Scenario: Manual or legacy work uses direct CLI submit
 
 - **WHEN** work instructions are manual, legacy, unconfigured or lack trusted authorization
-- **THEN** guidance SHALL hand registration to `researchspec-submit` or report the boundary
-- **AND** it SHALL not invent automatic authority, paths, provenance or runtime writes
+- **THEN** guidance SHALL present the direct `researchspec submit` dry-run and
+  confirmation boundary or report that registration cannot proceed
+- **AND** it SHALL NOT invoke a Submit Companion or invent automatic authority,
+  paths, provenance, or runtime writes
 
 #### Scenario: Converter remains deterministic
 

@@ -16,7 +16,7 @@ Produce an evidence-linked readiness scorecard and, for a formal workflow Gate, 
 
 ## Do Not Use
 
-- Do not diagnose malformed YAML, schemas, hashes, or generated ownership as the primary job; route to check.
+- Do not diagnose malformed YAML, schemas, hashes, or generated ownership as the primary job; use the direct targeted \`researchspec check\` command.
 - Do not propose or apply fixes while verifying. Route semantic changes to propose and human choices to decide.
 - Do not perform manuscript peer review, copy-editing, or new literature synthesis; use ARSU reviewer or deep research.
 
@@ -43,7 +43,7 @@ researchspec submit gate:sf-<instance>/<node> --input verdict.json --actor-kind 
 ## Workflow
 
 1. Define the readiness question and scope. “Valid workspace” and “ready to draft/advance/share” are different claims.
-2. Run the relevant deterministic check first. If any blocking diagnostic exists, stop semantic scoring and route to check; record semantic assessment as not evaluated.
+2. Run the relevant deterministic check first. If any blocking diagnostic exists, stop semantic scoring and report the direct check/repair boundary; record semantic assessment as not evaluated.
 3. Read project research question, scope, target output, language, and constraints. Extract the criteria that claims, sources, manuscript, and workflow must satisfy.
 4. Inspect source contracts and registered evidence artifacts. Assess coverage, relevance, provenance visibility, and explicit gaps without conducting new research.
 5. Inspect each in-scope claim: statement, support links, strength, limits, wording constraints, and relation to the research question. Flag support that is missing, indirect, contradictory, or weaker than the declared strength.
@@ -56,7 +56,7 @@ researchspec submit gate:sf-<instance>/<node> --input verdict.json --actor-kind 
 12. For a formal Gate, fetch its dynamic instructions and construct a strict payload using only the declared validator/evidence contract. Show verdict, evidence, limitations, conditions, and advancement consequences to the user.
 13. If the user challenges the verdict, re-run verification and mark the payload as reverification, binding challenged basis and any superseded confirmed event. Never offer override before this step.
 14. If the user confirms, dry-run and execute the identical submit-gate plan with their real confirmed_by; --yes only binds the mechanical plan. If the confirmed reverification still fails and the user requests an override, route that exact event to Decide.
-15. Route remaining findings: mechanical validity to check, semantic contract change to propose, human pending choice to decide, manuscript quality to ARSU reviewer, missing scholarly evidence to ARSU research.
+15. Route remaining findings: mechanical validity to direct check, semantic contract change to Propose, human pending choice to Decide, manuscript quality to ARSU reviewer, missing scholarly evidence to ARSU research.
 
 ## Readiness Scorecard
 

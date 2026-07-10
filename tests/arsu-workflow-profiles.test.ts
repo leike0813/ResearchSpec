@@ -32,6 +32,13 @@ void test("arsu-v0-1 exactly covers the routing catalog and generated projection
   assert.equal(await runtimeWorkflowProjectionIsCurrent(process.cwd()), true);
   assert.match(GENERATED_PROFILE_SOURCE, /Do not edit/);
   for (const route of routes) for (const artifactType of route.primary_artifact_types) assert.ok(ARSU_ARTIFACT_CONTRACTS[artifactType], `${route.route_ref}:${artifactType}`);
+  for (const route of routes.filter((item) => item.gate_policy.level === "required" && item.route_kind === "mode")) {
+    const template = external.find((item) => item.route_ref === route.route_ref);
+    assert.ok(template);
+    for (const gate of template.gates) assert.deepEqual(gate.validator.evidence.artifact_types, route.primary_artifact_types, `${route.route_ref}:${gate.id}`);
+  }
+  const pipeline = external.find((item) => item.template_id === "tpl-academic-pipeline-end-to-end");
+  assert.deepEqual(pipeline?.gates.find((gate) => gate.id === "final-integrity")?.validator.evidence.artifact_types, ["final_integrity_report", "paper_draft"]);
 });
 
 void test("new workspace defaults to arsu-v0-1 without starting a route", () => {

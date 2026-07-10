@@ -83,17 +83,15 @@ export async function handleInit(inputPath: string | undefined, options: InitOpt
   const currentInstallations = installationRecords(priorSnapshot?.manifest.installations);
   const delivery = await planToolDelivery({ projectRoot, toolIds: selected, existingInstallations: currentInstallations, force: context.force });
   operations.push(...delivery.operations);
-
-  const retained = currentInstallations.filter((item) => typeof item.tool_id === "string" && selected.includes(item.tool_id));
-  const desiredKeys = new Set(delivery.installations.map((item) => `${item.scope}:${item.path}`));
-  for (const installation of currentInstallations) {
-    if (typeof installation.tool_id !== "string" || selected.includes(installation.tool_id) || installation.scope === "shared-global") continue;
-    if (typeof installation.path !== "string" || typeof installation.sha256 !== "string") continue;
-    const target = path.resolve(projectRoot, installation.path);
-    const bytes = await readBytes(target);
-    if (bytes !== undefined && sha256(bytes) === installation.sha256) operations.push({ action: "remove-owned", path: target, relativePath: installation.path, scope: "project", ownership: "generated", previousHash: installation.sha256, reason: "tool was explicitly deselected" });
-  }
-  const installations = deduplicateInstallations([...retained.filter((item) => !desiredKeys.has(`${item.scope}:${item.path}`)), ...delivery.installations]);
+  const reconciliation = await reconcileInstallations({
+    projectRoot,
+    existingInstallations: currentInstallations,
+    desiredInstallations: delivery.installations,
+    reconciledToolIds: [...new Set([...selected, ...currentInstallations.map((item) => item.tool_id)])],
+    selectedToolIds: selected,
+  });
+  operations.push(...reconciliation.operations);
+  const installations = deduplicateInstallations([...reconciliation.retainedInstallations, ...delivery.installations]);
   const configText = stringify({ schema_version: "0.1", profile, agent_tools: { selected, delivery: "both" } });
   const configPath = path.join(workspace, "config.yaml");
   operations.push(await authoritativeWrite(configPath, "config.yaml", configText, "workspace", "update selected tool intent"));
@@ -110,7 +108,7 @@ export async function handleInit(inputPath: string | undefined, options: InitOpt
     for (const entry of getWorkspaceEntries(workspace, profile)) if (entry.kind === "dir") await mkdir(entry.path, { recursive: true });
     await executeWritePlan(plan);
   }
-  const diagnostics = [...delivery.diagnostics, ...operationDiagnostics(operations)];
+  const diagnostics = [...delivery.diagnostics, ...reconciliation.diagnostics, ...operationDiagnostics(operations)];
   const data = { workspace, profile, selected_tools: selected, dry_run: context.dryRun, plan: summarizePlan(operations) };
   return deliveryResult("init", data, { stdout: formatPlan(context.dryRun ? "ResearchSpec init dry run" : existing ? "ResearchSpec workspace updated" : "ResearchSpec workspace initialized", workspace, operations, context.dryRun) }, diagnostics);
 }
@@ -129,24 +127,17 @@ export async function handleUpdate(inputPath: string | undefined, options: Updat
   if (!targetTools.length) return success("update", { workspace, selected_tools: selected, plan: [] }, { stdout: "ResearchSpec update: nothing to do.\n" });
   const existingInstallations = installationRecords(snapshot.manifest.installations);
   const delivery = await planToolDelivery({ projectRoot, toolIds: targetTools, existingInstallations, force: context.force });
-  const targetSet = new Set(targetTools);
-  const untouched = existingInstallations.filter((item) => !targetSet.has(item.tool_id));
   const operations = [...delivery.operations];
-  const diagnostics = [...delivery.diagnostics];
-  const desiredKeys = new Set(delivery.installations.map((item) => `${item.scope}:${item.path}`));
-  const retainedStale: InstallationRecord[] = [];
-  for (const installation of existingInstallations.filter((item) => targetSet.has(item.tool_id) && !desiredKeys.has(`${item.scope}:${item.path}`))) {
-    if (installation.scope === "shared-global") { retainedStale.push(installation); continue; }
-    const target = path.resolve(projectRoot, installation.path);
-    const bytes = await readBytes(target);
-    if (bytes === undefined) continue;
-    if (sha256(bytes) === installation.sha256) operations.push({ action: "remove-owned", path: target, relativePath: installation.path, scope: "project", ownership: "generated", previousHash: installation.sha256, reason: "remove stale manifest-owned generated file" });
-    else {
-      retainedStale.push(installation);
-      diagnostics.push({ severity: "warning", code: "generated_file_drift", message: "Stale generated file has user modifications and was preserved.", path: target, blocking: false });
-    }
-  }
-  const installations = deduplicateInstallations([...untouched, ...retainedStale, ...delivery.installations]);
+  const reconciliation = await reconcileInstallations({
+    projectRoot,
+    existingInstallations,
+    desiredInstallations: delivery.installations,
+    reconciledToolIds: targetTools,
+    selectedToolIds: selected,
+  });
+  operations.push(...reconciliation.operations);
+  const diagnostics = [...delivery.diagnostics, ...reconciliation.diagnostics];
+  const installations = deduplicateInstallations([...reconciliation.retainedInstallations, ...delivery.installations]);
   if (selected.join("\0") !== configured.join("\0")) {
     const configText = stringify({ ...snapshot.config, agent_tools: { ...record(snapshot.config.agent_tools), selected } });
     operations.push(await authoritativeWrite(path.join(workspace, "config.yaml"), "config.yaml", configText, "workspace", "add explicitly targeted tools"));
@@ -495,6 +486,82 @@ function installationRecords(value: unknown): InstallationRecord[] {
     typeof item.source === "string" && item.adapter_version === "1");
 }
 function deduplicateInstallations(items: InstallationRecord[]): InstallationRecord[] { return [...new Map(items.map((item) => [`${item.scope}:${item.path}`, item])).values()].sort((a, b) => a.tool_id.localeCompare(b.tool_id) || a.path.localeCompare(b.path)); }
+const RETIRED_COMPANION_IDS = new Set(["explore", "check", "next", "context", "submit", "archive"]);
+
+async function reconcileInstallations(input: {
+  projectRoot: string;
+  existingInstallations: readonly InstallationRecord[];
+  desiredInstallations: readonly InstallationRecord[];
+  reconciledToolIds: readonly string[];
+  selectedToolIds: readonly string[];
+}): Promise<{ operations: PlannedWrite[]; retainedInstallations: InstallationRecord[]; diagnostics: Diagnostic[] }> {
+  const operations: PlannedWrite[] = [];
+  const retainedInstallations: InstallationRecord[] = [];
+  const diagnostics: Diagnostic[] = [];
+  const desiredKeys = new Set(input.desiredInstallations.map(installationKey));
+  const reconciledTools = new Set(input.reconciledToolIds);
+  const selectedTools = new Set(input.selectedToolIds);
+
+  for (const installation of input.existingInstallations) {
+    if (desiredKeys.has(installationKey(installation))) continue;
+    if (!reconciledTools.has(installation.tool_id)) {
+      retainedInstallations.push(installation);
+      continue;
+    }
+
+    const selected = selectedTools.has(installation.tool_id);
+    const productRetirement = selected && isRetiredCompanionSource(installation.source);
+    const mayRemove = installation.scope === "project" || (installation.scope === "shared-global" && productRetirement);
+    if (!mayRemove) {
+      retainedInstallations.push(installation);
+      continue;
+    }
+
+    const target = installation.scope === "shared-global"
+      ? installation.path
+      : path.resolve(input.projectRoot, installation.path);
+    const bytes = await readBytes(target);
+    if (bytes === undefined) continue;
+    if (sha256(bytes) !== installation.sha256) {
+      retainedInstallations.push(installation);
+      diagnostics.push({
+        severity: "warning",
+        code: "generated_file_drift",
+        message: productRetirement
+          ? "Retired generated projection has user modifications and was preserved."
+          : "Stale generated file has user modifications and was preserved.",
+        path: target,
+        blocking: false,
+        details: { source: installation.source, retirement: productRetirement },
+      });
+      continue;
+    }
+    operations.push({
+      action: "remove-owned",
+      path: target,
+      relativePath: installation.path,
+      scope: installation.scope,
+      ownership: "generated",
+      previousHash: installation.sha256,
+      reason: productRetirement
+        ? "remove product-retired manifest-owned Companion projection"
+        : selected
+          ? "remove stale manifest-owned generated file"
+          : "tool was explicitly deselected",
+    });
+  }
+  return { operations, retainedInstallations, diagnostics };
+}
+
+function installationKey(item: Pick<InstallationRecord, "scope" | "path">): string {
+  return `${item.scope}:${item.path}`;
+}
+
+function isRetiredCompanionSource(source: string): boolean {
+  const command = source.match(/^command:([a-z-]+)$/)?.[1];
+  const skill = source.match(/^companion:researchspec-([a-z-]+)\//)?.[1];
+  return RETIRED_COMPANION_IDS.has(command ?? skill ?? "");
+}
 function operationDiagnostics(operations: PlannedWrite[]): Diagnostic[] { return operations.filter((item) => item.action === "skip-drift" || item.action === "conflict").map((item) => ({ severity: "warning", code: item.action === "skip-drift" ? "generated_file_drift" : "generated_file_conflict", message: item.reason, path: item.path, blocking: false })); }
 function deliveryResult<T>(command: string, data: T, human: { stdout: string }, diagnostics: Diagnostic[]): CommandResult<T> {
   const base = success(command, data, human, diagnostics);

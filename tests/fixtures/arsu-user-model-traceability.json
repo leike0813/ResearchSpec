@@ -1,0 +1,124 @@
+{
+  "schema_version": "1",
+  "user_model_change": "define-arsu-user-usage-model-v0-1",
+  "technical_changes": [
+    "add-arsu-routing-catalog",
+    "add-subflow-instance-control-plane",
+    "add-gate-transition-control-plane",
+    "add-arsu-workflow-profiles",
+    "consolidate-researchspec-agent-surface",
+    "implement-complete-cli-interface",
+    "add-atomic-artifact-submit"
+  ],
+  "journeys": [
+    { "journey_id": "bootstrap", "test_id": "journey.bootstrap" },
+    { "journey_id": "vague-routing", "test_id": "journey.vague-routing" },
+    { "journey_id": "expert-direct-route", "test_id": "journey.expert-direct-route" },
+    { "journey_id": "standalone", "test_id": "journey.standalone" },
+    { "journey_id": "pipeline", "test_id": "journey.pipeline" },
+    { "journey_id": "parallel-join", "test_id": "journey.parallel-join" },
+    { "journey_id": "gate-challenge-override", "test_id": "journey.gate-challenge-override" },
+    { "journey_id": "revision-round", "test_id": "journey.revision-round" },
+    { "journey_id": "resume", "test_id": "journey.resume" },
+    { "journey_id": "context-export", "test_id": "journey.context-export" },
+    { "journey_id": "terminal-completion", "test_id": "journey.terminal-completion" }
+  ],
+  "capabilities": [
+    {
+      "capability_id": "arsu-user-routing",
+      "requirements": [
+        {
+          "requirement": "Dialogue-First ARSU Routing",
+          "scenarios": [
+            { "scenario": "Bootstrap does not start work", "technical_changes": ["add-subflow-instance-control-plane", "add-arsu-workflow-profiles"], "journey_ids": ["bootstrap"], "test_ids": ["journey.bootstrap"] },
+            { "scenario": "Vague goal enters Navigate", "technical_changes": ["add-arsu-routing-catalog", "consolidate-researchspec-agent-surface"], "journey_ids": ["vague-routing"], "test_ids": ["journey.vague-routing"] },
+            { "scenario": "Expert request goes directly to an ARSU Skill", "technical_changes": ["add-arsu-routing-catalog", "add-subflow-instance-control-plane"], "journey_ids": ["expert-direct-route"], "test_ids": ["journey.expert-direct-route"] }
+          ]
+        },
+        {
+          "requirement": "Route Summary And Start Authorization",
+          "scenarios": [
+            { "scenario": "Route summary is complete", "technical_changes": ["add-arsu-routing-catalog", "add-subflow-instance-control-plane", "consolidate-researchspec-agent-surface"], "journey_ids": ["vague-routing", "expert-direct-route"], "test_ids": ["journey.vague-routing", "journey.expert-direct-route"] },
+            { "scenario": "Missing prerequisites expand the route", "technical_changes": ["add-arsu-routing-catalog", "add-arsu-workflow-profiles"], "journey_ids": ["vague-routing"], "test_ids": ["journey.vague-routing"] },
+            { "scenario": "Confirmation authorizes one route", "technical_changes": ["add-subflow-instance-control-plane"], "journey_ids": ["expert-direct-route", "standalone"], "test_ids": ["journey.expert-direct-route", "journey.standalone"] }
+          ]
+        },
+        {
+          "requirement": "Routing Catalog Is The Mapping Authority",
+          "scenarios": [
+            { "scenario": "Mode mapping is projected consistently", "technical_changes": ["add-arsu-routing-catalog", "consolidate-researchspec-agent-surface"], "journey_ids": ["vague-routing"], "test_ids": ["journey.vague-routing"] },
+            { "scenario": "Near-miss intent is disambiguated", "technical_changes": ["add-arsu-routing-catalog", "consolidate-researchspec-agent-surface"], "journey_ids": ["vague-routing"], "test_ids": ["journey.vague-routing"] }
+          ]
+        }
+      ]
+    },
+    {
+      "capability_id": "arsu-run-usage",
+      "requirements": [
+        {
+          "requirement": "Active Run And Dynamic Subflows",
+          "scenarios": [
+            { "scenario": "Standalone work starts under the active run", "technical_changes": ["add-subflow-instance-control-plane", "add-arsu-workflow-profiles"], "journey_ids": ["standalone"], "test_ids": ["journey.standalone"] },
+            { "scenario": "Revision round is instantiated dynamically", "technical_changes": ["add-arsu-workflow-profiles"], "journey_ids": ["revision-round"], "test_ids": ["journey.revision-round"] }
+          ]
+        },
+        {
+          "requirement": "CLI-Owned Workflow Frontier",
+          "scenarios": [
+            { "scenario": "Pipeline dispatch follows CLI state", "technical_changes": ["add-subflow-instance-control-plane", "add-arsu-workflow-profiles", "consolidate-researchspec-agent-surface"], "journey_ids": ["pipeline", "resume"], "test_ids": ["journey.pipeline", "journey.resume"] },
+            { "scenario": "Parallel work follows profile declarations", "technical_changes": ["add-subflow-instance-control-plane", "add-arsu-workflow-profiles"], "journey_ids": ["parallel-join"], "test_ids": ["journey.parallel-join"] }
+          ]
+        },
+        {
+          "requirement": "Uniform Runtime Protocol",
+          "scenarios": [
+            { "scenario": "Agent advances one runtime action", "technical_changes": ["implement-complete-cli-interface", "add-subflow-instance-control-plane", "add-gate-transition-control-plane"], "journey_ids": ["standalone", "pipeline", "terminal-completion"], "test_ids": ["journey.standalone", "journey.pipeline", "journey.terminal-completion"] },
+            { "scenario": "Work submission records an existing candidate", "technical_changes": ["add-atomic-artifact-submit", "add-subflow-instance-control-plane"], "journey_ids": ["standalone", "parallel-join"], "test_ids": ["journey.standalone", "journey.parallel-join"] }
+          ]
+        },
+        {
+          "requirement": "Human-Confirmed Gates And Controlled Transitions",
+          "scenarios": [
+            { "scenario": "Gate submission includes confirmation", "technical_changes": ["add-gate-transition-control-plane"], "journey_ids": ["gate-challenge-override"], "test_ids": ["journey.gate-challenge-override"] },
+            { "scenario": "User challenges a Gate verdict", "technical_changes": ["add-gate-transition-control-plane"], "journey_ids": ["gate-challenge-override"], "test_ids": ["journey.gate-challenge-override"] },
+            { "scenario": "Unique transition advances automatically", "technical_changes": ["add-gate-transition-control-plane"], "journey_ids": ["standalone", "terminal-completion"], "test_ids": ["journey.standalone", "journey.terminal-completion"] },
+            { "scenario": "Ambiguous transition requires Decision", "technical_changes": ["add-gate-transition-control-plane", "add-arsu-workflow-profiles"], "journey_ids": ["pipeline", "revision-round"], "test_ids": ["journey.pipeline", "journey.revision-round"] }
+          ]
+        },
+        {
+          "requirement": "Decisions Capture Only High-Impact Interaction",
+          "scenarios": [
+            { "scenario": "Ordinary exploration remains with the artifact", "technical_changes": ["add-gate-transition-control-plane", "consolidate-researchspec-agent-surface"], "journey_ids": ["vague-routing", "gate-challenge-override"], "test_ids": ["journey.vague-routing", "journey.gate-challenge-override"] }
+          ]
+        }
+      ]
+    },
+    {
+      "capability_id": "agent-surface-model",
+      "requirements": [
+        {
+          "requirement": "Minimal User-Visible Skill Surface",
+          "scenarios": [
+            { "scenario": "ARSU semantic Skills are exposed", "technical_changes": ["consolidate-researchspec-agent-surface"], "journey_ids": ["bootstrap"], "test_ids": ["journey.bootstrap"] },
+            { "scenario": "Companion intents are exposed", "technical_changes": ["consolidate-researchspec-agent-surface"], "journey_ids": ["bootstrap", "vague-routing"], "test_ids": ["journey.bootstrap", "journey.vague-routing"] },
+            { "scenario": "Transaction helpers do not become Companions", "technical_changes": ["consolidate-researchspec-agent-surface"], "journey_ids": ["bootstrap", "context-export"], "test_ids": ["journey.bootstrap", "journey.context-export"] }
+          ]
+        },
+        {
+          "requirement": "Minimal CLI Surface",
+          "scenarios": [
+            { "scenario": "Target command set is projected", "technical_changes": ["implement-complete-cli-interface", "consolidate-researchspec-agent-surface"], "journey_ids": ["bootstrap"], "test_ids": ["journey.bootstrap"] },
+            { "scenario": "Selectors distinguish runtime entities", "technical_changes": ["implement-complete-cli-interface", "add-subflow-instance-control-plane", "add-gate-transition-control-plane"], "journey_ids": ["expert-direct-route", "standalone", "pipeline"], "test_ids": ["journey.expert-direct-route", "journey.standalone", "journey.pipeline"] }
+          ]
+        },
+        {
+          "requirement": "Adapter Delivery Does Not Define Product Capabilities",
+          "scenarios": [
+            { "scenario": "Target delivery matrix is generated", "technical_changes": ["consolidate-researchspec-agent-surface"], "journey_ids": ["bootstrap"], "test_ids": ["journey.bootstrap"] },
+            { "scenario": "Wrapper does not own workflow semantics", "technical_changes": ["consolidate-researchspec-agent-surface"], "journey_ids": ["vague-routing", "resume"], "test_ids": ["journey.vague-routing", "journey.resume"] }
+          ]
+        }
+      ]
+    }
+  ]
+}

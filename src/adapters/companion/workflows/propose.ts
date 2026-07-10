@@ -18,7 +18,7 @@ Convert a clearly stated semantic change into a reviewable, deterministic pendin
 
 - Do not use for syntax-only repairs, generated tool refresh, artifact registration, gate append, stage transition, or manuscript prose revision.
 - Do not create unsupported targets outside the five stable specs.
-- Do not accept, apply, reject, postpone, or archive the created change; use decide and archive separately.
+- Do not accept, apply, reject, postpone, or archive the created change; use Decide for the semantic choice and the direct CLI archive transaction after resolution.
 
 ## Inputs
 
@@ -61,7 +61,7 @@ Example semantic input:
 
 ## Workflow
 
-1. Restate the requested semantic change and identify why it is high impact. If the desired outcome is still exploratory, use explore or ARSU research before authoring a patch.
+1. Restate the requested semantic change and identify why it is high impact. If the desired outcome is still exploratory, use Navigate Explain or ARSU research before authoring a patch.
 2. Run targeted check and show/list views for every affected contract object and evidence reference. Record exact current values from CLI-visible files, not memory.
 3. Choose the smallest patch set that expresses one coherent decision. Split unrelated research choices into separate change IDs.
 4. Select only one of the five stable contracts. YAML paths use dot segments and unique \`collection[id]\` selectors. Project Markdown permits only \`replace section[Heading]\`.

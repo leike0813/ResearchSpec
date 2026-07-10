@@ -9,6 +9,7 @@ import { planToolDelivery } from "../src/adapters/delivery.js";
 import { TOOL_IDS, TOOLS, detectTools, getTool, parseToolExpression } from "../src/adapters/tools.js";
 import { cleanup, tempProject } from "./helpers/cli.js";
 import { ARSU_ROUTING_CATALOG } from "../src/arsu-converter/routing/catalog.js";
+import { renderNavigateRoutingProjection } from "../src/arsu-converter/routing/navigation-projection.js";
 import { renderArsuCommandDescription } from "../src/arsu-converter/routing/projection.js";
 
 void test("tool registry contains the exact 31-tool surface and 28 command adapters", () => {
@@ -63,7 +64,7 @@ void test("registered command paths preserve per-tool conventions", () => {
   const previousCodexHome = process.env.CODEX_HOME;
   process.env.CODEX_HOME = "/codex-home";
   assert.equal(requireTool("codex").command?.path("deep-research", root), "/codex-home/prompts/researchspec-deep-research.md");
-  assert.equal(requireTool("codex").command?.path("check", root), "/codex-home/prompts/researchspec-check.md");
+  assert.equal(requireTool("codex").command?.path("navigate", root), "/codex-home/prompts/researchspec-navigate.md");
   if (previousCodexHome === undefined) Reflect.deleteProperty(process.env, "CODEX_HOME");
   else process.env.CODEX_HOME = previousCodexHome;
 });
@@ -96,20 +97,15 @@ void test("ARSU command descriptions are projected from the routing catalog", ()
   }
 });
 
-void test("companion manifest renders nine self-contained workflow skills with distinct metadata", () => {
-  assert.deepEqual(COMPANION_WORKFLOW_IDS, ["explore", "propose", "check", "verify", "next", "context", "decide", "submit", "archive"]);
+void test("companion manifest renders four self-contained workflow skills with distinct metadata", () => {
+  assert.deepEqual(COMPANION_WORKFLOW_IDS, ["navigate", "propose", "decide", "verify"]);
   assert.deepEqual(COMPANION_INTENTS.map((intent) => intent.skillId), [
-    "researchspec-explore",
+    "researchspec-navigate",
     "researchspec-propose",
-    "researchspec-check",
-    "researchspec-verify",
-    "researchspec-next",
-    "researchspec-context",
     "researchspec-decide",
-    "researchspec-submit",
-    "researchspec-archive",
+    "researchspec-verify",
   ]);
-  assert.equal(new Set(COMPANION_INTENTS.map((intent) => intent.id)).size, 9);
+  assert.equal(new Set(COMPANION_INTENTS.map((intent) => intent.id)).size, 4);
   assert.equal(ARSU_COMMAND_CONTENTS.length, 4);
 
   for (const intent of COMPANION_INTENTS) {
@@ -122,27 +118,24 @@ void test("companion manifest renders nine self-contained workflow skills with d
     assert.doesNotMatch(rendered, /references\/cli-discipline\.md|<<|Authoring hint/);
   }
 
-  const check = COMPANION_INTENTS.find((intent) => intent.id === "check");
-  assert.ok(check);
-  const claude = renderCommand(requireTool("claude"), check);
-  assert.match(claude, /Use the installed `researchspec-check` skill/);
-  assert.match(claude, /tags: \[researchspec, companion, check\]/);
+  const navigate = COMPANION_INTENTS.find((intent) => intent.id === "navigate");
+  assert.ok(navigate);
+  const claude = renderCommand(requireTool("claude"), navigate);
+  assert.match(claude, /Use the installed `researchspec-navigate` skill/);
+  assert.match(claude, /tags: \[researchspec, companion, navigate\]/);
   assert.doesNotMatch(claude, /tags: \[researchspec, arsu\]/);
-  assert.equal(requireTool("claude").command?.path(check.id, "/project"), "/project/.claude/commands/researchspec/check.md");
-
-  const next = COMPANION_INTENTS.find((intent) => intent.id === "next");
-  assert.ok(next);
-  assert.match(next.instructions, /status\.data\.workflow_control\.work_items/);
-  assert.match(next.instructions, /instructions subflow:<template> --json/);
-  assert.match(next.instructions, /automatic with valid start authorization/);
-  assert.match(next.instructions, /instructions transition:sf-<instance>\/<node> --json/);
-  assert.match(next.instructions, /decision-required transitions/);
-
-  const submit = COMPANION_INTENTS.find((intent) => intent.id === "submit");
-  assert.ok(submit);
-  assert.match(submit.instructions, /--expected-sha256/);
-  assert.match(submit.instructions, /receipt/);
-  assert.match(submit.instructions, /state, Gates, and Decisions/);
+  assert.equal(requireTool("claude").command?.path(navigate.id, "/project"), "/project/.claude/commands/researchspec/navigate.md");
+  for (const branch of ["Route", "Resume", "Explain", "Export"]) assert.match(navigate.instructions, new RegExp(`\\*\\*${branch}:\\*\\*|${branch} branch|${branch} for`));
+  assert.match(navigate.instructions, /instructions transition:<instance>\/<node> --json/);
+  assert.match(navigate.instructions, /direct hash-bound `researchspec submit`/);
+  assert.match(navigate.instructions, /exactly one authorized non-semantic transition/);
+  assert.match(navigate.instructions, /formal Gates to `researchspec-verify`/);
+  assert.ok(navigate.instructions.endsWith(renderNavigateRoutingProjection()));
+  for (const skill of ARSU_ROUTING_CATALOG.skills) {
+    assert.match(navigate.instructions, new RegExp(skill.skill_id));
+    for (const route of skill.routes) assert.match(navigate.instructions, new RegExp(route.route_ref));
+    for (const nearMiss of skill.near_misses) assert.match(navigate.instructions, new RegExp(nearMiss.route_ref));
+  }
 });
 
 void test("Copilot uses its explicit detection paths", async () => {
@@ -152,7 +145,7 @@ void test("Copilot uses its explicit detection paths", async () => {
   await cleanup(root);
 });
 
-void test("delivery projects nine skills to 31 tools and nine wrappers to 28 command-capable tools", async () => {
+void test("delivery projects eight skills to 31 tools and eight wrappers to 28 command-capable tools", async () => {
   const root = await tempProject();
   const previousCodexHome = process.env.CODEX_HOME;
   process.env.CODEX_HOME = path.join(root, "codex-home");
@@ -160,8 +153,12 @@ void test("delivery projects nine skills to 31 tools and nine wrappers to 28 com
     const delivery = await planToolDelivery({ projectRoot: root, toolIds: TOOL_IDS, existingInstallations: [], force: false });
     const companionSkills = delivery.installations.filter((item) => item.source.startsWith("companion:") && item.source.endsWith("/SKILL.md"));
     const companionCommands = delivery.installations.filter((item) => COMPANION_WORKFLOW_IDS.some((id) => item.source === `command:${id}`));
-    assert.equal(companionSkills.length, 31 * 9);
-    assert.equal(companionCommands.length, 28 * 9);
+    const arsuSkills = delivery.installations.filter((item) => ARSU_COMMAND_CONTENTS.some((content) => item.source === `${content.id}/SKILL.md`));
+    const arsuCommands = delivery.installations.filter((item) => ARSU_COMMAND_CONTENTS.some((content) => item.source === `command:${content.id}`));
+    assert.equal(companionSkills.length, TOOL_IDS.length * COMPANION_INTENTS.length);
+    assert.equal(companionCommands.length, TOOLS.filter((tool) => tool.command).length * COMPANION_INTENTS.length);
+    assert.equal(arsuSkills.length + companionSkills.length, 31 * 8);
+    assert.equal(arsuCommands.length + companionCommands.length, 28 * 8);
     assert.equal(delivery.diagnostics.filter((item) => item.code === "commands_not_supported").length, 3);
   } finally {
     if (previousCodexHome === undefined) Reflect.deleteProperty(process.env, "CODEX_HOME");

@@ -9,6 +9,7 @@ import type { ConversionManifest, RiskFinding, ValidationResult } from "./types.
 import { ARSU_ROUTING_CATALOG, getArsuSkillDefinition } from "./routing/catalog.js";
 import { ArsuRoutingCatalogSchema, type ArsuRoutingCatalog, validateRoutingCatalogReferences } from "./routing/contracts.js";
 import { readSkillFrontmatterDescription, renderArsuSkillDescription } from "./routing/projection.js";
+import { RESEARCHSPEC_PREFLIGHT_MARKER } from "./contracts.js";
 
 const LINK_RE = /\[[^\]]+\]\((?<link>[^)#]+)(?:#[^)]+)?\)/g;
 
@@ -101,7 +102,7 @@ export async function validateArsuOutput(outputRoot: string): Promise<Validation
       errors.push(`Missing ${group}/SKILL.md`);
     } else {
       const skillText = await readUtf8(skillPath);
-      if (!skillText.includes("<!-- researchspec-contract-preflight:v4 -->")) {
+      if (!skillText.includes(RESEARCHSPEC_PREFLIGHT_MARKER)) {
         errors.push(`Missing Contract Preflight block in ${group}/SKILL.md`);
       }
       const skill = getArsuSkillDefinition(group);

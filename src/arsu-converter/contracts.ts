@@ -5,8 +5,8 @@ import type {
   ContractProfile,
 } from "./types.js";
 
-const PROFILE_ID = "researchspec-preflight-v4";
-const CONTRACT_MARKER = "<!-- researchspec-contract-preflight:v4 -->";
+export const RESEARCHSPEC_PREFLIGHT_PROFILE_ID = "researchspec-preflight-v5";
+export const RESEARCHSPEC_PREFLIGHT_MARKER = "<!-- researchspec-contract-preflight:v5 -->";
 
 export const RESEARCHSPEC_MUTATION_OWNERSHIP = {
   stable_specs: "human_or_accepted_contract_patch",
@@ -26,7 +26,7 @@ export function mutationBoundaryBullets(targets: string[]): string[] {
     bullets.push("Request changes to `researchspec/runs/current/state.yaml` through the ResearchSpec orchestrator or runtime helper; do not edit run state directly.");
   }
   if (targets.includes("researchspec/runs/current/artifact-registry.json")) {
-    bullets.push("Write only the candidate path declared by dynamic instructions. For trusted automatic instance work, run hash-bound `researchspec submit` directly; hand manual or legacy registration to `researchspec-submit`. Never edit registry or receipts directly.");
+    bullets.push("Write only the candidate path declared by dynamic instructions. For trusted automatic instance work, run hash-bound `researchspec submit` directly. For manual or legacy registration, preview the same direct CLI transaction and obtain explicit confirmation, or report the authority boundary. Never edit registry or receipts directly.");
   }
   if (targets.includes("researchspec/runs/current/decision-ledger.jsonl")) {
     bullets.push("After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.");
@@ -40,7 +40,7 @@ export function mutationBoundaryBullets(targets: string[]): string[] {
 export function buildContractCompatibilityManifest(skillGroups: string[]): ContractCompatibilityManifest {
   return {
     schema_version: "0.1",
-    compatibility_kind: PROFILE_ID,
+    compatibility_kind: RESEARCHSPEC_PREFLIGHT_PROFILE_ID,
     source: VENDOR_SOURCE_PATH,
     output: GENERATED_OUTPUT_PATH,
     material_passport_policy: "compatibility_artifact_only_not_runtime_ssot",
@@ -60,10 +60,10 @@ export function injectContractPreflight(text: string, skillGroup: string): {
   text: string;
   result: ContractInjectionResult;
 } {
-  if (text.includes(CONTRACT_MARKER)) {
+  if (text.includes(RESEARCHSPEC_PREFLIGHT_MARKER)) {
     return {
       text,
-      result: { injected: false, profile_id: PROFILE_ID, marker: CONTRACT_MARKER },
+      result: { injected: false, profile_id: RESEARCHSPEC_PREFLIGHT_PROFILE_ID, marker: RESEARCHSPEC_PREFLIGHT_MARKER },
     };
   }
 
@@ -72,18 +72,18 @@ export function injectContractPreflight(text: string, skillGroup: string): {
   if (frontmatter?.[0]) {
     return {
       text: `${frontmatter[0]}\n${block}\n${text.slice(frontmatter[0].length).replace(/^\r?\n/, "")}`,
-      result: { injected: true, profile_id: PROFILE_ID, marker: CONTRACT_MARKER },
+      result: { injected: true, profile_id: RESEARCHSPEC_PREFLIGHT_PROFILE_ID, marker: RESEARCHSPEC_PREFLIGHT_MARKER },
     };
   }
   return {
     text: `${block}\n${text}`,
-    result: { injected: true, profile_id: PROFILE_ID, marker: CONTRACT_MARKER },
+    result: { injected: true, profile_id: RESEARCHSPEC_PREFLIGHT_PROFILE_ID, marker: RESEARCHSPEC_PREFLIGHT_MARKER },
   };
 }
 
 function buildProfile(skillGroup: string): ContractProfile {
   return {
-    profile_id: PROFILE_ID,
+    profile_id: RESEARCHSPEC_PREFLIGHT_PROFILE_ID,
     required_contracts: [
       "researchspec/specs/workflow.yaml",
       "researchspec/runs/current/state.yaml",
@@ -115,7 +115,7 @@ function buildProfile(skillGroup: string): ContractProfile {
 }
 
 function contractPreflightBlock(skillGroup: string): string {
-  return `${CONTRACT_MARKER}
+  return `${RESEARCHSPEC_PREFLIGHT_MARKER}
 ## ResearchSpec Contract Preflight
 
 Before running this ARSU-derived skill, locate the project \`researchspec/\`
@@ -136,9 +136,12 @@ available, build the strict dependency payload in a temporary file, run Submit
 with \`--dry-run --json\`, then execute the identical selector/payload/actor with
 the returned SHA-256, \`--expected-sha256\`, and \`--yes --json\`. Re-query status
 and artifact checks. This registration is mechanical and is not Gate pass or
-academic approval. For \`manual\`, \`legacy\`, missing authorization, or unavailable
-Submit, hand the candidate to \`researchspec-submit\` or report the boundary.
-Never invent path, type, provenance, or runtime writes, and never hand-edit
+academic approval. For \`manual\`, \`legacy\`, or missing automatic authorization,
+build the strict payload only from dynamic instructions, run direct
+\`researchspec submit\` with \`--dry-run --json\`, present its candidate hash,
+validation, and planned writes, then obtain explicit confirmation before the
+identical expected-hash execution. If Submit or its required authority is
+unavailable, report the boundary. Never invent path, type, provenance, or runtime writes, and never hand-edit
 state, registries, receipts, or JSONL ledgers.
 
 For a formal Gate, use \`researchspec-verify\` to produce evidence-linked findings,
@@ -160,7 +163,7 @@ Do not treat ARS Material Passport as ResearchSpec runtime truth. It may be
 imported or rendered as a compatibility artifact, while runtime provenance,
 decisions, gates, and resume state live in ResearchSpec registries and ledgers.
 
-This generated compatibility block uses profile \`${PROFILE_ID}\` for
+This generated compatibility block uses profile \`${RESEARCHSPEC_PREFLIGHT_PROFILE_ID}\` for
 \`${skillGroup}\`. Per-stage and per-mode graphs remain workflow-profile data.
 `;
 }
