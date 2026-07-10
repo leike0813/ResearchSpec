@@ -1,39 +1,90 @@
 import path from "node:path";
 
+export type WorkspaceFileKind = "markdown" | "yaml" | "json" | "jsonl";
+export type OverwritePolicy = "user" | "generated";
+
+export interface WorkspaceTemplateDefinition {
+  relativePath: string;
+  kind: WorkspaceFileKind;
+  content: string;
+  overwritePolicy: OverwritePolicy;
+  required: boolean;
+}
+
 export type WorkspaceEntry =
   | { kind: "dir"; path: string }
-  | { kind: "file"; path: string; content: string };
+  | { kind: "file"; path: string; content: string; overwritePolicy: OverwritePolicy };
 
 export const REQUIRED_DIRECTORIES = [
   "specs",
   "runs/current",
   "changes",
+  "changes/archive",
   "draft-patches",
+  "draft-patches/archive",
 ] as const;
 
-export const YAML_FILES = [
-  "specs/sources.yaml",
-  "specs/claims.yaml",
-  "specs/manuscript.yaml",
-  "specs/workflow.yaml",
-  "runs/current/state.yaml",
+export const WORKSPACE_TEMPLATES: readonly WorkspaceTemplateDefinition[] = [
+  {
+    relativePath: "config.yaml",
+    kind: "yaml",
+    overwritePolicy: "user",
+    required: true,
+    content: `schema_version: "0.1"\nprofile: arsu-paper\nagent_tools:\n  selected: []\n  delivery: both\n`,
+  },
+  {
+    relativePath: "tool-installation-manifest.json",
+    kind: "json",
+    overwritePolicy: "generated",
+    required: true,
+    content: `${JSON.stringify({ schema_version: "1", package_version: "0.1.0", installations: [] }, null, 2)}\n`,
+  },
+  {
+    relativePath: "specs/project.md",
+    kind: "markdown",
+    overwritePolicy: "user",
+    required: true,
+    content: `---\nschema_version: "0.1"\nproject_id: project\ntitle: "Untitled research project"\ntarget_output: other\nprimary_language: und\n---\n\n# ResearchSpec Project\n\n## Research Question\n\nTBD\n\n## Scope\n\nTBD\n\n## Constraints\n\n- Complete this contract before semantic research begins.\n`,
+  },
+  { relativePath: "specs/sources.yaml", kind: "yaml", overwritePolicy: "user", required: true, content: `schema_version: "0.1"\nsources: []\n` },
+  { relativePath: "specs/claims.yaml", kind: "yaml", overwritePolicy: "user", required: true, content: `schema_version: "0.1"\nclaims: []\n` },
+  {
+    relativePath: "specs/manuscript.yaml",
+    kind: "yaml",
+    overwritePolicy: "user",
+    required: true,
+    content: `schema_version: "0.1"\nmanuscript_id: manuscript\ntitle: "Untitled manuscript"\nstatus: planning\nsections: []\n`,
+  },
+  {
+    relativePath: "specs/workflow.yaml",
+    kind: "yaml",
+    overwritePolicy: "user",
+    required: true,
+    content: `schema_version: "0.1"\nworkflow_id: arsu-paper\nworkflow_kind: arsu-paper\nentry_stage_id: intake\nterminal_stage_ids: [complete]\nstages:\n  - stage_id: intake\n    title: Intake\n  - stage_id: complete\n    title: Complete\n`,
+  },
+  {
+    relativePath: "runs/current/state.yaml",
+    kind: "yaml",
+    overwritePolicy: "user",
+    required: true,
+    content: `schema_version: "0.1"\nrun_id: current\nworkflow_id: arsu-paper\nstatus: not_started\nactive_stage_id: intake\npending_decisions: []\ndiagnostics: []\n`,
+  },
+  {
+    relativePath: "runs/current/artifact-registry.json",
+    kind: "json",
+    overwritePolicy: "user",
+    required: true,
+    content: `${JSON.stringify({ schema_version: "0.1", run_id: "current", artifacts: [] }, null, 2)}\n`,
+  },
+  { relativePath: "runs/current/decision-ledger.jsonl", kind: "jsonl", overwritePolicy: "user", required: true, content: "" },
+  { relativePath: "runs/current/gate-ledger.jsonl", kind: "jsonl", overwritePolicy: "user", required: true, content: "" },
 ] as const;
 
-export const JSON_FILES = ["runs/current/artifact-registry.json"] as const;
-
-export const JSONL_FILES = [
-  "runs/current/decision-ledger.jsonl",
-  "runs/current/gate-ledger.jsonl",
-] as const;
-
-export const MARKDOWN_FILES = ["specs/project.md"] as const;
-
-export const REQUIRED_FILES = [
-  ...MARKDOWN_FILES,
-  ...YAML_FILES,
-  ...JSON_FILES,
-  ...JSONL_FILES,
-] as const;
+export const REQUIRED_FILES = WORKSPACE_TEMPLATES.filter((item) => item.required).map((item) => item.relativePath);
+export const YAML_FILES = WORKSPACE_TEMPLATES.filter((item) => item.kind === "yaml").map((item) => item.relativePath);
+export const JSON_FILES = WORKSPACE_TEMPLATES.filter((item) => item.kind === "json").map((item) => item.relativePath);
+export const JSONL_FILES = WORKSPACE_TEMPLATES.filter((item) => item.kind === "jsonl").map((item) => item.relativePath);
+export const MARKDOWN_FILES = WORKSPACE_TEMPLATES.filter((item) => item.kind === "markdown").map((item) => item.relativePath);
 
 export function resolveInitTarget(inputPath: string | undefined, cwd: string): string {
   const base = inputPath ? path.resolve(cwd, inputPath) : cwd;
@@ -41,70 +92,13 @@ export function resolveInitTarget(inputPath: string | undefined, cwd: string): s
 }
 
 export function getWorkspaceEntries(workspaceRoot: string): WorkspaceEntry[] {
-  const dirs: WorkspaceEntry[] = REQUIRED_DIRECTORIES.map((dir) => ({
-    kind: "dir",
-    path: path.join(workspaceRoot, dir),
-  }));
-
-  const files: WorkspaceEntry[] = [
-    file(workspaceRoot, "specs/project.md", projectTemplate),
-    file(workspaceRoot, "specs/sources.yaml", sourcesTemplate),
-    file(workspaceRoot, "specs/claims.yaml", claimsTemplate),
-    file(workspaceRoot, "specs/manuscript.yaml", manuscriptTemplate),
-    file(workspaceRoot, "specs/workflow.yaml", workflowTemplate),
-    file(workspaceRoot, "runs/current/state.yaml", stateTemplate),
-    file(workspaceRoot, "runs/current/artifact-registry.json", artifactRegistryTemplate),
-    file(workspaceRoot, "runs/current/decision-ledger.jsonl", ""),
-    file(workspaceRoot, "runs/current/gate-ledger.jsonl", ""),
+  return [
+    ...REQUIRED_DIRECTORIES.map((dir): WorkspaceEntry => ({ kind: "dir", path: path.join(workspaceRoot, dir) })),
+    ...WORKSPACE_TEMPLATES.map((item): WorkspaceEntry => ({
+      kind: "file",
+      path: path.join(workspaceRoot, item.relativePath),
+      content: item.content,
+      overwritePolicy: item.overwritePolicy,
+    })),
   ];
-
-  return [...dirs, ...files];
 }
-
-function file(root: string, relativePath: string, content: string): WorkspaceEntry {
-  return { kind: "file", path: path.join(root, relativePath), content };
-}
-
-const projectTemplate = `# ResearchSpec Project
-
-Use this file for stable research intent, scope, constraints, and human-facing project notes.
-
-This template intentionally does not invent a research question, claim, source, or manuscript structure.
-`;
-
-const sourcesTemplate = `schema_version: "0.1"
-sources: []
-`;
-
-const claimsTemplate = `schema_version: "0.1"
-claims: []
-`;
-
-const manuscriptTemplate = `schema_version: "0.1"
-manuscript:
-  status: draft
-  sections: []
-`;
-
-const workflowTemplate = `schema_version: "0.1"
-workflow_id: arsu-paper
-workflow_kind: arsu-paper
-entry_stage_id: intake
-terminal_stage_ids: []
-stages: []
-`;
-
-const stateTemplate = `schema_version: "0.1"
-run_id: current
-workflow_id: arsu-paper
-status: initialized
-active_stage_id: intake
-diagnostics: []
-`;
-
-const artifactRegistryTemplate = `{
-  "schema_version": "0.1",
-  "run_id": "current",
-  "artifacts": []
-}
-`;

@@ -1,0 +1,148 @@
+## Purpose
+
+ResearchSpec exposes a complete first-version public CLI surface and the
+machine- and human-facing result contract that all public commands share. This
+capability is the user-facing command layer over the framework-core workspace,
+agent-tool-delivery, and derived context artifacts.
+
+## Requirements
+
+### Requirement: Complete Public Command Surface
+
+ResearchSpec SHALL expose `init`, `update`, `status`, `check`, `list`, `show`,
+`handoff`, `pack`, `decide`, and `archive` as the complete first-version public
+CLI command set.
+
+#### Scenario: Help lists public commands
+
+- **WHEN** a user runs `researchspec --help`
+- **THEN** the CLI SHALL list all ten public commands
+- **AND** it SHALL NOT list ARSU converter or upstream-maintenance commands
+
+#### Scenario: Unsupported syntax is a usage error
+
+- **WHEN** a user supplies an unknown command, option, target, or conflicting
+  option combination
+- **THEN** the CLI SHALL return exit code 2
+- **AND** it SHALL direct the user to the relevant help surface
+
+### Requirement: Common Command Context
+
+ResearchSpec SHALL apply `--cwd`, `--workspace`, `--json`, `--dry-run`,
+`--force`, `--yes`, and `--quiet` consistently to commands that support those
+behaviors.
+
+#### Scenario: Explicit workspace takes precedence
+
+- **WHEN** both cwd and an explicit workspace path are supplied
+- **THEN** the CLI SHALL use the explicit workspace after validating it
+
+#### Scenario: Machine mode never prompts
+
+- **WHEN** a command is run with `--json` or without a TTY
+- **THEN** the CLI SHALL NOT wait for interactive input
+- **AND** missing required selections SHALL return exit code 2
+
+#### Scenario: Dry run shares the write plan
+
+- **WHEN** a writing command is run with `--dry-run`
+- **THEN** it SHALL report the same planned operations that execution would use
+- **AND** it SHALL NOT modify files
+
+### Requirement: Versioned Machine Result Contract
+
+Every command supporting `--json` SHALL return one `CliEnvelope` containing
+`schema_version`, `command`, `ok`, `data`, `diagnostics`, and an optional
+structured `error`.
+
+#### Scenario: JSON success is isolated
+
+- **WHEN** a JSON command succeeds
+- **THEN** stdout SHALL contain exactly one valid envelope with
+  `schema_version` equal to `1`
+- **AND** human progress SHALL NOT be mixed into stdout
+
+#### Scenario: JSON expected failure remains parseable
+
+- **WHEN** a JSON command encounters a domain, usage, or write conflict
+- **THEN** stdout SHALL contain exactly one valid failure envelope
+- **AND** the process SHALL return the mapped exit class
+
+### Requirement: Read Commands Use Current Workspace State
+
+`status`, `check`, `list`, and `show` SHALL derive results from the same current
+workspace snapshot without modifying files.
+
+#### Scenario: Status summarizes the current run
+
+- **WHEN** the user runs `researchspec status`
+- **THEN** the result SHALL include workflow/stage, pending items, blocking gates,
+  recent artifacts, installed tools, and validation summary when available
+
+#### Scenario: Check targets are composable
+
+- **WHEN** the user runs `researchspec check [all|contracts|runtime|artifacts|tools]`
+- **THEN** the CLI SHALL run the selected validators
+- **AND** `--strict` SHALL promote warnings to a failing result
+
+#### Scenario: List and show resolve stable items
+
+- **WHEN** the user lists changes, artifacts, gates, decisions, or tools and then
+  shows a canonical selector
+- **THEN** the CLI SHALL return the indexed item and its source path
+- **AND** an ambiguous bare ID SHALL return candidate canonical selectors with
+  exit code 2
+
+### Requirement: Derived Handoff And Context Pack
+
+ResearchSpec SHALL render handoff and context-pack outputs from authoritative
+contracts and runtime records without changing research semantics.
+
+#### Scenario: Handoff defaults to the current run
+
+- **WHEN** the user runs `researchspec handoff`
+- **THEN** the CLI SHALL render `runs/current/handoff.md`
+- **AND** `--stdout` SHALL print the same view without writing it
+
+#### Scenario: Pack is deterministic and auditable
+
+- **WHEN** the user runs `researchspec pack`
+- **THEN** the CLI SHALL create a deterministic ZIP containing contracts,
+  runtime state, ledgers, registry, handoff, and a SHA-256 manifest
+- **AND** `--include-artifacts` SHALL add only registered files within allowed
+  project roots
+
+### Requirement: Explicit Human Decisions
+
+ResearchSpec SHALL make `decide` the only public command that accepts, rejects,
+or postpones a pending high-impact item.
+
+#### Scenario: Non-interactive decision records a human actor
+
+- **WHEN** a user supplies an item, `--decision`, `--actor-name`, and required
+  reason
+- **THEN** the CLI SHALL validate the item and decision before writing
+- **AND** it SHALL append the decision ledger only after accepted changes and
+  registry updates succeed
+
+#### Scenario: Yes does not accept a decision
+
+- **WHEN** a pending high-impact decision exists and the user supplies only
+  `--yes`
+- **THEN** the CLI SHALL NOT accept the decision
+
+### Requirement: Resolved Item Archive
+
+ResearchSpec SHALL archive only resolved contract changes and draft patches.
+
+#### Scenario: Resolved item is archived
+
+- **WHEN** an item has the required decision, gate, applied-patch, and receipt
+  evidence
+- **THEN** `archive` SHALL move it to a dated archive directory
+- **AND** historical ledgers and stable specs SHALL remain unchanged
+
+#### Scenario: Pending item is blocked
+
+- **WHEN** an item is unresolved or has a blocking gate
+- **THEN** `archive` SHALL make no changes and return a domain-blocked result

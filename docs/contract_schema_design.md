@@ -915,9 +915,9 @@ decision 改变合同，应链接 accepted `contract-patch.yaml`。
 | `stage_id` | string | 否 | 相关 stage |
 | `decision_type` | enum/string | 是 | `scope` / `methodology` / `claim_strength` / `review_outcome` / `gate_override` / `limitation_acceptance` / `patch_acceptance` / `branch_choice` |
 | `prompt` | string | 否 | 当时向人类确认的问题 |
-| `selected_option` | string/object | 是 | 选择结果 |
+| `selected_option` | string/object | 条件 | resolved/postponed event 必填；proposal event 可为空 |
 | `rationale` | string | 否 | 人类或 agent 记录的理由 |
-| `status` | `decision_status` | 是 | 通常为 `accepted`；也可记录 rejected proposal |
+| `status` | `decision_status` | 是 | `proposed` / `accepted` / `rejected` / `postponed` / `superseded` |
 | `affected_contracts` | list[path] | 否 | 受影响 contract |
 | `affected_claim_ids` | list[ref] | 否 | 受影响 claims |
 | `affected_artifact_ids` | list[ref] | 否 | 受影响 artifacts |
@@ -1017,6 +1017,8 @@ finalization 等 gate 的运行结果、阻断状态和输入输出 artifacts。
 | `risk_level` | enum | 是 | `low` / `medium` / `high` |
 | `requires_human_decision` | boolean | 是 | 高影响变更应为 true |
 | `decision_id` | ref | 否 | 接受/拒绝的 decision |
+| `resolved_at` | `iso_datetime` | 否 | accepted/rejected/applied resolution time |
+| `apply_receipt_artifact_id` | ref | 否 | applied change 的 receipt artifact |
 | `patches` | list[`ContractPatchItem`] | 是 | 具体变更 |
 | `validation` | object | 否 | patch 语法/引用验证结果 |
 
@@ -1096,6 +1098,11 @@ block/hash/roadmap traceability 思路。
 | `emitted_by` | `actor`/string | 是 | 产生者；可兼容 ARS string |
 | `roadmap_item_ids` | list[string] | 否 | patch 级关联 roadmap items |
 | `created_at` | `iso_datetime` | 否 | 创建时间 |
+| `status` | enum | 是 | `proposed` / `accepted` / `rejected` / `applied` / `superseded` |
+| `decision_id` | ref | 否 | 接受/拒绝的 decision |
+| `resolved_at` | `iso_datetime` | 否 | resolution time |
+| `applied_artifact_id` | ref | 否 | 应用后生成的新 draft artifact |
+| `apply_receipt_artifact_id` | ref | 否 | applied patch 的 receipt artifact |
 
 `DraftPatchOp` 通用字段：
 
@@ -1103,7 +1110,7 @@ block/hash/roadmap traceability 思路。
 | --- | --- | --- | --- |
 | `op` | enum | 是 | `replace_block` / `insert_after` / `delete_block` |
 | `block_id` | string | 视 op | 目标 block，推荐 `B0042` |
-| `anchor_block_id` | string | 视 op | `insert_after` 目标 |
+| `block_id` | string | 视 op | replace/delete 的目标 block；`insert_after` 的 anchor block |
 | `old_hash` | string | 视 op | 原 block hash；replace/delete 必填 |
 | `new_text` | string | 视 op | replace/insert 必填 |
 | `roadmap_item_ids` | list[string] | 否 | 对应 Revision Roadmap items |
@@ -1113,7 +1120,7 @@ block/hash/roadmap traceability 思路。
 
 - `replace_block` 必须有 `block_id`、`old_hash`、`new_text`。
 - `delete_block` 必须有 `block_id`、`old_hash`。
-- `insert_after` 必须有 `anchor_block_id` 或 explicit body-start anchor，以及
+- `insert_after` 必须有 `block_id`（可为 `DOC-BODY-START`）以及
   `new_text`。
 - `roadmap_item_ids` 应能解析到 Revision Roadmap artifact payload，不能解析时
   diagnostics；final gate 可升级为 blocking。
@@ -1139,6 +1146,24 @@ block/hash/roadmap traceability 思路。
   "emitted_by": {"kind": "agent", "name": "draft_writer_agent"}
 }
 ```
+
+### 5.3 Apply Receipt Artifact
+
+`decide` 接受并应用 contract change 或 draft patch 后，必须先写 receipt、注册
+receipt/revised artifact，再把 decision event 追加到 ledger。Receipt payload：
+
+| 字段 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `schema_version` | string | 是 | Receipt schema version |
+| `receipt_type` | enum | 是 | `contract_patch_apply` / `draft_patch_apply` |
+| `item_selector` | string | 是 | `change:<id>` 或 `patch:<id>` |
+| `decision_id` | ref | 是 | 授权本次应用的 human decision |
+| `applied_at` | `iso_datetime` | 是 | 应用时间 |
+| `output_hashes` | map[path, sha256] | 是 | 所有变更后输出的 hash |
+| `created_artifact_ids` | list[ref] | 是 | 新 draft 等产物的 registry IDs |
+
+Archive preflight 必须交叉验证 item lifecycle、latest decision event、registry
+entry、receipt file hash 和 receipt payload；不得只信 patch 自报 status。
 
 ## 6. Handoff Rendered Views
 

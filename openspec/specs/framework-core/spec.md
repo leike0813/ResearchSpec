@@ -36,14 +36,14 @@ file-based CLI framework.
 
 ### Requirement: Minimal ResearchSpec CLI
 
-ResearchSpec SHALL expose a local `researchspec` CLI with the first framework
-commands needed to initialize and inspect a contract workspace.
+ResearchSpec SHALL expose a local `researchspec` CLI whose public command
+registry covers workspace initialization, inspection, generated tool delivery,
+derived context artifacts, explicit decisions, and resolved-item archiving.
 
 #### Scenario: CLI displays help
 
 - **WHEN** a user runs `researchspec --help`
-- **THEN** the CLI SHALL display available commands
-- **AND** the command list SHALL include `init`, `status`, and `check`
+- **THEN** the CLI SHALL display the complete public command registry
 
 #### Scenario: CLI displays version
 
@@ -54,19 +54,19 @@ commands needed to initialize and inspect a contract workspace.
 #### Scenario: Unsupported command fails clearly
 
 - **WHEN** a user runs an unsupported command
-- **THEN** the CLI SHALL fail with a clear message
+- **THEN** the CLI SHALL return a usage-class error
 - **AND** the message SHALL direct the user to help output
 
 ### Requirement: Workspace Initialization
 
-ResearchSpec SHALL create the documented `researchspec/` workspace skeleton
-without inventing research content.
+ResearchSpec SHALL create or safely extend the documented `researchspec/`
+workspace without inventing research content or overwriting user contracts.
 
 #### Scenario: Dry-run initialization reports planned files
 
 - **WHEN** a user runs `researchspec init --tools none --dry-run`
 - **THEN** the CLI SHALL report the workspace files and directories it would
-  create
+  create, update, delete, or skip
 - **AND** it SHALL NOT write files
 
 #### Scenario: Initialize workspace without agent tools
@@ -79,13 +79,12 @@ without inventing research content.
   `researchspec/draft-patches/`
 - **AND** it SHALL NOT generate adapter files
 
-#### Scenario: Initialization does not overwrite user content by default
+#### Scenario: Existing workspace is extended safely
 
 - **GIVEN** a `researchspec/` workspace already exists
-- **WHEN** a user runs `researchspec init --tools none`
-- **THEN** the CLI SHALL report that the workspace already exists
-- **AND** it SHALL NOT overwrite existing contract files unless an explicit
-  overwrite mode is implemented and requested
+- **WHEN** a user reruns `researchspec init`
+- **THEN** the CLI SHALL preserve existing research contracts
+- **AND** it SHALL add only missing metadata or safely managed generated files
 
 ### Requirement: Workspace Discovery
 
@@ -152,19 +151,29 @@ workspace contract files.
 - **THEN** the CLI SHALL report a blocking check result
 - **AND** it SHALL identify the invalid file path
 
-### Requirement: First Slice Boundaries
+### Requirement: Workspace Metadata Sources Of Truth
 
-The framework core first slice SHALL avoid surfaces that belong to later
-ResearchSpec changes.
+ResearchSpec SHALL separate user-selected workspace configuration from generated
+installation ownership evidence.
 
-#### Scenario: Later commands are not exposed as implemented behavior
+#### Scenario: Metadata is created without replacing contracts
 
-- **WHEN** a user asks the CLI for available commands
-- **THEN** the CLI SHALL NOT present `decide`, `archive`, `pack`, `handoff`,
-  `list`, or `show` as implemented commands in this change
+- **WHEN** an older valid workspace lacks config or installation manifest files
+- **THEN** initialization or update SHALL create the missing metadata
+- **AND** existing research contracts SHALL remain unchanged
 
-#### Scenario: ARSU maintenance remains out of scope
+### Requirement: Shared Write Planning
 
-- **WHEN** the framework core first slice is implemented
-- **THEN** it SHALL NOT include ARSU upstream synchronization, converter
-  maintenance, generated skill delivery, or ARSU semantic workflow execution
+All public writing commands SHALL use one preflighted write-plan model with
+explicit ownership and overwrite policy.
+
+#### Scenario: User contracts are protected
+
+- **WHEN** a planned operation targets an existing user-owned research contract
+- **THEN** neither `--force` nor `--yes` SHALL silently overwrite it
+
+#### Scenario: Authoritative records are committed last
+
+- **WHEN** a multi-file operation succeeds
+- **THEN** its installation manifest or decision ledger entry SHALL be committed
+  after dependent file writes

@@ -2,10 +2,9 @@
 
 ## 0. 文档状态与事实源
 
-本文定义 ResearchSpec CLI 的第一版用户向命令界面。它补齐 PRD 和架构文档中
-刻意留空的 CLI 层，但仍停留在 interface design 粒度：定义命令、参数意图、
-交互流程、读写边界和示例，不冻结完整 JSON stdout shape、exit code 表、
-TypeScript DTO、agent 工具目录路径或 shell completion 行为。
+本文定义 ResearchSpec CLI 的第一版用户向命令界面及当前实现契约。除 shell
+completion 外，命令、参数、JSON envelope、exit code、item selector、agent tool
+delivery、读写边界和生命周期行为均以本文为准。
 
 事实源：
 
@@ -99,7 +98,7 @@ researchspec <command> [arguments] [options]
 | --- | --- | --- |
 | `--cwd <path>` | 全部命令 | 指定项目工作目录；默认当前目录 |
 | `--workspace <path>` | 合同相关命令 | 指定 `researchspec/` 路径；默认从 cwd 向下定位 |
-| `--json` | 查询、检查、列表、show、handoff、pack、decide、archive | 输出机器可读结果；本文不冻结完整 shape |
+| `--json` | 查询、检查、列表、show、handoff、pack、decide、archive | 输出单个 versioned JSON envelope |
 | `--dry-run` | 写命令 | 只报告将写入、修改、跳过的文件，不落盘 |
 | `--force` | 写命令 | 允许覆盖 generated agent-facing files；不得绕过 human decision |
 | `--yes` | 低风险写命令 | 跳过低风险确认；不得自动接受 high-impact research decisions |
@@ -110,7 +109,8 @@ researchspec <command> [arguments] [options]
 - stdout 只输出主要 JSON object。
 - stderr 输出 diagnostics、warnings、progress 和 debug。
 - 成功和失败都应保持机器可解析。
-- 完整 JSON shape、错误码和 exit code 表后续单独冻结。
+- JSON success 和 expected failure 都只向 stdout 输出一个 envelope；progress 和
+  human diagnostics 不得混入 stdout。
 
 ## 4. `researchspec init [path]`
 
@@ -126,8 +126,8 @@ OpenSpec-like TUI 流程：
 
 1. Welcome：说明将创建 `researchspec/` workspace 并安装 agent-facing files。
 2. Detect：检测当前目录是否已有 workspace，检测可用 agent tools。
-3. Select tools：多选用户要使用的 agent，例如 Codex、Claude Code、Cursor、
-   Gemini CLI、OpenCode 等；具体支持列表由实现和 adapters 决定。
+3. Select tools：从 agent registry 搜索并多选工具。`--tools all` 表示 registry
+   中的全部 31 个工具；ForgeCode、Kimi CLI 和 Mistral Vibe 为 skills-only。
 4. Select profile：选择 ResearchSpec profile。第一版默认是 ARSU paper workflow。
 5. Preview writes：展示将创建的 workspace files 和将安装的 tool files。
 6. Confirm：用户确认后写入。
@@ -448,21 +448,56 @@ researchspec archive [item] [--json] [--dry-run]
 | agent tool directories | `init`、`update` | 只写 generated agent-facing files |
 | packed bundle | `pack` | 只写用户指定 bundle |
 
-## 15. 后续实现规格
+## 15. 已冻结实现契约
 
-本文之后应拆分以下 implementation specs：
+### 15.1 JSON envelope
 
-1. Init TUI flow and tool detection rules。
-2. Agent tool adapter path rules。
-3. Formal command parser and option spec。
-4. `--json` stdout schema and failure status schema。
-5. Exit code table。
-6. Workspace root discovery rules。
-7. `decide` item resolution and write policy。
-8. `archive` item resolution、preflight checks and target path rules。
-9. Handoff/pack output format。
+```ts
+interface CliEnvelope<T> {
+  schema_version: "1";
+  command: string;
+  ok: boolean;
+  data: T | null;
+  diagnostics: Diagnostic[];
+  error?: { code: string; message: string; hint?: string; details?: unknown };
+}
+```
 
-这些规格应基于本文用户向命令边界展开，不重新引入维护者向 ARSU commands。
+### 15.2 Exit codes
+
+| Code | 含义 |
+| --- | --- |
+| `0` | 成功，包括空列表和无 pending item |
+| `1` | 有效命令被 workspace/domain/preflight 阻断 |
+| `2` | 参数、选项冲突、非 TTY 缺输入或 item 歧义 |
+| `3` | 写保护或 I/O conflict |
+| `4` | 未预期 internal error |
+
+### 15.3 Item selectors
+
+Canonical selectors 为 `change:`、`patch:`、`artifact:`、`gate:`、
+`decision:`、`source:`、`claim:`、`tool:` 和 `contract:`。裸 ID 只有在所有
+index 中唯一时才可解析；歧义时返回候选 canonical selectors。
+
+### 15.4 Tool delivery facts
+
+- `researchspec/config.yaml` 保存 profile 和 selected tools。
+- `tool-installation-manifest.json` 保存 generated path、scope、source、adapter
+  version 和 SHA-256 ownership evidence。
+- Project-local skill 路径统一为 `<skillsDir>/skills/<skill-id>/**`；四个 ARSU
+  skill 目录递归安装。
+- 28 个 command-capable tools 通过 registry formatter 生成各自 Markdown/TOML
+  格式；不得用一个通用 Markdown 文件覆盖格式差异。
+- Codex prompts 是 `$CODEX_HOME/prompts` 或 `~/.codex/prompts` 下的
+  shared-global files，不因单个项目 deselect 被删除。
+- Manifest 未登记的 existing file 视为 user-owned；hash drift 默认保留，
+  `--force` 也只能覆盖 manifest-owned generated files。
+
+### 15.5 Deterministic derived views
+
+`handoff` 每次从 contracts/state/registry/ledgers 渲染。`pack` 使用固定 entry
+排序和时间戳，包含 entry path、byte count 和 SHA-256 manifest；两者都不接受
+decision、不推进 stage，也不成为 runtime SSOT。
 
 ## 16. 非目标
 
@@ -472,8 +507,5 @@ researchspec archive [item] [--json] [--dry-run]
 - 不暴露 registry/ledger 的低层 append commands。
 - 不暴露 wrapper runtime helper commands。
 - 不在第一版设计 run/project archive 生命周期。
-- 不冻结完整 JSON wire contract。
-- 不冻结 exit code 表。
-- 不冻结 adapter 目标路径。
 - 不设计 shell completion。
 - 不引入 hidden global state 或 database-first runtime。
