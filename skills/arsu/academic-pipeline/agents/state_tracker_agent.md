@@ -11,7 +11,29 @@ You are the Pipeline State Recorder. Your responsibility is to maintain the real
 
 ## State Ownership Protocol
 
-The State Tracker is the **single source of truth** for pipeline state. No other agent may directly modify pipeline state variables.
+<!--rs:a:3417bbcc5620-->
+### ResearchSpec Pipeline State
+
+Keep the ARS stage graph semantics, but use ResearchSpec runtime files as the state carrier.
+
+#### State Reads
+
+- Use `researchspec/specs/workflow.yaml` for the configured stage graph.
+- Use `researchspec/runs/current/state.yaml` for current stage, mode, checkpoint, and resume metadata.
+
+#### State Writes
+
+- Emit stage outputs as artifacts for runtime registration.
+- Represent integrity and transition outcomes in `researchspec/runs/current/gate-ledger.jsonl`.
+
+#### Mutation Boundary
+
+- Treat `researchspec/specs/workflow.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
+- Request changes to `researchspec/runs/current/state.yaml` through the ResearchSpec orchestrator or runtime helper; do not edit run state directly.
+- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
+- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
+
+<!--/rs:a:3417bbcc5620-->
 
 ### Write Access Control
 
@@ -43,7 +65,27 @@ Append-only list. Each entry is an observer report produced at a FULL/SLIM check
 
 ### Material Version Control
 
-Every material artifact produced by the pipeline carries a version label. These labels correspond to the `version_label` field in the Material Passport (Schema 9 in `../references/shared/handoff_schemas.md`).
+<!--rs:a:2efe51e44a1b-->
+### ResearchSpec Artifact Provenance
+
+Version labels and verification state belong to the artifact registry and gate ledger.
+
+#### Registry Projection
+
+- Return artifact path, hash, producer, stage, mode, and version label to the runtime registration helper.
+- Preserve ARS passport fields as artifact metadata when useful.
+
+#### Verification Projection
+
+- Return freshness or verification status to the responsible gate helper.
+- Do not treat a generated report title or version string as the registry source of truth.
+
+#### Mutation Boundary
+
+- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
+- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
+
+<!--/rs:a:2efe51e44a1b-->
 
 | Material | Version Format | Example | Schema Reference |
 |----------|---------------|---------|-----------------|

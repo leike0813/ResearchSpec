@@ -1,4 +1,7 @@
 import { CONVERTER_VERSION, GENERATED_OUTPUT_PATH, VENDOR_SOURCE_PATH } from "./config.js";
+import { serializableAnchorReplacementPlan } from "./anchors/replace.js";
+import { REPLACEMENT_PROFILE_ID } from "./anchors/templates.js";
+import type { AnchorReplacementPlan, SerializableAnchorReplacementPlan } from "./anchors/types.js";
 import type {
   ConversionManifest,
   ConversionResult,
@@ -12,6 +15,7 @@ export function buildManifest(
   result: ConversionResult,
   validation: ValidationResult | null,
   contractManifestHash: string,
+  anchorReplacementReportHash?: string,
 ): ConversionManifest {
   const skillGroups: ConversionManifest["skill_groups"] = {};
   const outputFiles: OutputFileRecord[] = [];
@@ -39,12 +43,37 @@ export function buildManifest(
     transform_rule: "contract_compatibility_manifest",
     sha256: contractManifestHash,
   });
+  if (anchorReplacementReportHash) {
+    outputFiles.push({
+      group: "root",
+      source_path: "generated:anchor-replacement-report",
+      output_path: "anchor-replacement-report.md",
+      transform_rule: "anchor_replacement_human_report",
+      sha256: anchorReplacementReportHash,
+    });
+  }
 
   const validationSummary = validation ?? {
     ok: false,
     errors: ["validation_not_run"],
     warnings: [],
   };
+  const anchorReplacements = result.anchor_replacements
+    ? serializableAnchorReplacementPlan(result.anchor_replacements)
+    : {
+        profile_id: REPLACEMENT_PROFILE_ID,
+        coverage_policy: "required_and_recommended" as const,
+        source_commit: result.source_version.commit,
+        total_anchors: 0,
+        replaceable_anchors: 0,
+        diagnostic_anchors: 0,
+        matched_anchors: 0,
+        replaced_anchors: 0,
+        diagnostic_matched: 0,
+        missing_blocking: [],
+        missing_diagnostic: [],
+        records: [],
+      };
 
   return {
     converter_version: CONVERTER_VERSION,
@@ -66,7 +95,9 @@ export function buildManifest(
       generated_groups: Object.keys(result.contract_manifest.skill_groups).sort(),
       material_passport_policy: result.contract_manifest.material_passport_policy,
       full_matrix_injection: false,
+      anchor_replacement: result.contract_manifest.anchor_replacement,
     },
+    anchor_replacements: anchorReplacements,
     validation_summary: validationSummary,
   };
 }
@@ -100,6 +131,14 @@ export function buildReport(manifest: ConversionManifest): string {
     `- Profile: \`${manifest.contract_compatibility.compatibility_kind}\``,
     `- Material Passport policy: \`${manifest.contract_compatibility.material_passport_policy}\``,
     `- Full matrix injection: \`${String(manifest.contract_compatibility.full_matrix_injection)}\``,
+    `- Anchor replacement profile: \`${manifest.anchor_replacements.profile_id}\``,
+    `- Anchor replacement coverage: ${String(manifest.anchor_replacements.replaced_anchors)}/${String(manifest.anchor_replacements.replaceable_anchors)} replaceable anchors`,
+    `- Diagnostic anchors matched: ${String(manifest.anchor_replacements.diagnostic_matched)}/${String(manifest.anchor_replacements.diagnostic_anchors)}`,
+    `- Human replacement report: \`anchor-replacement-report.md\``,
+    "",
+    "## Anchor Replacement Semantics",
+    "",
+    ...semanticCoverageLines(manifest.anchor_replacements),
     "",
     "## File Summary",
     "",
@@ -137,30 +176,140 @@ export function buildReport(manifest: ConversionManifest): string {
   return `${lines.join("\n")}\n`;
 }
 
-export function normalizeManifest(manifest: ConversionManifest): Omit<ConversionManifest, "generated_at"> {
-  const rest: Omit<ConversionManifest, "generated_at"> = {
-    converter_version: manifest.converter_version,
-    output_kind: manifest.output_kind,
-    source_root: manifest.source_root,
-    output_root: manifest.output_root,
-    source_commit: manifest.source_commit,
-    source_version: manifest.source_version,
-    generated_groups: manifest.generated_groups,
-    skill_groups: manifest.skill_groups,
-    output_files: manifest.output_files,
-    excluded: manifest.excluded,
-    unclassified_files: manifest.unclassified_files,
-    risk_findings: manifest.risk_findings,
-    contract_compatibility: manifest.contract_compatibility,
-    validation_summary: manifest.validation_summary,
-  };
-  return {
-    ...rest,
-    source_version: {
-      ...rest.source_version,
-      dirty: false,
+export function buildAnchorReplacementReport(plan: AnchorReplacementPlan | null): string {
+  const lines = [
+    "# ARSU Anchor Replacement Report",
+    "",
+    "This report is for human audit of generated ARSU contract replacements. It is not a runtime ResearchSpec contract.",
+    "",
+  ];
+  if (!plan) {
+    lines.push("No anchor replacement plan was produced.", "");
+    return lines.join("\n");
+  }
+
+  const replaceable = plan.records
+    .filter((record) => record.replacement_mode === "replace")
+    .sort((left, right) => left.owner_skill.localeCompare(right.owner_skill) || left.source_path.localeCompare(right.source_path) || left.anchor_id.localeCompare(right.anchor_id));
+  lines.push("## Replaced Anchors", "");
+  for (const record of replaceable) {
+    lines.push(
+      `### ${record.anchor_id}`,
+      "",
+      `- Owner skill: \`${record.owner_skill}\``,
+      `- Source path: \`${record.source_path}\``,
+      `- Marker id: \`${record.marker_id}\``,
+      `- Severity: \`${record.severity}\``,
+      `- Semantic role: \`${record.semantic_role ?? "unknown"}\``,
+      `- Replacement shape: \`${record.replacement_shape ?? "unknown"}\``,
+      `- Template id: \`${record.template_id}\``,
+      `- ResearchSpec targets: ${record.researchspec_targets.map((target) => `\`${target}\``).join(", ")}`,
+      `- Generated output paths: ${record.output_paths.length > 0 ? record.output_paths.map((item) => `\`${item}\``).join(", ") : "_none_"}`,
+      `- Before SHA-256: \`${record.before_sha256 ?? "unavailable"}\``,
+      `- After SHA-256: \`${record.after_sha256 ?? "unavailable"}\``,
+      "",
+      "#### Before",
+      "",
+      fencedBlock(record.before_text ?? ""),
+      "",
+      "#### After",
+      "",
+      fencedBlock(record.after_text ?? ""),
+      "",
+    );
+    if (record.diagnostics.length > 0) {
+      lines.push("#### Diagnostics", "", ...record.diagnostics.map((item) => `- ${item}`), "");
+    }
+  }
+
+  const diagnostics = plan.records
+    .filter((record) => record.replacement_mode === "diagnostic")
+    .sort((left, right) => left.anchor_id.localeCompare(right.anchor_id));
+  lines.push("## Diagnostic-Only Anchors", "");
+  if (diagnostics.length === 0) {
+    lines.push("- None.", "");
+  } else {
+    for (const record of diagnostics) {
+      lines.push(
+        `### ${record.anchor_id}`,
+        "",
+        `- Source path: \`${record.source_path}\``,
+        `- Matched: \`${String(record.matched)}\``,
+        `- Severity: \`${record.severity}\``,
+        `- Diagnostics: ${record.diagnostics.length > 0 ? record.diagnostics.map((item) => `\`${item}\``).join(", ") : "_none_"}`,
+        "",
+      );
+    }
+  }
+
+  return `${lines.join("\n")}\n`;
+}
+
+export function normalizeManifest(manifest: ConversionManifest): unknown {
+  const normalized = {
+    ...manifest,
+    generated_at: undefined,
+    source_version: { ...manifest.source_version, dirty: false },
+    generated_groups: [...manifest.generated_groups].sort(),
+    output_files: [...manifest.output_files].sort((left, right) => left.output_path.localeCompare(right.output_path)),
+    excluded: sortFileRecords(manifest.excluded),
+    unclassified_files: sortFileRecords(manifest.unclassified_files),
+    risk_findings: [...manifest.risk_findings].sort(compareRiskFinding),
+    validation_summary: {
+      ...manifest.validation_summary,
+      errors: [...manifest.validation_summary.errors].sort(),
+      warnings: [...manifest.validation_summary.warnings].sort(),
+    },
+    anchor_replacements: {
+      ...manifest.anchor_replacements,
+      missing_blocking: [...manifest.anchor_replacements.missing_blocking].sort(),
+      missing_diagnostic: [...manifest.anchor_replacements.missing_diagnostic].sort(),
+      records: manifest.anchor_replacements.records
+        .map((record) => ({
+          ...record,
+          researchspec_targets: [...record.researchspec_targets].sort(),
+          output_paths: [...record.output_paths].sort(),
+          diagnostics: [...record.diagnostics].sort(),
+        }))
+        .sort((left, right) => left.anchor_id.localeCompare(right.anchor_id)),
     },
   };
+  return canonicalizeObject(normalized);
+}
+
+function sortFileRecords(records: ConversionManifest["excluded"]): ConversionManifest["excluded"] {
+  return [...records].sort((left, right) =>
+    left.path.localeCompare(right.path) ||
+    left.category.localeCompare(right.category) ||
+    left.reason.localeCompare(right.reason));
+}
+
+function canonicalizeObject(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(canonicalizeObject);
+  if (typeof value !== "object" || value === null) return value;
+  return Object.fromEntries(
+    Object.entries(value as Record<string, unknown>)
+      .filter(([, item]) => item !== undefined)
+      .sort(([left], [right]) => left.localeCompare(right))
+      .map(([key, item]) => [key, canonicalizeObject(item)]),
+  );
+}
+
+function semanticCoverageLines(anchorReplacements: SerializableAnchorReplacementPlan): string[] {
+  const counts = new Map<string, number>();
+  for (const record of anchorReplacements.records) {
+    if (record.replacement_mode !== "replace") continue;
+    const key = record.semantic_role ?? "unknown";
+    counts.set(key, (counts.get(key) ?? 0) + 1);
+  }
+  if (counts.size === 0) return ["- None."];
+  return [...counts.entries()]
+    .sort(([left], [right]) => left.localeCompare(right))
+    .map(([role, count]) => `- \`${role}\`: ${String(count)}`);
+}
+
+function fencedBlock(text: string): string {
+  return ["````markdown", text.trimEnd(), "````"].join("\n");
 }
 
 function riskFindingsForGroup(groupName: string, group: SkillConversion): RiskFinding[] {

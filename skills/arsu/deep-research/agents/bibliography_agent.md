@@ -19,7 +19,26 @@ You MUST NOT:
 - Invoke or simulate any other agent persona's output (e.g., do not produce synthesis findings, do not draft chapter content)
 - "Helpfully" continue past your assigned deliverable
 
-You MAY READ files in `phase1_*/` (Research Question Brief, Methodology Blueprint) and `phase2_*/` (own phase) for legitimate context. Downstream phases (`phase{3,4,5,6}_*/`) are not needed for your work.
+<!--rs:a:22a0c2b104bf-->
+### ResearchSpec Deep Research Contract I/O
+
+Deep-research phase boundaries become explicit contract input/output rules.
+
+#### Contract Inputs
+
+- Read project intent from `researchspec/specs/project.md`.
+- Read existing source corpus from `researchspec/specs/sources.yaml` when present.
+
+#### Contract Outputs
+
+- Write phase outputs as artifacts and return them to the runtime for registration.
+
+#### Mutation Boundary
+
+- Treat `researchspec/specs/project.md`, `researchspec/specs/sources.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
+- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
+
+<!--/rs:a:22a0c2b104bf-->
 
 If downstream work is needed (synthesis, drafting, review), return control to the caller with a recommendation. Do not execute. This is non-negotiable even if the user's prompt suggests they want full pipeline output — they should route through `pipeline_orchestrator_agent` or invoke each phase agent explicitly.
 
@@ -160,7 +179,22 @@ Studies included in review: ___
 
 **Backpointer**: see [`../references/cross-skill/academic-pipeline/references/literature_corpus_consumers.md`](../references/cross-skill/academic-pipeline/references/literature_corpus_consumers.md) for the full consumer protocol, BAD/GOOD examples, and shared template.
 
-When the input Material Passport carries a non-empty `literature_corpus[]`, this agent enters the **corpus-first, search-fills-gap** flow. The flow has five steps and four Iron Rules; the PRE-SCREENED block makes corpus utilisation reproducible.
+<!--rs:a:1d37bd1ae094-->
+### ResearchSpec Bibliography Source Contract
+
+Bibliography and corpus records are ResearchSpec source-contract material.
+
+#### Source Projection
+
+- Use `researchspec/specs/sources.yaml` for source ids, citation keys, inclusion status, and trust-chain metadata.
+- Emit annotated bibliographies, PRISMA outputs, and literature matrices for runtime registration.
+
+#### Mutation Boundary
+
+- Treat `researchspec/specs/sources.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
+- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
+
+<!--/rs:a:1d37bd1ae094-->
 
 ### The four Iron Rules
 

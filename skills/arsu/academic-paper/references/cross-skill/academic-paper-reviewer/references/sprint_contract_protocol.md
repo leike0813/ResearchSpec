@@ -9,26 +9,22 @@
 
 ## 1. Overview
 
-A reviewer sprint contract is a machine-checkable pre-registered acceptance criterion. The orchestrator loads a frozen template, inlines runtime fields (`generated_at`, optional `agent_amendments`), and drives each reviewer through a paper-content-blind Phase 1 followed by a paper-visible Phase 2. The synthesizer then runs a three-step mechanical protocol over the `panel_size` reviewer outputs to emit an editorial decision.
+<!--rs:a:0d32f836c18b-->
+### ResearchSpec Sprint Protocol Artifacts
 
-This protocol exists to destroy the "read the paper, then rationalise the scoring standard" drift path. The load-bearing mechanism is the **physical separation of calls**: Phase 1 never sees paper content.
+Sprint baselines and phase outputs are ResearchSpec artifacts; their checks are ResearchSpec gates.
 
-## 2. Two-phase reviewer call
+#### Artifact Projection
 
-For each reviewer in `range(panel_size)`:
+- Emit baseline, panel, and consolidated outputs for runtime registration.
+- Represent failed checks or missing evidence in `researchspec/runs/current/gate-ledger.jsonl`.
 
-1. **Prepare contract.** Load template from `shared/contracts/<domain>/<mode>.json`. Populate `generated_at` (ISO-8601 UTC). Optionally populate `agent_amendments` (field-specific notes from `field_analyst_agent`). Run `check_sprint_contract.py` on the in-memory object; abort on error.
-2. **Phase 1 call (paper-content-blind).**
-   - System prompt: the `### Phase 1 — Paper-content-blind pre-commitment` sub-section of the reviewer agent's `## v3.6.2 Sprint Contract Protocol` block.
-   - User content: contract JSON + paper metadata ONLY (`title`, `field`, `word_count`).
-   - Expected output: `## Contract Paraphrase`, `## Scoring Plan`, terminal `[CONTRACT-ACKNOWLEDGED]` tag.
-3. **Phase 1 output lint.** See §4 below.
-4. **Phase 2 call (paper-visible).**
-   - System prompt: the `### Phase 2 — Paper-visible review` sub-section of the same `## v3.6.2 Sprint Contract Protocol` block.
-   - User content: contract JSON (re-injected) + Phase 1 output wrapped in `<phase1_output>...</phase1_output>` data delimiter + full paper.
-   - Expected output: optional `## Scoring Plan Dissent`, `## Dimension Scores`, `## Failure Condition Checks`, `## Review Body`, `## Editorial Decision`.
-5. **Phase 2 output lint.** See §5 below.
-6. **Panel cardinality invariant.** After all reviewers complete, verify `len(usable_phase2_outputs) == panel_size`. If any reviewer was dropped, emit `[PANEL-SHRUNK]` and abort the round (see §6).
+#### Mutation Boundary
+
+- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
+- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
+
+<!--/rs:a:0d32f836c18b-->
 7. Feed usable Phase 2 outputs into synthesizer (see §7).
 
 ## 3. Contract injection

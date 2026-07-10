@@ -91,7 +91,22 @@ Triggered when user picks "acknowledge limitation" on a block.
 
 Round count is per-stage-per-pipeline-run, stored in `compliance_history[].user_override` entries.
 
-> **Enforcement boundary.** This ladder is enforced at **runtime by `compliance_agent`** using the `compliance_history[]` round counter, NOT by Schema 12. Schema 12 intentionally permits `user_override.rationale.minLength: 1` so that legacy passports and cross-session resume do not fail validation on historical entries. The round-counter increment and ≥100-char rationale check live in the agent's write-path, not in the JSON Schema. If you bypass the agent and hand-write a `user_override` entry into the passport, Schema 12 will accept any rationale length — but that entry will not have gone through the friction ladder and must be treated as unaudited.
+<!--rs:a:7c9478d2fb6c-->
+### ResearchSpec Compliance Decision
+
+Human compliance overrides are explicit decision-ledger entries supported by registered reports.
+
+#### Decision Record
+
+- After human confirmation, return override choice and rationale to the runtime for decision-ledger recording.
+- Emit Schema 12 or compliance reports for runtime registration.
+
+#### Mutation Boundary
+
+- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
+- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
+
+<!--/rs:a:7c9478d2fb6c-->
 
 On any successful override, the agent generates `disclosure_addendum` text and the orchestrator **auto-injects** it into the manuscript's AI disclosure section. The addendum is non-removable — this is the concrete form of the `no detection evasion` iron rule in CONTRIBUTING.md.
 

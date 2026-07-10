@@ -274,7 +274,22 @@ The v3.11 deterministic citation-existence gate (#182) always *detects* unverifi
 > "Citation verification: **mark only** (default — unverifiable citations get advisory suffixes, output is never blocked) / **strict** (a citation whose exact DOI/arXiv ID provably fails lookup blocks finalization). Strict suits DOI-dense fields; mark-only suits fields citing reports, standards, or grey literature, where real-but-unindexed citations are common."
 
 **Seeding rule (byte-equivalence is load-bearing — Invariant 7):**
-- Answer `strict` → record `strict` in the PCR `Citation Verification` row, and ensure the Material Passport carries `terminal_policies.citation_existence: strict` at the point the passport is materialized or next updated in this run (corpus creation, adapter import, or pre-finalizer setup). The finalizer remains the sole policy *evaluator* — this step only writes the scholar's declared policy, never evaluates it.
+<!--rs:a:36f017b67e7e-->
+### ResearchSpec Citation Policy Decision
+
+Citation terminal policy is a human-selected workflow decision, not a Material Passport mutation.
+
+#### Decision Handling
+
+- Read supported policy choices from `researchspec/specs/workflow.yaml`.
+- After the scholar selects a policy, return the choice to the runtime for decision-ledger recording.
+
+#### Mutation Boundary
+
+- Treat `researchspec/specs/workflow.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
+- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
+
+<!--/rs:a:36f017b67e7e-->
 - Answer `mark only`, or no answer → record `advisory (mark only, default)` in the PCR row and **write nothing to the passport** (per-key absence already means advisory; writing an explicit key would break byte-equivalence with pre-#392 runs for no semantic gain).
 
 **No default change anywhere** — a scholar who skips the question gets exactly today's behavior. **Plan mode is exempt** (the simplified plan-mode intake does not run Step 13, mirroring Step 12).

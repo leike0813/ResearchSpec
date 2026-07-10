@@ -1,4 +1,4 @@
-export const CONVERTER_VERSION = "0.1.0";
+export const CONVERTER_VERSION = "0.3.0";
 
 export const VENDOR_SOURCE_PATH = "vendor/ars";
 export const GENERATED_OUTPUT_PATH = "skills/arsu";

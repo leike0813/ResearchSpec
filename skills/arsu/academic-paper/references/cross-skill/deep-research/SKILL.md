@@ -263,9 +263,27 @@ User: "Research [topic]"
 
 ARS pipeline runs in 6 phases. Two invocation modes:
 
-**Mode A — orchestrator-driven (default):** `pipeline_orchestrator_agent` (in `academic-pipeline` skill) runs all phases end-to-end with state tracking via Material Passport.
+<!--rs:a:073722889e7a-->
+### ResearchSpec Deep Research Runtime
 
-**Mode B — phase-by-phase (cross-session resume):** User invokes one agent per phase across sessions for long-running projects. Common pattern via `ARS_PASSPORT_RESET=1` + `resume_from_passport=<hash>` (see `../academic-pipeline/references/passport_as_reset_boundary.md`).
+Deep-research consumes project/workflow/state contracts and registers research outputs as artifacts.
+
+#### Runtime Reads
+
+- Read research intent from `researchspec/specs/project.md`.
+- Read stage and mode from `researchspec/specs/workflow.yaml` and `researchspec/runs/current/state.yaml`.
+
+#### Runtime Writes
+
+- Emit RQ briefs, methodology blueprints, bibliographies, and synthesis outputs for runtime registration.
+
+#### Mutation Boundary
+
+- Treat `researchspec/specs/project.md`, `researchspec/specs/workflow.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
+- Request changes to `researchspec/runs/current/state.yaml` through the ResearchSpec orchestrator or runtime helper; do not edit run state directly.
+- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
+
+<!--/rs:a:073722889e7a-->
 
 In Mode B, **single-phase agents (Bucket A per `docs/design/2026-05-18-ars-v3.9.2-agent-phase-classification.md`) stay strictly within their assigned phase for writes**. Reads from upstream phases are allowed. Multi-phase agents (Bucket B: `devils_advocate_agent`, `report_compiler_agent`) do exactly the work specified by the caller's invocation for that phase — no extension to other phases in the same call.
 

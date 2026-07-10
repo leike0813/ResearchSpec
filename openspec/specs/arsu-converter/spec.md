@@ -112,6 +112,15 @@ artifacts during conversion.
 - **AND** it SHALL identify the generated skill groups and their first-slice
   ResearchSpec contract compatibility profile
 
+#### Scenario: Semantic replacement profile is declared
+
+- **WHEN** converter output is generated
+- **THEN** `skills/arsu/researchspec-contracts.json` SHALL declare anchor
+  replacement profile `researchspec-anchor-replacement-v2`
+- **AND** it SHALL declare coverage policy `required_and_recommended`
+- **AND** it SHALL treat Material Passport content as compatibility artifacts or
+  payload projection sources rather than runtime sources of truth
+
 #### Scenario: Material Passport is not runtime SSOT
 
 - **WHEN** contract compatibility guidance is generated
@@ -216,64 +225,121 @@ public user-facing CLI behavior.
   semantic workflows
 - **AND** it SHALL NOT call any LLM API
 
-### Requirement: ARSU Contract Anchor Audit Assets
+### Requirement: ARSU contract anchor replacement
 
-ResearchSpec SHALL maintain audited upstream anchor assets for ARS-native
-contract instructions that require future ResearchSpec compatibility
-replacement.
+The converter SHALL replace audited ARS-native contract instructions through
+robust anchors and semantic ResearchSpec replacement templates.
 
-#### Scenario: Anchor table records robust replacement targets
+#### Scenario: Match evidence and replacement scope are separate
 
-- **WHEN** maintainers inspect the ARSU converter anchor assets
-- **THEN** `src/arsu-converter/anchors/contract-anchors.json` SHALL list audited
-  upstream contract anchors
-- **AND** each anchor SHALL identify its source path, owner skill, contract
-  category, severity, robust match hints, replacement intent, and future
-  template id
+- **GIVEN** an anchor has severity `required` or `recommended`
+- **WHEN** maintainers validate anchor assets
+- **THEN** the anchor SHALL reference a registered `template_id`
+- **AND** it SHALL declare unique ordered start and end snippets for the complete
+  replacement span
+- **AND** semantic role, ResearchSpec targets, and replacement shape SHALL resolve
+  from the template registry as their single source of truth
 
-#### Scenario: Required anchors are future blocking targets
+#### Scenario: High-risk runtime surfaces have coverage decisions
 
-- **WHEN** an anchor has required severity
-- **THEN** it SHALL include a non-empty replacement intent
-- **AND** it SHALL include a non-empty future template id
-- **AND** it SHALL represent a target that a future matcher should treat as
-  blocking if not found
+- **WHEN** maintainers validate anchor assets
+- **THEN** every detected high-risk runtime-contract occurrence SHALL be covered
+  by a replacement anchor, diagnostic anchor, or explicit retain decision
+- **AND** uncovered occurrences SHALL fail anchor validation
 
-#### Scenario: Anchors do not rely only on line numbers
+#### Scenario: Diagnostic anchors remain report-only
 
-- **WHEN** anchor assets are validated
-- **THEN** validation SHALL fail if an anchor's matching strategy depends only
-  on file line numbers
-- **AND** anchors SHALL use more robust hints such as headings, stable phrases,
-  schema names, or nearby text patterns
+- **GIVEN** an anchor has severity `diagnostic`
+- **WHEN** conversion runs
+- **THEN** conversion SHALL NOT emit replacement text for that anchor
+- **AND** its match status SHALL remain visible in the human report
 
-#### Scenario: Upstream manifest records audited runtime shape
+#### Scenario: Anchors are matched before generated output is overwritten
 
-- **WHEN** maintainers inspect the ARSU converter anchor assets
-- **THEN** `src/arsu-converter/anchors/upstream-manifest.json` SHALL record the
-  audited `vendor/ars` commit, runtime file tree, frontmatter, heading tree,
-  normalized content hashes, and contract-risk keyword hits for audited runtime
-  sources
+- **GIVEN** `vendor/ars` is a valid clean upstream checkout
+- **WHEN** a maintainer runs ARSU conversion
+- **THEN** the converter SHALL match contract anchors before deleting or
+  overwriting `skills/arsu`
+- **AND** any missing blocking anchors SHALL fail conversion before generated
+  output is touched
 
-#### Scenario: Anchor validation checks current upstream checkout
+#### Scenario: Matcher uses robust hints
 
-- **WHEN** maintainers run the anchor validation script
-- **THEN** it SHALL verify that the manifest commit matches
-  `git -C vendor/ars rev-parse HEAD`
-- **AND** it SHALL verify that manifest paths and normalized hashes match the
-  current audited runtime file tree
-- **AND** it SHALL verify that anchor source files exist in `vendor/ars`
+- **WHEN** the converter matches an anchor
+- **THEN** it SHALL use the anchor source path plus robust hints such as
+  headings, whitespace-tolerant snippets, and case-insensitive keywords
+- **AND** it SHALL NOT depend on source line numbers for matching
+- **AND** match evidence SHALL remain separate from explicit replacement
+  boundaries
+- **AND** ambiguous, missing, reversed, or overlapping replacement spans SHALL
+  block conversion
+
+#### Scenario: Required and recommended anchors are blocking
+
+- **GIVEN** an anchor has severity `required` or `recommended`
+- **WHEN** the converter cannot match that anchor in `vendor/ars`
+- **THEN** conversion SHALL fail before writing generated output
+- **AND** the diagnostic SHALL identify the missing anchor id and source path
+
+#### Scenario: Matched anchors replace complete semantic spans
+
+- **GIVEN** a `required` or `recommended` anchor is matched
+- **WHEN** the converter writes a generated text file
+- **THEN** the complete inclusive start/end span SHALL be replaced with the
+  renderer registered for the anchor's `template_id`
+- **AND** the replacement SHALL preserve the original LF or CRLF boundary
+- **AND** the visible replacement text SHALL be shaped for the anchor semantics
+- **AND** runtime HTML markers SHALL contain only a compact deterministic marker id needed for pairing
+
+#### Scenario: Replacement instructions respect mutation ownership
+
+- **WHEN** a replacement describes ResearchSpec writes
+- **THEN** stable spec changes SHALL use an accepted contract patch or direct human
+  edit
+- **AND** artifact registry and state writes SHALL be assigned to runtime helpers
+- **AND** decision ledger writes SHALL require a human-confirmed decision
+- **AND** gate ledger writes SHALL be assigned to validators or gate helpers
+
+#### Scenario: Replacement results record full maintenance metadata
+
+- **WHEN** conversion succeeds
+- **THEN** `skills/arsu/conversion-manifest.json` SHALL record semantic role,
+  ResearchSpec targets, replacement shape, template id, compact marker id,
+  before hash, and after hash for every replaceable anchor record
+- **AND** those maintenance fields SHALL NOT be duplicated in runtime markers
+- **AND** `skills/arsu/conversion-report.md` SHALL summarize semantic replacement
+  coverage
+
+#### Scenario: Human-readable replacement report is generated
+
+- **WHEN** conversion succeeds
+- **THEN** `skills/arsu/anchor-replacement-report.md` SHALL list every replaced
+  anchor with metadata, generated output paths, diagnostics, before text, and
+  after text
+- **AND** it SHALL list diagnostic-only anchors separately without an after block
+
+#### Scenario: Generated output validation checks local replacement blocks
+
+- **WHEN** maintainers run generated-output validation
+- **THEN** validation SHALL extract and verify the exact marker block for each
+  replacement record
+- **AND** declared target checks SHALL apply to that block rather than the entire
+  output file
+- **AND** validation SHALL reject malformed marker boundaries and obsolete generic
+  replacement headings
+
+#### Scenario: Idempotence compares semantic manifest content
+
+- **WHEN** maintainers compare current output with a clean regeneration
+- **THEN** JSON object key order and explicitly unordered collection order SHALL
+  NOT cause drift
+- **AND** semantically meaningful field or output hash changes SHALL cause drift
 
 #### Scenario: Anchor validation is developer-only
 
 - **WHEN** maintainers inspect public `researchspec` CLI help
-- **THEN** ARSU anchor audit validation SHALL NOT appear as a public user command
+- **THEN** ARSU anchor audit validation and replacement SHALL NOT appear as
+  public user commands
 - **AND** anchor validation MAY be exposed through a developer package script
-
-#### Scenario: Anchor audit does not rewrite generated skills
-
-- **WHEN** this anchor audit capability is implemented
-- **THEN** it SHALL NOT implement anchor matching
-- **AND** it SHALL NOT perform contract text replacement
-- **AND** it SHALL NOT regenerate `skills/arsu`
-- **AND** it SHALL NOT perform upstream current-only cleanup
+- **AND** conversion SHALL remain local-file developer tooling with no LLM API
+  calls

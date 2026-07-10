@@ -55,7 +55,7 @@ ARSU-derived 内容仍不做默认 current-only cleanup。
 
 `required` 表示未来 matcher 未匹配时应阻断转换，除非维护者显式更新锚点表或替换策略。典型对象包括 Material Passport runtime SSOT、Schema 9、Schema 11、revision patch、handoff schema、sprint contract 等。
 
-`recommended` 表示未来应该替换或注入更具体的 ResearchSpec guidance，但短期未命中不一定必须阻断转换。典型对象包括部分 phase boundary、submission-package gate、ground-truth isolation 等。
+`recommended` 表示合同迁移优先级低于 required，但只要被列为可替换锚点，未命中仍会阻断转换。典型对象包括部分 phase boundary、submission-package gate、ground-truth isolation 等。
 
 `diagnostic` 表示需要被记录和观察，但不应成为第一版 matcher 的硬阻断。典型对象包括 style profile carry、repro lock 等兼容元数据。
 
@@ -106,7 +106,7 @@ Enforcement: scripts/check_pipeline_integrity.py / PreToolUse guard
 - Required Artifacts
 - Ledger Writes
 
-第一版锚点只记录代表性 Bucket A / high-impact agents。后续 matcher 可以基于 manifest 扩展到同类 agent block。
+锚点覆盖按 occurrence 审计，不以单个“代表性 agent”代替同类执行点。每个高风险 runtime occurrence 必须对应 replaceable anchor、diagnostic anchor，或带理由的 retain decision；同类 reviewer phase block 分布在多个 agent 文件时逐文件记录。
 
 ### 5.4 Revision patch 是高价值兼容目标
 
@@ -146,7 +146,7 @@ Schema 11 的 `commitment_extracted` 体系非常重要，它把 reviewer commen
 
 锚点不能依赖文件行号。上游 agent 文档经常插入段落，行号会漂移。
 
-本阶段锚点使用：
+当前锚点使用：
 
 - source path；
 - owner skill；
@@ -156,9 +156,19 @@ Schema 11 的 `commitment_extracted` 体系非常重要，它把 reviewer commen
 - snippet hints；
 - keyword hints；
 - replacement intent；
-- future template id。
+- template id；
+- replacement scope 的 start/end snippets。
 
-后续 matcher 可以先用 source path 缩小范围，再组合 heading、snippet、keyword 进行鲁棒匹配。若 source path 失效，则 upstream manifest 的 file tree drift 会先暴露结构变化。
+Matcher 先用 source path 缩小范围，再组合 heading、snippet、keyword 证明语义上下文；这些证据不再隐式决定替换范围。start/end snippets 必须在窗口中唯一且顺序正确，完整行区间才会进入替换。若 source path 失效，则 upstream manifest 的 file tree drift 会先暴露结构变化。
+
+最终 ARSU Markdown 中的注释只保留配对所需的 anchor id：
+
+```text
+<!--rs:a:<12-hex-marker-id>-->
+<!--/rs:a:<12-hex-marker-id>-->
+```
+
+12 位 marker id 由完整 anchor id 稳定派生。完整 anchor id、template、source、severity、semantic role、targets 和 hashes 等维护信息只进入 manifest 与人类审计报告，避免污染 agent runtime context。
 
 ## 7. Manifest 设计要点
 
@@ -180,15 +190,8 @@ Manifest 记录的是上游 shape，不是 ResearchSpec 合同规格。
 
 如果上游变化导致 checker 失败，维护者应先复核变化，再更新 manifest 和必要锚点。
 
-## 8. 后续 Change 建议
+## 8. 维护流程
 
-下一阶段应实现：
+上游变化时先运行 anchor checker。对于新增或漂移的高风险 occurrence，维护者必须判断其处置方式：替换、diagnostic 或 retain。新增替换需要同时提供显式 scope 和已注册 template；retain decision 必须说明其为何不是 ResearchSpec runtime ownership。
 
-- anchor matcher；
-- replacement template registry；
-- conversion-time anchor validation；
-- conversion-time contract text replacement；
-- warning/failure report；
-- maintainer companion skill，用于上游变化时辅助复核锚点漂移。
-
-该 companion skill 不应镜像简单 CLI，而应处理 checker warning/failure 后的语义复核：定位上游文本变化、判断合同语义是否改变、建议更新锚点或 replacement template。
+转换后必须检查 human report、局部 marker block、生成物验证和两次连续 idempotence。Checker 只能验证结构和已声明规则，语义复核仍由维护者负责。

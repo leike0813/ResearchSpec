@@ -4,9 +4,10 @@ import path from "node:path";
 import { buildContractCompatibilityManifest } from "./contracts.js";
 import { emitSkillGroup } from "./emit.js";
 import { listFiles, pathExists, removeTree, sha256File, writeJson, writeUtf8 } from "./fs-utils.js";
+import { buildAnchorReplacementPlan } from "./anchors/match.js";
 import { checkExistingOutputClean, checkIdempotence } from "./idempotence.js";
 import { buildInventory } from "./ingest.js";
-import { buildManifest, buildReport } from "./manifest.js";
+import { buildAnchorReplacementReport, buildManifest, buildReport } from "./manifest.js";
 import { GENERATED_OUTPUT_PATH } from "./config.js";
 import { validateUpstreamCheckout } from "./upstream.js";
 import type { ConversionResult, ValidationResult } from "./types.js";
@@ -25,9 +26,10 @@ export async function convertArsu(options: ConvertOptions): Promise<ConversionRe
   const repoRoot = path.resolve(options.repoRoot);
   const outputRoot = path.resolve(options.outputRoot ?? path.join(repoRoot, GENERATED_OUTPUT_PATH));
   const { sourceRoot, sourceVersion } = await validateUpstreamCheckout(repoRoot);
+  const anchorReplacements = await buildAnchorReplacementPlan(repoRoot, sourceRoot, sourceVersion.commit);
 
   if (options.dryRun) {
-    return dryRunResult(sourceRoot, sourceVersion, outputRoot);
+    return dryRunResult(sourceRoot, sourceVersion, outputRoot, anchorReplacements);
   }
 
   if (await pathExists(outputRoot)) {
@@ -56,6 +58,7 @@ export async function convertArsu(options: ConvertOptions): Promise<ConversionRe
       groupName,
       groupInventory,
       knownSourcePaths,
+      anchorReplacements,
     );
   }
 
@@ -70,6 +73,7 @@ export async function convertArsu(options: ConvertOptions): Promise<ConversionRe
     skill_groups: generatedGroups,
     inventory,
     contract_manifest: contractManifest,
+    anchor_replacements: anchorReplacements,
     validation: null,
   };
 
@@ -102,7 +106,9 @@ async function writeConversionOutputs(
   validation: ValidationResult | null,
   contractManifestHash: string,
 ): Promise<void> {
-  const manifest = buildManifest(result, validation, contractManifestHash);
+  await writeUtf8(path.join(outputRoot, "anchor-replacement-report.md"), buildAnchorReplacementReport(result.anchor_replacements));
+  const anchorReplacementReportHash = await sha256File(path.join(outputRoot, "anchor-replacement-report.md"));
+  const manifest = buildManifest(result, validation, contractManifestHash, anchorReplacementReportHash);
   await writeJson(path.join(outputRoot, "conversion-manifest.json"), manifest);
   await writeUtf8(path.join(outputRoot, "conversion-report.md"), buildReport(manifest));
 }
@@ -111,6 +117,7 @@ function dryRunResult(
   sourceRoot: string,
   sourceVersion: ConversionResult["source_version"],
   outputRoot: string,
+  anchorReplacements: ConversionResult["anchor_replacements"],
 ): ConversionResult {
   return {
     source_root: sourceRoot,
@@ -126,6 +133,7 @@ function dryRunResult(
       needs_review: [],
     },
     contract_manifest: buildContractCompatibilityManifest([]),
+    anchor_replacements: anchorReplacements,
     validation: { ok: true, errors: [], warnings: [] },
   };
 }

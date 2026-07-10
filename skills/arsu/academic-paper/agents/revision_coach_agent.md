@@ -99,7 +99,22 @@ For each parsed reviewer comment (from Step 2), decompose into an explicit list 
    - `commitment_type`: One of `add_experiment` / `add_analysis` / `add_clarification` / `add_citation` / `restructure` / `other`. Use `other` only when none of the five apply, and add a one-line free-text note in `commitment_text` explaining the type.
    - `required_evidence_type`: Where the evidence of fulfillment lives, per `re_review_mode_protocol` Commitment Ledger Verification. Seven **manuscript-evidence** types — `new_section` / `new_figure` / `new_table` / `new_citation` / `methods_paragraph` / `discussion_paragraph` / `prose_edit` — verify at `revision_location` in the revised manuscript. One **response-letter-evidence** type — `acknowledgment_only` — verifies in the Response to Reviewers (Schema 8) and does NOT require any manuscript change. One **escape-hatch** type — `other` — is intentionally underspecified for genuinely uncategorizable evidence and triggers a soft advisory at re-review prompting the author to specify the actual evidence location. Use `prose_edit` for sentence- or paragraph-level prose changes too granular to bucket into the other manuscript categories (typo fixes, terminology clarifications, equation formatting, citation-style corrections); use `other` only when no other value fits, and add a one-line free-text note in `commitment_text` explaining the type. This guides the `re_review_mode_protocol` verification step in Schema 11 v3.11.
 4. Comments with no extractable commitment (positive comments, summary acknowledgments) emit an empty list `[]` — this is valid.
-5. Output: write the commitment list into `commitment_extracted` field of the Schema 11 row for that `concern_id`. At this stage each commitment object carries only the three extraction fields (`commitment_text` / `commitment_type` / `required_evidence_type`). The lifecycle fields `fulfillment_status` and `unfulfilled_rationale` are **nested inside the same object** but are **absent now** — they are appended per-object during revision execution and verified in re-review (Schema 11 nested-object shape, #268). Do not emit placeholder keys for them.
+<!--rs:a:70b27456fa15-->
+### ResearchSpec Revision Commitment Planning
+
+Revision commitments are separated into contract changes, draft patches, and human decisions.
+
+#### Commitment Routing
+
+- Research-scope or claim commitments go to `researchspec/changes/<change-id>/contract-patch.yaml`.
+- Manuscript-text commitments go to `researchspec/draft-patches/<patch-id>.json`.
+- Tradeoffs and rejected reviewer requests go to `researchspec/runs/current/decision-ledger.jsonl`.
+
+#### Mutation Boundary
+
+- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
+
+<!--/rs:a:70b27456fa15-->
 
 **Output format:**
 

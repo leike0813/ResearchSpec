@@ -2,6 +2,7 @@ import { cp, mkdir } from "node:fs/promises";
 import path from "node:path";
 
 import { injectContractPreflight } from "./contracts.js";
+import { applyAnchorReplacements } from "./anchors/replace.js";
 import { readUtf8, sha256File, writeUtf8 } from "./fs-utils.js";
 import {
   discoverDependencies,
@@ -21,6 +22,7 @@ import type {
   SkillConversion,
   SkillGroupInventory,
 } from "./types.js";
+import type { AnchorReplacementPlan } from "./anchors/types.js";
 
 export async function emitSkillGroup(
   sourceRoot: string,
@@ -28,6 +30,7 @@ export async function emitSkillGroup(
   groupName: string,
   groupInventory: SkillGroupInventory,
   knownSourcePaths: Set<string>,
+  anchorReplacements: AnchorReplacementPlan,
 ): Promise<SkillConversion> {
   const groupOut = path.join(outputRoot, groupName);
   for (const dirname of ["agents", "references", "templates", "examples", "assets", "scripts"]) {
@@ -36,6 +39,7 @@ export async function emitSkillGroup(
 
   const sourceToOutput = new Map<string, string>();
   const filesToCopy = groupFiles(groupInventory);
+  addAnchoredRuntimeFiles(filesToCopy, groupName, anchorReplacements);
   const pending = [...filesToCopy.entries()];
   const seen = new Set<string>();
   const dependencyMeta = new Map<string, DependencyRef>();
@@ -98,6 +102,7 @@ export async function emitSkillGroup(
       outputPath,
       sourceToOutput,
       knownSourcePaths,
+      anchorReplacements,
     );
     if (copied.contractInjection) contractInjection = copied.contractInjection;
     findings.push(...copied.findings);
@@ -128,6 +133,16 @@ function groupFiles(group: SkillGroupInventory): Map<string, string> {
   return files;
 }
 
+function addAnchoredRuntimeFiles(files: Map<string, string>, groupName: string, plan: AnchorReplacementPlan): void {
+  for (const sourcePath of plan.spans_by_source.keys()) {
+    if (sourcePath.startsWith(`${groupName}/`)) {
+      files.set(sourcePath, sourcePath.split("/").slice(1).join("/"));
+    } else if (sourcePath.startsWith("shared/")) {
+      files.set(sourcePath, `references/shared/${sourcePath.slice("shared/".length)}`);
+    }
+  }
+}
+
 async function copyTransformedFile(
   sourceRoot: string,
   groupOut: string,
@@ -136,6 +151,7 @@ async function copyTransformedFile(
   outputPath: string,
   sourceToOutput: Map<string, string>,
   knownSourcePaths: Set<string>,
+  anchorReplacements: AnchorReplacementPlan,
 ): Promise<{
   file: CopiedFile;
   findings: ReturnType<typeof scanFindings>;
@@ -149,6 +165,7 @@ async function copyTransformedFile(
   let contractInjection: ContractInjectionResult | undefined;
   if (isTextResource(sourcePath)) {
     let text = await readUtf8(sourceFile);
+    text = applyAnchorReplacements(text, sourcePath, `${groupName}/${outputPath}`, anchorReplacements);
     text = neutralizeUnresolvedMarkdownLinks(text, sourcePath, sourceToOutput, knownSourcePaths);
     text = rewriteMarkdownLinks(text, sourcePath, outputPath, sourceToOutput, knownSourcePaths);
     text = rewriteText(text, sourceToOutput, outputPath);

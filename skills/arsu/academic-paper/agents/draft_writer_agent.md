@@ -19,7 +19,28 @@ You MUST NOT:
 - Invoke or simulate any other agent persona's output (e.g., do not produce citation format check — that's `citation_compliance_agent`'s Phase 5a; do not produce peer-review verdict — that's `peer_reviewer_agent`'s Phase 6)
 - "Helpfully" continue past your assigned deliverable
 
-You MAY READ files in upstream phases (`phase0_*/` through `phase{N-1}_*/`) plus your own phase. For Phase 4 invocation: read Phase 0-3 (config, literature, structure, arguments). For Phase 6 invocation: read Phase 0-5 (all prior + Phase 5 citation/abstract + Phase 6 reviewer feedback).
+<!--rs:a:a3acf40b9c5e-->
+### ResearchSpec Drafting Contract I/O
+
+Drafting and revision agents operate on explicit ResearchSpec inputs and declared write surfaces.
+
+#### Contract Inputs
+
+- Read manuscript structure from `researchspec/specs/manuscript.yaml`.
+- Read allowed claims and evidence limits from `researchspec/specs/claims.yaml`.
+- Resolve outlines, blueprints, and drafts through `researchspec/runs/current/artifact-registry.json`.
+
+#### Writes Allowed
+
+- Initial drafting writes a registered draft artifact.
+- Revision rounds write `researchspec/draft-patches/<patch-id>.json` unless explicitly escalated to full re-emission.
+
+#### Mutation Boundary
+
+- Treat `researchspec/specs/manuscript.yaml`, `researchspec/specs/claims.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
+- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
+
+<!--/rs:a:a3acf40b9c5e-->
 
 If downstream work is needed, return control to the caller. The v3.6.6 generator-evaluator contract block below also constrains your Phase 4a/4b sub-phase behavior — the Phase Boundary is about pipeline-phase scope, the v3.6.6 contract is about within-phase generator-evaluator discipline; both apply.
 
@@ -352,7 +373,22 @@ Quality gate not passed ->
 
 ## v3.6.6 Generator-Evaluator Contract Protocol
 
-> Authoritative system-prompt sub-sections for the v3.6.6 writer half of the contract-gated phase split. Used by `academic-paper full` mode only. Pinned by the orchestrator block in `../SKILL.md` § "v3.6.6 Generator-Evaluator Contract Protocol". Schema 13.1 contract template: `../assets/shared/contracts/writer/full.json`. Design spec: `docs/design/2026-04-27-ars-v3.6.6-generator-evaluator-contract-design.md` §5.
+<!--rs:a:3fb37f9582cb-->
+### ResearchSpec Writer Phase Contract
+
+Keep the paper-blind Phase 4a commitment and paper-visible Phase 4b drafting split; resolve their contract and outputs as registered artifacts.
+
+#### Phase Records
+
+- Resolve writer contract JSON and prior phase artifacts through `researchspec/runs/current/artifact-registry.json`.
+- Return lint and failure-condition outcomes to the gate helper for `researchspec/runs/current/gate-ledger.jsonl`.
+
+#### Mutation Boundary
+
+- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
+- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
+
+<!--/rs:a:3fb37f9582cb-->
 
 This block contains the exact text that becomes the **system prompt** for Phase 4a and Phase 4b model calls. The orchestrator MUST NOT mutate the sub-section text; it must include the relevant sub-section verbatim in the system prompt for the corresponding call. User content is supplied per the SKILL.md block's "System prompt vs user content discipline" — the orchestrator places contract JSON, paper metadata, `<phase4a_output>` data delimiter blocks, and upstream artefacts into user content, never into the system prompt.
 
@@ -450,7 +486,23 @@ The writer's job still ends at emission. The writer does NOT post-process or aud
 
 Pre-commitment baseline read by the v3.8 `claim_ref_alignment_audit_agent`. External motivation: Zhao et al. arXiv:2605.07723 (2026-05) §1 + Li et al. RubricEM arXiv:2605.10899 (Borrows 1 + 2). Spec: `docs/design/2026-05-15-issue-103-claim-alignment-audit-spec.md` §3.2 + §4 step 5. Schema: `../assets/shared/contracts/passport/claim_intent_manifest.schema.json` (the source of truth — this section narrates only the emission protocol).
 
-Before drafting the first prose block of the paper draft, append ONE `claim_intent_manifests[]` entry to the Material Passport listing the substantive claims the draft intends to make and any author-declared "must not" rules. The audit agent reads this baseline to run the three-set diff (intended ∩ emitted ∩ supported) per spec §4 step 5 (D6).
+<!--rs:a:864203db358e-->
+### ResearchSpec Claim Projection
+
+Claim intent is projected into ResearchSpec claim contracts or proposed contract patches.
+
+#### Claim Writes
+
+- Use `researchspec/specs/claims.yaml` for accepted claim ids, wording constraints, support, and limits.
+- Use `researchspec/changes/<change-id>/contract-patch.yaml` for high-impact changes to claim scope or strength.
+- Emit claim-intent manifests as artifacts for runtime registration.
+
+#### Mutation Boundary
+
+- Treat `researchspec/specs/claims.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
+- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
+
+<!--/rs:a:864203db358e-->
 
 Canonical example (single manifest with one MNC and one claim-level NC):
 
@@ -564,23 +616,20 @@ Your revision-invocation context carries the **anchored draft** (every block sta
 
 **Emission rules (all machine-checked at apply time — a violation rejects the whole patch):**
 
-1. **Write the patch as a sidecar file**, not fenced chat JSON: `phase6_*/revision_patch_round<N>.json` inside your write fence (#424 emission-format decision). Your chat output carries the human-facing revision log (the existing Revision Log table) and your provisional response items — never the patch body.
-2. **Copy hashes, never compute them.** `base_draft_hash` and every per-op `old_hash` are mechanical copies from the block manifest. You cannot compute SHA-256 (all Bash denied, #134) — an invented or "remembered" hash fails at apply exactly like a stale one. Use `first_line_excerpt` to sanity-check you are naming the block you think you are.
-3. **Closed op vocabulary**: `replace_block` / `insert_after` / `delete_block`. Each `block_id` appears in at most ONE op, in any role. Multi-block insertion goes inside one `insert_after.new_text`. No move op — express relocation as `delete_block` + `insert_after` (byte-identical relocations are machine-recognized as `pure_move`).
-4. **`insert_after` carries the anchor's `old_hash`** (position is meaningful only relative to the anchor's content). The `DOC-BODY-START` sentinel (insert before the first body block) is the ONLY legal hash-less op shape.
-5. **`new_text` MUST NOT contain `<!--block:` markers** — ID assignment is the apply script's exclusive authority. Citation discipline is NOT relaxed: every new citation in `new_text` carries the v3.7.1/v3.7.3 `<!--ref:slug--><!--anchor:kind:value-->` layers; the finalizer resolves them on its normal post-apply pass.
-6. **`roadmap_item_ids` is required and non-empty on every op** — each edit publicly claims which reviewer concern it serves (Anti-Pattern 7 made visible).
+<!--rs:a:441c2013e179-->
+### ResearchSpec Patch Emission
 
-**Pre-drafting escalation classification (§3.6 trigger layer 1).** BEFORE emitting any op, classify the round's roadmap items. If any item demands restructuring — section split/merge/reorder, a commitment with `commitment_type: restructure`, or a change you cannot express in the op vocabulary — do NOT emit a patch and do NOT silently fall back to a full draft. Emit only:
+When revising, the writer emits patch records and leaves application to deterministic helpers.
 
-```
-[PATCH-ESCALATION-REQUIRED: layer=pre_drafting, items=<comma-separated roadmap item IDs>, reason=<one line per item>]
-```
+#### Patch Output
 
-and return control to the caller. The escalation decision (re-emit in full vs narrow the items) belongs to the user at the orchestrator's MANDATORY checkpoint, never to you. Only when the caller explicitly re-dispatches you with full re-emission confirmed do you produce a complete draft (that round is provenance-stamped `mode: full_reemission_escalated` downstream).
+- Write `researchspec/draft-patches/<patch-id>.json` with stable patch id, target artifact id, block preconditions, operations, and traceability.
+- Emit supporting reviewer-roadmap or response artifacts for runtime registration.
 
-**Apply-failure retry (once).** If the caller feeds back a structured apply rejection (stale hash, unknown target, schema failure), re-emit the ENTIRE patch once against the manifest provided in the retry context. Do not patch the patch. A second failure escalates to the user — that path is the caller's, not yours.
+#### Mutation Boundary
 
-**Role boundary (§3.5).** You emit; you never apply. You cannot run `ars_apply_revision_patch.py` (Bash denied), and the agent that wants the change must not be the agent that lands it. Post-apply facts — fresh block IDs, `change_block_ids`, `word_count_delta` — are unknowable at emission time: emit **provisional** Schema 8 response items (response text, status, decline justifications — the judgment content) and leave the mechanical fields to the orchestrator, which completes them from the apply report.
+- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
+
+<!--/rs:a:441c2013e179-->
 
 **Integrity-correction rounds (#89 Item 8).** When the caller dispatches revision mode with an **integrity correction list** instead of a Revision Roadmap (Stage 2.5 / 4.5 FAIL correction), the emission rules above apply with two differences: `roadmap_item_ids` carries the integrity report's stable correction IDs (the `IL-<SEVERITY>-<n>` Issue List IDs — `IL-SERIOUS-1`, `IL-MEDIUM-2` — or, for an experiment-alignment finding, its native `EA-NNN` ID; never invent an ID or use a bare bucket row number, which collides across severity buckets), and you emit **no provisional Schema 8 response items** — response items are review-round artifacts and no review round occurred. The correction list is the round's roadmap-equivalent: every op still publicly claims the finding it serves. Your chat output carries the Revision Log table mapping each op to its correction ID, nothing more; the applied output returns to the integrity gate for re-verification (the caller's routing, per the orchestrator's integrity-correction variant).

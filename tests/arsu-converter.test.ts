@@ -9,6 +9,8 @@ import { test } from "node:test";
 import { convertArsu } from "../src/arsu-converter/converter.js";
 import { validateArsuOutput } from "../src/arsu-converter/validate.js";
 import { checkExistingOutputClean } from "../src/arsu-converter/idempotence.js";
+import { normalizeManifest } from "../src/arsu-converter/manifest.js";
+import { ArsuConverterError, type ConversionManifest } from "../src/arsu-converter/types.js";
 
 void test("converter generates four ResearchSpec-compatible skill groups", async () => {
   const root = await tempRepoRoot();
@@ -31,15 +33,43 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
 
   const contracts = JSON.parse(
     await readFile(path.join(root, "skills/arsu/researchspec-contracts.json"), "utf8"),
-  ) as { material_passport_policy?: string };
+  ) as { material_passport_policy?: string; anchor_replacement?: { coverage_policy?: string; profile_id?: string } };
   assert.equal(contracts.material_passport_policy, "compatibility_artifact_only_not_runtime_ssot");
+  assert.equal(contracts.anchor_replacement?.profile_id, "researchspec-anchor-replacement-v2");
+  assert.equal(contracts.anchor_replacement?.coverage_policy, "required_and_recommended");
 
   const manifest = JSON.parse(
     await readFile(path.join(root, "skills/arsu/conversion-manifest.json"), "utf8"),
-  ) as { risk_findings: Array<{ term: string; blocking: boolean }>; excluded: Array<{ path: string }> };
+  ) as {
+    risk_findings: Array<{ term: string; blocking: boolean }>;
+    excluded: Array<{ path: string }>;
+    anchor_replacements: {
+      profile_id: string;
+      replaceable_anchors: number;
+      replaced_anchors: number;
+      diagnostic_anchors: number;
+      records: Array<{ anchor_id: string; semantic_role?: string; before_sha256?: string; after_sha256?: string }>;
+    };
+  };
   assert.equal(manifest.risk_findings.some((item) => item.term === "Claude Code" && !item.blocking), true);
   assert.equal(manifest.risk_findings.some((item) => item.term === "Version History" && !item.blocking), true);
   assert.equal(manifest.excluded.some((item) => item.path === ".claude/CLAUDE.md"), true);
+  assert.equal(manifest.anchor_replacements.replaceable_anchors, 2);
+  assert.equal(manifest.anchor_replacements.replaced_anchors, 2);
+  assert.equal(manifest.anchor_replacements.diagnostic_anchors, 1);
+  assert.equal(manifest.anchor_replacements.profile_id, "researchspec-anchor-replacement-v2");
+  assert.equal(
+    manifest.anchor_replacements.records.some((item) => item.anchor_id === "fixture.required.material" && item.semantic_role === "runtime_state_boundary" && item.before_sha256 && item.after_sha256),
+    true,
+  );
+  assert.match(deepResearch, /<!--rs:a:[0-9a-f]{12}-->/);
+  assert.match(deepResearch, /<!--\/rs:a:[0-9a-f]{12}-->\n/);
+  assert.doesNotMatch(deepResearch, /ResearchSpec Contract Replacement/);
+  assert.match(deepResearch, /ResearchSpec Deep Research Runtime/);
+  const anchorReport = await readFile(path.join(root, "skills/arsu/anchor-replacement-report.md"), "utf8");
+  assert.match(anchorReport, /### fixture\.required\.material/);
+  assert.match(anchorReport, /#### Before/);
+  assert.match(anchorReport, /#### After/);
   await cleanup(root);
 });
 
@@ -65,6 +95,42 @@ void test("converter rejects missing, non-git, dirty, and incomplete upstream ch
   await cleanup(incomplete);
 });
 
+void test("converter blocks missing required or recommended anchors before writing output", async () => {
+  const root = await tempRepoRoot();
+  await makeSource(root);
+  const anchorsPath = path.join(root, "src/arsu-converter/anchors/contract-anchors.json");
+  const anchors = JSON.parse(await readFile(anchorsPath, "utf8")) as { anchors: Array<{ id: string; match_hints: { snippets: string[] } }> };
+  anchors.anchors[0].match_hints.snippets = ["missing required anchor text"];
+  await writeFile(anchorsPath, `${JSON.stringify(anchors, null, 2)}\n`, "utf8");
+
+  await assert.rejects(
+    () => convertArsu({ repoRoot: root }),
+    (error) =>
+      error instanceof ArsuConverterError &&
+      error.code === "anchor_match_failed" &&
+      error.details.includes("missing blocking anchor: fixture.required.material"),
+  );
+  assert.equal(existsSync(path.join(root, "skills/arsu")), false);
+  await cleanup(root);
+});
+
+void test("converter reports missing diagnostic anchors without blocking conversion", async () => {
+  const root = await tempRepoRoot();
+  await makeSource(root);
+  const anchorsPath = path.join(root, "src/arsu-converter/anchors/contract-anchors.json");
+  const anchors = JSON.parse(await readFile(anchorsPath, "utf8")) as { anchors: Array<{ id: string; match_hints: { snippets: string[] } }> };
+  const diagnostic = anchors.anchors.find((anchor) => anchor.id === "fixture.diagnostic.style");
+  assert.ok(diagnostic);
+  diagnostic.match_hints.snippets = ["missing diagnostic anchor text"];
+  await writeFile(anchorsPath, `${JSON.stringify(anchors, null, 2)}\n`, "utf8");
+
+  const result = await convertArsu({ repoRoot: root });
+
+  assert.equal(result.validation?.ok, true);
+  assert.deepEqual(result.anchor_replacements?.missing_diagnostic, ["fixture.diagnostic.style"]);
+  await cleanup(root);
+});
+
 void test("validation reports generated link and hash drift", async () => {
   const root = await tempRepoRoot();
   await makeSource(root);
@@ -77,6 +143,77 @@ void test("validation reports generated link and hash drift", async () => {
   assert.equal(validation.ok, false);
   assert.equal(validation.errors.some((error) => error.includes("Broken link")), true);
   assert.equal(validation.errors.some((error) => error.includes("Hash mismatch")), true);
+  await cleanup(root);
+});
+
+void test("validation reports replacement marker drift", async () => {
+  const root = await tempRepoRoot();
+  await makeSource(root);
+  await convertArsu({ repoRoot: root });
+
+  const skillPath = path.join(root, "skills/arsu/deep-research/SKILL.md");
+  const original = await readFile(skillPath, "utf8");
+  await writeFile(skillPath, original.replace(/<!--\/rs:a:[0-9a-f]{12}-->/, ""), "utf8");
+
+  const validation = await validateArsuOutput(path.join(root, "skills/arsu"));
+  assert.equal(validation.ok, false);
+  assert.equal(validation.errors.some((error) => error.includes("Anchor replacement marker missing")), true);
+  await cleanup(root);
+});
+
+void test("validation checks declared targets inside the exact marker block", async () => {
+  const root = await tempRepoRoot();
+  await makeSource(root);
+  await convertArsu({ repoRoot: root });
+
+  const skillPath = path.join(root, "skills/arsu/deep-research/SKILL.md");
+  const original = await readFile(skillPath, "utf8");
+  const altered = original.replace(
+    /(<!--rs:a:[0-9a-f]{12}-->)[\s\S]*?(<!--\/rs:a:[0-9a-f]{12}-->)/,
+    "$1\nNo declared target in this block.\n$2",
+  );
+  await writeFile(skillPath, altered, "utf8");
+
+  const validation = await validateArsuOutput(path.join(root, "skills/arsu"));
+  assert.equal(validation.ok, false);
+  assert.equal(validation.errors.some((error) => error.includes("text missing declared ResearchSpec target")), true);
+  await cleanup(root);
+});
+
+void test("manifest normalization ignores object keys and unordered collection order", async () => {
+  const root = await tempRepoRoot();
+  await makeSource(root);
+  await convertArsu({ repoRoot: root });
+  const manifest = JSON.parse(
+    await readFile(path.join(root, "skills/arsu/conversion-manifest.json"), "utf8"),
+  ) as ConversionManifest;
+  const reordered: ConversionManifest = {
+    ...manifest,
+    unclassified_files: [...manifest.unclassified_files].reverse(),
+    anchor_replacements: {
+      ...manifest.anchor_replacements,
+      records: [...manifest.anchor_replacements.records].reverse().map((record) => {
+        const { diagnostics, ...rest } = record;
+        return { diagnostics: [...diagnostics].reverse(), ...rest };
+      }),
+    },
+  };
+
+  assert.equal(JSON.stringify(normalizeManifest(manifest)), JSON.stringify(normalizeManifest(reordered)));
+  await cleanup(root);
+});
+
+void test("validation reports semantic replacement report drift", async () => {
+  const root = await tempRepoRoot();
+  await makeSource(root);
+  await convertArsu({ repoRoot: root });
+
+  await writeFile(path.join(root, "skills/arsu/anchor-replacement-report.md"), "# incomplete\n", "utf8");
+
+  const validation = await validateArsuOutput(path.join(root, "skills/arsu"));
+  assert.equal(validation.ok, false);
+  assert.equal(validation.errors.some((error) => error.includes("Hash mismatch for anchor-replacement-report.md")), true);
+  assert.equal(validation.errors.some((error) => error.includes("Anchor replacement report missing anchor")), true);
   await cleanup(root);
 });
 
@@ -106,6 +243,7 @@ async function tempRepoRoot(): Promise<string> {
 async function makeSource(root: string, options: { omitGroup?: string } = {}): Promise<void> {
   const source = path.join(root, "vendor/ars");
   await makeSourceFiles(source, options);
+  await makeAnchorAssets(root);
   git(source, "init");
   git(source, "config", "user.name", "researchspec test");
   git(source, "config", "user.email", "researchspec@example.test");
@@ -136,6 +274,11 @@ async function makeSourceFiles(source: string, options: { omitGroup?: string } =
 
   await mkdir(path.join(source, "shared"), { recursive: true });
   await writeFile(path.join(source, "shared/handoff_schemas.md"), "Shared schema\n", "utf8");
+  await writeFile(
+    path.join(source, "shared/style_calibration_protocol.md"),
+    "Pipeline carry\nMaterial Passport carries the Style Profile across all stages\nStyle Profile\nSchema 10\n",
+    "utf8",
+  );
   await mkdir(path.join(source, ".claude"), { recursive: true });
   await writeFile(path.join(source, ".claude/CLAUDE.md"), "adapter only\n", { encoding: "utf8", flag: "w" });
   await mkdir(path.join(source, "docs/design"), { recursive: true });
@@ -146,15 +289,90 @@ async function makeSourceFiles(source: string, options: { omitGroup?: string } =
   }
   if (groups.includes("deep-research")) {
     await writeFile(
+      path.join(source, "deep-research/agents/bibliography_agent.md"),
+      "You MAY READ files in `phase1_*/` for legitimate context.\n" +
+        "The phase2 bibliography output is written after scripts/check_pipeline_integrity.py advisory checks.\n" +
+        "write-scope guard\n",
+      "utf8",
+    );
+    await writeFile(
       path.join(source, "deep-research/SKILL.md"),
       "---\nname: deep-research\ndescription: test\n---\n\n" +
         "Use shared/handoff_schemas.md and academic-paper/references/writing_quality_check.md.\n" +
+        "Mode A runs with state tracking via Material Passport under pipeline_orchestrator_agent.\n" +
         "Read [Design note](../docs/design/old.md).\n" +
         "Claude Code platform note.\n" +
         "## Version History\n",
       "utf8",
     );
   }
+}
+
+async function makeAnchorAssets(root: string): Promise<void> {
+  await mkdir(path.join(root, "src/arsu-converter/anchors"), { recursive: true });
+  await writeFile(
+    path.join(root, "src/arsu-converter/anchors/contract-anchors.json"),
+    `${JSON.stringify(
+      {
+        schema_version: "researchspec.arsu.contract-anchors.v2",
+        upstream_source: "vendor/ars",
+        audited_commit: "fixture",
+        anchors: [
+          {
+            id: "fixture.required.material",
+            source_path: "deep-research/SKILL.md",
+            owner_skill: "deep-research",
+            contract_category: "material_passport_runtime_ssot",
+            severity: "required",
+            match_hints: {
+              snippets: ["state tracking via Material Passport", "pipeline_orchestrator_agent"],
+              keywords: ["Mode A"],
+            },
+            replacement_intent: "Fixture replacement for Material Passport runtime ownership.",
+            template_id: "deep-research-state-to-researchspec-runtime",
+            replacement_scope: {
+              start_snippet: "state tracking via Material Passport",
+              end_snippet: "state tracking via Material Passport",
+            },
+          },
+          {
+            id: "fixture.recommended.phase",
+            source_path: "deep-research/agents/bibliography_agent.md",
+            owner_skill: "deep-research",
+            contract_category: "phase_directory_boundaries",
+            severity: "recommended",
+            match_hints: {
+              snippets: ["You MAY READ files in `phase1_*/`", "scripts/check_pipeline_integrity.py"],
+              keywords: ["phase2"],
+            },
+            replacement_intent: "Fixture replacement for phase IO ownership.",
+            template_id: "deep-research-phase-boundary-to-contract-io",
+            replacement_scope: {
+              start_snippet: "You MAY READ files in `phase1_*/`",
+              end_snippet: "scripts/check_pipeline_integrity.py",
+            },
+          },
+          {
+            id: "fixture.diagnostic.style",
+            source_path: "shared/style_calibration_protocol.md",
+            owner_skill: "shared",
+            contract_category: "artifact_provenance",
+            severity: "diagnostic",
+            match_hints: {
+              snippets: ["Pipeline carry", "Material Passport carries the Style Profile across all stages"],
+              keywords: ["Style Profile"],
+            },
+            replacement_intent: "Fixture diagnostic only.",
+            template_id: "style-profile-to-researchspec-artifact",
+          },
+        ],
+        coverage_decisions: [],
+      },
+      null,
+      2,
+    )}\n`,
+    "utf8",
+  );
 }
 
 function git(cwd: string, ...args: string[]): void {

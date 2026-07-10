@@ -233,7 +233,26 @@ Routing into Mode B requires explicit user signal — `/ars-<mode>` slash comman
 
 ## Re-Review Mode (Verification Review)
 
-Dedicated mode for Pipeline Stage 3' — verifies whether revisions address first-round review comments. Uses R&R Traceability Matrix (Schema 11) with Author's Claim + Verified? columns.
+<!--rs:a:b9d2e46fc97a-->
+### ResearchSpec Re-review Traceability
+
+Re-review checks compare commitments against ResearchSpec patch and artifact records.
+
+#### Verification Inputs
+
+- Read applied or pending patches from `researchspec/draft-patches/<patch-id>.json`.
+- Resolve revised draft and response artifacts through `researchspec/runs/current/artifact-registry.json`.
+
+#### Gate Result
+
+- Return missing, partially satisfied, or contradicted commitments to the re-review gate helper.
+
+#### Mutation Boundary
+
+- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
+- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
+
+<!--/rs:a:b9d2e46fc97a-->
 
 **Input**: Original Revision Roadmap + Revised manuscript + Response to Reviewers (optional)
 **Output**: Verification Review Report with traceability matrix + new issues + Decision
@@ -406,7 +425,22 @@ Follows the paper's language. Academic terms remain in English. User can overrid
 ## v3.6.2 Sprint Contract Hard Gate
 
 - **Reviewer hard gate.** All reviewer modes that ship with contracts (`reviewer_full`, `reviewer_methodology_focus`) now run two-call Phase 1 (paper-content-blind) + Phase 2 (paper-visible) orchestration. See `references/sprint_contract_protocol.md`.
-- **Schema 13 sprint contract.** Template-driven acceptance criteria with `panel_size`, `acceptance_dimensions`, `failure_conditions` (with `severity` precedence + `cross_reviewer_quantifier` panel-relative thresholds), `measurement_procedure`, optional `override_ladder`, bounded `agent_amendments`. Validator: `scripts/check_sprint_contract.py`. Schema: `../../../assets/shared/sprint_contract.schema.json`.
+<!--rs:a:9f0c7ac717e2-->
+### ResearchSpec Reviewer Sprint Artifact
+
+Sprint contracts and panel outputs are registered artifacts with gate outcomes.
+
+#### Artifact Records
+
+- Emit sprint contract JSON, reviewer panel outputs, and lint diagnostics for runtime registration.
+- Return accept, revise, reject, and blocking outcomes to the review gate helper.
+
+#### Mutation Boundary
+
+- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
+- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
+
+<!--/rs:a:9f0c7ac717e2-->
 - **Synthesizer three-step mechanical protocol.** Build cross-reviewer matrix → evaluate each failure_condition with panel-relative quantifier + expression vocabulary → resolve precedence by severity. Forbidden operations explicit in `agents/editorial_synthesizer_agent.md`.
 - **methodology_focus reduced panel.** `reviewer_methodology_focus` mode runs a 2-reviewer panel (EIC + methodology only) instead of the default 5.
 - **Templates:** `../../../assets/shared/contracts/reviewer/full.json` (panel 5) and `../../../assets/shared/contracts/reviewer/methodology_focus.json` (panel 2). Reserved modes (`reviewer_re_review`, `reviewer_calibration`, `reviewer_guided`) keep pre-v3.6.2 behaviour until follow-up patch templates land.

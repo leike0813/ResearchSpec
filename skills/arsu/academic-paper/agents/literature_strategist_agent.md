@@ -249,7 +249,22 @@ This advisory never blocks lit-review output, never downgrades included sources,
 
 **Backpointer**: see [`../references/cross-skill/academic-pipeline/references/literature_corpus_consumers.md`](../references/cross-skill/academic-pipeline/references/literature_corpus_consumers.md) for the full consumer protocol, BAD/GOOD examples, and shared template.
 
-When the input Material Passport carries a non-empty `literature_corpus[]`, this agent enters the **corpus-first, search-fills-gap** flow. The flow has five steps and four Iron Rules; the PRE-SCREENED block makes corpus utilisation reproducible. The merged `final_included` set feeds the Annotated Bibliography, Literature Matrix, Research Gap Identification, and Recommended Sources by Paper Section sections above without altering their formats.
+<!--rs:a:4d7408f706a8-->
+### ResearchSpec Source Corpus
+
+Literature corpus inputs are owned by ResearchSpec source contracts and registered artifacts.
+
+#### Source Reads
+
+- Read canonical source ids, citation keys, screening status, and trust metadata from `researchspec/specs/sources.yaml`.
+- Resolve bibliography reports and literature matrices through `researchspec/runs/current/artifact-registry.json`.
+
+#### Mutation Boundary
+
+- Treat `researchspec/specs/sources.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
+- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
+
+<!--/rs:a:4d7408f706a8-->
 
 ### The four Iron Rules
 

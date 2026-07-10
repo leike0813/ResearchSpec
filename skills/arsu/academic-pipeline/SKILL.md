@@ -24,9 +24,9 @@ skill, stage, phase, or mode.
 
 Use `runs/current/artifact-registry.json` to read prior artifacts. Write new
 artifacts as files, then register them through the ResearchSpec runtime helper
-or wrapper protocol. Record human-confirmed decisions in
-`runs/current/decision-ledger.jsonl` and validation or gate outcomes in
-`runs/current/gate-ledger.jsonl`.
+or wrapper protocol. Do not hand-edit state, registries, or JSONL ledgers.
+After human confirmation, the runtime records decisions; validators and gate
+helpers record validation or gate outcomes.
 
 Do not treat ARS Material Passport as ResearchSpec runtime truth. It may be
 imported or rendered as a compatibility artifact, while runtime provenance,
@@ -78,12 +78,30 @@ I received reviewer comments, help me revise
 ```
 resume_from_passport=<hash> [stage=<n>] [mode=<m>]
 ```
---> Loads the Material Passport (Schema 9), locates the `kind: boundary` entry matching `<hash>`, and confirms it has no later `kind: resume` entry consuming it. If `pending_decision` is set, the decision prompt fires first to capture the user's branch choice for the audit ledger; the prompt is never skipped, even when the user supplies `stage=`. After the prompt (or immediately if no `pending_decision`), the next stage is determined by: (a) `stage=<n>` CLI override if provided, else (b) the matched option's `next_stage`, else (c) the `next` field recorded in the boundary entry. CLI `stage=`/`mode=` overrides win over option routing.
-- **Gate (emit)**: `ARS_PASSPORT_RESET=1` must be set in the emitting session. Without the flag, no `kind: boundary` entries are written and there is nothing to resume from.
-- **Gate (resume)**: No flag required. Any session can invoke `resume_from_passport=<hash>` against a passport that carries a valid boundary entry matching the hash.
-- **Intent**: Invoke in a *fresh* Claude Code session. Resuming within the same session that emitted the boundary provides no token savings and may drop still-live in-session context.
-- **Stage**: Any. Resumes at whatever stage the routing rules above determine.
-- **Reference**: [`references/passport_as_reset_boundary.md`](references/passport_as_reset_boundary.md) — see §"`resume_from_passport` mode contract".
+<!--rs:a:839696c20996-->
+### ResearchSpec Runtime Ownership
+
+Resume handling is controlled by ResearchSpec runtime files. The ARS Material Passport can be imported as evidence, but it is not the active resume ledger.
+
+#### Before Resuming
+
+- Read `researchspec/runs/current/state.yaml` for current stage, mode, and resume status.
+- Resolve prior artifacts through `researchspec/runs/current/artifact-registry.json`.
+- Check `researchspec/runs/current/gate-ledger.jsonl` for unresolved blocking gates.
+
+#### Decision Handling
+
+- If a branch or override is required, stop and request a human decision.
+- After human confirmation, return the chosen branch to the runtime for decision-ledger recording before advancing.
+
+#### Mutation Boundary
+
+- Request changes to `researchspec/runs/current/state.yaml` through the ResearchSpec orchestrator or runtime helper; do not edit run state directly.
+- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
+- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
+- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
+
+<!--/rs:a:839696c20996-->
 
 **Execution flow:**
 1. Detect the user's current stage and available materials
@@ -334,9 +352,29 @@ Checkpoint: [MANDATORY/ADVISORY] — [What user needs to confirm]
 
 academic-pipeline is the orchestrator skill that coordinates the full ARS pipeline across 10 stages (delegating to deep-research, academic-paper, academic-paper-reviewer). Two invocation modes:
 
-**Mode A — orchestrator-driven (default):** `pipeline_orchestrator_agent` runs all stages end-to-end with state tracking via Material Passport. `state_tracker_agent`, `integrity_verification_agent`, `collaboration_depth_agent`, and `claim_ref_alignment_audit_agent` are dispatched by the orchestrator at the appropriate checkpoints.
+<!--rs:a:1ba3243e78aa-->
+### ResearchSpec Pipeline State
 
-**Mode B — phase-by-phase (cross-session resume):** User invokes one phase agent at a time across sessions, typically via `ARS_PASSPORT_RESET=1` + `resume_from_passport=<hash>` (see `references/passport_as_reset_boundary.md`).
+Keep the ARS stage graph semantics, but use ResearchSpec runtime files as the state carrier.
+
+#### State Reads
+
+- Use `researchspec/specs/workflow.yaml` for the configured stage graph.
+- Use `researchspec/runs/current/state.yaml` for current stage, mode, checkpoint, and resume metadata.
+
+#### State Writes
+
+- Emit stage outputs as artifacts for runtime registration.
+- Represent integrity and transition outcomes in `researchspec/runs/current/gate-ledger.jsonl`.
+
+#### Mutation Boundary
+
+- Treat `researchspec/specs/workflow.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
+- Request changes to `researchspec/runs/current/state.yaml` through the ResearchSpec orchestrator or runtime helper; do not edit run state directly.
+- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
+- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
+
+<!--/rs:a:1ba3243e78aa-->
 
 In Mode B, **single-phase agents (Bucket A per `docs/design/2026-05-18-ars-v3.9.2-agent-phase-classification.md`) in the downstream skills (deep-research, academic-paper, academic-paper-reviewer) stay strictly within their assigned phase for writes**. The 5 agents in academic-pipeline itself are all cross-phase / meta by design (Bucket C/D) — they have no fence by design:
 
@@ -348,7 +386,28 @@ In Mode B, **single-phase agents (Bucket A per `docs/design/2026-05-18-ars-v3.9.
 
 Routing into Mode B requires explicit user signal — `/ars-<mode>` slash command or `[direct-mode]` prefix. Ambiguous cross-phase input defaults to clarification per `.claude/CLAUDE.md` Routing Discipline + `references/shared/references/intent_clarification_protocol.md`. **Critically:** if `pipeline_orchestrator_agent` is dispatched on ambiguous cross-phase materials, the orchestrator itself currently cannot reconcile (this is the v3.10 conductor #134 work) — v3.9.2 routes such cases to clarification BEFORE the orchestrator runs.
 
-**Enforcement (v3.9.2):** Phase Boundary blocks on downstream Bucket A agents + advisory verifier (`scripts/check_pipeline_integrity.py`) + a deterministic PreToolUse write-scope guard in hook-enabled runtimes (#134 rescope, PR #294). Multi-phase envelope + orchestrator structured intake remain forward-scope (#134 Slices 3-5).
+<!--rs:a:4ca56b3923e8-->
+### ResearchSpec Contract I/O
+
+Treat phase boundaries as contract-scoped reads and writes instead of ARS directory fences.
+
+#### Contract Inputs
+
+- Load only the workflow, run state, and registered artifacts required by the current stage or mode.
+- Do not infer permission from a `phase*_` directory name when ResearchSpec state disagrees.
+
+#### Writes Allowed
+
+- Write new deliverables as artifact files, then return them to the runtime for registration.
+- Treat script or hook checks as diagnostics; ResearchSpec contracts define the runtime boundary.
+
+#### Mutation Boundary
+
+- Treat `researchspec/specs/workflow.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
+- Request changes to `researchspec/runs/current/state.yaml` through the ResearchSpec orchestrator or runtime helper; do not edit run state directly.
+- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
+
+<!--/rs:a:4ca56b3923e8-->
 
 ---
 

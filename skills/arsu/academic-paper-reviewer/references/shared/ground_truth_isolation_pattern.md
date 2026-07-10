@@ -80,8 +80,22 @@ training-time memory, citation existence proofs, or the
 `integrity_verification_agent`'s seven-mode failure checklist at Stage 2.5 or
 4.5. Once an artifact is at layer 2, downstream skills may treat it as
 provisionally reliable for argument building and paper drafting. The provenance
-chain must remain traceable through the Material Passport carried with each
-artifact.
+<!--rs:a:52352275e976-->
+### ResearchSpec Ground Truth Provenance
+
+Ground-truth provenance is traceable through registered artifacts and canonical source records.
+
+#### Provenance Chain
+
+- Resolve evidence artifacts through `researchspec/runs/current/artifact-registry.json`.
+- Link source identity and verification metadata through `researchspec/specs/sources.yaml`.
+
+#### Mutation Boundary
+
+- Treat `researchspec/specs/sources.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
+- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
+
+<!--/rs:a:52352275e976-->
 
 **Layer 3 — ground truth and evaluation rubrics** includes gold labels,
 reviewer scoring rubrics, calibration sets, and any material that defines what
@@ -236,7 +250,25 @@ researcher reviews the integrity agent's reports and makes go/no-go decisions
 at each gate. This pattern document explains the design reasoning behind those
 gates and the data-flow structure that makes them meaningful. Reading this
 document does not grant confidence that any specific pipeline run was clean.
-Only a passed integrity gate with a verified Material Passport does that.
+<!--rs:a:25942682a000-->
+### ResearchSpec Ground Truth Gate
+
+Data access level and verified-only constraints are workflow and gate policy.
+
+#### Gate Inputs
+
+- Read allowed data-access level and verified-only constraints from `researchspec/specs/workflow.yaml`.
+
+#### Blocking Conditions
+
+- Return unavailable, unverified, or policy-conflicting ground truth to the integrity gate helper.
+
+#### Mutation Boundary
+
+- Treat `researchspec/specs/workflow.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
+- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
+
+<!--/rs:a:25942682a000-->
 
 **Not a benchmark protocol.** All current ARS skills are `task_type:
 open-ended` because ARS targets humanities research, higher-education quality

@@ -42,45 +42,30 @@ Determine the entry point from the user's first message. Use the following keywo
 
 #### Resume Mode: `resume_from_passport`
 
-**Trigger:** user input starts with or contains `resume_from_passport=<12-hex>`.
+<!--rs:a:b4116c66ae00-->
+### ResearchSpec Runtime Ownership
 
-**Contract:** full spec in [`../references/passport_as_reset_boundary.md`](../references/passport_as_reset_boundary.md) §"`resume_from_passport` mode contract".
+Resume handling is controlled by ResearchSpec runtime files. The ARS Material Passport can be imported as evidence, but it is not the active resume ledger.
 
-**Orchestrator obligations:**
-1. **Acquire passport lock.** Before reading the ledger or checking for a prior consuming entry, acquire an exclusive advisory lock on the passport file (see `references/passport_as_reset_boundary.md` §"Concurrency model"). Hold the lock across the read, the no-prior-resume check, and the append. Release after the append is durable on disk. Do NOT release between steps.
-2. Parse `<hash>` from user input. Validate `^[0-9a-f]{12}$`.
-3. Locate passport file: prefer explicit path in user input; else look in `./passports/` or `./material_passport*.yaml` relative to CWD; else ask the user for the path.
-4. Load `reset_boundary[]`. Find the entry with `kind: boundary` and matching `hash`. No match → hard error: "Passport hash `<hash>` not found in `<path>`. Cannot resume."
-5. Check for prior consumption. If any later entry has `kind: resume` and `consumes_hash == <hash>`, that boundary is already consumed, and the orchestrator emits a hard error: "Passport hash `<hash>` was already resumed at `<consume generated_at>`. Cannot resume twice." This prevents double-resume and diverging session histories.
-6. Emit `### Resume Acknowledged` section using this exact template:
+#### Before Resuming
 
-   ```
-   ### Resume Acknowledged
-   - Hash: <hash>
-   - Source session: <session_marker> (generated <generated_at>)
-   - Recovered stage: <stage>
-   - Next stage: <next> [override: stage=<user-stage>, mode=<user-mode>]
-   ```
+- Read `researchspec/runs/current/state.yaml` for current stage, mode, and resume status.
+- Resolve prior artifacts through `researchspec/runs/current/artifact-registry.json`.
+- Check `researchspec/runs/current/gate-ledger.jsonl` for unresolved blocking gates.
 
-   The `[override: ...]` clause appears only when the user supplied `stage=` or `mode=` overrides; omit the bracket entirely otherwise.
+#### Decision Handling
 
-   When `pending_decision` is set on the boundary entry, replace `<next>` with `(pending user decision)` in the template above. The actual next stage is determined after the user picks a branch (step 8). After the user picks, print the resolved `next_stage` from the matched option as part of the decision-prompt flow.
+- If a branch or override is required, stop and request a human decision.
+- After human confirmation, return the chosen branch to the runtime for decision-ledger recording before advancing.
 
-   Example rendering (`pending_decision` set, resolved after user chose `revise`):
-   ```
-   ### Resume Acknowledged
-   - Hash: a3f2b7c9d0e1
-   - Source session: sess-42 (generated 2026-04-23T14:00:00Z)
-   - Recovered stage: 3
-   - Next stage: (pending user decision)
+#### Mutation Boundary
 
-   [after user picks `revise`]
-   - Resolved next stage: 4 (mode: revision)
-   ```
-7. Honor `verification_status`. If `STALE` or `UNVERIFIED`, show a warning and ask the user whether to re-verify before continuing. If `VERIFIED`, proceed without prompting.
-8. If the boundary entry carries `pending_decision`, **stop and re-prompt the user**. Display `pending_decision.question` and each option's `value`. Do NOT use `next` to auto-advance. After the user picks, look up the matching entry in `options[]` by `value`. Use that entry's `next_stage` and `next_mode` to determine actual routing. Record the chosen `value` as `chosen_branch` on the resume entry (step 9). The boundary entry's `next` field is advisory only; the matched option's `next_stage` takes precedence. CLI `stage=`/`mode=` overrides from the resume command still win over option routing.
-9. Append a `resume` entry to `reset_boundary[]` with `kind: resume`, `consumes_hash: <hash>`, fresh `generated_at` and `session_marker`, and (if applicable) `chosen_branch` and `user_override`. This marks the boundary as consumed for any downstream reader. Release the passport lock after this append is durable on disk.
-10. Invoke the next stage with the passport as the sole input. Do NOT ask the user to re-summarize prior stages.
+- Request changes to `researchspec/runs/current/state.yaml` through the ResearchSpec orchestrator or runtime helper; do not edit run state directly.
+- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
+- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
+- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
+
+<!--/rs:a:b4116c66ae00-->
 11. Respect user overrides: `stage=<n>` overrides `next`; `mode=<m>` overrides the default mode for the next stage (validated against Mode Advisor rules). User overrides are recorded on the resume entry's `user_override` field.
 
 ### 2. Mode Recommendation
@@ -176,36 +161,28 @@ SLIM checkpoints never reset. MANDATORY checkpoints co-occur with reset when app
 
 **Reset-boundary emission sequence (flag ON, FULL checkpoint):**
 
-1. `state_tracker` stages a new `kind: boundary` entry for `reset_boundary[]` (Schema 9). Entry matches `../../../../assets/shared/contracts/passport/reset_ledger_entry.schema.json` `#/$defs/boundary`.
-2. Orchestrator computes `hash` using the normative byte serialization defined in protocol doc §"The reset boundary protocol" step 2: JSON Canonical Form (RFC 8785) per entry, LF-separated, new entry appended with `hash` set to placeholder `"000000000000"`, SHA-256 first 12 lowercase hex. Write the computed hash back into the new entry, then append to the ledger. Follow the protocol doc exactly — any deviation breaks cross-session resume.
-3. If the checkpoint co-occurs with a MANDATORY user decision (e.g., Stage 3 review outcome, Stage 5 finalization format), set `pending_decision` on the new entry. Each option is an object with `value` (branch identifier), `next_stage` (stage to route to, or `null` to terminate), and optional `next_mode`. `next` on the boundary entry is still populated as a best-guess default but must NOT be used to auto-advance — on resume the orchestrator looks up the chosen `value` in `options[]` and routes via that option's `next_stage`/`next_mode` (see §Resume Mode obligations).
-4. In the checkpoint notification, orchestrator emits — as a distinct block below the Decision Dashboard but above the continue/pause prompt:
+<!--rs:a:a988873008fb-->
+### ResearchSpec Reset Boundary
 
-   ```
-   [PASSPORT-RESET: hash=<hash>, stage=<completed>, next=<next>]
+Checkpoint resets and resumes are ResearchSpec runtime events, not Material Passport ledger mutations.
 
-   ### Resume Instruction
-   - Passport file: <path>
-   - To continue, start a fresh Claude Code session and invoke:
-     resume_from_passport=<hash>
-   - Continuing in-session defeats the token-savings intent of `ARS_PASSPORT_RESET=1`.
-   ```
+#### Boundary Record
 
-   `<hash>` is 12 lowercase hex characters per `reset_ledger_entry.schema.json` — the schema is authoritative for the format.
+- Store reset boundary state in `researchspec/runs/current/state.yaml`.
+- After human confirmation, return branch choices, overrides, and pending decisions to the runtime for decision-ledger recording.
 
-5. Orchestrator halts after emission. For `systematic-review` mode, orchestrator refuses any in-session `continue` and repeats the Resume Instruction. For other modes, an in-session `continue` is honored once but the orchestrator uses ONLY the passport ledger as input to the next stage (no replay of prior turns).
+#### Gate Record
 
-**Iron rules (reset boundary):**
+- Use `researchspec/runs/current/gate-ledger.jsonl` to record whether the recovered state is verified, stale, or blocked.
+- If an ARS reset tag exists, register it as compatibility evidence rather than consuming it as the runtime source of truth.
 
-1. Flag OFF produces byte-identical output to pre-v3.6.3 for every mode.
-2. Ledger append-only. Re-runs append new `kind: boundary` entries with bumped `version_label`; resume adds `kind: resume` entries; prior entries are never deleted, reordered, or mutated.
-3. Hash is computed over the JCS-serialized, LF-separated ledger with `hash` set to placeholder `"000000000000"` on the new entry. Any deviation from the protocol doc's byte-serialization rules breaks cross-implementation interoperability.
-4. The `[PASSPORT-RESET: ...]` tag is the sole machine-stable handoff anchor. The `### Resume Instruction` subsection is for user ergonomics.
-5. Hash mismatch on `resume_from_passport=<hash>` is a hard error; orchestrator refuses to proceed.
-6. A `boundary` is consumed only by appending a `kind: resume` entry with matching `consumes_hash`. Double-resume (second resume of an already-consumed boundary) is a hard error.
-7. MANDATORY checkpoints (Stage 2.5 / 4.5, review decisions, Stage 5) remain MANDATORY even when reset co-occurs. Integrity gates are never diluted. If the boundary carries `pending_decision`, resume must re-prompt the user; `next` is advisory. Actual routing comes from the matched option's `next_stage`/`next_mode`, not from the boundary `next` field.
-8. `collaboration_depth_agent` observer fires on FULL checkpoints as before; its output is included in the checkpoint notification regardless of reset state. Observer state does NOT cross reset boundaries.
-9. Resume consumption MUST hold an exclusive advisory lock on the passport file for the entire read-check-append sequence (acquire the lock on the "Acquire passport lock" obligation, hold across the read-ledger, no-prior-resume check, and resume-entry append steps, release only after the append is durable). Releasing the lock between the no-prior-resume check and the resume-entry append reopens the double-resume race this rule exists to prevent. Non-POSIX implementations that cannot provide OS-level exclusion MUST refuse to resume rather than degrade silently (fail with an explicit error surfaced to the user). See §"Concurrency model" in the protocol doc.
+#### Mutation Boundary
+
+- Request changes to `researchspec/runs/current/state.yaml` through the ResearchSpec orchestrator or runtime helper; do not edit run state directly.
+- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
+- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
+
+<!--/rs:a:a988873008fb-->
 
 Full protocol: [`../references/passport_as_reset_boundary.md`](../references/passport_as_reset_boundary.md).
 
@@ -509,7 +486,31 @@ Reference helper: `scripts/slr_lineage.py` `emit(stages, incoming_slr_lineage)`.
 | Stage 4/4' -> 4.5 | Revised/Re-Revised Draft | Schema 4 (revised) | Pass to integrity_verification_agent (final verification) |
 | Stage 4.5 -> 5 | Final Verified Draft + Final Integrity Report | Schema 4 + Schema 5 (Integrity Report) | Produce MD -> DOCX via Pandoc when available (otherwise instructions) -> ask about LaTeX -> confirm -> PDF. Carry forward `experiment_alignment_results[]` + `experiment_intake_declaration` (#260) to formatter surface + Stage 6 histogram |
 
-**All artifacts must carry a Material Passport (Schema 9)** with `origin_skill`, `origin_mode`, `origin_date`, `verification_status`, and `version_label`. From v3.7.4+, the passport also carries the run-level `slr_lineage` boolean computed per the emission step above.
+<!--rs:a:6b5cf894d129-->
+### ResearchSpec Handoff Projection
+
+ARS handoff schemas remain payload guidance. ResearchSpec files own the stable runtime contract.
+
+#### Projection Rules
+
+- Project research intent into `researchspec/specs/project.md`.
+- Project bibliography and corpus metadata into `researchspec/specs/sources.yaml`.
+- Project claim intent and limits into `researchspec/specs/claims.yaml`.
+- Project manuscript structure into `researchspec/specs/manuscript.yaml`.
+
+#### Runtime Records
+
+- Emit every handoff payload as an artifact for runtime registration.
+- Record decisions and gates in their ledgers; manuscript edits use `researchspec/draft-patches/<patch-id>.json`.
+
+#### Mutation Boundary
+
+- Treat `researchspec/specs/project.md`, `researchspec/specs/sources.yaml`, `researchspec/specs/claims.yaml`, `researchspec/specs/manuscript.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
+- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
+- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
+- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
+
+<!--/rs:a:6b5cf894d129-->
 
 **Style Profile carry-through**: If a Style Profile (Schema 10) was produced during `academic-paper` intake (Step 10), carry it through all stages in the Material Passport. The Style Profile is consumed by `draft_writer_agent` (Stage 2) and optionally by `report_compiler_agent` (Stage 1, if applicable). The Style Profile does not affect integrity verification or review stages.
 
@@ -892,7 +893,28 @@ The per-pass resolution counts gain a `terminal_blocked[]` bucket recording each
 
 ## Revision-Round Patch Sequencing (#390)
 
-When a revision stage dispatches `academic-paper` revision mode (Stage 3 → 4 / 3' → 4'; "Resolved next stage: 4 (mode: revision)" — and equally the integrity-FAIL correction rounds, Stage 2.5 FAIL → 2 and Stage 4.5 FAIL → 5 (revision), where the integrity correction list serves as the round's revision requirements; #89 Item 8, destination differences in the integrity-correction variant below — note the FAIL arrow lands on Stage 5's **revision** sub-step, not the PASS-path Stage 4.5 → 5 finalization handoff, and re-verification by the issuing gate is mandatory before finalization), the writer's deliverable is a **patch document**, not a re-emitted draft, and the orchestrator owns the deterministic steps around it. Spec: `docs/design/2026-06-10-390-diff-patch-revision-mode-spec.md` §3.3–§3.6. Protocol + exact commands: `../../academic-paper/references/revision_patch_protocol.md`. The toolchain is Slice A (#423): `scripts/ars_anchorize_draft.py` + `scripts/ars_apply_revision_patch.py`.
+<!--rs:a:4df35b1d7e20-->
+### ResearchSpec Draft Patch Protocol
+
+Revision work emits ResearchSpec draft patches. Applying them is a separate deterministic step guarded by decisions and gates.
+
+#### Patch Inputs
+
+- Read the current draft artifact from `researchspec/runs/current/artifact-registry.json`.
+- Read accepted revision intent from `researchspec/runs/current/decision-ledger.jsonl`.
+
+#### Patch Output
+
+- Emit `researchspec/draft-patches/<patch-id>.json` with block ids, old hashes, operations, and roadmap traceability.
+- Do not silently apply patch operations while generating the patch.
+
+#### Mutation Boundary
+
+- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
+- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
+- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
+
+<!--/rs:a:4df35b1d7e20-->
 
 **Normative order per revision round — nothing may rewrite the draft between steps 1 and 3:**
 
@@ -947,7 +969,28 @@ A **package-level** gate, explicitly NOT the ref-marker stamp path above: the v3
 
 ### Procedure (after the formatter emits the output package)
 
-1. **Resolve the policy.** Read `terminal_policies.submission_package` from the Material Passport. Key absence — or absence of the whole `terminal_policies` object — resolves to `advisory` (the same per-key runtime convention as the existing keys). ALWAYS pass the resolved value explicitly: the CLI is never run policy-less in the pipeline (an unflagged run stamps `policy_slug: null` = a standalone unevaluated report, which can never satisfy the freshness guard below).
+<!--rs:a:96de257a1678-->
+### ResearchSpec Submission Gate
+
+Submission package checks produce gate-ledger records tied to registered artifacts.
+
+#### Gate Inputs
+
+- Resolve formatted manuscript, figures, tables, and supplementary files from `researchspec/runs/current/artifact-registry.json`.
+- Read package policy choices from `researchspec/runs/current/decision-ledger.jsonl` when human selection is required.
+
+#### Ledger Writes
+
+- Return pass, fail, and blocking findings to the submission-package gate helper.
+- Do not advance to delivery while a blocking gate entry remains unresolved.
+
+#### Mutation Boundary
+
+- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
+- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
+- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
+
+<!--/rs:a:96de257a1678-->
 2. **Run the verifier** on the package directory: `python scripts/verify_submission_package.py <package_dir> --policy <resolved>` plus `--passport` / `--venue-profile` / `--join-map` when the run has them — the SAME input set the freshness invocation (step 5) will carry, or the inputs fingerprint can never match.
 3. **Gate on stdout tokens, NEVER on exit codes.** Exit 1 also covers nonterminal advisory/heuristic fails (a strict-mode heuristic fail exits 1 with NO terminal token and must not block — heuristic findings never promote, structurally). Match each token as a line PREFIX, not full-line equality — the emitted lines carry a `strict_eligible_fails=<ids>` / `strict_eligible_not_checked=<ids>` suffix. The terminal signals are exactly:
    - `TERMINAL-BLOCK policy=submission_package` (a strict-eligible check FAILED under `strict`) → return the package to the formatter fix loop, **bounded: 2 fix rounds**, then surface to the scholar (mirrors the revision-loop cap philosophy). One round = dispatch the formatter to remediate the named findings, then re-run the verifier; if the 2nd round still emits the token, STOP and surface — never a 3rd. Never carry a verdict across rounds.

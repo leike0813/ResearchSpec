@@ -66,46 +66,29 @@ Orchestrator obligations on resume:
 
 ## Append-only ledger semantics
 
-Material Passport ledger (`compliance_history[]` + new `reset_boundary` entries) is append-only:
-- Every checkpoint with the flag ON appends one `reset_boundary` entry of kind `boundary` under Schema 9's `reset_boundary` field.
-- Re-running a stage (e.g., after a review rejection) appends a new entry with `version_label` bumped (`v1.0 → v1.1-revised`).
-- `resume_from_passport` consumption appends one entry of kind `resume` to the same ledger, carrying the `consumes_hash` pointer to the `boundary` entry it resolves. This is how resume leaves a trace — no mutation of prior entries.
-- Prior entries are never deleted, reordered, or mutated.
-- Stage-re-run cases produce adjacent entries for the same `stage`; both are preserved.
+<!--rs:a:2001afa86b8b-->
+### ResearchSpec Resume Protocol
 
-### Computing `awaiting_resume` from the ledger
+Reset and resume semantics are preserved, but their runtime state is split across ResearchSpec state, decisions, gates, and artifacts.
 
-A `boundary` entry with hash `H` is considered **awaiting resume** iff no `resume` entry exists later in the ledger with `consumes_hash == H`. Downstream readers (state machine, observers, external audit tools) compute this by a single pass over `reset_boundary[]` — no out-of-band state required.
+#### Compatibility Import
 
-## Concurrency model
+- Emit any imported ARS Material Passport reset payload as compatibility evidence for runtime registration.
+- Project its active stage and pending branch information into `researchspec/runs/current/state.yaml`.
 
-Resume consumption is a three-step read-modify-write on the passport ledger:
+#### Runtime Ownership
 
-1. Read the ledger and locate the target `boundary` entry by `hash`.
-2. Verify no `resume` entry later in the ledger carries `consumes_hash` equal to that hash.
-3. Append a new `resume` entry.
+- Use `researchspec/runs/current/decision-ledger.jsonl` for branch selection.
+- Use `researchspec/runs/current/gate-ledger.jsonl` for stale, unverified, or blocked recovery state.
 
-Without coordination, two processes can complete step 2 in parallel before either reaches step 3, both observe "no prior resume", and both append. The append-only-ledger invariant survives, but the "one boundary, one resume" invariant breaks. To prevent this, every compliant orchestrator implementation MUST hold an exclusive advisory lock on the passport file for the entire read-check-append sequence.
+#### Mutation Boundary
 
-**POSIX requirement.** On POSIX systems the lock is an `fcntl` exclusive advisory lock (`fcntl.flock(fd, fcntl.LOCK_EX)` in Python, `flock(fd, LOCK_EX)` in C). Acquire before step 1, release after step 3. Do not release between steps under any circumstance. Releasing between steps 2 and 3 reopens the exact race this rule prevents.
+- Request changes to `researchspec/runs/current/state.yaml` through the ResearchSpec orchestrator or runtime helper; do not edit run state directly.
+- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
+- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
+- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
 
-**Lock timeout.** Acquisition MUST use a bounded timeout not exceeding 60 seconds; 30 seconds is RECOMMENDED. The passport write is a few-KB append and fsync, so this bound is two orders of magnitude above any reasonable write latency. 60 s is the hard ceiling because a user waiting longer will assume the orchestrator hung; 30 s leaves slack for slow fsync on NFS or sandboxed filesystems. A timeout at this scale indicates a stuck or crashed peer rather than lock contention. Timeout is a hard error; the orchestrator surfaces it to the user with a "passport locked by another session" message and does NOT retry automatically.
-
-**Non-POSIX (Windows).** `fcntl` is unavailable. Compliant implementations use `msvcrt.locking` with `LK_NBLCK`/`LK_LOCK`, or a cross-platform library like `portalocker`. Implementations that cannot provide OS-level exclusion MUST fail loudly on resume with a "concurrency protection unavailable on this platform" error and refuse to consume the boundary. Silent best-effort is forbidden.
-
-**Observability.** The lock is advisory: external readers that don't honor the protocol can still read the passport. Only cooperating writers get safety. This is acceptable because the passport is intended to be consumed by one tool family (ARS-compatible orchestrators).
-
-## Iron rules
-
-1. Flag OFF is pre-v3.6.3 behavior, bit-for-bit.
-2. Ledger is append-only. No exception, no "clean up" operation.
-3. Reset tag is the sole machine-stable handoff. Human-readable `### Resume Instruction` is for user ergonomics; consumers parse the tag.
-4. `systematic-review` with flag ON refuses in-session continuation across FULL checkpoints.
-5. Hash mismatch on resume is a hard error; orchestrator never proceeds on a guessed or coerced hash.
-6. MANDATORY checkpoints are not downgraded by reset; they co-occur.
-7. Hash is computed over the entry with the canonical placeholder `"000000000000"` in the `hash` field, serialized per the byte rules in §"The reset boundary protocol" step 2. `kind: resume` entries are never included in a `boundary` hash computation — the hash covers only prior `boundary` entries plus the new boundary entry itself. Any other convention (exclude-field, variable-length placeholder, post-hoc mutation, including resume entries) breaks cross-implementation interoperability and is forbidden.
-8. A `boundary` entry is "consumed" only by appending a `resume` entry with matching `consumes_hash`. If a `boundary` entry has `pending_decision` set, the orchestrator MUST re-prompt the user on resume and MUST NOT auto-advance using `next`. Each option in `pending_decision.options[]` carries its own routing (`next_stage`/`next_mode`); the boundary entry's `next` field is advisory only and MAY be `null` when all branches terminate or no sensible default exists. Actual routing on resume comes from the matched option's `next_stage`/`next_mode`, not from the boundary `next` field.
-9. Resume consumption MUST hold an exclusive advisory lock on the passport file for the entire read-check-append sequence. Releasing the lock between the no-prior-resume check and the resume-entry append reopens the double-resume race the rule exists to prevent. Non-POSIX implementations that cannot provide OS-level exclusion MUST refuse to resume rather than degrade silently.
+<!--/rs:a:2001afa86b8b-->
 
 ## Interaction with existing features
 

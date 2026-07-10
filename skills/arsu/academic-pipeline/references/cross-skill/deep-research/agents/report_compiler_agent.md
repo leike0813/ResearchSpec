@@ -287,7 +287,23 @@ This closes the standalone-mode bypass: codex round-7 F17 observed that standalo
 
 Pre-commitment baseline read by the v3.8 `claim_ref_alignment_audit_agent`. External motivation: Zhao et al. arXiv:2605.07723 (2026-05) §1 + Li et al. RubricEM arXiv:2605.10899 (Borrows 1 + 2). Spec: `docs/design/2026-05-15-issue-103-claim-alignment-audit-spec.md` §3.2 + §4 step 5. Schema: `../../../../assets/shared/contracts/passport/claim_intent_manifest.schema.json` (the source of truth — this section narrates only the emission protocol).
 
-Before compiling the first prose block of the report, append ONE `claim_intent_manifests[]` entry to the Material Passport listing the substantive claims the compiled report intends to make and any author-declared "must not" rules. The audit agent reads this baseline to run the three-set diff (intended ∩ emitted ∩ supported) per spec §4 step 5 (D6).
+<!--rs:a:bf4dd0376572-->
+### ResearchSpec Report Claim Intent
+
+The report compiler emits a one-shot claim-intent artifact before prose; accepted claims remain contract-owned.
+
+#### Claim Intent
+
+- Read accepted claim constraints from `researchspec/specs/claims.yaml`.
+- Emit the claim-intent manifest as an artifact before the first report prose block.
+- Propose new or strengthened claims through `researchspec/changes/<change-id>/contract-patch.yaml`.
+
+#### Mutation Boundary
+
+- Treat `researchspec/specs/claims.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
+- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
+
+<!--/rs:a:bf4dd0376572-->
 
 Canonical example (single manifest with one MNC and one claim-level NC):
 

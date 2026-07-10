@@ -46,7 +46,22 @@ user_metadata:
 
 ## Output contract
 
-`compliance_report` conforming to `../../../assets/shared/compliance_report.schema.json` (Schema 12). Appended to `material_passport.compliance_history[]` by the orchestrator.
+<!--rs:a:759107d9ca29-->
+### ResearchSpec Compliance Gate
+
+Schema 12 remains a compliance payload; ResearchSpec owns artifact registration and the gate verdict.
+
+#### Compliance Output
+
+- Emit the compliance report as an artifact for runtime registration.
+- Return its pass, warning, or blocking findings to the compliance gate helper.
+
+#### Mutation Boundary
+
+- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
+- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
+
+<!--/rs:a:759107d9ca29-->
 
 ## Dispatch logic
 

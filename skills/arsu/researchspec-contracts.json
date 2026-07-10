@@ -4,6 +4,12 @@
   "source": "vendor/ars",
   "output": "skills/arsu",
   "material_passport_policy": "compatibility_artifact_only_not_runtime_ssot",
+  "anchor_replacement": {
+    "profile_id": "researchspec-anchor-replacement-v2",
+    "coverage_policy": "required_and_recommended",
+    "marker": "<!--rs:a:<marker-id>-->",
+    "diagnostic_anchor_policy": "report_only"
+  },
   "skill_groups": {
     "academic-paper": {
       "profile_id": "researchspec-preflight-v1",
@@ -24,8 +30,8 @@
         "researchspec/draft-patches/<patch-id>.json for manuscript text revisions"
       ],
       "ledgers": [
-        "researchspec/runs/current/decision-ledger.jsonl for human-confirmed decisions",
-        "researchspec/runs/current/gate-ledger.jsonl for validation and gate outcomes"
+        "researchspec/runs/current/decision-ledger.jsonl written by runtime after human-confirmed decisions",
+        "researchspec/runs/current/gate-ledger.jsonl written by validators or gate helpers"
       ],
       "notes": [
         "academic-paper uses the shared first-slice ResearchSpec preflight profile.",
@@ -54,8 +60,8 @@
         "researchspec/draft-patches/<patch-id>.json for manuscript text revisions"
       ],
       "ledgers": [
-        "researchspec/runs/current/decision-ledger.jsonl for human-confirmed decisions",
-        "researchspec/runs/current/gate-ledger.jsonl for validation and gate outcomes"
+        "researchspec/runs/current/decision-ledger.jsonl written by runtime after human-confirmed decisions",
+        "researchspec/runs/current/gate-ledger.jsonl written by validators or gate helpers"
       ],
       "notes": [
         "academic-paper-reviewer uses the shared first-slice ResearchSpec preflight profile.",
@@ -84,8 +90,8 @@
         "researchspec/draft-patches/<patch-id>.json for manuscript text revisions"
       ],
       "ledgers": [
-        "researchspec/runs/current/decision-ledger.jsonl for human-confirmed decisions",
-        "researchspec/runs/current/gate-ledger.jsonl for validation and gate outcomes"
+        "researchspec/runs/current/decision-ledger.jsonl written by runtime after human-confirmed decisions",
+        "researchspec/runs/current/gate-ledger.jsonl written by validators or gate helpers"
       ],
       "notes": [
         "academic-pipeline uses the shared first-slice ResearchSpec preflight profile.",
@@ -114,8 +120,8 @@
         "researchspec/draft-patches/<patch-id>.json for manuscript text revisions"
       ],
       "ledgers": [
-        "researchspec/runs/current/decision-ledger.jsonl for human-confirmed decisions",
-        "researchspec/runs/current/gate-ledger.jsonl for validation and gate outcomes"
+        "researchspec/runs/current/decision-ledger.jsonl written by runtime after human-confirmed decisions",
+        "researchspec/runs/current/gate-ledger.jsonl written by validators or gate helpers"
       ],
       "notes": [
         "deep-research uses the shared first-slice ResearchSpec preflight profile.",

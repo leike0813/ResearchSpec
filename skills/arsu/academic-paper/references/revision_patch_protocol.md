@@ -1,24 +1,23 @@
 # Revision Patch Protocol (#390)
 
 **Spec:** `docs/design/2026-06-10-390-diff-patch-revision-mode-spec.md` (mechanism §3, coverage claim §4, escalation §3.6).
-**Toolchain:** Slice A (#423) — `scripts/_block_parser.py`, `scripts/ars_anchorize_draft.py`, `scripts/ars_apply_revision_patch.py`, schemas under `shared/contracts/patch/`.
-**Audience:** the pipeline orchestrator (Mode A) and any user running revision rounds phase-by-phase across sessions (Mode B). The commands below are the same in both modes — Mode A wraps them, Mode B types them.
+<!--rs:a:323dc5aad0a2-->
+### ResearchSpec Revision Patch Reference
 
-**What this buys, stated honestly:** under patch apply, a block no operation names cannot be silently distorted, because no generation pass runs over it — that is a property of the apply script, not of the model. It does NOT make the edits themselves better, and structural rewrites are not patch-protected (they escalate, §3.6). Every summary of this feature must survive that sentence.
+The patch protocol is ResearchSpec-owned: generate patch JSON, verify preconditions, then apply after approval.
 
----
+#### Patch Contract
 
-## Artifacts and naming
+- Store operations in `researchspec/draft-patches/<patch-id>.json`.
+- Use `researchspec/runs/current/gate-ledger.jsonl` for hash/precondition failures.
+- Use `researchspec/runs/current/decision-ledger.jsonl` for apply approval and unresolved tradeoffs.
 
-| Artifact | Produced by | Convention |
-|---|---|---|
-| Anchored draft | `ars_anchorize_draft.py` (in place) | every block carries `<!--block:BNNNN-->`; IDs never renumbered |
-| Block manifest | same run, sidecar | `<draft>.block-manifest.json` — `base_draft_hash` + `{block_id, old_hash, first_line_excerpt}` per block; the ONLY legitimate hash source for a patch |
-| Patch document | `draft_writer_agent` (revision invocation) | `phase6_*/revision_patch_round<N>.json`, schema `../assets/shared/contracts/patch/revision_patch.schema.json` |
-| Revised draft | `ars_apply_revision_patch.py` | `--output` MUST be a new file (versioned artifact; the base is never modified) |
-| Apply report | same run, sidecar | `<output>.apply-report.json` — ops applied, fresh block IDs, structural flags, `preserved_ratio` |
+#### Mutation Boundary
 
-The apply report shares the revised draft's lifecycle: it is a **required input to re-review and the Stage 4.5 integrity gate** — re-reviewers read it to see exactly which blocks changed (`ops_applied[]`, `fresh_block_ids`, `pure_move_pairs`) and which are machine-guaranteed untouched.
+- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
+- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
+
+<!--/rs:a:323dc5aad0a2-->
 
 ## Mode B command sequence (one revision round)
 

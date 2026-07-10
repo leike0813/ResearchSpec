@@ -91,6 +91,13 @@ export interface ContractProfile {
   full_matrix_injection: false;
 }
 
+export interface AnchorReplacementCompatibility {
+  profile_id: string;
+  coverage_policy: "required_and_recommended";
+  marker: "<!--rs:a:<marker-id>-->";
+  diagnostic_anchor_policy: "report_only";
+}
+
 export interface ContractInjectionResult {
   injected: boolean;
   profile_id: string;
@@ -103,6 +110,7 @@ export interface ContractCompatibilityManifest {
   source: string;
   output: string;
   material_passport_policy: string;
+  anchor_replacement: AnchorReplacementCompatibility;
   skill_groups: Record<string, ContractProfile>;
 }
 
@@ -131,6 +139,7 @@ export interface ConversionResult {
   skill_groups: Record<string, SkillConversion>;
   inventory: Inventory;
   contract_manifest: ContractCompatibilityManifest;
+  anchor_replacements: import("./anchors/types.js").AnchorReplacementPlan | null;
   validation: ValidationResult | null;
 }
 
@@ -161,7 +170,9 @@ export interface ConversionManifest {
     generated_groups: string[];
     material_passport_policy: string;
     full_matrix_injection: false;
+    anchor_replacement: AnchorReplacementCompatibility;
   };
+  anchor_replacements: Omit<import("./anchors/types.js").AnchorReplacementPlan, "spans_by_source">;
   validation_summary: ValidationResult;
 }
 

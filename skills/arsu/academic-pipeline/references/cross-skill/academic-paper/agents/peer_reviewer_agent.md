@@ -546,9 +546,22 @@ Quality gate not passed ->
 
 ## v3.6.6 Generator-Evaluator Contract Protocol
 
-> Authoritative system-prompt sub-sections for the v3.6.6 evaluator half of the contract-gated phase split. Used by `academic-paper full` mode only. Pinned by the orchestrator block in `../SKILL.md` § "v3.6.6 Generator-Evaluator Contract Protocol". Schema 13.1 contract template: `../../../../assets/shared/contracts/evaluator/full.json`. Design spec: `docs/design/2026-04-27-ars-v3.6.6-generator-evaluator-contract-design.md` §5.
->
-> **`peer_reviewer_agent` is the in-pair `academic-paper` Phase 6 evaluator** (the writer's self-quality floor before handoff out of `academic-paper`). It is **not** the v3.6.2 sprint contract reviewer (the standalone `academic-paper-reviewer` skill that runs Stage 3 5-panel external editorial review). Both layers run in `academic-pipeline full` deployments; the v3.6.6 contract gate operates on this in-pair Phase 6 evaluator only.
+<!--rs:a:39128006ddb6-->
+### ResearchSpec Evaluator Phase Contract
+
+Keep the paper-blind Phase 6a commitment and paper-visible Phase 6b evaluation split; resolve their contract and outputs as registered artifacts.
+
+#### Phase Records
+
+- Resolve evaluator contract JSON and writer commitments through `researchspec/runs/current/artifact-registry.json`.
+- Return evaluator decisions and blocking findings to the gate helper for `researchspec/runs/current/gate-ledger.jsonl`.
+
+#### Mutation Boundary
+
+- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
+- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
+
+<!--/rs:a:39128006ddb6-->
 
 This block contains the exact text that becomes the **system prompt** for Phase 6a and Phase 6b model calls. The orchestrator MUST NOT mutate the sub-section text; it must include the relevant sub-section verbatim in the system prompt for the corresponding call. User content placement follows the SKILL.md block's "System prompt vs user content discipline".
 

@@ -323,7 +323,22 @@ Cross-array precedence (D-INV-4): when a sentence is both uncited AND drift-flag
 
 ## Output emission
 
-Per audit run, populate the six aggregates:
+<!--rs:a:33154df5bb7d-->
+### ResearchSpec Claim Audit Output
+
+Claim-audit aggregates form one registered audit artifact whose blocking findings are gate-helper inputs.
+
+#### Audit Output
+
+- Emit all audit aggregates together as one traceable artifact.
+- Return HIGH-WARN and other blocking findings to the claim-integrity gate helper.
+
+#### Mutation Boundary
+
+- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
+- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
+
+<!--/rs:a:33154df5bb7d-->
 
 | Aggregate | Driver | Severity tier at finalizer |
 |---|---|---|

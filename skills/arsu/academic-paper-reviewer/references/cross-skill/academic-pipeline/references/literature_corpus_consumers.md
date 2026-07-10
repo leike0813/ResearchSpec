@@ -6,7 +6,22 @@
 
 ## What this document covers
 
-This is the contract every literature-reading consumer agent must follow. The v3.6.4 input port (`../../../../assets/shared/contracts/passport/literature_corpus_entry.schema.json`) defines what enters a Material Passport; this document defines how Phase 1 agents read it.
+<!--rs:a:6aa4ef1ee975-->
+### ResearchSpec Literature Consumer Contract
+
+Literature consumers read the canonical corpus through ResearchSpec while preserving the upstream no-mutation and fallback rules.
+
+#### Corpus Inputs
+
+- Read source ids, citation keys, inclusion state, and trust metadata from `researchspec/specs/sources.yaml`.
+- Resolve bibliography and screening artifacts through `researchspec/runs/current/artifact-registry.json`.
+
+#### Mutation Boundary
+
+- Treat `researchspec/specs/sources.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
+- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
+
+<!--/rs:a:6aa4ef1ee975-->
 
 The `corpus-first, search-fills-gap` flow has five steps; the four Iron Rules are non-negotiable; the PRE-SCREENED block is the reproducibility surface; failures are surfaced honestly via the `[CORPUS PARSE FAILURE: <cause>]` graceful fallback.
 

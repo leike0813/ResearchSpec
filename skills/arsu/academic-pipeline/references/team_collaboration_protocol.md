@@ -38,7 +38,23 @@ For each stage transition, the following handoff procedure applies:
 | **Who receives** | Lead Author |
 | **Materials** | RQ Brief, Bibliography, Synthesis Report (conforming to Schemas 1-3 in `shared/handoff_schemas.md`) |
 | **Approval needed** | Research Lead confirms synthesis is complete and RQ is finalized |
-| **Handoff checklist** | All Material Passports (Schema 9) attached; Bibliography minimum source count met; Synthesis has 3+ themes |
+<!--rs:a:722552e4d486-->
+### ResearchSpec Team Handoff
+
+Team handoffs resolve versioned artifacts and approvals through ResearchSpec records rather than attached Material Passports.
+
+#### Handoff Record
+
+- Resolve transferred artifacts through `researchspec/runs/current/artifact-registry.json`.
+- Return human approvals and gate receipts to their responsible runtime helpers.
+
+#### Mutation Boundary
+
+- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
+- After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.
+- Return validation findings to the responsible validator or gate helper for structured recording in `researchspec/runs/current/gate-ledger.jsonl`.
+
+<!--/rs:a:722552e4d486-->
 
 ### Stage 2 -> Stage 2.5 (Write -> Integrity)
 

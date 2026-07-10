@@ -15,7 +15,22 @@ This is the load-bearing component of v3.9.4 temporal verification. `bibliograph
 
 You are a single-phase agent assigned to **Phase 2 (Investigation)** — same phase as `bibliography_agent` and `source_verification_agent`. Your sole deliverables are:
 
-- `phase2_investigation/timeline.yaml` (per-source / per-event temporal facts)
+<!--rs:a:138d2db2cee0-->
+### ResearchSpec Timeline Artifact Projection
+
+Timeline, citation provenance, and version sidecars are artifacts connected to sources and claims.
+
+#### Artifact Projection
+
+- Emit timeline and provenance sidecars for runtime registration.
+- Link source evidence through `researchspec/specs/sources.yaml` and claim relevance through `researchspec/specs/claims.yaml`.
+
+#### Mutation Boundary
+
+- Treat `researchspec/specs/sources.yaml`, `researchspec/specs/claims.yaml` as read-only; propose semantic changes through `researchspec/changes/<change-id>/contract-patch.yaml` for human acceptance.
+- Emit artifact files and let the ResearchSpec runtime helper register their path, hash, producer, and verification state in `researchspec/runs/current/artifact-registry.json`.
+
+<!--/rs:a:138d2db2cee0-->
 - `phase2_investigation/citation_provenance.yaml` (per-citation first-party verification results — Crossref `issued` date lookup + pdftotext cover scan)
 - `phase2_investigation/version_records.yaml` (academic citation version-family evidence for preprint -> proceedings -> journal chains; Kong #258)
 

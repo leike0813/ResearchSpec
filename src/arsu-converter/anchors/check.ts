@@ -2,6 +2,8 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 
 import { pathExists } from "../fs-utils.js";
+import { findUncoveredRuntimeSurfaces } from "./coverage.js";
+import { compactMarkerId } from "./markers.js";
 import {
   CONTRACT_ANCHORS_PATH,
   generateUpstreamManifest,
@@ -10,30 +12,8 @@ import {
   type UpstreamManifestFile,
   UPSTREAM_MANIFEST_PATH,
 } from "./manifest.js";
-
-export type AnchorSeverity = "required" | "recommended" | "diagnostic";
-
-export interface ContractAnchor {
-  id: string;
-  source_path: string;
-  owner_skill: string;
-  contract_category: string;
-  severity: AnchorSeverity;
-  match_hints: {
-    headings?: string[];
-    snippets?: string[];
-    keywords?: string[];
-  };
-  replacement_intent: string;
-  future_template_id: string;
-}
-
-export interface ContractAnchorFile {
-  schema_version: "researchspec.arsu.contract-anchors.v0";
-  upstream_source: "vendor/ars";
-  audited_commit: string;
-  anchors: ContractAnchor[];
-}
+import { hasReplacementTemplate } from "./templates.js";
+import type { AnchorSeverity, ContractAnchor, ContractAnchorFile, CoverageDecision } from "./types.js";
 
 export interface AnchorValidationResult {
   ok: boolean;
@@ -53,6 +33,8 @@ export async function validateAnchorAssets(repoRoot = process.cwd()): Promise<An
     if (anchors.audited_commit !== manifest.upstream.commit) {
       errors.push(`Anchor audited commit ${anchors.audited_commit} does not match manifest commit ${manifest.upstream.commit}.`);
     }
+    const uncovered = await findUncoveredRuntimeSurfaces(repoRoot, anchors, manifest.files.map((file) => file.path));
+    errors.push(...uncovered.map((finding) => `Uncovered runtime contract surface: ${finding}.`));
   }
 
   if (anchors) {
@@ -106,14 +88,20 @@ async function validateAnchors(
   warnings: string[],
 ): Promise<void> {
   const seen = new Set<string>();
+  const markerIds = new Set<string>();
   for (const anchor of anchorFile.anchors) {
     if (seen.has(anchor.id)) {
       errors.push(`Duplicate anchor id: ${anchor.id}.`);
     }
     seen.add(anchor.id);
+    const markerId = compactMarkerId(anchor.id);
+    if (markerIds.has(markerId)) errors.push(`Compact marker id collision: ${markerId}.`);
+    markerIds.add(markerId);
 
-    if (anchor.severity === "required" && (!anchor.replacement_intent || !anchor.future_template_id)) {
-      errors.push(`Required anchor ${anchor.id} must include replacement intent and future template id.`);
+    if (anchor.severity === "required" || anchor.severity === "recommended") {
+      validateSemanticProfile(anchor, errors);
+    } else if (anchor.replacement_scope !== undefined) {
+      errors.push(`Diagnostic anchor ${anchor.id} must not declare replacement_scope.`);
     }
 
     const hintCount = countHints(anchor);
@@ -129,7 +117,10 @@ async function validateAnchors(
 
     const content = await readFile(sourcePath, "utf8");
     validateHintPresence(anchor, content, errors, warnings);
+    validateReplacementScope(anchor, content, errors);
   }
+
+  validateCoverageDecisions(anchorFile.coverage_decisions, errors);
 }
 
 async function validateManifest(repoRoot: string, expected: UpstreamManifest, errors: string[]): Promise<void> {
@@ -190,6 +181,33 @@ function validateHintPresence(
   }
 }
 
+function validateReplacementScope(anchor: ContractAnchor, content: string, errors: string[]): void {
+  if (anchor.severity === "diagnostic") return;
+  const scope = anchor.replacement_scope;
+  if (!scope) {
+    errors.push(`Replaceable anchor ${anchor.id} must declare replacement_scope.`);
+    return;
+  }
+  for (const [label, snippet] of [["start", scope.start_snippet], ["end", scope.end_snippet]] as const) {
+    if (!snippet.trim()) {
+      errors.push(`Replaceable anchor ${anchor.id} has an empty ${label} boundary.`);
+    } else if (!content.includes(snippet)) {
+      errors.push(`Replaceable anchor ${anchor.id} ${label} boundary not found: ${snippet}.`);
+    }
+  }
+}
+
+function validateCoverageDecisions(decisions: CoverageDecision[], errors: string[]): void {
+  const seen = new Set<string>();
+  for (const decision of decisions) {
+    if (seen.has(decision.id)) errors.push(`Duplicate coverage decision id: ${decision.id}.`);
+    seen.add(decision.id);
+    if (!decision.match_snippet.trim() || !decision.rationale.trim()) {
+      errors.push(`Coverage decision ${decision.id} must include a match snippet and rationale.`);
+    }
+  }
+}
+
 function extractHeadingTitles(content: string): string[] {
   const headings: ManifestHeading[] = [];
   for (const line of content.split("\n")) {
@@ -211,11 +229,13 @@ function countHints(anchor: ContractAnchor): number {
 function isAnchorFile(value: unknown): value is ContractAnchorFile {
   if (!isRecord(value)) return false;
   return (
-    value.schema_version === "researchspec.arsu.contract-anchors.v0" &&
+    value.schema_version === "researchspec.arsu.contract-anchors.v2" &&
     value.upstream_source === "vendor/ars" &&
     typeof value.audited_commit === "string" &&
     Array.isArray(value.anchors) &&
-    value.anchors.every(isAnchor)
+    value.anchors.every(isAnchor) &&
+    Array.isArray(value.coverage_decisions) &&
+    value.coverage_decisions.every(isCoverageDecision)
   );
 }
 
@@ -229,7 +249,33 @@ function isAnchor(value: unknown): value is ContractAnchor {
     isSeverity(value.severity) &&
     isMatchHints(value.match_hints) &&
     typeof value.replacement_intent === "string" &&
-    typeof value.future_template_id === "string"
+    typeof value.template_id === "string" &&
+    isOptionalReplacementScope(value.replacement_scope)
+  );
+}
+
+function validateSemanticProfile(anchor: ContractAnchor, errors: string[]): void {
+  if (!anchor.replacement_intent || !anchor.template_id) {
+    errors.push(`Replaceable anchor ${anchor.id} must include replacement intent and template id.`);
+  } else if (!hasReplacementTemplate(anchor.template_id)) {
+    errors.push(`Replaceable anchor ${anchor.id} references unknown template id: ${anchor.template_id}.`);
+  }
+}
+
+function isCoverageDecision(value: unknown): value is CoverageDecision {
+  return isRecord(value) &&
+    typeof value.id === "string" &&
+    typeof value.source_path === "string" &&
+    typeof value.match_snippet === "string" &&
+    value.disposition === "retain" &&
+    typeof value.rationale === "string";
+}
+
+function isOptionalReplacementScope(value: unknown): value is ContractAnchor["replacement_scope"] {
+  return value === undefined || (
+    isRecord(value) &&
+    typeof value.start_snippet === "string" &&
+    typeof value.end_snippet === "string"
   );
 }
 
