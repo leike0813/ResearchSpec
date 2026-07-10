@@ -1,270 +1,176 @@
-# ResearchSpec Skill / Slash Command Design：CLI Companion 设计
+# ResearchSpec Companion Skill / Command Design
 
-## 0. 文档状态与事实源
+## 0. 定位与事实源
 
-本文定义 ResearchSpec CLI 的 companion skill / slash command 设计。它不是实现级
-adapter path 规格，也不冻结具体命令文件模板、JSON stdout shape、exit code 表或
-TypeScript DTO。
+ResearchSpec companion 是 CLI 之上的 agent-facing workflow 层。它负责理解意图、
+组合只读视图、解释证据与风险、识别停止点、向用户取得明确选择，并在写后复查。
+CLI 仍是 schema validation、target resolution、dry-run、write plan、receipt、registry、
+ledger、lifecycle 与 generated ownership 的唯一确定性执行入口。
 
-事实源：
+实现事实源位于 `src/adapters/companion/`：一个 typed manifest 注册全部 workflow，
+每个 workflow 由独立 TypeScript 模块维护，通用 CLI 纪律在 build 时内联。最终安装的
+skill 是自包含的，不依赖 companion runtime reference、script、database 或 LLM API。
 
-- CLI interface：`docs/cli_interface_design.md`
-- Product requirements：`docs/prd_proposal.md`
-- Architecture：`docs/arch_design_proposal.md`
-- Contract schemas：`docs/contract_schema_design.md`
-- Workflow-contract mapping：`docs/arsu_workflow_contract_design.md`
-- Project rules：`AGENTS.md`
-- OpenSpec reference：`references/OpenSpec`
+ARSU 与 companion 是两组独立 intent。ARSU 负责文献研究、证据综合、论文写作、
+稿件审查、revision strategy 和 manuscript draft-patch authoring；companion 负责安全地
+导航和操作 ResearchSpec contract lifecycle。
 
-OpenSpec 的重要参考不是命令数量，而是职责分离：terminal CLI 是稳定执行引擎，
-agent chat 中的 skill / slash command 是高摩擦流程的方向盘。ResearchSpec 采用
-同一原则，但不机械镜像 CLI 命令。
+## 1. 默认 8-Skill Surface
 
-## 1. Companion 定位
+| ID | Skill | 主要触发 | 不负责 |
+| --- | --- | --- | --- |
+| `explore` | `researchspec-explore` | 理解 workspace、contracts、claims、artifacts、gates、decisions | 外部文献研究、写入 |
+| `propose` | `researchspec-propose` | 把高影响语义变更变成 pending contract change | 接受或应用 change |
+| `check` | `researchspec-check` | deterministic validation、diagnostic 分类与授权修复 | semantic readiness、论文审稿 |
+| `verify` | `researchspec-verify` | evidence-linked coherence/readiness scorecard | schema 修复、稿件 peer review |
+| `next` | `researchspec-next` | 跨会话恢复并给出一个首选下一步 | 执行决定、归档或 stage transition |
+| `context` | `researchspec-context` | 在 handoff stdout/write 与 pack 之间选择 | 修改 SSOT、任意备份 |
+| `decide` | `researchspec-decide` | review、dry-run、确认、accept/reject/postpone | author proposal/draft patch |
+| `archive` | `researchspec-archive` | resolved evidence 检查与 lifecycle archive | 补造 receipt/gate/decision |
 
-ResearchSpec companion commands 是由 `researchspec init` 或 `researchspec update`
-安装到用户选择的 agent tool 中的 agent-facing 指令。它们帮助 agent 正确调用 CLI、
-解释诊断、读取必要上下文、向用户确认高影响决策，并在遇到格式不规范、spec 冲突或
-缺失记录时进行语义修复。
+不为 `setup`、`init`、`update`、`status`、`list`、`show`、`handoff`、`pack`、`apply`
+单独建立 skill。前两者发生在 project-local skills 可用之前；其余是八个 workflow 内部
+按意图组合的机械命令，单独暴露只会造成重叠触发或绕开安全流程。
 
-Companion commands 不替代 CLI：
-
-- CLI 负责 workspace 发现、schema/check、dry-run、写入、归档、handoff 渲染和
-  machine-readable 输出。
-- Agent 负责理解用户意图、解释检查结果、判断修复路径、整理风险、请求用户确认。
-- ResearchSpec runtime 的权威文件仍由 CLI、helper、validator 或明确文件编辑产生。
-
-Companion commands 也不替代 ARSU skills。ARSU-derived skills 承担研究、写作、
-审稿和修订等语义 workflow；ResearchSpec companion commands 只维护和推进
-ResearchSpec contract workspace。
-
-## 2. 选择原则
-
-第一版不为每个 CLI 命令生成 companion。只有满足以下任一条件的操作才值得配
-skill / slash command：
-
-| 条件 | 说明 |
-| --- | --- |
-| 用户手动操作容易漏步骤 | 需要先 list/show/check/dry-run，再确认写入 |
-| CLI 可能因材料不规范失败 | 需要 agent 读取 artifact、修复格式或补齐说明 |
-| 需要语义判断 | 例如 spec 冲突、claim 影响、gate blocker 的学术含义 |
-| 需要人类确认 | agent 必须解释风险并等待用户决定 |
-| 失败成本高 | 例如错误接受 contract patch、归档未完成 change、忽略 blocking gate |
-
-不配 companion 的命令：
-
-| CLI command | 原因 |
-| --- | --- |
-| `researchspec pack` | 机械打包，CLI dry-run 足够清楚 |
-| `researchspec handoff` | 生成 rendered view，不需要 agent 介入 |
-| `researchspec status` | 常规状态查询可直接运行 CLI |
-| `researchspec list` | 常规列表查询可直接运行 CLI |
-| `researchspec show` | 常规对象查看可直接运行 CLI |
-| `researchspec init` / `researchspec update` | 主要是 terminal TUI 或安装刷新流程 |
-
-不生成这些 companion ids：`researchspec-pack`、`researchspec-handoff`、
-`researchspec-status`、`researchspec-list`、`researchspec-show`、
-`researchspec-init`、`researchspec-update`。
-
-## 3. 命名与投递
-
-ResearchSpec 使用一个 canonical intent 渲染成不同 agent tool 的命令或 skill：
-
-| Canonical id | Colon slash form | Dash slash form |
-| --- | --- | --- |
-| `researchspec-check` | `/researchspec:check` | `/researchspec-check` |
-| `researchspec-decide` | `/researchspec:decide` | `/researchspec-decide` |
-| `researchspec-archive` | `/researchspec:archive` | `/researchspec-archive` |
-| `researchspec-next` | `/researchspec:next` | `/researchspec-next` |
-
-工具适配规则：
-
-- 支持 skills 的工具可安装为 skill folder，例如 `researchspec-check/SKILL.md`。
-- 只支持 slash commands 的工具可安装为命令文件。
-- 支持两者的工具可以同时安装，但两者必须来自同一个 canonical intent。
-- 用户只需要记住当前 agent tool 展示的形式；语义以 canonical id 为准。
-
-第一版不冻结具体 adapter 目标路径。路径、frontmatter、metadata 和 generated marker
-由后续 adapter implementation spec 定义。
-
-## 4. 通用运行模式
-
-每个 companion command 都遵守同一运行纪律：
-
-1. 定位 workspace，并优先调用 CLI 的 `--json` 或 `--dry-run`。
-2. 如果用户未指定对象，使用 `researchspec list ... --json` 或相关 status 输出列出候选。
-3. 候选不唯一时询问用户，不猜测、不自动选择。
-4. 对高影响写入，先展示 dry-run 摘要和风险，再等待用户确认。
-5. 需要修复文件时，先说明诊断、影响和目标 surface，再做最小修改。
-6. 写入后重新运行相关 `check` 或 `status`。
-7. 最终输出只汇报已发生的写入、仍存在的 blocker 和下一步。
-
-禁止行为：
-
-- 不直接手写权威 JSONL ledger。
-- 不手工拼接 CLI 本应生成的 machine-readable 输出。
-- 不静默接受 high-impact research decisions。
-- 不把 ARS Material Passport 当作 runtime SSOT。
-- 不运行 ARSU semantic research/writing/review workflow，除非用户明确调用对应 ARSU skill。
-
-## 5. `researchspec-check`
-
-用途：解释 `researchspec check` 的 diagnostics，判断哪些问题可以由 agent 修复，哪些必须
-交给用户决策。
-
-触发：
+## 2. Source Architecture 与 Skill 厚度
 
 ```text
-/researchspec:check
-/researchspec:check contracts
-/researchspec-check artifacts
+src/adapters/companion/
+  types.ts
+  shared-guidance.ts
+  manifest.ts
+  render.ts
+  index.ts
+  workflows/
+    explore.ts
+    propose.ts
+    check.ts
+    verify.ts
+    next.ts
+    context.ts
+    decide.ts
+    archive.ts
 ```
 
-运行流程：
+- Workflow module 拥有完整 canonical instructions；不把八个 skill 的正文塞入一个文件。
+- Manifest 是唯一注册表，提供稳定 ID、skill ID、description、metadata 与 workflow body。
+- `shared-guidance.ts` 只保存真正跨 workflow 的 authority、selector、confirmation 和
+  failure-class 纪律，由 renderer 内联到每个 `SKILL.md`。
+- Command projector 使用同一 manifest，只生成“调用已安装 skill”的短 wrapper，不复制
+  workflow。
 
-1. 运行 `researchspec check [target] --json`。
-2. 按 blocker、warning、diagnostic 分组解释结果。
-3. 标出可机械修复、可语义修复、必须用户决策、应忽略或记录为 upstream diagnostics 的项。
-4. 对可修复项提出最小修改计划；高影响合同变化必须转成 pending item 或要求用户确认。
-5. 修复后重新运行 `researchspec check [target] --json`。
+每个 `SKILL.md` 必须包含 Mission、When to Use、Do Not Use、Inputs、CLI Examples、
+Workflow、Decision Table、Failure Recovery、Output Contract、Guardrails、Completion 和
+内联 Shared CLI Discipline。厚度以状态分支、停止条件和可执行性审查，不以行数或全文
+snapshot 审查。
 
-Agent 可做：
+## 3. 公共执行纪律
 
-- 解释字段缺失、cross-reference 断裂、artifact path/hash 异常。
-- 读取相关 docs/artifacts，判断是否需要 contract patch。
-- 对 ResearchSpec-authored docs 或 contracts 做最小修复。
+1. 使用最近的 `researchspec/` workspace；用户指定 `--workspace` / `--cwd` 时服从显式值。
+2. Inspection 与 preview 使用 JSON envelope，按 `ok/data/diagnostics/error` 解释。
+3. 使用 `status/list/show` 获取 canonical selector；候选不唯一时停止并让用户选择。
+4. Decision event 是导航 evidence，必须映射回 `change_id`、`draft_patch_id` 或 `gate_id`。
+5. 写 workflow 先收集完整 semantic payload，再运行完整命令的 `--dry-run --json`。
+6. 向用户解释 before/after meaning、paths、evidence 与风险，取得明确确认后才执行同一命令。
+7. `--yes` 只能跳过 pending proposal 等低风险创建 prompt，不能代表 research decision、
+   lifecycle override 或 generated-file ownership 授权。
+8. 写后用 `show/status/check` 复查权威状态；process exit 不是唯一成功证据。
+9. Exit 2 修正参数/schema；exit 1 处理 domain blocker；exit 3 保留 existing target 并处理
+   ownership/路径冲突；exit 4 停止并报告可复现内部错误。
 
-Agent 不做：
+不得手写 CLI-owned receipt、registry、ledger、manifest 或 lifecycle status；不得通过降低
+claim/gate 语义来让检查通过；不得把 ARSU-derived history/version 文本本身当成阻断。
 
-- 因 ARSU-derived version/history/changelog 文本直接阻断。
-- 为了通过检查而降低 claim/gate 语义强度。
-- 静默改写 stable specs。
+## 4. Workflow Contracts
 
-## 6. `researchspec-decide`
+### 4.1 Explore
 
-用途：帮助用户处理 pending item，包括 contract change、draft patch、gate override 和
-accepted limitation。
+组合 `status`、窄范围 `list`、canonical `show` 和必要的 targeted `check`。输出 observed
+evidence、relationships、unknowns、contradictions、options 和下一 owner。只读；当用户
+考虑高影响 semantic change 时，只整理 target/current/evidence/impact 并路由 propose。
 
-触发：
+### 4.2 Propose
+
+先检查当前 target 与 supporting evidence，再生成 strict JSON input。YAML 只允许 dot 与
+唯一 `collection[id]` selector；Markdown 只允许 `replace section[Heading]`。运行完整
+`propose` dry-run，解释三文件 create-only plan 和 semantic risk，确认后创建 pending
+change，再用 show/list/check 复查。它不改 stable specs，也不接受 proposal。
+
+### 4.3 Check
+
+针对 `all/contracts/runtime/artifacts/tools` 运行 deterministic check，按 blocking、severity、
+code、path 分组。将修复分为 mechanical、semantic、human-decision：前者在授权后最小修复
+并重跑相同 check；semantic 路由 propose；pending choice 路由 decide。`--strict` 只用于
+明确要求 zero-warning 的 completion rule。
+
+### 4.4 Verify
+
+以 deterministic check 通过为前置，检查 RQ/scope、sources、claim support/strength/limits、
+manuscript constraints、workflow artifacts、gates、decisions 与 lifecycle evidence。每个
+pass/concern/blocker/unknown 必须引用 stable ID 或 workspace-relative path。它不写 gate、
+report 或文件；schema 问题路由 check，contract change 路由 propose，稿件质量路由 ARSU
+reviewer。
+
+### 4.5 Next
+
+固定优先级：blocking diagnostic → blocking gate → pending change/patch → archivable item →
+current stage/ARSU skill。只返回一个 primary action 和最多两个次选，包含 owner、evidence、
+blockers、inputs 与 completion test。缺少 stage skill mapping 时报告缺失，不猜测。
+
+### 4.6 Context
+
+根据 audience、transport、persistence 选择 `handoff --stdout`、handoff write 或 deterministic
+pack。Pack 默认不带 artifacts；只有在 recipient need、privacy/licensing/path safety/size
+可接受时才用 `--include-artifacts`。写 variant 必须 dry-run、说明 overwrite/exposure、明确
+确认并用 path/hash/manifest 复查。Derived view 不是 SSOT。
+
+### 4.7 Decide
+
+它是唯一 public semantic apply workflow。先消歧并 show item，再收集 decision、human actor
+与 reason；使用完整 payload dry-run，检查 target/current value、base hash、evidence、receipt、
+registry 和 ledger writes；解释 semantic effect 并明确确认后执行完全相同命令。Accept 时
+CLI 会二次运行与 propose 相同的 target resolver，任何 YAML/Markdown current-value drift
+都会阻断。写后复查 receipt/status/check。
+
+### 4.8 Archive
+
+只接受 resolved change/patch。检查 matching decision、linked blocking gate、registered
+receipt path/hash/content 和 destination collision；dry-run 后解释 source/target 与保留的
+ledger/registry evidence，再确认移动。它不补造 evidence，不处理 pending item、current run、
+backup 或 OpenSpec change。
+
+## 5. Delivery Matrix
+
+每个 selected tool 的 project-local skill 路径为：
 
 ```text
-/researchspec:decide
-/researchspec:decide <item>
-/researchspec-decide <item>
+<skillsDir>/skills/researchspec-<id>/SKILL.md
 ```
 
-运行流程：
+- 31 个 registered tools 全部安装 8 个 companion skills 和 4 个 ARSU skill trees。
+- 28 个 command-capable tools 生成 8 个 companion wrappers 和 4 个 ARSU wrappers。
+- ForgeCode、Kimi、Mistral Vibe 只安装 skills，并产生非阻断 `commands_not_supported`。
+- Codex command prompts 延续 registry 定义的 shared-global `$CODEX_HOME/prompts` 路径。
+- Markdown/TOML/frontmatter、colon/dash 与参数注入由既有 tool formatter 决定，不新增平台特判。
 
-1. 如果没有 item，运行 `researchspec list changes --json` 并让用户选择。
-2. 运行 `researchspec show <item> --json`，读取相关 artifacts。
-3. 概括 item 的来源、风险、将改变的 specs/artifacts，以及是否影响 claims、manuscript
-   或 workflow state。
-4. 运行 `researchspec decide <item> --dry-run --json`。
-5. 向用户请求明确选择：accept、reject 或 postpone。
-6. 用户确认后运行 `researchspec decide <item> --json`。
-7. 写入后运行 `researchspec status --json`，说明后续是否应 archive。
+所有生成文件进入同一 write plan 和 `tool-installation-manifest.json`。Unknown existing path
+按 user-owned conflict 保留；manifest-owned hash drift 默认保留；`--force` 只能覆盖已登记
+generated file。旧 manifest-owned `references/cli-discipline.md` 不再是 desired output：hash
+未漂移则 stale cleanup，用户修改则保留并报告 `generated_file_drift`。
 
-关键规则：
+## 6. 验收边界
 
-- 用户没有明确选择时，不得执行 accept/reject。
-- 如果 dry-run 显示会修改 high-impact specs，必须用自然语言解释影响。
-- 如果 item 内容不完整，先修复或要求补充，不能用猜测填补。
+- Manifest 恰好 8 个唯一 companion IDs，skill 与 command projection parity，ARSU intents 独立。
+- 每个 skill 检查必要章节、关键状态分支、CLI example、confirmation、failure recovery、output
+  contract 和 near-miss；不锁定全文、hash、行数或大 snapshot。
+- Delivery 从 registry 推导 31×8 和 28×8，不为具体工具复制规则。
+- `propose → decide accept → receipt/registry/ledger → archive` 有端到端验收。
+- Dry-run 无写入、create-only/manifest ownership、drift、force、Codex shared-global 和 stale
+  cleanup 均保持现有确定性契约。
 
-## 7. `researchspec-archive`
+## 7. 非目标
 
-用途：归档已处理的 contract change 或 draft patch。它参考 OpenSpec archive 的交互模式：
-先选对象，再检查完成度，遇到可修复问题时由 agent 介入，最后 dry-run 与确认归档。
-
-触发：
-
-```text
-/researchspec:archive
-/researchspec:archive <item>
-/researchspec-archive <item>
-```
-
-运行流程：
-
-1. 如果没有 item，运行 `researchspec list changes --json`，筛出 resolved items。
-2. 候选不唯一时询问用户；不要根据最近对话自动归档。
-3. 运行 `researchspec show <item> --json` 和 `researchspec archive <item> --dry-run --json`。
-4. 检查是否存在未应用 patch、缺失 decision record、blocking gate、格式不规范或 spec 冲突。
-5. 对可修复问题，读取必要文件并提出最小修复；修复后重新 dry-run。
-6. 对仍存在的 warning，向用户说明风险并请求确认是否继续。
-7. 用户确认后运行 `researchspec archive <item> --json`。
-8. 输出归档路径、是否有残留 warning，以及下一步。
-
-Agent 可介入的典型问题：
-
-- pending item 已被人工处理但缺少 receipt 或 decision 引用。
-- draft patch metadata 与实际 artifact 不一致。
-- contract patch 已合并但 active change 仍未标记 resolved。
-- check 输出显示 spec 冲突，需要 agent 读相关 specs 后整理修复方案。
-
-Agent 不做：
-
-- 归档 pending item。
-- 把 `runs/current` 整体归档。
-- 因为用户说“差不多可以了”就跳过 dry-run。
-- 将 archive 当成 pack 或备份命令。
-
-## 8. `researchspec-next`
-
-用途：基于 status/check 解释当前最合理的下一步。它是导航命令，不是执行命令。
-
-触发：
-
-```text
-/researchspec:next
-/researchspec-next
-```
-
-运行流程：
-
-1. 运行 `researchspec status --json`。
-2. 如存在 blocker 或 stale diagnostics，运行 `researchspec check --json`。
-3. 给出一个首选下一步和最多两个备选项。
-4. 如果下一步需要 companion command，给出对应命令。
-5. 如果下一步是 ARSU semantic workflow，只说明应调用相应 ARSU skill，不直接执行。
-
-输出原则：
-
-- 不推进 workflow stage。
-- 不接受或归档 pending item。
-- 不生成 handoff 或 pack。
-- 只给出可执行、可验证的下一步。
-
-## 9. Skill 厚度判断
-
-第一版 companion commands 采用轻量 reference-backed / script-assisted 设计：
-
-| 判断 | 结论 |
-| --- | --- |
-| 为什么不是更轻 | archive/decide/check 需要对象选择、dry-run、诊断解释和用户确认 |
-| 为什么不需要更重 | 权威状态和写入由 CLI 管理，不需要独立 gate、SQLite 或长期状态 |
-| 升级触发 | 若未来 companion 需要跨 session 恢复、多阶段修复队列或弱模型稳定执行，再拆 gate-driven 设计 |
-
-单个 command 文件应保持短小；共享规则由 generated shared reference 或同源模板注入。
-后续实现可以把通用运行模式渲染成每个 tool 的本地格式，但不应让不同 adapter 产生语义漂移。
-
-## 10. 后续实现规格
-
-本文之后应拆分以下 implementation specs：
-
-1. Adapter path and generated file marker rules。
-2. Canonical command intent schema。
-3. Per-tool rendering templates for skills and slash commands。
-4. CLI `--json` result categories consumed by companion commands。
-5. `researchspec archive` dry-run failure categories。
-6. Companion command drift detection and `researchspec update` overwrite policy。
-7. Trigger and near-miss review checklist for generated skills。
-
-## 11. 非目标
-
-- 不设计 ARSU maintenance companion。
-- 不为简单机械 CLI 命令生成 companion。
-- 不冻结具体 adapter 目录。
-- 不冻结完整 slash command 文件格式。
-- 不冻结 stdout JSON schema。
-- 不引入 runtime LLM API dependency。
-- 不让 companion command 直接写权威 registry/ledger。
+- 不引入 runtime LLM API、database、workflow profile、setup/onboard skill 或平台专属 core。
+- 不建立 companion scripts、assets、gate、state 或 `agents/openai.yaml`。
+- 不让 companion 取代 ARSU semantic research/writing/review，也不暴露低层 registry/ledger
+  append 或 stage-transition skill。

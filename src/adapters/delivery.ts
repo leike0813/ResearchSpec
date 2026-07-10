@@ -4,7 +4,8 @@ import { fileURLToPath } from "node:url";
 
 import type { Diagnostic } from "../core/validation/types.js";
 import { planFile, type PlannedWrite, sha256 } from "../core/workspace/write-plan.js";
-import { COMMAND_CONTENTS, renderCommand } from "./command-renderer.js";
+import { COMPANION_INTENTS, renderCompanionSkill } from "./companion/index.js";
+import { ARSU_COMMAND_CONTENTS, renderCommand } from "./command-renderer.js";
 import { getTool } from "./tools.js";
 
 export interface InstallationRecord {
@@ -51,11 +52,24 @@ export async function planToolDelivery(input: {
         }
       }
 
+      for (const intent of COMPANION_INTENTS) {
+        const skillRoot = path.join(input.projectRoot, tool.skillsDir, "skills", intent.skillId);
+        const skillTarget = path.join(skillRoot, "SKILL.md");
+        await addPlanned(
+          skillTarget,
+          posix(path.relative(input.projectRoot, skillTarget)),
+          "project",
+          renderCompanionSkill(intent),
+          `companion:${intent.skillId}/SKILL.md`,
+          toolId,
+        );
+      }
+
       if (!tool.command) {
         diagnostics.push({ severity: "info", code: "commands_not_supported", message: `${tool.name} supports skills only.`, blocking: false, details: { tool_id: tool.id } });
         continue;
       }
-      for (const content of COMMAND_CONTENTS) {
+      for (const content of [...ARSU_COMMAND_CONTENTS, ...COMPANION_INTENTS]) {
         const target = tool.command.path(content.id, input.projectRoot);
         const scope = tool.command.scope;
         const manifestPath = scope === "shared-global" ? target : posix(path.relative(input.projectRoot, target));

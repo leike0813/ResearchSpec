@@ -152,6 +152,18 @@ Renderer 从 specs、state、artifact registry 和 ledgers 渲染 agent/human �
 Adapter Delivery 只负责把 generated skills、commands 或 prompts 写入目标 agent
 工具目录。Adapter 不调用 agent API，不持有研究状态，也不改变 core contracts。
 
+### 2.8 Companion Workflow Layer
+
+Companion layer 位于 CLI 与 agent 交互之间。八个 workflow 模块分别拥有 explore、
+propose、check、verify、next、context、decide、archive 的 canonical instructions；typed
+manifest 是唯一注册表，共享 CLI 纪律只在 build 时内联。安装产物是 self-contained
+`SKILL.md`，command wrapper 只路由到已安装 skill。
+
+Companion 不拥有 deterministic runtime。Public `propose` 把 strict semantic JSON 转为
+create-only pending change；target resolver 在 propose 与 decide accept 之间共享，避免
+current-value drift。`decide` 仍是唯一 public semantic apply surface。ARSU 继续负责研究、
+写作、审稿和 manuscript draft-patch authoring。
+
 ## 3. Contract Workspace Architecture
 
 目标 workspace：
@@ -450,15 +462,13 @@ Forbidden boundary violations:
 
 ### 7.1 CLI Responsibilities
 
-ResearchSpec CLI should orchestrate local file operations.
+ResearchSpec CLI 编排本地文件操作。公共 surface 为 `init`、`update`、`status`、
+`check`、`list`、`show`、`handoff`、`pack`、`propose`、`decide` 和 `archive`。
+Converter/upstream maintenance 保持开发者工具，不进入公共 CLI。
 
-Likely command families:
-
-- Workspace init/migrate/update。
-- Contract validation/check。
-- Handoff pack/render。
-- Converter run/update/drift check。
-- Wrapper/artifact install for supported agent tools。
+`propose` 只创建 `changes/<id>/proposal.md`、`tasks.md`、`contract-patch.yaml`，不修改
+stable specs 或 ledgers。只有 `decide accept` 能在二次 target/evidence 验证通过后应用
+semantic patch 并产生 receipt/registry/ledger evidence。
 
 CLI must not:
 
@@ -518,8 +528,8 @@ ResearchSpec should instead maintain ARSU-derived skills and wrappers:
 - `academic-paper-reviewer`
 - `academic-pipeline`
 
-Generic helper skills may exist later, but they must consume the same contract
-workspace and must not reintroduce a parallel contract model.
+ResearchSpec 另行维护八个 contract-lifecycle companion workflows。它们消费同一 contract
+workspace，不重新引入平行 contract model，也不取代上述 ARSU semantic skills。
 
 ### 8.3 Material Passport
 

@@ -6,8 +6,8 @@ import { Command, CommanderError, InvalidArgumentError } from "commander";
 
 import {
   handleArchive, handleCheck, handleDecide, handleHandoff, handleInit, handleList,
-  handlePack, handleShow, handleStatus, handleUpdate, type DecideOptions,
-  type HandoffOptions, type InitOptions, type PackOptions, type UpdateOptions,
+  handlePack, handlePropose, handleShow, handleStatus, handleUpdate, type DecideOptions,
+  type HandoffOptions, type InitOptions, type PackOptions, type ProposeOptions, type UpdateOptions,
 } from "./handlers.js";
 import { presentResult } from "./presenter.js";
 import { CliError, failure, type CommandContext, type CommandResult } from "./types.js";
@@ -82,6 +82,11 @@ function registerCommands(program: Command, run: Runner): void {
     .option("--out <path>", "output ZIP path")
     .option("--include-artifacts", "include safe registered artifacts")
     .action(async (options: PackOptions, command: Command) => run("pack", command, () => handlePack(options, commandContext("pack", command))));
+  program.command("propose <change-id>").description("Create a validated pending contract change")
+    .requiredOption("--input <payload.json>", "strict semantic proposal JSON")
+    .requiredOption("--actor-kind <kind>", "human or agent", parseActorKind)
+    .requiredOption("--actor-name <name>", "proposal author name")
+    .action(async (changeId: string, options: ProposeOptions, command: Command) => run("propose", command, () => handlePropose(changeId, options, commandContext("propose", command))));
   program.command("decide [item]").description("Resolve a pending human decision")
     .option("--decision <choice>", "accept, reject, or postpone", parseDecision)
     .option("--actor-name <name>", "human actor name")
@@ -122,6 +127,11 @@ function commandContext(command: string, commandObject: Command): CommandContext
 function parseDecision(value: string): "accept" | "reject" | "postpone" {
   if (value === "accept" || value === "reject" || value === "postpone") return value;
   throw new InvalidArgumentError("decision must be accept, reject, or postpone");
+}
+
+function parseActorKind(value: string): "human" | "agent" {
+  if (value === "human" || value === "agent") return value;
+  throw new InvalidArgumentError("actor kind must be human or agent");
 }
 
 async function readPackageVersion(): Promise<string> {

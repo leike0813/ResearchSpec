@@ -11,7 +11,7 @@ import { cleanup, parseEnvelope, runCli, tempProject } from "./helpers/cli.js";
 void test("help, version, and usage errors expose the complete public boundary", () => {
   const help = runCli(["--help"]);
   assert.equal(help.status, 0);
-  for (const command of ["init", "update", "status", "check", "list", "show", "handoff", "pack", "decide", "archive"]) assert.match(help.stdout, new RegExp(`\\b${command}\\b`));
+  for (const command of ["init", "update", "status", "check", "list", "show", "handoff", "pack", "propose", "decide", "archive"]) assert.match(help.stdout, new RegExp(`\\b${command}\\b`));
   assert.equal(runCli(["--version"]).stdout.trim(), "0.1.0");
   const invalid = runCli(["unknown", "--json"]);
   assert.equal(invalid.status, 2);
@@ -107,14 +107,32 @@ void test("handoff is a derived view and context packs are deterministic", async
   await cleanup(root);
 });
 
-void test("decide applies a contract patch, writes receipt/ledger last, and enables archive", async () => {
+void test("propose creates a pending change that decide applies and archive closes", async () => {
   const root = await tempProject();
   assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
   const workspace = path.join(root, "researchspec");
   await writeFile(path.join(workspace, "specs/claims.yaml"), 'schema_version: "0.1"\nclaims:\n  - claim_id: C001\n    strength: strong\n', "utf8");
+  const stableBefore = await readFile(path.join(workspace, "specs/claims.yaml"), "utf8");
+  const payloadPath = path.join(root, "proposal.json");
+  const payload = {
+    title: "Weaken claim", rationale: "Evidence boundary", risk_level: "high", impact: ["Changes permitted claim wording."],
+    patches: [{ target_contract: "specs/claims.yaml", operation: "replace", target_path: "claims[C001].strength", current_value: "strong", proposed_value: "moderate", reason: "Evidence supports moderation.", source_artifact_ids: [], source_decision_ids: [] }],
+  };
+  await writeFile(payloadPath, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
+  const dryRun = parseEnvelope<{ plan: Array<{ action: string; path: string }>; dry_run: boolean }>(runCli(["propose", "change-one", "--input", payloadPath, "--actor-kind", "agent", "--actor-name", "reviewer", "--dry-run", "--json"], root));
+  assert.equal(dryRun.data?.dry_run, true);
+  assert.deepEqual(dryRun.data?.plan.map((item) => item.action), ["create", "create", "create"]);
+  assert.match(dryRun.data?.plan.at(-1)?.path ?? "", /contract-patch\.yaml$/);
+  assert.equal(existsSync(path.join(workspace, "changes/change-one")), false);
+  assert.equal(await readFile(path.join(workspace, "specs/claims.yaml"), "utf8"), stableBefore);
+  assert.equal(runCli(["propose", "change-one", "--input", payloadPath, "--actor-kind", "agent", "--actor-name", "reviewer", "--json"], root).status, 2);
+  const proposed = runCli(["propose", "change-one", "--input", payloadPath, "--actor-kind", "agent", "--actor-name", "reviewer", "--yes", "--json"], root);
+  assert.equal(proposed.status, 0, proposed.stderr || proposed.stdout);
   const changeRoot = path.join(workspace, "changes/change-one");
-  await mkdir(changeRoot, { recursive: true });
-  await writeFile(path.join(changeRoot, "contract-patch.yaml"), 'schema_version: "0.1"\nchange_id: change-one\ntitle: Weaken claim\nstatus: proposed\ncreated_at: "2026-07-10T00:00:00Z"\ncreated_by: {kind: agent, name: reviewer}\nrationale: Evidence boundary\nrisk_level: high\nrequires_human_decision: true\npatches:\n  - patch_id: P001\n    target_contract: specs/claims.yaml\n    operation: replace\n    target_path: claims[C001].strength\n    current_value: strong\n    proposed_value: moderate\n', "utf8");
+  for (const file of ["proposal.md", "tasks.md", "contract-patch.yaml"]) assert.equal(existsSync(path.join(changeRoot, file)), true);
+  assert.equal(await readFile(path.join(workspace, "specs/claims.yaml"), "utf8"), stableBefore);
+  assert.equal(runCli(["show", "change:change-one", "--json"], root).status, 0);
+  assert.equal(runCli(["propose", "change-one", "--input", payloadPath, "--actor-kind", "agent", "--actor-name", "reviewer", "--yes", "--json"], root).status, 3);
   const decided = runCli(["decide", "change:change-one", "--decision", "accept", "--actor-name", "Researcher", "--reason", "Evidence supports moderation", "--json"], root);
   assert.equal(decided.status, 0, decided.stderr || decided.stdout);
   assert.match(await readFile(path.join(workspace, "specs/claims.yaml"), "utf8"), /strength: moderate/);
@@ -126,6 +144,56 @@ void test("decide applies a contract patch, writes receipt/ledger last, and enab
   const archived = runCli(["archive", "change:change-one", "--json"], root);
   assert.equal(archived.status, 0, archived.stderr || archived.stdout);
   assert.equal(existsSync(changeRoot), false);
+  await cleanup(root);
+});
+
+void test("propose validates strict targets, evidence, and current-value drift at acceptance", async () => {
+  const root = await tempProject();
+  assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
+  const workspace = path.join(root, "researchspec");
+  await writeFile(path.join(workspace, "specs/claims.yaml"), 'schema_version: "0.1"\nclaims:\n  - claim_id: C001\n    strength: strong\n', "utf8");
+  const payloadPath = path.join(root, "proposal.json");
+  const base = { title: "Change claim", rationale: "Evidence", risk_level: "high", impact: ["Claim changes."], patches: [{ target_contract: "specs/claims.yaml", operation: "replace", target_path: "claims[C001].strength", current_value: "strong", proposed_value: "moderate", reason: "Align evidence.", source_artifact_ids: [], source_decision_ids: [] }] };
+  await writeFile(payloadPath, JSON.stringify({ ...base, patches: [{ ...base.patches[0], source_artifact_ids: ["A-MISSING"] }] }), "utf8");
+  assert.equal(runCli(["propose", "missing-evidence", "--input", payloadPath, "--actor-kind", "agent", "--actor-name", "reviewer", "--yes", "--json"], root).status, 1);
+  await writeFile(payloadPath, JSON.stringify({ ...base, patches: [{ ...base.patches[0], target_path: "claims[C404].strength" }] }), "utf8");
+  assert.equal(runCli(["propose", "missing-target", "--input", payloadPath, "--actor-kind", "agent", "--actor-name", "reviewer", "--yes", "--json"], root).status, 1);
+  await writeFile(path.join(workspace, "specs/claims.yaml"), 'schema_version: "0.1"\nclaims:\n  - claim_id: C001\n    strength: strong\n  - claim_id: C001\n    strength: strong\n', "utf8");
+  await writeFile(payloadPath, JSON.stringify(base), "utf8");
+  assert.equal(runCli(["propose", "ambiguous-target", "--input", payloadPath, "--actor-kind", "agent", "--actor-name", "reviewer", "--yes", "--json"], root).status, 1);
+  await writeFile(path.join(workspace, "specs/claims.yaml"), 'schema_version: "0.1"\nclaims:\n  - claim_id: C001\n    strength: strong\n', "utf8");
+  await writeFile(payloadPath, JSON.stringify({ ...base, patches: [{ ...base.patches[0], target_contract: "specs/other.yaml" }] }), "utf8");
+  assert.equal(runCli(["propose", "unknown-contract", "--input", payloadPath, "--actor-kind", "agent", "--actor-name", "reviewer", "--yes", "--json"], root).status, 2);
+  await writeFile(payloadPath, JSON.stringify({ ...base, patches: [{ ...base.patches[0], target_path: "../claims[C001].strength" }] }), "utf8");
+  assert.equal(runCli(["propose", "escaping-target", "--input", payloadPath, "--actor-kind", "agent", "--actor-name", "reviewer", "--yes", "--json"], root).status, 1);
+  await writeFile(payloadPath, JSON.stringify({ ...base, unexpected: true }), "utf8");
+  assert.equal(runCli(["propose", "strict-payload", "--input", payloadPath, "--actor-kind", "agent", "--actor-name", "reviewer", "--yes", "--json"], root).status, 2);
+  await writeFile(payloadPath, JSON.stringify(base), "utf8");
+  assert.equal(runCli(["propose", "drifted", "--input", payloadPath, "--actor-kind", "agent", "--actor-name", "reviewer", "--yes", "--json"], root).status, 0);
+  await writeFile(path.join(workspace, "specs/claims.yaml"), 'schema_version: "0.1"\nclaims:\n  - claim_id: C001\n    strength: weak\n', "utf8");
+  const ledgerBefore = await readFile(path.join(workspace, "runs/current/decision-ledger.jsonl"), "utf8");
+  assert.equal(runCli(["decide", "change:drifted", "--decision", "accept", "--actor-name", "Researcher", "--reason", "Review complete", "--json"], root).status, 1);
+  assert.equal(await readFile(path.join(workspace, "runs/current/decision-ledger.jsonl"), "utf8"), ledgerBefore);
+  await cleanup(root);
+});
+
+void test("decide revalidates Markdown section current values before applying a proposal", async () => {
+  const root = await tempProject();
+  assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
+  const workspace = path.join(root, "researchspec");
+  const payloadPath = path.join(root, "markdown-proposal.json");
+  const payload = {
+    title: "Refine research question", rationale: "Narrow the population", risk_level: "high", impact: ["Changes the governing research question."],
+    patches: [{ target_contract: "specs/project.md", operation: "replace", target_path: "section[Research Question]", current_value: "TBD", proposed_value: "What changes in the target population?", reason: "Make the population explicit.", source_artifact_ids: [], source_decision_ids: [] }],
+  };
+  await writeFile(payloadPath, JSON.stringify(payload), "utf8");
+  assert.equal(runCli(["propose", "markdown-drift", "--input", payloadPath, "--actor-kind", "agent", "--actor-name", "reviewer", "--yes", "--json"], root).status, 0);
+  const projectPath = path.join(workspace, "specs/project.md");
+  await writeFile(projectPath, (await readFile(projectPath, "utf8")).replace("\nTBD\n\n## Scope", "\nChanged outside the proposal.\n\n## Scope"), "utf8");
+  const decided = runCli(["decide", "change:markdown-drift", "--decision", "accept", "--actor-name", "Researcher", "--reason", "Reviewed", "--json"], root);
+  assert.equal(decided.status, 1);
+  assert.equal(parseEnvelope(decided).error?.code, "current_value_conflict");
+  assert.match(await readFile(projectPath, "utf8"), /Changed outside the proposal/);
   await cleanup(root);
 });
 
@@ -184,20 +252,64 @@ void test("update preserves drifted manifest-owned files", async () => {
   for (const skillId of ["deep-research", "academic-paper", "academic-paper-reviewer", "academic-pipeline"]) {
     assert.equal(existsSync(path.join(root, ".forge/skills", skillId, "SKILL.md")), true);
   }
-  const skillPath = path.join(root, ".forge/skills/deep-research/SKILL.md");
+  for (const skillId of ["researchspec-explore", "researchspec-propose", "researchspec-check", "researchspec-verify", "researchspec-next", "researchspec-context", "researchspec-decide", "researchspec-archive"]) {
+    assert.equal(existsSync(path.join(root, ".forge/skills", skillId, "SKILL.md")), true);
+    assert.equal(existsSync(path.join(root, ".forge/skills", skillId, "references/cli-discipline.md")), false);
+  }
+  const skillPath = path.join(root, ".forge/skills/researchspec-check/SKILL.md");
   await writeFile(skillPath, "user customization", "utf8");
   const update = runCli(["update", "--tools", "forgecode", "--json"], root);
   assert.equal(update.status, 0);
   assert.match(update.stdout, /generated_file_drift/);
   assert.equal(await readFile(skillPath, "utf8"), "user customization");
+  const forced = runCli(["update", "--tools", "forgecode", "--force", "--json"], root);
+  assert.equal(forced.status, 0, forced.stderr || forced.stdout);
+  assert.notEqual(await readFile(skillPath, "utf8"), "user customization");
+  const manifestPath = path.join(root, "researchspec/tool-installation-manifest.json");
+  const manifest = JSON.parse(await readFile(manifestPath, "utf8")) as {
+    installations: Array<{ tool_id: string; path: string; scope: "project" | "shared-global"; sha256: string; source: string; adapter_version: string }>;
+  };
+  assert.ok(manifest.installations.some((entry) => entry.path.endsWith("researchspec-check/SKILL.md") && entry.source === "companion:researchspec-check/SKILL.md"));
+  const stalePath = path.join(root, ".forge/skills/researchspec-check/references/cli-discipline.md");
+  const staleContent = "old generated companion reference";
+  await mkdir(path.dirname(stalePath), { recursive: true });
+  await writeFile(stalePath, staleContent, "utf8");
+  manifest.installations.push({
+    tool_id: "forgecode",
+    path: ".forge/skills/researchspec-check/references/cli-discipline.md",
+    scope: "project",
+    sha256: hash(staleContent),
+    source: "companion:researchspec-check/references/cli-discipline.md",
+    adapter_version: "1",
+  });
+  await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
+  assert.equal(runCli(["update", "--tools", "forgecode", "--json"], root).status, 0);
+  assert.equal(existsSync(stalePath), false);
+  const driftedReference = path.join(root, ".forge/skills/researchspec-archive/references/cli-discipline.md");
+  const oldReference = "old generated reference";
+  await mkdir(path.dirname(driftedReference), { recursive: true });
+  await writeFile(driftedReference, "user-modified reference", "utf8");
+  const refreshedManifest = JSON.parse(await readFile(manifestPath, "utf8")) as typeof manifest;
+  refreshedManifest.installations.push({
+    tool_id: "forgecode",
+    path: ".forge/skills/researchspec-archive/references/cli-discipline.md",
+    scope: "project",
+    sha256: hash(oldReference),
+    source: "companion:researchspec-archive/references/cli-discipline.md",
+    adapter_version: "1",
+  });
+  await writeFile(manifestPath, `${JSON.stringify(refreshedManifest, null, 2)}\n`, "utf8");
+  const preserve = runCli(["update", "--tools", "forgecode", "--json"], root);
+  assert.match(preserve.stdout, /generated_file_drift/);
+  assert.equal(await readFile(driftedReference, "utf8"), "user-modified reference");
   await cleanup(root);
 });
 
-void test("command-capable delivery emits all four wrappers in the registered format", async () => {
+void test("command-capable delivery emits ARSU and companion wrappers in the registered format", async () => {
   const root = await tempProject();
   assert.equal(runCli(["init", root, "--tools", "gemini"]).status, 0);
-  for (const skillId of ["deep-research", "academic-paper", "academic-paper-reviewer", "academic-pipeline"]) {
-    const command = await readFile(path.join(root, ".gemini/commands/researchspec", `${skillId}.toml`), "utf8");
+  for (const commandId of ["deep-research", "academic-paper", "academic-paper-reviewer", "academic-pipeline", "explore", "propose", "check", "verify", "next", "context", "decide", "archive"]) {
+    const command = await readFile(path.join(root, ".gemini/commands/researchspec", `${commandId}.toml`), "utf8");
     assert.match(command, /^description = /);
     assert.match(command, /prompt = """/);
   }

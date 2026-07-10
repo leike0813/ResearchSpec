@@ -27,7 +27,9 @@ const RegistrySchema = z.looseObject({ schema_version: z.string(), run_id: SafeI
 const ContractPatchSchema = z.looseObject({
   schema_version: z.string(), change_id: SafeId, title: z.string().min(1), status: z.enum(["proposed", "postponed", "accepted", "rejected", "applied", "superseded"]),
   created_at: z.string().min(1), created_by: ActorSchema, rationale: z.string().min(1), risk_level: z.enum(["low", "medium", "high"]), requires_human_decision: z.boolean(),
-  patches: z.array(z.looseObject({ patch_id: SafeId, target_contract: z.string().min(1), operation: z.enum(["add", "replace", "remove", "append", "merge"]), target_path: z.string().min(1) })),
+  impact: z.array(z.string().min(1)).min(1),
+  validation: z.looseObject({ validated_at: z.string().min(1), target_hashes: z.record(z.string(), z.string()), artifact_ids: z.array(SafeId), decision_ids: z.array(SafeId) }),
+  patches: z.array(z.looseObject({ patch_id: SafeId, target_contract: z.enum(["specs/project.md", "specs/sources.yaml", "specs/claims.yaml", "specs/manuscript.yaml", "specs/workflow.yaml"]), operation: z.enum(["add", "replace", "remove", "append", "merge"]), target_path: z.string().min(1), reason: z.string().min(1), source_artifact_ids: z.array(SafeId), source_decision_ids: z.array(SafeId) })).min(1),
 });
 const DraftPatchSchema = z.looseObject({
   patch_format_version: z.string(), patch_id: SafeId, revision_round: z.number().int().nonnegative(), status: z.enum(["proposed", "postponed", "accepted", "rejected", "applied", "superseded"]),

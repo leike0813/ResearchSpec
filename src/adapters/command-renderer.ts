@@ -2,6 +2,8 @@ import type { ToolDefinition } from "./tools.js";
 
 export interface CommandContent {
   id: string;
+  skillId: string;
+  family: "arsu" | "companion";
   name: string;
   description: string;
   category: string;
@@ -9,7 +11,7 @@ export interface CommandContent {
   body: string;
 }
 
-export const COMMAND_CONTENTS: readonly CommandContent[] = [
+export const ARSU_COMMAND_CONTENTS: readonly CommandContent[] = [
   command("deep-research", "Deep Research", "Run evidence-grounded research through ResearchSpec contracts."),
   command("academic-paper", "Academic Paper", "Draft or revise an academic paper from ResearchSpec contracts."),
   command("academic-paper-reviewer", "Academic Paper Reviewer", "Review a manuscript against ResearchSpec contracts."),
@@ -24,6 +26,8 @@ export function renderCommand(tool: ToolDefinition, content: CommandContent): st
   }
   const description = yamlScalar(content.description);
   const name = `researchspec-${content.id}`;
+  const category = yamlScalar(content.category);
+  const tags = content.tags.map(yamlScalar).join(", ");
   const safeTomlBody = body.replaceAll('"""', String.raw`\"""`);
   switch (tool.command.format) {
     case "plain": return `${body.trim()}\n`;
@@ -32,18 +36,18 @@ export function renderCommand(tool: ToolDefinition, content: CommandContent): st
     case "description": return `---\ndescription: ${description}\n---\n\n${body.trim()}\n`;
     case "description-arguments": return `---\ndescription: ${description}\nargument-hint: "[command arguments]"\n---\n\n${body.trim()}\n`;
     case "continue": return `---\nname: ${name}\ndescription: ${description}\ninvokable: true\n---\n\n${body.trim()}\n`;
-    case "claude": return `---\nname: ${name}\ndescription: ${description}\nallowed-tools: Bash(researchspec:*)\ncategory: researchspec\ntags: [researchspec, arsu]\n---\n\n${body.trim()}\n`;
+    case "claude": return `---\nname: ${name}\ndescription: ${description}\nallowed-tools: Bash(researchspec:*)\ncategory: ${category}\ntags: [${tags}]\n---\n\n${body.trim()}\n`;
     case "cursor": return `---\nname: /${name}\nid: ${name}\ncategory: researchspec\ndescription: ${description}\n---\n\n${body.trim()}\n`;
     case "codebuddy": return `---\nname: ${name}\ndescription: ${JSON.stringify(content.description)}\nargument-hint: "[command arguments]"\n---\n\n${body.trim()}\n`;
     case "costrict": return `---\ndescription: ${JSON.stringify(content.description)}\nargument-hint: "[command arguments]"\n---\n\n${body.trim()}\n`;
     case "trae": return `---\nname: ${yamlScalar(name)}\ndescription: ${description}\n---\n\n${body.trim()}\n`;
-    case "named": return `---\nname: ${name}\ndescription: ${description}\ncategory: researchspec\ntags: [researchspec, arsu]\n---\n\n${body.trim()}\n`;
+    case "named": return `---\nname: ${name}\ndescription: ${description}\ncategory: ${category}\ntags: [${tags}]\n---\n\n${body.trim()}\n`;
   }
 }
 
 function command(id: string, name: string, description: string): CommandContent {
   return {
-    id, name, description, category: "researchspec", tags: ["researchspec", "arsu"],
+    id, skillId: id, family: "arsu", name, description, category: "researchspec", tags: ["researchspec", "arsu"],
     body: `Use the installed \`${id}\` skill. Discover the nearest \`researchspec/\` workspace, run \`researchspec check\`, and follow the skill while treating contracts and ledgers as the source of truth. Do not call an LLM API or silently accept pending decisions.`,
   };
 }

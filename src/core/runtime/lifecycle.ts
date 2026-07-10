@@ -7,6 +7,7 @@ import { fileExists, readOptionalText } from "../../utils/fs.js";
 import type { IndexedItem, WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { resolveItem } from "../workspace/snapshot.js";
 import { executeWritePlan, hashPath, sha256, type PlannedWrite } from "../workspace/write-plan.js";
+import { validateAndApplyContractOperations, validateEvidenceReferences } from "./contract-change.js";
 
 export type DecisionChoice = "accept" | "reject" | "postpone";
 
@@ -107,6 +108,7 @@ async function acceptItem(snapshot: WorkspaceSnapshot, item: IndexedItem, decisi
 
 async function acceptContractChange(snapshot: WorkspaceSnapshot, item: IndexedItem, decisionId: string, now: string): Promise<PlannedWrite[]> {
   const patch = record(item.value);
+  validateEvidenceReferences(snapshot, records(patch.patches));
   const grouped = new Map<string, Record<string, unknown>[]>();
   for (const operation of records(patch.patches)) {
     if (typeof operation.target_contract !== "string") throw new Error("Contract patch is missing target_contract.");
@@ -118,7 +120,7 @@ async function acceptContractChange(snapshot: WorkspaceSnapshot, item: IndexedIt
     const absolutePath = path.resolve(snapshot.workspace, relativePath);
     await assertContained(snapshot.workspace, absolutePath, "contract patch target");
     const original = await readFile(absolutePath, "utf8");
-    const next = relativePath.endsWith(".md") ? applyMarkdownOperations(original, operations) : stringify(applyYamlOperations(parse(original) as unknown, operations));
+    const next = validateAndApplyContractOperations(relativePath, original, operations);
     outputHashes[relativePath] = sha256(next);
     writes.push({ action: "refresh", path: absolutePath, relativePath, content: next, scope: "workspace", ownership: "user", previousHash: sha256(original), nextHash: sha256(next), reason: `accepted contract change ${item.id}` });
   }
@@ -182,49 +184,6 @@ async function lifecycleWrite(item: IndexedItem, status: string, decisionId: str
   Object.assign(value, { status, decision_id: decisionId, resolved_at: now, applied_artifact_id: status === "applied" ? `A-${item.id}` : undefined, apply_receipt_artifact_id: status === "applied" ? `A-receipt-${item.id}` : undefined });
   const next = `${JSON.stringify(value, null, 2)}\n`;
   return { action: "refresh", path: item.path, content: next, scope: "workspace", ownership: "user", previousHash: sha256(original), nextHash: sha256(next), reason: "update draft patch lifecycle" };
-}
-
-function applyYamlOperations(root: unknown, operations: Record<string, unknown>[]): unknown {
-  for (const operation of operations) {
-    const targetPath = string(operation.target_path);
-    const segments = targetPath.split(".");
-    let current = root as Record<string, unknown>;
-    for (let index = 0; index < segments.length - 1; index += 1) {
-      const match = /^(\w+)\[([^\]]+)\]$/.exec(segments[index]);
-      if (match) {
-        const list = current[match[1]];
-        if (!Array.isArray(list)) throw new Error(`Patch target is not an array: ${match[1]}`);
-        const found = list.filter((value) => Object.values(record(value)).includes(match[2]));
-        if (found.length !== 1) throw new Error(`Patch selector is not unique: ${segments[index]}`);
-        current = record(found[0]);
-      } else {
-        current = record(current[segments[index]]);
-      }
-    }
-    const key = segments.at(-1) ?? "";
-    if (operation.current_value !== undefined && JSON.stringify(current[key]) !== JSON.stringify(operation.current_value)) throw new Error(`Patch current_value conflict at ${targetPath}`);
-    const op = string(operation.operation);
-    if (op === "remove") Reflect.deleteProperty(current, key);
-    else if (op === "append") {
-      if (!Array.isArray(current[key])) throw new Error(`Append target is not an array: ${targetPath}`);
-      current[key].push(operation.proposed_value);
-    } else if (op === "merge") Object.assign(record(current[key]), record(operation.proposed_value));
-    else current[key] = operation.proposed_value;
-  }
-  return root;
-}
-
-function applyMarkdownOperations(text: string, operations: Record<string, unknown>[]): string {
-  let result = text;
-  for (const operation of operations) {
-    const target = string(operation.target_path);
-    if (!target.startsWith("section[")) throw new Error(`Unsupported Markdown target: ${target}`);
-    const heading = target.slice(8, -1);
-    const pattern = new RegExp(`(^## ${escapeRegExp(heading)}\\n)([\\s\\S]*?)(?=^## |$)`, "m");
-    if (!pattern.test(result)) throw new Error(`Markdown section not found: ${heading}`);
-    result = result.replace(pattern, `$1\n${string(operation.proposed_value).trim()}\n\n`);
-  }
-  return result;
 }
 
 function applyDraftOperations(text: string, operations: Record<string, unknown>[]): string {
@@ -326,8 +285,6 @@ function bodyStart(text: string): number {
 function record(value: unknown): Record<string, unknown> { return value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : {}; }
 function records(value: unknown): Record<string, unknown>[] { return Array.isArray(value) ? value.map(record) : []; }
 function string(value: unknown): string { return typeof value === "string" ? value : ""; }
-function escapeRegExp(value: string): string { return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
-
 function assertSafeId(value: string, label: string): void {
   if (!/^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(value) || value.includes("..")) throw new Error(`Unsafe ${label}: ${value}`);
 }

@@ -6,6 +6,7 @@ import { stringify } from "yaml";
 import { planToolDelivery, type InstallationRecord } from "../adapters/delivery.js";
 import { detectTools, orderTools, parseToolExpression } from "../adapters/tools.js";
 import { archiveItem, decideItem, type DecisionChoice } from "../core/runtime/lifecycle.js";
+import { assertProposalBasisCurrent, ContractChangeError, planContractChangeProposal } from "../core/runtime/contract-change.js";
 import { renderHandoff } from "../core/runtime/handoff.js";
 import { buildContextPack } from "../core/runtime/pack.js";
 import { buildStatus, formatStatusHuman, listItems, showItem, type ListType } from "../core/runtime/query.js";
@@ -24,6 +25,7 @@ export interface UpdateOptions { tools?: string }
 export interface HandoffOptions { stdout?: boolean; out?: string }
 export interface PackOptions { out?: string; includeArtifacts?: boolean }
 export interface DecideOptions { decision?: DecisionChoice; actorName?: string; reason?: string }
+export interface ProposeOptions { input: string; actorKind: "human" | "agent"; actorName: string }
 
 export async function handleInit(inputPath: string | undefined, options: InitOptions, context: CommandContext): Promise<CommandResult> {
   if (options.profile !== undefined && options.profile !== "arsu-paper") throw new CliError("invalid_profile", `Unknown profile: ${options.profile}`, 2, "The current release supports only arsu-paper.");
@@ -203,6 +205,48 @@ export async function handlePack(options: PackOptions, context: CommandContext):
   return success("pack", { path: target, bytes: bundle.bytes.length, sha256: bundle.sha256, entries: bundle.entries, dry_run: context.dryRun, plan: summarizePlan([operation]) }, { stdout: `${context.dryRun ? "Would write" : "Wrote"} context pack: ${target}\n` });
 }
 
+export async function handlePropose(changeId: string, options: ProposeOptions, context: CommandContext): Promise<CommandResult> {
+  if (context.force) throw new CliError("force_not_supported", "--force does not apply to create-only proposals.", 2);
+  const workspace = await requireWorkspace(context);
+  let payload: unknown;
+  const inputPath = path.resolve(context.cwd, options.input);
+  try { payload = JSON.parse(await readFile(inputPath, "utf8")) as unknown; }
+  catch (error) {
+    const nodeError = error as NodeJS.ErrnoException;
+    throw new CliError("invalid_proposal_input", nodeError.code === "ENOENT" ? `Proposal input file not found: ${inputPath}` : `Cannot read proposal input: ${error instanceof Error ? error.message : String(error)}`, 2);
+  }
+  try {
+    const snapshot = await loadWorkspaceSnapshot(workspace);
+    const proposal = await planContractChangeProposal({ snapshot, changeId, payload, actorKind: options.actorKind, actorName: options.actorName });
+    if (!context.dryRun && !context.yes) {
+      if (!context.interactive) throw new CliError("confirmation_required", "Non-interactive proposal creation requires --yes.", 2, "This confirms creation of a pending proposal only; it does not accept the change.");
+      const approved = await confirm({ message: `Create pending ${proposal.patch.risk_level}-risk change ${changeId} with ${String(proposal.patch.patches.length)} patch(es)?`, default: false });
+      if (!approved) throw new CliError("cancelled", "Proposal creation cancelled.", 1);
+    }
+    if (!context.dryRun) {
+      await assertProposalBasisCurrent(workspace, proposal.patch);
+      await executeWritePlan({ operations: proposal.operations });
+    }
+    return success("propose", {
+      workspace,
+      selector: `change:${changeId}`,
+      status: proposal.patch.status,
+      risk_level: proposal.patch.risk_level,
+      requires_human_decision: true,
+      dry_run: context.dryRun,
+      plan: summarizePlan(proposal.operations),
+    }, { stdout: `${context.dryRun ? "Would create" : "Created"} pending contract change change:${changeId}.\n` });
+  } catch (error) {
+    if (error instanceof CliError) throw error;
+    if (error instanceof ContractChangeError) {
+      const exitCode = error.kind === "usage" ? 2 : error.kind === "conflict" ? 3 : 1;
+      throw new CliError(error.code, error.message, exitCode, undefined, error.details);
+    }
+    if (isFileSystemError(error)) throw error;
+    throw new CliError("proposal_blocked", error instanceof Error ? error.message : String(error), 1);
+  }
+}
+
 export async function handleDecide(selector: string | undefined, options: DecideOptions, context: CommandContext): Promise<CommandResult> {
   const workspace = await requireWorkspace(context);
   const snapshot = await loadWorkspaceSnapshot(workspace);
@@ -222,7 +266,11 @@ export async function handleDecide(selector: string | undefined, options: Decide
   try {
     const outcome = await decideItem({ snapshot, selector, decision, actorName, reason, dryRun: context.dryRun });
     return success("decide", { ...outcome, dry_run: context.dryRun }, { stdout: `${context.dryRun ? "Would record" : "Recorded"} ${outcome.status} decision for ${outcome.item}.\n` });
-  } catch (error) { if (isFileSystemError(error)) throw error; throw new CliError("decision_blocked", error instanceof Error ? error.message : String(error), 1); }
+  } catch (error) {
+    if (error instanceof ContractChangeError) throw new CliError(error.code, error.message, 1, undefined, error.details);
+    if (isFileSystemError(error)) throw error;
+    throw new CliError("decision_blocked", error instanceof Error ? error.message : String(error), 1);
+  }
 }
 
 export async function handleArchive(selector: string | undefined, context: CommandContext): Promise<CommandResult> {

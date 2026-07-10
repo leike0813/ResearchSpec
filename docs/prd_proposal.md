@@ -240,6 +240,25 @@ ResearchSpec 必须最终拥有 ARSU-derived 产物的转换、刷新和验证�
   和禁止写入范围。
 - 上游 version/history 文本只作为 diagnostics，不作为默认阻断项。
 
+### 3.11 ResearchSpec Companion Workflows
+
+ResearchSpec 默认向所有 registered agent tools 投递八个 agent-neutral companion：
+`explore`、`propose`、`check`、`verify`、`next`、`context`、`decide` 和 `archive`。
+
+需求：
+
+- 每个 companion 必须是自包含 workflow skill，具有明确 trigger/near-miss、输入、状态
+  分支、失败恢复、输出契约、guardrail 和 completion；不能只是 CLI help 的转述。
+- Shared CLI discipline 可以在源码层复用，但必须在 build 时内联，不能要求运行时再读取
+  一个通用 companion reference。
+- CLI 负责 deterministic validation 与权威写入；companion 负责解释、消歧、semantic
+  verification、风险说明和 human confirmation。
+- `propose` 为 high-impact contract change 提供 create-only deterministic entry；`decide`
+  是唯一 public semantic apply workflow。
+- ARSU 继续拥有 literature research、writing、review 与 manuscript draft-patch authoring；
+  companion 不得复制这些能力。
+- 31 个 tools 默认获得八个 skills；具备 command format 的 28 个 tools 同源生成薄 wrapper。
+
 ## 4. 合同层需求
 
 ResearchSpec 默认合同空间：
@@ -518,6 +537,8 @@ ResearchSpec 不做：
   changes 和 draft patches。
 - `academic-pipeline`、`deep-research`、`academic-paper`、
   `academic-paper-reviewer` 的支持要求已在需求层声明。
+- 八个 ResearchSpec companion 覆盖 explore/propose 到 decide/archive 的 contract
+  lifecycle，同时保持与 ARSU semantic workflows 的边界。
 - Material Passport 不再是 ResearchSpec runtime SSOT。
 - ARSU-derived current-state cleanup 明确不是默认目标。
 - 旧轻量 Markdown-only 合同结构不再作为目标事实源。
@@ -538,6 +559,7 @@ PRD 之后应拆出以下可实现 specs：
 9. Converter changes，将 Contract Inputs / Contract Outputs / Writes Allowed 注入
    ARSU-derived skill artifacts。
 10. Adapter-neutral skill delivery rules。
+11. Companion workflow triggers、semantic verification、proposal creation 与 lifecycle safety。
 
 ### 7.3 实现优先级建议
 

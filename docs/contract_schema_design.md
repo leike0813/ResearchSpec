@@ -992,16 +992,21 @@ finalization 等 gate 的运行结果、阻断状态和输入输出 artifacts。
 职责：描述对 stable specs 的高影响结构化变更。Agent 可以提出，human
 决定接受或拒绝；patch applier 后续负责实际落盘。
 
-目录内可包含 `proposal.md`、`notes.md`、supporting artifacts，但本字段设计
-只覆盖 `contract-patch.yaml`。
+公共 `researchspec propose` 确定性创建 `proposal.md`、`tasks.md` 和
+`contract-patch.yaml`；三者均 create-only、user-owned，machine contract 最后写入。
 
 生产/消费约束：
 
-- Agent 可填写 `rationale`、`target_contract`、`target_path` 和
-  `proposed_value` 草案。
-- Runtime/script 应补齐 `change_id`、timestamps、validation 和冲突检测结果。
+- Agent/human 通过 strict JSON input 填写 title、rationale、risk、impact 以及
+  target/current/proposed/evidence 语义字段。
+- Runtime 补齐 `change_id`、timestamps、actor、status、patch IDs、validation metadata，
+  并拒绝 active/archive ID 复用和任何覆盖。
 - Human review 消费 proposal 后，通过 decision ledger 表达接受/拒绝。
-- Patch applier 是唯一应把 accepted patch 写回 stable specs 的 producer。
+- `propose` 与 accepted patch applier 共用 target resolver；后者在写入前二次校验
+  target、selector、current value 与 evidence refs。Patch applier 是唯一应把 accepted
+  patch 写回 stable specs 的 producer。
+- Target 只允许五个 stable specs。YAML 使用 dot / unique `collection[id]` grammar；
+  Markdown 只允许 `replace section[Heading]`。
 
 顶层字段：
 
@@ -1015,6 +1020,7 @@ finalization 等 gate 的运行结果、阻断状态和输入输出 artifacts。
 | `created_by` | `actor` | 是 | 提出者 |
 | `rationale` | string | 是 | 为什么需要变更 |
 | `risk_level` | enum | 是 | `low` / `medium` / `high` |
+| `impact` | list[string] | 是 | 用户可审查的语义影响 |
 | `requires_human_decision` | boolean | 是 | 高影响变更应为 true |
 | `decision_id` | ref | 否 | 接受/拒绝的 decision |
 | `resolved_at` | `iso_datetime` | 否 | accepted/rejected/applied resolution time |
@@ -1030,21 +1036,20 @@ finalization 等 gate 的运行结果、阻断状态和输入输出 artifacts。
 | `target_contract` | path | 是 | 目标 stable spec |
 | `operation` | enum | 是 | `add` / `replace` / `remove` / `append` / `merge` |
 | `target_path` | string | 是 | YAML path 或 Markdown section path |
-| `current_value` | any | 否 | 可选，用于冲突检测 |
-| `proposed_value` | any | 否 | 新值；remove 可为空 |
-| `reason` | string | 否 | 单项变更理由 |
-| `source_artifact_ids` | list[ref] | 否 | 支撑 artifacts |
-| `source_decision_ids` | list[ref] | 否 | 支撑 decisions |
+| `current_value` | any | 条件必填 | replace/remove/append/merge 必填并在 propose/accept 两次精确比较 |
+| `proposed_value` | any | 条件必填 | add/replace/append/merge 必填；remove 禁止 |
+| `reason` | string | 是 | 单项变更理由 |
+| `source_artifact_ids` | list[ref] | 是 | 支撑 artifacts；每个 ID 必须存在，可为空数组 |
+| `source_decision_ids` | list[ref] | 是 | 支撑 decisions；每个 ID 必须存在，可为空数组 |
 
 `validation` 字段：
 
 | 字段 | 类型 | 必填 | 说明 |
 | --- | --- | --- | --- |
-| `structural_status` | enum | 否 | `not_run` / `pass` / `fail` |
-| `reference_status` | enum | 否 | `not_run` / `pass` / `fail` |
-| `issues` | list[string] | 否 | patch 级验证问题摘要 |
-| `validated_at` | `iso_datetime` | 否 | 最近验证时间 |
-| `validated_by` | `actor` | 否 | validator |
+| `validated_at` | `iso_datetime` | 是 | proposal target/reference 验证时间 |
+| `target_hashes` | map[path, sha256] | 是 | 每个目标 stable contract 的 proposal-time hash |
+| `artifact_ids` | list[ref] | 是 | 已验证 artifact refs 的去重集合 |
+| `decision_ids` | list[ref] | 是 | 已验证 decision refs 的去重集合 |
 
 示例：
 
@@ -1059,7 +1064,15 @@ created_by:
   name: integrity_verification_agent
 rationale: "Integrity gate found evidence supports association, not causality."
 risk_level: high
+impact:
+  - "Changes permitted wording for C001."
 requires_human_decision: true
+validation:
+  validated_at: "2026-07-09T00:00:00+08:00"
+  target_hashes:
+    specs/claims.yaml: "<sha256>"
+  artifact_ids: [A0007]
+  decision_ids: []
 patches:
   - patch_id: P001
     target_contract: specs/claims.yaml
@@ -1067,7 +1080,9 @@ patches:
     target_path: claims[C001].strength
     current_value: strong
     proposed_value: moderate
+    reason: "Align strength with evidence."
     source_artifact_ids: [A0007]
+    source_decision_ids: []
 ```
 
 ### 5.2 `researchspec/draft-patches/<patch-id>.json`

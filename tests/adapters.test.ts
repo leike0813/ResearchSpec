@@ -3,7 +3,9 @@ import { mkdir } from "node:fs/promises";
 import path from "node:path";
 import { test } from "node:test";
 
-import { COMMAND_CONTENTS, renderCommand } from "../src/adapters/command-renderer.js";
+import { COMPANION_INTENTS, COMPANION_WORKFLOW_IDS, renderCompanionSkill } from "../src/adapters/companion/index.js";
+import { ARSU_COMMAND_CONTENTS, renderCommand } from "../src/adapters/command-renderer.js";
+import { planToolDelivery } from "../src/adapters/delivery.js";
 import { TOOL_IDS, TOOLS, detectTools, getTool, parseToolExpression } from "../src/adapters/tools.js";
 import { cleanup, tempProject } from "./helpers/cli.js";
 
@@ -59,12 +61,13 @@ void test("registered command paths preserve per-tool conventions", () => {
   const previousCodexHome = process.env.CODEX_HOME;
   process.env.CODEX_HOME = "/codex-home";
   assert.equal(requireTool("codex").command?.path("deep-research", root), "/codex-home/prompts/researchspec-deep-research.md");
+  assert.equal(requireTool("codex").command?.path("check", root), "/codex-home/prompts/researchspec-check.md");
   if (previousCodexHome === undefined) Reflect.deleteProperty(process.env, "CODEX_HOME");
   else process.env.CODEX_HOME = previousCodexHome;
 });
 
 void test("format families render machine-valid structural markers", () => {
-  const content = COMMAND_CONTENTS[0];
+  const content = ARSU_COMMAND_CONTENTS[0];
   assert.match(renderCommand(requireTool("gemini"), content), /^description = /);
   assert.match(renderCommand(requireTool("gemini"), content), /prompt = """/);
   assert.doesNotMatch(renderCommand(requireTool("cline"), content), /^---/);
@@ -75,8 +78,44 @@ void test("format families render machine-valid structural markers", () => {
   assert.doesNotMatch(renderCommand(requireTool("trae"), content), /category:|argument-hint:/);
   assert.match(renderCommand(requireTool("costrict"), content), /description: "/);
   for (const definition of TOOLS.filter((tool) => tool.command)) {
-    assert.ok(renderCommand(definition, content).trim().length > 0);
+    for (const intent of [...ARSU_COMMAND_CONTENTS, ...COMPANION_INTENTS]) {
+      assert.ok(renderCommand(definition, intent).trim().length > 0);
+    }
   }
+});
+
+void test("companion manifest renders eight self-contained workflow skills with distinct metadata", () => {
+  assert.deepEqual(COMPANION_WORKFLOW_IDS, ["explore", "propose", "check", "verify", "next", "context", "decide", "archive"]);
+  assert.deepEqual(COMPANION_INTENTS.map((intent) => intent.skillId), [
+    "researchspec-explore",
+    "researchspec-propose",
+    "researchspec-check",
+    "researchspec-verify",
+    "researchspec-next",
+    "researchspec-context",
+    "researchspec-decide",
+    "researchspec-archive",
+  ]);
+  assert.equal(new Set(COMPANION_INTENTS.map((intent) => intent.id)).size, 8);
+  assert.equal(ARSU_COMMAND_CONTENTS.length, 4);
+
+  for (const intent of COMPANION_INTENTS) {
+    const rendered = renderCompanionSkill(intent);
+    assert.match(rendered, new RegExp(`^---\\nname: ${intent.skillId}\\n`, "m"));
+    for (const heading of ["Mission", "When to Use", "Do Not Use", "Inputs", "CLI Examples", "Workflow", "Decision Table", "Failure Recovery", "Output Contract", "Guardrails", "Completion", "Shared CLI Discipline"]) {
+      assert.match(rendered, new RegExp(`## ${heading}`));
+    }
+    assert.match(rendered, /--dry-run --json/);
+    assert.doesNotMatch(rendered, /references\/cli-discipline\.md|<<|Authoring hint/);
+  }
+
+  const check = COMPANION_INTENTS.find((intent) => intent.id === "check");
+  assert.ok(check);
+  const claude = renderCommand(requireTool("claude"), check);
+  assert.match(claude, /Use the installed `researchspec-check` skill/);
+  assert.match(claude, /tags: \[researchspec, companion, check\]/);
+  assert.doesNotMatch(claude, /tags: \[researchspec, arsu\]/);
+  assert.equal(requireTool("claude").command?.path(check.id, "/project"), "/project/.claude/commands/researchspec/check.md");
 });
 
 void test("Copilot uses its explicit detection paths", async () => {
@@ -84,6 +123,24 @@ void test("Copilot uses its explicit detection paths", async () => {
   await mkdir(path.join(root, ".github/agents"), { recursive: true });
   assert.ok((await detectTools(root)).includes("github-copilot"));
   await cleanup(root);
+});
+
+void test("delivery projects eight skills to 31 tools and eight wrappers to 28 command-capable tools", async () => {
+  const root = await tempProject();
+  const previousCodexHome = process.env.CODEX_HOME;
+  process.env.CODEX_HOME = path.join(root, "codex-home");
+  try {
+    const delivery = await planToolDelivery({ projectRoot: root, toolIds: TOOL_IDS, existingInstallations: [], force: false });
+    const companionSkills = delivery.installations.filter((item) => item.source.startsWith("companion:") && item.source.endsWith("/SKILL.md"));
+    const companionCommands = delivery.installations.filter((item) => COMPANION_WORKFLOW_IDS.some((id) => item.source === `command:${id}`));
+    assert.equal(companionSkills.length, 31 * 8);
+    assert.equal(companionCommands.length, 28 * 8);
+    assert.equal(delivery.diagnostics.filter((item) => item.code === "commands_not_supported").length, 3);
+  } finally {
+    if (previousCodexHome === undefined) Reflect.deleteProperty(process.env, "CODEX_HOME");
+    else process.env.CODEX_HOME = previousCodexHome;
+    await cleanup(root);
+  }
 });
 
 function requireTool(id: string) {

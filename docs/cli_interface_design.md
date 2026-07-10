@@ -79,6 +79,7 @@ researchspec <command> [arguments] [options]
 | `researchspec show <item>` | 查看某个合同、artifact 或 pending item | 否 | 是 | 否 |
 | `researchspec handoff` | 生成或打印当前 handoff view | 可选 | 是 | 是 |
 | `researchspec pack` | 打包当前上下文 | 是 | 是 | 是 |
+| `researchspec propose <change-id>` | 从 strict JSON 创建 validated pending contract change | 是 | 是 | 是 |
 | `researchspec decide [item]` | 交互式处理 pending item | 是 | 是 | 是 |
 | `researchspec archive [item]` | 归档已处理的 change 或 draft patch | 是 | 是 | 是 |
 
@@ -98,7 +99,7 @@ researchspec <command> [arguments] [options]
 | --- | --- | --- |
 | `--cwd <path>` | 全部命令 | 指定项目工作目录；默认当前目录 |
 | `--workspace <path>` | 合同相关命令 | 指定 `researchspec/` 路径；默认从 cwd 向下定位 |
-| `--json` | 查询、检查、列表、show、handoff、pack、decide、archive | 输出单个 versioned JSON envelope |
+| `--json` | 查询、检查、列表、show、handoff、pack、propose、decide、archive | 输出单个 versioned JSON envelope |
 | `--dry-run` | 写命令 | 只报告将写入、修改、跳过的文件，不落盘 |
 | `--force` | 写命令 | 允许覆盖 generated agent-facing files；不得绕过 human decision |
 | `--yes` | 低风险写命令 | 跳过低风险确认；不得自动接受 high-impact research decisions |
@@ -347,7 +348,42 @@ researchspec pack [--out <path>] [--include-artifacts] [--json] [--dry-run]
 - `pack` 不接受 pending items。
 - `pack` 不推进 workflow stage。
 
-## 12. `researchspec decide [item]`
+## 12. `researchspec propose <change-id>`
+
+用途：把 agent/human 已完成的 semantic change intent 验证并创建为 pending contract
+change；不修改 stable specs、runtime state、registry 或 ledgers。
+
+Synopsis：
+
+```bash
+researchspec propose <change-id> \
+  --input <payload.json> \
+  --actor-kind <human|agent> \
+  --actor-name <name> \
+  [--json] [--dry-run] [--yes]
+```
+
+输入 JSON 为 strict object，包含 `title`、`rationale`、`risk_level`、非空 `impact`
+和非空 `patches`。每个 patch 提供 `target_contract`、`operation`、`target_path`、
+operation 所需的 current/proposed value、`reason`、`source_artifact_ids` 与
+`source_decision_ids`。未知字段和不完整 operation shape 属于 usage error。
+
+规则：
+
+- `change-id` 必须是 SafeId，不能复用 active/archive ID，不能覆盖 existing target；
+  `--force` 不适用。
+- Target 仅限五个 stable specs。YAML 支持 dot 与唯一 `collection[id]` selector；
+  `project.md` 仅支持 `replace section[Heading]`。
+- CLI 检查 target existence/type、current value、proposed value 及 artifact/decision refs，
+  并派生 schema version、change ID、time、actor、status、human-decision flag、patch IDs
+  和 validation metadata。
+- Write plan 按 `proposal.md`、`tasks.md`、`contract-patch.yaml` 顺序 create-only；最后
+  一个文件是 machine contract。三个文件均为 user-owned。
+- 非交互执行需要 `--yes`；它只确认创建 pending proposal，不表示接受该 proposal。
+- 参数/schema error 返回 2，target/current/reference domain conflict 返回 1，existing
+  output/I/O conflict 返回 3。JSON mode 始终只输出一个 envelope。
+
+## 13. `researchspec decide [item]`
 
 用途：处理需要人类确认的 pending item。它统一承载合同变更、稿件 patch、
 gate override 和 accepted limitation 等用户决策，避免多个相似写命令造成混淆。
@@ -355,7 +391,9 @@ gate override 和 accepted limitation 等用户决策，避免多个相似写命
 Synopsis：
 
 ```bash
-researchspec decide [item] [--json] [--dry-run]
+researchspec decide [item] \
+  [--decision <accept|reject|postpone>] \
+  [--actor-name <name>] [--reason <text>] [--json] [--dry-run]
 ```
 
 交互流程：
@@ -373,7 +411,6 @@ researchspec decide [item] [--json] [--dry-run]
 | Contract change | 更新目标 `specs/*`，追加 decision record，可写 apply receipt artifact |
 | Draft patch | 生成 revised draft artifact，更新 artifact registry，追加 decision record |
 | Gate override | 追加 decision record，不修改历史 gate event |
-| Accepted limitation | 追加 decision record；必要时要求 contract change |
 
 规则：
 
@@ -381,10 +418,12 @@ researchspec decide [item] [--json] [--dry-run]
 - `--dry-run` 必须显示将写入的全部 surfaces。
 - 不提供多套相近 patch 应用命令；用户只通过 `decide` 处理 pending items。
 - 任何 high-impact research change 都必须留下 decision record。
+- Accept contract change 前必须再次解析 target、验证 artifact/decision refs，并比较
+  YAML value 或 Markdown section body 的 `current_value`；发生 drift 时不得应用。
 - `decide` 只负责决策和应用，不负责把已处理对象移出 active surface；收尾归档由
   `archive` 完成。
 
-## 13. `researchspec archive [item]`
+## 14. `researchspec archive [item]`
 
 用途：归档已接受、拒绝或已完成处理的 contract change / draft patch，让它们退出
 active surface，同时保留可追踪的收尾记录。
@@ -433,11 +472,12 @@ researchspec archive [item] [--json] [--dry-run]
 - 如果检查发现格式不规范、引用缺失或 spec 冲突，应报告 diagnostics；复杂修复可交给
   agent-facing companion command 协助，但最终写入仍应通过 CLI 或明确的文件编辑完成。
 
-## 14. 读写边界汇总
+## 15. 读写边界汇总
 
 | Surface | 用户向可写命令 | 规则 |
 | --- | --- | --- |
-| `researchspec/specs/*` | `init`、`decide` | skeleton 可创建；语义变更必须来自 accepted pending item |
+| `researchspec/specs/*` | `init`、`decide` | `propose` 只读取；语义变更必须来自 accepted pending item |
+| `researchspec/changes/<id>/*` | `propose`、`decide` | propose create-only；decide 更新 lifecycle，machine contract 最后创建 |
 | `runs/current/state.yaml` | `init` | 后续 stage transition 由 wrapper/runtime 内部 helper 处理，不暴露为用户命令 |
 | `artifact-registry.json` | `decide` | 只在接受 draft patch 或生成 receipt 时由 CLI/helper 写入 |
 | `decision-ledger.jsonl` | `decide` | 记录 human decision，不允许用户手写 JSONL |
@@ -448,9 +488,9 @@ researchspec archive [item] [--json] [--dry-run]
 | agent tool directories | `init`、`update` | 只写 generated agent-facing files |
 | packed bundle | `pack` | 只写用户指定 bundle |
 
-## 15. 已冻结实现契约
+## 16. 已冻结实现契约
 
-### 15.1 JSON envelope
+### 16.1 JSON envelope
 
 ```ts
 interface CliEnvelope<T> {
@@ -463,7 +503,7 @@ interface CliEnvelope<T> {
 }
 ```
 
-### 15.2 Exit codes
+### 16.2 Exit codes
 
 | Code | 含义 |
 | --- | --- |
@@ -473,33 +513,33 @@ interface CliEnvelope<T> {
 | `3` | 写保护或 I/O conflict |
 | `4` | 未预期 internal error |
 
-### 15.3 Item selectors
+### 16.3 Item selectors
 
 Canonical selectors 为 `change:`、`patch:`、`artifact:`、`gate:`、
 `decision:`、`source:`、`claim:`、`tool:` 和 `contract:`。裸 ID 只有在所有
 index 中唯一时才可解析；歧义时返回候选 canonical selectors。
 
-### 15.4 Tool delivery facts
+### 16.4 Tool delivery facts
 
 - `researchspec/config.yaml` 保存 profile 和 selected tools。
 - `tool-installation-manifest.json` 保存 generated path、scope、source、adapter
   version 和 SHA-256 ownership evidence。
 - Project-local skill 路径统一为 `<skillsDir>/skills/<skill-id>/**`；四个 ARSU
-  skill 目录递归安装。
+  skill 目录递归安装，八个 self-contained companion skills 各安装一个 `SKILL.md`。
 - 28 个 command-capable tools 通过 registry formatter 生成各自 Markdown/TOML
-  格式；不得用一个通用 Markdown 文件覆盖格式差异。
+  格式的四个 ARSU 与八个 companion wrappers；不得用一个通用 Markdown 文件覆盖格式差异。
 - Codex prompts 是 `$CODEX_HOME/prompts` 或 `~/.codex/prompts` 下的
   shared-global files，不因单个项目 deselect 被删除。
 - Manifest 未登记的 existing file 视为 user-owned；hash drift 默认保留，
   `--force` 也只能覆盖 manifest-owned generated files。
 
-### 15.5 Deterministic derived views
+### 16.5 Deterministic derived views
 
 `handoff` 每次从 contracts/state/registry/ledgers 渲染。`pack` 使用固定 entry
 排序和时间戳，包含 entry path、byte count 和 SHA-256 manifest；两者都不接受
 decision、不推进 stage，也不成为 runtime SSOT。
 
-## 16. 非目标
+## 17. 非目标
 
 - 不设计 LLM API integration。
 - 不运行 ARSU semantic writing/research/review workflows。
