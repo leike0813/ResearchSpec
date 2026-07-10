@@ -1,195 +1,207 @@
-# ResearchSpec Companion Skill / Command Design
+# ResearchSpec Skill / Command Design
 
-## 0. 定位与事实源
+## 0. 定位、状态与事实源
 
-ResearchSpec companion 是 CLI 之上的 agent-facing workflow 层。它负责理解意图、
-组合只读视图、解释证据与风险、识别停止点、向用户取得明确选择，并在写后复查。
-CLI 仍是 schema validation、target resolution、dry-run、write plan、receipt、registry、
-ledger、lifecycle 与 generated ownership 的唯一确定性执行入口。
+ResearchSpec 的 agent-facing surface 由 ARSU Skills、ResearchSpec Companion Skills 和不同
+工具的 command wrappers 构成。用户入口、运行顺序和目标最小集合以
+[ARSU 用户使用模型 v0.1](./arsu_user_usage_model.md)为 canonical 事实源。
 
-实现事实源位于 `src/adapters/companion/`：一个 typed manifest 注册全部 workflow，
-每个 workflow 由独立 TypeScript 模块维护，通用 CLI 纪律在 build 时内联。最终安装的
-skill 是自包含的，不依赖 companion runtime reference、script、database 或 LLM API。
+本文区分：
 
-ARSU 与 companion 是两组独立 intent。ARSU 负责文献研究、证据综合、论文写作、
-稿件审查、revision strategy 和 manuscript draft-patch authoring；companion 负责安全地
-导航和操作 ResearchSpec contract lifecycle。
+- **Target v0.1**：4 个 ARSU Skills、4 个 Companion Skills、31×8 Skills 和 28×8
+  thin wrappers。
+- **Current implementation（2026-07-10）**：4 个 ARSU Skills、9 个 Companion Skills；
+  `src/adapters/companion/` 的 typed manifest 和 converter/delivery registry 是实现事实源。
+- **Pending technical layer**：routing catalog、Navigate、新 selector runtime，以及安全清理
+  六个被合并/移除的旧 Companion 投影。
 
-## 1. 默认 9-Skill Surface
+CLI 是 schema validation、path resolution、DAG/frontier、dry-run、write plan、receipt、
+registry、ledger、lifecycle 和 generated ownership 的唯一确定性执行入口。ARSU Skill 负责
+学术语义生产；Companion 负责用户意图、解释和高影响交互；wrapper 只负责工具适配。
 
-| ID | Skill | 主要触发 | 不负责 |
+## 1. Target v0.1 Skill Surface
+
+### 1.1 四个 ARSU Skills
+
+| Skill | 拥有的语义工作 | 不负责 |
+| --- | --- | --- |
+| `deep-research` | 研究问题、证据搜索、综合、事实核查、研究报告 | 稿件 peer review、直接写 runtime stores |
+| `academic-paper` | 论文规划、论证、写作、修改、引用与格式 | 对自身稿件作权威审稿、决定 workflow state |
+| `academic-paper-reviewer` | 同行评议、methodology review、re-review | 直接改稿、应用 revision patch |
+| `academic-pipeline` | 按 CLI frontier 协调跨 Skill subflows | 第二套 stage state、亲自执行研究/写作/审稿 |
+
+### 1.2 四个 Companion Skills
+
+| Skill | 主要触发 | 组合的能力 | 不负责 |
 | --- | --- | --- | --- |
-| `explore` | `researchspec-explore` | 理解 workspace、contracts、claims、artifacts、gates、decisions | 外部文献研究、写入 |
-| `propose` | `researchspec-propose` | 把高影响语义变更变成 pending contract change | 接受或应用 change |
-| `check` | `researchspec-check` | deterministic validation、diagnostic 分类与授权修复 | semantic readiness、论文审稿 |
-| `verify` | `researchspec-verify` | evidence-linked coherence/readiness scorecard | schema 修复、稿件 peer review |
-| `next` | `researchspec-next` | 跨会话恢复并给出一个首选下一步 | 执行决定、归档或 stage transition |
-| `context` | `researchspec-context` | 在 handoff stdout/write 与 pack 之间选择 | 修改 SSOT、任意备份 |
-| `decide` | `researchspec-decide` | review、dry-run、确认、accept/reject/postpone | author proposal/draft patch |
-| `submit` | `researchspec-submit` | preview、hash-bound 确认、candidate/receipt 原子登记 | 写 candidate、学术认可、Gate 或 stage transition |
-| `archive` | `researchspec-archive` | resolved evidence 检查与 lifecycle archive | 补造 receipt/gate/decision |
+| `researchspec-navigate` | 模糊目标、跨 Skill、继续、解释、导出 | routing catalog、status/instructions、list/show/check、handoff/pack | 学术语义生产、高影响决定 |
+| `researchspec-propose` | scope/claim/structure 等高影响变更 | evidence collection、strict proposal、dry-run、确认 | 接受或应用 change |
+| `researchspec-decide` | review branch、pending change、Gate override | show、options/evidence、human rationale、dry-run、CLI transaction | 起草论文、伪造 Gate |
+| `researchspec-verify` | 阶段边界语义审查 | deterministic check、artifact evidence、semantic scorecard、proposed Gate verdict | 直接确认 Gate、修改稿件 |
 
-不为 `setup`、`init`、`update`、`status`、`list`、`show`、`handoff`、`pack`、`apply`
-单独建立 skill。前两者发生在 project-local skills 可用之前；其余是九个 workflow 内部
-按意图组合的机械命令，单独暴露只会造成重叠触发或绕开安全流程。
+Companion 以稳定用户意图划分，不与每个 CLI 动词一一对应。Check、Submit 和 Archive 是
+可直接复用的 deterministic transaction；Explore、Next 和 Context 是 Navigate 的内部路由
+分支，而不是独立产品。
 
-## 2. Source Architecture 与 Skill 厚度
+## 2. 用户触发与 Skill 路由
 
-```text
-src/adapters/companion/
-  types.ts
-  shared-guidance.ts
-  manifest.ts
-  render.ts
-  index.ts
-  workflows/
-    explore.ts
-    propose.ts
-    check.ts
-    verify.ts
-    next.ts
-    context.ts
-    decide.ts
-    submit.ts
-    archive.ts
+```mermaid
+flowchart TD
+    U["用户目标"] --> Q{"是否明确到 ARSU Skill / mode？"}
+    Q -->|"否"| N["researchspec-navigate"]
+    Q -->|"是"| A["对应 ARSU Skill"]
+    N --> R["typed routing catalog"]
+    A --> R
+    R --> S["路线摘要<br/>Skill、mode、依赖、产物、Gate、成本"]
+    S --> C{"用户确认"}
+    C -->|"确认"| ST["start subflow"]
+    C -->|"调整"| U
 ```
 
-- Workflow module 拥有完整 canonical instructions；不把九个 skill 的正文塞入一个文件。
-- Manifest 是唯一注册表，提供稳定 ID、skill ID、description、metadata 与 workflow body。
-- `shared-guidance.ts` 只保存真正跨 workflow 的 authority、selector、confirmation 和
-  failure-class 纪律，由 renderer 内联到每个 `SKILL.md`。
-- Command projector 使用同一 manifest，只生成“调用已安装 skill”的短 wrapper，不复制
-  workflow。
+Skill descriptions 与 Navigate 必须从同一个 converter-owned routing catalog 投影。任何一个
+Skill 都不得靠自身 description 声称绕过 prerequisites、route confirmation 或 Gate policy。
 
-每个 `SKILL.md` 必须包含 Mission、When to Use、Do Not Use、Inputs、CLI Examples、
-Workflow、Decision Table、Failure Recovery、Output Contract、Guardrails、Completion 和
-内联 Shared CLI Discipline。厚度以状态分支、停止条件和可执行性审查，不以行数或全文
-snapshot 审查。
+## 3. Target Companion Workflow Contracts
 
-## 3. 公共执行纪律
+### 3.1 Navigate
 
-1. 使用最近的 `researchspec/` workspace；用户指定 `--workspace` / `--cwd` 时服从显式值。
-2. Inspection 与 preview 使用 JSON envelope，按 `ok/data/diagnostics/error` 解释。
-3. 使用 `status/list/show` 获取 canonical selector；workflow 节点使用 `work:<id>`，并通过 `instructions work:<id>` 获取动态工作包；候选不唯一时停止并让用户选择。
-4. Decision event 是导航 evidence，必须映射回 `change_id`、`draft_patch_id` 或 `gate_id`。
-5. 写 workflow 先收集完整 semantic payload，再运行完整命令的 `--dry-run --json`。
-6. 向用户解释 before/after meaning、paths、evidence 与风险，取得明确确认后才执行同一命令。
-7. `--yes` 只能跳过 pending proposal 等低风险创建 prompt，不能代表 research decision、
-   lifecycle override 或 generated-file ownership 授权。
-8. 写后用 `show/status/check` 复查权威状态；process exit 不是唯一成功证据。
-9. Exit 2 修正参数/schema；exit 1 处理 domain blocker；exit 3 保留 existing target 并处理
-   ownership/路径冲突；exit 4 停止并报告可复现内部错误。
+Navigate 包含四个入口分支：
 
-不得手写 CLI-owned receipt、registry、ledger、manifest 或 lifecycle status；不得通过降低
-claim/gate 语义来让检查通过；不得把 ARSU-derived history/version 文本本身当成阻断。
+1. **Route**：将模糊目标映射为候选 Skill/mode，使用 near-miss 解释差别。
+2. **Resume**：读取 active run frontier，区分继续已有 work 与创建新 subflow。
+3. **Explain**：把 blocker、candidate、Gate、Decision 和 transition 翻译成用户可理解的状态。
+4. **Export**：根据接收方和持久化需求选择 `handoff` 或 `pack`。
 
-## 4. Workflow Contracts
+Route 分支必须展示 prerequisite expansion、主要 artifacts、formal Gates 和成本摘要；只有用户
+确认后才能调用 `start`。多个 ready items 或多条合理路线必须让用户选择，不以文件名、stage
+标题或聊天暗示猜测。
 
-### 4.1 Explore
+### 3.2 Propose
 
-组合 `status`、窄范围 `list`、canonical `show` 和必要的 targeted `check`。输出 observed
-evidence、relationships、unknowns、contradictions、options 和下一 owner。只读；当用户
-考虑高影响 semantic change 时，只整理 target/current/evidence/impact 并路由 propose。
+Propose 只处理高影响语义变更。它收集 target/current/evidence/impact，生成 strict semantic
+input，先 dry-run，再展示 before/after meaning、paths 和风险，获得确认后调用 `propose`。
+它不改 stable specs，不接受 proposal，也不把普通探索意见提升为 Decision。
 
-### 4.2 Propose
+### 3.3 Decide
 
-先检查当前 target 与 supporting evidence，再生成 strict JSON input。YAML 只允许 dot 与
-唯一 `collection[id]` selector；Markdown 只允许 `replace section[Heading]`。运行完整
-`propose` dry-run，解释三文件 create-only plan 和 semantic risk，确认后创建 pending
-change，再用 show/list/check 复查。它不改 stable specs，也不接受 proposal。
+Decide 处理：
 
-### 4.3 Check
+- pending contract change / draft patch 的 accept、reject 或 postpone；
+- review/revision branch；
+- scope、claim、structure 等 workflow 语义选择；
+- failed Gate 的显式 override。
 
-针对 `all/contracts/runtime/artifacts/tools` 运行 deterministic check，按 blocking、severity、
-code、path 分组。将修复分为 mechanical、semantic、human-decision：前者在授权后最小修复
-并重跑相同 check；semantic 路由 propose；pending choice 路由 decide。`--strict` 只用于
-明确要求 zero-warning 的 completion rule。
+它必须绑定 human actor、reason、target/current evidence 和 dry-run plan。Gate 用户确认本身不
+创建 Decision；只有 override 或新的语义选择进入 Decision ledger。
 
-### 4.4 Verify
+### 3.4 Verify
 
-以 deterministic check 通过为前置，检查 RQ/scope、sources、claim support/strength/limits、
-manuscript constraints、workflow artifacts、gates、decisions 与 lifecycle evidence。每个
-pass/concern/blocker/unknown 必须引用 stable ID 或 workspace-relative path。它不写 gate、
-report 或文件；schema 问题路由 check，contract change 路由 propose，稿件质量路由 ARSU
-reviewer。
+Verify 以 deterministic check 通过为前置，检查 RQ/scope、sources、claim support/strength/
+limits、manuscript constraints、workflow artifacts 和 prior decisions。每个 verdict 必须引用
+稳定 ID 或 workspace-relative path。
 
-### 4.5 Next
+Verify 只提出 Gate verdict。它向用户展示 validator、evidence、限制和后果；用户确认后由
+CLI `submit gate:` 持久化。用户质疑时先 re-verify，仍失败但要求继续时路由 Decide override。
 
-固定优先级：blocking diagnostic → blocking gate → pending change/patch → archivable item →
-ready work item → transition/configuration boundary。对单个 ready 节点调用
-`instructions work:<id> --json`，使用其中的 producer Skill、dependencies、output、allowed
-writes 和 completion policy；不得从静态 Skill 文本重建节点协议。Ready selectors 从
-`status.data.workflow_control.ready_items` 读取，并在同一 object 的 `work_items` 中取详情；
-status 顶层没有第二份 work-items 列表。多个同优先级节点要求用户选择。
-Ready 节点存在 `candidate_unregistered` warning 时路由 `researchspec-submit`，否则路由节点
-声明的 producer Skill；不从文件名或 stage title 猜测。
-`stage_work_complete + transition_required` 只表示只读控制面到达转移边界，
-不得直接编辑 state 或宣告 run complete。
+## 4. 公共执行纪律
 
-### 4.6 Context
+1. 从最近的 ResearchSpec workspace 读取 CLI 状态；显式 `--workspace`/`--cwd` 优先。
+2. 以 JSON envelope 消费 inspection、instructions、preview 和 transaction 结果。
+3. 运行循环固定为 `status → instructions <selector> → start/submit/advance → status`。
+4. ARSU Skill 只写 instructions 允许的 candidate、contract patch 或 draft patch surface。
+5. Candidate 产生后可以自动执行 hash-bound `submit work:`；不要求用户逐 artifact 确认。
+6. 每个 formal Gate 都必须展示 evidence 并取得用户确认；Agent 不能代替用户填写
+   `confirmed_by`。
+7. 唯一合法 transition 可以自动 `advance`；多个分支或新语义必须进入 Decide。
+8. 写后复查权威 status/check/receipt；process exit 不是唯一成功证据。
+9. 不得手写 CLI-owned receipt、registry、ledger、state 或 manifest。
+10. 不得通过降低 claim/Gate 语义、忽略 hash drift 或扩大 allowed writes 来“修复”阻断。
 
-根据 audience、transport、persistence 选择 `handoff --stdout`、handoff write 或 deterministic
-pack。Pack 默认不带 artifacts；只有在 recipient need、privacy/licensing/path safety/size
-可接受时才用 `--include-artifacts`。写 variant 必须 dry-run、说明 overwrite/exposure、明确
-确认并用 path/hash/manifest 复查。Derived view 不是 SSOT。
+## 5. Current Implementation 与迁移映射
 
-### 4.7 Decide
+Current implementation 的九个 Companion 为：Explore、Propose、Check、Verify、Next、Context、
+Decide、Submit、Archive。它们在 surface consolidation 完成前仍由 typed manifest 投影，现有
+用户工作不应被本设计文档提前破坏。
 
-它是唯一 public semantic apply workflow。先消歧并 show item，再收集 decision、human actor
-与 reason；使用完整 payload dry-run，检查 target/current value、base hash、evidence、receipt、
-registry 和 ledger writes；解释 semantic effect 并明确确认后执行完全相同命令。Accept 时
-CLI 会二次运行与 propose 相同的 target resolver，任何 YAML/Markdown current-value drift
-都会阻断。写后复查 receipt/status/check。
+目标迁移如下：
 
-### 4.8 Submit
+| Current Companion | Target 归属 | 迁移原则 |
+| --- | --- | --- |
+| Explore | Navigate / Explain | 保留只读证据整理，合入 Navigate |
+| Next | Navigate / Resume | 继续消费 CLI frontier，不保留第二个入口 |
+| Context | Navigate / Export | handoff/pack 选择合入 Navigate |
+| Check | CLI `check` | deterministic inspection 不需要 Companion |
+| Submit | CLI `submit` | work candidate 自动提交；Gate submit 由 Verify 组织确认 |
+| Archive | CLI `archive` | lifecycle primitive 直接调用 |
+| Propose | Propose | 保留并按 target runtime 更新 |
+| Decide | Decide | 保留，增加 review branch/Gate override |
+| Verify | Verify | 保留，成为 proposed Gate verdict owner |
 
-固定流程为 `status → instructions → submit --dry-run → exact-hash confirmation → submit
---expected-sha256 --yes → status + check artifacts`。Input 只包含 schema version、可信依赖
-artifact IDs 与可选 producer mode；candidate path/type、producer Skill、stage、template ref 和
-IDs 全由 workflow/CLI 派生。Workflow 不编辑 candidate、registry 或 receipt，也不把
-deterministic `verified` 解释为学术认可。写后报告 state、Gate 和 Decision 均未被修改；若
-completion Gate 缺失，artifact 可已登记但节点仍 blocked。
+当前 `researchspec-next` 的 blocker/pending/archive/work 优先级和
+`researchspec-submit` 的 preview/confirm 流程是已实现事实；它们将被 Navigate 和自动 work
+submit policy 吸收，而不是继续演化成更多 Companion。
 
-### 4.9 Archive
+## 6. Source Architecture 与 SSOT
 
-只接受 resolved change/patch。检查 matching decision、linked blocking gate、registered
-receipt path/hash/content 和 destination collision；dry-run 后解释 source/target 与保留的
-ledger/registry evidence，再确认移动。它不补造 evidence，不处理 pending item、current run、
-backup 或 OpenSpec change。
-
-## 5. Delivery Matrix
-
-每个 selected tool 的 project-local skill 路径为：
+Target source architecture：
 
 ```text
-<skillsDir>/skills/researchspec-<id>/SKILL.md
+converter-owned routing catalog
+  ├─ ARSU Skill descriptions
+  └─ researchspec-navigate route entries
+
+typed Companion manifest
+  ├─ navigate
+  ├─ propose
+  ├─ decide
+  └─ verify
+
+renderer
+  ├─ self-contained SKILL.md
+  └─ thin tool-specific command wrapper
 ```
 
-- 31 个 registered tools 全部安装 9 个 companion skills 和 4 个 ARSU skill trees。
-- 28 个 command-capable tools 生成 9 个 companion wrappers 和 4 个 ARSU wrappers。
-- ForgeCode、Kimi、Mistral Vibe 只安装 skills，并产生非阻断 `commands_not_supported`。
-- Codex command prompts 延续 registry 定义的 shared-global `$CODEX_HOME/prompts` 路径。
-- Markdown/TOML/frontmatter、colon/dash 与参数注入由既有 tool formatter 决定，不新增平台特判。
+- Routing catalog 是 Skill/mode/intent/near-miss/artifact/risk/Gate policy 的 SSOT。
+- Companion manifest 是四个 Companion ID、description、metadata 和 workflow body 的 SSOT。
+- Shared CLI discipline 可在源码层复用，但必须内联到 self-contained `SKILL.md`。
+- Command projector 消费相同 Skill registry，只生成“调用已安装 Skill”的适配文本。
+- Generated trees 由 converter/delivery pipeline 维护，不手改 31 个工具目录。
 
-所有生成文件进入同一 write plan 和 `tool-installation-manifest.json`。Unknown existing path
-按 user-owned conflict 保留；manifest-owned hash drift 默认保留；`--force` 只能覆盖已登记
-generated file。旧 manifest-owned `references/cli-discipline.md` 不再是 desired output：hash
-未漂移则 stale cleanup，用户修改则保留并报告 `generated_file_drift`。
+## 7. Delivery Matrix
 
-## 6. 验收边界
+| 状态 | Registered tools | Skills per tool | Command-capable tools | Wrappers per tool |
+| --- | ---: | ---: | ---: | ---: |
+| Current implementation | 31 | 13（4 ARSU + 9 Companion） | 28 | 13 |
+| Target v0.1 | 31 | 8（4 ARSU + 4 Companion） | 28 | 8 |
 
-- Manifest 恰好 9 个唯一 companion IDs，skill 与 command projection parity，ARSU intents 独立。
-- 每个 skill 检查必要章节、关键状态分支、CLI example、confirmation、failure recovery、output
-  contract 和 near-miss；不锁定全文、hash、行数或大 snapshot。
-- Delivery 从 registry 推导 31×9 和 28×9，不为具体工具复制规则。
-- `propose → decide accept → receipt/registry/ledger → archive` 有端到端验收。
-- `instructions → candidate → submit preview/confirm → receipt/registry → next ready` 有端到端验收。
-- Dry-run 无写入、create-only/manifest ownership、drift、force、Codex shared-global 和 stale
-  cleanup 均保持现有确定性契约。
+ForgeCode、Kimi CLI 和 Mistral Vibe 等 skills-only 工具仍不生成 wrappers。Codex 的
+shared-global prompt ownership、manifest hash/drift protection 和工具格式化规则继续有效。
+数量必须从 tool registry 与 Skill registry 推导，不复制 31 或 28 份规则。
 
-## 7. 非目标
+## 8. Pending Technical Layers
 
-- 不引入 runtime LLM API、database、workflow profile、setup/onboard skill 或平台专属 core。
-- 不建立 companion scripts、assets、gate、state 或 `agents/openai.yaml`。
-- 不让 companion 取代 ARSU semantic research/writing/review，也不暴露低层 registry/ledger
-  append 或 stage-transition skill。
+1. `add-arsu-routing-catalog`：建立 typed routing catalog 和 descriptions projection。
+2. `add-subflow-instance-control-plane`：让 Navigate/ARSU Skills 消费通用 subflow/work
+   status/instructions，提供 `start` 与 automatic work submit policy。
+3. `add-gate-transition-control-plane`：让 Verify/Decide 消费 Gate/transition packets。
+4. `add-arsu-workflow-profiles`：提供全部 mode graphs、parallel/join 和 round templates。
+5. `consolidate-researchspec-agent-surface`：新增 Navigate，移除六个 superseded Companion 的
+   manifest entries 与 manifest-owned generated assets，达到 31×8/28×8。
+
+## 9. 验收边界
+
+- 用户从模糊目标和明确 Skill/mode 都能得到同源路线摘要，并且启动前只确认一次。
+- Navigate 能恢复、解释和导出，但不复制 ARSU 语义或 CLI 状态机。
+- Propose/Decide/Verify 的高影响边界和持久化 evidence 清晰。
+- Candidate 自动提交不被解释为 Gate pass；每个 Gate 都能证明 human confirmation。
+- Current 九 Companion 在 consolidation 前保持可用，目标文档不伪装成已实现。
+- Consolidation 后 manifest 恰好 4 个 Companion IDs，Skill/command projection parity，
+  delivery 从 registry 推导 31×8 与 28×8。
+- 测试锁定 ID、结构、reason code、projection parity 和可观察行为，不锁完整自然语言正文。
+
+## 10. 非目标
+
+- 不引入 runtime LLM API、database 或平台专属 core。
+- 不让 Companion 取代 ARSU semantic research/writing/review。
+- 不为每个 CLI transaction 建立 Skill，也不暴露低层 registry/ledger append。
+- 不在本设计中提前冻结 routing/subflow/Gate/transition DTO。

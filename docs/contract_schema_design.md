@@ -2,9 +2,19 @@
 
 ## 0. 文档状态与事实源
 
-本文是 ResearchSpec 吸收 ARSU 前的字段级合同设计草案。它定义
+本文是 ResearchSpec 面向 ARSU 的字段级合同设计。它定义
 ResearchSpec core contract workspace 的初始字段模型，用于后续拆分正式
 schema、validator、CLI 行为和 ARSU wrapper preflight 协议。
+
+用户运行语义以 [ARSU 用户使用模型 v0.1](./arsu_user_usage_model.md)为 canonical
+事实源。本文中的 schema 说明分为：
+
+- **Target v0.1**：单 active run、动态 subflow/round、parallel/join、Gate confirmation、
+  transition receipt 与 selector instructions 所需的领域信息。
+- **Current implementation（2026-07-10）**：现有 workspace DTO、静态 stage/work items、
+  receipt-backed `submit work:` 和既有 ledgers。
+- **Pending technical layer**：subflow/Gate/transition 的最终 DTO、持久化位置和迁移策略；
+  本文不把方向性字段写成已实现 Schema。
 
 本文不是最终 JSON Schema，不冻结 TypeScript 类型、CLI wire shape 或
 converter 注入实现。后续实现可以调整字段命名细节，但不应改变本文确立
@@ -15,6 +25,7 @@ converter 注入实现。后续实现可以调整字段命名细节，但不应�
 - ARSU：`/home/joshua/Workspace/Code/Skill/academic-research-skills-universal`
 - ARS upstream：`/home/joshua/Workspace/Code/Skill/academic-research-skills-universal/vendor/ars`
 - Workflow-contract mapping：`docs/arsu_workflow_contract_design.md`
+- Canonical 用户模型：`docs/arsu_user_usage_model.md`
 - 产品需求：`docs/prd_proposal.md`
 - 架构设计：`docs/arch_design_proposal.md`
 - 上游合同参考：`vendor/ars/shared/handoff_schemas.md`
@@ -633,9 +644,10 @@ sections:
 
 ### 3.5 `researchspec/specs/workflow.yaml`
 
-职责：声明当前项目使用的 workflow graph、ARSU skill/mode 对齐、每个 work item
-需要读取的 contracts/artifacts，以及 Agent 允许生成的候选输出。Core 不把
-academic-pipeline 硬编码进程序，而是从这里读取。
+职责：声明当前项目使用的 workflow/profile、ARSU skill/mode 对齐、每个 work item
+需要读取的 contracts/artifacts，以及 Agent 允许生成的候选输出。Target v0.1 还由
+profile 声明 subflow/round template、parallel/join、Gate 和 transition；Core 不把
+academic-pipeline 硬编码进程序。
 
 写入 owner：
 
@@ -654,6 +666,9 @@ academic-pipeline 硬编码进程序，而是从这里读取。
 
 顶层字段：
 
+下表首先记录 Current implementation 已可解析的字段；Target extensions 随后单列，避免把
+尚未实现的 DTO 误写成当前契约。
+
 | 字段 | 类型 | 必填 | 说明 |
 | --- | --- | --- | --- |
 | `schema_version` | string | 是 | ResearchSpec schema 版本 |
@@ -666,6 +681,17 @@ academic-pipeline 硬编码进程序，而是从这里读取。
 | `work_items` | list[`WorkflowNodeDefinition`] | 否 | 可执行节点；缺省表示兼容 workflow 尚未配置动态控制图 |
 | `mode_profiles` | list[`ModeProfile`] | 否 | skill/mode 读写约束复用块 |
 | `human_checkpoints` | list[`HumanCheckpoint`] | 否 | 必须人类确认的节点 |
+
+Target v0.1 的 profile 还必须能表达以下领域概念，最终字段名由
+`add-subflow-instance-control-plane` 与 `add-gate-transition-control-plane` 冻结：
+
+| 概念 | 最小语义 | 约束 |
+| --- | --- | --- |
+| `subflow_templates` | route/mode、work graph、parent policy、instance parameters | `init` 不实例化；`start` 在用户确认路线后实例化 |
+| `round_templates` | revision/re-review 的 repeatable template | instance 保存 parent 与 round identity，core 不硬编码最大轮数 |
+| `parallel_groups` | members、concurrency policy、join condition | Agent 不从 ready items 自行猜并行策略 |
+| `gates` | validator、evidence contract、risk policy、confirmation requirement | 每个 formal Gate 必须 user-confirmed |
+| `transitions` | basis、from/to、branch condition、effects | 唯一 transition 可自动 advance，多分支进入 Decision |
 
 `StageSpec` 字段：
 
@@ -683,7 +709,7 @@ academic-pipeline 硬编码进程序，而是从这里读取。
 | `gates_required` | list[string] | 否 | 必须通过的 gate 类型 |
 | `next` | list[`StageTransition`] | 否 | 转移规则 |
 
-`WorkflowNodeDefinition` 是 `status/instructions` 的运行期事实源：
+Current `WorkflowNodeDefinition` 是 work-level `status/instructions` 的运行期事实源：
 
 | 字段 | 类型 | 必填 | 说明 |
 | --- | --- | --- | --- |
@@ -706,6 +732,10 @@ academic-pipeline 硬编码进程序，而是从这里读取。
 节点状态固定为 `done / ready / blocked`。`done` 需要 `work_item_id` 对应的 registry entry、artifact type/path、文件、SHA-256，以及每个 `required_gate_ids` 对应的 pass/pass-with-conditions 或 accepted override。`require_receipt: true` 时还必须存在 hash-trusted `artifact_submit_receipt` registry record 与严格 receipt payload，且 candidate ID/path/hash、selector、profile 和关联 ID 相互一致。`artifact_statuses` 与 `verification_states` 是额外完成约束，不能替代 required gates；文件存在或手写 registry entry 本身不构成完成。`ready` 还必须处于 active stage。当前控制面在 active stage 全部节点完成后返回 `stage_work_complete: true` 与 `transition_required: true`，不会修改 state 或宣告整个 run 完成。
 
 当前显式试验 profile `arsu-research-slice` 将 RQ Brief、Bibliography、Synthesis 三个节点放在同一非 terminal 的 `research` stage；输出分别为 `runs/current/artifacts/rq-brief.md`、`bibliography.md` 和 `synthesis-report.md`，template refs 指向 `ars:shared/handoff_schemas.md#schema-1-rq-brief` 至 Schema 3。`init` 创建派生的 artifact 父目录，但不复制 template 或创建空 artifact 文件。三个节点全部 done 后仍只到达 transition boundary。
+
+这个 Slice 是 Current implementation 的协议验证，不是完整 ARSU profile。Target v0.1 的
+`instructions` 将同时支持 `subflow:`、`work:`、`gate:` 和 `transition:`，但不把依赖 artifact
+全文复制进 packet，也不允许 Agent 覆盖 profile-owned path/type/Gate/transition facts。
 
 `WriteSurface` 字段：
 
@@ -782,6 +812,10 @@ stages:
 职责：保存当前 run 的恢复点、active stage/mode、阻塞原因和最近 artifacts。
 它是运行位置 SSOT，不保存完整研究语义。
 
+Current implementation 只有一组静态 stage-oriented state。Target v0.1 保持一个 workspace
+最多一个 active run，但在 run 内增加动态 subflow/round instances；具体是扩展 `state.yaml`
+还是引入同目录 typed runtime file，由后续 technical change 决定。
+
 写入 owner：
 
 - Orchestrator/runtime。
@@ -813,6 +847,16 @@ stages:
 | `pending_decisions` | list[ref] | 否 | 等待人类处理的 decisions/changes |
 | `blocking_gates` | list[ref] | 否 | 当前阻塞 gate |
 | `diagnostics` | list[`Diagnostic`] | 否 | 非阻断诊断 |
+
+Target runtime representation 至少必须能复算：
+
+- subflow instance ID、template ID、parent ID、round number 和 lifecycle state；
+- work/parallel group/join frontier；
+- pending Gate 与 proposed verdict/evidence；
+- eligible transitions 和它们的 Gate/Decision basis；
+- start/submit/advance receipts 与 resume frontier。
+
+这些字段由 CLI transaction 写入；Human、ARSU Skill 和 Companion 都不得手写。
 
 `resume` 字段：
 
@@ -958,6 +1002,8 @@ decision 改变合同，应链接 accepted `contract-patch.yaml`。
 - Agent 可以准备问题、选项和 rationale 草案，但不能伪造 human decision。
 - Consumers 读取 decision ledger 判断 branch、override、accepted limitation
   和 patch acceptance。
+- Target v0.1 只把 scope、claims、structure、branch 和 Gate override 等高影响选择写入
+  Decision ledger；普通探索对话和 artifact feedback 不为追求审计数量而追加事件。
 
 每行一个 `DecisionEvent`。
 
@@ -994,7 +1040,8 @@ finalization 等 gate 的运行结果、阻断状态和输入输出 artifacts。
 
 生产/消费约束：
 
-- Gate/validator 是主要 producer；human 只通过 decision ledger override。
+- Gate/validator 产生 proposed verdict；Target v0.1 由用户确认后通过 `submit gate:`
+  持久化，human 只在 failed-Gate override 时进入 decision ledger。
 - Agent 不应手写通过状态；若 gate 结果来自 agent 审查，仍应由 wrapper/runtime
   结构化追加。
 - Orchestrator、finalize 和 process summary 是主要 consumers。
@@ -1019,6 +1066,11 @@ finalization 等 gate 的运行结果、阻断状态和输入输出 artifacts。
 | `affected_contracts` | list[path] | 否 | 相关 contracts |
 | `next_action` | string | 否 | runtime 建议动作 |
 | `override_decision_id` | ref | 否 | 若被人工 override |
+
+Target Gate event/receipt 还必须持久化 `validator`、结构化 `evidence`、`confirmed_by`、
+confirmation timestamp 和 basis hashes。用户质疑先产生新的 re-verification evidence；历史
+verdict 不原地改写。上述字段的 strict DTO 与 receipt linkage 尚未实现，由 Gate/transition
+technical change 冻结。
 
 `GateIssue` 字段：
 
@@ -1339,8 +1391,9 @@ runtime SSOT。字段拆分如下。
 
 ## 9. Contract Preflight 读取/写入协议
 
-每个 converted ARSU skill wrapper 在执行前应运行 ResearchSpec contract
-preflight。字段级行为如下。
+每个 converted ARSU skill wrapper 在执行前应运行 ResearchSpec contract preflight。
+Current Slice 使用 `status` + `instructions work:`；Target v0.1 对
+`subflow:/work:/gate:/transition:` 使用同一个 selector protocol。
 
 Preflight inputs：
 
@@ -1366,10 +1419,10 @@ Wrapper 写入纪律：
 | 写入目标 | 允许方式 |
 | --- | --- |
 | Stable specs | 只能提出 `contract-patch.yaml`，或由 human 直接编辑 |
-| Artifact outputs | 写文件后注册到 `artifact-registry.json` |
+| Artifact outputs | 写 candidate 后调用 hash-bound `submit work:`；不得手写 registry |
 | Human decisions | 只有 human-confirmed 才写 `decision-ledger.jsonl` |
-| Gate results | integrity/review/compliance/finalization 写 `gate-ledger.jsonl` |
-| Runtime state | gate transition/orchestrator 更新 `state.yaml` |
+| Gate results | Verify 提出 verdict，用户确认后调用 `submit gate:`；不得手写 ledger |
+| Runtime state | 只由 `start` / `advance` 等 CLI transaction 更新 |
 | Draft body changes | 写 `draft-patches/<patch-id>.json` 或新 draft artifact |
 
 ## 10. Validation 设计
@@ -1426,22 +1479,18 @@ Wrapper 写入纪律：
 Diagnostics 可以写入 `state.yaml.diagnostics`、validator report artifact 或
 process summary；不得伪装成 gate verdict。
 
-## 11. 初始实现顺序建议
+## 11. Target v0.1 Schema 落地顺序
 
-1. 固化 workspace layout、minimum viable fields、requiredness tier 和
-   `filled_by` 分类。
-2. 为 `specs/*`、`state.yaml`、registry、ledgers、patch 文件编写正式 schema；
-   schema 必须区分 human/agent authoring burden 与 script/runtime derived
-   fields。
-3. 实现只读 validator：结构检查和跨引用检查，先围绕 minimum viable fields
-   建立可靠 baseline。
-4. 实现 artifact registration helper 和 ledger append helper，避免 LLM 手写
-   registry/ledger 机械字段。
-5. 实现 contract preflight bundle 生成，只加载当前 stage/mode 的 minimum
-   contracts、需要的 extended fields 和 artifact refs。
-6. 改造 ARSU converter，使 wrapper 注入 Contract Inputs / Outputs / Writes
-   Allowed blocks。
-7. 再考虑将常见 ARS artifact payload 提升为 ResearchSpec artifact schemas。
+既有 workspace/schema、work evaluator、receipt-backed artifact submit 和 contract lifecycle
+属于 Current implementation。剩余 schema 按用户模型的 technical changes 定型：
+
+1. Routing catalog Schema：Skill/mode/artifact/near-miss/risk/Gate policy。
+2. Subflow runtime Schema：instance/parent/round、parallel/join、通用 selector status 与
+   instructions。
+3. Gate/transition Schema：proposed verdict、evidence、`confirmed_by`、override linkage、
+   transition receipt 和 state preconditions。
+4. ARSU profile Schema：四类 Skill 的完整 mode graph 和 round templates。
+5. Agent surface projection Schema：四 Companion registry 与 31×8/28×8 derived delivery。
 
 ## 12. 非目标
 

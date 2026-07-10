@@ -40,6 +40,46 @@ ResearchSpec should not become:
 Files remain the interface. Tool adapters may render and write files, but should
 not call agent APIs or depend on a specific model.
 
+## Canonical User Usage Model
+
+`docs/arsu_user_usage_model.md` is the canonical source for how users enter,
+confirm, run, resume, verify, and finish ARSU work. Product, architecture, CLI,
+schema, Skill, converter, and workflow changes must preserve that model or update
+it through an explicit OpenSpec change before implementation.
+
+The locked direction is:
+
+- `researchspec init` prepares the workspace and installs Skills; it does not
+  start academic work.
+- User-Agent dialogue starts work. Vague, cross-Skill, resume, explanation, and
+  export requests route through `researchspec-navigate`; an explicit ARSU Skill
+  or mode may route directly after the same prerequisite and route-summary check.
+- Starting a subflow requires a user-confirmed summary of Skill, mode,
+  prerequisites, artifacts, formal Gates, and cost.
+- ResearchSpec CLI is the only workflow-state authority. ARSU Skills produce
+  semantic artifacts, and `academic-pipeline` dispatches only from the CLI
+  frontier.
+- Workflow profiles own work graphs, parallel/join policy, Gates, transitions,
+  and dynamic revision-round templates. Do not hard-code the ARSU pipeline graph
+  in core.
+- Candidate artifacts may be submitted automatically with hash binding. Every
+  formal Gate requires human confirmation; a failed-Gate override requires an
+  explicit Decision.
+- Only scope, claim, structure, branch, and override choices belong in the
+  Decision ledger. Ordinary exploration belongs in the relevant artifact.
+
+The target user-visible agent surface is exactly four ARSU Skills
+(`deep-research`, `academic-paper`, `academic-paper-reviewer`,
+`academic-pipeline`) and four Companion Skills (`researchspec-navigate`,
+`researchspec-propose`, `researchspec-decide`, `researchspec-verify`).
+
+The target public CLI has fifteen top-level commands: `init`, `update`, `status`,
+`instructions`, `start`, `submit`, `advance`, `check`, `list`, `show`, `handoff`,
+`pack`, `propose`, `decide`, and `archive`. The runtime protocol is
+`status -> instructions <selector> -> start/submit/advance -> status`.
+Command wrappers are adapters, not separate product capabilities. Do not add a
+new public command or Companion merely to expose a low-level transaction.
+
 ## ARSU Relationship
 
 ARSU is a skill package and converter project. ResearchSpec is the framework

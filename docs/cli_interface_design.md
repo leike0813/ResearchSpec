@@ -2,9 +2,18 @@
 
 ## 0. 文档状态与事实源
 
-本文定义 ResearchSpec CLI 的第一版用户向命令界面及当前实现契约。除 shell
-completion 外，命令、参数、JSON envelope、exit code、item selector、agent tool
-delivery、读写边界和生命周期行为均以本文为准。
+本文定义 ResearchSpec CLI 的 Target v0.1 用户面，并保留 Current implementation 的
+wire contract 供迁移使用。用户从对话进入 ARSU 工作的顺序以
+[ARSU 用户使用模型 v0.1](./arsu_user_usage_model.md)为 canonical 事实源。
+
+状态约定：
+
+- **Target v0.1**：15 个顶层命令和
+  `status → instructions → start/submit/advance → status`。
+- **Current implementation（2026-07-10）**：尚无 `start`、`submit gate:` 或 `advance`；
+  已有 `instructions work:` 与 `submit work:`。
+- **Pending technical layer**：subflow selectors/instances、Gate submit、transition advance
+  及其 receipt/state transaction。
 
 事实源：
 
@@ -12,6 +21,7 @@ delivery、读写边界和生命周期行为均以本文为准。
 - Architecture：`docs/arch_design_proposal.md`
 - Contract schemas：`docs/contract_schema_design.md`
 - Workflow-contract mapping：`docs/arsu_workflow_contract_design.md`
+- Canonical 用户模型：`docs/arsu_user_usage_model.md`
 - Project rules：`AGENTS.md`
 - OpenSpec reference：`references/OpenSpec`
 
@@ -59,7 +69,7 @@ CLI 必须遵守以下边界：
 
 ## 2. 命令风格
 
-第一版采用尽量简洁的 OpenSpec-like 风格：少量顶层命令，避免无意义的
+Target v0.1 采用尽量简洁的 OpenSpec-like 风格：少量顶层命令，避免无意义的
 “谓词 + 宾语”嵌套，也避免相近命令表达不同写入语义。
 
 全局形式：
@@ -68,15 +78,18 @@ CLI 必须遵守以下边界：
 researchspec <command> [arguments] [options]
 ```
 
-公共命令：
+Target v0.1 公共命令：
 
 | Command | 用途 | 默认写入 | `--json` | `--dry-run` |
 | --- | --- | --- | --- | --- |
 | `researchspec init [path]` | 交互式初始化 workspace 并选择 agent tools | 是 | 否 | 是 |
 | `researchspec update [path]` | 刷新用户已选择的 agent-facing files | 是 | 是 | 是 |
 | `researchspec status` | 查看当前 run 和 pending items | 否 | 是 | 否 |
-| `researchspec instructions work:<id>` | 获取 ready work item 的动态工作包 | 否 | 是 | 否 |
-| `researchspec submit work:<id>` | 校验并原子登记 workflow candidate 与 receipt | 是 | 是 | 是 |
+| `researchspec instructions <selector>` | 获取 subflow/work/gate/transition 的动态工作包 | 否 | 是 | 否 |
+| `researchspec start subflow:<id>` | 实例化用户已确认的 subflow | 是 | 是 | 是 |
+| `researchspec submit work:<id>` | 校验并登记 workflow candidate 与 receipt | 是 | 是 | 是 |
+| `researchspec submit gate:<id>` | 登记 verification evidence、verdict 与用户确认 | 是 | 是 | 是 |
+| `researchspec advance transition:<id>` | 执行唯一合法的状态转换并记录 receipt | 是 | 是 | 是 |
 | `researchspec check [target]` | 检查 workspace/contracts/runtime/tools | 否 | 是 | 否 |
 | `researchspec list [type]` | 列出 changes/artifacts/gates/decisions/tools | 否 | 是 | 否 |
 | `researchspec show <item>` | 查看某个合同、artifact 或 pending item | 否 | 是 | 否 |
@@ -85,6 +98,34 @@ researchspec <command> [arguments] [options]
 | `researchspec propose <change-id>` | 从 strict JSON 创建 validated pending contract change | 是 | 是 | 是 |
 | `researchspec decide [item]` | 交互式处理 pending item | 是 | 是 | 是 |
 | `researchspec archive [item]` | 归档已处理的 change 或 draft patch | 是 | 是 | 是 |
+
+`submit` 是一个顶层命令但有两个 selector 语义；因此上表仍是 15 个顶层命令，而不是
+16 个。`start` 只接受可启动 subflow，`advance` 只接受可执行 transition，不提供含义模糊的
+通用 `execute`。
+
+Current implementation 当前可用的顶层命令是 `init`、`update`、`status`、
+`instructions`、`submit`（仅 `work:`）、`check`、`list`、`show`、`handoff`、`pack`、
+`propose`、`decide` 和 `archive`。下文已有命令的参数和 envelope 仍描述当前 wire contract；
+标为 Target 的 `start`、`submit gate:` 和 `advance` 只能在对应 technical changes 完成后使用。
+
+### 2.1 Selector-Based Runtime Protocol（Target v0.1）
+
+```text
+status
+→ instructions <subflow:|work:|gate:|transition:>
+→ start / submit / advance
+→ status
+```
+
+| Selector | 只读 packet | 唯一执行入口 |
+| --- | --- | --- |
+| `subflow:<id>` | 路线、依赖、实例参数、成本、start capability | `start` |
+| `work:<id>` | producer、inputs、candidate path、validation/completion | `submit work:` |
+| `gate:<id>` | validator、evidence、proposed verdict、confirmation | `submit gate:` |
+| `transition:<id>` | basis、目标、branch conditions、effects | `advance` |
+
+CLI 不向 Agent 暴露低层 registry/ledger/state append。`academic-pipeline`、Navigate 和其他
+Skills 都消费同一 protocol，不另建 stage mapping。
 
 特意不采用的公共命令：
 
@@ -102,7 +143,7 @@ researchspec <command> [arguments] [options]
 | --- | --- | --- |
 | `--cwd <path>` | 全部命令 | 指定项目工作目录；默认当前目录 |
 | `--workspace <path>` | 合同相关命令 | 指定 `researchspec/` 路径；默认从 cwd 向下定位 |
-| `--json` | 查询、instructions、submit、检查、列表、show、handoff、pack、propose、decide、archive | 输出单个 versioned JSON envelope |
+| `--json` | 查询、instructions、start、submit、advance、检查、列表、show、handoff、pack、propose、decide、archive | 输出单个 versioned JSON envelope |
 | `--dry-run` | 写命令 | 只报告将写入、修改、跳过的文件，不落盘 |
 | `--force` | 写命令 | 允许覆盖 generated agent-facing files；不得绕过 human decision |
 | `--yes` | 低风险写命令 | 跳过低风险确认；不得自动接受 high-impact research decisions |
@@ -118,7 +159,8 @@ researchspec <command> [arguments] [options]
 
 ## 4. `researchspec init [path]`
 
-用途：创建 ResearchSpec workspace，并用交互式 TUI 帮用户选择 agent tools。
+用途：创建 ResearchSpec workspace，并用交互式 TUI 帮用户选择 agent tools。Target v0.1
+中它只执行 Bootstrap：不选择具体 ARSU mode、不创建 subflow、不开始学术工作。
 
 Synopsis：
 
@@ -274,6 +316,23 @@ work item、hash 与 provenance 的重试幂等，任何不同 revision、proven
 UTF-8 非空文件、path containment、SHA-256、template ref 与依赖 artifact 均可信。它不表示
 学术结论真实、证据充分或质量 Gate 已通过；`completion.required_gate_ids` 仍独立决定节点
 能否成为 `done`。
+
+### 6.3 `start`、`submit gate:` 与 `advance`（Target v0.1，尚未实现）
+
+```bash
+researchspec start subflow:<id> [--dry-run] [--yes] [--json]
+researchspec submit gate:<id> --input <verdict.json> [--dry-run] [--yes] [--json]
+researchspec advance transition:<id> [--dry-run] [--yes] [--json]
+```
+
+- `start` 只实例化用户已确认的 route plan，并持久化 parent/round identity；不执行 ARSU
+  semantic work。
+- `submit gate:` 只接受 CLI instructions 指定的 validator/evidence contract，并要求实际用户
+  确认。它保存 verdict 与 `confirmed_by`，不把 Agent 自报文本当作 Gate。
+- `advance` 校验 Gate/Decision basis、目标 state 与 read preconditions 后执行 transition
+  receipt。唯一合法 transition 可由 Agent 自动调用；多分支必须先 `decide`。
+- 三者的 DTO、错误码和 receipt shape 由对应 technical changes 冻结，本文不提前承诺 wire
+  details。
 
 ## 7. `researchspec check [target]`
 
@@ -527,7 +586,7 @@ researchspec archive [item] [--json] [--dry-run]
 - `archive` 不接受 pending item；pending item 必须先经过 `decide`。
 - `archive` 不修改 stable specs，不生成 revised draft，不追加 semantic decision。
 - 历史 decision/gate ledger 不移动；归档对象保留对 ledger record 的引用。
-- 第一版不处理 `runs/current`、整个 project 或 artifact registry 条目的归档生命周期。
+- Current implementation 不处理 `runs/current`、整个 project 或 artifact registry 条目的归档生命周期。
 - 如果检查发现格式不规范、引用缺失或 spec 冲突，应报告 diagnostics；复杂修复可交给
   agent-facing companion command 协助，但最终写入仍应通过 CLI 或明确的文件编辑完成。
 
@@ -537,18 +596,18 @@ researchspec archive [item] [--json] [--dry-run]
 | --- | --- | --- |
 | `researchspec/specs/*` | `init`、`decide` | `propose` 只读取；语义变更必须来自 accepted pending item |
 | `researchspec/changes/<id>/*` | `propose`、`decide` | propose create-only；decide 更新 lifecycle，machine contract 最后创建 |
-| `runs/current/state.yaml` | `init` | 后续 stage transition 由 wrapper/runtime 内部 helper 处理，不暴露为用户命令 |
+| `runs/current/state.yaml` | Current: `init`; Target: `start`、`advance` | 只由受约束 lifecycle transaction 写入，不由 wrapper 手改 |
 | `artifact-registry.json` | `submit`、`decide` | 只由受约束事务入口登记 candidate、receipt 或 revised artifact |
 | `runs/current/receipts/artifact-submit/*` | `submit` | deterministic create-only receipt；与 candidate/registry hash 交叉验证 |
 | `decision-ledger.jsonl` | `decide` | 记录 human decision，不允许用户手写 JSONL |
-| `gate-ledger.jsonl` | 无公共写命令 | gate event 由 validator/gate helper 产生 |
+| `gate-ledger.jsonl` | Current: 无公共写命令；Target: `submit gate:` | validator 提出 verdict，用户确认，CLI 原子追加 |
 | `runs/current/handoff.md` | `handoff` | rendered view，不是 SSOT |
 | `researchspec/changes/archive/*` | `archive` | 只移动 resolved contract changes，不处理 pending changes |
 | `researchspec/draft-patches/archive/*` | `archive` | 只移动 resolved draft patches，不应用 patch |
 | agent tool directories | `init`、`update` | 只写 generated agent-facing files |
 | packed bundle | `pack` | 只写用户指定 bundle |
 
-## 16. 已冻结实现契约
+## 16. Current implementation 已冻结契约
 
 ### 16.1 JSON envelope
 
@@ -575,22 +634,27 @@ interface CliEnvelope<T> {
 
 ### 16.3 Item selectors
 
-Canonical selectors 为 `change:`、`patch:`、`artifact:`、`gate:`、
+Current canonical selectors 为 `change:`、`patch:`、`artifact:`、`gate:`、
 `decision:`、`source:`、`claim:`、`tool:` 和 `contract:`。裸 ID 只有在所有
 index 中唯一时才可解析；歧义时返回候选 canonical selectors。
 
 Workflow work item 使用独立的 `work:<id>` selector，由 `instructions`、`submit` 和 status
 work-item view 消费，不进入通用 `show/list` item index。
 
+Target v0.1 将 `subflow:`、`work:`、`gate:`、`transition:` 统一纳入 control-plane
+selector contract；既有 governance selectors 继续服务 `list/show/propose/decide/archive`。
+
 ### 16.4 Tool delivery facts
 
 - `researchspec/config.yaml` 保存 profile 和 selected tools。
 - `tool-installation-manifest.json` 保存 generated path、scope、source、adapter
   version 和 SHA-256 ownership evidence。
-- Project-local skill 路径统一为 `<skillsDir>/skills/<skill-id>/**`；四个 ARSU
-  skill 目录递归安装，九个 self-contained companion skills 各安装一个 `SKILL.md`。
-- 28 个 command-capable tools 通过 registry formatter 生成各自 Markdown/TOML
-  格式的四个 ARSU 与九个 companion wrappers；不得用一个通用 Markdown 文件覆盖格式差异。
+- Current implementation：Project-local skill 路径统一为
+  `<skillsDir>/skills/<skill-id>/**`；四个 ARSU skill 目录和九个 self-contained
+  Companion Skills 被投影到 31 个 registered tools，28 个 command-capable tools 同源生成
+  13 个 wrappers。
+- Target v0.1：四个 ARSU + 四个 Companion，总计 31×8 Skills 与 28×8 wrappers。
+- 迁移前后都不得用一个通用 Markdown 文件覆盖工具的 Markdown/TOML 格式差异。
 - Codex prompts 是 `$CODEX_HOME/prompts` 或 `~/.codex/prompts` 下的
   shared-global files，不因单个项目 deselect 被删除。
 - Manifest 未登记的 existing file 视为 user-owned；hash drift 默认保留，
@@ -609,6 +673,7 @@ decision、不推进 stage，也不成为 runtime SSOT。
 - 不暴露 ARSU maintenance commands。
 - 不暴露 registry/ledger 的低层 append commands。
 - 不暴露 wrapper runtime helper commands。
-- 不在第一版设计 run/project archive 生命周期。
+- 不为 Check、Submit、Archive 等 deterministic transactions 再建立目标 Companion。
+- Target v0.1 不扩展 run/project archive 生命周期。
 - 不设计 shell completion。
 - 不引入 hidden global state 或 database-first runtime。

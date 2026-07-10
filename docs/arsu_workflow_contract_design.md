@@ -3,11 +3,24 @@
 ## 0. Purpose And Status
 
 This document aligns upstream ARSU workflows with the ResearchSpec contract
-model before ResearchSpec absorbs ARSU.
+model and the locked user usage model.
 
 It is a design decision document, not a frozen schema specification. Field-level
 schemas, validators, and command behavior should be split into later specs or
 implementation changes.
+
+User entry, route confirmation, runtime order, Gate interaction, and the minimal
+surface are canonical in [ARSU User Usage Model v0.1](./arsu_user_usage_model.md).
+
+- **Target v0.1** uses one active run, dynamic standalone/pipeline subflows,
+  workflow-declared parallel groups, confirmed Gates, transitions, and revision
+  round templates.
+- **Current implementation (2026-07-10)** provides the three-work research Slice,
+  work-level status/instructions, receipt-backed `submit work:`, and nine current
+  Companion Skills.
+- **Pending technical layers** are the routing catalog, subflow instances,
+  `submit gate:`, `advance`, complete ARSU profiles, and four-Companion
+  consolidation.
 
 Source anchors:
 
@@ -26,6 +39,7 @@ Primary upstream references:
 - `vendor/ars/academic-paper/references/workflow_phase_details.md`
 - `vendor/ars/*/references/*mode*_guide.md`
 - `vendor/ars/*/references/*protocol*.md`
+- `docs/arsu_user_usage_model.md`
 
 Current-state policy:
 
@@ -68,9 +82,11 @@ Hard boundaries:
 
 ## 2. Academic Pipeline Stage Contract Matrix
 
-`academic-pipeline` remains the ARSU-owned stage graph. ResearchSpec core should
-provide generic contract/runtime primitives rather than hard-coding this graph
-into every project.
+`academic-pipeline` remains the ARSU-owned semantic stage graph. ResearchSpec core
+provides generic contract/runtime primitives rather than hard-coding this graph
+into every project. Target profiles instantiate the table below as subflows,
+work, Gates, transitions, and dynamic revision rounds; the table is not a second
+runtime state machine.
 
 | Stage | ARSU task | Required ResearchSpec contracts | Required artifacts | Writes |
 | --- | --- | --- | --- | --- |
@@ -93,6 +109,10 @@ Mandatory stage rules to preserve:
 - Review/revision branch choices are human decisions and must be recorded.
 - Resume boundaries and checkpoint decisions belong in ResearchSpec state and
   ledgers, not in chat memory.
+- A unique transition after an accepted Gate/branch can advance automatically;
+  multiple branches or new semantics require Decision.
+- Parallel execution is allowed only when the profile declares the group and join
+  policy.
 
 ## 3. Skill-Level Workflow Matrices
 
@@ -215,29 +235,32 @@ Additional ARS passport extension aggregates should map by role:
 
 ## 5. ResearchSpec Contract Preflight
 
-Every converted ARSU skill wrapper should begin with a contract preflight.
+Every converted ARSU skill wrapper begins with a contract preflight. Current
+implementation supports work selectors; Target v0.1 generalizes the same loop to
+subflow, Gate, and transition selectors.
 
 Preflight steps:
 
 1. Locate the project `researchspec/` directory.
 2. Read `specs/workflow.yaml` and `runs/current/state.yaml`.
-3. Identify current skill, stage, phase, and mode.
-4. Load only the contracts required by that stage/mode.
-5. Load artifact registry entries referenced by the current state.
-6. Check pending decisions and blocking gate entries before producing new work.
-7. For typed workflows, run `researchspec status --json` and
-   `researchspec instructions work:<id> --json` instead of inferring the node contract.
-8. Render a small stage input packet for the LLM.
+3. Run `researchspec status --json` to discover the authoritative frontier.
+4. Request `researchspec instructions <selector> --json`; do not infer a node,
+   Gate, or transition contract from chat or static Skill prose.
+5. For a `work:` selector, load only the declared contracts and artifact refs.
+6. Check pending decisions and blocking Gates before producing new work.
+7. Render a small stage input packet for the LLM.
 
 Preflight output should be an internal view containing:
 
-- current workflow and stage;
+- current run, subflow, workflow stage, Skill, and mode;
 - required contract paths read;
 - required artifact refs loaded;
 - allowed writes for this invocation;
 - blocked/pending decisions;
-- expected output artifact types.
-- declared candidate path, deterministic validation profile, and Submit capability.
+- expected output artifact types;
+- declared candidate path, deterministic validation profile, and Submit capability;
+- formal Gate and transition boundary, without pretending either is already
+  implemented in the current Slice.
 
 Do not let converted skills infer stage truth from chat memory when
 `runs/current/state.yaml` exists.
@@ -299,10 +322,16 @@ Use `changes/<change-id>/contract-patch.yaml` when a task proposes:
 - changing review-response strategy;
 - accepting a limitation or override that affects final claims.
 
-Low-risk artifact registration does not require a contract patch, but a typed workflow candidate
-must be handed to `researchspec-submit`: dry-run, confirm the exact SHA-256, then let the runtime
-write the receipt and registry atomically. Gate receipts and confirmed decisions remain owned by
-their dedicated validators/runtime paths. ARSU Skills never hand-edit those stores.
+Low-risk artifact registration does not require a contract patch. Current
+implementation can hand a typed workflow candidate to the `researchspec-submit`
+Companion for dry-run and exact-hash confirmation. Target v0.1 removes that extra
+user-facing Companion: the Agent automatically performs hash-bound
+`submit work:<id>` after candidate production. This mechanical submit is not a
+Gate or academic approval.
+
+Formal Gate evidence is proposed by `researchspec-verify`, shown to the user, and
+persisted by Target `submit gate:<id>` only after confirmation. ARSU Skills never
+hand-edit registry, receipts, state, or ledgers.
 
 ### 6.4 Preserve Upstream Semantics
 
@@ -338,18 +367,16 @@ This mapping implies:
 - Draft revision should preserve the useful ARS block/hash patch discipline in
   `draft-patches/<patch-id>.json`.
 
-## 8. Suggested Follow-Up Specs
+## 8. Pending Technical Changes
 
-Later changes should split this design into implementable specs:
+Current contract workspace, work-level control plane, artifact submit, and ARSU
+conversion remain in force. Target v0.1 is completed by:
 
-1. ResearchSpec contract workspace layout and init/update behavior.
-2. Artifact registry schema.
-3. Decision ledger and gate ledger schemas.
-4. Contract patch schema.
-5. Draft patch import/adaptation from ARS revision patch protocol.
-6. ARSU wrapper preflight protocol.
-7. Converter changes that inject ResearchSpec contract blocks into generated
-   ARSU skill artifacts.
+1. `add-arsu-routing-catalog`.
+2. `add-subflow-instance-control-plane`.
+3. `add-gate-transition-control-plane`.
+4. `add-arsu-workflow-profiles`.
+5. `consolidate-researchspec-agent-surface`.
 
 ## 9. Acceptance Checklist
 
@@ -361,3 +388,5 @@ This design is sufficient for the next planning step when:
 - ARS handoff schemas have a ResearchSpec target location;
 - Material Passport is no longer treated as ResearchSpec runtime SSOT;
 - upstream current-state cleanup is explicitly out of default scope.
+- all target claims are labeled separately from Current implementation;
+- routing and runtime sequences defer to the canonical user model.

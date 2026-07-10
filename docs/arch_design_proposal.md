@@ -2,14 +2,25 @@
 
 ## 0. 文档状态与事实源
 
-本文是 ResearchSpec 吸收 ARSU 前的设计级架构文档。它说明模块边界、数据流、
+本文是 ResearchSpec 面向 ARSU 的设计级架构文档。它说明模块边界、数据流、
 写入纪律、验证策略和演进顺序，不冻结字段级 schema、TypeScript 类型、
 CLI 参数形状或 adapter 路径细节。
+
+[ARSU 用户使用模型 v0.1](./arsu_user_usage_model.md)是用户入口、运行循环和最小
+surface 的 canonical 事实源。本文明确区分：
+
+- **Target v0.1**：CLI 控制平面、profile-owned workflow graph、动态 subflow/round、
+  4 ARSU + 4 Companion + 15 CLI。
+- **Current implementation（2026-07-10）**：静态 research Slice、work-level
+  status/instructions/submit、九个 Companion 和已有 contract lifecycle。
+- **Pending technical layer**：routing catalog、subflow control、Gate/transition、完整
+  profiles 与 surface consolidation。
 
 事实源：
 
 - Product requirements：`docs/prd_proposal.md`
 - Workflow-contract mapping：`docs/arsu_workflow_contract_design.md`
+- Canonical 用户模型：`docs/arsu_user_usage_model.md`
 - Project agent rules：`AGENTS.md`
 - ResearchSpec 项目：`/home/joshua/Workspace/Code/JavaScript/ResearchSpec`
 - ARSU 项目：`/home/joshua/Workspace/Code/Skill/academic-research-skills-universal`
@@ -84,31 +95,21 @@ ResearchSpec =
 
 ## 2. 总体架构
 
-ResearchSpec 由七个主要子系统组成。
+Target v0.1 由九个协作层组成；它们是职责边界，不要求拆成九个包。
 
 ```text
-ARS upstream
-    |
-    v
-ARSU source package
-    |
-    v
-ARSU Converter --------------+
-    |                         |
-    v                         v
-ARSU-derived skill artifacts  Contract Workspace
-    |                         |
-    v                         v
-Wrapper Preflight -----> Run Runtime
-    |                         |
-    v                         v
-Agent semantic work       Registry / Ledgers / Gates
-    |                         |
-    v                         v
-Artifact writes -------> Renderer / Handoff
-                              |
-                              v
-                       Adapter Delivery
+ARS upstream → ARSU Converter → ARSU Skills ───────┐
+                         │                         │ semantic work
+                         └→ Routing Catalog       ▼
+User dialogue → Companion Layer → CLI Control Plane → Contract Workspace
+                                      │                    │
+                                      ▼                    ▼
+                             Workflow Profiles      Artifacts / Ledgers
+                                      │                    │
+                                      └────→ Renderer / Handoff
+                                                     │
+                                                     ▼
+                                              Adapter Delivery
 ```
 
 ### 2.1 Contract Workspace
@@ -127,8 +128,9 @@ artifact 是否可定位、hash 是否匹配、ledger 是否 append-only、stage
 
 ### 2.3 Run Runtime
 
-Run Runtime 是文件化运行态，不是数据库。它由 `runs/current/*` 组成，记录当前
-stage、blockers、artifact refs、decisions、gates 和 handoff view。
+Run Runtime 是文件化运行态，不是数据库。一个 workspace 只有一个 active run；run 下
+可以有 standalone、pipeline 和 revision-round subflow instances。Runtime 记录 frontier、
+blockers、artifact refs、decisions、gates、transitions 和 handoff view。
 
 ### 2.4 ARSU Converter
 
@@ -138,9 +140,9 @@ ARSU Converter 从 ARSU/ARS upstream 生成 ResearchSpec 可维护的 skill arti
 
 ### 2.5 Wrapper Preflight
 
-Wrapper preflight 是每个 converted ARSU skill 执行前的固定入口。它定位
-`researchspec/`，读取当前 workflow/state，加载最小必要 contracts 和 artifacts，
-并返回 allowed writes。
+Wrapper preflight 是每个 converted ARSU skill 执行前的固定入口。Target v0.1 通过
+`status` 和 selector-specific `instructions` 获取当前 frontier、最小必要 contracts/artifacts
+和 allowed writes，不从聊天或静态 Skill 文本推断 stage。
 
 ### 2.6 Renderer / Handoff
 
@@ -154,15 +156,21 @@ Adapter Delivery 只负责把 generated skills、commands 或 prompts 写入目�
 
 ### 2.8 Companion Workflow Layer
 
-Companion layer 位于 CLI 与 agent 交互之间。八个 workflow 模块分别拥有 explore、
-propose、check、verify、next、context、decide、archive 的 canonical instructions；typed
-manifest 是唯一注册表，共享 CLI 纪律只在 build 时内联。安装产物是 self-contained
-`SKILL.md`，command wrapper 只路由到已安装 skill。
+Companion layer 位于用户对话与 CLI/ARSU Skills 之间。Target v0.1 只有 Navigate、Propose、
+Decide、Verify 四个用户意图：Navigate 统一模糊路由、恢复、状态解释和上下文导出；另外
+三个保留高影响语义变更、人类决策和阶段语义审查。
 
-Companion 不拥有 deterministic runtime。Public `propose` 把 strict semantic JSON 转为
-create-only pending change；target resolver 在 propose 与 decide accept 之间共享，避免
-current-value drift。`decide` 仍是唯一 public semantic apply surface。ARSU 继续负责研究、
-写作、审稿和 manuscript draft-patch authoring。
+Companion 不拥有 deterministic runtime。它消费 routing catalog 和 CLI packets，展示路线、
+证据、风险与确认点。ARSU 继续负责研究、写作、审稿和 manuscript draft-patch authoring。
+Current implementation 的 Explore/Check/Next/Context/Submit/Archive 等九个 Companion 在
+最后的 surface consolidation change 前继续兼容，但不是目标架构。
+
+### 2.9 Routing Catalog And Workflow Profiles
+
+Converter-owned routing catalog 是 Skill/mode、intent、near-miss、主要产物、依赖、risk 与
+Gate policy 的 SSOT。Workflow profile 声明 subflow templates、work DAG、parallel/join、
+Gate、transition 和 revision-round template。Catalog 回答“选哪条路线”，profile 回答“路线
+内部如何推进”，CLI 依据 workspace 实况计算 frontier。
 
 ## 3. Contract Workspace Architecture
 
@@ -277,30 +285,31 @@ researchspec/
 2. Create `researchspec/` workspace。
 3. Write initial specs and run files。
 4. Create empty registry and ledgers。
-5. Select or declare ARSU workflow entry point。
-6. Render initial handoff view。
-7. Optionally install agent-neutral wrappers through adapters。
+5. Install selected agent-neutral Skills/wrappers through adapters。
+6. Render initial handoff view when applicable。
 
 架构要求：
 
 - Init 不应调用 LLM。
 - Init 不应从 ARSU stage output 推断研究语义。
+- Init 不选择具体学术路线、不创建 subflow；路线由后续用户对话和确认启动。
 - Migrate 可以导入旧材料，但应生成 proposed changes 或 artifacts，而不是静默改写
   current specs。
 
 ### 4.2 ARSU Stage Execution
 
-每个 ARSU stage 的执行路径：
+Target v0.1 的 stage/subflow 执行复用一个 selector 循环：
 
-1. Wrapper preflight reads workflow/state。
-2. Preflight loads only required specs and artifact refs。
-3. Gate check rejects execution if blocking gates or pending decisions exist。
-4. Agent performs semantic work using the staged input packet。
-5. Outputs are written as artifacts, draft patches, proposed changes, or ledger entries。
-6. Registry append records artifacts。
-7. Decision/gate append records human decisions or validation results。
-8. State transition updates current stage or blocker。
-9. Renderer refreshes handoff view。
+1. CLI `status` 计算 `subflow:`、`work:`、`gate:`、`transition:` frontier。
+2. Agent 为选中的 selector 请求动态 `instructions`。
+3. `start` 创建已确认的 subflow；ARSU Skill 按 work packet 产生 candidate。
+4. `submit work:` 对 candidate 做 hash-bound receipt/registry 登记。
+5. 正式 Gate 由 Verify 提出 verdict、用户确认，再通过 `submit gate:` 持久化。
+6. 唯一合法 transition 由 `advance` 执行；多分支或新语义进入 Decision。
+7. Agent 再次查询 `status`，不在本地复制状态机。
+
+Current implementation 只实现到 work-level status/instructions/submit；其余动作属于 pending
+technical layers。
 
 ### 4.3 Artifact Registration
 
@@ -462,9 +471,14 @@ Forbidden boundary violations:
 
 ### 7.1 CLI Responsibilities
 
-ResearchSpec CLI 编排本地文件操作。公共 surface 为 `init`、`update`、`status`、
-`check`、`list`、`show`、`handoff`、`pack`、`propose`、`decide` 和 `archive`。
-Converter/upstream maintenance 保持开发者工具，不进入公共 CLI。
+ResearchSpec CLI 编排本地文件操作。Target v0.1 的公共 surface 固定为 `init`、`update`、
+`status`、`instructions`、`start`、`submit`、`advance`、`check`、`list`、`show`、
+`handoff`、`pack`、`propose`、`decide` 和 `archive`。Converter/upstream maintenance
+保持开发者工具，不进入公共 CLI。
+
+运行协议为 `status → instructions <selector> → start/submit/advance → status`。CLI 是状态、
+路径、DAG、hash、receipt、Gate/Decision transaction 和 transition 的唯一确定性权威；
+ARSU/Companion 不手写这些 stores。
 
 `propose` 只创建 `changes/<id>/proposal.md`、`tasks.md`、`contract-patch.yaml`，不修改
 stable specs 或 ledgers。只有 `decide accept` 能在二次 target/evidence 验证通过后应用
@@ -528,8 +542,9 @@ ResearchSpec should instead maintain ARSU-derived skills and wrappers:
 - `academic-paper-reviewer`
 - `academic-pipeline`
 
-ResearchSpec 另行维护八个 contract-lifecycle companion workflows。它们消费同一 contract
-workspace，不重新引入平行 contract model，也不取代上述 ARSU semantic skills。
+ResearchSpec 目标只维护四个 companion workflows：Navigate、Propose、Decide、Verify。
+它们消费同一 contract workspace，不重新引入平行状态机，也不取代上述 ARSU semantic
+skills。当前九个 Companion 仅是迁移前实现事实。
 
 ### 8.3 Material Passport
 
@@ -553,62 +568,32 @@ become source-of-truth research specs.
 
 ## 9. Implementation Roadmap
 
-### 9.1 Phase 1: Workspace Layout
+已有 workspace、schema、work-level control plane、artifact submit 和 contract lifecycle 保持
+为 Current implementation。Target v0.1 的剩余架构按五个 technical changes 落地：
 
-Deliver:
+### 9.1 Routing Catalog
 
-- Directional `researchspec/` workspace layout.
-- Initial templates for specs, run state, registry and ledgers.
-- Minimal detection of existing workspace.
-- No ARSU semantic conversion yet.
+`add-arsu-routing-catalog` 提供 typed converter-owned route SSOT 和 Skill description 投影。
 
-### 9.2 Phase 2: Minimal Schemas And Validators
+### 9.2 Subflow Instance Control Plane
 
-Deliver:
+`add-subflow-instance-control-plane` 提供 active run、动态 subflow/round、parallel groups、
+通用 selectors、`start` 和 automatic work-submit policy。
 
-- Parse/validate machine-facing files.
-- Validate required files and append-only ledger shape.
-- Validate artifact references and basic hash/drift checks.
-- Keep schemas small and evolve from actual ARSU wrapper needs.
+### 9.3 Gate And Transition Control Plane
 
-### 9.3 Phase 3: Runtime Primitives
+`add-gate-transition-control-plane` 提供 `submit gate:`、`advance transition:`、Gate
+confirmation/challenge/override 和 transition receipt。
 
-Deliver:
+### 9.4 Complete ARSU Workflow Profiles
 
-- Register artifact primitive.
-- Append decision primitive.
-- Append gate primitive.
-- Stage transition primitive.
-- Handoff renderer.
+`add-arsu-workflow-profiles` 把四类 ARSU modes 映射成完整 profile graphs 和动态 revision
+round templates。
 
-These primitives are deterministic and script-owned.
+### 9.5 Agent Surface Consolidation
 
-### 9.4 Phase 4: Wrapper Preflight
-
-Deliver:
-
-- Preflight reads workflow/state.
-- Preflight loads minimal contracts/artifacts for current stage/mode.
-- Preflight emits allowed writes and blocker state.
-- Wrappers stop relying on chat memory for stage truth.
-
-### 9.5 Phase 5: ARSU Converter Integration
-
-Deliver:
-
-- Converter injects Contract Inputs / Contract Outputs / Writes Allowed blocks.
-- Converter reports diagnostics for upstream history/version markers.
-- Drift check compares generated artifacts with checked-in outputs.
-- Initial support focuses on the four core ARSU skill groups.
-
-### 9.6 Phase 6: End-To-End Academic Pipeline
-
-Deliver:
-
-- `academic-pipeline` becomes the first full-path acceptance workflow.
-- Stage 2.5 and Stage 4.5 write gate-ledger entries.
-- Review/revision branches write decision-ledger entries.
-- Final process summary renders from registry and ledgers.
+`consolidate-researchspec-agent-surface` 新增 Navigate，收敛为四个 Companion，并生成
+31×8 Skills 与 28×8 thin wrappers。
 
 ## 10. Acceptance Criteria
 
@@ -621,4 +606,5 @@ This architecture is ready for implementation planning when:
 - Wrapper preflight is the mandatory ARSU execution entry.
 - Converter owns ARSU-derived output generation.
 - Adapter delivery is file-only and agent-neutral.
-- Field-level schemas are explicitly deferred to later specs.
+- 用户入口与运行顺序符合 canonical v0.1 model。
+- Target 与 Current implementation 在文档和 surface 中不混淆。

@@ -2,8 +2,19 @@
 
 ## 0. 文档状态与事实源
 
-本文是 ResearchSpec 吸收 ARSU 前的需求级 PRD。它定义产品目标、核心用户、
+本文是 ResearchSpec 面向 ARSU 的需求级 PRD。它定义产品目标、核心用户、
 合同族职责、ARSU workflow 对齐要求、非目标和验收口径。
+
+用户入口、路线确认、运行循环和最小 surface 以
+[ARSU 用户使用模型 v0.1](./arsu_user_usage_model.md)为 canonical 事实源。本文中的
+能力描述分为三层：
+
+- **Target v0.1**：4 个 ARSU Skills、4 个 Companion Skills、15 个 CLI 命令和
+  selector-based 运行协议。
+- **Current implementation（2026-07-10）**：实验研究 Slice、动态 work instructions、
+  `submit work:`、九个当前 Companion 及已有 contract lifecycle。
+- **Pending technical layer**：routing catalog、subflow instances、Gate/transition、
+  完整 ARSU profiles 和 surface consolidation。
 
 本文不定义字段级 schema、validator 细节、CLI 参数形状或 adapter 具体写盘
 协议。这些内容应在后续 specs 或实现任务中单独落地。
@@ -14,6 +25,7 @@
 - ARSU 项目：`/home/joshua/Workspace/Code/Skill/academic-research-skills-universal`
 - ARS 上游 checkout：`/home/joshua/Workspace/Code/Skill/academic-research-skills-universal/vendor/ars`
 - Workflow-contract 设计输入：`docs/arsu_workflow_contract_design.md`
+- Canonical 用户模型：`docs/arsu_user_usage_model.md`
 - 架构方向输入：`docs/arch_design_proposal.md`
 - 项目级 agent 指令：`AGENTS.md`
 
@@ -113,6 +125,17 @@ ResearchSpec 对 handoff 的价值：
   提供可恢复的决策和门禁记录。
 - `runs/current/handoff.md` 可作为渲染视图，但不是事实源。
 
+### 2.5 用户启动与恢复模型（Target v0.1）
+
+- `researchspec init` 只准备 workspace 和注入 Skills，不启动学术工作。
+- 模糊、跨 Skill、继续、解释或导出请求进入 `researchspec-navigate`；明确 Skill/mode
+  可以专家直达。
+- 两条路径都必须展示 Skill、mode、前置 subflow、主要产物、Gate 和成本摘要，用户确认
+  后才创建 subflow。
+- 同一 workspace 只有一个 active run；standalone 工作和 revision round 都是具有 identity
+  的动态 subflow。
+- ARSU Skill 产生语义 artifact，ResearchSpec CLI 计算 frontier 并执行确定性提交和推进。
+
 ## 3. 产品需求
 
 ### 3.1 Typed Contract Workspace
@@ -131,11 +154,13 @@ ResearchSpec 必须创建并维护 typed file-contract workspace。
 ### 3.2 ARSU Workflow Support
 
 ResearchSpec 必须支持 ARSU 的核心 workflow，而不是把 ARSU 当作旧合同模型上的
-附加插件。
+附加插件。Target v0.1 通过 profile 声明 work、parallel group、Gate、transition 和
+revision-round template；core 只实现通用控制平面。
 
 需求：
 
-- 支持 `academic-pipeline` 的 10-stage 主流程。
+- 保留 `academic-pipeline` 十个语义阶段的职责，并由 profile 将其投影为动态 subflow、Gate
+  和 transition，而不是在 core 中写死十个状态。
 - 支持 `deep-research` 的 6 个 phases 和 8 个 modes。
 - 支持 `academic-paper` 的 8 个 phases 和 11 个 modes。
 - 支持 `academic-paper-reviewer` 的 3 个 phases 和 6 个 modes。
@@ -240,24 +265,26 @@ ResearchSpec 必须最终拥有 ARSU-derived 产物的转换、刷新和验证�
   和禁止写入范围。
 - 上游 version/history 文本只作为 diagnostics，不作为默认阻断项。
 
-### 3.11 ResearchSpec Companion Workflows
+### 3.11 ResearchSpec Companion Workflows（Target v0.1）
 
-ResearchSpec 默认向所有 registered agent tools 投递八个 agent-neutral companion：
-`explore`、`propose`、`check`、`verify`、`next`、`context`、`decide` 和 `archive`。
+目标 Companion 固定为四个：
+
+- `researchspec-navigate`：模糊目标路由、恢复、状态解释和上下文导出。
+- `researchspec-propose`：高影响语义变更起草。
+- `researchspec-decide`：人类决策、review branch 和 Gate override。
+- `researchspec-verify`：阶段边界语义审查与 proposed Gate verdict。
 
 需求：
 
-- 每个 companion 必须是自包含 workflow skill，具有明确 trigger/near-miss、输入、状态
-  分支、失败恢复、输出契约、guardrail 和 completion；不能只是 CLI help 的转述。
-- Shared CLI discipline 可以在源码层复用，但必须在 build 时内联，不能要求运行时再读取
-  一个通用 companion reference。
-- CLI 负责 deterministic validation 与权威写入；companion 负责解释、消歧、semantic
-  verification、风险说明和 human confirmation。
-- `propose` 为 high-impact contract change 提供 create-only deterministic entry；`decide`
-  是唯一 public semantic apply workflow。
+- Companion 以用户意图分层，不为每个 CLI transaction 建立同名 Skill。
+- CLI 负责 deterministic validation 与权威写入；Companion 负责路由、解释、语义审查、
+  风险说明和 human confirmation。
 - ARSU 继续拥有 literature research、writing、review 与 manuscript draft-patch authoring；
-  companion 不得复制这些能力。
-- 31 个 tools 默认获得八个 skills；具备 command format 的 28 个 tools 同源生成薄 wrapper。
+  Companion 不得复制这些能力。
+- Target delivery 是 31 个 tools 各 8 个 Skills，28 个 command-capable tools 各 8 个薄
+  wrappers。Wrapper 是 adapter，不是新的产品能力。
+- Current implementation 的九个 Companion 在 surface consolidation change 完成前继续存在；
+  不得把它们误写为 Target v0.1。
 
 ## 4. 合同层需求
 
@@ -338,14 +365,16 @@ contracts、draft artifact refs、venue/format profile refs。
 
 ### 4.5 Workflow Spec
 
-`researchspec/specs/workflow.yaml` 描述当前选择的 ARSU workflow、stage graph
-reference、entry point、mode choices 和 partial-entry 配置。
+`researchspec/specs/workflow.yaml` 描述当前选择的 ARSU workflow/profile、动态
+subflow template、work graph、parallel/join、Gate、transition 和 mode choices。
 
 需求：
 
 - 支持从 idea、sources、draft、review comments 或 finalization 进入。
 - 支持 `academic-pipeline` 作为 ARSU 默认 stage graph。
 - 不把 pipeline stage graph 写死为 ResearchSpec core 的唯一流程。
+- CLI 从 profile 计算 frontier；`academic-pipeline` 不维护第二套 stage truth。
+- Revision round 由带 parent/round identity 的模板实例化，不硬编码固定轮数。
 
 ### 4.6 Run State
 
@@ -428,7 +457,7 @@ pending confirmations、resume target 和下一步恢复信息。
 
 ### 5.1 Academic Pipeline
 
-ResearchSpec 必须支持 `academic-pipeline` 的 10-stage 主流程：
+ResearchSpec 必须保留 `academic-pipeline` 的十个语义阶段职责：
 
 1. Research
 2. Write
@@ -448,6 +477,10 @@ ResearchSpec 必须支持 `academic-pipeline` 的 10-stage 主流程：
 - Review/revision branch choices 必须进入 decision ledger。
 - Integrity 和 final integrity 必须进入 gate ledger。
 - Process summary 应从 artifact registry、decision ledger 和 gate ledger 生成。
+- 具体运行图由 profile 实例化为 subflows、work、Gates 和 transitions；这些阶段名不是
+  ResearchSpec core 中的硬编码状态枚举。
+- Review 后的 revision/re-review 是动态 round；唯一合法 transition 可自动推进，多分支必须
+  进入 Decision。
 
 ### 5.2 Deep Research
 
@@ -537,8 +570,9 @@ ResearchSpec 不做：
   changes 和 draft patches。
 - `academic-pipeline`、`deep-research`、`academic-paper`、
   `academic-paper-reviewer` 的支持要求已在需求层声明。
-- 八个 ResearchSpec companion 覆盖 explore/propose 到 decide/archive 的 contract
-  lifecycle，同时保持与 ARSU semantic workflows 的边界。
+- 四个目标 Companion 覆盖 Navigate/Propose/Decide/Verify，同时保持与 ARSU semantic
+  workflows 和 CLI transactions 的边界。
+- 目标用户流程符合 `status → instructions → start/submit/advance → status`。
 - Material Passport 不再是 ResearchSpec runtime SSOT。
 - ARSU-derived current-state cleanup 明确不是默认目标。
 - 旧轻量 Markdown-only 合同结构不再作为目标事实源。
@@ -546,29 +580,19 @@ ResearchSpec 不做：
 
 ### 7.2 后续 Specs
 
-PRD 之后应拆出以下可实现 specs：
-
-1. ResearchSpec contract workspace layout and init/update behavior。
-2. `sources.yaml`、`claims.yaml`、`manuscript.yaml`、`workflow.yaml` 的 schema。
-3. `state.yaml` run-state schema。
-4. `artifact-registry.json` schema。
-5. `decision-ledger.jsonl` 与 `gate-ledger.jsonl` schema。
-6. `contract-patch.yaml` schema 与 human review flow。
-7. `draft-patches/<patch-id>.json` schema，继承 ARS revision patch discipline。
-8. ARSU wrapper contract preflight protocol。
-9. Converter changes，将 Contract Inputs / Contract Outputs / Writes Allowed 注入
-   ARSU-derived skill artifacts。
-10. Adapter-neutral skill delivery rules。
-11. Companion workflow triggers、semantic verification、proposal creation 与 lifecycle safety。
+用户模型的 umbrella specs 为 `arsu-user-routing`、`arsu-run-usage` 和
+`agent-surface-model`。现有 contract/workspace/runtime specs 继续有效；尚未实现的能力由
+五个独立 technical changes 承担，不在 PRD 中提前冻结 DTO。
 
 ### 7.3 实现优先级建议
 
-建议后续实现顺序：
+下一阶段严格按以下技术层推进：
 
-1. 固化 contract workspace layout。
-2. 实现最小 schemas 和 validators。
-3. 实现 artifact registry、decision ledger、gate ledger 的 append/read/render
-   primitives。
-4. 实现 wrapper preflight。
-5. 改造 ARSU converter，使生成产物带有 ResearchSpec contract blocks。
-6. 将 `academic-pipeline` 作为首个端到端验收路径。
+1. `add-arsu-routing-catalog`。
+2. `add-subflow-instance-control-plane`。
+3. `add-gate-transition-control-plane`。
+4. `add-arsu-workflow-profiles`。
+5. `consolidate-researchspec-agent-surface`。
+
+全部技术层完成后，再用 standalone、pipeline、Gate challenge/override、revision round、
+resume 和 context export 旅程验收 umbrella change。
