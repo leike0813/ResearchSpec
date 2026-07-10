@@ -6,6 +6,9 @@ import { pathExists, readUtf8, sha256File } from "./fs-utils.js";
 import { markerEnd, markerStart } from "./anchors/markers.js";
 import { scanFindings } from "./transform.js";
 import type { ConversionManifest, RiskFinding, ValidationResult } from "./types.js";
+import { ARSU_ROUTING_CATALOG, getArsuSkillDefinition } from "./routing/catalog.js";
+import { ArsuRoutingCatalogSchema, type ArsuRoutingCatalog, validateRoutingCatalogReferences } from "./routing/contracts.js";
+import { readSkillFrontmatterDescription, renderArsuSkillDescription } from "./routing/projection.js";
 
 const LINK_RE = /\[[^\]]+\]\((?<link>[^)#]+)(?:#[^)]+)?\)/g;
 
@@ -20,6 +23,7 @@ export async function validateArsuOutput(outputRoot: string): Promise<Validation
   const manifestPath = path.join(outputRoot, "conversion-manifest.json");
   const reportPath = path.join(outputRoot, "conversion-report.md");
   const contractsPath = path.join(outputRoot, "researchspec-contracts.json");
+  const routingCatalogPath = path.join(outputRoot, "routing-catalog.json");
   const manifest = await readJsonFile<ConversionManifest>(manifestPath, errors);
 
   if (!(await pathExists(reportPath))) errors.push("Missing conversion-report.md");
@@ -27,6 +31,22 @@ export async function validateArsuOutput(outputRoot: string): Promise<Validation
     errors.push("Missing researchspec-contracts.json");
   } else {
     await readJsonFile<unknown>(contractsPath, errors);
+  }
+  let routingCatalog: ArsuRoutingCatalog | null = null;
+  const rawRoutingCatalog = await readJsonFile<unknown>(routingCatalogPath, errors);
+  if (rawRoutingCatalog) {
+    const parsed = ArsuRoutingCatalogSchema.safeParse(rawRoutingCatalog);
+    if (!parsed.success) {
+      errors.push(`Invalid routing-catalog.json: ${parsed.error.issues.map((issue) => issue.path.join(".") || "root").join(", ")}`);
+    } else {
+      routingCatalog = parsed.data;
+      for (const issue of validateRoutingCatalogReferences(routingCatalog)) {
+        errors.push(`Routing catalog ${issue.code}: ${issue.message}`);
+      }
+      if (JSON.stringify(routingCatalog) !== JSON.stringify(ARSU_ROUTING_CATALOG)) {
+        errors.push("routing-catalog.json differs from the canonical converter-owned catalog");
+      }
+    }
   }
 
   if (manifest) {
@@ -57,6 +77,17 @@ export async function validateArsuOutput(outputRoot: string): Promise<Validation
     }
 
     errors.push(...await validateRiskFindingCoverage(outputRoot, manifest));
+    const routingRecord = manifest.output_files.find((item) => item.output_path === manifest.routing_catalog.path);
+    if (!routingRecord || routingRecord.sha256 !== manifest.routing_catalog.sha256) {
+      errors.push("Manifest routing catalog metadata does not match its output-file record");
+    }
+    if (manifest.routing_catalog.catalog_id !== ARSU_ROUTING_CATALOG.catalog_id
+      || manifest.routing_catalog.schema_version !== ARSU_ROUTING_CATALOG.schema_version
+      || manifest.routing_catalog.skill_count !== ARSU_ROUTING_CATALOG.skills.length
+      || manifest.routing_catalog.mode_route_count !== ARSU_ROUTING_CATALOG.skills.flatMap((skill) => skill.routes).filter((route) => route.route_kind === "mode").length
+      || manifest.routing_catalog.entry_route_count !== ARSU_ROUTING_CATALOG.skills.flatMap((skill) => skill.routes).filter((route) => route.route_kind === "entry").length) {
+      errors.push("Manifest routing catalog metadata differs from the canonical catalog");
+    }
   }
 
   for (const group of DEFAULT_SKILL_GROUPS) {
@@ -72,6 +103,13 @@ export async function validateArsuOutput(outputRoot: string): Promise<Validation
       const skillText = await readUtf8(skillPath);
       if (!skillText.includes("<!-- researchspec-contract-preflight:v1 -->")) {
         errors.push(`Missing Contract Preflight block in ${group}/SKILL.md`);
+      }
+      const skill = getArsuSkillDefinition(group);
+      const description = readSkillFrontmatterDescription(skillText);
+      const expected = renderArsuSkillDescription(skill);
+      if (description !== expected) errors.push(`Routing description mismatch in ${group}/SKILL.md`);
+      if (manifest?.skill_groups[group]?.routing_description.description !== expected) {
+        errors.push(`Manifest routing description mismatch for ${group}`);
       }
     }
   }
@@ -114,6 +152,7 @@ function validateManifestShape(manifest: ConversionManifest): { errors: string[]
     "unclassified_files",
     "risk_findings",
     "contract_compatibility",
+    "routing_catalog",
     "validation_summary",
   ] as const;
   for (const key of required) {
@@ -288,7 +327,7 @@ function outputFilesByPath(manifest: ConversionManifest): Map<string, { sha256: 
 }
 
 async function collectGeneratedFiles(outputRoot: string): Promise<string[]> {
-  const files: string[] = ["researchspec-contracts.json"];
+  const files: string[] = ["researchspec-contracts.json", "routing-catalog.json"];
   if (await pathExists(path.join(outputRoot, "anchor-replacement-report.md"))) files.push("anchor-replacement-report.md");
   for (const group of DEFAULT_SKILL_GROUPS) {
     const groupRoot = path.join(outputRoot, group);

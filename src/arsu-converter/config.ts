@@ -1,14 +1,11 @@
-export const CONVERTER_VERSION = "0.4.0";
+import { ARSU_SKILL_IDS } from "./routing/contracts.js";
+
+export const CONVERTER_VERSION = "0.5.0";
 
 export const VENDOR_SOURCE_PATH = "vendor/ars";
 export const GENERATED_OUTPUT_PATH = "skills/arsu";
 
-export const DEFAULT_SKILL_GROUPS = [
-  "deep-research",
-  "academic-paper",
-  "academic-paper-reviewer",
-  "academic-pipeline",
-] as const;
+export const DEFAULT_SKILL_GROUPS = ARSU_SKILL_IDS;
 
 export const OPTIONAL_SKILL_GROUPS = ["experiment-agent"] as const;
 

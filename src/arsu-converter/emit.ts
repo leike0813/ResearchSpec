@@ -23,6 +23,8 @@ import type {
   SkillGroupInventory,
 } from "./types.js";
 import type { AnchorReplacementPlan } from "./anchors/types.js";
+import { ArsuSkillIdSchema, type ArsuSkillId } from "./routing/contracts.js";
+import { projectSkillFrontmatterDescription, type SkillDescriptionProjection } from "./routing/projection.js";
 
 export async function emitSkillGroup(
   sourceRoot: string,
@@ -32,6 +34,7 @@ export async function emitSkillGroup(
   knownSourcePaths: Set<string>,
   anchorReplacements: AnchorReplacementPlan,
 ): Promise<SkillConversion> {
+  const skillId = ArsuSkillIdSchema.parse(groupName);
   const groupOut = path.join(outputRoot, groupName);
   for (const dirname of ["agents", "references", "templates", "examples", "assets", "scripts"]) {
     await mkdir(path.join(groupOut, dirname), { recursive: true });
@@ -92,6 +95,7 @@ export async function emitSkillGroup(
     profile_id: "researchspec-preflight-v1",
     marker: "<!-- researchspec-contract-preflight:v1 -->",
   };
+  let routingDescription: SkillDescriptionProjection | null = null;
 
   for (const [sourcePath, outputPath] of [...sourceToOutput.entries()].sort((a, b) => a[1].localeCompare(b[1]))) {
     const copied = await copyTransformedFile(
@@ -103,13 +107,16 @@ export async function emitSkillGroup(
       sourceToOutput,
       knownSourcePaths,
       anchorReplacements,
+      skillId,
     );
     if (copied.contractInjection) contractInjection = copied.contractInjection;
+    if (copied.routingDescription) routingDescription = copied.routingDescription;
     findings.push(...copied.findings);
     files.push(copied.file);
   }
 
   const dependencyCopies = [...dependencyMeta.values()].sort((a, b) => a.source_path.localeCompare(b.source_path));
+  if (!routingDescription) throw new Error(`Missing routing description projection for ${groupName}/SKILL.md.`);
   return {
     name: groupName,
     entry: "SKILL.md",
@@ -119,6 +126,7 @@ export async function emitSkillGroup(
     missing_dependencies: missingDependencies.sort((a, b) => a.source_path.localeCompare(b.source_path)),
     needs_review: buildNeedsReview(findings, missingDependencies),
     contract_injection: contractInjection,
+    routing_description: routingDescription,
   };
 }
 
@@ -152,10 +160,12 @@ async function copyTransformedFile(
   sourceToOutput: Map<string, string>,
   knownSourcePaths: Set<string>,
   anchorReplacements: AnchorReplacementPlan,
+  skillId: ArsuSkillId,
 ): Promise<{
   file: CopiedFile;
   findings: ReturnType<typeof scanFindings>;
   contractInjection?: ContractInjectionResult;
+  routingDescription?: SkillDescriptionProjection;
 }> {
   const sourceFile = path.join(sourceRoot, sourcePath);
   const outputFile = path.join(groupOut, outputPath);
@@ -163,6 +173,7 @@ async function copyTransformedFile(
 
   let transformRule = "binary_or_machine_copy";
   let contractInjection: ContractInjectionResult | undefined;
+  let routingDescription: SkillDescriptionProjection | undefined;
   if (isTextResource(sourcePath)) {
     let text = await readUtf8(sourceFile);
     text = applyAnchorReplacements(text, sourcePath, `${groupName}/${outputPath}`, anchorReplacements);
@@ -173,13 +184,16 @@ async function copyTransformedFile(
     text = rewriteText(text, sourceToOutput, outputPath);
     text = restoreAnchorBlocks(text, protectedAnchors.blocks);
     if (outputPath === "SKILL.md") {
+      const projected = projectSkillFrontmatterDescription(text, skillId);
+      text = projected.text;
+      routingDescription = projected.projection;
       const injected = injectContractPreflight(text, groupName);
       text = injected.text;
       contractInjection = injected.result;
     }
     await writeUtf8(outputFile, text);
     transformRule = contractInjection?.injected
-      ? "text_copy_with_dependency_rewrite_and_contract_preflight"
+      ? "text_copy_with_dependency_rewrite_routing_description_and_contract_preflight"
       : "text_copy_with_dependency_rewrite";
   } else {
     await cp(sourceFile, outputFile, { force: true });
@@ -197,6 +211,7 @@ async function copyTransformedFile(
       ? scanFindings(await readUtf8(outputFile), `${groupName}/${outputPath}`)
       : [],
     contractInjection,
+    routingDescription,
   };
 }
 

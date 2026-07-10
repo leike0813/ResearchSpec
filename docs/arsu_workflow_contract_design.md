@@ -16,10 +16,10 @@ surface are canonical in [ARSU User Usage Model v0.1](./arsu_user_usage_model.md
   workflow-declared parallel groups, confirmed Gates, transitions, and revision
   round templates.
 - **Current implementation (2026-07-10)** provides the three-work research Slice,
-  work-level status/instructions, receipt-backed `submit work:`, and nine current
-  Companion Skills.
-- **Pending technical layers** are the routing catalog, subflow instances,
-  `submit gate:`, `advance`, complete ARSU profiles, and four-Companion
+  work-level status/instructions, receipt-backed `submit work:`, the typed ARSU
+  routing catalog with description projections, and nine current Companion Skills.
+- **Pending technical layers** are subflow instances, `submit gate:`, `advance`,
+  complete ARSU profiles, and four-Companion
   consolidation.
 
 Source anchors:
@@ -372,7 +372,7 @@ This mapping implies:
 Current contract workspace, work-level control plane, artifact submit, and ARSU
 conversion remain in force. Target v0.1 is completed by:
 
-1. `add-arsu-routing-catalog`.
+1. `add-arsu-routing-catalog` — implemented; remains active for independent verification/archive.
 2. `add-subflow-instance-control-plane`.
 3. `add-gate-transition-control-plane`.
 4. `add-arsu-workflow-profiles`.

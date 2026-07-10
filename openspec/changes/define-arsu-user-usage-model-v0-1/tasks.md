@@ -7,7 +7,7 @@
 
 ## 2. Routing Catalog Technical Change
 
-- [ ] 2.1 Create and implement `add-arsu-routing-catalog` with a typed converter-owned catalog for modes, artifacts, near-misses, risk, Gate policy, prerequisites, and Skill-description projection.
+- [x] 2.1 Create and implement `add-arsu-routing-catalog` with a typed converter-owned catalog for modes, artifacts, near-misses, risk, Gate policy, prerequisites, and Skill-description projection.
 
 ## 3. Subflow Control Plane Technical Change
 

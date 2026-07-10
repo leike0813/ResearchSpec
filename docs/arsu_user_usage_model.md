@@ -83,7 +83,8 @@ flowchart TD
 
 ### 3.3 路由事实源
 
-Target v0.1 由一个 typed、converter-owned routing catalog 保存以下字段：
+Current implementation 已由 `src/arsu-converter/routing/` 提供 typed、converter-owned
+routing catalog，并生成可审计的 `skills/arsu/routing-catalog.json`。它保存：
 
 - Skill 与 mode ID；
 - 用户意图和 near-miss；
@@ -93,7 +94,8 @@ Target v0.1 由一个 typed、converter-owned routing catalog 保存以下字段
 - 粗粒度成本/交互预算；
 - workflow template reference。
 
-`researchspec-navigate`、ARSU Skill description 和路线摘要都从该 catalog 投影，不各自维护自然语言映射。
+ARSU Skill 与 command wrapper descriptions 已从该 catalog 投影。后续
+`researchspec-navigate` 和 subflow route summary 也必须消费同一 catalog，不另建映射。
 
 ## 4. 全部 ARSU Mode 的主要产物路由矩阵
 
@@ -406,10 +408,12 @@ command wrapper 只是不同 agent 工具的 adapter。目标交付量是：
 - receipt-backed、hash-bound candidate submit；
 - contract change / Decision / archive 的确定性事务；
 - 4 个 ARSU Skills 与 9 个 Companion Skills 的多工具投影。
+- converter-owned routing catalog，覆盖 25 个 modes、2 个 pipeline entries、artifacts、
+  prerequisites、near-misses、risk/Gate policy 和粗粒度成本，并投影 ARSU descriptions。
 
 当前实现尚不具备：
 
-- converter-owned typed routing catalog 和 `researchspec-navigate`；
+- `researchspec-navigate` 以及基于 catalog 的 workspace route availability evaluation；
 - active-run 下的通用 subflow/round instance；
 - `subflow:`、`gate:`、`transition:` 的完整 status/instructions；
 - `start`、`submit gate:` 与 `advance`；
@@ -428,6 +432,8 @@ command wrapper 只是不同 agent 工具的 adapter。目标交付量是：
 | 3 | `add-gate-transition-control-plane` | `submit gate:`、`advance transition:`、Gate confirmation/challenge/override、transition receipt |
 | 4 | `add-arsu-workflow-profiles` | deep-research、academic-paper、reviewer、pipeline 的完整 mode/profile graphs |
 | 5 | `consolidate-researchspec-agent-surface` | Navigate、四 Companion、旧投影清理、31×8/28×8 delivery |
+
+其中 `add-arsu-routing-catalog` 已实现并保持 active，后续四个技术层仍待完成。
 
 Umbrella change 只有在以下用户旅程全部通过时才能归档：Bootstrap、模糊路由、专家直达、standalone、pipeline、并行 join、Gate challenge/override、revision round、resume、context export 和 terminal completion。
 

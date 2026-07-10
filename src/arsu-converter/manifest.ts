@@ -15,6 +15,7 @@ export function buildManifest(
   result: ConversionResult,
   validation: ValidationResult | null,
   contractManifestHash: string,
+  routingCatalogHash: string,
   anchorReplacementReportHash?: string,
 ): ConversionManifest {
   const skillGroups: ConversionManifest["skill_groups"] = {};
@@ -33,6 +34,7 @@ export function buildManifest(
       missing_dependencies: group.missing_dependencies,
       risk_findings: groupRisks,
       contract_injection: group.contract_injection,
+      routing_description: group.routing_description,
     };
   }
 
@@ -42,6 +44,13 @@ export function buildManifest(
     output_path: "researchspec-contracts.json",
     transform_rule: "contract_compatibility_manifest",
     sha256: contractManifestHash,
+  });
+  outputFiles.push({
+    group: "root",
+    source_path: "generated:routing-catalog",
+    output_path: "routing-catalog.json",
+    transform_rule: "routing_catalog_projection",
+    sha256: routingCatalogHash,
   });
   if (anchorReplacementReportHash) {
     outputFiles.push({
@@ -97,6 +106,15 @@ export function buildManifest(
       full_matrix_injection: false,
       anchor_replacement: result.contract_manifest.anchor_replacement,
     },
+    routing_catalog: {
+      path: "routing-catalog.json",
+      catalog_id: result.routing_catalog.catalog_id,
+      schema_version: result.routing_catalog.schema_version,
+      skill_count: result.routing_catalog.skills.length,
+      mode_route_count: result.routing_catalog.skills.flatMap((skill) => skill.routes).filter((route) => route.route_kind === "mode").length,
+      entry_route_count: result.routing_catalog.skills.flatMap((skill) => skill.routes).filter((route) => route.route_kind === "entry").length,
+      sha256: routingCatalogHash,
+    },
     anchor_replacements: anchorReplacements,
     validation_summary: validationSummary,
   };
@@ -135,6 +153,14 @@ export function buildReport(manifest: ConversionManifest): string {
     `- Anchor replacement coverage: ${String(manifest.anchor_replacements.replaced_anchors)}/${String(manifest.anchor_replacements.replaceable_anchors)} replaceable anchors`,
     `- Diagnostic anchors matched: ${String(manifest.anchor_replacements.diagnostic_matched)}/${String(manifest.anchor_replacements.diagnostic_anchors)}`,
     `- Human replacement report: \`anchor-replacement-report.md\``,
+    "",
+    "## Routing Catalog",
+    "",
+    `- Path: \`${manifest.routing_catalog.path}\``,
+    `- Catalog ID: \`${manifest.routing_catalog.catalog_id}\``,
+    `- Skills: ${String(manifest.routing_catalog.skill_count)}`,
+    `- Mode routes: ${String(manifest.routing_catalog.mode_route_count)}`,
+    `- Entry routes: ${String(manifest.routing_catalog.entry_route_count)}`,
     "",
     "## Anchor Replacement Semantics",
     "",

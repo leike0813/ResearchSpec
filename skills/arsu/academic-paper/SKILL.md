@@ -1,6 +1,6 @@
 ---
 name: academic-paper
-description: "12-agent academic paper writing pipeline. 11 modes (full/plan/outline/revision/revision-coach/abstract/lit-review/format-convert/citation-check/disclosure/rebuttal-audit). 6 paper types, 5 citation formats, bilingual abstracts, LaTeX/DOCX-via-Pandoc/PDF output. Style Calibration + Writing Quality Check + Anti-Patterns with IRON RULE markers. Triggers: write paper, academic paper, guide my paper, parse reviews, audit my rebuttal, check my response draft, AI disclosure, 寫論文, 學術論文, 引導我寫論文, 審查意見, 評估回覆."
+description: "Academic manuscript planning, drafting, revision, citation work, disclosure, and format conversion. Routes: academic-paper:full, academic-paper:outline-only, academic-paper:revision, academic-paper:abstract-only, academic-paper:lit-review, academic-paper:format-convert, academic-paper:citation-check, academic-paper:plan, academic-paper:revision-coach, academic-paper:disclosure, academic-paper:rebuttal-audit. Use for: plan or draft an academic paper; revise a manuscript; prepare citation or submission outputs; respond to reviewer feedback. Near-miss routing: start from a topic and continue through review and finalization -> academic-pipeline:end-to-end; conduct a PRISMA systematic review -> deep-research:systematic-review; independently peer-review a manuscript -> academic-paper-reviewer:full. Before starting, validate prerequisites and present expected artifacts, formal Gates, and cost for user confirmation."
 metadata:
   version: "3.2.0"
   last_updated: "2026-06-01"

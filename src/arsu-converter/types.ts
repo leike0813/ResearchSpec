@@ -1,3 +1,6 @@
+import type { ArsuRoutingCatalog } from "./routing/contracts.js";
+import type { SkillDescriptionProjection } from "./routing/projection.js";
+
 export interface FileRecord {
   path: string;
   category: string;
@@ -59,6 +62,7 @@ export interface SkillConversion {
   missing_dependencies: MissingDependency[];
   needs_review: Array<Record<string, string | number>>;
   contract_injection: ContractInjectionResult;
+  routing_description: SkillDescriptionProjection;
 }
 
 export interface SourceVersion {
@@ -139,6 +143,7 @@ export interface ConversionResult {
   skill_groups: Record<string, SkillConversion>;
   inventory: Inventory;
   contract_manifest: ContractCompatibilityManifest;
+  routing_catalog: ArsuRoutingCatalog;
   anchor_replacements: import("./anchors/types.js").AnchorReplacementPlan | null;
   validation: ValidationResult | null;
 }
@@ -159,6 +164,7 @@ export interface ConversionManifest {
     missing_dependencies: MissingDependency[];
     risk_findings: RiskFinding[];
     contract_injection: ContractInjectionResult;
+    routing_description: SkillDescriptionProjection;
   }>;
   output_files: OutputFileRecord[];
   excluded: FileRecord[];
@@ -171,6 +177,15 @@ export interface ConversionManifest {
     material_passport_policy: string;
     full_matrix_injection: false;
     anchor_replacement: AnchorReplacementCompatibility;
+  };
+  routing_catalog: {
+    path: "routing-catalog.json";
+    catalog_id: "arsu-routing-v0.1";
+    schema_version: "1";
+    skill_count: number;
+    mode_route_count: number;
+    entry_route_count: number;
+    sha256: string;
   };
   anchor_replacements: Omit<import("./anchors/types.js").AnchorReplacementPlan, "spans_by_source">;
   validation_summary: ValidationResult;

@@ -1,5 +1,5 @@
 {
-  "converter_version": "0.4.0",
+  "converter_version": "0.5.0",
   "output_kind": "final",
   "source_root": "vendor/ars",
   "output_root": "skills/arsu",
@@ -11,7 +11,7 @@
     "remote_url": "https://github.com/Imbad0202/academic-research-skills",
     "dirty": false
   },
-  "generated_at": "2026-07-10T10:27:39Z",
+  "generated_at": "2026-07-10T12:22:35Z",
   "generated_groups": [
     "academic-paper",
     "academic-paper-reviewer",
@@ -894,8 +894,8 @@
           "group": "academic-paper",
           "source_path": "academic-paper/SKILL.md",
           "output_path": "academic-paper/SKILL.md",
-          "transform_rule": "text_copy_with_dependency_rewrite_and_contract_preflight",
-          "sha256": "ca8e9d3cf34979dec623f4d123de52937ac9198cc218154508d5f22bd6c9fa6c"
+          "transform_rule": "text_copy_with_dependency_rewrite_routing_description_and_contract_preflight",
+          "sha256": "3080fde72132f73f12cb5a4f2ed5293821dfe85b5ccbe74fef5055daa18a1864"
         },
         {
           "group": "academic-paper",
@@ -4482,6 +4482,10 @@
         "injected": true,
         "profile_id": "researchspec-preflight-v1",
         "marker": "<!-- researchspec-contract-preflight:v1 -->"
+      },
+      "routing_description": {
+        "skill_id": "academic-paper",
+        "description": "Academic manuscript planning, drafting, revision, citation work, disclosure, and format conversion. Routes: academic-paper:full, academic-paper:outline-only, academic-paper:revision, academic-paper:abstract-only, academic-paper:lit-review, academic-paper:format-convert, academic-paper:citation-check, academic-paper:plan, academic-paper:revision-coach, academic-paper:disclosure, academic-paper:rebuttal-audit. Use for: plan or draft an academic paper; revise a manuscript; prepare citation or submission outputs; respond to reviewer feedback. Near-miss routing: start from a topic and continue through review and finalization -> academic-pipeline:end-to-end; conduct a PRISMA systematic review -> deep-research:systematic-review; independently peer-review a manuscript -> academic-paper-reviewer:full. Before starting, validate prerequisites and present expected artifacts, formal Gates, and cost for user confirmation."
       }
     },
     "academic-paper-reviewer": {
@@ -5205,8 +5209,8 @@
           "group": "academic-paper-reviewer",
           "source_path": "academic-paper-reviewer/SKILL.md",
           "output_path": "academic-paper-reviewer/SKILL.md",
-          "transform_rule": "text_copy_with_dependency_rewrite_and_contract_preflight",
-          "sha256": "c78ac34e7533ede88d97c0e40f1b4f1826a03e03dde6ccccb34c126c0155c2bb"
+          "transform_rule": "text_copy_with_dependency_rewrite_routing_description_and_contract_preflight",
+          "sha256": "c42fe23f73030e3fef8235c45e83ebc4b895332e7ceaf0213c781b84cfde6752"
         },
         {
           "group": "academic-paper-reviewer",
@@ -8231,6 +8235,10 @@
         "injected": true,
         "profile_id": "researchspec-preflight-v1",
         "marker": "<!-- researchspec-contract-preflight:v1 -->"
+      },
+      "routing_description": {
+        "skill_id": "academic-paper-reviewer",
+        "description": "Independent manuscript peer review, focused methodology assessment, guided review, and revision verification. Routes: academic-paper-reviewer:full, academic-paper-reviewer:re-review, academic-paper-reviewer:quick, academic-paper-reviewer:methodology-focus, academic-paper-reviewer:guided, academic-paper-reviewer:calibration. Use for: peer-review an academic manuscript; verify a revised manuscript; focus on methodology; calibrate reviewer judgments. Near-miss routing: verify facts or claims in a research report -> deep-research:fact-check; write or revise manuscript prose -> academic-paper:revision; audit only the response letter -> academic-paper:rebuttal-audit. Before starting, validate prerequisites and present expected artifacts, formal Gates, and cost for user confirmation."
       }
     },
     "academic-pipeline": {
@@ -8926,8 +8934,8 @@
           "group": "academic-pipeline",
           "source_path": "academic-pipeline/SKILL.md",
           "output_path": "academic-pipeline/SKILL.md",
-          "transform_rule": "text_copy_with_dependency_rewrite_and_contract_preflight",
-          "sha256": "87ecfbe87d6cf8fdb1471cb1aebccb1d95e4580be216e61fc8e26e8685354d94"
+          "transform_rule": "text_copy_with_dependency_rewrite_routing_description_and_contract_preflight",
+          "sha256": "7c8a567befa3b4da7b626cab21a80abec748b7929600e2c2aae8df5acec3aaeb"
         },
         {
           "group": "academic-pipeline",
@@ -11888,6 +11896,10 @@
         "injected": true,
         "profile_id": "researchspec-preflight-v1",
         "marker": "<!-- researchspec-contract-preflight:v1 -->"
+      },
+      "routing_description": {
+        "skill_id": "academic-pipeline",
+        "description": "Cross-stage orchestration from research through writing, integrity, review, revision, and finalization. Routes: academic-pipeline:end-to-end, academic-pipeline:mid-entry. Use for: complete a research-to-publication workflow; continue a cross-stage paper workflow; enter the pipeline from existing materials. Near-miss routing: perform one focused research task -> deep-research:full; write from completed research materials -> academic-paper:full; review one existing manuscript -> academic-paper-reviewer:full. Before starting, validate prerequisites and present expected artifacts, formal Gates, and cost for user confirmation."
       }
     },
     "deep-research": {
@@ -12758,8 +12770,8 @@
           "group": "deep-research",
           "source_path": "deep-research/SKILL.md",
           "output_path": "deep-research/SKILL.md",
-          "transform_rule": "text_copy_with_dependency_rewrite_and_contract_preflight",
-          "sha256": "8dd219deb0cd5172fa83bb378efa5352513832868c5bd1dadade8694f3882385"
+          "transform_rule": "text_copy_with_dependency_rewrite_routing_description_and_contract_preflight",
+          "sha256": "ba3383e8207e73797b8748dcda4a15aa25c41b37306c9a0f0112e96dd809e338"
         },
         {
           "group": "deep-research",
@@ -15894,6 +15906,10 @@
         "injected": true,
         "profile_id": "researchspec-preflight-v1",
         "marker": "<!-- researchspec-contract-preflight:v1 -->"
+      },
+      "routing_description": {
+        "skill_id": "deep-research",
+        "description": "Research questions, evidence discovery, literature synthesis, fact-checking, and research reports. Routes: deep-research:full, deep-research:quick, deep-research:review, deep-research:lit-review, deep-research:three-way-scan, deep-research:fact-check, deep-research:socratic, deep-research:systematic-review. Use for: investigate a research question; synthesize scholarly evidence; verify claims; design a systematic review. Near-miss routing: write a literature-review section for a manuscript -> academic-paper:lit-review; peer-review an academic manuscript -> academic-paper-reviewer:full; complete research-to-publication workflow -> academic-pipeline:end-to-end. Before starting, validate prerequisites and present expected artifacts, formal Gates, and cost for user confirmation."
       }
     }
   },
@@ -16616,8 +16632,8 @@
       "group": "academic-paper-reviewer",
       "source_path": "academic-paper-reviewer/SKILL.md",
       "output_path": "academic-paper-reviewer/SKILL.md",
-      "transform_rule": "text_copy_with_dependency_rewrite_and_contract_preflight",
-      "sha256": "c78ac34e7533ede88d97c0e40f1b4f1826a03e03dde6ccccb34c126c0155c2bb"
+      "transform_rule": "text_copy_with_dependency_rewrite_routing_description_and_contract_preflight",
+      "sha256": "c42fe23f73030e3fef8235c45e83ebc4b895332e7ceaf0213c781b84cfde6752"
     },
     {
       "group": "academic-paper-reviewer",
@@ -17512,8 +17528,8 @@
       "group": "academic-paper",
       "source_path": "academic-paper/SKILL.md",
       "output_path": "academic-paper/SKILL.md",
-      "transform_rule": "text_copy_with_dependency_rewrite_and_contract_preflight",
-      "sha256": "ca8e9d3cf34979dec623f4d123de52937ac9198cc218154508d5f22bd6c9fa6c"
+      "transform_rule": "text_copy_with_dependency_rewrite_routing_description_and_contract_preflight",
+      "sha256": "3080fde72132f73f12cb5a4f2ed5293821dfe85b5ccbe74fef5055daa18a1864"
     },
     {
       "group": "academic-paper",
@@ -18282,8 +18298,8 @@
       "group": "academic-pipeline",
       "source_path": "academic-pipeline/SKILL.md",
       "output_path": "academic-pipeline/SKILL.md",
-      "transform_rule": "text_copy_with_dependency_rewrite_and_contract_preflight",
-      "sha256": "87ecfbe87d6cf8fdb1471cb1aebccb1d95e4580be216e61fc8e26e8685354d94"
+      "transform_rule": "text_copy_with_dependency_rewrite_routing_description_and_contract_preflight",
+      "sha256": "7c8a567befa3b4da7b626cab21a80abec748b7929600e2c2aae8df5acec3aaeb"
     },
     {
       "group": "academic-pipeline",
@@ -19164,8 +19180,8 @@
       "group": "deep-research",
       "source_path": "deep-research/SKILL.md",
       "output_path": "deep-research/SKILL.md",
-      "transform_rule": "text_copy_with_dependency_rewrite_and_contract_preflight",
-      "sha256": "8dd219deb0cd5172fa83bb378efa5352513832868c5bd1dadade8694f3882385"
+      "transform_rule": "text_copy_with_dependency_rewrite_routing_description_and_contract_preflight",
+      "sha256": "ba3383e8207e73797b8748dcda4a15aa25c41b37306c9a0f0112e96dd809e338"
     },
     {
       "group": "deep-research",
@@ -19215,6 +19231,13 @@
       "output_path": "researchspec-contracts.json",
       "transform_rule": "contract_compatibility_manifest",
       "sha256": "9a6f3fb414a0c7406045bf1215d56311287b94c739cfe902b556a3d0ece32a20"
+    },
+    {
+      "group": "root",
+      "source_path": "generated:routing-catalog",
+      "output_path": "routing-catalog.json",
+      "transform_rule": "routing_catalog_projection",
+      "sha256": "b0c207ae5ae9045e8bf42939c75db8193e857ca9491de0ef7b7b3426fc8ff230"
     }
   ],
   "excluded": [
@@ -34338,6 +34361,15 @@
       "marker": "<!--rs:<anchor-id>-->",
       "diagnostic_anchor_policy": "report_only"
     }
+  },
+  "routing_catalog": {
+    "path": "routing-catalog.json",
+    "catalog_id": "arsu-routing-v0.1",
+    "schema_version": "1",
+    "skill_count": 4,
+    "mode_route_count": 25,
+    "entry_route_count": 2,
+    "sha256": "b0c207ae5ae9045e8bf42939c75db8193e857ca9491de0ef7b7b3426fc8ff230"
   },
   "anchor_replacements": {
     "profile_id": "researchspec-anchor-replacement-v3",

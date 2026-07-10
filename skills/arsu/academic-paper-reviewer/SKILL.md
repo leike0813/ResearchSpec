@@ -1,6 +1,6 @@
 ---
 name: academic-paper-reviewer
-description: "Multi-perspective academic paper review with dynamic reviewer personas. Simulates 5 independent reviewers (EIC + 3 peer reviewers + Devil's Advocate) with field-specific expertise. Supports full review, re-review (verification), quick assessment, methodology focus, Socratic guided, and calibration modes. Triggers on: review paper, peer review, manuscript review, referee report, review my paper, critique paper, simulate review, editorial review, calibrate reviewer, reviewer calibration, measure reviewer accuracy."
+description: "Independent manuscript peer review, focused methodology assessment, guided review, and revision verification. Routes: academic-paper-reviewer:full, academic-paper-reviewer:re-review, academic-paper-reviewer:quick, academic-paper-reviewer:methodology-focus, academic-paper-reviewer:guided, academic-paper-reviewer:calibration. Use for: peer-review an academic manuscript; verify a revised manuscript; focus on methodology; calibrate reviewer judgments. Near-miss routing: verify facts or claims in a research report -> deep-research:fact-check; write or revise manuscript prose -> academic-paper:revision; audit only the response letter -> academic-paper:rebuttal-audit. Before starting, validate prerequisites and present expected artifacts, formal Gates, and cost for user confirmation."
 metadata:
   version: "1.10.0"
   last_updated: "2026-06-01"

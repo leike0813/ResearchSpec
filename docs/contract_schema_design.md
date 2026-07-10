@@ -12,7 +12,7 @@ schema、validator、CLI 行为和 ARSU wrapper preflight 协议。
 - **Target v0.1**：单 active run、动态 subflow/round、parallel/join、Gate confirmation、
   transition receipt 与 selector instructions 所需的领域信息。
 - **Current implementation（2026-07-10）**：现有 workspace DTO、静态 stage/work items、
-  receipt-backed `submit work:` 和既有 ledgers。
+  receipt-backed `submit work:`、既有 ledgers，以及 converter-owned typed routing catalog。
 - **Pending technical layer**：subflow/Gate/transition 的最终 DTO、持久化位置和迁移策略；
   本文不把方向性字段写成已实现 Schema。
 
@@ -805,6 +805,27 @@ stages:
         allowed_types: [integrity_report, verified_draft]
 ```
 
+### 3.6 `skills/arsu/routing-catalog.json`
+
+职责：提供 converter-owned catalog 的 generated audit view。源码 SSOT 位于
+`src/arsu-converter/routing/`；JSON 由 converter 稳定生成并进入 conversion manifest/hash，
+不得手改或成为独立配置源。
+
+| 层级 | 必填字段 | 约束 |
+| --- | --- | --- |
+| Catalog | `schema_version`、`catalog_id`、`skills` | 固定为 Schema `1`、catalog `arsu-routing-v0.1` 和四个 Skills |
+| Skill | `skill_id`、`title`、`summary`、`intents`、`default_route_ref`、`routes`、`near_misses` | Skill ID 唯一，default route 必须属于自身 |
+| Route | `route_ref`、`route_kind`、`mode_id`、`intents`、`primary_artifact_types`、`prerequisite_groups`、`risk_level`、`gate_policy`、`cost` | 25 个 mode routes；两个 pipeline entry routes 的 `mode_id` 为 null |
+| Prerequisite group | `operator`、`requirements`、`fallback_route_refs` | `all_of` 全部满足，`any_of` 至少满足一个；fallback graph 无环 |
+| Requirement | `kind`、`id` | kind 仅为 `contract`、`artifact` 或 `user_input` |
+| Gate policy | `level`、`gate_kinds` | 路线政策，不生成 runtime Gate ID 或 verdict |
+| Cost | `effort`、`interaction` | 仅粗粒度预算，不承诺 token、时间或价格 |
+
+Catalog validator 阻断额外字段、重复或缺失 Skill/route、错误 owner/mode、未知
+near-miss/fallback refs、空 prerequisite group、fallback cycle、不一致 Gate policy 和非安全 ID。
+`primary_artifact_types` 是 route-level stable type names；work path、validator 和 completion
+仍由后续 workflow profiles 定义。
+
 ## 4. Run Runtime
 
 ### 4.1 `researchspec/runs/current/state.yaml`
@@ -1484,7 +1505,8 @@ process summary；不得伪装成 gate verdict。
 既有 workspace/schema、work evaluator、receipt-backed artifact submit 和 contract lifecycle
 属于 Current implementation。剩余 schema 按用户模型的 technical changes 定型：
 
-1. Routing catalog Schema：Skill/mode/artifact/near-miss/risk/Gate policy。
+1. Routing catalog Schema 已实现于 `src/arsu-converter/routing/`：严格 Skill/route、artifact、
+   prerequisite、near-miss、risk/Gate/cost contract，并生成 `skills/arsu/routing-catalog.json`。
 2. Subflow runtime Schema：instance/parent/round、parallel/join、通用 selector status 与
    instructions。
 3. Gate/transition Schema：proposed verdict、evidence、`confirmed_by`、override linkage、

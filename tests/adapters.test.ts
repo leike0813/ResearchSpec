@@ -8,6 +8,8 @@ import { ARSU_COMMAND_CONTENTS, renderCommand } from "../src/adapters/command-re
 import { planToolDelivery } from "../src/adapters/delivery.js";
 import { TOOL_IDS, TOOLS, detectTools, getTool, parseToolExpression } from "../src/adapters/tools.js";
 import { cleanup, tempProject } from "./helpers/cli.js";
+import { ARSU_ROUTING_CATALOG } from "../src/arsu-converter/routing/catalog.js";
+import { renderArsuCommandDescription } from "../src/arsu-converter/routing/projection.js";
 
 void test("tool registry contains the exact 31-tool surface and 28 command adapters", () => {
   assert.equal(TOOL_IDS.length, 31);
@@ -81,6 +83,16 @@ void test("format families render machine-valid structural markers", () => {
     for (const intent of [...ARSU_COMMAND_CONTENTS, ...COMPANION_INTENTS]) {
       assert.ok(renderCommand(definition, intent).trim().length > 0);
     }
+  }
+});
+
+void test("ARSU command descriptions are projected from the routing catalog", () => {
+  assert.deepEqual(ARSU_COMMAND_CONTENTS.map((content) => content.id), ARSU_ROUTING_CATALOG.skills.map((skill) => skill.skill_id));
+  for (const skill of ARSU_ROUTING_CATALOG.skills) {
+    const command = ARSU_COMMAND_CONTENTS.find((content) => content.id === skill.skill_id);
+    assert.ok(command);
+    assert.equal(command.description, renderArsuCommandDescription(skill));
+    assert.equal(command.family, "arsu");
   }
 });
 

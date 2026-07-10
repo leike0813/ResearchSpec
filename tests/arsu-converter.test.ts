@@ -11,6 +11,8 @@ import { validateArsuOutput } from "../src/arsu-converter/validate.js";
 import { checkExistingOutputClean } from "../src/arsu-converter/idempotence.js";
 import { normalizeManifest } from "../src/arsu-converter/manifest.js";
 import { ArsuConverterError, type ConversionManifest } from "../src/arsu-converter/types.js";
+import { ARSU_ROUTING_CATALOG, getArsuSkillDefinition } from "../src/arsu-converter/routing/catalog.js";
+import { readSkillFrontmatterDescription, renderArsuSkillDescription } from "../src/arsu-converter/routing/projection.js";
 
 void test("converter generates four ResearchSpec-compatible skill groups", async () => {
   const root = await tempRepoRoot();
@@ -34,6 +36,11 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
   assert.match(deepResearch, /references\/cross-skill\/academic-paper\/references\/writing_quality_check\.md/);
   assert.doesNotMatch(deepResearch, /\.\.\/docs\/design\/old\.md/);
   assert.equal(existsSync(path.join(root, "skills/arsu/deep-research/references/shared/handoff_schemas.md")), true);
+  const routingCatalog = JSON.parse(
+    await readFile(path.join(root, "skills/arsu/routing-catalog.json"), "utf8"),
+  ) as unknown;
+  assert.deepEqual(routingCatalog, ARSU_ROUTING_CATALOG);
+  assert.equal(readSkillFrontmatterDescription(deepResearch), renderArsuSkillDescription(getArsuSkillDefinition("deep-research")));
 
   const contracts = JSON.parse(
     await readFile(path.join(root, "skills/arsu/researchspec-contracts.json"), "utf8"),
@@ -63,6 +70,8 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
         template_id?: string;
       }>;
     };
+    routing_catalog: { path: string; catalog_id: string; skill_count: number; mode_route_count: number; entry_route_count: number; sha256: string };
+    output_files: Array<{ output_path: string; sha256: string }>;
   };
   assert.equal(manifest.risk_findings.some((item) => item.term === "Claude Code" && !item.blocking), true);
   assert.equal(manifest.risk_findings.some((item) => item.term === "Version History" && !item.blocking), true);
@@ -71,6 +80,11 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
   assert.equal(manifest.anchor_replacements.replaced_anchors, 2);
   assert.equal(manifest.anchor_replacements.diagnostic_anchors, 1);
   assert.equal(manifest.anchor_replacements.profile_id, "researchspec-anchor-replacement-v3");
+  assert.deepEqual(
+    { path: manifest.routing_catalog.path, catalog_id: manifest.routing_catalog.catalog_id, skills: manifest.routing_catalog.skill_count, modes: manifest.routing_catalog.mode_route_count, entries: manifest.routing_catalog.entry_route_count },
+    { path: "routing-catalog.json", catalog_id: "arsu-routing-v0.1", skills: 4, modes: 25, entries: 2 },
+  );
+  assert.equal(manifest.output_files.some((item) => item.output_path === "routing-catalog.json" && item.sha256 === manifest.routing_catalog.sha256), true);
   assert.equal(
     manifest.anchor_replacements.records.some((item) =>
       item.anchor_id === "STATE-001" &&
@@ -88,6 +102,29 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
   assert.match(anchorReport, /### STATE-001/);
   assert.match(anchorReport, /#### Before/);
   assert.match(anchorReport, /#### After/);
+  const conversionReport = await readFile(path.join(root, "skills/arsu/conversion-report.md"), "utf8");
+  assert.match(conversionReport, /## Routing Catalog/);
+  assert.match(conversionReport, /Mode routes: 25/);
+  await cleanup(root);
+});
+
+void test("validation reports routing catalog and Skill description drift", async () => {
+  const root = await tempRepoRoot();
+  await makeSource(root);
+  await convertArsu({ repoRoot: root });
+
+  const catalogPath = path.join(root, "skills/arsu/routing-catalog.json");
+  const catalog = JSON.parse(await readFile(catalogPath, "utf8")) as { catalog_id: string };
+  catalog.catalog_id = "invalid";
+  await writeFile(catalogPath, `${JSON.stringify(catalog, null, 2)}\n`, "utf8");
+  const skillPath = path.join(root, "skills/arsu/deep-research/SKILL.md");
+  await writeFile(skillPath, (await readFile(skillPath, "utf8")).replace(/description:.*\n/, "description: drifted\n"), "utf8");
+
+  const validation = await validateArsuOutput(path.join(root, "skills/arsu"));
+  assert.equal(validation.ok, false);
+  assert.ok(validation.errors.some((error) => error.includes("Invalid routing-catalog.json") || error.includes("canonical converter-owned catalog")));
+  assert.ok(validation.errors.some((error) => error.includes("Routing description mismatch")));
+  assert.ok(validation.errors.some((error) => error.includes("Hash mismatch")));
   await cleanup(root);
 });
 

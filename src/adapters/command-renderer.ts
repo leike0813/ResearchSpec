@@ -1,4 +1,6 @@
 import type { ToolDefinition } from "./tools.js";
+import { ARSU_ROUTING_CATALOG } from "../arsu-converter/routing/catalog.js";
+import { renderArsuCommandDescription } from "../arsu-converter/routing/projection.js";
 
 export interface CommandContent {
   id: string;
@@ -11,12 +13,7 @@ export interface CommandContent {
   body: string;
 }
 
-export const ARSU_COMMAND_CONTENTS: readonly CommandContent[] = [
-  command("deep-research", "Deep Research", "Run evidence-grounded research through ResearchSpec contracts."),
-  command("academic-paper", "Academic Paper", "Draft or revise an academic paper from ResearchSpec contracts."),
-  command("academic-paper-reviewer", "Academic Paper Reviewer", "Review a manuscript against ResearchSpec contracts."),
-  command("academic-pipeline", "Academic Pipeline", "Coordinate the ARSU paper workflow through ResearchSpec files."),
-];
+export const ARSU_COMMAND_CONTENTS: readonly CommandContent[] = ARSU_ROUTING_CATALOG.skills.map(command);
 
 export function renderCommand(tool: ToolDefinition, content: CommandContent): string {
   if (!tool.command) throw new Error(`${tool.id} does not support commands.`);
@@ -45,9 +42,16 @@ export function renderCommand(tool: ToolDefinition, content: CommandContent): st
   }
 }
 
-function command(id: string, name: string, description: string): CommandContent {
+function command(skill: (typeof ARSU_ROUTING_CATALOG.skills)[number]): CommandContent {
+  const id = skill.skill_id;
   return {
-    id, skillId: id, family: "arsu", name, description, category: "researchspec", tags: ["researchspec", "arsu"],
+    id,
+    skillId: id,
+    family: "arsu",
+    name: skill.title,
+    description: renderArsuCommandDescription(skill),
+    category: "researchspec",
+    tags: ["researchspec", "arsu"],
     body: `Use the installed \`${id}\` skill. Discover the nearest \`researchspec/\` workspace, run \`researchspec check\`, and follow the skill while treating contracts and ledgers as the source of truth. Do not call an LLM API or silently accept pending decisions.`,
   };
 }

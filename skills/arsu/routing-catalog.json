@@ -1,0 +1,1760 @@
+{
+  "schema_version": "1",
+  "catalog_id": "arsu-routing-v0.1",
+  "skills": [
+    {
+      "skill_id": "deep-research",
+      "title": "Deep Research",
+      "summary": "Research questions, evidence discovery, literature synthesis, fact-checking, and research reports.",
+      "intents": [
+        "investigate a research question",
+        "synthesize scholarly evidence",
+        "verify claims",
+        "design a systematic review"
+      ],
+      "default_route_ref": "deep-research:full",
+      "routes": [
+        {
+          "route_ref": "deep-research:full",
+          "title": "Full research",
+          "intents": [
+            "complete evidence-grounded research report"
+          ],
+          "primary_artifact_types": [
+            "rq_brief",
+            "methodology_blueprint",
+            "bibliography",
+            "synthesis_report",
+            "research_report"
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/project.md"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "user_input",
+                  "id": "research_goal"
+                }
+              ],
+              "fallback_route_refs": []
+            }
+          ],
+          "risk_level": "high",
+          "gate_policy": {
+            "level": "required",
+            "gate_kinds": [
+              "evidence_quality"
+            ]
+          },
+          "cost": {
+            "effort": "high",
+            "interaction": "long_horizon"
+          },
+          "route_kind": "mode",
+          "mode_id": "full"
+        },
+        {
+          "route_ref": "deep-research:quick",
+          "title": "Quick research brief",
+          "intents": [
+            "short research brief with key sources"
+          ],
+          "primary_artifact_types": [
+            "research_brief",
+            "bibliography"
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/project.md"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "user_input",
+                  "id": "research_goal"
+                }
+              ],
+              "fallback_route_refs": []
+            }
+          ],
+          "risk_level": "low",
+          "gate_policy": {
+            "level": "none",
+            "gate_kinds": []
+          },
+          "cost": {
+            "effort": "low",
+            "interaction": "single_pass"
+          },
+          "route_kind": "mode",
+          "mode_id": "quick"
+        },
+        {
+          "route_ref": "deep-research:review",
+          "title": "Research text review",
+          "intents": [
+            "review an existing research text or report"
+          ],
+          "primary_artifact_types": [
+            "research_review_report"
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/project.md"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "user_input",
+                  "id": "research_text"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "research_report"
+                }
+              ],
+              "fallback_route_refs": []
+            }
+          ],
+          "risk_level": "medium",
+          "gate_policy": {
+            "level": "conditional",
+            "gate_kinds": [
+              "evidence_quality"
+            ]
+          },
+          "cost": {
+            "effort": "medium",
+            "interaction": "single_pass"
+          },
+          "route_kind": "mode",
+          "mode_id": "review"
+        },
+        {
+          "route_ref": "deep-research:lit-review",
+          "title": "Evidence literature review",
+          "intents": [
+            "search and synthesize literature on a topic"
+          ],
+          "primary_artifact_types": [
+            "bibliography",
+            "source_corpus",
+            "literature_matrix",
+            "synthesis_report"
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/project.md"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "user_input",
+                  "id": "research_goal"
+                }
+              ],
+              "fallback_route_refs": []
+            }
+          ],
+          "risk_level": "high",
+          "gate_policy": {
+            "level": "required",
+            "gate_kinds": [
+              "evidence_quality"
+            ]
+          },
+          "cost": {
+            "effort": "medium",
+            "interaction": "iterative"
+          },
+          "route_kind": "mode",
+          "mode_id": "lit-review"
+        },
+        {
+          "route_ref": "deep-research:three-way-scan",
+          "title": "WHY/HOW/WHAT scan",
+          "intents": [
+            "rapidly compare a focused paper shortlist"
+          ],
+          "primary_artifact_types": [
+            "comparison_matrix",
+            "reading_shortlist"
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/project.md"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "user_input",
+                  "id": "research_goal"
+                }
+              ],
+              "fallback_route_refs": []
+            }
+          ],
+          "risk_level": "low",
+          "gate_policy": {
+            "level": "none",
+            "gate_kinds": []
+          },
+          "cost": {
+            "effort": "low",
+            "interaction": "single_pass"
+          },
+          "route_kind": "mode",
+          "mode_id": "three-way-scan"
+        },
+        {
+          "route_ref": "deep-research:fact-check",
+          "title": "Claim fact-check",
+          "intents": [
+            "verify specific factual or scholarly claims"
+          ],
+          "primary_artifact_types": [
+            "fact_check_report"
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/project.md"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "user_input",
+                  "id": "claims"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "synthesis_report"
+                }
+              ],
+              "fallback_route_refs": []
+            }
+          ],
+          "risk_level": "high",
+          "gate_policy": {
+            "level": "conditional",
+            "gate_kinds": [
+              "claim_verification"
+            ]
+          },
+          "cost": {
+            "effort": "low",
+            "interaction": "single_pass"
+          },
+          "route_kind": "mode",
+          "mode_id": "fact-check"
+        },
+        {
+          "route_ref": "deep-research:socratic",
+          "title": "Socratic research planning",
+          "intents": [
+            "clarify a vague research idea through guided dialogue"
+          ],
+          "primary_artifact_types": [
+            "rq_brief",
+            "research_plan_summary"
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/project.md"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "user_input",
+                  "id": "research_goal"
+                }
+              ],
+              "fallback_route_refs": []
+            }
+          ],
+          "risk_level": "medium",
+          "gate_policy": {
+            "level": "none",
+            "gate_kinds": []
+          },
+          "cost": {
+            "effort": "variable",
+            "interaction": "iterative"
+          },
+          "route_kind": "mode",
+          "mode_id": "socratic"
+        },
+        {
+          "route_ref": "deep-research:systematic-review",
+          "title": "Systematic review",
+          "intents": [
+            "conduct a PRISMA systematic review or meta-analysis"
+          ],
+          "primary_artifact_types": [
+            "systematic_review_protocol",
+            "prisma_materials",
+            "risk_of_bias_report",
+            "meta_analysis_report",
+            "research_report"
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/project.md"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "user_input",
+                  "id": "review_question"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "rq_brief"
+                }
+              ],
+              "fallback_route_refs": [
+                "deep-research:socratic"
+              ]
+            }
+          ],
+          "risk_level": "high",
+          "gate_policy": {
+            "level": "required",
+            "gate_kinds": [
+              "methodology_compliance",
+              "evidence_quality"
+            ]
+          },
+          "cost": {
+            "effort": "high",
+            "interaction": "long_horizon"
+          },
+          "route_kind": "mode",
+          "mode_id": "systematic-review"
+        }
+      ],
+      "near_misses": [
+        {
+          "intent": "write a literature-review section for a manuscript",
+          "route_ref": "academic-paper:lit-review",
+          "reason": "The deliverable is manuscript prose rather than an evidence synthesis artifact."
+        },
+        {
+          "intent": "peer-review an academic manuscript",
+          "route_ref": "academic-paper-reviewer:full",
+          "reason": "Manuscript peer review belongs to the reviewer Skill, not research-text review."
+        },
+        {
+          "intent": "complete research-to-publication workflow",
+          "route_ref": "academic-pipeline:end-to-end",
+          "reason": "A cross-stage deliverable needs the pipeline rather than a standalone research route."
+        }
+      ]
+    },
+    {
+      "skill_id": "academic-paper",
+      "title": "Academic Paper",
+      "summary": "Academic manuscript planning, drafting, revision, citation work, disclosure, and format conversion.",
+      "intents": [
+        "plan or draft an academic paper",
+        "revise a manuscript",
+        "prepare citation or submission outputs",
+        "respond to reviewer feedback"
+      ],
+      "default_route_ref": "academic-paper:full",
+      "routes": [
+        {
+          "route_ref": "academic-paper:full",
+          "title": "Full manuscript drafting",
+          "intents": [
+            "draft a complete paper from existing research materials"
+          ],
+          "primary_artifact_types": [
+            "paper_configuration",
+            "paper_outline",
+            "evidence_map",
+            "argument_blueprint",
+            "paper_draft",
+            "submission_package"
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/project.md"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/manuscript.yaml"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "user_input",
+                  "id": "research_materials"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "rq_brief"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "bibliography"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "source_corpus"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "synthesis_report"
+                }
+              ],
+              "fallback_route_refs": [
+                "deep-research:full"
+              ]
+            }
+          ],
+          "risk_level": "high",
+          "gate_policy": {
+            "level": "required",
+            "gate_kinds": [
+              "manuscript_quality",
+              "citation_integrity"
+            ]
+          },
+          "cost": {
+            "effort": "high",
+            "interaction": "long_horizon"
+          },
+          "route_kind": "mode",
+          "mode_id": "full"
+        },
+        {
+          "route_ref": "academic-paper:outline-only",
+          "title": "Outline only",
+          "intents": [
+            "create a detailed manuscript outline and evidence map"
+          ],
+          "primary_artifact_types": [
+            "paper_outline",
+            "evidence_map"
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/project.md"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/manuscript.yaml"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "user_input",
+                  "id": "research_materials"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "rq_brief"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "bibliography"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "source_corpus"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "synthesis_report"
+                }
+              ],
+              "fallback_route_refs": [
+                "deep-research:full"
+              ]
+            }
+          ],
+          "risk_level": "medium",
+          "gate_policy": {
+            "level": "conditional",
+            "gate_kinds": [
+              "manuscript_structure"
+            ]
+          },
+          "cost": {
+            "effort": "medium",
+            "interaction": "single_pass"
+          },
+          "route_kind": "mode",
+          "mode_id": "outline-only"
+        },
+        {
+          "route_ref": "academic-paper:revision",
+          "title": "Manuscript revision",
+          "intents": [
+            "revise a draft against reviewer feedback"
+          ],
+          "primary_artifact_types": [
+            "revision_patch",
+            "revised_draft",
+            "apply_report",
+            "response_to_reviewers"
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/manuscript.yaml"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "user_input",
+                  "id": "manuscript"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "paper_draft"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "verified_draft"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "revised_draft"
+                }
+              ],
+              "fallback_route_refs": [
+                "academic-paper:full"
+              ]
+            },
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "user_input",
+                  "id": "reviewer_comments"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "review_report"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "revision_roadmap"
+                }
+              ],
+              "fallback_route_refs": [
+                "academic-paper:revision-coach"
+              ]
+            }
+          ],
+          "risk_level": "high",
+          "gate_policy": {
+            "level": "required",
+            "gate_kinds": [
+              "revision_completeness"
+            ]
+          },
+          "cost": {
+            "effort": "high",
+            "interaction": "iterative"
+          },
+          "route_kind": "mode",
+          "mode_id": "revision"
+        },
+        {
+          "route_ref": "academic-paper:abstract-only",
+          "title": "Abstract only",
+          "intents": [
+            "write an abstract and keywords for an existing manuscript"
+          ],
+          "primary_artifact_types": [
+            "abstract",
+            "keywords"
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/manuscript.yaml"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "user_input",
+                  "id": "manuscript"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "paper_draft"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "verified_draft"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "revised_draft"
+                }
+              ],
+              "fallback_route_refs": [
+                "academic-paper:full"
+              ]
+            }
+          ],
+          "risk_level": "low",
+          "gate_policy": {
+            "level": "none",
+            "gate_kinds": []
+          },
+          "cost": {
+            "effort": "low",
+            "interaction": "single_pass"
+          },
+          "route_kind": "mode",
+          "mode_id": "abstract-only"
+        },
+        {
+          "route_ref": "academic-paper:lit-review",
+          "title": "Manuscript literature review",
+          "intents": [
+            "prepare literature-review material or prose for a manuscript"
+          ],
+          "primary_artifact_types": [
+            "bibliography",
+            "literature_matrix",
+            "synthesis_report",
+            "literature_review_draft"
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/project.md"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/manuscript.yaml"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "user_input",
+                  "id": "research_materials"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "rq_brief"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "bibliography"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "source_corpus"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "synthesis_report"
+                }
+              ],
+              "fallback_route_refs": [
+                "deep-research:lit-review"
+              ]
+            }
+          ],
+          "risk_level": "high",
+          "gate_policy": {
+            "level": "required",
+            "gate_kinds": [
+              "evidence_quality",
+              "manuscript_quality"
+            ]
+          },
+          "cost": {
+            "effort": "medium",
+            "interaction": "iterative"
+          },
+          "route_kind": "mode",
+          "mode_id": "lit-review"
+        },
+        {
+          "route_ref": "academic-paper:format-convert",
+          "title": "Format conversion",
+          "intents": [
+            "convert a final draft to a submission format"
+          ],
+          "primary_artifact_types": [
+            "formatted_manuscript",
+            "submission_package"
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/manuscript.yaml"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "user_input",
+                  "id": "manuscript"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "paper_draft"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "verified_draft"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "revised_draft"
+                }
+              ],
+              "fallback_route_refs": [
+                "academic-paper:full"
+              ]
+            }
+          ],
+          "risk_level": "low",
+          "gate_policy": {
+            "level": "none",
+            "gate_kinds": []
+          },
+          "cost": {
+            "effort": "low",
+            "interaction": "single_pass"
+          },
+          "route_kind": "mode",
+          "mode_id": "format-convert"
+        },
+        {
+          "route_ref": "academic-paper:citation-check",
+          "title": "Citation check",
+          "intents": [
+            "audit citations and references in a draft"
+          ],
+          "primary_artifact_types": [
+            "citation_audit_report"
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/manuscript.yaml"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "user_input",
+                  "id": "manuscript"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "paper_draft"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "verified_draft"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "revised_draft"
+                }
+              ],
+              "fallback_route_refs": [
+                "academic-paper:full"
+              ]
+            }
+          ],
+          "risk_level": "medium",
+          "gate_policy": {
+            "level": "conditional",
+            "gate_kinds": [
+              "citation_integrity"
+            ]
+          },
+          "cost": {
+            "effort": "low",
+            "interaction": "single_pass"
+          },
+          "route_kind": "mode",
+          "mode_id": "citation-check"
+        },
+        {
+          "route_ref": "academic-paper:plan",
+          "title": "Guided paper planning",
+          "intents": [
+            "plan a paper through structured dialogue"
+          ],
+          "primary_artifact_types": [
+            "chapter_plan",
+            "insight_collection"
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/project.md"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/manuscript.yaml"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "user_input",
+                  "id": "research_materials"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "rq_brief"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "bibliography"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "source_corpus"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "synthesis_report"
+                }
+              ],
+              "fallback_route_refs": [
+                "deep-research:socratic"
+              ]
+            }
+          ],
+          "risk_level": "medium",
+          "gate_policy": {
+            "level": "none",
+            "gate_kinds": []
+          },
+          "cost": {
+            "effort": "variable",
+            "interaction": "iterative"
+          },
+          "route_kind": "mode",
+          "mode_id": "plan"
+        },
+        {
+          "route_ref": "academic-paper:revision-coach",
+          "title": "Revision coaching",
+          "intents": [
+            "parse reviewer comments and develop a revision strategy"
+          ],
+          "primary_artifact_types": [
+            "revision_roadmap",
+            "response_letter_skeleton"
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/manuscript.yaml"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "user_input",
+                  "id": "reviewer_comments"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "review_report"
+                }
+              ],
+              "fallback_route_refs": []
+            }
+          ],
+          "risk_level": "medium",
+          "gate_policy": {
+            "level": "none",
+            "gate_kinds": []
+          },
+          "cost": {
+            "effort": "medium",
+            "interaction": "iterative"
+          },
+          "route_kind": "mode",
+          "mode_id": "revision-coach"
+        },
+        {
+          "route_ref": "academic-paper:disclosure",
+          "title": "AI disclosure",
+          "intents": [
+            "prepare a venue-specific AI-use disclosure"
+          ],
+          "primary_artifact_types": [
+            "ai_disclosure"
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/manuscript.yaml"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "user_input",
+                  "id": "manuscript"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "paper_draft"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "verified_draft"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "revised_draft"
+                }
+              ],
+              "fallback_route_refs": [
+                "academic-paper:full"
+              ]
+            },
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "user_input",
+                  "id": "venue_requirements"
+                },
+                {
+                  "kind": "user_input",
+                  "id": "venue_profile"
+                }
+              ],
+              "fallback_route_refs": []
+            }
+          ],
+          "risk_level": "medium",
+          "gate_policy": {
+            "level": "conditional",
+            "gate_kinds": [
+              "compliance"
+            ]
+          },
+          "cost": {
+            "effort": "low",
+            "interaction": "single_pass"
+          },
+          "route_kind": "mode",
+          "mode_id": "disclosure"
+        },
+        {
+          "route_ref": "academic-paper:rebuttal-audit",
+          "title": "Rebuttal audit",
+          "intents": [
+            "audit an existing rebuttal against reviewer comments"
+          ],
+          "primary_artifact_types": [
+            "rebuttal_qa_report"
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/manuscript.yaml"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "user_input",
+                  "id": "reviewer_comments"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "review_report"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "user_input",
+                  "id": "rebuttal_draft"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "response_to_reviewers"
+                }
+              ],
+              "fallback_route_refs": []
+            }
+          ],
+          "risk_level": "medium",
+          "gate_policy": {
+            "level": "conditional",
+            "gate_kinds": [
+              "rebuttal_completeness"
+            ]
+          },
+          "cost": {
+            "effort": "low",
+            "interaction": "single_pass"
+          },
+          "route_kind": "mode",
+          "mode_id": "rebuttal-audit"
+        }
+      ],
+      "near_misses": [
+        {
+          "intent": "start from a topic and continue through review and finalization",
+          "route_ref": "academic-pipeline:end-to-end",
+          "reason": "From-scratch cross-stage work needs pipeline coordination and Gates."
+        },
+        {
+          "intent": "conduct a PRISMA systematic review",
+          "route_ref": "deep-research:systematic-review",
+          "reason": "Systematic-review methodology is research work, not manuscript literature-section drafting."
+        },
+        {
+          "intent": "independently peer-review a manuscript",
+          "route_ref": "academic-paper-reviewer:full",
+          "reason": "Independent manuscript assessment belongs to the reviewer Skill."
+        }
+      ]
+    },
+    {
+      "skill_id": "academic-paper-reviewer",
+      "title": "Academic Paper Reviewer",
+      "summary": "Independent manuscript peer review, focused methodology assessment, guided review, and revision verification.",
+      "intents": [
+        "peer-review an academic manuscript",
+        "verify a revised manuscript",
+        "focus on methodology",
+        "calibrate reviewer judgments"
+      ],
+      "default_route_ref": "academic-paper-reviewer:full",
+      "routes": [
+        {
+          "route_ref": "academic-paper-reviewer:full",
+          "title": "Full peer review",
+          "intents": [
+            "run a complete multi-perspective manuscript review"
+          ],
+          "primary_artifact_types": [
+            "review_report",
+            "editorial_decision",
+            "revision_roadmap"
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/project.md"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/manuscript.yaml"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "user_input",
+                  "id": "manuscript"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "paper_draft"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "verified_draft"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "revised_draft"
+                }
+              ],
+              "fallback_route_refs": [
+                "academic-paper:full"
+              ]
+            }
+          ],
+          "risk_level": "high",
+          "gate_policy": {
+            "level": "required",
+            "gate_kinds": [
+              "review_quality"
+            ]
+          },
+          "cost": {
+            "effort": "medium",
+            "interaction": "single_pass"
+          },
+          "route_kind": "mode",
+          "mode_id": "full"
+        },
+        {
+          "route_ref": "academic-paper-reviewer:re-review",
+          "title": "Revision re-review",
+          "intents": [
+            "verify whether a revised manuscript addresses prior review"
+          ],
+          "primary_artifact_types": [
+            "verification_review_report",
+            "rr_traceability_matrix",
+            "revision_roadmap"
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/manuscript.yaml"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "user_input",
+                  "id": "revised_manuscript"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "revised_draft"
+                }
+              ],
+              "fallback_route_refs": [
+                "academic-paper:revision"
+              ]
+            },
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "artifact",
+                  "id": "review_report"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "revision_roadmap"
+                },
+                {
+                  "kind": "user_input",
+                  "id": "reviewer_comments"
+                }
+              ],
+              "fallback_route_refs": []
+            }
+          ],
+          "risk_level": "high",
+          "gate_policy": {
+            "level": "required",
+            "gate_kinds": [
+              "revision_completeness"
+            ]
+          },
+          "cost": {
+            "effort": "medium",
+            "interaction": "single_pass"
+          },
+          "route_kind": "mode",
+          "mode_id": "re-review"
+        },
+        {
+          "route_ref": "academic-paper-reviewer:quick",
+          "title": "Quick review",
+          "intents": [
+            "identify the most important manuscript issues quickly"
+          ],
+          "primary_artifact_types": [
+            "eic_quick_assessment"
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/manuscript.yaml"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "user_input",
+                  "id": "manuscript"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "paper_draft"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "verified_draft"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "revised_draft"
+                }
+              ],
+              "fallback_route_refs": [
+                "academic-paper:full"
+              ]
+            }
+          ],
+          "risk_level": "low",
+          "gate_policy": {
+            "level": "none",
+            "gate_kinds": []
+          },
+          "cost": {
+            "effort": "low",
+            "interaction": "single_pass"
+          },
+          "route_kind": "mode",
+          "mode_id": "quick"
+        },
+        {
+          "route_ref": "academic-paper-reviewer:methodology-focus",
+          "title": "Methodology-focused review",
+          "intents": [
+            "assess research design and methodology in depth"
+          ],
+          "primary_artifact_types": [
+            "methodology_review"
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/project.md"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/manuscript.yaml"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "user_input",
+                  "id": "manuscript"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "paper_draft"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "verified_draft"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "revised_draft"
+                }
+              ],
+              "fallback_route_refs": [
+                "academic-paper:full"
+              ]
+            }
+          ],
+          "risk_level": "high",
+          "gate_policy": {
+            "level": "required",
+            "gate_kinds": [
+              "methodology_quality"
+            ]
+          },
+          "cost": {
+            "effort": "medium",
+            "interaction": "single_pass"
+          },
+          "route_kind": "mode",
+          "mode_id": "methodology-focus"
+        },
+        {
+          "route_ref": "academic-paper-reviewer:guided",
+          "title": "Guided review",
+          "intents": [
+            "work through manuscript issues through Socratic dialogue"
+          ],
+          "primary_artifact_types": [
+            "guided_review_notes"
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/manuscript.yaml"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "user_input",
+                  "id": "manuscript"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "paper_draft"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "verified_draft"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "revised_draft"
+                }
+              ],
+              "fallback_route_refs": [
+                "academic-paper:full"
+              ]
+            }
+          ],
+          "risk_level": "medium",
+          "gate_policy": {
+            "level": "none",
+            "gate_kinds": []
+          },
+          "cost": {
+            "effort": "variable",
+            "interaction": "iterative"
+          },
+          "route_kind": "mode",
+          "mode_id": "guided"
+        },
+        {
+          "route_ref": "academic-paper-reviewer:calibration",
+          "title": "Reviewer calibration",
+          "intents": [
+            "measure reviewer accuracy against a gold set"
+          ],
+          "primary_artifact_types": [
+            "calibration_report",
+            "confidence_disclosure"
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "user_input",
+                  "id": "calibration_gold_set"
+                }
+              ],
+              "fallback_route_refs": []
+            }
+          ],
+          "risk_level": "low",
+          "gate_policy": {
+            "level": "none",
+            "gate_kinds": []
+          },
+          "cost": {
+            "effort": "high",
+            "interaction": "long_horizon"
+          },
+          "route_kind": "mode",
+          "mode_id": "calibration"
+        }
+      ],
+      "near_misses": [
+        {
+          "intent": "verify facts or claims in a research report",
+          "route_ref": "deep-research:fact-check",
+          "reason": "Claim verification is evidence research, not manuscript peer review."
+        },
+        {
+          "intent": "write or revise manuscript prose",
+          "route_ref": "academic-paper:revision",
+          "reason": "Reviewer routes remain read-only with respect to manuscript content."
+        },
+        {
+          "intent": "audit only the response letter",
+          "route_ref": "academic-paper:rebuttal-audit",
+          "reason": "Rebuttal QA differs from verifying changes in the revised manuscript."
+        }
+      ]
+    },
+    {
+      "skill_id": "academic-pipeline",
+      "title": "Academic Pipeline",
+      "summary": "Cross-stage orchestration from research through writing, integrity, review, revision, and finalization.",
+      "intents": [
+        "complete a research-to-publication workflow",
+        "continue a cross-stage paper workflow",
+        "enter the pipeline from existing materials"
+      ],
+      "default_route_ref": "academic-pipeline:end-to-end",
+      "routes": [
+        {
+          "route_ref": "academic-pipeline:end-to-end",
+          "title": "End-to-end pipeline",
+          "intents": [
+            "start from a research goal and continue to a submission package"
+          ],
+          "primary_artifact_types": [
+            "submission_package",
+            "process_summary"
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/workflow.yaml"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/project.md"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "user_input",
+                  "id": "research_goal"
+                }
+              ],
+              "fallback_route_refs": []
+            }
+          ],
+          "risk_level": "high",
+          "gate_policy": {
+            "level": "profile_defined",
+            "gate_kinds": [
+              "integrity",
+              "review",
+              "final_integrity"
+            ]
+          },
+          "cost": {
+            "effort": "high",
+            "interaction": "long_horizon"
+          },
+          "route_kind": "entry",
+          "mode_id": null
+        },
+        {
+          "route_ref": "academic-pipeline:mid-entry",
+          "title": "Mid-entry or resume",
+          "intents": [
+            "continue the pipeline from research materials, a draft, or review feedback"
+          ],
+          "primary_artifact_types": [
+            "submission_package",
+            "process_summary"
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/workflow.yaml"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "all_of",
+              "requirements": [
+                {
+                  "kind": "contract",
+                  "id": "specs/project.md"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "user_input",
+                  "id": "research_materials"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "rq_brief"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "bibliography"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "synthesis_report"
+                },
+                {
+                  "kind": "user_input",
+                  "id": "manuscript"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "paper_draft"
+                },
+                {
+                  "kind": "user_input",
+                  "id": "reviewer_comments"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "review_report"
+                }
+              ],
+              "fallback_route_refs": [
+                "academic-pipeline:end-to-end"
+              ]
+            }
+          ],
+          "risk_level": "high",
+          "gate_policy": {
+            "level": "profile_defined",
+            "gate_kinds": [
+              "integrity",
+              "review",
+              "final_integrity"
+            ]
+          },
+          "cost": {
+            "effort": "high",
+            "interaction": "long_horizon"
+          },
+          "route_kind": "entry",
+          "mode_id": null
+        }
+      ],
+      "near_misses": [
+        {
+          "intent": "perform one focused research task",
+          "route_ref": "deep-research:full",
+          "reason": "A standalone research route avoids unnecessary pipeline overhead."
+        },
+        {
+          "intent": "write from completed research materials",
+          "route_ref": "academic-paper:full",
+          "reason": "A single writing deliverable can go directly to the paper Skill."
+        },
+        {
+          "intent": "review one existing manuscript",
+          "route_ref": "academic-paper-reviewer:full",
+          "reason": "A local peer-review request does not require pipeline orchestration."
+        }
+      ]
+    }
+  ]
+}

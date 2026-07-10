@@ -11,8 +11,9 @@ ResearchSpec 的 agent-facing surface 由 ARSU Skills、ResearchSpec Companion S
 - **Target v0.1**：4 个 ARSU Skills、4 个 Companion Skills、31×8 Skills 和 28×8
   thin wrappers。
 - **Current implementation（2026-07-10）**：4 个 ARSU Skills、9 个 Companion Skills；
-  `src/adapters/companion/` 的 typed manifest 和 converter/delivery registry 是实现事实源。
-- **Pending technical layer**：routing catalog、Navigate、新 selector runtime，以及安全清理
+  `src/arsu-converter/routing/` 已拥有 typed routing catalog 和 ARSU description projections，
+  `src/adapters/companion/` 的 typed manifest 仍是 Companion 实现事实源。
+- **Pending technical layer**：Navigate、新 selector runtime，以及安全清理
   六个被合并/移除的旧 Companion 投影。
 
 CLI 是 schema validation、path resolution、DAG/frontier、dry-run、write plan、receipt、
@@ -58,8 +59,9 @@ flowchart TD
     C -->|"调整"| U
 ```
 
-Skill descriptions 与 Navigate 必须从同一个 converter-owned routing catalog 投影。任何一个
-Skill 都不得靠自身 description 声称绕过 prerequisites、route confirmation 或 Gate policy。
+Skill 与 command wrapper descriptions 已从同一个 converter-owned routing catalog 投影。
+Navigate 后续也必须消费该 catalog。任何一个 Skill 都不得靠自身 description 声称绕过
+prerequisites、route confirmation 或 Gate policy。
 
 ## 3. Target Companion Workflow Contracts
 
@@ -143,7 +145,7 @@ submit policy 吸收，而不是继续演化成更多 Companion。
 
 ## 6. Source Architecture 与 SSOT
 
-Target source architecture：
+Current/target source architecture：
 
 ```text
 converter-owned routing catalog
@@ -180,7 +182,7 @@ shared-global prompt ownership、manifest hash/drift protection 和工具格式�
 
 ## 8. Pending Technical Layers
 
-1. `add-arsu-routing-catalog`：建立 typed routing catalog 和 descriptions projection。
+1. `add-arsu-routing-catalog` 已实现：typed routing catalog、generated JSON 和 descriptions projection。
 2. `add-subflow-instance-control-plane`：让 Navigate/ARSU Skills 消费通用 subflow/work
    status/instructions，提供 `start` 与 automatic work submit policy。
 3. `add-gate-transition-control-plane`：让 Verify/Decide 消费 Gate/transition packets。

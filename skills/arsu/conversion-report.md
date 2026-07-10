@@ -4,7 +4,7 @@
 - Source: `vendor/ars`
 - Source commit: `becfcc40c6e9e93c187cf4a088333f83373e002d`
 - Output: `skills/arsu`
-- Generated at: `2026-07-10T10:27:39Z`
+- Generated at: `2026-07-10T12:22:35Z`
 - Validation: pass
 
 ## Source Checkout
@@ -32,6 +32,14 @@
 - Diagnostic anchors matched: 2/2
 - Human replacement report: `anchor-replacement-report.md`
 
+## Routing Catalog
+
+- Path: `routing-catalog.json`
+- Catalog ID: `arsu-routing-v0.1`
+- Skills: 4
+- Mode routes: 25
+- Entry routes: 2
+
 ## Anchor Replacement Semantics
 
 - `artifact_provenance`: 4
@@ -48,7 +56,7 @@
 
 ## File Summary
 
-- Output files: 474
+- Output files: 475
 - Excluded source files: 499
 - Unclassified source files: 321
 - Risk findings: 1222

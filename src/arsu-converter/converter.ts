@@ -13,6 +13,7 @@ import { validateUpstreamCheckout } from "./upstream.js";
 import type { ConversionResult, ValidationResult } from "./types.js";
 import { ArsuConverterError } from "./types.js";
 import { validateArsuOutput } from "./validate.js";
+import { ARSU_ROUTING_CATALOG } from "./routing/catalog.js";
 
 export interface ConvertOptions {
   repoRoot: string;
@@ -65,6 +66,8 @@ export async function convertArsu(options: ConvertOptions): Promise<ConversionRe
   const contractManifest = buildContractCompatibilityManifest(Object.keys(generatedGroups).sort());
   await writeJson(path.join(outputRoot, "researchspec-contracts.json"), contractManifest);
   const contractManifestHash = await sha256File(path.join(outputRoot, "researchspec-contracts.json"));
+  await writeJson(path.join(outputRoot, "routing-catalog.json"), ARSU_ROUTING_CATALOG);
+  const routingCatalogHash = await sha256File(path.join(outputRoot, "routing-catalog.json"));
 
   const result: ConversionResult = {
     source_root: sourceRoot,
@@ -73,14 +76,15 @@ export async function convertArsu(options: ConvertOptions): Promise<ConversionRe
     skill_groups: generatedGroups,
     inventory,
     contract_manifest: contractManifest,
+    routing_catalog: ARSU_ROUTING_CATALOG,
     anchor_replacements: anchorReplacements,
     validation: null,
   };
 
-  await writeConversionOutputs(result, outputRoot, null, contractManifestHash);
+  await writeConversionOutputs(result, outputRoot, null, contractManifestHash, routingCatalogHash);
   const validation = await validateArsuOutput(outputRoot);
   result.validation = validation;
-  await writeConversionOutputs(result, outputRoot, validation, contractManifestHash);
+  await writeConversionOutputs(result, outputRoot, validation, contractManifestHash, routingCatalogHash);
   return result;
 }
 
@@ -105,10 +109,11 @@ async function writeConversionOutputs(
   outputRoot: string,
   validation: ValidationResult | null,
   contractManifestHash: string,
+  routingCatalogHash: string,
 ): Promise<void> {
   await writeUtf8(path.join(outputRoot, "anchor-replacement-report.md"), buildAnchorReplacementReport(result.anchor_replacements));
   const anchorReplacementReportHash = await sha256File(path.join(outputRoot, "anchor-replacement-report.md"));
-  const manifest = buildManifest(result, validation, contractManifestHash, anchorReplacementReportHash);
+  const manifest = buildManifest(result, validation, contractManifestHash, routingCatalogHash, anchorReplacementReportHash);
   await writeJson(path.join(outputRoot, "conversion-manifest.json"), manifest);
   await writeUtf8(path.join(outputRoot, "conversion-report.md"), buildReport(manifest));
 }
@@ -133,6 +138,7 @@ function dryRunResult(
       needs_review: [],
     },
     contract_manifest: buildContractCompatibilityManifest([]),
+    routing_catalog: ARSU_ROUTING_CATALOG,
     anchor_replacements: anchorReplacements,
     validation: { ok: true, errors: [], warnings: [] },
   };

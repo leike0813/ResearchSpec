@@ -7,6 +7,7 @@ import { planFile, type PlannedWrite, sha256 } from "../core/workspace/write-pla
 import { COMPANION_INTENTS, renderCompanionSkill } from "./companion/index.js";
 import { ARSU_COMMAND_CONTENTS, renderCommand } from "./command-renderer.js";
 import { getTool } from "./tools.js";
+import { ARSU_SKILL_IDS } from "../arsu-converter/routing/contracts.js";
 
 export interface InstallationRecord {
   tool_id: string;
@@ -23,7 +24,6 @@ export interface DeliveryPlan {
   diagnostics: Diagnostic[];
 }
 
-const SKILL_IDS = ["deep-research", "academic-paper", "academic-paper-reviewer", "academic-pipeline"] as const;
 const PACKAGE_ROOT = fileURLToPath(new URL("../../../", import.meta.url));
 
 export async function planToolDelivery(input: {
@@ -41,7 +41,7 @@ export async function planToolDelivery(input: {
     const tool = getTool(toolId);
     if (!tool) continue;
     try {
-      for (const skillId of SKILL_IDS) {
+      for (const skillId of ARSU_SKILL_IDS) {
         const sourceRoot = path.join(PACKAGE_ROOT, "skills/arsu", skillId);
         for (const sourceFile of await walkFiles(sourceRoot)) {
           const relativeAsset = path.relative(sourceRoot, sourceFile);
