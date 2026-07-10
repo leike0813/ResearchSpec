@@ -130,7 +130,7 @@ ARS 的复杂 payload。
 | `sources.yaml` | `schema_version`、`sources[].source_id`、`title`、`authors`、`type`、`status` |
 | `claims.yaml` | `schema_version`、`claims[].claim_id`、`text`、`claim_type`、`strength`、`status`；accepted factual claim 需要 `source_ids` 或明确 limitation |
 | `manuscript.yaml` | `schema_version`、`manuscript_id`、`manuscript_type`、`language`、`sections[].section_id`、`heading`、`level`、`status` |
-| `workflow.yaml` | `schema_version`、`workflow_id`、`workflow_kind`、`entry_stage_id`、`terminal_stage_ids`、`stages[].stage_id`、`label`、`required_contracts`、`writes_allowed` |
+| `workflow.yaml` | `schema_version`、`workflow_id`、`workflow_kind`、`entry_stage_id`、`terminal_stage_ids`、`stages[].stage_id`、`stages[].title`；动态控制 profile 另含 `work_items[]` |
 | `state.yaml` | `schema_version`、`run_id`、`workflow_id`、`status`、`active_stage_id` |
 | `artifact-registry.json` | `schema_version`、`run_id`、`artifacts[].artifact_id`、`artifact_type`、`path`、`producer`、`created_at`、`status`、`verification_state` |
 | `decision-ledger.jsonl` | `event_id`、`decision_id`、`timestamp`、`actor`、`decision_type`、`selected_option`、`status` |
@@ -633,8 +633,8 @@ sections:
 
 ### 3.5 `researchspec/specs/workflow.yaml`
 
-职责：声明当前项目使用的 workflow graph、ARSU skill/mode 对齐、每个 stage
-需要读取的 contracts/artifacts，以及允许写入的 runtime surfaces。Core 不把
+职责：声明当前项目使用的 workflow graph、ARSU skill/mode 对齐、每个 work item
+需要读取的 contracts/artifacts，以及 Agent 允许生成的候选输出。Core 不把
 academic-pipeline 硬编码进程序，而是从这里读取。
 
 写入 owner：
@@ -663,6 +663,7 @@ academic-pipeline 硬编码进程序，而是从这里读取。
 | `entry_stage_id` | string | 是 | 初始 stage |
 | `terminal_stage_ids` | list[string] | 是 | 终止 stage |
 | `stages` | list[`StageSpec`] | 是 | stage 定义 |
+| `work_items` | list[`WorkflowNodeDefinition`] | 否 | 可执行节点；缺省表示兼容 workflow 尚未配置动态控制图 |
 | `mode_profiles` | list[`ModeProfile`] | 否 | skill/mode 读写约束复用块 |
 | `human_checkpoints` | list[`HumanCheckpoint`] | 否 | 必须人类确认的节点 |
 
@@ -671,7 +672,7 @@ academic-pipeline 硬编码进程序，而是从这里读取。
 | 字段 | 类型 | 必填 | 说明 |
 | --- | --- | --- | --- |
 | `stage_id` | string | 是 | 例如 `stage-1-research` |
-| `label` | string | 是 | 人类可读名称 |
+| `title` | string | 是 | 人类可读名称 |
 | `arsu_stage` | string | 否 | 上游 stage 名称，如 `RESEARCH`、`INTEGRITY` |
 | `skill` | string | 否 | `deep-research`、`academic-paper` 等 |
 | `allowed_modes` | list[string] | 否 | 当前 stage 可用 modes |
@@ -681,6 +682,30 @@ academic-pipeline 硬编码进程序，而是从这里读取。
 | `writes_allowed` | list[`WriteSurface`] | 是 | stage 可写 surfaces |
 | `gates_required` | list[string] | 否 | 必须通过的 gate 类型 |
 | `next` | list[`StageTransition`] | 否 | 转移规则 |
+
+`WorkflowNodeDefinition` 是 `status/instructions` 的运行期事实源：
+
+| 字段 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `id` | id | 是 | 通过 `work:<id>` 选择 |
+| `stage_id` | ref | 是 | 只有匹配 `state.active_stage_id` 才可能 ready |
+| `title` / `description` | string | 是 | 人类可读节点说明 |
+| `producer_skill` | string | 是 | 应执行的 ARSU Skill |
+| `requires.work_items` | list[ref] | 是 | DAG 前驱节点 |
+| `requires.contracts` | list[path] | 是 | workspace-relative contract paths |
+| `requires.artifact_types` | list[string] | 是 | 必须存在且 path/hash 有效的已登记 artifacts |
+| `requires.gate_types` / `decision_types` | list[string] | 是 | 必须通过/接受的 runtime facts |
+| `output.artifact_type` | string | 是 | 候选输出类型 |
+| `output.workspace_path` | path | 是 | ResearchSpec workspace-relative 输出路径 |
+| `output.template_ref` | string | 是 | 例如 `ars:shared/handoff_schemas.md#schema-1-rq-brief` |
+| `instruction` / `rules` | string / list[string] | 是 | 动态工作包的语义指示与约束 |
+| `allowed_writes` | list[enum] | 是 | 仅 `output_artifact` / `contract_patch` / `draft_patch`；不含 registry、ledger、state |
+| `validation_profile` | string | 是 | instructions 返回的确定性 validation profile |
+| `completion` | object | 是 | 明确 artifact status、verification state、registry、SHA-256 和 `required_gate_ids` |
+
+节点状态固定为 `done / ready / blocked`。`done` 需要 `work_item_id` 对应的 registry entry、artifact type/path、文件、SHA-256，以及每个 `required_gate_ids` 对应的 pass/pass-with-conditions 或 accepted override。`artifact_statuses` 与 `verification_states` 是额外完成约束，不能替代 required gates；文件存在本身不构成完成。`ready` 还必须处于 active stage。当前只读控制面在 active stage 全部节点完成后返回 `stage_work_complete: true` 与 `transition_required: true`，不会修改 state 或宣告整个 run 完成。
+
+当前显式试验 profile `arsu-research-slice` 将 RQ Brief、Bibliography、Synthesis 三个节点放在同一非 terminal 的 `research` stage；输出分别为 `runs/current/artifacts/rq-brief.md`、`bibliography.md` 和 `synthesis-report.md`，template refs 指向 `ars:shared/handoff_schemas.md#schema-1-rq-brief` 至 Schema 3。`init` 创建派生的 artifact 父目录，但不复制 template 或创建空 artifact 文件。三个节点全部 done 后仍只到达 transition boundary。
 
 `WriteSurface` 字段：
 
@@ -733,7 +758,7 @@ entry_stage_id: stage-1-research
 terminal_stage_ids: [stage-6-process-summary]
 stages:
   - stage_id: stage-2-5-integrity
-    label: "Pre-review integrity"
+    title: "Pre-review integrity"
     arsu_stage: INTEGRITY
     skill: academic-pipeline
     allowed_modes: [pre-review]
@@ -850,8 +875,9 @@ payload schema 和验证状态。Downstream stages 必须通过 registry 找 art
 | --- | --- | --- | --- |
 | `artifact_id` | id | 是 | registry 内唯一 |
 | `artifact_type` | enum/string | 是 | 见第 7 节 artifact type taxonomy |
+| `work_item_id` | ref | 否 | 将 artifact 关联到 workflow work item；节点 completion 必需 |
 | `path` | path | 是 | 文件必须存在，除非 `status: rejected` |
-| `content_hash` | hash | 否 | 文件存在时建议必填 |
+| `sha256` | hash | 否 | 当前权威 hash 字段；workflow completion 必填且必须匹配文件 |
 | `payload_schema_ref` | string | 否 | 上游 schema、ResearchSpec schema 或 `freeform_markdown` |
 | `producer` | `actor` | 是 | 产物生产者 |
 | `producer_skill` | string | 否 | ARSU skill，如 `deep-research` |
@@ -877,7 +903,7 @@ payload schema 和验证状态。Downstream stages 必须通过 registry 找 art
       "artifact_id": "A0007",
       "artifact_type": "integrity_report",
       "path": "runs/current/artifacts/integrity-pre-review.md",
-      "content_hash": "sha256:0123456789abcdef",
+      "sha256": "0123456789abcdef",
       "payload_schema_ref": "ars:shared/handoff_schemas.md#schema-5-integrity-report",
       "producer": {"kind": "agent", "name": "integrity_verification_agent"},
       "producer_skill": "academic-pipeline",
@@ -1269,7 +1295,7 @@ runtime SSOT。字段拆分如下。
 | `origin_skill`、`origin_mode`、`origin_date` | `artifact-registry.json` | producer/provenance |
 | `verification_status` | `artifact-registry.json.verification_state` | artifact 当前验证状态 |
 | `version_label` | `artifact-registry.json.version_label` | 人类可读版本 |
-| `content_hash` | `artifact-registry.json.content_hash` | 文件完整性 |
+| `content_hash` | `artifact-registry.json.sha256` | 文件完整性 |
 | `upstream_dependencies` | `artifact-registry.json.depends_on` | artifact dependency graph |
 | `integrity_pass_date` | `gate-ledger.jsonl` | integrity gate event timestamp |
 | `compliance_history` | `gate-ledger.jsonl` + compliance artifacts | append-only gate history |

@@ -1,8 +1,8 @@
 import type { WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { buildStatus } from "./query.js";
 
-export function renderHandoff(snapshot: WorkspaceSnapshot): string {
-  const status = buildStatus(snapshot);
+export async function renderHandoff(snapshot: WorkspaceSnapshot): Promise<string> {
+  const status = await buildStatus(snapshot);
   const claims = records(record(snapshot.documents["specs/claims.yaml"]).claims);
   const sources = records(record(snapshot.documents["specs/sources.yaml"]).sources);
   return `# ResearchSpec Handoff

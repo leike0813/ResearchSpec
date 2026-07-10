@@ -1,7 +1,8 @@
 import path from "node:path";
-import { readFile, realpath } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 
 import { fileExists, isDirectory } from "../../utils/fs.js";
+import { inspectArtifacts } from "../runtime/workflow-control.js";
 import { loadWorkspaceSnapshot } from "../workspace/snapshot.js";
 import type { WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { REQUIRED_DIRECTORIES } from "../workspace/layout.js";
@@ -22,28 +23,7 @@ export async function runWorkspaceChecks(workspace: string, target: CheckTarget 
   }
 
   if (target === "all" || target === "artifacts") {
-    for (const artifact of snapshot.artifacts) {
-      const declaredPath = typeof artifact.path === "string" ? artifact.path : undefined;
-      if (!declaredPath) continue;
-      const resolved = path.resolve(path.dirname(workspace), declaredPath);
-      const projectRoot = path.dirname(workspace);
-      if (!resolved.startsWith(`${projectRoot}${path.sep}`) && resolved !== projectRoot) {
-        diagnostics.push({ severity: "error", code: "artifact_path_escape", message: "Artifact path escapes the project root.", path: declaredPath, blocking: true });
-        continue;
-      }
-      if (!(await fileExists(resolved))) {
-        diagnostics.push({ severity: "warning", code: "artifact_missing", message: "Registered artifact is missing.", path: resolved, blocking: false });
-      } else {
-        const [realProject, realArtifact] = await Promise.all([realpath(projectRoot), realpath(resolved)]);
-        if (realArtifact !== realProject && !realArtifact.startsWith(`${realProject}${path.sep}`)) {
-          diagnostics.push({ severity: "error", code: "artifact_path_escape", message: "Artifact symlink resolves outside the project root.", path: resolved, blocking: true });
-          continue;
-        }
-        if (typeof artifact.sha256 !== "string") continue;
-        const content = await readFile(resolved);
-        if (sha256(content) !== artifact.sha256) diagnostics.push({ severity: "error", code: "artifact_hash_mismatch", message: "Artifact hash does not match the registry.", path: resolved, blocking: true });
-      }
-    }
+    for (const inspection of await inspectArtifacts(snapshot)) diagnostics.push(...inspection.diagnostics);
   }
 
   if (target === "all" || target === "tools") {
@@ -78,10 +58,6 @@ function validateCrossReferences(snapshot: WorkspaceSnapshot, target: CheckTarge
   if (target === "all" || target === "contracts") {
     addDuplicateDiagnostics(diagnostics, sources, "source_id", "duplicate_source_id", "specs/sources.yaml", snapshot.workspace);
     addDuplicateDiagnostics(diagnostics, claims, "claim_id", "duplicate_claim_id", "specs/claims.yaml", snapshot.workspace);
-    addDuplicateDiagnostics(diagnostics, stages, "stage_id", "duplicate_stage_id", "specs/workflow.yaml", snapshot.workspace);
-    for (const requiredStage of [workflow.entry_stage_id, ...stringArray(workflow.terminal_stage_ids)]) {
-      if (typeof requiredStage === "string" && !stageIds.has(requiredStage)) diagnostics.push(dangling("workflow_stage_missing", `Workflow stage does not exist: ${requiredStage}`, path.join(snapshot.workspace, "specs/workflow.yaml")));
-    }
     for (const claim of claims) {
       for (const sourceId of collectStringRefs(claim, ["source_id", "supporting_source_ids", "source_ids"])) {
         if (!sourceIds.has(sourceId)) diagnostics.push(dangling("claim_source_missing", `Claim references missing source: ${sourceId}`, path.join(snapshot.workspace, "specs/claims.yaml")));

@@ -3,6 +3,7 @@ import path from "node:path";
 import { z } from "zod";
 
 import { fileExists, readOptionalText } from "../../utils/fs.js";
+import { validateWorkflowDefinition, WorkflowDefinitionSchema, WORKFLOW_PROFILE_IDS, type WorkflowDefinition } from "../contracts/workflow.js";
 import { parseJson, parseJsonLines, parseYaml } from "../validation/parse.js";
 import type { Diagnostic } from "../validation/types.js";
 import { JSON_FILES, JSONL_FILES, MARKDOWN_FILES, REQUIRED_FILES, YAML_FILES } from "./layout.js";
@@ -12,16 +13,23 @@ const SafeId = z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]*$/).refine((value) =
 const ActorSchema = z.union([z.string().min(1), z.looseObject({ kind: z.string().min(1), name: z.string().min(1) })]);
 const SourceSchema = z.looseObject({ source_id: SafeId });
 const ClaimSchema = z.looseObject({ claim_id: SafeId });
-const ArtifactSchema = z.looseObject({ artifact_id: SafeId, path: z.string().min(1), sha256: z.string().optional() });
+const ArtifactSchema = z.looseObject({
+  artifact_id: SafeId,
+  artifact_type: z.string().min(1).optional(),
+  work_item_id: SafeId.optional(),
+  path: z.string().min(1),
+  sha256: z.string().optional(),
+  status: z.string().optional(),
+  verification_state: z.string().optional(),
+});
 const DecisionSchema = z.looseObject({ event_id: SafeId, decision_id: SafeId, timestamp: z.string().min(1), actor: ActorSchema, decision_type: z.string().min(1), selected_option: z.unknown(), status: z.enum(["proposed", "accepted", "rejected", "postponed", "superseded"]) });
 const GateSchema = z.looseObject({ event_id: SafeId, gate_id: SafeId, timestamp: z.string().min(1), actor: ActorSchema, stage_id: z.string().min(1), gate_type: z.string().min(1), verdict: z.enum(["pass", "pass_with_conditions", "fail", "not_run"]), blocking: z.boolean() });
-const ConfigSchema = z.looseObject({ schema_version: z.string(), profile: z.literal("arsu-paper"), agent_tools: z.looseObject({ selected: z.array(z.string()), delivery: z.enum(["skills", "commands", "both"]) }) });
+const ConfigSchema = z.looseObject({ schema_version: z.string(), profile: z.enum(WORKFLOW_PROFILE_IDS), agent_tools: z.looseObject({ selected: z.array(z.string()), delivery: z.enum(["skills", "commands", "both"]) }) });
 const ManifestSchema = z.looseObject({ schema_version: z.string(), package_version: z.string(), installations: z.array(z.looseObject({ tool_id: z.string(), path: z.string(), scope: z.enum(["project", "shared-global"]), sha256: z.string(), source: z.string(), adapter_version: z.string() })) });
 const SourcesSchema = z.looseObject({ schema_version: z.string(), sources: z.array(SourceSchema) });
 const ClaimsSchema = z.looseObject({ schema_version: z.string(), claims: z.array(ClaimSchema) });
 const ProjectSchema = z.looseObject({ schema_version: z.string(), project_id: SafeId, title: z.string(), target_output: z.string(), primary_language: z.string() });
 const ManuscriptSchema = z.looseObject({ schema_version: z.string(), manuscript_id: SafeId, title: z.string(), status: z.string(), sections: z.array(z.unknown()) });
-const WorkflowSchema = z.looseObject({ schema_version: z.string(), workflow_id: SafeId, workflow_kind: z.string(), entry_stage_id: SafeId, terminal_stage_ids: z.array(SafeId), stages: z.array(z.looseObject({ stage_id: SafeId, title: z.string() })) });
 const StateSchema = z.looseObject({ schema_version: z.string(), run_id: SafeId, workflow_id: SafeId, status: z.enum(["not_started", "in_progress", "waiting", "blocked", "complete", "failed", "cancelled"]), active_stage_id: SafeId, pending_decisions: z.array(z.unknown()), diagnostics: z.array(z.unknown()) });
 const RegistrySchema = z.looseObject({ schema_version: z.string(), run_id: SafeId, artifacts: z.array(ArtifactSchema) });
 const ContractPatchSchema = z.looseObject({
@@ -61,6 +69,7 @@ export interface WorkspaceSnapshot {
   documents: Record<string, unknown>;
   config: Record<string, unknown>;
   manifest: Record<string, unknown>;
+  workflow?: WorkflowDefinition;
   state: Record<string, unknown>;
   artifacts: Record<string, unknown>[];
   decisions: Record<string, unknown>[];
@@ -115,6 +124,7 @@ export async function loadWorkspaceSnapshot(workspace: string): Promise<Workspac
 
   const config = asRecord(documents["config.yaml"]);
   const manifest = asRecord(documents["tool-installation-manifest.json"]);
+  const workflow = parseWorkflowDefinition(documents["specs/workflow.yaml"], files.get("specs/workflow.yaml"), diagnostics);
   const state = asRecord(documents["runs/current/state.yaml"]);
   const artifacts = records(asRecord(documents["runs/current/artifact-registry.json"]).artifacts);
   const decisions = records(documents["runs/current/decision-ledger.jsonl"]);
@@ -125,7 +135,6 @@ export async function loadWorkspaceSnapshot(workspace: string): Promise<Workspac
   validateDocument("specs/sources.yaml", documents["specs/sources.yaml"], SourcesSchema, files, diagnostics);
   validateDocument("specs/claims.yaml", documents["specs/claims.yaml"], ClaimsSchema, files, diagnostics);
   validateDocument("specs/manuscript.yaml", documents["specs/manuscript.yaml"], ManuscriptSchema, files, diagnostics);
-  validateDocument("specs/workflow.yaml", documents["specs/workflow.yaml"], WorkflowSchema, files, diagnostics);
   validateDocument("runs/current/state.yaml", state, StateSchema, files, diagnostics);
   validateDocument("runs/current/artifact-registry.json", documents["runs/current/artifact-registry.json"], RegistrySchema, files, diagnostics);
   validateRecords(decisions, DecisionSchema, path.join(workspace, "runs/current/decision-ledger.jsonl"), "invalid_decision_event", diagnostics);
@@ -135,7 +144,20 @@ export async function loadWorkspaceSnapshot(workspace: string): Promise<Workspac
   const patches = await loadDraftPatches(workspace, diagnostics);
   const items = buildItems(documents, artifacts, decisions, gates, changes, patches, config, manifest);
 
-  return { workspace, files, documents, config, manifest, state, artifacts, decisions, gates, changes, patches, items, diagnostics };
+  return { workspace, files, documents, config, manifest, workflow, state, artifacts, decisions, gates, changes, patches, items, diagnostics };
+}
+
+function parseWorkflowDefinition(value: unknown, file: SnapshotFile | undefined, diagnostics: Diagnostic[]): WorkflowDefinition | undefined {
+  if (!file) return undefined;
+  const result = WorkflowDefinitionSchema.safeParse(value);
+  if (!result.success) {
+    diagnostics.push({ severity: "error", code: "invalid_contract_shape", message: "Contract does not match the required shape.", path: file.absolutePath, blocking: true, details: result.error.issues });
+    return undefined;
+  }
+  for (const issue of validateWorkflowDefinition(result.data)) {
+    diagnostics.push({ severity: "error", code: issue.code, message: issue.message, path: file.absolutePath, blocking: true });
+  }
+  return result.data;
 }
 
 export function resolveItem(snapshot: WorkspaceSnapshot, input: string): { item?: IndexedItem; candidates: IndexedItem[] } {

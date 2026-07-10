@@ -15,7 +15,7 @@ export async function buildContextPack(snapshot: WorkspaceSnapshot, includeArtif
   for (const file of snapshot.files.values()) content.set(posix(file.relativePath), file.bytes);
   await addTree(content, snapshot.workspace, "changes");
   await addTree(content, snapshot.workspace, "draft-patches");
-  content.set("runs/current/handoff.md", strToU8(renderHandoff(snapshot)));
+  content.set("runs/current/handoff.md", strToU8(await renderHandoff(snapshot)));
 
   if (includeArtifacts) {
     const projectRoot = path.dirname(snapshot.workspace);

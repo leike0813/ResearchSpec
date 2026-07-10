@@ -74,6 +74,7 @@ researchspec <command> [arguments] [options]
 | `researchspec init [path]` | 交互式初始化 workspace 并选择 agent tools | 是 | 否 | 是 |
 | `researchspec update [path]` | 刷新用户已选择的 agent-facing files | 是 | 是 | 是 |
 | `researchspec status` | 查看当前 run 和 pending items | 否 | 是 | 否 |
+| `researchspec instructions work:<id>` | 获取 ready work item 的动态工作包 | 否 | 是 | 否 |
 | `researchspec check [target]` | 检查 workspace/contracts/runtime/tools | 否 | 是 | 否 |
 | `researchspec list [type]` | 列出 changes/artifacts/gates/decisions/tools | 否 | 是 | 否 |
 | `researchspec show <item>` | 查看某个合同、artifact 或 pending item | 否 | 是 | 否 |
@@ -99,7 +100,7 @@ researchspec <command> [arguments] [options]
 | --- | --- | --- |
 | `--cwd <path>` | 全部命令 | 指定项目工作目录；默认当前目录 |
 | `--workspace <path>` | 合同相关命令 | 指定 `researchspec/` 路径；默认从 cwd 向下定位 |
-| `--json` | 查询、检查、列表、show、handoff、pack、propose、decide、archive | 输出单个 versioned JSON envelope |
+| `--json` | 查询、instructions、检查、列表、show、handoff、pack、propose、decide、archive | 输出单个 versioned JSON envelope |
 | `--dry-run` | 写命令 | 只报告将写入、修改、跳过的文件，不落盘 |
 | `--force` | 写命令 | 允许覆盖 generated agent-facing files；不得绕过 human decision |
 | `--yes` | 低风险写命令 | 跳过低风险确认；不得自动接受 high-impact research decisions |
@@ -129,7 +130,7 @@ OpenSpec-like TUI 流程：
 2. Detect：检测当前目录是否已有 workspace，检测可用 agent tools。
 3. Select tools：从 agent registry 搜索并多选工具。`--tools all` 表示 registry
    中的全部 31 个工具；ForgeCode、Kimi CLI 和 Mistral Vibe 为 skills-only。
-4. Select profile：选择 ResearchSpec profile。第一版默认是 ARSU paper workflow。
+4. Select profile：选择 ResearchSpec profile。默认 `arsu-paper` 保留兼容 skeleton；显式 `arsu-research-slice` 提供 RQ Brief → Bibliography → Synthesis 的只读动态控制面。
 5. Preview writes：展示将创建的 workspace files 和将安装的 tool files。
 6. Confirm：用户确认后写入。
 7. Next steps：提示用户打开对应 agent，使用已安装的 ResearchSpec/ARSU wrapper。
@@ -138,6 +139,7 @@ OpenSpec-like TUI 流程：
 
 ```bash
 researchspec init --tools codex,claude --profile arsu-paper --yes
+researchspec init --tools none --profile arsu-research-slice
 researchspec init --tools none
 ```
 
@@ -152,6 +154,7 @@ researchspec init --tools none
 规则：
 
 - 已存在 workspace 时默认不覆盖。
+- 已存在 workspace 省略 `--profile` 时沿用已配置 profile；`init` 不允许直接切换 profile，切换需要显式 contract migration。
 - 用户材料不足时只生成 skeleton 和待填位置，不让 CLI 猜研究内容。
 - Agent-facing files 是 generated files；若用户已修改，默认跳过或提示 drift。
 - `--force` 只允许覆盖 generated files，不允许覆盖 research contracts 中的用户内容。
@@ -213,8 +216,31 @@ researchspec status [--json]
 - 最近 artifacts。
 - 已安装 agent tools 摘要。
 - 最近 check/gate 摘要。
+- 单一 `workflow_control` object：`profile`、`active_stage_id`、`state`（`unconfigured / blocked / ready / stage_work_complete`）、`ready_items` canonical selectors、`done/ready/blocked` work items、缺失依赖、unlocks、`stage_work_complete` 和 `transition_required`。顶层不重复输出 `work_items`。
 
 `status` 是只读命令，不改变 workspace。
+
+### 6.1 `researchspec instructions work:<id>`
+
+用途：为一个 `ready` work item 返回由 workflow contract 和当前 runtime 状态动态组装的工作包。
+
+```bash
+researchspec instructions work:rq-brief [--json]
+```
+
+成功输出是扁平 instruction packet：`selector`、`work_item_id`、`stage_id`、`producer_skill`、`state`、`description`、`context: null`；`output` 只保存 artifact type、workspace/resolved path 和 `template_ref`，实际解析后的 `template` 位于顶层。其余字段包括 dependencies、semantic instruction、rules、allowed/forbidden writes、`validation {profile, suggested_command}`、`completion {policy, submit_available: false}` 和 unlocks。命令不内嵌依赖文件全文，也不写 workspace；当前没有 submit 能力。
+
+约定错误：
+
+| Code | 含义 |
+| --- | --- |
+| `invalid_work_item_selector` | 未使用 `work:<id>` canonical selector |
+| `workflow_unconfigured` | workflow 没有 work-item graph |
+| `workflow_invalid` | graph 结构或引用无效 |
+| `work_item_not_found` | selector 对应节点不存在 |
+| `work_item_blocked` | stage 或依赖尚未满足，或已登记输出失真 |
+| `work_item_already_done` | 节点已经完成；本命令不承担 revise |
+| `workflow_resource_unavailable` | `template_ref` 无法解析为随包模板 |
 
 ## 7. `researchspec check [target]`
 
@@ -518,6 +544,8 @@ interface CliEnvelope<T> {
 Canonical selectors 为 `change:`、`patch:`、`artifact:`、`gate:`、
 `decision:`、`source:`、`claim:`、`tool:` 和 `contract:`。裸 ID 只有在所有
 index 中唯一时才可解析；歧义时返回候选 canonical selectors。
+
+Workflow work item 使用独立的 `work:<id>` selector，只由 `instructions` 和 status work-item view 消费，不进入通用 `show/list` item index。
 
 ### 16.4 Tool delivery facts
 

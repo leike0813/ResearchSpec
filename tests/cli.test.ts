@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { existsSync } from "node:fs";
-import { mkdir, readFile, rm, symlink, writeFile } from "node:fs/promises";
+import { mkdir, readFile, readdir, rm, symlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { test } from "node:test";
 import { strFromU8, unzipSync } from "fflate";
@@ -11,7 +11,7 @@ import { cleanup, parseEnvelope, runCli, tempProject } from "./helpers/cli.js";
 void test("help, version, and usage errors expose the complete public boundary", () => {
   const help = runCli(["--help"]);
   assert.equal(help.status, 0);
-  for (const command of ["init", "update", "status", "check", "list", "show", "handoff", "pack", "propose", "decide", "archive"]) assert.match(help.stdout, new RegExp(`\\b${command}\\b`));
+  for (const command of ["init", "update", "status", "instructions", "check", "list", "show", "handoff", "pack", "propose", "decide", "archive"]) assert.match(help.stdout, new RegExp(`\\b${command}\\b`));
   assert.equal(runCli(["--version"]).stdout.trim(), "0.1.0");
   const invalid = runCli(["unknown", "--json"]);
   assert.equal(invalid.status, 2);
@@ -51,6 +51,68 @@ void test("status and check use the versioned JSON envelope", async () => {
   const check = parseEnvelope<{ ok: boolean; target: string }>(runCli(["check", "contracts", "--json"], root));
   assert.equal(check.data?.ok, true);
   assert.equal(check.data?.target, "contracts");
+  await cleanup(root);
+});
+
+void test("research-slice init exposes dynamic status and resolved instructions", async () => {
+  const root = await tempProject();
+  assert.equal(runCli(["init", root, "--tools", "none", "--profile", "arsu-research-slice"]).status, 0);
+  const workspace = path.join(root, "researchspec");
+  assert.equal(existsSync(path.join(workspace, "runs/current/artifacts")), true);
+  assert.deepEqual(await readdir(path.join(workspace, "runs/current/artifacts")), []);
+
+  const status = parseEnvelope<{
+    workflow_control: {
+      profile: string; active_stage_id: string; state: string; configured: boolean; valid: boolean;
+      ready_items: string[]; work_items: Array<{ id: string; selector: string; work_item_id: string; state: string }>;
+    };
+  }>(runCli(["status", "--json"], root));
+  assert.equal(status.ok, true);
+  assert.equal(status.data?.workflow_control.configured, true);
+  assert.equal(status.data?.workflow_control.valid, true);
+  assert.equal(status.data?.workflow_control.profile, "arsu-research-slice");
+  assert.equal(status.data?.workflow_control.active_stage_id, "research");
+  assert.equal(status.data?.workflow_control.state, "ready");
+  assert.deepEqual(status.data?.workflow_control.ready_items, ["work:rq-brief"]);
+  assert.deepEqual(status.data?.workflow_control.work_items.map((item) => [item.selector, item.work_item_id, item.state]), [
+    ["work:rq-brief", "rq-brief", "ready"], ["work:bibliography", "bibliography", "blocked"], ["work:synthesis", "synthesis", "blocked"],
+  ]);
+  assert.equal(status.data && "work_items" in status.data, false);
+
+  const instructions = parseEnvelope<{
+    selector: string; work_item_id: string; stage_id: string; producer_skill: string; state: string;
+    description: string; context: null; template: string; forbidden_writes: string[];
+    output: { workspace_path: string; resolved_path: string; template_ref: string };
+    validation: { profile: string; suggested_command: string };
+    completion: { submit_available: boolean; policy: { required_gate_ids: string[] } };
+  }>(runCli(["instructions", "work:rq-brief", "--json"], root));
+  assert.equal(instructions.ok, true);
+  assert.equal(instructions.data?.selector, "work:rq-brief");
+  assert.equal(instructions.data?.work_item_id, "rq-brief");
+  assert.equal(instructions.data?.stage_id, "research");
+  assert.equal(instructions.data?.producer_skill, "deep-research");
+  assert.equal(instructions.data?.state, "ready");
+  assert.equal(instructions.data?.context, null);
+  assert.equal(instructions.data?.output.workspace_path, "runs/current/artifacts/rq-brief.md");
+  assert.equal(instructions.data?.output.template_ref, "ars:shared/handoff_schemas.md#schema-1-rq-brief");
+  assert.match(instructions.data?.template ?? "", /Schema 1: RQ Brief/);
+  assert.ok(instructions.data?.output.resolved_path.endsWith("/researchspec/runs/current/artifacts/rq-brief.md"));
+  assert.ok(instructions.data?.forbidden_writes.includes("runs/current/state.yaml"));
+  assert.equal(instructions.data?.validation.profile, "research-artifact");
+  assert.equal(instructions.data?.completion.submit_available, false);
+  assert.deepEqual(instructions.data?.completion.policy.required_gate_ids, []);
+
+  const blocked = runCli(["instructions", "work:bibliography", "--json"], root);
+  assert.equal(blocked.status, 1);
+  assert.equal(parseEnvelope(blocked).error?.code, "work_item_blocked");
+  assert.equal(runCli(["instructions", "rq-brief", "--json"], root).status, 2);
+  const unsafeSelector = runCli(["instructions", "work:../rq-brief", "--json"], root);
+  assert.equal(unsafeSelector.status, 2);
+  assert.equal(parseEnvelope(unsafeSelector).error?.code, "invalid_work_item_selector");
+  assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
+  const profileChange = runCli(["init", root, "--tools", "none", "--profile", "arsu-paper", "--json"]);
+  assert.equal(profileChange.status, 3);
+  assert.equal(parseEnvelope(profileChange).error?.code, "profile_change_requires_migration");
   await cleanup(root);
 });
 

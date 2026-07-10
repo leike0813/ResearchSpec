@@ -116,6 +116,12 @@ void test("companion manifest renders eight self-contained workflow skills with 
   assert.match(claude, /tags: \[researchspec, companion, check\]/);
   assert.doesNotMatch(claude, /tags: \[researchspec, arsu\]/);
   assert.equal(requireTool("claude").command?.path(check.id, "/project"), "/project/.claude/commands/researchspec/check.md");
+
+  const next = COMPANION_INTENTS.find((intent) => intent.id === "next");
+  assert.ok(next);
+  assert.match(next.instructions, /status\.data\.workflow_control\.work_items/);
+  assert.match(next.instructions, /instructions work:<id> --json/);
+  assert.match(next.instructions, /transition_required/);
 });
 
 void test("Copilot uses its explicit detection paths", async () => {

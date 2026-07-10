@@ -1,9 +1,10 @@
 import type { IndexedItem, WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { latestById, resolveItem } from "../workspace/snapshot.js";
+import { evaluateWorkflowControl } from "./workflow-control.js";
 
 export type ListType = "changes" | "artifacts" | "gates" | "decisions" | "tools";
 
-export function buildStatus(snapshot: WorkspaceSnapshot) {
+export async function buildStatus(snapshot: WorkspaceSnapshot) {
   const latestDecisions = latestById(snapshot.decisions, "decision_id");
   const latestGates = latestById(snapshot.gates, "gate_id");
   const overriddenGateIds = new Set(latestDecisions.filter((item) => item.status === "accepted" && item.decision_type === "gate_override" && typeof item.gate_id === "string").map((item) => item.gate_id as string));
@@ -14,12 +15,14 @@ export function buildStatus(snapshot: WorkspaceSnapshot) {
   });
   const blockingGates = latestGates.filter((item) => item.blocking === true && item.verdict !== "pass" && !overriddenGateIds.has(String(item.gate_id)));
   const selectedTools = stringArray(record(snapshot.config.agent_tools).selected);
+  const workflowControl = await evaluateWorkflowControl(snapshot);
   return {
     status: "initialized",
     workspace: snapshot.workspace,
     initialized: true,
     run: snapshot.state,
     workflow: snapshot.documents["specs/workflow.yaml"] ?? null,
+    workflow_control: workflowControl,
     pending_items: [...pendingChanges.map((item) => item.selector), ...pendingDecisions.map((item) => `decision:${String(item.decision_id)}`)],
     blocking_gates: blockingGates,
     recent_artifacts: snapshot.artifacts.slice(-5),
@@ -42,7 +45,7 @@ export function showItem(snapshot: WorkspaceSnapshot, selector: string): { item?
   return resolveItem(snapshot, selector);
 }
 
-export function formatStatusHuman(status: ReturnType<typeof buildStatus>): string {
+export function formatStatusHuman(status: Awaited<ReturnType<typeof buildStatus>>): string {
   const runStatus = typeof status.run.status === "string" ? status.run.status : "unknown";
   const stage = typeof status.run.active_stage_id === "string" ? status.run.active_stage_id : "unknown";
   return [
@@ -52,6 +55,7 @@ export function formatStatusHuman(status: ReturnType<typeof buildStatus>): strin
     `Active stage: ${stage}`,
     `Pending items: ${String(status.pending_items.length)}`,
     `Blocking gates: ${String(status.blocking_gates.length)}`,
+    `Ready work items: ${String(status.workflow_control.ready_items.length)}`,
     `Installed tools: ${String(status.tools.selected.length)}`,
     "",
   ].join("\n");

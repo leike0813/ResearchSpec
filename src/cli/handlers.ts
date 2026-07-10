@@ -5,15 +5,17 @@ import { stringify } from "yaml";
 
 import { planToolDelivery, type InstallationRecord } from "../adapters/delivery.js";
 import { detectTools, orderTools, parseToolExpression } from "../adapters/tools.js";
+import { WorkItemSelectorSchema, WORKFLOW_PROFILE_IDS, type WorkflowProfileId } from "../core/contracts/workflow.js";
 import { archiveItem, decideItem, type DecisionChoice } from "../core/runtime/lifecycle.js";
 import { assertProposalBasisCurrent, ContractChangeError, planContractChangeProposal } from "../core/runtime/contract-change.js";
 import { renderHandoff } from "../core/runtime/handoff.js";
 import { buildContextPack } from "../core/runtime/pack.js";
 import { buildStatus, formatStatusHuman, listItems, showItem, type ListType } from "../core/runtime/query.js";
+import { buildWorkflowInstructions } from "../core/runtime/workflow-control.js";
 import { runWorkspaceChecks, type CheckTarget } from "../core/validation/check.js";
 import type { Diagnostic } from "../core/validation/types.js";
 import { resolveWorkspace } from "../core/workspace/discover.js";
-import { REQUIRED_DIRECTORIES, WORKSPACE_TEMPLATES, resolveInitTarget } from "../core/workspace/layout.js";
+import { getWorkspaceEntries, getWorkspaceTemplates, resolveInitTarget } from "../core/workspace/layout.js";
 import { loadWorkspaceSnapshot } from "../core/workspace/snapshot.js";
 import { executeWritePlan, planFile, sha256, type PlannedWrite } from "../core/workspace/write-plan.js";
 import { fileExists, readOptionalText } from "../utils/fs.js";
@@ -28,11 +30,14 @@ export interface DecideOptions { decision?: DecisionChoice; actorName?: string; 
 export interface ProposeOptions { input: string; actorKind: "human" | "agent"; actorName: string }
 
 export async function handleInit(inputPath: string | undefined, options: InitOptions, context: CommandContext): Promise<CommandResult> {
-  if (options.profile !== undefined && options.profile !== "arsu-paper") throw new CliError("invalid_profile", `Unknown profile: ${options.profile}`, 2, "The current release supports only arsu-paper.");
+  if (options.profile !== undefined && !WORKFLOW_PROFILE_IDS.includes(options.profile as WorkflowProfileId)) throw new CliError("invalid_profile", `Unknown profile: ${options.profile}`, 2, `Supported profiles: ${WORKFLOW_PROFILE_IDS.join(", ")}.`);
   const workspace = context.workspace ? path.resolve(context.cwd, context.workspace) : resolveInitTarget(inputPath, context.cwd);
   const projectRoot = path.dirname(workspace);
   const existing = await fileExists(workspace);
   const priorSnapshot = existing ? await loadWorkspaceSnapshot(workspace) : undefined;
+  const priorProfile = WORKFLOW_PROFILE_IDS.includes(priorSnapshot?.config.profile as WorkflowProfileId) ? priorSnapshot?.config.profile as WorkflowProfileId : "arsu-paper";
+  if (existing && options.profile !== undefined && options.profile !== priorProfile) throw new CliError("profile_change_requires_migration", `Existing workspace uses profile ${priorProfile}; init cannot change it to ${options.profile}.`, 3, "Create an explicit contract migration instead of replacing workflow/state during init.");
+  const profile = (options.profile ?? priorProfile) as WorkflowProfileId;
   const configured = strings(record(priorSnapshot?.config.agent_tools).selected);
   const detected = await detectTools(projectRoot);
   const explicitTools = options.tools !== undefined;
@@ -55,7 +60,7 @@ export async function handleInit(inputPath: string | undefined, options: InitOpt
   if (!context.interactive && !explicitTools && selected.includes("codex")) throw new CliError("codex_global_write_requires_explicit_selection", "Non-interactive Codex delivery requires explicit --tools codex or --tools all.", 2);
 
   const operations: PlannedWrite[] = [];
-  for (const template of WORKSPACE_TEMPLATES) {
+  for (const template of getWorkspaceTemplates(profile)) {
     if (template.relativePath === "config.yaml" || template.relativePath === "tool-installation-manifest.json") continue;
     const target = path.join(workspace, template.relativePath);
     if (await fileExists(target)) {
@@ -79,8 +84,7 @@ export async function handleInit(inputPath: string | undefined, options: InitOpt
     if (bytes !== undefined && sha256(bytes) === installation.sha256) operations.push({ action: "remove-owned", path: target, relativePath: installation.path, scope: "project", ownership: "generated", previousHash: installation.sha256, reason: "tool was explicitly deselected" });
   }
   const installations = deduplicateInstallations([...retained.filter((item) => !desiredKeys.has(`${item.scope}:${item.path}`)), ...delivery.installations]);
-  const priorProfile = priorSnapshot && typeof priorSnapshot.config.profile === "string" ? priorSnapshot.config.profile : "arsu-paper";
-  const configText = stringify({ schema_version: "0.1", profile: options.profile ?? priorProfile, agent_tools: { selected, delivery: "both" } });
+  const configText = stringify({ schema_version: "0.1", profile, agent_tools: { selected, delivery: "both" } });
   const configPath = path.join(workspace, "config.yaml");
   operations.push(await authoritativeWrite(configPath, "config.yaml", configText, "workspace", "update selected tool intent"));
   const manifestText = `${JSON.stringify({ schema_version: "1", package_version: "0.1.0", installations }, null, 2)}\n`;
@@ -93,11 +97,11 @@ export async function handleInit(inputPath: string | undefined, options: InitOpt
     if (!approved) throw new CliError("cancelled", "Initialization cancelled.", 1);
   }
   if (!context.dryRun) {
-    for (const directory of REQUIRED_DIRECTORIES) await mkdir(path.join(workspace, directory), { recursive: true });
+    for (const entry of getWorkspaceEntries(workspace, profile)) if (entry.kind === "dir") await mkdir(entry.path, { recursive: true });
     await executeWritePlan(plan);
   }
   const diagnostics = [...delivery.diagnostics, ...operationDiagnostics(operations)];
-  const data = { workspace, profile: options.profile ?? "arsu-paper", selected_tools: selected, dry_run: context.dryRun, plan: summarizePlan(operations) };
+  const data = { workspace, profile, selected_tools: selected, dry_run: context.dryRun, plan: summarizePlan(operations) };
   return deliveryResult("init", data, { stdout: formatPlan(context.dryRun ? "ResearchSpec init dry run" : existing ? "ResearchSpec workspace updated" : "ResearchSpec workspace initialized", workspace, operations, context.dryRun) }, diagnostics);
 }
 
@@ -146,9 +150,28 @@ export async function handleUpdate(inputPath: string | undefined, options: Updat
 export async function handleStatus(context: CommandContext): Promise<CommandResult> {
   const workspace = await requireWorkspace(context);
   const snapshot = await loadWorkspaceSnapshot(workspace);
-  const data = buildStatus(snapshot);
+  const data = await buildStatus(snapshot);
   const ok = snapshot.diagnostics.every((item) => !item.blocking);
   return { ...success("status", data, { stdout: formatStatusHuman(data) }, snapshot.diagnostics), ok, exitCode: ok ? 0 : 1 };
+}
+
+export async function handleInstructions(selector: string, context: CommandContext): Promise<CommandResult> {
+  if (!WorkItemSelectorSchema.safeParse(selector).success) throw new CliError("invalid_work_item_selector", `Invalid work-item selector: ${selector}`, 2, "Use the canonical form work:<safe-id>.");
+  const workspace = await requireWorkspace(context);
+  const result = await buildWorkflowInstructions(await loadWorkspaceSnapshot(workspace), selector.slice("work:".length));
+  if (!result.ok) {
+    const messages = {
+      workflow_unconfigured: "The current workflow has no dynamic work-item graph.",
+      workflow_invalid: "The current workflow graph is invalid.",
+      work_item_not_found: `Work item not found: ${selector}`,
+      work_item_blocked: `Work item is blocked: ${selector}`,
+      work_item_already_done: `Work item is already complete: ${selector}`,
+      workflow_resource_unavailable: `The work-item template could not be resolved: ${selector}`,
+    } as const;
+    throw new CliError(result.code, messages[result.code], 1, undefined, { selector, item: result.item, resolver: result.details });
+  }
+  const packet = result.packet;
+  return success("instructions", packet, { stdout: [`Work item: ${packet.selector}`, `Producer skill: ${packet.producer_skill}`, `Output: ${packet.output.resolved_path}`, `Template: ${packet.output.template_ref}`, ""].join("\n") });
 }
 
 export async function handleCheck(target: string | undefined, strict: boolean, context: CommandContext): Promise<CommandResult> {
@@ -185,7 +208,7 @@ export async function handleShow(selector: string, context: CommandContext): Pro
 export async function handleHandoff(options: HandoffOptions, context: CommandContext): Promise<CommandResult> {
   if (options.stdout && options.out) throw new CliError("conflicting_options", "--stdout and --out cannot be used together.", 2);
   const workspace = await requireWorkspace(context);
-  const content = renderHandoff(await loadWorkspaceSnapshot(workspace));
+  const content = await renderHandoff(await loadWorkspaceSnapshot(workspace));
   if (options.stdout) return success("handoff", { workspace, written: false, content }, { stdout: content });
   const target = options.out ? path.resolve(context.cwd, options.out) : path.join(workspace, "runs/current/handoff.md");
   const operation = await authoritativeWrite(target, path.relative(workspace, target), content, "workspace", "render handoff view");

@@ -5,7 +5,7 @@ import path from "node:path";
 import { Command, CommanderError, InvalidArgumentError } from "commander";
 
 import {
-  handleArchive, handleCheck, handleDecide, handleHandoff, handleInit, handleList,
+  handleArchive, handleCheck, handleDecide, handleHandoff, handleInit, handleInstructions, handleList,
   handlePack, handlePropose, handleShow, handleStatus, handleUpdate, type DecideOptions,
   type HandoffOptions, type InitOptions, type PackOptions, type ProposeOptions, type UpdateOptions,
 } from "./handlers.js";
@@ -60,13 +60,15 @@ type Runner = (command: string, commandObject: Command, action: () => Promise<Co
 function registerCommands(program: Command, run: Runner): void {
   program.command("init [path]").description("Initialize or safely extend a ResearchSpec workspace")
     .option("--tools <ids>", "all, none, or comma-separated tool IDs")
-    .option("--profile <profile>", "workspace profile", "arsu-paper")
+    .option("--profile <profile>", "workspace profile")
     .action(async (target: string | undefined, options: InitOptions, command: Command) => run("init", command, () => handleInit(target, options, commandContext("init", command))));
   program.command("update [path]").description("Refresh selected generated agent files")
     .option("--tools <ids>", "refresh/add a tool subset")
     .action(async (target: string | undefined, options: UpdateOptions, command: Command) => run("update", command, () => handleUpdate(target, options, commandContext("update", command))));
   program.command("status").description("Show current run and pending-item status")
     .action(async (_options: Record<string, never>, command: Command) => run("status", command, () => handleStatus(commandContext("status", command))));
+  program.command("instructions <work-item>").description("Show dynamic instructions for a ready work item")
+    .action(async (workItem: string, _options: Record<string, never>, command: Command) => run("instructions", command, () => handleInstructions(workItem, commandContext("instructions", command))));
   program.command("check [target]").description("Check all, contracts, runtime, artifacts, or tools")
     .option("--strict", "treat warnings as failures")
     .action(async (target: string | undefined, options: { strict?: boolean }, command: Command) => run("check", command, () => handleCheck(target, Boolean(options.strict), commandContext("check", command))));

@@ -68,7 +68,7 @@ snapshot 审查。
 
 1. 使用最近的 `researchspec/` workspace；用户指定 `--workspace` / `--cwd` 时服从显式值。
 2. Inspection 与 preview 使用 JSON envelope，按 `ok/data/diagnostics/error` 解释。
-3. 使用 `status/list/show` 获取 canonical selector；候选不唯一时停止并让用户选择。
+3. 使用 `status/list/show` 获取 canonical selector；workflow 节点使用 `work:<id>`，并通过 `instructions work:<id>` 获取动态工作包；候选不唯一时停止并让用户选择。
 4. Decision event 是导航 evidence，必须映射回 `change_id`、`draft_patch_id` 或 `gate_id`。
 5. 写 workflow 先收集完整 semantic payload，再运行完整命令的 `--dry-run --json`。
 6. 向用户解释 before/after meaning、paths、evidence 与风险，取得明确确认后才执行同一命令。
@@ -114,8 +114,13 @@ reviewer。
 ### 4.5 Next
 
 固定优先级：blocking diagnostic → blocking gate → pending change/patch → archivable item →
-current stage/ARSU skill。只返回一个 primary action 和最多两个次选，包含 owner、evidence、
-blockers、inputs 与 completion test。缺少 stage skill mapping 时报告缺失，不猜测。
+ready work item → transition/configuration boundary。对单个 ready 节点调用
+`instructions work:<id> --json`，使用其中的 producer Skill、dependencies、output、allowed
+writes 和 completion policy；不得从静态 Skill 文本重建节点协议。Ready selectors 从
+`status.data.workflow_control.ready_items` 读取，并在同一 object 的 `work_items` 中取详情；
+status 顶层没有第二份 work-items 列表。多个同优先级节点要求用户选择。
+`stage_work_complete + transition_required` 只表示只读控制面到达转移边界，
+不得直接编辑 state 或宣告 run complete。
 
 ### 4.6 Context
 
