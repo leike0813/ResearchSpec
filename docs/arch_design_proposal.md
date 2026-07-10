@@ -11,10 +11,10 @@ surface 的 canonical 事实源。本文明确区分：
 
 - **Target v0.1**：CLI 控制平面、profile-owned workflow graph、动态 subflow/round、
   4 ARSU + 4 Companion + 15 CLI。
-- **Current implementation（2026-07-10）**：静态 research Slice、work-level
-  status/instructions/submit、九个 Companion 和已有 contract lifecycle。
-- **Pending technical layer**：routing catalog、subflow control、Gate/transition、完整
-  profiles 与 surface consolidation。
+- **Current implementation（2026-07-10）**：typed routing catalog、动态 research subflow
+  Slice、subflow/round instances、parallel frontier、scoped instructions/Start/Submit、九个
+  Companion 和已有 contract lifecycle。
+- **Pending technical layer**：Gate/transition、完整 profiles 与 surface consolidation。
 
 事实源：
 
@@ -577,8 +577,8 @@ become source-of-truth research specs.
 
 ### 9.2 Subflow Instance Control Plane
 
-`add-subflow-instance-control-plane` 提供 active run、动态 subflow/round、parallel groups、
-通用 selectors、`start` 和 automatic work-submit policy。
+`add-subflow-instance-control-plane` 已提供 active run、动态 subflow/round、parallel groups、
+通用 selectors、原子 `start` 和 Start-authorized automatic work-submit policy。
 
 ### 9.3 Gate And Transition Control Plane
 

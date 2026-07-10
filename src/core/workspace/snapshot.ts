@@ -4,7 +4,8 @@ import { z } from "zod";
 
 import { fileExists, readOptionalText } from "../../utils/fs.js";
 import { ArtifactRegistrySchema } from "../contracts/artifact.js";
-import { validateWorkflowDefinition, WorkflowDefinitionSchema, WORKFLOW_PROFILE_IDS, type WorkflowDefinition } from "../contracts/workflow.js";
+import { isInstanceRunState, RunStateSchema, type RunState } from "../contracts/run-state.js";
+import { isInstanceWorkflowDefinition, validateWorkflowDefinition, WorkflowDefinitionSchema, WORKFLOW_PROFILE_IDS, type WorkflowDefinition } from "../contracts/workflow.js";
 import { parseJson, parseJsonLines, parseYaml } from "../validation/parse.js";
 import type { Diagnostic } from "../validation/types.js";
 import { JSON_FILES, JSONL_FILES, MARKDOWN_FILES, REQUIRED_FILES, YAML_FILES } from "./layout.js";
@@ -22,7 +23,6 @@ const SourcesSchema = z.looseObject({ schema_version: z.string(), sources: z.arr
 const ClaimsSchema = z.looseObject({ schema_version: z.string(), claims: z.array(ClaimSchema) });
 const ProjectSchema = z.looseObject({ schema_version: z.string(), project_id: SafeId, title: z.string(), target_output: z.string(), primary_language: z.string() });
 const ManuscriptSchema = z.looseObject({ schema_version: z.string(), manuscript_id: SafeId, title: z.string(), status: z.string(), sections: z.array(z.unknown()) });
-const StateSchema = z.looseObject({ schema_version: z.string(), run_id: SafeId, workflow_id: SafeId, status: z.enum(["not_started", "in_progress", "waiting", "blocked", "complete", "failed", "cancelled"]), active_stage_id: SafeId, pending_decisions: z.array(z.unknown()), diagnostics: z.array(z.unknown()) });
 const ContractPatchSchema = z.looseObject({
   schema_version: z.string(), change_id: SafeId, title: z.string().min(1), status: z.enum(["proposed", "postponed", "accepted", "rejected", "applied", "superseded"]),
   created_at: z.string().min(1), created_by: ActorSchema, rationale: z.string().min(1), risk_level: z.enum(["low", "medium", "high"]), requires_human_decision: z.boolean(),
@@ -61,6 +61,7 @@ export interface WorkspaceSnapshot {
   config: Record<string, unknown>;
   manifest: Record<string, unknown>;
   workflow?: WorkflowDefinition;
+  runState?: RunState;
   state: Record<string, unknown>;
   artifacts: Record<string, unknown>[];
   decisions: Record<string, unknown>[];
@@ -117,6 +118,8 @@ export async function loadWorkspaceSnapshot(workspace: string): Promise<Workspac
   const manifest = asRecord(documents["tool-installation-manifest.json"]);
   const workflow = parseWorkflowDefinition(documents["specs/workflow.yaml"], files.get("specs/workflow.yaml"), diagnostics);
   const state = asRecord(documents["runs/current/state.yaml"]);
+  const runState = parseRunState(documents["runs/current/state.yaml"], files.get("runs/current/state.yaml"), diagnostics);
+  validateInstanceStateReferences(workflow, runState, files.get("runs/current/state.yaml"), diagnostics);
   const artifacts = records(asRecord(documents["runs/current/artifact-registry.json"]).artifacts);
   const decisions = records(documents["runs/current/decision-ledger.jsonl"]);
   const gates = records(documents["runs/current/gate-ledger.jsonl"]);
@@ -126,7 +129,6 @@ export async function loadWorkspaceSnapshot(workspace: string): Promise<Workspac
   validateDocument("specs/sources.yaml", documents["specs/sources.yaml"], SourcesSchema, files, diagnostics);
   validateDocument("specs/claims.yaml", documents["specs/claims.yaml"], ClaimsSchema, files, diagnostics);
   validateDocument("specs/manuscript.yaml", documents["specs/manuscript.yaml"], ManuscriptSchema, files, diagnostics);
-  validateDocument("runs/current/state.yaml", state, StateSchema, files, diagnostics);
   validateDocument("runs/current/artifact-registry.json", documents["runs/current/artifact-registry.json"], ArtifactRegistrySchema, files, diagnostics);
   validateRecords(decisions, DecisionSchema, path.join(workspace, "runs/current/decision-ledger.jsonl"), "invalid_decision_event", diagnostics);
   validateRecords(gates, GateSchema, path.join(workspace, "runs/current/gate-ledger.jsonl"), "invalid_gate_event", diagnostics);
@@ -135,7 +137,33 @@ export async function loadWorkspaceSnapshot(workspace: string): Promise<Workspac
   const patches = await loadDraftPatches(workspace, diagnostics);
   const items = buildItems(documents, artifacts, decisions, gates, changes, patches, config, manifest);
 
-  return { workspace, files, documents, config, manifest, workflow, state, artifacts, decisions, gates, changes, patches, items, diagnostics };
+  return { workspace, files, documents, config, manifest, workflow, runState, state, artifacts, decisions, gates, changes, patches, items, diagnostics };
+}
+
+function validateInstanceStateReferences(workflow: WorkflowDefinition | undefined, state: RunState | undefined, file: SnapshotFile | undefined, diagnostics: Diagnostic[]): void {
+  if (!file || !isInstanceRunState(state)) return;
+  if (!isInstanceWorkflowDefinition(workflow)) {
+    diagnostics.push({ severity: "error", code: "workflow_state_version_mismatch", message: "Instance run state requires an instance workflow.", path: file.absolutePath, blocking: true });
+    return;
+  }
+  const ids = new Set<string>();
+  const templateIds = new Set(workflow.subflow_templates.map((item) => item.template_id));
+  for (const instance of state.subflows) {
+    if (ids.has(instance.instance_id)) diagnostics.push({ severity: "error", code: "duplicate_subflow_instance_id", message: `Duplicate subflow instance: ${instance.instance_id}`, path: file.absolutePath, blocking: true });
+    ids.add(instance.instance_id);
+    if (!templateIds.has(instance.template_id)) diagnostics.push({ severity: "error", code: "subflow_template_missing", message: `Instance references missing template: ${instance.template_id}`, path: file.absolutePath, blocking: true });
+  }
+  for (const instance of state.subflows) if (instance.parent_subflow_id && (!ids.has(instance.parent_subflow_id) || instance.parent_subflow_id === instance.instance_id)) diagnostics.push({ severity: "error", code: "subflow_parent_invalid", message: `Instance has invalid parent: ${instance.instance_id}`, path: file.absolutePath, blocking: true });
+}
+
+function parseRunState(value: unknown, file: SnapshotFile | undefined, diagnostics: Diagnostic[]): RunState | undefined {
+  if (!file) return undefined;
+  const result = RunStateSchema.safeParse(value);
+  if (!result.success) {
+    diagnostics.push({ severity: "error", code: "invalid_contract_shape", message: "Run state does not match a supported legacy or instance shape.", path: file.absolutePath, blocking: true, details: result.error.issues });
+    return undefined;
+  }
+  return result.data;
 }
 
 function parseWorkflowDefinition(value: unknown, file: SnapshotFile | undefined, diagnostics: Diagnostic[]): WorkflowDefinition | undefined {

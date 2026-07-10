@@ -1,6 +1,6 @@
 {
   "schema_version": "0.1",
-  "compatibility_kind": "researchspec-preflight-v1",
+  "compatibility_kind": "researchspec-preflight-v2",
   "source": "vendor/ars",
   "output": "skills/arsu",
   "material_passport_policy": "compatibility_artifact_only_not_runtime_ssot",
@@ -12,7 +12,7 @@
   },
   "skill_groups": {
     "academic-paper": {
-      "profile_id": "researchspec-preflight-v1",
+      "profile_id": "researchspec-preflight-v2",
       "required_contracts": [
         "researchspec/specs/workflow.yaml",
         "researchspec/runs/current/state.yaml",
@@ -42,7 +42,7 @@
       "full_matrix_injection": false
     },
     "academic-paper-reviewer": {
-      "profile_id": "researchspec-preflight-v1",
+      "profile_id": "researchspec-preflight-v2",
       "required_contracts": [
         "researchspec/specs/workflow.yaml",
         "researchspec/runs/current/state.yaml",
@@ -72,7 +72,7 @@
       "full_matrix_injection": false
     },
     "academic-pipeline": {
-      "profile_id": "researchspec-preflight-v1",
+      "profile_id": "researchspec-preflight-v2",
       "required_contracts": [
         "researchspec/specs/workflow.yaml",
         "researchspec/runs/current/state.yaml",
@@ -102,7 +102,7 @@
       "full_matrix_injection": false
     },
     "deep-research": {
-      "profile_id": "researchspec-preflight-v1",
+      "profile_id": "researchspec-preflight-v2",
       "required_contracts": [
         "researchspec/specs/workflow.yaml",
         "researchspec/runs/current/state.yaml",

@@ -3,6 +3,8 @@ import { readFile } from "node:fs/promises";
 
 import { fileExists, isDirectory } from "../../utils/fs.js";
 import { inspectArtifacts } from "../runtime/workflow-control.js";
+import { isInstanceRunState } from "../contracts/run-state.js";
+import { SubflowStartReceiptSchema } from "../contracts/subflow.js";
 import { loadWorkspaceSnapshot } from "../workspace/snapshot.js";
 import type { WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { REQUIRED_DIRECTORIES } from "../workspace/layout.js";
@@ -26,6 +28,8 @@ export async function runWorkspaceChecks(workspace: string, target: CheckTarget 
     for (const inspection of await inspectArtifacts(snapshot)) diagnostics.push(...inspection.diagnostics);
   }
 
+  if (target === "all" || target === "runtime") diagnostics.push(...await inspectSubflowStartReceipts(snapshot));
+
   if (target === "all" || target === "tools") {
     const installations = Array.isArray(snapshot.manifest.installations) ? snapshot.manifest.installations : [];
     for (const value of installations) {
@@ -42,6 +46,27 @@ export async function runWorkspaceChecks(workspace: string, target: CheckTarget 
 
   const ok = diagnostics.every((diagnostic) => !diagnostic.blocking && (!strict || diagnostic.severity !== "warning"));
   return { ok, workspace, target, diagnostics };
+}
+
+async function inspectSubflowStartReceipts(snapshot: WorkspaceSnapshot): Promise<Diagnostic[]> {
+  if (!isInstanceRunState(snapshot.runState)) return [];
+  const diagnostics: Diagnostic[] = [];
+  for (const instance of snapshot.runState.subflows) {
+    const receiptPath = path.resolve(snapshot.workspace, instance.start_receipt.path);
+    if (!(receiptPath === snapshot.workspace || receiptPath.startsWith(`${snapshot.workspace}${path.sep}`))) {
+      diagnostics.push(dangling("subflow_start_receipt_escape", `Start receipt escapes the workspace: ${instance.start_receipt.path}`, path.join(snapshot.workspace, "runs/current/state.yaml")));
+      continue;
+    }
+    try {
+      const bytes = await readFile(receiptPath);
+      const receipt = SubflowStartReceiptSchema.safeParse(JSON.parse(Buffer.from(bytes).toString("utf8")) as unknown);
+      if (sha256(bytes) !== instance.start_receipt.sha256) diagnostics.push(dangling("subflow_start_receipt_hash_mismatch", `Start receipt hash differs for ${instance.instance_id}.`, receiptPath));
+      if (!receipt.success || receipt.data.instance_id !== instance.instance_id || receipt.data.plan_sha256 !== instance.start_receipt.plan_sha256 || receipt.data.template_id !== instance.template_id || receipt.data.route_ref !== instance.route_ref) diagnostics.push(dangling("subflow_start_receipt_mismatch", `Start receipt does not match state for ${instance.instance_id}.`, receiptPath));
+    } catch {
+      diagnostics.push(dangling("subflow_start_receipt_missing", `Start receipt is missing or invalid for ${instance.instance_id}.`, receiptPath));
+    }
+  }
+  return diagnostics;
 }
 
 function validateCrossReferences(snapshot: WorkspaceSnapshot, target: CheckTarget): Diagnostic[] {

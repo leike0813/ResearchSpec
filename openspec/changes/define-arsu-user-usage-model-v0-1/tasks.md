@@ -11,7 +11,7 @@
 
 ## 3. Subflow Control Plane Technical Change
 
-- [ ] 3.1 Create and implement `add-subflow-instance-control-plane` with active-run subflow/round instances, parallel groups, generalized selectors, `start`, and automatic work-submit policy.
+- [x] 3.1 Create and implement `add-subflow-instance-control-plane` with active-run subflow/round instances, parallel groups, generalized selectors, `start`, and automatic work-submit policy.
 
 ## 4. Gate And Transition Technical Change
 

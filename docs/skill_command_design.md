@@ -183,8 +183,8 @@ shared-global prompt ownership、manifest hash/drift protection 和工具格式�
 ## 8. Pending Technical Layers
 
 1. `add-arsu-routing-catalog` 已实现：typed routing catalog、generated JSON 和 descriptions projection。
-2. `add-subflow-instance-control-plane`：让 Navigate/ARSU Skills 消费通用 subflow/work
-   status/instructions，提供 `start` 与 automatic work submit policy。
+2. `add-subflow-instance-control-plane` 已实现：通用 subflow/scoped-work status/instructions、
+   原子 `start`、parallel frontier 与 Start-authorized automatic work submit policy。
 3. `add-gate-transition-control-plane`：让 Verify/Decide 消费 Gate/transition packets。
 4. `add-arsu-workflow-profiles`：提供全部 mode graphs、parallel/join 和 round templates。
 5. `consolidate-researchspec-agent-surface`：新增 Navigate，移除六个 superseded Companion 的

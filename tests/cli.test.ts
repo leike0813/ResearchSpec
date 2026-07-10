@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { existsSync } from "node:fs";
-import { mkdir, readFile, readdir, rm, symlink, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rm, symlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { test } from "node:test";
 import { strFromU8, unzipSync } from "fflate";
@@ -11,7 +11,7 @@ import { cleanup, parseEnvelope, runCli, tempProject } from "./helpers/cli.js";
 void test("help, version, and usage errors expose the complete public boundary", () => {
   const help = runCli(["--help"]);
   assert.equal(help.status, 0);
-  for (const command of ["init", "update", "status", "instructions", "submit", "check", "list", "show", "handoff", "pack", "propose", "decide", "archive"]) assert.match(help.stdout, new RegExp(`\\b${command}\\b`));
+  for (const command of ["init", "update", "status", "instructions", "start", "submit", "check", "list", "show", "handoff", "pack", "propose", "decide", "archive"]) assert.match(help.stdout, new RegExp(`\\b${command}\\b`));
   assert.equal(runCli(["--version"]).stdout.trim(), "0.1.0");
   const invalid = runCli(["unknown", "--json"]);
   assert.equal(invalid.status, 2);
@@ -58,26 +58,41 @@ void test("research-slice init exposes dynamic status and resolved instructions"
   const root = await tempProject();
   assert.equal(runCli(["init", root, "--tools", "none", "--profile", "arsu-research-slice"]).status, 0);
   const workspace = path.join(root, "researchspec");
-  assert.equal(existsSync(path.join(workspace, "runs/current/artifacts")), true);
-  assert.deepEqual(await readdir(path.join(workspace, "runs/current/artifacts")), []);
+  assert.equal(existsSync(path.join(workspace, "runs/current/subflows")), false);
 
   const status = parseEnvelope<{
     workflow_control: {
-      profile: string; active_stage_id: string; state: string; configured: boolean; valid: boolean;
-      ready_items: string[]; work_items: Array<{ id: string; selector: string; work_item_id: string; state: string }>;
+      profile: string; active_stage_id: null; state: string; configured: boolean; valid: boolean;
+      ready_items: string[]; startable_subflows: string[]; work_items: Array<{ id: string; selector: string; work_item_id: string; state: string }>;
     };
   }>(runCli(["status", "--json"], root));
   assert.equal(status.ok, true);
   assert.equal(status.data?.workflow_control.configured, true);
   assert.equal(status.data?.workflow_control.valid, true);
   assert.equal(status.data?.workflow_control.profile, "arsu-research-slice");
-  assert.equal(status.data?.workflow_control.active_stage_id, "research");
-  assert.equal(status.data?.workflow_control.state, "ready");
-  assert.deepEqual(status.data?.workflow_control.ready_items, ["work:rq-brief"]);
-  assert.deepEqual(status.data?.workflow_control.work_items.map((item) => [item.selector, item.work_item_id, item.state]), [
-    ["work:rq-brief", "rq-brief", "ready"], ["work:bibliography", "bibliography", "blocked"], ["work:synthesis", "synthesis", "blocked"],
-  ]);
+  assert.equal(status.data?.workflow_control.active_stage_id, null);
+  assert.equal(status.data?.workflow_control.state, "not_started");
+  assert.deepEqual(status.data?.workflow_control.ready_items, []);
+  assert.deepEqual(status.data?.workflow_control.startable_subflows, ["subflow:tpl-research"]);
+  assert.deepEqual(status.data?.workflow_control.work_items, []);
   assert.equal(status.data && "work_items" in status.data, false);
+
+  const subflow = parseEnvelope<{
+    selector: string; route: { route_ref: string }; route_coverage: string; instruction_basis_sha256: string; required_user_input_ids: string[];
+  }>(runCli(["instructions", "subflow:tpl-research", "--json"], root));
+  assert.equal(subflow.ok, true);
+  assert.equal(subflow.data?.route.route_ref, "deep-research:full");
+  assert.equal(subflow.data?.route_coverage, "partial");
+  assert.ok(subflow.data?.required_user_input_ids.includes("research_goal"));
+  const startInput = path.join(root, "start.json");
+  await writeFile(startInput, `${JSON.stringify({ schema_version: "1", instruction_basis_sha256: subflow.data?.instruction_basis_sha256, acknowledged_user_input_ids: ["research_goal"], prerequisite_artifact_ids: [], prerequisite_decision_ids: [], parent_subflow_selector: null }, null, 2)}\n`, "utf8");
+  const startPreview = parseEnvelope<{ status: string; plan_sha256: string; instance: { instance_id: string }; plan: Array<{ action: string }> }>(runCli(["start", "subflow:tpl-research", "--input", startInput, "--actor-kind", "agent", "--actor-name", "academic-pipeline", "--confirmed-by", "researcher", "--dry-run", "--json"], root));
+  assert.equal(startPreview.data?.status, "would_start");
+  assert.deepEqual(startPreview.data?.plan.map((item) => item.action), ["create", "refresh"]);
+  const start = parseEnvelope<{ status: string; workflow_control_after: { ready_items: string[] } }>(runCli(["start", "subflow:tpl-research", "--input", startInput, "--actor-kind", "agent", "--actor-name", "academic-pipeline", "--confirmed-by", "researcher", "--expected-plan-sha256", startPreview.data?.plan_sha256 ?? "", "--yes", "--json"], root));
+  assert.equal(start.data?.status, "started");
+  const workSelector = start.data?.workflow_control_after.ready_items[0] ?? "";
+  assert.match(workSelector, /^work:sf-.+\/rq-brief$/);
 
   const instructions = parseEnvelope<{
     selector: string; work_item_id: string; stage_id: string; producer_skill: string; state: string;
@@ -89,35 +104,39 @@ void test("research-slice init exposes dynamic status and resolved instructions"
       submit?: { selector: string; candidate_path: string; dry_run_command: string; requires_expected_sha256_for_noninteractive_execution: boolean; updates_state: boolean };
       policy: { required_gate_ids: string[] };
     };
-  }>(runCli(["instructions", "work:rq-brief", "--json"], root));
+    submission: { policy: string; requires_user_confirmation: boolean; authorization: { valid: boolean } };
+  }>(runCli(["instructions", workSelector, "--json"], root));
   assert.equal(instructions.ok, true);
-  assert.equal(instructions.data?.selector, "work:rq-brief");
+  assert.equal(instructions.data?.selector, workSelector);
   assert.equal(instructions.data?.work_item_id, "rq-brief");
   assert.equal(instructions.data?.stage_id, "research");
   assert.equal(instructions.data?.producer_skill, "deep-research");
   assert.equal(instructions.data?.state, "ready");
   assert.equal(instructions.data?.context, null);
-  assert.equal(instructions.data?.output.workspace_path, "runs/current/artifacts/rq-brief.md");
+  assert.match(instructions.data?.output.workspace_path ?? "", /^runs\/current\/subflows\/sf-.+\/artifacts\/rq-brief\.md$/);
   assert.equal(instructions.data?.output.template_ref, "ars:shared/handoff_schemas.md#schema-1-rq-brief");
   assert.match(instructions.data?.template ?? "", /Schema 1: RQ Brief/);
-  assert.ok(instructions.data?.output.resolved_path.endsWith("/researchspec/runs/current/artifacts/rq-brief.md"));
+  assert.ok(instructions.data?.output.resolved_path.endsWith("/artifacts/rq-brief.md"));
   assert.ok(instructions.data?.forbidden_writes.includes("runs/current/state.yaml"));
   assert.equal(instructions.data?.validation.profile, "research-artifact");
   assert.equal(instructions.data?.completion.submit_available, true);
-  assert.equal(instructions.data?.completion.submit?.selector, "work:rq-brief");
+  assert.equal(instructions.data?.completion.submit?.selector, workSelector);
   assert.equal(instructions.data?.completion.submit?.candidate_path, instructions.data?.output.resolved_path);
-  assert.match(instructions.data?.completion.submit?.dry_run_command ?? "", /submit work:rq-brief/);
+  assert.match(instructions.data?.completion.submit?.dry_run_command ?? "", /submit work:sf-/);
   assert.equal(instructions.data?.completion.submit?.requires_expected_sha256_for_noninteractive_execution, true);
   assert.equal(instructions.data?.completion.submit?.updates_state, false);
   assert.deepEqual(instructions.data?.completion.policy.required_gate_ids, []);
+  assert.equal(instructions.data?.submission.policy, "automatic");
+  assert.equal(instructions.data?.submission.authorization.valid, true);
+  assert.equal(instructions.data?.submission.requires_user_confirmation, false);
 
-  const blocked = runCli(["instructions", "work:bibliography", "--json"], root);
+  const blocked = runCli(["instructions", workSelector.replace("/rq-brief", "/bibliography"), "--json"], root);
   assert.equal(blocked.status, 1);
   assert.equal(parseEnvelope(blocked).error?.code, "work_item_blocked");
   assert.equal(runCli(["instructions", "rq-brief", "--json"], root).status, 2);
   const unsafeSelector = runCli(["instructions", "work:../rq-brief", "--json"], root);
   assert.equal(unsafeSelector.status, 2);
-  assert.equal(parseEnvelope(unsafeSelector).error?.code, "invalid_work_item_selector");
+  assert.equal(parseEnvelope(unsafeSelector).error?.code, "invalid_runtime_selector");
   assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
   const profileChange = runCli(["init", root, "--tools", "none", "--profile", "arsu-paper", "--json"]);
   assert.equal(profileChange.status, 3);
@@ -129,8 +148,11 @@ void test("submit previews an exact candidate hash then atomically registers its
   const root = await tempProject();
   assert.equal(runCli(["init", root, "--tools", "none", "--profile", "arsu-research-slice"]).status, 0);
   const workspace = path.join(root, "researchspec");
-  const candidatePath = path.join(workspace, "runs/current/artifacts/rq-brief.md");
+  const instanceId = await startSliceViaCli(root);
+  const selector = `work:${instanceId}/rq-brief`;
+  const candidatePath = path.join(workspace, `runs/current/subflows/${instanceId}/artifacts/rq-brief.md`);
   const inputPath = path.join(root, "submission.json");
+  await mkdir(path.dirname(candidatePath), { recursive: true });
   await writeFile(candidatePath, "# RQ Brief\n\nA bounded research question.\n", "utf8");
   await writeFile(inputPath, `${JSON.stringify({ schema_version: "1", dependency_artifact_ids: [], producer_mode: "full" }, null, 2)}\n`, "utf8");
   const protectedPaths = ["runs/current/state.yaml", "runs/current/gate-ledger.jsonl", "runs/current/decision-ledger.jsonl"];
@@ -140,7 +162,7 @@ void test("submit previews an exact candidate hash then atomically registers its
     status: string; candidate_sha256: string; artifact: { artifact_id: string };
     receipt_artifact: { artifact_type: string }; plan: Array<{ action: string }>;
     workflow_control_after: null; state_updated: boolean; gate_appended: boolean; decision_appended: boolean;
-  }>(runCli(["submit", "work:rq-brief", "--input", inputPath, "--actor-kind", "agent", "--actor-name", "deep-research", "--dry-run", "--json"], root));
+  }>(runCli(["submit", selector, "--input", inputPath, "--actor-kind", "agent", "--actor-name", "deep-research", "--dry-run", "--json"], root));
   assert.equal(preview.ok, true);
   assert.equal(preview.data?.status, "would_submit");
   assert.match(preview.data?.candidate_sha256 ?? "", /^[a-f0-9]{64}$/);
@@ -152,21 +174,21 @@ void test("submit previews an exact candidate hash then atomically registers its
   assert.equal(preview.data?.decision_appended, false);
   assert.deepEqual(await Promise.all(protectedPaths.map((item) => readFile(path.join(workspace, item), "utf8"))), protectedBefore);
 
-  const missingConfirmation = runCli(["submit", "work:rq-brief", "--input", inputPath, "--actor-kind", "agent", "--actor-name", "deep-research", "--json"], root);
+  const missingConfirmation = runCli(["submit", selector, "--input", inputPath, "--actor-kind", "agent", "--actor-name", "deep-research", "--json"], root);
   assert.equal(missingConfirmation.status, 2);
   assert.equal(parseEnvelope(missingConfirmation).error?.code, "confirmation_required");
 
-  const confirmedArgs = ["submit", "work:rq-brief", "--input", inputPath, "--actor-kind", "agent", "--actor-name", "deep-research", "--expected-sha256", preview.data?.candidate_sha256 ?? "", "--yes", "--json"];
+  const confirmedArgs = ["submit", selector, "--input", inputPath, "--actor-kind", "agent", "--actor-name", "deep-research", "--expected-sha256", preview.data?.candidate_sha256 ?? "", "--yes", "--json"];
   const submitted = parseEnvelope<{ status: string; workflow_control_after: { ready_items: string[] } }>(runCli(confirmedArgs, root));
   assert.equal(submitted.ok, true);
   assert.equal(submitted.data?.status, "submitted");
-  assert.deepEqual(submitted.data?.workflow_control_after.ready_items, ["work:bibliography"]);
+  assert.deepEqual(submitted.data?.workflow_control_after.ready_items, [`work:${instanceId}/bibliography`]);
   const retried = parseEnvelope<{ status: string; plan: unknown[] }>(runCli(confirmedArgs, root));
   assert.equal(retried.data?.status, "already_submitted");
   assert.deepEqual(retried.data?.plan, []);
   assert.deepEqual(await Promise.all(protectedPaths.map((item) => readFile(path.join(workspace, item), "utf8"))), protectedBefore);
 
-  const invalidActor = runCli(["submit", "work:rq-brief", "--input", inputPath, "--actor-kind", "model", "--actor-name", "bad", "--dry-run", "--json"], root);
+  const invalidActor = runCli(["submit", selector, "--input", inputPath, "--actor-kind", "model", "--actor-name", "bad", "--dry-run", "--json"], root);
   assert.equal(invalidActor.status, 2);
   assert.equal(parseEnvelope(invalidActor).error?.code, "invalid_actor_kind");
   await cleanup(root);
@@ -447,5 +469,18 @@ void test("pack excludes registered artifacts whose symlink resolves outside the
   await rm(outside, { force: true });
   await cleanup(root);
 });
+
+async function startSliceViaCli(root: string): Promise<string> {
+  const instruction = parseEnvelope<{ instruction_basis_sha256: string }>(runCli(["instructions", "subflow:tpl-research", "--json"], root));
+  assert.equal(instruction.ok, true);
+  const inputPath = path.join(root, "start-helper.json");
+  await writeFile(inputPath, `${JSON.stringify({ schema_version: "1", instruction_basis_sha256: instruction.data?.instruction_basis_sha256, acknowledged_user_input_ids: ["research_goal"], prerequisite_artifact_ids: [], prerequisite_decision_ids: [], parent_subflow_selector: null }, null, 2)}\n`, "utf8");
+  const base = ["start", "subflow:tpl-research", "--input", inputPath, "--actor-kind", "agent", "--actor-name", "academic-pipeline", "--confirmed-by", "researcher"];
+  const preview = parseEnvelope<{ plan_sha256: string }>(runCli([...base, "--dry-run", "--json"], root));
+  assert.equal(preview.ok, true);
+  const result = parseEnvelope<{ instance: { instance_id: string } }>(runCli([...base, "--expected-plan-sha256", preview.data?.plan_sha256 ?? "", "--yes", "--json"], root));
+  assert.equal(result.ok, true);
+  return result.data?.instance.instance_id ?? "";
+}
 
 function hash(value: string | Uint8Array): string { return createHash("sha256").update(value).digest("hex"); }

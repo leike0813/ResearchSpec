@@ -29,9 +29,11 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
 
   const deepResearch = await readFile(path.join(root, "skills/arsu/deep-research/SKILL.md"), "utf8");
   assert.match(deepResearch, /researchspec status --json/);
-  assert.match(deepResearch, /researchspec instructions work:<id> --json/);
+  assert.match(deepResearch, /work:<instance>\/<node>/);
+  assert.match(deepResearch, /policy is `automatic`/);
+  assert.match(deepResearch, /--expected-sha256/);
   assert.match(deepResearch, /researchspec-submit/);
-  assert.match(deepResearch, /Do not hand-edit state, registries, receipts, or JSONL ledgers/);
+  assert.match(deepResearch, /never hand-edit\s+state, registries, receipts, or JSONL ledgers/);
   assert.match(deepResearch, /references\/shared\/handoff_schemas\.md/);
   assert.match(deepResearch, /references\/cross-skill\/academic-paper\/references\/writing_quality_check\.md/);
   assert.doesNotMatch(deepResearch, /\.\.\/docs\/design\/old\.md/);

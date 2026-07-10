@@ -7,6 +7,8 @@ import { planToolDelivery, type InstallationRecord } from "../adapters/delivery.
 import { detectTools, orderTools, parseToolExpression } from "../adapters/tools.js";
 import { WorkItemSelectorSchema, WORKFLOW_PROFILE_IDS, type WorkflowProfileId } from "../core/contracts/workflow.js";
 import { Sha256Schema, SubmitActorKindSchema, SubmitActorSchema } from "../core/contracts/artifact.js";
+import { RuntimeSelectorSchema, SubflowSelectorSchema, parseRuntimeSelector } from "../core/contracts/runtime-selector.js";
+import { StartActorSchema } from "../core/contracts/subflow.js";
 import { ArtifactSubmitError, executeArtifactSubmit, planArtifactSubmit } from "../core/runtime/artifact-submit.js";
 import { archiveItem, decideItem, type DecisionChoice } from "../core/runtime/lifecycle.js";
 import { assertProposalBasisCurrent, ContractChangeError, planContractChangeProposal } from "../core/runtime/contract-change.js";
@@ -14,6 +16,7 @@ import { renderHandoff } from "../core/runtime/handoff.js";
 import { buildContextPack } from "../core/runtime/pack.js";
 import { buildStatus, formatStatusHuman, listItems, showItem, type ListType } from "../core/runtime/query.js";
 import { buildWorkflowInstructions } from "../core/runtime/workflow-control.js";
+import { buildSubflowInstructions, executeSubflowStart, planSubflowStart, SubflowStartError } from "../core/runtime/subflow-control.js";
 import { runWorkspaceChecks, type CheckTarget } from "../core/validation/check.js";
 import type { Diagnostic } from "../core/validation/types.js";
 import { resolveWorkspace } from "../core/workspace/discover.js";
@@ -31,6 +34,7 @@ export interface PackOptions { out?: string; includeArtifacts?: boolean }
 export interface DecideOptions { decision?: DecisionChoice; actorName?: string; reason?: string }
 export interface ProposeOptions { input: string; actorKind: "human" | "agent"; actorName: string }
 export interface SubmitOptions { input: string; actorKind: string; actorName: string; expectedSha256?: string }
+export interface StartOptions { input: string; actorKind: string; actorName: string; confirmedBy: string; expectedPlanSha256?: string }
 
 export async function handleInit(inputPath: string | undefined, options: InitOptions, context: CommandContext): Promise<CommandResult> {
   if (options.profile !== undefined && !WORKFLOW_PROFILE_IDS.includes(options.profile as WorkflowProfileId)) throw new CliError("invalid_profile", `Unknown profile: ${options.profile}`, 2, `Supported profiles: ${WORKFLOW_PROFILE_IDS.join(", ")}.`);
@@ -159,9 +163,17 @@ export async function handleStatus(context: CommandContext): Promise<CommandResu
 }
 
 export async function handleInstructions(selector: string, context: CommandContext): Promise<CommandResult> {
-  if (!WorkItemSelectorSchema.safeParse(selector).success) throw new CliError("invalid_work_item_selector", `Invalid work-item selector: ${selector}`, 2, "Use the canonical form work:<safe-id>.");
+  if (!RuntimeSelectorSchema.safeParse(selector).success) throw new CliError("invalid_runtime_selector", `Invalid runtime selector: ${selector}`, 2, "Use subflow:<id>, work:<id>, gate:<id>, or transition:<id>.");
   const workspace = await requireWorkspace(context);
-  const result = await buildWorkflowInstructions(await loadWorkspaceSnapshot(workspace), selector.slice("work:".length));
+  const snapshot = await loadWorkspaceSnapshot(workspace);
+  const parsed = parseRuntimeSelector(selector);
+  if (parsed?.kind === "reserved") throw new CliError("runtime_selector_unavailable", `${parsed.namespace} instructions are reserved for a later control-plane change.`, 1, undefined, { selector });
+  if (parsed?.kind === "subflow_template" || parsed?.kind === "subflow_instance") {
+    const result = await buildSubflowInstructions(snapshot, selector);
+    if (!result.ok) throw new CliError(result.code, `Subflow instructions are unavailable: ${selector}`, 1, undefined, { selector });
+    return success("instructions", result.packet, { stdout: [`Subflow: ${selector}`, `Route: ${result.packet.route.route_ref}`, `State: ${result.packet.state}`, ""].join("\n") });
+  }
+  const result = await buildWorkflowInstructions(snapshot, selector);
   if (!result.ok) {
     const messages = {
       workflow_unconfigured: "The current workflow has no dynamic work-item graph.",
@@ -175,6 +187,34 @@ export async function handleInstructions(selector: string, context: CommandConte
   }
   const packet = result.packet;
   return success("instructions", packet, { stdout: [`Work item: ${packet.selector}`, `Producer skill: ${packet.producer_skill}`, `Output: ${packet.output.resolved_path}`, `Template: ${packet.output.template_ref}`, ""].join("\n") });
+}
+
+export async function handleStart(selector: string, options: StartOptions, context: CommandContext): Promise<CommandResult> {
+  if (!SubflowSelectorSchema.safeParse(selector).success || parseRuntimeSelector(selector)?.kind !== "subflow_template") throw new CliError("invalid_subflow_selector", `Invalid start selector: ${selector}`, 2, "Use subflow:tpl-<safe-id>.");
+  if (options.expectedPlanSha256 !== undefined && !Sha256Schema.safeParse(options.expectedPlanSha256).success) throw new CliError("invalid_expected_plan_sha256", "--expected-plan-sha256 must be 64 lowercase hexadecimal characters.", 2);
+  const actorResult = StartActorSchema.safeParse({ kind: options.actorKind, name: options.actorName });
+  if (!actorResult.success || !options.confirmedBy.trim()) throw new CliError("invalid_start_input", "Start actor and --confirmed-by are required and must be valid.", 2, undefined, actorResult.success ? undefined : actorResult.error.issues);
+  if (!context.dryRun && !context.interactive && (!context.yes || !options.expectedPlanSha256)) throw new CliError("confirmation_required", "Non-interactive Start requires --expected-plan-sha256 and --yes.", 2, "Preview the identical Start input with --dry-run --json after the user confirms the route.");
+  const workspace = await requireWorkspace(context);
+  const inputPath = path.resolve(context.cwd, options.input);
+  let payload: unknown;
+  try { payload = JSON.parse(await readFile(inputPath, "utf8")) as unknown; }
+  catch (error) { throw new CliError("invalid_start_input", `Cannot read Start input: ${error instanceof Error ? error.message : String(error)}`, 2); }
+  try {
+    const plan = await planSubflowStart({ snapshot: await loadWorkspaceSnapshot(workspace), selector, payload, actor: actorResult.data, confirmedBy: options.confirmedBy, expectedPlanSha256: options.expectedPlanSha256 });
+    if (!context.dryRun && plan.status !== "already_started" && !context.yes) {
+      const approved = await confirm({ message: `Start ${selector} as ${plan.instance.instance_id}? This authorizes declared automatic artifact registration but not Gates, Decisions, or transitions.`, default: false });
+      if (!approved) throw new CliError("cancelled", "Subflow start cancelled.", 1);
+    }
+    const outcome = context.dryRun ? undefined : await executeSubflowStart(plan, workspace);
+    const status = context.dryRun ? plan.status : outcome?.status ?? plan.status;
+    return success("start", { status, selector, plan_sha256: plan.plan_sha256, instance_selector: `subflow:${plan.instance.instance_id}`, instance: plan.instance, receipt: plan.receipt, dry_run: context.dryRun, plan: summarizePlan(plan.writePlan.operations), workflow_control_after: outcome?.workflow_control_after ?? null, artifact_registry_updated: false, gate_appended: false, decision_appended: false, semantic_work_executed: false }, { stdout: `${context.dryRun ? "Would start" : status === "already_started" ? "Already started" : "Started"} ${selector} as ${plan.instance.instance_id}.\n` });
+  } catch (error) {
+    if (error instanceof CliError) throw error;
+    if (error instanceof SubflowStartError) throw new CliError(error.code, error.message, error.kind === "usage" ? 2 : error.kind === "conflict" ? 3 : 1, undefined, error.details);
+    if ((error as NodeJS.ErrnoException).code === "EWRITE_CONFLICT") throw new CliError("subflow_start_conflict", error instanceof Error ? error.message : String(error), 3);
+    throw new CliError("internal_error", error instanceof Error ? error.message : String(error), 4);
+  }
 }
 
 export async function handleSubmit(selector: string, options: SubmitOptions, context: CommandContext): Promise<CommandResult> {
@@ -196,7 +236,7 @@ export async function handleSubmit(selector: string, options: SubmitOptions, con
   }
   try {
     const plan = await planArtifactSubmit({ snapshot: await loadWorkspaceSnapshot(workspace), selector, payload, actor: actorResult.data, expectedSha256: options.expectedSha256 });
-    if (!context.dryRun && plan.status !== "already_submitted" && !context.yes) {
+    if (!context.dryRun && plan.status !== "already_submitted" && plan.confirmation_basis !== "subflow_start" && !context.yes) {
       const approved = await confirm({ message: `Submit ${selector} at SHA-256 ${plan.candidate_sha256} and register its receipt? This does not update state, Gates, or Decisions.`, default: false });
       if (!approved) throw new CliError("cancelled", "Artifact submission cancelled.", 1);
     }
@@ -210,6 +250,7 @@ export async function handleSubmit(selector: string, options: SubmitOptions, con
       receipt_artifact: plan.receipt_artifact,
       validation: plan.validation,
       projected_completion: plan.projected_completion,
+      confirmation_basis: plan.confirmation_basis,
       dry_run: context.dryRun,
       plan: summarizePlan(plan.writePlan.operations),
       workflow_control_after: result?.workflow_control_after ?? null,

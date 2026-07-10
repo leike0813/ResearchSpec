@@ -410,13 +410,16 @@ command wrapper 只是不同 agent 工具的 adapter。目标交付量是：
 - 4 个 ARSU Skills 与 9 个 Companion Skills 的多工具投影。
 - converter-owned routing catalog，覆盖 25 个 modes、2 个 pipeline entries、artifacts、
   prerequisites、near-misses、risk/Gate policy 和粗粒度成本，并投影 ARSU descriptions。
+- active-run `state.yaml` 下的 strict subflow/round instances、parent/round identity、
+  all/quorum parallel frontier、`instructions subflow:` 与原子 `start`；
+- instance-scoped `work:<instance>/<node>` 和由 Start confirmation 授权的 automatic
+  hash-bound `submit work:`；旧静态 workspaces 保持兼容。
 
 当前实现尚不具备：
 
 - `researchspec-navigate` 以及基于 catalog 的 workspace route availability evaluation；
-- active-run 下的通用 subflow/round instance；
-- `subflow:`、`gate:`、`transition:` 的完整 status/instructions；
-- `start`、`submit gate:` 与 `advance`；
+- `gate:`、`transition:` 的可执行 status/instructions；
+- `submit gate:` 与 `advance`；
 - Gate 的用户确认、challenge/override 与 transition receipt；
 - 四类 ARSU 的完整 profile graphs、并行组和动态 revision rounds；
 - 4 Companion、15 CLI、31×8/28×8 的目标 surface 收敛。
@@ -433,7 +436,8 @@ command wrapper 只是不同 agent 工具的 adapter。目标交付量是：
 | 4 | `add-arsu-workflow-profiles` | deep-research、academic-paper、reviewer、pipeline 的完整 mode/profile graphs |
 | 5 | `consolidate-researchspec-agent-surface` | Navigate、四 Companion、旧投影清理、31×8/28×8 delivery |
 
-其中 `add-arsu-routing-catalog` 已实现并保持 active，后续四个技术层仍待完成。
+其中 routing catalog 与 subflow instance control plane 已实现；Gate/transition、完整 profiles
+和 surface consolidation 仍待完成。
 
 Umbrella change 只有在以下用户旅程全部通过时才能归档：Bootstrap、模糊路由、专家直达、standalone、pipeline、并行 join、Gate challenge/override、revision round、resume、context export 和 terminal completion。
 

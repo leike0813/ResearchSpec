@@ -109,11 +109,8 @@ export function resolveInitTarget(inputPath: string | undefined, cwd: string): s
 
 export function getWorkspaceEntries(workspaceRoot: string, profile: WorkflowProfileId = "arsu-paper"): WorkspaceEntry[] {
   const templates = getWorkspaceTemplates(profile);
-  const profileDirectories = profile === "arsu-research-slice"
-    ? [...new Set((ARSU_RESEARCH_SLICE_WORKFLOW.work_items ?? []).map((item) => path.dirname(item.output.workspace_path)))]
-    : [];
   return [
-    ...[...REQUIRED_DIRECTORIES, ...profileDirectories].map((dir): WorkspaceEntry => ({ kind: "dir", path: path.join(workspaceRoot, dir) })),
+    ...REQUIRED_DIRECTORIES.map((dir): WorkspaceEntry => ({ kind: "dir", path: path.join(workspaceRoot, dir) })),
     ...templates.map((item): WorkspaceEntry => ({
       kind: "file",
       path: path.join(workspaceRoot, item.relativePath),

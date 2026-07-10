@@ -181,18 +181,14 @@ ResearchSpec SHALL archive only resolved contract changes and draft patches.
 ### Requirement: Dynamic Workflow Status Contract
 
 `researchspec status` SHALL expose one read-only workflow-control view derived
-from the same current workspace snapshot and workflow evaluator used by
-instructions.
+from the same snapshot and evaluator used by generalized instructions and Submit.
 
-#### Scenario: Configured workflow reports a frontier
+#### Scenario: Instance workflow reports a generalized frontier
 
-- **GIVEN** a valid workflow with typed work items
+- **GIVEN** a valid workflow with subflow templates and zero or more instances
 - **WHEN** the user runs `researchspec status --json`
-- **THEN** `data.workflow_control` SHALL include profile, active stage, control
-  state, canonical ready-item selectors, work-item states, missing dependencies,
-  warnings, outputs, and unlocks
-- **AND** existing status fields SHALL remain available
-- **AND** work items SHALL NOT be duplicated at another top-level data field
+- **THEN** `workflow_control` SHALL include frontier, startable subflows, instances, parallel groups, scoped work states, ready work selectors, blockers, warnings and unlocks
+- **AND** existing status fields and legacy work views SHALL remain available
 
 #### Scenario: Unconfigured workflow remains inspectable
 
@@ -204,32 +200,32 @@ instructions.
 
 ### Requirement: Dynamic Work-Item Instructions
 
-ResearchSpec SHALL expose `instructions work:<id>` as a read-only CLI primitive
-for a ready work item.
+ResearchSpec SHALL expose read-only instructions for available subflow templates, active subflow instances, scoped work and legacy work through canonical runtime selectors.
 
-#### Scenario: Ready item returns a separated instruction packet
+#### Scenario: Template selector returns route packet
 
-- **GIVEN** a work item is ready
-- **WHEN** the user runs `researchspec instructions work:<id> --json`
-- **THEN** the result SHALL include the canonical selector, work-item and stage
-  IDs, producer Skill, description, context, rules, dependency metadata, candidate
-  output paths, resolved ARSU template, validation profile, completion policy,
-  forbidden writes, and unlocks as separate fields
-- **AND** completion SHALL explicitly report `submit_available: false`
-- **AND** the command SHALL NOT modify workspace files
+- **GIVEN** a subflow template is available for confirmation
+- **WHEN** the user requests `instructions subflow:tpl-<id> --json`
+- **THEN** the packet SHALL include catalog route summary, prerequisites, template/parallel scope, instruction basis and Start contract
 
-#### Scenario: Selector syntax is constrained
+#### Scenario: Instance selector returns resume packet
 
-- **WHEN** the user supplies a bare, empty, path-like, or otherwise unsafe
-  work-item selector
-- **THEN** the command SHALL return `invalid_work_item_selector` with exit code 2
+- **GIVEN** a subflow instance exists
+- **WHEN** the user requests its instructions
+- **THEN** the packet SHALL include parent/round/lifecycle, active stage, blockers and current frontier
 
-#### Scenario: Runtime frontier prevents invalid instruction use
+#### Scenario: Ready scoped work returns separated instructions
 
-- **WHEN** the workflow is unconfigured or invalid, the work item is unknown,
-  blocked, or already done, or its template resource cannot be resolved
-- **THEN** the command SHALL return the corresponding stable domain error
-- **AND** it SHALL NOT infer or fabricate instructions
+- **GIVEN** an instance work item is dispatchable
+- **WHEN** the user requests `instructions work:<instance>/<node> --json`
+- **THEN** it SHALL include the established work packet fields plus instance provenance, submission policy and authorization
+- **AND** it SHALL not write the workspace
+
+#### Scenario: Selector syntax and availability are constrained
+
+- **WHEN** a selector is unsafe, unknown, blocked, done, capacity-deferred, or belongs to the unavailable Gate/transition layer
+- **THEN** instructions SHALL return the corresponding stable usage/domain error
+- **AND** it SHALL not infer a packet
 
 ### Requirement: Public Artifact Submit Command
 
@@ -266,3 +262,24 @@ Dynamic work-item instructions SHALL advertise whether the runtime can submit th
 - **WHEN** a ready work item uses a supported validation profile
 - **THEN** instructions SHALL retain existing fields and set `submit_available: true`
 - **AND** it SHALL include candidate path, input shape, dry-run command, confirmation/hash requirements, and explicit state/Gate/Decision non-effects
+
+### Requirement: Public Subflow Start Command
+ResearchSpec SHALL expose `start subflow:<template-id>` with strict input, actor/confirmation identity, dry-run, expected-plan binding and versioned JSON results.
+
+#### Scenario: Non-interactive start binds the previewed plan
+- **WHEN** Start executes without an interactive TTY
+- **THEN** it SHALL require `--expected-plan-sha256` and `--yes`
+- **AND** the expected hash SHALL match the current route/template/prerequisite/state plan
+
+#### Scenario: Start success states are stable
+- **WHEN** Start is previewed, first committed or exactly retried
+- **THEN** JSON data SHALL report `would_start`, `started` or `already_started`
+- **AND** it SHALL explicitly report that artifacts, Gates, Decisions and semantic work were not written
+
+#### Scenario: Start failures use stable exit classes
+- **WHEN** selector, input, actor, confirmer or plan hash syntax is invalid
+- **THEN** Start SHALL return exit code 2
+- **WHEN** workflow, route, prerequisites, parent or run lifecycle blocks start
+- **THEN** Start SHALL return exit code 1
+- **WHEN** receipt, instance, plan or read preconditions conflict
+- **THEN** Start SHALL return exit code 3

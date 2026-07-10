@@ -3,12 +3,14 @@ import { mkdir, mkdtemp, readFile, rm, symlink, writeFile } from "node:fs/promis
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { test } from "node:test";
+import { stringify } from "yaml";
 
 import { ArtifactSubmitError, executeArtifactSubmit, planArtifactSubmit } from "../src/core/runtime/artifact-submit.js";
 import { evaluateWorkflowControl } from "../src/core/runtime/workflow-control.js";
 import { getWorkspaceEntries } from "../src/core/workspace/layout.js";
 import { loadWorkspaceSnapshot } from "../src/core/workspace/snapshot.js";
 import { sha256 } from "../src/core/workspace/write-plan.js";
+import { ARSU_RESEARCH_SLICE_WORKFLOW } from "../src/core/workflow/profiles/arsu-research-slice.js";
 
 const payload = { schema_version: "1", dependency_artifact_ids: [], producer_mode: "full" } as const;
 const actor = { kind: "agent", name: "deep-research" } as const;
@@ -219,6 +221,16 @@ async function createWorkspace(): Promise<string> {
       await writeFile(entry.path, entry.content, "utf8");
     }
   }
+  const template = ARSU_RESEARCH_SLICE_WORKFLOW.subflow_templates[0];
+  assert.ok(template);
+  const legacyWork = template.work_items.map((item) => {
+    const rest: Record<string, unknown> = structuredClone(item);
+    Reflect.deleteProperty(rest, "submission");
+    return { ...rest, output: { artifact_type: item.output.artifact_type, workspace_path: `runs/current/artifacts/${path.basename(item.output.workspace_path_template)}`, template_ref: item.output.template_ref } };
+  });
+  await mkdir(path.join(workspace, "runs/current/artifacts"), { recursive: true });
+  await writeFile(path.join(workspace, "specs/workflow.yaml"), stringify({ schema_version: "0.1", workflow_id: "arsu-research-slice", workflow_kind: "arsu-research-slice", entry_stage_id: "research", terminal_stage_ids: [], stages: [{ stage_id: "research", title: "Research slice" }], work_items: legacyWork }), "utf8");
+  await writeFile(path.join(workspace, "runs/current/state.yaml"), 'schema_version: "0.1"\nrun_id: current\nworkflow_id: arsu-research-slice\nstatus: not_started\nactive_stage_id: research\npending_decisions: []\ndiagnostics: []\n', "utf8");
   return root;
 }
 

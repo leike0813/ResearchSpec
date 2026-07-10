@@ -35,6 +35,7 @@ export const SubmittedArtifactRecordSchema = z.object({
   artifact_id: SafeIdSchema,
   artifact_type: z.string().min(1),
   work_item_id: SafeIdSchema,
+  subflow_instance_id: SafeIdSchema.optional(),
   path: z.string().min(1),
   sha256: Sha256Schema,
   status: z.literal("candidate"),
@@ -71,7 +72,13 @@ export const ArtifactSubmitReceiptSchema = z.object({
   schema_version: z.literal("1"),
   receipt_type: z.literal("artifact_submit"),
   submission_id: SafeIdSchema,
-  selector: z.string().regex(/^work:[A-Za-z0-9][A-Za-z0-9._-]*$/),
+  selector: z.string().regex(/^work:(?:sf-[A-Za-z0-9][A-Za-z0-9._-]*\/)?[A-Za-z0-9][A-Za-z0-9._-]*$/),
+  subflow_instance_id: SafeIdSchema.optional(),
+  start_authorization: z.object({
+    plan_sha256: Sha256Schema,
+    receipt_path: z.string().min(1),
+    receipt_sha256: Sha256Schema,
+  }).strict().optional(),
   artifact: z.object({
     artifact_id: SafeIdSchema,
     artifact_type: z.string().min(1),

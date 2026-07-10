@@ -11,10 +11,9 @@ schema、validator、CLI 行为和 ARSU wrapper preflight 协议。
 
 - **Target v0.1**：单 active run、动态 subflow/round、parallel/join、Gate confirmation、
   transition receipt 与 selector instructions 所需的领域信息。
-- **Current implementation（2026-07-10）**：现有 workspace DTO、静态 stage/work items、
-  receipt-backed `submit work:`、既有 ledgers，以及 converter-owned typed routing catalog。
-- **Pending technical layer**：subflow/Gate/transition 的最终 DTO、持久化位置和迁移策略；
-  本文不把方向性字段写成已实现 Schema。
+- **Current implementation（2026-07-10）**：legacy/static 与 Schema 0.2 instance workflow/state
+  union、subflow/round、parallel join、receipt-backed scoped Submit，以及 typed routing catalog。
+- **Pending technical layer**：Gate/transition DTO、完整 profiles 和迁移工具。
 
 本文不是最终 JSON Schema，不冻结 TypeScript 类型、CLI wire shape 或
 converter 注入实现。后续实现可以调整字段命名细节，但不应改变本文确立
@@ -682,8 +681,8 @@ academic-pipeline 硬编码进程序。
 | `mode_profiles` | list[`ModeProfile`] | 否 | skill/mode 读写约束复用块 |
 | `human_checkpoints` | list[`HumanCheckpoint`] | 否 | 必须人类确认的节点 |
 
-Target v0.1 的 profile 还必须能表达以下领域概念，最终字段名由
-`add-subflow-instance-control-plane` 与 `add-gate-transition-control-plane` 冻结：
+Schema `0.2` 已实现 `subflow_templates`、`round` 和 `parallel_groups`；Gate/transition 字段仍由
+`add-gate-transition-control-plane` 冻结：
 
 | 概念 | 最小语义 | 约束 |
 | --- | --- | --- |
@@ -731,11 +730,14 @@ Current `WorkflowNodeDefinition` 是 work-level `status/instructions` 的运行�
 
 节点状态固定为 `done / ready / blocked`。`done` 需要 `work_item_id` 对应的 registry entry、artifact type/path、文件、SHA-256，以及每个 `required_gate_ids` 对应的 pass/pass-with-conditions 或 accepted override。`require_receipt: true` 时还必须存在 hash-trusted `artifact_submit_receipt` registry record 与严格 receipt payload，且 candidate ID/path/hash、selector、profile 和关联 ID 相互一致。`artifact_statuses` 与 `verification_states` 是额外完成约束，不能替代 required gates；文件存在或手写 registry entry 本身不构成完成。`ready` 还必须处于 active stage。当前控制面在 active stage 全部节点完成后返回 `stage_work_complete: true` 与 `transition_required: true`，不会修改 state 或宣告整个 run 完成。
 
-当前显式试验 profile `arsu-research-slice` 将 RQ Brief、Bibliography、Synthesis 三个节点放在同一非 terminal 的 `research` stage；输出分别为 `runs/current/artifacts/rq-brief.md`、`bibliography.md` 和 `synthesis-report.md`，template refs 指向 `ars:shared/handoff_schemas.md#schema-1-rq-brief` 至 Schema 3。`init` 创建派生的 artifact 父目录，但不复制 template 或创建空 artifact 文件。三个节点全部 done 后仍只到达 transition boundary。
+当前显式试验 profile `arsu-research-slice` 在 `init` 时只声明 partial
+`subflow:tpl-research`，不创建 instance 或 artifact。用户确认并 `start` 后，RQ Brief、
+Bibliography、Synthesis 位于该 instance 的 `research` stage，输出解析到
+`runs/current/subflows/<instance>/artifacts/`。三个节点全部 done 后仍只到达 transition boundary。
 
-这个 Slice 是 Current implementation 的协议验证，不是完整 ARSU profile。Target v0.1 的
-`instructions` 将同时支持 `subflow:`、`work:`、`gate:` 和 `transition:`，但不把依赖 artifact
-全文复制进 packet，也不允许 Agent 覆盖 profile-owned path/type/Gate/transition facts。
+这个 Slice 是 Current implementation 的协议验证，不是完整 ARSU profile。`instructions`
+已支持 template/instance `subflow:` 和 scoped/legacy `work:`；`gate:`/`transition:` 当前只冻结
+selector 语法并明确返回 unavailable。
 
 `WriteSurface` 字段：
 
@@ -833,9 +835,9 @@ near-miss/fallback refs、空 prerequisite group、fallback cycle、不一致 Ga
 职责：保存当前 run 的恢复点、active stage/mode、阻塞原因和最近 artifacts。
 它是运行位置 SSOT，不保存完整研究语义。
 
-Current implementation 只有一组静态 stage-oriented state。Target v0.1 保持一个 workspace
-最多一个 active run，但在 run 内增加动态 subflow/round instances；具体是扩展 `state.yaml`
-还是引入同目录 typed runtime file，由后续 technical change 决定。
+Current implementation 已确定 `runs/current/state.yaml` 是唯一 run-state SSOT。Schema `0.2`
+在单 active run 下保存 strict `subflows`，每个 instance 记录 template/route、parent、round、
+active stage、Start receipt ref 与 prerequisite IDs；Schema `0.1` 静态 state 继续兼容读取。
 
 写入 owner：
 
@@ -869,13 +871,14 @@ Current implementation 只有一组静态 stage-oriented state。Target v0.1 保
 | `blocking_gates` | list[ref] | 否 | 当前阻塞 gate |
 | `diagnostics` | list[`Diagnostic`] | 否 | 非阻断诊断 |
 
-Target runtime representation 至少必须能复算：
+Current subflow runtime 已能复算：
 
 - subflow instance ID、template ID、parent ID、round number 和 lifecycle state；
 - work/parallel group/join frontier；
-- pending Gate 与 proposed verdict/evidence；
-- eligible transitions 和它们的 Gate/Decision basis；
-- start/submit/advance receipts 与 resume frontier。
+- start receipt、instance-scoped work 和 automatic Submit authorization。
+
+Pending Gate/transition change 再增加 proposed verdict/evidence、eligible transitions 与
+advance receipts。
 
 这些字段由 CLI transaction 写入；Human、ARSU Skill 和 Companion 都不得手写。
 

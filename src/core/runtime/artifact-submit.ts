@@ -1,4 +1,5 @@
 import { lstat, readFile, realpath } from "node:fs/promises";
+import { readFileSync, realpathSync } from "node:fs";
 import path from "node:path";
 
 import {
@@ -13,7 +14,10 @@ import {
   type SubmittedArtifactRecord,
   type SubmitReceiptArtifactRecord,
 } from "../contracts/artifact.js";
-import { WorkItemSelectorSchema, type WorkflowNodeDefinition } from "../contracts/workflow.js";
+import { isInstanceRunState } from "../contracts/run-state.js";
+import { parseRuntimeSelector } from "../contracts/runtime-selector.js";
+import { SubflowStartReceiptSchema } from "../contracts/subflow.js";
+import { isInstanceWorkflowDefinition, resolveWorkNode, WorkItemSelectorSchema, type WorkflowNodeDefinition, type WorkflowNodeTemplate } from "../contracts/workflow.js";
 import { loadWorkspaceSnapshot, type WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { executeWritePlan, planFile, sha256, type PlannedWrite, type ReadPrecondition, type WritePlan } from "../workspace/write-plan.js";
 import { evaluateWorkflowControl, inspectArtifacts, passedCompletionGateIds, resolveTemplateReference, type WorkflowControlResult } from "./workflow-control.js";
@@ -36,6 +40,7 @@ export interface ArtifactSubmitPlan {
   validation: { profile: string; ok: true; diagnostics: []; checks: string[] };
   projected_completion: { state: "done" | "blocked"; missing_gate_ids: string[] };
   writePlan: WritePlan;
+  confirmation_basis: "subflow_start" | "per_artifact" | "legacy";
 }
 
 export interface ArtifactSubmitOutcome {
@@ -52,19 +57,17 @@ export async function planArtifactSubmit(input: {
   expectedSha256?: string;
   now?: string;
 }): Promise<ArtifactSubmitPlan> {
-  const selector = parseSelector(input.selector);
+  const selector = resolveSubmitTarget(input.snapshot, input.selector);
   const payload = parsePayload(input.payload);
   const snapshot = input.snapshot;
   if (snapshot.diagnostics.some((item) => item.blocking)) throw new ArtifactSubmitError("workflow_invalid", "Workspace or workflow has blocking diagnostics.", "domain", { diagnostics: snapshot.diagnostics.filter((item) => item.blocking) });
-  const node = snapshot.workflow?.work_items?.find((item) => item.id === selector.workItemId);
-  if (!snapshot.workflow?.work_items) throw new ArtifactSubmitError("workflow_unconfigured", "The current workflow has no work-item graph.", "domain");
-  if (!node) throw new ArtifactSubmitError("work_item_not_found", `Work item not found: ${input.selector}`, "domain");
+  const node = selector.node;
   if (node.validation_profile !== "research-artifact") throw new ArtifactSubmitError("candidate_validation_failed", `Unsupported validation profile: ${node.validation_profile}`, "domain");
 
   const candidate = await validateCandidate(snapshot, node, input.expectedSha256);
-  const ids = derivedIds(node.id, candidate.hash);
+  const ids = derivedIds(selector.instanceId ? `${selector.instanceId}-${node.id}` : node.id, candidate.hash);
   const dependencies = await trustedDependencies(snapshot, node, payload);
-  const existingForWorkItem = snapshot.artifacts.filter((item) => item.work_item_id === node.id);
+  const existingForWorkItem = snapshot.artifacts.filter((item) => item.work_item_id === node.id && (selector.instanceId ? item.subflow_instance_id === selector.instanceId : item.subflow_instance_id === undefined));
   const existingCandidate = existingForWorkItem.find((item) => item.artifact_id === ids.artifactId);
   const now = input.now ?? new Date().toISOString();
   const basis = submissionBasis(snapshot, node);
@@ -83,6 +86,7 @@ export async function planArtifactSubmit(input: {
     receipt_type: "artifact_submit",
     submission_id: ids.submissionId,
     selector: input.selector,
+    ...(selector.instanceId ? { subflow_instance_id: selector.instanceId, start_authorization: selector.startAuthorization } : {}),
     artifact: { artifact_id: ids.artifactId, artifact_type: node.output.artifact_type, path: candidateRegistryPath, sha256: candidate.hash },
     receipt_artifact_id: ids.receiptArtifactId,
     producer: input.actor,
@@ -111,6 +115,7 @@ export async function planArtifactSubmit(input: {
     artifact_id: ids.artifactId,
     artifact_type: node.output.artifact_type,
     work_item_id: node.id,
+    ...(selector.instanceId ? { subflow_instance_id: selector.instanceId } : {}),
     path: candidateRegistryPath,
     sha256: candidate.hash,
     status: "candidate",
@@ -140,7 +145,7 @@ export async function planArtifactSubmit(input: {
     if (!recordsEqual(existingCandidate, artifact)) throw new ArtifactSubmitError("submission_conflict", `Registered artifact conflicts with the planned submission: ${ids.artifactId}`, "conflict");
     const existingReceiptRecord = snapshot.artifacts.find((item) => item.artifact_id === ids.receiptArtifactId);
     if (!existingReceiptRecord || !recordsEqual(existingReceiptRecord, receiptArtifact) || !existingReceiptBytes) throw new ArtifactSubmitError("submission_conflict", "Existing submission is incomplete or its receipt is untrusted.", "conflict");
-    return buildPlan("already_submitted", input.selector, candidate.hash, artifact, receiptArtifact, receipt, validationChecks, node, passedGateIds, { operations: [] });
+    return buildPlan("already_submitted", input.selector, candidate.hash, artifact, receiptArtifact, receipt, validationChecks, node, passedGateIds, { operations: [] }, selector.confirmationBasis);
   }
   for (const record of snapshot.artifacts) {
     if ((record.artifact_id === ids.artifactId && !recordsEqual(record, artifact)) || (record.artifact_id === ids.receiptArtifactId && !recordsEqual(record, receiptArtifact))) {
@@ -149,7 +154,7 @@ export async function planArtifactSubmit(input: {
   }
 
   const control = await evaluateWorkflowControl(snapshot);
-  const status = control.work_items.find((item) => item.id === node.id);
+  const status = control.work_items.find((item) => item.selector === input.selector);
   if (!status) throw new ArtifactSubmitError("work_item_not_found", `Work item not found: ${input.selector}`, "domain");
   if (status.state !== "ready") throw new ArtifactSubmitError("work_item_blocked", `Work item is not ready: ${input.selector}`, "domain", { item: status });
 
@@ -161,7 +166,7 @@ export async function planArtifactSubmit(input: {
   if (!registryFile) throw new ArtifactSubmitError("workflow_invalid", "Artifact registry is unavailable.", "domain");
   const registryOperation: PlannedWrite = { action: "refresh", path: registryPath, relativePath: "runs/current/artifact-registry.json", content: registryText, scope: "workspace", ownership: "user", previousHash: registryFile.hash, nextHash: sha256(registryText), reason: "commit artifact submission registry last" };
   const readPreconditions = submissionPreconditions(snapshot, node, candidate.path, candidate.hash, dependencies);
-  return buildPlan("would_submit", input.selector, candidate.hash, artifact, receiptArtifact, receipt, validationChecks, node, passedGateIds, { operations: [receiptOperation, registryOperation], readPreconditions });
+  return buildPlan("would_submit", input.selector, candidate.hash, artifact, receiptArtifact, receipt, validationChecks, node, passedGateIds, { operations: [receiptOperation, registryOperation], readPreconditions }, selector.confirmationBasis);
 }
 
 export async function executeArtifactSubmit(plan: ArtifactSubmitPlan, workspace: string): Promise<ArtifactSubmitOutcome> {
@@ -174,9 +179,44 @@ export async function executeArtifactSubmit(plan: ArtifactSubmitPlan, workspace:
   return { status: "submitted", plan, workflow_control_after: await evaluateWorkflowControl(snapshot) };
 }
 
-function parseSelector(selector: string): { workItemId: string } {
+interface SubmitTarget {
+  node: WorkflowNodeDefinition;
+  nodeTemplate?: WorkflowNodeTemplate;
+  instanceId?: string;
+  startAuthorization?: { plan_sha256: string; receipt_path: string; receipt_sha256: string };
+  confirmationBasis: ArtifactSubmitPlan["confirmation_basis"];
+}
+
+function resolveSubmitTarget(snapshot: WorkspaceSnapshot, selector: string): SubmitTarget {
   if (!WorkItemSelectorSchema.safeParse(selector).success) throw new ArtifactSubmitError("invalid_work_item_selector", `Invalid work-item selector: ${selector}`, "usage");
-  return { workItemId: selector.slice("work:".length) };
+  const parsed = parseRuntimeSelector(selector);
+  if (parsed?.kind === "scoped_work") {
+    if (!isInstanceWorkflowDefinition(snapshot.workflow) || !isInstanceRunState(snapshot.runState)) throw new ArtifactSubmitError("workflow_unconfigured", "The current workflow has no subflow work graph.", "domain");
+    const instance = snapshot.runState.subflows.find((item) => item.instance_id === parsed.instanceId);
+    const template = instance ? snapshot.workflow.subflow_templates.find((item) => item.template_id === instance.template_id) : undefined;
+    const nodeTemplate = template?.work_items.find((item) => item.id === parsed.workItemId);
+    if (!instance || !template || !nodeTemplate) throw new ArtifactSubmitError("work_item_not_found", `Work item not found: ${selector}`, "domain");
+    const authorization = validateStartAuthorization(snapshot, instance.instance_id, instance.start_receipt);
+    if (nodeTemplate.submission.policy === "automatic" && !authorization) throw new ArtifactSubmitError("submission_dependency_untrusted", "Automatic submission requires a trusted subflow start receipt.", "domain");
+    return { node: resolveWorkNode(nodeTemplate, instance.instance_id, instance.round_number), nodeTemplate, instanceId: instance.instance_id, ...(authorization ? { startAuthorization: authorization } : {}), confirmationBasis: nodeTemplate.submission.policy === "automatic" ? "subflow_start" : "per_artifact" };
+  }
+  if (parsed?.kind !== "legacy_work" || !snapshot.workflow || isInstanceWorkflowDefinition(snapshot.workflow) || !snapshot.workflow.work_items) throw new ArtifactSubmitError("workflow_unconfigured", "The current workflow has no legacy work-item graph.", "domain");
+  const node = snapshot.workflow.work_items.find((item) => item.id === parsed.workItemId);
+  if (!node) throw new ArtifactSubmitError("work_item_not_found", `Work item not found: ${selector}`, "domain");
+  return { node, confirmationBasis: "legacy" };
+}
+
+function validateStartAuthorization(snapshot: WorkspaceSnapshot, instanceId: string, reference: { path: string; sha256: string; plan_sha256: string }) {
+  const filePath = path.resolve(snapshot.workspace, reference.path);
+  try {
+    const workspaceReal = realpathSync(snapshot.workspace);
+    const receiptReal = realpathSync(filePath);
+    if (!isInside(workspaceReal, receiptReal)) return undefined;
+    const bytes = readFileSync(filePath);
+    const receipt = SubflowStartReceiptSchema.parse(JSON.parse(Buffer.from(bytes).toString("utf8")) as unknown);
+    if (sha256(bytes) !== reference.sha256 || receipt.instance_id !== instanceId || receipt.plan_sha256 !== reference.plan_sha256) return undefined;
+    return { plan_sha256: reference.plan_sha256, receipt_path: reference.path, receipt_sha256: reference.sha256 };
+  } catch { return undefined; }
 }
 
 function parsePayload(payload: unknown): ArtifactSubmitInput {
@@ -250,9 +290,9 @@ function submissionPreconditions(snapshot: WorkspaceSnapshot, node: WorkflowNode
   return result;
 }
 
-function buildPlan(status: ArtifactSubmitPlan["status"], selector: string, candidateHash: string, artifact: SubmittedArtifactRecord, receiptArtifact: SubmitReceiptArtifactRecord, receipt: ArtifactSubmitReceipt, checks: string[], node: WorkflowNodeDefinition, passedGateIds: Set<string>, writePlan: WritePlan): ArtifactSubmitPlan {
+function buildPlan(status: ArtifactSubmitPlan["status"], selector: string, candidateHash: string, artifact: SubmittedArtifactRecord, receiptArtifact: SubmitReceiptArtifactRecord, receipt: ArtifactSubmitReceipt, checks: string[], node: WorkflowNodeDefinition, passedGateIds: Set<string>, writePlan: WritePlan, confirmationBasis: ArtifactSubmitPlan["confirmation_basis"]): ArtifactSubmitPlan {
   const missingGateIds = node.completion.required_gate_ids.filter((id) => !passedGateIds.has(id));
-  return { status, selector, candidate_sha256: candidateHash, artifact, receipt_artifact: receiptArtifact, receipt, validation: { profile: node.validation_profile, ok: true, diagnostics: [], checks }, projected_completion: { state: missingGateIds.length ? "blocked" : "done", missing_gate_ids: missingGateIds }, writePlan };
+  return { status, selector, candidate_sha256: candidateHash, artifact, receipt_artifact: receiptArtifact, receipt, validation: { profile: node.validation_profile, ok: true, diagnostics: [], checks }, projected_completion: { state: missingGateIds.length ? "blocked" : "done", missing_gate_ids: missingGateIds }, writePlan, confirmation_basis: confirmationBasis };
 }
 
 function derivedIds(workItemId: string, hash: string) {
@@ -280,6 +320,8 @@ function receiptSubmissionIdentityEquivalent(left: ArtifactSubmitReceipt, right:
     receipt_type: value.receipt_type,
     submission_id: value.submission_id,
     selector: value.selector,
+    subflow_instance_id: value.subflow_instance_id,
+    start_authorization: value.start_authorization,
     artifact: value.artifact,
     receipt_artifact_id: value.receipt_artifact_id,
     producer: value.producer,
@@ -295,7 +337,13 @@ function receiptSubmissionIdentityEquivalent(left: ArtifactSubmitReceipt, right:
 }
 
 function recordsEqual(left: Record<string, unknown>, right: Record<string, unknown>): boolean {
-  return JSON.stringify(left) === JSON.stringify(right);
+  return JSON.stringify(canonical(left)) === JSON.stringify(canonical(right));
+}
+
+function canonical(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(canonical);
+  if (!value || typeof value !== "object") return value;
+  return Object.fromEntries(Object.entries(value as Record<string, unknown>).sort(([left], [right]) => left.localeCompare(right)).map(([key, entry]) => [key, canonical(entry)]));
 }
 
 function toPosix(value: string): string { return value.split(path.sep).join("/"); }

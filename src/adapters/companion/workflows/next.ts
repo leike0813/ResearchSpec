@@ -47,10 +47,11 @@ researchspec archive --json
 4. Otherwise inspect pending contract changes and draft patches. Prefer an item already awaiting explicit review over creating new semantic work.
 5. Otherwise run the no-selector \`archive --json\` view to identify resolved, evidence-complete items. Recommend archive only after the candidate is inspectable.
 6. Otherwise select from \`status.data.workflow_control.ready_items\` and look up details in \`status.data.workflow_control.work_items\`. If several ready items have equal priority, show their selectors and ask the user to choose; do not invent an ordering absent from the graph.
-7. Run \`researchspec instructions work:<id> --json\` for the selected item. If its status warnings include \`candidate_unregistered\`, recommend \`researchspec-submit\`; otherwise recommend its declared \`producer_skill\`. Use returned dependencies, output path, allowed writes, validation, and completion policy; never reconstruct these from static Skill text.
-8. If \`workflow_control.configured\` is false, make “configure or migrate the workflow work-item graph” the action. If it is invalid, route to \`researchspec-check\`; do not guess from stage title.
-9. If the active stage has \`stage_work_complete: true\` and \`transition_required: true\`, report that a transition is required but unavailable in the current read-only control plane; do not claim the run is complete or edit state.
-10. Form one primary recommendation with owner skill/command, reason, blockers, required inputs, and a verifiable completion condition. Add at most two genuinely viable, lower-priority alternatives, then stop without executing.
+7. If no instance is active and \`startable_subflows\` is non-empty, request \`instructions subflow:<template> --json\`, present its exact route/prerequisite/artifact/Gate/cost summary, and ask for confirmation. Do not execute Start in this read-only workflow.
+8. Otherwise request instructions for the selected canonical scoped or legacy work selector. Use returned dependencies, parallel metadata, output, allowed writes, validation, submission, and completion policy; never reconstruct them from static Skill text.
+9. If a candidate is unregistered and submission is automatic with valid start authorization, recommend the producer Skill's direct hash-bound Submit sequence. Otherwise recommend \`researchspec-submit\` for manual/legacy registration.
+10. If \`workflow_control.configured\` is false, recommend configuring or migrating the graph. If invalid, route to \`researchspec-check\`. If \`transition_required\` is true, report the unavailable transition boundary without editing state.
+11. Form one primary recommendation with owner skill/command, reason, blockers, required inputs, and a verifiable completion condition. Add at most two viable alternatives, then stop without executing.
 
 ## Decision Table
 
@@ -61,7 +62,9 @@ researchspec archive --json
 | Pending change or draft patch | Review/show, then decide the canonical item. |
 | Resolved archivable item | \`researchspec-archive\` after its preview gate. |
 | Ready work item without candidate | Fetch \`instructions work:<id>\` and recommend its declared producer Skill. |
-| Ready item with \`candidate_unregistered\` | Recommend \`researchspec-submit work:<id>\`. |
+| Startable subflow and no active instance | Present \`instructions subflow:<template>\` and request route confirmation. |
+| Automatic item with candidate and trusted start authorization | Recommend the producer Skill's direct hash-bound Submit sequence. |
+| Manual/legacy item with \`candidate_unregistered\` | Recommend \`researchspec-submit work:<id>\`. |
 | Several ready work items | Ask the user to choose among their canonical \`work:<id>\` selectors. |
 | Work-item graph absent | Configure/migrate the workflow contract; do not infer a Skill. |
 | Active stage work complete | Report the pending transition boundary; do not edit state. |

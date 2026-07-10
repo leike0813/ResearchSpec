@@ -2,9 +2,12 @@ import { readFile, realpath } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { ARSU_ROUTING_CATALOG } from "../../arsu-converter/routing/catalog.js";
 import { fileExists } from "../../utils/fs.js";
 import { ArtifactSubmitReceiptSchema, SubmittedArtifactRecordSchema, SubmitReceiptArtifactRecordSchema } from "../contracts/artifact.js";
-import { validateWorkflowDefinition, type WorkflowNodeDefinition } from "../contracts/workflow.js";
+import { SubflowStartReceiptSchema } from "../contracts/subflow.js";
+import { isInstanceRunState } from "../contracts/run-state.js";
+import { isInstanceWorkflowDefinition, resolveWorkNode, validateWorkflowDefinition, type ParallelGroupDefinition, type SubflowTemplateDefinition, type WorkflowNodeDefinition, type WorkflowNodeTemplate } from "../contracts/workflow.js";
 import type { Diagnostic } from "../validation/types.js";
 import { latestById, type WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { sha256 } from "../workspace/write-plan.js";
@@ -29,12 +32,44 @@ export interface WorkItemStatus {
   artifact_id?: string;
   unlocks: string[];
   warnings: Array<{ code: "candidate_unregistered"; path: string }>;
+  instance_id?: string;
+  template_id?: string;
+  dispatchable: boolean;
+  submission_policy: "automatic" | "manual" | "legacy";
+  deferred_reason?: "parallel_capacity_deferred";
+}
+
+export interface SubflowControlStatus {
+  id: string;
+  selector: string;
+  kind: "template" | "instance";
+  template_id: string;
+  instance_id?: string;
+  route_ref: string;
+  route_coverage: "complete" | "partial";
+  state: "available" | "blocked" | "active" | "waiting" | "complete" | "failed" | "cancelled";
+  parent_subflow_id?: string | null;
+  round_number?: number | null;
+  active_stage_id?: string;
+  missing_dependencies: MissingDependency[];
+  ready_items: string[];
+}
+
+export interface ParallelGroupStatus {
+  id: string;
+  selector: string;
+  subflow_instance_id: string;
+  state: "satisfied" | "pending";
+  join_policy: "all" | "quorum";
+  ready_members: string[];
+  dispatchable_members: string[];
+  done_members: string[];
 }
 
 export interface WorkflowControlResult {
   profile: string;
   active_stage_id: string | null;
-  state: "unconfigured" | "blocked" | "ready" | "stage_work_complete";
+  state: "unconfigured" | "not_started" | "blocked" | "ready" | "stage_work_complete";
   configured: boolean;
   valid: boolean;
   reason?: "workflow_nodes_missing" | "workflow_invalid";
@@ -42,6 +77,10 @@ export interface WorkflowControlResult {
   ready_items: string[];
   stage_work_complete: boolean;
   transition_required: boolean;
+  frontier: string[];
+  startable_subflows: string[];
+  subflows: SubflowControlStatus[];
+  parallel_groups: ParallelGroupStatus[];
 }
 
 export interface ArtifactInspection {
@@ -84,7 +123,7 @@ export interface WorkflowInstructionPacket {
       candidate_path: string;
       dry_run_command: string;
       input_schema: { required: string[]; optional: string[] };
-      requires_confirmation: true;
+      requires_confirmation: boolean;
       requires_expected_sha256_for_noninteractive_execution: true;
       updates_state: false;
       appends_gate: false;
@@ -92,6 +131,13 @@ export interface WorkflowInstructionPacket {
     };
   };
   unlocks: string[];
+  instance_id?: string;
+  template_id?: string;
+  submission: {
+    policy: "automatic" | "manual" | "legacy";
+    authorization: { kind: "subflow_start"; valid: boolean; receipt_path: string; receipt_sha256: string } | null;
+    requires_user_confirmation: boolean;
+  };
 }
 
 export type WorkflowInstructionResult =
@@ -144,11 +190,17 @@ export function passedCompletionGateIds(snapshot: WorkspaceSnapshot): Set<string
 
 export async function evaluateWorkflowControl(snapshot: WorkspaceSnapshot): Promise<WorkflowControlResult> {
   const workflow = snapshot.workflow;
-  const nodes = workflow?.work_items ?? [];
   const profile = typeof snapshot.config.profile === "string" ? snapshot.config.profile : "unknown";
   const activeStage = typeof snapshot.state.active_stage_id === "string" ? snapshot.state.active_stage_id : null;
-  if (!workflow || nodes.length === 0) return { profile, active_stage_id: activeStage, state: "unconfigured", configured: false, valid: true, reason: "workflow_nodes_missing", work_items: [], ready_items: [], stage_work_complete: false, transition_required: false };
-  if (validateWorkflowDefinition(workflow).length > 0) return { profile, active_stage_id: activeStage, state: "blocked", configured: true, valid: false, reason: "workflow_invalid", work_items: [], ready_items: [], stage_work_complete: false, transition_required: false };
+  const empty = (state: WorkflowControlResult["state"], configured: boolean, valid: boolean, reason?: WorkflowControlResult["reason"]): WorkflowControlResult => ({ profile, active_stage_id: activeStage, state, configured, valid, ...(reason ? { reason } : {}), work_items: [], ready_items: [], stage_work_complete: false, transition_required: false, frontier: [], startable_subflows: [], subflows: [], parallel_groups: [] });
+  if (!workflow) return empty("unconfigured", false, true, "workflow_nodes_missing");
+  if (validateWorkflowDefinition(workflow).length > 0) return empty("blocked", true, false, "workflow_invalid");
+  if (isInstanceWorkflowDefinition(workflow)) {
+    if (!isInstanceRunState(snapshot.runState)) return empty("blocked", true, false, "workflow_invalid");
+    return evaluateInstanceWorkflow(snapshot, workflow.subflow_templates, profile);
+  }
+  const nodes = workflow.work_items ?? [];
+  if (nodes.length === 0) return empty("unconfigured", false, true, "workflow_nodes_missing");
 
   const inspections = await inspectArtifacts(snapshot);
   const facts = eventFacts(snapshot);
@@ -169,12 +221,12 @@ export async function evaluateWorkflowControl(snapshot: WorkspaceSnapshot): Prom
         if (outputProblems.length === 0) {
           return {
             id: node.id, selector: `work:${node.id}`, work_item_id: node.id, stage_id: node.stage_id, producer_skill: node.producer_skill, state: "done",
-            missing_dependencies: [], output_path: outputPath, artifact_id: stringValue(candidate.artifact.artifact_id), unlocks: unlocks.get(node.id) ?? [], warnings: [],
+            missing_dependencies: [], output_path: outputPath, artifact_id: stringValue(candidate.artifact.artifact_id), unlocks: unlocks.get(node.id) ?? [], warnings: [], dispatchable: false, submission_policy: "legacy",
           };
         }
         return {
           id: node.id, selector: `work:${node.id}`, work_item_id: node.id, stage_id: node.stage_id, producer_skill: node.producer_skill, state: "blocked",
-          missing_dependencies: outputProblems, output_path: outputPath, artifact_id: stringValue(candidate.artifact.artifact_id), unlocks: unlocks.get(node.id) ?? [], warnings: [],
+          missing_dependencies: outputProblems, output_path: outputPath, artifact_id: stringValue(candidate.artifact.artifact_id), unlocks: unlocks.get(node.id) ?? [], warnings: [], dispatchable: false, submission_policy: "legacy",
         };
       }
 
@@ -201,7 +253,7 @@ export async function evaluateWorkflowControl(snapshot: WorkspaceSnapshot): Prom
         : [];
       return {
         id: node.id, selector: `work:${node.id}`, work_item_id: node.id, stage_id: node.stage_id, producer_skill: node.producer_skill, state: missing.length ? "blocked" : "ready",
-        missing_dependencies: missing, output_path: outputPath, unlocks: unlocks.get(node.id) ?? [], warnings,
+        missing_dependencies: missing, output_path: outputPath, unlocks: unlocks.get(node.id) ?? [], warnings, dispatchable: missing.length === 0, submission_policy: "legacy",
       };
     })();
     memo.set(node.id, pending);
@@ -213,17 +265,165 @@ export async function evaluateWorkflowControl(snapshot: WorkspaceSnapshot): Prom
   const stageWorkComplete = activeItems.length > 0 && activeItems.every((item) => item.state === "done");
   const readyItems = workItems.filter((item) => item.state === "ready").map((item) => item.selector);
   const state = stageWorkComplete ? "stage_work_complete" : readyItems.length ? "ready" : "blocked";
-  return { profile, active_stage_id: activeStage, state, configured: true, valid: true, work_items: workItems, ready_items: readyItems, stage_work_complete: stageWorkComplete, transition_required: stageWorkComplete };
+  return { profile, active_stage_id: activeStage, state, configured: true, valid: true, work_items: workItems, ready_items: readyItems, stage_work_complete: stageWorkComplete, transition_required: stageWorkComplete, frontier: readyItems, startable_subflows: [], subflows: [], parallel_groups: [] };
 }
 
-export async function buildWorkflowInstructions(snapshot: WorkspaceSnapshot, workItemId: string): Promise<WorkflowInstructionResult> {
+async function evaluateInstanceWorkflow(snapshot: WorkspaceSnapshot, templates: SubflowTemplateDefinition[], profile: string): Promise<WorkflowControlResult> {
+  if (!isInstanceRunState(snapshot.runState)) throw new Error("Instance workflow requires instance run state.");
+  const inspections = await inspectArtifacts(snapshot);
+  const facts = eventFacts(snapshot);
+  const templateStatuses = templates.map((template): SubflowControlStatus => {
+    const missing = templateStartProblems(snapshot, template, inspections);
+    return {
+      id: template.template_id, selector: `subflow:${template.template_id}`, kind: "template", template_id: template.template_id,
+      route_ref: template.route_ref, route_coverage: template.route_coverage, state: missing.length ? "blocked" : "available",
+      missing_dependencies: missing, ready_items: [],
+    };
+  });
+  const allWork: WorkItemStatus[] = [];
+  const allGroups: ParallelGroupStatus[] = [];
+  const instanceStatuses: SubflowControlStatus[] = [];
+  const instanceCompletion: boolean[] = [];
+
+  for (const instance of snapshot.runState.subflows) {
+    const template = templates.find((item) => item.template_id === instance.template_id);
+    if (!template) {
+      instanceStatuses.push({ id: instance.instance_id, selector: `subflow:${instance.instance_id}`, kind: "instance", template_id: instance.template_id, instance_id: instance.instance_id, route_ref: instance.route_ref, route_coverage: "partial", state: "blocked", parent_subflow_id: instance.parent_subflow_id, round_number: instance.round_number, active_stage_id: instance.active_stage_id, missing_dependencies: [{ kind: "output", id: instance.template_id, reason: "subflow_template_missing" }], ready_items: [] });
+      instanceCompletion.push(false);
+      continue;
+    }
+    const nodes = template.work_items.map((item) => ({ template: item, node: resolveWorkNode(item, instance.instance_id, instance.round_number) }));
+    const byId = new Map(nodes.map((item) => [item.node.id, item]));
+    const groupsById = new Map(template.parallel_groups.map((item) => [item.id, item]));
+    const unlocks = new Map<string, string[]>();
+    for (const { node } of nodes) for (const dependency of node.requires.work_items) unlocks.set(dependency, [...(unlocks.get(dependency) ?? []), node.id]);
+    const memo = new Map<string, Promise<WorkItemStatus>>();
+    const groupMemo = new Map<string, Promise<boolean>>();
+
+    const evaluateGroup = (group: ParallelGroupDefinition): Promise<boolean> => {
+      const existing = groupMemo.get(group.id);
+      if (existing) return existing;
+      const pending = (async () => {
+        const statuses = await Promise.all(group.members.map((member) => evaluateNode(member.work_item_id)));
+        const done = statuses.filter((item) => item.state === "done").length;
+        return group.join.policy === "quorum"
+          ? done >= group.join.required_count
+          : group.members.filter((item) => item.required).every((member) => statuses.find((item) => item.work_item_id === member.work_item_id)?.state === "done");
+      })();
+      groupMemo.set(group.id, pending);
+      return pending;
+    };
+    const evaluateNode = (id: string): Promise<WorkItemStatus> => {
+      const existing = memo.get(id);
+      if (existing) return existing;
+      const pending = (async (): Promise<WorkItemStatus> => {
+        const entry = byId.get(id);
+        if (!entry) throw new Error(`Missing instance work item: ${id}`);
+        const { node, template: nodeTemplate } = entry;
+        const selector = `work:${instance.instance_id}/${node.id}`;
+        const outputPath = path.resolve(snapshot.workspace, node.output.workspace_path);
+        const candidates = inspections.filter((inspection) => inspection.artifact.work_item_id === node.id && inspection.artifact.subflow_instance_id === instance.instance_id);
+        const candidate = candidates[candidates.length - 1];
+        if (candidate) {
+          const problems = await completionProblems(snapshot, node, candidate, facts, inspections, { instanceId: instance.instance_id, selector });
+          return { id: `${instance.instance_id}/${node.id}`, selector, work_item_id: node.id, instance_id: instance.instance_id, template_id: template.template_id, stage_id: node.stage_id, producer_skill: node.producer_skill, state: problems.length ? "blocked" : "done", missing_dependencies: problems, output_path: outputPath, artifact_id: stringValue(candidate.artifact.artifact_id), unlocks: (unlocks.get(node.id) ?? []).map((item) => `work:${instance.instance_id}/${item}`), warnings: [], dispatchable: false, submission_policy: nodeTemplate.submission.policy };
+        }
+        const missing: MissingDependency[] = [];
+        if (instance.status !== "active") missing.push({ kind: "stage", id: instance.status, reason: "subflow_inactive" });
+        if (instance.active_stage_id !== node.stage_id) missing.push({ kind: "stage", id: node.stage_id, reason: "inactive_stage" });
+        for (const dependencyId of node.requires.work_items) if ((await evaluateNode(dependencyId)).state !== "done") missing.push({ kind: "work_item", id: dependencyId, reason: "work_item_not_done" });
+        for (const groupId of node.requires.parallel_groups) {
+          const group = groupsById.get(groupId);
+          if (!group || !(await evaluateGroup(group))) missing.push({ kind: "work_item", id: groupId, reason: "parallel_join_not_satisfied" });
+        }
+        addExternalDependencyProblems(snapshot, node, inspections, facts, missing);
+        const warnings: WorkItemStatus["warnings"] = await fileExists(outputPath) ? [{ code: "candidate_unregistered", path: outputPath }] : [];
+        return { id: `${instance.instance_id}/${node.id}`, selector, work_item_id: node.id, instance_id: instance.instance_id, template_id: template.template_id, stage_id: node.stage_id, producer_skill: node.producer_skill, state: missing.length ? "blocked" : "ready", missing_dependencies: missing, output_path: outputPath, unlocks: (unlocks.get(node.id) ?? []).map((item) => `work:${instance.instance_id}/${item}`), warnings, dispatchable: missing.length === 0, submission_policy: nodeTemplate.submission.policy };
+      })();
+      memo.set(id, pending);
+      return pending;
+    };
+
+    const workStatuses = await Promise.all(nodes.map((item) => evaluateNode(item.node.id)));
+    const groupStatuses: ParallelGroupStatus[] = [];
+    for (const group of template.parallel_groups) {
+      const memberStatuses = group.members.map((member) => workStatuses.find((item) => item.work_item_id === member.work_item_id)).filter((item): item is WorkItemStatus => Boolean(item));
+      const ready = memberStatuses.filter((item) => item.state === "ready");
+      const dispatchable = ready.slice(0, group.max_concurrency);
+      for (const item of ready.slice(group.max_concurrency)) { item.dispatchable = false; item.deferred_reason = "parallel_capacity_deferred"; }
+      groupStatuses.push({ id: group.id, selector: `parallel:${instance.instance_id}/${group.id}`, subflow_instance_id: instance.instance_id, state: await evaluateGroup(group) ? "satisfied" : "pending", join_policy: group.join.policy, ready_members: ready.map((item) => item.selector), dispatchable_members: dispatchable.map((item) => item.selector), done_members: memberStatuses.filter((item) => item.state === "done").map((item) => item.selector) });
+    }
+    const groupedIds = new Set(template.parallel_groups.flatMap((group) => group.members.map((item) => item.work_item_id)));
+    const groupsSatisfied = groupStatuses.every((item) => item.state === "satisfied");
+    const ungroupedDone = workStatuses.filter((item) => !groupedIds.has(item.work_item_id) && item.stage_id === instance.active_stage_id).every((item) => item.state === "done");
+    const complete = workStatuses.some((item) => item.stage_id === instance.active_stage_id) && groupsSatisfied && ungroupedDone;
+    const readyItems = workStatuses.filter((item) => item.state === "ready" && item.dispatchable).map((item) => item.selector);
+    instanceCompletion.push(complete);
+    allWork.push(...workStatuses);
+    allGroups.push(...groupStatuses);
+    instanceStatuses.push({ id: instance.instance_id, selector: `subflow:${instance.instance_id}`, kind: "instance", template_id: template.template_id, instance_id: instance.instance_id, route_ref: instance.route_ref, route_coverage: template.route_coverage, state: instance.status, parent_subflow_id: instance.parent_subflow_id, round_number: instance.round_number, active_stage_id: instance.active_stage_id, missing_dependencies: [], ready_items: readyItems });
+  }
+
+  const startable = templateStatuses.filter((item) => item.state === "available").map((item) => item.selector);
+  const readyItems = allWork.filter((item) => item.state === "ready" && item.dispatchable).map((item) => item.selector);
+  const stageWorkComplete = instanceCompletion.length > 0 && instanceCompletion.every(Boolean);
+  const state: WorkflowControlResult["state"] = stageWorkComplete ? "stage_work_complete" : readyItems.length ? "ready" : snapshot.runState.subflows.length === 0 ? "not_started" : "blocked";
+  return { profile, active_stage_id: null, state, configured: true, valid: true, work_items: allWork, ready_items: readyItems, stage_work_complete: stageWorkComplete, transition_required: stageWorkComplete, frontier: [...startable, ...readyItems], startable_subflows: startable, subflows: [...templateStatuses, ...instanceStatuses], parallel_groups: allGroups };
+}
+
+function templateStartProblems(snapshot: WorkspaceSnapshot, template: SubflowTemplateDefinition, inspections: ArtifactInspection[]): MissingDependency[] {
+  const route = getRouteDefinition(template.route_ref);
+  const problems: MissingDependency[] = [];
+  for (const group of route.prerequisite_groups) {
+    const deterministicallyAvailable = group.requirements.some((requirement) => requirement.kind === "user_input")
+      || (group.operator === "all_of"
+        ? group.requirements.every((requirement) => requirementAvailable(snapshot, inspections, requirement))
+        : group.requirements.some((requirement) => requirementAvailable(snapshot, inspections, requirement)));
+    if (!deterministicallyAvailable) problems.push({ kind: "output", id: group.fallback_route_refs.join(",") || template.route_ref, reason: "subflow_prerequisite_missing" });
+  }
+  return problems;
+}
+
+function requirementAvailable(snapshot: WorkspaceSnapshot, inspections: ArtifactInspection[], requirement: { kind: string; id: string }): boolean {
+  if (requirement.kind === "user_input") return false;
+  if (requirement.kind === "contract") return snapshot.files.has(requirement.id) && !snapshot.diagnostics.some((item) => item.blocking && item.path === snapshot.files.get(requirement.id)?.absolutePath);
+  return inspections.some((item) => item.artifact.artifact_type === requirement.id && isTrustedInspection(item));
+}
+
+function getRouteDefinition(routeRef: string) {
+  const route = ARSU_ROUTING_CATALOG.skills.flatMap((skill) => skill.routes).find((item) => item.route_ref === routeRef);
+  if (!route) throw new Error(`Unknown ARSU route: ${routeRef}`);
+  return route;
+}
+
+function addExternalDependencyProblems(snapshot: WorkspaceSnapshot, node: WorkflowNodeDefinition, inspections: ArtifactInspection[], facts: EventFacts, missing: MissingDependency[]): void {
+  for (const contractPath of node.requires.contracts) {
+    const file = snapshot.files.get(contractPath);
+    const invalid = file && snapshot.diagnostics.some((diagnostic) => diagnostic.blocking && diagnostic.path === file.absolutePath);
+    if (!file || invalid) missing.push({ kind: "contract", id: contractPath, reason: file ? "contract_invalid" : "contract_missing" });
+  }
+  for (const artifactType of node.requires.artifact_types) if (!inspections.some((inspection) => inspection.artifact.artifact_type === artifactType && isTrustedInspection(inspection))) missing.push({ kind: "artifact_type", id: artifactType, reason: "artifact_unavailable" });
+  for (const gateType of node.requires.gate_types) if (!facts.passedGateTypes.has(gateType)) missing.push({ kind: "gate_type", id: gateType, reason: "gate_not_passed" });
+  for (const decisionType of node.requires.decision_types) if (!facts.acceptedDecisionTypes.has(decisionType)) missing.push({ kind: "decision_type", id: decisionType, reason: "decision_not_accepted" });
+}
+
+export async function buildWorkflowInstructions(snapshot: WorkspaceSnapshot, selectorOrId: string): Promise<WorkflowInstructionResult> {
   const control = await evaluateWorkflowControl(snapshot);
   if (!control.configured) return { ok: false, code: "workflow_unconfigured" };
   if (!control.valid || !snapshot.workflow) return { ok: false, code: "workflow_invalid" };
-  const status = control.work_items.find((item) => item.id === workItemId);
-  const node = snapshot.workflow.work_items?.find((item) => item.id === workItemId);
+  const selector = selectorOrId.startsWith("work:") ? selectorOrId : `work:${selectorOrId}`;
+  const status = control.work_items.find((item) => item.selector === selector || item.id === selectorOrId);
+  let node: WorkflowNodeDefinition | undefined;
+  let nodeTemplate: WorkflowNodeTemplate | undefined;
+  if (isInstanceWorkflowDefinition(snapshot.workflow) && status?.instance_id && status.template_id) {
+    const template = snapshot.workflow.subflow_templates.find((item) => item.template_id === status.template_id);
+    nodeTemplate = template?.work_items.find((item) => item.id === status.work_item_id);
+    const instance = isInstanceRunState(snapshot.runState) ? snapshot.runState.subflows.find((item) => item.instance_id === status.instance_id) : undefined;
+    if (nodeTemplate && instance) node = resolveWorkNode(nodeTemplate, instance.instance_id, instance.round_number);
+  } else if (snapshot.workflow && !isInstanceWorkflowDefinition(snapshot.workflow)) node = snapshot.workflow.work_items?.find((item) => item.id === status?.work_item_id || item.id === selectorOrId);
   if (!status || !node) return { ok: false, code: "work_item_not_found" };
   if (status.state === "blocked") return { ok: false, code: "work_item_blocked", item: status };
+  if (!status.dispatchable) return { ok: false, code: "work_item_blocked", item: status };
   if (status.state === "done") return { ok: false, code: "work_item_already_done", item: status };
 
   const controlById = new Map(control.work_items.map((item) => [item.id, item]));
@@ -262,6 +462,9 @@ export async function buildWorkflowInstructions(snapshot: WorkspaceSnapshot, wor
       validation: { profile: node.validation_profile, suggested_command: "researchspec check artifacts --json" },
       completion: submitCapability(node, status),
       unlocks: status.unlocks,
+      ...(status.instance_id ? { instance_id: status.instance_id } : {}),
+      ...(status.template_id ? { template_id: status.template_id } : {}),
+      submission: await submissionPacket(snapshot, status, nodeTemplate),
     },
   };
 }
@@ -276,7 +479,7 @@ export async function resolveTemplateReference(templateRef: string): Promise<Res
   return { template_ref: templateRef, source_path: sourcePath, content };
 }
 
-async function completionProblems(snapshot: WorkspaceSnapshot, node: WorkflowNodeDefinition, inspection: ArtifactInspection, facts: EventFacts, inspections: ArtifactInspection[]): Promise<MissingDependency[]> {
+async function completionProblems(snapshot: WorkspaceSnapshot, node: WorkflowNodeDefinition, inspection: ArtifactInspection, facts: EventFacts, inspections: ArtifactInspection[], scope?: { instanceId: string; selector: string }): Promise<MissingDependency[]> {
   const problems: MissingDependency[] = [];
   const artifact = inspection.artifact;
   const expectedPath = path.resolve(snapshot.workspace, node.output.workspace_path);
@@ -304,9 +507,10 @@ async function completionProblems(snapshot: WorkspaceSnapshot, node: WorkflowNod
         const parsed = ArtifactSubmitReceiptSchema.safeParse(JSON.parse(await readFile(receiptInspection.resolved_path, "utf8")) as unknown);
         const related = Array.isArray(receiptInspection.artifact.related_artifact_ids) ? receiptInspection.artifact.related_artifact_ids : [];
         const suffix = typeof artifact.sha256 === "string" ? artifact.sha256.slice(0, 16) : "";
-        const expectedCandidateId = `A-${node.id}-${suffix}`;
-        const expectedSubmissionId = `S-${node.id}-${suffix}`;
-        const expectedReceiptId = `A-submit-receipt-${node.id}-${suffix}`;
+        const scopedWorkId = scope ? `${scope.instanceId}-${node.id}` : node.id;
+        const expectedCandidateId = `A-${scopedWorkId}-${suffix}`;
+        const expectedSubmissionId = `S-${scopedWorkId}-${suffix}`;
+        const expectedReceiptId = `A-submit-receipt-${scopedWorkId}-${suffix}`;
         const expectedReceiptPath = path.resolve(snapshot.workspace, `runs/current/receipts/artifact-submit/${expectedSubmissionId}.json`);
         if (!candidateRecord.success || !receiptRecord?.success || !parsed.success
           || candidateId !== expectedCandidateId
@@ -314,7 +518,9 @@ async function completionProblems(snapshot: WorkspaceSnapshot, node: WorkflowNod
           || receiptInspection.resolved_path !== expectedReceiptPath
           || parsed.data.submission_id !== expectedSubmissionId
           || parsed.data.receipt_artifact_id !== receiptId
-          || parsed.data.selector !== `work:${node.id}`
+          || parsed.data.selector !== (scope?.selector ?? `work:${node.id}`)
+          || parsed.data.subflow_instance_id !== scope?.instanceId
+          || candidateRecord.data.subflow_instance_id !== scope?.instanceId
           || parsed.data.artifact.artifact_id !== candidateId
           || parsed.data.artifact.artifact_type !== node.output.artifact_type
           || parsed.data.artifact.path !== artifact.path
@@ -336,6 +542,18 @@ async function completionProblems(snapshot: WorkspaceSnapshot, node: WorkflowNod
           || !related.includes(candidateId)) {
           problems.push({ kind: "output", id: node.id, reason: "submit_receipt_mismatch" });
         }
+        if (scope) {
+          const authorization = parsed.success ? parsed.data.start_authorization : undefined;
+          if (!authorization) problems.push({ kind: "output", id: node.id, reason: "subflow_start_receipt_missing" });
+          else {
+            try {
+              const startPath = path.resolve(snapshot.workspace, authorization.receipt_path);
+              const startBytes = await readFile(startPath);
+              const start = SubflowStartReceiptSchema.parse(JSON.parse(Buffer.from(startBytes).toString("utf8")) as unknown);
+              if (sha256(startBytes) !== authorization.receipt_sha256 || start.instance_id !== scope.instanceId || start.plan_sha256 !== authorization.plan_sha256) problems.push({ kind: "output", id: node.id, reason: "subflow_start_receipt_mismatch" });
+            } catch { problems.push({ kind: "output", id: node.id, reason: "subflow_start_receipt_untrusted" }); }
+          }
+        }
       } catch {
         problems.push({ kind: "output", id: node.id, reason: "submit_receipt_invalid" });
       }
@@ -356,13 +574,35 @@ function submitCapability(node: WorkflowNodeDefinition, status: WorkItemStatus):
         candidate_path: status.output_path,
         dry_run_command: `researchspec submit ${status.selector} --input <submission.json> --actor-kind <kind> --actor-name <name> --dry-run --json`,
         input_schema: { required: ["schema_version", "dependency_artifact_ids"], optional: ["producer_mode"] },
-        requires_confirmation: true as const,
+        requires_confirmation: status.submission_policy !== "automatic",
         requires_expected_sha256_for_noninteractive_execution: true as const,
         updates_state: false as const,
         appends_gate: false as const,
         appends_decision: false as const,
       },
     } : {}),
+  };
+}
+
+async function submissionPacket(snapshot: WorkspaceSnapshot, status: WorkItemStatus, nodeTemplate: WorkflowNodeTemplate | undefined): Promise<WorkflowInstructionPacket["submission"]> {
+  if (!status.instance_id || !nodeTemplate || !isInstanceRunState(snapshot.runState)) return { policy: "legacy", authorization: null, requires_user_confirmation: true };
+  const instance = snapshot.runState.subflows.find((item) => item.instance_id === status.instance_id);
+  if (!instance) return { policy: nodeTemplate.submission.policy, authorization: null, requires_user_confirmation: true };
+  const receiptPath = path.resolve(snapshot.workspace, instance.start_receipt.path);
+  let valid = false;
+  try {
+    const bytes = await readFile(receiptPath);
+    const receipt = JSON.parse(Buffer.from(bytes).toString("utf8")) as Record<string, unknown>;
+    valid = sha256(bytes) === instance.start_receipt.sha256
+      && receipt.receipt_type === "subflow_start"
+      && receipt.instance_id === instance.instance_id
+      && receipt.plan_sha256 === instance.start_receipt.plan_sha256;
+  } catch { valid = false; }
+  const automatic = nodeTemplate.submission.policy === "automatic" && valid;
+  return {
+    policy: nodeTemplate.submission.policy,
+    authorization: { kind: "subflow_start", valid, receipt_path: receiptPath, receipt_sha256: instance.start_receipt.sha256 },
+    requires_user_confirmation: !automatic,
   };
 }
 

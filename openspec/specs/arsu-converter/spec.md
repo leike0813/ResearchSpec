@@ -373,25 +373,25 @@ replacement bodies.
 
 ### Requirement: Generated Skill Submit Handoff
 
-ResearchSpec SHALL generate ARSU contract preflight guidance that hands a completed workflow-owned candidate to the public Submit capability rather than an unspecified runtime helper.
+ResearchSpec SHALL generate ARSU contract preflight guidance that consumes generalized runtime instructions and follows the declared automatic/manual submission policy.
 
-#### Scenario: Supported workflow uses Submit capability
+#### Scenario: Automatic instance work submits directly
 
-- **WHEN** a generated ARSU Skill writes the candidate path declared by dynamic instructions and `submit_available` is true
-- **THEN** generated guidance SHALL route registration through `researchspec-submit`
-- **AND** it SHALL forbid hand-written artifact registry, receipt, Gate, Decision, and state updates
+- **WHEN** a generated ARSU Skill completes a candidate whose instructions prove `submission.policy: automatic` and trusted start authorization
+- **THEN** guidance SHALL perform Submit dry-run followed by execution bound to the returned exact hash
+- **AND** it SHALL query status/check afterward without asking for per-artifact confirmation
 
-#### Scenario: Unsupported workflow remains explicit
+#### Scenario: Manual or legacy work uses Submit Companion
 
-- **WHEN** dynamic instructions are unavailable, the workflow is unconfigured, or Submit capability is false
-- **THEN** generated guidance SHALL report the missing capability or compatibility boundary
-- **AND** it SHALL NOT invent a path, artifact type, producer mapping, or runtime write
+- **WHEN** work instructions are manual, legacy, unconfigured or lack trusted authorization
+- **THEN** guidance SHALL hand registration to `researchspec-submit` or report the boundary
+- **AND** it SHALL not invent automatic authority, paths, provenance or runtime writes
 
 #### Scenario: Converter remains deterministic
 
-- **WHEN** Submit handoff guidance changes
-- **THEN** converter regeneration, validation, manifest hashes, and idempotence checks SHALL remain authoritative
-- **AND** generated Skill trees SHALL NOT be hand-edited
+- **WHEN** preflight guidance changes
+- **THEN** converter regeneration, validation, manifest hashes and idempotence SHALL remain authoritative
+- **AND** generated Skill trees SHALL not be hand-edited
 
 ### Requirement: Converter-Owned Routing Catalog Projection
 The ARSU converter SHALL generate, register, validate, and report the canonical routing catalog and its Skill-description projections.

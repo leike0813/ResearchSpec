@@ -6,8 +6,8 @@ import { Command, CommanderError, InvalidArgumentError } from "commander";
 
 import {
   handleArchive, handleCheck, handleDecide, handleHandoff, handleInit, handleInstructions, handleList,
-  handlePack, handlePropose, handleShow, handleStatus, handleSubmit, handleUpdate, type DecideOptions,
-  type HandoffOptions, type InitOptions, type PackOptions, type ProposeOptions, type SubmitOptions, type UpdateOptions,
+  handlePack, handlePropose, handleShow, handleStart, handleStatus, handleSubmit, handleUpdate, type DecideOptions,
+  type HandoffOptions, type InitOptions, type PackOptions, type ProposeOptions, type StartOptions, type SubmitOptions, type UpdateOptions,
 } from "./handlers.js";
 import { presentResult } from "./presenter.js";
 import { CliError, failure, type CommandContext, type CommandResult } from "./types.js";
@@ -67,8 +67,15 @@ function registerCommands(program: Command, run: Runner): void {
     .action(async (target: string | undefined, options: UpdateOptions, command: Command) => run("update", command, () => handleUpdate(target, options, commandContext("update", command))));
   program.command("status").description("Show current run and pending-item status")
     .action(async (_options: Record<string, never>, command: Command) => run("status", command, () => handleStatus(commandContext("status", command))));
-  program.command("instructions <work-item>").description("Show dynamic instructions for a ready work item")
-    .action(async (workItem: string, _options: Record<string, never>, command: Command) => run("instructions", command, () => handleInstructions(workItem, commandContext("instructions", command))));
+  program.command("instructions <selector>").description("Show dynamic instructions for a runtime selector")
+    .action(async (selector: string, _options: Record<string, never>, command: Command) => run("instructions", command, () => handleInstructions(selector, commandContext("instructions", command))));
+  program.command("start <subflow>").description("Atomically start a confirmed subflow template")
+    .requiredOption("--input <start.json>", "strict subflow Start JSON")
+    .requiredOption("--actor-kind <kind>", "human, agent, or script")
+    .requiredOption("--actor-name <name>", "Start requester name")
+    .requiredOption("--confirmed-by <name>", "human who confirmed the route")
+    .option("--expected-plan-sha256 <hash>", "bind execution to the previewed Start plan")
+    .action(async (subflow: string, options: StartOptions, command: Command) => run("start", command, () => handleStart(subflow, options, commandContext("start", command))));
   program.command("submit <work-item>").description("Validate and atomically register a workflow-owned candidate artifact")
     .requiredOption("--input <submission.json>", "strict artifact submission JSON")
     .requiredOption("--actor-kind <kind>", "human, agent, script, converter, or validator")

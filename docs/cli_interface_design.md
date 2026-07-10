@@ -10,10 +10,10 @@ wire contract 供迁移使用。用户从对话进入 ARSU 工作的顺序以
 
 - **Target v0.1**：15 个顶层命令和
   `status → instructions → start/submit/advance → status`。
-- **Current implementation（2026-07-10）**：尚无 `start`、`submit gate:` 或 `advance`；
-  已有 `instructions work:` 与 `submit work:`。
-- **Pending technical layer**：subflow selectors/instances、Gate submit、transition advance
-  及其 receipt/state transaction。
+- **Current implementation（2026-07-10）**：已有 subflow template/instance、
+  `instructions subflow:|work:`、`start` 与 start-authorized `submit work:`；尚无
+  `submit gate:` 或 `advance`。
+- **Pending technical layer**：Gate submit、transition advance、完整 profiles 与 surface 收敛。
 
 事实源：
 
@@ -104,9 +104,9 @@ Target v0.1 公共命令：
 通用 `execute`。
 
 Current implementation 当前可用的顶层命令是 `init`、`update`、`status`、
-`instructions`、`submit`（仅 `work:`）、`check`、`list`、`show`、`handoff`、`pack`、
+`instructions`、`start`、`submit`（仅 `work:`）、`check`、`list`、`show`、`handoff`、`pack`、
 `propose`、`decide` 和 `archive`。下文已有命令的参数和 envelope 仍描述当前 wire contract；
-标为 Target 的 `start`、`submit gate:` 和 `advance` 只能在对应 technical changes 完成后使用。
+标为 Target 的 `submit gate:` 和 `advance` 只能在对应 technical changes 完成后使用。
 
 ### 2.1 Selector-Based Runtime Protocol（Target v0.1）
 
@@ -317,7 +317,7 @@ UTF-8 非空文件、path containment、SHA-256、template ref 与依赖 artifac
 学术结论真实、证据充分或质量 Gate 已通过；`completion.required_gate_ids` 仍独立决定节点
 能否成为 `done`。
 
-### 6.3 `start`、`submit gate:` 与 `advance`（Target v0.1，尚未实现）
+### 6.3 `start`（Current）与 `submit gate:` / `advance`（Target）
 
 ```bash
 researchspec start subflow:<id> [--dry-run] [--yes] [--json]
@@ -325,14 +325,14 @@ researchspec submit gate:<id> --input <verdict.json> [--dry-run] [--yes] [--json
 researchspec advance transition:<id> [--dry-run] [--yes] [--json]
 ```
 
-- `start` 只实例化用户已确认的 route plan，并持久化 parent/round identity；不执行 ARSU
-  semantic work。
+- `start` 已实现：strict JSON 输入绑定 subflow instructions basis；dry-run 返回 plan SHA-256，
+  非交互执行要求相同输入、`--expected-plan-sha256` 与 `--yes`。Start receipt 先写、
+  `state.yaml` 最后刷新，并持久化 parent/round/actor/confirmed-by；不执行 ARSU semantic work。
 - `submit gate:` 只接受 CLI instructions 指定的 validator/evidence contract，并要求实际用户
   确认。它保存 verdict 与 `confirmed_by`，不把 Agent 自报文本当作 Gate。
 - `advance` 校验 Gate/Decision basis、目标 state 与 read preconditions 后执行 transition
   receipt。唯一合法 transition 可由 Agent 自动调用；多分支必须先 `decide`。
-- 三者的 DTO、错误码和 receipt shape 由对应 technical changes 冻结，本文不提前承诺 wire
-  details。
+- Gate/transition DTO、错误码和 receipt shape 仍由后续 change 冻结。
 
 ## 7. `researchspec check [target]`
 

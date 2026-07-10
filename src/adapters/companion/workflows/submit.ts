@@ -13,10 +13,12 @@ Submit exactly one workflow-owned candidate through the deterministic ResearchSp
 - Status shows a ready work item with a \`candidate_unregistered\` warning.
 - A producer Skill has finished the candidate at the path returned by dynamic instructions.
 - The user wants to preview or perform artifact registration.
+- The work packet is manual or legacy, or trusted automatic start authorization is unavailable.
 
 ## Do Not Use
 
 - Do not create, revise, review, or semantically approve candidate content.
+- Do not insert this Companion into trusted automatic instance work; producer preflight performs that registration directly.
 - Do not append Gates or Decisions, edit state, transition stages, or change stable specs.
 - Do not hand-edit the artifact registry or submission receipt.
 - Do not use Submit to replace an already submitted work item with different content.

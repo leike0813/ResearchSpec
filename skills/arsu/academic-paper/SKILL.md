@@ -13,7 +13,7 @@ metadata:
     - academic-pipeline
 ---
 
-<!-- researchspec-contract-preflight:v1 -->
+<!-- researchspec-contract-preflight:v2 -->
 ## ResearchSpec Contract Preflight
 
 Before running this ARSU-derived skill, locate the project `researchspec/`
@@ -21,13 +21,21 @@ workspace. Read `specs/workflow.yaml` and `runs/current/state.yaml` first,
 then load only the contracts and artifact references needed for the current
 skill, stage, phase, or mode.
 
-Use `runs/current/artifact-registry.json` to read prior artifacts. For a typed
-workflow, call `researchspec status --json` and
-`researchspec instructions work:<id> --json`; write only the declared candidate
-path. When `completion.submit_available` is true, hand the finished candidate
-to `researchspec-submit`. If the workflow is unconfigured or Submit is
-unavailable, report that boundary instead of inventing path, type, or runtime
-writes. Do not hand-edit state, registries, receipts, or JSONL ledgers.
+Use `runs/current/artifact-registry.json` to read prior artifacts. Call
+`researchspec status --json` and request instructions for the canonical scoped
+`work:<instance>/<node>` selector (or legacy `work:<id>`). Write only the
+declared candidate path.
+
+After producing the candidate, inspect `submission` and `completion.submit`.
+When policy is `automatic`, the start authorization is valid, and Submit is
+available, build the strict dependency payload in a temporary file, run Submit
+with `--dry-run --json`, then execute the identical selector/payload/actor with
+the returned SHA-256, `--expected-sha256`, and `--yes --json`. Re-query status
+and artifact checks. This registration is mechanical and is not Gate pass or
+academic approval. For `manual`, `legacy`, missing authorization, or unavailable
+Submit, hand the candidate to `researchspec-submit` or report the boundary.
+Never invent path, type, provenance, or runtime writes, and never hand-edit
+state, registries, receipts, or JSONL ledgers.
 After human confirmation, the runtime records decisions; validators and gate
 helpers record validation or gate outcomes.
 
@@ -35,7 +43,7 @@ Do not treat ARS Material Passport as ResearchSpec runtime truth. It may be
 imported or rendered as a compatibility artifact, while runtime provenance,
 decisions, gates, and resume state live in ResearchSpec registries and ledgers.
 
-This generated compatibility block uses profile `researchspec-preflight-v1` for
+This generated compatibility block uses profile `researchspec-preflight-v2` for
 `academic-paper`. Full per-stage and per-mode matrix injection is deferred to a
 later ResearchSpec converter change.
 

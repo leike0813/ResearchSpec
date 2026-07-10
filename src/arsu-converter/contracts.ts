@@ -5,8 +5,8 @@ import type {
   ContractProfile,
 } from "./types.js";
 
-const PROFILE_ID = "researchspec-preflight-v1";
-const CONTRACT_MARKER = "<!-- researchspec-contract-preflight:v1 -->";
+const PROFILE_ID = "researchspec-preflight-v2";
+const CONTRACT_MARKER = "<!-- researchspec-contract-preflight:v2 -->";
 
 export const RESEARCHSPEC_MUTATION_OWNERSHIP = {
   stable_specs: "human_or_accepted_contract_patch",
@@ -26,7 +26,7 @@ export function mutationBoundaryBullets(targets: string[]): string[] {
     bullets.push("Request changes to `researchspec/runs/current/state.yaml` through the ResearchSpec orchestrator or runtime helper; do not edit run state directly.");
   }
   if (targets.includes("researchspec/runs/current/artifact-registry.json")) {
-    bullets.push("Write only the candidate path declared by dynamic instructions. When `completion.submit_available` is true, hand the finished candidate to `researchspec-submit`; do not edit the registry or receipt directly. If Submit is unavailable, report the compatibility boundary instead of inventing a runtime write.");
+    bullets.push("Write only the candidate path declared by dynamic instructions. For trusted automatic instance work, run hash-bound `researchspec submit` directly; hand manual or legacy registration to `researchspec-submit`. Never edit registry or receipts directly.");
   }
   if (targets.includes("researchspec/runs/current/decision-ledger.jsonl")) {
     bullets.push("After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.");
@@ -123,13 +123,21 @@ workspace. Read \`specs/workflow.yaml\` and \`runs/current/state.yaml\` first,
 then load only the contracts and artifact references needed for the current
 skill, stage, phase, or mode.
 
-Use \`runs/current/artifact-registry.json\` to read prior artifacts. For a typed
-workflow, call \`researchspec status --json\` and
-\`researchspec instructions work:<id> --json\`; write only the declared candidate
-path. When \`completion.submit_available\` is true, hand the finished candidate
-to \`researchspec-submit\`. If the workflow is unconfigured or Submit is
-unavailable, report that boundary instead of inventing path, type, or runtime
-writes. Do not hand-edit state, registries, receipts, or JSONL ledgers.
+Use \`runs/current/artifact-registry.json\` to read prior artifacts. Call
+\`researchspec status --json\` and request instructions for the canonical scoped
+\`work:<instance>/<node>\` selector (or legacy \`work:<id>\`). Write only the
+declared candidate path.
+
+After producing the candidate, inspect \`submission\` and \`completion.submit\`.
+When policy is \`automatic\`, the start authorization is valid, and Submit is
+available, build the strict dependency payload in a temporary file, run Submit
+with \`--dry-run --json\`, then execute the identical selector/payload/actor with
+the returned SHA-256, \`--expected-sha256\`, and \`--yes --json\`. Re-query status
+and artifact checks. This registration is mechanical and is not Gate pass or
+academic approval. For \`manual\`, \`legacy\`, missing authorization, or unavailable
+Submit, hand the candidate to \`researchspec-submit\` or report the boundary.
+Never invent path, type, provenance, or runtime writes, and never hand-edit
+state, registries, receipts, or JSONL ledgers.
 After human confirmation, the runtime records decisions; validators and gate
 helpers record validation or gate outcomes.
 

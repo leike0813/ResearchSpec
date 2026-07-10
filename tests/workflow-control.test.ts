@@ -6,209 +6,112 @@ import { test } from "node:test";
 import { stringify } from "yaml";
 
 import { executeArtifactSubmit, planArtifactSubmit } from "../src/core/runtime/artifact-submit.js";
+import { buildSubflowInstructions, executeSubflowStart, planSubflowStart } from "../src/core/runtime/subflow-control.js";
 import { buildWorkflowInstructions, evaluateWorkflowControl } from "../src/core/runtime/workflow-control.js";
 import { runWorkspaceChecks } from "../src/core/validation/check.js";
 import { getWorkspaceEntries } from "../src/core/workspace/layout.js";
 import { loadWorkspaceSnapshot } from "../src/core/workspace/snapshot.js";
+import type { InstanceWorkflowDefinition } from "../src/core/contracts/workflow.js";
 import { ARSU_RESEARCH_SLICE_WORKFLOW } from "../src/core/workflow/profiles/arsu-research-slice.js";
 
-void test("research slice exposes a deterministic read-only work-item frontier", async () => {
+void test("research slice requires an explicit confirmed subflow start", async () => {
   const root = await createWorkspace("arsu-research-slice");
   try {
     const workspace = path.join(root, "researchspec");
-    const snapshot = await loadWorkspaceSnapshot(workspace);
-    const initial = await evaluateWorkflowControl(snapshot);
+    const before = await loadWorkspaceSnapshot(workspace);
+    const initial = await evaluateWorkflowControl(before);
     assert.equal(initial.configured, true);
-    assert.equal(initial.valid, true);
-    assert.equal(initial.profile, "arsu-research-slice");
-    assert.equal(initial.active_stage_id, "research");
-    assert.equal(initial.state, "ready");
-    assert.deepEqual(initial.ready_items, ["work:rq-brief"]);
-    assert.deepEqual(initial.work_items.map((item) => [item.id, item.state]), [
-      ["rq-brief", "ready"], ["bibliography", "blocked"], ["synthesis", "blocked"],
-    ]);
-    assert.equal(initial.stage_work_complete, false);
+    assert.equal(initial.state, "not_started");
+    assert.deepEqual(initial.startable_subflows, ["subflow:tpl-research"]);
+    assert.deepEqual(initial.ready_items, []);
 
-    const candidatePath = path.join(workspace, "runs/current/artifacts/rq-brief.md");
-    await writeFile(candidatePath, "# Unregistered candidate\n", "utf8");
-    const candidate = await evaluateWorkflowControl(await loadWorkspaceSnapshot(workspace));
-    assert.equal(candidate.work_items[0]?.state, "ready");
-    assert.deepEqual(candidate.work_items[0]?.warnings, [{ code: "candidate_unregistered", path: candidatePath }]);
-
-    const instruction = await buildWorkflowInstructions(snapshot, "rq-brief");
+    const instruction = await buildSubflowInstructions(before, "subflow:tpl-research");
     assert.equal(instruction.ok, true);
-    if (instruction.ok) {
-      assert.equal(instruction.packet.selector, "work:rq-brief");
-      assert.equal(instruction.packet.work_item_id, "rq-brief");
-      assert.equal(instruction.packet.output.workspace_path, "runs/current/artifacts/rq-brief.md");
-      assert.equal(instruction.packet.output.template_ref, "ars:shared/handoff_schemas.md#schema-1-rq-brief");
-      assert.match(instruction.packet.template, /Schema 1: RQ Brief/);
-      assert.equal(instruction.packet.context, null);
-      assert.equal(instruction.packet.validation.profile, "research-artifact");
-      assert.equal(instruction.packet.completion.submit_available, true);
-      assert.equal(instruction.packet.completion.submit?.selector, "work:rq-brief");
-      assert.equal(instruction.packet.completion.submit?.candidate_path, instruction.packet.output.resolved_path);
-      assert.equal(instruction.packet.completion.submit?.updates_state, false);
-      assert.deepEqual(instruction.packet.unlocks, ["bibliography"]);
-      assert.deepEqual(instruction.packet.allowed_writes, ["output_artifact", "contract_patch"]);
-    }
+    if (!instruction.ok) return;
+    assert.equal(instruction.packet.route.route_ref, "deep-research:full");
+    assert.equal(instruction.packet.route_coverage, "partial");
+    assert.ok(instruction.packet.required_user_input_ids.includes("research_goal"));
+    assert.equal(instruction.packet.instruction_basis_sha256.length, 64);
 
-    assert.equal(await readFile(path.join(workspace, "runs/current/state.yaml"), "utf8"), snapshot.files.get("runs/current/state.yaml")?.text);
-    assert.equal(await readFile(path.join(workspace, "runs/current/artifact-registry.json"), "utf8"), snapshot.files.get("runs/current/artifact-registry.json")?.text);
-  } finally {
-    await rm(root, { recursive: true, force: true });
-  }
+    const start = await planSubflowStart({
+      snapshot: before,
+      selector: "subflow:tpl-research",
+      payload: startPayload(instruction.packet.instruction_basis_sha256),
+      actor: { kind: "agent", name: "academic-pipeline" },
+      confirmedBy: "researcher",
+      now: "2026-07-10T00:00:00.000Z",
+    });
+    assert.equal(start.status, "would_start");
+    assert.deepEqual(start.writePlan.operations.map((item) => item.action), ["create", "refresh"]);
+    assert.equal(await readFile(path.join(workspace, "runs/current/state.yaml"), "utf8"), before.files.get("runs/current/state.yaml")?.text);
+    const outcome = await executeSubflowStart(start, workspace);
+    assert.equal(outcome.status, "started");
+    assert.equal(outcome.workflow_control_after.state, "ready");
+    assert.deepEqual(outcome.workflow_control_after.ready_items, [`work:${start.instance.instance_id}/rq-brief`]);
+    assert.equal(outcome.workflow_control_after.work_items[0]?.submission_policy, "automatic");
+
+    const retry = await planSubflowStart({ snapshot: await loadWorkspaceSnapshot(workspace), selector: "subflow:tpl-research", payload: startPayload(instruction.packet.instruction_basis_sha256), actor: { kind: "agent", name: "academic-pipeline" }, confirmedBy: "researcher", expectedPlanSha256: start.plan_sha256 });
+    assert.equal(retry.status, "already_started");
+    assert.deepEqual(retry.writePlan.operations, []);
+  } finally { await rm(root, { recursive: true, force: true }); }
 });
 
-void test("registered and hash-matched output completes one item and unlocks the next", async () => {
+void test("scoped work instructions and receipt-backed submit advance the instance frontier", async () => {
   const root = await createWorkspace("arsu-research-slice");
   try {
     const workspace = path.join(root, "researchspec");
-    const outputPath = path.join(workspace, "runs/current/artifacts/rq-brief.md");
-    const content = "# RQ Brief\n";
-    await writeFile(outputPath, content, "utf8");
-    await submitWorkItem(workspace, "rq-brief");
-
+    const instanceId = await startSlice(workspace);
     let snapshot = await loadWorkspaceSnapshot(workspace);
-    let control = await evaluateWorkflowControl(snapshot);
-    assert.deepEqual(control.work_items.map((item) => [item.id, item.state]), [
-      ["rq-brief", "done"], ["bibliography", "ready"], ["synthesis", "blocked"],
-    ]);
-    const bibliography = await buildWorkflowInstructions(snapshot, "bibliography");
-    assert.equal(bibliography.ok, true);
-    if (bibliography.ok) assert.deepEqual(bibliography.packet.dependencies.work_items, [{ id: "rq-brief", state: "done" }]);
+    const selector = `work:${instanceId}/rq-brief`;
+    const instruction = await buildWorkflowInstructions(snapshot, selector);
+    assert.equal(instruction.ok, true);
+    if (!instruction.ok) return;
+    assert.equal(instruction.packet.instance_id, instanceId);
+    assert.equal(instruction.packet.submission.policy, "automatic");
+    assert.equal(instruction.packet.submission.authorization?.valid, true);
+    assert.equal(instruction.packet.submission.requires_user_confirmation, false);
 
-    await writeFile(outputPath, "# Drifted RQ Brief\n", "utf8");
+    await mkdir(path.dirname(instruction.packet.output.resolved_path), { recursive: true });
+    await writeFile(instruction.packet.output.resolved_path, "# RQ Brief\n", "utf8");
+    const plan = await planArtifactSubmit({ snapshot, selector, payload: { schema_version: "1", dependency_artifact_ids: [], producer_mode: "full" }, actor: { kind: "agent", name: "deep-research" }, now: "2026-07-10T00:01:00.000Z" });
+    assert.equal(plan.confirmation_basis, "subflow_start");
+    await executeArtifactSubmit(plan, workspace);
     snapshot = await loadWorkspaceSnapshot(workspace);
-    control = await evaluateWorkflowControl(snapshot);
-    const rqBrief = control.work_items.find((item) => item.id === "rq-brief");
-    assert.equal(rqBrief?.state, "blocked");
-    assert.ok(rqBrief?.missing_dependencies.some((item) => item.reason === "artifact_hash_mismatch"));
-    const check = await runWorkspaceChecks(workspace, "artifacts");
-    assert.equal(check.ok, false);
-    assert.ok(check.diagnostics.some((item) => item.code === "artifact_hash_mismatch"));
-  } finally {
-    await rm(root, { recursive: true, force: true });
-  }
-});
-
-void test("active stage remains authoritative while state transitions are unavailable", async () => {
-  const root = await createWorkspace("arsu-research-slice");
-  try {
-    const workspace = path.join(root, "researchspec");
-    await writeFile(path.join(workspace, "specs/workflow.yaml"), stringify({
-      ...ARSU_RESEARCH_SLICE_WORKFLOW,
-      stages: [...ARSU_RESEARCH_SLICE_WORKFLOW.stages, { stage_id: "idle", title: "Idle" }],
-    }), "utf8");
-    await writeFile(path.join(workspace, "runs/current/state.yaml"), 'schema_version: "0.1"\nrun_id: current\nworkflow_id: arsu-research-slice\nstatus: waiting\nactive_stage_id: idle\npending_decisions: []\ndiagnostics: []\n', "utf8");
-    const control = await evaluateWorkflowControl(await loadWorkspaceSnapshot(workspace));
-    assert.equal(control.work_items[0]?.state, "blocked");
-    assert.deepEqual(control.work_items[0]?.missing_dependencies, [{ kind: "stage", id: "research", reason: "inactive_stage" }]);
-    assert.equal(control.stage_work_complete, false);
-    assert.equal(control.transition_required, false);
-    assert.equal(control.state, "blocked");
-  } finally {
-    await rm(root, { recursive: true, force: true });
-  }
-});
-
-void test("a completed slice reports a transition boundary without declaring a terminal workflow", async () => {
-  const root = await createWorkspace("arsu-research-slice");
-  try {
-    const workspace = path.join(root, "researchspec");
-    const dependencyArtifactIds: string[] = [];
-    for (const node of ARSU_RESEARCH_SLICE_WORKFLOW.work_items) {
-      const content = `# ${node.title}\n`;
-      await writeFile(path.join(workspace, node.output.workspace_path), content, "utf8");
-      const submittedArtifactId = await submitWorkItem(workspace, node.id, dependencyArtifactIds.slice(-1));
-      dependencyArtifactIds.push(submittedArtifactId);
-    }
-    const snapshot = await loadWorkspaceSnapshot(workspace);
     const control = await evaluateWorkflowControl(snapshot);
-    assert.equal(snapshot.workflow?.terminal_stage_ids.length, 0);
-    assert.equal(control.state, "stage_work_complete");
-    assert.equal(control.stage_work_complete, true);
-    assert.equal(control.transition_required, true);
-    assert.equal(snapshot.state.status, "not_started");
-  } finally {
-    await rm(root, { recursive: true, force: true });
-  }
+    assert.deepEqual(control.work_items.map((item) => [item.work_item_id, item.state]), [["rq-brief", "done"], ["bibliography", "ready"], ["synthesis", "blocked"]]);
+    assert.equal(control.work_items[0]?.instance_id, instanceId);
+  } finally { await rm(root, { recursive: true, force: true }); }
 });
 
-void test("legacy workflow stays valid but explicitly has no dynamic control graph", async () => {
+void test("default legacy workspace remains valid and subflow-unconfigured", async () => {
   const root = await createWorkspace("arsu-paper");
   try {
     const workspace = path.join(root, "researchspec");
     const snapshot = await loadWorkspaceSnapshot(workspace);
     const control = await evaluateWorkflowControl(snapshot);
-    assert.deepEqual(control, {
-      profile: "arsu-paper",
-      active_stage_id: "intake",
-      state: "unconfigured",
-      configured: false,
-      valid: true,
-      reason: "workflow_nodes_missing",
-      work_items: [],
-      ready_items: [],
-      stage_work_complete: false,
-      transition_required: false,
-    });
-    assert.equal((await buildWorkflowInstructions(snapshot, "rq-brief")).ok, false);
+    assert.equal(control.configured, false);
+    assert.equal(control.state, "unconfigured");
+    assert.equal((await buildSubflowInstructions(snapshot, "subflow:tpl-research")).ok, false);
     assert.equal((await runWorkspaceChecks(workspace, "contracts")).ok, true);
-  } finally {
-    await rm(root, { recursive: true, force: true });
-  }
+  } finally { await rm(root, { recursive: true, force: true }); }
 });
 
-void test("completion gate IDs are mandatory additional completion evidence", async () => {
+void test("instance workflow validation rejects parallel and graph inconsistencies", async () => {
   const root = await createWorkspace("arsu-research-slice");
   try {
     const workspace = path.join(root, "researchspec");
-    const workflow = {
-      ...structuredClone(ARSU_RESEARCH_SLICE_WORKFLOW),
-      work_items: ARSU_RESEARCH_SLICE_WORKFLOW.work_items.map((item) => item.id === "rq-brief"
-        ? { ...structuredClone(item), completion: { ...structuredClone(item.completion), required_gate_ids: ["G-rq-approved"] } }
-        : structuredClone(item)),
-    };
+    const workflow = structuredClone(ARSU_RESEARCH_SLICE_WORKFLOW) as InstanceWorkflowDefinition;
+    const template = workflow.subflow_templates[0];
+    assert.ok(template);
+    template.parallel_groups.push({ id: "research-pair", members: [{ work_item_id: "bibliography", required: true }, { work_item_id: "missing", required: false }], max_concurrency: 3, join: { policy: "quorum", required_count: 3 } });
+    const firstWork = template.work_items[0];
+    assert.ok(firstWork);
+    firstWork.requires.work_items = ["synthesis"];
     await writeFile(path.join(workspace, "specs/workflow.yaml"), stringify(workflow), "utf8");
-
-    const content = "# RQ Brief\n";
-    await writeFile(path.join(workspace, "runs/current/artifacts/rq-brief.md"), content, "utf8");
-    await submitWorkItem(workspace, "rq-brief");
-
-    let control = await evaluateWorkflowControl(await loadWorkspaceSnapshot(workspace));
-    assert.equal(control.work_items[0]?.state, "blocked");
-    assert.ok(control.work_items[0]?.missing_dependencies.some((item) => item.kind === "gate_id" && item.id === "G-rq-approved"));
-
-    await writeFile(path.join(workspace, "runs/current/gate-ledger.jsonl"), `${JSON.stringify({
-      event_id: "E-gate-rq", gate_id: "G-rq-approved", timestamp: "2026-07-10T00:00:00Z",
-      actor: { kind: "agent", name: "validator" }, stage_id: "research", gate_type: "approval", verdict: "pass", blocking: true,
-    })}\n`, "utf8");
-    control = await evaluateWorkflowControl(await loadWorkspaceSnapshot(workspace));
-    assert.equal(control.work_items[0]?.state, "done");
-  } finally {
-    await rm(root, { recursive: true, force: true });
-  }
-});
-
-void test("workflow graph diagnostics reject duplicate outputs and cycles", async () => {
-  const root = await createWorkspace("arsu-research-slice");
-  try {
-    const workspace = path.join(root, "researchspec");
-    const workItems = ARSU_RESEARCH_SLICE_WORKFLOW.work_items.map((item) => structuredClone(item));
-    const [rqBrief, bibliography] = workItems;
-    assert.ok(rqBrief && bibliography);
-    rqBrief.requires.work_items = ["synthesis"];
-    bibliography.output.workspace_path = rqBrief.output.workspace_path;
-    await writeFile(path.join(workspace, "specs/workflow.yaml"), stringify({ ...ARSU_RESEARCH_SLICE_WORKFLOW, work_items: workItems }), "utf8");
     const snapshot = await loadWorkspaceSnapshot(workspace);
-    assert.ok(snapshot.diagnostics.some((item) => item.code === "workflow_cycle"));
-    assert.ok(snapshot.diagnostics.some((item) => item.code === "duplicate_work_item_output"));
-    const check = await runWorkspaceChecks(workspace, "contracts");
-    assert.equal(check.ok, false);
-  } finally {
-    await rm(root, { recursive: true, force: true });
-  }
+    for (const code of ["parallel_member_missing", "parallel_capacity_invalid", "parallel_quorum_invalid", "workflow_cycle"]) assert.ok(snapshot.diagnostics.some((item) => item.code === code), code);
+    assert.equal((await runWorkspaceChecks(workspace, "contracts")).ok, false);
+  } finally { await rm(root, { recursive: true, force: true }); }
 });
 
 async function createWorkspace(profile: "arsu-paper" | "arsu-research-slice"): Promise<string> {
@@ -216,22 +119,21 @@ async function createWorkspace(profile: "arsu-paper" | "arsu-research-slice"): P
   const workspace = path.join(root, "researchspec");
   for (const entry of getWorkspaceEntries(workspace, profile)) {
     if (entry.kind === "dir") await mkdir(entry.path, { recursive: true });
-    else {
-      await mkdir(path.dirname(entry.path), { recursive: true });
-      await writeFile(entry.path, entry.content, "utf8");
-    }
+    else { await mkdir(path.dirname(entry.path), { recursive: true }); await writeFile(entry.path, entry.content, "utf8"); }
   }
   return root;
 }
 
-async function submitWorkItem(workspace: string, workItemId: string, dependencyArtifactIds: string[] = []): Promise<string> {
-  const plan = await planArtifactSubmit({
-    snapshot: await loadWorkspaceSnapshot(workspace),
-    selector: `work:${workItemId}`,
-    payload: { schema_version: "1", dependency_artifact_ids: dependencyArtifactIds },
-    actor: { kind: "agent", name: "deep-research" },
-    now: "2026-07-10T00:00:00.000Z",
-  });
-  await executeArtifactSubmit(plan, workspace);
-  return plan.artifact.artifact_id;
+async function startSlice(workspace: string): Promise<string> {
+  const snapshot = await loadWorkspaceSnapshot(workspace);
+  const instruction = await buildSubflowInstructions(snapshot, "subflow:tpl-research");
+  assert.equal(instruction.ok, true);
+  if (!instruction.ok) throw new Error("subflow instructions unavailable");
+  const plan = await planSubflowStart({ snapshot, selector: "subflow:tpl-research", payload: startPayload(instruction.packet.instruction_basis_sha256), actor: { kind: "agent", name: "academic-pipeline" }, confirmedBy: "researcher", now: "2026-07-10T00:00:00.000Z" });
+  await executeSubflowStart(plan, workspace);
+  return plan.instance.instance_id;
+}
+
+function startPayload(instructionBasis: string) {
+  return { schema_version: "1", instruction_basis_sha256: instructionBasis, acknowledged_user_input_ids: ["research_goal"], prerequisite_artifact_ids: [], prerequisite_decision_ids: [], parent_subflow_selector: null };
 }

@@ -4,7 +4,7 @@
 - Source: `vendor/ars`
 - Source commit: `becfcc40c6e9e93c187cf4a088333f83373e002d`
 - Output: `skills/arsu`
-- Generated at: `2026-07-10T12:22:35Z`
+- Generated at: `2026-07-10T13:11:47Z`
 - Validation: pass
 
 ## Source Checkout
@@ -24,7 +24,7 @@
 ## Contract Compatibility
 
 - Manifest: `researchspec-contracts.json`
-- Profile: `researchspec-preflight-v1`
+- Profile: `researchspec-preflight-v2`
 - Material Passport policy: `compatibility_artifact_only_not_runtime_ssot`
 - Full matrix injection: `false`
 - Anchor replacement profile: `researchspec-anchor-replacement-v3`
@@ -59,7 +59,7 @@
 - Output files: 475
 - Excluded source files: 499
 - Unclassified source files: 321
-- Risk findings: 1222
+- Risk findings: 1230
 
 ## Risk Findings
 
@@ -113,7 +113,7 @@
 - `academic-paper-reviewer/references/cross-skill/academic-paper/agents/formatter_agent.md` line 390: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/references/cross-skill/academic-paper/agents/formatter_agent.md` line 396: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/references/cross-skill/academic-paper/agents/formatter_agent.md` line 416: issue_reference `issue_or_pr_reference`
-- ... 1172 more findings in `conversion-manifest.json`
+- ... 1180 more findings in `conversion-manifest.json`
 
 ## Validation
 
