@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { Command, CommanderError, InvalidArgumentError } from "commander";
@@ -160,11 +158,6 @@ async function readPackageVersion(): Promise<string> {
   const packageUrl = new URL("../../../package.json", import.meta.url);
   const packageJson = JSON.parse(await readFile(packageUrl, "utf8")) as { version?: string };
   return packageJson.version ?? "0.0.0";
-}
-
-if (import.meta.url === `file://${process.argv[1]}`) {
-  const result = await main();
-  process.exitCode = result.exitCode;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

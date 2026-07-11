@@ -1,0 +1,22 @@
+# ResearchSpec Mixed-License Notice
+
+ResearchSpec is distributed under multiple licenses. A single SPDX identifier would not accurately describe the complete package.
+
+## MIT-licensed material
+
+Unless identified below as ARSU-derived material, ResearchSpec-authored source code, tests, documentation, Companion Skills, and command adapters are licensed under the MIT License, copyright 2026 ResearchSpec contributors. The complete text is in `LICENSES/MIT.txt`.
+
+## CC BY-NC 4.0 material
+
+The following material is adapted from Academic Research Skills (ARS), copyright 2026 Cheng-I Wu, and remains licensed under the Creative Commons Attribution-NonCommercial 4.0 International License:
+
+- `vendor/ars/**`
+- `skills/arsu/**`
+- `src/arsu-converter/routing/catalog.ts`
+- `src/arsu-converter/workflow/catalog.ts`
+- `src/core/workflow/profiles/arsu-v0-1.generated.ts`
+- their compiled equivalents under `dist/**`
+
+The canonical license identifier and URL are recorded in `LICENSES/CC-BY-NC-4.0.txt`. Complete copies of the upstream license are included as `LICENSE` inside every packaged ARSU Skill directory.
+
+The MIT grant does not remove or override the noncommercial restriction on ARSU-derived material. Commercial distribution or use of the combined package may require separate permission from the relevant rights holder. This file documents the project's engineering interpretation and is not legal advice.

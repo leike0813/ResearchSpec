@@ -1,0 +1,13 @@
+# ResearchSpec Attribution Notice
+
+ResearchSpec contains material adapted from Academic Research Skills (ARS):
+
+- Copyright: Copyright (c) 2026 Cheng-I Wu
+- Source: https://github.com/Imbad0202/academic-research-skills
+- Vendored source: `vendor/ars`
+- License: Creative Commons Attribution-NonCommercial 4.0 International
+- License URL: https://creativecommons.org/licenses/by-nc/4.0/
+
+ResearchSpec conversion changes paths, routing descriptions, contract preflight guidance, workflow projections, and runtime-control instructions. ARSU-derived output remains subject to the upstream attribution and noncommercial license. See `LICENSE` for the material boundary and `LICENSES/` for license references.
+
+ResearchSpec-authored material is copyright 2026 ResearchSpec contributors and is licensed under MIT where identified by the root license map.

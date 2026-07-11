@@ -666,8 +666,8 @@ academic-pipeline 硬编码进程序。
 
 顶层字段：
 
-下表首先记录 Current implementation 已可解析的字段；Target extensions 随后单列，避免把
-尚未实现的 DTO 误写成当前契约。
+下表记录 Current implementation 已可解析的字段；未来扩展必须通过新的 OpenSpec change
+增量定义，不能在设计文档中先行伪装成当前契约。
 
 | 字段 | 类型 | 必填 | 说明 |
 | --- | --- | --- | --- |

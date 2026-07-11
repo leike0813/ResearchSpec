@@ -453,10 +453,10 @@ Umbrella change 只有在以下用户旅程全部通过时才能归档：Bootstr
 - 4 ARSU + 4 Companion + 15 CLI；
 - selector-based 运行协议。
 
-仍由后续技术 change 决定：
+v0.1 已实现并仍可通过后续 change 演进：
 
-- catalog、subflow、Gate、transition receipt 的具体 DTO；
-- state/registry/ledger 的兼容迁移策略；
-- 成本估算单位和并发上限；
-- 各 mode 的最终 artifact type IDs、validator IDs 与 Gate IDs；
-- terminal/abandon/supersede 的精确状态枚举。
+- catalog、subflow、Gate、transition 与 receipt DTO 以 main specs 和 Schema 0.2 实现为准；
+- 旧 0.1/0.2 workspace 继续兼容读取，未来迁移工具仍属于独立 change；
+- 成本与并发策略由 routing/workflow profile 声明，不进入通用 core 硬编码；
+- artifact type、validator 与 Gate IDs 由 converter-owned catalogs/profile 投影拥有；
+- terminal 与当前生命周期状态以 run-state schema 和控制面实现为准。

@@ -25,6 +25,7 @@ import type {
 import type { AnchorReplacementPlan } from "./anchors/types.js";
 import { ArsuSkillIdSchema, type ArsuSkillId } from "./routing/contracts.js";
 import { projectSkillFrontmatterDescription, type SkillDescriptionProjection } from "./routing/projection.js";
+import { emitArsuSkillLicensing } from "./licensing.js";
 
 export async function emitSkillGroup(
   sourceRoot: string,
@@ -114,6 +115,8 @@ export async function emitSkillGroup(
     findings.push(...copied.findings);
     files.push(copied.file);
   }
+
+  files.push(...await emitArsuSkillLicensing(sourceRoot, groupOut, groupName));
 
   const dependencyCopies = [...dependencyMeta.values()].sort((a, b) => a.source_path.localeCompare(b.source_path));
   if (!routingDescription) throw new Error(`Missing routing description projection for ${groupName}/SKILL.md.`);

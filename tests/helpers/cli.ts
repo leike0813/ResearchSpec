@@ -3,7 +3,7 @@ import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
-const CLI = path.resolve("dist/src/cli/main.js");
+const CLI = path.resolve(".test-dist/src/cli/bin.js");
 
 export interface CliProcessResult { status: number | null; stdout: string; stderr: string }
 export interface Envelope<T = unknown> { schema_version: string; command: string; ok: boolean; data: T | null; diagnostics: unknown[]; error?: { code?: string; message?: string } }

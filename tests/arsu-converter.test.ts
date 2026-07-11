@@ -25,6 +25,8 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
     const skillPath = path.join(root, "skills/arsu", group, "SKILL.md");
     assert.equal(existsSync(skillPath), true);
     assert.match(await readFile(skillPath, "utf8"), /ResearchSpec Contract Preflight/);
+    assert.match(await readFile(path.join(root, "skills/arsu", group, "LICENSE"), "utf8"), /Attribution-NonCommercial 4.0 International/);
+    assert.match(await readFile(path.join(root, "skills/arsu", group, "NOTICE.md"), "utf8"), /Cheng-I Wu/);
   }
 
   const deepResearch = await readFile(path.join(root, "skills/arsu/deep-research/SKILL.md"), "utf8");
@@ -89,6 +91,8 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
     { path: "routing-catalog.json", catalog_id: "arsu-routing-v0.1", skills: 4, modes: 25, entries: 2 },
   );
   assert.equal(manifest.output_files.some((item) => item.output_path === "routing-catalog.json" && item.sha256 === manifest.routing_catalog.sha256), true);
+  assert.equal(manifest.output_files.filter((item) => item.output_path.endsWith("/LICENSE")).length, 4);
+  assert.equal(manifest.output_files.filter((item) => item.output_path.endsWith("/NOTICE.md")).length, 4);
   assert.equal(
     manifest.anchor_replacements.records.some((item) =>
       item.anchor_id === "STATE-001" &&
@@ -123,12 +127,14 @@ void test("validation reports routing catalog and Skill description drift", asyn
   await writeFile(catalogPath, `${JSON.stringify(catalog, null, 2)}\n`, "utf8");
   const skillPath = path.join(root, "skills/arsu/deep-research/SKILL.md");
   await writeFile(skillPath, (await readFile(skillPath, "utf8")).replace(/description:.*\n/, "description: drifted\n"), "utf8");
+  await rm(path.join(root, "skills/arsu/deep-research/NOTICE.md"));
 
   const validation = await validateArsuOutput(path.join(root, "skills/arsu"));
   assert.equal(validation.ok, false);
   assert.ok(validation.errors.some((error) => error.includes("Invalid routing-catalog.json") || error.includes("canonical converter-owned catalog")));
   assert.ok(validation.errors.some((error) => error.includes("Routing description mismatch")));
   assert.ok(validation.errors.some((error) => error.includes("Hash mismatch")));
+  assert.ok(validation.errors.some((error) => error.includes("Missing deep-research/NOTICE.md")));
   await cleanup(root);
 });
 
@@ -328,6 +334,12 @@ async function makeSource(root: string, options: { omitGroup?: string } = {}): P
 }
 
 async function makeSourceFiles(source: string, options: { omitGroup?: string } = {}): Promise<void> {
+  await mkdir(source, { recursive: true });
+  await writeFile(
+    path.join(source, "LICENSE"),
+    "Copyright (c) 2026 Cheng-I Wu\n\nAttribution-NonCommercial 4.0 International\n",
+    "utf8",
+  );
   const groups = ["deep-research", "academic-paper", "academic-paper-reviewer", "academic-pipeline"].filter(
     (group) => group !== options.omitGroup,
   );

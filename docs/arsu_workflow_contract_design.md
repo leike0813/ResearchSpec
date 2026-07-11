@@ -367,16 +367,19 @@ This mapping implies:
 - Draft revision should preserve the useful ARS block/hash patch discipline in
   `draft-patches/<patch-id>.json`.
 
-## 8. Pending Technical Changes
+## 8. Implemented Technical Layers
 
 Current contract workspace, work-level control plane, artifact submit, and ARSU
-conversion remain in force. Target v0.1 is completed by:
+conversion remain in force. Target v0.1 was completed by:
 
-1. `add-arsu-routing-catalog` — implemented; remains active for independent verification/archive.
-2. `add-subflow-instance-control-plane`.
-3. `add-gate-transition-control-plane`.
-4. `add-arsu-workflow-profiles`.
-5. `consolidate-researchspec-agent-surface`.
+1. `add-arsu-routing-catalog` — typed route, prerequisite, artifact, risk, Gate, and cost catalog.
+2. `add-subflow-instance-control-plane` — scoped instances, parallel frontier, joins, and Start receipts.
+3. `add-gate-transition-control-plane` — confirmed Gates, challenge/override, Decisions, transitions, and receipts.
+4. `add-arsu-workflow-profiles` — complete route graphs, pipeline entries, and dynamic revision rounds.
+5. `consolidate-researchspec-agent-surface` — four Companion target surface and safe retired-projection cleanup.
+
+The eleven public-CLI journeys subsequently accepted these layers. New work must
+extend the current specs rather than treating the five archived changes as pending.
 
 ## 9. Acceptance Checklist
 

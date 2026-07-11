@@ -10,6 +10,7 @@ import { ARSU_ROUTING_CATALOG, getArsuSkillDefinition } from "./routing/catalog.
 import { ArsuRoutingCatalogSchema, type ArsuRoutingCatalog, validateRoutingCatalogReferences } from "./routing/contracts.js";
 import { readSkillFrontmatterDescription, renderArsuSkillDescription } from "./routing/projection.js";
 import { RESEARCHSPEC_PREFLIGHT_MARKER } from "./contracts.js";
+import { ARSU_LICENSE_FILENAME, ARSU_NOTICE_FILENAME } from "./licensing.js";
 
 const LINK_RE = /\[[^\]]+\]\((?<link>[^)#]+)(?:#[^)]+)?\)/g;
 
@@ -98,6 +99,24 @@ export async function validateArsuOutput(outputRoot: string): Promise<Validation
       continue;
     }
     const skillPath = path.join(groupRoot, "SKILL.md");
+    const licensePath = path.join(groupRoot, ARSU_LICENSE_FILENAME);
+    const noticePath = path.join(groupRoot, ARSU_NOTICE_FILENAME);
+    if (!(await pathExists(licensePath))) {
+      errors.push(`Missing ${group}/${ARSU_LICENSE_FILENAME}`);
+    } else {
+      const license = await readUtf8(licensePath);
+      if (!license.includes("Attribution-NonCommercial 4.0 International") || !license.includes("Copyright (c) 2026 Cheng-I Wu")) {
+        errors.push(`Invalid ARSU license projection in ${group}/${ARSU_LICENSE_FILENAME}`);
+      }
+    }
+    if (!(await pathExists(noticePath))) {
+      errors.push(`Missing ${group}/${ARSU_NOTICE_FILENAME}`);
+    } else {
+      const notice = await readUtf8(noticePath);
+      for (const required of ["Cheng-I Wu", "https://github.com/Imbad0202/academic-research-skills", "vendor/ars", "adapted by ResearchSpec"]) {
+        if (!notice.includes(required)) errors.push(`Invalid ARSU attribution notice in ${group}/${ARSU_NOTICE_FILENAME}: missing ${required}`);
+      }
+    }
     if (!(await pathExists(skillPath))) {
       errors.push(`Missing ${group}/SKILL.md`);
     } else {

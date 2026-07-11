@@ -1,6 +1,6 @@
 import { ARSU_SKILL_IDS } from "./routing/contracts.js";
 
-export const CONVERTER_VERSION = "0.6.0";
+export const CONVERTER_VERSION = "0.7.0";
 
 export const VENDOR_SOURCE_PATH = "vendor/ars";
 export const GENERATED_OUTPUT_PATH = "skills/arsu";

@@ -152,10 +152,13 @@ void test("delivery projects eight skills to 31 tools and eight wrappers to 28 c
   try {
     const delivery = await planToolDelivery({ projectRoot: root, toolIds: TOOL_IDS, existingInstallations: [], force: false });
     const companionSkills = delivery.installations.filter((item) => item.source.startsWith("companion:") && item.source.endsWith("/SKILL.md"));
+    const companionLicenses = delivery.installations.filter((item) => item.source.startsWith("companion:") && item.source.endsWith("/LICENSE"));
     const companionCommands = delivery.installations.filter((item) => COMPANION_WORKFLOW_IDS.some((id) => item.source === `command:${id}`));
     const arsuSkills = delivery.installations.filter((item) => ARSU_COMMAND_CONTENTS.some((content) => item.source === `${content.id}/SKILL.md`));
     const arsuCommands = delivery.installations.filter((item) => ARSU_COMMAND_CONTENTS.some((content) => item.source === `command:${content.id}`));
     assert.equal(companionSkills.length, TOOL_IDS.length * COMPANION_INTENTS.length);
+    assert.equal(companionLicenses.length, TOOL_IDS.length * COMPANION_INTENTS.length);
+    assert.ok(companionLicenses.every((item) => item.sha256.length === 64));
     assert.equal(companionCommands.length, TOOLS.filter((tool) => tool.command).length * COMPANION_INTENTS.length);
     assert.equal(arsuSkills.length + companionSkills.length, 31 * 8);
     assert.equal(arsuCommands.length + companionCommands.length, 28 * 8);

@@ -577,15 +577,15 @@ ResearchSpec 不做：
 - 旧轻量 Markdown-only 合同结构不再作为目标事实源。
 - 字段级 schema 留给后续 specs，没有在 PRD 中提前冻结。
 
-### 7.2 后续 Specs
+### 7.2 已实现 Specs
 
 用户模型的 umbrella specs 为 `arsu-user-routing`、`arsu-run-usage` 和
-`agent-surface-model`。现有 contract/workspace/runtime specs 继续有效；尚未实现的能力由
-五个独立 technical changes 承担，不在 PRD 中提前冻结 DTO。
+`agent-surface-model`。它们以及 contract/workspace/runtime specs 已同步到 main specs；
+字段级 DTO、workflow profiles、Gate/transition 与 Agent surface 以当前 specs 和实现为准。
 
-### 7.3 实现优先级建议
+### 7.3 v0.1 实现记录
 
-下一阶段严格按以下技术层推进：
+v0.1 已按以下技术层完成并归档：
 
 1. `add-arsu-routing-catalog`。
 2. `add-subflow-instance-control-plane`。
@@ -593,5 +593,6 @@ ResearchSpec 不做：
 4. `add-arsu-workflow-profiles`。
 5. `consolidate-researchspec-agent-surface`。
 
-全部技术层完成后，再用 standalone、pipeline、Gate challenge/override、revision round、
-resume 和 context export 旅程验收 umbrella change。
+随后通过 standalone、pipeline、Gate challenge/override、revision round、resume 和
+context export 等十一条公共 CLI 旅程完成 umbrella acceptance。未来能力必须通过新的
+OpenSpec change 增量定义，不重开这些已完成技术层。

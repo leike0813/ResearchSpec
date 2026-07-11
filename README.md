@@ -1,0 +1,104 @@
+# ResearchSpec
+
+ResearchSpec is an agent-neutral, file-based control plane for Academic Research Skills Universal (ARSU). It installs research Skills into supported Agent tools while keeping workflow state, artifacts, formal Gates, human Decisions, transitions, and receipts in an explicit local workspace.
+
+Version `0.1.0` is an MVP release candidate. The functional user model is implemented and covered by public-CLI acceptance journeys; publication remains blocked until the hosted CI and manual dogfooding checklist are signed.
+
+## Requirements
+
+- Node.js 22 or 24
+- pnpm 10 for source development
+- one supported Agent tool; Codex is used in the examples below
+
+Node 20 is end-of-life and is not part of the supported release matrix.
+
+## Installation
+
+After the package is published:
+
+```bash
+npm install --global researchspec
+researchspec --version
+```
+
+For local source evaluation:
+
+```bash
+pnpm install --frozen-lockfile
+pnpm build
+npm link
+researchspec --version
+```
+
+Local linking is for development and dogfooding; it is not evidence that the npm package has been released.
+
+## Quick Start
+
+Initialize a new research project without starting academic work:
+
+```bash
+mkdir my-research
+cd my-research
+researchspec init . --tools codex
+researchspec check all --strict
+```
+
+Then start Codex in the same project and describe the research goal in natural language:
+
+> I want to study how generative AI affects writing instruction in higher education. Show candidate routes, prerequisites, artifacts, formal Gates, risks, and cost. Do not start a route until I confirm it.
+
+ResearchSpec installs exactly eight project Skills:
+
+- ARSU: `deep-research`, `academic-paper`, `academic-paper-reviewer`, `academic-pipeline`
+- Companion: `researchspec-navigate`, `researchspec-propose`, `researchspec-decide`, `researchspec-verify`
+
+The normal runtime protocol is:
+
+```text
+status → instructions <selector> → start / submit / advance → status
+```
+
+The CLI is the only workflow-state authority. Agents produce semantic candidate artifacts; they must not directly edit state, registries, ledgers, or receipts.
+
+## Codex Installation Scope
+
+Codex Skills are project-local under `.codex/skills/`. Codex command prompts are shared-global under `$CODEX_HOME/prompts/`, or `~/.codex/prompts/` when `CODEX_HOME` is unset. Non-interactive initialization requires Codex to be explicitly selected so this global write is visible.
+
+For an isolated evaluation:
+
+```bash
+export CODEX_HOME="$PWD/.codex-home"
+researchspec init . --tools codex
+```
+
+Run Codex from the same environment. See the repository's [dogfooding guide](artifacts/researchspec_dogfooding_guide.md) for the full validation sequence.
+
+## Privacy And Safety
+
+- The ResearchSpec CLI has no runtime LLM API integration and sends no telemetry.
+- Agent tools may have their own network, model, and telemetry behavior; review those tools separately.
+- `handoff` is a derived view and `pack` excludes registered artifacts by default. `--include-artifacts` is an explicit privacy-sensitive action.
+- Research content stays in the project unless the user or Agent tool exports or transmits it.
+- Formal Gates require human confirmation. `--yes` only authorizes an already previewed mechanical transaction.
+
+See [SECURITY.md](SECURITY.md) for supported versions and vulnerability handling.
+
+## Documentation
+
+- [Canonical ARSU user model](docs/arsu_user_usage_model.md)
+- [CLI interface](docs/cli_interface_design.md)
+- [Release process](docs/release_process.md)
+- [MVP dogfooding guide](artifacts/researchspec_dogfooding_guide.md)
+
+## Licensing
+
+ResearchSpec uses a mixed-license model:
+
+- ResearchSpec-authored framework and Companion material is MIT licensed.
+- Bundled and generated ARSU-derived material is licensed under CC BY-NC 4.0 and retains Cheng-I Wu's upstream attribution.
+
+The complete combined package must not be described as unrestricted for commercial use. See [LICENSE](LICENSE), [NOTICE](NOTICE), and [LICENSES](LICENSES/) for the material boundary. Commercial use requires separate rights review and may require upstream permission.
+
+## Release Status
+
+The repository contains no automated publish workflow. A tag or npm publication is authorized only after the technical gates, hosted Node/OS matrix, administrative controls, and manual dogfood journeys in [the release checklist](artifacts/mvp_release_checklist.md) are complete.

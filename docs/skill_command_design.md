@@ -175,15 +175,16 @@ ForgeCode、Kimi CLI 和 Mistral Vibe 等 skills-only 工具仍不生成 wrapper
 shared-global prompt ownership、manifest hash/drift protection 和工具格式化规则继续有效。
 数量必须从 tool registry 与 Skill registry 推导，不复制 31 或 28 份规则。
 
-## 8. Pending Technical Layers
+## 8. Implemented Technical Layers
 
 1. `add-arsu-routing-catalog` 已实现：typed routing catalog、generated JSON 和 descriptions projection。
 2. `add-subflow-instance-control-plane` 已实现：通用 subflow/scoped-work status/instructions、
    原子 `start`、parallel frontier 与 Start-authorized automatic work submit policy。
-3. `add-gate-transition-control-plane`：让 Verify/Decide 消费 Gate/transition packets。
-4. `add-arsu-workflow-profiles`：提供全部 mode graphs、parallel/join 和 round templates。
-5. `consolidate-researchspec-agent-surface`：新增 Navigate，移除六个 superseded Companion 的
-   manifest entries 与 manifest-owned generated assets，达到 31×8/28×8。
+3. `add-gate-transition-control-plane` 已实现：Verify/Decide 消费 Gate/transition packets，
+   并保留 confirmation、challenge/override 与 receipt 边界。
+4. `add-arsu-workflow-profiles` 已实现：提供全部 mode graphs、parallel/join 和 round templates。
+5. `consolidate-researchspec-agent-surface` 已实现：Navigate 与四 Companion 已成为唯一目标面，
+   delivery 达到 31×8 Skills 与 28×8 wrappers。
 
 ## 9. 验收边界
 
@@ -191,8 +192,7 @@ shared-global prompt ownership、manifest hash/drift protection 和工具格式�
 - Navigate 能恢复、解释和导出，但不复制 ARSU 语义或 CLI 状态机。
 - Propose/Decide/Verify 的高影响边界和持久化 evidence 清晰。
 - Candidate 自动提交不被解释为 Gate pass；每个 Gate 都能证明 human confirmation。
-- Current 九 Companion 在 consolidation 前保持可用，目标文档不伪装成已实现。
-- Consolidation 后 manifest 恰好 4 个 Companion IDs，Skill/command projection parity，
+- 当前 manifest 恰好 4 个 Companion IDs，Skill/command projection parity，
   delivery 从 registry 推导 31×8 与 28×8。
 - 测试锁定 ID、结构、reason code、projection parity 和可观察行为，不锁完整自然语言正文。
 

@@ -2,30 +2,47 @@
   "name": "researchspec",
   "version": "0.1.0",
   "description": "Agent-neutral spec-driven framework for ARSU-facing academic writing workflows.",
+  "license": "SEE LICENSE IN LICENSE",
   "type": "module",
   "packageManager": "pnpm@10.13.1",
   "bin": {
-    "researchspec": "./dist/src/cli/main.js"
+    "researchspec": "./dist/src/cli/bin.js"
   },
   "files": [
     "dist",
     "skills",
     "README.md",
-    "LICENSE"
+    "CHANGELOG.md",
+    "SECURITY.md",
+    "LICENSE",
+    "LICENSES",
+    "NOTICE",
+    "docs/release_process.md",
+    "docs/arsu_user_usage_model.md",
+    "docs/cli_interface_design.md",
+    "artifacts/researchspec_dogfooding_guide.md",
+    "artifacts/mvp_release_checklist.md"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "test": "tsc -p tsconfig.json && node --test \"dist/tests/**/*.test.js\"",
+    "clean": "node scripts/clean-output.mjs dist .test-dist",
+    "build": "node scripts/clean-output.mjs dist && tsc -p tsconfig.build.json",
+    "test": "node scripts/clean-output.mjs .test-dist && tsc -p tsconfig.test.json && node scripts/run-tests.mjs",
     "check": "tsc -p tsconfig.json",
     "lint": "eslint .",
-    "arsu:convert": "node dist/src/arsu-converter/cli.js convert",
-    "arsu:check": "node dist/src/arsu-converter/cli.js check",
-    "arsu:idempotence": "node dist/src/arsu-converter/cli.js idempotence",
-    "arsu:anchors:manifest": "node dist/src/arsu-converter/anchors/generate.js",
-    "arsu:anchors:check": "node dist/src/arsu-converter/anchors/check.js"
+    "prepack": "pnpm build",
+    "release:verify": "node scripts/verify-package.mjs",
+    "arsu:convert": "pnpm build && node dist/src/arsu-converter/cli.js convert",
+    "arsu:check": "pnpm build && node dist/src/arsu-converter/cli.js check",
+    "arsu:idempotence": "pnpm build && node dist/src/arsu-converter/cli.js idempotence",
+    "arsu:anchors:manifest": "pnpm build && node dist/src/arsu-converter/anchors/generate.js",
+    "arsu:anchors:check": "pnpm build && node dist/src/arsu-converter/anchors/check.js"
   },
   "engines": {
-    "node": ">=20.19.0"
+    "node": ">=22"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
     "@eslint/js": "^9.37.0",

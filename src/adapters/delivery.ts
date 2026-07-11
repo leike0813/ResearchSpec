@@ -8,6 +8,7 @@ import { COMPANION_INTENTS, renderCompanionSkill } from "./companion/index.js";
 import { ARSU_COMMAND_CONTENTS, renderCommand } from "./command-renderer.js";
 import { getTool } from "./tools.js";
 import { ARSU_SKILL_IDS } from "../arsu-converter/routing/contracts.js";
+import { MIT_LICENSE_TEXT } from "../licensing.js";
 
 export interface InstallationRecord {
   tool_id: string;
@@ -61,6 +62,15 @@ export async function planToolDelivery(input: {
           "project",
           renderCompanionSkill(intent),
           `companion:${intent.skillId}/SKILL.md`,
+          toolId,
+        );
+        const licenseTarget = path.join(skillRoot, "LICENSE");
+        await addPlanned(
+          licenseTarget,
+          posix(path.relative(input.projectRoot, licenseTarget)),
+          "project",
+          MIT_LICENSE_TEXT,
+          `companion:${intent.skillId}/LICENSE`,
           toolId,
         );
       }
