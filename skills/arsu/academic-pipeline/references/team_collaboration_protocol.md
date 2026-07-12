@@ -39,7 +39,7 @@ For each stage transition, the following handoff procedure applies:
 | **Materials** | RQ Brief, Bibliography, Synthesis Report (conforming to Schemas 1-3 in `shared/handoff_schemas.md`) |
 | **Approval needed** | Research Lead confirms synthesis is complete and RQ is finalized |
 <!--rs:HANDOFF-002-->
-| **Handoff checklist** | Resolve every required source, bibliography, and synthesis artifact through `researchspec/runs/current/artifact-registry.json`; verify hashes and the minimum source/theme requirements; require the responsible gate receipt from `researchspec/runs/current/gate-ledger.jsonl`; and return any human approval to the decision runtime for `researchspec/runs/current/decision-ledger.jsonl`. A Material Passport attachment is optional compatibility evidence, not a prerequisite. |
+| **Handoff checklist** | Resolve every required source, bibliography, and synthesis artifact through `researchspec/runs/current/artifact-registry.json`; verify hashes and minimum source/theme requirements; require the responsible current Gate receipt; and return human choices to the Decision runtime. An imported Material Passport is optional external evidence, not a prerequisite or authority source. |
 <!--/rs:HANDOFF-002-->
 
 ### Stage 2 -> Stage 2.5 (Write -> Integrity)

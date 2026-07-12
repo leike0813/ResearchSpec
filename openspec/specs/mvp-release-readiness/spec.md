@@ -13,7 +13,7 @@ ResearchSpec SHALL build its npm distribution from a clean production-only TypeS
 - **GIVEN** a prior build output contains files no longer produced by current source
 - **WHEN** the production package is built
 - **THEN** only current production JavaScript SHALL remain under `dist`
-- **AND** the tarball SHALL NOT contain compiled tests, TypeScript declarations, source maps, or retired Companion workflow modules
+- **AND** the tarball SHALL NOT contain compiled tests, TypeScript declarations, source maps, or non-current workflow modules
 
 #### Scenario: Cleanup target is not a known build output
 

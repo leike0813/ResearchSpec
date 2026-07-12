@@ -127,8 +127,8 @@ void test("[journey.parallel-join] declared parallel capacity and all-join contr
 void test("[journey.gate-challenge-override] challenge requires confirmed reverification before override", async () => {
   const root = await tempProject();
   try {
-    const context = initialize(root, "arsu-research-slice");
-    await startSubflow(context, "subflow:tpl-research");
+    const context = initialize(root);
+    await startSubflow(context, "subflow:tpl-academic-paper-reviewer-methodology-focus");
     while (status(context).workflow_control.ready_items.length) await submitWork(context, status(context).workflow_control.ready_items[0] ?? "");
     const gate = status(context).workflow_control.gates.find((item) => item.state === "ready");
     assert.ok(gate);

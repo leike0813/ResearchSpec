@@ -45,7 +45,7 @@ Current-state policy:
 - ARSU-derived content is not required to be current-state-only.
 - Upstream version, history, changelog, migration, issue, PR, and
   schema-version text may be recorded as diagnostics or risk findings.
-- Those markers are not blocking compatibility defects by themselves.
+- Those markers are not blocking integration defects by themselves.
 - ResearchSpec-authored contracts, wrappers, schemas, and validators should
   describe the current intended behavior.
 
@@ -304,8 +304,16 @@ Replacement mapping:
 - reset/resume protocol -> `state.yaml` plus append-only ledger events
 
 Existing ARS passport semantics can be preserved as imported artifacts or
-compatibility views, but new ResearchSpec-native workflows should read the
+imported evidence views, but ResearchSpec-native workflows should read the
 split contracts above.
+
+The implemented inbound path is the confirmed Start transaction for
+`academic-pipeline:mid-entry`. It accepts a hash-bound JSON/YAML passport,
+copies the source and normalized projection into the workspace, records an
+optional resume candidate, and appends Gate/Decision history with
+`authority: imported_evidence`. Imported evidence is visible to instructions
+but is excluded from readiness, blocking, branch, override, and transition
+authority. The transaction does not provide outbound passport export.
 
 ### 6.3 Contract Mutation Rules
 
@@ -323,7 +331,7 @@ Use `changes/<change-id>/contract-patch.yaml` when a task proposes:
 
 Low-risk artifact registration does not require a contract patch. Current
 instance work can automatically perform hash-bound `submit work:<id>` after
-candidate production when Start authorization is trusted; manual/legacy work uses
+candidate production when Start authorization is trusted; manual work uses
 the direct CLI Submit dry-run/confirmation/hash-bound transaction or reports the
 authority boundary. This mechanical submit is not a Gate or academic approval.
 
@@ -354,12 +362,12 @@ Avoid:
 
 This mapping implies:
 
-- ResearchSpec needs schemas for the contract family before large ARSU wrapper
-  rewrites.
+- ResearchSpec owns strict Material Passport import schemas and projects external ARS
+  runtime evidence before large ARSU wrapper rewrites depend on it.
 - `academic-pipeline` remains the default ARSU orchestration graph, but
   ResearchSpec should support partial entry points through `workflow.yaml` and
   `state.yaml`.
-- Artifact registry and ledgers are the critical compatibility layer. Without
+- Artifact registry and ledgers are the critical integration layer. Without
   them, ARSU stages will keep depending on monolithic Material Passport and chat
   history.
 - Review and integrity stages need explicit gate semantics; ordinary advisory

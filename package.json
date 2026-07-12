@@ -20,7 +20,6 @@
     "docs/release_process.md",
     "docs/arsu_user_usage_model.md",
     "docs/cli_interface_design.md",
-    "artifacts/researchspec_dogfooding_guide.md",
     "artifacts/mvp_release_checklist.md"
   ],
   "scripts": {

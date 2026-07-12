@@ -13,6 +13,7 @@ import { RESEARCHSPEC_PREFLIGHT_MARKER } from "./contracts.js";
 import { ARSU_LICENSE_FILENAME, ARSU_NOTICE_FILENAME } from "./licensing.js";
 
 const LINK_RE = /\[[^\]]+\]\((?<link>[^)#]+)(?:#[^)]+)?\)/g;
+const OPERATIONAL_CODE_PATH_RE = /`(?<path>(?:docs|scripts)\/[A-Za-z0-9_./@+%:-]+)`/g;
 
 export async function validateArsuOutput(outputRoot: string): Promise<ValidationResult> {
   const errors: string[] = [];
@@ -131,6 +132,7 @@ export async function validateArsuOutput(outputRoot: string): Promise<Validation
       if (manifest?.skill_groups[group]?.routing_description.description !== expected) {
         errors.push(`Manifest routing description mismatch for ${group}`);
       }
+      errors.push(...await validateEntrypointOperationalPaths(groupRoot, group, skillText));
     }
   }
 
@@ -138,6 +140,24 @@ export async function validateArsuOutput(outputRoot: string): Promise<Validation
   errors.sort();
   warnings.sort();
   return { ok: errors.length === 0, errors, warnings };
+}
+
+async function validateEntrypointOperationalPaths(
+  groupRoot: string,
+  group: string,
+  skillText: string,
+): Promise<string[]> {
+  const errors: string[] = [];
+  const seen = new Set<string>();
+  for (const match of skillText.matchAll(OPERATIONAL_CODE_PATH_RE)) {
+    const referencedPath = match.groups?.path ?? "";
+    if (!referencedPath || seen.has(referencedPath)) continue;
+    seen.add(referencedPath);
+    if (!(await pathExists(path.join(groupRoot, referencedPath)))) {
+      errors.push(`Unresolved operational path in ${group}/SKILL.md: ${referencedPath}`);
+    }
+  }
+  return errors;
 }
 
 async function readJsonFile<T>(filePath: string, errors: string[], label = path.basename(filePath)): Promise<T | null> {
@@ -171,7 +191,7 @@ function validateManifestShape(manifest: ConversionManifest): { errors: string[]
     "excluded",
     "unclassified_files",
     "risk_findings",
-    "contract_compatibility",
+    "contract_integration",
     "routing_catalog",
     "validation_summary",
   ] as const;
@@ -189,16 +209,16 @@ function validateManifestShape(manifest: ConversionManifest): { errors: string[]
   if (JSON.stringify(manifest.generated_groups) !== JSON.stringify([...DEFAULT_SKILL_GROUPS].sort())) {
     errors.push("Manifest generated_groups must list the required skill groups");
   }
-  if (manifest.contract_compatibility?.material_passport_policy !== "compatibility_artifact_only_not_runtime_ssot") {
-    errors.push("Manifest contract compatibility must keep Material Passport out of runtime SSOT");
+  if (manifest.contract_integration?.material_passport_policy !== "imported_evidence_only_not_runtime_ssot") {
+    errors.push("Manifest contract integration must keep imported Material Passport evidence out of runtime SSOT");
   }
-  if (requiresAnchorReplacement(manifest) && manifest.contract_compatibility?.anchor_replacement?.profile_id !== "researchspec-anchor-replacement-v3") {
+  if (requiresAnchorReplacement(manifest) && manifest.contract_integration?.anchor_replacement?.profile_id !== "researchspec-anchor-replacement-v3") {
     if (requiresSemanticAnchorReplacement(manifest)) {
-      errors.push("Manifest contract compatibility must declare v3 anchor replacement profile");
+      errors.push("Manifest contract integration must declare v3 anchor replacement profile");
     }
   }
-  if (requiresAnchorReplacement(manifest) && manifest.contract_compatibility?.anchor_replacement?.coverage_policy !== "required_and_recommended") {
-    errors.push("Manifest contract compatibility must declare required_and_recommended anchor replacement");
+  if (requiresAnchorReplacement(manifest) && manifest.contract_integration?.anchor_replacement?.coverage_policy !== "required_and_recommended") {
+    errors.push("Manifest contract integration must declare required_and_recommended anchor replacement");
   }
   if (requiresAnchorReplacement(manifest) && (!manifest.anchor_replacements || manifest.anchor_replacements.coverage_policy !== "required_and_recommended")) {
     errors.push("Manifest anchor_replacements must declare required_and_recommended coverage");

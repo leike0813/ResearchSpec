@@ -1,8 +1,6 @@
 import path from "node:path";
 import { stringify } from "yaml";
 
-import type { WorkflowProfileId } from "../contracts/workflow.js";
-import { ARSU_RESEARCH_SLICE_STATE, ARSU_RESEARCH_SLICE_WORKFLOW } from "../workflow/profiles/arsu-research-slice.js";
 import { ARSU_V0_1_WORKFLOW } from "../workflow/profiles/arsu-v0-1.generated.js";
 
 export type WorkspaceFileKind = "markdown" | "yaml" | "json" | "jsonl";
@@ -35,7 +33,7 @@ export const WORKSPACE_TEMPLATES: readonly WorkspaceTemplateDefinition[] = [
     kind: "yaml",
     overwritePolicy: "user",
     required: true,
-    content: `schema_version: "0.1"\nprofile: arsu-paper\nagent_tools:\n  selected: []\n  delivery: both\n`,
+    content: `schema_version: "0.1"\nprofile: arsu-v0-1\nagent_tools:\n  selected: []\n  delivery: both\n`,
   },
   {
     relativePath: "tool-installation-manifest.json",
@@ -65,14 +63,14 @@ export const WORKSPACE_TEMPLATES: readonly WorkspaceTemplateDefinition[] = [
     kind: "yaml",
     overwritePolicy: "user",
     required: true,
-    content: `schema_version: "0.1"\nworkflow_id: arsu-paper\nworkflow_kind: arsu-paper\nentry_stage_id: intake\nterminal_stage_ids: [complete]\nstages:\n  - stage_id: intake\n    title: Intake\n  - stage_id: complete\n    title: Complete\n`,
+    content: stringify(ARSU_V0_1_WORKFLOW),
   },
   {
     relativePath: "runs/current/state.yaml",
     kind: "yaml",
     overwritePolicy: "user",
     required: true,
-    content: `schema_version: "0.1"\nrun_id: current\nworkflow_id: arsu-paper\nstatus: not_started\nactive_stage_id: intake\npending_decisions: []\ndiagnostics: []\n`,
+    content: stringify({ schema_version: "0.2", run_id: "current", workflow_id: "arsu-v0-1", status: "not_started", started_at: null, updated_at: null, subflows: [], material_passport_imports: [], resume_candidate: null, pending_decisions: [], diagnostics: [] }),
   },
   {
     relativePath: "runs/current/artifact-registry.json",
@@ -85,22 +83,7 @@ export const WORKSPACE_TEMPLATES: readonly WorkspaceTemplateDefinition[] = [
   { relativePath: "runs/current/gate-ledger.jsonl", kind: "jsonl", overwritePolicy: "user", required: true, content: "" },
 ] as const;
 
-export function getWorkspaceTemplates(profile: WorkflowProfileId = "arsu-v0-1"): readonly WorkspaceTemplateDefinition[] {
-  if (profile === "arsu-paper") return WORKSPACE_TEMPLATES;
-  const workflow = profile === "arsu-v0-1" ? ARSU_V0_1_WORKFLOW : ARSU_RESEARCH_SLICE_WORKFLOW;
-  const state = profile === "arsu-v0-1" ? {
-    schema_version: "0.2" as const, run_id: "current", workflow_id: "arsu-v0-1", status: "not_started" as const,
-    active_stage_id: null, started_at: null, updated_at: null, subflows: [], pending_decisions: [], diagnostics: [],
-  } : ARSU_RESEARCH_SLICE_STATE;
-  return WORKSPACE_TEMPLATES.map((template) => {
-    if (template.relativePath === "config.yaml") {
-      return { ...template, content: `schema_version: "0.1"\nprofile: ${profile}\nagent_tools:\n  selected: []\n  delivery: both\n` };
-    }
-    if (template.relativePath === "specs/workflow.yaml") return { ...template, content: stringify(workflow) };
-    if (template.relativePath === "runs/current/state.yaml") return { ...template, content: stringify(state) };
-    return template;
-  });
-}
+export function getWorkspaceTemplates(): readonly WorkspaceTemplateDefinition[] { return WORKSPACE_TEMPLATES; }
 
 export const REQUIRED_FILES = WORKSPACE_TEMPLATES.filter((item) => item.required).map((item) => item.relativePath);
 export const YAML_FILES = WORKSPACE_TEMPLATES.filter((item) => item.kind === "yaml").map((item) => item.relativePath);
@@ -113,8 +96,8 @@ export function resolveInitTarget(inputPath: string | undefined, cwd: string): s
   return path.basename(base) === "researchspec" ? base : path.join(base, "researchspec");
 }
 
-export function getWorkspaceEntries(workspaceRoot: string, profile: WorkflowProfileId = "arsu-v0-1"): WorkspaceEntry[] {
-  const templates = getWorkspaceTemplates(profile);
+export function getWorkspaceEntries(workspaceRoot: string): WorkspaceEntry[] {
+  const templates = getWorkspaceTemplates();
   return [
     ...REQUIRED_DIRECTORIES.map((dir): WorkspaceEntry => ({ kind: "dir", path: path.join(workspaceRoot, dir) })),
     ...templates.map((item): WorkspaceEntry => ({

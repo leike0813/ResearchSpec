@@ -2,7 +2,7 @@ import { ARSU_ROUTING_CATALOG, getArsuRoute } from "../routing/catalog.js";
 import type { ArsuRouteDefinition, RouteRef } from "../routing/contracts.js";
 import type {
   GateTemplateDefinition,
-  InstanceWorkflowDefinition,
+  WorkflowDefinition,
   ParallelGroupDefinition,
   SubflowTemplateDefinition,
   TransitionTemplateDefinition,
@@ -180,7 +180,7 @@ function roundTemplate(): SubflowTemplateDefinition {
 
 const operationalRoutes = ARSU_ROUTING_CATALOG.skills.flatMap((skill) => skill.routes).filter((route) => route.route_kind === "mode");
 
-export const ARSU_V0_1_WORKFLOW: InstanceWorkflowDefinition = {
+export const ARSU_V0_1_WORKFLOW: WorkflowDefinition = {
   schema_version: "0.2", workflow_id: "arsu-v0-1", workflow_kind: "arsu-v0-1",
   subflow_templates: [
     ...operationalRoutes.map(externalTemplate),
@@ -190,7 +190,7 @@ export const ARSU_V0_1_WORKFLOW: InstanceWorkflowDefinition = {
   ],
 };
 
-export function validateArsuWorkflowCatalog(workflow: InstanceWorkflowDefinition = ARSU_V0_1_WORKFLOW): string[] {
+export function validateArsuWorkflowCatalog(workflow: WorkflowDefinition = ARSU_V0_1_WORKFLOW): string[] {
   const issues: string[] = [];
   const catalogRoutes = ARSU_ROUTING_CATALOG.skills.flatMap((skill) => skill.routes);
   const external = workflow.subflow_templates.filter((template) => template.visibility !== "internal");
@@ -215,7 +215,7 @@ export function validateArsuWorkflowCatalog(workflow: InstanceWorkflowDefinition
   return issues;
 }
 
-function recursivelyProducedArtifacts(workflow: InstanceWorkflowDefinition, templateIdValue: string, visiting: Set<string>): Set<string> {
+function recursivelyProducedArtifacts(workflow: WorkflowDefinition, templateIdValue: string, visiting: Set<string>): Set<string> {
   if (visiting.has(templateIdValue)) return new Set();
   visiting.add(templateIdValue);
   const template = workflow.subflow_templates.find((item) => item.template_id === templateIdValue);

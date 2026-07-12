@@ -549,7 +549,7 @@ skills。当前实现与目标均为四个 Companion。
 
 ### 8.3 Material Passport
 
-ARS Material Passport can be imported as an artifact or rendered as a compatibility
+ARS Material Passport can be imported as an external evidence artifact or rendered as an integration
 view, but it must not be the ResearchSpec runtime SSOT.
 
 Replacement:

@@ -5,8 +5,8 @@ import { evaluateWorkflowControl } from "./workflow-control.js";
 export type ListType = "changes" | "artifacts" | "gates" | "decisions" | "tools";
 
 export async function buildStatus(snapshot: WorkspaceSnapshot) {
-  const latestDecisions = latestById(snapshot.decisions, "decision_id");
-  const latestGates = latestById(snapshot.gates, "gate_id");
+  const latestDecisions = latestById(snapshot.decisions.filter((item) => item.authority !== "imported_evidence"), "decision_id");
+  const latestGates = latestById(snapshot.gates.filter((item) => item.authority !== "imported_evidence"), "gate_id");
   const overriddenGateIds = new Set(latestDecisions.filter((item) => item.status === "accepted" && item.decision_type === "gate_override" && typeof item.gate_id === "string").map((item) => item.gate_id as string));
   const pendingDecisions = latestDecisions.filter((item) => item.status === "proposed" || item.status === "postponed");
   const pendingChanges = [...snapshot.changes, ...snapshot.patches].filter((item) => {
@@ -47,12 +47,14 @@ export function showItem(snapshot: WorkspaceSnapshot, selector: string): { item?
 
 export function formatStatusHuman(status: Awaited<ReturnType<typeof buildStatus>>): string {
   const runStatus = typeof status.run.status === "string" ? status.run.status : "unknown";
-  const stage = typeof status.run.active_stage_id === "string" ? status.run.active_stage_id : "unknown";
+  const activeStages = status.workflow_control.subflows
+    .filter((item) => item.kind === "instance" && item.active_stage_id)
+    .map((item) => `${String(item.instance_id)}:${String(item.active_stage_id)}`);
   return [
     `ResearchSpec workspace: ${status.workspace}`,
     "Status: initialized",
     `Run status: ${runStatus}`,
-    `Active stage: ${stage}`,
+    `Active instances: ${activeStages.length ? activeStages.join(", ") : "none"}`,
     `Pending items: ${String(status.pending_items.length)}`,
     `Blocking gates: ${String(status.blocking_gates.length)}`,
     `Ready work items: ${String(status.workflow_control.ready_items.length)}`,

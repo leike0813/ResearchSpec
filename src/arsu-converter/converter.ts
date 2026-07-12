@@ -1,7 +1,7 @@
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
 
-import { buildContractCompatibilityManifest } from "./contracts.js";
+import { buildContractIntegrationManifest } from "./contracts.js";
 import { emitSkillGroup } from "./emit.js";
 import { listFiles, pathExists, removeTree, sha256File, writeJson, writeUtf8 } from "./fs-utils.js";
 import { buildAnchorReplacementPlan } from "./anchors/match.js";
@@ -67,7 +67,7 @@ export async function convertArsu(options: ConvertOptions): Promise<ConversionRe
     );
   }
 
-  const contractManifest = buildContractCompatibilityManifest(Object.keys(generatedGroups).sort());
+  const contractManifest = buildContractIntegrationManifest(Object.keys(generatedGroups).sort());
   await writeJson(path.join(outputRoot, "researchspec-contracts.json"), contractManifest);
   const contractManifestHash = await sha256File(path.join(outputRoot, "researchspec-contracts.json"));
   await writeJson(path.join(outputRoot, "routing-catalog.json"), ARSU_ROUTING_CATALOG);
@@ -144,7 +144,7 @@ function dryRunResult(
       excluded: [],
       needs_review: [],
     },
-    contract_manifest: buildContractCompatibilityManifest([]),
+    contract_manifest: buildContractIntegrationManifest([]),
     routing_catalog: ARSU_ROUTING_CATALOG,
     anchor_replacements: anchorReplacements,
     validation: { ok: true, errors: [], warnings: [] },

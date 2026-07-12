@@ -4,9 +4,7 @@ ResearchSpec delivers complete ARSU skill groups and tool-neutral command
 wrappers to a registry of selectable agent tools, with generated-file drift
 protection and shared-global prompt management. This capability is the generated
 tool delivery layer driven by `init` / `update`.
-
 ## Requirements
-
 ### Requirement: Complete Agent Tool Registry
 
 ResearchSpec SHALL provide a single registry for all 31 selectable agent tools
@@ -120,26 +118,15 @@ generated ownership evidence in `tool-installation-manifest.json`.
 - **AND** it SHALL be committed after generated files
 
 ### Requirement: Generated File Drift Protection
+`init` and `update` SHALL preserve unknown or modified generated files and SHALL reconcile obsolete project-local manifest-owned files without recognizing product-history identifiers.
 
-`init` and `update` SHALL preserve user-owned and modified generated files,
-including retired projections, regardless of `--force`.
+#### Scenario: No-longer-desired project file is manifest-owned
+- **WHEN** its bytes match the recorded hash
+- **THEN** generic reconciliation SHALL remove it without a retired-product classification
 
-#### Scenario: Unknown existing file is preserved
-
-- **WHEN** an expected or obsolete target exists but is not manifest-owned
-- **THEN** the operation SHALL leave it unchanged
-
-#### Scenario: Drifted desired file may be refreshed explicitly
-
-- **WHEN** a manifest-owned file no longer matches its recorded hash
-- **THEN** the operation SHALL preserve it and report `generated_file_drift`
-- **AND** `--force` SHALL apply only to manifest-owned generated files
-
-#### Scenario: Drifted retired file is never deleted by force
-
-- **WHEN** a no-longer-desired manifest-owned file differs from its recorded hash
-- **THEN** init and update SHALL preserve it, retain its manifest record, and
-  report drift even when `--force` is supplied
+#### Scenario: No-longer-desired file is modified
+- **WHEN** its bytes differ from the recorded hash
+- **THEN** it SHALL be preserved and reported as generated-file drift
 
 ### Requirement: Shared Global Codex Prompts
 
@@ -157,14 +144,6 @@ under `$CODEX_HOME/prompts` or `~/.codex/prompts`.
 - **WHEN** one project removes Codex from its selected tools
 - **THEN** shared-global Codex prompts SHALL NOT be deleted
 
-#### Scenario: Product-retired global prompt is removed safely
-
-- **WHEN** Codex remains selected and a manifest-owned shared-global prompt
-  belongs to an explicitly retired Companion
-- **THEN** init and update SHALL remove it only when its bytes match the recorded hash
-- **AND** a drifted retired prompt SHALL be preserved, diagnosed, and retained in
-  the manifest
-
 ### Requirement: Installed Skill License Retention
 
 ResearchSpec SHALL deliver applicable license and attribution files with every independently copied ARSU and Companion Skill without weakening generated-file ownership or drift protection.
@@ -180,3 +159,4 @@ ResearchSpec SHALL deliver applicable license and attribution files with every i
 - **WHEN** a selected tool receives a generated Companion Skill
 - **THEN** the Companion directory SHALL include canonical MIT license text attributed to `ResearchSpec contributors`
 - **AND** the license file SHALL follow the same manifest hash, drift-preservation, and safe-retirement rules as its `SKILL.md`
+

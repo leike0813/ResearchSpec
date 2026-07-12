@@ -5,6 +5,7 @@ export async function renderHandoff(snapshot: WorkspaceSnapshot): Promise<string
   const status = await buildStatus(snapshot);
   const claims = records(record(snapshot.documents["specs/claims.yaml"]).claims);
   const sources = records(record(snapshot.documents["specs/sources.yaml"]).sources);
+  const instances = status.workflow_control.subflows.filter((item) => item.kind === "instance");
   return `# ResearchSpec Handoff
 
 ## Workspace
@@ -12,7 +13,10 @@ export async function renderHandoff(snapshot: WorkspaceSnapshot): Promise<string
 - Run: ${text(snapshot.state.run_id, "current")}
 - Workflow: ${text(snapshot.state.workflow_id, "unknown")}
 - Status: ${text(snapshot.state.status, "unknown")}
-- Active stage: ${text(snapshot.state.active_stage_id, "unknown")}
+
+## Active Subflow Instances
+
+${instances.length ? instances.map((item) => `- ${text(item.instance_id, "unknown")}: ${text(item.active_stage_id, "unknown")} (${item.state})`).join("\n") : "- None"}
 
 ## Current Contracts
 

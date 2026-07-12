@@ -11,7 +11,7 @@ schema、validator、CLI 行为和 ARSU wrapper preflight 协议。
 
 - **Target v0.1**：单 active run、动态 subflow/round、parallel/join、Gate confirmation、
   transition receipt 与 selector instructions 所需的领域信息。
-- **Current implementation（2026-07-11）**：legacy/static 与 additive Schema 0.2、完整
+- **Current implementation（2026-07-11）**：唯一 Schema 0.2 subflow-instance 模型、完整
   `arsu-v0-1` profile、parent/child/round graph、parallel join、Gate/transition receipts、
   typed routing catalog、text/binary scoped Submit，以及四 Companion/31×8 delivery。
 - **Acceptance status**：Schema 0.2 与旧 workspace 兼容路径已通过 v0.1 journeys；未来显式迁移工具不属于 v0.1。
@@ -99,7 +99,7 @@ requiredness tier：
 | `derived_required` | 正式运行时必须存在，但应由脚本/runtime 派生 | 缺失时要求工具补写，不要求人类手写 |
 | `recommended` | 强烈建议存在，可提升质量 | diagnostics warning |
 | `optional` | 有则使用，无则跳过 | 不阻断 |
-| `compatibility_only` | 为导入 ARS/ARSU payload 或 view 保留 | 不进入 core validation 阻断 |
+| `imported_evidence` | 标记导入的 ARS/ARSU payload 或 view | 不进入 core validation authority 计算 |
 
 对应的 `filled_by` 建议值：
 
@@ -203,8 +203,8 @@ updated_at: "2026-07-09T00:00:00+08:00"
 | Gate event | `G<number>` | `G0002` |
 | Change | `chg-<date>-<slug>` | `chg-20260709-scope-narrowing` |
 | Draft patch | `dp-<date>-<slug>` | `dp-20260709-rev1-methods` |
-| Roadmap item | upstream compatible | `REV-001` |
-| Draft block | upstream compatible | `B0042` |
+| Roadmap item | upstream-aligned | `REV-001` |
+| Draft block | upstream-aligned | `B0042` |
 
 Validator 不应要求所有 ID 一定使用推荐格式；但 init/converter 生成的内容
 应使用推荐格式，减少跨 agent 混乱。
@@ -731,14 +731,8 @@ Current `WorkflowNodeDefinition` 是 work-level `status/instructions` 的运行�
 
 节点状态固定为 `done / ready / blocked`。`done` 需要 `work_item_id` 对应的 registry entry、artifact type/path、文件、SHA-256，以及每个 `required_gate_ids` 对应的 pass/pass-with-conditions 或 accepted override。`require_receipt: true` 时还必须存在 hash-trusted `artifact_submit_receipt` registry record 与严格 receipt payload，且 candidate ID/path/hash、selector、profile 和关联 ID 相互一致。`artifact_statuses` 与 `verification_states` 是额外完成约束，不能替代 required gates；文件存在或手写 registry entry 本身不构成完成。`ready` 还必须处于 active stage。当前控制面在 active stage 全部节点完成后继续计算 scoped Gate/transition frontier；只有 receipt-bound `advance` 才会修改 instance/run state。
 
-兼容试验 profile `arsu-research-slice` 在显式选择时只声明 partial
-`subflow:tpl-research`，不创建 instance 或 artifact。用户确认并 `start` 后，RQ Brief、
-Bibliography、Synthesis 位于该 instance 的 `research` stage，输出解析到
-`runs/current/subflows/<instance>/artifacts/`。三个节点 done 后进入 research-completion Gate；
-Gate pass 或可信 override 后，唯一 terminal transition 可推进 subflow complete。
-
-默认 `arsu-v0-1` 则提供 27 个 complete external route templates 与一个 internal revision-round
-template。`instructions` 已支持 template/instance/parent-scoped child `subflow:`、scoped/legacy
+`arsu-v0-1` 提供完整 external route templates 与 internal revision-round
+template。`instructions` 已支持 template/instance/parent-scoped child `subflow:`、scoped
 `work:`、instance-scoped `gate:` 和 `transition:` 的完整 transaction protocol。
 
 `WriteSurface` 字段：
@@ -991,7 +985,7 @@ payload schema 和验证状态。Downstream stages 必须通过 registry 找 art
 
 #### 4.2.1 Artifact Submit DTO 与 Receipt
 
-`researchspec submit` 的输入是 strict DTO，不复用宽松 legacy registry shape：
+`researchspec submit` 的输入是 strict DTO，并写入明确的 current registry variant：
 
 ```json
 {
@@ -1011,7 +1005,7 @@ verification state 和 ID 均由 workflow/runtime 派生，payload 不得自报�
 workflow/state/registry/ledger/contracts basis hashes、validation evidence、actor 与时间。Receipt
 自身以 `artifact_type: artifact_submit_receipt` 登记，但不设置 `work_item_id`。
 
-Submit 生成的 `verification_state: verified` 只表示 `research-artifact` 确定性 profile 已验证
+Submit 生成的 `verification_state: verified` 只表示 `text-artifact` 或 `binary-file-artifact` 确定性 profile 已验证
 普通文件与 containment、UTF-8/非空、candidate hash、template ref 和依赖可信性；它不证明
 学术结论、证据质量或 completion Gate。既有手工 registry records 继续宽松可读，但
 `require_receipt: true` 的节点只有 receipt-backed record 才能完成。
@@ -1363,7 +1357,7 @@ contract patch 或人类确认投影。
 | `rr_traceability_matrix` | Schema 11 R&R Matrix | re-review/final integrity artifact；完整 payload 注册 |
 | `compliance_report` | Schema 12 Compliance Report | `gate-ledger` 记录 compliance verdict；完整 payload 注册 |
 | `style_profile` | Schema 10 Style Profile | 可被 `manuscript.yaml` metadata 引用；完整 payload 注册 |
-| `material_passport` | Schema 9 Material Passport | 只作为 imported/compatibility artifact；运行时语义拆分 |
+| `material_passport` | Schema 9 Material Passport | 只作为 imported external evidence；运行时语义拆分 |
 | `process_summary` | pipeline final summary | renderer artifact；不改 stable specs |
 
 ### 7.2 Payload reference 字段
@@ -1413,6 +1407,14 @@ runtime SSOT。字段拆分如下。
 | `experiment_provenance` | artifact registry + claims evidence refs | 外部实验 provenance |
 | `experiment_alignment_results` | gate ledger + claims integrity status | claim/experiment alignment gate |
 | `claim_intent_manifest` 类聚合 | `claims.yaml` + artifact registry | claims 投影后仍保留原始 artifact |
+
+当前兼容导入由 `academic-pipeline:mid-entry` 的 Start 事务承载。Start 输入绑定
+passport 路径、SHA-256、可选 reset boundary 和伴随 artifact；CLI 将原件与规范化
+projection 复制到 `runs/current/imports/material-passports/` 后再更新 registry、
+imported-evidence ledgers 和 state。Passport 自报的 `VERIFIED`、Gate pass、branch
+或 override 仅是历史证据，不会满足当前 Gate/Decision。`literature_corpus` 与
+`experiment_provenance` 只生成投影 artifact；提升到稳定 sources/claims 必须走
+contract proposal。
 
 ## 9. Contract Preflight 读取/写入协议
 
@@ -1499,7 +1501,8 @@ Wrapper 写入纪律：
 - 上游 schema-version 与 ResearchSpec schema_version 不同。
 - DOI 格式可疑但 source 仍为 candidate。
 - Artifact payload 使用 `freeform_markdown`。
-- Material Passport 被导入但未完成全部投影。
+- Material Passport 含未知扩展、缺少可验证伴随 artifact，或其 sources/claims
+  语义尚未通过 contract proposal 提升。
 
 Diagnostics 可以写入 `state.yaml.diagnostics`、validator report artifact 或
 process summary；不得伪装成 gate verdict。

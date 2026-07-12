@@ -8,11 +8,11 @@ import { fileExists } from "../../utils/fs.js";
 import { ArtifactSubmitReceiptSchema, SubmittedArtifactRecordSchema, SubmitReceiptArtifactRecordSchema } from "../contracts/artifact.js";
 import { GateSubmitReceiptSchema, TransitionAdvanceReceiptSchema } from "../contracts/gate-transition.js";
 import { SubflowStartReceiptSchema } from "../contracts/subflow.js";
-import { isInstanceRunState } from "../contracts/run-state.js";
-import { isInstanceWorkflowDefinition, resolveWorkNode, validateWorkflowDefinition, type ParallelGroupDefinition, type SubflowTemplateDefinition, type WorkflowNodeDefinition, type WorkflowNodeTemplate } from "../contracts/workflow.js";
+import { resolveWorkNode, validateWorkflowDefinition, type ParallelGroupDefinition, type SubflowTemplateDefinition, type WorkflowNodeDefinition, type WorkflowNodeTemplate } from "../contracts/workflow.js";
 import type { Diagnostic } from "../validation/types.js";
 import { latestById, type WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { sha256 } from "../workspace/write-plan.js";
+import { buildRuntimeContext } from "./runtime-context.js";
 
 export type WorkItemState = "done" | "ready" | "blocked";
 
@@ -37,7 +37,7 @@ export interface WorkItemStatus {
   instance_id?: string;
   template_id?: string;
   dispatchable: boolean;
-  submission_policy: "automatic" | "manual" | "legacy";
+  submission_policy: "automatic" | "manual";
   deferred_reason?: "parallel_capacity_deferred";
 }
 
@@ -101,7 +101,6 @@ export interface TransitionControlStatus {
 
 export interface WorkflowControlResult {
   profile: string;
-  active_stage_id: string | null;
   state: "unconfigured" | "not_started" | "blocked" | "ready" | "stage_work_complete" | "gate_required" | "transition_ready" | "decision_required" | "complete";
   configured: boolean;
   valid: boolean;
@@ -134,8 +133,9 @@ export interface WorkflowInstructionPacket {
   stage_id: string;
   producer_skill: string;
   state: "ready";
+  instruction_basis_sha256: string;
   description: string;
-  context: null;
+  context: ReturnType<typeof buildRuntimeContext>;
   output: WorkflowNodeDefinition["output"] & { resolved_path: string };
   template: string;
   dependencies: {
@@ -169,7 +169,7 @@ export interface WorkflowInstructionPacket {
   instance_id?: string;
   template_id?: string;
   submission: {
-    policy: "automatic" | "manual" | "legacy";
+    policy: "automatic" | "manual";
     authorization: { kind: "subflow_start"; valid: boolean; receipt_path: string; receipt_sha256: string } | null;
     requires_user_confirmation: boolean;
   };
@@ -230,85 +230,15 @@ export function passedCompletionGateIds(snapshot: WorkspaceSnapshot): Set<string
 export async function evaluateWorkflowControl(snapshot: WorkspaceSnapshot): Promise<WorkflowControlResult> {
   const workflow = snapshot.workflow;
   const profile = typeof snapshot.config.profile === "string" ? snapshot.config.profile : "unknown";
-  const activeStage = typeof snapshot.state.active_stage_id === "string" ? snapshot.state.active_stage_id : null;
-  const empty = (state: WorkflowControlResult["state"], configured: boolean, valid: boolean, reason?: WorkflowControlResult["reason"]): WorkflowControlResult => ({ profile, active_stage_id: activeStage, state, configured, valid, ...(reason ? { reason } : {}), work_items: [], ready_items: [], stage_work_complete: false, transition_required: false, frontier: [], startable_subflows: [], subflows: [], parallel_groups: [], gates: [], transitions: [] });
+  const empty = (state: WorkflowControlResult["state"], configured: boolean, valid: boolean, reason?: WorkflowControlResult["reason"]): WorkflowControlResult => ({ profile, state, configured, valid, ...(reason ? { reason } : {}), work_items: [], ready_items: [], stage_work_complete: false, transition_required: false, frontier: [], startable_subflows: [], subflows: [], parallel_groups: [], gates: [], transitions: [] });
   if (!workflow) return empty("unconfigured", false, true, "workflow_nodes_missing");
   if (validateWorkflowDefinition(workflow).length > 0) return empty("blocked", true, false, "workflow_invalid");
-  if (isInstanceWorkflowDefinition(workflow)) {
-    if (!isInstanceRunState(snapshot.runState)) return empty("blocked", true, false, "workflow_invalid");
-    return evaluateInstanceWorkflow(snapshot, workflow.subflow_templates, profile);
-  }
-  const nodes = workflow.work_items ?? [];
-  if (nodes.length === 0) return empty("unconfigured", false, true, "workflow_nodes_missing");
-
-  const inspections = await inspectArtifacts(snapshot);
-  const facts = eventFacts(snapshot);
-  const byId = new Map(nodes.map((node) => [node.id, node]));
-  const unlocks = new Map<string, string[]>();
-  for (const node of nodes) for (const dependency of node.requires.work_items) unlocks.set(dependency, [...(unlocks.get(dependency) ?? []), node.id]);
-  const memo = new Map<string, Promise<WorkItemStatus>>();
-
-  const evaluate = (node: WorkflowNodeDefinition): Promise<WorkItemStatus> => {
-    const existing = memo.get(node.id);
-    if (existing) return existing;
-    const pending = (async (): Promise<WorkItemStatus> => {
-      const outputPath = path.resolve(snapshot.workspace, node.output.workspace_path);
-      const candidates = inspections.filter((inspection) => inspection.artifact.work_item_id === node.id);
-      const candidate = candidates[candidates.length - 1];
-      if (candidate) {
-        const outputProblems = await completionProblems(snapshot, node, candidate, facts, inspections);
-        if (outputProblems.length === 0) {
-          return {
-            id: node.id, selector: `work:${node.id}`, work_item_id: node.id, stage_id: node.stage_id, producer_skill: node.producer_skill, state: "done",
-            missing_dependencies: [], output_path: outputPath, artifact_id: stringValue(candidate.artifact.artifact_id), unlocks: unlocks.get(node.id) ?? [], warnings: [], dispatchable: false, submission_policy: "legacy",
-          };
-        }
-        return {
-          id: node.id, selector: `work:${node.id}`, work_item_id: node.id, stage_id: node.stage_id, producer_skill: node.producer_skill, state: "blocked",
-          missing_dependencies: outputProblems, output_path: outputPath, artifact_id: stringValue(candidate.artifact.artifact_id), unlocks: unlocks.get(node.id) ?? [], warnings: [], dispatchable: false, submission_policy: "legacy",
-        };
-      }
-
-      const missing: MissingDependency[] = [];
-      if (activeStage !== node.stage_id) missing.push({ kind: "stage", id: node.stage_id, reason: "inactive_stage" });
-      for (const dependencyId of node.requires.work_items) {
-        const dependency = byId.get(dependencyId);
-        if (!dependency || (await evaluate(dependency)).state !== "done") missing.push({ kind: "work_item", id: dependencyId, reason: "work_item_not_done" });
-      }
-      for (const contractPath of node.requires.contracts) {
-        const file = snapshot.files.get(contractPath);
-        const invalid = file && snapshot.diagnostics.some((diagnostic) => diagnostic.blocking && diagnostic.path === file.absolutePath);
-        if (!file || invalid) missing.push({ kind: "contract", id: contractPath, reason: file ? "contract_invalid" : "contract_missing" });
-      }
-      for (const artifactType of node.requires.artifact_types) {
-        if (!inspections.some((inspection) => inspection.artifact.artifact_type === artifactType && isTrustedInspection(inspection))) {
-          missing.push({ kind: "artifact_type", id: artifactType, reason: "artifact_unavailable" });
-        }
-      }
-      for (const gateType of node.requires.gate_types) if (!facts.passedGateTypes.has(gateType)) missing.push({ kind: "gate_type", id: gateType, reason: "gate_not_passed" });
-      for (const decisionType of node.requires.decision_types) if (!facts.acceptedDecisionTypes.has(decisionType)) missing.push({ kind: "decision_type", id: decisionType, reason: "decision_not_accepted" });
-      const warnings: WorkItemStatus["warnings"] = await fileExists(outputPath)
-        ? [{ code: "candidate_unregistered", path: outputPath }]
-        : [];
-      return {
-        id: node.id, selector: `work:${node.id}`, work_item_id: node.id, stage_id: node.stage_id, producer_skill: node.producer_skill, state: missing.length ? "blocked" : "ready",
-        missing_dependencies: missing, output_path: outputPath, unlocks: unlocks.get(node.id) ?? [], warnings, dispatchable: missing.length === 0, submission_policy: "legacy",
-      };
-    })();
-    memo.set(node.id, pending);
-    return pending;
-  };
-
-  const workItems = await Promise.all(nodes.map((node) => evaluate(node)));
-  const activeItems = workItems.filter((item) => item.stage_id === activeStage);
-  const stageWorkComplete = activeItems.length > 0 && activeItems.every((item) => item.state === "done");
-  const readyItems = workItems.filter((item) => item.state === "ready").map((item) => item.selector);
-  const state = stageWorkComplete ? "stage_work_complete" : readyItems.length ? "ready" : "blocked";
-  return { profile, active_stage_id: activeStage, state, configured: true, valid: true, work_items: workItems, ready_items: readyItems, stage_work_complete: stageWorkComplete, transition_required: stageWorkComplete, frontier: readyItems, startable_subflows: [], subflows: [], parallel_groups: [], gates: [], transitions: [] };
+  if (!snapshot.runState) return empty("blocked", true, false, "workflow_invalid");
+  return evaluateInstanceWorkflow(snapshot, workflow.subflow_templates, profile);
 }
 
 async function evaluateInstanceWorkflow(snapshot: WorkspaceSnapshot, templates: SubflowTemplateDefinition[], profile: string): Promise<WorkflowControlResult> {
-  if (!isInstanceRunState(snapshot.runState)) throw new Error("Instance workflow requires instance run state.");
+  if (!snapshot.runState) throw new Error("Workflow requires run state.");
   const inspections = await inspectArtifacts(snapshot);
   const facts = eventFacts(snapshot);
   const trustedGates = await trustedGateEvents(snapshot);
@@ -368,7 +298,7 @@ async function evaluateInstanceWorkflow(snapshot: WorkspaceSnapshot, templates: 
         const candidates = inspections.filter((inspection) => inspection.artifact.work_item_id === node.id && inspection.artifact.subflow_instance_id === instance.instance_id);
         const candidate = candidates[candidates.length - 1];
         if (candidate) {
-          const problems = await completionProblems(snapshot, node, candidate, facts, inspections, { instanceId: instance.instance_id, selector });
+          const problems = await completionProblems(snapshot, node, candidate, facts, inspections, { instanceId: instance.instance_id, selector, requireStartAuthorization: nodeTemplate.submission.policy === "automatic" });
           return { id: `${instance.instance_id}/${node.id}`, selector, work_item_id: node.id, instance_id: instance.instance_id, template_id: template.template_id, stage_id: node.stage_id, producer_skill: node.producer_skill, state: problems.length ? "blocked" : "done", missing_dependencies: problems, output_path: outputPath, artifact_id: stringValue(candidate.artifact.artifact_id), unlocks: (unlocks.get(node.id) ?? []).map((item) => `work:${instance.instance_id}/${item}`), warnings: [], dispatchable: false, submission_policy: nodeTemplate.submission.policy };
         }
         const missing: MissingDependency[] = [];
@@ -478,7 +408,7 @@ async function evaluateInstanceWorkflow(snapshot: WorkspaceSnapshot, templates: 
       : readyGates.length ? "gate_required"
         : readyTransitions.length ? "transition_ready"
           : stageWorkComplete ? "stage_work_complete" : readyItems.length ? "ready" : snapshot.runState.subflows.length === 0 ? "not_started" : "blocked";
-  return { profile, active_stage_id: null, state, configured: true, valid: true, work_items: allWork, ready_items: readyItems, stage_work_complete: stageWorkComplete, transition_required: readyTransitions.length > 0 || decisionTransitions.length > 0, frontier: [...startable, ...readyItems, ...readyGates, ...readyTransitions, ...decisionTransitions], startable_subflows: startable, subflows: [...templateStatuses, ...instanceStatuses], parallel_groups: allGroups, gates: allGates, transitions: allTransitions };
+  return { profile, state, configured: true, valid: true, work_items: allWork, ready_items: readyItems, stage_work_complete: stageWorkComplete, transition_required: readyTransitions.length > 0 || decisionTransitions.length > 0, frontier: [...startable, ...readyItems, ...readyGates, ...readyTransitions, ...decisionTransitions], startable_subflows: startable, subflows: [...templateStatuses, ...instanceStatuses], parallel_groups: allGroups, gates: allGates, transitions: allTransitions };
 }
 
 async function evaluateChildNodes(snapshot: WorkspaceSnapshot, templates: SubflowTemplateDefinition[], parent: import("../contracts/run-state.js").SubflowInstanceState, template: SubflowTemplateDefinition): Promise<SubflowControlStatus[]> {
@@ -497,7 +427,7 @@ async function evaluateChildNodes(snapshot: WorkspaceSnapshot, templates: Subflo
       if (parent.status !== "active") missing.push({ kind: "stage", id: parent.status, reason: "subflow_inactive" });
       if (parent.active_stage_id !== node.stage_id) missing.push({ kind: "stage", id: node.stage_id, reason: "inactive_stage" });
       for (const dependencyId of node.depends_on) if ((await evaluate(dependencyId)).state !== "complete") missing.push({ kind: "subflow_node", id: dependencyId, reason: "child_subflow_not_complete" });
-      const children = snapshot.runState && isInstanceRunState(snapshot.runState) ? snapshot.runState.subflows
+      const children = snapshot.runState ? snapshot.runState.subflows
         .filter((item) => item.parent_subflow_id === parent.instance_id && (item.parent_node_id ?? null) === node.id && item.template_id === node.template_id)
         .sort((left, right) => (left.round_number ?? 0) - (right.round_number ?? 0) || left.started_at.localeCompare(right.started_at)) : [];
       const trusted: typeof children = [];
@@ -592,12 +522,12 @@ export async function buildWorkflowInstructions(snapshot: WorkspaceSnapshot, sel
   const status = control.work_items.find((item) => item.selector === selector || item.id === selectorOrId);
   let node: WorkflowNodeDefinition | undefined;
   let nodeTemplate: WorkflowNodeTemplate | undefined;
-  if (isInstanceWorkflowDefinition(snapshot.workflow) && status?.instance_id && status.template_id) {
+  if (status?.instance_id && status.template_id) {
     const template = snapshot.workflow.subflow_templates.find((item) => item.template_id === status.template_id);
     nodeTemplate = template?.work_items.find((item) => item.id === status.work_item_id);
-    const instance = isInstanceRunState(snapshot.runState) ? snapshot.runState.subflows.find((item) => item.instance_id === status.instance_id) : undefined;
+    const instance = snapshot.runState?.subflows.find((item) => item.instance_id === status.instance_id);
     if (nodeTemplate && instance) node = resolveWorkNode(nodeTemplate, instance.instance_id, instance.round_number);
-  } else if (snapshot.workflow && !isInstanceWorkflowDefinition(snapshot.workflow)) node = snapshot.workflow.work_items?.find((item) => item.id === status?.work_item_id || item.id === selectorOrId);
+  }
   if (!status || !node) return { ok: false, code: "work_item_not_found" };
   if (status.state === "blocked") return { ok: false, code: "work_item_blocked", item: status };
   if (!status.dispatchable) return { ok: false, code: "work_item_blocked", item: status };
@@ -612,6 +542,7 @@ export async function buildWorkflowInstructions(snapshot: WorkspaceSnapshot, sel
   } catch (error) {
     return { ok: false, code: "workflow_resource_unavailable", item: status, details: { template_ref: node.output.template_ref, message: error instanceof Error ? error.message : String(error) } };
   }
+  const runtimeContext = buildRuntimeContext(snapshot, status.instance_id);
   return {
     ok: true,
     packet: {
@@ -621,8 +552,9 @@ export async function buildWorkflowInstructions(snapshot: WorkspaceSnapshot, sel
       stage_id: status.stage_id,
       producer_skill: status.producer_skill,
       state: "ready",
+      instruction_basis_sha256: runtimeInstructionBasis(snapshot, status.selector, { status, node, runtimeContext }),
       description: node.description,
-      context: null,
+      context: runtimeContext,
       output: { ...node.output, resolved_path: status.output_path },
       template: template.content,
       dependencies: {
@@ -649,7 +581,7 @@ export async function buildWorkflowInstructions(snapshot: WorkspaceSnapshot, sel
 export async function buildGateTransitionInstructions(snapshot: WorkspaceSnapshot, selector: string): Promise<GateTransitionInstructionResult> {
   const control = await evaluateWorkflowControl(snapshot);
   if (!control.configured) return { ok: false, code: "workflow_unconfigured" };
-  if (!control.valid || !snapshot.workflow || !isInstanceWorkflowDefinition(snapshot.workflow) || !isInstanceRunState(snapshot.runState)) return { ok: false, code: "workflow_invalid" };
+  if (!control.valid || !snapshot.workflow || !snapshot.runState) return { ok: false, code: "workflow_invalid" };
   if (selector.startsWith("gate:")) {
     const status = control.gates.find((item) => item.selector === selector);
     if (!status) return { ok: false, code: "runtime_item_not_found" };
@@ -663,11 +595,12 @@ export async function buildGateTransitionInstructions(snapshot: WorkspaceSnapsho
       .map((artifact) => ({ kind: "artifact", artifact_id: artifact.artifact_id, sha256: artifact.sha256 })));
     const contractEvidence: Array<Record<string, unknown>> = gate.validator.evidence.contracts.map((contractPath) => ({ kind: "contract", path: contractPath, sha256: snapshot.files.get(contractPath)?.hash ?? "" })).filter((item) => item.sha256);
     const evidence = [...artifactEvidence, ...contractEvidence];
-    const instructionBasis = runtimeInstructionBasis(snapshot, selector, { gate, status, evidence });
+    const runtimeContext = buildRuntimeContext(snapshot, status.subflow_instance_id);
+    const instructionBasis = runtimeInstructionBasis(snapshot, selector, { gate, status, evidence, runtimeContext });
     return { ok: true, packet: {
       kind: "gate", selector, state: status.state, instance_id: status.subflow_instance_id, template_id: status.template_id,
       gate: { id: status.gate_node_id, gate_type: gate.gate_type, stage_id: gate.stage_id, title: gate.title, risk_level: gate.risk_level, blocking: gate.blocking },
-      validator: gate.validator, evidence, latest_attempt: status.latest_event_id ? { event_id: status.latest_event_id, verdict: status.latest_verdict } : null,
+      validator: gate.validator, evidence, runtime_context: runtimeContext, latest_attempt: status.latest_event_id ? { event_id: status.latest_event_id, verdict: status.latest_verdict } : null,
       instruction_basis_sha256: instructionBasis, confirmation: { required: true, actor_kind: "human", delegated_by_start: false, yes_is_not_confirmation: true },
       submit: { available: true, command: `researchspec submit ${selector} --input <verdict.json> --actor-kind validator --actor-name <name> --confirmed-by <human> --dry-run --json`, expected_plan_required_for_noninteractive_execution: true },
     } };
@@ -710,7 +643,7 @@ export async function resolveTemplateReference(templateRef: string): Promise<Res
   return { template_ref: templateRef, source_path: sourcePath, content };
 }
 
-async function completionProblems(snapshot: WorkspaceSnapshot, node: WorkflowNodeDefinition, inspection: ArtifactInspection, facts: EventFacts, inspections: ArtifactInspection[], scope?: { instanceId: string; selector: string }): Promise<MissingDependency[]> {
+async function completionProblems(snapshot: WorkspaceSnapshot, node: WorkflowNodeDefinition, inspection: ArtifactInspection, facts: EventFacts, inspections: ArtifactInspection[], scope?: { instanceId: string; selector: string; requireStartAuthorization: boolean }): Promise<MissingDependency[]> {
   const problems: MissingDependency[] = [];
   const artifact = inspection.artifact;
   const expectedPath = path.resolve(snapshot.workspace, node.output.workspace_path);
@@ -773,7 +706,7 @@ async function completionProblems(snapshot: WorkspaceSnapshot, node: WorkflowNod
           || !related.includes(candidateId)) {
           problems.push({ kind: "output", id: node.id, reason: "submit_receipt_mismatch" });
         }
-        if (scope) {
+        if (scope?.requireStartAuthorization) {
           const authorization = parsed.success ? parsed.data.start_authorization : undefined;
           if (!authorization) problems.push({ kind: "output", id: node.id, reason: "subflow_start_receipt_missing" });
           else {
@@ -795,7 +728,7 @@ async function completionProblems(snapshot: WorkspaceSnapshot, node: WorkflowNod
 }
 
 function submitCapability(node: WorkflowNodeDefinition, status: WorkItemStatus): WorkflowInstructionPacket["completion"] {
-  const available = ["research-artifact", "text-artifact", "binary-file-artifact"].includes(node.validation_profile);
+  const available = ["text-artifact", "binary-file-artifact"].includes(node.validation_profile);
   return {
     policy: node.completion,
     submit_available: available,
@@ -816,7 +749,7 @@ function submitCapability(node: WorkflowNodeDefinition, status: WorkItemStatus):
 }
 
 async function submissionPacket(snapshot: WorkspaceSnapshot, status: WorkItemStatus, nodeTemplate: WorkflowNodeTemplate | undefined): Promise<WorkflowInstructionPacket["submission"]> {
-  if (!status.instance_id || !nodeTemplate || !isInstanceRunState(snapshot.runState)) return { policy: "legacy", authorization: null, requires_user_confirmation: true };
+  if (!status.instance_id || !nodeTemplate || !snapshot.runState) throw new Error("Scoped submission requires current instance state.");
   const instance = snapshot.runState.subflows.find((item) => item.instance_id === status.instance_id);
   if (!instance) return { policy: nodeTemplate.submission.policy, authorization: null, requires_user_confirmation: true };
   const receiptPath = path.resolve(snapshot.workspace, instance.start_receipt.path);
@@ -848,8 +781,8 @@ interface EventFacts {
 }
 
 function eventFacts(snapshot: WorkspaceSnapshot): EventFacts {
-  const latestDecisions = latestById(snapshot.decisions, "decision_id");
-  const latestGates = latestById(snapshot.gates, "gate_id");
+  const latestDecisions = latestById(snapshot.decisions.filter((item) => item.authority !== "imported_evidence"), "decision_id");
+  const latestGates = latestById(snapshot.gates.filter((item) => item.authority !== "imported_evidence"), "gate_id");
   const overriddenGateIds = new Set(latestDecisions.filter((item) => item.status === "accepted" && item.decision_type === "gate_override" && typeof item.gate_id === "string").map((item) => String(item.gate_id)));
   const passedGates = latestGates.filter((item) => item.verdict === "pass" || item.verdict === "pass_with_conditions" || overriddenGateIds.has(String(item.gate_id)));
   const passedGateIds = new Set(passedGates.filter((item) => typeof item.gate_id === "string").map((item) => String(item.gate_id)));
@@ -861,6 +794,7 @@ function eventFacts(snapshot: WorkspaceSnapshot): EventFacts {
 async function trustedGateEvents(snapshot: WorkspaceSnapshot): Promise<Record<string, unknown>[]> {
   const trusted: Record<string, unknown>[] = [];
   for (const event of snapshot.gates) {
+    if (event.authority === "imported_evidence") continue;
     if (event.schema_version !== "1") { trusted.push(event); continue; }
     const reference = event.receipt && typeof event.receipt === "object" && !Array.isArray(event.receipt) ? event.receipt as Record<string, unknown> : undefined;
     if (!reference || typeof reference.path !== "string" || typeof reference.sha256 !== "string" || typeof reference.plan_sha256 !== "string") continue;

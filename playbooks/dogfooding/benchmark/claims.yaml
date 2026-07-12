@@ -1,0 +1,27 @@
+schema_version: "1"
+synthetic: true
+claims:
+  - claim_id: CLM-01
+    wording: Structured use of generative AI may increase visible revision activity in some introductory writing contexts.
+    support:
+      - SYN-CLASSROOM-01
+    strength: tentative
+    limits:
+      - Single course
+      - Revision activity is not equivalent to writing quality
+  - claim_id: CLM-02
+    wording: Generative AI reduces instructor workload.
+    support:
+      - SYN-INTERVIEW-02
+    strength: unsupported_as_written
+    limits:
+      - Evidence reports both time savings and new verification work
+      - No measured workload data
+  - claim_id: CLM-03
+    wording: Clear disclosure guidance is associated with fewer student uncertainties about acceptable AI use.
+    support:
+      - SYN-SURVEY-03
+      - SYN-POLICY-04
+    strength: hypothesis_only
+    limits:
+      - The supplied materials do not directly compare policy clarity with uncertainty

@@ -33,7 +33,7 @@ The workflow is read-only and contains no publish job. A local run cannot be use
 
 ## 3. Manual Dogfooding
 
-Follow `artifacts/researchspec_dogfooding_guide.md` in a disposable research project with an isolated `CODEX_HOME`. Sign all of these journeys in `artifacts/mvp_release_checklist.md`:
+Follow `playbooks/dogfooding/README.md` in a disposable research project using an adapter that satisfies the playbook's isolation contract. The playbook, synthetic benchmark, scenario catalog, adapters, and evidence templates are maintainer-only repository assets and are intentionally excluded from the npm package. Sign all of these journeys in `artifacts/mvp_release_checklist.md`:
 
 - quick standalone;
 - cross-session resume;

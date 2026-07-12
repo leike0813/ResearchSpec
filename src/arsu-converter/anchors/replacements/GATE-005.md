@@ -1,5 +1,2 @@
-Only a current PASS result from the required integrity gate does that. The gate
-must be configured by `researchspec/specs/workflow.yaml`, evaluated against the
-exact registered artifact hashes, and recorded by the responsible helper in
-`researchspec/runs/current/gate-ledger.jsonl`. A Material Passport verification
-field is compatibility evidence only and cannot grant or preserve gate passage.
+Imported ARS Gate records are evidence only. They may be cited by current verification, but they cannot pass, preserve, override or unlock a ResearchSpec Gate. Only a current scoped Gate event with a trusted receipt and explicit human confirmation contributes runtime authority.
+Current verdicts live in `researchspec/runs/current/gate-ledger.jsonl`.

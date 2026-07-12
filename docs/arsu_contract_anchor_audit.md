@@ -32,7 +32,7 @@ becfcc40c6e9e93c187cf4a088333f83373e002d
 - `shared/contracts/**` 的机器 schema 描述；
 - 少量模板和 example 中的 schema 使用说明。
 
-因此下一阶段不能只追加入口说明，而应在转换时用锚点表锁定上游合同文本，逐段替换成 ResearchSpec-compatible contract guidance。
+因此下一阶段不能只追加入口说明，而应在转换时用锚点表锁定上游合同文本，逐段替换成 ResearchSpec contract integration guidance。
 
 ## 2. Current-State Policy
 
@@ -71,7 +71,7 @@ ResearchSpec 不能把这个对象继续当 runtime SSOT。兼容层应拆分为
 - `runs/current/artifact-registry.json`：artifact path、hash、producer、stage、verification state；
 - `runs/current/decision-ledger.jsonl`：用户决策、override、policy 选择；
 - `runs/current/gate-ledger.jsonl`：integrity/review/compliance gate 结果；
-- ARS Material Passport：仅作为 imported compatibility artifact 或 payload projection source。
+- ARS Material Passport：仅作为 imported external evidence artifact 或 payload projection source。
 
 锚点表中所有 `material_passport_runtime_ssot` required anchors 都服务于这一替换。
 
@@ -127,7 +127,7 @@ ARS revision patch 设计本身值得保留：block id、old hash、operation、
 
 ResearchSpec 兼容层应做两件事：
 
-- contract JSON 作为 artifact 或 compatibility manifest 由 registry 管理；
+- contract JSON 作为 artifact 或 integration manifest 由 registry 管理；
 - phase outputs 和 lint diagnostics 作为 artifact/gate 记录，而不是只依赖 ARS script names。
 
 ### 5.6 Commitment ledger 应进入 changes / draft-patches / ledgers

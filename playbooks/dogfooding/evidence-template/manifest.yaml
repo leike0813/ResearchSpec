@@ -1,0 +1,27 @@
+schema_version: "1"
+run_id: ""
+scenario_id: ""
+fixture_variant: ""
+researchspec_version: ""
+git_commit: ""
+package_sha256: ""
+agent:
+  product: ""
+  version: ""
+  adapter: ""
+environment:
+  os: ""
+  node_version: ""
+  workspace_path: ""
+started_at: ""
+completed_at: ""
+result: blocked
+hard_failures: []
+scores:
+  routing_clarity: null
+  user_control: null
+  evidence_discipline: null
+  artifact_usability: null
+evidence_paths: []
+related_run_id: null
+notes: ""

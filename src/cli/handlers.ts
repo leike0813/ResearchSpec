@@ -5,7 +5,7 @@ import { stringify } from "yaml";
 
 import { planToolDelivery, type InstallationRecord } from "../adapters/delivery.js";
 import { detectTools, orderTools, parseToolExpression } from "../adapters/tools.js";
-import { DEFAULT_WORKFLOW_PROFILE_ID, WorkItemSelectorSchema, WORKFLOW_PROFILE_IDS, type WorkflowProfileId } from "../core/contracts/workflow.js";
+import { DEFAULT_WORKFLOW_PROFILE_ID, WorkItemSelectorSchema } from "../core/contracts/workflow.js";
 import { Sha256Schema, SubmitActorKindSchema, SubmitActorSchema } from "../core/contracts/artifact.js";
 import { RuntimeActorSchema } from "../core/contracts/gate-transition.js";
 import { GateSelectorSchema, RuntimeSelectorSchema, SubflowSelectorSchema, TransitionSelectorSchema, parseRuntimeSelector } from "../core/contracts/runtime-selector.js";
@@ -29,7 +29,7 @@ import { fileExists, readOptionalText } from "../utils/fs.js";
 import { CliError, success, type CommandContext, type CommandResult } from "./types.js";
 import { searchableMultiSelect } from "./prompts/searchable-multi-select.js";
 
-export interface InitOptions { tools?: string; profile?: string }
+export interface InitOptions { tools?: string }
 export interface UpdateOptions { tools?: string }
 export interface HandoffOptions { stdout?: boolean; out?: string }
 export interface PackOptions { out?: string; includeArtifacts?: boolean }
@@ -40,14 +40,11 @@ export interface StartOptions { input: string; actorKind: string; actorName: str
 export interface AdvanceOptions { actorKind: string; actorName: string; expectedPlanSha256?: string }
 
 export async function handleInit(inputPath: string | undefined, options: InitOptions, context: CommandContext): Promise<CommandResult> {
-  if (options.profile !== undefined && !WORKFLOW_PROFILE_IDS.includes(options.profile as WorkflowProfileId)) throw new CliError("invalid_profile", `Unknown profile: ${options.profile}`, 2, `Supported profiles: ${WORKFLOW_PROFILE_IDS.join(", ")}.`);
   const workspace = context.workspace ? path.resolve(context.cwd, context.workspace) : resolveInitTarget(inputPath, context.cwd);
   const projectRoot = path.dirname(workspace);
   const existing = await fileExists(workspace);
   const priorSnapshot = existing ? await loadWorkspaceSnapshot(workspace) : undefined;
-  const priorProfile = WORKFLOW_PROFILE_IDS.includes(priorSnapshot?.config.profile as WorkflowProfileId) ? priorSnapshot?.config.profile as WorkflowProfileId : "arsu-paper";
-  if (existing && options.profile !== undefined && options.profile !== priorProfile) throw new CliError("profile_change_requires_migration", `Existing workspace uses profile ${priorProfile}; init cannot change it to ${options.profile}.`, 3, "Create an explicit contract migration instead of replacing workflow/state during init.");
-  const profile = (options.profile ?? (existing ? priorProfile : DEFAULT_WORKFLOW_PROFILE_ID)) as WorkflowProfileId;
+  const profile = DEFAULT_WORKFLOW_PROFILE_ID;
   const configured = strings(record(priorSnapshot?.config.agent_tools).selected);
   const detected = await detectTools(projectRoot);
   const explicitTools = options.tools !== undefined;
@@ -70,7 +67,7 @@ export async function handleInit(inputPath: string | undefined, options: InitOpt
   if (!context.interactive && !explicitTools && selected.includes("codex")) throw new CliError("codex_global_write_requires_explicit_selection", "Non-interactive Codex delivery requires explicit --tools codex or --tools all.", 2);
 
   const operations: PlannedWrite[] = [];
-  for (const template of getWorkspaceTemplates(profile)) {
+  for (const template of getWorkspaceTemplates()) {
     if (template.relativePath === "config.yaml" || template.relativePath === "tool-installation-manifest.json") continue;
     const target = path.join(workspace, template.relativePath);
     if (await fileExists(target)) {
@@ -105,7 +102,7 @@ export async function handleInit(inputPath: string | undefined, options: InitOpt
     if (!approved) throw new CliError("cancelled", "Initialization cancelled.", 1);
   }
   if (!context.dryRun) {
-    for (const entry of getWorkspaceEntries(workspace, profile)) if (entry.kind === "dir") await mkdir(entry.path, { recursive: true });
+    for (const entry of getWorkspaceEntries(workspace)) if (entry.kind === "dir") await mkdir(entry.path, { recursive: true });
     await executeWritePlan(plan);
   }
   const diagnostics = [...delivery.diagnostics, ...reconciliation.diagnostics, ...operationDiagnostics(operations)];
@@ -201,14 +198,15 @@ export async function handleStart(selector: string, options: StartOptions, conte
   try { payload = JSON.parse(await readFile(inputPath, "utf8")) as unknown; }
   catch (error) { throw new CliError("invalid_start_input", `Cannot read Start input: ${error instanceof Error ? error.message : String(error)}`, 2); }
   try {
-    const plan = await planSubflowStart({ snapshot: await loadWorkspaceSnapshot(workspace), selector, payload, actor: actorResult.data, confirmedBy: options.confirmedBy, expectedPlanSha256: options.expectedPlanSha256 });
+    const plan = await planSubflowStart({ snapshot: await loadWorkspaceSnapshot(workspace), selector, payload, actor: actorResult.data, confirmedBy: options.confirmedBy, expectedPlanSha256: options.expectedPlanSha256, sourceRoot: context.cwd });
     if (!context.dryRun && plan.status !== "already_started" && !context.yes) {
-      const approved = await confirm({ message: `Start ${selector} as ${plan.instance.instance_id}? This authorizes declared automatic artifact registration but not Gates, Decisions, or transitions.`, default: false });
+      const importSummary = plan.material_passport_import ? ` Import ${String(plan.material_passport_import.artifact_ids.length)} ARS artifacts and ${String(plan.material_passport_import.gate_evidence_ids.length + plan.material_passport_import.decision_evidence_ids.length)} non-authoritative evidence records.` : "";
+      const approved = await confirm({ message: `Start ${selector} as ${plan.instance.instance_id}?${importSummary} This authorizes declared automatic artifact registration but not current Gates, Decisions, or transitions.`, default: false });
       if (!approved) throw new CliError("cancelled", "Subflow start cancelled.", 1);
     }
     const outcome = context.dryRun ? undefined : await executeSubflowStart(plan, workspace);
     const status = context.dryRun ? plan.status : outcome?.status ?? plan.status;
-    return success("start", { status, selector, plan_sha256: plan.plan_sha256, instance_selector: `subflow:${plan.instance.instance_id}`, instance: plan.instance, receipt: plan.receipt, dry_run: context.dryRun, plan: summarizePlan(plan.writePlan.operations), workflow_control_after: outcome?.workflow_control_after ?? null, artifact_registry_updated: false, gate_appended: false, decision_appended: false, semantic_work_executed: false }, { stdout: `${context.dryRun ? "Would start" : status === "already_started" ? "Already started" : "Started"} ${selector} as ${plan.instance.instance_id}.\n` });
+    return success("start", { status, selector, plan_sha256: plan.plan_sha256, instance_selector: `subflow:${plan.instance.instance_id}`, instance: plan.instance, receipt: plan.receipt, material_passport_import: plan.material_passport_import ?? null, dry_run: context.dryRun, plan: summarizePlan(plan.writePlan.operations), workflow_control_after: outcome?.workflow_control_after ?? null, artifact_registry_updated: Boolean(plan.material_passport_import), imported_gate_evidence_appended: (plan.material_passport_import?.gate_evidence_ids.length ?? 0) > 0, imported_decision_evidence_appended: (plan.material_passport_import?.decision_evidence_ids.length ?? 0) > 0, state_updated: !context.dryRun && status === "started", semantic_work_executed: false }, { stdout: `${context.dryRun ? "Would start" : status === "already_started" ? "Already started" : "Started"} ${selector} as ${plan.instance.instance_id}.\n` });
   } catch (error) {
     if (error instanceof CliError) throw error;
     if (error instanceof SubflowStartError) throw new CliError(error.code, error.message, error.kind === "usage" ? 2 : error.kind === "conflict" ? 3 : 1, undefined, error.details);
@@ -486,8 +484,6 @@ function installationRecords(value: unknown): InstallationRecord[] {
     typeof item.source === "string" && item.adapter_version === "1");
 }
 function deduplicateInstallations(items: InstallationRecord[]): InstallationRecord[] { return [...new Map(items.map((item) => [`${item.scope}:${item.path}`, item])).values()].sort((a, b) => a.tool_id.localeCompare(b.tool_id) || a.path.localeCompare(b.path)); }
-const RETIRED_COMPANION_IDS = new Set(["explore", "check", "next", "context", "submit", "archive"]);
-
 async function reconcileInstallations(input: {
   projectRoot: string;
   existingInstallations: readonly InstallationRecord[];
@@ -510,8 +506,7 @@ async function reconcileInstallations(input: {
     }
 
     const selected = selectedTools.has(installation.tool_id);
-    const productRetirement = selected && isRetiredCompanionSource(installation.source);
-    const mayRemove = installation.scope === "project" || (installation.scope === "shared-global" && productRetirement);
+    const mayRemove = installation.scope === "project";
     if (!mayRemove) {
       retainedInstallations.push(installation);
       continue;
@@ -527,12 +522,10 @@ async function reconcileInstallations(input: {
       diagnostics.push({
         severity: "warning",
         code: "generated_file_drift",
-        message: productRetirement
-          ? "Retired generated projection has user modifications and was preserved."
-          : "Stale generated file has user modifications and was preserved.",
+        message: "Stale generated file has user modifications and was preserved.",
         path: target,
         blocking: false,
-        details: { source: installation.source, retirement: productRetirement },
+        details: { source: installation.source },
       });
       continue;
     }
@@ -543,11 +536,7 @@ async function reconcileInstallations(input: {
       scope: installation.scope,
       ownership: "generated",
       previousHash: installation.sha256,
-      reason: productRetirement
-        ? "remove product-retired manifest-owned Companion projection"
-        : selected
-          ? "remove stale manifest-owned generated file"
-          : "tool was explicitly deselected",
+      reason: selected ? "remove stale manifest-owned generated file" : "tool was explicitly deselected",
     });
   }
   return { operations, retainedInstallations, diagnostics };
@@ -557,11 +546,6 @@ function installationKey(item: Pick<InstallationRecord, "scope" | "path">): stri
   return `${item.scope}:${item.path}`;
 }
 
-function isRetiredCompanionSource(source: string): boolean {
-  const command = source.match(/^command:([a-z-]+)$/)?.[1];
-  const skill = source.match(/^companion:researchspec-([a-z-]+)\//)?.[1];
-  return RETIRED_COMPANION_IDS.has(command ?? skill ?? "");
-}
 function operationDiagnostics(operations: PlannedWrite[]): Diagnostic[] { return operations.filter((item) => item.action === "skip-drift" || item.action === "conflict").map((item) => ({ severity: "warning", code: item.action === "skip-drift" ? "generated_file_drift" : "generated_file_conflict", message: item.reason, path: item.path, blocking: false })); }
 function deliveryResult<T>(command: string, data: T, human: { stdout: string }, diagnostics: Diagnostic[]): CommandResult<T> {
   const base = success(command, data, human, diagnostics);

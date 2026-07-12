@@ -251,7 +251,7 @@ function buildNeedsReview(
       line: finding.line,
       category: finding.category,
       term: finding.term,
-      reason: "semantic_cleanup_not_required_for_compatibility",
+      reason: "semantic_cleanup_not_required_for_integration",
     });
   }
   for (const missing of missingDependencies) {

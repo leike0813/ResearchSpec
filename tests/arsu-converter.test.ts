@@ -34,7 +34,7 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
   assert.match(deepResearch, /work:<instance>\/<node>/);
   assert.match(deepResearch, /policy is `automatic`/);
   assert.match(deepResearch, /--expected-sha256/);
-  assert.match(deepResearch, /For `manual`, `legacy`, or missing automatic authorization/);
+  assert.match(deepResearch, /For `manual` or missing automatic authorization/);
   assert.match(deepResearch, /run direct\s+`researchspec submit` with `--dry-run --json`/);
   assert.doesNotMatch(deepResearch, /researchspec-submit/);
   assert.match(deepResearch, /never hand-edit\s+state, registries, receipts, or JSONL ledgers/);
@@ -51,7 +51,7 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
   const contracts = JSON.parse(
     await readFile(path.join(root, "skills/arsu/researchspec-contracts.json"), "utf8"),
   ) as { material_passport_policy?: string; anchor_replacement?: { coverage_policy?: string; profile_id?: string } };
-  assert.equal(contracts.material_passport_policy, "compatibility_artifact_only_not_runtime_ssot");
+  assert.equal(contracts.material_passport_policy, "imported_evidence_only_not_runtime_ssot");
   assert.equal(contracts.anchor_replacement?.profile_id, "researchspec-anchor-replacement-v3");
   assert.equal(contracts.anchor_replacement?.coverage_policy, "required_and_recommended");
 
@@ -74,6 +74,7 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
         after_sha256?: string;
         marker_id?: string;
         template_id?: string;
+        output_paths?: string[];
       }>;
     };
     routing_catalog: { path: string; catalog_id: string; skill_count: number; mode_route_count: number; entry_route_count: number; sha256: string };
@@ -106,6 +107,20 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
   assert.match(deepResearch, /<!--\/rs:STATE-001-->\n/);
   assert.doesNotMatch(deepResearch, /ResearchSpec Contract Replacement/);
   assert.match(deepResearch, /researchspec\/runs\/current\/state\.yaml/);
+  const crossSkillDeepResearchPath = path.join(
+    root,
+    "skills/arsu/academic-paper/references/cross-skill/deep-research/SKILL.md",
+  );
+  const crossSkillDeepResearch = await readFile(crossSkillDeepResearchPath, "utf8");
+  assert.match(crossSkillDeepResearch, /<!--rs:STATE-001-->/);
+  assert.match(crossSkillDeepResearch, /description: test/);
+  assert.doesNotMatch(crossSkillDeepResearch, /researchspec-contract-preflight:v5/);
+  assert.equal(
+    manifest.anchor_replacements.records.some((item) =>
+      item.anchor_id === "STATE-001" &&
+      item.output_paths?.includes("academic-paper/references/cross-skill/deep-research/SKILL.md")),
+    true,
+  );
   const anchorReport = await readFile(path.join(root, "skills/arsu/anchor-replacement-report.md"), "utf8");
   assert.match(anchorReport, /### STATE-001/);
   assert.match(anchorReport, /#### Before/);
@@ -208,6 +223,33 @@ void test("validation reports generated link and hash drift", async () => {
   assert.equal(validation.ok, false);
   assert.equal(validation.errors.some((error) => error.includes("Broken link")), true);
   assert.equal(validation.errors.some((error) => error.includes("Hash mismatch")), true);
+  await cleanup(root);
+});
+
+void test("validation blocks unresolved operational code paths only in public entrypoints", async () => {
+  const root = await tempRepoRoot();
+  await makeSource(root);
+  await convertArsu({ repoRoot: root });
+
+  const outputRoot = path.join(root, "skills/arsu");
+  const skillPath = path.join(outputRoot, "deep-research/SKILL.md");
+  await writeFile(skillPath, `${await readFile(skillPath, "utf8")}\nRun \`scripts/missing.py\`.\n`, "utf8");
+
+  const publicValidation = await validateArsuOutput(outputRoot);
+  assert.equal(publicValidation.ok, false);
+  assert.equal(
+    publicValidation.errors.includes("Unresolved operational path in deep-research/SKILL.md: scripts/missing.py"),
+    true,
+  );
+
+  await convertArsu({ repoRoot: root, force: true });
+  const nestedPath = path.join(outputRoot, "deep-research/references/guide.md");
+  await writeFile(nestedPath, `${await readFile(nestedPath, "utf8")}\nHistorical \`docs/design/old.md\`.\n`, "utf8");
+  const nestedValidation = await validateArsuOutput(outputRoot);
+  assert.equal(
+    nestedValidation.errors.some((error) => error.includes("Unresolved operational path")),
+    false,
+  );
   await cleanup(root);
 });
 
@@ -350,7 +392,7 @@ async function makeSourceFiles(source: string, options: { omitGroup?: string } =
     await mkdir(path.join(source, group, "examples"), { recursive: true });
     await writeFile(
       path.join(source, group, "SKILL.md"),
-      `---\nname: ${group}\ndescription: test\n---\n\n# ${group}\n`,
+      `---\nname: ${group}\ndescription: test\n---\n\n# ${group}\n${group === "academic-paper" ? "Load deep-research/SKILL.md.\n" : ""}`,
       "utf8",
     );
     await writeFile(path.join(source, group, "agents/worker.md"), "Agent prompt\n", "utf8");

@@ -4,7 +4,7 @@
 - Source: `vendor/ars`
 - Source commit: `becfcc40c6e9e93c187cf4a088333f83373e002d`
 - Output: `skills/arsu`
-- Generated at: `2026-07-11T04:58:42Z`
+- Generated at: `2026-07-11T14:47:38Z`
 - Validation: pass
 
 ## Source Checkout
@@ -21,14 +21,14 @@
 - `academic-pipeline`
 - `deep-research`
 
-## Contract Compatibility
+## Contract Integration
 
 - Manifest: `researchspec-contracts.json`
 - Profile: `researchspec-preflight-v5`
-- Material Passport policy: `compatibility_artifact_only_not_runtime_ssot`
+- Material Passport policy: `imported_evidence_only_not_runtime_ssot`
 - Full matrix injection: `false`
 - Anchor replacement profile: `researchspec-anchor-replacement-v3`
-- Anchor replacement coverage: 50/50 replaceable anchors
+- Anchor replacement coverage: 53/53 replaceable anchors
 - Diagnostic anchors matched: 2/2
 - Human replacement report: `anchor-replacement-report.md`
 
@@ -44,7 +44,7 @@
 
 - `artifact_provenance`: 4
 - `claim_contract_projection`: 3
-- `contract_io_boundary`: 3
+- `contract_io_boundary`: 6
 - `decision_ledger_entry`: 2
 - `draft_patch_protocol`: 4
 - `gate_policy`: 5
@@ -59,7 +59,7 @@
 - Output files: 483
 - Excluded source files: 499
 - Unclassified source files: 321
-- Risk findings: 1226
+- Risk findings: 1118
 
 ## Risk Findings
 
@@ -113,7 +113,7 @@
 - `academic-paper-reviewer/references/cross-skill/academic-paper/agents/formatter_agent.md` line 390: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/references/cross-skill/academic-paper/agents/formatter_agent.md` line 396: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/references/cross-skill/academic-paper/agents/formatter_agent.md` line 416: issue_reference `issue_or_pr_reference`
-- ... 1176 more findings in `conversion-manifest.json`
+- ... 1068 more findings in `conversion-manifest.json`
 
 ## Validation
 

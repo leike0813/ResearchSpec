@@ -4,9 +4,7 @@ ResearchSpec provides a minimal TypeScript CLI framework for creating and
 checking local file-based contract workspaces. This capability covers the first
 framework slice: package scaffold, user-facing `init` / `status` / `check`
 commands, workspace discovery, and basic workspace validation.
-
 ## Requirements
-
 ### Requirement: TypeScript CLI Project Scaffold
 
 ResearchSpec SHALL provide a minimal TypeScript project scaffold for a local
@@ -178,45 +176,20 @@ explicit ownership and overwrite policy.
 - **THEN** its installation manifest or decision ledger entry SHALL be committed
   after dependent file writes
 
-### Requirement: Typed Workflow Work-Item Contract
-
-ResearchSpec SHALL parse and validate both legacy typed work-item definitions and strict instance-enabled subflow templates without hard-coding ARSU stage semantics into core.
-
-#### Scenario: Valid graph becomes executable control data
-
-- **GIVEN** `specs/workflow.yaml` declares unique legacy work items or strict subflow templates with valid stages, dependencies, outputs, instructions, parallel groups, validation, submission and completion metadata
-- **WHEN** ResearchSpec loads the workspace snapshot
-- **THEN** it SHALL expose a typed workflow definition to runtime consumers
-- **AND** template, work-item, stage, group, route, dependency, output-path and graph references SHALL be validated
-
-#### Scenario: Invalid graph blocks control-plane use
-
-- **GIVEN** a workflow contains duplicate IDs/outputs, missing references, an invalid route/placeholder/join, a dependency cycle, or a path escape
-- **WHEN** ResearchSpec loads or checks the workspace
-- **THEN** it SHALL emit a blocking diagnostic with a stable reason code
-- **AND** it SHALL NOT produce a usable frontier from that graph
-
-#### Scenario: Legacy workflow remains valid but unconfigured
-
-- **GIVEN** a valid existing workflow contract has neither `work_items` nor `subflow_templates`
-- **WHEN** ResearchSpec loads, checks, or reports status for the workspace
-- **THEN** ordinary workspace operations SHALL continue to succeed
-- **AND** workflow control SHALL report `configured: false` without modifying the workspace
-
 ### Requirement: Deterministic Read-Only Workflow Evaluation
 
 ResearchSpec SHALL derive template, instance, parallel-group and work state from typed workflow/state, contracts, artifact registry/files, decisions and gates without modifying the workspace.
 
-#### Scenario: Unstarted Slice exposes a subflow frontier
+#### Scenario: Unstarted universal workspace exposes subflow frontiers
 
-- **GIVEN** a new `arsu-research-slice` workspace with no subflow instance
+- **GIVEN** a new `arsu-v0-1` workspace with no subflow instance
 - **WHEN** ResearchSpec evaluates the workflow
-- **THEN** it SHALL expose the research template as startable
+- **THEN** it SHALL expose eligible external templates as startable
 - **AND** it SHALL expose no ready work item before Start
 
-#### Scenario: Started Slice frontier is deterministic
+#### Scenario: Started subflow frontier is deterministic
 
-- **GIVEN** the research Slice subflow is active with no registered outputs
+- **GIVEN** a current subflow instance is active with no registered outputs
 - **WHEN** ResearchSpec evaluates the workflow
 - **THEN** scoped RQ Brief work SHALL be ready and downstream work SHALL be blocked
 - **AND** repeated evaluation of unchanged files SHALL return the same frontier
@@ -255,27 +228,20 @@ ResearchSpec SHALL derive template, instance, parallel-group and work state from
 - **THEN** it SHALL report `stage_work_complete` and `transition_required: true`
 - **AND** it SHALL NOT update state or declare the run/subflow terminal
 
-### Requirement: Explicit Research Slice Profile
+### Requirement: Universal Workflow Profile
 
-ResearchSpec SHALL provide an opt-in dynamic `arsu-research-slice` profile while preserving `arsu-paper` as the default and old Slice workspaces as legacy inputs.
+ResearchSpec SHALL initialize every workspace with the `arsu-v0-1` profile.
 
-#### Scenario: Explicit Slice initialization creates a startable template
+#### Scenario: Initialization creates universal templates
 
-- **WHEN** a user initializes a new workspace with `--profile arsu-research-slice`
-- **THEN** workflow/state SHALL use Schema `0.2` with a partial research subflow template and no instances
+- **WHEN** a user initializes a new workspace
+- **THEN** workflow/state SHALL use Schema `0.2` with the universal ARSU templates and no instances
 - **AND** no empty candidate, copied template or started academic work SHALL be created
 
-#### Scenario: Default initialization remains unchanged
+#### Scenario: Profile option is unavailable
 
-- **WHEN** a user initializes without an explicit profile
-- **THEN** ResearchSpec SHALL use `arsu-paper`
-
-#### Scenario: Init cannot replace an existing profile
-
-- **GIVEN** an initialized workspace has one profile
-- **WHEN** `init` requests another profile
-- **THEN** ResearchSpec SHALL return a write-conflict-class failure
-- **AND** it SHALL require explicit migration rather than replacing workflow/state
+- **WHEN** a user supplies `--profile`
+- **THEN** CLI parsing SHALL reject the unknown option before writing
 
 ### Requirement: Write Plan Read Preconditions
 
@@ -288,9 +254,9 @@ ResearchSpec SHALL allow a writing transaction to declare hashes for authoritati
 - **THEN** execution SHALL fail with a write conflict
 - **AND** no planned write SHALL be committed
 
-#### Scenario: Existing callers remain compatible
+#### Scenario: Transaction supplies no read preconditions
 
-- **WHEN** an existing writing workflow supplies no read preconditions
+- **WHEN** a writing transaction supplies no read preconditions
 - **THEN** WritePlan SHALL preserve its current write preflight, staging, rollback, and commit behavior
 
 ### Requirement: Receipt-Backed Workflow Completion
@@ -349,11 +315,11 @@ ResearchSpec SHALL derive Gate and transition state independently for every acti
 - **THEN** the instance SHALL become complete and run lifecycle SHALL be re-derived without modifying unrelated instances
 
 ### Requirement: Schema 0.2 supports child subflow graphs
-Schema 0.2 SHALL parse declarative child subflow nodes and child join groups with default-empty values and SHALL preserve old Schema 0.2 files without migration.
+Schema 0.2 SHALL require declarative child subflow node and child join group arrays on every template.
 
-#### Scenario: Legacy template omits child fields
-- **WHEN** an existing Schema 0.2 workflow has no child node or child group properties
-- **THEN** it parses with empty child collections and retains its prior behavior
+#### Scenario: Template omits child fields
+- **WHEN** a Schema 0.2 workflow omits child node or child group properties
+- **THEN** strict workflow validation fails
 
 ### Requirement: Child completion is derived from trusted state
 The workflow evaluator SHALL count a child node complete only when a matching child instance has a trusted parent-scoped start receipt and terminal state satisfying the node completion rule.
@@ -370,8 +336,16 @@ New profile work items SHALL identify their producer route, and validation SHALL
 - **THEN** workflow validation fails
 
 ### Requirement: New outputs are instance scoped
-The runtime SHALL resolve instance-scoped output paths below the owning subflow instance artifact root while retaining legacy workspace-scoped output paths.
+The runtime SHALL resolve outputs below the owning subflow instance artifact root.
 
 #### Scenario: Two revision rounds emit the same artifact type
 - **WHEN** sibling round instances resolve the same relative output name
 - **THEN** they resolve to different concrete paths and artifact registry records
+
+### Requirement: Single Current Runtime Contract
+ResearchSpec SHALL parse exactly the `arsu-v0-1` Schema 0.2 subflow workflow and run-state family, with explicit current registry and ledger record variants.
+
+#### Scenario: Pre-instance contract is loaded
+- **WHEN** workflow or run state uses the former static contract
+- **THEN** validation SHALL fail and SHALL NOT expose a runtime frontier
+

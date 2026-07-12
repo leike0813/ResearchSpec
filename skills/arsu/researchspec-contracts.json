@@ -1,9 +1,9 @@
 {
   "schema_version": "0.1",
-  "compatibility_kind": "researchspec-preflight-v5",
+  "integration_profile": "researchspec-preflight-v5",
   "source": "vendor/ars",
   "output": "skills/arsu",
-  "material_passport_policy": "compatibility_artifact_only_not_runtime_ssot",
+  "material_passport_policy": "imported_evidence_only_not_runtime_ssot",
   "anchor_replacement": {
     "profile_id": "researchspec-anchor-replacement-v3",
     "coverage_policy": "required_and_recommended",
@@ -36,7 +36,7 @@
       "notes": [
         "academic-paper uses the shared ResearchSpec runtime preflight profile.",
         "Load only stage/mode-relevant contracts into agent context.",
-        "Treat ARS Material Passport as an imported compatibility artifact, not runtime truth.",
+        "Treat ARS Material Passport as imported external evidence, not runtime truth.",
         "Per-stage and per-mode graphs are supplied by the workflow profile layer."
       ],
       "full_matrix_injection": false
@@ -66,7 +66,7 @@
       "notes": [
         "academic-paper-reviewer uses the shared ResearchSpec runtime preflight profile.",
         "Load only stage/mode-relevant contracts into agent context.",
-        "Treat ARS Material Passport as an imported compatibility artifact, not runtime truth.",
+        "Treat ARS Material Passport as imported external evidence, not runtime truth.",
         "Per-stage and per-mode graphs are supplied by the workflow profile layer."
       ],
       "full_matrix_injection": false
@@ -96,7 +96,7 @@
       "notes": [
         "academic-pipeline uses the shared ResearchSpec runtime preflight profile.",
         "Load only stage/mode-relevant contracts into agent context.",
-        "Treat ARS Material Passport as an imported compatibility artifact, not runtime truth.",
+        "Treat ARS Material Passport as imported external evidence, not runtime truth.",
         "Per-stage and per-mode graphs are supplied by the workflow profile layer."
       ],
       "full_matrix_injection": false
@@ -126,7 +126,7 @@
       "notes": [
         "deep-research uses the shared ResearchSpec runtime preflight profile.",
         "Load only stage/mode-relevant contracts into agent context.",
-        "Treat ARS Material Passport as an imported compatibility artifact, not runtime truth.",
+        "Treat ARS Material Passport as imported external evidence, not runtime truth.",
         "Per-stage and per-mode graphs are supplied by the workflow profile layer."
       ],
       "full_matrix_injection": false

@@ -20,13 +20,13 @@ Unchecked items are factual missing evidence. Do not convert them to completed s
 
 ## Manual Dogfooding
 
-Follow [the dogfooding guide](researchspec_dogfooding_guide.md) and attach reproducible evidence paths.
+Follow [the repository-only dogfooding playbook](../playbooks/dogfooding/README.md) and attach reproducible evidence directories outside the research workspace. Scenario definitions and release mappings are authoritative in `playbooks/dogfooding/scenarios.yaml`.
 
-- [ ] Quick standalone completed without authoritative-state edits. Evidence: _pending_
-- [ ] New-session Resume used only persisted workspace/frontier facts. Evidence: _pending_
-- [ ] Handoff/pack export completed without workflow-state advancement. Evidence: _pending_
-- [ ] Gate challenge produced reverification and an explicit latest-event-bound override. Evidence: _pending_
-- [ ] End-to-end pipeline completed after at least revision rounds 1 and 2. Evidence: _pending_
+- [ ] `DF-T1-STANDALONE` — Quick standalone completed without authoritative-state edits. Evidence directory: _pending_
+- [ ] `DF-T1-RESUME` — New-session Resume used only persisted workspace/frontier facts. Evidence directory: _pending_
+- [ ] `DF-T1-EXPORT` — Handoff/pack export completed without workflow-state advancement. Evidence directory: _pending_
+- [ ] `DF-T1-GATE` — Gate challenge produced reverification and an explicit latest-event-bound override. Evidence directory: _pending_
+- [ ] `DF-T1-PIPELINE` — End-to-end pipeline completed after at least revision rounds 1 and 2. Evidence directory: _pending_
 
 ## Administrative And Legal
 

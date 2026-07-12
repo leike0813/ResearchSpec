@@ -16,7 +16,7 @@ void test("ARSU contract anchor assets validate against vendored upstream", asyn
 
   assert.equal(result.ok, true, result.errors.join("\n"));
   assert.deepEqual(result.warnings, []);
-  assert.equal(result.anchor_count, 52);
+  assert.equal(result.anchor_count, 55);
   assert.ok(result.manifest_file_count > 0);
 });
 
@@ -34,11 +34,34 @@ void test("replaceable anchor assets declare semantic replacement metadata", asy
   };
   const replaceable = data.anchors.filter((anchor) => anchor.severity === "required" || anchor.severity === "recommended");
 
-  assert.equal(replaceable.length, 50);
+  assert.equal(replaceable.length, 53);
   assert.equal(replaceable.every((anchor) =>
     /^(STATE|IO|HANDOFF|PATCH|GATE|ARTIFACT|CLAIM|DECISION|SOURCE|REVIEW)-\d{3}$/.test(anchor.id) &&
     anchor.name && anchor.semantic_role && anchor.researchspec_targets?.length && anchor.replacement_shape &&
     anchor.replacement_scope?.start_snippet && anchor.replacement_scope.end_snippet), true);
+});
+
+void test("semantic replacement assets retain stable entrypoint boundaries", async () => {
+  const cases = [
+    {
+      path: "src/arsu-converter/anchors/replacements/PATCH-001.md",
+      required: [/does not apply to the `academic-paper full` in-pair Phase\s+6→4 loop/, /complete `## Draft Body`/],
+    },
+    {
+      path: "src/arsu-converter/anchors/replacements/IO-004.md",
+      required: [/Ambiguous cross-stage\s+material must be clarified before dispatch/, /one invocation does\s+not authorize either role to extend itself into another stage/],
+    },
+    {
+      path: "src/arsu-converter/anchors/replacements/IO-006.md",
+      required: [/expected\s+to read the complete registered manuscript/, /read access\s+does not extend their write scope/],
+    },
+  ];
+
+  for (const item of cases) {
+    const text = await readFile(item.path, "utf8");
+    for (const pattern of item.required) assert.match(text, pattern, item.path);
+    assert.doesNotMatch(text, /docs\/design\/|scripts\/check_pipeline_integrity\.py/, item.path);
+  }
 });
 
 void test("upstream manifest extracts contract-risk shape from shared handoff schemas", async () => {

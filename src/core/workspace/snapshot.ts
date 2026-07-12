@@ -4,9 +4,11 @@ import { z } from "zod";
 
 import { fileExists, readOptionalText } from "../../utils/fs.js";
 import { ArtifactRegistrySchema } from "../contracts/artifact.js";
+import { ImportedGateEvidenceSchema } from "../contracts/material-passport.js";
+import { DecisionLedgerEventSchema } from "../contracts/decision.js";
 import { GateEventV1Schema } from "../contracts/gate-transition.js";
-import { isInstanceRunState, RunStateSchema, type RunState } from "../contracts/run-state.js";
-import { isInstanceWorkflowDefinition, validateWorkflowDefinition, WorkflowDefinitionSchema, WORKFLOW_PROFILE_IDS, type WorkflowDefinition } from "../contracts/workflow.js";
+import { RunStateSchema, type RunState } from "../contracts/run-state.js";
+import { validateWorkflowDefinition, WorkflowDefinitionSchema, WORKFLOW_PROFILE_IDS, type WorkflowDefinition } from "../contracts/workflow.js";
 import { parseJson, parseJsonLines, parseYaml } from "../validation/parse.js";
 import type { Diagnostic } from "../validation/types.js";
 import { JSON_FILES, JSONL_FILES, MARKDOWN_FILES, REQUIRED_FILES, YAML_FILES } from "./layout.js";
@@ -16,9 +18,7 @@ const SafeId = z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]*$/).refine((value) =
 const ActorSchema = z.union([z.string().min(1), z.looseObject({ kind: z.string().min(1), name: z.string().min(1) })]);
 const SourceSchema = z.looseObject({ source_id: SafeId });
 const ClaimSchema = z.looseObject({ claim_id: SafeId });
-const DecisionSchema = z.looseObject({ event_id: SafeId, decision_id: SafeId, timestamp: z.string().min(1), actor: ActorSchema, decision_type: z.string().min(1), selected_option: z.unknown(), status: z.enum(["proposed", "accepted", "rejected", "postponed", "superseded"]) });
-const LegacyGateSchema = z.looseObject({ event_id: SafeId, gate_id: SafeId, timestamp: z.string().min(1), actor: ActorSchema, stage_id: z.string().min(1), gate_type: z.string().min(1), verdict: z.enum(["pass", "pass_with_conditions", "fail", "not_run"]), blocking: z.boolean() });
-const GateSchema = z.union([GateEventV1Schema, LegacyGateSchema]);
+const GateSchema = z.union([ImportedGateEvidenceSchema, GateEventV1Schema]);
 const ConfigSchema = z.looseObject({ schema_version: z.string(), profile: z.enum(WORKFLOW_PROFILE_IDS), agent_tools: z.looseObject({ selected: z.array(z.string()), delivery: z.enum(["skills", "commands", "both"]) }) });
 const ManifestSchema = z.looseObject({ schema_version: z.string(), package_version: z.string(), installations: z.array(z.looseObject({ tool_id: z.string(), path: z.string(), scope: z.enum(["project", "shared-global"]), sha256: z.string(), source: z.string(), adapter_version: z.string() })) });
 const SourcesSchema = z.looseObject({ schema_version: z.string(), sources: z.array(SourceSchema) });
@@ -132,7 +132,7 @@ export async function loadWorkspaceSnapshot(workspace: string): Promise<Workspac
   validateDocument("specs/claims.yaml", documents["specs/claims.yaml"], ClaimsSchema, files, diagnostics);
   validateDocument("specs/manuscript.yaml", documents["specs/manuscript.yaml"], ManuscriptSchema, files, diagnostics);
   validateDocument("runs/current/artifact-registry.json", documents["runs/current/artifact-registry.json"], ArtifactRegistrySchema, files, diagnostics);
-  validateRecords(decisions, DecisionSchema, path.join(workspace, "runs/current/decision-ledger.jsonl"), "invalid_decision_event", diagnostics);
+  validateRecords(decisions, DecisionLedgerEventSchema, path.join(workspace, "runs/current/decision-ledger.jsonl"), "invalid_decision_event", diagnostics);
   validateRecords(gates, GateSchema, path.join(workspace, "runs/current/gate-ledger.jsonl"), "invalid_gate_event", diagnostics);
 
   const changes = await loadActiveChanges(workspace, diagnostics);
@@ -143,11 +143,7 @@ export async function loadWorkspaceSnapshot(workspace: string): Promise<Workspac
 }
 
 function validateInstanceStateReferences(workflow: WorkflowDefinition | undefined, state: RunState | undefined, file: SnapshotFile | undefined, diagnostics: Diagnostic[]): void {
-  if (!file || !isInstanceRunState(state)) return;
-  if (!isInstanceWorkflowDefinition(workflow)) {
-    diagnostics.push({ severity: "error", code: "workflow_state_version_mismatch", message: "Instance run state requires an instance workflow.", path: file.absolutePath, blocking: true });
-    return;
-  }
+  if (!file || !state || !workflow) return;
   const ids = new Set<string>();
   const templateIds = new Set(workflow.subflow_templates.map((item) => item.template_id));
   for (const instance of state.subflows) {
@@ -178,7 +174,7 @@ function parseRunState(value: unknown, file: SnapshotFile | undefined, diagnosti
   if (!file) return undefined;
   const result = RunStateSchema.safeParse(value);
   if (!result.success) {
-    diagnostics.push({ severity: "error", code: "invalid_contract_shape", message: "Run state does not match a supported legacy or instance shape.", path: file.absolutePath, blocking: true, details: result.error.issues });
+    diagnostics.push({ severity: "error", code: "invalid_contract_shape", message: "Run state does not match the current Schema 0.2 contract.", path: file.absolutePath, blocking: true, details: result.error.issues });
     return undefined;
   }
   return result.data;

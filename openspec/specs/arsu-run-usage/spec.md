@@ -1,9 +1,7 @@
 ## Purpose
 
 Define the canonical user-visible active-run, subflow, frontier, Gate, transition, and Decision protocol.
-
 ## Requirements
-
 ### Requirement: Active Run And Dynamic Subflows
 ResearchSpec SHALL maintain at most one active run per workspace and SHALL represent standalone work, pipeline work, and revision rounds as identifiable subflow instances.
 
@@ -70,3 +68,16 @@ ResearchSpec SHALL persist user choices in the Decision ledger only when they af
 - **WHEN** a user asks exploratory questions or gives low-impact working feedback
 - **THEN** the interaction SHALL remain in the relevant working artifact or conversation context
 - **AND** it SHALL NOT create a Decision ledger event solely for audit volume
+
+### Requirement: External Passport Mid-Entry Journey
+ResearchSpec SHALL route a user continuing from an ARS Material Passport through the current mid-entry summary, confirmation and workflow frontier.
+
+#### Scenario: User imports a Passport
+- **WHEN** Navigate identifies a local Material Passport and the user confirms the import summary
+- **THEN** the Agent SHALL preview and execute the hash-bound Start transaction
+- **AND** subsequent work SHALL use current status and scoped instructions
+
+#### Scenario: Imported claims require current authority
+- **WHEN** the Passport contains a branch, Gate pass or override
+- **THEN** the Agent SHALL expose it as imported evidence and use the current Gate or Decision flow before advancing
+

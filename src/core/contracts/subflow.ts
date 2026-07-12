@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { SubmitActorSchema } from "./artifact.js";
+import { MaterialPassportImportSchema } from "./material-passport.js";
 
 const SafeIdSchema = z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]*$/).refine((value) => !value.includes(".."));
 const Sha256Schema = z.string().regex(/^[a-f0-9]{64}$/);
@@ -13,6 +14,7 @@ export const SubflowStartInputSchema = z.strictObject({
   prerequisite_artifact_ids: z.array(SafeIdSchema).refine(unique, "prerequisite_artifact_ids must be unique"),
   prerequisite_decision_ids: z.array(SafeIdSchema).refine(unique, "prerequisite_decision_ids must be unique"),
   parent_subflow_selector: z.string().regex(/^subflow:sf-[A-Za-z0-9][A-Za-z0-9._-]*$/).nullable(),
+  material_passport_import: MaterialPassportImportSchema.optional(),
 });
 
 export const SubflowStartReceiptSchema = z.strictObject({
@@ -44,6 +46,12 @@ export const SubflowStartReceiptSchema = z.strictObject({
   acknowledged_user_input_ids: z.array(SafeIdSchema),
   prerequisite_artifact_ids: z.array(SafeIdSchema),
   prerequisite_decision_ids: z.array(SafeIdSchema),
+  material_passport_import: z.strictObject({
+    import_id: SafeIdSchema,
+    passport_sha256: Sha256Schema,
+    boundary_hash: z.string().regex(/^[a-f0-9]{12}$/).nullable(),
+    projection_artifact_id: SafeIdSchema,
+  }).optional(),
   basis: z.strictObject({
     workflow_sha256: Sha256Schema,
     state_sha256: Sha256Schema,

@@ -538,16 +538,8 @@ score_trajectory: {
 ### Reset Boundary Extension (v3.6.3)
 
 <!--rs:STATE-009-->
-When importing an ARS Material Passport with `ARS_PASSPORT_RESET=1`, interpret
-the following Schema 9 `reset_boundary[]` structure only as a compatibility
-payload. Project stage, mode, and consumption state into
-`researchspec/runs/current/state.yaml`; register the passport and referenced
-outputs through `researchspec/runs/current/artifact-registry.json`; return human
-branch choices to the decision runtime for
-`researchspec/runs/current/decision-ledger.jsonl`; and submit verification or
-staleness findings to the resume gate for
-`researchspec/runs/current/gate-ledger.jsonl`. Do not append to this schema as a
-substitute for those ResearchSpec-owned writes.
+When importing an ARS Schema 9 `reset_boundary[]`, preserve the selected boundary and related records inside the immutable source artifact and deterministic projection. Record the consumed boundary in `material_passport_imports`; do not copy the external ledger into current state or emit a modified Passport.
+Register the immutable source in `researchspec/runs/current/artifact-registry.json`.
 <!--/rs:STATE-009-->
 
 ```yaml
@@ -804,15 +796,8 @@ See `style_calibration_protocol.md` for full consumption rules and conflict reso
 - `verified` / `status` / `quality_assessment`: academic-paper-reviewer (re-review mode)
 
 <!--rs:REVIEW-015-->
-**Consumer:** academic-paper revision mode and the pipeline orchestrator resolve
-Schema 11 commitment artifacts through
-`researchspec/runs/current/artifact-registry.json`. Research-meaning commitments
-become proposed `researchspec/changes/<change-id>/contract-patch.yaml` files;
-manuscript edits trace to `researchspec/draft-patches/<patch-id>.json`; accepted
-or rejected strategic choices are returned to the decision runtime for
-`researchspec/runs/current/decision-ledger.jsonl`. An imported Material Passport
-may carry a Schema 11 compatibility copy, but it is not the cross-stage source
-of truth.
+Register the canonical revision roadmap and review report as current ResearchSpec artifacts. Any Schema 11 representation originating outside ResearchSpec is imported evidence only; cross-stage work must reference the registered artifact id and hash.
+Register the roadmap through `researchspec/runs/current/artifact-registry.json`.
 <!--/rs:REVIEW-015-->
 
 **Purpose**: Maps every reviewer concern through the full revision cycle — what was raised, what the author claims to have done, where the change is, and whether it was independently verified.

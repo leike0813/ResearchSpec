@@ -49,6 +49,10 @@ CLI 必须遵守以下边界：
 - 不直接改 high-impact specs，除非用户通过明确决策接受 pending item。
 - 不依赖 Claude Code、Codex、Cursor、Gemini CLI 或任何单一 agent runtime。
 - 不把 ARS Material Passport 恢复为 ResearchSpec runtime SSOT。
+- 允许 `start subflow:tpl-academic-pipeline-mid-entry` 在同一份严格 Start JSON 中
+  携带可选 `material_passport_import`；它是 hash-bound 外部证据导入，不是新顶层命令。
+- 导入的 Gate/Decision 历史必须标记为 `imported_evidence`，只能进入 instructions
+  context，不能直接推进当前 workflow。
 - 默认不覆盖用户内容；写操作需要显示 summary，并支持 `--dry-run` 和显式
   `--force`。
 
@@ -65,6 +69,8 @@ CLI 必须遵守以下边界：
 - wrapper input packet generation 属于内部 runtime/helper API，不作为用户命令。
 - artifact registry 和 ledger 的低层 append 属于 helper/API 行为；用户只能通过
   `submit`、`decide` 等受约束的高层事务入口触发相应写入。
+- Material Passport 的 registry/ledger 投影只能由已确认的 mid-entry Start 事务触发；
+  dry-run 必须显示原件、projection、evidence、receipt 与 state-last 写计划。
 - ARSU converter maintenance 属于开发者命令或脚本，不放进本文公共 CLI。
 
 ## 2. 命令风格
@@ -164,7 +170,7 @@ Skills 都消费同一 protocol，不另建 stage mapping。
 Synopsis：
 
 ```bash
-researchspec init [path] [--tools <ids>] [--profile <profile>] [--dry-run] [--force]
+researchspec init [path] [--tools <ids>] [--dry-run] [--force]
 ```
 
 OpenSpec-like TUI 流程：
@@ -173,7 +179,7 @@ OpenSpec-like TUI 流程：
 2. Detect：检测当前目录是否已有 workspace，检测可用 agent tools。
 3. Select tools：从 agent registry 搜索并多选工具。`--tools all` 表示 registry
    中的全部 31 个工具；ForgeCode、Kimi CLI 和 Mistral Vibe 为 skills-only。
-4. Select profile：选择 ResearchSpec profile。默认 `arsu-paper` 保留兼容 skeleton；显式 `arsu-research-slice` 提供 RQ Brief → Bibliography → Synthesis 的只读动态控制面。
+4. Load workflow：固定使用 `arsu-v0-1`，展示可用的外部 subflow templates。
 5. Preview writes：展示将创建的 workspace files 和将安装的 tool files。
 6. Confirm：用户确认后写入。
 7. Next steps：提示用户打开对应 agent，使用已安装的 ResearchSpec/ARSU wrapper。
@@ -181,8 +187,8 @@ OpenSpec-like TUI 流程：
 非交互用法：
 
 ```bash
-researchspec init --tools codex,claude --profile arsu-paper --yes
-researchspec init --tools none --profile arsu-research-slice
+researchspec init --tools codex,claude --yes
+researchspec init --tools none
 researchspec init --tools none
 ```
 
@@ -197,7 +203,7 @@ researchspec init --tools none
 规则：
 
 - 已存在 workspace 时默认不覆盖。
-- 已存在 workspace 省略 `--profile` 时沿用已配置 profile；`init` 不允许直接切换 profile，切换需要显式 contract migration。
+- `init` 固定写入 `arsu-v0-1`；CLI 不提供 profile 选择或切换入口。
 - 用户材料不足时只生成 skeleton 和待填位置，不让 CLI 猜研究内容。
 - Agent-facing files 是 generated files；若用户已修改，默认跳过或提示 drift。
 - `--force` 只允许覆盖 generated files，不允许覆盖 research contracts 中的用户内容。
@@ -271,7 +277,7 @@ researchspec status [--json]
 researchspec instructions work:rq-brief [--json]
 ```
 
-成功输出是扁平 instruction packet：`selector`、`work_item_id`、`stage_id`、`producer_skill`、`state`、`description`、`context: null`；`output` 只保存 artifact type、workspace/resolved path 和 `template_ref`，实际解析后的 `template` 位于顶层。其余字段包括 dependencies、semantic instruction、rules、allowed/forbidden writes、`validation {profile, suggested_command}`、completion policy 和 unlocks。支持 `research-artifact` profile 的节点返回 `submit_available: true` 及 selector、candidate path、dry-run command、strict input 字段和确认/hash 要求，并明确声明不写 state、Gate 或 Decision。命令不内嵌依赖文件全文，也不写 workspace。
+成功输出是扁平 instruction packet：`selector`、`work_item_id`、`stage_id`、`producer_skill`、`state`、`description`、typed runtime context；`output` 只保存 artifact type、workspace/resolved path 和 `template_ref`，实际解析后的 `template` 位于顶层。其余字段包括 dependencies、semantic instruction、rules、allowed/forbidden writes、`validation {profile, suggested_command}`、completion policy 和 unlocks。支持 `text-artifact` 或 `binary-file-artifact` 的节点返回 `submit_available: true` 及 selector、candidate path、dry-run command、strict input 字段和确认/hash 要求，并明确声明不写 state、Gate 或 Decision。命令不内嵌依赖文件全文，也不写 workspace。
 
 约定错误：
 

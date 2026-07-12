@@ -1,7 +1,9 @@
 # Revision Patch Protocol (#390)
 
-**Spec:** `docs/design/2026-06-10-390-diff-patch-revision-mode-spec.md` (mechanism §3, coverage claim §4, escalation §3.6).
 <!--rs:PATCH-003-->
+**Protocol authority:** this current ResearchSpec contract replaces upstream
+design-note and script-path references for revision rounds.
+
 **Toolchain ownership:** ResearchSpec deterministic helpers prepare block
 manifests, validate and apply `researchspec/draft-patches/<patch-id>.json`, and
 emit apply reports. Both orchestrated and phase-by-phase runs resolve inputs and

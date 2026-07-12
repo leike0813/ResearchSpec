@@ -2,10 +2,8 @@
 
 Define the developer-only converter that turns the vendored ARS upstream
 checkout into ResearchSpec-owned ARSU skill artifacts with deterministic output,
-checkout validation, and first-slice ResearchSpec contract compatibility.
-
+checkout validation, and ResearchSpec contract integration.
 ## Requirements
-
 ### Requirement: Vendored ARS Upstream Source
 
 ResearchSpec SHALL treat `vendor/ars` as the fixed upstream source for ARSU
@@ -91,9 +89,9 @@ metadata.
 - **AND** validation SHALL fail if a listed file no longer matches its recorded
   hash
 
-### Requirement: ResearchSpec Contract Compatibility Injection
+### Requirement: ResearchSpec Contract Integration Injection
 
-ResearchSpec SHALL inject a first compatibility layer into generated ARSU skill
+ResearchSpec SHALL inject the current contract integration layer into generated ARSU skill
 artifacts during conversion.
 
 #### Scenario: Skill entrypoints contain contract preflight guidance
@@ -105,12 +103,12 @@ artifacts during conversion.
   read workflow and run state, load required contracts, and use registries and
   ledgers for runtime writes
 
-#### Scenario: Compatibility metadata is generated
+#### Scenario: Integration metadata is generated
 
 - **WHEN** conversion succeeds
 - **THEN** `skills/arsu/researchspec-contracts.json` SHALL be written
 - **AND** it SHALL identify the generated skill groups and their first-slice
-  ResearchSpec contract compatibility profile
+  ResearchSpec contract integration profile
 
 #### Scenario: Semantic replacement profile is declared
 
@@ -118,21 +116,21 @@ artifacts during conversion.
 - **THEN** `skills/arsu/researchspec-contracts.json` SHALL declare anchor
   replacement profile `researchspec-anchor-replacement-v3`
 - **AND** it SHALL declare coverage policy `required_and_recommended`
-- **AND** it SHALL treat Material Passport content as compatibility artifacts or
+- **AND** it SHALL treat Material Passport content as imported external evidence or
   payload projection sources rather than runtime sources of truth
 
 #### Scenario: Material Passport is not runtime SSOT
 
-- **WHEN** contract compatibility guidance is generated
+- **WHEN** contract integration guidance is generated
 - **THEN** it SHALL state that ARS Material Passport may be treated as a
-  compatibility artifact
+  imported evidence artifact
 - **AND** it SHALL NOT instruct generated skills to use Material Passport as the
   ResearchSpec runtime source of truth
 
 #### Scenario: Full matrix injection is deferred
 
-- **WHEN** conversion injects contract compatibility in this change
-- **THEN** it SHALL use a shared preflight and compatibility metadata profile
+- **WHEN** conversion injects contract integration guidance
+- **THEN** it SHALL use a shared preflight and integration metadata profile
 - **AND** it SHALL NOT require every upstream stage or mode section to be
   rewritten with the full ResearchSpec workflow matrix
 
@@ -181,7 +179,7 @@ defects from non-blocking upstream content diagnostics.
 - **WHEN** the maintainer runs the ARSU generated-output check script
 - **THEN** validation SHALL pass
 - **AND** it SHALL verify required groups, generated manifests, rewritten links,
-  file hashes, and contract compatibility metadata
+  file hashes, and contract integration metadata
 
 #### Scenario: Broken generated links are blocking
 
@@ -381,9 +379,9 @@ ResearchSpec SHALL generate ARSU contract preflight guidance that consumes gener
 - **THEN** guidance SHALL perform Submit dry-run followed by execution bound to the returned exact hash
 - **AND** it SHALL query status/check afterward without asking for per-artifact confirmation
 
-#### Scenario: Manual or legacy work uses direct CLI submit
+#### Scenario: Manual work uses direct CLI submit
 
-- **WHEN** work instructions are manual, legacy, unconfigured or lack trusted authorization
+- **WHEN** work instructions are manual or lack trusted automatic authorization
 - **THEN** guidance SHALL present the direct `researchspec submit` dry-run and
   confirmation boundary or report that registration cannot proceed
 - **AND** it SHALL NOT invoke a Submit Companion or invent automatic authority,
@@ -468,3 +466,50 @@ The converter SHALL generate deterministic license and attribution files inside 
 - **WHEN** converter validation or idempotence checks generated output
 - **THEN** a missing, malformed, unregistered, or hash-drifted Skill license or notice SHALL fail validation
 - **AND** the generated files SHALL NOT be maintained by direct hand edits
+
+### Requirement: Semantic replacements preserve stable behavior boundaries
+The converter SHALL preserve stable prohibitions, applicability boundaries, and mode exceptions contained in every replaced blocking anchor span.
+
+#### Scenario: Revision patch replacement preserves the full-mode exception
+- **WHEN** the converter replaces the academic-paper revision patch protocol
+- **THEN** the generated revision-mode guidance SHALL use ResearchSpec draft-patch contracts
+- **AND** it SHALL state that the academic-paper full-mode Phase 6→4 loop does not use the patch protocol and still requires a complete Draft Body
+
+#### Scenario: Phase boundaries use current ResearchSpec authority
+- **WHEN** the converter replaces public phase-boundary guidance
+- **THEN** the generated entrypoint SHALL preserve single-stage and cross-stage role boundaries and clarification-before-dispatch behavior
+- **AND** it SHALL use the configured workflow, current run state, frontier instructions, and declared outputs as authority instead of ARS phase directories, design notes, hooks, or advisory scripts
+
+### Requirement: Public entrypoints contain no unresolved operational repository paths
+Generated public ARSU entrypoints SHALL NOT contain unresolved operational code-span references to excluded upstream documentation or root scripts.
+
+#### Scenario: Missing docs or scripts code-span path blocks validation
+- **GIVEN** a top-level generated `<skill-group>/SKILL.md` contains a code span beginning with `docs/` or `scripts/`
+- **AND** the referenced path does not resolve inside that generated skill group
+- **WHEN** generated-output validation runs
+- **THEN** validation SHALL fail and identify the entrypoint and unresolved path
+
+#### Scenario: Nested upstream history remains non-blocking
+- **GIVEN** an ARSU-derived nested reference or agent file contains upstream historical path text
+- **WHEN** generated-output validation runs
+- **THEN** that text SHALL NOT fail validation solely because it is historical or is outside the public entrypoint
+
+### Requirement: Cross-skill entry copies share semantic replacements
+The converter SHALL apply source-path anchor replacements to public entrypoints and every copied cross-skill instance of the same upstream entry file.
+
+#### Scenario: Cross-skill copy receives anchor replacement without public projection
+- **WHEN** an upstream `SKILL.md` is copied as a cross-skill dependency
+- **THEN** every applicable anchor replacement SHALL appear in that copy and its output path SHALL be recorded in the conversion manifest
+- **AND** the copy SHALL retain its upstream description and SHALL NOT receive a duplicate Contract Preflight
+
+### Requirement: Current Contract Integration Metadata
+The converter SHALL describe ResearchSpec contract integration and one-way ARS Material Passport evidence import without legacy or compatibility runtime paths.
+
+#### Scenario: Generated output is inspected
+- **WHEN** conversion completes
+- **THEN** metadata and generated guidance SHALL use current integration/import terminology and SHALL not offer Passport export as runtime state authority
+
+#### Scenario: Upstream history is retained
+- **WHEN** vendored source or audit Before text contains historical terminology
+- **THEN** conversion SHALL preserve it and SHALL exclude the audit source text from current-guidance risk checks
+

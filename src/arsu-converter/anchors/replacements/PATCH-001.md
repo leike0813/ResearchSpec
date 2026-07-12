@@ -1,3 +1,6 @@
+In `academic-paper` revision mode, `draft_writer_agent` does not re-emit the
+complete manuscript. The round uses the following bounded patch workflow:
+
 1. **Prepare the base artifact.** Resolve the current manuscript id and hash
    through `researchspec/runs/current/artifact-registry.json`. The deterministic
    preparation helper assigns stable block markers where missing and emits a
@@ -27,3 +30,7 @@ Patch mode guarantees byte preservation only for untouched blocks; it does not
 guarantee the quality of edited text. Finalizer and gate checks run on the new
 registered artifact, and any failure is returned to the responsible helper
 rather than written directly to a ledger.
+
+This patch protocol does not apply to the `academic-paper full` in-pair Phase
+6→4 loop. That loop must continue to emit the complete `## Draft Body` required
+by the Phase 4b contract; it must not emit or apply a revision patch.

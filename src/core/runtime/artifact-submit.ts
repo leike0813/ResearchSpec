@@ -16,10 +16,9 @@ import {
   type SubmittedArtifactRecord,
   type SubmitReceiptArtifactRecord,
 } from "../contracts/artifact.js";
-import { isInstanceRunState } from "../contracts/run-state.js";
 import { parseRuntimeSelector } from "../contracts/runtime-selector.js";
 import { SubflowStartReceiptSchema } from "../contracts/subflow.js";
-import { isInstanceWorkflowDefinition, resolveWorkNode, WorkItemSelectorSchema, type WorkflowNodeDefinition, type WorkflowNodeTemplate } from "../contracts/workflow.js";
+import { resolveWorkNode, WorkItemSelectorSchema, type WorkflowNodeDefinition, type WorkflowNodeTemplate } from "../contracts/workflow.js";
 import { loadWorkspaceSnapshot, type WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { executeWritePlan, planFile, sha256, type PlannedWrite, type ReadPrecondition, type WritePlan } from "../workspace/write-plan.js";
 import { evaluateWorkflowControl, inspectArtifacts, passedCompletionGateIds, resolveTemplateReference, type WorkflowControlResult } from "./workflow-control.js";
@@ -42,7 +41,7 @@ export interface ArtifactSubmitPlan {
   validation: { profile: string; ok: true; diagnostics: []; checks: string[] };
   projected_completion: { state: "done" | "blocked"; missing_gate_ids: string[] };
   writePlan: WritePlan;
-  confirmation_basis: "subflow_start" | "per_artifact" | "legacy";
+  confirmation_basis: "subflow_start" | "per_artifact";
 }
 
 export interface ArtifactSubmitOutcome {
@@ -64,7 +63,7 @@ export async function planArtifactSubmit(input: {
   const snapshot = input.snapshot;
   if (snapshot.diagnostics.some((item) => item.blocking)) throw new ArtifactSubmitError("workflow_invalid", "Workspace or workflow has blocking diagnostics.", "domain", { diagnostics: snapshot.diagnostics.filter((item) => item.blocking) });
   const node = selector.node;
-  if (!["research-artifact", "text-artifact", "binary-file-artifact"].includes(node.validation_profile)) throw new ArtifactSubmitError("candidate_validation_failed", `Unsupported validation profile: ${node.validation_profile}`, "domain");
+  if (!["text-artifact", "binary-file-artifact"].includes(node.validation_profile)) throw new ArtifactSubmitError("candidate_validation_failed", `Unsupported validation profile: ${node.validation_profile}`, "domain");
 
   const candidate = await validateCandidate(snapshot, node, input.expectedSha256);
   const ids = derivedIds(selector.instanceId ? `${selector.instanceId}-${node.id}` : node.id, candidate.hash);
@@ -194,7 +193,7 @@ function resolveSubmitTarget(snapshot: WorkspaceSnapshot, selector: string): Sub
   if (!WorkItemSelectorSchema.safeParse(selector).success) throw new ArtifactSubmitError("invalid_work_item_selector", `Invalid work-item selector: ${selector}`, "usage");
   const parsed = parseRuntimeSelector(selector);
   if (parsed?.kind === "scoped_work") {
-    if (!isInstanceWorkflowDefinition(snapshot.workflow) || !isInstanceRunState(snapshot.runState)) throw new ArtifactSubmitError("workflow_unconfigured", "The current workflow has no subflow work graph.", "domain");
+    if (!snapshot.workflow || !snapshot.runState) throw new ArtifactSubmitError("workflow_unconfigured", "The current workflow has no subflow work graph.", "domain");
     const instance = snapshot.runState.subflows.find((item) => item.instance_id === parsed.instanceId);
     const template = instance ? snapshot.workflow.subflow_templates.find((item) => item.template_id === instance.template_id) : undefined;
     const nodeTemplate = template?.work_items.find((item) => item.id === parsed.workItemId);
@@ -203,10 +202,7 @@ function resolveSubmitTarget(snapshot: WorkspaceSnapshot, selector: string): Sub
     if (nodeTemplate.submission.policy === "automatic" && !authorization) throw new ArtifactSubmitError("submission_dependency_untrusted", "Automatic submission requires a trusted subflow start receipt.", "domain");
     return { node: resolveWorkNode(nodeTemplate, instance.instance_id, instance.round_number), nodeTemplate, instanceId: instance.instance_id, ...(authorization ? { startAuthorization: authorization } : {}), confirmationBasis: nodeTemplate.submission.policy === "automatic" ? "subflow_start" : "per_artifact" };
   }
-  if (parsed?.kind !== "legacy_work" || !snapshot.workflow || isInstanceWorkflowDefinition(snapshot.workflow) || !snapshot.workflow.work_items) throw new ArtifactSubmitError("workflow_unconfigured", "The current workflow has no legacy work-item graph.", "domain");
-  const node = snapshot.workflow.work_items.find((item) => item.id === parsed.workItemId);
-  if (!node) throw new ArtifactSubmitError("work_item_not_found", `Work item not found: ${selector}`, "domain");
-  return { node, confirmationBasis: "legacy" };
+  throw new ArtifactSubmitError("invalid_work_item_selector", `Invalid work-item selector: ${selector}`, "usage");
 }
 
 function validateStartAuthorization(snapshot: WorkspaceSnapshot, instanceId: string, reference: { path: string; sha256: string; plan_sha256: string }) {

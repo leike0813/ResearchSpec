@@ -57,49 +57,48 @@ void test("status and check use the versioned JSON envelope", async () => {
   await cleanup(root);
 });
 
-void test("research-slice init exposes dynamic status and resolved instructions", async () => {
+void test("universal init exposes dynamic status and resolved instructions", async () => {
   const root = await tempProject();
-  assert.equal(runCli(["init", root, "--tools", "none", "--profile", "arsu-research-slice"]).status, 0);
+  assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
   const workspace = path.join(root, "researchspec");
   assert.equal(existsSync(path.join(workspace, "runs/current/subflows")), false);
 
   const status = parseEnvelope<{
     workflow_control: {
-      profile: string; active_stage_id: null; state: string; configured: boolean; valid: boolean;
+      profile: string; state: string; configured: boolean; valid: boolean;
       ready_items: string[]; startable_subflows: string[]; work_items: Array<{ id: string; selector: string; work_item_id: string; state: string }>;
     };
   }>(runCli(["status", "--json"], root));
   assert.equal(status.ok, true);
   assert.equal(status.data?.workflow_control.configured, true);
   assert.equal(status.data?.workflow_control.valid, true);
-  assert.equal(status.data?.workflow_control.profile, "arsu-research-slice");
-  assert.equal(status.data?.workflow_control.active_stage_id, null);
+  assert.equal(status.data?.workflow_control.profile, "arsu-v0-1");
   assert.equal(status.data?.workflow_control.state, "not_started");
   assert.deepEqual(status.data?.workflow_control.ready_items, []);
-  assert.deepEqual(status.data?.workflow_control.startable_subflows, ["subflow:tpl-research"]);
+  assert.ok(status.data?.workflow_control.startable_subflows.includes("subflow:tpl-deep-research-full"));
   assert.deepEqual(status.data?.workflow_control.work_items, []);
   assert.equal(status.data && "work_items" in status.data, false);
 
   const subflow = parseEnvelope<{
     selector: string; route: { route_ref: string }; route_coverage: string; instruction_basis_sha256: string; required_user_input_ids: string[];
-  }>(runCli(["instructions", "subflow:tpl-research", "--json"], root));
+  }>(runCli(["instructions", "subflow:tpl-deep-research-full", "--json"], root));
   assert.equal(subflow.ok, true);
   assert.equal(subflow.data?.route.route_ref, "deep-research:full");
-  assert.equal(subflow.data?.route_coverage, "partial");
+  assert.equal(subflow.data?.route_coverage, "complete");
   assert.ok(subflow.data?.required_user_input_ids.includes("research_goal"));
   const startInput = path.join(root, "start.json");
   await writeFile(startInput, `${JSON.stringify({ schema_version: "1", instruction_basis_sha256: subflow.data?.instruction_basis_sha256, acknowledged_user_input_ids: ["research_goal"], prerequisite_artifact_ids: [], prerequisite_decision_ids: [], parent_subflow_selector: null }, null, 2)}\n`, "utf8");
-  const startPreview = parseEnvelope<{ status: string; plan_sha256: string; instance: { instance_id: string }; plan: Array<{ action: string }> }>(runCli(["start", "subflow:tpl-research", "--input", startInput, "--actor-kind", "agent", "--actor-name", "academic-pipeline", "--confirmed-by", "researcher", "--dry-run", "--json"], root));
+  const startPreview = parseEnvelope<{ status: string; plan_sha256: string; instance: { instance_id: string }; plan: Array<{ action: string }> }>(runCli(["start", "subflow:tpl-deep-research-full", "--input", startInput, "--actor-kind", "agent", "--actor-name", "academic-pipeline", "--confirmed-by", "researcher", "--dry-run", "--json"], root));
   assert.equal(startPreview.data?.status, "would_start");
   assert.deepEqual(startPreview.data?.plan.map((item) => item.action), ["create", "refresh"]);
-  const start = parseEnvelope<{ status: string; workflow_control_after: { ready_items: string[] } }>(runCli(["start", "subflow:tpl-research", "--input", startInput, "--actor-kind", "agent", "--actor-name", "academic-pipeline", "--confirmed-by", "researcher", "--expected-plan-sha256", startPreview.data?.plan_sha256 ?? "", "--yes", "--json"], root));
+  const start = parseEnvelope<{ status: string; workflow_control_after: { ready_items: string[] } }>(runCli(["start", "subflow:tpl-deep-research-full", "--input", startInput, "--actor-kind", "agent", "--actor-name", "academic-pipeline", "--confirmed-by", "researcher", "--expected-plan-sha256", startPreview.data?.plan_sha256 ?? "", "--yes", "--json"], root));
   assert.equal(start.data?.status, "started");
   const workSelector = start.data?.workflow_control_after.ready_items[0] ?? "";
   assert.match(workSelector, /^work:sf-.+\/rq-brief$/);
 
   const instructions = parseEnvelope<{
     selector: string; work_item_id: string; stage_id: string; producer_skill: string; state: string;
-    description: string; context: null; template: string; forbidden_writes: string[];
+    description: string; context: { schema_version: string; instance_id: string; resume_candidate: null; imports: unknown[]; artifacts: unknown[]; gate_evidence: unknown[]; decision_evidence: unknown[]; diagnostics: string[] }; template: string; forbidden_writes: string[];
     output: { workspace_path: string; resolved_path: string; template_ref: string };
     validation: { profile: string; suggested_command: string };
     completion: {
@@ -112,16 +111,19 @@ void test("research-slice init exposes dynamic status and resolved instructions"
   assert.equal(instructions.ok, true);
   assert.equal(instructions.data?.selector, workSelector);
   assert.equal(instructions.data?.work_item_id, "rq-brief");
-  assert.equal(instructions.data?.stage_id, "research");
+  assert.equal(instructions.data?.stage_id, "work");
   assert.equal(instructions.data?.producer_skill, "deep-research");
   assert.equal(instructions.data?.state, "ready");
-  assert.equal(instructions.data?.context, null);
+  assert.equal(instructions.data?.context.schema_version, "1");
+  assert.equal(instructions.data?.context.instance_id, workSelector.slice("work:".length).split("/", 1)[0]);
+  assert.deepEqual(instructions.data?.context.imports, []);
+  assert.deepEqual(instructions.data?.context.gate_evidence, []);
   assert.match(instructions.data?.output.workspace_path ?? "", /^runs\/current\/subflows\/sf-.+\/artifacts\/rq-brief\.md$/);
-  assert.equal(instructions.data?.output.template_ref, "ars:shared/handoff_schemas.md#schema-1-rq-brief");
-  assert.match(instructions.data?.template ?? "", /Schema 1: RQ Brief/);
+  assert.equal(instructions.data?.output.template_ref, "arsu-artifact:rq_brief");
+  assert.match(instructions.data?.template ?? "", /Artifact type: `rq_brief`/);
   assert.ok(instructions.data?.output.resolved_path.endsWith("/artifacts/rq-brief.md"));
   assert.ok(instructions.data?.forbidden_writes.includes("runs/current/state.yaml"));
-  assert.equal(instructions.data?.validation.profile, "research-artifact");
+  assert.equal(instructions.data?.validation.profile, "text-artifact");
   assert.equal(instructions.data?.completion.submit_available, true);
   assert.equal(instructions.data?.completion.submit?.selector, workSelector);
   assert.equal(instructions.data?.completion.submit?.candidate_path, instructions.data?.output.resolved_path);
@@ -141,15 +143,13 @@ void test("research-slice init exposes dynamic status and resolved instructions"
   assert.equal(unsafeSelector.status, 2);
   assert.equal(parseEnvelope(unsafeSelector).error?.code, "invalid_runtime_selector");
   assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
-  const profileChange = runCli(["init", root, "--tools", "none", "--profile", "arsu-paper", "--json"]);
-  assert.equal(profileChange.status, 3);
-  assert.equal(parseEnvelope(profileChange).error?.code, "profile_change_requires_migration");
+  assert.equal(runCli(["init", root, "--tools", "none", "--profile", "arsu-paper", "--json"]).status, 2);
   await cleanup(root);
 });
 
 void test("submit previews an exact candidate hash then atomically registers its receipt", async () => {
   const root = await tempProject();
-  assert.equal(runCli(["init", root, "--tools", "none", "--profile", "arsu-research-slice"]).status, 0);
+  assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
   const workspace = path.join(root, "researchspec");
   const instanceId = await startSliceViaCli(root);
   const selector = `work:${instanceId}/rq-brief`;
@@ -185,7 +185,7 @@ void test("submit previews an exact candidate hash then atomically registers its
   const submitted = parseEnvelope<{ status: string; workflow_control_after: { ready_items: string[] } }>(runCli(confirmedArgs, root));
   assert.equal(submitted.ok, true);
   assert.equal(submitted.data?.status, "submitted");
-  assert.deepEqual(submitted.data?.workflow_control_after.ready_items, [`work:${instanceId}/bibliography`]);
+  assert.deepEqual(submitted.data?.workflow_control_after.ready_items, [`work:${instanceId}/methodology-blueprint`, `work:${instanceId}/bibliography`]);
   const retried = parseEnvelope<{ status: string; plan: unknown[] }>(runCli(confirmedArgs, root));
   assert.equal(retried.data?.status, "already_submitted");
   assert.deepEqual(retried.data?.plan, []);
@@ -215,15 +215,14 @@ void test("list and show use canonical selectors and reject ambiguous bare IDs",
   const root = await tempProject();
   assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
   await writeFile(path.join(root, "researchspec/specs/claims.yaml"), 'schema_version: "0.1"\nclaims:\n  - claim_id: SAME\n    statement: test\n', "utf8");
-  await writeFile(path.join(root, "researchspec/runs/current/artifact-registry.json"), `${JSON.stringify({ schema_version: "0.1", run_id: "current", artifacts: [{ artifact_id: "SAME", path: "artifact.md" }] }, null, 2)}\n`, "utf8");
+  await writeFile(path.join(root, "artifact.md"), "artifact", "utf8");
+  await writeFile(path.join(root, "researchspec/runs/current/artifact-registry.json"), `${JSON.stringify({ schema_version: "0.1", run_id: "current", artifacts: [draftArtifact("SAME", "artifact.md", "artifact")] }, null, 2)}\n`, "utf8");
   const list = parseEnvelope<{ items: unknown[] }>(runCli(["list", "artifacts", "--json"], root));
   assert.equal(list.data?.items.length, 1);
   assert.equal(runCli(["show", "claim:SAME", "--json"], root).status, 0);
   const ambiguous = runCli(["show", "SAME", "--json"], root);
   assert.equal(ambiguous.status, 2);
   assert.equal(parseEnvelope(ambiguous).error?.code, "item_ambiguous");
-  assert.equal(runCli(["check", "artifacts"], root).status, 0);
-  assert.equal(runCli(["check", "artifacts", "--strict"], root).status, 1);
   await cleanup(root);
 });
 
@@ -358,7 +357,7 @@ void test("decide rejects draft artifact paths outside the project root", async 
   const draft = "<!--block:B0001-->\nOutside draft.\n";
   await writeFile(outside, draft, "utf8");
   const workspace = path.join(root, "researchspec");
-  await writeFile(path.join(workspace, "runs/current/artifact-registry.json"), `${JSON.stringify({ schema_version: "0.1", run_id: "current", artifacts: [{ artifact_id: "A-OUT", path: `../${path.basename(outside)}`, sha256: hash(draft) }] }, null, 2)}\n`, "utf8");
+  await writeFile(path.join(workspace, "runs/current/artifact-registry.json"), `${JSON.stringify({ schema_version: "0.1", run_id: "current", artifacts: [draftArtifact("A-OUT", `../${path.basename(outside)}`, draft)] }, null, 2)}\n`, "utf8");
   const patch = { patch_format_version: "1.0", patch_id: "dp-escape", revision_round: 1, status: "proposed", base_artifact_id: "A-OUT", base_draft_hash: hash(draft), emitted_by: "writer", ops: [{ op: "replace_block", block_id: "B0001", old_hash: hash("Outside draft.").slice(0, 12), new_text: "Escaped" }] };
   await writeFile(path.join(workspace, "draft-patches/dp-escape.json"), `${JSON.stringify(patch, null, 2)}\n`, "utf8");
   assert.equal(runCli(["decide", "patch:dp-escape", "--decision", "accept", "--actor-name", "Researcher", "--reason", "test", "--json"], root).status, 1);
@@ -373,7 +372,7 @@ void test("decide applies ARSU standalone block-marker draft patches without cha
   const workspace = path.join(root, "researchspec");
   const draft = "---\ntitle: Draft\n---\n\n<!--block:B0001-->\nOriginal first paragraph.\n\n<!--block:B0002-->\nUntouched second paragraph.\n";
   await writeFile(path.join(root, "draft.md"), draft, "utf8");
-  await writeFile(path.join(workspace, "runs/current/artifact-registry.json"), `${JSON.stringify({ schema_version: "0.1", run_id: "current", artifacts: [{ artifact_id: "A-DRAFT", artifact_type: "paper_draft", path: "draft.md", sha256: hash(draft) }] }, null, 2)}\n`, "utf8");
+  await writeFile(path.join(workspace, "runs/current/artifact-registry.json"), `${JSON.stringify({ schema_version: "0.1", run_id: "current", artifacts: [draftArtifact("A-DRAFT", "draft.md", draft)] }, null, 2)}\n`, "utf8");
   const patch = {
     patch_format_version: "1.0", patch_id: "dp-one", revision_round: 1, status: "proposed",
     base_artifact_id: "A-DRAFT", base_draft_hash: hash(draft), emitted_by: { kind: "agent", name: "writer" },
@@ -448,7 +447,7 @@ void test("update preserves drifted manifest-owned files", async () => {
   await cleanup(root);
 });
 
-void test("update and existing-workspace init safely retire legacy local Companion projections", async () => {
+void test("update and existing-workspace init generically reconcile obsolete project-local projections", async () => {
   for (const command of ["update", "init"] as const) {
     const root = await tempProject();
     assert.equal(runCli(["init", root, "--tools", "forgecode"]).status, 0);
@@ -456,19 +455,19 @@ void test("update and existing-workspace init safely retire legacy local Compani
     const manifest = JSON.parse(await readFile(manifestPath, "utf8")) as {
       installations: Array<{ tool_id: string; path: string; scope: "project" | "shared-global"; sha256: string; source: string; adapter_version: "1" }>;
     };
-    const cleanPath = path.join(root, ".forge/skills/researchspec-next/SKILL.md");
-    const driftedPath = path.join(root, ".forge/skills/researchspec-submit/SKILL.md");
-    const userOwnedPath = path.join(root, ".forge/skills/researchspec-explore/SKILL.md");
+    const cleanPath = path.join(root, ".forge/skills/obsolete-clean/SKILL.md");
+    const driftedPath = path.join(root, ".forge/skills/obsolete-modified/SKILL.md");
+    const userOwnedPath = path.join(root, ".forge/skills/unmanifested-user/SKILL.md");
     await mkdir(path.dirname(cleanPath), { recursive: true });
     await mkdir(path.dirname(driftedPath), { recursive: true });
     await mkdir(path.dirname(userOwnedPath), { recursive: true });
-    await writeFile(cleanPath, "legacy next", "utf8");
-    await writeFile(driftedPath, "user-modified submit", "utf8");
+    await writeFile(cleanPath, "generated clean", "utf8");
+    await writeFile(driftedPath, "user-modified generated file", "utf8");
     await writeFile(userOwnedPath, "unmanifested user workflow", "utf8");
     manifest.installations.push(
-      { tool_id: "forgecode", path: ".forge/skills/researchspec-next/SKILL.md", scope: "project", sha256: hash("legacy next"), source: "companion:researchspec-next/SKILL.md", adapter_version: "1" },
-      { tool_id: "forgecode", path: ".forge/skills/researchspec-submit/SKILL.md", scope: "project", sha256: hash("legacy submit"), source: "companion:researchspec-submit/SKILL.md", adapter_version: "1" },
-      { tool_id: "forgecode", path: ".forge/skills/researchspec-context/SKILL.md", scope: "project", sha256: hash("missing"), source: "companion:researchspec-context/SKILL.md", adapter_version: "1" },
+      { tool_id: "forgecode", path: ".forge/skills/obsolete-clean/SKILL.md", scope: "project", sha256: hash("generated clean"), source: "generated:obsolete-clean", adapter_version: "1" },
+      { tool_id: "forgecode", path: ".forge/skills/obsolete-modified/SKILL.md", scope: "project", sha256: hash("generated original"), source: "generated:obsolete-modified", adapter_version: "1" },
+      { tool_id: "forgecode", path: ".forge/skills/obsolete-missing/SKILL.md", scope: "project", sha256: hash("missing"), source: "generated:obsolete-missing", adapter_version: "1" },
     );
     await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
 
@@ -478,19 +477,18 @@ void test("update and existing-workspace init safely retire legacy local Compani
     assert.equal(result.status, 0, result.stderr || result.stdout);
     assert.match(result.stdout, /generated_file_drift/);
     assert.equal(existsSync(cleanPath), false);
-    assert.equal(await readFile(driftedPath, "utf8"), "user-modified submit");
+    assert.equal(await readFile(driftedPath, "utf8"), "user-modified generated file");
     assert.equal(await readFile(userOwnedPath, "utf8"), "unmanifested user workflow");
     const reconciled = JSON.parse(await readFile(manifestPath, "utf8")) as typeof manifest;
-    assert.equal(reconciled.installations.some((item) => item.source.includes("researchspec-next")), false);
-    assert.equal(reconciled.installations.some((item) => item.source.includes("researchspec-context")), false);
-    assert.equal(reconciled.installations.some((item) => item.source.includes("researchspec-submit")), true);
-    assert.equal(reconciled.installations.filter((item) => item.source.startsWith("companion:") && item.path.endsWith("/SKILL.md") && !item.source.includes("researchspec-submit")).length, 4);
+    assert.equal(reconciled.installations.some((item) => item.source === "generated:obsolete-clean"), false);
+    assert.equal(reconciled.installations.some((item) => item.source === "generated:obsolete-missing"), false);
+    assert.equal(reconciled.installations.some((item) => item.source === "generated:obsolete-modified"), true);
     assert.equal(runCli(["update", "--tools", "forgecode", "--json"], root).status, 0);
     await cleanup(root);
   }
 });
 
-void test("Codex product retirement removes clean global prompts but preserves drift and deselection", async () => {
+void test("shared-global projections are never removed by project reconciliation", async () => {
   const root = await tempProject();
   const codexHome = path.join(root, "codex-home");
   const env = { CODEX_HOME: codexHome };
@@ -499,30 +497,29 @@ void test("Codex product retirement removes clean global prompts but preserves d
   const manifest = JSON.parse(await readFile(manifestPath, "utf8")) as {
     installations: Array<{ tool_id: string; path: string; scope: "project" | "shared-global"; sha256: string; source: string; adapter_version: "1" }>;
   };
-  const cleanPath = path.join(codexHome, "prompts/researchspec-next.md");
-  const driftedPath = path.join(codexHome, "prompts/researchspec-submit.md");
+  const cleanPath = path.join(codexHome, "prompts/obsolete-clean.md");
+  const driftedPath = path.join(codexHome, "prompts/obsolete-modified.md");
   await mkdir(path.dirname(cleanPath), { recursive: true });
-  await writeFile(cleanPath, "legacy next", "utf8");
-  await writeFile(driftedPath, "user-modified submit", "utf8");
+  await writeFile(cleanPath, "generated clean", "utf8");
+  await writeFile(driftedPath, "user-modified generated file", "utf8");
   manifest.installations.push(
-    { tool_id: "codex", path: cleanPath, scope: "shared-global", sha256: hash("legacy next"), source: "command:next", adapter_version: "1" },
-    { tool_id: "codex", path: driftedPath, scope: "shared-global", sha256: hash("legacy submit"), source: "command:submit", adapter_version: "1" },
+    { tool_id: "codex", path: cleanPath, scope: "shared-global", sha256: hash("generated clean"), source: "generated:obsolete-clean", adapter_version: "1" },
+    { tool_id: "codex", path: driftedPath, scope: "shared-global", sha256: hash("generated original"), source: "generated:obsolete-modified", adapter_version: "1" },
   );
   await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
 
   const update = runCli(["update", "--tools", "codex", "--force", "--json"], root, env);
   assert.equal(update.status, 0, update.stderr || update.stdout);
-  assert.equal(existsSync(cleanPath), false);
-  assert.equal(await readFile(driftedPath, "utf8"), "user-modified submit");
-  assert.match(update.stdout, /generated_file_drift/);
+  assert.equal(await readFile(cleanPath, "utf8"), "generated clean");
+  assert.equal(await readFile(driftedPath, "utf8"), "user-modified generated file");
 
-  const deselectedPath = path.join(codexHome, "prompts/researchspec-archive.md");
-  await writeFile(deselectedPath, "legacy archive", "utf8");
+  const deselectedPath = path.join(codexHome, "prompts/obsolete-deselected.md");
+  await writeFile(deselectedPath, "generated deselected", "utf8");
   const afterUpdate = JSON.parse(await readFile(manifestPath, "utf8")) as typeof manifest;
-  afterUpdate.installations.push({ tool_id: "codex", path: deselectedPath, scope: "shared-global", sha256: hash("legacy archive"), source: "command:archive", adapter_version: "1" });
+  afterUpdate.installations.push({ tool_id: "codex", path: deselectedPath, scope: "shared-global", sha256: hash("generated deselected"), source: "generated:obsolete-deselected", adapter_version: "1" });
   await writeFile(manifestPath, `${JSON.stringify(afterUpdate, null, 2)}\n`, "utf8");
   assert.equal(runCli(["init", root, "--tools", "none", "--json"], process.cwd(), env).status, 0);
-  assert.equal(await readFile(deselectedPath, "utf8"), "legacy archive");
+  assert.equal(await readFile(deselectedPath, "utf8"), "generated deselected");
   const afterDeselection = JSON.parse(await readFile(manifestPath, "utf8")) as typeof manifest;
   assert.equal(afterDeselection.installations.some((item) => item.path === deselectedPath), true);
   await cleanup(root);
@@ -545,7 +542,7 @@ void test("pack excludes registered artifacts whose symlink resolves outside the
   const outside = path.join(path.dirname(root), `${path.basename(root)}-secret.txt`);
   await writeFile(outside, "secret", "utf8");
   await symlink(outside, path.join(root, "linked-secret.txt"));
-  await writeFile(path.join(root, "researchspec/runs/current/artifact-registry.json"), `${JSON.stringify({ schema_version: "0.1", run_id: "current", artifacts: [{ artifact_id: "A-SECRET", path: "linked-secret.txt" }] }, null, 2)}\n`, "utf8");
+  await writeFile(path.join(root, "researchspec/runs/current/artifact-registry.json"), `${JSON.stringify({ schema_version: "0.1", run_id: "current", artifacts: [draftArtifact("A-SECRET", "linked-secret.txt", "secret")] }, null, 2)}\n`, "utf8");
   const output = path.join(root, "safe.zip");
   assert.equal(runCli(["pack", "--include-artifacts", "--out", output], root).status, 0);
   assert.equal(Object.keys(unzipSync(await readFile(output))).some((entry) => entry.includes("linked-secret")), false);
@@ -554,11 +551,11 @@ void test("pack excludes registered artifacts whose symlink resolves outside the
 });
 
 async function startSliceViaCli(root: string): Promise<string> {
-  const instruction = parseEnvelope<{ instruction_basis_sha256: string }>(runCli(["instructions", "subflow:tpl-research", "--json"], root));
+  const instruction = parseEnvelope<{ instruction_basis_sha256: string }>(runCli(["instructions", "subflow:tpl-deep-research-full", "--json"], root));
   assert.equal(instruction.ok, true);
   const inputPath = path.join(root, "start-helper.json");
   await writeFile(inputPath, `${JSON.stringify({ schema_version: "1", instruction_basis_sha256: instruction.data?.instruction_basis_sha256, acknowledged_user_input_ids: ["research_goal"], prerequisite_artifact_ids: [], prerequisite_decision_ids: [], parent_subflow_selector: null }, null, 2)}\n`, "utf8");
-  const base = ["start", "subflow:tpl-research", "--input", inputPath, "--actor-kind", "agent", "--actor-name", "academic-pipeline", "--confirmed-by", "researcher"];
+  const base = ["start", "subflow:tpl-deep-research-full", "--input", inputPath, "--actor-kind", "agent", "--actor-name", "academic-pipeline", "--confirmed-by", "researcher"];
   const preview = parseEnvelope<{ plan_sha256: string }>(runCli([...base, "--dry-run", "--json"], root));
   assert.equal(preview.ok, true);
   const result = parseEnvelope<{ instance: { instance_id: string } }>(runCli([...base, "--expected-plan-sha256", preview.data?.plan_sha256 ?? "", "--yes", "--json"], root));
@@ -567,3 +564,6 @@ async function startSliceViaCli(root: string): Promise<string> {
 }
 
 function hash(value: string | Uint8Array): string { return createHash("sha256").update(value).digest("hex"); }
+function draftArtifact(artifactId: string, artifactPath: string, content: string | Uint8Array) {
+  return { artifact_id: artifactId, artifact_type: "paper_draft", path: artifactPath, sha256: hash(content), status: "created", produced_by: "researchspec decide", created_at: "2026-07-10T00:00:00.000Z", derived_from_artifact_ids: ["A-SOURCE"] };
+}

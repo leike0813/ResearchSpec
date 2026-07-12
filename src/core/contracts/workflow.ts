@@ -4,7 +4,7 @@ import { z } from "zod";
 import { RouteRefSchema } from "../../arsu-converter/routing/contracts.js";
 export { WorkItemSelectorSchema } from "./runtime-selector.js";
 
-export const WORKFLOW_PROFILE_IDS = ["arsu-v0-1", "arsu-paper", "arsu-research-slice"] as const;
+export const WORKFLOW_PROFILE_IDS = ["arsu-v0-1"] as const;
 export type WorkflowProfileId = typeof WORKFLOW_PROFILE_IDS[number];
 export const DEFAULT_WORKFLOW_PROFILE_ID: WorkflowProfileId = "arsu-v0-1";
 
@@ -15,7 +15,7 @@ const WorkspacePathTemplateSchema = z.string().min(1).refine(isSafeWorkspacePath
 
 const RequiresShape = {
   work_items: z.array(SafeIdSchema),
-  parallel_groups: z.array(SafeIdSchema).default([]),
+  parallel_groups: z.array(SafeIdSchema),
   contracts: z.array(WorkspacePathSchema),
   artifact_types: z.array(z.string().min(1)),
   gate_types: z.array(z.string().min(1)),
@@ -27,7 +27,7 @@ const CompletionShape = {
   required_gate_ids: z.array(SafeIdSchema),
   require_registry: z.literal(true),
   require_sha256: z.literal(true),
-  require_receipt: z.boolean().default(false),
+  require_receipt: z.boolean(),
 };
 const CommonNodeShape = {
   id: SafeIdSchema,
@@ -39,7 +39,7 @@ const CommonNodeShape = {
   instruction: z.string().min(1),
   rules: z.array(z.string().min(1)),
   allowed_writes: z.array(z.enum(["output_artifact", "contract_patch", "draft_patch"])),
-  validation_profile: z.string().min(1),
+  validation_profile: z.enum(["text-artifact", "binary-file-artifact"]),
 };
 
 export const GateTemplateDefinitionSchema = z.strictObject({
@@ -118,33 +118,22 @@ export const SubflowTemplateDefinitionSchema = z.strictObject({
   entry_stage_id: SafeIdSchema,
   stages: z.array(z.strictObject({ stage_id: SafeIdSchema, title: z.string().min(1) })).min(1),
   start_requires: z.strictObject({ decision_types: z.array(SafeIdSchema) }),
-  work_items: z.array(WorkflowNodeTemplateSchema).default([]),
-  parallel_groups: z.array(ParallelGroupDefinitionSchema).default([]),
-  subflow_nodes: z.array(SubflowNodeDefinitionSchema).optional(),
-  subflow_parallel_groups: z.array(SubflowParallelGroupDefinitionSchema).optional(),
-  gates: z.array(GateTemplateDefinitionSchema).default([]),
+  work_items: z.array(WorkflowNodeTemplateSchema),
+  parallel_groups: z.array(ParallelGroupDefinitionSchema),
+  subflow_nodes: z.array(SubflowNodeDefinitionSchema),
+  subflow_parallel_groups: z.array(SubflowParallelGroupDefinitionSchema),
+  gates: z.array(GateTemplateDefinitionSchema),
   advisory_gate_kinds: z.array(SafeIdSchema).optional(),
-  transitions: z.array(TransitionTemplateDefinitionSchema).default([]),
+  transitions: z.array(TransitionTemplateDefinitionSchema),
 });
 
-export const LegacyWorkflowDefinitionSchema = z.looseObject({
-  schema_version: z.string(),
-  workflow_id: SafeIdSchema,
-  workflow_kind: z.string().min(1),
-  entry_stage_id: SafeIdSchema,
-  terminal_stage_ids: z.array(SafeIdSchema),
-  stages: z.array(z.looseObject({ stage_id: SafeIdSchema, title: z.string().min(1) })),
-  work_items: z.array(WorkflowNodeDefinitionSchema).optional(),
-});
-
-export const InstanceWorkflowDefinitionSchema = z.strictObject({
+export const WorkflowDefinitionSchema = z.strictObject({
   schema_version: z.literal("0.2"),
   workflow_id: SafeIdSchema,
   workflow_kind: z.string().min(1),
   subflow_templates: z.array(SubflowTemplateDefinitionSchema).min(1),
 });
 
-export const WorkflowDefinitionSchema = z.union([InstanceWorkflowDefinitionSchema, LegacyWorkflowDefinitionSchema]);
 export type WorkflowNodeDefinition = z.infer<typeof WorkflowNodeDefinitionSchema>;
 export type WorkflowNodeTemplate = z.infer<typeof WorkflowNodeTemplateSchema>;
 export type ParallelGroupDefinition = z.infer<typeof ParallelGroupDefinitionSchema>;
@@ -153,15 +142,9 @@ export type SubflowParallelGroupDefinition = z.infer<typeof SubflowParallelGroup
 export type SubflowTemplateDefinition = z.infer<typeof SubflowTemplateDefinitionSchema>;
 export type GateTemplateDefinition = z.infer<typeof GateTemplateDefinitionSchema>;
 export type TransitionTemplateDefinition = z.infer<typeof TransitionTemplateDefinitionSchema>;
-export type LegacyWorkflowDefinition = z.infer<typeof LegacyWorkflowDefinitionSchema>;
-export type InstanceWorkflowDefinition = z.infer<typeof InstanceWorkflowDefinitionSchema>;
 export type WorkflowDefinition = z.infer<typeof WorkflowDefinitionSchema>;
 
 export interface WorkflowDefinitionIssue { code: string; message: string }
-
-export function isInstanceWorkflowDefinition(value: WorkflowDefinition | undefined): value is InstanceWorkflowDefinition {
-  return value?.schema_version === "0.2" && "subflow_templates" in value;
-}
 
 export function resolveWorkNode(template: WorkflowNodeTemplate, instanceId: string, roundNumber: number | null): WorkflowNodeDefinition {
   const workspacePath = template.output.workspace_path_template
@@ -175,19 +158,10 @@ export function resolveWorkNode(template: WorkflowNodeTemplate, instanceId: stri
 }
 
 export function validateWorkflowDefinition(workflow: WorkflowDefinition): WorkflowDefinitionIssue[] {
-  if (isInstanceWorkflowDefinition(workflow)) return validateInstanceWorkflow(workflow);
-  return validateLegacyWorkflow(workflow);
+  return validateInstanceWorkflow(workflow);
 }
 
-function validateLegacyWorkflow(workflow: LegacyWorkflowDefinition): WorkflowDefinitionIssue[] {
-  const issues: WorkflowDefinitionIssue[] = [];
-  const stageIds = uniqueIds(workflow.stages.map((item) => item.stage_id), "duplicate_stage_id", issues);
-  for (const stageId of [workflow.entry_stage_id, ...workflow.terminal_stage_ids]) if (!stageIds.has(stageId)) issues.push({ code: "workflow_stage_missing", message: `Workflow stage does not exist: ${stageId}` });
-  validateNodeGraph(workflow.work_items ?? [], stageIds, [], issues);
-  return deduplicateIssues(issues);
-}
-
-function validateInstanceWorkflow(workflow: InstanceWorkflowDefinition): WorkflowDefinitionIssue[] {
+function validateInstanceWorkflow(workflow: WorkflowDefinition): WorkflowDefinitionIssue[] {
   const issues: WorkflowDefinitionIssue[] = [];
   const templateIds = uniqueIds(workflow.subflow_templates.map((item) => item.template_id), "duplicate_subflow_template_id", issues);
   for (const template of workflow.subflow_templates) {

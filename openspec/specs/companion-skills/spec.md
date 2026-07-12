@@ -1,9 +1,7 @@
 ## Purpose
 
 ResearchSpec defines four self-contained Companion workflows that combine user intent, catalog route facts, and CLI-owned workspace evidence without duplicating ARSU semantic work or deterministic runtime authority.
-
 ## Requirements
-
 ### Requirement: Canonical Four-Workflow Manifest
 
 ResearchSpec SHALL define exactly four companion workflows named `researchspec-navigate`, `researchspec-propose`, `researchspec-decide`, and `researchspec-verify` in one typed manifest.
@@ -132,3 +130,11 @@ Companion Skills SHALL distinguish delegated mechanical child starts and unique 
 
 - **WHEN** a child start is delegated by the exact parent plan
 - **THEN** the Agent MAY execute that start but SHALL NOT use the parent confirmation to pass a Gate or select a branch
+
+### Requirement: Current Companion Submission Guidance
+Companion Skills SHALL describe only scoped automatic or manual submission and SHALL contain no retired workflow migration record.
+
+#### Scenario: Navigate explains candidate submission
+- **WHEN** a candidate is ready
+- **THEN** guidance SHALL use the current scoped submission policy and authority boundary
+

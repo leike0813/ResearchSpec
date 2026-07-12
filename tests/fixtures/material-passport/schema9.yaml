@@ -1,0 +1,41 @@
+origin_skill: academic-paper
+origin_mode: full
+origin_date: 2026-07-11T08:00:00Z
+verification_status: VERIFIED
+version_label: paper_draft_v2
+upstream_dependencies: [synthesis_v1]
+reset_boundary:
+  - kind: boundary
+    hash: a3f2b7c9d0e1
+    stage: "2"
+    next: "2.5"
+    generated_at: 2026-07-11T08:05:00Z
+    session_marker: sess-import
+    mode: full
+    pending_decision:
+      question: Continue to integrity review?
+      options:
+        - value: continue
+          next_stage: "2.5"
+          next_mode: pre-review
+compliance_history:
+  - mode: full
+    overall_decision: pass
+audit_artifact:
+  - audit_id: audit-1
+    status: persisted
+literature_corpus:
+  - id: source-1
+    title: Example source
+experiment_intake_declaration:
+  status: experiments_declared
+  declared_by: scholar
+experiment_provenance:
+  - experiment_id: exp-1
+    known_limitations: [limited sample]
+experiment_alignment_results:
+  - claim_id: C001
+    experiment_id: exp-1
+    alignment_verdict: ALIGNED
+unknown_extension:
+  retained: true

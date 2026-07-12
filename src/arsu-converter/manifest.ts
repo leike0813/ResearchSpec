@@ -42,7 +42,7 @@ export function buildManifest(
     group: "root",
     source_path: "generated:researchspec-contracts",
     output_path: "researchspec-contracts.json",
-    transform_rule: "contract_compatibility_manifest",
+    transform_rule: "contract_integration_manifest",
     sha256: contractManifestHash,
   });
   outputFiles.push({
@@ -98,9 +98,9 @@ export function buildManifest(
     excluded: result.inventory.excluded,
     unclassified_files: result.inventory.needs_review,
     risk_findings: riskFindings.sort(compareRiskFinding),
-    contract_compatibility: {
+    contract_integration: {
       manifest_path: "researchspec-contracts.json",
-      compatibility_kind: result.contract_manifest.compatibility_kind,
+      integration_profile: result.contract_manifest.integration_profile,
       generated_groups: Object.keys(result.contract_manifest.skill_groups).sort(),
       material_passport_policy: result.contract_manifest.material_passport_policy,
       full_matrix_injection: false,
@@ -143,12 +143,12 @@ export function buildReport(manifest: ConversionManifest): string {
     "",
     ...manifest.generated_groups.map((group) => `- \`${group}\``),
     "",
-    "## Contract Compatibility",
+    "## Contract Integration",
     "",
-    `- Manifest: \`${manifest.contract_compatibility.manifest_path}\``,
-    `- Profile: \`${manifest.contract_compatibility.compatibility_kind}\``,
-    `- Material Passport policy: \`${manifest.contract_compatibility.material_passport_policy}\``,
-    `- Full matrix injection: \`${String(manifest.contract_compatibility.full_matrix_injection)}\``,
+    `- Manifest: \`${manifest.contract_integration.manifest_path}\``,
+    `- Profile: \`${manifest.contract_integration.integration_profile}\``,
+    `- Material Passport policy: \`${manifest.contract_integration.material_passport_policy}\``,
+    `- Full matrix injection: \`${String(manifest.contract_integration.full_matrix_injection)}\``,
     `- Anchor replacement profile: \`${manifest.anchor_replacements.profile_id}\``,
     `- Anchor replacement coverage: ${String(manifest.anchor_replacements.replaced_anchors)}/${String(manifest.anchor_replacements.replaceable_anchors)} replaceable anchors`,
     `- Diagnostic anchors matched: ${String(manifest.anchor_replacements.diagnostic_matched)}/${String(manifest.anchor_replacements.diagnostic_anchors)}`,

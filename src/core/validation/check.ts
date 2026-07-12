@@ -3,7 +3,6 @@ import { readFile } from "node:fs/promises";
 
 import { fileExists, isDirectory } from "../../utils/fs.js";
 import { inspectArtifacts } from "../runtime/workflow-control.js";
-import { isInstanceRunState } from "../contracts/run-state.js";
 import { SubflowStartReceiptSchema } from "../contracts/subflow.js";
 import { GateSubmitReceiptSchema, TransitionAdvanceReceiptSchema } from "../contracts/gate-transition.js";
 import { loadWorkspaceSnapshot } from "../workspace/snapshot.js";
@@ -60,7 +59,7 @@ async function inspectGateTransitionReceipts(snapshot: WorkspaceSnapshot): Promi
       if (!receipt.success || sha256(bytes) !== reference.sha256 || receipt.data.plan_sha256 !== reference.plan_sha256 || receipt.data.event_id !== event.event_id || receipt.data.gate_id !== event.gate_id) diagnostics.push(dangling("gate_submit_receipt_mismatch", `Gate receipt does not match event ${String(event.event_id)}.`, receiptPath));
     } catch { diagnostics.push(dangling("gate_submit_receipt_missing", `Gate receipt is missing or invalid for ${String(event.event_id)}.`, receiptPath)); }
   }
-  if (!isInstanceRunState(snapshot.runState)) return diagnostics;
+  if (!snapshot.runState) return diagnostics;
   for (const instance of snapshot.runState.subflows) for (const reference of instance.transition_receipts) {
     const receiptPath = path.resolve(snapshot.workspace, reference.path);
     try {
@@ -73,7 +72,7 @@ async function inspectGateTransitionReceipts(snapshot: WorkspaceSnapshot): Promi
 }
 
 async function inspectSubflowStartReceipts(snapshot: WorkspaceSnapshot): Promise<Diagnostic[]> {
-  if (!isInstanceRunState(snapshot.runState)) return [];
+  if (!snapshot.runState) return [];
   const diagnostics: Diagnostic[] = [];
   for (const instance of snapshot.runState.subflows) {
     const receiptPath = path.resolve(snapshot.workspace, instance.start_receipt.path);

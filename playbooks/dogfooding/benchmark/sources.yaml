@@ -1,0 +1,34 @@
+schema_version: "1"
+synthetic: true
+sources:
+  - source_id: SYN-CLASSROOM-01
+    kind: classroom_observation_summary
+    scope: one first-year writing course, six weeks
+    finding: Students using structured AI prompts produced more outline revisions, while final rubric scores varied widely.
+    limits:
+      - No comparison group
+      - No validated measure of writing improvement
+      - Instructor supplied all prompts
+  - source_id: SYN-INTERVIEW-02
+    kind: instructor_interview_summary
+    scope: five instructors at one institution
+    finding: Instructors reported faster formative feedback but additional time spent checking unsupported claims.
+    limits:
+      - Self-reported workload
+      - Small convenience sample
+      - No time logs
+  - source_id: SYN-SURVEY-03
+    kind: student_survey_summary
+    scope: 84 voluntary responses
+    finding: Respondents valued rapid feedback; some reported uncertainty about permitted use and attribution.
+    limits:
+      - Voluntary response bias
+      - Attitudes rather than observed behavior
+      - Local policy changed during data collection
+  - source_id: SYN-POLICY-04
+    kind: institutional_policy_excerpt
+    scope: one synthetic university policy
+    finding: Course-level disclosure rules are required, but acceptable assistance is left to instructors.
+    limits:
+      - Policy text does not show implementation quality
+      - Not generalizable across institutions

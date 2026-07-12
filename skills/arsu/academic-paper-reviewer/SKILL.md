@@ -33,7 +33,7 @@ available, build the strict dependency payload in a temporary file, run Submit
 with `--dry-run --json`, then execute the identical selector/payload/actor with
 the returned SHA-256, `--expected-sha256`, and `--yes --json`. Re-query status
 and artifact checks. This registration is mechanical and is not Gate pass or
-academic approval. For `manual`, `legacy`, or missing automatic authorization,
+academic approval. For `manual` or missing automatic authorization,
 build the strict payload only from dynamic instructions, run direct
 `researchspec submit` with `--dry-run --json`, present its candidate hash,
 validation, and planned writes, then obtain explicit confirmation before the
@@ -57,10 +57,10 @@ it never confirms a Gate or branch. Revision rounds have no inferred maximum:
 after re-review, follow only the next round selector returned by status.
 
 Do not treat ARS Material Passport as ResearchSpec runtime truth. It may be
-imported or rendered as a compatibility artifact, while runtime provenance,
+imported as external evidence, while runtime provenance,
 decisions, gates, and resume state live in ResearchSpec registries and ledgers.
 
-This generated compatibility block uses profile `researchspec-preflight-v5` for
+This generated contract integration block uses profile `researchspec-preflight-v5` for
 `academic-paper-reviewer`. Per-stage and per-mode graphs remain workflow-profile data.
 
 # Academic Paper Reviewer v1.10.0 — Multi-Perspective Academic Paper Review Agent Team
@@ -243,15 +243,22 @@ Two invocation modes:
 
 **Mode B — phase-by-phase (cross-session resume):** User invokes one reviewer agent per phase across sessions, or runs the full reviewer panel standalone via `/ars-review` equivalent.
 
-In Mode B, **single-phase agents (Bucket A per `docs/design/2026-05-18-ars-v3.9.2-agent-phase-classification.md`) stay strictly within their assigned phase for writes**. The 6 Bucket A agents in academic-paper-reviewer are: `eic_agent`, `methodology_reviewer`, `domain_reviewer`, `perspective_reviewer`, `devils_advocate_reviewer` (all Phase 1 panel) + `editorial_synthesizer` (Phase 2 synthesis). Reading the full paper draft is **expected** for all reviewers — without context they cannot evaluate.
+<!--rs:IO-006-->
+In phase-by-phase mode, the review panel and editorial synthesizer may write only
+the outputs declared by the selected review work item. Reviewers are expected
+to read the complete registered manuscript needed for evaluation; read access
+does not extend their write scope. `field_analyst` remains a panel-configuration
+role and may emit only its declared configuration artifact. The Sprint Contract
+paper-blind and paper-visible call discipline remains active inside these stage
+boundaries; neither rule overrides the other.
 
-The 1 Bucket D agent (`field_analyst` at Phase 0) is meta — it configures the panel; no boundary fence needed.
-
-The v3.6.2 Sprint Contract Protocol (paper-blind Phase 1 + paper-visible Phase 2 + data delimiter) additionally constrains all reviewer agents' within-phase discipline. Phase Boundary (phase scope) and Sprint Contract (within-phase paper-blind/paper-visible discipline) both apply — neither overrides the other.
-
-Routing into Mode B requires explicit user signal — `/ars-<mode>` slash command or `[direct-mode]` prefix. Ambiguous cross-phase input defaults to clarification per `.claude/CLAUDE.md` Routing Discipline + `references/shared/references/intent_clarification_protocol.md`.
-
-**Enforcement (v3.9.2):** Phase Boundary blocks on Bucket A agents + advisory verifier (`scripts/check_pipeline_integrity.py`) + a deterministic PreToolUse write-scope guard in hook-enabled runtimes (#134 rescope, PR #294). Multi-phase envelope remains forward-scope (#134 Slices 3-5).
+Phase-by-phase routing requires an explicit user signal. Ambiguous cross-stage
+material must be clarified before dispatch. The configured graph in
+`researchspec/specs/workflow.yaml`, the frontier in
+`researchspec/runs/current/state.yaml`, and registered inputs in
+`researchspec/runs/current/artifact-registry.json` define the permitted read and
+write boundary.
+<!--/rs:IO-006-->
 
 ---
 

@@ -6,9 +6,9 @@ import {
   GateSubmitPayloadSchema, GateSubmitReceiptSchema, RuntimeActorSchema, Sha256Schema, TransitionAdvanceReceiptSchema,
   type GateSubmitReceipt, type TransitionAdvanceReceipt,
 } from "../contracts/gate-transition.js";
-import { isInstanceRunState, type InstanceRunState } from "../contracts/run-state.js";
+import type { RunState } from "../contracts/run-state.js";
 import { parseRuntimeSelector } from "../contracts/runtime-selector.js";
-import { isInstanceWorkflowDefinition, type InstanceWorkflowDefinition } from "../contracts/workflow.js";
+import type { WorkflowDefinition } from "../contracts/workflow.js";
 import type { WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { loadWorkspaceSnapshot } from "../workspace/snapshot.js";
 import { executeWritePlan, planFile, sha256, type WritePlan } from "../workspace/write-plan.js";
@@ -155,7 +155,7 @@ export async function planTransitionAdvance(input: { snapshot: WorkspaceSnapshot
   const nextInstance = { ...instance, status: status.effect.kind === "complete_subflow" ? "complete" as const : "active" as const, active_stage_id: status.effect.kind === "activate_stage" ? status.effect.stage_id : instance.active_stage_id, transition_receipts: [...instance.transition_receipts, { transition_id: status.transition_id, path: relativeReceiptPath, sha256: receiptHash, plan_sha256: planSha256 }] };
   const nextInstances = snapshot.runState.subflows.map((item) => item.instance_id === instance.instance_id ? nextInstance : item);
   const nextRunStatus = nextInstances.every((item) => ["complete", "failed", "cancelled"].includes(item.status)) ? "complete" as const : "in_progress" as const;
-  const nextState: InstanceRunState = { ...snapshot.runState, status: nextRunStatus, updated_at: receipt.advanced_at, subflows: nextInstances };
+  const nextState: RunState = { ...snapshot.runState, status: nextRunStatus, updated_at: receipt.advanced_at, subflows: nextInstances };
   const stateFile = snapshot.files.get("runs/current/state.yaml");
   if (!stateFile) throw new GateTransitionError("workflow_invalid", "Run state is unavailable.", "domain");
   const stateText = stringify(nextState);
@@ -171,8 +171,8 @@ export async function executeTransitionAdvance(plan: TransitionAdvancePlan, work
   return { status: "advanced", plan, workflow_control_after: await evaluateWorkflowControl(await loadWorkspaceSnapshot(workspace)) };
 }
 
-function assertInstanceControl(snapshot: WorkspaceSnapshot): asserts snapshot is WorkspaceSnapshot & { workflow: InstanceWorkflowDefinition; runState: InstanceRunState } {
-  if (!isInstanceWorkflowDefinition(snapshot.workflow) || !isInstanceRunState(snapshot.runState)) throw new GateTransitionError("workflow_unconfigured", "Workflow has no instance Gate/transition graph.", "domain");
+function assertInstanceControl(snapshot: WorkspaceSnapshot): asserts snapshot is WorkspaceSnapshot & { workflow: WorkflowDefinition; runState: RunState } {
+  if (!snapshot.workflow || !snapshot.runState) throw new GateTransitionError("workflow_unconfigured", "Workflow has no instance Gate/transition graph.", "domain");
   if (snapshot.diagnostics.some((item) => item.blocking)) throw new GateTransitionError("workflow_invalid", "Workspace has blocking diagnostics.", "domain", snapshot.diagnostics.filter((item) => item.blocking));
 }
 
@@ -203,7 +203,7 @@ async function existingGatePlan(snapshot: WorkspaceSnapshot, selector: string, p
 }
 
 async function existingTransitionPlan(snapshot: WorkspaceSnapshot, selector: string, planSha256: string): Promise<TransitionAdvancePlan | undefined> {
-  if (!isInstanceRunState(snapshot.runState)) return undefined;
+  if (!snapshot.runState) return undefined;
   const ref = snapshot.runState.subflows.flatMap((instance) => instance.transition_receipts).find((item) => item.plan_sha256 === planSha256);
   if (!ref) return undefined;
   try {

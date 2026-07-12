@@ -264,26 +264,25 @@ User: "Research [topic]"
 ARS pipeline runs in 6 phases. Two invocation modes:
 
 <!--rs:STATE-008-->
-**Mode A — orchestrator-driven (default):** `pipeline_orchestrator_agent` runs
-the deep-research phases using stable project intent from
-`researchspec/specs/project.md`, the configured stage graph from
-`researchspec/specs/workflow.yaml`, and active run state from
-`researchspec/runs/current/state.yaml`. Research briefs, bibliographies,
-synthesis outputs, and related evidence are resolved and returned by artifact id
-through `researchspec/runs/current/artifact-registry.json`.
-
-**Mode B — phase-by-phase (cross-session resume):** each invocation reads only
-the current ResearchSpec contracts, state, and registered inputs required for
-its assigned phase, then returns its deliverables for registration. A Material
-Passport reset tag may be used to locate legacy compatibility evidence, but it
-does not carry active ResearchSpec state.
+Use `researchspec status` and dynamic instructions to locate the current resume frontier. A Passport boundary tag may help select imported ARS evidence, but only the hash-bound `material_passport_import` transaction can register it, and only current ResearchSpec Decisions and Gate receipts can authorize progress.
+Resolve the current route from `researchspec/specs/workflow.yaml`.
 <!--/rs:STATE-008-->
 
-In Mode B, **single-phase agents (Bucket A per `docs/design/2026-05-18-ars-v3.9.2-agent-phase-classification.md`) stay strictly within their assigned phase for writes**. Reads from upstream phases are allowed. Multi-phase agents (Bucket B: `devils_advocate_agent`, `report_compiler_agent`) do exactly the work specified by the caller's invocation for that phase — no extension to other phases in the same call.
+<!--rs:IO-004-->
+In phase-by-phase mode, single-stage deep-research agents may read the contracts
+and registered upstream artifacts required by the selected work item, but may
+write only its declared outputs. `devils_advocate_agent` and
+`report_compiler_agent` retain multi-stage responsibilities only when the
+current frontier instructions explicitly select that work; one invocation does
+not authorize either role to extend itself into another stage.
 
-Routing into Mode B requires explicit user signal — `/ars-<mode>` slash command or `[direct-mode]` prefix. Ambiguous cross-phase input defaults to clarification per `.claude/CLAUDE.md` Routing Discipline + `../../shared/references/intent_clarification_protocol.md`.
-
-**Enforcement (v3.9.2):** Phase Boundary blocks on Bucket A agents + advisory verifier (`scripts/check_pipeline_integrity.py`) + a deterministic PreToolUse write-scope guard in hook-enabled runtimes (#134 rescope, PR #294). Multi-phase envelope remains forward-scope (#134 Slices 3-5).
+Phase-by-phase routing requires an explicit user signal. Ambiguous cross-stage
+material must be clarified before dispatch. The configured graph in
+`researchspec/specs/workflow.yaml`, the frontier in
+`researchspec/runs/current/state.yaml`, and registered inputs in
+`researchspec/runs/current/artifact-registry.json` define the permitted read and
+write boundary.
+<!--/rs:IO-004-->
 
 ---
 

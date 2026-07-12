@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { ImportedArtifactRecordSchema } from "./material-passport.js";
 
 const SafeIdSchema = z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]*$/).refine((value) => !value.includes(".."));
 export const Sha256Schema = z.string().regex(/^[a-f0-9]{64}$/);
@@ -14,16 +15,6 @@ export const ArtifactSubmitInputSchema = z.object({
   producer_mode: SafeIdSchema.optional(),
 }).strict();
 
-export const LegacyArtifactSchema = z.looseObject({
-  artifact_id: SafeIdSchema,
-  artifact_type: z.string().min(1).optional(),
-  work_item_id: SafeIdSchema.optional(),
-  path: z.string().min(1),
-  sha256: z.string().optional(),
-  status: z.string().optional(),
-  verification_state: z.string().optional(),
-});
-
 const VerificationSchema = z.object({
   profile: z.string().min(1),
   verified_at: z.iso.datetime(),
@@ -35,7 +26,7 @@ export const SubmittedArtifactRecordSchema = z.object({
   artifact_id: SafeIdSchema,
   artifact_type: z.string().min(1),
   work_item_id: SafeIdSchema,
-  subflow_instance_id: SafeIdSchema.optional(),
+  subflow_instance_id: SafeIdSchema,
   path: z.string().min(1),
   sha256: Sha256Schema,
   status: z.literal("candidate"),
@@ -61,6 +52,27 @@ export const SubmitReceiptArtifactRecordSchema = z.object({
   created_at: z.iso.datetime(),
 }).strict();
 
+export const AppliedDraftArtifactRecordSchema = z.strictObject({
+  artifact_id: SafeIdSchema,
+  artifact_type: z.literal("paper_draft"),
+  path: z.string().min(1),
+  sha256: Sha256Schema,
+  status: z.literal("created"),
+  produced_by: z.literal("researchspec decide"),
+  created_at: z.iso.datetime(),
+  derived_from_artifact_ids: z.array(SafeIdSchema).min(1),
+});
+
+export const ApplyReceiptArtifactRecordSchema = z.strictObject({
+  artifact_id: SafeIdSchema,
+  artifact_type: z.literal("apply_receipt"),
+  path: z.string().min(1),
+  sha256: Sha256Schema,
+  status: z.literal("verified"),
+  produced_by: z.literal("researchspec decide"),
+  created_at: z.iso.datetime(),
+});
+
 const DependencyArtifactSchema = z.object({
   artifact_id: SafeIdSchema,
   artifact_type: z.string().min(1),
@@ -72,8 +84,8 @@ export const ArtifactSubmitReceiptSchema = z.object({
   schema_version: z.literal("1"),
   receipt_type: z.literal("artifact_submit"),
   submission_id: SafeIdSchema,
-  selector: z.string().regex(/^work:(?:sf-[A-Za-z0-9][A-Za-z0-9._-]*\/)?[A-Za-z0-9][A-Za-z0-9._-]*$/),
-  subflow_instance_id: SafeIdSchema.optional(),
+  selector: z.string().regex(/^work:sf-[A-Za-z0-9][A-Za-z0-9._-]*\/[A-Za-z0-9][A-Za-z0-9._-]*$/),
+  subflow_instance_id: SafeIdSchema,
   start_authorization: z.object({
     plan_sha256: Sha256Schema,
     receipt_path: z.string().min(1),
@@ -113,10 +125,16 @@ export const ArtifactSubmitReceiptSchema = z.object({
   submitted_at: z.iso.datetime(),
 }).strict();
 
-export const ArtifactRegistrySchema = z.looseObject({
-  schema_version: z.string(),
+export const ArtifactRegistrySchema = z.strictObject({
+  schema_version: z.literal("0.1"),
   run_id: SafeIdSchema,
-  artifacts: z.array(LegacyArtifactSchema),
+  artifacts: z.array(z.union([
+    ImportedArtifactRecordSchema,
+    SubmittedArtifactRecordSchema,
+    SubmitReceiptArtifactRecordSchema,
+    AppliedDraftArtifactRecordSchema,
+    ApplyReceiptArtifactRecordSchema,
+  ])),
 });
 
 export type ArtifactSubmitInput = z.infer<typeof ArtifactSubmitInputSchema>;

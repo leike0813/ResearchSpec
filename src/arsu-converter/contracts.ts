@@ -1,6 +1,6 @@
 import { GENERATED_OUTPUT_PATH, VENDOR_SOURCE_PATH } from "./config.js";
 import type {
-  ContractCompatibilityManifest,
+  ContractIntegrationManifest,
   ContractInjectionResult,
   ContractProfile,
 } from "./types.js";
@@ -26,7 +26,7 @@ export function mutationBoundaryBullets(targets: string[]): string[] {
     bullets.push("Request changes to `researchspec/runs/current/state.yaml` through the ResearchSpec orchestrator or runtime helper; do not edit run state directly.");
   }
   if (targets.includes("researchspec/runs/current/artifact-registry.json")) {
-    bullets.push("Write only the candidate path declared by dynamic instructions. For trusted automatic instance work, run hash-bound `researchspec submit` directly. For manual or legacy registration, preview the same direct CLI transaction and obtain explicit confirmation, or report the authority boundary. Never edit registry or receipts directly.");
+    bullets.push("Write only the candidate path declared by dynamic instructions. For trusted automatic instance work, run hash-bound `researchspec submit` directly. For manual work, preview the same direct CLI transaction and obtain explicit confirmation. Never edit registry or receipts directly.");
   }
   if (targets.includes("researchspec/runs/current/decision-ledger.jsonl")) {
     bullets.push("After an explicit human choice, let the ResearchSpec runtime append the structured event to `researchspec/runs/current/decision-ledger.jsonl`.");
@@ -37,13 +37,13 @@ export function mutationBoundaryBullets(targets: string[]): string[] {
   return bullets;
 }
 
-export function buildContractCompatibilityManifest(skillGroups: string[]): ContractCompatibilityManifest {
+export function buildContractIntegrationManifest(skillGroups: string[]): ContractIntegrationManifest {
   return {
     schema_version: "0.1",
-    compatibility_kind: RESEARCHSPEC_PREFLIGHT_PROFILE_ID,
+    integration_profile: RESEARCHSPEC_PREFLIGHT_PROFILE_ID,
     source: VENDOR_SOURCE_PATH,
     output: GENERATED_OUTPUT_PATH,
-    material_passport_policy: "compatibility_artifact_only_not_runtime_ssot",
+    material_passport_policy: "imported_evidence_only_not_runtime_ssot",
     anchor_replacement: {
       profile_id: "researchspec-anchor-replacement-v3",
       coverage_policy: "required_and_recommended",
@@ -107,7 +107,7 @@ function buildProfile(skillGroup: string): ContractProfile {
     notes: [
       `${skillGroup} uses the shared ResearchSpec runtime preflight profile.`,
       "Load only stage/mode-relevant contracts into agent context.",
-      "Treat ARS Material Passport as an imported compatibility artifact, not runtime truth.",
+      "Treat ARS Material Passport as imported external evidence, not runtime truth.",
       "Per-stage and per-mode graphs are supplied by the workflow profile layer.",
     ],
     full_matrix_injection: false,
@@ -136,7 +136,7 @@ available, build the strict dependency payload in a temporary file, run Submit
 with \`--dry-run --json\`, then execute the identical selector/payload/actor with
 the returned SHA-256, \`--expected-sha256\`, and \`--yes --json\`. Re-query status
 and artifact checks. This registration is mechanical and is not Gate pass or
-academic approval. For \`manual\`, \`legacy\`, or missing automatic authorization,
+academic approval. For \`manual\` or missing automatic authorization,
 build the strict payload only from dynamic instructions, run direct
 \`researchspec submit\` with \`--dry-run --json\`, present its candidate hash,
 validation, and planned writes, then obtain explicit confirmation before the
@@ -160,10 +160,10 @@ it never confirms a Gate or branch. Revision rounds have no inferred maximum:
 after re-review, follow only the next round selector returned by status.
 
 Do not treat ARS Material Passport as ResearchSpec runtime truth. It may be
-imported or rendered as a compatibility artifact, while runtime provenance,
+imported as external evidence, while runtime provenance,
 decisions, gates, and resume state live in ResearchSpec registries and ledgers.
 
-This generated compatibility block uses profile \`${RESEARCHSPEC_PREFLIGHT_PROFILE_ID}\` for
+This generated contract integration block uses profile \`${RESEARCHSPEC_PREFLIGHT_PROFILE_ID}\` for
 \`${skillGroup}\`. Per-stage and per-mode graphs remain workflow-profile data.
 `;
 }

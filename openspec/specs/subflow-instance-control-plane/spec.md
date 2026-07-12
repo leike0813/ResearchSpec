@@ -3,13 +3,11 @@
 ResearchSpec provides a typed subflow-instance control plane that turns confirmed
 subflow templates into runtime instances, derives catalog-bound route summaries
 and prerequisites, atomically records receipt-backed starts, computes
-workflow-declared parallel frontiers, delegates start-authorized automatic work
-submission, and preserves legacy `0.1` static workflow compatibility. This
+workflow-declared parallel frontiers, and delegates start-authorized automatic work
+submission. This
 capability is the contract layer that owns subflow/round instance lifecycle
 without executing semantic work.
-
 ## Requirements
-
 ### Requirement: Typed Subflow And Round Instances
 ResearchSpec SHALL represent standalone, pipeline and repeatable round work as strict subflow templates and runtime instances under one active run.
 
@@ -37,22 +35,15 @@ ResearchSpec SHALL derive subflow route summaries and prerequisites from the can
 - **AND** ResearchSpec SHALL NOT start the fallback route
 
 ### Requirement: Atomic Receipt-Backed Start
-ResearchSpec SHALL preview and atomically record a confirmed subflow start with read-precondition protection.
+ResearchSpec SHALL compose an optional `material_passport_import` only for external academic-pipeline mid-entry, write imported evidence and receipt before state, and bind the complete import identity into the Start plan.
 
-#### Scenario: Dry-run is side-effect free
-- **WHEN** Start runs in dry-run mode with valid input
-- **THEN** it SHALL return the semantic plan hash, derived instance, receipt and write plan
-- **AND** state, artifacts and ledgers SHALL remain byte-for-byte unchanged
+#### Scenario: Dry-run and commit
+- **WHEN** a valid import Start is previewed and then confirmed with its plan hash
+- **THEN** dry-run SHALL write nothing and execution SHALL commit immutable evidence before current instance state
 
-#### Scenario: Start commits receipt before state
-- **WHEN** the exact previewed plan is authorized
-- **THEN** ResearchSpec SHALL create or reuse the matching start receipt before refreshing state
-- **AND** state SHALL be the authoritative record of the active instance
-
-#### Scenario: Exact retry is idempotent
-- **WHEN** the same plan hash already identifies a trusted instance and receipt
-- **THEN** Start SHALL return `already_started` without another write
-- **AND** divergent receipts, IDs or basis hashes SHALL fail as conflicts
+#### Scenario: Import is route constrained
+- **WHEN** any other selector receives `material_passport_import`
+- **THEN** Start SHALL reject the input without writes
 
 ### Requirement: Workflow-Declared Parallel Frontier
 ResearchSpec SHALL compute parallel dispatch and join readiness only from profile declarations.
@@ -83,14 +74,6 @@ ResearchSpec SHALL allow a started subflow to delegate deterministic candidate r
 - **THEN** automatic Submit SHALL be blocked
 - **AND** it SHALL not write registry, state or ledgers
 
-### Requirement: Legacy Runtime Compatibility
-ResearchSpec SHALL keep valid static `0.1` workflow workspaces readable and executable without implicit migration.
-
-#### Scenario: Legacy work selector remains usable
-- **WHEN** an existing workspace contains top-level work items and no subflow templates
-- **THEN** `work:<id>` status, instructions and Submit SHALL retain their established behavior
-- **AND** Start SHALL report the workflow as unconfigured for subflow use
-
 ### Requirement: Parent frontier exposes scoped child selectors
 The subflow frontier SHALL expose a ready child as `subflow:<parent-instance>/<node-id>` and SHALL resolve its template, dependencies, and next round from the workflow profile.
 
@@ -111,3 +94,4 @@ A successful parent-scoped start receipt SHALL bind parent instance ID, parent n
 #### Scenario: Exact child start is retried
 - **WHEN** a start request repeats with the same complete receipt basis
 - **THEN** it returns the existing child instance without creating a duplicate
+

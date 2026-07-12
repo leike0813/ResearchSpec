@@ -94,7 +94,7 @@ When working on this repository, treat ARSU as the main capability payload:
 - optional future ARSU skill groups, if deliberately adopted
 
 The important integration point is the contract design. ResearchSpec contracts
-do not need to be backward-compatible with raw ARS/ARSU contracts, but ARSU
+use their own current contracts rather than raw ARS/ARSU contracts, and ARSU
 skills must be adapted to consume the ResearchSpec contracts once this project
 absorbs them.
 

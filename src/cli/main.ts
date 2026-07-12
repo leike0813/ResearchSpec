@@ -58,7 +58,6 @@ type Runner = (command: string, commandObject: Command, action: () => Promise<Co
 function registerCommands(program: Command, run: Runner): void {
   program.command("init [path]").description("Initialize or safely extend a ResearchSpec workspace")
     .option("--tools <ids>", "all, none, or comma-separated tool IDs")
-    .option("--profile <profile>", "workspace profile")
     .action(async (target: string | undefined, options: InitOptions, command: Command) => run("init", command, () => handleInit(target, options, commandContext("init", command))));
   program.command("update [path]").description("Refresh selected generated agent files")
     .option("--tools <ids>", "refresh/add a tool subset")

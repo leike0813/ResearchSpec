@@ -148,7 +148,7 @@ ARSU Skill 与 command wrapper descriptions 已从该 catalog 投影。后续
 | 使用方式 | 入口 | 行为 |
 | --- | --- | --- |
 | End-to-end | 从研究目标或种子材料启动 | 创建 pipeline parent subflow，按 profile frontier 调度 Research、Write、Integrity、Review、Revision、Finalization |
-| Mid-entry / resume | 从已有稿件、审稿意见或 active run 恢复 | Navigate 识别现有 artifacts/state，展示省略与补齐的 prerequisite subflows，确认后从合法 frontier 继续 |
+| Mid-entry / resume | 从已有稿件、审稿意见、active run 或 ARS Material Passport 恢复 | Navigate 识别现有 artifacts/state；对 JSON/YAML passport 展示 hash-bound 兼容导入摘要；确认后从合法 frontier 继续 |
 
 ## 5. 统一运行协议
 
@@ -354,6 +354,12 @@ flowchart TD
 
 恢复已有 ready work 不等于启动新路线，不重复要求路线确认；但如果要补建 prerequisite、改变 mode 或选择新 branch，则必须再次确认或进入 Decision。
 
+从 ARS Material Passport 恢复时，Navigate 使用
+`start subflow:tpl-academic-pipeline-mid-entry` 的 `material_passport_import` 输入。CLI
+保存原件和规范化投影，并把导入的 ARS Gate/Decision 记录作为非权威 evidence 暴露给
+后续 scoped instructions。Passport 中的 pass、branch、override 或 stage 不直接改变
+当前 frontier；Agent 仍需使用现行 Gate、Decision 和 transition 协议。
+
 ## 11. 目标最小 Surface
 
 ### 11.1 Skills：4 + 4
@@ -414,7 +420,7 @@ command wrapper 只是不同 agent 工具的 adapter。目标交付量是：
 - active-run `state.yaml` 下的 strict subflow/round instances、parent/round identity、
   all/quorum parallel frontier、`instructions subflow:` 与原子 `start`；
 - instance-scoped `work:<instance>/<node>` 和由 Start confirmation 授权的 automatic
-  hash-bound `submit work:`；旧静态 workspaces 保持兼容。
+  hash-bound `submit work:`。
 - instance-scoped `gate:`/`transition:` frontier、用户确认 Gate submit、challenge 后重验、
   receipt-bound override/branch Decision，以及 receipt-first/state-last Advance。
 - 新 workspace 默认 `arsu-v0-1`，完整覆盖 25 个 operational modes、2 个 pipeline entries，

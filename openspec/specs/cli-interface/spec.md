@@ -4,9 +4,7 @@ ResearchSpec exposes a complete first-version public CLI surface and the
 machine- and human-facing result contract that all public commands share. This
 capability is the user-facing command layer over the framework-core workspace,
 agent-tool-delivery, and derived context artifacts.
-
 ## Requirements
-
 ### Requirement: Complete Public Command Surface
 
 ResearchSpec SHALL expose `init`, `update`, `status`, `instructions`, `start`,
@@ -188,7 +186,7 @@ from the same snapshot and evaluator used by generalized instructions and Submit
 - **GIVEN** a valid workflow with subflow templates and zero or more instances
 - **WHEN** the user runs `researchspec status --json`
 - **THEN** `workflow_control` SHALL include frontier, startable subflows, instances, parallel groups, scoped work states, ready work selectors, blockers, warnings and unlocks
-- **AND** existing status fields and legacy work views SHALL remain available
+- **AND** stage identity SHALL be reported per subflow instance
 
 #### Scenario: Unconfigured workflow remains inspectable
 
@@ -200,7 +198,7 @@ from the same snapshot and evaluator used by generalized instructions and Submit
 
 ### Requirement: Dynamic Work-Item Instructions
 
-ResearchSpec SHALL expose read-only instructions for available subflow templates, active subflow instances, scoped work and legacy work through canonical runtime selectors.
+ResearchSpec SHALL expose read-only instructions for available subflow templates, active subflow instances and scoped work through canonical runtime selectors.
 
 #### Scenario: Template selector returns route packet
 
@@ -324,11 +322,11 @@ ResearchSpec SHALL expose `advance transition:<instance>/<node>` as the only pub
 - **THEN** instructions SHALL return a stable domain error and SHALL NOT infer missing workflow facts
 
 ### Requirement: New workspaces use the universal profile
-`researchspec init` SHALL select `arsu-v0-1` when no profile is supplied, SHALL retain explicit legacy profile selection, and SHALL not start an academic route.
+`researchspec init` SHALL always create an unstarted `arsu-v0-1` workspace and SHALL expose no profile selection option.
 
-#### Scenario: Init uses no profile option
-- **WHEN** a new workspace is initialized without `--profile`
-- **THEN** it stores `arsu-v0-1` and leaves all external subflows unstarted
+#### Scenario: Init receives a profile option
+- **WHEN** a caller supplies `--profile`
+- **THEN** CLI parsing SHALL reject the unknown option without writing a workspace
 
 ### Requirement: Existing commands expose child-aware workflow state
 `status`, `instructions`, and `start` SHALL render and accept parent-scoped child subflow candidates without adding a public top-level command.
@@ -344,19 +342,19 @@ The CLI SHALL continue to expose exactly the canonical fifteen top-level command
 - **WHEN** top-level help is requested
 - **THEN** it lists init, update, status, instructions, start, submit, advance, check, list, show, handoff, pack, propose, decide, and archive exactly once
 
-### Requirement: Init And Update Reconcile Retired Agent Projections
+### Requirement: Init And Update Reconcile Generated Agent Projections
 
-`init` for an existing workspace and `update` SHALL use the same ownership-aware reconciliation for desired and retired Agent projections.
+`init` for an existing workspace and `update` SHALL use the same ownership-aware reconciliation for desired and obsolete project-local Agent projections.
 
 #### Scenario: Existing workspace converges through either command
 
-- **WHEN** a workspace manifest records clean projections for retired Companion Skills or wrappers
+- **WHEN** a workspace manifest records clean project-local projections that are no longer desired
 - **THEN** init and update SHALL install the four-Companion desired surface and remove those stale project-local files
 - **AND** both commands SHALL produce equivalent manifest ownership facts
 
 #### Scenario: Reconciliation preserves user changes
 
-- **WHEN** a retired projection is unmanifested or differs from its recorded hash
+- **WHEN** an obsolete projection is unmanifested or differs from its recorded hash
 - **THEN** init and update SHALL leave it unchanged and report the applicable ownership or drift boundary
 - **AND** repeated reconciliation SHALL be idempotent
 
@@ -364,3 +362,19 @@ The CLI SHALL continue to expose exactly the canonical fifteen top-level command
 
 - **WHEN** agent projections are consolidated
 - **THEN** CLI help SHALL continue to expose exactly init, update, status, instructions, start, submit, advance, check, list, show, handoff, pack, propose, decide, and archive
+
+### Requirement: Mid-Entry Material Passport Input
+Start SHALL accept an optional strict `material_passport_import` object without adding a public command.
+
+#### Scenario: Import is previewed and executed
+- **WHEN** a caller supplies a valid Passport import to the mid-entry Start
+- **THEN** dry-run SHALL expose hashes, projected evidence, diagnostics and writes
+- **AND** execution SHALL require the identical plan hash and current read basis
+
+### Requirement: Imported-Evidence Runtime Context
+Subflow, work and Gate instructions SHALL expose typed scoped import references.
+
+#### Scenario: Imported evidence changes
+- **WHEN** registered import evidence or its hashes change
+- **THEN** the prior instruction basis SHALL become stale
+

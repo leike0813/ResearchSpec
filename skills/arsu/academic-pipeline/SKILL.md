@@ -35,7 +35,7 @@ available, build the strict dependency payload in a temporary file, run Submit
 with `--dry-run --json`, then execute the identical selector/payload/actor with
 the returned SHA-256, `--expected-sha256`, and `--yes --json`. Re-query status
 and artifact checks. This registration is mechanical and is not Gate pass or
-academic approval. For `manual`, `legacy`, or missing automatic authorization,
+academic approval. For `manual` or missing automatic authorization,
 build the strict payload only from dynamic instructions, run direct
 `researchspec submit` with `--dry-run --json`, present its candidate hash,
 validation, and planned writes, then obtain explicit confirmation before the
@@ -59,10 +59,10 @@ it never confirms a Gate or branch. Revision rounds have no inferred maximum:
 after re-review, follow only the next round selector returned by status.
 
 Do not treat ARS Material Passport as ResearchSpec runtime truth. It may be
-imported or rendered as a compatibility artifact, while runtime provenance,
+imported as external evidence, while runtime provenance,
 decisions, gates, and resume state live in ResearchSpec registries and ledgers.
 
-This generated compatibility block uses profile `researchspec-preflight-v5` for
+This generated contract integration block uses profile `researchspec-preflight-v5` for
 `academic-pipeline`. Per-stage and per-mode graphs remain workflow-profile data.
 
 # Academic Pipeline v3.15.0 — Full Academic Research Workflow Orchestrator
@@ -108,30 +108,8 @@ I received reviewer comments, help me revise
 resume_from_passport=<hash> [stage=<n>] [mode=<m>]
 ```
 <!--rs:STATE-002-->
---> Treats `resume_from_passport=<hash>` as a compatibility import request. It
-loads the legacy Material Passport, locates the matching `kind: boundary`
-payload, and submits that payload plus the passport content hash to the
-ResearchSpec resume helper. The helper checks
-`researchspec/runs/current/state.yaml` for prior consumption and resolves
-recovered outputs through
-`researchspec/runs/current/artifact-registry.json`. If the imported boundary
-contains `pending_decision`, the user must still choose a branch before routing;
-the confirmed choice is returned to the decision runtime for
-`researchspec/runs/current/decision-ledger.jsonl`. Explicit `stage=` and `mode=`
-overrides retain precedence over option routing.
-- **Gate (compatibility emission):** `ARS_PASSPORT_RESET=1` controls only whether
-  an ARS-compatible `[PASSPORT-RESET: ...]` export is produced. ResearchSpec
-  checkpoint state remains owned by the runtime regardless of that flag.
-- **Gate (resume):** no flag is required. Resume proceeds only after the helper
-  verifies the imported boundary, current artifact hashes, unresolved gates in
-  `researchspec/runs/current/gate-ledger.jsonl`, and single-consumption state.
-- **Intent:** use a fresh agent session when context reduction is desired. The
-  runtime files, not chat recall or the imported passport alone, reconstruct the
-  run.
-- **Stage:** any stage allowed by the configured workflow and verified routing
-  decision.
-- **Reference:** `references/passport_as_reset_boundary.md` defines the legacy
-  payload and import rules.
+Treat `resume_from_passport=<hash>` as a request to prepare `material_passport_import` for the external `academic-pipeline:mid-entry` Start. Resolve the source path, verify the declared SHA-256 and selected boundary, preview the exact Start transaction, and require human confirmation. The transaction registers the source and normalized projection, appends imported evidence, records the consumed boundary in current state, and starts the instance at its declared entry stage. No Passport file is mutated or emitted.
+Current authority is committed through `researchspec/runs/current/state.yaml`.
 <!--/rs:STATE-002-->
 
 **Execution flow:**
@@ -384,21 +362,8 @@ Checkpoint: [MANDATORY/ADVISORY] — [What user needs to confirm]
 academic-pipeline is the orchestrator skill that coordinates the full ARS pipeline across 10 stages (delegating to deep-research, academic-paper, academic-paper-reviewer). Two invocation modes:
 
 <!--rs:STATE-003-->
-**Mode A — orchestrator-driven (default):** `pipeline_orchestrator_agent` runs
-all stages end to end using `researchspec/specs/workflow.yaml` as the configured
-stage graph and `researchspec/runs/current/state.yaml` as active run state.
-`state_tracker_agent`, integrity verification, collaboration-depth observation,
-and claim-reference audit remain the specialized roles dispatched at their
-configured checkpoints; produced material is resolved and registered through
-`researchspec/runs/current/artifact-registry.json`, and gate outcomes are
-submitted to the appropriate helper for
-`researchspec/runs/current/gate-ledger.jsonl`.
-
-**Mode B — phase-by-phase (cross-session resume):** the user invokes one phase
-agent at a time. Each session resumes from current ResearchSpec state and the
-registered artifacts required by that phase. `ARS_PASSPORT_RESET=1` and
-`resume_from_passport=<hash>` remain optional compatibility export/import
-mechanisms, not the run-state source of truth.
+Resume from ResearchSpec state and registered artifacts. If the user supplies an ARS Material Passport, route it through the one-way `material_passport_import` input on the confirmed mid-entry Start; otherwise use the current CLI frontier directly. Never infer current Gate or Decision authority from external records.
+Resolve the current graph from `researchspec/specs/workflow.yaml`.
 <!--/rs:STATE-003-->
 
 <!--rs:IO-002-->

@@ -512,8 +512,10 @@
       "severity": "required",
       "match_hints": {
         "snippets": [
+          "In revision mode, `draft_writer_agent` does NOT re-emit the complete paper",
           "**Anchorize** the draft (`scripts/ars_anchorize_draft.py`",
-          "The writer emits a patch document"
+          "The writer emits a patch document",
+          "The `academic-paper full` in-pair Phase 6→4 loop is NOT patch-adopted"
         ],
         "keywords": [
           "shared/contracts/patch/revision_patch.schema.json",
@@ -527,8 +529,98 @@
       ],
       "replacement_shape": "patch_protocol_block",
       "replacement_scope": {
-        "start_snippet": "1. **Anchorize** the draft",
+        "start_snippet": "In revision mode, `draft_writer_agent` does NOT re-emit the complete paper.",
         "end_snippet": "Item 9 boundary, spec §5.2/§7)."
+      }
+    },
+    {
+      "id": "IO-004",
+      "name": "deep.skill.phase-boundary",
+      "source_path": "deep-research/SKILL.md",
+      "owner_skill": "deep-research",
+      "contract_category": "phase_directory_boundaries",
+      "severity": "recommended",
+      "match_hints": {
+        "snippets": [
+          "single-phase agents (Bucket A",
+          "Multi-phase agents (Bucket B: `devils_advocate_agent`, `report_compiler_agent`)",
+          "scripts/check_pipeline_integrity.py"
+        ],
+        "keywords": [
+          "Ambiguous cross-phase input",
+          "Phase Boundary"
+        ]
+      },
+      "semantic_role": "contract_io_boundary",
+      "researchspec_targets": [
+        "researchspec/specs/workflow.yaml",
+        "researchspec/runs/current/state.yaml",
+        "researchspec/runs/current/artifact-registry.json"
+      ],
+      "replacement_shape": "io_contract_block",
+      "replacement_scope": {
+        "start_snippet": "In Mode B, **single-phase agents (Bucket A",
+        "end_snippet": "Multi-phase envelope remains forward-scope (#134 Slices 3-5)."
+      }
+    },
+    {
+      "id": "IO-005",
+      "name": "paper.skill.phase-boundary",
+      "source_path": "academic-paper/SKILL.md",
+      "owner_skill": "academic-paper",
+      "contract_category": "phase_directory_boundaries",
+      "severity": "recommended",
+      "match_hints": {
+        "snippets": [
+          "single-phase agents (Bucket A",
+          "Multi-phase agents (Bucket B: `argument_builder` P3+Plan, `visualization` P4+P7)",
+          "scripts/check_pipeline_integrity.py"
+        ],
+        "keywords": [
+          "Ambiguous cross-phase input",
+          "generator-evaluator contract"
+        ]
+      },
+      "semantic_role": "contract_io_boundary",
+      "researchspec_targets": [
+        "researchspec/specs/workflow.yaml",
+        "researchspec/runs/current/state.yaml",
+        "researchspec/runs/current/artifact-registry.json"
+      ],
+      "replacement_shape": "io_contract_block",
+      "replacement_scope": {
+        "start_snippet": "In Mode B, **single-phase agents (Bucket A",
+        "end_snippet": "Multi-phase envelope remains forward-scope (#134 Slices 3-5)."
+      }
+    },
+    {
+      "id": "IO-006",
+      "name": "reviewer.skill.phase-boundary",
+      "source_path": "academic-paper-reviewer/SKILL.md",
+      "owner_skill": "academic-paper-reviewer",
+      "contract_category": "phase_directory_boundaries",
+      "severity": "recommended",
+      "match_hints": {
+        "snippets": [
+          "single-phase agents (Bucket A",
+          "The 1 Bucket D agent (`field_analyst` at Phase 0) is meta",
+          "scripts/check_pipeline_integrity.py"
+        ],
+        "keywords": [
+          "Ambiguous cross-phase input",
+          "Sprint Contract Protocol"
+        ]
+      },
+      "semantic_role": "contract_io_boundary",
+      "researchspec_targets": [
+        "researchspec/specs/workflow.yaml",
+        "researchspec/runs/current/state.yaml",
+        "researchspec/runs/current/artifact-registry.json"
+      ],
+      "replacement_shape": "io_contract_block",
+      "replacement_scope": {
+        "start_snippet": "In Mode B, **single-phase agents (Bucket A",
+        "end_snippet": "Multi-phase envelope remains forward-scope (#134 Slices 3-5)."
       }
     },
     {
@@ -690,6 +782,7 @@
       "severity": "required",
       "match_hints": {
         "snippets": [
+          "**Spec:** `docs/design/2026-06-10-390-diff-patch-revision-mode-spec.md`",
           "Toolchain:",
           "The apply report shares the revised draft's lifecycle"
         ],
@@ -706,7 +799,7 @@
       ],
       "replacement_shape": "patch_protocol_block",
       "replacement_scope": {
-        "start_snippet": "**Toolchain:** Slice A (#423)",
+        "start_snippet": "**Spec:** `docs/design/2026-06-10-390-diff-patch-revision-mode-spec.md`",
         "end_snippet": "record the round as `mode: full_reemission_escalated`."
       }
     },

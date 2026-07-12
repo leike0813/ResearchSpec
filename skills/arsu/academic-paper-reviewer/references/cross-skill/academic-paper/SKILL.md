@@ -147,30 +147,27 @@ Phase 7: FORMAT        -> [formatter]                  -> Final Output Package
 academic-paper pipeline runs in 8 phases (Phase 0 intake → 7 formatting). Two invocation modes:
 
 <!--rs:STATE-001-->
-**Mode A — orchestrator-driven (default):** `pipeline_orchestrator_agent` runs
-the academic-paper phases end to end. It reads the configured stage graph from
-`researchspec/specs/workflow.yaml`, reads the active phase and mode from
-`researchspec/runs/current/state.yaml`, and resolves outlines, drafts, reviews,
-and other phase inputs by artifact id through
-`researchspec/runs/current/artifact-registry.json`. The orchestrator requests
-state transitions from the ResearchSpec runtime; it does not carry state in a
-Material Passport.
-
-**Mode B — phase-by-phase (cross-session resume):** the user invokes one agent
-per phase across sessions. Each invocation reads the same ResearchSpec state and
-registered artifacts, performs only its assigned phase, and returns new outputs
-for runtime registration. A legacy Material Passport may be imported as
-compatibility evidence, but it never replaces the current ResearchSpec state or
-artifact records.
+ResearchSpec owns the active run through `researchspec/runs/current/state.yaml`. Read the current subflow instances, frontier, Gate ledger and Decision ledger before dispatch. An ARS Material Passport may be imported as non-authoritative evidence through `material_passport_import`, but it never replaces current state or grants a transition.
 <!--/rs:STATE-001-->
 
-In Mode B, **single-phase agents (Bucket A per `docs/design/2026-05-18-ars-v3.9.2-agent-phase-classification.md`) stay strictly within their assigned phase for writes**. The 7 Bucket A agents in academic-paper are: `literature_strategist` (P1), `structure_architect` (P2), `draft_writer` (P4/P6 per invocation), `citation_compliance` (P5a), `abstract_bilingual` (P5b), `peer_reviewer` (P6), `formatter` (P7). Reads from upstream phases are allowed.
+<!--rs:IO-005-->
+In phase-by-phase mode, the literature strategist, structure architect, draft
+writer, citation compliance, bilingual abstract, peer review, and formatting
+roles may write only the outputs declared by the selected work item. They may
+read registered upstream artifacts required by that work. The argument-building
+and visualization roles may span their documented stages only when the current
+frontier instructions explicitly select that work; one invocation does not
+authorize work in another stage. The generator-evaluator contract continues to
+constrain the draft-writer and peer-review call pairs within their selected
+work.
 
-Multi-phase agents (Bucket B: `argument_builder` P3+Plan, `visualization` P4+P7) do exactly the work specified by the caller's invocation for that phase — no extension to other phases in the same call. The v3.6.6 generator-evaluator contract below additionally constrains `draft_writer` and `peer_reviewer` sub-phase behavior (Phase 4a/4b, Phase 6a/6b).
-
-Routing into Mode B requires explicit user signal — `/ars-<mode>` slash command or `[direct-mode]` prefix. Ambiguous cross-phase input defaults to clarification per `.claude/CLAUDE.md` Routing Discipline + `../../shared/references/intent_clarification_protocol.md`.
-
-**Enforcement (v3.9.2):** Phase Boundary blocks on Bucket A agents + advisory verifier (`scripts/check_pipeline_integrity.py`) + a deterministic PreToolUse write-scope guard in hook-enabled runtimes (#134 rescope, PR #294). Multi-phase envelope remains forward-scope (#134 Slices 3-5).
+Phase-by-phase routing requires an explicit user signal. Ambiguous cross-stage
+material must be clarified before dispatch. The configured graph in
+`researchspec/specs/workflow.yaml`, the frontier in
+`researchspec/runs/current/state.yaml`, and registered inputs in
+`researchspec/runs/current/artifact-registry.json` define the permitted read and
+write boundary.
+<!--/rs:IO-005-->
 
 ## v3.6.6 Generator-Evaluator Contract Protocol
 
@@ -361,9 +358,10 @@ certifies acceptance.
 
 ## Revision Mode Patch Protocol (#390)
 
-In revision mode, `draft_writer_agent` does NOT re-emit the complete paper. The round runs **anchorize → patch → deterministic apply → finalizer**, confining the regeneration surface to the blocks the revision explicitly touches (DELEGATE-52 blast-radius containment; spec `docs/design/2026-06-10-390-diff-patch-revision-mode-spec.md`):
-
 <!--rs:PATCH-001-->
+In `academic-paper` revision mode, `draft_writer_agent` does not re-emit the
+complete manuscript. The round uses the following bounded patch workflow:
+
 1. **Prepare the base artifact.** Resolve the current manuscript id and hash
    through `researchspec/runs/current/artifact-registry.json`. The deterministic
    preparation helper assigns stable block markers where missing and emits a
@@ -393,6 +391,10 @@ Patch mode guarantees byte preservation only for untouched blocks; it does not
 guarantee the quality of edited text. Finalizer and gate checks run on the new
 registered artifact, and any failure is returned to the responsible helper
 rather than written directly to a ledger.
+
+This patch protocol does not apply to the `academic-paper full` in-pair Phase
+6→4 loop. That loop must continue to emit the complete `## Draft Body` required
+by the Phase 4b contract; it must not emit or apply a revision patch.
 <!--/rs:PATCH-001-->
 
 ---

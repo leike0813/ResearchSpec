@@ -281,7 +281,7 @@ function parseAnchoredBlocks(text: string): AnchoredBlock[] {
   const matches = [...text.matchAll(marker)];
   const markerOccurrences = text.match(/<!--\s*block:/gi)?.length ?? 0;
   if (matches.length !== markerOccurrences) throw new Error("Draft contains a malformed or non-standalone block marker.");
-  if (!matches.length) throw new Error("Draft has no ResearchSpec-compatible block markers.");
+  if (!matches.length) throw new Error("Draft has no ResearchSpec block markers.");
   const ids = new Set<string>();
   return matches.map((match, index) => {
     const id = match[1];

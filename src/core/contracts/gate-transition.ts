@@ -50,13 +50,14 @@ export const GateSubmitReceiptSchema = z.strictObject({
   challenged_basis_sha256: Sha256Schema.optional(), supersedes_event_id: SafeRuntimeIdSchema.optional(), submitted_at: z.iso.datetime(),
 });
 
-export const GateEventV1Schema = z.looseObject({
+export const GateEventV1Schema = z.strictObject({
   schema_version: z.literal("1"), event_id: SafeRuntimeIdSchema, gate_id: ScopedRuntimeIdSchema,
   gate_node_id: SafeRuntimeIdSchema, subflow_instance_id: z.string().regex(/^sf-[A-Za-z0-9][A-Za-z0-9._-]*$/),
   template_id: z.string().regex(/^tpl-[A-Za-z0-9][A-Za-z0-9._-]*$/), timestamp: z.iso.datetime(), actor: RuntimeActorSchema,
   stage_id: SafeRuntimeIdSchema, gate_type: SafeRuntimeIdSchema, validator_id: SafeRuntimeIdSchema,
   verdict: z.enum(["pass", "pass_with_conditions", "fail"]), blocking: z.boolean(),
   verification_kind: z.enum(["initial", "reverification"]), evidence: z.array(GateEvidenceRefSchema).min(1),
+  findings: z.array(z.strictObject({ code: SafeRuntimeIdSchema, summary: z.string().min(1), evidence_indexes: z.array(z.number().int().nonnegative()).min(1) })),
   confirmed_by: z.strictObject({ kind: z.literal("human"), name: z.string().min(1) }), receipt: GateReceiptReferenceSchema,
   challenged_basis_sha256: Sha256Schema.optional(), supersedes_event_id: SafeRuntimeIdSchema.optional(),
 });

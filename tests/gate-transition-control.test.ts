@@ -5,7 +5,7 @@ import path from "node:path";
 import { test } from "node:test";
 import { parse, stringify } from "yaml";
 
-import type { InstanceWorkflowDefinition } from "../src/core/contracts/workflow.js";
+import type { WorkflowDefinition } from "../src/core/contracts/workflow.js";
 import { executeArtifactSubmit, planArtifactSubmit } from "../src/core/runtime/artifact-submit.js";
 import { executeGateSubmit, executeTransitionAdvance, planGateSubmit, planTransitionAdvance } from "../src/core/runtime/gate-transition-control.js";
 import { decideItem } from "../src/core/runtime/lifecycle.js";
@@ -13,7 +13,7 @@ import { buildSubflowInstructions, executeSubflowStart, planSubflowStart } from 
 import { buildGateTransitionInstructions, evaluateWorkflowControl } from "../src/core/runtime/workflow-control.js";
 import { getWorkspaceEntries } from "../src/core/workspace/layout.js";
 import { loadWorkspaceSnapshot } from "../src/core/workspace/snapshot.js";
-import { ARSU_RESEARCH_SLICE_WORKFLOW } from "../src/core/workflow/profiles/arsu-research-slice.js";
+import { TEST_RUN_STATE, TEST_WORKFLOW } from "./helpers/test-workflow.js";
 
 void test("confirmed Gate submit unlocks one receipt-backed terminal transition", async () => {
   const root = await createWorkspace();
@@ -103,7 +103,7 @@ void test("multiple transition candidates require one workflow-branch Decision",
   } finally { await rm(root, { recursive: true, force: true }); }
 });
 
-void test("Schema 0.2 without Gate and transition fields remains readable", async () => {
+void test("Schema 0.2 requires explicit Gate and transition fields", async () => {
   const root = await createWorkspace();
   try {
     const workspace = path.join(root, "researchspec");
@@ -114,26 +114,25 @@ void test("Schema 0.2 without Gate and transition fields remains readable", asyn
     delete templates[0]?.transitions;
     await writeFile(workflowPath, stringify(raw), "utf8");
     const snapshot = await loadWorkspaceSnapshot(workspace);
-    assert.equal(snapshot.diagnostics.some((item) => item.blocking), false);
-    assert.deepEqual((snapshot.workflow as InstanceWorkflowDefinition).subflow_templates[0]?.gates, []);
-    assert.deepEqual((snapshot.workflow as InstanceWorkflowDefinition).subflow_templates[0]?.transitions, []);
+    assert.ok(snapshot.diagnostics.some((item) => item.code === "invalid_contract_shape"));
   } finally { await rm(root, { recursive: true, force: true }); }
 });
 
 async function createWorkspace(withBranch = false): Promise<string> {
   const root = await mkdtemp(path.join(tmpdir(), "researchspec-gate-transition-"));
   const workspace = path.join(root, "researchspec");
-  for (const entry of getWorkspaceEntries(workspace, "arsu-research-slice")) {
+  for (const entry of getWorkspaceEntries(workspace)) {
     if (entry.kind === "dir") await mkdir(entry.path, { recursive: true });
     else { await mkdir(path.dirname(entry.path), { recursive: true }); await writeFile(entry.path, entry.content, "utf8"); }
   }
+  const workflow = structuredClone(TEST_WORKFLOW);
   if (withBranch) {
-    const workflow = structuredClone(ARSU_RESEARCH_SLICE_WORKFLOW) as InstanceWorkflowDefinition;
     const template = workflow.subflow_templates[0];
     assert.ok(template);
     template.transitions.push({ id: "alternate-completion", from_stage_id: "research", effect: { kind: "complete_subflow" }, requires: { gate_ids: ["research-completion"], decision_types: ["workflow_branch"] }, branch: { decision_point_id: "research-outcome", option_id: "alternate" } });
-    await writeFile(path.join(workspace, "specs/workflow.yaml"), stringify(workflow), "utf8");
   }
+  await writeFile(path.join(workspace, "specs/workflow.yaml"), stringify(workflow), "utf8");
+  await writeFile(path.join(workspace, "runs/current/state.yaml"), stringify(TEST_RUN_STATE), "utf8");
   return root;
 }
 
@@ -151,7 +150,7 @@ async function completeSliceWork(workspace: string): Promise<string> {
     assert.ok(status);
     await mkdir(path.dirname(status.output_path), { recursive: true });
     await writeFile(status.output_path, `# ${status.work_item_id}\n\nEvidence.\n`, "utf8");
-    const template = (snapshot.workflow as InstanceWorkflowDefinition).subflow_templates[0]?.work_items.find((item) => item.id === status.work_item_id);
+    const template = (snapshot.workflow as WorkflowDefinition).subflow_templates[0]?.work_items.find((item) => item.id === status.work_item_id);
     assert.ok(template);
     const dependencies = template.requires.work_items.map((workId) => snapshot.artifacts.find((artifact) => artifact.subflow_instance_id === start.instance.instance_id && artifact.work_item_id === workId && artifact.artifact_type !== "artifact_submit_receipt")?.artifact_id).filter((id): id is string => typeof id === "string");
     const plan = await planArtifactSubmit({ snapshot, selector: status.selector, payload: { schema_version: "1", dependency_artifact_ids: dependencies, producer_mode: "full" }, actor: { kind: "agent", name: "deep-research" }, now: `2026-07-10T00:0${String(index + 1)}:00.000Z` });

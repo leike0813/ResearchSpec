@@ -95,7 +95,7 @@ export interface ContractProfile {
   full_matrix_injection: false;
 }
 
-export interface AnchorReplacementCompatibility {
+export interface AnchorReplacementIntegration {
   profile_id: string;
   coverage_policy: "required_and_recommended";
   marker: "<!--rs:<anchor-id>-->";
@@ -108,13 +108,13 @@ export interface ContractInjectionResult {
   marker: string;
 }
 
-export interface ContractCompatibilityManifest {
+export interface ContractIntegrationManifest {
   schema_version: string;
-  compatibility_kind: string;
+  integration_profile: string;
   source: string;
   output: string;
   material_passport_policy: string;
-  anchor_replacement: AnchorReplacementCompatibility;
+  anchor_replacement: AnchorReplacementIntegration;
   skill_groups: Record<string, ContractProfile>;
 }
 
@@ -142,7 +142,7 @@ export interface ConversionResult {
   output_root: string;
   skill_groups: Record<string, SkillConversion>;
   inventory: Inventory;
-  contract_manifest: ContractCompatibilityManifest;
+  contract_manifest: ContractIntegrationManifest;
   routing_catalog: ArsuRoutingCatalog;
   anchor_replacements: import("./anchors/types.js").AnchorReplacementPlan | null;
   validation: ValidationResult | null;
@@ -170,13 +170,13 @@ export interface ConversionManifest {
   excluded: FileRecord[];
   unclassified_files: FileRecord[];
   risk_findings: RiskFinding[];
-  contract_compatibility: {
+  contract_integration: {
     manifest_path: string;
-    compatibility_kind: string;
+    integration_profile: string;
     generated_groups: string[];
     material_passport_policy: string;
     full_matrix_injection: false;
-    anchor_replacement: AnchorReplacementCompatibility;
+    anchor_replacement: AnchorReplacementIntegration;
   };
   routing_catalog: {
     path: "routing-catalog.json";

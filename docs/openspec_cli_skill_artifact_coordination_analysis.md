@@ -350,9 +350,9 @@ Skill 按静态说明生成研究工件
 
 Skill 已经被告知不要越界，却没有获得完成正确动作的控制平面。这正是 ResearchSpec 与 OpenSpec 协同体验之间的根因差距。
 
-### 6.4 默认 `arsu-paper` Workflow 仍是占位图
+### 6.4 `arsu-v0-1` Workflow 是唯一控制图
 
-当前初始化模板中的 workflow 主要表达 `intake` 和 `complete`，没有完整定义：
+当前初始化模板直接投影完整 `arsu-v0-1`，统一定义：
 
 - stage 到 producer Skill 的映射；
 - 每个 stage 所需 contracts/artifacts/decisions/gates；
@@ -360,7 +360,7 @@ Skill 已经被告知不要越界，却没有获得完成正确动作的控制�
 - allowed writes；
 - completion policy 和后继依赖。
 
-而 `researchspec-next` 又正确地禁止在缺少 Skill mapping 时猜测。因此新工作区虽然声明使用 `arsu-paper` profile，CLI 仍无法动态回答“现在应调用哪个 Skill、读取哪些输入、提交什么工件”。
+CLI 从同一 workflow、routing catalog 与 runtime state 动态回答应调用哪个 Skill、读取哪些输入、提交什么工件，不保留第二套静态图。
 
 ### 6.5 `status` 不是工件状态机
 

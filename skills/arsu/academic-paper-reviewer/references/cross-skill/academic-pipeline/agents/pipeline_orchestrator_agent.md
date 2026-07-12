@@ -43,66 +43,15 @@ Determine the entry point from the user's first message. Use the following keywo
 #### Resume Mode: `resume_from_passport`
 
 <!--rs:STATE-005-->
-**Trigger:** user input starts with or contains `resume_from_passport=<12-hex>`.
+**ARS import contract:** the selected Material Passport boundary is external evidence, not runtime state.
 
-**Compatibility contract:** the referenced ARS Material Passport boundary is
-import evidence only. Active resume state is owned by
-`researchspec/runs/current/state.yaml`; imported files and recovered outputs are
-resolved through `researchspec/runs/current/artifact-registry.json`; human branch
-choices are recorded through the decision runtime in
-`researchspec/runs/current/decision-ledger.jsonl`; verification and blocking
-conditions are recorded by the resume gate in
-`researchspec/runs/current/gate-ledger.jsonl`.
-
-**Orchestrator obligations:**
-
-1. Parse `<hash>` from user input and validate `^[0-9a-f]{12}$`.
-2. Locate the compatibility passport: prefer an explicit path in user input;
-   otherwise look in `./passports/` or `./material_passport*.yaml` relative to
-   the current working directory; if none is found, ask the user for the path.
-3. Read `reset_boundary[]` without modifying the passport. Find the
-   `kind: boundary` entry whose `hash` matches. No match is a hard error:
-   `Passport hash <hash> not found in <path>. Cannot resume.`
-4. Submit the passport path, its content hash, and the matched boundary payload
-   to the ResearchSpec resume helper. The helper owns the exclusive run-state
-   update lock and MUST atomically check whether this imported boundary has
-   already been consumed in the current run. A prior consumption is a hard
-   error and MUST identify when the boundary was resumed. Do not implement this
-   check by appending a `resume` entry to the passport.
-5. Resolve every recovered output by artifact id and recorded hash through
-   `researchspec/runs/current/artifact-registry.json`. A missing, changed, or
-   unregistered required artifact makes the resume stale and blocks automatic
-   advancement until the resume gate records a verified result.
-6. Emit the acknowledgement in this form:
-
-   ```text
-   ### Resume Acknowledged
-   - Hash: <hash>
-   - Source session: <session_marker> (generated <generated_at>)
-   - Recovered stage: <stage>
-   - Next stage: <next> [override: stage=<user-stage>, mode=<user-mode>]
-   ```
-
-   Include the bracketed override only when the user supplied `stage=` or
-   `mode=`. When the imported boundary has `pending_decision`, print
-   `(pending user decision)` as `<next>` until step 8 resolves it.
-7. Honor the imported `verification_status` as evidence, not as a current gate
-   result. For `STALE` or `UNVERIFIED`, warn the user and ask whether to
-   re-verify. For `VERIFIED`, the resume gate may reuse it only after current
-   artifact hashes and required gate receipts have been checked.
-8. If `pending_decision` exists, stop and display its question and option
-   values. After the user selects a value, resolve `next_stage` and `next_mode`
-   from the matching option. Explicit `stage=` or `mode=` resume overrides take
-   precedence. Return the confirmed choice and rationale to the ResearchSpec
-   decision runtime before advancing; do not write the decision ledger directly.
-9. Ask the resume helper to atomically register the imported passport as a
-   compatibility artifact, mark the boundary consumed in run state, record any
-   human-confirmed branch, and submit verification findings to the resume gate.
-   The helper, decision runtime, and gate validator own their respective stable
-   files; the orchestrator MUST NOT edit those files or the source passport.
-10. Invoke the resolved next stage with the current ResearchSpec state and the
-    registered artifact ids required by that stage. The passport is not the
-    sole runtime input. Do not ask the user to re-summarize prior stages.
+1. Require an explicit Passport path, expected SHA-256 and, when resuming a boundary, its 12-character boundary hash.
+2. Parse only strict JSON or YAML and reject path escape, symlink escape, hash drift, ambiguous boundary selection and duplicate consumption.
+3. Normalize the source into a deterministic projection without modifying the source bytes.
+4. Preview `start subflow:tpl-academic-pipeline-mid-entry` with `material_passport_import` and bind the import identity into the Start plan hash.
+5. After human confirmation, register the source, projection and accompanied artifact; append imported Gate/Decision evidence with `authority: imported_evidence`; record the consumed boundary; then commit the new instance state last.
+6. Begin at the current template entry stage. Imported records cannot satisfy a current Gate, branch Decision or transition.
+The import transaction commits consumption through `researchspec/runs/current/state.yaml`.
 <!--/rs:STATE-005-->
 11. Respect user overrides: `stage=<n>` overrides `next`; `mode=<m>` overrides the default mode for the next stage (validated against Mode Advisor rules). User overrides are recorded on the resume entry's `user_override` field.
 
@@ -200,65 +149,8 @@ SLIM checkpoints never reset. MANDATORY checkpoints co-occur with reset when app
 **Reset-boundary emission sequence (flag ON, FULL checkpoint):**
 
 <!--rs:STATE-004-->
-1. Ask the ResearchSpec checkpoint helper to snapshot the completed stage,
-   proposed next stage, active mode, required artifact ids and hashes, and any
-   pending decision in `researchspec/runs/current/state.yaml`. The helper owns
-   the atomic state update; the orchestrator does not edit the file directly.
-2. When `ARS_PASSPORT_RESET=1`, also emit an ARS-compatible `kind: boundary`
-   payload as a compatibility artifact. Preserve the legacy canonical hash
-   rules—RFC 8785 serialization, LF-separated boundary entries, a
-   `"000000000000"` placeholder, and the first 12 lowercase SHA-256 hex
-   characters—so external ARS readers can still verify the export. Register the
-   passport path and content hash through
-   `researchspec/runs/current/artifact-registry.json`; the export is not active
-   ResearchSpec state.
-3. If the checkpoint coincides with a mandatory user choice, preserve the
-   complete `pending_decision` question and option routing in the compatibility
-   payload, but stop for the human decision. After confirmation, return the
-   selected value and rationale to the decision runtime for
-   `researchspec/runs/current/decision-ledger.jsonl`. `next` remains advisory;
-   the chosen option's `next_stage` and `next_mode` determine routing unless an
-   explicit resume override is present.
-4. Emit the compatibility tag and user instruction as a distinct block:
-
-   ```text
-   [PASSPORT-RESET: hash=<hash>, stage=<completed>, next=<next>]
-
-   ### Resume Instruction
-   - Passport file: <path>
-   - To continue, start a fresh agent session and invoke:
-     resume_from_passport=<hash>
-   - ResearchSpec run state and registered artifacts remain authoritative.
-   ```
-
-5. Halt after a FULL checkpoint when the configured workflow requires a fresh
-   session. Other modes may accept one in-session continuation, but the next
-   stage still loads only current ResearchSpec state and registered artifacts;
-   it must not reconstruct state from chat or use the passport as its sole input.
-
-**Iron rules (reset boundary):**
-
-1. With compatibility export disabled, no passport bytes or reset tags are
-   emitted; normal ResearchSpec checkpoint behavior is unchanged.
-2. ResearchSpec run state, artifact registration, human decisions, and gate
-   outcomes remain separated across their runtime files and are written only by
-   their responsible helpers.
-3. A compatibility passport remains append-only. Existing boundary/resume
-   entries are never deleted, reordered, or mutated.
-4. The `[PASSPORT-RESET: ...]` tag is the machine-stable identifier for legacy
-   import; the human instruction is explanatory only.
-5. Hash mismatch is a hard import error.
-6. Single consumption is enforced atomically by the ResearchSpec resume helper.
-   A legacy `kind: resume` export may mirror the result but does not establish it.
-7. Mandatory integrity and review checkpoints are never weakened. Pending
-   decisions always re-prompt and confirmed option routing takes precedence over
-   advisory defaults.
-8. Collaboration-depth output remains advisory and is registered as an artifact;
-   it never becomes a blocking state flag.
-9. If a compatibility passport is also updated, the import/export helper must
-   retain the legacy exclusive-lock guarantee for the complete read-check-append
-   sequence. A platform unable to provide that lock must refuse the compatibility
-   write, while leaving ResearchSpec state uncorrupted.
+Checkpoint by registering the produced artifacts and advancing only through current ResearchSpec Gate and transition transactions. Do not write or append an ARS Material Passport. When an external Passport is supplied later, import it as hash-bound evidence and preserve the original bytes unchanged.
+Checkpoint authority remains in `researchspec/runs/current/state.yaml`.
 <!--/rs:STATE-004-->
 
 Full protocol: [`../references/passport_as_reset_boundary.md`](../references/passport_as_reset_boundary.md).
@@ -564,17 +456,7 @@ Reference helper: `scripts/slr_lineage.py` `emit(stages, incoming_slr_lineage)`.
 | Stage 4.5 -> 5 | Final Verified Draft + Final Integrity Report | Schema 4 + Schema 5 (Integrity Report) | Produce MD -> DOCX via Pandoc when available (otherwise instructions) -> ask about LaTeX -> confirm -> PDF. Carry forward `experiment_alignment_results[]` + `experiment_intake_declaration` (#260) to formatter surface + Stage 6 histogram |
 
 <!--rs:HANDOFF-001-->
-Every handoff payload must be emitted as an artifact and returned to the runtime
-registration helper with path, hash, producer, stage, mode, version label, and
-verification status for `researchspec/runs/current/artifact-registry.json`.
-Project research intent to `researchspec/specs/project.md`, sources to
-`researchspec/specs/sources.yaml`, accepted claims to
-`researchspec/specs/claims.yaml`, and manuscript structure to
-`researchspec/specs/manuscript.yaml` only through an accepted contract patch or
-direct human edit. Human branch choices and gate results go through their
-responsible decision and gate helpers. Preserve `slr_lineage` and other useful
-Schema 9 fields as compatibility metadata on the registered artifact; a
-Material Passport is not required as the handoff carrier.
+Register the handoff payload through `researchspec/runs/current/artifact-registry.json`, bind it to a hash, and identify every source artifact and unresolved Decision. When the payload originated in an ARS Material Passport, retain its Schema 9 fields as imported provenance on the registered evidence; the current ResearchSpec contracts and ledgers remain authoritative.
 <!--/rs:HANDOFF-001-->
 
 **Style Profile carry-through**: If a Style Profile (Schema 10) was produced during `academic-paper` intake (Step 10), carry it through all stages in the Material Passport. The Style Profile is consumed by `draft_writer_agent` (Stage 2) and optionally by `report_compiler_agent` (Stage 1, if applicable). The Style Profile does not affect integrity verification or review stages.

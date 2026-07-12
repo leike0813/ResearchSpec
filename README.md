@@ -71,7 +71,7 @@ export CODEX_HOME="$PWD/.codex-home"
 researchspec init . --tools codex
 ```
 
-Run Codex from the same environment. See the repository's [dogfooding guide](artifacts/researchspec_dogfooding_guide.md) for the full validation sequence.
+Run Codex from the same environment. Maintainers can use the repository-only [Codex dogfooding adapter](playbooks/dogfooding/adapters/codex.md) with the canonical playbook; neither is included in the npm package.
 
 ## Privacy And Safety
 
@@ -88,7 +88,8 @@ See [SECURITY.md](SECURITY.md) for supported versions and vulnerability handling
 - [Canonical ARSU user model](docs/arsu_user_usage_model.md)
 - [CLI interface](docs/cli_interface_design.md)
 - [Release process](docs/release_process.md)
-- [MVP dogfooding guide](artifacts/researchspec_dogfooding_guide.md)
+- [Project-owner walkthrough](playbooks/owner-walkthrough/README.md) — recommended introduction to the real operating model
+- [Playbooks index](playbooks/README.md) — owner walkthrough and Dogfooding QA guidance; repository-only, not included in the npm package
 
 ## Licensing
 

@@ -4,9 +4,7 @@ ResearchSpec exposes a workflow-owned, deterministic, receipt-backed artifact
 submission capability. This capability is the contract layer for turning a
 ready work item's validated candidate into an atomic registry/receipt
 registration without expanding runtime authority over state, specs, or ledgers.
-
 ## Requirements
-
 ### Requirement: Workflow-Owned Artifact Submit
 
 ResearchSpec SHALL submit only the candidate path and artifact type declared by a ready workflow work item.
@@ -27,10 +25,10 @@ ResearchSpec SHALL submit only the candidate path and artifact type declared by 
 
 ResearchSpec SHALL generate `verification_state: verified` only after the candidate passes the workflow node's supported deterministic validation profile.
 
-#### Scenario: Research artifact validation succeeds
+#### Scenario: Text artifact validation succeeds
 
 - **WHEN** the candidate is a contained regular UTF-8 non-empty file, its hash matches the expected hash, its template ref resolves, and declared artifact dependencies are trusted and covered
-- **THEN** validation profile `research-artifact` SHALL succeed
+- **THEN** validation profile `text-artifact` SHALL succeed
 - **AND** verification metadata SHALL identify the deterministic validator separately from the producer
 
 #### Scenario: Invalid candidate produces no runtime write
@@ -92,30 +90,6 @@ ResearchSpec SHALL scope new subflow artifact submissions by both subflow instan
 - **THEN** its receipt SHALL identify and validate the trusted subflow start receipt
 - **AND** forged or drifted authorization SHALL block completion and submission
 
-### Requirement: Automatic Registration Confirmation Policy
-ResearchSpec SHALL distinguish route-delegated automatic registration from manual and legacy artifact confirmation.
-
-#### Scenario: Started automatic work uses delegated confirmation
-- **WHEN** a work packet declares automatic submission and its start authorization is trusted
-- **THEN** exact-hash non-interactive Submit MAY execute with `--yes` without a second user prompt
-- **AND** the result SHALL report `confirmation_basis: subflow_start`
-
-#### Scenario: Manual and legacy policy remains compatible
-- **WHEN** a work item is manual or belongs to a legacy workflow
-- **THEN** its established dry-run/hash confirmation behavior SHALL remain available
-- **AND** automatic policy SHALL not be inferred from Skill identity or route risk
-
-### Requirement: Artifact submission supports controlled text and binary files
-Artifact submission SHALL support `text-artifact` and `binary-file-artifact` validation profiles while preserving `research-artifact` as a text-compatible legacy profile.
-
-#### Scenario: Valid binary candidate is submitted
-- **WHEN** a contained non-empty regular file has an allowed extension and media kind and matches the planned hash
-- **THEN** the binary candidate can be registered and receipted without UTF-8 decoding
-
-#### Scenario: Text candidate is invalid UTF-8
-- **WHEN** a `text-artifact` candidate cannot be decoded as UTF-8
-- **THEN** submission fails without mutating the registry or workflow state
-
 ### Requirement: ARSU artifact references are controlled
 Instructions SHALL resolve `arsu-artifact:<artifact-type>` only through the validated artifact-contract registry and SHALL continue to support existing controlled ARS handoff references.
 
@@ -129,3 +103,11 @@ Binary candidate transactions SHALL retain containment, plan-hash, registry prec
 #### Scenario: Binary file changes after dry-run
 - **WHEN** the binary candidate hash differs from the expected plan at execution
 - **THEN** submission returns a conflict and does not register the changed file
+
+### Requirement: Current Scoped Artifact Submission
+Artifact submission SHALL accept only instance-scoped work selectors, `automatic|manual` submission policy, `subflow_start|per_artifact` confirmation basis, and explicit text or binary validation.
+
+#### Scenario: Removed alias is submitted
+- **WHEN** a caller uses an unscoped work selector or `research-artifact` validation profile
+- **THEN** submission SHALL fail before any registry or receipt write
+

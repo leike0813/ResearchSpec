@@ -77,8 +77,8 @@ export function instructions(context: JourneyContext, selector: string): unknown
   return data;
 }
 
-export function initialize(root: string, profile = "arsu-v0-1"): JourneyContext {
-  const result = runCli(["init", root, "--tools", "forgecode", "--profile", profile, "--json"]);
+export function initialize(root: string): JourneyContext {
+  const result = runCli(["init", root, "--tools", "forgecode", "--json"]);
   assert.equal(result.status, 0, result.stderr || result.stdout);
   return { root, workspace: path.join(root, "researchspec") };
 }

@@ -1,3 +1,6 @@
+**Protocol authority:** this current ResearchSpec contract replaces upstream
+design-note and script-path references for revision rounds.
+
 **Toolchain ownership:** ResearchSpec deterministic helpers prepare block
 manifests, validate and apply `researchspec/draft-patches/<patch-id>.json`, and
 emit apply reports. Both orchestrated and phase-by-phase runs resolve inputs and
