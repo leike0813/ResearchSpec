@@ -45,8 +45,8 @@ Companion 以稳定用户意图划分，不与每个 CLI 动词一一对应。Ch
 
 ### 1.3 可选 Domain Plugin Skills
 
-Domain plugins 是 ResearchSpec 审校并随包分发的 Open Agent Skills 集合。workspace 通过
-`researchspec plugin` 统一选择，所有 configured tools 接收相同 Skill trees。Navigate 只会
+Domain plugins 是 ResearchSpec 审校并随包分发的 Open Agent Skills 集合。vendor converter 维护来源与 Skill dependencies，稳定 domain catalog 维护 direct Skill lists。workspace 通过
+`researchspec plugin` 按 domain 统一选择，所有 configured tools 接收相同的 dependency-resolved Skill trees。Navigate 只会
 把已安装且语义匹配的 plugin Skill 作为 advisory option；插件不得创建 route、subflow、
 work item 或直接写 state、artifact registry、Gate、Decision、transition、receipt。脚本和
 其他资源按字节投影，ResearchSpec 不执行脚本或安装依赖。

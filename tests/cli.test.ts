@@ -52,7 +52,7 @@ void test("status and check use the versioned JSON envelope", async () => {
   assert.equal(status.data?.status, "initialized");
   assert.equal(status.data?.run.status, "not_started");
   assert.deepEqual(status.data?.tools.selected, []);
-  assert.deepEqual(status.data?.plugins, { selected: [], available: [], unavailable: [], projected: [] });
+  assert.deepEqual(status.data?.plugins, { selected: [], available: ["genomics-and-systems-biology", "molecular-and-organismal-biosciences", "translational-medicine-and-therapeutics"], unavailable: [], projected: [], resolved_skills: [] });
   const check = parseEnvelope<{ ok: boolean; target: string }>(runCli(["check", "contracts", "--json"], root));
   assert.equal(check.data?.ok, true);
   assert.equal(check.data?.target, "contracts");
@@ -65,10 +65,10 @@ void test("status and check use the versioned JSON envelope", async () => {
 void test("plugin catalog list and show are package-only outside a workspace", () => {
   const listed = runCli(["plugin", "list", "--json"]);
   assert.equal(listed.status, 0);
-  assert.deepEqual(parseEnvelope<{ plugins: unknown[] }>(listed).data?.plugins, []);
+  assert.equal(parseEnvelope<{ domains: unknown[] }>(listed).data?.domains.length, 3);
   const installed = runCli(["plugin", "list", "--installed", "--json"]);
   assert.equal(installed.status, 0);
-  assert.deepEqual(parseEnvelope<{ plugins: unknown[] }>(installed).data?.plugins, []);
+  assert.deepEqual(parseEnvelope<{ domains: unknown[] }>(installed).data?.domains, []);
   const missing = runCli(["plugin", "show", "unknown-plugin", "--json"]);
   assert.equal(missing.status, 1);
   assert.equal(parseEnvelope(missing).error?.code, "plugin_not_found");

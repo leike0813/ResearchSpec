@@ -1,5 +1,1795 @@
 {
   "schema_version": "1",
-  "sources": [],
-  "plugins": []
+  "vendors": [
+    {
+      "vendor_id": "tooluniverse",
+      "name": "ToolUniverse",
+      "repository_url": "https://github.com/mims-harvard/ToolUniverse",
+      "release": "v1.3.1",
+      "revision": "9b7ff91ddb45b567cac2fa8ea31b82851e877617",
+      "license": "Apache-2.0",
+      "converter_version": "1",
+      "skills": [
+        {
+          "skill_id": "tooluniverse-acmg-variant-classification",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-acmg-variant-classification"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-admet-prediction",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-admet-prediction"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-adverse-event-detection",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-adverse-event-detection"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-adverse-outcome-pathway",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-adverse-outcome-pathway"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-aging-senescence",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-aging-senescence"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-antibody-engineering",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-antibody-engineering"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-binder-discovery",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-binder-discovery"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-cancer-classification",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-cancer-classification"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-cancer-genomics-tcga",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-cancer-genomics-tcga"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-cancer-variant-interpretation",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-cancer-variant-interpretation"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-cell-line-profiling",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-cell-line-profiling"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-chemical-compound-retrieval",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-chemical-compound-retrieval"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-chemical-safety",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-chemical-safety"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-chemical-sourcing",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-chemical-sourcing"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-clinical-data-integration",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-clinical-data-integration"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-clinical-guidelines",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-clinical-guidelines"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-clinical-risk-scoring",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-clinical-risk-scoring"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-clinical-trial-design",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-clinical-trial-design"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-clinical-trial-matching",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-clinical-trial-matching"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-comparative-genomics",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-comparative-genomics"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-computational-biophysics",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-computational-biophysics"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-crispr-screen-analysis",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-crispr-screen-analysis"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-data-integration-analysis",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-data-integration-analysis"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-data-wrangling",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-data-wrangling"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-dataset-discovery",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-dataset-discovery"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-diagnostic-test-evaluation",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-diagnostic-test-evaluation"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-disease-research",
+          "dependencies": [
+            "tooluniverse-rare-disease-diagnosis"
+          ],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-disease-research"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-dose-response",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-dose-response"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-drug-drug-interaction",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-drug-drug-interaction"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-drug-mechanism-research",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-drug-mechanism-research"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-drug-regulatory",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-drug-regulatory"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-drug-repurposing",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-drug-repurposing"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-drug-research",
+          "dependencies": [
+            "tooluniverse-drug-drug-interaction"
+          ],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-drug-research"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-drug-synergy",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-drug-synergy"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-drug-target-validation",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-drug-target-validation"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-ecology-biodiversity",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-ecology-biodiversity"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-electron-microscopy",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-electron-microscopy"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-enzyme-kinetics",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-enzyme-kinetics"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-epidemiological-analysis",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-epidemiological-analysis"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-epigenomics",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-epigenomics"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-epigenomics-chromatin",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-epigenomics-chromatin"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-expression-data-retrieval",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-expression-data-retrieval"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-fastq-qc",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-fastq-qc"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-functional-genomics-screens",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-functional-genomics-screens"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-gene-disease-association",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-gene-disease-association"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-gene-enrichment",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-gene-enrichment"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-gene-regulatory-networks",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-gene-regulatory-networks"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-gpcr-structural-pharmacology",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-gpcr-structural-pharmacology"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-gwas-drug-discovery",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-gwas-drug-discovery"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-gwas-finemapping",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-gwas-finemapping"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-gwas-snp-interpretation",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-gwas-snp-interpretation"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-gwas-study-explorer",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-gwas-study-explorer"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-gwas-trait-to-gene",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-gwas-trait-to-gene"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-hla-immunogenomics",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-hla-immunogenomics"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-image-analysis",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-image-analysis"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-immune-repertoire-analysis",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-immune-repertoire-analysis"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-immunology",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-immunology"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-immunotherapy-response-prediction",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-immunotherapy-response-prediction"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-infectious-disease",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-infectious-disease"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-inorganic-physical-chemistry",
+          "dependencies": [
+            "tooluniverse-organic-chemistry"
+          ],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-inorganic-physical-chemistry"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-kegg-disease-drug",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-kegg-disease-drug"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-lipidomics",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-lipidomics"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-literature-deep-research",
+          "dependencies": [
+            "tooluniverse-target-research"
+          ],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-literature-deep-research"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-mendelian-randomization",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-mendelian-randomization"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-meta-analysis",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-meta-analysis"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-metabolomics",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-metabolomics"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-metabolomics-analysis",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-metabolomics-analysis"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-metabolomics-pathway",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-metabolomics-pathway"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-metagenomics-analysis",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-metagenomics-analysis"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-microbial-genome-characterization",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-microbial-genome-characterization"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-microbiome-research",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-microbiome-research"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-model-organism-genetics",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-model-organism-genetics"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-molecular-cloning",
+          "dependencies": [
+            "tooluniverse-primer-design"
+          ],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-molecular-cloning"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-multi-omics-integration",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-multi-omics-integration"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-multiomic-disease-characterization",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-multiomic-disease-characterization"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-natural-product-dereplication",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-natural-product-dereplication"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-network-pharmacology",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-network-pharmacology"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-neuroscience",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-neuroscience"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-noncoding-rna",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-noncoding-rna"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-organic-chemistry",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-organic-chemistry"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-pathway-disease-genetics",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-pathway-disease-genetics"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-peptide-target-deorphanization",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-peptide-target-deorphanization"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-pharmacogenomics",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-pharmacogenomics"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-pharmacokinetics",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-pharmacokinetics"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-pharmacovigilance",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-pharmacovigilance"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-phewas",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-phewas"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-phylogenetics",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-phylogenetics"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-plant-genomics",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-plant-genomics"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-polygenic-risk-score",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-polygenic-risk-score"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-population-genetics",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-population-genetics"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-population-genetics-1000genomes",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-population-genetics-1000genomes"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-precision-medicine-stratification",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-precision-medicine-stratification"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-precision-oncology",
+          "dependencies": [
+            "tooluniverse-drug-drug-interaction"
+          ],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-precision-oncology"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-primer-design",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-primer-design"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-product-safety-surveillance",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-product-safety-surveillance"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-protein-interactions",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-protein-interactions"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-protein-lof-mechanism",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-protein-lof-mechanism"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-protein-modification-analysis",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-protein-modification-analysis"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-protein-sae-variant-interpretation",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-protein-sae-variant-interpretation"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-protein-structural-annotation-pdb",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-protein-structural-annotation-pdb"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-protein-structure-prediction",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-protein-structure-prediction"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-protein-structure-retrieval",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-protein-structure-retrieval"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-protein-therapeutic-design",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-protein-therapeutic-design"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-proteomics-analysis",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-proteomics-analysis"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-proteomics-data-retrieval",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-proteomics-data-retrieval"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-rare-disease-diagnosis",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-rare-disease-diagnosis"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-rare-disease-genomics",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-rare-disease-genomics"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-regulatory-genomics",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-regulatory-genomics"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-regulatory-variant-analysis",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-regulatory-variant-analysis"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-residue-functional-mechanism-interpretation",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-residue-functional-mechanism-interpretation"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-rnaseq-deseq2",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-rnaseq-deseq2"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-sequence-analysis",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-sequence-analysis"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-sequence-retrieval",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-sequence-retrieval"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-single-cell",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-single-cell"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-small-molecule-discovery",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-small-molecule-discovery"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-spatial-omics-analysis",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-spatial-omics-analysis"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-spatial-transcriptomics",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-spatial-transcriptomics"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-statistical-modeling",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-statistical-modeling"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-stem-cell-organoid",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-stem-cell-organoid"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-structural-proteomics",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-structural-proteomics"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-structural-variant-analysis",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-structural-variant-analysis"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-systems-biology",
+          "dependencies": [
+            "tooluniverse-computational-biophysics"
+          ],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-systems-biology"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-target-research",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-target-research"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-toxicology",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-toxicology"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-vaccine-design",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-vaccine-design"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-variant-analysis",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-variant-analysis"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-variant-functional-annotation",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-variant-functional-annotation"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-variant-interpretation",
+          "dependencies": [
+            "tooluniverse-sequence-analysis"
+          ],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-variant-interpretation"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-variant-predictor-dms-validation",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-variant-predictor-dms-validation"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "tooluniverse-variant-to-mechanism",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/tooluniverse-variant-to-mechanism"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "genomics-and-systems-biology",
+      "title": "Genomics and Systems Biology",
+      "description": "Genetics, genomic interpretation, omics, systems biology, and quantitative biological analysis.",
+      "version": "1.0.0",
+      "skills": [
+        "tooluniverse-acmg-variant-classification",
+        "tooluniverse-admet-prediction",
+        "tooluniverse-adverse-outcome-pathway",
+        "tooluniverse-cancer-genomics-tcga",
+        "tooluniverse-cancer-variant-interpretation",
+        "tooluniverse-clinical-data-integration",
+        "tooluniverse-clinical-risk-scoring",
+        "tooluniverse-comparative-genomics",
+        "tooluniverse-crispr-screen-analysis",
+        "tooluniverse-data-integration-analysis",
+        "tooluniverse-data-wrangling",
+        "tooluniverse-dataset-discovery",
+        "tooluniverse-epidemiological-analysis",
+        "tooluniverse-epigenomics",
+        "tooluniverse-epigenomics-chromatin",
+        "tooluniverse-expression-data-retrieval",
+        "tooluniverse-fastq-qc",
+        "tooluniverse-functional-genomics-screens",
+        "tooluniverse-gene-disease-association",
+        "tooluniverse-gene-enrichment",
+        "tooluniverse-gene-regulatory-networks",
+        "tooluniverse-gwas-drug-discovery",
+        "tooluniverse-gwas-finemapping",
+        "tooluniverse-gwas-snp-interpretation",
+        "tooluniverse-gwas-study-explorer",
+        "tooluniverse-gwas-trait-to-gene",
+        "tooluniverse-hla-immunogenomics",
+        "tooluniverse-immune-repertoire-analysis",
+        "tooluniverse-immunotherapy-response-prediction",
+        "tooluniverse-lipidomics",
+        "tooluniverse-literature-deep-research",
+        "tooluniverse-mendelian-randomization",
+        "tooluniverse-meta-analysis",
+        "tooluniverse-metabolomics",
+        "tooluniverse-metabolomics-analysis",
+        "tooluniverse-metabolomics-pathway",
+        "tooluniverse-metagenomics-analysis",
+        "tooluniverse-microbial-genome-characterization",
+        "tooluniverse-model-organism-genetics",
+        "tooluniverse-multi-omics-integration",
+        "tooluniverse-multiomic-disease-characterization",
+        "tooluniverse-noncoding-rna",
+        "tooluniverse-pathway-disease-genetics",
+        "tooluniverse-pharmacogenomics",
+        "tooluniverse-phewas",
+        "tooluniverse-phylogenetics",
+        "tooluniverse-plant-genomics",
+        "tooluniverse-polygenic-risk-score",
+        "tooluniverse-population-genetics",
+        "tooluniverse-population-genetics-1000genomes",
+        "tooluniverse-protein-modification-analysis",
+        "tooluniverse-protein-sae-variant-interpretation",
+        "tooluniverse-protein-structure-prediction",
+        "tooluniverse-proteomics-analysis",
+        "tooluniverse-proteomics-data-retrieval",
+        "tooluniverse-rare-disease-genomics",
+        "tooluniverse-regulatory-genomics",
+        "tooluniverse-regulatory-variant-analysis",
+        "tooluniverse-rnaseq-deseq2",
+        "tooluniverse-sequence-analysis",
+        "tooluniverse-single-cell",
+        "tooluniverse-spatial-omics-analysis",
+        "tooluniverse-spatial-transcriptomics",
+        "tooluniverse-statistical-modeling",
+        "tooluniverse-structural-proteomics",
+        "tooluniverse-structural-variant-analysis",
+        "tooluniverse-systems-biology",
+        "tooluniverse-variant-analysis",
+        "tooluniverse-variant-functional-annotation",
+        "tooluniverse-variant-interpretation",
+        "tooluniverse-variant-predictor-dms-validation",
+        "tooluniverse-variant-to-mechanism"
+      ]
+    },
+    {
+      "domain_id": "molecular-and-organismal-biosciences",
+      "title": "Molecular and Organismal Biosciences",
+      "description": "Molecular and structural mechanisms, microbiology, ecology, organisms, and quantitative imaging.",
+      "version": "1.0.0",
+      "skills": [
+        "tooluniverse-antibody-engineering",
+        "tooluniverse-computational-biophysics",
+        "tooluniverse-data-integration-analysis",
+        "tooluniverse-data-wrangling",
+        "tooluniverse-dataset-discovery",
+        "tooluniverse-ecology-biodiversity",
+        "tooluniverse-electron-microscopy",
+        "tooluniverse-enzyme-kinetics",
+        "tooluniverse-gpcr-structural-pharmacology",
+        "tooluniverse-image-analysis",
+        "tooluniverse-immune-repertoire-analysis",
+        "tooluniverse-immunology",
+        "tooluniverse-infectious-disease",
+        "tooluniverse-literature-deep-research",
+        "tooluniverse-meta-analysis",
+        "tooluniverse-metagenomics-analysis",
+        "tooluniverse-microbial-genome-characterization",
+        "tooluniverse-microbiome-research",
+        "tooluniverse-model-organism-genetics",
+        "tooluniverse-molecular-cloning",
+        "tooluniverse-neuroscience",
+        "tooluniverse-phylogenetics",
+        "tooluniverse-plant-genomics",
+        "tooluniverse-primer-design",
+        "tooluniverse-protein-interactions",
+        "tooluniverse-protein-lof-mechanism",
+        "tooluniverse-protein-modification-analysis",
+        "tooluniverse-protein-sae-variant-interpretation",
+        "tooluniverse-protein-structural-annotation-pdb",
+        "tooluniverse-protein-structure-prediction",
+        "tooluniverse-protein-structure-retrieval",
+        "tooluniverse-protein-therapeutic-design",
+        "tooluniverse-residue-functional-mechanism-interpretation",
+        "tooluniverse-sequence-analysis",
+        "tooluniverse-sequence-retrieval",
+        "tooluniverse-statistical-modeling",
+        "tooluniverse-stem-cell-organoid",
+        "tooluniverse-structural-proteomics",
+        "tooluniverse-structural-variant-analysis",
+        "tooluniverse-vaccine-design"
+      ]
+    },
+    {
+      "domain_id": "translational-medicine-and-therapeutics",
+      "title": "Translational Medicine and Therapeutics",
+      "description": "Clinical and translational evidence, disease research, therapeutics, pharmacology, chemistry, toxicology, and safety.",
+      "version": "1.0.0",
+      "skills": [
+        "tooluniverse-admet-prediction",
+        "tooluniverse-adverse-event-detection",
+        "tooluniverse-adverse-outcome-pathway",
+        "tooluniverse-aging-senescence",
+        "tooluniverse-binder-discovery",
+        "tooluniverse-cancer-classification",
+        "tooluniverse-cancer-genomics-tcga",
+        "tooluniverse-cancer-variant-interpretation",
+        "tooluniverse-cell-line-profiling",
+        "tooluniverse-chemical-compound-retrieval",
+        "tooluniverse-chemical-safety",
+        "tooluniverse-chemical-sourcing",
+        "tooluniverse-clinical-data-integration",
+        "tooluniverse-clinical-guidelines",
+        "tooluniverse-clinical-risk-scoring",
+        "tooluniverse-clinical-trial-design",
+        "tooluniverse-clinical-trial-matching",
+        "tooluniverse-data-integration-analysis",
+        "tooluniverse-data-wrangling",
+        "tooluniverse-dataset-discovery",
+        "tooluniverse-diagnostic-test-evaluation",
+        "tooluniverse-disease-research",
+        "tooluniverse-dose-response",
+        "tooluniverse-drug-drug-interaction",
+        "tooluniverse-drug-mechanism-research",
+        "tooluniverse-drug-regulatory",
+        "tooluniverse-drug-repurposing",
+        "tooluniverse-drug-research",
+        "tooluniverse-drug-synergy",
+        "tooluniverse-drug-target-validation",
+        "tooluniverse-epidemiological-analysis",
+        "tooluniverse-expression-data-retrieval",
+        "tooluniverse-gene-disease-association",
+        "tooluniverse-gpcr-structural-pharmacology",
+        "tooluniverse-gwas-drug-discovery",
+        "tooluniverse-immunotherapy-response-prediction",
+        "tooluniverse-infectious-disease",
+        "tooluniverse-inorganic-physical-chemistry",
+        "tooluniverse-kegg-disease-drug",
+        "tooluniverse-literature-deep-research",
+        "tooluniverse-meta-analysis",
+        "tooluniverse-microbiome-research",
+        "tooluniverse-multiomic-disease-characterization",
+        "tooluniverse-natural-product-dereplication",
+        "tooluniverse-network-pharmacology",
+        "tooluniverse-organic-chemistry",
+        "tooluniverse-pathway-disease-genetics",
+        "tooluniverse-peptide-target-deorphanization",
+        "tooluniverse-pharmacogenomics",
+        "tooluniverse-pharmacokinetics",
+        "tooluniverse-pharmacovigilance",
+        "tooluniverse-polygenic-risk-score",
+        "tooluniverse-precision-medicine-stratification",
+        "tooluniverse-precision-oncology",
+        "tooluniverse-product-safety-surveillance",
+        "tooluniverse-protein-structure-retrieval",
+        "tooluniverse-protein-therapeutic-design",
+        "tooluniverse-proteomics-data-retrieval",
+        "tooluniverse-rare-disease-diagnosis",
+        "tooluniverse-rare-disease-genomics",
+        "tooluniverse-sequence-retrieval",
+        "tooluniverse-small-molecule-discovery",
+        "tooluniverse-statistical-modeling",
+        "tooluniverse-target-research",
+        "tooluniverse-toxicology"
+      ]
+    }
+  ]
 }

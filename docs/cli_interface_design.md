@@ -603,14 +603,14 @@ researchspec archive [item] [--json] [--dry-run]
 
 ```bash
 researchspec plugin list [--installed]
-researchspec plugin show <plugin-id>
-researchspec plugin install <plugin-ids...>
-researchspec plugin uninstall <plugin-ids...>
-researchspec plugin update [plugin-ids...]
+researchspec plugin show <domain-id>
+researchspec plugin install <domain-ids...>
+researchspec plugin uninstall <domain-ids...>
+researchspec plugin update [domain-ids...]
 ```
 
 `list/show` 直接读取随 npm 包分发的 registry，可在没有 workspace 时运行。写子命令
-只改变 workspace 级 `plugins.selected` 与 manifest-owned Skill projection；没有配置
+只接受稳定 domain IDs，改变 workspace 级 `plugins.selected`，并动态解析 direct Skills 与 reviewed hard dependencies 后更新 manifest-owned Skill projection；没有配置
 Agent tool 时仍保存选择并给出非阻塞警告。插件只增加 Skills，不生成 wrapper，不进入
 workflow profile。完整 Registry Schema、provenance、license、drift 和卸载边界见
 [Domain Skill Plugins](./domain_skill_plugins.md)。

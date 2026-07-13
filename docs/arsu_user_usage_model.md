@@ -388,7 +388,7 @@ ResearchSpec 维护的领域插件可以从 bundled registry 增加可选 Open A
 | Inspection | `check`, `list`, `show` | 校验和查看权威对象 |
 | Context | `handoff`, `pack` | 渲染或打包可移交上下文 |
 | Governance | `propose`, `decide`, `archive` | 高影响 change、显式决策与生命周期收尾 |
-| Domain Skills | `plugin` | 查看 bundled registry 并管理 workspace 级可选 Skills |
+| Domain Skills | `plugin` | 查看稳定 domain catalog，并按依赖闭包管理 workspace 级可选 Skills；vendor 仅作为详细 provenance |
 
 command wrapper 只是不同 agent 工具的 adapter。目标交付量是：
 

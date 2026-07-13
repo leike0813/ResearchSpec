@@ -15,7 +15,7 @@ Current external reference paths:
 - ResearchSpec project: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec`
 - ARSU project to be absorbed: `/home/joshua/Workspace/Code/Skill/academic-research-skills-universal`
 - ARS upstream checkout inside ARSU: `/home/joshua/Workspace/Code/Skill/academic-research-skills-universal/vendor/ars`
-- ToolUniverse audit and future ingest source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/tooluniverse`
+- ToolUniverse vendor converter source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/tooluniverse`
 
 When paths or ownership change, update this file in the same change so future
 agents do not follow stale locations.
@@ -83,18 +83,18 @@ The target public CLI has sixteen top-level commands: `init`, `update`, `status`
 Command wrappers are adapters, not separate product capabilities. Do not add a
 new public command or Companion merely to expose a low-level transaction.
 
-Domain plugins are project-maintained packages of reviewed Open Agent Skills,
-not third-party runtimes. They may assist semantic work but must not own or
+Domain plugins are stable user installation units assembled from project-maintained vendor Skills,
+not third-party runtimes. Vendor and domain are separate many-to-many layers: vendor converters own upstream version, provenance, adaptation, and hard Skill dependencies; domains own fixed reviewed Skill lists. They may assist semantic work but must not own or
 directly modify workflow state, routes, work items, artifact registry, Gates,
 Decisions, transitions, or receipts. ResearchSpec distributes static reviewed
 content and never executes plugin scripts or installs their dependencies.
 
-`vendor/tooluniverse` is a maintainer-only pinned source used for audit and
-possible future ingest. Its presence does not approve any upstream Skill for
-distribution, expose ToolUniverse as a ResearchSpec runtime, or authorize
-upstream setup, dependency installation, scripts, MCP calls, or workflow writes.
-Only a later explicit OpenSpec change may admit reviewed static derivatives to
-`skills/plugins/registry.json`.
+`vendor/tooluniverse` is the maintainer-only pinned input for the ToolUniverse
+vendor converter. Production admission is controlled by the v1.3.1 audit and
+converter policies: 130 reviewed research Skills are generated into three stable
+domains, while 20 maintenance/setup surfaces remain excluded. Neither the source
+checkout nor generated admission authorizes dependency installation, script
+execution, credential setup, MCP configuration, or workflow writes.
 
 ## ARSU Relationship
 

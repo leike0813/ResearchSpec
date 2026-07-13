@@ -178,9 +178,9 @@ Gate、transition 和 revision-round template。Catalog 回答“选哪条路线
 
 ### 2.10 Domain Skill Plugin Registry
 
-`skills/plugins/registry.json` 是可选领域 Skills 的 package-owned catalog。维护者固定上游
+`skills/plugins/registry.json` 是 vendor/domain 两层可选领域 Skills 的 package-owned catalog。vendor converter 固定上游
 revision，完成筛选、改写、审校和 license/NOTICE 处理，再把静态 Skill tree 随 npm 包发布。
-workspace 只保存 selected plugin IDs；manifest 保存 tool/path/hash 与 plugin/Skill ownership。
+domain catalog 维护稳定的 direct Skill lists。workspace 只保存 selected domain IDs；manifest 保存 tool/path/hash、vendor/Skill ownership 与 per-domain resolution snapshots。
 插件可以辅助语义生产，但不能拥有 workflow profile、frontier、state、artifact registry、
 Gate、Decision 或 receipt。ResearchSpec 不远程下载插件、不执行其脚本、不安装依赖。
 

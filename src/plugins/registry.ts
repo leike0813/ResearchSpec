@@ -12,43 +12,69 @@ import type { Diagnostic } from "../core/validation/types.js";
 const SkillIdSchema = z.string().min(1).max(64).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
 const RelativeSourcePathSchema = z.string().min(1).refine(isSafeRelativePath, "must be a safe relative POSIX path");
 const ImmutableRevisionSchema = z.string().regex(/^[a-f0-9]{7,64}$/, "must be an immutable hexadecimal revision");
+const SemverSchema = z.string().regex(/^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[0-9A-Za-z.-]+)?$/);
+
+const UpstreamSchema = z.strictObject({
+  source_paths: z.array(RelativeSourcePathSchema).min(1),
+  adaptation: z.enum(["curated", "converted"]),
+});
 
 export const PluginRegistrySchema = z.strictObject({
   schema_version: z.literal("1"),
-  sources: z.array(z.strictObject({
-    source_id: SkillIdSchema,
+  vendors: z.array(z.strictObject({
+    vendor_id: SkillIdSchema,
     name: z.string().trim().min(1),
     repository_url: z.url().refine((value) => value.startsWith("https://") || value.startsWith("http://"), "must use http or https"),
+    release: z.string().trim().min(1),
+    revision: ImmutableRevisionSchema,
     license: z.string().trim().min(1),
-  })),
-  plugins: z.array(z.strictObject({
-    plugin_id: SkillIdSchema,
-    title: z.string().trim().min(1),
-    description: z.string().trim().min(1).max(1024),
-    version: z.string().regex(/^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[0-9A-Za-z.-]+)?$/),
-    domain: z.string().trim().min(1),
+    converter_version: z.string().trim().min(1),
     skills: z.array(z.strictObject({
       skill_id: SkillIdSchema,
-      upstreams: z.array(z.strictObject({
-        source_id: SkillIdSchema,
-        revision: ImmutableRevisionSchema,
-        source_paths: z.array(RelativeSourcePathSchema).min(1),
-        adaptation: z.enum(["curated", "converted"]),
-      })).min(1),
+      dependencies: z.array(SkillIdSchema),
+      upstreams: z.array(UpstreamSchema).min(1),
     })).min(1),
+  })),
+  domains: z.array(z.strictObject({
+    domain_id: SkillIdSchema,
+    title: z.string().trim().min(1),
+    description: z.string().trim().min(1).max(1024),
+    version: SemverSchema,
+    skills: z.array(SkillIdSchema).min(1),
   })),
 });
 
 export type PluginRegistry = z.infer<typeof PluginRegistrySchema>;
-export type DomainSkillPlugin = PluginRegistry["plugins"][number];
-export type DomainSkillDefinition = DomainSkillPlugin["skills"][number];
+export type VendorDefinition = PluginRegistry["vendors"][number];
+export type VendorSkillDefinition = VendorDefinition["skills"][number];
+export type DomainDefinition = PluginRegistry["domains"][number];
+export type DomainSkillPlugin = DomainDefinition;
+
+export interface RegisteredSkill {
+  vendor: VendorDefinition;
+  definition: VendorSkillDefinition;
+}
+
+export interface ResolvedDomainSelection {
+  selectedDomainIds: string[];
+  availableDomainIds: string[];
+  unavailableDomainIds: string[];
+  directSkillIds: string[];
+  resolvedSkillIds: string[];
+  skills: RegisteredSkill[];
+}
 
 export interface LoadedPluginRegistry {
   root: string;
   registryPath: string;
   registry: PluginRegistry;
-  plugins: ReadonlyMap<string, DomainSkillPlugin>;
+  vendors: ReadonlyMap<string, VendorDefinition>;
+  domains: ReadonlyMap<string, DomainDefinition>;
+  /** Compatibility alias for internal callers while the public command remains `plugin`. */
+  plugins: ReadonlyMap<string, DomainDefinition>;
+  skills: ReadonlyMap<string, RegisteredSkill>;
   skillFiles: ReadonlyMap<string, readonly string[]>;
+  diagnostics: readonly Diagnostic[];
 }
 
 export class PluginRegistryError extends Error {
@@ -62,95 +88,136 @@ export const PACKAGE_ROOT = fileURLToPath(new URL("../../../", import.meta.url))
 export const PLUGIN_ROOT = path.join(PACKAGE_ROOT, "skills/plugins");
 export const BASE_SKILL_IDS = [...ARSU_SKILL_IDS, ...COMPANION_INTENTS.map((intent) => intent.skillId)] as const;
 
-export async function loadPluginRegistry(pluginRoot = PLUGIN_ROOT): Promise<LoadedPluginRegistry> {
+export async function loadPluginRegistry(pluginRoot = PLUGIN_ROOT, validateSkillContent = true): Promise<LoadedPluginRegistry> {
   const registryPath = path.join(pluginRoot, "registry.json");
   let raw: unknown;
-  try {
-    raw = JSON.parse(await readFile(registryPath, "utf8")) as unknown;
-  } catch (error) {
-    throw new PluginRegistryError([diagnostic("plugin_registry_unreadable", `Cannot read plugin registry: ${error instanceof Error ? error.message : String(error)}`, registryPath)]);
+  try { raw = JSON.parse(await readFile(registryPath, "utf8")) as unknown; }
+  catch (error) {
+    throw new PluginRegistryError([fatal("plugin_registry_unreadable", `Cannot read plugin registry: ${error instanceof Error ? error.message : String(error)}`, registryPath)]);
   }
-  return validatePluginRegistry(raw, pluginRoot, registryPath);
+  return validatePluginRegistry(raw, pluginRoot, registryPath, validateSkillContent);
 }
 
-export async function validatePluginRegistry(raw: unknown, pluginRoot: string, registryPath = path.join(pluginRoot, "registry.json")): Promise<LoadedPluginRegistry> {
+export async function validatePluginRegistry(raw: unknown, pluginRoot: string, registryPath = path.join(pluginRoot, "registry.json"), validateSkillContent = true): Promise<LoadedPluginRegistry> {
   const parsed = PluginRegistrySchema.safeParse(raw);
-  if (!parsed.success) {
-    throw new PluginRegistryError(parsed.error.issues.map((issue) => diagnostic("plugin_registry_invalid", `Invalid plugin registry at ${issue.path.join(".") || "root"}: ${issue.message}`, registryPath, issue)));
-  }
+  if (!parsed.success) throw new PluginRegistryError(parsed.error.issues.map((issue) => fatal("plugin_registry_invalid", `Invalid plugin registry at ${issue.path.join(".") || "root"}: ${issue.message}`, registryPath, issue)));
 
   const registry = parsed.data;
-  const diagnostics: Diagnostic[] = [];
-  const sourceIds = uniqueIds(registry.sources.map((item) => item.source_id), "source", diagnostics, registryPath);
-  uniqueIds(registry.plugins.map((item) => item.plugin_id), "plugin", diagnostics, registryPath);
-  const skillIds = new Set<string>();
+  const errors: Diagnostic[] = [];
+  const warnings: Diagnostic[] = [];
+  uniqueIds(registry.vendors.map((item) => item.vendor_id), "vendor", errors, registryPath);
+  uniqueIds(registry.domains.map((item) => item.domain_id), "domain", errors, registryPath);
   const baseIds = new Set<string>(BASE_SKILL_IDS);
+  const skills = new Map<string, RegisteredSkill>();
   const skillFiles = new Map<string, readonly string[]>();
+  const packagedFiles = validateSkillContent ? new Map<string, readonly string[]>() : await loadPackagedSkillFiles(pluginRoot, registry.vendors);
 
-  for (const plugin of registry.plugins) {
-    const pluginSkillIds = new Set<string>();
-    for (const skill of plugin.skills) {
-      if (pluginSkillIds.has(skill.skill_id) || skillIds.has(skill.skill_id)) diagnostics.push(diagnostic("plugin_skill_id_duplicate", `Plugin Skill ID must be globally unique: ${skill.skill_id}`, registryPath, { plugin_id: plugin.plugin_id, skill_id: skill.skill_id }));
-      if (baseIds.has(skill.skill_id)) diagnostics.push(diagnostic("plugin_skill_id_conflict", `Plugin Skill ID conflicts with the fixed base surface: ${skill.skill_id}`, registryPath, { plugin_id: plugin.plugin_id, skill_id: skill.skill_id }));
-      pluginSkillIds.add(skill.skill_id);
-      skillIds.add(skill.skill_id);
-      for (const upstream of skill.upstreams) {
-        if (!sourceIds.has(upstream.source_id)) diagnostics.push(diagnostic("plugin_source_unknown", `Plugin Skill ${skill.skill_id} references unknown source ${upstream.source_id}.`, registryPath, { plugin_id: plugin.plugin_id, skill_id: skill.skill_id, source_id: upstream.source_id }));
-      }
-      const skillRoot = pluginSkillRoot(pluginRoot, plugin.plugin_id, skill.skill_id);
-      const files = await validateSkillRoot(skillRoot, plugin, skill, diagnostics);
-      skillFiles.set(skillKey(plugin.plugin_id, skill.skill_id), files);
+  for (const vendor of registry.vendors) {
+    const localIds = new Set<string>();
+    for (const skill of vendor.skills) {
+      if (localIds.has(skill.skill_id) || skills.has(skill.skill_id)) errors.push(fatal("plugin_skill_id_duplicate", `Vendor Skill ID must be globally unique: ${skill.skill_id}`, registryPath, { vendor_id: vendor.vendor_id, skill_id: skill.skill_id }));
+      if (baseIds.has(skill.skill_id)) errors.push(fatal("plugin_skill_id_conflict", `Vendor Skill ID conflicts with the fixed base surface: ${skill.skill_id}`, registryPath, { vendor_id: vendor.vendor_id, skill_id: skill.skill_id }));
+      localIds.add(skill.skill_id);
+      skills.set(skill.skill_id, { vendor, definition: skill });
     }
   }
 
-  if (diagnostics.length) throw new PluginRegistryError(diagnostics);
+  for (const [skillId, registered] of skills) {
+    const dependencies = new Set<string>();
+    for (const dependency of registered.definition.dependencies) {
+      if (dependency === skillId) errors.push(fatal("plugin_dependency_self", `Vendor Skill cannot depend on itself: ${skillId}`, registryPath, { skill_id: skillId }));
+      else if (!skills.has(dependency)) errors.push(fatal("plugin_dependency_unknown", `Vendor Skill ${skillId} references unknown dependency ${dependency}.`, registryPath, { skill_id: skillId, dependency }));
+      if (dependencies.has(dependency)) errors.push(fatal("plugin_dependency_duplicate", `Vendor Skill ${skillId} repeats dependency ${dependency}.`, registryPath, { skill_id: skillId, dependency }));
+      dependencies.add(dependency);
+    }
+    const root = pluginSkillRoot(pluginRoot, registered.vendor.vendor_id, skillId);
+    const precomputed = packagedFiles.get(skillId);
+    skillFiles.set(skillId, precomputed ?? await validateSkillRoot(root, registered.vendor, registered.definition, errors, validateSkillContent));
+  }
+
+  const directlyReachable = new Set<string>();
+  for (const domain of registry.domains) {
+    const members = new Set<string>();
+    for (const skillId of domain.skills) {
+      if (!skills.has(skillId)) errors.push(fatal("plugin_domain_skill_unknown", `Domain ${domain.domain_id} references unknown Skill ${skillId}.`, registryPath, { domain_id: domain.domain_id, skill_id: skillId }));
+      if (members.has(skillId)) errors.push(fatal("plugin_domain_skill_duplicate", `Domain ${domain.domain_id} repeats Skill ${skillId}.`, registryPath, { domain_id: domain.domain_id, skill_id: skillId }));
+      members.add(skillId);
+      directlyReachable.add(skillId);
+    }
+  }
+  const reachable = resolveSkillIds(skills, directlyReachable);
+  for (const skillId of skills.keys()) if (!reachable.has(skillId)) errors.push(fatal("plugin_skill_unreachable", `Vendor Skill is unreachable from every domain: ${skillId}`, registryPath, { skill_id: skillId }));
+  warnings.push(...cycleDiagnostics(skills, registryPath));
+
+  if (errors.length) throw new PluginRegistryError(errors);
+  const domains = new Map(registry.domains.map((domain) => [domain.domain_id, domain]));
   return {
     root: pluginRoot,
     registryPath,
     registry,
-    plugins: new Map(registry.plugins.map((plugin) => [plugin.plugin_id, plugin])),
+    vendors: new Map(registry.vendors.map((vendor) => [vendor.vendor_id, vendor])),
+    domains,
+    plugins: domains,
+    skills,
     skillFiles,
+    diagnostics: warnings,
   };
 }
 
-export function pluginSkillRoot(pluginRoot: string, pluginId: string, skillId: string): string {
-  if (!SkillIdSchema.safeParse(pluginId).success || !SkillIdSchema.safeParse(skillId).success) throw new Error("Unsafe plugin or Skill ID.");
-  return path.join(pluginRoot, pluginId, skillId);
+export function resolveDomainSelection(loaded: LoadedPluginRegistry, selectedDomainIds: readonly string[]): ResolvedDomainSelection {
+  const selected = uniqueSorted(selectedDomainIds);
+  const available = selected.filter((id) => loaded.domains.has(id));
+  const unavailable = selected.filter((id) => !loaded.domains.has(id));
+  const direct = new Set<string>();
+  for (const domainId of available) for (const skillId of loaded.domains.get(domainId)?.skills ?? []) direct.add(skillId);
+  const resolved = resolveSkillIds(loaded.skills, direct);
+  const resolvedSkillIds = [...resolved].sort(compareText);
+  return {
+    selectedDomainIds: selected,
+    availableDomainIds: available,
+    unavailableDomainIds: unavailable,
+    directSkillIds: [...direct].sort(compareText),
+    resolvedSkillIds,
+    skills: resolvedSkillIds.flatMap((id) => { const skill = loaded.skills.get(id); return skill ? [skill] : []; }),
+  };
 }
 
-export function filesForSkill(loaded: LoadedPluginRegistry, pluginId: string, skillId: string): readonly string[] {
-  return loaded.skillFiles.get(skillKey(pluginId, skillId)) ?? [];
+export function pluginSkillRoot(pluginRoot: string, vendorId: string, skillId: string): string {
+  if (!SkillIdSchema.safeParse(vendorId).success || !SkillIdSchema.safeParse(skillId).success) throw new Error("Unsafe vendor or Skill ID.");
+  return path.join(pluginRoot, "vendors", vendorId, skillId);
 }
 
-async function validateSkillRoot(root: string, plugin: DomainSkillPlugin, skill: DomainSkillDefinition, diagnostics: Diagnostic[]): Promise<readonly string[]> {
+export function filesForSkill(loaded: LoadedPluginRegistry, skillId: string): readonly string[] { return loaded.skillFiles.get(skillId) ?? []; }
+
+async function validateSkillRoot(root: string, vendor: VendorDefinition, skill: VendorSkillDefinition, diagnostics: Diagnostic[], validateContent: boolean): Promise<readonly string[]> {
   let files: string[];
   try { files = await walkFiles(root); }
   catch (error) {
-    diagnostics.push(diagnostic("plugin_skill_missing", `Cannot read derived Skill root for ${plugin.plugin_id}/${skill.skill_id}: ${error instanceof Error ? error.message : String(error)}`, root, { plugin_id: plugin.plugin_id, skill_id: skill.skill_id }));
+    diagnostics.push(fatal("plugin_skill_missing", `Cannot read derived Skill root for ${vendor.vendor_id}/${skill.skill_id}: ${error instanceof Error ? error.message : String(error)}`, root, { vendor_id: vendor.vendor_id, skill_id: skill.skill_id }));
     return [];
   }
   const relativeFiles = files.map((file) => posix(path.relative(root, file)));
   const skillPath = path.join(root, "SKILL.md");
   if (!relativeFiles.includes("SKILL.md")) {
-    diagnostics.push(diagnostic("plugin_skill_missing", `Registered Skill is missing SKILL.md: ${plugin.plugin_id}/${skill.skill_id}`, skillPath, { plugin_id: plugin.plugin_id, skill_id: skill.skill_id }));
+    diagnostics.push(fatal("plugin_skill_missing", `Registered Skill is missing SKILL.md: ${vendor.vendor_id}/${skill.skill_id}`, skillPath));
+    return relativeFiles;
+  }
+  if (!validateContent) {
+    if (!relativeFiles.includes("LICENSE")) diagnostics.push(fatal("plugin_skill_license_missing", `Third-party-derived Skill is missing LICENSE: ${skill.skill_id}`, path.join(root, "LICENSE")));
+    if (!relativeFiles.includes("NOTICE.md")) diagnostics.push(fatal("plugin_skill_notice_missing", `Third-party-derived Skill is missing NOTICE.md: ${skill.skill_id}`, path.join(root, "NOTICE.md")));
     return relativeFiles;
   }
   try {
     const frontmatter = parseSkillFrontmatter(await readFile(skillPath, "utf8"));
     const result = SkillFrontmatterSchema.safeParse(frontmatter.value);
-    if (!result.success) {
-      for (const issue of result.error.issues) diagnostics.push(diagnostic("plugin_skill_frontmatter_invalid", `Invalid SKILL.md frontmatter for ${skill.skill_id} at ${issue.path.join(".") || "root"}: ${issue.message}`, skillPath, issue));
-    } else if (result.data.name !== skill.skill_id || path.basename(root) !== result.data.name) {
-      diagnostics.push(diagnostic("plugin_skill_name_mismatch", `SKILL.md name, registry Skill ID, and directory must match: ${skill.skill_id}`, skillPath, { declared_name: result.data.name, skill_id: skill.skill_id, directory: path.basename(root) }));
-    }
-    if (!frontmatter.body.trim()) diagnostics.push(diagnostic("plugin_skill_body_missing", `SKILL.md must contain Markdown instructions: ${skill.skill_id}`, skillPath));
-  } catch (error) {
-    diagnostics.push(diagnostic("plugin_skill_frontmatter_invalid", `Cannot parse SKILL.md for ${skill.skill_id}: ${error instanceof Error ? error.message : String(error)}`, skillPath));
-  }
+    if (!result.success) for (const issue of result.error.issues) diagnostics.push(fatal("plugin_skill_frontmatter_invalid", `Invalid SKILL.md frontmatter for ${skill.skill_id} at ${issue.path.join(".") || "root"}: ${issue.message}`, skillPath, issue));
+    else if (result.data.name !== skill.skill_id || path.basename(root) !== result.data.name) diagnostics.push(fatal("plugin_skill_name_mismatch", `SKILL.md name, registry Skill ID, and directory must match: ${skill.skill_id}`, skillPath, { declared_name: result.data.name }));
+    if (!frontmatter.body.trim()) diagnostics.push(fatal("plugin_skill_body_missing", `SKILL.md must contain Markdown instructions: ${skill.skill_id}`, skillPath));
+  } catch (error) { diagnostics.push(fatal("plugin_skill_frontmatter_invalid", `Cannot parse SKILL.md for ${skill.skill_id}: ${error instanceof Error ? error.message : String(error)}`, skillPath)); }
   const licensePath = path.join(root, "LICENSE");
   const noticePath = path.join(root, "NOTICE.md");
-  if (!relativeFiles.includes("LICENSE") || !(await readFile(licensePath, "utf8")).trim()) diagnostics.push(diagnostic("plugin_skill_license_missing", `Third-party-derived Skill is missing a non-empty LICENSE: ${skill.skill_id}`, licensePath));
-  if (!relativeFiles.includes("NOTICE.md") || !(await readFile(noticePath, "utf8")).trim()) diagnostics.push(diagnostic("plugin_skill_notice_missing", `Third-party-derived Skill is missing a non-empty NOTICE.md: ${skill.skill_id}`, noticePath));
+  if (!relativeFiles.includes("LICENSE") || !(await safeNonEmpty(licensePath))) diagnostics.push(fatal("plugin_skill_license_missing", `Third-party-derived Skill is missing a non-empty LICENSE: ${skill.skill_id}`, licensePath));
+  if (!relativeFiles.includes("NOTICE.md") || !(await safeNonEmpty(noticePath))) diagnostics.push(fatal("plugin_skill_notice_missing", `Third-party-derived Skill is missing a non-empty NOTICE.md: ${skill.skill_id}`, noticePath));
   return relativeFiles;
 }
 
@@ -170,10 +237,48 @@ function parseSkillFrontmatter(text: string): { value: unknown; body: string } {
   return { value: parse(text.slice(4, end)) as unknown, body: text.slice(end + 5) };
 }
 
+function resolveSkillIds(skills: ReadonlyMap<string, RegisteredSkill>, roots: Iterable<string>): Set<string> {
+  const resolved = new Set<string>();
+  const pending = [...roots];
+  while (pending.length) {
+    const skillId = pending.pop();
+    if (!skillId) continue;
+    if (resolved.has(skillId) || !skills.has(skillId)) continue;
+    resolved.add(skillId);
+    pending.push(...(skills.get(skillId)?.definition.dependencies ?? []));
+  }
+  return resolved;
+}
+
+function cycleDiagnostics(skills: ReadonlyMap<string, RegisteredSkill>, registryPath: string): Diagnostic[] {
+  const diagnostics: Diagnostic[] = [];
+  const visited = new Set<string>();
+  const active = new Set<string>();
+  const stack: string[] = [];
+  const reported = new Set<string>();
+  function visit(skillId: string): void {
+    if (active.has(skillId)) {
+      const start = stack.indexOf(skillId);
+      const cycle = [...stack.slice(start), skillId];
+      const key = [...new Set(cycle)].sort(compareText).join("|");
+      if (!reported.has(key)) {
+        reported.add(key);
+        diagnostics.push({ severity: "warning", code: "plugin_dependency_cycle", message: `Vendor Skill dependency cycle: ${cycle.join(" -> ")}`, path: registryPath, blocking: false, details: { cycle } });
+      }
+      return;
+    }
+    if (visited.has(skillId)) return;
+    visited.add(skillId); active.add(skillId); stack.push(skillId);
+    for (const dependency of skills.get(skillId)?.definition.dependencies ?? []) if (skills.has(dependency)) visit(dependency);
+    stack.pop(); active.delete(skillId);
+  }
+  for (const skillId of skills.keys()) visit(skillId);
+  return diagnostics;
+}
+
 async function walkFiles(root: string): Promise<string[]> {
   const result: string[] = [];
-  const entries = await readdir(root, { withFileTypes: true });
-  for (const entry of entries) {
+  for (const entry of await readdir(root, { withFileTypes: true })) {
     const target = path.join(root, entry.name);
     if (entry.isSymbolicLink()) throw new Error(`Symbolic links are not supported in plugin Skills: ${target}`);
     if (entry.isDirectory()) result.push(...await walkFiles(target));
@@ -182,25 +287,38 @@ async function walkFiles(root: string): Promise<string[]> {
   return result.sort(compareText);
 }
 
-function uniqueIds(ids: readonly string[], kind: string, diagnostics: Diagnostic[], registryPath: string): Set<string> {
-  const result = new Set<string>();
-  for (const id of ids) {
-    if (result.has(id)) diagnostics.push(diagnostic(`plugin_${kind}_id_duplicate`, `Duplicate ${kind} ID: ${id}`, registryPath));
-    result.add(id);
+async function loadPackagedSkillFiles(pluginRoot: string, vendors: PluginRegistry["vendors"]): Promise<Map<string, readonly string[]>> {
+  const result = new Map<string, readonly string[]>();
+  for (const vendor of vendors) {
+    try {
+      const raw = JSON.parse(await readFile(path.join(pluginRoot, "vendor-manifests", `${vendor.vendor_id}.json`), "utf8")) as { file_dispositions?: Array<{ disposition?: string; output_path?: string }> };
+      const bySkill = new Map<string, Set<string>>();
+      for (const item of raw.file_dispositions ?? []) {
+        const prefix = `vendors/${vendor.vendor_id}/`;
+        if (item.disposition !== "included" || typeof item.output_path !== "string" || !item.output_path.startsWith(prefix)) continue;
+        const rest = item.output_path.slice(prefix.length);
+        const separator = rest.indexOf("/");
+        if (separator < 1) continue;
+        const skillId = rest.slice(0, separator);
+        const relative = rest.slice(separator + 1);
+        const files = bySkill.get(skillId) ?? new Set<string>();
+        files.add(relative); bySkill.set(skillId, files);
+      }
+      for (const skill of vendor.skills) {
+        const files = bySkill.get(skill.skill_id);
+        if (!files?.has("SKILL.md")) continue;
+        files.add("LICENSE"); files.add("NOTICE.md");
+        result.set(skill.skill_id, [...files].sort(compareText));
+      }
+    } catch { /* Unbundled fixtures and maintainer validation use filesystem discovery. */ }
   }
   return result;
 }
 
-function isSafeRelativePath(value: string): boolean {
-  if (value.includes("\\") || value.startsWith("/") || value.includes("\0")) return false;
-  const segments = value.split("/");
-  return segments.every((segment) => Boolean(segment) && segment !== "." && segment !== "..");
-}
-
-function diagnostic(code: string, message: string, filePath: string, details?: unknown): Diagnostic {
-  return { severity: "error", code, message, path: filePath, blocking: true, ...(details === undefined ? {} : { details }) };
-}
-
-function skillKey(pluginId: string, skillId: string): string { return `${pluginId}:${skillId}`; }
+async function safeNonEmpty(filePath: string): Promise<boolean> { try { return Boolean((await readFile(filePath, "utf8")).trim()); } catch { return false; } }
+function uniqueIds(ids: readonly string[], kind: string, diagnostics: Diagnostic[], registryPath: string): void { const seen = new Set<string>(); for (const id of ids) { if (seen.has(id)) diagnostics.push(fatal(`plugin_${kind}_id_duplicate`, `Duplicate ${kind} ID: ${id}`, registryPath)); seen.add(id); } }
+function isSafeRelativePath(value: string): boolean { if (value.includes("\\") || value.startsWith("/") || value.includes("\0")) return false; return value.split("/").every((segment) => Boolean(segment) && segment !== "." && segment !== ".."); }
+function fatal(code: string, message: string, filePath: string, details?: unknown): Diagnostic { return { severity: "error", code, message, path: filePath, blocking: true, ...(details === undefined ? {} : { details }) }; }
+function uniqueSorted(values: readonly string[]): string[] { return [...new Set(values)].sort(compareText); }
 function posix(value: string): string { return value.split(path.sep).join("/"); }
 function compareText(left: string, right: string): number { return left < right ? -1 : left > right ? 1 : 0; }

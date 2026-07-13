@@ -126,26 +126,20 @@ SHALL also support package-only inspection without a workspace.
   exit code 2
 
 ### Requirement: Plugin Command Group
-ResearchSpec SHALL expose `plugin list [--installed]`, `plugin show <plugin-id>`, `plugin install <plugin-ids...>`, `plugin uninstall <plugin-ids...>`, and `plugin update [plugin-ids...]` under the sixteenth top-level command.
+The CLI SHALL expose `plugin list [--installed]`, `plugin show <domain-id>`, `plugin install <domain-ids...>`, `plugin uninstall <domain-ids...>`, and `plugin update [domain-ids...]` while treating domain IDs as the only lifecycle selection unit.
 
-#### Scenario: List and show work without a workspace
-- **WHEN** a user invokes package catalog list or show outside a workspace
-- **THEN** the CLI SHALL report bundled plugin metadata
-- **AND** installation state SHALL be false or unavailable rather than requiring initialization
+#### Scenario: Domain catalog is listed outside a workspace
+- **WHEN** a user runs `plugin list` without a workspace
+- **THEN** the CLI SHALL list stable domains without vendor names
 
-#### Scenario: Writing subcommands use global policy flags
-- **WHEN** install, update, or uninstall is invoked with `--dry-run`, `--yes`, `--force`, `--json`, or `--quiet`
-- **THEN** the subcommand SHALL follow the common write plan, confirmation, output, and error contracts
+#### Scenario: Domain details expose provenance
+- **WHEN** a user runs `plugin show <domain-id>`
+- **THEN** the CLI SHALL distinguish direct and resolved Skills
+- **AND** it MAY expose vendor, revision, license, and dependency provenance
 
-#### Scenario: Multiple plugin IDs are incremental
-- **WHEN** a user installs or uninstalls multiple valid plugin IDs
-- **THEN** the operation SHALL preserve selections outside the requested IDs
-- **AND** duplicate IDs SHALL be normalized
-
-#### Scenario: JSON plugin output is isolated
-- **WHEN** any plugin subcommand is invoked with `--json`
-- **THEN** stdout SHALL contain exactly one versioned CLI envelope
-- **AND** diagnostics SHALL remain structured
+#### Scenario: Machine output distinguishes intent and projection
+- **WHEN** plugin lifecycle or status JSON is requested
+- **THEN** it SHALL distinguish selected domains, resolved Skills, and projected Skills
 
 ### Requirement: Derived Handoff And Context Pack
 

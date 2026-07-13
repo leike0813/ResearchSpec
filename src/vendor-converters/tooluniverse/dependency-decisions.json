@@ -1,0 +1,2918 @@
+[
+  {
+    "from": "tooluniverse-adverse-event-detection",
+    "to": "tooluniverse-pharmacovigilance",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-adverse-event-detection/SKILL.md",
+        "line": 62,
+        "text": "**Differentiation from tooluniverse-pharmacovigilance**: This skill focuses specifically on **signal detection and quantification** using disproportionality analysis (PRR, ROR, IC) with statistical rigor, produces a quantitative **Safety Signal Score (0-100)**, and performs **comparative safety analysis** across drug classes."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-adverse-outcome-pathway",
+    "to": "tooluniverse-pharmacovigilance",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-adverse-outcome-pathway/SKILL.md",
+        "line": 3,
+        "text": "description: Map environmental and industrial chemicals to adverse outcome pathways (AOPs) — molecular initiating event to organ-level toxicity. Uses AOPWiki, GHS classification, IARC carcinogen status, and LD50 data. Use for environmental/industrial chemical risk assessment, regulatory-grade hazard characterization, and AOP stressor mapping. Distinct from drug-safety analysis (use tooluniverse-ph"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-adverse-outcome-pathway",
+    "to": "tooluniverse-toxicology",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-adverse-outcome-pathway/SKILL.md",
+        "line": 9,
+        "text": "Distinct from drug safety (see tooluniverse-toxicology): this skill targets **environmental and"
+      },
+      {
+        "path": "skills/tooluniverse-adverse-outcome-pathway/SKILL.md",
+        "line": 24,
+        "text": "Do NOT use for FDA-approved drugs with FAERS data — use `tooluniverse-toxicology` instead."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-aging-senescence",
+    "to": "tooluniverse-disease-research",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-aging-senescence/SKILL.md",
+        "line": 34,
+        "text": "**Not this skill**: For rare disease genetics, use `tooluniverse-rare-disease-diagnosis`. For general disease research, use `tooluniverse-disease-research`."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-aging-senescence",
+    "to": "tooluniverse-rare-disease-diagnosis",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-aging-senescence/SKILL.md",
+        "line": 34,
+        "text": "**Not this skill**: For rare disease genetics, use `tooluniverse-rare-disease-diagnosis`. For general disease research, use `tooluniverse-disease-research`."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-binder-discovery",
+    "to": "tooluniverse-data-wrangling",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-binder-discovery/SKILL.md",
+        "line": 277,
+        "text": "See `tooluniverse-data-wrangling` skill for format cookbook and pagination patterns."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-cancer-genomics-tcga",
+    "to": "tooluniverse-data-wrangling",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-cancer-genomics-tcga/SKILL.md",
+        "line": 325,
+        "text": "See `tooluniverse-data-wrangling` skill for pagination, error handling, and format parsing patterns."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-cancer-genomics-tcga",
+    "to": "tooluniverse-gwas-snp-interpretation",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-cancer-genomics-tcga/SKILL.md",
+        "line": 33,
+        "text": "- GWAS variant interpretation -> Use `tooluniverse-gwas-snp-interpretation`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-cancer-genomics-tcga",
+    "to": "tooluniverse-precision-oncology",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-cancer-genomics-tcga/SKILL.md",
+        "line": 31,
+        "text": "- Precision oncology treatment recommendations -> Use `tooluniverse-precision-oncology`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-cancer-genomics-tcga",
+    "to": "tooluniverse-rare-disease-genomics",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-cancer-genomics-tcga/SKILL.md",
+        "line": 32,
+        "text": "- Rare disease gene discovery -> Use `tooluniverse-rare-disease-genomics`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-chemical-sourcing",
+    "to": "tooluniverse-admet-prediction",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-chemical-sourcing/SKILL.md",
+        "line": 38,
+        "text": "**Not this skill**: For ADMET/toxicity assessment, use `tooluniverse-admet-prediction`. For drug-target interaction analysis, use `tooluniverse-drug-target-validation`."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-chemical-sourcing",
+    "to": "tooluniverse-drug-target-validation",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-chemical-sourcing/SKILL.md",
+        "line": 38,
+        "text": "**Not this skill**: For ADMET/toxicity assessment, use `tooluniverse-admet-prediction`. For drug-target interaction analysis, use `tooluniverse-drug-target-validation`."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-clinical-data-integration",
+    "to": "tooluniverse-adverse-event-detection",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-clinical-data-integration/SKILL.md",
+        "line": 24,
+        "text": "**Differentiation**: This skill emphasizes *regulatory-grade data integration* across the full drug lifecycle. For focused FAERS signal detection with quantitative scoring, see `tooluniverse-adverse-event-detection`. For general pharmacovigilance workflows, see `tooluniverse-pharmacovigilance`."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-clinical-data-integration",
+    "to": "tooluniverse-pharmacovigilance",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-clinical-data-integration/SKILL.md",
+        "line": 24,
+        "text": "**Differentiation**: This skill emphasizes *regulatory-grade data integration* across the full drug lifecycle. For focused FAERS signal detection with quantitative scoring, see `tooluniverse-adverse-event-detection`. For general pharmacovigilance workflows, see `tooluniverse-pharmacovigilance`."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-clinical-risk-scoring",
+    "to": "tooluniverse-diagnostic-test-evaluation",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-clinical-risk-scoring/SKILL.md",
+        "line": 3,
+        "text": "description: Compute and interpret validated bedside clinical risk scores and pretest probabilities for an INDIVIDUAL patient — pick the right score for the scenario, gather inputs, run the deterministic calculator tool, and read the result against an interpretation table. Covers CHA2DS2-VASc (AF stroke risk), HAS-BLED (bleeding on anticoagulation), CURB-65 (pneumonia severity / admit decision), q"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-clinical-risk-scoring",
+    "to": "tooluniverse-epidemiological-analysis",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-clinical-risk-scoring/SKILL.md",
+        "line": 3,
+        "text": "description: Compute and interpret validated bedside clinical risk scores and pretest probabilities for an INDIVIDUAL patient — pick the right score for the scenario, gather inputs, run the deterministic calculator tool, and read the result against an interpretation table. Covers CHA2DS2-VASc (AF stroke risk), HAS-BLED (bleeding on anticoagulation), CURB-65 (pneumonia severity / admit decision), q"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-clinical-risk-scoring",
+    "to": "tooluniverse-polygenic-risk-score",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-clinical-risk-scoring/SKILL.md",
+        "line": 3,
+        "text": "description: Compute and interpret validated bedside clinical risk scores and pretest probabilities for an INDIVIDUAL patient — pick the right score for the scenario, gather inputs, run the deterministic calculator tool, and read the result against an interpretation table. Covers CHA2DS2-VASc (AF stroke risk), HAS-BLED (bleeding on anticoagulation), CURB-65 (pneumonia severity / admit decision), q"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-clinical-trial-design",
+    "to": "tooluniverse-data-wrangling",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-clinical-trial-design/SKILL.md",
+        "line": 252,
+        "text": "See `tooluniverse-data-wrangling` skill for pagination, error handling, and bulk download patterns."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-clinical-trial-design",
+    "to": "tooluniverse-disease-research",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-clinical-trial-design/SKILL.md",
+        "line": 209,
+        "text": "- **tooluniverse-disease-research**: Deep dive on disease biology"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-clinical-trial-design",
+    "to": "tooluniverse-drug-research",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-clinical-trial-design/SKILL.md",
+        "line": 208,
+        "text": "- **tooluniverse-drug-research**: Investigate mechanism, preclinical data"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-clinical-trial-design",
+    "to": "tooluniverse-pharmacovigilance",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-clinical-trial-design/SKILL.md",
+        "line": 211,
+        "text": "- **tooluniverse-pharmacovigilance**: Post-market safety for comparator drugs"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-clinical-trial-design",
+    "to": "tooluniverse-precision-oncology",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-clinical-trial-design/SKILL.md",
+        "line": 212,
+        "text": "- **tooluniverse-precision-oncology**: Biomarker biology, resistance mechanisms"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-clinical-trial-design",
+    "to": "tooluniverse-target-research",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-clinical-trial-design/SKILL.md",
+        "line": 210,
+        "text": "- **tooluniverse-target-research**: Validate drug target, essentiality"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-clinical-trial-matching",
+    "to": "tooluniverse-adverse-event-detection",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-clinical-trial-matching/SKILL.md",
+        "line": 49,
+        "text": "- Drug safety profiling -> Use `tooluniverse-adverse-event-detection`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-clinical-trial-matching",
+    "to": "tooluniverse-cancer-variant-interpretation",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-clinical-trial-matching/SKILL.md",
+        "line": 48,
+        "text": "- Single variant interpretation without trial focus -> Use `tooluniverse-cancer-variant-interpretation`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-clinical-trial-matching",
+    "to": "tooluniverse-disease-research",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-clinical-trial-matching/SKILL.md",
+        "line": 51,
+        "text": "- General disease research -> Use `tooluniverse-disease-research`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-clinical-trial-matching",
+    "to": "tooluniverse-drug-target-validation",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-clinical-trial-matching/SKILL.md",
+        "line": 50,
+        "text": "- Target validation -> Use `tooluniverse-drug-target-validation`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-comparative-genomics",
+    "to": "tooluniverse-microbial-genome-characterization",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-comparative-genomics/SKILL.md",
+        "line": 148,
+        "text": "**Genome-assembly context for a comparison species**: When a species' ortholog calls look incomplete or you need the underlying reference assembly, use `NCBIDatasets_list_genomes_by_taxon` (params `taxon` as tax_id, `limit`, `reference_only`) to find the reference genome, `NCBIDatasets_get_genome_assembly` (param `accession`) for assembly metrics (contiguity/N50/completeness — a fragmented assembl"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-data-integration-analysis",
+    "to": "tooluniverse-gene-enrichment",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-data-integration-analysis/SKILL.md",
+        "line": 29,
+        "text": "- Pure gene enrichment without prior analysis --> Use `tooluniverse-gene-enrichment`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-data-integration-analysis",
+    "to": "tooluniverse-literature-deep-research",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-data-integration-analysis/SKILL.md",
+        "line": 30,
+        "text": "- Pure literature review --> Use `tooluniverse-literature-deep-research`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-data-integration-analysis",
+    "to": "tooluniverse-rnaseq-deseq2",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-data-integration-analysis/SKILL.md",
+        "line": 28,
+        "text": "- Running the statistical analysis itself --> Use `tooluniverse-statistical-modeling` or `tooluniverse-rnaseq-deseq2`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-data-integration-analysis",
+    "to": "tooluniverse-statistical-modeling",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-data-integration-analysis/SKILL.md",
+        "line": 28,
+        "text": "- Running the statistical analysis itself --> Use `tooluniverse-statistical-modeling` or `tooluniverse-rnaseq-deseq2`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-data-integration-analysis",
+    "to": "tooluniverse-variant-interpretation",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-data-integration-analysis/SKILL.md",
+        "line": 31,
+        "text": "- Single variant interpretation --> Use `tooluniverse-variant-interpretation`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-diagnostic-test-evaluation",
+    "to": "tooluniverse-epidemiological-analysis",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-diagnostic-test-evaluation/SKILL.md",
+        "line": 94,
+        "text": "- `tooluniverse-epidemiological-analysis` — population-level risk, screening program metrics."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-diagnostic-test-evaluation",
+    "to": "tooluniverse-meta-analysis",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-diagnostic-test-evaluation/SKILL.md",
+        "line": 95,
+        "text": "- `tooluniverse-meta-analysis` — pool diagnostic accuracy across studies."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-diagnostic-test-evaluation",
+    "to": "tooluniverse-statistical-modeling",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-diagnostic-test-evaluation/SKILL.md",
+        "line": 93,
+        "text": "- `tooluniverse-statistical-modeling` — logistic regression that produces the score, ORs."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-disease-research",
+    "to": "tooluniverse-rare-disease-diagnosis",
+    "relation": "required",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-disease-research/SKILL.md",
+        "line": 263,
+        "text": "For rare disease differential diagnosis, run: `python3 skills/tooluniverse-rare-disease-diagnosis/scripts/clinical_patterns.py --type differential --symptoms 'symptom1,symptom2'`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-dose-response",
+    "to": "tooluniverse-gpcr-structural-pharmacology",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-dose-response/SKILL.md",
+        "line": 77,
+        "text": "- `tooluniverse-gpcr-structural-pharmacology` / `tooluniverse-network-pharmacology` — receptor pharmacology context."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-dose-response",
+    "to": "tooluniverse-image-analysis",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-dose-response/SKILL.md",
+        "line": 3,
+        "text": "description: Dose-response / concentration-response curve fitting — IC50, EC50, Hill slope, Emax/Emin efficacy, and relative potency from paired concentration vs response data (enzyme/cell assays, drug screening, agonist/antagonist pharmacology). Fits the 4-parameter logistic (Hill sigmoidal) model. Use when you have concentrations + responses and need a potency value, to compare two compounds' po"
+      },
+      {
+        "path": "skills/tooluniverse-dose-response/SKILL.md",
+        "line": 76,
+        "text": "- `tooluniverse-image-analysis` — dose-response on image-derived measurements (.tif, colony, fluorescence)."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-dose-response",
+    "to": "tooluniverse-network-pharmacology",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-dose-response/SKILL.md",
+        "line": 77,
+        "text": "- `tooluniverse-gpcr-structural-pharmacology` / `tooluniverse-network-pharmacology` — receptor pharmacology context."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-dose-response",
+    "to": "tooluniverse-statistical-modeling",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-dose-response/SKILL.md",
+        "line": 3,
+        "text": "description: Dose-response / concentration-response curve fitting — IC50, EC50, Hill slope, Emax/Emin efficacy, and relative potency from paired concentration vs response data (enzyme/cell assays, drug screening, agonist/antagonist pharmacology). Fits the 4-parameter logistic (Hill sigmoidal) model. Use when you have concentrations + responses and need a potency value, to compare two compounds' po"
+      },
+      {
+        "path": "skills/tooluniverse-dose-response/SKILL.md",
+        "line": 78,
+        "text": "- `tooluniverse-statistical-modeling` — general regression, EC50 via spline, power analysis."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-drug-mechanism-research",
+    "to": "tooluniverse-adverse-event-detection",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-drug-mechanism-research/SKILL.md",
+        "line": 33,
+        "text": "- Drug safety/adverse events profiling -> `tooluniverse-adverse-event-detection`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-drug-mechanism-research",
+    "to": "tooluniverse-drug-repurposing",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-drug-mechanism-research/SKILL.md",
+        "line": 34,
+        "text": "- Drug repurposing/new indications -> `tooluniverse-drug-repurposing`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-drug-mechanism-research",
+    "to": "tooluniverse-drug-target-validation",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-drug-mechanism-research/SKILL.md",
+        "line": 35,
+        "text": "- Target druggability assessment -> `tooluniverse-drug-target-validation`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-drug-mechanism-research",
+    "to": "tooluniverse-network-pharmacology",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-drug-mechanism-research/SKILL.md",
+        "line": 36,
+        "text": "- Network pharmacology/polypharmacology -> `tooluniverse-network-pharmacology`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-drug-mechanism-research",
+    "to": "tooluniverse-pharmacogenomics",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-drug-mechanism-research/SKILL.md",
+        "line": 37,
+        "text": "- CPIC dosing guidelines specifically -> `tooluniverse-pharmacogenomics`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-drug-regulatory",
+    "to": "tooluniverse-drug-drug-interaction",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-drug-regulatory/SKILL.md",
+        "line": 31,
+        "text": "- Drug-drug interactions -> Use `tooluniverse-drug-drug-interaction`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-drug-regulatory",
+    "to": "tooluniverse-drug-mechanism-research",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-drug-regulatory/SKILL.md",
+        "line": 33,
+        "text": "- Drug mechanism of action / target binding -> Use `tooluniverse-drug-mechanism-research`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-drug-regulatory",
+    "to": "tooluniverse-drug-repurposing",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-drug-regulatory/SKILL.md",
+        "line": 34,
+        "text": "- Drug repurposing / new indications -> Use `tooluniverse-drug-repurposing`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-drug-regulatory",
+    "to": "tooluniverse-pharmacogenomics",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-drug-regulatory/SKILL.md",
+        "line": 32,
+        "text": "- Pharmacogenomics / dosing by genotype -> Use `tooluniverse-pharmacogenomics`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-drug-research",
+    "to": "tooluniverse-drug-drug-interaction",
+    "relation": "required",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-drug-research/SKILL.md",
+        "line": 234,
+        "text": "For drug interaction checking, run: `python3 skills/tooluniverse-drug-drug-interaction/scripts/pharmacology_ref.py --type interaction --drug1 X --drug2 Y`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-drug-synergy",
+    "to": "tooluniverse-cell-line-profiling",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-drug-synergy/SKILL.md",
+        "line": 78,
+        "text": "- `tooluniverse-cell-line-profiling` — look up *pre-computed* combination synergy (SYNERGxDB)."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-drug-synergy",
+    "to": "tooluniverse-dose-response",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-drug-synergy/SKILL.md",
+        "line": 77,
+        "text": "- `tooluniverse-dose-response` — fit the single-agent IC50/EC50 curves that Loewe/CI/ZIP need."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-drug-synergy",
+    "to": "tooluniverse-drug-repurposing",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-drug-synergy/SKILL.md",
+        "line": 79,
+        "text": "- `tooluniverse-drug-repurposing` / `tooluniverse-network-pharmacology` — rationale for combinations."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-drug-synergy",
+    "to": "tooluniverse-network-pharmacology",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-drug-synergy/SKILL.md",
+        "line": 79,
+        "text": "- `tooluniverse-drug-repurposing` / `tooluniverse-network-pharmacology` — rationale for combinations."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-drug-target-validation",
+    "to": "tooluniverse-disease-research",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-drug-target-validation/SKILL.md",
+        "line": 51,
+        "text": "**Not for** (use other skills): general target biology (`tooluniverse-target-research`), drug compound profiling (`tooluniverse-drug-research`), variant interpretation (`tooluniverse-variant-interpretation`), disease research (`tooluniverse-disease-research`)."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-drug-target-validation",
+    "to": "tooluniverse-drug-research",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-drug-target-validation/SKILL.md",
+        "line": 51,
+        "text": "**Not for** (use other skills): general target biology (`tooluniverse-target-research`), drug compound profiling (`tooluniverse-drug-research`), variant interpretation (`tooluniverse-variant-interpretation`), disease research (`tooluniverse-disease-research`)."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-drug-target-validation",
+    "to": "tooluniverse-target-research",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-drug-target-validation/SKILL.md",
+        "line": 51,
+        "text": "**Not for** (use other skills): general target biology (`tooluniverse-target-research`), drug compound profiling (`tooluniverse-drug-research`), variant interpretation (`tooluniverse-variant-interpretation`), disease research (`tooluniverse-disease-research`)."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-drug-target-validation",
+    "to": "tooluniverse-variant-interpretation",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-drug-target-validation/SKILL.md",
+        "line": 51,
+        "text": "**Not for** (use other skills): general target biology (`tooluniverse-target-research`), drug compound profiling (`tooluniverse-drug-research`), variant interpretation (`tooluniverse-variant-interpretation`), disease research (`tooluniverse-disease-research`)."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-enzyme-kinetics",
+    "to": "tooluniverse-dose-response",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-enzyme-kinetics/SKILL.md",
+        "line": 88,
+        "text": "- `tooluniverse-dose-response` — IC50/EC50 (the Hill/4PL sibling for concentration-response)."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-enzyme-kinetics",
+    "to": "tooluniverse-statistical-modeling",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-enzyme-kinetics/SKILL.md",
+        "line": 89,
+        "text": "- `tooluniverse-statistical-modeling` — general nonlinear regression and model comparison."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-epigenomics-chromatin",
+    "to": "tooluniverse-epigenomics",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-epigenomics-chromatin/SKILL.md",
+        "line": 2,
+        "text": "name: tooluniverse-epigenomics-chromatin"
+      },
+      {
+        "path": "skills/tooluniverse-epigenomics-chromatin/SKILL.md",
+        "line": 3,
+        "text": "description: Histone-modification ChIP-seq, ATAC-seq accessibility, chromatin state, and TF binding analysis from ENCODE, Roadmap Epigenomics, ChIP-Atlas. Use for chromatin-state-by-tissue queries, TF-binding-by-region, regulatory landscape mapping, and ENCODE-cCRE annotations. For DNA methylation use tooluniverse-epigenomics; for RNA-seq use tooluniverse-rnaseq-deseq2."
+      },
+      {
+        "path": "skills/tooluniverse-epigenomics-chromatin/SKILL.md",
+        "line": 14,
+        "text": "- Methylation array data processing (CpG beta values, differential methylation) -> Use `tooluniverse-epigenomics`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-epigenomics-chromatin",
+    "to": "tooluniverse-gwas-snp-interpretation",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-epigenomics-chromatin/SKILL.md",
+        "line": 16,
+        "text": "- GWAS variant interpretation -> Use `tooluniverse-gwas-snp-interpretation`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-epigenomics-chromatin",
+    "to": "tooluniverse-rnaseq-deseq2",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-epigenomics-chromatin/SKILL.md",
+        "line": 3,
+        "text": "description: Histone-modification ChIP-seq, ATAC-seq accessibility, chromatin state, and TF binding analysis from ENCODE, Roadmap Epigenomics, ChIP-Atlas. Use for chromatin-state-by-tissue queries, TF-binding-by-region, regulatory landscape mapping, and ENCODE-cCRE annotations. For DNA methylation use tooluniverse-epigenomics; for RNA-seq use tooluniverse-rnaseq-deseq2."
+      },
+      {
+        "path": "skills/tooluniverse-epigenomics-chromatin/SKILL.md",
+        "line": 15,
+        "text": "- RNA-seq differential expression -> Use `tooluniverse-rnaseq-deseq2`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-epigenomics-chromatin",
+    "to": "tooluniverse-variant-analysis",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-epigenomics-chromatin/SKILL.md",
+        "line": 17,
+        "text": "- Variant functional annotation from VCF -> Use `tooluniverse-variant-analysis`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-fastq-qc",
+    "to": "tooluniverse-rnaseq-deseq2",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-fastq-qc/SKILL.md",
+        "line": 3,
+        "text": "description: FASTQ quality control and adapter/quality-trimming decisions with local NGS tools — run FastQC on raw reads, summarize a project with MultiQC, interpret per-base sequence quality, per-base N content, adapter content, overrepresented sequences, sequence duplication and GC content, and decide whether (and how) to trim with fastp / Cutadapt before downstream analysis. seqkit for read cou"
+      },
+      {
+        "path": "skills/tooluniverse-fastq-qc/SKILL.md",
+        "line": 39,
+        "text": "- Differential expression / DEG / fold-change analysis -> `tooluniverse-rnaseq-deseq2`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-fastq-qc",
+    "to": "tooluniverse-sequence-analysis",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-fastq-qc/SKILL.md",
+        "line": 3,
+        "text": "description: FASTQ quality control and adapter/quality-trimming decisions with local NGS tools — run FastQC on raw reads, summarize a project with MultiQC, interpret per-base sequence quality, per-base N content, adapter content, overrepresented sequences, sequence duplication and GC content, and decide whether (and how) to trim with fastp / Cutadapt before downstream analysis. seqkit for read cou"
+      },
+      {
+        "path": "skills/tooluniverse-fastq-qc/SKILL.md",
+        "line": 40,
+        "text": "- Read alignment, coverage depth, samtools, BWA -> `tooluniverse-sequence-analysis`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-fastq-qc",
+    "to": "tooluniverse-single-cell",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-fastq-qc/SKILL.md",
+        "line": 42,
+        "text": "- Single-cell / scRNA QC (per-cell metrics, scanpy) -> `tooluniverse-single-cell`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-fastq-qc",
+    "to": "tooluniverse-variant-analysis",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-fastq-qc/SKILL.md",
+        "line": 3,
+        "text": "description: FASTQ quality control and adapter/quality-trimming decisions with local NGS tools — run FastQC on raw reads, summarize a project with MultiQC, interpret per-base sequence quality, per-base N content, adapter content, overrepresented sequences, sequence duplication and GC content, and decide whether (and how) to trim with fastp / Cutadapt before downstream analysis. seqkit for read cou"
+      },
+      {
+        "path": "skills/tooluniverse-fastq-qc/SKILL.md",
+        "line": 41,
+        "text": "- Variant calling, VCF, VAF, mutation analysis -> `tooluniverse-variant-analysis`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-functional-genomics-screens",
+    "to": "tooluniverse-cell-line-profiling",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-functional-genomics-screens/SKILL.md",
+        "line": 52,
+        "text": "**DepMap per-cell-line Chronos scores**: `DepMap_get_gene_dependencies` returns metadata only. For the actual per-cell-line scores, use the bundled script in the cell-line-profiling skill — `tooluniverse-cell-line-profiling/scripts/depmap_gene_dependency.py` (downloads the current DepMap Public CRISPRGeneEffect.csv once, cached; queries by `gene` or `cell-line`):"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-gene-disease-association",
+    "to": "tooluniverse-disease-research",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-gene-disease-association/SKILL.md",
+        "line": 213,
+        "text": "For comprehensive disease reports: [tooluniverse-disease-research](../tooluniverse-disease-research/SKILL.md)"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-gene-disease-association",
+    "to": "tooluniverse-drug-target-validation",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-gene-disease-association/SKILL.md",
+        "line": 216,
+        "text": "For drug-target validation: [tooluniverse-drug-target-validation](../tooluniverse-drug-target-validation/SKILL.md)"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-gene-disease-association",
+    "to": "tooluniverse-rare-disease-diagnosis",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-gene-disease-association/SKILL.md",
+        "line": 214,
+        "text": "For rare disease diagnosis: [tooluniverse-rare-disease-diagnosis](../tooluniverse-rare-disease-diagnosis/SKILL.md)"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-gene-disease-association",
+    "to": "tooluniverse-variant-interpretation",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-gene-disease-association/SKILL.md",
+        "line": 215,
+        "text": "For variant interpretation: [tooluniverse-variant-interpretation](../tooluniverse-variant-interpretation/SKILL.md)"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-gene-enrichment",
+    "to": "tooluniverse-disease-research",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-gene-enrichment/SKILL.md",
+        "line": 173,
+        "text": "- Single gene function lookup → Use `tooluniverse-disease-research`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-gene-enrichment",
+    "to": "tooluniverse-multiomic-disease-characterization",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-gene-enrichment/SKILL.md",
+        "line": 172,
+        "text": "- Disease characterization → Use `tooluniverse-multiomic-disease-characterization`"
+      },
+      {
+        "path": "skills/tooluniverse-gene-enrichment/SKILL.md",
+        "line": 453,
+        "text": "For disease characterization: [tooluniverse-multiomic-disease-characterization](../tooluniverse-multiomic-disease-characterization/SKILL.md)"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-gene-enrichment",
+    "to": "tooluniverse-network-pharmacology",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-gene-enrichment/SKILL.md",
+        "line": 171,
+        "text": "- Network pharmacology / drug repurposing → Use `tooluniverse-network-pharmacology`"
+      },
+      {
+        "path": "skills/tooluniverse-gene-enrichment/SKILL.md",
+        "line": 452,
+        "text": "For network-level analysis: [tooluniverse-network-pharmacology](../tooluniverse-network-pharmacology/SKILL.md)"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-gene-enrichment",
+    "to": "tooluniverse-protein-interactions",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-gene-enrichment/SKILL.md",
+        "line": 175,
+        "text": "- Protein-protein interaction analysis only → Use `tooluniverse-protein-interactions`"
+      },
+      {
+        "path": "skills/tooluniverse-gene-enrichment/SKILL.md",
+        "line": 455,
+        "text": "For protein interactions: [tooluniverse-protein-interactions](../tooluniverse-protein-interactions/SKILL.md)"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-gene-enrichment",
+    "to": "tooluniverse-spatial-omics-analysis",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-gene-enrichment/SKILL.md",
+        "line": 174,
+        "text": "- Spatial omics analysis → Use `tooluniverse-spatial-omics-analysis`"
+      },
+      {
+        "path": "skills/tooluniverse-gene-enrichment/SKILL.md",
+        "line": 454,
+        "text": "For spatial omics: [tooluniverse-spatial-omics-analysis](../tooluniverse-spatial-omics-analysis/SKILL.md)"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-gpcr-structural-pharmacology",
+    "to": "tooluniverse-antibody-engineering",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-gpcr-structural-pharmacology/SKILL.md",
+        "line": 253,
+        "text": "| Antibody engineering | SAbDab structure + CDR data | `tooluniverse-antibody-engineering` for optimization |"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-gpcr-structural-pharmacology",
+    "to": "tooluniverse-binder-discovery",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-gpcr-structural-pharmacology/SKILL.md",
+        "line": 252,
+        "text": "| GPCR drug discovery | Receptor/ligand/structure data | `tooluniverse-binder-discovery` for virtual screening |"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-gpcr-structural-pharmacology",
+    "to": "tooluniverse-drug-target-validation",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-gpcr-structural-pharmacology/SKILL.md",
+        "line": 255,
+        "text": "| Target validation | GPCR expression, ligand data | `tooluniverse-drug-target-validation` |"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-gpcr-structural-pharmacology",
+    "to": "tooluniverse-protein-structure-retrieval",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-gpcr-structural-pharmacology/SKILL.md",
+        "line": 256,
+        "text": "| PDB structure analysis | PDBePISA interfaces | `tooluniverse-protein-structure-retrieval` for RCSB/PDBe |"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-gpcr-structural-pharmacology",
+    "to": "tooluniverse-variant-functional-annotation",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-gpcr-structural-pharmacology/SKILL.md",
+        "line": 254,
+        "text": "| Variant impact on GPCR | GPCRdb mutation effects | `tooluniverse-variant-functional-annotation` for ACMG |"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-gwas-drug-discovery",
+    "to": "tooluniverse-drug-repurposing",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-gwas-drug-discovery/SKILL.md",
+        "line": 213,
+        "text": "- Related skills: tooluniverse-drug-repurposing, disease-intelligence-gatherer, tooluniverse-sdk"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-gwas-trait-to-gene",
+    "to": "tooluniverse-data-wrangling",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-gwas-trait-to-gene/SKILL.md",
+        "line": 238,
+        "text": "See `tooluniverse-data-wrangling` skill for pagination, bulk download, and format parsing patterns."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-hla-immunogenomics",
+    "to": "tooluniverse-drug-target-validation",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-hla-immunogenomics/SKILL.md",
+        "line": 41,
+        "text": "**Not this skill**: For full neoantigen prediction pipelines, use `tooluniverse-immunotherapy-response-prediction`. For general gene function lookup, use `tooluniverse-drug-target-validation`."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-hla-immunogenomics",
+    "to": "tooluniverse-immunotherapy-response-prediction",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-hla-immunogenomics/SKILL.md",
+        "line": 41,
+        "text": "**Not this skill**: For full neoantigen prediction pipelines, use `tooluniverse-immunotherapy-response-prediction`. For general gene function lookup, use `tooluniverse-drug-target-validation`."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-immune-repertoire-analysis",
+    "to": "tooluniverse-rnaseq-deseq2",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-immune-repertoire-analysis/SKILL.md",
+        "line": 119,
+        "text": "- `tooluniverse-rnaseq-deseq2` - Bulk RNA-seq analysis"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-immune-repertoire-analysis",
+    "to": "tooluniverse-single-cell",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-immune-repertoire-analysis/SKILL.md",
+        "line": 118,
+        "text": "- `tooluniverse-single-cell` - Single-cell transcriptomics"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-immune-repertoire-analysis",
+    "to": "tooluniverse-variant-analysis",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-immune-repertoire-analysis/SKILL.md",
+        "line": 120,
+        "text": "- `tooluniverse-variant-analysis` - Somatic hypermutation analysis (BCR)"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-infectious-disease",
+    "to": "tooluniverse-microbial-genome-characterization",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-infectious-disease/SKILL.md",
+        "line": 138,
+        "text": "**Genome assembly availability and QC**: After classifying the pathogen, use `NCBIDatasets_list_genomes_by_taxon` (params `taxon` as tax_id, `limit`, `reference_only`) to find the reference genome, `NCBIDatasets_get_genome_assembly` (param `accession`, e.g. \"GCF_000005845.2\") for assembly metrics (length, N50, GC%, contig/chromosome counts), and `NCBIDatasets_get_sequence_reports` (param `accessio"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-inorganic-physical-chemistry",
+    "to": "tooluniverse-organic-chemistry",
+    "relation": "required",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-inorganic-physical-chemistry/SKILL.md",
+        "line": 3,
+        "text": "description: Inorganic chemistry, physical chemistry, and materials science — crystal structures, coordination chemistry, lattice parameters, thermodynamic properties, electronic structure. Use for unit cell volume calculations, coordination geometry, materials property estimation, and inorganic-mechanism reasoning. Complementary to tooluniverse-organic-chemistry."
+      },
+      {
+        "path": "skills/tooluniverse-inorganic-physical-chemistry/SKILL.md",
+        "line": 22,
+        "text": "3. **Preferred**: Use `CrystalStructure_validate` tool (via MCP/SDK). **Fallback**: `python3 skills/tooluniverse-organic-chemistry/scripts/crystal_validator.py --a X --b Y --c Z --alpha A --beta B --gamma G --Z N --MW M --density D`"
+      },
+      {
+        "path": "skills/tooluniverse-inorganic-physical-chemistry/SKILL.md",
+        "line": 41,
+        "text": "3. Use `python3 skills/tooluniverse-organic-chemistry/scripts/chemistry_facts.py point_groups` for point group lookup"
+      },
+      {
+        "path": "skills/tooluniverse-inorganic-physical-chemistry/SKILL.md",
+        "line": 81,
+        "text": "- **For peak counting**: Draw the structure, identify all symmetry operations, group equivalent H atoms. Use `python3 skills/tooluniverse-organic-chemistry/scripts/chemistry_facts.py` for reference data."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-kegg-disease-drug",
+    "to": "tooluniverse-adverse-event-detection",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-kegg-disease-drug/SKILL.md",
+        "line": 157,
+        "text": "- **Drug safety**: Use `tooluniverse-adverse-event-detection` for FAERS data"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-kegg-disease-drug",
+    "to": "tooluniverse-cancer-variant-interpretation",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-kegg-disease-drug/SKILL.md",
+        "line": 156,
+        "text": "- **Clinical variants**: Use `tooluniverse-cancer-variant-interpretation` for CIViC/ClinVar"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-kegg-disease-drug",
+    "to": "tooluniverse-drug-mechanism-research",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-kegg-disease-drug/SKILL.md",
+        "line": 155,
+        "text": "- **Drug mechanisms**: Use `tooluniverse-drug-mechanism-research` for ChEMBL/DailyMed MOA"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-kegg-disease-drug",
+    "to": "tooluniverse-systems-biology",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-kegg-disease-drug/SKILL.md",
+        "line": 154,
+        "text": "- **Pathway details**: Use `tooluniverse-systems-biology` for Reactome/WikiPathways cross-ref"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-lipidomics",
+    "to": "tooluniverse-admet-prediction",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-lipidomics/SKILL.md",
+        "line": 35,
+        "text": "**Not this skill**: For general metabolomics (amino acids, sugars, organic acids), use `tooluniverse-metabolomics`. For drug ADMET properties, use `tooluniverse-admet-prediction`."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-lipidomics",
+    "to": "tooluniverse-metabolomics",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-lipidomics/SKILL.md",
+        "line": 35,
+        "text": "**Not this skill**: For general metabolomics (amino acids, sugars, organic acids), use `tooluniverse-metabolomics`. For drug ADMET properties, use `tooluniverse-admet-prediction`."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-literature-deep-research",
+    "to": "tooluniverse-disease-research",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-literature-deep-research/SKILL.md",
+        "line": 67,
+        "text": "- Disease profile: `tooluniverse-disease-research`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-literature-deep-research",
+    "to": "tooluniverse-drug-research",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-literature-deep-research/SKILL.md",
+        "line": 66,
+        "text": "- Drug profile: `tooluniverse-drug-research`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-literature-deep-research",
+    "to": "tooluniverse-target-research",
+    "relation": "required",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-literature-deep-research/SKILL.md",
+        "line": 65,
+        "text": "- Gene/protein deep-dive: `tooluniverse-target-research`"
+      },
+      {
+        "path": "skills/tooluniverse-literature-deep-research/SKILL.md",
+        "line": 91,
+        "text": "GPCR targets: delegate to `tooluniverse-target-research`."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-meta-analysis",
+    "to": "tooluniverse-gwas-finemapping",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-meta-analysis/SKILL.md",
+        "line": 114,
+        "text": "- `tooluniverse-gwas-study-explorer` / `tooluniverse-gwas-finemapping` — GWAS-specific multi-cohort analysis."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-meta-analysis",
+    "to": "tooluniverse-gwas-study-explorer",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-meta-analysis/SKILL.md",
+        "line": 114,
+        "text": "- `tooluniverse-gwas-study-explorer` / `tooluniverse-gwas-finemapping` — GWAS-specific multi-cohort analysis."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-meta-analysis",
+    "to": "tooluniverse-literature-deep-research",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-meta-analysis/SKILL.md",
+        "line": 9,
+        "text": "Pool quantitative results from **multiple studies** into one estimate, and judge how consistent the studies are. This is the statistical half of a systematic review (the literature-collection half is `tooluniverse-literature-deep-research`)."
+      },
+      {
+        "path": "skills/tooluniverse-meta-analysis/SKILL.md",
+        "line": 17,
+        "text": "Do NOT use it to *find* the studies — use `tooluniverse-literature-deep-research` / the literature tools for that, then bring the extracted numbers here. Before trusting any input study, consider checking it with `Crossref_check_retraction`."
+      },
+      {
+        "path": "skills/tooluniverse-meta-analysis/SKILL.md",
+        "line": 112,
+        "text": "- `tooluniverse-literature-deep-research` — find and grade the studies to feed in."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-meta-analysis",
+    "to": "tooluniverse-statistical-modeling",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-meta-analysis/SKILL.md",
+        "line": 113,
+        "text": "- `tooluniverse-statistical-modeling` — single-study regression, Cox, ORs (see `references/cox_regression.md` for HR extraction)."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-metabolomics-analysis",
+    "to": "tooluniverse-gene-enrichment",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-metabolomics-analysis/SKILL.md",
+        "line": 150,
+        "text": "| `tooluniverse-gene-enrichment` | Pathway enrichment | Phase 6 |"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-metabolomics-analysis",
+    "to": "tooluniverse-multi-omics-integration",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-metabolomics-analysis/SKILL.md",
+        "line": 153,
+        "text": "| `tooluniverse-multi-omics-integration` | Comprehensive integration | Phase 7 |"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-metabolomics-analysis",
+    "to": "tooluniverse-proteomics-analysis",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-metabolomics-analysis/SKILL.md",
+        "line": 152,
+        "text": "| `tooluniverse-proteomics-analysis` | Protein levels for integration | Phase 7 |"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-metabolomics-analysis",
+    "to": "tooluniverse-rnaseq-deseq2",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-metabolomics-analysis/SKILL.md",
+        "line": 151,
+        "text": "| `tooluniverse-rnaseq-deseq2` | Enzyme expression for integration | Phase 7 |"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-microbial-genome-characterization",
+    "to": "tooluniverse-comparative-genomics",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-microbial-genome-characterization/SKILL.md",
+        "line": 3,
+        "text": "description: Genome-ASSEMBLY discovery, QC, and replicon mapping for any organism (bacteria, archaea, fungi, and beyond) using NCBI Datasets. Resolves an organism name or taxid to assemblies, picks the reference/representative or best-quality assembly, pulls assembly QC metrics (total length, contig/scaffold N50, contig count, GC%, assembly level, RefSeq category), enumerates chromosomes and plasm"
+      },
+      {
+        "path": "skills/tooluniverse-microbial-genome-characterization/SKILL.md",
+        "line": 34,
+        "text": "- Gene-level orthology, synteny, conservation → `tooluniverse-comparative-genomics`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-microbial-genome-characterization",
+    "to": "tooluniverse-plant-genomics",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-microbial-genome-characterization/SKILL.md",
+        "line": 3,
+        "text": "description: Genome-ASSEMBLY discovery, QC, and replicon mapping for any organism (bacteria, archaea, fungi, and beyond) using NCBI Datasets. Resolves an organism name or taxid to assemblies, picks the reference/representative or best-quality assembly, pulls assembly QC metrics (total length, contig/scaffold N50, contig count, GC%, assembly level, RefSeq category), enumerates chromosomes and plasm"
+      },
+      {
+        "path": "skills/tooluniverse-microbial-genome-characterization/SKILL.md",
+        "line": 35,
+        "text": "- Plant gene structure / annotation → `tooluniverse-plant-genomics`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-microbiome-research",
+    "to": "tooluniverse-metagenomics-analysis",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-microbiome-research/SKILL.md",
+        "line": 3,
+        "text": "description: Microbiome research using MGnify, GTDB, ENA, OLS (ENVO biomes), and EuropePMC. Covers study discovery, taxonomic profiling, host-microbe interaction analysis, and biome-by-condition queries. Use for microbiome study selection, organism-environment associations, and clinical-microbiome literature review. Distinct from analytical workflow (use tooluniverse-metagenomics-analysis for that"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-model-organism-genetics",
+    "to": "tooluniverse-drug-target-validation",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-model-organism-genetics/SKILL.md",
+        "line": 14,
+        "text": "**Not for**: human variant interpretation (`tooluniverse-variant-analysis`), drug target validation (`tooluniverse-drug-target-validation`), human disease characterization (`tooluniverse-multiomic-disease-characterization`)."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-model-organism-genetics",
+    "to": "tooluniverse-multiomic-disease-characterization",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-model-organism-genetics/SKILL.md",
+        "line": 14,
+        "text": "**Not for**: human variant interpretation (`tooluniverse-variant-analysis`), drug target validation (`tooluniverse-drug-target-validation`), human disease characterization (`tooluniverse-multiomic-disease-characterization`)."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-model-organism-genetics",
+    "to": "tooluniverse-variant-analysis",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-model-organism-genetics/SKILL.md",
+        "line": 14,
+        "text": "**Not for**: human variant interpretation (`tooluniverse-variant-analysis`), drug target validation (`tooluniverse-drug-target-validation`), human disease characterization (`tooluniverse-multiomic-disease-characterization`)."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-molecular-cloning",
+    "to": "tooluniverse-primer-design",
+    "relation": "required",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-molecular-cloning/SKILL.md",
+        "line": 3,
+        "text": "description: Molecular cloning assembly design — Gibson Assembly (overlap design for seamless multi-fragment joining) and Golden Gate Assembly (Type IIS / BsaI / BbsI design with unique 4-bp fusion overhangs). Use when you need to plan how to join DNA fragments into a construct, design assembly overlaps/overhangs, or decide between cloning methods. Covers the domestication (internal-site removal),"
+      },
+      {
+        "path": "skills/tooluniverse-molecular-cloning/SKILL.md",
+        "line": 29,
+        "text": "For each fragment it returns `left_overlap`, `right_overlap`, and `with_overlaps` (the fragment extended with the homology arms you'd add to your PCR primers — hand these to `tooluniverse-primer-design`)."
+      },
+      {
+        "path": "skills/tooluniverse-molecular-cloning/SKILL.md",
+        "line": 64,
+        "text": "- **Generating the fragments** still needs primers with the overlaps/overhangs appended — design and QC those in `tooluniverse-primer-design` (and BLAST for specificity)."
+      },
+      {
+        "path": "skills/tooluniverse-molecular-cloning/SKILL.md",
+        "line": 72,
+        "text": "- `tooluniverse-primer-design` — design the PCR primers (with homology arms / Type IIS tails) to make the fragments."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-molecular-cloning",
+    "to": "tooluniverse-sequence-analysis",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-molecular-cloning/SKILL.md",
+        "line": 73,
+        "text": "- `tooluniverse-sequence-analysis` — handle the input sequences."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-multi-omics-integration",
+    "to": "tooluniverse-epigenomics",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-multi-omics-integration/SKILL.md",
+        "line": 139,
+        "text": "| `tooluniverse-epigenomics` | Methylation, ChIP-seq | 1, 4 |"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-multi-omics-integration",
+    "to": "tooluniverse-expression-data-retrieval",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-multi-omics-integration/SKILL.md",
+        "line": 143,
+        "text": "| `tooluniverse-expression-data-retrieval` | Public data retrieval | 1 |"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-multi-omics-integration",
+    "to": "tooluniverse-gene-enrichment",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-multi-omics-integration/SKILL.md",
+        "line": 142,
+        "text": "| `tooluniverse-gene-enrichment` | Pathway enrichment | 6 |"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-multi-omics-integration",
+    "to": "tooluniverse-protein-interactions",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-multi-omics-integration/SKILL.md",
+        "line": 141,
+        "text": "| `tooluniverse-protein-interactions` | Protein network context | 6 |"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-multi-omics-integration",
+    "to": "tooluniverse-rnaseq-deseq2",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-multi-omics-integration/SKILL.md",
+        "line": 138,
+        "text": "| `tooluniverse-rnaseq-deseq2` | RNA-seq analysis | 1, 4 |"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-multi-omics-integration",
+    "to": "tooluniverse-target-research",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-multi-omics-integration/SKILL.md",
+        "line": 144,
+        "text": "| `tooluniverse-target-research` | Gene/protein annotation | 3, 8 |"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-multi-omics-integration",
+    "to": "tooluniverse-variant-analysis",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-multi-omics-integration/SKILL.md",
+        "line": 140,
+        "text": "| `tooluniverse-variant-analysis` | CNV/SNV processing | 1, 3, 4 |"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-multiomic-disease-characterization",
+    "to": "tooluniverse-adverse-event-detection",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-multiomic-disease-characterization/SKILL.md",
+        "line": 51,
+        "text": "- Drug safety profiling -> Use `tooluniverse-adverse-event-detection`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-multiomic-disease-characterization",
+    "to": "tooluniverse-disease-research",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-multiomic-disease-characterization/SKILL.md",
+        "line": 52,
+        "text": "- General disease overview -> Use `tooluniverse-disease-research`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-multiomic-disease-characterization",
+    "to": "tooluniverse-drug-target-validation",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-multiomic-disease-characterization/SKILL.md",
+        "line": 50,
+        "text": "- Single gene/target validation -> Use `tooluniverse-drug-target-validation`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-multiomic-disease-characterization",
+    "to": "tooluniverse-systems-biology",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-multiomic-disease-characterization/SKILL.md",
+        "line": 55,
+        "text": "- Pathway-only analysis -> Use `tooluniverse-systems-biology`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-multiomic-disease-characterization",
+    "to": "tooluniverse-variant-interpretation",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-multiomic-disease-characterization/SKILL.md",
+        "line": 53,
+        "text": "- Variant interpretation -> Use `tooluniverse-variant-interpretation`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-natural-product-dereplication",
+    "to": "tooluniverse-chemical-compound-retrieval",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-natural-product-dereplication/SKILL.md",
+        "line": 3,
+        "text": "description: Dereplicate a putative natural product and assign its chemical taxonomy. Use to answer \"is [compound] a known natural product\", \"what microbe/organism produces [compound]\", \"what chemical class is [compound]\", \"dereplicate this metabolite (by formula/exact mass/InChIKey/SMILES)\", or \"classify this molecule into ChemOnt\". Searches NPAtlas for known microbial natural products (producing"
+      },
+      {
+        "path": "skills/tooluniverse-natural-product-dereplication/SKILL.md",
+        "line": 157,
+        "text": "- General drug/compound **identity & ADMET**, properties, bioassays → **tooluniverse-chemical-compound-retrieval** / **tooluniverse-small-molecule-discovery**."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-natural-product-dereplication",
+    "to": "tooluniverse-metabolomics",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-natural-product-dereplication/SKILL.md",
+        "line": 3,
+        "text": "description: Dereplicate a putative natural product and assign its chemical taxonomy. Use to answer \"is [compound] a known natural product\", \"what microbe/organism produces [compound]\", \"what chemical class is [compound]\", \"dereplicate this metabolite (by formula/exact mass/InChIKey/SMILES)\", or \"classify this molecule into ChemOnt\". Searches NPAtlas for known microbial natural products (producing"
+      },
+      {
+        "path": "skills/tooluniverse-natural-product-dereplication/SKILL.md",
+        "line": 158,
+        "text": "- Metabolomics **pathway/enrichment** analysis → **tooluniverse-metabolomics** skills."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-natural-product-dereplication",
+    "to": "tooluniverse-small-molecule-discovery",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-natural-product-dereplication/SKILL.md",
+        "line": 3,
+        "text": "description: Dereplicate a putative natural product and assign its chemical taxonomy. Use to answer \"is [compound] a known natural product\", \"what microbe/organism produces [compound]\", \"what chemical class is [compound]\", \"dereplicate this metabolite (by formula/exact mass/InChIKey/SMILES)\", or \"classify this molecule into ChemOnt\". Searches NPAtlas for known microbial natural products (producing"
+      },
+      {
+        "path": "skills/tooluniverse-natural-product-dereplication/SKILL.md",
+        "line": 157,
+        "text": "- General drug/compound **identity & ADMET**, properties, bioassays → **tooluniverse-chemical-compound-retrieval** / **tooluniverse-small-molecule-discovery**."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-network-pharmacology",
+    "to": "tooluniverse-adverse-event-detection",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-network-pharmacology/SKILL.md",
+        "line": 52,
+        "text": "- Adverse event detection only -> `tooluniverse-adverse-event-detection`"
+      },
+      {
+        "path": "skills/tooluniverse-network-pharmacology/SKILL.md",
+        "line": 203,
+        "text": "- [tooluniverse-adverse-event-detection](../tooluniverse-adverse-event-detection/SKILL.md) - Adverse event detection"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-network-pharmacology",
+    "to": "tooluniverse-drug-repurposing",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-network-pharmacology/SKILL.md",
+        "line": 50,
+        "text": "- Simple drug repurposing without network analysis -> `tooluniverse-drug-repurposing`"
+      },
+      {
+        "path": "skills/tooluniverse-network-pharmacology/SKILL.md",
+        "line": 201,
+        "text": "- [tooluniverse-drug-repurposing](../tooluniverse-drug-repurposing/SKILL.md) - Drug repurposing without network analysis"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-network-pharmacology",
+    "to": "tooluniverse-drug-target-validation",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-network-pharmacology/SKILL.md",
+        "line": 51,
+        "text": "- Single target validation -> `tooluniverse-drug-target-validation`"
+      },
+      {
+        "path": "skills/tooluniverse-network-pharmacology/SKILL.md",
+        "line": 202,
+        "text": "- [tooluniverse-drug-target-validation](../tooluniverse-drug-target-validation/SKILL.md) - Target validation"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-network-pharmacology",
+    "to": "tooluniverse-protein-interactions",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-network-pharmacology/SKILL.md",
+        "line": 205,
+        "text": "- [tooluniverse-protein-interactions](../tooluniverse-protein-interactions/SKILL.md) - Protein interactions"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-network-pharmacology",
+    "to": "tooluniverse-systems-biology",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-network-pharmacology/SKILL.md",
+        "line": 204,
+        "text": "- [tooluniverse-systems-biology](../tooluniverse-systems-biology/SKILL.md) - Systems biology"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-noncoding-rna",
+    "to": "tooluniverse-crispr-screen-analysis",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-noncoding-rna/SKILL.md",
+        "line": 34,
+        "text": "**Not this skill**: For mRNA expression analysis, use `tooluniverse-rnaseq-deseq2`. For CRISPR screens, use `tooluniverse-crispr-screen-analysis`."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-noncoding-rna",
+    "to": "tooluniverse-rnaseq-deseq2",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-noncoding-rna/SKILL.md",
+        "line": 34,
+        "text": "**Not this skill**: For mRNA expression analysis, use `tooluniverse-rnaseq-deseq2`. For CRISPR screens, use `tooluniverse-crispr-screen-analysis`."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-pathway-disease-genetics",
+    "to": "tooluniverse-drug-target-validation",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-pathway-disease-genetics/SKILL.md",
+        "line": 161,
+        "text": "- **tooluniverse-drug-target-validation**: Deep target validation"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-pathway-disease-genetics",
+    "to": "tooluniverse-gene-enrichment",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-pathway-disease-genetics/SKILL.md",
+        "line": 160,
+        "text": "- **tooluniverse-gene-enrichment**: Detailed enrichment analysis"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-pathway-disease-genetics",
+    "to": "tooluniverse-gwas-trait-to-gene",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-pathway-disease-genetics/SKILL.md",
+        "line": 159,
+        "text": "- **tooluniverse-gwas-trait-to-gene**: Focused GWAS-to-gene mapping"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-pathway-disease-genetics",
+    "to": "tooluniverse-network-pharmacology",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-pathway-disease-genetics/SKILL.md",
+        "line": 162,
+        "text": "- **tooluniverse-network-pharmacology**: Network-level drug analysis"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-pathway-disease-genetics",
+    "to": "tooluniverse-variant-functional-annotation",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-pathway-disease-genetics/SKILL.md",
+        "line": 163,
+        "text": "- **tooluniverse-variant-functional-annotation**: Detailed variant interpretation"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-pharmacokinetics",
+    "to": "tooluniverse-admet-prediction",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-pharmacokinetics/SKILL.md",
+        "line": 3,
+        "text": "description: Pharmacokinetic (PK) analysis of concentration-time data — non-compartmental analysis (NCA) for Cmax, Tmax, AUC (0-t and 0-∞), terminal half-life, clearance (CL), volume of distribution (Vd), MRT, and absolute bioavailability (F). Also one-compartment fitting. Use when you have plasma/serum drug concentrations over time after a dose and need PK parameters, or to compute bioavailabilit"
+      },
+      {
+        "path": "skills/tooluniverse-pharmacokinetics/SKILL.md",
+        "line": 17,
+        "text": "This is **measured-data** PK. For predicting ADMET properties from a chemical structure, use `tooluniverse-admet-prediction`."
+      },
+      {
+        "path": "skills/tooluniverse-pharmacokinetics/SKILL.md",
+        "line": 85,
+        "text": "- `tooluniverse-admet-prediction` — predict ADME properties from structure (no measured data)."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-pharmacokinetics",
+    "to": "tooluniverse-dose-response",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-pharmacokinetics/SKILL.md",
+        "line": 86,
+        "text": "- `tooluniverse-dose-response` — IC50/EC50 potency from concentration-response (not time-course)."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-pharmacokinetics",
+    "to": "tooluniverse-statistical-modeling",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-pharmacokinetics/SKILL.md",
+        "line": 87,
+        "text": "- `tooluniverse-statistical-modeling` — compare PK parameters across groups."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-phewas",
+    "to": "tooluniverse-gwas-finemapping",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-phewas/SKILL.md",
+        "line": 3,
+        "text": "description: Cross-ancestry / cross-biobank phenome-wide association (PheWAS) and replication. Given ONE variant (rsID) or ONE gene, look up every phenotype it associates with across European/UK (UKB-TOPMed), Finnish (FinnGen), Japanese (BioBank Japan), and Taiwanese (TPMI) biobanks, plus exome-wide gene-burden PheWAS (Genebass), then judge whether an association replicates across ancestries or is"
+      },
+      {
+        "path": "skills/tooluniverse-phewas/SKILL.md",
+        "line": 100,
+        "text": "- **No automatic meta-analysis.** This skill compares biobanks qualitatively (replication, direction, power). For a formal cross-ancestry meta-analysis or fine-mapping, hand off to dedicated tooling (`tooluniverse-mendelian-randomization`, `tooluniverse-gwas-finemapping`)."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-phewas",
+    "to": "tooluniverse-gwas-snp-interpretation",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-phewas/SKILL.md",
+        "line": 3,
+        "text": "description: Cross-ancestry / cross-biobank phenome-wide association (PheWAS) and replication. Given ONE variant (rsID) or ONE gene, look up every phenotype it associates with across European/UK (UKB-TOPMed), Finnish (FinnGen), Japanese (BioBank Japan), and Taiwanese (TPMI) biobanks, plus exome-wide gene-burden PheWAS (Genebass), then judge whether an association replicates across ancestries or is"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-phewas",
+    "to": "tooluniverse-mendelian-randomization",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-phewas/SKILL.md",
+        "line": 100,
+        "text": "- **No automatic meta-analysis.** This skill compares biobanks qualitatively (replication, direction, power). For a formal cross-ancestry meta-analysis or fine-mapping, hand off to dedicated tooling (`tooluniverse-mendelian-randomization`, `tooluniverse-gwas-finemapping`)."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-plant-genomics",
+    "to": "tooluniverse-phylogenetics",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-plant-genomics/SKILL.md",
+        "line": 35,
+        "text": "**Not this skill**: For general pathway analysis (human/mouse), use `tooluniverse-systems-biology`. For phylogenetics, use `tooluniverse-phylogenetics`."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-plant-genomics",
+    "to": "tooluniverse-systems-biology",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-plant-genomics/SKILL.md",
+        "line": 35,
+        "text": "**Not this skill**: For general pathway analysis (human/mouse), use `tooluniverse-systems-biology`. For phylogenetics, use `tooluniverse-phylogenetics`."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-population-genetics-1000genomes",
+    "to": "tooluniverse-gwas-finemapping",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-population-genetics-1000genomes/SKILL.md",
+        "line": 30,
+        "text": "- GWAS fine-mapping -> Use `tooluniverse-gwas-finemapping`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-population-genetics-1000genomes",
+    "to": "tooluniverse-population-genetics",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-population-genetics-1000genomes/SKILL.md",
+        "line": 2,
+        "text": "name: tooluniverse-population-genetics-1000genomes"
+      },
+      {
+        "path": "skills/tooluniverse-population-genetics-1000genomes/SKILL.md",
+        "line": 28,
+        "text": "- Allele frequencies from gnomAD -> Use `tooluniverse-population-genetics`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-population-genetics-1000genomes",
+    "to": "tooluniverse-variant-interpretation",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-population-genetics-1000genomes/SKILL.md",
+        "line": 29,
+        "text": "- ClinVar / OMIM variant interpretation -> Use `tooluniverse-variant-interpretation`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-precision-medicine-stratification",
+    "to": "tooluniverse-adverse-event-detection",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-precision-medicine-stratification/SKILL.md",
+        "line": 51,
+        "text": "- Drug safety profiling only -> `tooluniverse-adverse-event-detection`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-precision-medicine-stratification",
+    "to": "tooluniverse-clinical-trial-matching",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-precision-medicine-stratification/SKILL.md",
+        "line": 53,
+        "text": "- Clinical trial search only -> `tooluniverse-clinical-trial-matching`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-precision-medicine-stratification",
+    "to": "tooluniverse-drug-drug-interaction",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-precision-medicine-stratification/SKILL.md",
+        "line": 54,
+        "text": "- Drug-drug interaction only -> `tooluniverse-drug-drug-interaction`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-precision-medicine-stratification",
+    "to": "tooluniverse-drug-target-validation",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-precision-medicine-stratification/SKILL.md",
+        "line": 52,
+        "text": "- Target validation -> `tooluniverse-drug-target-validation`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-precision-medicine-stratification",
+    "to": "tooluniverse-immunotherapy-response-prediction",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-precision-medicine-stratification/SKILL.md",
+        "line": 50,
+        "text": "- Immunotherapy-specific prediction -> `tooluniverse-immunotherapy-response-prediction`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-precision-medicine-stratification",
+    "to": "tooluniverse-polygenic-risk-score",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-precision-medicine-stratification/SKILL.md",
+        "line": 55,
+        "text": "- PRS calculation only -> `tooluniverse-polygenic-risk-score`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-precision-medicine-stratification",
+    "to": "tooluniverse-variant-interpretation",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-precision-medicine-stratification/SKILL.md",
+        "line": 49,
+        "text": "- Single variant interpretation -> `tooluniverse-variant-interpretation`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-precision-oncology",
+    "to": "tooluniverse-drug-drug-interaction",
+    "relation": "required",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-precision-oncology/SKILL.md",
+        "line": 155,
+        "text": "For CYP interaction with cancer drugs, run: `python3 skills/tooluniverse-drug-drug-interaction/scripts/pharmacology_ref.py --type cyp_substrate --drug drugname`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-primer-design",
+    "to": "tooluniverse-dose-response",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-primer-design/SKILL.md",
+        "line": 79,
+        "text": "- `tooluniverse-enzyme-kinetics` / `tooluniverse-dose-response` — other quantitative assay analyses."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-primer-design",
+    "to": "tooluniverse-enzyme-kinetics",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-primer-design/SKILL.md",
+        "line": 79,
+        "text": "- `tooluniverse-enzyme-kinetics` / `tooluniverse-dose-response` — other quantitative assay analyses."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-primer-design",
+    "to": "tooluniverse-sequence-analysis",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-primer-design/SKILL.md",
+        "line": 78,
+        "text": "- `tooluniverse-sequence-analysis` — upstream sequence handling (FASTQ, alignment, coverage)."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-product-safety-surveillance",
+    "to": "tooluniverse-adverse-event-detection",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-product-safety-surveillance/SKILL.md",
+        "line": 18,
+        "text": "`tooluniverse-pharmacovigilance` / `tooluniverse-adverse-event-detection`."
+      },
+      {
+        "path": "skills/tooluniverse-product-safety-surveillance/SKILL.md",
+        "line": 36,
+        "text": "5. **Stay in scope.** If the request is drug-AE signal detection (PRR/ROR/IC), STOP and point to `tooluniverse-pharmacovigilance` / `tooluniverse-adverse-event-detection`."
+      },
+      {
+        "path": "skills/tooluniverse-product-safety-surveillance/SKILL.md",
+        "line": 53,
+        "text": "- Drug adverse-event SIGNAL detection / disproportionality (PRR, ROR, IC) → `tooluniverse-pharmacovigilance` or `tooluniverse-adverse-event-detection`"
+      },
+      {
+        "path": "skills/tooluniverse-product-safety-surveillance/SKILL.md",
+        "line": 230,
+        "text": "- **This skill does not compute signal statistics** (PRR/ROR/IC). For drug-AE disproportionality use `tooluniverse-pharmacovigilance` / `tooluniverse-adverse-event-detection`."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-product-safety-surveillance",
+    "to": "tooluniverse-pharmacovigilance",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-product-safety-surveillance/SKILL.md",
+        "line": 18,
+        "text": "`tooluniverse-pharmacovigilance` / `tooluniverse-adverse-event-detection`."
+      },
+      {
+        "path": "skills/tooluniverse-product-safety-surveillance/SKILL.md",
+        "line": 36,
+        "text": "5. **Stay in scope.** If the request is drug-AE signal detection (PRR/ROR/IC), STOP and point to `tooluniverse-pharmacovigilance` / `tooluniverse-adverse-event-detection`."
+      },
+      {
+        "path": "skills/tooluniverse-product-safety-surveillance/SKILL.md",
+        "line": 53,
+        "text": "- Drug adverse-event SIGNAL detection / disproportionality (PRR, ROR, IC) → `tooluniverse-pharmacovigilance` or `tooluniverse-adverse-event-detection`"
+      },
+      {
+        "path": "skills/tooluniverse-product-safety-surveillance/SKILL.md",
+        "line": 230,
+        "text": "- **This skill does not compute signal statistics** (PRR/ROR/IC). For drug-AE disproportionality use `tooluniverse-pharmacovigilance` / `tooluniverse-adverse-event-detection`."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-protein-lof-mechanism",
+    "to": "tooluniverse-cancer-variant-interpretation",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-protein-lof-mechanism/SKILL.md",
+        "line": 32,
+        "text": "- Cancer-specific drivers → `tooluniverse-cancer-variant-interpretation`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-protein-lof-mechanism",
+    "to": "tooluniverse-protein-sae-variant-interpretation",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-protein-lof-mechanism/SKILL.md",
+        "line": 31,
+        "text": "- Just the SAE feature disruption (without full synthesis) → `tooluniverse-protein-sae-variant-interpretation`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-protein-lof-mechanism",
+    "to": "tooluniverse-variant-interpretation",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-protein-lof-mechanism/SKILL.md",
+        "line": 30,
+        "text": "- ACMG pathogenicity classification → `tooluniverse-variant-interpretation`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-protein-lof-mechanism",
+    "to": "tooluniverse-variant-to-mechanism",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-protein-lof-mechanism/SKILL.md",
+        "line": 29,
+        "text": "- Non-coding / regulatory variants → `tooluniverse-variant-to-mechanism`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-protein-sae-variant-interpretation",
+    "to": "tooluniverse-cancer-variant-interpretation",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-protein-sae-variant-interpretation/SKILL.md",
+        "line": 25,
+        "text": "- Cancer-specific variant interpretation → `tooluniverse-cancer-variant-interpretation`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-protein-sae-variant-interpretation",
+    "to": "tooluniverse-gene-disease-association",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-protein-sae-variant-interpretation/SKILL.md",
+        "line": 24,
+        "text": "- Variant-to-disease association without mechanism → `tooluniverse-gene-disease-association`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-protein-sae-variant-interpretation",
+    "to": "tooluniverse-variant-interpretation",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-protein-sae-variant-interpretation/SKILL.md",
+        "line": 22,
+        "text": "- ACMG pathogenicity classification → `tooluniverse-variant-interpretation`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-protein-sae-variant-interpretation",
+    "to": "tooluniverse-variant-to-mechanism",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-protein-sae-variant-interpretation/SKILL.md",
+        "line": 23,
+        "text": "- Regulatory / non-coding variants → `tooluniverse-variant-to-mechanism`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-protein-structural-annotation-pdb",
+    "to": "tooluniverse-computational-biophysics",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-protein-structural-annotation-pdb/SKILL.md",
+        "line": 28,
+        "text": "`tooluniverse-computational-biophysics`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-protein-structural-annotation-pdb",
+    "to": "tooluniverse-residue-functional-mechanism-interpretation",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-protein-structural-annotation-pdb/SKILL.md",
+        "line": 179,
+        "text": "| `tooluniverse-residue-functional-mechanism-interpretation` | Downstream consumer | Use this annotation as the structural evidence layer when interpreting DMS hotspots; the skill also plots an annotated DMS heatmap in its Step 7 |"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-protein-structure-prediction",
+    "to": "tooluniverse-protein-structure-retrieval",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-protein-structure-prediction/SKILL.md",
+        "line": 39,
+        "text": "**Not for** (use `tooluniverse-protein-structure-retrieval` instead): retrieval-only tasks where user provides a PDB ID or wants to browse experimental structures without prediction."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-proteomics-analysis",
+    "to": "tooluniverse-gene-enrichment",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-proteomics-analysis/SKILL.md",
+        "line": 62,
+        "text": "| `tooluniverse-gene-enrichment` | Pathway enrichment | Phase 5 |"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-proteomics-analysis",
+    "to": "tooluniverse-multi-omics-integration",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-proteomics-analysis/SKILL.md",
+        "line": 65,
+        "text": "| `tooluniverse-multi-omics-integration` | Cross-omics analysis | Phase 7 |"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-proteomics-analysis",
+    "to": "tooluniverse-protein-interactions",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-proteomics-analysis/SKILL.md",
+        "line": 63,
+        "text": "| `tooluniverse-protein-interactions` | PPI networks | Phase 6 |"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-proteomics-analysis",
+    "to": "tooluniverse-rnaseq-deseq2",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-proteomics-analysis/SKILL.md",
+        "line": 64,
+        "text": "| `tooluniverse-rnaseq-deseq2` | RNA-seq for integration | Phase 7 |"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-proteomics-analysis",
+    "to": "tooluniverse-target-research",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-proteomics-analysis/SKILL.md",
+        "line": 66,
+        "text": "| `tooluniverse-target-research` | Protein annotation | Phase 8 |"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-proteomics-data-retrieval",
+    "to": "tooluniverse-multi-omics-integration",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-proteomics-data-retrieval/SKILL.md",
+        "line": 287,
+        "text": "| `tooluniverse-multi-omics-integration` | Discover proteomics datasets for cross-omics integration |"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-proteomics-data-retrieval",
+    "to": "tooluniverse-protein-modification-analysis",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-proteomics-data-retrieval/SKILL.md",
+        "line": 286,
+        "text": "| `tooluniverse-protein-modification-analysis` | Find PTM-specific datasets to complement iPTMnet annotations |"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-proteomics-data-retrieval",
+    "to": "tooluniverse-proteomics-analysis",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-proteomics-data-retrieval/SKILL.md",
+        "line": 285,
+        "text": "| `tooluniverse-proteomics-analysis` | Use retrieved datasets as input for MS data analysis |"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-rare-disease-genomics",
+    "to": "tooluniverse-cancer-variant-interpretation",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-rare-disease-genomics/SKILL.md",
+        "line": 69,
+        "text": "- Cancer variant interpretation -> Use `tooluniverse-cancer-variant-interpretation`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-rare-disease-genomics",
+    "to": "tooluniverse-disease-research",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-rare-disease-genomics/SKILL.md",
+        "line": 68,
+        "text": "- Common disease genomics (type 2 diabetes, hypertension) -> Use `tooluniverse-disease-research`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-rare-disease-genomics",
+    "to": "tooluniverse-gwas-snp-interpretation",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-rare-disease-genomics/SKILL.md",
+        "line": 70,
+        "text": "- GWAS-based variant interpretation -> Use `tooluniverse-gwas-snp-interpretation`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-rare-disease-genomics",
+    "to": "tooluniverse-pharmacogenomics",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-rare-disease-genomics/SKILL.md",
+        "line": 71,
+        "text": "- Pharmacogenomics / drug-gene interactions -> Use `tooluniverse-pharmacogenomics`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-rare-disease-genomics",
+    "to": "tooluniverse-rare-disease-diagnosis",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-rare-disease-genomics/SKILL.md",
+        "line": 72,
+        "text": "- Differential diagnosis from symptoms -> Use `tooluniverse-rare-disease-diagnosis`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-regulatory-variant-analysis",
+    "to": "tooluniverse-epigenomics",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-regulatory-variant-analysis/SKILL.md",
+        "line": 30,
+        "text": "- Epigenomics data processing (BED/narrowPeak files) -> Use `tooluniverse-epigenomics`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-regulatory-variant-analysis",
+    "to": "tooluniverse-gene-disease-association",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-regulatory-variant-analysis/SKILL.md",
+        "line": 28,
+        "text": "- Gene-disease associations (not variant-specific) -> Use `tooluniverse-gene-disease-association`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-regulatory-variant-analysis",
+    "to": "tooluniverse-pharmacogenomics",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-regulatory-variant-analysis/SKILL.md",
+        "line": 29,
+        "text": "- Pharmacogenomic variant annotation -> Use `tooluniverse-pharmacogenomics`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-regulatory-variant-analysis",
+    "to": "tooluniverse-variant-interpretation",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-regulatory-variant-analysis/SKILL.md",
+        "line": 26,
+        "text": "- Coding variant pathogenicity -> Use `tooluniverse-variant-interpretation`"
+      },
+      {
+        "path": "skills/tooluniverse-regulatory-variant-analysis/SKILL.md",
+        "line": 27,
+        "text": "- Full clinical variant classification (ACMG) -> Use `tooluniverse-variant-interpretation`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-residue-functional-mechanism-interpretation",
+    "to": "tooluniverse-protein-lof-mechanism",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-residue-functional-mechanism-interpretation/SKILL.md",
+        "line": 46,
+        "text": "— use `tooluniverse-protein-lof-mechanism`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-residue-functional-mechanism-interpretation",
+    "to": "tooluniverse-protein-sae-variant-interpretation",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-residue-functional-mechanism-interpretation/SKILL.md",
+        "line": 44,
+        "text": "ESMC features changed — use `tooluniverse-protein-sae-variant-interpretation`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-residue-functional-mechanism-interpretation",
+    "to": "tooluniverse-protein-structural-annotation-pdb",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-residue-functional-mechanism-interpretation/SKILL.md",
+        "line": 449,
+        "text": "own sequence — see `tooluniverse-protein-structural-annotation-pdb` pitfalls)."
+      },
+      {
+        "path": "skills/tooluniverse-residue-functional-mechanism-interpretation/SKILL.md",
+        "line": 497,
+        "text": "| `tooluniverse-protein-structural-annotation-pdb` (or `Structure_annotate_per_residue` directly) | Structural evidence |"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-residue-functional-mechanism-interpretation",
+    "to": "tooluniverse-variant-predictor-dms-validation",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-residue-functional-mechanism-interpretation/SKILL.md",
+        "line": 42,
+        "text": "`tooluniverse-variant-predictor-dms-validation`"
+      },
+      {
+        "path": "skills/tooluniverse-residue-functional-mechanism-interpretation/SKILL.md",
+        "line": 502,
+        "text": "| `tooluniverse-variant-predictor-dms-validation` | Sibling skill: validate a predictor before trusting its scores |"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-single-cell",
+    "to": "tooluniverse-gene-enrichment",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-single-cell/SKILL.md",
+        "line": 45,
+        "text": "- Gene enrichment only -> `tooluniverse-gene-enrichment`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-single-cell",
+    "to": "tooluniverse-rnaseq-deseq2",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-single-cell/SKILL.md",
+        "line": 44,
+        "text": "- Bulk RNA-seq DESeq2 only -> `tooluniverse-rnaseq-deseq2`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-single-cell",
+    "to": "tooluniverse-variant-analysis",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-single-cell/SKILL.md",
+        "line": 46,
+        "text": "- VCF/variant analysis -> `tooluniverse-variant-analysis`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-spatial-transcriptomics",
+    "to": "tooluniverse-data-wrangling",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-spatial-transcriptomics/SKILL.md",
+        "line": 323,
+        "text": "See `tooluniverse-data-wrangling` skill for format cookbook and bulk download patterns."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-spatial-transcriptomics",
+    "to": "tooluniverse-gene-enrichment",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-spatial-transcriptomics/SKILL.md",
+        "line": 167,
+        "text": "- `tooluniverse-gene-enrichment`: Pathway enrichment for spatial domain marker genes (Phase 3)"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-spatial-transcriptomics",
+    "to": "tooluniverse-multi-omics-integration",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-spatial-transcriptomics/SKILL.md",
+        "line": 168,
+        "text": "- `tooluniverse-multi-omics-integration`: Integration with other omics layers (Phase 8)"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-spatial-transcriptomics",
+    "to": "tooluniverse-single-cell",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-spatial-transcriptomics/SKILL.md",
+        "line": 166,
+        "text": "- `tooluniverse-single-cell`: scRNA-seq reference for deconvolution (Phase 6) and L-R database (Phase 7)"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-structural-variant-analysis",
+    "to": "tooluniverse-variant-interpretation",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-structural-variant-analysis/SKILL.md",
+        "line": 226,
+        "text": "- **Single nucleotide variants (SNVs)** - Use `tooluniverse-variant-interpretation`"
+      },
+      {
+        "path": "skills/tooluniverse-structural-variant-analysis/SKILL.md",
+        "line": 247,
+        "text": "- `tooluniverse-variant-interpretation` - For SNVs and small indels"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-systems-biology",
+    "to": "tooluniverse-computational-biophysics",
+    "relation": "required",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-systems-biology/SKILL.md",
+        "line": 194,
+        "text": "To determine Km and Vmax from data: use Lineweaver-Burk (1/v vs 1/[S]), Eadie-Hofstee (v vs v/[S]), or nonlinear regression (preferred — avoids distortion from reciprocal transforms). See `enzyme_kinetics.py` in `skills/tooluniverse-computational-biophysics/scripts/`."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-vaccine-design",
+    "to": "tooluniverse-antibody-engineering",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-vaccine-design/SKILL.md",
+        "line": 34,
+        "text": "**Not this skill**: For HLA typing or allele frequency only, use `tooluniverse-hla-immunogenomics`. For antibody engineering, use `tooluniverse-antibody-engineering`."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-vaccine-design",
+    "to": "tooluniverse-hla-immunogenomics",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-vaccine-design/SKILL.md",
+        "line": 34,
+        "text": "**Not this skill**: For HLA typing or allele frequency only, use `tooluniverse-hla-immunogenomics`. For antibody engineering, use `tooluniverse-antibody-engineering`."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-variant-functional-annotation",
+    "to": "tooluniverse-variant-interpretation",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-variant-functional-annotation/SKILL.md",
+        "line": 13,
+        "text": "**Differentiation from tooluniverse-variant-interpretation**: This skill focuses specifically on"
+      },
+      {
+        "path": "skills/tooluniverse-variant-functional-annotation/SKILL.md",
+        "line": 16,
+        "text": "recommendations. Use `tooluniverse-variant-interpretation` for complete ACMG clinical classification."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-variant-interpretation",
+    "to": "tooluniverse-sequence-analysis",
+    "relation": "required",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-variant-interpretation/SKILL.md",
+        "line": 366,
+        "text": "For amino acid properties at variant position, run: `python3 skills/tooluniverse-sequence-analysis/scripts/amino_acids.py --type amino_acid --code X`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-variant-predictor-dms-validation",
+    "to": "tooluniverse-protein-lof-mechanism",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-variant-predictor-dms-validation/SKILL.md",
+        "line": 43,
+        "text": "`tooluniverse-protein-lof-mechanism`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-variant-predictor-dms-validation",
+    "to": "tooluniverse-protein-sae-variant-interpretation",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-variant-predictor-dms-validation/SKILL.md",
+        "line": 42,
+        "text": "`tooluniverse-protein-sae-variant-interpretation` or"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-variant-predictor-dms-validation",
+    "to": "tooluniverse-residue-functional-mechanism-interpretation",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-variant-predictor-dms-validation/SKILL.md",
+        "line": 40,
+        "text": "`tooluniverse-residue-functional-mechanism-interpretation`"
+      },
+      {
+        "path": "skills/tooluniverse-variant-predictor-dms-validation/SKILL.md",
+        "line": 423,
+        "text": "`tooluniverse-residue-functional-mechanism-interpretation`."
+      },
+      {
+        "path": "skills/tooluniverse-variant-predictor-dms-validation/SKILL.md",
+        "line": 444,
+        "text": "| Next step: per-hotspot mechanism | `tooluniverse-residue-functional-mechanism-interpretation` |"
+      },
+      {
+        "path": "skills/tooluniverse-variant-predictor-dms-validation/SKILL.md",
+        "line": 445,
+        "text": "| Final visualization | Step 7 of `tooluniverse-residue-functional-mechanism-interpretation` (annotated heatmap + callouts) |"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-variant-to-mechanism",
+    "to": "tooluniverse-data-wrangling",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-variant-to-mechanism/SKILL.md",
+        "line": 367,
+        "text": "See `tooluniverse-data-wrangling` skill for API patterns and error handling."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-variant-to-mechanism",
+    "to": "tooluniverse-gene-disease-association",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-variant-to-mechanism/SKILL.md",
+        "line": 38,
+        "text": "- Gene-disease association without variant context -> Use `tooluniverse-gene-disease-association`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-variant-to-mechanism",
+    "to": "tooluniverse-gwas-snp-interpretation",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-variant-to-mechanism/SKILL.md",
+        "line": 36,
+        "text": "- Pure GWAS hit listing without mechanism -> Use `tooluniverse-gwas-snp-interpretation`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-variant-to-mechanism",
+    "to": "tooluniverse-pharmacogenomics",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-variant-to-mechanism/SKILL.md",
+        "line": 37,
+        "text": "- Pharmacogenomic variant annotation -> Use `tooluniverse-pharmacogenomics`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-variant-to-mechanism",
+    "to": "tooluniverse-regulatory-genomics",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-variant-to-mechanism/SKILL.md",
+        "line": 35,
+        "text": "- Pure regulatory element annotation without mechanism -> Use `tooluniverse-regulatory-genomics`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-variant-to-mechanism",
+    "to": "tooluniverse-variant-interpretation",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-variant-to-mechanism/SKILL.md",
+        "line": 34,
+        "text": "- Coding variant pathogenicity / ACMG classification -> Use `tooluniverse-variant-interpretation`"
+      }
+    ]
+  }
+]

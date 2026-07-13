@@ -9,7 +9,7 @@ import { ARSU_COMMAND_CONTENTS, renderCommand } from "./command-renderer.js";
 import { getTool } from "./tools.js";
 import { ARSU_SKILL_IDS } from "../arsu-converter/routing/contracts.js";
 import { MIT_LICENSE_TEXT } from "../licensing.js";
-import { filesForSkill, pluginSkillRoot, type LoadedPluginRegistry } from "../plugins/registry.js";
+import { filesForSkill, pluginSkillRoot, resolveDomainSelection, type LoadedPluginRegistry } from "../plugins/registry.js";
 
 export interface InstallationRecord {
   tool_id: string;
@@ -18,8 +18,8 @@ export interface InstallationRecord {
   sha256: string;
   source: string;
   adapter_version: "1";
-  plugin_id?: string;
-  plugin_version?: string;
+  vendor_id?: string;
+  vendor_release?: string;
   skill_id?: string;
 }
 
@@ -83,12 +83,12 @@ export async function planToolDelivery(input: {
       }
 
       if (pluginRegistry) {
-        for (const pluginId of input.selectedPluginIds ?? []) {
-          const plugin = pluginRegistry.plugins.get(pluginId);
-          if (!plugin) continue;
-          for (const skill of plugin.skills) {
-            const sourceRoot = pluginSkillRoot(pluginRegistry.root, plugin.plugin_id, skill.skill_id);
-            for (const relativeAsset of filesForSkill(pluginRegistry, plugin.plugin_id, skill.skill_id)) {
+        const resolution = resolveDomainSelection(pluginRegistry, input.selectedPluginIds ?? []);
+        for (const registered of resolution.skills) {
+          const skill = registered.definition;
+          const vendor = registered.vendor;
+            const sourceRoot = pluginSkillRoot(pluginRegistry.root, vendor.vendor_id, skill.skill_id);
+            for (const relativeAsset of filesForSkill(pluginRegistry, skill.skill_id)) {
               const sourceFile = path.join(sourceRoot, relativeAsset);
               const target = path.join(input.projectRoot, tool.skillsDir, "skills", skill.skill_id, relativeAsset);
               await addPlanned(
@@ -96,12 +96,11 @@ export async function planToolDelivery(input: {
                 posix(path.relative(input.projectRoot, target)),
                 "project",
                 await readFile(sourceFile),
-                `plugin:${plugin.plugin_id}/${skill.skill_id}/${relativeAsset}`,
+                `domain-skill:${vendor.vendor_id}/${skill.skill_id}/${relativeAsset}`,
                 toolId,
-                { plugin_id: plugin.plugin_id, plugin_version: plugin.version, skill_id: skill.skill_id },
+                { vendor_id: vendor.vendor_id, vendor_release: vendor.release, skill_id: skill.skill_id },
               );
             }
-          }
         }
       }
 
@@ -121,7 +120,7 @@ export async function planToolDelivery(input: {
   }
   return { operations, installations, diagnostics };
 
-  async function addPlanned(target: string, manifestPath: string, scope: "project" | "shared-global", content: string | Uint8Array, source: string, toolId: string, plugin?: Pick<InstallationRecord, "plugin_id" | "plugin_version" | "skill_id">): Promise<void> {
+  async function addPlanned(target: string, manifestPath: string, scope: "project" | "shared-global", content: string | Uint8Array, source: string, toolId: string, plugin?: Pick<InstallationRecord, "vendor_id" | "vendor_release" | "skill_id">): Promise<void> {
     const prior = recorded.get(`${scope}:${manifestPath}`);
     const operation = await planFile({ path: target, relativePath: manifestPath, content, scope, ownership: "generated", recordedHash: typeof prior?.sha256 === "string" ? prior.sha256 : undefined, force: input.force });
     operations.push(operation);

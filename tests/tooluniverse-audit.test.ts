@@ -122,11 +122,14 @@ void test("ToolUniverse audit summaries and known findings are reproducible", as
   for (const skillId of audit.summary.known_skill_md_over_500_lines) assert.ok(hasFinding(audit, skillId, "skill-body-over-recommendation"));
 });
 
-void test("ToolUniverse audit does not admit production plugins", async () => {
-  const registry = JSON.parse(await readFile(REGISTRY_PATH, "utf8")) as { schema_version?: string; sources?: unknown[]; plugins?: unknown[] };
+void test("ToolUniverse production vendor remains traceable to the audit", async () => {
+  const registry = JSON.parse(await readFile(REGISTRY_PATH, "utf8")) as { schema_version?: string; vendors?: Array<{ vendor_id: string; revision: string; skills: unknown[] }>; domains?: unknown[] };
   assert.equal(registry.schema_version, "1");
-  assert.deepEqual(registry.sources, []);
-  assert.deepEqual(registry.plugins, []);
+  assert.equal(registry.vendors?.length, 1);
+  assert.equal(registry.vendors?.[0]?.vendor_id, "tooluniverse");
+  assert.equal(registry.vendors?.[0]?.revision, REVISION);
+  assert.equal(registry.vendors?.[0]?.skills.length, 130);
+  assert.equal(registry.domains?.length, 3);
 });
 
 async function assertSourceInitialized(): Promise<void> {

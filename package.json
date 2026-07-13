@@ -21,6 +21,7 @@
     "docs/arsu_user_usage_model.md",
     "docs/cli_interface_design.md",
     "docs/domain_skill_plugins.md",
+    "docs/tooluniverse_vendor_adapter.md",
     "artifacts/mvp_release_checklist.md"
   ],
   "scripts": {
@@ -35,7 +36,10 @@
     "arsu:check": "pnpm build && node dist/src/arsu-converter/cli.js check",
     "arsu:idempotence": "pnpm build && node dist/src/arsu-converter/cli.js idempotence",
     "arsu:anchors:manifest": "pnpm build && node dist/src/arsu-converter/anchors/generate.js",
-    "arsu:anchors:check": "pnpm build && node dist/src/arsu-converter/anchors/check.js"
+    "arsu:anchors:check": "pnpm build && node dist/src/arsu-converter/anchors/check.js",
+    "tooluniverse:convert": "pnpm build && node dist/src/vendor-converters/tooluniverse/cli.js convert",
+    "tooluniverse:check": "pnpm build && node dist/src/vendor-converters/tooluniverse/cli.js check",
+    "tooluniverse:idempotence": "pnpm build && node dist/src/vendor-converters/tooluniverse/cli.js idempotence"
   },
   "engines": {
     "node": ">=22"

@@ -53,7 +53,9 @@ ResearchSpec installs exactly eight base project Skills:
 - Companion: `researchspec-navigate`, `researchspec-propose`, `researchspec-decide`, `researchspec-verify`
 
 Optional ResearchSpec-maintained [domain Skill plugins](docs/domain_skill_plugins.md)
-can add reviewed Open Agent Skills to the workspace. Plugins add no command
+can add reviewed Open Agent Skills to the workspace. Users select stable
+vendor-neutral domains; maintainer converters own upstream provenance and Skill
+dependencies. Plugins add no command
 wrappers and never own workflow state, Gates, Decisions, or receipts. Inspect the
 bundled catalog with `researchspec plugin list`.
 
@@ -93,6 +95,7 @@ See [SECURITY.md](SECURITY.md) for supported versions and vulnerability handling
 - [Canonical ARSU user model](docs/arsu_user_usage_model.md)
 - [CLI interface](docs/cli_interface_design.md)
 - [Domain Skill plugins](docs/domain_skill_plugins.md)
+- [ToolUniverse vendor adapter](docs/tooluniverse_vendor_adapter.md)
 - [Release process](docs/release_process.md)
 - [Project-owner walkthrough](playbooks/owner-walkthrough/README.md) — recommended introduction to the real operating model
 - [Playbooks index](playbooks/README.md) — owner walkthrough and Dogfooding QA guidance; repository-only, not included in the npm package

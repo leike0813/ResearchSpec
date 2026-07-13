@@ -10,6 +10,12 @@ No candidate is ready for direct distribution. Of the 130 candidates, 125 requir
 
 The structured source of truth for every count and disposition in this report is [`skill-audit.json`](skill-audit.json).
 
+The follow-up change `add-vendor-domain-plugin-ingestion` subsequently introduced
+the required vendor/domain dependency contract and a ToolUniverse-specific
+converter. Production admission remains derived from this immutable audit; see
+[`docs/tooluniverse_vendor_adapter.md`](../../../docs/tooluniverse_vendor_adapter.md)
+for the current maintenance workflow.
+
 ## Source baseline
 
 | Field | Value |

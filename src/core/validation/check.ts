@@ -10,7 +10,7 @@ import type { WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { REQUIRED_DIRECTORIES } from "../workspace/layout.js";
 import { sha256 } from "../workspace/write-plan.js";
 import type { CheckResult, CheckTarget, Diagnostic } from "./types.js";
-import { filesForSkill, loadPluginRegistry, pluginSkillRoot, PluginRegistryError, type LoadedPluginRegistry } from "../../plugins/registry.js";
+import { filesForSkill, loadPluginRegistry, pluginSkillRoot, PluginRegistryError, resolveDomainSelection, type LoadedPluginRegistry } from "../../plugins/registry.js";
 import { selectedPluginIds } from "../../plugins/status.js";
 import { getTool } from "../../adapters/tools.js";
 
@@ -62,37 +62,35 @@ async function inspectPlugins(snapshot: WorkspaceSnapshot, provided?: LoadedPlug
     return [{ severity: "error", code: "plugin_registry_unreadable", message: error instanceof Error ? error.message : String(error), blocking: true }];
   }
   const selected = selectedPluginIds(snapshot.config);
+  diagnostics.push(...loaded.diagnostics);
   const configuredTools = stringArray(record(snapshot.config.agent_tools).selected);
   const manifest = records(snapshot.manifest.installations);
   const manifestByPath = new Map(manifest.filter((item) => item.scope === "project" && typeof item.path === "string").map((item) => [String(item.path), item]));
-  for (const pluginId of selected) {
-    const plugin = loaded.plugins.get(pluginId);
-    if (!plugin) {
-      diagnostics.push({ severity: "warning", code: "plugin_unavailable", message: `Selected plugin is unavailable in this ResearchSpec package: ${pluginId}`, path: path.join(snapshot.workspace, "config.yaml"), blocking: false, details: { plugin_id: pluginId } });
-      continue;
-    }
-    if (!configuredTools.length) {
-      diagnostics.push({ severity: "info", code: "plugin_projection_deferred", message: `Plugin ${pluginId} is selected but no Agent tool is configured.`, path: path.join(snapshot.workspace, "config.yaml"), blocking: false, details: { plugin_id: pluginId } });
-      continue;
-    }
-    for (const toolId of configuredTools) {
+  const resolution = resolveDomainSelection(loaded, selected);
+  for (const domainId of resolution.unavailableDomainIds) diagnostics.push({ severity: "warning", code: "plugin_unavailable", message: `Selected domain is unavailable in this ResearchSpec package: ${domainId}`, path: path.join(snapshot.workspace, "config.yaml"), blocking: false, details: { domain_id: domainId } });
+  if (!configuredTools.length) {
+    for (const domainId of resolution.availableDomainIds) diagnostics.push({ severity: "info", code: "plugin_projection_deferred", message: `Domain ${domainId} is selected but no Agent tool is configured.`, path: path.join(snapshot.workspace, "config.yaml"), blocking: false, details: { domain_id: domainId } });
+    return diagnostics;
+  }
+  for (const toolId of configuredTools) {
       const tool = getTool(toolId);
       if (!tool) continue;
-      for (const skill of plugin.skills) {
-        const sourceRoot = pluginSkillRoot(loaded.root, plugin.plugin_id, skill.skill_id);
-        for (const relativeAsset of filesForSkill(loaded, plugin.plugin_id, skill.skill_id)) {
+      for (const registered of resolution.skills) {
+        const skill = registered.definition;
+        const vendor = registered.vendor;
+        const sourceRoot = pluginSkillRoot(loaded.root, vendor.vendor_id, skill.skill_id);
+        for (const relativeAsset of filesForSkill(loaded, skill.skill_id)) {
           const targetPath = path.join(path.dirname(snapshot.workspace), tool.skillsDir, "skills", skill.skill_id, relativeAsset);
           const relativeTarget = path.relative(path.dirname(snapshot.workspace), targetPath).split(path.sep).join("/");
           const owned = manifestByPath.get(relativeTarget);
-          if (!owned || owned.plugin_id !== plugin.plugin_id || owned.plugin_version !== plugin.version || owned.skill_id !== skill.skill_id || typeof owned.sha256 !== "string") {
-            diagnostics.push({ severity: "warning", code: "plugin_projection_missing", message: "Selected plugin resource is not owned by the installation manifest.", path: targetPath, blocking: false, details: { plugin_id: plugin.plugin_id, skill_id: skill.skill_id, tool_id: toolId, source: path.join(sourceRoot, relativeAsset) } });
+          if (!owned || owned.vendor_id !== vendor.vendor_id || owned.vendor_release !== vendor.release || owned.skill_id !== skill.skill_id || typeof owned.sha256 !== "string") {
+            diagnostics.push({ severity: "warning", code: "plugin_projection_missing", message: "Resolved domain Skill resource is not owned by the installation manifest.", path: targetPath, blocking: false, details: { vendor_id: vendor.vendor_id, skill_id: skill.skill_id, tool_id: toolId, source: path.join(sourceRoot, relativeAsset) } });
             continue;
           }
-          if (!(await fileExists(targetPath))) diagnostics.push({ severity: "warning", code: "plugin_file_missing", message: "Manifest-owned plugin resource is missing.", path: targetPath, blocking: false, details: { plugin_id: plugin.plugin_id, skill_id: skill.skill_id, tool_id: toolId } });
-          else if (sha256(await readFile(targetPath)) !== owned.sha256) diagnostics.push({ severity: "warning", code: "plugin_file_drift", message: "Manifest-owned plugin resource has changed.", path: targetPath, blocking: false, details: { plugin_id: plugin.plugin_id, skill_id: skill.skill_id, tool_id: toolId } });
+          if (!(await fileExists(targetPath))) diagnostics.push({ severity: "warning", code: "plugin_file_missing", message: "Manifest-owned domain Skill resource is missing.", path: targetPath, blocking: false, details: { vendor_id: vendor.vendor_id, skill_id: skill.skill_id, tool_id: toolId } });
+          else if (sha256(await readFile(targetPath)) !== owned.sha256) diagnostics.push({ severity: "warning", code: "plugin_file_drift", message: "Manifest-owned domain Skill resource has changed.", path: targetPath, blocking: false, details: { vendor_id: vendor.vendor_id, skill_id: skill.skill_id, tool_id: toolId } });
         }
       }
-    }
   }
   return diagnostics;
 }

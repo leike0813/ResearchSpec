@@ -27,9 +27,10 @@ const ConfigSchema = z.looseObject({
 });
 const ManifestSchema = z.looseObject({
   schema_version: z.string(), package_version: z.string(),
+  plugin_resolutions: z.array(z.looseObject({ domain_id: z.string(), domain_version: z.string(), resolved_skill_ids: z.array(z.string()) })).optional(),
   installations: z.array(z.looseObject({
     tool_id: z.string(), path: z.string(), scope: z.enum(["project", "shared-global"]), sha256: z.string(), source: z.string(), adapter_version: z.string(),
-    plugin_id: z.string().optional(), plugin_version: z.string().optional(), skill_id: z.string().optional(),
+    vendor_id: z.string().optional(), vendor_release: z.string().optional(), skill_id: z.string().optional(),
   })),
 });
 const SourcesSchema = z.looseObject({ schema_version: z.string(), sources: z.array(SourceSchema) });

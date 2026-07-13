@@ -56,3 +56,11 @@ ResearchSpec SHALL provide a human-readable report that summarizes the machine i
 - **THEN** the report SHALL reference the pinned source and machine audit
 - **AND** tests SHALL validate structured evidence rather than exact report prose
 - **AND** future plugin packaging recommendations SHALL remain non-executing until approved in a separate change
+
+### Requirement: Audit-Governed Production Ingestion
+Any production ToolUniverse vendor bundle SHALL consume the pinned audit inventory as its include, exclude, classification, finding, and upstream revision input without changing the audit's evidence role.
+
+#### Scenario: Audit and production bundle remain traceable
+- **WHEN** ToolUniverse production Skills are regenerated
+- **THEN** every generated or excluded Skill SHALL trace to exactly one audit record
+- **AND** changes to the pinned source or inventory SHALL block regeneration until a new reviewed audit is supplied

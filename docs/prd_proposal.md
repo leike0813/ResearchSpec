@@ -293,7 +293,7 @@ ResearchSpec 必须能够把维护者审校的领域知识作为可选 Open Agen
 
 需求：
 
-- bundled registry 是 plugin/source/provenance 的唯一 catalog SSOT，不在用户运行期访问上游；
+- bundled registry 是 vendor provenance、稳定 domains、Skill membership 与 hard dependencies 的 runtime catalog SSOT，不在用户运行期访问上游；
 - workspace 级选择投影到所有 configured tools，新 tool 自动补齐；
 - 插件保留 LICENSE、NOTICE 与 immutable upstream revision，资源原样复制；
 - ResearchSpec 不执行 plugin scripts、不安装依赖、不提供 sandbox；

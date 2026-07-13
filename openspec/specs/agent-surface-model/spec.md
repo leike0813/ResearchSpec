@@ -48,3 +48,11 @@ ResearchSpec SHALL treat command wrappers as thin tool adapters, keep base Skill
 - **WHEN** a command wrapper invokes a Skill
 - **THEN** the wrapper SHALL delegate to the corresponding Skill or CLI protocol
 - **AND** it SHALL NOT introduce an independent product capability or state machine
+
+### Requirement: Optional Domain Skills Do Not Expand Fixed Base Surface
+Dependency-resolved domain Skills SHALL remain optional additions to the exact four ARSU and four Companion Skill base surface and SHALL NOT add command wrappers.
+
+#### Scenario: Domain installation preserves wrapper frontier
+- **WHEN** any combination of domains is installed
+- **THEN** all supported tools SHALL retain exactly the eight fixed base Skills and optional resolved domain Skills
+- **AND** command-capable tools SHALL retain exactly eight fixed wrappers

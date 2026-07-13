@@ -40,7 +40,7 @@ export const WORKSPACE_TEMPLATES: readonly WorkspaceTemplateDefinition[] = [
     kind: "json",
     overwritePolicy: "generated",
     required: true,
-    content: `${JSON.stringify({ schema_version: "1", package_version: "0.1.0", installations: [] }, null, 2)}\n`,
+    content: `${JSON.stringify({ schema_version: "1", package_version: "0.1.0", plugin_resolutions: [], installations: [] }, null, 2)}\n`,
   },
   {
     relativePath: "specs/project.md",
