@@ -8,7 +8,8 @@
     "add-arsu-workflow-profiles",
     "consolidate-researchspec-agent-surface",
     "implement-complete-cli-interface",
-    "add-atomic-artifact-submit"
+    "add-atomic-artifact-submit",
+    "add-arsu-material-passport-import"
   ],
   "journeys": [
     { "journey_id": "bootstrap", "test_id": "journey.bootstrap" },
@@ -21,7 +22,8 @@
     { "journey_id": "revision-round", "test_id": "journey.revision-round" },
     { "journey_id": "resume", "test_id": "journey.resume" },
     { "journey_id": "context-export", "test_id": "journey.context-export" },
-    { "journey_id": "terminal-completion", "test_id": "journey.terminal-completion" }
+    { "journey_id": "terminal-completion", "test_id": "journey.terminal-completion" },
+    { "journey_id": "resume-passport", "test_id": "journey.resume-passport" }
   ],
   "capabilities": [
     {
@@ -89,6 +91,13 @@
           "requirement": "Decisions Capture Only High-Impact Interaction",
           "scenarios": [
             { "scenario": "Ordinary exploration remains with the artifact", "technical_changes": ["add-gate-transition-control-plane", "consolidate-researchspec-agent-surface"], "journey_ids": ["vague-routing", "gate-challenge-override"], "test_ids": ["journey.vague-routing", "journey.gate-challenge-override"] }
+          ]
+        },
+        {
+          "requirement": "External Passport Mid-Entry Journey",
+          "scenarios": [
+            { "scenario": "User imports a Passport", "technical_changes": ["add-arsu-material-passport-import", "add-subflow-instance-control-plane"], "journey_ids": ["resume-passport"], "test_ids": ["journey.resume-passport"] },
+            { "scenario": "Imported claims require current authority", "technical_changes": ["add-arsu-material-passport-import", "add-gate-transition-control-plane"], "journey_ids": ["resume-passport"], "test_ids": ["journey.resume-passport"] }
           ]
         }
       ]

@@ -5,7 +5,8 @@ import { Command, CommanderError, InvalidArgumentError } from "commander";
 import {
   handleAdvance, handleArchive, handleCheck, handleDecide, handleHandoff, handleInit, handleInstructions, handleList,
   handlePack, handlePropose, handleShow, handleStart, handleStatus, handleSubmit, handleUpdate, type DecideOptions,
-  type AdvanceOptions, type HandoffOptions, type InitOptions, type PackOptions, type ProposeOptions, type StartOptions, type SubmitOptions, type UpdateOptions,
+  handlePluginInstall, handlePluginList, handlePluginShow, handlePluginUninstall, handlePluginUpdate,
+  type AdvanceOptions, type HandoffOptions, type InitOptions, type PackOptions, type PluginListOptions, type ProposeOptions, type StartOptions, type SubmitOptions, type UpdateOptions,
 } from "./handlers.js";
 import { presentResult } from "./presenter.js";
 import { CliError, failure, type CommandContext, type CommandResult } from "./types.js";
@@ -113,6 +114,18 @@ function registerCommands(program: Command, run: Runner): void {
     .action(async (item: string | undefined, options: DecideOptions, command: Command) => run("decide", command, () => handleDecide(item, options, commandContext("decide", command))));
   program.command("archive [item]").description("Archive a resolved change or draft patch")
     .action(async (item: string | undefined, _options: Record<string, never>, command: Command) => run("archive", command, () => handleArchive(item, commandContext("archive", command))));
+  const plugin = program.command("plugin").description("Inspect and manage bundled domain Skill plugins");
+  plugin.command("list").description("List bundled domain Skill plugins")
+    .option("--installed", "show only workspace-selected plugins")
+    .action(async (options: PluginListOptions, command: Command) => run("plugin", command, () => handlePluginList(options, commandContext("plugin", command))));
+  plugin.command("show <plugin-id>").description("Show bundled plugin metadata and provenance")
+    .action(async (pluginId: string, _options: Record<string, never>, command: Command) => run("plugin", command, () => handlePluginShow(pluginId, commandContext("plugin", command))));
+  plugin.command("install <plugin-ids...>").description("Select and project plugins into the current workspace")
+    .action(async (pluginIds: string[], _options: Record<string, never>, command: Command) => run("plugin", command, () => handlePluginInstall(pluginIds, commandContext("plugin", command))));
+  plugin.command("uninstall <plugin-ids...>").description("Remove selected plugins from the current workspace")
+    .action(async (pluginIds: string[], _options: Record<string, never>, command: Command) => run("plugin", command, () => handlePluginUninstall(pluginIds, commandContext("plugin", command))));
+  plugin.command("update [plugin-ids...]").description("Refresh selected plugins, or all when IDs are omitted")
+    .action(async (pluginIds: string[], _options: Record<string, never>, command: Command) => run("plugin", command, () => handlePluginUpdate(pluginIds ?? [], commandContext("plugin", command))));
 }
 
 async function createProgram(): Promise<Command> {

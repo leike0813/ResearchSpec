@@ -10,10 +10,13 @@ import type { WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { REQUIRED_DIRECTORIES } from "../workspace/layout.js";
 import { sha256 } from "../workspace/write-plan.js";
 import type { CheckResult, CheckTarget, Diagnostic } from "./types.js";
+import { filesForSkill, loadPluginRegistry, pluginSkillRoot, PluginRegistryError, type LoadedPluginRegistry } from "../../plugins/registry.js";
+import { selectedPluginIds } from "../../plugins/status.js";
+import { getTool } from "../../adapters/tools.js";
 
 export type { CheckResult, CheckTarget, Diagnostic } from "./types.js";
 
-export async function runWorkspaceChecks(workspace: string, target: CheckTarget = "all", strict = false): Promise<CheckResult> {
+export async function runWorkspaceChecks(workspace: string, target: CheckTarget = "all", strict = false, providedPluginRegistry?: LoadedPluginRegistry): Promise<CheckResult> {
   const snapshot = await loadWorkspaceSnapshot(workspace);
   const diagnostics = snapshot.diagnostics.filter((diagnostic) => target === "all" || diagnosticMatchesTarget(workspace, diagnostic, target));
 
@@ -42,10 +45,56 @@ export async function runWorkspaceChecks(workspace: string, target: CheckTarget 
     }
   }
 
+  if (target === "all" || target === "plugins") diagnostics.push(...await inspectPlugins(snapshot, providedPluginRegistry));
+
   diagnostics.push(...validateCrossReferences(snapshot, target));
 
   const ok = diagnostics.every((diagnostic) => !diagnostic.blocking && (!strict || diagnostic.severity !== "warning"));
   return { ok, workspace, target, diagnostics };
+}
+
+async function inspectPlugins(snapshot: WorkspaceSnapshot, provided?: LoadedPluginRegistry): Promise<Diagnostic[]> {
+  const diagnostics: Diagnostic[] = [];
+  let loaded: LoadedPluginRegistry;
+  try { loaded = provided ?? await loadPluginRegistry(); }
+  catch (error) {
+    if (error instanceof PluginRegistryError) return error.diagnostics;
+    return [{ severity: "error", code: "plugin_registry_unreadable", message: error instanceof Error ? error.message : String(error), blocking: true }];
+  }
+  const selected = selectedPluginIds(snapshot.config);
+  const configuredTools = stringArray(record(snapshot.config.agent_tools).selected);
+  const manifest = records(snapshot.manifest.installations);
+  const manifestByPath = new Map(manifest.filter((item) => item.scope === "project" && typeof item.path === "string").map((item) => [String(item.path), item]));
+  for (const pluginId of selected) {
+    const plugin = loaded.plugins.get(pluginId);
+    if (!plugin) {
+      diagnostics.push({ severity: "warning", code: "plugin_unavailable", message: `Selected plugin is unavailable in this ResearchSpec package: ${pluginId}`, path: path.join(snapshot.workspace, "config.yaml"), blocking: false, details: { plugin_id: pluginId } });
+      continue;
+    }
+    if (!configuredTools.length) {
+      diagnostics.push({ severity: "info", code: "plugin_projection_deferred", message: `Plugin ${pluginId} is selected but no Agent tool is configured.`, path: path.join(snapshot.workspace, "config.yaml"), blocking: false, details: { plugin_id: pluginId } });
+      continue;
+    }
+    for (const toolId of configuredTools) {
+      const tool = getTool(toolId);
+      if (!tool) continue;
+      for (const skill of plugin.skills) {
+        const sourceRoot = pluginSkillRoot(loaded.root, plugin.plugin_id, skill.skill_id);
+        for (const relativeAsset of filesForSkill(loaded, plugin.plugin_id, skill.skill_id)) {
+          const targetPath = path.join(path.dirname(snapshot.workspace), tool.skillsDir, "skills", skill.skill_id, relativeAsset);
+          const relativeTarget = path.relative(path.dirname(snapshot.workspace), targetPath).split(path.sep).join("/");
+          const owned = manifestByPath.get(relativeTarget);
+          if (!owned || owned.plugin_id !== plugin.plugin_id || owned.plugin_version !== plugin.version || owned.skill_id !== skill.skill_id || typeof owned.sha256 !== "string") {
+            diagnostics.push({ severity: "warning", code: "plugin_projection_missing", message: "Selected plugin resource is not owned by the installation manifest.", path: targetPath, blocking: false, details: { plugin_id: plugin.plugin_id, skill_id: skill.skill_id, tool_id: toolId, source: path.join(sourceRoot, relativeAsset) } });
+            continue;
+          }
+          if (!(await fileExists(targetPath))) diagnostics.push({ severity: "warning", code: "plugin_file_missing", message: "Manifest-owned plugin resource is missing.", path: targetPath, blocking: false, details: { plugin_id: plugin.plugin_id, skill_id: skill.skill_id, tool_id: toolId } });
+          else if (sha256(await readFile(targetPath)) !== owned.sha256) diagnostics.push({ severity: "warning", code: "plugin_file_drift", message: "Manifest-owned plugin resource has changed.", path: targetPath, blocking: false, details: { plugin_id: plugin.plugin_id, skill_id: skill.skill_id, tool_id: toolId } });
+        }
+      }
+    }
+  }
+  return diagnostics;
 }
 
 async function inspectGateTransitionReceipts(snapshot: WorkspaceSnapshot): Promise<Diagnostic[]> {
@@ -167,6 +216,7 @@ function diagnosticMatchesTarget(workspace: string, diagnostic: Diagnostic, targ
   if (target === "runtime") return relative.startsWith("runs/") || relative.startsWith("changes/") || relative.startsWith("draft-patches/");
   if (target === "artifacts") return relative === "runs/current/artifact-registry.json" || diagnostic.code.startsWith("artifact_");
   if (target === "tools") return relative === "config.yaml" || relative === "tool-installation-manifest.json" || diagnostic.code.startsWith("generated_file_");
+  if (target === "plugins") return relative === "config.yaml" || relative === "tool-installation-manifest.json" || diagnostic.code.startsWith("plugin_");
   return true;
 }
 

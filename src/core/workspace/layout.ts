@@ -33,7 +33,7 @@ export const WORKSPACE_TEMPLATES: readonly WorkspaceTemplateDefinition[] = [
     kind: "yaml",
     overwritePolicy: "user",
     required: true,
-    content: `schema_version: "0.1"\nprofile: arsu-v0-1\nagent_tools:\n  selected: []\n  delivery: both\n`,
+    content: `schema_version: "0.1"\nprofile: arsu-v0-1\nagent_tools:\n  selected: []\n  delivery: both\nplugins:\n  selected: []\n`,
   },
   {
     relativePath: "tool-installation-manifest.json",

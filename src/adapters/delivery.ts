@@ -9,6 +9,7 @@ import { ARSU_COMMAND_CONTENTS, renderCommand } from "./command-renderer.js";
 import { getTool } from "./tools.js";
 import { ARSU_SKILL_IDS } from "../arsu-converter/routing/contracts.js";
 import { MIT_LICENSE_TEXT } from "../licensing.js";
+import { filesForSkill, pluginSkillRoot, type LoadedPluginRegistry } from "../plugins/registry.js";
 
 export interface InstallationRecord {
   tool_id: string;
@@ -17,6 +18,9 @@ export interface InstallationRecord {
   sha256: string;
   source: string;
   adapter_version: "1";
+  plugin_id?: string;
+  plugin_version?: string;
+  skill_id?: string;
 }
 
 export interface DeliveryPlan {
@@ -32,11 +36,14 @@ export async function planToolDelivery(input: {
   toolIds: readonly string[];
   existingInstallations: readonly InstallationRecord[];
   force: boolean;
+  pluginRegistry?: LoadedPluginRegistry;
+  selectedPluginIds?: readonly string[];
 }): Promise<DeliveryPlan> {
   const operations: PlannedWrite[] = [];
   const installations: InstallationRecord[] = [];
   const diagnostics: Diagnostic[] = [];
   const recorded = new Map(input.existingInstallations.map((item) => [`${item.scope}:${item.path}`, item]));
+  const pluginRegistry = input.pluginRegistry;
 
   for (const toolId of input.toolIds) {
     const tool = getTool(toolId);
@@ -75,6 +82,29 @@ export async function planToolDelivery(input: {
         );
       }
 
+      if (pluginRegistry) {
+        for (const pluginId of input.selectedPluginIds ?? []) {
+          const plugin = pluginRegistry.plugins.get(pluginId);
+          if (!plugin) continue;
+          for (const skill of plugin.skills) {
+            const sourceRoot = pluginSkillRoot(pluginRegistry.root, plugin.plugin_id, skill.skill_id);
+            for (const relativeAsset of filesForSkill(pluginRegistry, plugin.plugin_id, skill.skill_id)) {
+              const sourceFile = path.join(sourceRoot, relativeAsset);
+              const target = path.join(input.projectRoot, tool.skillsDir, "skills", skill.skill_id, relativeAsset);
+              await addPlanned(
+                target,
+                posix(path.relative(input.projectRoot, target)),
+                "project",
+                await readFile(sourceFile),
+                `plugin:${plugin.plugin_id}/${skill.skill_id}/${relativeAsset}`,
+                toolId,
+                { plugin_id: plugin.plugin_id, plugin_version: plugin.version, skill_id: skill.skill_id },
+              );
+            }
+          }
+        }
+      }
+
       if (!tool.command) {
         diagnostics.push({ severity: "info", code: "commands_not_supported", message: `${tool.name} supports skills only.`, blocking: false, details: { tool_id: tool.id } });
         continue;
@@ -91,12 +121,12 @@ export async function planToolDelivery(input: {
   }
   return { operations, installations, diagnostics };
 
-  async function addPlanned(target: string, manifestPath: string, scope: "project" | "shared-global", content: string | Uint8Array, source: string, toolId: string): Promise<void> {
+  async function addPlanned(target: string, manifestPath: string, scope: "project" | "shared-global", content: string | Uint8Array, source: string, toolId: string, plugin?: Pick<InstallationRecord, "plugin_id" | "plugin_version" | "skill_id">): Promise<void> {
     const prior = recorded.get(`${scope}:${manifestPath}`);
     const operation = await planFile({ path: target, relativePath: manifestPath, content, scope, ownership: "generated", recordedHash: typeof prior?.sha256 === "string" ? prior.sha256 : undefined, force: input.force });
     operations.push(operation);
     const hash = operation.action === "skip-drift" && typeof prior?.sha256 === "string" ? prior.sha256 : sha256(content);
-    if (operation.action !== "conflict") installations.push({ tool_id: toolId, path: manifestPath, scope, sha256: hash, source, adapter_version: "1" });
+    if (operation.action !== "conflict") installations.push({ tool_id: toolId, path: manifestPath, scope, sha256: hash, source, adapter_version: "1", ...plugin });
   }
 }
 

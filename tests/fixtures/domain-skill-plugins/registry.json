@@ -1,0 +1,53 @@
+{
+  "schema_version": "1",
+  "sources": [
+    {
+      "source_id": "domain-source",
+      "name": "Domain Skills Source",
+      "repository_url": "https://example.com/domain-skills.git",
+      "license": "MIT"
+    }
+  ],
+  "plugins": [
+    {
+      "plugin_id": "geoscience",
+      "title": "Geoscience",
+      "description": "Reviewed geoscience methods for rock and excavation research.",
+      "version": "1.0.0",
+      "domain": "geoscience",
+      "skills": [
+        {
+          "skill_id": "rock-mechanics",
+          "upstreams": [
+            {
+              "source_id": "domain-source",
+              "revision": "0123456789abcdef0123456789abcdef01234567",
+              "source_paths": ["skills/rock-mechanics"],
+              "adaptation": "curated"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "plugin_id": "quantitative-methods",
+      "title": "Quantitative Methods",
+      "description": "Reviewed quantitative analysis guidance for research tables.",
+      "version": "2.1.0",
+      "domain": "statistics",
+      "skills": [
+        {
+          "skill_id": "research-tables",
+          "upstreams": [
+            {
+              "source_id": "domain-source",
+              "revision": "89abcdef0123456789abcdef0123456789abcdef",
+              "source_paths": ["skills/research-tables", "references/table-policy.md"],
+              "adaptation": "converted"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

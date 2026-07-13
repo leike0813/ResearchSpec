@@ -2,14 +2,14 @@
 
 ## 0. 定位、状态与事实源
 
-ResearchSpec 的 agent-facing surface 由 ARSU Skills、ResearchSpec Companion Skills 和不同
-工具的 command wrappers 构成。用户入口、运行顺序和目标最小集合以
+ResearchSpec 的 agent-facing surface 由固定 ARSU Skills、ResearchSpec Companion Skills、
+可选 domain plugin Skills 和不同工具的 command wrappers 构成。用户入口、运行顺序和固定最小集合以
 [ARSU 用户使用模型 v0.1](./arsu_user_usage_model.md)为 canonical 事实源。
 
 本文区分：
 
-- **Target v0.1**：4 个 ARSU Skills、4 个 Companion Skills、31×8 Skills 和 28×8
-  thin wrappers。
+- **Target v0.1**：固定 4 个 ARSU Skills、4 个 Companion Skills、31×8 base Skills 和
+  28×8 thin wrappers；可选 plugin Skills 只增加 Skill projection。
 - **Current implementation（2026-07-11）**：4 个 ARSU Skills、4 个 Companion Skills；
   converter 已拥有 typed routing 与 workflow/artifact catalogs，Navigate 从同一 catalog
   投影 Route/Resume/Explain/Export，并安全清理 manifest-owned 的旧 Companion 投影。
@@ -42,6 +42,14 @@ registry、ledger、lifecycle 和 generated ownership 的唯一确定性执行�
 Companion 以稳定用户意图划分，不与每个 CLI 动词一一对应。Check、Submit 和 Archive 是
 可直接复用的 deterministic transaction；Explore、Next 和 Context 是 Navigate 的内部路由
 分支，而不是独立产品。
+
+### 1.3 可选 Domain Plugin Skills
+
+Domain plugins 是 ResearchSpec 审校并随包分发的 Open Agent Skills 集合。workspace 通过
+`researchspec plugin` 统一选择，所有 configured tools 接收相同 Skill trees。Navigate 只会
+把已安装且语义匹配的 plugin Skill 作为 advisory option；插件不得创建 route、subflow、
+work item 或直接写 state、artifact registry、Gate、Decision、transition、receipt。脚本和
+其他资源按字节投影，ResearchSpec 不执行脚本或安装依赖。
 
 ## 2. 用户触发与 Skill 路由
 
@@ -184,7 +192,7 @@ shared-global prompt ownership、manifest hash/drift protection 和工具格式�
    并保留 confirmation、challenge/override 与 receipt 边界。
 4. `add-arsu-workflow-profiles` 已实现：提供全部 mode graphs、parallel/join 和 round templates。
 5. `consolidate-researchspec-agent-surface` 已实现：Navigate 与四 Companion 已成为唯一目标面，
-   delivery 达到 31×8 Skills 与 28×8 wrappers。
+   base delivery 达到 31×8 Skills 与 28×8 wrappers。
 
 ## 9. 验收边界
 
@@ -193,7 +201,8 @@ shared-global prompt ownership、manifest hash/drift protection 和工具格式�
 - Propose/Decide/Verify 的高影响边界和持久化 evidence 清晰。
 - Candidate 自动提交不被解释为 Gate pass；每个 Gate 都能证明 human confirmation。
 - 当前 manifest 恰好 4 个 Companion IDs，Skill/command projection parity，
-  delivery 从 registry 推导 31×8 与 28×8。
+  base delivery 从固定 registries 推导 31×8 与 28×8；domain registry 独立增加 Skills，
+  不增加 wrappers。
 - 测试锁定 ID、结构、reason code、projection parity 和可观察行为，不锁完整自然语言正文。
 
 ## 10. 非目标

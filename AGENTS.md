@@ -68,17 +68,25 @@ The locked direction is:
 - Only scope, claim, structure, branch, and override choices belong in the
   Decision ledger. Ordinary exploration belongs in the relevant artifact.
 
-The target user-visible agent surface is exactly four ARSU Skills
+The fixed user-visible agent surface is exactly four ARSU Skills
 (`deep-research`, `academic-paper`, `academic-paper-reviewer`,
 `academic-pipeline`) and four Companion Skills (`researchspec-navigate`,
-`researchspec-propose`, `researchspec-decide`, `researchspec-verify`).
+`researchspec-propose`, `researchspec-decide`, `researchspec-verify`). Optional
+ResearchSpec-maintained domain plugin Skills may extend that base surface from
+`skills/plugins/registry.json`; they do not add Companion Skills or wrappers.
 
-The target public CLI has fifteen top-level commands: `init`, `update`, `status`,
+The target public CLI has sixteen top-level commands: `init`, `update`, `status`,
 `instructions`, `start`, `submit`, `advance`, `check`, `list`, `show`, `handoff`,
-`pack`, `propose`, `decide`, and `archive`. The runtime protocol is
+`pack`, `propose`, `decide`, `archive`, and `plugin`. The runtime protocol is
 `status -> instructions <selector> -> start/submit/advance -> status`.
 Command wrappers are adapters, not separate product capabilities. Do not add a
 new public command or Companion merely to expose a low-level transaction.
+
+Domain plugins are project-maintained packages of reviewed Open Agent Skills,
+not third-party runtimes. They may assist semantic work but must not own or
+directly modify workflow state, routes, work items, artifact registry, Gates,
+Decisions, transitions, or receipts. ResearchSpec distributes static reviewed
+content and never executes plugin scripts or installs their dependencies.
 
 ## ARSU Relationship
 

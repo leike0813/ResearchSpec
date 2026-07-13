@@ -8,12 +8,12 @@ wire contract 供迁移使用。用户从对话进入 ARSU 工作的顺序以
 
 状态约定：
 
-- **Target v0.1**：15 个顶层命令和
+- **Target v0.1**：16 个顶层命令和
   `status → instructions → start/submit/advance → status`。
 - **Current implementation（2026-07-10）**：已有完整 `arsu-v0-1` profile、external 与
   parent-scoped child subflow、`submit work:|gate:`、`advance transition:`、Decision 与
   dynamic revision-round frontier。
-- **Acceptance status**：十五命令、Navigate、四 Companion 与 selector runtime 已通过公共 CLI 用户旅程验收。
+- **Acceptance status**：十六命令、Navigate、四 Companion 与 selector runtime 已通过公共 CLI 用户旅程验收。
 
 事实源：
 
@@ -104,12 +104,13 @@ Target v0.1 公共命令：
 | `researchspec propose <change-id>` | 从 strict JSON 创建 validated pending contract change | 是 | 是 | 是 |
 | `researchspec decide [item]` | 交互式处理 pending item | 是 | 是 | 是 |
 | `researchspec archive [item]` | 归档已处理的 change 或 draft patch | 是 | 是 | 是 |
+| `researchspec plugin <subcommand>` | 查看并管理随包分发的领域 Skill plugins | 视子命令 | 是 | 写子命令支持 |
 
-`submit` 是一个顶层命令但有两个 selector 语义；因此上表仍是 15 个顶层命令，而不是
-16 个。`start` 只接受可启动 subflow，`advance` 只接受可执行 transition，不提供含义模糊的
+`submit` 是一个顶层命令但有两个 selector 语义；加入 `plugin` 命令组后，上表是 16 个顶层命令，而不是
+17 个。`start` 只接受可启动 subflow，`advance` 只接受可执行 transition，不提供含义模糊的
 通用 `execute`。
 
-Current implementation 已提供全部 15 个目标顶层命令。`submit` 按 scoped selector 分派
+Current implementation 已提供全部 16 个目标顶层命令。`submit` 按 scoped selector 分派
 `work:` 与 `gate:`，`advance` 只接受唯一授权的 scoped `transition:`；下文参数和 envelope
 描述当前 wire contract。
 
@@ -148,7 +149,7 @@ Skills 都消费同一 protocol，不另建 stage mapping。
 | --- | --- | --- |
 | `--cwd <path>` | 全部命令 | 指定项目工作目录；默认当前目录 |
 | `--workspace <path>` | 合同相关命令 | 指定 `researchspec/` 路径；默认从 cwd 向下定位 |
-| `--json` | 查询、instructions、start、submit、advance、检查、列表、show、handoff、pack、propose、decide、archive | 输出单个 versioned JSON envelope |
+| `--json` | 查询、instructions、start、submit、advance、检查、列表、show、handoff、pack、propose、decide、archive、plugin | 输出单个 versioned JSON envelope |
 | `--dry-run` | 写命令 | 只报告将写入、修改、跳过的文件，不落盘 |
 | `--force` | 写命令 | 允许覆盖 generated agent-facing files；不得绕过 human decision |
 | `--yes` | 低风险写命令 | 跳过低风险确认；不得自动接受 high-impact research decisions |
@@ -596,7 +597,25 @@ researchspec archive [item] [--json] [--dry-run]
 - 如果检查发现格式不规范、引用缺失或 spec 冲突，应报告 diagnostics；复杂修复可交给
   agent-facing companion command 协助，但最终写入仍应通过 CLI 或明确的文件编辑完成。
 
-## 15. 读写边界汇总
+## 15. `researchspec plugin`
+
+`plugin` 是领域 Skill catalog 与 workspace 选择的命令组：
+
+```bash
+researchspec plugin list [--installed]
+researchspec plugin show <plugin-id>
+researchspec plugin install <plugin-ids...>
+researchspec plugin uninstall <plugin-ids...>
+researchspec plugin update [plugin-ids...]
+```
+
+`list/show` 直接读取随 npm 包分发的 registry，可在没有 workspace 时运行。写子命令
+只改变 workspace 级 `plugins.selected` 与 manifest-owned Skill projection；没有配置
+Agent tool 时仍保存选择并给出非阻塞警告。插件只增加 Skills，不生成 wrapper，不进入
+workflow profile。完整 Registry Schema、provenance、license、drift 和卸载边界见
+[Domain Skill Plugins](./domain_skill_plugins.md)。
+
+## 16. 读写边界汇总
 
 | Surface | 用户向可写命令 | 规则 |
 | --- | --- | --- |
@@ -613,9 +632,9 @@ researchspec archive [item] [--json] [--dry-run]
 | agent tool directories | `init`、`update` | 只写 generated agent-facing files |
 | packed bundle | `pack` | 只写用户指定 bundle |
 
-## 16. Current implementation 已冻结契约
+## 17. Current implementation 已冻结契约
 
-### 16.1 JSON envelope
+### 17.1 JSON envelope
 
 ```ts
 interface CliEnvelope<T> {
@@ -628,7 +647,7 @@ interface CliEnvelope<T> {
 }
 ```
 
-### 16.2 Exit codes
+### 17.2 Exit codes
 
 | Code | 含义 |
 | --- | --- |
@@ -638,7 +657,7 @@ interface CliEnvelope<T> {
 | `3` | 写保护或 I/O conflict |
 | `4` | 未预期 internal error |
 
-### 16.3 Item selectors
+### 17.3 Item selectors
 
 Current canonical selectors 还包括 external `subflow:<template>`、parent-scoped
 `subflow:<parent>/<node>`、instance-scoped `work:`/`gate:`/`transition:`，以及 `change:`、`patch:`、`artifact:`、
@@ -651,15 +670,15 @@ work-item view 消费，不进入通用 `show/list` item index。
 Target v0.1 将 `subflow:`、`work:`、`gate:`、`transition:` 统一纳入 control-plane
 selector contract；既有 governance selectors 继续服务 `list/show/propose/decide/archive`。
 
-### 16.4 Tool delivery facts
+### 17.4 Tool delivery facts
 
-- `researchspec/config.yaml` 保存 profile 和 selected tools。
+- `researchspec/config.yaml` 保存 profile、selected tools 和 workspace 级 selected plugins。
 - `tool-installation-manifest.json` 保存 generated path、scope、source、adapter
   version 和 SHA-256 ownership evidence。
 - Current implementation / Target v0.1：Project-local skill 路径统一为
   `<skillsDir>/skills/<skill-id>/**`；四个 ARSU 和四个 self-contained Companion Skills
-  被投影到 31 个 registered tools，28 个 command-capable tools 同源生成 8 个 wrappers，
-  总计 31×8 Skills 与 28×8 wrappers。
+  被投影到 31 个 registered tools，28 个 command-capable tools 同源生成 8 个 wrappers。
+  可选 registry-driven plugin Skills 同样可投影到 31 个 tools，但 wrapper 总数始终为 28×8。
 - 迁移前后都不得用一个通用 Markdown 文件覆盖工具的 Markdown/TOML 格式差异。
 - Codex prompts 是 `$CODEX_HOME/prompts` 或 `~/.codex/prompts` 下的
   shared-global files，不因单个项目 deselect 被删除。
@@ -668,13 +687,13 @@ selector contract；既有 governance selectors 继续服务 `list/show/propose/
 - Manifest 未登记的 existing file 视为 user-owned；hash drift 默认保留，
   `--force` 也只能覆盖 manifest-owned generated files。
 
-### 16.5 Deterministic derived views
+### 17.5 Deterministic derived views
 
 `handoff` 每次从 contracts/state/registry/ledgers 渲染。`pack` 使用固定 entry
 排序和时间戳，包含 entry path、byte count 和 SHA-256 manifest；两者都不接受
 decision、不推进 stage，也不成为 runtime SSOT。
 
-## 17. 非目标
+## 18. 非目标
 
 - 不设计 LLM API integration。
 - 不运行 ARSU semantic writing/research/review workflows。

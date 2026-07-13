@@ -8,7 +8,7 @@
 
 - **Target v0.1**：已经锁定的目标用户体验和职责边界。
 - **Current implementation（2026-07-11）**：仓库中已经可运行的能力。
-- **Acceptance status**：Target v0.1 的十一条公共 CLI 用户旅程已经通过验收。
+- **Acceptance status**：Target v0.1 的十二条公共 CLI 用户旅程已经通过验收。
 
 本模型由 main capability specs 持续约束；原 umbrella change `define-arsu-user-usage-model-v0-1` 在全部技术层和端到端验收通过后归档。
 
@@ -362,7 +362,7 @@ flowchart TD
 
 ## 11. 目标最小 Surface
 
-### 11.1 Skills：4 + 4
+### 11.1 固定 Skills：4 + 4；可选领域 Skills
 
 | 类别 | Skill | 用户作用 |
 | --- | --- | --- |
@@ -376,8 +376,10 @@ flowchart TD
 | Companion | `researchspec-verify` | 阶段边界语义审查与 proposed Gate verdict |
 
 Check、Submit 和 Archive 是 CLI transaction，不需要同名 Companion。Explore、Next 与 Context 的用户意图并入 Navigate。
+ResearchSpec 维护的领域插件可以从 bundled registry 增加可选 Open Agent Skills；它们不改变固定
+4+4 成员、wrapper 数量或 workflow authority。
 
-### 11.2 CLI：15 个顶层命令
+### 11.2 CLI：16 个顶层命令
 
 | 分组 | 命令 | 用户模型中的作用 |
 | --- | --- | --- |
@@ -386,10 +388,11 @@ Check、Submit 和 Archive 是 CLI transaction，不需要同名 Companion。Exp
 | Inspection | `check`, `list`, `show` | 校验和查看权威对象 |
 | Context | `handoff`, `pack` | 渲染或打包可移交上下文 |
 | Governance | `propose`, `decide`, `archive` | 高影响 change、显式决策与生命周期收尾 |
+| Domain Skills | `plugin` | 查看 bundled registry 并管理 workspace 级可选 Skills |
 
 command wrapper 只是不同 agent 工具的 adapter。目标交付量是：
 
-- 31 个 registered tools × 8 Skills；
+- 31 个 registered tools × 8 个固定 Skills，加 workspace 选择的 plugin Skills；
 - 28 个 command-capable tools × 8 thin wrappers。
 
 这个乘积不是产品能力数量，不能用 wrapper 数量反推新 surface。
@@ -406,15 +409,17 @@ command wrapper 只是不同 agent 工具的 adapter。目标交付量是：
 
 ## 13. Current implementation 与 Target 差距
 
-截至 2026-07-10，当前实现已经具备：
+截至 2026-07-13，当前实现已经具备：
 
-- 全部 15 个目标顶层命令，包括 `submit work:|gate:` 与 `advance transition:`；
+- 全部 16 个目标顶层命令，包括 `submit work:|gate:`、`advance transition:` 与 `plugin`；
 - typed workflow work items、`done/ready/blocked` evaluator 和动态 `instructions work:`；
 - `RQ Brief → Bibliography → Synthesis` 实验 Slice；
 - receipt-backed、hash-bound candidate submit；
 - contract change / Decision / archive 的确定性事务；
 - 4 个 ARSU Skills 与 4 个 Companion Skills 的多工具投影；Navigate 从 routing catalog
   和 CLI frontier 组合 Route、Resume、Explain、Export。
+- bundled domain Skill registry、workspace selection、31-tool Skill projection、manifest drift
+  protection 与 advisory Navigate recommendation；插件不生成 wrappers 或 workflow state。
 - converter-owned routing catalog，覆盖 25 个 modes、2 个 pipeline entries、artifacts、
   prerequisites、near-misses、risk/Gate policy 和粗粒度成本，并投影 ARSU descriptions。
 - active-run `state.yaml` 下的 strict subflow/round instances、parent/round identity、
@@ -429,7 +434,7 @@ command wrapper 只是不同 agent 工具的 adapter。目标交付量是：
 
 当前实现已经通过 bootstrap、vague/expert routing、standalone、pipeline、parallel join、
 Gate challenge/override、revision round、cross-process resume、context export 与 terminal
-completion 的公共 CLI 黑盒验收。本文中的四 Companion、十五个 CLI 和 31×8/28×8 数量
+completion 与 Material Passport resume 的公共 CLI 黑盒验收。本文中的四 Companion、十六个 CLI 和 31×8/28×8 base 数量
 是当前 generated delivery 的事实。
 
 ## 14. 技术层落地顺序
@@ -456,7 +461,7 @@ Umbrella change 只有在以下用户旅程全部通过时才能归档：Bootstr
 - CLI 状态权威与 ARSU 语义生产边界；
 - work 自动提交、Gate 逐次确认、Decision 使用范围；
 - workflow-declared parallelism 与 unique-transition 自动推进；
-- 4 ARSU + 4 Companion + 15 CLI；
+- 固定 4 ARSU + 4 Companion、可选 domain plugin Skills、16 CLI；
 - selector-based 运行协议。
 
 v0.1 已实现并仍可通过后续 change 演进：

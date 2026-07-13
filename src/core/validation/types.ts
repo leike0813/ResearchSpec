@@ -9,7 +9,7 @@ export interface Diagnostic {
 
 export type ParseResult<T> = { ok: true; value: T } | { ok: false; diagnostic: Diagnostic };
 
-export type CheckTarget = "all" | "contracts" | "runtime" | "artifacts" | "tools";
+export type CheckTarget = "all" | "contracts" | "runtime" | "artifacts" | "tools" | "plugins";
 
 export interface CheckResult {
   ok: boolean;

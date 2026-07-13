@@ -23,9 +23,12 @@ void test("traceability covers every canonical user-model requirement and scenar
 
   const journeyIds = new Set(manifest.journeys.map((item) => item.journey_id));
   const testIds = new Set(manifest.journeys.map((item) => item.test_id));
-  assert.equal(journeyIds.size, 11);
-  assert.equal(testIds.size, 11);
-  const journeySource = await readFile("tests/arsu-user-journeys.test.ts", "utf8");
+  assert.equal(journeyIds.size, 12);
+  assert.equal(testIds.size, 12);
+  const journeySource = (await Promise.all([
+    readFile("tests/arsu-user-journeys.test.ts", "utf8"),
+    readFile("tests/material-passport-import.test.ts", "utf8"),
+  ])).join("\n");
   for (const testId of testIds) assert.match(journeySource, new RegExp(`\\[${escapeRegex(testId)}\\]`));
 
   const archived = await readdir("openspec/changes/archive");

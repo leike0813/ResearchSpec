@@ -10,11 +10,11 @@ CLI 参数形状或 adapter 路径细节。
 surface 的 canonical 事实源。本文明确区分：
 
 - **Target v0.1**：CLI 控制平面、profile-owned workflow graph、动态 subflow/round、
-  4 ARSU + 4 Companion + 15 CLI。
+  固定 4 ARSU + 4 Companion、可选 domain plugin Skills 与 16 CLI。
 - **Current implementation（2026-07-11）**：typed routing/workflow/artifact catalogs、完整
   `arsu-v0-1`、nested subflow/round、parallel frontier、scoped Start/Submit、Gate/Decision/
-  transition receipts、四个 Companion、31×8/28×8 delivery 和 contract lifecycle。
-- **Acceptance status**：Target v0.1 架构已通过十一条公共 CLI 用户旅程验收，无待实现技术层。
+  transition receipts、四个 Companion、domain plugin registry、31×8/28×8 base delivery 和 contract lifecycle。
+- **Acceptance status**：Target v0.1 架构已通过十二条公共 CLI 用户旅程验收，无待实现技术层。
 
 事实源：
 
@@ -69,6 +69,7 @@ ResearchSpec =
   ARSU-facing spec framework
   + file-based contract runtime
   + ARSU converter / maintenance layer
+  + maintained domain Skill plugin registry
   + agent-neutral delivery adapters
 ```
 
@@ -95,7 +96,7 @@ ResearchSpec =
 
 ## 2. 总体架构
 
-Target v0.1 由九个协作层组成；它们是职责边界，不要求拆成九个包。
+Target v0.1 由十个协作层组成；它们是职责边界，不要求拆成十个包。
 
 ```text
 ARS upstream → ARSU Converter → ARSU Skills ───────┐
@@ -153,6 +154,8 @@ Renderer 从 specs、state、artifact registry 和 ledgers 渲染 agent/human �
 
 Adapter Delivery 只负责把 generated skills、commands 或 prompts 写入目标 agent
 工具目录。Adapter 不调用 agent API，不持有研究状态，也不改变 core contracts。
+固定 4+4 Skills 生成 8 个 wrappers；registry-driven domain Skills 只投影 Skill trees，
+不生成 wrappers。
 
 ### 2.8 Companion Workflow Layer
 
@@ -172,6 +175,14 @@ Converter-owned routing catalog 是 Skill/mode、intent、near-miss、主要产�
 Gate policy 的 SSOT。Workflow profile 声明 subflow templates、work DAG、parallel/join、
 Gate、transition 和 revision-round template。Catalog 回答“选哪条路线”，profile 回答“路线
 内部如何推进”，CLI 依据 workspace 实况计算 frontier。
+
+### 2.10 Domain Skill Plugin Registry
+
+`skills/plugins/registry.json` 是可选领域 Skills 的 package-owned catalog。维护者固定上游
+revision，完成筛选、改写、审校和 license/NOTICE 处理，再把静态 Skill tree 随 npm 包发布。
+workspace 只保存 selected plugin IDs；manifest 保存 tool/path/hash 与 plugin/Skill ownership。
+插件可以辅助语义生产，但不能拥有 workflow profile、frontier、state、artifact registry、
+Gate、Decision 或 receipt。ResearchSpec 不远程下载插件、不执行其脚本、不安装依赖。
 
 ## 3. Contract Workspace Architecture
 
@@ -595,7 +606,12 @@ round templates。
 ### 9.5 Agent Surface Consolidation
 
 `consolidate-researchspec-agent-surface` 新增 Navigate，收敛为四个 Companion，并生成
-31×8 Skills 与 28×8 thin wrappers。
+31×8 base Skills 与 28×8 thin wrappers；可选 plugin Skills 不改变 wrapper 数量。
+
+### 9.6 Domain Skill Plugin Registry
+
+`add-domain-skill-plugin-registry` 提供 package-owned registry、workspace selection、31-tool
+Skill-only projection、manifest provenance、drift-safe lifecycle 与 Navigate advisory boundary。
 
 ## 10. Acceptance Criteria
 

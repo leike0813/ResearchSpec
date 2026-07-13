@@ -20,6 +20,7 @@
     "docs/release_process.md",
     "docs/arsu_user_usage_model.md",
     "docs/cli_interface_design.md",
+    "docs/domain_skill_plugins.md",
     "artifacts/mvp_release_checklist.md"
   ],
   "scripts": {

@@ -47,10 +47,15 @@ Then start Codex in the same project and describe the research goal in natural l
 
 > I want to study how generative AI affects writing instruction in higher education. Show candidate routes, prerequisites, artifacts, formal Gates, risks, and cost. Do not start a route until I confirm it.
 
-ResearchSpec installs exactly eight project Skills:
+ResearchSpec installs exactly eight base project Skills:
 
 - ARSU: `deep-research`, `academic-paper`, `academic-paper-reviewer`, `academic-pipeline`
 - Companion: `researchspec-navigate`, `researchspec-propose`, `researchspec-decide`, `researchspec-verify`
+
+Optional ResearchSpec-maintained [domain Skill plugins](docs/domain_skill_plugins.md)
+can add reviewed Open Agent Skills to the workspace. Plugins add no command
+wrappers and never own workflow state, Gates, Decisions, or receipts. Inspect the
+bundled catalog with `researchspec plugin list`.
 
 The normal runtime protocol is:
 
@@ -87,6 +92,7 @@ See [SECURITY.md](SECURITY.md) for supported versions and vulnerability handling
 
 - [Canonical ARSU user model](docs/arsu_user_usage_model.md)
 - [CLI interface](docs/cli_interface_design.md)
+- [Domain Skill plugins](docs/domain_skill_plugins.md)
 - [Release process](docs/release_process.md)
 - [Project-owner walkthrough](playbooks/owner-walkthrough/README.md) — recommended introduction to the real operating model
 - [Playbooks index](playbooks/README.md) — owner walkthrough and Dogfooding QA guidance; repository-only, not included in the npm package

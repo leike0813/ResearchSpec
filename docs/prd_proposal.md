@@ -9,11 +9,12 @@
 [ARSU 用户使用模型 v0.1](./arsu_user_usage_model.md)为 canonical 事实源。本文中的
 能力描述分为三层：
 
-- **Target v0.1**：4 个 ARSU Skills、4 个 Companion Skills、15 个 CLI 命令和
-  selector-based 运行协议。
+- **Target v0.1**：固定 4 个 ARSU Skills、4 个 Companion Skills、可选 domain plugin
+  Skills、16 个 CLI 命令和 selector-based 运行协议。
 - **Current implementation（2026-07-11）**：完整 routing/workflow catalogs、subflow/round、
-  Gate/transition、`arsu-v0-1`、四个 Companion、十五个 CLI 和 31×8/28×8 delivery。
-- **Acceptance status**：Target v0.1 的十一条公共 CLI 用户旅程已通过，产品技术层完整。
+  Gate/transition、`arsu-v0-1`、四个 Companion、domain plugin registry、十六个 CLI 和
+  31×8/28×8 base delivery。
+- **Acceptance status**：Target v0.1 的十二条公共 CLI 用户旅程已通过，产品技术层完整。
 
 本文不定义字段级 schema、validator 细节、CLI 参数形状或 adapter 具体写盘
 协议。这些内容应在后续 specs 或实现任务中单独落地。
@@ -280,10 +281,25 @@ ResearchSpec 必须最终拥有 ARSU-derived 产物的转换、刷新和验证�
   风险说明和 human confirmation。
 - ARSU 继续拥有 literature research、writing、review 与 manuscript draft-patch authoring；
   Companion 不得复制这些能力。
-- Target delivery 是 31 个 tools 各 8 个 Skills，28 个 command-capable tools 各 8 个薄
-  wrappers。Wrapper 是 adapter，不是新的产品能力。
+- Target base delivery 是 31 个 tools 各 8 个固定 Skills，28 个 command-capable tools 各
+  8 个薄 wrappers。Workspace-selected plugin Skills 可额外投影到 31 个 tools，但不增加
+  wrappers。Wrapper 和 plugin projection 都不是新的 workflow authority。
 - Current implementation 已由 typed manifest 投影四个 Companion；六个旧投影仅在检测到
   manifest ownership 且 hash 匹配时安全清理，用户漂移始终保留并诊断。
+
+### 3.12 Domain Skill Plugins
+
+ResearchSpec 必须能够把维护者审校的领域知识作为可选 Open Agent Skills 包随 npm 发布。
+
+需求：
+
+- bundled registry 是 plugin/source/provenance 的唯一 catalog SSOT，不在用户运行期访问上游；
+- workspace 级选择投影到所有 configured tools，新 tool 自动补齐；
+- 插件保留 LICENSE、NOTICE 与 immutable upstream revision，资源原样复制；
+- ResearchSpec 不执行 plugin scripts、不安装依赖、不提供 sandbox；
+- plugin Skills 不生成 command wrappers，也不得拥有 workflow、Gate、Decision、artifact
+  registry 或 receipt authority；
+- install/update/uninstall 复用 manifest hash、drift protection 和 manifest-last write discipline。
 
 ## 4. 合同层需求
 
@@ -594,5 +610,5 @@ v0.1 已按以下技术层完成并归档：
 5. `consolidate-researchspec-agent-surface`。
 
 随后通过 standalone、pipeline、Gate challenge/override、revision round、resume 和
-context export 等十一条公共 CLI 旅程完成 umbrella acceptance。未来能力必须通过新的
+context export、Material Passport resume 等十二条公共 CLI 旅程完成 umbrella acceptance。未来能力必须通过新的
 OpenSpec change 增量定义，不重开这些已完成技术层。

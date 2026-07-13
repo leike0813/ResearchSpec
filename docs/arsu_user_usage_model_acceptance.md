@@ -12,7 +12,7 @@ This acceptance layer verifies the canonical user model through the packaged Res
 
 ## Stable Journeys
 
-The suite exposes eleven stable IDs: `bootstrap`, `vague-routing`, `expert-direct-route`, `standalone`, `pipeline`, `parallel-join`, `gate-challenge-override`, `revision-round`, `resume`, `context-export`, and `terminal-completion`.
+The suite exposes twelve stable IDs: `bootstrap`, `vague-routing`, `expert-direct-route`, `standalone`, `pipeline`, `parallel-join`, `gate-challenge-override`, `revision-round`, `resume`, `resume-passport`, `context-export`, and `terminal-completion`.
 
 The authoritative requirement/scenario mapping is [the traceability manifest](../tests/fixtures/arsu-user-model-traceability.json). This document deliberately does not duplicate that matrix.
 

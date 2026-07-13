@@ -34,7 +34,7 @@ void test("[journey.bootstrap] init installs the eight-Skill surface without sta
       assert.equal(existsSync(path.join(root, ".forge/skills", skill, "SKILL.md")), true, skill);
     }
     const commandNames = [...runCli(["--help"], root).stdout.matchAll(/^ {2}([a-z]+)(?:\s|$)/gm)].map((item) => item[1]).filter((item) => item !== "help");
-    assert.deepEqual(commandNames, ["init", "update", "status", "instructions", "start", "submit", "advance", "check", "list", "show", "handoff", "pack", "propose", "decide", "archive"]);
+    assert.deepEqual(commandNames, ["init", "update", "status", "instructions", "start", "submit", "advance", "check", "list", "show", "handoff", "pack", "propose", "decide", "archive", "plugin"]);
   } finally { await cleanup(root); }
 });
 

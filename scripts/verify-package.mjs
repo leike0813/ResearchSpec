@@ -22,7 +22,7 @@ const expectedSkills = [
 ];
 const expectedCommands = [
   "advance", "archive", "check", "decide", "handoff", "init", "instructions", "list",
-  "pack", "propose", "show", "start", "status", "submit", "update",
+  "pack", "plugin", "propose", "show", "start", "status", "submit", "update",
 ];
 
 try {
@@ -51,6 +51,8 @@ try {
     .filter((command) => command && command !== "help")
     .sort();
   assert(equal(commands, expectedCommands), `Installed command surface mismatch: ${commands.join(", ")}`);
+  const pluginList = JSON.parse(run(bin, ["plugin", "list", "--json"], installDirectory).stdout);
+  assert(equal(pluginList.data?.plugins, []), "Production plugin registry must be empty for this release");
 
   const environment = { ...process.env, CODEX_HOME: codexHome };
   run(bin, ["init", projectDirectory, "--tools", "codex", "--json"], installDirectory, environment);
@@ -73,7 +75,8 @@ function verifyTarballFiles(files) {
   const required = [
     "package.json", "README.md", "CHANGELOG.md", "SECURITY.md", "LICENSE", "NOTICE",
     "LICENSES/MIT.txt", "LICENSES/CC-BY-NC-4.0.txt", "docs/release_process.md",
-    "docs/arsu_user_usage_model.md", "docs/cli_interface_design.md",
+    "docs/arsu_user_usage_model.md", "docs/cli_interface_design.md", "docs/domain_skill_plugins.md",
+    "skills/plugins/registry.json",
     "artifacts/mvp_release_checklist.md", "dist/src/cli/bin.js",
   ];
   for (const skill of expectedSkills.slice(0, 4)) {
@@ -81,13 +84,14 @@ function verifyTarballFiles(files) {
   }
   for (const item of required) assert(files.includes(item), `Tarball is missing required file: ${item}`);
 
-  const allowed = /^(?:package\.json|README\.md|CHANGELOG\.md|SECURITY\.md|LICENSE|NOTICE|LICENSES\/[^/]+|docs\/(?:release_process|arsu_user_usage_model|cli_interface_design)\.md|artifacts\/mvp_release_checklist\.md|dist\/src\/.*\.js|skills\/.*)$/;
+  const allowed = /^(?:package\.json|README\.md|CHANGELOG\.md|SECURITY\.md|LICENSE|NOTICE|LICENSES\/[^/]+|docs\/(?:release_process|arsu_user_usage_model|cli_interface_design|domain_skill_plugins)\.md|artifacts\/mvp_release_checklist\.md|dist\/src\/.*\.js|skills\/.*)$/;
   const retired = /^dist\/src\/adapters\/companion\/workflows\/(?:archive|check|context|explore|next|submit)\.js$/;
   for (const file of files) {
     assert(allowed.test(file), `Tarball contains a path outside the release allowlist: ${file}`);
     assert(!file.startsWith("playbooks/"), `Tarball contains repository-only playbook material: ${file}`);
     assert(file !== "artifacts/researchspec_dogfooding_guide.md", `Tarball contains the retired dogfooding guide: ${file}`);
     assert(!file.startsWith("dist/tests/"), `Tarball contains compiled tests: ${file}`);
+    assert(!file.startsWith("tests/fixtures/domain-skill-plugins/"), `Tarball contains plugin test fixtures: ${file}`);
     assert(!file.endsWith(".d.ts"), `Tarball contains TypeScript declarations: ${file}`);
     assert(!file.endsWith(".js.map"), `Tarball contains source maps: ${file}`);
     assert(!retired.test(file), `Tarball contains a retired Companion workflow: ${file}`);

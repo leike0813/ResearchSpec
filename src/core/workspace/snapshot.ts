@@ -19,8 +19,19 @@ const ActorSchema = z.union([z.string().min(1), z.looseObject({ kind: z.string()
 const SourceSchema = z.looseObject({ source_id: SafeId });
 const ClaimSchema = z.looseObject({ claim_id: SafeId });
 const GateSchema = z.union([ImportedGateEvidenceSchema, GateEventV1Schema]);
-const ConfigSchema = z.looseObject({ schema_version: z.string(), profile: z.enum(WORKFLOW_PROFILE_IDS), agent_tools: z.looseObject({ selected: z.array(z.string()), delivery: z.enum(["skills", "commands", "both"]) }) });
-const ManifestSchema = z.looseObject({ schema_version: z.string(), package_version: z.string(), installations: z.array(z.looseObject({ tool_id: z.string(), path: z.string(), scope: z.enum(["project", "shared-global"]), sha256: z.string(), source: z.string(), adapter_version: z.string() })) });
+const ConfigSchema = z.looseObject({
+  schema_version: z.string(),
+  profile: z.enum(WORKFLOW_PROFILE_IDS),
+  agent_tools: z.looseObject({ selected: z.array(z.string()), delivery: z.enum(["skills", "commands", "both"]) }),
+  plugins: z.looseObject({ selected: z.array(z.string()) }).optional(),
+});
+const ManifestSchema = z.looseObject({
+  schema_version: z.string(), package_version: z.string(),
+  installations: z.array(z.looseObject({
+    tool_id: z.string(), path: z.string(), scope: z.enum(["project", "shared-global"]), sha256: z.string(), source: z.string(), adapter_version: z.string(),
+    plugin_id: z.string().optional(), plugin_version: z.string().optional(), skill_id: z.string().optional(),
+  })),
+});
 const SourcesSchema = z.looseObject({ schema_version: z.string(), sources: z.array(SourceSchema) });
 const ClaimsSchema = z.looseObject({ schema_version: z.string(), claims: z.array(ClaimSchema) });
 const ProjectSchema = z.looseObject({ schema_version: z.string(), project_id: SafeId, title: z.string(), target_output: z.string(), primary_language: z.string() });

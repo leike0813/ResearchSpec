@@ -11,8 +11,8 @@ import { cleanup, parseEnvelope, runCli, tempProject } from "./helpers/cli.js";
 void test("help, version, and usage errors expose the complete public boundary", () => {
   const help = runCli(["--help"]);
   assert.equal(help.status, 0);
-  const commands = ["init", "update", "status", "instructions", "start", "submit", "advance", "check", "list", "show", "handoff", "pack", "propose", "decide", "archive"];
-  assert.equal(commands.length, 15);
+  const commands = ["init", "update", "status", "instructions", "start", "submit", "advance", "check", "list", "show", "handoff", "pack", "propose", "decide", "archive", "plugin"];
+  assert.equal(commands.length, 16);
   for (const command of commands) assert.match(help.stdout, new RegExp(`\\b${command}\\b`));
   assert.equal(runCli(["--version"]).stdout.trim(), "0.1.0");
   const invalid = runCli(["unknown", "--json"]);
@@ -30,6 +30,7 @@ void test("init dry-run and execution share a protected workspace plan", async (
 
   assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
   assert.match(await readFile(path.join(root, "researchspec/config.yaml"), "utf8"), /^profile: arsu-v0-1$/m);
+  assert.match(await readFile(path.join(root, "researchspec/config.yaml"), "utf8"), /plugins:\n\s+selected: \[\]/);
   assert.equal(runCli(["init", root, "--tools", "none", "--profile", "unknown", "--json"]).status, 2);
   for (const relative of ["config.yaml", "tool-installation-manifest.json", "specs/project.md", "runs/current/state.yaml"]) assert.equal(existsSync(path.join(root, "researchspec", relative)), true);
   const projectPath = path.join(root, "researchspec/specs/project.md");
@@ -46,15 +47,31 @@ void test("status and check use the versioned JSON envelope", async () => {
   assert.equal(parseEnvelope(missing).error?.code, "workspace_missing");
 
   assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
-  const status = parseEnvelope<{ status: string; run: { status: string }; tools: { selected: string[] } }>(runCli(["status", "--json"], root));
+  const status = parseEnvelope<{ status: string; run: { status: string }; tools: { selected: string[] }; plugins: { selected: string[]; available: string[]; projected: string[] } }>(runCli(["status", "--json"], root));
   assert.equal(status.ok, true);
   assert.equal(status.data?.status, "initialized");
   assert.equal(status.data?.run.status, "not_started");
   assert.deepEqual(status.data?.tools.selected, []);
+  assert.deepEqual(status.data?.plugins, { selected: [], available: [], unavailable: [], projected: [] });
   const check = parseEnvelope<{ ok: boolean; target: string }>(runCli(["check", "contracts", "--json"], root));
   assert.equal(check.data?.ok, true);
   assert.equal(check.data?.target, "contracts");
+  const pluginCheck = parseEnvelope<{ ok: boolean; target: string }>(runCli(["check", "plugins", "--json"], root));
+  assert.equal(pluginCheck.data?.ok, true);
+  assert.equal(pluginCheck.data?.target, "plugins");
   await cleanup(root);
+});
+
+void test("plugin catalog list and show are package-only outside a workspace", () => {
+  const listed = runCli(["plugin", "list", "--json"]);
+  assert.equal(listed.status, 0);
+  assert.deepEqual(parseEnvelope<{ plugins: unknown[] }>(listed).data?.plugins, []);
+  const installed = runCli(["plugin", "list", "--installed", "--json"]);
+  assert.equal(installed.status, 0);
+  assert.deepEqual(parseEnvelope<{ plugins: unknown[] }>(installed).data?.plugins, []);
+  const missing = runCli(["plugin", "show", "unknown-plugin", "--json"]);
+  assert.equal(missing.status, 1);
+  assert.equal(parseEnvelope(missing).error?.code, "plugin_not_found");
 });
 
 void test("universal init exposes dynamic status and resolved instructions", async () => {

@@ -33,6 +33,7 @@ Choose exactly one of Route, Resume, Explain, or Export, then use ResearchSpec's
 
 \`\`\`bash
 researchspec status --json
+researchspec plugin list --installed --json
 researchspec instructions subflow:tpl-<route> --json
 researchspec start subflow:tpl-<route> --input start.json --actor-kind agent --actor-name researchspec-navigate --confirmed-by "<human>" --dry-run --json
 researchspec instructions work:<instance>/<node> --json
@@ -50,8 +51,8 @@ researchspec pack --out context.zip --dry-run --json
 
 1. Identify one branch. Use Route for a new or changed academic goal, Resume for existing work, Explain for evidence questions, and Export for context sharing. If two are requested, complete the read-only branch first and clearly separate any later write.
 2. Resolve the workspace and run \`researchspec status --json\`. Treat diagnostics and \`workflow_control\` as current authority.
-3. **Route:** match the goal against the catalog reference below, including near misses. Intersect semantic matches with status subflows by \`route_ref\`; never claim that a catalog route is currently startable merely because it exists.
-4. For each viable Route candidate, show Skill, mode/entry, prerequisite expansion and missing inputs, primary artifacts, formal Gate policy, risk, cost, and current selector. If none or several remain, explain the missing basis or ask the user to choose.
+3. **Route:** match the goal against the catalog reference below, including near misses. Intersect semantic matches with status subflows by \`route_ref\`; never claim that a catalog route is currently startable merely because it exists. Also query \`researchspec plugin list --installed --json\`; if an installed domain Skill's domain, description, or Skill metadata semantically matches the user's intent, present it only as an advisory helper or explicit Skill option alongside the canonical ARSU route.
+4. For each viable Route candidate, show Skill, mode/entry, prerequisite expansion and missing inputs, primary artifacts, formal Gate policy, risk, cost, and current selector. Keep plugin recommendations separate: an uninstalled, unavailable, or irrelevant plugin is not executable workspace capability, and a recommendation never creates a route, subflow, work item, Gate, Decision, receipt, frontier, or second state machine. If none or several canonical routes remain, explain the missing basis or ask the user to choose.
 5. Fetch \`instructions subflow:<selector> --json\` for the chosen candidate. Present the full route/child graph summary and obtain explicit confirmation. Dry-run Start with the real payload, show plan hash and writes, then execute the identical plan only after confirmation. A changed route, graph, inputs, decision basis, or plan requires a fresh preview and confirmation.
 6. **Resume:** read only the current CLI frontier. Dispatch ready semantic work to the exact \`producer_skill\` returned by work instructions. Route formal Gates to \`researchspec-verify\`; route multiple transitions, mid-entry choices, review branches, and overrides to \`researchspec-decide\`.
 7. If Resume exposes exactly one authorized non-semantic transition, fetch its instructions, dry-run Advance, and execute the exact plan with expected plan hash. Do not advance when confirmation, Decision, Gate, receipt, or basis is missing. Existing work does not require route reconfirmation unless its route or plan drifted.
@@ -65,6 +66,7 @@ researchspec pack --out context.zip --dry-run --json
 | Situation | Action |
 | --- | --- |
 | Vague or cross-Skill new goal | Route from catalog facts plus current CLI availability. |
+| Installed plugin matches the domain | Recommend it as advisory semantic help; do not change the route or frontier. |
 | Explicit supported route not yet started | Show the same prerequisite/route summary and require confirmation. |
 | Ready work selector | Call instructions and dispatch its returned ARSU producer. |
 | Formal Gate | Route to Verify; Navigate cannot confirm it. |
@@ -94,6 +96,7 @@ Return the selected branch, workspace evidence used, canonical selectors, catalo
 - The routing catalog owns route meaning; this Skill owns no parallel route table.
 - Parent route confirmation authorizes only the exact displayed plan. It never passes a Gate, selects a branch, or authorizes changed inputs.
 - Navigate may execute only confirmed Start/export writes and exact unique mechanical Advance. All semantic work and human decisions remain with their owners.
+- Plugin Skills may assist semantic production or be invoked explicitly, but they cannot directly modify ResearchSpec state, artifact registry, Gates, Decisions, or receipts.
 
 ## Completion
 

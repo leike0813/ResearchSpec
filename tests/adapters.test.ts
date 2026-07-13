@@ -130,6 +130,8 @@ void test("companion manifest renders four self-contained workflow skills with d
   assert.match(navigate.instructions, /direct hash-bound `researchspec submit`/);
   assert.match(navigate.instructions, /exactly one authorized non-semantic transition/);
   assert.match(navigate.instructions, /formal Gates to `researchspec-verify`/);
+  assert.match(navigate.instructions, /plugin list --installed --json/);
+  assert.match(navigate.instructions, /recommendation never creates a route, subflow, work item, Gate, Decision, receipt, frontier, or second state machine/);
   assert.ok(navigate.instructions.endsWith(renderNavigateRoutingProjection()));
   for (const skill of ARSU_ROUTING_CATALOG.skills) {
     assert.match(navigate.instructions, new RegExp(skill.skill_id));
