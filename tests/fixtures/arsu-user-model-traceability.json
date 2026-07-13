@@ -6,6 +6,7 @@
     "add-subflow-instance-control-plane",
     "add-gate-transition-control-plane",
     "add-arsu-workflow-profiles",
+    "add-domain-skill-plugin-registry",
     "consolidate-researchspec-agent-surface",
     "implement-complete-cli-interface",
     "add-atomic-artifact-submit",
@@ -110,6 +111,7 @@
           "scenarios": [
             { "scenario": "ARSU semantic Skills are exposed", "technical_changes": ["consolidate-researchspec-agent-surface"], "journey_ids": ["bootstrap"], "test_ids": ["journey.bootstrap"] },
             { "scenario": "Companion intents are exposed", "technical_changes": ["consolidate-researchspec-agent-surface"], "journey_ids": ["bootstrap", "vague-routing"], "test_ids": ["journey.bootstrap", "journey.vague-routing"] },
+            { "scenario": "Optional domain Skills do not redefine the base surface", "technical_changes": ["add-domain-skill-plugin-registry"], "journey_ids": ["bootstrap"], "test_ids": ["journey.bootstrap"] },
             { "scenario": "Transaction helpers do not become Companions", "technical_changes": ["consolidate-researchspec-agent-surface"], "journey_ids": ["bootstrap", "context-export"], "test_ids": ["journey.bootstrap", "journey.context-export"] }
           ]
         },

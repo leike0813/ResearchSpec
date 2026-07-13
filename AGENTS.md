@@ -15,6 +15,7 @@ Current external reference paths:
 - ResearchSpec project: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec`
 - ARSU project to be absorbed: `/home/joshua/Workspace/Code/Skill/academic-research-skills-universal`
 - ARS upstream checkout inside ARSU: `/home/joshua/Workspace/Code/Skill/academic-research-skills-universal/vendor/ars`
+- ToolUniverse audit and future ingest source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/tooluniverse`
 
 When paths or ownership change, update this file in the same change so future
 agents do not follow stale locations.
@@ -87,6 +88,13 @@ not third-party runtimes. They may assist semantic work but must not own or
 directly modify workflow state, routes, work items, artifact registry, Gates,
 Decisions, transitions, or receipts. ResearchSpec distributes static reviewed
 content and never executes plugin scripts or installs their dependencies.
+
+`vendor/tooluniverse` is a maintainer-only pinned source used for audit and
+possible future ingest. Its presence does not approve any upstream Skill for
+distribution, expose ToolUniverse as a ResearchSpec runtime, or authorize
+upstream setup, dependency installation, scripts, MCP calls, or workflow writes.
+Only a later explicit OpenSpec change may admit reviewed static derivatives to
+`skills/plugins/registry.json`.
 
 ## ARSU Relationship
 

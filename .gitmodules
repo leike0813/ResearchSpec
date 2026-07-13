@@ -1,3 +1,6 @@
 [submodule "vendor/ars"]
 	path = vendor/ars
 	url = https://github.com/Imbad0202/academic-research-skills
+[submodule "vendor/tooluniverse"]
+	path = vendor/tooluniverse
+	url = https://github.com/mims-harvard/ToolUniverse
