@@ -1,0 +1,13 @@
+{
+  "schema_version": "1",
+  "default_disposition": "included",
+  "decisions": [
+    {
+      "upstream_skill_id": "open-notebook",
+      "source_path": "skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "disposition": "excluded",
+      "reason": "Upstream test harness is not required for target-Agent use and would not be executed by ResearchSpec.",
+      "skill_remains_complete": true
+    }
+  ]
+}

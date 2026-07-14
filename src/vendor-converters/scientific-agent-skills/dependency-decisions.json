@@ -1,0 +1,247 @@
+{
+  "schema_version": "1",
+  "decisions": [
+    {
+      "from": "bulk-rnaseq",
+      "to": "nextflow",
+      "relation": "required",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/bulk-rnaseq/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "bulk-rnaseq",
+      "to": "pydeseq2",
+      "relation": "required",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/bulk-rnaseq/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "bulk-rnaseq",
+      "to": "pathway-enrichment",
+      "relation": "required",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/bulk-rnaseq/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "bulk-rnaseq",
+      "to": "scientific-visualization",
+      "relation": "required",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/bulk-rnaseq/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "literature-review",
+      "to": "parallel-web",
+      "relation": "required",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/literature-review/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "literature-review",
+      "to": "bioservices",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/literature-review/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "literature-review",
+      "to": "gget",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/literature-review/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "literature-review",
+      "to": "scientific-schematics",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/literature-review/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "literature-review",
+      "to": "venue-templates",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/literature-review/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "market-research-reports",
+      "to": "research-lookup",
+      "relation": "required",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/market-research-reports/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "market-research-reports",
+      "to": "generate-image",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/market-research-reports/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "market-research-reports",
+      "to": "scientific-schematics",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/market-research-reports/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "market-research-reports",
+      "to": "peer-review",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/market-research-reports/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "research-lookup",
+      "to": "parallel-web",
+      "relation": "required",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/research-lookup/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "scanpy",
+      "to": "anndata",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/scanpy/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "scanpy",
+      "to": "scvi-tools",
+      "relation": "routing",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/scanpy/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "scientific-slides",
+      "to": "pptx",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/scientific-slides/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "scientific-slides",
+      "to": "research-lookup",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/scientific-slides/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "scientific-slides",
+      "to": "scientific-schematics",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/scientific-slides/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "scientific-writing",
+      "to": "research-lookup",
+      "relation": "required",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/scientific-writing/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "scientific-writing",
+      "to": "scientific-schematics",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/scientific-writing/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "scientific-writing",
+      "to": "venue-templates",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/scientific-writing/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    }
+  ]
+}

@@ -4,3 +4,6 @@
 [submodule "vendor/tooluniverse"]
 	path = vendor/tooluniverse
 	url = https://github.com/mims-harvard/ToolUniverse
+[submodule "vendor/scientific-agent-skills"]
+	path = vendor/scientific-agent-skills
+	url = https://github.com/K-Dense-AI/scientific-agent-skills.git

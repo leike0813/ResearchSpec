@@ -10,4 +10,20 @@ ResearchSpec contains material adapted from Academic Research Skills (ARS):
 
 ResearchSpec conversion changes paths, routing descriptions, contract preflight guidance, workflow projections, and runtime-control instructions. ARSU-derived output remains subject to the upstream attribution and noncommercial license. See `LICENSE` for the material boundary and `LICENSES/` for license references.
 
+ResearchSpec's domain taxonomy documentation includes ANZSRC 2020 Fields of Research classification names:
+
+- Attribution: Australian Bureau of Statistics and Stats NZ, Australian and New Zealand Standard Research Classification (ANZSRC), 2020
+- Source: https://www.abs.gov.au/statistics/classifications/australian-and-new-zealand-standard-research-classification-anzsrc/latest-release
+- License: Creative Commons Attribution 4.0 International
+- License URL: https://creativecommons.org/licenses/by/4.0/
+
+ResearchSpec distributes reviewed Open Agent Skills adapted from Scientific Agent Skills:
+
+- Source: https://github.com/K-Dense-AI/scientific-agent-skills
+- Release: v2.53.0
+- Revision: 9c9bd2e92af12311ecd0c1a643e0931643f9ea04
+- Skill content license: MIT, as recorded in each generated Skill's `LICENSE` and `NOTICE.md`
+
+Package, service, dataset, hardware, and runtime licenses referenced by those Skills remain separately applicable. ResearchSpec distributes static reviewed resources and does not execute bundled scripts or install their dependencies.
+
 ResearchSpec-authored material is copyright 2026 ResearchSpec contributors and is licensed under MIT where identified by the root license map.

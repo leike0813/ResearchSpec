@@ -1,0 +1,443 @@
+{
+  "schema_version": "1",
+  "vendor": {
+    "vendor_id": "scientific-agent-skills",
+    "name": "Scientific Agent Skills",
+    "repository_url": "https://github.com/K-Dense-AI/scientific-agent-skills",
+    "release": "v2.53.0",
+    "revision": "9c9bd2e92af12311ecd0c1a643e0931643f9ea04",
+    "license": "MIT",
+    "converter_version": "1",
+    "skills": [
+      {
+        "skill_id": "scientific-agent-skills-aeon",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/aeon"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-astropy",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/astropy"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-benchling-integration",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/benchling-integration"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-cirq",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/cirq"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-generate-image",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/generate-image"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-geopandas",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/geopandas"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-ginkgo-cloud-lab",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/ginkgo-cloud-lab"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-labarchive-integration",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/labarchive-integration"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-liteparse",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/liteparse"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-markdown-mermaid-writing",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/markdown-mermaid-writing"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-matlab",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/matlab"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-matplotlib",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/matplotlib"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-networkx",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/networkx"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-open-notebook",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/open-notebook"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-opentrons-integration",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/opentrons-integration"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-optimize-for-gpu",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/optimize-for-gpu"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-pennylane",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/pennylane"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-protocolsio-integration",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/protocolsio-integration"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-pufferlib",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/pufferlib"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-pylabrobot",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/pylabrobot"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-pymatgen",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/pymatgen"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-pymoo",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/pymoo"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-pytorch-lightning",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/pytorch-lightning"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-pyzotero",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/pyzotero"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-qiskit",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/qiskit"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-scientific-visualization",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/scientific-visualization"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-scikit-learn",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/scikit-learn"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-shap",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/shap"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-simpy",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/simpy"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-stable-baselines3",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/stable-baselines3"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-sympy",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/sympy"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-timesfm-forecasting",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/timesfm-forecasting"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-torch-geometric",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/torch-geometric"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      }
+    ]
+  }
+}

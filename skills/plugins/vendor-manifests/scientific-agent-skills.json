@@ -1,0 +1,2689 @@
+{
+  "schema_version": "1",
+  "converter_version": "1",
+  "vendor_id": "scientific-agent-skills",
+  "release": "v2.53.0",
+  "revision": "9c9bd2e92af12311ecd0c1a643e0931643f9ea04",
+  "audited_skills": 147,
+  "reviewed_candidates": 139,
+  "generated_skills": [
+    "scientific-agent-skills-aeon",
+    "scientific-agent-skills-astropy",
+    "scientific-agent-skills-benchling-integration",
+    "scientific-agent-skills-cirq",
+    "scientific-agent-skills-generate-image",
+    "scientific-agent-skills-geopandas",
+    "scientific-agent-skills-ginkgo-cloud-lab",
+    "scientific-agent-skills-labarchive-integration",
+    "scientific-agent-skills-liteparse",
+    "scientific-agent-skills-markdown-mermaid-writing",
+    "scientific-agent-skills-matlab",
+    "scientific-agent-skills-matplotlib",
+    "scientific-agent-skills-networkx",
+    "scientific-agent-skills-open-notebook",
+    "scientific-agent-skills-opentrons-integration",
+    "scientific-agent-skills-optimize-for-gpu",
+    "scientific-agent-skills-pennylane",
+    "scientific-agent-skills-protocolsio-integration",
+    "scientific-agent-skills-pufferlib",
+    "scientific-agent-skills-pylabrobot",
+    "scientific-agent-skills-pymatgen",
+    "scientific-agent-skills-pymoo",
+    "scientific-agent-skills-pytorch-lightning",
+    "scientific-agent-skills-pyzotero",
+    "scientific-agent-skills-qiskit",
+    "scientific-agent-skills-scientific-visualization",
+    "scientific-agent-skills-scikit-learn",
+    "scientific-agent-skills-shap",
+    "scientific-agent-skills-simpy",
+    "scientific-agent-skills-stable-baselines3",
+    "scientific-agent-skills-sympy",
+    "scientific-agent-skills-timesfm-forecasting",
+    "scientific-agent-skills-torch-geometric"
+  ],
+  "excluded_skill_ids": [
+    "scientific-agent-skills-adaptyv",
+    "scientific-agent-skills-anndata",
+    "scientific-agent-skills-arbor",
+    "scientific-agent-skills-arboreto",
+    "scientific-agent-skills-autoskill",
+    "scientific-agent-skills-bgpt-paper-search",
+    "scientific-agent-skills-bids",
+    "scientific-agent-skills-biopython",
+    "scientific-agent-skills-bioservices",
+    "scientific-agent-skills-bulk-rnaseq",
+    "scientific-agent-skills-cellxgene-census",
+    "scientific-agent-skills-citation-management",
+    "scientific-agent-skills-clinical-decision-support",
+    "scientific-agent-skills-clinical-reports",
+    "scientific-agent-skills-cobrapy",
+    "scientific-agent-skills-consciousness-council",
+    "scientific-agent-skills-dask",
+    "scientific-agent-skills-database-lookup",
+    "scientific-agent-skills-datamol",
+    "scientific-agent-skills-deepchem",
+    "scientific-agent-skills-deeptools",
+    "scientific-agent-skills-depmap",
+    "scientific-agent-skills-dhdna-profiler",
+    "scientific-agent-skills-diffdock",
+    "scientific-agent-skills-dnanexus-integration",
+    "scientific-agent-skills-docx",
+    "scientific-agent-skills-esm",
+    "scientific-agent-skills-etetoolkit",
+    "scientific-agent-skills-exa-search",
+    "scientific-agent-skills-experimental-design",
+    "scientific-agent-skills-exploratory-data-analysis",
+    "scientific-agent-skills-flowio",
+    "scientific-agent-skills-fluidsim",
+    "scientific-agent-skills-geniml",
+    "scientific-agent-skills-geomaster",
+    "scientific-agent-skills-get-available-resources",
+    "scientific-agent-skills-gget",
+    "scientific-agent-skills-glycoengineering",
+    "scientific-agent-skills-gtars",
+    "scientific-agent-skills-histolab",
+    "scientific-agent-skills-hugging-science",
+    "scientific-agent-skills-hypogenic",
+    "scientific-agent-skills-hypothesis-generation",
+    "scientific-agent-skills-imaging-data-commons",
+    "scientific-agent-skills-infographics",
+    "scientific-agent-skills-iso-13485-certification",
+    "scientific-agent-skills-lamindb",
+    "scientific-agent-skills-latchbio-integration",
+    "scientific-agent-skills-latex-posters",
+    "scientific-agent-skills-literature-review",
+    "scientific-agent-skills-market-research-reports",
+    "scientific-agent-skills-markitdown",
+    "scientific-agent-skills-matchms",
+    "scientific-agent-skills-medchem",
+    "scientific-agent-skills-modal",
+    "scientific-agent-skills-molecular-dynamics",
+    "scientific-agent-skills-molfeat",
+    "scientific-agent-skills-neurokit2",
+    "scientific-agent-skills-neuropixels-analysis",
+    "scientific-agent-skills-nextflow",
+    "scientific-agent-skills-omero-integration",
+    "scientific-agent-skills-pacsomatic",
+    "scientific-agent-skills-paper-lookup",
+    "scientific-agent-skills-paperzilla",
+    "scientific-agent-skills-parallel-web",
+    "scientific-agent-skills-pathml",
+    "scientific-agent-skills-pathway-enrichment",
+    "scientific-agent-skills-pdf",
+    "scientific-agent-skills-peer-review",
+    "scientific-agent-skills-phylogenetics",
+    "scientific-agent-skills-pi-agent",
+    "scientific-agent-skills-polars",
+    "scientific-agent-skills-polars-bio",
+    "scientific-agent-skills-pptx",
+    "scientific-agent-skills-pptx-posters",
+    "scientific-agent-skills-primekg",
+    "scientific-agent-skills-pydeseq2",
+    "scientific-agent-skills-pydicom",
+    "scientific-agent-skills-pyhealth",
+    "scientific-agent-skills-pymc",
+    "scientific-agent-skills-pyopenms",
+    "scientific-agent-skills-pysam",
+    "scientific-agent-skills-pytdc",
+    "scientific-agent-skills-qutip",
+    "scientific-agent-skills-rdkit",
+    "scientific-agent-skills-research-grants",
+    "scientific-agent-skills-research-lookup",
+    "scientific-agent-skills-rowan",
+    "scientific-agent-skills-scanpy",
+    "scientific-agent-skills-scholar-evaluation",
+    "scientific-agent-skills-scientific-brainstorming",
+    "scientific-agent-skills-scientific-critical-thinking",
+    "scientific-agent-skills-scientific-schematics",
+    "scientific-agent-skills-scientific-slides",
+    "scientific-agent-skills-scientific-writing",
+    "scientific-agent-skills-scikit-bio",
+    "scientific-agent-skills-scikit-survival",
+    "scientific-agent-skills-scvelo",
+    "scientific-agent-skills-scvi-tools",
+    "scientific-agent-skills-seaborn",
+    "scientific-agent-skills-statistical-analysis",
+    "scientific-agent-skills-statistical-power",
+    "scientific-agent-skills-statsmodels",
+    "scientific-agent-skills-tiledbvcf",
+    "scientific-agent-skills-torchdrug",
+    "scientific-agent-skills-transformers",
+    "scientific-agent-skills-treatment-plans",
+    "scientific-agent-skills-umap-learn",
+    "scientific-agent-skills-usfiscaldata",
+    "scientific-agent-skills-vaex",
+    "scientific-agent-skills-venue-templates",
+    "scientific-agent-skills-what-if-oracle",
+    "scientific-agent-skills-xlsx",
+    "scientific-agent-skills-zarr-python"
+  ],
+  "admission_policy_sha256": "b6f130268f1db84efe0f167cb57b92fd709013c7d37a5c9c961d018967025f76",
+  "dependency_policy_sha256": "501cb7d26cdad1f9baa9e795d94da70340e159dc977f77d93fc53be3c9b904da",
+  "resource_policy_sha256": "fec05976b64edd3c0a1ba2d0c1bd06a3e855f5199511588c60935ec8bf24d24d",
+  "dependency_decisions": [
+    {
+      "from": "bulk-rnaseq",
+      "to": "nextflow",
+      "relation": "required",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/bulk-rnaseq/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "bulk-rnaseq",
+      "to": "pydeseq2",
+      "relation": "required",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/bulk-rnaseq/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "bulk-rnaseq",
+      "to": "pathway-enrichment",
+      "relation": "required",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/bulk-rnaseq/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "bulk-rnaseq",
+      "to": "scientific-visualization",
+      "relation": "required",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/bulk-rnaseq/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "literature-review",
+      "to": "parallel-web",
+      "relation": "required",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/literature-review/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "literature-review",
+      "to": "bioservices",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/literature-review/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "literature-review",
+      "to": "gget",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/literature-review/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "literature-review",
+      "to": "scientific-schematics",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/literature-review/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "literature-review",
+      "to": "venue-templates",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/literature-review/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "market-research-reports",
+      "to": "research-lookup",
+      "relation": "required",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/market-research-reports/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "market-research-reports",
+      "to": "generate-image",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/market-research-reports/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "market-research-reports",
+      "to": "scientific-schematics",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/market-research-reports/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "market-research-reports",
+      "to": "peer-review",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/market-research-reports/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "research-lookup",
+      "to": "parallel-web",
+      "relation": "required",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/research-lookup/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "scanpy",
+      "to": "anndata",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/scanpy/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "scanpy",
+      "to": "scvi-tools",
+      "relation": "routing",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/scanpy/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "scientific-slides",
+      "to": "pptx",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/scientific-slides/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "scientific-slides",
+      "to": "research-lookup",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/scientific-slides/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "scientific-slides",
+      "to": "scientific-schematics",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/scientific-slides/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "scientific-writing",
+      "to": "research-lookup",
+      "relation": "required",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/scientific-writing/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "scientific-writing",
+      "to": "scientific-schematics",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/scientific-writing/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "scientific-writing",
+      "to": "venue-templates",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/scientific-writing/SKILL.md"
+      ],
+      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    }
+  ],
+  "file_dispositions": [
+    {
+      "source_path": "skills/aeon/references/anomaly_detection.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/anomaly_detection.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "f7121dbcfff6ed13356a5540488272ef7fbd6cee4eeb139d33bb1b8214cf573b"
+    },
+    {
+      "source_path": "skills/aeon/references/classification.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/classification.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "5aea5ecf30840d0748077a9ac617ec460711ba70f8ef5df650a31f134b605067"
+    },
+    {
+      "source_path": "skills/aeon/references/clustering.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/clustering.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "ab2635b7d55ae727bc027c0b0f21dc65167c35b0379acbd19396db82594c2832"
+    },
+    {
+      "source_path": "skills/aeon/references/datasets_benchmarking.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/datasets_benchmarking.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "1830d335c9fb02fbd8cf9765f22309e81ee562fdd6f199435178ef2a18beb4ce"
+    },
+    {
+      "source_path": "skills/aeon/references/distances.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/distances.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "1b9a0371bad5babf386cf52405fc48b93097b05706a5c79ef6d216f94f502d04"
+    },
+    {
+      "source_path": "skills/aeon/references/forecasting.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/forecasting.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "3ee8527837e92712306688301b0abb8c19b7bfb3f249cd1239f1039f5026477d"
+    },
+    {
+      "source_path": "skills/aeon/references/networks.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/networks.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "fccccdfd172c5f1578d462d06f66187b9f4242144a59abfd8408f467d9e40e65"
+    },
+    {
+      "source_path": "skills/aeon/references/regression.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/regression.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "39ccf444ec621c1e4c89fe4ba56db5d5b7b3c55bce12cd4035fd6451f734c294"
+    },
+    {
+      "source_path": "skills/aeon/references/segmentation.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/segmentation.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "7495a53b149750c2fc310a545c9f9b27523626f5d38689cde34ec9585450573a"
+    },
+    {
+      "source_path": "skills/aeon/references/similarity_search.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/similarity_search.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "9d803e450a82dd864f7f7b8859fe7dc2d210b14369d0ae2ab8b74922446741e5"
+    },
+    {
+      "source_path": "skills/aeon/references/transformations.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/transformations.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "e7807df13949b036f30212d98b921ad6f31e0720d145ff3196f85a3584788da4"
+    },
+    {
+      "source_path": "skills/aeon/SKILL.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-aeon/SKILL.md",
+      "disposition": "included",
+      "reason": "normalized reviewed Open Agent Skill entry",
+      "sha256": "e50df07e72e71acc1c4c1ac8323537bb5050e9eb9bcd1cfa21695caed37cdb98"
+    },
+    {
+      "source_path": "skills/astropy/references/coordinates.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-astropy/references/coordinates.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "6bba23f1cedf55411293337c0b4158f83d2babe3aaa617e9b2b364a8f4e7bd1a"
+    },
+    {
+      "source_path": "skills/astropy/references/cosmology.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-astropy/references/cosmology.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "311751b8072ce53abcba210b5ebfaac048301ecb7314d164321fba56df93366c"
+    },
+    {
+      "source_path": "skills/astropy/references/fits.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-astropy/references/fits.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "aa1771bc8cb75a2f332bb1a9cfc31a859fd7b6e07a6314add673d17111b98838"
+    },
+    {
+      "source_path": "skills/astropy/references/tables.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-astropy/references/tables.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "abade45705a4bf6b0a9b27d6693163e26cb53d9a9750f8d57dd9a9ad57caf366"
+    },
+    {
+      "source_path": "skills/astropy/references/time.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-astropy/references/time.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "fd7c3a1a922e7b72060fa702d9702239a0b552d34efbe8e1673604a749810f61"
+    },
+    {
+      "source_path": "skills/astropy/references/units.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-astropy/references/units.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "ec3d108772f9c0f2242ede6b8499f846d21d53bfc1c255fb3306bdf685139a8e"
+    },
+    {
+      "source_path": "skills/astropy/references/wcs_and_other_modules.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-astropy/references/wcs_and_other_modules.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "b955cd3b0c75ae9dce3b24ccea2b78e0eceee6c81b836a30d1f4edf2821eb9fc"
+    },
+    {
+      "source_path": "skills/astropy/SKILL.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-astropy/SKILL.md",
+      "disposition": "included",
+      "reason": "normalized reviewed Open Agent Skill entry",
+      "sha256": "a92dad416199457142fd91e7e5f5a2d0c95504758acca14a77928b4e82d60169"
+    },
+    {
+      "source_path": "skills/benchling-integration/references/api_endpoints.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-benchling-integration/references/api_endpoints.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "4a5c8565551089485ea6033554b8c8427766b752bf987cafc8d3582c19c47808"
+    },
+    {
+      "source_path": "skills/benchling-integration/references/authentication.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-benchling-integration/references/authentication.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "277a3fffdd9ec7e5c767168ef6b2af040229015f451895e96f57cfa4d2493d39"
+    },
+    {
+      "source_path": "skills/benchling-integration/references/eventbridge.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-benchling-integration/references/eventbridge.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "6e89cfdcc0c150a0bf466630f7d0ea7da3e1734607afdb08f9df5bf00b774606"
+    },
+    {
+      "source_path": "skills/benchling-integration/references/sdk_reference.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-benchling-integration/references/sdk_reference.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "8c382608201505fd448d4cabfc2541a662f892a53e3f78a9de9440d4d7c6a026"
+    },
+    {
+      "source_path": "skills/benchling-integration/SKILL.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-benchling-integration/SKILL.md",
+      "disposition": "included",
+      "reason": "normalized reviewed Open Agent Skill entry",
+      "sha256": "c0ec30fd340b46a97c53e08464c2899b2155c7b7f39c8a9f1e6617178ebe41ce"
+    },
+    {
+      "source_path": "skills/cirq/references/building.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-cirq/references/building.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "14c6f9fd8a684b99748801e4219e631d8e9876b7f0ce051e944d337c908f7cba"
+    },
+    {
+      "source_path": "skills/cirq/references/experiments.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-cirq/references/experiments.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "90a490240dfcf75fa6b3a2d94dbd6ab83b869162f9dd1534eae7f9688cab4b9e"
+    },
+    {
+      "source_path": "skills/cirq/references/hardware.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-cirq/references/hardware.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "f2fa45c1fb92344d73134de0dc9374acfe3ca69b7a8d038a6b1bb159a165bf34"
+    },
+    {
+      "source_path": "skills/cirq/references/noise.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-cirq/references/noise.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "bef62408a68bccbf0c39e6af1b9ac40ef4debbf3ef62e0b620a88a9df9bacca7"
+    },
+    {
+      "source_path": "skills/cirq/references/simulation.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-cirq/references/simulation.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "5653cf1a672fbf21caa24b016e86da6fbde02f25571f13956ddc5637c225c17a"
+    },
+    {
+      "source_path": "skills/cirq/references/transformation.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-cirq/references/transformation.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "f77c2709d45cb826e84d0447e3465779245c93c36ed4dbcc806d37ab168b0f89"
+    },
+    {
+      "source_path": "skills/cirq/SKILL.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-cirq/SKILL.md",
+      "disposition": "included",
+      "reason": "normalized reviewed Open Agent Skill entry",
+      "sha256": "f40ef63258effb4752fc049e2e0522197f41a1e2c6203757dc786c7f2e0bef81"
+    },
+    {
+      "source_path": "skills/generate-image/scripts/generate_image.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-generate-image/scripts/generate_image.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "f4aee183b7f192cae34813e53f094d2d14f0ca265189343f018b218415b63d9a"
+    },
+    {
+      "source_path": "skills/generate-image/SKILL.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-generate-image/SKILL.md",
+      "disposition": "included",
+      "reason": "normalized reviewed Open Agent Skill entry",
+      "sha256": "0287947083b8af8439778d4c6f80f4f4d35311067d515db727d18c2429fb31da"
+    },
+    {
+      "source_path": "skills/geopandas/references/crs-management.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-geopandas/references/crs-management.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "3e78919eef20638352689a2419b28ad7367bbd0f64686f438f3496625db6f48d"
+    },
+    {
+      "source_path": "skills/geopandas/references/data-io.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-geopandas/references/data-io.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "8bfd8fc74b34e79fd42f31daef06ca582a500469c711371a6eba04cd6f8f59dc"
+    },
+    {
+      "source_path": "skills/geopandas/references/data-structures.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-geopandas/references/data-structures.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "9cd950173409b04e3c57b40b24e296646931de938ebcc86b8bf6806a97fcaab8"
+    },
+    {
+      "source_path": "skills/geopandas/references/geometric-operations.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-geopandas/references/geometric-operations.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "f9d55230cae612770de98fb873f32d004d06f4e24624541dc9513be229c176f3"
+    },
+    {
+      "source_path": "skills/geopandas/references/spatial-analysis.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-geopandas/references/spatial-analysis.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "9e846073426fdb00da1f04465036e3c992b5fb3f556f2e264c8db56e1f9e4924"
+    },
+    {
+      "source_path": "skills/geopandas/references/visualization.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-geopandas/references/visualization.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "b84ea68adec0fe229bb46973efc2747de69465f6bcc9ad835d526860bbfeddc4"
+    },
+    {
+      "source_path": "skills/geopandas/SKILL.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-geopandas/SKILL.md",
+      "disposition": "included",
+      "reason": "normalized reviewed Open Agent Skill entry",
+      "sha256": "61d10f69e9c9fea2cfe6013d91c1a069e475b17981f6eea1d94f93447b558982"
+    },
+    {
+      "source_path": "skills/ginkgo-cloud-lab/references/cell-free-protein-expression-hibit.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/cell-free-protein-expression-hibit.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "c93d29199800737a37bd2d5e13af7b7dbeaf049864f8990cdc11471394db88e6"
+    },
+    {
+      "source_path": "skills/ginkgo-cloud-lab/references/cell-free-protein-expression-optimization.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/cell-free-protein-expression-optimization.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "a55de455e4bc0ec6a79d1df002baad0018c905e299180fbb9d699a53ed11538c"
+    },
+    {
+      "source_path": "skills/ginkgo-cloud-lab/references/cell-free-protein-expression-validation.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/cell-free-protein-expression-validation.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "0af3fe33052fe8bcb2de62d05f38870c3c7e96ff9d1be0f04161c0e425dee896"
+    },
+    {
+      "source_path": "skills/ginkgo-cloud-lab/references/cfps-expression-purification-quantification.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/cfps-expression-purification-quantification.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "36299ce12b5d8805aee78377fd5aa40f1f667c0947bf57122b6ce8c2f7582fd4"
+    },
+    {
+      "source_path": "skills/ginkgo-cloud-lab/references/cfps-strep-purification-thermal-shift.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/cfps-strep-purification-thermal-shift.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "9f694714e0f24546e7e0ca11fd2bca2100de42c871413feaa2577a58acc2ec3f"
+    },
+    {
+      "source_path": "skills/ginkgo-cloud-lab/references/cfps-strep-tag-purification-a280.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/cfps-strep-tag-purification-a280.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "9f57114e902d57527dcca1f50cd535d24d79ebc2e974b417e487f143e824d4a1"
+    },
+    {
+      "source_path": "skills/ginkgo-cloud-lab/references/echo-ms-cfps-detection.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/echo-ms-cfps-detection.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "8559bd9cc4b42282b65a3cf112654797948824ddde89fdf8ead61a88356ef47b"
+    },
+    {
+      "source_path": "skills/ginkgo-cloud-lab/references/echo-ms-method-onboarding.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/echo-ms-method-onboarding.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "d2fe8ae43474fbbd4f16bcc0bd69210d27a649b0ef2a38e490acd81b48673f86"
+    },
+    {
+      "source_path": "skills/ginkgo-cloud-lab/references/ecoli-expression-purification-quantification.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/ecoli-expression-purification-quantification.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "7ba569df772167a1fc2cdf3c8f01a692e7e2daa7749d37078036ee6b2166579a"
+    },
+    {
+      "source_path": "skills/ginkgo-cloud-lab/references/ecoli-minibinder-expression-histag-a280.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/ecoli-minibinder-expression-histag-a280.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "08353f78bdb475f1b903f51dd075b9ce8681e56661e3b219af2321d331b3130a"
+    },
+    {
+      "source_path": "skills/ginkgo-cloud-lab/references/ecoli-protein-expression-hibit.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/ecoli-protein-expression-hibit.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "feb6c584536a460deea218ec30e3518ac3a10f4d7f59250dd87add91ec4d44eb"
+    },
+    {
+      "source_path": "skills/ginkgo-cloud-lab/references/ecoli-protein-expression-histag-a280.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/ecoli-protein-expression-histag-a280.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "89d1214a869befde38d172cb364d6088646cebfb649c2c88552a31e7bd42e846"
+    },
+    {
+      "source_path": "skills/ginkgo-cloud-lab/references/fluorescent-pixel-art-generation.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/fluorescent-pixel-art-generation.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "19978904607739dde30af0c6c2b0465018e8b11d3872f246621223d130098a53"
+    },
+    {
+      "source_path": "skills/ginkgo-cloud-lab/references/ivt-rna-synthesis-qpcr.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/ivt-rna-synthesis-qpcr.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "3b955bef645452fe9656f7f01d700e746f73c14e920eff94626d821d73b274a6"
+    },
+    {
+      "source_path": "skills/ginkgo-cloud-lab/references/minibinder-strep-tag-a280.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/minibinder-strep-tag-a280.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "7552088b8502d4793752d94cb2c8401ffaae09db03af6a47503c38616c3beda7"
+    },
+    {
+      "source_path": "skills/ginkgo-cloud-lab/references/pichia-protein-expression-labchip.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/pichia-protein-expression-labchip.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "2ba279ce0dc6dc6237f0f4f71bf90cfa81742bd9b3a7e4084881ff6fcd864f9d"
+    },
+    {
+      "source_path": "skills/ginkgo-cloud-lab/references/spr-target-onboarding.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/spr-target-onboarding.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "1024b20128ee8ac884270f4cd24b867ec00f5082741f0123381cc0a1b2c72d51"
+    },
+    {
+      "source_path": "skills/ginkgo-cloud-lab/SKILL.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/SKILL.md",
+      "disposition": "included",
+      "reason": "normalized reviewed Open Agent Skill entry",
+      "sha256": "70a1711e098bf337a5150bac3cc938d2668576c0bed8ac13e10699f634b59c84"
+    },
+    {
+      "source_path": "skills/labarchive-integration/references/api_reference.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-labarchive-integration/references/api_reference.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "9680fe9f2378f8f2e2b75fe3da9890df580c6254067028ca2e78f5fa6e55c304"
+    },
+    {
+      "source_path": "skills/labarchive-integration/references/authentication_guide.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-labarchive-integration/references/authentication_guide.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "9736d35612b4f89d0d6ef3b148de05e95befb48c2a5d59fe1e39fb0b431d6afb"
+    },
+    {
+      "source_path": "skills/labarchive-integration/references/integrations.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-labarchive-integration/references/integrations.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "6d7b514173089ef2e291de64c4441b8d1c9ec2a5b9e9a0eb1950842c3bf32717"
+    },
+    {
+      "source_path": "skills/labarchive-integration/scripts/entry_operations.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-labarchive-integration/scripts/entry_operations.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "e15516532d740d65b01375c4b7b2eab1832697304a4f4ce9baf8b3c68c66e3e7"
+    },
+    {
+      "source_path": "skills/labarchive-integration/scripts/notebook_operations.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-labarchive-integration/scripts/notebook_operations.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "ae836f9c9732d5e1465acb56c110f2e45edbcd7dada2abb36d053825b492e5b7"
+    },
+    {
+      "source_path": "skills/labarchive-integration/scripts/setup_config.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-labarchive-integration/scripts/setup_config.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "0d0b486065f1aed4444c6e4fdaf6e6408dcc6a9592cd39aae423fe3c80b61c17"
+    },
+    {
+      "source_path": "skills/labarchive-integration/SKILL.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-labarchive-integration/SKILL.md",
+      "disposition": "included",
+      "reason": "normalized reviewed Open Agent Skill entry",
+      "sha256": "4a386ebbb1dbb63b6e42f3da83c31a361d05dfb1356febef6005b516f6265ce8"
+    },
+    {
+      "source_path": "skills/liteparse/references/api_reference.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-liteparse/references/api_reference.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "f9f6561f4497d5e17457f1802b19fe9f8c72523069d7143fbae68afc98e3d886"
+    },
+    {
+      "source_path": "skills/liteparse/references/choosing_a_parser.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-liteparse/references/choosing_a_parser.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "58b198705dad134527ba824b7c02af8203d36c3bed334826cd5026137b982199"
+    },
+    {
+      "source_path": "skills/liteparse/references/cli_reference.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-liteparse/references/cli_reference.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "b84dd0c47a8d3426603b316fae2924c9d79e9097285be45215f88b6a2a23a8f4"
+    },
+    {
+      "source_path": "skills/liteparse/references/ocr_and_formats.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-liteparse/references/ocr_and_formats.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "1031bdac3bc536aeaf8d45b4867104dad34f894d3440757ad38a75d41a58f61d"
+    },
+    {
+      "source_path": "skills/liteparse/references/output_formats.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-liteparse/references/output_formats.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "78011bc2c40cc8f24bbfd906ab12a3328cd597c100cebb1ed4f89bd48766479c"
+    },
+    {
+      "source_path": "skills/liteparse/scripts/batch_parse_dir.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-liteparse/scripts/batch_parse_dir.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "6d9162557da1a4d0005fb448989040a40c9246e469a62783c525aba591c6294c"
+    },
+    {
+      "source_path": "skills/liteparse/SKILL.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-liteparse/SKILL.md",
+      "disposition": "included",
+      "reason": "normalized reviewed Open Agent Skill entry",
+      "sha256": "925f471d45bb5d8a526bd6a07a08895838c6b0432a912b0f2075b8081d1cf73f"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/assets/examples/example-research-report.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/assets/examples/example-research-report.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "05a9e64bf13415f2b4e49c46c02ce48869a4a4e4922d64b752b0cbc79fbbf6e0"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/references/diagrams/architecture.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/architecture.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "a0ce8122c68ab040abedbd072315d86528bfbbf4167506c9449e672943b46bd5"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/references/diagrams/block.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/block.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "37db54de9c926ae1b2ead4ec5c0641119d452b4ae09868df59fdfce71b244f63"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/references/diagrams/c4.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/c4.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "68e7f4b491cfee954f3d7228a67c78c34cb9171448d5e487fb4fed2e5e05078c"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/references/diagrams/class.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/class.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "1700e36fe29e5aa687cc36b091126b86bc561688befa7f9496602a2852af9c66"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/references/diagrams/complex_examples.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/complex_examples.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "d58319e3a4e8c9518dd477841b8d56b04fea37db5bce47ee4c3926c10ca55af8"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/references/diagrams/er.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/er.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "86c581b8a9d6c65a245087ed82472926a5b0682214b771f3bdd59d0042c4e97e"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/references/diagrams/flowchart.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/flowchart.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "d450c52f59682f90715c11664715fa3770611434644896fe1b7c88092719a82a"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/references/diagrams/gantt.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/gantt.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "b51ef540f6cae178c7d5b76cd9f6bf0229c5a2d6e995df5523cc49d3532a4128"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/references/diagrams/git_graph.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/git_graph.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "b93d7f713867f1c30fa879378e2624c047c324947ba0e0e739ad0dc0ff663ae0"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/references/diagrams/kanban.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/kanban.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "b682c5f71713c7655ee992f895597ad1f6e9723efc2a62af1f2ce5e7b97cf886"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/references/diagrams/mindmap.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/mindmap.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "3a6dc95f7fce1e6c0842bb66e44c45a1ee6b9db017d62fc7e57f1b0f394dee8c"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/references/diagrams/packet.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/packet.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "2f456c0514b1ae521711f976b23445ea374cd9a02db0782ad86f1ccf16054e12"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/references/diagrams/pie.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/pie.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "94fdb61d0240f7e201538e910329ac1f0bae76e7fa2a4fc3f944d0b33fa99d6a"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/references/diagrams/quadrant.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/quadrant.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "861a023803e0d7e753118c5b1127ea33e984e8c48b245f5084239f0c4593dae7"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/references/diagrams/radar.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/radar.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "2024c1e28e8a2458bec6ca630e1c7f055a70227dcfb2c7861f4c5f8eed31c656"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/references/diagrams/requirement.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/requirement.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "52b77e05935296d7a50b7056b220762061e4fb32e9ee44e2af5091b864ab2397"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/references/diagrams/sankey.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/sankey.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "622a103a08da26bf3f194e52e1555513c1769d54806a22cefa6922c2d6add948"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/references/diagrams/sequence.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/sequence.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "9457d93250240dd12d97b4d7481d4626f0fb262f1673f8f2d165e7f0321cbd74"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/references/diagrams/state.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/state.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "a735d97bf574bba8cd0eea3beebbe99fad91770161782e28322c9408e0a74508"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/references/diagrams/timeline.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/timeline.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "920a533f375fae3da53a30ddf7ac5538f36e55e0ead7309ed8aba05d5248e923"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/references/diagrams/treemap.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/treemap.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "45980d28bba78eb7b83dd0b68f54561f3931a5ce26d096bb3f937b041d6244d4"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/references/diagrams/user_journey.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/user_journey.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "1c99799368a4121f84839a5eb82b75ad60e05ec6cd0f69589e2dece9d4e8aa50"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/references/diagrams/xy_chart.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/xy_chart.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "4df50afcedd91e0bfbcc851ddde763e4d520d2e015b5b75775b35f5d542db9be"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/references/diagrams/zenuml.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/zenuml.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "69cfe24fd119eb3223d404dd9c07d58954cabbc70d2b3df3ecffd527f671ff2b"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/references/markdown_style_guide.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/markdown_style_guide.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "01338438471ff723403a9a948262f2ecd81e341924352c1e2dadbe9b0f65e28a"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/references/mermaid_style_guide.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/mermaid_style_guide.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "f4aaeebe99d640cae23abf7b087505ef10149903fc108e864395b4ce86a162d0"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/SKILL.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/SKILL.md",
+      "disposition": "included",
+      "reason": "normalized reviewed Open Agent Skill entry",
+      "sha256": "3917a761fd0deece374eb00b25def2135a6a3cadc0b9aa7d56ee334ab6db8952"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/templates/decision_record.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/templates/decision_record.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "30192e491938d799284bc76dcf7e47600896a1815bd76a55c044bff2f47a2ead"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/templates/how_to_guide.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/templates/how_to_guide.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "df0f491db8697c28914187c1375f4957644d055a512c7b6c92fec3abdadb1350"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/templates/issue.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/templates/issue.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "66a7f0746f599e12208a7009d61f1296d3f9a642e430c9db4cddbe4ec8b53dc8"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/templates/kanban.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/templates/kanban.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "1d3e0d6f20628459bb73a63263a446d942441ced871bab4279918e2f33b82166"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/templates/presentation.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/templates/presentation.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "3753856520cf61d787c0ad9db640f0587dcf726df7c67a6bbf46b5c07e1b96a1"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/templates/project_documentation.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/templates/project_documentation.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "43da7e54717f97d31cec00a5a5576d838ada34fb1fa13563c2eb11820f122a21"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/templates/pull_request.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/templates/pull_request.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "737981cb04acde56f9c0402445c9120c75c12270d17c30a3f9a3d95e660d22d1"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/templates/research_paper.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/templates/research_paper.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "5fdcf37e2596b7a8e3917f3da3db9caf90fff5301932be68f9fe639f608815ca"
+    },
+    {
+      "source_path": "skills/markdown-mermaid-writing/templates/status_report.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/templates/status_report.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "090b5af7d41a417a365e44f4cb61f6d6e903e75d3daf8ea36edd9f67ee04d5a2"
+    },
+    {
+      "source_path": "skills/matlab/references/data-import-export.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-matlab/references/data-import-export.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "6d598e56aa30e143426e294012ed59d1c3b3e6322b3f910a40269ff52eac2ee4"
+    },
+    {
+      "source_path": "skills/matlab/references/executing-scripts.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-matlab/references/executing-scripts.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "c9d90ab6a6888f54743818813b97c367b61911b739c030dc0c41f85affbc4195"
+    },
+    {
+      "source_path": "skills/matlab/references/graphics-visualization.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-matlab/references/graphics-visualization.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "e4721985ee482a643e9aec015ac3c8648adcf4878369af98aba69a83dc05f9df"
+    },
+    {
+      "source_path": "skills/matlab/references/mathematics.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-matlab/references/mathematics.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "460a3de65dae9c0adbcdfeaf89a71c1b2b2947b6dc08fc1e00d9a1ff9b8dce5c"
+    },
+    {
+      "source_path": "skills/matlab/references/matrices-arrays.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-matlab/references/matrices-arrays.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "7009f40385ea5ead39a1070ed14694b917f9e259b2051c38f617829ab706a943"
+    },
+    {
+      "source_path": "skills/matlab/references/octave-compatibility.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-matlab/references/octave-compatibility.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "851a90612e3f0083eee0ab612eb7bf384f38b5f8459dcb03a7d5f37727b35296"
+    },
+    {
+      "source_path": "skills/matlab/references/programming.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-matlab/references/programming.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "8ee4bc6602be8fa151f715d2ffae550eeed1002dceb60e7a5b5b612ec2ad9623"
+    },
+    {
+      "source_path": "skills/matlab/references/python-integration.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-matlab/references/python-integration.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "1915d531af3c8a428d894c9b74caef4321f1441337b556c0f4e67364af913b12"
+    },
+    {
+      "source_path": "skills/matlab/SKILL.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-matlab/SKILL.md",
+      "disposition": "included",
+      "reason": "normalized reviewed Open Agent Skill entry",
+      "sha256": "2d9e95f774096a00b9a7aebe8501bf3cc877acf1d0c2638874868a80911f0cd5"
+    },
+    {
+      "source_path": "skills/matplotlib/references/api_reference.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-matplotlib/references/api_reference.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "7db16c836bf62d9ac1bf952a70f3ffed785cfe51f76d806ded428a125ec9f1b5"
+    },
+    {
+      "source_path": "skills/matplotlib/references/common_issues.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-matplotlib/references/common_issues.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "36d5439972718697be22222ba8a53e0e52d474153eaaa999c349f41b54e01cb5"
+    },
+    {
+      "source_path": "skills/matplotlib/references/plot_types.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-matplotlib/references/plot_types.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "99b4c3c5c6c4d6590b722b6de7e414c2e443402df51cf99c3616b9f366a04c44"
+    },
+    {
+      "source_path": "skills/matplotlib/references/styling_guide.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-matplotlib/references/styling_guide.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "e53cb0f55fd1c4b07122cf67c0aabcc3114a686598667e62856c9d797a6e7f35"
+    },
+    {
+      "source_path": "skills/matplotlib/scripts/plot_template.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-matplotlib/scripts/plot_template.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "24b362b1c2a96d4eda19ed8f4a913f356029e836069aab564e0cfb4ac2b84a1b"
+    },
+    {
+      "source_path": "skills/matplotlib/scripts/style_configurator.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-matplotlib/scripts/style_configurator.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "5839cebb22b21f7612c6d169b9f63f20316910d1d7a3f0eb68c2b79cc43e1b0d"
+    },
+    {
+      "source_path": "skills/matplotlib/SKILL.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-matplotlib/SKILL.md",
+      "disposition": "included",
+      "reason": "normalized reviewed Open Agent Skill entry",
+      "sha256": "2531250c327b0bf5c3720a3804699e0bee7c11e7212dced1aeb8bc8cdd85f9e6"
+    },
+    {
+      "source_path": "skills/networkx/references/algorithms.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-networkx/references/algorithms.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "44cf621daafcf5dee12e6e71bdae19d3e3c99aff3f59013ba5e1db602557c7e3"
+    },
+    {
+      "source_path": "skills/networkx/references/generators.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-networkx/references/generators.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "08daa0828e96ea7e6d456a920d65bdedce267bb93e2fb7ba0ee757b76821e9eb"
+    },
+    {
+      "source_path": "skills/networkx/references/graph-basics.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-networkx/references/graph-basics.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "96ddf0a935866125f9d846ab9e2a1b44f336ae4b95744c9473800ba8f9fc8fc5"
+    },
+    {
+      "source_path": "skills/networkx/references/io.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-networkx/references/io.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "9a2ef4134cdffa27082a2fdf6642c3b804bab8a8c20ad78cd72fae97658eeb6d"
+    },
+    {
+      "source_path": "skills/networkx/references/visualization.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-networkx/references/visualization.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "75b2441897c56194c747972cce8ab26b37f2d64009661f90be0ac975ceb0ce6f"
+    },
+    {
+      "source_path": "skills/networkx/SKILL.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-networkx/SKILL.md",
+      "disposition": "included",
+      "reason": "normalized reviewed Open Agent Skill entry",
+      "sha256": "026da1c2bc3b5411c0083bebaeb9e69fd5a6597b28ff32c4c942f0ca56a26341"
+    },
+    {
+      "source_path": "skills/open-notebook/references/api_reference.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/references/api_reference.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "6d368df0f9368d297c4db06ed0f78f23db9cbb488b986574fdf267cb8ec373c0"
+    },
+    {
+      "source_path": "skills/open-notebook/references/architecture.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/references/architecture.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "f491698b896af52653b6b54c928d68088ff0f69698305b7fcb97197bb7f4ecd5"
+    },
+    {
+      "source_path": "skills/open-notebook/references/configuration.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/references/configuration.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "a448271bba6ae082d39d0bbafc5761a1f63b8df48a49932475b59fa774e3ee29"
+    },
+    {
+      "source_path": "skills/open-notebook/references/examples.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/references/examples.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "b6bc527544e04b7291aa377821733089a724cee32e6e265a54d574dab0404c54"
+    },
+    {
+      "source_path": "skills/open-notebook/scripts/chat_interaction.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/scripts/chat_interaction.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "64cb5283ea2ea17d00e046b902e93bc768b671f917bb9739aac0104dfaf95119"
+    },
+    {
+      "source_path": "skills/open-notebook/scripts/notebook_management.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/scripts/notebook_management.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "6939dc1657930eabac310a4068178776860f15fdc6447fc86f1325cced236add"
+    },
+    {
+      "source_path": "skills/open-notebook/scripts/source_ingestion.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/scripts/source_ingestion.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "96cd97e9512edf5013091607ad6bab3fec132d510446b7a8fb87a9f559b34ade"
+    },
+    {
+      "source_path": "skills/open-notebook/scripts/test_open_notebook_skill.py",
+      "disposition": "excluded",
+      "reason": "Upstream test harness is not required for target-Agent use and would not be executed by ResearchSpec."
+    },
+    {
+      "source_path": "skills/open-notebook/SKILL.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/SKILL.md",
+      "disposition": "included",
+      "reason": "normalized reviewed Open Agent Skill entry",
+      "sha256": "17565e71cba0685f8aa60c333b40c8f9ccd327c7fa0a75a69d0463e5d92c6391"
+    },
+    {
+      "source_path": "skills/opentrons-integration/references/api_reference.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-opentrons-integration/references/api_reference.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "b4162502b68085b97c8c1bbcbeff332c95bc1bb2fd53e049a00a11cf41718d86"
+    },
+    {
+      "source_path": "skills/opentrons-integration/scripts/basic_protocol_template.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-opentrons-integration/scripts/basic_protocol_template.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "686fa264c76047d1ad3d0dbed7db9d78039a5ab3ae42ade5528d83dc9874f890"
+    },
+    {
+      "source_path": "skills/opentrons-integration/scripts/pcr_setup_template.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-opentrons-integration/scripts/pcr_setup_template.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "fcff6cf747aaff92a16033b67e906b0a3b223b54012fe6b9424dbdb0ff74621e"
+    },
+    {
+      "source_path": "skills/opentrons-integration/scripts/serial_dilution_template.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-opentrons-integration/scripts/serial_dilution_template.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "f646b62549474113b999fcafa93a6ac2e64735596ccdb798f8138573a739acf1"
+    },
+    {
+      "source_path": "skills/opentrons-integration/SKILL.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-opentrons-integration/SKILL.md",
+      "disposition": "included",
+      "reason": "normalized reviewed Open Agent Skill entry",
+      "sha256": "8b59a222aa1c1108d413bfb3535e803377edbff4b94e5bd515be64221b6ea75a"
+    },
+    {
+      "source_path": "skills/optimize-for-gpu/references/cucim.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-optimize-for-gpu/references/cucim.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "e48a46e85a4f52f250aa88034abf681b564535e4605d66885bcc3c323947a270"
+    },
+    {
+      "source_path": "skills/optimize-for-gpu/references/cudf.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-optimize-for-gpu/references/cudf.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "a9d7091a07c995b54a9461c554f4755f41a75614b60d7d0fbae7815d5d3424b9"
+    },
+    {
+      "source_path": "skills/optimize-for-gpu/references/cugraph.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-optimize-for-gpu/references/cugraph.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "d0db8b3ca776d7c13ec8fba42c32a2b2926180b6a5f049ee8a9ae63c41083d17"
+    },
+    {
+      "source_path": "skills/optimize-for-gpu/references/cuml.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-optimize-for-gpu/references/cuml.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "d30e601364b20ab2ec006790e0ddccfef18242a531d45c18f42be05e55f5787c"
+    },
+    {
+      "source_path": "skills/optimize-for-gpu/references/cupy.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-optimize-for-gpu/references/cupy.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "d3bf80d9ce29e331dee20b71b01b9f5a206c86bd56830c83c991b4c341cc9e94"
+    },
+    {
+      "source_path": "skills/optimize-for-gpu/references/cuspatial.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-optimize-for-gpu/references/cuspatial.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "689983c53215ba8c91105f3c5f5aa1fce35afc9ec337f5298633d0a33422c9e6"
+    },
+    {
+      "source_path": "skills/optimize-for-gpu/references/cuvs.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-optimize-for-gpu/references/cuvs.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "9c32b6a8c80a84da5270242fa32e61990de56807da723d91f15f61993e8d446f"
+    },
+    {
+      "source_path": "skills/optimize-for-gpu/references/cuxfilter.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-optimize-for-gpu/references/cuxfilter.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "ecfedef1d944010081c7303d807c257b7d99bfd8b2c58b1b415e03662c06466b"
+    },
+    {
+      "source_path": "skills/optimize-for-gpu/references/kvikio.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-optimize-for-gpu/references/kvikio.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "a02084a5fdfe1bc7ed3bdb0fe2646ef7266145a951b76f7b3df6c6d7f2036485"
+    },
+    {
+      "source_path": "skills/optimize-for-gpu/references/numba.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-optimize-for-gpu/references/numba.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "7a368623d584619842a66808e32a31ecbfeff4d6258f97235f87eb6c0e219af2"
+    },
+    {
+      "source_path": "skills/optimize-for-gpu/references/raft.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-optimize-for-gpu/references/raft.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "40f36f7bb9165b654f6f45ea78899a1698d910541d739ef30b36d7d38b32ad40"
+    },
+    {
+      "source_path": "skills/optimize-for-gpu/references/warp.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-optimize-for-gpu/references/warp.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "a32a920a9694b2c94edbd7cde4d378467a290060c07ee3ca4b66bf7e32b68a2e"
+    },
+    {
+      "source_path": "skills/optimize-for-gpu/SKILL.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-optimize-for-gpu/SKILL.md",
+      "disposition": "included",
+      "reason": "normalized reviewed Open Agent Skill entry",
+      "sha256": "451502ed7f75ecad35cbdb78b01307e0c3e97d7144e19abd39369eeb51cd3a40"
+    },
+    {
+      "source_path": "skills/pennylane/references/advanced_features.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pennylane/references/advanced_features.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "81a52e3f1f437ceef2b20e0f447627e3acad18a4e98139eb46d93f5083f860c2"
+    },
+    {
+      "source_path": "skills/pennylane/references/devices_backends.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pennylane/references/devices_backends.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "1b2da18f0343e0d99321b5c15d5834161f298d80fe8f1afe92c931e7364b9913"
+    },
+    {
+      "source_path": "skills/pennylane/references/getting_started.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pennylane/references/getting_started.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "acfa9ab3f9fb4e1ab8efa29ea110279546e5b247ee96183a2b4f27aef73dd714"
+    },
+    {
+      "source_path": "skills/pennylane/references/optimization.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pennylane/references/optimization.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "3863a127a04a5ff3a582390b64b05330722e8a0a7792c2f1b8f13af7d432f6c4"
+    },
+    {
+      "source_path": "skills/pennylane/references/quantum_chemistry.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pennylane/references/quantum_chemistry.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "57e10e42aef2b15a7638b25420b3949aebf03d528ccd0a1f523c57b652cfe752"
+    },
+    {
+      "source_path": "skills/pennylane/references/quantum_circuits.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pennylane/references/quantum_circuits.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "5f2c2077c6f99732accd654dce9edeb29d92df55a64d8c0ffa2da5171d16be1a"
+    },
+    {
+      "source_path": "skills/pennylane/references/quantum_ml.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pennylane/references/quantum_ml.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "ec5a6fa56353c291e2a08ae65ffe59414021058c8b7c6d48f8035214abeac9c0"
+    },
+    {
+      "source_path": "skills/pennylane/SKILL.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pennylane/SKILL.md",
+      "disposition": "included",
+      "reason": "normalized reviewed Open Agent Skill entry",
+      "sha256": "40aec2eeed16f351a000d041765e607baefcf91407b180930840b27a8f33c08e"
+    },
+    {
+      "source_path": "skills/protocolsio-integration/references/additional_features.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-protocolsio-integration/references/additional_features.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "55af83378e4e427de8e3f2ac242c5063d15ac08957f8b719b646d33164179c62"
+    },
+    {
+      "source_path": "skills/protocolsio-integration/references/authentication.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-protocolsio-integration/references/authentication.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "227a44f0514f5fdfffa72eeb45eb6edb798a780810ce7f5c8cbf91ded6421215"
+    },
+    {
+      "source_path": "skills/protocolsio-integration/references/discussions.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-protocolsio-integration/references/discussions.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "67885f9d635af994e02cd685d8a7435e0fd7f7ed6ebfb441272dd20d557962fe"
+    },
+    {
+      "source_path": "skills/protocolsio-integration/references/file_manager.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-protocolsio-integration/references/file_manager.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "eb2a7170e8ca4944070a0282e434921f37fee4bef405296119d91c6cf16e8b31"
+    },
+    {
+      "source_path": "skills/protocolsio-integration/references/protocols_api.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-protocolsio-integration/references/protocols_api.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "ba32892bd66eb70066a455e63fd32187b9c01c97d142d40cae24a34fee396ced"
+    },
+    {
+      "source_path": "skills/protocolsio-integration/references/workspaces.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-protocolsio-integration/references/workspaces.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "b3e4d3a9d31886274cbde594398d24ceb321565aa2f430d4c16d2a1d18ed3aba"
+    },
+    {
+      "source_path": "skills/protocolsio-integration/SKILL.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-protocolsio-integration/SKILL.md",
+      "disposition": "included",
+      "reason": "normalized reviewed Open Agent Skill entry",
+      "sha256": "1e783deda6276674942acf1a6bb54e9eefc50a2089db69b1f70e31e0f165511c"
+    },
+    {
+      "source_path": "skills/pufferlib/references/environments.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pufferlib/references/environments.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "eeb773e9add21d6cd37ee717dc3251e3951b89fbd5e474fadca8408b9f6cc564"
+    },
+    {
+      "source_path": "skills/pufferlib/references/integration.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pufferlib/references/integration.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "1ec4dbbf6923631d4e6002e7a82c9ed8fff08dc64eb75305e4a42577bbcd015e"
+    },
+    {
+      "source_path": "skills/pufferlib/references/policies.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pufferlib/references/policies.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "fb898cbc18f6adf5d57d5338afe0e5b80ae7c669cee323228f5becdea04ee9fc"
+    },
+    {
+      "source_path": "skills/pufferlib/references/training.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pufferlib/references/training.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "06bba5c274ec8dba3812c0609225892122f840ba4159c810023158025cc34cba"
+    },
+    {
+      "source_path": "skills/pufferlib/references/vectorization.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pufferlib/references/vectorization.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "8c163431de060ee64b91a70f1057b04ca2d0c089be8150b0868f1f9af3716f49"
+    },
+    {
+      "source_path": "skills/pufferlib/scripts/env_template.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pufferlib/scripts/env_template.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "9f394e9c719e50926181ab603abfbc2d1d1a8747c7dd384d24836c0e4de8713e"
+    },
+    {
+      "source_path": "skills/pufferlib/scripts/train_template.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pufferlib/scripts/train_template.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "e0dffda87ea42e890769205ea0eb71ab2d1892f5d3015a189196fc03b6729d9f"
+    },
+    {
+      "source_path": "skills/pufferlib/SKILL.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pufferlib/SKILL.md",
+      "disposition": "included",
+      "reason": "normalized reviewed Open Agent Skill entry",
+      "sha256": "2aeb94a05831d88f74459233cc7e570cab0bb3ed5f1eac567a4785979ce15a45"
+    },
+    {
+      "source_path": "skills/pylabrobot/references/analytical-equipment.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pylabrobot/references/analytical-equipment.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "b22c5107dcceb62d5e16b2b2cfb4d61bec1f2dcc4252cd56337b134b21ea9ee4"
+    },
+    {
+      "source_path": "skills/pylabrobot/references/hardware-backends.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pylabrobot/references/hardware-backends.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "ae007727fd5b887c090632686fe3f2f53dd7c0493234736b4ceee6548617a5bd"
+    },
+    {
+      "source_path": "skills/pylabrobot/references/liquid-handling.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pylabrobot/references/liquid-handling.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "71a6f02e2871133318803f3d798d98a7f8b272dba75b6ae5f6a2f3f20bf4ac16"
+    },
+    {
+      "source_path": "skills/pylabrobot/references/material-handling.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pylabrobot/references/material-handling.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "030aaa791eaccf2e998b7c01e74c573ca4b891ab0e19a1994cd82540e36980fd"
+    },
+    {
+      "source_path": "skills/pylabrobot/references/resources.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pylabrobot/references/resources.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "2d187c3f65c68acadb4d1ef443243a252ff94fd16877931dc8604415ecfea897"
+    },
+    {
+      "source_path": "skills/pylabrobot/references/visualization.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pylabrobot/references/visualization.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "bda040591f0b0c58889fe6bc4e0a50b54a10e1b9582563b25ae414d4a1c7da51"
+    },
+    {
+      "source_path": "skills/pylabrobot/SKILL.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pylabrobot/SKILL.md",
+      "disposition": "included",
+      "reason": "normalized reviewed Open Agent Skill entry",
+      "sha256": "5bea03f7d38650c6775448aa3b2fa931d444f86ecd79d46e7ccddb346556bbc8"
+    },
+    {
+      "source_path": "skills/pymatgen/references/analysis_modules.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/references/analysis_modules.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "262b89d9e9fbca2692f9432f2f4b5d35500a1f749f7a2002111c3014e89937f4"
+    },
+    {
+      "source_path": "skills/pymatgen/references/core_classes.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/references/core_classes.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "230c4a8be4467a7c712d95a0b4109af2b1427b9ea7cb191bc2ea78062d7143de"
+    },
+    {
+      "source_path": "skills/pymatgen/references/io_formats.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/references/io_formats.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "d31fab0646a5be2ceefadca786f079a6b0b62f93c502a668654548d8bae9c1d1"
+    },
+    {
+      "source_path": "skills/pymatgen/references/materials_project_api.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/references/materials_project_api.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "9af1daa4bc88a0774b93d238fdf203d8cf86b817ac642166e55abd5248eb5fbc"
+    },
+    {
+      "source_path": "skills/pymatgen/references/transformations_workflows.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/references/transformations_workflows.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "7c7e4cc305c4c67cbcf8d56ba7bee08170ce5264e6bba964aa0b98de44001fb9"
+    },
+    {
+      "source_path": "skills/pymatgen/scripts/phase_diagram_generator.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/scripts/phase_diagram_generator.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "be132bf108bb799d81f53e17280de05db286d85c80e1ff34efe1bb75640e947e"
+    },
+    {
+      "source_path": "skills/pymatgen/scripts/structure_analyzer.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/scripts/structure_analyzer.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "efd488516026e53108af8f96872c1c30928de92efca9e083c15d620575cec76f"
+    },
+    {
+      "source_path": "skills/pymatgen/scripts/structure_converter.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/scripts/structure_converter.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "a1ee392512f3e97fa014cbe2e3f290f5d049d0431e59f4dbbd80c2dce4293935"
+    },
+    {
+      "source_path": "skills/pymatgen/SKILL.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/SKILL.md",
+      "disposition": "included",
+      "reason": "normalized reviewed Open Agent Skill entry",
+      "sha256": "a5796348533f2481d5823ca936ca7e68c7263e548f8f901d53b2f0cf9107dd50"
+    },
+    {
+      "source_path": "skills/pymoo/references/algorithms.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pymoo/references/algorithms.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "32977be7825446fb36c93e01308ce5d6551408c2022d1002662cb6a48b090949"
+    },
+    {
+      "source_path": "skills/pymoo/references/constraints_mcdm.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pymoo/references/constraints_mcdm.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "67d8d2538e331aa1344f4b94a2b8b600c630efbfc80171ae741bb7e117f175c2"
+    },
+    {
+      "source_path": "skills/pymoo/references/operators.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pymoo/references/operators.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "aefd3a1906fcc81afea224cba9f0ea0a23b9a2f1b3604004a03edc082799b655"
+    },
+    {
+      "source_path": "skills/pymoo/references/parallelization.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pymoo/references/parallelization.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "c6fd4a91a3da58577b9008bb7d399f8cfc2b887d94667fa3be00571d130848ae"
+    },
+    {
+      "source_path": "skills/pymoo/references/problems.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pymoo/references/problems.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "9baf6ef8ee9c4c6d67b7de5a74662534020154054f1649a716e71a59826e7338"
+    },
+    {
+      "source_path": "skills/pymoo/references/visualization.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pymoo/references/visualization.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "b21636950d2f69eb10d4150c0c2e47e9a70ff9da792a707293b6c176122835b0"
+    },
+    {
+      "source_path": "skills/pymoo/scripts/custom_problem_example.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pymoo/scripts/custom_problem_example.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "9b385850d6b05f28443a28cfb41d226cddc8296bad98436616ed62d7f5e935ac"
+    },
+    {
+      "source_path": "skills/pymoo/scripts/decision_making_example.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pymoo/scripts/decision_making_example.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "7ff21a0661ca04e5668ccd76a7342231782b07e6f7e57b9258178bf57ce09506"
+    },
+    {
+      "source_path": "skills/pymoo/scripts/many_objective_example.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pymoo/scripts/many_objective_example.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "221ffd681d1bbea65151aae04d090f602a76912c72e487db2a0e5d5e2c03be72"
+    },
+    {
+      "source_path": "skills/pymoo/scripts/multi_objective_example.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pymoo/scripts/multi_objective_example.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "ba237064b8aac3aae49d8f40b8bd8ac78766ddcdd2d69c4e219b35837d186d92"
+    },
+    {
+      "source_path": "skills/pymoo/scripts/single_objective_example.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pymoo/scripts/single_objective_example.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "a69cecea739093a152370ab53b9d2d7491a584c0ed5bfb5a236d729472b0732f"
+    },
+    {
+      "source_path": "skills/pymoo/SKILL.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pymoo/SKILL.md",
+      "disposition": "included",
+      "reason": "normalized reviewed Open Agent Skill entry",
+      "sha256": "688b4540dd610ca052b31c230232a7435ddf6759f76094c4f37600487b46f961"
+    },
+    {
+      "source_path": "skills/pytorch-lightning/references/best_practices.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/references/best_practices.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "3172921ba31cd2e59d0d84b533210b852a4f8d651f06f74e2f907d28e11933ef"
+    },
+    {
+      "source_path": "skills/pytorch-lightning/references/callbacks.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/references/callbacks.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "aa2140e7b684dfe8e3f47752dc4d9b14220a8d4c126f3f38cbbc1b6698466395"
+    },
+    {
+      "source_path": "skills/pytorch-lightning/references/data_module.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/references/data_module.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "a94cb2aeb0ac6e04d07d05cd8a3f96bb64d0623cfb310dfcc6d2c255b03d86f9"
+    },
+    {
+      "source_path": "skills/pytorch-lightning/references/distributed_training.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/references/distributed_training.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "0828867cbfea2483ffbfec2398fa1f35784f62b4832d71a311dc10d7ae1ef9d9"
+    },
+    {
+      "source_path": "skills/pytorch-lightning/references/lightning_module.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/references/lightning_module.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "952354340eb7fa6d09fa235392ccd4eb31e023422c45068e8c780f6523363a90"
+    },
+    {
+      "source_path": "skills/pytorch-lightning/references/logging.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/references/logging.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "097cd018cdd0d4880dd861bd9405e68df7c392498bb28ad63afbeb9869ae8db1"
+    },
+    {
+      "source_path": "skills/pytorch-lightning/references/trainer.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/references/trainer.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "d7761218deb392bfac4f373d4238c0595b5094115bd1645ae00bff0940b54887"
+    },
+    {
+      "source_path": "skills/pytorch-lightning/scripts/quick_trainer_setup.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/scripts/quick_trainer_setup.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "a2bf7df7ea87d341b6caa282d16a0970a123ed7b17c7bbcaaf6b6b3df77aec4b"
+    },
+    {
+      "source_path": "skills/pytorch-lightning/scripts/template_datamodule.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/scripts/template_datamodule.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "82d1601800fa17a80250b640b4df530ebd78bb852316bc75c6441b1d592c80cf"
+    },
+    {
+      "source_path": "skills/pytorch-lightning/scripts/template_lightning_module.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/scripts/template_lightning_module.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "0337c694bc33f2de5bd93af0221b78d0ffcad3841ca1f540b78eb3a309e9d1c2"
+    },
+    {
+      "source_path": "skills/pytorch-lightning/SKILL.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/SKILL.md",
+      "disposition": "included",
+      "reason": "normalized reviewed Open Agent Skill entry",
+      "sha256": "dd59c6ccd9cbf2e414dccd99628fad415a1f1bbf1e526470ff6b586f89e7293d"
+    },
+    {
+      "source_path": "skills/pyzotero/references/authentication.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/references/authentication.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "9c14d8f8d68fee3e8ea01c9ceb598449c9f3ef0dd171503b5063fed4dc0a0934"
+    },
+    {
+      "source_path": "skills/pyzotero/references/cli.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/references/cli.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "4abbcadd84157ac432c35ab043ce0d11bf874b796ecfeb850100b7799b4b74d5"
+    },
+    {
+      "source_path": "skills/pyzotero/references/collections.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/references/collections.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "d6b72f9933a4eb5bb2d4aafdf5b4f6daebf4c03d7f0aef0c960cd8d9276e59da"
+    },
+    {
+      "source_path": "skills/pyzotero/references/error-handling.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/references/error-handling.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "2be8a65f5ed7f3ade735a9fc6c78cb74ce9e92112bd5df03d52f25f30985fd32"
+    },
+    {
+      "source_path": "skills/pyzotero/references/exports.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/references/exports.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "02db73f3d15b4b2de852727816b18d90cd535e431416c2cd8b2c1c4411362124"
+    },
+    {
+      "source_path": "skills/pyzotero/references/files-attachments.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/references/files-attachments.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "585b9443d0b836b6c58903769497391b116074e04c9a82a376e8230b8a450d3a"
+    },
+    {
+      "source_path": "skills/pyzotero/references/full-text.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/references/full-text.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "ee6e5380ff8b902c716582340f4063a9e7468a1eff6ea9c04a5d646a84398a39"
+    },
+    {
+      "source_path": "skills/pyzotero/references/mcp.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/references/mcp.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "eb9803c1ac9651dc3883e2c4216ed336190627c54286104d50b3c4f2d6f9f9d0"
+    },
+    {
+      "source_path": "skills/pyzotero/references/pagination.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/references/pagination.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "aefc14d4b1a8d55a41fe53fb5b8bb3093848815d68b18542f316336d2359224a"
+    },
+    {
+      "source_path": "skills/pyzotero/references/read-api.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/references/read-api.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "18866a03761653d8aee715f98683849f037be8a97507f08a4a145ce68a5d0e32"
+    },
+    {
+      "source_path": "skills/pyzotero/references/saved-searches.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/references/saved-searches.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "1cce1a29d4c9c73b497e26a93e5e21174148bd221dde9bd3df3e2f0e7acc0cb9"
+    },
+    {
+      "source_path": "skills/pyzotero/references/search-params.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/references/search-params.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "e31834d6ce3bcd55a58a235731b3efc539935f6b4c101cd4c37aae19b0f53756"
+    },
+    {
+      "source_path": "skills/pyzotero/references/tags.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/references/tags.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "8b2d2a962d2ce796572fb725e3bdc5ab3f8a20bc749dc3a95ef78a090dfc1adc"
+    },
+    {
+      "source_path": "skills/pyzotero/references/write-api.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/references/write-api.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "153ab5fffd8f12a9db044d7bb6b58e8a9b948063c2fba154c8fb16c87bfd761f"
+    },
+    {
+      "source_path": "skills/pyzotero/SKILL.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/SKILL.md",
+      "disposition": "included",
+      "reason": "normalized reviewed Open Agent Skill entry",
+      "sha256": "afe409e37d373f10d2e03cf622a4ff84615612e359882632e5811f49e6652067"
+    },
+    {
+      "source_path": "skills/qiskit/references/algorithms.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-qiskit/references/algorithms.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "06f48e2a63464b711d37851983ad1d050bcdc003cb8afe70c98c3ce1f01c7b3b"
+    },
+    {
+      "source_path": "skills/qiskit/references/backends.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-qiskit/references/backends.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "e1336784fcdfc487e3ba4a07d1be22061938749e5975c49eae69a96742c6b1c4"
+    },
+    {
+      "source_path": "skills/qiskit/references/circuits.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-qiskit/references/circuits.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "4708eed5c9ecef6055673c101ef1642e88062f9a987f8b71eafaefa3572d632d"
+    },
+    {
+      "source_path": "skills/qiskit/references/patterns.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-qiskit/references/patterns.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "02e8359f367dc5618ed7ea5287100e61336eef798e642aaf8074c794de588411"
+    },
+    {
+      "source_path": "skills/qiskit/references/primitives.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-qiskit/references/primitives.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "6fea9e6ad7ea039e44b05400d48caf80e2b3110364fb6ee545108cc3d2a27c9d"
+    },
+    {
+      "source_path": "skills/qiskit/references/setup.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-qiskit/references/setup.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "deeed00097127b28da39926a777f2b1945957969d2e02852f31efd00e398b897"
+    },
+    {
+      "source_path": "skills/qiskit/references/transpilation.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-qiskit/references/transpilation.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "a30b3f6e66eea9a61716cdd339d4aec1a58437cf6d7fba6915b2b6963fd5eca5"
+    },
+    {
+      "source_path": "skills/qiskit/references/visualization.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-qiskit/references/visualization.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "612660942719fb14c9d91247ccf8b4ce5c7c980117ef7d8c4955aef053f72c54"
+    },
+    {
+      "source_path": "skills/qiskit/SKILL.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-qiskit/SKILL.md",
+      "disposition": "included",
+      "reason": "normalized reviewed Open Agent Skill entry",
+      "sha256": "a076023dc6461a9c9651d4103f375b512a9c159379ea258c080bfef6817d2a6f"
+    },
+    {
+      "source_path": "skills/scientific-visualization/assets/color_palettes.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/assets/color_palettes.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "ffea28da930406ecb11bbeaebfc530dfac40b772827a7653f449cb3b0bb35309"
+    },
+    {
+      "source_path": "skills/scientific-visualization/assets/nature.mplstyle",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/assets/nature.mplstyle",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "05b5cab4b5286cd812ff3ceba31845c08baa083d77382df05ec100383e4ff040"
+    },
+    {
+      "source_path": "skills/scientific-visualization/assets/presentation.mplstyle",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/assets/presentation.mplstyle",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "a47167d633cd0695bc428a42ed4e790a69f90d0204ed560bae6902785ba2b823"
+    },
+    {
+      "source_path": "skills/scientific-visualization/assets/publication.mplstyle",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/assets/publication.mplstyle",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "38244036fb563bdf50b6b15ac927ae62afa3a8f6acf03ec5c9b317adad9c5a14"
+    },
+    {
+      "source_path": "skills/scientific-visualization/references/color_palettes.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/references/color_palettes.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "4d9ec64478dee9fc8de43fbde9983a413520c436099b0c560b21eadec572270b"
+    },
+    {
+      "source_path": "skills/scientific-visualization/references/journal_requirements.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/references/journal_requirements.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "69157b820c78e9bca299ea6f7dcb49624ea778ec3ed619a98e82c3b60e6dc782"
+    },
+    {
+      "source_path": "skills/scientific-visualization/references/matplotlib_examples.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/references/matplotlib_examples.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "d9195bb8c1b80f235495ac8a63e86fef0462e99cc2cc7d5d244818bfe5ee08cf"
+    },
+    {
+      "source_path": "skills/scientific-visualization/references/publication_guidelines.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/references/publication_guidelines.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "c8430dfe7d374edc771c55a0d9c6e1f07ab803f16321d21941835e93944da2d1"
+    },
+    {
+      "source_path": "skills/scientific-visualization/scripts/figure_export.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/scripts/figure_export.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "542f604c2a4dc642c055b24ef26b9e9e808616a33fde0cd2154c975dc83318d0"
+    },
+    {
+      "source_path": "skills/scientific-visualization/scripts/style_presets.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/scripts/style_presets.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "3a4163c6aaaf6792665cf890ab497a2b5070c0ed0adfa524fcaee5262a3f1792"
+    },
+    {
+      "source_path": "skills/scientific-visualization/SKILL.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/SKILL.md",
+      "disposition": "included",
+      "reason": "normalized reviewed Open Agent Skill entry",
+      "sha256": "9408d11855df69aae69dcb36985fa1b4be2016a1cc90fdf7cde0fbc0b8299b33"
+    },
+    {
+      "source_path": "skills/scikit-learn/references/model_evaluation.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-scikit-learn/references/model_evaluation.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "95825afc97206a6588c7fd1f9358e2b130bbbbe6ae5f1032923ee7dbaf6c11e5"
+    },
+    {
+      "source_path": "skills/scikit-learn/references/pipelines_and_composition.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-scikit-learn/references/pipelines_and_composition.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "c856b5b21e03b1cf5e4094211a831b69f1ff1d8ecd7b0174ca3a28674aec0033"
+    },
+    {
+      "source_path": "skills/scikit-learn/references/preprocessing.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-scikit-learn/references/preprocessing.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "e510e9f984e29162f950500edca082fe8d647c7bdb4ac066c295eb5eead8a2e1"
+    },
+    {
+      "source_path": "skills/scikit-learn/references/quick_reference.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-scikit-learn/references/quick_reference.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "c34ef2f24089f22e80a1ca7794b2c089ce9fc07e6286206140c99f56fa30990e"
+    },
+    {
+      "source_path": "skills/scikit-learn/references/supervised_learning.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-scikit-learn/references/supervised_learning.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "f257bc6e165777baf81ffdc55c2f6e36bc770a94fb42d3b9b6ed844c3a7f8c83"
+    },
+    {
+      "source_path": "skills/scikit-learn/references/unsupervised_learning.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-scikit-learn/references/unsupervised_learning.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "a1f2a140c20e20f20de9c24a3be2ccacece1f192a1745c5f70a0c5e3cb972850"
+    },
+    {
+      "source_path": "skills/scikit-learn/scripts/classification_pipeline.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-scikit-learn/scripts/classification_pipeline.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "0879a3643690c4e8245a9e57ebac631751a1178d0b4c31b0bde87ce0c38992d0"
+    },
+    {
+      "source_path": "skills/scikit-learn/scripts/clustering_analysis.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-scikit-learn/scripts/clustering_analysis.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "aec71c7f1abfbc218eaa7ce000a85a726bef4d7b777038179aa4b44e96ca4d78"
+    },
+    {
+      "source_path": "skills/scikit-learn/SKILL.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-scikit-learn/SKILL.md",
+      "disposition": "included",
+      "reason": "normalized reviewed Open Agent Skill entry",
+      "sha256": "f2cdc300dbe9eef603127b9091fdc2c706d0888c7605c62be2a8140ac077add5"
+    },
+    {
+      "source_path": "skills/shap/references/explainers.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-shap/references/explainers.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "2c3ea2706977790aafa13024b876b75bc198886cf75c83cfb29518bf0d5f108f"
+    },
+    {
+      "source_path": "skills/shap/references/plots.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-shap/references/plots.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "cb1a7392e4592f67a5a231ba33627342e4343876ce715e83eb0fa461ebd3f6ed"
+    },
+    {
+      "source_path": "skills/shap/references/theory.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-shap/references/theory.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "7afc74836fa44354799727f22fec89bd6b86b798d6b56bbf0f642c9f87cf1610"
+    },
+    {
+      "source_path": "skills/shap/references/workflows.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-shap/references/workflows.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "649baa278103cce7c54be74ce7e97ce82328deb64a5599f74bd0a11d6739e864"
+    },
+    {
+      "source_path": "skills/shap/SKILL.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-shap/SKILL.md",
+      "disposition": "included",
+      "reason": "normalized reviewed Open Agent Skill entry",
+      "sha256": "1a2c509c63a987a2ec1cf1b7f31d16fde9c1d6a1ee7a3a61805ced8d353e7eab"
+    },
+    {
+      "source_path": "skills/simpy/references/events.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-simpy/references/events.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "ec53d2242372565fdbbe15c6d85ac65be79558bec589abda9f658851ea2856a7"
+    },
+    {
+      "source_path": "skills/simpy/references/monitoring.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-simpy/references/monitoring.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "115230919df1c97b49a599720e025ac9f7514cf12613b2765e208ed708aad20a"
+    },
+    {
+      "source_path": "skills/simpy/references/process-interaction.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-simpy/references/process-interaction.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "07607eae087b6bd07b83acd76c23135a8376a52c01b06f02f2ebc4e8bd2bf5b5"
+    },
+    {
+      "source_path": "skills/simpy/references/real-time.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-simpy/references/real-time.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "70c08f55ab65c5ff92d2b17023485b42be8a82b2a8139b6437263352b9fb3aa2"
+    },
+    {
+      "source_path": "skills/simpy/references/resources.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-simpy/references/resources.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "3f87b67d8db3bdf7101dfe31f952bf9688fdba3c1b86b5c3a8bec0bfdc5d0e1b"
+    },
+    {
+      "source_path": "skills/simpy/scripts/basic_simulation_template.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-simpy/scripts/basic_simulation_template.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "664c2d8427a14f0a9db9e4f9cd3138e1d8f8a83702fa31e99115b6c2d8bd0210"
+    },
+    {
+      "source_path": "skills/simpy/scripts/resource_monitor.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-simpy/scripts/resource_monitor.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "e069449c87109851e8fe0b6d9e899dfef8c37065e420a6d5f661765e58588b86"
+    },
+    {
+      "source_path": "skills/simpy/SKILL.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-simpy/SKILL.md",
+      "disposition": "included",
+      "reason": "normalized reviewed Open Agent Skill entry",
+      "sha256": "0ec8d49443be378939a390421baa3082ef156b1e53ff54b871eb1deb20583a14"
+    },
+    {
+      "source_path": "skills/stable-baselines3/references/algorithms.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-stable-baselines3/references/algorithms.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "364effdb558ed7104dcf94b7c4407ca1c34e6b3d7bc36e2b0ea0591f09e73cae"
+    },
+    {
+      "source_path": "skills/stable-baselines3/references/callbacks.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-stable-baselines3/references/callbacks.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "54b8253ac089f949d4d1da7d19a06bf6e0819415e5f03f7c95294e718c1c1e48"
+    },
+    {
+      "source_path": "skills/stable-baselines3/references/custom_environments.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-stable-baselines3/references/custom_environments.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "24a30a48fbdbaf7cf226fcd0916bf4ae8c3ec25d1fbeb500c13ccfb78fb5325c"
+    },
+    {
+      "source_path": "skills/stable-baselines3/references/vectorized_envs.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-stable-baselines3/references/vectorized_envs.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "be23ef237442efb1b9ac68f196652beb962bc6c7d2ee94059751cdc65746ab73"
+    },
+    {
+      "source_path": "skills/stable-baselines3/scripts/custom_env_template.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-stable-baselines3/scripts/custom_env_template.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "10d4d2f55fef72b091d65faa409746484fa8ef9472578c6f96de551f2b37512d"
+    },
+    {
+      "source_path": "skills/stable-baselines3/scripts/evaluate_agent.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-stable-baselines3/scripts/evaluate_agent.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "16024c0322e4c70b82dae620fa7481da08a1ea6e10fd36ec203c2c32fa0da464"
+    },
+    {
+      "source_path": "skills/stable-baselines3/scripts/train_rl_agent.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-stable-baselines3/scripts/train_rl_agent.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "a233523c6ee778c8931bdf3ae093f1ee8865db63be40f3365328e0e6ec024892"
+    },
+    {
+      "source_path": "skills/stable-baselines3/SKILL.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-stable-baselines3/SKILL.md",
+      "disposition": "included",
+      "reason": "normalized reviewed Open Agent Skill entry",
+      "sha256": "48f2bae2bfeb79d8116778f2eccfd42dfacfc2b941f520f4e25bc061ccae85f8"
+    },
+    {
+      "source_path": "skills/sympy/references/advanced-topics.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-sympy/references/advanced-topics.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "212b3d0c3b67a45160135a4ff8d9ae89e0064cf1c68adf408a6c2af5c0d82bb9"
+    },
+    {
+      "source_path": "skills/sympy/references/code-generation-printing.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-sympy/references/code-generation-printing.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "046648801a3404b9e883110e24bd4d947381be930c2ef8589fd8ca3414ef81cb"
+    },
+    {
+      "source_path": "skills/sympy/references/core-capabilities.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-sympy/references/core-capabilities.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "9d7b7393e814ef833fdcbb6e63a8a6621f08c123afe39d43c2bd2e131c7782d9"
+    },
+    {
+      "source_path": "skills/sympy/references/matrices-linear-algebra.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-sympy/references/matrices-linear-algebra.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "f22d091d2a38957e0e820e859e172b2d535cc1eef4f98d32d4af02962bd9a73c"
+    },
+    {
+      "source_path": "skills/sympy/references/physics-mechanics.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-sympy/references/physics-mechanics.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "e5853aa09e9bddc37134afd7469bc86b952edcbd9dd6d8a6ef9c2c24a2e0fbf3"
+    },
+    {
+      "source_path": "skills/sympy/SKILL.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-sympy/SKILL.md",
+      "disposition": "included",
+      "reason": "normalized reviewed Open Agent Skill entry",
+      "sha256": "0f87949b0380b4ba445c1d6c0d34f5bd90be194882e0c507b9a19f70999e20ab"
+    },
+    {
+      "source_path": "skills/timesfm-forecasting/examples/anomaly-detection/detect_anomalies.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/anomaly-detection/detect_anomalies.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "2320b725adfaf4e45c40a34bd253ce56020c911bb804ceeeb1b9704f5fb61ffb"
+    },
+    {
+      "source_path": "skills/timesfm-forecasting/examples/anomaly-detection/output/anomaly_detection.json",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/anomaly-detection/output/anomaly_detection.json",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "f657f299b1bc0205cd242822bddaac92dc2b08c6a71dc19215cf98294a2dbdbc"
+    },
+    {
+      "source_path": "skills/timesfm-forecasting/examples/anomaly-detection/output/anomaly_detection.png",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/anomaly-detection/output/anomaly_detection.png",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "c4b30e01bb01847c0eabf8367f28cd16368fd28e450c38c1cc089abb18672276"
+    },
+    {
+      "source_path": "skills/timesfm-forecasting/examples/covariates-forecasting/demo_covariates.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/covariates-forecasting/demo_covariates.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "b3f57e5b7e0af827e8e34674c2e16d4104e1b5467833a47e67a5ceafcc8ded2f"
+    },
+    {
+      "source_path": "skills/timesfm-forecasting/examples/covariates-forecasting/output/covariates_data.png",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/covariates-forecasting/output/covariates_data.png",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "24682a190ecae753d5531bce9841040709a64abb044bfb372bab34a6c7c17070"
+    },
+    {
+      "source_path": "skills/timesfm-forecasting/examples/covariates-forecasting/output/covariates_metadata.json",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/covariates-forecasting/output/covariates_metadata.json",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "0a0ece6fdf551000673ee1f763895b88e18dbee05471a44e71e9388593477006"
+    },
+    {
+      "source_path": "skills/timesfm-forecasting/examples/covariates-forecasting/output/sales_with_covariates.csv",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/covariates-forecasting/output/sales_with_covariates.csv",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "765621c852fd31ce7803012fd100973f20a1be796d492092df2f0ecb884a9f1c"
+    },
+    {
+      "source_path": "skills/timesfm-forecasting/examples/global-temperature/generate_animation_data.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/generate_animation_data.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "457850385191763131554bd035b13a23e2b5a78fea03ae2e9e39a274bed5eaf2"
+    },
+    {
+      "source_path": "skills/timesfm-forecasting/examples/global-temperature/generate_gif.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/generate_gif.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "5ec2d4323044468c3eb1ad42e5f4e5c5148273564c445b7b19807763f7d4c455"
+    },
+    {
+      "source_path": "skills/timesfm-forecasting/examples/global-temperature/generate_html.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/generate_html.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "43ba538c8d7d1632c24f9b014daf3a488483d3fe5bdb2cfec2b44f8eda6ffcf0"
+    },
+    {
+      "source_path": "skills/timesfm-forecasting/examples/global-temperature/output/animation_data.json",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/output/animation_data.json",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "d54662e5e1d8cba1be036e397a64df5a868db2d807b82560423302e096f1f060"
+    },
+    {
+      "source_path": "skills/timesfm-forecasting/examples/global-temperature/output/forecast_animation.gif",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/output/forecast_animation.gif",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "ca9bbbe3206a0c2c7da26e154a6a5661490f97a024ccb7a833f26fd96bd0e51b"
+    },
+    {
+      "source_path": "skills/timesfm-forecasting/examples/global-temperature/output/forecast_output.csv",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/output/forecast_output.csv",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "64ae6a900cdf76152de2aac7a5f068c342fc8f1d8fee7ed33ae68c37d11d2840"
+    },
+    {
+      "source_path": "skills/timesfm-forecasting/examples/global-temperature/output/forecast_output.json",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/output/forecast_output.json",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "4cfbede705b0abd82a6e8622dd93c89d5e7ae3563ac486fffe9c9736682f7aad"
+    },
+    {
+      "source_path": "skills/timesfm-forecasting/examples/global-temperature/output/forecast_visualization.png",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/output/forecast_visualization.png",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "d4b03c857b444842550fb711ee9951f0e5f159d52bbedebe4e8bbfe2d18bc2f5"
+    },
+    {
+      "source_path": "skills/timesfm-forecasting/examples/global-temperature/output/interactive_forecast.html",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/output/interactive_forecast.html",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "8ddfaf1ee3b089048e5b421160a601fb1ad355c7bfff9d8d94f6b3fb367f9658"
+    },
+    {
+      "source_path": "skills/timesfm-forecasting/examples/global-temperature/README.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/README.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "944076d47548b7ecc79701a09537b79e26a7a03b7d91db0548977c1a854846d0"
+    },
+    {
+      "source_path": "skills/timesfm-forecasting/examples/global-temperature/run_example.sh",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/run_example.sh",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "d305541a6477d592ccc3c2320fd52524f5501838c281eacd0760621dbb7b5c32"
+    },
+    {
+      "source_path": "skills/timesfm-forecasting/examples/global-temperature/run_forecast.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/run_forecast.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "66fead15854d9b8f91c1281be60589f3bfbe51dbeb15289d2c9965919a00c2f1"
+    },
+    {
+      "source_path": "skills/timesfm-forecasting/examples/global-temperature/temperature_anomaly.csv",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/temperature_anomaly.csv",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "3a32b67453575fe786983efb9cad4c491b69ee69903cd9d36b58eb04204161a7"
+    },
+    {
+      "source_path": "skills/timesfm-forecasting/examples/global-temperature/visualize_forecast.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/visualize_forecast.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "f8ab85d7d680bdfad7cafd6a25d0c78c72e4a7d96637975251fe5a361c76ebae"
+    },
+    {
+      "source_path": "skills/timesfm-forecasting/references/api_reference.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/references/api_reference.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "69942b90d4b9979746955087cde76e3e6403f2a36e7680e4fca96ce37a3c0faf"
+    },
+    {
+      "source_path": "skills/timesfm-forecasting/references/data_preparation.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/references/data_preparation.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "d7f1209ff1134b71e8f65d3627461a9e81f7daabd3addd93b229fb2f8813526c"
+    },
+    {
+      "source_path": "skills/timesfm-forecasting/references/system_requirements.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/references/system_requirements.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "6b2225f558ec00d2624f2060f1067d6b27792b6fe185bcf1e19eead53a24c8dd"
+    },
+    {
+      "source_path": "skills/timesfm-forecasting/scripts/check_system.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/scripts/check_system.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "1ddc967b105522390e706a5ab83c6de9f173e276d11a96382cf954011031284a"
+    },
+    {
+      "source_path": "skills/timesfm-forecasting/scripts/forecast_csv.py",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/scripts/forecast_csv.py",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "b72119e1e43ed514e83e86064a73f11ffb9b39475f620f222b5fd2842ac273ad"
+    },
+    {
+      "source_path": "skills/timesfm-forecasting/SKILL.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/SKILL.md",
+      "disposition": "included",
+      "reason": "normalized reviewed Open Agent Skill entry",
+      "sha256": "665670017a30a2b809afd804a5f5cd45fc48becfba4f4d893f42a228eb6c8b0d"
+    },
+    {
+      "source_path": "skills/torch-geometric/references/custom_datasets.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-torch-geometric/references/custom_datasets.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "48700ef231c9d727f34d5ef4daf5b087fec1238c91e4a2051f51d85137a85f7b"
+    },
+    {
+      "source_path": "skills/torch-geometric/references/explainability.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-torch-geometric/references/explainability.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "1e4dbbc1a6bd08503d04c6570be84f105bb2a3aae7b1a4d67b991d44f86c388b"
+    },
+    {
+      "source_path": "skills/torch-geometric/references/heterogeneous.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-torch-geometric/references/heterogeneous.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "57d19d123de25fc93c4cf03483797089709efd233f9aa36e0c4a72e41eb0ce7a"
+    },
+    {
+      "source_path": "skills/torch-geometric/references/link_prediction.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-torch-geometric/references/link_prediction.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "c66a29c15cedcecf7615f691cab14a5871d474aec082ddbb22313d6d9848fcdc"
+    },
+    {
+      "source_path": "skills/torch-geometric/references/message_passing.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-torch-geometric/references/message_passing.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "9a4fa90b74841dc531a576247caa32d158d862951c8a7199543eb180b0241954"
+    },
+    {
+      "source_path": "skills/torch-geometric/references/scaling.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-torch-geometric/references/scaling.md",
+      "disposition": "included",
+      "reason": "reviewed source resource",
+      "sha256": "990b4a8deb097cf028da17a55764e7ec0bd00f1d0db9bb9abd94b8fbda316e7c"
+    },
+    {
+      "source_path": "skills/torch-geometric/SKILL.md",
+      "output_path": "vendors/scientific-agent-skills/scientific-agent-skills-torch-geometric/SKILL.md",
+      "disposition": "included",
+      "reason": "normalized reviewed Open Agent Skill entry",
+      "sha256": "7bf25bdec31d2bea29154ad0b160fd79c6202563d6d4804b47405852cf20997e"
+    }
+  ]
+}

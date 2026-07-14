@@ -55,7 +55,9 @@ ResearchSpec installs exactly eight base project Skills:
 Optional ResearchSpec-maintained [domain Skill plugins](docs/domain_skill_plugins.md)
 can add reviewed Open Agent Skills to the workspace. Users select stable
 vendor-neutral domains; maintainer converters own upstream provenance and Skill
-dependencies. Plugins add no command
+dependencies. Discipline domains follow [ANZSRC 2020 FoR Group](docs/domain_taxonomy.md),
+while Field codes remain audit metadata; empty fixed domains stay internal until
+reviewed Skills are available. Plugins add no command
 wrappers and never own workflow state, Gates, Decisions, or receipts. Inspect the
 bundled catalog with `researchspec plugin list`.
 
@@ -95,6 +97,8 @@ See [SECURITY.md](SECURITY.md) for supported versions and vulnerability handling
 - [Canonical ARSU user model](docs/arsu_user_usage_model.md)
 - [CLI interface](docs/cli_interface_design.md)
 - [Domain Skill plugins](docs/domain_skill_plugins.md)
+- [Domain taxonomy](docs/domain_taxonomy.md)
+- [Scientific Agent Skills vendor adapter](docs/scientific_agent_skills_vendor_adapter.md)
 - [ToolUniverse vendor adapter](docs/tooluniverse_vendor_adapter.md)
 - [Release process](docs/release_process.md)
 - [Project-owner walkthrough](playbooks/owner-walkthrough/README.md) — recommended introduction to the real operating model
@@ -106,6 +110,7 @@ ResearchSpec uses a mixed-license model:
 
 - ResearchSpec-authored framework and Companion material is MIT licensed.
 - Bundled and generated ARSU-derived material is licensed under CC BY-NC 4.0 and retains Cheng-I Wu's upstream attribution.
+- ToolUniverse and Scientific Agent Skills domain assets retain the Skill-level licenses and provenance recorded in each generated `LICENSE` and `NOTICE.md`.
 
 The complete combined package must not be described as unrestricted for commercial use. See [LICENSE](LICENSE), [NOTICE](NOTICE), and [LICENSES](LICENSES/) for the material boundary. Commercial use requires separate rights review and may require upstream permission.
 

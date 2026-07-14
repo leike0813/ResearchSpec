@@ -1,5 +1,5 @@
 import { execFile } from "node:child_process";
-import { cp, mkdir, mkdtemp, readFile, readdir, rm, stat, writeFile } from "node:fs/promises";
+import { cp, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { promisify } from "node:util";
@@ -7,7 +7,9 @@ import { promisify } from "node:util";
 import { parse, stringify } from "yaml";
 
 import { sha256 } from "../../core/workspace/write-plan.js";
-import { loadPluginRegistry, validatePluginRegistry, type PluginRegistry } from "../../plugins/registry.js";
+import { assemblePluginRegistry } from "../../plugins/assembler.js";
+import { loadPluginRegistry, type PluginRegistry } from "../../plugins/registry.js";
+import { commitVendorStage, pathExists, posix, prepareVendorStage, vendorProjectionDiff, walkFiles } from "../shared/staging.js";
 
 const execFileAsync = promisify(execFile);
 const VENDOR_ID = "tooluniverse";
@@ -19,8 +21,9 @@ interface AuditSkill {
   skill_id: string;
   source_path: string;
   scope_disposition: "candidate" | "exclude";
-  primary_domain: string | null;
-  secondary_domains: string[];
+  primary_anzsrc_field: string | null;
+  additional_anzsrc_fields: string[];
+  anzsrc_unclassified_reason: string | null;
   cross_skill_references: string[];
 }
 
@@ -37,11 +40,6 @@ interface DependencyDecision {
   evidence: Array<{ path: string; line: number; text: string }>;
 }
 
-interface DomainCatalog {
-  schema_version: "1";
-  domains: PluginRegistry["domains"];
-}
-
 interface FileDisposition { source_path: string; output_path?: string; disposition: "included" | "excluded"; reason: string; sha256?: string }
 
 export interface ToolUniverseConversionManifest {
@@ -56,7 +54,6 @@ export interface ToolUniverseConversionManifest {
   excluded_skill_ids: string[];
   dependency_decisions: DependencyDecision[];
   file_dispositions: FileDisposition[];
-  domain_counts: Record<string, number>;
 }
 
 export interface ConvertToolUniverseOptions { repoRoot: string; outputRoot?: string; force?: boolean; dryRun?: boolean }
@@ -66,27 +63,20 @@ export async function convertToolUniverse(options: ConvertToolUniverseOptions): 
   const outputRoot = path.resolve(options.outputRoot ?? path.join(repoRoot, "skills/plugins"));
   const audit = await readJson<Audit>(path.join(repoRoot, AUDIT_PATH));
   const decisions = await readJson<DependencyDecision[]>(path.join(repoRoot, POLICY_ROOT, "dependency-decisions.json"));
-  const domainCatalog = await readJson<DomainCatalog>(path.join(repoRoot, POLICY_ROOT, "domain-catalog.json"));
   const sourceRoot = path.join(repoRoot, SOURCE_PATH);
   await validateSource(sourceRoot, audit);
-  validateAuditAndPolicies(audit, decisions, domainCatalog);
+  validateAuditAndPolicies(audit, decisions);
 
   const stage = await mkdtemp(path.join(tmpdir(), "researchspec-tooluniverse-"));
   try {
-    const manifest = await generateBundle(stage, sourceRoot, audit, decisions, domainCatalog);
-    await validatePluginRegistry(await readJson<unknown>(path.join(stage, "registry.json")), stage);
+    await prepareVendorStage(path.join(repoRoot, "skills/plugins"), stage, VENDOR_ID);
+    const manifest = await generateBundle(stage, sourceRoot, audit, decisions);
+    await assemblePluginRegistry({ repoRoot, pluginRoot: stage });
     if (options.dryRun) return manifest;
-    if (!options.force && await pathExists(path.join(outputRoot, "vendors", VENDOR_ID)) && !(await generatedOutputMatches(stage, outputRoot))) {
+    if (!options.force && await pathExists(path.join(outputRoot, "vendors", VENDOR_ID)) && (await vendorProjectionDiff(stage, outputRoot, VENDOR_ID)).length) {
       throw new Error("ToolUniverse generated output has drift; run with --force after reviewing the converter inputs.");
     }
-    await rm(path.join(outputRoot, "vendors", VENDOR_ID), { recursive: true, force: true });
-    await mkdir(path.join(outputRoot, "vendors"), { recursive: true });
-    await cp(path.join(stage, "vendors", VENDOR_ID), path.join(outputRoot, "vendors", VENDOR_ID), { recursive: true });
-    await mkdir(path.join(outputRoot, "vendor-manifests"), { recursive: true });
-    await mkdir(path.join(outputRoot, "conversion-reports"), { recursive: true });
-    await cp(path.join(stage, "vendor-manifests", `${VENDOR_ID}.json`), path.join(outputRoot, "vendor-manifests", `${VENDOR_ID}.json`));
-    await cp(path.join(stage, "conversion-reports", `${VENDOR_ID}.md`), path.join(outputRoot, "conversion-reports", `${VENDOR_ID}.md`));
-    await cp(path.join(stage, "registry.json"), path.join(outputRoot, "registry.json"));
+    await commitVendorStage(stage, outputRoot, VENDOR_ID);
     return manifest;
   } finally { await rm(stage, { recursive: true, force: true }); }
 }
@@ -99,12 +89,7 @@ export async function checkToolUniverseOutput(repoRoot: string): Promise<{ ok: b
     const vendor = loaded.vendors.get(VENDOR_ID);
     if (!vendor) errors.push("ToolUniverse vendor is absent from the bundled registry");
     else if (vendor.skills.length !== 130) errors.push(`Expected 130 ToolUniverse Skills, found ${String(vendor.skills.length)}`);
-    const expected: Record<string, number> = {
-      "genomics-and-systems-biology": 72,
-      "molecular-and-organismal-biosciences": 40,
-      "translational-medicine-and-therapeutics": 65,
-    };
-    for (const [domainId, count] of Object.entries(expected)) if (loaded.domains.get(domainId)?.skills.length !== count) errors.push(`Domain ${domainId} does not contain ${String(count)} direct Skills`);
+    if (loaded.domains.size !== 218) errors.push(`Expected 218 internal domains, found ${String(loaded.domains.size)}`);
     warnings.push(...loaded.diagnostics.map((item) => item.message));
   } catch (error) { errors.push(error instanceof Error ? error.message : String(error)); }
   return { ok: errors.length === 0, errors, warnings };
@@ -114,12 +99,12 @@ export async function checkToolUniverseIdempotence(repoRoot: string): Promise<{ 
   const stage = await mkdtemp(path.join(tmpdir(), "researchspec-tooluniverse-check-"));
   try {
     await convertToolUniverse({ repoRoot, outputRoot: stage, force: true });
-    const driftPaths = await treeDiff(stage, path.join(repoRoot, "skills/plugins"));
+    const driftPaths = await vendorProjectionDiff(stage, path.join(repoRoot, "skills/plugins"), VENDOR_ID);
     return { ok: driftPaths.length === 0, drift_paths: driftPaths };
   } finally { await rm(stage, { recursive: true, force: true }); }
 }
 
-async function generateBundle(outputRoot: string, sourceRoot: string, audit: Audit, decisions: DependencyDecision[], domainCatalog: DomainCatalog): Promise<ToolUniverseConversionManifest> {
+async function generateBundle(outputRoot: string, sourceRoot: string, audit: Audit, decisions: DependencyDecision[]): Promise<ToolUniverseConversionManifest> {
   const candidates = audit.skills.filter((skill) => skill.scope_disposition === "candidate").sort((a, b) => a.skill_id.localeCompare(b.skill_id));
   const requiredBySkill = new Map<string, string[]>();
   for (const decision of decisions) if (decision.relation === "required") requiredBySkill.set(decision.from, [...(requiredBySkill.get(decision.from) ?? []), decision.to]);
@@ -154,7 +139,7 @@ async function generateBundle(outputRoot: string, sourceRoot: string, audit: Aud
     await writeText(path.join(outputSkillRoot, "LICENSE"), license.endsWith("\n") ? license : `${license}\n`);
     const notice = `# Notice\n\nThis Skill is adapted by ResearchSpec from ToolUniverse (${audit.source.repository_url}) release ${audit.source.release}, revision ${audit.source.revision}.\n\nSource path: \`${skill.source_path}\`. The adaptation normalizes packaging and ResearchSpec authority boundaries; upstream scientific and runtime requirements remain attributable to ToolUniverse.\n`;
     await writeText(path.join(outputSkillRoot, "NOTICE.md"), notice);
-    vendorSkills.push({ skill_id: skill.skill_id, dependencies: [...new Set(requiredBySkill.get(skill.skill_id) ?? [])].sort(), upstreams: [{ source_paths: [skill.source_path], adaptation: "converted" }] });
+    vendorSkills.push({ skill_id: skill.skill_id, license: "Apache-2.0", dependencies: [...new Set(requiredBySkill.get(skill.skill_id) ?? [])].sort(), upstreams: [{ source_paths: [skill.source_path], adaptation: "converted" }] });
   }
 
   const vendor: PluginRegistry["vendors"][number] = {
@@ -167,8 +152,6 @@ async function generateBundle(outputRoot: string, sourceRoot: string, audit: Aud
     converter_version: "1",
     skills: vendorSkills,
   };
-  const registry: PluginRegistry = { schema_version: "1", vendors: [vendor], domains: domainCatalog.domains };
-  const domainCounts = Object.fromEntries(domainCatalog.domains.map((domain) => [domain.domain_id, domain.skills.length]));
   const manifest: ToolUniverseConversionManifest = {
     schema_version: "1",
     converter_version: "1",
@@ -181,23 +164,19 @@ async function generateBundle(outputRoot: string, sourceRoot: string, audit: Aud
     excluded_skill_ids: audit.skills.filter((skill) => skill.scope_disposition === "exclude").map((skill) => skill.skill_id).sort(),
     dependency_decisions: decisions,
     file_dispositions: fileDispositions.sort((a, b) => a.source_path.localeCompare(b.source_path) || String(a.output_path).localeCompare(String(b.output_path))),
-    domain_counts: domainCounts,
   };
-  await writeJson(path.join(outputRoot, "registry.json"), registry);
+  await writeJson(path.join(outputRoot, "vendor-bundles", `${VENDOR_ID}.json`), { schema_version: "1", vendor });
   await writeJson(path.join(outputRoot, "vendor-manifests", `${VENDOR_ID}.json`), manifest);
   await writeText(path.join(outputRoot, "conversion-reports", `${VENDOR_ID}.md`), renderReport(manifest));
   return manifest;
 }
 
-function validateAuditAndPolicies(audit: Audit, decisions: DependencyDecision[], catalog: DomainCatalog): void {
+function validateAuditAndPolicies(audit: Audit, decisions: DependencyDecision[]): void {
   if (audit.summary.top_level_skills !== 150 || audit.summary.candidate_skills !== 130 || audit.summary.excluded_skills !== 20) throw new Error("ToolUniverse audit inventory does not match the reviewed 150/130/20 baseline.");
   const candidates = new Set(audit.skills.filter((skill) => skill.scope_disposition === "candidate").map((skill) => skill.skill_id));
   const expectedEdges = new Set(audit.skills.filter((skill) => skill.scope_disposition === "candidate").flatMap((skill) => skill.cross_skill_references.filter((target) => candidates.has(target)).map((target) => `${skill.skill_id}\0${target}`)));
   const actualEdges = new Set(decisions.map((item) => `${item.from}\0${item.to}`));
   if (expectedEdges.size !== audit.summary.candidate_cross_skill_edges || actualEdges.size !== expectedEdges.size || [...expectedEdges].some((edge) => !actualEdges.has(edge))) throw new Error("Dependency decision catalog must classify every audited candidate-to-candidate reference exactly once.");
-  if (catalog.domains.length !== 3) throw new Error("ToolUniverse domain catalog must contain exactly three stable domains.");
-  for (const domain of catalog.domains) for (const skillId of domain.skills) if (!candidates.has(skillId)) throw new Error(`Domain ${domain.domain_id} references non-candidate Skill ${skillId}.`);
-  if ([...candidates].some((skillId) => !catalog.domains.some((domain) => domain.skills.includes(skillId)))) throw new Error("Every admitted ToolUniverse Skill must be a direct member of at least one domain.");
 }
 
 async function validateSource(sourceRoot: string, audit: Audit): Promise<void> {
@@ -258,26 +237,10 @@ function renderReport(manifest: ToolUniverseConversionManifest): string {
   const required = manifest.dependency_decisions.filter((item) => item.relation === "required").length;
   const related = manifest.dependency_decisions.filter((item) => item.relation === "related").length;
   const routing = manifest.dependency_decisions.filter((item) => item.relation === "routing").length;
-  return `# ToolUniverse Vendor Conversion\n\n- Release: \`${manifest.release}\`\n- Revision: \`${manifest.revision}\`\n- Generated Skills: ${String(manifest.generated_skills.length)}\n- Excluded Skills: ${String(manifest.excluded_skills)}\n- Dependency decisions: ${String(required)} required, ${String(related)} related, ${String(routing)} routing\n\n## Domains\n\n${Object.entries(manifest.domain_counts).sort().map(([id, count]) => `- \`${id}\`: ${String(count)} direct Skills`).join("\n")}\n\nResearchSpec copied static reviewed resources only. It did not execute scripts, install dependencies, configure credentials, or grant workflow authority.\n`;
+  return `# ToolUniverse Vendor Conversion\n\n- Release: \`${manifest.release}\`\n- Revision: \`${manifest.revision}\`\n- Generated Skills: ${String(manifest.generated_skills.length)}\n- Excluded Skills: ${String(manifest.excluded_skills)}\n- Dependency decisions: ${String(required)} required, ${String(related)} related, ${String(routing)} routing\n\nThis converter emits the isolated ToolUniverse vendor bundle. The source-neutral domain catalog and central assembler own production domain membership and registry assembly.\n\nResearchSpec copied static reviewed resources only. It did not execute scripts, install dependencies, configure credentials, or grant workflow authority.\n`;
 }
 
-async function generatedOutputMatches(stage: string, outputRoot: string): Promise<boolean> { return (await treeDiff(stage, outputRoot)).length === 0; }
-async function treeDiff(expectedRoot: string, actualRoot: string): Promise<string[]> {
-  const expected = await relativeFileMap(expectedRoot);
-  const actual = await relativeFileMap(actualRoot, (relative) => relative === "registry.json" || relative.startsWith("vendors/tooluniverse/") || relative === "vendor-manifests/tooluniverse.json" || relative === "conversion-reports/tooluniverse.md");
-  const keys = new Set([...expected.keys(), ...actual.keys()]);
-  return [...keys].filter((key) => expected.get(key) !== actual.get(key)).sort();
-}
-async function relativeFileMap(root: string, include: (relative: string) => boolean = () => true): Promise<Map<string, string>> {
-  const result = new Map<string, string>();
-  if (!(await pathExists(root))) return result;
-  for (const file of await walkFiles(root)) { const relative = posix(path.relative(root, file)); if (include(relative)) result.set(relative, sha256(await readFile(file))); }
-  return result;
-}
-async function walkFiles(root: string): Promise<string[]> { const result: string[] = []; for (const entry of await readdir(root, { withFileTypes: true })) { const target = path.join(root, entry.name); if (entry.isDirectory()) result.push(...await walkFiles(target)); else if (entry.isFile()) result.push(target); } return result.sort(); }
 async function readJson<T>(filePath: string): Promise<T> { return JSON.parse(await readFile(filePath, "utf8")) as T; }
 async function writeJson(filePath: string, value: unknown): Promise<void> { await writeText(filePath, `${JSON.stringify(value, null, 2)}\n`); }
 async function writeText(filePath: string, value: string): Promise<void> { await mkdir(path.dirname(filePath), { recursive: true }); await writeFile(filePath, value, "utf8"); }
-async function pathExists(filePath: string): Promise<boolean> { try { await stat(filePath); return true; } catch { return false; } }
 function included(sourcePath: string, outputPath: string, content: string, reason: string): FileDisposition { return { source_path: sourcePath, output_path: outputPath, disposition: "included", reason, sha256: sha256(content) }; }
-function posix(value: string): string { return value.split(path.sep).join("/"); }

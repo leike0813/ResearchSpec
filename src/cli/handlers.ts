@@ -28,8 +28,8 @@ import { executeWritePlan, planFile, sha256, type PlannedWrite } from "../core/w
 import { fileExists, readOptionalText } from "../utils/fs.js";
 import { CliError, success, type CommandContext, type CommandResult } from "./types.js";
 import { searchableMultiSelect } from "./prompts/searchable-multi-select.js";
-import { loadPluginRegistry, PluginRegistryError, resolveDomainSelection, type LoadedPluginRegistry } from "../plugins/registry.js";
-import { buildResolutionSnapshots, pluginCatalogItem, pluginStatusSummary, resolutionSnapshots, selectedPluginIds } from "../plugins/status.js";
+import { availableDomains, domainIsAvailable, loadPluginRegistry, PluginRegistryError, resolveDomainSelection, type LoadedPluginRegistry } from "../plugins/registry.js";
+import { buildResolutionSnapshots, pluginCatalogItem, pluginStatusSummary, resolutionSnapshots, selectedPluginIds, unavailablePluginCatalogItem } from "../plugins/status.js";
 
 export interface InitOptions { tools?: string }
 export interface UpdateOptions { tools?: string }
@@ -341,21 +341,27 @@ export async function handlePluginList(options: PluginListOptions, context: Comm
   const workspace = await optionalWorkspace(context);
   const snapshot = workspace ? await loadWorkspaceSnapshot(workspace) : undefined;
   const selected = snapshot ? selectedPluginIds(snapshot.config) : [];
-  const domains = pluginRegistry.registry.domains
-    .map((domain) => pluginCatalogItem(domain, pluginRegistry, selected))
-    .filter((domain) => !options.installed || domain.installed);
+  const projected = new Set(snapshot ? pluginStatusSummary(snapshot.config, snapshot.manifest, pluginRegistry).projected : []);
+  const domains = options.installed
+    ? selected.map((domainId) => {
+      const domain = pluginRegistry.domains.get(domainId);
+      return domainIsAvailable(domain) ? pluginCatalogItem(domain, pluginRegistry, selected, projected.has(domainId)) : unavailablePluginCatalogItem(domainId, domain);
+    })
+    : availableDomains(pluginRegistry).map((domain) => pluginCatalogItem(domain, pluginRegistry, selected, projected.has(domain.domain_id)));
   return success("plugin", { action: "list", workspace: workspace ?? null, domains }, {
-    stdout: domains.length ? `${domains.map((domain) => `${domain.domain_id}\t${domain.version}${domain.installed ? "\tinstalled" : ""}`).join("\n")}\n` : "No domain Skill plugins.\n",
+    stdout: domains.length ? `${domains.map((domain) => `${domain.domain_id}\t${domain.version ?? "unknown"}${domain.installed ? "\tinstalled" : ""}${domain.available ? "" : "\tunavailable"}`).join("\n")}\n` : "No domain Skill plugins.\n",
   });
 }
 
 export async function handlePluginShow(pluginId: string, context: CommandContext, providedRegistry?: LoadedPluginRegistry): Promise<CommandResult> {
   const pluginRegistry = providedRegistry ?? await bundledPluginRegistry();
   const domain = pluginRegistry.domains.get(pluginId);
-  if (!domain) throw new CliError("plugin_not_found", `Domain plugin not found: ${pluginId}`, 1);
+  if (!domainIsAvailable(domain)) throw new CliError("plugin_not_found", `Domain plugin not found or unavailable: ${pluginId}`, 1);
   const workspace = await optionalWorkspace(context);
   const snapshot = workspace ? await loadWorkspaceSnapshot(workspace) : undefined;
-  const item = pluginCatalogItem(domain, pluginRegistry, snapshot ? selectedPluginIds(snapshot.config) : []);
+  const selected = snapshot ? selectedPluginIds(snapshot.config) : [];
+  const projected = snapshot ? pluginStatusSummary(snapshot.config, snapshot.manifest, pluginRegistry).projected.includes(domain.domain_id) : false;
+  const item = pluginCatalogItem(domain, pluginRegistry, selected, projected);
   return success("plugin", { action: "show", workspace: workspace ?? null, domain: item }, { stdout: `${JSON.stringify(item, null, 2)}\n` });
 }
 
@@ -383,7 +389,7 @@ export async function handlePluginUpdate(pluginIds: readonly string[], context: 
   return reconcilePluginSelection("update", workspace, snapshot, selected, context, pluginRegistry);
 }
 
-export async function handlePluginUninstall(pluginIds: readonly string[], context: CommandContext): Promise<CommandResult> {
+export async function handlePluginUninstall(pluginIds: readonly string[], context: CommandContext, providedRegistry?: LoadedPluginRegistry): Promise<CommandResult> {
   const requested = normalizePluginIds(pluginIds);
   if (!requested.length) throw new CliError("plugin_ids_required", "At least one plugin ID is required.", 2);
   const workspace = await requireWorkspace(context);
@@ -392,7 +398,7 @@ export async function handlePluginUninstall(pluginIds: readonly string[], contex
   const notInstalled = requested.filter((id) => !selectedBefore.includes(id));
   if (notInstalled.length) throw new CliError("plugin_not_installed", `Plugin is not installed: ${notInstalled.join(", ")}`, 1);
   const requestedSet = new Set(requested);
-  const pluginRegistry = await bundledPluginRegistry();
+  const pluginRegistry = providedRegistry ?? await bundledPluginRegistry();
   const existingInstallations = installationRecords(snapshot.manifest.installations);
   const selected = selectedBefore.filter((id) => !requestedSet.has(id));
   const desiredSkillIds = resolvedSkillIdsForSelection(pluginRegistry, selected, snapshot.manifest);
@@ -567,8 +573,8 @@ async function reconcilePluginSelection(action: "install" | "update", workspace:
   const projectRoot = path.dirname(workspace);
   const toolIds = strings(record(snapshot.config.agent_tools).selected);
   const existingInstallations = installationRecords(snapshot.manifest.installations);
-  const availableSelected = selected.filter((id) => pluginRegistry.domains.has(id));
-  const unavailableSelected = selected.filter((id) => !pluginRegistry.domains.has(id));
+  const availableSelected = selected.filter((id) => domainIsAvailable(pluginRegistry.domains.get(id)));
+  const unavailableSelected = selected.filter((id) => !domainIsAvailable(pluginRegistry.domains.get(id)));
   const delivery = await planToolDelivery({ projectRoot, toolIds, existingInstallations, force: context.force, pluginRegistry, selectedPluginIds: availableSelected });
   const operations = [...delivery.operations];
   const reconciliation = await reconcileInstallations({
@@ -605,14 +611,14 @@ async function bundledPluginRegistry(): Promise<LoadedPluginRegistry> {
 }
 
 function assertPluginsAvailable(ids: readonly string[], registry: LoadedPluginRegistry): void {
-  const unknown = ids.filter((id) => !registry.domains.has(id));
+  const unknown = ids.filter((id) => !domainIsAvailable(registry.domains.get(id)));
   if (unknown.length) throw new CliError("plugin_unavailable", `Domain plugin is unavailable in this ResearchSpec package: ${unknown.join(", ")}`, 1, "Unavailable selected domains may still be safely removed with researchspec plugin uninstall.", { domain_ids: unknown });
 }
 
 function pluginManifestText(installations: readonly InstallationRecord[], registry: LoadedPluginRegistry, selectedDomainIds: readonly string[], previous?: Record<string, unknown>): string {
   const selected = new Set(selectedDomainIds);
   const current = buildResolutionSnapshots(registry, selectedDomainIds);
-  const unavailable = resolutionSnapshots(previous?.plugin_resolutions).filter((snapshot) => selected.has(snapshot.domain_id) && !registry.domains.has(snapshot.domain_id));
+  const unavailable = resolutionSnapshots(previous?.plugin_resolutions).filter((snapshot) => selected.has(snapshot.domain_id) && !domainIsAvailable(registry.domains.get(snapshot.domain_id)));
   const pluginResolutions = [...current, ...unavailable].sort((left, right) => left.domain_id.localeCompare(right.domain_id));
   return `${JSON.stringify({ schema_version: "1", package_version: "0.1.0", plugin_resolutions: pluginResolutions, installations }, null, 2)}\n`;
 }
@@ -623,8 +629,8 @@ function resolvedSkillIdsForUnavailable(domainIds: readonly string[], manifest: 
 }
 
 function resolvedSkillIdsForSelection(registry: LoadedPluginRegistry, selectedDomainIds: readonly string[], manifest: Record<string, unknown>): Set<string> {
-  const available = selectedDomainIds.filter((id) => registry.domains.has(id));
-  const unavailable = selectedDomainIds.filter((id) => !registry.domains.has(id));
+  const available = selectedDomainIds.filter((id) => domainIsAvailable(registry.domains.get(id)));
+  const unavailable = selectedDomainIds.filter((id) => !domainIsAvailable(registry.domains.get(id)));
   return new Set([...resolveDomainSelection(registry, available).resolvedSkillIds, ...resolvedSkillIdsForUnavailable(unavailable, manifest)]);
 }
 

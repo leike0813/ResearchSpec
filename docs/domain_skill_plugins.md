@@ -2,79 +2,83 @@
 
 ## Purpose and authority
 
-Domain Skill plugins are ResearchSpec-maintained collections of Open Agent Skills. Users select stable professional domains; upstream vendors are maintainer concerns, not installation products. Domain Skills may assist semantic research work, but they never own ResearchSpec routes, workflow profiles, work items, state, artifact registry, Gates, Decisions, transitions, or receipts.
+Domain Skill plugins are ResearchSpec-maintained collections of Open Agent Skills. Users select stable domains; upstream vendors are maintainer concerns, not installation products. Plugin Skills may assist semantic research work, but they never own ResearchSpec routes, workflow profiles, work items, state, artifact registry, Gates, Decisions, transitions, or receipts.
 
 User runtime is offline with respect to plugin maintenance. It reads static assets distributed in the ResearchSpec npm package and never clones an upstream repository, runs a converter, executes a bundled script, installs dependencies, or configures credentials.
 
-## Two-layer model
+Domain identity and taxonomy are canonicalized in [ResearchSpec Domain Taxonomy](./domain_taxonomy.md).
 
-The registry deliberately separates two many-to-many layers:
+## Vendor and domain layers
+
+The registry separates two many-to-many layers:
 
 ```text
-upstream project                 stable user domain
-      │                                  │
-      ▼                                  ▼
-vendor converter ──► vendor Skills ◄── domain Skill list
-                           │
-                           ▼
-                 reviewed dependency graph
+upstream project                    stable user domain
+      │                                     │
+      ▼                                     ▼
+vendor converter ──► vendor bundle/Skills ◄── source-neutral domain list
+                              │
+                              ▼
+                    reviewed dependency graph
 ```
 
-- A **vendor** pins an upstream project release and revision, converts reviewed Skills, records provenance, and owns required Skill dependencies.
+- A **vendor** pins an upstream release and revision, converts reviewed Skills, records Skill-level provenance and licenses, and owns required Skill dependencies.
 - A **domain** owns a stable, versioned list of direct Skill IDs. One vendor may contribute to several domains, and one domain may contain Skills from several vendors.
+- A **central assembler** validates all isolated vendor bundles against the source-neutral domain catalog and is the only writer of `skills/plugins/registry.json`.
 - The same Skill may be a direct member of several domains. Its bytes and global Skill ID remain unique.
-- Vendor converters cannot create, rename, or silently change domains. Domain catalog changes require explicit review and a domain version change.
 
-ToolUniverse v1.3.1 is the first production vendor. Its 130 admitted research Skills are organized into:
-
-- `translational-medicine-and-therapeutics` — 65 direct Skills;
-- `genomics-and-systems-biology` — 72 direct Skills;
-- `molecular-and-organismal-biosciences` — 40 direct Skills.
-
-The overlap is intentional: 89 Skills belong directly to one domain, 35 to two, and six reusable research-method Skills to all three.
+ToolUniverse v1.3.1 contributes 130 admitted Skills. Scientific Agent Skills v2.53.0 contributes 33 reviewed, vendor-prefixed Skills after complete admission decisions for all 147 audit records. Together they populate 44 non-empty domains while remaining isolated vendor bundles; users still select only source-neutral domains.
 
 ## Registry and package layout
-
-`skills/plugins/registry.json` is the distributed runtime catalog:
 
 ```text
 skills/plugins/
   registry.json
+  vendor-bundles/
+    <vendor-id>.json
   vendors/
     <vendor-id>/
       <skill-id>/
         SKILL.md
         LICENSE
         NOTICE.md
-        scripts/       optional and inert at installation time
-        references/    optional
-        assets/        optional
+        scripts/ references/ assets/ ...
   vendor-manifests/
   conversion-reports/
 ```
 
-Registry Schema 1 contains `schema_version`, `vendors`, and `domains`. A vendor records repository identity, release, immutable revision, license, converter version, and its Skills. Each vendor Skill records a globally unique `skill_id`, reviewed `dependencies`, and upstream source paths. A domain records `domain_id`, title, description, version, and direct Skill IDs.
+Registry Schema 1 contains `schema_version`, `domain_taxonomy`, `vendors`, and `domains`. A vendor records repository identity, release, immutable revision, root license, converter version, and its Skills. Each vendor Skill records a globally unique `skill_id`, applicable content `license`, reviewed `dependencies`, and upstream paths. A domain is a typed `discipline` or `tool` record with a stable ID, title, description, version, and direct Skills; discipline domains additionally retain `anzsrc_group_code`.
 
-Validation rejects unsafe paths, duplicate vendor/domain/Skill IDs, base-Skill conflicts, unknown dependencies, self-dependencies, unknown domain members, unreachable assets, invalid Open Agent Skills metadata, and missing attribution. Dependency cycles are allowed as availability groups, resolved with a visited set, and reported to maintainers.
+Validation rejects unsafe paths, duplicate IDs, base-Skill conflicts, unknown or self dependencies, invalid members, unreachable vendor Skills, invalid Open Agent Skills metadata, and missing attribution. Dependency cycles are finite availability groups: they are resolved with a visited set and diagnosed for maintainers.
 
-## Vendor conversion
+## Fixed internal catalog and public availability
 
-Vendor converters are repo-local maintainer tools that emit a common internal bundle manifest; they are not a public converter ABI. The ToolUniverse adapter:
+The internal catalog pre-creates all 213 ANZSRC Group domains and five ResearchSpec tool domains. Empty domains are valid internally so taxonomy identity does not depend on current vendor coverage. Public availability is derived only from a non-empty reviewed `skills` list.
 
-- validates the pinned v1.3.1 submodule and complete 150-Skill audit inventory;
+Normal `plugin list`, direct `show` and `install`, JSON, status availability, checks, and Navigate hide or reject empty domains. A previously selected domain that later becomes empty or disappears remains visible only through installed status as `unavailable`; update blocks, while its saved manifest snapshot permits safe uninstall. Repopulating the same stable ID restores availability.
+
+## Vendor conversion and assembly
+
+Vendor converters are repo-local maintainer tools, not a public converter ABI. The ToolUniverse converter:
+
+- validates the pinned v1.3.1 submodule and complete 150-Skill audit;
 - admits 130 research Skills and excludes 20 setup, developer, router, SDK, and platform surfaces;
-- classifies all 223 explicit Skill references as `required`, `related`, or `routing` with evidence;
-- writes only reviewed `required` relations into the installation dependency graph;
-- normalizes frontmatter and progressive disclosure, filters non-runtime resources, and adds compatibility and ResearchSpec authority guidance;
-- generates per-Skill Apache-2.0 attribution, a conversion manifest, a report, hashes, and idempotence evidence.
+- classifies all 223 explicit references as `required`, `related`, or `routing` with evidence;
+- places only reviewed `required` edges in the dependency graph;
+- normalizes frontmatter and progressive disclosure, retains reviewed resources, and adds license, notice, compatibility, and authority guidance;
+- emits only the ToolUniverse vendor bundle, Skill tree, manifest, and report before invoking central assembly.
 
-Maintainer commands are:
+The Scientific Agent Skills converter independently:
 
-```bash
-pnpm tooluniverse:convert
-pnpm tooluniverse:check
-pnpm tooluniverse:idempotence
-```
+- validates the pinned v2.53.0 source and complete 147-record admission catalog;
+- admits 33 Skills with `scientific-agent-skills-` IDs and excludes 114 after authority, redistribution, overlap, static security, content, and domain review;
+- removes platform metadata, normalizes compatibility and tool declarations, discloses bundled scripts, and copies reviewed resource trees with explicit exceptions;
+- records all 22 audited relationships while allowing only admitted reviewed `required` edges to affect installation;
+- emits its isolated tree, bundle, manifest, and report.
+
+Each converter stages against all published vendors before central assembly and commits only its own projection plus the registry. Running one converter cannot replace another vendor's generated tree or bundle.
+
+Converters and the assembler never execute upstream scripts, install dependencies, configure credentials, contact services, or grant workflow authority.
 
 ## Workspace selection and dependency resolution
 
@@ -83,12 +87,12 @@ Workspace intent contains domain IDs only:
 ```yaml
 plugins:
   selected:
-    - genomics-and-systems-biology
+    - bioinformatics-and-computational-biology
 ```
 
-For every operation ResearchSpec computes the sorted union of each selected domain's direct Skills and transitive required dependencies. Multiple domains and dependency paths are deduplicated by global Skill ID. All configured Agent tools receive the same resolved set; adding a tool later backfills the current closure. Domain Skills add no command wrappers, so the fixed wrapper frontier remains eight wrappers on each of the 28 command-capable tools.
+For each operation ResearchSpec computes the sorted union of selected domains' direct Skills and transitive required dependencies. Multiple domains and dependency paths are deduplicated by global Skill ID. All configured Agent tools receive the same resolved set; adding a tool later backfills the current closure. Domain Skills add no command wrappers, so the fixed wrapper frontier remains eight wrappers on each of the 28 command-capable tools.
 
-`tool-installation-manifest.json` records vendor/Skill file ownership and a resolution snapshot for each selected domain. Config is user intent; snapshots are derived recovery evidence.
+`tool-installation-manifest.json` records vendor/Skill file ownership and a resolution snapshot for every selected available domain. Config is user intent; snapshots are derived recovery evidence retained while a selection is unavailable.
 
 ## CLI lifecycle
 
@@ -100,12 +104,10 @@ researchspec plugin update [domain-ids...]
 researchspec plugin uninstall <domain-ids...>
 ```
 
-Normal list, install, update, uninstall, and status surfaces expose domains rather than vendor packages. `show` may expose vendor, release, revision, license, direct Skills, resolved dependencies, and provenance. `--installed` means explicitly selected domains, never domains inferred from dependencies.
+Normal lifecycle surfaces expose domains rather than vendors. `show` includes domain type, ANZSRC Group code where applicable, direct and resolved Skills, dependencies, vendor release, revision, licenses, and provenance. `--installed` means explicit workspace selections, including unavailable recovery entries; it never infers domains from dependencies.
 
-Install and update are idempotent set reconciliation. Install without an Agent tool saves intent and returns a non-blocking warning. Update recomputes the graph from the current package. A selected unavailable domain blocks update but remains safely removable from its saved snapshot.
-
-Uninstall first removes the selected domain from intent, recomputes the remaining closure, and deletes only no-longer-reachable files. Shared dependencies remain. Drift in any file scheduled for deletion blocks the entire transaction, and `--force` never deletes a user-modified file. Config and the installation manifest are committed after generated file operations, with the manifest last.
+Install and update are idempotent set reconciliation. Install without an Agent tool saves intent and returns a non-blocking warning. Update recomputes the current graph and blocks if any selected domain is unavailable. Uninstall removes only files no longer reachable from remaining snapshots; shared dependencies remain. Drift in any file scheduled for deletion blocks the whole transaction, and `--force` never deletes a user-modified file. Config and manifest commit after generated operations, with the manifest last.
 
 ## Navigate integration
 
-Navigate may recommend a semantically matching Skill only when it is in the resolved installed set. Recommendations remain advisory and do not create routes, subflows, work items, Gates, Decisions, receipts, or an alternate workflow state machine.
+Navigate may recommend a semantically matching Skill only when its domain is installed and available and its files are projected. An unavailable snapshot is recovery evidence, not an executable recommendation. Recommendations remain advisory and do not create routes, subflows, work items, Gates, Decisions, receipts, or an alternate workflow state machine.

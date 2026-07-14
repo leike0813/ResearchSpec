@@ -293,13 +293,15 @@ ResearchSpec 必须能够把维护者审校的领域知识作为可选 Open Agen
 
 需求：
 
-- bundled registry 是 vendor provenance、稳定 domains、Skill membership 与 hard dependencies 的 runtime catalog SSOT，不在用户运行期访问上游；
+- bundled registry 是 vendor provenance、稳定 domains、Skill membership 与 hard dependencies 的 runtime catalog SSOT，不在用户运行期访问上游；vendor converter 只输出隔离 bundle，source-neutral catalog 与 central assembler 共同决定最终 registry；
+- 学科 domain 以 ANZSRC 2020 FoR Group 为唯一标准，Field 仅作 audit metadata；另有五个粗粒度工具域。内部 218 个固定 domain 允许为空，但普通用户 surface 只显示非空项；
 - workspace 级选择投影到所有 configured tools，新 tool 自动补齐；
 - 插件保留 LICENSE、NOTICE 与 immutable upstream revision，资源原样复制；
 - ResearchSpec 不执行 plugin scripts、不安装依赖、不提供 sandbox；
 - plugin Skills 不生成 command wrappers，也不得拥有 workflow、Gate、Decision、artifact
   registry 或 receipt authority；
 - install/update/uninstall 复用 manifest hash、drift protection 和 manifest-last write discipline。
+- 已选 domain 后续变空或缺失时，status/list-installed 保留 unavailable 恢复项，update 阻断，uninstall 继续使用 snapshot 安全清理。
 
 ## 4. 合同层需求
 

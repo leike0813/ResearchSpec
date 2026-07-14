@@ -10,38 +10,61 @@ import { ARSU_SKILL_IDS } from "../arsu-converter/routing/contracts.js";
 import type { Diagnostic } from "../core/validation/types.js";
 
 const SkillIdSchema = z.string().min(1).max(64).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
+const DomainIdSchema = z.string().min(1).max(128).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
 const RelativeSourcePathSchema = z.string().min(1).refine(isSafeRelativePath, "must be a safe relative POSIX path");
 const ImmutableRevisionSchema = z.string().regex(/^[a-f0-9]{7,64}$/, "must be an immutable hexadecimal revision");
 const SemverSchema = z.string().regex(/^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[0-9A-Za-z.-]+)?$/);
+const AnzsrcGroupCodeSchema = z.string().regex(/^\d{4}$/);
 
 const UpstreamSchema = z.strictObject({
   source_paths: z.array(RelativeSourcePathSchema).min(1),
   adaptation: z.enum(["curated", "converted"]),
 });
 
+export const DomainTaxonomySchema = z.strictObject({
+  discipline_system: z.literal("ANZSRC FoR"),
+  discipline_version: z.literal("2020"),
+  source_release: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+});
+
+export const DomainDefinitionSchema = z.discriminatedUnion("domain_type", [z.strictObject({
+  domain_id: DomainIdSchema,
+  domain_type: z.literal("discipline"),
+  anzsrc_group_code: AnzsrcGroupCodeSchema,
+  title: z.string().trim().min(1),
+  description: z.string().trim().min(1).max(1024),
+  version: SemverSchema,
+  skills: z.array(SkillIdSchema),
+}), z.strictObject({
+  domain_id: DomainIdSchema,
+  domain_type: z.literal("tool"),
+  title: z.string().trim().min(1),
+  description: z.string().trim().min(1).max(1024),
+  version: SemverSchema,
+  skills: z.array(SkillIdSchema),
+})]);
+
+export const VendorDefinitionSchema = z.strictObject({
+  vendor_id: SkillIdSchema,
+  name: z.string().trim().min(1),
+  repository_url: z.url().refine((value) => value.startsWith("https://") || value.startsWith("http://"), "must use http or https"),
+  release: z.string().trim().min(1),
+  revision: ImmutableRevisionSchema,
+  license: z.string().trim().min(1),
+  converter_version: z.string().trim().min(1),
+  skills: z.array(z.strictObject({
+    skill_id: SkillIdSchema,
+    license: z.string().trim().min(1),
+    dependencies: z.array(SkillIdSchema),
+    upstreams: z.array(UpstreamSchema).min(1),
+  })).min(1),
+});
+
 export const PluginRegistrySchema = z.strictObject({
   schema_version: z.literal("1"),
-  vendors: z.array(z.strictObject({
-    vendor_id: SkillIdSchema,
-    name: z.string().trim().min(1),
-    repository_url: z.url().refine((value) => value.startsWith("https://") || value.startsWith("http://"), "must use http or https"),
-    release: z.string().trim().min(1),
-    revision: ImmutableRevisionSchema,
-    license: z.string().trim().min(1),
-    converter_version: z.string().trim().min(1),
-    skills: z.array(z.strictObject({
-      skill_id: SkillIdSchema,
-      dependencies: z.array(SkillIdSchema),
-      upstreams: z.array(UpstreamSchema).min(1),
-    })).min(1),
-  })),
-  domains: z.array(z.strictObject({
-    domain_id: SkillIdSchema,
-    title: z.string().trim().min(1),
-    description: z.string().trim().min(1).max(1024),
-    version: SemverSchema,
-    skills: z.array(SkillIdSchema).min(1),
-  })),
+  domain_taxonomy: DomainTaxonomySchema,
+  vendors: z.array(VendorDefinitionSchema),
+  domains: z.array(DomainDefinitionSchema),
 });
 
 export type PluginRegistry = z.infer<typeof PluginRegistrySchema>;
@@ -49,6 +72,14 @@ export type VendorDefinition = PluginRegistry["vendors"][number];
 export type VendorSkillDefinition = VendorDefinition["skills"][number];
 export type DomainDefinition = PluginRegistry["domains"][number];
 export type DomainSkillPlugin = DomainDefinition;
+
+export function domainIsAvailable(domain: DomainDefinition | undefined): domain is DomainDefinition {
+  return domain !== undefined && domain.skills.length > 0;
+}
+
+export function availableDomains(loaded: Pick<LoadedPluginRegistry, "domains">): DomainDefinition[] {
+  return [...loaded.domains.values()].filter(domainIsAvailable).sort((a, b) => compareText(a.domain_id, b.domain_id));
+}
 
 export interface RegisteredSkill {
   vendor: VendorDefinition;
@@ -166,8 +197,8 @@ export async function validatePluginRegistry(raw: unknown, pluginRoot: string, r
 
 export function resolveDomainSelection(loaded: LoadedPluginRegistry, selectedDomainIds: readonly string[]): ResolvedDomainSelection {
   const selected = uniqueSorted(selectedDomainIds);
-  const available = selected.filter((id) => loaded.domains.has(id));
-  const unavailable = selected.filter((id) => !loaded.domains.has(id));
+  const available = selected.filter((id) => domainIsAvailable(loaded.domains.get(id)));
+  const unavailable = selected.filter((id) => !domainIsAvailable(loaded.domains.get(id)));
   const direct = new Set<string>();
   for (const domainId of available) for (const skillId of loaded.domains.get(domainId)?.skills ?? []) direct.add(skillId);
   const resolved = resolveSkillIds(loaded.skills, direct);

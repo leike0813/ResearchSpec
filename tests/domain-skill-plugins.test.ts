@@ -9,22 +9,28 @@ import { handlePluginInstall, handlePluginList, handlePluginShow, handlePluginUn
 import type { CommandContext } from "../src/cli/types.js";
 import { runWorkspaceChecks } from "../src/core/validation/check.js";
 import { loadWorkspaceSnapshot } from "../src/core/workspace/snapshot.js";
-import { loadPluginRegistry, PluginRegistryError, resolveDomainSelection, validatePluginRegistry } from "../src/plugins/registry.js";
+import { availableDomains, loadPluginRegistry, PluginRegistryError, resolveDomainSelection, validatePluginRegistry } from "../src/plugins/registry.js";
 import { pluginStatusSummary } from "../src/plugins/status.js";
 import { cleanup, runCli, tempProject } from "./helpers/cli.js";
 
 const FIXTURE_ROOT = path.resolve("tests/fixtures/domain-skill-plugins");
 
-void test("production registry contains ToolUniverse vendor and three stable domains", async () => {
+void test("production registry contains the fixed taxonomy and two reviewed vendors", async () => {
   const loaded = await loadPluginRegistry();
   assert.equal(loaded.registry.schema_version, "1");
+  assert.deepEqual(loaded.registry.domain_taxonomy, { discipline_system: "ANZSRC FoR", discipline_version: "2020", source_release: "2025-10-24" });
   assert.equal(loaded.vendors.get("tooluniverse")?.skills.length, 130);
-  assert.deepEqual([...loaded.domains.keys()], ["genomics-and-systems-biology", "molecular-and-organismal-biosciences", "translational-medicine-and-therapeutics"]);
+  assert.equal(loaded.vendors.get("scientific-agent-skills")?.skills.length, 33);
+  assert.equal(loaded.domains.size, 218);
+  assert.equal(availableDomains(loaded).length, 44);
+  assert.equal(loaded.domains.get("scientific-visualization-and-communication")?.skills.length, 4);
+  assert.equal(loaded.domains.has("genomics-and-systems-biology"), false);
 });
 
 void test("registry validates multi-vendor domains, resources, provenance, and dependency closure", async () => {
   const loaded = await loadPluginRegistry(FIXTURE_ROOT);
-  assert.deepEqual([...loaded.domains.keys()], ["geoscience", "quantitative-methods"]);
+  assert.deepEqual([...loaded.domains.keys()], ["geoscience", "quantitative-methods", "empty-tool"]);
+  assert.deepEqual(availableDomains(loaded).map((domain) => domain.domain_id), ["geoscience", "quantitative-methods"]);
   assert.ok(loaded.skillFiles.get("rock-mechanics")?.includes("scripts/calculate.py"));
   assert.deepEqual(resolveDomainSelection(loaded, ["geoscience"]).resolvedSkillIds, ["research-tables", "rock-mechanics"]);
   const listed = await handlePluginList({}, context(process.cwd()), loaded);
@@ -35,6 +41,26 @@ void test("registry validates multi-vendor domains, resources, provenance, and d
   assert.equal(domain.direct_skills.length, 1);
   assert.equal(domain.resolved_skills.length, 2);
   assert.equal(domain.resolved_skills[0]?.vendor.license, "MIT");
+  await assert.rejects(handlePluginShow("empty-tool", context(process.cwd()), loaded), (error: unknown) => isCliCode(error, "plugin_not_found"));
+  await assert.rejects(handlePluginInstall(["empty-tool"], context(process.cwd()), loaded), (error: unknown) => isCliCode(error, "plugin_unavailable"));
+});
+
+void test("production domain installation projects Scientific Agent Skills without new wrappers", async () => {
+  const root = await tempProject();
+  try {
+    assert.equal(runCli(["init", root, "--tools", "claude"]).status, 0);
+    const registry = await loadPluginRegistry();
+    await handlePluginInstall(["quantum-physics"], context(root), registry);
+    for (const id of ["cirq", "pennylane", "qiskit"]) {
+      assert.equal(await exists(path.join(root, ".claude/skills", `scientific-agent-skills-${id}`, "SKILL.md")), true);
+    }
+    const snapshot = await loadWorkspaceSnapshot(path.join(root, "researchspec"));
+    assert.deepEqual(pluginStatusSummary(snapshot.config, snapshot.manifest, registry).selected, ["quantum-physics"]);
+    const manifest = JSON.parse(await readFile(path.join(root, "researchspec/tool-installation-manifest.json"), "utf8")) as { installations: Array<{ source: string }> };
+    assert.equal(manifest.installations.filter((item) => item.source.startsWith("command:")).length, 8);
+    await handlePluginUninstall(["quantum-physics"], context(root), registry);
+    assert.equal(await exists(path.join(root, ".claude/skills/scientific-agent-skills-qiskit/SKILL.md")), false);
+  } finally { await cleanup(root); }
 });
 
 void test("registry rejects invalid identities, references, paths, and provenance", async () => {
@@ -156,6 +182,30 @@ void test("uninstall drift blocks the transaction and retired domains use snapsh
   } finally { await cleanup(root); }
 });
 
+void test("selected empty domains stay unavailable and retain snapshot-based uninstall", async () => {
+  const root = await tempProject(); const fixture = await fixtureCopy();
+  try {
+    assert.equal(runCli(["init", root, "--tools", "forgecode"]).status, 0);
+    const original = await loadPluginRegistry(fixture);
+    await handlePluginInstall(["geoscience"], context(root), original);
+    const registryPath = path.join(fixture, "registry.json");
+    const raw = JSON.parse(await readFile(registryPath, "utf8")) as RegistryObject;
+    const geoscience = raw.domains.find((domain) => domain.domain_id === "geoscience");
+    const quantitativeMethods = raw.domains.find((domain) => domain.domain_id === "quantitative-methods");
+    assert.ok(geoscience);
+    assert.ok(quantitativeMethods);
+    geoscience.skills = [];
+    quantitativeMethods.skills.push("rock-mechanics");
+    await writeFile(registryPath, `${JSON.stringify(raw, null, 2)}\n`, "utf8");
+    const emptied = await loadPluginRegistry(fixture);
+    const installed = await handlePluginList({ installed: true }, context(root), emptied);
+    assert.deepEqual((installed.data as { domains: Array<{ domain_id: string; available: boolean }> }).domains.map((item) => [item.domain_id, item.available]), [["geoscience", false]]);
+    await assert.rejects(handlePluginUpdate([], context(root), emptied), (error: unknown) => isCliCode(error, "plugin_unavailable"));
+    await handlePluginUninstall(["geoscience"], context(root), emptied);
+    assert.equal(await exists(path.join(root, ".forge/skills/rock-mechanics/SKILL.md")), false);
+  } finally { await cleanup(root); await cleanup(fixture); }
+});
+
 void test("domain update records new vendor release and domain version", async () => {
   const root = await tempProject(); const fixture = await fixtureCopy();
   try {
@@ -182,6 +232,7 @@ async function exists(filePath: string): Promise<boolean> { try { await readFile
 
 interface RegistryObject {
   schema_version: "1";
-  vendors: Array<{ vendor_id: string; release: string; skills: Array<{ skill_id: string; dependencies: string[]; upstreams: Array<{ source_paths: string[]; adaptation: "curated" | "converted" }> }>; [key: string]: unknown }>;
+  domain_taxonomy: { discipline_system: "ANZSRC FoR"; discipline_version: "2020"; source_release: string };
+  vendors: Array<{ vendor_id: string; release: string; skills: Array<{ skill_id: string; license: string; dependencies: string[]; upstreams: Array<{ source_paths: string[]; adaptation: "curated" | "converted" }> }>; [key: string]: unknown }>;
   domains: Array<{ domain_id: string; version: string; skills: string[]; [key: string]: unknown }>;
 }

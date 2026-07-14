@@ -1,0 +1,1720 @@
+{
+  "schema_version": "1",
+  "vendor": {
+    "vendor_id": "tooluniverse",
+    "name": "ToolUniverse",
+    "repository_url": "https://github.com/mims-harvard/ToolUniverse",
+    "release": "v1.3.1",
+    "revision": "9b7ff91ddb45b567cac2fa8ea31b82851e877617",
+    "license": "Apache-2.0",
+    "converter_version": "1",
+    "skills": [
+      {
+        "skill_id": "tooluniverse-acmg-variant-classification",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-acmg-variant-classification"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-admet-prediction",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-admet-prediction"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-adverse-event-detection",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-adverse-event-detection"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-adverse-outcome-pathway",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-adverse-outcome-pathway"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-aging-senescence",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-aging-senescence"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-antibody-engineering",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-antibody-engineering"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-binder-discovery",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-binder-discovery"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-cancer-classification",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-cancer-classification"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-cancer-genomics-tcga",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-cancer-genomics-tcga"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-cancer-variant-interpretation",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-cancer-variant-interpretation"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-cell-line-profiling",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-cell-line-profiling"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-chemical-compound-retrieval",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-chemical-compound-retrieval"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-chemical-safety",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-chemical-safety"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-chemical-sourcing",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-chemical-sourcing"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-clinical-data-integration",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-clinical-data-integration"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-clinical-guidelines",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-clinical-guidelines"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-clinical-risk-scoring",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-clinical-risk-scoring"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-clinical-trial-design",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-clinical-trial-design"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-clinical-trial-matching",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-clinical-trial-matching"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-comparative-genomics",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-comparative-genomics"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-computational-biophysics",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-computational-biophysics"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-crispr-screen-analysis",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-crispr-screen-analysis"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-data-integration-analysis",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-data-integration-analysis"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-data-wrangling",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-data-wrangling"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-dataset-discovery",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-dataset-discovery"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-diagnostic-test-evaluation",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-diagnostic-test-evaluation"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-disease-research",
+        "license": "Apache-2.0",
+        "dependencies": [
+          "tooluniverse-rare-disease-diagnosis"
+        ],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-disease-research"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-dose-response",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-dose-response"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-drug-drug-interaction",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-drug-drug-interaction"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-drug-mechanism-research",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-drug-mechanism-research"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-drug-regulatory",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-drug-regulatory"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-drug-repurposing",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-drug-repurposing"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-drug-research",
+        "license": "Apache-2.0",
+        "dependencies": [
+          "tooluniverse-drug-drug-interaction"
+        ],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-drug-research"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-drug-synergy",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-drug-synergy"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-drug-target-validation",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-drug-target-validation"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-ecology-biodiversity",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-ecology-biodiversity"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-electron-microscopy",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-electron-microscopy"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-enzyme-kinetics",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-enzyme-kinetics"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-epidemiological-analysis",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-epidemiological-analysis"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-epigenomics",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-epigenomics"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-epigenomics-chromatin",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-epigenomics-chromatin"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-expression-data-retrieval",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-expression-data-retrieval"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-fastq-qc",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-fastq-qc"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-functional-genomics-screens",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-functional-genomics-screens"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-gene-disease-association",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-gene-disease-association"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-gene-enrichment",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-gene-enrichment"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-gene-regulatory-networks",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-gene-regulatory-networks"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-gpcr-structural-pharmacology",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-gpcr-structural-pharmacology"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-gwas-drug-discovery",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-gwas-drug-discovery"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-gwas-finemapping",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-gwas-finemapping"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-gwas-snp-interpretation",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-gwas-snp-interpretation"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-gwas-study-explorer",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-gwas-study-explorer"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-gwas-trait-to-gene",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-gwas-trait-to-gene"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-hla-immunogenomics",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-hla-immunogenomics"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-image-analysis",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-image-analysis"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-immune-repertoire-analysis",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-immune-repertoire-analysis"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-immunology",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-immunology"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-immunotherapy-response-prediction",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-immunotherapy-response-prediction"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-infectious-disease",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-infectious-disease"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-inorganic-physical-chemistry",
+        "license": "Apache-2.0",
+        "dependencies": [
+          "tooluniverse-organic-chemistry"
+        ],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-inorganic-physical-chemistry"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-kegg-disease-drug",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-kegg-disease-drug"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-lipidomics",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-lipidomics"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-literature-deep-research",
+        "license": "Apache-2.0",
+        "dependencies": [
+          "tooluniverse-target-research"
+        ],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-literature-deep-research"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-mendelian-randomization",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-mendelian-randomization"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-meta-analysis",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-meta-analysis"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-metabolomics",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-metabolomics"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-metabolomics-analysis",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-metabolomics-analysis"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-metabolomics-pathway",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-metabolomics-pathway"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-metagenomics-analysis",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-metagenomics-analysis"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-microbial-genome-characterization",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-microbial-genome-characterization"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-microbiome-research",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-microbiome-research"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-model-organism-genetics",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-model-organism-genetics"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-molecular-cloning",
+        "license": "Apache-2.0",
+        "dependencies": [
+          "tooluniverse-primer-design"
+        ],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-molecular-cloning"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-multi-omics-integration",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-multi-omics-integration"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-multiomic-disease-characterization",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-multiomic-disease-characterization"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-natural-product-dereplication",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-natural-product-dereplication"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-network-pharmacology",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-network-pharmacology"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-neuroscience",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-neuroscience"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-noncoding-rna",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-noncoding-rna"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-organic-chemistry",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-organic-chemistry"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-pathway-disease-genetics",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-pathway-disease-genetics"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-peptide-target-deorphanization",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-peptide-target-deorphanization"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-pharmacogenomics",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-pharmacogenomics"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-pharmacokinetics",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-pharmacokinetics"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-pharmacovigilance",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-pharmacovigilance"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-phewas",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-phewas"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-phylogenetics",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-phylogenetics"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-plant-genomics",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-plant-genomics"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-polygenic-risk-score",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-polygenic-risk-score"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-population-genetics",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-population-genetics"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-population-genetics-1000genomes",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-population-genetics-1000genomes"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-precision-medicine-stratification",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-precision-medicine-stratification"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-precision-oncology",
+        "license": "Apache-2.0",
+        "dependencies": [
+          "tooluniverse-drug-drug-interaction"
+        ],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-precision-oncology"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-primer-design",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-primer-design"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-product-safety-surveillance",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-product-safety-surveillance"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-protein-interactions",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-protein-interactions"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-protein-lof-mechanism",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-protein-lof-mechanism"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-protein-modification-analysis",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-protein-modification-analysis"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-protein-sae-variant-interpretation",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-protein-sae-variant-interpretation"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-protein-structural-annotation-pdb",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-protein-structural-annotation-pdb"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-protein-structure-prediction",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-protein-structure-prediction"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-protein-structure-retrieval",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-protein-structure-retrieval"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-protein-therapeutic-design",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-protein-therapeutic-design"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-proteomics-analysis",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-proteomics-analysis"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-proteomics-data-retrieval",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-proteomics-data-retrieval"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-rare-disease-diagnosis",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-rare-disease-diagnosis"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-rare-disease-genomics",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-rare-disease-genomics"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-regulatory-genomics",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-regulatory-genomics"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-regulatory-variant-analysis",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-regulatory-variant-analysis"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-residue-functional-mechanism-interpretation",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-residue-functional-mechanism-interpretation"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-rnaseq-deseq2",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-rnaseq-deseq2"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-sequence-analysis",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-sequence-analysis"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-sequence-retrieval",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-sequence-retrieval"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-single-cell",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-single-cell"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-small-molecule-discovery",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-small-molecule-discovery"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-spatial-omics-analysis",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-spatial-omics-analysis"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-spatial-transcriptomics",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-spatial-transcriptomics"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-statistical-modeling",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-statistical-modeling"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-stem-cell-organoid",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-stem-cell-organoid"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-structural-proteomics",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-structural-proteomics"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-structural-variant-analysis",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-structural-variant-analysis"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-systems-biology",
+        "license": "Apache-2.0",
+        "dependencies": [
+          "tooluniverse-computational-biophysics"
+        ],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-systems-biology"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-target-research",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-target-research"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-toxicology",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-toxicology"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-vaccine-design",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-vaccine-design"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-variant-analysis",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-variant-analysis"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-variant-functional-annotation",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-variant-functional-annotation"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-variant-interpretation",
+        "license": "Apache-2.0",
+        "dependencies": [
+          "tooluniverse-sequence-analysis"
+        ],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-variant-interpretation"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-variant-predictor-dms-validation",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-variant-predictor-dms-validation"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "tooluniverse-variant-to-mechanism",
+        "license": "Apache-2.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tooluniverse-variant-to-mechanism"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      }
+    ]
+  }
+}

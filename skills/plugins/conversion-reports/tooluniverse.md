@@ -6,10 +6,6 @@
 - Excluded Skills: 20
 - Dependency decisions: 8 required, 138 related, 77 routing
 
-## Domains
-
-- `genomics-and-systems-biology`: 72 direct Skills
-- `molecular-and-organismal-biosciences`: 40 direct Skills
-- `translational-medicine-and-therapeutics`: 65 direct Skills
+This converter emits the isolated ToolUniverse vendor bundle. The source-neutral domain catalog and central assembler own production domain membership and registry assembly.
 
 ResearchSpec copied static reviewed resources only. It did not execute scripts, install dependencies, configure credentials, or grant workflow authority.

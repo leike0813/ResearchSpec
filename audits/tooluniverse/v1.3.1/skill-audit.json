@@ -23,17 +23,6 @@
     "script_files": 88,
     "skills_with_tests_or_evals": 44,
     "candidate_cross_skill_edges": 223,
-    "domain_counts": {
-      "evidence-and-discovery": 9,
-      "genomics-and-genetics": 26,
-      "omics-and-systems-biology": 18,
-      "molecular-and-structural-biology": 19,
-      "drug-discovery-and-pharmacology": 20,
-      "clinical-and-translational": 16,
-      "chemistry-and-toxicology": 9,
-      "microbiology-and-ecology": 8,
-      "quantitative-and-data-analysis": 5
-    },
     "known_frontmatter_parse_errors": [
       "tooluniverse-fastq-qc",
       "tooluniverse-phewas"
@@ -51,53 +40,6 @@
       "tooluniverse-variant-analysis"
     ]
   },
-  "domains": [
-    {
-      "domain_id": "evidence-and-discovery",
-      "title": "Evidence and discovery",
-      "definition": "Literature, datasets, broad evidence retrieval, synthesis, and research discovery."
-    },
-    {
-      "domain_id": "genomics-and-genetics",
-      "title": "Genomics and genetics",
-      "definition": "Variants, GWAS, population genetics, regulatory genetics, and genomic interpretation."
-    },
-    {
-      "domain_id": "omics-and-systems-biology",
-      "title": "Omics and systems biology",
-      "definition": "Transcriptomics, epigenomics, proteomics, metabolomics, multi-omics, and pathway systems."
-    },
-    {
-      "domain_id": "molecular-and-structural-biology",
-      "title": "Molecular and structural biology",
-      "definition": "Proteins, sequences, enzymes, molecular methods, immunobiology, and structural analysis."
-    },
-    {
-      "domain_id": "drug-discovery-and-pharmacology",
-      "title": "Drug discovery and pharmacology",
-      "definition": "Targets, binders, drug mechanisms, ADMET, pharmacology, safety signals, and therapeutics."
-    },
-    {
-      "domain_id": "clinical-and-translational",
-      "title": "Clinical and translational",
-      "definition": "Clinical evidence, trials, diagnostics, risk, precision medicine, oncology, and patient-facing translation."
-    },
-    {
-      "domain_id": "chemistry-and-toxicology",
-      "title": "Chemistry and toxicology",
-      "definition": "Chemical identity, sourcing, organic and inorganic chemistry, environmental hazard, and toxicology."
-    },
-    {
-      "domain_id": "microbiology-and-ecology",
-      "title": "Microbiology and ecology",
-      "definition": "Microbes, infectious disease, microbiomes, phylogeny, ecology, plants, and organismal genomics."
-    },
-    {
-      "domain_id": "quantitative-and-data-analysis",
-      "title": "Quantitative and data analysis",
-      "definition": "Statistical modelling, data wrangling, integration, imaging, quality control, and reusable analysis methods."
-    }
-  ],
   "skills": [
     {
       "skill_id": "create-tooluniverse-skill",
@@ -105,8 +47,6 @@
       "kind": "developer-maintenance",
       "scope_disposition": "exclude",
       "ingest_readiness": "not-applicable",
-      "primary_domain": null,
-      "secondary_domains": [],
       "resources": {
         "files": 19,
         "bytes": 92733,
@@ -158,7 +98,10 @@
           ],
           "note": "Skill carries 3 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": null,
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": "Maintainer, setup, routing, platform, SDK, or self-maintenance surface outside the reviewed domain business scope."
     },
     {
       "skill_id": "devtu-auto-discover-apis",
@@ -166,8 +109,6 @@
       "kind": "developer-maintenance",
       "scope_disposition": "exclude",
       "ingest_readiness": "not-applicable",
-      "primary_domain": null,
-      "secondary_domains": [],
       "resources": {
         "files": 3,
         "bytes": 11489,
@@ -193,7 +134,10 @@
           ],
           "note": "Platform-specific instruction terms require neutralization: Skill(."
         }
-      ]
+      ],
+      "primary_anzsrc_field": null,
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": "Maintainer, setup, routing, platform, SDK, or self-maintenance surface outside the reviewed domain business scope."
     },
     {
       "skill_id": "devtu-benchmark-harness",
@@ -201,8 +145,6 @@
       "kind": "developer-maintenance",
       "scope_disposition": "exclude",
       "ingest_readiness": "not-applicable",
-      "primary_domain": null,
-      "secondary_domains": [],
       "resources": {
         "files": 15,
         "bytes": 141499,
@@ -272,7 +214,10 @@
           ],
           "note": "Skill carries 2 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": null,
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": "Maintainer, setup, routing, platform, SDK, or self-maintenance surface outside the reviewed domain business scope."
     },
     {
       "skill_id": "devtu-code-optimization",
@@ -280,8 +225,6 @@
       "kind": "developer-maintenance",
       "scope_disposition": "exclude",
       "ingest_readiness": "not-applicable",
-      "primary_domain": null,
-      "secondary_domains": [],
       "resources": {
         "files": 3,
         "bytes": 12717,
@@ -307,7 +250,10 @@
           ],
           "note": "Platform-specific instruction terms require neutralization: Skill(."
         }
-      ]
+      ],
+      "primary_anzsrc_field": null,
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": "Maintainer, setup, routing, platform, SDK, or self-maintenance surface outside the reviewed domain business scope."
     },
     {
       "skill_id": "devtu-create-tool",
@@ -315,8 +261,6 @@
       "kind": "developer-maintenance",
       "scope_disposition": "exclude",
       "ingest_readiness": "not-applicable",
-      "primary_domain": null,
-      "secondary_domains": [],
       "resources": {
         "files": 11,
         "bytes": 108987,
@@ -350,7 +294,10 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": null,
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": "Maintainer, setup, routing, platform, SDK, or self-maintenance surface outside the reviewed domain business scope."
     },
     {
       "skill_id": "devtu-docs-quality",
@@ -358,8 +305,6 @@
       "kind": "developer-maintenance",
       "scope_disposition": "exclude",
       "ingest_readiness": "not-applicable",
-      "primary_domain": null,
-      "secondary_domains": [],
       "resources": {
         "files": 5,
         "bytes": 34418,
@@ -385,7 +330,10 @@
           ],
           "note": "Instructions depend on external runtime surfaces: MCP, Python SDK."
         }
-      ]
+      ],
+      "primary_anzsrc_field": null,
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": "Maintainer, setup, routing, platform, SDK, or self-maintenance surface outside the reviewed domain business scope."
     },
     {
       "skill_id": "devtu-fix-tool",
@@ -393,8 +341,6 @@
       "kind": "developer-maintenance",
       "scope_disposition": "exclude",
       "ingest_readiness": "not-applicable",
-      "primary_domain": null,
-      "secondary_domains": [],
       "resources": {
         "files": 4,
         "bytes": 39673,
@@ -420,7 +366,10 @@
           ],
           "note": "Instructions depend on external runtime surfaces: MCP."
         }
-      ]
+      ],
+      "primary_anzsrc_field": null,
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": "Maintainer, setup, routing, platform, SDK, or self-maintenance surface outside the reviewed domain business scope."
     },
     {
       "skill_id": "devtu-github",
@@ -428,8 +377,6 @@
       "kind": "developer-maintenance",
       "scope_disposition": "exclude",
       "ingest_readiness": "not-applicable",
-      "primary_domain": null,
-      "secondary_domains": [],
       "resources": {
         "files": 3,
         "bytes": 22941,
@@ -455,7 +402,10 @@
           ],
           "note": "Platform-specific instruction terms require neutralization: .claude/, Claude Code."
         }
-      ]
+      ],
+      "primary_anzsrc_field": null,
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": "Maintainer, setup, routing, platform, SDK, or self-maintenance surface outside the reviewed domain business scope."
     },
     {
       "skill_id": "devtu-optimize-descriptions",
@@ -463,8 +413,6 @@
       "kind": "developer-maintenance",
       "scope_disposition": "exclude",
       "ingest_readiness": "not-applicable",
-      "primary_domain": null,
-      "secondary_domains": [],
       "resources": {
         "files": 3,
         "bytes": 30027,
@@ -490,7 +438,10 @@
           ],
           "note": "Instructions depend on external runtime surfaces: package installation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": null,
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": "Maintainer, setup, routing, platform, SDK, or self-maintenance surface outside the reviewed domain business scope."
     },
     {
       "skill_id": "devtu-optimize-skills",
@@ -498,8 +449,6 @@
       "kind": "developer-maintenance",
       "scope_disposition": "exclude",
       "ingest_readiness": "not-applicable",
-      "primary_domain": null,
-      "secondary_domains": [],
       "resources": {
         "files": 5,
         "bytes": 24032,
@@ -517,7 +466,10 @@
           ],
           "note": "Maintains ToolUniverse source, tools, documentation, or Skills."
         }
-      ]
+      ],
+      "primary_anzsrc_field": null,
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": "Maintainer, setup, routing, platform, SDK, or self-maintenance surface outside the reviewed domain business scope."
     },
     {
       "skill_id": "devtu-self-evolve",
@@ -525,8 +477,6 @@
       "kind": "developer-maintenance",
       "scope_disposition": "exclude",
       "ingest_readiness": "not-applicable",
-      "primary_domain": null,
-      "secondary_domains": [],
       "resources": {
         "files": 3,
         "bytes": 33258,
@@ -560,7 +510,10 @@
           ],
           "note": "Platform-specific instruction terms require neutralization: Skill(."
         }
-      ]
+      ],
+      "primary_anzsrc_field": null,
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": "Maintainer, setup, routing, platform, SDK, or self-maintenance surface outside the reviewed domain business scope."
     },
     {
       "skill_id": "setup-tooluniverse",
@@ -568,8 +521,6 @@
       "kind": "setup",
       "scope_disposition": "exclude",
       "ingest_readiness": "not-applicable",
-      "primary_domain": null,
-      "secondary_domains": [],
       "resources": {
         "files": 17,
         "bytes": 131325,
@@ -634,7 +585,10 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": null,
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": "Maintainer, setup, routing, platform, SDK, or self-maintenance surface outside the reviewed domain business scope."
     },
     {
       "skill_id": "tooluniverse",
@@ -642,8 +596,6 @@
       "kind": "router",
       "scope_disposition": "exclude",
       "ingest_readiness": "not-applicable",
-      "primary_domain": null,
-      "secondary_domains": [],
       "resources": {
         "files": 5,
         "bytes": 63627,
@@ -832,7 +784,10 @@
           ],
           "note": "Platform-specific instruction terms require neutralization: Skill(."
         }
-      ]
+      ],
+      "primary_anzsrc_field": null,
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": "Maintainer, setup, routing, platform, SDK, or self-maintenance surface outside the reviewed domain business scope."
     },
     {
       "skill_id": "tooluniverse-acmg-variant-classification",
@@ -840,8 +795,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "genomics-and-genetics",
-      "secondary_domains": [],
       "resources": {
         "files": 1,
         "bytes": 15401,
@@ -876,7 +829,10 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "320213",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-admet-prediction",
@@ -884,10 +840,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "drug-discovery-and-pharmacology",
-      "secondary_domains": [
-        "quantitative-and-data-analysis"
-      ],
       "resources": {
         "files": 1,
         "bytes": 14607,
@@ -922,7 +874,13 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "321405",
+      "additional_anzsrc_fields": [
+        "321407",
+        "340404"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-adverse-event-detection",
@@ -930,8 +888,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "drug-discovery-and-pharmacology",
-      "secondary_domains": [],
       "resources": {
         "files": 6,
         "bytes": 81792,
@@ -992,7 +948,12 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "321407",
+      "additional_anzsrc_fields": [
+        "420310"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-adverse-outcome-pathway",
@@ -1000,10 +961,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "chemistry-and-toxicology",
-      "secondary_domains": [
-        "omics-and-systems-biology"
-      ],
       "resources": {
         "files": 1,
         "bytes": 9587,
@@ -1049,7 +1006,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "410201",
+      "additional_anzsrc_fields": [
+        "321407"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-aging-senescence",
@@ -1057,8 +1019,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "evidence-and-discovery",
-      "secondary_domains": [],
       "resources": {
         "files": 1,
         "bytes": 11549,
@@ -1104,7 +1064,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310102",
+      "additional_anzsrc_fields": [
+        "320210"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-antibody-engineering",
@@ -1112,8 +1077,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "molecular-and-structural-biology",
-      "secondary_domains": [],
       "resources": {
         "files": 9,
         "bytes": 110541,
@@ -1172,7 +1135,12 @@
           ],
           "note": "Skill carries 1 script resource(s); dependencies and execution safety require review."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "320402",
+      "additional_anzsrc_fields": [
+        "320603"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-binder-discovery",
@@ -1180,8 +1148,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "drug-discovery-and-pharmacology",
-      "secondary_domains": [],
       "resources": {
         "files": 6,
         "bytes": 104115,
@@ -1226,7 +1192,13 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "340401",
+      "additional_anzsrc_fields": [
+        "340404",
+        "321405"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-cancer-classification",
@@ -1234,8 +1206,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "clinical-and-translational",
-      "secondary_domains": [],
       "resources": {
         "files": 1,
         "bytes": 11248,
@@ -1278,7 +1248,10 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "321102",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-cancer-genomics-tcga",
@@ -1286,11 +1259,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "clinical-and-translational",
-      "secondary_domains": [
-        "genomics-and-genetics",
-        "omics-and-systems-biology"
-      ],
       "resources": {
         "files": 1,
         "bytes": 14909,
@@ -1346,7 +1314,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation, triggers."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "321103",
+      "additional_anzsrc_fields": [
+        "310204"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-cancer-variant-interpretation",
@@ -1354,10 +1327,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "clinical-and-translational",
-      "secondary_domains": [
-        "genomics-and-genetics"
-      ],
       "resources": {
         "files": 9,
         "bytes": 85044,
@@ -1408,7 +1377,12 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "321103",
+      "additional_anzsrc_fields": [
+        "321109"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-cell-line-profiling",
@@ -1416,8 +1390,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "evidence-and-discovery",
-      "secondary_domains": [],
       "resources": {
         "files": 2,
         "bytes": 23946,
@@ -1460,7 +1432,10 @@
           ],
           "note": "Skill carries 1 script resource(s); dependencies and execution safety require review."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "321101",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-chemical-compound-retrieval",
@@ -1468,10 +1443,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "chemistry-and-toxicology",
-      "secondary_domains": [
-        "evidence-and-discovery"
-      ],
       "resources": {
         "files": 3,
         "bytes": 10317,
@@ -1506,7 +1477,10 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "340404",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-chemical-safety",
@@ -1514,8 +1488,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "chemistry-and-toxicology",
-      "secondary_domains": [],
       "resources": {
         "files": 6,
         "bytes": 55333,
@@ -1574,7 +1546,12 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "321407",
+      "additional_anzsrc_fields": [
+        "410201"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-chemical-sourcing",
@@ -1582,8 +1559,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "chemistry-and-toxicology",
-      "secondary_domains": [],
       "resources": {
         "files": 1,
         "bytes": 13214,
@@ -1629,7 +1604,10 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "340404",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-claude-code-plugin",
@@ -1637,8 +1615,6 @@
       "kind": "platform-adapter",
       "scope_disposition": "exclude",
       "ingest_readiness": "not-applicable",
-      "primary_domain": null,
-      "secondary_domains": [],
       "resources": {
         "files": 1,
         "bytes": 9322,
@@ -1690,7 +1666,10 @@
           ],
           "note": "Platform-specific instruction terms require neutralization: .claude/, Claude Code, slash command."
         }
-      ]
+      ],
+      "primary_anzsrc_field": null,
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": "Maintainer, setup, routing, platform, SDK, or self-maintenance surface outside the reviewed domain business scope."
     },
     {
       "skill_id": "tooluniverse-clinical-data-integration",
@@ -1698,10 +1677,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "clinical-and-translational",
-      "secondary_domains": [
-        "quantitative-and-data-analysis"
-      ],
       "resources": {
         "files": 1,
         "bytes": 14408,
@@ -1755,7 +1730,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "321407",
+      "additional_anzsrc_fields": [
+        "420308"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-clinical-guidelines",
@@ -1763,8 +1743,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "clinical-and-translational",
-      "secondary_domains": [],
       "resources": {
         "files": 2,
         "bytes": 28181,
@@ -1807,7 +1785,10 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "420312",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-clinical-risk-scoring",
@@ -1815,10 +1796,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "needs-curation",
-      "primary_domain": "clinical-and-translational",
-      "secondary_domains": [
-        "quantitative-and-data-analysis"
-      ],
       "resources": {
         "files": 2,
         "bytes": 16148,
@@ -1897,7 +1874,10 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "320204",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-clinical-trial-design",
@@ -1905,8 +1885,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "clinical-and-translational",
-      "secondary_domains": [],
       "resources": {
         "files": 10,
         "bytes": 146815,
@@ -1980,7 +1958,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "420204",
+      "additional_anzsrc_fields": [
+        "490502"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-clinical-trial-matching",
@@ -1988,8 +1971,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "clinical-and-translational",
-      "secondary_domains": [],
       "resources": {
         "files": 9,
         "bytes": 107811,
@@ -2053,7 +2034,10 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "320299",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-codex-plugin",
@@ -2061,8 +2045,6 @@
       "kind": "platform-adapter",
       "scope_disposition": "exclude",
       "ingest_readiness": "not-applicable",
-      "primary_domain": null,
-      "secondary_domains": [],
       "resources": {
         "files": 1,
         "bytes": 9023,
@@ -2106,7 +2088,10 @@
           ],
           "note": "Platform-specific instruction terms require neutralization: Claude Code, Codex, slash command."
         }
-      ]
+      ],
+      "primary_anzsrc_field": null,
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": "Maintainer, setup, routing, platform, SDK, or self-maintenance surface outside the reviewed domain business scope."
     },
     {
       "skill_id": "tooluniverse-comparative-genomics",
@@ -2114,10 +2099,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "genomics-and-genetics",
-      "secondary_domains": [
-        "omics-and-systems-biology"
-      ],
       "resources": {
         "files": 2,
         "bytes": 20757,
@@ -2170,7 +2151,12 @@
           ],
           "note": "Skill carries 1 script resource(s); dependencies and execution safety require review."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310204",
+      "additional_anzsrc_fields": [
+        "310410"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-computational-biophysics",
@@ -2178,8 +2164,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "molecular-and-structural-biology",
-      "secondary_domains": [],
       "resources": {
         "files": 10,
         "bytes": 131145,
@@ -2238,7 +2222,10 @@
           ],
           "note": "Skill carries 9 script resource(s); dependencies and execution safety require review."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "510501",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-crispr-screen-analysis",
@@ -2246,10 +2233,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "evidence-and-discovery",
-      "secondary_domains": [
-        "quantitative-and-data-analysis"
-      ],
       "resources": {
         "files": 9,
         "bytes": 85593,
@@ -2302,7 +2285,10 @@
           ],
           "note": "Skill carries 3 script resource(s); dependencies and execution safety require review."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310204",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-cs-setup",
@@ -2310,8 +2296,6 @@
       "kind": "platform-adapter",
       "scope_disposition": "exclude",
       "ingest_readiness": "not-applicable",
-      "primary_domain": null,
-      "secondary_domains": [],
       "resources": {
         "files": 4,
         "bytes": 13932,
@@ -2345,7 +2329,10 @@
           ],
           "note": "Platform-specific instruction terms require neutralization: Skill(, slash command."
         }
-      ]
+      ],
+      "primary_anzsrc_field": null,
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": "Maintainer, setup, routing, platform, SDK, or self-maintenance surface outside the reviewed domain business scope."
     },
     {
       "skill_id": "tooluniverse-custom-tool",
@@ -2353,8 +2340,6 @@
       "kind": "self-maintenance",
       "scope_disposition": "exclude",
       "ingest_readiness": "not-applicable",
-      "primary_domain": null,
-      "secondary_domains": [],
       "resources": {
         "files": 3,
         "bytes": 42091,
@@ -2388,7 +2373,10 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": null,
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": "Maintainer, setup, routing, platform, SDK, or self-maintenance surface outside the reviewed domain business scope."
     },
     {
       "skill_id": "tooluniverse-data-integration-analysis",
@@ -2396,8 +2384,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "quantitative-and-data-analysis",
-      "secondary_domains": [],
       "resources": {
         "files": 1,
         "bytes": 8643,
@@ -2446,7 +2432,10 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310201",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-data-wrangling",
@@ -2454,8 +2443,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "quantitative-and-data-analysis",
-      "secondary_domains": [],
       "resources": {
         "files": 3,
         "bytes": 29336,
@@ -2498,7 +2485,10 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "460501",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-dataset-discovery",
@@ -2506,10 +2496,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "evidence-and-discovery",
-      "secondary_domains": [
-        "quantitative-and-data-analysis"
-      ],
       "resources": {
         "files": 1,
         "bytes": 8569,
@@ -2544,7 +2530,10 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "460508",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-diagnostic-test-evaluation",
@@ -2552,8 +2541,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "clinical-and-translational",
-      "secondary_domains": [],
       "resources": {
         "files": 3,
         "bytes": 9874,
@@ -2632,7 +2619,12 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "320204",
+      "additional_anzsrc_fields": [
+        "490502"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-disease-research",
@@ -2640,10 +2632,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "evidence-and-discovery",
-      "secondary_domains": [
-        "clinical-and-translational"
-      ],
       "resources": {
         "files": 6,
         "bytes": 70505,
@@ -2688,7 +2676,10 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "320299",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-dose-response",
@@ -2696,8 +2687,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "chemistry-and-toxicology",
-      "secondary_domains": [],
       "resources": {
         "files": 3,
         "bytes": 11490,
@@ -2769,7 +2758,10 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "321401",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-drug-drug-interaction",
@@ -2777,8 +2769,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "drug-discovery-and-pharmacology",
-      "secondary_domains": [],
       "resources": {
         "files": 7,
         "bytes": 117813,
@@ -2837,7 +2827,10 @@
           ],
           "note": "Skill carries 1 script resource(s); dependencies and execution safety require review."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "321402",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-drug-mechanism-research",
@@ -2845,10 +2838,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "drug-discovery-and-pharmacology",
-      "secondary_domains": [
-        "evidence-and-discovery"
-      ],
       "resources": {
         "files": 1,
         "bytes": 12318,
@@ -2897,7 +2886,10 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation, triggers."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "321401",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-drug-regulatory",
@@ -2905,8 +2897,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "drug-discovery-and-pharmacology",
-      "secondary_domains": [],
       "resources": {
         "files": 1,
         "bytes": 14231,
@@ -2954,7 +2944,10 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation, triggers."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "321499",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-drug-repurposing",
@@ -2962,8 +2955,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "drug-discovery-and-pharmacology",
-      "secondary_domains": [],
       "resources": {
         "files": 6,
         "bytes": 83195,
@@ -3016,7 +3007,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "321405",
+      "additional_anzsrc_fields": [
+        "340401"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-drug-research",
@@ -3024,10 +3020,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "drug-discovery-and-pharmacology",
-      "secondary_domains": [
-        "evidence-and-discovery"
-      ],
       "resources": {
         "files": 6,
         "bytes": 73695,
@@ -3072,7 +3064,10 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "321499",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-drug-synergy",
@@ -3080,8 +3075,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "drug-discovery-and-pharmacology",
-      "secondary_domains": [],
       "resources": {
         "files": 3,
         "bytes": 9547,
@@ -3153,7 +3146,12 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "321401",
+      "additional_anzsrc_fields": [
+        "490502"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-drug-target-validation",
@@ -3161,8 +3159,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "drug-discovery-and-pharmacology",
-      "secondary_domains": [],
       "resources": {
         "files": 6,
         "bytes": 74315,
@@ -3226,7 +3222,12 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "321405",
+      "additional_anzsrc_fields": [
+        "340401"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-ecology-biodiversity",
@@ -3234,8 +3235,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "microbiology-and-ecology",
-      "secondary_domains": [],
       "resources": {
         "files": 1,
         "bytes": 7447,
@@ -3270,7 +3269,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310399",
+      "additional_anzsrc_fields": [
+        "410202"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-electron-microscopy",
@@ -3278,8 +3282,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "molecular-and-structural-biology",
-      "secondary_domains": [],
       "resources": {
         "files": 1,
         "bytes": 15881,
@@ -3314,7 +3316,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310112",
+      "additional_anzsrc_fields": [
+        "340605"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-enzyme-kinetics",
@@ -3322,8 +3329,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "molecular-and-structural-biology",
-      "secondary_domains": [],
       "resources": {
         "files": 3,
         "bytes": 9929,
@@ -3393,7 +3398,10 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310106",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-epidemiological-analysis",
@@ -3401,10 +3409,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "clinical-and-translational",
-      "secondary_domains": [
-        "quantitative-and-data-analysis"
-      ],
       "resources": {
         "files": 1,
         "bytes": 11822,
@@ -3447,7 +3451,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "420204",
+      "additional_anzsrc_fields": [
+        "420205"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-epigenomics",
@@ -3455,10 +3464,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "genomics-and-genetics",
-      "secondary_domains": [
-        "omics-and-systems-biology"
-      ],
       "resources": {
         "files": 8,
         "bytes": 127088,
@@ -3517,7 +3522,12 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310504",
+      "additional_anzsrc_fields": [
+        "310204"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-epigenomics-chromatin",
@@ -3525,10 +3535,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "genomics-and-genetics",
-      "secondary_domains": [
-        "omics-and-systems-biology"
-      ],
       "resources": {
         "files": 1,
         "bytes": 13384,
@@ -3576,7 +3582,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation, triggers."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310504",
+      "additional_anzsrc_fields": [
+        "310508"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-expression-data-retrieval",
@@ -3584,11 +3595,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "omics-and-systems-biology",
-      "secondary_domains": [
-        "quantitative-and-data-analysis",
-        "evidence-and-discovery"
-      ],
       "resources": {
         "files": 3,
         "bytes": 10972,
@@ -3623,7 +3629,10 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310204",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-fastq-qc",
@@ -3631,8 +3640,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "needs-curation",
-      "primary_domain": "quantitative-and-data-analysis",
-      "secondary_domains": [],
       "resources": {
         "files": 7,
         "bytes": 39575,
@@ -3705,7 +3712,10 @@
           ],
           "note": "Skill carries 2 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310206",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-functional-genomics-screens",
@@ -3713,10 +3723,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "genomics-and-genetics",
-      "secondary_domains": [
-        "omics-and-systems-biology"
-      ],
       "resources": {
         "files": 1,
         "bytes": 5476,
@@ -3761,7 +3767,10 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310204",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-gene-disease-association",
@@ -3769,10 +3778,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "genomics-and-genetics",
-      "secondary_domains": [
-        "clinical-and-translational"
-      ],
       "resources": {
         "files": 1,
         "bytes": 11712,
@@ -3828,7 +3833,10 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "320213",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-gene-enrichment",
@@ -3836,10 +3844,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "omics-and-systems-biology",
-      "secondary_domains": [
-        "genomics-and-genetics"
-      ],
       "resources": {
         "files": 12,
         "bytes": 192627,
@@ -3915,7 +3919,12 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310201",
+      "additional_anzsrc_fields": [
+        "310202"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-gene-regulatory-networks",
@@ -3923,10 +3932,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "omics-and-systems-biology",
-      "secondary_domains": [
-        "genomics-and-genetics"
-      ],
       "resources": {
         "files": 1,
         "bytes": 11385,
@@ -3961,7 +3966,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310202",
+      "additional_anzsrc_fields": [
+        "310505"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-gpcr-structural-pharmacology",
@@ -3969,10 +3979,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "drug-discovery-and-pharmacology",
-      "secondary_domains": [
-        "molecular-and-structural-biology"
-      ],
       "resources": {
         "files": 1,
         "bytes": 13789,
@@ -4021,7 +4027,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "321401",
+      "additional_anzsrc_fields": [
+        "310110"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-gwas-drug-discovery",
@@ -4029,10 +4040,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "drug-discovery-and-pharmacology",
-      "secondary_domains": [
-        "genomics-and-genetics"
-      ],
       "resources": {
         "files": 9,
         "bytes": 102036,
@@ -4095,7 +4102,12 @@
           ],
           "note": "Skill carries 2 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310207",
+      "additional_anzsrc_fields": [
+        "321405"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-gwas-finemapping",
@@ -4103,8 +4115,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "genomics-and-genetics",
-      "secondary_domains": [],
       "resources": {
         "files": 4,
         "bytes": 47577,
@@ -4155,7 +4165,10 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310207",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-gwas-snp-interpretation",
@@ -4163,8 +4176,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "genomics-and-genetics",
-      "secondary_domains": [],
       "resources": {
         "files": 8,
         "bytes": 47425,
@@ -4225,7 +4236,10 @@
           ],
           "note": "Skill carries 3 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310207",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-gwas-study-explorer",
@@ -4233,8 +4247,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "genomics-and-genetics",
-      "secondary_domains": [],
       "resources": {
         "files": 4,
         "bytes": 55028,
@@ -4285,7 +4297,10 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310207",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-gwas-trait-to-gene",
@@ -4293,8 +4308,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "genomics-and-genetics",
-      "secondary_domains": [],
       "resources": {
         "files": 5,
         "bytes": 46593,
@@ -4356,7 +4369,10 @@
           ],
           "note": "Skill carries 2 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310207",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-hla-immunogenomics",
@@ -4364,10 +4380,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "genomics-and-genetics",
-      "secondary_domains": [
-        "omics-and-systems-biology"
-      ],
       "resources": {
         "files": 1,
         "bytes": 12396,
@@ -4413,7 +4425,10 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "320406",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-image-analysis",
@@ -4421,8 +4436,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "quantitative-and-data-analysis",
-      "secondary_domains": [],
       "resources": {
         "files": 11,
         "bytes": 139919,
@@ -4475,7 +4488,12 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "460306",
+      "additional_anzsrc_fields": [
+        "490502"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-immune-repertoire-analysis",
@@ -4483,10 +4501,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "molecular-and-structural-biology",
-      "secondary_domains": [
-        "quantitative-and-data-analysis"
-      ],
       "resources": {
         "files": 3,
         "bytes": 32211,
@@ -4541,7 +4555,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "320404",
+      "additional_anzsrc_fields": [
+        "310206"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-immunology",
@@ -4549,8 +4568,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "molecular-and-structural-biology",
-      "secondary_domains": [],
       "resources": {
         "files": 1,
         "bytes": 13223,
@@ -4585,7 +4602,10 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "320499",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-immunotherapy-response-prediction",
@@ -4593,10 +4613,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "clinical-and-translational",
-      "secondary_domains": [
-        "quantitative-and-data-analysis"
-      ],
       "resources": {
         "files": 7,
         "bytes": 82596,
@@ -4647,7 +4663,12 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "320409",
+      "additional_anzsrc_fields": [
+        "321109"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-infectious-disease",
@@ -4655,10 +4676,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "microbiology-and-ecology",
-      "secondary_domains": [
-        "clinical-and-translational"
-      ],
       "resources": {
         "files": 6,
         "bytes": 55431,
@@ -4703,7 +4720,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "320211",
+      "additional_anzsrc_fields": [
+        "320799"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-inorganic-physical-chemistry",
@@ -4711,8 +4733,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "chemistry-and-toxicology",
-      "secondary_domains": [],
       "resources": {
         "files": 2,
         "bytes": 14501,
@@ -4773,7 +4793,12 @@
           ],
           "note": "Skill carries 1 script resource(s); dependencies and execution safety require review."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "340299",
+      "additional_anzsrc_fields": [
+        "340699"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-install-skills",
@@ -4781,8 +4806,6 @@
       "kind": "setup",
       "scope_disposition": "exclude",
       "ingest_readiness": "not-applicable",
-      "primary_domain": null,
-      "secondary_domains": [],
       "resources": {
         "files": 1,
         "bytes": 3142,
@@ -4826,7 +4849,10 @@
           ],
           "note": "Platform-specific instruction terms require neutralization: .claude/, Claude Code, Codex."
         }
-      ]
+      ],
+      "primary_anzsrc_field": null,
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": "Maintainer, setup, routing, platform, SDK, or self-maintenance surface outside the reviewed domain business scope."
     },
     {
       "skill_id": "tooluniverse-kegg-disease-drug",
@@ -4834,10 +4860,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "drug-discovery-and-pharmacology",
-      "secondary_domains": [
-        "clinical-and-translational"
-      ],
       "resources": {
         "files": 1,
         "bytes": 10824,
@@ -4893,7 +4915,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation, triggers."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "321401",
+      "additional_anzsrc_fields": [
+        "310202"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-lipidomics",
@@ -4901,8 +4928,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "omics-and-systems-biology",
-      "secondary_domains": [],
       "resources": {
         "files": 1,
         "bytes": 9733,
@@ -4948,7 +4973,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "320504",
+      "additional_anzsrc_fields": [
+        "310205"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-literature-deep-research",
@@ -4956,8 +4986,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "evidence-and-discovery",
-      "secondary_domains": [],
       "resources": {
         "files": 7,
         "bytes": 87705,
@@ -5004,7 +5032,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "461003",
+      "additional_anzsrc_fields": [
+        "461005"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-mendelian-randomization",
@@ -5012,8 +5045,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "needs-curation",
-      "primary_domain": "genomics-and-genetics",
-      "secondary_domains": [],
       "resources": {
         "files": 2,
         "bytes": 13073,
@@ -5064,7 +5095,12 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310207",
+      "additional_anzsrc_fields": [
+        "420204"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-meta-analysis",
@@ -5072,10 +5108,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "evidence-and-discovery",
-      "secondary_domains": [
-        "quantitative-and-data-analysis"
-      ],
       "resources": {
         "files": 3,
         "bytes": 16520,
@@ -5147,7 +5179,10 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "490502",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-metabolomics",
@@ -5155,8 +5190,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "omics-and-systems-biology",
-      "secondary_domains": [],
       "resources": {
         "files": 16,
         "bytes": 64612,
@@ -5225,7 +5258,12 @@
           ],
           "note": "Skill carries 3 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310205",
+      "additional_anzsrc_fields": [
+        "340106"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-metabolomics-analysis",
@@ -5233,10 +5271,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "omics-and-systems-biology",
-      "secondary_domains": [
-        "quantitative-and-data-analysis"
-      ],
       "resources": {
         "files": 3,
         "bytes": 20503,
@@ -5284,7 +5318,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310205",
+      "additional_anzsrc_fields": [
+        "490502"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-metabolomics-pathway",
@@ -5292,8 +5331,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "omics-and-systems-biology",
-      "secondary_domains": [],
       "resources": {
         "files": 1,
         "bytes": 7237,
@@ -5328,7 +5365,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310205",
+      "additional_anzsrc_fields": [
+        "310202"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-metagenomics-analysis",
@@ -5336,12 +5378,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "microbiology-and-ecology",
-      "secondary_domains": [
-        "genomics-and-genetics",
-        "omics-and-systems-biology",
-        "quantitative-and-data-analysis"
-      ],
       "resources": {
         "files": 1,
         "bytes": 5087,
@@ -5376,7 +5412,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310204",
+      "additional_anzsrc_fields": [
+        "310703"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-microbial-genome-characterization",
@@ -5384,10 +5425,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "microbiology-and-ecology",
-      "secondary_domains": [
-        "genomics-and-genetics"
-      ],
       "resources": {
         "files": 2,
         "bytes": 14914,
@@ -5441,7 +5478,12 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310704",
+      "additional_anzsrc_fields": [
+        "310206"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-microbiome-research",
@@ -5449,10 +5491,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "microbiology-and-ecology",
-      "secondary_domains": [
-        "evidence-and-discovery"
-      ],
       "resources": {
         "files": 1,
         "bytes": 12983,
@@ -5505,7 +5543,10 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310703",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-model-organism-genetics",
@@ -5513,10 +5554,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "microbiology-and-ecology",
-      "secondary_domains": [
-        "genomics-and-genetics"
-      ],
       "resources": {
         "files": 1,
         "bytes": 17984,
@@ -5563,7 +5600,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310509",
+      "additional_anzsrc_fields": [
+        "310410"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-molecular-cloning",
@@ -5571,8 +5613,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "molecular-and-structural-biology",
-      "secondary_domains": [],
       "resources": {
         "files": 3,
         "bytes": 10345,
@@ -5642,7 +5682,10 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310113",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-multi-omics-integration",
@@ -5650,8 +5693,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "omics-and-systems-biology",
-      "secondary_domains": [],
       "resources": {
         "files": 2,
         "bytes": 16686,
@@ -5702,7 +5743,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310299",
+      "additional_anzsrc_fields": [
+        "310114"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-multiomic-disease-characterization",
@@ -5710,10 +5756,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "omics-and-systems-biology",
-      "secondary_domains": [
-        "clinical-and-translational"
-      ],
       "resources": {
         "files": 8,
         "bytes": 87988,
@@ -5778,7 +5820,12 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310114",
+      "additional_anzsrc_fields": [
+        "310208"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-natural-product-dereplication",
@@ -5786,8 +5833,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "chemistry-and-toxicology",
-      "secondary_domains": [],
       "resources": {
         "files": 2,
         "bytes": 14789,
@@ -5842,7 +5887,10 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "340502",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-network-pharmacology",
@@ -5850,8 +5898,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "drug-discovery-and-pharmacology",
-      "secondary_domains": [],
       "resources": {
         "files": 9,
         "bytes": 118097,
@@ -5916,7 +5962,12 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "321401",
+      "additional_anzsrc_fields": [
+        "310202"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-neuroscience",
@@ -5924,8 +5975,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "molecular-and-structural-biology",
-      "secondary_domains": [],
       "resources": {
         "files": 1,
         "bytes": 14057,
@@ -5960,7 +6009,10 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "320999",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-noncoding-rna",
@@ -5968,8 +6020,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "omics-and-systems-biology",
-      "secondary_domains": [],
       "resources": {
         "files": 1,
         "bytes": 13716,
@@ -6015,7 +6065,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310508",
+      "additional_anzsrc_fields": [
+        "310505"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-organic-chemistry",
@@ -6023,8 +6078,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "chemistry-and-toxicology",
-      "secondary_domains": [],
       "resources": {
         "files": 8,
         "bytes": 124795,
@@ -6081,7 +6134,10 @@
           ],
           "note": "Skill carries 7 script resource(s); dependencies and execution safety require review."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "340599",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-pathway-disease-genetics",
@@ -6089,11 +6145,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "genomics-and-genetics",
-      "secondary_domains": [
-        "clinical-and-translational",
-        "omics-and-systems-biology"
-      ],
       "resources": {
         "files": 1,
         "bytes": 10090,
@@ -6142,7 +6193,13 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310202",
+      "additional_anzsrc_fields": [
+        "310207",
+        "321405"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-peptide-target-deorphanization",
@@ -6150,10 +6207,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "evidence-and-discovery",
-      "secondary_domains": [
-        "drug-discovery-and-pharmacology"
-      ],
       "resources": {
         "files": 5,
         "bytes": 119254,
@@ -6205,7 +6258,12 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "340407",
+      "additional_anzsrc_fields": [
+        "321401"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-pharmacogenomics",
@@ -6213,11 +6271,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "drug-discovery-and-pharmacology",
-      "secondary_domains": [
-        "genomics-and-genetics",
-        "omics-and-systems-biology"
-      ],
       "resources": {
         "files": 1,
         "bytes": 20545,
@@ -6252,7 +6305,10 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "321406",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-pharmacokinetics",
@@ -6260,8 +6316,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "drug-discovery-and-pharmacology",
-      "secondary_domains": [],
       "resources": {
         "files": 3,
         "bytes": 12196,
@@ -6332,7 +6386,10 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "321402",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-pharmacovigilance",
@@ -6340,8 +6397,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "drug-discovery-and-pharmacology",
-      "secondary_domains": [],
       "resources": {
         "files": 7,
         "bytes": 69537,
@@ -6384,7 +6439,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "321407",
+      "additional_anzsrc_fields": [
+        "420310"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-phewas",
@@ -6392,8 +6452,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "needs-curation",
-      "primary_domain": "genomics-and-genetics",
-      "secondary_domains": [],
       "resources": {
         "files": 2,
         "bytes": 12783,
@@ -6448,7 +6506,10 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310207",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-phylogenetics",
@@ -6456,10 +6517,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "microbiology-and-ecology",
-      "secondary_domains": [
-        "genomics-and-genetics"
-      ],
       "resources": {
         "files": 14,
         "bytes": 245207,
@@ -6539,7 +6596,12 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310410",
+      "additional_anzsrc_fields": [
+        "310203"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-plant-genomics",
@@ -6547,11 +6609,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "microbiology-and-ecology",
-      "secondary_domains": [
-        "genomics-and-genetics",
-        "omics-and-systems-biology"
-      ],
       "resources": {
         "files": 1,
         "bytes": 7884,
@@ -6597,7 +6654,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310803",
+      "additional_anzsrc_fields": [
+        "310509"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-polygenic-risk-score",
@@ -6605,10 +6667,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "genomics-and-genetics",
-      "secondary_domains": [
-        "clinical-and-translational"
-      ],
       "resources": {
         "files": 6,
         "bytes": 61866,
@@ -6660,7 +6718,12 @@
           ],
           "note": "Skill carries 2 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310207",
+      "additional_anzsrc_fields": [
+        "320204"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-population-genetics",
@@ -6668,8 +6731,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "genomics-and-genetics",
-      "secondary_domains": [],
       "resources": {
         "files": 2,
         "bytes": 38858,
@@ -6720,7 +6781,10 @@
           ],
           "note": "Skill carries 1 script resource(s); dependencies and execution safety require review."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310207",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-population-genetics-1000genomes",
@@ -6728,8 +6792,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "genomics-and-genetics",
-      "secondary_domains": [],
       "resources": {
         "files": 1,
         "bytes": 10796,
@@ -6776,7 +6838,10 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation, triggers."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310207",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-precision-medicine-stratification",
@@ -6784,8 +6849,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "clinical-and-translational",
-      "secondary_domains": [],
       "resources": {
         "files": 8,
         "bytes": 104141,
@@ -6860,7 +6923,10 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "320299",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-precision-oncology",
@@ -6868,8 +6934,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "clinical-and-translational",
-      "secondary_domains": [],
       "resources": {
         "files": 8,
         "bytes": 75499,
@@ -6930,7 +6994,12 @@
           ],
           "note": "Skill carries 1 script resource(s); dependencies and execution safety require review."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "321104",
+      "additional_anzsrc_fields": [
+        "321109"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-primer-design",
@@ -6938,8 +7007,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "molecular-and-structural-biology",
-      "secondary_domains": [],
       "resources": {
         "files": 3,
         "bytes": 10807,
@@ -7010,7 +7077,10 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310206",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-product-safety-surveillance",
@@ -7018,8 +7088,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "needs-curation",
-      "primary_domain": "clinical-and-translational",
-      "secondary_domains": [],
       "resources": {
         "files": 3,
         "bytes": 25211,
@@ -7089,7 +7157,10 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "420310",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-protein-interactions",
@@ -7097,8 +7168,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "molecular-and-structural-biology",
-      "secondary_domains": [],
       "resources": {
         "files": 12,
         "bytes": 116413,
@@ -7161,7 +7230,10 @@
           ],
           "note": "Skill carries 2 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310109",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-protein-lof-mechanism",
@@ -7169,8 +7241,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "molecular-and-structural-biology",
-      "secondary_domains": [],
       "resources": {
         "files": 1,
         "bytes": 13271,
@@ -7226,7 +7296,10 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310112",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-protein-modification-analysis",
@@ -7234,10 +7307,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "molecular-and-structural-biology",
-      "secondary_domains": [
-        "quantitative-and-data-analysis"
-      ],
       "resources": {
         "files": 1,
         "bytes": 5191,
@@ -7272,7 +7341,10 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310109",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-protein-sae-variant-interpretation",
@@ -7280,10 +7352,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "genomics-and-genetics",
-      "secondary_domains": [
-        "molecular-and-structural-biology"
-      ],
       "resources": {
         "files": 1,
         "bytes": 12808,
@@ -7339,7 +7407,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310112",
+      "additional_anzsrc_fields": [
+        "310201"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-protein-structural-annotation-pdb",
@@ -7347,8 +7420,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "molecular-and-structural-biology",
-      "secondary_domains": [],
       "resources": {
         "files": 1,
         "bytes": 7875,
@@ -7394,7 +7465,10 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310112",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-protein-structure-prediction",
@@ -7402,10 +7476,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "molecular-and-structural-biology",
-      "secondary_domains": [
-        "quantitative-and-data-analysis"
-      ],
       "resources": {
         "files": 1,
         "bytes": 15258,
@@ -7450,7 +7520,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310112",
+      "additional_anzsrc_fields": [
+        "310201"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-protein-structure-retrieval",
@@ -7458,10 +7533,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "molecular-and-structural-biology",
-      "secondary_domains": [
-        "evidence-and-discovery"
-      ],
       "resources": {
         "files": 3,
         "bytes": 13316,
@@ -7496,7 +7567,10 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310112",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-protein-therapeutic-design",
@@ -7504,10 +7578,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "drug-discovery-and-pharmacology",
-      "secondary_domains": [
-        "molecular-and-structural-biology"
-      ],
       "resources": {
         "files": 6,
         "bytes": 43682,
@@ -7542,7 +7612,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "320603",
+      "additional_anzsrc_fields": [
+        "340407"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-proteomics-analysis",
@@ -7550,10 +7625,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "omics-and-systems-biology",
-      "secondary_domains": [
-        "quantitative-and-data-analysis"
-      ],
       "resources": {
         "files": 4,
         "bytes": 24851,
@@ -7602,7 +7673,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310205",
+      "additional_anzsrc_fields": [
+        "320506"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-proteomics-data-retrieval",
@@ -7610,11 +7686,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "omics-and-systems-biology",
-      "secondary_domains": [
-        "quantitative-and-data-analysis",
-        "evidence-and-discovery"
-      ],
       "resources": {
         "files": 1,
         "bytes": 12868,
@@ -7661,7 +7732,10 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310205",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-rare-disease-diagnosis",
@@ -7669,8 +7743,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "clinical-and-translational",
-      "secondary_domains": [],
       "resources": {
         "files": 7,
         "bytes": 124052,
@@ -7721,7 +7793,10 @@
           ],
           "note": "Skill carries 1 script resource(s); dependencies and execution safety require review."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "320213",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-rare-disease-genomics",
@@ -7729,11 +7804,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "clinical-and-translational",
-      "secondary_domains": [
-        "genomics-and-genetics",
-        "omics-and-systems-biology"
-      ],
       "resources": {
         "files": 1,
         "bytes": 18453,
@@ -7790,7 +7860,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation, triggers."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "320213",
+      "additional_anzsrc_fields": [
+        "310204"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-regulatory-genomics",
@@ -7798,10 +7873,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "genomics-and-genetics",
-      "secondary_domains": [
-        "omics-and-systems-biology"
-      ],
       "resources": {
         "files": 1,
         "bytes": 17781,
@@ -7844,7 +7915,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310508",
+      "additional_anzsrc_fields": [
+        "310204"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-regulatory-variant-analysis",
@@ -7852,10 +7928,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "genomics-and-genetics",
-      "secondary_domains": [
-        "quantitative-and-data-analysis"
-      ],
       "resources": {
         "files": 1,
         "bytes": 11638,
@@ -7903,7 +7975,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310508",
+      "additional_anzsrc_fields": [
+        "310207"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-residue-functional-mechanism-interpretation",
@@ -7911,8 +7988,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "evidence-and-discovery",
-      "secondary_domains": [],
       "resources": {
         "files": 1,
         "bytes": 22903,
@@ -7968,7 +8043,10 @@
           ],
           "note": "SKILL.md has 505 lines; the specification recommends fewer than 500."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310112",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-rnaseq-deseq2",
@@ -7976,8 +8054,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "omics-and-systems-biology",
-      "secondary_domains": [],
       "resources": {
         "files": 22,
         "bytes": 265395,
@@ -8060,7 +8136,12 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310204",
+      "additional_anzsrc_fields": [
+        "490502"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-sdk",
@@ -8068,8 +8149,6 @@
       "kind": "sdk",
       "scope_disposition": "exclude",
       "ingest_readiness": "not-applicable",
-      "primary_domain": null,
-      "secondary_domains": [],
       "resources": {
         "files": 2,
         "bytes": 16574,
@@ -8103,7 +8182,10 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": null,
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": "Maintainer, setup, routing, platform, SDK, or self-maintenance surface outside the reviewed domain business scope."
     },
     {
       "skill_id": "tooluniverse-self-review",
@@ -8111,8 +8193,6 @@
       "kind": "self-maintenance",
       "scope_disposition": "exclude",
       "ingest_readiness": "not-applicable",
-      "primary_domain": null,
-      "secondary_domains": [],
       "resources": {
         "files": 1,
         "bytes": 15658,
@@ -8138,7 +8218,10 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": null,
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": "Maintainer, setup, routing, platform, SDK, or self-maintenance surface outside the reviewed domain business scope."
     },
     {
       "skill_id": "tooluniverse-sequence-analysis",
@@ -8146,10 +8229,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "molecular-and-structural-biology",
-      "secondary_domains": [
-        "quantitative-and-data-analysis"
-      ],
       "resources": {
         "files": 5,
         "bytes": 118730,
@@ -8203,7 +8282,10 @@
           ],
           "note": "Skill carries 4 script resource(s); dependencies and execution safety require review."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310206",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-sequence-retrieval",
@@ -8211,10 +8293,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "molecular-and-structural-biology",
-      "secondary_domains": [
-        "evidence-and-discovery"
-      ],
       "resources": {
         "files": 3,
         "bytes": 10387,
@@ -8249,7 +8327,10 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310206",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-single-cell",
@@ -8257,8 +8338,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "omics-and-systems-biology",
-      "secondary_domains": [],
       "resources": {
         "files": 16,
         "bytes": 167098,
@@ -8340,7 +8419,10 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310204",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-small-molecule-discovery",
@@ -8348,8 +8430,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "drug-discovery-and-pharmacology",
-      "secondary_domains": [],
       "resources": {
         "files": 1,
         "bytes": 15970,
@@ -8392,7 +8472,13 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "340401",
+      "additional_anzsrc_fields": [
+        "340404",
+        "321405"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-spatial-omics-analysis",
@@ -8400,10 +8486,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "omics-and-systems-biology",
-      "secondary_domains": [
-        "quantitative-and-data-analysis"
-      ],
       "resources": {
         "files": 6,
         "bytes": 94360,
@@ -8454,7 +8536,12 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310204",
+      "additional_anzsrc_fields": [
+        "310205"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-spatial-transcriptomics",
@@ -8462,8 +8549,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "omics-and-systems-biology",
-      "secondary_domains": [],
       "resources": {
         "files": 3,
         "bytes": 30274,
@@ -8519,7 +8604,10 @@
           ],
           "note": "Platform-specific instruction terms require neutralization: Codex."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310204",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-statistical-modeling",
@@ -8527,8 +8615,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "quantitative-and-data-analysis",
-      "secondary_domains": [],
       "resources": {
         "files": 22,
         "bytes": 304548,
@@ -8604,7 +8690,10 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "490501",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-stem-cell-organoid",
@@ -8612,8 +8701,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "molecular-and-structural-biology",
-      "secondary_domains": [],
       "resources": {
         "files": 1,
         "bytes": 8570,
@@ -8656,7 +8743,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "320606",
+      "additional_anzsrc_fields": [
+        "310102"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-structural-proteomics",
@@ -8664,10 +8756,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "omics-and-systems-biology",
-      "secondary_domains": [
-        "molecular-and-structural-biology"
-      ],
       "resources": {
         "files": 1,
         "bytes": 6521,
@@ -8702,7 +8790,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310112",
+      "additional_anzsrc_fields": [
+        "310205"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-structural-variant-analysis",
@@ -8710,11 +8803,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "genomics-and-genetics",
-      "secondary_domains": [
-        "molecular-and-structural-biology",
-        "quantitative-and-data-analysis"
-      ],
       "resources": {
         "files": 5,
         "bytes": 81327,
@@ -8759,7 +8847,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "320213",
+      "additional_anzsrc_fields": [
+        "310204"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-systems-biology",
@@ -8767,8 +8860,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "omics-and-systems-biology",
-      "secondary_domains": [],
       "resources": {
         "files": 8,
         "bytes": 42891,
@@ -8829,7 +8920,10 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310114",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-target-research",
@@ -8837,10 +8931,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "drug-discovery-and-pharmacology",
-      "secondary_domains": [
-        "evidence-and-discovery"
-      ],
       "resources": {
         "files": 6,
         "bytes": 118353,
@@ -8875,7 +8965,10 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "321405",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-toxicology",
@@ -8883,8 +8976,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "chemistry-and-toxicology",
-      "secondary_domains": [],
       "resources": {
         "files": 1,
         "bytes": 12466,
@@ -8927,7 +9018,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "321407",
+      "additional_anzsrc_fields": [
+        "410201"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-vaccine-design",
@@ -8935,8 +9031,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "molecular-and-structural-biology",
-      "secondary_domains": [],
       "resources": {
         "files": 2,
         "bytes": 16860,
@@ -8990,7 +9084,12 @@
           ],
           "note": "Skill carries 1 script resource(s); dependencies and execution safety require review."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "320402",
+      "additional_anzsrc_fields": [
+        "320603"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-variant-analysis",
@@ -8998,10 +9097,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "genomics-and-genetics",
-      "secondary_domains": [
-        "quantitative-and-data-analysis"
-      ],
       "resources": {
         "files": 17,
         "bytes": 248526,
@@ -9081,7 +9176,12 @@
           ],
           "note": "Skill carries 1 test or evaluation resource(s) that are not presumptively runtime assets."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310206",
+      "additional_anzsrc_fields": [
+        "310204"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-variant-functional-annotation",
@@ -9089,8 +9189,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "genomics-and-genetics",
-      "secondary_domains": [],
       "resources": {
         "files": 1,
         "bytes": 13981,
@@ -9135,7 +9233,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310208",
+      "additional_anzsrc_fields": [
+        "320213"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-variant-interpretation",
@@ -9143,8 +9246,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "genomics-and-genetics",
-      "secondary_domains": [],
       "resources": {
         "files": 6,
         "bytes": 105941,
@@ -9197,7 +9298,10 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "320213",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-variant-predictor-dms-validation",
@@ -9205,8 +9309,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "genomics-and-genetics",
-      "secondary_domains": [],
       "resources": {
         "files": 1,
         "bytes": 20608,
@@ -9253,7 +9355,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310201",
+      "additional_anzsrc_fields": [
+        "490502"
+      ],
+      "anzsrc_unclassified_reason": null
     },
     {
       "skill_id": "tooluniverse-variant-to-mechanism",
@@ -9261,8 +9368,6 @@
       "kind": "research",
       "scope_disposition": "candidate",
       "ingest_readiness": "standard-adaptation",
-      "primary_domain": "genomics-and-genetics",
-      "secondary_domains": [],
       "resources": {
         "files": 1,
         "bytes": 18278,
@@ -9320,7 +9425,12 @@
           ],
           "note": "Non-standard frontmatter fields require an adaptation decision: disable-model-invocation."
         }
-      ]
+      ],
+      "primary_anzsrc_field": "310208",
+      "additional_anzsrc_fields": [
+        "310508"
+      ],
+      "anzsrc_unclassified_reason": null
     }
   ]
 }

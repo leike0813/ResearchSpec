@@ -178,9 +178,14 @@ Gate、transition 和 revision-round template。Catalog 回答“选哪条路线
 
 ### 2.10 Domain Skill Plugin Registry
 
-`skills/plugins/registry.json` 是 vendor/domain 两层可选领域 Skills 的 package-owned catalog。vendor converter 固定上游
-revision，完成筛选、改写、审校和 license/NOTICE 处理，再把静态 Skill tree 随 npm 包发布。
-domain catalog 维护稳定的 direct Skill lists。workspace 只保存 selected domain IDs；manifest 保存 tool/path/hash、vendor/Skill ownership 与 per-domain resolution snapshots。
+`skills/plugins/registry.json` 是 vendor/domain 两层可选领域 Skills 的 package-owned runtime catalog。每个 vendor converter 固定上游
+revision，完成筛选、改写、审校和 license/NOTICE 处理，只输出隔离的 vendor bundle 与静态 Skill tree。
+source-neutral domain catalog 维护稳定的 direct Skill lists，central assembler 是 registry 的唯一写入者。
+ToolUniverse 与 Scientific Agent Skills converter 都先在完整多 vendor staging tree 上完成中央装配验证，
+再仅提交自身 bundle/tree/manifest/report 与 registry，因而任何 vendor 都不能覆盖另一个 vendor。
+Scientific Agent Skills 的 147 条 admission policy 只生成 33 个通过许可、静态安全、内容、重叠、资源和 domain 审查的 Skills。
+学科 domain 以 ANZSRC 2020 FoR Group 为唯一分类，Field 仅作 audit metadata；五个粗粒度工具域由 ResearchSpec 维护。
+内部 218 个固定 domain 中只有非空项公开可用。workspace 只保存 selected domain IDs；manifest 保存 tool/path/hash、vendor/Skill ownership 与 per-domain resolution snapshots，且为变空或缺失的 selected domain 保留恢复证据。
 插件可以辅助语义生产，但不能拥有 workflow profile、frontier、state、artifact registry、
 Gate、Decision 或 receipt。ResearchSpec 不远程下载插件、不执行其脚本、不安装依赖。
 

@@ -5,12 +5,17 @@ Define the deterministic vendor bundle contract, audit-governed admission, depen
 ## Requirements
 
 ### Requirement: Deterministic Vendor Bundle Contract
-ResearchSpec SHALL define an internal vendor bundle contract that records immutable vendor identity, admitted Skills, reviewed dependencies, upstream paths, generated files, and converter version without defining a public converter ABI.
+ResearchSpec SHALL define an internal isolated vendor bundle contract that records immutable vendor identity, admitted Skills, reviewed dependencies, upstream paths, generated files, Skill-level content licenses, and converter version without defining a public converter ABI or owning domain membership.
 
 #### Scenario: Vendor bundle is reproducible
 - **WHEN** a vendor converter runs twice against the same clean pinned source and policy inputs
-- **THEN** the generated Skill bytes and semantic manifest content SHALL be identical
+- **THEN** the generated Skill bytes and semantic vendor bundle content SHALL be identical
 - **AND** generated timestamps SHALL not affect idempotence comparison
+
+#### Scenario: Vendor converters remain isolated
+- **WHEN** one vendor is regenerated
+- **THEN** its converter SHALL write only that vendor's bundle and Skill tree
+- **AND** it SHALL NOT overwrite another vendor or the source-neutral domain catalog
 
 ### Requirement: ToolUniverse Audit-Governed Admission
 The ToolUniverse converter SHALL consume the pinned v1.3.1 audit as its complete admission inventory, generate all 130 candidate Skills, exclude all 20 non-business Skills, and reject new or unclassified upstream entries.
@@ -37,9 +42,35 @@ The converter SHALL normalize admitted Skills to the supported Open Agent Skills
 - **AND** ResearchSpec SHALL NOT execute scripts, install dependencies, configure credentials, or copy tests, evaluations, environment templates, or maintenance history as runtime assets
 
 ### Requirement: Vendor Conversion Verification
-ResearchSpec SHALL provide ToolUniverse convert, check, and idempotence maintainer commands and SHALL include generated vendor assets in release verification while excluding the vendor checkout.
+ResearchSpec SHALL provide ToolUniverse convert, check, and idempotence maintainer commands; a central assembler SHALL validate all vendor bundles against the source-neutral domain catalog and SHALL be the only writer of the production registry.
 
 #### Scenario: Release bundle contains generated assets only
 - **WHEN** the npm package is verified
 - **THEN** it SHALL contain the assembled registry and generated ToolUniverse Skill trees
-- **AND** it SHALL exclude `vendor/tooluniverse`, test fixtures, and converter-only source inputs
+- **AND** it SHALL exclude vendor checkouts, audits, test fixtures, taxonomy maintenance inputs, and converter-only source inputs
+
+#### Scenario: Central assembly is deterministic
+- **WHEN** unchanged validated vendor bundles and domain catalog are assembled repeatedly
+- **THEN** the production registry bytes SHALL remain identical
+- **AND** unknown vendor Skills, duplicate Skill IDs, or invalid domain references SHALL block assembly before the registry is replaced
+
+### Requirement: Complete Multi-Vendor Staging
+Each vendor converter SHALL stage its target output together with every unchanged published vendor, validate the complete source-neutral domain catalog through the central assembler, and commit only its own generated vendor outputs plus the assembled registry.
+
+#### Scenario: Second vendor conversion preserves first vendor
+- **WHEN** Scientific Agent Skills is converted or refreshed
+- **THEN** ToolUniverse generated files and bundle remain byte-identical
+- **AND** the assembled registry contains both reviewed vendors
+
+#### Scenario: First vendor conversion preserves second vendor
+- **WHEN** ToolUniverse is converted or refreshed after Scientific Agent Skills admission
+- **THEN** Scientific Agent Skills generated files and bundle remain byte-identical
+- **AND** central assembly validates all cross-vendor membership and dependencies
+
+### Requirement: Reviewed Cross-Vendor Dependency Targets
+Vendor converters SHALL write only reviewed `required` relationships to the registry graph and SHALL resolve every target to an admitted global Skill ID.
+
+#### Scenario: Required target is unavailable
+- **WHEN** a required target is excluded and has no reviewed self-contained adaptation or admitted equivalent
+- **THEN** the source Skill is excluded or conversion fails
+- **AND** the relationship is not silently downgraded

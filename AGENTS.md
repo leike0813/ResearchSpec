@@ -16,6 +16,7 @@ Current external reference paths:
 - ARSU project to be absorbed: `/home/joshua/Workspace/Code/Skill/academic-research-skills-universal`
 - ARS upstream checkout inside ARSU: `/home/joshua/Workspace/Code/Skill/academic-research-skills-universal/vendor/ars`
 - ToolUniverse vendor converter source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/tooluniverse`
+- Scientific Agent Skills vendor converter source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/scientific-agent-skills`
 
 When paths or ownership change, update this file in the same change so future
 agents do not follow stale locations.
@@ -89,12 +90,36 @@ directly modify workflow state, routes, work items, artifact registry, Gates,
 Decisions, transitions, or receipts. ResearchSpec distributes static reviewed
 content and never executes plugin scripts or installs their dependencies.
 
+Discipline domains use ANZSRC 2020 Fields of Research Group as their only
+classification standard; Field is audit metadata and never automatic membership.
+ResearchSpec also owns exactly five coarse tool domains documented in
+`docs/domain_taxonomy.md`. The internal catalog pre-creates all 213 discipline
+domains and five tool domains, but empty domains remain hidden from ordinary user
+discovery and installation. A selected domain that becomes empty is unavailable
+recovery state until it is safely uninstalled or repopulated.
+
 `vendor/tooluniverse` is the maintainer-only pinned input for the ToolUniverse
 vendor converter. Production admission is controlled by the v1.3.1 audit and
-converter policies: 130 reviewed research Skills are generated into three stable
-domains, while 20 maintenance/setup surfaces remain excluded. Neither the source
+converter policies: 130 reviewed research Skills are generated into an isolated
+vendor bundle and assigned by the source-neutral catalog to 28 ANZSRC Group
+domains and two non-empty tool domains, while 20 maintenance/setup surfaces remain excluded. Neither the source
 checkout nor generated admission authorizes dependency installation, script
 execution, credential setup, MCP configuration, or workflow writes.
+
+`vendor/scientific-agent-skills` is the maintainer-only pinned input for the
+Scientific Agent Skills v2.53.0 converter. Its immutable audit covers all 147
+upstream Skills, while complete production policies admit 33 reviewed,
+vendor-prefixed Skills and exclude 114 for authority, redistribution, ARSU or
+ToolUniverse overlap, static security, domain fit, or content-review reasons.
+The generated bundle contributes to 13 ANZSRC Group domains and four tool
+domains. Do not execute its scripts, install its dependencies, infer approval
+from upstream security labels, or bypass the checked-in admission, dependency,
+resource, and source-neutral domain decisions.
+
+Multi-vendor maintenance must keep converters isolated: each converter stages
+against all published vendors but emits and commits only its own bundle, while a
+source-neutral domain catalog and central assembler own the published registry.
+Vendor root licensing does not replace an evidenced Skill-level content license.
 
 ## ARSU Relationship
 

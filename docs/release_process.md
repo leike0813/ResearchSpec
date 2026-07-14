@@ -15,6 +15,8 @@ pnpm arsu:check
 pnpm arsu:idempotence
 pnpm tooluniverse:check
 pnpm tooluniverse:idempotence
+pnpm scientific-agent-skills:check
+pnpm scientific-agent-skills:idempotence
 pnpm release:verify
 pnpm dlx @fission-ai/openspec@1.5.0 validate --specs --strict --no-interactive
 git diff --check

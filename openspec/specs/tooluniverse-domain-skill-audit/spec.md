@@ -1,4 +1,10 @@
-## ADDED Requirements
+## Purpose
+
+Define the immutable ToolUniverse audit source, complete Skill evidence,
+classification model, reporting boundary, and traceability into the separately
+governed production vendor bundle.
+
+## Requirements
 
 ### Requirement: Immutable ToolUniverse Audit Source
 ResearchSpec SHALL keep the audited ToolUniverse source as a repository submodule at `vendor/tooluniverse`, pinned to the immutable commit for the declared upstream release, and SHALL keep that checkout outside npm distribution.
@@ -27,25 +33,25 @@ ResearchSpec SHALL maintain one versioned machine audit record for every top-lev
 - **THEN** validation SHALL fail until source metadata, records, findings, and aggregate counts are reconciled
 
 ### Requirement: Domain and Evidence Classification
-Each candidate Skill SHALL have one primary domain from the declared nine-domain taxonomy, optional secondary domains, resource evidence, cross-Skill references, and structured findings needed to assess later ingest work.
+Every ToolUniverse audit record SHALL carry validated ANZSRC Field metadata or an explicit unclassified reason, while production domain membership SHALL be maintained independently by the source-neutral domain catalog.
 
-#### Scenario: Candidate classification is complete
-- **WHEN** a Skill is classified as a business candidate
-- **THEN** it SHALL name one valid primary domain
-- **AND** its resource and cross-Skill evidence SHALL be derived from files below its source root
+#### Scenario: Field classification is complete
+- **WHEN** any of the 150 audited upstream Skills is validated
+- **THEN** it SHALL have a valid primary Field and distinct optional additional Fields or a concise unclassified reason
+- **AND** its resource and cross-Skill evidence SHALL remain derived from files below its source root
 
 #### Scenario: Exclusion is explicit
 - **WHEN** a router, setup, developer, SDK, platform-adapter, or self-maintenance Skill is outside the business plugin scope
-- **THEN** its audit record SHALL use the exclude disposition with a concise reason
-- **AND** it SHALL not be assigned a production plugin ID
+- **THEN** its audit record SHALL retain the exclude disposition with a concise reason
+- **AND** its Field metadata SHALL NOT assign a production plugin ID or domain membership
 
 ### Requirement: Audit Does Not Grant Plugin Admission
-The audit SHALL remain a maintainer evidence artifact and SHALL NOT create production registry entries, plugin trees, runtime installation behavior, or workflow authority.
+The ToolUniverse audit SHALL remain maintainer evidence and SHALL NOT by itself create or mutate production registry entries, plugin trees, runtime installation behavior, or workflow authority; production admission SHALL remain governed by the separately specified vendor converter and registry contracts.
 
-#### Scenario: Audit-only release boundary
-- **WHEN** this audit change is complete
-- **THEN** `skills/plugins/registry.json` SHALL remain empty
-- **AND** no ToolUniverse-derived Skill SHALL be projected to an Agent tool
+#### Scenario: Audit and admitted production bundle remain separate
+- **WHEN** ToolUniverse production Skills are regenerated or delivered
+- **THEN** every generated or excluded Skill SHALL trace to the pinned audit record
+- **AND** production bytes SHALL be created only by the reviewed converter path
 - **AND** no upstream script or dependency SHALL be executed or installed by the audit
 
 ### Requirement: Human Audit Report and Follow-up Recommendation
@@ -58,9 +64,10 @@ ResearchSpec SHALL provide a human-readable report that summarizes the machine i
 - **AND** future plugin packaging recommendations SHALL remain non-executing until approved in a separate change
 
 ### Requirement: Audit-Governed Production Ingestion
-Any production ToolUniverse vendor bundle SHALL consume the pinned audit inventory as its include, exclude, classification, finding, and upstream revision input without changing the audit's evidence role.
+Any production ToolUniverse vendor bundle SHALL consume the pinned audit inventory as its include, exclude, Field evidence, finding, and upstream revision input, while the source-neutral domain catalog SHALL independently own direct domain membership.
 
 #### Scenario: Audit and production bundle remain traceable
-- **WHEN** ToolUniverse production Skills are regenerated
+- **WHEN** ToolUniverse production Skills are regenerated and centrally assembled
 - **THEN** every generated or excluded Skill SHALL trace to exactly one audit record
 - **AND** changes to the pinned source or inventory SHALL block regeneration until a new reviewed audit is supplied
+- **AND** the 130 admitted Skills SHALL be assigned only through reviewed catalog membership

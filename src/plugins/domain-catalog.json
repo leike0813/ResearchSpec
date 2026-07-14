@@ -1,0 +1,2265 @@
+{
+  "schema_version": "1",
+  "taxonomy": {
+    "discipline_system": "ANZSRC FoR",
+    "discipline_version": "2020",
+    "source_release": "2025-10-24"
+  },
+  "domains": [
+    {
+      "domain_id": "agricultural-biotechnology",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3001",
+      "title": "Agricultural biotechnology",
+      "description": "ANZSRC 2020 FoR Group 3001: Agricultural biotechnology.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "agriculture-land-and-farm-management",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3002",
+      "title": "Agriculture, land and farm management",
+      "description": "ANZSRC 2020 FoR Group 3002: Agriculture, land and farm management.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "animal-production",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3003",
+      "title": "Animal production",
+      "description": "ANZSRC 2020 FoR Group 3003: Animal production.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "crop-and-pasture-production",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3004",
+      "title": "Crop and pasture production",
+      "description": "ANZSRC 2020 FoR Group 3004: Crop and pasture production.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "fisheries-sciences",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3005",
+      "title": "Fisheries sciences",
+      "description": "ANZSRC 2020 FoR Group 3005: Fisheries sciences.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "food-sciences",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3006",
+      "title": "Food sciences",
+      "description": "ANZSRC 2020 FoR Group 3006: Food sciences.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "forestry-sciences",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3007",
+      "title": "Forestry sciences",
+      "description": "ANZSRC 2020 FoR Group 3007: Forestry sciences.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "horticultural-production",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3008",
+      "title": "Horticultural production",
+      "description": "ANZSRC 2020 FoR Group 3008: Horticultural production.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "veterinary-sciences",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3009",
+      "title": "Veterinary sciences",
+      "description": "ANZSRC 2020 FoR Group 3009: Veterinary sciences.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "other-agricultural-veterinary-and-food-sciences",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3099",
+      "title": "Other agricultural, veterinary and food sciences",
+      "description": "ANZSRC 2020 FoR Group 3099: Other agricultural, veterinary and food sciences.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "biochemistry-and-cell-biology",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3101",
+      "title": "Biochemistry and cell biology",
+      "description": "ANZSRC 2020 FoR Group 3101: Biochemistry and cell biology.",
+      "version": "0.1.0",
+      "skills": [
+        "tooluniverse-aging-senescence",
+        "tooluniverse-electron-microscopy",
+        "tooluniverse-enzyme-kinetics",
+        "tooluniverse-gpcr-structural-pharmacology",
+        "tooluniverse-molecular-cloning",
+        "tooluniverse-multi-omics-integration",
+        "tooluniverse-multiomic-disease-characterization",
+        "tooluniverse-protein-interactions",
+        "tooluniverse-protein-lof-mechanism",
+        "tooluniverse-protein-modification-analysis",
+        "tooluniverse-protein-sae-variant-interpretation",
+        "tooluniverse-protein-structural-annotation-pdb",
+        "tooluniverse-protein-structure-prediction",
+        "tooluniverse-protein-structure-retrieval",
+        "tooluniverse-residue-functional-mechanism-interpretation",
+        "tooluniverse-stem-cell-organoid",
+        "tooluniverse-structural-proteomics",
+        "tooluniverse-systems-biology"
+      ]
+    },
+    {
+      "domain_id": "bioinformatics-and-computational-biology",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3102",
+      "title": "Bioinformatics and computational biology",
+      "description": "ANZSRC 2020 FoR Group 3102: Bioinformatics and computational biology.",
+      "version": "0.1.0",
+      "skills": [
+        "tooluniverse-cancer-genomics-tcga",
+        "tooluniverse-comparative-genomics",
+        "tooluniverse-crispr-screen-analysis",
+        "tooluniverse-data-integration-analysis",
+        "tooluniverse-epigenomics",
+        "tooluniverse-expression-data-retrieval",
+        "tooluniverse-fastq-qc",
+        "tooluniverse-functional-genomics-screens",
+        "tooluniverse-gene-enrichment",
+        "tooluniverse-gene-regulatory-networks",
+        "tooluniverse-gwas-drug-discovery",
+        "tooluniverse-gwas-finemapping",
+        "tooluniverse-gwas-snp-interpretation",
+        "tooluniverse-gwas-study-explorer",
+        "tooluniverse-gwas-trait-to-gene",
+        "tooluniverse-immune-repertoire-analysis",
+        "tooluniverse-kegg-disease-drug",
+        "tooluniverse-lipidomics",
+        "tooluniverse-mendelian-randomization",
+        "tooluniverse-metabolomics",
+        "tooluniverse-metabolomics-analysis",
+        "tooluniverse-metabolomics-pathway",
+        "tooluniverse-metagenomics-analysis",
+        "tooluniverse-microbial-genome-characterization",
+        "tooluniverse-multi-omics-integration",
+        "tooluniverse-multiomic-disease-characterization",
+        "tooluniverse-network-pharmacology",
+        "tooluniverse-pathway-disease-genetics",
+        "tooluniverse-phewas",
+        "tooluniverse-phylogenetics",
+        "tooluniverse-polygenic-risk-score",
+        "tooluniverse-population-genetics",
+        "tooluniverse-population-genetics-1000genomes",
+        "tooluniverse-primer-design",
+        "tooluniverse-protein-sae-variant-interpretation",
+        "tooluniverse-protein-structure-prediction",
+        "tooluniverse-proteomics-analysis",
+        "tooluniverse-proteomics-data-retrieval",
+        "tooluniverse-rare-disease-genomics",
+        "tooluniverse-regulatory-genomics",
+        "tooluniverse-regulatory-variant-analysis",
+        "tooluniverse-rnaseq-deseq2",
+        "tooluniverse-sequence-analysis",
+        "tooluniverse-sequence-retrieval",
+        "tooluniverse-single-cell",
+        "tooluniverse-spatial-omics-analysis",
+        "tooluniverse-spatial-transcriptomics",
+        "tooluniverse-structural-proteomics",
+        "tooluniverse-structural-variant-analysis",
+        "tooluniverse-variant-analysis",
+        "tooluniverse-variant-functional-annotation",
+        "tooluniverse-variant-predictor-dms-validation",
+        "tooluniverse-variant-to-mechanism"
+      ]
+    },
+    {
+      "domain_id": "ecology",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3103",
+      "title": "Ecology",
+      "description": "ANZSRC 2020 FoR Group 3103: Ecology.",
+      "version": "0.1.0",
+      "skills": [
+        "tooluniverse-ecology-biodiversity"
+      ]
+    },
+    {
+      "domain_id": "evolutionary-biology",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3104",
+      "title": "Evolutionary biology",
+      "description": "ANZSRC 2020 FoR Group 3104: Evolutionary biology.",
+      "version": "0.1.0",
+      "skills": [
+        "tooluniverse-comparative-genomics",
+        "tooluniverse-model-organism-genetics",
+        "tooluniverse-phylogenetics"
+      ]
+    },
+    {
+      "domain_id": "genetics",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3105",
+      "title": "Genetics",
+      "description": "ANZSRC 2020 FoR Group 3105: Genetics.",
+      "version": "0.1.0",
+      "skills": [
+        "tooluniverse-epigenomics",
+        "tooluniverse-epigenomics-chromatin",
+        "tooluniverse-gene-regulatory-networks",
+        "tooluniverse-model-organism-genetics",
+        "tooluniverse-noncoding-rna",
+        "tooluniverse-plant-genomics",
+        "tooluniverse-regulatory-genomics",
+        "tooluniverse-regulatory-variant-analysis",
+        "tooluniverse-variant-to-mechanism"
+      ]
+    },
+    {
+      "domain_id": "industrial-biotechnology",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3106",
+      "title": "Industrial biotechnology",
+      "description": "ANZSRC 2020 FoR Group 3106: Industrial biotechnology.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "microbiology",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3107",
+      "title": "Microbiology",
+      "description": "ANZSRC 2020 FoR Group 3107: Microbiology.",
+      "version": "0.1.0",
+      "skills": [
+        "tooluniverse-metagenomics-analysis",
+        "tooluniverse-microbial-genome-characterization",
+        "tooluniverse-microbiome-research"
+      ]
+    },
+    {
+      "domain_id": "plant-biology",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3108",
+      "title": "Plant biology",
+      "description": "ANZSRC 2020 FoR Group 3108: Plant biology.",
+      "version": "0.1.0",
+      "skills": [
+        "tooluniverse-plant-genomics"
+      ]
+    },
+    {
+      "domain_id": "zoology",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3109",
+      "title": "Zoology",
+      "description": "ANZSRC 2020 FoR Group 3109: Zoology.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "other-biological-sciences",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3199",
+      "title": "Other biological sciences",
+      "description": "ANZSRC 2020 FoR Group 3199: Other biological sciences.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "cardiovascular-medicine-and-haematology",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3201",
+      "title": "Cardiovascular medicine and haematology",
+      "description": "ANZSRC 2020 FoR Group 3201: Cardiovascular medicine and haematology.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "clinical-sciences",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3202",
+      "title": "Clinical sciences",
+      "description": "ANZSRC 2020 FoR Group 3202: Clinical sciences.",
+      "version": "0.1.0",
+      "skills": [
+        "tooluniverse-acmg-variant-classification",
+        "tooluniverse-aging-senescence",
+        "tooluniverse-clinical-risk-scoring",
+        "tooluniverse-clinical-trial-matching",
+        "tooluniverse-diagnostic-test-evaluation",
+        "tooluniverse-disease-research",
+        "tooluniverse-gene-disease-association",
+        "tooluniverse-infectious-disease",
+        "tooluniverse-polygenic-risk-score",
+        "tooluniverse-precision-medicine-stratification",
+        "tooluniverse-rare-disease-diagnosis",
+        "tooluniverse-rare-disease-genomics",
+        "tooluniverse-structural-variant-analysis",
+        "tooluniverse-variant-functional-annotation",
+        "tooluniverse-variant-interpretation"
+      ]
+    },
+    {
+      "domain_id": "dentistry",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3203",
+      "title": "Dentistry",
+      "description": "ANZSRC 2020 FoR Group 3203: Dentistry.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "immunology",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3204",
+      "title": "Immunology",
+      "description": "ANZSRC 2020 FoR Group 3204: Immunology.",
+      "version": "0.1.0",
+      "skills": [
+        "tooluniverse-antibody-engineering",
+        "tooluniverse-hla-immunogenomics",
+        "tooluniverse-immune-repertoire-analysis",
+        "tooluniverse-immunology",
+        "tooluniverse-immunotherapy-response-prediction",
+        "tooluniverse-vaccine-design"
+      ]
+    },
+    {
+      "domain_id": "medical-biochemistry-and-metabolomics",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3205",
+      "title": "Medical biochemistry and metabolomics",
+      "description": "ANZSRC 2020 FoR Group 3205: Medical biochemistry and metabolomics.",
+      "version": "0.1.0",
+      "skills": [
+        "tooluniverse-lipidomics",
+        "tooluniverse-proteomics-analysis"
+      ]
+    },
+    {
+      "domain_id": "medical-biotechnology",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3206",
+      "title": "Medical biotechnology",
+      "description": "ANZSRC 2020 FoR Group 3206: Medical biotechnology.",
+      "version": "0.1.0",
+      "skills": [
+        "tooluniverse-antibody-engineering",
+        "tooluniverse-protein-therapeutic-design",
+        "tooluniverse-stem-cell-organoid",
+        "tooluniverse-vaccine-design"
+      ]
+    },
+    {
+      "domain_id": "medical-microbiology",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3207",
+      "title": "Medical microbiology",
+      "description": "ANZSRC 2020 FoR Group 3207: Medical microbiology.",
+      "version": "0.1.0",
+      "skills": [
+        "tooluniverse-infectious-disease"
+      ]
+    },
+    {
+      "domain_id": "medical-physiology",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3208",
+      "title": "Medical physiology",
+      "description": "ANZSRC 2020 FoR Group 3208: Medical physiology.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "neurosciences",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3209",
+      "title": "Neurosciences",
+      "description": "ANZSRC 2020 FoR Group 3209: Neurosciences.",
+      "version": "0.1.0",
+      "skills": [
+        "tooluniverse-neuroscience"
+      ]
+    },
+    {
+      "domain_id": "nutrition-and-dietetics",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3210",
+      "title": "Nutrition and dietetics",
+      "description": "ANZSRC 2020 FoR Group 3210: Nutrition and dietetics.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "oncology-and-carcinogenesis",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3211",
+      "title": "Oncology and carcinogenesis",
+      "description": "ANZSRC 2020 FoR Group 3211: Oncology and carcinogenesis.",
+      "version": "0.1.0",
+      "skills": [
+        "tooluniverse-cancer-classification",
+        "tooluniverse-cancer-genomics-tcga",
+        "tooluniverse-cancer-variant-interpretation",
+        "tooluniverse-cell-line-profiling",
+        "tooluniverse-immunotherapy-response-prediction",
+        "tooluniverse-precision-oncology"
+      ]
+    },
+    {
+      "domain_id": "ophthalmology-and-optometry",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3212",
+      "title": "Ophthalmology and optometry",
+      "description": "ANZSRC 2020 FoR Group 3212: Ophthalmology and optometry.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "paediatrics",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3213",
+      "title": "Paediatrics",
+      "description": "ANZSRC 2020 FoR Group 3213: Paediatrics.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "pharmacology-and-pharmaceutical-sciences",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3214",
+      "title": "Pharmacology and pharmaceutical sciences",
+      "description": "ANZSRC 2020 FoR Group 3214: Pharmacology and pharmaceutical sciences.",
+      "version": "0.1.0",
+      "skills": [
+        "tooluniverse-admet-prediction",
+        "tooluniverse-adverse-event-detection",
+        "tooluniverse-adverse-outcome-pathway",
+        "tooluniverse-binder-discovery",
+        "tooluniverse-chemical-safety",
+        "tooluniverse-clinical-data-integration",
+        "tooluniverse-dose-response",
+        "tooluniverse-drug-drug-interaction",
+        "tooluniverse-drug-mechanism-research",
+        "tooluniverse-drug-regulatory",
+        "tooluniverse-drug-repurposing",
+        "tooluniverse-drug-research",
+        "tooluniverse-drug-synergy",
+        "tooluniverse-drug-target-validation",
+        "tooluniverse-gpcr-structural-pharmacology",
+        "tooluniverse-gwas-drug-discovery",
+        "tooluniverse-kegg-disease-drug",
+        "tooluniverse-network-pharmacology",
+        "tooluniverse-pathway-disease-genetics",
+        "tooluniverse-peptide-target-deorphanization",
+        "tooluniverse-pharmacogenomics",
+        "tooluniverse-pharmacokinetics",
+        "tooluniverse-pharmacovigilance",
+        "tooluniverse-small-molecule-discovery",
+        "tooluniverse-target-research",
+        "tooluniverse-toxicology"
+      ]
+    },
+    {
+      "domain_id": "reproductive-medicine",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3215",
+      "title": "Reproductive medicine",
+      "description": "ANZSRC 2020 FoR Group 3215: Reproductive medicine.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "other-biomedical-and-clinical-sciences",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3299",
+      "title": "Other biomedical and clinical sciences",
+      "description": "ANZSRC 2020 FoR Group 3299: Other biomedical and clinical sciences.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "architecture",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3301",
+      "title": "Architecture",
+      "description": "ANZSRC 2020 FoR Group 3301: Architecture.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "building",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3302",
+      "title": "Building",
+      "description": "ANZSRC 2020 FoR Group 3302: Building.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "design",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3303",
+      "title": "Design",
+      "description": "ANZSRC 2020 FoR Group 3303: Design.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "urban-and-regional-planning",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3304",
+      "title": "Urban and regional planning",
+      "description": "ANZSRC 2020 FoR Group 3304: Urban and regional planning.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "other-built-environment-and-design",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3399",
+      "title": "Other built environment and design",
+      "description": "ANZSRC 2020 FoR Group 3399: Other built environment and design.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "analytical-chemistry",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3401",
+      "title": "Analytical chemistry",
+      "description": "ANZSRC 2020 FoR Group 3401: Analytical chemistry.",
+      "version": "0.1.0",
+      "skills": [
+        "tooluniverse-metabolomics"
+      ]
+    },
+    {
+      "domain_id": "inorganic-chemistry",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3402",
+      "title": "Inorganic chemistry",
+      "description": "ANZSRC 2020 FoR Group 3402: Inorganic chemistry.",
+      "version": "0.1.0",
+      "skills": [
+        "tooluniverse-inorganic-physical-chemistry"
+      ]
+    },
+    {
+      "domain_id": "macromolecular-and-materials-chemistry",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3403",
+      "title": "Macromolecular and materials chemistry",
+      "description": "ANZSRC 2020 FoR Group 3403: Macromolecular and materials chemistry.",
+      "version": "0.2.0",
+      "skills": [
+        "scientific-agent-skills-pymatgen"
+      ]
+    },
+    {
+      "domain_id": "medicinal-and-biomolecular-chemistry",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3404",
+      "title": "Medicinal and biomolecular chemistry",
+      "description": "ANZSRC 2020 FoR Group 3404: Medicinal and biomolecular chemistry.",
+      "version": "0.1.0",
+      "skills": [
+        "tooluniverse-admet-prediction",
+        "tooluniverse-binder-discovery",
+        "tooluniverse-chemical-compound-retrieval",
+        "tooluniverse-chemical-sourcing",
+        "tooluniverse-drug-repurposing",
+        "tooluniverse-drug-target-validation",
+        "tooluniverse-peptide-target-deorphanization",
+        "tooluniverse-protein-therapeutic-design",
+        "tooluniverse-small-molecule-discovery"
+      ]
+    },
+    {
+      "domain_id": "organic-chemistry",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3405",
+      "title": "Organic chemistry",
+      "description": "ANZSRC 2020 FoR Group 3405: Organic chemistry.",
+      "version": "0.1.0",
+      "skills": [
+        "tooluniverse-natural-product-dereplication",
+        "tooluniverse-organic-chemistry"
+      ]
+    },
+    {
+      "domain_id": "physical-chemistry",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3406",
+      "title": "Physical chemistry",
+      "description": "ANZSRC 2020 FoR Group 3406: Physical chemistry.",
+      "version": "0.1.0",
+      "skills": [
+        "tooluniverse-electron-microscopy",
+        "tooluniverse-inorganic-physical-chemistry"
+      ]
+    },
+    {
+      "domain_id": "theoretical-and-computational-chemistry",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3407",
+      "title": "Theoretical and computational chemistry",
+      "description": "ANZSRC 2020 FoR Group 3407: Theoretical and computational chemistry.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "other-chemical-sciences",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3499",
+      "title": "Other chemical sciences",
+      "description": "ANZSRC 2020 FoR Group 3499: Other chemical sciences.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "accounting-auditing-and-accountability",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3501",
+      "title": "Accounting, auditing and accountability",
+      "description": "ANZSRC 2020 FoR Group 3501: Accounting, auditing and accountability.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "banking-finance-and-investment",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3502",
+      "title": "Banking, finance and investment",
+      "description": "ANZSRC 2020 FoR Group 3502: Banking, finance and investment.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "business-systems-in-context",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3503",
+      "title": "Business systems in context",
+      "description": "ANZSRC 2020 FoR Group 3503: Business systems in context.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "commercial-services",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3504",
+      "title": "Commercial services",
+      "description": "ANZSRC 2020 FoR Group 3504: Commercial services.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "human-resources-and-industrial-relations",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3505",
+      "title": "Human resources and industrial relations",
+      "description": "ANZSRC 2020 FoR Group 3505: Human resources and industrial relations.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "marketing",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3506",
+      "title": "Marketing",
+      "description": "ANZSRC 2020 FoR Group 3506: Marketing.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "strategy-management-and-organisational-behaviour",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3507",
+      "title": "Strategy, management and organisational behaviour",
+      "description": "ANZSRC 2020 FoR Group 3507: Strategy, management and organisational behaviour.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "tourism",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3508",
+      "title": "Tourism",
+      "description": "ANZSRC 2020 FoR Group 3508: Tourism.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "transportation-logistics-and-supply-chains",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3509",
+      "title": "Transportation, logistics and supply chains",
+      "description": "ANZSRC 2020 FoR Group 3509: Transportation, logistics and supply chains.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "other-commerce-management-tourism-and-services",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3599",
+      "title": "Other commerce, management, tourism and services",
+      "description": "ANZSRC 2020 FoR Group 3599: Other commerce, management, tourism and services.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "art-history-theory-and-criticism",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3601",
+      "title": "Art history, theory and criticism",
+      "description": "ANZSRC 2020 FoR Group 3601: Art history, theory and criticism.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "creative-and-professional-writing",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3602",
+      "title": "Creative and professional writing",
+      "description": "ANZSRC 2020 FoR Group 3602: Creative and professional writing.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "music",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3603",
+      "title": "Music",
+      "description": "ANZSRC 2020 FoR Group 3603: Music.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "performing-arts",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3604",
+      "title": "Performing arts",
+      "description": "ANZSRC 2020 FoR Group 3604: Performing arts.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "screen-and-digital-media",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3605",
+      "title": "Screen and digital media",
+      "description": "ANZSRC 2020 FoR Group 3605: Screen and digital media.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "visual-arts",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3606",
+      "title": "Visual arts",
+      "description": "ANZSRC 2020 FoR Group 3606: Visual arts.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "other-creative-arts-and-writing",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3699",
+      "title": "Other creative arts and writing",
+      "description": "ANZSRC 2020 FoR Group 3699: Other creative arts and writing.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "atmospheric-sciences",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3701",
+      "title": "Atmospheric sciences",
+      "description": "ANZSRC 2020 FoR Group 3701: Atmospheric sciences.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "climate-change-science",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3702",
+      "title": "Climate change science",
+      "description": "ANZSRC 2020 FoR Group 3702: Climate change science.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "geochemistry",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3703",
+      "title": "Geochemistry",
+      "description": "ANZSRC 2020 FoR Group 3703: Geochemistry.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "geoinformatics",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3704",
+      "title": "Geoinformatics",
+      "description": "ANZSRC 2020 FoR Group 3704: Geoinformatics.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "geology",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3705",
+      "title": "Geology",
+      "description": "ANZSRC 2020 FoR Group 3705: Geology.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "geophysics",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3706",
+      "title": "Geophysics",
+      "description": "ANZSRC 2020 FoR Group 3706: Geophysics.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "hydrology",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3707",
+      "title": "Hydrology",
+      "description": "ANZSRC 2020 FoR Group 3707: Hydrology.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "oceanography",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3708",
+      "title": "Oceanography",
+      "description": "ANZSRC 2020 FoR Group 3708: Oceanography.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "physical-geography-and-environmental-geoscience",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3709",
+      "title": "Physical geography and environmental geoscience",
+      "description": "ANZSRC 2020 FoR Group 3709: Physical geography and environmental geoscience.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "other-earth-sciences",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3799",
+      "title": "Other earth sciences",
+      "description": "ANZSRC 2020 FoR Group 3799: Other earth sciences.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "applied-economics",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3801",
+      "title": "Applied economics",
+      "description": "ANZSRC 2020 FoR Group 3801: Applied economics.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "econometrics",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3802",
+      "title": "Econometrics",
+      "description": "ANZSRC 2020 FoR Group 3802: Econometrics.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "economic-theory",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3803",
+      "title": "Economic theory",
+      "description": "ANZSRC 2020 FoR Group 3803: Economic theory.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "other-economics",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3899",
+      "title": "Other economics",
+      "description": "ANZSRC 2020 FoR Group 3899: Other economics.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "curriculum-and-pedagogy",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3901",
+      "title": "Curriculum and pedagogy",
+      "description": "ANZSRC 2020 FoR Group 3901: Curriculum and pedagogy.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "education-policy-sociology-and-philosophy",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3902",
+      "title": "Education policy, sociology and philosophy",
+      "description": "ANZSRC 2020 FoR Group 3902: Education policy, sociology and philosophy.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "education-systems",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3903",
+      "title": "Education systems",
+      "description": "ANZSRC 2020 FoR Group 3903: Education systems.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "specialist-studies-in-education",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3904",
+      "title": "Specialist studies in education",
+      "description": "ANZSRC 2020 FoR Group 3904: Specialist studies in education.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "other-education",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3999",
+      "title": "Other Education",
+      "description": "ANZSRC 2020 FoR Group 3999: Other Education.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "aerospace-engineering",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4001",
+      "title": "Aerospace engineering",
+      "description": "ANZSRC 2020 FoR Group 4001: Aerospace engineering.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "automotive-engineering",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4002",
+      "title": "Automotive engineering",
+      "description": "ANZSRC 2020 FoR Group 4002: Automotive engineering.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "biomedical-engineering",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4003",
+      "title": "Biomedical engineering",
+      "description": "ANZSRC 2020 FoR Group 4003: Biomedical engineering.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "chemical-engineering",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4004",
+      "title": "Chemical engineering",
+      "description": "ANZSRC 2020 FoR Group 4004: Chemical engineering.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "civil-engineering",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4005",
+      "title": "Civil engineering",
+      "description": "ANZSRC 2020 FoR Group 4005: Civil engineering.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "communications-engineering",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4006",
+      "title": "Communications engineering",
+      "description": "ANZSRC 2020 FoR Group 4006: Communications engineering.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "control-engineering-mechatronics-and-robotics",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4007",
+      "title": "Control engineering, mechatronics and robotics",
+      "description": "ANZSRC 2020 FoR Group 4007: Control engineering, mechatronics and robotics.",
+      "version": "0.2.0",
+      "skills": [
+        "scientific-agent-skills-ginkgo-cloud-lab",
+        "scientific-agent-skills-opentrons-integration",
+        "scientific-agent-skills-pylabrobot"
+      ]
+    },
+    {
+      "domain_id": "electrical-engineering",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4008",
+      "title": "Electrical engineering",
+      "description": "ANZSRC 2020 FoR Group 4008: Electrical engineering.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "electronics-sensors-and-digital-hardware",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4009",
+      "title": "Electronics, sensors and digital hardware",
+      "description": "ANZSRC 2020 FoR Group 4009: Electronics, sensors and digital hardware.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "engineering-practice-and-education",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4010",
+      "title": "Engineering practice and education",
+      "description": "ANZSRC 2020 FoR Group 4010: Engineering practice and education.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "environmental-engineering",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4011",
+      "title": "Environmental engineering",
+      "description": "ANZSRC 2020 FoR Group 4011: Environmental engineering.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "fluid-mechanics-and-thermal-engineering",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4012",
+      "title": "Fluid mechanics and thermal engineering",
+      "description": "ANZSRC 2020 FoR Group 4012: Fluid mechanics and thermal engineering.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "geomatic-engineering",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4013",
+      "title": "Geomatic engineering",
+      "description": "ANZSRC 2020 FoR Group 4013: Geomatic engineering.",
+      "version": "0.2.0",
+      "skills": [
+        "scientific-agent-skills-geopandas"
+      ]
+    },
+    {
+      "domain_id": "manufacturing-engineering",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4014",
+      "title": "Manufacturing engineering",
+      "description": "ANZSRC 2020 FoR Group 4014: Manufacturing engineering.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "maritime-engineering",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4015",
+      "title": "Maritime engineering",
+      "description": "ANZSRC 2020 FoR Group 4015: Maritime engineering.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "materials-engineering",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4016",
+      "title": "Materials engineering",
+      "description": "ANZSRC 2020 FoR Group 4016: Materials engineering.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "mechanical-engineering",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4017",
+      "title": "Mechanical engineering",
+      "description": "ANZSRC 2020 FoR Group 4017: Mechanical engineering.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "nanotechnology",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4018",
+      "title": "Nanotechnology",
+      "description": "ANZSRC 2020 FoR Group 4018: Nanotechnology.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "resources-engineering-and-extractive-metallurgy",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4019",
+      "title": "Resources engineering and extractive metallurgy",
+      "description": "ANZSRC 2020 FoR Group 4019: Resources engineering and extractive metallurgy.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "other-engineering",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4099",
+      "title": "Other engineering",
+      "description": "ANZSRC 2020 FoR Group 4099: Other engineering.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "climate-change-impacts-and-adaptation",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4101",
+      "title": "Climate change impacts and adaptation",
+      "description": "ANZSRC 2020 FoR Group 4101: Climate change impacts and adaptation.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "ecological-applications",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4102",
+      "title": "Ecological applications",
+      "description": "ANZSRC 2020 FoR Group 4102: Ecological applications.",
+      "version": "0.1.0",
+      "skills": [
+        "tooluniverse-adverse-outcome-pathway",
+        "tooluniverse-chemical-safety",
+        "tooluniverse-ecology-biodiversity",
+        "tooluniverse-toxicology"
+      ]
+    },
+    {
+      "domain_id": "environmental-biotechnology",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4103",
+      "title": "Environmental biotechnology",
+      "description": "ANZSRC 2020 FoR Group 4103: Environmental biotechnology.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "environmental-management",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4104",
+      "title": "Environmental management",
+      "description": "ANZSRC 2020 FoR Group 4104: Environmental management.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "pollution-and-contamination",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4105",
+      "title": "Pollution and contamination",
+      "description": "ANZSRC 2020 FoR Group 4105: Pollution and contamination.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "soil-sciences",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4106",
+      "title": "Soil sciences",
+      "description": "ANZSRC 2020 FoR Group 4106: Soil sciences.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "other-environmental-sciences",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4199",
+      "title": "Other environmental sciences",
+      "description": "ANZSRC 2020 FoR Group 4199: Other environmental sciences.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "allied-health-and-rehabilitation-science",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4201",
+      "title": "Allied health and rehabilitation science",
+      "description": "ANZSRC 2020 FoR Group 4201: Allied health and rehabilitation science.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "epidemiology",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4202",
+      "title": "Epidemiology",
+      "description": "ANZSRC 2020 FoR Group 4202: Epidemiology.",
+      "version": "0.1.0",
+      "skills": [
+        "tooluniverse-clinical-trial-design",
+        "tooluniverse-epidemiological-analysis",
+        "tooluniverse-mendelian-randomization"
+      ]
+    },
+    {
+      "domain_id": "health-services-and-systems",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4203",
+      "title": "Health services and systems",
+      "description": "ANZSRC 2020 FoR Group 4203: Health services and systems.",
+      "version": "0.1.0",
+      "skills": [
+        "tooluniverse-adverse-event-detection",
+        "tooluniverse-clinical-data-integration",
+        "tooluniverse-clinical-guidelines",
+        "tooluniverse-pharmacovigilance",
+        "tooluniverse-product-safety-surveillance"
+      ]
+    },
+    {
+      "domain_id": "midwifery",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4204",
+      "title": "Midwifery",
+      "description": "ANZSRC 2020 FoR Group 4204: Midwifery.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "nursing",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4205",
+      "title": "Nursing",
+      "description": "ANZSRC 2020 FoR Group 4205: Nursing.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "public-health",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4206",
+      "title": "Public health",
+      "description": "ANZSRC 2020 FoR Group 4206: Public health.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "sports-science-and-exercise",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4207",
+      "title": "Sports science and exercise",
+      "description": "ANZSRC 2020 FoR Group 4207: Sports science and exercise.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "traditional-complementary-and-integrative-medicine",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4208",
+      "title": "Traditional, complementary and integrative medicine",
+      "description": "ANZSRC 2020 FoR Group 4208: Traditional, complementary and integrative medicine.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "other-health-sciences",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4299",
+      "title": "Other health sciences",
+      "description": "ANZSRC 2020 FoR Group 4299: Other health sciences.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "archaeology",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4301",
+      "title": "Archaeology",
+      "description": "ANZSRC 2020 FoR Group 4301: Archaeology.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "heritage-archive-and-museum-studies",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4302",
+      "title": "Heritage, archive and museum studies",
+      "description": "ANZSRC 2020 FoR Group 4302: Heritage, archive and museum studies.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "historical-studies",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4303",
+      "title": "Historical studies",
+      "description": "ANZSRC 2020 FoR Group 4303: Historical studies.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "other-history-heritage-and-archaeology",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4399",
+      "title": "Other history, heritage and archaeology",
+      "description": "ANZSRC 2020 FoR Group 4399: Other history, heritage and archaeology.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "anthropology",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4401",
+      "title": "Anthropology",
+      "description": "ANZSRC 2020 FoR Group 4401: Anthropology.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "criminology",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4402",
+      "title": "Criminology",
+      "description": "ANZSRC 2020 FoR Group 4402: Criminology.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "demography",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4403",
+      "title": "Demography",
+      "description": "ANZSRC 2020 FoR Group 4403: Demography.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "development-studies",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4404",
+      "title": "Development studies",
+      "description": "ANZSRC 2020 FoR Group 4404: Development studies.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "gender-studies",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4405",
+      "title": "Gender studies",
+      "description": "ANZSRC 2020 FoR Group 4405: Gender studies.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "human-geography",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4406",
+      "title": "Human geography",
+      "description": "ANZSRC 2020 FoR Group 4406: Human geography.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "policy-and-administration",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4407",
+      "title": "Policy and administration",
+      "description": "ANZSRC 2020 FoR Group 4407: Policy and administration.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "political-science",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4408",
+      "title": "Political science",
+      "description": "ANZSRC 2020 FoR Group 4408: Political science.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "social-work",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4409",
+      "title": "Social work",
+      "description": "ANZSRC 2020 FoR Group 4409: Social work.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "sociology",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4410",
+      "title": "Sociology",
+      "description": "ANZSRC 2020 FoR Group 4410: Sociology.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "other-human-society",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4499",
+      "title": "Other human society",
+      "description": "ANZSRC 2020 FoR Group 4499: Other human society.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "aboriginal-and-torres-strait-islander-culture-language-and-history",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4501",
+      "title": "Aboriginal and Torres Strait Islander culture, language and history",
+      "description": "ANZSRC 2020 FoR Group 4501: Aboriginal and Torres Strait Islander culture, language and history.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "aboriginal-and-torres-strait-islander-education",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4502",
+      "title": "Aboriginal and Torres Strait Islander education",
+      "description": "ANZSRC 2020 FoR Group 4502: Aboriginal and Torres Strait Islander education.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "aboriginal-and-torres-strait-islander-environmental-knowledges-and-management",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4503",
+      "title": "Aboriginal and Torres Strait Islander environmental knowledges and management",
+      "description": "ANZSRC 2020 FoR Group 4503: Aboriginal and Torres Strait Islander environmental knowledges and management.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "aboriginal-and-torres-strait-islander-health-and-wellbeing",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4504",
+      "title": "Aboriginal and Torres Strait Islander health and wellbeing",
+      "description": "ANZSRC 2020 FoR Group 4504: Aboriginal and Torres Strait Islander health and wellbeing.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "aboriginal-and-torres-strait-islander-peoples-society-and-community",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4505",
+      "title": "Aboriginal and Torres Strait Islander peoples, society and community",
+      "description": "ANZSRC 2020 FoR Group 4505: Aboriginal and Torres Strait Islander peoples, society and community.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "aboriginal-and-torres-strait-islander-sciences",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4506",
+      "title": "Aboriginal and Torres Strait Islander sciences",
+      "description": "ANZSRC 2020 FoR Group 4506: Aboriginal and Torres Strait Islander sciences.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "te-ahurea-reo-me-te-hitori-o-te-maori-maori-culture-language-and-history",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4507",
+      "title": "Te ahurea, reo me te hītori o te Māori (Māori culture, language and history)",
+      "description": "ANZSRC 2020 FoR Group 4507: Te ahurea, reo me te hītori o te Māori (Māori culture, language and history).",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "matauranga-maori-maori-education",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4508",
+      "title": "Mātauranga Māori (Māori education)",
+      "description": "ANZSRC 2020 FoR Group 4508: Mātauranga Māori (Māori education).",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "nga-matauranga-taiao-o-te-maori-maori-environmental-knowledges",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4509",
+      "title": "Ngā mātauranga taiao o te Māori (Māori environmental knowledges)",
+      "description": "ANZSRC 2020 FoR Group 4509: Ngā mātauranga taiao o te Māori (Māori environmental knowledges).",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "te-hauora-me-te-oranga-o-te-maori-maori-health-and-wellbeing",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4510",
+      "title": "Te hauora me te oranga o te Māori (Māori health and wellbeing)",
+      "description": "ANZSRC 2020 FoR Group 4510: Te hauora me te oranga o te Māori (Māori health and wellbeing).",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "nga-tangata-te-porihanga-me-nga-hapori-o-te-maori-maori-peoples-society-and-community",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4511",
+      "title": "Ngā tāngata, te porihanga me ngā hapori o te Māori (Māori peoples, society and community)",
+      "description": "ANZSRC 2020 FoR Group 4511: Ngā tāngata, te porihanga me ngā hapori o te Māori (Māori peoples, society and community).",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "nga-putaiao-maori-maori-sciences",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4512",
+      "title": "Ngā pūtaiao Māori (Māori sciences)",
+      "description": "ANZSRC 2020 FoR Group 4512: Ngā pūtaiao Māori (Māori sciences).",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "pacific-peoples-culture-language-and-history",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4513",
+      "title": "Pacific Peoples culture, language and history",
+      "description": "ANZSRC 2020 FoR Group 4513: Pacific Peoples culture, language and history.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "pacific-peoples-education",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4514",
+      "title": "Pacific Peoples education",
+      "description": "ANZSRC 2020 FoR Group 4514: Pacific Peoples education.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "pacific-peoples-environmental-knowledges",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4515",
+      "title": "Pacific Peoples environmental knowledges",
+      "description": "ANZSRC 2020 FoR Group 4515: Pacific Peoples environmental knowledges.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "pacific-peoples-health-and-wellbeing",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4516",
+      "title": "Pacific Peoples health and wellbeing",
+      "description": "ANZSRC 2020 FoR Group 4516: Pacific Peoples health and wellbeing.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "pacific-peoples-sciences",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4517",
+      "title": "Pacific Peoples sciences",
+      "description": "ANZSRC 2020 FoR Group 4517: Pacific Peoples sciences.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "pacific-peoples-society-and-community",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4518",
+      "title": "Pacific Peoples society and community",
+      "description": "ANZSRC 2020 FoR Group 4518: Pacific Peoples society and community.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "other-indigenous-data-methodologies-and-global-indigenous-studies",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4519",
+      "title": "Other Indigenous data, methodologies and global Indigenous studies",
+      "description": "ANZSRC 2020 FoR Group 4519: Other Indigenous data, methodologies and global Indigenous studies.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "other-indigenous-studies",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4599",
+      "title": "Other Indigenous studies",
+      "description": "ANZSRC 2020 FoR Group 4599: Other Indigenous studies.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "applied-computing",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4601",
+      "title": "Applied computing",
+      "description": "ANZSRC 2020 FoR Group 4601: Applied computing.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "artificial-intelligence",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4602",
+      "title": "Artificial intelligence",
+      "description": "ANZSRC 2020 FoR Group 4602: Artificial intelligence.",
+      "version": "0.2.0",
+      "skills": [
+        "scientific-agent-skills-liteparse"
+      ]
+    },
+    {
+      "domain_id": "computer-vision-and-multimedia-computation",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4603",
+      "title": "Computer vision and multimedia computation",
+      "description": "ANZSRC 2020 FoR Group 4603: Computer vision and multimedia computation.",
+      "version": "0.1.0",
+      "skills": [
+        "tooluniverse-image-analysis"
+      ]
+    },
+    {
+      "domain_id": "cybersecurity-and-privacy",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4604",
+      "title": "Cybersecurity and privacy",
+      "description": "ANZSRC 2020 FoR Group 4604: Cybersecurity and privacy.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "data-management-and-data-science",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4605",
+      "title": "Data management and data science",
+      "description": "ANZSRC 2020 FoR Group 4605: Data management and data science.",
+      "version": "0.2.0",
+      "skills": [
+        "scientific-agent-skills-benchling-integration",
+        "scientific-agent-skills-networkx",
+        "tooluniverse-data-wrangling",
+        "tooluniverse-dataset-discovery"
+      ]
+    },
+    {
+      "domain_id": "distributed-computing-and-systems-software",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4606",
+      "title": "Distributed computing and systems software",
+      "description": "ANZSRC 2020 FoR Group 4606: Distributed computing and systems software.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "graphics-augmented-reality-and-games",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4607",
+      "title": "Graphics, augmented reality and games",
+      "description": "ANZSRC 2020 FoR Group 4607: Graphics, augmented reality and games.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "human-centred-computing",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4608",
+      "title": "Human-centred computing",
+      "description": "ANZSRC 2020 FoR Group 4608: Human-centred computing.",
+      "version": "0.2.0",
+      "skills": [
+        "scientific-agent-skills-matplotlib",
+        "scientific-agent-skills-scientific-visualization"
+      ]
+    },
+    {
+      "domain_id": "information-systems",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4609",
+      "title": "Information systems",
+      "description": "ANZSRC 2020 FoR Group 4609: Information systems.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "library-and-information-studies",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4610",
+      "title": "Library and information studies",
+      "description": "ANZSRC 2020 FoR Group 4610: Library and information studies.",
+      "version": "0.2.0",
+      "skills": [
+        "scientific-agent-skills-labarchive-integration",
+        "scientific-agent-skills-open-notebook",
+        "scientific-agent-skills-protocolsio-integration",
+        "scientific-agent-skills-pyzotero",
+        "tooluniverse-literature-deep-research"
+      ]
+    },
+    {
+      "domain_id": "machine-learning",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4611",
+      "title": "Machine learning",
+      "description": "ANZSRC 2020 FoR Group 4611: Machine learning.",
+      "version": "0.2.0",
+      "skills": [
+        "scientific-agent-skills-aeon",
+        "scientific-agent-skills-pufferlib",
+        "scientific-agent-skills-pytorch-lightning",
+        "scientific-agent-skills-scikit-learn",
+        "scientific-agent-skills-shap",
+        "scientific-agent-skills-stable-baselines3",
+        "scientific-agent-skills-timesfm-forecasting",
+        "scientific-agent-skills-torch-geometric"
+      ]
+    },
+    {
+      "domain_id": "software-engineering",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4612",
+      "title": "Software engineering",
+      "description": "ANZSRC 2020 FoR Group 4612: Software engineering.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "theory-of-computation",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4613",
+      "title": "Theory of computation",
+      "description": "ANZSRC 2020 FoR Group 4613: Theory of computation.",
+      "version": "0.2.0",
+      "skills": [
+        "scientific-agent-skills-matlab",
+        "scientific-agent-skills-sympy"
+      ]
+    },
+    {
+      "domain_id": "other-information-and-computing-sciences",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4699",
+      "title": "Other information and computing sciences",
+      "description": "ANZSRC 2020 FoR Group 4699: Other information and computing sciences.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "communication-and-media-studies",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4701",
+      "title": "Communication and media studies",
+      "description": "ANZSRC 2020 FoR Group 4701: Communication and media studies.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "cultural-studies",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4702",
+      "title": "Cultural studies",
+      "description": "ANZSRC 2020 FoR Group 4702: Cultural studies.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "language-studies",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4703",
+      "title": "Language studies",
+      "description": "ANZSRC 2020 FoR Group 4703: Language studies.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "linguistics",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4704",
+      "title": "Linguistics",
+      "description": "ANZSRC 2020 FoR Group 4704: Linguistics.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "literary-studies",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4705",
+      "title": "Literary studies",
+      "description": "ANZSRC 2020 FoR Group 4705: Literary studies.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "other-language-communication-and-culture",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4799",
+      "title": "Other language, communication and culture",
+      "description": "ANZSRC 2020 FoR Group 4799: Other language, communication and culture.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "commercial-law",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4801",
+      "title": "Commercial law",
+      "description": "ANZSRC 2020 FoR Group 4801: Commercial law.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "environmental-and-resources-law",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4802",
+      "title": "Environmental and resources law",
+      "description": "ANZSRC 2020 FoR Group 4802: Environmental and resources law.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "international-and-comparative-law",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4803",
+      "title": "International and comparative law",
+      "description": "ANZSRC 2020 FoR Group 4803: International and comparative law.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "law-in-context",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4804",
+      "title": "Law in context",
+      "description": "ANZSRC 2020 FoR Group 4804: Law in context.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "legal-systems",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4805",
+      "title": "Legal systems",
+      "description": "ANZSRC 2020 FoR Group 4805: Legal systems.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "private-law-and-civil-obligations",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4806",
+      "title": "Private law and civil obligations",
+      "description": "ANZSRC 2020 FoR Group 4806: Private law and civil obligations.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "public-law",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4807",
+      "title": "Public law",
+      "description": "ANZSRC 2020 FoR Group 4807: Public law.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "other-law-and-legal-studies",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4899",
+      "title": "Other law and legal studies",
+      "description": "ANZSRC 2020 FoR Group 4899: Other law and legal studies.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "applied-mathematics",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4901",
+      "title": "Applied mathematics",
+      "description": "ANZSRC 2020 FoR Group 4901: Applied mathematics.",
+      "version": "0.2.0",
+      "skills": [
+        "scientific-agent-skills-simpy"
+      ]
+    },
+    {
+      "domain_id": "mathematical-physics",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4902",
+      "title": "Mathematical physics",
+      "description": "ANZSRC 2020 FoR Group 4902: Mathematical physics.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "numerical-and-computational-mathematics",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4903",
+      "title": "Numerical and computational mathematics",
+      "description": "ANZSRC 2020 FoR Group 4903: Numerical and computational mathematics.",
+      "version": "0.2.0",
+      "skills": [
+        "scientific-agent-skills-pymoo"
+      ]
+    },
+    {
+      "domain_id": "pure-mathematics",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4904",
+      "title": "Pure mathematics",
+      "description": "ANZSRC 2020 FoR Group 4904: Pure mathematics.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "statistics",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4905",
+      "title": "Statistics",
+      "description": "ANZSRC 2020 FoR Group 4905: Statistics.",
+      "version": "0.1.0",
+      "skills": [
+        "tooluniverse-clinical-trial-design",
+        "tooluniverse-diagnostic-test-evaluation",
+        "tooluniverse-drug-synergy",
+        "tooluniverse-image-analysis",
+        "tooluniverse-meta-analysis",
+        "tooluniverse-metabolomics-analysis",
+        "tooluniverse-rnaseq-deseq2",
+        "tooluniverse-statistical-modeling",
+        "tooluniverse-variant-predictor-dms-validation"
+      ]
+    },
+    {
+      "domain_id": "other-mathematical-sciences",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "4999",
+      "title": "Other mathematical sciences",
+      "description": "ANZSRC 2020 FoR Group 4999: Other mathematical sciences.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "applied-ethics",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "5001",
+      "title": "Applied ethics",
+      "description": "ANZSRC 2020 FoR Group 5001: Applied ethics.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "history-and-philosophy-of-specific-fields",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "5002",
+      "title": "History and philosophy of specific fields",
+      "description": "ANZSRC 2020 FoR Group 5002: History and philosophy of specific fields.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "philosophy",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "5003",
+      "title": "Philosophy",
+      "description": "ANZSRC 2020 FoR Group 5003: Philosophy.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "religious-studies",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "5004",
+      "title": "Religious studies",
+      "description": "ANZSRC 2020 FoR Group 5004: Religious studies.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "theology",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "5005",
+      "title": "Theology",
+      "description": "ANZSRC 2020 FoR Group 5005: Theology.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "other-philosophy-and-religious-studies",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "5099",
+      "title": "Other philosophy and religious studies",
+      "description": "ANZSRC 2020 FoR Group 5099: Other philosophy and religious studies.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "astronomical-sciences",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "5101",
+      "title": "Astronomical sciences",
+      "description": "ANZSRC 2020 FoR Group 5101: Astronomical sciences.",
+      "version": "0.2.0",
+      "skills": [
+        "scientific-agent-skills-astropy"
+      ]
+    },
+    {
+      "domain_id": "atomic-molecular-and-optical-physics",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "5102",
+      "title": "Atomic, molecular and optical physics",
+      "description": "ANZSRC 2020 FoR Group 5102: Atomic, molecular and optical physics.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "classical-physics",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "5103",
+      "title": "Classical physics",
+      "description": "ANZSRC 2020 FoR Group 5103: Classical physics.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "condensed-matter-physics",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "5104",
+      "title": "Condensed matter physics",
+      "description": "ANZSRC 2020 FoR Group 5104: Condensed matter physics.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "medical-and-biological-physics",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "5105",
+      "title": "Medical and biological physics",
+      "description": "ANZSRC 2020 FoR Group 5105: Medical and biological physics.",
+      "version": "0.1.0",
+      "skills": [
+        "tooluniverse-computational-biophysics"
+      ]
+    },
+    {
+      "domain_id": "nuclear-and-plasma-physics",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "5106",
+      "title": "Nuclear and plasma physics",
+      "description": "ANZSRC 2020 FoR Group 5106: Nuclear and plasma physics.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "particle-and-high-energy-physics",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "5107",
+      "title": "Particle and high energy physics",
+      "description": "ANZSRC 2020 FoR Group 5107: Particle and high energy physics.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "quantum-physics",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "5108",
+      "title": "Quantum physics",
+      "description": "ANZSRC 2020 FoR Group 5108: Quantum physics.",
+      "version": "0.2.0",
+      "skills": [
+        "scientific-agent-skills-cirq",
+        "scientific-agent-skills-pennylane",
+        "scientific-agent-skills-qiskit"
+      ]
+    },
+    {
+      "domain_id": "space-sciences",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "5109",
+      "title": "Space sciences",
+      "description": "ANZSRC 2020 FoR Group 5109: Space sciences.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "synchrotrons-and-accelerators",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "5110",
+      "title": "Synchrotrons and accelerators",
+      "description": "ANZSRC 2020 FoR Group 5110: Synchrotrons and accelerators.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "other-physical-sciences",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "5199",
+      "title": "Other physical sciences",
+      "description": "ANZSRC 2020 FoR Group 5199: Other physical sciences.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "applied-and-developmental-psychology",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "5201",
+      "title": "Applied and developmental psychology",
+      "description": "ANZSRC 2020 FoR Group 5201: Applied and developmental psychology.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "biological-psychology",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "5202",
+      "title": "Biological psychology",
+      "description": "ANZSRC 2020 FoR Group 5202: Biological psychology.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "clinical-and-health-psychology",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "5203",
+      "title": "Clinical and health psychology",
+      "description": "ANZSRC 2020 FoR Group 5203: Clinical and health psychology.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "cognitive-and-computational-psychology",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "5204",
+      "title": "Cognitive and computational psychology",
+      "description": "ANZSRC 2020 FoR Group 5204: Cognitive and computational psychology.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "social-and-personality-psychology",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "5205",
+      "title": "Social and personality psychology",
+      "description": "ANZSRC 2020 FoR Group 5205: Social and personality psychology.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "other-psychology",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "5299",
+      "title": "Other psychology",
+      "description": "ANZSRC 2020 FoR Group 5299: Other psychology.",
+      "version": "0.1.0",
+      "skills": []
+    },
+    {
+      "domain_id": "experimental-design-and-data-analysis",
+      "domain_type": "tool",
+      "title": "Experimental design and data analysis",
+      "description": "Cross-disciplinary experimental design, data preparation, measurement evaluation, statistical analysis, evidence synthesis, and quantitative interpretation.",
+      "version": "0.1.0",
+      "skills": [
+        "tooluniverse-clinical-trial-design",
+        "tooluniverse-data-integration-analysis",
+        "tooluniverse-data-wrangling",
+        "tooluniverse-diagnostic-test-evaluation",
+        "tooluniverse-epidemiological-analysis",
+        "tooluniverse-image-analysis",
+        "tooluniverse-meta-analysis",
+        "tooluniverse-statistical-modeling"
+      ]
+    },
+    {
+      "domain_id": "computational-modeling-and-simulation",
+      "domain_type": "tool",
+      "title": "Computational modeling and simulation",
+      "description": "Cross-disciplinary construction, execution, and interpretation of computational models and simulations.",
+      "version": "0.2.0",
+      "skills": [
+        "scientific-agent-skills-cirq",
+        "scientific-agent-skills-matlab",
+        "scientific-agent-skills-networkx",
+        "scientific-agent-skills-pennylane",
+        "scientific-agent-skills-pylabrobot",
+        "scientific-agent-skills-pymatgen",
+        "scientific-agent-skills-pymoo",
+        "scientific-agent-skills-qiskit",
+        "scientific-agent-skills-simpy",
+        "scientific-agent-skills-sympy",
+        "tooluniverse-computational-biophysics"
+      ]
+    },
+    {
+      "domain_id": "scientific-visualization-and-communication",
+      "domain_type": "tool",
+      "title": "Scientific visualization and communication",
+      "description": "Cross-disciplinary creation of scientific figures, diagrams, presentations, and other visual research communication.",
+      "version": "0.2.0",
+      "skills": [
+        "scientific-agent-skills-generate-image",
+        "scientific-agent-skills-markdown-mermaid-writing",
+        "scientific-agent-skills-matplotlib",
+        "scientific-agent-skills-scientific-visualization"
+      ]
+    },
+    {
+      "domain_id": "laboratory-automation-and-informatics",
+      "domain_type": "tool",
+      "title": "Laboratory automation and informatics",
+      "description": "Cross-disciplinary laboratory automation, instruments, protocols, sample operations, and laboratory information systems.",
+      "version": "0.2.0",
+      "skills": [
+        "scientific-agent-skills-benchling-integration",
+        "scientific-agent-skills-ginkgo-cloud-lab",
+        "scientific-agent-skills-labarchive-integration",
+        "scientific-agent-skills-open-notebook",
+        "scientific-agent-skills-opentrons-integration",
+        "scientific-agent-skills-protocolsio-integration",
+        "scientific-agent-skills-pylabrobot"
+      ]
+    },
+    {
+      "domain_id": "research-computing-infrastructure",
+      "domain_type": "tool",
+      "title": "Research computing infrastructure",
+      "description": "Cross-disciplinary research computing environments, scalable execution, workflow infrastructure, and data storage operations.",
+      "version": "0.2.0",
+      "skills": [
+        "scientific-agent-skills-liteparse",
+        "scientific-agent-skills-open-notebook",
+        "scientific-agent-skills-optimize-for-gpu",
+        "scientific-agent-skills-pytorch-lightning"
+      ]
+    }
+  ]
+}

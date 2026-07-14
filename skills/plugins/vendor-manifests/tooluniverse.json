@@ -6810,10 +6810,5 @@
       "reason": "normalized Open Agent Skill entry",
       "sha256": "5b766b0cdca821914297cdd44e5781169ada11cf07cc44f1d3951e8f807f17ec"
     }
-  ],
-  "domain_counts": {
-    "genomics-and-systems-biology": 72,
-    "molecular-and-organismal-biosciences": 40,
-    "translational-medicine-and-therapeutics": 65
-  }
+  ]
 }

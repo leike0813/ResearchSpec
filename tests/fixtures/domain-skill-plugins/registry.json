@@ -1,5 +1,10 @@
 {
   "schema_version": "1",
+  "domain_taxonomy": {
+    "discipline_system": "ANZSRC FoR",
+    "discipline_version": "2020",
+    "source_release": "2025-10-24"
+  },
   "vendors": [
     {
       "vendor_id": "domain-source",
@@ -12,6 +17,7 @@
       "skills": [
         {
           "skill_id": "rock-mechanics",
+          "license": "MIT",
           "dependencies": ["research-tables"],
           "upstreams": [{ "source_paths": ["skills/rock-mechanics"], "adaptation": "curated" }]
         }
@@ -28,6 +34,7 @@
       "skills": [
         {
           "skill_id": "research-tables",
+          "license": "MIT",
           "dependencies": [],
           "upstreams": [{ "source_paths": ["skills/research-tables", "references/table-policy.md"], "adaptation": "converted" }]
         }
@@ -37,6 +44,8 @@
   "domains": [
     {
       "domain_id": "geoscience",
+      "domain_type": "discipline",
+      "anzsrc_group_code": "3706",
       "title": "Geoscience",
       "description": "Reviewed geoscience methods for rock and excavation research.",
       "version": "1.0.0",
@@ -44,10 +53,19 @@
     },
     {
       "domain_id": "quantitative-methods",
+      "domain_type": "tool",
       "title": "Quantitative Methods",
       "description": "Reviewed quantitative analysis guidance for research tables.",
       "version": "2.1.0",
       "skills": ["research-tables"]
+    },
+    {
+      "domain_id": "empty-tool",
+      "domain_type": "tool",
+      "title": "Empty Tool",
+      "description": "A fixed internal domain awaiting reviewed Skills.",
+      "version": "1.0.0",
+      "skills": []
     }
   ]
 }

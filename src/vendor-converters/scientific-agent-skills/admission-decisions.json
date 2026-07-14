@@ -1,0 +1,5398 @@
+{
+  "schema_version": "1",
+  "vendor_id": "scientific-agent-skills",
+  "release": "v2.53.0",
+  "revision": "9c9bd2e92af12311ecd0c1a643e0931643f9ea04",
+  "decisions": [
+    {
+      "upstream_skill_id": "adaptyv",
+      "generated_skill_id": "scientific-agent-skills-adaptyv",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/adaptyv/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/adaptyv/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-protein-therapeutic-design"
+        ],
+        "evidence": [
+          "skills/adaptyv/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "aeon",
+      "generated_skill_id": "scientific-agent-skills-aeon",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/aeon/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/aeon/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/aeon/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "anndata",
+      "generated_skill_id": "scientific-agent-skills-anndata",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/anndata/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/anndata/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-single-cell"
+        ],
+        "evidence": [
+          "skills/anndata/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "arbor",
+      "generated_skill_id": "scientific-agent-skills-arbor",
+      "disposition": "excluded",
+      "reason_codes": [
+        "outside-plugin-authority"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "not-applicable",
+        "evidence": [
+          "SECURITY.md",
+          "skills/arbor/SKILL.md"
+        ],
+        "note": "The source is outside the production admission boundary."
+      },
+      "content_review": {
+        "outcome": "not-applicable",
+        "evidence": [
+          "skills/arbor/SKILL.md"
+        ],
+        "note": "Content review is not applicable to an audit hard exclusion."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "none"
+    },
+    {
+      "upstream_skill_id": "arboreto",
+      "generated_skill_id": "scientific-agent-skills-arboreto",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/arboreto/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/arboreto/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-gene-regulatory-networks"
+        ],
+        "evidence": [
+          "skills/arboreto/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "astropy",
+      "generated_skill_id": "scientific-agent-skills-astropy",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/astropy/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/astropy/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/astropy/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "autoskill",
+      "generated_skill_id": "scientific-agent-skills-autoskill",
+      "disposition": "excluded",
+      "reason_codes": [
+        "outside-plugin-authority",
+        "upstream-security-review-required"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "not-applicable",
+        "evidence": [
+          "SECURITY.md",
+          "skills/autoskill/SKILL.md"
+        ],
+        "note": "The source is outside the production admission boundary."
+      },
+      "content_review": {
+        "outcome": "not-applicable",
+        "evidence": [
+          "skills/autoskill/SKILL.md"
+        ],
+        "note": "Content review is not applicable to an audit hard exclusion."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "none"
+    },
+    {
+      "upstream_skill_id": "benchling-integration",
+      "generated_skill_id": "scientific-agent-skills-benchling-integration",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/benchling-integration/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/benchling-integration/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/benchling-integration/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "bgpt-paper-search",
+      "generated_skill_id": "scientific-agent-skills-bgpt-paper-search",
+      "disposition": "excluded",
+      "reason_codes": [
+        "static-security-review-failed",
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/bgpt-paper-search/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/bgpt-paper-search/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-literature-deep-research"
+        ],
+        "evidence": [
+          "skills/bgpt-paper-search/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "bids",
+      "generated_skill_id": "scientific-agent-skills-bids",
+      "disposition": "excluded",
+      "reason_codes": [
+        "static-security-review-failed",
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/bids/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/bids/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-neuroscience"
+        ],
+        "evidence": [
+          "skills/bids/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "biopython",
+      "generated_skill_id": "scientific-agent-skills-biopython",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/biopython/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/biopython/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-sequence-analysis"
+        ],
+        "evidence": [
+          "skills/biopython/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "bioservices",
+      "generated_skill_id": "scientific-agent-skills-bioservices",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/bioservices/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/bioservices/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-dataset-discovery"
+        ],
+        "evidence": [
+          "skills/bioservices/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "bulk-rnaseq",
+      "generated_skill_id": "scientific-agent-skills-bulk-rnaseq",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/bulk-rnaseq/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/bulk-rnaseq/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-rnaseq-deseq2"
+        ],
+        "evidence": [
+          "skills/bulk-rnaseq/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "cellxgene-census",
+      "generated_skill_id": "scientific-agent-skills-cellxgene-census",
+      "disposition": "excluded",
+      "reason_codes": [
+        "static-security-review-failed",
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/cellxgene-census/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/cellxgene-census/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-single-cell"
+        ],
+        "evidence": [
+          "skills/cellxgene-census/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "cirq",
+      "generated_skill_id": "scientific-agent-skills-cirq",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/cirq/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/cirq/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/cirq/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "citation-management",
+      "generated_skill_id": "scientific-agent-skills-citation-management",
+      "disposition": "excluded",
+      "reason_codes": [
+        "arsu-surface-overlap",
+        "static-security-review-failed"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/citation-management/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/citation-management/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [
+          "deep-research"
+        ],
+        "evidence": [
+          "skills/citation-management/SKILL.md"
+        ]
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "clinical-decision-support",
+      "generated_skill_id": "scientific-agent-skills-clinical-decision-support",
+      "disposition": "excluded",
+      "reason_codes": [
+        "static-security-review-failed",
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/clinical-decision-support/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/clinical-decision-support/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-clinical-guidelines"
+        ],
+        "evidence": [
+          "skills/clinical-decision-support/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "clinical-reports",
+      "generated_skill_id": "scientific-agent-skills-clinical-reports",
+      "disposition": "excluded",
+      "reason_codes": [
+        "static-security-review-failed",
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/clinical-reports/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/clinical-reports/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-clinical-data-integration"
+        ],
+        "evidence": [
+          "skills/clinical-reports/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "cobrapy",
+      "generated_skill_id": "scientific-agent-skills-cobrapy",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/cobrapy/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/cobrapy/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-systems-biology"
+        ],
+        "evidence": [
+          "skills/cobrapy/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "consciousness-council",
+      "generated_skill_id": "scientific-agent-skills-consciousness-council",
+      "disposition": "excluded",
+      "reason_codes": [
+        "no-domain-fit",
+        "static-security-review-failed"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/consciousness-council/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/consciousness-council/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "none"
+    },
+    {
+      "upstream_skill_id": "dask",
+      "generated_skill_id": "scientific-agent-skills-dask",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/dask/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/dask/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-data-wrangling"
+        ],
+        "evidence": [
+          "skills/dask/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "database-lookup",
+      "generated_skill_id": "scientific-agent-skills-database-lookup",
+      "disposition": "excluded",
+      "reason_codes": [
+        "static-security-review-failed",
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/database-lookup/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/database-lookup/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-dataset-discovery"
+        ],
+        "evidence": [
+          "skills/database-lookup/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "datamol",
+      "generated_skill_id": "scientific-agent-skills-datamol",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/datamol/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/datamol/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-small-molecule-discovery"
+        ],
+        "evidence": [
+          "skills/datamol/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "deepchem",
+      "generated_skill_id": "scientific-agent-skills-deepchem",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/deepchem/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/deepchem/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-small-molecule-discovery"
+        ],
+        "evidence": [
+          "skills/deepchem/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "deeptools",
+      "generated_skill_id": "scientific-agent-skills-deeptools",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/deeptools/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/deeptools/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-epigenomics-chromatin"
+        ],
+        "evidence": [
+          "skills/deeptools/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "depmap",
+      "generated_skill_id": "scientific-agent-skills-depmap",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/depmap/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/depmap/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-cell-line-profiling"
+        ],
+        "evidence": [
+          "skills/depmap/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "dhdna-profiler",
+      "generated_skill_id": "scientific-agent-skills-dhdna-profiler",
+      "disposition": "excluded",
+      "reason_codes": [
+        "no-domain-fit",
+        "static-security-review-failed"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/dhdna-profiler/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/dhdna-profiler/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "none"
+    },
+    {
+      "upstream_skill_id": "diffdock",
+      "generated_skill_id": "scientific-agent-skills-diffdock",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/diffdock/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/diffdock/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-small-molecule-discovery"
+        ],
+        "evidence": [
+          "skills/diffdock/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "dnanexus-integration",
+      "generated_skill_id": "scientific-agent-skills-dnanexus-integration",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/dnanexus-integration/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/dnanexus-integration/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-sequence-analysis"
+        ],
+        "evidence": [
+          "skills/dnanexus-integration/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "docx",
+      "generated_skill_id": "scientific-agent-skills-docx",
+      "disposition": "excluded",
+      "reason_codes": [
+        "redistribution-prohibited"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "not-applicable",
+        "evidence": [
+          "SECURITY.md",
+          "skills/docx/SKILL.md"
+        ],
+        "note": "The source is outside the production admission boundary."
+      },
+      "content_review": {
+        "outcome": "not-applicable",
+        "evidence": [
+          "skills/docx/SKILL.md"
+        ],
+        "note": "Content review is not applicable to an audit hard exclusion."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "none"
+    },
+    {
+      "upstream_skill_id": "esm",
+      "generated_skill_id": "scientific-agent-skills-esm",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/esm/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/esm/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-protein-structure-prediction"
+        ],
+        "evidence": [
+          "skills/esm/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "etetoolkit",
+      "generated_skill_id": "scientific-agent-skills-etetoolkit",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/etetoolkit/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/etetoolkit/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-phylogenetics"
+        ],
+        "evidence": [
+          "skills/etetoolkit/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "exa-search",
+      "generated_skill_id": "scientific-agent-skills-exa-search",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/exa-search/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/exa-search/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-literature-deep-research"
+        ],
+        "evidence": [
+          "skills/exa-search/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "experimental-design",
+      "generated_skill_id": "scientific-agent-skills-experimental-design",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/experimental-design/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/experimental-design/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-clinical-trial-design"
+        ],
+        "evidence": [
+          "skills/experimental-design/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "exploratory-data-analysis",
+      "generated_skill_id": "scientific-agent-skills-exploratory-data-analysis",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/exploratory-data-analysis/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/exploratory-data-analysis/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-data-wrangling"
+        ],
+        "evidence": [
+          "skills/exploratory-data-analysis/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "flowio",
+      "generated_skill_id": "scientific-agent-skills-flowio",
+      "disposition": "excluded",
+      "reason_codes": [
+        "static-security-review-failed",
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/flowio/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/flowio/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-immunology"
+        ],
+        "evidence": [
+          "skills/flowio/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "fluidsim",
+      "generated_skill_id": "scientific-agent-skills-fluidsim",
+      "disposition": "excluded",
+      "reason_codes": [
+        "static-security-review-failed"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/fluidsim/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/fluidsim/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "generate-image",
+      "generated_skill_id": "scientific-agent-skills-generate-image",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/generate-image/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/generate-image/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/generate-image/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "geniml",
+      "generated_skill_id": "scientific-agent-skills-geniml",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/geniml/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/geniml/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-epigenomics"
+        ],
+        "evidence": [
+          "skills/geniml/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "geomaster",
+      "generated_skill_id": "scientific-agent-skills-geomaster",
+      "disposition": "excluded",
+      "reason_codes": [
+        "static-security-review-failed"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/geomaster/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/geomaster/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "geopandas",
+      "generated_skill_id": "scientific-agent-skills-geopandas",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/geopandas/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/geopandas/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/geopandas/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "get-available-resources",
+      "generated_skill_id": "scientific-agent-skills-get-available-resources",
+      "disposition": "excluded",
+      "reason_codes": [
+        "outside-plugin-authority"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "not-applicable",
+        "evidence": [
+          "SECURITY.md",
+          "skills/get-available-resources/SKILL.md"
+        ],
+        "note": "The source is outside the production admission boundary."
+      },
+      "content_review": {
+        "outcome": "not-applicable",
+        "evidence": [
+          "skills/get-available-resources/SKILL.md"
+        ],
+        "note": "Content review is not applicable to an audit hard exclusion."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "none"
+    },
+    {
+      "upstream_skill_id": "gget",
+      "generated_skill_id": "scientific-agent-skills-gget",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/gget/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/gget/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-sequence-retrieval"
+        ],
+        "evidence": [
+          "skills/gget/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "ginkgo-cloud-lab",
+      "generated_skill_id": "scientific-agent-skills-ginkgo-cloud-lab",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/ginkgo-cloud-lab/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/ginkgo-cloud-lab/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/ginkgo-cloud-lab/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "glycoengineering",
+      "generated_skill_id": "scientific-agent-skills-glycoengineering",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/glycoengineering/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/glycoengineering/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-protein-modification-analysis"
+        ],
+        "evidence": [
+          "skills/glycoengineering/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "gtars",
+      "generated_skill_id": "scientific-agent-skills-gtars",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/gtars/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/gtars/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-regulatory-genomics"
+        ],
+        "evidence": [
+          "skills/gtars/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "histolab",
+      "generated_skill_id": "scientific-agent-skills-histolab",
+      "disposition": "excluded",
+      "reason_codes": [
+        "static-security-review-failed",
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/histolab/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/histolab/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-image-analysis"
+        ],
+        "evidence": [
+          "skills/histolab/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "hugging-science",
+      "generated_skill_id": "scientific-agent-skills-hugging-science",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/hugging-science/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/hugging-science/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-dataset-discovery"
+        ],
+        "evidence": [
+          "skills/hugging-science/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "hypogenic",
+      "generated_skill_id": "scientific-agent-skills-hypogenic",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/hypogenic/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/hypogenic/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-multi-omics-integration"
+        ],
+        "evidence": [
+          "skills/hypogenic/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "hypothesis-generation",
+      "generated_skill_id": "scientific-agent-skills-hypothesis-generation",
+      "disposition": "excluded",
+      "reason_codes": [
+        "arsu-surface-overlap",
+        "no-domain-fit",
+        "static-security-review-failed"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/hypothesis-generation/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/hypothesis-generation/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [
+          "deep-research"
+        ],
+        "evidence": [
+          "skills/hypothesis-generation/SKILL.md"
+        ]
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "none"
+    },
+    {
+      "upstream_skill_id": "imaging-data-commons",
+      "generated_skill_id": "scientific-agent-skills-imaging-data-commons",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/imaging-data-commons/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/imaging-data-commons/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-image-analysis"
+        ],
+        "evidence": [
+          "skills/imaging-data-commons/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "infographics",
+      "generated_skill_id": "scientific-agent-skills-infographics",
+      "disposition": "excluded",
+      "reason_codes": [
+        "static-security-review-failed"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/infographics/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/infographics/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "iso-13485-certification",
+      "generated_skill_id": "scientific-agent-skills-iso-13485-certification",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/iso-13485-certification/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/iso-13485-certification/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-drug-regulatory"
+        ],
+        "evidence": [
+          "skills/iso-13485-certification/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "labarchive-integration",
+      "generated_skill_id": "scientific-agent-skills-labarchive-integration",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/labarchive-integration/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/labarchive-integration/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/labarchive-integration/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "lamindb",
+      "generated_skill_id": "scientific-agent-skills-lamindb",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/lamindb/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/lamindb/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-data-integration-analysis"
+        ],
+        "evidence": [
+          "skills/lamindb/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "latchbio-integration",
+      "generated_skill_id": "scientific-agent-skills-latchbio-integration",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/latchbio-integration/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/latchbio-integration/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-multi-omics-integration"
+        ],
+        "evidence": [
+          "skills/latchbio-integration/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "latex-posters",
+      "generated_skill_id": "scientific-agent-skills-latex-posters",
+      "disposition": "excluded",
+      "reason_codes": [
+        "static-security-review-failed"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/latex-posters/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/latex-posters/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "liteparse",
+      "generated_skill_id": "scientific-agent-skills-liteparse",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/liteparse/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/liteparse/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/liteparse/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "literature-review",
+      "generated_skill_id": "scientific-agent-skills-literature-review",
+      "disposition": "excluded",
+      "reason_codes": [
+        "arsu-surface-overlap",
+        "no-domain-fit",
+        "static-security-review-failed"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/literature-review/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/literature-review/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [
+          "deep-research"
+        ],
+        "evidence": [
+          "skills/literature-review/SKILL.md"
+        ]
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "none"
+    },
+    {
+      "upstream_skill_id": "markdown-mermaid-writing",
+      "generated_skill_id": "scientific-agent-skills-markdown-mermaid-writing",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/markdown-mermaid-writing/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/markdown-mermaid-writing/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/markdown-mermaid-writing/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "market-research-reports",
+      "generated_skill_id": "scientific-agent-skills-market-research-reports",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/market-research-reports/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/market-research-reports/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-literature-deep-research"
+        ],
+        "evidence": [
+          "skills/market-research-reports/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "markitdown",
+      "generated_skill_id": "scientific-agent-skills-markitdown",
+      "disposition": "excluded",
+      "reason_codes": [
+        "static-security-review-failed"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/markitdown/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/markitdown/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "matchms",
+      "generated_skill_id": "scientific-agent-skills-matchms",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/matchms/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/matchms/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-metabolomics-analysis"
+        ],
+        "evidence": [
+          "skills/matchms/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "matlab",
+      "generated_skill_id": "scientific-agent-skills-matlab",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/matlab/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/matlab/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/matlab/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "matplotlib",
+      "generated_skill_id": "scientific-agent-skills-matplotlib",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/matplotlib/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/matplotlib/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/matplotlib/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "medchem",
+      "generated_skill_id": "scientific-agent-skills-medchem",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/medchem/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/medchem/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-small-molecule-discovery"
+        ],
+        "evidence": [
+          "skills/medchem/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "modal",
+      "generated_skill_id": "scientific-agent-skills-modal",
+      "disposition": "excluded",
+      "reason_codes": [
+        "static-security-review-failed"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/modal/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/modal/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "molecular-dynamics",
+      "generated_skill_id": "scientific-agent-skills-molecular-dynamics",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/molecular-dynamics/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/molecular-dynamics/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-computational-biophysics"
+        ],
+        "evidence": [
+          "skills/molecular-dynamics/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "molfeat",
+      "generated_skill_id": "scientific-agent-skills-molfeat",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/molfeat/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/molfeat/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-small-molecule-discovery"
+        ],
+        "evidence": [
+          "skills/molfeat/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "networkx",
+      "generated_skill_id": "scientific-agent-skills-networkx",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/networkx/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/networkx/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/networkx/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "neurokit2",
+      "generated_skill_id": "scientific-agent-skills-neurokit2",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/neurokit2/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/neurokit2/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-neuroscience"
+        ],
+        "evidence": [
+          "skills/neurokit2/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "neuropixels-analysis",
+      "generated_skill_id": "scientific-agent-skills-neuropixels-analysis",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/neuropixels-analysis/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/neuropixels-analysis/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-neuroscience"
+        ],
+        "evidence": [
+          "skills/neuropixels-analysis/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "nextflow",
+      "generated_skill_id": "scientific-agent-skills-nextflow",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/nextflow/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/nextflow/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-multi-omics-integration"
+        ],
+        "evidence": [
+          "skills/nextflow/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "omero-integration",
+      "generated_skill_id": "scientific-agent-skills-omero-integration",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/omero-integration/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/omero-integration/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-image-analysis"
+        ],
+        "evidence": [
+          "skills/omero-integration/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "open-notebook",
+      "generated_skill_id": "scientific-agent-skills-open-notebook",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/open-notebook/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/open-notebook/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/open-notebook/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "opentrons-integration",
+      "generated_skill_id": "scientific-agent-skills-opentrons-integration",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/opentrons-integration/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/opentrons-integration/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/opentrons-integration/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "optimize-for-gpu",
+      "generated_skill_id": "scientific-agent-skills-optimize-for-gpu",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/optimize-for-gpu/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/optimize-for-gpu/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/optimize-for-gpu/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "pacsomatic",
+      "generated_skill_id": "scientific-agent-skills-pacsomatic",
+      "disposition": "excluded",
+      "reason_codes": [
+        "static-security-review-failed"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/pacsomatic/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/pacsomatic/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "paper-lookup",
+      "generated_skill_id": "scientific-agent-skills-paper-lookup",
+      "disposition": "excluded",
+      "reason_codes": [
+        "arsu-surface-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/paper-lookup/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/paper-lookup/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [
+          "deep-research"
+        ],
+        "evidence": [
+          "skills/paper-lookup/SKILL.md"
+        ]
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "paperzilla",
+      "generated_skill_id": "scientific-agent-skills-paperzilla",
+      "disposition": "excluded",
+      "reason_codes": [
+        "static-security-review-failed",
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/paperzilla/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/paperzilla/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-literature-deep-research"
+        ],
+        "evidence": [
+          "skills/paperzilla/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "parallel-web",
+      "generated_skill_id": "scientific-agent-skills-parallel-web",
+      "disposition": "excluded",
+      "reason_codes": [
+        "static-security-review-failed"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/parallel-web/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/parallel-web/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "pathml",
+      "generated_skill_id": "scientific-agent-skills-pathml",
+      "disposition": "excluded",
+      "reason_codes": [
+        "static-security-review-failed",
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/pathml/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/pathml/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-image-analysis"
+        ],
+        "evidence": [
+          "skills/pathml/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "pathway-enrichment",
+      "generated_skill_id": "scientific-agent-skills-pathway-enrichment",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/pathway-enrichment/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/pathway-enrichment/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-gene-enrichment"
+        ],
+        "evidence": [
+          "skills/pathway-enrichment/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "pdf",
+      "generated_skill_id": "scientific-agent-skills-pdf",
+      "disposition": "excluded",
+      "reason_codes": [
+        "redistribution-prohibited"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "not-applicable",
+        "evidence": [
+          "SECURITY.md",
+          "skills/pdf/SKILL.md"
+        ],
+        "note": "The source is outside the production admission boundary."
+      },
+      "content_review": {
+        "outcome": "not-applicable",
+        "evidence": [
+          "skills/pdf/SKILL.md"
+        ],
+        "note": "Content review is not applicable to an audit hard exclusion."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "none"
+    },
+    {
+      "upstream_skill_id": "peer-review",
+      "generated_skill_id": "scientific-agent-skills-peer-review",
+      "disposition": "excluded",
+      "reason_codes": [
+        "arsu-surface-overlap",
+        "no-domain-fit",
+        "static-security-review-failed"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/peer-review/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/peer-review/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [
+          "academic-paper-reviewer"
+        ],
+        "evidence": [
+          "skills/peer-review/SKILL.md"
+        ]
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "none"
+    },
+    {
+      "upstream_skill_id": "pennylane",
+      "generated_skill_id": "scientific-agent-skills-pennylane",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/pennylane/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/pennylane/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/pennylane/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "phylogenetics",
+      "generated_skill_id": "scientific-agent-skills-phylogenetics",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/phylogenetics/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/phylogenetics/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-phylogenetics"
+        ],
+        "evidence": [
+          "skills/phylogenetics/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "pi-agent",
+      "generated_skill_id": "scientific-agent-skills-pi-agent",
+      "disposition": "excluded",
+      "reason_codes": [
+        "outside-plugin-authority"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "not-applicable",
+        "evidence": [
+          "SECURITY.md",
+          "skills/pi-agent/SKILL.md"
+        ],
+        "note": "The source is outside the production admission boundary."
+      },
+      "content_review": {
+        "outcome": "not-applicable",
+        "evidence": [
+          "skills/pi-agent/SKILL.md"
+        ],
+        "note": "Content review is not applicable to an audit hard exclusion."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "none"
+    },
+    {
+      "upstream_skill_id": "polars",
+      "generated_skill_id": "scientific-agent-skills-polars",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/polars/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/polars/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-data-wrangling"
+        ],
+        "evidence": [
+          "skills/polars/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "polars-bio",
+      "generated_skill_id": "scientific-agent-skills-polars-bio",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/polars-bio/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/polars-bio/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-data-wrangling"
+        ],
+        "evidence": [
+          "skills/polars-bio/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "pptx",
+      "generated_skill_id": "scientific-agent-skills-pptx",
+      "disposition": "excluded",
+      "reason_codes": [
+        "redistribution-prohibited"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "not-applicable",
+        "evidence": [
+          "SECURITY.md",
+          "skills/pptx/SKILL.md"
+        ],
+        "note": "The source is outside the production admission boundary."
+      },
+      "content_review": {
+        "outcome": "not-applicable",
+        "evidence": [
+          "skills/pptx/SKILL.md"
+        ],
+        "note": "Content review is not applicable to an audit hard exclusion."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "none"
+    },
+    {
+      "upstream_skill_id": "pptx-posters",
+      "generated_skill_id": "scientific-agent-skills-pptx-posters",
+      "disposition": "excluded",
+      "reason_codes": [
+        "static-security-review-failed"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/pptx-posters/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/pptx-posters/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "primekg",
+      "generated_skill_id": "scientific-agent-skills-primekg",
+      "disposition": "excluded",
+      "reason_codes": [
+        "static-security-review-failed",
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/primekg/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/primekg/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-network-pharmacology"
+        ],
+        "evidence": [
+          "skills/primekg/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "protocolsio-integration",
+      "generated_skill_id": "scientific-agent-skills-protocolsio-integration",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/protocolsio-integration/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/protocolsio-integration/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/protocolsio-integration/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "pufferlib",
+      "generated_skill_id": "scientific-agent-skills-pufferlib",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/pufferlib/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/pufferlib/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/pufferlib/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "pydeseq2",
+      "generated_skill_id": "scientific-agent-skills-pydeseq2",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/pydeseq2/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/pydeseq2/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-rnaseq-deseq2"
+        ],
+        "evidence": [
+          "skills/pydeseq2/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "pydicom",
+      "generated_skill_id": "scientific-agent-skills-pydicom",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/pydicom/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/pydicom/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-image-analysis"
+        ],
+        "evidence": [
+          "skills/pydicom/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "pyhealth",
+      "generated_skill_id": "scientific-agent-skills-pyhealth",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/pyhealth/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/pyhealth/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-clinical-risk-scoring"
+        ],
+        "evidence": [
+          "skills/pyhealth/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "pylabrobot",
+      "generated_skill_id": "scientific-agent-skills-pylabrobot",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/pylabrobot/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/pylabrobot/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/pylabrobot/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "pymatgen",
+      "generated_skill_id": "scientific-agent-skills-pymatgen",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/pymatgen/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/pymatgen/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/pymatgen/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "pymc",
+      "generated_skill_id": "scientific-agent-skills-pymc",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/pymc/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/pymc/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-statistical-modeling"
+        ],
+        "evidence": [
+          "skills/pymc/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "pymoo",
+      "generated_skill_id": "scientific-agent-skills-pymoo",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/pymoo/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/pymoo/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/pymoo/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "pyopenms",
+      "generated_skill_id": "scientific-agent-skills-pyopenms",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/pyopenms/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/pyopenms/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-proteomics-analysis"
+        ],
+        "evidence": [
+          "skills/pyopenms/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "pysam",
+      "generated_skill_id": "scientific-agent-skills-pysam",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/pysam/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/pysam/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-variant-analysis"
+        ],
+        "evidence": [
+          "skills/pysam/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "pytdc",
+      "generated_skill_id": "scientific-agent-skills-pytdc",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/pytdc/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/pytdc/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-small-molecule-discovery"
+        ],
+        "evidence": [
+          "skills/pytdc/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "pytorch-lightning",
+      "generated_skill_id": "scientific-agent-skills-pytorch-lightning",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/pytorch-lightning/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/pytorch-lightning/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/pytorch-lightning/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "pyzotero",
+      "generated_skill_id": "scientific-agent-skills-pyzotero",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/pyzotero/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/pyzotero/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/pyzotero/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "qiskit",
+      "generated_skill_id": "scientific-agent-skills-qiskit",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/qiskit/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/qiskit/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/qiskit/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "qutip",
+      "generated_skill_id": "scientific-agent-skills-qutip",
+      "disposition": "excluded",
+      "reason_codes": [
+        "static-security-review-failed"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/qutip/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/qutip/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "rdkit",
+      "generated_skill_id": "scientific-agent-skills-rdkit",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/rdkit/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/rdkit/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-small-molecule-discovery"
+        ],
+        "evidence": [
+          "skills/rdkit/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "research-grants",
+      "generated_skill_id": "scientific-agent-skills-research-grants",
+      "disposition": "excluded",
+      "reason_codes": [
+        "no-domain-fit"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/research-grants/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/research-grants/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "none"
+    },
+    {
+      "upstream_skill_id": "research-lookup",
+      "generated_skill_id": "scientific-agent-skills-research-lookup",
+      "disposition": "excluded",
+      "reason_codes": [
+        "arsu-surface-overlap",
+        "static-security-review-failed"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/research-lookup/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/research-lookup/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [
+          "deep-research"
+        ],
+        "evidence": [
+          "skills/research-lookup/SKILL.md"
+        ]
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "rowan",
+      "generated_skill_id": "scientific-agent-skills-rowan",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/rowan/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/rowan/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-computational-biophysics"
+        ],
+        "evidence": [
+          "skills/rowan/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "scanpy",
+      "generated_skill_id": "scientific-agent-skills-scanpy",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/scanpy/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/scanpy/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-single-cell"
+        ],
+        "evidence": [
+          "skills/scanpy/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "scholar-evaluation",
+      "generated_skill_id": "scientific-agent-skills-scholar-evaluation",
+      "disposition": "excluded",
+      "reason_codes": [
+        "arsu-surface-overlap",
+        "static-security-review-failed"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/scholar-evaluation/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/scholar-evaluation/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [
+          "researchspec-verify"
+        ],
+        "evidence": [
+          "skills/scholar-evaluation/SKILL.md"
+        ]
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "scientific-brainstorming",
+      "generated_skill_id": "scientific-agent-skills-scientific-brainstorming",
+      "disposition": "excluded",
+      "reason_codes": [
+        "arsu-surface-overlap",
+        "no-domain-fit"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/scientific-brainstorming/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/scientific-brainstorming/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [
+          "deep-research"
+        ],
+        "evidence": [
+          "skills/scientific-brainstorming/SKILL.md"
+        ]
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "none"
+    },
+    {
+      "upstream_skill_id": "scientific-critical-thinking",
+      "generated_skill_id": "scientific-agent-skills-scientific-critical-thinking",
+      "disposition": "excluded",
+      "reason_codes": [
+        "arsu-surface-overlap",
+        "no-domain-fit"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/scientific-critical-thinking/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/scientific-critical-thinking/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [
+          "deep-research"
+        ],
+        "evidence": [
+          "skills/scientific-critical-thinking/SKILL.md"
+        ]
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "none"
+    },
+    {
+      "upstream_skill_id": "scientific-schematics",
+      "generated_skill_id": "scientific-agent-skills-scientific-schematics",
+      "disposition": "excluded",
+      "reason_codes": [
+        "static-security-review-failed"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/scientific-schematics/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/scientific-schematics/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "scientific-slides",
+      "generated_skill_id": "scientific-agent-skills-scientific-slides",
+      "disposition": "excluded",
+      "reason_codes": [
+        "static-security-review-failed"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/scientific-slides/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/scientific-slides/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "scientific-visualization",
+      "generated_skill_id": "scientific-agent-skills-scientific-visualization",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/scientific-visualization/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/scientific-visualization/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/scientific-visualization/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "scientific-writing",
+      "generated_skill_id": "scientific-agent-skills-scientific-writing",
+      "disposition": "excluded",
+      "reason_codes": [
+        "arsu-surface-overlap",
+        "static-security-review-failed"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/scientific-writing/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/scientific-writing/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [
+          "academic-paper"
+        ],
+        "evidence": [
+          "skills/scientific-writing/SKILL.md"
+        ]
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "scikit-bio",
+      "generated_skill_id": "scientific-agent-skills-scikit-bio",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/scikit-bio/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/scikit-bio/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-sequence-analysis"
+        ],
+        "evidence": [
+          "skills/scikit-bio/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "scikit-learn",
+      "generated_skill_id": "scientific-agent-skills-scikit-learn",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/scikit-learn/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/scikit-learn/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/scikit-learn/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "scikit-survival",
+      "generated_skill_id": "scientific-agent-skills-scikit-survival",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/scikit-survival/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/scikit-survival/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-clinical-risk-scoring"
+        ],
+        "evidence": [
+          "skills/scikit-survival/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "scvelo",
+      "generated_skill_id": "scientific-agent-skills-scvelo",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/scvelo/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/scvelo/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-single-cell"
+        ],
+        "evidence": [
+          "skills/scvelo/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "scvi-tools",
+      "generated_skill_id": "scientific-agent-skills-scvi-tools",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/scvi-tools/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/scvi-tools/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-single-cell"
+        ],
+        "evidence": [
+          "skills/scvi-tools/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "seaborn",
+      "generated_skill_id": "scientific-agent-skills-seaborn",
+      "disposition": "excluded",
+      "reason_codes": [
+        "static-security-review-failed"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/seaborn/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/seaborn/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "shap",
+      "generated_skill_id": "scientific-agent-skills-shap",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/shap/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/shap/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/shap/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "simpy",
+      "generated_skill_id": "scientific-agent-skills-simpy",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/simpy/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/simpy/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/simpy/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "stable-baselines3",
+      "generated_skill_id": "scientific-agent-skills-stable-baselines3",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/stable-baselines3/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/stable-baselines3/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/stable-baselines3/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "statistical-analysis",
+      "generated_skill_id": "scientific-agent-skills-statistical-analysis",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/statistical-analysis/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/statistical-analysis/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-statistical-modeling"
+        ],
+        "evidence": [
+          "skills/statistical-analysis/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "statistical-power",
+      "generated_skill_id": "scientific-agent-skills-statistical-power",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/statistical-power/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/statistical-power/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-statistical-modeling"
+        ],
+        "evidence": [
+          "skills/statistical-power/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "statsmodels",
+      "generated_skill_id": "scientific-agent-skills-statsmodels",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/statsmodels/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/statsmodels/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-statistical-modeling"
+        ],
+        "evidence": [
+          "skills/statsmodels/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "sympy",
+      "generated_skill_id": "scientific-agent-skills-sympy",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/sympy/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/sympy/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/sympy/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "tiledbvcf",
+      "generated_skill_id": "scientific-agent-skills-tiledbvcf",
+      "disposition": "excluded",
+      "reason_codes": [
+        "static-security-review-failed",
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/tiledbvcf/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/tiledbvcf/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-variant-analysis"
+        ],
+        "evidence": [
+          "skills/tiledbvcf/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "timesfm-forecasting",
+      "generated_skill_id": "scientific-agent-skills-timesfm-forecasting",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/timesfm-forecasting/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/timesfm-forecasting/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/timesfm-forecasting/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "torch-geometric",
+      "generated_skill_id": "scientific-agent-skills-torch-geometric",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/torch-geometric/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/torch-geometric/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/torch-geometric/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "torchdrug",
+      "generated_skill_id": "scientific-agent-skills-torchdrug",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/torchdrug/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/torchdrug/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-small-molecule-discovery"
+        ],
+        "evidence": [
+          "skills/torchdrug/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "transformers",
+      "generated_skill_id": "scientific-agent-skills-transformers",
+      "disposition": "excluded",
+      "reason_codes": [
+        "static-security-review-failed"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/transformers/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/transformers/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "treatment-plans",
+      "generated_skill_id": "scientific-agent-skills-treatment-plans",
+      "disposition": "excluded",
+      "reason_codes": [
+        "static-security-review-failed",
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/treatment-plans/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/treatment-plans/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-clinical-guidelines"
+        ],
+        "evidence": [
+          "skills/treatment-plans/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "umap-learn",
+      "generated_skill_id": "scientific-agent-skills-umap-learn",
+      "disposition": "excluded",
+      "reason_codes": [
+        "static-security-review-failed"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/umap-learn/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/umap-learn/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "usfiscaldata",
+      "generated_skill_id": "scientific-agent-skills-usfiscaldata",
+      "disposition": "excluded",
+      "reason_codes": [
+        "static-security-review-failed",
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/usfiscaldata/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/usfiscaldata/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-dataset-discovery"
+        ],
+        "evidence": [
+          "skills/usfiscaldata/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "vaex",
+      "generated_skill_id": "scientific-agent-skills-vaex",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/vaex/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/vaex/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-data-wrangling"
+        ],
+        "evidence": [
+          "skills/vaex/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "venue-templates",
+      "generated_skill_id": "scientific-agent-skills-venue-templates",
+      "disposition": "excluded",
+      "reason_codes": [
+        "static-security-review-failed"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/venue-templates/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/venue-templates/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "what-if-oracle",
+      "generated_skill_id": "scientific-agent-skills-what-if-oracle",
+      "disposition": "excluded",
+      "reason_codes": [
+        "no-domain-fit"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/what-if-oracle/SKILL.md"
+        ],
+        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/what-if-oracle/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "none"
+    },
+    {
+      "upstream_skill_id": "xlsx",
+      "generated_skill_id": "scientific-agent-skills-xlsx",
+      "disposition": "excluded",
+      "reason_codes": [
+        "redistribution-prohibited"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "not-applicable",
+        "evidence": [
+          "SECURITY.md",
+          "skills/xlsx/SKILL.md"
+        ],
+        "note": "The source is outside the production admission boundary."
+      },
+      "content_review": {
+        "outcome": "not-applicable",
+        "evidence": [
+          "skills/xlsx/SKILL.md"
+        ],
+        "note": "Content review is not applicable to an audit hard exclusion."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "none"
+    },
+    {
+      "upstream_skill_id": "zarr-python",
+      "generated_skill_id": "scientific-agent-skills-zarr-python",
+      "disposition": "excluded",
+      "reason_codes": [
+        "static-security-review-failed",
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "failed",
+        "evidence": [
+          "SECURITY.md",
+          "skills/zarr-python/SKILL.md"
+        ],
+        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/zarr-python/SKILL.md"
+        ],
+        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-data-integration-analysis"
+        ],
+        "evidence": [
+          "skills/zarr-python/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    }
+  ]
+}

@@ -76,3 +76,12 @@ Automated technical readiness SHALL NOT by itself authorize the v0.1 tag or npm 
 
 - **WHEN** a maintainer considers tagging or publishing v0.1.0
 - **THEN** the package name SHALL be rechecked, hosted CI SHALL be green, repository and npm account controls SHALL be configured, and all required dogfood journeys SHALL be signed
+
+### Requirement: Second-Vendor Release Assets
+The npm release SHALL contain the admitted Scientific Agent Skills generated tree, bundle, manifest, conversion report, assembled registry, applicable license and notice files, and canonical adapter documentation while excluding maintainer-only vendor checkout, audit inputs, and test fixtures.
+
+#### Scenario: Installed package verifies second vendor
+- **WHEN** the release verifier packs and installs the npm tarball
+- **THEN** Scientific Agent Skills convert-derived assets are present and registry-valid
+- **AND** the vendor checkout and audit policy inputs are absent
+- **AND** default initialization still emits only the eight base Skills and eight wrappers

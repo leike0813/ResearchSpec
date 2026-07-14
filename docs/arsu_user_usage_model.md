@@ -420,6 +420,8 @@ command wrapper 只是不同 agent 工具的 adapter。目标交付量是：
   和 CLI frontier 组合 Route、Resume、Explain、Export。
 - bundled domain Skill registry、workspace selection、31-tool Skill projection、manifest drift
   protection 与 advisory Navigate recommendation；插件不生成 wrappers 或 workflow state。
+- 学科 domain 使用 ANZSRC 2020 FoR Group，工具 domain 使用五类粗粒度 ResearchSpec 目录；
+  内部空 domain 不出现在普通用户 catalog，已选后变空或缺失的项仅作为 unavailable 恢复状态。
 - converter-owned routing catalog，覆盖 25 个 modes、2 个 pipeline entries、artifacts、
   prerequisites、near-misses、risk/Gate policy 和粗粒度成本，并投影 ARSU descriptions。
 - active-run `state.yaml` 下的 strict subflow/round instances、parent/round identity、

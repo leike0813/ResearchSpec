@@ -7,6 +7,7 @@ import { checkToolUniverseIdempotence, checkToolUniverseOutput, type ToolUnivers
 
 const REPO_ROOT = path.resolve(".");
 const MANIFEST_PATH = path.resolve("skills/plugins/vendor-manifests/tooluniverse.json");
+const BUNDLE_PATH = path.resolve("skills/plugins/vendor-bundles/tooluniverse.json");
 
 void test("ToolUniverse conversion manifest admits the audited inventory and classifies every dependency edge", async () => {
   const manifest = JSON.parse(await readFile(MANIFEST_PATH, "utf8")) as ToolUniverseConversionManifest;
@@ -18,11 +19,11 @@ void test("ToolUniverse conversion manifest admits the audited inventory and cla
     Object.fromEntries(["required", "related", "routing"].map((relation) => [relation, manifest.dependency_decisions.filter((item) => item.relation === relation).length])),
     { required: 8, related: 138, routing: 77 },
   );
-  assert.deepEqual(manifest.domain_counts, {
-    "genomics-and-systems-biology": 72,
-    "molecular-and-organismal-biosciences": 40,
-    "translational-medicine-and-therapeutics": 65,
-  });
+  const bundle = JSON.parse(await readFile(BUNDLE_PATH, "utf8")) as { schema_version: string; vendor: { vendor_id: string; skills: Array<{ license: string }> } };
+  assert.equal(bundle.schema_version, "1");
+  assert.equal(bundle.vendor.vendor_id, "tooluniverse");
+  assert.equal(bundle.vendor.skills.length, 130);
+  assert.ok(bundle.vendor.skills.every((skill) => skill.license === "Apache-2.0"));
   assert.ok(manifest.file_dispositions.some((item) => item.reason === "test, evaluation, or benchmark resource" && item.disposition === "excluded"));
   assert.ok(manifest.file_dispositions.some((item) => item.reason === "environment or credential template" && item.disposition === "excluded"));
   assert.equal(manifest.file_dispositions.some((item) => item.disposition === "included" && /(^|\/)test_data\//.test(item.source_path)), false);
