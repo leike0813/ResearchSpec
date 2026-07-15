@@ -4,10 +4,10 @@
 - Revision: `9c9bd2e92af12311ecd0c1a643e0931643f9ea04`
 - Audited Skills: 147
 - Reviewed business candidates: 139
-- Generated Skills: 33
-- Excluded Skills: 114
+- Generated Skills: 49
+- Excluded Skills: 98
 - Installed hard dependency edges: 0
-- Explicit resource exclusions: 1
+- Explicit resource exclusions: 28
 
 ## Exclusion decisions
 
@@ -15,7 +15,7 @@
 - no-domain-fit: 9
 - outside-plugin-authority: 4
 - redistribution-prohibited: 4
-- static-security-review-failed: 40
+- static-security-review-failed: 1
 - tooluniverse-semantic-overlap: 76
 - upstream-security-review-required: 1
 

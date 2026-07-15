@@ -99,6 +99,8 @@ See [SECURITY.md](SECURITY.md) for supported versions and vulnerability handling
 - [Domain Skill plugins](docs/domain_skill_plugins.md)
 - [Domain taxonomy](docs/domain_taxonomy.md)
 - [Scientific Agent Skills vendor adapter](docs/scientific_agent_skills_vendor_adapter.md)
+- [Scientific Agent Skills v2.53.0 manual security review](artifacts/scientific_agent_skills_v2_53_0_manual_security_review.md)
+- [Scientific Agent Skills v2.53.0 ingest conclusion](artifacts/scientific_agent_skills_v2_53_0_ingest_report.md)
 - [ToolUniverse vendor adapter](docs/tooluniverse_vendor_adapter.md)
 - [Release process](docs/release_process.md)
 - [Project-owner walkthrough](playbooks/owner-walkthrough/README.md) — recommended introduction to the real operating model

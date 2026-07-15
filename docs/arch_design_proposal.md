@@ -183,7 +183,7 @@ revision，完成筛选、改写、审校和 license/NOTICE 处理，只输出�
 source-neutral domain catalog 维护稳定的 direct Skill lists，central assembler 是 registry 的唯一写入者。
 ToolUniverse 与 Scientific Agent Skills converter 都先在完整多 vendor staging tree 上完成中央装配验证，
 再仅提交自身 bundle/tree/manifest/report 与 registry，因而任何 vendor 都不能覆盖另一个 vendor。
-Scientific Agent Skills 的 147 条 admission policy 只生成 33 个通过许可、静态安全、内容、重叠、资源和 domain 审查的 Skills。
+Scientific Agent Skills 的 147 条 admission policy 与 40 项 finding-level 人工安全决定共同生成 49 个通过许可、安全、内容、重叠、资源和 domain 审查的 Skills；其余候选保持明确排除。
 学科 domain 以 ANZSRC 2020 FoR Group 为唯一分类，Field 仅作 audit metadata；五个粗粒度工具域由 ResearchSpec 维护。
 内部 218 个固定 domain 中只有非空项公开可用。workspace 只保存 selected domain IDs；manifest 保存 tool/path/hash、vendor/Skill ownership 与 per-domain resolution snapshots，且为变空或缺失的 selected domain 保留恢复证据。
 插件可以辅助语义生产，但不能拥有 workflow profile、frontier、state、artifact registry、

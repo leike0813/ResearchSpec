@@ -31,7 +31,7 @@ void test("internal catalog contains every Group and five tools while public cat
     assert.equal(domain?.domain_type, "discipline");
     if (domain?.domain_type === "discipline") assert.equal(domain.anzsrc_group_code, group.code);
   }
-  assert.equal(availableDomains(registry).length, 44);
+  assert.equal(availableDomains(registry).length, 48);
   assert.equal(tools.filter((domain) => domain.skills.length > 0).length, 5);
 });
 

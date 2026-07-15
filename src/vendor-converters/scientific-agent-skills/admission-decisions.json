@@ -301,17 +301,16 @@
       "generated_skill_id": "scientific-agent-skills-bgpt-paper-search",
       "disposition": "excluded",
       "reason_codes": [
-        "static-security-review-failed",
         "tooluniverse-semantic-overlap"
       ],
       "license": null,
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/bgpt-paper-search/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -339,17 +338,16 @@
       "generated_skill_id": "scientific-agent-skills-bids",
       "disposition": "excluded",
       "reason_codes": [
-        "static-security-review-failed",
         "tooluniverse-semantic-overlap"
       ],
       "license": null,
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/bids/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -488,17 +486,16 @@
       "generated_skill_id": "scientific-agent-skills-cellxgene-census",
       "disposition": "excluded",
       "reason_codes": [
-        "static-security-review-failed",
         "tooluniverse-semantic-overlap"
       ],
       "license": null,
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/cellxgene-census/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -564,17 +561,16 @@
       "generated_skill_id": "scientific-agent-skills-citation-management",
       "disposition": "excluded",
       "reason_codes": [
-        "arsu-surface-overlap",
-        "static-security-review-failed"
+        "arsu-surface-overlap"
       ],
       "license": null,
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/citation-management/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -602,17 +598,16 @@
       "generated_skill_id": "scientific-agent-skills-clinical-decision-support",
       "disposition": "excluded",
       "reason_codes": [
-        "static-security-review-failed",
         "tooluniverse-semantic-overlap"
       ],
       "license": null,
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/clinical-decision-support/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -640,17 +635,16 @@
       "generated_skill_id": "scientific-agent-skills-clinical-reports",
       "disposition": "excluded",
       "reason_codes": [
-        "static-security-review-failed",
         "tooluniverse-semantic-overlap"
       ],
       "license": null,
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/clinical-reports/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -715,17 +709,16 @@
       "generated_skill_id": "scientific-agent-skills-consciousness-council",
       "disposition": "excluded",
       "reason_codes": [
-        "no-domain-fit",
-        "static-security-review-failed"
+        "no-domain-fit"
       ],
       "license": null,
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/consciousness-council/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -786,17 +779,16 @@
       "generated_skill_id": "scientific-agent-skills-database-lookup",
       "disposition": "excluded",
       "reason_codes": [
-        "static-security-review-failed",
         "tooluniverse-semantic-overlap"
       ],
       "license": null,
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/database-lookup/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -982,7 +974,7 @@
           "SECURITY.md",
           "skills/dhdna-profiler/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review retained the security blocker for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -1298,17 +1290,16 @@
       "generated_skill_id": "scientific-agent-skills-flowio",
       "disposition": "excluded",
       "reason_codes": [
-        "static-security-review-failed",
         "tooluniverse-semantic-overlap"
       ],
       "license": null,
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/flowio/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -1334,18 +1325,23 @@
     {
       "upstream_skill_id": "fluidsim",
       "generated_skill_id": "scientific-agent-skills-fluidsim",
-      "disposition": "excluded",
-      "reason_codes": [
-        "static-security-review-failed"
-      ],
-      "license": null,
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/fluidsim/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/fluidsim/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -1442,18 +1438,23 @@
     {
       "upstream_skill_id": "geomaster",
       "generated_skill_id": "scientific-agent-skills-geomaster",
-      "disposition": "excluded",
-      "reason_codes": [
-        "static-security-review-failed"
-      ],
-      "license": null,
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/geomaster/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/geomaster/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -1697,17 +1698,16 @@
       "generated_skill_id": "scientific-agent-skills-histolab",
       "disposition": "excluded",
       "reason_codes": [
-        "static-security-review-failed",
         "tooluniverse-semantic-overlap"
       ],
       "license": null,
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/histolab/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -1810,17 +1810,16 @@
       "disposition": "excluded",
       "reason_codes": [
         "arsu-surface-overlap",
-        "no-domain-fit",
-        "static-security-review-failed"
+        "no-domain-fit"
       ],
       "license": null,
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/hypothesis-generation/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -1883,18 +1882,23 @@
     {
       "upstream_skill_id": "infographics",
       "generated_skill_id": "scientific-agent-skills-infographics",
-      "disposition": "excluded",
-      "reason_codes": [
-        "static-security-review-failed"
-      ],
-      "license": null,
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/infographics/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/infographics/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -2065,18 +2069,23 @@
     {
       "upstream_skill_id": "latex-posters",
       "generated_skill_id": "scientific-agent-skills-latex-posters",
-      "disposition": "excluded",
-      "reason_codes": [
-        "static-security-review-failed"
-      ],
-      "license": null,
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/latex-posters/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/latex-posters/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -2139,17 +2148,16 @@
       "disposition": "excluded",
       "reason_codes": [
         "arsu-surface-overlap",
-        "no-domain-fit",
-        "static-security-review-failed"
+        "no-domain-fit"
       ],
       "license": null,
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/literature-review/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -2250,18 +2258,23 @@
     {
       "upstream_skill_id": "markitdown",
       "generated_skill_id": "scientific-agent-skills-markitdown",
-      "disposition": "excluded",
-      "reason_codes": [
-        "static-security-review-failed"
-      ],
-      "license": null,
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/markitdown/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/markitdown/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -2433,18 +2446,23 @@
     {
       "upstream_skill_id": "modal",
       "generated_skill_id": "scientific-agent-skills-modal",
-      "disposition": "excluded",
-      "reason_codes": [
-        "static-security-review-failed"
-      ],
-      "license": null,
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/modal/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/modal/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -2840,18 +2858,23 @@
     {
       "upstream_skill_id": "pacsomatic",
       "generated_skill_id": "scientific-agent-skills-pacsomatic",
-      "disposition": "excluded",
-      "reason_codes": [
-        "static-security-review-failed"
-      ],
-      "license": null,
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/pacsomatic/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/pacsomatic/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -2912,17 +2935,16 @@
       "generated_skill_id": "scientific-agent-skills-paperzilla",
       "disposition": "excluded",
       "reason_codes": [
-        "static-security-review-failed",
         "tooluniverse-semantic-overlap"
       ],
       "license": null,
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/paperzilla/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -2948,18 +2970,23 @@
     {
       "upstream_skill_id": "parallel-web",
       "generated_skill_id": "scientific-agent-skills-parallel-web",
-      "disposition": "excluded",
-      "reason_codes": [
-        "static-security-review-failed"
-      ],
-      "license": null,
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/parallel-web/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/parallel-web/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -2983,17 +3010,16 @@
       "generated_skill_id": "scientific-agent-skills-pathml",
       "disposition": "excluded",
       "reason_codes": [
-        "static-security-review-failed",
         "tooluniverse-semantic-overlap"
       ],
       "license": null,
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/pathml/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -3092,17 +3118,16 @@
       "disposition": "excluded",
       "reason_codes": [
         "arsu-surface-overlap",
-        "no-domain-fit",
-        "static-security-review-failed"
+        "no-domain-fit"
       ],
       "license": null,
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/peer-review/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -3343,18 +3368,23 @@
     {
       "upstream_skill_id": "pptx-posters",
       "generated_skill_id": "scientific-agent-skills-pptx-posters",
-      "disposition": "excluded",
-      "reason_codes": [
-        "static-security-review-failed"
-      ],
-      "license": null,
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/pptx-posters/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/pptx-posters/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -3378,17 +3408,16 @@
       "generated_skill_id": "scientific-agent-skills-primekg",
       "disposition": "excluded",
       "reason_codes": [
-        "static-security-review-failed",
         "tooluniverse-semantic-overlap"
       ],
       "license": null,
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/primekg/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -3977,18 +4006,23 @@
     {
       "upstream_skill_id": "qutip",
       "generated_skill_id": "scientific-agent-skills-qutip",
-      "disposition": "excluded",
-      "reason_codes": [
-        "static-security-review-failed"
-      ],
-      "license": null,
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/qutip/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/qutip/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -4082,17 +4116,16 @@
       "generated_skill_id": "scientific-agent-skills-research-lookup",
       "disposition": "excluded",
       "reason_codes": [
-        "arsu-surface-overlap",
-        "static-security-review-failed"
+        "arsu-surface-overlap"
       ],
       "license": null,
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/research-lookup/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -4194,17 +4227,16 @@
       "generated_skill_id": "scientific-agent-skills-scholar-evaluation",
       "disposition": "excluded",
       "reason_codes": [
-        "arsu-surface-overlap",
-        "static-security-review-failed"
+        "arsu-surface-overlap"
       ],
       "license": null,
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/scholar-evaluation/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -4306,18 +4338,23 @@
     {
       "upstream_skill_id": "scientific-schematics",
       "generated_skill_id": "scientific-agent-skills-scientific-schematics",
-      "disposition": "excluded",
-      "reason_codes": [
-        "static-security-review-failed"
-      ],
-      "license": null,
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/scientific-schematics/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/scientific-schematics/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -4339,18 +4376,23 @@
     {
       "upstream_skill_id": "scientific-slides",
       "generated_skill_id": "scientific-agent-skills-scientific-slides",
-      "disposition": "excluded",
-      "reason_codes": [
-        "static-security-review-failed"
-      ],
-      "license": null,
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/scientific-slides/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/scientific-slides/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -4412,17 +4454,16 @@
       "generated_skill_id": "scientific-agent-skills-scientific-writing",
       "disposition": "excluded",
       "reason_codes": [
-        "arsu-surface-overlap",
-        "static-security-review-failed"
+        "arsu-surface-overlap"
       ],
       "license": null,
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/scientific-writing/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -4634,18 +4675,23 @@
     {
       "upstream_skill_id": "seaborn",
       "generated_skill_id": "scientific-agent-skills-seaborn",
-      "disposition": "excluded",
-      "reason_codes": [
-        "static-security-review-failed"
-      ],
-      "license": null,
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/seaborn/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/seaborn/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -4932,17 +4978,16 @@
       "generated_skill_id": "scientific-agent-skills-tiledbvcf",
       "disposition": "excluded",
       "reason_codes": [
-        "static-security-review-failed",
         "tooluniverse-semantic-overlap"
       ],
       "license": null,
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/tiledbvcf/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -5081,18 +5126,23 @@
     {
       "upstream_skill_id": "transformers",
       "generated_skill_id": "scientific-agent-skills-transformers",
-      "disposition": "excluded",
-      "reason_codes": [
-        "static-security-review-failed"
-      ],
-      "license": null,
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/transformers/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/transformers/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -5116,17 +5166,16 @@
       "generated_skill_id": "scientific-agent-skills-treatment-plans",
       "disposition": "excluded",
       "reason_codes": [
-        "static-security-review-failed",
         "tooluniverse-semantic-overlap"
       ],
       "license": null,
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/treatment-plans/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -5152,18 +5201,23 @@
     {
       "upstream_skill_id": "umap-learn",
       "generated_skill_id": "scientific-agent-skills-umap-learn",
-      "disposition": "excluded",
-      "reason_codes": [
-        "static-security-review-failed"
-      ],
-      "license": null,
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/umap-learn/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/umap-learn/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -5187,17 +5241,16 @@
       "generated_skill_id": "scientific-agent-skills-usfiscaldata",
       "disposition": "excluded",
       "reason_codes": [
-        "static-security-review-failed",
         "tooluniverse-semantic-overlap"
       ],
       "license": null,
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/usfiscaldata/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -5260,18 +5313,23 @@
     {
       "upstream_skill_id": "venue-templates",
       "generated_skill_id": "scientific-agent-skills-venue-templates",
-      "disposition": "excluded",
-      "reason_codes": [
-        "static-security-review-failed"
-      ],
-      "license": null,
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/venue-templates/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/venue-templates/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",
@@ -5361,17 +5419,16 @@
       "generated_skill_id": "scientific-agent-skills-zarr-python",
       "disposition": "excluded",
       "reason_codes": [
-        "static-security-review-failed",
         "tooluniverse-semantic-overlap"
       ],
       "license": null,
       "security_review": {
-        "outcome": "failed",
+        "outcome": "passed",
         "evidence": [
           "SECURITY.md",
           "skills/zarr-python/SKILL.md"
         ],
-        "note": "Static review retained the upstream Critical/High finding as unresolved, so the Skill is excluded."
+        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
       },
       "content_review": {
         "outcome": "passed",

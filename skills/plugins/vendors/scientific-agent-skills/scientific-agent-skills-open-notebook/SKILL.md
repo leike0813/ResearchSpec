@@ -22,7 +22,7 @@ metadata:
 
 > **ResearchSpec boundary:** This Skill may produce candidate semantic material, but it must not modify ResearchSpec workflow state, routes, work items, artifact registry, Gates, Decisions, transitions, or receipts. Use the ResearchSpec CLI for authoritative mutations.
 
-> **Bundled scripts:** ResearchSpec distributes these reviewed inert resources but does not run them: `scripts/chat_interaction.py`, `scripts/notebook_management.py`, `scripts/source_ingestion.py`, `scripts/test_open_notebook_skill.py`. The target Agent must inspect requirements and side effects before execution.
+> **Bundled scripts:** ResearchSpec distributes these reviewed inert resources but does not run them: `scripts/chat_interaction.py`, `scripts/notebook_management.py`, `scripts/source_ingestion.py`. The target Agent must inspect requirements and side effects before execution.
 
 # Open Notebook
 

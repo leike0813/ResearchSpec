@@ -182,33 +182,33 @@
       "to": "pptx",
       "relation": "related",
       "resolved_target": null,
-      "disposition": "source-excluded",
+      "disposition": "advisory",
       "evidence": [
         "skills/scientific-slides/SKILL.md"
       ],
-      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+      "note": "The source is admitted, but this non-required relation targets an excluded Skill and remains advisory only."
     },
     {
       "from": "scientific-slides",
       "to": "research-lookup",
       "relation": "related",
       "resolved_target": null,
-      "disposition": "source-excluded",
+      "disposition": "advisory",
       "evidence": [
         "skills/scientific-slides/SKILL.md"
       ],
-      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+      "note": "The source is admitted, but this non-required relation targets an excluded Skill and remains advisory only."
     },
     {
       "from": "scientific-slides",
       "to": "scientific-schematics",
       "relation": "related",
-      "resolved_target": null,
-      "disposition": "source-excluded",
+      "resolved_target": "scientific-agent-skills-scientific-schematics",
+      "disposition": "advisory",
       "evidence": [
         "skills/scientific-slides/SKILL.md"
       ],
-      "note": "The source Skill is excluded, so the relationship cannot affect installation."
+      "note": "The source and target are admitted, but this related edge is advisory and never triggers domain installation."
     },
     {
       "from": "scientific-writing",

@@ -20,10 +20,10 @@ void test("production registry contains the fixed taxonomy and two reviewed vend
   assert.equal(loaded.registry.schema_version, "1");
   assert.deepEqual(loaded.registry.domain_taxonomy, { discipline_system: "ANZSRC FoR", discipline_version: "2020", source_release: "2025-10-24" });
   assert.equal(loaded.vendors.get("tooluniverse")?.skills.length, 130);
-  assert.equal(loaded.vendors.get("scientific-agent-skills")?.skills.length, 33);
+  assert.equal(loaded.vendors.get("scientific-agent-skills")?.skills.length, 49);
   assert.equal(loaded.domains.size, 218);
-  assert.equal(availableDomains(loaded).length, 44);
-  assert.equal(loaded.domains.get("scientific-visualization-and-communication")?.skills.length, 4);
+  assert.equal(availableDomains(loaded).length, 48);
+  assert.equal(loaded.domains.get("scientific-visualization-and-communication")?.skills.length, 12);
   assert.equal(loaded.domains.has("genomics-and-systems-biology"), false);
 });
 

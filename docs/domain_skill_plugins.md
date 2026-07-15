@@ -27,7 +27,7 @@ vendor converter ──► vendor bundle/Skills ◄── source-neutral domain 
 - A **central assembler** validates all isolated vendor bundles against the source-neutral domain catalog and is the only writer of `skills/plugins/registry.json`.
 - The same Skill may be a direct member of several domains. Its bytes and global Skill ID remain unique.
 
-ToolUniverse v1.3.1 contributes 130 admitted Skills. Scientific Agent Skills v2.53.0 contributes 33 reviewed, vendor-prefixed Skills after complete admission decisions for all 147 audit records. Together they populate 44 non-empty domains while remaining isolated vendor bundles; users still select only source-neutral domains.
+ToolUniverse v1.3.1 contributes 130 admitted Skills. Scientific Agent Skills v2.53.0 contributes 49 reviewed, vendor-prefixed Skills after complete admission decisions for all 147 audit records and finding-level decisions for all 40 manual-security targets. Together they populate 48 non-empty domains while remaining isolated vendor bundles; users still select only source-neutral domains.
 
 ## Registry and package layout
 
@@ -71,8 +71,8 @@ Vendor converters are repo-local maintainer tools, not a public converter ABI. T
 The Scientific Agent Skills converter independently:
 
 - validates the pinned v2.53.0 source and complete 147-record admission catalog;
-- admits 33 Skills with `scientific-agent-skills-` IDs and excludes 114 after authority, redistribution, overlap, static security, content, and domain review;
-- removes platform metadata, normalizes compatibility and tool declarations, discloses bundled scripts, and copies reviewed resource trees with explicit exceptions;
+- admits 49 Skills with `scientific-agent-skills-` IDs and excludes 98 after authority, redistribution, overlap, manual security, content, and domain review;
+- validates the complete 40-Skill manual-review SSOT, applies only approved declarative adaptations, removes platform metadata, normalizes compatibility and tool declarations, discloses bundled scripts, and copies reviewed resource trees with 28 explicit exclusions;
 - records all 22 audited relationships while allowing only admitted reviewed `required` edges to affect installation;
 - emits its isolated tree, bundle, manifest, and report.
 

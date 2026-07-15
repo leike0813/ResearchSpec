@@ -3,10 +3,199 @@
   "default_disposition": "included",
   "decisions": [
     {
+      "upstream_skill_id": "infographics",
+      "source_path": "skills/infographics/scripts/generate_infographic_ai.py",
+      "disposition": "excluded",
+      "reason": "Exclude provider-specific network, credential, research-injection, persistence, and unbounded-iteration business logic.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "infographics",
+      "source_path": "skills/infographics/scripts/generate_infographic.py",
+      "disposition": "excluded",
+      "reason": "Exclude the provider-bound wrapper because it copies the full process environment and forwards credentials to another script.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "latex-posters",
+      "source_path": "skills/latex-posters/scripts/generate_schematic_ai.py",
+      "disposition": "excluded",
+      "reason": "Exclude provider-specific model, network, .env, and credential handling while retaining the independent LaTeX poster capability.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "latex-posters",
+      "source_path": "skills/latex-posters/scripts/generate_schematic.py",
+      "disposition": "excluded",
+      "reason": "Exclude the provider-bound wrapper and its full environment inheritance.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "markitdown",
+      "source_path": "skills/markitdown/scripts/convert_with_ai.py",
+      "disposition": "excluded",
+      "reason": "Exclude provider-specific document/image transmission and API-key handling; retain local conversion scripts.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "markitdown",
+      "source_path": "skills/markitdown/scripts/generate_schematic_ai.py",
+      "disposition": "excluded",
+      "reason": "Exclude unrelated provider-specific schematic generation implementation.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "markitdown",
+      "source_path": "skills/markitdown/scripts/generate_schematic.py",
+      "disposition": "excluded",
+      "reason": "Exclude unrelated provider-bound schematic wrapper.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "modal",
+      "source_path": "skills/modal/references/secrets.md",
+      "disposition": "excluded",
+      "reason": "Exclude inline, environment, and .env secret-handling examples; use only an already authenticated target environment.",
+      "skill_remains_complete": true
+    },
+    {
       "upstream_skill_id": "open-notebook",
       "source_path": "skills/open-notebook/scripts/test_open_notebook_skill.py",
       "disposition": "excluded",
       "reason": "Upstream test harness is not required for target-Agent use and would not be executed by ResearchSpec.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "pacsomatic",
+      "source_path": "skills/pacsomatic/scripts/run_pacsomatic.py",
+      "disposition": "excluded",
+      "reason": "Exclude cloning, environment creation, executable script generation, raw module commands, shell submission, and scheduler execution.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "pacsomatic",
+      "source_path": "skills/pacsomatic/tests/test_run_pacsomatic.py",
+      "disposition": "excluded",
+      "reason": "Exclude tests for the removed executable helper.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "parallel-web",
+      "source_path": "skills/parallel-web/references/data-enrichment.md",
+      "disposition": "excluded",
+      "reason": "Exclude provider-specific CLI, data-transfer, polling, and credential-dependent workflows.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "parallel-web",
+      "source_path": "skills/parallel-web/references/deep-research.md",
+      "disposition": "excluded",
+      "reason": "Exclude provider-specific CLI, data-transfer, polling, and credential-dependent workflows.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "parallel-web",
+      "source_path": "skills/parallel-web/references/web-extract.md",
+      "disposition": "excluded",
+      "reason": "Exclude provider-specific CLI, data-transfer, polling, and credential-dependent workflows.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "parallel-web",
+      "source_path": "skills/parallel-web/references/web-search.md",
+      "disposition": "excluded",
+      "reason": "Exclude provider-specific CLI, data-transfer, polling, and credential-dependent workflows.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "pptx-posters",
+      "source_path": "skills/pptx-posters/scripts/generate_schematic_ai.py",
+      "disposition": "excluded",
+      "reason": "Exclude provider-specific model, network, .env, and credential handling.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "pptx-posters",
+      "source_path": "skills/pptx-posters/scripts/generate_schematic.py",
+      "disposition": "excluded",
+      "reason": "Exclude provider-bound wrapper and full environment inheritance.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "scientific-schematics",
+      "source_path": "skills/scientific-schematics/references/QUICK_REFERENCE.md",
+      "disposition": "excluded",
+      "reason": "Exclude provider-, model-, credential-, or executable-specific material from the generic adapted Skill.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "scientific-schematics",
+      "source_path": "skills/scientific-schematics/references/README.md",
+      "disposition": "excluded",
+      "reason": "Exclude provider-, model-, credential-, or executable-specific material from the generic adapted Skill.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "scientific-schematics",
+      "source_path": "skills/scientific-schematics/scripts/example_usage.sh",
+      "disposition": "excluded",
+      "reason": "Exclude provider-, model-, credential-, or executable-specific material from the generic adapted Skill.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "scientific-schematics",
+      "source_path": "skills/scientific-schematics/scripts/generate_schematic_ai.py",
+      "disposition": "excluded",
+      "reason": "Exclude provider-, model-, credential-, or executable-specific material from the generic adapted Skill.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "scientific-schematics",
+      "source_path": "skills/scientific-schematics/scripts/generate_schematic.py",
+      "disposition": "excluded",
+      "reason": "Exclude provider-, model-, credential-, or executable-specific material from the generic adapted Skill.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "scientific-slides",
+      "source_path": "skills/scientific-slides/scripts/generate_schematic_ai.py",
+      "disposition": "excluded",
+      "reason": "Exclude provider-specific image generation, network, environment, and credential handling.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "scientific-slides",
+      "source_path": "skills/scientific-slides/scripts/generate_schematic.py",
+      "disposition": "excluded",
+      "reason": "Exclude provider-specific image generation, network, environment, and credential handling.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "scientific-slides",
+      "source_path": "skills/scientific-slides/scripts/generate_slide_image_ai.py",
+      "disposition": "excluded",
+      "reason": "Exclude provider-specific image generation, network, environment, and credential handling.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "scientific-slides",
+      "source_path": "skills/scientific-slides/scripts/generate_slide_image.py",
+      "disposition": "excluded",
+      "reason": "Exclude provider-specific image generation, network, environment, and credential handling.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "venue-templates",
+      "source_path": "skills/venue-templates/scripts/generate_schematic_ai.py",
+      "disposition": "excluded",
+      "reason": "Exclude provider-specific image generation, environment, network, and credential handling.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "venue-templates",
+      "source_path": "skills/venue-templates/scripts/generate_schematic.py",
+      "disposition": "excluded",
+      "reason": "Exclude provider-specific image generation, environment, network, and credential handling.",
       "skill_remains_complete": true
     }
   ]

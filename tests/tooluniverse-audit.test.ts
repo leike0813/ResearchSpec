@@ -120,7 +120,7 @@ void test("ToolUniverse production vendor remains traceable to the audit", async
   assert.equal(registry.vendors.get("tooluniverse")?.revision, REVISION);
   assert.equal(registry.vendors.get("tooluniverse")?.skills.length, 130);
   assert.equal(registry.domains.size, 218);
-  assert.equal(availableDomains(registry).length, 44);
+  assert.equal(availableDomains(registry).length, 48);
 });
 
 function hasFinding(audit: Audit, skillId: string, code: string): boolean {

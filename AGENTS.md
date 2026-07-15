@@ -108,13 +108,18 @@ execution, credential setup, MCP configuration, or workflow writes.
 
 `vendor/scientific-agent-skills` is the maintainer-only pinned input for the
 Scientific Agent Skills v2.53.0 converter. Its immutable audit covers all 147
-upstream Skills, while complete production policies admit 33 reviewed,
-vendor-prefixed Skills and exclude 114 for authority, redistribution, ARSU or
-ToolUniverse overlap, static security, domain fit, or content-review reasons.
-The generated bundle contributes to 13 ANZSRC Group domains and four tool
-domains. Do not execute its scripts, install its dependencies, infer approval
-from upstream security labels, or bypass the checked-in admission, dependency,
-resource, and source-neutral domain decisions.
+upstream Skills. The complete production policies admit 49 reviewed,
+vendor-prefixed Skills and exclude 98 for authority, redistribution, ARSU or
+ToolUniverse overlap, manual security, domain fit, or content-review reasons.
+The generated bundle contributes to 19 ANZSRC Group domains and all five tool
+domains. The 40-item manual security catalog is a production SSOT: 39 Skills
+are clear only with their approved adaptations and `dhdna-profiler` remains a
+confirmed failure. Do not execute bundled scripts, install dependencies,
+handle Skill credentials, infer approval from upstream security labels, or
+bypass the checked-in admission, manual-review, dependency, resource, and
+source-neutral domain decisions. External model or service use must remain
+provider-neutral, use the target Agent's user-approved configuration, and
+never expose or persist secrets through ResearchSpec.
 
 Multi-vendor maintenance must keep converters isolated: each converter stages
 against all published vendors but emits and commits only its own bundle, while a

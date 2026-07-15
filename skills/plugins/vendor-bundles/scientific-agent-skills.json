@@ -7,7 +7,7 @@
     "release": "v2.53.0",
     "revision": "9c9bd2e92af12311ecd0c1a643e0931643f9ea04",
     "license": "MIT",
-    "converter_version": "1",
+    "converter_version": "2",
     "skills": [
       {
         "skill_id": "scientific-agent-skills-aeon",
@@ -62,6 +62,19 @@
         ]
       },
       {
+        "skill_id": "scientific-agent-skills-fluidsim",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/fluidsim"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
         "skill_id": "scientific-agent-skills-generate-image",
         "license": "MIT",
         "dependencies": [],
@@ -69,6 +82,19 @@
           {
             "source_paths": [
               "skills/generate-image"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-geomaster",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/geomaster"
             ],
             "adaptation": "converted"
           }
@@ -101,6 +127,19 @@
         ]
       },
       {
+        "skill_id": "scientific-agent-skills-infographics",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/infographics"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
         "skill_id": "scientific-agent-skills-labarchive-integration",
         "license": "MIT",
         "dependencies": [],
@@ -108,6 +147,19 @@
           {
             "source_paths": [
               "skills/labarchive-integration"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-latex-posters",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/latex-posters"
             ],
             "adaptation": "converted"
           }
@@ -140,6 +192,19 @@
         ]
       },
       {
+        "skill_id": "scientific-agent-skills-markitdown",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/markitdown"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
         "skill_id": "scientific-agent-skills-matlab",
         "license": "MIT",
         "dependencies": [],
@@ -160,6 +225,19 @@
           {
             "source_paths": [
               "skills/matplotlib"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-modal",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/modal"
             ],
             "adaptation": "converted"
           }
@@ -218,6 +296,32 @@
         ]
       },
       {
+        "skill_id": "scientific-agent-skills-pacsomatic",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/pacsomatic"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-parallel-web",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/parallel-web"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
         "skill_id": "scientific-agent-skills-pennylane",
         "license": "MIT",
         "dependencies": [],
@@ -225,6 +329,19 @@
           {
             "source_paths": [
               "skills/pennylane"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-pptx-posters",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/pptx-posters"
             ],
             "adaptation": "converted"
           }
@@ -335,6 +452,45 @@
         ]
       },
       {
+        "skill_id": "scientific-agent-skills-qutip",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/qutip"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-scientific-schematics",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/scientific-schematics"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-scientific-slides",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/scientific-slides"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
         "skill_id": "scientific-agent-skills-scientific-visualization",
         "license": "MIT",
         "dependencies": [],
@@ -355,6 +511,19 @@
           {
             "source_paths": [
               "skills/scikit-learn"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-seaborn",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/seaborn"
             ],
             "adaptation": "converted"
           }
@@ -433,6 +602,45 @@
           {
             "source_paths": [
               "skills/torch-geometric"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-transformers",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/transformers"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-umap-learn",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/umap-learn"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-venue-templates",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/venue-templates"
             ],
             "adaptation": "converted"
           }

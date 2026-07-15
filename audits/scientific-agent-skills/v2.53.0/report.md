@@ -183,4 +183,4 @@ ToolUniverse 转换器 ─────────────> 隔离的供应�
 本审计是结构性、许可证、安全边界、依赖和打包证据。它不验证科学正确性、
 执行代码、测试第三方服务或完成法律审查。
 
-后续准入由单独 change 中的 Scientific Agent Skills 专用 converter 和完整逐项决策实施。转换器只能生成许可证、安全、内容、重叠、依赖、资源和 domain 结论全部明确的 Skills；本报告中的 readiness 与上游安全标签本身不构成准入。
+后续准入由 Scientific Agent Skills 专用 converter、完整逐项 admission policy 与 40 项 finding-level 人工安全决定共同实施。转换器只能生成许可证、安全、内容、重叠、依赖、资源和 domain 结论全部明确的 Skills；本报告中的 readiness、scanner severity 与上游安全标签本身均不构成准入。最终人工结论见 `artifacts/scientific_agent_skills_v2_53_0_manual_security_review.md`，最终 ingest 结果见 `artifacts/scientific_agent_skills_v2_53_0_ingest_report.md`。

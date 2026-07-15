@@ -5,6 +5,11 @@ import { z } from "zod";
 
 import { AuditRelativePathSchema } from "../../vendor-audits/contracts.js";
 import { ScientificAgentSkillsAuditSchema, type ScientificAgentSkillsAudit } from "../../vendor-audits/scientific-agent-skills.js";
+import {
+  assertScientificAgentSkillsSecurityReviewComplete,
+  loadScientificAgentSkillsSecurityReview,
+  type ScientificAgentSkillsSecurityReviewCatalog,
+} from "./security-review.js";
 
 const SkillIdSchema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).max(64);
 const ReviewSchema = z.strictObject({
@@ -79,6 +84,7 @@ export interface ScientificAgentSkillsPolicies {
   admission: ScientificAgentSkillsAdmissionCatalog;
   dependencies: z.infer<typeof ScientificAgentSkillsDependencyCatalogSchema>;
   resources: z.infer<typeof ScientificAgentSkillsResourceCatalogSchema>;
+  securityReview: ScientificAgentSkillsSecurityReviewCatalog;
 }
 
 export async function loadScientificAgentSkillsPolicies(repoRoot: string): Promise<ScientificAgentSkillsPolicies> {
@@ -87,8 +93,10 @@ export async function loadScientificAgentSkillsPolicies(repoRoot: string): Promi
   const admission = ScientificAgentSkillsAdmissionCatalogSchema.parse(await readJson(path.join(policyRoot, "admission-decisions.json")));
   const dependencies = ScientificAgentSkillsDependencyCatalogSchema.parse(await readJson(path.join(policyRoot, "dependency-decisions.json")));
   const resources = ScientificAgentSkillsResourceCatalogSchema.parse(await readJson(path.join(policyRoot, "resource-decisions.json")));
-  validateScientificAgentSkillsPolicies({ audit, admission, dependencies, resources });
-  return { audit, admission, dependencies, resources };
+  const securityReview = await loadScientificAgentSkillsSecurityReview(repoRoot);
+  assertScientificAgentSkillsSecurityReviewComplete(securityReview);
+  validateScientificAgentSkillsPolicies({ audit, admission, dependencies, resources, securityReview });
+  return { audit, admission, dependencies, resources, securityReview };
 }
 
 export function validateScientificAgentSkillsPolicies(policies: ScientificAgentSkillsPolicies): void {
@@ -136,6 +144,22 @@ export function validateScientificAgentSkillsPolicies(policies: ScientificAgentS
     if (!decision.source_path.startsWith(expectedPrefix)) throw new Error(`Resource exception is outside its Skill: ${decision.source_path}`);
     if (resourceKeys.has(decision.source_path)) throw new Error(`Resource exception repeats ${decision.source_path}.`);
     resourceKeys.add(decision.source_path);
+  }
+  const admittedReviewedIds = new Set(policies.admission.decisions.filter((decision) => decision.disposition === "admitted").map((decision) => decision.upstream_skill_id));
+  const approvedResourceExclusions = new Map(
+    policies.securityReview.reviews
+      .filter((review) => admittedReviewedIds.has(review.skill_id))
+      .flatMap((review) => review.adaptations
+        .filter((adaptation) => adaptation.kind === "resource-exclusion" && adaptation.source_path)
+        .map((adaptation) => [adaptation.source_path as string, adaptation.note] as const)),
+  );
+  for (const [sourcePath, note] of approvedResourceExclusions) {
+    const decision = policies.resources.decisions.find((item) => item.source_path === sourcePath);
+    if (!decision || decision.reason !== note) throw new Error(`Approved manual resource exclusion is absent from production policy: ${sourcePath}`);
+  }
+  for (const decision of policies.resources.decisions) {
+    if (decision.upstream_skill_id === "open-notebook") continue;
+    if (!approvedResourceExclusions.has(decision.source_path)) throw new Error(`Production resource exclusion lacks manual-review approval: ${decision.source_path}`);
   }
 }
 
