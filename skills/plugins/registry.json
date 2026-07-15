@@ -7,6 +7,128 @@
   },
   "vendors": [
     {
+      "vendor_id": "finrobot",
+      "name": "FinRobot",
+      "repository_url": "https://github.com/AI4Finance-Foundation/FinRobot.git",
+      "release": "snapshot-297a8d2",
+      "revision": "297a8d28d099be328c8a8eb658b4f782b93f3651",
+      "license": "Apache-2.0",
+      "converter_version": "1",
+      "skills": [
+        {
+          "skill_id": "financial-research-company-fundamentals",
+          "license": "Apache-2.0",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "finrobot_equity/core/src/modules/enhanced_text_generator.py",
+                "finrobot_equity/core/src/modules/equity_agents/company_overview_agent.py",
+                "finrobot_equity/core/src/modules/equity_agents/major_takeaways_agent.py",
+                "finrobot_equity/core/src/modules/financial_data_processor.py",
+                "finrobot/data_source/fmp_utils.py",
+                "finrobot/data_source/sec_utils.py",
+                "finrobot/data_source/yfinance_utils.py",
+                "finrobot/functional/analyzer.py",
+                "finrobot/utils.py"
+              ],
+              "adaptation": "curated"
+            }
+          ]
+        },
+        {
+          "skill_id": "financial-research-competitive-position",
+          "license": "Apache-2.0",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "finrobot_equity/core/src/modules/equity_agents/competitor_analysis_agent.py",
+                "finrobot/data_source/fmp_utils.py",
+                "finrobot/data_source/sec_utils.py",
+                "finrobot/data_source/yfinance_utils.py",
+                "finrobot/functional/analyzer.py",
+                "finrobot/utils.py"
+              ],
+              "adaptation": "curated"
+            }
+          ]
+        },
+        {
+          "skill_id": "financial-research-corporate-risk",
+          "license": "Apache-2.0",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "finrobot_equity/core/src/modules/enhanced_text_generator.py",
+                "finrobot_equity/core/src/modules/equity_agents/risks_agent.py",
+                "finrobot/data_source/fmp_utils.py",
+                "finrobot/data_source/sec_utils.py",
+                "finrobot/data_source/yfinance_utils.py",
+                "finrobot/functional/analyzer.py",
+                "finrobot/utils.py"
+              ],
+              "adaptation": "curated"
+            }
+          ]
+        },
+        {
+          "skill_id": "financial-research-event-evidence",
+          "license": "Apache-2.0",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "finrobot_equity/core/src/modules/catalyst_analyzer.py",
+                "finrobot_equity/core/src/modules/enhanced_text_generator.py",
+                "finrobot_equity/core/src/modules/equity_agents/news_summary_agent.py"
+              ],
+              "adaptation": "curated"
+            }
+          ]
+        },
+        {
+          "skill_id": "financial-research-relative-valuation",
+          "license": "Apache-2.0",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "finrobot_equity/core/src/modules/enhanced_text_generator.py",
+                "finrobot_equity/core/src/modules/equity_agents/valuation_overview_agent.py",
+                "finrobot_equity/core/src/modules/sensitivity_analyzer.py",
+                "finrobot_equity/core/src/modules/valuation_engine.py",
+                "finrobot/data_source/fmp_utils.py",
+                "finrobot/data_source/sec_utils.py",
+                "finrobot/data_source/yfinance_utils.py",
+                "finrobot/utils.py"
+              ],
+              "adaptation": "curated"
+            }
+          ]
+        },
+        {
+          "skill_id": "financial-research-statement-analysis",
+          "license": "Apache-2.0",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "finrobot_equity/core/src/modules/financial_data_processor.py",
+                "finrobot/data_source/fmp_utils.py",
+                "finrobot/data_source/sec_utils.py",
+                "finrobot/data_source/yfinance_utils.py",
+                "finrobot/functional/analyzer.py",
+                "finrobot/utils.py"
+              ],
+              "adaptation": "curated"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "vendor_id": "materials-science-skills-for-llm",
       "name": "Materials-Science-Skills-For-LLM",
       "repository_url": "https://github.com/IntelligentMat/Materials-Science-Skills-For-LLM",
@@ -3120,7 +3242,10 @@
       "title": "Accounting, auditing and accountability",
       "description": "ANZSRC 2020 FoR Group 3501: Accounting, auditing and accountability.",
       "version": "0.1.0",
-      "skills": []
+      "skills": [
+        "financial-research-company-fundamentals",
+        "financial-research-statement-analysis"
+      ]
     },
     {
       "domain_id": "banking-finance-and-investment",
@@ -3129,7 +3254,14 @@
       "title": "Banking, finance and investment",
       "description": "ANZSRC 2020 FoR Group 3502: Banking, finance and investment.",
       "version": "0.1.0",
-      "skills": []
+      "skills": [
+        "financial-research-company-fundamentals",
+        "financial-research-competitive-position",
+        "financial-research-corporate-risk",
+        "financial-research-event-evidence",
+        "financial-research-relative-valuation",
+        "financial-research-statement-analysis"
+      ]
     },
     {
       "domain_id": "business-systems-in-context",

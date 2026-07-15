@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "vendor": "finrobot",
+  "release": "snapshot-297a8d2",
+  "revision": "297a8d28d099be328c8a8eb658b4f782b93f3651",
+  "audit_sha256": "6b518a933f036333203276263b94cc5b4bd45a924f426972c4547165c5cbb9c3",
+  "converter_execution": "never",
+  "sources": [
+    {
+      "source_path": "finrobot/data_source/fmp_utils.py",
+      "git_object_id": "5af7e58b1425670476e016389a856ff398f6f907",
+      "sha256": "766da4e06a4096a12f5552af346dd5ebfd299fb3d20ba55fd861b4329d304b16",
+      "production_action": "adapted-resource",
+      "finrobot_coupling": "light",
+      "output_assets": [
+        "resources/python/provider_adapters.py"
+      ]
+    },
+    {
+      "source_path": "finrobot/data_source/sec_utils.py",
+      "git_object_id": "a5870d3b29a8a4ea804ac1180c695f8ea9faafcf",
+      "sha256": "8be8664f05eb9d4d92be038d369db83ff28f8ab611d20f1796ddf2f4cb7be173",
+      "production_action": "adapted-resource",
+      "finrobot_coupling": "light",
+      "output_assets": [
+        "resources/python/provider_adapters.py"
+      ]
+    },
+    {
+      "source_path": "finrobot/data_source/yfinance_utils.py",
+      "git_object_id": "283053139af6ee1406d5e37ae6192894ba72e935",
+      "sha256": "5a10ae0998376f54108bab618e781ee44ce57ae06503109a29e2de2600daa11b",
+      "production_action": "adapted-resource",
+      "finrobot_coupling": "light",
+      "output_assets": [
+        "resources/python/provider_adapters.py"
+      ]
+    },
+    {
+      "source_path": "finrobot/functional/analyzer.py",
+      "git_object_id": "16042fa76c3aadd5935b473ff7ea3233900aa78d",
+      "sha256": "a7af9f74bca58c5105beb3a48b53622ae41cec4330e851d4702160833c5060d2",
+      "production_action": "adapted-resource",
+      "finrobot_coupling": "light",
+      "output_assets": [
+        "resources/python/financial_analyzer.py"
+      ]
+    },
+    {
+      "source_path": "finrobot/utils.py",
+      "git_object_id": "94c5ea8c4f3d379a57359e27644767cf092539ce",
+      "sha256": "7d8b84b7d40c8a32f5854899d35f52bf25027efdf1957245799f4140aebec477",
+      "production_action": "adapted-resource",
+      "finrobot_coupling": "light",
+      "output_assets": [
+        "resources/python/provider_adapters.py"
+      ]
+    },
+    {
+      "source_path": "finrobot_equity/core/src/modules/enhanced_text_generator.py",
+      "git_object_id": "082890ae1a88b3b10af4be73a04f1a757a63a0f2",
+      "sha256": "e09107b59bbb5f65423a30ab475aecf84f36d934e0d5750e26656ed76daace97",
+      "production_action": "adapted-resource",
+      "finrobot_coupling": "light",
+      "output_assets": [
+        "resources/python/enhanced_text_generator.py"
+      ]
+    },
+    {
+      "source_path": "finrobot_equity/core/src/modules/equity_agents/company_overview_agent.py",
+      "git_object_id": "8dac1c7a5e12141ffee42563513c22e3c3c2756b",
+      "sha256": "f2678311f6fa5741216dd4c13153f8d81367d615d27a04428f070cb25c44abaf",
+      "production_action": "prompt-resource",
+      "finrobot_coupling": "none",
+      "output_assets": [
+        "resources/agent-specs/company_overview.json"
+      ]
+    },
+    {
+      "source_path": "finrobot_equity/core/src/modules/equity_agents/major_takeaways_agent.py",
+      "git_object_id": "5ade681875cf8c0ddd87b45b68c11d4127a7df91",
+      "sha256": "47bf4b4e16fc0c308bbc4d42986bba696f1de34ecc3c8ab65f1718e26d5a6081",
+      "production_action": "prompt-resource",
+      "finrobot_coupling": "none",
+      "output_assets": [
+        "resources/agent-specs/major_takeaways.json"
+      ]
+    },
+    {
+      "source_path": "finrobot_equity/core/src/modules/financial_data_processor.py",
+      "git_object_id": "288328c7b903d43ae067dd8d422a7f0c0647472d",
+      "sha256": "0cfc251b8f8a1fba8dc16ba1ca52d6eb92ccf160a5bc881c24adfa885425c726",
+      "production_action": "direct-resource",
+      "finrobot_coupling": "none",
+      "output_assets": [
+        "resources/python/financial_data_processor.py"
+      ]
+    }
+  ]
+}

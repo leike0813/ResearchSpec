@@ -22,6 +22,7 @@
     "docs/cli_interface_design.md",
     "docs/domain_skill_plugins.md",
     "docs/domain_taxonomy.md",
+    "docs/finrobot_vendor_adapter.md",
     "docs/materials_science_skills_vendor_adapter.md",
     "docs/scientific_agent_skills_vendor_adapter.md",
     "docs/tooluniverse_vendor_adapter.md",
@@ -49,7 +50,10 @@
     "scientific-agent-skills:idempotence": "pnpm build && node dist/src/vendor-converters/scientific-agent-skills/cli.js idempotence",
     "materials-science-skills-for-llm:convert": "pnpm build && node dist/src/vendor-converters/materials-science-skills-for-llm/cli.js convert",
     "materials-science-skills-for-llm:check": "pnpm build && node dist/src/vendor-converters/materials-science-skills-for-llm/cli.js check",
-    "materials-science-skills-for-llm:idempotence": "pnpm build && node dist/src/vendor-converters/materials-science-skills-for-llm/cli.js idempotence"
+    "materials-science-skills-for-llm:idempotence": "pnpm build && node dist/src/vendor-converters/materials-science-skills-for-llm/cli.js idempotence",
+    "finrobot:convert": "pnpm build && node dist/src/vendor-converters/finrobot/cli.js convert",
+    "finrobot:check": "pnpm build && node dist/src/vendor-converters/finrobot/cli.js check",
+    "finrobot:idempotence": "pnpm build && node dist/src/vendor-converters/finrobot/cli.js idempotence"
   },
   "engines": {
     "node": ">=22"

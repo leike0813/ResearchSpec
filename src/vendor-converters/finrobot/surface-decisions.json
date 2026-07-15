@@ -1,0 +1,799 @@
+{
+  "schema_version": "2",
+  "vendor_id": "finrobot",
+  "release": "snapshot-297a8d2",
+  "revision": "297a8d28d099be328c8a8eb658b4f782b93f3651",
+  "audit_sha256": "6b518a933f036333203276263b94cc5b4bd45a924f426972c4547165c5cbb9c3",
+  "decisions": [
+    {
+      "surface_id": "analyzer-analyze-balance-sheet",
+      "source_path": "finrobot/functional/analyzer.py",
+      "symbol": "ReportAnalysisUtils.analyze_balance_sheet",
+      "content_origin_id": "root-apache",
+      "disposition": "admitted-resource",
+      "generated_skill_id": "financial-research-statement-analysis",
+      "output_assets": [
+        "curation/resources/python/financial_analyzer.py"
+      ],
+      "symbol_action": "provider-boundary-adapted",
+      "reason_code": "capability-admission"
+    },
+    {
+      "surface_id": "analyzer-analyze-business-highlights",
+      "source_path": "finrobot/functional/analyzer.py",
+      "symbol": "ReportAnalysisUtils.analyze_business_highlights",
+      "content_origin_id": "root-apache",
+      "disposition": "admitted-resource",
+      "generated_skill_id": "financial-research-company-fundamentals",
+      "output_assets": [
+        "curation/resources/python/financial_analyzer.py"
+      ],
+      "symbol_action": "provider-boundary-adapted",
+      "reason_code": "capability-admission"
+    },
+    {
+      "surface_id": "analyzer-analyze-cash-flow",
+      "source_path": "finrobot/functional/analyzer.py",
+      "symbol": "ReportAnalysisUtils.analyze_cash_flow",
+      "content_origin_id": "root-apache",
+      "disposition": "admitted-resource",
+      "generated_skill_id": "financial-research-statement-analysis",
+      "output_assets": [
+        "curation/resources/python/financial_analyzer.py"
+      ],
+      "symbol_action": "provider-boundary-adapted",
+      "reason_code": "capability-admission"
+    },
+    {
+      "surface_id": "analyzer-analyze-company-description",
+      "source_path": "finrobot/functional/analyzer.py",
+      "symbol": "ReportAnalysisUtils.analyze_company_description",
+      "content_origin_id": "root-apache",
+      "disposition": "admitted-resource",
+      "generated_skill_id": "financial-research-company-fundamentals",
+      "output_assets": [
+        "curation/resources/python/financial_analyzer.py"
+      ],
+      "symbol_action": "provider-boundary-adapted",
+      "reason_code": "capability-admission"
+    },
+    {
+      "surface_id": "analyzer-analyze-income-stmt",
+      "source_path": "finrobot/functional/analyzer.py",
+      "symbol": "ReportAnalysisUtils.analyze_income_stmt",
+      "content_origin_id": "root-apache",
+      "disposition": "admitted-resource",
+      "generated_skill_id": "financial-research-statement-analysis",
+      "output_assets": [
+        "curation/resources/python/financial_analyzer.py"
+      ],
+      "symbol_action": "provider-boundary-adapted",
+      "reason_code": "capability-admission"
+    },
+    {
+      "surface_id": "analyzer-analyze-segment-stmt",
+      "source_path": "finrobot/functional/analyzer.py",
+      "symbol": "ReportAnalysisUtils.analyze_segment_stmt",
+      "content_origin_id": "root-apache",
+      "disposition": "admitted-resource",
+      "generated_skill_id": "financial-research-statement-analysis",
+      "output_assets": [
+        "curation/resources/python/financial_analyzer.py"
+      ],
+      "symbol_action": "provider-boundary-adapted",
+      "reason_code": "capability-admission"
+    },
+    {
+      "surface_id": "analyzer-get-competitors-analysis",
+      "source_path": "finrobot/functional/analyzer.py",
+      "symbol": "ReportAnalysisUtils.get_competitors_analysis",
+      "content_origin_id": "root-apache",
+      "disposition": "admitted-resource",
+      "generated_skill_id": "financial-research-competitive-position",
+      "output_assets": [
+        "curation/resources/python/financial_analyzer.py"
+      ],
+      "symbol_action": "provider-boundary-adapted",
+      "reason_code": "capability-admission"
+    },
+    {
+      "surface_id": "analyzer-get-key-data",
+      "source_path": "finrobot/functional/analyzer.py",
+      "symbol": "ReportAnalysisUtils.get_key_data",
+      "content_origin_id": "root-apache",
+      "disposition": "admitted-resource",
+      "generated_skill_id": "financial-research-company-fundamentals",
+      "output_assets": [
+        "curation/resources/python/financial_analyzer.py"
+      ],
+      "symbol_action": "provider-boundary-adapted",
+      "reason_code": "capability-admission"
+    },
+    {
+      "surface_id": "analyzer-get-risk-assessment",
+      "source_path": "finrobot/functional/analyzer.py",
+      "symbol": "ReportAnalysisUtils.get_risk_assessment",
+      "content_origin_id": "root-apache",
+      "disposition": "admitted-resource",
+      "generated_skill_id": "financial-research-corporate-risk",
+      "output_assets": [
+        "curation/resources/python/financial_analyzer.py"
+      ],
+      "symbol_action": "provider-boundary-adapted",
+      "reason_code": "capability-admission"
+    },
+    {
+      "surface_id": "analyzer-income-summarization",
+      "source_path": "finrobot/functional/analyzer.py",
+      "symbol": "ReportAnalysisUtils.income_summarization",
+      "content_origin_id": "root-apache",
+      "disposition": "admitted-resource",
+      "generated_skill_id": "financial-research-statement-analysis",
+      "output_assets": [
+        "curation/resources/python/financial_analyzer.py"
+      ],
+      "symbol_action": "provider-boundary-adapted",
+      "reason_code": "capability-admission"
+    },
+    {
+      "surface_id": "catalyst-assess-impact",
+      "source_path": "finrobot_equity/core/src/modules/catalyst_analyzer.py",
+      "symbol": "CatalystAnalyzer.assess_catalyst_impact",
+      "content_origin_id": "root-apache",
+      "disposition": "admitted-resource",
+      "generated_skill_id": "financial-research-event-evidence",
+      "output_assets": [
+        "curation/resources/python/catalyst_analyzer.py"
+      ],
+      "symbol_action": "business-logic-preserved",
+      "reason_code": "capability-admission"
+    },
+    {
+      "surface_id": "catalyst-classify-event",
+      "source_path": "finrobot_equity/core/src/modules/catalyst_analyzer.py",
+      "symbol": "CatalystAnalyzer._classify_event_type",
+      "content_origin_id": "root-apache",
+      "disposition": "admitted-resource",
+      "generated_skill_id": "financial-research-event-evidence",
+      "output_assets": [
+        "curation/resources/python/catalyst_analyzer.py"
+      ],
+      "symbol_action": "business-logic-preserved",
+      "reason_code": "capability-admission"
+    },
+    {
+      "surface_id": "catalyst-estimate-probability",
+      "source_path": "finrobot_equity/core/src/modules/catalyst_analyzer.py",
+      "symbol": "CatalystAnalyzer._estimate_probability",
+      "content_origin_id": "root-apache",
+      "disposition": "admitted-resource",
+      "generated_skill_id": "financial-research-event-evidence",
+      "output_assets": [
+        "curation/resources/python/catalyst_analyzer.py"
+      ],
+      "symbol_action": "business-logic-preserved",
+      "reason_code": "capability-admission"
+    },
+    {
+      "surface_id": "catalyst-identify",
+      "source_path": "finrobot_equity/core/src/modules/catalyst_analyzer.py",
+      "symbol": "CatalystAnalyzer.identify_catalysts",
+      "content_origin_id": "root-apache",
+      "disposition": "admitted-resource",
+      "generated_skill_id": "financial-research-event-evidence",
+      "output_assets": [
+        "curation/resources/python/catalyst_analyzer.py"
+      ],
+      "symbol_action": "business-logic-preserved",
+      "reason_code": "capability-admission"
+    },
+    {
+      "surface_id": "enhanced-catalyst-analysis",
+      "source_path": "finrobot_equity/core/src/modules/enhanced_text_generator.py",
+      "symbol": "EnhancedTextGenerator.generate_catalyst_analysis",
+      "content_origin_id": "root-apache",
+      "disposition": "admitted-resource",
+      "generated_skill_id": "financial-research-event-evidence",
+      "output_assets": [
+        "curation/resources/python/enhanced_text_generator.py"
+      ],
+      "symbol_action": "provider-boundary-adapted",
+      "reason_code": "capability-admission"
+    },
+    {
+      "surface_id": "enhanced-executive-summary",
+      "source_path": "finrobot_equity/core/src/modules/enhanced_text_generator.py",
+      "symbol": "EnhancedTextGenerator.generate_executive_summary",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    },
+    {
+      "surface_id": "enhanced-forecast-methodology",
+      "source_path": "finrobot_equity/core/src/modules/enhanced_text_generator.py",
+      "symbol": "EnhancedTextGenerator.generate_forecast_methodology",
+      "content_origin_id": "root-apache",
+      "disposition": "admitted-resource",
+      "generated_skill_id": "financial-research-company-fundamentals",
+      "output_assets": [
+        "curation/resources/python/enhanced_text_generator.py"
+      ],
+      "symbol_action": "provider-boundary-adapted",
+      "reason_code": "capability-admission"
+    },
+    {
+      "surface_id": "enhanced-investment-recommendation",
+      "source_path": "finrobot_equity/core/src/modules/enhanced_text_generator.py",
+      "symbol": "EnhancedTextGenerator.generate_investment_recommendation",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    },
+    {
+      "surface_id": "enhanced-risk-factors",
+      "source_path": "finrobot_equity/core/src/modules/enhanced_text_generator.py",
+      "symbol": "EnhancedTextGenerator.generate_risk_factors",
+      "content_origin_id": "root-apache",
+      "disposition": "admitted-resource",
+      "generated_skill_id": "financial-research-corporate-risk",
+      "output_assets": [
+        "curation/resources/python/enhanced_text_generator.py"
+      ],
+      "symbol_action": "provider-boundary-adapted",
+      "reason_code": "capability-admission"
+    },
+    {
+      "surface_id": "enhanced-section-summary",
+      "source_path": "finrobot_equity/core/src/modules/enhanced_text_generator.py",
+      "symbol": "EnhancedTextGenerator.generate_section_summary",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    },
+    {
+      "surface_id": "enhanced-valuation-analysis",
+      "source_path": "finrobot_equity/core/src/modules/enhanced_text_generator.py",
+      "symbol": "EnhancedTextGenerator.generate_valuation_analysis",
+      "content_origin_id": "root-apache",
+      "disposition": "admitted-resource",
+      "generated_skill_id": "financial-research-relative-valuation",
+      "output_assets": [
+        "curation/resources/python/enhanced_text_generator.py"
+      ],
+      "symbol_action": "provider-boundary-adapted",
+      "reason_code": "capability-admission"
+    },
+    {
+      "surface_id": "equity-company-overview",
+      "source_path": "finrobot_equity/core/src/modules/equity_agents/company_overview_agent.py",
+      "symbol": "COMPANY_OVERVIEW_PROMPT",
+      "content_origin_id": "root-apache",
+      "disposition": "admitted-resource",
+      "generated_skill_id": "financial-research-company-fundamentals",
+      "output_assets": [
+        "curation/resources/agent-specs/company_overview.json"
+      ],
+      "symbol_action": "prompt-and-output-schema-preserved",
+      "reason_code": "capability-admission"
+    },
+    {
+      "surface_id": "equity-competitor-analysis",
+      "source_path": "finrobot_equity/core/src/modules/equity_agents/competitor_analysis_agent.py",
+      "symbol": "COMPETITOR_ANALYSIS_PROMPT",
+      "content_origin_id": "root-apache",
+      "disposition": "admitted-resource",
+      "generated_skill_id": "financial-research-competitive-position",
+      "output_assets": [
+        "curation/resources/agent-specs/competitor_analysis.json"
+      ],
+      "symbol_action": "prompt-and-output-schema-preserved",
+      "reason_code": "capability-admission"
+    },
+    {
+      "surface_id": "equity-investment-overview",
+      "source_path": "finrobot_equity/core/src/modules/equity_agents/investment_overview_agent.py",
+      "symbol": "INVESTMENT_OVERVIEW_PROMPT",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    },
+    {
+      "surface_id": "equity-major-takeaways",
+      "source_path": "finrobot_equity/core/src/modules/equity_agents/major_takeaways_agent.py",
+      "symbol": "MAJOR_TAKEAWAYS_PROMPT",
+      "content_origin_id": "root-apache",
+      "disposition": "admitted-resource",
+      "generated_skill_id": "financial-research-company-fundamentals",
+      "output_assets": [
+        "curation/resources/agent-specs/major_takeaways.json"
+      ],
+      "symbol_action": "prompt-and-output-schema-preserved",
+      "reason_code": "capability-admission"
+    },
+    {
+      "surface_id": "equity-news-summary",
+      "source_path": "finrobot_equity/core/src/modules/equity_agents/news_summary_agent.py",
+      "symbol": "NEWS_SUMMARY_PROMPT",
+      "content_origin_id": "root-apache",
+      "disposition": "admitted-resource",
+      "generated_skill_id": "financial-research-event-evidence",
+      "output_assets": [
+        "curation/resources/agent-specs/news_summary.json"
+      ],
+      "symbol_action": "prompt-and-output-schema-preserved",
+      "reason_code": "capability-admission"
+    },
+    {
+      "surface_id": "equity-risks",
+      "source_path": "finrobot_equity/core/src/modules/equity_agents/risks_agent.py",
+      "symbol": "RISKS_PROMPT",
+      "content_origin_id": "root-apache",
+      "disposition": "admitted-resource",
+      "generated_skill_id": "financial-research-corporate-risk",
+      "output_assets": [
+        "curation/resources/agent-specs/risks.json"
+      ],
+      "symbol_action": "prompt-and-output-schema-preserved",
+      "reason_code": "capability-admission"
+    },
+    {
+      "surface_id": "equity-tagline",
+      "source_path": "finrobot_equity/core/src/modules/equity_agents/tagline_agent.py",
+      "symbol": "TAGLINE_PROMPT",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    },
+    {
+      "surface_id": "equity-valuation-overview",
+      "source_path": "finrobot_equity/core/src/modules/equity_agents/valuation_overview_agent.py",
+      "symbol": "VALUATION_OVERVIEW_PROMPT",
+      "content_origin_id": "root-apache",
+      "disposition": "admitted-resource",
+      "generated_skill_id": "financial-research-relative-valuation",
+      "output_assets": [
+        "curation/resources/agent-specs/valuation_overview.json"
+      ],
+      "symbol_action": "prompt-and-output-schema-preserved",
+      "reason_code": "capability-admission"
+    },
+    {
+      "surface_id": "fallback-company-overview",
+      "source_path": "finrobot_equity/core/src/modules/text_generator_agents.py",
+      "symbol": "SYSTEM_PROMPTS[company_overview]",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    },
+    {
+      "surface_id": "fallback-competitor-analysis",
+      "source_path": "finrobot_equity/core/src/modules/text_generator_agents.py",
+      "symbol": "SYSTEM_PROMPTS[competitor_analysis]",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    },
+    {
+      "surface_id": "fallback-investment-overview",
+      "source_path": "finrobot_equity/core/src/modules/text_generator_agents.py",
+      "symbol": "SYSTEM_PROMPTS[investment_overview]",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    },
+    {
+      "surface_id": "fallback-major-takeaways",
+      "source_path": "finrobot_equity/core/src/modules/text_generator_agents.py",
+      "symbol": "SYSTEM_PROMPTS[major_takeaways]",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    },
+    {
+      "surface_id": "fallback-news-summary",
+      "source_path": "finrobot_equity/core/src/modules/text_generator_agents.py",
+      "symbol": "SYSTEM_PROMPTS[news_summary]",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    },
+    {
+      "surface_id": "fallback-risks",
+      "source_path": "finrobot_equity/core/src/modules/text_generator_agents.py",
+      "symbol": "SYSTEM_PROMPTS[risks]",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    },
+    {
+      "surface_id": "fallback-tagline",
+      "source_path": "finrobot_equity/core/src/modules/text_generator_agents.py",
+      "symbol": "SYSTEM_PROMPTS[tagline]",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    },
+    {
+      "surface_id": "fallback-valuation-overview",
+      "source_path": "finrobot_equity/core/src/modules/text_generator_agents.py",
+      "symbol": "SYSTEM_PROMPTS[valuation_overview]",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    },
+    {
+      "surface_id": "forecaster-building-task",
+      "source_path": "configs/save_config_forecaster.json",
+      "symbol": "building_task",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    },
+    {
+      "surface_id": "forecaster-financial-data-analyst",
+      "source_path": "configs/save_config_forecaster.json",
+      "symbol": "agent_configs[financial_data_analyst]",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    },
+    {
+      "surface_id": "forecaster-financial-report-writer",
+      "source_path": "configs/save_config_forecaster.json",
+      "symbol": "agent_configs[financial_report_writer]",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    },
+    {
+      "surface_id": "forecaster-market-news-researcher",
+      "source_path": "configs/save_config_forecaster.json",
+      "symbol": "agent_configs[market_news_researcher]",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    },
+    {
+      "surface_id": "forecaster-python-programmer",
+      "source_path": "configs/save_config_forecaster.json",
+      "symbol": "agent_configs[python_programmer]",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    },
+    {
+      "surface_id": "forecaster-stock-price-estimator",
+      "source_path": "configs/save_config_forecaster.json",
+      "symbol": "agent_configs[stock_price_estimator]",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    },
+    {
+      "surface_id": "orchestration-leader",
+      "source_path": "finrobot/agents/prompts.py",
+      "symbol": "leader_system_message",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    },
+    {
+      "surface_id": "orchestration-order",
+      "source_path": "finrobot/agents/prompts.py",
+      "symbol": "order_template",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    },
+    {
+      "surface_id": "orchestration-role",
+      "source_path": "finrobot/agents/prompts.py",
+      "symbol": "role_system_message",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    },
+    {
+      "surface_id": "processor-extract-api",
+      "source_path": "finrobot_equity/core/src/modules/financial_data_processor.py",
+      "symbol": "extract_historical_metrics_from_api_data",
+      "content_origin_id": "root-apache",
+      "disposition": "admitted-resource",
+      "generated_skill_id": "financial-research-statement-analysis",
+      "output_assets": [
+        "curation/resources/python/financial_data_processor.py"
+      ],
+      "symbol_action": "business-logic-preserved",
+      "reason_code": "capability-admission"
+    },
+    {
+      "surface_id": "processor-extract-pdf",
+      "source_path": "finrobot_equity/core/src/modules/financial_data_processor.py",
+      "symbol": "extract_historical_metrics_from_pdf_data",
+      "content_origin_id": "root-apache",
+      "disposition": "admitted-resource",
+      "generated_skill_id": "financial-research-statement-analysis",
+      "output_assets": [
+        "curation/resources/python/financial_data_processor.py"
+      ],
+      "symbol_action": "business-logic-preserved",
+      "reason_code": "capability-admission"
+    },
+    {
+      "surface_id": "processor-growth-forecast",
+      "source_path": "finrobot_equity/core/src/modules/financial_data_processor.py",
+      "symbol": "calculate_growth_and_forecasts",
+      "content_origin_id": "root-apache",
+      "disposition": "admitted-resource",
+      "generated_skill_id": "financial-research-company-fundamentals",
+      "output_assets": [
+        "curation/resources/python/financial_data_processor.py"
+      ],
+      "symbol_action": "business-logic-preserved",
+      "reason_code": "capability-admission"
+    },
+    {
+      "surface_id": "role-accountant",
+      "source_path": "finrobot/agents/agent_library.py",
+      "symbol": "library[Accountant]",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    },
+    {
+      "surface_id": "role-artificial-intelligence-engineer",
+      "source_path": "finrobot/agents/agent_library.py",
+      "symbol": "library[Artificial_Intelligence_Engineer]",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    },
+    {
+      "surface_id": "role-data-analyst",
+      "source_path": "finrobot/agents/agent_library.py",
+      "symbol": "library[Data_Analyst]",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    },
+    {
+      "surface_id": "role-expert-investor",
+      "source_path": "finrobot/agents/agent_library.py",
+      "symbol": "library[Expert_Investor]",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    },
+    {
+      "surface_id": "role-financial-analyst",
+      "source_path": "finrobot/agents/agent_library.py",
+      "symbol": "library[Financial_Analyst]",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    },
+    {
+      "surface_id": "role-it-specialist",
+      "source_path": "finrobot/agents/agent_library.py",
+      "symbol": "library[IT_Specialist]",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    },
+    {
+      "surface_id": "role-market-analyst",
+      "source_path": "finrobot/agents/agent_library.py",
+      "symbol": "library[Market_Analyst]",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    },
+    {
+      "surface_id": "role-programmer",
+      "source_path": "finrobot/agents/agent_library.py",
+      "symbol": "library[Programmer]",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    },
+    {
+      "surface_id": "role-software-developer",
+      "source_path": "finrobot/agents/agent_library.py",
+      "symbol": "library[Software_Developer]",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    },
+    {
+      "surface_id": "role-statistician",
+      "source_path": "finrobot/agents/agent_library.py",
+      "symbol": "library[Statistician]",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    },
+    {
+      "surface_id": "sensitivity-confidence-interval",
+      "source_path": "finrobot_equity/core/src/modules/sensitivity_analyzer.py",
+      "symbol": "SensitivityAnalyzer.calculate_confidence_interval",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    },
+    {
+      "surface_id": "sensitivity-margin",
+      "source_path": "finrobot_equity/core/src/modules/sensitivity_analyzer.py",
+      "symbol": "SensitivityAnalyzer.analyze_margin_sensitivity",
+      "content_origin_id": "root-apache",
+      "disposition": "admitted-resource",
+      "generated_skill_id": "financial-research-relative-valuation",
+      "output_assets": [
+        "curation/resources/python/sensitivity_analyzer.py"
+      ],
+      "symbol_action": "business-logic-preserved",
+      "reason_code": "capability-admission"
+    },
+    {
+      "surface_id": "sensitivity-revenue",
+      "source_path": "finrobot_equity/core/src/modules/sensitivity_analyzer.py",
+      "symbol": "SensitivityAnalyzer.analyze_revenue_sensitivity",
+      "content_origin_id": "root-apache",
+      "disposition": "admitted-resource",
+      "generated_skill_id": "financial-research-relative-valuation",
+      "output_assets": [
+        "curation/resources/python/sensitivity_analyzer.py"
+      ],
+      "symbol_action": "business-logic-preserved",
+      "reason_code": "capability-admission"
+    },
+    {
+      "surface_id": "sensitivity-table",
+      "source_path": "finrobot_equity/core/src/modules/sensitivity_analyzer.py",
+      "symbol": "SensitivityAnalyzer.generate_sensitivity_table",
+      "content_origin_id": "root-apache",
+      "disposition": "admitted-resource",
+      "generated_skill_id": "financial-research-relative-valuation",
+      "output_assets": [
+        "curation/resources/python/sensitivity_analyzer.py"
+      ],
+      "symbol_action": "business-logic-preserved",
+      "reason_code": "capability-admission"
+    },
+    {
+      "surface_id": "valuation-ev-ebitda",
+      "source_path": "finrobot_equity/core/src/modules/valuation_engine.py",
+      "symbol": "ValuationEngine.calculate_ev_ebitda_valuation",
+      "content_origin_id": "root-apache",
+      "disposition": "admitted-resource",
+      "generated_skill_id": "financial-research-relative-valuation",
+      "output_assets": [
+        "curation/resources/python/valuation_engine.py"
+      ],
+      "symbol_action": "business-logic-preserved",
+      "reason_code": "capability-admission"
+    },
+    {
+      "surface_id": "valuation-peer-comparison",
+      "source_path": "finrobot_equity/core/src/modules/valuation_engine.py",
+      "symbol": "ValuationEngine.calculate_peer_comparison_valuation",
+      "content_origin_id": "root-apache",
+      "disposition": "admitted-resource",
+      "generated_skill_id": "financial-research-relative-valuation",
+      "output_assets": [
+        "curation/resources/python/valuation_engine.py"
+      ],
+      "symbol_action": "business-logic-preserved",
+      "reason_code": "capability-admission"
+    },
+    {
+      "surface_id": "valuation-simplified-dcf",
+      "source_path": "finrobot_equity/core/src/modules/valuation_engine.py",
+      "symbol": "ValuationEngine.calculate_dcf_valuation",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded",
+      "generated_skill_id": null,
+      "output_assets": [],
+      "symbol_action": "none",
+      "reason_code": "outside-six-admitted-capabilities"
+    }
+  ]
+}

@@ -26,4 +26,17 @@ ResearchSpec distributes reviewed Open Agent Skills adapted from Scientific Agen
 
 Package, service, dataset, hardware, and runtime licenses referenced by those Skills remain separately applicable. ResearchSpec distributes static reviewed resources and does not execute bundled scripts or install their dependencies.
 
+ResearchSpec distributes reviewed Skills derived from FinRobot:
+
+- Source: https://github.com/AI4Finance-Foundation/FinRobot
+- Release: snapshot-297a8d2
+- Revision: 297a8d28d099be328c8a8eb658b4f782b93f3651
+- Content license: Apache License 2.0, preserved in every generated Skill's `LICENSE` and `NOTICE`
+
+FinRobot-derived Python and AgentSpec resources are static package assets during
+conversion, packaging, installation, discovery, and update. A target Agent may
+invoke them later with user-configured dependencies, providers, and credentials.
+ResearchSpec contains no actual provider credentials or private payloads and is
+independent from and not endorsed by FinRobot or AI4Finance Foundation.
+
 ResearchSpec-authored material is copyright 2026 ResearchSpec contributors and is licensed under MIT where identified by the root license map.

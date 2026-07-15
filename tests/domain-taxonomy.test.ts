@@ -31,39 +31,42 @@ void test("internal catalog contains every Group and five tools while public cat
     assert.equal(domain?.domain_type, "discipline");
     if (domain?.domain_type === "discipline") assert.equal(domain.anzsrc_group_code, group.code);
   }
-  assert.equal(availableDomains(registry).length, 49);
+  assert.equal(availableDomains(registry).length, 51);
   assert.equal(tools.filter((domain) => domain.skills.length > 0).length, 5);
 });
 
-void test("all 309 vendor audit records carry valid Field metadata independent of membership", async () => {
+void test("all 315 vendor audit records carry valid Field metadata independent of membership", async () => {
   const snapshot = await loadAnzsrcSnapshot(SNAPSHOT_PATH);
   const fields = new Set(snapshot.fields.map((field) => field.code));
-  const paths = [
-    path.resolve("audits/tooluniverse/v1.3.1/skill-audit.json"),
-    path.resolve("audits/scientific-agent-skills/v2.53.0/skill-audit.json"),
-    path.resolve("audits/materials-science-skills-for-llm/snapshot-fafd3ab/skill-audit.json"),
+  const sources = [
+    { path: path.resolve("audits/tooluniverse/v1.3.1/skill-audit.json"), records: "skills" },
+    { path: path.resolve("audits/scientific-agent-skills/v2.53.0/skill-audit.json"), records: "skills" },
+    { path: path.resolve("audits/materials-science-skills-for-llm/snapshot-fafd3ab/skill-audit.json"), records: "skills" },
+    { path: path.resolve("audits/finrobot/snapshot-297a8d2/capability-audit.json"), records: "candidate_capabilities" },
   ];
   let records = 0;
-  for (const auditPath of paths) {
-    const audit = JSON.parse(await readFile(auditPath, "utf8")) as { skills: AuditFieldRecord[] };
-    for (const item of audit.skills) {
+  for (const source of sources) {
+    const audit = JSON.parse(await readFile(source.path, "utf8")) as Record<string, AuditFieldRecord[]>;
+    for (const item of audit[source.records] ?? []) {
       records += 1;
+      const recordId = item.skill_id ?? item.capability_id;
       if (item.primary_anzsrc_field === null) {
-        assert.ok(item.anzsrc_unclassified_reason, item.skill_id);
-        assert.deepEqual(item.additional_anzsrc_fields, [], item.skill_id);
+        assert.ok(item.anzsrc_unclassified_reason, recordId);
+        assert.deepEqual(item.additional_anzsrc_fields, [], recordId);
       } else {
-        assert.ok(fields.has(item.primary_anzsrc_field), item.skill_id);
-        assert.equal(item.anzsrc_unclassified_reason, null, item.skill_id);
-        assert.ok(item.additional_anzsrc_fields.every((field) => fields.has(field) && field !== item.primary_anzsrc_field), item.skill_id);
-        assert.equal(new Set(item.additional_anzsrc_fields).size, item.additional_anzsrc_fields.length, item.skill_id);
+        assert.ok(fields.has(item.primary_anzsrc_field), recordId);
+        assert.equal(item.anzsrc_unclassified_reason, null, recordId);
+        assert.ok(item.additional_anzsrc_fields.every((field) => fields.has(field) && field !== item.primary_anzsrc_field), recordId);
+        assert.equal(new Set(item.additional_anzsrc_fields).size, item.additional_anzsrc_fields.length, recordId);
       }
     }
   }
-  assert.equal(records, 309);
+  assert.equal(records, 315);
 });
 
 interface AuditFieldRecord {
-  skill_id: string;
+  skill_id?: string;
+  capability_id?: string;
   primary_anzsrc_field: string | null;
   additional_anzsrc_fields: string[];
   anzsrc_unclassified_reason: string | null;

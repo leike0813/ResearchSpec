@@ -128,10 +128,10 @@ void test("Scientific Agent Skills structural, license, and security summaries a
 
 void test("Scientific Agent Skills production admission remains separately policy governed", async () => {
   const registry = await loadPluginRegistry();
-  assert.deepEqual([...registry.vendors.keys()], ["materials-science-skills-for-llm", "scientific-agent-skills", "tooluniverse"]);
+  assert.deepEqual([...registry.vendors.keys()], ["finrobot", "materials-science-skills-for-llm", "scientific-agent-skills", "tooluniverse"]);
   assert.equal(registry.vendors.get("scientific-agent-skills")?.skills.length, 49);
   assert.equal(registry.domains.size, 218);
-  assert.equal(availableDomains(registry).length, 49);
+  assert.equal(availableDomains(registry).length, 51);
   assert.equal((await readFile(path.join(DERIVED_ROOT, "scientific-agent-skills-astropy", "SKILL.md"), "utf8")).startsWith("---\n"), true);
 });
 

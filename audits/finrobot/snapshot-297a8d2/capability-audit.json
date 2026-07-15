@@ -1,0 +1,4525 @@
+{
+  "schema_version": "1",
+  "source": {
+    "source_id": "finrobot",
+    "name": "FinRobot",
+    "repository_url": "https://github.com/AI4Finance-Foundation/FinRobot.git",
+    "release": "snapshot-297a8d2",
+    "revision": "297a8d28d099be328c8a8eb658b4f782b93f3651",
+    "root_license": "Apache-2.0 (metadata conflict under review)",
+    "license_path": "LICENSE"
+  },
+  "policy": {
+    "audit_is_admission": false,
+    "future_change": "ingest-finrobot",
+    "source_has_upstream_skills": false,
+    "nested_gitlinks_initialized": false,
+    "allowed_domains": [
+      "accounting-auditing-and-accountability",
+      "banking-finance-and-investment"
+    ],
+    "anzsrc_field_creates_membership": false,
+    "converter_executes_upstream_content": false,
+    "transaction_authority": false,
+    "personalized_advice_authority": false
+  },
+  "summary": {
+    "tracked_entries": 146,
+    "files": 143,
+    "executables": 2,
+    "gitlinks": 1,
+    "file_bytes": 25906666,
+    "knowledge_surfaces": 66,
+    "candidate_capabilities": 6,
+    "content_origins": 5,
+    "license_claims": 6,
+    "risk_counts": {
+      "code-execution": 9,
+      "credential": 27,
+      "data-freshness": 27,
+      "external-service": 37,
+      "fixed-assumption": 13,
+      "personalized-advice": 19,
+      "provider-binding": 40,
+      "runtime-coupling": 42,
+      "stateful-operation": 3,
+      "unsupported-numeric-output": 23
+    }
+  },
+  "content_origins": [
+    {
+      "origin_id": "attributed-autogen",
+      "kind": "attributed-borrowing",
+      "scope": [
+        "finrobot/functional/coding.py"
+      ],
+      "content_license": {
+        "status": "ambiguous",
+        "expression": null,
+        "evidence": [
+          "finrobot/functional/coding.py"
+        ]
+      },
+      "redistribution_status": "blocked",
+      "note": "The file attributes a Microsoft AutoGen notebook but does not state a source-local effective content license."
+    },
+    {
+      "origin_id": "external-finnlp",
+      "kind": "external-gitlink",
+      "scope": [
+        "FinNLP"
+      ],
+      "content_license": {
+        "status": "ambiguous",
+        "expression": null,
+        "evidence": [
+          ".gitmodules"
+        ]
+      },
+      "redistribution_status": "blocked",
+      "note": "FinNLP is an uninitialized external gitlink and is not audited as in-tree FinRobot content."
+    },
+    {
+      "origin_id": "root-apache",
+      "kind": "upstream-root",
+      "scope": [
+        "LICENSE",
+        "NOTICE"
+      ],
+      "content_license": {
+        "status": "confirmed",
+        "expression": "Apache-2.0",
+        "evidence": [
+          "LICENSE",
+          "NOTICE"
+        ]
+      },
+      "redistribution_status": "reviewed",
+      "note": "The repository root declares Apache-2.0 and NOTICE attribution, subject to separate origin findings."
+    },
+    {
+      "origin_id": "unclear-filings",
+      "kind": "unclear-import",
+      "scope": [
+        "finrobot/data_source/filings_src/prepline_sec_filings/fetch.py"
+      ],
+      "content_license": {
+        "status": "ambiguous",
+        "expression": null,
+        "evidence": [
+          "finrobot/data_source/filings_src/prepline_sec_filings/fetch.py"
+        ]
+      },
+      "redistribution_status": "blocked",
+      "note": "The imported filings implementation lacks sufficient source-local provenance for redistribution."
+    },
+    {
+      "origin_id": "unclear-marker",
+      "kind": "unclear-import",
+      "scope": [
+        "finrobot/data_source/marker_sec_src/pdf_to_md.py"
+      ],
+      "content_license": {
+        "status": "ambiguous",
+        "expression": null,
+        "evidence": [
+          "finrobot/data_source/marker_sec_src/pdf_to_md.py"
+        ]
+      },
+      "redistribution_status": "blocked",
+      "note": "The marker-derived SEC conversion tree lacks sufficient source-local provenance for redistribution."
+    }
+  ],
+  "license_claims": [
+    {
+      "claim_id": "borrowed-content",
+      "expression": null,
+      "status": "unknown",
+      "scope": [
+        "finrobot/functional/coding.py"
+      ],
+      "evidence": [
+        "finrobot/functional/coding.py"
+      ],
+      "note": "Attribution alone does not establish an effective content license for copying."
+    },
+    {
+      "claim_id": "finnlp-external",
+      "expression": null,
+      "status": "external",
+      "scope": [
+        "FinNLP"
+      ],
+      "evidence": [
+        ".gitmodules"
+      ],
+      "note": "The nested repository requires an independent license and content audit."
+    },
+    {
+      "claim_id": "imported-source-trees",
+      "expression": null,
+      "status": "unknown",
+      "scope": [
+        "finrobot/data_source/filings_src/prepline_sec_filings/fetch.py",
+        "finrobot/data_source/marker_sec_src/pdf_to_md.py"
+      ],
+      "evidence": [
+        "finrobot/data_source/filings_src/prepline_sec_filings/fetch.py",
+        "finrobot/data_source/marker_sec_src/pdf_to_md.py"
+      ],
+      "note": "Historical imported trees need source and license review before reuse."
+    },
+    {
+      "claim_id": "root-apache",
+      "expression": "Apache-2.0",
+      "status": "declared",
+      "scope": [
+        "LICENSE",
+        "NOTICE"
+      ],
+      "evidence": [
+        "LICENSE",
+        "NOTICE"
+      ],
+      "note": "Current repository-level license and attribution claim."
+    },
+    {
+      "claim_id": "setup-mit",
+      "expression": "MIT",
+      "status": "conflicting",
+      "scope": [
+        "setup.py"
+      ],
+      "evidence": [
+        "setup.py",
+        "LICENSE"
+      ],
+      "note": "Package metadata remains MIT while the current root license is Apache-2.0."
+    },
+    {
+      "claim_id": "trademark-attribution",
+      "expression": "Apache-2.0",
+      "status": "declared",
+      "scope": [
+        "NOTICE",
+        "TRADEMARK_POLICY.md"
+      ],
+      "evidence": [
+        "NOTICE",
+        "TRADEMARK_POLICY.md"
+      ],
+      "note": "Redistribution must preserve NOTICE and must not imply FinRobot trademark endorsement."
+    }
+  ],
+  "findings": [
+    {
+      "code": "NO-UPSTREAM-SKILL",
+      "severity": "blocking",
+      "evidence": [
+        "README.md"
+      ],
+      "note": "The pinned repository contains no SKILL.md and must be audited as source surfaces rather than upstream Skills."
+    },
+    {
+      "code": "LICENSE-METADATA-CONFLICT",
+      "severity": "blocking",
+      "evidence": [
+        "LICENSE",
+        "setup.py"
+      ],
+      "note": "The Apache-2.0 root license conflicts with MIT package metadata."
+    },
+    {
+      "code": "UNINITIALIZED-SUBMODULE",
+      "severity": "blocking",
+      "evidence": [
+        ".gitmodules"
+      ],
+      "note": "FinNLP remains an uninitialized external gitlink and is outside the audited content tree."
+    },
+    {
+      "code": "UNKNOWN-ORIGIN",
+      "severity": "blocking",
+      "evidence": [
+        "finrobot/functional/coding.py",
+        "finrobot/data_source/filings_src/prepline_sec_filings/fetch.py",
+        "finrobot/data_source/marker_sec_src/pdf_to_md.py"
+      ],
+      "note": "Borrowed or imported source areas lack sufficient local provenance for redistribution."
+    },
+    {
+      "code": "IMPLEMENTATION-DOC-DRIFT",
+      "severity": "review",
+      "evidence": [
+        "README.md",
+        "finrobot_equity/core/src/modules/valuation_engine.py"
+      ],
+      "note": "The pinned tree lacks several technologies, operators, and valuation methods claimed by current documentation and prior study notes."
+    },
+    {
+      "code": "FIXED-ASSUMPTION",
+      "severity": "blocking",
+      "evidence": [
+        "finrobot_equity/core/src/modules/valuation_engine.py",
+        "finrobot_equity/core/src/modules/sensitivity_analyzer.py"
+      ],
+      "note": "Simplified valuation and sensitivity methods use hard-coded assumptions that are not validated professional defaults."
+    },
+    {
+      "code": "PROVIDER-BINDING",
+      "severity": "review",
+      "evidence": [
+        "requirements.txt",
+        "finrobot_equity/core/src/modules/market_data_api.py"
+      ],
+      "note": "Runtime behavior binds to named model and financial-data providers, credentials, and remote services."
+    },
+    {
+      "code": "DATA-FRESHNESS",
+      "severity": "review",
+      "evidence": [
+        "finrobot_equity/core/src/modules/equity_agents/news_summary_agent.py",
+        "configs/save_config_forecaster.json"
+      ],
+      "note": "Market and news conclusions are time-sensitive but do not implement a stable freshness contract."
+    },
+    {
+      "code": "NO-TRANSACTION-AUTHORITY",
+      "severity": "blocking",
+      "evidence": [
+        "NOTICE",
+        "configs/save_config_forecaster.json"
+      ],
+      "note": "ResearchSpec must not provide trading, portfolio, target-price, rating, or personalized-advice authority."
+    }
+  ],
+  "source_entries": [
+    {
+      "path": ".dockerignore",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "212d3ea81a74dad2f62e982a3b621eff7f38b14e",
+      "bytes": 161,
+      "sha256": "410493a58cc9fba621588561388342b094dc11a64d986f902f70b23480d2e70f",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": ".gitignore",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "1847fb3d7d2c901dd5fe0e3df38242a8b148604c",
+      "bytes": 457,
+      "sha256": "98174f361e86f5888e106e5e2dd93a2865cbce0ca2f2b21ca6a7dee825bf2f6c",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": ".gitmodules",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "86a7b171861c25adb325636f257c95132b364830",
+      "bytes": 95,
+      "sha256": "750aae2c249890fe4a7c0a41a81f29072825109ef602427e5e6176035b0841de",
+      "content_origin_id": "root-apache",
+      "disposition": "audit-only"
+    },
+    {
+      "path": ".vscode/settings.json",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "2e0dbc2d9a0aafb4c4b64e7bb68c00a1feb96087",
+      "bytes": 64,
+      "sha256": "896ef2375cffd27e4e44a1b154ad0dc0d3f792bc29024884e070db7127428d94",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "Dockerfile",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "326416574caa14ff61581f00c75bc99e2a153ddd",
+      "bytes": 710,
+      "sha256": "a2ea5a00ed05fcc0f43c0a34f891988d5bd10646382872fb94d0258167bad793",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "FinNLP",
+      "kind": "gitlink",
+      "git_mode": "160000",
+      "git_object_id": "587f04f473507ddea6453e43796797fce17155ce",
+      "bytes": null,
+      "sha256": null,
+      "content_origin_id": "external-finnlp",
+      "disposition": "external-reference"
+    },
+    {
+      "path": "LICENSE",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "6cc0d28c44e482825bba73c84761e3d65f138f42",
+      "bytes": 11552,
+      "sha256": "bbcb4226500b503737713f0c9a9da17efce56fa6989b9f0538071dcb60826af5",
+      "content_origin_id": "root-apache",
+      "disposition": "audit-only"
+    },
+    {
+      "path": "NOTICE",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "4ad1671f14994630695c91b14ee7cfa14cacb6af",
+      "bytes": 1304,
+      "sha256": "d1da20e9e1e8a0f3189665c4f21cf35f0eba1a8a1432f95a734db0640e289346",
+      "content_origin_id": "root-apache",
+      "disposition": "audit-only"
+    },
+    {
+      "path": "OAI_CONFIG_LIST",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "2e904f8fc780fc3c258bd253e64fc51be36ec363",
+      "bytes": 718,
+      "sha256": "ce80c302f59dc139fc4f607edb6259d0f2f410eb3eb641c466f41a47076cfc69",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "README.md",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "7ba84f96abbf6abd3226aa32be4aa2da26907dc6",
+      "bytes": 21116,
+      "sha256": "5a6c36a61f225df83ec5b1fe08a4155844477145ad0d2342a886211b0ed4c001",
+      "content_origin_id": "root-apache",
+      "disposition": "audit-only"
+    },
+    {
+      "path": "TRADEMARK_POLICY.md",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "3c0a9297b07c7b5c6748aac41096a0ab56c96708",
+      "bytes": 1825,
+      "sha256": "28d544a54523e7119a7e4e29e17a2dd532e2c611b8f1991c591fb460dafc81f6",
+      "content_origin_id": "root-apache",
+      "disposition": "audit-only"
+    },
+    {
+      "path": "agent_builder_demo.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "ee5a89dc7e0cacfa21c24a167ace1ae0395f3c72",
+      "bytes": 1728,
+      "sha256": "01e6ae862c500baf346f93667c7e17565bd3b57824fd8905afc179138a1b2c54",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "config_api_keys",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "ccd8744ba4eba7e73a3323d0eee1453af145cca6",
+      "bytes": 292,
+      "sha256": "14e08dcfe9d4162ef98f2f864faaf4b827060fac978be247e13eea390d62c026",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "configs/save_config_forecaster.json",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "15f277c4b6f14f507e04bf4f1fd85dcdd3910fc0",
+      "bytes": 14865,
+      "sha256": "c34eb2834ac7a1da263611d6bebd96f0dd0d64e7e0210e1dccb360e0fa347df0",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "deploy.gcloud.sh",
+      "kind": "executable",
+      "git_mode": "100755",
+      "git_object_id": "3f5d4dbaa1f17edefabd5326a7f10c9a1c92fc18",
+      "bytes": 6940,
+      "sha256": "d953c296d0ea079152ee571e964a1d31427959ca5e87a46d023c9d64dc6859ba",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "deploy.sh",
+      "kind": "executable",
+      "git_mode": "100755",
+      "git_object_id": "ae997e8c5b63bad1d8e298d5862b6160d940af62",
+      "bytes": 15082,
+      "sha256": "6bcc236afe3873198bb22a26b351f9b7868c7aacede47f0ae3938c1fa938e491",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "experiments/investment_group.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "eb7a74f983d89f7c491fc5828d066e8cc48a4891",
+      "bytes": 11453,
+      "sha256": "d2cbab450223f67830f23b193596001c258b766065d81af0055b1b7a02541f45",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "experiments/multi_factor_agents.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "7f834fa21353ad0ac403aae802921c6a16fdecf6",
+      "bytes": 4399,
+      "sha256": "79dcc1f07f2fbc9d4c7824799d4045d6a39479d899178ad5d1f1508c8dd46459",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "experiments/portfolio_optimization.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "50e64c07f7080887a09fb51f46d96af71309d70f",
+      "bytes": 6941,
+      "sha256": "d6445b946f6c3d4f6853f04730b7af1188562301d745e098671e6cde584c4dc8",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "experiments/quantitative_investment_group_config.json",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "c662847cb5f8af1406541a174c612586234cec58",
+      "bytes": 3803,
+      "sha256": "d83e0953eedab91215cadd80c2cad051965af0ab15d474f24c96f59e71fd2fb8",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "figs/logo_white_background.jpg",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "23d767c456a00ce950f0c011e3455981e6149406",
+      "bytes": 252942,
+      "sha256": "30ec229b037ac1f646524accdb3f385370def4bf73225e6d0a58e7b047b15a66",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot/__init__.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot/agents/__init__.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "8b137891791fe96927ad78e64b0aad7bded08bdc",
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot/agents/agent_library.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "8fc08507bd0b547dc7bb0869fe626df68a5d7ded",
+      "bytes": 6000,
+      "sha256": "e3c07e7b5e7ffd6f5ec33effd3125ef6f47e3ffabba36fdcda21bbcc522a7221",
+      "content_origin_id": "root-apache",
+      "disposition": "candidate-source"
+    },
+    {
+      "path": "finrobot/agents/prompts.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "90996f14120a168f19c8d30f0ddb8cc7b90605b2",
+      "bytes": 1819,
+      "sha256": "17110fbdb73cab01efb0b5a34a08c50a388b78fca3d2246b3d283d76e291c14d",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot/agents/utils.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "e625de10dd689dba69105a167374426430c92b86",
+      "bytes": 1239,
+      "sha256": "610d023da64653b94e4069044c161bf5a6f3823b3b517d2a09a26ff82e256332",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot/agents/workflow.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "1bbe652cdd65e31b457b1e46830c03f99ad884b2",
+      "bytes": 15460,
+      "sha256": "1ff5e04cdfbbffa0c6e61e15965aa31d216cb6d000905824abac34423e207fe5",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot/data_source/__init__.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "291f75077e0b75d3dc305dbd9e8759c3b7ef6e10",
+      "bytes": 405,
+      "sha256": "38cc7d74f31e5855cd7cf6122a2c74867f8cbffca4df83a29fd445126fd6c925",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot/data_source/earnings_calls_src/__init__.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "b4667b1b3b2b485e39dadfac836186e573ea0872",
+      "bytes": 92,
+      "sha256": "021d77508de7e45ce124b52953684764a52b97c17ed5ab7671b65f7ccb14794e",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot/data_source/earnings_calls_src/earningsData.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "a578592e379cb451a1917b5c0775bf0009143965",
+      "bytes": 1493,
+      "sha256": "177191b785b4ff867fb8df3d5ad92060a3a1bad796161c9b4a1a56d999023125",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot/data_source/earnings_calls_src/main_earningsData.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "bf7648c67e1b0bdf99a87b4ce854743bd5ba49f7",
+      "bytes": 2988,
+      "sha256": "2b6746e65d49460c4ec9a8a27131957dc94165c851aac8a459198f6e3791463f",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot/data_source/filings_src/__init__.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "aa4f83da062de9c3edcb1eb7d3edd37cc21c6e5a",
+      "bytes": 62,
+      "sha256": "bf1d5ad357dd26d7e0a41b0552ec7b9d21ff55616aa77d26be5f56eaeee664bf",
+      "content_origin_id": "unclear-filings",
+      "disposition": "blocked-origin"
+    },
+    {
+      "path": "finrobot/data_source/filings_src/prepline_sec_filings/__init__.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "content_origin_id": "unclear-filings",
+      "disposition": "blocked-origin"
+    },
+    {
+      "path": "finrobot/data_source/filings_src/prepline_sec_filings/api/__init__.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "content_origin_id": "unclear-filings",
+      "disposition": "blocked-origin"
+    },
+    {
+      "path": "finrobot/data_source/filings_src/prepline_sec_filings/api/app.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "e7099445af531a73cad6955162b8a2f515357915",
+      "bytes": 1384,
+      "sha256": "f9e2430030ca46482a8804b6f01efbd0ffbeb81851ea8c798670b0eb2f6feafe",
+      "content_origin_id": "unclear-filings",
+      "disposition": "blocked-origin"
+    },
+    {
+      "path": "finrobot/data_source/filings_src/prepline_sec_filings/api/section.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "bfe96487ea003bade4138f4386bd10fa475f132f",
+      "bytes": 13938,
+      "sha256": "72548a0b39ef1f521ab110c52f92ce7751e5e1553841090227147b4652bf983c",
+      "content_origin_id": "unclear-filings",
+      "disposition": "blocked-origin"
+    },
+    {
+      "path": "finrobot/data_source/filings_src/prepline_sec_filings/fetch.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "4ee852273712e03b15094d3104300555f808a695",
+      "bytes": 9768,
+      "sha256": "f0291fb768bcc8aa1507ef139f3a6c06b610f6d672be79977dd2b255bd45f07b",
+      "content_origin_id": "unclear-filings",
+      "disposition": "blocked-origin"
+    },
+    {
+      "path": "finrobot/data_source/filings_src/prepline_sec_filings/sec_document.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "641fa1883f706fb5ed6e7ba89c2fa15917346270",
+      "bytes": 18783,
+      "sha256": "f5ebbee47573105040f49bfce634caa66b7733303154853a5c3842cd29c37dd1",
+      "content_origin_id": "unclear-filings",
+      "disposition": "blocked-origin"
+    },
+    {
+      "path": "finrobot/data_source/filings_src/prepline_sec_filings/sections.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "1e048bd0a8d00e49b819decd97928d5951f1c232",
+      "bytes": 6321,
+      "sha256": "531a5da95b865ba3bbb8510003cca0fe4a34221b39f9f7bce3ddb9ed6345e3b6",
+      "content_origin_id": "unclear-filings",
+      "disposition": "blocked-origin"
+    },
+    {
+      "path": "finrobot/data_source/filings_src/secData.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "5eb295aff20305288da0ee0fd1ea1a0e5a84dfb6",
+      "bytes": 4001,
+      "sha256": "8f4a5de7c081a166b3b595a1df27977f0e1238eb7fc1388c7aaf9a7b303ac506",
+      "content_origin_id": "unclear-filings",
+      "disposition": "blocked-origin"
+    },
+    {
+      "path": "finrobot/data_source/filings_src/sec_filings.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "6a9591d59e1f6a145bde667ac06cdfad8f471836",
+      "bytes": 8302,
+      "sha256": "cd4393c3540e81793a5cd8985260a0eb64902914bb46586cb58d48d92c53c091",
+      "content_origin_id": "unclear-filings",
+      "disposition": "blocked-origin"
+    },
+    {
+      "path": "finrobot/data_source/filings_src/section_names.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "6fdfdfb3a2fbc19dfabb5511c2f5c876b5b26b0d",
+      "bytes": 1923,
+      "sha256": "6de181a92d84de24a5f26a108d711d5ef603d545904a18fcda6f9bff1cc4c3fb",
+      "content_origin_id": "unclear-filings",
+      "disposition": "blocked-origin"
+    },
+    {
+      "path": "finrobot/data_source/finance_data.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "5549cf23bfa7d06e66142668d707dadf7ea7416f",
+      "bytes": 2952,
+      "sha256": "3e8c2e1c541dfbc20411137ebab4916ef66692e0ea346ce84d6ecb9e920a4e51",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot/data_source/finnhub_utils.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "497dc51b237a48319fa4eb58478657e4ae4203a5",
+      "bytes": 10557,
+      "sha256": "a25e2c93c5840263253d1f1940199f886f798595c86ee9a684628bec3e12901b",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot/data_source/finnlp_utils.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "168c82380c804b381d7e01903a5b0f6a87a020e8",
+      "bytes": 14297,
+      "sha256": "4a9b64242c0df64f62eaec085c0ec810af1f72eb2ac13233ef026044893c4c5a",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot/data_source/fmp_utils.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "5af7e58b1425670476e016389a856ff398f6f907",
+      "bytes": 11289,
+      "sha256": "766da4e06a4096a12f5552af346dd5ebfd299fb3d20ba55fd861b4329d304b16",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot/data_source/marker_sec_src/__init__.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "d62e1b84341075970c9ebdcb5f748b93789513a8",
+      "bytes": 231,
+      "sha256": "34c61de0a3a7391b47aa282cb757b2ac3d36138a210ee66ecc0bed441297461b",
+      "content_origin_id": "unclear-marker",
+      "disposition": "blocked-origin"
+    },
+    {
+      "path": "finrobot/data_source/marker_sec_src/pdf_to_md.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "eb4e623ee25d8d2b9e0cef6d0e5633ea329da0b7",
+      "bytes": 1277,
+      "sha256": "b78ae32f83615d50f6bc432cdab4ceee1ed5a281684194864c04d55d633001e8",
+      "content_origin_id": "unclear-marker",
+      "disposition": "blocked-origin"
+    },
+    {
+      "path": "finrobot/data_source/marker_sec_src/pdf_to_md_parallel.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "6d53cb67efa80296ad383898232966b36bcf44f7",
+      "bytes": 5700,
+      "sha256": "d35793785fc990ded126164bb0fceea751b527d142bccbb3e2d5636f581c2133",
+      "content_origin_id": "unclear-marker",
+      "disposition": "blocked-origin"
+    },
+    {
+      "path": "finrobot/data_source/marker_sec_src/sec_filings_to_pdf.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "1fc7ac9320c641f1041108db9e14c3b41f4f356c",
+      "bytes": 4857,
+      "sha256": "060901ccf69b63bd6e8ca54e7aea8b61a9b268df432bc627c1a40c616b638a8a",
+      "content_origin_id": "unclear-marker",
+      "disposition": "blocked-origin"
+    },
+    {
+      "path": "finrobot/data_source/reddit_utils.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "f91119219da963996e0f0aa314b3452d153538df",
+      "bytes": 4108,
+      "sha256": "f86d349f2e2ce527a261e1609b5d633a3a2b743a13b4bbccdad930d82b4368df",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot/data_source/sec_utils.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "a5870d3b29a8a4ea804ac1180c695f8ea9faafcf",
+      "bytes": 7559,
+      "sha256": "8be8664f05eb9d4d92be038d369db83ff28f8ab611d20f1796ddf2f4cb7be173",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot/data_source/yfinance_utils.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "283053139af6ee1406d5e37ae6192894ba72e935",
+      "bytes": 4322,
+      "sha256": "5a10ae0998376f54108bab618e781ee44ce57ae06503109a29e2de2600daa11b",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot/functional/__init__.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "a922fe3bd560d0e4ecaad6f41c61b3eb6b6b9842",
+      "bytes": 286,
+      "sha256": "51680ab70e0a220150dd6dbb919888d255462f7609bedd5bcf2f48e453f3f8a2",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot/functional/analyzer.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "16042fa76c3aadd5935b473ff7ea3233900aa78d",
+      "bytes": 23358,
+      "sha256": "a7af9f74bca58c5105beb3a48b53622ae41cec4330e851d4702160833c5060d2",
+      "content_origin_id": "root-apache",
+      "disposition": "candidate-source"
+    },
+    {
+      "path": "finrobot/functional/charting.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "d19ef31554e973b9faeae3edaa0f642b6553c558",
+      "bytes": 8790,
+      "sha256": "baaa51d19f01c7087ad4d264f2768e1fe709b89ba19132dc2ee96a96d223e6f1",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot/functional/coding.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "c6cd800797864438b8b39fa807058e6b9cfe8920",
+      "bytes": 3107,
+      "sha256": "301415c90bd7d3224153114ce3d3c0b6879f57878a6d2dde3ddea83484c121ab",
+      "content_origin_id": "attributed-autogen",
+      "disposition": "blocked-origin"
+    },
+    {
+      "path": "finrobot/functional/quantitative.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "17dc1b9423e38414dc1f501150afb2bdc42a7c6f",
+      "bytes": 7357,
+      "sha256": "1682d309d12e974e522dd9da3038e4aa2985ee39b49f0206fe45e5382da66de2",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot/functional/rag.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "bb98441412acce0ca944a7d97b779931816dd3aa",
+      "bytes": 3114,
+      "sha256": "ea2aaff52945172aceae5aa5f67eba7a6e943f30c661c5b74683ab8819c35e45",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot/functional/ragquery.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "d797071e61a1f357ae3e6e3936ee993671efa6b4",
+      "bytes": 9680,
+      "sha256": "a050927cdca2f991a4a8779f7413730b29dccb69269ecd4ab8a4f83b72881a10",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot/functional/reportlab.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "05734133416ffd41d77e3cac98627148d174e0a7",
+      "bytes": 15636,
+      "sha256": "7c3269333ea03ad4c8804f6282da3f61ffa14977ab6cdff017c1208986612e30",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot/functional/text.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "4e21bbbfb5372b52d6b97964aa86f57f63babfb8",
+      "bytes": 780,
+      "sha256": "b608058a674df7d2e9d98a301ad6309448c14f0b0376b2c4d54f5dbf9f513514",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot/toolkits.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "c3bdf506e50d25949178fdbb4312e0f0c25805f4",
+      "bytes": 3133,
+      "sha256": "6cbd5959a2cbd73bc2cf3bb4a5d62614b95baaa1e609258001752ea195d999a1",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot/utils.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "94c5ea8c4f3d379a57359e27644767cf092539ce",
+      "bytes": 2537,
+      "sha256": "7d8b84b7d40c8a32f5854899d35f52bf25027efdf1957245799f4140aebec477",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/README.md",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "1640e86e88b83bd6f8a7f0f65ad0646191964105",
+      "bytes": 8836,
+      "sha256": "552083909af72653987077fa547869a94c62066d1a6bba0e44b21e74d94d8418",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/__init__.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "489489c99f6ef26e253fadd112c0ac80776749c8",
+      "bytes": 1016,
+      "sha256": "891b7f42d08ed04cff469c61f49a9218a9eb61b09f39f58f0df0955b2512c401",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/core/config/config.ini.example",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "e704fa046821af252108e61bc169ea9d118a38c1",
+      "bytes": 1179,
+      "sha256": "359f4bc758983ec13424908d927ce821879dc56706dfc70013088f05d731d9c1",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/core/output/COP_Equity_Research_Report.html",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "bbaa2a7fa417eb2db4566e49c8940438f9d3e403",
+      "bytes": 347015,
+      "sha256": "4773e5d99f1502e93d50baecbd5fd504711a0ac91a5ad12cb5d9751dacb8bc4e",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/core/output/META_Equity_Research_Report.html",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "233c64629cf29019ba2adfed85294e597c5c50d6",
+      "bytes": 345589,
+      "sha256": "c15a750d03f5ce259d21cf1e3510d345e8d4fbc1cf99c66f60dba8a1ad2463b6",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/core/output/MSFT_Equity_Research_Report.html",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "44c9d9017b41bb182cc8151242bca940b98d739c",
+      "bytes": 347523,
+      "sha256": "1fd3d0b4fc1a1d7f7176a93ff303c2f13b5c5288995ad3bdcf32f51412154a14",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/core/output/NVDA_Equity_Research_Report.html",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "58d98a1d73d707d59af7d92fb01b087d13e22561",
+      "bytes": 349113,
+      "sha256": "75e144fcb7beff44c508e0da86fe3383c3231f0adcbfe4ac544d896403b74c04",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/core/output/TSLA_Equity_Research_Report.html",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "d93fb63f1dea3fd61e4e36705832353773d0707d",
+      "bytes": 336230,
+      "sha256": "d85d9b0cbefb005da716c522003656926fb6eeb254332a1e62c2fcd522eac37e",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/core/requirements.txt",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "5d1a353e6771c8f18cd9f91e1af81d77e380a355",
+      "bytes": 629,
+      "sha256": "3e5b3c074b31a7e03cddf2da0d0e5df380a23483c7dcb73e9fcbaa2809c3e16d",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/core/src/Run.ipynb",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "9124ec0d7e31f2547005b4bd5866a97012964331",
+      "bytes": 5738,
+      "sha256": "7246af0c665c6315465c69f67c7bfea8eb6395d11fa4c05265a490c76a9c5b69",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/core/src/create_equity_report.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "2acd947c2d5677e4015b354b2ab144d5bffb7724",
+      "bytes": 59183,
+      "sha256": "af1c3e298dfc099caad803b9587d131983a7a173bf37303491a1baedfa9ad7f6",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/core/src/generate_financial_analysis.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "009fa9a57d0f4f962ce8e6dbab0c56de2690523b",
+      "bytes": 28471,
+      "sha256": "896d6b20af9be94de5b7eb5c4ebd9d6501ef3a40147b72c10c83b7fcd0972d16",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/core/src/generate_pdf_report.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "233ba9495c845536fbebd560894423b33de7274b",
+      "bytes": 31146,
+      "sha256": "0ab0e920b3652b7636358a2fe1ff84e6bcae9f4f5a1a59c458acee1e3c91d4a6",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/core/src/modules/catalyst_analyzer.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "c4364fdf3966beb899176184d21e5ca7f7752460",
+      "bytes": 15849,
+      "sha256": "65a4ebba92f7ee98944cbe01b0b9c30feb334a5ed344e50100cac0e08416e530",
+      "content_origin_id": "root-apache",
+      "disposition": "candidate-source"
+    },
+    {
+      "path": "finrobot_equity/core/src/modules/chart_generator.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "79e97d8fb54ae1e3297783461d7df6f65f1bcd40",
+      "bytes": 42993,
+      "sha256": "2eae6fb9dc7de0dd850654279de9e68549c83bf859d244d437f4503bffc583c0",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/core/src/modules/common_utils.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "3c63bee3cdf282bfa3dfde9821b2060f81018218",
+      "bytes": 2265,
+      "sha256": "810b3074e85cac4b160b175b5425930ebc83b183319943f63528c780fe301dfc",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/core/src/modules/enhanced_chart_generator.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "1ebee275cfe45354b8e9c170f443db629949e482",
+      "bytes": 37834,
+      "sha256": "f70b8b31133c5ff9287f09c4b10758d1ce2e1a5034b7c7f50e3010ad27d3b2b4",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/core/src/modules/enhanced_text_generator.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "082890ae1a88b3b10af4be73a04f1a757a63a0f2",
+      "bytes": 20103,
+      "sha256": "e09107b59bbb5f65423a30ab475aecf84f36d934e0d5750e26656ed76daace97",
+      "content_origin_id": "root-apache",
+      "disposition": "candidate-source"
+    },
+    {
+      "path": "finrobot_equity/core/src/modules/equity_agents/__init__.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "7835b12063d81ee42bbbada0ae11c1bfa368641b",
+      "bytes": 725,
+      "sha256": "c2fea11628f34dffd47615cfe29a8a60b9d5c3f41ed0b040bb20aaebc078fc96",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/core/src/modules/equity_agents/agent_manager.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "8bb4173a65ad8b8afa4c836339d4b5e751e218c8",
+      "bytes": 4986,
+      "sha256": "fc334c2a35ea34629d90f133134172f9a4cb64f420248a2d33893eaf4046f856",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/core/src/modules/equity_agents/company_overview_agent.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "8dac1c7a5e12141ffee42563513c22e3c3c2756b",
+      "bytes": 3506,
+      "sha256": "f2678311f6fa5741216dd4c13153f8d81367d615d27a04428f070cb25c44abaf",
+      "content_origin_id": "root-apache",
+      "disposition": "candidate-source"
+    },
+    {
+      "path": "finrobot_equity/core/src/modules/equity_agents/competitor_analysis_agent.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "7f3f3debaa9e290b2409fb0ec28f9228b340f16a",
+      "bytes": 2064,
+      "sha256": "ccc21dced3c850a7cb8bba3c6256c27045062757e24dad49f6ad6b12c0c928bf",
+      "content_origin_id": "root-apache",
+      "disposition": "candidate-source"
+    },
+    {
+      "path": "finrobot_equity/core/src/modules/equity_agents/investment_overview_agent.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "c8a4d57c799c5db7d568b35b65d92fb7b06b7e27",
+      "bytes": 3414,
+      "sha256": "2bb1e9d5b43f5d6716ae0116df403fbba242a4489ba890fb549f7626dc078c49",
+      "content_origin_id": "root-apache",
+      "disposition": "candidate-source"
+    },
+    {
+      "path": "finrobot_equity/core/src/modules/equity_agents/major_takeaways_agent.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "5ade681875cf8c0ddd87b45b68c11d4127a7df91",
+      "bytes": 2011,
+      "sha256": "47bf4b4e16fc0c308bbc4d42986bba696f1de34ecc3c8ab65f1718e26d5a6081",
+      "content_origin_id": "root-apache",
+      "disposition": "candidate-source"
+    },
+    {
+      "path": "finrobot_equity/core/src/modules/equity_agents/news_summary_agent.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "c5cd5218e87ec1efbd17c30d9657220f19137c2f",
+      "bytes": 2838,
+      "sha256": "ebb0a705d26ed185b7cdaed21d6bd202bb83e6a968b890ed1957f0c22f77b8fb",
+      "content_origin_id": "root-apache",
+      "disposition": "candidate-source"
+    },
+    {
+      "path": "finrobot_equity/core/src/modules/equity_agents/risks_agent.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "1d78c12a27170ec243dbb07980e9b073c353843f",
+      "bytes": 3173,
+      "sha256": "cfcf9793a184dfa55cc6e40a4444a9ce7848a5045285c0abadcf06d9e20c87b0",
+      "content_origin_id": "root-apache",
+      "disposition": "candidate-source"
+    },
+    {
+      "path": "finrobot_equity/core/src/modules/equity_agents/tagline_agent.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "adb2bb5aabaf089957c44bccf6cb5e15d1b6033c",
+      "bytes": 768,
+      "sha256": "c188128e56329174dcac041aa0a6187ae79b078004758ba39f0ed79dc62203bc",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/core/src/modules/equity_agents/valuation_overview_agent.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "0ded77ee1638c27509579961e18719b2b4d40af3",
+      "bytes": 3208,
+      "sha256": "c3d02d5c07c0498b1e0e892ff0ddac88327f2efa6c39db64520a4607dda2f092",
+      "content_origin_id": "root-apache",
+      "disposition": "candidate-source"
+    },
+    {
+      "path": "finrobot_equity/core/src/modules/financial_data_processor.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "288328c7b903d43ae067dd8d422a7f0c0647472d",
+      "bytes": 24287,
+      "sha256": "0cfc251b8f8a1fba8dc16ba1ca52d6eb92ccf160a5bc881c24adfa885425c726",
+      "content_origin_id": "root-apache",
+      "disposition": "candidate-source"
+    },
+    {
+      "path": "finrobot_equity/core/src/modules/html_renderer.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "7fcc98f8bfc5446cecce653d314e7c3b7fa02bfe",
+      "bytes": 66395,
+      "sha256": "b1345905d5f9e97dc4fbc50baf2c2de67b46be9c3de6e77cc1990e36d6a83179",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/core/src/modules/html_template_professional.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "c5e568f2970d504c28d96a37f576f089f6780dae",
+      "bytes": 50093,
+      "sha256": "0c3f17ffed61f3e7add079e90ecd3d451e4ea3518404a42dce976c5cd1941462",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/core/src/modules/market_data_api.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "ed927133396c1848e8c7d0da67f8ad830f98c35c",
+      "bytes": 34002,
+      "sha256": "76bc3caa1e3fd186e66cc9bfba78e6686a3db0e79fb1c9b35a53b4d53fcb606b",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/core/src/modules/news_integrator.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "c89e9afa757eee99124563ff12a41865e35e71c6",
+      "bytes": 21093,
+      "sha256": "ece554851486df7148e63f23145cf153c9003f4adcd202d9965237f34121c31b",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/core/src/modules/pdf_generator.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "f8367bba990b161614b3f5ab84be6964203c0ceb",
+      "bytes": 35347,
+      "sha256": "5da8037419c5da6f764db918883adaa3de885149151b8d72f0aad526178e8ef6",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/core/src/modules/professional_pdf_report.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "782012a8ebbec2304e4908c2f284a60525c24ba9",
+      "bytes": 66213,
+      "sha256": "1527a83e7e9a3b85d9ba364266994716089bc8e99125f50e77c1cedface7237d",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/core/src/modules/report_data_loader.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "f01fbee5d7b638d167532a63a8f0aa9d5b02a7da",
+      "bytes": 2357,
+      "sha256": "ca9590d1a83ebe9c64a1667d490ae409c9585fee9496c9575aa27276b2e3d5bb",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/core/src/modules/report_structure.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "bfe9751b14186589bc9a5c98fc6f1c7174128cbc",
+      "bytes": 11745,
+      "sha256": "cb1c786e323cc8e481811cd78df6594667fadb31a6e915c0da6b6ba0e9bf5662",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/core/src/modules/retail_sentiment_client.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "7448e63add5d9d9a6517ef0b5db0ed74f3c26b8a",
+      "bytes": 6831,
+      "sha256": "1e744cd0498dcdd03183652da2f0170da895791a523a85b75e705cde3474ff53",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/core/src/modules/sensitivity_analyzer.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "f5c186821a744792b90bdcdec776c11c28a23810",
+      "bytes": 11933,
+      "sha256": "edc42f04d39361d20d130595d8bdde506da6a42e4dfead180d427471728cfa34",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/core/src/modules/text_generator_agents.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "fa3d6262c01bfd9633b1c7595cb7c1dfa200f122",
+      "bytes": 9282,
+      "sha256": "a8b9f427f4081ec611ba1d8b71b8c2258e5d76a2dd735d28f565154fcc36bf6f",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/core/src/modules/valuation_engine.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "532de76720fe3ad9004475fd5fbd052236852c10",
+      "bytes": 16009,
+      "sha256": "3256aa3bfc5aa7378a904696930ab4437c752f028a1e16a253f654b7e22a54b0",
+      "content_origin_id": "root-apache",
+      "disposition": "candidate-source"
+    },
+    {
+      "path": "finrobot_equity/core/tests/test_generate_report.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "d059c9e30a3930a2fbc6bacf9b7cecf398ddf354",
+      "bytes": 14495,
+      "sha256": "463077209134ba0c8703a4b604533bb9dbfac6d882aa1c18e5ef837151ad5c8f",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/core/tests/test_modules.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "07048229148431bc03617f814c13bbdb85ec1700",
+      "bytes": 16858,
+      "sha256": "385837db33aa9a4830fff4094397e572d5475ed4a7888cbaeeadda25e21ecfac",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/core/tests/test_retail_sentiment_client.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "78b4bb2bdf9d869e6f160ed7d9c442ae56e7357c",
+      "bytes": 6962,
+      "sha256": "aa6ec2c92f9acd005b687ba1da6dbbadfe62f1fafc06c15355e950d13dc08c13",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/web_app/admin_routes.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "95f4c446d8439329033dc2b66a21eae6d0069bb1",
+      "bytes": 6389,
+      "sha256": "6e5a94e5556907296c8a4f12468902cc7268489b2ec16f448675aa61cb137c0e",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/web_app/auth.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "ef45f5f8f141bd33e14894e538be8f348d637963",
+      "bytes": 5618,
+      "sha256": "ad61a4ff2719e9598d3f723c4545051d20cad2cfed03ddcc2d253498837b84d3",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/web_app/data/.gitkeep",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "b825a41c690d13487cbcf3b4afd1636758b5a650",
+      "bytes": 90,
+      "sha256": "40fff984f28f8a23a470eefa3d0300311c6ce0276a4aeedd5de3a3c6be4a156a",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/web_app/database/__init__.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "f6dd4cf921f53e8efb8cf44d117fe1b7bbb0fb71",
+      "bytes": 868,
+      "sha256": "e721dbc2eff942dce4c5080aa8f8e11f7ced41ce04c9b6fa8a92632e102d9069",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/web_app/database/connection.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "6432870ee59c2df111b5266217439f0b1f5ad880",
+      "bytes": 1379,
+      "sha256": "137f008e217d68ef081c8ef41810c909788798fc763738c35c337ac9029392fa",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/web_app/database/crud.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "5e9e7bedbb94a556ffbf2870029036870b005834",
+      "bytes": 11870,
+      "sha256": "b0f657d577bc94001acaf2e73803fcc2f79125378042363ea0dd47eed626ad66",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/web_app/database/models.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "6a228be2860dbe70a172ac66e5a2f1b619484414",
+      "bytes": 4284,
+      "sha256": "befec7781430b6ec60ac71e8dc7d5133d56ab667faf5284f70b7a667007ae88d",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/web_app/main.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "340d366f6f0db21eba86e9ffcea077b1bdfd07eb",
+      "bytes": 29747,
+      "sha256": "8d1efd785ffbd3b3862c816dcc5d6b81a2656c01d653031523f582e347bbfcdd",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/web_app/middleware/__init__.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "0cd691a2ee303521019f26a31757f4b1d3c3482c",
+      "bytes": 115,
+      "sha256": "cec480b7cf68bcdcb2a781d3b0ab2daa2c1b86a4d03d89e8c2a9e1c09f23a274",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/web_app/middleware/request_logger.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "fd8ef497002db13a94dc4e5bbc3eb50ad2f61720",
+      "bytes": 3606,
+      "sha256": "2638a334d38c538fe0d4dacfdbd06096e6672a835fcfa5b875e7b6e96d96c45e",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/web_app/static/bg.png",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "e50042b88a873b4b9bc8bb60e86ab8399d203c1c",
+      "bytes": 3826447,
+      "sha256": "e22b527e3a373c2b9a5470c14af111282db771f448c450624d8df1081a66786a",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/web_app/static/logo.png",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "7febd2b3302cf3ffc8d28c4674747c000363ab2e",
+      "bytes": 275972,
+      "sha256": "af29d766294cc353351a436e3c2b01919cf5e8cc79e0944b2c5d5b56d40313b7",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/web_app/static/logo_transparent_background.png",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "7c4a71aadd2964c141e1b039fa63428d6613d9ae",
+      "bytes": 114415,
+      "sha256": "7f2be852e192a0a0af6e627629bf9d748c6cf4684d3c487436aa692b269881a5",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/web_app/static/style.css",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "a76a7aee070c52789d295582a50f18ec26aa5c96",
+      "bytes": 112,
+      "sha256": "fa548a86d9cef51b3a0dccff032abb279d0866d6b1fa3efbdf653e847ee1a5f5",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/web_app/templates/index.html",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "8454cc7470314a1e85c0cfc8256723f8ab539d12",
+      "bytes": 56586,
+      "sha256": "c11be560bf7d77cbc8d2f14e817b7f7a9598176e688ffcbada577c27b5719120",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/web_app/templates/login.html",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "61a3436a8e606d4664af5a9c4627d05d92fe3317",
+      "bytes": 28366,
+      "sha256": "1703bad23abff08d7838ebaf586da3a8f64f0e4b694841e2ec9f7dcad114de90",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "finrobot_equity/web_app/templates/parallel_dashboard.html",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "827ed00b34aee976115bd0aeda23ef4cf77fa29c",
+      "bytes": 18470,
+      "sha256": "a58f2801a2c972cc3e37d184092b8ee11dc14be37b33490183a700cda0d15ec3",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "report/2023-07-27_10-K_msft-20230630.htm.pdf",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "d616b83e3ca5b328872a61387487799ee6324c89",
+      "bytes": 12453080,
+      "sha256": "d2bc59800deba48b2b6c5e004f7dc5a9403553020952c40c79177ce653f9ca13",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "report/Microsoft_Annual_Report_2023.pdf",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "e0fdf54cc727c1c6cc184c5c5682bb3b40fab0fe",
+      "bytes": 215265,
+      "sha256": "1523d9dda1d1ca00cb8c7ad31b55a89c6ad29f60d0e5689e989c2eb99d081198",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "report/NVDA_report.pdf",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "8228ab586a8ab80e9e692a645d251acf14e57e26",
+      "bytes": 192860,
+      "sha256": "1a99bac1a17cd0a8d57cfa6e0040eb3ec77dbbcf1e5e6498663fa5720dff83b7",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "requirements-equity.txt",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "f94f77d749e4f746841da91059c1961861ab2fa6",
+      "bytes": 984,
+      "sha256": "7b6ddb60add459012eb95ab7435e72e593a8c7922c7f01982f7e9d007bbddf67",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "requirements.txt",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "9f4e2bfa96c79a41c3e33736aae9c2acd15d7ea8",
+      "bytes": 542,
+      "sha256": "685ca02bb04d09f4019f582ec28e41143eff055654fd706e751dd7aa59caae02",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "run_web_app.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "14faefb4bb7bc45cae9b931cd09fd3de8edc6496",
+      "bytes": 2617,
+      "sha256": "d87af3f722e9eca27a443fcd7f03c2961000441952d12685b7a6686158f4db70",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "setup.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "526194c0536167eacb4318d25af51b0f56ad161f",
+      "bytes": 1553,
+      "sha256": "16c90b1727b04f8326c11c534800fdb9cfb5085b2ac327e1a6aa580f95c347f0",
+      "content_origin_id": "root-apache",
+      "disposition": "audit-only"
+    },
+    {
+      "path": "test_module.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "3245f17bdf84e4445c6d6af031b2b6425db0cac7",
+      "bytes": 3159,
+      "sha256": "4579b4278e392de796b238aa98ddb4f44aa3a92a5265f06ee97a0fafa381d98f",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "tutorials_advanced/agent_annual_report.ipynb",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "1ae6a7b1a38e5ba927e24f47fa57e3d36563d048",
+      "bytes": 569393,
+      "sha256": "e0b9dcb9ee035662b1685e6d0476665602dcb2b83f2d53e0675003eea79652f0",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "tutorials_advanced/agent_fingpt_forecaster.ipynb",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "70d9ac8a745a3982c3bafb2e8e2826f515ef30f0",
+      "bytes": 27785,
+      "sha256": "9307a2b1e8da95faa4026ac30a8fc3d0835a7748604bf88d882c3703ad602b4b",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "tutorials_advanced/agent_openbb.ipynb",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "84f523b6f7b50a518068f78078c9765f536ea262",
+      "bytes": 1980043,
+      "sha256": "4f732ac65c7f58294b03af167670f6f1bb0d27ad95737d30524e865be3925be9",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "tutorials_advanced/agent_trade_strategist.ipynb",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "ecc6446bedc1a5c1dd9d5a1f6967c9bf3c708083",
+      "bytes": 631040,
+      "sha256": "bd88c00041e323884883a5fd7726866d0f9360c433027f3486efe1d7b7664e72",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "tutorials_advanced/lmm_agent_mplfinance.ipynb",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "181f7b7fbe9b40360cde9944c199096c227e9b9f",
+      "bytes": 118944,
+      "sha256": "c35028fd4b42b05f9bb66f1f05459a58feda845b6d06ad942babba7a9b9051bc",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "tutorials_advanced/lmm_agent_opt_smacross.ipynb",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "b2b3bbfefa0e1eba6b30d74523eccd00d5bf554e",
+      "bytes": 852938,
+      "sha256": "644461c59d3df704bfcf560dc97bf63ebd8a3e2243ea7481a7e5d10bfee42af1",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "tutorials_beginner/agent_annual_report.ipynb",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "4d45c095145c0877fe3253cdb5c4ec215c86a81f",
+      "bytes": 718198,
+      "sha256": "7124f12822fb2d129a4b076899048676bfbec6377b201310f608752564723df9",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "tutorials_beginner/agent_fingpt_forecaster.ipynb",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "9c74e526c798a3c9b497b22612b6f68d3b70aca8",
+      "bytes": 23896,
+      "sha256": "1f96f59830c1e9a7a717a76361582b0d3d84fcb2e9826173bf2dacfb70e6eb9a",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "tutorials_beginner/agent_rag_earnings_call_sec_filings.ipynb",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "71c3c1fc283f2447328b841dde6b15a3263f992f",
+      "bytes": 606048,
+      "sha256": "c353c799d0bae741dfd172b1b9ca060ebf791a2a72ab07d33d347cc94168e9ad",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "tutorials_beginner/agent_rag_qa.ipynb",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "2c91a4fef0abf91b55cc6a0697d1372fea18c0a7",
+      "bytes": 54859,
+      "sha256": "ab636e74697b797dd877e550e34bb835a0db86b50d429d7239cefa584298e591",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "tutorials_beginner/agent_rag_qa_up.ipynb",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "e0c4003adda2fd710cda7989015ded37381b9662",
+      "bytes": 49842,
+      "sha256": "58dca7a3bf0629721f94779c13a1acf930fc526e00b3792da1db08cd7c426abe",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "tutorials_beginner/ollama function call.ipynb",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "e4179e0c341962431089283bc613ab030c1c8b7c",
+      "bytes": 14315,
+      "sha256": "47bd104b0c0bdcbe2d57f11a364179635d47dfaa805711a45bd24d64d9410392",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    },
+    {
+      "path": "tutorials_beginner/ollama stock chart.ipynb",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "39774bcd65e45471d671b07bd7c9fe06bf7f80df",
+      "bytes": 8311,
+      "sha256": "34c06898ca147ab786873e159a4930e0958e39549bd844ee0343d18baa8a4777",
+      "content_origin_id": "root-apache",
+      "disposition": "excluded-scope"
+    }
+  ],
+  "knowledge_surfaces": [
+    {
+      "surface_id": "analyzer-analyze-balance-sheet",
+      "source_path": "finrobot/functional/analyzer.py",
+      "symbol": "ReportAnalysisUtils.analyze_balance_sheet",
+      "kind": "analysis-template",
+      "scope": "financial-research",
+      "disposition": "candidate",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "credential",
+        "data-freshness",
+        "external-service",
+        "provider-binding"
+      ],
+      "findings": [
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot/functional/analyzer.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        },
+        {
+          "code": "DATA-FRESHNESS",
+          "severity": "review",
+          "evidence": [
+            "finrobot/functional/analyzer.py"
+          ],
+          "note": "Time-sensitive financial evidence lacks a ResearchSpec freshness contract."
+        }
+      ],
+      "recommendation": "Use only as source-bound evidence for a curated static financial-research capability."
+    },
+    {
+      "surface_id": "analyzer-analyze-business-highlights",
+      "source_path": "finrobot/functional/analyzer.py",
+      "symbol": "ReportAnalysisUtils.analyze_business_highlights",
+      "kind": "analysis-template",
+      "scope": "financial-research",
+      "disposition": "candidate",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "credential",
+        "data-freshness",
+        "external-service",
+        "provider-binding"
+      ],
+      "findings": [
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot/functional/analyzer.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        },
+        {
+          "code": "DATA-FRESHNESS",
+          "severity": "review",
+          "evidence": [
+            "finrobot/functional/analyzer.py"
+          ],
+          "note": "Time-sensitive financial evidence lacks a ResearchSpec freshness contract."
+        }
+      ],
+      "recommendation": "Use only as source-bound evidence for a curated static financial-research capability."
+    },
+    {
+      "surface_id": "analyzer-analyze-cash-flow",
+      "source_path": "finrobot/functional/analyzer.py",
+      "symbol": "ReportAnalysisUtils.analyze_cash_flow",
+      "kind": "analysis-template",
+      "scope": "financial-research",
+      "disposition": "candidate",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "credential",
+        "data-freshness",
+        "external-service",
+        "provider-binding"
+      ],
+      "findings": [
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot/functional/analyzer.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        },
+        {
+          "code": "DATA-FRESHNESS",
+          "severity": "review",
+          "evidence": [
+            "finrobot/functional/analyzer.py"
+          ],
+          "note": "Time-sensitive financial evidence lacks a ResearchSpec freshness contract."
+        }
+      ],
+      "recommendation": "Use only as source-bound evidence for a curated static financial-research capability."
+    },
+    {
+      "surface_id": "analyzer-analyze-company-description",
+      "source_path": "finrobot/functional/analyzer.py",
+      "symbol": "ReportAnalysisUtils.analyze_company_description",
+      "kind": "analysis-template",
+      "scope": "financial-research",
+      "disposition": "candidate",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "credential",
+        "data-freshness",
+        "external-service",
+        "provider-binding"
+      ],
+      "findings": [
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot/functional/analyzer.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        },
+        {
+          "code": "DATA-FRESHNESS",
+          "severity": "review",
+          "evidence": [
+            "finrobot/functional/analyzer.py"
+          ],
+          "note": "Time-sensitive financial evidence lacks a ResearchSpec freshness contract."
+        }
+      ],
+      "recommendation": "Use only as source-bound evidence for a curated static financial-research capability."
+    },
+    {
+      "surface_id": "analyzer-analyze-income-stmt",
+      "source_path": "finrobot/functional/analyzer.py",
+      "symbol": "ReportAnalysisUtils.analyze_income_stmt",
+      "kind": "analysis-template",
+      "scope": "financial-research",
+      "disposition": "candidate",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "credential",
+        "data-freshness",
+        "external-service",
+        "provider-binding"
+      ],
+      "findings": [
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot/functional/analyzer.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        },
+        {
+          "code": "DATA-FRESHNESS",
+          "severity": "review",
+          "evidence": [
+            "finrobot/functional/analyzer.py"
+          ],
+          "note": "Time-sensitive financial evidence lacks a ResearchSpec freshness contract."
+        }
+      ],
+      "recommendation": "Use only as source-bound evidence for a curated static financial-research capability."
+    },
+    {
+      "surface_id": "analyzer-analyze-segment-stmt",
+      "source_path": "finrobot/functional/analyzer.py",
+      "symbol": "ReportAnalysisUtils.analyze_segment_stmt",
+      "kind": "analysis-template",
+      "scope": "financial-research",
+      "disposition": "candidate",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "credential",
+        "data-freshness",
+        "external-service",
+        "provider-binding"
+      ],
+      "findings": [
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot/functional/analyzer.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        },
+        {
+          "code": "DATA-FRESHNESS",
+          "severity": "review",
+          "evidence": [
+            "finrobot/functional/analyzer.py"
+          ],
+          "note": "Time-sensitive financial evidence lacks a ResearchSpec freshness contract."
+        }
+      ],
+      "recommendation": "Use only as source-bound evidence for a curated static financial-research capability."
+    },
+    {
+      "surface_id": "analyzer-get-competitors-analysis",
+      "source_path": "finrobot/functional/analyzer.py",
+      "symbol": "ReportAnalysisUtils.get_competitors_analysis",
+      "kind": "analysis-template",
+      "scope": "financial-research",
+      "disposition": "candidate",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "credential",
+        "data-freshness",
+        "external-service",
+        "provider-binding"
+      ],
+      "findings": [
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot/functional/analyzer.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        },
+        {
+          "code": "DATA-FRESHNESS",
+          "severity": "review",
+          "evidence": [
+            "finrobot/functional/analyzer.py"
+          ],
+          "note": "Time-sensitive financial evidence lacks a ResearchSpec freshness contract."
+        }
+      ],
+      "recommendation": "Use only as source-bound evidence for a curated static financial-research capability."
+    },
+    {
+      "surface_id": "analyzer-get-key-data",
+      "source_path": "finrobot/functional/analyzer.py",
+      "symbol": "ReportAnalysisUtils.get_key_data",
+      "kind": "analysis-template",
+      "scope": "financial-research",
+      "disposition": "candidate",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "credential",
+        "data-freshness",
+        "external-service",
+        "provider-binding"
+      ],
+      "findings": [
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot/functional/analyzer.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        },
+        {
+          "code": "DATA-FRESHNESS",
+          "severity": "review",
+          "evidence": [
+            "finrobot/functional/analyzer.py"
+          ],
+          "note": "Time-sensitive financial evidence lacks a ResearchSpec freshness contract."
+        }
+      ],
+      "recommendation": "Use only as source-bound evidence for a curated static financial-research capability."
+    },
+    {
+      "surface_id": "analyzer-get-risk-assessment",
+      "source_path": "finrobot/functional/analyzer.py",
+      "symbol": "ReportAnalysisUtils.get_risk_assessment",
+      "kind": "analysis-template",
+      "scope": "financial-research",
+      "disposition": "candidate",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "credential",
+        "data-freshness",
+        "external-service",
+        "provider-binding"
+      ],
+      "findings": [
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot/functional/analyzer.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        },
+        {
+          "code": "DATA-FRESHNESS",
+          "severity": "review",
+          "evidence": [
+            "finrobot/functional/analyzer.py"
+          ],
+          "note": "Time-sensitive financial evidence lacks a ResearchSpec freshness contract."
+        }
+      ],
+      "recommendation": "Use only as source-bound evidence for a curated static financial-research capability."
+    },
+    {
+      "surface_id": "analyzer-income-summarization",
+      "source_path": "finrobot/functional/analyzer.py",
+      "symbol": "ReportAnalysisUtils.income_summarization",
+      "kind": "analysis-template",
+      "scope": "financial-research",
+      "disposition": "candidate",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "credential",
+        "data-freshness",
+        "external-service",
+        "provider-binding"
+      ],
+      "findings": [
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot/functional/analyzer.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        },
+        {
+          "code": "DATA-FRESHNESS",
+          "severity": "review",
+          "evidence": [
+            "finrobot/functional/analyzer.py"
+          ],
+          "note": "Time-sensitive financial evidence lacks a ResearchSpec freshness contract."
+        }
+      ],
+      "recommendation": "Use only as source-bound evidence for a curated static financial-research capability."
+    },
+    {
+      "surface_id": "catalyst-assess-impact",
+      "source_path": "finrobot_equity/core/src/modules/catalyst_analyzer.py",
+      "symbol": "CatalystAnalyzer.assess_catalyst_impact",
+      "kind": "deterministic-method",
+      "scope": "financial-research",
+      "disposition": "candidate",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "data-freshness",
+        "external-service",
+        "fixed-assumption",
+        "provider-binding",
+        "unsupported-numeric-output"
+      ],
+      "findings": [
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/catalyst_analyzer.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        },
+        {
+          "code": "DATA-FRESHNESS",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/catalyst_analyzer.py"
+          ],
+          "note": "Time-sensitive financial evidence lacks a ResearchSpec freshness contract."
+        },
+        {
+          "code": "FIXED-ASSUMPTION",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/catalyst_analyzer.py"
+          ],
+          "note": "Hard-coded assumptions require independent validation and must not become authoritative defaults."
+        },
+        {
+          "code": "UNSUPPORTED-NUMERIC-OUTPUT",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/catalyst_analyzer.py"
+          ],
+          "note": "Numeric predictions, targets, ratings, or confidence claims require deterministic evidence."
+        }
+      ],
+      "recommendation": "Use only as source-bound evidence for a curated static financial-research capability."
+    },
+    {
+      "surface_id": "catalyst-classify-event",
+      "source_path": "finrobot_equity/core/src/modules/catalyst_analyzer.py",
+      "symbol": "CatalystAnalyzer._classify_event_type",
+      "kind": "deterministic-method",
+      "scope": "financial-research",
+      "disposition": "candidate",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "data-freshness",
+        "external-service",
+        "fixed-assumption",
+        "provider-binding",
+        "unsupported-numeric-output"
+      ],
+      "findings": [
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/catalyst_analyzer.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        },
+        {
+          "code": "DATA-FRESHNESS",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/catalyst_analyzer.py"
+          ],
+          "note": "Time-sensitive financial evidence lacks a ResearchSpec freshness contract."
+        },
+        {
+          "code": "FIXED-ASSUMPTION",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/catalyst_analyzer.py"
+          ],
+          "note": "Hard-coded assumptions require independent validation and must not become authoritative defaults."
+        },
+        {
+          "code": "UNSUPPORTED-NUMERIC-OUTPUT",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/catalyst_analyzer.py"
+          ],
+          "note": "Numeric predictions, targets, ratings, or confidence claims require deterministic evidence."
+        }
+      ],
+      "recommendation": "Use only as source-bound evidence for a curated static financial-research capability."
+    },
+    {
+      "surface_id": "catalyst-estimate-probability",
+      "source_path": "finrobot_equity/core/src/modules/catalyst_analyzer.py",
+      "symbol": "CatalystAnalyzer._estimate_probability",
+      "kind": "deterministic-method",
+      "scope": "financial-research",
+      "disposition": "evidence-only",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "data-freshness",
+        "external-service",
+        "fixed-assumption",
+        "provider-binding",
+        "unsupported-numeric-output"
+      ],
+      "findings": [
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/catalyst_analyzer.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        },
+        {
+          "code": "DATA-FRESHNESS",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/catalyst_analyzer.py"
+          ],
+          "note": "Time-sensitive financial evidence lacks a ResearchSpec freshness contract."
+        },
+        {
+          "code": "FIXED-ASSUMPTION",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/catalyst_analyzer.py"
+          ],
+          "note": "Hard-coded assumptions require independent validation and must not become authoritative defaults."
+        },
+        {
+          "code": "UNSUPPORTED-NUMERIC-OUTPUT",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/catalyst_analyzer.py"
+          ],
+          "note": "Numeric predictions, targets, ratings, or confidence claims require deterministic evidence."
+        }
+      ],
+      "recommendation": "Retain as methodological or risk evidence; do not copy defaults or executable behavior."
+    },
+    {
+      "surface_id": "catalyst-identify",
+      "source_path": "finrobot_equity/core/src/modules/catalyst_analyzer.py",
+      "symbol": "CatalystAnalyzer.identify_catalysts",
+      "kind": "deterministic-method",
+      "scope": "financial-research",
+      "disposition": "candidate",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "data-freshness",
+        "external-service",
+        "fixed-assumption",
+        "provider-binding",
+        "unsupported-numeric-output"
+      ],
+      "findings": [
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/catalyst_analyzer.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        },
+        {
+          "code": "DATA-FRESHNESS",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/catalyst_analyzer.py"
+          ],
+          "note": "Time-sensitive financial evidence lacks a ResearchSpec freshness contract."
+        },
+        {
+          "code": "FIXED-ASSUMPTION",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/catalyst_analyzer.py"
+          ],
+          "note": "Hard-coded assumptions require independent validation and must not become authoritative defaults."
+        },
+        {
+          "code": "UNSUPPORTED-NUMERIC-OUTPUT",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/catalyst_analyzer.py"
+          ],
+          "note": "Numeric predictions, targets, ratings, or confidence claims require deterministic evidence."
+        }
+      ],
+      "recommendation": "Use only as source-bound evidence for a curated static financial-research capability."
+    },
+    {
+      "surface_id": "enhanced-catalyst-analysis",
+      "source_path": "finrobot_equity/core/src/modules/enhanced_text_generator.py",
+      "symbol": "EnhancedTextGenerator.generate_catalyst_analysis",
+      "kind": "text-generation-prompt",
+      "scope": "financial-research",
+      "disposition": "candidate",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "credential",
+        "data-freshness",
+        "external-service",
+        "provider-binding",
+        "runtime-coupling",
+        "unsupported-numeric-output"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/enhanced_text_generator.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        },
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/enhanced_text_generator.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        },
+        {
+          "code": "DATA-FRESHNESS",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/enhanced_text_generator.py"
+          ],
+          "note": "Time-sensitive financial evidence lacks a ResearchSpec freshness contract."
+        },
+        {
+          "code": "UNSUPPORTED-NUMERIC-OUTPUT",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/enhanced_text_generator.py"
+          ],
+          "note": "Numeric predictions, targets, ratings, or confidence claims require deterministic evidence."
+        }
+      ],
+      "recommendation": "Use only as source-bound evidence for a curated static financial-research capability."
+    },
+    {
+      "surface_id": "enhanced-executive-summary",
+      "source_path": "finrobot_equity/core/src/modules/enhanced_text_generator.py",
+      "symbol": "EnhancedTextGenerator.generate_executive_summary",
+      "kind": "text-generation-prompt",
+      "scope": "financial-research",
+      "disposition": "exclude",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "credential",
+        "external-service",
+        "personalized-advice",
+        "provider-binding",
+        "runtime-coupling",
+        "unsupported-numeric-output"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/enhanced_text_generator.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        },
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/enhanced_text_generator.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        },
+        {
+          "code": "UNSUPPORTED-NUMERIC-OUTPUT",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/enhanced_text_generator.py"
+          ],
+          "note": "Numeric predictions, targets, ratings, or confidence claims require deterministic evidence."
+        },
+        {
+          "code": "NO-PERSONALIZED-ADVICE",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/enhanced_text_generator.py"
+          ],
+          "note": "The source language must be curated to research analysis rather than personalized advice."
+        }
+      ],
+      "recommendation": "Exclude this runtime-oriented or low-value surface from future Plugin content."
+    },
+    {
+      "surface_id": "enhanced-forecast-methodology",
+      "source_path": "finrobot_equity/core/src/modules/enhanced_text_generator.py",
+      "symbol": "EnhancedTextGenerator.generate_forecast_methodology",
+      "kind": "text-generation-prompt",
+      "scope": "financial-research",
+      "disposition": "candidate",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "credential",
+        "external-service",
+        "fixed-assumption",
+        "provider-binding",
+        "runtime-coupling"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/enhanced_text_generator.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        },
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/enhanced_text_generator.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        },
+        {
+          "code": "FIXED-ASSUMPTION",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/enhanced_text_generator.py"
+          ],
+          "note": "Hard-coded assumptions require independent validation and must not become authoritative defaults."
+        }
+      ],
+      "recommendation": "Use only as source-bound evidence for a curated static financial-research capability."
+    },
+    {
+      "surface_id": "enhanced-investment-recommendation",
+      "source_path": "finrobot_equity/core/src/modules/enhanced_text_generator.py",
+      "symbol": "EnhancedTextGenerator.generate_investment_recommendation",
+      "kind": "text-generation-prompt",
+      "scope": "financial-research",
+      "disposition": "exclude",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "credential",
+        "external-service",
+        "personalized-advice",
+        "provider-binding",
+        "runtime-coupling",
+        "unsupported-numeric-output"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/enhanced_text_generator.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        },
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/enhanced_text_generator.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        },
+        {
+          "code": "UNSUPPORTED-NUMERIC-OUTPUT",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/enhanced_text_generator.py"
+          ],
+          "note": "Numeric predictions, targets, ratings, or confidence claims require deterministic evidence."
+        },
+        {
+          "code": "NO-PERSONALIZED-ADVICE",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/enhanced_text_generator.py"
+          ],
+          "note": "The source language must be curated to research analysis rather than personalized advice."
+        }
+      ],
+      "recommendation": "Exclude this runtime-oriented or low-value surface from future Plugin content."
+    },
+    {
+      "surface_id": "enhanced-risk-factors",
+      "source_path": "finrobot_equity/core/src/modules/enhanced_text_generator.py",
+      "symbol": "EnhancedTextGenerator.generate_risk_factors",
+      "kind": "text-generation-prompt",
+      "scope": "financial-research",
+      "disposition": "candidate",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "credential",
+        "external-service",
+        "personalized-advice",
+        "provider-binding",
+        "runtime-coupling"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/enhanced_text_generator.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        },
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/enhanced_text_generator.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        },
+        {
+          "code": "NO-PERSONALIZED-ADVICE",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/enhanced_text_generator.py"
+          ],
+          "note": "The source language must be curated to research analysis rather than personalized advice."
+        }
+      ],
+      "recommendation": "Use only as source-bound evidence for a curated static financial-research capability."
+    },
+    {
+      "surface_id": "enhanced-section-summary",
+      "source_path": "finrobot_equity/core/src/modules/enhanced_text_generator.py",
+      "symbol": "EnhancedTextGenerator.generate_section_summary",
+      "kind": "text-generation-prompt",
+      "scope": "financial-research",
+      "disposition": "exclude",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "credential",
+        "external-service",
+        "provider-binding",
+        "runtime-coupling"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/enhanced_text_generator.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        },
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/enhanced_text_generator.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        }
+      ],
+      "recommendation": "Exclude this runtime-oriented or low-value surface from future Plugin content."
+    },
+    {
+      "surface_id": "enhanced-valuation-analysis",
+      "source_path": "finrobot_equity/core/src/modules/enhanced_text_generator.py",
+      "symbol": "EnhancedTextGenerator.generate_valuation_analysis",
+      "kind": "text-generation-prompt",
+      "scope": "financial-research",
+      "disposition": "candidate",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "credential",
+        "external-service",
+        "personalized-advice",
+        "provider-binding",
+        "runtime-coupling",
+        "unsupported-numeric-output"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/enhanced_text_generator.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        },
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/enhanced_text_generator.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        },
+        {
+          "code": "UNSUPPORTED-NUMERIC-OUTPUT",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/enhanced_text_generator.py"
+          ],
+          "note": "Numeric predictions, targets, ratings, or confidence claims require deterministic evidence."
+        },
+        {
+          "code": "NO-PERSONALIZED-ADVICE",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/enhanced_text_generator.py"
+          ],
+          "note": "The source language must be curated to research analysis rather than personalized advice."
+        }
+      ],
+      "recommendation": "Use only as source-bound evidence for a curated static financial-research capability."
+    },
+    {
+      "surface_id": "equity-company-overview",
+      "source_path": "finrobot_equity/core/src/modules/equity_agents/company_overview_agent.py",
+      "symbol": "COMPANY_OVERVIEW_PROMPT",
+      "kind": "equity-agent-prompt",
+      "scope": "financial-research",
+      "disposition": "candidate",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "provider-binding",
+        "runtime-coupling"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/equity_agents/company_overview_agent.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        },
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/equity_agents/company_overview_agent.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        }
+      ],
+      "recommendation": "Use only as source-bound evidence for a curated static financial-research capability."
+    },
+    {
+      "surface_id": "equity-competitor-analysis",
+      "source_path": "finrobot_equity/core/src/modules/equity_agents/competitor_analysis_agent.py",
+      "symbol": "COMPETITOR_ANALYSIS_PROMPT",
+      "kind": "equity-agent-prompt",
+      "scope": "financial-research",
+      "disposition": "candidate",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "provider-binding",
+        "runtime-coupling"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/equity_agents/competitor_analysis_agent.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        },
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/equity_agents/competitor_analysis_agent.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        }
+      ],
+      "recommendation": "Use only as source-bound evidence for a curated static financial-research capability."
+    },
+    {
+      "surface_id": "equity-investment-overview",
+      "source_path": "finrobot_equity/core/src/modules/equity_agents/investment_overview_agent.py",
+      "symbol": "INVESTMENT_OVERVIEW_PROMPT",
+      "kind": "equity-agent-prompt",
+      "scope": "financial-research",
+      "disposition": "candidate",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "personalized-advice",
+        "provider-binding",
+        "runtime-coupling"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/equity_agents/investment_overview_agent.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        },
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/equity_agents/investment_overview_agent.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        },
+        {
+          "code": "NO-PERSONALIZED-ADVICE",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/equity_agents/investment_overview_agent.py"
+          ],
+          "note": "The source language must be curated to research analysis rather than personalized advice."
+        }
+      ],
+      "recommendation": "Use only as source-bound evidence for a curated static financial-research capability."
+    },
+    {
+      "surface_id": "equity-major-takeaways",
+      "source_path": "finrobot_equity/core/src/modules/equity_agents/major_takeaways_agent.py",
+      "symbol": "MAJOR_TAKEAWAYS_PROMPT",
+      "kind": "equity-agent-prompt",
+      "scope": "financial-research",
+      "disposition": "candidate",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "provider-binding",
+        "runtime-coupling"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/equity_agents/major_takeaways_agent.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        },
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/equity_agents/major_takeaways_agent.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        }
+      ],
+      "recommendation": "Use only as source-bound evidence for a curated static financial-research capability."
+    },
+    {
+      "surface_id": "equity-news-summary",
+      "source_path": "finrobot_equity/core/src/modules/equity_agents/news_summary_agent.py",
+      "symbol": "NEWS_SUMMARY_PROMPT",
+      "kind": "equity-agent-prompt",
+      "scope": "financial-research",
+      "disposition": "candidate",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "data-freshness",
+        "personalized-advice",
+        "provider-binding",
+        "runtime-coupling"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/equity_agents/news_summary_agent.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        },
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/equity_agents/news_summary_agent.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        },
+        {
+          "code": "DATA-FRESHNESS",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/equity_agents/news_summary_agent.py"
+          ],
+          "note": "Time-sensitive financial evidence lacks a ResearchSpec freshness contract."
+        },
+        {
+          "code": "NO-PERSONALIZED-ADVICE",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/equity_agents/news_summary_agent.py"
+          ],
+          "note": "The source language must be curated to research analysis rather than personalized advice."
+        }
+      ],
+      "recommendation": "Use only as source-bound evidence for a curated static financial-research capability."
+    },
+    {
+      "surface_id": "equity-risks",
+      "source_path": "finrobot_equity/core/src/modules/equity_agents/risks_agent.py",
+      "symbol": "RISKS_PROMPT",
+      "kind": "equity-agent-prompt",
+      "scope": "financial-research",
+      "disposition": "candidate",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "personalized-advice",
+        "provider-binding",
+        "runtime-coupling"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/equity_agents/risks_agent.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        },
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/equity_agents/risks_agent.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        },
+        {
+          "code": "NO-PERSONALIZED-ADVICE",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/equity_agents/risks_agent.py"
+          ],
+          "note": "The source language must be curated to research analysis rather than personalized advice."
+        }
+      ],
+      "recommendation": "Use only as source-bound evidence for a curated static financial-research capability."
+    },
+    {
+      "surface_id": "equity-tagline",
+      "source_path": "finrobot_equity/core/src/modules/equity_agents/tagline_agent.py",
+      "symbol": "TAGLINE_PROMPT",
+      "kind": "equity-agent-prompt",
+      "scope": "financial-research",
+      "disposition": "exclude",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "provider-binding",
+        "runtime-coupling"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/equity_agents/tagline_agent.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        },
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/equity_agents/tagline_agent.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        }
+      ],
+      "recommendation": "Exclude this runtime-oriented or low-value surface from future Plugin content."
+    },
+    {
+      "surface_id": "equity-valuation-overview",
+      "source_path": "finrobot_equity/core/src/modules/equity_agents/valuation_overview_agent.py",
+      "symbol": "VALUATION_OVERVIEW_PROMPT",
+      "kind": "equity-agent-prompt",
+      "scope": "financial-research",
+      "disposition": "candidate",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "personalized-advice",
+        "provider-binding",
+        "runtime-coupling",
+        "unsupported-numeric-output"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/equity_agents/valuation_overview_agent.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        },
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/equity_agents/valuation_overview_agent.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        },
+        {
+          "code": "UNSUPPORTED-NUMERIC-OUTPUT",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/equity_agents/valuation_overview_agent.py"
+          ],
+          "note": "Numeric predictions, targets, ratings, or confidence claims require deterministic evidence."
+        },
+        {
+          "code": "NO-PERSONALIZED-ADVICE",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/equity_agents/valuation_overview_agent.py"
+          ],
+          "note": "The source language must be curated to research analysis rather than personalized advice."
+        }
+      ],
+      "recommendation": "Use only as source-bound evidence for a curated static financial-research capability."
+    },
+    {
+      "surface_id": "fallback-company-overview",
+      "source_path": "finrobot_equity/core/src/modules/text_generator_agents.py",
+      "symbol": "SYSTEM_PROMPTS[company_overview]",
+      "kind": "text-generation-prompt",
+      "scope": "financial-research",
+      "disposition": "evidence-only",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "credential",
+        "external-service",
+        "provider-binding",
+        "runtime-coupling"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/text_generator_agents.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        },
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/text_generator_agents.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        }
+      ],
+      "recommendation": "Retain as methodological or risk evidence; do not copy defaults or executable behavior."
+    },
+    {
+      "surface_id": "fallback-competitor-analysis",
+      "source_path": "finrobot_equity/core/src/modules/text_generator_agents.py",
+      "symbol": "SYSTEM_PROMPTS[competitor_analysis]",
+      "kind": "text-generation-prompt",
+      "scope": "financial-research",
+      "disposition": "evidence-only",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "credential",
+        "external-service",
+        "provider-binding",
+        "runtime-coupling"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/text_generator_agents.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        },
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/text_generator_agents.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        }
+      ],
+      "recommendation": "Retain as methodological or risk evidence; do not copy defaults or executable behavior."
+    },
+    {
+      "surface_id": "fallback-investment-overview",
+      "source_path": "finrobot_equity/core/src/modules/text_generator_agents.py",
+      "symbol": "SYSTEM_PROMPTS[investment_overview]",
+      "kind": "text-generation-prompt",
+      "scope": "financial-research",
+      "disposition": "evidence-only",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "credential",
+        "external-service",
+        "personalized-advice",
+        "provider-binding",
+        "runtime-coupling"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/text_generator_agents.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        },
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/text_generator_agents.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        },
+        {
+          "code": "NO-PERSONALIZED-ADVICE",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/text_generator_agents.py"
+          ],
+          "note": "The source language must be curated to research analysis rather than personalized advice."
+        }
+      ],
+      "recommendation": "Retain as methodological or risk evidence; do not copy defaults or executable behavior."
+    },
+    {
+      "surface_id": "fallback-major-takeaways",
+      "source_path": "finrobot_equity/core/src/modules/text_generator_agents.py",
+      "symbol": "SYSTEM_PROMPTS[major_takeaways]",
+      "kind": "text-generation-prompt",
+      "scope": "financial-research",
+      "disposition": "evidence-only",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "credential",
+        "external-service",
+        "provider-binding",
+        "runtime-coupling"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/text_generator_agents.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        },
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/text_generator_agents.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        }
+      ],
+      "recommendation": "Retain as methodological or risk evidence; do not copy defaults or executable behavior."
+    },
+    {
+      "surface_id": "fallback-news-summary",
+      "source_path": "finrobot_equity/core/src/modules/text_generator_agents.py",
+      "symbol": "SYSTEM_PROMPTS[news_summary]",
+      "kind": "text-generation-prompt",
+      "scope": "financial-research",
+      "disposition": "evidence-only",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "credential",
+        "data-freshness",
+        "external-service",
+        "personalized-advice",
+        "provider-binding",
+        "runtime-coupling"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/text_generator_agents.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        },
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/text_generator_agents.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        },
+        {
+          "code": "DATA-FRESHNESS",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/text_generator_agents.py"
+          ],
+          "note": "Time-sensitive financial evidence lacks a ResearchSpec freshness contract."
+        },
+        {
+          "code": "NO-PERSONALIZED-ADVICE",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/text_generator_agents.py"
+          ],
+          "note": "The source language must be curated to research analysis rather than personalized advice."
+        }
+      ],
+      "recommendation": "Retain as methodological or risk evidence; do not copy defaults or executable behavior."
+    },
+    {
+      "surface_id": "fallback-risks",
+      "source_path": "finrobot_equity/core/src/modules/text_generator_agents.py",
+      "symbol": "SYSTEM_PROMPTS[risks]",
+      "kind": "text-generation-prompt",
+      "scope": "financial-research",
+      "disposition": "evidence-only",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "credential",
+        "external-service",
+        "personalized-advice",
+        "provider-binding",
+        "runtime-coupling"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/text_generator_agents.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        },
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/text_generator_agents.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        },
+        {
+          "code": "NO-PERSONALIZED-ADVICE",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/text_generator_agents.py"
+          ],
+          "note": "The source language must be curated to research analysis rather than personalized advice."
+        }
+      ],
+      "recommendation": "Retain as methodological or risk evidence; do not copy defaults or executable behavior."
+    },
+    {
+      "surface_id": "fallback-tagline",
+      "source_path": "finrobot_equity/core/src/modules/text_generator_agents.py",
+      "symbol": "SYSTEM_PROMPTS[tagline]",
+      "kind": "text-generation-prompt",
+      "scope": "financial-research",
+      "disposition": "evidence-only",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "credential",
+        "external-service",
+        "provider-binding",
+        "runtime-coupling"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/text_generator_agents.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        },
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/text_generator_agents.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        }
+      ],
+      "recommendation": "Retain as methodological or risk evidence; do not copy defaults or executable behavior."
+    },
+    {
+      "surface_id": "fallback-valuation-overview",
+      "source_path": "finrobot_equity/core/src/modules/text_generator_agents.py",
+      "symbol": "SYSTEM_PROMPTS[valuation_overview]",
+      "kind": "text-generation-prompt",
+      "scope": "financial-research",
+      "disposition": "evidence-only",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "credential",
+        "external-service",
+        "personalized-advice",
+        "provider-binding",
+        "runtime-coupling"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/text_generator_agents.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        },
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/text_generator_agents.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        },
+        {
+          "code": "NO-PERSONALIZED-ADVICE",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/text_generator_agents.py"
+          ],
+          "note": "The source language must be curated to research analysis rather than personalized advice."
+        }
+      ],
+      "recommendation": "Retain as methodological or risk evidence; do not copy defaults or executable behavior."
+    },
+    {
+      "surface_id": "forecaster-building-task",
+      "source_path": "configs/save_config_forecaster.json",
+      "symbol": "building_task",
+      "kind": "configuration-prompt",
+      "scope": "execution-runtime",
+      "disposition": "exclude",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "code-execution",
+        "data-freshness",
+        "external-service",
+        "personalized-advice",
+        "runtime-coupling",
+        "unsupported-numeric-output"
+      ],
+      "findings": [
+        {
+          "code": "DATA-FRESHNESS",
+          "severity": "review",
+          "evidence": [
+            "configs/save_config_forecaster.json"
+          ],
+          "note": "Time-sensitive financial evidence lacks a ResearchSpec freshness contract."
+        },
+        {
+          "code": "UNSUPPORTED-NUMERIC-OUTPUT",
+          "severity": "review",
+          "evidence": [
+            "configs/save_config_forecaster.json"
+          ],
+          "note": "Numeric predictions, targets, ratings, or confidence claims require deterministic evidence."
+        },
+        {
+          "code": "NO-PERSONALIZED-ADVICE",
+          "severity": "review",
+          "evidence": [
+            "configs/save_config_forecaster.json"
+          ],
+          "note": "The source language must be curated to research analysis rather than personalized advice."
+        },
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "configs/save_config_forecaster.json"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        }
+      ],
+      "recommendation": "Exclude this runtime-oriented or low-value surface from future Plugin content."
+    },
+    {
+      "surface_id": "forecaster-financial-data-analyst",
+      "source_path": "configs/save_config_forecaster.json",
+      "symbol": "agent_configs[financial_data_analyst]",
+      "kind": "configuration-prompt",
+      "scope": "execution-runtime",
+      "disposition": "exclude",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "code-execution",
+        "data-freshness",
+        "external-service",
+        "personalized-advice",
+        "runtime-coupling",
+        "unsupported-numeric-output"
+      ],
+      "findings": [
+        {
+          "code": "DATA-FRESHNESS",
+          "severity": "review",
+          "evidence": [
+            "configs/save_config_forecaster.json"
+          ],
+          "note": "Time-sensitive financial evidence lacks a ResearchSpec freshness contract."
+        },
+        {
+          "code": "UNSUPPORTED-NUMERIC-OUTPUT",
+          "severity": "review",
+          "evidence": [
+            "configs/save_config_forecaster.json"
+          ],
+          "note": "Numeric predictions, targets, ratings, or confidence claims require deterministic evidence."
+        },
+        {
+          "code": "NO-PERSONALIZED-ADVICE",
+          "severity": "review",
+          "evidence": [
+            "configs/save_config_forecaster.json"
+          ],
+          "note": "The source language must be curated to research analysis rather than personalized advice."
+        },
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "configs/save_config_forecaster.json"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        }
+      ],
+      "recommendation": "Exclude this runtime-oriented or low-value surface from future Plugin content."
+    },
+    {
+      "surface_id": "forecaster-financial-report-writer",
+      "source_path": "configs/save_config_forecaster.json",
+      "symbol": "agent_configs[financial_report_writer]",
+      "kind": "configuration-prompt",
+      "scope": "execution-runtime",
+      "disposition": "exclude",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "code-execution",
+        "data-freshness",
+        "external-service",
+        "personalized-advice",
+        "runtime-coupling",
+        "unsupported-numeric-output"
+      ],
+      "findings": [
+        {
+          "code": "DATA-FRESHNESS",
+          "severity": "review",
+          "evidence": [
+            "configs/save_config_forecaster.json"
+          ],
+          "note": "Time-sensitive financial evidence lacks a ResearchSpec freshness contract."
+        },
+        {
+          "code": "UNSUPPORTED-NUMERIC-OUTPUT",
+          "severity": "review",
+          "evidence": [
+            "configs/save_config_forecaster.json"
+          ],
+          "note": "Numeric predictions, targets, ratings, or confidence claims require deterministic evidence."
+        },
+        {
+          "code": "NO-PERSONALIZED-ADVICE",
+          "severity": "review",
+          "evidence": [
+            "configs/save_config_forecaster.json"
+          ],
+          "note": "The source language must be curated to research analysis rather than personalized advice."
+        },
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "configs/save_config_forecaster.json"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        }
+      ],
+      "recommendation": "Exclude this runtime-oriented or low-value surface from future Plugin content."
+    },
+    {
+      "surface_id": "forecaster-market-news-researcher",
+      "source_path": "configs/save_config_forecaster.json",
+      "symbol": "agent_configs[market_news_researcher]",
+      "kind": "configuration-prompt",
+      "scope": "execution-runtime",
+      "disposition": "exclude",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "code-execution",
+        "data-freshness",
+        "external-service",
+        "personalized-advice",
+        "runtime-coupling",
+        "unsupported-numeric-output"
+      ],
+      "findings": [
+        {
+          "code": "DATA-FRESHNESS",
+          "severity": "review",
+          "evidence": [
+            "configs/save_config_forecaster.json"
+          ],
+          "note": "Time-sensitive financial evidence lacks a ResearchSpec freshness contract."
+        },
+        {
+          "code": "UNSUPPORTED-NUMERIC-OUTPUT",
+          "severity": "review",
+          "evidence": [
+            "configs/save_config_forecaster.json"
+          ],
+          "note": "Numeric predictions, targets, ratings, or confidence claims require deterministic evidence."
+        },
+        {
+          "code": "NO-PERSONALIZED-ADVICE",
+          "severity": "review",
+          "evidence": [
+            "configs/save_config_forecaster.json"
+          ],
+          "note": "The source language must be curated to research analysis rather than personalized advice."
+        },
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "configs/save_config_forecaster.json"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        }
+      ],
+      "recommendation": "Exclude this runtime-oriented or low-value surface from future Plugin content."
+    },
+    {
+      "surface_id": "forecaster-python-programmer",
+      "source_path": "configs/save_config_forecaster.json",
+      "symbol": "agent_configs[python_programmer]",
+      "kind": "configuration-prompt",
+      "scope": "execution-runtime",
+      "disposition": "exclude",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "code-execution",
+        "data-freshness",
+        "external-service",
+        "personalized-advice",
+        "runtime-coupling",
+        "unsupported-numeric-output"
+      ],
+      "findings": [
+        {
+          "code": "DATA-FRESHNESS",
+          "severity": "review",
+          "evidence": [
+            "configs/save_config_forecaster.json"
+          ],
+          "note": "Time-sensitive financial evidence lacks a ResearchSpec freshness contract."
+        },
+        {
+          "code": "UNSUPPORTED-NUMERIC-OUTPUT",
+          "severity": "review",
+          "evidence": [
+            "configs/save_config_forecaster.json"
+          ],
+          "note": "Numeric predictions, targets, ratings, or confidence claims require deterministic evidence."
+        },
+        {
+          "code": "NO-PERSONALIZED-ADVICE",
+          "severity": "review",
+          "evidence": [
+            "configs/save_config_forecaster.json"
+          ],
+          "note": "The source language must be curated to research analysis rather than personalized advice."
+        },
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "configs/save_config_forecaster.json"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        }
+      ],
+      "recommendation": "Exclude this runtime-oriented or low-value surface from future Plugin content."
+    },
+    {
+      "surface_id": "forecaster-stock-price-estimator",
+      "source_path": "configs/save_config_forecaster.json",
+      "symbol": "agent_configs[stock_price_estimator]",
+      "kind": "configuration-prompt",
+      "scope": "execution-runtime",
+      "disposition": "exclude",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "code-execution",
+        "data-freshness",
+        "external-service",
+        "personalized-advice",
+        "runtime-coupling",
+        "unsupported-numeric-output"
+      ],
+      "findings": [
+        {
+          "code": "DATA-FRESHNESS",
+          "severity": "review",
+          "evidence": [
+            "configs/save_config_forecaster.json"
+          ],
+          "note": "Time-sensitive financial evidence lacks a ResearchSpec freshness contract."
+        },
+        {
+          "code": "UNSUPPORTED-NUMERIC-OUTPUT",
+          "severity": "review",
+          "evidence": [
+            "configs/save_config_forecaster.json"
+          ],
+          "note": "Numeric predictions, targets, ratings, or confidence claims require deterministic evidence."
+        },
+        {
+          "code": "NO-PERSONALIZED-ADVICE",
+          "severity": "review",
+          "evidence": [
+            "configs/save_config_forecaster.json"
+          ],
+          "note": "The source language must be curated to research analysis rather than personalized advice."
+        },
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "configs/save_config_forecaster.json"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        }
+      ],
+      "recommendation": "Exclude this runtime-oriented or low-value surface from future Plugin content."
+    },
+    {
+      "surface_id": "orchestration-leader",
+      "source_path": "finrobot/agents/prompts.py",
+      "symbol": "leader_system_message",
+      "kind": "orchestration-prompt",
+      "scope": "generic-agent-runtime",
+      "disposition": "exclude",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "code-execution",
+        "runtime-coupling",
+        "stateful-operation"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot/agents/prompts.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        }
+      ],
+      "recommendation": "Exclude this runtime-oriented or low-value surface from future Plugin content."
+    },
+    {
+      "surface_id": "orchestration-order",
+      "source_path": "finrobot/agents/prompts.py",
+      "symbol": "order_template",
+      "kind": "orchestration-prompt",
+      "scope": "generic-agent-runtime",
+      "disposition": "exclude",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "code-execution",
+        "runtime-coupling",
+        "stateful-operation"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot/agents/prompts.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        }
+      ],
+      "recommendation": "Exclude this runtime-oriented or low-value surface from future Plugin content."
+    },
+    {
+      "surface_id": "orchestration-role",
+      "source_path": "finrobot/agents/prompts.py",
+      "symbol": "role_system_message",
+      "kind": "orchestration-prompt",
+      "scope": "generic-agent-runtime",
+      "disposition": "exclude",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "code-execution",
+        "runtime-coupling",
+        "stateful-operation"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot/agents/prompts.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        }
+      ],
+      "recommendation": "Exclude this runtime-oriented or low-value surface from future Plugin content."
+    },
+    {
+      "surface_id": "processor-extract-api",
+      "source_path": "finrobot_equity/core/src/modules/financial_data_processor.py",
+      "symbol": "extract_historical_metrics_from_api_data",
+      "kind": "deterministic-method",
+      "scope": "financial-research",
+      "disposition": "candidate",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "data-freshness",
+        "provider-binding"
+      ],
+      "findings": [
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/financial_data_processor.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        },
+        {
+          "code": "DATA-FRESHNESS",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/financial_data_processor.py"
+          ],
+          "note": "Time-sensitive financial evidence lacks a ResearchSpec freshness contract."
+        }
+      ],
+      "recommendation": "Use only as source-bound evidence for a curated static financial-research capability."
+    },
+    {
+      "surface_id": "processor-extract-pdf",
+      "source_path": "finrobot_equity/core/src/modules/financial_data_processor.py",
+      "symbol": "extract_historical_metrics_from_pdf_data",
+      "kind": "deterministic-method",
+      "scope": "financial-research",
+      "disposition": "candidate",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "data-freshness"
+      ],
+      "findings": [
+        {
+          "code": "DATA-FRESHNESS",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/financial_data_processor.py"
+          ],
+          "note": "Time-sensitive financial evidence lacks a ResearchSpec freshness contract."
+        }
+      ],
+      "recommendation": "Use only as source-bound evidence for a curated static financial-research capability."
+    },
+    {
+      "surface_id": "processor-growth-forecast",
+      "source_path": "finrobot_equity/core/src/modules/financial_data_processor.py",
+      "symbol": "calculate_growth_and_forecasts",
+      "kind": "deterministic-method",
+      "scope": "financial-research",
+      "disposition": "evidence-only",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "fixed-assumption",
+        "unsupported-numeric-output"
+      ],
+      "findings": [
+        {
+          "code": "FIXED-ASSUMPTION",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/financial_data_processor.py"
+          ],
+          "note": "Hard-coded assumptions require independent validation and must not become authoritative defaults."
+        },
+        {
+          "code": "UNSUPPORTED-NUMERIC-OUTPUT",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/financial_data_processor.py"
+          ],
+          "note": "Numeric predictions, targets, ratings, or confidence claims require deterministic evidence."
+        }
+      ],
+      "recommendation": "Retain as methodological or risk evidence; do not copy defaults or executable behavior."
+    },
+    {
+      "surface_id": "role-accountant",
+      "source_path": "finrobot/agents/agent_library.py",
+      "symbol": "library[Accountant]",
+      "kind": "agent-role",
+      "scope": "financial-research",
+      "disposition": "candidate",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "runtime-coupling"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot/agents/agent_library.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        }
+      ],
+      "recommendation": "Use only as source-bound evidence for a curated static financial-research capability."
+    },
+    {
+      "surface_id": "role-artificial-intelligence-engineer",
+      "source_path": "finrobot/agents/agent_library.py",
+      "symbol": "library[Artificial_Intelligence_Engineer]",
+      "kind": "agent-role",
+      "scope": "generic-agent-runtime",
+      "disposition": "exclude",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "runtime-coupling"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot/agents/agent_library.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        }
+      ],
+      "recommendation": "Exclude this runtime-oriented or low-value surface from future Plugin content."
+    },
+    {
+      "surface_id": "role-data-analyst",
+      "source_path": "finrobot/agents/agent_library.py",
+      "symbol": "library[Data_Analyst]",
+      "kind": "agent-role",
+      "scope": "generic-agent-runtime",
+      "disposition": "exclude",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "runtime-coupling"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot/agents/agent_library.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        }
+      ],
+      "recommendation": "Exclude this runtime-oriented or low-value surface from future Plugin content."
+    },
+    {
+      "surface_id": "role-expert-investor",
+      "source_path": "finrobot/agents/agent_library.py",
+      "symbol": "library[Expert_Investor]",
+      "kind": "agent-role",
+      "scope": "financial-research",
+      "disposition": "candidate",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "credential",
+        "data-freshness",
+        "external-service",
+        "personalized-advice",
+        "provider-binding",
+        "runtime-coupling"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot/agents/agent_library.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        },
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot/agents/agent_library.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        },
+        {
+          "code": "DATA-FRESHNESS",
+          "severity": "review",
+          "evidence": [
+            "finrobot/agents/agent_library.py"
+          ],
+          "note": "Time-sensitive financial evidence lacks a ResearchSpec freshness contract."
+        },
+        {
+          "code": "NO-PERSONALIZED-ADVICE",
+          "severity": "review",
+          "evidence": [
+            "finrobot/agents/agent_library.py"
+          ],
+          "note": "The source language must be curated to research analysis rather than personalized advice."
+        }
+      ],
+      "recommendation": "Use only as source-bound evidence for a curated static financial-research capability."
+    },
+    {
+      "surface_id": "role-financial-analyst",
+      "source_path": "finrobot/agents/agent_library.py",
+      "symbol": "library[Financial_Analyst]",
+      "kind": "agent-role",
+      "scope": "financial-research",
+      "disposition": "candidate",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "runtime-coupling"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot/agents/agent_library.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        }
+      ],
+      "recommendation": "Use only as source-bound evidence for a curated static financial-research capability."
+    },
+    {
+      "surface_id": "role-it-specialist",
+      "source_path": "finrobot/agents/agent_library.py",
+      "symbol": "library[IT_Specialist]",
+      "kind": "agent-role",
+      "scope": "generic-agent-runtime",
+      "disposition": "exclude",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "runtime-coupling"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot/agents/agent_library.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        }
+      ],
+      "recommendation": "Exclude this runtime-oriented or low-value surface from future Plugin content."
+    },
+    {
+      "surface_id": "role-market-analyst",
+      "source_path": "finrobot/agents/agent_library.py",
+      "symbol": "library[Market_Analyst]",
+      "kind": "agent-role",
+      "scope": "financial-research",
+      "disposition": "candidate",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "credential",
+        "data-freshness",
+        "external-service",
+        "provider-binding",
+        "runtime-coupling"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot/agents/agent_library.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        },
+        {
+          "code": "PROVIDER-BINDING",
+          "severity": "review",
+          "evidence": [
+            "finrobot/agents/agent_library.py"
+          ],
+          "note": "The source binds analysis to a named provider or SDK."
+        },
+        {
+          "code": "DATA-FRESHNESS",
+          "severity": "review",
+          "evidence": [
+            "finrobot/agents/agent_library.py"
+          ],
+          "note": "Time-sensitive financial evidence lacks a ResearchSpec freshness contract."
+        }
+      ],
+      "recommendation": "Use only as source-bound evidence for a curated static financial-research capability."
+    },
+    {
+      "surface_id": "role-programmer",
+      "source_path": "finrobot/agents/agent_library.py",
+      "symbol": "library[Programmer]",
+      "kind": "agent-role",
+      "scope": "generic-agent-runtime",
+      "disposition": "exclude",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "runtime-coupling"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot/agents/agent_library.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        }
+      ],
+      "recommendation": "Exclude this runtime-oriented or low-value surface from future Plugin content."
+    },
+    {
+      "surface_id": "role-software-developer",
+      "source_path": "finrobot/agents/agent_library.py",
+      "symbol": "library[Software_Developer]",
+      "kind": "agent-role",
+      "scope": "generic-agent-runtime",
+      "disposition": "exclude",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "runtime-coupling"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot/agents/agent_library.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        }
+      ],
+      "recommendation": "Exclude this runtime-oriented or low-value surface from future Plugin content."
+    },
+    {
+      "surface_id": "role-statistician",
+      "source_path": "finrobot/agents/agent_library.py",
+      "symbol": "library[Statistician]",
+      "kind": "agent-role",
+      "scope": "generic-agent-runtime",
+      "disposition": "exclude",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "runtime-coupling"
+      ],
+      "findings": [
+        {
+          "code": "RUNTIME-COUPLING",
+          "severity": "review",
+          "evidence": [
+            "finrobot/agents/agent_library.py"
+          ],
+          "note": "The surface is coupled to an upstream agent runtime and cannot be copied as runtime authority."
+        }
+      ],
+      "recommendation": "Exclude this runtime-oriented or low-value surface from future Plugin content."
+    },
+    {
+      "surface_id": "sensitivity-confidence-interval",
+      "source_path": "finrobot_equity/core/src/modules/sensitivity_analyzer.py",
+      "symbol": "SensitivityAnalyzer.calculate_confidence_interval",
+      "kind": "financial-assumption",
+      "scope": "financial-research",
+      "disposition": "evidence-only",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "fixed-assumption",
+        "unsupported-numeric-output"
+      ],
+      "findings": [
+        {
+          "code": "FIXED-ASSUMPTION",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/sensitivity_analyzer.py"
+          ],
+          "note": "Hard-coded assumptions require independent validation and must not become authoritative defaults."
+        },
+        {
+          "code": "UNSUPPORTED-NUMERIC-OUTPUT",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/sensitivity_analyzer.py"
+          ],
+          "note": "Numeric predictions, targets, ratings, or confidence claims require deterministic evidence."
+        }
+      ],
+      "recommendation": "Retain as methodological or risk evidence; do not copy defaults or executable behavior."
+    },
+    {
+      "surface_id": "sensitivity-margin",
+      "source_path": "finrobot_equity/core/src/modules/sensitivity_analyzer.py",
+      "symbol": "SensitivityAnalyzer.analyze_margin_sensitivity",
+      "kind": "financial-assumption",
+      "scope": "financial-research",
+      "disposition": "evidence-only",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "fixed-assumption",
+        "unsupported-numeric-output"
+      ],
+      "findings": [
+        {
+          "code": "FIXED-ASSUMPTION",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/sensitivity_analyzer.py"
+          ],
+          "note": "Hard-coded assumptions require independent validation and must not become authoritative defaults."
+        },
+        {
+          "code": "UNSUPPORTED-NUMERIC-OUTPUT",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/sensitivity_analyzer.py"
+          ],
+          "note": "Numeric predictions, targets, ratings, or confidence claims require deterministic evidence."
+        }
+      ],
+      "recommendation": "Retain as methodological or risk evidence; do not copy defaults or executable behavior."
+    },
+    {
+      "surface_id": "sensitivity-revenue",
+      "source_path": "finrobot_equity/core/src/modules/sensitivity_analyzer.py",
+      "symbol": "SensitivityAnalyzer.analyze_revenue_sensitivity",
+      "kind": "financial-assumption",
+      "scope": "financial-research",
+      "disposition": "evidence-only",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "fixed-assumption",
+        "unsupported-numeric-output"
+      ],
+      "findings": [
+        {
+          "code": "FIXED-ASSUMPTION",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/sensitivity_analyzer.py"
+          ],
+          "note": "Hard-coded assumptions require independent validation and must not become authoritative defaults."
+        },
+        {
+          "code": "UNSUPPORTED-NUMERIC-OUTPUT",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/sensitivity_analyzer.py"
+          ],
+          "note": "Numeric predictions, targets, ratings, or confidence claims require deterministic evidence."
+        }
+      ],
+      "recommendation": "Retain as methodological or risk evidence; do not copy defaults or executable behavior."
+    },
+    {
+      "surface_id": "sensitivity-table",
+      "source_path": "finrobot_equity/core/src/modules/sensitivity_analyzer.py",
+      "symbol": "SensitivityAnalyzer.generate_sensitivity_table",
+      "kind": "financial-assumption",
+      "scope": "financial-research",
+      "disposition": "evidence-only",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "fixed-assumption",
+        "unsupported-numeric-output"
+      ],
+      "findings": [
+        {
+          "code": "FIXED-ASSUMPTION",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/sensitivity_analyzer.py"
+          ],
+          "note": "Hard-coded assumptions require independent validation and must not become authoritative defaults."
+        },
+        {
+          "code": "UNSUPPORTED-NUMERIC-OUTPUT",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/sensitivity_analyzer.py"
+          ],
+          "note": "Numeric predictions, targets, ratings, or confidence claims require deterministic evidence."
+        }
+      ],
+      "recommendation": "Retain as methodological or risk evidence; do not copy defaults or executable behavior."
+    },
+    {
+      "surface_id": "valuation-ev-ebitda",
+      "source_path": "finrobot_equity/core/src/modules/valuation_engine.py",
+      "symbol": "ValuationEngine.calculate_ev_ebitda_valuation",
+      "kind": "deterministic-method",
+      "scope": "financial-research",
+      "disposition": "candidate",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "fixed-assumption",
+        "unsupported-numeric-output"
+      ],
+      "findings": [
+        {
+          "code": "FIXED-ASSUMPTION",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/valuation_engine.py"
+          ],
+          "note": "Hard-coded assumptions require independent validation and must not become authoritative defaults."
+        },
+        {
+          "code": "UNSUPPORTED-NUMERIC-OUTPUT",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/valuation_engine.py"
+          ],
+          "note": "Numeric predictions, targets, ratings, or confidence claims require deterministic evidence."
+        }
+      ],
+      "recommendation": "Use only as source-bound evidence for a curated static financial-research capability."
+    },
+    {
+      "surface_id": "valuation-peer-comparison",
+      "source_path": "finrobot_equity/core/src/modules/valuation_engine.py",
+      "symbol": "ValuationEngine.calculate_peer_comparison_valuation",
+      "kind": "deterministic-method",
+      "scope": "financial-research",
+      "disposition": "candidate",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "fixed-assumption",
+        "unsupported-numeric-output"
+      ],
+      "findings": [
+        {
+          "code": "FIXED-ASSUMPTION",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/valuation_engine.py"
+          ],
+          "note": "Hard-coded assumptions require independent validation and must not become authoritative defaults."
+        },
+        {
+          "code": "UNSUPPORTED-NUMERIC-OUTPUT",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/valuation_engine.py"
+          ],
+          "note": "Numeric predictions, targets, ratings, or confidence claims require deterministic evidence."
+        }
+      ],
+      "recommendation": "Use only as source-bound evidence for a curated static financial-research capability."
+    },
+    {
+      "surface_id": "valuation-simplified-dcf",
+      "source_path": "finrobot_equity/core/src/modules/valuation_engine.py",
+      "symbol": "ValuationEngine.calculate_dcf_valuation",
+      "kind": "deterministic-method",
+      "scope": "financial-research",
+      "disposition": "evidence-only",
+      "content_origin_id": "root-apache",
+      "operational_risks": [
+        "fixed-assumption",
+        "unsupported-numeric-output"
+      ],
+      "findings": [
+        {
+          "code": "FIXED-ASSUMPTION",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/valuation_engine.py"
+          ],
+          "note": "Hard-coded assumptions require independent validation and must not become authoritative defaults."
+        },
+        {
+          "code": "UNSUPPORTED-NUMERIC-OUTPUT",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/valuation_engine.py"
+          ],
+          "note": "Numeric predictions, targets, ratings, or confidence claims require deterministic evidence."
+        }
+      ],
+      "recommendation": "Retain as methodological or risk evidence; do not copy defaults or executable behavior."
+    }
+  ],
+  "candidate_capabilities": [
+    {
+      "capability_id": "company-fundamentals-analysis",
+      "source_surface_ids": [
+        "analyzer-analyze-business-highlights",
+        "analyzer-analyze-company-description",
+        "analyzer-get-key-data",
+        "enhanced-forecast-methodology",
+        "equity-company-overview",
+        "equity-major-takeaways",
+        "processor-growth-forecast"
+      ],
+      "readiness": "needs-curation",
+      "primary_anzsrc_field": "350202",
+      "additional_anzsrc_fields": [
+        "350103"
+      ],
+      "anzsrc_unclassified_reason": null,
+      "prospective_domains": [
+        "accounting-auditing-and-accountability",
+        "banking-finance-and-investment"
+      ],
+      "content_license": {
+        "status": "confirmed",
+        "expression": "Apache-2.0",
+        "evidence": [
+          "LICENSE",
+          "NOTICE"
+        ]
+      },
+      "overlaps": [],
+      "safety_constraints": [
+        "deterministic-calculation",
+        "human-review",
+        "no-credential-handling",
+        "no-personalized-advice",
+        "no-provider-assumption",
+        "no-transaction-authority",
+        "provenance-required",
+        "source-freshness-required"
+      ],
+      "findings": [
+        {
+          "code": "FIXED-ASSUMPTION",
+          "severity": "blocking",
+          "evidence": [
+            "finrobot_equity/core/src/modules/financial_data_processor.py"
+          ],
+          "note": "Forecast assumptions require explicit user-reviewed inputs."
+        }
+      ],
+      "recommendation": "Curate an evidence-bound company fundamentals workflow while removing provider and forecast defaults."
+    },
+    {
+      "capability_id": "competitive-position-analysis",
+      "source_surface_ids": [
+        "analyzer-get-competitors-analysis",
+        "equity-competitor-analysis"
+      ],
+      "readiness": "needs-curation",
+      "primary_anzsrc_field": "350202",
+      "additional_anzsrc_fields": [
+        "350208"
+      ],
+      "anzsrc_unclassified_reason": null,
+      "prospective_domains": [
+        "banking-finance-and-investment"
+      ],
+      "content_license": {
+        "status": "confirmed",
+        "expression": "Apache-2.0",
+        "evidence": [
+          "LICENSE",
+          "NOTICE"
+        ]
+      },
+      "overlaps": [],
+      "safety_constraints": [
+        "deterministic-calculation",
+        "human-review",
+        "no-credential-handling",
+        "no-personalized-advice",
+        "no-provider-assumption",
+        "no-transaction-authority",
+        "provenance-required",
+        "source-freshness-required"
+      ],
+      "findings": [],
+      "recommendation": "Retain peer and moat comparison structure with explicit evidence dates and comparable-company selection rationale."
+    },
+    {
+      "capability_id": "corporate-risk-analysis",
+      "source_surface_ids": [
+        "analyzer-get-risk-assessment",
+        "enhanced-risk-factors",
+        "equity-risks"
+      ],
+      "readiness": "needs-curation",
+      "primary_anzsrc_field": "350208",
+      "additional_anzsrc_fields": [
+        "350202"
+      ],
+      "anzsrc_unclassified_reason": null,
+      "prospective_domains": [
+        "banking-finance-and-investment"
+      ],
+      "content_license": {
+        "status": "confirmed",
+        "expression": "Apache-2.0",
+        "evidence": [
+          "LICENSE",
+          "NOTICE"
+        ]
+      },
+      "overlaps": [],
+      "safety_constraints": [
+        "deterministic-calculation",
+        "human-review",
+        "no-credential-handling",
+        "no-personalized-advice",
+        "no-provider-assumption",
+        "no-transaction-authority",
+        "provenance-required",
+        "source-freshness-required"
+      ],
+      "findings": [],
+      "recommendation": "Curate a non-advisory risk framework that separates evidence, likelihood, impact, limits, and monitoring signals."
+    },
+    {
+      "capability_id": "financial-news-impact-analysis",
+      "source_surface_ids": [
+        "catalyst-assess-impact",
+        "catalyst-classify-event",
+        "catalyst-estimate-probability",
+        "catalyst-identify",
+        "enhanced-catalyst-analysis",
+        "equity-news-summary"
+      ],
+      "readiness": "blocked-review",
+      "primary_anzsrc_field": "350208",
+      "additional_anzsrc_fields": [
+        "350202"
+      ],
+      "anzsrc_unclassified_reason": null,
+      "prospective_domains": [
+        "banking-finance-and-investment"
+      ],
+      "content_license": {
+        "status": "confirmed",
+        "expression": "Apache-2.0",
+        "evidence": [
+          "LICENSE",
+          "NOTICE"
+        ]
+      },
+      "overlaps": [],
+      "safety_constraints": [
+        "deterministic-calculation",
+        "human-review",
+        "no-credential-handling",
+        "no-personalized-advice",
+        "no-provider-assumption",
+        "no-transaction-authority",
+        "provenance-required",
+        "source-freshness-required"
+      ],
+      "findings": [
+        {
+          "code": "DATA-FRESHNESS",
+          "severity": "review",
+          "evidence": [
+            "finrobot_equity/core/src/modules/equity_agents/news_summary_agent.py"
+          ],
+          "note": "News evidence requires explicit retrieval and as-of dates."
+        },
+        {
+          "code": "FIXED-ASSUMPTION",
+          "severity": "blocking",
+          "evidence": [
+            "finrobot_equity/core/src/modules/catalyst_analyzer.py"
+          ],
+          "note": "Event probabilities and impact heuristics are not validated estimates."
+        }
+      ],
+      "recommendation": "Rebuild as source-dated event analysis; remove fixed probability, price-impact, sentiment, and investment-implication claims."
+    },
+    {
+      "capability_id": "financial-statement-analysis",
+      "source_surface_ids": [
+        "analyzer-analyze-balance-sheet",
+        "analyzer-analyze-cash-flow",
+        "analyzer-analyze-income-stmt",
+        "analyzer-analyze-segment-stmt",
+        "analyzer-income-summarization",
+        "processor-extract-api",
+        "processor-extract-pdf"
+      ],
+      "readiness": "needs-curation",
+      "primary_anzsrc_field": "350103",
+      "additional_anzsrc_fields": [
+        "350202"
+      ],
+      "anzsrc_unclassified_reason": null,
+      "prospective_domains": [
+        "accounting-auditing-and-accountability",
+        "banking-finance-and-investment"
+      ],
+      "content_license": {
+        "status": "confirmed",
+        "expression": "Apache-2.0",
+        "evidence": [
+          "LICENSE",
+          "NOTICE"
+        ]
+      },
+      "overlaps": [],
+      "safety_constraints": [
+        "deterministic-calculation",
+        "human-review",
+        "no-credential-handling",
+        "no-personalized-advice",
+        "no-provider-assumption",
+        "no-transaction-authority",
+        "provenance-required",
+        "source-freshness-required"
+      ],
+      "findings": [],
+      "recommendation": "Merge related statement templates into one evidence-bound capability with normalized periods, units, sources, and reconciliation checks."
+    },
+    {
+      "capability_id": "relative-valuation-analysis",
+      "source_surface_ids": [
+        "enhanced-valuation-analysis",
+        "equity-valuation-overview",
+        "sensitivity-margin",
+        "sensitivity-revenue",
+        "sensitivity-table",
+        "valuation-ev-ebitda",
+        "valuation-peer-comparison"
+      ],
+      "readiness": "blocked-review",
+      "primary_anzsrc_field": "350202",
+      "additional_anzsrc_fields": [
+        "350208"
+      ],
+      "anzsrc_unclassified_reason": null,
+      "prospective_domains": [
+        "banking-finance-and-investment"
+      ],
+      "content_license": {
+        "status": "confirmed",
+        "expression": "Apache-2.0",
+        "evidence": [
+          "LICENSE",
+          "NOTICE"
+        ]
+      },
+      "overlaps": [],
+      "safety_constraints": [
+        "deterministic-calculation",
+        "human-review",
+        "no-credential-handling",
+        "no-personalized-advice",
+        "no-provider-assumption",
+        "no-transaction-authority",
+        "provenance-required",
+        "source-freshness-required"
+      ],
+      "findings": [
+        {
+          "code": "FIXED-ASSUMPTION",
+          "severity": "blocking",
+          "evidence": [
+            "finrobot_equity/core/src/modules/valuation_engine.py"
+          ],
+          "note": "Default multiples, debt proxies, and sensitivity ranges require independent validation."
+        },
+        {
+          "code": "NO-TRANSACTION-AUTHORITY",
+          "severity": "blocking",
+          "evidence": [
+            "finrobot_equity/core/src/modules/enhanced_text_generator.py"
+          ],
+          "note": "Target-price and rating language must not be absorbed."
+        }
+      ],
+      "recommendation": "Retain comparative method selection and interpretation only; remove source defaults, invented targets, ratings, and unsupported confidence language."
+    }
+  ]
+}

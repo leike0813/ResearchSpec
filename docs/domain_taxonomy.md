@@ -31,8 +31,10 @@ Registry Schema 1 内部固定保存 213 个学科型 domain 和 5 个工具型 
 
 若已选 domain 在后续版本中被移除或变空，`plugin list --installed` 与 status 仍将其显示为 unavailable，以保留 manifest resolution snapshot 的安全卸载能力；update 会阻断。该 domain 后续重新获得 Skills 时，会在同一 ID 下恢复可用。
 
-当前 ToolUniverse、Scientific Agent Skills 与
-Materials-Science-Skills-For-LLM 合计提供 49 个非空 domain。Materials vendor
+当前 ToolUniverse、Scientific Agent Skills、Materials-Science-Skills-For-LLM
+与 FinRobot 合计提供 51 个非空 domain。FinRobot 的六个准入 Skills 全部加入
+`banking-finance-and-investment`，其中 statement analysis 与 company
+fundamentals 也加入 `accounting-auditing-and-accountability`。Materials vendor
 的七个准入 Skills 经人工加入 `materials-engineering`、
 `macromolecular-and-materials-chemistry` 与
 `computational-modeling-and-simulation`；GPU、远程服务和 HPC 使用本身不产生

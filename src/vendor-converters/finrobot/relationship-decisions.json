@@ -1,0 +1,51 @@
+{
+  "schema_version": "2",
+  "vendor_id": "finrobot",
+  "release": "snapshot-297a8d2",
+  "revision": "297a8d28d099be328c8a8eb658b4f782b93f3651",
+  "audit_sha256": "6b518a933f036333203276263b94cc5b4bd45a924f426972c4547165c5cbb9c3",
+  "decisions": [
+    {
+      "from": "financial-research-statement-analysis",
+      "to": "financial-research-company-fundamentals",
+      "relation": "related",
+      "disposition": "advisory",
+      "note": "Reviewed statement findings may inform a separate fundamentals analysis when both are in scope."
+    },
+    {
+      "from": "financial-research-company-fundamentals",
+      "to": "financial-research-statement-analysis",
+      "relation": "related",
+      "disposition": "advisory",
+      "note": "Fundamentals claims may be checked against a separately prepared statement analysis."
+    },
+    {
+      "from": "financial-research-corporate-risk",
+      "to": "financial-research-company-fundamentals",
+      "relation": "related",
+      "disposition": "advisory",
+      "note": "Risk transmission may refer to a separate map of business and operating drivers."
+    },
+    {
+      "from": "financial-research-competitive-position",
+      "to": "financial-research-company-fundamentals",
+      "relation": "related",
+      "disposition": "advisory",
+      "note": "Peer comparison may use a separate fundamentals record to define comparable drivers."
+    },
+    {
+      "from": "financial-research-relative-valuation",
+      "to": "financial-research-company-fundamentals",
+      "relation": "related",
+      "disposition": "advisory",
+      "note": "Valuation interpretation may refer to separately reviewed fundamentals and assumptions."
+    },
+    {
+      "from": "financial-research-event-evidence",
+      "to": "financial-research-corporate-risk",
+      "relation": "related",
+      "disposition": "advisory",
+      "note": "A source-dated event may inform a separate risk assessment without creating an automatic dependency."
+    }
+  ]
+}

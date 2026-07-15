@@ -1,0 +1,501 @@
+{
+  "schema_version": "1",
+  "converter_version": "1",
+  "vendor_id": "finrobot",
+  "release": "snapshot-297a8d2",
+  "revision": "297a8d28d099be328c8a8eb658b4f782b93f3651",
+  "audit_sha256": "6b518a933f036333203276263b94cc5b4bd45a924f426972c4547165c5cbb9c3",
+  "approved_tree_set_sha256": "83cc17371bd3e0b82434f67e74adc5ed8a12cf11979480e1eb1f83debe1a9bb3",
+  "generated_skills": [
+    "financial-research-company-fundamentals",
+    "financial-research-competitive-position",
+    "financial-research-corporate-risk",
+    "financial-research-event-evidence",
+    "financial-research-relative-valuation",
+    "financial-research-statement-analysis"
+  ],
+  "source_entry_decisions": 146,
+  "surface_decisions": 66,
+  "direct_resources": 4,
+  "adapted_candidate_resources": 8,
+  "provider_helper_sources": 4,
+  "admission_policy_sha256": "bf578759f2c29c92c3e77f08ae37d2bc048f2d8d0fea15710a38d4da7f940bcd",
+  "source_policy_sha256": "e4e7587e5a5d1b92c133ec6e52f4718c40ecdcf7de7086d2c93ca92705fca523",
+  "surface_policy_sha256": "25b6294abb861f2a9f2725c16712e01f515032c64a517b259b95c92488435862",
+  "curation_policy_sha256": "c3b17c482478ccdb378a331920d6bfb4a23ba746ae7fcd04e2d467d3fdf9d095",
+  "review_policy_sha256": "b13657d8ea57dfc3567e5700527e289333bb2157c1c8b0749efa0526bbe07192",
+  "tree_sha256": {
+    "financial-research-company-fundamentals": "3229a5360144dcacdf677c8139f0cb8b6c46ed5de4849dcf46086209a6b189d9",
+    "financial-research-competitive-position": "5b83895a2095195bc81e27d8c3179882845819d1a63a3813b3fa29051d04f32d",
+    "financial-research-corporate-risk": "b4dc81cd82dbdddcac9eecce6cb539e8d0bdbf448e04eba9d7bf94af4ab8b573",
+    "financial-research-event-evidence": "3046894c9c6b29aefa864ec6a419472eba71931e35f89c2e3f468b2dcb903455",
+    "financial-research-relative-valuation": "722d87b150dc5bae2668008726cca3f01de2a6a40d536c67c85f98be72e5cd1f",
+    "financial-research-statement-analysis": "f46b3a06b1327ffa7c1dd07b0e901ed969478c71d81db18d0976c842dd9171a4"
+  },
+  "relationship_decisions": [
+    {
+      "from": "financial-research-statement-analysis",
+      "to": "financial-research-company-fundamentals",
+      "relation": "related",
+      "disposition": "advisory",
+      "note": "Reviewed statement findings may inform a separate fundamentals analysis when both are in scope."
+    },
+    {
+      "from": "financial-research-company-fundamentals",
+      "to": "financial-research-statement-analysis",
+      "relation": "related",
+      "disposition": "advisory",
+      "note": "Fundamentals claims may be checked against a separately prepared statement analysis."
+    },
+    {
+      "from": "financial-research-corporate-risk",
+      "to": "financial-research-company-fundamentals",
+      "relation": "related",
+      "disposition": "advisory",
+      "note": "Risk transmission may refer to a separate map of business and operating drivers."
+    },
+    {
+      "from": "financial-research-competitive-position",
+      "to": "financial-research-company-fundamentals",
+      "relation": "related",
+      "disposition": "advisory",
+      "note": "Peer comparison may use a separate fundamentals record to define comparable drivers."
+    },
+    {
+      "from": "financial-research-relative-valuation",
+      "to": "financial-research-company-fundamentals",
+      "relation": "related",
+      "disposition": "advisory",
+      "note": "Valuation interpretation may refer to separately reviewed fundamentals and assumptions."
+    },
+    {
+      "from": "financial-research-event-evidence",
+      "to": "financial-research-corporate-risk",
+      "relation": "related",
+      "disposition": "advisory",
+      "note": "A source-dated event may inform a separate risk assessment without creating an automatic dependency."
+    }
+  ],
+  "file_dispositions": [
+    {
+      "source_path": "complete-tree/dependencies.json",
+      "output_path": "vendors/finrobot/financial-research-company-fundamentals/dependencies.json",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "9fd3cec6c7e469c824ead6065f0de9d76874d8e925197767743a7a01a11210e5"
+    },
+    {
+      "source_path": "complete-tree/DERIVATION.json",
+      "output_path": "vendors/finrobot/financial-research-company-fundamentals/DERIVATION.json",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "59e4e43de01a30a01cec8d452c1b361f154b1d941e0b309a11793886fa8352bb"
+    },
+    {
+      "source_path": "complete-tree/LICENSE",
+      "output_path": "vendors/finrobot/financial-research-company-fundamentals/LICENSE",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "bbcb4226500b503737713f0c9a9da17efce56fa6989b9f0538071dcb60826af5"
+    },
+    {
+      "source_path": "complete-tree/NOTICE",
+      "output_path": "vendors/finrobot/financial-research-company-fundamentals/NOTICE",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "3220523ff31ffc2e3ea73f5193d5e6cc02f6ad03a19b184bf4421b01dfcfd966"
+    },
+    {
+      "source_path": "curation/resources/agent-specs/company_overview.json",
+      "output_path": "vendors/finrobot/financial-research-company-fundamentals/resources/agent-specs/company_overview.json",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "b77ebb54eaf36b4916f3ddf18697f33ab9e9d4e216a2b7e4e5eed39dc678af5d"
+    },
+    {
+      "source_path": "curation/resources/agent-specs/major_takeaways.json",
+      "output_path": "vendors/finrobot/financial-research-company-fundamentals/resources/agent-specs/major_takeaways.json",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "138e1424e4e8d280ec8edeac490eb4a0818515da29a1a469f736a2d112e25a92"
+    },
+    {
+      "source_path": "curation/resources/python/enhanced_text_generator.py",
+      "output_path": "vendors/finrobot/financial-research-company-fundamentals/resources/python/enhanced_text_generator.py",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "8e2f3ccdb030c5bc785e7b92c95983a2ce67c20dfef6d8980b8179c31478acd9"
+    },
+    {
+      "source_path": "curation/resources/python/financial_analyzer.py",
+      "output_path": "vendors/finrobot/financial-research-company-fundamentals/resources/python/financial_analyzer.py",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "676e7ddc482d7ff5715fc050b299c25590d66a7125237a1e12c118d85bf93357"
+    },
+    {
+      "source_path": "curation/resources/python/financial_data_processor.py",
+      "output_path": "vendors/finrobot/financial-research-company-fundamentals/resources/python/financial_data_processor.py",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "c35767f4afb5118925a3b73afa8b1e12b411b945cd6eaf1d79cf8c05fdb6f43d"
+    },
+    {
+      "source_path": "curation/resources/python/provider_adapters.py",
+      "output_path": "vendors/finrobot/financial-research-company-fundamentals/resources/python/provider_adapters.py",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "1ee862ba3f6c6a83957c9135623fcd39ca9f4fda97b2f4c987736c168bd88d09"
+    },
+    {
+      "source_path": "curation/resources/python/provider_contracts.py",
+      "output_path": "vendors/finrobot/financial-research-company-fundamentals/resources/python/provider_contracts.py",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "dc1d1d8f9a0dd4038b8adbca65d21a04cdddf53cba37d3cd4f4e0d7eca9ca3a7"
+    },
+    {
+      "source_path": "complete-tree/SKILL.md",
+      "output_path": "vendors/finrobot/financial-research-company-fundamentals/SKILL.md",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "dae3947dac9a1a72a42dae2b10d871be4b1e1e8b968ffcaf656bc9150f971f10"
+    },
+    {
+      "source_path": "complete-tree/dependencies.json",
+      "output_path": "vendors/finrobot/financial-research-competitive-position/dependencies.json",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "9f8b4eabf2ae8367ff458b1dc5b52ef3b7a88c4514ae7de35e29f1f79a19a04f"
+    },
+    {
+      "source_path": "complete-tree/DERIVATION.json",
+      "output_path": "vendors/finrobot/financial-research-competitive-position/DERIVATION.json",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "3a1b8639b282957045e1e21e1730956152c485e6b73592184a4e93b8532ac1c2"
+    },
+    {
+      "source_path": "complete-tree/LICENSE",
+      "output_path": "vendors/finrobot/financial-research-competitive-position/LICENSE",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "bbcb4226500b503737713f0c9a9da17efce56fa6989b9f0538071dcb60826af5"
+    },
+    {
+      "source_path": "complete-tree/NOTICE",
+      "output_path": "vendors/finrobot/financial-research-competitive-position/NOTICE",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "3220523ff31ffc2e3ea73f5193d5e6cc02f6ad03a19b184bf4421b01dfcfd966"
+    },
+    {
+      "source_path": "curation/resources/agent-specs/competitor_analysis.json",
+      "output_path": "vendors/finrobot/financial-research-competitive-position/resources/agent-specs/competitor_analysis.json",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "0f8bc96b79a5feb06255e4ab6509c86298729c815db598a9855af309c32c4908"
+    },
+    {
+      "source_path": "curation/resources/python/financial_analyzer.py",
+      "output_path": "vendors/finrobot/financial-research-competitive-position/resources/python/financial_analyzer.py",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "676e7ddc482d7ff5715fc050b299c25590d66a7125237a1e12c118d85bf93357"
+    },
+    {
+      "source_path": "curation/resources/python/provider_adapters.py",
+      "output_path": "vendors/finrobot/financial-research-competitive-position/resources/python/provider_adapters.py",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "1ee862ba3f6c6a83957c9135623fcd39ca9f4fda97b2f4c987736c168bd88d09"
+    },
+    {
+      "source_path": "curation/resources/python/provider_contracts.py",
+      "output_path": "vendors/finrobot/financial-research-competitive-position/resources/python/provider_contracts.py",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "dc1d1d8f9a0dd4038b8adbca65d21a04cdddf53cba37d3cd4f4e0d7eca9ca3a7"
+    },
+    {
+      "source_path": "complete-tree/SKILL.md",
+      "output_path": "vendors/finrobot/financial-research-competitive-position/SKILL.md",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "ecdbd94017a0d9975a9b504ded60e5307dc9f8b4228a9d4dc6e6bbe48c9441ff"
+    },
+    {
+      "source_path": "complete-tree/dependencies.json",
+      "output_path": "vendors/finrobot/financial-research-corporate-risk/dependencies.json",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "8a76311351d131902eafc03dcad54be3e5b9536a4059a33190c3092811fd8044"
+    },
+    {
+      "source_path": "complete-tree/DERIVATION.json",
+      "output_path": "vendors/finrobot/financial-research-corporate-risk/DERIVATION.json",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "4eb270c8dd54a937b19bbcece33e63e1343843732e73e8f8c50b2b8ffe420dd2"
+    },
+    {
+      "source_path": "complete-tree/LICENSE",
+      "output_path": "vendors/finrobot/financial-research-corporate-risk/LICENSE",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "bbcb4226500b503737713f0c9a9da17efce56fa6989b9f0538071dcb60826af5"
+    },
+    {
+      "source_path": "complete-tree/NOTICE",
+      "output_path": "vendors/finrobot/financial-research-corporate-risk/NOTICE",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "3220523ff31ffc2e3ea73f5193d5e6cc02f6ad03a19b184bf4421b01dfcfd966"
+    },
+    {
+      "source_path": "curation/resources/agent-specs/risks.json",
+      "output_path": "vendors/finrobot/financial-research-corporate-risk/resources/agent-specs/risks.json",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "ef3e6feab16ec7c38a9e4df10ac19bfb64073c9634142b3c4885aa21231ee6f2"
+    },
+    {
+      "source_path": "curation/resources/python/enhanced_text_generator.py",
+      "output_path": "vendors/finrobot/financial-research-corporate-risk/resources/python/enhanced_text_generator.py",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "8e2f3ccdb030c5bc785e7b92c95983a2ce67c20dfef6d8980b8179c31478acd9"
+    },
+    {
+      "source_path": "curation/resources/python/financial_analyzer.py",
+      "output_path": "vendors/finrobot/financial-research-corporate-risk/resources/python/financial_analyzer.py",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "676e7ddc482d7ff5715fc050b299c25590d66a7125237a1e12c118d85bf93357"
+    },
+    {
+      "source_path": "curation/resources/python/provider_adapters.py",
+      "output_path": "vendors/finrobot/financial-research-corporate-risk/resources/python/provider_adapters.py",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "1ee862ba3f6c6a83957c9135623fcd39ca9f4fda97b2f4c987736c168bd88d09"
+    },
+    {
+      "source_path": "curation/resources/python/provider_contracts.py",
+      "output_path": "vendors/finrobot/financial-research-corporate-risk/resources/python/provider_contracts.py",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "dc1d1d8f9a0dd4038b8adbca65d21a04cdddf53cba37d3cd4f4e0d7eca9ca3a7"
+    },
+    {
+      "source_path": "complete-tree/SKILL.md",
+      "output_path": "vendors/finrobot/financial-research-corporate-risk/SKILL.md",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "cc60740b79a8eef1baa1aa3f1da04e092a820aa92f62fd2c6e2ec3af2de19586"
+    },
+    {
+      "source_path": "complete-tree/dependencies.json",
+      "output_path": "vendors/finrobot/financial-research-event-evidence/dependencies.json",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "905666fe03ca04025dbe62badbe1f129b6a9557c7cc97b896b15c60a84fdb926"
+    },
+    {
+      "source_path": "complete-tree/DERIVATION.json",
+      "output_path": "vendors/finrobot/financial-research-event-evidence/DERIVATION.json",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "9a6655beafab225225dd9b87fc6677d38a1bd3fb6b89fbb06111bb96125167d7"
+    },
+    {
+      "source_path": "complete-tree/LICENSE",
+      "output_path": "vendors/finrobot/financial-research-event-evidence/LICENSE",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "bbcb4226500b503737713f0c9a9da17efce56fa6989b9f0538071dcb60826af5"
+    },
+    {
+      "source_path": "complete-tree/NOTICE",
+      "output_path": "vendors/finrobot/financial-research-event-evidence/NOTICE",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "3220523ff31ffc2e3ea73f5193d5e6cc02f6ad03a19b184bf4421b01dfcfd966"
+    },
+    {
+      "source_path": "curation/resources/agent-specs/news_summary.json",
+      "output_path": "vendors/finrobot/financial-research-event-evidence/resources/agent-specs/news_summary.json",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "7b52ff18de69e5cddc6576293f735388bd4fb76c8b7f212574fdced5cd94f198"
+    },
+    {
+      "source_path": "curation/resources/python/catalyst_analyzer.py",
+      "output_path": "vendors/finrobot/financial-research-event-evidence/resources/python/catalyst_analyzer.py",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "171e6ee85dfb8e12895f250ef8c52d657d856d44942393c5ea55c5968817d9c4"
+    },
+    {
+      "source_path": "curation/resources/python/enhanced_text_generator.py",
+      "output_path": "vendors/finrobot/financial-research-event-evidence/resources/python/enhanced_text_generator.py",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "8e2f3ccdb030c5bc785e7b92c95983a2ce67c20dfef6d8980b8179c31478acd9"
+    },
+    {
+      "source_path": "curation/resources/python/provider_contracts.py",
+      "output_path": "vendors/finrobot/financial-research-event-evidence/resources/python/provider_contracts.py",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "dc1d1d8f9a0dd4038b8adbca65d21a04cdddf53cba37d3cd4f4e0d7eca9ca3a7"
+    },
+    {
+      "source_path": "complete-tree/SKILL.md",
+      "output_path": "vendors/finrobot/financial-research-event-evidence/SKILL.md",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "791ca5f71083c1acc96957d5e7df5a64169e4681420aaf7efe7579e63c338b71"
+    },
+    {
+      "source_path": "complete-tree/dependencies.json",
+      "output_path": "vendors/finrobot/financial-research-relative-valuation/dependencies.json",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "66573dc68f5b44ea1791c13d9cb874a90f485b76691c175a8e13aaeda1bcdab4"
+    },
+    {
+      "source_path": "complete-tree/DERIVATION.json",
+      "output_path": "vendors/finrobot/financial-research-relative-valuation/DERIVATION.json",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "4ce8f369b2751c07b657f5b90494ffa6a16f9caa51b7db164883ba32e5098e3e"
+    },
+    {
+      "source_path": "complete-tree/LICENSE",
+      "output_path": "vendors/finrobot/financial-research-relative-valuation/LICENSE",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "bbcb4226500b503737713f0c9a9da17efce56fa6989b9f0538071dcb60826af5"
+    },
+    {
+      "source_path": "complete-tree/NOTICE",
+      "output_path": "vendors/finrobot/financial-research-relative-valuation/NOTICE",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "3220523ff31ffc2e3ea73f5193d5e6cc02f6ad03a19b184bf4421b01dfcfd966"
+    },
+    {
+      "source_path": "curation/resources/agent-specs/valuation_overview.json",
+      "output_path": "vendors/finrobot/financial-research-relative-valuation/resources/agent-specs/valuation_overview.json",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "2f17f7fe2f5e6d2abc36999dceeda7e337d639a0ea2e632155fbc490d4349037"
+    },
+    {
+      "source_path": "curation/resources/python/enhanced_text_generator.py",
+      "output_path": "vendors/finrobot/financial-research-relative-valuation/resources/python/enhanced_text_generator.py",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "8e2f3ccdb030c5bc785e7b92c95983a2ce67c20dfef6d8980b8179c31478acd9"
+    },
+    {
+      "source_path": "curation/resources/python/provider_adapters.py",
+      "output_path": "vendors/finrobot/financial-research-relative-valuation/resources/python/provider_adapters.py",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "1ee862ba3f6c6a83957c9135623fcd39ca9f4fda97b2f4c987736c168bd88d09"
+    },
+    {
+      "source_path": "curation/resources/python/provider_contracts.py",
+      "output_path": "vendors/finrobot/financial-research-relative-valuation/resources/python/provider_contracts.py",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "dc1d1d8f9a0dd4038b8adbca65d21a04cdddf53cba37d3cd4f4e0d7eca9ca3a7"
+    },
+    {
+      "source_path": "curation/resources/python/sensitivity_analyzer.py",
+      "output_path": "vendors/finrobot/financial-research-relative-valuation/resources/python/sensitivity_analyzer.py",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "2c2e6170d4ed9d56ad976e3d316076f2a1756dce7afac49c69c8a25ea17b8f7b"
+    },
+    {
+      "source_path": "curation/resources/python/valuation_engine.py",
+      "output_path": "vendors/finrobot/financial-research-relative-valuation/resources/python/valuation_engine.py",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "5cb6c5bfdfd1484c4c55d4e6690fd26efc7fe61175687c8df09bf54a5c516a7f"
+    },
+    {
+      "source_path": "complete-tree/SKILL.md",
+      "output_path": "vendors/finrobot/financial-research-relative-valuation/SKILL.md",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "31d01a8c09e1ad3d0af18a43593ad3b02fe089c9341372e0c4e98d49d131c8b0"
+    },
+    {
+      "source_path": "complete-tree/dependencies.json",
+      "output_path": "vendors/finrobot/financial-research-statement-analysis/dependencies.json",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "27be725f6d1613ad9cea75ed0f4acc36a99eb7736b8d3d6b8c82ed7e27f789d8"
+    },
+    {
+      "source_path": "complete-tree/DERIVATION.json",
+      "output_path": "vendors/finrobot/financial-research-statement-analysis/DERIVATION.json",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "4d093a391d4503687abe0b64bb41afafbf1aeed781026eb89a94aa7cfa62ccb2"
+    },
+    {
+      "source_path": "complete-tree/LICENSE",
+      "output_path": "vendors/finrobot/financial-research-statement-analysis/LICENSE",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "bbcb4226500b503737713f0c9a9da17efce56fa6989b9f0538071dcb60826af5"
+    },
+    {
+      "source_path": "complete-tree/NOTICE",
+      "output_path": "vendors/finrobot/financial-research-statement-analysis/NOTICE",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "3220523ff31ffc2e3ea73f5193d5e6cc02f6ad03a19b184bf4421b01dfcfd966"
+    },
+    {
+      "source_path": "curation/resources/python/financial_analyzer.py",
+      "output_path": "vendors/finrobot/financial-research-statement-analysis/resources/python/financial_analyzer.py",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "676e7ddc482d7ff5715fc050b299c25590d66a7125237a1e12c118d85bf93357"
+    },
+    {
+      "source_path": "curation/resources/python/financial_data_processor.py",
+      "output_path": "vendors/finrobot/financial-research-statement-analysis/resources/python/financial_data_processor.py",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "c35767f4afb5118925a3b73afa8b1e12b411b945cd6eaf1d79cf8c05fdb6f43d"
+    },
+    {
+      "source_path": "curation/resources/python/provider_adapters.py",
+      "output_path": "vendors/finrobot/financial-research-statement-analysis/resources/python/provider_adapters.py",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "1ee862ba3f6c6a83957c9135623fcd39ca9f4fda97b2f4c987736c168bd88d09"
+    },
+    {
+      "source_path": "curation/resources/python/provider_contracts.py",
+      "output_path": "vendors/finrobot/financial-research-statement-analysis/resources/python/provider_contracts.py",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "dc1d1d8f9a0dd4038b8adbca65d21a04cdddf53cba37d3cd4f4e0d7eca9ca3a7"
+    },
+    {
+      "source_path": "complete-tree/SKILL.md",
+      "output_path": "vendors/finrobot/financial-research-statement-analysis/SKILL.md",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "c63f1e5e509da74e12aa6e4a3c62dce2fe716d9a91300bdbd97895cd42dc3556"
+    }
+  ]
+}

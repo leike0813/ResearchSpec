@@ -82,7 +82,7 @@ export async function checkMaterialsOutput(repoRoot: string): Promise<{ ok: bool
     else if (vendor.skills.length !== expected) errors.push(`Expected ${String(expected)} Materials Skills, found ${String(vendor.skills.length)}`);
     errors.push(...productionVendorInventoryErrors(loaded.vendors.keys()));
     if (loaded.domains.size !== 218) errors.push(`Expected 218 internal domains, found ${String(loaded.domains.size)}`);
-    if (availableDomains(loaded).length !== 49) errors.push(`Expected 49 available domains, found ${String(availableDomains(loaded).length)}`);
+    if (availableDomains(loaded).length !== 51) errors.push(`Expected 51 available domains, found ${String(availableDomains(loaded).length)}`);
     warnings.push(...loaded.diagnostics.map((item) => item.message));
   } catch (error) { errors.push(error instanceof Error ? error.message : String(error)); }
   return { ok: errors.length === 0, errors, warnings };

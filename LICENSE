@@ -20,3 +20,15 @@ The following material is adapted from Academic Research Skills (ARS), copyright
 The canonical license identifier and URL are recorded in `LICENSES/CC-BY-NC-4.0.txt`. Complete copies of the upstream license are included as `LICENSE` inside every packaged ARSU Skill directory.
 
 The MIT grant does not remove or override the noncommercial restriction on ARSU-derived material. Commercial distribution or use of the combined package may require separate permission from the relevant rights holder. This file documents the project's engineering interpretation and is not legal advice.
+
+## Apache-2.0 material
+
+Generated FinRobot-derived Skills under `skills/plugins/vendors/finrobot/**`
+are distributed under Apache License 2.0 after source, origin, license, and
+derivation review. Each Skill contains its complete `LICENSE`, attribution
+`NOTICE`, source revision, and derivation manifest. A reference copy of the
+license is available at `LICENSES/Apache-2.0.txt`.
+
+The Apache-2.0 grant applies only to the reviewed FinRobot-derived material
+identified by those files and does not change the licenses of ARSU-derived,
+ResearchSpec-authored, or other vendor material.

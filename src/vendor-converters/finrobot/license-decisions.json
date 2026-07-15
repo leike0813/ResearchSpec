@@ -1,0 +1,51 @@
+{
+  "schema_version": "2",
+  "vendor_id": "finrobot",
+  "release": "snapshot-297a8d2",
+  "revision": "297a8d28d099be328c8a8eb658b4f782b93f3651",
+  "audit_sha256": "6b518a933f036333203276263b94cc5b4bd45a924f426972c4547165c5cbb9c3",
+  "decisions": [
+    {
+      "claim_id": "borrowed-content",
+      "disposition": "excluded",
+      "effective_expression": null,
+      "reason_code": "not-a-production-content-license",
+      "note": "Attribution alone does not establish an effective content license for copying."
+    },
+    {
+      "claim_id": "finnlp-external",
+      "disposition": "excluded",
+      "effective_expression": null,
+      "reason_code": "not-a-production-content-license",
+      "note": "The nested repository requires an independent license and content audit."
+    },
+    {
+      "claim_id": "imported-source-trees",
+      "disposition": "excluded",
+      "effective_expression": null,
+      "reason_code": "not-a-production-content-license",
+      "note": "Historical imported trees need source and license review before reuse."
+    },
+    {
+      "claim_id": "root-apache",
+      "disposition": "preserve",
+      "effective_expression": "Apache-2.0",
+      "reason_code": "required-apache-attribution",
+      "note": "Preserve the complete Apache-2.0 license, NOTICE obligations, and non-endorsement boundary."
+    },
+    {
+      "claim_id": "setup-mit",
+      "disposition": "excluded",
+      "effective_expression": null,
+      "reason_code": "not-a-production-content-license",
+      "note": "Package metadata remains MIT while the current root license is Apache-2.0."
+    },
+    {
+      "claim_id": "trademark-attribution",
+      "disposition": "preserve",
+      "effective_expression": "Apache-2.0",
+      "reason_code": "required-apache-attribution",
+      "note": "Preserve the complete Apache-2.0 license, NOTICE obligations, and non-endorsement boundary."
+    }
+  ]
+}

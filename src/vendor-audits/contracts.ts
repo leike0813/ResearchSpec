@@ -17,7 +17,7 @@ export const ContentLicenseReviewSchema = z.strictObject({
   evidence: z.array(AuditRelativePathSchema).min(1),
 });
 
-export const VendorAuditSourceSchema = z.strictObject({
+export const VendorAuditRepositorySourceSchema = z.strictObject({
   source_id: z.string().min(1),
   name: z.string().min(1),
   repository_url: z.url(),
@@ -25,6 +25,9 @@ export const VendorAuditSourceSchema = z.strictObject({
   revision: AuditRevisionSchema,
   root_license: z.string().min(1),
   license_path: AuditRelativePathSchema,
+});
+
+export const VendorAuditSourceSchema = VendorAuditRepositorySourceSchema.extend({
   skill_root: AuditSkillRootSchema,
 });
 
@@ -70,6 +73,7 @@ export const AnzsrcAuditMetadataSchema = z.strictObject({
 });
 
 export type VendorAuditSource = z.infer<typeof VendorAuditSourceSchema>;
+export type VendorAuditRepositorySource = z.infer<typeof VendorAuditRepositorySourceSchema>;
 export type ContentLicenseReview = z.infer<typeof ContentLicenseReviewSchema>;
 export type VendorAuditResources = z.infer<typeof VendorAuditResourcesSchema>;
 export type VendorAuditFinding = z.infer<typeof VendorAuditFindingSchema>;

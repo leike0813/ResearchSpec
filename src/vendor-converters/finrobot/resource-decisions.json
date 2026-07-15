@@ -1,0 +1,149 @@
+{
+  "schema_version": "2",
+  "vendor_id": "finrobot",
+  "release": "snapshot-297a8d2",
+  "revision": "297a8d28d099be328c8a8eb658b4f782b93f3651",
+  "audit_sha256": "6b518a933f036333203276263b94cc5b4bd45a924f426972c4547165c5cbb9c3",
+  "decisions": [
+    {
+      "resource_id": "public-company-disclosures",
+      "kind": "disclosure",
+      "disposition": "reference-only",
+      "applies_to": [
+        "financial-research-company-fundamentals",
+        "financial-research-competitive-position",
+        "financial-research-corporate-risk",
+        "financial-research-event-evidence",
+        "financial-research-relative-valuation",
+        "financial-research-statement-analysis"
+      ],
+      "note": "Citable public evidence; retrieval may use a user-approved browser, filing client, or local corpus."
+    },
+    {
+      "resource_id": "published-financial-reports",
+      "kind": "report",
+      "disposition": "reference-only",
+      "applies_to": [
+        "financial-research-company-fundamentals",
+        "financial-research-competitive-position",
+        "financial-research-corporate-risk",
+        "financial-research-event-evidence",
+        "financial-research-relative-valuation",
+        "financial-research-statement-analysis"
+      ],
+      "note": "Citable reports with issuer, period, publication date, and location."
+    },
+    {
+      "resource_id": "user-provided-research-data",
+      "kind": "user-data",
+      "disposition": "user-configured",
+      "applies_to": [
+        "financial-research-company-fundamentals",
+        "financial-research-competitive-position",
+        "financial-research-corporate-risk",
+        "financial-research-event-evidence",
+        "financial-research-relative-valuation",
+        "financial-research-statement-analysis"
+      ],
+      "note": "Private or licensed data stays outside the distributed Skill and is supplied at execution time."
+    },
+    {
+      "resource_id": "bundled-python-analysis",
+      "kind": "calculation-tool",
+      "disposition": "bundled",
+      "applies_to": [
+        "financial-research-company-fundamentals",
+        "financial-research-competitive-position",
+        "financial-research-corporate-risk",
+        "financial-research-event-evidence",
+        "financial-research-relative-valuation",
+        "financial-research-statement-analysis"
+      ],
+      "note": "Source-derived Python resources may be invoked by the Agent in a user-approved environment."
+    },
+    {
+      "resource_id": "provider-neutral-agent-specs",
+      "kind": "agent-spec",
+      "disposition": "bundled",
+      "applies_to": [
+        "financial-research-company-fundamentals",
+        "financial-research-competitive-position",
+        "financial-research-corporate-risk",
+        "financial-research-event-evidence",
+        "financial-research-relative-valuation",
+        "financial-research-statement-analysis"
+      ],
+      "note": "Complete prompts and JSON output schemas without an openai-agents runtime dependency."
+    },
+    {
+      "resource_id": "model-provider",
+      "kind": "model-sdk",
+      "disposition": "user-configured",
+      "applies_to": [
+        "financial-research-company-fundamentals",
+        "financial-research-competitive-position",
+        "financial-research-corporate-risk",
+        "financial-research-event-evidence",
+        "financial-research-relative-valuation",
+        "financial-research-statement-analysis"
+      ],
+      "note": "Any model implementation is selected and configured by the user through the TextGenerator contract."
+    },
+    {
+      "resource_id": "financial-data-service",
+      "kind": "financial-service",
+      "disposition": "user-configured",
+      "applies_to": [
+        "financial-research-company-fundamentals",
+        "financial-research-competitive-position",
+        "financial-research-corporate-risk",
+        "financial-research-event-evidence",
+        "financial-research-relative-valuation",
+        "financial-research-statement-analysis"
+      ],
+      "note": "Market, filing, and financial-data providers may be used through injected adapters."
+    },
+    {
+      "resource_id": "api-credentials",
+      "kind": "credential",
+      "disposition": "user-configured",
+      "applies_to": [
+        "financial-research-company-fundamentals",
+        "financial-research-competitive-position",
+        "financial-research-corporate-risk",
+        "financial-research-event-evidence",
+        "financial-research-relative-valuation",
+        "financial-research-statement-analysis"
+      ],
+      "note": "Credentials are resolved from the user's secret mechanism and never shipped, echoed, or persisted by the Skill."
+    },
+    {
+      "resource_id": "remote-retrieval",
+      "kind": "remote-access",
+      "disposition": "user-configured",
+      "applies_to": [
+        "financial-research-company-fundamentals",
+        "financial-research-competitive-position",
+        "financial-research-corporate-risk",
+        "financial-research-event-evidence",
+        "financial-research-relative-valuation",
+        "financial-research-statement-analysis"
+      ],
+      "note": "The Agent may retrieve authorized sources and services when the task requires current data."
+    },
+    {
+      "resource_id": "finrobot-runtime",
+      "kind": "upstream-runtime",
+      "disposition": "excluded",
+      "applies_to": [
+        "financial-research-company-fundamentals",
+        "financial-research-competitive-position",
+        "financial-research-corporate-risk",
+        "financial-research-event-evidence",
+        "financial-research-relative-valuation",
+        "financial-research-statement-analysis"
+      ],
+      "note": "No published resource imports or requires the FinRobot package runtime."
+    }
+  ]
+}

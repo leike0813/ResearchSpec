@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "skill_dependencies": [],
+  "runtime_requirements": [
+    "pandas",
+    "numpy",
+    "optional:yfinance",
+    "optional:sec-api-compatible-extractor"
+  ],
+  "provider_configuration": "user-owned",
+  "credential_persistence": "forbidden"
+}

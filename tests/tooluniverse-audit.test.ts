@@ -116,11 +116,11 @@ void test("ToolUniverse audit summaries and known findings are reproducible", as
 
 void test("ToolUniverse production vendor remains traceable to the audit", async () => {
   const registry = await loadPluginRegistry();
-  assert.equal(registry.vendors.size, 3);
+  assert.equal(registry.vendors.size, 4);
   assert.equal(registry.vendors.get("tooluniverse")?.revision, REVISION);
   assert.equal(registry.vendors.get("tooluniverse")?.skills.length, 130);
   assert.equal(registry.domains.size, 218);
-  assert.equal(availableDomains(registry).length, 49);
+  assert.equal(availableDomains(registry).length, 51);
 });
 
 function hasFinding(audit: Audit, skillId: string, code: string): boolean {

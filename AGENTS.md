@@ -18,6 +18,7 @@ Current external reference paths:
 - ToolUniverse vendor converter source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/tooluniverse`
 - Scientific Agent Skills vendor converter source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/scientific-agent-skills`
 - Materials-Science-Skills-For-LLM audit source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/materials-science-skills-for-llm`
+- FinRobot audit source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/finrobot`
 
 When paths or ownership change, update this file in the same change so future
 agents do not follow stale locations.
@@ -137,7 +138,33 @@ access external services, compile software, or run scheduler/HPC work. Do not
 bypass the checked-in admission, relationship, file, resource, curation,
 license, or source-neutral domain decisions.
 
-Multi-vendor maintenance must keep converters isolated: each converter stages
+`vendor/finrobot` is the maintainer-only pinned input for the
+`snapshot-297a8d2` audit and converter. FinRobot has no upstream `SKILL.md`; its
+immutable audit covers all 146 tracked Git entries, 66 source-bound knowledge
+surfaces, five origins, six license claims, and six candidates. Production
+policies admit six neutral `financial-research-*` Skills from twelve candidate
+files: four runtime-independent Python modules are included directly and eight
+candidate scripts are adapted as provider-neutral Python or AgentSpec resources.
+Four additional provider/helper sources form the reviewed dependency closure.
+FinNLP, AutoGen-attributed content, unclear filing/marker trees, and hard
+FinRobot aggregate dependencies remain excluded. All generated Skills carry
+Apache-2.0 licensing, immutable derivation metadata, empty hard Skill
+dependencies, and advisory-only relationships. They contribute to
+`banking-finance-and-investment`; statement analysis and company fundamentals
+also contribute to `accounting-auditing-and-accountability`.
+
+FinRobot safety is form safety, not business-capability removal. ResearchSpec
+conversion, checking, packaging, installation, discovery, and update never
+import or execute generated resources, install dependencies, initialize clients,
+read credentials, or contact services. When explicitly invoked by the target
+Agent, the Skills may use user-configured providers and execution environments
+and may produce calculations, forecasts, probabilities, sentiment, valuation,
+targets, ratings, recommendations, and conclusions. Never embed actual secrets,
+private endpoints, private datasets, local user paths, or unknown-origin content
+in published files, and do not bypass the checked-in admission, source, surface,
+origin, license, resource, relationship, derivation, and review decisions.
+
+Four-vendor maintenance must keep converters isolated: each converter stages
 against all published vendors but emits and commits only its own bundle, while a
 source-neutral domain catalog and central assembler own the published registry.
 Vendor root licensing does not replace an evidenced Skill-level content license.

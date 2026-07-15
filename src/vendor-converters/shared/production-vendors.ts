@@ -1,4 +1,5 @@
 export const PRODUCTION_VENDOR_IDS = [
+  "finrobot",
   "materials-science-skills-for-llm",
   "scientific-agent-skills",
   "tooluniverse",

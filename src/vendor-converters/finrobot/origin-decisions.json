@@ -1,0 +1,44 @@
+{
+  "schema_version": "2",
+  "vendor_id": "finrobot",
+  "release": "snapshot-297a8d2",
+  "revision": "297a8d28d099be328c8a8eb658b4f782b93f3651",
+  "audit_sha256": "6b518a933f036333203276263b94cc5b4bd45a924f426972c4547165c5cbb9c3",
+  "decisions": [
+    {
+      "origin_id": "attributed-autogen",
+      "disposition": "excluded",
+      "license_expression": null,
+      "reason_code": "origin-not-authorized-for-redistribution",
+      "note": "The file attributes a Microsoft AutoGen notebook but does not state a source-local effective content license."
+    },
+    {
+      "origin_id": "external-finnlp",
+      "disposition": "excluded",
+      "license_expression": null,
+      "reason_code": "origin-not-authorized-for-redistribution",
+      "note": "FinNLP is an uninitialized external gitlink and is not audited as in-tree FinRobot content."
+    },
+    {
+      "origin_id": "root-apache",
+      "disposition": "production-source",
+      "license_expression": "Apache-2.0",
+      "reason_code": "apache-source-copy-and-adaptation",
+      "note": "Root Apache-2.0 files may be copied or adapted with source hash, derivation, LICENSE, NOTICE, and non-endorsement attribution."
+    },
+    {
+      "origin_id": "unclear-filings",
+      "disposition": "excluded",
+      "license_expression": null,
+      "reason_code": "origin-not-authorized-for-redistribution",
+      "note": "The imported filings implementation lacks sufficient source-local provenance for redistribution."
+    },
+    {
+      "origin_id": "unclear-marker",
+      "disposition": "excluded",
+      "license_expression": null,
+      "reason_code": "origin-not-authorized-for-redistribution",
+      "note": "The marker-derived SEC conversion tree lacks sufficient source-local provenance for redistribution."
+    }
+  ]
+}

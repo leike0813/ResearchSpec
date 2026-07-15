@@ -10,3 +10,6 @@
 [submodule "vendor/materials-science-skills-for-llm"]
 	path = vendor/materials-science-skills-for-llm
 	url = https://github.com/IntelligentMat/Materials-Science-Skills-For-LLM.git
+[submodule "vendor/finrobot"]
+	path = vendor/finrobot
+	url = https://github.com/AI4Finance-Foundation/FinRobot.git

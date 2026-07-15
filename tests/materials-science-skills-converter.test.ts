@@ -46,8 +46,8 @@ void test("Materials generated bundle is attributable, dependency-free, and reac
   assert.match(manifest.file_policy_sha256, /^[a-f0-9]{64}$/);
 
   const loaded = await loadPluginRegistry(PLUGIN_ROOT);
-  assert.deepEqual([...loaded.vendors.keys()], ["materials-science-skills-for-llm", "scientific-agent-skills", "tooluniverse"]);
-  assert.equal(availableDomains(loaded).length, 49);
+  assert.deepEqual([...loaded.vendors.keys()], ["finrobot", "materials-science-skills-for-llm", "scientific-agent-skills", "tooluniverse"]);
+  assert.equal(availableDomains(loaded).length, 51);
   assert.equal(loaded.domains.get("materials-engineering")?.skills.filter((id) => id.startsWith("materials-science-skills-")).length, 6);
   assert.equal(loaded.domains.get("macromolecular-and-materials-chemistry")?.skills.filter((id) => id.startsWith("materials-science-skills-")).length, 2);
   assert.equal(loaded.domains.get("computational-modeling-and-simulation")?.skills.filter((id) => id.startsWith("materials-science-skills-")).length, 7);

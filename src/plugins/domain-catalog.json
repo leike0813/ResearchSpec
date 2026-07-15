@@ -651,7 +651,10 @@
       "title": "Accounting, auditing and accountability",
       "description": "ANZSRC 2020 FoR Group 3501: Accounting, auditing and accountability.",
       "version": "0.1.0",
-      "skills": []
+      "skills": [
+        "financial-research-company-fundamentals",
+        "financial-research-statement-analysis"
+      ]
     },
     {
       "domain_id": "banking-finance-and-investment",
@@ -660,7 +663,14 @@
       "title": "Banking, finance and investment",
       "description": "ANZSRC 2020 FoR Group 3502: Banking, finance and investment.",
       "version": "0.1.0",
-      "skills": []
+      "skills": [
+        "financial-research-company-fundamentals",
+        "financial-research-competitive-position",
+        "financial-research-corporate-risk",
+        "financial-research-event-evidence",
+        "financial-research-relative-valuation",
+        "financial-research-statement-analysis"
+      ]
     },
     {
       "domain_id": "business-systems-in-context",

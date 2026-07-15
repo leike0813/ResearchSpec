@@ -4,7 +4,12 @@
 
 Domain Skill plugins are ResearchSpec-maintained collections of Open Agent Skills. Users select stable domains; upstream vendors are maintainer concerns, not installation products. Plugin Skills may assist semantic research work, but they never own ResearchSpec routes, workflow profiles, work items, state, artifact registry, Gates, Decisions, transitions, or receipts.
 
-User runtime is offline with respect to plugin maintenance. It reads static assets distributed in the ResearchSpec npm package and never clones an upstream repository, runs a converter, executes a bundled script, installs dependencies, or configures credentials.
+User runtime is offline with respect to plugin maintenance. Installation,
+discovery, update, and validation read static assets distributed in the
+ResearchSpec npm package and never clone an upstream repository, run a converter,
+execute a bundled script, install dependencies, or configure credentials. A
+target Agent may later invoke an admitted Skill resource under the user's own
+execution environment and authority.
 
 Domain identity and taxonomy are canonicalized in [ResearchSpec Domain Taxonomy](./domain_taxonomy.md).
 
@@ -32,8 +37,10 @@ v2.53.0 contributes 49 reviewed, vendor-prefixed Skills after complete admission
 decisions for all 147 audit records and finding-level decisions for all 40
 manual-security targets. Materials-Science-Skills-For-LLM
 `snapshot-fafd3ab` contributes seven curated Skills after resolving all twelve
-audit records and all 24 admitted source files. Together the three isolated
-vendor bundles populate 49 non-empty domains; users still select only
+audit records and all 24 admitted source files. FinRobot `snapshot-297a8d2`
+contributes six neutral, capability-complete financial research Skills after
+resolving all 146 source entries and 66 knowledge surfaces. Together the four
+isolated vendor bundles populate 51 non-empty domains; users still select only
 source-neutral domains.
 
 ## Registry and package layout
@@ -48,7 +55,7 @@ skills/plugins/
       <skill-id>/
         SKILL.md
         LICENSE
-        NOTICE.md
+        NOTICE or NOTICE.md
         scripts/ references/ assets/ ...
   vendor-manifests/
   conversion-reports/
@@ -92,9 +99,20 @@ The Materials-Science-Skills-For-LLM converter independently:
 - treats software, models, data, services, documentation, GPU, and HPC environments as reviewed external resources rather than provisioned assets;
 - emits its isolated tree, bundle, manifest, and report.
 
+The FinRobot converter independently:
+
+- binds the archived immutable `snapshot-297a8d2` audit and the explicitly approved complete-tree hash;
+- admits six neutral `financial-research-*` Skills from four direct and eight adapted candidate resources;
+- replaces FinRobot aggregate imports and import-time provider clients with Protocols, DTOs, injected adapters, and provider-neutral AgentSpec JSON;
+- preserves reviewed calculations, forecasts, probability and sentiment analysis, targets, ratings, recommendations, and conclusions while rejecting embedded sensitive values and unresolved origins;
+- publishes complete Apache-2.0 attribution, dependencies, derivations, Python resources, AgentSpec schemas, its isolated bundle, manifest, and report.
+
 Each converter stages against all published vendors before central assembly and commits only its own projection plus the registry. Running one converter cannot replace another vendor's generated tree or bundle.
 
-Converters and the assembler never execute upstream scripts, install dependencies, configure credentials, contact services, or grant workflow authority.
+Converters and the assembler never execute upstream or generated scripts,
+install dependencies, configure credentials, contact services, or grant
+workflow authority. This inert maintenance boundary does not prohibit a target
+Agent from invoking an admitted resource later in a user-configured environment.
 
 ## Workspace selection and dependency resolution
 

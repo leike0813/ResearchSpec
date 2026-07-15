@@ -235,7 +235,7 @@ async function validateSkillRoot(root: string, vendor: VendorDefinition, skill: 
   }
   if (!validateContent) {
     if (!relativeFiles.includes("LICENSE")) diagnostics.push(fatal("plugin_skill_license_missing", `Third-party-derived Skill is missing LICENSE: ${skill.skill_id}`, path.join(root, "LICENSE")));
-    if (!relativeFiles.includes("NOTICE.md")) diagnostics.push(fatal("plugin_skill_notice_missing", `Third-party-derived Skill is missing NOTICE.md: ${skill.skill_id}`, path.join(root, "NOTICE.md")));
+    if (!relativeFiles.includes("NOTICE.md") && !relativeFiles.includes("NOTICE")) diagnostics.push(fatal("plugin_skill_notice_missing", `Third-party-derived Skill is missing NOTICE or NOTICE.md: ${skill.skill_id}`, path.join(root, "NOTICE")));
     return relativeFiles;
   }
   try {
@@ -246,9 +246,10 @@ async function validateSkillRoot(root: string, vendor: VendorDefinition, skill: 
     if (!frontmatter.body.trim()) diagnostics.push(fatal("plugin_skill_body_missing", `SKILL.md must contain Markdown instructions: ${skill.skill_id}`, skillPath));
   } catch (error) { diagnostics.push(fatal("plugin_skill_frontmatter_invalid", `Cannot parse SKILL.md for ${skill.skill_id}: ${error instanceof Error ? error.message : String(error)}`, skillPath)); }
   const licensePath = path.join(root, "LICENSE");
-  const noticePath = path.join(root, "NOTICE.md");
+  const noticeName = relativeFiles.includes("NOTICE.md") ? "NOTICE.md" : "NOTICE";
+  const noticePath = path.join(root, noticeName);
   if (!relativeFiles.includes("LICENSE") || !(await safeNonEmpty(licensePath))) diagnostics.push(fatal("plugin_skill_license_missing", `Third-party-derived Skill is missing a non-empty LICENSE: ${skill.skill_id}`, licensePath));
-  if (!relativeFiles.includes("NOTICE.md") || !(await safeNonEmpty(noticePath))) diagnostics.push(fatal("plugin_skill_notice_missing", `Third-party-derived Skill is missing a non-empty NOTICE.md: ${skill.skill_id}`, noticePath));
+  if ((!relativeFiles.includes("NOTICE.md") && !relativeFiles.includes("NOTICE")) || !(await safeNonEmpty(noticePath))) diagnostics.push(fatal("plugin_skill_notice_missing", `Third-party-derived Skill is missing a non-empty NOTICE or NOTICE.md: ${skill.skill_id}`, noticePath));
   return relativeFiles;
 }
 
@@ -338,7 +339,8 @@ async function loadPackagedSkillFiles(pluginRoot: string, vendors: PluginRegistr
       for (const skill of vendor.skills) {
         const files = bySkill.get(skill.skill_id);
         if (!files?.has("SKILL.md")) continue;
-        files.add("LICENSE"); files.add("NOTICE.md");
+        files.add("LICENSE");
+        if (!files.has("NOTICE") && !files.has("NOTICE.md")) files.add("NOTICE.md");
         result.set(skill.skill_id, [...files].sort(compareText));
       }
     } catch { /* Unbundled fixtures and maintainer validation use filesystem discovery. */ }
