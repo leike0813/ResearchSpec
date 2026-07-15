@@ -1,7 +1,7 @@
 import js from "@eslint/js";
 import tseslint from "typescript-eslint";
 
-const tsFiles = ["src/**/*.ts", "tests/**/*.ts"];
+const tsFiles = ["src/**/*.ts", "tests/**/*.ts", "harness/**/*.ts"];
 
 export default tseslint.config(
   {

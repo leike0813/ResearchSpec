@@ -3,9 +3,10 @@
   "compilerOptions": {
     "noEmit": false,
     "rootDir": ".",
-    "outDir": ".test-dist",
+    "outDir": ".harness-dist",
     "declaration": false,
     "sourceMap": false
   },
-  "include": ["src/**/*.ts", "tests/**/*.ts", "harness/**/*.ts"]
+  "include": ["src/**/*.ts", "harness/**/*.ts"],
+  "exclude": ["tests/**/*.ts"]
 }

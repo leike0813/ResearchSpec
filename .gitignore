@@ -23,5 +23,6 @@ references/OpenSpec/
 node_modules/
 dist/
 .test-dist/
+.harness-dist/
 coverage/
 *.tsbuildinfo
