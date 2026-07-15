@@ -1,0 +1,1348 @@
+{
+  "schema_version": "1",
+  "vendor_id": "histagent",
+  "release": "snapshot-47bbe21",
+  "revision": "47bbe21dc81618489f5d5929358032883a3fe448",
+  "audit": {
+    "path": "audits/histagent/snapshot-47bbe21/capability-audit.json",
+    "sha256": "0f0de44a13204fbbc139ec78b6f9320c4078a786e700f1f5bdcda1688cf36269"
+  },
+  "source_evidence_path": "src/vendor-converters/histagent/source-evidence.json",
+  "decisions": {
+    "source_entries": [
+      {
+        "id": ".gitignore",
+        "audit_disposition": "retain",
+        "production_action": "retained-evidence"
+      },
+      {
+        "id": "CODE_OF_CONDUCT.md",
+        "audit_disposition": "retain",
+        "production_action": "retained-evidence"
+      },
+      {
+        "id": "CONTRIBUTING.md",
+        "audit_disposition": "retain",
+        "production_action": "retained-evidence"
+      },
+      {
+        "id": "Figures/Figure_1.png",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "Figures/data_hir.png",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "Figures/histagent_arch.png",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "Figures/language.png",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "Figures/lit_search_agent.png",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "Figures/region.png",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "LICENSE",
+        "audit_disposition": "retain",
+        "production_action": "retained-evidence"
+      },
+      {
+        "id": "README.md",
+        "audit_disposition": "retain",
+        "production_action": "retained-evidence"
+      },
+      {
+        "id": "browser_use/README.md",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/__init__.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/__pycache__/__init__.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/__pycache__/logging_config.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/__pycache__/utils.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/agent/__pycache__/gif.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/agent/__pycache__/prompts.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/agent/__pycache__/service.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/agent/__pycache__/tests.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/agent/__pycache__/views.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/agent/gif.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/agent/message_manager/__pycache__/service.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/agent/message_manager/__pycache__/tests.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/agent/message_manager/__pycache__/utils.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/agent/message_manager/__pycache__/views.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/agent/message_manager/service.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/agent/message_manager/tests.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/agent/message_manager/utils.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/agent/message_manager/views.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/agent/prompts.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/agent/service.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/agent/system_prompt.md",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/agent/tests.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/agent/views.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/browser/__pycache__/browser.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/browser/__pycache__/context.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/browser/__pycache__/views.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/browser/browser.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/browser/context.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/browser/tests/__pycache__/screenshot_test.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/browser/tests/__pycache__/test_clicks.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/browser/tests/screenshot_test.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/browser/tests/test_clicks.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/browser/views.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/controller/__pycache__/service.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/controller/__pycache__/views.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/controller/registry/__pycache__/service.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/controller/registry/__pycache__/views.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/controller/registry/service.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/controller/registry/views.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/controller/service.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/controller/views.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/dom/__init__.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/dom/__pycache__/__init__.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/dom/__pycache__/service.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/dom/__pycache__/views.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/dom/buildDomTree.js",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/dom/history_tree_processor/__pycache__/service.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/dom/history_tree_processor/__pycache__/view.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/dom/history_tree_processor/service.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/dom/history_tree_processor/view.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/dom/service.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/dom/tests/__pycache__/extraction_test.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/dom/tests/__pycache__/process_dom_test.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/dom/tests/extraction_test.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/dom/tests/process_dom_test.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/dom/views.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/logging_config.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/telemetry/__pycache__/service.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/telemetry/__pycache__/views.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/telemetry/service.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/telemetry/views.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser_use/utils.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "combine_results.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "dataset_loader.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "judgment.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "openai_baseline.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "requirements.txt",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "run_gaia.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "run_hist.py",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "run_hlejson.py",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "scripts/LocalGoogleSearchTool.py",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "scripts/__init__.py",
+        "audit_disposition": "retain",
+        "production_action": "retained-evidence"
+      },
+      {
+        "id": "scripts/__pycache__/LocalGoogleSearchTool.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "scripts/__pycache__/__init__.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "scripts/__pycache__/agent_web_browser.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "scripts/__pycache__/cookies.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "scripts/__pycache__/file_processing.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "scripts/__pycache__/frame_extract.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "scripts/__pycache__/image_web_browser.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "scripts/__pycache__/mdconvert.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "scripts/__pycache__/ocr.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "scripts/__pycache__/reformulator.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "scripts/__pycache__/reverse_image.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "scripts/__pycache__/run_agents.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "scripts/__pycache__/speech_recognition.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "scripts/__pycache__/text_inspector_tool.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "scripts/__pycache__/text_web_browser.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "scripts/__pycache__/transkribus_ocr.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "scripts/__pycache__/translator.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "scripts/__pycache__/visual_qa.cpython-312.pyc",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "scripts/agent_web_browser.py",
+        "audit_disposition": "replace",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "scripts/cookies.py",
+        "audit_disposition": "confirmed-failure",
+        "production_action": "excluded"
+      },
+      {
+        "id": "scripts/file_processing.py",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "scripts/frame_extract.py",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "scripts/gaia_scorer.py",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "scripts/image_web_browser.py",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "scripts/mdconvert.py",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "scripts/ocr.py",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "scripts/reformulator.py",
+        "audit_disposition": "replace",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "scripts/reverse_image.py",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "scripts/run_agents.py",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "scripts/speech_recognition.py",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "scripts/text_inspector_tool.py",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "scripts/text_web_browser.py",
+        "audit_disposition": "replace",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "scripts/transkribus_ocr.py",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "scripts/translator.py",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "scripts/visual_qa.py",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "scripts/web_tools.py",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      }
+    ],
+    "knowledge_surfaces": [
+      {
+        "id": "agent-historical-answer-loop",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "agent-historical-orchestration",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "archival-web-navigation",
+        "audit_disposition": "replace",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "browser-agent-adapter",
+        "audit_disposition": "replace",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "browser-automation-runtime",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser-telemetry",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "cookie-injection-payload",
+        "audit_disposition": "confirmed-failure",
+        "production_action": "excluded"
+      },
+      {
+        "id": "document-conversion",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "file-format-processing",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "gaia-benchmark-runner",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "general-ocr",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "histbench-dataset-loader",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "histbench-judgment",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "histbench-result-combination",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "histbench-runner",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "historical-ocr",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "hle-benchmark-runner",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "image-source-browser",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "literature-retrieval-browser",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "literature-tool-suite",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "local-search-reformulation",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "openai-baseline",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "precise-text-browser",
+        "audit_disposition": "replace",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "response-reformulation",
+        "audit_disposition": "replace",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "reverse-image-identification",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "source-text-inspection",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "speech-transcription",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "text-web-search",
+        "audit_disposition": "replace",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "translation",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "video-frame-extraction",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "visual-source-analysis",
+        "audit_disposition": "replace",
+        "production_action": "independent-reimplementation"
+      }
+    ],
+    "content_origins": [
+      {
+        "id": "browser-use-unclear",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "compiled-bytecode",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "histagent-root",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "microsoft-autogen",
+        "audit_disposition": "replace",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "unverified-figures",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      }
+    ],
+    "license_claims": [
+      {
+        "id": "autogen-derived-mit",
+        "audit_disposition": "replace",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "browser-use-missing",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "figure-provenance-unverified",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "root-apache-2-0",
+        "audit_disposition": "retain",
+        "production_action": "retained-evidence"
+      }
+    ],
+    "runtime_authorities": [
+      {
+        "id": "benchmark-execution",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "browser-control",
+        "audit_disposition": "replace",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "credential-access",
+        "audit_disposition": "replace",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "dependency-installation",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "external-request",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "filesystem-read",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "filesystem-write",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "provider-inference",
+        "audit_disposition": "replace",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "subprocess-execution",
+        "audit_disposition": "replace",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "telemetry",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      }
+    ],
+    "external_resources": [
+      {
+        "id": "gaia-dataset",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "google-books",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "google-lens",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "google-scholar",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "histbench-dataset",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "hle-dataset",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "huggingface-models",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "imgbb",
+        "audit_disposition": "replace",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "internet-archive",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "llamaparse",
+        "audit_disposition": "replace",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "local-translation-service",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "openai-provider",
+        "audit_disposition": "replace",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "serpapi",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "springer-api",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "transkribus",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "youtube-media",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      }
+    ],
+    "security_findings": [
+      {
+        "id": "BROWSER-USE-ORIGIN",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "COOKIE-PAYLOAD",
+        "audit_disposition": "confirmed-failure",
+        "production_action": "excluded"
+      },
+      {
+        "id": "CREDENTIAL-SURFACE",
+        "audit_disposition": "replace",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "EXTERNAL-MATERIAL-UPLOAD",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "FIXED-PROVIDER-BINDING",
+        "audit_disposition": "replace",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "IMAGE-PROVENANCE",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "OUTPUT-LAYER-COLLAPSE",
+        "audit_disposition": "replace",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "SUBPROCESS-BOUNDARY",
+        "audit_disposition": "replace",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "TELEMETRY-DEFAULT",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      },
+      {
+        "id": "TRACKED-BYTECODE",
+        "audit_disposition": "exclude",
+        "production_action": "excluded"
+      }
+    ],
+    "candidates": [
+      {
+        "id": "histagent-historical-research",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "histagent-historical-source-identification",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      },
+      {
+        "id": "histagent-historical-source-analysis",
+        "audit_disposition": "adapt",
+        "production_action": "independent-reimplementation"
+      }
+    ]
+  },
+  "capability_map": [
+    {
+      "surface_id": "agent-historical-answer-loop",
+      "skill_id": "histagent-historical-research",
+    "command": "submit-evidence",
+    "implementation": "state-machine",
+    "implementation_kind": "bundled-script",
+    "optional_dependency": null,
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-agent-historical-answer-loop"
+    },
+    {
+      "surface_id": "agent-historical-orchestration",
+      "skill_id": "histagent-historical-research",
+    "command": "status",
+    "implementation": "state-machine",
+    "implementation_kind": "bundled-script",
+    "optional_dependency": null,
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-agent-historical-orchestration"
+    },
+    {
+      "surface_id": "archival-web-navigation",
+      "skill_id": "histagent-historical-source-identification",
+    "command": "archive",
+    "implementation": "internet-archive-cdx-adapter",
+    "implementation_kind": "configured-http-adapter",
+    "optional_dependency": null,
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-archival-web-navigation"
+    },
+    {
+      "surface_id": "browser-agent-adapter",
+      "skill_id": "histagent-historical-source-identification",
+    "command": "fetch",
+    "implementation": "http-html-adapter",
+    "implementation_kind": "configured-http-adapter",
+    "optional_dependency": null,
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-browser-agent-adapter"
+    },
+    {
+      "surface_id": "document-conversion",
+      "skill_id": "histagent-historical-source-analysis",
+    "command": "convert",
+    "implementation": "stdlib-document-converter",
+    "implementation_kind": "bundled-script",
+    "optional_dependency": "pypdf",
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-document-conversion"
+    },
+    {
+      "surface_id": "file-format-processing",
+      "skill_id": "histagent-historical-source-analysis",
+    "command": "convert",
+    "implementation": "stdlib-document-converter",
+    "implementation_kind": "bundled-script",
+    "optional_dependency": null,
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-file-format-processing"
+    },
+    {
+      "surface_id": "general-ocr",
+      "skill_id": "histagent-historical-source-analysis",
+    "command": "ocr",
+    "implementation": "tesseract-adapter",
+    "implementation_kind": "optional-local-tool",
+    "optional_dependency": "tesseract",
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-general-ocr"
+    },
+    {
+      "surface_id": "historical-ocr",
+      "skill_id": "histagent-historical-source-analysis",
+    "command": "ocr",
+    "implementation": "tesseract-transkribus-adapters",
+    "implementation_kind": "optional-local-tool",
+    "optional_dependency": "tesseract",
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-historical-ocr"
+    },
+    {
+      "surface_id": "image-source-browser",
+      "skill_id": "histagent-historical-source-identification",
+    "command": "fetch",
+    "implementation": "http-image-adapter",
+    "implementation_kind": "configured-http-adapter",
+    "optional_dependency": null,
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-image-source-browser"
+    },
+    {
+      "surface_id": "literature-retrieval-browser",
+      "skill_id": "histagent-historical-source-identification",
+    "command": "literature",
+    "implementation": "google-books-springer-adapters",
+    "implementation_kind": "configured-http-adapter",
+    "optional_dependency": null,
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-literature-retrieval-browser"
+    },
+    {
+      "surface_id": "literature-tool-suite",
+      "skill_id": "histagent-historical-research",
+    "command": "submit-source",
+    "implementation": "state-machine",
+    "implementation_kind": "bundled-script",
+    "optional_dependency": null,
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-literature-tool-suite"
+    },
+    {
+      "surface_id": "local-search-reformulation",
+      "skill_id": "histagent-historical-source-identification",
+    "command": "search",
+    "implementation": "local-index-serpapi-adapters",
+    "implementation_kind": "configured-http-adapter",
+    "optional_dependency": null,
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-local-search-reformulation"
+    },
+    {
+      "surface_id": "precise-text-browser",
+      "skill_id": "histagent-historical-source-identification",
+    "command": "exact-text",
+    "implementation": "http-local-index-adapters",
+    "implementation_kind": "bundled-script",
+    "optional_dependency": null,
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-precise-text-browser"
+    },
+    {
+      "surface_id": "response-reformulation",
+      "skill_id": "histagent-historical-research",
+    "command": "render",
+    "implementation": "deterministic-renderer",
+    "implementation_kind": "bundled-script",
+    "optional_dependency": null,
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-response-reformulation"
+    },
+    {
+      "surface_id": "reverse-image-identification",
+      "skill_id": "histagent-historical-source-identification",
+    "command": "reverse-image",
+    "implementation": "serpapi-lens-http-upload-adapters",
+    "implementation_kind": "configured-http-adapter",
+    "optional_dependency": null,
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-reverse-image-identification"
+    },
+    {
+      "surface_id": "source-text-inspection",
+      "skill_id": "histagent-historical-source-analysis",
+    "command": "inspect",
+    "implementation": "stdlib-inspector",
+    "implementation_kind": "bundled-script",
+    "optional_dependency": null,
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-source-text-inspection"
+    },
+    {
+      "surface_id": "speech-transcription",
+      "skill_id": "histagent-historical-source-analysis",
+    "command": "transcribe",
+    "implementation": "whisper-cli-adapter",
+    "implementation_kind": "optional-local-tool",
+    "optional_dependency": "whisper",
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-speech-transcription"
+    },
+    {
+      "surface_id": "text-web-search",
+      "skill_id": "histagent-historical-source-identification",
+    "command": "search",
+    "implementation": "serpapi-adapter",
+    "implementation_kind": "configured-http-adapter",
+    "optional_dependency": null,
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-text-web-search"
+    },
+    {
+      "surface_id": "translation",
+      "skill_id": "histagent-historical-source-analysis",
+    "command": "translate",
+    "implementation": "libretranslate-adapter",
+    "implementation_kind": "configured-http-adapter",
+    "optional_dependency": null,
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-translation"
+    },
+    {
+      "surface_id": "video-frame-extraction",
+      "skill_id": "histagent-historical-source-analysis",
+    "command": "frames",
+    "implementation": "ffmpeg-adapter",
+    "implementation_kind": "optional-local-tool",
+    "optional_dependency": "ffmpeg",
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-video-frame-extraction"
+    },
+    {
+      "surface_id": "visual-source-analysis",
+      "skill_id": "histagent-historical-source-analysis",
+    "command": "vision",
+    "implementation": "provider-neutral-http-adapter",
+    "implementation_kind": "configured-http-adapter",
+    "optional_dependency": null,
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-visual-source-analysis"
+    }
+  ],
+  "skill_contracts": [
+    {
+      "skill_id": "histagent-historical-research",
+      "formal_entrypoint": "scripts/research_runtime.py",
+      "commands": [
+        "init",
+        "status",
+        "submit-source",
+        "submit-layer",
+        "submit-evidence",
+        "check",
+        "render"
+      ],
+      "hard_dependencies": [],
+      "advisory_relationships": [
+        {
+          "target_skill_id": "histagent-historical-source-identification",
+          "relation": "advisory",
+          "evidence": [
+            "README.md"
+          ],
+          "note": "Related capability may be composed by the target Agent without a hard Skill dependency."
+        },
+        {
+          "target_skill_id": "histagent-historical-source-analysis",
+          "relation": "advisory",
+          "evidence": [
+            "README.md"
+          ],
+          "note": "Related capability may be composed by the target Agent without a hard Skill dependency."
+        }
+      ],
+      "prospective_domains": [
+        "historical-studies"
+      ]
+    },
+    {
+      "skill_id": "histagent-historical-source-identification",
+      "formal_entrypoint": "scripts/identify_sources.py",
+      "commands": [
+        "search",
+        "exact-text",
+        "literature",
+        "archive",
+        "fetch",
+        "reverse-image",
+        "verify",
+        "validate"
+      ],
+      "hard_dependencies": [],
+      "advisory_relationships": [
+        {
+          "target_skill_id": "histagent-historical-research",
+          "relation": "advisory",
+          "evidence": [
+            "README.md"
+          ],
+          "note": "Related capability may be composed by the target Agent without a hard Skill dependency."
+        },
+        {
+          "target_skill_id": "histagent-historical-source-analysis",
+          "relation": "advisory",
+          "evidence": [
+            "README.md"
+          ],
+          "note": "Related capability may be composed by the target Agent without a hard Skill dependency."
+        }
+      ],
+      "prospective_domains": [
+        "heritage-archive-and-museum-studies",
+        "historical-studies"
+      ]
+    },
+    {
+      "skill_id": "histagent-historical-source-analysis",
+      "formal_entrypoint": "scripts/analyze_source.py",
+      "commands": [
+        "inspect",
+        "convert",
+        "ocr",
+        "translate",
+        "transcribe",
+        "frames",
+        "vision",
+        "collate",
+        "validate"
+      ],
+      "hard_dependencies": [],
+      "advisory_relationships": [
+        {
+          "target_skill_id": "histagent-historical-research",
+          "relation": "advisory",
+          "evidence": [
+            "README.md"
+          ],
+          "note": "Related capability may be composed by the target Agent without a hard Skill dependency."
+        },
+        {
+          "target_skill_id": "histagent-historical-source-identification",
+          "relation": "advisory",
+          "evidence": [
+            "README.md"
+          ],
+          "note": "Related capability may be composed by the target Agent without a hard Skill dependency."
+        }
+      ],
+      "prospective_domains": [
+        "heritage-archive-and-museum-studies",
+        "historical-studies"
+      ]
+    }
+  ]
+}

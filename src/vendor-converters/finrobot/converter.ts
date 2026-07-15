@@ -8,7 +8,7 @@ import { sha256 } from "../../core/workspace/write-plan.js";
 import { assemblePluginRegistry } from "../../plugins/assembler.js";
 import { availableDomains, loadPluginRegistry, type PluginRegistry } from "../../plugins/registry.js";
 import { commitVendorStage, pathExists, prepareVendorStage, vendorProjectionDiff } from "../shared/staging.js";
-import { productionVendorInventoryErrors } from "../shared/production-vendors.js";
+import { PRODUCTION_DOMAIN_COUNTS, productionVendorInventoryErrors } from "../shared/production-vendors.js";
 import { assertFinRobotProductionReady, loadFinRobotDraftPolicies, type FinRobotDraftPolicies } from "./policy.js";
 import { renderFinRobotPreviewSet } from "./preview.js";
 
@@ -97,8 +97,8 @@ export async function checkFinRobotOutput(repoRoot: string): Promise<{ ok: boole
       if (vendor.skills.some((skill) => skill.dependencies.length !== 0)) errors.push("FinRobot Registry Schema 1 dependencies must remain empty");
     }
     errors.push(...productionVendorInventoryErrors(loaded.vendors.keys()));
-    if (loaded.domains.size !== 218) errors.push(`Expected 218 internal domains, found ${String(loaded.domains.size)}`);
-    if (availableDomains(loaded).length !== 51) errors.push(`Expected 51 available domains, found ${String(availableDomains(loaded).length)}`);
+    if (loaded.domains.size !== PRODUCTION_DOMAIN_COUNTS.internal) errors.push(`Expected ${String(PRODUCTION_DOMAIN_COUNTS.internal)} internal domains, found ${String(loaded.domains.size)}`);
+    if (availableDomains(loaded).length !== PRODUCTION_DOMAIN_COUNTS.available) errors.push(`Expected ${String(PRODUCTION_DOMAIN_COUNTS.available)} available domains, found ${String(availableDomains(loaded).length)}`);
     const manifest = JSON.parse(await readFile(path.join(repoRoot, "skills/plugins/vendor-manifests/finrobot.json"), "utf8")) as { approved_tree_set_sha256?: string };
     if (manifest.approved_tree_set_sha256 !== APPROVED_TREE_SET) errors.push("FinRobot manifest does not bind the approved complete-tree hash");
     warnings.push(...loaded.diagnostics.map((item) => item.message));

@@ -187,7 +187,7 @@ void test("audit records implementation drift, fixed assumptions, provider risks
 
 void test("audit remains immutable while production ingestion is separately policy governed", async () => {
   const registry = await loadPluginRegistry();
-  assert.deepEqual([...registry.vendors.keys()], ["finrobot", "materials-science-skills-for-llm", "scientific-agent-skills", "tooluniverse"]);
+  assert.deepEqual([...registry.vendors.keys()], ["finrobot", "histagent", "materials-science-skills-for-llm", "scientific-agent-skills", "tooluniverse"]);
   assert.deepEqual(registry.domains.get("accounting-auditing-and-accountability")?.skills, ["financial-research-company-fundamentals", "financial-research-statement-analysis"]);
   assert.equal(registry.domains.get("banking-finance-and-investment")?.skills.length, 6);
   assert.equal(registry.vendors.get("finrobot")?.skills.length, 6);

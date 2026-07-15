@@ -1,0 +1,2691 @@
+{
+  "schema_version": "1",
+  "source": {
+    "source_id": "histagent",
+    "name": "HistAgent",
+    "repository_url": "https://github.com/CharlesQ9/HistAgent",
+    "release": "snapshot-47bbe21",
+    "revision": "47bbe21dc81618489f5d5929358032883a3fe448",
+    "root_license": "Apache-2.0 with per-origin review",
+    "license_path": "LICENSE"
+  },
+  "policy": {
+    "audit_is_admission": false,
+    "future_change": "ingest-histagent",
+    "source_has_upstream_skills": false,
+    "generated_production_skills": false,
+    "converter_executes_upstream_content": false,
+    "parallel_ingest_preparation_allowed": true,
+    "production_requires_audit_validation": true,
+    "production_requires_hash_bound_human_review": true,
+    "benchmark_content_admitted": false,
+    "tool_domain_membership": false,
+    "explicit_invocation_authorizes_configured_providers_and_task_materials": true,
+    "access_control_owned_by_host": true,
+    "culture_specific_policy_added": false,
+    "allowed_domains": [
+      "heritage-archive-and-museum-studies",
+      "historical-studies"
+    ],
+    "anzsrc_field_creates_membership": false
+  },
+  "summary": {
+    "tracked_entries": 120,
+    "tracked_entry_set_sha256": "04a05d13194092009a10cb606d7a51a1bb851f5138e3680faa6a105839f34d02",
+    "files": 120,
+    "file_bytes": 3632711,
+    "upstream_skills": 0,
+    "content_origins": 5,
+    "license_claims": 4,
+    "runtime_authorities": 10,
+    "external_resources": 16,
+    "security_findings": 10,
+    "knowledge_surfaces": 31,
+    "candidate_skills": 3,
+    "source_dispositions": {
+      "retain": 6,
+      "adapt": 16,
+      "replace": 3,
+      "exclude": 94,
+      "confirmed-failure": 1
+    }
+  },
+  "content_origins": [
+    {
+      "origin_id": "browser-use-unclear",
+      "kind": "unattributed-import",
+      "scope": [
+        "browser_use/README.md",
+        "browser_use/agent/service.py"
+      ],
+      "content_license": {
+        "status": "ambiguous",
+        "expression": null,
+        "evidence": [
+          "browser_use/README.md"
+        ]
+      },
+      "disposition": "exclude",
+      "note": "The vendored browser_use tree has no source-local license or immutable upstream provenance."
+    },
+    {
+      "origin_id": "compiled-bytecode",
+      "kind": "compiled-artifact",
+      "scope": [
+        "scripts/__pycache__/cookies.cpython-312.pyc"
+      ],
+      "content_license": {
+        "status": "prohibited",
+        "expression": null,
+        "evidence": [
+          "scripts/__pycache__/cookies.cpython-312.pyc"
+        ]
+      },
+      "disposition": "exclude",
+      "note": "Tracked Python bytecode is non-source generated material and is never an ingestion input."
+    },
+    {
+      "origin_id": "histagent-root",
+      "kind": "upstream-root",
+      "scope": [
+        "LICENSE",
+        "README.md",
+        "run_hist.py"
+      ],
+      "content_license": {
+        "status": "confirmed",
+        "expression": "Apache-2.0",
+        "evidence": [
+          "LICENSE"
+        ]
+      },
+      "disposition": "adapt",
+      "note": "HistAgent-authored capability evidence is governed by the repository Apache-2.0 claim, subject to per-file origin exceptions."
+    },
+    {
+      "origin_id": "microsoft-autogen",
+      "kind": "attributed-borrowing",
+      "scope": [
+        "scripts/agent_web_browser.py",
+        "scripts/image_web_browser.py",
+        "scripts/mdconvert.py",
+        "scripts/reformulator.py",
+        "scripts/text_web_browser.py"
+      ],
+      "content_license": {
+        "status": "ambiguous",
+        "expression": "MIT source claim requires verification",
+        "evidence": [
+          "scripts/agent_web_browser.py",
+          "scripts/image_web_browser.py",
+          "scripts/mdconvert.py",
+          "scripts/reformulator.py",
+          "scripts/text_web_browser.py"
+        ]
+      },
+      "disposition": "replace",
+      "note": "All five files attribute Microsoft AutoGen or Magentic-One; future ingestion must verify each exact MIT source and preserve notice or reimplement equivalent behavior."
+    },
+    {
+      "origin_id": "unverified-figures",
+      "kind": "unverified-media",
+      "scope": [
+        "Figures/Figure_1.png",
+        "Figures/histagent_arch.png"
+      ],
+      "content_license": {
+        "status": "ambiguous",
+        "expression": null,
+        "evidence": [
+          "README.md",
+          "Figures/Figure_1.png"
+        ]
+      },
+      "disposition": "exclude",
+      "note": "The image files have no source-bound authorship or redistribution evidence sufficient for production copying."
+    }
+  ],
+  "license_claims": [
+    {
+      "claim_id": "autogen-derived-mit",
+      "expression": "MIT",
+      "status": "requires-source-verification",
+      "scope": [
+        "scripts/agent_web_browser.py",
+        "scripts/image_web_browser.py",
+        "scripts/mdconvert.py",
+        "scripts/reformulator.py",
+        "scripts/text_web_browser.py"
+      ],
+      "evidence": [
+        "scripts/agent_web_browser.py",
+        "scripts/image_web_browser.py",
+        "scripts/mdconvert.py",
+        "scripts/reformulator.py",
+        "scripts/text_web_browser.py"
+      ],
+      "disposition": "replace",
+      "note": "Verify exact upstream revisions and notices before any copying; otherwise use implementation-equivalent reimplementation."
+    },
+    {
+      "claim_id": "browser-use-missing",
+      "expression": null,
+      "status": "missing",
+      "scope": [
+        "browser_use/README.md",
+        "browser_use/agent/service.py"
+      ],
+      "evidence": [
+        "browser_use/README.md"
+      ],
+      "disposition": "exclude",
+      "note": "No source-local license or pinned origin authorizes production reuse of the vendored browser_use implementation."
+    },
+    {
+      "claim_id": "figure-provenance-unverified",
+      "expression": null,
+      "status": "unverified",
+      "scope": [
+        "Figures/Figure_1.png",
+        "Figures/histagent_arch.png"
+      ],
+      "evidence": [
+        "README.md"
+      ],
+      "disposition": "exclude",
+      "note": "Repository-level licensing alone is insufficient evidence for copied or externally produced figures."
+    },
+    {
+      "claim_id": "root-apache-2-0",
+      "expression": "Apache-2.0",
+      "status": "confirmed",
+      "scope": [
+        "LICENSE",
+        "README.md",
+        "run_hist.py"
+      ],
+      "evidence": [
+        "LICENSE",
+        "README.md"
+      ],
+      "disposition": "retain",
+      "note": "The root repository declares Apache-2.0 for HistAgent-authored content."
+    }
+  ],
+  "runtime_authorities": [
+    {
+      "authority_id": "benchmark-execution",
+      "kind": "benchmark-execution",
+      "evidence": [
+        "run_hist.py",
+        "run_gaia.py",
+        "run_hlejson.py"
+      ],
+      "granted_by_explicit_invocation": false,
+      "governed_by_host_policy": true,
+      "disposition": "exclude",
+      "note": "HistBench, GAIA, and HLE runners are audit evidence only."
+    },
+    {
+      "authority_id": "browser-control",
+      "kind": "browser-control",
+      "evidence": [
+        "scripts/agent_web_browser.py",
+        "browser_use/browser/browser.py"
+      ],
+      "granted_by_explicit_invocation": true,
+      "governed_by_host_policy": true,
+      "disposition": "replace",
+      "note": "Browser control may be supplied only by the target Agent under host access policy."
+    },
+    {
+      "authority_id": "credential-access",
+      "kind": "credential-access",
+      "evidence": [
+        "README.md",
+        "run_hist.py"
+      ],
+      "granted_by_explicit_invocation": true,
+      "governed_by_host_policy": true,
+      "disposition": "replace",
+      "note": "Skills may use configured provider credentials but never embed, expose, or persist them."
+    },
+    {
+      "authority_id": "dependency-installation",
+      "kind": "dependency-installation",
+      "evidence": [
+        "README.md",
+        "requirements.txt"
+      ],
+      "granted_by_explicit_invocation": false,
+      "governed_by_host_policy": true,
+      "disposition": "exclude",
+      "note": "ResearchSpec conversion, packaging, installation, and discovery never install upstream dependencies."
+    },
+    {
+      "authority_id": "external-request",
+      "kind": "external-request",
+      "evidence": [
+        "scripts/web_tools.py",
+        "scripts/transkribus_ocr.py"
+      ],
+      "granted_by_explicit_invocation": true,
+      "governed_by_host_policy": true,
+      "disposition": "adapt",
+      "note": "Explicit Skill invocation permits requests needed for the task using user-approved services, subject to host policy."
+    },
+    {
+      "authority_id": "filesystem-read",
+      "kind": "filesystem-read",
+      "evidence": [
+        "scripts/file_processing.py",
+        "scripts/mdconvert.py"
+      ],
+      "granted_by_explicit_invocation": true,
+      "governed_by_host_policy": true,
+      "disposition": "adapt",
+      "note": "Explicit invocation permits reading task materials selected by the user or host."
+    },
+    {
+      "authority_id": "filesystem-write",
+      "kind": "filesystem-write",
+      "evidence": [
+        "scripts/frame_extract.py",
+        "scripts/transkribus_ocr.py"
+      ],
+      "granted_by_explicit_invocation": true,
+      "governed_by_host_policy": true,
+      "disposition": "adapt",
+      "note": "Derived files remain host-governed artifacts with provenance."
+    },
+    {
+      "authority_id": "provider-inference",
+      "kind": "provider-inference",
+      "evidence": [
+        "run_hist.py",
+        "scripts/visual_qa.py"
+      ],
+      "granted_by_explicit_invocation": true,
+      "governed_by_host_policy": true,
+      "disposition": "replace",
+      "note": "Provider-bound calls must become provider-neutral and use the target Agent configuration."
+    },
+    {
+      "authority_id": "subprocess-execution",
+      "kind": "subprocess-execution",
+      "evidence": [
+        "run_hist.py",
+        "scripts/mdconvert.py"
+      ],
+      "granted_by_explicit_invocation": true,
+      "governed_by_host_policy": true,
+      "disposition": "replace",
+      "note": "Audio, video, and conversion commands require an explicit host-approved execution environment."
+    },
+    {
+      "authority_id": "telemetry",
+      "kind": "telemetry",
+      "evidence": [
+        "browser_use/telemetry/service.py"
+      ],
+      "granted_by_explicit_invocation": false,
+      "governed_by_host_policy": true,
+      "disposition": "exclude",
+      "note": "No telemetry implementation or enabled-by-default behavior is retained."
+    }
+  ],
+  "external_resources": [
+    {
+      "resource_id": "gaia-dataset",
+      "kind": "dataset",
+      "evidence": [
+        "run_gaia.py"
+      ],
+      "data_flow": "download",
+      "disposition": "exclude",
+      "note": "GAIA data and runner behavior are evaluation-only."
+    },
+    {
+      "resource_id": "google-books",
+      "kind": "search-service",
+      "evidence": [
+        "scripts/web_tools.py"
+      ],
+      "data_flow": "request-response",
+      "disposition": "adapt",
+      "note": "Book search is preserved through host-approved web or provider tooling with citations."
+    },
+    {
+      "resource_id": "google-lens",
+      "kind": "search-service",
+      "evidence": [
+        "scripts/reverse_image.py"
+      ],
+      "data_flow": "upload",
+      "disposition": "adapt",
+      "note": "Reverse-image search requires explicit task-material authorization and image provenance."
+    },
+    {
+      "resource_id": "google-scholar",
+      "kind": "search-service",
+      "evidence": [
+        "scripts/web_tools.py"
+      ],
+      "data_flow": "request-response",
+      "disposition": "adapt",
+      "note": "Scholarly search is preserved without fixed provider credentials."
+    },
+    {
+      "resource_id": "histbench-dataset",
+      "kind": "dataset",
+      "evidence": [
+        "README.md",
+        "dataset_loader.py"
+      ],
+      "data_flow": "download",
+      "disposition": "exclude",
+      "note": "HistBench datasets and evaluation runners are not ingestion inputs."
+    },
+    {
+      "resource_id": "hle-dataset",
+      "kind": "dataset",
+      "evidence": [
+        "run_hlejson.py"
+      ],
+      "data_flow": "download",
+      "disposition": "exclude",
+      "note": "HLE dataset and judging surfaces remain audit-only."
+    },
+    {
+      "resource_id": "huggingface-models",
+      "kind": "model",
+      "evidence": [
+        "scripts/ocr.py",
+        "requirements.txt"
+      ],
+      "data_flow": "download",
+      "disposition": "adapt",
+      "note": "OCR model selection is provider-neutral and host-approved."
+    },
+    {
+      "resource_id": "imgbb",
+      "kind": "media-service",
+      "evidence": [
+        "scripts/transkribus_ocr.py"
+      ],
+      "data_flow": "upload",
+      "disposition": "replace",
+      "note": "A future implementation must avoid mandatory third-party image hosting and preserve upload provenance."
+    },
+    {
+      "resource_id": "internet-archive",
+      "kind": "website",
+      "evidence": [
+        "scripts/text_web_browser.py"
+      ],
+      "data_flow": "request-response",
+      "disposition": "adapt",
+      "note": "Archive retrieval remains citation- and host-policy-bound."
+    },
+    {
+      "resource_id": "llamaparse",
+      "kind": "provider",
+      "evidence": [
+        "scripts/web_tools.py"
+      ],
+      "data_flow": "upload",
+      "disposition": "replace",
+      "note": "Document parsing must use the target Agent configuration and disclose remote upload."
+    },
+    {
+      "resource_id": "local-translation-service",
+      "kind": "local-service",
+      "evidence": [
+        "scripts/translator.py"
+      ],
+      "data_flow": "local-only",
+      "disposition": "adapt",
+      "note": "Local translation remains optional and host-configured."
+    },
+    {
+      "resource_id": "openai-provider",
+      "kind": "provider",
+      "evidence": [
+        "run_hist.py",
+        "scripts/visual_qa.py"
+      ],
+      "data_flow": "request-response",
+      "disposition": "replace",
+      "note": "Fixed OpenAI bindings become provider-neutral target-Agent inference."
+    },
+    {
+      "resource_id": "serpapi",
+      "kind": "search-service",
+      "evidence": [
+        "scripts/text_web_browser.py"
+      ],
+      "data_flow": "request-response",
+      "disposition": "adapt",
+      "note": "Precise search may use a user-configured provider without embedded credentials."
+    },
+    {
+      "resource_id": "springer-api",
+      "kind": "search-service",
+      "evidence": [
+        "scripts/web_tools.py"
+      ],
+      "data_flow": "request-response",
+      "disposition": "adapt",
+      "note": "Springer retrieval remains optional, configured, and citation-bound."
+    },
+    {
+      "resource_id": "transkribus",
+      "kind": "provider",
+      "evidence": [
+        "scripts/transkribus_ocr.py"
+      ],
+      "data_flow": "upload",
+      "disposition": "adapt",
+      "note": "Historical OCR may use configured Transkribus access with explicit material upload authorization."
+    },
+    {
+      "resource_id": "youtube-media",
+      "kind": "media-service",
+      "evidence": [
+        "scripts/mdconvert.py"
+      ],
+      "data_flow": "request-response",
+      "disposition": "adapt",
+      "note": "Media transcript access remains host-policy- and provenance-bound."
+    }
+  ],
+  "security_findings": [
+    {
+      "code": "BROWSER-USE-ORIGIN",
+      "severity": "blocking",
+      "evidence": [
+        "browser_use/README.md"
+      ],
+      "note": "The vendored browser_use tree lacks source-bound provenance and licensing.",
+      "disposition": "exclude"
+    },
+    {
+      "code": "COOKIE-PAYLOAD",
+      "severity": "blocking",
+      "evidence": [
+        "scripts/cookies.py"
+      ],
+      "note": "The tracked cookie payload is recorded only by path, Git object ID, byte count, and SHA-256; no values may enter audit artifacts.",
+      "disposition": "confirmed-failure"
+    },
+    {
+      "code": "CREDENTIAL-SURFACE",
+      "severity": "review",
+      "evidence": [
+        "README.md",
+        "run_hist.py"
+      ],
+      "note": "Provider credentials and CLI overrides require target-Agent configuration without persistence.",
+      "disposition": "replace"
+    },
+    {
+      "code": "EXTERNAL-MATERIAL-UPLOAD",
+      "severity": "review",
+      "evidence": [
+        "scripts/transkribus_ocr.py",
+        "scripts/web_tools.py"
+      ],
+      "note": "Images and documents may leave the host only after explicit invocation and provider disclosure.",
+      "disposition": "adapt"
+    },
+    {
+      "code": "FIXED-PROVIDER-BINDING",
+      "severity": "review",
+      "evidence": [
+        "scripts/visual_qa.py",
+        "run_hist.py"
+      ],
+      "note": "Provider-specific implementations must become provider-neutral.",
+      "disposition": "replace"
+    },
+    {
+      "code": "IMAGE-PROVENANCE",
+      "severity": "review",
+      "evidence": [
+        "Figures/Figure_1.png",
+        "README.md"
+      ],
+      "note": "Unaudited figures and retrieved images are not reusable production assets.",
+      "disposition": "exclude"
+    },
+    {
+      "code": "OUTPUT-LAYER-COLLAPSE",
+      "severity": "blocking",
+      "evidence": [
+        "scripts/transkribus_ocr.py",
+        "scripts/translator.py"
+      ],
+      "note": "Future outputs must separate raw observation or OCR, normalized transcription, emendation, translation, and interpretation without unmarked completion.",
+      "disposition": "replace"
+    },
+    {
+      "code": "SUBPROCESS-BOUNDARY",
+      "severity": "review",
+      "evidence": [
+        "run_hist.py",
+        "scripts/mdconvert.py"
+      ],
+      "note": "Command and media execution must be delegated to a host-approved environment.",
+      "disposition": "replace"
+    },
+    {
+      "code": "TELEMETRY-DEFAULT",
+      "severity": "blocking",
+      "evidence": [
+        "browser_use/telemetry/service.py"
+      ],
+      "note": "Telemetry code and default capture behavior are excluded.",
+      "disposition": "exclude"
+    },
+    {
+      "code": "TRACKED-BYTECODE",
+      "severity": "blocking",
+      "evidence": [
+        "scripts/__pycache__/cookies.cpython-312.pyc"
+      ],
+      "note": "Tracked compiled Python artifacts are excluded from every future generation input.",
+      "disposition": "exclude"
+    }
+  ],
+  "source_entries": [
+    {
+      "path": ".gitignore",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "0f81340ea9ebc55faab2061006c6bce1e9dc2db1",
+      "bytes": 76,
+      "sha256": "aba156532344a33d73158a15298cb310566031be1fb667083ca3eb54460239cd",
+      "content_origin_id": "histagent-root",
+      "disposition": "retain"
+    },
+    {
+      "path": "CODE_OF_CONDUCT.md",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "493bc5f878c9246a157cdd50c54a90f2e033b150",
+      "bytes": 5302,
+      "sha256": "4b71f1f266079b84990a2365b082ecb67671bcbc0e460fb32ea2bc9f1710f881",
+      "content_origin_id": "histagent-root",
+      "disposition": "retain"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "0b69da16c6ac2f632be868ccb677e7cb17aa6c08",
+      "bytes": 2448,
+      "sha256": "e4513c0c3c5a380d4602ab74b4f9f3f6f03b2af1bd4f06eaa58fff4aeb315a47",
+      "content_origin_id": "histagent-root",
+      "disposition": "retain"
+    },
+    {
+      "path": "Figures/Figure_1.png",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "6cf4a5ed977eaf257d93b88fa48d716b8b41af3e",
+      "bytes": 216900,
+      "sha256": "b88c04b8914254de30f83137c305259c5031fb4dc18e146d6c466b6b48e6a68a",
+      "content_origin_id": "unverified-figures",
+      "disposition": "exclude"
+    },
+    {
+      "path": "Figures/data_hir.png",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "c51b237d3fadedd8d27ec79d16c6aed3490c6e14",
+      "bytes": 583957,
+      "sha256": "0416a38af90f2e4797c886537bce6c8353504d0c3752916fe070eded2cdddded",
+      "content_origin_id": "unverified-figures",
+      "disposition": "exclude"
+    },
+    {
+      "path": "Figures/histagent_arch.png",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "f73ca209060b8c02664e3fadca0bb08681e4d31c",
+      "bytes": 413203,
+      "sha256": "0d1e516ef310e62517a21890eeb0e9f885b85bb3697e0c3cd4c4ab6dec00d620",
+      "content_origin_id": "unverified-figures",
+      "disposition": "exclude"
+    },
+    {
+      "path": "Figures/language.png",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "1cfc060c77d1b8e9fdbf4a9ea7ef5b4c347bacda",
+      "bytes": 220229,
+      "sha256": "894040ba291f669975e9ff2cd43ad1509cc1c7cecff0829be61c133e9b5332e2",
+      "content_origin_id": "unverified-figures",
+      "disposition": "exclude"
+    },
+    {
+      "path": "Figures/lit_search_agent.png",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "adf561ef47461cbb1f23129e5dfde8e50e0bebda",
+      "bytes": 196287,
+      "sha256": "d4ec0417fa2f0b077c63720b2b408dec8593233373e4dfd04d50fc89f2558ea5",
+      "content_origin_id": "unverified-figures",
+      "disposition": "exclude"
+    },
+    {
+      "path": "Figures/region.png",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "365c27d91e7e612332ff6e06ae572176fe3b751f",
+      "bytes": 419429,
+      "sha256": "79ff5503220c1a36772571a26b35c3f8cf44b969ab7b8ecab38363bbf8b6ce16",
+      "content_origin_id": "unverified-figures",
+      "disposition": "exclude"
+    },
+    {
+      "path": "LICENSE",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+      "bytes": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "content_origin_id": "histagent-root",
+      "disposition": "retain"
+    },
+    {
+      "path": "README.md",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "8e4aca2d4f23586ffb7716766d9a5f3220dcbcb7",
+      "bytes": 24542,
+      "sha256": "307fc4f1188ca7592772ade268fe140b41f332f3e581674472ff17bb271619f3",
+      "content_origin_id": "histagent-root",
+      "disposition": "retain"
+    },
+    {
+      "path": "browser_use/README.md",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "ed850d74033b54ae377e8021f3849a1cc273beb4",
+      "bytes": 877,
+      "sha256": "dd18c43951f2201247f7294e0f10b4ee14e3238bacbc03b90c9168aa60ca00a1",
+      "content_origin_id": "browser-use-unclear",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/__init__.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "cb9b1a4e30f886fda7d2aff7dade1bd7d543ecb3",
+      "bytes": 893,
+      "sha256": "524d70aac183909005fa0475dca815ad551c4a471a333a3c6d9c858f5af853ee",
+      "content_origin_id": "browser-use-unclear",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/__pycache__/__init__.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "a0ff58da8b107a7b43ef6c14656e6a95af705b08",
+      "bytes": 874,
+      "sha256": "bfee251c514cfd32abe901dcd71948e50aa2ab173075087cfb7fd899283ae508",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/__pycache__/logging_config.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "b5be88cb8990baa9ad5b3c8712700360c30437c7",
+      "bytes": 5702,
+      "sha256": "8a33e555104f1c6954c3405a4ae3c6b7fed930357d3dbdb583703920e14f12cb",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/__pycache__/utils.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "a39e0d47798af1a6265c68142a80ea90635a0441",
+      "bytes": 3410,
+      "sha256": "f9eff88614fc80f1004cda613d72b1c9003cd3b4a19f8f5b2f94d83e1f811679",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/agent/__pycache__/gif.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "ef86116aefbd1e172643a3fa44d699541586987a",
+      "bytes": 11121,
+      "sha256": "24cb6f2a3f0623c3057c6a8b3868d96273ab234fa8530c9f6b74b6a7843bf031",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/agent/__pycache__/prompts.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "07fe6da039350122148da9d8d928f3d91c3e80c8",
+      "bytes": 7586,
+      "sha256": "dc9593accfaa357e8e5623a432831082f9179432d3f9b737d818c2afab4928cd",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/agent/__pycache__/service.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "34103aa80d6b1a136d6a99cc2d8f29da2c6a429c",
+      "bytes": 52715,
+      "sha256": "eed5fab634619ccd45e518a962cf762a94ca8d96a60453683565cdb40dcb54ac",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/agent/__pycache__/tests.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "609ae3319c5afb600835d72a0372f1c036206dfe",
+      "bytes": 7793,
+      "sha256": "29e54627104ae4a0dd4fae65d6a0edf3c81fc3e7aa6a90d7702b05ba3c035027",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/agent/__pycache__/views.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "ccfc6c8a28fcd25c511c7e81f38ba783ca2334b8",
+      "bytes": 21808,
+      "sha256": "eb699af542205938f9a136e22989e8295b29a0cb7ed66e76bec349918c9a8d73",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/agent/gif.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "1cb7cbc9ce15444c2b6b69c0313580f77700177b",
+      "bytes": 8766,
+      "sha256": "848d3a4b21ba15c9ed9ab2f56f5b72f397074b93a2028f6893e9c61ddd685ad1",
+      "content_origin_id": "browser-use-unclear",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/agent/message_manager/__pycache__/service.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "05316375dc60e57309bead03f09ebd98b438881e",
+      "bytes": 16601,
+      "sha256": "ac3d0b404e3a7cdda0676720666684d902791a31c7b4195c48c97eb91cec909a",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/agent/message_manager/__pycache__/tests.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "01aa28ad034d7e37a51354ba694bf59b187e6660",
+      "bytes": 9454,
+      "sha256": "2b6983342f6ed02ae74a8e97f748f336814e7dae7f6775619bd6bd8ea0a60779",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/agent/message_manager/__pycache__/utils.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "fc02ec19ed96eddd92b83a5ed130425b56ef3ef2",
+      "bytes": 6477,
+      "sha256": "c53ddc5573591b4d43dea80f216f744b4c16578a6fa9242153646a7d9fb9dda9",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/agent/message_manager/__pycache__/views.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "ae1f39dbc57cc35cd9803d6986297da82b3f93c7",
+      "bytes": 6482,
+      "sha256": "d6c500d60b2c013bee057d1f9506bff5342aea01226e958cf31e9a1e0dc97e42",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/agent/message_manager/service.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "73b3cf78708a4c3d2a28a8c58ecaca4ecfd176e7",
+      "bytes": 10682,
+      "sha256": "3e059052731a3df0666cf6b13b79dc82c3e6f257f74b794c2b6e559db2cabc63",
+      "content_origin_id": "browser-use-unclear",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/agent/message_manager/tests.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "94c1beb59e2c38d69a2b7a30043d616ea0a0c29e",
+      "bytes": 7840,
+      "sha256": "540f13a474f2ae13c48773ef992e0b9e2d88343db191c531a778ca5b1d8c8730",
+      "content_origin_id": "browser-use-unclear",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/agent/message_manager/utils.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "fb4a2167badd27bd285efc296f97581f78d51bbd",
+      "bytes": 4337,
+      "sha256": "d557f8f9976064f6b6c68c16f5a3df7b52ddd82a8fe8d76de31f1b1b9291712a",
+      "content_origin_id": "browser-use-unclear",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/agent/message_manager/views.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "ad8c9c67056c0842bf20d7afa49f7b1ff2665e93",
+      "bytes": 3857,
+      "sha256": "94cc0d29345a66302b436ec41749e612ca97e08c40044b48083a2c5c6fff9df3",
+      "content_origin_id": "browser-use-unclear",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/agent/prompts.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "83ef09022623876732c71f1db9d2592e64ed4199",
+      "bytes": 5246,
+      "sha256": "ebf5beef8e8f688a7e7b1570197712df65b569f880971f4bd5f4378fd0ca2005",
+      "content_origin_id": "browser-use-unclear",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/agent/service.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "05d96c32e95e5622d186bef7bf3144d43464a448",
+      "bytes": 34175,
+      "sha256": "63000621c369ededd8235444f33505518b19eabc1c8416a912b3f9b912d2d944",
+      "content_origin_id": "browser-use-unclear",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/agent/system_prompt.md",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "e70ae4952fca15c61c532960d3391c6dc423ff69",
+      "bytes": 4422,
+      "sha256": "1bde84a35e83ba26e513f7d44dae936958158a2e86358f3615c833b58d093440",
+      "content_origin_id": "browser-use-unclear",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/agent/tests.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "15c47357da7b549b8adb0f8e38f0e2224b994da3",
+      "bytes": 5710,
+      "sha256": "6f82aab0dd5d83a8340005fd0fd2395724a7f42239e1e279c4d9c362af8aa497",
+      "content_origin_id": "browser-use-unclear",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/agent/views.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "086ee356c892234584bb3a5e5a45f9708c0caf37",
+      "bytes": 12498,
+      "sha256": "8d7a229fc62ce9df170d91d09045441ef2a96a38ae96ff3c03851704a1ad050b",
+      "content_origin_id": "browser-use-unclear",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/browser/__pycache__/browser.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "85e873e470cb73dc48d503128b5a2846687e5801",
+      "bytes": 11967,
+      "sha256": "88551dabaafc3213901792a4dda75dec414a05c13ce964c47052ccd7c11c2824",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/browser/__pycache__/context.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "b09bf0ce941583c7254e64aedf2894d2991715ac",
+      "bytes": 60819,
+      "sha256": "6e8c756db3fe8a666991a6d03c7488f76790328fffa2a5fbf802f8dff7d3f6a3",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/browser/__pycache__/views.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "cff41579fd3b34d6383b98897b68a931cc3aa173",
+      "bytes": 2858,
+      "sha256": "21300854d6b02e0370687e5b1c486a35bbb52dbd7a5546328a9013881fdc0869",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/browser/browser.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "1cc9b373ce12933c6448c93ca1b16b65614f9ae0",
+      "bytes": 7966,
+      "sha256": "86962f40e55df4ea4c44b87df5f368a5908e38fea68abb9320ef1feac49ea829",
+      "content_origin_id": "browser-use-unclear",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/browser/context.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "56c6b9dfc76cb20fa5c9fea6b394ca4d36a9ba47",
+      "bytes": 39851,
+      "sha256": "d2ea1809c89173462becfccd66e6e65f994fde8895fed979bd98d481873096d1",
+      "content_origin_id": "browser-use-unclear",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/browser/tests/__pycache__/screenshot_test.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "c826feaffee235a87407c6ae55c861398815261b",
+      "bytes": 1610,
+      "sha256": "4e91451b98584571956653b51acb7bf5ec9529f2b612d34237ea6c17a4a0121b",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/browser/tests/__pycache__/test_clicks.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "ac276da75acd50889f39d3772759d4677e7a3841",
+      "bytes": 4643,
+      "sha256": "837845d5cc1869d2c2a9261b539227c31bfabebf8648efa3e648b798859a4459",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/browser/tests/screenshot_test.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "7255ccb615e9a89d2a2e87b4949ae9b581e5c57f",
+      "bytes": 933,
+      "sha256": "6b56b3ba2a23c3f4225f8584bbdbffab8ce38438deb871ceb2d3f003cda730f4",
+      "content_origin_id": "browser-use-unclear",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/browser/tests/test_clicks.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "98ca74354c70406a8d1d701f86c32787b725c930",
+      "bytes": 2942,
+      "sha256": "de257cd46354db15956543d4e014bbfaccd7abe33a0e4b184c9fa9ce970af899",
+      "content_origin_id": "browser-use-unclear",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/browser/views.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "3434d86e2691caba5715f4028bd3d849d07bf9e7",
+      "bytes": 1231,
+      "sha256": "522e05a18f91d1dd171cbeb8cf16c4920da2848a8e41bc38601c24c49de34955",
+      "content_origin_id": "browser-use-unclear",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/controller/__pycache__/service.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "257e71956a5fb763928f2a6a37fd39a7ae25cfd0",
+      "bytes": 29671,
+      "sha256": "858dcb8d258d31d8d66b4bba508c35487c1d85c46f27145c36793d25f59daaf1",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/controller/__pycache__/views.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "e9460051b56d0a380cd7cd324e1561ec973ac56b",
+      "bytes": 3037,
+      "sha256": "e0f810f5136e1fb68970d09849792d7c0ca3ddf70fcfd3eb67fd21a548ade1d2",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/controller/registry/__pycache__/service.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "4cce694b6a2bd77c3f928a77870f2eec117ce07d",
+      "bytes": 9889,
+      "sha256": "ba124969a150dda83cf02b7b4ebfb068f28ddb98f5abc8fef67f7e5e0199fa3f",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/controller/registry/__pycache__/views.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "1cde1ae3febe945fecd80985d18e7f3afaffbe0c",
+      "bytes": 3667,
+      "sha256": "46a3526c64808259767e865556acadaf90281dae807488ac5acc1cad244fa4c1",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/controller/registry/service.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "20d80f189d82e4feef6b29696a1602ac68fe191d",
+      "bytes": 7079,
+      "sha256": "f8b8be324b784decde772208e133495cf5f0e2d783ce36aedbf4f7fb24e0c958",
+      "content_origin_id": "browser-use-unclear",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/controller/registry/views.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "211c767a31609ee4afc46d50fa8353fc16f391de",
+      "bytes": 1938,
+      "sha256": "6af8ae480e1aab6ae929cac71e06068045f14f0d8056623ed86e8bccab55a1d7",
+      "content_origin_id": "browser-use-unclear",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/controller/service.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "a1ec1f1318966b628b06e1c17f00a2a390c2163c",
+      "bytes": 19574,
+      "sha256": "cd0a61e74d60496d8080c21a276032c65f6f24df6f37f398bf0bc8dc61c08e1a",
+      "content_origin_id": "browser-use-unclear",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/controller/views.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "82995c9e311578ca1c9c133509b70c3eede2bb40",
+      "bytes": 1173,
+      "sha256": "a2b18b9c655c368218aae541af9bf118f88ceb41fb4ba3bda4cec26f38817e9a",
+      "content_origin_id": "browser-use-unclear",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/dom/__init__.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "content_origin_id": "browser-use-unclear",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/dom/__pycache__/__init__.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "ef86e6dcc5121f8f5aaf9382c655b3936b711623",
+      "bytes": 166,
+      "sha256": "da1dd43c749217b49c0a0a792f9cb85a5da0fdefdb58ef6a27c23e74b5972b6f",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/dom/__pycache__/service.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "56549a6f8b0fd1451db753e20824efb66733e69e",
+      "bytes": 6326,
+      "sha256": "2ab30519ef6160b86889e7a0fcfcda3fff5ee90df2096aefd1d225989b83b9f1",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/dom/__pycache__/views.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "a55c8b9a069e923cc14e55756a6893fe430d9d75",
+      "bytes": 8928,
+      "sha256": "360a47a306f28cfbdc1a788f80767637360dbd3e1520bec2ca97c840d1b6f0e3",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/dom/buildDomTree.js",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "460512fda7d0b00aaf06972fee564315303e912a",
+      "bytes": 31059,
+      "sha256": "d78e1892d8f997a8450fd73ea2bc161afd2f5ac238402bf39fd13907f8d54f04",
+      "content_origin_id": "browser-use-unclear",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/dom/history_tree_processor/__pycache__/service.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "5eebb5e826f1617b570f72719736b0a1973e59b8",
+      "bytes": 6964,
+      "sha256": "cac36cb598f6c17f8db2272639b88bffdf2bd944830ad2fd90a8353a8b38cb64",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/dom/history_tree_processor/__pycache__/view.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "61431446e437e2710be92e43530c8a870324f110",
+      "bytes": 3087,
+      "sha256": "27229c3b6408efd3006896a2dd907bbc4e4c5929830f0a4e948a6b184f941a50",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/dom/history_tree_processor/service.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "fee43125c2786d01114b94f5bf6643376de4c2be",
+      "bytes": 4174,
+      "sha256": "5453d21b34577f437fab930222f8cdd48c300b7ee3d7f950ccb008609f28dc01",
+      "content_origin_id": "browser-use-unclear",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/dom/history_tree_processor/view.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "e970ad5b53af7f340d93f2f21773a7651fd3a8d7",
+      "bytes": 1704,
+      "sha256": "d8a8a2d010f992ead45da5d6277f006653aac5023956512e4c2be68dc446cb54",
+      "content_origin_id": "browser-use-unclear",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/dom/service.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "d03fbecfbf5abdc5db805d67764afdcc3868de87",
+      "bytes": 4589,
+      "sha256": "337eab9fe4ab7c2ee9b84ce11d2dce2b432c5ad2c0d2a923191eb97ec02a6cef",
+      "content_origin_id": "browser-use-unclear",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/dom/tests/__pycache__/extraction_test.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "4c62b0fe312cd64f3c3b7b38ffd372ae86277638",
+      "bytes": 6857,
+      "sha256": "10c549eb1a121ffa8258b4dc2c1eaff5e3accf53d05478baf78db30e122a52e7",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/dom/tests/__pycache__/process_dom_test.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "20a6353f433f1d324c8c246688d45c744aea2cf8",
+      "bytes": 2118,
+      "sha256": "71b41b6d7e213d606948c71456471b6161554faef19004baf222a94767959351",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/dom/tests/extraction_test.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "d48823f54f14f3d182775cc3bae9e6b3ae186527",
+      "bytes": 4777,
+      "sha256": "8741b369c1da3e76e096490f44b1011590cc9151404eb8ca6f5ac28b2cc155d6",
+      "content_origin_id": "browser-use-unclear",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/dom/tests/process_dom_test.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "39bd2432885c1b961da9086de70dd658e5a1f840",
+      "bytes": 1139,
+      "sha256": "2d1f29f4ee5ede480c156a529000c333a76edab29753237f170354bca7427eb5",
+      "content_origin_id": "browser-use-unclear",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/dom/views.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "05c597c627ed303d9192be04c7ec14d19e17b174",
+      "bytes": 5732,
+      "sha256": "ceefebaf400f5c26d349f644f30e506f7d341466fc41d311a10b568172d06220",
+      "content_origin_id": "browser-use-unclear",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/logging_config.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "043252bd78d0ab711c206be30b96f1a9ff36537f",
+      "bytes": 4109,
+      "sha256": "e0e120f09eb7817badeac17eec33bac38fe40e857be67c4c41ed6a5959b51076",
+      "content_origin_id": "browser-use-unclear",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/telemetry/__pycache__/service.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "90137f71aa83d61d02de206c32deddf81d2e6746",
+      "bytes": 5152,
+      "sha256": "dd1a5a77ef5c02bde9c4f4c99d412450dd9bcc128a7059f367b253702358bf5b",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/telemetry/__pycache__/views.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "4fd9b373999eef6c457e3fb185dd5377581edcd1",
+      "bytes": 3200,
+      "sha256": "a57676b91b9f2ddff4c8bd4ddda2a0e5aec7db86317635a5da17aacccd2209c5",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/telemetry/service.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "6a2e82e45801516de284816f38de79bfd67a0f84",
+      "bytes": 2820,
+      "sha256": "8605f457f268733a21d0f9cb54af211d2a61f18d804f146b065c82f3deb5d9d2",
+      "content_origin_id": "browser-use-unclear",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/telemetry/views.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "fdba27303109e6ec12f763b537b2bdee9dca9d95",
+      "bytes": 1242,
+      "sha256": "be2ede6bc3bcbf85c877254cc971f2b1e78cf1271d52ca12405ebf9d83d6931c",
+      "content_origin_id": "browser-use-unclear",
+      "disposition": "exclude"
+    },
+    {
+      "path": "browser_use/utils.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "860b35a320d83f924483dbba53ed80bfcea27ff2",
+      "bytes": 1474,
+      "sha256": "15785d391449464de91b57c33320f11b4ca7005a31e2d42fcafb550e276ddeec",
+      "content_origin_id": "browser-use-unclear",
+      "disposition": "exclude"
+    },
+    {
+      "path": "combine_results.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "3bd4bf5990d7384b1f2dd8d9c96ad6298156dfef",
+      "bytes": 33038,
+      "sha256": "56e4b928e40652aa7a9a181338a360e213c33c7d56305b604f8d239ea8ca0f6b",
+      "content_origin_id": "histagent-root",
+      "disposition": "exclude"
+    },
+    {
+      "path": "dataset_loader.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "71b263d4a86679a65257b2053ebe3accdc6695f5",
+      "bytes": 37702,
+      "sha256": "84bad0ea8ac239c7db0c1b0b5375b064a27a2fa3c5380ebf922d1231ab92a6c1",
+      "content_origin_id": "histagent-root",
+      "disposition": "exclude"
+    },
+    {
+      "path": "judgment.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "49f51294342b50c9f5de278c5aff7577be97ce0e",
+      "bytes": 7371,
+      "sha256": "50e4802e603cdd70be41fd158e230b0e2808da74d20024dd1f0ff2f254d1f5d3",
+      "content_origin_id": "histagent-root",
+      "disposition": "exclude"
+    },
+    {
+      "path": "openai_baseline.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "08efbd498bdc7f2ab87878ee6c611c5d5a63e755",
+      "bytes": 20143,
+      "sha256": "772d63158ba661cb2bf51dc5cdab53483e955ec1f12debfd21ba1debb7013d64",
+      "content_origin_id": "histagent-root",
+      "disposition": "exclude"
+    },
+    {
+      "path": "requirements.txt",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "15c3d0d69a07f28d484aa9193a31b6133bd71817",
+      "bytes": 808,
+      "sha256": "029853936487c2cc74e81677b113e73ae626e403658948f15f7bc621221ea932",
+      "content_origin_id": "histagent-root",
+      "disposition": "exclude"
+    },
+    {
+      "path": "run_gaia.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "e37ca4a4b8a48b6eec9d22c1d4acb9f73b381893",
+      "bytes": 51638,
+      "sha256": "19d746ef17f62788db8c624c188e1aeaac658a9b00e666309a87a59ae0523124",
+      "content_origin_id": "histagent-root",
+      "disposition": "exclude"
+    },
+    {
+      "path": "run_hist.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "4be2101b9c44fb6345acdc381c849ff09a67a4e2",
+      "bytes": 97963,
+      "sha256": "9dfbaf36bb5497fa268d10b13908f8ef78b2cae04e779cca3fdb48ae69a4c354",
+      "content_origin_id": "histagent-root",
+      "disposition": "adapt"
+    },
+    {
+      "path": "run_hlejson.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "3e856dc31034185a732f6b5ea732854cfb1c4a78",
+      "bytes": 96651,
+      "sha256": "09f44f36fc401d117b2d5adfce3711833af6b213166fb5ec88b339cf254c985a",
+      "content_origin_id": "histagent-root",
+      "disposition": "exclude"
+    },
+    {
+      "path": "scripts/LocalGoogleSearchTool.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "ccf33b5de9e541b505302a962f772e21c4d93483",
+      "bytes": 7993,
+      "sha256": "f0a87fa93b1f88cab7dc461a415ed12088caaa2f5a1f6533be92410084469924",
+      "content_origin_id": "histagent-root",
+      "disposition": "adapt"
+    },
+    {
+      "path": "scripts/__init__.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "content_origin_id": "histagent-root",
+      "disposition": "retain"
+    },
+    {
+      "path": "scripts/__pycache__/LocalGoogleSearchTool.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "a80e0bcfb4d9c0f3f04b37897ddf5055d19efa4a",
+      "bytes": 8224,
+      "sha256": "47abf37e62ac2f4ea5e7705bdc450d28c339b47f1866e96c427bbce330bfed64",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "scripts/__pycache__/__init__.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "19a34dd4beeac0881c215fed464a5c52da73ee8c",
+      "bytes": 158,
+      "sha256": "a85d1d06ddf976f149a92d6d298d25d033e3e6db2e9c5f9a49ef9164f4e115ec",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "scripts/__pycache__/agent_web_browser.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "d45b371e4a00761fd62f713951adfaa0a267caec",
+      "bytes": 11462,
+      "sha256": "1939a85e91c4072136abdc6f0ca6e290caa957304cd6d2596dddcc80c089ce00",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "scripts/__pycache__/cookies.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "693cf953147a7de2920f3508260511f946c53fac",
+      "bytes": 11133,
+      "sha256": "343f6f55d1370b53baf38dcbaac908f504dee130c0342b1ba2cba1ba0e9a56a4",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "scripts/__pycache__/file_processing.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "d8214d505433f5ce3f30a52f3329dc93dcab38a1",
+      "bytes": 38601,
+      "sha256": "f4638d859f0d2831130ae970f7af124e3bd1d0ef92f4daf16540d335003b45e0",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "scripts/__pycache__/frame_extract.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "30918be52a7db8d9b2a17bf3dd6b1df9817e1eea",
+      "bytes": 10160,
+      "sha256": "42baef0ebdb85b67664f7510aee8c7ac46a641d3ed7b31f308cd55b652adf07f",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "scripts/__pycache__/image_web_browser.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "9528656513e0076429c5b6b5bd1310a2d7641d47",
+      "bytes": 48029,
+      "sha256": "c64446d959a5ca8d5cc9ef4b6a45329ee633e38ca231544f34545602e1a3a146",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "scripts/__pycache__/mdconvert.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "8a3e73fc8a340760303ad1b3207bf989858f9450",
+      "bytes": 44032,
+      "sha256": "24401d336306845fa29f24cd6de1577c115f8e97f67a541213108d127ce67804",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "scripts/__pycache__/ocr.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "ec6c4bfd82e77ed68785ace25842c675d8a4e217",
+      "bytes": 11002,
+      "sha256": "05ed26a1094cecb49f870e189990a8f3e9ffcf46d814cef8b0d2c6c05091ee53",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "scripts/__pycache__/reformulator.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "6812cf8ad20a6fb8cbc4af2baf8960008795ed02",
+      "bytes": 2837,
+      "sha256": "b248744414a6a5bd218f05463edb2bb8d2978ea60fbc673bb08f7c86349c0426",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "scripts/__pycache__/reverse_image.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "a5fefa6898495f61bcca56f27b90f985ed5ab700",
+      "bytes": 11754,
+      "sha256": "99ab818431c5fbd3e205ebe67303504875d68d8a49867be258e568a76b5e555e",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "scripts/__pycache__/run_agents.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "3f064f2e98c175b399f5000c3230a4b66405bc6d",
+      "bytes": 4868,
+      "sha256": "806c924e0aaf8da9fb1dc2af4f9b39f08a3f53e35b718955916404c87e6e6445",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "scripts/__pycache__/speech_recognition.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "68aceb40b8301ec7f07b0e314d6f1d38f0ba7673",
+      "bytes": 8176,
+      "sha256": "6b5258dcb203446a04b94814029ecdb8a21493bc39858ed94863c0103f247818",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "scripts/__pycache__/text_inspector_tool.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "bfe67a1c2a671f96e23794d531ccbe33a540c775",
+      "bytes": 4634,
+      "sha256": "e2f693bdf0a0676bfc33ad0eec54eba84e217b4f2873746f075b567e9ca856ed",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "scripts/__pycache__/text_web_browser.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "e7c763d561f7769048b409540d7a445e91392191",
+      "bytes": 29963,
+      "sha256": "f61cd0c90b0d99f7f509ca97fb4cd7535550298f534ce70cd8f89ecf5f2c37fb",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "scripts/__pycache__/transkribus_ocr.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "a047aada6f7ffc25ae2f2109b7dd71b0b2ea0552",
+      "bytes": 16225,
+      "sha256": "ce6590e4ec3420012dd93ea99bc306bf81f9e4ed7d55ad7ca812f1a436e9ce6b",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "scripts/__pycache__/translator.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "2cc2bc91bd0f0b945fb3089f35108dffc2c0f75d",
+      "bytes": 5475,
+      "sha256": "c8efacea95cae0e88b72512b786f5bf7e63865166c3bd41b72a6d1dbf149577b",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "scripts/__pycache__/visual_qa.cpython-312.pyc",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "d39f4912f1e53f59ffd33906c80269e1e7da2336",
+      "bytes": 7589,
+      "sha256": "9b1ae679088ce0cc9355989f413878bc841ee89e56f2c1c9f882bf8107d51384",
+      "content_origin_id": "compiled-bytecode",
+      "disposition": "exclude"
+    },
+    {
+      "path": "scripts/agent_web_browser.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "6f2eb98365fdc84f37399262a248f81a1a846dc1",
+      "bytes": 9457,
+      "sha256": "b25545f782534336c825b0ed1b30ffb49761e4d4bae70232a2ae509f6164e0c5",
+      "content_origin_id": "microsoft-autogen",
+      "disposition": "replace"
+    },
+    {
+      "path": "scripts/cookies.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "8e42333561e5b2e72e84b3ed02bb0468b6047cd2",
+      "bytes": 23304,
+      "sha256": "527392dc67924e2f7512f0c60c677edfebdd51dfc430d357abebe3b6d5583e12",
+      "content_origin_id": "histagent-root",
+      "disposition": "confirmed-failure"
+    },
+    {
+      "path": "scripts/file_processing.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "327db0e9848e05bbf1064d98d37bd5b3b3dda888",
+      "bytes": 37311,
+      "sha256": "a7e31889ed8a51f711c7e716620edc84a50c743b20ff6a6328c6cfcc24b70216",
+      "content_origin_id": "histagent-root",
+      "disposition": "adapt"
+    },
+    {
+      "path": "scripts/frame_extract.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "f05efa067a1dc11e99f71c9a2ee1758a81ab2913",
+      "bytes": 8503,
+      "sha256": "c4ef42985250a943744209ebf17a1aa32a5b9419db6f63e8b5f572d26d5eb0ce",
+      "content_origin_id": "histagent-root",
+      "disposition": "adapt"
+    },
+    {
+      "path": "scripts/gaia_scorer.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "c8fba27e1bfda1e0f7748f584a29a309188a42b6",
+      "bytes": 3211,
+      "sha256": "1428b2f7a8c620a528705e642ffdf927b81a7b6f4e939c86b771b8772d2cce03",
+      "content_origin_id": "histagent-root",
+      "disposition": "adapt"
+    },
+    {
+      "path": "scripts/image_web_browser.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "11851e42d5c6db09745eddee7a148369b4b9150c",
+      "bytes": 43452,
+      "sha256": "f12c7433978c781d38630bb0ee199e0b4628af9bfd26aceb8ff107bf8c5944e8",
+      "content_origin_id": "microsoft-autogen",
+      "disposition": "adapt"
+    },
+    {
+      "path": "scripts/mdconvert.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "6a1fd00bdc76327e801d62df71d782d39445d987",
+      "bytes": 36970,
+      "sha256": "948d7189273d7e8ca4c91b53a8f01a386448dd7927cb54db6df9e13d8afb74e2",
+      "content_origin_id": "microsoft-autogen",
+      "disposition": "adapt"
+    },
+    {
+      "path": "scripts/ocr.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "5fe4a5fca4d85e217ef89eb4c089efd57508fd40",
+      "bytes": 10692,
+      "sha256": "e2043be84d753ded7303e72e753c3c92ba2b5b93eb6dd7f0e6931b2664d5aeb7",
+      "content_origin_id": "histagent-root",
+      "disposition": "adapt"
+    },
+    {
+      "path": "scripts/reformulator.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "bef6d9d5b6d9bb6ae3d9fa407f2062d5e122d527",
+      "bytes": 2679,
+      "sha256": "a278dd88b10a3ceb11bcc3b0372bb5d06fa180d3a79a2655f676a49fe6536611",
+      "content_origin_id": "microsoft-autogen",
+      "disposition": "replace"
+    },
+    {
+      "path": "scripts/reverse_image.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "627b94db12585d404069e6a0983ffeb8151e5675",
+      "bytes": 9081,
+      "sha256": "ab46be2e0cfb75e12ca6be199e165a7a6d4aa1e9ab3790066c57c9ab1f3a01cd",
+      "content_origin_id": "histagent-root",
+      "disposition": "adapt"
+    },
+    {
+      "path": "scripts/run_agents.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "37da8a40e5860be7a83f37d20d5f290b6d0d86a8",
+      "bytes": 3703,
+      "sha256": "d697b0cb03d1343df8b280a4b42355d4a3ca2cede854e9282ede4c25e83c3e8c",
+      "content_origin_id": "histagent-root",
+      "disposition": "adapt"
+    },
+    {
+      "path": "scripts/speech_recognition.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "432d1c03d97a7a9181d4f041cc6b40443f6b377e",
+      "bytes": 6864,
+      "sha256": "65a2a77e03d1851be2e69f75fe86ff26066a5f1e2eabd06065350b9611638473",
+      "content_origin_id": "histagent-root",
+      "disposition": "adapt"
+    },
+    {
+      "path": "scripts/text_inspector_tool.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "056168cee84dc157859805e47a5d69f43984b3d1",
+      "bytes": 4597,
+      "sha256": "3c55cf019dff77c64430df98a5f2bb6a8d5e2c557d7bd0366fac539faa6d5765",
+      "content_origin_id": "histagent-root",
+      "disposition": "adapt"
+    },
+    {
+      "path": "scripts/text_web_browser.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "c83ae112d5b564aa93e7ab3d8154ca586204fb1a",
+      "bytes": 23654,
+      "sha256": "ea4c1626d9be46fd2200bb51729e5964b4fe4a1d5717ed05a99ece0f9a2b4528",
+      "content_origin_id": "microsoft-autogen",
+      "disposition": "replace"
+    },
+    {
+      "path": "scripts/transkribus_ocr.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "0a496fbf09684652ccf0fc2f63d5da7cbf97df23",
+      "bytes": 12997,
+      "sha256": "4860f40cbbb539440e1c0d0722b51aeefa8656600977918365fcc32289b3ff34",
+      "content_origin_id": "histagent-root",
+      "disposition": "adapt"
+    },
+    {
+      "path": "scripts/translator.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "d14caa53725604409f03c69b652b6b2845587cff",
+      "bytes": 4857,
+      "sha256": "f1b079c72c7c04898d2cd85ea0c9dbadfcf063c9cbbe0e324ac68b4a92fdac28",
+      "content_origin_id": "histagent-root",
+      "disposition": "adapt"
+    },
+    {
+      "path": "scripts/visual_qa.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "45fe1021443704741e6499d62aa1ec184da5e461",
+      "bytes": 6039,
+      "sha256": "594c66909ada22a51a5e1ad3d63b8025124c73cde15df3b9855a96ace84e464f",
+      "content_origin_id": "histagent-root",
+      "disposition": "adapt"
+    },
+    {
+      "path": "scripts/web_tools.py",
+      "kind": "file",
+      "git_mode": "100644",
+      "git_object_id": "9c6f9c91795af23e676833003472ba9585f4501e",
+      "bytes": 98190,
+      "sha256": "5b92325b7b4ff191028a4da411805a2298e7010e6829b9516539495c664c0d07",
+      "content_origin_id": "histagent-root",
+      "disposition": "adapt"
+    }
+  ],
+  "knowledge_surfaces": [
+    {
+      "surface_id": "agent-historical-answer-loop",
+      "source_path": "run_hist.py",
+      "symbol": "answer_single_question",
+      "kind": "agent-orchestration",
+      "capability_scope": "historical-research",
+      "content_origin_id": "histagent-root",
+      "runtime_authority_ids": [
+        "provider-inference",
+        "filesystem-read",
+        "filesystem-write"
+      ],
+      "external_resource_ids": [
+        "openai-provider"
+      ],
+      "disposition": "adapt",
+      "findings": [],
+      "recommendation": "Adapt the evidenced capability under the HistAgent ingestion policy."
+    },
+    {
+      "surface_id": "agent-historical-orchestration",
+      "source_path": "run_hist.py",
+      "symbol": "create_agent_hierarchy",
+      "kind": "agent-orchestration",
+      "capability_scope": "historical-research",
+      "content_origin_id": "histagent-root",
+      "runtime_authority_ids": [
+        "provider-inference"
+      ],
+      "external_resource_ids": [
+        "openai-provider"
+      ],
+      "disposition": "adapt",
+      "findings": [],
+      "recommendation": "Adapt the evidenced capability under the HistAgent ingestion policy."
+    },
+    {
+      "surface_id": "archival-web-navigation",
+      "source_path": "scripts/text_web_browser.py",
+      "symbol": "ArchiveSearchTool",
+      "kind": "archival-retrieval",
+      "capability_scope": "source-identification",
+      "content_origin_id": "microsoft-autogen",
+      "runtime_authority_ids": [
+        "external-request"
+      ],
+      "external_resource_ids": [
+        "internet-archive"
+      ],
+      "disposition": "replace",
+      "findings": [],
+      "recommendation": "Replace the evidenced capability under the HistAgent ingestion policy."
+    },
+    {
+      "surface_id": "browser-agent-adapter",
+      "source_path": "scripts/agent_web_browser.py",
+      "symbol": "BrowserTool",
+      "kind": "browser-runtime",
+      "capability_scope": "source-identification",
+      "content_origin_id": "microsoft-autogen",
+      "runtime_authority_ids": [
+        "browser-control",
+        "external-request"
+      ],
+      "external_resource_ids": [],
+      "disposition": "replace",
+      "findings": [],
+      "recommendation": "Replace the evidenced capability under the HistAgent ingestion policy."
+    },
+    {
+      "surface_id": "browser-automation-runtime",
+      "source_path": "browser_use/agent/service.py",
+      "symbol": "Agent",
+      "kind": "browser-runtime",
+      "capability_scope": "shared-runtime",
+      "content_origin_id": "browser-use-unclear",
+      "runtime_authority_ids": [
+        "browser-control"
+      ],
+      "external_resource_ids": [],
+      "disposition": "exclude",
+      "findings": [],
+      "recommendation": "Exclude the evidenced capability under the HistAgent ingestion policy."
+    },
+    {
+      "surface_id": "browser-telemetry",
+      "source_path": "browser_use/telemetry/service.py",
+      "symbol": "ProductTelemetry",
+      "kind": "telemetry-runtime",
+      "capability_scope": "shared-runtime",
+      "content_origin_id": "browser-use-unclear",
+      "runtime_authority_ids": [
+        "telemetry"
+      ],
+      "external_resource_ids": [],
+      "disposition": "exclude",
+      "findings": [],
+      "recommendation": "Exclude the evidenced capability under the HistAgent ingestion policy."
+    },
+    {
+      "surface_id": "cookie-injection-payload",
+      "source_path": "scripts/cookies.py",
+      "symbol": "COOKIES",
+      "kind": "secret-payload",
+      "capability_scope": "shared-runtime",
+      "content_origin_id": "histagent-root",
+      "runtime_authority_ids": [],
+      "external_resource_ids": [],
+      "disposition": "confirmed-failure",
+      "findings": [],
+      "recommendation": "Retain only path and cryptographic metadata as a confirmed security failure."
+    },
+    {
+      "surface_id": "document-conversion",
+      "source_path": "scripts/mdconvert.py",
+      "symbol": "MarkdownConverter",
+      "kind": "document-processing",
+      "capability_scope": "source-analysis",
+      "content_origin_id": "microsoft-autogen",
+      "runtime_authority_ids": [
+        "filesystem-read",
+        "filesystem-write",
+        "subprocess-execution"
+      ],
+      "external_resource_ids": [
+        "youtube-media"
+      ],
+      "disposition": "adapt",
+      "findings": [],
+      "recommendation": "Adapt the evidenced capability under the HistAgent ingestion policy."
+    },
+    {
+      "surface_id": "file-format-processing",
+      "source_path": "scripts/file_processing.py",
+      "symbol": "PDFTool, DOCXTool, XLSXTool, PPTXTool",
+      "kind": "document-processing",
+      "capability_scope": "source-analysis",
+      "content_origin_id": "histagent-root",
+      "runtime_authority_ids": [
+        "filesystem-read",
+        "filesystem-write"
+      ],
+      "external_resource_ids": [],
+      "disposition": "adapt",
+      "findings": [],
+      "recommendation": "Adapt the evidenced capability under the HistAgent ingestion policy."
+    },
+    {
+      "surface_id": "gaia-benchmark-runner",
+      "source_path": "run_gaia.py",
+      "symbol": "main",
+      "kind": "benchmark-runtime",
+      "capability_scope": "evaluation-only",
+      "content_origin_id": "histagent-root",
+      "runtime_authority_ids": [
+        "benchmark-execution"
+      ],
+      "external_resource_ids": [
+        "gaia-dataset"
+      ],
+      "disposition": "exclude",
+      "findings": [],
+      "recommendation": "Exclude the evidenced capability under the HistAgent ingestion policy."
+    },
+    {
+      "surface_id": "general-ocr",
+      "source_path": "scripts/ocr.py",
+      "symbol": "OCRTool",
+      "kind": "ocr",
+      "capability_scope": "source-analysis",
+      "content_origin_id": "histagent-root",
+      "runtime_authority_ids": [
+        "filesystem-read",
+        "provider-inference"
+      ],
+      "external_resource_ids": [
+        "huggingface-models"
+      ],
+      "disposition": "adapt",
+      "findings": [],
+      "recommendation": "Adapt the evidenced capability under the HistAgent ingestion policy."
+    },
+    {
+      "surface_id": "histbench-dataset-loader",
+      "source_path": "dataset_loader.py",
+      "symbol": "load_custom_dataset",
+      "kind": "evaluation-runtime",
+      "capability_scope": "evaluation-only",
+      "content_origin_id": "histagent-root",
+      "runtime_authority_ids": [
+        "benchmark-execution",
+        "filesystem-read"
+      ],
+      "external_resource_ids": [
+        "histbench-dataset"
+      ],
+      "disposition": "exclude",
+      "findings": [],
+      "recommendation": "Exclude the evidenced capability under the HistAgent ingestion policy."
+    },
+    {
+      "surface_id": "histbench-judgment",
+      "source_path": "judgment.py",
+      "symbol": "judge_all",
+      "kind": "evaluation-runtime",
+      "capability_scope": "evaluation-only",
+      "content_origin_id": "histagent-root",
+      "runtime_authority_ids": [
+        "benchmark-execution",
+        "provider-inference"
+      ],
+      "external_resource_ids": [
+        "histbench-dataset",
+        "openai-provider"
+      ],
+      "disposition": "exclude",
+      "findings": [],
+      "recommendation": "Exclude the evidenced capability under the HistAgent ingestion policy."
+    },
+    {
+      "surface_id": "histbench-result-combination",
+      "source_path": "combine_results.py",
+      "symbol": "combine_results",
+      "kind": "evaluation-runtime",
+      "capability_scope": "evaluation-only",
+      "content_origin_id": "histagent-root",
+      "runtime_authority_ids": [
+        "benchmark-execution",
+        "filesystem-read",
+        "filesystem-write"
+      ],
+      "external_resource_ids": [
+        "histbench-dataset"
+      ],
+      "disposition": "exclude",
+      "findings": [],
+      "recommendation": "Exclude the evidenced capability under the HistAgent ingestion policy."
+    },
+    {
+      "surface_id": "histbench-runner",
+      "source_path": "run_hist.py",
+      "symbol": "main",
+      "kind": "benchmark-runtime",
+      "capability_scope": "evaluation-only",
+      "content_origin_id": "histagent-root",
+      "runtime_authority_ids": [
+        "benchmark-execution"
+      ],
+      "external_resource_ids": [
+        "histbench-dataset"
+      ],
+      "disposition": "exclude",
+      "findings": [],
+      "recommendation": "Exclude the evidenced capability under the HistAgent ingestion policy."
+    },
+    {
+      "surface_id": "historical-ocr",
+      "source_path": "scripts/transkribus_ocr.py",
+      "symbol": "transkribus_ocr",
+      "kind": "ocr",
+      "capability_scope": "source-analysis",
+      "content_origin_id": "histagent-root",
+      "runtime_authority_ids": [
+        "credential-access",
+        "external-request",
+        "filesystem-read",
+        "filesystem-write",
+        "provider-inference"
+      ],
+      "external_resource_ids": [
+        "imgbb",
+        "transkribus"
+      ],
+      "disposition": "adapt",
+      "findings": [],
+      "recommendation": "Adapt the evidenced capability under the HistAgent ingestion policy."
+    },
+    {
+      "surface_id": "hle-benchmark-runner",
+      "source_path": "run_hlejson.py",
+      "symbol": "main",
+      "kind": "benchmark-runtime",
+      "capability_scope": "evaluation-only",
+      "content_origin_id": "histagent-root",
+      "runtime_authority_ids": [
+        "benchmark-execution"
+      ],
+      "external_resource_ids": [
+        "hle-dataset"
+      ],
+      "disposition": "exclude",
+      "findings": [],
+      "recommendation": "Exclude the evidenced capability under the HistAgent ingestion policy."
+    },
+    {
+      "surface_id": "image-source-browser",
+      "source_path": "scripts/image_web_browser.py",
+      "symbol": "SimpleImageBrowser",
+      "kind": "image-processing",
+      "capability_scope": "source-identification",
+      "content_origin_id": "microsoft-autogen",
+      "runtime_authority_ids": [
+        "external-request",
+        "filesystem-write"
+      ],
+      "external_resource_ids": [],
+      "disposition": "adapt",
+      "findings": [],
+      "recommendation": "Adapt the evidenced capability under the HistAgent ingestion policy."
+    },
+    {
+      "surface_id": "literature-retrieval-browser",
+      "source_path": "scripts/web_tools.py",
+      "symbol": "LiteratureSearchBrowser",
+      "kind": "literature-retrieval",
+      "capability_scope": "source-identification",
+      "content_origin_id": "histagent-root",
+      "runtime_authority_ids": [
+        "credential-access",
+        "external-request",
+        "filesystem-read",
+        "filesystem-write",
+        "provider-inference"
+      ],
+      "external_resource_ids": [
+        "google-books",
+        "google-scholar",
+        "llamaparse",
+        "openai-provider",
+        "springer-api"
+      ],
+      "disposition": "adapt",
+      "findings": [],
+      "recommendation": "Adapt the evidenced capability under the HistAgent ingestion policy."
+    },
+    {
+      "surface_id": "literature-tool-suite",
+      "source_path": "scripts/web_tools.py",
+      "symbol": "create_literature_tools",
+      "kind": "literature-retrieval",
+      "capability_scope": "historical-research",
+      "content_origin_id": "histagent-root",
+      "runtime_authority_ids": [
+        "external-request",
+        "provider-inference"
+      ],
+      "external_resource_ids": [
+        "google-books",
+        "google-scholar",
+        "springer-api"
+      ],
+      "disposition": "adapt",
+      "findings": [],
+      "recommendation": "Adapt the evidenced capability under the HistAgent ingestion policy."
+    },
+    {
+      "surface_id": "local-search-reformulation",
+      "source_path": "scripts/LocalGoogleSearchTool.py",
+      "symbol": "LocalGoogleSearchTool",
+      "kind": "archival-retrieval",
+      "capability_scope": "source-identification",
+      "content_origin_id": "histagent-root",
+      "runtime_authority_ids": [
+        "external-request",
+        "provider-inference"
+      ],
+      "external_resource_ids": [
+        "serpapi"
+      ],
+      "disposition": "adapt",
+      "findings": [],
+      "recommendation": "Adapt the evidenced capability under the HistAgent ingestion policy."
+    },
+    {
+      "surface_id": "openai-baseline",
+      "source_path": "openai_baseline.py",
+      "symbol": "answer_single_question",
+      "kind": "evaluation-runtime",
+      "capability_scope": "evaluation-only",
+      "content_origin_id": "histagent-root",
+      "runtime_authority_ids": [
+        "benchmark-execution",
+        "provider-inference"
+      ],
+      "external_resource_ids": [
+        "openai-provider"
+      ],
+      "disposition": "exclude",
+      "findings": [],
+      "recommendation": "Exclude the evidenced capability under the HistAgent ingestion policy."
+    },
+    {
+      "surface_id": "precise-text-browser",
+      "source_path": "scripts/text_web_browser.py",
+      "symbol": "SimpleTextBrowser",
+      "kind": "archival-retrieval",
+      "capability_scope": "source-identification",
+      "content_origin_id": "microsoft-autogen",
+      "runtime_authority_ids": [
+        "external-request"
+      ],
+      "external_resource_ids": [
+        "serpapi"
+      ],
+      "disposition": "replace",
+      "findings": [],
+      "recommendation": "Replace the evidenced capability under the HistAgent ingestion policy."
+    },
+    {
+      "surface_id": "response-reformulation",
+      "source_path": "scripts/reformulator.py",
+      "symbol": "prepare_response",
+      "kind": "prompt-adaptation",
+      "capability_scope": "historical-research",
+      "content_origin_id": "microsoft-autogen",
+      "runtime_authority_ids": [
+        "provider-inference"
+      ],
+      "external_resource_ids": [
+        "openai-provider"
+      ],
+      "disposition": "replace",
+      "findings": [],
+      "recommendation": "Replace the evidenced capability under the HistAgent ingestion policy."
+    },
+    {
+      "surface_id": "reverse-image-identification",
+      "source_path": "scripts/reverse_image.py",
+      "symbol": "GoogleLensSearchTool",
+      "kind": "image-processing",
+      "capability_scope": "source-identification",
+      "content_origin_id": "histagent-root",
+      "runtime_authority_ids": [
+        "external-request",
+        "filesystem-read"
+      ],
+      "external_resource_ids": [
+        "google-lens"
+      ],
+      "disposition": "adapt",
+      "findings": [],
+      "recommendation": "Adapt the evidenced capability under the HistAgent ingestion policy."
+    },
+    {
+      "surface_id": "source-text-inspection",
+      "source_path": "scripts/text_inspector_tool.py",
+      "symbol": "TextInspectorTool",
+      "kind": "document-processing",
+      "capability_scope": "source-analysis",
+      "content_origin_id": "histagent-root",
+      "runtime_authority_ids": [
+        "filesystem-read",
+        "provider-inference"
+      ],
+      "external_resource_ids": [
+        "openai-provider"
+      ],
+      "disposition": "adapt",
+      "findings": [],
+      "recommendation": "Adapt the evidenced capability under the HistAgent ingestion policy."
+    },
+    {
+      "surface_id": "speech-transcription",
+      "source_path": "scripts/speech_recognition.py",
+      "symbol": "SpeechRecognitionTool",
+      "kind": "media-processing",
+      "capability_scope": "source-analysis",
+      "content_origin_id": "histagent-root",
+      "runtime_authority_ids": [
+        "filesystem-read",
+        "provider-inference"
+      ],
+      "external_resource_ids": [
+        "huggingface-models"
+      ],
+      "disposition": "adapt",
+      "findings": [],
+      "recommendation": "Adapt the evidenced capability under the HistAgent ingestion policy."
+    },
+    {
+      "surface_id": "text-web-search",
+      "source_path": "scripts/text_web_browser.py",
+      "symbol": "SearchInformationTool",
+      "kind": "archival-retrieval",
+      "capability_scope": "source-identification",
+      "content_origin_id": "microsoft-autogen",
+      "runtime_authority_ids": [
+        "credential-access",
+        "external-request"
+      ],
+      "external_resource_ids": [
+        "serpapi"
+      ],
+      "disposition": "replace",
+      "findings": [],
+      "recommendation": "Replace the evidenced capability under the HistAgent ingestion policy."
+    },
+    {
+      "surface_id": "translation",
+      "source_path": "scripts/translator.py",
+      "symbol": "TranslatorTool",
+      "kind": "translation",
+      "capability_scope": "source-analysis",
+      "content_origin_id": "histagent-root",
+      "runtime_authority_ids": [
+        "external-request"
+      ],
+      "external_resource_ids": [
+        "local-translation-service"
+      ],
+      "disposition": "adapt",
+      "findings": [],
+      "recommendation": "Adapt the evidenced capability under the HistAgent ingestion policy."
+    },
+    {
+      "surface_id": "video-frame-extraction",
+      "source_path": "scripts/frame_extract.py",
+      "symbol": "VideoFrameExtractorTool",
+      "kind": "media-processing",
+      "capability_scope": "source-analysis",
+      "content_origin_id": "histagent-root",
+      "runtime_authority_ids": [
+        "filesystem-read",
+        "filesystem-write",
+        "subprocess-execution"
+      ],
+      "external_resource_ids": [],
+      "disposition": "adapt",
+      "findings": [],
+      "recommendation": "Adapt the evidenced capability under the HistAgent ingestion policy."
+    },
+    {
+      "surface_id": "visual-source-analysis",
+      "source_path": "scripts/visual_qa.py",
+      "symbol": "VisualQATool, visualizer",
+      "kind": "image-processing",
+      "capability_scope": "source-analysis",
+      "content_origin_id": "histagent-root",
+      "runtime_authority_ids": [
+        "external-request",
+        "filesystem-read",
+        "provider-inference"
+      ],
+      "external_resource_ids": [
+        "openai-provider"
+      ],
+      "disposition": "replace",
+      "findings": [],
+      "recommendation": "Replace the evidenced capability under the HistAgent ingestion policy."
+    }
+  ],
+  "candidate_skills": [
+    {
+      "skill_id": "histagent-historical-research",
+      "source_surface_ids": [
+        "agent-historical-answer-loop",
+        "agent-historical-orchestration",
+        "literature-tool-suite",
+        "response-reformulation"
+      ],
+      "implementation_strategy": "self-contained-executable-capability-reimplementation",
+      "execution_contract": {
+        "extensions": [
+          "script-assisted",
+          "resource-backed",
+          "stateful"
+        ],
+        "formal_entrypoint": "scripts/research_runtime.py",
+      "commands": [
+        "init",
+        "status",
+        "submit-source",
+        "submit-layer",
+        "submit-evidence",
+        "check",
+        "render"
+        ],
+        "state_authority": "run-directory-json",
+        "resource_library": "lib/historical_support.py",
+        "cli_contract": "conventional-command-options-and-domain-files",
+        "success_contract": "command-specific-json-and-artifacts",
+        "failure_contract": "nonzero-exit-stderr-error-object",
+        "dependency_policy": "documented-user-managed-no-auto-install",
+        "self_contained": true
+    },
+      "output_layers": [
+        "raw-observation-or-ocr",
+        "normalized-transcription",
+        "emendation",
+        "translation",
+        "interpretation"
+      ],
+      "hard_dependencies": [],
+      "advisory_relationships": [
+        {
+          "target_skill_id": "histagent-historical-source-identification",
+          "relation": "advisory",
+          "evidence": [
+            "README.md"
+          ],
+          "note": "Related capability may be composed by the target Agent without a hard Skill dependency."
+        },
+        {
+          "target_skill_id": "histagent-historical-source-analysis",
+          "relation": "advisory",
+          "evidence": [
+            "README.md"
+          ],
+          "note": "Related capability may be composed by the target Agent without a hard Skill dependency."
+        }
+      ],
+      "primary_anzsrc_field": "430399",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null,
+      "prospective_domains": [
+        "historical-studies"
+      ],
+      "content_license": {
+        "status": "confirmed",
+        "expression": "Apache-2.0 with replacement of unresolved derived implementations",
+        "evidence": [
+          "LICENSE",
+          "scripts/text_web_browser.py"
+        ]
+      },
+      "overlaps": [
+        {
+          "target_kind": "arsu",
+          "target_id": "deep-research",
+          "disposition": "complementary",
+          "evidence": [
+            "README.md"
+          ],
+          "note": "Adds history-specific source treatment while leaving general deep research authoritative for its own workflow."
+        }
+      ],
+      "safety_constraints": [
+        "host-access-control",
+        "human-review",
+        "no-embedded-credentials",
+        "no-unmarked-completion",
+        "output-layer-separation",
+        "provider-neutral",
+        "provenance-required"
+      ],
+      "disposition": "adapt",
+      "findings": [
+        {
+          "code": "OUTPUT-LAYER-CONTRACT",
+          "severity": "blocking",
+          "evidence": [
+            "README.md"
+          ],
+          "note": "Historical conclusions require explicit provenance and source-layer separation."
+        }
+      ],
+      "recommendation": "Generate only after audit validation and hash-bound human review of the complete generated tree."
+    },
+    {
+      "skill_id": "histagent-historical-source-identification",
+      "source_surface_ids": [
+        "archival-web-navigation",
+        "browser-agent-adapter",
+        "image-source-browser",
+        "literature-retrieval-browser",
+        "local-search-reformulation",
+        "precise-text-browser",
+        "reverse-image-identification",
+        "text-web-search"
+      ],
+      "implementation_strategy": "self-contained-executable-capability-reimplementation",
+      "execution_contract": {
+        "extensions": [
+          "script-assisted",
+          "resource-backed"
+        ],
+        "formal_entrypoint": "scripts/identify_sources.py",
+      "commands": [
+        "search",
+        "exact-text",
+        "literature",
+        "archive",
+        "fetch",
+        "reverse-image",
+        "verify",
+        "validate"
+        ],
+        "state_authority": "artifact-directory",
+        "resource_library": "lib/historical_support.py",
+        "cli_contract": "conventional-command-options-and-domain-files",
+        "success_contract": "command-specific-json-and-artifacts",
+        "failure_contract": "nonzero-exit-stderr-error-object",
+        "dependency_policy": "documented-user-managed-no-auto-install",
+        "self_contained": true
+    },
+      "output_layers": [
+        "raw-observation-or-ocr",
+        "normalized-transcription",
+        "emendation",
+        "translation",
+        "interpretation"
+      ],
+      "hard_dependencies": [],
+      "advisory_relationships": [
+        {
+          "target_skill_id": "histagent-historical-research",
+          "relation": "advisory",
+          "evidence": [
+            "README.md"
+          ],
+          "note": "Related capability may be composed by the target Agent without a hard Skill dependency."
+        },
+        {
+          "target_skill_id": "histagent-historical-source-analysis",
+          "relation": "advisory",
+          "evidence": [
+            "README.md"
+          ],
+          "note": "Related capability may be composed by the target Agent without a hard Skill dependency."
+        }
+      ],
+      "primary_anzsrc_field": "430201",
+      "additional_anzsrc_fields": [
+        "430306"
+      ],
+      "anzsrc_unclassified_reason": null,
+      "prospective_domains": [
+        "heritage-archive-and-museum-studies",
+        "historical-studies"
+      ],
+      "content_license": {
+        "status": "confirmed",
+        "expression": "Apache-2.0 with replacement of unresolved derived implementations",
+        "evidence": [
+          "LICENSE",
+          "scripts/text_web_browser.py"
+        ]
+      },
+      "overlaps": [
+        {
+          "target_kind": "arsu",
+          "target_id": "deep-research",
+          "disposition": "complementary",
+          "evidence": [
+            "README.md"
+          ],
+          "note": "Preserves precise archival, bibliographic, and image-source identification as a focused advisory capability."
+        }
+      ],
+      "safety_constraints": [
+        "host-access-control",
+        "human-review",
+        "no-embedded-credentials",
+        "no-unmarked-completion",
+        "output-layer-separation",
+        "provider-neutral",
+        "provenance-required"
+      ],
+      "disposition": "adapt",
+      "findings": [
+        {
+          "code": "SOURCE-PROVENANCE-CONTRACT",
+          "severity": "blocking",
+          "evidence": [
+            "README.md"
+          ],
+          "note": "Every discovered source and retrieved image requires traceable provenance."
+        }
+      ],
+      "recommendation": "Reimplement browsing and exact retrieval against host-approved provider-neutral tools; do not copy browser_use or Cookie material."
+    },
+    {
+      "skill_id": "histagent-historical-source-analysis",
+      "source_surface_ids": [
+        "document-conversion",
+        "file-format-processing",
+        "general-ocr",
+        "historical-ocr",
+        "source-text-inspection",
+        "speech-transcription",
+        "translation",
+        "video-frame-extraction",
+        "visual-source-analysis"
+      ],
+      "implementation_strategy": "self-contained-executable-capability-reimplementation",
+      "execution_contract": {
+        "extensions": [
+          "script-assisted",
+          "resource-backed"
+        ],
+        "formal_entrypoint": "scripts/analyze_source.py",
+      "commands": [
+        "inspect",
+        "convert",
+        "ocr",
+        "translate",
+        "transcribe",
+        "frames",
+        "vision",
+        "collate",
+        "validate"
+        ],
+        "state_authority": "artifact-directory",
+        "resource_library": "lib/historical_support.py",
+        "cli_contract": "conventional-command-options-and-domain-files",
+        "success_contract": "command-specific-json-and-artifacts",
+        "failure_contract": "nonzero-exit-stderr-error-object",
+        "dependency_policy": "documented-user-managed-no-auto-install",
+        "self_contained": true
+    },
+      "output_layers": [
+        "raw-observation-or-ocr",
+        "normalized-transcription",
+        "emendation",
+        "translation",
+        "interpretation"
+      ],
+      "hard_dependencies": [],
+      "advisory_relationships": [
+        {
+          "target_skill_id": "histagent-historical-research",
+          "relation": "advisory",
+          "evidence": [
+            "README.md"
+          ],
+          "note": "Related capability may be composed by the target Agent without a hard Skill dependency."
+        },
+        {
+          "target_skill_id": "histagent-historical-source-identification",
+          "relation": "advisory",
+          "evidence": [
+            "README.md"
+          ],
+          "note": "Related capability may be composed by the target Agent without a hard Skill dependency."
+        }
+      ],
+      "primary_anzsrc_field": "430206",
+      "additional_anzsrc_fields": [
+        "430306"
+      ],
+      "anzsrc_unclassified_reason": null,
+      "prospective_domains": [
+        "heritage-archive-and-museum-studies",
+        "historical-studies"
+      ],
+      "content_license": {
+        "status": "confirmed",
+        "expression": "Apache-2.0 with replacement of unresolved derived implementations",
+        "evidence": [
+          "LICENSE",
+          "scripts/text_web_browser.py"
+        ]
+      },
+      "overlaps": [
+        {
+          "target_kind": "arsu",
+          "target_id": "deep-research",
+          "disposition": "related",
+          "evidence": [
+            "README.md"
+          ],
+          "note": "Provides source-processing discipline for multimodal historical material without replacing synthesis workflows."
+        }
+      ],
+      "safety_constraints": [
+        "host-access-control",
+        "human-review",
+        "no-embedded-credentials",
+        "no-unmarked-completion",
+        "output-layer-separation",
+        "provider-neutral",
+        "provenance-required"
+      ],
+      "disposition": "adapt",
+      "findings": [
+        {
+          "code": "NO-UNMARKED-EMENDATION",
+          "severity": "blocking",
+          "evidence": [
+            "scripts/transkribus_ocr.py",
+            "scripts/translator.py"
+          ],
+          "note": "OCR correction, normalization, translation, and interpretation must remain distinguishable."
+        }
+      ],
+      "recommendation": "Preserve OCR, collation, translation, file, image, audio, and video analysis via provider-neutral Python and AgentSpec resources."
+    }
+  ]
+}

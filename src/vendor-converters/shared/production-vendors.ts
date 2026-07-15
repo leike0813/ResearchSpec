@@ -1,9 +1,15 @@
 export const PRODUCTION_VENDOR_IDS = [
   "finrobot",
+  "histagent",
   "materials-science-skills-for-llm",
   "scientific-agent-skills",
   "tooluniverse",
 ] as const;
+
+export const PRODUCTION_DOMAIN_COUNTS = {
+  internal: 218,
+  available: 53,
+} as const;
 
 export function productionVendorInventoryErrors(actualIds: Iterable<string>): string[] {
   const actual = [...actualIds].sort(compareText);

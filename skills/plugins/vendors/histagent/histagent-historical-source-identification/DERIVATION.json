@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "vendor": "histagent",
+  "release": "snapshot-47bbe21",
+  "revision": "47bbe21dc81618489f5d5929358032883a3fe448",
+  "audit_sha256": "0f0de44a13204fbbc139ec78b6f9320c4078a786e700f1f5bdcda1688cf36269",
+  "implementation_strategy": "independent-capability-reimplementation",
+  "copied_upstream_code": false,
+  "sources": [
+    {
+      "surface_id": "archival-web-navigation",
+      "source_path": "scripts/text_web_browser.py",
+      "source_sha256": "ea4c1626d9be46fd2200bb51729e5964b4fe4a1d5717ed05a99ece0f9a2b4528",
+      "command": "archive",
+      "implementation": "internet-archive-cdx-adapter",
+      "action": "independent-reimplementation"
+    },
+    {
+      "surface_id": "browser-agent-adapter",
+      "source_path": "scripts/agent_web_browser.py",
+      "source_sha256": "b25545f782534336c825b0ed1b30ffb49761e4d4bae70232a2ae509f6164e0c5",
+      "command": "fetch",
+      "implementation": "http-html-adapter",
+      "action": "independent-reimplementation"
+    },
+    {
+      "surface_id": "image-source-browser",
+      "source_path": "scripts/image_web_browser.py",
+      "source_sha256": "f12c7433978c781d38630bb0ee199e0b4628af9bfd26aceb8ff107bf8c5944e8",
+      "command": "fetch",
+      "implementation": "http-image-adapter",
+      "action": "independent-reimplementation"
+    },
+    {
+      "surface_id": "literature-retrieval-browser",
+      "source_path": "scripts/web_tools.py",
+      "source_sha256": "5b92325b7b4ff191028a4da411805a2298e7010e6829b9516539495c664c0d07",
+      "command": "literature",
+      "implementation": "google-books-springer-adapters",
+      "action": "independent-reimplementation"
+    },
+    {
+      "surface_id": "local-search-reformulation",
+      "source_path": "scripts/LocalGoogleSearchTool.py",
+      "source_sha256": "f0a87fa93b1f88cab7dc461a415ed12088caaa2f5a1f6533be92410084469924",
+      "command": "search",
+      "implementation": "local-index-serpapi-adapters",
+      "action": "independent-reimplementation"
+    },
+    {
+      "surface_id": "precise-text-browser",
+      "source_path": "scripts/text_web_browser.py",
+      "source_sha256": "ea4c1626d9be46fd2200bb51729e5964b4fe4a1d5717ed05a99ece0f9a2b4528",
+      "command": "exact-text",
+      "implementation": "http-local-index-adapters",
+      "action": "independent-reimplementation"
+    },
+    {
+      "surface_id": "reverse-image-identification",
+      "source_path": "scripts/reverse_image.py",
+      "source_sha256": "ab46be2e0cfb75e12ca6be199e165a7a6d4aa1e9ab3790066c57c9ab1f3a01cd",
+      "command": "reverse-image",
+      "implementation": "serpapi-lens-http-upload-adapters",
+      "action": "independent-reimplementation"
+    },
+    {
+      "surface_id": "text-web-search",
+      "source_path": "scripts/text_web_browser.py",
+      "source_sha256": "ea4c1626d9be46fd2200bb51729e5964b4fe4a1d5717ed05a99ece0f9a2b4528",
+      "command": "search",
+      "implementation": "serpapi-adapter",
+      "action": "independent-reimplementation"
+    }
+  ],
+  "attributed_source_evidence": [
+    {
+      "histagent_path": "scripts/agent_web_browser.py",
+      "official_revision": "63a01753114696ed51f9f7740d0f0fcc33c0c8b8",
+      "official_path": "autogen/browser_utils.py",
+      "official_sha256": "19b720d454b4fdca8c50eb41cc5913301b9aeb6b0935a8aa5a6e1c708ce9590c",
+      "claimed_symbols": [
+        "BrowserAgent",
+        "BrowserTool"
+      ],
+      "source_match": "not-found-in-attributed-file",
+      "production_action": "independent-reimplementation",
+      "notice_action": "record-evidence-no-copied-code"
+    },
+    {
+      "histagent_path": "scripts/image_web_browser.py",
+      "official_revision": "63a01753114696ed51f9f7740d0f0fcc33c0c8b8",
+      "official_path": "autogen/browser_utils.py",
+      "official_sha256": "19b720d454b4fdca8c50eb41cc5913301b9aeb6b0935a8aa5a6e1c708ce9590c",
+      "claimed_symbols": [
+        "SimpleImageBrowser"
+      ],
+      "source_match": "not-found-in-attributed-file",
+      "production_action": "independent-reimplementation",
+      "notice_action": "record-evidence-no-copied-code"
+    },
+    {
+      "histagent_path": "scripts/mdconvert.py",
+      "official_revision": "bd5a24ba72ba01c4ec7509f027caaa7454b5f6d0",
+      "official_path": "python/packages/autogen-magentic-one/src/autogen_magentic_one/markdown_browser/mdconvert.py",
+      "official_sha256": "df3d1a3bcbad199075ce77d62eaa931e78d8319ae74bb117803b31c430d8091d",
+      "claimed_symbols": [
+        "MarkdownConverter"
+      ],
+      "source_match": "attributed-baseline-confirmed",
+      "production_action": "independent-reimplementation",
+      "notice_action": "record-evidence-no-copied-code"
+    },
+    {
+      "histagent_path": "scripts/reformulator.py",
+      "official_revision": "63a01753114696ed51f9f7740d0f0fcc33c0c8b8",
+      "official_path": "samples/tools/autogenbench/scenarios/GAIA/Templates/Orchestrator/scenario.py",
+      "official_sha256": "5a6761f3a47fb0d2570c68a947645613dae0ca114a0c64cbaa73c04b5895eb3c",
+      "claimed_symbols": [
+        "response_preparer"
+      ],
+      "source_match": "functional-origin-confirmed",
+      "production_action": "independent-reimplementation",
+      "notice_action": "record-evidence-no-copied-code"
+    },
+    {
+      "histagent_path": "scripts/text_web_browser.py",
+      "official_revision": "63a01753114696ed51f9f7740d0f0fcc33c0c8b8",
+      "official_path": "autogen/browser_utils.py",
+      "official_sha256": "19b720d454b4fdca8c50eb41cc5913301b9aeb6b0935a8aa5a6e1c708ce9590c",
+      "claimed_symbols": [
+        "SimpleTextBrowser"
+      ],
+      "source_match": "attributed-baseline-confirmed",
+      "production_action": "independent-reimplementation",
+      "notice_action": "record-evidence-no-copied-code"
+    }
+  ]
+}

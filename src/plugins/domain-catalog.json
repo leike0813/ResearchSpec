@@ -1350,7 +1350,10 @@
       "title": "Heritage, archive and museum studies",
       "description": "ANZSRC 2020 FoR Group 4302: Heritage, archive and museum studies.",
       "version": "0.1.0",
-      "skills": []
+      "skills": [
+        "histagent-historical-source-analysis",
+        "histagent-historical-source-identification"
+      ]
     },
     {
       "domain_id": "historical-studies",
@@ -1359,7 +1362,11 @@
       "title": "Historical studies",
       "description": "ANZSRC 2020 FoR Group 4303: Historical studies.",
       "version": "0.1.0",
-      "skills": []
+      "skills": [
+        "histagent-historical-research",
+        "histagent-historical-source-analysis",
+        "histagent-historical-source-identification"
+      ]
     },
     {
       "domain_id": "other-history-heritage-and-archaeology",

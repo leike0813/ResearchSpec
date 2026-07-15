@@ -15,7 +15,7 @@ import { cleanup, runCli, tempProject } from "./helpers/cli.js";
 
 const FIXTURE_ROOT = path.resolve("tests/fixtures/domain-skill-plugins");
 
-void test("production registry contains the fixed taxonomy and four reviewed vendors", async () => {
+void test("production registry contains the fixed taxonomy and five reviewed vendors", async () => {
   const loaded = await loadPluginRegistry();
   assert.equal(loaded.registry.schema_version, "1");
   assert.deepEqual(loaded.registry.domain_taxonomy, { discipline_system: "ANZSRC FoR", discipline_version: "2020", source_release: "2025-10-24" });
@@ -23,8 +23,9 @@ void test("production registry contains the fixed taxonomy and four reviewed ven
   assert.equal(loaded.vendors.get("scientific-agent-skills")?.skills.length, 49);
   assert.equal(loaded.vendors.get("materials-science-skills-for-llm")?.skills.length, 7);
   assert.equal(loaded.vendors.get("finrobot")?.skills.length, 6);
+  assert.equal(loaded.vendors.get("histagent")?.skills.length, 3);
   assert.equal(loaded.domains.size, 218);
-  assert.equal(availableDomains(loaded).length, 51);
+  assert.equal(availableDomains(loaded).length, 53);
   assert.equal(loaded.domains.get("scientific-visualization-and-communication")?.skills.length, 12);
   assert.equal(loaded.domains.has("genomics-and-systems-biology"), false);
 });

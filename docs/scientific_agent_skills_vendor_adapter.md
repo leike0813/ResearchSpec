@@ -44,6 +44,6 @@ pnpm scientific-agent-skills:check
 pnpm scientific-agent-skills:idempotence
 ```
 
-`convert` refuses unexplained generated drift unless `--force` follows review. `check` validates the 49-Skill vendor output inside the combined two-vendor, 218-domain registry, including the complete manual-review catalog and approved resource curation. `idempotence` regenerates against all published vendors and compares only this vendor's owned projection plus the central registry.
+`convert` refuses unexplained generated drift unless `--force` follows review. `check` validates the 49-Skill vendor output inside the combined five-vendor, 218-domain registry, including the complete manual-review catalog and approved resource curation. `idempotence` regenerates against all published vendors and compares only this vendor's owned projection plus the central registry.
 
 To update the vendor, first pin and audit a new immutable upstream release. Reconcile every admission, overlap, license, security, content, relationship, resource, ID, and domain decision before regenerating. Do not reuse v2.53.0 decisions for a changed source tree.

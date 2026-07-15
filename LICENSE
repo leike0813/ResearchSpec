@@ -24,11 +24,13 @@ The MIT grant does not remove or override the noncommercial restriction on ARSU-
 ## Apache-2.0 material
 
 Generated FinRobot-derived Skills under `skills/plugins/vendors/finrobot/**`
-are distributed under Apache License 2.0 after source, origin, license, and
-derivation review. Each Skill contains its complete `LICENSE`, attribution
-`NOTICE`, source revision, and derivation manifest. A reference copy of the
-license is available at `LICENSES/Apache-2.0.txt`.
+and independently reimplemented HistAgent-derived Skills under
+`skills/plugins/vendors/histagent/**` are distributed under Apache License 2.0
+after source, origin, license, and derivation review. Each Skill contains its
+complete `LICENSE`, attribution `NOTICE`, source revision, and derivation
+manifest. A reference copy of the license is available at
+`LICENSES/Apache-2.0.txt`.
 
-The Apache-2.0 grant applies only to the reviewed FinRobot-derived material
+The Apache-2.0 grant applies only to the reviewed FinRobot- and HistAgent-derived material
 identified by those files and does not change the licenses of ARSU-derived,
 ResearchSpec-authored, or other vendor material.

@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "vendor": "histagent",
+  "release": "snapshot-47bbe21",
+  "revision": "47bbe21dc81618489f5d5929358032883a3fe448",
+  "audit_sha256": "0f0de44a13204fbbc139ec78b6f9320c4078a786e700f1f5bdcda1688cf36269",
+  "implementation_strategy": "independent-capability-reimplementation",
+  "copied_upstream_code": false,
+  "sources": [
+    {
+      "surface_id": "document-conversion",
+      "source_path": "scripts/mdconvert.py",
+      "source_sha256": "948d7189273d7e8ca4c91b53a8f01a386448dd7927cb54db6df9e13d8afb74e2",
+      "command": "convert",
+      "implementation": "stdlib-document-converter",
+      "action": "independent-reimplementation"
+    },
+    {
+      "surface_id": "file-format-processing",
+      "source_path": "scripts/file_processing.py",
+      "source_sha256": "a7e31889ed8a51f711c7e716620edc84a50c743b20ff6a6328c6cfcc24b70216",
+      "command": "convert",
+      "implementation": "stdlib-document-converter",
+      "action": "independent-reimplementation"
+    },
+    {
+      "surface_id": "general-ocr",
+      "source_path": "scripts/ocr.py",
+      "source_sha256": "e2043be84d753ded7303e72e753c3c92ba2b5b93eb6dd7f0e6931b2664d5aeb7",
+      "command": "ocr",
+      "implementation": "tesseract-adapter",
+      "action": "independent-reimplementation"
+    },
+    {
+      "surface_id": "historical-ocr",
+      "source_path": "scripts/transkribus_ocr.py",
+      "source_sha256": "4860f40cbbb539440e1c0d0722b51aeefa8656600977918365fcc32289b3ff34",
+      "command": "ocr",
+      "implementation": "tesseract-transkribus-adapters",
+      "action": "independent-reimplementation"
+    },
+    {
+      "surface_id": "source-text-inspection",
+      "source_path": "scripts/text_inspector_tool.py",
+      "source_sha256": "3c55cf019dff77c64430df98a5f2bb6a8d5e2c557d7bd0366fac539faa6d5765",
+      "command": "inspect",
+      "implementation": "stdlib-inspector",
+      "action": "independent-reimplementation"
+    },
+    {
+      "surface_id": "speech-transcription",
+      "source_path": "scripts/speech_recognition.py",
+      "source_sha256": "65a2a77e03d1851be2e69f75fe86ff26066a5f1e2eabd06065350b9611638473",
+      "command": "transcribe",
+      "implementation": "whisper-cli-adapter",
+      "action": "independent-reimplementation"
+    },
+    {
+      "surface_id": "translation",
+      "source_path": "scripts/translator.py",
+      "source_sha256": "f1b079c72c7c04898d2cd85ea0c9dbadfcf063c9cbbe0e324ac68b4a92fdac28",
+      "command": "translate",
+      "implementation": "libretranslate-adapter",
+      "action": "independent-reimplementation"
+    },
+    {
+      "surface_id": "video-frame-extraction",
+      "source_path": "scripts/frame_extract.py",
+      "source_sha256": "c4ef42985250a943744209ebf17a1aa32a5b9419db6f63e8b5f572d26d5eb0ce",
+      "command": "frames",
+      "implementation": "ffmpeg-adapter",
+      "action": "independent-reimplementation"
+    },
+    {
+      "surface_id": "visual-source-analysis",
+      "source_path": "scripts/visual_qa.py",
+      "source_sha256": "594c66909ada22a51a5e1ad3d63b8025124c73cde15df3b9855a96ace84e464f",
+      "command": "vision",
+      "implementation": "provider-neutral-http-adapter",
+      "action": "independent-reimplementation"
+    }
+  ],
+  "attributed_source_evidence": [
+    {
+      "histagent_path": "scripts/agent_web_browser.py",
+      "official_revision": "63a01753114696ed51f9f7740d0f0fcc33c0c8b8",
+      "official_path": "autogen/browser_utils.py",
+      "official_sha256": "19b720d454b4fdca8c50eb41cc5913301b9aeb6b0935a8aa5a6e1c708ce9590c",
+      "claimed_symbols": [
+        "BrowserAgent",
+        "BrowserTool"
+      ],
+      "source_match": "not-found-in-attributed-file",
+      "production_action": "independent-reimplementation",
+      "notice_action": "record-evidence-no-copied-code"
+    },
+    {
+      "histagent_path": "scripts/image_web_browser.py",
+      "official_revision": "63a01753114696ed51f9f7740d0f0fcc33c0c8b8",
+      "official_path": "autogen/browser_utils.py",
+      "official_sha256": "19b720d454b4fdca8c50eb41cc5913301b9aeb6b0935a8aa5a6e1c708ce9590c",
+      "claimed_symbols": [
+        "SimpleImageBrowser"
+      ],
+      "source_match": "not-found-in-attributed-file",
+      "production_action": "independent-reimplementation",
+      "notice_action": "record-evidence-no-copied-code"
+    },
+    {
+      "histagent_path": "scripts/mdconvert.py",
+      "official_revision": "bd5a24ba72ba01c4ec7509f027caaa7454b5f6d0",
+      "official_path": "python/packages/autogen-magentic-one/src/autogen_magentic_one/markdown_browser/mdconvert.py",
+      "official_sha256": "df3d1a3bcbad199075ce77d62eaa931e78d8319ae74bb117803b31c430d8091d",
+      "claimed_symbols": [
+        "MarkdownConverter"
+      ],
+      "source_match": "attributed-baseline-confirmed",
+      "production_action": "independent-reimplementation",
+      "notice_action": "record-evidence-no-copied-code"
+    },
+    {
+      "histagent_path": "scripts/reformulator.py",
+      "official_revision": "63a01753114696ed51f9f7740d0f0fcc33c0c8b8",
+      "official_path": "samples/tools/autogenbench/scenarios/GAIA/Templates/Orchestrator/scenario.py",
+      "official_sha256": "5a6761f3a47fb0d2570c68a947645613dae0ca114a0c64cbaa73c04b5895eb3c",
+      "claimed_symbols": [
+        "response_preparer"
+      ],
+      "source_match": "functional-origin-confirmed",
+      "production_action": "independent-reimplementation",
+      "notice_action": "record-evidence-no-copied-code"
+    },
+    {
+      "histagent_path": "scripts/text_web_browser.py",
+      "official_revision": "63a01753114696ed51f9f7740d0f0fcc33c0c8b8",
+      "official_path": "autogen/browser_utils.py",
+      "official_sha256": "19b720d454b4fdca8c50eb41cc5913301b9aeb6b0935a8aa5a6e1c708ce9590c",
+      "claimed_symbols": [
+        "SimpleTextBrowser"
+      ],
+      "source_match": "attributed-baseline-confirmed",
+      "production_action": "independent-reimplementation",
+      "notice_action": "record-evidence-no-copied-code"
+    }
+  ]
+}

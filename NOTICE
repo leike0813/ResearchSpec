@@ -39,4 +39,18 @@ invoke them later with user-configured dependencies, providers, and credentials.
 ResearchSpec contains no actual provider credentials or private payloads and is
 independent from and not endorsed by FinRobot or AI4Finance Foundation.
 
+ResearchSpec distributes independently reimplemented Skills derived from audited HistAgent capabilities:
+
+- Source: https://github.com/CharlesQ9/HistAgent
+- Release: snapshot-47bbe21
+- Revision: 47bbe21dc81618489f5d5929358032883a3fe448
+- Content license: Apache License 2.0, preserved in every generated Skill's `LICENSE` and `NOTICE`
+
+The HistAgent Skills contain no copied HistAgent, AutoGen, Magentic-One,
+browser_use, benchmark, Cookie, telemetry, bytecode, or unverified media
+implementation. Conversion and package lifecycle operations treat their Python
+entrypoints as static assets and never execute them, read credentials, contact
+services, or upload material. ResearchSpec is independent from and not endorsed
+by HistAgent or Microsoft.
+
 ResearchSpec-authored material is copyright 2026 ResearchSpec contributors and is licensed under MIT where identified by the root license map.

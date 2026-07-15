@@ -129,6 +129,71 @@
       ]
     },
     {
+      "vendor_id": "histagent",
+      "name": "HistAgent",
+      "repository_url": "https://github.com/CharlesQ9/HistAgent",
+      "release": "snapshot-47bbe21",
+      "revision": "47bbe21dc81618489f5d5929358032883a3fe448",
+      "license": "Apache-2.0",
+      "converter_version": "1",
+      "skills": [
+        {
+          "skill_id": "histagent-historical-research",
+          "license": "Apache-2.0",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "run_hist.py",
+                "scripts/reformulator.py",
+                "scripts/web_tools.py"
+              ],
+              "adaptation": "curated"
+            }
+          ]
+        },
+        {
+          "skill_id": "histagent-historical-source-analysis",
+          "license": "Apache-2.0",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "scripts/file_processing.py",
+                "scripts/frame_extract.py",
+                "scripts/mdconvert.py",
+                "scripts/ocr.py",
+                "scripts/speech_recognition.py",
+                "scripts/text_inspector_tool.py",
+                "scripts/transkribus_ocr.py",
+                "scripts/translator.py",
+                "scripts/visual_qa.py"
+              ],
+              "adaptation": "curated"
+            }
+          ]
+        },
+        {
+          "skill_id": "histagent-historical-source-identification",
+          "license": "Apache-2.0",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "scripts/LocalGoogleSearchTool.py",
+                "scripts/agent_web_browser.py",
+                "scripts/image_web_browser.py",
+                "scripts/reverse_image.py",
+                "scripts/text_web_browser.py",
+                "scripts/web_tools.py"
+              ],
+              "adaptation": "curated"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "vendor_id": "materials-science-skills-for-llm",
       "name": "Materials-Science-Skills-For-LLM",
       "repository_url": "https://github.com/IntelligentMat/Materials-Science-Skills-For-LLM",
@@ -3941,7 +4006,10 @@
       "title": "Heritage, archive and museum studies",
       "description": "ANZSRC 2020 FoR Group 4302: Heritage, archive and museum studies.",
       "version": "0.1.0",
-      "skills": []
+      "skills": [
+        "histagent-historical-source-analysis",
+        "histagent-historical-source-identification"
+      ]
     },
     {
       "domain_id": "historical-studies",
@@ -3950,7 +4018,11 @@
       "title": "Historical studies",
       "description": "ANZSRC 2020 FoR Group 4303: Historical studies.",
       "version": "0.1.0",
-      "skills": []
+      "skills": [
+        "histagent-historical-research",
+        "histagent-historical-source-analysis",
+        "histagent-historical-source-identification"
+      ]
     },
     {
       "domain_id": "other-history-heritage-and-archaeology",

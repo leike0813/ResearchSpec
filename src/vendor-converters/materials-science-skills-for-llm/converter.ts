@@ -8,7 +8,7 @@ import { sha256 } from "../../core/workspace/write-plan.js";
 import { assemblePluginRegistry } from "../../plugins/assembler.js";
 import { availableDomains, loadPluginRegistry, type PluginRegistry } from "../../plugins/registry.js";
 import { commitVendorStage, pathExists, prepareVendorStage, vendorProjectionDiff } from "../shared/staging.js";
-import { productionVendorInventoryErrors } from "../shared/production-vendors.js";
+import { PRODUCTION_DOMAIN_COUNTS, productionVendorInventoryErrors } from "../shared/production-vendors.js";
 import {
   loadMaterialsPolicies,
   type MaterialsFileDecision,
@@ -81,8 +81,8 @@ export async function checkMaterialsOutput(repoRoot: string): Promise<{ ok: bool
     if (!vendor) errors.push("Materials vendor is absent from the bundled registry");
     else if (vendor.skills.length !== expected) errors.push(`Expected ${String(expected)} Materials Skills, found ${String(vendor.skills.length)}`);
     errors.push(...productionVendorInventoryErrors(loaded.vendors.keys()));
-    if (loaded.domains.size !== 218) errors.push(`Expected 218 internal domains, found ${String(loaded.domains.size)}`);
-    if (availableDomains(loaded).length !== 51) errors.push(`Expected 51 available domains, found ${String(availableDomains(loaded).length)}`);
+    if (loaded.domains.size !== PRODUCTION_DOMAIN_COUNTS.internal) errors.push(`Expected ${String(PRODUCTION_DOMAIN_COUNTS.internal)} internal domains, found ${String(loaded.domains.size)}`);
+    if (availableDomains(loaded).length !== PRODUCTION_DOMAIN_COUNTS.available) errors.push(`Expected ${String(PRODUCTION_DOMAIN_COUNTS.available)} available domains, found ${String(availableDomains(loaded).length)}`);
     warnings.push(...loaded.diagnostics.map((item) => item.message));
   } catch (error) { errors.push(error instanceof Error ? error.message : String(error)); }
   return { ok: errors.length === 0, errors, warnings };

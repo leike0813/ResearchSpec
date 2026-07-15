@@ -34,7 +34,7 @@ const expectedDomains = [
   "experimental-design-and-data-analysis", "fluid-mechanics-and-thermal-engineering", "genetics",
   "geoinformatics", "geomatic-engineering",
   "health-services-and-systems", "human-centred-computing", "immunology", "inorganic-chemistry",
-  "laboratory-automation-and-informatics", "library-and-information-studies", "machine-learning",
+  "heritage-archive-and-museum-studies", "historical-studies", "laboratory-automation-and-informatics", "library-and-information-studies", "machine-learning",
   "macromolecular-and-materials-chemistry", "materials-engineering", "medical-and-biological-physics",
   "medical-biochemistry-and-metabolomics", "medical-biotechnology", "medical-microbiology",
   "medicinal-and-biomolecular-chemistry", "microbiology", "neurosciences", "numerical-and-computational-mathematics",
@@ -94,7 +94,7 @@ function verifyTarballFiles(files) {
   const required = [
     "package.json", "README.md", "CHANGELOG.md", "SECURITY.md", "LICENSE", "NOTICE",
     "LICENSES/MIT.txt", "LICENSES/CC-BY-NC-4.0.txt", "LICENSES/Apache-2.0.txt", "docs/release_process.md",
-    "docs/arsu_user_usage_model.md", "docs/cli_interface_design.md", "docs/domain_skill_plugins.md", "docs/domain_taxonomy.md", "docs/finrobot_vendor_adapter.md", "docs/materials_science_skills_vendor_adapter.md", "docs/scientific_agent_skills_vendor_adapter.md", "docs/tooluniverse_vendor_adapter.md",
+    "docs/arsu_user_usage_model.md", "docs/cli_interface_design.md", "docs/domain_skill_plugins.md", "docs/domain_taxonomy.md", "docs/finrobot_vendor_adapter.md", "docs/histagent_vendor_adapter.md", "docs/materials_science_skills_vendor_adapter.md", "docs/scientific_agent_skills_vendor_adapter.md", "docs/tooluniverse_vendor_adapter.md",
     "skills/plugins/registry.json", "skills/plugins/vendor-bundles/tooluniverse.json", "skills/plugins/vendor-manifests/tooluniverse.json",
     "skills/plugins/conversion-reports/tooluniverse.md",
     "skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/SKILL.md",
@@ -115,6 +115,14 @@ function verifyTarballFiles(files) {
     "skills/plugins/vendors/finrobot/financial-research-relative-valuation/dependencies.json",
     "skills/plugins/vendors/finrobot/financial-research-relative-valuation/resources/python/valuation_engine.py",
     "skills/plugins/vendors/finrobot/financial-research-relative-valuation/resources/agent-specs/valuation_overview.json",
+    "skills/plugins/vendor-bundles/histagent.json", "skills/plugins/vendor-manifests/histagent.json",
+    "skills/plugins/conversion-reports/histagent.md",
+    "skills/plugins/vendors/histagent/histagent-historical-research/SKILL.md",
+    "skills/plugins/vendors/histagent/histagent-historical-research/LICENSE",
+    "skills/plugins/vendors/histagent/histagent-historical-research/NOTICE",
+    "skills/plugins/vendors/histagent/histagent-historical-research/DERIVATION.json",
+    "skills/plugins/vendors/histagent/histagent-historical-research/lib/historical_support.py",
+    "skills/plugins/vendors/histagent/histagent-historical-research/scripts/research_runtime.py",
     "artifacts/mvp_release_checklist.md", "dist/src/cli/bin.js",
   ];
   for (const skill of expectedSkills.slice(0, 4)) {
@@ -122,7 +130,7 @@ function verifyTarballFiles(files) {
   }
   for (const item of required) assert(files.includes(item), `Tarball is missing required file: ${item}`);
 
-  const allowed = /^(?:package\.json|README\.md|CHANGELOG\.md|SECURITY\.md|LICENSE|NOTICE|LICENSES\/[^/]+|docs\/(?:release_process|arsu_user_usage_model|cli_interface_design|domain_skill_plugins|domain_taxonomy|finrobot_vendor_adapter|materials_science_skills_vendor_adapter|scientific_agent_skills_vendor_adapter|tooluniverse_vendor_adapter)\.md|artifacts\/mvp_release_checklist\.md|dist\/src\/.*\.js|skills\/.*)$/;
+  const allowed = /^(?:package\.json|README\.md|CHANGELOG\.md|SECURITY\.md|LICENSE|NOTICE|LICENSES\/[^/]+|docs\/(?:release_process|arsu_user_usage_model|cli_interface_design|domain_skill_plugins|domain_taxonomy|finrobot_vendor_adapter|histagent_vendor_adapter|materials_science_skills_vendor_adapter|scientific_agent_skills_vendor_adapter|tooluniverse_vendor_adapter)\.md|artifacts\/mvp_release_checklist\.md|dist\/src\/.*\.js|skills\/.*)$/;
   const retired = /^dist\/src\/adapters\/companion\/workflows\/(?:archive|check|context|explore|next|submit)\.js$/;
   for (const file of files) {
     assert(allowed.test(file), `Tarball contains a path outside the release allowlist: ${file}`);
@@ -134,6 +142,7 @@ function verifyTarballFiles(files) {
     assert(!file.startsWith("vendor/scientific-agent-skills/"), `Tarball contains the Scientific Agent Skills source checkout: ${file}`);
     assert(!file.startsWith("vendor/materials-science-skills-for-llm/"), `Tarball contains the Materials-Science-Skills-For-LLM source checkout: ${file}`);
     assert(!file.startsWith("vendor/finrobot/"), `Tarball contains the FinRobot source checkout: ${file}`);
+    assert(!file.startsWith("vendor/histagent/"), `Tarball contains the HistAgent source checkout: ${file}`);
     assert(!file.startsWith("audits/"), `Tarball contains maintainer-only vendor audit evidence: ${file}`);
     assert(!file.startsWith("src/vendor-converters/"), `Tarball contains maintainer-only vendor decision sources: ${file}`);
     assert(!file.includes("/curation/"), `Tarball contains maintainer-only curation inputs: ${file}`);

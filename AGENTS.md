@@ -19,6 +19,7 @@ Current external reference paths:
 - Scientific Agent Skills vendor converter source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/scientific-agent-skills`
 - Materials-Science-Skills-For-LLM audit source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/materials-science-skills-for-llm`
 - FinRobot audit source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/finrobot`
+- HistAgent audit source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/histagent`
 
 When paths or ownership change, update this file in the same change so future
 agents do not follow stale locations.
@@ -164,10 +165,60 @@ private endpoints, private datasets, local user paths, or unknown-origin content
 in published files, and do not bypass the checked-in admission, source, surface,
 origin, license, resource, relationship, derivation, and review decisions.
 
-Four-vendor maintenance must keep converters isolated: each converter stages
+`vendor/histagent` is the maintainer-only pinned input for the
+`snapshot-47bbe21` audit and converter of all 120 tracked files. The approved
+production bundle contains three self-contained executable Skills:
+`histagent-historical-research`,
+`histagent-historical-source-identification`, and
+`histagent-historical-source-analysis`. All have empty hard Skill dependencies
+and advisory-only relationships. Historical studies receives all three;
+heritage, archive and museum studies receives source identification and source
+analysis; no tool domain receives a HistAgent Skill. The converter binds the
+archived audit, complete 21-surface capability map, five attributed-source
+records, and approved aggregate tree hash
+`c44f136b6945868ddde7871b5f5ecd7bfb8ac09f84f080f46fbd37f9e173dbd3`.
+
+HistAgent must not publish thin provider wrappers. Every generated Skill is a
+complete eight-file authored tree whose `SKILL.md` contains the ordinary runtime
+path and all hard constraints. Each claimed capability maps to a concrete
+bundled script, bundled resource, or user-configured external tool. Source
+identification and source analysis are script-assisted; historical research
+uses Skill-local JSON state and gates without becoming ResearchSpec workflow
+authority. Production bytes must remain identical to the approved trees.
+
+HistAgent capability preservation does not authorize implementation copying.
+Do not copy or expose `scripts/cookies.py`, telemetry defaults, tracked bytecode,
+unresolved `browser_use` content, unverified figures, or fixed provider
+credentials. The AutoGen/Magentic-One attribution scope includes
+`scripts/agent_web_browser.py`, `scripts/image_web_browser.py`,
+`scripts/mdconvert.py`, `scripts/reformulator.py`, and
+`scripts/text_web_browser.py`. Implementation reuse requires exact per-file
+MIT-source verification and notice preservation; unresolved content requires
+implementation-equivalent replacement. HistBench, GAIA,
+and HLE datasets, runners, scoring, combination, and judgment remain audit-only.
+Historical-source outputs must distinguish raw observation or OCR,
+normalized transcription, emendation, translation, and interpretation, with no
+unmarked completion. Explicit Skill invocation permits configured providers and
+task materials only under target-Agent and host policy. Conversion, checking,
+idempotence, packaging, installation, discovery, update, and registry assembly
+never import or execute HistAgent code, install dependencies, read credentials,
+start browsers, contact services, or upload material.
+
+Five-vendor maintenance must keep converters isolated: each converter stages
 against all published vendors but emits and commits only its own bundle, while a
 source-neutral domain catalog and central assembler own the published registry.
 Vendor root licensing does not replace an evidenced Skill-level content license.
+
+Non-native upstream projects such as HistAgent, FinRobot, and
+Materials-Science-Skills-For-LLM follow
+`docs/non_native_vendor_skill_standard.md`. Its templates are authoring
+scaffolds, not converter prose fragments or a runtime protocol. `references/`
+is optional and contains only substantial context-saving detail; the only copy
+of an execution-critical workflow, constraint, authority boundary, output rule,
+or failure rule belongs in `SKILL.md`. ResearchSpec does not currently consume a
+generic `runner.json`, `RUNTIME.json`, input/output schema, or fixed stdout
+envelope. Do not add those files merely to normalize a Skill. Scripts and domain
+schemas are allowed only when the Skill actually uses and documents them.
 
 ## ARSU Relationship
 

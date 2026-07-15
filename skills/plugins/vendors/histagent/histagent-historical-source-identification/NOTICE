@@ -1,0 +1,4 @@
+HistAgent capability reimplementation
+====================================
+
+This standalone Skill preserves audited HistAgent capabilities through an independent implementation under Apache-2.0. It contains no copied HistAgent, AutoGen, Magentic-One, browser_use, benchmark, Cookie, telemetry, bytecode, or unverified media implementation. DERIVATION.json records immutable evidence and per-capability decisions. ResearchSpec is independent from and not endorsed by HistAgent or Microsoft.

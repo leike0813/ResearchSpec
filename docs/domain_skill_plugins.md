@@ -39,9 +39,11 @@ manual-security targets. Materials-Science-Skills-For-LLM
 `snapshot-fafd3ab` contributes seven curated Skills after resolving all twelve
 audit records and all 24 admitted source files. FinRobot `snapshot-297a8d2`
 contributes six neutral, capability-complete financial research Skills after
-resolving all 146 source entries and 66 knowledge surfaces. Together the four
-isolated vendor bundles populate 51 non-empty domains; users still select only
-source-neutral domains.
+resolving all 146 source entries and 66 knowledge surfaces. HistAgent
+`snapshot-47bbe21` contributes three independently authored, hash-approved
+historical research Skills after resolving all 120 source entries and 21
+admitted capability surfaces. Together the five isolated vendor bundles
+populate 53 non-empty domains; users still select only source-neutral domains.
 
 ## Registry and package layout
 
@@ -106,6 +108,14 @@ The FinRobot converter independently:
 - replaces FinRobot aggregate imports and import-time provider clients with Protocols, DTOs, injected adapters, and provider-neutral AgentSpec JSON;
 - preserves reviewed calculations, forecasts, probability and sentiment analysis, targets, ratings, recommendations, and conclusions while rejecting embedded sensitive values and unresolved origins;
 - publishes complete Apache-2.0 attribution, dependencies, derivations, Python resources, AgentSpec schemas, its isolated bundle, manifest, and report.
+
+The HistAgent converter independently:
+
+- binds the archived immutable `snapshot-47bbe21` audit and approved complete-tree aggregate hash;
+- publishes exactly three complete eight-file Skill trees through independent capability reimplementation;
+- maps all 21 admitted surfaces to conventional commands while preserving five historical-source layers;
+- keeps six sibling relationships advisory, all hard Skill dependencies empty, and Skill-local state outside ResearchSpec workflow authority;
+- excludes Cookie material, telemetry, bytecode, unresolved browser code, benchmark payloads, unverified media, fixed credentials, and copied AutoGen/Magentic-One implementation.
 
 Each converter stages against all published vendors before central assembly and commits only its own projection plus the registry. Running one converter cannot replace another vendor's generated tree or bundle.
 

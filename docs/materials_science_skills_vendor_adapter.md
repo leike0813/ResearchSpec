@@ -56,8 +56,8 @@ pnpm materials-science-skills-for-llm:idempotence
 
 Conversion stages all published vendors, assembles the complete source-neutral
 registry, and commits only the Materials tree, bundle, manifest, report, and
-combined registry. The generated vendor order is FinRobot, Materials,
-Scientific Agent Skills, then ToolUniverse.
+combined registry. The generated vendor order is FinRobot, HistAgent,
+Materials, Scientific Agent Skills, then ToolUniverse.
 
 The converter never executes upstream commands, installs dependencies,
 configures credentials, retrieves resources, accesses services, compiles

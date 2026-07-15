@@ -1,0 +1,62 @@
+{
+  "schema_version": "1",
+  "vendor_id": "histagent",
+  "source_repository": "https://github.com/microsoft/autogen",
+  "code_license": "MIT",
+  "license_evidence": {
+    "path": "LICENSE-CODE",
+    "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+  },
+  "files": [
+    {
+      "histagent_path": "scripts/agent_web_browser.py",
+      "official_revision": "63a01753114696ed51f9f7740d0f0fcc33c0c8b8",
+      "official_path": "autogen/browser_utils.py",
+      "official_sha256": "19b720d454b4fdca8c50eb41cc5913301b9aeb6b0935a8aa5a6e1c708ce9590c",
+      "claimed_symbols": ["BrowserAgent", "BrowserTool"],
+      "source_match": "not-found-in-attributed-file",
+      "production_action": "independent-reimplementation",
+      "notice_action": "record-evidence-no-copied-code"
+    },
+    {
+      "histagent_path": "scripts/image_web_browser.py",
+      "official_revision": "63a01753114696ed51f9f7740d0f0fcc33c0c8b8",
+      "official_path": "autogen/browser_utils.py",
+      "official_sha256": "19b720d454b4fdca8c50eb41cc5913301b9aeb6b0935a8aa5a6e1c708ce9590c",
+      "claimed_symbols": ["SimpleImageBrowser"],
+      "source_match": "not-found-in-attributed-file",
+      "production_action": "independent-reimplementation",
+      "notice_action": "record-evidence-no-copied-code"
+    },
+    {
+      "histagent_path": "scripts/mdconvert.py",
+      "official_revision": "bd5a24ba72ba01c4ec7509f027caaa7454b5f6d0",
+      "official_path": "python/packages/autogen-magentic-one/src/autogen_magentic_one/markdown_browser/mdconvert.py",
+      "official_sha256": "df3d1a3bcbad199075ce77d62eaa931e78d8319ae74bb117803b31c430d8091d",
+      "claimed_symbols": ["MarkdownConverter"],
+      "source_match": "attributed-baseline-confirmed",
+      "production_action": "independent-reimplementation",
+      "notice_action": "record-evidence-no-copied-code"
+    },
+    {
+      "histagent_path": "scripts/reformulator.py",
+      "official_revision": "63a01753114696ed51f9f7740d0f0fcc33c0c8b8",
+      "official_path": "samples/tools/autogenbench/scenarios/GAIA/Templates/Orchestrator/scenario.py",
+      "official_sha256": "5a6761f3a47fb0d2570c68a947645613dae0ca114a0c64cbaa73c04b5895eb3c",
+      "claimed_symbols": ["response_preparer"],
+      "source_match": "functional-origin-confirmed",
+      "production_action": "independent-reimplementation",
+      "notice_action": "record-evidence-no-copied-code"
+    },
+    {
+      "histagent_path": "scripts/text_web_browser.py",
+      "official_revision": "63a01753114696ed51f9f7740d0f0fcc33c0c8b8",
+      "official_path": "autogen/browser_utils.py",
+      "official_sha256": "19b720d454b4fdca8c50eb41cc5913301b9aeb6b0935a8aa5a6e1c708ce9590c",
+      "claimed_symbols": ["SimpleTextBrowser"],
+      "source_match": "attributed-baseline-confirmed",
+      "production_action": "independent-reimplementation",
+      "notice_action": "record-evidence-no-copied-code"
+    }
+  ]
+}

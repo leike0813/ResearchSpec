@@ -31,11 +31,11 @@ void test("internal catalog contains every Group and five tools while public cat
     assert.equal(domain?.domain_type, "discipline");
     if (domain?.domain_type === "discipline") assert.equal(domain.anzsrc_group_code, group.code);
   }
-  assert.equal(availableDomains(registry).length, 51);
+  assert.equal(availableDomains(registry).length, 53);
   assert.equal(tools.filter((domain) => domain.skills.length > 0).length, 5);
 });
 
-void test("all 315 vendor audit records carry valid Field metadata independent of membership", async () => {
+void test("all 318 vendor audit records carry valid Field metadata independent of membership", async () => {
   const snapshot = await loadAnzsrcSnapshot(SNAPSHOT_PATH);
   const fields = new Set(snapshot.fields.map((field) => field.code));
   const sources = [
@@ -43,6 +43,7 @@ void test("all 315 vendor audit records carry valid Field metadata independent o
     { path: path.resolve("audits/scientific-agent-skills/v2.53.0/skill-audit.json"), records: "skills" },
     { path: path.resolve("audits/materials-science-skills-for-llm/snapshot-fafd3ab/skill-audit.json"), records: "skills" },
     { path: path.resolve("audits/finrobot/snapshot-297a8d2/capability-audit.json"), records: "candidate_capabilities" },
+    { path: path.resolve("audits/histagent/snapshot-47bbe21/capability-audit.json"), records: "candidate_skills" },
   ];
   let records = 0;
   for (const source of sources) {
@@ -61,7 +62,7 @@ void test("all 315 vendor audit records carry valid Field metadata independent o
       }
     }
   }
-  assert.equal(records, 315);
+  assert.equal(records, 318);
 });
 
 interface AuditFieldRecord {

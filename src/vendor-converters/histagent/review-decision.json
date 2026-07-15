@@ -1,0 +1,11 @@
+{
+  "schema_version": "1",
+  "vendor_id": "histagent",
+  "release": "snapshot-47bbe21",
+  "revision": "47bbe21dc81618489f5d5929358032883a3fe448",
+  "review_status": "approved",
+  "tree_set_sha256": "c44f136b6945868ddde7871b5f5ecd7bfb8ac09f84f080f46fbd37f9e173dbd3",
+  "approved_tree_set_sha256": "c44f136b6945868ddde7871b5f5ecd7bfb8ac09f84f080f46fbd37f9e173dbd3",
+  "approval_note": "User approved the complete HistAgent preview tree set after review.",
+  "approved_at": "2026-07-15T19:43:10Z"
+}

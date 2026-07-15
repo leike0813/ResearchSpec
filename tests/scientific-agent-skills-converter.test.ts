@@ -77,7 +77,7 @@ void test("combined production registry reaches every admitted second-vendor Ski
   const loaded = await loadPluginRegistry(PLUGIN_ROOT);
   const direct = new Set(loaded.registry.domains.flatMap((domain) => domain.skills));
   const admittedIds = policies.admission.decisions.filter((decision) => decision.disposition === "admitted").map((decision) => decision.generated_skill_id);
-  assert.equal(loaded.vendors.size, 4);
+  assert.equal(loaded.vendors.size, 5);
   assert.ok(admittedIds.every((id) => direct.has(id)));
   assert.ok(policies.admission.decisions.filter((decision) => decision.disposition === "excluded").every((decision) => !loaded.skills.has(decision.generated_skill_id)));
   assert.equal(loaded.domains.get("machine-learning")?.skills.filter((id) => id.startsWith("scientific-agent-skills-")).length, 10);

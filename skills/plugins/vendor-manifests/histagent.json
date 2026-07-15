@@ -1,0 +1,515 @@
+{
+  "schema_version": "1",
+  "converter_version": "1",
+  "vendor_id": "histagent",
+  "release": "snapshot-47bbe21",
+  "revision": "47bbe21dc81618489f5d5929358032883a3fe448",
+  "audit_sha256": "0f0de44a13204fbbc139ec78b6f9320c4078a786e700f1f5bdcda1688cf36269",
+  "approved_tree_set_sha256": "c44f136b6945868ddde7871b5f5ecd7bfb8ac09f84f080f46fbd37f9e173dbd3",
+  "generated_skills": [
+    "histagent-historical-research",
+    "histagent-historical-source-analysis",
+    "histagent-historical-source-identification"
+  ],
+  "decision_counts": {
+    "source_entries": 120,
+    "knowledge_surfaces": 31,
+    "content_origins": 5,
+    "license_claims": 4,
+    "runtime_authorities": 10,
+    "external_resources": 16,
+    "security_findings": 10,
+    "candidates": 3
+  },
+  "capability_map": [
+    {
+      "surface_id": "agent-historical-answer-loop",
+      "skill_id": "histagent-historical-research",
+      "command": "submit-evidence",
+      "implementation": "state-machine",
+      "implementation_kind": "bundled-script",
+      "optional_dependency": null,
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-agent-historical-answer-loop"
+    },
+    {
+      "surface_id": "agent-historical-orchestration",
+      "skill_id": "histagent-historical-research",
+      "command": "status",
+      "implementation": "state-machine",
+      "implementation_kind": "bundled-script",
+      "optional_dependency": null,
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-agent-historical-orchestration"
+    },
+    {
+      "surface_id": "archival-web-navigation",
+      "skill_id": "histagent-historical-source-identification",
+      "command": "archive",
+      "implementation": "internet-archive-cdx-adapter",
+      "implementation_kind": "configured-http-adapter",
+      "optional_dependency": null,
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-archival-web-navigation"
+    },
+    {
+      "surface_id": "browser-agent-adapter",
+      "skill_id": "histagent-historical-source-identification",
+      "command": "fetch",
+      "implementation": "http-html-adapter",
+      "implementation_kind": "configured-http-adapter",
+      "optional_dependency": null,
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-browser-agent-adapter"
+    },
+    {
+      "surface_id": "document-conversion",
+      "skill_id": "histagent-historical-source-analysis",
+      "command": "convert",
+      "implementation": "stdlib-document-converter",
+      "implementation_kind": "bundled-script",
+      "optional_dependency": "pypdf",
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-document-conversion"
+    },
+    {
+      "surface_id": "file-format-processing",
+      "skill_id": "histagent-historical-source-analysis",
+      "command": "convert",
+      "implementation": "stdlib-document-converter",
+      "implementation_kind": "bundled-script",
+      "optional_dependency": null,
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-file-format-processing"
+    },
+    {
+      "surface_id": "general-ocr",
+      "skill_id": "histagent-historical-source-analysis",
+      "command": "ocr",
+      "implementation": "tesseract-adapter",
+      "implementation_kind": "optional-local-tool",
+      "optional_dependency": "tesseract",
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-general-ocr"
+    },
+    {
+      "surface_id": "historical-ocr",
+      "skill_id": "histagent-historical-source-analysis",
+      "command": "ocr",
+      "implementation": "tesseract-transkribus-adapters",
+      "implementation_kind": "optional-local-tool",
+      "optional_dependency": "tesseract",
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-historical-ocr"
+    },
+    {
+      "surface_id": "image-source-browser",
+      "skill_id": "histagent-historical-source-identification",
+      "command": "fetch",
+      "implementation": "http-image-adapter",
+      "implementation_kind": "configured-http-adapter",
+      "optional_dependency": null,
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-image-source-browser"
+    },
+    {
+      "surface_id": "literature-retrieval-browser",
+      "skill_id": "histagent-historical-source-identification",
+      "command": "literature",
+      "implementation": "google-books-springer-adapters",
+      "implementation_kind": "configured-http-adapter",
+      "optional_dependency": null,
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-literature-retrieval-browser"
+    },
+    {
+      "surface_id": "literature-tool-suite",
+      "skill_id": "histagent-historical-research",
+      "command": "submit-source",
+      "implementation": "state-machine",
+      "implementation_kind": "bundled-script",
+      "optional_dependency": null,
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-literature-tool-suite"
+    },
+    {
+      "surface_id": "local-search-reformulation",
+      "skill_id": "histagent-historical-source-identification",
+      "command": "search",
+      "implementation": "local-index-serpapi-adapters",
+      "implementation_kind": "configured-http-adapter",
+      "optional_dependency": null,
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-local-search-reformulation"
+    },
+    {
+      "surface_id": "precise-text-browser",
+      "skill_id": "histagent-historical-source-identification",
+      "command": "exact-text",
+      "implementation": "http-local-index-adapters",
+      "implementation_kind": "bundled-script",
+      "optional_dependency": null,
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-precise-text-browser"
+    },
+    {
+      "surface_id": "response-reformulation",
+      "skill_id": "histagent-historical-research",
+      "command": "render",
+      "implementation": "deterministic-renderer",
+      "implementation_kind": "bundled-script",
+      "optional_dependency": null,
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-response-reformulation"
+    },
+    {
+      "surface_id": "reverse-image-identification",
+      "skill_id": "histagent-historical-source-identification",
+      "command": "reverse-image",
+      "implementation": "serpapi-lens-http-upload-adapters",
+      "implementation_kind": "configured-http-adapter",
+      "optional_dependency": null,
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-reverse-image-identification"
+    },
+    {
+      "surface_id": "source-text-inspection",
+      "skill_id": "histagent-historical-source-analysis",
+      "command": "inspect",
+      "implementation": "stdlib-inspector",
+      "implementation_kind": "bundled-script",
+      "optional_dependency": null,
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-source-text-inspection"
+    },
+    {
+      "surface_id": "speech-transcription",
+      "skill_id": "histagent-historical-source-analysis",
+      "command": "transcribe",
+      "implementation": "whisper-cli-adapter",
+      "implementation_kind": "optional-local-tool",
+      "optional_dependency": "whisper",
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-speech-transcription"
+    },
+    {
+      "surface_id": "text-web-search",
+      "skill_id": "histagent-historical-source-identification",
+      "command": "search",
+      "implementation": "serpapi-adapter",
+      "implementation_kind": "configured-http-adapter",
+      "optional_dependency": null,
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-text-web-search"
+    },
+    {
+      "surface_id": "translation",
+      "skill_id": "histagent-historical-source-analysis",
+      "command": "translate",
+      "implementation": "libretranslate-adapter",
+      "implementation_kind": "configured-http-adapter",
+      "optional_dependency": null,
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-translation"
+    },
+    {
+      "surface_id": "video-frame-extraction",
+      "skill_id": "histagent-historical-source-analysis",
+      "command": "frames",
+      "implementation": "ffmpeg-adapter",
+      "implementation_kind": "optional-local-tool",
+      "optional_dependency": "ffmpeg",
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-video-frame-extraction"
+    },
+    {
+      "surface_id": "visual-source-analysis",
+      "skill_id": "histagent-historical-source-analysis",
+      "command": "vision",
+      "implementation": "provider-neutral-http-adapter",
+      "implementation_kind": "configured-http-adapter",
+      "optional_dependency": null,
+      "derivation": "independent-reimplementation",
+      "representative_test": "histagent-visual-source-analysis"
+    }
+  ],
+  "attributed_source_evidence": [
+    {
+      "histagent_path": "scripts/agent_web_browser.py",
+      "official_revision": "63a01753114696ed51f9f7740d0f0fcc33c0c8b8",
+      "official_path": "autogen/browser_utils.py",
+      "official_sha256": "19b720d454b4fdca8c50eb41cc5913301b9aeb6b0935a8aa5a6e1c708ce9590c",
+      "claimed_symbols": [
+        "BrowserAgent",
+        "BrowserTool"
+      ],
+      "source_match": "not-found-in-attributed-file",
+      "production_action": "independent-reimplementation",
+      "notice_action": "record-evidence-no-copied-code"
+    },
+    {
+      "histagent_path": "scripts/image_web_browser.py",
+      "official_revision": "63a01753114696ed51f9f7740d0f0fcc33c0c8b8",
+      "official_path": "autogen/browser_utils.py",
+      "official_sha256": "19b720d454b4fdca8c50eb41cc5913301b9aeb6b0935a8aa5a6e1c708ce9590c",
+      "claimed_symbols": [
+        "SimpleImageBrowser"
+      ],
+      "source_match": "not-found-in-attributed-file",
+      "production_action": "independent-reimplementation",
+      "notice_action": "record-evidence-no-copied-code"
+    },
+    {
+      "histagent_path": "scripts/mdconvert.py",
+      "official_revision": "bd5a24ba72ba01c4ec7509f027caaa7454b5f6d0",
+      "official_path": "python/packages/autogen-magentic-one/src/autogen_magentic_one/markdown_browser/mdconvert.py",
+      "official_sha256": "df3d1a3bcbad199075ce77d62eaa931e78d8319ae74bb117803b31c430d8091d",
+      "claimed_symbols": [
+        "MarkdownConverter"
+      ],
+      "source_match": "attributed-baseline-confirmed",
+      "production_action": "independent-reimplementation",
+      "notice_action": "record-evidence-no-copied-code"
+    },
+    {
+      "histagent_path": "scripts/reformulator.py",
+      "official_revision": "63a01753114696ed51f9f7740d0f0fcc33c0c8b8",
+      "official_path": "samples/tools/autogenbench/scenarios/GAIA/Templates/Orchestrator/scenario.py",
+      "official_sha256": "5a6761f3a47fb0d2570c68a947645613dae0ca114a0c64cbaa73c04b5895eb3c",
+      "claimed_symbols": [
+        "response_preparer"
+      ],
+      "source_match": "functional-origin-confirmed",
+      "production_action": "independent-reimplementation",
+      "notice_action": "record-evidence-no-copied-code"
+    },
+    {
+      "histagent_path": "scripts/text_web_browser.py",
+      "official_revision": "63a01753114696ed51f9f7740d0f0fcc33c0c8b8",
+      "official_path": "autogen/browser_utils.py",
+      "official_sha256": "19b720d454b4fdca8c50eb41cc5913301b9aeb6b0935a8aa5a6e1c708ce9590c",
+      "claimed_symbols": [
+        "SimpleTextBrowser"
+      ],
+      "source_match": "attributed-baseline-confirmed",
+      "production_action": "independent-reimplementation",
+      "notice_action": "record-evidence-no-copied-code"
+    }
+  ],
+  "production_policy_sha256": "deac0c823d076f62fbc52b9876e4d69f0111e6d858f5b306e6d59dc741e9b633",
+  "source_evidence_sha256": "95e1001b0c222a3408614abf4bc5a7b073d075649d8c8e5be6b232a34aa067c6",
+  "review_policy_sha256": "55f3444a222bf5c49ab65ac4259f5f1257304470cced45fa314ad87b17fd97b3",
+  "tree_sha256": {
+    "histagent-historical-research": "f7d643dd3ad6b638dbedc35c5260ffb92dfaaffccffa0648e0120913d68b8a6d",
+    "histagent-historical-source-analysis": "5c2af41c75fd75bca27c71fec54f72ecfa1f14a28f60d62be9601af4bc6ee5e5",
+    "histagent-historical-source-identification": "f08670d10f115a8699a10915590dbe0f47cd02ae28c7e43215d06be3e42f4c04"
+  },
+  "relationship_decisions": [
+    {
+      "from": "histagent-historical-research",
+      "to": "histagent-historical-source-analysis",
+      "relation": "advisory",
+      "note": "Related capability may be composed by the target Agent without a hard Skill dependency."
+    },
+    {
+      "from": "histagent-historical-research",
+      "to": "histagent-historical-source-identification",
+      "relation": "advisory",
+      "note": "Related capability may be composed by the target Agent without a hard Skill dependency."
+    },
+    {
+      "from": "histagent-historical-source-analysis",
+      "to": "histagent-historical-research",
+      "relation": "advisory",
+      "note": "Related capability may be composed by the target Agent without a hard Skill dependency."
+    },
+    {
+      "from": "histagent-historical-source-analysis",
+      "to": "histagent-historical-source-identification",
+      "relation": "advisory",
+      "note": "Related capability may be composed by the target Agent without a hard Skill dependency."
+    },
+    {
+      "from": "histagent-historical-source-identification",
+      "to": "histagent-historical-research",
+      "relation": "advisory",
+      "note": "Related capability may be composed by the target Agent without a hard Skill dependency."
+    },
+    {
+      "from": "histagent-historical-source-identification",
+      "to": "histagent-historical-source-analysis",
+      "relation": "advisory",
+      "note": "Related capability may be composed by the target Agent without a hard Skill dependency."
+    }
+  ],
+  "file_dispositions": [
+    {
+      "source_path": "complete-tree/histagent-historical-research/DERIVATION.json",
+      "output_path": "vendors/histagent/histagent-historical-research/DERIVATION.json",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "5cb4951fe01c69c2ec211ecca830a5c1d5687238d249f76ab035a96d254d4f7f"
+    },
+    {
+      "source_path": "complete-tree/histagent-historical-research/LICENSE",
+      "output_path": "vendors/histagent/histagent-historical-research/LICENSE",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "source_path": "complete-tree/histagent-historical-research/NOTICE",
+      "output_path": "vendors/histagent/histagent-historical-research/NOTICE",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "9a0dccaa13485303a74c4922d4b3b6cbd0d46e828fc2b96143bf72b8c6e02b14"
+    },
+    {
+      "source_path": "complete-tree/histagent-historical-research/SKILL.md",
+      "output_path": "vendors/histagent/histagent-historical-research/SKILL.md",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "f3a947459670d01fba54975a7ec9e841dd1ee379d1a37ded59ed739d2d84590b"
+    },
+    {
+      "source_path": "complete-tree/histagent-historical-research/lib/historical_support.py",
+      "output_path": "vendors/histagent/histagent-historical-research/lib/historical_support.py",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "f46f1da49ee21d8e0586bc953ab0e7373802cbf631e0821437628d57ef158c91"
+    },
+    {
+      "source_path": "complete-tree/histagent-historical-research/references/evidence-and-conflict-cases.md",
+      "output_path": "vendors/histagent/histagent-historical-research/references/evidence-and-conflict-cases.md",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "f91b50b40f23f4c15a3a38003d9eee8f59b1756ea9dc636db42b19b8748886b5"
+    },
+    {
+      "source_path": "complete-tree/histagent-historical-research/references/stage-records.md",
+      "output_path": "vendors/histagent/histagent-historical-research/references/stage-records.md",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "82639590d7d5f1062ea497005136e5b6d6fb950a44e21f04f7a2379ac5f9fe3b"
+    },
+    {
+      "source_path": "complete-tree/histagent-historical-research/scripts/research_runtime.py",
+      "output_path": "vendors/histagent/histagent-historical-research/scripts/research_runtime.py",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "1bf8b39abf4fab11a0e2cd13df594a7e71a10721c69d1b81158a25a5286a6f1c"
+    },
+    {
+      "source_path": "complete-tree/histagent-historical-source-analysis/DERIVATION.json",
+      "output_path": "vendors/histagent/histagent-historical-source-analysis/DERIVATION.json",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "b095b9b7a1405f158610d0a64d66858a0909bf0a013d564e50efe370933620bb"
+    },
+    {
+      "source_path": "complete-tree/histagent-historical-source-analysis/LICENSE",
+      "output_path": "vendors/histagent/histagent-historical-source-analysis/LICENSE",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "source_path": "complete-tree/histagent-historical-source-analysis/NOTICE",
+      "output_path": "vendors/histagent/histagent-historical-source-analysis/NOTICE",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "9a0dccaa13485303a74c4922d4b3b6cbd0d46e828fc2b96143bf72b8c6e02b14"
+    },
+    {
+      "source_path": "complete-tree/histagent-historical-source-analysis/SKILL.md",
+      "output_path": "vendors/histagent/histagent-historical-source-analysis/SKILL.md",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "f021d66c0e6c361bc62a1904d0f570644de9e6959fd7fac9e8645c0208befd60"
+    },
+    {
+      "source_path": "complete-tree/histagent-historical-source-analysis/lib/historical_support.py",
+      "output_path": "vendors/histagent/histagent-historical-source-analysis/lib/historical_support.py",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "f46f1da49ee21d8e0586bc953ab0e7373802cbf631e0821437628d57ef158c91"
+    },
+    {
+      "source_path": "complete-tree/histagent-historical-source-analysis/references/adapters-and-formats.md",
+      "output_path": "vendors/histagent/histagent-historical-source-analysis/references/adapters-and-formats.md",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "c8eb580edbbd66bd1c235cd2e37a6f85e127e6ad6a7dcfc6fb6ec75792302546"
+    },
+    {
+      "source_path": "complete-tree/histagent-historical-source-analysis/references/layer-and-collation-cases.md",
+      "output_path": "vendors/histagent/histagent-historical-source-analysis/references/layer-and-collation-cases.md",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "f3553e4f04a8621676577d8f0fe65f1a199ba6450aa091f664a8455ef0f4b002"
+    },
+    {
+      "source_path": "complete-tree/histagent-historical-source-analysis/scripts/analyze_source.py",
+      "output_path": "vendors/histagent/histagent-historical-source-analysis/scripts/analyze_source.py",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "7a4355ebd86dac2882b4e39ffa89cc468753a3fedaa3faf1e81a7162a2245e3a"
+    },
+    {
+      "source_path": "complete-tree/histagent-historical-source-identification/DERIVATION.json",
+      "output_path": "vendors/histagent/histagent-historical-source-identification/DERIVATION.json",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "17720f016ead3670a6f11002cf8f099a7906899b5ff4d18c752181fe4015b9b3"
+    },
+    {
+      "source_path": "complete-tree/histagent-historical-source-identification/LICENSE",
+      "output_path": "vendors/histagent/histagent-historical-source-identification/LICENSE",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "source_path": "complete-tree/histagent-historical-source-identification/NOTICE",
+      "output_path": "vendors/histagent/histagent-historical-source-identification/NOTICE",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "9a0dccaa13485303a74c4922d4b3b6cbd0d46e828fc2b96143bf72b8c6e02b14"
+    },
+    {
+      "source_path": "complete-tree/histagent-historical-source-identification/SKILL.md",
+      "output_path": "vendors/histagent/histagent-historical-source-identification/SKILL.md",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "cff2a73ed49816f9d7093a7062f4dee8037bd319e1239d344614500a1ca229b8"
+    },
+    {
+      "source_path": "complete-tree/histagent-historical-source-identification/lib/historical_support.py",
+      "output_path": "vendors/histagent/histagent-historical-source-identification/lib/historical_support.py",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "f46f1da49ee21d8e0586bc953ab0e7373802cbf631e0821437628d57ef158c91"
+    },
+    {
+      "source_path": "complete-tree/histagent-historical-source-identification/references/candidate-verification-cases.md",
+      "output_path": "vendors/histagent/histagent-historical-source-identification/references/candidate-verification-cases.md",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "5c5492c102c22e61073af19b048606abcdf30a2bbafb7a6cc75eb0b93a746ce0"
+    },
+    {
+      "source_path": "complete-tree/histagent-historical-source-identification/references/provider-adapters.md",
+      "output_path": "vendors/histagent/histagent-historical-source-identification/references/provider-adapters.md",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "4eda74f31eac16eea956be2a37e645428e48aca4d961e32f572f43c1957bd78f"
+    },
+    {
+      "source_path": "complete-tree/histagent-historical-source-identification/scripts/identify_sources.py",
+      "output_path": "vendors/histagent/histagent-historical-source-identification/scripts/identify_sources.py",
+      "disposition": "included",
+      "reason": "approved complete-tree asset",
+      "sha256": "dbaecbf5a5a23ad3fc869e60ea89457e17d54441f13a072a213756032f8c21b1"
+    }
+  ]
+}

@@ -10,7 +10,7 @@ import { PRODUCTION_VENDOR_IDS } from "../src/vendor-converters/shared/productio
 
 const PLUGIN_ROOT = path.resolve("skills/plugins");
 
-void test("shared staging commits only the target vendor projection for all four converters", async () => {
+void test("shared staging commits only the target vendor projection for every production converter", async () => {
   for (const vendorId of PRODUCTION_VENDOR_IDS) {
     const root = await mkdtemp(path.join(tmpdir(), `researchspec-staging-${vendorId}-`));
     const output = path.join(root, "output");

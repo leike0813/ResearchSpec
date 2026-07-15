@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "vendor": "histagent",
+  "release": "snapshot-47bbe21",
+  "revision": "47bbe21dc81618489f5d5929358032883a3fe448",
+  "audit_sha256": "0f0de44a13204fbbc139ec78b6f9320c4078a786e700f1f5bdcda1688cf36269",
+  "implementation_strategy": "independent-capability-reimplementation",
+  "copied_upstream_code": false,
+  "sources": [
+    {
+      "surface_id": "agent-historical-answer-loop",
+      "source_path": "run_hist.py",
+      "source_sha256": "9dfbaf36bb5497fa268d10b13908f8ef78b2cae04e779cca3fdb48ae69a4c354",
+      "command": "submit-evidence",
+      "implementation": "state-machine",
+      "action": "independent-reimplementation"
+    },
+    {
+      "surface_id": "agent-historical-orchestration",
+      "source_path": "run_hist.py",
+      "source_sha256": "9dfbaf36bb5497fa268d10b13908f8ef78b2cae04e779cca3fdb48ae69a4c354",
+      "command": "status",
+      "implementation": "state-machine",
+      "action": "independent-reimplementation"
+    },
+    {
+      "surface_id": "literature-tool-suite",
+      "source_path": "scripts/web_tools.py",
+      "source_sha256": "5b92325b7b4ff191028a4da411805a2298e7010e6829b9516539495c664c0d07",
+      "command": "submit-source",
+      "implementation": "state-machine",
+      "action": "independent-reimplementation"
+    },
+    {
+      "surface_id": "response-reformulation",
+      "source_path": "scripts/reformulator.py",
+      "source_sha256": "a278dd88b10a3ceb11bcc3b0372bb5d06fa180d3a79a2655f676a49fe6536611",
+      "command": "render",
+      "implementation": "deterministic-renderer",
+      "action": "independent-reimplementation"
+    }
+  ],
+  "attributed_source_evidence": [
+    {
+      "histagent_path": "scripts/agent_web_browser.py",
+      "official_revision": "63a01753114696ed51f9f7740d0f0fcc33c0c8b8",
+      "official_path": "autogen/browser_utils.py",
+      "official_sha256": "19b720d454b4fdca8c50eb41cc5913301b9aeb6b0935a8aa5a6e1c708ce9590c",
+      "claimed_symbols": [
+        "BrowserAgent",
+        "BrowserTool"
+      ],
+      "source_match": "not-found-in-attributed-file",
+      "production_action": "independent-reimplementation",
+      "notice_action": "record-evidence-no-copied-code"
+    },
+    {
+      "histagent_path": "scripts/image_web_browser.py",
+      "official_revision": "63a01753114696ed51f9f7740d0f0fcc33c0c8b8",
+      "official_path": "autogen/browser_utils.py",
+      "official_sha256": "19b720d454b4fdca8c50eb41cc5913301b9aeb6b0935a8aa5a6e1c708ce9590c",
+      "claimed_symbols": [
+        "SimpleImageBrowser"
+      ],
+      "source_match": "not-found-in-attributed-file",
+      "production_action": "independent-reimplementation",
+      "notice_action": "record-evidence-no-copied-code"
+    },
+    {
+      "histagent_path": "scripts/mdconvert.py",
+      "official_revision": "bd5a24ba72ba01c4ec7509f027caaa7454b5f6d0",
+      "official_path": "python/packages/autogen-magentic-one/src/autogen_magentic_one/markdown_browser/mdconvert.py",
+      "official_sha256": "df3d1a3bcbad199075ce77d62eaa931e78d8319ae74bb117803b31c430d8091d",
+      "claimed_symbols": [
+        "MarkdownConverter"
+      ],
+      "source_match": "attributed-baseline-confirmed",
+      "production_action": "independent-reimplementation",
+      "notice_action": "record-evidence-no-copied-code"
+    },
+    {
+      "histagent_path": "scripts/reformulator.py",
+      "official_revision": "63a01753114696ed51f9f7740d0f0fcc33c0c8b8",
+      "official_path": "samples/tools/autogenbench/scenarios/GAIA/Templates/Orchestrator/scenario.py",
+      "official_sha256": "5a6761f3a47fb0d2570c68a947645613dae0ca114a0c64cbaa73c04b5895eb3c",
+      "claimed_symbols": [
+        "response_preparer"
+      ],
+      "source_match": "functional-origin-confirmed",
+      "production_action": "independent-reimplementation",
+      "notice_action": "record-evidence-no-copied-code"
+    },
+    {
+      "histagent_path": "scripts/text_web_browser.py",
+      "official_revision": "63a01753114696ed51f9f7740d0f0fcc33c0c8b8",
+      "official_path": "autogen/browser_utils.py",
+      "official_sha256": "19b720d454b4fdca8c50eb41cc5913301b9aeb6b0935a8aa5a6e1c708ce9590c",
+      "claimed_symbols": [
+        "SimpleTextBrowser"
+      ],
+      "source_match": "attributed-baseline-confirmed",
+      "production_action": "independent-reimplementation",
+      "notice_action": "record-evidence-no-copied-code"
+    }
+  ]
+}
