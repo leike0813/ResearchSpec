@@ -17,6 +17,7 @@ Current external reference paths:
 - ARS upstream checkout inside ARSU: `/home/joshua/Workspace/Code/Skill/academic-research-skills-universal/vendor/ars`
 - ToolUniverse vendor converter source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/tooluniverse`
 - Scientific Agent Skills vendor converter source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/scientific-agent-skills`
+- Materials-Science-Skills-For-LLM audit source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/materials-science-skills-for-llm`
 
 When paths or ownership change, update this file in the same change so future
 agents do not follow stale locations.
@@ -120,6 +121,21 @@ bypass the checked-in admission, manual-review, dependency, resource, and
 source-neutral domain decisions. External model or service use must remain
 provider-neutral, use the target Agent's user-approved configuration, and
 never expose or persist secrets through ResearchSpec.
+
+`vendor/materials-science-skills-for-llm` is the maintainer-only pinned input
+for the `snapshot-fafd3ab` audit and converter of all 12 upstream Skills. The
+complete production policies admit seven curated, vendor-prefixed Skills and
+exclude five for maintenance scope, private tooling, overlap, or privileged
+platform authority. The 24-item file catalog, seven-item relationship catalog,
+external-resource decisions, and source-bound replacement assets are production
+SSOTs. Generated Skills contribute to `materials-engineering`,
+`macromolecular-and-materials-chemistry`, and
+`computational-modeling-and-simulation`; GPU, remote-service, and HPC use alone
+does not create infrastructure-domain membership. Do not execute upstream
+commands, install dependencies, configure credentials, retrieve resources,
+access external services, compile software, or run scheduler/HPC work. Do not
+bypass the checked-in admission, relationship, file, resource, curation,
+license, or source-neutral domain decisions.
 
 Multi-vendor maintenance must keep converters isolated: each converter stages
 against all published vendors but emits and commits only its own bundle, while a

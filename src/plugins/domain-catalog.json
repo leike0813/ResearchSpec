@@ -576,8 +576,10 @@
       "anzsrc_group_code": "3403",
       "title": "Macromolecular and materials chemistry",
       "description": "ANZSRC 2020 FoR Group 3403: Macromolecular and materials chemistry.",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "skills": [
+        "materials-science-skills-phonopy-workflows",
+        "materials-science-skills-unimol-ops",
         "scientific-agent-skills-pymatgen"
       ]
     },
@@ -1117,8 +1119,15 @@
       "anzsrc_group_code": "4016",
       "title": "Materials engineering",
       "description": "ANZSRC 2020 FoR Group 4016: Materials engineering.",
-      "version": "0.1.0",
-      "skills": []
+      "version": "0.2.0",
+      "skills": [
+        "materials-science-skills-apex-alloy-workflows",
+        "materials-science-skills-atomsk-cli",
+        "materials-science-skills-deeptb-helper",
+        "materials-science-skills-dpgen-workflow",
+        "materials-science-skills-gpumd-workflow",
+        "materials-science-skills-phonopy-workflows"
+      ]
     },
     {
       "domain_id": "mechanical-engineering",
@@ -2226,8 +2235,15 @@
       "domain_type": "tool",
       "title": "Computational modeling and simulation",
       "description": "Cross-disciplinary construction, execution, and interpretation of computational models and simulations.",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "skills": [
+        "materials-science-skills-apex-alloy-workflows",
+        "materials-science-skills-atomsk-cli",
+        "materials-science-skills-deeptb-helper",
+        "materials-science-skills-dpgen-workflow",
+        "materials-science-skills-gpumd-workflow",
+        "materials-science-skills-phonopy-workflows",
+        "materials-science-skills-unimol-ops",
         "scientific-agent-skills-cirq",
         "scientific-agent-skills-fluidsim",
         "scientific-agent-skills-matlab",

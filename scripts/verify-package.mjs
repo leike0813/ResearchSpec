@@ -35,7 +35,7 @@ const expectedDomains = [
   "geoinformatics", "geomatic-engineering",
   "health-services-and-systems", "human-centred-computing", "immunology", "inorganic-chemistry",
   "laboratory-automation-and-informatics", "library-and-information-studies", "machine-learning",
-  "macromolecular-and-materials-chemistry", "medical-and-biological-physics",
+  "macromolecular-and-materials-chemistry", "materials-engineering", "medical-and-biological-physics",
   "medical-biochemistry-and-metabolomics", "medical-biotechnology", "medical-microbiology",
   "medicinal-and-biomolecular-chemistry", "microbiology", "neurosciences", "numerical-and-computational-mathematics",
   "oncology-and-carcinogenesis",
@@ -94,13 +94,18 @@ function verifyTarballFiles(files) {
   const required = [
     "package.json", "README.md", "CHANGELOG.md", "SECURITY.md", "LICENSE", "NOTICE",
     "LICENSES/MIT.txt", "LICENSES/CC-BY-NC-4.0.txt", "docs/release_process.md",
-    "docs/arsu_user_usage_model.md", "docs/cli_interface_design.md", "docs/domain_skill_plugins.md", "docs/domain_taxonomy.md", "docs/scientific_agent_skills_vendor_adapter.md", "docs/tooluniverse_vendor_adapter.md",
+    "docs/arsu_user_usage_model.md", "docs/cli_interface_design.md", "docs/domain_skill_plugins.md", "docs/domain_taxonomy.md", "docs/materials_science_skills_vendor_adapter.md", "docs/scientific_agent_skills_vendor_adapter.md", "docs/tooluniverse_vendor_adapter.md",
     "skills/plugins/registry.json", "skills/plugins/vendor-bundles/tooluniverse.json", "skills/plugins/vendor-manifests/tooluniverse.json",
     "skills/plugins/conversion-reports/tooluniverse.md",
     "skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/SKILL.md",
     "skills/plugins/vendor-bundles/scientific-agent-skills.json", "skills/plugins/vendor-manifests/scientific-agent-skills.json",
     "skills/plugins/conversion-reports/scientific-agent-skills.md",
     "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-astropy/SKILL.md",
+    "skills/plugins/vendor-bundles/materials-science-skills-for-llm.json", "skills/plugins/vendor-manifests/materials-science-skills-for-llm.json",
+    "skills/plugins/conversion-reports/materials-science-skills-for-llm.md",
+    "skills/plugins/vendors/materials-science-skills-for-llm/materials-science-skills-apex-alloy-workflows/SKILL.md",
+    "skills/plugins/vendors/materials-science-skills-for-llm/materials-science-skills-apex-alloy-workflows/LICENSE",
+    "skills/plugins/vendors/materials-science-skills-for-llm/materials-science-skills-apex-alloy-workflows/NOTICE.md",
     "artifacts/mvp_release_checklist.md", "dist/src/cli/bin.js",
   ];
   for (const skill of expectedSkills.slice(0, 4)) {
@@ -108,7 +113,7 @@ function verifyTarballFiles(files) {
   }
   for (const item of required) assert(files.includes(item), `Tarball is missing required file: ${item}`);
 
-  const allowed = /^(?:package\.json|README\.md|CHANGELOG\.md|SECURITY\.md|LICENSE|NOTICE|LICENSES\/[^/]+|docs\/(?:release_process|arsu_user_usage_model|cli_interface_design|domain_skill_plugins|domain_taxonomy|scientific_agent_skills_vendor_adapter|tooluniverse_vendor_adapter)\.md|artifacts\/mvp_release_checklist\.md|dist\/src\/.*\.js|skills\/.*)$/;
+  const allowed = /^(?:package\.json|README\.md|CHANGELOG\.md|SECURITY\.md|LICENSE|NOTICE|LICENSES\/[^/]+|docs\/(?:release_process|arsu_user_usage_model|cli_interface_design|domain_skill_plugins|domain_taxonomy|materials_science_skills_vendor_adapter|scientific_agent_skills_vendor_adapter|tooluniverse_vendor_adapter)\.md|artifacts\/mvp_release_checklist\.md|dist\/src\/.*\.js|skills\/.*)$/;
   const retired = /^dist\/src\/adapters\/companion\/workflows\/(?:archive|check|context|explore|next|submit)\.js$/;
   for (const file of files) {
     assert(allowed.test(file), `Tarball contains a path outside the release allowlist: ${file}`);
@@ -118,7 +123,11 @@ function verifyTarballFiles(files) {
     assert(!file.startsWith("tests/fixtures/domain-skill-plugins/"), `Tarball contains plugin test fixtures: ${file}`);
     assert(!file.startsWith("vendor/tooluniverse/"), `Tarball contains the ToolUniverse source checkout: ${file}`);
     assert(!file.startsWith("vendor/scientific-agent-skills/"), `Tarball contains the Scientific Agent Skills source checkout: ${file}`);
+    assert(!file.startsWith("vendor/materials-science-skills-for-llm/"), `Tarball contains the Materials-Science-Skills-For-LLM source checkout: ${file}`);
     assert(!file.startsWith("audits/"), `Tarball contains maintainer-only vendor audit evidence: ${file}`);
+    assert(!file.startsWith("src/vendor-converters/"), `Tarball contains maintainer-only vendor decision sources: ${file}`);
+    assert(!file.includes("/curation/"), `Tarball contains maintainer-only curation inputs: ${file}`);
+    assert(!/(?:admission|relationship|file|external-resource)-decisions\.json$/.test(file), `Tarball contains maintainer-only production decisions: ${file}`);
     assert(!file.endsWith(".d.ts"), `Tarball contains TypeScript declarations: ${file}`);
     assert(!file.endsWith(".js.map"), `Tarball contains source maps: ${file}`);
     assert(!retired.test(file), `Tarball contains a retired Companion workflow: ${file}`);

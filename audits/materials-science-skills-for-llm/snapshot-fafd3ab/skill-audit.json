@@ -1,0 +1,395 @@
+{
+  "schema_version": "1",
+  "source": {
+    "source_id": "materials-science-skills-for-llm",
+    "name": "Materials-Science-Skills-For-LLM",
+    "repository_url": "https://github.com/IntelligentMat/Materials-Science-Skills-For-LLM",
+    "release": "snapshot-fafd3ab",
+    "revision": "fafd3ab011e4c363658a39c4bb62fc739839d58c",
+    "root_license": "MIT",
+    "license_path": "LICENSE",
+    "skill_root": "."
+  },
+  "policy": {
+    "audit_is_admission": false,
+    "future_change": "ingest-materials-science-skills-for-llm",
+    "generated_id_prefix": "materials-science-skills-",
+    "allowed_domains": [
+      "materials-engineering",
+      "macromolecular-and-materials-chemistry",
+      "computational-modeling-and-simulation",
+      "research-computing-infrastructure"
+    ],
+    "anzsrc_field_creates_membership": false,
+    "converter_executes_upstream_content": false
+  },
+  "summary": {
+    "top_level_skills": 12,
+    "candidate_skills": 8,
+    "excluded_skills": 4,
+    "blocked_review_skills": 4,
+    "files": 43,
+    "bytes": 82860,
+    "reference_files": 31,
+    "license_status_counts": {
+      "ambiguous": 12
+    },
+    "risk_counts": {
+      "absolute-path": 1,
+      "command-execution": 12,
+      "credential": 3,
+      "dependency-installation": 10,
+      "external-service": 3,
+      "hpc-or-scheduler": 4,
+      "privileged-operation": 1,
+      "resource-download": 4,
+      "stateful-operation": 12
+    }
+  },
+  "skills": [
+    {
+      "skill_id": "apex-alloy-workflows",
+      "source_path": "apex-alloy-workflows",
+      "scope": "research-workflow",
+      "scope_disposition": "candidate",
+      "ingest_readiness": "blocked-review",
+      "frontmatter": { "name": "apex-alloy-workflows", "keys": ["description", "name"], "yaml_valid": true, "validation_error": null, "compatibility_declared": false },
+      "primary_anzsrc_field": "401607",
+      "additional_anzsrc_fields": ["460207"],
+      "anzsrc_unclassified_reason": null,
+      "prospective_domains": ["materials-engineering", "computational-modeling-and-simulation", "research-computing-infrastructure"],
+      "resources": { "files": 3, "bytes": 8996, "references": 2, "scripts": 0, "assets": 0, "tests_or_evals": 0, "environment_templates": 0 },
+      "relationships": [
+        { "target_skill_id": "deepmd-kit", "relation": "related", "evidence": ["apex-alloy-workflows/SKILL.md"], "note": "APEX supports DeepMD potentials, while the sibling Skill covers the DeepMD development surface." },
+        { "target_skill_id": "slurm-workload-manager", "relation": "related", "evidence": ["apex-alloy-workflows/SKILL.md"], "note": "APEX exposes a Slurm/HPC backend governed by separate scheduler authority." }
+      ],
+      "content_license": { "status": "ambiguous", "expression": null, "evidence": ["LICENSE", "apex-alloy-workflows/SKILL.md", "apex-alloy-workflows/references/quickstart.md"] },
+      "operational_risks": [
+        { "risk": "command-execution", "evidence": ["apex-alloy-workflows/SKILL.md"], "note": "The workflow submits, monitors, retries, terminates, retrieves, and archives jobs." },
+        { "risk": "credential", "evidence": ["apex-alloy-workflows/references/quickstart.md"], "note": "The Bohrium example contains email, password, and program identifiers." },
+        { "risk": "external-service", "evidence": ["apex-alloy-workflows/references/quickstart.md"], "note": "Bohrium submission uses a remote workflow service and images." },
+        { "risk": "hpc-or-scheduler", "evidence": ["apex-alloy-workflows/SKILL.md"], "note": "The workflow includes Slurm and MPI execution." },
+        { "risk": "stateful-operation", "evidence": ["apex-alloy-workflows/SKILL.md"], "note": "Submission and control commands mutate remote and local job state." }
+      ],
+      "overlaps": [],
+      "findings": [
+        { "code": "credential-service-hpc-boundary", "severity": "blocking", "evidence": ["apex-alloy-workflows/SKILL.md", "apex-alloy-workflows/references/quickstart.md"], "note": "Future adaptation must remove embedded credential patterns and make service and scheduler authority user-controlled." },
+        { "code": "content-license-scope-unconfirmed", "severity": "review", "evidence": ["LICENSE", "apex-alloy-workflows/SKILL.md"], "note": "The root MIT license is evidence but does not establish the provenance and license of APEX-derived guidance." }
+      ],
+      "recommendation": "Retain as a candidate only after licensing, credentials, remote-service, and HPC boundaries are resolved by explicit ingestion decisions."
+    },
+    {
+      "skill_id": "ase",
+      "source_path": "ase",
+      "scope": "development-maintenance",
+      "scope_disposition": "exclude",
+      "ingest_readiness": "not-applicable",
+      "frontmatter": { "name": "ase", "keys": ["description", "name"], "yaml_valid": true, "validation_error": null, "compatibility_declared": false },
+      "primary_anzsrc_field": "461299",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null,
+      "prospective_domains": [],
+      "resources": { "files": 5, "bytes": 5550, "references": 4, "scripts": 0, "assets": 0, "tests_or_evals": 0, "environment_templates": 0 },
+      "relationships": [],
+      "content_license": { "status": "ambiguous", "expression": null, "evidence": ["LICENSE", "ase/SKILL.md", "ase/references/git-workflow.md"] },
+      "operational_risks": [
+        { "risk": "command-execution", "evidence": ["ase/SKILL.md"], "note": "The Skill directs environment creation, tests, formatting, documentation, and Git operations." },
+        { "risk": "dependency-installation", "evidence": ["ase/SKILL.md"], "note": "It instructs editable and optional package installation." },
+        { "risk": "resource-download", "evidence": ["ase/references/testing.md"], "note": "Test guidance installs data files from a Git repository." },
+        { "risk": "stateful-operation", "evidence": ["ase/references/git-workflow.md"], "note": "Branching, merging, pushing, and changelog operations alter a development checkout." }
+      ],
+      "overlaps": [],
+      "findings": [
+        { "code": "development-maintenance-surface", "severity": "blocking", "evidence": ["ase/SKILL.md", "ase/references/git-workflow.md"], "note": "The Skill primarily maintains ASE rather than providing reusable academic research semantics." },
+        { "code": "content-license-scope-unconfirmed", "severity": "review", "evidence": ["LICENSE", "ase/SKILL.md"], "note": "The repository license does not independently establish the license of summarized ASE project guidance." }
+      ],
+      "recommendation": "Exclude from production ingestion because the surface is upstream software development and maintenance."
+    },
+    {
+      "skill_id": "atomsk-cli",
+      "source_path": "atomsk-cli",
+      "scope": "reusable-scientific-computing",
+      "scope_disposition": "candidate",
+      "ingest_readiness": "blocked-review",
+      "frontmatter": { "name": "atomsk-cli", "keys": ["description", "name"], "yaml_valid": true, "validation_error": null, "compatibility_declared": false },
+      "primary_anzsrc_field": "401699",
+      "additional_anzsrc_fields": ["460207"],
+      "anzsrc_unclassified_reason": null,
+      "prospective_domains": ["materials-engineering", "computational-modeling-and-simulation"],
+      "resources": { "files": 1, "bytes": 3764, "references": 0, "scripts": 0, "assets": 0, "tests_or_evals": 0, "environment_templates": 0 },
+      "relationships": [],
+      "content_license": { "status": "ambiguous", "expression": null, "evidence": ["LICENSE", "atomsk-cli/SKILL.md"] },
+      "operational_risks": [
+        { "risk": "command-execution", "evidence": ["atomsk-cli/SKILL.md"], "note": "The Skill provides direct structure-creation and transformation commands." },
+        { "risk": "stateful-operation", "evidence": ["atomsk-cli/SKILL.md"], "note": "Commands create and transform scientific structure files." }
+      ],
+      "overlaps": [],
+      "findings": [
+        { "code": "missing-quick-recipes-reference", "severity": "blocking", "evidence": ["atomsk-cli/SKILL.md"], "note": "The Skill points to references/quick-recipes.md, which is absent from the pinned snapshot." },
+        { "code": "content-license-scope-unconfirmed", "severity": "review", "evidence": ["LICENSE", "atomsk-cli/SKILL.md"], "note": "Atomsk-derived command guidance requires source and content-license confirmation." }
+      ],
+      "recommendation": "Retain as a candidate only after the broken reference and content provenance are resolved."
+    },
+    {
+      "skill_id": "cms-scripts",
+      "source_path": "cms-scripts",
+      "scope": "private-local-tooling",
+      "scope_disposition": "exclude",
+      "ingest_readiness": "not-applicable",
+      "frontmatter": { "name": "cms-scripts", "keys": ["description", "name"], "yaml_valid": true, "validation_error": null, "compatibility_declared": false },
+      "primary_anzsrc_field": "401699",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null,
+      "prospective_domains": [],
+      "resources": { "files": 3, "bytes": 6248, "references": 2, "scripts": 0, "assets": 0, "tests_or_evals": 0, "environment_templates": 0 },
+      "relationships": [
+        { "target_skill_id": "ase", "relation": "related", "evidence": ["cms-scripts/SKILL.md"], "note": "The unavailable private toolbox is described as containing ASE usage notebooks." },
+        { "target_skill_id": "atomsk-cli", "relation": "related", "evidence": ["cms-scripts/SKILL.md"], "note": "The unavailable toolbox lists Atomsk among its dependencies." },
+        { "target_skill_id": "pymatgen-usage", "relation": "related", "evidence": ["cms-scripts/SKILL.md"], "note": "The unavailable private toolbox is described as containing pymatgen usage notebooks." },
+        { "target_skill_id": "slurm-workload-manager", "relation": "related", "evidence": ["cms-scripts/SKILL.md"], "note": "The Skill references HPC Slurm helpers that are not included in this snapshot." }
+      ],
+      "content_license": { "status": "ambiguous", "expression": null, "evidence": ["LICENSE", "cms-scripts/SKILL.md", "cms-scripts/references/catalogue.md"] },
+      "operational_risks": [
+        { "risk": "absolute-path", "evidence": ["cms-scripts/SKILL.md"], "note": "The contract hard-codes /Users/siyuliu/Desktop/tools/scripts-main." },
+        { "risk": "command-execution", "evidence": ["cms-scripts/SKILL.md"], "note": "The Skill directs execution of scripts absent from the repository." },
+        { "risk": "dependency-installation", "evidence": ["cms-scripts/SKILL.md"], "note": "It delegates installation to a large undeclared set of scientific dependencies." },
+        { "risk": "hpc-or-scheduler", "evidence": ["cms-scripts/references/usage-patterns.md"], "note": "The unavailable toolbox includes Slurm generation and job helpers." },
+        { "risk": "stateful-operation", "evidence": ["cms-scripts/SKILL.md"], "note": "Referenced scripts may overwrite scientific files and change executable permissions." }
+      ],
+      "overlaps": [],
+      "findings": [
+        { "code": "private-absolute-tool-path", "severity": "blocking", "evidence": ["cms-scripts/SKILL.md"], "note": "The core tool collection is an external private absolute path and is not auditable from this snapshot." },
+        { "code": "referenced-toolbox-not-redistributed", "severity": "blocking", "evidence": ["cms-scripts/references/catalogue.md"], "note": "The catalog describes scripts and notebooks that are not present, licensed, or reviewable here." },
+        { "code": "content-license-scope-unconfirmed", "severity": "review", "evidence": ["LICENSE", "cms-scripts/SKILL.md"], "note": "The root license cannot authorize absent private toolbox content." }
+      ],
+      "recommendation": "Exclude as local private tooling whose core scripts are absent and bound to a personal absolute path."
+    },
+    {
+      "skill_id": "deepmd-kit",
+      "source_path": "deepmd-kit",
+      "scope": "development-maintenance",
+      "scope_disposition": "exclude",
+      "ingest_readiness": "not-applicable",
+      "frontmatter": { "name": "deepmd-kit", "keys": ["description", "name"], "yaml_valid": true, "validation_error": null, "compatibility_declared": false },
+      "primary_anzsrc_field": "461299",
+      "additional_anzsrc_fields": [],
+      "anzsrc_unclassified_reason": null,
+      "prospective_domains": [],
+      "resources": { "files": 2, "bytes": 3473, "references": 1, "scripts": 0, "assets": 0, "tests_or_evals": 0, "environment_templates": 0 },
+      "relationships": [],
+      "content_license": { "status": "ambiguous", "expression": null, "evidence": ["LICENSE", "deepmd-kit/SKILL.md", "deepmd-kit/references/validation-checklist.md"] },
+      "operational_risks": [
+        { "risk": "command-execution", "evidence": ["deepmd-kit/SKILL.md"], "note": "The Skill drives builds, lint, tests, and training smoke runs." },
+        { "risk": "dependency-installation", "evidence": ["deepmd-kit/SKILL.md"], "note": "It installs large TensorFlow, PyTorch, test, and lint environments." },
+        { "risk": "resource-download", "evidence": ["deepmd-kit/SKILL.md"], "note": "Backend packages are obtained from external package indexes." },
+        { "risk": "stateful-operation", "evidence": ["deepmd-kit/SKILL.md"], "note": "Editable installation, formatting, building, and training mutate a development checkout." }
+      ],
+      "overlaps": [],
+      "findings": [
+        { "code": "development-maintenance-surface", "severity": "blocking", "evidence": ["deepmd-kit/SKILL.md", "deepmd-kit/references/validation-checklist.md"], "note": "The Skill is primarily a DeePMD-kit development and validation playbook." },
+        { "code": "content-license-scope-unconfirmed", "severity": "review", "evidence": ["LICENSE", "deepmd-kit/SKILL.md"], "note": "The summarized DeePMD project guidance lacks Skill-level provenance and license confirmation." }
+      ],
+      "recommendation": "Exclude because the current surface is repository development and maintenance rather than reusable research workflow semantics."
+    },
+    {
+      "skill_id": "deeptb-helper",
+      "source_path": "deeptb-helper",
+      "scope": "research-workflow",
+      "scope_disposition": "candidate",
+      "ingest_readiness": "needs-curation",
+      "frontmatter": { "name": "deeptb-helper", "keys": ["description", "name"], "yaml_valid": false, "validation_error": "description contains an unquoted mapping colon", "compatibility_declared": false },
+      "primary_anzsrc_field": "510403",
+      "additional_anzsrc_fields": ["460207"],
+      "anzsrc_unclassified_reason": null,
+      "prospective_domains": ["materials-engineering", "computational-modeling-and-simulation"],
+      "resources": { "files": 4, "bytes": 5963, "references": 3, "scripts": 0, "assets": 0, "tests_or_evals": 0, "environment_templates": 0 },
+      "relationships": [],
+      "content_license": { "status": "ambiguous", "expression": null, "evidence": ["LICENSE", "deeptb-helper/SKILL.md", "deeptb-helper/references/install.md"] },
+      "operational_risks": [
+        { "risk": "command-execution", "evidence": ["deeptb-helper/SKILL.md"], "note": "The workflow generates configs, trains models, and performs inference." },
+        { "risk": "dependency-installation", "evidence": ["deeptb-helper/references/install.md"], "note": "CPU/GPU installation depends on platform-specific Torch and torch-scatter packages." },
+        { "risk": "resource-download", "evidence": ["deeptb-helper/references/install.md"], "note": "The installation guide pipes a remote installer and clones DeePTB." },
+        { "risk": "stateful-operation", "evidence": ["deeptb-helper/SKILL.md"], "note": "Training and inference create checkpoints and output directories." }
+      ],
+      "overlaps": [],
+      "findings": [
+        { "code": "invalid-yaml-frontmatter", "severity": "blocking", "evidence": ["deeptb-helper/SKILL.md"], "note": "The unquoted description contains a colon and cannot be parsed as YAML frontmatter." },
+        { "code": "install-and-download-boundary", "severity": "review", "evidence": ["deeptb-helper/references/install.md"], "note": "Future adaptation must separate scientific guidance from installation and remote-download instructions." },
+        { "code": "content-license-scope-unconfirmed", "severity": "review", "evidence": ["LICENSE", "deeptb-helper/SKILL.md"], "note": "DeePTB-derived guidance needs source and content-license confirmation." }
+      ],
+      "recommendation": "Curate the research workflow while removing installer execution and making platform, data, and compute prerequisites explicit."
+    },
+    {
+      "skill_id": "dpgen-workflow",
+      "source_path": "dpgen-workflow",
+      "scope": "research-workflow",
+      "scope_disposition": "candidate",
+      "ingest_readiness": "needs-curation",
+      "frontmatter": { "name": "dpgen-workflow", "keys": ["description", "name"], "yaml_valid": true, "validation_error": null, "compatibility_declared": false },
+      "primary_anzsrc_field": "460207",
+      "additional_anzsrc_fields": ["401699"],
+      "anzsrc_unclassified_reason": null,
+      "prospective_domains": ["materials-engineering", "computational-modeling-and-simulation", "research-computing-infrastructure"],
+      "resources": { "files": 2, "bytes": 3843, "references": 1, "scripts": 0, "assets": 0, "tests_or_evals": 0, "environment_templates": 0 },
+      "relationships": [
+        { "target_skill_id": "deepmd-kit", "relation": "related", "evidence": ["dpgen-workflow/SKILL.md"], "note": "DP-GEN is a deep-potential generation workflow, while the sibling Skill covers development of its model backend." }
+      ],
+      "content_license": { "status": "ambiguous", "expression": null, "evidence": ["LICENSE", "dpgen-workflow/SKILL.md", "dpgen-workflow/references/quick-start.md"] },
+      "operational_risks": [
+        { "risk": "command-execution", "evidence": ["dpgen-workflow/SKILL.md"], "note": "The Skill drives DP-GEN runs, tests, GUI, docs, and packaging." },
+        { "risk": "dependency-installation", "evidence": ["dpgen-workflow/references/quick-start.md"], "note": "Multiple editable and released-package installation variants are prescribed." },
+        { "risk": "hpc-or-scheduler", "evidence": ["dpgen-workflow/references/quick-start.md"], "note": "Machine templates depend on Slurm, PBS, and external ab-initio systems." },
+        { "risk": "stateful-operation", "evidence": ["dpgen-workflow/SKILL.md"], "note": "Run, initialize, simplify, collect, and build commands create and modify workflow artifacts." }
+      ],
+      "overlaps": [],
+      "findings": [
+        { "code": "mixed-research-and-maintenance-scope", "severity": "review", "evidence": ["dpgen-workflow/SKILL.md"], "note": "Reusable DP-GEN semantics are mixed with repository testing, documentation, and packaging guidance." },
+        { "code": "hpc-dependency-boundary", "severity": "review", "evidence": ["dpgen-workflow/references/quick-start.md"], "note": "External schedulers and scientific software must remain user-controlled prerequisites." },
+        { "code": "content-license-scope-unconfirmed", "severity": "review", "evidence": ["LICENSE", "dpgen-workflow/SKILL.md"], "note": "DP-GEN-derived guidance needs source and content-license confirmation." }
+      ],
+      "recommendation": "Curate the scientific workflow separately from development commands and declare HPC and external-code boundaries without executing them."
+    },
+    {
+      "skill_id": "gpumd-workflow",
+      "source_path": "gpumd-workflow",
+      "scope": "research-workflow",
+      "scope_disposition": "candidate",
+      "ingest_readiness": "needs-curation",
+      "frontmatter": { "name": "gpumd-workflow", "keys": ["description", "name"], "yaml_valid": true, "validation_error": null, "compatibility_declared": false },
+      "primary_anzsrc_field": "510403",
+      "additional_anzsrc_fields": ["460207"],
+      "anzsrc_unclassified_reason": null,
+      "prospective_domains": ["materials-engineering", "computational-modeling-and-simulation", "research-computing-infrastructure"],
+      "resources": { "files": 6, "bytes": 9430, "references": 5, "scripts": 0, "assets": 0, "tests_or_evals": 0, "environment_templates": 0 },
+      "relationships": [],
+      "content_license": { "status": "ambiguous", "expression": null, "evidence": ["LICENSE", "gpumd-workflow/SKILL.md", "gpumd-workflow/references/quickstart.md"] },
+      "operational_risks": [
+        { "risk": "command-execution", "evidence": ["gpumd-workflow/SKILL.md"], "note": "The Skill compiles and runs molecular dynamics and NEP training executables." },
+        { "risk": "dependency-installation", "evidence": ["gpumd-workflow/references/quickstart.md"], "note": "A compatible CUDA toolkit and native compiler toolchain are prerequisites." },
+        { "risk": "stateful-operation", "evidence": ["gpumd-workflow/SKILL.md"], "note": "Compilation, simulation, training, and restart flows create binaries, models, and outputs." }
+      ],
+      "overlaps": [],
+      "findings": [
+        { "code": "gpu-native-execution-boundary", "severity": "review", "evidence": ["gpumd-workflow/SKILL.md", "gpumd-workflow/references/quickstart.md"], "note": "Future adaptation must treat CUDA compilation and GPU execution as user-approved external operations." },
+        { "code": "content-license-scope-unconfirmed", "severity": "review", "evidence": ["LICENSE", "gpumd-workflow/SKILL.md"], "note": "GPUMD-derived guidance needs source and content-license confirmation." }
+      ],
+      "recommendation": "Curate as a computational workflow with explicit external binary, CUDA, resource, and execution boundaries."
+    },
+    {
+      "skill_id": "phonopy-workflows",
+      "source_path": "phonopy-workflows",
+      "scope": "research-workflow",
+      "scope_disposition": "candidate",
+      "ingest_readiness": "needs-curation",
+      "frontmatter": { "name": "phonopy-workflows", "keys": ["description", "name"], "yaml_valid": true, "validation_error": null, "compatibility_declared": false },
+      "primary_anzsrc_field": "510406",
+      "additional_anzsrc_fields": ["340202"],
+      "anzsrc_unclassified_reason": null,
+      "prospective_domains": ["materials-engineering", "macromolecular-and-materials-chemistry", "computational-modeling-and-simulation"],
+      "resources": { "files": 5, "bytes": 9406, "references": 4, "scripts": 0, "assets": 0, "tests_or_evals": 0, "environment_templates": 0 },
+      "relationships": [],
+      "content_license": { "status": "ambiguous", "expression": null, "evidence": ["LICENSE", "phonopy-workflows/SKILL.md", "phonopy-workflows/references/quick-start.md"] },
+      "operational_risks": [
+        { "risk": "command-execution", "evidence": ["phonopy-workflows/SKILL.md"], "note": "The workflow creates displacement inputs and consumes external DFT outputs." },
+        { "risk": "dependency-installation", "evidence": ["phonopy-workflows/references/dev.md"], "note": "Development guidance installs optional scientific and documentation dependencies." },
+        { "risk": "stateful-operation", "evidence": ["phonopy-workflows/SKILL.md"], "note": "Commands generate supercells, force sets, plots, and property outputs." }
+      ],
+      "overlaps": [],
+      "findings": [
+        { "code": "mixed-research-and-maintenance-scope", "severity": "review", "evidence": ["phonopy-workflows/SKILL.md", "phonopy-workflows/references/dev.md"], "note": "A useful phonon workflow is mixed with upstream repository maintenance guidance." },
+        { "code": "external-dft-boundary", "severity": "review", "evidence": ["phonopy-workflows/references/quick-start.md"], "note": "Force calculations rely on external DFT codes and remain outside ResearchSpec authority." },
+        { "code": "content-license-scope-unconfirmed", "severity": "review", "evidence": ["LICENSE", "phonopy-workflows/SKILL.md"], "note": "Phonopy-derived guidance needs source and content-license confirmation." }
+      ],
+      "recommendation": "Curate the phonon research workflow, separate development maintenance, and declare DFT execution as an external prerequisite."
+    },
+    {
+      "skill_id": "pymatgen-usage",
+      "source_path": "pymatgen-usage",
+      "scope": "reusable-scientific-computing",
+      "scope_disposition": "candidate",
+      "ingest_readiness": "blocked-review",
+      "frontmatter": { "name": "pymatgen-usage", "keys": ["description", "name"], "yaml_valid": true, "validation_error": null, "compatibility_declared": false },
+      "primary_anzsrc_field": "340309",
+      "additional_anzsrc_fields": ["340701"],
+      "anzsrc_unclassified_reason": null,
+      "prospective_domains": ["materials-engineering", "macromolecular-and-materials-chemistry", "computational-modeling-and-simulation"],
+      "resources": { "files": 5, "bytes": 8007, "references": 4, "scripts": 0, "assets": 0, "tests_or_evals": 0, "environment_templates": 0 },
+      "relationships": [],
+      "content_license": { "status": "ambiguous", "expression": null, "evidence": ["LICENSE", "pymatgen-usage/SKILL.md", "pymatgen-usage/references/mp-api.md"] },
+      "operational_risks": [
+        { "risk": "command-execution", "evidence": ["pymatgen-usage/SKILL.md"], "note": "The Skill runs pymatgen and pmg operations on scientific files." },
+        { "risk": "credential", "evidence": ["pymatgen-usage/references/mp-api.md"], "note": "Materials Project access requires an API key and includes a command that persists it." },
+        { "risk": "dependency-installation", "evidence": ["pymatgen-usage/SKILL.md"], "note": "The Skill prescribes pymatgen and optional dependency installation." },
+        { "risk": "external-service", "evidence": ["pymatgen-usage/references/mp-api.md"], "note": "MPRester accesses the Materials Project service." },
+        { "risk": "stateful-operation", "evidence": ["pymatgen-usage/SKILL.md"], "note": "Conversion and configuration commands write files and may persist credentials." }
+      ],
+      "overlaps": [
+        { "target_kind": "existing-vendor", "target_id": "scientific-agent-skills-pymatgen", "disposition": "duplicate", "evidence": ["pymatgen-usage/SKILL.md"], "note": "ResearchSpec already publishes an admitted Scientific Agent Skills pymatgen surface with substantially overlapping core, I/O, CLI, and Materials Project coverage." }
+      ],
+      "findings": [
+        { "code": "existing-pymatgen-vendor-overlap", "severity": "blocking", "evidence": ["pymatgen-usage/SKILL.md"], "note": "Ingestion must resolve duplication against scientific-agent-skills-pymatgen instead of publishing parallel undifferentiated guidance." },
+        { "code": "credential-persistence-boundary", "severity": "review", "evidence": ["pymatgen-usage/references/mp-api.md"], "note": "Future adaptation must not capture, persist, or configure Materials Project credentials." },
+        { "code": "content-license-scope-unconfirmed", "severity": "review", "evidence": ["LICENSE", "pymatgen-usage/SKILL.md"], "note": "Pymatgen-derived examples and guidance need source and content-license confirmation." }
+      ],
+      "recommendation": "Block pending a deliberate overlap decision, content provenance review, and provider-neutral credential boundary."
+    },
+    {
+      "skill_id": "slurm-workload-manager",
+      "source_path": "slurm-workload-manager",
+      "scope": "platform-management",
+      "scope_disposition": "exclude",
+      "ingest_readiness": "not-applicable",
+      "frontmatter": { "name": "slurm-workload-manager", "keys": ["description", "name"], "yaml_valid": true, "validation_error": null, "compatibility_declared": false },
+      "primary_anzsrc_field": "460607",
+      "additional_anzsrc_fields": ["460610"],
+      "anzsrc_unclassified_reason": null,
+      "prospective_domains": [],
+      "resources": { "files": 4, "bytes": 6295, "references": 3, "scripts": 0, "assets": 0, "tests_or_evals": 0, "environment_templates": 0 },
+      "relationships": [],
+      "content_license": { "status": "ambiguous", "expression": null, "evidence": ["LICENSE", "slurm-workload-manager/SKILL.md", "slurm-workload-manager/references/minimal-slurm.conf.md"] },
+      "operational_risks": [
+        { "risk": "command-execution", "evidence": ["slurm-workload-manager/SKILL.md"], "note": "The Skill compiles, installs, configures, starts, and controls scheduler services." },
+        { "risk": "credential", "evidence": ["slurm-workload-manager/SKILL.md"], "note": "Accounting setup references database credentials and Munge keys." },
+        { "risk": "dependency-installation", "evidence": ["slurm-workload-manager/SKILL.md"], "note": "System compilers, libraries, Munge, database components, and plugins are prerequisites." },
+        { "risk": "hpc-or-scheduler", "evidence": ["slurm-workload-manager/SKILL.md"], "note": "The entire surface administers an HPC scheduler and jobs." },
+        { "risk": "privileged-operation", "evidence": ["slurm-workload-manager/SKILL.md"], "note": "Installation and configuration target system paths and use sudo." },
+        { "risk": "stateful-operation", "evidence": ["slurm-workload-manager/SKILL.md"], "note": "Daemon, job, configuration, and accounting commands mutate host and cluster state." }
+      ],
+      "overlaps": [],
+      "findings": [
+        { "code": "platform-administration-authority", "severity": "blocking", "evidence": ["slurm-workload-manager/SKILL.md", "slurm-workload-manager/references/minimal-slurm.conf.md"], "note": "The Skill owns privileged scheduler installation and administration rather than bounded research assistance." },
+        { "code": "content-license-scope-unconfirmed", "severity": "review", "evidence": ["LICENSE", "slurm-workload-manager/SKILL.md"], "note": "Slurm-derived administrative guidance needs source and content-license confirmation." }
+      ],
+      "recommendation": "Exclude because privileged platform and scheduler administration is outside domain Skill authority."
+    },
+    {
+      "skill_id": "unimol-ops",
+      "source_path": "unimol-ops",
+      "scope": "research-workflow",
+      "scope_disposition": "candidate",
+      "ingest_readiness": "blocked-review",
+      "frontmatter": { "name": "unimol-ops", "keys": ["description", "name"], "yaml_valid": true, "validation_error": null, "compatibility_declared": false },
+      "primary_anzsrc_field": "340402",
+      "additional_anzsrc_fields": ["461199"],
+      "anzsrc_unclassified_reason": null,
+      "prospective_domains": ["macromolecular-and-materials-chemistry", "computational-modeling-and-simulation", "research-computing-infrastructure"],
+      "resources": { "files": 3, "bytes": 11885, "references": 2, "scripts": 0, "assets": 0, "tests_or_evals": 0, "environment_templates": 0 },
+      "relationships": [],
+      "content_license": { "status": "ambiguous", "expression": null, "evidence": ["LICENSE", "unimol-ops/SKILL.md", "unimol-ops/references/resources.md"] },
+      "operational_risks": [
+        { "risk": "command-execution", "evidence": ["unimol-ops/SKILL.md"], "note": "The Skill trains, fine-tunes, infers, and docks with GPU model code." },
+        { "risk": "dependency-installation", "evidence": ["unimol-ops/SKILL.md"], "note": "It prescribes pinned RDKit, GPU PyTorch, Uni-Core, and unimol_tools installation." },
+        { "risk": "external-service", "evidence": ["unimol-ops/references/resources.md"], "note": "Model retrieval depends on Hugging Face or a configured mirror." },
+        { "risk": "resource-download", "evidence": ["unimol-ops/references/resources.md"], "note": "Workflows retrieve large model weights and datasets not distributed here." },
+        { "risk": "stateful-operation", "evidence": ["unimol-ops/SKILL.md"], "note": "Training, inference, docking, and cache operations create models and outputs." }
+      ],
+      "overlaps": [],
+      "findings": [
+        { "code": "external-model-download-boundary", "severity": "blocking", "evidence": ["unimol-ops/SKILL.md", "unimol-ops/references/resources.md"], "note": "Model and dataset sources, licenses, sizes, hashes, and user-approved download behavior are not captured." },
+        { "code": "gpu-service-compatibility-boundary", "severity": "review", "evidence": ["unimol-ops/SKILL.md"], "note": "Pinned dependencies, CUDA compatibility, remote endpoints, and compute cost require explicit adaptation." },
+        { "code": "content-license-scope-unconfirmed", "severity": "review", "evidence": ["LICENSE", "unimol-ops/SKILL.md"], "note": "Uni-Mol-derived guidance and linked resources need source and content-license confirmation." }
+      ],
+      "recommendation": "Block until model/data provenance, licensing, download, endpoint, compatibility, and compute-cost decisions are explicit."
+    }
+  ]
+}

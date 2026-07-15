@@ -3,17 +3,12 @@ import { z } from "zod";
 import {
   AnzsrcAuditMetadataSchema,
   AuditRelativePathSchema,
+  ContentLicenseReviewSchema,
   VendorAuditFindingSchema,
   VendorAuditRelationshipSchema,
   VendorAuditResourcesSchema,
   VendorAuditSourceSchema,
 } from "./contracts.js";
-
-export const ContentLicenseReviewSchema = z.strictObject({
-  status: z.enum(["confirmed", "ambiguous", "prohibited"]),
-  expression: z.string().min(1).nullable(),
-  evidence: z.array(AuditRelativePathSchema).min(1),
-});
 
 export const UpstreamSecurityReviewSchema = z.strictObject({
   highest_severity: z.enum(["critical", "high", "medium", "low", "info", "none"]),

@@ -27,7 +27,14 @@ vendor converter ──► vendor bundle/Skills ◄── source-neutral domain 
 - A **central assembler** validates all isolated vendor bundles against the source-neutral domain catalog and is the only writer of `skills/plugins/registry.json`.
 - The same Skill may be a direct member of several domains. Its bytes and global Skill ID remain unique.
 
-ToolUniverse v1.3.1 contributes 130 admitted Skills. Scientific Agent Skills v2.53.0 contributes 49 reviewed, vendor-prefixed Skills after complete admission decisions for all 147 audit records and finding-level decisions for all 40 manual-security targets. Together they populate 48 non-empty domains while remaining isolated vendor bundles; users still select only source-neutral domains.
+ToolUniverse v1.3.1 contributes 130 admitted Skills. Scientific Agent Skills
+v2.53.0 contributes 49 reviewed, vendor-prefixed Skills after complete admission
+decisions for all 147 audit records and finding-level decisions for all 40
+manual-security targets. Materials-Science-Skills-For-LLM
+`snapshot-fafd3ab` contributes seven curated Skills after resolving all twelve
+audit records and all 24 admitted source files. Together the three isolated
+vendor bundles populate 49 non-empty domains; users still select only
+source-neutral domains.
 
 ## Registry and package layout
 
@@ -74,6 +81,15 @@ The Scientific Agent Skills converter independently:
 - admits 49 Skills with `scientific-agent-skills-` IDs and excludes 98 after authority, redistribution, overlap, manual security, content, and domain review;
 - validates the complete 40-Skill manual-review SSOT, applies only approved declarative adaptations, removes platform metadata, normalizes compatibility and tool declarations, discloses bundled scripts, and copies reviewed resource trees with 28 explicit exclusions;
 - records all 22 audited relationships while allowing only admitted reviewed `required` edges to affect installation;
+- emits its isolated tree, bundle, manifest, and report.
+
+The Materials-Science-Skills-For-LLM converter independently:
+
+- validates the pinned `snapshot-fafd3ab` source and complete 12-record admission catalog;
+- admits seven `materials-science-skills-` Skills and excludes five for maintenance scope, private tooling, overlap, or privileged authority;
+- applies only the 24 explicit source-file decisions, including 15 source-bound replacement assets and two exclusions;
+- classifies all seven audited relationships as advisory or source-excluded and emits no hard dependency;
+- treats software, models, data, services, documentation, GPU, and HPC environments as reviewed external resources rather than provisioned assets;
 - emits its isolated tree, bundle, manifest, and report.
 
 Each converter stages against all published vendors before central assembly and commits only its own projection plus the registry. Running one converter cannot replace another vendor's generated tree or bundle.

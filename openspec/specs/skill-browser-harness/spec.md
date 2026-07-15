@@ -2,7 +2,9 @@
 
 ## Purpose
 
-TBD
+Provide a repository-local, read-only browser for inspecting the current
+production Skill surface and its source files without expanding the public CLI
+or executing bundled Skill content.
 
 ## Requirements
 

@@ -7,6 +7,108 @@
   },
   "vendors": [
     {
+      "vendor_id": "materials-science-skills-for-llm",
+      "name": "Materials-Science-Skills-For-LLM",
+      "repository_url": "https://github.com/IntelligentMat/Materials-Science-Skills-For-LLM",
+      "release": "snapshot-fafd3ab",
+      "revision": "fafd3ab011e4c363658a39c4bb62fc739839d58c",
+      "license": "MIT",
+      "converter_version": "1",
+      "skills": [
+        {
+          "skill_id": "materials-science-skills-apex-alloy-workflows",
+          "license": "MIT",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "apex-alloy-workflows"
+              ],
+              "adaptation": "curated"
+            }
+          ]
+        },
+        {
+          "skill_id": "materials-science-skills-atomsk-cli",
+          "license": "MIT",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "atomsk-cli"
+              ],
+              "adaptation": "curated"
+            }
+          ]
+        },
+        {
+          "skill_id": "materials-science-skills-deeptb-helper",
+          "license": "MIT",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "deeptb-helper"
+              ],
+              "adaptation": "curated"
+            }
+          ]
+        },
+        {
+          "skill_id": "materials-science-skills-dpgen-workflow",
+          "license": "MIT",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "dpgen-workflow"
+              ],
+              "adaptation": "curated"
+            }
+          ]
+        },
+        {
+          "skill_id": "materials-science-skills-gpumd-workflow",
+          "license": "MIT",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "gpumd-workflow"
+              ],
+              "adaptation": "curated"
+            }
+          ]
+        },
+        {
+          "skill_id": "materials-science-skills-phonopy-workflows",
+          "license": "MIT",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "phonopy-workflows"
+              ],
+              "adaptation": "curated"
+            }
+          ]
+        },
+        {
+          "skill_id": "materials-science-skills-unimol-ops",
+          "license": "MIT",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "unimol-ops"
+              ],
+              "adaptation": "curated"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "vendor_id": "scientific-agent-skills",
       "name": "Scientific Agent Skills",
       "repository_url": "https://github.com/K-Dense-AI/scientific-agent-skills",
@@ -2943,8 +3045,10 @@
       "anzsrc_group_code": "3403",
       "title": "Macromolecular and materials chemistry",
       "description": "ANZSRC 2020 FoR Group 3403: Macromolecular and materials chemistry.",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "skills": [
+        "materials-science-skills-phonopy-workflows",
+        "materials-science-skills-unimol-ops",
         "scientific-agent-skills-pymatgen"
       ]
     },
@@ -3484,8 +3588,15 @@
       "anzsrc_group_code": "4016",
       "title": "Materials engineering",
       "description": "ANZSRC 2020 FoR Group 4016: Materials engineering.",
-      "version": "0.1.0",
-      "skills": []
+      "version": "0.2.0",
+      "skills": [
+        "materials-science-skills-apex-alloy-workflows",
+        "materials-science-skills-atomsk-cli",
+        "materials-science-skills-deeptb-helper",
+        "materials-science-skills-dpgen-workflow",
+        "materials-science-skills-gpumd-workflow",
+        "materials-science-skills-phonopy-workflows"
+      ]
     },
     {
       "domain_id": "mechanical-engineering",
@@ -4593,8 +4704,15 @@
       "domain_type": "tool",
       "title": "Computational modeling and simulation",
       "description": "Cross-disciplinary construction, execution, and interpretation of computational models and simulations.",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "skills": [
+        "materials-science-skills-apex-alloy-workflows",
+        "materials-science-skills-atomsk-cli",
+        "materials-science-skills-deeptb-helper",
+        "materials-science-skills-dpgen-workflow",
+        "materials-science-skills-gpumd-workflow",
+        "materials-science-skills-phonopy-workflows",
+        "materials-science-skills-unimol-ops",
         "scientific-agent-skills-cirq",
         "scientific-agent-skills-fluidsim",
         "scientific-agent-skills-matlab",

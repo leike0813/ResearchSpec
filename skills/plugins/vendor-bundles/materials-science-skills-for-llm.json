@@ -1,0 +1,105 @@
+{
+  "schema_version": "1",
+  "vendor": {
+    "vendor_id": "materials-science-skills-for-llm",
+    "name": "Materials-Science-Skills-For-LLM",
+    "repository_url": "https://github.com/IntelligentMat/Materials-Science-Skills-For-LLM",
+    "release": "snapshot-fafd3ab",
+    "revision": "fafd3ab011e4c363658a39c4bb62fc739839d58c",
+    "license": "MIT",
+    "converter_version": "1",
+    "skills": [
+      {
+        "skill_id": "materials-science-skills-apex-alloy-workflows",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "apex-alloy-workflows"
+            ],
+            "adaptation": "curated"
+          }
+        ]
+      },
+      {
+        "skill_id": "materials-science-skills-atomsk-cli",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "atomsk-cli"
+            ],
+            "adaptation": "curated"
+          }
+        ]
+      },
+      {
+        "skill_id": "materials-science-skills-deeptb-helper",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "deeptb-helper"
+            ],
+            "adaptation": "curated"
+          }
+        ]
+      },
+      {
+        "skill_id": "materials-science-skills-dpgen-workflow",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "dpgen-workflow"
+            ],
+            "adaptation": "curated"
+          }
+        ]
+      },
+      {
+        "skill_id": "materials-science-skills-gpumd-workflow",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "gpumd-workflow"
+            ],
+            "adaptation": "curated"
+          }
+        ]
+      },
+      {
+        "skill_id": "materials-science-skills-phonopy-workflows",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "phonopy-workflows"
+            ],
+            "adaptation": "curated"
+          }
+        ]
+      },
+      {
+        "skill_id": "materials-science-skills-unimol-ops",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "unimol-ops"
+            ],
+            "adaptation": "curated"
+          }
+        ]
+      }
+    ]
+  }
+}

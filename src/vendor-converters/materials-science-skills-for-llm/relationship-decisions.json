@@ -1,0 +1,12 @@
+{
+  "schema_version": "1",
+  "decisions": [
+    { "from": "apex-alloy-workflows", "to": "deepmd-kit", "relation": "related", "disposition": "advisory", "resolved_target": null, "evidence": ["apex-alloy-workflows/SKILL.md"], "note": "Deep-potential support is optional context and the sibling development surface is excluded." },
+    { "from": "apex-alloy-workflows", "to": "slurm-workload-manager", "relation": "related", "disposition": "advisory", "resolved_target": null, "evidence": ["apex-alloy-workflows/SKILL.md"], "note": "Scheduler use is an external prerequisite, not a packaged dependency." },
+    { "from": "cms-scripts", "to": "ase", "relation": "related", "disposition": "source-excluded", "resolved_target": null, "evidence": ["cms-scripts/SKILL.md"], "note": "The private source Skill is excluded." },
+    { "from": "cms-scripts", "to": "atomsk-cli", "relation": "related", "disposition": "source-excluded", "resolved_target": null, "evidence": ["cms-scripts/SKILL.md"], "note": "The private source Skill is excluded." },
+    { "from": "cms-scripts", "to": "pymatgen-usage", "relation": "related", "disposition": "source-excluded", "resolved_target": null, "evidence": ["cms-scripts/SKILL.md"], "note": "The private source Skill is excluded." },
+    { "from": "cms-scripts", "to": "slurm-workload-manager", "relation": "related", "disposition": "source-excluded", "resolved_target": null, "evidence": ["cms-scripts/SKILL.md"], "note": "The private source Skill is excluded." },
+    { "from": "dpgen-workflow", "to": "deepmd-kit", "relation": "related", "disposition": "advisory", "resolved_target": null, "evidence": ["dpgen-workflow/SKILL.md"], "note": "A user-provided DeepMD runtime is optional external context, not a packaged Skill dependency." }
+  ]
+}

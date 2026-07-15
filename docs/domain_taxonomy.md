@@ -31,7 +31,14 @@ Registry Schema 1 内部固定保存 213 个学科型 domain 和 5 个工具型 
 
 若已选 domain 在后续版本中被移除或变空，`plugin list --installed` 与 status 仍将其显示为 unavailable，以保留 manifest resolution snapshot 的安全卸载能力；update 会阻断。该 domain 后续重新获得 Skills 时，会在同一 ID 下恢复可用。
 
-当前 ToolUniverse 与 Scientific Agent Skills 合计提供 48 个非空 domain。Scientific Agent Skills 的 49 个准入 Skills 经人工加入 19 个 ANZSRC Group domain 和全部五个工具域，其中部分 domain 已由 ToolUniverse 激活。其他 domain 允许为空，并对用户隐藏。
+当前 ToolUniverse、Scientific Agent Skills 与
+Materials-Science-Skills-For-LLM 合计提供 49 个非空 domain。Materials vendor
+的七个准入 Skills 经人工加入 `materials-engineering`、
+`macromolecular-and-materials-chemistry` 与
+`computational-modeling-and-simulation`；GPU、远程服务和 HPC 使用本身不产生
+`research-computing-infrastructure` membership。Scientific Agent Skills 的 49
+个准入 Skills 经人工加入 19 个 ANZSRC Group domain 和全部五个工具域。其他
+domain 允许为空，并对用户隐藏。
 
 ## ANZSRC Division 与 Group 完整名录
 

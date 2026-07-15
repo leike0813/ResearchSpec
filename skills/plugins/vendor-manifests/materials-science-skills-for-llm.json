@@ -1,0 +1,297 @@
+{
+  "schema_version": "1",
+  "converter_version": "1",
+  "vendor_id": "materials-science-skills-for-llm",
+  "release": "snapshot-fafd3ab",
+  "revision": "fafd3ab011e4c363658a39c4bb62fc739839d58c",
+  "audited_skills": 12,
+  "generated_skills": [
+    "materials-science-skills-apex-alloy-workflows",
+    "materials-science-skills-atomsk-cli",
+    "materials-science-skills-deeptb-helper",
+    "materials-science-skills-dpgen-workflow",
+    "materials-science-skills-gpumd-workflow",
+    "materials-science-skills-phonopy-workflows",
+    "materials-science-skills-unimol-ops"
+  ],
+  "excluded_skill_ids": [
+    "materials-science-skills-ase",
+    "materials-science-skills-cms-scripts",
+    "materials-science-skills-deepmd-kit",
+    "materials-science-skills-pymatgen-usage",
+    "materials-science-skills-slurm-workload-manager"
+  ],
+  "admission_policy_sha256": "fcce1aad3e2ff7b2edbc97782e5c9f01f7fec15f8faa473a2c785daf695d9153",
+  "relationship_policy_sha256": "98ba81fadc94057c6d460a5047798edbd75213daeed6c0a4c1f0275701012257",
+  "file_policy_sha256": "db4091f4056ae855bcd95de43e414157250b7188c12761591c5216b5bab9d66d",
+  "external_resource_policy_sha256": "5937e78afa228ea90f8185cbb099035590a017c7f988b0205384691648ab78f9",
+  "relationship_decisions": [
+    {
+      "from": "apex-alloy-workflows",
+      "to": "deepmd-kit",
+      "relation": "related",
+      "disposition": "advisory",
+      "resolved_target": null,
+      "evidence": [
+        "apex-alloy-workflows/SKILL.md"
+      ],
+      "note": "Deep-potential support is optional context and the sibling development surface is excluded."
+    },
+    {
+      "from": "apex-alloy-workflows",
+      "to": "slurm-workload-manager",
+      "relation": "related",
+      "disposition": "advisory",
+      "resolved_target": null,
+      "evidence": [
+        "apex-alloy-workflows/SKILL.md"
+      ],
+      "note": "Scheduler use is an external prerequisite, not a packaged dependency."
+    },
+    {
+      "from": "cms-scripts",
+      "to": "ase",
+      "relation": "related",
+      "disposition": "source-excluded",
+      "resolved_target": null,
+      "evidence": [
+        "cms-scripts/SKILL.md"
+      ],
+      "note": "The private source Skill is excluded."
+    },
+    {
+      "from": "cms-scripts",
+      "to": "atomsk-cli",
+      "relation": "related",
+      "disposition": "source-excluded",
+      "resolved_target": null,
+      "evidence": [
+        "cms-scripts/SKILL.md"
+      ],
+      "note": "The private source Skill is excluded."
+    },
+    {
+      "from": "cms-scripts",
+      "to": "pymatgen-usage",
+      "relation": "related",
+      "disposition": "source-excluded",
+      "resolved_target": null,
+      "evidence": [
+        "cms-scripts/SKILL.md"
+      ],
+      "note": "The private source Skill is excluded."
+    },
+    {
+      "from": "cms-scripts",
+      "to": "slurm-workload-manager",
+      "relation": "related",
+      "disposition": "source-excluded",
+      "resolved_target": null,
+      "evidence": [
+        "cms-scripts/SKILL.md"
+      ],
+      "note": "The private source Skill is excluded."
+    },
+    {
+      "from": "dpgen-workflow",
+      "to": "deepmd-kit",
+      "relation": "related",
+      "disposition": "advisory",
+      "resolved_target": null,
+      "evidence": [
+        "dpgen-workflow/SKILL.md"
+      ],
+      "note": "A user-provided DeepMD runtime is optional external context, not a packaged Skill dependency."
+    }
+  ],
+  "file_dispositions": [
+    {
+      "source_path": "apex-alloy-workflows/references/property-parameters.md",
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-apex-alloy-workflows/references/property-parameters.md",
+      "disposition": "included",
+      "reason": "reviewed source file copied",
+      "source_sha256": "020677923773d1d1e59099da57bc1697e233b2cf0c1a3730fee91616a8238c51",
+      "sha256": "020677923773d1d1e59099da57bc1697e233b2cf0c1a3730fee91616a8238c51"
+    },
+    {
+      "source_path": "apex-alloy-workflows/references/quickstart.md",
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-apex-alloy-workflows/references/quickstart.md",
+      "disposition": "included",
+      "reason": "reviewed source-bound replacement asset",
+      "source_sha256": "056ef96e11ca23a1cc7ef491d2fef42948836318331b30241220460687612737",
+      "sha256": "cb2be3914dc526ca05931e7d50cea353f7a1777a199a6ad0f4a6620261cbd0df"
+    },
+    {
+      "source_path": "apex-alloy-workflows/SKILL.md",
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-apex-alloy-workflows/SKILL.md",
+      "disposition": "included",
+      "reason": "reviewed source-bound replacement asset",
+      "source_sha256": "8f6336800762f6c57383010fc62839836ee6a8be4d7bc762ecf7c66d38655e3d",
+      "sha256": "e7a6aab2b193c2c77a69e0da885628f23a79307491da2728621e237369a46c65"
+    },
+    {
+      "source_path": "atomsk-cli/SKILL.md",
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-atomsk-cli/SKILL.md",
+      "disposition": "included",
+      "reason": "reviewed source-bound replacement asset",
+      "source_sha256": "b3c704708e4b770c37f97db76b9f75d54d30b5b4e12637da9199f7c386939f5a",
+      "sha256": "65c089f3c231c28d4e7a47ecdc1e3d33f652720609d82f8a6e96d7925369d317"
+    },
+    {
+      "source_path": "deeptb-helper/references/cli-cheatsheet.md",
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-deeptb-helper/references/cli-cheatsheet.md",
+      "disposition": "included",
+      "reason": "reviewed source-bound replacement asset",
+      "source_sha256": "12b300a7011363beb9b8bab629ee52cd26882edc2e7d17dee2dcc992f2fc7d6d",
+      "sha256": "9e741d1c7f359234ddc5085f5d1d960df3ac1a990a3eb9ef1529b0a2170f3a04"
+    },
+    {
+      "source_path": "deeptb-helper/references/datasets.md",
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-deeptb-helper/references/datasets.md",
+      "disposition": "included",
+      "reason": "reviewed source file copied",
+      "source_sha256": "60402f53274ac03352ec67fa3163f8447a6b5288fddf68376ae6efb75263dc76",
+      "sha256": "60402f53274ac03352ec67fa3163f8447a6b5288fddf68376ae6efb75263dc76"
+    },
+    {
+      "source_path": "deeptb-helper/references/install.md",
+      "disposition": "excluded",
+      "reason": "Dependency installation is outside the static Skill boundary.",
+      "source_sha256": "5edb953ad69c26812abbb268959740d163e56b92f79defe127599e78e97f4335"
+    },
+    {
+      "source_path": "deeptb-helper/SKILL.md",
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-deeptb-helper/SKILL.md",
+      "disposition": "included",
+      "reason": "reviewed source-bound replacement asset",
+      "source_sha256": "c1f724ffda50caf41c4a706a725e9fb4963b04fef24178e4dfed3198a2d73c1e",
+      "sha256": "295d054c768ee705a2058d21865156df9b129ba772491572754864683b96fd43"
+    },
+    {
+      "source_path": "dpgen-workflow/references/quick-start.md",
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-dpgen-workflow/references/quick-start.md",
+      "disposition": "included",
+      "reason": "reviewed source-bound replacement asset",
+      "source_sha256": "b65309f875980120885db42dcf6bed66595197c6a84a0eee2065096c7f8d1135",
+      "sha256": "cb25f1b0b2f9bef26bb6e39f30f71f730c7fa263804f8966bff350a2ca203395"
+    },
+    {
+      "source_path": "dpgen-workflow/SKILL.md",
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-dpgen-workflow/SKILL.md",
+      "disposition": "included",
+      "reason": "reviewed source-bound replacement asset",
+      "source_sha256": "6b677adcd4c831f0728dec7e1c6a6c4c6e233e90f2edc30c00a98771c5eaf0ac",
+      "sha256": "3709b3e6b131033240fe55f6f2fe111afc0374a1908baa8c77d073a648766bad"
+    },
+    {
+      "source_path": "gpumd-workflow/references/gpumd-run.md",
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-gpumd-workflow/references/gpumd-run.md",
+      "disposition": "included",
+      "reason": "reviewed source file copied",
+      "source_sha256": "44d16c99de13dfcff774cf3f8285b3e810760066fb475b48ce04b5276ca377eb",
+      "sha256": "44d16c99de13dfcff774cf3f8285b3e810760066fb475b48ce04b5276ca377eb"
+    },
+    {
+      "source_path": "gpumd-workflow/references/nep-training.md",
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-gpumd-workflow/references/nep-training.md",
+      "disposition": "included",
+      "reason": "reviewed source file copied",
+      "source_sha256": "ff747d39cd559c51e8211d216cdda60da7559816fac3f0acd93e9904493952a1",
+      "sha256": "ff747d39cd559c51e8211d216cdda60da7559816fac3f0acd93e9904493952a1"
+    },
+    {
+      "source_path": "gpumd-workflow/references/outputs.md",
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-gpumd-workflow/references/outputs.md",
+      "disposition": "included",
+      "reason": "reviewed source file copied",
+      "source_sha256": "abe67ad3ade0057b53fd753be30205e4a64e27f453a2fc61f9eaf8f28c9f57e4",
+      "sha256": "abe67ad3ade0057b53fd753be30205e4a64e27f453a2fc61f9eaf8f28c9f57e4"
+    },
+    {
+      "source_path": "gpumd-workflow/references/quickstart.md",
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-gpumd-workflow/references/quickstart.md",
+      "disposition": "included",
+      "reason": "reviewed source-bound replacement asset",
+      "source_sha256": "435ed5fce2b7c0ff918924ad2404f6883f70993e3ea7f445c5750cad9390af9f",
+      "sha256": "31a42c95088b1ef654b584bf83709be5d04c7f825baf515a8bc416f60c43250f"
+    },
+    {
+      "source_path": "gpumd-workflow/references/troubleshooting.md",
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-gpumd-workflow/references/troubleshooting.md",
+      "disposition": "included",
+      "reason": "reviewed source-bound replacement asset",
+      "source_sha256": "dfd3dcbbc485084baceb91a142448d0c3b368839b6be32ee70e202f3fd905cbc",
+      "sha256": "1010be0f15c862fecaac862255fa88ce92af026b56b5f5175d1b202293201418"
+    },
+    {
+      "source_path": "gpumd-workflow/SKILL.md",
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-gpumd-workflow/SKILL.md",
+      "disposition": "included",
+      "reason": "reviewed source-bound replacement asset",
+      "source_sha256": "58f69a3a1d3968143abd63929dd3deac148b3a5a8a73de01ae4e51ec9fe208ed",
+      "sha256": "9bda5557e9516928d2045fe5d1abf2c1a689a8b500d81e90d883a578a0bc8f33"
+    },
+    {
+      "source_path": "phonopy-workflows/references/common-files.md",
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-phonopy-workflows/references/common-files.md",
+      "disposition": "included",
+      "reason": "reviewed source file copied",
+      "source_sha256": "600afaf02bb8e17604b56645b8f1b3d0e0e54fbb90425dbbe5eabc63056ca965",
+      "sha256": "600afaf02bb8e17604b56645b8f1b3d0e0e54fbb90425dbbe5eabc63056ca965"
+    },
+    {
+      "source_path": "phonopy-workflows/references/config-templates.md",
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-phonopy-workflows/references/config-templates.md",
+      "disposition": "included",
+      "reason": "reviewed source file copied",
+      "source_sha256": "24c33261730298c48c7e9cded2aa5a6f8b75636cefeadadbfc383894d1c6ae9b",
+      "sha256": "24c33261730298c48c7e9cded2aa5a6f8b75636cefeadadbfc383894d1c6ae9b"
+    },
+    {
+      "source_path": "phonopy-workflows/references/dev.md",
+      "disposition": "excluded",
+      "reason": "Upstream development maintenance is outside the generated research Skill.",
+      "source_sha256": "332c4d4586b63cf2135ce18653294dc467b682b5548fa5c92468ce18100318c7"
+    },
+    {
+      "source_path": "phonopy-workflows/references/quick-start.md",
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-phonopy-workflows/references/quick-start.md",
+      "disposition": "included",
+      "reason": "reviewed source-bound replacement asset",
+      "source_sha256": "454a95bf7b7a2118c0624a567c11b7c9617e08fd5a754465278def5494df0bed",
+      "sha256": "e1f8398f9b1e294cf8c871b55bcdc5cf36f6ba49682980838edf2d009d24de65"
+    },
+    {
+      "source_path": "phonopy-workflows/SKILL.md",
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-phonopy-workflows/SKILL.md",
+      "disposition": "included",
+      "reason": "reviewed source-bound replacement asset",
+      "source_sha256": "7c632388475c7bc293838e5b0908f23d63f6257fe3f53ae40e28cbfa91d04960",
+      "sha256": "5c51cf68ca6d88443a98069da2748c2b07ae89f58edbb00ebbab92c2e8839aa2"
+    },
+    {
+      "source_path": "unimol-ops/references/resources.md",
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-unimol-ops/references/resources.md",
+      "disposition": "included",
+      "reason": "reviewed source-bound replacement asset",
+      "source_sha256": "d97bdd9e206c7fb86eafeb11e83ca59882621a6e86a014560c332a3197ff7fe3",
+      "sha256": "eb7360dc38994fd7f57343f286ee8ec2fa4c1cad0dc79de09568d710b60549a9"
+    },
+    {
+      "source_path": "unimol-ops/references/workflows.md",
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-unimol-ops/references/workflows.md",
+      "disposition": "included",
+      "reason": "reviewed source-bound replacement asset",
+      "source_sha256": "1165f2075d2ceb0d3477b42ff64feacc4cc56fb9622b0de4123c4770619e6b77",
+      "sha256": "4e9c40e0a035ccbe16f091def5245a61e1ab93bab10e4189d80cf4cf1cf28c4f"
+    },
+    {
+      "source_path": "unimol-ops/SKILL.md",
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-unimol-ops/SKILL.md",
+      "disposition": "included",
+      "reason": "reviewed source-bound replacement asset",
+      "source_sha256": "48f9dc6cb5167639d9bad380722405ee4dcf0ac011c6e5de0908b8eff4e38805",
+      "sha256": "ad2b02ac2f411b860f405ecce097fabd7230fc618dd1dc3a0268206db219d858"
+    }
+  ]
+}

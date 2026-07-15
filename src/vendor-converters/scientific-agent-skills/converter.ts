@@ -10,6 +10,7 @@ import { sha256 } from "../../core/workspace/write-plan.js";
 import { assemblePluginRegistry } from "../../plugins/assembler.js";
 import { availableDomains, loadPluginRegistry, type PluginRegistry } from "../../plugins/registry.js";
 import { commitVendorStage, pathExists, posix, prepareVendorStage, vendorProjectionDiff, walkFiles } from "../shared/staging.js";
+import { productionVendorInventoryErrors } from "../shared/production-vendors.js";
 import {
   loadScientificAgentSkillsPolicies,
   type ScientificAgentSkillsAdmissionDecision,
@@ -87,7 +88,7 @@ export async function checkScientificAgentSkillsOutput(repoRoot: string): Promis
     const vendor = loaded.vendors.get(VENDOR_ID);
     if (!vendor) errors.push("Scientific Agent Skills vendor is absent from the bundled registry");
     else if (vendor.skills.length !== expected) errors.push(`Expected ${String(expected)} Scientific Agent Skills, found ${String(vendor.skills.length)}`);
-    if (loaded.vendors.size !== 2) errors.push(`Expected two production vendors, found ${String(loaded.vendors.size)}`);
+    errors.push(...productionVendorInventoryErrors(loaded.vendors.keys()));
     if (loaded.domains.size !== 218) errors.push(`Expected 218 internal domains, found ${String(loaded.domains.size)}`);
     if (!availableDomains(loaded).length) errors.push("Production registry has no available domains");
     warnings.push(...loaded.diagnostics.map((item) => item.message));

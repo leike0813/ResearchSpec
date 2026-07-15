@@ -10,6 +10,7 @@ import { sha256 } from "../../core/workspace/write-plan.js";
 import { assemblePluginRegistry } from "../../plugins/assembler.js";
 import { loadPluginRegistry, type PluginRegistry } from "../../plugins/registry.js";
 import { commitVendorStage, pathExists, posix, prepareVendorStage, vendorProjectionDiff, walkFiles } from "../shared/staging.js";
+import { productionVendorInventoryErrors } from "../shared/production-vendors.js";
 
 const execFileAsync = promisify(execFile);
 const VENDOR_ID = "tooluniverse";
@@ -89,6 +90,7 @@ export async function checkToolUniverseOutput(repoRoot: string): Promise<{ ok: b
     const vendor = loaded.vendors.get(VENDOR_ID);
     if (!vendor) errors.push("ToolUniverse vendor is absent from the bundled registry");
     else if (vendor.skills.length !== 130) errors.push(`Expected 130 ToolUniverse Skills, found ${String(vendor.skills.length)}`);
+    errors.push(...productionVendorInventoryErrors(loaded.vendors.keys()));
     if (loaded.domains.size !== 218) errors.push(`Expected 218 internal domains, found ${String(loaded.domains.size)}`);
     warnings.push(...loaded.diagnostics.map((item) => item.message));
   } catch (error) { errors.push(error instanceof Error ? error.message : String(error)); }

@@ -6,6 +6,17 @@ export const AuditRevisionSchema = z.string().regex(/^[a-f0-9]{40}$/, "must be a
 
 export const AuditRelativePathSchema = z.string().min(1).refine(isSafeAuditPath, "must be a safe relative POSIX path");
 
+export const AuditSkillRootSchema = z.string().min(1).refine(
+  (value) => value === "." || isSafeAuditPath(value),
+  "must be '.' or a safe relative POSIX path",
+);
+
+export const ContentLicenseReviewSchema = z.strictObject({
+  status: z.enum(["confirmed", "ambiguous", "prohibited"]),
+  expression: z.string().min(1).nullable(),
+  evidence: z.array(AuditRelativePathSchema).min(1),
+});
+
 export const VendorAuditSourceSchema = z.strictObject({
   source_id: z.string().min(1),
   name: z.string().min(1),
@@ -14,7 +25,7 @@ export const VendorAuditSourceSchema = z.strictObject({
   revision: AuditRevisionSchema,
   root_license: z.string().min(1),
   license_path: AuditRelativePathSchema,
-  skill_root: AuditRelativePathSchema,
+  skill_root: AuditSkillRootSchema,
 });
 
 export const VendorAuditResourcesSchema = z.strictObject({
@@ -59,6 +70,7 @@ export const AnzsrcAuditMetadataSchema = z.strictObject({
 });
 
 export type VendorAuditSource = z.infer<typeof VendorAuditSourceSchema>;
+export type ContentLicenseReview = z.infer<typeof ContentLicenseReviewSchema>;
 export type VendorAuditResources = z.infer<typeof VendorAuditResourcesSchema>;
 export type VendorAuditFinding = z.infer<typeof VendorAuditFindingSchema>;
 export type VendorAuditRelationship = z.infer<typeof VendorAuditRelationshipSchema>;

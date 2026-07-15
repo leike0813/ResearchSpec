@@ -1,0 +1,19 @@
+{
+  "schema_version": "1",
+  "decisions": [
+    { "upstream_skill_id": "apex-alloy-workflows", "resource_id": "apex-runtime", "kind": "software", "disposition": "preconfigured", "evidence": ["apex-alloy-workflows/SKILL.md"], "note": "Use only a user-approved local APEX installation or configured service." },
+    { "upstream_skill_id": "apex-alloy-workflows", "resource_id": "remote-hpc", "kind": "compute-environment", "disposition": "reference-only", "evidence": ["apex-alloy-workflows/SKILL.md"], "note": "Remote or scheduler-backed execution requires explicit per-operation confirmation." },
+    { "upstream_skill_id": "atomsk-cli", "resource_id": "atomsk-binary", "kind": "software", "disposition": "preconfigured", "evidence": ["atomsk-cli/SKILL.md"], "note": "Atomsk must already be installed by the user." },
+    { "upstream_skill_id": "deeptb-helper", "resource_id": "deeptb-runtime", "kind": "software", "disposition": "preconfigured", "evidence": ["deeptb-helper/SKILL.md"], "note": "DeePTB and its Python environment are user-managed prerequisites." },
+    { "upstream_skill_id": "deeptb-helper", "resource_id": "training-datasets", "kind": "data", "disposition": "preconfigured", "evidence": ["deeptb-helper/references/datasets.md"], "note": "Training data must be supplied locally with known provenance." },
+    { "upstream_skill_id": "dpgen-workflow", "resource_id": "dpgen-toolchain", "kind": "software", "disposition": "preconfigured", "evidence": ["dpgen-workflow/SKILL.md"], "note": "DP-GEN, DFT, and model runtimes are user-managed prerequisites." },
+    { "upstream_skill_id": "dpgen-workflow", "resource_id": "scheduler-environment", "kind": "compute-environment", "disposition": "reference-only", "evidence": ["dpgen-workflow/SKILL.md"], "note": "Scheduler execution remains external and confirmation-gated." },
+    { "upstream_skill_id": "gpumd-workflow", "resource_id": "gpumd-binary", "kind": "software", "disposition": "preconfigured", "evidence": ["gpumd-workflow/SKILL.md"], "note": "GPUMD must already be compiled and available." },
+    { "upstream_skill_id": "gpumd-workflow", "resource_id": "cuda-gpu", "kind": "compute-environment", "disposition": "preconfigured", "evidence": ["gpumd-workflow/SKILL.md"], "note": "CUDA and GPU capacity are user-provided and expensive runs require confirmation." },
+    { "upstream_skill_id": "phonopy-workflows", "resource_id": "phonopy-runtime", "kind": "software", "disposition": "preconfigured", "evidence": ["phonopy-workflows/SKILL.md"], "note": "Phonopy must already be installed." },
+    { "upstream_skill_id": "phonopy-workflows", "resource_id": "dft-or-alm", "kind": "software", "disposition": "preconfigured", "evidence": ["phonopy-workflows/SKILL.md"], "note": "DFT or ALM backends are external user-approved prerequisites." },
+    { "upstream_skill_id": "unimol-ops", "resource_id": "unimol-model", "kind": "model", "disposition": "preconfigured", "evidence": ["unimol-ops/references/resources.md"], "note": "Use only a local model supplied by the user with known provenance." },
+    { "upstream_skill_id": "unimol-ops", "resource_id": "molecular-data", "kind": "data", "disposition": "preconfigured", "evidence": ["unimol-ops/references/resources.md"], "note": "Use only local user-provided molecular data." },
+    { "upstream_skill_id": "unimol-ops", "resource_id": "container-image", "kind": "software", "disposition": "removed", "evidence": ["unimol-ops/SKILL.md"], "note": "Fixed images and automatic image retrieval are not distributed or invoked." }
+  ]
+}
