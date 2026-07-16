@@ -23,6 +23,10 @@ pnpm finrobot:check
 pnpm finrobot:idempotence
 pnpm histagent:check
 pnpm histagent:idempotence
+pnpm education-agent-skills:audit:check
+pnpm education-agent-skills:evidence:check
+pnpm education-agent-skills:check
+pnpm education-agent-skills:idempotence
 pnpm release:verify
 pnpm dlx @fission-ai/openspec@1.5.0 validate --specs --strict --no-interactive
 git diff --check
@@ -31,6 +35,13 @@ git diff --check
 `release:verify` runs the package lifecycle, inspects the real tarball, installs it into an OS temporary directory, invokes the installed bin, and initializes an isolated Codex delivery. Repository source or internal planners are not substitutes for this check.
 
 The Scientific Agent Skills gates also require all 40 manual-security targets to have finding-level maintainer decisions consistent with admission, resource curation, dependencies, and generated hashes. Upstream scanner labels alone are neither release approval nor a production blocker override.
+
+The Education Agent Skills gates require the immutable 165-Skill audit, all 872
+evidence declarations, all 813 advisory relationships, and the generated
+136-Skill tree to remain bound to the approved aggregate SHA-256
+`c4fc2f93a7553a1c02538d15491ed108afd36ad4a4a291ca4db3bad39e74775d`.
+Any source, policy, evidence, license, or generated-byte drift requires a new
+human approval.
 
 ## 2. Hosted Matrix
 

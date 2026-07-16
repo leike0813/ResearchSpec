@@ -55,7 +55,7 @@ ResearchSpec SHALL provide ToolUniverse convert, check, and idempotence maintain
 - **AND** unknown vendor Skills, duplicate Skill IDs, or invalid domain references SHALL block assembly before the registry is replaced
 
 ### Requirement: Complete Multi-Vendor Staging
-Each vendor converter SHALL stage its target output together with every unchanged published vendor, validate the complete source-neutral domain catalog through the central assembler, and commit only its own generated vendor outputs plus the assembled registry.
+Each vendor converter SHALL stage its target output together with every unchanged published vendor, validate the complete source-neutral domain catalog through the central assembler, and commit only its own generated vendor outputs plus the assembled registry. The rule SHALL apply to the approved Education Agent Skills sixth vendor.
 
 #### Scenario: Second vendor conversion preserves first vendor
 - **WHEN** Scientific Agent Skills is converted or refreshed
@@ -66,6 +66,11 @@ Each vendor converter SHALL stage its target output together with every unchange
 - **WHEN** ToolUniverse is converted or refreshed after Scientific Agent Skills admission
 - **THEN** Scientific Agent Skills generated files and bundle remain byte-identical
 - **AND** central assembly validates all cross-vendor membership and dependencies
+
+#### Scenario: Education Agent Skills is regenerated
+- **WHEN** its approved converter commits a staged projection
+- **THEN** all five non-target vendor projections remain byte-identical
+- **AND** the assembled registry contains all six reviewed vendors
 
 ### Requirement: Reviewed Cross-Vendor Dependency Targets
 Vendor converters SHALL write only reviewed `required` relationships to the registry graph and SHALL resolve every target to an admitted global Skill ID.

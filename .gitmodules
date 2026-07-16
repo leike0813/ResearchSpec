@@ -16,3 +16,6 @@
 [submodule "vendor/histagent"]
 	path = vendor/histagent
 	url = https://github.com/CharlesQ9/HistAgent
+[submodule "vendor/education-agent-skills"]
+	path = vendor/education-agent-skills
+	url = https://github.com/GarethManning/education-agent-skills

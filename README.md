@@ -98,6 +98,7 @@ See [SECURITY.md](SECURITY.md) for supported versions and vulnerability handling
 - [CLI interface](docs/cli_interface_design.md)
 - [Domain Skill plugins](docs/domain_skill_plugins.md)
 - [Domain taxonomy](docs/domain_taxonomy.md)
+- [Education Agent Skills vendor adapter](docs/education_agent_skills_vendor_adapter.md)
 - [FinRobot vendor adapter](docs/finrobot_vendor_adapter.md)
 - [HistAgent vendor adapter](docs/histagent_vendor_adapter.md)
 - [Materials-Science-Skills-For-LLM vendor adapter](docs/materials_science_skills_vendor_adapter.md)
@@ -115,6 +116,7 @@ ResearchSpec uses a mixed-license model:
 
 - ResearchSpec-authored framework and Companion material is MIT licensed.
 - Bundled and generated ARSU-derived material is licensed under CC BY-NC 4.0 and retains Cheng-I Wu's upstream attribution.
+- Education Agent Skills domain assets are adapted under CC BY-SA 4.0 and retain Gareth Manning attribution plus modification notices in every generated Skill.
 - ToolUniverse, Scientific Agent Skills, Materials-Science-Skills-For-LLM, FinRobot, and HistAgent domain assets retain the Skill-level licenses and provenance recorded in each generated `LICENSE` and `NOTICE` or `NOTICE.md`.
 
 The complete combined package must not be described as unrestricted for commercial use. See [LICENSE](LICENSE), [NOTICE](NOTICE), and [LICENSES](LICENSES/) for the material boundary. Commercial use requires separate rights review and may require upstream permission.

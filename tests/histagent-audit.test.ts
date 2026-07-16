@@ -8,6 +8,7 @@ import { test } from "node:test";
 import { loadPluginRegistry } from "../src/plugins/registry.js";
 import { loadAnzsrcSnapshot } from "../src/plugins/taxonomy.js";
 import { HistAgentAuditSchema } from "../src/vendor-audits/histagent.js";
+import { PRODUCTION_VENDOR_IDS } from "../src/vendor-converters/shared/production-vendors.js";
 import { assertAuditSourceInitialized, assertEvidencePaths, gitOutput } from "./helpers/vendor-audit.js";
 
 const SOURCE_ROOT = path.resolve("vendor/histagent");
@@ -212,7 +213,7 @@ void test("audit remains non-admission while the separately approved converter o
   });
 
   const registry = await loadPluginRegistry();
-  assert.deepEqual([...registry.vendors.keys()], ["finrobot", "histagent", "materials-science-skills-for-llm", "scientific-agent-skills", "tooluniverse"]);
+  assert.deepEqual([...registry.vendors.keys()], [...PRODUCTION_VENDOR_IDS]);
   assert.equal(registry.vendors.get("histagent")?.skills.length, 3);
   assert.equal(registry.domains.get("historical-studies")?.skills.filter((skill) => skill.startsWith("histagent-")).length, 3);
   assert.equal(registry.domains.get("heritage-archive-and-museum-studies")?.skills.filter((skill) => skill.startsWith("histagent-")).length, 2);

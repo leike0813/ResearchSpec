@@ -613,12 +613,13 @@ researchspec plugin update [domain-ids...]
 只接受稳定 domain IDs，改变 workspace 级 `plugins.selected`，并动态解析 direct Skills 与 reviewed hard dependencies 后更新 manifest-owned Skill projection；没有配置
 Agent tool 时仍保存选择并给出非阻塞警告。插件只增加 Skills，不生成 wrapper，不进入
 workflow profile。完整 Registry Schema、provenance、license、drift 和卸载边界见
-[Domain Skill Plugins](./domain_skill_plugins.md)。当前五个 vendor 的维护边界分别见
+[Domain Skill Plugins](./domain_skill_plugins.md)。当前六个 vendor 的维护边界分别见
 [ToolUniverse Vendor Adapter](./tooluniverse_vendor_adapter.md) 与
 [Scientific Agent Skills Vendor Adapter](./scientific_agent_skills_vendor_adapter.md)、
 [Materials-Science-Skills-For-LLM Vendor Adapter](./materials_science_skills_vendor_adapter.md)、
 [FinRobot Vendor Adapter](./finrobot_vendor_adapter.md)、
-[HistAgent Vendor Adapter](./histagent_vendor_adapter.md)；vendor 不是 CLI 安装对象。
+[HistAgent Vendor Adapter](./histagent_vendor_adapter.md)、
+[Education Agent Skills Vendor Adapter](./education_agent_skills_vendor_adapter.md)；vendor 不是 CLI 安装对象。
 
 学科型 domain 仅采用 ANZSRC 2020 FoR Group，工具型 domain 使用 ResearchSpec 的五类粗粒度目录，详见
 [Domain Taxonomy](./domain_taxonomy.md)。Registry 内部固定保存 218 个 domain，但普通

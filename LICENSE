@@ -34,3 +34,17 @@ manifest. A reference copy of the license is available at
 The Apache-2.0 grant applies only to the reviewed FinRobot- and HistAgent-derived material
 identified by those files and does not change the licenses of ARSU-derived,
 ResearchSpec-authored, or other vendor material.
+
+## CC BY-SA 4.0 material
+
+Generated Education Agent Skills under
+`skills/plugins/vendors/education-agent-skills/**` are adaptations of reviewed
+content by Gareth Manning and are distributed under the Creative Commons
+Attribution-ShareAlike 4.0 International License. Each generated Skill contains
+the complete license text and a `NOTICE.md` identifying its source, revision,
+source hash, generated identifier, and ResearchSpec modifications. A reference
+copy of the license is available at `LICENSES/CC-BY-SA-4.0.txt`.
+
+The CC BY-SA 4.0 grant and ShareAlike condition apply only to the identified
+Education Agent Skills material and do not change the licenses of ARSU-derived,
+ResearchSpec-authored, or other vendor material.

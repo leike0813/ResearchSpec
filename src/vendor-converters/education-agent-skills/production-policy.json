@@ -1,0 +1,121 @@
+{
+  "schema_version": "1",
+  "vendor_id": "education-agent-skills",
+  "release": "snapshot-32fce5c",
+  "revision": "32fce5c0d097ec675cf81c750a65a379e4d87e3c",
+  "tree_hash": "3223d79299ae10391c22549debef7ffc9ef7a0e2",
+  "converter_version": "1",
+  "audit": {
+    "path": "audits/education-agent-skills/snapshot-32fce5c/skill-audit.json",
+    "sha256": "e9326c43078db4c6bce4387c5a41a5bef775ad4d1691095c2020ef9cb9926857",
+    "expected_skills": 165
+  },
+  "evidence": {
+    "path": "audits/education-agent-skills/snapshot-32fce5c/evidence-map.json",
+    "sha256": "58e0768df288aad6d9e3c5222338879ef1703bc78f80e02739f6d4194cc6bd2b",
+    "expected_declarations": 872,
+    "marker_open": "⟦UNRESOLVED⟧",
+    "marker_close": "⟦/UNRESOLVED⟧",
+    "rule": "Evidence status: Unmarked citations have identity verification only, not claim-support review. Text inside `⟦UNRESOLVED⟧…⟦/UNRESOLVED⟧` relies on unresolved evidence; verify the source and its support before relying on it, otherwise omit or soften the claim and disclose the uncertainty."
+  },
+  "license": {
+    "expression": "CC-BY-SA-4.0",
+    "author": "Gareth Manning",
+    "url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "text_path": "LICENSES/CC-BY-SA-4.0.txt",
+    "text_sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f",
+    "upstream_evidence": [
+      "README.md",
+      ".claude-plugin/plugin.json",
+      ".codex-plugin/plugin.json"
+    ]
+  },
+  "admission": {
+    "expected_admitted": 136,
+    "expected_excluded": 29,
+    "original_framework_exclusions": [
+      "curriculum-alignment/developmental-band-translator",
+      "original-frameworks/assessment-design-orchestrator",
+      "original-frameworks/coherent-rubric-logic-builder",
+      "original-frameworks/compassionate-systems-awareness-orchestrator",
+      "original-frameworks/developmental-band-system-designer",
+      "original-frameworks/developmental-progression-synthesis",
+      "original-frameworks/dilemma-navigation-for-education-design",
+      "original-frameworks/dispositional-knowledge-assessment-designer",
+      "original-frameworks/inclusive-design-orchestrator",
+      "original-frameworks/learning-target-authoring-guide",
+      "original-frameworks/multi-perspective-decision-wheel",
+      "original-frameworks/place-based-curriculum-orchestrator",
+      "original-frameworks/regenerative-project-design-orchestrator",
+      "original-frameworks/scoping-for-transformative-learning-inquiry",
+      "original-frameworks/seeds-regenerative-inquiry-cycle",
+      "original-frameworks/self-determined-project-design-protocol",
+      "original-frameworks/single-point-rubric-designer",
+      "original-frameworks/three-horizons-learning-transition-mapper",
+      "professional-learning/competency-framework-translator"
+    ],
+    "third_party_author_exclusions": [
+      "historical-thinking/central-historical-question-evaluator",
+      "historical-thinking/close-reading-skill-builder",
+      "historical-thinking/contextualisation-skill-builder",
+      "historical-thinking/corroboration-skill-builder",
+      "historical-thinking/document-based-lesson-designer",
+      "historical-thinking/historical-document-set-curator",
+      "historical-thinking/historical-source-adapter",
+      "historical-thinking/historical-thinking-assessment-designer",
+      "historical-thinking/historical-thinking-strategy-modelling-guide",
+      "historical-thinking/sourcing-skill-builder"
+    ]
+  },
+  "relationships": {
+    "expected_declarations": 813,
+    "semantics": "advisory",
+    "hard_dependency": false
+  },
+  "domains": {
+    "allowed": [
+      "curriculum-and-pedagogy",
+      "education-systems",
+      "specialist-studies-in-education"
+    ],
+    "expected_admitted_counts": {
+      "curriculum-and-pedagogy": 54,
+      "education-systems": 9,
+      "specialist-studies-in-education": 73
+    }
+  },
+  "safety": {
+    "principled_blockers": [
+      "clinical-diagnosis-or-treatment",
+      "hidden-profiling-or-monitoring",
+      "no-human-high-risk-learner-decision",
+      "unavoidable-unauthorized-sensitive-data-transfer-or-persistence",
+      "researchspec-workflow-authority",
+      "unproved-content-origin"
+    ],
+    "boundaries": {
+      "authority": "This Skill may produce candidate educational material, but it must not modify ResearchSpec workflow state, routes, work items, artifact registry, Gates, Decisions, transitions, or receipts. Use the ResearchSpec CLI for authoritative mutations.",
+      "minors": "Use age-appropriate interaction and accountable human oversight for consequential learner-facing use. Do not let the Skill make unreviewed high-risk decisions about access, grading, discipline, placement, safeguarding, or opportunity.",
+      "privacy": "Use only task-relevant, lawfully available information. Minimize and de-identify learner data where possible; do not infer sensitive traits, conduct hidden profiling or monitoring, or transmit or persist sensitive data without explicit authority and consent.",
+      "learning-analytics": "Treat analytics as limited educational evidence, not a complete learner profile. Disclose uncertainty, avoid covert surveillance, and require a qualified human to review consequential interpretations or actions.",
+      "wellbeing": "Keep wellbeing guidance educational and non-clinical. Do not diagnose or treat a condition, present the Skill as therapy, or replace qualified safeguarding, pastoral, medical, or mental-health support; escalate urgent concerns under local policy.",
+      "diagnosis": "Any diagnosis language is limited to the learner's visible task reasoning or error pattern. Do not diagnose the learner, a disability, a mental-health condition, motivation, trauma, or another personal characteristic."
+    }
+  },
+  "generation": {
+    "generated_id_prefix": "education-agent-skills-",
+    "source_root": "vendor/education-agent-skills",
+    "copied_skill_files": [
+      "SKILL.md"
+    ],
+    "excluded_source_surfaces": [
+      "installer",
+      "mcp-runtime",
+      "test",
+      "maintenance",
+      "generated",
+      "showcase",
+      "project-doc"
+    ]
+  }
+}

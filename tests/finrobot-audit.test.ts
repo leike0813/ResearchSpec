@@ -9,6 +9,7 @@ import { loadPluginRegistry } from "../src/plugins/registry.js";
 import { loadAnzsrcSnapshot } from "../src/plugins/taxonomy.js";
 import { VendorAuditRepositorySourceSchema, VendorAuditSourceSchema } from "../src/vendor-audits/contracts.js";
 import { FinRobotAuditSchema } from "../src/vendor-audits/finrobot.js";
+import { PRODUCTION_VENDOR_IDS } from "../src/vendor-converters/shared/production-vendors.js";
 import { assertAuditSourceInitialized, assertEvidencePaths, gitOutput } from "./helpers/vendor-audit.js";
 
 const SOURCE_ROOT = path.resolve("vendor/finrobot");
@@ -187,7 +188,7 @@ void test("audit records implementation drift, fixed assumptions, provider risks
 
 void test("audit remains immutable while production ingestion is separately policy governed", async () => {
   const registry = await loadPluginRegistry();
-  assert.deepEqual([...registry.vendors.keys()], ["finrobot", "histagent", "materials-science-skills-for-llm", "scientific-agent-skills", "tooluniverse"]);
+  assert.deepEqual([...registry.vendors.keys()], [...PRODUCTION_VENDOR_IDS]);
   assert.deepEqual(registry.domains.get("accounting-auditing-and-accountability")?.skills, ["financial-research-company-fundamentals", "financial-research-statement-analysis"]);
   assert.equal(registry.domains.get("banking-finance-and-investment")?.skills.length, 6);
   assert.equal(registry.vendors.get("finrobot")?.skills.length, 6);

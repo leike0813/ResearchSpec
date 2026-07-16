@@ -31,11 +31,11 @@ void test("internal catalog contains every Group and five tools while public cat
     assert.equal(domain?.domain_type, "discipline");
     if (domain?.domain_type === "discipline") assert.equal(domain.anzsrc_group_code, group.code);
   }
-  assert.equal(availableDomains(registry).length, 53);
+  assert.equal(availableDomains(registry).length, 56);
   assert.equal(tools.filter((domain) => domain.skills.length > 0).length, 5);
 });
 
-void test("all 318 vendor audit records carry valid Field metadata independent of membership", async () => {
+void test("all 318 Field-audited vendor records carry valid metadata independent of membership", async () => {
   const snapshot = await loadAnzsrcSnapshot(SNAPSHOT_PATH);
   const fields = new Set(snapshot.fields.map((field) => field.code));
   const sources = [
@@ -63,6 +63,31 @@ void test("all 318 vendor audit records carry valid Field metadata independent o
     }
   }
   assert.equal(records, 318);
+});
+
+void test("all 165 Education audit records carry one manually reviewed ANZSRC Group candidate", async () => {
+  const snapshot = await loadAnzsrcSnapshot(SNAPSHOT_PATH);
+  const groups = new Map(snapshot.groups.map((group) => [group.code, anzsrcGroupDomainId(group.title)]));
+  const audit = JSON.parse(await readFile(path.resolve("audits/education-agent-skills/snapshot-32fce5c/skill-audit.json"), "utf8")) as {
+    skills: Array<{
+      skill_id: string;
+      prospective_domains: Array<{
+        group_code: string;
+        domain_id: string;
+        manual_reviewed: boolean;
+        rationale: string;
+      }>;
+    }>;
+  };
+  assert.equal(audit.skills.length, 165);
+  for (const skill of audit.skills) {
+    assert.equal(skill.prospective_domains.length, 1, skill.skill_id);
+    const domain = skill.prospective_domains[0];
+    assert.ok(domain, skill.skill_id);
+    assert.equal(groups.get(domain.group_code), domain.domain_id, skill.skill_id);
+    assert.equal(domain.manual_reviewed, true, skill.skill_id);
+    assert.ok(domain.rationale, skill.skill_id);
+  }
 });
 
 interface AuditFieldRecord {

@@ -42,8 +42,11 @@ contributes six neutral, capability-complete financial research Skills after
 resolving all 146 source entries and 66 knowledge surfaces. HistAgent
 `snapshot-47bbe21` contributes three independently authored, hash-approved
 historical research Skills after resolving all 120 source entries and 21
-admitted capability surfaces. Together the five isolated vendor bundles
-populate 53 non-empty domains; users still select only source-neutral domains.
+admitted capability surfaces. Education Agent Skills `snapshot-32fce5c`
+contributes 136 complete CC BY-SA 4.0 Skills after resolving all 165 admission
+decisions, 872 evidence declarations, and 813 advisory relationships. Together
+the six isolated vendor bundles populate 56 non-empty domains; users still
+select only source-neutral domains.
 
 ## Registry and package layout
 
@@ -119,6 +122,21 @@ The HistAgent converter independently:
 - maps all 21 admitted surfaces to conventional commands while preserving five historical-source layers;
 - keeps six sibling relationships advisory, all hard Skill dependencies empty, and Skill-local state outside ResearchSpec workflow authority;
 - excludes Cookie material, telemetry, bytecode, unresolved browser code, benchmark payloads, unverified media, fixed credentials, and copied AutoGen/Magentic-One implementation.
+
+The Education Agent Skills converter independently:
+
+- binds the immutable `snapshot-32fce5c` audit, evidence map, production policy,
+  license text, and approved complete-tree aggregate hash;
+- admits 136 Gareth Manning Skills and excludes 19 original-framework Skills
+  plus ten Sean Hu Skills whose redistribution authority is not established;
+- preserves the complete educational body and declared input/output schemas
+  while adding source-bound unresolved-evidence markers and reviewed learner,
+  privacy, analytics, wellbeing, diagnosis, human-oversight, and ResearchSpec
+  authority boundaries;
+- publishes only static `SKILL.md`, CC BY-SA 4.0 `LICENSE`, and complete
+  `NOTICE.md` files with empty hard dependencies;
+- assigns the generated Skills only to `curriculum-and-pedagogy`,
+  `education-systems`, and `specialist-studies-in-education`.
 
 Each converter stages against all published vendors before central assembly and commits only its own projection plus the registry. Running one converter cannot replace another vendor's generated tree or bundle.
 

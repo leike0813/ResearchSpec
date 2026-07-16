@@ -10,6 +10,9 @@
   },
   "files": [
     "dist",
+    "!dist/src/vendor-audits",
+    "!dist/src/vendor-evidence",
+    "!dist/src/vendor-converters/education-agent-skills",
     "skills",
     "README.md",
     "CHANGELOG.md",
@@ -22,6 +25,7 @@
     "docs/cli_interface_design.md",
     "docs/domain_skill_plugins.md",
     "docs/domain_taxonomy.md",
+    "docs/education_agent_skills_vendor_adapter.md",
     "docs/finrobot_vendor_adapter.md",
     "docs/histagent_vendor_adapter.md",
     "docs/materials_science_skills_vendor_adapter.md",
@@ -57,7 +61,14 @@
     "finrobot:idempotence": "pnpm build && node dist/src/vendor-converters/finrobot/cli.js idempotence",
     "histagent:convert": "pnpm build && node dist/src/vendor-converters/histagent/cli.js convert",
     "histagent:check": "pnpm build && node dist/src/vendor-converters/histagent/cli.js check",
-    "histagent:idempotence": "pnpm build && node dist/src/vendor-converters/histagent/cli.js idempotence"
+    "histagent:idempotence": "pnpm build && node dist/src/vendor-converters/histagent/cli.js idempotence",
+    "education-agent-skills:audit": "pnpm build && node dist/src/vendor-audits/education-agent-skills-cli.js audit",
+    "education-agent-skills:audit:check": "pnpm build && node dist/src/vendor-audits/education-agent-skills-cli.js check",
+    "education-agent-skills:evidence:check": "pnpm build && node dist/src/vendor-evidence/education-agent-skills/cli.js check",
+    "education-agent-skills:preview": "pnpm build && node dist/src/vendor-converters/education-agent-skills/cli.js preview",
+    "education-agent-skills:convert": "pnpm build && node dist/src/vendor-converters/education-agent-skills/cli.js convert",
+    "education-agent-skills:check": "pnpm build && node dist/src/vendor-converters/education-agent-skills/cli.js check",
+    "education-agent-skills:idempotence": "pnpm build && node dist/src/vendor-converters/education-agent-skills/cli.js idempotence"
   },
   "engines": {
     "node": ">=22"

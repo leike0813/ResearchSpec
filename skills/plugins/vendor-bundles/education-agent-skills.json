@@ -1,0 +1,1782 @@
+{
+  "schema_version": "1",
+  "vendor": {
+    "vendor_id": "education-agent-skills",
+    "name": "Education Agent Skills",
+    "repository_url": "https://github.com/GarethManning/education-agent-skills",
+    "release": "snapshot-32fce5c",
+    "revision": "32fce5c0d097ec675cf81c750a65a379e4d87e3c",
+    "license": "CC-BY-SA-4.0",
+    "converter_version": "1",
+    "skills": [
+      {
+        "skill_id": "education-agent-skills-academic-language-sentence-frame-generator",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/eal-language-development/academic-language-sentence-frame-generator/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-adaptive-hint-sequence-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/ai-learning-science/adaptive-hint-sequence-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-agency-circles-for-systems-action",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/systems-thinking/agency-circles-for-systems-action/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-agency-scaffold-generator",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/wellbeing-motivation-agency/agency-scaffold-generator/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-ai-claim-checker",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/student-learning/ai-claim-checker/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-ai-expertise-interrogation-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/ai-literacy/ai-expertise-interrogation-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-ai-facilitated-collaborative-learning-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/ai-learning-science/ai-facilitated-collaborative-learning-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-ai-feedback-design-principles",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/ai-learning-science/ai-feedback-design-principles/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-ai-hallucination-fact-check-protocol",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/ai-literacy/ai-hallucination-fact-check-protocol/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-ai-learning-boundary-mapper",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/ai-literacy/ai-learning-boundary-mapper/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-ai-output-critical-audit-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/ai-literacy/ai-output-critical-audit-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-ai-socratic-dialogue-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/ai-literacy/ai-socratic-dialogue-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-argument-structure-scaffold-generator",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/literacy-critical-thinking/argument-structure-scaffold-generator/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-aspirational-systems-iceberg",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/systems-thinking/aspirational-systems-iceberg/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-assessment-validity-checker",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/curriculum-assessment/assessment-validity-checker/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-awe-wonder-experience-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/wellbeing-motivation-agency/awe-wonder-experience-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-backwards-design-unit-planner",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/curriculum-assessment/backwards-design-unit-planner/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-belonging-classroom-culture-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/wellbeing-motivation-agency/belonging-classroom-culture-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-biophilic-learning-environment-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/environmental-experiential-learning/biophilic-learning-environment-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-checking-for-understanding-protocol-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/explicit-instruction/checking-for-understanding-protocol-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-cognitive-load-analyser",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/memory-learning-science/cognitive-load-analyser/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-cognitive-tutoring-architecture-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/ai-learning-science/cognitive-tutoring-architecture-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-competency-unpacker",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/curriculum-assessment/competency-unpacker/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-confidence-calibration-check",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/student-learning/confidence-calibration-check/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-coverage-audit",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/curriculum-alignment/coverage-audit/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-cpa-sequence-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/global-cross-cultural-pedagogies/cpa-sequence-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-criterion-referenced-rubric-generator",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/curriculum-assessment/criterion-referenced-rubric-generator/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-critical-thinking-task-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/literacy-critical-thinking/critical-thinking-task-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-cross-cultural-task-validity-checker",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/global-cross-cultural-pedagogies/cross-cultural-task-validity-checker/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-culturally-responsive-teaching-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/global-cross-cultural-pedagogies/culturally-responsive-teaching-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-curriculum-crosswalk",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/curriculum-alignment/curriculum-crosswalk/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-curriculum-knowledge-architecture-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/curriculum-assessment/curriculum-knowledge-architecture-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-dialogic-teaching-move-generator",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/questioning-discussion/dialogic-teaching-move-generator/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-differentiation-adapter",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/curriculum-assessment/differentiation-adapter/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-digital-worked-example-sequence",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/ai-learning-science/digital-worked-example-sequence/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-disciplinary-ai-literacy-sequence-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/ai-literacy/disciplinary-ai-literacy-sequence-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-disciplinary-writing-scaffold",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/literacy-critical-thinking/disciplinary-writing-scaffold/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-discipline-specific-critical-thinking-task-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/curriculum-assessment/discipline-specific-critical-thinking-task-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-discussion-protocol-selector",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/questioning-discussion/discussion-protocol-selector/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-dual-coding-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/memory-learning-science/dual-coding-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-ecological-inquiry-anchor-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/environmental-experiential-learning/ecological-inquiry-anchor-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-elaborative-interrogation-generator",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/memory-learning-science/elaborative-interrogation-generator/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-emergent-project-design-scaffold",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/global-cross-cultural-pedagogies/emergent-project-design-scaffold/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-erroneous-example-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/ai-learning-science/erroneous-example-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-error-analysis-protocol",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/self-regulated-learning/error-analysis-protocol/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-experiential-learning-cycle-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/environmental-experiential-learning/experiential-learning-cycle-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-explain-first-interrogator",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/student-learning/explain-first-interrogator/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-explicit-instruction-sequence-builder",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/explicit-instruction/explicit-instruction-sequence-builder/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-fading-manager",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/student-learning/fading-manager/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-feedback-quality-analyser",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/memory-learning-science/feedback-quality-analyser/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-flow-state-condition-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/wellbeing-motivation-agency/flow-state-condition-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-formative-assessment-loop-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/ai-learning-science/formative-assessment-loop-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-formative-assessment-technique-selector",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/curriculum-assessment/formative-assessment-technique-selector/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-gap-analysis-from-student-work",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/curriculum-assessment/gap-analysis-from-student-work/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-goal-setting-protocol-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/self-regulated-learning/goal-setting-protocol-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-hexagon-complexity-mapper",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/systems-thinking/hexagon-complexity-mapper/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-hinge-question-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/questioning-discussion/hinge-question-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-implementation-intention-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/wellbeing-motivation-agency/implementation-intention-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-individual-spacing-algorithm-explainer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/ai-learning-science/individual-spacing-algorithm-explainer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-instructional-coaching-conversation-guide",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/professional-learning/instructional-coaching-conversation-guide/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-intelligent-tutoring-dialogue-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/ai-learning-science/intelligent-tutoring-dialogue-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-interdisciplinary-real-world-connection-mapper",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/environmental-experiential-learning/interdisciplinary-real-world-connection-mapper/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-interleaving-unit-planner",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/memory-learning-science/interleaving-unit-planner/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-kud-chart-author",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/curriculum-alignment/kud-chart-author/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-kud-knowledge-type-mapper",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/curriculum-assessment/kud-knowledge-type-mapper/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-ladder-of-inference-reflection",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/systems-thinking/ladder-of-inference-reflection/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-language-demand-analyser",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/eal-language-development/language-demand-analyser/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-learning-analytics-interpretation-guide",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/ai-learning-science/learning-analytics-interpretation-guide/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-learning-progression-builder",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/curriculum-assessment/learning-progression-builder/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-lesson-observation-protocol-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/professional-learning/lesson-observation-protocol-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-lesson-opening-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/explicit-instruction/lesson-opening-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-lesson-study-cycle-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/professional-learning/lesson-study-cycle-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-leverage-and-response-design",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/systems-thinking/leverage-and-response-design/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-media-literacy-deconstruction-protocol",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/literacy-critical-thinking/media-literacy-deconstruction-protocol/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-mental-model-mapper",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/systems-thinking/mental-model-mapper/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-metacognitive-monitoring-ai-contexts",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/ai-learning-science/metacognitive-monitoring-ai-contexts/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-metacognitive-prompt-library",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/self-regulated-learning/metacognitive-prompt-library/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-mixed-age-learning-task-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/montessori-alternative-approaches/mixed-age-learning-task-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-motivation-diagnostic-task-redesign",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/wellbeing-motivation-agency/motivation-diagnostic-task-redesign/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-outdoor-learning-sequence-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/environmental-experiential-learning/outdoor-learning-sequence-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-panel-review",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/professional-learning/panel-review/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-pedagogical-content-knowledge-developer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/professional-learning/pedagogical-content-knowledge-developer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-perma-based-lesson-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/wellbeing-motivation-agency/perma-based-lesson-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-perspective-taking-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/questioning-discussion/perspective-taking-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-phenomenon-based-unit-anchor",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/global-cross-cultural-pedagogies/phenomenon-based-unit-anchor/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-place-based-inquiry-anchor",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/global-cross-cultural-pedagogies/place-based-inquiry-anchor/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-practice-problem-sequence-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/explicit-instruction/practice-problem-sequence-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-prepared-environment-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/montessori-alternative-approaches/prepared-environment-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-productive-failure-desirable-difficulty-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/ai-learning-science/productive-failure-desirable-difficulty-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-productive-failure-protocol",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/student-learning/productive-failure-protocol/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-professional-development-session-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/professional-learning/professional-development-session-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-progressive-hint-ladder",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/student-learning/progressive-hint-ladder/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-project-brief-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/curriculum-assessment/project-brief-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-prompt-literacy-sequence-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/ai-literacy/prompt-literacy-sequence-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-reading-comprehension-strategy-selector",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/literacy-critical-thinking/reading-comprehension-strategy-selector/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-reflective-practice-prompt-generator",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/professional-learning/reflective-practice-prompt-generator/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-reggio-documentation-protocol",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/global-cross-cultural-pedagogies/reggio-documentation-protocol/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-restorative-practice-protocol-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/wellbeing-motivation-agency/restorative-practice-protocol-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-retrieval-practice-generator",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/memory-learning-science/retrieval-practice-generator/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-retrieve-first-gate",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/student-learning/retrieve-first-gate/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-ruler-emotional-literacy-sequence",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/wellbeing-motivation-agency/ruler-emotional-literacy-sequence/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-scaffolded-task-modifier",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/eal-language-development/scaffolded-task-modifier/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-scope-and-sequence-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/curriculum-assessment/scope-and-sequence-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-self-efficacy-builder-sequence",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/wellbeing-motivation-agency/self-efficacy-builder-sequence/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-self-explanation-prompt-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/ai-learning-science/self-explanation-prompt-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-self-regulation-scaffold-generator",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/self-regulated-learning/self-regulation-scaffold-generator/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-service-learning-project-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/environmental-experiential-learning/service-learning-project-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-sheltered-instruction-lesson-modifier",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/eal-language-development/sheltered-instruction-lesson-modifier/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-socratic-questioning-sequence-generator",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/questioning-discussion/socratic-questioning-sequence-generator/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-source-credibility-evaluation-protocol",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/literacy-critical-thinking/source-credibility-evaluation-protocol/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-spaced-practice-scheduler",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/memory-learning-science/spaced-practice-scheduler/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-srl-session-wrapper",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/student-learning/srl-session-wrapper/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-stuck-and-error-diagnosis-coach",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/student-learning/stuck-and-error-diagnosis-coach/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-study-strategy-selector",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/self-regulated-learning/study-strategy-selector/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-systems-awareness-iceberg",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/systems-thinking/systems-awareness-iceberg/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-systems-wellbeing-impact-mapper",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/systems-thinking/systems-wellbeing-impact-mapper/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-teach-back-evaluator",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/student-learning/teach-back-evaluator/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-teacher-inquiry-cycle-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/professional-learning/teacher-inquiry-cycle-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-technological-pedagogical-content-knowledge-developer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/professional-learning/technological-pedagogical-content-knowledge-developer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-text-complexity-analyser",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/literacy-critical-thinking/text-complexity-analyser/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-think-aloud-script-generator",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/explicit-instruction/think-aloud-script-generator/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-three-part-lesson-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/montessori-alternative-approaches/three-part-lesson-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-transfer-bridge",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/student-learning/transfer-bridge/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-trauma-informed-practice-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/wellbeing-motivation-agency/trauma-informed-practice-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-ubuntu-collective-knowledge-task-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/global-cross-cultural-pedagogies/ubuntu-collective-knowledge-task-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-udl-barrier-anticipator",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/inclusive-design/udl-barrier-anticipator/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-udl-lesson-auditor",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/inclusive-design/udl-lesson-auditor/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-udl-options-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/inclusive-design/udl-options-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-unassisted-evidence-checkpoint",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/student-learning/unassisted-evidence-checkpoint/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-uninterrupted-work-cycle-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/montessori-alternative-approaches/uninterrupted-work-cycle-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-variation-theory-task-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/global-cross-cultural-pedagogies/variation-theory-task-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-vocabulary-tiering-tool",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/eal-language-development/vocabulary-tiering-tool/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-weekly-agency-review",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/student-learning/weekly-agency-review/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-wellbeing-learning-connection-mapper",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/wellbeing-motivation-agency/wellbeing-learning-connection-mapper/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-worked-example-fading-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/memory-learning-science/worked-example-fading-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "education-agent-skills-worked-example-to-problem-solving-transition-designer",
+        "license": "CC-BY-SA-4.0",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/ai-learning-science/worked-example-to-problem-solving-transition-designer/SKILL.md"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      }
+    ]
+  }
+}

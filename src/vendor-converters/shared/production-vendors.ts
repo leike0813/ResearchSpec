@@ -1,4 +1,5 @@
 export const PRODUCTION_VENDOR_IDS = [
+  "education-agent-skills",
   "finrobot",
   "histagent",
   "materials-science-skills-for-llm",
@@ -8,7 +9,7 @@ export const PRODUCTION_VENDOR_IDS = [
 
 export const PRODUCTION_DOMAIN_COUNTS = {
   internal: 218,
-  available: 53,
+  available: 56,
 } as const;
 
 export function productionVendorInventoryErrors(actualIds: Iterable<string>): string[] {

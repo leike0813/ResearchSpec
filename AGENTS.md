@@ -20,6 +20,8 @@ Current external reference paths:
 - Materials-Science-Skills-For-LLM audit source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/materials-science-skills-for-llm`
 - FinRobot audit source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/finrobot`
 - HistAgent audit source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/histagent`
+- Education Agent Skills working checkout: `/home/joshua/Workspace/Code/Skill/education-agent-skills`
+- Education Agent Skills audit source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/education-agent-skills`
 
 When paths or ownership change, update this file in the same change so future
 agents do not follow stale locations.
@@ -222,7 +224,68 @@ idempotence, packaging, installation, discovery, update, and registry assembly
 never import or execute HistAgent code, install dependencies, read credentials,
 start browsers, contact services, or upload material.
 
-Five-vendor maintenance must keep converters isolated: each converter stages
+`vendor/education-agent-skills` is the maintainer-only pinned input for the
+`snapshot-32fce5c` audit at commit
+`32fce5c0d097ec675cf81c750a65a379e4d87e3c` and tree
+`3223d79299ae10391c22549debef7ffc9ef7a0e2`. Its immutable audit covers all
+238 tracked files and all 165 upstream Skills. The checked-in JSON is the audit
+SSOT; its Markdown report is derived deterministically and normal audit checking
+is offline. Upstream README, registry, domain, tag, evidence-strength, and
+relationship claims are observations only and never production authority.
+
+The pinned root has no tracked license text. README and plugin CC BY-SA 4.0
+claims, plus the subtree-scoped `mcp-server/LICENSE`, do not prove Skill-level
+redistribution rights or embedded framework provenance. All 165 Skills therefore
+remain excluded by the immutable audit even where their content fit would
+otherwise be a candidate or defer. The ResearchSpec-owned
+`evidence-map.json` is bound to immutable audit SHA-256
+`e9326c43078db4c6bce4387c5a41a5bef775ad4d1691095c2020ef9cb9926857`
+and maps all 872 declarations to 719 normalized works: 293 verified, 410
+unresolved, zero conflicting, and 16 not applicable. Twenty explicit
+multi-version declarations use composite mappings. Its
+`evidence-report.md` is derived deterministically, and
+`education-agent-skills:evidence:check` is offline and read-only.
+
+The supplementary Google Scholar discovery round targeted the 428 works that
+were initially unresolved. Scholar returned candidates for 18 works and no
+result for 11 before an HTTP 429 challenge blocked the remaining 399 intended
+lookups across the canonical and regional Scholar hosts. Seventeen returned
+candidates were independently confirmed through reliable destinations; one
+mismatched candidate remained unresolved. Scholar result pages are discovery
+metadata only and never verification sources.
+
+Evidence verification proves bibliographic existence and identity only.
+`claim_support_reviewed` remains false for every work; effect sizes, support
+scope, interpretation, and misattribution are not upgraded by a verified
+publication record. Original frameworks and unpublished practice methods remain
+non-publication evidence rather than verified works. All `chains_well_with`
+declarations remain prospective advisory relationships and never hard
+dependencies.
+
+Do not execute or install the upstream installer, MCP server, tests, scripts, or
+dependencies; do not configure credentials, contact hosted services, upload
+learner material, or grant learner-data access. Student-facing tutoring, minor
+analytics, wellbeing or motivation diagnosis, and original frameworks require
+explicit review. The `ingest-education-agent-skills` change consumes the
+immutable audit and evidence map through a 165-item admission catalog, an
+872-item evidence adaptation catalog, and an 813-item advisory relationship
+catalog. Its approved production set admits 136 Gareth Manning Skills under
+CC BY-SA 4.0 and excludes 19 original-framework Skills plus ten Sean Hu Skills
+whose redistribution authority is not established. The generated trees preserve
+student-facing capabilities with reviewed safety boundaries and contributes
+only to `curriculum-and-pedagogy`, `education-systems`, and
+`specialist-studies-in-education`.
+
+The approved production tree is bound to aggregate SHA-256
+`c4fc2f93a7553a1c02538d15491ed108afd36ad4a4a291ca4db3bad39e74775d`
+and publishes the sixth vendor with 136 static Skill trees, empty hard
+dependencies, complete CC BY-SA 4.0 licenses and notices, and membership only in
+the three reviewed education domains. Production checking and idempotence must
+fail on any source, audit, evidence, policy, license, generated-tree, domain, or
+registry drift. Education Agent Skills add no public CLI command or workflow
+authority.
+
+Six-vendor maintenance must keep converters isolated: each converter stages
 against all published vendors but emits and commits only its own bundle, while a
 source-neutral domain catalog and central assembler own the published registry.
 Vendor root licensing does not replace an evidenced Skill-level content license.

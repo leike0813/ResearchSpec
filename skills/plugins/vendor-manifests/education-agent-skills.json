@@ -1,0 +1,3184 @@
+{
+  "schema_version": "1",
+  "converter_version": "1",
+  "vendor_id": "education-agent-skills",
+  "release": "snapshot-32fce5c",
+  "revision": "32fce5c0d097ec675cf81c750a65a379e4d87e3c",
+  "audit_sha256": "e9326c43078db4c6bce4387c5a41a5bef775ad4d1691095c2020ef9cb9926857",
+  "evidence_map_sha256": "58e0768df288aad6d9e3c5222338879ef1703bc78f80e02739f6d4194cc6bd2b",
+  "production_policy_sha256": "fcb818163c79058ac084f944700c187c36b06b1698b1c9242454b973e259256f",
+  "license_sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f",
+  "approved_tree_set_sha256": "c4fc2f93a7553a1c02538d15491ed108afd36ad4a4a291ca4db3bad39e74775d",
+  "generated_skills": [
+    "education-agent-skills-academic-language-sentence-frame-generator",
+    "education-agent-skills-adaptive-hint-sequence-designer",
+    "education-agent-skills-agency-circles-for-systems-action",
+    "education-agent-skills-agency-scaffold-generator",
+    "education-agent-skills-ai-claim-checker",
+    "education-agent-skills-ai-expertise-interrogation-designer",
+    "education-agent-skills-ai-facilitated-collaborative-learning-designer",
+    "education-agent-skills-ai-feedback-design-principles",
+    "education-agent-skills-ai-hallucination-fact-check-protocol",
+    "education-agent-skills-ai-learning-boundary-mapper",
+    "education-agent-skills-ai-output-critical-audit-designer",
+    "education-agent-skills-ai-socratic-dialogue-designer",
+    "education-agent-skills-argument-structure-scaffold-generator",
+    "education-agent-skills-aspirational-systems-iceberg",
+    "education-agent-skills-assessment-validity-checker",
+    "education-agent-skills-awe-wonder-experience-designer",
+    "education-agent-skills-backwards-design-unit-planner",
+    "education-agent-skills-belonging-classroom-culture-designer",
+    "education-agent-skills-biophilic-learning-environment-designer",
+    "education-agent-skills-checking-for-understanding-protocol-designer",
+    "education-agent-skills-cognitive-load-analyser",
+    "education-agent-skills-cognitive-tutoring-architecture-designer",
+    "education-agent-skills-competency-unpacker",
+    "education-agent-skills-confidence-calibration-check",
+    "education-agent-skills-coverage-audit",
+    "education-agent-skills-cpa-sequence-designer",
+    "education-agent-skills-criterion-referenced-rubric-generator",
+    "education-agent-skills-critical-thinking-task-designer",
+    "education-agent-skills-cross-cultural-task-validity-checker",
+    "education-agent-skills-culturally-responsive-teaching-designer",
+    "education-agent-skills-curriculum-crosswalk",
+    "education-agent-skills-curriculum-knowledge-architecture-designer",
+    "education-agent-skills-dialogic-teaching-move-generator",
+    "education-agent-skills-differentiation-adapter",
+    "education-agent-skills-digital-worked-example-sequence",
+    "education-agent-skills-disciplinary-ai-literacy-sequence-designer",
+    "education-agent-skills-disciplinary-writing-scaffold",
+    "education-agent-skills-discipline-specific-critical-thinking-task-designer",
+    "education-agent-skills-discussion-protocol-selector",
+    "education-agent-skills-dual-coding-designer",
+    "education-agent-skills-ecological-inquiry-anchor-designer",
+    "education-agent-skills-elaborative-interrogation-generator",
+    "education-agent-skills-emergent-project-design-scaffold",
+    "education-agent-skills-erroneous-example-designer",
+    "education-agent-skills-error-analysis-protocol",
+    "education-agent-skills-experiential-learning-cycle-designer",
+    "education-agent-skills-explain-first-interrogator",
+    "education-agent-skills-explicit-instruction-sequence-builder",
+    "education-agent-skills-fading-manager",
+    "education-agent-skills-feedback-quality-analyser",
+    "education-agent-skills-flow-state-condition-designer",
+    "education-agent-skills-formative-assessment-loop-designer",
+    "education-agent-skills-formative-assessment-technique-selector",
+    "education-agent-skills-gap-analysis-from-student-work",
+    "education-agent-skills-goal-setting-protocol-designer",
+    "education-agent-skills-hexagon-complexity-mapper",
+    "education-agent-skills-hinge-question-designer",
+    "education-agent-skills-implementation-intention-designer",
+    "education-agent-skills-individual-spacing-algorithm-explainer",
+    "education-agent-skills-instructional-coaching-conversation-guide",
+    "education-agent-skills-intelligent-tutoring-dialogue-designer",
+    "education-agent-skills-interdisciplinary-real-world-connection-mapper",
+    "education-agent-skills-interleaving-unit-planner",
+    "education-agent-skills-kud-chart-author",
+    "education-agent-skills-kud-knowledge-type-mapper",
+    "education-agent-skills-ladder-of-inference-reflection",
+    "education-agent-skills-language-demand-analyser",
+    "education-agent-skills-learning-analytics-interpretation-guide",
+    "education-agent-skills-learning-progression-builder",
+    "education-agent-skills-lesson-observation-protocol-designer",
+    "education-agent-skills-lesson-opening-designer",
+    "education-agent-skills-lesson-study-cycle-designer",
+    "education-agent-skills-leverage-and-response-design",
+    "education-agent-skills-media-literacy-deconstruction-protocol",
+    "education-agent-skills-mental-model-mapper",
+    "education-agent-skills-metacognitive-monitoring-ai-contexts",
+    "education-agent-skills-metacognitive-prompt-library",
+    "education-agent-skills-mixed-age-learning-task-designer",
+    "education-agent-skills-motivation-diagnostic-task-redesign",
+    "education-agent-skills-outdoor-learning-sequence-designer",
+    "education-agent-skills-panel-review",
+    "education-agent-skills-pedagogical-content-knowledge-developer",
+    "education-agent-skills-perma-based-lesson-designer",
+    "education-agent-skills-perspective-taking-designer",
+    "education-agent-skills-phenomenon-based-unit-anchor",
+    "education-agent-skills-place-based-inquiry-anchor",
+    "education-agent-skills-practice-problem-sequence-designer",
+    "education-agent-skills-prepared-environment-designer",
+    "education-agent-skills-productive-failure-desirable-difficulty-designer",
+    "education-agent-skills-productive-failure-protocol",
+    "education-agent-skills-professional-development-session-designer",
+    "education-agent-skills-progressive-hint-ladder",
+    "education-agent-skills-project-brief-designer",
+    "education-agent-skills-prompt-literacy-sequence-designer",
+    "education-agent-skills-reading-comprehension-strategy-selector",
+    "education-agent-skills-reflective-practice-prompt-generator",
+    "education-agent-skills-reggio-documentation-protocol",
+    "education-agent-skills-restorative-practice-protocol-designer",
+    "education-agent-skills-retrieval-practice-generator",
+    "education-agent-skills-retrieve-first-gate",
+    "education-agent-skills-ruler-emotional-literacy-sequence",
+    "education-agent-skills-scaffolded-task-modifier",
+    "education-agent-skills-scope-and-sequence-designer",
+    "education-agent-skills-self-efficacy-builder-sequence",
+    "education-agent-skills-self-explanation-prompt-designer",
+    "education-agent-skills-self-regulation-scaffold-generator",
+    "education-agent-skills-service-learning-project-designer",
+    "education-agent-skills-sheltered-instruction-lesson-modifier",
+    "education-agent-skills-socratic-questioning-sequence-generator",
+    "education-agent-skills-source-credibility-evaluation-protocol",
+    "education-agent-skills-spaced-practice-scheduler",
+    "education-agent-skills-srl-session-wrapper",
+    "education-agent-skills-stuck-and-error-diagnosis-coach",
+    "education-agent-skills-study-strategy-selector",
+    "education-agent-skills-systems-awareness-iceberg",
+    "education-agent-skills-systems-wellbeing-impact-mapper",
+    "education-agent-skills-teach-back-evaluator",
+    "education-agent-skills-teacher-inquiry-cycle-designer",
+    "education-agent-skills-technological-pedagogical-content-knowledge-developer",
+    "education-agent-skills-text-complexity-analyser",
+    "education-agent-skills-think-aloud-script-generator",
+    "education-agent-skills-three-part-lesson-designer",
+    "education-agent-skills-transfer-bridge",
+    "education-agent-skills-trauma-informed-practice-designer",
+    "education-agent-skills-ubuntu-collective-knowledge-task-designer",
+    "education-agent-skills-udl-barrier-anticipator",
+    "education-agent-skills-udl-lesson-auditor",
+    "education-agent-skills-udl-options-designer",
+    "education-agent-skills-unassisted-evidence-checkpoint",
+    "education-agent-skills-uninterrupted-work-cycle-designer",
+    "education-agent-skills-variation-theory-task-designer",
+    "education-agent-skills-vocabulary-tiering-tool",
+    "education-agent-skills-weekly-agency-review",
+    "education-agent-skills-wellbeing-learning-connection-mapper",
+    "education-agent-skills-worked-example-fading-designer",
+    "education-agent-skills-worked-example-to-problem-solving-transition-designer"
+  ],
+  "excluded_skill_ids": [
+    "education-agent-skills-assessment-design-orchestrator",
+    "education-agent-skills-central-historical-question-evaluator",
+    "education-agent-skills-close-reading-skill-builder",
+    "education-agent-skills-coherent-rubric-logic-builder",
+    "education-agent-skills-compassionate-systems-awareness-orchestrator",
+    "education-agent-skills-competency-framework-translator",
+    "education-agent-skills-contextualisation-skill-builder",
+    "education-agent-skills-corroboration-skill-builder",
+    "education-agent-skills-developmental-band-system-designer",
+    "education-agent-skills-developmental-band-translator",
+    "education-agent-skills-developmental-progression-synthesis",
+    "education-agent-skills-dilemma-navigation-for-education-design",
+    "education-agent-skills-dispositional-knowledge-assessment-designer",
+    "education-agent-skills-document-based-lesson-designer",
+    "education-agent-skills-historical-document-set-curator",
+    "education-agent-skills-historical-source-adapter",
+    "education-agent-skills-historical-thinking-assessment-designer",
+    "education-agent-skills-historical-thinking-strategy-modelling-guide",
+    "education-agent-skills-inclusive-design-orchestrator",
+    "education-agent-skills-learning-target-authoring-guide",
+    "education-agent-skills-multi-perspective-decision-wheel",
+    "education-agent-skills-place-based-curriculum-orchestrator",
+    "education-agent-skills-regenerative-project-design-orchestrator",
+    "education-agent-skills-scoping-for-transformative-learning-inquiry",
+    "education-agent-skills-seeds-regenerative-inquiry-cycle",
+    "education-agent-skills-self-determined-project-design-protocol",
+    "education-agent-skills-single-point-rubric-designer",
+    "education-agent-skills-sourcing-skill-builder",
+    "education-agent-skills-three-horizons-learning-transition-mapper"
+  ],
+  "decision_counts": {
+    "admission": 165,
+    "evidence_adaptations": 872,
+    "advisory_relationships": 813,
+    "safety_domains": 136,
+    "hard_dependencies": 0
+  },
+  "tree_sha256": {
+    "education-agent-skills-academic-language-sentence-frame-generator": "5001f598e2b5d11188f1824fd0aad37cb5faf8f3e1d6972e1db2bf59ec6d306c",
+    "education-agent-skills-adaptive-hint-sequence-designer": "f6de105550b4ed457db3376347b03aaf8de8be683dc6edd456c62173a6a0b6a0",
+    "education-agent-skills-agency-circles-for-systems-action": "c5dd4aabbc28b036e2c65d78116d0763037e3fbfc9e4d210b5dd7e8a32b15c58",
+    "education-agent-skills-agency-scaffold-generator": "73da1d2f2f0de30f3897cfc8ad35863c8bc601a742e885ec5dc0fd2c222a9a85",
+    "education-agent-skills-ai-claim-checker": "fe2b0fc511e756e98d1db2721427113ede936fe427d7270e31a991b655d7416f",
+    "education-agent-skills-ai-expertise-interrogation-designer": "95218be0aaa94cdafb284e0b67ad3a03c51b95d71fba579cfb953adeec344f05",
+    "education-agent-skills-ai-facilitated-collaborative-learning-designer": "953112d0eb28c02296694caca09ea89b5a4f8a12ed1b42a361dbcb7bbf250504",
+    "education-agent-skills-ai-feedback-design-principles": "ed813086f9e0e53c8b678131a098d165a6a9ee7d32a053b85b852b752910525b",
+    "education-agent-skills-ai-hallucination-fact-check-protocol": "6995b092fd6751bb6e730c13b78d9a39f3324117085b6e73408ed0f718ea560d",
+    "education-agent-skills-ai-learning-boundary-mapper": "ed559025086c8b5defe6b3c3f63a6f86c1c40a1241cbaa6a47dad08ec547b261",
+    "education-agent-skills-ai-output-critical-audit-designer": "e99e82e939340f7a06c94683cfb85f7dceb23b968ebed306e47376543f0e7b4b",
+    "education-agent-skills-ai-socratic-dialogue-designer": "d081700bdab9d7181f73bbd05b07942fa49eea0ee6668f6a32f01d1bb7ff1b53",
+    "education-agent-skills-argument-structure-scaffold-generator": "6a54c1690746a30ed955b78649388c3c4fcfda191cc046043d9d8152ce03f045",
+    "education-agent-skills-aspirational-systems-iceberg": "46923dbd594ede359c6ec1e6467e63a1e0a57c8b7e4d07e7309683f61e13ed4f",
+    "education-agent-skills-assessment-validity-checker": "c90084bdd370dea0bd372d35670e2cd9425564c6129dcee59039d641837ea828",
+    "education-agent-skills-awe-wonder-experience-designer": "d7ce44f936d3a2a920fed8f5c1188654a1dc883c7598622b4f3ff205f0b78dea",
+    "education-agent-skills-backwards-design-unit-planner": "491cbdda972c57777720024de12886f8ccba47f647df3da2c13334a33016b3b3",
+    "education-agent-skills-belonging-classroom-culture-designer": "3ef0be88e2718a6615f1eba88701e68bbed5e624ce3e27bbb4d1bc9fe97b2e97",
+    "education-agent-skills-biophilic-learning-environment-designer": "4a030fa047d30d7ffbf70f535549af800e1ecdd8f57e20a96b9ff599e948331a",
+    "education-agent-skills-checking-for-understanding-protocol-designer": "5c016e62f5a277b4fcf1a4372f4f431fdc6feb630e676dadfcb5ea7bc62d326b",
+    "education-agent-skills-cognitive-load-analyser": "354f18cd4fb16c51a9ac9120aa141221bdf74d035022a56b9f41e530043c4404",
+    "education-agent-skills-cognitive-tutoring-architecture-designer": "ac1df818bf9c39b7610440ee1ffa6582055e28df6333c7b9f8b29e05c53448a3",
+    "education-agent-skills-competency-unpacker": "dbb2a8f41ba4abb75e229874348c800d141c4f5cabc1bdc03ac2509d4a8f1726",
+    "education-agent-skills-confidence-calibration-check": "1cf512999b7eee60d69e3eef9b52c2bc903c0e6796232fb0193d6cf475329d03",
+    "education-agent-skills-coverage-audit": "84d9aef23a932893f70146d1352eb95a914ab2547141c37a031fbbe6e71c1c18",
+    "education-agent-skills-cpa-sequence-designer": "ab093fe900735679f67ef6afe0c0476b3cb4f7d96b2a94c12d542505d68ca71b",
+    "education-agent-skills-criterion-referenced-rubric-generator": "398e08cbfa3caa999277e7209b1cb3ccf5c25ff9137642cd78a5d092d8bbfa74",
+    "education-agent-skills-critical-thinking-task-designer": "df386add25031c5a972ba7de38c7a6facdfbce1c0c573e671df44f15387dd2ce",
+    "education-agent-skills-cross-cultural-task-validity-checker": "291521c8ee56f4879abefe0fa570967137a8797439952369e2fc3ac120d687f3",
+    "education-agent-skills-culturally-responsive-teaching-designer": "d7c946264c4ac66d917943661244c7a6532d557ccc1996fd24e1fd2b927da303",
+    "education-agent-skills-curriculum-crosswalk": "b422639bcd4994ed7af1b015699a8a2cd6f24e0ad71c6adf6907c7ae6c3a69d9",
+    "education-agent-skills-curriculum-knowledge-architecture-designer": "814108d7f89a83e800e09495734e0a0bd1d7287c8489375f96310c4b4cd82666",
+    "education-agent-skills-dialogic-teaching-move-generator": "25d9d594a6f5f58907680b83ba7704af2af18e2a2a17efc21a914871cccae6ef",
+    "education-agent-skills-differentiation-adapter": "30c603d4d9ebaad447b724458ec6af70e89931f009aa0b8ecf4b225d6f5b1d80",
+    "education-agent-skills-digital-worked-example-sequence": "2f2db1210fdc4641d6b860c1d440e603d78fe1ec4b6b0b406b679e1ed0a3e551",
+    "education-agent-skills-disciplinary-ai-literacy-sequence-designer": "91fae744f7bd76910a9a8712898b0f79ab81fdf9bd417302c0e245dd018ea548",
+    "education-agent-skills-disciplinary-writing-scaffold": "3ff3871e8c26d6923593d2685fae895add497919b33278818117766df040b62b",
+    "education-agent-skills-discipline-specific-critical-thinking-task-designer": "b2f89a5ebb9780bc5cae87050c967f9bacd3d1aa49cad7a27daa7b2270a0f3d6",
+    "education-agent-skills-discussion-protocol-selector": "140bdd01d4471c674fc0141e05cd0de8fab61d6662ba2be62cc6098c92a5bb1c",
+    "education-agent-skills-dual-coding-designer": "686ec2e7a65b487f40a72ff2675e73e544ef8e098effc0451cb6a61deb00533c",
+    "education-agent-skills-ecological-inquiry-anchor-designer": "93ae199200efd10dc772b344acf4bbf62692ecd5f4b26ec76fdf940715247aa2",
+    "education-agent-skills-elaborative-interrogation-generator": "8a9de4a09d4d6665346707f6de547372bdd9da34b59ba3d2c0bd2e38f011c517",
+    "education-agent-skills-emergent-project-design-scaffold": "35cc7890d3011515d654914439c6f55c3ce331df9a20b079018d383e65b6b893",
+    "education-agent-skills-erroneous-example-designer": "da45b2aa48b1f2e8f3a246760ee9fcf3d6b9ca5175f136e46ec5d05b88f52fd5",
+    "education-agent-skills-error-analysis-protocol": "70030b9fb45ae7fc143ea6b218ff389e2803690a3cc929725fcd7282c5f34db0",
+    "education-agent-skills-experiential-learning-cycle-designer": "5e527fc2d03f66f7ccc76f012f6ebcedc7d1ef7ddd7c4c46529ed802e3428572",
+    "education-agent-skills-explain-first-interrogator": "2450aef31461e3427d702d705a77ced7abeed0889af1a0cc483205da04a2dcdb",
+    "education-agent-skills-explicit-instruction-sequence-builder": "73a065d287ae3759cef8a546a9f76a27216e74a3159b415c80e4ffe5882e02db",
+    "education-agent-skills-fading-manager": "9a530b002ea41853438404f0541e4759f18c01c9c416e96ea8f878a5ff5f6439",
+    "education-agent-skills-feedback-quality-analyser": "f56916c272021d84d8ca9a517c4ad47daa477b7324ac2d8076b66e1dd93afd1e",
+    "education-agent-skills-flow-state-condition-designer": "f2cf0e5fe46957163427fd4b7003d0df771baa19115baf59bf7199626deb0b9f",
+    "education-agent-skills-formative-assessment-loop-designer": "a0c872c77e5402096190e735c2db0dacd70d6bf5bdd31e31f089d99f7293e524",
+    "education-agent-skills-formative-assessment-technique-selector": "39a1aace3ab2dbc5c19e728f4ea66a26f48e13247330386b9dc26e4c1dcfcf63",
+    "education-agent-skills-gap-analysis-from-student-work": "d3a0d8e67144198400df64cf2d0403ee15afdfb6e81b043650e84be991b03bc7",
+    "education-agent-skills-goal-setting-protocol-designer": "30aba14c4c91f5f76402713d769f6e363f2498647ec21f1d72ace87bfae3bf4e",
+    "education-agent-skills-hexagon-complexity-mapper": "9fd85d07ca58f637303ba0789f777ebfda6bdc578c712a23ae3c1c6297837f13",
+    "education-agent-skills-hinge-question-designer": "266944b84d7013518f4527fd9affc9718e8232907539d36f1a3be01823a6faf3",
+    "education-agent-skills-implementation-intention-designer": "67f54f494d2591157c1040016f00557e7bec14792452b93c314953041e232191",
+    "education-agent-skills-individual-spacing-algorithm-explainer": "37807f44580c11c1112a4f505f62e396c02ae0705b10910393221665aab5502c",
+    "education-agent-skills-instructional-coaching-conversation-guide": "86e472ff9ebadfe0073b1e95cec8c2f0d15a766ffbf6eac86afb382501f2c918",
+    "education-agent-skills-intelligent-tutoring-dialogue-designer": "30e5c566d79ce76d229b538d37d8a733ed75089da68dc3f2e3cf3682c14af63f",
+    "education-agent-skills-interdisciplinary-real-world-connection-mapper": "fdbff513ea98d95e164711ecf8577a068c3074612b0e68887499bcbcb907b2d4",
+    "education-agent-skills-interleaving-unit-planner": "5f496b930a5ce47f8543d3b6b51245e5e0303220e370dd954a84ac6bf4c05092",
+    "education-agent-skills-kud-chart-author": "0f34e386c9e62957032ea2d82c29869f5f5c9fe8cf66c7179721b7921794bd05",
+    "education-agent-skills-kud-knowledge-type-mapper": "145737f590cb00efb8de880351b7095c283cb66d55436ad3a1bc4eab6c6e9619",
+    "education-agent-skills-ladder-of-inference-reflection": "1c83d9e4043c92a61d40200b756dba2eaba571073ead2561b4deca0e4c5c1de7",
+    "education-agent-skills-language-demand-analyser": "c0dfd18eaef89f781d18e4f01e389c9152310520d41ecd8ebcde9f9f5c520106",
+    "education-agent-skills-learning-analytics-interpretation-guide": "bfc2938304cfd1f1cee5a5e10c6dab18fb7e57481d174d329f27b97125b90e9d",
+    "education-agent-skills-learning-progression-builder": "f2502c967b6cc256ac6806ef1969e0f7cf2e07b678d7cff133e736692a3ebc17",
+    "education-agent-skills-lesson-observation-protocol-designer": "7add9761e40c5291ddde3bfa281503e937f79d189ed535b468adc4480e6070e8",
+    "education-agent-skills-lesson-opening-designer": "5d97993c8243efc447a92a023603c55a320f80a31bb27a1ad4cd3ff60d83b036",
+    "education-agent-skills-lesson-study-cycle-designer": "a1d5457b538536116a1710ffc1879be6045ddd67bf873b6a9cccd6e3dbff0149",
+    "education-agent-skills-leverage-and-response-design": "832785b967ca06e8c1ce8a27b63193b83dfcb6ad835ccd3acf49299db9abdac6",
+    "education-agent-skills-media-literacy-deconstruction-protocol": "231c4841fb55d6f05974f56411ba527e9b32a60e1a1ff236010757608cefcbfd",
+    "education-agent-skills-mental-model-mapper": "8576c1002b8514a3e85a8d9a8fcad4ca9627e58c346f8c4784a6189025939ce6",
+    "education-agent-skills-metacognitive-monitoring-ai-contexts": "f2f9b2eb544d803002622355b890a9d5b1a1d8f581edb36d1ef32476f24086a9",
+    "education-agent-skills-metacognitive-prompt-library": "2bb000786517d5df776c148e9f0da27b3a0011e06bf5bfc78f04b9f3c95d6677",
+    "education-agent-skills-mixed-age-learning-task-designer": "c92322e1d831de2c87589cbd26fc2164277adea5a24add12702c610b8ce28864",
+    "education-agent-skills-motivation-diagnostic-task-redesign": "3d6427fd24267a2168d9e963ccc39c7958691a51d5a120a63ab8b48b876ce6c7",
+    "education-agent-skills-outdoor-learning-sequence-designer": "abb2a79805d60bf65105cb71f761994ac8b20ad5e3a6aba696dbbd1bf062f897",
+    "education-agent-skills-panel-review": "8e1ba221a4ac569b98b17f3687cf83952fe9551b66aa071e6337c55560b4d292",
+    "education-agent-skills-pedagogical-content-knowledge-developer": "238397aeaa8b007815b41467dfec739312deca926ec0c1e2b3c2d85ed0215182",
+    "education-agent-skills-perma-based-lesson-designer": "02d533f34fb5df60a0ba8c3fb8d59051b8cff7fbdf20f0d261577a8a02b573e1",
+    "education-agent-skills-perspective-taking-designer": "4e62cf903858a3d22fced0be16078fa69d92210c73666c2878a3a4fd514d4e0b",
+    "education-agent-skills-phenomenon-based-unit-anchor": "901c68733e7e813261b5be3eba1bcb601f02a417127db9f30f728389e6b66d3b",
+    "education-agent-skills-place-based-inquiry-anchor": "0ee841640449019410faa2c1220020a3fe0c165530d1bcaec24b9984bbffb3f4",
+    "education-agent-skills-practice-problem-sequence-designer": "120a7c0e663d849d3a84ee91f6970b3e9b8478ba55eb419a12e07d09e0b1bec9",
+    "education-agent-skills-prepared-environment-designer": "216342adc510b5a5b6a7b8895f17b4cfa4f2e60b03bc4a0cb8c8a31100ee10ad",
+    "education-agent-skills-productive-failure-desirable-difficulty-designer": "3680ac9615f9d18c4223032cc730fd290dc5c23a130f2347a001aee9f517e892",
+    "education-agent-skills-productive-failure-protocol": "40051abf419994edff04bbf101883097e7021c039375ba44c5076d52d3fe0581",
+    "education-agent-skills-professional-development-session-designer": "4a66e85dcc1e19c349a4323632e3ada161c3822567b9ab2b4dd86809ce64e144",
+    "education-agent-skills-progressive-hint-ladder": "14ccaa3927d5b0d9c36794ec69715ae6ebae5f8ad27b0535b779368bbfe516c8",
+    "education-agent-skills-project-brief-designer": "62a07f7824e442baf6bf69499056f3d0e83ddba64445a556b12a97c99a10eb0f",
+    "education-agent-skills-prompt-literacy-sequence-designer": "c5381db247eb3675ea038fbc1f87d7d0d2cae9bffc5fd82f539d5d76dcdadc48",
+    "education-agent-skills-reading-comprehension-strategy-selector": "d8cbda0125a0f9352b9a7c91a44a4f47e2b61d621a200cb2dc1488612dbae7a9",
+    "education-agent-skills-reflective-practice-prompt-generator": "4cc1a5ddc8628c75c60a2744e08e3595dcc106141b8b2cdb851927a05bdbc8fc",
+    "education-agent-skills-reggio-documentation-protocol": "69d4c24a30046bb033502969d6ce39e6883f540529f5442afef6bcd8164f4e5a",
+    "education-agent-skills-restorative-practice-protocol-designer": "6a21c1289b306f08ce7b59283dcc95a56ac70ad4b580e5d30d185755b8edbb97",
+    "education-agent-skills-retrieval-practice-generator": "7f3d3e0dcd144b05414e28d320e505b07cce725cec4717f80903a6cd18157823",
+    "education-agent-skills-retrieve-first-gate": "a945727dfb018bbf12aeeb1f9737fbce6cc7cb8ecaa0ca142a70b3f0eaf429dc",
+    "education-agent-skills-ruler-emotional-literacy-sequence": "5f412b3067479396ad1b49ffb7a1352708f8df27d04e50d466b77962337a1c0b",
+    "education-agent-skills-scaffolded-task-modifier": "7ceb346c208b7ac9ea62305ba54aba7d7b27bd6b2bc040dd5e251cdf082d5cde",
+    "education-agent-skills-scope-and-sequence-designer": "78a0d23569a41c233bfbb43cc15b1b5a8df633af86bc783d0323d1437b7e5703",
+    "education-agent-skills-self-efficacy-builder-sequence": "c4d8489d41014b6148b554de1c2a450ce455ac13ad1915d41fe7065bad1e5ed4",
+    "education-agent-skills-self-explanation-prompt-designer": "ede9a51bc35fa4eec66eb96155792ab71d32ee13533d7506206aa8c863e33c47",
+    "education-agent-skills-self-regulation-scaffold-generator": "36075f6d8e9c1b0bc80b895042b09403a969bd08608756f6a9a153f16136ed7e",
+    "education-agent-skills-service-learning-project-designer": "ea27509b63e84d9d74fcd5a938dd95c9ed77a911d8e2051d0bab14b978976cfa",
+    "education-agent-skills-sheltered-instruction-lesson-modifier": "33ef0d83c032b6153987ddc297ef0026845fc1297e5a83f35b75b92290e40ade",
+    "education-agent-skills-socratic-questioning-sequence-generator": "888f963450b0d757c7bac5df25d8d3e929baadf6d37ff19f55589dc23b2de745",
+    "education-agent-skills-source-credibility-evaluation-protocol": "e6c9041f6e1a42908a5e5e4ab89c0eda16c381a4f54d9d034baf85e6495e9e01",
+    "education-agent-skills-spaced-practice-scheduler": "b4ef82f14528a7c1e9dd2c34f9a2b99858c651a9bc66d233d12dbf34011a0376",
+    "education-agent-skills-srl-session-wrapper": "c90231a0b9bc17f246302d676e30c015b8172cd0e99314179e0cd68746b09091",
+    "education-agent-skills-stuck-and-error-diagnosis-coach": "98ac85673708f0355b55c042d7b53ea04a69abb1c6eb5bf365544c75520104a5",
+    "education-agent-skills-study-strategy-selector": "5f5d1d4dbb351298d123b86beba797c13767c08fb4fd1084e7b08cd8883e003e",
+    "education-agent-skills-systems-awareness-iceberg": "5ed9bfd755b8319c306f0889f1339ec46161aacb1d8f164639d41b91f6b2e4a9",
+    "education-agent-skills-systems-wellbeing-impact-mapper": "089034478522e6c6f43049cedace7df81a0246a7ec7b43158ff03b532cfd4e52",
+    "education-agent-skills-teach-back-evaluator": "231f6e0e262c390ef6b1bfec170822032e8983367402ead58da4c780269688ff",
+    "education-agent-skills-teacher-inquiry-cycle-designer": "3c5d039529243b053f48e54deb05adec4b58250ff8410ff82c6f0a8045fb934d",
+    "education-agent-skills-technological-pedagogical-content-knowledge-developer": "5378b0433fd0ddfef470749771373d3a5694ae0bfe68ee78479a1623d3a790b8",
+    "education-agent-skills-text-complexity-analyser": "3ba7a92936951a7d3f4d3c7eb241f245ddae70f7673a6ca7b13ed6b8d3825aee",
+    "education-agent-skills-think-aloud-script-generator": "6a6d8631f924b32fef25c2f50685910e1f3110041eea597fdbccabfbfd57eec3",
+    "education-agent-skills-three-part-lesson-designer": "1b223a115de29a371406ab0c5257a1e9d15e25e4d21edae8ce2f47b80f04e2a0",
+    "education-agent-skills-transfer-bridge": "7b81e5d7f68f0defe64cce51a2f11f5ca8784ed1d740cebb70963d19a45bad18",
+    "education-agent-skills-trauma-informed-practice-designer": "8f7e62e3928740413337f758ee2c09948a996acf7eb800d96d8b0cc758065e6f",
+    "education-agent-skills-ubuntu-collective-knowledge-task-designer": "1b95c7d122fe15156d68a3b13d6ca1772a794f005589f9d4c5580e0d71b107d5",
+    "education-agent-skills-udl-barrier-anticipator": "6ec102bdef1ee46010164ba050a85da675e8aaa5adfc4a8b9e68ee497dd798ea",
+    "education-agent-skills-udl-lesson-auditor": "2e9904be09f4620ff9f8dfed9f81454faefd19952ab11b8ef2f5f0b8b699ae32",
+    "education-agent-skills-udl-options-designer": "a9e3de1fe6a4fd8eeb0695b721a74868e551b96dbb357f2f21cab37a8f2ca0fd",
+    "education-agent-skills-unassisted-evidence-checkpoint": "6f07beca19e1c53f3a6d234c708c35f4e0d1aef5587ea1a160d28ebf315fb11a",
+    "education-agent-skills-uninterrupted-work-cycle-designer": "d21bec3fb2bfcafda354b90aaff6d27e5460d7fdb477d98f5a0bb524b55f773b",
+    "education-agent-skills-variation-theory-task-designer": "47a7d057de9c9610d85694a87b36a6e0c97dcff24aa13d78a99ab150727fffc8",
+    "education-agent-skills-vocabulary-tiering-tool": "8a17e6ad62337018101e2ac99d687c97c47e07d2a3ba7d7fbe6e8ee45b7033c4",
+    "education-agent-skills-weekly-agency-review": "1aa537f09976112f6cd9ef18c1417af2ee878a8a37a28272385bc38d08810749",
+    "education-agent-skills-wellbeing-learning-connection-mapper": "040f8ea574052c611b8ca75d733924d21d56af8b6cab4196aeb35183bb1c24c9",
+    "education-agent-skills-worked-example-fading-designer": "d60e4c78d857533dda989dd6f81beac57274459340af0b91a6e14c7f51b3c4e6",
+    "education-agent-skills-worked-example-to-problem-solving-transition-designer": "a1c3f0d8e36bbca603750640ea0ea0e857fff2d68cb76fef2b829437912525ce"
+  },
+  "file_dispositions": [
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-academic-language-sentence-frame-generator/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-academic-language-sentence-frame-generator/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "a6e9ccd0f901c376eb4a2b9795cf45f8c339a4151d9efa028b5227b72fea3604"
+    },
+    {
+      "source_path": "skills/eal-language-development/academic-language-sentence-frame-generator/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-academic-language-sentence-frame-generator/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "e3b0df8c198defcfe145b9a7843eaa828dd26fae94baef6b9e4741cdc2dccaff"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-adaptive-hint-sequence-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-adaptive-hint-sequence-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "74bdcb90f2a0a299f479fdfceb80bfe695c89776e10f3cdb2a5e02f51fa08185"
+    },
+    {
+      "source_path": "skills/ai-learning-science/adaptive-hint-sequence-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-adaptive-hint-sequence-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "6d8581a0b92cff1a7649d23b4f08d79e622d43829d988dfee07decb1109461d5"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-agency-circles-for-systems-action/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-agency-circles-for-systems-action/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "379718bf635aa0314ffe9c9d0699398496301e381e68559571eb51bf6d822d2d"
+    },
+    {
+      "source_path": "skills/systems-thinking/agency-circles-for-systems-action/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-agency-circles-for-systems-action/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f034be6f587e3a510a707c6445fde636ca85fdc3bd2dd13fcd8e796b7aa5ec36"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-agency-scaffold-generator/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-agency-scaffold-generator/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "576d3fa094a9738958901434628d1bcf50494a1b15d171f66d7748cecf8b6061"
+    },
+    {
+      "source_path": "skills/wellbeing-motivation-agency/agency-scaffold-generator/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-agency-scaffold-generator/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "81b72ae6ca795cdd9ead1c6d5deedf584a806e00c06d0cc845fc7700333f7b3c"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ai-claim-checker/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ai-claim-checker/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "c0ef7572d389feeccc0e5bbebd1b6d786f72dfd79f1d727e9ccc52ebb711ac9e"
+    },
+    {
+      "source_path": "skills/student-learning/ai-claim-checker/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ai-claim-checker/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "49f5db5ddcdbfb717c25a8dfda75ef5807eeb05623bc8570eab9aa3840b48abb"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ai-expertise-interrogation-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ai-expertise-interrogation-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "6cd6a581d073cb3f9453a0bd4e0d65b35ea2b7bb04474d1bfe62428a72a5c0c3"
+    },
+    {
+      "source_path": "skills/ai-literacy/ai-expertise-interrogation-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ai-expertise-interrogation-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "fe707cbdd576e4708457d186a0c66ec843da947a3c8f384e30e40e74e51974ba"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ai-facilitated-collaborative-learning-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ai-facilitated-collaborative-learning-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "93e89498f9e3b3a13c5c1572d041a88982846c2937d1e83a13668ad7e15893dd"
+    },
+    {
+      "source_path": "skills/ai-learning-science/ai-facilitated-collaborative-learning-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ai-facilitated-collaborative-learning-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "97c78e1ef340379cc471f559a65e2d2ce889a24d76f8a66f1cb3b7314756278d"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ai-feedback-design-principles/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ai-feedback-design-principles/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "ddba5077abce425bca940bff968af1870f16190374b62fd3ce151b7c9d449500"
+    },
+    {
+      "source_path": "skills/ai-learning-science/ai-feedback-design-principles/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ai-feedback-design-principles/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "5b02e1b069b6d1bfcee61a61bc3c0a5ad0866eb10dbbe3cd0f8d08c32b746b7f"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ai-hallucination-fact-check-protocol/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ai-hallucination-fact-check-protocol/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "ed0e6411e5a4bcd87e2bbcfe33f91cd866fd8b89773d876ef943321959932afb"
+    },
+    {
+      "source_path": "skills/ai-literacy/ai-hallucination-fact-check-protocol/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ai-hallucination-fact-check-protocol/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "2a44c3fb6c96d4f50fe77ee81d6e4e0dd33985eaea05d8e7bb5f47df55e805de"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ai-learning-boundary-mapper/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ai-learning-boundary-mapper/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "3c4b84947ddc7d5f751cd4b3880a9c77e66b63c7a51585225ae76cd7059df6b3"
+    },
+    {
+      "source_path": "skills/ai-literacy/ai-learning-boundary-mapper/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ai-learning-boundary-mapper/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "3b83a6b804702c846bf64c7f68c1e37b31b79c9de3e77788239d68114dae28b6"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ai-output-critical-audit-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ai-output-critical-audit-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "ca6c7c0cfda3743f56fcbd84787ebedf77885b5b1d06d04c4d84e512f42c516d"
+    },
+    {
+      "source_path": "skills/ai-literacy/ai-output-critical-audit-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ai-output-critical-audit-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "777807d417133422fb36aba3f18dffb11aa6e0c875082d55ca1d024dba4d7f5f"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ai-socratic-dialogue-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ai-socratic-dialogue-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "a7dd70f9de7e6aca54e8ee26b3ee89491417d5bac1eb8d42e9260353077a0723"
+    },
+    {
+      "source_path": "skills/ai-literacy/ai-socratic-dialogue-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ai-socratic-dialogue-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "9e77c5e595f331ac36b7bf942cdf87535de5d5a1b56141b75c1a3df795814edc"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-argument-structure-scaffold-generator/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-argument-structure-scaffold-generator/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "87677d247f1c8579401d7b9b0b8c51dfabe1b8acf03dd818c605a94074ff5eb6"
+    },
+    {
+      "source_path": "skills/literacy-critical-thinking/argument-structure-scaffold-generator/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-argument-structure-scaffold-generator/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "1853a5c32f2637cb499e284b55cd8240e28526cc703ef1247a7508c589466984"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-aspirational-systems-iceberg/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-aspirational-systems-iceberg/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "59b4b0d77a5a583418bdc4f34fb359625fe3a3117150d8f71f05be1b99728d73"
+    },
+    {
+      "source_path": "skills/systems-thinking/aspirational-systems-iceberg/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-aspirational-systems-iceberg/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "dcca6927cc2302f209c5725b0558594e2b7b4fcec820fa2cffc2ae51071495d5"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-assessment-validity-checker/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-assessment-validity-checker/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "0984cc31d4a829cfbee795f02db517f877a8cb59c0422b8403662db5ca2456bd"
+    },
+    {
+      "source_path": "skills/curriculum-assessment/assessment-validity-checker/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-assessment-validity-checker/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "bf599d02c461406ceb7d26102ae0dc20ab8f67c152eadeca18fe8f952ed83806"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-awe-wonder-experience-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-awe-wonder-experience-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "1f0bfb48e760b1fe99a02ad29af4d3e792dd0a3364de6d01121061507f9d4c34"
+    },
+    {
+      "source_path": "skills/wellbeing-motivation-agency/awe-wonder-experience-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-awe-wonder-experience-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "c906b4dfb911097e31ed17cdddb00be75bd42d4217c0f31154cc9224165e25f1"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-backwards-design-unit-planner/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-backwards-design-unit-planner/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "2b298151881c25e75234231f07687f4f50756a044dd4bfe21f7bf20cdd02dc90"
+    },
+    {
+      "source_path": "skills/curriculum-assessment/backwards-design-unit-planner/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-backwards-design-unit-planner/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "952fc9baf5e40cdc22c444a445e56bc4e05b8d1bddc85463984f82e063d61a56"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-belonging-classroom-culture-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-belonging-classroom-culture-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "6fbfa48a2dcbcd68a33d85300cfdaf427776ed91e99db73caab98efa87e393b8"
+    },
+    {
+      "source_path": "skills/wellbeing-motivation-agency/belonging-classroom-culture-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-belonging-classroom-culture-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "15ae0f50e6c3ecee808abe90b6025b6de7ddafcf13b5687d61104b415daea7e4"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-biophilic-learning-environment-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-biophilic-learning-environment-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "63b244046ab92facd0089eebc04a8e7b8262944b5a3e41a5e8082c424c5f22ff"
+    },
+    {
+      "source_path": "skills/environmental-experiential-learning/biophilic-learning-environment-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-biophilic-learning-environment-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "994d713f1662dba90a9d181b3e3abd2803aee18d6dca05b2425421b2c7ff0a43"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-checking-for-understanding-protocol-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-checking-for-understanding-protocol-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "927f8dcda67c017f66d067ab7b00cc0e1c747bb679044ce80d64593b02fd1e0a"
+    },
+    {
+      "source_path": "skills/explicit-instruction/checking-for-understanding-protocol-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-checking-for-understanding-protocol-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "9488623be8931405bb3d6167810728c563e188fa06ca1070d3e02cd966b40de8"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-cognitive-load-analyser/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-cognitive-load-analyser/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "281879663f157fd1efea93b36a1aa67d2de6ac262c3cdc1328ecb756597c7ff1"
+    },
+    {
+      "source_path": "skills/memory-learning-science/cognitive-load-analyser/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-cognitive-load-analyser/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "589f5c76a719b35ec7ac8a0d819c91e83eab2b20ea720736fe89db44efd7b2c6"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-cognitive-tutoring-architecture-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-cognitive-tutoring-architecture-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "ddff4df1cca92d801f6cb05fb536a8030dba4c26c8649a464cdcc97d5ff81d19"
+    },
+    {
+      "source_path": "skills/ai-learning-science/cognitive-tutoring-architecture-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-cognitive-tutoring-architecture-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "fa742dfa40f84654b420eb028dbe058edcf351a56fbf660b5afa3d0752a33d47"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-competency-unpacker/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-competency-unpacker/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "be63efa5cda73b84cb415a5a3d44d6a2a1e7b2bc859f6fec3de8f80b939e4db7"
+    },
+    {
+      "source_path": "skills/curriculum-assessment/competency-unpacker/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-competency-unpacker/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "4bf7fb63da1a6f6a1c0fee7e316a9930d4db00128f1adfb71d6c8ca802d99ef4"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-confidence-calibration-check/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-confidence-calibration-check/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "1a1ae92468550111937acd5da8bd4a1d67602ed5e21b9d69298c7734e4d59857"
+    },
+    {
+      "source_path": "skills/student-learning/confidence-calibration-check/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-confidence-calibration-check/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "a54cf56179ed8f6a28f9fac7c5df1796506522c51afb22e91a1c700b2278889c"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-coverage-audit/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-coverage-audit/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "9b71524033a56390b71fcd5a9517c230052942e9b420ccf5d75e107f949b3970"
+    },
+    {
+      "source_path": "skills/curriculum-alignment/coverage-audit/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-coverage-audit/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "80f0eeef93d287f664f3bc0334dcf6f41fb3977786d34c00144da9b69e1d2ea7"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-cpa-sequence-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-cpa-sequence-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "9d3704abe0e458b76966660a98a1e44166af1113fded5e5237b959b4ea56f5a0"
+    },
+    {
+      "source_path": "skills/global-cross-cultural-pedagogies/cpa-sequence-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-cpa-sequence-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "b5ac128f142f773ab8461847cd1e0a2f2189a95d5a1cd14a891e07787efb2e28"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-criterion-referenced-rubric-generator/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-criterion-referenced-rubric-generator/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "e6e01e6d5556fd797cc613b85005e9b8dad2a787d1e1bdb4fd84c36a651fbaf1"
+    },
+    {
+      "source_path": "skills/curriculum-assessment/criterion-referenced-rubric-generator/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-criterion-referenced-rubric-generator/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f5bb3525c8d40384ebb120670c48ff98281308a1ecdd8bbf670be296ba080514"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-critical-thinking-task-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-critical-thinking-task-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "071e8920dae085fe1e62ad9abdf85385d74ccd549410d49bf1479767007a03bb"
+    },
+    {
+      "source_path": "skills/literacy-critical-thinking/critical-thinking-task-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-critical-thinking-task-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "6723f3688b5d08d4a080e5ce60a62d4a4e4b18697ecbca4a4c9ee265f0bfbc19"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-cross-cultural-task-validity-checker/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-cross-cultural-task-validity-checker/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "11851ba79673542f2c82d46ee675c6024a366e24386e22ab4aa2fe8e939e024f"
+    },
+    {
+      "source_path": "skills/global-cross-cultural-pedagogies/cross-cultural-task-validity-checker/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-cross-cultural-task-validity-checker/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "366fa5a9bda8ad0046238db105343655eeed4243319281a951bc1004aa5f8eb5"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-culturally-responsive-teaching-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-culturally-responsive-teaching-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "45cc373bc8d2980c513bb0ba1b8aed5f682ab3c18609b40e0f34df963e364ef6"
+    },
+    {
+      "source_path": "skills/global-cross-cultural-pedagogies/culturally-responsive-teaching-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-culturally-responsive-teaching-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "033308955315b350fce0e9d53393ecec3e1f846e388a4ddceb699247c63526e3"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-curriculum-crosswalk/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-curriculum-crosswalk/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "6edd49447a1fb0ed1449bd99674f3a6b6957d4ea24a9eedf36adf5972bef336e"
+    },
+    {
+      "source_path": "skills/curriculum-alignment/curriculum-crosswalk/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-curriculum-crosswalk/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "da53d7c193ea55c719d7865ba90e50a02ee5f91fe1585151b9809dc519aa81d5"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-curriculum-knowledge-architecture-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-curriculum-knowledge-architecture-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "b683ba124ca82f126ae4f91b04c008f45c6c602d1b40674ea7f143511baa6baf"
+    },
+    {
+      "source_path": "skills/curriculum-assessment/curriculum-knowledge-architecture-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-curriculum-knowledge-architecture-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "31aa0a5690792c8c84d6fb41c0f492018f6fc3b8a9146b36f527f6a6b64b018f"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-dialogic-teaching-move-generator/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-dialogic-teaching-move-generator/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "9440b7484f0b5a8db26ebf5c51b9c822316398cc5f46055988cf88c9728671f5"
+    },
+    {
+      "source_path": "skills/questioning-discussion/dialogic-teaching-move-generator/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-dialogic-teaching-move-generator/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "378c7701e2f3bbf5f765ee80a30e0cfc132fcde5eb624c84b01ca19ecb060cd2"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-differentiation-adapter/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-differentiation-adapter/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "3a1095be2a5565320e72adbeb73ead2833b2cba7a15ffc1ccf0f5f6528bd9b62"
+    },
+    {
+      "source_path": "skills/curriculum-assessment/differentiation-adapter/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-differentiation-adapter/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "c08acb0d50333043f768332f1d3a3fe6522c2fe3e2d2fd32742e49069fcd20a6"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-digital-worked-example-sequence/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-digital-worked-example-sequence/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "1ab7fb48413d871adc5737a6dcf5803a5831ce3ab49e7c3c62e542406df6ab42"
+    },
+    {
+      "source_path": "skills/ai-learning-science/digital-worked-example-sequence/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-digital-worked-example-sequence/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "b6dd3e0e9c9602eaf90a1b6e3488b18c3d2b2bbc8625a85ef7890fe28fd5667e"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-disciplinary-ai-literacy-sequence-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-disciplinary-ai-literacy-sequence-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "6d40a67a14ec92f42ff000a43272106eee484cb9f2ef75bf81da6e2d8a65a424"
+    },
+    {
+      "source_path": "skills/ai-literacy/disciplinary-ai-literacy-sequence-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-disciplinary-ai-literacy-sequence-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "24cac771b3090b5c91d2eb76519661d798f1314721447086e414bd4bd7246d0e"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-disciplinary-writing-scaffold/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-disciplinary-writing-scaffold/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "bc0f93dc76f1351c5f9834951af6723e10b9037e33fc6b1c9b6f25d961bc8b0b"
+    },
+    {
+      "source_path": "skills/literacy-critical-thinking/disciplinary-writing-scaffold/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-disciplinary-writing-scaffold/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "b7ab13e8278c503d2d403bfe8ed1e34e9c736386c97a0466f006da5724eb9aa3"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-discipline-specific-critical-thinking-task-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-discipline-specific-critical-thinking-task-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "6dd40f51086a90372d0b232a371ad2db4f5a22d26ca0a7d10dd8d36b00c29b18"
+    },
+    {
+      "source_path": "skills/curriculum-assessment/discipline-specific-critical-thinking-task-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-discipline-specific-critical-thinking-task-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "09f3a17674efa0ac66a480d63ce27d0dbf58c17dbf19dca2e216859b38dc251b"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-discussion-protocol-selector/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-discussion-protocol-selector/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "8985353a3af22a7148eb5ad8c4d8783ddb3858393c6fa8ef8efd831d06dab311"
+    },
+    {
+      "source_path": "skills/questioning-discussion/discussion-protocol-selector/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-discussion-protocol-selector/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "acec4c588249a7612fb319818c5856639e3b22456dcffb3152e3f91a3fdd814a"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-dual-coding-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-dual-coding-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "cc72aee536490c4f08dab7c43bd1fc9e7ef393507d848bce50716cab01f82246"
+    },
+    {
+      "source_path": "skills/memory-learning-science/dual-coding-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-dual-coding-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "5eab2717dbadd6de652c4a65a2cdbc8ae742240432443d9d4058ca611712b44e"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ecological-inquiry-anchor-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ecological-inquiry-anchor-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "ef849ac06cec621337bf6fe53baf7e26c2e6ea34e0ac1a317418daf5ec82063d"
+    },
+    {
+      "source_path": "skills/environmental-experiential-learning/ecological-inquiry-anchor-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ecological-inquiry-anchor-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "83bf0f992b663e77ec8190b68c3898071476f78985d72521da03c8b7b0744768"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-elaborative-interrogation-generator/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-elaborative-interrogation-generator/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "4b66a46565bfdbf89f9a889cd0f63939c89c7338278a2cc8070b887c749ed955"
+    },
+    {
+      "source_path": "skills/memory-learning-science/elaborative-interrogation-generator/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-elaborative-interrogation-generator/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f0b36cb830e4d4109a042c8f038a7e1f057843bd2f7bfac9b3de55c279c80ca9"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-emergent-project-design-scaffold/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-emergent-project-design-scaffold/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "0035271f74e94c11c4ace2638597f25b62b597a0de87ee46348f98136eec47d7"
+    },
+    {
+      "source_path": "skills/global-cross-cultural-pedagogies/emergent-project-design-scaffold/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-emergent-project-design-scaffold/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "161989fc102964cbff76a03f0c6baee0d625d6275682abff52e05af66489e029"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-erroneous-example-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-erroneous-example-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "a0343ad8161386580af1146602559c85658b57fdc323c1ac6a231961f6bbd187"
+    },
+    {
+      "source_path": "skills/ai-learning-science/erroneous-example-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-erroneous-example-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "28b8563e09ace9206e38926bb1e4a7a759c5b57c7c98c767376b0748cf6db19a"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-error-analysis-protocol/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-error-analysis-protocol/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "dfd917280beb8ec2dc2075dd6fb15bcc7228ee0b7839a66cdedb834bd4ed1709"
+    },
+    {
+      "source_path": "skills/self-regulated-learning/error-analysis-protocol/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-error-analysis-protocol/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "bcce4b34741a49af49bac62a46867fe585d3f536c0ba8d951dca99b6bfacccab"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-experiential-learning-cycle-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-experiential-learning-cycle-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "a565bed562706c5757e7ac418b010057d4f245a7ae13046ec1e91dc4ec5b9012"
+    },
+    {
+      "source_path": "skills/environmental-experiential-learning/experiential-learning-cycle-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-experiential-learning-cycle-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "e53e08ebbcb4463e2d4a8ced4aa49733d150388c736682d015f9a0ef8057d6cb"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-explain-first-interrogator/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-explain-first-interrogator/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "ffef0b6492f34e10b76bc2effea61da0b945f941a737a574384be24d098fed8c"
+    },
+    {
+      "source_path": "skills/student-learning/explain-first-interrogator/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-explain-first-interrogator/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "c5f434a974ca63a90b585b9b4433b4f6f351295bc615884868d59ff457cb4b35"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-explicit-instruction-sequence-builder/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-explicit-instruction-sequence-builder/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "29796887dbb2da9a66aa3a6c48999e83a3c1e02f944aa8a0e164f62113ab43a9"
+    },
+    {
+      "source_path": "skills/explicit-instruction/explicit-instruction-sequence-builder/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-explicit-instruction-sequence-builder/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "319b6683505ebb64efbbc0c1929fd6c7d4f91e9fa08aac266d9a410d97c7e1c7"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-fading-manager/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-fading-manager/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "a91f06d5826b147c7c78d1e53679e9caaacbefeada913239caaa36440c3dae66"
+    },
+    {
+      "source_path": "skills/student-learning/fading-manager/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-fading-manager/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "313ee747ff0fd7d1ca364aac41545adc75625702c69da128b8bc802b73416fde"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-feedback-quality-analyser/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-feedback-quality-analyser/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "010d415a471e0e56af7914fea69da0dc3fbc8546e7c27e9dde28eb6b97225da8"
+    },
+    {
+      "source_path": "skills/memory-learning-science/feedback-quality-analyser/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-feedback-quality-analyser/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "9940dfb74159471338e68d98176266ea3be64351f564c7c37dc1580ea09b6420"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-flow-state-condition-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-flow-state-condition-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "0a8ffa0dd97aa01f4af3e2d6707b76cb7ac3ce16d350d3898d27045721288775"
+    },
+    {
+      "source_path": "skills/wellbeing-motivation-agency/flow-state-condition-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-flow-state-condition-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "93e79a99fbd4f01aa1caee483b9708b4cdec76f1c1bb1ca38fbaa27eced8f130"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-formative-assessment-loop-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-formative-assessment-loop-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "6df4ffbb4b9c47c689d068736ca74cb6b688fb3929348acc646d29c1f32b0492"
+    },
+    {
+      "source_path": "skills/ai-learning-science/formative-assessment-loop-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-formative-assessment-loop-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8887028801820482880c74768203ac887f9f7a60477758733d5fb08620486c5"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-formative-assessment-technique-selector/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-formative-assessment-technique-selector/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "4008fa8246df8c5d8a33976e4d4525ef4a0cc6ae9f33365da85ac7235c3dcf8f"
+    },
+    {
+      "source_path": "skills/curriculum-assessment/formative-assessment-technique-selector/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-formative-assessment-technique-selector/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "0a4108f43ad08eeb18f7474e58d806b655780010196c96d7a1fa5d616420db80"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-gap-analysis-from-student-work/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-gap-analysis-from-student-work/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "b52cbaf72980b187c4596140802210802279adddcd55f339846581b3da0838b1"
+    },
+    {
+      "source_path": "skills/curriculum-assessment/gap-analysis-from-student-work/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-gap-analysis-from-student-work/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "9e711771bfc5da0fd935f36575d06467d21584e91594e8c72336f593a6b4d93c"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-goal-setting-protocol-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-goal-setting-protocol-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "d3736dc5fdc3805fa81175a7193966bef7998d8b7d82ada548583be5f2cd7424"
+    },
+    {
+      "source_path": "skills/self-regulated-learning/goal-setting-protocol-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-goal-setting-protocol-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "fc5e36058b5ce0992b66ca9d5f537b00f713767914bac5b881bcc142ec2e76a2"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-hexagon-complexity-mapper/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-hexagon-complexity-mapper/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "e2af23383db6b9ed4d8d07854be0a36d380d7f9d4c4dd82ffd764f3c7998f545"
+    },
+    {
+      "source_path": "skills/systems-thinking/hexagon-complexity-mapper/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-hexagon-complexity-mapper/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "9321ad4c60edc47d6e78befcd4af67b2204b4f3eadd630a22e32bc5a06b4c624"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-hinge-question-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-hinge-question-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "3b20c27756e1f7236b84fef2b98b8cefe233d3d2f7941f2c0386b087235cdee0"
+    },
+    {
+      "source_path": "skills/questioning-discussion/hinge-question-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-hinge-question-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "4730273158aa93b8cafc670d86c944867f3e6e99c087b2bab5af9c2d12cebc92"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-implementation-intention-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-implementation-intention-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "01d02e018c0733d8420570f5b953f4d94877748218bcdfb6144796f273070eed"
+    },
+    {
+      "source_path": "skills/wellbeing-motivation-agency/implementation-intention-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-implementation-intention-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "9e826ce875d1565b36237fbd19bd53389066d7740695005310b9ca9e4fcba92d"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-individual-spacing-algorithm-explainer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-individual-spacing-algorithm-explainer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "aefd35b1b4e989b6428bed7497f43fbb9aeae142f18fc98feaacb2d8735e8a66"
+    },
+    {
+      "source_path": "skills/ai-learning-science/individual-spacing-algorithm-explainer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-individual-spacing-algorithm-explainer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "d15a0aeed079434196f5428e9c188616140fef55cb9a8f49815cf16660a43273"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-instructional-coaching-conversation-guide/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-instructional-coaching-conversation-guide/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "d4eec8d4be7bab9d1f378dbf56e5dda35051d564cda93816508b67b5a24681c7"
+    },
+    {
+      "source_path": "skills/professional-learning/instructional-coaching-conversation-guide/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-instructional-coaching-conversation-guide/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "0860e2ed4e336c2f71ee9c180afe033b9fdf5f891c4b790d29d6a31fb5de4483"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-intelligent-tutoring-dialogue-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-intelligent-tutoring-dialogue-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "450082918946b88bdd7a0c9af9789df1a4126be57478f0be565c4b7c1c7dfcff"
+    },
+    {
+      "source_path": "skills/ai-learning-science/intelligent-tutoring-dialogue-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-intelligent-tutoring-dialogue-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f22dbf2c881c9113aad0f05e4154ebc344ee80a375c5c9312773a94f7f349a32"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-interdisciplinary-real-world-connection-mapper/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-interdisciplinary-real-world-connection-mapper/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "77c09a0b36dc0c3c51e8313a98887d34734a8225a117f516bd13a08b19f48e80"
+    },
+    {
+      "source_path": "skills/environmental-experiential-learning/interdisciplinary-real-world-connection-mapper/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-interdisciplinary-real-world-connection-mapper/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "b3d2330f733175b1b32c97e4ab76eda00d1b10539f3db7cb038880b49374b79f"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-interleaving-unit-planner/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-interleaving-unit-planner/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "280ef02b3c3e0d0821bf6ac416ff68ca0dcc1f507be04eae81b68758adf25b1d"
+    },
+    {
+      "source_path": "skills/memory-learning-science/interleaving-unit-planner/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-interleaving-unit-planner/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "fa9a977bf7087d56c9ea45187e904f160a1864077f06702752e33a1580838a6e"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-kud-chart-author/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-kud-chart-author/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "72abf2f64d8e2be68eb02b064c4838b9cc4b5c8b35f58a0cb6bdcee33d78ec6e"
+    },
+    {
+      "source_path": "skills/curriculum-alignment/kud-chart-author/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-kud-chart-author/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "97e92108361d76e807acb408c475f04d07a810511319883e8a972a0ccfd11251"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-kud-knowledge-type-mapper/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-kud-knowledge-type-mapper/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "c32a15c70c55e8f993259ba1f4912a5c328d14e134a724b3ec11c3ccc2714a7c"
+    },
+    {
+      "source_path": "skills/curriculum-assessment/kud-knowledge-type-mapper/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-kud-knowledge-type-mapper/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "785b75716f5c56bf280ed208b7eae96bcd4e3ea879facceb61d034f32af72b0e"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ladder-of-inference-reflection/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ladder-of-inference-reflection/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "d613832f64cfff6e25a7b47678cd9d05ae5be0b4e6608429ffaa17a189877039"
+    },
+    {
+      "source_path": "skills/systems-thinking/ladder-of-inference-reflection/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ladder-of-inference-reflection/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "ef473781b8e356daa9496a29e8c15e4cf36a27224255a676fd17315d75f4e4b5"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-language-demand-analyser/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-language-demand-analyser/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "e117ebd1a7c8d1c9aa4f8d7269e72f78f65e386d657d60503322ee1ec90e641c"
+    },
+    {
+      "source_path": "skills/eal-language-development/language-demand-analyser/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-language-demand-analyser/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "7bf1f72d4794c5f58720731ff5417fec3907477df1eb29ace6273bddb3c091f7"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-learning-analytics-interpretation-guide/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-learning-analytics-interpretation-guide/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "46529ee48c3336aea680f3bfe43c0d3a2eb595a7c6618255040105a96fc27d06"
+    },
+    {
+      "source_path": "skills/ai-learning-science/learning-analytics-interpretation-guide/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-learning-analytics-interpretation-guide/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "2b06ef37930356e908ee240495a10318de1c81256449769e6777d635f54d50ec"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-learning-progression-builder/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-learning-progression-builder/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "ae859768747f69144ed7f0ff994520069708b7e63b9ed9be73d0d55db58e80e7"
+    },
+    {
+      "source_path": "skills/curriculum-assessment/learning-progression-builder/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-learning-progression-builder/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "e305a43f6f3cc9b5322a0715302711d9634dab5d272699d7f704d38af1e9ddc8"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-lesson-observation-protocol-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-lesson-observation-protocol-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "3debbfc4d1c8908e08cf0bfc3890fda06ef398734dc26e2d67f8caa95485dcd1"
+    },
+    {
+      "source_path": "skills/professional-learning/lesson-observation-protocol-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-lesson-observation-protocol-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "374032cb55208b473d1cdfd00bb2d3fa7d70e2233246d95d113dd92c2bc51e29"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-lesson-opening-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-lesson-opening-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f9cd2909e736aec2aa679b7fdb19592454d0206d6f8cf60626398dac25a085a3"
+    },
+    {
+      "source_path": "skills/explicit-instruction/lesson-opening-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-lesson-opening-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "4f75aa6549a52cccf75e2537eaafef7f22730f61ff23c8a603548709e94c76a0"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-lesson-study-cycle-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-lesson-study-cycle-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "80a24eac2d6250de258f95649a066571d63b80e0fb1b509edadab93096d33dad"
+    },
+    {
+      "source_path": "skills/professional-learning/lesson-study-cycle-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-lesson-study-cycle-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "a872dffcfe1bf704f63324fad1ddd101a2e9528cdb47adc9193e5050f5d879ac"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-leverage-and-response-design/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-leverage-and-response-design/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "b6827116c1453d3b67f27a7d3de462d86fe144eccd9bc20ca2304f122ef5957d"
+    },
+    {
+      "source_path": "skills/systems-thinking/leverage-and-response-design/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-leverage-and-response-design/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "8a9c7a62366606faa09a0d34123085528648313d1ffb0ba6d7f62b130cf2f40f"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-media-literacy-deconstruction-protocol/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-media-literacy-deconstruction-protocol/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "b6812dc7baaac2e6b9a5b5e5b08c43e505ea78e0dfe3f9501be5c1e089e0ae2d"
+    },
+    {
+      "source_path": "skills/literacy-critical-thinking/media-literacy-deconstruction-protocol/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-media-literacy-deconstruction-protocol/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "3963689ce30354563ca19a7367573a4179e13b5e79c12c78502ff97c3bbda851"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-mental-model-mapper/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-mental-model-mapper/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f4c1a4d41a838b1c7ca071d8d1a41b8a51604e83e731ad6eac612cf587f1c98d"
+    },
+    {
+      "source_path": "skills/systems-thinking/mental-model-mapper/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-mental-model-mapper/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "ae4145adb9a45f14e21a0713d0744c1d023f9e0c0066fbfb28a134ec68d872ac"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-metacognitive-monitoring-ai-contexts/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-metacognitive-monitoring-ai-contexts/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "67fcd048785833b673a07136cad986e0fe1a63cef86a39f23efaa2b392b18631"
+    },
+    {
+      "source_path": "skills/ai-learning-science/metacognitive-monitoring-ai-contexts/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-metacognitive-monitoring-ai-contexts/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "a57f1cf62d2d93e0026db47dcb3ac719e88ec7f373e7f970e94a19b97ea86b98"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-metacognitive-prompt-library/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-metacognitive-prompt-library/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "9c34b9faf928e4af3ee1b4c4b937e5eea4b6037dd06b31ab6a826c10b2ff7d11"
+    },
+    {
+      "source_path": "skills/self-regulated-learning/metacognitive-prompt-library/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-metacognitive-prompt-library/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "3cba0bbc632176d124c15140a34b447279f73cfbfcfb9b267c37008d6858b3c9"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-mixed-age-learning-task-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-mixed-age-learning-task-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "50e0242a07c25060273e0ed76dfde9585a730a6552b5830635038e94f2c24099"
+    },
+    {
+      "source_path": "skills/montessori-alternative-approaches/mixed-age-learning-task-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-mixed-age-learning-task-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "595619a18ce16c9719ba6a241a0da013751566de9cac9220bff37bdeb30ff1fb"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-motivation-diagnostic-task-redesign/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-motivation-diagnostic-task-redesign/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "0ae5737f68b4c864fe5a974cdcad7521cef2279876e6fb650d2f853796d11c8a"
+    },
+    {
+      "source_path": "skills/wellbeing-motivation-agency/motivation-diagnostic-task-redesign/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-motivation-diagnostic-task-redesign/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "b389448b5dc4bf3a89bb8deec24908f4e76c3b36a931b0671d5cd6f1f972f5fe"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-outdoor-learning-sequence-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-outdoor-learning-sequence-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "8808394902040023f3ab350afc76ee35dc41dc002f07e16a0bb2d3ba8cce429c"
+    },
+    {
+      "source_path": "skills/environmental-experiential-learning/outdoor-learning-sequence-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-outdoor-learning-sequence-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "c7d153f4a5f38e09a1d3aeb3c9dc290349b1438f1450cd55535ee7e9b5276955"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-panel-review/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-panel-review/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "6b29cb84df3bed36f62c33ce5a7c8d9748ed79d9ff40d62314477d4bbb55cbf3"
+    },
+    {
+      "source_path": "skills/professional-learning/panel-review/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-panel-review/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "9167a69ca9cf81dd0aafae02d48ea73e9c2a79b417bf49fd6b7c84494597bc9f"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-pedagogical-content-knowledge-developer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-pedagogical-content-knowledge-developer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "228f9ec77b43a397e54af464c5d6405816b71ef8b609eb4149471a1ef44d3359"
+    },
+    {
+      "source_path": "skills/professional-learning/pedagogical-content-knowledge-developer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-pedagogical-content-knowledge-developer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "a834fbd53262cd91845460d0916405660e9ece6a1311206a3855b09c925a5ed3"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-perma-based-lesson-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-perma-based-lesson-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "8fef31219dc7d6dcabc9b1dcc7f24471ca92237e1b2196ab7d9ddd90d0468e6d"
+    },
+    {
+      "source_path": "skills/wellbeing-motivation-agency/perma-based-lesson-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-perma-based-lesson-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "1512d328360acdd03c3a41f8ba7418466c3ec9224630cc24e4bc1bdbc999ff31"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-perspective-taking-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-perspective-taking-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "e7c5b55fadf947d562a7f8eeab87eadfa4b6dea212877ceb867baf7b62984208"
+    },
+    {
+      "source_path": "skills/questioning-discussion/perspective-taking-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-perspective-taking-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "a6696e11162c620977278b30fcb243a6cef399177e04a26952d841d282c03811"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-phenomenon-based-unit-anchor/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-phenomenon-based-unit-anchor/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "e7352da255cf964c60580a7c38effd42e28515ae3cd57e4ec13264e76c5aa316"
+    },
+    {
+      "source_path": "skills/global-cross-cultural-pedagogies/phenomenon-based-unit-anchor/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-phenomenon-based-unit-anchor/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "45eb49f77507180ec7d36591916a13f38b6c9c97e0099f5de6b8b82a7286699b"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-place-based-inquiry-anchor/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-place-based-inquiry-anchor/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "d6239db4ac1ea12ed328b73f813336c096e3ba0ccad5d9a05205f524ec56d1b3"
+    },
+    {
+      "source_path": "skills/global-cross-cultural-pedagogies/place-based-inquiry-anchor/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-place-based-inquiry-anchor/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "47a5aa21c281eaf2e4368a538468e5adb98f41bf09cf1c37eed5bcaaa68bf645"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-practice-problem-sequence-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-practice-problem-sequence-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "94f565ee58d115718456237dced6ced95efae5527da77f52d45464c84cf8e03b"
+    },
+    {
+      "source_path": "skills/explicit-instruction/practice-problem-sequence-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-practice-problem-sequence-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "a7e99a5de12fbfa8911fb366eec73db5c9fc5e24a298b8c89825b07979fd99aa"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-prepared-environment-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-prepared-environment-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "63b60346ed6e05300799eed1c5d8c309c9ddf6a22eff760082b7782e8b9468bb"
+    },
+    {
+      "source_path": "skills/montessori-alternative-approaches/prepared-environment-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-prepared-environment-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "17fbfa00c31523ced041e92cb869a77b9fa6a99de2b3b5c6d81778dcbb66e657"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-productive-failure-desirable-difficulty-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-productive-failure-desirable-difficulty-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "e8651e04c059dadaa43b3beab5c14d45b9dd1f6aab1b2b7666f305bdbfebf46f"
+    },
+    {
+      "source_path": "skills/ai-learning-science/productive-failure-desirable-difficulty-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-productive-failure-desirable-difficulty-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "57d062121e94f82d8ab7a4ba6b797530a076a9d0a50cac853ce8d56539f691e9"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-productive-failure-protocol/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-productive-failure-protocol/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "ebd038623cff843ab4ade6cfe25124facf3e34d6acccdc5852537668c63059cb"
+    },
+    {
+      "source_path": "skills/student-learning/productive-failure-protocol/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-productive-failure-protocol/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "1be46a3d9b0bc212c686779fe838e59b4549147368f65bcb32be31ab3d4d839e"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-professional-development-session-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-professional-development-session-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "56653858f38578f89b13dc387bc91ae7378e347ec69d9ad233f929ea5bbc21c9"
+    },
+    {
+      "source_path": "skills/professional-learning/professional-development-session-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-professional-development-session-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "db27da04c1176b0411ed5b1215e1e3cd7d31c47623d6c11b06cc6ddf9eac5c95"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-progressive-hint-ladder/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-progressive-hint-ladder/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "acb68e95d000d9d559a9a91dd529dab0eb6070b2d4ecda2de810376ad2a1c362"
+    },
+    {
+      "source_path": "skills/student-learning/progressive-hint-ladder/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-progressive-hint-ladder/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "44f751971df675bb6b36571634c44131df5a8b6b7a3e2182f8c50ee9b8b7e74b"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-project-brief-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-project-brief-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "50a037acdf630f0624fc31c573339375e14d209ac2d382a3e5bb7a6b1329efd5"
+    },
+    {
+      "source_path": "skills/curriculum-assessment/project-brief-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-project-brief-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "b4508be5fec233b4aebb4a9f039ce35bcf444ed1a2fae2268569785eee4c35ad"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-prompt-literacy-sequence-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-prompt-literacy-sequence-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "0b2ff298b1ad8f62238d5b51a122c3539e87986ced91f3e4031a6d6838331662"
+    },
+    {
+      "source_path": "skills/ai-literacy/prompt-literacy-sequence-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-prompt-literacy-sequence-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "017a92bee47be5d83c7d92cc3895120ecd2cd938fd26a0d157b622ffa4d2f6a3"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-reading-comprehension-strategy-selector/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-reading-comprehension-strategy-selector/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "5f65347fa427e2cbcaf7eb56cb1674fbc3bbdb951e846562c33062825adc6c24"
+    },
+    {
+      "source_path": "skills/literacy-critical-thinking/reading-comprehension-strategy-selector/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-reading-comprehension-strategy-selector/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "0e94bcc1342f43e4753ee199d2586c493bd2ebd716b3cac597b3148d054e7a94"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-reflective-practice-prompt-generator/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-reflective-practice-prompt-generator/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "5335d4c904018a7749881d615781ea5d7d7a77c71eeab453e36cabeb0ef5f79a"
+    },
+    {
+      "source_path": "skills/professional-learning/reflective-practice-prompt-generator/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-reflective-practice-prompt-generator/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "ad0643bfddfb8c2439fa4b21756d04022cbbc34fa5f134c164ddf561c2c466d0"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-reggio-documentation-protocol/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-reggio-documentation-protocol/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "198f70f3a7309a3b3fc206275a247c561a97f980a5789eb8e751e9fe69cce9e4"
+    },
+    {
+      "source_path": "skills/global-cross-cultural-pedagogies/reggio-documentation-protocol/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-reggio-documentation-protocol/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "3cd09e0b1e70c203678086eae07b2c0d3b2834f13de56e2c7efe4ff65dfcb232"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-restorative-practice-protocol-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-restorative-practice-protocol-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "7fe207007436e6594940c2f9a5dd9d4e0c66b3e214b3fcd2bdacaf02038be43c"
+    },
+    {
+      "source_path": "skills/wellbeing-motivation-agency/restorative-practice-protocol-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-restorative-practice-protocol-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "55c9dc7d38a7c446980a2acfa0cf895e91c4121fe0cb81edfb13b7025aeb52e3"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-retrieval-practice-generator/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-retrieval-practice-generator/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "2b55abce2589d80dc788a8b19217acfa5f7d5c3cf4b7aae32a71ab500b7b3cf1"
+    },
+    {
+      "source_path": "skills/memory-learning-science/retrieval-practice-generator/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-retrieval-practice-generator/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "fa2559d1f2c617412686a7948224a8ad1a9e97498e6cf8df0bf3170a866e7ccd"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-retrieve-first-gate/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-retrieve-first-gate/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "eae9ea148259e4c621fd6446aedcdb2185c42735e426c33ce5e9930f3aaec63b"
+    },
+    {
+      "source_path": "skills/student-learning/retrieve-first-gate/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-retrieve-first-gate/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "adddedb8e3f00c68a49d857e45817eed0a6f4216673e2c9a27eb6097a205a061"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ruler-emotional-literacy-sequence/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ruler-emotional-literacy-sequence/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "32d8078e6123fc9e9dc23d086266aa6af6bd6bf8e00619f3ac95779c95dbe160"
+    },
+    {
+      "source_path": "skills/wellbeing-motivation-agency/ruler-emotional-literacy-sequence/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ruler-emotional-literacy-sequence/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "56d86bfb01366116f6d6dd0426940a0249c278284a4a9cbfbb8baefdda13e223"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-scaffolded-task-modifier/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-scaffolded-task-modifier/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "adf957740e966105fd5e748a4b4dbd4d3630f4d5db0fba20bb38304e30a09553"
+    },
+    {
+      "source_path": "skills/eal-language-development/scaffolded-task-modifier/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-scaffolded-task-modifier/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "cb7b9eca4bb0d3b8c5865f051fc72691377b04d6a4f792647cc0246ce5ae183b"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-scope-and-sequence-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-scope-and-sequence-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "7a6ddb47806c97c728f583e5a14a161f65c2627092fca65250ee23f2900efc79"
+    },
+    {
+      "source_path": "skills/curriculum-assessment/scope-and-sequence-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-scope-and-sequence-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "cbb22a08477e9c81af9e55f7e86a43d6fa63b2900dd5177798854894f39bcd56"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-self-efficacy-builder-sequence/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-self-efficacy-builder-sequence/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "7ad59fac276b4cbc7fd686b2b87b017fe140e9c966976b5cda5762875f753065"
+    },
+    {
+      "source_path": "skills/wellbeing-motivation-agency/self-efficacy-builder-sequence/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-self-efficacy-builder-sequence/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "0dbfd3115cde91a050b8805210239858e916f83d60cdf3763106c0d64f7628b0"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-self-explanation-prompt-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-self-explanation-prompt-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "5a72d45f0ec04c0ded95584d1833663073c9fcb9c4eb4e949dc49baa0e84c8ef"
+    },
+    {
+      "source_path": "skills/ai-learning-science/self-explanation-prompt-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-self-explanation-prompt-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "77c2457dfe879b22fa2c090ab74523ac64a5257ffa02b24b947d924b27a96eb1"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-self-regulation-scaffold-generator/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-self-regulation-scaffold-generator/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "d46b02ea7279b79009632721fef5dc9746f42de0b0b89bc552c586c14f2c6d57"
+    },
+    {
+      "source_path": "skills/self-regulated-learning/self-regulation-scaffold-generator/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-self-regulation-scaffold-generator/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "709ea41163ba836eaf5bd77dab4217a1b65fd0d21b80bf9f5f85b91f33ef0a57"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-service-learning-project-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-service-learning-project-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "b8946c58e0fc4536797fc2ac337f3ba378f5d3f186bc5fb07406ae5293daef3f"
+    },
+    {
+      "source_path": "skills/environmental-experiential-learning/service-learning-project-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-service-learning-project-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "ffd018dae231aa185ed2aaaf212c48f5cc3bbf1be2ce6b3b14121ead17eeec21"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-sheltered-instruction-lesson-modifier/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-sheltered-instruction-lesson-modifier/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "72f8d6909173ff55ba4c8704972469965642e77ef1455ded663c28379c62cda5"
+    },
+    {
+      "source_path": "skills/eal-language-development/sheltered-instruction-lesson-modifier/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-sheltered-instruction-lesson-modifier/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "731fa189c02af5f8c8ab0d4deafee97a5b8ea8e68f25480086695c71cccee311"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-socratic-questioning-sequence-generator/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-socratic-questioning-sequence-generator/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "b1f47483f4c92dbb6a857079234081bbaaf0f589a50ff294300e0b36086cd1b4"
+    },
+    {
+      "source_path": "skills/questioning-discussion/socratic-questioning-sequence-generator/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-socratic-questioning-sequence-generator/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "528d1a5b60785ac40bb6b6023fa857be9fef10e1e0b755a3b9bbe4a56bbce4a8"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-source-credibility-evaluation-protocol/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-source-credibility-evaluation-protocol/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "3a52d9657d1ba36c512ef2f68a1d6530c0d72a87dcf38aa30207a6762abcb077"
+    },
+    {
+      "source_path": "skills/literacy-critical-thinking/source-credibility-evaluation-protocol/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-source-credibility-evaluation-protocol/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "31d863cca50fbc66be772dd2e84321f243ce6ba6fcdc44efc2ad810534199628"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-spaced-practice-scheduler/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-spaced-practice-scheduler/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "43cd92cab29f65daed0e8ae911b8d6fd8ab8b1311f12642c167f98dcfc77c834"
+    },
+    {
+      "source_path": "skills/memory-learning-science/spaced-practice-scheduler/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-spaced-practice-scheduler/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "9136c099cab6d045123037abcabedd91d9c1e1588f6938de16a19517375d4478"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-srl-session-wrapper/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-srl-session-wrapper/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "840441f866d1ae0d0130e23efdfbbf15c883be33e4ab2a040bf3f661febc6338"
+    },
+    {
+      "source_path": "skills/student-learning/srl-session-wrapper/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-srl-session-wrapper/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "7d2b91421d2f16de3b3304617d585c072e5fd905f2ad0ba4c974ffae80e6197e"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-stuck-and-error-diagnosis-coach/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-stuck-and-error-diagnosis-coach/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "292ed6a6763058c7012ef6bcad36c7df81b5b162f7ee277593cd36e0ebcbd784"
+    },
+    {
+      "source_path": "skills/student-learning/stuck-and-error-diagnosis-coach/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-stuck-and-error-diagnosis-coach/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "52d77bfff2f7d265e11116a7ef5ef0ada0d94dc8fd58b93d9218ca97799b9727"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-study-strategy-selector/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-study-strategy-selector/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "456f5eecf7fe87ae15d2ec873cfab8abb33a75d446539d79459950c5be7c97f9"
+    },
+    {
+      "source_path": "skills/self-regulated-learning/study-strategy-selector/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-study-strategy-selector/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "962d0052a15d3f78e38493d627e12a3c61debc224e62ee176621c0b387a99301"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-systems-awareness-iceberg/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-systems-awareness-iceberg/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "139b2ff472c1aeb20a8ccd3f648b19ab6d05efba2112edff9209fbdc2fc3a29a"
+    },
+    {
+      "source_path": "skills/systems-thinking/systems-awareness-iceberg/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-systems-awareness-iceberg/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "7a62e0b5106d6839a11f17a4eef60921aa4ee3ede176d33621fdb00eeac6e72e"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-systems-wellbeing-impact-mapper/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-systems-wellbeing-impact-mapper/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "7a887f8b77436f7678ef6b719595fd24f372eb007f93aab6ed3efc559de77245"
+    },
+    {
+      "source_path": "skills/systems-thinking/systems-wellbeing-impact-mapper/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-systems-wellbeing-impact-mapper/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "91b6eb4ddac82598b5595d0e7bcf0bd65ba577e507dde883647009c8e509fe5a"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-teach-back-evaluator/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-teach-back-evaluator/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8a5cd253010bf72ada0ace3daa5c3d3ffc883d1d93baccee0849154b407738d"
+    },
+    {
+      "source_path": "skills/student-learning/teach-back-evaluator/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-teach-back-evaluator/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "80c825b2dc48f720e30d0f773381327a10f0191d9868fcb63beb97950d72f49e"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-teacher-inquiry-cycle-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-teacher-inquiry-cycle-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "a79f8f631f288d080119bdde6baf5af029c848479b8a0a27f7ef1d246e309e58"
+    },
+    {
+      "source_path": "skills/professional-learning/teacher-inquiry-cycle-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-teacher-inquiry-cycle-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "6d399fb6175c4f9f65511cf386e4fc1fed0ed60f819c1dedd0d0061e6f3c2de1"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-technological-pedagogical-content-knowledge-developer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-technological-pedagogical-content-knowledge-developer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "83ec96cfd5054612f1c7df3d7b20d6314c12e0738ed2770038c6054d78b44d09"
+    },
+    {
+      "source_path": "skills/professional-learning/technological-pedagogical-content-knowledge-developer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-technological-pedagogical-content-knowledge-developer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "703f7db64fa487892a8a6b79b79510bf06fcec115c1df1de22020d8e9c582328"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-text-complexity-analyser/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-text-complexity-analyser/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "96ac2bec52f1d3b176f66eede52082a2a30232ed5f661581b3bdeba184a2df5d"
+    },
+    {
+      "source_path": "skills/literacy-critical-thinking/text-complexity-analyser/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-text-complexity-analyser/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "3e6240ecacb36a1483e1bb2e5cc3432d5729f9bcc304c0eeb088d44db9fa4e23"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-think-aloud-script-generator/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-think-aloud-script-generator/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "fe7e9818b2c1d9e176a84bb5c31c2c811bee34a2d14f0808ec720bc262566899"
+    },
+    {
+      "source_path": "skills/explicit-instruction/think-aloud-script-generator/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-think-aloud-script-generator/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8d9abafa21bb2d6c7d2f089cc1449bd9ce948c4026e776761d7d9f6dded2da0"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-three-part-lesson-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-three-part-lesson-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "d8384f71243dbdf97c3a6f7e1d8a77cb05a5d9cd71d74ca2f61a08a66c0adc0e"
+    },
+    {
+      "source_path": "skills/montessori-alternative-approaches/three-part-lesson-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-three-part-lesson-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "a16fe38e0e84577ace88e318228aafa7ab34f7b0b470159d9c47aa5bc1160ad0"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-transfer-bridge/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-transfer-bridge/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "ec2b284bae5beb17b67cf671bd0b0dd39e3f0bea426a224efc9ef106d09cff82"
+    },
+    {
+      "source_path": "skills/student-learning/transfer-bridge/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-transfer-bridge/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "9f2451b6a9399a3249b6ce5dccbc42b690de827cf0eac700c4287f9b036e7887"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-trauma-informed-practice-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-trauma-informed-practice-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "d8fb336cd3ed811a9cd0dff1375f1291d99917c1ee7d0acbd4c76464b60492c9"
+    },
+    {
+      "source_path": "skills/wellbeing-motivation-agency/trauma-informed-practice-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-trauma-informed-practice-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "df39441688e5d91aa0d28a80b6b98847e7dd38115b9c7b60a7b70bc63e59ac2a"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ubuntu-collective-knowledge-task-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ubuntu-collective-knowledge-task-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "40c4b14445a15866c650fbb749b34d415d418343e388c94967aad823e8073fdf"
+    },
+    {
+      "source_path": "skills/global-cross-cultural-pedagogies/ubuntu-collective-knowledge-task-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-ubuntu-collective-knowledge-task-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "8791f5579d1e934f9c56b9d380f10bc55c51089ba12a8f813d7861ed9855d56c"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-udl-barrier-anticipator/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-udl-barrier-anticipator/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "13ce2d6f4274de25d010b636a15cc4359f9a6355e1fa5ac09b1de170da5e423c"
+    },
+    {
+      "source_path": "skills/inclusive-design/udl-barrier-anticipator/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-udl-barrier-anticipator/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "1f8174ca061bf554ac89c1e73cd9b56da7b28ac24aab6f030cd79a8bcbbba8ed"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-udl-lesson-auditor/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-udl-lesson-auditor/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "6fe61177724cb1ad13da90cfdd3e26a71badf86d57367d0d19fe2bfefb435cc5"
+    },
+    {
+      "source_path": "skills/inclusive-design/udl-lesson-auditor/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-udl-lesson-auditor/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "5a8072a79c59ffa7de54792f624208709cbde55048f7b6f6e75072ab354cbca5"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-udl-options-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-udl-options-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "3d1bd1788be6290891f677440f97674a36e6e7248ae5a1651eb22c125c528f1d"
+    },
+    {
+      "source_path": "skills/inclusive-design/udl-options-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-udl-options-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "c6446cd907901592274dd0d0c9f6bc7974d04991b2417e67a3e2efb3aaa217a1"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-unassisted-evidence-checkpoint/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-unassisted-evidence-checkpoint/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "ab42b455de63d0d50780bb1fe81258d1150a13e07ad7ca8804bafe1dca6886b9"
+    },
+    {
+      "source_path": "skills/student-learning/unassisted-evidence-checkpoint/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-unassisted-evidence-checkpoint/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "3db6aa49b617f63522c257ee796db5dfa7b87a6e5aff9000bf7f65c982960872"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-uninterrupted-work-cycle-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-uninterrupted-work-cycle-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "a6a2efa1abec02dbfa1ebfef6e2ce2d243a563d6df92a2e624715debcc9a608b"
+    },
+    {
+      "source_path": "skills/montessori-alternative-approaches/uninterrupted-work-cycle-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-uninterrupted-work-cycle-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "426bb1a19f40899531bd9c531d092ca74419d9f27a0d8559d9255ffae4803196"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-variation-theory-task-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-variation-theory-task-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f6c88e7f9f2a22e6cbf1c553a368f96f8b69fbc250f12a0d69a148f983386f79"
+    },
+    {
+      "source_path": "skills/global-cross-cultural-pedagogies/variation-theory-task-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-variation-theory-task-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "6d5b429597027bd4d7745cded53f14201700fb53bc88e60edd7720aac90e0c4b"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-vocabulary-tiering-tool/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-vocabulary-tiering-tool/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "762947b7f74101819b33050026639f488c4fc8c5ac222b979a460bd2ae4ec124"
+    },
+    {
+      "source_path": "skills/eal-language-development/vocabulary-tiering-tool/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-vocabulary-tiering-tool/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "9deda5e2f3ec038cf5f221072784fcb78cd262062715b8665f59b9d02bbf3765"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-weekly-agency-review/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-weekly-agency-review/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "229b76bcd52f443b4858347f9766d743e8f045a9a2f6cd0a9f2fc13e4435e95c"
+    },
+    {
+      "source_path": "skills/student-learning/weekly-agency-review/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-weekly-agency-review/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8d194c0f69ec755f1e7ca72b3e17b06ee725f7419ee935169f26c571e0c4980"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-wellbeing-learning-connection-mapper/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-wellbeing-learning-connection-mapper/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "44e6a079b797766692dd847f8ae8cafa71c08af72ce72c208683ce5a7395bd8f"
+    },
+    {
+      "source_path": "skills/wellbeing-motivation-agency/wellbeing-learning-connection-mapper/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-wellbeing-learning-connection-mapper/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "dc198a815b3efec56f3c9771f84d4c187ba397d7bde28bff6c79aa35bfd90e57"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-worked-example-fading-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-worked-example-fading-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "b0a131d023ee7e011b42d29898d4dbdd4f4aa233f63d540a2dc73be17949f3e1"
+    },
+    {
+      "source_path": "skills/memory-learning-science/worked-example-fading-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-worked-example-fading-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "95f45c5c7083193b49a9305750a81b870cf60f946e789501fde8d11e4047cec3"
+    },
+    {
+      "source_path": "generated/LICENSE",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-worked-example-to-problem-solving-transition-designer/LICENSE",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f"
+    },
+    {
+      "source_path": "generated/NOTICE.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-worked-example-to-problem-solving-transition-designer/NOTICE.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "d1504f246179f05a1d44a14bbdc3c066c74dc19f8ae3e8c1c0ece3380505c78e"
+    },
+    {
+      "source_path": "skills/ai-learning-science/worked-example-to-problem-solving-transition-designer/SKILL.md",
+      "output_path": "vendors/education-agent-skills/education-agent-skills-worked-example-to-problem-solving-transition-designer/SKILL.md",
+      "disposition": "included",
+      "reason": "approved adapted Skill asset",
+      "sha256": "82c7afcfc2576f2003d5370f2716fde4a12c3e7c78d92d691fba467f7fdf06f3"
+    }
+  ]
+}

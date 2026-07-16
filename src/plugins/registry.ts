@@ -9,7 +9,7 @@ import { COMPANION_INTENTS } from "../adapters/companion/index.js";
 import { ARSU_SKILL_IDS } from "../arsu-converter/routing/contracts.js";
 import type { Diagnostic } from "../core/validation/types.js";
 
-const SkillIdSchema = z.string().min(1).max(64).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
+const SkillIdSchema = z.string().min(1).max(128).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
 const DomainIdSchema = z.string().min(1).max(128).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
 const RelativeSourcePathSchema = z.string().min(1).refine(isSafeRelativePath, "must be a safe relative POSIX path");
 const ImmutableRevisionSchema = z.string().regex(/^[a-f0-9]{7,64}$/, "must be an immutable hexadecimal revision");

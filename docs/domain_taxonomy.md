@@ -32,7 +32,7 @@ Registry Schema 1 内部固定保存 213 个学科型 domain 和 5 个工具型 
 若已选 domain 在后续版本中被移除或变空，`plugin list --installed` 与 status 仍将其显示为 unavailable，以保留 manifest resolution snapshot 的安全卸载能力；update 会阻断。该 domain 后续重新获得 Skills 时，会在同一 ID 下恢复可用。
 
 当前 ToolUniverse、Scientific Agent Skills、Materials-Science-Skills-For-LLM、
-FinRobot 与 HistAgent 合计提供 53 个非空 domain。FinRobot 的六个准入 Skills 全部加入
+FinRobot、HistAgent 与 Education Agent Skills 合计提供 56 个非空 domain。FinRobot 的六个准入 Skills 全部加入
 `banking-finance-and-investment`，其中 statement analysis 与 company
 fundamentals 也加入 `accounting-auditing-and-accountability`。Materials vendor
 的七个准入 Skills 经人工加入 `materials-engineering`、
@@ -42,7 +42,10 @@ fundamentals 也加入 `accounting-auditing-and-accountability`。Materials vend
 个准入 Skills 经人工加入 19 个 ANZSRC Group domain 和全部五个工具域。HistAgent
 的三个准入 Skills 全部加入 `historical-studies`；source identification 与 source
 analysis 另加入 `heritage-archive-and-museum-studies`，且不加入任何工具域。其他
-domain 允许为空，并对用户隐藏。
+Education Agent Skills 的 136 个准入 Skills 分别加入
+`curriculum-and-pedagogy`（54）、`education-systems`（9）和
+`specialist-studies-in-education`（73），不加入任何工具域。其他 domain
+允许为空，并对用户隐藏。
 
 ## ANZSRC Division 与 Group 完整名录
 

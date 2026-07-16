@@ -5,6 +5,7 @@ import { test } from "node:test";
 
 import { availableDomains, loadPluginRegistry } from "../src/plugins/registry.js";
 import { loadAnzsrcSnapshot } from "../src/plugins/taxonomy.js";
+import { PRODUCTION_VENDOR_IDS } from "../src/vendor-converters/shared/production-vendors.js";
 import { assertAuditSourceInitialized, assertEvidencePaths, gitOutput, repositoryResourceSummary, topLevelSkillIds } from "./helpers/vendor-audit.js";
 
 const SOURCE_ROOT = path.resolve("vendor/tooluniverse");
@@ -116,11 +117,11 @@ void test("ToolUniverse audit summaries and known findings are reproducible", as
 
 void test("ToolUniverse production vendor remains traceable to the audit", async () => {
   const registry = await loadPluginRegistry();
-  assert.equal(registry.vendors.size, 5);
+  assert.deepEqual([...registry.vendors.keys()], [...PRODUCTION_VENDOR_IDS]);
   assert.equal(registry.vendors.get("tooluniverse")?.revision, REVISION);
   assert.equal(registry.vendors.get("tooluniverse")?.skills.length, 130);
   assert.equal(registry.domains.size, 218);
-  assert.equal(availableDomains(registry).length, 53);
+  assert.equal(availableDomains(registry).length, 56);
 });
 
 function hasFinding(audit: Audit, skillId: string, code: string): boolean {

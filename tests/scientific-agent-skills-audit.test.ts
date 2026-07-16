@@ -8,6 +8,7 @@ import { parse } from "yaml";
 import { availableDomains, loadPluginRegistry } from "../src/plugins/registry.js";
 import { loadAnzsrcSnapshot } from "../src/plugins/taxonomy.js";
 import { ScientificAgentSkillsAuditSchema } from "../src/vendor-audits/scientific-agent-skills.js";
+import { PRODUCTION_VENDOR_IDS } from "../src/vendor-converters/shared/production-vendors.js";
 import { assertAuditSourceInitialized, assertEvidencePaths, gitOutput, repositoryResourceSummary, topLevelSkillIds } from "./helpers/vendor-audit.js";
 
 const SOURCE_ROOT = path.resolve("vendor/scientific-agent-skills");
@@ -128,10 +129,10 @@ void test("Scientific Agent Skills structural, license, and security summaries a
 
 void test("Scientific Agent Skills production admission remains separately policy governed", async () => {
   const registry = await loadPluginRegistry();
-  assert.deepEqual([...registry.vendors.keys()], ["finrobot", "histagent", "materials-science-skills-for-llm", "scientific-agent-skills", "tooluniverse"]);
+  assert.deepEqual([...registry.vendors.keys()], [...PRODUCTION_VENDOR_IDS]);
   assert.equal(registry.vendors.get("scientific-agent-skills")?.skills.length, 49);
   assert.equal(registry.domains.size, 218);
-  assert.equal(availableDomains(registry).length, 53);
+  assert.equal(availableDomains(registry).length, 56);
   assert.equal((await readFile(path.join(DERIVED_ROOT, "scientific-agent-skills-astropy", "SKILL.md"), "utf8")).startsWith("---\n"), true);
 });
 

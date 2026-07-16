@@ -11,6 +11,7 @@ import { renderMaterialsCompleteTrees } from "../src/vendor-converters/materials
 import { checkMaterialsIdempotence, checkMaterialsOutput, type MaterialsConversionManifest } from "../src/vendor-converters/materials-science-skills-for-llm/converter.js";
 import { loadMaterialsPolicies } from "../src/vendor-converters/materials-science-skills-for-llm/policy.js";
 import { MATERIALS_SKILL_DEFINITIONS } from "../src/vendor-converters/materials-science-skills-for-llm/skill-definitions.js";
+import { PRODUCTION_VENDOR_IDS } from "../src/vendor-converters/shared/production-vendors.js";
 import { walkFiles } from "../src/vendor-converters/shared/staging.js";
 
 const REPO_ROOT = path.resolve(".");
@@ -97,8 +98,8 @@ void test("Materials generated bundle is hash-bound, dependency-free, and in onl
   assert.deepEqual(manifest.implementation_counts, { agent_procedures: 14, external_tools: 9, references: 6, bundled_scripts: 0 });
 
   const loaded = await loadPluginRegistry(PLUGIN_ROOT);
-  assert.deepEqual([...loaded.vendors.keys()], ["finrobot", "histagent", "materials-science-skills-for-llm", "scientific-agent-skills", "tooluniverse"]);
-  assert.equal(availableDomains(loaded).length, 53);
+  assert.deepEqual([...loaded.vendors.keys()], [...PRODUCTION_VENDOR_IDS]);
+  assert.equal(availableDomains(loaded).length, 56);
   assert.equal(loaded.domains.get("materials-engineering")?.skills.filter((id) => id.startsWith("materials-science-skills-")).length, 6);
   assert.equal(loaded.domains.get("macromolecular-and-materials-chemistry")?.skills.filter((id) => id.startsWith("materials-science-skills-")).length, 2);
   assert.equal(loaded.domains.get("computational-modeling-and-simulation")?.skills.filter((id) => id.startsWith("materials-science-skills-")).length, 7);

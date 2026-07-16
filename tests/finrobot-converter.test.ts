@@ -10,6 +10,7 @@ import { availableDomains, loadPluginRegistry, resolveDomainSelection } from "..
 import { renderFinRobotCompleteTrees } from "../src/vendor-converters/finrobot/complete-tree.js";
 import { checkFinRobotIdempotence, checkFinRobotOutput, type FinRobotConversionManifest } from "../src/vendor-converters/finrobot/converter.js";
 import { assertNoSensitiveValues, loadFinRobotDraftPolicies } from "../src/vendor-converters/finrobot/policy.js";
+import { PRODUCTION_VENDOR_IDS } from "../src/vendor-converters/shared/production-vendors.js";
 
 const REPO_ROOT = path.resolve(".");
 const PLUGIN_ROOT = path.resolve("skills/plugins");
@@ -36,11 +37,11 @@ void test("FinRobot generated bundle is the approved version 2 six-Skill project
   assert.equal(rendered.reviewStatus, "approved");
   assert.equal(manifest.converter_version, "2");
   assert.equal(manifest.approved_tree_set_sha256, APPROVED_HASH);
-  assert.deepEqual([...loaded.vendors.keys()], ["finrobot", "histagent", "materials-science-skills-for-llm", "scientific-agent-skills", "tooluniverse"]);
+  assert.deepEqual([...loaded.vendors.keys()], [...PRODUCTION_VENDOR_IDS]);
   assert.equal(loaded.vendors.get("finrobot")?.skills.length, 6);
   assert.ok(loaded.vendors.get("finrobot")?.skills.every((skill) => skill.dependencies.length === 0));
   assert.equal(loaded.domains.size, 218);
-  assert.equal(availableDomains(loaded).length, 53);
+  assert.equal(availableDomains(loaded).length, 56);
   assert.deepEqual(loaded.domains.get("accounting-auditing-and-accountability")?.skills, [
     "financial-research-company-fundamentals",
     "financial-research-statement-analysis",

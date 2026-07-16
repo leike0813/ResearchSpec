@@ -62,7 +62,7 @@ pnpm histagent:check
 pnpm histagent:idempotence
 ```
 
-Conversion stages all five published vendors, invokes the source-neutral
+Conversion stages all six published vendors, invokes the source-neutral
 central assembler, and commits only the HistAgent tree, bundle, manifest,
 conversion report, and combined registry. Drift protection requires `--force`
 after review.

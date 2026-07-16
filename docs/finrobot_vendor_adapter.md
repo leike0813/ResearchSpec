@@ -77,6 +77,6 @@ pnpm finrobot:check
 pnpm finrobot:idempotence
 ```
 
-Conversion stages all five published vendors, assembles the complete
+Conversion stages all six published vendors, assembles the complete
 source-neutral registry, and commits only the FinRobot tree, bundle, manifest,
 report, and combined registry. Drift protection requires `--force` after review.

@@ -15,7 +15,7 @@ import { cleanup, runCli, tempProject } from "./helpers/cli.js";
 
 const FIXTURE_ROOT = path.resolve("tests/fixtures/domain-skill-plugins");
 
-void test("production registry contains the fixed taxonomy and five reviewed vendors", async () => {
+void test("production registry contains the fixed taxonomy and six reviewed vendors", async () => {
   const loaded = await loadPluginRegistry();
   assert.equal(loaded.registry.schema_version, "1");
   assert.deepEqual(loaded.registry.domain_taxonomy, { discipline_system: "ANZSRC FoR", discipline_version: "2020", source_release: "2025-10-24" });
@@ -24,8 +24,9 @@ void test("production registry contains the fixed taxonomy and five reviewed ven
   assert.equal(loaded.vendors.get("materials-science-skills-for-llm")?.skills.length, 7);
   assert.equal(loaded.vendors.get("finrobot")?.skills.length, 6);
   assert.equal(loaded.vendors.get("histagent")?.skills.length, 3);
+  assert.equal(loaded.vendors.get("education-agent-skills")?.skills.length, 136);
   assert.equal(loaded.domains.size, 218);
-  assert.equal(availableDomains(loaded).length, 53);
+  assert.equal(availableDomains(loaded).length, 56);
   assert.equal(loaded.domains.get("scientific-visualization-and-communication")?.skills.length, 12);
   assert.equal(loaded.domains.has("genomics-and-systems-biology"), false);
 });
@@ -63,6 +64,28 @@ void test("production domain installation projects Scientific Agent Skills witho
     assert.equal(manifest.installations.filter((item) => item.source.startsWith("command:")).length, 8);
     await handlePluginUninstall(["quantum-physics"], context(root), registry);
     assert.equal(await exists(path.join(root, ".claude/skills/scientific-agent-skills-qiskit/SKILL.md")), false);
+  } finally { await cleanup(root); }
+});
+
+void test("production Education domain installs complete static Skills without new wrappers", async () => {
+  const root = await tempProject();
+  try {
+    assert.equal(runCli(["init", root, "--tools", "claude"]).status, 0);
+    const registry = await loadPluginRegistry();
+    await handlePluginInstall(["education-systems"], context(root), registry);
+    const educationSkills = registry.domains.get("education-systems")?.skills ?? [];
+    assert.equal(educationSkills.length, 9);
+    for (const id of educationSkills) {
+      const skillRoot = path.join(root, ".claude/skills", id);
+      assert.equal(await exists(path.join(skillRoot, "SKILL.md")), true);
+      assert.equal(await exists(path.join(skillRoot, "LICENSE")), true);
+      assert.equal(await exists(path.join(skillRoot, "NOTICE.md")), true);
+      assert.equal(await exists(path.join(skillRoot, "scripts")), false);
+    }
+    const manifest = JSON.parse(await readFile(path.join(root, "researchspec/tool-installation-manifest.json"), "utf8")) as { installations: Array<{ source: string }> };
+    assert.equal(manifest.installations.filter((item) => item.source.startsWith("command:")).length, 8);
+    await handlePluginUninstall(["education-systems"], context(root), registry);
+    assert.equal(await exists(path.join(root, ".claude/skills", educationSkills[0] ?? "missing", "SKILL.md")), false);
   } finally { await cleanup(root); }
 });
 

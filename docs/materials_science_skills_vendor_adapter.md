@@ -64,7 +64,7 @@ pnpm materials-science-skills-for-llm:check
 pnpm materials-science-skills-for-llm:idempotence
 ```
 
-Conversion stages all five published vendors, assembles the complete
+Conversion stages all six published vendors, assembles the complete
 source-neutral registry, and commits only the Materials tree, bundle, manifest,
 report, and registry. Conversion, checking, idempotence, packaging,
 installation, discovery, and update never execute scientific software, install
