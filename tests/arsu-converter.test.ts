@@ -31,6 +31,12 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
 
   const deepResearch = await readFile(path.join(root, "skills/arsu/deep-research/SKILL.md"), "utf8");
   assert.match(deepResearch, /researchspec status --json/);
+  assert.match(deepResearch, /researchspec plugin list --summary --json/);
+  assert.match(deepResearch, /researchspec plugin show <domain-id> --summary --json/);
+  assert.match(deepResearch, /researchspec plugin instructions <skill-id> --json/);
+  assert.match(deepResearch, /propose at most three domains in one batch/);
+  assert.match(deepResearch, /does not become the candidate producer/);
+  assert.match(deepResearch, /continue the same core work without the plugin/);
   assert.match(deepResearch, /work:<instance>\/<node>/);
   assert.match(deepResearch, /policy is `automatic`/);
   assert.match(deepResearch, /--expected-sha256/);
@@ -114,7 +120,7 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
   const crossSkillDeepResearch = await readFile(crossSkillDeepResearchPath, "utf8");
   assert.match(crossSkillDeepResearch, /<!--rs:STATE-001-->/);
   assert.match(crossSkillDeepResearch, /description: test/);
-  assert.doesNotMatch(crossSkillDeepResearch, /researchspec-contract-preflight:v5/);
+  assert.doesNotMatch(crossSkillDeepResearch, /researchspec-contract-preflight:v6/);
   assert.equal(
     manifest.anchor_replacements.records.some((item) =>
       item.anchor_id === "STATE-001" &&

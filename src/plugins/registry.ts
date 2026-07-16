@@ -1,4 +1,5 @@
 import { readdir, readFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -86,6 +87,12 @@ export interface RegisteredSkill {
   definition: VendorSkillDefinition;
 }
 
+export interface PluginSkillMetadata {
+  name: string;
+  description: string;
+  entrySha256: string;
+}
+
 export interface ResolvedDomainSelection {
   selectedDomainIds: string[];
   availableDomainIds: string[];
@@ -104,6 +111,7 @@ export interface LoadedPluginRegistry {
   /** Compatibility alias for internal callers while the public command remains `plugin`. */
   plugins: ReadonlyMap<string, DomainDefinition>;
   skills: ReadonlyMap<string, RegisteredSkill>;
+  skillMetadata: ReadonlyMap<string, PluginSkillMetadata>;
   skillFiles: ReadonlyMap<string, readonly string[]>;
   diagnostics: readonly Diagnostic[];
 }
@@ -140,6 +148,7 @@ export async function validatePluginRegistry(raw: unknown, pluginRoot: string, r
   uniqueIds(registry.domains.map((item) => item.domain_id), "domain", errors, registryPath);
   const baseIds = new Set<string>(BASE_SKILL_IDS);
   const skills = new Map<string, RegisteredSkill>();
+  const skillMetadata = new Map<string, PluginSkillMetadata>();
   const skillFiles = new Map<string, readonly string[]>();
   const packagedFiles = validateSkillContent ? new Map<string, readonly string[]>() : await loadPackagedSkillFiles(pluginRoot, registry.vendors);
 
@@ -163,7 +172,9 @@ export async function validatePluginRegistry(raw: unknown, pluginRoot: string, r
     }
     const root = pluginSkillRoot(pluginRoot, registered.vendor.vendor_id, skillId);
     const precomputed = packagedFiles.get(skillId);
-    skillFiles.set(skillId, precomputed ?? await validateSkillRoot(root, registered.vendor, registered.definition, errors, validateSkillContent));
+    const validation = await validateSkillRoot(root, registered.vendor, registered.definition, errors, validateSkillContent, precomputed);
+    skillFiles.set(skillId, validation.files);
+    if (validation.metadata) skillMetadata.set(skillId, validation.metadata);
   }
 
   const directlyReachable = new Set<string>();
@@ -190,6 +201,7 @@ export async function validatePluginRegistry(raw: unknown, pluginRoot: string, r
     domains,
     plugins: domains,
     skills,
+    skillMetadata,
     skillFiles,
     diagnostics: warnings,
   };
@@ -220,37 +232,38 @@ export function pluginSkillRoot(pluginRoot: string, vendorId: string, skillId: s
 
 export function filesForSkill(loaded: LoadedPluginRegistry, skillId: string): readonly string[] { return loaded.skillFiles.get(skillId) ?? []; }
 
-async function validateSkillRoot(root: string, vendor: VendorDefinition, skill: VendorSkillDefinition, diagnostics: Diagnostic[], validateContent: boolean): Promise<readonly string[]> {
+async function validateSkillRoot(
+  root: string,
+  vendor: VendorDefinition,
+  skill: VendorSkillDefinition,
+  diagnostics: Diagnostic[],
+  validateContent: boolean,
+  precomputed?: readonly string[],
+): Promise<{ files: readonly string[]; metadata?: PluginSkillMetadata }> {
   let files: string[];
-  try { files = await walkFiles(root); }
+  try { files = precomputed ? precomputed.map((file) => path.join(root, file)) : await walkFiles(root); }
   catch (error) {
     diagnostics.push(fatal("plugin_skill_missing", `Cannot read derived Skill root for ${vendor.vendor_id}/${skill.skill_id}: ${error instanceof Error ? error.message : String(error)}`, root, { vendor_id: vendor.vendor_id, skill_id: skill.skill_id }));
-    return [];
+    return { files: [] };
   }
   const relativeFiles = files.map((file) => posix(path.relative(root, file)));
   const skillPath = path.join(root, "SKILL.md");
   if (!relativeFiles.includes("SKILL.md")) {
     diagnostics.push(fatal("plugin_skill_missing", `Registered Skill is missing SKILL.md: ${vendor.vendor_id}/${skill.skill_id}`, skillPath));
-    return relativeFiles;
+    return { files: relativeFiles };
   }
-  if (!validateContent) {
-    if (!relativeFiles.includes("LICENSE")) diagnostics.push(fatal("plugin_skill_license_missing", `Third-party-derived Skill is missing LICENSE: ${skill.skill_id}`, path.join(root, "LICENSE")));
-    if (!relativeFiles.includes("NOTICE.md") && !relativeFiles.includes("NOTICE")) diagnostics.push(fatal("plugin_skill_notice_missing", `Third-party-derived Skill is missing NOTICE or NOTICE.md: ${skill.skill_id}`, path.join(root, "NOTICE")));
-    return relativeFiles;
-  }
+  let metadata: PluginSkillMetadata | undefined;
   try {
-    const frontmatter = parseSkillFrontmatter(await readFile(skillPath, "utf8"));
-    const result = SkillFrontmatterSchema.safeParse(frontmatter.value);
-    if (!result.success) for (const issue of result.error.issues) diagnostics.push(fatal("plugin_skill_frontmatter_invalid", `Invalid SKILL.md frontmatter for ${skill.skill_id} at ${issue.path.join(".") || "root"}: ${issue.message}`, skillPath, issue));
-    else if (result.data.name !== skill.skill_id || path.basename(root) !== result.data.name) diagnostics.push(fatal("plugin_skill_name_mismatch", `SKILL.md name, registry Skill ID, and directory must match: ${skill.skill_id}`, skillPath, { declared_name: result.data.name }));
-    if (!frontmatter.body.trim()) diagnostics.push(fatal("plugin_skill_body_missing", `SKILL.md must contain Markdown instructions: ${skill.skill_id}`, skillPath));
+    const entry = await readPluginSkillEntry(skillPath);
+    metadata = entry.metadata;
+    if (entry.metadata.name !== skill.skill_id || path.basename(root) !== entry.metadata.name) diagnostics.push(fatal("plugin_skill_name_mismatch", `SKILL.md name, registry Skill ID, and directory must match: ${skill.skill_id}`, skillPath, { declared_name: entry.metadata.name }));
   } catch (error) { diagnostics.push(fatal("plugin_skill_frontmatter_invalid", `Cannot parse SKILL.md for ${skill.skill_id}: ${error instanceof Error ? error.message : String(error)}`, skillPath)); }
   const licensePath = path.join(root, "LICENSE");
   const noticeName = relativeFiles.includes("NOTICE.md") ? "NOTICE.md" : "NOTICE";
   const noticePath = path.join(root, noticeName);
-  if (!relativeFiles.includes("LICENSE") || !(await safeNonEmpty(licensePath))) diagnostics.push(fatal("plugin_skill_license_missing", `Third-party-derived Skill is missing a non-empty LICENSE: ${skill.skill_id}`, licensePath));
-  if ((!relativeFiles.includes("NOTICE.md") && !relativeFiles.includes("NOTICE")) || !(await safeNonEmpty(noticePath))) diagnostics.push(fatal("plugin_skill_notice_missing", `Third-party-derived Skill is missing a non-empty NOTICE or NOTICE.md: ${skill.skill_id}`, noticePath));
-  return relativeFiles;
+  if (!relativeFiles.includes("LICENSE") || (validateContent && !(await safeNonEmpty(licensePath)))) diagnostics.push(fatal("plugin_skill_license_missing", `Third-party-derived Skill is missing a non-empty LICENSE: ${skill.skill_id}`, licensePath));
+  if ((!relativeFiles.includes("NOTICE.md") && !relativeFiles.includes("NOTICE")) || (validateContent && !(await safeNonEmpty(noticePath)))) diagnostics.push(fatal("plugin_skill_notice_missing", `Third-party-derived Skill is missing a non-empty NOTICE or NOTICE.md: ${skill.skill_id}`, noticePath));
+  return { files: relativeFiles, metadata };
 }
 
 const SkillFrontmatterSchema = z.looseObject({
@@ -261,6 +274,22 @@ const SkillFrontmatterSchema = z.looseObject({
   metadata: z.record(z.string(), z.string()).optional(),
   "allowed-tools": z.string().trim().min(1).optional(),
 });
+
+export async function readPluginSkillEntry(skillPath: string): Promise<{ metadata: PluginSkillMetadata; text: string }> {
+  const text = await readFile(skillPath, "utf8");
+  const frontmatter = parseSkillFrontmatter(text);
+  const result = SkillFrontmatterSchema.safeParse(frontmatter.value);
+  if (!result.success) throw new Error(result.error.issues.map((issue) => `${issue.path.join(".") || "root"}: ${issue.message}`).join("; "));
+  if (!frontmatter.body.trim()) throw new Error("SKILL.md must contain Markdown instructions.");
+  return {
+    text,
+    metadata: {
+      name: result.data.name,
+      description: result.data.description,
+      entrySha256: createHash("sha256").update(text).digest("hex"),
+    },
+  };
+}
 
 function parseSkillFrontmatter(text: string): { value: unknown; body: string } {
   if (!text.startsWith("---\n")) throw new Error("SKILL.md must start with YAML frontmatter.");

@@ -95,6 +95,16 @@ directly modify workflow state, routes, work items, artifact registry, Gates,
 Decisions, transitions, or receipts. ResearchSpec distributes static reviewed
 content and never executes plugin scripts or installs their dependencies.
 
+At runtime, Navigate and the active ARSU producer may discover optional domain
+assistance from compact packaged Skill metadata. Suggest at most three domains
+in one batch, keep plugin consent separate from route confirmation, preview the
+exact install, and bind non-interactive execution to its `plan_sha256`. Use a
+newly projected Skill natively when the host has loaded it; otherwise use
+`plugin instructions <skill-id>` only after selection, availability, projection,
+and manifest-hash checks. The plugin is a bounded advisory helper whose result
+returns to the original ARSU producer. Decline or failure must leave the core
+selector, producer, frontier, and workflow authority unchanged.
+
 Discipline domains use ANZSRC 2020 Fields of Research Group as their only
 classification standard; Field is audit metadata and never automatic membership.
 ResearchSpec also owns exactly five coarse tool domains documented in

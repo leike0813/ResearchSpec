@@ -377,7 +377,13 @@ flowchart TD
 
 Check、Submit 和 Archive 是 CLI transaction，不需要同名 Companion。Explore、Next 与 Context 的用户意图并入 Navigate。
 ResearchSpec 维护的领域插件可以从 bundled registry 增加可选 Open Agent Skills；它们不改变固定
-4+4 成员、wrapper 数量或 workflow authority。
+4+4 成员、wrapper 数量或 workflow authority。Navigate 与当前 ARSU producer 会在新路由、
+研究需要显著变化、出现新 ready work item 或用户明确要求专业能力时，使用紧凑插件元数据判断
+是否存在实质帮助。未安装能力最多按三个 domain 合并建议，必须与路由确认分开征得用户同意，
+并以 dry-run 返回的 `plan_sha256` 绑定安装执行。安装后优先使用宿主已热加载的 Skill；若宿主
+尚未加载，则通过 `plugin instructions <skill-id>` 读取当前 workspace 中已投影且 hash-clean 的
+同一份指令。插件只作为当前 ARSU producer 的嵌套语义助手，其结果必须回到原 producer 审查和
+整合。拒绝、不可用、漂移或调用失败都不阻断核心路由。
 
 ### 11.2 CLI：16 个顶层命令
 
@@ -388,7 +394,7 @@ ResearchSpec 维护的领域插件可以从 bundled registry 增加可选 Open A
 | Inspection | `check`, `list`, `show` | 校验和查看权威对象 |
 | Context | `handoff`, `pack` | 渲染或打包可移交上下文 |
 | Governance | `propose`, `decide`, `archive` | 高影响 change、显式决策与生命周期收尾 |
-| Domain Skills | `plugin` | 查看稳定 domain catalog，并按依赖闭包管理 workspace 级可选 Skills；vendor 仅作为详细 provenance |
+| Domain Skills | `plugin` | 查看稳定 domain catalog，按依赖闭包管理 workspace 级可选 Skills，并读取已投影 Skill 的 hash-bound 指令；vendor 仅作为详细 provenance |
 
 command wrapper 只是不同 agent 工具的 adapter。目标交付量是：
 
@@ -419,7 +425,8 @@ command wrapper 只是不同 agent 工具的 adapter。目标交付量是：
 - 4 个 ARSU Skills 与 4 个 Companion Skills 的多工具投影；Navigate 从 routing catalog
   和 CLI frontier 组合 Route、Resume、Explain、Export。
 - bundled domain Skill registry、workspace selection、31-tool Skill projection、manifest drift
-  protection 与 advisory Navigate recommendation；插件不生成 wrappers 或 workflow state。
+  protection、紧凑语义发现、批量确认与 plan-hash-bound 安装，以及 advisory Navigate/ARSU
+  动态辅助；插件不生成 wrappers、workflow state 或第二套 producer/frontier。
 - 学科 domain 使用 ANZSRC 2020 FoR Group，工具 domain 使用五类粗粒度 ResearchSpec 目录；
   内部空 domain 不出现在普通用户 catalog，已选后变空或缺失的项仅作为 unavailable 恢复状态。
 - converter-owned routing catalog，覆盖 25 个 modes、2 个 pipeline entries、artifacts、

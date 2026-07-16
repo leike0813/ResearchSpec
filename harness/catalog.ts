@@ -12,6 +12,7 @@ import { assemblePluginRegistry } from "../src/plugins/assembler.js";
 import {
   filesForSkill,
   pluginSkillRoot,
+  readPluginSkillEntry,
   resolveDomainSelection,
   validatePluginRegistry,
 } from "../src/plugins/registry.js";
@@ -293,14 +294,13 @@ async function loadPlugins(
       for (const relativePath of filesForSkill(loaded, skillId)) {
         sourceFiles.set(relativePath, { type: "disk", root, absolutePath: path.join(root, relativePath) });
       }
-      const entry = await readFile(path.join(root, "SKILL.md"), "utf8");
-      const frontmatter = parseFrontmatter(entry);
+      const entry = await readPluginSkillEntry(path.join(root, "SKILL.md"));
       const files = await fileMetadata(sourceFiles);
       skills.push({
         skill_id: skillId,
         family: "plugin",
         title: titleCase(skillId),
-        description: stringValue(frontmatter.description) ?? "",
+        description: entry.metadata.description,
         license: registered.definition.license,
         dependencies: [...registered.definition.dependencies].sort(compareText),
         direct_domain_ids: sorted(directDomains.get(skillId) ?? []),

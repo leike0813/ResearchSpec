@@ -58,8 +58,13 @@ vendor-neutral domains; maintainer converters own upstream provenance and Skill
 dependencies. Discipline domains follow [ANZSRC 2020 FoR Group](docs/domain_taxonomy.md),
 while Field codes remain audit metadata; empty fixed domains stay internal until
 reviewed Skills are available. Plugins add no command
-wrappers and never own workflow state, Gates, Decisions, or receipts. Inspect the
-bundled catalog with `researchspec plugin list`.
+wrappers and never own workflow state, Gates, Decisions, or receipts. During
+normal research dialogue, Navigate can quietly inspect compact plugin metadata,
+suggest a small relevant domain batch, obtain separate consent, preview and
+execute the exact hash-bound installation, and use the projected Skill as an
+advisory helper of the current ARSU producer. Core work continues unchanged when
+the user declines or augmentation is unavailable. Inspect the bundled catalog
+manually with `researchspec plugin list`; manual CLI selection remains optional.
 
 The normal runtime protocol is:
 

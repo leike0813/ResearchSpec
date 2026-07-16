@@ -5,8 +5,8 @@ import { Command, CommanderError, InvalidArgumentError } from "commander";
 import {
   handleAdvance, handleArchive, handleCheck, handleDecide, handleHandoff, handleInit, handleInstructions, handleList,
   handlePack, handlePropose, handleShow, handleStart, handleStatus, handleSubmit, handleUpdate, type DecideOptions,
-  handlePluginInstall, handlePluginList, handlePluginShow, handlePluginUninstall, handlePluginUpdate,
-  type AdvanceOptions, type HandoffOptions, type InitOptions, type PackOptions, type PluginListOptions, type ProposeOptions, type StartOptions, type SubmitOptions, type UpdateOptions,
+  handlePluginInstall, handlePluginInstructions, handlePluginList, handlePluginShow, handlePluginUninstall, handlePluginUpdate,
+  type AdvanceOptions, type HandoffOptions, type InitOptions, type PackOptions, type PluginInstallOptions, type PluginListOptions, type PluginShowOptions, type ProposeOptions, type StartOptions, type SubmitOptions, type UpdateOptions,
 } from "./handlers.js";
 import { presentResult } from "./presenter.js";
 import { CliError, failure, type CommandContext, type CommandResult } from "./types.js";
@@ -117,15 +117,21 @@ function registerCommands(program: Command, run: Runner): void {
   const plugin = program.command("plugin").description("Inspect and manage bundled domain Skill plugins");
   plugin.command("list").description("List bundled domain Skill plugins")
     .option("--installed", "show only workspace-selected plugins")
+    .option("--summary", "emit compact discovery metadata")
     .action(async (options: PluginListOptions, command: Command) => run("plugin", command, () => handlePluginList(options, commandContext("plugin", command))));
   plugin.command("show <plugin-id>").description("Show bundled plugin metadata and provenance")
-    .action(async (pluginId: string, _options: Record<string, never>, command: Command) => run("plugin", command, () => handlePluginShow(pluginId, commandContext("plugin", command))));
+    .option("--summary", "emit compact Skill descriptions without full provenance")
+    .action(async (pluginId: string, options: PluginShowOptions, command: Command) => run("plugin", command, () => handlePluginShow(pluginId, options, commandContext("plugin", command))));
   plugin.command("install <plugin-ids...>").description("Select and project plugins into the current workspace")
-    .action(async (pluginIds: string[], _options: Record<string, never>, command: Command) => run("plugin", command, () => handlePluginInstall(pluginIds, commandContext("plugin", command))));
+    .option("--expected-plan-sha256 <hash>", "bind execution to the previewed plugin install plan")
+    .option("--summary", "emit aggregate write-plan impact")
+    .action(async (pluginIds: string[], options: PluginInstallOptions, command: Command) => run("plugin", command, () => handlePluginInstall(pluginIds, options, commandContext("plugin", command))));
   plugin.command("uninstall <plugin-ids...>").description("Remove selected plugins from the current workspace")
     .action(async (pluginIds: string[], _options: Record<string, never>, command: Command) => run("plugin", command, () => handlePluginUninstall(pluginIds, commandContext("plugin", command))));
   plugin.command("update [plugin-ids...]").description("Refresh selected plugins, or all when IDs are omitted")
     .action(async (pluginIds: string[], _options: Record<string, never>, command: Command) => run("plugin", command, () => handlePluginUpdate(pluginIds ?? [], commandContext("plugin", command))));
+  plugin.command("instructions <skill-id>").description("Read an installed hash-clean plugin Skill for immediate advisory use")
+    .action(async (skillId: string, _options: Record<string, never>, command: Command) => run("plugin", command, () => handlePluginInstructions(skillId, commandContext("plugin", command))));
 }
 
 async function createProgram(): Promise<Command> {

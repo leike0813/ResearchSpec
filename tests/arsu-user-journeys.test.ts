@@ -47,6 +47,9 @@ void test("[journey.vague-routing] Navigate combines catalog route meaning with 
     assert.match(navigate, /academic-paper:lit-review/);
     assert.match(navigate, /deep-research:lit-review/);
     assert.match(navigate, /Near misses:/);
+    assert.match(navigate, /plugin list --summary --json/);
+    assert.match(navigate, /propose at most three domains in one batch/);
+    assert.match(navigate, /continue the same canonical selector with the base ARSU producer/);
     const candidate = instructions(context, "subflow:tpl-academic-pipeline-end-to-end") as SubflowPacket;
     assert.equal(candidate.route.route_ref, "academic-pipeline:end-to-end");
     assert.ok(candidate.required_user_input_ids.includes("research_goal"));
@@ -54,6 +57,73 @@ void test("[journey.vague-routing] Navigate combines catalog route meaning with 
     assert.ok(candidate.gates.length > 0);
     assert.ok(candidate.transitions.length > 0);
     assert.equal(status(context).run.status, "not_started");
+  } finally { await cleanup(root); }
+});
+
+void test("[journey.plugin-augmentation] confirmed plugin installation leaves the core frontier and producer unchanged", async () => {
+  const root = await tempProject();
+  try {
+    const context = initialize(root);
+    await startSubflow(context, "subflow:tpl-deep-research-quick");
+    const before = status(context);
+    const ready = before.workflow_control.ready_items[0];
+    assert.ok(ready);
+    const producerBefore = (instructions(context, ready) as { producer_skill: string }).producer_skill;
+
+    const preview = cliJson<{ plan_sha256: string }>([
+      "plugin", "install", "quantum-physics", "--dry-run", "--summary",
+    ], root).data;
+    assert.ok(preview?.plan_sha256);
+    cliJson([
+      "plugin", "install", "quantum-physics",
+      "--expected-plan-sha256", preview.plan_sha256,
+      "--yes", "--summary",
+    ], root);
+
+    const after = status(context);
+    assert.deepEqual(after.workflow_control.frontier, before.workflow_control.frontier);
+    assert.equal((instructions(context, ready) as { producer_skill: string }).producer_skill, producerBefore);
+    const helper = cliJson<{
+      skill_id: string;
+      authority: { workflow_binding: string; producer_unchanged: boolean };
+    }>(["plugin", "instructions", "scientific-agent-skills-qiskit"], root).data;
+    assert.equal(helper?.skill_id, "scientific-agent-skills-qiskit");
+    assert.equal(helper?.authority.workflow_binding, "none");
+    assert.equal(helper?.authority.producer_unchanged, true);
+  } finally { await cleanup(root); }
+});
+
+void test("[journey.plugin-fallback] failed augmentation leaves core work ready and does not add authority state", async () => {
+  const root = await tempProject();
+  try {
+    const context = initialize(root);
+    await startSubflow(context, "subflow:tpl-deep-research-quick");
+    const before = status(context);
+    const ready = before.workflow_control.ready_items[0];
+    assert.ok(ready);
+    const producerBefore = (instructions(context, ready) as { producer_skill: string }).producer_skill;
+
+    const failed = runCli([
+      "plugin", "install", "quantum-physics",
+      "--expected-plan-sha256", "0".repeat(64),
+      "--yes", "--summary", "--json",
+    ], root);
+    assert.equal(failed.status, 3);
+
+    const afterFailure = cliJson<{
+      plugins: { selected: string[] };
+      pending_items: string[];
+      blocking_gates: unknown[];
+      workflow_control: WorkflowControlView;
+    }>(["status"], root).data;
+    assert.deepEqual(afterFailure?.plugins.selected, []);
+    assert.deepEqual(afterFailure?.workflow_control.frontier, before.workflow_control.frontier);
+    assert.deepEqual(afterFailure?.pending_items, before.pending_items);
+    assert.deepEqual(afterFailure?.blocking_gates, before.blocking_gates);
+    assert.equal((instructions(context, ready) as { producer_skill: string }).producer_skill, producerBefore);
+
+    await submitWork(context, ready);
+    assert.equal(status(context).workflow_control.ready_items.includes(ready), false);
   } finally { await cleanup(root); }
 });
 

@@ -14,7 +14,7 @@ metadata:
     - academic-paper-reviewer
 ---
 
-<!-- researchspec-contract-preflight:v5 -->
+<!-- researchspec-contract-preflight:v6 -->
 ## ResearchSpec Contract Preflight
 
 Before running this ARSU-derived skill, locate the project `researchspec/`
@@ -28,6 +28,33 @@ instructions for the selected external `subflow:<template>`, delegated
 `subflow:<parent>/<node>`, scoped `work:<instance>/<node>`,
 `gate:<instance>/<node>`, or `transition:<instance>/<node>` selector. Never
 reconstruct stage, Gate, or transition order from this Skill text.
+
+At a new or materially changed route, a newly ready work item, or an explicit
+specialist request, evaluate optional reviewed domain assistance with
+`researchspec plugin list --summary --json`, then inspect only plausible domains
+with `researchspec plugin show <domain-id> --summary --json`. Semantic matching
+is the Agent's judgment, not CLI authority. If one or more specific uninstalled
+Skills would materially help, propose at most three domains in one batch and
+show the matching Skills, purpose, and direct/resolved Skill counts. Keep this
+consent separate from route confirmation. After the confirmed core Start,
+dry-run the exact plugin batch with `--summary --json`, show its domain
+versions, resolved Skills, projected tools, write summary, and
+`plan_sha256`, obtain explicit confirmation, then execute with
+`--expected-plan-sha256 <sha256> --yes --summary --json`.
+
+When an installed, available, projected plugin Skill materially assists the
+current work, invoke it natively if the host has loaded it; otherwise request
+`researchspec plugin instructions <skill-id> --json` and follow that exact
+hash-bound entry. Give the helper only the current task, necessary inputs,
+expected response, and forbidden ResearchSpec authority writes. Its result is
+working material returned to this ARSU producer for review and integration; it
+does not become the candidate producer, workflow dependency, subflow, work item,
+Gate, Decision, transition, or receipt. Installation consent does not authorize
+scripts, dependencies, network, credentials, services, or sensitive-data use.
+If discovery, consent, installation, activation, or invocation is unavailable,
+continue the same core work without the plugin. A declined suggestion is not a
+Decision and should not be repeated in the current conversation unless the
+research need materially changes.
 
 After producing the candidate, inspect `submission` and `completion.submit`.
 When policy is `automatic`, the start authorization is valid, and Submit is
@@ -62,7 +89,7 @@ Do not treat ARS Material Passport as ResearchSpec runtime truth. It may be
 imported as external evidence, while runtime provenance,
 decisions, gates, and resume state live in ResearchSpec registries and ledgers.
 
-This generated contract integration block uses profile `researchspec-preflight-v5` for
+This generated contract integration block uses profile `researchspec-preflight-v6` for
 `academic-pipeline`. Per-stage and per-mode graphs remain workflow-profile data.
 
 # Academic Pipeline v3.15.0 — Full Academic Research Workflow Orchestrator

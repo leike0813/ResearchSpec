@@ -602,11 +602,12 @@ researchspec archive [item] [--json] [--dry-run]
 `plugin` 是领域 Skill catalog 与 workspace 选择的命令组：
 
 ```bash
-researchspec plugin list [--installed]
-researchspec plugin show <domain-id>
-researchspec plugin install <domain-ids...>
+researchspec plugin list [--installed] [--summary]
+researchspec plugin show <domain-id> [--summary]
+researchspec plugin install <domain-ids...> [--expected-plan-sha256 <sha256>] [--summary]
 researchspec plugin uninstall <domain-ids...>
 researchspec plugin update [domain-ids...]
+researchspec plugin instructions <skill-id>
 ```
 
 `list/show` 直接读取随 npm 包分发的 registry，可在没有 workspace 时运行。写子命令
@@ -626,6 +627,19 @@ workflow profile。完整 Registry Schema、provenance、license、drift 和卸�
 `list/show/install` 及其 JSON 只暴露 `skills` 非空的可用 domain。`list --installed` 与
 status 会保留已选但缺失或变空的 domain，并标为 unavailable；该状态阻断 update，但仍可
 依赖 manifest snapshot 安全 uninstall。重新获得 reviewed Skills 后，同一 ID 自动恢复可用。
+
+`list/show --summary` 是 Agent 发现入口：前者只返回 domain identity、availability 和
+direct/resolved 数量，后者返回 Skill ID、frontmatter description、reviewed dependency 与
+`SKILL.md` SHA-256；CLI 不执行语义打分或自动推荐。`plugin install --dry-run --summary --json`
+返回 registry、domain version、resolved Skill、tool projection 与 write plan 共同绑定的
+`plan_sha256`。非交互执行必须同时提供 `--yes` 和相同的
+`--expected-plan-sha256`，不一致时按 conflict 失败且不写入。
+
+`plugin instructions <skill-id>` 只读取当前已选、available、完整投影且与 manifest hash
+一致的 Skill。返回包包含 exact `SKILL.md`、entry hash、resource paths、domain、projected
+tools 与 advisory authority；该命令不执行资源，也不授予 plugin 修改 workflow state、
+artifact registry、Gate、Decision、transition 或 receipt 的权限。它用于宿主尚未热加载新
+Skill 时的当前会话即时路由。
 
 ## 16. 读写边界汇总
 

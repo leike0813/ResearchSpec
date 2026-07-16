@@ -162,17 +162,28 @@ For each operation ResearchSpec computes the sorted union of selected domains' d
 ## CLI lifecycle
 
 ```bash
-researchspec plugin list [--installed]
-researchspec plugin show <domain-id>
-researchspec plugin install <domain-ids...>
+researchspec plugin list [--installed] [--summary]
+researchspec plugin show <domain-id> [--summary]
+researchspec plugin install <domain-ids...> [--expected-plan-sha256 <sha256>] [--summary]
 researchspec plugin update [domain-ids...]
 researchspec plugin uninstall <domain-ids...>
+researchspec plugin instructions <skill-id>
 ```
 
 Normal lifecycle surfaces expose domains rather than vendors. `show` includes domain type, ANZSRC Group code where applicable, direct and resolved Skills, dependencies, vendor release, revision, licenses, and provenance. `--installed` means explicit workspace selections, including unavailable recovery entries; it never infers domains from dependencies.
 
-Install and update are idempotent set reconciliation. Install without an Agent tool saves intent and returns a non-blocking warning. Update recomputes the current graph and blocks if any selected domain is unavailable. Uninstall removes only files no longer reachable from remaining snapshots; shared dependencies remain. Drift in any file scheduled for deletion blocks the whole transaction, and `--force` never deletes a user-modified file. Config and manifest commit after generated operations, with the manifest last.
+`list --summary` returns compact domain identity, state, and direct/resolved counts. `show --summary` adds the direct and resolved Skill IDs, descriptions, dependencies, and packaged `SKILL.md` SHA-256 values needed for Agent-side semantic matching. Full views retain license and provenance detail. ResearchSpec does not score or recommend domains in the CLI.
 
-## Navigate integration
+Install and update are idempotent set reconciliation. An install dry-run returns a deterministic `plan_sha256` bound to the registry, selected domain versions, resolved Skills, configured tools, and summarized write plan. Non-interactive execution requires both `--yes` and the matching `--expected-plan-sha256`; drift fails before any write. Interactive installation retains its confirmation prompt. Install without an Agent tool saves intent and returns a non-blocking warning. Update recomputes the current graph and blocks if any selected domain is unavailable. Uninstall removes only files no longer reachable from remaining snapshots; shared dependencies remain. Drift in any file scheduled for deletion blocks the whole transaction, and `--force` never deletes a user-modified file. Config and manifest commit after generated operations, with the manifest last.
 
-Navigate may recommend a semantically matching Skill only when its domain is installed and available and its files are projected. An unavailable snapshot is recovery evidence, not an executable recommendation. Recommendations remain advisory and do not create routes, subflows, work items, Gates, Decisions, receipts, or an alternate workflow state machine.
+`plugin instructions <skill-id>` is a read-only immediate-activation bridge. It succeeds only when the Skill belongs to the current available selected-domain closure and every configured tool has the complete manifest-owned, hash-clean projection. The packet returns the exact packaged `SKILL.md`, its entry hash, resource paths, providing domains, projected tools, and an advisory authority boundary. It never executes bundled resources.
+
+## Agent-assisted runtime integration
+
+Navigate and the current ARSU producer evaluate optional plugin assistance at bounded semantic moments: a new or materially changed route, a newly ready work item, or an explicit specialist request. They query compact metadata, inspect only plausible domains, and recommend nothing unless one or more named Skills materially help the current research task.
+
+For uninstalled assistance, the Agent proposes at most three domains in one batch, states the matching Skills and installation counts, and obtains consent separately from route confirmation. After the core Start is confirmed, the Agent previews the plugin install, shows the exact plan hash and impact, executes only that same hash-bound batch, then reloads plugin status. Installation authorizes static Skill projection only; it does not authorize network access, script or dependency execution, credentials, external services, or sensitive-data transfer.
+
+An installed Skill remains a bounded advisory helper of the current ARSU producer. If the host has loaded it, the Agent may invoke it natively. Otherwise the Agent reads the exact current instructions through the bridge. The helper receives only the current task, necessary inputs, expected response, and forbidden ResearchSpec authority writes. Its result returns to the original ARSU producer for validation and integration; it is not itself a submitted workflow candidate.
+
+An unavailable snapshot is recovery evidence, not an executable recommendation. Recommendations and invocations never create routes, subflows, work items, Gates, Decisions, receipts, frontiers, producers, or an alternate workflow state machine. Declining a suggestion is conversation context, not a Decision. Discovery, installation, activation, or invocation failure is non-blocking: report the unavailable augmentation and continue the same core ARSU route.

@@ -61,6 +61,32 @@ export function pluginCatalogItem(domain: DomainDefinition, loaded: LoadedPlugin
   };
 }
 
+export function pluginCatalogSummaryItem(domain: DomainDefinition, loaded: LoadedPluginRegistry, selected: readonly string[], projected = false) {
+  const resolution = resolveDomainSelection(loaded, [domain.domain_id]);
+  return {
+    domain_id: domain.domain_id,
+    title: domain.title,
+    description: domain.description,
+    version: domain.version,
+    domain_type: domain.domain_type,
+    anzsrc_group_code: domain.domain_type === "discipline" ? domain.anzsrc_group_code : null,
+    available: domainIsAvailable(domain),
+    installed: selected.includes(domain.domain_id),
+    projected,
+    direct_skill_count: domain.skills.length,
+    resolved_skill_count: resolution.resolvedSkillIds.length,
+  };
+}
+
+export function pluginDomainSummaryItem(domain: DomainDefinition, loaded: LoadedPluginRegistry, selected: readonly string[], projected = false) {
+  const resolution = resolveDomainSelection(loaded, [domain.domain_id]);
+  return {
+    ...pluginCatalogSummaryItem(domain, loaded, selected, projected),
+    direct_skills: domain.skills.map((skillId) => skillSummaryItem(skillId, loaded)),
+    resolved_skills: resolution.resolvedSkillIds.map((skillId) => skillSummaryItem(skillId, loaded)),
+  };
+}
+
 export function unavailablePluginCatalogItem(domainId: string, domain: DomainDefinition | undefined) {
   return {
     domain_id: domainId,
@@ -92,6 +118,17 @@ function skillItem(skillId: string, loaded: LoadedPluginRegistry) {
       repository_url: registered.vendor.repository_url,
       license: registered.vendor.license,
     } : null,
+  };
+}
+
+function skillSummaryItem(skillId: string, loaded: LoadedPluginRegistry) {
+  const registered = loaded.skills.get(skillId);
+  const metadata = loaded.skillMetadata.get(skillId);
+  return {
+    skill_id: skillId,
+    description: metadata?.description ?? null,
+    entry_sha256: metadata?.entrySha256 ?? null,
+    dependencies: registered?.definition.dependencies ?? [],
   };
 }
 

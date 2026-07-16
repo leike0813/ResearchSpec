@@ -78,6 +78,72 @@ void test("plugin catalog list and show are package-only outside a workspace", (
   const empty = runCli(["plugin", "show", "architecture", "--json"]);
   assert.equal(empty.status, 1);
   assert.equal(parseEnvelope(empty).error?.code, "plugin_not_found");
+  const compact = parseEnvelope<{ domains: Array<{ direct_skill_count: number; resolved_skill_count: number; direct_skills?: unknown }> }>(
+    runCli(["plugin", "list", "--summary", "--json"]),
+  );
+  assert.equal(compact.data?.domains.length, 56);
+  assert.equal(typeof compact.data?.domains[0]?.direct_skill_count, "number");
+  assert.equal(compact.data?.domains[0]?.direct_skills, undefined);
+  const compactDomain = parseEnvelope<{ domain: { resolved_skills: Array<{ description: string; entry_sha256: string }> } }>(
+    runCli(["plugin", "show", "quantum-physics", "--summary", "--json"]),
+  );
+  assert.ok(compactDomain.data?.domain.resolved_skills.every((skill) => skill.description && /^[a-f0-9]{64}$/.test(skill.entry_sha256)));
+  assert.match(runCli(["plugin", "--help"]).stdout, /\binstructions\b/);
+});
+
+void test("non-interactive plugin install binds the preview and exposes immediate Skill instructions", async () => {
+  const root = await tempProject();
+  try {
+    assert.equal(runCli(["init", root, "--tools", "forgecode"]).status, 0);
+    const preview = parseEnvelope<{
+      plan_sha256: string;
+      domain_versions: Array<{ domain_id: string; version: string }>;
+      plan: { operation_count: number; writable_count: number };
+    }>(runCli(["plugin", "install", "quantum-physics", "--dry-run", "--summary", "--json"], root));
+    assert.equal(preview.ok, true);
+    assert.match(preview.data?.plan_sha256 ?? "", /^[a-f0-9]{64}$/);
+    assert.deepEqual(preview.data?.domain_versions.map((item) => item.domain_id), ["quantum-physics"]);
+    assert.ok((preview.data?.plan.operation_count ?? 0) > 0);
+
+    const unbound = runCli(["plugin", "install", "quantum-physics", "--yes", "--summary", "--json"], root);
+    assert.equal(unbound.status, 2);
+    assert.equal(parseEnvelope(unbound).error?.code, "confirmation_required");
+    const stale = runCli(["plugin", "install", "quantum-physics", "--expected-plan-sha256", "0".repeat(64), "--yes", "--summary", "--json"], root);
+    assert.equal(stale.status, 3);
+    assert.equal(parseEnvelope(stale).error?.code, "plugin_install_plan_conflict");
+
+    const installed = parseEnvelope<{ plan_sha256: string }>(runCli([
+      "plugin", "install", "quantum-physics",
+      "--expected-plan-sha256", preview.data?.plan_sha256 ?? "",
+      "--yes", "--summary", "--json",
+    ], root));
+    assert.equal(installed.ok, true);
+    assert.equal(installed.data?.plan_sha256, preview.data?.plan_sha256);
+
+    const instructions = parseEnvelope<{
+      skill_id: string;
+      entry_sha256: string;
+      instructions: string;
+      authority: { kind: string; workflow_binding: string; producer_unchanged: boolean };
+    }>(runCli(["plugin", "instructions", "scientific-agent-skills-qiskit", "--json"], root));
+    assert.equal(instructions.ok, true);
+    assert.equal(instructions.data?.skill_id, "scientific-agent-skills-qiskit");
+    assert.match(instructions.data?.entry_sha256 ?? "", /^[a-f0-9]{64}$/);
+    assert.match(instructions.data?.instructions ?? "", /^---\nname: scientific-agent-skills-qiskit/m);
+    assert.deepEqual(instructions.data?.authority, {
+      kind: "advisory-semantic-helper",
+      workflow_binding: "none",
+      producer_unchanged: true,
+      executes_resources: false,
+      forbidden_writes: [
+        "researchspec/runs/current/state.yaml",
+        "researchspec/runs/current/artifact-registry.json",
+        "researchspec/runs/current/decision-ledger.jsonl",
+        "researchspec/runs/current/gate-ledger.jsonl",
+        "researchspec/runs/current/receipts/**",
+      ],
+    });
+  } finally { await cleanup(root); }
 });
 
 void test("universal init exposes dynamic status and resolved instructions", async () => {

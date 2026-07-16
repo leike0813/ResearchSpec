@@ -29,7 +29,17 @@ import { fileExists, readOptionalText } from "../utils/fs.js";
 import { CliError, success, type CommandContext, type CommandResult } from "./types.js";
 import { searchableMultiSelect } from "./prompts/searchable-multi-select.js";
 import { availableDomains, domainIsAvailable, loadPluginRegistry, PluginRegistryError, resolveDomainSelection, type LoadedPluginRegistry } from "../plugins/registry.js";
-import { buildResolutionSnapshots, pluginCatalogItem, pluginStatusSummary, resolutionSnapshots, selectedPluginIds, unavailablePluginCatalogItem } from "../plugins/status.js";
+import { buildPluginSkillInstructions, PluginSkillInstructionsError } from "../plugins/instructions.js";
+import {
+  buildResolutionSnapshots,
+  pluginCatalogItem,
+  pluginCatalogSummaryItem,
+  pluginDomainSummaryItem,
+  pluginStatusSummary,
+  resolutionSnapshots,
+  selectedPluginIds,
+  unavailablePluginCatalogItem,
+} from "../plugins/status.js";
 
 export interface InitOptions { tools?: string }
 export interface UpdateOptions { tools?: string }
@@ -40,7 +50,9 @@ export interface ProposeOptions { input: string; actorKind: "human" | "agent"; a
 export interface SubmitOptions { input: string; actorKind: string; actorName: string; confirmedBy?: string; expectedSha256?: string; expectedPlanSha256?: string }
 export interface StartOptions { input: string; actorKind: string; actorName: string; confirmedBy?: string; expectedPlanSha256?: string }
 export interface AdvanceOptions { actorKind: string; actorName: string; expectedPlanSha256?: string }
-export interface PluginListOptions { installed?: boolean }
+export interface PluginListOptions { installed?: boolean; summary?: boolean }
+export interface PluginShowOptions { summary?: boolean }
+export interface PluginInstallOptions { expectedPlanSha256?: string; summary?: boolean }
 
 export async function handleInit(inputPath: string | undefined, options: InitOptions, context: CommandContext): Promise<CommandResult> {
   const workspace = context.workspace ? path.resolve(context.cwd, context.workspace) : resolveInitTarget(inputPath, context.cwd);
@@ -345,15 +357,25 @@ export async function handlePluginList(options: PluginListOptions, context: Comm
   const domains = options.installed
     ? selected.map((domainId) => {
       const domain = pluginRegistry.domains.get(domainId);
-      return domainIsAvailable(domain) ? pluginCatalogItem(domain, pluginRegistry, selected, projected.has(domainId)) : unavailablePluginCatalogItem(domainId, domain);
+      if (domainIsAvailable(domain)) {
+        return options.summary
+          ? pluginCatalogSummaryItem(domain, pluginRegistry, selected, projected.has(domainId))
+          : pluginCatalogItem(domain, pluginRegistry, selected, projected.has(domainId));
+      }
+      const unavailable = unavailablePluginCatalogItem(domainId, domain);
+      return options.summary
+        ? { ...unavailable, direct_skill_count: 0, resolved_skill_count: 0, direct_skills: undefined, resolved_skills: undefined }
+        : unavailable;
     })
-    : availableDomains(pluginRegistry).map((domain) => pluginCatalogItem(domain, pluginRegistry, selected, projected.has(domain.domain_id)));
+    : availableDomains(pluginRegistry).map((domain) => options.summary
+      ? pluginCatalogSummaryItem(domain, pluginRegistry, selected, projected.has(domain.domain_id))
+      : pluginCatalogItem(domain, pluginRegistry, selected, projected.has(domain.domain_id)));
   return success("plugin", { action: "list", workspace: workspace ?? null, domains }, {
     stdout: domains.length ? `${domains.map((domain) => `${domain.domain_id}\t${domain.version ?? "unknown"}${domain.installed ? "\tinstalled" : ""}${domain.available ? "" : "\tunavailable"}`).join("\n")}\n` : "No domain Skill plugins.\n",
   });
 }
 
-export async function handlePluginShow(pluginId: string, context: CommandContext, providedRegistry?: LoadedPluginRegistry): Promise<CommandResult> {
+export async function handlePluginShow(pluginId: string, options: PluginShowOptions, context: CommandContext, providedRegistry?: LoadedPluginRegistry): Promise<CommandResult> {
   const pluginRegistry = providedRegistry ?? await bundledPluginRegistry();
   const domain = pluginRegistry.domains.get(pluginId);
   if (!domainIsAvailable(domain)) throw new CliError("plugin_not_found", `Domain plugin not found or unavailable: ${pluginId}`, 1);
@@ -361,19 +383,37 @@ export async function handlePluginShow(pluginId: string, context: CommandContext
   const snapshot = workspace ? await loadWorkspaceSnapshot(workspace) : undefined;
   const selected = snapshot ? selectedPluginIds(snapshot.config) : [];
   const projected = snapshot ? pluginStatusSummary(snapshot.config, snapshot.manifest, pluginRegistry).projected.includes(domain.domain_id) : false;
-  const item = pluginCatalogItem(domain, pluginRegistry, selected, projected);
+  const item = options.summary
+    ? pluginDomainSummaryItem(domain, pluginRegistry, selected, projected)
+    : pluginCatalogItem(domain, pluginRegistry, selected, projected);
   return success("plugin", { action: "show", workspace: workspace ?? null, domain: item }, { stdout: `${JSON.stringify(item, null, 2)}\n` });
 }
 
-export async function handlePluginInstall(pluginIds: readonly string[], context: CommandContext, providedRegistry?: LoadedPluginRegistry): Promise<CommandResult> {
+export async function handlePluginInstall(pluginIds: readonly string[], options: PluginInstallOptions, context: CommandContext, providedRegistry?: LoadedPluginRegistry): Promise<CommandResult> {
   const requested = normalizePluginIds(pluginIds);
   if (!requested.length) throw new CliError("plugin_ids_required", "At least one plugin ID is required.", 2);
+  if (options.expectedPlanSha256 !== undefined && !Sha256Schema.safeParse(options.expectedPlanSha256).success) {
+    throw new CliError("invalid_expected_plan_sha256", "--expected-plan-sha256 must be 64 lowercase hexadecimal characters.", 2);
+  }
   const pluginRegistry = providedRegistry ?? await bundledPluginRegistry();
   assertPluginsAvailable(requested, pluginRegistry);
   const workspace = await requireWorkspace(context);
   const snapshot = await loadWorkspaceSnapshot(workspace);
   const selected = uniqueSorted([...selectedPluginIds(snapshot.config), ...requested]);
-  return reconcilePluginSelection("install", workspace, snapshot, selected, context, pluginRegistry);
+  return reconcilePluginSelection("install", workspace, snapshot, selected, context, pluginRegistry, options);
+}
+
+export async function handlePluginInstructions(skillId: string, context: CommandContext, providedRegistry?: LoadedPluginRegistry): Promise<CommandResult> {
+  const pluginRegistry = providedRegistry ?? await bundledPluginRegistry();
+  const workspace = await requireWorkspace(context);
+  const snapshot = await loadWorkspaceSnapshot(workspace);
+  try {
+    const packet = await buildPluginSkillInstructions(snapshot, pluginRegistry, skillId);
+    return success("plugin", { action: "instructions", workspace, ...packet }, { stdout: `${JSON.stringify(packet, null, 2)}\n` });
+  } catch (error) {
+    if (error instanceof PluginSkillInstructionsError) throw new CliError(error.code, error.message, 1, undefined, error.details);
+    throw error;
+  }
 }
 
 export async function handlePluginUpdate(pluginIds: readonly string[], context: CommandContext, providedRegistry?: LoadedPluginRegistry): Promise<CommandResult> {
@@ -569,7 +609,15 @@ async function optionalWorkspace(context: CommandContext): Promise<string | unde
   return undefined;
 }
 
-async function reconcilePluginSelection(action: "install" | "update", workspace: string, snapshot: Awaited<ReturnType<typeof loadWorkspaceSnapshot>>, selected: string[], context: CommandContext, pluginRegistry: LoadedPluginRegistry): Promise<CommandResult> {
+async function reconcilePluginSelection(
+  action: "install" | "update",
+  workspace: string,
+  snapshot: Awaited<ReturnType<typeof loadWorkspaceSnapshot>>,
+  selected: string[],
+  context: CommandContext,
+  pluginRegistry: LoadedPluginRegistry,
+  installOptions: PluginInstallOptions = {},
+): Promise<CommandResult> {
   const projectRoot = path.dirname(workspace);
   const toolIds = strings(record(snapshot.config.agent_tools).selected);
   const existingInstallations = installationRecords(snapshot.manifest.installations);
@@ -593,13 +641,58 @@ async function reconcilePluginSelection(action: "install" | "update", workspace:
   operations.push(await authoritativeWrite(path.join(workspace, "tool-installation-manifest.json"), "tool-installation-manifest.json", manifestText, "workspace", "commit generated ownership last"));
   const diagnostics = [...delivery.diagnostics, ...reconciliation.diagnostics, ...operationDiagnostics(operations)];
   if (!toolIds.length) diagnostics.push({ severity: "warning", code: "plugin_projection_deferred", message: "Plugin selection was saved, but no Agent tool is configured for projection.", blocking: false, details: { selected_plugins: selected } });
+  const resolution = resolveDomainSelection(pluginRegistry, availableSelected);
+  const domainVersions = availableSelected.map((domainId) => ({
+    domain_id: domainId,
+    version: pluginRegistry.domains.get(domainId)?.version ?? null,
+  }));
+  const plan = summarizePlan(operations);
+  const planSha256 = sha256(JSON.stringify({
+    action,
+    registry: pluginRegistry.registry,
+    selected_domains: selected,
+    domain_versions: domainVersions,
+    resolved_skills: resolution.resolvedSkillIds,
+    projected_tools: toolIds,
+    plan,
+  }));
+  if (action === "install" && !context.dryRun) {
+    if (!context.interactive && (!context.yes || !installOptions.expectedPlanSha256)) {
+      throw new CliError(
+        "confirmation_required",
+        "Non-interactive plugin install requires --expected-plan-sha256 and --yes.",
+        2,
+        "Preview the identical plugin install with --dry-run --json after the user confirms the batch.",
+      );
+    }
+    if (installOptions.expectedPlanSha256 !== undefined && installOptions.expectedPlanSha256 !== planSha256) {
+      throw new CliError(
+        "plugin_install_plan_conflict",
+        "Plugin install plan changed after preview.",
+        3,
+        "Reload compact plugin metadata and preview the installation again.",
+        { expected_plan_sha256: installOptions.expectedPlanSha256, actual_plan_sha256: planSha256 },
+      );
+    }
+  }
   if (!context.dryRun && context.interactive && !context.yes) {
     const approved = await confirm({ message: `${action === "install" ? "Install" : "Update"} domain Skill plugins for ${String(toolIds.length)} configured tool(s)?`, default: true });
     if (!approved) throw new CliError("cancelled", `Plugin ${action} cancelled.`, 1);
   }
   if (!context.dryRun) await executeWritePlan({ operations });
-  const resolution = resolveDomainSelection(pluginRegistry, availableSelected);
-  return deliveryResult("plugin", { action, workspace, selected_domains: selected, available_domains: availableSelected, unavailable_domains: unavailableSelected, resolved_skills: resolution.resolvedSkillIds, projected_tools: toolIds, dry_run: context.dryRun, plan: summarizePlan(operations) }, { stdout: formatPlan(context.dryRun ? `ResearchSpec plugin ${action} dry run` : `ResearchSpec domain plugins ${action === "install" ? "installed" : "updated"}`, workspace, operations, context.dryRun) }, diagnostics);
+  return deliveryResult("plugin", {
+    action,
+    workspace,
+    selected_domains: selected,
+    available_domains: availableSelected,
+    unavailable_domains: unavailableSelected,
+    domain_versions: domainVersions,
+    resolved_skills: resolution.resolvedSkillIds,
+    projected_tools: toolIds,
+    plan_sha256: planSha256,
+    dry_run: context.dryRun,
+    plan: installOptions.summary ? summarizePluginOperations(plan) : plan,
+  }, { stdout: formatPlan(context.dryRun ? `ResearchSpec plugin ${action} dry run` : `ResearchSpec domain plugins ${action === "install" ? "installed" : "updated"}`, workspace, operations, context.dryRun) }, diagnostics);
 }
 
 async function bundledPluginRegistry(): Promise<LoadedPluginRegistry> {
@@ -651,6 +744,15 @@ async function authoritativeWrite(target: string, relativePath: string, content:
 
 function summarizePlan(operations: PlannedWrite[]) {
   return operations.map((operation) => ({ action: operation.action, path: operation.path, relativePath: operation.relativePath, scope: operation.scope, ownership: operation.ownership, previousHash: operation.previousHash, nextHash: operation.nextHash, reason: operation.reason }));
+}
+function summarizePluginOperations(operations: ReturnType<typeof summarizePlan>) {
+  const counts = new Map<string, number>();
+  for (const operation of operations) counts.set(operation.action, (counts.get(operation.action) ?? 0) + 1);
+  return {
+    operation_count: operations.length,
+    writable_count: operations.filter((item) => item.action === "create" || item.action === "refresh" || item.action === "remove-owned").length,
+    actions: Object.fromEntries([...counts.entries()].sort(([left], [right]) => left.localeCompare(right))),
+  };
 }
 function writableCount(operations: PlannedWrite[]): number { return operations.filter((item) => item.action === "create" || item.action === "refresh" || item.action === "remove-owned").length; }
 function formatPlan(title: string, workspace: string, operations: PlannedWrite[], dryRun: boolean): string {

@@ -5,7 +5,7 @@ import { test } from "node:test";
 
 import { planToolDelivery } from "../src/adapters/delivery.js";
 import { TOOL_IDS, TOOLS } from "../src/adapters/tools.js";
-import { handlePluginInstall, handlePluginList, handlePluginShow, handlePluginUninstall, handlePluginUpdate, handleUpdate } from "../src/cli/handlers.js";
+import { handlePluginInstall, handlePluginInstructions, handlePluginList, handlePluginShow, handlePluginUninstall, handlePluginUpdate, handleUpdate } from "../src/cli/handlers.js";
 import type { CommandContext } from "../src/cli/types.js";
 import { runWorkspaceChecks } from "../src/core/validation/check.js";
 import { loadWorkspaceSnapshot } from "../src/core/workspace/snapshot.js";
@@ -39,14 +39,22 @@ void test("registry validates multi-vendor domains, resources, provenance, and d
   assert.deepEqual(resolveDomainSelection(loaded, ["geoscience"]).resolvedSkillIds, ["research-tables", "rock-mechanics"]);
   const listed = await handlePluginList({}, context(process.cwd()), loaded);
   assert.equal((listed.data as { domains: unknown[] }).domains.length, 2);
-  const shown = await handlePluginShow("geoscience", context(process.cwd()), loaded);
+  const compact = await handlePluginList({ summary: true }, context(process.cwd()), loaded);
+  const compactDomain = (compact.data as { domains: Array<Record<string, unknown>> }).domains[0];
+  assert.equal(typeof compactDomain?.direct_skill_count, "number");
+  assert.equal("direct_skills" in (compactDomain ?? {}), false);
+  const shown = await handlePluginShow("geoscience", {}, context(process.cwd()), loaded);
   const domain = (shown.data as { domain: { domain_id: string; direct_skills: unknown[]; resolved_skills: Array<{ vendor: { license: string } }> } }).domain;
   assert.equal(domain.domain_id, "geoscience");
   assert.equal(domain.direct_skills.length, 1);
   assert.equal(domain.resolved_skills.length, 2);
   assert.equal(domain.resolved_skills[0]?.vendor.license, "MIT");
-  await assert.rejects(handlePluginShow("empty-tool", context(process.cwd()), loaded), (error: unknown) => isCliCode(error, "plugin_not_found"));
-  await assert.rejects(handlePluginInstall(["empty-tool"], context(process.cwd()), loaded), (error: unknown) => isCliCode(error, "plugin_unavailable"));
+  const compactShow = await handlePluginShow("geoscience", { summary: true }, context(process.cwd()), loaded);
+  const compactSkill = (compactShow.data as { domain: { resolved_skills: Array<{ description: string; entry_sha256: string }> } }).domain.resolved_skills[0];
+  assert.ok(compactSkill?.description.length);
+  assert.match(compactSkill?.entry_sha256 ?? "", /^[a-f0-9]{64}$/);
+  await assert.rejects(handlePluginShow("empty-tool", {}, context(process.cwd()), loaded), (error: unknown) => isCliCode(error, "plugin_not_found"));
+  await assert.rejects(handlePluginInstall(["empty-tool"], {}, context(process.cwd()), loaded), (error: unknown) => isCliCode(error, "plugin_unavailable"));
 });
 
 void test("production domain installation projects Scientific Agent Skills without new wrappers", async () => {
@@ -54,7 +62,7 @@ void test("production domain installation projects Scientific Agent Skills witho
   try {
     assert.equal(runCli(["init", root, "--tools", "claude"]).status, 0);
     const registry = await loadPluginRegistry();
-    await handlePluginInstall(["quantum-physics"], context(root), registry);
+    await handlePluginInstall(["quantum-physics"], {}, context(root), registry);
     for (const id of ["cirq", "pennylane", "qiskit"]) {
       assert.equal(await exists(path.join(root, ".claude/skills", `scientific-agent-skills-${id}`, "SKILL.md")), true);
     }
@@ -72,7 +80,7 @@ void test("production Education domain installs complete static Skills without n
   try {
     assert.equal(runCli(["init", root, "--tools", "claude"]).status, 0);
     const registry = await loadPluginRegistry();
-    await handlePluginInstall(["education-systems"], context(root), registry);
+    await handlePluginInstall(["education-systems"], {}, context(root), registry);
     const educationSkills = registry.domains.get("education-systems")?.skills ?? [];
     assert.equal(educationSkills.length, 9);
     for (const id of educationSkills) {
@@ -157,7 +165,7 @@ void test("domain selection persists without tools and tool update backfills the
   try {
     assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
     const registry = await loadPluginRegistry(FIXTURE_ROOT);
-    const install = await handlePluginInstall(["geoscience"], context(root), registry);
+    const install = await handlePluginInstall(["geoscience"], {}, context(root), registry);
     assert.ok(install.diagnostics.some((item) => item.code === "plugin_projection_deferred"));
     await handleUpdate(undefined, { tools: "forgecode" }, context(root), registry);
     const script = path.join(root, ".forge/skills/rock-mechanics/scripts/calculate.py");
@@ -171,13 +179,81 @@ void test("domain selection persists without tools and tool update backfills the
   } finally { await cleanup(root); }
 });
 
+void test("agent install is plan-bound and installed Skill instructions require a clean projection", async () => {
+  const root = await tempProject();
+  const fixture = await fixtureCopy();
+  try {
+    assert.equal(runCli(["init", root, "--tools", "forgecode"]).status, 0);
+    const registry = await loadPluginRegistry(fixture);
+    const preview = await handlePluginInstall(
+      ["geoscience"],
+      { summary: true },
+      { ...context(root), dryRun: true, interactive: false },
+      registry,
+    );
+    const previewData = preview.data as { plan_sha256: string; plan: { operation_count: number; actions: Record<string, number> } };
+    assert.match(previewData.plan_sha256, /^[a-f0-9]{64}$/);
+    assert.ok(previewData.plan.operation_count > 0);
+    await assert.rejects(
+      handlePluginInstall(["geoscience"], {}, { ...context(root), interactive: false }, registry),
+      (error: unknown) => isCliCode(error, "confirmation_required"),
+    );
+    await assert.rejects(
+      handlePluginInstall(["geoscience"], { expectedPlanSha256: "0".repeat(64) }, { ...context(root), interactive: false }, registry),
+      (error: unknown) => isCliCode(error, "plugin_install_plan_conflict"),
+    );
+    const installed = await handlePluginInstall(
+      ["geoscience"],
+      { expectedPlanSha256: previewData.plan_sha256, summary: true },
+      { ...context(root), interactive: false },
+      registry,
+    );
+    assert.equal((installed.data as { plan_sha256: string }).plan_sha256, previewData.plan_sha256);
+
+    const instructions = await handlePluginInstructions("rock-mechanics", context(root), registry);
+    const packet = instructions.data as {
+      skill_id: string;
+      entry_sha256: string;
+      instructions: string;
+      resource_paths: string[];
+      authority: { kind: string; producer_unchanged: boolean };
+    };
+    assert.equal(packet.skill_id, "rock-mechanics");
+    assert.match(packet.entry_sha256, /^[a-f0-9]{64}$/);
+    assert.match(packet.instructions, /^---\nname: rock-mechanics/m);
+    assert.ok(packet.resource_paths.includes("scripts/calculate.py"));
+    assert.equal(packet.authority.kind, "advisory-semantic-helper");
+    assert.equal(packet.authority.producer_unchanged, true);
+
+    await writeFile(path.join(root, ".forge/skills/rock-mechanics/SKILL.md"), "drift", "utf8");
+    await assert.rejects(
+      handlePluginInstructions("rock-mechanics", context(root), registry),
+      (error: unknown) => isCliCode(error, "plugin_skill_projection_drift"),
+    );
+    await writeFile(
+      path.join(root, ".forge/skills/rock-mechanics/SKILL.md"),
+      packet.instructions,
+      "utf8",
+    );
+    await writeFile(
+      path.join(fixture, "vendors/domain-source/rock-mechanics/SKILL.md"),
+      `${packet.instructions}\nSource drift\n`,
+      "utf8",
+    );
+    await assert.rejects(
+      handlePluginInstructions("rock-mechanics", context(root), registry),
+      (error: unknown) => isCliCode(error, "plugin_skill_projection_drift"),
+    );
+  } finally { await cleanup(root); await cleanup(fixture); }
+});
+
 void test("lifecycle is idempotent, force-refreshes drift, and retains shared dependencies", async () => {
   const root = await tempProject();
   try {
     assert.equal(runCli(["init", root, "--tools", "forgecode"]).status, 0);
     const registry = await loadPluginRegistry(FIXTURE_ROOT);
-    await handlePluginInstall(["geoscience", "quantitative-methods"], context(root), registry);
-    const repeated = await handlePluginInstall(["geoscience"], context(root), registry);
+    await handlePluginInstall(["geoscience", "quantitative-methods"], {}, context(root), registry);
+    const repeated = await handlePluginInstall(["geoscience"], {}, context(root), registry);
     assert.ok(planActions(repeated).every((action) => action === "skip-unchanged"));
     const skillPath = path.join(root, ".forge/skills/rock-mechanics/SKILL.md");
     await writeFile(skillPath, "user drift", "utf8");
@@ -196,7 +272,7 @@ void test("uninstall drift blocks the transaction and retired domains use snapsh
   try {
     assert.equal(runCli(["init", root, "--tools", "forgecode"]).status, 0);
     const registry = await loadPluginRegistry(FIXTURE_ROOT);
-    await handlePluginInstall(["geoscience"], context(root), registry);
+    await handlePluginInstall(["geoscience"], {}, context(root), registry);
     const driftPath = path.join(root, ".forge/skills/rock-mechanics/SKILL.md");
     const dependencyPath = path.join(root, ".forge/skills/research-tables/SKILL.md");
     await writeFile(driftPath, "user drift", "utf8");
@@ -213,7 +289,7 @@ void test("selected empty domains stay unavailable and retain snapshot-based uni
   try {
     assert.equal(runCli(["init", root, "--tools", "forgecode"]).status, 0);
     const original = await loadPluginRegistry(fixture);
-    await handlePluginInstall(["geoscience"], context(root), original);
+    await handlePluginInstall(["geoscience"], {}, context(root), original);
     const registryPath = path.join(fixture, "registry.json");
     const raw = JSON.parse(await readFile(registryPath, "utf8")) as RegistryObject;
     const geoscience = raw.domains.find((domain) => domain.domain_id === "geoscience");
@@ -236,7 +312,7 @@ void test("domain update records new vendor release and domain version", async (
   const root = await tempProject(); const fixture = await fixtureCopy();
   try {
     assert.equal(runCli(["init", root, "--tools", "forgecode"]).status, 0);
-    await handlePluginInstall(["geoscience"], context(root), await loadPluginRegistry(fixture));
+    await handlePluginInstall(["geoscience"], {}, context(root), await loadPluginRegistry(fixture));
     const registryPath = path.join(fixture, "registry.json");
     const raw = JSON.parse(await readFile(registryPath, "utf8")) as RegistryObject;
     raw.vendors[0].release = "v1.1.0"; raw.domains[0].version = "1.1.0";
@@ -249,7 +325,7 @@ void test("domain update records new vendor release and domain version", async (
   } finally { await cleanup(root); await cleanup(fixture); }
 });
 
-function context(root: string): CommandContext { return { command: "plugin", cwd: root, json: true, dryRun: false, force: false, yes: true, quiet: true, interactive: false }; }
+function context(root: string): CommandContext { return { command: "plugin", cwd: root, json: true, dryRun: false, force: false, yes: true, quiet: true, interactive: true }; }
 async function fixtureCopy(): Promise<string> { const root = await tempProject(); await cp(FIXTURE_ROOT, root, { recursive: true, force: true }); return root; }
 function hasDiagnostic(code: string): (error: unknown) => boolean { return (error) => error instanceof PluginRegistryError && error.diagnostics.some((item) => item.code === code); }
 function isCliCode(error: unknown, code: string): boolean { return Boolean(error && typeof error === "object" && "code" in error && (error as { code?: string }).code === code); }

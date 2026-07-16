@@ -130,7 +130,13 @@ void test("companion manifest renders four self-contained workflow skills with d
   assert.match(navigate.instructions, /direct hash-bound `researchspec submit`/);
   assert.match(navigate.instructions, /exactly one authorized non-semantic transition/);
   assert.match(navigate.instructions, /formal Gates to `researchspec-verify`/);
-  assert.match(navigate.instructions, /plugin list --installed --json/);
+  assert.match(navigate.instructions, /plugin list --summary --json/);
+  assert.match(navigate.instructions, /plugin show <domain-id> --summary --json/);
+  assert.match(navigate.instructions, /plugin install <domain-ids\.\.\.> --expected-plan-sha256 <sha256> --yes --summary --json/);
+  assert.match(navigate.instructions, /plugin instructions <skill-id> --json/);
+  assert.match(navigate.instructions, /propose at most three domains in one batch/);
+  assert.match(navigate.instructions, /bounded brief: current task, necessary inputs, expected response, and forbidden ResearchSpec authority writes/);
+  assert.match(navigate.instructions, /continue the same canonical selector with the base ARSU producer/);
   assert.match(navigate.instructions, /recommendation never creates a route, subflow, work item, Gate, Decision, receipt, frontier, or second state machine/);
   assert.ok(navigate.instructions.endsWith(renderNavigateRoutingProjection()));
   for (const skill of ARSU_ROUTING_CATALOG.skills) {
