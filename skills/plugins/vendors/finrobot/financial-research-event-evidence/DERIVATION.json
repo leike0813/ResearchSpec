@@ -1,40 +1,109 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "vendor": "finrobot",
   "release": "snapshot-297a8d2",
   "revision": "297a8d28d099be328c8a8eb658b4f782b93f3651",
   "audit_sha256": "6b518a933f036333203276263b94cc5b4bd45a924f426972c4547165c5cbb9c3",
-  "converter_execution": "never",
-  "sources": [
+  "skill_id": "financial-research-event-evidence",
+  "skill_tier": 3,
+  "implementation_strategy": "researchspec-authored-non-native-skill",
+  "upstream_code_copied": false,
+  "capability_map": [
     {
+      "surface_id": "catalyst-assess-impact",
       "source_path": "finrobot_equity/core/src/modules/catalyst_analyzer.py",
-      "git_object_id": "c4364fdf3966beb899176184d21e5ca7f7752460",
-      "sha256": "65a4ebba92f7ee98944cbe01b0b9c30feb334a5ed344e50100cac0e08416e530",
-      "production_action": "direct-resource",
-      "finrobot_coupling": "none",
-      "output_assets": [
-        "resources/python/catalyst_analyzer.py"
-      ]
+      "source_sha256": "65a4ebba92f7ee98944cbe01b0b9c30feb334a5ed344e50100cac0e08416e530",
+      "symbol": "CatalystAnalyzer.assess_catalyst_impact",
+      "implementation": {
+        "kind": "bundled-script",
+        "scriptPath": "scripts/event_evidence.py"
+      }
     },
     {
+      "surface_id": "catalyst-classify-event",
+      "source_path": "finrobot_equity/core/src/modules/catalyst_analyzer.py",
+      "source_sha256": "65a4ebba92f7ee98944cbe01b0b9c30feb334a5ed344e50100cac0e08416e530",
+      "symbol": "CatalystAnalyzer._classify_event_type",
+      "implementation": {
+        "kind": "bundled-script",
+        "scriptPath": "scripts/event_evidence.py"
+      }
+    },
+    {
+      "surface_id": "catalyst-estimate-probability",
+      "source_path": "finrobot_equity/core/src/modules/catalyst_analyzer.py",
+      "source_sha256": "65a4ebba92f7ee98944cbe01b0b9c30feb334a5ed344e50100cac0e08416e530",
+      "symbol": "CatalystAnalyzer._estimate_probability",
+      "implementation": {
+        "kind": "bundled-script",
+        "scriptPath": "scripts/event_evidence.py"
+      }
+    },
+    {
+      "surface_id": "catalyst-identify",
+      "source_path": "finrobot_equity/core/src/modules/catalyst_analyzer.py",
+      "source_sha256": "65a4ebba92f7ee98944cbe01b0b9c30feb334a5ed344e50100cac0e08416e530",
+      "symbol": "CatalystAnalyzer.identify_catalysts",
+      "implementation": {
+        "kind": "bundled-script",
+        "scriptPath": "scripts/event_evidence.py"
+      }
+    },
+    {
+      "surface_id": "enhanced-catalyst-analysis",
       "source_path": "finrobot_equity/core/src/modules/enhanced_text_generator.py",
-      "git_object_id": "082890ae1a88b3b10af4be73a04f1a757a63a0f2",
-      "sha256": "e09107b59bbb5f65423a30ab475aecf84f36d934e0d5750e26656ed76daace97",
-      "production_action": "adapted-resource",
-      "finrobot_coupling": "light",
-      "output_assets": [
-        "resources/python/enhanced_text_generator.py"
-      ]
+      "source_sha256": "e09107b59bbb5f65423a30ab475aecf84f36d934e0d5750e26656ed76daace97",
+      "symbol": "EnhancedTextGenerator.generate_catalyst_analysis",
+      "implementation": {
+        "kind": "agent-procedure",
+        "procedureAnchor": "Agent procedure: assess causal path, probability, sentiment, magnitude, timing, and counterevidence for each event.",
+        "outputAnchor": "Record each conclusion with evidence, assumptions, counterevidence, and limitations.",
+        "failureAnchor": "Stop when the available evidence cannot support the requested conclusion."
+      }
     },
     {
+      "surface_id": "equity-news-summary",
       "source_path": "finrobot_equity/core/src/modules/equity_agents/news_summary_agent.py",
-      "git_object_id": "c5cd5218e87ec1efbd17c30d9657220f19137c2f",
-      "sha256": "ebb0a705d26ed185b7cdaed21d6bd202bb83e6a968b890ed1957f0c22f77b8fb",
-      "production_action": "prompt-resource",
-      "finrobot_coupling": "none",
-      "output_assets": [
-        "resources/agent-specs/news_summary.json"
-      ]
+      "source_sha256": "ebb0a705d26ed185b7cdaed21d6bd202bb83e6a968b890ed1957f0c22f77b8fb",
+      "symbol": "NEWS_SUMMARY_PROMPT",
+      "implementation": {
+        "kind": "agent-procedure",
+        "procedureAnchor": "Agent procedure: synthesize verified events without converting repetition or recency into unsupported importance.",
+        "outputAnchor": "Record each conclusion with evidence, assumptions, counterevidence, and limitations.",
+        "failureAnchor": "Stop when the available evidence cannot support the requested conclusion."
+      }
+    }
+  ],
+  "files": [
+    {
+      "path": "SKILL.md",
+      "authorship": "researchspec-authored",
+      "source_scope": "audited-capability-reimplementation"
+    },
+    {
+      "path": "scripts/event_evidence.py",
+      "authorship": "researchspec-authored",
+      "source_scope": "audited-capability-reimplementation"
+    },
+    {
+      "path": "lib/financial_support.py",
+      "authorship": "researchspec-authored",
+      "source_scope": "shared-deterministic-support"
+    },
+    {
+      "path": "LICENSE",
+      "authorship": "upstream-license",
+      "source_scope": "vendor-root"
+    },
+    {
+      "path": "NOTICE",
+      "authorship": "combined-notice",
+      "source_scope": "vendor-root-and-researchspec"
+    },
+    {
+      "path": "DERIVATION.json",
+      "authorship": "converter-generated",
+      "source_scope": "immutable-audit-and-skill-definition"
     }
   ]
 }

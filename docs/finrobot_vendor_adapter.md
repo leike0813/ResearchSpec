@@ -3,59 +3,70 @@
 The FinRobot adapter is the maintainer-only deterministic converter for the
 pinned `vendor/finrobot` submodule at `snapshot-297a8d2`, revision
 `297a8d28d099be328c8a8eb658b4f782b93f3651`. FinRobot has no upstream
-`SKILL.md`; its production package is derived from an immutable capability audit
-and explicit source-to-output decisions.
+`SKILL.md`; its production package is derived from an immutable capability audit,
+reviewed policy catalogs, and an approved authored tree set.
 
 ## Production decisions
 
-The audit covers all 146 tracked Git entries, 66 knowledge surfaces, five
-content origins, six license claims, and six candidate capabilities. Production
-catalogs resolve every record and bind the complete audit JSON SHA-256.
+The immutable audit covers all 146 tracked Git entries, 66 knowledge surfaces,
+five content origins, six license claims, and six candidate capabilities.
+Production policies retain every source decision as evidence and map the 32
+admitted surfaces exactly once through `skill-definitions.ts`. No upstream
+FinRobot file is copied into a published runtime tree.
 
-The twelve candidate files contain no hard FinRobot runtime dependency:
+The approved aggregate tree hash is
+`eecf6fc9e7669f46ef9c58d4fd5938cabedb6d8d7aceac59e15688e178f3765e`.
+Converter version 2 emits only those exact trees. The FinNLP gitlink,
+AutoGen-attributed content, unclear filing and marker trees, provider helpers,
+and hard FinRobot aggregate dependencies remain non-distributed evidence or
+excluded inputs.
 
-- four calculation modules are included as reviewed Python resources;
-- the report analyzer and enhanced text generator are adapted to injected
-  provider and text-generation contracts;
-- six equity agents become provider-neutral AgentSpec JSON with their complete
-  prompts and output schemas.
+## Skill architecture
 
-Four additional helper sources provide the minimal reviewed yfinance, FMP, SEC,
-and shared-helper closure. The FinNLP gitlink, AutoGen-attributed content,
-unclear filing/marker trees, and unrelated FinRobot runtime aggregates remain
-excluded.
+The six fixed `financial-research-*` Skills use the lowest sufficient thickness:
 
-## Capability and form-safety boundary
+- company fundamentals, event evidence, relative valuation, and statement
+  analysis are Tier 3 script-assisted Skills;
+- competitive position and corporate risk are Tier 1 Agent procedures.
 
-The generated Skills retain financial-statement, fundamentals, corporate-risk,
-competitive-position, relative-valuation, and event/catalyst capabilities.
-Reviewed resources may calculate forecasts and sensitivities and may produce
-probabilities, sentiment assessments, price impacts, targets, ratings,
-recommendations, and analytical conclusions.
+The four formal entrypoints use Python 3.11 standard-library modules only. Each
+Tier 3 tree receives the same `lib/financial_support.py` bytes for JSON, number,
+date, unit, hash, atomic-write, and command-error behavior. Domain formulas stay
+in the corresponding entrypoint. The current reviewed trees contain no
+`references/` directories because all supporting rules are short and required on
+ordinary invocations.
+
+Agent procedures own source quality, peer selection, business interpretation,
+risk transmission, semantic scores, assumptions, conflicts, valuation choices,
+and conclusions. Scripts own deterministic validation, normalization, ratios,
+forecasts, DCF and multiples, sensitivity, explicit deduplication, ranking from
+Agent-supplied assessments, hashing, and JSON rendering.
+
+## Safety and external tools
 
 ResearchSpec conversion, checking, idempotence, packaging, installation,
-discovery, and update remain file-only. They do not import or execute Python,
-initialize provider clients, install dependencies, read credentials, or contact
-services. When a target Agent invokes a Skill, providers, credentials, and
-execution environments are user-configured. Published bytes are checked for
-actual credential values, private keys, private endpoints, private datasets,
-local user paths, unresolved origins, and FinRobot aggregate imports.
+discovery, update, and registry assembly remain file-only. They do not import or
+execute generated Python, install dependencies, initialize clients, read
+credentials, or contact services.
+
+When a user invokes a Skill, the target Agent may use user-authorized browser,
+filing, market-data, or local-corpus tools under host policy. The distributed
+trees contain no provider client, provider adapter, credential contract,
+AgentSpec, dependency manifest, generic runner, or automatic network access.
+Published bytes are checked for secret-like values, private keys, private
+endpoints, local user paths, repository coupling, and undeclared Python imports.
 
 ## Generated package
 
-Each of the six `financial-research-*` Skills contains:
+Every tree contains a complete current-state `SKILL.md`, Apache-2.0 `LICENSE`,
+source-bound `NOTICE`, and `DERIVATION.json`. Tier 3 trees additionally contain
+one formal script and `lib/financial_support.py`. Each derivation record binds
+the immutable audit, source path and hash, audited symbol, implementation kind,
+and complete file closure.
 
-- Open Agent Skills frontmatter and capability-complete instructions;
-- a complete Apache-2.0 `LICENSE` and attribution `NOTICE`;
-- `DERIVATION.json` binding source Git objects, SHA-256 values, coupling, and
-  production actions;
-- `dependencies.json` with empty Skill dependencies and documented user-managed
-  runtime requirements;
-- the approved Python and AgentSpec resources required by that Skill.
-
-The six Skills have no hard Skill dependency edges. Cross-Skill relationships
-are advisory. All six belong to `banking-finance-and-investment`; statement
-analysis and company fundamentals also belong to
+The six Skills have empty hard dependency arrays and advisory-only
+relationships. All six belong to `banking-finance-and-investment`; company
+fundamentals and statement analysis also belong to
 `accounting-auditing-and-accountability`.
 
 ## Maintainer commands

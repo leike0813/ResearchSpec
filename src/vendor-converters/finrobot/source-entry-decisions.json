@@ -1234,17 +1234,15 @@
         "pandas"
       ],
       "dependency_closure": [],
-      "production_action": "adapted-resource",
-      "output_assets": [
-        "curation/resources/python/provider_adapters.py"
-      ],
-      "symbol_action": "provider-boundary-adapted",
+      "production_action": "evidence-only",
+      "output_assets": [],
+      "symbol_action": "none",
       "converter_execution": "never",
-      "skill_execution": "agent-invoked",
-      "credential_policy": "user-configured-not-persisted",
-      "sensitive_scan": "required-on-derived-assets",
-      "derivation_notice": "required",
-      "reason_code": "adapted-resource",
+      "skill_execution": "not-distributed",
+      "credential_policy": "not-applicable",
+      "sensitive_scan": "not-applicable",
+      "derivation_notice": "not-applicable",
+      "reason_code": "authored-reimplementation-evidence",
       "required_symbols": [
         "FMPUtils.get_target_price",
         "FMPUtils.get_historical_market_cap",
@@ -1252,19 +1250,12 @@
         "FMPUtils.get_competitor_financial_metrics"
       ],
       "copied_symbols": [],
-      "adapted_symbols": [
-        "FMPUtils.get_target_price",
-        "FMPUtils.get_historical_market_cap",
-        "FMPUtils.get_historical_bvps",
-        "FMPUtils.get_competitor_financial_metrics"
-      ],
+      "adapted_symbols": [],
       "omitted_symbols": [
         "import-time provider initialization",
         "unneeded module symbols"
       ],
-      "replacement_contracts": [
-        "curation/resources/python/provider_contracts.py"
-      ],
+      "replacement_contracts": [],
       "prompt_business_logic": "none"
     },
     {
@@ -1415,31 +1406,25 @@
         "sec-api-compatible-extractor"
       ],
       "dependency_closure": [],
-      "production_action": "adapted-resource",
-      "output_assets": [
-        "curation/resources/python/provider_adapters.py"
-      ],
-      "symbol_action": "provider-boundary-adapted",
+      "production_action": "evidence-only",
+      "output_assets": [],
+      "symbol_action": "none",
       "converter_execution": "never",
-      "skill_execution": "agent-invoked",
-      "credential_policy": "user-configured-not-persisted",
-      "sensitive_scan": "required-on-derived-assets",
-      "derivation_notice": "required",
-      "reason_code": "adapted-resource",
+      "skill_execution": "not-distributed",
+      "credential_policy": "not-applicable",
+      "sensitive_scan": "not-applicable",
+      "derivation_notice": "not-applicable",
+      "reason_code": "authored-reimplementation-evidence",
       "required_symbols": [
         "SECUtils.get_10k_section"
       ],
       "copied_symbols": [],
-      "adapted_symbols": [
-        "SECUtils.get_10k_section"
-      ],
+      "adapted_symbols": [],
       "omitted_symbols": [
         "import-time provider initialization",
         "unneeded module symbols"
       ],
-      "replacement_contracts": [
-        "curation/resources/python/provider_contracts.py"
-      ],
+      "replacement_contracts": [],
       "prompt_business_logic": "none"
     },
     {
@@ -1456,17 +1441,15 @@
         "pandas"
       ],
       "dependency_closure": [],
-      "production_action": "adapted-resource",
-      "output_assets": [
-        "curation/resources/python/provider_adapters.py"
-      ],
-      "symbol_action": "provider-boundary-adapted",
+      "production_action": "evidence-only",
+      "output_assets": [],
+      "symbol_action": "none",
       "converter_execution": "never",
-      "skill_execution": "agent-invoked",
-      "credential_policy": "user-configured-not-persisted",
-      "sensitive_scan": "required-on-derived-assets",
-      "derivation_notice": "required",
-      "reason_code": "adapted-resource",
+      "skill_execution": "not-distributed",
+      "credential_policy": "not-applicable",
+      "sensitive_scan": "not-applicable",
+      "derivation_notice": "not-applicable",
+      "reason_code": "authored-reimplementation-evidence",
       "required_symbols": [
         "YFinanceUtils.get_stock_data",
         "YFinanceUtils.get_stock_info",
@@ -1476,21 +1459,12 @@
         "YFinanceUtils.get_analyst_recommendations"
       ],
       "copied_symbols": [],
-      "adapted_symbols": [
-        "YFinanceUtils.get_stock_data",
-        "YFinanceUtils.get_stock_info",
-        "YFinanceUtils.get_income_stmt",
-        "YFinanceUtils.get_balance_sheet",
-        "YFinanceUtils.get_cash_flow",
-        "YFinanceUtils.get_analyst_recommendations"
-      ],
+      "adapted_symbols": [],
       "omitted_symbols": [
         "import-time provider initialization",
         "unneeded module symbols"
       ],
-      "replacement_contracts": [
-        "curation/resources/python/provider_contracts.py"
-      ],
+      "replacement_contracts": [],
       "prompt_business_logic": "none"
     },
     {
@@ -1552,17 +1526,15 @@
         "finrobot/data_source/sec_utils.py",
         "finrobot/utils.py"
       ],
-      "production_action": "adapted-resource",
-      "output_assets": [
-        "curation/resources/python/financial_analyzer.py"
-      ],
-      "symbol_action": "provider-boundary-adapted",
+      "production_action": "evidence-only",
+      "output_assets": [],
+      "symbol_action": "none",
       "converter_execution": "never",
-      "skill_execution": "agent-invoked",
-      "credential_policy": "user-configured-not-persisted",
-      "sensitive_scan": "required-on-derived-assets",
-      "derivation_notice": "required",
-      "reason_code": "adapted-resource",
+      "skill_execution": "not-distributed",
+      "credential_policy": "not-applicable",
+      "sensitive_scan": "not-applicable",
+      "derivation_notice": "not-applicable",
+      "reason_code": "authored-reimplementation-evidence",
       "required_symbols": [
         "ReportAnalysisUtils.analyze_balance_sheet",
         "ReportAnalysisUtils.analyze_business_highlights",
@@ -1576,26 +1548,13 @@
         "ReportAnalysisUtils.income_summarization"
       ],
       "copied_symbols": [],
-      "adapted_symbols": [
-        "ReportAnalysisUtils.analyze_balance_sheet",
-        "ReportAnalysisUtils.analyze_business_highlights",
-        "ReportAnalysisUtils.analyze_cash_flow",
-        "ReportAnalysisUtils.analyze_company_description",
-        "ReportAnalysisUtils.analyze_income_stmt",
-        "ReportAnalysisUtils.analyze_segment_stmt",
-        "ReportAnalysisUtils.get_competitors_analysis",
-        "ReportAnalysisUtils.get_key_data",
-        "ReportAnalysisUtils.get_risk_assessment",
-        "ReportAnalysisUtils.income_summarization"
-      ],
+      "adapted_symbols": [],
       "omitted_symbols": [
         "import-time provider initialization",
         "unneeded module symbols"
       ],
-      "replacement_contracts": [
-        "curation/resources/python/provider_contracts.py"
-      ],
-      "prompt_business_logic": "adapted"
+      "replacement_contracts": [],
+      "prompt_business_logic": "none"
     },
     {
       "source_path": "finrobot/functional/charting.py",
@@ -1824,31 +1783,25 @@
       "finrobot_coupling": "light",
       "external_dependencies": [],
       "dependency_closure": [],
-      "production_action": "adapted-resource",
-      "output_assets": [
-        "curation/resources/python/provider_adapters.py"
-      ],
-      "symbol_action": "provider-boundary-adapted",
+      "production_action": "evidence-only",
+      "output_assets": [],
+      "symbol_action": "none",
       "converter_execution": "never",
-      "skill_execution": "agent-invoked",
-      "credential_policy": "user-configured-not-persisted",
-      "sensitive_scan": "required-on-derived-assets",
-      "derivation_notice": "required",
-      "reason_code": "adapted-resource",
+      "skill_execution": "not-distributed",
+      "credential_policy": "not-applicable",
+      "sensitive_scan": "not-applicable",
+      "derivation_notice": "not-applicable",
+      "reason_code": "authored-reimplementation-evidence",
       "required_symbols": [
         "get_next_weekday"
       ],
       "copied_symbols": [],
-      "adapted_symbols": [
-        "get_next_weekday"
-      ],
+      "adapted_symbols": [],
       "omitted_symbols": [
         "import-time provider initialization",
         "unneeded module symbols"
       ],
-      "replacement_contracts": [
-        "curation/resources/python/provider_contracts.py"
-      ],
+      "replacement_contracts": [],
       "prompt_business_logic": "none"
     },
     {
@@ -2223,26 +2176,22 @@
         "numpy"
       ],
       "dependency_closure": [],
-      "production_action": "direct-resource",
-      "output_assets": [
-        "curation/resources/python/catalyst_analyzer.py"
-      ],
-      "symbol_action": "preserved-with-explicit-assumptions",
+      "production_action": "evidence-only",
+      "output_assets": [],
+      "symbol_action": "none",
       "converter_execution": "never",
-      "skill_execution": "agent-invoked",
-      "credential_policy": "user-configured-not-persisted",
-      "sensitive_scan": "required-on-derived-assets",
-      "derivation_notice": "required",
-      "reason_code": "direct-resource",
+      "skill_execution": "not-distributed",
+      "credential_policy": "not-applicable",
+      "sensitive_scan": "not-applicable",
+      "derivation_notice": "not-applicable",
+      "reason_code": "authored-reimplementation-evidence",
       "required_symbols": [
         "CatalystAnalyzer.assess_catalyst_impact",
         "CatalystAnalyzer._classify_event_type",
         "CatalystAnalyzer._estimate_probability",
         "CatalystAnalyzer.identify_catalysts"
       ],
-      "copied_symbols": [
-        "complete-module-symbol-closure"
-      ],
+      "copied_symbols": [],
       "adapted_symbols": [],
       "omitted_symbols": [
         "__main__ demonstration"
@@ -2352,17 +2301,15 @@
       "finrobot_coupling": "light",
       "external_dependencies": [],
       "dependency_closure": [],
-      "production_action": "adapted-resource",
-      "output_assets": [
-        "curation/resources/python/enhanced_text_generator.py"
-      ],
-      "symbol_action": "provider-boundary-adapted",
+      "production_action": "evidence-only",
+      "output_assets": [],
+      "symbol_action": "none",
       "converter_execution": "never",
-      "skill_execution": "agent-invoked",
-      "credential_policy": "user-configured-not-persisted",
-      "sensitive_scan": "required-on-derived-assets",
-      "derivation_notice": "required",
-      "reason_code": "adapted-resource",
+      "skill_execution": "not-distributed",
+      "credential_policy": "not-applicable",
+      "sensitive_scan": "not-applicable",
+      "derivation_notice": "not-applicable",
+      "reason_code": "authored-reimplementation-evidence",
       "required_symbols": [
         "EnhancedTextGenerator.generate_catalyst_analysis",
         "EnhancedTextGenerator.generate_forecast_methodology",
@@ -2370,20 +2317,13 @@
         "EnhancedTextGenerator.generate_valuation_analysis"
       ],
       "copied_symbols": [],
-      "adapted_symbols": [
-        "EnhancedTextGenerator.generate_catalyst_analysis",
-        "EnhancedTextGenerator.generate_forecast_methodology",
-        "EnhancedTextGenerator.generate_risk_factors",
-        "EnhancedTextGenerator.generate_valuation_analysis"
-      ],
+      "adapted_symbols": [],
       "omitted_symbols": [
         "import-time provider initialization",
         "unneeded module symbols"
       ],
-      "replacement_contracts": [
-        "curation/resources/python/provider_contracts.py"
-      ],
-      "prompt_business_logic": "adapted"
+      "replacement_contracts": [],
+      "prompt_business_logic": "none"
     },
     {
       "source_path": "finrobot_equity/core/src/modules/equity_agents/__init__.py",
@@ -2454,32 +2394,25 @@
       "finrobot_coupling": "none",
       "external_dependencies": [],
       "dependency_closure": [],
-      "production_action": "prompt-resource",
-      "output_assets": [
-        "curation/resources/agent-specs/company_overview.json"
-      ],
-      "symbol_action": "prompt-and-schema-preserved",
+      "production_action": "evidence-only",
+      "output_assets": [],
+      "symbol_action": "none",
       "converter_execution": "never",
-      "skill_execution": "agent-invoked",
-      "credential_policy": "user-configured-not-persisted",
-      "sensitive_scan": "required-on-derived-assets",
-      "derivation_notice": "required",
-      "reason_code": "prompt-resource",
+      "skill_execution": "not-distributed",
+      "credential_policy": "not-applicable",
+      "sensitive_scan": "not-applicable",
+      "derivation_notice": "not-applicable",
+      "reason_code": "authored-reimplementation-evidence",
       "required_symbols": [
         "COMPANY_OVERVIEW_PROMPT"
       ],
-      "copied_symbols": [
-        "prompt-constant",
-        "response-field-schema"
-      ],
-      "adapted_symbols": [
-        "Agent-construction-to-provider-neutral-AgentSpec"
-      ],
+      "copied_symbols": [],
+      "adapted_symbols": [],
       "omitted_symbols": [
         "openai-agents runtime construction"
       ],
       "replacement_contracts": [],
-      "prompt_business_logic": "copied"
+      "prompt_business_logic": "none"
     },
     {
       "source_path": "finrobot_equity/core/src/modules/equity_agents/competitor_analysis_agent.py",
@@ -2496,32 +2429,25 @@
       "finrobot_coupling": "none",
       "external_dependencies": [],
       "dependency_closure": [],
-      "production_action": "prompt-resource",
-      "output_assets": [
-        "curation/resources/agent-specs/competitor_analysis.json"
-      ],
-      "symbol_action": "prompt-and-schema-preserved",
+      "production_action": "evidence-only",
+      "output_assets": [],
+      "symbol_action": "none",
       "converter_execution": "never",
-      "skill_execution": "agent-invoked",
-      "credential_policy": "user-configured-not-persisted",
-      "sensitive_scan": "required-on-derived-assets",
-      "derivation_notice": "required",
-      "reason_code": "prompt-resource",
+      "skill_execution": "not-distributed",
+      "credential_policy": "not-applicable",
+      "sensitive_scan": "not-applicable",
+      "derivation_notice": "not-applicable",
+      "reason_code": "authored-reimplementation-evidence",
       "required_symbols": [
         "COMPETITOR_ANALYSIS_PROMPT"
       ],
-      "copied_symbols": [
-        "prompt-constant",
-        "response-field-schema"
-      ],
-      "adapted_symbols": [
-        "Agent-construction-to-provider-neutral-AgentSpec"
-      ],
+      "copied_symbols": [],
+      "adapted_symbols": [],
       "omitted_symbols": [
         "openai-agents runtime construction"
       ],
       "replacement_contracts": [],
-      "prompt_business_logic": "copied"
+      "prompt_business_logic": "none"
     },
     {
       "source_path": "finrobot_equity/core/src/modules/equity_agents/investment_overview_agent.py",
@@ -2565,32 +2491,25 @@
       "finrobot_coupling": "none",
       "external_dependencies": [],
       "dependency_closure": [],
-      "production_action": "prompt-resource",
-      "output_assets": [
-        "curation/resources/agent-specs/major_takeaways.json"
-      ],
-      "symbol_action": "prompt-and-schema-preserved",
+      "production_action": "evidence-only",
+      "output_assets": [],
+      "symbol_action": "none",
       "converter_execution": "never",
-      "skill_execution": "agent-invoked",
-      "credential_policy": "user-configured-not-persisted",
-      "sensitive_scan": "required-on-derived-assets",
-      "derivation_notice": "required",
-      "reason_code": "prompt-resource",
+      "skill_execution": "not-distributed",
+      "credential_policy": "not-applicable",
+      "sensitive_scan": "not-applicable",
+      "derivation_notice": "not-applicable",
+      "reason_code": "authored-reimplementation-evidence",
       "required_symbols": [
         "MAJOR_TAKEAWAYS_PROMPT"
       ],
-      "copied_symbols": [
-        "prompt-constant",
-        "response-field-schema"
-      ],
-      "adapted_symbols": [
-        "Agent-construction-to-provider-neutral-AgentSpec"
-      ],
+      "copied_symbols": [],
+      "adapted_symbols": [],
       "omitted_symbols": [
         "openai-agents runtime construction"
       ],
       "replacement_contracts": [],
-      "prompt_business_logic": "copied"
+      "prompt_business_logic": "none"
     },
     {
       "source_path": "finrobot_equity/core/src/modules/equity_agents/news_summary_agent.py",
@@ -2607,32 +2526,25 @@
       "finrobot_coupling": "none",
       "external_dependencies": [],
       "dependency_closure": [],
-      "production_action": "prompt-resource",
-      "output_assets": [
-        "curation/resources/agent-specs/news_summary.json"
-      ],
-      "symbol_action": "prompt-and-schema-preserved",
+      "production_action": "evidence-only",
+      "output_assets": [],
+      "symbol_action": "none",
       "converter_execution": "never",
-      "skill_execution": "agent-invoked",
-      "credential_policy": "user-configured-not-persisted",
-      "sensitive_scan": "required-on-derived-assets",
-      "derivation_notice": "required",
-      "reason_code": "prompt-resource",
+      "skill_execution": "not-distributed",
+      "credential_policy": "not-applicable",
+      "sensitive_scan": "not-applicable",
+      "derivation_notice": "not-applicable",
+      "reason_code": "authored-reimplementation-evidence",
       "required_symbols": [
         "NEWS_SUMMARY_PROMPT"
       ],
-      "copied_symbols": [
-        "prompt-constant",
-        "response-field-schema"
-      ],
-      "adapted_symbols": [
-        "Agent-construction-to-provider-neutral-AgentSpec"
-      ],
+      "copied_symbols": [],
+      "adapted_symbols": [],
       "omitted_symbols": [
         "openai-agents runtime construction"
       ],
       "replacement_contracts": [],
-      "prompt_business_logic": "copied"
+      "prompt_business_logic": "none"
     },
     {
       "source_path": "finrobot_equity/core/src/modules/equity_agents/risks_agent.py",
@@ -2649,32 +2561,25 @@
       "finrobot_coupling": "none",
       "external_dependencies": [],
       "dependency_closure": [],
-      "production_action": "prompt-resource",
-      "output_assets": [
-        "curation/resources/agent-specs/risks.json"
-      ],
-      "symbol_action": "prompt-and-schema-preserved",
+      "production_action": "evidence-only",
+      "output_assets": [],
+      "symbol_action": "none",
       "converter_execution": "never",
-      "skill_execution": "agent-invoked",
-      "credential_policy": "user-configured-not-persisted",
-      "sensitive_scan": "required-on-derived-assets",
-      "derivation_notice": "required",
-      "reason_code": "prompt-resource",
+      "skill_execution": "not-distributed",
+      "credential_policy": "not-applicable",
+      "sensitive_scan": "not-applicable",
+      "derivation_notice": "not-applicable",
+      "reason_code": "authored-reimplementation-evidence",
       "required_symbols": [
         "RISKS_PROMPT"
       ],
-      "copied_symbols": [
-        "prompt-constant",
-        "response-field-schema"
-      ],
-      "adapted_symbols": [
-        "Agent-construction-to-provider-neutral-AgentSpec"
-      ],
+      "copied_symbols": [],
+      "adapted_symbols": [],
       "omitted_symbols": [
         "openai-agents runtime construction"
       ],
       "replacement_contracts": [],
-      "prompt_business_logic": "copied"
+      "prompt_business_logic": "none"
     },
     {
       "source_path": "finrobot_equity/core/src/modules/equity_agents/tagline_agent.py",
@@ -2718,32 +2623,25 @@
       "finrobot_coupling": "none",
       "external_dependencies": [],
       "dependency_closure": [],
-      "production_action": "prompt-resource",
-      "output_assets": [
-        "curation/resources/agent-specs/valuation_overview.json"
-      ],
-      "symbol_action": "prompt-and-schema-preserved",
+      "production_action": "evidence-only",
+      "output_assets": [],
+      "symbol_action": "none",
       "converter_execution": "never",
-      "skill_execution": "agent-invoked",
-      "credential_policy": "user-configured-not-persisted",
-      "sensitive_scan": "required-on-derived-assets",
-      "derivation_notice": "required",
-      "reason_code": "prompt-resource",
+      "skill_execution": "not-distributed",
+      "credential_policy": "not-applicable",
+      "sensitive_scan": "not-applicable",
+      "derivation_notice": "not-applicable",
+      "reason_code": "authored-reimplementation-evidence",
       "required_symbols": [
         "VALUATION_OVERVIEW_PROMPT"
       ],
-      "copied_symbols": [
-        "prompt-constant",
-        "response-field-schema"
-      ],
-      "adapted_symbols": [
-        "Agent-construction-to-provider-neutral-AgentSpec"
-      ],
+      "copied_symbols": [],
+      "adapted_symbols": [],
       "omitted_symbols": [
         "openai-agents runtime construction"
       ],
       "replacement_contracts": [],
-      "prompt_business_logic": "copied"
+      "prompt_business_logic": "none"
     },
     {
       "source_path": "finrobot_equity/core/src/modules/financial_data_processor.py",
@@ -2766,25 +2664,21 @@
         "numpy"
       ],
       "dependency_closure": [],
-      "production_action": "direct-resource",
-      "output_assets": [
-        "curation/resources/python/financial_data_processor.py"
-      ],
-      "symbol_action": "preserved-with-explicit-assumptions",
+      "production_action": "evidence-only",
+      "output_assets": [],
+      "symbol_action": "none",
       "converter_execution": "never",
-      "skill_execution": "agent-invoked",
-      "credential_policy": "user-configured-not-persisted",
-      "sensitive_scan": "required-on-derived-assets",
-      "derivation_notice": "required",
-      "reason_code": "direct-resource",
+      "skill_execution": "not-distributed",
+      "credential_policy": "not-applicable",
+      "sensitive_scan": "not-applicable",
+      "derivation_notice": "not-applicable",
+      "reason_code": "authored-reimplementation-evidence",
       "required_symbols": [
         "extract_historical_metrics_from_api_data",
         "extract_historical_metrics_from_pdf_data",
         "calculate_growth_and_forecasts"
       ],
-      "copied_symbols": [
-        "complete-module-symbol-closure"
-      ],
+      "copied_symbols": [],
       "adapted_symbols": [],
       "omitted_symbols": [
         "__main__ demonstration"
@@ -3055,25 +2949,21 @@
         "numpy"
       ],
       "dependency_closure": [],
-      "production_action": "direct-resource",
-      "output_assets": [
-        "curation/resources/python/sensitivity_analyzer.py"
-      ],
-      "symbol_action": "preserved-with-explicit-assumptions",
+      "production_action": "evidence-only",
+      "output_assets": [],
+      "symbol_action": "none",
       "converter_execution": "never",
-      "skill_execution": "agent-invoked",
-      "credential_policy": "user-configured-not-persisted",
-      "sensitive_scan": "required-on-derived-assets",
-      "derivation_notice": "required",
-      "reason_code": "direct-resource",
+      "skill_execution": "not-distributed",
+      "credential_policy": "not-applicable",
+      "sensitive_scan": "not-applicable",
+      "derivation_notice": "not-applicable",
+      "reason_code": "authored-reimplementation-evidence",
       "required_symbols": [
         "SensitivityAnalyzer.analyze_margin_sensitivity",
         "SensitivityAnalyzer.analyze_revenue_sensitivity",
         "SensitivityAnalyzer.generate_sensitivity_table"
       ],
-      "copied_symbols": [
-        "complete-module-symbol-closure"
-      ],
+      "copied_symbols": [],
       "adapted_symbols": [],
       "omitted_symbols": [
         "__main__ demonstration"
@@ -3127,24 +3017,20 @@
         "numpy"
       ],
       "dependency_closure": [],
-      "production_action": "direct-resource",
-      "output_assets": [
-        "curation/resources/python/valuation_engine.py"
-      ],
-      "symbol_action": "preserved-with-explicit-assumptions",
+      "production_action": "evidence-only",
+      "output_assets": [],
+      "symbol_action": "none",
       "converter_execution": "never",
-      "skill_execution": "agent-invoked",
-      "credential_policy": "user-configured-not-persisted",
-      "sensitive_scan": "required-on-derived-assets",
-      "derivation_notice": "required",
-      "reason_code": "direct-resource",
+      "skill_execution": "not-distributed",
+      "credential_policy": "not-applicable",
+      "sensitive_scan": "not-applicable",
+      "derivation_notice": "not-applicable",
+      "reason_code": "authored-reimplementation-evidence",
       "required_symbols": [
         "ValuationEngine.calculate_ev_ebitda_valuation",
         "ValuationEngine.calculate_peer_comparison_valuation"
       ],
-      "copied_symbols": [
-        "complete-module-symbol-closure"
-      ],
+      "copied_symbols": [],
       "adapted_symbols": [],
       "omitted_symbols": [
         "__main__ demonstration"

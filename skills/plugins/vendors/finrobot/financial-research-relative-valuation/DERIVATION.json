@@ -1,90 +1,119 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "vendor": "finrobot",
   "release": "snapshot-297a8d2",
   "revision": "297a8d28d099be328c8a8eb658b4f782b93f3651",
   "audit_sha256": "6b518a933f036333203276263b94cc5b4bd45a924f426972c4547165c5cbb9c3",
-  "converter_execution": "never",
-  "sources": [
+  "skill_id": "financial-research-relative-valuation",
+  "skill_tier": 3,
+  "implementation_strategy": "researchspec-authored-non-native-skill",
+  "upstream_code_copied": false,
+  "capability_map": [
     {
-      "source_path": "finrobot/data_source/fmp_utils.py",
-      "git_object_id": "5af7e58b1425670476e016389a856ff398f6f907",
-      "sha256": "766da4e06a4096a12f5552af346dd5ebfd299fb3d20ba55fd861b4329d304b16",
-      "production_action": "adapted-resource",
-      "finrobot_coupling": "light",
-      "output_assets": [
-        "resources/python/provider_adapters.py"
-      ]
-    },
-    {
-      "source_path": "finrobot/data_source/sec_utils.py",
-      "git_object_id": "a5870d3b29a8a4ea804ac1180c695f8ea9faafcf",
-      "sha256": "8be8664f05eb9d4d92be038d369db83ff28f8ab611d20f1796ddf2f4cb7be173",
-      "production_action": "adapted-resource",
-      "finrobot_coupling": "light",
-      "output_assets": [
-        "resources/python/provider_adapters.py"
-      ]
-    },
-    {
-      "source_path": "finrobot/data_source/yfinance_utils.py",
-      "git_object_id": "283053139af6ee1406d5e37ae6192894ba72e935",
-      "sha256": "5a10ae0998376f54108bab618e781ee44ce57ae06503109a29e2de2600daa11b",
-      "production_action": "adapted-resource",
-      "finrobot_coupling": "light",
-      "output_assets": [
-        "resources/python/provider_adapters.py"
-      ]
-    },
-    {
-      "source_path": "finrobot/utils.py",
-      "git_object_id": "94c5ea8c4f3d379a57359e27644767cf092539ce",
-      "sha256": "7d8b84b7d40c8a32f5854899d35f52bf25027efdf1957245799f4140aebec477",
-      "production_action": "adapted-resource",
-      "finrobot_coupling": "light",
-      "output_assets": [
-        "resources/python/provider_adapters.py"
-      ]
-    },
-    {
+      "surface_id": "enhanced-valuation-analysis",
       "source_path": "finrobot_equity/core/src/modules/enhanced_text_generator.py",
-      "git_object_id": "082890ae1a88b3b10af4be73a04f1a757a63a0f2",
-      "sha256": "e09107b59bbb5f65423a30ab475aecf84f36d934e0d5750e26656ed76daace97",
-      "production_action": "adapted-resource",
-      "finrobot_coupling": "light",
-      "output_assets": [
-        "resources/python/enhanced_text_generator.py"
-      ]
+      "source_sha256": "e09107b59bbb5f65423a30ab475aecf84f36d934e0d5750e26656ed76daace97",
+      "symbol": "EnhancedTextGenerator.generate_valuation_analysis",
+      "implementation": {
+        "kind": "agent-procedure",
+        "procedureAnchor": "Agent procedure: choose defensible methods, assumptions, weights, and limitations for the decision context.",
+        "outputAnchor": "Record each conclusion with evidence, assumptions, counterevidence, and limitations.",
+        "failureAnchor": "Stop when the available evidence cannot support the requested conclusion."
+      }
     },
     {
+      "surface_id": "equity-valuation-overview",
       "source_path": "finrobot_equity/core/src/modules/equity_agents/valuation_overview_agent.py",
-      "git_object_id": "0ded77ee1638c27509579961e18719b2b4d40af3",
-      "sha256": "c3d02d5c07c0498b1e0e892ff0ddac88327f2efa6c39db64520a4607dda2f092",
-      "production_action": "prompt-resource",
-      "finrobot_coupling": "none",
-      "output_assets": [
-        "resources/agent-specs/valuation_overview.json"
-      ]
+      "source_sha256": "c3d02d5c07c0498b1e0e892ff0ddac88327f2efa6c39db64520a4607dda2f092",
+      "symbol": "VALUATION_OVERVIEW_PROMPT",
+      "implementation": {
+        "kind": "agent-procedure",
+        "procedureAnchor": "Agent procedure: interpret fair value, target price, margin of safety, and rating with explicit uncertainty.",
+        "outputAnchor": "Record each conclusion with evidence, assumptions, counterevidence, and limitations.",
+        "failureAnchor": "Stop when the available evidence cannot support the requested conclusion."
+      }
     },
     {
+      "surface_id": "sensitivity-margin",
       "source_path": "finrobot_equity/core/src/modules/sensitivity_analyzer.py",
-      "git_object_id": "f5c186821a744792b90bdcdec776c11c28a23810",
-      "sha256": "edc42f04d39361d20d130595d8bdde506da6a42e4dfead180d427471728cfa34",
-      "production_action": "direct-resource",
-      "finrobot_coupling": "none",
-      "output_assets": [
-        "resources/python/sensitivity_analyzer.py"
-      ]
+      "source_sha256": "edc42f04d39361d20d130595d8bdde506da6a42e4dfead180d427471728cfa34",
+      "symbol": "SensitivityAnalyzer.analyze_margin_sensitivity",
+      "implementation": {
+        "kind": "bundled-script",
+        "scriptPath": "scripts/valuation.py"
+      }
     },
     {
+      "surface_id": "sensitivity-revenue",
+      "source_path": "finrobot_equity/core/src/modules/sensitivity_analyzer.py",
+      "source_sha256": "edc42f04d39361d20d130595d8bdde506da6a42e4dfead180d427471728cfa34",
+      "symbol": "SensitivityAnalyzer.analyze_revenue_sensitivity",
+      "implementation": {
+        "kind": "bundled-script",
+        "scriptPath": "scripts/valuation.py"
+      }
+    },
+    {
+      "surface_id": "sensitivity-table",
+      "source_path": "finrobot_equity/core/src/modules/sensitivity_analyzer.py",
+      "source_sha256": "edc42f04d39361d20d130595d8bdde506da6a42e4dfead180d427471728cfa34",
+      "symbol": "SensitivityAnalyzer.generate_sensitivity_table",
+      "implementation": {
+        "kind": "bundled-script",
+        "scriptPath": "scripts/valuation.py"
+      }
+    },
+    {
+      "surface_id": "valuation-ev-ebitda",
       "source_path": "finrobot_equity/core/src/modules/valuation_engine.py",
-      "git_object_id": "532de76720fe3ad9004475fd5fbd052236852c10",
-      "sha256": "3256aa3bfc5aa7378a904696930ab4437c752f028a1e16a253f654b7e22a54b0",
-      "production_action": "direct-resource",
-      "finrobot_coupling": "none",
-      "output_assets": [
-        "resources/python/valuation_engine.py"
-      ]
+      "source_sha256": "3256aa3bfc5aa7378a904696930ab4437c752f028a1e16a253f654b7e22a54b0",
+      "symbol": "ValuationEngine.calculate_ev_ebitda_valuation",
+      "implementation": {
+        "kind": "bundled-script",
+        "scriptPath": "scripts/valuation.py"
+      }
+    },
+    {
+      "surface_id": "valuation-peer-comparison",
+      "source_path": "finrobot_equity/core/src/modules/valuation_engine.py",
+      "source_sha256": "3256aa3bfc5aa7378a904696930ab4437c752f028a1e16a253f654b7e22a54b0",
+      "symbol": "ValuationEngine.calculate_peer_comparison_valuation",
+      "implementation": {
+        "kind": "bundled-script",
+        "scriptPath": "scripts/valuation.py"
+      }
+    }
+  ],
+  "files": [
+    {
+      "path": "SKILL.md",
+      "authorship": "researchspec-authored",
+      "source_scope": "audited-capability-reimplementation"
+    },
+    {
+      "path": "scripts/valuation.py",
+      "authorship": "researchspec-authored",
+      "source_scope": "audited-capability-reimplementation"
+    },
+    {
+      "path": "lib/financial_support.py",
+      "authorship": "researchspec-authored",
+      "source_scope": "shared-deterministic-support"
+    },
+    {
+      "path": "LICENSE",
+      "authorship": "upstream-license",
+      "source_scope": "vendor-root"
+    },
+    {
+      "path": "NOTICE",
+      "authorship": "combined-notice",
+      "source_scope": "vendor-root-and-researchspec"
+    },
+    {
+      "path": "DERIVATION.json",
+      "authorship": "converter-generated",
+      "source_scope": "immutable-audit-and-skill-definition"
     }
   ]
 }

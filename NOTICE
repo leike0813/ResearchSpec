@@ -33,11 +33,13 @@ ResearchSpec distributes reviewed Skills derived from FinRobot:
 - Revision: 297a8d28d099be328c8a8eb658b4f782b93f3651
 - Content license: Apache License 2.0, preserved in every generated Skill's `LICENSE` and `NOTICE`
 
-FinRobot-derived Python and AgentSpec resources are static package assets during
-conversion, packaging, installation, discovery, and update. A target Agent may
-invoke them later with user-configured dependencies, providers, and credentials.
-ResearchSpec contains no actual provider credentials or private payloads and is
-independent from and not endorsed by FinRobot or AI4Finance Foundation.
+FinRobot-derived Skills contain ResearchSpec-authored Agent procedures and four
+deterministic Python 3.11 standard-library entrypoints. No upstream runtime,
+AgentSpec, provider client or adapter, credential contract, or dependency
+manifest is distributed. Conversion and package lifecycle operations treat the
+entrypoints as static files and never execute them, read credentials, or contact
+services. ResearchSpec is independent from and not endorsed by FinRobot or
+AI4Finance Foundation.
 
 ResearchSpec distributes independently reimplemented Skills derived from audited HistAgent capabilities:
 

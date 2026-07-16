@@ -144,9 +144,9 @@ license, or source-neutral domain decisions.
 immutable audit covers all 146 tracked Git entries, 66 source-bound knowledge
 surfaces, five origins, six license claims, and six candidates. Production
 policies admit six neutral `financial-research-*` Skills from twelve candidate
-files: four runtime-independent Python modules are included directly and eight
-candidate scripts are adapted as provider-neutral Python or AgentSpec resources.
-Four additional provider/helper sources form the reviewed dependency closure.
+files. The 32 admitted surfaces map exactly once to complete ResearchSpec-authored
+Agent procedures or deterministic Python 3.11 standard-library entrypoints; no
+upstream FinRobot runtime file or provider helper is distributed.
 FinNLP, AutoGen-attributed content, unclear filing/marker trees, and hard
 FinRobot aggregate dependencies remain excluded. All generated Skills carry
 Apache-2.0 licensing, immutable derivation metadata, empty hard Skill
@@ -158,12 +158,23 @@ FinRobot safety is form safety, not business-capability removal. ResearchSpec
 conversion, checking, packaging, installation, discovery, and update never
 import or execute generated resources, install dependencies, initialize clients,
 read credentials, or contact services. When explicitly invoked by the target
-Agent, the Skills may use user-configured providers and execution environments
+Agent, the Skills may use user-authorized browser, filing, market-data, local
+corpus, and execution tools
 and may produce calculations, forecasts, probabilities, sentiment, valuation,
 targets, ratings, recommendations, and conclusions. Never embed actual secrets,
 private endpoints, private datasets, local user paths, or unknown-origin content
 in published files, and do not bypass the checked-in admission, source, surface,
 origin, license, resource, relationship, derivation, and review decisions.
+
+FinRobot converter version 2 binds the approved aggregate tree hash
+`eecf6fc9e7669f46ef9c58d4fd5938cabedb6d8d7aceac59e15688e178f3765e`.
+Company fundamentals, event evidence, relative valuation, and statement analysis
+are Tier 3 script-assisted Skills with a copied `lib/financial_support.py`;
+competitive position and corporate risk are Tier 1 Agent procedures. The
+current trees contain no references because no supporting material meets the
+progressive-disclosure threshold. Do not reintroduce AgentSpec, dependency
+manifests, provider contracts/adapters, generic runners, product metadata, or
+unconsumed auxiliary resources.
 
 `vendor/histagent` is the maintainer-only pinned input for the
 `snapshot-47bbe21` audit and converter of all 120 tracked files. The approved

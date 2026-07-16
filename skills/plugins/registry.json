@@ -13,7 +13,7 @@
       "release": "snapshot-297a8d2",
       "revision": "297a8d28d099be328c8a8eb658b4f782b93f3651",
       "license": "Apache-2.0",
-      "converter_version": "1",
+      "converter_version": "2",
       "skills": [
         {
           "skill_id": "financial-research-company-fundamentals",
@@ -22,15 +22,11 @@
           "upstreams": [
             {
               "source_paths": [
+                "finrobot/functional/analyzer.py",
                 "finrobot_equity/core/src/modules/enhanced_text_generator.py",
                 "finrobot_equity/core/src/modules/equity_agents/company_overview_agent.py",
                 "finrobot_equity/core/src/modules/equity_agents/major_takeaways_agent.py",
-                "finrobot_equity/core/src/modules/financial_data_processor.py",
-                "finrobot/data_source/fmp_utils.py",
-                "finrobot/data_source/sec_utils.py",
-                "finrobot/data_source/yfinance_utils.py",
-                "finrobot/functional/analyzer.py",
-                "finrobot/utils.py"
+                "finrobot_equity/core/src/modules/financial_data_processor.py"
               ],
               "adaptation": "curated"
             }
@@ -43,12 +39,8 @@
           "upstreams": [
             {
               "source_paths": [
-                "finrobot_equity/core/src/modules/equity_agents/competitor_analysis_agent.py",
-                "finrobot/data_source/fmp_utils.py",
-                "finrobot/data_source/sec_utils.py",
-                "finrobot/data_source/yfinance_utils.py",
                 "finrobot/functional/analyzer.py",
-                "finrobot/utils.py"
+                "finrobot_equity/core/src/modules/equity_agents/competitor_analysis_agent.py"
               ],
               "adaptation": "curated"
             }
@@ -61,13 +53,9 @@
           "upstreams": [
             {
               "source_paths": [
-                "finrobot_equity/core/src/modules/enhanced_text_generator.py",
-                "finrobot_equity/core/src/modules/equity_agents/risks_agent.py",
-                "finrobot/data_source/fmp_utils.py",
-                "finrobot/data_source/sec_utils.py",
-                "finrobot/data_source/yfinance_utils.py",
                 "finrobot/functional/analyzer.py",
-                "finrobot/utils.py"
+                "finrobot_equity/core/src/modules/enhanced_text_generator.py",
+                "finrobot_equity/core/src/modules/equity_agents/risks_agent.py"
               ],
               "adaptation": "curated"
             }
@@ -98,11 +86,7 @@
                 "finrobot_equity/core/src/modules/enhanced_text_generator.py",
                 "finrobot_equity/core/src/modules/equity_agents/valuation_overview_agent.py",
                 "finrobot_equity/core/src/modules/sensitivity_analyzer.py",
-                "finrobot_equity/core/src/modules/valuation_engine.py",
-                "finrobot/data_source/fmp_utils.py",
-                "finrobot/data_source/sec_utils.py",
-                "finrobot/data_source/yfinance_utils.py",
-                "finrobot/utils.py"
+                "finrobot_equity/core/src/modules/valuation_engine.py"
               ],
               "adaptation": "curated"
             }
@@ -115,12 +99,8 @@
           "upstreams": [
             {
               "source_paths": [
-                "finrobot_equity/core/src/modules/financial_data_processor.py",
-                "finrobot/data_source/fmp_utils.py",
-                "finrobot/data_source/sec_utils.py",
-                "finrobot/data_source/yfinance_utils.py",
                 "finrobot/functional/analyzer.py",
-                "finrobot/utils.py"
+                "finrobot_equity/core/src/modules/financial_data_processor.py"
               ],
               "adaptation": "curated"
             }

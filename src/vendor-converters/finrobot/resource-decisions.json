@@ -17,7 +17,7 @@
         "financial-research-relative-valuation",
         "financial-research-statement-analysis"
       ],
-      "note": "Citable public evidence; retrieval may use a user-approved browser, filing client, or local corpus."
+      "note": "Citable public evidence retrieved only through a target Agent tool that the user has authorized."
     },
     {
       "resource_id": "published-financial-reports",
@@ -31,7 +31,7 @@
         "financial-research-relative-valuation",
         "financial-research-statement-analysis"
       ],
-      "note": "Citable reports with issuer, period, publication date, and location."
+      "note": "Citable reports retain issuer, period, publication date, and source location."
     },
     {
       "resource_id": "user-provided-research-data",
@@ -45,80 +45,22 @@
         "financial-research-relative-valuation",
         "financial-research-statement-analysis"
       ],
-      "note": "Private or licensed data stays outside the distributed Skill and is supplied at execution time."
+      "note": "Private or licensed data remains outside the distributed tree and is supplied at invocation time."
     },
     {
-      "resource_id": "bundled-python-analysis",
+      "resource_id": "bundled-deterministic-financial-tools",
       "kind": "calculation-tool",
       "disposition": "bundled",
       "applies_to": [
         "financial-research-company-fundamentals",
-        "financial-research-competitive-position",
-        "financial-research-corporate-risk",
         "financial-research-event-evidence",
         "financial-research-relative-valuation",
         "financial-research-statement-analysis"
       ],
-      "note": "Source-derived Python resources may be invoked by the Agent in a user-approved environment."
+      "note": "Four documented Python 3.11 standard-library entrypoints perform only deterministic validation, calculation, normalization, ranking, and rendering."
     },
     {
-      "resource_id": "provider-neutral-agent-specs",
-      "kind": "agent-spec",
-      "disposition": "bundled",
-      "applies_to": [
-        "financial-research-company-fundamentals",
-        "financial-research-competitive-position",
-        "financial-research-corporate-risk",
-        "financial-research-event-evidence",
-        "financial-research-relative-valuation",
-        "financial-research-statement-analysis"
-      ],
-      "note": "Complete prompts and JSON output schemas without an openai-agents runtime dependency."
-    },
-    {
-      "resource_id": "model-provider",
-      "kind": "model-sdk",
-      "disposition": "user-configured",
-      "applies_to": [
-        "financial-research-company-fundamentals",
-        "financial-research-competitive-position",
-        "financial-research-corporate-risk",
-        "financial-research-event-evidence",
-        "financial-research-relative-valuation",
-        "financial-research-statement-analysis"
-      ],
-      "note": "Any model implementation is selected and configured by the user through the TextGenerator contract."
-    },
-    {
-      "resource_id": "financial-data-service",
-      "kind": "financial-service",
-      "disposition": "user-configured",
-      "applies_to": [
-        "financial-research-company-fundamentals",
-        "financial-research-competitive-position",
-        "financial-research-corporate-risk",
-        "financial-research-event-evidence",
-        "financial-research-relative-valuation",
-        "financial-research-statement-analysis"
-      ],
-      "note": "Market, filing, and financial-data providers may be used through injected adapters."
-    },
-    {
-      "resource_id": "api-credentials",
-      "kind": "credential",
-      "disposition": "user-configured",
-      "applies_to": [
-        "financial-research-company-fundamentals",
-        "financial-research-competitive-position",
-        "financial-research-corporate-risk",
-        "financial-research-event-evidence",
-        "financial-research-relative-valuation",
-        "financial-research-statement-analysis"
-      ],
-      "note": "Credentials are resolved from the user's secret mechanism and never shipped, echoed, or persisted by the Skill."
-    },
-    {
-      "resource_id": "remote-retrieval",
+      "resource_id": "target-agent-browser-tool",
       "kind": "remote-access",
       "disposition": "user-configured",
       "applies_to": [
@@ -129,7 +71,32 @@
         "financial-research-relative-valuation",
         "financial-research-statement-analysis"
       ],
-      "note": "The Agent may retrieve authorized sources and services when the task requires current data."
+      "note": "A browser may retrieve authorized evidence under target-Agent and host policy; the Skill contains no browser client."
+    },
+    {
+      "resource_id": "target-agent-filing-tool",
+      "kind": "financial-service",
+      "disposition": "user-configured",
+      "applies_to": [
+        "financial-research-company-fundamentals",
+        "financial-research-competitive-position",
+        "financial-research-corporate-risk",
+        "financial-research-statement-analysis"
+      ],
+      "note": "A configured filing tool may retrieve authorized disclosures; the Skill does not resolve credentials or implement a provider adapter."
+    },
+    {
+      "resource_id": "target-agent-market-data-tool",
+      "kind": "financial-service",
+      "disposition": "user-configured",
+      "applies_to": [
+        "financial-research-company-fundamentals",
+        "financial-research-competitive-position",
+        "financial-research-event-evidence",
+        "financial-research-relative-valuation",
+        "financial-research-statement-analysis"
+      ],
+      "note": "A configured market-data tool may supply authorized observations; the Skill contains no provider client or credential contract."
     },
     {
       "resource_id": "finrobot-runtime",
@@ -143,7 +110,7 @@
         "financial-research-relative-valuation",
         "financial-research-statement-analysis"
       ],
-      "note": "No published resource imports or requires the FinRobot package runtime."
+      "note": "No published tree imports or requires the FinRobot package runtime."
     }
   ]
 }

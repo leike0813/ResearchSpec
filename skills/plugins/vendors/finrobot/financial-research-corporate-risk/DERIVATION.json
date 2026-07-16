@@ -1,80 +1,71 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "vendor": "finrobot",
   "release": "snapshot-297a8d2",
   "revision": "297a8d28d099be328c8a8eb658b4f782b93f3651",
   "audit_sha256": "6b518a933f036333203276263b94cc5b4bd45a924f426972c4547165c5cbb9c3",
-  "converter_execution": "never",
-  "sources": [
+  "skill_id": "financial-research-corporate-risk",
+  "skill_tier": 1,
+  "implementation_strategy": "researchspec-authored-non-native-skill",
+  "upstream_code_copied": false,
+  "capability_map": [
     {
-      "source_path": "finrobot/data_source/fmp_utils.py",
-      "git_object_id": "5af7e58b1425670476e016389a856ff398f6f907",
-      "sha256": "766da4e06a4096a12f5552af346dd5ebfd299fb3d20ba55fd861b4329d304b16",
-      "production_action": "adapted-resource",
-      "finrobot_coupling": "light",
-      "output_assets": [
-        "resources/python/provider_adapters.py"
-      ]
-    },
-    {
-      "source_path": "finrobot/data_source/sec_utils.py",
-      "git_object_id": "a5870d3b29a8a4ea804ac1180c695f8ea9faafcf",
-      "sha256": "8be8664f05eb9d4d92be038d369db83ff28f8ab611d20f1796ddf2f4cb7be173",
-      "production_action": "adapted-resource",
-      "finrobot_coupling": "light",
-      "output_assets": [
-        "resources/python/provider_adapters.py"
-      ]
-    },
-    {
-      "source_path": "finrobot/data_source/yfinance_utils.py",
-      "git_object_id": "283053139af6ee1406d5e37ae6192894ba72e935",
-      "sha256": "5a10ae0998376f54108bab618e781ee44ce57ae06503109a29e2de2600daa11b",
-      "production_action": "adapted-resource",
-      "finrobot_coupling": "light",
-      "output_assets": [
-        "resources/python/provider_adapters.py"
-      ]
-    },
-    {
+      "surface_id": "analyzer-get-risk-assessment",
       "source_path": "finrobot/functional/analyzer.py",
-      "git_object_id": "16042fa76c3aadd5935b473ff7ea3233900aa78d",
-      "sha256": "a7af9f74bca58c5105beb3a48b53622ae41cec4330e851d4702160833c5060d2",
-      "production_action": "adapted-resource",
-      "finrobot_coupling": "light",
-      "output_assets": [
-        "resources/python/financial_analyzer.py"
-      ]
+      "source_sha256": "a7af9f74bca58c5105beb3a48b53622ae41cec4330e851d4702160833c5060d2",
+      "symbol": "ReportAnalysisUtils.get_risk_assessment",
+      "implementation": {
+        "kind": "agent-procedure",
+        "procedureAnchor": "Agent procedure: identify exposures, controls, transmission paths, and evidence-backed residual risk.",
+        "outputAnchor": "Record each conclusion with evidence, assumptions, counterevidence, and limitations.",
+        "failureAnchor": "Stop when the available evidence cannot support the requested conclusion."
+      }
     },
     {
-      "source_path": "finrobot/utils.py",
-      "git_object_id": "94c5ea8c4f3d379a57359e27644767cf092539ce",
-      "sha256": "7d8b84b7d40c8a32f5854899d35f52bf25027efdf1957245799f4140aebec477",
-      "production_action": "adapted-resource",
-      "finrobot_coupling": "light",
-      "output_assets": [
-        "resources/python/provider_adapters.py"
-      ]
-    },
-    {
+      "surface_id": "enhanced-risk-factors",
       "source_path": "finrobot_equity/core/src/modules/enhanced_text_generator.py",
-      "git_object_id": "082890ae1a88b3b10af4be73a04f1a757a63a0f2",
-      "sha256": "e09107b59bbb5f65423a30ab475aecf84f36d934e0d5750e26656ed76daace97",
-      "production_action": "adapted-resource",
-      "finrobot_coupling": "light",
-      "output_assets": [
-        "resources/python/enhanced_text_generator.py"
-      ]
+      "source_sha256": "e09107b59bbb5f65423a30ab475aecf84f36d934e0d5750e26656ed76daace97",
+      "symbol": "EnhancedTextGenerator.generate_risk_factors",
+      "implementation": {
+        "kind": "agent-procedure",
+        "procedureAnchor": "Agent procedure: connect each risk driver to affected metrics, timing, mitigants, and observable warning indicators.",
+        "outputAnchor": "Record each conclusion with evidence, assumptions, counterevidence, and limitations.",
+        "failureAnchor": "Stop when the available evidence cannot support the requested conclusion."
+      }
     },
     {
+      "surface_id": "equity-risks",
       "source_path": "finrobot_equity/core/src/modules/equity_agents/risks_agent.py",
-      "git_object_id": "1d78c12a27170ec243dbb07980e9b073c353843f",
-      "sha256": "cfcf9793a184dfa55cc6e40a4444a9ce7848a5045285c0abadcf06d9e20c87b0",
-      "production_action": "prompt-resource",
-      "finrobot_coupling": "none",
-      "output_assets": [
-        "resources/agent-specs/risks.json"
-      ]
+      "source_sha256": "cfcf9793a184dfa55cc6e40a4444a9ce7848a5045285c0abadcf06d9e20c87b0",
+      "symbol": "RISKS_PROMPT",
+      "implementation": {
+        "kind": "agent-procedure",
+        "procedureAnchor": "Agent procedure: prioritize risk factors using explicit likelihood, impact, confidence, and counterevidence judgments.",
+        "outputAnchor": "Record each conclusion with evidence, assumptions, counterevidence, and limitations.",
+        "failureAnchor": "Stop when the available evidence cannot support the requested conclusion."
+      }
+    }
+  ],
+  "files": [
+    {
+      "path": "SKILL.md",
+      "authorship": "researchspec-authored",
+      "source_scope": "audited-capability-reimplementation"
+    },
+    {
+      "path": "LICENSE",
+      "authorship": "upstream-license",
+      "source_scope": "vendor-root"
+    },
+    {
+      "path": "NOTICE",
+      "authorship": "combined-notice",
+      "source_scope": "vendor-root-and-researchspec"
+    },
+    {
+      "path": "DERIVATION.json",
+      "authorship": "converter-generated",
+      "source_scope": "immutable-audit-and-skill-definition"
     }
   ]
 }

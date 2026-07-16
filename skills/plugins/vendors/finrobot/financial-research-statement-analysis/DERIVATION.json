@@ -1,70 +1,119 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "vendor": "finrobot",
   "release": "snapshot-297a8d2",
   "revision": "297a8d28d099be328c8a8eb658b4f782b93f3651",
   "audit_sha256": "6b518a933f036333203276263b94cc5b4bd45a924f426972c4547165c5cbb9c3",
-  "converter_execution": "never",
-  "sources": [
+  "skill_id": "financial-research-statement-analysis",
+  "skill_tier": 3,
+  "implementation_strategy": "researchspec-authored-non-native-skill",
+  "upstream_code_copied": false,
+  "capability_map": [
     {
-      "source_path": "finrobot/data_source/fmp_utils.py",
-      "git_object_id": "5af7e58b1425670476e016389a856ff398f6f907",
-      "sha256": "766da4e06a4096a12f5552af346dd5ebfd299fb3d20ba55fd861b4329d304b16",
-      "production_action": "adapted-resource",
-      "finrobot_coupling": "light",
-      "output_assets": [
-        "resources/python/provider_adapters.py"
-      ]
-    },
-    {
-      "source_path": "finrobot/data_source/sec_utils.py",
-      "git_object_id": "a5870d3b29a8a4ea804ac1180c695f8ea9faafcf",
-      "sha256": "8be8664f05eb9d4d92be038d369db83ff28f8ab611d20f1796ddf2f4cb7be173",
-      "production_action": "adapted-resource",
-      "finrobot_coupling": "light",
-      "output_assets": [
-        "resources/python/provider_adapters.py"
-      ]
-    },
-    {
-      "source_path": "finrobot/data_source/yfinance_utils.py",
-      "git_object_id": "283053139af6ee1406d5e37ae6192894ba72e935",
-      "sha256": "5a10ae0998376f54108bab618e781ee44ce57ae06503109a29e2de2600daa11b",
-      "production_action": "adapted-resource",
-      "finrobot_coupling": "light",
-      "output_assets": [
-        "resources/python/provider_adapters.py"
-      ]
-    },
-    {
+      "surface_id": "analyzer-analyze-balance-sheet",
       "source_path": "finrobot/functional/analyzer.py",
-      "git_object_id": "16042fa76c3aadd5935b473ff7ea3233900aa78d",
-      "sha256": "a7af9f74bca58c5105beb3a48b53622ae41cec4330e851d4702160833c5060d2",
-      "production_action": "adapted-resource",
-      "finrobot_coupling": "light",
-      "output_assets": [
-        "resources/python/financial_analyzer.py"
-      ]
+      "source_sha256": "a7af9f74bca58c5105beb3a48b53622ae41cec4330e851d4702160833c5060d2",
+      "symbol": "ReportAnalysisUtils.analyze_balance_sheet",
+      "implementation": {
+        "kind": "bundled-script",
+        "scriptPath": "scripts/statements.py"
+      }
     },
     {
-      "source_path": "finrobot/utils.py",
-      "git_object_id": "94c5ea8c4f3d379a57359e27644767cf092539ce",
-      "sha256": "7d8b84b7d40c8a32f5854899d35f52bf25027efdf1957245799f4140aebec477",
-      "production_action": "adapted-resource",
-      "finrobot_coupling": "light",
-      "output_assets": [
-        "resources/python/provider_adapters.py"
-      ]
+      "surface_id": "analyzer-analyze-cash-flow",
+      "source_path": "finrobot/functional/analyzer.py",
+      "source_sha256": "a7af9f74bca58c5105beb3a48b53622ae41cec4330e851d4702160833c5060d2",
+      "symbol": "ReportAnalysisUtils.analyze_cash_flow",
+      "implementation": {
+        "kind": "bundled-script",
+        "scriptPath": "scripts/statements.py"
+      }
     },
     {
+      "surface_id": "analyzer-analyze-income-stmt",
+      "source_path": "finrobot/functional/analyzer.py",
+      "source_sha256": "a7af9f74bca58c5105beb3a48b53622ae41cec4330e851d4702160833c5060d2",
+      "symbol": "ReportAnalysisUtils.analyze_income_stmt",
+      "implementation": {
+        "kind": "bundled-script",
+        "scriptPath": "scripts/statements.py"
+      }
+    },
+    {
+      "surface_id": "analyzer-analyze-segment-stmt",
+      "source_path": "finrobot/functional/analyzer.py",
+      "source_sha256": "a7af9f74bca58c5105beb3a48b53622ae41cec4330e851d4702160833c5060d2",
+      "symbol": "ReportAnalysisUtils.analyze_segment_stmt",
+      "implementation": {
+        "kind": "agent-procedure",
+        "procedureAnchor": "Agent procedure: assess segment mix, segment definition changes, allocation limits, and concentration evidence.",
+        "outputAnchor": "Record each conclusion with evidence, assumptions, counterevidence, and limitations.",
+        "failureAnchor": "Stop when the available evidence cannot support the requested conclusion."
+      }
+    },
+    {
+      "surface_id": "analyzer-income-summarization",
+      "source_path": "finrobot/functional/analyzer.py",
+      "source_sha256": "a7af9f74bca58c5105beb3a48b53622ae41cec4330e851d4702160833c5060d2",
+      "symbol": "ReportAnalysisUtils.income_summarization",
+      "implementation": {
+        "kind": "agent-procedure",
+        "procedureAnchor": "Agent procedure: explain earnings quality and financial trajectory using normalized calculations and cited disclosures.",
+        "outputAnchor": "Record each conclusion with evidence, assumptions, counterevidence, and limitations.",
+        "failureAnchor": "Stop when the available evidence cannot support the requested conclusion."
+      }
+    },
+    {
+      "surface_id": "processor-extract-api",
       "source_path": "finrobot_equity/core/src/modules/financial_data_processor.py",
-      "git_object_id": "288328c7b903d43ae067dd8d422a7f0c0647472d",
-      "sha256": "0cfc251b8f8a1fba8dc16ba1ca52d6eb92ccf160a5bc881c24adfa885425c726",
-      "production_action": "direct-resource",
-      "finrobot_coupling": "none",
-      "output_assets": [
-        "resources/python/financial_data_processor.py"
-      ]
+      "source_sha256": "0cfc251b8f8a1fba8dc16ba1ca52d6eb92ccf160a5bc881c24adfa885425c726",
+      "symbol": "extract_historical_metrics_from_api_data",
+      "implementation": {
+        "kind": "bundled-script",
+        "scriptPath": "scripts/statements.py"
+      }
+    },
+    {
+      "surface_id": "processor-extract-pdf",
+      "source_path": "finrobot_equity/core/src/modules/financial_data_processor.py",
+      "source_sha256": "0cfc251b8f8a1fba8dc16ba1ca52d6eb92ccf160a5bc881c24adfa885425c726",
+      "symbol": "extract_historical_metrics_from_pdf_data",
+      "implementation": {
+        "kind": "bundled-script",
+        "scriptPath": "scripts/statements.py"
+      }
+    }
+  ],
+  "files": [
+    {
+      "path": "SKILL.md",
+      "authorship": "researchspec-authored",
+      "source_scope": "audited-capability-reimplementation"
+    },
+    {
+      "path": "scripts/statements.py",
+      "authorship": "researchspec-authored",
+      "source_scope": "audited-capability-reimplementation"
+    },
+    {
+      "path": "lib/financial_support.py",
+      "authorship": "researchspec-authored",
+      "source_scope": "shared-deterministic-support"
+    },
+    {
+      "path": "LICENSE",
+      "authorship": "upstream-license",
+      "source_scope": "vendor-root"
+    },
+    {
+      "path": "NOTICE",
+      "authorship": "combined-notice",
+      "source_scope": "vendor-root-and-researchspec"
+    },
+    {
+      "path": "DERIVATION.json",
+      "authorship": "converter-generated",
+      "source_scope": "immutable-audit-and-skill-definition"
     }
   ]
 }

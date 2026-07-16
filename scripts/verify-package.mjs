@@ -112,9 +112,9 @@ function verifyTarballFiles(files) {
     "skills/plugins/vendors/finrobot/financial-research-relative-valuation/LICENSE",
     "skills/plugins/vendors/finrobot/financial-research-relative-valuation/NOTICE",
     "skills/plugins/vendors/finrobot/financial-research-relative-valuation/DERIVATION.json",
-    "skills/plugins/vendors/finrobot/financial-research-relative-valuation/dependencies.json",
-    "skills/plugins/vendors/finrobot/financial-research-relative-valuation/resources/python/valuation_engine.py",
-    "skills/plugins/vendors/finrobot/financial-research-relative-valuation/resources/agent-specs/valuation_overview.json",
+    "skills/plugins/vendors/finrobot/financial-research-relative-valuation/lib/financial_support.py",
+    "skills/plugins/vendors/finrobot/financial-research-relative-valuation/scripts/valuation.py",
+    "skills/plugins/vendors/finrobot/financial-research-competitive-position/SKILL.md",
     "skills/plugins/vendor-bundles/histagent.json", "skills/plugins/vendor-manifests/histagent.json",
     "skills/plugins/conversion-reports/histagent.md",
     "skills/plugins/vendors/histagent/histagent-historical-research/SKILL.md",
@@ -146,6 +146,7 @@ function verifyTarballFiles(files) {
     assert(!file.startsWith("audits/"), `Tarball contains maintainer-only vendor audit evidence: ${file}`);
     assert(!file.startsWith("src/vendor-converters/"), `Tarball contains maintainer-only vendor decision sources: ${file}`);
     assert(!file.includes("/curation/"), `Tarball contains maintainer-only curation inputs: ${file}`);
+    assert(!/^skills\/plugins\/vendors\/finrobot\/[^/]+\/(?:dependencies\.json|references\/|resources\/|agents\/)/.test(file), `Tarball contains an obsolete or unjustified FinRobot asset: ${file}`);
     assert(!/(?:admission|relationship|file|external-resource)-decisions\.json$/.test(file), `Tarball contains maintainer-only production decisions: ${file}`);
     assert(!file.endsWith(".d.ts"), `Tarball contains TypeScript declarations: ${file}`);
     assert(!file.endsWith(".js.map"), `Tarball contains source maps: ${file}`);

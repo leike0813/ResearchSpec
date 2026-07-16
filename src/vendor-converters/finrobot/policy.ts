@@ -5,6 +5,7 @@ import { z } from "zod";
 
 import { sha256 } from "../../core/workspace/write-plan.js";
 import { FinRobotAuditSchema, type FinRobotAudit } from "../../vendor-audits/finrobot.js";
+import { FINROBOT_SKILL_DEFINITIONS } from "./skill-definitions.js";
 
 const VENDOR_ID = "finrobot" as const;
 const RELEASE = "snapshot-297a8d2" as const;
@@ -53,11 +54,10 @@ export const FinRobotAdmissionCatalogSchema = z.strictObject({
   decisions: z.array(z.strictObject({
     capability_id: CapabilityIdSchema,
     generated_skill_id: GeneratedSkillIdSchema,
-    disposition: z.literal("proposed-admission"),
+    disposition: z.literal("admitted"),
     source_surface_ids: z.array(IdSchema).min(1),
     domain_ids: z.array(DomainIdSchema).min(1),
     license_expression: z.literal("Apache-2.0"),
-    curation_profile: IdSchema,
     dependencies: z.array(IdSchema).length(0),
     content_review: ReviewStatusSchema,
     safety_constraints: z.array(IdSchema).min(1),
@@ -77,20 +77,20 @@ export const FinRobotSourceEntryCatalogSchema = z.strictObject({
     finrobot_coupling: z.enum(["hard", "light", "none", "not-applicable"]),
     external_dependencies: z.array(z.string().min(1)),
     dependency_closure: z.array(RelativePathSchema),
-    production_action: z.enum(["direct-resource", "adapted-resource", "prompt-resource", "evidence-only", "excluded"]),
+    production_action: z.enum(["evidence-only", "excluded"]),
     output_assets: z.array(RelativePathSchema),
     required_symbols: z.array(z.string().min(1)),
     copied_symbols: z.array(z.string().min(1)),
     adapted_symbols: z.array(z.string().min(1)),
     omitted_symbols: z.array(z.string().min(1)),
     replacement_contracts: z.array(RelativePathSchema),
-    prompt_business_logic: z.enum(["copied", "adapted", "none"]),
-    symbol_action: z.enum(["preserved-with-explicit-assumptions", "prompt-and-schema-preserved", "provider-boundary-adapted", "none"]),
+    prompt_business_logic: z.literal("none"),
+    symbol_action: z.literal("none"),
     converter_execution: z.literal("never"),
-    skill_execution: z.enum(["agent-invoked", "not-distributed"]),
-    credential_policy: z.enum(["user-configured-not-persisted", "not-applicable"]),
-    sensitive_scan: z.enum(["required-on-derived-assets", "not-applicable"]),
-    derivation_notice: z.enum(["required", "not-applicable"]),
+    skill_execution: z.literal("not-distributed"),
+    credential_policy: z.literal("not-applicable"),
+    sensitive_scan: z.literal("not-applicable"),
+    derivation_notice: z.literal("not-applicable"),
     reason_code: IdSchema,
   })).length(146),
 });
@@ -102,32 +102,12 @@ export const FinRobotSurfaceCatalogSchema = z.strictObject({
     source_path: RelativePathSchema,
     symbol: z.string().min(1),
     content_origin_id: IdSchema,
-    disposition: z.enum(["admitted-resource", "excluded"]),
+    disposition: z.enum(["admitted-capability", "excluded"]),
     generated_skill_id: GeneratedSkillIdSchema.nullable(),
     output_assets: z.array(RelativePathSchema),
-    symbol_action: z.enum(["business-logic-preserved", "prompt-and-output-schema-preserved", "provider-boundary-adapted", "none"]),
+    implementation_kind: z.enum(["agent-procedure", "bundled-script", "external-tool", "none"]),
     reason_code: IdSchema,
   })).length(66),
-});
-
-export const FinRobotCurationCatalogSchema = z.strictObject({
-  ...CatalogMetadataShape,
-  shared_contract_path: RelativePathSchema,
-  required_output_sections: z.array(z.enum([
-    "Scope / As-of", "Evidence", "Calculations", "Assumptions", "Analysis",
-    "Limitations", "Human Review", "ARSU Handoff",
-  ])).length(8),
-  profiles: z.array(z.strictObject({
-    profile_id: IdSchema,
-    capability_id: CapabilityIdSchema,
-    generated_skill_id: GeneratedSkillIdSchema,
-    title: z.string().trim().min(1),
-    description: z.string().trim().min(1),
-    compatibility: z.string().trim().min(1),
-    fragment_path: RelativePathSchema,
-    resource_paths: z.array(RelativePathSchema).min(1),
-    runtime_requirements: z.array(z.string().min(1)),
-  })).length(6),
 });
 
 export const FinRobotOriginCatalogSchema = z.strictObject({
@@ -156,11 +136,11 @@ export const FinRobotResourceCatalogSchema = z.strictObject({
   ...CatalogMetadataShape,
   decisions: z.array(z.strictObject({
     resource_id: IdSchema,
-    kind: z.enum(["disclosure", "report", "user-data", "calculation-tool", "agent-spec", "model-sdk", "financial-service", "credential", "remote-access", "upstream-runtime"]),
+    kind: z.enum(["disclosure", "report", "user-data", "calculation-tool", "financial-service", "remote-access", "upstream-runtime"]),
     disposition: z.enum(["reference-only", "bundled", "user-configured", "excluded"]),
     applies_to: z.array(GeneratedSkillIdSchema).min(1),
     note: z.string().trim().min(1),
-  })).min(10),
+  })).length(8),
 });
 
 export const FinRobotRelationshipCatalogSchema = z.strictObject({
@@ -176,25 +156,27 @@ export const FinRobotRelationshipCatalogSchema = z.strictObject({
 
 export const FinRobotReviewDecisionSchema = z.strictObject({
   ...CatalogMetadataShape,
-  review_status: ReviewStatusSchema,
-  draft_set_sha256: Sha256Schema.nullable(),
-  approved_draft_set_sha256: Sha256Schema.nullable(),
-  approval_note: z.string().trim().min(1).nullable(),
-  approved_at: z.iso.datetime().nullable(),
+  published: z.strictObject({
+    review_status: z.literal("approved"),
+    tree_set_sha256: Sha256Schema,
+    approval_note: z.string().trim().min(1),
+    approved_at: z.iso.datetime(),
+    converter_version: z.enum(["1", "2"]),
+  }),
+  candidate: z.strictObject({
+    review_status: z.enum(["pending-human-review", "rejected"]),
+    tree_set_sha256: Sha256Schema.nullable(),
+    review_note: z.string().trim().min(1),
+  }).nullable(),
 }).superRefine((value, context) => {
-  const approved = value.review_status === "approved";
-  if (approved !== (value.approved_draft_set_sha256 !== null && value.approval_note !== null && value.approved_at !== null)) {
-    context.addIssue({ code: "custom", message: "approved review requires a bound draft hash, approval note, and timestamp" });
-  }
-  if (approved && value.draft_set_sha256 !== value.approved_draft_set_sha256) {
-    context.addIssue({ code: "custom", message: "approval must bind the current draft set" });
+  if (value.candidate?.tree_set_sha256 === value.published.tree_set_sha256) {
+    context.addIssue({ code: "custom", message: "candidate and published tree hashes must differ" });
   }
 });
 
 export type FinRobotAdmissionCatalog = z.infer<typeof FinRobotAdmissionCatalogSchema>;
 export type FinRobotSourceEntryCatalog = z.infer<typeof FinRobotSourceEntryCatalogSchema>;
 export type FinRobotSurfaceCatalog = z.infer<typeof FinRobotSurfaceCatalogSchema>;
-export type FinRobotCurationCatalog = z.infer<typeof FinRobotCurationCatalogSchema>;
 export type FinRobotOriginCatalog = z.infer<typeof FinRobotOriginCatalogSchema>;
 export type FinRobotLicenseCatalog = z.infer<typeof FinRobotLicenseCatalogSchema>;
 export type FinRobotResourceCatalog = z.infer<typeof FinRobotResourceCatalogSchema>;
@@ -206,7 +188,6 @@ export interface FinRobotDraftPolicies {
   admission: FinRobotAdmissionCatalog;
   sourceEntries: FinRobotSourceEntryCatalog;
   surfaces: FinRobotSurfaceCatalog;
-  curation: FinRobotCurationCatalog;
   origins: FinRobotOriginCatalog;
   licenses: FinRobotLicenseCatalog;
   resources: FinRobotResourceCatalog;
@@ -227,7 +208,6 @@ const POLICY_FILES = {
   admission: "admission-decisions.json",
   sourceEntries: "source-entry-decisions.json",
   surfaces: "surface-decisions.json",
-  curation: "curation-decisions.json",
   origins: "origin-decisions.json",
   licenses: "license-decisions.json",
   resources: "resource-decisions.json",
@@ -244,7 +224,6 @@ export async function loadFinRobotDraftPolicies(repoRoot: string): Promise<FinRo
     admission: FinRobotAdmissionCatalogSchema.parse(await readJson(path.join(root, POLICY_FILES.admission))),
     sourceEntries: FinRobotSourceEntryCatalogSchema.parse(await readJson(path.join(root, POLICY_FILES.sourceEntries))),
     surfaces: FinRobotSurfaceCatalogSchema.parse(await readJson(path.join(root, POLICY_FILES.surfaces))),
-    curation: FinRobotCurationCatalogSchema.parse(await readJson(path.join(root, POLICY_FILES.curation))),
     origins: FinRobotOriginCatalogSchema.parse(await readJson(path.join(root, POLICY_FILES.origins))),
     licenses: FinRobotLicenseCatalogSchema.parse(await readJson(path.join(root, POLICY_FILES.licenses))),
     resources: FinRobotResourceCatalogSchema.parse(await readJson(path.join(root, POLICY_FILES.resources))),
@@ -265,7 +244,7 @@ export async function validateFinRobotDraftPolicies(repoRoot: string, policies: 
     const admission = admissionByCapability.get(capabilityId);
     if (!admission || admission.generated_skill_id !== EXPECTED_SKILLS[capabilityId]) throw new Error(`Invalid FinRobot Skill mapping for ${capabilityId}.`);
     if (!sameSet(admission.source_surface_ids, candidate.source_surface_ids)) throw new Error(`FinRobot admission surfaces differ from the audit for ${capabilityId}.`);
-    if (admission.content_review !== policies.review.review_status) throw new Error(`FinRobot review state differs for ${capabilityId}.`);
+    if (admission.content_review !== policies.review.published.review_status) throw new Error(`FinRobot published review state differs for ${capabilityId}.`);
   }
 
   const auditedSources = uniqueMap(policies.audit.source_entries, (item) => item.path, "audited FinRobot source");
@@ -275,18 +254,31 @@ export async function validateFinRobotDraftPolicies(repoRoot: string, policies: 
     const decision = sourceDecisions.get(sourcePath);
     if (!decision || decision.git_object_id !== source.git_object_id || decision.sha256 !== source.sha256 || decision.content_origin_id !== source.content_origin_id) throw new Error(`FinRobot source decision differs from the audit: ${sourcePath}`);
   }
-  const distributedSources = policies.sourceEntries.decisions.filter((item) => ["direct-resource", "adapted-resource", "prompt-resource"].includes(item.production_action));
-  if (distributedSources.length !== 16) throw new Error("FinRobot production inputs must contain twelve capability sources and four provider-helper sources.");
-  if (distributedSources.filter((item) => item.production_action === "direct-resource").length !== 4) throw new Error("FinRobot must directly admit four runtime-independent modules.");
-  if (distributedSources.filter((item) => item.production_action === "prompt-resource").length !== 6) throw new Error("FinRobot must preserve six AgentSpec prompt resources.");
-  if (distributedSources.some((item) => item.finrobot_coupling === "hard")) throw new Error("A hard FinRobot runtime dependency cannot be distributed.");
-  for (const decision of distributedSources) {
-    if (decision.content_origin_id !== "root-apache" || !decision.sha256 || decision.output_assets.length === 0) throw new Error(`Distributed FinRobot source lacks evidence or output assets: ${decision.source_path}`);
+  const capabilityEvidence = policies.sourceEntries.decisions.filter((item) => item.candidate_surface_ids.length > 0);
+  if (capabilityEvidence.length !== 12) throw new Error("FinRobot implementation evidence must contain the twelve audited capability sources.");
+  for (const decision of capabilityEvidence) {
+    if (decision.production_action !== "evidence-only" || decision.output_assets.length !== 0) throw new Error(`FinRobot source evidence must not publish a runtime asset: ${decision.source_path}`);
+    if (decision.content_origin_id !== "root-apache" || !decision.sha256) throw new Error(`FinRobot source evidence lacks a reviewed Apache source hash: ${decision.source_path}`);
     const sourceBytes = await readFile(path.join(repoRoot, "vendor/finrobot", decision.source_path));
     if (sha256(sourceBytes) !== decision.sha256) throw new Error(`FinRobot source hash changed: ${decision.source_path}`);
   }
+  if (policies.sourceEntries.decisions.some((item) => item.output_assets.length > 0 || item.replacement_contracts.length > 0)) throw new Error("FinRobot source decisions must not retain obsolete curation or provider outputs.");
 
   const candidateSurfaceIds = new Set(policies.audit.candidate_capabilities.flatMap((item) => item.source_surface_ids));
+  const definedSkills = Object.values(FINROBOT_SKILL_DEFINITIONS);
+  const definedCapabilities = uniqueMap(
+    definedSkills.flatMap((definition) => definition.capabilities.map((capability) => ({ definition, capability }))),
+    (item) => item.capability.id,
+    "FinRobot capability implementation",
+  );
+  const definedCapabilityIds = new Set(definedSkills.flatMap((definition) => definition.capabilities.map((item) => item.id)));
+  if (!sameSet([...candidateSurfaceIds], [...definedCapabilityIds])) throw new Error("FinRobot typed Skill definitions must map all 32 admitted surfaces exactly once.");
+  if (!sameSet(Object.values(EXPECTED_SKILLS), definedSkills.map((definition) => definition.skillId))) throw new Error("FinRobot typed Skill definitions must preserve the six fixed Skill IDs.");
+  for (const definition of definedSkills) {
+    const admission = policies.admission.decisions.find((item) => item.generated_skill_id === definition.skillId);
+    if (!admission || !sameSet(admission.source_surface_ids, definition.capabilities.map((item) => item.id))) throw new Error(`FinRobot typed capability mapping differs from admission: ${definition.skillId}`);
+    if (!sameSet(admission.domain_ids, definition.domainIds) || definition.hardDependencies.length !== 0) throw new Error(`FinRobot typed domains or dependencies differ from admission: ${definition.skillId}`);
+  }
   const auditedSurfaces = uniqueMap(policies.audit.knowledge_surfaces, (item) => item.surface_id, "audited FinRobot surface");
   const surfaceDecisions = uniqueMap(policies.surfaces.decisions, (item) => item.surface_id, "FinRobot surface decision");
   if (candidateSurfaceIds.size !== 32 || surfaceDecisions.size !== 66) throw new Error("FinRobot surface policy must resolve 32 admitted and 34 excluded surfaces.");
@@ -294,7 +286,18 @@ export async function validateFinRobotDraftPolicies(repoRoot: string, policies: 
     const decision = surfaceDecisions.get(surfaceId);
     if (!decision || decision.source_path !== surface.source_path || decision.symbol !== surface.symbol || decision.content_origin_id !== surface.content_origin_id) throw new Error(`FinRobot surface decision differs from the audit: ${surfaceId}`);
     const admitted = candidateSurfaceIds.has(surfaceId);
-    if ((decision.disposition === "admitted-resource") !== admitted) throw new Error(`Invalid FinRobot surface disposition: ${surfaceId}`);
+    if ((decision.disposition === "admitted-capability") !== admitted) throw new Error(`Invalid FinRobot surface disposition: ${surfaceId}`);
+    if (!admitted) {
+      if (decision.generated_skill_id !== null || decision.output_assets.length !== 0 || decision.implementation_kind !== "none") throw new Error(`Excluded FinRobot surface retains an implementation: ${surfaceId}`);
+      continue;
+    }
+    const implementation = definedCapabilities.get(surfaceId);
+    if (!implementation || decision.generated_skill_id !== implementation.definition.skillId || decision.implementation_kind !== implementation.capability.implementation.kind) throw new Error(`FinRobot surface implementation differs from the typed definition: ${surfaceId}`);
+    const implementationPath = implementation.capability.implementation.kind === "bundled-script"
+      ? implementation.capability.implementation.scriptPath
+      : "SKILL.md";
+    const expectedAsset = `skills/${implementation.definition.skillId}/${implementationPath}`;
+    if (!sameSet(decision.output_assets, [expectedAsset])) throw new Error(`FinRobot surface output asset differs from its implementation: ${surfaceId}`);
   }
 
   validateDecisionCoverage(policies.audit.content_origins.map((item) => item.origin_id), policies.origins.decisions.map((item) => item.origin_id), "FinRobot origin");
@@ -302,19 +305,10 @@ export async function validateFinRobotDraftPolicies(repoRoot: string, policies: 
   if (productionOrigins.length !== 1 || productionOrigins[0]?.origin_id !== "root-apache") throw new Error("Only root-Apache FinRobot content may be distributed.");
   validateDecisionCoverage(policies.audit.license_claims.map((item) => item.claim_id), policies.licenses.decisions.map((item) => item.claim_id), "FinRobot license claim");
 
-  const profiles = uniqueMap(policies.curation.profiles, (item) => item.generated_skill_id, "FinRobot curation profile");
-  if (profiles.size !== 6) throw new Error("FinRobot curation profiles must cover all admitted Skills.");
-  const curationRoot = path.join(repoRoot, "src/vendor-converters/finrobot");
-  const resourcePaths = new Set<string>();
-  for (const relative of [policies.curation.shared_contract_path, ...policies.curation.profiles.flatMap((item) => [item.fragment_path, ...item.resource_paths])]) {
-    const bytes = await readFile(path.join(curationRoot, relative));
-    if (relative.includes("curation/resources/")) {
-      resourcePaths.add(relative);
-      assertNoSensitiveValues(bytes.toString("utf8"), relative);
-      if (relative.endsWith(".py") && /(?:^|\n)\s*(?:from|import)\s+finrobot(?:\.|\s|$)/m.test(bytes.toString("utf8"))) throw new Error(`Derived FinRobot resource retains an upstream runtime import: ${relative}`);
-    }
-  }
-  if (resourcePaths.size !== 14) throw new Error(`FinRobot curation must expose fourteen distinct derived assets, found ${String(resourcePaths.size)}.`);
+  const tierThreeSkills = definedSkills.filter((item) => item.tier === 3).map((item) => item.skillId);
+  const bundledTools = policies.resources.decisions.filter((item) => item.disposition === "bundled");
+  if (bundledTools.length !== 1 || bundledTools[0]?.kind !== "calculation-tool" || !sameSet(bundledTools[0].applies_to, tierThreeSkills)) throw new Error("FinRobot bundled resource decisions must identify exactly the four Tier 3 tools.");
+  if (definedSkills.some((item) => item.references.length !== 0)) throw new Error("FinRobot references require a separate progressive-disclosure review.");
 
   const allSkills = new Set(Object.values(EXPECTED_SKILLS));
   const relationKeys = new Set<string>();
@@ -338,7 +332,7 @@ export function assertNoSensitiveValues(content: string, label: string): void {
 }
 
 export function assertFinRobotProductionReady(policies: FinRobotDraftPolicies): void {
-  if (policies.review.review_status !== "approved" || policies.admission.review_status !== "approved") throw new Error("FinRobot production conversion is blocked pending explicit human approval of the complete six-Skill trees.");
+  if (policies.review.published.review_status !== "approved" || policies.review.published.converter_version !== "2" || policies.review.candidate !== null || policies.admission.review_status !== "approved") throw new Error("FinRobot production conversion requires the approved version 2 complete-tree review state.");
 }
 
 export const FINROBOT_POLICY = { vendorId: VENDOR_ID, release: RELEASE, revision: REVISION, auditSha256: AUDIT_SHA256, expectedSkills: EXPECTED_SKILLS } as const;

@@ -7,43 +7,63 @@ import { promisify } from "node:util";
 import { sha256 } from "../../core/workspace/write-plan.js";
 import { assemblePluginRegistry } from "../../plugins/assembler.js";
 import { availableDomains, loadPluginRegistry, type PluginRegistry } from "../../plugins/registry.js";
-import { commitVendorStage, pathExists, prepareVendorStage, vendorProjectionDiff } from "../shared/staging.js";
+import { commitVendorStage, pathExists, posix, prepareVendorStage, vendorProjectionDiff, walkFiles } from "../shared/staging.js";
 import { PRODUCTION_DOMAIN_COUNTS, productionVendorInventoryErrors } from "../shared/production-vendors.js";
+import { renderFinRobotCompleteTrees } from "./complete-tree.js";
 import { assertFinRobotProductionReady, loadFinRobotDraftPolicies, type FinRobotDraftPolicies } from "./policy.js";
-import { renderFinRobotPreviewSet } from "./preview.js";
+import { FINROBOT_SKILL_DEFINITIONS } from "./skill-definitions.js";
 
 const execFileAsync = promisify(execFile);
 const VENDOR_ID = "finrobot";
 const SOURCE_PATH = "vendor/finrobot";
 const POLICY_PATH = "src/vendor-converters/finrobot";
-const APPROVED_TREE_SET = "83cc17371bd3e0b82434f67e74adc5ed8a12cf11979480e1eb1f83debe1a9bb3";
 
 interface FileDisposition {
   source_path: string;
   output_path: string;
   disposition: "included";
-  reason: string;
+  reason: "approved complete-tree asset";
   sha256: string;
 }
 
+interface CapabilityImplementation {
+  surface_id: string;
+  skill_id: string;
+  implementation_kind: "agent-procedure" | "bundled-script" | "external-tool";
+  implementation_path: string;
+}
+
 export interface FinRobotConversionManifest {
-  schema_version: "1";
-  converter_version: "1";
+  schema_version: "2";
+  converter_version: "2";
   vendor_id: "finrobot";
   release: "snapshot-297a8d2";
   revision: string;
   audit_sha256: string;
   approved_tree_set_sha256: string;
   generated_skills: string[];
-  source_entry_decisions: 146;
-  surface_decisions: 66;
-  direct_resources: 4;
-  adapted_candidate_resources: 8;
-  provider_helper_sources: 4;
+  decision_counts: {
+    source_entries: 146;
+    knowledge_surfaces: 66;
+    admitted_capabilities: 32;
+    content_origins: 5;
+    license_claims: 6;
+    resources: 8;
+  };
+  implementation_counts: {
+    agent_procedures: number;
+    bundled_scripts: number;
+    external_tools: number;
+    formal_entrypoints: 4;
+    shared_support_copies: 4;
+    references: 0;
+  };
+  capability_map: CapabilityImplementation[];
   admission_policy_sha256: string;
   source_policy_sha256: string;
   surface_policy_sha256: string;
-  curation_policy_sha256: string;
+  resource_policy_sha256: string;
+  relationship_policy_sha256: string;
   review_policy_sha256: string;
   tree_sha256: Record<string, string>;
   relationship_decisions: FinRobotDraftPolicies["relationships"]["decisions"];
@@ -63,13 +83,12 @@ export async function convertFinRobot(options: ConvertFinRobotOptions): Promise<
   const policies = await loadFinRobotDraftPolicies(repoRoot);
   assertFinRobotProductionReady(policies);
   await validatePrerequisites(repoRoot, policies);
-  const preview = await renderFinRobotPreviewSet(repoRoot);
-  if (preview.draftSetSha256 !== APPROVED_TREE_SET) throw new Error("FinRobot rendered trees differ from the approved tree set.");
+  const rendered = await renderFinRobotCompleteTrees(repoRoot);
 
   const stage = await mkdtemp(path.join(tmpdir(), "researchspec-finrobot-"));
   try {
     await prepareVendorStage(path.join(repoRoot, "skills/plugins"), stage, VENDOR_ID);
-    const manifest = await generateBundle(repoRoot, stage, policies, preview);
+    const manifest = await generateBundle(repoRoot, stage, policies, rendered);
     await assemblePluginRegistry({ repoRoot, pluginRoot: stage });
     if (options.dryRun) return manifest;
     if (!options.force && await pathExists(path.join(outputRoot, "vendors", VENDOR_ID)) && (await vendorProjectionDiff(stage, outputRoot, VENDOR_ID)).length) {
@@ -89,18 +108,35 @@ export async function checkFinRobotOutput(repoRoot: string): Promise<{ ok: boole
     const policies = await loadFinRobotDraftPolicies(repoRoot);
     assertFinRobotProductionReady(policies);
     await validatePrerequisites(repoRoot, policies);
+    const rendered = await renderFinRobotCompleteTrees(repoRoot);
     const loaded = await loadPluginRegistry(path.join(repoRoot, "skills/plugins"));
     const vendor = loaded.vendors.get(VENDOR_ID);
     if (!vendor) errors.push("FinRobot vendor is absent from the bundled registry");
     else {
+      if (vendor.converter_version !== "2") errors.push(`Expected FinRobot converter version 2, found ${vendor.converter_version}`);
       if (vendor.skills.length !== 6) errors.push(`Expected 6 FinRobot Skills, found ${String(vendor.skills.length)}`);
       if (vendor.skills.some((skill) => skill.dependencies.length !== 0)) errors.push("FinRobot Registry Schema 1 dependencies must remain empty");
     }
     errors.push(...productionVendorInventoryErrors(loaded.vendors.keys()));
     if (loaded.domains.size !== PRODUCTION_DOMAIN_COUNTS.internal) errors.push(`Expected ${String(PRODUCTION_DOMAIN_COUNTS.internal)} internal domains, found ${String(loaded.domains.size)}`);
     if (availableDomains(loaded).length !== PRODUCTION_DOMAIN_COUNTS.available) errors.push(`Expected ${String(PRODUCTION_DOMAIN_COUNTS.available)} available domains, found ${String(availableDomains(loaded).length)}`);
-    const manifest = JSON.parse(await readFile(path.join(repoRoot, "skills/plugins/vendor-manifests/finrobot.json"), "utf8")) as { approved_tree_set_sha256?: string };
-    if (manifest.approved_tree_set_sha256 !== APPROVED_TREE_SET) errors.push("FinRobot manifest does not bind the approved complete-tree hash");
+    const banking = loaded.domains.get("banking-finance-and-investment")?.skills.filter((skillId) => skillId.startsWith("financial-research-")).sort(compareText) ?? [];
+    const accounting = loaded.domains.get("accounting-auditing-and-accountability")?.skills.filter((skillId) => skillId.startsWith("financial-research-")).sort(compareText) ?? [];
+    if (!sameValues(banking, rendered.trees.map((tree) => tree.skillId).sort(compareText))) errors.push("Banking, finance and investment does not contain all six FinRobot Skills");
+    if (!sameValues(accounting, ["financial-research-company-fundamentals", "financial-research-statement-analysis"])) errors.push("Accounting, auditing and accountability has invalid FinRobot membership");
+    const manifest = JSON.parse(await readFile(path.join(repoRoot, "skills/plugins/vendor-manifests/finrobot.json"), "utf8")) as FinRobotConversionManifest;
+    if (manifest.converter_version !== "2" || manifest.approved_tree_set_sha256 !== rendered.treeSetSha256) errors.push("FinRobot manifest does not bind the approved version 2 complete-tree hash");
+    for (const tree of rendered.trees) {
+      if (manifest.tree_sha256[tree.skillId] !== tree.sha256) errors.push(`FinRobot manifest tree hash differs for ${tree.skillId}`);
+      const generatedRoot = path.join(repoRoot, "skills/plugins/vendors/finrobot", tree.skillId);
+      const generatedPaths = (await walkFiles(generatedRoot)).map((file) => posix(path.relative(generatedRoot, file))).sort(compareText);
+      const approvedPaths = tree.files.map((file) => file.path).sort(compareText);
+      if (!sameValues(generatedPaths, approvedPaths)) errors.push(`FinRobot generated file closure differs from the approved tree: ${tree.skillId}`);
+      for (const file of tree.files) {
+        const generated = await readFile(path.join(generatedRoot, file.path));
+        if (!generated.equals(file.content)) errors.push(`FinRobot generated file differs from the approved tree: ${tree.skillId}/${file.path}`);
+      }
+    }
     warnings.push(...loaded.diagnostics.map((item) => item.message));
   } catch (error) {
     errors.push(error instanceof Error ? error.message : String(error));
@@ -123,40 +159,37 @@ async function generateBundle(
   repoRoot: string,
   outputRoot: string,
   policies: FinRobotDraftPolicies,
-  preview: Awaited<ReturnType<typeof renderFinRobotPreviewSet>>,
+  rendered: Awaited<ReturnType<typeof renderFinRobotCompleteTrees>>,
 ): Promise<FinRobotConversionManifest> {
-  const policyRoot = path.join(repoRoot, POLICY_PATH);
-  const profiles = new Map<string, FinRobotDraftPolicies["curation"]["profiles"][number]>(
-    policies.curation.profiles.map((profile) => [profile.generated_skill_id, profile]),
-  );
   const fileDispositions: FileDisposition[] = [];
   const vendorSkills: PluginRegistry["vendors"][number]["skills"] = [];
 
-  for (const skill of preview.previews) {
-    const profile = profiles.get(skill.skillId);
-    if (!profile) throw new Error(`FinRobot preview has no approved curation profile: ${skill.skillId}`);
-    const outputSkillRoot = path.join(outputRoot, "vendors", VENDOR_ID, skill.skillId);
-    for (const file of skill.files) {
+  for (const tree of rendered.trees) {
+    const outputSkillRoot = path.join(outputRoot, "vendors", VENDOR_ID, tree.skillId);
+    for (const file of tree.files) {
       const target = path.join(outputSkillRoot, file.path);
       await mkdir(path.dirname(target), { recursive: true });
       await writeFile(target, file.content);
       fileDispositions.push({
-        source_path: file.path.startsWith("resources/") ? `curation/${file.path}` : `complete-tree/${file.path}`,
-        output_path: `vendors/${VENDOR_ID}/${skill.skillId}/${file.path}`,
+        source_path: `authored-tree/${tree.skillId}/${file.path}`,
+        output_path: `vendors/${VENDOR_ID}/${tree.skillId}/${file.path}`,
         disposition: "included",
         reason: "approved complete-tree asset",
         sha256: file.sha256,
       });
     }
-    const sourcePaths = policies.sourceEntries.decisions
-      .filter((source) => source.output_assets.some((asset) => profile.resource_paths.includes(asset)))
-      .map((source) => source.source_path)
-      .sort(compareText);
+    const definition = FINROBOT_SKILL_DEFINITIONS[tree.skillId];
+    if (!definition) throw new Error(`FinRobot complete tree has no typed definition: ${tree.skillId}`);
+    const sourcePaths = definition.capabilities.map((capability) => {
+      const surface = policies.surfaces.decisions.find((item) => item.surface_id === capability.id);
+      if (!surface) throw new Error(`FinRobot capability references an unknown surface: ${capability.id}`);
+      return surface.source_path;
+    });
     vendorSkills.push({
-      skill_id: skill.skillId,
+      skill_id: tree.skillId,
       license: "Apache-2.0",
       dependencies: [],
-      upstreams: [{ source_paths: sourcePaths, adaptation: "curated" }],
+      upstreams: [{ source_paths: [...new Set(sourcePaths)].sort(compareText), adaptation: "curated" }],
     });
   }
 
@@ -167,36 +200,49 @@ async function generateBundle(
     release: policies.audit.source.release,
     revision: policies.audit.source.revision,
     license: "Apache-2.0",
-    converter_version: "1",
+    converter_version: "2",
     skills: vendorSkills.sort((left, right) => compareText(left.skill_id, right.skill_id)),
   };
-  const direct = policies.sourceEntries.decisions.filter((item) => item.production_action === "direct-resource").length;
-  const prompt = policies.sourceEntries.decisions.filter((item) => item.production_action === "prompt-resource").length;
-  const adapted = policies.sourceEntries.decisions.filter((item) => item.production_action === "adapted-resource").length;
+  const capabilityMap = Object.values(FINROBOT_SKILL_DEFINITIONS)
+    .flatMap((definition) => definition.capabilities.map((capability) => manifestCapability(definition.skillId, capability)))
+    .sort((left, right) => compareText(left.surface_id, right.surface_id));
+  const policyRoot = path.join(repoRoot, POLICY_PATH);
   const manifest: FinRobotConversionManifest = {
-    schema_version: "1",
-    converter_version: "1",
+    schema_version: "2",
+    converter_version: "2",
     vendor_id: VENDOR_ID,
     release: "snapshot-297a8d2",
     revision: policies.audit.source.revision,
     audit_sha256: policies.review.audit_sha256,
-    approved_tree_set_sha256: preview.draftSetSha256,
-    generated_skills: preview.previews.map((item) => item.skillId),
-    source_entry_decisions: 146,
-    surface_decisions: 66,
-    direct_resources: direct as 4,
-    adapted_candidate_resources: (prompt + adapted - 4) as 8,
-    provider_helper_sources: 4,
+    approved_tree_set_sha256: rendered.treeSetSha256,
+    generated_skills: rendered.trees.map((tree) => tree.skillId),
+    decision_counts: {
+      source_entries: 146,
+      knowledge_surfaces: 66,
+      admitted_capabilities: 32,
+      content_origins: 5,
+      license_claims: 6,
+      resources: 8,
+    },
+    implementation_counts: {
+      agent_procedures: capabilityMap.filter((item) => item.implementation_kind === "agent-procedure").length,
+      bundled_scripts: capabilityMap.filter((item) => item.implementation_kind === "bundled-script").length,
+      external_tools: capabilityMap.filter((item) => item.implementation_kind === "external-tool").length,
+      formal_entrypoints: 4,
+      shared_support_copies: 4,
+      references: 0,
+    },
+    capability_map: capabilityMap,
     admission_policy_sha256: await policyHash(policyRoot, "admission-decisions.json"),
     source_policy_sha256: await policyHash(policyRoot, "source-entry-decisions.json"),
     surface_policy_sha256: await policyHash(policyRoot, "surface-decisions.json"),
-    curation_policy_sha256: await policyHash(policyRoot, "curation-decisions.json"),
+    resource_policy_sha256: await policyHash(policyRoot, "resource-decisions.json"),
+    relationship_policy_sha256: await policyHash(policyRoot, "relationship-decisions.json"),
     review_policy_sha256: await policyHash(policyRoot, "review-decision.json"),
-    tree_sha256: Object.fromEntries(preview.previews.map((item) => [item.skillId, item.sha256])),
+    tree_sha256: Object.fromEntries(rendered.trees.map((tree) => [tree.skillId, tree.sha256])),
     relationship_decisions: policies.relationships.decisions,
     file_dispositions: fileDispositions.sort((left, right) => compareText(left.output_path, right.output_path)),
   };
-  if (direct !== 4 || prompt !== 6 || adapted !== 6) throw new Error("FinRobot executable source classification differs from the approved policy.");
   await writeJson(path.join(outputRoot, "vendor-bundles/finrobot.json"), { schema_version: "1", vendor });
   await writeJson(path.join(outputRoot, "vendor-manifests/finrobot.json"), manifest);
   await writeText(path.join(outputRoot, "conversion-reports/finrobot.md"), renderReport(manifest));
@@ -217,10 +263,24 @@ async function validatePrerequisites(repoRoot: string, policies: FinRobotDraftPo
 }
 
 function renderReport(manifest: FinRobotConversionManifest): string {
-  return `# FinRobot Vendor Conversion\n\n- Release: \`${manifest.release}\`\n- Revision: \`${manifest.revision}\`\n- Audit SHA-256: \`${manifest.audit_sha256}\`\n- Approved complete-tree SHA-256: \`${manifest.approved_tree_set_sha256}\`\n- Generated Skills: ${String(manifest.generated_skills.length)}\n- Source decisions: ${String(manifest.source_entry_decisions)}\n- Surface decisions: ${String(manifest.surface_decisions)}\n- Candidate executable classification: ${String(manifest.direct_resources)} direct, ${String(manifest.adapted_candidate_resources)} adapted, 0 hard-coupled exclusions\n- Provider/helper closure sources: ${String(manifest.provider_helper_sources)} adapted\n\nResearchSpec conversion, checking, packaging, installation, discovery, and update remain file-only and do not execute the distributed resources. The Skills retain reviewed financial-analysis capabilities and may use user-configured providers and execution environments without embedding credential values or private payloads.\n`;
+  return `# FinRobot Vendor Conversion\n\n- Release: \`${manifest.release}\`\n- Revision: \`${manifest.revision}\`\n- Audit SHA-256: \`${manifest.audit_sha256}\`\n- Converter version: \`${manifest.converter_version}\`\n- Approved complete-tree SHA-256: \`${manifest.approved_tree_set_sha256}\`\n- Generated Skills: ${String(manifest.generated_skills.length)}\n- Capability implementations: ${String(manifest.implementation_counts.agent_procedures)} Agent procedures, ${String(manifest.implementation_counts.bundled_scripts)} bundled-script mappings, ${String(manifest.implementation_counts.external_tools)} external-tool mappings\n- Formal entrypoints: ${String(manifest.implementation_counts.formal_entrypoints)}; shared support copies: ${String(manifest.implementation_counts.shared_support_copies)}; references: ${String(manifest.implementation_counts.references)}\n- Generated files: ${String(manifest.file_dispositions.length)}\n- Advisory relationships: ${String(manifest.relationship_decisions.length)}; 0 hard dependencies\n\nThe converter emits the exact approved complete trees through isolated five-vendor staging. Conversion, checking, packaging, installation, discovery, update, and registry assembly do not import or execute the Python entrypoints, install dependencies, read credentials, contact services, or grant ResearchSpec workflow authority.\n`;
+}
+
+function manifestCapability(
+  skillId: string,
+  capability: (typeof FINROBOT_SKILL_DEFINITIONS)[string]["capabilities"][number],
+): CapabilityImplementation {
+  if (capability.implementation.kind === "bundled-resource") throw new Error(`FinRobot capability cannot use a bundled-resource implementation: ${capability.id}`);
+  return {
+    surface_id: capability.id,
+    skill_id: skillId,
+    implementation_kind: capability.implementation.kind,
+    implementation_path: capability.implementation.kind === "bundled-script" ? capability.implementation.scriptPath : "SKILL.md",
+  };
 }
 
 async function policyHash(root: string, name: string): Promise<string> { return sha256(await readFile(path.join(root, name))); }
 async function writeJson(filePath: string, value: unknown): Promise<void> { await writeText(filePath, `${JSON.stringify(value, null, 2)}\n`); }
 async function writeText(filePath: string, value: string): Promise<void> { await mkdir(path.dirname(filePath), { recursive: true }); await writeFile(filePath, value.endsWith("\n") ? value : `${value}\n`, "utf8"); }
-function compareText(left: string, right: string): number { return left.localeCompare(right); }
+function sameValues(left: string[], right: string[]): boolean { return JSON.stringify(left) === JSON.stringify(right); }
+function compareText(left: string, right: string): number { return left < right ? -1 : left > right ? 1 : 0; }

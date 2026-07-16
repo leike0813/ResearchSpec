@@ -2,67 +2,59 @@ import assert from "node:assert/strict";
 import path from "node:path";
 import { test } from "node:test";
 
-import { parse } from "yaml";
-
+import { renderFinRobotCompleteTrees } from "../src/vendor-converters/finrobot/complete-tree.js";
 import { assertFinRobotProductionReady, loadFinRobotDraftPolicies } from "../src/vendor-converters/finrobot/policy.js";
-import { renderFinRobotPreviewSet } from "../src/vendor-converters/finrobot/preview.js";
+import { FINROBOT_SKILL_DEFINITIONS } from "../src/vendor-converters/finrobot/skill-definitions.js";
 
 const REPO_ROOT = path.resolve(".");
+const APPROVED_HASH = "eecf6fc9e7669f46ef9c58d4fd5938cabedb6d8d7aceac59e15688e178f3765e";
 
-void test("FinRobot policy closes the audit with dependency-aware executable decisions", async () => {
+void test("FinRobot policy preserves immutable audit decisions and maps 32 admitted surfaces", async () => {
   const policies = await loadFinRobotDraftPolicies(REPO_ROOT);
   assert.equal(policies.admission.decisions.length, 6);
   assert.equal(policies.sourceEntries.decisions.length, 146);
   assert.equal(policies.surfaces.decisions.length, 66);
-  assert.equal(policies.surfaces.decisions.filter((item) => item.disposition === "admitted-resource").length, 32);
+  assert.equal(policies.surfaces.decisions.filter((item) => item.disposition === "admitted-capability").length, 32);
   assert.equal(policies.surfaces.decisions.filter((item) => item.disposition === "excluded").length, 34);
+  assert.ok(policies.admission.decisions.every((item) => item.disposition === "admitted"));
+  assert.ok(policies.sourceEntries.decisions.every((item) => item.output_assets.length === 0));
+  assert.equal(policies.surfaces.decisions.filter((item) => item.implementation_kind === "agent-procedure").length, 16);
+  assert.equal(policies.surfaces.decisions.filter((item) => item.implementation_kind === "bundled-script").length, 16);
+  assert.equal(Object.values(FINROBOT_SKILL_DEFINITIONS).flatMap((item) => item.capabilities).length, 32);
+  assert.equal(new Set(Object.values(FINROBOT_SKILL_DEFINITIONS).flatMap((item) => item.capabilities.map((capability) => capability.id))).size, 32);
 
-  const distributed = policies.sourceEntries.decisions.filter((item) =>
-    ["direct-resource", "adapted-resource", "prompt-resource"].includes(item.production_action),
-  );
-  assert.equal(distributed.length, 16);
-  assert.equal(distributed.filter((item) => item.production_action === "direct-resource").length, 4);
-  assert.equal(distributed.filter((item) => item.production_action === "adapted-resource").length, 6);
-  assert.equal(distributed.filter((item) => item.production_action === "prompt-resource").length, 6);
-  assert.ok(distributed.every((item) => item.finrobot_coupling !== "hard"));
-  assert.ok(distributed.every((item) => item.converter_execution === "never"));
-  assert.ok(distributed.every((item) => item.output_assets.length > 0));
-
-  assert.equal(policies.origins.decisions.length, 5);
   assert.deepEqual(policies.origins.decisions.filter((item) => item.disposition === "production-source").map((item) => item.origin_id), ["root-apache"]);
-  assert.equal(policies.licenses.decisions.length, 6);
   assert.deepEqual(policies.licenses.decisions.filter((item) => item.disposition === "preserve").map((item) => item.claim_id), ["root-apache", "trademark-attribution"]);
   assert.ok(policies.admission.decisions.every((item) => item.dependencies.length === 0));
   assert.ok(policies.relationships.decisions.every((item) => item.disposition === "advisory"));
-  assert.ok(policies.resources.decisions.some((item) => item.kind === "calculation-tool" && item.disposition === "bundled"));
-  assert.ok(policies.resources.decisions.some((item) => item.kind === "financial-service" && item.disposition === "user-configured"));
-  assert.equal(policies.review.review_status, "approved");
-  assert.equal(policies.review.approved_draft_set_sha256, "83cc17371bd3e0b82434f67e74adc5ed8a12cf11979480e1eb1f83debe1a9bb3");
+  assert.equal(policies.review.published.tree_set_sha256, APPROVED_HASH);
+  assert.equal(policies.review.published.converter_version, "2");
+  assert.equal(policies.review.candidate, null);
   assert.doesNotThrow(() => assertFinRobotProductionReady(policies));
 });
 
-void test("FinRobot preview rendering produces six complete formally safe Skill trees", async () => {
-  const policies = await loadFinRobotDraftPolicies(REPO_ROOT);
-  const result = await renderFinRobotPreviewSet(REPO_ROOT);
-  assert.equal(result.reviewStatus, "approved");
-  assert.equal(result.previews.length, 6);
-  assert.match(result.draftSetSha256, /^[a-f0-9]{64}$/);
-  assert.equal(new Set(result.previews.map((item) => item.sha256)).size, 6);
+void test("FinRobot approved version 2 trees are complete and progressively disclosed", async () => {
+  const rendered = await renderFinRobotCompleteTrees(REPO_ROOT);
 
-  for (const preview of result.previews) {
-    const closing = preview.content.indexOf("\n---\n", 4);
-    assert.ok(closing > 0, preview.skillId);
-    const frontmatter = parse(preview.content.slice(4, closing)) as Record<string, unknown>;
-    assert.equal(frontmatter.name, preview.skillId);
-    assert.equal(frontmatter.license, "Apache-2.0");
-    assert.equal((frontmatter.metadata as Record<string, unknown>).vendor, "finrobot");
-    assert.match(String(frontmatter.compatibility), /agent-invoked Python and AgentSpec resources/);
-    assert.ok(preview.files.some((file) => file.path === "LICENSE"));
-    assert.ok(preview.files.some((file) => file.path === "NOTICE"));
-    assert.ok(preview.files.some((file) => file.path === "DERIVATION.json"));
-    assert.ok(preview.files.some((file) => file.path === "dependencies.json"));
-    assert.ok(preview.files.some((file) => file.path.startsWith("resources/")));
-    for (const file of preview.files) assert.match(file.sha256, /^[a-f0-9]{64}$/);
-    for (const section of policies.curation.required_output_sections) assert.equal(preview.content.split(`### ${section}`).length, 2, `${preview.skillId}:${section}`);
+  assert.equal(rendered.reviewStatus, "approved");
+  assert.equal(rendered.treeSetSha256, APPROVED_HASH);
+  assert.equal(rendered.trees.length, 6);
+  assert.equal(new Set(rendered.trees.map((item) => item.sha256)).size, 6);
+
+  for (const tree of rendered.trees) {
+    const paths = tree.files.map((file) => file.path);
+    assert.ok(paths.includes("SKILL.md"), tree.skillId);
+    assert.ok(paths.includes("LICENSE"), tree.skillId);
+    assert.ok(paths.includes("NOTICE"), tree.skillId);
+    assert.ok(paths.includes("DERIVATION.json"), tree.skillId);
+    assert.equal(paths.some((item) => item.startsWith("references/")), false, tree.skillId);
+    assert.equal(paths.some((item) => item === "dependencies.json" || item.includes("agent-specs/") || item.includes("provider_")), false, tree.skillId);
+    assert.equal(paths.some((item) => ["runner.json", "RUNTIME.json", "agents/openai.yaml"].includes(item)), false, tree.skillId);
+    if (tree.tier === 3) {
+      assert.ok(paths.includes("lib/financial_support.py"), tree.skillId);
+      assert.equal(paths.filter((item) => item.startsWith("scripts/")).length, 1, tree.skillId);
+    } else {
+      assert.equal(paths.some((item) => item.startsWith("lib/") || item.startsWith("scripts/") || item.startsWith("references/")), false, tree.skillId);
+    }
   }
 });

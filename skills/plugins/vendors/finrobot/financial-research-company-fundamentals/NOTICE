@@ -39,5 +39,4 @@ should not be considered as professional financial advice.
 
 ResearchSpec adaptation notice
 ------------------------------
-This package contains source-derived FinRobot materials adapted by ResearchSpec.
-ResearchSpec and these Skills are independent from and not endorsed by FinRobot.
+This standalone Skill preserves audited FinRobot financial-research capabilities through ResearchSpec-authored procedures and deterministic Python 3.11 standard-library tools. It contains no FinRobot runtime, provider client, AgentSpec, prompt factory, credential handling, dependency installer, or automatic network access. DERIVATION.json records immutable evidence and per-capability implementation decisions. ResearchSpec and this Skill are independent from and not endorsed by FinRobot.
