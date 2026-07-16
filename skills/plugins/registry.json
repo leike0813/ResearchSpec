@@ -180,7 +180,7 @@
       "release": "snapshot-fafd3ab",
       "revision": "fafd3ab011e4c363658a39c4bb62fc739839d58c",
       "license": "MIT",
-      "converter_version": "1",
+      "converter_version": "2",
       "skills": [
         {
           "skill_id": "materials-science-skills-apex-alloy-workflows",
@@ -189,7 +189,9 @@
           "upstreams": [
             {
               "source_paths": [
-                "apex-alloy-workflows"
+                "apex-alloy-workflows/SKILL.md",
+                "apex-alloy-workflows/references/property-parameters.md",
+                "apex-alloy-workflows/references/quickstart.md"
               ],
               "adaptation": "curated"
             }
@@ -202,7 +204,7 @@
           "upstreams": [
             {
               "source_paths": [
-                "atomsk-cli"
+                "atomsk-cli/SKILL.md"
               ],
               "adaptation": "curated"
             }
@@ -215,7 +217,10 @@
           "upstreams": [
             {
               "source_paths": [
-                "deeptb-helper"
+                "deeptb-helper/SKILL.md",
+                "deeptb-helper/references/cli-cheatsheet.md",
+                "deeptb-helper/references/datasets.md",
+                "deeptb-helper/references/install.md"
               ],
               "adaptation": "curated"
             }
@@ -228,7 +233,8 @@
           "upstreams": [
             {
               "source_paths": [
-                "dpgen-workflow"
+                "dpgen-workflow/SKILL.md",
+                "dpgen-workflow/references/quick-start.md"
               ],
               "adaptation": "curated"
             }
@@ -241,7 +247,12 @@
           "upstreams": [
             {
               "source_paths": [
-                "gpumd-workflow"
+                "gpumd-workflow/SKILL.md",
+                "gpumd-workflow/references/gpumd-run.md",
+                "gpumd-workflow/references/nep-training.md",
+                "gpumd-workflow/references/outputs.md",
+                "gpumd-workflow/references/quickstart.md",
+                "gpumd-workflow/references/troubleshooting.md"
               ],
               "adaptation": "curated"
             }
@@ -254,7 +265,11 @@
           "upstreams": [
             {
               "source_paths": [
-                "phonopy-workflows"
+                "phonopy-workflows/SKILL.md",
+                "phonopy-workflows/references/common-files.md",
+                "phonopy-workflows/references/config-templates.md",
+                "phonopy-workflows/references/dev.md",
+                "phonopy-workflows/references/quick-start.md"
               ],
               "adaptation": "curated"
             }
@@ -267,7 +282,9 @@
           "upstreams": [
             {
               "source_paths": [
-                "unimol-ops"
+                "unimol-ops/SKILL.md",
+                "unimol-ops/references/resources.md",
+                "unimol-ops/references/workflows.md"
               ],
               "adaptation": "curated"
             }

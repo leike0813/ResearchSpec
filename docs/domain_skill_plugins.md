@@ -96,7 +96,9 @@ The Materials-Science-Skills-For-LLM converter independently:
 
 - validates the pinned `snapshot-fafd3ab` source and complete 12-record admission catalog;
 - admits seven `materials-science-skills-` Skills and excludes five for maintenance scope, private tooling, overlap, or privileged authority;
-- applies only the 24 explicit source-file decisions, including 15 source-bound replacement assets and two exclusions;
+- publishes one complete Tier 1 Atomsk tree and six complete Tier 2 trees, each Tier 2 tree carrying one substantial conditionally read reference;
+- maps 14 semantic capabilities to Agent procedures and nine execution capabilities to explicit user-configured external tools, with no bundled script or state authority;
+- preserves all 24 source-file decisions as 22 source-to-authored-output adaptations and two exclusions, with per-Skill derivation and exact aggregate hash approval;
 - classifies all seven audited relationships as advisory or source-excluded and emits no hard dependency;
 - treats software, models, data, services, documentation, GPU, and HPC environments as reviewed external resources rather than provisioned assets;
 - emits its isolated tree, bundle, manifest, and report.
@@ -104,10 +106,11 @@ The Materials-Science-Skills-For-LLM converter independently:
 The FinRobot converter independently:
 
 - binds the archived immutable `snapshot-297a8d2` audit and the explicitly approved complete-tree hash;
-- admits six neutral `financial-research-*` Skills from four direct and eight adapted candidate resources;
-- replaces FinRobot aggregate imports and import-time provider clients with Protocols, DTOs, injected adapters, and provider-neutral AgentSpec JSON;
+- admits six neutral `financial-research-*` Skills as complete ResearchSpec-authored non-native trees;
+- publishes four script-assisted Skills with tree-local deterministic Python entrypoints and two complete Agent-procedure Skills;
+- excludes provider wrappers, AgentSpec JSON, dependency manifests, prompt factories, credential handling, and automatic network access;
 - preserves reviewed calculations, forecasts, probability and sentiment analysis, targets, ratings, recommendations, and conclusions while rejecting embedded sensitive values and unresolved origins;
-- publishes complete Apache-2.0 attribution, dependencies, derivations, Python resources, AgentSpec schemas, its isolated bundle, manifest, and report.
+- publishes complete Apache-2.0 attribution, empty hard dependencies, derivations, its isolated bundle, manifest, and report.
 
 The HistAgent converter independently:
 

@@ -1,0 +1,98 @@
+{
+  "schema_version": 2,
+  "vendor": "materials-science-skills-for-llm",
+  "release": "snapshot-fafd3ab",
+  "revision": "fafd3ab011e4c363658a39c4bb62fc739839d58c",
+  "audit_sha256": "03a12b5547b140c68458b5bf988f8df7056178a56c8fe41be2a3ffd29cf16589",
+  "skill_id": "materials-science-skills-unimol-ops",
+  "upstream_skill_id": "unimol-ops",
+  "skill_tier": 2,
+  "implementation_strategy": "researchspec-authored-non-native-skill",
+  "upstream_code_copied": false,
+  "capability_map": [
+    {
+      "id": "unimol-prepare-workflow",
+      "implementation": {
+        "kind": "agent-procedure",
+        "procedureAnchor": "Agent procedure: verify model-task compatibility, data schema, conformers, units, preprocessing, applicability, and evaluation design.",
+        "outputAnchor": "Return a reviewed mode, resource inventory, command plan, output contract, and scientific checks.",
+        "failureAnchor": "Stop when model provenance, license, task metadata, input schema, units, or applicability cannot be established."
+      }
+    },
+    {
+      "id": "unimol-run-local",
+      "implementation": {
+        "kind": "external-tool",
+        "toolName": "user-configured Uni-Mol, unicore-train, or torchrun entrypoint",
+        "usageAnchor": "Use the user-configured Uni-Mol, unicore-train, or torchrun entrypoint only for the selected reviewed local mode.",
+        "authorityAnchor": "The user owns the runtime, model files, molecular data, GPU allocation, checkpoints, compute budget, and output directory.",
+        "failureAnchor": "If the entrypoint, model, or data is unavailable or incompatible, report the missing prerequisite without installing, downloading, pulling images, or contacting a remote endpoint."
+      }
+    },
+    {
+      "id": "unimol-interpret-results",
+      "implementation": {
+        "kind": "agent-procedure",
+        "procedureAnchor": "Agent procedure: assess prediction meaning, uncertainty, applicability domain, representation use, evaluation leakage, and downstream limitations.",
+        "outputAnchor": "Return raw-output provenance and a separate scientific interpretation with limitations.",
+        "failureAnchor": "Do not treat an embedding or prediction as validated when task compatibility, units, uncertainty, or held-out evaluation is missing."
+      }
+    }
+  ],
+  "source_file_map": [
+    {
+      "upstream_skill_id": "unimol-ops",
+      "source_path": "unimol-ops/SKILL.md",
+      "source_sha256": "48f9dc6cb5167639d9bad380722405ee4dcf0ac011c6e5de0908b8eff4e38805",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "upstream_skill_id": "unimol-ops",
+      "source_path": "unimol-ops/references/resources.md",
+      "source_sha256": "d97bdd9e206c7fb86eafeb11e83ca59882621a6e86a014560c332a3197ff7fe3",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "upstream_skill_id": "unimol-ops",
+      "source_path": "unimol-ops/references/workflows.md",
+      "source_sha256": "1165f2075d2ceb0d3477b42ff64feacc4cc56fb9622b0de4123c4770619e6b77",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "references/local-workflow-modes.md"
+      ]
+    }
+  ],
+  "files": [
+    {
+      "path": "SKILL.md",
+      "authorship": "researchspec-authored-adaptation",
+      "source_scope": "reviewed-materials-skill-evidence"
+    },
+    {
+      "path": "references/local-workflow-modes.md",
+      "authorship": "researchspec-authored-adaptation",
+      "source_scope": "reviewed-materials-skill-evidence"
+    },
+    {
+      "path": "LICENSE",
+      "authorship": "upstream-license",
+      "source_scope": "vendor-root"
+    },
+    {
+      "path": "NOTICE.md",
+      "authorship": "researchspec-authored",
+      "source_scope": "immutable-audit-and-source-decisions"
+    },
+    {
+      "path": "DERIVATION.json",
+      "authorship": "converter-generated",
+      "source_scope": "immutable-audit-skill-definition-and-source-decisions"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "schema_version": "2",
+  "vendor_id": "materials-science-skills-for-llm",
+  "release": "snapshot-fafd3ab",
+  "revision": "fafd3ab011e4c363658a39c4bb62fc739839d58c",
+  "audit_sha256": "03a12b5547b140c68458b5bf988f8df7056178a56c8fe41be2a3ffd29cf16589",
+  "published": {
+    "review_status": "approved",
+    "tree_set_sha256": "c45bafc4be7e4fa540cc119cbaa81cec8f0e453d60fc9f2efd0124d8ec717e3e",
+    "approval_note": "User explicitly authorized direct promotion to the final target for complete tree set c45bafc4be7e4fa540cc119cbaa81cec8f0e453d60fc9f2efd0124d8ec717e3e.",
+    "approved_at": "2026-07-16T04:34:55Z",
+    "converter_version": "2"
+  },
+  "candidate": null
+}

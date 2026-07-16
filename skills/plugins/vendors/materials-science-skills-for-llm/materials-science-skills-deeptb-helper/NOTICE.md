@@ -1,11 +1,11 @@
 # Notice
 
-This Skill is adapted by ResearchSpec from Materials-Science-Skills-For-LLM (https://github.com/IntelligentMat/Materials-Science-Skills-For-LLM), snapshot-fafd3ab, revision fafd3ab011e4c363658a39c4bb62fc739839d58c.
+This complete Skill is adapted by ResearchSpec from Materials-Science-Skills-For-LLM (https://github.com/IntelligentMat/Materials-Science-Skills-For-LLM), snapshot-fafd3ab, revision fafd3ab011e4c363658a39c4bb62fc739839d58c.
 
-Upstream source: `deeptb-helper`. Generated Skill ID: `materials-science-skills-deeptb-helper`. Copied and curated Skill content is distributed under MIT after per-file review. External software, models, datasets, services, documentation, and compute environments remain separately licensed and are not copied by ResearchSpec.
+Upstream Skill: `deeptb-helper`. Generated Skill ID: `materials-science-skills-deeptb-helper`. The reviewed authored adaptation and copied root license are distributed under MIT. External software, models, datasets, services, documentation, GPU capacity, schedulers, and compute environments remain separately licensed and user managed.
 
-ResearchSpec used complete source-bound replacement assets and did not execute upstream commands, install dependencies, configure credentials, retrieve resources, access services, or submit scientific/HPC work.
+The Skill contains no bundled executable, installer, credential handling, automatic network access, or ResearchSpec workflow authority. `DERIVATION.json` records source evidence and each Agent-procedure or external-tool implementation.
 
-Curated source files: `deeptb-helper/SKILL.md`, `deeptb-helper/references/cli-cheatsheet.md`.
+Adapted source files: `deeptb-helper/SKILL.md`, `deeptb-helper/references/cli-cheatsheet.md`, `deeptb-helper/references/datasets.md`.
 
 Excluded source files: `deeptb-helper/references/install.md`.

@@ -128,16 +128,23 @@ never expose or persist secrets through ResearchSpec.
 for the `snapshot-fafd3ab` audit and converter of all 12 upstream Skills. The
 complete production policies admit seven curated, vendor-prefixed Skills and
 exclude five for maintenance scope, private tooling, overlap, or privileged
-platform authority. The 24-item file catalog, seven-item relationship catalog,
-external-resource decisions, and source-bound replacement assets are production
-SSOTs. Generated Skills contribute to `materials-engineering`,
+platform authority. Converter version 2 publishes seven complete
+ResearchSpec-authored non-native Skill trees bound to aggregate SHA-256
+`c45bafc4be7e4fa540cc119cbaa81cec8f0e453d60fc9f2efd0124d8ec717e3e`.
+Atomsk is a Tier 1 external-tool Skill without references; APEX, DeePTB, DP-GEN,
+GPUMD, Phonopy, and Uni-Mol are Tier 2 trees with exactly one substantial,
+conditionally read reference each. All ordinary paths and hard constraints live
+in `SKILL.md`. The 24-item source catalog, typed capability definitions,
+fourteen external-resource decisions, seven-item relationship catalog,
+per-Skill derivation, and hash-bound review decision are production SSOTs.
+Generated Skills contribute to `materials-engineering`,
 `macromolecular-and-materials-chemistry`, and
 `computational-modeling-and-simulation`; GPU, remote-service, and HPC use alone
 does not create infrastructure-domain membership. Do not execute upstream
 commands, install dependencies, configure credentials, retrieve resources,
 access external services, compile software, or run scheduler/HPC work. Do not
-bypass the checked-in admission, relationship, file, resource, curation,
-license, or source-neutral domain decisions.
+bypass the checked-in admission, relationship, source-file, resource,
+capability, derivation, review, license, or source-neutral domain decisions.
 
 `vendor/finrobot` is the maintainer-only pinned input for the
 `snapshot-297a8d2` audit and converter. FinRobot has no upstream `SKILL.md`; its

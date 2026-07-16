@@ -1,0 +1,75 @@
+{
+  "schema_version": 2,
+  "vendor": "materials-science-skills-for-llm",
+  "release": "snapshot-fafd3ab",
+  "revision": "fafd3ab011e4c363658a39c4bb62fc739839d58c",
+  "audit_sha256": "03a12b5547b140c68458b5bf988f8df7056178a56c8fe41be2a3ffd29cf16589",
+  "skill_id": "materials-science-skills-atomsk-cli",
+  "upstream_skill_id": "atomsk-cli",
+  "skill_tier": 1,
+  "implementation_strategy": "researchspec-authored-non-native-skill",
+  "upstream_code_copied": false,
+  "capability_map": [
+    {
+      "id": "atomsk-design-operation",
+      "implementation": {
+        "kind": "agent-procedure",
+        "procedureAnchor": "Agent procedure: translate the requested structure change into an ordered, reviewable Atomsk operation.",
+        "outputAnchor": "Return the exact command, read/write paths, assumptions, and structural validation checklist.",
+        "failureAnchor": "Stop when crystallographic conventions, species mapping, units, or transformation order are ambiguous."
+      }
+    },
+    {
+      "id": "atomsk-execute-operation",
+      "implementation": {
+        "kind": "external-tool",
+        "toolName": "atomsk",
+        "usageAnchor": "Use the user-preinstalled atomsk executable only after the exact command and file effects have been reviewed.",
+        "authorityAnchor": "The user owns the Atomsk installation and local files; an existing path may be replaced only after explicit confirmation.",
+        "failureAnchor": "If atomsk is unavailable or rejects an option, inspect local version help and revise the command without installing software or guessing syntax."
+      }
+    },
+    {
+      "id": "atomsk-validate-structure",
+      "implementation": {
+        "kind": "agent-procedure",
+        "procedureAnchor": "Agent procedure: validate atom count, species, cell vectors, orientation, periodicity, coordinates, and target format after execution.",
+        "outputAnchor": "Return the validation evidence and identify every intentional structural change.",
+        "failureAnchor": "Treat unexplained atom loss, cell change, overlap, or format mismatch as failure."
+      }
+    }
+  ],
+  "source_file_map": [
+    {
+      "upstream_skill_id": "atomsk-cli",
+      "source_path": "atomsk-cli/SKILL.md",
+      "source_sha256": "b3c704708e4b770c37f97db76b9f75d54d30b5b4e12637da9199f7c386939f5a",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "SKILL.md"
+      ]
+    }
+  ],
+  "files": [
+    {
+      "path": "SKILL.md",
+      "authorship": "researchspec-authored-adaptation",
+      "source_scope": "reviewed-materials-skill-evidence"
+    },
+    {
+      "path": "LICENSE",
+      "authorship": "upstream-license",
+      "source_scope": "vendor-root"
+    },
+    {
+      "path": "NOTICE.md",
+      "authorship": "researchspec-authored",
+      "source_scope": "immutable-audit-and-source-decisions"
+    },
+    {
+      "path": "DERIVATION.json",
+      "authorship": "converter-generated",
+      "source_scope": "immutable-audit-skill-definition-and-source-decisions"
+    }
+  ]
+}

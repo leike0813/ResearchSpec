@@ -1,9 +1,11 @@
 {
   "schema_version": "1",
-  "converter_version": "1",
+  "converter_version": "2",
   "vendor_id": "materials-science-skills-for-llm",
   "release": "snapshot-fafd3ab",
   "revision": "fafd3ab011e4c363658a39c4bb62fc739839d58c",
+  "audit_sha256": "03a12b5547b140c68458b5bf988f8df7056178a56c8fe41be2a3ffd29cf16589",
+  "approved_tree_set_sha256": "c45bafc4be7e4fa540cc119cbaa81cec8f0e453d60fc9f2efd0124d8ec717e3e",
   "audited_skills": 12,
   "generated_skills": [
     "materials-science-skills-apex-alloy-workflows",
@@ -21,10 +23,54 @@
     "materials-science-skills-pymatgen-usage",
     "materials-science-skills-slurm-workload-manager"
   ],
-  "admission_policy_sha256": "fcce1aad3e2ff7b2edbc97782e5c9f01f7fec15f8faa473a2c785daf695d9153",
+  "admission_policy_sha256": "53c10d9ca89fef0a731b9e0f542c890557093d7528413e3adcc834480fac97c5",
   "relationship_policy_sha256": "98ba81fadc94057c6d460a5047798edbd75213daeed6c0a4c1f0275701012257",
-  "file_policy_sha256": "db4091f4056ae855bcd95de43e414157250b7188c12761591c5216b5bab9d66d",
+  "file_policy_sha256": "022b1381e4c888868848dd23ec7ebcc1093e1b4716595b06590ecc3d65a49513",
   "external_resource_policy_sha256": "5937e78afa228ea90f8185cbb099035590a017c7f988b0205384691648ab78f9",
+  "review_policy_sha256": "ae1bc4ee288ce63f356c0db9d427c7b6325ee5c6e66c667a9eb430d7a2c1d873",
+  "implementation_counts": {
+    "agent_procedures": 14,
+    "external_tools": 9,
+    "references": 6,
+    "bundled_scripts": 0
+  },
+  "generated_trees": [
+    {
+      "skill_id": "materials-science-skills-apex-alloy-workflows",
+      "tier": 2,
+      "sha256": "21d11b9366a45e6eb578ecf27bddf8aa15f983ec4f0b90cc6aa4b432d8f45e88"
+    },
+    {
+      "skill_id": "materials-science-skills-atomsk-cli",
+      "tier": 1,
+      "sha256": "0a12608923a1ce3aa741571b5e70a1fc86c329880920f007f76e8a44c1c7ad47"
+    },
+    {
+      "skill_id": "materials-science-skills-deeptb-helper",
+      "tier": 2,
+      "sha256": "e96d2cbdc4308b076493fa3fe5d8f36846752b14b1188a78bc9a56e8c105dfc9"
+    },
+    {
+      "skill_id": "materials-science-skills-dpgen-workflow",
+      "tier": 2,
+      "sha256": "de9908efde629419bf648ce594a4cd62de8f184042cddf4b8e24a26cd6320ab8"
+    },
+    {
+      "skill_id": "materials-science-skills-gpumd-workflow",
+      "tier": 2,
+      "sha256": "c0612bb161c288fa194f79424b0d39e5ea69c4fc5eaa5f5d931b18faf3dfcc57"
+    },
+    {
+      "skill_id": "materials-science-skills-phonopy-workflows",
+      "tier": 2,
+      "sha256": "24f9680017077902a36be04b1588568849f44e799cc131660ff41a3d26e42174"
+    },
+    {
+      "skill_id": "materials-science-skills-unimol-ops",
+      "tier": 2,
+      "sha256": "9c608df0591025210ac0cf4d06e955bc571151c6664a82ba6b3ed94ede1591fe"
+    }
+  ],
   "relationship_decisions": [
     {
       "from": "apex-alloy-workflows",
@@ -104,194 +150,358 @@
       "note": "A user-provided DeepMD runtime is optional external context, not a packaged Skill dependency."
     }
   ],
-  "file_dispositions": [
+  "source_file_dispositions": [
     {
-      "source_path": "apex-alloy-workflows/references/property-parameters.md",
-      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-apex-alloy-workflows/references/property-parameters.md",
-      "disposition": "included",
-      "reason": "reviewed source file copied",
-      "source_sha256": "020677923773d1d1e59099da57bc1697e233b2cf0c1a3730fee91616a8238c51",
-      "sha256": "020677923773d1d1e59099da57bc1697e233b2cf0c1a3730fee91616a8238c51"
-    },
-    {
-      "source_path": "apex-alloy-workflows/references/quickstart.md",
-      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-apex-alloy-workflows/references/quickstart.md",
-      "disposition": "included",
-      "reason": "reviewed source-bound replacement asset",
-      "source_sha256": "056ef96e11ca23a1cc7ef491d2fef42948836318331b30241220460687612737",
-      "sha256": "cb2be3914dc526ca05931e7d50cea353f7a1777a199a6ad0f4a6620261cbd0df"
-    },
-    {
+      "upstream_skill_id": "apex-alloy-workflows",
       "source_path": "apex-alloy-workflows/SKILL.md",
-      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-apex-alloy-workflows/SKILL.md",
-      "disposition": "included",
-      "reason": "reviewed source-bound replacement asset",
       "source_sha256": "8f6336800762f6c57383010fc62839836ee6a8be4d7bc762ecf7c66d38655e3d",
-      "sha256": "e7a6aab2b193c2c77a69e0da885628f23a79307491da2728621e237369a46c65"
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "SKILL.md"
+      ]
     },
     {
+      "upstream_skill_id": "apex-alloy-workflows",
+      "source_path": "apex-alloy-workflows/references/property-parameters.md",
+      "source_sha256": "020677923773d1d1e59099da57bc1697e233b2cf0c1a3730fee91616a8238c51",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "references/property-parameters.md"
+      ]
+    },
+    {
+      "upstream_skill_id": "apex-alloy-workflows",
+      "source_path": "apex-alloy-workflows/references/quickstart.md",
+      "source_sha256": "056ef96e11ca23a1cc7ef491d2fef42948836318331b30241220460687612737",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "upstream_skill_id": "atomsk-cli",
       "source_path": "atomsk-cli/SKILL.md",
-      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-atomsk-cli/SKILL.md",
-      "disposition": "included",
-      "reason": "reviewed source-bound replacement asset",
       "source_sha256": "b3c704708e4b770c37f97db76b9f75d54d30b5b4e12637da9199f7c386939f5a",
-      "sha256": "65c089f3c231c28d4e7a47ecdc1e3d33f652720609d82f8a6e96d7925369d317"
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "SKILL.md"
+      ]
     },
     {
-      "source_path": "deeptb-helper/references/cli-cheatsheet.md",
-      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-deeptb-helper/references/cli-cheatsheet.md",
-      "disposition": "included",
-      "reason": "reviewed source-bound replacement asset",
-      "source_sha256": "12b300a7011363beb9b8bab629ee52cd26882edc2e7d17dee2dcc992f2fc7d6d",
-      "sha256": "9e741d1c7f359234ddc5085f5d1d960df3ac1a990a3eb9ef1529b0a2170f3a04"
-    },
-    {
-      "source_path": "deeptb-helper/references/datasets.md",
-      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-deeptb-helper/references/datasets.md",
-      "disposition": "included",
-      "reason": "reviewed source file copied",
-      "source_sha256": "60402f53274ac03352ec67fa3163f8447a6b5288fddf68376ae6efb75263dc76",
-      "sha256": "60402f53274ac03352ec67fa3163f8447a6b5288fddf68376ae6efb75263dc76"
-    },
-    {
-      "source_path": "deeptb-helper/references/install.md",
-      "disposition": "excluded",
-      "reason": "Dependency installation is outside the static Skill boundary.",
-      "source_sha256": "5edb953ad69c26812abbb268959740d163e56b92f79defe127599e78e97f4335"
-    },
-    {
+      "upstream_skill_id": "deeptb-helper",
       "source_path": "deeptb-helper/SKILL.md",
-      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-deeptb-helper/SKILL.md",
-      "disposition": "included",
-      "reason": "reviewed source-bound replacement asset",
       "source_sha256": "c1f724ffda50caf41c4a706a725e9fb4963b04fef24178e4dfed3198a2d73c1e",
-      "sha256": "295d054c768ee705a2058d21865156df9b129ba772491572754864683b96fd43"
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "SKILL.md"
+      ]
     },
     {
-      "source_path": "dpgen-workflow/references/quick-start.md",
-      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-dpgen-workflow/references/quick-start.md",
-      "disposition": "included",
-      "reason": "reviewed source-bound replacement asset",
-      "source_sha256": "b65309f875980120885db42dcf6bed66595197c6a84a0eee2065096c7f8d1135",
-      "sha256": "cb25f1b0b2f9bef26bb6e39f30f71f730c7fa263804f8966bff350a2ca203395"
+      "upstream_skill_id": "deeptb-helper",
+      "source_path": "deeptb-helper/references/cli-cheatsheet.md",
+      "source_sha256": "12b300a7011363beb9b8bab629ee52cd26882edc2e7d17dee2dcc992f2fc7d6d",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "SKILL.md"
+      ]
     },
     {
-      "source_path": "dpgen-workflow/SKILL.md",
-      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-dpgen-workflow/SKILL.md",
-      "disposition": "included",
-      "reason": "reviewed source-bound replacement asset",
-      "source_sha256": "6b677adcd4c831f0728dec7e1c6a6c4c6e233e90f2edc30c00a98771c5eaf0ac",
-      "sha256": "3709b3e6b131033240fe55f6f2fe111afc0374a1908baa8c77d073a648766bad"
+      "upstream_skill_id": "deeptb-helper",
+      "source_path": "deeptb-helper/references/datasets.md",
+      "source_sha256": "60402f53274ac03352ec67fa3163f8447a6b5288fddf68376ae6efb75263dc76",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "references/dataset-and-configuration.md"
+      ]
     },
     {
-      "source_path": "gpumd-workflow/references/gpumd-run.md",
-      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-gpumd-workflow/references/gpumd-run.md",
-      "disposition": "included",
-      "reason": "reviewed source file copied",
-      "source_sha256": "44d16c99de13dfcff774cf3f8285b3e810760066fb475b48ce04b5276ca377eb",
-      "sha256": "44d16c99de13dfcff774cf3f8285b3e810760066fb475b48ce04b5276ca377eb"
-    },
-    {
-      "source_path": "gpumd-workflow/references/nep-training.md",
-      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-gpumd-workflow/references/nep-training.md",
-      "disposition": "included",
-      "reason": "reviewed source file copied",
-      "source_sha256": "ff747d39cd559c51e8211d216cdda60da7559816fac3f0acd93e9904493952a1",
-      "sha256": "ff747d39cd559c51e8211d216cdda60da7559816fac3f0acd93e9904493952a1"
-    },
-    {
-      "source_path": "gpumd-workflow/references/outputs.md",
-      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-gpumd-workflow/references/outputs.md",
-      "disposition": "included",
-      "reason": "reviewed source file copied",
-      "source_sha256": "abe67ad3ade0057b53fd753be30205e4a64e27f453a2fc61f9eaf8f28c9f57e4",
-      "sha256": "abe67ad3ade0057b53fd753be30205e4a64e27f453a2fc61f9eaf8f28c9f57e4"
-    },
-    {
-      "source_path": "gpumd-workflow/references/quickstart.md",
-      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-gpumd-workflow/references/quickstart.md",
-      "disposition": "included",
-      "reason": "reviewed source-bound replacement asset",
-      "source_sha256": "435ed5fce2b7c0ff918924ad2404f6883f70993e3ea7f445c5750cad9390af9f",
-      "sha256": "31a42c95088b1ef654b584bf83709be5d04c7f825baf515a8bc416f60c43250f"
-    },
-    {
-      "source_path": "gpumd-workflow/references/troubleshooting.md",
-      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-gpumd-workflow/references/troubleshooting.md",
-      "disposition": "included",
-      "reason": "reviewed source-bound replacement asset",
-      "source_sha256": "dfd3dcbbc485084baceb91a142448d0c3b368839b6be32ee70e202f3fd905cbc",
-      "sha256": "1010be0f15c862fecaac862255fa88ce92af026b56b5f5175d1b202293201418"
-    },
-    {
-      "source_path": "gpumd-workflow/SKILL.md",
-      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-gpumd-workflow/SKILL.md",
-      "disposition": "included",
-      "reason": "reviewed source-bound replacement asset",
-      "source_sha256": "58f69a3a1d3968143abd63929dd3deac148b3a5a8a73de01ae4e51ec9fe208ed",
-      "sha256": "9bda5557e9516928d2045fe5d1abf2c1a689a8b500d81e90d883a578a0bc8f33"
-    },
-    {
-      "source_path": "phonopy-workflows/references/common-files.md",
-      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-phonopy-workflows/references/common-files.md",
-      "disposition": "included",
-      "reason": "reviewed source file copied",
-      "source_sha256": "600afaf02bb8e17604b56645b8f1b3d0e0e54fbb90425dbbe5eabc63056ca965",
-      "sha256": "600afaf02bb8e17604b56645b8f1b3d0e0e54fbb90425dbbe5eabc63056ca965"
-    },
-    {
-      "source_path": "phonopy-workflows/references/config-templates.md",
-      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-phonopy-workflows/references/config-templates.md",
-      "disposition": "included",
-      "reason": "reviewed source file copied",
-      "source_sha256": "24c33261730298c48c7e9cded2aa5a6f8b75636cefeadadbfc383894d1c6ae9b",
-      "sha256": "24c33261730298c48c7e9cded2aa5a6f8b75636cefeadadbfc383894d1c6ae9b"
-    },
-    {
-      "source_path": "phonopy-workflows/references/dev.md",
+      "upstream_skill_id": "deeptb-helper",
+      "source_path": "deeptb-helper/references/install.md",
+      "source_sha256": "5edb953ad69c26812abbb268959740d163e56b92f79defe127599e78e97f4335",
       "disposition": "excluded",
-      "reason": "Upstream development maintenance is outside the generated research Skill.",
-      "source_sha256": "332c4d4586b63cf2135ce18653294dc467b682b5548fa5c92468ce18100318c7"
+      "reason": "Dependency installation is outside the static Skill boundary."
     },
     {
-      "source_path": "phonopy-workflows/references/quick-start.md",
-      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-phonopy-workflows/references/quick-start.md",
-      "disposition": "included",
-      "reason": "reviewed source-bound replacement asset",
-      "source_sha256": "454a95bf7b7a2118c0624a567c11b7c9617e08fd5a754465278def5494df0bed",
-      "sha256": "e1f8398f9b1e294cf8c871b55bcdc5cf36f6ba49682980838edf2d009d24de65"
+      "upstream_skill_id": "dpgen-workflow",
+      "source_path": "dpgen-workflow/SKILL.md",
+      "source_sha256": "6b677adcd4c831f0728dec7e1c6a6c4c6e233e90f2edc30c00a98771c5eaf0ac",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "SKILL.md",
+        "references/parameter-and-machine-files.md"
+      ]
     },
     {
+      "upstream_skill_id": "dpgen-workflow",
+      "source_path": "dpgen-workflow/references/quick-start.md",
+      "source_sha256": "b65309f875980120885db42dcf6bed66595197c6a84a0eee2065096c7f8d1135",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "upstream_skill_id": "gpumd-workflow",
+      "source_path": "gpumd-workflow/SKILL.md",
+      "source_sha256": "58f69a3a1d3968143abd63929dd3deac148b3a5a8a73de01ae4e51ec9fe208ed",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "upstream_skill_id": "gpumd-workflow",
+      "source_path": "gpumd-workflow/references/gpumd-run.md",
+      "source_sha256": "44d16c99de13dfcff774cf3f8285b3e810760066fb475b48ce04b5276ca377eb",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "references/md-nep-and-output-playbook.md"
+      ]
+    },
+    {
+      "upstream_skill_id": "gpumd-workflow",
+      "source_path": "gpumd-workflow/references/nep-training.md",
+      "source_sha256": "ff747d39cd559c51e8211d216cdda60da7559816fac3f0acd93e9904493952a1",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "references/md-nep-and-output-playbook.md"
+      ]
+    },
+    {
+      "upstream_skill_id": "gpumd-workflow",
+      "source_path": "gpumd-workflow/references/outputs.md",
+      "source_sha256": "abe67ad3ade0057b53fd753be30205e4a64e27f453a2fc61f9eaf8f28c9f57e4",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "references/md-nep-and-output-playbook.md"
+      ]
+    },
+    {
+      "upstream_skill_id": "gpumd-workflow",
+      "source_path": "gpumd-workflow/references/quickstart.md",
+      "source_sha256": "435ed5fce2b7c0ff918924ad2404f6883f70993e3ea7f445c5750cad9390af9f",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "upstream_skill_id": "gpumd-workflow",
+      "source_path": "gpumd-workflow/references/troubleshooting.md",
+      "source_sha256": "dfd3dcbbc485084baceb91a142448d0c3b368839b6be32ee70e202f3fd905cbc",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "SKILL.md",
+        "references/md-nep-and-output-playbook.md"
+      ]
+    },
+    {
+      "upstream_skill_id": "phonopy-workflows",
       "source_path": "phonopy-workflows/SKILL.md",
-      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-phonopy-workflows/SKILL.md",
-      "disposition": "included",
-      "reason": "reviewed source-bound replacement asset",
       "source_sha256": "7c632388475c7bc293838e5b0908f23d63f6257fe3f53ae40e28cbfa91d04960",
-      "sha256": "5c51cf68ca6d88443a98069da2748c2b07ae89f58edbb00ebbab92c2e8839aa2"
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "SKILL.md"
+      ]
     },
     {
-      "source_path": "unimol-ops/references/resources.md",
-      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-unimol-ops/references/resources.md",
-      "disposition": "included",
-      "reason": "reviewed source-bound replacement asset",
-      "source_sha256": "d97bdd9e206c7fb86eafeb11e83ca59882621a6e86a014560c332a3197ff7fe3",
-      "sha256": "eb7360dc38994fd7f57343f286ee8ec2fa4c1cad0dc79de09568d710b60549a9"
+      "upstream_skill_id": "phonopy-workflows",
+      "source_path": "phonopy-workflows/references/common-files.md",
+      "source_sha256": "600afaf02bb8e17604b56645b8f1b3d0e0e54fbb90425dbbe5eabc63056ca965",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "references/configuration-and-force-files.md"
+      ]
     },
     {
-      "source_path": "unimol-ops/references/workflows.md",
-      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-unimol-ops/references/workflows.md",
-      "disposition": "included",
-      "reason": "reviewed source-bound replacement asset",
-      "source_sha256": "1165f2075d2ceb0d3477b42ff64feacc4cc56fb9622b0de4123c4770619e6b77",
-      "sha256": "4e9c40e0a035ccbe16f091def5245a61e1ab93bab10e4189d80cf4cf1cf28c4f"
+      "upstream_skill_id": "phonopy-workflows",
+      "source_path": "phonopy-workflows/references/config-templates.md",
+      "source_sha256": "24c33261730298c48c7e9cded2aa5a6f8b75636cefeadadbfc383894d1c6ae9b",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "references/configuration-and-force-files.md"
+      ]
     },
     {
+      "upstream_skill_id": "phonopy-workflows",
+      "source_path": "phonopy-workflows/references/dev.md",
+      "source_sha256": "332c4d4586b63cf2135ce18653294dc467b682b5548fa5c92468ce18100318c7",
+      "disposition": "excluded",
+      "reason": "Upstream development maintenance is outside the generated research Skill."
+    },
+    {
+      "upstream_skill_id": "phonopy-workflows",
+      "source_path": "phonopy-workflows/references/quick-start.md",
+      "source_sha256": "454a95bf7b7a2118c0624a567c11b7c9617e08fd5a754465278def5494df0bed",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "upstream_skill_id": "unimol-ops",
       "source_path": "unimol-ops/SKILL.md",
-      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-unimol-ops/SKILL.md",
-      "disposition": "included",
-      "reason": "reviewed source-bound replacement asset",
       "source_sha256": "48f9dc6cb5167639d9bad380722405ee4dcf0ac011c6e5de0908b8eff4e38805",
-      "sha256": "ad2b02ac2f411b860f405ecce097fabd7230fc618dd1dc3a0268206db219d858"
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "upstream_skill_id": "unimol-ops",
+      "source_path": "unimol-ops/references/resources.md",
+      "source_sha256": "d97bdd9e206c7fb86eafeb11e83ca59882621a6e86a014560c332a3197ff7fe3",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "upstream_skill_id": "unimol-ops",
+      "source_path": "unimol-ops/references/workflows.md",
+      "source_sha256": "1165f2075d2ceb0d3477b42ff64feacc4cc56fb9622b0de4123c4770619e6b77",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "references/local-workflow-modes.md"
+      ]
+    }
+  ],
+  "generated_file_dispositions": [
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-apex-alloy-workflows/DERIVATION.json",
+      "sha256": "51442e7c441e920db9e463e37c38a50f6b8df60de43ea39a4d3f5d8ac62239ea"
+    },
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-apex-alloy-workflows/LICENSE",
+      "sha256": "710bb1bd858a00c11b7ea85b16f8af23705190adc21800d4978edeedf1d5e8f9"
+    },
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-apex-alloy-workflows/NOTICE.md",
+      "sha256": "4d933b61223cf4850aa30fd5b9b8b32911ee8663707ee2e7d29aa45bcecc32f0"
+    },
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-apex-alloy-workflows/SKILL.md",
+      "sha256": "6aa380d5ada2afb90c8bf415b7525cde2ed3fa59f8c46247077d742b12cfd7ec"
+    },
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-apex-alloy-workflows/references/property-parameters.md",
+      "sha256": "c49514bcbe76fe916cbeb68bd99eb23a83cff727e7b88db5f3a7a3d7cac55101"
+    },
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-atomsk-cli/DERIVATION.json",
+      "sha256": "51cee64472113f1c598003f605b0ff005fb0bc607951abe07c841356b30d1cad"
+    },
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-atomsk-cli/LICENSE",
+      "sha256": "710bb1bd858a00c11b7ea85b16f8af23705190adc21800d4978edeedf1d5e8f9"
+    },
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-atomsk-cli/NOTICE.md",
+      "sha256": "ccdbf3fe89659a523402a9da7943f893acbbe69861f25ff43e92d72f56d73123"
+    },
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-atomsk-cli/SKILL.md",
+      "sha256": "9c1fbae5fe779f147276ea848d20fdbc86cdad75be483356825f399c89cfe93a"
+    },
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-deeptb-helper/DERIVATION.json",
+      "sha256": "98a4e2a8f154ad8f922c0fa96cf870152d242bd4ff6c760275d1c56d07957095"
+    },
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-deeptb-helper/LICENSE",
+      "sha256": "710bb1bd858a00c11b7ea85b16f8af23705190adc21800d4978edeedf1d5e8f9"
+    },
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-deeptb-helper/NOTICE.md",
+      "sha256": "bdf51c4b073d271dac89b0486b201fee1b29a48393fff87b9c3be00e7d840ed4"
+    },
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-deeptb-helper/SKILL.md",
+      "sha256": "5135f04e4f1f26d4754f7114b93deb40fa31c91b3bedee6aa5db75c2fb51baac"
+    },
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-deeptb-helper/references/dataset-and-configuration.md",
+      "sha256": "1eb7379bd04704eaf1902eab8f94929a248ceb6c448fbf794042613a7a47bb6b"
+    },
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-dpgen-workflow/DERIVATION.json",
+      "sha256": "867c818b198db0e79144ef867cf7611b8fe4969d62962ed0852f39adde1ec7f1"
+    },
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-dpgen-workflow/LICENSE",
+      "sha256": "710bb1bd858a00c11b7ea85b16f8af23705190adc21800d4978edeedf1d5e8f9"
+    },
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-dpgen-workflow/NOTICE.md",
+      "sha256": "d0852fee36e115e0818ce13177cffacea45862268e5a10eb3203c1d8653c0a95"
+    },
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-dpgen-workflow/SKILL.md",
+      "sha256": "e54e5d0e8d5c539f7f733e5b3242be03267ffc0c9cf249ee504c0c1bc0952e71"
+    },
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-dpgen-workflow/references/parameter-and-machine-files.md",
+      "sha256": "ed56521e82890be0c9d0def167dea0b48331c6edf20e2b6b6bbf40f569495975"
+    },
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-gpumd-workflow/DERIVATION.json",
+      "sha256": "3bfc4bb4f618cb1fee64c3db9aa81e3ff8a9e04f25769bff03bab56588ece08f"
+    },
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-gpumd-workflow/LICENSE",
+      "sha256": "710bb1bd858a00c11b7ea85b16f8af23705190adc21800d4978edeedf1d5e8f9"
+    },
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-gpumd-workflow/NOTICE.md",
+      "sha256": "48da98e10463df6d08d753e899d526444dc4b8825dcfb3b61b28a64b746d415c"
+    },
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-gpumd-workflow/SKILL.md",
+      "sha256": "9c28decf1d6b8ade2ba9cfe792ec59774d2eef2dbac934deeb5f899909e6711c"
+    },
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-gpumd-workflow/references/md-nep-and-output-playbook.md",
+      "sha256": "d79b1dc714b39d1558e78a5cab864537bee42e809e4c77dd763b23e47808213e"
+    },
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-phonopy-workflows/DERIVATION.json",
+      "sha256": "b4fb4d07775cd9dbf7d2a4a01c5a2200c84ea3c787d8672eacd5160b42cd9082"
+    },
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-phonopy-workflows/LICENSE",
+      "sha256": "710bb1bd858a00c11b7ea85b16f8af23705190adc21800d4978edeedf1d5e8f9"
+    },
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-phonopy-workflows/NOTICE.md",
+      "sha256": "7b2d3a579a3e5ce8d5e38f95244a67444bfc30ea11b0e36c2ab349b2cb0df70e"
+    },
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-phonopy-workflows/SKILL.md",
+      "sha256": "15c7da7fd6fec1bb2c092277f5d36c58e09f54dae946d1e5839109ed0e74e50c"
+    },
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-phonopy-workflows/references/configuration-and-force-files.md",
+      "sha256": "cd5f6f522588fd0ce21507a4a308ee12d3bed435acde7a2cad967a1535786b40"
+    },
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-unimol-ops/DERIVATION.json",
+      "sha256": "abad504e57c1850a1eacc3ae31eb1fe31fc5482157f034d4e4a12a2a8a9b8180"
+    },
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-unimol-ops/LICENSE",
+      "sha256": "710bb1bd858a00c11b7ea85b16f8af23705190adc21800d4978edeedf1d5e8f9"
+    },
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-unimol-ops/NOTICE.md",
+      "sha256": "a672d37fe7345e4a35ed7947ec8a082547866663653107a40ef1bb67d6e932ce"
+    },
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-unimol-ops/SKILL.md",
+      "sha256": "c040d77968a2f02acebe5afeeae3435945a8b4fb2942ef6e2133e25080549996"
+    },
+    {
+      "output_path": "vendors/materials-science-skills-for-llm/materials-science-skills-unimol-ops/references/local-workflow-modes.md",
+      "sha256": "efc9883cd2e2d840022238b767cf246a2b730e709e9095b807f88318c5be0625"
     }
   ]
 }

@@ -1,0 +1,136 @@
+{
+  "schema_version": 2,
+  "vendor": "materials-science-skills-for-llm",
+  "release": "snapshot-fafd3ab",
+  "revision": "fafd3ab011e4c363658a39c4bb62fc739839d58c",
+  "audit_sha256": "03a12b5547b140c68458b5bf988f8df7056178a56c8fe41be2a3ffd29cf16589",
+  "skill_id": "materials-science-skills-gpumd-workflow",
+  "upstream_skill_id": "gpumd-workflow",
+  "skill_tier": 2,
+  "implementation_strategy": "researchspec-authored-non-native-skill",
+  "upstream_code_copied": false,
+  "capability_map": [
+    {
+      "id": "gpumd-prepare-workflow",
+      "implementation": {
+        "kind": "agent-procedure",
+        "procedureAnchor": "Agent procedure: validate structures, run settings, potential applicability, datasets, sampling, and validation criteria.",
+        "outputAnchor": "Return a reviewed input plan, command, output inventory, and scientific checks.",
+        "failureAnchor": "Stop when units, atom types, potential scope, dataset splits, ensemble, or stability criteria are unresolved."
+      }
+    },
+    {
+      "id": "gpumd-run-md",
+      "implementation": {
+        "kind": "external-tool",
+        "toolName": "gpumd",
+        "usageAnchor": "Use the user-compiled gpumd executable only for a reviewed directory containing model.xyz and run.in.",
+        "authorityAnchor": "The user owns the executable, CUDA environment, GPU allocation, input data, compute cost, and output directory.",
+        "failureAnchor": "If gpumd is unavailable or unstable, retain logs and inputs and diagnose the first error without compiling, changing drivers, or automatically retrying."
+      }
+    },
+    {
+      "id": "gpumd-run-nep",
+      "implementation": {
+        "kind": "external-tool",
+        "toolName": "nep",
+        "usageAnchor": "Use the user-compiled nep executable only for a reviewed directory containing nep.in and train.xyz with an optional test.xyz.",
+        "authorityAnchor": "The user owns the executable, datasets, GPU allocation, checkpoints, compute budget, and every training run.",
+        "failureAnchor": "If nep training fails or diverges, preserve loss and checkpoint evidence and ask before changing data, hyperparameters, or restarting."
+      }
+    },
+    {
+      "id": "gpumd-interpret-results",
+      "implementation": {
+        "kind": "agent-procedure",
+        "procedureAnchor": "Agent procedure: assess conservation, equilibration, sampling, stability, loss behavior, test performance, and output completeness.",
+        "outputAnchor": "Return evidence-linked results, uncertainty, applicability limits, and follow-up checks.",
+        "failureAnchor": "Do not report converged dynamics or a valid potential from incomplete, unstable, or unvalidated output."
+      }
+    }
+  ],
+  "source_file_map": [
+    {
+      "upstream_skill_id": "gpumd-workflow",
+      "source_path": "gpumd-workflow/SKILL.md",
+      "source_sha256": "58f69a3a1d3968143abd63929dd3deac148b3a5a8a73de01ae4e51ec9fe208ed",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "upstream_skill_id": "gpumd-workflow",
+      "source_path": "gpumd-workflow/references/gpumd-run.md",
+      "source_sha256": "44d16c99de13dfcff774cf3f8285b3e810760066fb475b48ce04b5276ca377eb",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "references/md-nep-and-output-playbook.md"
+      ]
+    },
+    {
+      "upstream_skill_id": "gpumd-workflow",
+      "source_path": "gpumd-workflow/references/nep-training.md",
+      "source_sha256": "ff747d39cd559c51e8211d216cdda60da7559816fac3f0acd93e9904493952a1",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "references/md-nep-and-output-playbook.md"
+      ]
+    },
+    {
+      "upstream_skill_id": "gpumd-workflow",
+      "source_path": "gpumd-workflow/references/outputs.md",
+      "source_sha256": "abe67ad3ade0057b53fd753be30205e4a64e27f453a2fc61f9eaf8f28c9f57e4",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "references/md-nep-and-output-playbook.md"
+      ]
+    },
+    {
+      "upstream_skill_id": "gpumd-workflow",
+      "source_path": "gpumd-workflow/references/quickstart.md",
+      "source_sha256": "435ed5fce2b7c0ff918924ad2404f6883f70993e3ea7f445c5750cad9390af9f",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "upstream_skill_id": "gpumd-workflow",
+      "source_path": "gpumd-workflow/references/troubleshooting.md",
+      "source_sha256": "dfd3dcbbc485084baceb91a142448d0c3b368839b6be32ee70e202f3fd905cbc",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "SKILL.md",
+        "references/md-nep-and-output-playbook.md"
+      ]
+    }
+  ],
+  "files": [
+    {
+      "path": "SKILL.md",
+      "authorship": "researchspec-authored-adaptation",
+      "source_scope": "reviewed-materials-skill-evidence"
+    },
+    {
+      "path": "references/md-nep-and-output-playbook.md",
+      "authorship": "researchspec-authored-adaptation",
+      "source_scope": "reviewed-materials-skill-evidence"
+    },
+    {
+      "path": "LICENSE",
+      "authorship": "upstream-license",
+      "source_scope": "vendor-root"
+    },
+    {
+      "path": "NOTICE.md",
+      "authorship": "researchspec-authored",
+      "source_scope": "immutable-audit-and-source-decisions"
+    },
+    {
+      "path": "DERIVATION.json",
+      "authorship": "converter-generated",
+      "source_scope": "immutable-audit-skill-definition-and-source-decisions"
+    }
+  ]
+}

@@ -1,0 +1,124 @@
+{
+  "schema_version": 2,
+  "vendor": "materials-science-skills-for-llm",
+  "release": "snapshot-fafd3ab",
+  "revision": "fafd3ab011e4c363658a39c4bb62fc739839d58c",
+  "audit_sha256": "03a12b5547b140c68458b5bf988f8df7056178a56c8fe41be2a3ffd29cf16589",
+  "skill_id": "materials-science-skills-phonopy-workflows",
+  "upstream_skill_id": "phonopy-workflows",
+  "skill_tier": 2,
+  "implementation_strategy": "researchspec-authored-non-native-skill",
+  "upstream_code_copied": false,
+  "capability_map": [
+    {
+      "id": "phonopy-design-calculation",
+      "implementation": {
+        "kind": "agent-procedure",
+        "procedureAnchor": "Agent procedure: choose and justify displacement, supercell, symmetry, path, mesh, and convergence settings.",
+        "outputAnchor": "Return the calculation design, force-job inventory, validation plan, and expected Phonopy artifacts.",
+        "failureAnchor": "Stop when the structure, calculator consistency, units, convergence plan, or observable definition is insufficient."
+      }
+    },
+    {
+      "id": "phonopy-process-workflow",
+      "implementation": {
+        "kind": "external-tool",
+        "toolName": "phonopy",
+        "usageAnchor": "Use the user-preinstalled phonopy CLI only for reviewed displacement generation, force assembly, force constants, bands, DOS, or thermal-property processing.",
+        "authorityAnchor": "The user owns the Phonopy installation and local files; generated or replaced files require disclosed paths and overwrite confirmation.",
+        "failureAnchor": "If phonopy or an interface command is unavailable, inspect local version help and preserve existing artifacts without installing or guessing flags."
+      }
+    },
+    {
+      "id": "phonopy-calculate-forces",
+      "implementation": {
+        "kind": "external-tool",
+        "toolName": "user-configured DFT or ALM force calculator",
+        "usageAnchor": "Use the selected user-configured DFT or ALM force calculator only for the reviewed displaced-structure job set.",
+        "authorityAnchor": "The user owns the calculator, licenses, credentials, remote or scheduler environment, compute budget, and submitted jobs.",
+        "failureAnchor": "If any force job fails or atom ordering differs, stop assembly and repair the incomplete force set without automatic resubmission."
+      }
+    },
+    {
+      "id": "phonopy-interpret-results",
+      "implementation": {
+        "kind": "agent-procedure",
+        "procedureAnchor": "Agent procedure: assess imaginary modes, acoustic sum rules, convergence, path conventions, NAC, and physical limitations.",
+        "outputAnchor": "Return provenance-linked phonon, DOS, thermal, and stability conclusions with uncertainty.",
+        "failureAnchor": "Do not interpret imaginary modes or thermal results before checking numerical, structural, and convergence causes."
+      }
+    }
+  ],
+  "source_file_map": [
+    {
+      "upstream_skill_id": "phonopy-workflows",
+      "source_path": "phonopy-workflows/SKILL.md",
+      "source_sha256": "7c632388475c7bc293838e5b0908f23d63f6257fe3f53ae40e28cbfa91d04960",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "upstream_skill_id": "phonopy-workflows",
+      "source_path": "phonopy-workflows/references/common-files.md",
+      "source_sha256": "600afaf02bb8e17604b56645b8f1b3d0e0e54fbb90425dbbe5eabc63056ca965",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "references/configuration-and-force-files.md"
+      ]
+    },
+    {
+      "upstream_skill_id": "phonopy-workflows",
+      "source_path": "phonopy-workflows/references/config-templates.md",
+      "source_sha256": "24c33261730298c48c7e9cded2aa5a6f8b75636cefeadadbfc383894d1c6ae9b",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "references/configuration-and-force-files.md"
+      ]
+    },
+    {
+      "upstream_skill_id": "phonopy-workflows",
+      "source_path": "phonopy-workflows/references/dev.md",
+      "source_sha256": "332c4d4586b63cf2135ce18653294dc467b682b5548fa5c92468ce18100318c7",
+      "disposition": "excluded",
+      "reason": "Upstream development maintenance is outside the generated research Skill."
+    },
+    {
+      "upstream_skill_id": "phonopy-workflows",
+      "source_path": "phonopy-workflows/references/quick-start.md",
+      "source_sha256": "454a95bf7b7a2118c0624a567c11b7c9617e08fd5a754465278def5494df0bed",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "SKILL.md"
+      ]
+    }
+  ],
+  "files": [
+    {
+      "path": "SKILL.md",
+      "authorship": "researchspec-authored-adaptation",
+      "source_scope": "reviewed-materials-skill-evidence"
+    },
+    {
+      "path": "references/configuration-and-force-files.md",
+      "authorship": "researchspec-authored-adaptation",
+      "source_scope": "reviewed-materials-skill-evidence"
+    },
+    {
+      "path": "LICENSE",
+      "authorship": "upstream-license",
+      "source_scope": "vendor-root"
+    },
+    {
+      "path": "NOTICE.md",
+      "authorship": "researchspec-authored",
+      "source_scope": "immutable-audit-and-source-decisions"
+    },
+    {
+      "path": "DERIVATION.json",
+      "authorship": "converter-generated",
+      "source_scope": "immutable-audit-skill-definition-and-source-decisions"
+    }
+  ]
+}

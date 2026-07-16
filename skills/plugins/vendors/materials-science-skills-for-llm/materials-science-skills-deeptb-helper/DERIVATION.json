@@ -1,0 +1,105 @@
+{
+  "schema_version": 2,
+  "vendor": "materials-science-skills-for-llm",
+  "release": "snapshot-fafd3ab",
+  "revision": "fafd3ab011e4c363658a39c4bb62fc739839d58c",
+  "audit_sha256": "03a12b5547b140c68458b5bf988f8df7056178a56c8fe41be2a3ffd29cf16589",
+  "skill_id": "materials-science-skills-deeptb-helper",
+  "upstream_skill_id": "deeptb-helper",
+  "skill_tier": 2,
+  "implementation_strategy": "researchspec-authored-non-native-skill",
+  "upstream_code_copied": false,
+  "capability_map": [
+    {
+      "id": "deeptb-prepare-workflow",
+      "implementation": {
+        "kind": "agent-procedure",
+        "procedureAnchor": "Agent procedure: review dataset suitability and construct a version-matched DeePTB configuration and evaluation plan.",
+        "outputAnchor": "Return a dataset/configuration review, command plan, metric definitions, and acceptance criteria.",
+        "failureAnchor": "Stop when labels, units, splits, species coverage, model target, or provenance cannot be established."
+      }
+    },
+    {
+      "id": "deeptb-run-workflow",
+      "implementation": {
+        "kind": "external-tool",
+        "toolName": "dptb",
+        "usageAnchor": "Use the user-configured dptb CLI only for reviewed config, bond, train, and run operations.",
+        "authorityAnchor": "The user owns the DeePTB environment, datasets, checkpoints, devices, compute budget, and output directories.",
+        "failureAnchor": "If dptb, a dataset, or a compatible checkpoint is unavailable, report the missing prerequisite and do not install, download, or start training."
+      }
+    },
+    {
+      "id": "deeptb-evaluate-results",
+      "implementation": {
+        "kind": "agent-procedure",
+        "procedureAnchor": "Agent procedure: evaluate training behavior, held-out metrics, physical plausibility, applicability, and uncertainty.",
+        "outputAnchor": "Return a model assessment that separates observed metrics from scientific interpretation.",
+        "failureAnchor": "Do not accept a model from training loss alone or when evaluation leakage, unit mismatch, or applicability gaps remain."
+      }
+    }
+  ],
+  "source_file_map": [
+    {
+      "upstream_skill_id": "deeptb-helper",
+      "source_path": "deeptb-helper/SKILL.md",
+      "source_sha256": "c1f724ffda50caf41c4a706a725e9fb4963b04fef24178e4dfed3198a2d73c1e",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "upstream_skill_id": "deeptb-helper",
+      "source_path": "deeptb-helper/references/cli-cheatsheet.md",
+      "source_sha256": "12b300a7011363beb9b8bab629ee52cd26882edc2e7d17dee2dcc992f2fc7d6d",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "upstream_skill_id": "deeptb-helper",
+      "source_path": "deeptb-helper/references/datasets.md",
+      "source_sha256": "60402f53274ac03352ec67fa3163f8447a6b5288fddf68376ae6efb75263dc76",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "references/dataset-and-configuration.md"
+      ]
+    },
+    {
+      "upstream_skill_id": "deeptb-helper",
+      "source_path": "deeptb-helper/references/install.md",
+      "source_sha256": "5edb953ad69c26812abbb268959740d163e56b92f79defe127599e78e97f4335",
+      "disposition": "excluded",
+      "reason": "Dependency installation is outside the static Skill boundary."
+    }
+  ],
+  "files": [
+    {
+      "path": "SKILL.md",
+      "authorship": "researchspec-authored-adaptation",
+      "source_scope": "reviewed-materials-skill-evidence"
+    },
+    {
+      "path": "references/dataset-and-configuration.md",
+      "authorship": "researchspec-authored-adaptation",
+      "source_scope": "reviewed-materials-skill-evidence"
+    },
+    {
+      "path": "LICENSE",
+      "authorship": "upstream-license",
+      "source_scope": "vendor-root"
+    },
+    {
+      "path": "NOTICE.md",
+      "authorship": "researchspec-authored",
+      "source_scope": "immutable-audit-and-source-decisions"
+    },
+    {
+      "path": "DERIVATION.json",
+      "authorship": "converter-generated",
+      "source_scope": "immutable-audit-skill-definition-and-source-decisions"
+    }
+  ]
+}

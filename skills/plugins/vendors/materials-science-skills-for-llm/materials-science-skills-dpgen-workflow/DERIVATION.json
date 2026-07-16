@@ -1,0 +1,90 @@
+{
+  "schema_version": 2,
+  "vendor": "materials-science-skills-for-llm",
+  "release": "snapshot-fafd3ab",
+  "revision": "fafd3ab011e4c363658a39c4bb62fc739839d58c",
+  "audit_sha256": "03a12b5547b140c68458b5bf988f8df7056178a56c8fe41be2a3ffd29cf16589",
+  "skill_id": "materials-science-skills-dpgen-workflow",
+  "upstream_skill_id": "dpgen-workflow",
+  "skill_tier": 2,
+  "implementation_strategy": "researchspec-authored-non-native-skill",
+  "upstream_code_copied": false,
+  "capability_map": [
+    {
+      "id": "dpgen-design-loop",
+      "implementation": {
+        "kind": "agent-procedure",
+        "procedureAnchor": "Agent procedure: design the concurrent-learning loop and decide the evidence required to advance each stage.",
+        "outputAnchor": "Return iteration scope, parameter and machine plans, uncertainty thresholds, labeling criteria, and stopping rules.",
+        "failureAnchor": "Stop when data provenance, exploration domain, labeling fidelity, or convergence criteria are undefined."
+      }
+    },
+    {
+      "id": "dpgen-run-loop",
+      "implementation": {
+        "kind": "external-tool",
+        "toolName": "dpgen",
+        "usageAnchor": "Use the user-configured dpgen CLI only for an explicitly reviewed init, run, autotest, simplify, or collect operation.",
+        "authorityAnchor": "The user owns DP-GEN, training and labeling runtimes, scheduler configuration, credentials, compute budget, and every submitted job.",
+        "failureAnchor": "If a stage or backend fails, preserve its artifacts and logs and ask whether to repair or rerun; never resubmit automatically."
+      }
+    },
+    {
+      "id": "dpgen-review-iteration",
+      "implementation": {
+        "kind": "agent-procedure",
+        "procedureAnchor": "Agent procedure: review model deviation, selected configurations, label quality, coverage, and convergence before proposing another iteration.",
+        "outputAnchor": "Return a stage ledger, accepted/rejected structures, evidence gaps, and advance/stop recommendation.",
+        "failureAnchor": "Do not advance when uncertainty, labeling errors, data leakage, or unexplored regions invalidate the iteration."
+      }
+    }
+  ],
+  "source_file_map": [
+    {
+      "upstream_skill_id": "dpgen-workflow",
+      "source_path": "dpgen-workflow/SKILL.md",
+      "source_sha256": "6b677adcd4c831f0728dec7e1c6a6c4c6e233e90f2edc30c00a98771c5eaf0ac",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "SKILL.md",
+        "references/parameter-and-machine-files.md"
+      ]
+    },
+    {
+      "upstream_skill_id": "dpgen-workflow",
+      "source_path": "dpgen-workflow/references/quick-start.md",
+      "source_sha256": "b65309f875980120885db42dcf6bed66595197c6a84a0eee2065096c7f8d1135",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "SKILL.md"
+      ]
+    }
+  ],
+  "files": [
+    {
+      "path": "SKILL.md",
+      "authorship": "researchspec-authored-adaptation",
+      "source_scope": "reviewed-materials-skill-evidence"
+    },
+    {
+      "path": "references/parameter-and-machine-files.md",
+      "authorship": "researchspec-authored-adaptation",
+      "source_scope": "reviewed-materials-skill-evidence"
+    },
+    {
+      "path": "LICENSE",
+      "authorship": "upstream-license",
+      "source_scope": "vendor-root"
+    },
+    {
+      "path": "NOTICE.md",
+      "authorship": "researchspec-authored",
+      "source_scope": "immutable-audit-and-source-decisions"
+    },
+    {
+      "path": "DERIVATION.json",
+      "authorship": "converter-generated",
+      "source_scope": "immutable-audit-skill-definition-and-source-decisions"
+    }
+  ]
+}

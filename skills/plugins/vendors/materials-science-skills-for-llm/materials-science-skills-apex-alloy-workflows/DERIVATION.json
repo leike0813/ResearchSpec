@@ -1,0 +1,98 @@
+{
+  "schema_version": 2,
+  "vendor": "materials-science-skills-for-llm",
+  "release": "snapshot-fafd3ab",
+  "revision": "fafd3ab011e4c363658a39c4bb62fc739839d58c",
+  "audit_sha256": "03a12b5547b140c68458b5bf988f8df7056178a56c8fe41be2a3ffd29cf16589",
+  "skill_id": "materials-science-skills-apex-alloy-workflows",
+  "upstream_skill_id": "apex-alloy-workflows",
+  "skill_tier": 2,
+  "implementation_strategy": "researchspec-authored-non-native-skill",
+  "upstream_code_copied": false,
+  "capability_map": [
+    {
+      "id": "apex-plan-property-workflow",
+      "implementation": {
+        "kind": "agent-procedure",
+        "procedureAnchor": "Agent procedure: design and validate the alloy property workflow before execution.",
+        "outputAnchor": "Return a reviewed property plan, input inventory, validation criteria, and interpretation record.",
+        "failureAnchor": "Stop when the structure, potential, property definition, or completion evidence is insufficient."
+      }
+    },
+    {
+      "id": "apex-operate-workflow",
+      "implementation": {
+        "kind": "external-tool",
+        "toolName": "apex",
+        "usageAnchor": "Use the user-configured apex CLI only for the reviewed submit, inspect, retrieve, report, or control action.",
+        "authorityAnchor": "The user owns the APEX runtime, backend, account, credentials, machine profile, compute budget, and every remote state change.",
+        "failureAnchor": "If apex or its backend is unavailable, preserve the plan and report the missing configuration without installing, retrying, or switching providers."
+      }
+    },
+    {
+      "id": "apex-interpret-results",
+      "implementation": {
+        "kind": "agent-procedure",
+        "procedureAnchor": "Agent procedure: assess convergence, provenance, property definitions, uncertainty, and scientific meaning.",
+        "outputAnchor": "Return evidence-linked property results with limitations and failed or incomplete tasks marked.",
+        "failureAnchor": "Do not conclude when required tasks failed, units conflict, or convergence is unverified."
+      }
+    }
+  ],
+  "source_file_map": [
+    {
+      "upstream_skill_id": "apex-alloy-workflows",
+      "source_path": "apex-alloy-workflows/SKILL.md",
+      "source_sha256": "8f6336800762f6c57383010fc62839836ee6a8be4d7bc762ecf7c66d38655e3d",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "upstream_skill_id": "apex-alloy-workflows",
+      "source_path": "apex-alloy-workflows/references/property-parameters.md",
+      "source_sha256": "020677923773d1d1e59099da57bc1697e233b2cf0c1a3730fee91616a8238c51",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "references/property-parameters.md"
+      ]
+    },
+    {
+      "upstream_skill_id": "apex-alloy-workflows",
+      "source_path": "apex-alloy-workflows/references/quickstart.md",
+      "source_sha256": "056ef96e11ca23a1cc7ef491d2fef42948836318331b30241220460687612737",
+      "disposition": "adapted",
+      "derived_output_paths": [
+        "SKILL.md"
+      ]
+    }
+  ],
+  "files": [
+    {
+      "path": "SKILL.md",
+      "authorship": "researchspec-authored-adaptation",
+      "source_scope": "reviewed-materials-skill-evidence"
+    },
+    {
+      "path": "references/property-parameters.md",
+      "authorship": "researchspec-authored-adaptation",
+      "source_scope": "reviewed-materials-skill-evidence"
+    },
+    {
+      "path": "LICENSE",
+      "authorship": "upstream-license",
+      "source_scope": "vendor-root"
+    },
+    {
+      "path": "NOTICE.md",
+      "authorship": "researchspec-authored",
+      "source_scope": "immutable-audit-and-source-decisions"
+    },
+    {
+      "path": "DERIVATION.json",
+      "authorship": "converter-generated",
+      "source_scope": "immutable-audit-skill-definition-and-source-decisions"
+    }
+  ]
+}
