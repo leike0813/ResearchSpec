@@ -25,6 +25,7 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
     const skillPath = path.join(root, "skills/arsu", group, "SKILL.md");
     assert.equal(existsSync(skillPath), true);
     assert.match(await readFile(skillPath, "utf8"), /ResearchSpec Contract Preflight/);
+    assert.match(await readFile(skillPath, "utf8"), /researchspec-literature-adapter:zotero-library:v1/);
     assert.match(await readFile(path.join(root, "skills/arsu", group, "LICENSE"), "utf8"), /Attribution-NonCommercial 4.0 International/);
     assert.match(await readFile(path.join(root, "skills/arsu", group, "NOTICE.md"), "utf8"), /Cheng-I Wu/);
   }
@@ -37,6 +38,10 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
   assert.match(deepResearch, /propose at most three domains in one batch/);
   assert.match(deepResearch, /does not become the candidate producer/);
   assert.match(deepResearch, /continue the same core work without the plugin/);
+  assert.match(deepResearch, /bounded, read-only query of the user's library/);
+  assert.match(deepResearch, /empty Zotero result/);
+  assert.match(deepResearch, /private collection/);
+  assert.match(deepResearch, /Host Bridge approval/);
   assert.match(deepResearch, /work:<instance>\/<node>/);
   assert.match(deepResearch, /policy is `automatic`/);
   assert.match(deepResearch, /--expected-sha256/);
@@ -120,7 +125,11 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
   const crossSkillDeepResearch = await readFile(crossSkillDeepResearchPath, "utf8");
   assert.match(crossSkillDeepResearch, /<!--rs:STATE-001-->/);
   assert.match(crossSkillDeepResearch, /description: test/);
-  assert.doesNotMatch(crossSkillDeepResearch, /researchspec-contract-preflight:v6/);
+  assert.doesNotMatch(crossSkillDeepResearch, /researchspec-contract-preflight:v7/);
+  for (const relativePath of ["scripts/adapters/zotero.py", "scripts/adapters/_common.py", "scripts/__init__.py", "scripts/adapters/__init__.py"]) {
+    assert.equal(existsSync(path.join(root, "skills/arsu/academic-pipeline", relativePath)), true);
+  }
+  assert.match(await readFile(path.join(root, "skills/arsu/academic-pipeline/scripts/adapters/zotero.py"), "utf8"), /Better BibTeX/);
   assert.equal(
     manifest.anchor_replacements.records.some((item) =>
       item.anchor_id === "STATE-001" &&
@@ -418,6 +427,9 @@ async function makeSourceFiles(source: string, options: { omitGroup?: string } =
   await writeFile(path.join(source, ".claude/CLAUDE.md"), "adapter only\n", { encoding: "utf8", flag: "w" });
   await mkdir(path.join(source, "docs/design"), { recursive: true });
   await writeFile(path.join(source, "docs/design/old.md"), "historical design\n", "utf8");
+  await mkdir(path.join(source, "scripts/adapters"), { recursive: true });
+  await writeFile(path.join(source, "scripts/adapters/zotero.py"), '"""Better BibTeX JSON only."""\nfrom scripts.adapters._common import helper\n', "utf8");
+  await writeFile(path.join(source, "scripts/adapters/_common.py"), "def helper():\n    return None\n", "utf8");
 
   if (groups.includes("academic-paper")) {
     await writeFile(path.join(source, "academic-paper/references/writing_quality_check.md"), "Writing quality\n", "utf8");

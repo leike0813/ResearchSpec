@@ -87,7 +87,7 @@ function registerCommands(program: Command, run: Runner): void {
     .requiredOption("--actor-name <name>", "transition executor name")
     .option("--expected-plan-sha256 <hash>", "bind execution to the previewed transition plan")
     .action(async (transition: string, options: AdvanceOptions, command: Command) => run("advance", command, () => handleAdvance(transition, options, commandContext("advance", command))));
-  program.command("check [target]").description("Check all, contracts, runtime, artifacts, or tools")
+  program.command("check [target]").description("Check all, contracts, runtime, artifacts, tools, plugins, or literature-adapters")
     .option("--strict", "treat warnings as failures")
     .action(async (target: string | undefined, options: { strict?: boolean }, command: Command) => run("check", command, () => handleCheck(target, Boolean(options.strict), commandContext("check", command))));
   program.command("list [type]").description("List changes, artifacts, gates, decisions, or tools")

@@ -4,6 +4,7 @@ import path from "node:path";
 import { test } from "node:test";
 
 import { planToolDelivery } from "../src/adapters/delivery.js";
+import { isDomainSkillInstallation, type ManagedInstallation } from "../src/adapters/installations.js";
 import { TOOL_IDS, TOOLS } from "../src/adapters/tools.js";
 import { handlePluginInstall, handlePluginInstructions, handlePluginList, handlePluginShow, handlePluginUninstall, handlePluginUpdate, handleUpdate } from "../src/cli/handlers.js";
 import type { CommandContext } from "../src/cli/types.js";
@@ -68,8 +69,8 @@ void test("production domain installation projects Scientific Agent Skills witho
     }
     const snapshot = await loadWorkspaceSnapshot(path.join(root, "researchspec"));
     assert.deepEqual(pluginStatusSummary(snapshot.config, snapshot.manifest, registry).selected, ["quantum-physics"]);
-    const manifest = JSON.parse(await readFile(path.join(root, "researchspec/tool-installation-manifest.json"), "utf8")) as { installations: Array<{ source: string }> };
-    assert.equal(manifest.installations.filter((item) => item.source.startsWith("command:")).length, 8);
+    const manifest = JSON.parse(await readFile(path.join(root, "researchspec/tool-installation-manifest.json"), "utf8")) as { installations: ManagedInstallation[] };
+    assert.equal(manifest.installations.filter((item) => item.source.kind === "command").length, 8);
     await handlePluginUninstall(["quantum-physics"], context(root), registry);
     assert.equal(await exists(path.join(root, ".claude/skills/scientific-agent-skills-qiskit/SKILL.md")), false);
   } finally { await cleanup(root); }
@@ -90,8 +91,8 @@ void test("production Education domain installs complete static Skills without n
       assert.equal(await exists(path.join(skillRoot, "NOTICE.md")), true);
       assert.equal(await exists(path.join(skillRoot, "scripts")), false);
     }
-    const manifest = JSON.parse(await readFile(path.join(root, "researchspec/tool-installation-manifest.json"), "utf8")) as { installations: Array<{ source: string }> };
-    assert.equal(manifest.installations.filter((item) => item.source.startsWith("command:")).length, 8);
+    const manifest = JSON.parse(await readFile(path.join(root, "researchspec/tool-installation-manifest.json"), "utf8")) as { installations: ManagedInstallation[] };
+    assert.equal(manifest.installations.filter((item) => item.source.kind === "command").length, 8);
     await handlePluginUninstall(["education-systems"], context(root), registry);
     assert.equal(await exists(path.join(root, ".claude/skills", educationSkills[0] ?? "missing", "SKILL.md")), false);
   } finally { await cleanup(root); }
@@ -146,13 +147,13 @@ void test("resolved domain delivery reaches all adapters without wrappers or scr
   try {
     const registry = await loadPluginRegistry(FIXTURE_ROOT);
     const delivery = await planToolDelivery({ projectRoot: root, toolIds: TOOL_IDS, existingInstallations: [], force: false, pluginRegistry: registry, selectedPluginIds: ["geoscience"] });
-    const domainFiles = delivery.installations.filter((item) => item.vendor_id);
+    const domainFiles = delivery.installations.filter(isDomainSkillInstallation);
     const resourcesPerTool = (registry.skillFiles.get("rock-mechanics")?.length ?? 0) + (registry.skillFiles.get("research-tables")?.length ?? 0);
     assert.equal(domainFiles.length, TOOL_IDS.length * resourcesPerTool);
     assert.equal(new Set(domainFiles.map((item) => item.tool_id)).size, 31);
-    assert.deepEqual([...new Set(domainFiles.map((item) => item.skill_id))].sort(), ["research-tables", "rock-mechanics"]);
-    assert.ok(domainFiles.every((item) => item.vendor_id && item.vendor_release));
-    assert.equal(delivery.installations.filter((item) => item.source.startsWith("command:")).length, TOOLS.filter((tool) => tool.command).length * 8);
+    assert.deepEqual([...new Set(domainFiles.map((item) => item.source.skill_id))].sort(), ["research-tables", "rock-mechanics"]);
+    assert.ok(domainFiles.every((item) => item.source.vendor_id && item.source.vendor_release));
+    assert.equal(delivery.installations.filter((item) => item.source.kind === "command").length, TOOLS.filter((tool) => tool.command).length * 8);
     assert.equal(await exists(path.join(root, "researchspec-plugin-script-executed")), false);
   } finally {
     if (previousCodexHome === undefined) Reflect.deleteProperty(process.env, "CODEX_HOME"); else process.env.CODEX_HOME = previousCodexHome;
@@ -319,8 +320,8 @@ void test("domain update records new vendor release and domain version", async (
     await writeFile(registryPath, `${JSON.stringify(raw, null, 2)}\n`, "utf8");
     await writeFile(path.join(fixture, "vendors/domain-source/rock-mechanics/references/criteria.md"), "# Updated criteria\n", "utf8");
     await handlePluginUpdate(["geoscience"], context(root), await loadPluginRegistry(fixture));
-    const manifest = JSON.parse(await readFile(path.join(root, "researchspec/tool-installation-manifest.json"), "utf8")) as { installations: Array<{ vendor_id?: string; vendor_release?: string }>; plugin_resolutions: Array<{ domain_id: string; domain_version: string }> };
-    assert.ok(manifest.installations.filter((item) => item.vendor_id === "domain-source").every((item) => item.vendor_release === "v1.1.0"));
+    const manifest = JSON.parse(await readFile(path.join(root, "researchspec/tool-installation-manifest.json"), "utf8")) as { installations: ManagedInstallation[]; plugin_resolutions: Array<{ domain_id: string; domain_version: string }> };
+    assert.ok(manifest.installations.filter(isDomainSkillInstallation).filter((item) => item.source.vendor_id === "domain-source").every((item) => item.source.vendor_release === "v1.1.0"));
     assert.equal(manifest.plugin_resolutions.find((item) => item.domain_id === "geoscience")?.domain_version, "1.1.0");
   } finally { await cleanup(root); await cleanup(fixture); }
 });

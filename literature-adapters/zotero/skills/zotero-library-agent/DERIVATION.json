@@ -1,0 +1,26 @@
+{
+  "schema_version": "1",
+  "adapter_id": "zotero-library",
+  "release_set_id": "hbrs-48630ca514e3146c2c89a8d5",
+  "upstream": {
+    "repository": "https://github.com/leike0813/zotero-library-agent-bundle",
+    "immutable_tag": "host-bridge/hbrs-48630ca514e3146c2c89a8d5",
+    "bundle_revision": "8eef49d72574084244514fb612b96e7f5e7967a8",
+    "bundle_tree": "d4cb943c0370e5104ec8c7074606c69980dec090",
+    "source_repository": "https://github.com/leike0813/zotero-agents",
+    "source_commit": "4436cf4a91f12ea555a54ddbba9278480ceaf56d"
+  },
+  "audit_included_tree_sha256": "004738582e762734d00f6b7166d6e845016308c57d17ed0933b0b03a14b322cf",
+  "license": {
+    "expression": "AGPL-3.0-only",
+    "source_path": "LICENSE",
+    "source_sha256": "76a97c878c9c7a8321bb395c2b44d3fe2f8d81314d219b20138ed0e2dddd5182"
+  },
+  "adaptations": [
+    "removed upstream installer guidance",
+    "removed generic runner and output-envelope guidance",
+    "filtered excluded files from bundled manifest-source arrays",
+    "added ResearchSpec project-local runtime guidance"
+  ],
+  "generated_skill_id": "zotero-library-agent"
+}

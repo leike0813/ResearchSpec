@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import path from "node:path";
 
-import { DEFAULT_SKILL_GROUPS } from "./config.js";
+import { ARSU_OFFLINE_ZOTERO_PACKAGE_MARKERS, ARSU_OFFLINE_ZOTERO_SOURCE_FILES, DEFAULT_SKILL_GROUPS } from "./config.js";
 import { pathExists, readUtf8, sha256File } from "./fs-utils.js";
 import { markerEnd, markerStart } from "./anchors/markers.js";
 import { scanFindings } from "./transform.js";
@@ -9,7 +9,7 @@ import type { ConversionManifest, RiskFinding, ValidationResult } from "./types.
 import { ARSU_ROUTING_CATALOG, getArsuSkillDefinition } from "./routing/catalog.js";
 import { ArsuRoutingCatalogSchema, type ArsuRoutingCatalog, validateRoutingCatalogReferences } from "./routing/contracts.js";
 import { readSkillFrontmatterDescription, renderArsuSkillDescription } from "./routing/projection.js";
-import { RESEARCHSPEC_PREFLIGHT_MARKER } from "./contracts.js";
+import { RESEARCHSPEC_LITERATURE_ADAPTER_MARKER, RESEARCHSPEC_PREFLIGHT_MARKER } from "./contracts.js";
 import { ARSU_LICENSE_FILENAME, ARSU_NOTICE_FILENAME } from "./licensing.js";
 
 const LINK_RE = /\[[^\]]+\]\((?<link>[^)#]+)(?:#[^)]+)?\)/g;
@@ -125,6 +125,9 @@ export async function validateArsuOutput(outputRoot: string): Promise<Validation
       if (!skillText.includes(RESEARCHSPEC_PREFLIGHT_MARKER)) {
         errors.push(`Missing Contract Preflight block in ${group}/SKILL.md`);
       }
+      if (!skillText.includes(RESEARCHSPEC_LITERATURE_ADAPTER_MARKER)) {
+        errors.push(`Missing Zotero literature adapter protocol in ${group}/SKILL.md`);
+      }
       const skill = getArsuSkillDefinition(group);
       const description = readSkillFrontmatterDescription(skillText);
       const expected = renderArsuSkillDescription(skill);
@@ -134,6 +137,10 @@ export async function validateArsuOutput(outputRoot: string): Promise<Validation
       }
       errors.push(...await validateEntrypointOperationalPaths(groupRoot, group, skillText));
     }
+  }
+
+  for (const relativePath of [...ARSU_OFFLINE_ZOTERO_SOURCE_FILES, ...ARSU_OFFLINE_ZOTERO_PACKAGE_MARKERS]) {
+    if (!(await pathExists(path.join(outputRoot, "academic-pipeline", relativePath)))) errors.push(`Missing academic-pipeline/${relativePath}`);
   }
 
   errors.push(...await validateMarkdownLinks(outputRoot));

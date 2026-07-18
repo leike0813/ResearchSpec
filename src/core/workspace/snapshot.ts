@@ -1,4 +1,4 @@
-import { readdir, readFile } from "node:fs/promises";
+import { lstat, readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { z } from "zod";
 
@@ -13,6 +13,7 @@ import { parseJson, parseJsonLines, parseYaml } from "../validation/parse.js";
 import type { Diagnostic } from "../validation/types.js";
 import { JSON_FILES, JSONL_FILES, MARKDOWN_FILES, REQUIRED_FILES, YAML_FILES } from "./layout.js";
 import { sha256 } from "./write-plan.js";
+import { ToolInstallationManifestSchema } from "../../adapters/installations.js";
 
 const SafeId = z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]*$/).refine((value) => !value.includes(".."));
 const ActorSchema = z.union([z.string().min(1), z.looseObject({ kind: z.string().min(1), name: z.string().min(1) })]);
@@ -24,14 +25,6 @@ const ConfigSchema = z.looseObject({
   profile: z.enum(WORKFLOW_PROFILE_IDS),
   agent_tools: z.looseObject({ selected: z.array(z.string()), delivery: z.enum(["skills", "commands", "both"]) }),
   plugins: z.looseObject({ selected: z.array(z.string()) }).optional(),
-});
-const ManifestSchema = z.looseObject({
-  schema_version: z.string(), package_version: z.string(),
-  plugin_resolutions: z.array(z.looseObject({ domain_id: z.string(), domain_version: z.string(), resolved_skill_ids: z.array(z.string()) })).optional(),
-  installations: z.array(z.looseObject({
-    tool_id: z.string(), path: z.string(), scope: z.enum(["project", "shared-global"]), sha256: z.string(), source: z.string(), adapter_version: z.string(),
-    vendor_id: z.string().optional(), vendor_release: z.string().optional(), skill_id: z.string().optional(),
-  })),
 });
 const SourcesSchema = z.looseObject({ schema_version: z.string(), sources: z.array(SourceSchema) });
 const ClaimsSchema = z.looseObject({ schema_version: z.string(), claims: z.array(ClaimSchema) });
@@ -56,6 +49,9 @@ export interface SnapshotFile {
   text: string;
   bytes: Uint8Array;
   hash: string;
+  mode: number;
+  executable: boolean;
+  fileType: "file";
   value?: unknown;
 }
 
@@ -93,13 +89,26 @@ export async function loadWorkspaceSnapshot(workspace: string): Promise<Workspac
 
   for (const relativePath of REQUIRED_FILES) {
     const absolutePath = path.join(workspace, relativePath);
-    const text = await readOptionalText(absolutePath);
-    if (text === undefined) {
+    let info;
+    try {
+      info = await lstat(absolutePath);
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
       diagnostics.push({ severity: "error", code: "required_file_missing", message: "Required file is missing.", path: absolutePath, blocking: true });
       continue;
     }
+    if (!info.isFile() || info.isSymbolicLink()) {
+      diagnostics.push({ severity: "error", code: "required_file_not_regular", message: "Required file must be a regular file.", path: absolutePath, blocking: true });
+      continue;
+    }
+    const text = await readOptionalText(absolutePath);
+    if (text === undefined) {
+      diagnostics.push({ severity: "error", code: "required_file_missing", message: "Required file disappeared while loading the workspace.", path: absolutePath, blocking: true });
+      continue;
+    }
     const bytes = Buffer.from(text, "utf8");
-    const file: SnapshotFile = { relativePath, absolutePath, text, bytes, hash: sha256(bytes) };
+    const mode = info.mode & 0o777;
+    const file: SnapshotFile = { relativePath, absolutePath, text, bytes, hash: sha256(bytes), mode, executable: Boolean(mode & 0o111), fileType: "file" };
     files.set(relativePath, file);
 
     if (YAML_FILES.includes(relativePath)) {
@@ -139,7 +148,7 @@ export async function loadWorkspaceSnapshot(workspace: string): Promise<Workspac
   const gates = records(documents["runs/current/gate-ledger.jsonl"]);
 
   validateDocument("config.yaml", config, ConfigSchema, files, diagnostics);
-  validateDocument("tool-installation-manifest.json", manifest, ManifestSchema, files, diagnostics);
+  validateDocument("tool-installation-manifest.json", manifest, ToolInstallationManifestSchema, files, diagnostics);
   validateDocument("specs/sources.yaml", documents["specs/sources.yaml"], SourcesSchema, files, diagnostics);
   validateDocument("specs/claims.yaml", documents["specs/claims.yaml"], ClaimsSchema, files, diagnostics);
   validateDocument("specs/manuscript.yaml", documents["specs/manuscript.yaml"], ManuscriptSchema, files, diagnostics);

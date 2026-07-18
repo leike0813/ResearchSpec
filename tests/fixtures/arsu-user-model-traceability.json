@@ -12,7 +12,8 @@
     "consolidate-researchspec-agent-surface",
     "implement-complete-cli-interface",
     "add-atomic-artifact-submit",
-    "add-arsu-material-passport-import"
+    "add-arsu-material-passport-import",
+    "agent-assisted-domain-plugin-routing"
   ],
   "journeys": [
     { "journey_id": "bootstrap", "test_id": "journey.bootstrap" },
@@ -26,7 +27,9 @@
     { "journey_id": "resume", "test_id": "journey.resume" },
     { "journey_id": "context-export", "test_id": "journey.context-export" },
     { "journey_id": "terminal-completion", "test_id": "journey.terminal-completion" },
-    { "journey_id": "resume-passport", "test_id": "journey.resume-passport" }
+    { "journey_id": "resume-passport", "test_id": "journey.resume-passport" },
+    { "journey_id": "plugin-augmentation", "test_id": "journey.plugin-augmentation" },
+    { "journey_id": "plugin-fallback", "test_id": "journey.plugin-fallback" }
   ],
   "capabilities": [
     {
@@ -101,6 +104,13 @@
           "scenarios": [
             { "scenario": "User imports a Passport", "technical_changes": ["add-arsu-material-passport-import", "add-subflow-instance-control-plane"], "journey_ids": ["resume-passport"], "test_ids": ["journey.resume-passport"] },
             { "scenario": "Imported claims require current authority", "technical_changes": ["add-arsu-material-passport-import", "add-gate-transition-control-plane"], "journey_ids": ["resume-passport"], "test_ids": ["journey.resume-passport"] }
+          ]
+        },
+        {
+          "requirement": "Plugin Helpers Do Not Enter The Runtime Frontier",
+          "scenarios": [
+            { "scenario": "Helper is used during a work item", "technical_changes": ["agent-assisted-domain-plugin-routing"], "journey_ids": ["plugin-augmentation"], "test_ids": ["journey.plugin-augmentation"] },
+            { "scenario": "Helper is unavailable", "technical_changes": ["agent-assisted-domain-plugin-routing"], "journey_ids": ["plugin-fallback"], "test_ids": ["journey.plugin-fallback"] }
           ]
         }
       ]

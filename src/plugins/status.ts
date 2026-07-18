@@ -1,10 +1,12 @@
 import { availableDomains, domainIsAvailable, resolveDomainSelection, type DomainDefinition, type LoadedPluginRegistry } from "./registry.js";
+import {
+  domainResolutionSnapshots,
+  installationRecords,
+  isDomainSkillInstallation,
+  type DomainResolutionSnapshot,
+} from "../adapters/installations.js";
 
-export interface DomainResolutionSnapshot {
-  domain_id: string;
-  domain_version: string;
-  resolved_skill_ids: string[];
-}
+export type { DomainResolutionSnapshot } from "../adapters/installations.js";
 
 export interface PluginStatusSummary {
   selected: string[];
@@ -17,9 +19,7 @@ export interface PluginStatusSummary {
 export function selectedPluginIds(config: Record<string, unknown>): string[] { return uniqueSorted(strings(record(config.plugins).selected)); }
 
 export function resolutionSnapshots(value: unknown): DomainResolutionSnapshot[] {
-  return records(value).filter((item): item is Record<string, unknown> & DomainResolutionSnapshot =>
-    typeof item.domain_id === "string" && typeof item.domain_version === "string" && strings(item.resolved_skill_ids).length === (Array.isArray(item.resolved_skill_ids) ? item.resolved_skill_ids.length : -1))
-    .map((item) => ({ domain_id: item.domain_id, domain_version: item.domain_version, resolved_skill_ids: uniqueSorted(item.resolved_skill_ids) }));
+  return domainResolutionSnapshots(value).map((item) => ({ ...item, resolved_skill_ids: uniqueSorted(item.resolved_skill_ids) }));
 }
 
 export function buildResolutionSnapshots(loaded: LoadedPluginRegistry, domainIds: readonly string[]): DomainResolutionSnapshot[] {
@@ -35,11 +35,11 @@ export function pluginStatusSummary(config: Record<string, unknown>, manifest: R
   const resolution = resolveDomainSelection(loaded, selected);
   const available = availableDomains(loaded).map((domain) => domain.domain_id);
   const tools = uniqueSorted(strings(record(config.agent_tools).selected));
-  const recordsByTool = installationRecords(manifest.installations);
+  const recordsByTool = installationRecords(manifest.installations).filter(isDomainSkillInstallation);
   const projected = resolution.availableDomainIds.filter((domainId) => {
     if (!tools.length) return false;
     const skillIds = new Set(resolveDomainSelection(loaded, [domainId]).resolvedSkillIds);
-    return tools.every((toolId) => [...skillIds].every((skillId) => recordsByTool.some((item) => item.tool_id === toolId && item.skill_id === skillId)));
+    return tools.every((toolId) => [...skillIds].every((skillId) => recordsByTool.some((item) => item.tool_id === toolId && item.source.skill_id === skillId)));
   });
   return { selected, available, unavailable: resolution.unavailableDomainIds, projected, resolved_skills: resolution.resolvedSkillIds };
 }
@@ -132,9 +132,7 @@ function skillSummaryItem(skillId: string, loaded: LoadedPluginRegistry) {
   };
 }
 
-function installationRecords(value: unknown): Array<{ tool_id: string; skill_id?: string }> { return records(value).filter((item): item is Record<string, unknown> & { tool_id: string; skill_id?: string } => typeof item.tool_id === "string" && (item.skill_id === undefined || typeof item.skill_id === "string")); }
 function record(value: unknown): Record<string, unknown> { return value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : {}; }
-function records(value: unknown): Record<string, unknown>[] { return Array.isArray(value) ? value.filter((item): item is Record<string, unknown> => Boolean(item) && typeof item === "object" && !Array.isArray(item)) : []; }
 function strings(value: unknown): string[] { return Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : []; }
 function uniqueSorted(values: readonly string[]): string[] { return [...new Set(values)].sort(compareText); }
 function compareText(left: string, right: string): number { return left < right ? -1 : left > right ? 1 : 0; }

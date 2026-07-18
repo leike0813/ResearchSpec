@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { mkdtemp, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, mkdir, readFile, readdir, rm, stat, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import process from "node:process";
@@ -19,6 +19,8 @@ const expectedSkills = [
   "researchspec-navigate",
   "researchspec-propose",
   "researchspec-verify",
+  "zotero-bridge-cli",
+  "zotero-library-agent",
 ];
 const expectedCommands = [
   "advance", "archive", "check", "decide", "handoff", "init", "instructions", "list",
@@ -93,6 +95,18 @@ try {
     const license = await readFile(path.join(projectDirectory, ".codex", "skills", skill, "LICENSE"), "utf8");
     assert(license.trim().length > 0, `Installed Skill license is empty: ${skill}`);
   }
+  const adapterRoot = path.join(projectDirectory, ".zotero-bridge");
+  await readFile(path.join(adapterRoot, "profile.template.json"), "utf8");
+  const runtime = expectedRuntime(process.platform, process.arch);
+  assert(runtime, `Release verification platform is unsupported: ${process.platform}-${process.arch}`);
+  const runtimePath = path.join(adapterRoot, "bin", runtime);
+  const runtimeInfo = await stat(runtimePath);
+  assert(runtimeInfo.isFile(), `Installed Zotero runtime is not a file: ${runtimePath}`);
+  if (process.platform !== "win32") assert((runtimeInfo.mode & 0o111) !== 0, `Installed Zotero runtime is not executable: ${runtimePath}`);
+  if (process.platform === "win32") await readFile(path.join(adapterRoot, "bin", "zotero-bridge.cmd"), "utf8");
+  const installationManifest = JSON.parse(await readFile(path.join(projectDirectory, "researchspec", "tool-installation-manifest.json"), "utf8"));
+  assert(installationManifest.literature_adapter_resolutions?.length === 1, "Installed manifest has no fixed literature adapter resolution.");
+  assert(installationManifest.literature_adapter_resolutions[0].projection_state === "complete", "Installed literature adapter Skill projection is incomplete.");
   const prompts = (await readdir(path.join(codexHome, "prompts"))).filter((file) => file.startsWith("researchspec-") && file.endsWith(".md")).sort();
   assert(prompts.length === 8, `Installed Codex prompt count mismatch: ${String(prompts.length)}`);
   run(bin, ["check", "all", "--strict", "--json"], projectDirectory, environment);
@@ -105,8 +119,18 @@ try {
 function verifyTarballFiles(files) {
   const required = [
     "package.json", "README.md", "CHANGELOG.md", "SECURITY.md", "LICENSE", "NOTICE",
-    "LICENSES/MIT.txt", "LICENSES/CC-BY-NC-4.0.txt", "LICENSES/CC-BY-SA-4.0.txt", "LICENSES/Apache-2.0.txt", "docs/release_process.md",
-    "docs/arsu_user_usage_model.md", "docs/cli_interface_design.md", "docs/domain_skill_plugins.md", "docs/domain_taxonomy.md", "docs/education_agent_skills_vendor_adapter.md", "docs/finrobot_vendor_adapter.md", "docs/histagent_vendor_adapter.md", "docs/materials_science_skills_vendor_adapter.md", "docs/scientific_agent_skills_vendor_adapter.md", "docs/tooluniverse_vendor_adapter.md",
+    "LICENSES/MIT.txt", "LICENSES/CC-BY-NC-4.0.txt", "LICENSES/CC-BY-SA-4.0.txt", "LICENSES/Apache-2.0.txt", "LICENSES/AGPL-3.0.txt", "docs/release_process.md",
+    "docs/arsu_user_usage_model.md", "docs/cli_interface_design.md", "docs/domain_skill_plugins.md", "docs/domain_taxonomy.md", "docs/education_agent_skills_vendor_adapter.md", "docs/literature_system_adapters.md", "docs/finrobot_vendor_adapter.md", "docs/histagent_vendor_adapter.md", "docs/materials_science_skills_vendor_adapter.md", "docs/scientific_agent_skills_vendor_adapter.md", "docs/tooluniverse_vendor_adapter.md",
+    "literature-adapters/zotero/profile.template.json",
+    "literature-adapters/zotero/skills/zotero-library-agent/SKILL.md",
+    "literature-adapters/zotero/skills/zotero-bridge-cli/SKILL.md",
+    "literature-adapters/zotero/bin/win32-x64/zotero-bridge.exe",
+    "literature-adapters/zotero/bin/darwin-x64/zotero-bridge",
+    "literature-adapters/zotero/bin/darwin-arm64/zotero-bridge",
+    "literature-adapters/zotero/bin/linux-x86/zotero-bridge",
+    "literature-adapters/zotero/bin/linux-x64/zotero-bridge",
+    "literature-adapters/zotero/bin/linux-arm/zotero-bridge",
+    "literature-adapters/zotero/bin/linux-arm64/zotero-bridge",
     "skills/plugins/registry.json", "skills/plugins/vendor-bundles/tooluniverse.json", "skills/plugins/vendor-manifests/tooluniverse.json",
     "skills/plugins/conversion-reports/tooluniverse.md",
     "skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/SKILL.md",
@@ -159,8 +183,10 @@ function verifyTarballFiles(files) {
     educationFiles.every((file) => /\/(?:SKILL\.md|LICENSE|NOTICE\.md)$/.test(file)),
     "Tarball Education Skills contain an unexpected asset.",
   );
+  const adapterRuntimeFiles = files.filter((file) => /^literature-adapters\/zotero\/bin\/[^/]+\/zotero-bridge(?:\.exe)?$/.test(file));
+  assert(adapterRuntimeFiles.length === 7, `Tarball Zotero runtime count mismatch: ${String(adapterRuntimeFiles.length)}`);
 
-  const allowed = /^(?:package\.json|README\.md|CHANGELOG\.md|SECURITY\.md|LICENSE|NOTICE|LICENSES\/[^/]+|docs\/(?:release_process|arsu_user_usage_model|cli_interface_design|domain_skill_plugins|domain_taxonomy|education_agent_skills_vendor_adapter|finrobot_vendor_adapter|histagent_vendor_adapter|materials_science_skills_vendor_adapter|scientific_agent_skills_vendor_adapter|tooluniverse_vendor_adapter)\.md|artifacts\/mvp_release_checklist\.md|dist\/src\/.*\.js|skills\/.*)$/;
+  const allowed = /^(?:package\.json|README\.md|CHANGELOG\.md|SECURITY\.md|LICENSE|NOTICE|LICENSES\/[^/]+|docs\/(?:release_process|arsu_user_usage_model|cli_interface_design|domain_skill_plugins|domain_taxonomy|education_agent_skills_vendor_adapter|literature_system_adapters|finrobot_vendor_adapter|histagent_vendor_adapter|materials_science_skills_vendor_adapter|scientific_agent_skills_vendor_adapter|tooluniverse_vendor_adapter)\.md|artifacts\/mvp_release_checklist\.md|dist\/src\/.*\.js|skills\/.*|literature-adapters\/.*)$/;
   const retired = /^dist\/src\/adapters\/companion\/workflows\/(?:archive|check|context|explore|next|submit)\.js$/;
   for (const file of files) {
     assert(allowed.test(file), `Tarball contains a path outside the release allowlist: ${file}`);
@@ -174,10 +200,12 @@ function verifyTarballFiles(files) {
     assert(!file.startsWith("vendor/finrobot/"), `Tarball contains the FinRobot source checkout: ${file}`);
     assert(!file.startsWith("vendor/histagent/"), `Tarball contains the HistAgent source checkout: ${file}`);
     assert(!file.startsWith("vendor/education-agent-skills/"), `Tarball contains the Education Agent Skills source checkout: ${file}`);
+    assert(!file.startsWith("vendor/zotero-library-agent-bundle/"), `Tarball contains the Zotero adapter maintenance checkout: ${file}`);
     assert(!file.startsWith("audits/"), `Tarball contains maintainer-only vendor audit evidence: ${file}`);
     assert(!file.startsWith("dist/src/vendor-audits/"), `Tarball contains maintainer-only vendor audit code: ${file}`);
     assert(!file.startsWith("dist/src/vendor-evidence/"), `Tarball contains maintainer-only vendor evidence code: ${file}`);
     assert(!file.startsWith("dist/src/vendor-converters/education-agent-skills/"), `Tarball contains maintainer-only Education conversion code: ${file}`);
+    assert(!file.startsWith("dist/src/vendor-converters/zotero-library-agent-bundle/"), `Tarball contains maintainer-only Zotero conversion code: ${file}`);
     assert(!file.includes("/curation/"), `Tarball contains maintainer-only curation inputs: ${file}`);
     assert(!/^skills\/plugins\/vendors\/finrobot\/[^/]+\/(?:dependencies\.json|references\/|resources\/|agents\/)/.test(file), `Tarball contains an obsolete or unjustified FinRobot asset: ${file}`);
     assert(!/(?:admission|relationship|file|external-resource)-decisions\.json$/.test(file), `Tarball contains maintainer-only production decisions: ${file}`);
@@ -185,6 +213,19 @@ function verifyTarballFiles(files) {
     assert(!file.endsWith(".js.map"), `Tarball contains source maps: ${file}`);
     assert(!retired.test(file), `Tarball contains a retired Companion workflow: ${file}`);
   }
+}
+
+function expectedRuntime(platform, architecture) {
+  const key = `${platform}:${architecture}`;
+  return {
+    "win32:x64": "zotero-bridge.exe",
+    "darwin:x64": "zotero-bridge",
+    "darwin:arm64": "zotero-bridge",
+    "linux:ia32": "zotero-bridge",
+    "linux:x64": "zotero-bridge",
+    "linux:arm": "zotero-bridge",
+    "linux:arm64": "zotero-bridge",
+  }[key];
 }
 
 function parsePackMetadata(stdout) {

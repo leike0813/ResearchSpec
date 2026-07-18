@@ -41,16 +41,16 @@ skill groups at its registered project-local skill root.
 ### Requirement: Complete Companion Skill Delivery
 
 Every selected tool SHALL receive generated copies of all four canonical
-ResearchSpec companion skills at its registered project-local skill root.
+ResearchSpec Companion Skills together with the fixed ARSU and Literature Adapter Skills at its registered project-local skill root.
 
-#### Scenario: Every tool receives the target eight-Skill surface
+#### Scenario: Every tool receives the target ten-Skill surface
 
 - **WHEN** any of the 31 registered tools is selected
-- **THEN** it SHALL receive four ARSU Skills plus `researchspec-navigate`,
-  `researchspec-propose`, `researchspec-decide`, and `researchspec-verify`
-- **AND** each installed companion SHALL contain one self-contained `SKILL.md`
-- **AND** desired projection counts SHALL be derived from the ARSU and Companion
-  registries rather than a second member list
+- **THEN** it SHALL receive four ARSU Skills, `researchspec-navigate`,
+  `researchspec-propose`, `researchspec-decide`, `researchspec-verify`, `zotero-library-agent`, and `zotero-bridge-cli`
+- **AND** each installed Companion SHALL contain one self-contained `SKILL.md`
+- **AND** desired projection counts SHALL be derived from the ARSU, Companion, and Literature Adapter
+  catalogs rather than a second member list
 
 #### Scenario: Obsolete generated projections are cleaned safely
 
@@ -62,23 +62,23 @@ ResearchSpec companion skills at its registered project-local skill root.
 
 ### Requirement: Capability-Aware Command Delivery
 
-ResearchSpec SHALL render typed ARSU and companion wrapper intents through the
-registered tool-specific command format without conflating their metadata or
-installed skill IDs.
+ResearchSpec SHALL render typed ARSU and Companion wrapper intents through the
+registered tool-specific command format without creating wrappers for Literature Adapter Skills or conflating metadata and installed Skill IDs.
 
 #### Scenario: Command-capable tools receive the target eight-wrapper surface
 
 - **WHEN** one of the 28 command-capable tools is selected
 - **THEN** it SHALL receive wrappers for four ARSU Skills and four Companion Skills
   at the registered command paths and syntax
-- **AND** each companion wrapper SHALL route to its installed skill instead of
+- **AND** it SHALL receive no wrapper for either Literature Adapter Skill
+- **AND** each Companion wrapper SHALL route to its installed Skill instead of
   duplicating the workflow
-- **AND** companion metadata SHALL not inherit ARSU categories or tags
+- **AND** Companion metadata SHALL not inherit ARSU categories or tags
 
 #### Scenario: Skills-only tools remain non-blocking
 
 - **WHEN** ForgeCode, Kimi, or Mistral Vibe is selected
-- **THEN** its four ARSU and four Companion Skills SHALL be installed
+- **THEN** its four ARSU, four Companion, and two Literature Adapter Skills SHALL be installed
 - **AND** the CLI SHALL report a non-blocking `commands_not_supported`
   diagnostic instead of inventing a command format
 
@@ -107,15 +107,20 @@ configured and detected tools.
 
 ### Requirement: Local Selection And Ownership Facts
 
-ResearchSpec SHALL store selected tool intent in `researchspec/config.yaml` and
-generated ownership evidence in `tool-installation-manifest.json`.
+ResearchSpec SHALL store selected tool intent in `researchspec/config.yaml` and all generated ownership evidence in the strict current-state `tool-installation-manifest.json` schema version `1`.
 
 #### Scenario: Successful writes update the manifest last
 
-- **WHEN** tool files are installed or refreshed
-- **THEN** the manifest SHALL record only successful paths with source,
-  adapter, scope, version, and SHA-256 evidence
+- **WHEN** tool or literature-adapter files are installed or refreshed
+- **THEN** the manifest SHALL record only successful paths through structured owner, source, target, executable, and SHA-256 evidence
+- **AND** it SHALL record completed literature-adapter resolutions separately
 - **AND** it SHALL be committed after generated files
+
+#### Scenario: Previous development manifest shape is read
+
+- **WHEN** the manifest contains a flat installation source or `adapter_version`
+- **THEN** validation SHALL reject it as invalid schema version `1` content
+- **AND** ResearchSpec SHALL NOT migrate, dual-write, or interpret the legacy shape
 
 ### Requirement: Generated File Drift Protection
 `init` and `update` SHALL preserve unknown or modified generated files and SHALL reconcile obsolete project-local manifest-owned files without recognizing product-history identifiers.
@@ -146,7 +151,7 @@ under `$CODEX_HOME/prompts` or `~/.codex/prompts`.
 
 ### Requirement: Installed Skill License Retention
 
-ResearchSpec SHALL deliver applicable license and attribution files with every independently copied ARSU and Companion Skill without weakening generated-file ownership or drift protection.
+ResearchSpec SHALL deliver applicable license and attribution files with every independently copied ARSU, Companion, and Literature Adapter Skill without weakening generated-file ownership or drift protection.
 
 #### Scenario: ARSU Skill is installed
 
@@ -159,6 +164,12 @@ ResearchSpec SHALL deliver applicable license and attribution files with every i
 - **WHEN** a selected tool receives a generated Companion Skill
 - **THEN** the Companion directory SHALL include canonical MIT license text attributed to `ResearchSpec contributors`
 - **AND** the license file SHALL follow the same manifest hash, drift-preservation, and safe-retirement rules as its `SKILL.md`
+
+#### Scenario: Literature Adapter Skill is installed
+
+- **WHEN** a selected tool receives a Zotero Adapter Skill
+- **THEN** its approved AGPL-3.0 license, notice, and derivation evidence SHALL be delivered with the complete tree
+- **AND** those files SHALL use the same managed ownership and drift rules
 
 ### Requirement: Optional Plugin Skill Delivery
 Every configured tool SHALL receive complete packaged copies of every currently available workspace-selected domain Skill in addition to the fixed base surface; empty or missing selected domains SHALL retain intent and snapshots but SHALL NOT produce desired files.
@@ -178,12 +189,13 @@ Every configured tool SHALL receive complete packaged copies of every currently 
 - **AND** it SHALL preserve the last committed resolution snapshot
 
 ### Requirement: Plugin Projection Ownership Evidence
-Plugin projection SHALL reuse the installation manifest and record optional plugin ID, plugin version, and Skill ID in addition to existing path, hash, source, adapter, scope, and version evidence.
+Plugin projection SHALL reuse the structured managed-installation manifest and record its domain, vendor release, Skill ID, Agent-tool owner, target path, executable contract, and SHA-256 without altering literature-adapter resolutions.
 
 #### Scenario: Plugin writes commit manifest last
 - **WHEN** plugin files are installed or refreshed successfully
-- **THEN** their manifest entries SHALL identify the owning plugin and Skill
+- **THEN** their structured source SHALL identify the owning domain/vendor Skill and their owner SHALL identify the target Agent tool
 - **AND** the manifest SHALL be committed after the resource writes
+- **AND** existing literature-adapter installations and resolutions SHALL be preserved
 
 ### Requirement: Plugin Delivery Adds No Wrappers
 Optional plugin Skills SHALL NOT create tool command wrappers.

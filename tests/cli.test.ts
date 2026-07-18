@@ -4,6 +4,7 @@ import { existsSync } from "node:fs";
 import { mkdir, readFile, rm, symlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { test } from "node:test";
+import type { ManagedInstallation } from "../src/adapters/installations.js";
 import { strFromU8, unzipSync } from "fflate";
 
 import { cleanup, parseEnvelope, runCli, tempProject } from "./helpers/cli.js";
@@ -33,6 +34,18 @@ void test("init dry-run and execution share a protected workspace plan", async (
   assert.match(await readFile(path.join(root, "researchspec/config.yaml"), "utf8"), /plugins:\n\s+selected: \[\]/);
   assert.equal(runCli(["init", root, "--tools", "none", "--profile", "unknown", "--json"]).status, 2);
   for (const relative of ["config.yaml", "tool-installation-manifest.json", "specs/project.md", "runs/current/state.yaml"]) assert.equal(existsSync(path.join(root, "researchspec", relative)), true);
+  const runtimePath = path.join(root, ".zotero-bridge/bin", process.platform === "win32" ? "zotero-bridge.exe" : "zotero-bridge");
+  assert.equal(existsSync(runtimePath), true);
+  const manifest = JSON.parse(await readFile(path.join(root, "researchspec/tool-installation-manifest.json"), "utf8")) as { literature_adapter_resolutions: Array<{ projection_state: string }> };
+  assert.equal(manifest.literature_adapter_resolutions[0]?.projection_state, "deferred");
+  await rm(runtimePath);
+  assert.equal(runCli(["update", "--tools", "none"], root).status, 0);
+  assert.equal(existsSync(runtimePath), true);
+  await writeFile(runtimePath, "local drift", "utf8");
+  assert.equal(runCli(["update", "--tools", "none"], root).status, 0);
+  assert.equal(await readFile(runtimePath, "utf8"), "local drift");
+  assert.equal(runCli(["update", "--tools", "none", "--force"], root).status, 0);
+  assert.notEqual(await readFile(runtimePath, "utf8"), "local drift");
   const projectPath = path.join(root, "researchspec/specs/project.md");
   await writeFile(projectPath, "custom project text", "utf8");
   assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
@@ -47,7 +60,13 @@ void test("status and check use the versioned JSON envelope", async () => {
   assert.equal(parseEnvelope(missing).error?.code, "workspace_missing");
 
   assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
-  const status = parseEnvelope<{ status: string; run: { status: string }; tools: { selected: string[] }; plugins: { selected: string[]; available: string[]; projected: string[] } }>(runCli(["status", "--json"], root));
+  const status = parseEnvelope<{
+    status: string;
+    run: { status: string };
+    tools: { selected: string[] };
+    plugins: { selected: string[]; available: string[]; projected: string[] };
+    literature_adapters: Array<{ adapter_id: string; state: string; connection_state: string; skills: { projection_state: string } }>;
+  }>(runCli(["status", "--json"], root));
   assert.equal(status.ok, true);
   assert.equal(status.data?.status, "initialized");
   assert.equal(status.data?.run.status, "not_started");
@@ -56,12 +75,27 @@ void test("status and check use the versioned JSON envelope", async () => {
   assert.equal(status.data?.plugins.available.length, 56);
   assert.equal(status.data?.plugins.available.includes("scientific-visualization-and-communication"), true);
   assert.deepEqual(status.data?.plugins.projected, []);
+  assert.deepEqual(status.data?.literature_adapters.map((adapter) => ({
+    adapter_id: adapter.adapter_id,
+    state: adapter.state,
+    connection_state: adapter.connection_state,
+    projection_state: adapter.skills.projection_state,
+  })), [{ adapter_id: "zotero-library", state: "installed", connection_state: "unchecked", projection_state: "deferred" }]);
   const check = parseEnvelope<{ ok: boolean; target: string }>(runCli(["check", "contracts", "--json"], root));
   assert.equal(check.data?.ok, true);
   assert.equal(check.data?.target, "contracts");
   const pluginCheck = parseEnvelope<{ ok: boolean; target: string }>(runCli(["check", "plugins", "--json"], root));
   assert.equal(pluginCheck.data?.ok, true);
   assert.equal(pluginCheck.data?.target, "plugins");
+  const literatureCheck = parseEnvelope<{ ok: boolean; target: string }>(runCli(["check", "literature-adapters", "--json"], root));
+  assert.equal(literatureCheck.data?.ok, true);
+  assert.equal(literatureCheck.data?.target, "literature-adapters");
+  if (process.platform !== "win32") {
+    await writeFile(path.join(root, ".zotero-bridge/bin/zotero-bridge"), "drift", "utf8");
+    const drifted = parseEnvelope(runCli(["check", "literature-adapters", "--json"], root));
+    assert.equal(drifted.ok, false);
+    assert.ok(drifted.diagnostics.some((item) => typeof item === "object" && item !== null && (item as { code?: string }).code === "literature_adapter_file_drift"));
+  }
   await cleanup(root);
 });
 
@@ -497,22 +531,13 @@ void test("update preserves drifted manifest-owned files", async () => {
   assert.equal(forced.status, 0, forced.stderr || forced.stdout);
   assert.notEqual(await readFile(skillPath, "utf8"), "user customization");
   const manifestPath = path.join(root, "researchspec/tool-installation-manifest.json");
-  const manifest = JSON.parse(await readFile(manifestPath, "utf8")) as {
-    installations: Array<{ tool_id: string; path: string; scope: "project" | "shared-global"; sha256: string; source: string; adapter_version: string }>;
-  };
-  assert.ok(manifest.installations.some((entry) => entry.path.endsWith("researchspec-navigate/SKILL.md") && entry.source === "companion:researchspec-navigate/SKILL.md"));
+  const manifest = JSON.parse(await readFile(manifestPath, "utf8")) as { installations: ManagedInstallation[] };
+  assert.ok(manifest.installations.some((entry) => entry.target.path.endsWith("researchspec-navigate/SKILL.md") && entry.source.kind === "companion-skill" && entry.source.skill_id === "researchspec-navigate"));
   const stalePath = path.join(root, ".forge/skills/researchspec-check/references/cli-discipline.md");
   const staleContent = "old generated companion reference";
   await mkdir(path.dirname(stalePath), { recursive: true });
   await writeFile(stalePath, staleContent, "utf8");
-  manifest.installations.push({
-    tool_id: "forgecode",
-    path: ".forge/skills/researchspec-check/references/cli-discipline.md",
-    scope: "project",
-    sha256: hash(staleContent),
-    source: "companion:researchspec-check/references/cli-discipline.md",
-    adapter_version: "1",
-  });
+  manifest.installations.push(fixtureInstallation("forgecode", ".forge/skills/researchspec-check/references/cli-discipline.md", "project", hash(staleContent), "researchspec-check"));
   await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
   assert.equal(runCli(["update", "--tools", "forgecode", "--json"], root).status, 0);
   assert.equal(existsSync(stalePath), false);
@@ -521,14 +546,7 @@ void test("update preserves drifted manifest-owned files", async () => {
   await mkdir(path.dirname(driftedReference), { recursive: true });
   await writeFile(driftedReference, "user-modified reference", "utf8");
   const refreshedManifest = JSON.parse(await readFile(manifestPath, "utf8")) as typeof manifest;
-  refreshedManifest.installations.push({
-    tool_id: "forgecode",
-    path: ".forge/skills/researchspec-archive/references/cli-discipline.md",
-    scope: "project",
-    sha256: hash(oldReference),
-    source: "companion:researchspec-archive/references/cli-discipline.md",
-    adapter_version: "1",
-  });
+  refreshedManifest.installations.push(fixtureInstallation("forgecode", ".forge/skills/researchspec-archive/references/cli-discipline.md", "project", hash(oldReference), "researchspec-archive"));
   await writeFile(manifestPath, `${JSON.stringify(refreshedManifest, null, 2)}\n`, "utf8");
   const preserve = runCli(["update", "--tools", "forgecode", "--json"], root);
   assert.match(preserve.stdout, /generated_file_drift/);
@@ -541,9 +559,7 @@ void test("update and existing-workspace init generically reconcile obsolete pro
     const root = await tempProject();
     assert.equal(runCli(["init", root, "--tools", "forgecode"]).status, 0);
     const manifestPath = path.join(root, "researchspec/tool-installation-manifest.json");
-    const manifest = JSON.parse(await readFile(manifestPath, "utf8")) as {
-      installations: Array<{ tool_id: string; path: string; scope: "project" | "shared-global"; sha256: string; source: string; adapter_version: "1" }>;
-    };
+    const manifest = JSON.parse(await readFile(manifestPath, "utf8")) as { installations: ManagedInstallation[] };
     const cleanPath = path.join(root, ".forge/skills/obsolete-clean/SKILL.md");
     const driftedPath = path.join(root, ".forge/skills/obsolete-modified/SKILL.md");
     const userOwnedPath = path.join(root, ".forge/skills/unmanifested-user/SKILL.md");
@@ -554,9 +570,9 @@ void test("update and existing-workspace init generically reconcile obsolete pro
     await writeFile(driftedPath, "user-modified generated file", "utf8");
     await writeFile(userOwnedPath, "unmanifested user workflow", "utf8");
     manifest.installations.push(
-      { tool_id: "forgecode", path: ".forge/skills/obsolete-clean/SKILL.md", scope: "project", sha256: hash("generated clean"), source: "generated:obsolete-clean", adapter_version: "1" },
-      { tool_id: "forgecode", path: ".forge/skills/obsolete-modified/SKILL.md", scope: "project", sha256: hash("generated original"), source: "generated:obsolete-modified", adapter_version: "1" },
-      { tool_id: "forgecode", path: ".forge/skills/obsolete-missing/SKILL.md", scope: "project", sha256: hash("missing"), source: "generated:obsolete-missing", adapter_version: "1" },
+      fixtureInstallation("forgecode", ".forge/skills/obsolete-clean/SKILL.md", "project", hash("generated clean"), "obsolete-clean"),
+      fixtureInstallation("forgecode", ".forge/skills/obsolete-modified/SKILL.md", "project", hash("generated original"), "obsolete-modified"),
+      fixtureInstallation("forgecode", ".forge/skills/obsolete-missing/SKILL.md", "project", hash("missing"), "obsolete-missing"),
     );
     await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
 
@@ -569,9 +585,9 @@ void test("update and existing-workspace init generically reconcile obsolete pro
     assert.equal(await readFile(driftedPath, "utf8"), "user-modified generated file");
     assert.equal(await readFile(userOwnedPath, "utf8"), "unmanifested user workflow");
     const reconciled = JSON.parse(await readFile(manifestPath, "utf8")) as typeof manifest;
-    assert.equal(reconciled.installations.some((item) => item.source === "generated:obsolete-clean"), false);
-    assert.equal(reconciled.installations.some((item) => item.source === "generated:obsolete-missing"), false);
-    assert.equal(reconciled.installations.some((item) => item.source === "generated:obsolete-modified"), true);
+    assert.equal(reconciled.installations.some((item) => item.source.kind === "companion-skill" && item.source.skill_id === "obsolete-clean"), false);
+    assert.equal(reconciled.installations.some((item) => item.source.kind === "companion-skill" && item.source.skill_id === "obsolete-missing"), false);
+    assert.equal(reconciled.installations.some((item) => item.source.kind === "companion-skill" && item.source.skill_id === "obsolete-modified"), true);
     assert.equal(runCli(["update", "--tools", "forgecode", "--json"], root).status, 0);
     await cleanup(root);
   }
@@ -583,17 +599,15 @@ void test("shared-global projections are never removed by project reconciliation
   const env = { CODEX_HOME: codexHome };
   assert.equal(runCli(["init", root, "--tools", "codex"], process.cwd(), env).status, 0);
   const manifestPath = path.join(root, "researchspec/tool-installation-manifest.json");
-  const manifest = JSON.parse(await readFile(manifestPath, "utf8")) as {
-    installations: Array<{ tool_id: string; path: string; scope: "project" | "shared-global"; sha256: string; source: string; adapter_version: "1" }>;
-  };
+  const manifest = JSON.parse(await readFile(manifestPath, "utf8")) as { installations: ManagedInstallation[] };
   const cleanPath = path.join(codexHome, "prompts/obsolete-clean.md");
   const driftedPath = path.join(codexHome, "prompts/obsolete-modified.md");
   await mkdir(path.dirname(cleanPath), { recursive: true });
   await writeFile(cleanPath, "generated clean", "utf8");
   await writeFile(driftedPath, "user-modified generated file", "utf8");
   manifest.installations.push(
-    { tool_id: "codex", path: cleanPath, scope: "shared-global", sha256: hash("generated clean"), source: "generated:obsolete-clean", adapter_version: "1" },
-    { tool_id: "codex", path: driftedPath, scope: "shared-global", sha256: hash("generated original"), source: "generated:obsolete-modified", adapter_version: "1" },
+    fixtureInstallation("codex", cleanPath, "shared-global", hash("generated clean"), "obsolete-clean"),
+    fixtureInstallation("codex", driftedPath, "shared-global", hash("generated original"), "obsolete-modified"),
   );
   await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
 
@@ -605,12 +619,12 @@ void test("shared-global projections are never removed by project reconciliation
   const deselectedPath = path.join(codexHome, "prompts/obsolete-deselected.md");
   await writeFile(deselectedPath, "generated deselected", "utf8");
   const afterUpdate = JSON.parse(await readFile(manifestPath, "utf8")) as typeof manifest;
-  afterUpdate.installations.push({ tool_id: "codex", path: deselectedPath, scope: "shared-global", sha256: hash("generated deselected"), source: "generated:obsolete-deselected", adapter_version: "1" });
+  afterUpdate.installations.push(fixtureInstallation("codex", deselectedPath, "shared-global", hash("generated deselected"), "obsolete-deselected"));
   await writeFile(manifestPath, `${JSON.stringify(afterUpdate, null, 2)}\n`, "utf8");
   assert.equal(runCli(["init", root, "--tools", "none", "--json"], process.cwd(), env).status, 0);
   assert.equal(await readFile(deselectedPath, "utf8"), "generated deselected");
   const afterDeselection = JSON.parse(await readFile(manifestPath, "utf8")) as typeof manifest;
-  assert.equal(afterDeselection.installations.some((item) => item.path === deselectedPath), true);
+  assert.equal(afterDeselection.installations.some((item) => item.target.path === deselectedPath), true);
   await cleanup(root);
 });
 
@@ -652,6 +666,15 @@ async function startSliceViaCli(root: string): Promise<string> {
   return result.data?.instance.instance_id ?? "";
 }
 
+function fixtureInstallation(toolId: string, targetPath: string, scope: "project" | "shared-global", sha: string, skillId: string): ManagedInstallation {
+  return {
+    owner: "agent-tool",
+    tool_id: toolId,
+    source: { kind: "companion-skill", skill_id: skillId },
+    target: { scope, path: targetPath, executable: false },
+    sha256: sha,
+  };
+}
 function hash(value: string | Uint8Array): string { return createHash("sha256").update(value).digest("hex"); }
 function draftArtifact(artifactId: string, artifactPath: string, content: string | Uint8Array) {
   return { artifact_id: artifactId, artifact_type: "paper_draft", path: artifactPath, sha256: hash(content), status: "created", produced_by: "researchspec decide", created_at: "2026-07-10T00:00:00.000Z", derived_from_artifact_ids: ["A-SOURCE"] };

@@ -5,7 +5,7 @@ import { test } from "node:test";
 
 import { COMPANION_INTENTS, COMPANION_WORKFLOW_IDS, renderCompanionSkill } from "../src/adapters/companion/index.js";
 import { ARSU_COMMAND_CONTENTS, renderCommand } from "../src/adapters/command-renderer.js";
-import { planToolDelivery } from "../src/adapters/delivery.js";
+import { planWorkspaceDelivery } from "../src/adapters/workspace-delivery.js";
 import { TOOL_IDS, TOOLS, detectTools, getTool, parseToolExpression } from "../src/adapters/tools.js";
 import { cleanup, tempProject } from "./helpers/cli.js";
 import { ARSU_ROUTING_CATALOG } from "../src/arsu-converter/routing/catalog.js";
@@ -153,23 +153,41 @@ void test("Copilot uses its explicit detection paths", async () => {
   await cleanup(root);
 });
 
-void test("delivery projects eight skills to 31 tools and eight wrappers to 28 command-capable tools", async () => {
+void test("delivery projects ten fixed Skills to 31 tools and eight wrappers to 28 command-capable tools", async () => {
   const root = await tempProject();
   const previousCodexHome = process.env.CODEX_HOME;
   process.env.CODEX_HOME = path.join(root, "codex-home");
   try {
-    const delivery = await planToolDelivery({ projectRoot: root, toolIds: TOOL_IDS, existingInstallations: [], force: false });
-    const companionSkills = delivery.installations.filter((item) => item.source.startsWith("companion:") && item.source.endsWith("/SKILL.md"));
-    const companionLicenses = delivery.installations.filter((item) => item.source.startsWith("companion:") && item.source.endsWith("/LICENSE"));
-    const companionCommands = delivery.installations.filter((item) => COMPANION_WORKFLOW_IDS.some((id) => item.source === `command:${id}`));
-    const arsuSkills = delivery.installations.filter((item) => ARSU_COMMAND_CONTENTS.some((content) => item.source === `${content.id}/SKILL.md`));
-    const arsuCommands = delivery.installations.filter((item) => ARSU_COMMAND_CONTENTS.some((content) => item.source === `command:${content.id}`));
+    const delivery = await planWorkspaceDelivery({
+      projectRoot: root,
+      toolIds: TOOL_IDS,
+      selectedToolIds: TOOL_IDS,
+      reconciledToolIds: TOOL_IDS,
+      existingInstallations: [],
+      force: false,
+      platform: "linux",
+      architecture: "x64",
+    });
+    const companionSkills = delivery.installations.filter((item) => item.source.kind === "companion-skill" && item.target.path.endsWith("/SKILL.md"));
+    const companionLicenses = delivery.installations.filter((item) => item.source.kind === "companion-skill" && item.target.path.endsWith("/LICENSE"));
+    const companionCommands = delivery.installations.filter((item) => item.source.kind === "command" && COMPANION_WORKFLOW_IDS.includes(item.source.command_id as typeof COMPANION_WORKFLOW_IDS[number]));
+    const arsuSkills = delivery.installations.filter((item) => item.source.kind === "arsu-skill" && item.target.path.endsWith(`/skills/${item.source.skill_id}/SKILL.md`));
+    const arsuCommandIds = new Set(ARSU_COMMAND_CONTENTS.map((content) => content.id));
+    const arsuCommands = delivery.installations.filter((item) => item.source.kind === "command" && arsuCommandIds.has(item.source.command_id));
     assert.equal(companionSkills.length, TOOL_IDS.length * COMPANION_INTENTS.length);
     assert.equal(companionLicenses.length, TOOL_IDS.length * COMPANION_INTENTS.length);
     assert.ok(companionLicenses.every((item) => item.sha256.length === 64));
     assert.equal(companionCommands.length, TOOLS.filter((tool) => tool.command).length * COMPANION_INTENTS.length);
     assert.equal(arsuSkills.length + companionSkills.length, 31 * 8);
     assert.equal(arsuCommands.length + companionCommands.length, 28 * 8);
+    for (const toolId of TOOL_IDS) {
+      const skillIds = new Set(delivery.installations.flatMap((item) => {
+        if (item.tool_id !== toolId) return [];
+        if (item.source.kind === "arsu-skill" || item.source.kind === "companion-skill" || item.source.kind === "domain-skill") return [item.source.skill_id];
+        return item.source.kind === "literature-adapter" && item.source.component === "skill" && item.source.skill_id ? [item.source.skill_id] : [];
+      }));
+      assert.equal(skillIds.size, 10, toolId);
+    }
     assert.equal(delivery.diagnostics.filter((item) => item.code === "commands_not_supported").length, 3);
   } finally {
     if (previousCodexHome === undefined) Reflect.deleteProperty(process.env, "CODEX_HOME");

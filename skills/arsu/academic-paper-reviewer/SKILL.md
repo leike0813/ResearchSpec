@@ -12,7 +12,8 @@ metadata:
     - academic-pipeline
 ---
 
-<!-- researchspec-contract-preflight:v6 -->
+<!-- researchspec-contract-preflight:v7 -->
+<!-- researchspec-literature-adapter:zotero-library:v1 -->
 ## ResearchSpec Contract Preflight
 
 Before running this ARSU-derived skill, locate the project `researchspec/`
@@ -54,6 +55,31 @@ continue the same core work without the plugin. A declined suggestion is not a
 Decision and should not be repeated in the current conversation unless the
 research need materially changes.
 
+For literature work, inspect the fixed `zotero-library` entry in
+`researchspec status --json`; status is static and its
+`connection_state: unchecked` does not prove that Zotero or Host Bridge is
+reachable. When available, use the installed `zotero-library-agent` and
+`zotero-bridge-cli` Skills for a bounded, read-only query of the user's library
+before supplementing with external discovery when needed. An empty Zotero result
+is not evidence that relevant literature does not exist. Treat every adapter
+result only as working material for this same ARSU producer to review and
+integrate into its candidate.
+
+If the adapter is unavailable during ordinary literature work, disclose the
+limitation and continue through this producer's existing external-search or
+user-supplied-input path. If the request explicitly depends on the current
+Zotero selection, a private collection, private metadata, or private
+attachments, pause and request adapter configuration or alternative user input;
+never substitute public search as though it represented private library state.
+Adapter output must not directly modify ResearchSpec specs, state, artifact
+registry, Gates, Decisions, transitions, or receipts. Zotero mutation, workflow
+submit/apply, upload, deletion, and maintenance require separate user
+authorization and remain subject to Host Bridge approval.
+
+The packaged `academic-pipeline/scripts/adapters/zotero.py` path is separate: it
+reads only a user-supplied Better BibTeX JSON export, requires a user-provided
+Python 3.11+ environment with PyYAML, and is not a live Zotero fact source.
+
 After producing the candidate, inspect `submission` and `completion.submit`.
 When policy is `automatic`, the start authorization is valid, and Submit is
 available, build the strict dependency payload in a temporary file, run Submit
@@ -87,7 +113,7 @@ Do not treat ARS Material Passport as ResearchSpec runtime truth. It may be
 imported as external evidence, while runtime provenance,
 decisions, gates, and resume state live in ResearchSpec registries and ledgers.
 
-This generated contract integration block uses profile `researchspec-preflight-v6` for
+This generated contract integration block uses profile `researchspec-preflight-v7` for
 `academic-paper-reviewer`. Per-stage and per-mode graphs remain workflow-profile data.
 
 # Academic Paper Reviewer v1.10.0 — Multi-Perspective Academic Paper Review Agent Team

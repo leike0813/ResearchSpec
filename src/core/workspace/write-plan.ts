@@ -1,5 +1,5 @@
 import { createHash, randomUUID } from "node:crypto";
-import { lstat, mkdir, readFile, readdir, readlink, rename, rm, writeFile } from "node:fs/promises";
+import { chmod, lstat, mkdir, readFile, readdir, readlink, rename, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 export type PlannedAction = "create" | "refresh" | "remove-owned" | "move" | "skip-unchanged" | "skip-drift" | "conflict";
@@ -14,6 +14,8 @@ export interface PlannedWrite {
   ownership: "user" | "generated";
   previousHash?: string;
   nextHash?: string;
+  previousMode?: number;
+  nextMode?: number;
   reason: string;
 }
 
@@ -40,26 +42,43 @@ export async function planFile(input: {
   ownership: PlannedWrite["ownership"];
   recordedHash?: string;
   force?: boolean;
+  mode?: number;
+  requireRecordedOwnership?: boolean;
 }): Promise<PlannedWrite> {
-  const existing = await readBytes(input.path);
+  const existing = await readFileState(input.path);
   const nextHash = sha256(input.content);
   if (existing === undefined) {
-    return { ...input, action: "create", nextHash, reason: "target is missing" };
+    return { ...input, action: "create", nextHash, ...(input.mode === undefined ? {} : { nextMode: normalizeMode(input.mode) }), reason: "target is missing" };
   }
-  const previousHash = sha256(existing);
-  if (previousHash === nextHash) {
-    return { ...input, action: "skip-unchanged", previousHash, nextHash, reason: "content is current" };
+  if (existing.kind !== "file") {
+    return { ...input, action: "conflict", nextHash, previousMode: existing.mode, ...(input.mode === undefined ? {} : { nextMode: normalizeMode(input.mode) }), reason: `existing target is ${existing.kind}, not a regular file` };
+  }
+  const previousHash = sha256(existing.bytes);
+  const previousMode = existing.mode;
+  const nextMode = input.mode === undefined ? undefined : normalizeMode(input.mode);
+  if (input.requireRecordedOwnership && !input.recordedHash) {
+    return { ...input, action: "conflict", previousHash, nextHash, previousMode, ...(nextMode === undefined ? {} : { nextMode }), reason: "existing path is not manifest-owned" };
+  }
+  const modeCurrent = nextMode === undefined || previousMode === nextMode;
+  if (previousHash === nextHash && modeCurrent) {
+    return { ...input, action: "skip-unchanged", previousHash, nextHash, previousMode, ...(nextMode === undefined ? {} : { nextMode }), reason: "content and mode are current" };
+  }
+  if (previousHash === nextHash && !modeCurrent) {
+    if (input.ownership === "user") return { ...input, action: "conflict", previousHash, nextHash, previousMode, nextMode, reason: "existing user-owned file mode is protected" };
+    if (!input.recordedHash) return { ...input, action: "conflict", previousHash, nextHash, previousMode, nextMode, reason: "existing path mode is not manifest-owned" };
+    if (previousHash !== input.recordedHash && !input.force) return { ...input, action: "skip-drift", previousHash, nextHash, previousMode, nextMode, reason: "generated file has user modifications" };
+    return { ...input, action: "refresh", previousHash, nextHash, previousMode, nextMode, reason: "restore manifest-owned file mode" };
   }
   if (input.ownership === "user") {
-    return { ...input, action: "conflict", previousHash, nextHash, reason: "existing user-owned file is protected" };
+    return { ...input, action: "conflict", previousHash, nextHash, previousMode, ...(nextMode === undefined ? {} : { nextMode }), reason: "existing user-owned file is protected" };
   }
   if (!input.recordedHash) {
-    return { ...input, action: "conflict", previousHash, nextHash, reason: "existing path is not manifest-owned" };
+    return { ...input, action: "conflict", previousHash, nextHash, previousMode, ...(nextMode === undefined ? {} : { nextMode }), reason: "existing path is not manifest-owned" };
   }
   if (previousHash !== input.recordedHash && !input.force) {
-    return { ...input, action: "skip-drift", previousHash, nextHash, reason: "generated file has user modifications" };
+    return { ...input, action: "skip-drift", previousHash, nextHash, previousMode, ...(nextMode === undefined ? {} : { nextMode }), reason: "generated file has user modifications" };
   }
-  return { ...input, action: "refresh", previousHash, nextHash, reason: input.force ? "forced manifest-owned refresh" : "safe manifest-owned refresh" };
+  return { ...input, action: "refresh", previousHash, nextHash, previousMode, ...(nextMode === undefined ? {} : { nextMode }), reason: input.force ? "forced manifest-owned refresh" : "safe manifest-owned refresh" };
 }
 
 export async function executeWritePlan(plan: WritePlan): Promise<void> {
@@ -77,6 +96,7 @@ export async function executeWritePlan(plan: WritePlan): Promise<void> {
       if (entry.operation.content === undefined) throw new Error(`Planned write has no content: ${entry.operation.path}`);
       await mkdir(path.dirname(entry.operation.path), { recursive: true });
       await writeFile(entry.temporary, entry.operation.content);
+      if (entry.operation.nextMode !== undefined) await chmod(entry.temporary, entry.operation.nextMode);
     }
     for (const entry of transaction) {
       if (entry.operation.action === "move") {
@@ -106,8 +126,17 @@ export async function executeWritePlan(plan: WritePlan): Promise<void> {
   for (const entry of transaction) if (entry.hadOriginal) await rm(entry.backup, { force: true }).catch(() => undefined);
 }
 
-async function readBytes(filePath: string): Promise<Uint8Array | undefined> {
-  try { return await readFile(filePath); }
+type FileState = { kind: "file"; bytes: Uint8Array; mode: number } | { kind: "directory" | "symlink" | "other"; mode: number };
+
+async function readFileState(filePath: string): Promise<FileState | undefined> {
+  try {
+    const info = await lstat(filePath);
+    const mode = normalizeMode(info.mode);
+    if (info.isSymbolicLink()) return { kind: "symlink", mode };
+    if (info.isDirectory()) return { kind: "directory", mode };
+    if (!info.isFile()) return { kind: "other", mode };
+    return { kind: "file", bytes: await readFile(filePath), mode };
+  }
   catch (error) {
     const nodeError = error as NodeJS.ErrnoException;
     if (nodeError.code === "ENOENT") return undefined;
@@ -116,10 +145,9 @@ async function readBytes(filePath: string): Promise<Uint8Array | undefined> {
 }
 
 async function exists(filePath: string): Promise<boolean> {
-  try { await readFile(filePath); return true; }
+  try { await lstat(filePath); return true; }
   catch (error) {
     const nodeError = error as NodeJS.ErrnoException;
-    if (nodeError.code === "EISDIR") return true;
     if (nodeError.code === "ENOENT") return false;
     throw error;
   }
@@ -148,6 +176,7 @@ async function verifyPrecondition(operation: PlannedWrite): Promise<void> {
   }
   if (!(await exists(operation.path))) throw writeConflict(`Planned target is missing: ${operation.path}`);
   if (operation.previousHash && await hashPath(operation.path) !== operation.previousHash) throw writeConflict(`Target changed after planning: ${operation.path}`);
+  if (operation.previousMode !== undefined && normalizeMode((await lstat(operation.path)).mode) !== operation.previousMode) throw writeConflict(`Target mode changed after planning: ${operation.path}`);
 }
 
 function writeConflict(message: string): NodeJS.ErrnoException {
@@ -157,3 +186,4 @@ function writeConflict(message: string): NodeJS.ErrnoException {
 }
 
 function compareText(left: string, right: string): number { return left < right ? -1 : left > right ? 1 : 0; }
+function normalizeMode(mode: number): number { return mode & 0o777; }

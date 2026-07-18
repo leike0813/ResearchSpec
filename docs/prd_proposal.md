@@ -13,7 +13,7 @@
   Skills、16 个 CLI 命令和 selector-based 运行协议。
 - **Current implementation（2026-07-11）**：完整 routing/workflow catalogs、subflow/round、
   Gate/transition、`arsu-v0-1`、四个 Companion、domain plugin registry、十六个 CLI 和
-  31×8/28×8 base delivery。
+  31×10/28×8 base delivery。
 - **Acceptance status**：Target v0.1 的十二条公共 CLI 用户旅程已通过，产品技术层完整。
 
 本文不定义字段级 schema、validator 细节、CLI 参数形状或 adapter 具体写盘
@@ -281,7 +281,7 @@ ResearchSpec 必须最终拥有 ARSU-derived 产物的转换、刷新和验证�
   风险说明和 human confirmation。
 - ARSU 继续拥有 literature research、writing、review 与 manuscript draft-patch authoring；
   Companion 不得复制这些能力。
-- Target base delivery 是 31 个 tools 各 8 个固定 Skills，28 个 command-capable tools 各
+- Target base delivery 是 31 个 tools 各 10 个固定 Skills，28 个 command-capable tools 各
   8 个薄 wrappers。Workspace-selected plugin Skills 可额外投影到 31 个 tools，但不增加
   wrappers。Wrapper 和 plugin projection 都不是新的 workflow authority。
 - Current implementation 已由 typed manifest 投影四个 Companion；六个旧投影仅在检测到

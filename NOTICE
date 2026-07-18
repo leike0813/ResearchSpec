@@ -10,6 +10,22 @@ ResearchSpec contains material adapted from Academic Research Skills (ARS):
 
 ResearchSpec conversion changes paths, routing descriptions, contract preflight guidance, workflow projections, and runtime-control instructions. ARSU-derived output remains subject to the upstream attribution and noncommercial license. See `LICENSE` for the material boundary and `LICENSES/` for license references.
 
+ResearchSpec distributes a fixed Zotero literature Adapter derived from Zotero Agents:
+
+- Bundle source: https://github.com/leike0813/zotero-library-agent-bundle
+- Bundle release-set: `hbrs-48630ca514e3146c2c89a8d5`
+- Bundle revision: `8eef49d72574084244514fb612b96e7f5e7967a8`
+- Source: https://github.com/leike0813/zotero-agents
+- Source revision: `4436cf4a91f12ea555a54ddbba9278480ceaf56d`
+- License: GNU Affero General Public License v3.0 only
+
+The generated `literature-adapters/zotero` tree contains the two reviewed
+Agent-neutral Skills, profile template, evidence resources and seven platform
+runtimes consumed by the fixed integration. It excludes global installers and
+unconsumed runner/provider surfaces. Each redistributed component carries its
+license, notice and derivation record. ResearchSpec delivery and static checking
+do not execute these files or connect to Zotero or Host Bridge.
+
 ResearchSpec's domain taxonomy documentation includes ANZSRC 2020 Fields of Research classification names:
 
 - Attribution: Australian Bureau of Statistics and Stats NZ, Australian and New Zealand Standard Research Classification (ANZSRC), 2020

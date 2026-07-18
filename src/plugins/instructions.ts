@@ -12,6 +12,7 @@ import {
   type LoadedPluginRegistry,
 } from "./registry.js";
 import { resolutionSnapshots, selectedPluginIds } from "./status.js";
+import { installationRecords, isDomainSkillInstallation } from "../adapters/installations.js";
 
 export class PluginSkillInstructionsError extends Error {
   constructor(
@@ -65,7 +66,7 @@ export async function buildPluginSkillInstructions(
       );
     }
   }
-  const installations = records(snapshot.manifest.installations);
+  const installations = installationRecords(snapshot.manifest.installations).filter(isDomainSkillInstallation);
   const drift: Array<{ tool_id: string; path: string; reason: string }> = [];
   for (const toolId of toolIds) {
     const tool = getTool(toolId);
@@ -78,10 +79,9 @@ export async function buildPluginSkillInstructions(
       const expectedRelative = posix(path.relative(projectRoot, expectedPath));
       const installation = installations.find((item) =>
         item.tool_id === toolId
-        && item.skill_id === skillId
-        && item.path === expectedRelative
-        && item.scope === "project"
-        && typeof item.sha256 === "string");
+        && item.source.skill_id === skillId
+        && item.target.path === expectedRelative
+        && item.target.scope === "project");
       if (!installation) {
         drift.push({ tool_id: toolId, path: expectedRelative, reason: "manifest_record_missing" });
         continue;
@@ -135,18 +135,6 @@ export async function buildPluginSkillInstructions(
 
 function record(value: unknown): Record<string, unknown> {
   return value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : {};
-}
-
-function records(value: unknown): Array<Record<string, unknown> & {
-  tool_id?: string;
-  skill_id?: string;
-  path?: string;
-  scope?: string;
-  sha256?: string;
-}> {
-  return Array.isArray(value)
-    ? value.filter((item): item is Record<string, unknown> => Boolean(item) && typeof item === "object" && !Array.isArray(item))
-    : [];
 }
 
 function strings(value: unknown): string[] {

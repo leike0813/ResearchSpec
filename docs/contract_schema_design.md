@@ -13,7 +13,7 @@ schema、validator、CLI 行为和 ARSU wrapper preflight 协议。
   transition receipt 与 selector instructions 所需的领域信息。
 - **Current implementation（2026-07-11）**：唯一 Schema 0.2 subflow-instance 模型、完整
   `arsu-v0-1` profile、parent/child/round graph、parallel join、Gate/transition receipts、
-  typed routing catalog、text/binary scoped Submit，以及四 Companion/31×8 delivery。
+  typed routing catalog、text/binary scoped Submit，以及四 Companion、两个固定 Zotero Adapter Skills 和 31×10 delivery。
 - **Acceptance status**：Schema 0.2 与旧 workspace 兼容路径已通过 v0.1 journeys；未来显式迁移工具不属于 v0.1。
 
 本文不是最终 JSON Schema，不冻结 TypeScript 类型、CLI wire shape 或
@@ -1519,13 +1519,13 @@ process summary；不得伪装成 gate verdict。
 3. Gate/transition Schema：proposed verdict、evidence、`confirmed_by`、override linkage、
    transition receipt 和 state preconditions。
 4. ARSU profile Schema：四类 Skill 的完整 mode graph 和 round templates。
-5. Agent surface projection：四 Companion registry 与 31×8/28×8 derived delivery 已实现，
+5. Agent surface projection：四 Companion registry、固定 Zotero Adapter catalog 与 31×10/28×8 derived delivery 已实现，
    不成为 workspace contract Schema 的新状态源。
 
 ## 12. 非目标
 
 - 本文不设计 LLM API 调用。
-- 本文不设计 citation manager、PDF 管理或 Zotero adapter。
+- 本文不设计 citation manager 或 PDF 管理；固定 Zotero Adapter 只提供独立的文献系统访问边界，不进入 core contract authority。
 - 本文不把 academic-pipeline 硬编码为唯一 workflow。
 - 本文不复制 ARS handoff schemas 的完整 payload 字段作为 ResearchSpec core。
 - 本文不要求 ARSU-derived 内容执行默认 current-only cleanup。

@@ -4,7 +4,7 @@
 - Source: `vendor/ars`
 - Source commit: `becfcc40c6e9e93c187cf4a088333f83373e002d`
 - Output: `skills/arsu`
-- Generated at: `2026-07-16T14:28:08Z`
+- Generated at: `2026-07-18T16:36:10Z`
 - Validation: pass
 
 ## Source Checkout
@@ -24,7 +24,7 @@
 ## Contract Integration
 
 - Manifest: `researchspec-contracts.json`
-- Profile: `researchspec-preflight-v6`
+- Profile: `researchspec-preflight-v7`
 - Material Passport policy: `imported_evidence_only_not_runtime_ssot`
 - Full matrix injection: `false`
 - Anchor replacement profile: `researchspec-anchor-replacement-v3`
@@ -56,7 +56,7 @@
 
 ## File Summary
 
-- Output files: 483
+- Output files: 487
 - Excluded source files: 499
 - Unclassified source files: 321
 - Risk findings: 1118

@@ -13,6 +13,8 @@ import type { CheckResult, CheckTarget, Diagnostic } from "./types.js";
 import { filesForSkill, loadPluginRegistry, pluginSkillRoot, PluginRegistryError, resolveDomainSelection, type LoadedPluginRegistry } from "../../plugins/registry.js";
 import { selectedPluginIds } from "../../plugins/status.js";
 import { getTool } from "../../adapters/tools.js";
+import { installationRecords, isDomainSkillInstallation } from "../../adapters/installations.js";
+import { inspectLiteratureAdapters } from "../../literature-adapters/inspect.js";
 
 export type { CheckResult, CheckTarget, Diagnostic } from "./types.js";
 
@@ -34,18 +36,16 @@ export async function runWorkspaceChecks(workspace: string, target: CheckTarget 
   if (target === "all" || target === "runtime") diagnostics.push(...await inspectSubflowStartReceipts(snapshot), ...await inspectGateTransitionReceipts(snapshot));
 
   if (target === "all" || target === "tools") {
-    const installations = Array.isArray(snapshot.manifest.installations) ? snapshot.manifest.installations : [];
-    for (const value of installations) {
-      if (!value || typeof value !== "object") continue;
-      const item = value as Record<string, unknown>;
-      if (typeof item.path !== "string" || typeof item.sha256 !== "string") continue;
-      const targetPath = item.scope === "shared-global" ? item.path : path.resolve(path.dirname(workspace), item.path);
+    const installations = installationRecords(snapshot.manifest.installations).filter((item) => item.owner === "agent-tool" && item.source.kind !== "literature-adapter");
+    for (const item of installations) {
+      const targetPath = item.target.scope === "shared-global" ? item.target.path : path.resolve(path.dirname(workspace), item.target.path);
       if (!(await fileExists(targetPath))) diagnostics.push({ severity: "warning", code: "generated_file_missing", message: "Manifest-owned generated file is missing.", path: targetPath, blocking: false });
       else if (sha256(await readFile(targetPath)) !== item.sha256) diagnostics.push({ severity: "warning", code: "generated_file_drift", message: "Manifest-owned generated file has changed.", path: targetPath, blocking: false });
     }
   }
 
   if (target === "all" || target === "plugins") diagnostics.push(...await inspectPlugins(snapshot, providedPluginRegistry));
+  if (target === "all" || target === "literature-adapters") diagnostics.push(...(await inspectLiteratureAdapters(snapshot)).diagnostics);
 
   diagnostics.push(...validateCrossReferences(snapshot, target));
 
@@ -64,8 +64,8 @@ async function inspectPlugins(snapshot: WorkspaceSnapshot, provided?: LoadedPlug
   const selected = selectedPluginIds(snapshot.config);
   diagnostics.push(...loaded.diagnostics);
   const configuredTools = stringArray(record(snapshot.config.agent_tools).selected);
-  const manifest = records(snapshot.manifest.installations);
-  const manifestByPath = new Map(manifest.filter((item) => item.scope === "project" && typeof item.path === "string").map((item) => [String(item.path), item]));
+  const manifest = installationRecords(snapshot.manifest.installations).filter(isDomainSkillInstallation);
+  const manifestByPath = new Map(manifest.filter((item) => item.target.scope === "project").map((item) => [item.target.path, item]));
   const resolution = resolveDomainSelection(loaded, selected);
   for (const domainId of resolution.unavailableDomainIds) diagnostics.push({ severity: "warning", code: "plugin_unavailable", message: `Selected domain is unavailable in this ResearchSpec package: ${domainId}`, path: path.join(snapshot.workspace, "config.yaml"), blocking: false, details: { domain_id: domainId } });
   if (!configuredTools.length) {
@@ -83,7 +83,7 @@ async function inspectPlugins(snapshot: WorkspaceSnapshot, provided?: LoadedPlug
           const targetPath = path.join(path.dirname(snapshot.workspace), tool.skillsDir, "skills", skill.skill_id, relativeAsset);
           const relativeTarget = path.relative(path.dirname(snapshot.workspace), targetPath).split(path.sep).join("/");
           const owned = manifestByPath.get(relativeTarget);
-          if (!owned || owned.vendor_id !== vendor.vendor_id || owned.vendor_release !== vendor.release || owned.skill_id !== skill.skill_id || typeof owned.sha256 !== "string") {
+          if (!owned || owned.source.vendor_id !== vendor.vendor_id || owned.source.vendor_release !== vendor.release || owned.source.skill_id !== skill.skill_id) {
             diagnostics.push({ severity: "warning", code: "plugin_projection_missing", message: "Resolved domain Skill resource is not owned by the installation manifest.", path: targetPath, blocking: false, details: { vendor_id: vendor.vendor_id, skill_id: skill.skill_id, tool_id: toolId, source: path.join(sourceRoot, relativeAsset) } });
             continue;
           }
@@ -215,6 +215,7 @@ function diagnosticMatchesTarget(workspace: string, diagnostic: Diagnostic, targ
   if (target === "artifacts") return relative === "runs/current/artifact-registry.json" || diagnostic.code.startsWith("artifact_");
   if (target === "tools") return relative === "config.yaml" || relative === "tool-installation-manifest.json" || diagnostic.code.startsWith("generated_file_");
   if (target === "plugins") return relative === "config.yaml" || relative === "tool-installation-manifest.json" || diagnostic.code.startsWith("plugin_");
+  if (target === "literature-adapters") return relative === "tool-installation-manifest.json" || diagnostic.code.startsWith("literature_adapter_");
   return true;
 }
 

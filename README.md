@@ -47,10 +47,18 @@ Then start Codex in the same project and describe the research goal in natural l
 
 > I want to study how generative AI affects writing instruction in higher education. Show candidate routes, prerequisites, artifacts, formal Gates, risks, and cost. Do not start a route until I confirm it.
 
-ResearchSpec installs exactly eight base project Skills:
+ResearchSpec installs exactly ten fixed project Skills:
 
 - ARSU: `deep-research`, `academic-paper`, `academic-paper-reviewer`, `academic-pipeline`
 - Companion: `researchspec-navigate`, `researchspec-propose`, `researchspec-decide`, `researchspec-verify`
+- Zotero literature Adapter: `zotero-library-agent`, `zotero-bridge-cli`
+
+The fixed [literature system Adapter](docs/literature_system_adapters.md) also
+installs one project-local `.zotero-bridge` runtime and a profile template. It
+does not connect to Zotero during initialization or status checks. The two
+Adapter Skills provide bounded library access when the user-configured Host
+Bridge is available; Zotero remains the library authority and ResearchSpec
+remains the workflow authority.
 
 Optional ResearchSpec-maintained [domain Skill plugins](docs/domain_skill_plugins.md)
 can add reviewed Open Agent Skills to the workspace. Users select stable
@@ -103,6 +111,7 @@ See [SECURITY.md](SECURITY.md) for supported versions and vulnerability handling
 - [CLI interface](docs/cli_interface_design.md)
 - [Domain Skill plugins](docs/domain_skill_plugins.md)
 - [Domain taxonomy](docs/domain_taxonomy.md)
+- [Fixed literature system Adapter](docs/literature_system_adapters.md)
 - [Education Agent Skills vendor adapter](docs/education_agent_skills_vendor_adapter.md)
 - [FinRobot vendor adapter](docs/finrobot_vendor_adapter.md)
 - [HistAgent vendor adapter](docs/histagent_vendor_adapter.md)
@@ -121,6 +130,7 @@ ResearchSpec uses a mixed-license model:
 
 - ResearchSpec-authored framework and Companion material is MIT licensed.
 - Bundled and generated ARSU-derived material is licensed under CC BY-NC 4.0 and retains Cheng-I Wu's upstream attribution.
+- The fixed Zotero Adapter bundle is licensed under AGPL-3.0-only and retains its pinned source and derivation records.
 - Education Agent Skills domain assets are adapted under CC BY-SA 4.0 and retain Gareth Manning attribution plus modification notices in every generated Skill.
 - ToolUniverse, Scientific Agent Skills, Materials-Science-Skills-For-LLM, FinRobot, and HistAgent domain assets retain the Skill-level licenses and provenance recorded in each generated `LICENSE` and `NOTICE` or `NOTICE.md`.
 

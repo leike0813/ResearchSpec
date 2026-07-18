@@ -21,6 +21,18 @@ The canonical license identifier and URL are recorded in `LICENSES/CC-BY-NC-4.0.
 
 The MIT grant does not remove or override the noncommercial restriction on ARSU-derived material. Commercial distribution or use of the combined package may require separate permission from the relevant rights holder. This file documents the project's engineering interpretation and is not legal advice.
 
+## AGPL-3.0-only material
+
+The fixed Zotero literature Adapter under `literature-adapters/zotero/**` is
+derived from the pinned Zotero Agents source and bundle release recorded in its
+`NOTICE.md` and `DERIVATION.json` files. It is distributed under GNU Affero
+General Public License version 3 only. The complete license text is available at
+`LICENSES/AGPL-3.0.txt` and is copied into each generated Adapter Skill.
+
+The AGPL-3.0-only terms apply to the identified Adapter material and do not
+replace the licenses of ResearchSpec-authored, ARSU-derived, or domain Skill
+material.
+
 ## Apache-2.0 material
 
 Generated FinRobot-derived Skills under `skills/plugins/vendors/finrobot/**`

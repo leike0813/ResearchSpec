@@ -360,6 +360,8 @@ Target 建议：
 | `runtime` | state、artifact registry、decision/gate ledgers |
 | `artifacts` | artifact paths、hash、payload schema refs |
 | `tools` | 已安装 agent-facing generated files |
+| `plugins` | 已选择领域、resolution 与投影文件 |
+| `literature-adapters` | 固定 Adapter catalog/resolution、runtime、hash、executable mode 与两个 Skill 投影 |
 
 规则：
 
@@ -367,6 +369,7 @@ Target 建议：
 - `--strict` 可升级部分 diagnostics，但不得把 ARSU-derived version/history 文本
   默认当成阻断项。
 - `check` 不维护 ARSU source，不运行 converter。
+- `status` 与 `check` 不启动 Zotero runtime，也不探测 Host Bridge；connection 始终报告为 `unchecked`。
 
 ## 8. `researchspec list [type]`
 
@@ -702,8 +705,9 @@ selector contract；既有 governance selectors 继续服务 `list/show/propose/
 - `tool-installation-manifest.json` 保存 generated path、scope、source、adapter
   version 和 SHA-256 ownership evidence。
 - Current implementation / Target v0.1：Project-local skill 路径统一为
-  `<skillsDir>/skills/<skill-id>/**`；四个 ARSU 和四个 self-contained Companion Skills
-  被投影到 31 个 registered tools，28 个 command-capable tools 同源生成 8 个 wrappers。
+  `<skillsDir>/skills/<skill-id>/**`；四个 ARSU、四个 self-contained Companion 与两个固定
+  Zotero Adapter Skills 被投影到 31 个 registered tools，28 个 command-capable tools
+  仍只从 ARSU/Companion 同源生成 8 个 wrappers。
   可选 registry-driven plugin Skills 同样可投影到 31 个 tools，但 wrapper 总数始终为 28×8。
 - 迁移前后都不得用一个通用 Markdown 文件覆盖工具的 Markdown/TOML 格式差异。
 - Codex prompts 是 `$CODEX_HOME/prompts` 或 `~/.codex/prompts` 下的

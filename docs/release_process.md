@@ -13,6 +13,8 @@ pnpm lint
 pnpm check
 pnpm arsu:check
 pnpm arsu:idempotence
+pnpm zotero-adapter:check
+pnpm zotero-adapter:idempotence
 pnpm tooluniverse:check
 pnpm tooluniverse:idempotence
 pnpm scientific-agent-skills:check
@@ -32,7 +34,7 @@ pnpm dlx @fission-ai/openspec@1.5.0 validate --specs --strict --no-interactive
 git diff --check
 ```
 
-`release:verify` runs the package lifecycle, inspects the real tarball, installs it into an OS temporary directory, invokes the installed bin, and initializes an isolated Codex delivery. Repository source or internal planners are not substitutes for this check.
+`release:verify` runs the package lifecycle, inspects the real tarball, verifies all seven packaged Zotero runtimes, installs it into an OS temporary directory, invokes the installed bin, initializes an isolated Codex delivery with ten fixed Skills and eight wrappers, and completes `check all --strict` without executing the Adapter runtime. Repository source or internal planners are not substitutes for this check.
 
 The Scientific Agent Skills gates also require all 40 manual-security targets to have finding-level maintainer decisions consistent with admission, resource curation, dependencies, and generated hashes. Upstream scanner labels alone are neither release approval nor a production blocker override.
 
@@ -45,11 +47,12 @@ human approval.
 
 ## 2. Hosted Matrix
 
-The checked-in CI workflow must pass for all four cells:
+The checked-in CI workflow must pass for all six cells:
 
 | Operating system | Node 22 | Node 24 |
 | --- | --- | --- |
 | Ubuntu | required | required |
+| macOS | required | required |
 | Windows | required | required |
 
 The workflow is read-only and contains no publish job. A local run cannot be used to mark the hosted matrix complete.

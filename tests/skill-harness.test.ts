@@ -6,6 +6,7 @@ import { test } from "node:test";
 
 import { COMPANION_INTENTS, renderCompanionSkill } from "../src/adapters/companion/index.js";
 import { ARSU_SKILL_IDS } from "../src/arsu-converter/routing/contracts.js";
+import { LITERATURE_ADAPTER_SKILL_IDS } from "../src/literature-adapters/catalog.js";
 import { loadHarnessCatalog, readHarnessFile, validateHarnessSkillRoot, type HarnessFileTreeNode } from "../harness/catalog.js";
 import { createSkillHarnessServer, HARNESS_DEFAULT_HOST, renderHarnessMarkdown } from "../harness/server.js";
 import { cleanup, tempProject } from "./helpers/cli.js";
@@ -16,6 +17,7 @@ void test("harness catalog projects the production ARSU, Companion, and domain s
   const loaded = await loadHarnessCatalog(REPO_ROOT);
   assert.equal(loaded.catalog.summary.arsu_skills, ARSU_SKILL_IDS.length);
   assert.equal(loaded.catalog.summary.companion_skills, COMPANION_INTENTS.length);
+  assert.equal(loaded.catalog.summary.literature_adapter_skills, LITERATURE_ADAPTER_SKILL_IDS.length);
   assert.equal(loaded.catalog.summary.domains, 218);
   assert.equal(loaded.catalog.summary.available_domains, loaded.catalog.domains.filter((domain) => domain.direct_skill_ids.length > 0).length);
   assert.ok(loaded.catalog.summary.plugin_skills > 0);

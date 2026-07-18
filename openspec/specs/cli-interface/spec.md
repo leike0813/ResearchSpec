@@ -106,15 +106,16 @@ SHALL also support package-only inspection without a workspace.
 #### Scenario: Status summarizes the current run
 
 - **WHEN** the user runs `researchspec status`
-- **THEN** the result SHALL include workflow/stage, pending items, blocking gates,
-  recent artifacts, installed tools, selected/available/projected plugins, and
+- **THEN** the result SHALL include workflow/stage, pending items, blocking Gates,
+  recent artifacts, installed tools, literature adapters, selected/available/projected plugins, and
   validation summary when available
+- **AND** literature-adapter connection state SHALL remain `unchecked`
 
 #### Scenario: Check targets are composable
 
-- **WHEN** the user runs `researchspec check [all|contracts|runtime|artifacts|tools|plugins]`
+- **WHEN** the user runs `researchspec check [all|contracts|runtime|artifacts|tools|plugins|literature-adapters]`
 - **THEN** the CLI SHALL run the selected validators
-- **AND** `all` SHALL include plugin validation
+- **AND** `all` SHALL include plugin and literature-adapter validation
 - **AND** `--strict` SHALL promote warnings to a failing result
 
 #### Scenario: List and show resolve stable items
@@ -437,4 +438,12 @@ Subflow, work and Gate instructions SHALL expose typed scoped import references.
 #### Scenario: Imported evidence changes
 - **WHEN** registered import evidence or its hashes change
 - **THEN** the prior instruction basis SHALL become stale
+
+### Requirement: Literature Adapter Status Is Static
+The existing status and check command surface SHALL report fixed literature-adapter installation health without adding a top-level command or live connection probe.
+
+#### Scenario: Status runs against adapter files
+- **WHEN** adapter runtime or Skill files are missing, drifted, unsupported, or conflicted
+- **THEN** status SHALL return the corresponding structured adapter state and diagnostics
+- **AND** it SHALL NOT execute the runtime, connect to Host Bridge, access the network, or read credentials
 

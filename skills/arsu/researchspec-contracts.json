@@ -1,6 +1,6 @@
 {
   "schema_version": "0.1",
-  "integration_profile": "researchspec-preflight-v6",
+  "integration_profile": "researchspec-preflight-v7",
   "source": "vendor/ars",
   "output": "skills/arsu",
   "material_passport_policy": "imported_evidence_only_not_runtime_ssot",
@@ -12,7 +12,7 @@
   },
   "skill_groups": {
     "academic-paper": {
-      "profile_id": "researchspec-preflight-v6",
+      "profile_id": "researchspec-preflight-v7",
       "required_contracts": [
         "researchspec/specs/workflow.yaml",
         "researchspec/runs/current/state.yaml",
@@ -37,12 +37,13 @@
         "academic-paper uses the shared ResearchSpec runtime preflight profile.",
         "Load only stage/mode-relevant contracts into agent context.",
         "Treat ARS Material Passport as imported external evidence, not runtime truth.",
-        "Per-stage and per-mode graphs are supplied by the workflow profile layer."
+        "Per-stage and per-mode graphs are supplied by the workflow profile layer.",
+        "Use the fixed Zotero literature adapter only as bounded working-material input to the active producer."
       ],
       "full_matrix_injection": false
     },
     "academic-paper-reviewer": {
-      "profile_id": "researchspec-preflight-v6",
+      "profile_id": "researchspec-preflight-v7",
       "required_contracts": [
         "researchspec/specs/workflow.yaml",
         "researchspec/runs/current/state.yaml",
@@ -67,12 +68,13 @@
         "academic-paper-reviewer uses the shared ResearchSpec runtime preflight profile.",
         "Load only stage/mode-relevant contracts into agent context.",
         "Treat ARS Material Passport as imported external evidence, not runtime truth.",
-        "Per-stage and per-mode graphs are supplied by the workflow profile layer."
+        "Per-stage and per-mode graphs are supplied by the workflow profile layer.",
+        "Use the fixed Zotero literature adapter only as bounded working-material input to the active producer."
       ],
       "full_matrix_injection": false
     },
     "academic-pipeline": {
-      "profile_id": "researchspec-preflight-v6",
+      "profile_id": "researchspec-preflight-v7",
       "required_contracts": [
         "researchspec/specs/workflow.yaml",
         "researchspec/runs/current/state.yaml",
@@ -97,12 +99,13 @@
         "academic-pipeline uses the shared ResearchSpec runtime preflight profile.",
         "Load only stage/mode-relevant contracts into agent context.",
         "Treat ARS Material Passport as imported external evidence, not runtime truth.",
-        "Per-stage and per-mode graphs are supplied by the workflow profile layer."
+        "Per-stage and per-mode graphs are supplied by the workflow profile layer.",
+        "Use the fixed Zotero literature adapter only as bounded working-material input to the active producer."
       ],
       "full_matrix_injection": false
     },
     "deep-research": {
-      "profile_id": "researchspec-preflight-v6",
+      "profile_id": "researchspec-preflight-v7",
       "required_contracts": [
         "researchspec/specs/workflow.yaml",
         "researchspec/runs/current/state.yaml",
@@ -127,7 +130,8 @@
         "deep-research uses the shared ResearchSpec runtime preflight profile.",
         "Load only stage/mode-relevant contracts into agent context.",
         "Treat ARS Material Passport as imported external evidence, not runtime truth.",
-        "Per-stage and per-mode graphs are supplied by the workflow profile layer."
+        "Per-stage and per-mode graphs are supplied by the workflow profile layer.",
+        "Use the fixed Zotero literature adapter only as bounded working-material input to the active producer."
       ],
       "full_matrix_injection": false
     }

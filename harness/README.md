@@ -13,8 +13,9 @@ The displayed sources are:
 
 - ARSU IDs and generated trees from the same sources used by production delivery;
 - Companion Skills rendered in memory from the production manifest and renderer;
+- fixed Zotero literature Adapter Skills from the converter-owned generated tree;
 - plugin domains assembled without writes from the source-neutral domain catalog and isolated vendor bundles.
 
-The navigation has three top-level branches: ARSU, Companion, and Plugin. Plugin Skills are grouped by domain, with direct members separated from dependency-only members. Selecting a Skill opens its real directory tree beside an on-demand file preview; `SKILL.md` is selected initially, and every other enumerated resource remains available from the tree.
+The navigation has four top-level branches: ARSU, Companion, Literature Adapter, and Plugin. Plugin Skills are grouped by domain, with direct members separated from dependency-only members. Selecting a Skill opens its real directory tree beside an on-demand file preview; `SKILL.md` is selected initially, and every other enumerated resource remains available from the tree.
 
 The harness does not run converters, install dependencies for bundled Skills, modify registries, or expose workflow mutations. Markdown raw HTML is disabled, executable file types are never embedded, and every file read must belong to the enumerated Skill tree.

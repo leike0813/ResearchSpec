@@ -8,6 +8,7 @@ import { z } from "zod";
 
 import { COMPANION_INTENTS } from "../adapters/companion/index.js";
 import { ARSU_SKILL_IDS } from "../arsu-converter/routing/contracts.js";
+import { LITERATURE_ADAPTER_SKILL_IDS } from "../literature-adapters/catalog.js";
 import type { Diagnostic } from "../core/validation/types.js";
 
 const SkillIdSchema = z.string().min(1).max(128).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
@@ -125,7 +126,7 @@ export class PluginRegistryError extends Error {
 
 export const PACKAGE_ROOT = fileURLToPath(new URL("../../../", import.meta.url));
 export const PLUGIN_ROOT = path.join(PACKAGE_ROOT, "skills/plugins");
-export const BASE_SKILL_IDS = [...ARSU_SKILL_IDS, ...COMPANION_INTENTS.map((intent) => intent.skillId)] as const;
+export const BASE_SKILL_IDS = [...ARSU_SKILL_IDS, ...COMPANION_INTENTS.map((intent) => intent.skillId), ...LITERATURE_ADAPTER_SKILL_IDS] as const;
 
 export async function loadPluginRegistry(pluginRoot = PLUGIN_ROOT, validateSkillContent = true): Promise<LoadedPluginRegistry> {
   const registryPath = path.join(pluginRoot, "registry.json");

@@ -3,7 +3,17 @@ import path from "node:path";
 import { confirm, input, select } from "@inquirer/prompts";
 import { stringify } from "yaml";
 
-import { planToolDelivery, type InstallationRecord } from "../adapters/delivery.js";
+import { planWorkspaceDelivery } from "../adapters/workspace-delivery.js";
+import {
+  installationKey,
+  installationRecords,
+  isDomainSkillInstallation,
+  literatureAdapterResolutions,
+  managedSkillId,
+  renderToolInstallationManifest,
+  type LiteratureAdapterResolution,
+  type ManagedInstallation,
+} from "../adapters/installations.js";
 import { detectTools, orderTools, parseToolExpression } from "../adapters/tools.js";
 import { DEFAULT_WORKFLOW_PROFILE_ID, WorkItemSelectorSchema } from "../core/contracts/workflow.js";
 import { Sha256Schema, SubmitActorKindSchema, SubmitActorSchema } from "../core/contracts/artifact.js";
@@ -40,6 +50,7 @@ import {
   selectedPluginIds,
   unavailablePluginCatalogItem,
 } from "../plugins/status.js";
+import { inspectLiteratureAdapters } from "../literature-adapters/inspect.js";
 
 export interface InitOptions { tools?: string }
 export interface UpdateOptions { tools?: string }
@@ -96,21 +107,21 @@ export async function handleInit(inputPath: string | undefined, options: InitOpt
   }
 
   const currentInstallations = installationRecords(priorSnapshot?.manifest.installations);
-  const delivery = await planToolDelivery({ projectRoot, toolIds: selected, existingInstallations: currentInstallations, force: context.force, pluginRegistry, selectedPluginIds: configuredPlugins });
-  operations.push(...delivery.operations);
-  const reconciliation = await reconcileInstallations({
+  const delivery = await planWorkspaceDelivery({
     projectRoot,
-    existingInstallations: currentInstallations,
-    desiredInstallations: delivery.installations,
-    reconciledToolIds: [...new Set([...selected, ...currentInstallations.map((item) => item.tool_id)])],
+    toolIds: selected,
     selectedToolIds: selected,
+    existingInstallations: currentInstallations,
+    force: context.force,
+    pluginRegistry,
+    selectedPluginIds: configuredPlugins,
+    reconciledToolIds: [...new Set([...selected, ...currentInstallations.flatMap((item) => item.tool_id === null ? [] : [item.tool_id])])],
   });
-  operations.push(...reconciliation.operations);
-  const installations = deduplicateInstallations([...reconciliation.retainedInstallations, ...delivery.installations]);
+  operations.push(...delivery.operations);
   const configText = stringify({ schema_version: "0.1", profile, agent_tools: { selected, delivery: "both" }, plugins: { selected: configuredPlugins } });
   const configPath = path.join(workspace, "config.yaml");
   operations.push(await authoritativeWrite(configPath, "config.yaml", configText, "workspace", "update selected tool intent"));
-  const manifestText = pluginManifestText(installations, pluginRegistry, configuredPlugins, priorSnapshot?.manifest);
+  const manifestText = pluginManifestText(delivery.installations, pluginRegistry, configuredPlugins, priorSnapshot?.manifest, delivery.literatureAdapterResolutions);
   const manifestPath = path.join(workspace, "tool-installation-manifest.json");
   operations.push(await authoritativeWrite(manifestPath, "tool-installation-manifest.json", manifestText, "workspace", "commit generated ownership last"));
 
@@ -123,7 +134,7 @@ export async function handleInit(inputPath: string | undefined, options: InitOpt
     for (const entry of getWorkspaceEntries(workspace)) if (entry.kind === "dir") await mkdir(entry.path, { recursive: true });
     await executeWritePlan(plan);
   }
-  const diagnostics = [...delivery.diagnostics, ...reconciliation.diagnostics, ...operationDiagnostics(operations)];
+  const diagnostics = [...delivery.diagnostics, ...operationDiagnostics(operations)];
   const data = { workspace, profile, selected_tools: selected, selected_plugins: configuredPlugins, dry_run: context.dryRun, plan: summarizePlan(operations) };
   return deliveryResult("init", data, { stdout: formatPlan(context.dryRun ? "ResearchSpec init dry run" : existing ? "ResearchSpec workspace updated" : "ResearchSpec workspace initialized", workspace, operations, context.dryRun) }, diagnostics);
 }
@@ -142,25 +153,24 @@ export async function handleUpdate(inputPath: string | undefined, options: Updat
     try { targetTools = parseToolExpression(options.tools); } catch (error) { throw new CliError("invalid_tools", error instanceof Error ? error.message : String(error), 2); }
     if (options.tools !== "none") selected = [...new Set([...configured, ...targetTools])];
   }
-  if (!targetTools.length) return success("update", { workspace, selected_tools: selected, plan: [] }, { stdout: "ResearchSpec update: nothing to do.\n" });
   const existingInstallations = installationRecords(snapshot.manifest.installations);
-  const delivery = await planToolDelivery({ projectRoot, toolIds: targetTools, existingInstallations, force: context.force, pluginRegistry, selectedPluginIds: configuredPlugins });
-  const operations = [...delivery.operations];
-  const reconciliation = await reconcileInstallations({
+  const delivery = await planWorkspaceDelivery({
     projectRoot,
-    existingInstallations,
-    desiredInstallations: delivery.installations,
-    reconciledToolIds: targetTools,
+    toolIds: targetTools,
     selectedToolIds: selected,
+    existingInstallations,
+    force: context.force,
+    pluginRegistry,
+    selectedPluginIds: configuredPlugins,
+    reconciledToolIds: targetTools,
   });
-  operations.push(...reconciliation.operations);
-  const diagnostics = [...delivery.diagnostics, ...reconciliation.diagnostics];
-  const installations = deduplicateInstallations([...reconciliation.retainedInstallations, ...delivery.installations]);
+  const operations = [...delivery.operations];
+  const diagnostics = [...delivery.diagnostics];
   if (selected.join("\0") !== configured.join("\0")) {
     const configText = stringify({ ...snapshot.config, agent_tools: { ...record(snapshot.config.agent_tools), selected } });
     operations.push(await authoritativeWrite(path.join(workspace, "config.yaml"), "config.yaml", configText, "workspace", "add explicitly targeted tools"));
   }
-  const manifestText = pluginManifestText(installations, pluginRegistry, configuredPlugins, snapshot.manifest);
+  const manifestText = pluginManifestText(delivery.installations, pluginRegistry, configuredPlugins, snapshot.manifest, delivery.literatureAdapterResolutions);
   operations.push(await authoritativeWrite(path.join(workspace, "tool-installation-manifest.json"), "tool-installation-manifest.json", manifestText, "workspace", "commit generated ownership last"));
   if (!context.dryRun) await executeWritePlan({ operations });
   return deliveryResult("update", { workspace, selected_tools: selected, selected_plugins: configuredPlugins, dry_run: context.dryRun, plan: summarizePlan(operations) }, { stdout: formatPlan(context.dryRun ? "ResearchSpec update dry run" : "ResearchSpec tools updated", workspace, operations, context.dryRun) }, [...diagnostics, ...operationDiagnostics(operations)]);
@@ -170,9 +180,11 @@ export async function handleStatus(context: CommandContext): Promise<CommandResu
   const workspace = await requireWorkspace(context);
   const snapshot = await loadWorkspaceSnapshot(workspace);
   const pluginRegistry = await bundledPluginRegistry();
-  const data = await buildStatus(snapshot, pluginStatusSummary(snapshot.config, snapshot.manifest, pluginRegistry));
-  const ok = snapshot.diagnostics.every((item) => !item.blocking);
-  return { ...success("status", data, { stdout: formatStatusHuman(data) }, snapshot.diagnostics), ok, exitCode: ok ? 0 : 1 };
+  const literatureAdapters = await inspectLiteratureAdapters(snapshot);
+  const data = await buildStatus(snapshot, pluginStatusSummary(snapshot.config, snapshot.manifest, pluginRegistry), literatureAdapters.adapters);
+  const diagnostics = [...snapshot.diagnostics, ...literatureAdapters.diagnostics];
+  const ok = diagnostics.every((item) => !item.blocking);
+  return { ...success("status", data, { stdout: formatStatusHuman(data) }, diagnostics), ok, exitCode: ok ? 0 : 1 };
 }
 
 export async function handleInstructions(selector: string, context: CommandContext): Promise<CommandResult> {
@@ -338,7 +350,7 @@ function gateTransitionCliError(error: unknown): CliError {
 
 export async function handleCheck(target: string | undefined, strict: boolean, context: CommandContext): Promise<CommandResult> {
   const workspace = await requireWorkspace(context);
-  const validTargets = ["all", "contracts", "runtime", "artifacts", "tools", "plugins"];
+  const validTargets = ["all", "contracts", "runtime", "artifacts", "tools", "plugins", "literature-adapters"];
   const resolvedTarget = target ?? "all";
   if (!validTargets.includes(resolvedTarget)) throw new CliError("invalid_check_target", `Unknown check target: ${resolvedTarget}`, 2);
   const data = await runWorkspaceChecks(workspace, resolvedTarget as CheckTarget, strict);
@@ -442,18 +454,18 @@ export async function handlePluginUninstall(pluginIds: readonly string[], contex
   const existingInstallations = installationRecords(snapshot.manifest.installations);
   const selected = selectedBefore.filter((id) => !requestedSet.has(id));
   const desiredSkillIds = resolvedSkillIdsForSelection(pluginRegistry, selected, snapshot.manifest);
-  const owned = existingInstallations.filter((item) => item.skill_id && !desiredSkillIds.has(item.skill_id));
+  const owned = existingInstallations.filter((item) => isDomainSkillInstallation(item) && !desiredSkillIds.has(item.source.skill_id));
   const drift: Array<{ path: string; vendor_id?: string; skill_id?: string }> = [];
   const operations: PlannedWrite[] = [];
   for (const installation of owned) {
-    const target = installation.scope === "shared-global" ? installation.path : path.resolve(path.dirname(workspace), installation.path);
+    const target = installation.target.scope === "shared-global" ? installation.target.path : path.resolve(path.dirname(workspace), installation.target.path);
     const bytes = await readBytes(target);
     if (bytes === undefined) continue;
     if (sha256(bytes) !== installation.sha256) {
-      drift.push({ path: target, vendor_id: installation.vendor_id, skill_id: installation.skill_id });
+      drift.push({ path: target, vendor_id: installation.source.kind === "domain-skill" ? installation.source.vendor_id : undefined, skill_id: managedSkillId(installation) });
       continue;
     }
-    operations.push({ action: "remove-owned", path: target, relativePath: installation.path, scope: installation.scope, ownership: "generated", previousHash: installation.sha256, reason: `remove domain Skill ${installation.skill_id ?? "unknown"}` });
+    operations.push({ action: "remove-owned", path: target, relativePath: installation.target.path, scope: installation.target.scope, ownership: "generated", previousHash: installation.sha256, reason: `remove domain Skill ${managedSkillId(installation) ?? "unknown"}` });
   }
   if (drift.length) throw new CliError("plugin_uninstall_drift", "Plugin uninstall is blocked because manifest-owned files were modified.", 1, "Restore the recorded plugin files or preserve them and keep the plugin selected.", { drift });
 
@@ -461,7 +473,7 @@ export async function handlePluginUninstall(pluginIds: readonly string[], contex
   operations.push(await authoritativeWrite(path.join(workspace, "config.yaml"), "config.yaml", configText, "workspace", "update selected plugin intent"));
   const removalKeys = new Set(owned.map(installationKey));
   const retained = existingInstallations.filter((item) => !removalKeys.has(installationKey(item)));
-  const manifestText = pluginManifestText(retained, pluginRegistry, selected, snapshot.manifest);
+  const manifestText = pluginManifestText(retained, pluginRegistry, selected, snapshot.manifest, literatureAdapterResolutions(snapshot.manifest.literature_adapter_resolutions));
   operations.push(await authoritativeWrite(path.join(workspace, "tool-installation-manifest.json"), "tool-installation-manifest.json", manifestText, "workspace", "commit generated ownership last"));
   if (!context.dryRun && context.interactive && !context.yes) {
     const approved = await confirm({ message: `Uninstall ${requested.join(", ")} and remove ${String(operations.filter((item) => item.action === "remove-owned").length)} clean owned files?`, default: false });
@@ -623,23 +635,23 @@ async function reconcilePluginSelection(
   const existingInstallations = installationRecords(snapshot.manifest.installations);
   const availableSelected = selected.filter((id) => domainIsAvailable(pluginRegistry.domains.get(id)));
   const unavailableSelected = selected.filter((id) => !domainIsAvailable(pluginRegistry.domains.get(id)));
-  const delivery = await planToolDelivery({ projectRoot, toolIds, existingInstallations, force: context.force, pluginRegistry, selectedPluginIds: availableSelected });
-  const operations = [...delivery.operations];
-  const reconciliation = await reconcileInstallations({
+  const delivery = await planWorkspaceDelivery({
     projectRoot,
-    existingInstallations,
-    desiredInstallations: delivery.installations,
-    reconciledToolIds: toolIds,
+    toolIds,
     selectedToolIds: toolIds,
+    existingInstallations,
+    force: context.force,
+    pluginRegistry,
+    selectedPluginIds: availableSelected,
+    reconciledToolIds: toolIds,
     preserveSkillIds: [...resolvedSkillIdsForUnavailable(unavailableSelected, snapshot.manifest)],
   });
-  operations.push(...reconciliation.operations);
-  const installations = deduplicateInstallations([...reconciliation.retainedInstallations, ...delivery.installations]);
+  const operations = [...delivery.operations];
   const configText = stringify({ ...snapshot.config, plugins: { ...record(snapshot.config.plugins), selected } });
   operations.push(await authoritativeWrite(path.join(workspace, "config.yaml"), "config.yaml", configText, "workspace", "update selected plugin intent"));
-  const manifestText = pluginManifestText(installations, pluginRegistry, selected, snapshot.manifest);
+  const manifestText = pluginManifestText(delivery.installations, pluginRegistry, selected, snapshot.manifest, delivery.literatureAdapterResolutions);
   operations.push(await authoritativeWrite(path.join(workspace, "tool-installation-manifest.json"), "tool-installation-manifest.json", manifestText, "workspace", "commit generated ownership last"));
-  const diagnostics = [...delivery.diagnostics, ...reconciliation.diagnostics, ...operationDiagnostics(operations)];
+  const diagnostics = [...delivery.diagnostics, ...operationDiagnostics(operations)];
   if (!toolIds.length) diagnostics.push({ severity: "warning", code: "plugin_projection_deferred", message: "Plugin selection was saved, but no Agent tool is configured for projection.", blocking: false, details: { selected_plugins: selected } });
   const resolution = resolveDomainSelection(pluginRegistry, availableSelected);
   const domainVersions = availableSelected.map((domainId) => ({
@@ -708,12 +720,23 @@ function assertPluginsAvailable(ids: readonly string[], registry: LoadedPluginRe
   if (unknown.length) throw new CliError("plugin_unavailable", `Domain plugin is unavailable in this ResearchSpec package: ${unknown.join(", ")}`, 1, "Unavailable selected domains may still be safely removed with researchspec plugin uninstall.", { domain_ids: unknown });
 }
 
-function pluginManifestText(installations: readonly InstallationRecord[], registry: LoadedPluginRegistry, selectedDomainIds: readonly string[], previous?: Record<string, unknown>): string {
+function pluginManifestText(
+  installations: readonly ManagedInstallation[],
+  registry: LoadedPluginRegistry,
+  selectedDomainIds: readonly string[],
+  previous: Record<string, unknown> | undefined,
+  literatureAdapterResolutions: readonly LiteratureAdapterResolution[],
+): string {
   const selected = new Set(selectedDomainIds);
   const current = buildResolutionSnapshots(registry, selectedDomainIds);
   const unavailable = resolutionSnapshots(previous?.plugin_resolutions).filter((snapshot) => selected.has(snapshot.domain_id) && !domainIsAvailable(registry.domains.get(snapshot.domain_id)));
   const pluginResolutions = [...current, ...unavailable].sort((left, right) => left.domain_id.localeCompare(right.domain_id));
-  return `${JSON.stringify({ schema_version: "1", package_version: "0.1.0", plugin_resolutions: pluginResolutions, installations }, null, 2)}\n`;
+  return renderToolInstallationManifest({
+    package_version: "0.1.0",
+    plugin_resolutions: pluginResolutions,
+    literature_adapter_resolutions: [...literatureAdapterResolutions],
+    installations: [...installations],
+  });
 }
 
 function resolvedSkillIdsForUnavailable(domainIds: readonly string[], manifest: Record<string, unknown>): Set<string> {
@@ -762,85 +785,7 @@ function formatPlan(title: string, workspace: string, operations: PlannedWrite[]
   return `${title}\nWorkspace: ${workspace}\n${operations.map((item) => `${labels[item.action]}: ${item.path}`).join("\n")}\n`;
 }
 function record(value: unknown): Record<string, unknown> { return value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : {}; }
-function records(value: unknown): Record<string, unknown>[] { return Array.isArray(value) ? value.filter((item): item is Record<string, unknown> => Boolean(item) && typeof item === "object" && !Array.isArray(item)) : []; }
 function strings(value: unknown): string[] { return Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : []; }
-function installationRecords(value: unknown): InstallationRecord[] {
-  return records(value).filter((item): item is Record<string, unknown> & InstallationRecord =>
-    typeof item.tool_id === "string" && typeof item.path === "string" &&
-    (item.scope === "project" || item.scope === "shared-global") && typeof item.sha256 === "string" &&
-    typeof item.source === "string" && item.adapter_version === "1" &&
-    (item.vendor_id === undefined || typeof item.vendor_id === "string") &&
-    (item.vendor_release === undefined || typeof item.vendor_release === "string") &&
-    (item.skill_id === undefined || typeof item.skill_id === "string"));
-}
-function deduplicateInstallations(items: InstallationRecord[]): InstallationRecord[] { return [...new Map(items.map((item) => [`${item.scope}:${item.path}`, item])).values()].sort((a, b) => a.tool_id.localeCompare(b.tool_id) || a.path.localeCompare(b.path)); }
-async function reconcileInstallations(input: {
-  projectRoot: string;
-  existingInstallations: readonly InstallationRecord[];
-  desiredInstallations: readonly InstallationRecord[];
-  reconciledToolIds: readonly string[];
-  selectedToolIds: readonly string[];
-  preserveSkillIds?: readonly string[];
-}): Promise<{ operations: PlannedWrite[]; retainedInstallations: InstallationRecord[]; diagnostics: Diagnostic[] }> {
-  const operations: PlannedWrite[] = [];
-  const retainedInstallations: InstallationRecord[] = [];
-  const diagnostics: Diagnostic[] = [];
-  const desiredKeys = new Set(input.desiredInstallations.map(installationKey));
-  const reconciledTools = new Set(input.reconciledToolIds);
-  const selectedTools = new Set(input.selectedToolIds);
-  const preservedSkills = new Set(input.preserveSkillIds ?? []);
-
-  for (const installation of input.existingInstallations) {
-    if (desiredKeys.has(installationKey(installation))) continue;
-    if (installation.skill_id && preservedSkills.has(installation.skill_id)) {
-      retainedInstallations.push(installation);
-      continue;
-    }
-    if (!reconciledTools.has(installation.tool_id)) {
-      retainedInstallations.push(installation);
-      continue;
-    }
-
-    const selected = selectedTools.has(installation.tool_id);
-    const mayRemove = installation.scope === "project";
-    if (!mayRemove) {
-      retainedInstallations.push(installation);
-      continue;
-    }
-
-    const target = installation.scope === "shared-global"
-      ? installation.path
-      : path.resolve(input.projectRoot, installation.path);
-    const bytes = await readBytes(target);
-    if (bytes === undefined) continue;
-    if (sha256(bytes) !== installation.sha256) {
-      retainedInstallations.push(installation);
-      diagnostics.push({
-        severity: "warning",
-        code: "generated_file_drift",
-        message: "Stale generated file has user modifications and was preserved.",
-        path: target,
-        blocking: false,
-        details: { source: installation.source },
-      });
-      continue;
-    }
-    operations.push({
-      action: "remove-owned",
-      path: target,
-      relativePath: installation.path,
-      scope: installation.scope,
-      ownership: "generated",
-      previousHash: installation.sha256,
-      reason: selected ? "remove stale manifest-owned generated file" : "tool was explicitly deselected",
-    });
-  }
-  return { operations, retainedInstallations, diagnostics };
-}
-
-function installationKey(item: Pick<InstallationRecord, "scope" | "path">): string {
-  return `${item.scope}:${item.path}`;
-}
 
 function operationDiagnostics(operations: PlannedWrite[]): Diagnostic[] { return operations.filter((item) => item.action === "skip-drift" || item.action === "conflict").map((item) => ({ severity: "warning", code: item.action === "skip-drift" ? "generated_file_drift" : "generated_file_conflict", message: item.reason, path: item.path, blocking: false })); }
 function deliveryResult<T>(command: string, data: T, human: { stdout: string }, diagnostics: Diagnostic[]): CommandResult<T> {

@@ -23,14 +23,14 @@ import {
   type WorkflowControlView,
 } from "./helpers/arsu-journey.js";
 
-void test("[journey.bootstrap] init installs the eight-Skill surface without starting academic work", async () => {
+void test("[journey.bootstrap] init installs the ten-Skill surface without starting academic work", async () => {
   const root = await tempProject();
   try {
     const context = initialize(root);
     const current = status(context);
     assert.equal(current.run.status, "not_started");
     assert.equal(current.workflow_control.subflows.some((item) => item.kind === "instance"), false);
-    for (const skill of ["deep-research", "academic-paper", "academic-paper-reviewer", "academic-pipeline", "researchspec-navigate", "researchspec-propose", "researchspec-decide", "researchspec-verify"]) {
+    for (const skill of ["deep-research", "academic-paper", "academic-paper-reviewer", "academic-pipeline", "researchspec-navigate", "researchspec-propose", "researchspec-decide", "researchspec-verify", "zotero-library-agent", "zotero-bridge-cli"]) {
       assert.equal(existsSync(path.join(root, ".forge/skills", skill, "SKILL.md")), true, skill);
     }
     const commandNames = [...runCli(["--help"], root).stdout.matchAll(/^ {2}([a-z]+)(?:\s|$)/gm)].map((item) => item[1]).filter((item) => item !== "help");

@@ -8,6 +8,7 @@ import { checkArsuOutput } from "../src/arsu-converter/converter.js";
 import { ARSU_ROUTING_CATALOG } from "../src/arsu-converter/routing/catalog.js";
 import { ARSU_SKILL_IDS } from "../src/arsu-converter/routing/contracts.js";
 import { MIT_LICENSE_TEXT } from "../src/licensing.js";
+import { LITERATURE_ADAPTER_CATALOG } from "../src/literature-adapters/catalog.js";
 import { assemblePluginRegistry } from "../src/plugins/assembler.js";
 import {
   filesForSkill,
@@ -17,7 +18,7 @@ import {
   validatePluginRegistry,
 } from "../src/plugins/registry.js";
 
-export type HarnessSkillFamily = "arsu" | "companion" | "plugin";
+export type HarnessSkillFamily = "arsu" | "companion" | "literature-adapter" | "plugin";
 export type HarnessFileKind = "markdown" | "text" | "image" | "binary";
 
 export interface HarnessDiagnostic {
@@ -86,6 +87,7 @@ export interface HarnessCatalog {
   summary: {
     arsu_skills: number;
     companion_skills: number;
+    literature_adapter_skills: number;
     plugin_skills: number;
     domains: number;
     available_domains: number;
@@ -139,6 +141,7 @@ export async function loadHarnessCatalog(repoRoot: string): Promise<LoadedHarnes
 
   await loadArsu(resolvedRoot, skills, fileSources, diagnostics);
   loadCompanions(skills, fileSources);
+  await loadLiteratureAdapters(resolvedRoot, skills, fileSources, diagnostics);
   await loadPlugins(resolvedRoot, skills, domains, fileSources, diagnostics);
 
   skills.sort((left, right) => compareText(left.skill_id, right.skill_id));
@@ -150,6 +153,7 @@ export async function loadHarnessCatalog(repoRoot: string): Promise<LoadedHarnes
       summary: {
         arsu_skills: skills.filter((skill) => skill.family === "arsu").length,
         companion_skills: skills.filter((skill) => skill.family === "companion").length,
+        literature_adapter_skills: skills.filter((skill) => skill.family === "literature-adapter").length,
         plugin_skills: skills.filter((skill) => skill.family === "plugin").length,
         domains: domains.length,
         available_domains: domains.filter((domain) => domain.available).length,
@@ -160,6 +164,49 @@ export async function loadHarnessCatalog(repoRoot: string): Promise<LoadedHarnes
     },
     fileSources,
   };
+}
+
+async function loadLiteratureAdapters(
+  repoRoot: string,
+  skills: HarnessSkill[],
+  fileSources: Map<string, ReadonlyMap<string, HarnessFileSource>>,
+  diagnostics: HarnessDiagnostic[],
+): Promise<void> {
+  for (const adapter of LITERATURE_ADAPTER_CATALOG) {
+    for (const skillId of [adapter.primary_skill_id, adapter.helper_skill_id]) {
+      const sourcePath = adapter.skill_source_paths[skillId];
+      if (!sourcePath) throw new Error(`Literature adapter Skill path is missing: ${skillId}`);
+      const root = path.join(repoRoot, sourcePath);
+      try {
+        const sources = await diskSources(root);
+        const entry = await readFile(path.join(root, "SKILL.md"), "utf8");
+        const frontmatter = parseFrontmatter(entry);
+        const files = await fileMetadata(sources);
+        skills.push({
+          skill_id: skillId,
+          family: "literature-adapter",
+          title: titleCase(skillId),
+          description: stringValue(frontmatter.description) ?? "",
+          license: "AGPL-3.0-only",
+          dependencies: [],
+          direct_domain_ids: [],
+          resolved_domain_ids: [],
+          vendor: {
+            vendor_id: adapter.adapter_id,
+            name: "Zotero Literature Adapter",
+            release: adapter.identity.release_set_id,
+            revision: adapter.source.bundle_commit,
+            repository_url: `https://github.com/${adapter.source.bundle_repository}`,
+          },
+          files,
+          file_tree: buildHarnessFileTree(files),
+        });
+        fileSources.set(skillId, sources);
+      } catch (error) {
+        diagnostics.push({ source: "literature-adapter", severity: "error", code: "literature_adapter_skill_unreadable", message: `${skillId}: ${errorMessage(error)}` });
+      }
+    }
+  }
 }
 
 export async function readHarnessFile(loaded: LoadedHarnessCatalog, skillId: string, relativePath: string): Promise<HarnessFileContent | undefined> {

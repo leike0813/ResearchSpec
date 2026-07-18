@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { readFile, writeFile } from "node:fs/promises";
+import { chmod, lstat, readFile, symlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { test } from "node:test";
 
@@ -45,6 +45,59 @@ void test("write plan rejects a changed read dependency before staging writes", 
     (error: unknown) => (error as NodeJS.ErrnoException).code === "EWRITE_CONFLICT",
   );
   await assert.rejects(() => readFile(target), (error: unknown) => (error as NodeJS.ErrnoException).code === "ENOENT");
+  await cleanup(root);
+});
+
+void test("write plan creates executable files with the requested mode", { skip: process.platform === "win32" }, async () => {
+  const root = await tempProject();
+  const target = path.join(root, "tool");
+  const operation = await planFile({ path: target, content: "binary", scope: "project", ownership: "generated", mode: 0o755 });
+  await executeWritePlan({ operations: [operation] });
+  assert.equal((await lstat(target)).mode & 0o777, 0o755);
+  await cleanup(root);
+});
+
+void test("write plan restores manifest-owned executable mode drift", { skip: process.platform === "win32" }, async () => {
+  const root = await tempProject();
+  const target = path.join(root, "tool");
+  await writeFile(target, "binary", { mode: 0o644 });
+  const operation = await planFile({ path: target, content: "binary", scope: "project", ownership: "generated", recordedHash: hash("binary"), mode: 0o755 });
+  assert.equal(operation.action, "refresh");
+  await executeWritePlan({ operations: [operation] });
+  assert.equal((await lstat(target)).mode & 0o777, 0o755);
+  await cleanup(root);
+});
+
+void test("write plan refuses a mode changed after planning", { skip: process.platform === "win32" }, async () => {
+  const root = await tempProject();
+  const target = path.join(root, "tool");
+  await writeFile(target, "binary", { mode: 0o644 });
+  const operation = await planFile({ path: target, content: "updated", scope: "project", ownership: "generated", recordedHash: hash("binary"), mode: 0o755 });
+  await chmod(target, 0o600);
+  await assert.rejects(() => executeWritePlan({ operations: [operation] }), (error: unknown) => (error as NodeJS.ErrnoException).code === "EWRITE_CONFLICT");
+  assert.equal((await lstat(target)).mode & 0o777, 0o600);
+  await cleanup(root);
+});
+
+void test("write plan treats symlink targets as conflicts", { skip: process.platform === "win32" }, async () => {
+  const root = await tempProject();
+  const source = path.join(root, "source.txt");
+  const target = path.join(root, "target.txt");
+  await writeFile(source, "user content", "utf8");
+  await symlink(source, target);
+  const operation = await planFile({ path: target, content: "generated", scope: "project", ownership: "generated", mode: 0o755 });
+  assert.equal(operation.action, "conflict");
+  assert.equal(await readFile(target, "utf8"), "user content");
+  await cleanup(root);
+});
+
+void test("write plan refuses a dangling symlink introduced after planning", { skip: process.platform === "win32" }, async () => {
+  const root = await tempProject();
+  const target = path.join(root, "target.txt");
+  const operation = await planFile({ path: target, content: "generated", scope: "project", ownership: "generated" });
+  await symlink(path.join(root, "missing.txt"), target);
+  await assert.rejects(() => executeWritePlan({ operations: [operation] }), (error: unknown) => (error as NodeJS.ErrnoException).code === "EWRITE_CONFLICT");
+  assert.equal((await lstat(target)).isSymbolicLink(), true);
   await cleanup(root);
 });
 

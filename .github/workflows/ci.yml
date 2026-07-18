@@ -24,6 +24,7 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
+          - macos-latest
           - windows-latest
         node:
           - 22
@@ -58,6 +59,12 @@ jobs:
 
       - name: Validate converter idempotence
         run: pnpm arsu:idempotence
+
+      - name: Check out fixed Zotero adapter maintenance input
+        run: git submodule update --init vendor/zotero-library-agent-bundle
+
+      - name: Validate fixed Zotero adapter output
+        run: pnpm zotero-adapter:check && pnpm zotero-adapter:idempotence
 
       - name: Verify installable package
         run: pnpm release:verify

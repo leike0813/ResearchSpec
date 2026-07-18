@@ -47,8 +47,8 @@ conversion.
 ### Requirement: Deterministic ARSU Skill Generation
 
 ResearchSpec SHALL generate ARSU-derived skill artifacts from the vendored ARS
-source with deterministic structure, copied dependencies, and generated
-metadata.
+source with deterministic structure, copied dependencies, generated metadata,
+and the approved offline Better BibTeX adapter closure.
 
 #### Scenario: Required skill groups are generated
 
@@ -73,12 +73,18 @@ metadata.
 - **THEN** the required resources SHALL be copied into the generated skill group
 - **AND** generated links SHALL point to the copied local resources
 
-#### Scenario: Adapter-only files are excluded
+#### Scenario: Offline Better BibTeX adapter is copied
 
-- **GIVEN** upstream contains platform adapter files or development-only files
+- **GIVEN** `academic-pipeline` uses the upstream offline Zotero adapter
 - **WHEN** conversion succeeds
-- **THEN** those files SHALL NOT be copied into `skills/arsu` runtime skill
-  groups
+- **THEN** it SHALL contain `zotero.py`, `_common.py`, and required package markers
+- **AND** generated guidance SHALL state that this path reads user-supplied Better BibTeX JSON rather than live Zotero state
+
+#### Scenario: Other adapter and development files are excluded
+
+- **GIVEN** upstream contains other platform adapter files or development-only files
+- **WHEN** conversion succeeds
+- **THEN** unapproved files SHALL NOT be copied into `skills/arsu` runtime Skill groups
 - **AND** exclusions SHALL be recorded in the conversion manifest
 
 #### Scenario: Generated output records hashes
@@ -531,4 +537,34 @@ protocol into all four generated ARSU Skills.
   `producer_skill` as candidate owner
 - **AND** it SHALL prohibit plugin writes to ResearchSpec state, registries,
   ledgers, Gates, Decisions, transitions, and receipts
+
+### Requirement: Generated Zotero Literature Protocol
+ResearchSpec SHALL inject one converter-owned Zotero literature-adapter protocol into every generated ARSU producer through the shared contract preflight.
+
+#### Scenario: Producer handles ordinary literature work
+- **WHEN** a generated ARSU producer needs literature and the adapter is available
+- **THEN** it SHALL perform bounded read-only Zotero discovery before optional external supplementation
+- **AND** it SHALL treat adapter output as working material that the same producer must review and integrate
+
+#### Scenario: Query returns no items
+- **WHEN** a bounded Zotero query returns an empty result
+- **THEN** the generated guidance SHALL prohibit treating that result as proof that relevant literature does not exist
+
+#### Scenario: Ordinary adapter use fails
+- **WHEN** an ordinary literature task cannot use the adapter
+- **THEN** the producer SHALL continue through its existing external or user-supplied input path with the limitation disclosed
+
+#### Scenario: Task depends on private Zotero state
+- **WHEN** a task explicitly requires current selection, a private collection, private metadata, or private attachments and the adapter is unavailable
+- **THEN** the producer SHALL pause for adapter configuration or alternative user input
+- **AND** it SHALL NOT substitute public search as if it were the private library
+
+#### Scenario: Adapter output reaches workflow boundaries
+- **WHEN** adapter-derived material is ready for ResearchSpec use
+- **THEN** only the active producer and ResearchSpec CLI SHALL create candidates or perform authorized workflow writes
+- **AND** adapter guidance SHALL prohibit direct writes to specs, state, artifact registry, Gates, Decisions, transitions, and receipts
+
+#### Scenario: Mutating operation is requested
+- **WHEN** Zotero mutation, workflow submit/apply, upload, deletion, or maintenance is proposed
+- **THEN** it SHALL require separate user authorization and remain subject to Host Bridge approval
 

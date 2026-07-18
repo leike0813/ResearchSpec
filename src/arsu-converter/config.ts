@@ -1,6 +1,16 @@
 import { ARSU_SKILL_IDS } from "./routing/contracts.js";
 
-export const CONVERTER_VERSION = "0.7.0";
+export const CONVERTER_VERSION = "0.8.0";
+
+export const ARSU_OFFLINE_ZOTERO_SOURCE_FILES = [
+  "scripts/adapters/_common.py",
+  "scripts/adapters/zotero.py",
+] as const;
+
+export const ARSU_OFFLINE_ZOTERO_PACKAGE_MARKERS = [
+  "scripts/__init__.py",
+  "scripts/adapters/__init__.py",
+] as const;
 
 export const VENDOR_SOURCE_PATH = "vendor/ars";
 export const GENERATED_OUTPUT_PATH = "skills/arsu";

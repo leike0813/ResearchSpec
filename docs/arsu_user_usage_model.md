@@ -36,7 +36,8 @@ researchspec init
 `init` 的 Target v0.1 职责仅包括：
 
 - 创建或补齐 ResearchSpec workspace；
-- 安装或投影四个 ARSU Skills 与四个 Companion Skills；
+- 安装或投影四个 ARSU Skills、四个 Companion Skills 与两个固定 Zotero Adapter Skills；
+- 离线安装项目内 `.zotero-bridge` runtime 与 profile template；
 - 记录可用工具和配置；
 - 不选择 ARSU mode；
 - 不创建学术 subflow；
@@ -362,7 +363,7 @@ flowchart TD
 
 ## 11. 目标最小 Surface
 
-### 11.1 固定 Skills：4 + 4；可选领域 Skills
+### 11.1 固定 Skills：4 + 4 + 2；可选领域 Skills
 
 | 类别 | Skill | 用户作用 |
 | --- | --- | --- |
@@ -374,10 +375,12 @@ flowchart TD
 | Companion | `researchspec-propose` | 起草高影响语义变更 |
 | Companion | `researchspec-decide` | 人类决策、review branch、Gate override |
 | Companion | `researchspec-verify` | 阶段边界语义审查与 proposed Gate verdict |
+| Zotero Adapter | `zotero-library-agent` | 有界、只读的文献库发现与证据工作材料 |
+| Zotero Adapter | `zotero-bridge-cli` | 项目内 Host Bridge CLI 协议与用户授权操作边界 |
 
 Check、Submit 和 Archive 是 CLI transaction，不需要同名 Companion。Explore、Next 与 Context 的用户意图并入 Navigate。
 ResearchSpec 维护的领域插件可以从 bundled registry 增加可选 Open Agent Skills；它们不改变固定
-4+4 成员、wrapper 数量或 workflow authority。Navigate 与当前 ARSU producer 会在新路由、
+4+4+2 成员、wrapper 数量或 workflow authority。Navigate 与当前 ARSU producer 会在新路由、
 研究需要显著变化、出现新 ready work item 或用户明确要求专业能力时，使用紧凑插件元数据判断
 是否存在实质帮助。未安装能力最多按三个 domain 合并建议，必须与路由确认分开征得用户同意，
 并以 dry-run 返回的 `plan_sha256` 绑定安装执行。安装后优先使用宿主已热加载的 Skill；若宿主
@@ -398,7 +401,7 @@ ResearchSpec 维护的领域插件可以从 bundled registry 增加可选 Open A
 
 command wrapper 只是不同 agent 工具的 adapter。目标交付量是：
 
-- 31 个 registered tools × 8 个固定 Skills，加 workspace 选择的 plugin Skills；
+- 31 个 registered tools × 10 个固定 Skills，加 workspace 选择的 plugin Skills；
 - 28 个 command-capable tools × 8 thin wrappers。
 
 这个乘积不是产品能力数量，不能用 wrapper 数量反推新 surface。
@@ -409,8 +412,9 @@ command wrapper 只是不同 agent 工具的 adapter。目标交付量是：
 | --- | --- | --- |
 | ResearchSpec CLI | 路径、typed state、DAG/frontier、hash、registry/receipt、Gate/Decision transaction、transition | 研究结论、稿件内容、审稿判断 |
 | ARSU workflow profile | work graph、parallel/join、Gate policy、transition、round template | workspace 实际状态、手写 ledger |
-| ARSU Skill | 文献研究、综合、写作、审稿、修改、候选 artifact | 直接改 registry/state/ledger、猜 stage |
+| ARSU Skill | 文献研究、综合、写作、审稿、修改、候选 artifact；审查并整合 Adapter 工作材料 | 直接改 registry/state/ledger、猜 stage |
 | Companion | 路由、解释、提案、决策、语义验证的人机流程 | 第二套状态机、低层写入、重复 ARSU 语义能力 |
+| Zotero Adapter | Zotero library/Host Bridge 访问与证据输出 | ResearchSpec workflow authority、未经单独授权的 mutation/submit/apply/upload/delete |
 | Artifact/contracts | 可审计输入输出和事实记录 | 用聊天记忆替代 hash/decision/Gate |
 
 ## 13. Current implementation 与 Target 差距
@@ -443,7 +447,7 @@ command wrapper 只是不同 agent 工具的 adapter。目标交付量是：
 
 当前实现已经通过 bootstrap、vague/expert routing、standalone、pipeline、parallel join、
 Gate challenge/override、revision round、cross-process resume、context export 与 terminal
-completion 与 Material Passport resume 的公共 CLI 黑盒验收。本文中的四 Companion、十六个 CLI 和 31×8/28×8 base 数量
+completion 与 Material Passport resume 的公共 CLI 黑盒验收。本文中的四 Companion、十六个 CLI 和 31×10/28×8 base 数量
 是当前 generated delivery 的事实。
 
 ## 14. 技术层落地顺序
@@ -454,7 +458,7 @@ completion 与 Material Passport resume 的公共 CLI 黑盒验收。本文中�
 | 2 | `add-subflow-instance-control-plane` | subflow/round instances、parallel groups、通用 selector、`start`、自动 work submit policy |
 | 3 | `add-gate-transition-control-plane` | `submit gate:`、`advance transition:`、Gate confirmation/challenge/override、transition receipt |
 | 4 | `add-arsu-workflow-profiles` | deep-research、academic-paper、reviewer、pipeline 的完整 mode/profile graphs |
-| 5 | `consolidate-researchspec-agent-surface` | Navigate、四 Companion、旧投影清理、31×8/28×8 delivery |
+| 5 | `consolidate-researchspec-agent-surface` | Navigate、四 Companion、旧投影清理与 ARSU/Companion delivery；固定 Zotero Adapter 在现行 31×10/28×8 surface 中补充 |
 
 其中 routing catalog、subflow instance control plane、Gate/transition control plane 与完整
 workflow profiles、surface consolidation 与端到端 acceptance 已实现并通过；v0.1 不再有待实现技术层。

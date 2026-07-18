@@ -8,12 +8,12 @@ ResearchSpec 的 agent-facing surface 由固定 ARSU Skills、ResearchSpec Compa
 
 本文区分：
 
-- **Target v0.1**：固定 4 个 ARSU Skills、4 个 Companion Skills、31×8 base Skills 和
+- **Target v0.1**：固定 4 个 ARSU Skills、4 个 Companion Skills、2 个 Zotero Adapter Skills、31×10 base Skills 和
   28×8 thin wrappers；可选 plugin Skills 只增加 Skill projection。
 - **Current implementation（2026-07-11）**：4 个 ARSU Skills、4 个 Companion Skills；
   converter 已拥有 typed routing 与 workflow/artifact catalogs，Navigate 从同一 catalog
   投影 Route/Resume/Explain/Export，并安全清理 manifest-owned 的旧 Companion 投影。
-- **Acceptance status**：四 Companion 与 31×8/28×8 surface 已通过完整公共 CLI 用户旅程验收。
+- **Acceptance status**：四 Companion、固定 Zotero Adapter 与 31×10/28×8 surface 由 release verifier 和公共 CLI 用户旅程验收。
 
 CLI 是 schema validation、path resolution、DAG/frontier、dry-run、write plan、receipt、
 registry、ledger、lifecycle 和 generated ownership 的唯一确定性执行入口。ARSU Skill 负责
@@ -192,7 +192,7 @@ shared-global prompt ownership、manifest hash/drift protection 和工具格式�
    并保留 confirmation、challenge/override 与 receipt 边界。
 4. `add-arsu-workflow-profiles` 已实现：提供全部 mode graphs、parallel/join 和 round templates。
 5. `consolidate-researchspec-agent-surface` 已实现：Navigate 与四 Companion 已成为唯一目标面，
-   base delivery 达到 31×8 Skills 与 28×8 wrappers。
+   base delivery 达到 31×10 Skills 与 28×8 wrappers。
 
 ## 9. 验收边界
 
@@ -201,7 +201,7 @@ shared-global prompt ownership、manifest hash/drift protection 和工具格式�
 - Propose/Decide/Verify 的高影响边界和持久化 evidence 清晰。
 - Candidate 自动提交不被解释为 Gate pass；每个 Gate 都能证明 human confirmation。
 - 当前 manifest 恰好 4 个 Companion IDs，Skill/command projection parity，
-  base delivery 从固定 registries 推导 31×8 与 28×8；domain registry 独立增加 Skills，
+  base delivery 从固定 registries 推导 31×10 与 28×8；domain registry 独立增加 Skills，
   不增加 wrappers。
 - 测试锁定 ID、结构、reason code、projection parity 和可观察行为，不锁完整自然语言正文。
 

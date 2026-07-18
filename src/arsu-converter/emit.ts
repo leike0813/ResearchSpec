@@ -2,6 +2,7 @@ import { cp, mkdir } from "node:fs/promises";
 import path from "node:path";
 
 import { injectContractPreflight, RESEARCHSPEC_PREFLIGHT_MARKER, RESEARCHSPEC_PREFLIGHT_PROFILE_ID } from "./contracts.js";
+import { ARSU_OFFLINE_ZOTERO_PACKAGE_MARKERS, ARSU_OFFLINE_ZOTERO_SOURCE_FILES } from "./config.js";
 import { applyAnchorReplacements } from "./anchors/replace.js";
 import { readUtf8, sha256File, writeUtf8 } from "./fs-utils.js";
 import {
@@ -42,7 +43,7 @@ export async function emitSkillGroup(
   }
 
   const sourceToOutput = new Map<string, string>();
-  const filesToCopy = groupFiles(groupInventory);
+  const filesToCopy = groupFiles(groupInventory, groupName);
   addAnchoredRuntimeFiles(filesToCopy, groupName, anchorReplacements);
   const pending = [...filesToCopy.entries()];
   const seen = new Set<string>();
@@ -117,6 +118,7 @@ export async function emitSkillGroup(
   }
 
   files.push(...await emitArsuSkillLicensing(sourceRoot, groupOut, groupName));
+  if (groupName === "academic-pipeline") files.push(...await emitOfflineZoteroPackageMarkers(groupOut, groupName));
 
   const dependencyCopies = [...dependencyMeta.values()].sort((a, b) => a.source_path.localeCompare(b.source_path));
   if (!routingDescription) throw new Error(`Missing routing description projection for ${groupName}/SKILL.md.`);
@@ -133,13 +135,34 @@ export async function emitSkillGroup(
   };
 }
 
-function groupFiles(group: SkillGroupInventory): Map<string, string> {
+function groupFiles(group: SkillGroupInventory, groupName: string): Map<string, string> {
   const files = new Map<string, string>();
   files.set(group.entry, "SKILL.md");
   for (const bucket of ["agents", "references", "templates", "examples", "scripts"] as const) {
     for (const sourcePath of group[bucket]) {
       files.set(sourcePath, sourcePath.split("/").slice(1).join("/"));
     }
+  }
+  if (groupName === "academic-pipeline") {
+    for (const sourcePath of ARSU_OFFLINE_ZOTERO_SOURCE_FILES) files.set(sourcePath, sourcePath);
+  }
+  return files;
+}
+
+async function emitOfflineZoteroPackageMarkers(groupOut: string, groupName: string): Promise<CopiedFile[]> {
+  const files: CopiedFile[] = [];
+  for (const outputPath of ARSU_OFFLINE_ZOTERO_PACKAGE_MARKERS) {
+    const target = path.join(groupOut, outputPath);
+    await writeUtf8(target, outputPath === "scripts/__init__.py"
+      ? '"""Packaged ARSU runtime scripts."""\n'
+      : '"""Offline user-supplied corpus adapter support."""\n');
+    files.push({
+      group: groupName,
+      source_path: `researchspec-generated:${outputPath}`,
+      output_path: `${groupName}/${outputPath}`,
+      transform_rule: "researchspec_generated_package_marker",
+      sha256: await sha256File(target),
+    });
   }
   return files;
 }

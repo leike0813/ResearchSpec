@@ -40,7 +40,7 @@ function renderHealth() {
   const { summary, diagnostics } = state.catalog;
   const summaryNode = document.createElement("p");
   summaryNode.className = "summary-line";
-  summaryNode.textContent = `${summary.arsu_skills} ARSU · ${summary.companion_skills} Companion · ${summary.plugin_skills} plugin Skills · ${summary.available_domains}/${summary.domains} available domains`;
+  summaryNode.textContent = `${summary.arsu_skills} ARSU · ${summary.companion_skills} Companion · ${summary.literature_adapter_skills} literature Adapter · ${summary.plugin_skills} plugin Skills · ${summary.available_domains}/${summary.domains} available domains`;
   const nodes = [summaryNode];
   for (const diagnostic of diagnostics) {
     nodes.push(message(diagnostic.severity, `${diagnostic.source} · ${diagnostic.code}: ${diagnostic.message}`));
@@ -55,7 +55,7 @@ function renderNavigation() {
   const branches = [];
   let visibleEntries = 0;
 
-  for (const definition of [{ family: "arsu", label: "ARSU" }, { family: "companion", label: "Companion" }]) {
+  for (const definition of [{ family: "arsu", label: "ARSU" }, { family: "companion", label: "Companion" }, { family: "literature-adapter", label: "Literature Adapter" }]) {
     const allSkills = state.catalog.skills.filter((skill) => skill.family === definition.family);
     const familyMatches = matchesText(query, definition.label, definition.family);
     const visibleSkills = familyMatches ? allSkills : allSkills.filter((skill) => matchesSkill(skill, query));

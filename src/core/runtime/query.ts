@@ -2,10 +2,11 @@ import type { IndexedItem, WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { latestById, resolveItem } from "../workspace/snapshot.js";
 import { evaluateWorkflowControl } from "./workflow-control.js";
 import type { PluginStatusSummary } from "../../plugins/status.js";
+import type { LiteratureAdapterInspection } from "../../literature-adapters/inspect.js";
 
 export type ListType = "changes" | "artifacts" | "gates" | "decisions" | "tools";
 
-export async function buildStatus(snapshot: WorkspaceSnapshot, plugins?: PluginStatusSummary) {
+export async function buildStatus(snapshot: WorkspaceSnapshot, plugins?: PluginStatusSummary, literatureAdapters: LiteratureAdapterInspection[] = []) {
   const latestDecisions = latestById(snapshot.decisions.filter((item) => item.authority !== "imported_evidence"), "decision_id");
   const latestGates = latestById(snapshot.gates.filter((item) => item.authority !== "imported_evidence"), "gate_id");
   const overriddenGateIds = new Set(latestDecisions.filter((item) => item.status === "accepted" && item.decision_type === "gate_override" && typeof item.gate_id === "string").map((item) => item.gate_id as string));
@@ -29,6 +30,7 @@ export async function buildStatus(snapshot: WorkspaceSnapshot, plugins?: PluginS
     recent_artifacts: snapshot.artifacts.slice(-5),
     tools: { selected: selectedTools, installation_count: Array.isArray(snapshot.manifest.installations) ? snapshot.manifest.installations.length : 0 },
     plugins: plugins ?? { selected: [], available: [], unavailable: [], projected: [] },
+    literature_adapters: literatureAdapters,
     validation: { ok: snapshot.diagnostics.every((item) => !item.blocking), diagnostics: snapshot.diagnostics },
   };
 }
@@ -63,6 +65,7 @@ export function formatStatusHuman(status: Awaited<ReturnType<typeof buildStatus>
     `Installed tools: ${String(status.tools.selected.length)}`,
     `Selected plugins: ${String(status.plugins.selected.length)}`,
     `Projected plugins: ${String(status.plugins.projected.length)}`,
+    `Literature adapters: ${status.literature_adapters.length ? status.literature_adapters.map((adapter) => `${adapter.adapter_id}=${adapter.state}`).join(", ") : "none"}`,
     "",
   ].join("\n");
 }
