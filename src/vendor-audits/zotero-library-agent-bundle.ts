@@ -22,16 +22,16 @@ const AuditFileSchema = z.strictObject({
 
 export const ZoteroBundleAuditSchema = z.strictObject({
   schema_version: z.literal("1"),
-  audit_id: z.literal("zotero-library-agent-bundle-hbrs-48630ca514e3146c2c89a8d5"),
+  audit_id: z.literal("zotero-library-agent-bundle-hbrs-3d834c0f075f3122ac566e9a"),
   source: z.strictObject({
     repository: z.literal("https://github.com/leike0813/zotero-library-agent-bundle"),
-    immutable_tag: z.literal("host-bridge/hbrs-48630ca514e3146c2c89a8d5"),
-    revision: z.literal("8eef49d72574084244514fb612b96e7f5e7967a8"),
-    tree: z.literal("d4cb943c0370e5104ec8c7074606c69980dec090"),
+    immutable_tag: z.literal("host-bridge/hbrs-3d834c0f075f3122ac566e9a"),
+    revision: z.literal("01f4c670881d510f6f29e4df7c75ec547257b300"),
+    tree: z.literal("6260c0da65a643569353337934e95738f530f3ad"),
     clean: z.literal(true),
-    release_set_id: z.literal("hbrs-48630ca514e3146c2c89a8d5"),
+    release_set_id: z.literal("hbrs-3d834c0f075f3122ac566e9a"),
     source_repository: z.literal("https://github.com/leike0813/zotero-agents"),
-    source_commit: z.literal("4436cf4a91f12ea555a54ddbba9278480ceaf56d"),
+    source_commit: z.literal("033e97e04610e9f4390f646cd5598367a930427a"),
   }),
   license: z.strictObject({
     expression: z.literal("AGPL-3.0-only"),
@@ -85,7 +85,7 @@ export const ZoteroBundleAuditSchema = z.strictObject({
 export type ZoteroBundleAudit = z.infer<typeof ZoteroBundleAuditSchema>;
 
 export async function loadZoteroBundleAudit(repoRoot: string): Promise<ZoteroBundleAudit> {
-  const auditPath = path.join(repoRoot, "audits/zotero-library-agent-bundle/hbrs-48630ca514e3146c2c89a8d5/bundle-audit.json");
+  const auditPath = path.join(repoRoot, "audits/zotero-library-agent-bundle/hbrs-3d834c0f075f3122ac566e9a/bundle-audit.json");
   return ZoteroBundleAuditSchema.parse(JSON.parse(await readFile(auditPath, "utf8")) as unknown);
 }
 

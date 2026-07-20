@@ -10,7 +10,7 @@ import { loadZoteroBundleAudit, renderZoteroBundleAuditReport, type ZoteroBundle
 const execFileAsync = promisify(execFile);
 const SOURCE_PATH = "vendor/zotero-library-agent-bundle";
 const OUTPUT_PATH = "literature-adapters/zotero";
-const AUDIT_REPORT_PATH = "audits/zotero-library-agent-bundle/hbrs-48630ca514e3146c2c89a8d5/report.md";
+const AUDIT_REPORT_PATH = "audits/zotero-library-agent-bundle/hbrs-3d834c0f075f3122ac566e9a/report.md";
 const LICENSE_PATH = "LICENSES/AGPL-3.0.txt";
 
 export interface ZoteroConversionManifest {
@@ -99,7 +99,7 @@ export async function checkZoteroIdempotence(repoRoot: string): Promise<{ ok: bo
 }
 
 async function validateZoteroSource(repoRoot: string, sourceRoot: string): Promise<ZoteroBundleAudit> {
-  const auditPath = path.join(repoRoot, "audits/zotero-library-agent-bundle/hbrs-48630ca514e3146c2c89a8d5/bundle-audit.json");
+  const auditPath = path.join(repoRoot, "audits/zotero-library-agent-bundle/hbrs-3d834c0f075f3122ac566e9a/bundle-audit.json");
   const auditBytes = await readFile(auditPath);
   const audit = await loadZoteroBundleAudit(repoRoot);
   const { stdout: revision } = await execFileAsync("git", ["-C", sourceRoot, "rev-parse", "HEAD"]);
@@ -174,7 +174,7 @@ async function generateZoteroTree(repoRoot: string, sourceRoot: string, outputRo
   }
 
   const generatedFiles = await fileInventory(outputRoot);
-  const auditBytes = await readFile(path.join(repoRoot, "audits/zotero-library-agent-bundle/hbrs-48630ca514e3146c2c89a8d5/bundle-audit.json"));
+  const auditBytes = await readFile(path.join(repoRoot, "audits/zotero-library-agent-bundle/hbrs-3d834c0f075f3122ac566e9a/bundle-audit.json"));
   const manifest: ZoteroConversionManifest = {
     schema_version: "1",
     converter_version: "1",

@@ -1,11 +1,11 @@
 # Zotero Literature Adapter Conversion
 
-- Release set: `hbrs-48630ca514e3146c2c89a8d5`
-- Bundle revision: `8eef49d72574084244514fb612b96e7f5e7967a8`
-- Source commit: `4436cf4a91f12ea555a54ddbba9278480ceaf56d`
+- Release set: `hbrs-3d834c0f075f3122ac566e9a`
+- Bundle revision: `01f4c670881d510f6f29e4df7c75ec547257b300`
+- Source commit: `033e97e04610e9f4390f646cd5598367a930427a`
 - Protocol: `host-bridge.v1`
 - CLI schema: `zotero-bridge.cli.v2`
-- Bundle version: `0.3.0`
+- Bundle version: `0.3.1`
 - CLI version: `0.3.0`
 - Runtime platforms: 7
 - Generated Skills: `zotero-library-agent`, `zotero-bridge-cli`

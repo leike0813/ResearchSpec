@@ -12,7 +12,7 @@ ResearchSpec 将 Zotero 集成作为独立的固定文献系统 Adapter 交付�
 
 ## 身份与版本
 
-当前 release-set 是 `hbrs-48630ca514e3146c2c89a8d5`，协议是 `host-bridge.v1`，CLI schema 是 `zotero-bridge.cli.v2`。release-set、source commit、tree、build fingerprint、command catalog checksum、binary aggregate 和各平台 SHA-256 共同确定一次可吸纳发布。
+当前 release-set 是 `hbrs-3d834c0f075f3122ac566e9a`，协议是 `host-bridge.v1`，CLI schema 是 `zotero-bridge.cli.v2`。release-set、source commit、tree、build fingerprint、command catalog checksum、binary aggregate 和各平台 SHA-256 共同确定一次可吸纳发布。
 
 Bundle、CLI 和两个 Skill 的版本分别属于各自组件。ResearchSpec 会验证每个版本是否与该组件在 catalog 和 manifest 中声明的身份一致，但从不要求这些组件的 patch 版本相等。现在和后续更新中，跨组件 patch 不一致本身不是 admission、安装、状态或更新阻断条件。
 

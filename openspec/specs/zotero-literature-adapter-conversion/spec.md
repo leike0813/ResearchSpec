@@ -8,8 +8,8 @@ Define the immutable Zotero bundle admission, curated adapter bundle generation,
 ResearchSpec SHALL convert only the approved immutable Zotero bundle release set and SHALL validate its complete source, release, content, runtime, and licensing identity before generation.
 
 #### Scenario: Approved release is admitted
-- **WHEN** the local bundle matches tag `host-bridge/hbrs-48630ca514e3146c2c89a8d5`, bundle commit `8eef49d72574084244514fb612b96e7f5e7967a8`, tree `d4cb943c0370e5104ec8c7074606c69980dec090`, and source commit `4436cf4a91f12ea555a54ddbba9278480ceaf56d`
-- **THEN** admission SHALL validate release-set `hbrs-48630ca514e3146c2c89a8d5`, protocol `host-bridge.v1`, CLI schema `zotero-bridge.cli.v2`, build fingerprint, command checksum, content digests, binary aggregate, and all seven runtime checksums
+- **WHEN** the local bundle matches tag `host-bridge/hbrs-3d834c0f075f3122ac566e9a`, bundle commit `01f4c670881d510f6f29e4df7c75ec547257b300`, tree `6260c0da65a643569353337934e95738f530f3ad`, and source commit `033e97e04610e9f4390f646cd5598367a930427a`
+- **THEN** admission SHALL validate release-set `hbrs-3d834c0f075f3122ac566e9a`, protocol `host-bridge.v1`, CLI schema `zotero-bridge.cli.v2`, build fingerprint, command checksum, content digests, binary aggregate, and all seven runtime checksums
 
 #### Scenario: Source or published bytes drift
 - **WHEN** the pinned source is dirty or any required identity, file, tree, content digest, binary, checksum, license, notice, or derivation value differs

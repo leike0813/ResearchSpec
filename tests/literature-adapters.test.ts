@@ -19,7 +19,7 @@ void test("fixed Zotero catalog binds the approved release set and seven runtime
   const [adapter] = LITERATURE_ADAPTER_CATALOG;
   assert.equal(adapter?.adapter_id, "zotero-library");
   assert.equal(adapter?.install_policy, "fixed");
-  assert.equal(adapter?.identity.release_set_id, "hbrs-48630ca514e3146c2c89a8d5");
+  assert.equal(adapter?.identity.release_set_id, "hbrs-3d834c0f075f3122ac566e9a");
   assert.equal(adapter?.runtimes.length, 7);
   assert.equal(new Set(adapter?.runtimes.map((runtime) => runtime.platform)).size, 7);
 });
