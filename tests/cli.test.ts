@@ -12,8 +12,8 @@ import { cleanup, parseEnvelope, runCli, tempProject } from "./helpers/cli.js";
 void test("help, version, and usage errors expose the complete public boundary", () => {
   const help = runCli(["--help"]);
   assert.equal(help.status, 0);
-  const commands = ["init", "update", "status", "instructions", "start", "submit", "advance", "check", "list", "show", "handoff", "pack", "propose", "decide", "archive", "plugin"];
-  assert.equal(commands.length, 16);
+  const commands = ["init", "update", "status", "instructions", "start", "submit", "advance", "check", "doctor", "list", "show", "handoff", "pack", "propose", "decide", "archive", "plugin"];
+  assert.equal(commands.length, 17);
   for (const command of commands) assert.match(help.stdout, new RegExp(`\\b${command}\\b`));
   assert.equal(runCli(["--version"]).stdout.trim(), "0.1.0");
   const invalid = runCli(["unknown", "--json"]);
@@ -437,9 +437,11 @@ void test("propose validates strict targets, evidence, and current-value drift a
   await writeFile(payloadPath, JSON.stringify(base), "utf8");
   assert.equal(executePropose(root, ["propose", "drifted", "--input", payloadPath, "--actor-kind", "agent", "--actor-name", "reviewer"]).status, 0);
   await writeFile(path.join(workspace, "specs/claims.yaml"), 'schema_version: "0.1"\nclaims:\n  - claim_id: C001\n    strength: weak\n', "utf8");
-  const ledgerBefore = await readFile(path.join(workspace, "runs/current/decision-ledger.jsonl"), "utf8");
-  assert.equal(runCli(["decide", "change:drifted", "--decision", "accept", "--actor-name", "Researcher", "--reason", "Review complete", "--json"], root).status, 1);
-  assert.equal(await readFile(path.join(workspace, "runs/current/decision-ledger.jsonl"), "utf8"), ledgerBefore);
+  const drifted = executeDecision(root, ["decide", "change:drifted", "--decision", "accept", "--actor-name", "Researcher", "--reason", "Review complete"]);
+  assert.equal(drifted.status, 0, drifted.stderr || drifted.stdout);
+  assert.match(await readFile(path.join(workspace, "runs/current/decision-ledger.jsonl"), "utf8"), /"change_id":"drifted"/);
+  assert.match(await readFile(path.join(workspace, "changes/drifted/contract-patch.yaml"), "utf8"), /status: stale/);
+  assert.match(await readFile(path.join(workspace, "specs/claims.yaml"), "utf8"), /strength: weak/);
   await cleanup(root);
 });
 
@@ -456,9 +458,9 @@ void test("decide revalidates Markdown section current values before applying a 
   assert.equal(executePropose(root, ["propose", "markdown-drift", "--input", payloadPath, "--actor-kind", "agent", "--actor-name", "reviewer"]).status, 0);
   const projectPath = path.join(workspace, "specs/project.md");
   await writeFile(projectPath, (await readFile(projectPath, "utf8")).replace("\nTBD\n\n## Scope", "\nChanged outside the proposal.\n\n## Scope"), "utf8");
-  const decided = runCli(["decide", "change:markdown-drift", "--decision", "accept", "--actor-name", "Researcher", "--reason", "Reviewed", "--json"], root);
-  assert.equal(decided.status, 1);
-  assert.equal(parseEnvelope(decided).error?.code, "current_value_conflict");
+  const decided = executeDecision(root, ["decide", "change:markdown-drift", "--decision", "accept", "--actor-name", "Researcher", "--reason", "Reviewed"]);
+  assert.equal(decided.status, 0, decided.stderr || decided.stdout);
+  assert.equal(parseEnvelope<{ effects: Array<{ kind: string }> }>(decided).data?.effects.some((effect) => effect.kind === "change_marked_stale"), true);
   assert.match(await readFile(projectPath, "utf8"), /Changed outside the proposal/);
   await cleanup(root);
 });
@@ -474,7 +476,7 @@ void test("archive rejects forged lifecycle state without matching ledger eviden
   await cleanup(root);
 });
 
-void test("decide rejects draft artifact paths outside the project root", async () => {
+void test("advance rejects draft artifact paths outside the project root", async () => {
   const root = await tempProject();
   assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
   const outside = path.join(path.dirname(root), `${path.basename(root)}-outside.md`);
@@ -484,13 +486,14 @@ void test("decide rejects draft artifact paths outside the project root", async 
   await writeFile(path.join(workspace, "runs/current/artifact-registry.json"), `${JSON.stringify({ schema_version: "0.1", run_id: "current", artifacts: [draftArtifact("A-OUT", `../${path.basename(outside)}`, draft)] }, null, 2)}\n`, "utf8");
   const patch = { patch_format_version: "1.0", patch_id: "dp-escape", revision_round: 1, status: "proposed", base_artifact_id: "A-OUT", base_draft_hash: hash(draft), emitted_by: "writer", ops: [{ op: "replace_block", block_id: "B0001", old_hash: hash("Outside draft.").slice(0, 12), new_text: "Escaped" }] };
   await writeFile(path.join(workspace, "draft-patches/dp-escape.json"), `${JSON.stringify(patch, null, 2)}\n`, "utf8");
-  assert.equal(runCli(["decide", "patch:dp-escape", "--decision", "accept", "--actor-name", "Researcher", "--reason", "test", "--json"], root).status, 1);
+  assert.equal(executeDecision(root, ["decide", "patch:dp-escape", "--decision", "accept", "--actor-name", "Researcher", "--reason", "test"]).status, 0);
+  assert.equal(runCli(["advance", "patch:dp-escape", "--actor-kind", "agent", "--actor-name", "academic-paper", "--dry-run", "--json"], root).status, 1);
   assert.equal(await readFile(outside, "utf8"), draft);
   await rm(outside, { force: true });
   await cleanup(root);
 });
 
-void test("decide applies ARSU standalone block-marker draft patches without changing untouched blocks", async () => {
+void test("advance applies accepted ARSU block-marker patches without changing untouched blocks", async () => {
   const root = await tempProject();
   assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
   const workspace = path.join(root, "researchspec");
@@ -498,17 +501,71 @@ void test("decide applies ARSU standalone block-marker draft patches without cha
   await writeFile(path.join(root, "draft.md"), draft, "utf8");
   await writeFile(path.join(workspace, "runs/current/artifact-registry.json"), `${JSON.stringify({ schema_version: "0.1", run_id: "current", artifacts: [draftArtifact("A-DRAFT", "draft.md", draft)] }, null, 2)}\n`, "utf8");
   const patch = {
-    patch_format_version: "1.0", patch_id: "dp-one", revision_round: 1, status: "proposed",
-    base_artifact_id: "A-DRAFT", base_draft_hash: hash(draft), emitted_by: { kind: "agent", name: "writer" },
+    patch_format_version: "2", revision_round: 1,
+    base_artifact_id: "A-DRAFT", base_sha256: hash(draft),
+    producer_skill: "academic-paper", producer_mode: "revision", subflow_instance_id: null,
+    obligation_scope: [], evidence_artifact_ids: [],
+    semantic_delta: { level: "ordinary", summary: "Apply the reviewed paragraph revision." },
     ops: [{ op: "replace_block", block_id: "B0001", old_hash: hash("Original first paragraph.").slice(0, 12), new_text: "Revised first paragraph." }],
   };
-  await writeFile(path.join(workspace, "draft-patches/dp-one.json"), `${JSON.stringify(patch, null, 2)}\n`, "utf8");
+  const inputPath = path.join(root, "patch-input.json");
+  await writeFile(inputPath, `${JSON.stringify(patch, null, 2)}\n`, "utf8");
+  const submitted = executePatchSubmit(root, ["submit", "patch:dp-one", "--input", inputPath, "--actor-kind", "agent", "--actor-name", "writer"]);
+  assert.equal(submitted.status, 0, submitted.stderr || submitted.stdout);
+  const registryAfterSubmit = JSON.parse(await readFile(path.join(workspace, "runs/current/artifact-registry.json"), "utf8")) as { artifacts: Array<{ artifact_type: string }> };
+  assert.equal(registryAfterSubmit.artifacts.some((artifact) => artifact.artifact_type === "revision_patch"), false);
   const decided = executeDecision(root, ["decide", "patch:dp-one", "--decision", "accept", "--actor-name", "Researcher", "--reason", "Apply reviewed revision"]);
   assert.equal(decided.status, 0, decided.stderr || decided.stdout);
+  assert.equal(existsSync(path.join(root, "draft.dp-one.md")), false);
+  const advanced = executeAdvance(root, ["advance", "patch:dp-one", "--actor-kind", "agent", "--actor-name", "academic-paper"]);
+  assert.equal(advanced.status, 0, advanced.stderr || advanced.stdout);
   const revised = await readFile(path.join(root, "draft.dp-one.md"), "utf8");
   assert.match(revised, /<!--block:B0001-->\nRevised first paragraph\./);
   assert.match(revised, /<!--block:B0002-->\nUntouched second paragraph\./);
+  assert.equal(executeAdvance(root, ["advance", "patch:dp-one", "--actor-kind", "agent", "--actor-name", "academic-paper"]).status, 0);
   assert.equal(runCli(["archive", "patch:dp-one", "--json"], root).status, 0);
+  await cleanup(root);
+});
+
+void test("patch decisions do not apply text and stale Advance remains atomic", async () => {
+  const root = await tempProject();
+  assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
+  const workspace = path.join(root, "researchspec");
+  const draft = "<!--block:B0001-->\nOriginal.\n";
+  await writeFile(path.join(root, "draft.md"), draft, "utf8");
+  await writeFile(path.join(workspace, "runs/current/artifact-registry.json"), `${JSON.stringify({ schema_version: "0.1", run_id: "current", artifacts: [draftArtifact("A-DRAFT", "draft.md", draft)] }, null, 2)}\n`, "utf8");
+  const inputPath = path.join(root, "patch-stale-input.json");
+  await writeFile(inputPath, `${JSON.stringify({
+    patch_format_version: "2",
+    revision_round: 1,
+    base_artifact_id: "A-DRAFT",
+    base_sha256: hash(draft),
+    producer_skill: "academic-paper",
+    producer_mode: "revision",
+    subflow_instance_id: null,
+    obligation_scope: [],
+    evidence_artifact_ids: [],
+    semantic_delta: { level: "none" },
+    ops: [{ op: "replace_block", block_id: "B0001", old_hash: hash("Original.").slice(0, 12), new_text: "Revised." }],
+  }, null, 2)}\n`, "utf8");
+  assert.equal(executePatchSubmit(root, ["submit", "patch:dp-stale", "--input", inputPath, "--actor-kind", "agent", "--actor-name", "writer"]).status, 0);
+  assert.equal(executePatchSubmit(root, ["submit", "patch:dp-stale", "--input", inputPath, "--actor-kind", "agent", "--actor-name", "writer"]).status, 0);
+  for (const decision of ["reject", "postpone"] as const) {
+    const selector = `patch:dp-${decision}`;
+    assert.equal(executePatchSubmit(root, ["submit", selector, "--input", inputPath, "--actor-kind", "agent", "--actor-name", "writer"]).status, 0);
+    assert.equal(executeDecision(root, ["decide", selector, "--decision", decision, "--actor-name", "Researcher", ...(decision === "reject" ? ["--reason", "Not approved"] : [])]).status, 0);
+    assert.equal(existsSync(path.join(root, `draft.dp-${decision}.md`)), false);
+  }
+  assert.equal(executeDecision(root, ["decide", "patch:dp-stale", "--decision", "accept", "--actor-name", "Researcher", "--reason", "Reviewed"]).status, 0);
+  assert.equal(await readFile(path.join(root, "draft.md"), "utf8"), draft);
+  assert.equal(existsSync(path.join(root, "draft.dp-stale.md")), false);
+  await writeFile(path.join(root, "draft.md"), "<!--block:B0001-->\nChanged after review.\n", "utf8");
+  const advanced = executeAdvance(root, ["advance", "patch:dp-stale", "--actor-kind", "agent", "--actor-name", "academic-paper"]);
+  assert.equal(advanced.status, 0, advanced.stderr || advanced.stdout);
+  assert.equal(parseEnvelope<{ outcome: string }>(advanced).data?.outcome, "stale");
+  assert.equal(existsSync(path.join(root, "draft.dp-stale.md")), false);
+  assert.equal(existsSync(path.join(workspace, "runs/current/apply-reports/dp-stale.json")), false);
+  assert.match(await readFile(path.join(workspace, "draft-patches/dp-stale.json"), "utf8"), /"status": "stale"/);
   await cleanup(root);
 });
 
@@ -685,6 +742,22 @@ function executePropose(root: string, base: string[]): ReturnType<typeof runCli>
 }
 
 function executeDecision(root: string, base: string[]): ReturnType<typeof runCli> {
+  const selector = base[1] ?? "";
+  const basis = actionBasis(root, selector);
+  const preview = parseEnvelope<{ identity: { plan_sha256?: string } }>(runCli([...base, "--dry-run", "--json"], root));
+  assert.equal(preview.ok, true, JSON.stringify(preview.error));
+  return runCli([...base, "--expected-action-basis-sha256", basis, "--expected-plan-sha256", preview.data?.identity.plan_sha256 ?? "", "--yes", "--json"], root);
+}
+
+function executePatchSubmit(root: string, base: string[]): ReturnType<typeof runCli> {
+  const selector = base[1] ?? "";
+  const basis = actionBasis(root, selector);
+  const preview = parseEnvelope<{ identity: { plan_sha256?: string } }>(runCli([...base, "--dry-run", "--json"], root));
+  assert.equal(preview.ok, true, JSON.stringify(preview.error));
+  return runCli([...base, "--expected-action-basis-sha256", basis, "--expected-plan-sha256", preview.data?.identity.plan_sha256 ?? "", "--yes", "--json"], root);
+}
+
+function executeAdvance(root: string, base: string[]): ReturnType<typeof runCli> {
   const selector = base[1] ?? "";
   const basis = actionBasis(root, selector);
   const preview = parseEnvelope<{ identity: { plan_sha256?: string } }>(runCli([...base, "--dry-run", "--json"], root));

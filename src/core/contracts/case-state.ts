@@ -58,10 +58,12 @@ export const AcceptedEvidenceSchema = z.strictObject({
 
 export const HardObligationSchema = z.strictObject({
   obligation_id: CaseSafeIdSchema,
+  definition_id: CaseSafeIdSchema.optional(),
   title: z.string().trim().min(1),
   scope: ObligationScopeSchema,
   owner: z.literal("researchspec-cli"),
   status: z.enum(["unsatisfied", "satisfied", "blocked", "waived", "not_applicable"]),
+  status_reason: z.string().trim().min(1).nullable().optional(),
   policy_justification: z.string().trim().min(1),
   dependencies: z.array(HardObligationDependencySchema),
   accepted_evidence_ids: z.array(CaseSafeIdSchema),
@@ -89,6 +91,8 @@ export const AttemptRecordSchema = z.strictObject({
   output_refs: z.array(CaseSafeIdSchema),
   diagnostic_codes: z.array(CaseSafeIdSchema),
   disposition: z.enum(["working", "failed", "superseded", "accepted"]),
+  retry_of_attempt_id: CaseSafeIdSchema.nullable().optional(),
+  replaces_attempt_id: CaseSafeIdSchema.nullable().optional(),
   recorded_at: z.iso.datetime(),
 });
 
@@ -98,6 +102,12 @@ export const CaseActionSchema = z.strictObject({
   kind: z.enum(["gate", "decision", "patch", "contract_change", "completion"]),
   obligation_scope: z.array(CaseSafeIdSchema),
   status: z.enum(["pending", "accepted", "rejected", "postponed", "applied", "stale"]),
+  requested_effect: z.enum(["waive", "not_applicable"]).nullable().optional(),
+  rationale: z.string().trim().min(1).nullable().optional(),
+  payload_ref: z.strictObject({
+    path: CaseWorkspacePathSchema,
+    sha256: CaseSha256Schema,
+  }).nullable().optional(),
   created_at: z.iso.datetime(),
 });
 
@@ -145,6 +155,13 @@ export const CaseStateSchema = z.strictObject({
   for (const item of state.accepted_evidence) {
     if (!obligations.has(item.obligation_id)) {
       context.addIssue({ code: "custom", path: ["accepted_evidence"], message: `Accepted evidence has unknown obligation: ${item.obligation_id}` });
+    }
+  }
+  for (const action of state.case_actions) {
+    for (const obligationId of action.obligation_scope) {
+      if (!obligations.has(obligationId)) {
+        context.addIssue({ code: "custom", path: ["case_actions"], message: `Case action has unknown obligation: ${obligationId}` });
+      }
     }
   }
 });

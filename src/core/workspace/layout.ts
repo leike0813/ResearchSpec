@@ -1,7 +1,12 @@
 import path from "node:path";
+import { createHash } from "node:crypto";
 import { stringify } from "yaml";
 
-import { ARSU_V0_1_WORKFLOW } from "../workflow/profiles/arsu-v0-1.generated.js";
+import {
+  ARSU_ADAPTIVE_PLAYBOOK,
+  ARSU_V0_1_WORKFLOW,
+  createArsuAdaptiveProfile,
+} from "../../arsu-converter/workflow/catalog.js";
 
 export type WorkspaceFileKind = "markdown" | "yaml" | "json" | "jsonl";
 export type OverwritePolicy = "user" | "generated";
@@ -20,6 +25,7 @@ export type WorkspaceEntry =
 
 export const REQUIRED_DIRECTORIES = [
   "specs",
+  "playbooks",
   "runs/current",
   "changes",
   "changes/archive",
@@ -27,7 +33,9 @@ export const REQUIRED_DIRECTORIES = [
   "draft-patches/archive",
 ] as const;
 
-export const WORKSPACE_TEMPLATES: readonly WorkspaceTemplateDefinition[] = [
+export type InitRuntimeProfile = "legacy" | "strict" | "adaptive";
+
+const WORKSPACE_TEMPLATES: readonly WorkspaceTemplateDefinition[] = [
   {
     relativePath: "config.yaml",
     kind: "yaml",
@@ -83,12 +91,64 @@ export const WORKSPACE_TEMPLATES: readonly WorkspaceTemplateDefinition[] = [
   { relativePath: "runs/current/gate-ledger.jsonl", kind: "jsonl", overwritePolicy: "user", required: true, content: "" },
 ] as const;
 
-export function getWorkspaceTemplates(): readonly WorkspaceTemplateDefinition[] { return WORKSPACE_TEMPLATES; }
+const ADAPTIVE_PLAYBOOK_TEXT = stringify(ARSU_ADAPTIVE_PLAYBOOK);
+const ADAPTIVE_PLAYBOOK_SHA256 = createHash("sha256").update(ADAPTIVE_PLAYBOOK_TEXT).digest("hex");
+const ADAPTIVE_PROFILE_TEXT = stringify(createArsuAdaptiveProfile(ADAPTIVE_PLAYBOOK_SHA256));
+const ADAPTIVE_STATE_TEXT = stringify({
+  schema_version: "1",
+  case_id: "current",
+  run_id: "current",
+  profile_mode: "adaptive",
+  lifecycle: "open",
+  obligations: [],
+  accepted_evidence: [],
+  formal_gate_refs: [],
+  formal_decision_refs: [],
+  case_actions: [],
+  completion_effects: [],
+  receipts: [],
+  updated_at: null,
+});
+
+const ADAPTIVE_TEMPLATES: readonly WorkspaceTemplateDefinition[] = [
+  {
+    relativePath: "playbooks/arsu-adaptive.yaml",
+    kind: "yaml",
+    overwritePolicy: "generated",
+    required: false,
+    content: ADAPTIVE_PLAYBOOK_TEXT,
+  },
+  {
+    relativePath: "runs/current/attempt-ledger.jsonl",
+    kind: "jsonl",
+    overwritePolicy: "user",
+    required: false,
+    content: "",
+  },
+];
+
+export function getWorkspaceTemplates(profile: InitRuntimeProfile = "legacy"): readonly WorkspaceTemplateDefinition[] {
+  const profileId = profile === "legacy" ? "arsu-v0-1" : profile;
+  const templates = WORKSPACE_TEMPLATES.map((template) => {
+    if (template.relativePath === "config.yaml") {
+      return { ...template, content: `schema_version: "0.1"\nprofile: ${profileId}\nagent_tools:\n  selected: []\n  delivery: both\nplugins:\n  selected: []\n` };
+    }
+    if (profile === "adaptive" && template.relativePath === "specs/workflow.yaml") {
+      return { ...template, content: ADAPTIVE_PROFILE_TEXT };
+    }
+    if (profile === "adaptive" && template.relativePath === "runs/current/state.yaml") {
+      return { ...template, content: ADAPTIVE_STATE_TEXT };
+    }
+    return template;
+  });
+  return profile === "adaptive" ? [...templates, ...ADAPTIVE_TEMPLATES] : templates;
+}
 
 export const REQUIRED_FILES = WORKSPACE_TEMPLATES.filter((item) => item.required).map((item) => item.relativePath);
-export const YAML_FILES = WORKSPACE_TEMPLATES.filter((item) => item.kind === "yaml").map((item) => item.relativePath);
+export const OPTIONAL_FILES = ADAPTIVE_TEMPLATES.map((item) => item.relativePath);
+export const YAML_FILES = [...WORKSPACE_TEMPLATES.filter((item) => item.kind === "yaml").map((item) => item.relativePath), "playbooks/arsu-adaptive.yaml"];
 export const JSON_FILES = WORKSPACE_TEMPLATES.filter((item) => item.kind === "json").map((item) => item.relativePath);
-export const JSONL_FILES = WORKSPACE_TEMPLATES.filter((item) => item.kind === "jsonl").map((item) => item.relativePath);
+export const JSONL_FILES = [...WORKSPACE_TEMPLATES.filter((item) => item.kind === "jsonl").map((item) => item.relativePath), "runs/current/attempt-ledger.jsonl"];
 export const MARKDOWN_FILES = WORKSPACE_TEMPLATES.filter((item) => item.kind === "markdown").map((item) => item.relativePath);
 
 export function resolveInitTarget(inputPath: string | undefined, cwd: string): string {
@@ -96,8 +156,8 @@ export function resolveInitTarget(inputPath: string | undefined, cwd: string): s
   return path.basename(base) === "researchspec" ? base : path.join(base, "researchspec");
 }
 
-export function getWorkspaceEntries(workspaceRoot: string): WorkspaceEntry[] {
-  const templates = getWorkspaceTemplates();
+export function getWorkspaceEntries(workspaceRoot: string, profile: InitRuntimeProfile = "legacy"): WorkspaceEntry[] {
+  const templates = getWorkspaceTemplates(profile);
   return [
     ...REQUIRED_DIRECTORIES.map((dir): WorkspaceEntry => ({ kind: "dir", path: path.join(workspaceRoot, dir) })),
     ...templates.map((item): WorkspaceEntry => ({

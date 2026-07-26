@@ -22,6 +22,11 @@ import {
 import { sha256 } from "../workspace/write-plan.js";
 import { evaluateActionAvailability } from "./action-availability.js";
 import { buildActionDescriptor } from "./action-descriptor.js";
+import {
+  adaptiveActionCandidates,
+  adaptiveInstanceIds,
+  adaptiveInstanceState,
+} from "./adaptive-case-control.js";
 
 export type ListType = "changes" | "artifacts" | "gates" | "decisions" | "tools" | "actions" | "history" | "case-actions" | "diagnostics";
 
@@ -74,6 +79,7 @@ export function showItem(snapshot: WorkspaceSnapshot, selector: string): { item?
 }
 
 export async function buildCaseStatusSummary(snapshot: WorkspaceSnapshot): Promise<CaseStatusSummary> {
+  if (snapshot.runtimeMode === "adaptive") return buildAdaptiveCaseStatusSummary(snapshot);
   const control = await evaluateWorkflowControl(snapshot);
   const latestDecisions = latestById(snapshot.decisions.filter((item) => item.authority !== "imported_evidence"), "decision_id");
   const latestGates = latestById(snapshot.gates.filter((item) => item.authority !== "imported_evidence"), "gate_id");
@@ -83,7 +89,7 @@ export async function buildCaseStatusSummary(snapshot: WorkspaceSnapshot): Promi
   const pendingGates = latestGates.filter((item) => item.blocking === true && item.verdict !== "pass" && !overriddenGateIds.has(String(item.gate_id)));
   const pendingDecisions = latestDecisions.filter((item) => item.status === "proposed" || item.status === "postponed");
   const pendingChanges = snapshot.changes.filter((item) => pendingStatus(item.value));
-  const pendingPatches = snapshot.patches.filter((item) => pendingStatus(item.value));
+  const pendingPatches = snapshot.patches.filter((item) => pendingPatchStatus(item.value));
   const candidates = actionCandidates(snapshot, control, pendingGates, pendingChanges, pendingPatches);
   const evaluated = (await Promise.all([...new Set(candidates)].map((selector) => evaluateActionAvailability(snapshot, selector, control))))
     .filter((item): item is NonNullable<typeof item> => Boolean(item))
@@ -143,6 +149,68 @@ export async function buildCaseStatusSummary(snapshot: WorkspaceSnapshot): Promi
   });
 }
 
+async function buildAdaptiveCaseStatusSummary(snapshot: WorkspaceSnapshot): Promise<CaseStatusSummary> {
+  const state = snapshot.caseState;
+  if (!state) throw new Error("Adaptive CaseState is unavailable.");
+  const candidates = adaptiveActionCandidates(snapshot);
+  const evaluated = (await Promise.all(candidates.map((selector) => evaluateActionAvailability(snapshot, selector))))
+    .filter((item): item is NonNullable<typeof item> => Boolean(item))
+    .map((item) => item.availability);
+  const recommended = stableActions(evaluated.filter((item) => item.disposition === "recommended"));
+  const allowed = stableActions(evaluated.filter((item) => item.disposition === "allowed"));
+  const instanceIds = adaptiveInstanceIds(snapshot);
+  const active = instanceIds.filter((id) => adaptiveInstanceState(snapshot, id) === "active");
+  const idle = instanceIds.filter((id) => adaptiveInstanceState(snapshot, id) === "waiting");
+  const recent = [...instanceIds].reverse();
+  const pendingActions = state.case_actions.filter((item) => item.status === "pending" || item.status === "postponed");
+  const pendingGates = evaluated.filter((item) => item.selector.startsWith("gate:") && item.reason_code !== "gate_complete");
+  const pendingChanges = snapshot.changes.filter((item) => pendingStatus(item.value));
+  const pendingPatches = snapshot.patches.filter((item) => pendingPatchStatus(item.value));
+  const profilePath = "specs/workflow.yaml";
+  const blockers = [
+    ...evaluated.filter((item) => item.disposition === "blocked").flatMap((item) => item.blocking_refs),
+    ...snapshot.diagnostics.filter((item) => item.blocking).map((item) => item.path ? `diagnostic:${item.code}:${item.path}` : `diagnostic:${item.code}`),
+  ];
+  return CaseStatusSummarySchema.parse({
+    schema_version: "1",
+    workspace_id: safeId(snapshot.project.project_id) ?? "project",
+    run_id: state.run_id,
+    lifecycle: state.lifecycle,
+    profile: { mode: "adaptive", path: profilePath, sha256: snapshot.files.get(profilePath)?.hash ?? sha256("") },
+    active_instance_ids: active.slice(0, 20),
+    idle_instance_ids: idle.slice(0, 20),
+    recent_instance_ids: recent.slice(0, 20),
+    unsatisfied_obligation_ids: state.obligations.filter((item) => item.status === "unsatisfied" || item.status === "blocked").map((item) => item.obligation_id).slice(0, 20),
+    blocker_refs: [...new Set(blockers)].sort().slice(0, 20),
+    recommended_actions: recommended.slice(0, 20),
+    allowed_actions: allowed.slice(0, 20),
+    pending: {
+      gate_ids: pendingGates.map((item) => item.selector.split("/").at(-1) ?? item.selector.slice("gate:".length)).slice(0, 20),
+      gate_count: pendingGates.length,
+      decision_ids: pendingActions.map((item) => item.action_id).slice(0, 20),
+      decision_count: pendingActions.length,
+      patch_ids: pendingPatches.map((item) => item.id).sort().slice(0, 20),
+      patch_count: pendingPatches.length,
+      change_ids: pendingChanges.map((item) => item.id).sort().slice(0, 20),
+      change_count: pendingChanges.length,
+    },
+    diagnostic_counts: {
+      error: snapshot.diagnostics.filter((item) => item.severity === "error").length,
+      warning: snapshot.diagnostics.filter((item) => item.severity === "warning").length,
+      info: snapshot.diagnostics.filter((item) => item.severity === "info").length,
+      blocking: snapshot.diagnostics.filter((item) => item.blocking).length,
+    },
+    next_selectors: [...new Set([
+      directedShowSelector("workflow:current"),
+      directedListSelector("actions"),
+      directedListSelector("history"),
+      directedListSelector("case-actions"),
+      ...recommended.map((item) => directedInstructionsSelector(item.selector)),
+      ...allowed.map((item) => directedInstructionsSelector(item.selector)),
+    ])].slice(0, 20),
+  });
+}
+
 export async function listItemsPage(snapshot: WorkspaceSnapshot, type: ListType, request: Partial<PageRequest> = {}): Promise<RuntimePage> {
   const parsed = PageRequestSchema.parse(request);
   const items = await listProjection(snapshot, type);
@@ -167,7 +235,9 @@ export async function showRuntimeDetail(snapshot: WorkspaceSnapshot, selector: s
         selector,
         run: snapshot.state,
         workflow: snapshot.documents["specs/workflow.yaml"] ?? null,
-        workflow_control: await evaluateWorkflowControl(snapshot),
+        workflow_control: snapshot.runtimeMode === "adaptive"
+          ? { mode: "adaptive", action_selectors: adaptiveActionCandidates(snapshot) }
+          : await evaluateWorkflowControl(snapshot),
       },
       candidates: [],
     };
@@ -220,8 +290,9 @@ export function formatCaseStatusHuman(status: CaseStatusSummary): string {
 
 async function listProjection(snapshot: WorkspaceSnapshot, type: ListType): Promise<unknown[]> {
   if (type === "actions") {
-    const control = await evaluateWorkflowControl(snapshot);
-    const descriptors = await Promise.all(actionCandidates(snapshot, control).map((selector) => buildActionDescriptor(snapshot, selector, control)));
+    const control = snapshot.runtimeMode === "strict" ? await evaluateWorkflowControl(snapshot) : undefined;
+    const candidates = snapshot.runtimeMode === "adaptive" ? adaptiveActionCandidates(snapshot) : actionCandidates(snapshot, control as Awaited<ReturnType<typeof evaluateWorkflowControl>>);
+    const descriptors = await Promise.all(candidates.map((selector) => buildActionDescriptor(snapshot, selector, control)));
     return descriptors.filter((item): item is NonNullable<typeof item> => Boolean(item)).sort(compareSelector);
   }
   if (type === "history") return historyProjection(snapshot);
@@ -247,7 +318,7 @@ function actionCandidates(
   const gates = pendingGates ?? latestById(snapshot.gates.filter((item) => item.authority !== "imported_evidence"), "gate_id")
     .filter((item) => item.blocking === true && item.verdict !== "pass");
   const changes = pendingChanges ?? snapshot.changes.filter((item) => pendingStatus(item.value));
-  const patches = pendingPatches ?? snapshot.patches.filter((item) => pendingStatus(item.value));
+  const patches = pendingPatches ?? snapshot.patches.filter((item) => pendingPatchStatus(item.value));
   return [...new Set([
     ...control.subflows.filter((item) => item.kind === "template" || item.kind === "child").map((item) => item.selector),
     ...control.work_items.map((item) => item.selector),
@@ -267,6 +338,12 @@ function historyProjection(snapshot: WorkspaceSnapshot): unknown[] {
       selector: `subflow:${value.instance_id}`,
       type: "subflow",
       timestamp: value.started_at,
+      value,
+    })),
+    ...snapshot.attempts.map((value) => ({
+      selector: `attempt:${value.attempt_id}`,
+      type: "attempt",
+      timestamp: value.recorded_at,
       value,
     })),
   ];
@@ -301,13 +378,20 @@ function caseActionProjection(snapshot: WorkspaceSnapshot): unknown[] {
       id: String(value.gate_id),
       value,
     }));
+  const canonicalItemSelectors = new Set([...snapshot.changes, ...snapshot.patches].map((item) => item.selector));
   return [
+    ...(snapshot.caseState?.case_actions ?? []).filter((value) => !canonicalItemSelectors.has(value.selector)).map((value) => ({
+      selector: value.selector,
+      type: "case_action",
+      id: value.action_id,
+      value,
+    })),
     ...snapshot.changes,
     ...snapshot.patches,
     ...proposedDecisions,
     ...blockingGates,
   ]
-    .filter((item) => pendingStatus(item.value))
+    .filter((item) => item.type === "patch" ? pendingPatchStatus(item.value) : item.type === "case_action" && record(item.value).kind === "patch" ? pendingPatchStatus(item.value) : pendingStatus(item.value))
     .map((item) => ({ selector: item.selector, type: item.type, id: item.id, value: item.value }))
     .sort(compareSelector);
 }
@@ -363,7 +447,12 @@ export class RuntimeQueryError extends Error {
 
 function pendingStatus(value: unknown): boolean {
   const status = record(value).status;
-  return status === undefined || status === "proposed" || status === "postponed";
+  return status === undefined || status === "pending" || status === "proposed" || status === "postponed";
+}
+
+function pendingPatchStatus(value: unknown): boolean {
+  const status = record(value).status;
+  return status === undefined || status === "pending" || status === "proposed" || status === "postponed" || status === "accepted";
 }
 
 function ids(items: Record<string, unknown>[], field: string): string[] {

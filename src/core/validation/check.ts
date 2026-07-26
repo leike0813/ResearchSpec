@@ -5,6 +5,9 @@ import { fileExists, isDirectory } from "../../utils/fs.js";
 import { inspectArtifacts } from "../runtime/workflow-control.js";
 import { SubflowStartReceiptSchema } from "../contracts/subflow.js";
 import { GateSubmitReceiptSchema, TransitionAdvanceReceiptSchema } from "../contracts/gate-transition.js";
+import { AdaptiveCaseReceiptSchema } from "../contracts/adaptive-runtime.js";
+import { DraftPatchReceiptSchema } from "../contracts/draft-patch.js";
+import { ContractChangeDecisionReceiptSchema, ContractChangeProposalReceiptSchema } from "../contracts/contract-change.js";
 import { loadWorkspaceSnapshot } from "../workspace/snapshot.js";
 import type { WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { REQUIRED_DIRECTORIES } from "../workspace/layout.js";
@@ -15,6 +18,11 @@ import { selectedPluginIds } from "../../plugins/status.js";
 import { getTool } from "../../adapters/tools.js";
 import { installationRecords, isDomainSkillInstallation } from "../../adapters/installations.js";
 import { inspectLiteratureAdapters } from "../../literature-adapters/inspect.js";
+import {
+  gateReceiptMatchesAuthority,
+  startReceiptMatchesAuthority,
+  transitionReceiptMatchesAuthority,
+} from "../runtime/runtime-receipt-integrity.js";
 
 export type { CheckResult, CheckTarget, Diagnostic } from "./types.js";
 
@@ -33,7 +41,7 @@ export async function runWorkspaceChecks(workspace: string, target: CheckTarget 
     for (const inspection of await inspectArtifacts(snapshot)) diagnostics.push(...inspection.diagnostics);
   }
 
-  if (target === "all" || target === "runtime") diagnostics.push(...await inspectSubflowStartReceipts(snapshot), ...await inspectGateTransitionReceipts(snapshot));
+  if (target === "all" || target === "runtime") diagnostics.push(...await inspectSubflowStartReceipts(snapshot), ...await inspectGateTransitionReceipts(snapshot), ...await inspectAdaptiveReceipts(snapshot));
 
   if (target === "all" || target === "tools") {
     const installations = installationRecords(snapshot.manifest.installations).filter((item) => item.owner === "agent-tool" && item.source.kind !== "literature-adapter");
@@ -103,7 +111,7 @@ async function inspectGateTransitionReceipts(snapshot: WorkspaceSnapshot): Promi
     try {
       const bytes = await readFile(receiptPath);
       const receipt = GateSubmitReceiptSchema.safeParse(JSON.parse(Buffer.from(bytes).toString("utf8")) as unknown);
-      if (!receipt.success || sha256(bytes) !== reference.sha256 || receipt.data.plan_sha256 !== reference.plan_sha256 || receipt.data.event_id !== event.event_id || receipt.data.gate_id !== event.gate_id) diagnostics.push(dangling("gate_submit_receipt_mismatch", `Gate receipt does not match event ${String(event.event_id)}.`, receiptPath));
+      if (!receipt.success || sha256(bytes) !== reference.sha256 || !gateReceiptMatchesAuthority(event, reference, receipt.data)) diagnostics.push(dangling("gate_submit_receipt_mismatch", `Gate receipt does not match event ${String(event.event_id)}.`, receiptPath));
     } catch { diagnostics.push(dangling("gate_submit_receipt_missing", `Gate receipt is missing or invalid for ${String(event.event_id)}.`, receiptPath)); }
   }
   if (!snapshot.runState) return diagnostics;
@@ -112,7 +120,7 @@ async function inspectGateTransitionReceipts(snapshot: WorkspaceSnapshot): Promi
     try {
       const bytes = await readFile(receiptPath);
       const receipt = TransitionAdvanceReceiptSchema.safeParse(JSON.parse(Buffer.from(bytes).toString("utf8")) as unknown);
-      if (!receipt.success || sha256(bytes) !== reference.sha256 || receipt.data.plan_sha256 !== reference.plan_sha256 || receipt.data.transition_id !== reference.transition_id || receipt.data.subflow_instance_id !== instance.instance_id) diagnostics.push(dangling("transition_receipt_mismatch", `Transition receipt does not match state for ${reference.transition_id}.`, receiptPath));
+      if (!receipt.success || sha256(bytes) !== reference.sha256 || !transitionReceiptMatchesAuthority(instance, reference, receipt.data)) diagnostics.push(dangling("transition_receipt_mismatch", `Transition receipt does not match state for ${reference.transition_id}.`, receiptPath));
     } catch { diagnostics.push(dangling("transition_receipt_missing", `Transition receipt is missing or invalid for ${reference.transition_id}.`, receiptPath)); }
   }
   return diagnostics;
@@ -131,9 +139,42 @@ async function inspectSubflowStartReceipts(snapshot: WorkspaceSnapshot): Promise
       const bytes = await readFile(receiptPath);
       const receipt = SubflowStartReceiptSchema.safeParse(JSON.parse(Buffer.from(bytes).toString("utf8")) as unknown);
       if (sha256(bytes) !== instance.start_receipt.sha256) diagnostics.push(dangling("subflow_start_receipt_hash_mismatch", `Start receipt hash differs for ${instance.instance_id}.`, receiptPath));
-      if (!receipt.success || receipt.data.instance_id !== instance.instance_id || receipt.data.plan_sha256 !== instance.start_receipt.plan_sha256 || receipt.data.template_id !== instance.template_id || receipt.data.route_ref !== instance.route_ref || receipt.data.parent_subflow_id !== instance.parent_subflow_id || (receipt.data.parent_node_id ?? null) !== (instance.parent_node_id ?? null) || receipt.data.round_number !== instance.round_number) diagnostics.push(dangling("subflow_start_receipt_mismatch", `Start receipt does not match state for ${instance.instance_id}.`, receiptPath));
+      if (!receipt.success || !startReceiptMatchesAuthority(instance, receipt.data)) diagnostics.push(dangling("subflow_start_receipt_mismatch", `Start receipt does not match state for ${instance.instance_id}.`, receiptPath));
     } catch {
       diagnostics.push(dangling("subflow_start_receipt_missing", `Start receipt is missing or invalid for ${instance.instance_id}.`, receiptPath));
+    }
+  }
+  return diagnostics;
+}
+
+async function inspectAdaptiveReceipts(snapshot: WorkspaceSnapshot): Promise<Diagnostic[]> {
+  if (!snapshot.caseState) return [];
+  const diagnostics: Diagnostic[] = [];
+  for (const reference of snapshot.caseState.receipts) {
+    const receiptPath = path.resolve(snapshot.workspace, reference.path);
+    if (!(receiptPath === snapshot.workspace || receiptPath.startsWith(`${snapshot.workspace}${path.sep}`))) {
+      diagnostics.push(dangling("adaptive_receipt_escape", `Adaptive receipt escapes the workspace: ${reference.path}`, path.join(snapshot.workspace, "runs/current/state.yaml")));
+      continue;
+    }
+    try {
+      const bytes = await readFile(receiptPath);
+      const value = JSON.parse(Buffer.from(bytes).toString("utf8")) as unknown;
+      const receipt = reference.receipt_type === "gate_submit"
+        ? GateSubmitReceiptSchema.safeParse(value)
+        : reference.receipt_type.startsWith("draft_patch_")
+          ? DraftPatchReceiptSchema.safeParse(value)
+          : reference.receipt_type === "contract_change_proposal"
+            ? ContractChangeProposalReceiptSchema.safeParse(value)
+            : reference.receipt_type === "contract_change_decision"
+              ? ContractChangeDecisionReceiptSchema.safeParse(value)
+            : AdaptiveCaseReceiptSchema.safeParse(value);
+      const identityMatches = reference.receipt_type === "gate_submit"
+        || (receipt.success && record(receipt.data).receipt_id === reference.receipt_id);
+      if (!receipt.success || sha256(bytes) !== reference.sha256 || !identityMatches) {
+        diagnostics.push(dangling("adaptive_receipt_mismatch", `Adaptive receipt does not match state reference ${reference.receipt_id}.`, receiptPath));
+      }
+    } catch {
+      diagnostics.push(dangling("adaptive_receipt_missing", `Adaptive receipt is missing or invalid for ${reference.receipt_id}.`, receiptPath));
     }
   }
   return diagnostics;
@@ -167,6 +208,7 @@ function validateCrossReferences(snapshot: WorkspaceSnapshot, target: CheckTarge
     addDuplicateDiagnostics(diagnostics, snapshot.artifacts, "artifact_id", "duplicate_artifact_id", "runs/current/artifact-registry.json", snapshot.workspace);
     addDuplicateDiagnostics(diagnostics, snapshot.decisions, "event_id", "duplicate_decision_event_id", "runs/current/decision-ledger.jsonl", snapshot.workspace);
     addDuplicateDiagnostics(diagnostics, snapshot.gates, "event_id", "duplicate_gate_event_id", "runs/current/gate-ledger.jsonl", snapshot.workspace);
+    addDuplicateDiagnostics(diagnostics, snapshot.attempts, "attempt_id", "duplicate_attempt_id", "runs/current/attempt-ledger.jsonl", snapshot.workspace);
   }
 
   if (target === "all" || target === "artifacts") {

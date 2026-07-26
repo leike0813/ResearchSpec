@@ -1,8 +1,10 @@
 import { z, type ZodType } from "zod";
 
 import { ArtifactSubmitInputSchema } from "./artifact.js";
+import { AdaptiveObligationSubmitInputSchema } from "./adaptive-runtime.js";
 import { CaseSafeIdSchema, CaseSha256Schema } from "./case-state.js";
 import { GateSubmitPayloadSchema } from "./gate-transition.js";
+import { DraftPatchSubmitInputSchema } from "./draft-patch.js";
 import { ProposalInputSchema } from "./contract-change.js";
 import { SubflowStartInputSchema } from "./subflow.js";
 
@@ -134,6 +136,28 @@ export const ACTION_SCHEMA_REGISTRY = {
     requires_dry_run: true,
     requires_confirmation: true,
   },
+  submit_obligation: {
+    kind: "input",
+    command: "submit",
+    schema_ref: "researchspec://actions/submit-obligation/v1",
+    validator: AdaptiveObligationSubmitInputSchema,
+    cli_derived_fields: ["obligation_id", "subflow_instance_id", "attempt_id", "receipt_id"],
+    semantic_input_fields: ["operation", "method", "input_refs", "diagnostic_codes", "disposition", "output_refs", "retry_of_attempt_id", "replaces_attempt_id", "evidence", "reason", "resolution", "rationale"],
+    constraints: ["Attempts remain scoped to one obligation; only a validated accept_evidence operation may satisfy it."],
+    requires_dry_run: true,
+    requires_confirmation: true,
+  },
+  submit_patch: {
+    kind: "input",
+    command: "submit",
+    schema_ref: "researchspec://actions/submit-patch/v2",
+    validator: DraftPatchSubmitInputSchema,
+    cli_derived_fields: ["patch_id", "status", "emitted_by", "created_at", "decision_id", "receipt_refs"],
+    semantic_input_fields: ["revision_round", "base_artifact_id", "base_sha256", "producer_skill", "producer_mode", "subflow_instance_id", "obligation_scope", "evidence_artifact_ids", "semantic_delta", "ops"],
+    constraints: ["A patch is the sole authority for its text modification; high-impact deltas require a linked contract change."],
+    requires_dry_run: true,
+    requires_confirmation: true,
+  },
   advance: {
     kind: "no-input",
     command: "advance",
@@ -141,6 +165,26 @@ export const ACTION_SCHEMA_REGISTRY = {
     cli_derived_fields: [],
     semantic_input_fields: [],
     constraints: ["Only the currently ready transition may advance."],
+    requires_dry_run: true,
+    requires_confirmation: false,
+  },
+  advance_completion: {
+    kind: "no-input",
+    command: "advance",
+    schema_ref: "researchspec://actions/advance-completion/no-input",
+    cli_derived_fields: [],
+    semantic_input_fields: [],
+    constraints: ["Only the selected profile completion criterion may emit completion effects."],
+    requires_dry_run: true,
+    requires_confirmation: false,
+  },
+  advance_patch: {
+    kind: "no-input",
+    command: "advance",
+    schema_ref: "researchspec://actions/advance-patch/no-input",
+    cli_derived_fields: [],
+    semantic_input_fields: [],
+    constraints: ["Only an accepted, non-stale patch whose linked contract change is applied may modify the base artifact."],
     requires_dry_run: true,
     requires_confirmation: false,
   },

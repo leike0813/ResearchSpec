@@ -27,8 +27,12 @@ export async function buildActionDescriptor(
   if (!evaluated) return undefined;
   const registration = ACTION_SCHEMA_REGISTRY[evaluated.key];
   const schema = registration.kind === "input" ? jsonSchema(registration) : undefined;
-  const required = new Set(Array.isArray(schema?.required) ? schema.required.filter((item): item is string => typeof item === "string") : []);
-  const properties = record(schema?.properties);
+  const branches = schemaBranches(schema);
+  const templateBranch = branches[0] ?? {};
+  const required = new Set(Array.isArray(templateBranch.required) ? templateBranch.required.filter((item): item is string => typeof item === "string") : []);
+  const properties: Record<string, unknown> = {};
+  for (const branch of branches) Object.assign(properties, record(branch.properties));
+  const templateProperties = record(templateBranch.properties);
   const semanticInputSlots = registration.semantic_input_fields.map((field) => ({
     field_path: `/${escapePointer(field)}`,
     expectation: expectation(properties[field]),
@@ -36,8 +40,8 @@ export async function buildActionDescriptor(
   const minimalInputTemplate = registration.kind === "no-input"
     ? null
     : Object.fromEntries(registration.semantic_input_fields
-      .filter((field) => required.has(field) || conditionalSemanticField(evaluated.key, field))
-      .map((field) => [field, templateSlot(field, properties[field])]));
+      .filter((field) => (required.has(field) && field in templateProperties) || conditionalSemanticField(evaluated.key, field))
+      .map((field) => [field, templateSlot(field, templateProperties[field] ?? properties[field])]));
 
   return ActionDescriptorSchema.parse({
     schema_version: "1",
@@ -61,6 +65,12 @@ export function actionSchemaRegistration(key: RuntimeActionKey): ActionSchemaReg
 
 function jsonSchema(registration: Extract<ActionSchemaRegistration, { kind: "input" }>): Record<string, unknown> {
   return record(z.toJSONSchema(registration.validator, { target: "draft-2020-12" }));
+}
+
+function schemaBranches(schema: Record<string, unknown> | undefined): Record<string, unknown>[] {
+  if (!schema) return [];
+  const alternatives = Array.isArray(schema.oneOf) ? schema.oneOf : Array.isArray(schema.anyOf) ? schema.anyOf : [];
+  return alternatives.length > 0 ? alternatives.map(record) : [schema];
 }
 
 function nextSelectors(snapshot: WorkspaceSnapshot, selector: string): string[] {

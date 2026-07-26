@@ -54,13 +54,36 @@ export const SubmitReceiptArtifactRecordSchema = z.object({
 
 export const AppliedDraftArtifactRecordSchema = z.strictObject({
   artifact_id: SafeIdSchema,
-  artifact_type: z.literal("paper_draft"),
+  artifact_type: z.enum(["paper_draft", "revised_draft"]),
   path: z.string().min(1),
   sha256: Sha256Schema,
-  status: z.literal("created"),
-  produced_by: z.literal("researchspec decide"),
+  status: z.enum(["created", "accepted"]),
+  verification_state: z.literal("verified").optional(),
+  produced_by: z.enum(["researchspec decide", "researchspec advance"]),
   created_at: z.iso.datetime(),
   derived_from_artifact_ids: z.array(SafeIdSchema).min(1),
+  patch_id: SafeIdSchema.optional(),
+  work_item_id: SafeIdSchema.optional(),
+  subflow_instance_id: SafeIdSchema.optional(),
+  stage_id: SafeIdSchema.optional(),
+  apply_receipt_artifact_id: SafeIdSchema.optional(),
+});
+
+export const ApplyReportArtifactRecordSchema = z.strictObject({
+  artifact_id: SafeIdSchema,
+  artifact_type: z.literal("apply_report"),
+  path: z.string().min(1),
+  sha256: Sha256Schema,
+  status: z.literal("accepted"),
+  verification_state: z.literal("verified"),
+  produced_by: z.literal("researchspec advance"),
+  related_artifact_ids: z.array(SafeIdSchema).min(1),
+  created_at: z.iso.datetime(),
+  patch_id: SafeIdSchema.optional(),
+  work_item_id: SafeIdSchema.optional(),
+  subflow_instance_id: SafeIdSchema.optional(),
+  stage_id: SafeIdSchema.optional(),
+  apply_receipt_artifact_id: SafeIdSchema.optional(),
 });
 
 export const ApplyReceiptArtifactRecordSchema = z.strictObject({
@@ -69,7 +92,23 @@ export const ApplyReceiptArtifactRecordSchema = z.strictObject({
   path: z.string().min(1),
   sha256: Sha256Schema,
   status: z.literal("verified"),
-  produced_by: z.literal("researchspec decide"),
+  produced_by: z.enum(["researchspec decide", "researchspec advance"]),
+  created_at: z.iso.datetime(),
+  patch_id: SafeIdSchema.optional(),
+  related_artifact_ids: z.array(SafeIdSchema).optional(),
+});
+
+export const AdaptiveAcceptedArtifactRecordSchema = z.strictObject({
+  artifact_id: SafeIdSchema,
+  artifact_type: z.string().trim().min(1),
+  obligation_id: SafeIdSchema,
+  subflow_instance_id: z.string().regex(/^sf-[A-Za-z0-9][A-Za-z0-9._-]*$/),
+  path: z.string().min(1).refine((value) => !value.startsWith("/") && !value.split("/").includes("..")),
+  sha256: Sha256Schema,
+  status: z.literal("accepted"),
+  verification_state: z.literal("verified"),
+  producer: SubmitActorSchema,
+  provenance: z.string().trim().min(1),
   created_at: z.iso.datetime(),
 });
 
@@ -133,7 +172,9 @@ export const ArtifactRegistrySchema = z.strictObject({
     SubmittedArtifactRecordSchema,
     SubmitReceiptArtifactRecordSchema,
     AppliedDraftArtifactRecordSchema,
+    ApplyReportArtifactRecordSchema,
     ApplyReceiptArtifactRecordSchema,
+    AdaptiveAcceptedArtifactRecordSchema,
   ])),
 });
 

@@ -28,7 +28,7 @@ function buildContract(artifactType: string): ArsuArtifactContract {
     artifact_type: artifactType,
     title: binary?.title ?? title(artifactType),
     media_kind: binary ? "binary" : "text",
-    extension: binary?.extension ?? (artifactType === "revision_patch" ? ".json" : ".md"),
+    extension: binary?.extension ?? ".md",
     validation_profile: binary ? "binary-file-artifact" : "text-artifact",
     required_content: binary
       ? ["The file must be a non-empty native deliverable with the declared extension."]

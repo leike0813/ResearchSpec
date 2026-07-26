@@ -11,7 +11,7 @@ export const DecisionEventSchema = z.strictObject({
   decision_id: SafeIdSchema,
   timestamp: z.iso.datetime(),
   actor: ActorSchema,
-  decision_type: z.enum(["gate_override", "patch_acceptance", "workflow_branch"]),
+  decision_type: z.enum(["gate_override", "patch_acceptance", "workflow_branch", "obligation_waiver", "obligation_not_applicable"]),
   selected_option: z.unknown(),
   status: z.enum(["accepted", "rejected", "postponed"]),
   rationale: z.string().min(1).optional(),
@@ -23,6 +23,8 @@ export const DecisionEventSchema = z.strictObject({
   decision_point_id: ScopedIdSchema.optional(),
   transition_id: ScopedIdSchema.optional(),
   subflow_instance_id: SafeIdSchema.optional(),
+  case_action_id: SafeIdSchema.optional(),
+  obligation_id: SafeIdSchema.optional(),
 });
 
 export const DecisionLedgerEventSchema = z.union([ImportedDecisionEvidenceSchema, DecisionEventSchema]);

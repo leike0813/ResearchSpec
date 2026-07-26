@@ -11,7 +11,7 @@ import {
   type ProposalRisk,
   type StableContractPath,
 } from "../contracts/contract-change.js";
-import { CaseSafeIdSchema } from "../contracts/case-state.js";
+import { CaseSafeIdSchema, CaseStateSchema } from "../contracts/case-state.js";
 import type { WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { planFile, sha256, type PlannedWrite } from "../workspace/write-plan.js";
 
@@ -88,6 +88,7 @@ export async function planContractChangeProposal(input: {
     rationale: payload.rationale,
     risk_level: payload.risk_level,
     impact: payload.impact,
+    obligation_scope: payload.obligation_scope,
     requires_human_decision: true,
     validation: {
       validated_at: now,
@@ -110,6 +111,83 @@ export async function planContractChangeProposal(input: {
     const operation = await planFile({ path: target, relativePath: `changes/${input.changeId}/${file.name}`, content: file.content, scope: "workspace", ownership: "user" });
     if (operation.action !== "create") throw conflict("proposal_target_exists", `Proposal target already exists: ${target}`);
     operations.push(operation);
+  }
+  const patchText = files.find((file) => file.name === "contract-patch.yaml")?.content ?? stringify(patch);
+  const proposalPlanSha256 = sha256(`${JSON.stringify({
+    selector: `change:${input.changeId}`,
+    actor: { kind: input.actorKind, name: input.actorName.trim() },
+    proposal: {
+      title: patch.title,
+      rationale: patch.rationale,
+      risk_level: patch.risk_level,
+      impact: patch.impact,
+      obligation_scope: patch.obligation_scope,
+      patches: patch.patches,
+    },
+    target_hashes: patch.validation.target_hashes,
+  })}\n`);
+  const proposalReceiptRelative = `runs/current/receipts/contract-change/${input.changeId}-proposal.json`;
+  const proposalReceiptPath = path.join(input.snapshot.workspace, proposalReceiptRelative);
+  const proposalReceipt = `${JSON.stringify({
+    schema_version: "1",
+    receipt_type: "contract_change_proposal",
+    receipt_id: `R-change-proposal-${input.changeId}`,
+    selector: `change:${input.changeId}`,
+    plan_sha256: proposalPlanSha256,
+    payload_sha256: sha256(patchText),
+    obligation_scope: payload.obligation_scope,
+    committed_at: now,
+  }, null, 2)}\n`;
+  const receiptOperation = await planFile({ path: proposalReceiptPath, relativePath: proposalReceiptRelative, content: proposalReceipt, scope: "workspace", ownership: "user" });
+  if (receiptOperation.action !== "create") throw conflict("proposal_target_exists", `Proposal receipt already exists: ${proposalReceiptPath}`);
+  operations.push(receiptOperation);
+  if (input.snapshot.runtimeMode === "adaptive") {
+    const state = input.snapshot.caseState;
+    const stateFile = input.snapshot.files.get("runs/current/state.yaml");
+    if (!state || !stateFile) throw domain("adaptive_case_state_missing", "Adaptive proposal requires CaseState.");
+    const known = new Set(state.obligations.map((item) => item.obligation_id));
+    const missing = payload.obligation_scope.filter((id) => !known.has(id));
+    if (missing.length) throw usage("proposal_scope_invalid", "Contract-change scope contains unknown obligations.", { missing });
+    const selector = `change:${input.changeId}`;
+    const existing = state.case_actions.find((item) => item.selector === selector);
+    const nextState = CaseStateSchema.parse({
+      ...state,
+      case_actions: [
+        ...state.case_actions.filter((item) => item.selector !== selector),
+        {
+          action_id: existing?.action_id ?? `change-${input.changeId}`,
+          selector,
+          kind: "contract_change",
+          obligation_scope: payload.obligation_scope.length ? payload.obligation_scope : existing?.obligation_scope ?? [],
+          status: "pending",
+          rationale: payload.rationale,
+          payload_ref: { path: `changes/${input.changeId}/contract-patch.yaml`, sha256: sha256(patchText) },
+          created_at: existing?.created_at ?? now,
+        },
+      ],
+      receipts: [
+        ...state.receipts.filter((item) => item.receipt_id !== `R-change-proposal-${input.changeId}`),
+        {
+          receipt_id: `R-change-proposal-${input.changeId}`,
+          receipt_type: "contract_change_proposal",
+          path: proposalReceiptRelative,
+          sha256: sha256(proposalReceipt),
+        },
+      ],
+      updated_at: now,
+    });
+    const stateText = stringify(nextState);
+    operations.push({
+      action: "refresh",
+      path: stateFile.absolutePath,
+      relativePath: stateFile.relativePath,
+      content: stateText,
+      scope: "workspace",
+      ownership: "user",
+      previousHash: stateFile.hash,
+      nextHash: sha256(stateText),
+      reason: "commit contract-change CaseAction projection",
+    });
   }
   return { patch, operations };
 }

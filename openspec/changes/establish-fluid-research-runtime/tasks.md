@@ -80,44 +80,44 @@
 
 ## 6. M4 — Doctor
 
-- [ ] 6.1 Implement tolerant raw-file observation and the fixed healthy,
+- [x] 6.1 Implement tolerant raw-file observation and the fixed healthy,
   retryable, deterministic, human-reconstruction and conflicting-evidence
   finding taxonomy.
-- [ ] 6.2 Build retry recommendations and deterministic repair plans with
+- [x] 6.2 Build retry recommendations and deterministic repair plans with
   target/read hashes, operations, backups, postconditions and `plan_sha256`.
-- [ ] 6.3 Implement repair execution with plan confirmation, read
+- [x] 6.3 Implement repair execution with plan confirmation, read
   preconditions, original-byte preservation, dependent writes first,
   receipt-last authority commit and post-check.
-- [ ] 6.4 Register the seventeenth public `doctor` command and add invalid YAML,
+- [x] 6.4 Register the seventeenth public `doctor` command and add invalid YAML,
   schema-invalid state, orphan receipt, changed precondition and conflicting
   evidence black-box tests.
 
 ## 7. M5 — Adaptive Case Runtime
 
-- [ ] 7.1 Persist hard obligations, accepted evidence, formal Gate/Decision
+- [x] 7.1 Persist hard obligations, accepted evidence, formal Gate/Decision
   references, pending case actions, completion and receipts in CaseState while
   keeping playbooks, ephemeral plans and working material outside authority.
-- [ ] 7.2 Implement adaptive availability, scoped attempts, retry, replacement,
+- [x] 7.2 Implement adaptive availability, scoped attempts, retry, replacement,
   pause, waive and not-applicable behavior with hard-dependency propagation
   only where declared.
-- [ ] 7.3 Update converter-owned profiles to emit obligations, justified hard
+- [x] 7.3 Update converter-owned profiles to emit obligations, justified hard
   edges, formal policies, completion and soft playbooks; expose explicit strict
   profile selection without weakening its graph interpreter.
-- [ ] 7.4 Add adaptive reorder/parallel/rework and local-failure acceptance
+- [x] 7.4 Add adaptive reorder/parallel/rework and local-failure acceptance
   journeys plus strict-process regression coverage.
 
 ## 8. M6 — Proposed/Current Case Actions
 
-- [ ] 8.1 Make `submit patch:<selector>` create the sole canonical pending
+- [x] 8.1 Make `submit patch:<selector>` create the sole canonical pending
   patch with base identity/hash, patch body, semantic delta, evidence and
   producer scope; remove duplicate ordinary `revision_patch` submission.
-- [ ] 8.2 Implement `decide patch:<id>` accept/reject/postpone and
+- [x] 8.2 Implement `decide patch:<id>` accept/reject/postpone and
   `advance patch:<id>` controlled apply, revised artifact, apply report,
   receipt, idempotence and base-drift handling.
-- [ ] 8.3 Represent contract proposals as case actions and scoped blockers,
+- [x] 8.3 Represent contract proposals as case actions and scoped blockers,
   connect `propose`/`decide change:<id>` to revalidation/current application,
   and link high-impact patch deltas to required changes.
-- [ ] 8.4 Add patch acceptance, rejection, postponement, stale base, accepted
+- [x] 8.4 Add patch acceptance, rejection, postponement, stale base, accepted
   apply, contract drift and unrelated-obligation continuation journeys.
 
 ## 9. Z3 — Adapter-Native Runtime

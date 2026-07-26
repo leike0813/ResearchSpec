@@ -14,17 +14,26 @@ export const PatchSelectorSchema = z.string().regex(new RegExp(`^patch:${SafeId}
   .refine((value) => !value.includes(".."));
 export const LedgerGateSelectorSchema = z.string().regex(new RegExp(`^gate:${SafeId}$`))
   .refine((value) => !value.includes(".."));
+export const ObligationSelectorSchema = z.string().regex(new RegExp(`^obligation:sf-${SafeId}/${SafeId}$`))
+  .refine((value) => !value.includes(".."));
+export const CompletionSelectorSchema = z.string().regex(new RegExp(`^completion:sf-${SafeId}/${SafeId}$`))
+  .refine((value) => !value.includes(".."));
+export const CaseActionSelectorSchema = z.string().regex(new RegExp(`^case-action:${SafeId}$`))
+  .refine((value) => !value.includes(".."));
 export const WorkflowDetailSelectorSchema = z.literal("workflow:current");
 export const ActionTargetSelectorSchema = z.union([
   RuntimeSelectorSchema,
   ChangeSelectorSchema,
   PatchSelectorSchema,
   LedgerGateSelectorSchema,
+  ObligationSelectorSchema,
+  CompletionSelectorSchema,
+  CaseActionSelectorSchema,
 ]);
 export const DetailSelectorSchema = z.union([
   ActionTargetSelectorSchema,
   WorkflowDetailSelectorSchema,
-  z.string().regex(new RegExp(`^(?:artifact|decision|contract|source|claim|tool):${SafeId}$`))
+  z.string().regex(new RegExp(`^(?:artifact|decision|contract|source|claim|tool|attempt):${SafeId}$`))
     .refine((value) => !value.includes("..")),
 ]);
 
@@ -32,7 +41,10 @@ export type ActionTargetSelector =
   | RuntimeSelector
   | { kind: "change"; selector: string; id: string }
   | { kind: "patch"; selector: string; id: string }
-  | { kind: "ledger_gate"; selector: string; id: string };
+  | { kind: "ledger_gate"; selector: string; id: string }
+  | { kind: "obligation"; selector: string; instanceId: string; id: string }
+  | { kind: "completion"; selector: string; instanceId: string; id: string }
+  | { kind: "case_action"; selector: string; id: string };
 
 export function parseActionTargetSelector(value: string): ActionTargetSelector | undefined {
   const runtime = parseRuntimeSelector(value);
@@ -40,6 +52,15 @@ export function parseActionTargetSelector(value: string): ActionTargetSelector |
   if (ChangeSelectorSchema.safeParse(value).success) return { kind: "change", selector: value, id: value.slice("change:".length) };
   if (PatchSelectorSchema.safeParse(value).success) return { kind: "patch", selector: value, id: value.slice("patch:".length) };
   if (LedgerGateSelectorSchema.safeParse(value).success) return { kind: "ledger_gate", selector: value, id: value.slice("gate:".length) };
+  if (ObligationSelectorSchema.safeParse(value).success) {
+    const [instanceId, id] = value.slice("obligation:".length).split("/", 2);
+    return { kind: "obligation", selector: value, instanceId: instanceId ?? "", id: id ?? "" };
+  }
+  if (CompletionSelectorSchema.safeParse(value).success) {
+    const [instanceId, id] = value.slice("completion:".length).split("/", 2);
+    return { kind: "completion", selector: value, instanceId: instanceId ?? "", id: id ?? "" };
+  }
+  if (CaseActionSelectorSchema.safeParse(value).success) return { kind: "case_action", selector: value, id: value.slice("case-action:".length) };
   return undefined;
 }
 

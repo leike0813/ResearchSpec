@@ -22,6 +22,13 @@ export const DoctorFindingSchema = z.strictObject({
   repair_available: z.boolean(),
 });
 
+export const DoctorReportSchema = z.strictObject({
+  schema_version: z.literal("1"),
+  workspace: z.string().min(1),
+  healthy: z.boolean(),
+  findings: z.array(DoctorFindingSchema).min(1),
+});
+
 export const DoctorRepairOperationSchema = z.discriminatedUnion("kind", [
   z.strictObject({
     kind: z.literal("restore_bytes"),
@@ -37,7 +44,6 @@ export const DoctorRepairOperationSchema = z.discriminatedUnion("kind", [
   z.strictObject({
     kind: z.literal("append_receipt"),
     target_path: CaseWorkspacePathSchema,
-    receipt_sha256: CaseSha256Schema,
   }),
 ]);
 
@@ -64,5 +70,7 @@ export const DoctorRepairReceiptSchema = z.strictObject({
 
 export type RecoveryDisposition = z.infer<typeof RecoveryDispositionSchema>;
 export type DoctorFinding = z.infer<typeof DoctorFindingSchema>;
+export type DoctorReport = z.infer<typeof DoctorReportSchema>;
+export type DoctorRepairOperation = z.infer<typeof DoctorRepairOperationSchema>;
 export type DoctorRepairPlan = z.infer<typeof DoctorRepairPlanSchema>;
 export type DoctorRepairReceipt = z.infer<typeof DoctorRepairReceiptSchema>;

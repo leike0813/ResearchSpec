@@ -8,6 +8,7 @@ import { test } from "node:test";
 import { cleanup, parseEnvelope, runCli, tempProject } from "./helpers/cli.js";
 import {
   advanceTransition,
+  applyRevisionPatch,
   cliJson,
   decideTransition,
   drive,
@@ -34,7 +35,7 @@ void test("[journey.bootstrap] init installs the fifteen-Skill surface without s
       assert.equal(existsSync(path.join(root, ".forge/skills", skill, "SKILL.md")), true, skill);
     }
     const commandNames = [...runCli(["--help"], root).stdout.matchAll(/^ {2}([a-z]+)(?:\s|$)/gm)].map((item) => item[1]).filter((item) => item !== "help");
-    assert.deepEqual(commandNames, ["init", "update", "status", "instructions", "start", "submit", "advance", "check", "list", "show", "handoff", "pack", "propose", "decide", "archive", "plugin"]);
+    assert.deepEqual(commandNames, ["init", "update", "status", "instructions", "start", "submit", "advance", "check", "doctor", "list", "show", "handoff", "pack", "propose", "decide", "archive", "plugin"]);
   } finally { await cleanup(root); }
 });
 
@@ -224,6 +225,11 @@ void test("[journey.revision-round] a revision branch exposes isolated round one
       sawRoundOne ||= current.workflow_control.subflows.some((item) => item.kind === "instance" && item.parent_subflow_id === parent.slice(8) && item.round_number === 1);
       sawRoundTwo ||= current.workflow_control.subflows.some((item) => item.parent_subflow_id === parent.slice(8) && item.round_number === 2);
       if (sawRoundTwo) break;
+      const revision = current.workflow_control.subflows.find((item) =>
+        item.kind === "instance"
+        && item.state === "active"
+        && item.template_id === "tpl-academic-paper-revision");
+      if (revision && await applyRevisionPatch(context, revision.selector)) continue;
       const ready = current.workflow_control.ready_items[0];
       if (ready) { await submitWork(context, ready); continue; }
       const child = current.workflow_control.subflows.find((item) => item.kind === "child" && item.state === "available");

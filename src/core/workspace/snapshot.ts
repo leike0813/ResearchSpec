@@ -4,14 +4,17 @@ import { z } from "zod";
 
 import { fileExists, readOptionalText } from "../../utils/fs.js";
 import { ArtifactRegistrySchema } from "../contracts/artifact.js";
+import { CaseStateSchema, AttemptRecordSchema, type CaseState, type AttemptRecord } from "../contracts/case-state.js";
+import { CaseProfileSchema, SoftPlaybookSchema, type CaseProfile, type SoftPlaybook } from "../contracts/case-profile.js";
 import { ImportedGateEvidenceSchema } from "../contracts/material-passport.js";
 import { DecisionLedgerEventSchema } from "../contracts/decision.js";
+import { StoredDraftPatchSchema } from "../contracts/draft-patch.js";
 import { GateEventV1Schema } from "../contracts/gate-transition.js";
 import { RunStateSchema, type RunState } from "../contracts/run-state.js";
 import { validateWorkflowDefinition, WorkflowDefinitionSchema, WORKFLOW_PROFILE_IDS, type WorkflowDefinition } from "../contracts/workflow.js";
 import { parseJson, parseJsonLines, parseYaml } from "../validation/parse.js";
 import type { Diagnostic } from "../validation/types.js";
-import { JSON_FILES, JSONL_FILES, MARKDOWN_FILES, REQUIRED_FILES, YAML_FILES } from "./layout.js";
+import { JSON_FILES, JSONL_FILES, MARKDOWN_FILES, OPTIONAL_FILES, REQUIRED_FILES, YAML_FILES } from "./layout.js";
 import { sha256 } from "./write-plan.js";
 import { ToolInstallationManifestSchema } from "../../adapters/installations.js";
 
@@ -22,7 +25,7 @@ const ClaimSchema = z.looseObject({ claim_id: SafeId });
 const GateSchema = z.union([ImportedGateEvidenceSchema, GateEventV1Schema]);
 const ConfigSchema = z.looseObject({
   schema_version: z.string(),
-  profile: z.enum(WORKFLOW_PROFILE_IDS),
+  profile: z.enum([...WORKFLOW_PROFILE_IDS, "strict", "adaptive"]),
   agent_tools: z.looseObject({ selected: z.array(z.string()), delivery: z.enum(["skills", "commands", "both"]) }),
   plugins: z.looseObject({ selected: z.array(z.string()) }).optional(),
 });
@@ -31,16 +34,11 @@ const ClaimsSchema = z.looseObject({ schema_version: z.string(), claims: z.array
 const ProjectSchema = z.looseObject({ schema_version: z.string(), project_id: SafeId, title: z.string(), target_output: z.string(), primary_language: z.string() });
 const ManuscriptSchema = z.looseObject({ schema_version: z.string(), manuscript_id: SafeId, title: z.string(), status: z.string(), sections: z.array(z.unknown()) });
 const ContractPatchSchema = z.looseObject({
-  schema_version: z.string(), change_id: SafeId, title: z.string().min(1), status: z.enum(["proposed", "postponed", "accepted", "rejected", "applied", "superseded"]),
+  schema_version: z.string(), change_id: SafeId, title: z.string().min(1), status: z.enum(["proposed", "postponed", "accepted", "rejected", "stale", "applied", "superseded"]),
   created_at: z.string().min(1), created_by: ActorSchema, rationale: z.string().min(1), risk_level: z.enum(["low", "medium", "high"]), requires_human_decision: z.boolean(),
   impact: z.array(z.string().min(1)).min(1),
   validation: z.looseObject({ validated_at: z.string().min(1), target_hashes: z.record(z.string(), z.string()), artifact_ids: z.array(SafeId), decision_ids: z.array(SafeId) }),
   patches: z.array(z.looseObject({ patch_id: SafeId, target_contract: z.enum(["specs/project.md", "specs/sources.yaml", "specs/claims.yaml", "specs/manuscript.yaml", "specs/workflow.yaml"]), operation: z.enum(["add", "replace", "remove", "append", "merge"]), target_path: z.string().min(1), reason: z.string().min(1), source_artifact_ids: z.array(SafeId), source_decision_ids: z.array(SafeId) })).min(1),
-});
-const DraftPatchSchema = z.looseObject({
-  patch_format_version: z.string(), patch_id: SafeId, revision_round: z.number().int().nonnegative(), status: z.enum(["proposed", "postponed", "accepted", "rejected", "applied", "superseded"]),
-  base_artifact_id: SafeId, base_draft_hash: z.string().min(12), emitted_by: ActorSchema,
-  ops: z.array(z.looseObject({ op: z.enum(["replace_block", "insert_after", "delete_block"]), block_id: z.string().min(1), old_hash: z.string().optional(), new_text: z.string().optional() })),
 });
 
 export interface SnapshotFile {
@@ -56,7 +54,7 @@ export interface SnapshotFile {
 }
 
 export interface IndexedItem {
-  type: "change" | "patch" | "artifact" | "gate" | "decision" | "source" | "claim" | "tool" | "contract";
+  type: "change" | "patch" | "artifact" | "gate" | "decision" | "source" | "claim" | "tool" | "contract" | "case_action" | "attempt";
   id: string;
   selector: string;
   value: unknown;
@@ -73,6 +71,11 @@ export interface WorkspaceSnapshot {
   manifest: Record<string, unknown>;
   workflow?: WorkflowDefinition;
   runState?: RunState;
+  caseProfile?: CaseProfile;
+  caseState?: CaseState;
+  playbook?: SoftPlaybook;
+  attempts: AttemptRecord[];
+  runtimeMode: "adaptive" | "strict";
   state: Record<string, unknown>;
   artifacts: Record<string, unknown>[];
   decisions: Record<string, unknown>[];
@@ -89,14 +92,14 @@ export async function loadWorkspaceSnapshot(workspace: string): Promise<Workspac
   const diagnostics: Diagnostic[] = [];
   let project: Record<string, unknown> = {};
 
-  for (const relativePath of REQUIRED_FILES) {
+  for (const relativePath of [...REQUIRED_FILES, ...OPTIONAL_FILES]) {
     const absolutePath = path.join(workspace, relativePath);
     let info;
     try {
       info = await lstat(absolutePath);
     } catch (error) {
       if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
-      diagnostics.push({ severity: "error", code: "required_file_missing", message: "Required file is missing.", path: absolutePath, blocking: true });
+      if (REQUIRED_FILES.includes(relativePath)) diagnostics.push({ severity: "error", code: "required_file_missing", message: "Required file is missing.", path: absolutePath, blocking: true });
       continue;
     }
     if (!info.isFile() || info.isSymbolicLink()) {
@@ -144,13 +147,28 @@ export async function loadWorkspaceSnapshot(workspace: string): Promise<Workspac
 
   const config = asRecord(documents["config.yaml"]);
   const manifest = asRecord(documents["tool-installation-manifest.json"]);
-  const workflow = parseWorkflowDefinition(documents["specs/workflow.yaml"], files.get("specs/workflow.yaml"), diagnostics);
+  const adaptiveDeclared = asRecord(documents["specs/workflow.yaml"]).mode === "adaptive"
+    || asRecord(documents["runs/current/state.yaml"]).profile_mode === "adaptive";
+  const runtimeMode = adaptiveDeclared ? "adaptive" : "strict";
+  const caseProfile = runtimeMode === "adaptive"
+    ? parseCaseProfile(documents["specs/workflow.yaml"], files.get("specs/workflow.yaml"), diagnostics)
+    : undefined;
+  const workflow = runtimeMode === "strict"
+    ? parseWorkflowDefinition(documents["specs/workflow.yaml"], files.get("specs/workflow.yaml"), diagnostics)
+    : undefined;
   const state = asRecord(documents["runs/current/state.yaml"]);
-  const runState = parseRunState(documents["runs/current/state.yaml"], files.get("runs/current/state.yaml"), diagnostics);
+  const caseState = runtimeMode === "adaptive"
+    ? parseCaseState(documents["runs/current/state.yaml"], files.get("runs/current/state.yaml"), diagnostics)
+    : undefined;
+  const runState = runtimeMode === "strict"
+    ? parseRunState(documents["runs/current/state.yaml"], files.get("runs/current/state.yaml"), diagnostics)
+    : undefined;
   validateInstanceStateReferences(workflow, runState, files.get("runs/current/state.yaml"), diagnostics);
   const artifacts = records(asRecord(documents["runs/current/artifact-registry.json"]).artifacts);
   const decisions = records(documents["runs/current/decision-ledger.jsonl"]);
   const gates = records(documents["runs/current/gate-ledger.jsonl"]);
+  const attempts = parseAttempts(documents["runs/current/attempt-ledger.jsonl"], files.get("runs/current/attempt-ledger.jsonl"), diagnostics);
+  const playbook = parsePlaybook(documents["playbooks/arsu-adaptive.yaml"], files.get("playbooks/arsu-adaptive.yaml"), caseProfile, diagnostics);
 
   validateDocument("config.yaml", config, ConfigSchema, files, diagnostics);
   validateDocument("tool-installation-manifest.json", manifest, ToolInstallationManifestSchema, files, diagnostics);
@@ -163,9 +181,88 @@ export async function loadWorkspaceSnapshot(workspace: string): Promise<Workspac
 
   const changes = await loadActiveChanges(workspace, diagnostics);
   const patches = await loadDraftPatches(workspace, diagnostics);
-  const items = buildItems(documents, artifacts, decisions, gates, changes, patches, config, manifest);
+  await validateCaseActionProjections(workspace, caseState, changes, patches, diagnostics);
+  const items = buildItems(documents, artifacts, decisions, gates, changes, patches, config, manifest, caseState, attempts);
 
-  return { workspace, project, files, documents, config, manifest, workflow, runState, state, artifacts, decisions, gates, changes, patches, items, diagnostics };
+  return { workspace, project, files, documents, config, manifest, workflow, runState, caseProfile, caseState, playbook, attempts, runtimeMode, state, artifacts, decisions, gates, changes, patches, items, diagnostics };
+}
+
+async function validateCaseActionProjections(
+  workspace: string,
+  caseState: CaseState | undefined,
+  changes: IndexedItem[],
+  patches: IndexedItem[],
+  diagnostics: Diagnostic[],
+): Promise<void> {
+  if (!caseState) return;
+  const bySelector = new Map([...changes, ...patches].map((item) => [item.selector, item]));
+  for (const action of caseState.case_actions) {
+    if (action.kind !== "patch" && action.kind !== "contract_change") continue;
+    const item = bySelector.get(action.selector);
+    if (!item) {
+      if (action.kind === "contract_change" && !action.payload_ref) continue;
+      diagnostics.push({ severity: "error", code: "case_action_payload_missing", message: "CaseAction payload is missing.", path: action.payload_ref?.path ?? action.selector, blocking: true });
+      continue;
+    }
+    const itemStatus = stringValue(asRecord(item.value).status) ?? "proposed";
+    const projectedStatus = itemStatus === "proposed" ? "pending" : itemStatus;
+    if (projectedStatus !== action.status) {
+      diagnostics.push({ severity: "error", code: "case_action_status_drift", message: "CaseAction status differs from its canonical payload.", path: action.payload_ref?.path ?? action.selector, blocking: true });
+    }
+    if (!action.payload_ref) {
+      diagnostics.push({ severity: "error", code: "case_action_payload_ref_missing", message: "CaseAction has no canonical payload reference.", path: action.selector, blocking: true });
+      continue;
+    }
+    const target = path.join(workspace, action.payload_ref.path);
+    const text = await readOptionalText(target);
+    if (text === undefined || sha256(text) !== action.payload_ref.sha256) {
+      diagnostics.push({ severity: "error", code: "case_action_payload_drift", message: "CaseAction payload hash differs from its canonical file.", path: target, blocking: true });
+    }
+  }
+}
+
+function parseCaseProfile(value: unknown, file: SnapshotFile | undefined, diagnostics: Diagnostic[]): CaseProfile | undefined {
+  if (!file) return undefined;
+  const result = CaseProfileSchema.safeParse(value);
+  if (!result.success || result.data.mode !== "adaptive") {
+    diagnostics.push({ severity: "error", code: "invalid_contract_shape", message: "Adaptive workflow does not match CaseProfile Schema 1.", path: file.absolutePath, blocking: true, details: result.success ? [] : result.error.issues });
+    return undefined;
+  }
+  return result.data;
+}
+
+function parseCaseState(value: unknown, file: SnapshotFile | undefined, diagnostics: Diagnostic[]): CaseState | undefined {
+  if (!file) return undefined;
+  const result = CaseStateSchema.safeParse(value);
+  if (!result.success || result.data.profile_mode !== "adaptive") {
+    diagnostics.push({ severity: "error", code: "invalid_contract_shape", message: "Adaptive state does not match CaseState Schema 1.", path: file.absolutePath, blocking: true, details: result.success ? [] : result.error.issues });
+    return undefined;
+  }
+  return result.data;
+}
+
+function parseAttempts(value: unknown, file: SnapshotFile | undefined, diagnostics: Diagnostic[]): AttemptRecord[] {
+  if (!file) return [];
+  const values = records(value);
+  validateRecords(values, AttemptRecordSchema, file.absolutePath, "invalid_attempt_record", diagnostics);
+  return values.flatMap((item) => {
+    const result = AttemptRecordSchema.safeParse(item);
+    return result.success ? [result.data] : [];
+  });
+}
+
+function parsePlaybook(value: unknown, file: SnapshotFile | undefined, profile: CaseProfile | undefined, diagnostics: Diagnostic[]): SoftPlaybook | undefined {
+  if (!file) {
+    if (profile?.playbook_ref) diagnostics.push({ severity: "warning", code: "playbook_missing", message: "Adaptive playbook is unavailable; legal actions remain evaluable without recommendations.", path: profile.playbook_ref.path, blocking: false });
+    return undefined;
+  }
+  const result = SoftPlaybookSchema.safeParse(value);
+  if (!result.success) {
+    diagnostics.push({ severity: "warning", code: "invalid_playbook", message: "Adaptive playbook is invalid and will not rank actions.", path: file.absolutePath, blocking: false, details: result.error.issues });
+    return undefined;
+  }
+  if (profile?.playbook_ref?.sha256 !== file.hash) diagnostics.push({ severity: "warning", code: "playbook_hash_mismatch", message: "Adaptive playbook differs from the selected profile reference.", path: file.absolutePath, blocking: false });
+  return result.data;
 }
 
 function validateInstanceStateReferences(workflow: WorkflowDefinition | undefined, state: RunState | undefined, file: SnapshotFile | undefined, diagnostics: Diagnostic[]): void {
@@ -275,7 +372,7 @@ async function loadDraftPatches(workspace: string, diagnostics: Diagnostic[]): P
     }
     const value = asRecord(parsed.value);
     const id = stringValue(value.patch_id) ?? entry.name.slice(0, -5);
-    validateValue(value, DraftPatchSchema, patchPath, "invalid_draft_patch", diagnostics);
+    validateValue(value, StoredDraftPatchSchema, patchPath, "invalid_draft_patch", diagnostics);
     if (`${id}.json` !== entry.name) diagnostics.push({ severity: "error", code: "draft_patch_id_mismatch", message: "Draft patch ID must match its filename.", path: patchPath, blocking: true });
     items.push({ type: "patch", id, selector: `patch:${id}`, value, path: patchPath });
   }
@@ -283,7 +380,7 @@ async function loadDraftPatches(workspace: string, diagnostics: Diagnostic[]): P
 }
 
 function buildItems(
-  documents: Record<string, unknown>, artifacts: Record<string, unknown>[], decisions: Record<string, unknown>[], gates: Record<string, unknown>[], changes: IndexedItem[], patches: IndexedItem[], config: Record<string, unknown>, manifest: Record<string, unknown>,
+  documents: Record<string, unknown>, artifacts: Record<string, unknown>[], decisions: Record<string, unknown>[], gates: Record<string, unknown>[], changes: IndexedItem[], patches: IndexedItem[], config: Record<string, unknown>, manifest: Record<string, unknown>, caseState: CaseState | undefined, attempts: AttemptRecord[],
 ): IndexedItem[] {
   const result: IndexedItem[] = [...changes, ...patches];
   for (const artifact of artifacts) addRecord(result, "artifact", artifact, "artifact_id", "runs/current/artifact-registry.json");
@@ -291,6 +388,8 @@ function buildItems(
   for (const claim of records(asRecord(documents["specs/claims.yaml"]).claims)) addRecord(result, "claim", claim, "claim_id", "specs/claims.yaml");
   addEventItems(result, "decision", decisions, "decision_id", "runs/current/decision-ledger.jsonl");
   addEventItems(result, "gate", gates, "gate_id", "runs/current/gate-ledger.jsonl");
+  for (const action of caseState?.case_actions ?? []) addRecord(result, "case_action", action, "action_id", "runs/current/state.yaml");
+  for (const attempt of attempts) addRecord(result, "attempt", attempt, "attempt_id", "runs/current/attempt-ledger.jsonl");
   for (const alias of ["project", "sources", "claims", "manuscript", "workflow"]) {
     const relativePath = alias === "project" ? "specs/project.md" : `specs/${alias}.yaml`;
     result.push({ type: "contract", id: alias, selector: `contract:${alias}`, value: documents[relativePath], path: relativePath });

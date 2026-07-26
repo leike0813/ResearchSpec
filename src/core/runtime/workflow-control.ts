@@ -5,8 +5,16 @@ import { fileURLToPath } from "node:url";
 import { ARSU_ROUTING_CATALOG } from "../../arsu-converter/routing/catalog.js";
 import { renderArsuArtifactContract } from "../../arsu-converter/workflow/artifact-contracts.js";
 import { fileExists } from "../../utils/fs.js";
-import { ArtifactSubmitReceiptSchema, SubmittedArtifactRecordSchema, SubmitReceiptArtifactRecordSchema } from "../contracts/artifact.js";
+import {
+  AppliedDraftArtifactRecordSchema,
+  ApplyReceiptArtifactRecordSchema,
+  ApplyReportArtifactRecordSchema,
+  ArtifactSubmitReceiptSchema,
+  SubmittedArtifactRecordSchema,
+  SubmitReceiptArtifactRecordSchema,
+} from "../contracts/artifact.js";
 import { ActionAvailabilitySchema, type ActionAvailability } from "../contracts/case-control.js";
+import { DraftPatchReceiptSchema } from "../contracts/draft-patch.js";
 import { GateSubmitReceiptSchema, TransitionAdvanceReceiptSchema } from "../contracts/gate-transition.js";
 import { SubflowStartReceiptSchema } from "../contracts/subflow.js";
 import { resolveWorkNode, validateWorkflowDefinition, type ParallelGroupDefinition, type SubflowTemplateDefinition, type WorkflowNodeDefinition, type WorkflowNodeTemplate } from "../contracts/workflow.js";
@@ -712,19 +720,24 @@ async function completionProblems(snapshot: WorkspaceSnapshot, node: WorkflowNod
   if (!node.completion.artifact_statuses.includes(String(artifact.status))) problems.push({ kind: "output", id: node.id, reason: "artifact_status_not_accepted" });
   if (!node.completion.verification_states.includes(String(artifact.verification_state))) problems.push({ kind: "output", id: node.id, reason: "artifact_not_verified" });
   if (node.completion.require_receipt) {
-    const candidateRecord = SubmittedArtifactRecordSchema.safeParse(artifact);
-    const receiptId = stringValue(artifact.submit_receipt_artifact_id);
-    const candidateId = stringValue(artifact.artifact_id);
-    const receiptInspection = receiptId ? inspections.find((item) => item.artifact.artifact_id === receiptId) : undefined;
-    const receiptRecord = receiptInspection ? SubmitReceiptArtifactRecordSchema.safeParse(receiptInspection.artifact) : undefined;
-    if (!candidateRecord.success) problems.push({ kind: "output", id: node.id, reason: "submit_candidate_record_invalid" });
-    if (!receiptId || !receiptInspection) problems.push({ kind: "output", id: node.id, reason: "submit_receipt_missing" });
-    else if (!isTrustedInspection(receiptInspection) || !receiptRecord?.success) {
-      problems.push({ kind: "output", id: node.id, reason: "submit_receipt_untrusted" });
-    } else if (!receiptInspection.resolved_path) {
-      problems.push({ kind: "output", id: node.id, reason: "submit_receipt_missing" });
+    if (isPatchManagedOutput(artifact)) {
+      if (!(await trustedPatchApplyReceipt(artifact, inspections))) {
+        problems.push({ kind: "output", id: node.id, reason: "patch_apply_receipt_untrusted" });
+      }
     } else {
-      try {
+      const candidateRecord = SubmittedArtifactRecordSchema.safeParse(artifact);
+      const receiptId = stringValue(artifact.submit_receipt_artifact_id);
+      const candidateId = stringValue(artifact.artifact_id);
+      const receiptInspection = receiptId ? inspections.find((item) => item.artifact.artifact_id === receiptId) : undefined;
+      const receiptRecord = receiptInspection ? SubmitReceiptArtifactRecordSchema.safeParse(receiptInspection.artifact) : undefined;
+      if (!candidateRecord.success) problems.push({ kind: "output", id: node.id, reason: "submit_candidate_record_invalid" });
+      if (!receiptId || !receiptInspection) problems.push({ kind: "output", id: node.id, reason: "submit_receipt_missing" });
+      else if (!isTrustedInspection(receiptInspection) || !receiptRecord?.success) {
+        problems.push({ kind: "output", id: node.id, reason: "submit_receipt_untrusted" });
+      } else if (!receiptInspection.resolved_path) {
+        problems.push({ kind: "output", id: node.id, reason: "submit_receipt_missing" });
+      } else {
+        try {
         const parsed = ArtifactSubmitReceiptSchema.safeParse(JSON.parse(await readFile(receiptInspection.resolved_path, "utf8")) as unknown);
         const related = Array.isArray(receiptInspection.artifact.related_artifact_ids) ? receiptInspection.artifact.related_artifact_ids : [];
         const suffix = typeof artifact.sha256 === "string" ? artifact.sha256.slice(0, 16) : "";
@@ -775,13 +788,48 @@ async function completionProblems(snapshot: WorkspaceSnapshot, node: WorkflowNod
             } catch { problems.push({ kind: "output", id: node.id, reason: "subflow_start_receipt_untrusted" }); }
           }
         }
-      } catch {
-        problems.push({ kind: "output", id: node.id, reason: "submit_receipt_invalid" });
+        } catch {
+          problems.push({ kind: "output", id: node.id, reason: "submit_receipt_invalid" });
+        }
       }
     }
   }
   for (const gateId of node.completion.required_gate_ids) if (!facts.passedGateIds.has(gateId)) problems.push({ kind: "gate_id", id: gateId, reason: "completion_gate_not_passed" });
   return problems;
+}
+
+function isPatchManagedOutput(artifact: Record<string, unknown>): boolean {
+  if (artifact.produced_by !== "researchspec advance") return false;
+  return AppliedDraftArtifactRecordSchema.safeParse(artifact).success
+    || ApplyReportArtifactRecordSchema.safeParse(artifact).success;
+}
+
+async function trustedPatchApplyReceipt(
+  artifact: Record<string, unknown>,
+  inspections: ArtifactInspection[],
+): Promise<boolean> {
+  const patchId = stringValue(artifact.patch_id);
+  const artifactId = stringValue(artifact.artifact_id);
+  const artifactPath = stringValue(artifact.path);
+  const artifactHash = stringValue(artifact.sha256);
+  const receiptId = stringValue(artifact.apply_receipt_artifact_id);
+  const receiptInspection = inspections.find((item) => item.artifact.artifact_id === receiptId);
+  if (!patchId || !artifactId || !artifactPath || !artifactHash || !receiptId
+    || !receiptInspection?.resolved_path || !isTrustedInspection(receiptInspection)) return false;
+  const receiptArtifact = ApplyReceiptArtifactRecordSchema.safeParse(receiptInspection.artifact);
+  if (!receiptArtifact.success
+    || receiptArtifact.data.patch_id !== patchId
+    || !receiptArtifact.data.related_artifact_ids?.includes(artifactId)) return false;
+  try {
+    const receipt = DraftPatchReceiptSchema.parse(JSON.parse(await readFile(receiptInspection.resolved_path, "utf8")) as unknown);
+    return receipt.receipt_type === "draft_patch_apply"
+      && receipt.patch_id === patchId
+      && receipt.artifact_ids.includes(artifactId)
+      && receipt.artifact_ids.includes(receiptId)
+      && receipt.output_hashes[artifactPath] === artifactHash;
+  } catch {
+    return false;
+  }
 }
 
 function submitCapability(node: WorkflowNodeDefinition, status: WorkItemStatus): WorkflowInstructionPacket["completion"] {

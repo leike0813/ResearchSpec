@@ -37,7 +37,7 @@ const expectedAdapterSkills = [
   "zotero-bridge-cli",
 ];
 const expectedCommands = [
-  "advance", "archive", "check", "decide", "handoff", "init", "instructions", "list",
+  "advance", "archive", "check", "decide", "doctor", "handoff", "init", "instructions", "list",
   "pack", "plugin", "propose", "show", "start", "status", "submit", "update",
 ];
 const expectedDomains = [

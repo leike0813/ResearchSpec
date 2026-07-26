@@ -176,8 +176,8 @@ void test("approved ingestion publishes only reviewed static Skills without chan
   assert.match(report, /来源哈希绑定批准|source-hash-bound approval/);
   const help = runCli(["--help"]);
   assert.equal(help.status, 0);
-  const publicCommands = ["init", "update", "status", "instructions", "start", "submit", "advance", "check", "list", "show", "handoff", "pack", "propose", "decide", "archive", "plugin"];
-  assert.equal(publicCommands.length, 16);
+  const publicCommands = ["init", "update", "status", "instructions", "start", "submit", "advance", "check", "doctor", "list", "show", "handoff", "pack", "propose", "decide", "archive", "plugin"];
+  assert.equal(publicCommands.length, 17);
   for (const command of publicCommands) assert.match(help.stdout, new RegExp(`\\b${command}\\b`));
   assert.doesNotMatch(help.stdout, /education-agent-skills/);
 });

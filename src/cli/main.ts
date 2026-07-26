@@ -4,9 +4,9 @@ import { Command, CommanderError, InvalidArgumentError } from "commander";
 
 import {
   handleAdvance, handleArchive, handleCheck, handleDecide, handleHandoff, handleInit, handleInstructions, handleList,
-  handlePack, handlePropose, handleShow, handleStart, handleStatus, handleSubmit, handleUpdate, type DecideOptions,
+  handleDoctor, handlePack, handlePropose, handleShow, handleStart, handleStatus, handleSubmit, handleUpdate, type DecideOptions,
   handlePluginInstall, handlePluginInstructions, handlePluginList, handlePluginShow, handlePluginUninstall, handlePluginUpdate,
-  type AdvanceOptions, type HandoffOptions, type InitOptions, type ListOptions, type PackOptions, type PluginInstallOptions, type PluginListOptions, type PluginShowOptions, type ProposeOptions, type StartOptions, type SubmitOptions, type UpdateOptions,
+  type AdvanceOptions, type DoctorOptions, type HandoffOptions, type InitOptions, type ListOptions, type PackOptions, type PluginInstallOptions, type PluginListOptions, type PluginShowOptions, type ProposeOptions, type StartOptions, type SubmitOptions, type UpdateOptions,
 } from "./handlers.js";
 import { presentResult } from "./presenter.js";
 import { CliError, failure, type CommandContext, type CommandResult } from "./types.js";
@@ -59,6 +59,7 @@ type Runner = (command: string, commandObject: Command, action: () => Promise<Co
 function registerCommands(program: Command, run: Runner): void {
   program.command("init [path]").description("Initialize or safely extend a ResearchSpec workspace")
     .option("--tools <ids>", "all, none, or comma-separated tool IDs")
+    .option("--profile <mode>", "adaptive or strict runtime profile")
     .action(async (target: string | undefined, options: InitOptions, command: Command) => run("init", command, () => handleInit(target, options, commandContext("init", command))));
   program.command("update [path]").description("Refresh selected generated agent files")
     .option("--tools <ids>", "refresh/add a tool subset")
@@ -93,6 +94,10 @@ function registerCommands(program: Command, run: Runner): void {
   program.command("check [target]").description("Check all, contracts, runtime, artifacts, tools, plugins, or literature-adapters")
     .option("--strict", "treat warnings as failures")
     .action(async (target: string | undefined, options: { strict?: boolean }, command: Command) => run("check", command, () => handleCheck(target, Boolean(options.strict), commandContext("check", command))));
+  program.command("doctor").description("Diagnose runtime damage or apply one plan-bound deterministic repair")
+    .option("--repair <finding-id>", "preview or apply a deterministically repairable finding")
+    .option("--expected-plan-sha256 <hash>", "bind execution to the previewed Doctor repair plan")
+    .action(async (options: DoctorOptions, command: Command) => run("doctor", command, () => handleDoctor(options, commandContext("doctor", command))));
   program.command("list [type]").description("List paginated runtime collections")
     .option("--limit <count>", "page size from 1 to 50")
     .option("--cursor <cursor>", "opaque cursor returned by the prior page")

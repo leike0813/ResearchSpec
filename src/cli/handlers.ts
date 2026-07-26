@@ -19,7 +19,7 @@ import { DEFAULT_WORKFLOW_PROFILE_ID, WorkItemSelectorSchema } from "../core/con
 import { Sha256Schema, SubmitActorKindSchema, SubmitActorSchema } from "../core/contracts/artifact.js";
 import { RuntimeActorSchema } from "../core/contracts/gate-transition.js";
 import { GateSelectorSchema, RuntimeSelectorSchema, SubflowSelectorSchema, TransitionSelectorSchema, parseRuntimeSelector } from "../core/contracts/runtime-selector.js";
-import { ActionTargetSelectorSchema } from "../core/contracts/action-selector.js";
+import { ActionTargetSelectorSchema, CaseActionSelectorSchema, CompletionSelectorSchema, ObligationSelectorSchema, PatchSelectorSchema } from "../core/contracts/action-selector.js";
 import { StartActorSchema } from "../core/contracts/subflow.js";
 import { ArtifactSubmitError, executeArtifactSubmit, planArtifactSubmit } from "../core/runtime/artifact-submit.js";
 import { executeGateSubmit, executeTransitionAdvance, GateTransitionError, isSha256, planGateSubmit, planTransitionAdvance } from "../core/runtime/gate-transition-control.js";
@@ -41,7 +41,7 @@ import { buildSubflowInstructions, executeSubflowStart, planSubflowStart, Subflo
 import { runWorkspaceChecks, type CheckTarget } from "../core/validation/check.js";
 import type { Diagnostic } from "../core/validation/types.js";
 import { resolveWorkspace } from "../core/workspace/discover.js";
-import { getWorkspaceEntries, getWorkspaceTemplates, resolveInitTarget } from "../core/workspace/layout.js";
+import { getWorkspaceEntries, getWorkspaceTemplates, resolveInitTarget, type InitRuntimeProfile } from "../core/workspace/layout.js";
 import { loadWorkspaceSnapshot } from "../core/workspace/snapshot.js";
 import { executeWritePlan, planFile, sha256, type PlannedWrite } from "../core/workspace/write-plan.js";
 import { fileExists, readOptionalText } from "../utils/fs.js";
@@ -59,12 +59,30 @@ import {
   selectedPluginIds,
   unavailablePluginCatalogItem,
 } from "../plugins/status.js";
-import { evaluateActionAvailability } from "../core/runtime/action-availability.js";
+import { evaluateActionAvailability, type RuntimeActionKey } from "../core/runtime/action-availability.js";
 import { compactTransactionResult } from "../core/runtime/transaction-result.js";
+import { executePatchPlan, PatchLifecycleError, planPatchAdvance, planPatchSubmit } from "../core/runtime/patch-lifecycle.js";
+import { buildAdaptiveInstructions } from "../core/runtime/adaptive-case-control.js";
+import {
+  AdaptiveCaseError,
+  executeAdaptivePlan,
+  planAdaptiveCompletion,
+  planAdaptiveGate,
+  planAdaptiveObligationSubmit,
+  planAdaptiveResolutionDecision,
+  planAdaptiveStart,
+  type AdaptiveTransactionPlan,
+} from "../core/runtime/adaptive-case-transactions.js";
+import {
+  diagnoseRuntime,
+  DoctorRecoveryError,
+  executeDoctorRepair,
+  prepareDoctorRepair,
+} from "../core/runtime/runtime-recovery.js";
 import { validationViolations, zodIssues } from "./validation.js";
 import type { CompactTransactionEffect } from "../core/contracts/runtime-protocol.js";
 
-export interface InitOptions { tools?: string }
+export interface InitOptions { tools?: string; profile?: string }
 export interface UpdateOptions { tools?: string }
 export interface HandoffOptions { stdout?: boolean; out?: string }
 export interface PackOptions { out?: string; includeArtifacts?: boolean }
@@ -73,6 +91,7 @@ export interface ProposeOptions { input: string; actorKind: "human" | "agent"; a
 export interface SubmitOptions { input: string; actorKind: string; actorName: string; confirmedBy?: string; expectedSha256?: string; expectedPlanSha256?: string; expectedActionBasisSha256?: string }
 export interface StartOptions { input: string; actorKind: string; actorName: string; confirmedBy?: string; expectedPlanSha256?: string; expectedActionBasisSha256?: string }
 export interface AdvanceOptions { actorKind: string; actorName: string; expectedPlanSha256?: string; expectedActionBasisSha256?: string }
+export interface DoctorOptions { repair?: string; expectedPlanSha256?: string }
 export interface ListOptions { limit?: string; cursor?: string }
 export interface PluginListOptions { installed?: boolean; summary?: boolean }
 export interface PluginShowOptions { summary?: boolean }
@@ -83,7 +102,18 @@ export async function handleInit(inputPath: string | undefined, options: InitOpt
   const projectRoot = path.dirname(workspace);
   const existing = await fileExists(workspace);
   const priorSnapshot = existing ? await loadWorkspaceSnapshot(workspace) : undefined;
-  const profile = DEFAULT_WORKFLOW_PROFILE_ID;
+  if (options.profile !== undefined && options.profile !== "adaptive" && options.profile !== "strict") {
+    throw new CliError("invalid_profile", "--profile must be adaptive or strict.", 2);
+  }
+  const requestedProfile: InitRuntimeProfile = options.profile ?? "legacy";
+  const priorProfile = typeof priorSnapshot?.config.profile === "string" ? priorSnapshot.config.profile : undefined;
+  if (existing && options.profile && priorSnapshot && priorSnapshot.runtimeMode !== options.profile) {
+    throw new CliError("profile_change_requires_migration", "init cannot replace an existing workspace runtime profile.", 2, "Use the explicit runtime migration workflow when it becomes available.");
+  }
+  const profile = existing ? priorProfile ?? DEFAULT_WORKFLOW_PROFILE_ID : requestedProfile === "legacy" ? DEFAULT_WORKFLOW_PROFILE_ID : requestedProfile;
+  const templateProfile: InitRuntimeProfile = existing
+    ? priorSnapshot?.runtimeMode === "adaptive" ? "adaptive" : "legacy"
+    : requestedProfile;
   const configured = strings(record(priorSnapshot?.config.agent_tools).selected);
   const configuredPlugins = selectedPluginIds(record(priorSnapshot?.config));
   const pluginRegistry = await bundledPluginRegistry();
@@ -109,7 +139,7 @@ export async function handleInit(inputPath: string | undefined, options: InitOpt
   if (!context.interactive && !explicitTools && selected.includes("codex")) throw new CliError("codex_global_write_requires_explicit_selection", "Non-interactive Codex delivery requires explicit --tools codex or --tools all.", 2);
 
   const operations: PlannedWrite[] = [];
-  for (const template of getWorkspaceTemplates()) {
+  for (const template of getWorkspaceTemplates(templateProfile)) {
     if (template.relativePath === "config.yaml" || template.relativePath === "tool-installation-manifest.json") continue;
     const target = path.join(workspace, template.relativePath);
     if (await fileExists(target)) {
@@ -144,7 +174,7 @@ export async function handleInit(inputPath: string | undefined, options: InitOpt
     if (!approved) throw new CliError("cancelled", "Initialization cancelled.", 1);
   }
   if (!context.dryRun) {
-    for (const entry of getWorkspaceEntries(workspace)) if (entry.kind === "dir") await mkdir(entry.path, { recursive: true });
+    for (const entry of getWorkspaceEntries(workspace, templateProfile)) if (entry.kind === "dir") await mkdir(entry.path, { recursive: true });
     await executeWritePlan(plan);
   }
   const diagnostics = [...delivery.diagnostics, ...operationDiagnostics(operations)];
@@ -204,6 +234,10 @@ export async function handleInstructions(selector: string, context: CommandConte
   const snapshot = await loadWorkspaceSnapshot(workspace);
   const descriptor = await buildActionDescriptor(snapshot, selector);
   if (!descriptor) throw new CliError("action_descriptor_unavailable", `Action descriptor is unavailable: ${selector}`, 1);
+  if (snapshot.runtimeMode === "adaptive") {
+    const packet = { ...buildAdaptiveInstructions(snapshot, selector), action_descriptor: descriptor };
+    return success("instructions", packet, { stdout: `${JSON.stringify(packet, null, 2)}\n` });
+  }
   if (!RuntimeSelectorSchema.safeParse(selector).success) {
     if (descriptor.availability.disposition === "blocked") throw new CliError("action_blocked", `Action is blocked: ${selector}`, 1, undefined, { descriptor });
     const packet = { kind: descriptor.command, selector, action_descriptor: descriptor };
@@ -252,6 +286,16 @@ export async function handleStart(selector: string, options: StartOptions, conte
   try { payload = JSON.parse(await readFile(inputPath, "utf8")) as unknown; }
   catch (error) { throw new CliError("invalid_start_input", `Cannot read Start input: ${error instanceof Error ? error.message : String(error)}`, 2); }
   try {
+    if (snapshot.runtimeMode === "adaptive") {
+      const plan = await planAdaptiveStart({ snapshot, selector, payload, actor: actorResult.data, confirmedBy: options.confirmedBy, expectedPlanSha256: options.expectedPlanSha256 });
+      if (plan.status !== "already_applied") await assertActionBasis(snapshot, selector, options.expectedActionBasisSha256);
+      if (!context.dryRun && !context.yes && context.interactive) {
+        const approved = await confirm({ message: `Start the confirmed adaptive route ${selector}?`, default: false });
+        if (!approved) throw new CliError("cancelled", "Adaptive Start cancelled.", 1);
+      }
+      if (!context.dryRun) await executeAdaptivePlan(plan);
+      return adaptiveTransactionResult("start", plan, context);
+    }
     const plan = await planSubflowStart({ snapshot, selector, payload, actor: actorResult.data, confirmedBy: options.confirmedBy, expectedPlanSha256: options.expectedPlanSha256, sourceRoot: context.cwd });
     if (plan.status !== "already_started") await assertActionBasis(snapshot, selector, options.expectedActionBasisSha256);
     if (!context.dryRun && plan.status !== "already_started" && !context.yes) {
@@ -283,6 +327,7 @@ export async function handleStart(selector: string, options: StartOptions, conte
     return success("start", data, { stdout: `${context.dryRun ? "Would start" : status === "already_started" ? "Already started" : "Started"} ${selector} as ${plan.instance.instance_id}.\n` });
   } catch (error) {
     if (error instanceof CliError) throw error;
+    if (error instanceof AdaptiveCaseError) throw adaptiveCliError(error, "start", payload);
     if (error instanceof SubflowStartError) throw actionCliError("start", error.code, error.message, error.kind, error.details, payload);
     if ((error as NodeJS.ErrnoException).code === "EWRITE_CONFLICT") throw new CliError("subflow_start_conflict", error instanceof Error ? error.message : String(error), 3);
     throw new CliError("internal_error", error instanceof Error ? error.message : String(error), 4);
@@ -290,6 +335,8 @@ export async function handleStart(selector: string, options: StartOptions, conte
 }
 
 export async function handleSubmit(selector: string, options: SubmitOptions, context: CommandContext): Promise<CommandResult> {
+  if (PatchSelectorSchema.safeParse(selector).success) return handlePatchSubmit(selector, options, context);
+  if (ObligationSelectorSchema.safeParse(selector).success) return handleObligationSubmit(selector, options, context);
   if (GateSelectorSchema.safeParse(selector).success && parseRuntimeSelector(selector)?.kind === "gate") return handleGateSubmit(selector, options, context);
   if (!WorkItemSelectorSchema.safeParse(selector).success) throw new CliError("invalid_work_item_selector", `Invalid work-item selector: ${selector}`, 2, "Use the canonical form work:<safe-id>.");
   if (options.expectedSha256 !== undefined && !Sha256Schema.safeParse(options.expectedSha256).success) throw new CliError("invalid_expected_sha256", "--expected-sha256 must be 64 lowercase hexadecimal characters.", 2);
@@ -341,8 +388,77 @@ export async function handleSubmit(selector: string, options: SubmitOptions, con
   }
 }
 
+async function handlePatchSubmit(selector: string, options: SubmitOptions, context: CommandContext): Promise<CommandResult> {
+  if (options.expectedPlanSha256 !== undefined && !isSha256(options.expectedPlanSha256)) throw new CliError("invalid_expected_plan_sha256", "--expected-plan-sha256 must be 64 lowercase hexadecimal characters.", 2);
+  const actor = SubmitActorSchema.safeParse({ kind: options.actorKind, name: options.actorName });
+  if (!actor.success) throw new CliError("invalid_patch_input", "Patch actor is invalid.", 2, undefined, actor.error.issues);
+  if (!context.dryRun && !context.interactive && (!context.yes || !options.expectedPlanSha256 || !options.expectedActionBasisSha256)) {
+    throw new CliError("confirmation_required", "Non-interactive patch Submit requires action basis, plan hash, and --yes.", 2);
+  }
+  const workspace = await requireWorkspace(context);
+  const snapshot = await loadWorkspaceSnapshot(workspace);
+  let payload: unknown;
+  try { payload = JSON.parse(await readFile(path.resolve(context.cwd, options.input), "utf8")) as unknown; }
+  catch (error) { throw new CliError("invalid_patch_input", `Cannot read patch input: ${error instanceof Error ? error.message : String(error)}`, 2); }
+  try {
+    const plan = await planPatchSubmit({ snapshot, selector, payload, actor: actor.data, expectedPlanSha256: options.expectedPlanSha256 });
+    if (plan.status !== "already_submitted") await assertActionBasis(snapshot, selector, options.expectedActionBasisSha256);
+    if (!context.dryRun && !context.yes && context.interactive) {
+      const approved = await confirm({ message: `Create canonical pending ${selector}?`, default: false });
+      if (!approved) throw new CliError("cancelled", "Patch submission cancelled.", 1);
+    }
+    if (!context.dryRun) await executePatchPlan(plan);
+    const outcome = context.dryRun ? plan.status : plan.status === "already_submitted" ? "already_submitted" : "submitted";
+    const data = compactTransactionResult({
+      command: "submit",
+      selector,
+      outcome,
+      dryRun: context.dryRun,
+      identity: context.dryRun
+        ? { kind: "plan", selector, plan_sha256: plan.plan_sha256 }
+        : { kind: "receipt", selector, sha256: plan.receipt_sha256, plan_sha256: plan.plan_sha256 },
+      effects: plan.status === "already_submitted"
+        ? [{ kind: "no_change", refs: [selector] }]
+        : [{ kind: "patch_submitted", refs: [selector] }],
+      nextSelectors: [`show:${selector}`, `instructions:${selector}`, "list:case-actions"],
+    });
+    return success("submit", data, { stdout: `${context.dryRun ? "Would submit" : plan.status === "already_submitted" ? "Already submitted" : "Submitted"} ${selector}.\n` });
+  } catch (error) {
+    if (error instanceof CliError) throw error;
+    if (error instanceof PatchLifecycleError) throw actionCliError("submit_patch", error.code, error.message, error.kind, error.details, payload);
+    if ((error as NodeJS.ErrnoException).code === "EWRITE_CONFLICT") throw new CliError("patch_write_conflict", error instanceof Error ? error.message : String(error), 3);
+    if (isFileSystemError(error)) throw error;
+    throw new CliError("internal_error", error instanceof Error ? error.message : String(error), 4);
+  }
+}
+
+async function handleObligationSubmit(selector: string, options: SubmitOptions, context: CommandContext): Promise<CommandResult> {
+  if (options.expectedPlanSha256 !== undefined && !isSha256(options.expectedPlanSha256)) throw new CliError("invalid_expected_plan_sha256", "--expected-plan-sha256 must be 64 lowercase hexadecimal characters.", 2);
+  const actor = SubmitActorSchema.safeParse({ kind: options.actorKind, name: options.actorName });
+  if (!actor.success) throw new CliError("invalid_obligation_input", "Adaptive obligation actor is invalid.", 2, undefined, actor.error.issues);
+  if (!context.dryRun && !context.interactive && (!context.yes || !options.expectedPlanSha256 || !options.expectedActionBasisSha256)) throw new CliError("confirmation_required", "Non-interactive obligation Submit requires action basis, plan hash, and --yes.", 2);
+  const workspace = await requireWorkspace(context);
+  const snapshot = await loadWorkspaceSnapshot(workspace);
+  if (snapshot.runtimeMode !== "adaptive") throw new CliError("adaptive_runtime_unavailable", "Obligation selectors require an adaptive workspace.", 1);
+  let payload: unknown;
+  try { payload = JSON.parse(await readFile(path.resolve(context.cwd, options.input), "utf8")) as unknown; }
+  catch (error) { throw new CliError("invalid_obligation_input", `Cannot read obligation input: ${error instanceof Error ? error.message : String(error)}`, 2); }
+  try {
+    const plan = await planAdaptiveObligationSubmit({ snapshot, selector, payload, actor: actor.data, expectedPlanSha256: options.expectedPlanSha256 });
+    if (plan.status !== "already_applied") await assertActionBasis(snapshot, selector, options.expectedActionBasisSha256);
+    if (!context.dryRun && !context.yes && context.interactive) {
+      const approved = await confirm({ message: `Commit the adaptive obligation action for ${selector}?`, default: false });
+      if (!approved) throw new CliError("cancelled", "Obligation submission cancelled.", 1);
+    }
+    if (!context.dryRun) await executeAdaptivePlan(plan);
+    return adaptiveTransactionResult("submit", plan, context);
+  } catch (error) {
+    throw adaptiveCliError(error, "submit_obligation", payload);
+  }
+}
+
 async function handleGateSubmit(selector: string, options: SubmitOptions, context: CommandContext): Promise<CommandResult> {
-  if (!isSha256(options.expectedPlanSha256)) throw new CliError("invalid_expected_plan_sha256", "--expected-plan-sha256 must be 64 lowercase hexadecimal characters.", 2);
+  if (options.expectedPlanSha256 !== undefined && !isSha256(options.expectedPlanSha256)) throw new CliError("invalid_expected_plan_sha256", "--expected-plan-sha256 must be 64 lowercase hexadecimal characters.", 2);
   const actor = RuntimeActorSchema.safeParse({ kind: options.actorKind, name: options.actorName });
   if (!actor.success || actor.data.kind !== "validator" || !options.confirmedBy?.trim()) throw new CliError("invalid_gate_input", "Gate submit requires a validator actor and --confirmed-by human identity.", 2, undefined, actor.success ? undefined : actor.error.issues);
   if (!context.dryRun && !context.interactive && (!context.yes || !options.expectedPlanSha256 || !options.expectedActionBasisSha256)) throw new CliError("confirmation_required", "Non-interactive Gate submit requires --expected-action-basis-sha256, --expected-plan-sha256, and --yes after explicit human confirmation.", 2);
@@ -352,6 +468,12 @@ async function handleGateSubmit(selector: string, options: SubmitOptions, contex
   try { payload = JSON.parse(await readFile(path.resolve(context.cwd, options.input), "utf8")) as unknown; }
   catch (error) { throw new CliError("invalid_gate_input", `Cannot read Gate input: ${error instanceof Error ? error.message : String(error)}`, 2); }
   try {
+    if (snapshot.runtimeMode === "adaptive") {
+      const plan = await planAdaptiveGate({ snapshot, selector, payload, actor: actor.data, confirmedBy: options.confirmedBy, expectedPlanSha256: options.expectedPlanSha256 });
+      if (plan.status !== "already_applied") await assertActionBasis(snapshot, selector, options.expectedActionBasisSha256);
+      if (!context.dryRun) await executeAdaptivePlan(plan);
+      return adaptiveTransactionResult("submit", plan, context);
+    }
     const plan = await planGateSubmit({ snapshot, selector, payload, actor: actor.data, confirmedBy: options.confirmedBy, expectedPlanSha256: options.expectedPlanSha256 });
     if (plan.status !== "already_submitted") await assertActionBasis(snapshot, selector, options.expectedActionBasisSha256);
     if (!context.dryRun && plan.status !== "already_submitted" && !context.yes) {
@@ -375,18 +497,52 @@ async function handleGateSubmit(selector: string, options: SubmitOptions, contex
       nextSelectors: [`show:${eventSelector}`, `instructions:${selector}`],
     });
     return success("submit", data, { stdout: `${context.dryRun ? "Would submit" : status === "already_submitted" ? "Already submitted" : "Submitted"} ${selector}.\n` });
-  } catch (error) { throw gateTransitionCliError(error, "submit_gate", payload); }
+  } catch (error) {
+    if (error instanceof AdaptiveCaseError) throw adaptiveCliError(error, "submit_gate", payload);
+    throw gateTransitionCliError(error, "submit_gate", payload);
+  }
 }
 
 export async function handleAdvance(selector: string, options: AdvanceOptions, context: CommandContext): Promise<CommandResult> {
-  if (!TransitionSelectorSchema.safeParse(selector).success) throw new CliError("invalid_transition_selector", `Invalid transition selector: ${selector}`, 2, "Use transition:<instance>/<node>.");
-  if (!isSha256(options.expectedPlanSha256)) throw new CliError("invalid_expected_plan_sha256", "--expected-plan-sha256 must be 64 lowercase hexadecimal characters.", 2);
+  if (!TransitionSelectorSchema.safeParse(selector).success && !CompletionSelectorSchema.safeParse(selector).success && !PatchSelectorSchema.safeParse(selector).success) throw new CliError("invalid_transition_selector", `Invalid transition selector: ${selector}`, 2, "Use transition:<instance>/<node>, completion:<instance>/<criterion>, or patch:<id>.");
+  if (options.expectedPlanSha256 !== undefined && !isSha256(options.expectedPlanSha256)) throw new CliError("invalid_expected_plan_sha256", "--expected-plan-sha256 must be 64 lowercase hexadecimal characters.", 2);
   const actor = RuntimeActorSchema.safeParse({ kind: options.actorKind, name: options.actorName });
   if (!actor.success || !["agent", "script"].includes(actor.data.kind)) throw new CliError("invalid_advance_input", "Advance actor must be an agent or script.", 2, undefined, actor.success ? undefined : actor.error.issues);
   if (!context.dryRun && !context.interactive && (!context.yes || !options.expectedPlanSha256 || !options.expectedActionBasisSha256)) throw new CliError("confirmation_required", "Non-interactive Advance requires --expected-action-basis-sha256, --expected-plan-sha256, and --yes.", 2);
   const workspace = await requireWorkspace(context);
   const snapshot = await loadWorkspaceSnapshot(workspace);
   try {
+    if (PatchSelectorSchema.safeParse(selector).success) {
+      const plan = await planPatchAdvance({ snapshot, selector, actor: actor.data, expectedPlanSha256: options.expectedPlanSha256 });
+      if (!plan.status.startsWith("already_")) await assertActionBasis(snapshot, selector, options.expectedActionBasisSha256);
+      if (!context.dryRun) await executePatchPlan(plan);
+      const effects: CompactTransactionEffect[] = plan.status === "already_applied" || plan.status === "already_stale"
+        ? [{ kind: "no_change", refs: [selector] }]
+        : plan.status === "would_mark_stale"
+          ? [{ kind: "patch_marked_stale", refs: [selector] }]
+          : [{ kind: "patch_applied", refs: [selector, ...(plan.revised_artifact_id ? [`artifact:${plan.revised_artifact_id}`] : []), ...(plan.apply_report_artifact_id ? [`artifact:${plan.apply_report_artifact_id}`] : [])] }];
+      const data = compactTransactionResult({
+        command: "advance",
+        selector,
+        outcome: context.dryRun ? plan.status : plan.status === "would_apply" ? "applied" : plan.status === "would_mark_stale" ? "stale" : plan.status,
+        dryRun: context.dryRun,
+        identity: context.dryRun
+          ? { kind: "plan", selector, plan_sha256: plan.plan_sha256 }
+          : plan.receipt_sha256
+            ? { kind: "receipt", selector, sha256: plan.receipt_sha256, plan_sha256: plan.plan_sha256 }
+            : { kind: "plan", selector, plan_sha256: plan.plan_sha256 },
+        effects,
+        nextSelectors: [`show:${selector}`, `instructions:${selector}`, "list:case-actions"],
+      });
+      return success("advance", data, { stdout: `${context.dryRun ? "Would advance" : plan.status === "would_mark_stale" ? "Marked stale" : plan.status.startsWith("already_") ? "Already resolved" : "Advanced"} ${selector}.\n` });
+    }
+    if (snapshot.runtimeMode === "adaptive") {
+      if (!CompletionSelectorSchema.safeParse(selector).success) throw new CliError("invalid_completion_selector", "Adaptive Advance requires a completion selector.", 2);
+      const plan = await planAdaptiveCompletion({ snapshot, selector, actor: actor.data, expectedPlanSha256: options.expectedPlanSha256 });
+      if (plan.status !== "already_applied") await assertActionBasis(snapshot, selector, options.expectedActionBasisSha256);
+      if (!context.dryRun) await executeAdaptivePlan(plan);
+      return adaptiveTransactionResult("advance", plan, context);
+    }
     const plan = await planTransitionAdvance({ snapshot, selector, actor: actor.data, expectedPlanSha256: options.expectedPlanSha256 });
     if (plan.status !== "already_advanced") await assertActionBasis(snapshot, selector, options.expectedActionBasisSha256);
     if (!context.dryRun && plan.status !== "already_advanced" && !context.yes) {
@@ -412,7 +568,11 @@ export async function handleAdvance(selector: string, options: AdvanceOptions, c
       nextSelectors: [`instructions:${selector}`, `show:subflow:${plan.receipt.subflow_instance_id}`],
     });
     return success("advance", data, { stdout: `${context.dryRun ? "Would advance" : status === "already_advanced" ? "Already advanced" : "Advanced"} ${selector}.\n` });
-  } catch (error) { throw gateTransitionCliError(error, "advance"); }
+  } catch (error) {
+    if (error instanceof AdaptiveCaseError) throw adaptiveCliError(error, "advance_completion");
+    if (error instanceof PatchLifecycleError) throw actionCliError("advance_patch", error.code, error.message, error.kind, error.details);
+    throw gateTransitionCliError(error, "advance");
+  }
 }
 
 function gateTransitionCliError(error: unknown, key: "submit_gate" | "advance", validationInput?: unknown): CliError {
@@ -433,6 +593,71 @@ export async function handleCheck(target: string | undefined, strict: boolean, c
     ? { stdout: `ResearchSpec check passed: ${workspace}\n` }
     : { stderr: `ResearchSpec check failed: ${workspace}\n${data.diagnostics.map((item) => `- [${item.code}] ${item.path ?? ""} ${item.message}`).join("\n")}\n` };
   return { command: "check", ok: data.ok, exitCode: data.ok ? 0 : 1, data, diagnostics: data.diagnostics, human };
+}
+
+export async function handleDoctor(options: DoctorOptions, context: CommandContext): Promise<CommandResult> {
+  const workspace = await requireWorkspace(context);
+  if (!options.repair) {
+    if (options.expectedPlanSha256) throw new CliError("invalid_doctor_input", "--expected-plan-sha256 requires --repair.", 2);
+    const diagnosis = await diagnoseRuntime(workspace);
+    const human = diagnosis.report.healthy
+      ? { stdout: `ResearchSpec Doctor found no runtime damage: ${workspace}\n` }
+      : { stderr: `ResearchSpec Doctor found ${String(diagnosis.report.findings.length)} recovery finding(s): ${workspace}\n${diagnosis.report.findings.map((item) => `- [${item.disposition}] ${item.code} (${item.finding_id})`).join("\n")}\n` };
+    return { ...success("doctor", diagnosis.report, human), ok: diagnosis.report.healthy, exitCode: diagnosis.report.healthy ? 0 : 1 };
+  }
+  if (options.expectedPlanSha256 !== undefined && !isSha256(options.expectedPlanSha256)) {
+    throw new CliError("invalid_expected_plan_sha256", "--expected-plan-sha256 must be 64 lowercase hexadecimal characters.", 2);
+  }
+  try {
+    const prepared = await prepareDoctorRepair(workspace, options.repair);
+    if (context.dryRun) {
+      return success("doctor", prepared.plan, { stdout: `Doctor repair plan ${prepared.plan.plan_sha256} is available for ${options.repair}.\n` });
+    }
+    if (!context.interactive && (!context.yes || !options.expectedPlanSha256)) {
+      throw new CliError("confirmation_required", "Non-interactive Doctor repair requires --expected-plan-sha256 and --yes.", 2, "Preview the current finding with --repair <finding-id> --dry-run --json.");
+    }
+    if (options.expectedPlanSha256 && options.expectedPlanSha256 !== prepared.plan.plan_sha256) {
+      throw new CliError("doctor_plan_stale", "Doctor repair plan differs from the approved preview.", 3, "Run Doctor again and approve the new plan.", { expected: options.expectedPlanSha256, actual: prepared.plan.plan_sha256 });
+    }
+    if (!context.yes) {
+      const approved = await confirm({
+        message: `Apply Doctor repair ${prepared.plan.plan_sha256} for ${options.repair}? Original bytes will be retained in the workspace recovery area.`,
+        default: false,
+      });
+      if (!approved) throw new CliError("cancelled", "Doctor repair cancelled.", 1);
+    }
+    const execution = await executeDoctorRepair(prepared);
+    const data = compactTransactionResult({
+      command: "doctor",
+      selector: `repair:${options.repair}`,
+      outcome: "repaired",
+      dryRun: false,
+      identity: {
+        kind: "receipt",
+        selector: `repair:${options.repair}`,
+        sha256: execution.receiptSha256,
+        plan_sha256: prepared.plan.plan_sha256,
+      },
+      effects: [{ kind: "runtime_repaired", refs: prepared.finding.affected_paths.slice(0, 20) }],
+      nextSelectors: ["doctor", "check:runtime"],
+    });
+    const diagnostics: Diagnostic[] = execution.postCheckOk ? [] : [{
+      severity: "warning",
+      code: "doctor_postcheck_has_remaining_diagnostics",
+      message: "The selected repair committed, but other runtime diagnostics remain.",
+      path: workspace,
+      blocking: false,
+      details: { remaining_finding_ids: execution.remainingFindings.map((item) => item.finding_id) },
+    }];
+    return success("doctor", data, { stdout: `Repaired ${options.repair}; receipt: ${execution.receiptPath}\n` }, diagnostics);
+  } catch (error) {
+    if (error instanceof CliError) throw error;
+    if (error instanceof DoctorRecoveryError) {
+      const exitCode = error.code === "repair_conflict" ? 3 : error.code === "repair_postcheck_failed" ? 4 : 1;
+      throw new CliError(`doctor_${error.code}`, error.message, exitCode, error.code === "repair_conflict" ? "Run Doctor again and approve the new plan." : undefined);
+    }
+    throw error;
+  }
 }
 
 export async function handlePluginList(options: PluginListOptions, context: CommandContext, providedRegistry?: LoadedPluginRegistry): Promise<CommandResult> {
@@ -630,6 +855,7 @@ export async function handlePropose(changeId: string, options: ProposeOptions, c
         rationale: proposal.patch.rationale,
         risk_level: proposal.patch.risk_level,
         impact: proposal.patch.impact,
+        obligation_scope: proposal.patch.obligation_scope,
         patches: proposal.patch.patches,
       },
       target_hashes: proposal.patch.validation.target_hashes,
@@ -686,6 +912,15 @@ export async function handleDecide(selector: string | undefined, options: Decide
   if (!actorName) throw new CliError("actor_required", "--actor-name is required for a human decision.", 2);
   const reason = options.reason ?? (context.interactive && decision !== "postpone" ? await input({ message: "Decision rationale", validate: (value) => Boolean(value.trim()) || "Rationale is required." }) : undefined);
   try {
+    if (snapshot.runtimeMode === "adaptive" && CaseActionSelectorSchema.safeParse(selector).success) {
+      await assertActionBasis(snapshot, selector, options.expectedActionBasisSha256);
+      const plan = await planAdaptiveResolutionDecision({ snapshot, selector, decision, actorName, reason, expectedPlanSha256: options.expectedPlanSha256 });
+      if (!context.dryRun && !context.interactive && (!context.yes || !options.expectedActionBasisSha256 || !options.expectedPlanSha256)) {
+        throw new CliError("confirmation_required", "Non-interactive Decide requires --expected-action-basis-sha256, --expected-plan-sha256, and --yes.", 2);
+      }
+      if (!context.dryRun) await executeAdaptivePlan(plan);
+      return adaptiveTransactionResult("decide", plan, context);
+    }
     await assertActionBasis(snapshot, selector, options.expectedActionBasisSha256);
     const preview = await decideItem({ snapshot, selector, decision, actorName, reason, dryRun: true });
     if (options.expectedPlanSha256 && options.expectedPlanSha256 !== preview.plan_sha256) {
@@ -710,6 +945,11 @@ export async function handleDecide(selector: string | undefined, options: Decide
     });
     return success("decide", data, { stdout: `${context.dryRun ? "Would record" : "Recorded"} ${outcome.status} decision for ${outcome.item}.\n` });
   } catch (error) {
+    if (error instanceof AdaptiveCaseError) throw adaptiveCliError(error, "decide", {
+      decision,
+      actor_name: actorName,
+      ...(reason ? { reason } : {}),
+    });
     if (error instanceof ContractChangeError) throw new CliError(error.code, error.message, 1, undefined, error.details);
     if (error instanceof LifecycleError) {
       throw actionCliError("decide", error.code, error.message, error.kind, error.details, {
@@ -721,6 +961,38 @@ export async function handleDecide(selector: string | undefined, options: Decide
     if (isFileSystemError(error)) throw error;
     throw new CliError("decision_blocked", error instanceof Error ? error.message : String(error), 1);
   }
+}
+
+function adaptiveTransactionResult(
+  command: "start" | "submit" | "advance" | "decide",
+  plan: AdaptiveTransactionPlan,
+  context: CommandContext,
+): CommandResult {
+  const data = compactTransactionResult({
+    command,
+    selector: plan.selector,
+    outcome: plan.status === "already_applied" ? "already_applied" : context.dryRun ? "would_apply" : "applied",
+    dryRun: context.dryRun,
+    identity: context.dryRun
+      ? { kind: "plan", selector: plan.identity_selector, plan_sha256: plan.plan_sha256 }
+      : {
+        kind: command === "decide" ? "decision" : "receipt",
+        selector: plan.identity_selector,
+        ...(plan.identity_sha256 ? { sha256: plan.identity_sha256 } : {}),
+        plan_sha256: plan.plan_sha256,
+      },
+    effects: plan.status === "already_applied" ? [{ kind: "no_change", refs: [plan.identity_selector] }] : plan.effects,
+    nextSelectors: plan.next_selectors,
+  });
+  return success(command, data, { stdout: `${context.dryRun ? "Would apply" : plan.status === "already_applied" ? "Already applied" : "Applied"} ${plan.selector}.\n` });
+}
+
+function adaptiveCliError(error: unknown, key: "submit_obligation" | "submit_gate" | "advance_completion" | "decide" | "start", validationInput?: unknown): CliError {
+  if (error instanceof CliError) return error;
+  if (error instanceof AdaptiveCaseError) return actionCliError(key, error.code, error.message, error.kind, error.details, validationInput);
+  if ((error as NodeJS.ErrnoException).code === "EWRITE_CONFLICT") return new CliError("runtime_write_conflict", error instanceof Error ? error.message : String(error), 3);
+  if (isFileSystemError(error)) throw error;
+  return new CliError("internal_error", error instanceof Error ? error.message : String(error), 4);
 }
 
 export async function handleArchive(selector: string | undefined, context: CommandContext): Promise<CommandResult> {
@@ -961,7 +1233,7 @@ async function assertActionBasis(snapshot: Awaited<ReturnType<typeof loadWorkspa
 }
 
 function actionCliError(
-  key: "start" | "submit_artifact" | "submit_gate" | "advance" | "propose" | "decide",
+  key: RuntimeActionKey,
   code: string,
   message: string,
   kind: "usage" | "domain" | "conflict",

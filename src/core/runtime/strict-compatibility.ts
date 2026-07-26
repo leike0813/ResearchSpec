@@ -5,6 +5,7 @@ import { StrictCaseProfileSchema } from "../contracts/case-profile.js";
 import { RunStateSchema, type RunState } from "../contracts/run-state.js";
 import { WorkflowDefinitionSchema, type WorkflowDefinition } from "../contracts/workflow.js";
 import type { WorkflowControlResult } from "./workflow-control.js";
+import { createArsuStrictCaseProfile } from "../../arsu-converter/workflow/catalog.js";
 
 const StrictReadinessStateSchema = z.enum([
   "unconfigured",
@@ -103,12 +104,8 @@ export function projectStrictCompatibility(input: StrictCompatibilityInput) {
     authority_source: "schema-0.2",
     migrated: false,
     profile: {
-      schema_version: "1",
+      ...createArsuStrictCaseProfile(input.sourceHashes.workflow ?? ""),
       profile_id: input.control.profile,
-      mode: "strict",
-      obligations: [],
-      completion_criteria: [],
-      playbook_ref: null,
       workflow_graph_ref: {
         schema_version: "0.2",
         workflow_id: workflow.workflow_id,

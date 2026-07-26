@@ -6,10 +6,13 @@ import { fileExists, readOptionalText } from "../../utils/fs.js";
 import type { IndexedItem, WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { resolveItem } from "../workspace/snapshot.js";
 import { executeWritePlan, hashPath, sha256, type PlannedWrite } from "../workspace/write-plan.js";
-import { validateAndApplyContractOperations, validateEvidenceReferences } from "./contract-change.js";
+import { ContractChangeError, validateAndApplyContractOperations, validateEvidenceReferences } from "./contract-change.js";
 import { evaluateWorkflowControl } from "./workflow-control.js";
 import { GateSubmitReceiptSchema } from "../contracts/gate-transition.js";
 import { DecisionInputSchema, type DecisionInput } from "../contracts/case-control.js";
+import { CaseStateSchema } from "../contracts/case-state.js";
+import { DraftPatchReceiptSchema } from "../contracts/draft-patch.js";
+import { ContractChangeDecisionReceiptSchema } from "../contracts/contract-change.js";
 
 export type DecisionChoice = DecisionInput["decision"];
 
@@ -19,7 +22,7 @@ export interface DecisionOutcome {
   event_id: string;
   plan_sha256: string;
   status: "accepted" | "rejected" | "postponed";
-  effects: Array<{ kind: "decision_recorded" | "contract_applied" | "draft_output_created" | "item_rejected" | "item_postponed"; refs: string[] }>;
+  effects: Array<{ kind: "decision_recorded" | "contract_applied" | "change_marked_stale" | "patch_accepted" | "item_rejected" | "item_postponed"; refs: string[] }>;
   next_selectors: string[];
 }
 
@@ -56,9 +59,25 @@ export async function decideItem(input: { snapshot: WorkspaceSnapshot; selector:
   const decisionId = `D-${planSha256.slice(0, 24)}`;
   const eventId = `E-${planSha256.slice(24, 48)}`;
   const operations: PlannedWrite[] = [];
-  if (input.decision !== "postpone" && (item.type === "change" || item.type === "patch")) {
-    if (input.decision === "accept") operations.push(...await acceptItem(input.snapshot, item, decisionId, now));
-    operations.push(await lifecycleWrite(item, input.decision === "accept" ? "applied" : "rejected", decisionId, now));
+  let changeStale = false;
+  if (item.type === "change" || item.type === "patch") {
+    if (input.decision === "accept" && item.type === "change") {
+      try {
+        operations.push(...await acceptItem(input.snapshot, item, decisionId, planSha256, now));
+      } catch (error) {
+        if (!(error instanceof ContractChangeError)) throw error;
+        changeStale = true;
+        operations.push(await changeRevalidationReceiptWrite(input.snapshot, item, decisionId, planSha256, now, error));
+      }
+    }
+    const lifecycleStatus = input.decision === "accept"
+      ? item.type === "patch" ? "accepted" : changeStale ? "stale" : "applied"
+      : input.decision === "reject" ? "rejected" : "postponed";
+    const lifecycleOperation = await lifecycleWrite(item, lifecycleStatus, decisionId, now);
+    const decisionReceipt = await caseActionDecisionReceiptWrite(input.snapshot, item, input.decision, input.actorName, decisionId, planSha256, now);
+    operations.push(decisionReceipt.operation, lifecycleOperation);
+    const caseActionOperation = caseActionDecisionWrite(input.snapshot, item, lifecycleStatus, lifecycleOperation.nextHash, decisionId, now, decisionReceipt.reference);
+    if (caseActionOperation) operations.push(caseActionOperation);
   }
 
   const ledgerPath = path.join(input.snapshot.workspace, "runs/current/decision-ledger.jsonl");
@@ -75,8 +94,9 @@ export async function decideItem(input: { snapshot: WorkspaceSnapshot; selector:
   const effects: DecisionOutcome["effects"] = [{ kind: "decision_recorded", refs: [`decision:${decisionId}`, `decision-event:${eventId}`] }];
   if (input.decision === "postpone") effects.push({ kind: "item_postponed", refs: [item.selector] });
   else if (input.decision === "reject") effects.push({ kind: "item_rejected", refs: [item.selector] });
+  else if (item.type === "change" && changeStale) effects.push({ kind: "change_marked_stale", refs: [item.selector] });
   else if (item.type === "change") effects.push({ kind: "contract_applied", refs: [item.selector, `artifact:A-receipt-${item.id}`] });
-  else if (item.type === "patch") effects.push({ kind: "draft_output_created", refs: [item.selector, `artifact:A-${item.id}`, `artifact:A-receipt-${item.id}`] });
+  else if (item.type === "patch") effects.push({ kind: "patch_accepted", refs: [item.selector] });
   return {
     item: item.selector,
     decision_id: decisionId,
@@ -165,13 +185,13 @@ export async function archiveItem(input: { snapshot: WorkspaceSnapshot; selector
   if (!item || (item.type !== "change" && item.type !== "patch") || !item.path) throw new Error(`Archivable item not found: ${input.selector}`);
   assertSafeId(item.id, "item ID");
   const status = string(record(item.value).status) || "proposed";
-  if (!["applied", "rejected", "superseded"].includes(status)) throw new Error(`Item is not resolved: ${status}`);
+  if (!["applied", "rejected", "stale", "superseded"].includes(status)) throw new Error(`Item is not resolved: ${status}`);
   const itemValue = record(item.value);
   const decisionId = string(itemValue.decision_id);
   if (!decisionId) throw new Error("Resolved item has no decision record link.");
   const linkKey = item.type === "change" ? "change_id" : "draft_patch_id";
   const decision = input.snapshot.decisions.filter((event) => event.decision_id === decisionId).at(-1);
-  const allowedDecisionStatuses = status === "applied" ? ["accepted"] : status === "rejected" ? ["rejected"] : ["accepted", "rejected"];
+  const allowedDecisionStatuses = status === "applied" || status === "stale" ? ["accepted"] : status === "rejected" ? ["rejected"] : ["accepted", "rejected"];
   if (!decision || !allowedDecisionStatuses.includes(String(decision.status)) || decision[linkKey] !== item.id) throw new Error("Item lifecycle is not backed by a matching decision ledger event.");
   const linkedBlockingGate = latestLinkedBlockingGate(input.snapshot, linkKey, item.id);
   if (linkedBlockingGate) {
@@ -190,7 +210,15 @@ export async function archiveItem(input: { snapshot: WorkspaceSnapshot; selector
     const receiptBytes = await readFile(receiptPath);
     if (sha256(receiptBytes) !== receipt.sha256) throw new Error("Apply receipt hash does not match the artifact registry.");
     const receiptBody = record(JSON.parse(receiptBytes.toString("utf8")) as unknown);
-    if (receiptBody.item_selector !== item.selector || receiptBody.decision_id !== decisionId) throw new Error("Apply receipt does not match the archived item and decision.");
+    if ((receiptBody.item_selector ?? receiptBody.selector) !== item.selector || receiptBody.decision_id !== decisionId) throw new Error("Apply receipt does not match the archived item and decision.");
+  }
+  if (status === "stale") {
+    const staleReceipt = item.type === "patch"
+      ? string(itemValue.stale_receipt_path)
+      : `runs/current/receipts/contract-change/${item.id}-revalidation.json`;
+    const staleReceiptPath = path.resolve(input.snapshot.workspace, staleReceipt);
+    if (!staleReceipt || !(await fileExists(staleReceiptPath))) throw new Error("Stale item is missing its revalidation receipt.");
+    await assertContained(input.snapshot.workspace, staleReceiptPath, "stale receipt");
   }
   const date = new Date().toISOString().slice(0, 10);
   const target = item.type === "change"
@@ -202,13 +230,12 @@ export async function archiveItem(input: { snapshot: WorkspaceSnapshot; selector
   return { source: item.path, target };
 }
 
-async function acceptItem(snapshot: WorkspaceSnapshot, item: IndexedItem, decisionId: string, now: string): Promise<PlannedWrite[]> {
-  if (item.type === "change") return acceptContractChange(snapshot, item, decisionId, now);
-  if (item.type === "patch") return acceptDraftPatch(snapshot, item, decisionId, now);
+async function acceptItem(snapshot: WorkspaceSnapshot, item: IndexedItem, decisionId: string, planSha256: string, now: string): Promise<PlannedWrite[]> {
+  if (item.type === "change") return acceptContractChange(snapshot, item, decisionId, planSha256, now);
   return [];
 }
 
-async function acceptContractChange(snapshot: WorkspaceSnapshot, item: IndexedItem, decisionId: string, now: string): Promise<PlannedWrite[]> {
+async function acceptContractChange(snapshot: WorkspaceSnapshot, item: IndexedItem, decisionId: string, planSha256: string, now: string): Promise<PlannedWrite[]> {
   const patch = record(item.value);
   validateEvidenceReferences(snapshot, records(patch.patches));
   const grouped = new Map<string, Record<string, unknown>[]>();
@@ -226,38 +253,16 @@ async function acceptContractChange(snapshot: WorkspaceSnapshot, item: IndexedIt
     outputHashes[relativePath] = sha256(next);
     writes.push({ action: "refresh", path: absolutePath, relativePath, content: next, scope: "workspace", ownership: "user", previousHash: sha256(original), nextHash: sha256(next), reason: `accepted contract change ${item.id}` });
   }
-  writes.push(...receiptWrites(snapshot, item, decisionId, now, outputHashes));
+  writes.push(...receiptWrites(snapshot, item, decisionId, planSha256, now, outputHashes));
   return writes;
 }
 
-async function acceptDraftPatch(snapshot: WorkspaceSnapshot, item: IndexedItem, decisionId: string, now: string): Promise<PlannedWrite[]> {
-  const patch = record(item.value);
-  const baseId = string(patch.base_artifact_id);
-  const base = snapshot.artifacts.find((artifact) => artifact.artifact_id === baseId);
-  if (!base || typeof base.path !== "string") throw new Error(`Base artifact not found: ${baseId}`);
-  const projectRoot = path.dirname(snapshot.workspace);
-  const basePath = path.resolve(projectRoot, base.path);
-  await assertContained(projectRoot, basePath, "base draft artifact");
-  const original = await readFile(basePath, "utf8");
-  const declaredHash = string(patch.base_draft_hash).replace(/^sha256:/, "");
-  if (declaredHash && !sha256(original).startsWith(declaredHash)) throw new Error("Draft base hash is stale.");
-  const revised = applyDraftOperations(original, records(patch.ops));
-  const extension = path.extname(basePath);
-  const output = path.join(path.dirname(basePath), `${path.basename(basePath, extension)}.${item.id}${extension || ".md"}`);
-  if (!inside(projectRoot, output)) throw new Error("Revised draft output escapes the project root.");
-  const outputRelative = path.relative(projectRoot, output).split(path.sep).join("/");
-  const revisedArtifact = { artifact_id: `A-${item.id}`, artifact_type: "paper_draft", path: outputRelative, sha256: sha256(revised), status: "created", produced_by: "researchspec decide", created_at: now, derived_from_artifact_ids: [baseId] };
-  const writes: PlannedWrite[] = [{ action: "create", path: output, content: revised, scope: "project", ownership: "generated", nextHash: sha256(revised), reason: `accepted draft patch ${item.id}` }];
-  writes.push(...receiptWrites(snapshot, item, decisionId, now, { [outputRelative]: sha256(revised) }, [revisedArtifact]));
-  return writes;
-}
-
-function receiptWrites(snapshot: WorkspaceSnapshot, item: IndexedItem, decisionId: string, now: string, outputHashes: Record<string, string>, createdArtifacts: Record<string, unknown>[] = []): PlannedWrite[] {
+function receiptWrites(snapshot: WorkspaceSnapshot, item: IndexedItem, decisionId: string, planSha256: string, now: string, outputHashes: Record<string, string>, createdArtifacts: Record<string, unknown>[] = []): PlannedWrite[] {
   const receiptPath = path.join(snapshot.workspace, "runs/current/receipts", `${item.id}.json`);
   const projectRoot = path.dirname(snapshot.workspace);
   const receiptRelative = path.relative(projectRoot, receiptPath).split(path.sep).join("/");
   const receiptArtifact: Record<string, unknown> = { artifact_id: `A-receipt-${item.id}`, artifact_type: "apply_receipt", path: receiptRelative, status: "verified", produced_by: "researchspec decide", created_at: now };
-  const receipt = `${JSON.stringify({ schema_version: "1", receipt_type: item.type === "change" ? "contract_patch_apply" : "draft_patch_apply", item_selector: item.selector, decision_id: decisionId, applied_at: now, output_hashes: outputHashes, created_artifact_ids: createdArtifacts.map((artifact) => artifact.artifact_id) }, null, 2)}\n`;
+  const receipt = `${JSON.stringify({ schema_version: "1", receipt_type: item.type === "change" ? "contract_patch_apply" : "draft_patch_apply", item_selector: item.selector, decision_id: decisionId, plan_sha256: planSha256, applied_at: now, output_hashes: outputHashes, created_artifact_ids: createdArtifacts.map((artifact) => artifact.artifact_id) }, null, 2)}\n`;
   receiptArtifact.sha256 = sha256(receipt);
   const registryPath = path.join(snapshot.workspace, "runs/current/artifact-registry.json");
   const registrySource = snapshot.files.get("runs/current/artifact-registry.json")?.text ?? `${JSON.stringify({ schema_version: "0.1", run_id: "current", artifacts: [] }, null, 2)}\n`;
@@ -288,7 +293,153 @@ async function lifecycleWrite(item: IndexedItem, status: string, decisionId: str
   return { action: "refresh", path: item.path, content: next, scope: "workspace", ownership: "user", previousHash: sha256(original), nextHash: sha256(next), reason: "update draft patch lifecycle" };
 }
 
-function applyDraftOperations(text: string, operations: Record<string, unknown>[]): string {
+function caseActionDecisionWrite(
+  snapshot: WorkspaceSnapshot,
+  item: IndexedItem,
+  status: string,
+  payloadSha256: string | undefined,
+  decisionId: string,
+  now: string,
+  receipt: { receipt_id: string; receipt_type: string; path: string; sha256: string },
+): PlannedWrite | undefined {
+  if (snapshot.runtimeMode !== "adaptive" || !snapshot.caseState || (item.type !== "patch" && item.type !== "change")) return undefined;
+  const stateFile = snapshot.files.get("runs/current/state.yaml");
+  if (!stateFile) throw new Error("Adaptive CaseState file is unavailable.");
+  const caseStatus = status === "proposed" ? "pending" : status;
+  const next = CaseStateSchema.parse({
+    ...snapshot.caseState,
+    formal_decision_refs: [...snapshot.caseState.formal_decision_refs, { decision_id: decisionId, decision_type: "patch_acceptance" }],
+    case_actions: snapshot.caseState.case_actions.map((action) => action.selector === item.selector ? {
+      ...action,
+      status: caseStatus,
+      ...(item.path && payloadSha256 ? {
+        payload_ref: {
+          path: item.type === "patch"
+            ? `draft-patches/${item.id}.json`
+            : `changes/${item.id}/contract-patch.yaml`,
+          sha256: payloadSha256,
+        },
+      } : {}),
+    } : action),
+    receipts: [...snapshot.caseState.receipts.filter((item) => item.receipt_id !== receipt.receipt_id), receipt],
+    updated_at: now,
+  });
+  const content = stringify(next);
+  return {
+    action: "refresh",
+    path: stateFile.absolutePath,
+    relativePath: stateFile.relativePath,
+    content,
+    scope: "workspace",
+    ownership: "user",
+    previousHash: stateFile.hash,
+    nextHash: sha256(content),
+    reason: "commit adaptive case-action decision",
+  };
+}
+
+async function caseActionDecisionReceiptWrite(
+  snapshot: WorkspaceSnapshot,
+  item: IndexedItem,
+  decision: DecisionChoice,
+  actorName: string,
+  decisionId: string,
+  planSha256: string,
+  now: string,
+): Promise<{ operation: PlannedWrite; reference: { receipt_id: string; receipt_type: string; path: string; sha256: string } }> {
+  const relativePath = `runs/current/receipts/${item.type === "patch" ? "draft-patch" : "contract-change"}/${item.id}-decision.json`;
+  const target = path.join(snapshot.workspace, relativePath);
+  if (await fileExists(target)) throw new LifecycleError("conflict", "decision_receipt_conflict", `Decision receipt already exists: ${target}`);
+  const receipt = item.type === "patch"
+    ? DraftPatchReceiptSchema.parse({
+        schema_version: "1",
+        receipt_type: "draft_patch_decision",
+        receipt_id: `R-patch-decision-${planSha256.slice(0, 16)}`,
+        patch_id: item.id,
+        selector: item.selector,
+        plan_sha256: planSha256,
+        actor: { kind: "human", name: actorName },
+        decision_id: decisionId,
+        base_artifact_id: string(record(item.value).base_artifact_id),
+        base_sha256: patchBaseSha256(snapshot, item),
+        output_hashes: {},
+        artifact_ids: [],
+        effects: [{ kind: "decision_recorded", refs: [`decision:${decisionId}`, item.selector] }],
+        committed_at: now,
+      })
+    : ContractChangeDecisionReceiptSchema.parse({
+        schema_version: "1",
+        receipt_type: "contract_change_decision",
+        receipt_id: `R-change-decision-${planSha256.slice(0, 16)}`,
+        selector: item.selector,
+        decision_id: decisionId,
+        plan_sha256: planSha256,
+        decision,
+        actor: { kind: "human", name: actorName },
+        committed_at: now,
+      });
+  const content = `${JSON.stringify(receipt, null, 2)}\n`;
+  const receiptId = string(record(receipt).receipt_id);
+  const receiptType = string(record(receipt).receipt_type);
+  return {
+    operation: {
+      action: "create",
+      path: target,
+      relativePath,
+      content,
+      scope: "workspace",
+      ownership: "user",
+      nextHash: sha256(content),
+      reason: "record case-action decision receipt",
+    },
+    reference: { receipt_id: receiptId, receipt_type: receiptType, path: relativePath, sha256: sha256(content) },
+  };
+}
+
+function patchBaseSha256(snapshot: WorkspaceSnapshot, item: IndexedItem): string {
+  const value = record(item.value);
+  const declared = string(value.base_sha256) || string(value.base_draft_hash).replace(/^sha256:/, "");
+  if (/^[a-f0-9]{64}$/.test(declared)) return declared;
+  const artifact = snapshot.artifacts.find((candidate) => candidate.artifact_id === value.base_artifact_id);
+  if (artifact && typeof artifact.sha256 === "string" && /^[a-f0-9]{64}$/.test(artifact.sha256)) return artifact.sha256;
+  throw new LifecycleError("domain", "patch_base_hash_missing", "Patch decision requires a complete base artifact SHA-256.");
+}
+
+async function changeRevalidationReceiptWrite(
+  snapshot: WorkspaceSnapshot,
+  item: IndexedItem,
+  decisionId: string,
+  planSha256: string,
+  now: string,
+  error: ContractChangeError,
+): Promise<PlannedWrite> {
+  const relativePath = `runs/current/receipts/contract-change/${item.id}-revalidation.json`;
+  const target = path.join(snapshot.workspace, relativePath);
+  if (await fileExists(target)) throw new LifecycleError("conflict", "change_revalidation_receipt_conflict", `Revalidation receipt already exists: ${target}`);
+  const content = `${JSON.stringify({
+    schema_version: "1",
+    receipt_type: "contract_change_revalidation",
+    receipt_id: `R-change-revalidation-${item.id}`,
+    selector: item.selector,
+    decision_id: decisionId,
+    plan_sha256: planSha256,
+    outcome: "stale",
+    diagnostic_code: error.code,
+    checked_at: now,
+  }, null, 2)}\n`;
+  return {
+    action: "create",
+    path: target,
+    relativePath,
+    content,
+    scope: "workspace",
+    ownership: "user",
+    nextHash: sha256(content),
+    reason: "record contract-change revalidation failure",
+  };
+}
+
+export function applyDraftOperations(text: string, operations: Record<string, unknown>[]): string {
   const blocks = parseAnchoredBlocks(text);
   const byId = new Map(blocks.map((block) => [block.id, block]));
   const usedTargets = new Set<string>();

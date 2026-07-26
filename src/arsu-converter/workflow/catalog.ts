@@ -8,6 +8,14 @@ import type {
   TransitionTemplateDefinition,
   WorkflowNodeTemplate,
 } from "../../core/contracts/workflow.js";
+import {
+  AdaptiveCaseProfileSchema,
+  SoftPlaybookSchema,
+  StrictCaseProfileSchema,
+  type AdaptiveCaseProfile,
+  type SoftPlaybook,
+  type StrictCaseProfile,
+} from "../../core/contracts/case-profile.js";
 import { getArsuArtifactContract } from "./artifact-contracts.js";
 
 const COMPLETION = {
@@ -27,7 +35,7 @@ const GRAPH_PLANS: Record<string, GraphPlan> = {
   "deep-research:systematic-review": { dependencies: { prisma_materials: ["systematic_review_protocol"], risk_of_bias_report: ["systematic_review_protocol"], meta_analysis_report: ["prisma_materials", "risk_of_bias_report"], research_report: ["meta_analysis_report"] }, parallel: [{ id: "systematic-assessment", members: ["prisma_materials", "risk_of_bias_report"] }] },
   "academic-paper:full": { dependencies: { paper_outline: ["paper_configuration"], evidence_map: ["paper_configuration"], argument_blueprint: ["paper_outline", "evidence_map"], paper_draft: ["argument_blueprint"], submission_package: ["paper_draft"] }, parallel: [{ id: "paper-foundations", members: ["paper_outline", "evidence_map"] }] },
   "academic-paper:lit-review": { dependencies: { literature_matrix: ["bibliography"], synthesis_report: ["literature_matrix"], literature_review_draft: ["synthesis_report"] } },
-  "academic-paper:revision": { dependencies: { revised_draft: ["revision_patch"], apply_report: ["revised_draft"], response_to_reviewers: ["apply_report"] } },
+  "academic-paper:revision": { dependencies: { revised_draft: [], apply_report: ["revised_draft"], response_to_reviewers: ["apply_report"] } },
   "academic-paper-reviewer:full": { dependencies: { editorial_decision: ["review_report"], revision_roadmap: ["editorial_decision"] } },
   "academic-paper-reviewer:re-review": { dependencies: { rr_traceability_matrix: ["verification_review_report"], revision_roadmap: ["rr_traceability_matrix"] } },
 };
@@ -36,6 +44,13 @@ function slug(value: string): string { return value.replaceAll(":", "-").replace
 function templateId(routeRef: string): string { return `tpl-${slug(routeRef)}`; }
 function workId(artifactType: string): string { return slug(artifactType); }
 function skillId(routeRef: string): string { return routeRef.split(":", 1)[0] ?? ""; }
+function obligationId(routeRef: string, artifactType: string): string { return `${slug(routeRef)}--${workId(artifactType)}`; }
+function completionCriterionId(routeRef: string): string { return `${slug(routeRef)}--complete`; }
+function runtimeArtifactTypes(route: ArsuRouteDefinition): string[] {
+  return route.route_ref === "academic-paper:revision"
+    ? route.primary_artifact_types.filter((artifactType) => artifactType !== "revision_patch")
+    : route.primary_artifact_types;
+}
 
 function routeContracts(route: ArsuRouteDefinition): string[] {
   return [...new Set([...route.prerequisite_groups.flatMap((group) => group.requirements.filter((item) => item.kind === "contract").map((item) => item.id)), "specs/workflow.yaml", "runs/current/state.yaml"])];
@@ -43,10 +58,11 @@ function routeContracts(route: ArsuRouteDefinition): string[] {
 
 function workItems(route: ArsuRouteDefinition): WorkflowNodeTemplate[] {
   const plan = GRAPH_PLANS[route.route_ref] ?? {};
-  return route.primary_artifact_types.map((artifactType, index) => {
+  const artifactTypes = runtimeArtifactTypes(route);
+  return artifactTypes.map((artifactType, index) => {
     const contract = getArsuArtifactContract(artifactType);
     const explicit = plan.dependencies?.[artifactType];
-    const dependencies = explicit ?? route.primary_artifact_types.slice(Math.max(0, index - 1), index);
+    const dependencies = explicit ?? artifactTypes.slice(Math.max(0, index - 1), index);
     return {
       id: workId(artifactType), stage_id: "work", title: contract.title,
       description: `Produce the ${contract.title} required by ${route.route_ref}.`, producer_skill: skillId(route.route_ref), producer_route_ref: route.route_ref as RouteRef,
@@ -74,7 +90,7 @@ function formalGates(route: ArsuRouteDefinition): GateTemplateDefinition[] {
   if (route.gate_policy.level !== "required") return [];
   return route.gate_policy.gate_kinds.map((kind) => ({
     id: `gate-${slug(kind)}`, stage_id: "work", title: `${route.title}: ${kind}`, gate_type: kind,
-    validator: { id: "researchspec-verify", evidence: { artifact_types: route.primary_artifact_types, contracts: routeContracts(route).filter((item) => item.startsWith("specs/")) } },
+    validator: { id: "researchspec-verify", evidence: { artifact_types: runtimeArtifactTypes(route), contracts: routeContracts(route).filter((item) => item.startsWith("specs/")) } },
     risk_level: route.risk_level, blocking: true, confirmation_required: true,
   }));
 }
@@ -190,6 +206,108 @@ export const ARSU_V0_1_WORKFLOW: WorkflowDefinition = {
   ],
 };
 
+const externalRoutes = ARSU_ROUTING_CATALOG.skills.flatMap((skill) => skill.routes);
+
+function adaptiveObligations() {
+  return externalRoutes.flatMap((route) => {
+    const hardDependencies = GRAPH_PLANS[route.route_ref]?.dependencies ?? {};
+    return runtimeArtifactTypes(route).map((artifactType) => {
+      const contract = getArsuArtifactContract(artifactType);
+      return {
+        obligation_id: obligationId(route.route_ref, artifactType),
+        title: `${route.title}: ${contract.title}`,
+        policy_justification: `${artifactType} is a durable output declared by ${route.route_ref}.`,
+        dependencies: (hardDependencies[artifactType] ?? []).map((dependency) => ({
+          obligation_id: obligationId(route.route_ref, dependency),
+          justification: `${artifactType} consumes accepted ${dependency} evidence in ${route.route_ref}.`,
+        })),
+        required_evidence_types: [artifactType],
+        outputs: [{
+          artifact_type: artifactType,
+          path_template: `runs/current/subflows/{subflow_instance_id}/artifacts/${workId(artifactType)}${contract.extension}`,
+          validation_profile: contract.validation_profile,
+          required: true,
+        }],
+        formal_gate_ids: route.gate_policy.level === "required" || route.gate_policy.level === "profile_defined"
+          ? route.gate_policy.gate_kinds.map((kind) => `gate-${slug(kind)}`)
+          : [],
+        formal_decision_types: [],
+        resolution_policy: {
+          waive: "decision_required" as const,
+          not_applicable: "decision_required" as const,
+        },
+      };
+    });
+  });
+}
+
+function adaptiveRoutes() {
+  return externalRoutes.map((route) => ({
+    template_id: templateId(route.route_ref),
+    route_ref: route.route_ref,
+    route_kind: route.route_kind,
+    title: route.title,
+    obligation_ids: runtimeArtifactTypes(route).map((artifactType) => obligationId(route.route_ref, artifactType)),
+    completion_criterion_ids: [completionCriterionId(route.route_ref)],
+  }));
+}
+
+function adaptiveCompletionCriteria() {
+  return externalRoutes.map((route) => ({
+    criterion_id: completionCriterionId(route.route_ref),
+    obligation_ids: runtimeArtifactTypes(route).map((artifactType) => obligationId(route.route_ref, artifactType)),
+    effects: route.route_kind === "entry"
+      ? [{ kind: "complete_subflow" as const }, { kind: "complete_run" as const }]
+      : [{ kind: "complete_subflow" as const }],
+  }));
+}
+
+export const ARSU_ADAPTIVE_PLAYBOOK: SoftPlaybook = SoftPlaybookSchema.parse({
+  schema_version: "1",
+  playbook_id: "arsu-adaptive-default",
+  profile_id: "arsu-adaptive",
+  recommended_steps: externalRoutes.flatMap((route) => [
+    {
+      action_selector: `subflow:${templateId(route.route_ref)}`,
+      rationale: `Start ${route.route_ref} only after its route summary is confirmed.`,
+    },
+    ...runtimeArtifactTypes(route).map((artifactType) => ({
+      action_selector: `obligation:{subflow_instance_id}/${obligationId(route.route_ref, artifactType)}`,
+      rationale: `The default ARSU playbook recommends ${artifactType} at this point; declared hard dependencies remain authoritative.`,
+    })),
+  ]),
+});
+
+export function createArsuAdaptiveProfile(playbookSha256: string): AdaptiveCaseProfile {
+  return AdaptiveCaseProfileSchema.parse({
+    schema_version: "1",
+    profile_id: "arsu-adaptive",
+    mode: "adaptive",
+    routes: adaptiveRoutes(),
+    obligations: adaptiveObligations(),
+    completion_criteria: adaptiveCompletionCriteria(),
+    playbook_ref: { path: "playbooks/arsu-adaptive.yaml", sha256: playbookSha256 },
+  });
+}
+
+export function createArsuStrictCaseProfile(workflowSha256: string, playbookSha256: string | null = null): StrictCaseProfile {
+  return StrictCaseProfileSchema.parse({
+    schema_version: "1",
+    profile_id: "arsu-strict",
+    mode: "strict",
+    routes: adaptiveRoutes(),
+    obligations: adaptiveObligations(),
+    completion_criteria: adaptiveCompletionCriteria(),
+    playbook_ref: playbookSha256 ? { path: "playbooks/arsu-adaptive.yaml", sha256: playbookSha256 } : null,
+    workflow_graph_ref: {
+      schema_version: "0.2",
+      workflow_id: ARSU_V0_1_WORKFLOW.workflow_id,
+      path: "specs/workflow.yaml",
+      sha256: workflowSha256,
+    },
+  });
+}
+
 export function validateArsuWorkflowCatalog(workflow: WorkflowDefinition = ARSU_V0_1_WORKFLOW): string[] {
   const issues: string[] = [];
   const catalogRoutes = ARSU_ROUTING_CATALOG.skills.flatMap((skill) => skill.routes);
@@ -200,7 +318,7 @@ export function validateArsuWorkflowCatalog(workflow: WorkflowDefinition = ARSU_
     const template = matches[0];
     if (!template) continue;
     const produced = recursivelyProducedArtifacts(workflow, template.template_id, new Set());
-    for (const artifactType of route.primary_artifact_types) if (!produced.has(artifactType)) issues.push(`primary_artifact_missing:${route.route_ref}:${artifactType}`);
+    for (const artifactType of runtimeArtifactTypes(route)) if (!produced.has(artifactType)) issues.push(`primary_artifact_missing:${route.route_ref}:${artifactType}`);
     for (const item of template.work_items) {
       if (item.producer_route_ref) {
         const producerRoute = getArsuRoute(item.producer_route_ref as RouteRef);
@@ -212,6 +330,10 @@ export function validateArsuWorkflowCatalog(workflow: WorkflowDefinition = ARSU_
     if (route.gate_policy.level === "conditional") for (const kind of route.gate_policy.gate_kinds) if (!(template.advisory_gate_kinds ?? []).includes(kind)) issues.push(`conditional_gate_unaccounted:${route.route_ref}:${kind}`);
   }
   for (const template of external) if (!template.route_ref || !catalogRoutes.some((route) => route.route_ref === template.route_ref)) issues.push(`unknown_external_route:${template.template_id}`);
+  const adaptive = createArsuAdaptiveProfile("0".repeat(64));
+  for (const route of catalogRoutes) {
+    if (adaptive.routes.filter((item) => item.route_ref === route.route_ref).length !== 1) issues.push(`adaptive_route_coverage:${route.route_ref}`);
+  }
   return issues;
 }
 

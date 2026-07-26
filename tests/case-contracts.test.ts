@@ -4,11 +4,12 @@ import { test } from "node:test";
 import { ArtifactSubmitInputSchema } from "../src/core/contracts/artifact.js";
 import { ACTION_SCHEMA_REGISTRY, ActionAvailabilitySchema, CaseStatusSummarySchema, DecisionInputSchema } from "../src/core/contracts/case-control.js";
 import { ProposalInputSchema } from "../src/core/contracts/contract-change.js";
+import { DraftPatchSubmitInputSchema } from "../src/core/contracts/draft-patch.js";
 import { CompactTransactionResultSchema, RuntimePageSchema, ValidationViolationSchema } from "../src/core/contracts/runtime-protocol.js";
 import { AdaptiveCaseProfileSchema, StrictCaseProfileSchema } from "../src/core/contracts/case-profile.js";
 import { CaseStateSchema, WorkingEvidenceSchema } from "../src/core/contracts/case-state.js";
 import { GateSubmitPayloadSchema } from "../src/core/contracts/gate-transition.js";
-import { DoctorFindingSchema, DoctorRepairPlanSchema } from "../src/core/contracts/runtime-recovery.js";
+import { DoctorFindingSchema, DoctorRepairPlanSchema, DoctorRepairReceiptSchema, DoctorReportSchema } from "../src/core/contracts/runtime-recovery.js";
 import { SubflowStartInputSchema } from "../src/core/contracts/subflow.js";
 
 const SHA = "a".repeat(64);
@@ -105,6 +106,34 @@ void test("case contracts accept representative current facts and reject authori
       postconditions: [{ path: "runs/current/state.yaml", sha256: SHA }],
       plan_sha256: SHA,
     }],
+    ["doctor report", DoctorReportSchema, {
+      schema_version: "1",
+      workspace: "/tmp/researchspec",
+      healthy: false,
+      findings: [{
+        finding_id: "finding-1",
+        disposition: "requires_human_reconstruction",
+        scope: "run:current",
+        code: "semantic_authority_missing",
+        affected_paths: ["runs/current/state.yaml"],
+        evidence_refs: [],
+        retry_selector: null,
+        repair_available: false,
+      }],
+    }],
+    ["doctor receipt", DoctorRepairReceiptSchema, {
+      schema_version: "1",
+      receipt_type: "runtime_repair",
+      finding_id: "finding-2",
+      plan_sha256: SHA,
+      backup_paths: ["runs/current/recovery/finding-2/state.yaml"],
+      applied_operations: [
+        { kind: "write_determined_content", target_path: "runs/current/state.yaml", content_sha256: SHA },
+        { kind: "append_receipt", target_path: "runs/current/receipts/runtime-repair/finding-2.json" },
+      ],
+      postcondition_hashes: [{ path: "runs/current/state.yaml", sha256: SHA }],
+      repaired_at: NOW,
+    }],
   ];
 
   for (const [name, schema, value] of validCases) {
@@ -139,14 +168,44 @@ void test("action registry reuses every current write validator and declares adv
   assert.equal(ACTION_SCHEMA_REGISTRY.start.validator, SubflowStartInputSchema);
   assert.equal(ACTION_SCHEMA_REGISTRY.submit_artifact.validator, ArtifactSubmitInputSchema);
   assert.equal(ACTION_SCHEMA_REGISTRY.submit_gate.validator, GateSubmitPayloadSchema);
+  assert.equal(ACTION_SCHEMA_REGISTRY.submit_patch.validator, DraftPatchSubmitInputSchema);
   assert.equal(ACTION_SCHEMA_REGISTRY.propose.validator, ProposalInputSchema);
   assert.equal(ACTION_SCHEMA_REGISTRY.decide.validator, DecisionInputSchema);
   assert.equal(ACTION_SCHEMA_REGISTRY.advance.kind, "no-input");
   assert.equal(ACTION_SCHEMA_REGISTRY.advance.schema_ref, "researchspec://actions/advance/no-input");
+  assert.equal(ACTION_SCHEMA_REGISTRY.advance_patch.kind, "no-input");
   for (const registration of Object.values(ACTION_SCHEMA_REGISTRY)) {
     assert.ok(registration.schema_ref);
     assert.equal(registration.requires_dry_run, true);
   }
+});
+
+void test("canonical draft patch input closes semantic-delta and producer-scope combinations", () => {
+  const base = {
+    patch_format_version: "2",
+    revision_round: 1,
+    base_artifact_id: "A-draft",
+    base_sha256: SHA,
+    producer_skill: "academic-paper",
+    producer_mode: "revision",
+    subflow_instance_id: "sf-revision",
+    obligation_scope: ["revised-draft", "apply-report"],
+    evidence_artifact_ids: ["A-review"],
+    ops: [{ op: "replace_block", block_id: "B0001", old_hash: "a".repeat(12), new_text: "Revised text." }],
+  };
+  assert.equal(DraftPatchSubmitInputSchema.safeParse({ ...base, semantic_delta: { level: "none" } }).success, true);
+  assert.equal(DraftPatchSubmitInputSchema.safeParse({
+    ...base,
+    semantic_delta: { level: "high", categories: ["scope"], summary: "Narrows the accepted scope.", linked_change_id: "scope-change" },
+  }).success, true);
+  assert.equal(DraftPatchSubmitInputSchema.safeParse({
+    ...base,
+    semantic_delta: { level: "high", categories: ["scope"], summary: "Missing linked change." },
+  }).success, false);
+  assert.equal(DraftPatchSubmitInputSchema.safeParse({
+    ...base,
+    semantic_delta: { level: "ordinary", summary: "Local wording.", linked_change_id: "forbidden" },
+  }).success, false);
 });
 
 void test("runtime protocol contracts accept bounded pages, compact writes, and stable validation fields", () => {
@@ -165,6 +224,16 @@ void test("runtime protocol contracts accept bounded pages, compact writes, and 
     identity: { kind: "decision", selector: "decision:D-1", plan_sha256: SHA },
     effects: [{ kind: "decision_recorded", refs: ["decision:D-1"] }],
     next_selectors: ["status", "list:history"],
+  }).success, true);
+  assert.equal(CompactTransactionResultSchema.safeParse({
+    schema_version: "1",
+    command: "doctor",
+    selector: "repair:finding-1",
+    outcome: "repaired",
+    dry_run: false,
+    identity: { kind: "receipt", selector: "repair:finding-1", sha256: SHA, plan_sha256: SHA },
+    effects: [{ kind: "runtime_repaired", refs: ["runs/current/state.yaml"] }],
+    next_selectors: ["doctor", "check:runtime"],
   }).success, true);
   assert.equal(ValidationViolationSchema.safeParse({
     code: "required",

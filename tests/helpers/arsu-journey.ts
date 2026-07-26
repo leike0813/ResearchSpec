@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
@@ -10,7 +11,7 @@ export interface WorkflowControlView {
   ready_items: string[];
   startable_subflows: string[];
   work_items: Array<{ selector: string; state: string; dispatchable: boolean; instance_id?: string; work_item_id: string }>;
-  subflows: Array<{ selector: string; kind: string; state: string; instance_id?: string; parent_subflow_id?: string | null; parent_node_id?: string | null; round_number?: number | null }>;
+  subflows: Array<{ selector: string; kind: string; state: string; template_id?: string; instance_id?: string; parent_subflow_id?: string | null; parent_node_id?: string | null; round_number?: number | null }>;
   parallel_groups: Array<{ selector: string; state: string; join_policy: string; ready_members: string[]; dispatchable_members: string[]; done_members: string[] }>;
   gates: Array<{ selector: string; state: string; latest_event_id?: string; subflow_instance_id: string }>;
   transitions: Array<{ selector: string; transition_node_id: string; decision_point_id?: string; state: string; automatic: boolean; subflow_instance_id: string }>;
@@ -92,7 +93,7 @@ export function instructions(context: JourneyContext, selector: string): unknown
 }
 
 export function initialize(root: string): JourneyContext {
-  const result = runCli(["init", root, "--tools", "forgecode", "--json"]);
+  const result = runCli(["init", root, "--tools", "forgecode", "--profile", "strict", "--json"]);
   assert.equal(result.status, 0, result.stderr || result.stdout);
   return { root, workspace: path.join(root, "researchspec") };
 }
@@ -124,7 +125,7 @@ export async function submitWork(context: JourneyContext, selector: string): Pro
   await mkdir(path.dirname(packet.output.resolved_path), { recursive: true });
   const content = packet.validation.profile === "binary-file-artifact"
     ? Buffer.from([0x50, 0x4b, 0x03, 0x04, 0x52, 0x53])
-    : Buffer.from(`# Acceptance candidate\n\n${selector}\n`, "utf8");
+    : Buffer.from(`<!--block:B0001-->\n# Acceptance candidate\n\n${selector}\n`, "utf8");
   await writeFile(packet.output.resolved_path, content);
   const payload = {
     schema_version: "1",
@@ -181,12 +182,58 @@ export function advanceTransition(context: JourneyContext, selector: string): vo
   cliJson([...base, "--expected-action-basis-sha256", packet.action_descriptor.availability.basis_sha256, "--expected-plan-sha256", preview.identity.plan_sha256, "--yes"], context.root);
 }
 
+export async function applyRevisionPatch(context: JourneyContext, instanceSelector: string): Promise<boolean> {
+  const instanceId = instanceSelector.replace(/^subflow:/, "");
+  const patchId = `acceptance-${instanceId}`;
+  try {
+    await readFile(path.join(context.workspace, `draft-patches/${patchId}.json`));
+    return false;
+  } catch {
+    // The canonical patch does not exist yet.
+  }
+  const registry = await readRegistry(context);
+  const base = [...registry.artifacts].reverse().find((artifact) =>
+    (artifact.artifact_type === "revised_draft" || artifact.artifact_type === "paper_draft")
+    && typeof artifact.artifact_id === "string"
+    && typeof artifact.path === "string"
+    && typeof artifact.sha256 === "string");
+  assert.ok(base, "Revision journey requires a registered base draft.");
+  const basePath = path.join(context.root, String(base.path));
+  const baseBytes = await readFile(basePath);
+  const selector = `patch:${patchId}`;
+  const runtime = status(context).workflow_control.subflows.find((item) => item.selector === instanceSelector);
+  const payload = {
+    patch_format_version: "2",
+    revision_round: runtime?.round_number ?? 1,
+    base_artifact_id: String(base.artifact_id),
+    base_sha256: createHash("sha256").update(baseBytes).digest("hex"),
+    producer_skill: "academic-paper",
+    producer_mode: "revision",
+    subflow_instance_id: instanceId,
+    obligation_scope: [],
+    evidence_artifact_ids: [String(base.artifact_id)],
+    semantic_delta: { level: "ordinary", summary: "Apply the accepted revision-round edit." },
+    ops: [{ op: "insert_after", block_id: "DOC-BODY-START", new_text: `Revision round ${String(runtime?.round_number ?? 1)} accepted text.` }],
+  };
+  const inputPath = await writePayload(context, "patch", payload);
+  executePlanned(context, selector, ["submit", selector, "--input", inputPath, "--actor-kind", "agent", "--actor-name", "academic-paper"]);
+  executePlanned(context, selector, ["decide", selector, "--decision", "accept", "--actor-name", "Acceptance Researcher", "--reason", "Accepted by revision journey"]);
+  executePlanned(context, selector, ["advance", selector, "--actor-kind", "agent", "--actor-name", "academic-paper"]);
+  return true;
+}
+
 export async function drive(context: JourneyContext, rootSelector: string, choose: (candidates: WorkflowControlView["transitions"]) => string = chooseAccepted): Promise<StatusView> {
   const instanceId = rootSelector.slice("subflow:".length);
   for (let step = 0; step < 300; step += 1) {
     const current = status(context);
     const root = current.workflow_control.subflows.find((item) => item.kind === "instance" && item.instance_id === instanceId);
     if (root?.state === "complete") return current;
+
+    const revision = current.workflow_control.subflows.find((item) =>
+      item.kind === "instance"
+      && item.state === "active"
+      && item.template_id === "tpl-academic-paper-revision");
+    if (revision && await applyRevisionPatch(context, revision.selector)) continue;
 
     const readyWork = current.workflow_control.ready_items[0];
     if (readyWork) { await submitWork(context, readyWork); continue; }
@@ -223,4 +270,16 @@ async function writePayload(context: JourneyContext, prefix: string, value: unkn
   const filePath = path.join(directory, `${prefix}-${String(Date.now())}-${Math.random().toString(16).slice(2)}.json`);
   await writeFile(filePath, `${JSON.stringify(value, null, 2)}\n`, "utf8");
   return filePath;
+}
+
+function executePlanned(context: JourneyContext, selector: string, base: string[]): void {
+  const packet = instructions(context, selector) as { action_descriptor: ActionDescriptorView };
+  const preview = cliJson<{ identity: { plan_sha256?: string } }>([...base, "--dry-run"], context.root).data;
+  assert.ok(preview?.identity.plan_sha256);
+  cliJson([
+    ...base,
+    "--expected-action-basis-sha256", packet.action_descriptor.availability.basis_sha256,
+    "--expected-plan-sha256", preview.identity.plan_sha256,
+    "--yes",
+  ], context.root);
 }
