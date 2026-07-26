@@ -19,7 +19,10 @@ void test("fixed Zotero catalog binds the approved release set and seven runtime
   const [adapter] = LITERATURE_ADAPTER_CATALOG;
   assert.equal(adapter?.adapter_id, "zotero-library");
   assert.equal(adapter?.install_policy, "fixed");
-  assert.equal(adapter?.identity.release_set_id, "hbrs-3d834c0f075f3122ac566e9a");
+  assert.equal(adapter?.identity.release_set_id, "hbrs-f9f28ddce98be3008e13bbdb");
+  assert.equal(adapter?.skills.length, 7);
+  assert.deepEqual(adapter?.skills.map((skill) => skill.role), ["router", "task", "task", "task", "task", "task", "mechanism"]);
+  assert.equal(adapter?.skills.every((skill) => skill.researchspec_workflow_authority === "none"), true);
   assert.equal(adapter?.runtimes.length, 7);
   assert.equal(new Set(adapter?.runtimes.map((runtime) => runtime.platform)).size, 7);
 });
@@ -39,14 +42,16 @@ void test("component patch versions are independently valid", () => {
   const fixedAdapter = LITERATURE_ADAPTER_CATALOG[0];
   assert.ok(fixedAdapter);
   const adapter = structuredClone(fixedAdapter);
-  adapter.versions.bundle = "0.3.7";
+  adapter.versions.bundle = "0.4.7";
   adapter.versions.cli = "0.4.1";
-  adapter.versions.skills[adapter.primary_skill_id] = "0.5.9";
+  const firstSkill = adapter.skills[0];
+  assert.ok(firstSkill);
+  firstSkill.version = "0.5.9";
   assert.equal(LiteratureAdapterDefinitionSchema.safeParse(adapter).success, true);
   assert.equal(validateLiteratureAdapterCatalog([adapter]).length, 1);
 });
 
-void test("workspace delivery projects ten fixed Skills while retaining eight wrappers", async () => {
+void test("workspace delivery projects fifteen fixed Skills while retaining eight wrappers", async () => {
   const root = await tempProject();
   try {
     const delivery = await planWorkspaceDelivery({
@@ -65,7 +70,7 @@ void test("workspace delivery projects ten fixed Skills while retaining eight wr
       return item.source.kind === "literature-adapter" && item.source.component === "skill" && item.source.skill_id ? [item.source.skill_id] : [];
     }));
     const wrappers = delivery.installations.filter((item) => item.tool_id === "claude" && item.source.kind === "command");
-    assert.equal(skillIds.size, 10);
+    assert.equal(skillIds.size, 15);
     assert.equal(wrappers.length, 8);
     assert.equal(delivery.literatureAdapterResolutions[0]?.projection_state, "complete");
     assert.equal(delivery.literatureAdapterResolutions[0]?.runtime_asset?.installed_path, ".zotero-bridge/bin/zotero-bridge");
@@ -129,6 +134,68 @@ void test("adapter delivery never adopts or overwrites an unowned target", async
     assert.equal(delivery.resolutions[0]?.projection_state, "incomplete");
     await executeWritePlan({ operations: delivery.operations });
     assert.equal(await readFile(target, "utf8"), "user binary");
+  } finally {
+    await cleanup(root);
+  }
+});
+
+void test("owner-aware upgrade adds five Skill trees and preserves drifted legacy files", async () => {
+  const root = await tempProject();
+  const legacySkillIds = new Set(["zotero-library-agent", "zotero-bridge-cli"]);
+  try {
+    const initial = await planLiteratureAdapterDelivery({
+      projectRoot: root,
+      toolIds: ["claude"],
+      existingInstallations: [],
+      force: false,
+      platform: "linux",
+      architecture: "x64",
+    });
+    const legacyInstallations = initial.installations.filter((installation) =>
+      installation.source.kind !== "literature-adapter"
+      || installation.source.component !== "skill"
+      || (installation.source.skill_id !== undefined && legacySkillIds.has(installation.source.skill_id))
+    );
+    const legacyPaths = new Set(legacyInstallations.map((installation) => installation.target.path));
+    await executeWritePlan({
+      operations: initial.operations.filter(
+        (operation) => operation.relativePath !== undefined && legacyPaths.has(operation.relativePath),
+      ),
+    });
+
+    const legacyEntry = legacyInstallations.find((installation) =>
+      installation.source.kind === "literature-adapter"
+      && installation.source.component === "skill"
+      && installation.source.skill_id === "zotero-library-agent"
+      && installation.target.path.endsWith("/SKILL.md")
+    );
+    assert.ok(legacyEntry);
+    const legacyTarget = path.join(root, legacyEntry.target.path);
+    await writeFile(legacyTarget, "user-owned drift\n", "utf8");
+
+    const upgraded = await planLiteratureAdapterDelivery({
+      projectRoot: root,
+      toolIds: ["claude"],
+      existingInstallations: legacyInstallations,
+      force: false,
+      platform: "linux",
+      architecture: "x64",
+    });
+    assert.ok(upgraded.diagnostics.some((diagnostic) => diagnostic.code === "literature_adapter_file_drift"));
+    assert.equal(upgraded.resolutions[0]?.projection_state, "incomplete");
+    const projectedSkillIds = new Set(upgraded.installations.flatMap((installation) =>
+      installation.source.kind === "literature-adapter"
+      && installation.source.component === "skill"
+      && installation.source.skill_id
+        ? [installation.source.skill_id]
+        : []
+    ));
+    assert.equal(projectedSkillIds.size, 7);
+    await executeWritePlan({ operations: upgraded.operations });
+    assert.equal(await readFile(legacyTarget, "utf8"), "user-owned drift\n");
+    for (const skillId of ["zotero-library-query", "zotero-literature-acquisition", "zotero-literature-analysis", "zotero-research-synthesis", "zotero-library-curation"]) {
+      assert.equal(await readFile(path.join(root, ".claude/skills", skillId, "SKILL.md"), "utf8").then(() => true), true);
+    }
   } finally {
     await cleanup(root);
   }

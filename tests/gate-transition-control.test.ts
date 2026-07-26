@@ -1,10 +1,12 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { test } from "node:test";
 import { parse, stringify } from "yaml";
 
+import { TransitionAdvanceReceiptV2Schema } from "../src/core/contracts/gate-transition.js";
 import type { WorkflowDefinition } from "../src/core/contracts/workflow.js";
 import { executeArtifactSubmit, planArtifactSubmit } from "../src/core/runtime/artifact-submit.js";
 import { executeGateSubmit, executeTransitionAdvance, planGateSubmit, planTransitionAdvance } from "../src/core/runtime/gate-transition-control.js";
@@ -15,7 +17,36 @@ import { getWorkspaceEntries } from "../src/core/workspace/layout.js";
 import { loadWorkspaceSnapshot } from "../src/core/workspace/snapshot.js";
 import { TEST_RUN_STATE, TEST_WORKFLOW } from "./helpers/test-workflow.js";
 
-void test("confirmed Gate submit unlocks one receipt-backed terminal transition", async () => {
+void test("transition receipt v2 rejects invalid completion effect authority", () => {
+  const receipt = {
+    schema_version: "2",
+    receipt_type: "transition_advance",
+    plan_sha256: "a".repeat(64),
+    instruction_basis_sha256: "b".repeat(64),
+    selector: "transition:sf-research/complete",
+    transition_id: "sf-research/complete",
+    transition_node_id: "complete",
+    subflow_instance_id: "sf-research",
+    template_id: "tpl-research",
+    from_stage_id: "research",
+    effects: [{ kind: "complete_subflow", subflow_instance_id: "sf-research" }, { kind: "complete_run" }],
+    gate_event_ids: [],
+    decision_ids: [],
+    actor: { kind: "agent", name: "agent" },
+    advanced_at: "2026-07-10T00:00:00.000Z",
+  };
+  assert.equal(TransitionAdvanceReceiptV2Schema.safeParse(receipt).success, true);
+  assert.equal(TransitionAdvanceReceiptV2Schema.safeParse({
+    ...receipt,
+    effects: [...receipt.effects].reverse(),
+  }).success, false);
+  assert.equal(TransitionAdvanceReceiptV2Schema.safeParse({
+    ...receipt,
+    effects: [{ kind: "complete_subflow", subflow_instance_id: "sf-other" }],
+  }).success, false);
+});
+
+void test("confirmed Gate submit completes only the selected subflow", async () => {
   const root = await createWorkspace();
   try {
     const workspace = path.join(root, "researchspec");
@@ -44,12 +75,96 @@ void test("confirmed Gate submit unlocks one receipt-backed terminal transition"
     assert.deepEqual(control.transitions.filter((item) => item.state === "ready").map((item) => item.selector), [transitionSelector]);
     const advance = await planTransitionAdvance({ snapshot, selector: transitionSelector, actor: { kind: "agent", name: "academic-pipeline" }, now: "2026-07-10T01:01:00.000Z" });
     assert.equal(advance.status, "would_advance");
+    assert.equal(advance.receipt.schema_version, "2");
+    assert.deepEqual(advance.effects, [{ kind: "complete_subflow", subflow_instance_id: instanceId }]);
     assert.deepEqual(advance.writePlan.operations.map((item) => item.action), ["create", "refresh"]);
     const outcome = await executeTransitionAdvance(advance, workspace);
     assert.equal(outcome.status, "advanced");
-    assert.equal(outcome.workflow_control_after.state, "complete");
+    assert.equal(outcome.workflow_control_after.state, "ready");
+    assert.ok(outcome.workflow_control_after.startable_subflows.includes("subflow:tpl-research"));
+    assert.equal((await loadWorkspaceSnapshot(workspace)).runState?.status, "in_progress");
     const retry = await planTransitionAdvance({ snapshot: await loadWorkspaceSnapshot(workspace), selector: transitionSelector, actor: { kind: "agent", name: "academic-pipeline" }, expectedPlanSha256: advance.plan_sha256 });
     assert.equal(retry.status, "already_advanced");
+    assert.deepEqual(retry.effects, advance.effects);
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
+void test("explicit complete_run terminates the run through the same receipt", async () => {
+  const root = await createWorkspace({ completeRun: true });
+  try {
+    const workspace = path.join(root, "researchspec");
+    const instanceId = await completeSliceWork(workspace);
+    await submitPassingGate(workspace, instanceId);
+    const snapshot = await loadWorkspaceSnapshot(workspace);
+    const selector = `transition:${instanceId}/complete-research`;
+    const advance = await planTransitionAdvance({ snapshot, selector, actor: { kind: "agent", name: "academic-pipeline" }, now: "2026-07-10T01:30:00.000Z" });
+    assert.deepEqual(advance.effects, [
+      { kind: "complete_subflow", subflow_instance_id: instanceId },
+      { kind: "complete_run" },
+    ]);
+    await executeTransitionAdvance(advance, workspace);
+    const after = await loadWorkspaceSnapshot(workspace);
+    assert.equal(after.runState?.status, "complete");
+    const control = await evaluateWorkflowControl(after);
+    assert.equal(control.state, "complete");
+    assert.equal(control.subflows.find((item) => item.selector === "subflow:tpl-research")?.state, "blocked");
+    assert.deepEqual(control.startable_subflows, []);
+    assert.deepEqual(await buildSubflowInstructions(after, "subflow:tpl-research"), { ok: false, code: "run_terminal" });
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
+void test("legacy v1 transition receipts remain replayable without rewriting", async () => {
+  const root = await createWorkspace();
+  try {
+    const workspace = path.join(root, "researchspec");
+    const instanceId = await completeSliceWork(workspace);
+    const planSha256 = "b".repeat(64);
+    const selector = `transition:${instanceId}/complete-research`;
+    const receipt = {
+      schema_version: "1",
+      receipt_type: "transition_advance",
+      plan_sha256: planSha256,
+      instruction_basis_sha256: "c".repeat(64),
+      selector,
+      transition_id: `${instanceId}/complete-research`,
+      transition_node_id: "complete-research",
+      subflow_instance_id: instanceId,
+      template_id: "tpl-research",
+      from_stage_id: "research",
+      effect: { kind: "complete_subflow" },
+      gate_event_ids: [],
+      decision_ids: [],
+      actor: { kind: "agent", name: "legacy-agent" },
+      advanced_at: "2026-07-10T01:45:00.000Z",
+    };
+    const receiptText = `${JSON.stringify(receipt, null, 2)}\n`;
+    const relativeReceiptPath = `runs/current/receipts/transition-advance/${instanceId}/complete-research.json`;
+    const receiptPath = path.join(workspace, relativeReceiptPath);
+    await mkdir(path.dirname(receiptPath), { recursive: true });
+    await writeFile(receiptPath, receiptText, "utf8");
+    const statePath = path.join(workspace, "runs/current/state.yaml");
+    const state = parse(await readFile(statePath, "utf8")) as typeof TEST_RUN_STATE;
+    const instance = state.subflows.find((item) => item.instance_id === instanceId);
+    assert.ok(instance);
+    instance.status = "complete";
+    instance.transition_receipts.push({
+      transition_id: `${instanceId}/complete-research`,
+      path: relativeReceiptPath,
+      sha256: createHash("sha256").update(receiptText).digest("hex"),
+      plan_sha256: planSha256,
+    });
+    await writeFile(statePath, stringify(state), "utf8");
+
+    const replay = await planTransitionAdvance({
+      snapshot: await loadWorkspaceSnapshot(workspace),
+      selector,
+      actor: { kind: "agent", name: "academic-pipeline" },
+      expectedPlanSha256: planSha256,
+    });
+    assert.equal(replay.status, "already_advanced");
+    assert.equal(replay.receipt.schema_version, "1");
+    assert.deepEqual(replay.effects, [{ kind: "complete_subflow", subflow_instance_id: instanceId }]);
+    assert.equal(await readFile(receiptPath, "utf8"), receiptText);
   } finally { await rm(root, { recursive: true, force: true }); }
 });
 
@@ -83,7 +198,7 @@ void test("failed Gate requires confirmed reverification before override", async
 });
 
 void test("multiple transition candidates require one workflow-branch Decision", async () => {
-  const root = await createWorkspace(true);
+  const root = await createWorkspace({ withBranch: true });
   try {
     const workspace = path.join(root, "researchspec");
     const instanceId = await completeSliceWork(workspace);
@@ -118,7 +233,7 @@ void test("Schema 0.2 requires explicit Gate and transition fields", async () =>
   } finally { await rm(root, { recursive: true, force: true }); }
 });
 
-async function createWorkspace(withBranch = false): Promise<string> {
+async function createWorkspace(options: { withBranch?: boolean; completeRun?: boolean } = {}): Promise<string> {
   const root = await mkdtemp(path.join(tmpdir(), "researchspec-gate-transition-"));
   const workspace = path.join(root, "researchspec");
   for (const entry of getWorkspaceEntries(workspace)) {
@@ -126,10 +241,17 @@ async function createWorkspace(withBranch = false): Promise<string> {
     else { await mkdir(path.dirname(entry.path), { recursive: true }); await writeFile(entry.path, entry.content, "utf8"); }
   }
   const workflow = structuredClone(TEST_WORKFLOW);
-  if (withBranch) {
+  if (options.withBranch) {
     const template = workflow.subflow_templates[0];
     assert.ok(template);
-    template.transitions.push({ id: "alternate-completion", from_stage_id: "research", effect: { kind: "complete_subflow" }, requires: { gate_ids: ["research-completion"], decision_types: ["workflow_branch"] }, branch: { decision_point_id: "research-outcome", option_id: "alternate" } });
+    template.transitions.push({ id: "alternate-completion", from_stage_id: "research", effects: [{ kind: "complete_subflow" }], requires: { gate_ids: ["research-completion"], decision_types: ["workflow_branch"] }, branch: { decision_point_id: "research-outcome", option_id: "alternate" } });
+  }
+  if (options.completeRun) {
+    const template = workflow.subflow_templates[0];
+    const transition = template?.transitions.find((item) => item.id === "complete-research");
+    assert.ok(template && transition);
+    template.template_kind = "pipeline";
+    transition.effects.push({ kind: "complete_run" });
   }
   await writeFile(path.join(workspace, "specs/workflow.yaml"), stringify(workflow), "utf8");
   await writeFile(path.join(workspace, "runs/current/state.yaml"), stringify(TEST_RUN_STATE), "utf8");

@@ -1,0 +1,32 @@
+@startuml
+title 两个 OpenSpec 风格层次：产品治理与科研运行
+skinparam componentStyle rectangle
+skinparam shadowing false
+
+package "Repository development governance" {
+  artifact "openspec/specs/**\nResearchSpec product truth" as ProductSpecs
+  artifact "openspec/changes/<id>/**\nproposal / design / delta specs / tasks" as ProductChange
+  component "OpenSpec development lifecycle" as ProductLifecycle
+  ProductSpecs --> ProductLifecycle
+  ProductChange --> ProductLifecycle
+  ProductLifecycle --> ProductSpecs : archive merges accepted delta
+}
+
+package "Initialized research workspace" {
+  artifact "researchspec/specs/**\ncurrent research contracts" as ResearchSpecs
+  artifact "researchspec/changes/<id>/**\nproposal / tasks / contract-patch" as ResearchChange
+  database "runs/current/**\nstate / artifacts / Gates\nDecisions / receipts" as Run
+  component "ResearchSpec CLI lifecycle" as ResearchLifecycle
+  ResearchSpecs --> ResearchLifecycle
+  ResearchChange --> ResearchLifecycle
+  Run --> ResearchLifecycle
+  ResearchLifecycle --> ResearchSpecs : accepted semantic patch
+  ResearchLifecycle --> Run : receipts and Decision evidence
+}
+
+ProductSpecs ..> ResearchLifecycle : defines software behavior
+note bottom
+  The two layers share current/proposed separation,
+  but a user's research change is not a repository OpenSpec change.
+end note
+@enduml

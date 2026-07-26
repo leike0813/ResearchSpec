@@ -117,17 +117,17 @@ void test("[journey.resume-passport] public CLI imports a passport and resumes f
   try {
     const passportPath = path.join(root, "passport.yaml");
     await cp(fixture, passportPath);
-    const instructionResult = parseEnvelope<{ instruction_basis_sha256: string }>(runCli(["instructions", selector, "--json"], root));
+    const instructionResult = parseEnvelope<{ instruction_basis_sha256: string; action_descriptor: { availability: { basis_sha256: string } } }>(runCli(["instructions", selector, "--json"], root));
     assert.equal(instructionResult.ok, true);
     const inputPath = path.join(root, "start.json");
     await writeFile(inputPath, JSON.stringify({ schema_version: "1", instruction_basis_sha256: instructionResult.data?.instruction_basis_sha256, acknowledged_user_input_ids: ["research_materials"], prerequisite_artifact_ids: [], prerequisite_decision_ids: [], parent_subflow_selector: null, material_passport_import: { kind: "ars-material-passport", passport_path: "passport.yaml", expected_passport_sha256: sha256(await readFile(passportPath)), boundary_hash: "a3f2b7c9d0e1" } }), "utf8");
     const base = ["start", selector, "--input", inputPath, "--actor-kind", "agent", "--actor-name", "academic-pipeline", "--confirmed-by", "researcher"];
-    const preview = parseEnvelope<{ plan_sha256: string; material_passport_import: { import_id: string }; instance_selector: string }>(runCli([...base, "--dry-run", "--json"], root));
+    const preview = parseEnvelope<{ identity: { plan_sha256?: string }; effects: Array<{ kind: string }> }>(runCli([...base, "--dry-run", "--json"], root));
     assert.equal(preview.ok, true);
-    const executed = parseEnvelope<{ state_updated: boolean; material_passport_import: { import_id: string }; instance_selector: string }>(runCli([...base, "--expected-plan-sha256", preview.data?.plan_sha256 ?? "", "--yes", "--json"], root));
+    const executed = parseEnvelope<{ identity: { selector: string }; effects: Array<{ kind: string }> }>(runCli([...base, "--expected-action-basis-sha256", instructionResult.data?.action_descriptor.availability.basis_sha256 ?? "", "--expected-plan-sha256", preview.data?.identity.plan_sha256 ?? "", "--yes", "--json"], root));
     assert.equal(executed.ok, true);
-    assert.equal(executed.data?.state_updated, true);
-    const resumed = parseEnvelope<{ runtime_context: { imports: unknown[]; resume_candidate: { boundary_hash: string } } }>(runCli(["instructions", executed.data?.instance_selector ?? "", "--json"], root));
+    assert.ok(executed.data?.effects.some((effect) => effect.kind === "material_passport_imported"));
+    const resumed = parseEnvelope<{ runtime_context: { imports: unknown[]; resume_candidate: { boundary_hash: string } } }>(runCli(["instructions", executed.data?.identity.selector ?? "", "--json"], root));
     assert.equal(resumed.data?.runtime_context.imports.length, 1);
     assert.equal(resumed.data?.runtime_context.resume_candidate.boundary_hash, "a3f2b7c9d0e1");
   } finally { await rm(root, { recursive: true, force: true }); }

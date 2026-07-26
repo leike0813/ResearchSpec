@@ -66,6 +66,7 @@ export interface IndexedItem {
 
 export interface WorkspaceSnapshot {
   workspace: string;
+  project: Record<string, unknown>;
   files: Map<string, SnapshotFile>;
   documents: Record<string, unknown>;
   config: Record<string, unknown>;
@@ -86,6 +87,7 @@ export async function loadWorkspaceSnapshot(workspace: string): Promise<Workspac
   const files = new Map<string, SnapshotFile>();
   const documents: Record<string, unknown> = {};
   const diagnostics: Diagnostic[] = [];
+  let project: Record<string, unknown> = {};
 
   for (const relativePath of REQUIRED_FILES) {
     const absolutePath = path.join(workspace, relativePath);
@@ -131,7 +133,10 @@ export async function loadWorkspaceSnapshot(workspace: string): Promise<Workspac
         const end = text.indexOf("\n---\n", 4);
         const parsed = parseYaml(text.slice(4, end), absolutePath);
         if (!parsed.ok) diagnostics.push(parsed.diagnostic);
-        else validateValue(parsed.value, ProjectSchema, absolutePath, "invalid_project_contract", diagnostics);
+        else {
+          project = asRecord(parsed.value);
+          validateValue(parsed.value, ProjectSchema, absolutePath, "invalid_project_contract", diagnostics);
+        }
         if (!text.includes("## Research Question") || !text.includes("## Scope")) diagnostics.push({ severity: "error", code: "project_sections_missing", message: "Project contract requires Research Question and Scope sections.", path: absolutePath, blocking: true });
       }
     }
@@ -160,7 +165,7 @@ export async function loadWorkspaceSnapshot(workspace: string): Promise<Workspac
   const patches = await loadDraftPatches(workspace, diagnostics);
   const items = buildItems(documents, artifacts, decisions, gates, changes, patches, config, manifest);
 
-  return { workspace, files, documents, config, manifest, workflow, runState, state, artifacts, decisions, gates, changes, patches, items, diagnostics };
+  return { workspace, project, files, documents, config, manifest, workflow, runState, state, artifacts, decisions, gates, changes, patches, items, diagnostics };
 }
 
 function validateInstanceStateReferences(workflow: WorkflowDefinition | undefined, state: RunState | undefined, file: SnapshotFile | undefined, diagnostics: Diagnostic[]): void {

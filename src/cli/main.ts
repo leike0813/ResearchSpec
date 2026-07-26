@@ -6,7 +6,7 @@ import {
   handleAdvance, handleArchive, handleCheck, handleDecide, handleHandoff, handleInit, handleInstructions, handleList,
   handlePack, handlePropose, handleShow, handleStart, handleStatus, handleSubmit, handleUpdate, type DecideOptions,
   handlePluginInstall, handlePluginInstructions, handlePluginList, handlePluginShow, handlePluginUninstall, handlePluginUpdate,
-  type AdvanceOptions, type HandoffOptions, type InitOptions, type PackOptions, type PluginInstallOptions, type PluginListOptions, type PluginShowOptions, type ProposeOptions, type StartOptions, type SubmitOptions, type UpdateOptions,
+  type AdvanceOptions, type HandoffOptions, type InitOptions, type ListOptions, type PackOptions, type PluginInstallOptions, type PluginListOptions, type PluginShowOptions, type ProposeOptions, type StartOptions, type SubmitOptions, type UpdateOptions,
 } from "./handlers.js";
 import { presentResult } from "./presenter.js";
 import { CliError, failure, type CommandContext, type CommandResult } from "./types.js";
@@ -72,6 +72,7 @@ function registerCommands(program: Command, run: Runner): void {
     .requiredOption("--actor-kind <kind>", "human, agent, or script")
     .requiredOption("--actor-name <name>", "Start requester name")
     .option("--confirmed-by <name>", "human who confirmed an external route")
+    .option("--expected-action-basis-sha256 <hash>", "bind execution to the current action descriptor")
     .option("--expected-plan-sha256 <hash>", "bind execution to the previewed Start plan")
     .action(async (subflow: string, options: StartOptions, command: Command) => run("start", command, () => handleStart(subflow, options, commandContext("start", command))));
   program.command("submit <runtime-item>").description("Submit a workflow-owned work candidate or confirmed Gate verdict")
@@ -79,19 +80,23 @@ function registerCommands(program: Command, run: Runner): void {
     .requiredOption("--actor-kind <kind>", "human, agent, script, converter, or validator")
     .requiredOption("--actor-name <name>", "artifact producer name")
     .option("--confirmed-by <name>", "human who confirmed a Gate verdict")
+    .option("--expected-action-basis-sha256 <hash>", "bind execution to the current action descriptor")
     .option("--expected-sha256 <hash>", "bind execution to the previewed candidate SHA-256")
     .option("--expected-plan-sha256 <hash>", "bind Gate execution to the previewed plan")
     .action(async (runtimeItem: string, options: SubmitOptions, command: Command) => run("submit", command, () => handleSubmit(runtimeItem, options, commandContext("submit", command))));
   program.command("advance <transition>").description("Atomically advance one uniquely authorized transition")
     .requiredOption("--actor-kind <kind>", "agent or script")
     .requiredOption("--actor-name <name>", "transition executor name")
+    .option("--expected-action-basis-sha256 <hash>", "bind execution to the current action descriptor")
     .option("--expected-plan-sha256 <hash>", "bind execution to the previewed transition plan")
     .action(async (transition: string, options: AdvanceOptions, command: Command) => run("advance", command, () => handleAdvance(transition, options, commandContext("advance", command))));
   program.command("check [target]").description("Check all, contracts, runtime, artifacts, tools, plugins, or literature-adapters")
     .option("--strict", "treat warnings as failures")
     .action(async (target: string | undefined, options: { strict?: boolean }, command: Command) => run("check", command, () => handleCheck(target, Boolean(options.strict), commandContext("check", command))));
-  program.command("list [type]").description("List changes, artifacts, gates, decisions, or tools")
-    .action(async (type: string | undefined, _options: Record<string, never>, command: Command) => run("list", command, () => handleList(type, commandContext("list", command))));
+  program.command("list [type]").description("List paginated runtime collections")
+    .option("--limit <count>", "page size from 1 to 50")
+    .option("--cursor <cursor>", "opaque cursor returned by the prior page")
+    .action(async (type: string | undefined, options: ListOptions, command: Command) => run("list", command, () => handleList(type, options, commandContext("list", command))));
   program.command("show <item>").description("Show a canonical or globally unique item")
     .action(async (item: string, _options: Record<string, never>, command: Command) => run("show", command, () => handleShow(item, commandContext("show", command))));
   program.command("handoff").description("Render the current handoff view")
@@ -106,11 +111,15 @@ function registerCommands(program: Command, run: Runner): void {
     .requiredOption("--input <payload.json>", "strict semantic proposal JSON")
     .requiredOption("--actor-kind <kind>", "human or agent", parseActorKind)
     .requiredOption("--actor-name <name>", "proposal author name")
+    .option("--expected-action-basis-sha256 <hash>", "bind execution to the current action descriptor")
+    .option("--expected-plan-sha256 <hash>", "bind execution to the previewed proposal plan")
     .action(async (changeId: string, options: ProposeOptions, command: Command) => run("propose", command, () => handlePropose(changeId, options, commandContext("propose", command))));
   program.command("decide [item]").description("Resolve a pending human decision")
     .option("--decision <choice>", "accept, reject, or postpone", parseDecision)
     .option("--actor-name <name>", "human actor name")
     .option("--reason <text>", "decision rationale")
+    .option("--expected-action-basis-sha256 <hash>", "bind execution to the current action descriptor")
+    .option("--expected-plan-sha256 <hash>", "bind execution to the previewed decision plan")
     .action(async (item: string | undefined, options: DecideOptions, command: Command) => run("decide", command, () => handleDecide(item, options, commandContext("decide", command))));
   program.command("archive [item]").description("Archive a resolved change or draft patch")
     .action(async (item: string | undefined, _options: Record<string, never>, command: Command) => run("archive", command, () => handleArchive(item, commandContext("archive", command))));

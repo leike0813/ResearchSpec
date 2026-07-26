@@ -1,0 +1,32 @@
+@startuml
+title Dynamic Revision Round：每轮隔离、可重复、无推定上限
+skinparam shadowing false
+actor User
+participant "Host Agent / Pipeline" as Agent
+participant "ResearchSpec CLI" as CLI
+participant "academic-paper:revision" as Revise
+participant "reviewer:re-review" as ReReview
+database "Workspace" as Files
+
+CLI --> Agent : parent-scoped round n selector
+Agent -> CLI : Start tpl-pipeline-revision-round
+CLI -> Files : round Start receipt + instance state
+Agent -> Revise : start revision child
+Revise -> Files : revision artifacts via Submit
+Agent -> CLI : Advance revision-to-re-review
+Agent -> ReReview : start re-review child
+ReReview -> Files : verification artifacts via Submit
+CLI --> Agent : accepted / revision transition candidates
+Agent -> User : exact revision-outcome choices
+User --> Agent : explicit workflow_branch Decision
+Agent -> CLI : decide + complete round
+alt accepted
+  CLI -> Files : parent may advance to final-integrity
+else revision
+  CLI -> Files : complete round n and derive round n+1 frontier
+end
+note over CLI,Files
+  Round identity is derived from trusted parent/child receipts.
+  ARSU text does not own the counter or impose a runtime cap.
+end note
+@enduml

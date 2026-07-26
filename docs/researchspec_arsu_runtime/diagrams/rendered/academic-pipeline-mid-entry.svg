@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="564px" preserveAspectRatio="none" style="width:979px;height:564px;" version="1.1" viewBox="0 0 979 564" width="979px" zoomAndPan="magnify">
+<defs/>
+<g>
+<text fill="#000000" font-family="sans-serif" font-size="18" lengthAdjust="spacingAndGlyphs" textLength="544" x="216.75" y="26.708">Academic Pipeline mid-entry：材料识别不等于 branch Decision</text>
+<ellipse cx="469.5" cy="40.9531" fill="#000000" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;"/>
+<rect fill="#FEFECE" height="33.9688" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="272" x="333.5" y="70.9531"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="252" x="343.5" y="92.0918">User provides goal and existing material</text>
+<rect fill="#FEFECE" height="33.9688" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="243" x="348" y="124.9219"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="223" x="358" y="146.0605">Agent inspects registered evidence</text>
+<rect fill="#FEFECE" height="33.9688" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="266" x="336.5" y="178.8906"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="246" x="346.5" y="200.0293">CLI instructions expose the entry graph</text>
+<rect fill="#FEFECE" height="33.9688" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="230" x="354.5" y="232.8594"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="210" x="364.5" y="253.998">Start confirmed mid-entry subflow</text>
+<polygon fill="#FEFECE" points="32,286.8281,240,286.8281,252,298.8281,240,310.8281,32,310.8281,20,298.8281,32,286.8281" style="stroke: #A80036; stroke-width: 1.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="51" x="140" y="321.0386">research</text>
+<text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="208" x="32" y="302.6362">Accepted workflow_branch Decision?</text>
+<rect fill="#FEFECE" height="33.9688" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="114" x="79" y="343.6328"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="94" x="89" y="364.7715">Enter research</text>
+<polygon fill="#FEFECE" points="361,286.8281,389,286.8281,401,298.8281,389,310.8281,361,310.8281,349,298.8281,361,286.8281" style="stroke: #A80036; stroke-width: 1.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="28" x="361" y="302.6362">write</text>
+<rect fill="#FEFECE" height="33.9688" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="226" x="262" y="330.8281"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="206" x="272" y="351.9668">Require trusted synthesis_report</text>
+<rect fill="#FEFECE" height="33.9688" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="88" x="331" y="397.6016"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="68" x="341" y="418.7402">Enter write</text>
+<polygon fill="#FEFECE" points="575.5,286.8281,635.5,286.8281,647.5,298.8281,635.5,310.8281,575.5,310.8281,563.5,298.8281,575.5,286.8281" style="stroke: #A80036; stroke-width: 1.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="60" x="575.5" y="302.6362">pre-review</text>
+<text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="45" x="647.5" y="296.2339">revision</text>
+<rect fill="#FEFECE" height="33.9688" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="195" x="508" y="330.8281"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="175" x="518" y="351.9668">Require trusted paper_draft</text>
+<rect fill="#FEFECE" height="33.9688" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="177" x="517" y="397.6016"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="157" x="527" y="418.7402">Enter pre-review integrity</text>
+<rect fill="#FEFECE" height="33.9688" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="206" x="723" y="333.8281"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="186" x="733" y="354.9668">Require trusted review_report</text>
+<rect fill="#FEFECE" height="33.9688" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="147" x="752.5" y="400.6016"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="127" x="762.5" y="421.7402">Enter revision round</text>
+<path d="M599.5,471.4219 L599.5,487.5547 L579.5,491.5547 L599.5,495.5547 L599.5,511.6875 A0,0 0 0 0 599.5,511.6875 L967.5,511.6875 A0,0 0 0 0 967.5,511.6875 L967.5,481.4219 L957.5,471.4219 L599.5,471.4219 A0,0 0 0 0 599.5,471.4219 " fill="#FBFB77" style="stroke: #A80036; stroke-width: 1.0;"/>
+<path d="M957.5,471.4219 L957.5,481.4219 L967.5,481.4219 L957.5,471.4219 " fill="#FBFB77" style="stroke: #A80036; stroke-width: 1.0;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="347" x="605.5" y="488.4888">Material Passport may be imported only with this Start</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="259" x="605.5" y="503.6216">and remains non-authoritative evidence.</text>
+<rect fill="#FEFECE" height="33.9688" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="220" x="359.5" y="474.5703"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="200" x="369.5" y="495.709">Continue through normal profile</text>
+<ellipse cx="469.5" cy="542.6875" fill="#FFFFFF" rx="11" ry="11" style="stroke: #000000; stroke-width: 1.0;"/>
+<ellipse cx="469.5" cy="542.6875" fill="#000000" rx="6" ry="6" style="stroke: #7F7F7F; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="469.5" x2="469.5" y1="50.9531" y2="70.9531"/>
+<polygon fill="#A80036" points="465.5,60.9531,469.5,70.9531,473.5,60.9531,469.5,64.9531" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="469.5" x2="469.5" y1="104.9219" y2="124.9219"/>
+<polygon fill="#A80036" points="465.5,114.9219,469.5,124.9219,473.5,114.9219,469.5,118.9219" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="469.5" x2="469.5" y1="158.8906" y2="178.8906"/>
+<polygon fill="#A80036" points="465.5,168.8906,469.5,178.8906,473.5,168.8906,469.5,172.8906" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="469.5" x2="469.5" y1="212.8594" y2="232.8594"/>
+<polygon fill="#A80036" points="465.5,222.8594,469.5,232.8594,473.5,222.8594,469.5,226.8594" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="375" x2="375" y1="364.7969" y2="397.6016"/>
+<polygon fill="#A80036" points="371,387.6016,375,397.6016,379,387.6016,375,391.6016" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="605.5" x2="605.5" y1="364.7969" y2="397.6016"/>
+<polygon fill="#A80036" points="601.5,387.6016,605.5,397.6016,609.5,387.6016,605.5,391.6016" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="826" x2="826" y1="367.7969" y2="400.6016"/>
+<polygon fill="#A80036" points="822,390.6016,826,400.6016,830,390.6016,826,394.6016" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="136" x2="136" y1="310.8281" y2="343.6328"/>
+<polygon fill="#A80036" points="132,333.6328,136,343.6328,140,333.6328,136,337.6328" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="136" x2="136" y1="377.6016" y2="454.5703"/>
+<polygon fill="#A80036" points="132,444.5703,136,454.5703,140,444.5703,136,448.5703" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="375" x2="375" y1="310.8281" y2="330.8281"/>
+<polygon fill="#A80036" points="371,320.8281,375,330.8281,379,320.8281,375,324.8281" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="375" x2="375" y1="431.5703" y2="454.5703"/>
+<polygon fill="#A80036" points="371,444.5703,375,454.5703,379,444.5703,375,448.5703" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="605.5" x2="605.5" y1="310.8281" y2="330.8281"/>
+<polygon fill="#A80036" points="601.5,320.8281,605.5,330.8281,609.5,320.8281,605.5,324.8281" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="605.5" x2="605.5" y1="431.5703" y2="454.5703"/>
+<polygon fill="#A80036" points="601.5,444.5703,605.5,454.5703,609.5,444.5703,605.5,448.5703" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="252" x2="349" y1="298.8281" y2="298.8281"/>
+<polygon fill="#A80036" points="339,294.8281,349,298.8281,339,302.8281,343,298.8281" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="401" x2="563.5" y1="298.8281" y2="298.8281"/>
+<polygon fill="#A80036" points="553.5,294.8281,563.5,298.8281,553.5,302.8281,557.5,298.8281" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="469.5" x2="469.5" y1="266.8281" y2="271.8281"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="469.5" x2="136" y1="271.8281" y2="271.8281"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="136" x2="136" y1="271.8281" y2="286.8281"/>
+<polygon fill="#A80036" points="132,276.8281,136,286.8281,140,276.8281,136,280.8281" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="647.5" x2="826" y1="298.8281" y2="298.8281"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="826" x2="826" y1="298.8281" y2="333.8281"/>
+<polygon fill="#A80036" points="822,323.8281,826,333.8281,830,323.8281,826,327.8281" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="826" x2="826" y1="434.5703" y2="454.5703"/>
+<polygon fill="#A80036" points="822,444.5703,826,454.5703,830,444.5703,826,448.5703" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="136" x2="826" y1="454.5703" y2="454.5703"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="469.5" x2="469.5" y1="454.5703" y2="474.5703"/>
+<polygon fill="#A80036" points="465.5,464.5703,469.5,474.5703,473.5,464.5703,469.5,468.5703" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="469.5" x2="469.5" y1="508.5391" y2="531.6875"/>
+<polygon fill="#A80036" points="465.5,521.6875,469.5,531.6875,473.5,521.6875,469.5,525.6875" style="stroke: #A80036; stroke-width: 1.0;"/>
+<!--MD5=[d4b7ca68d4faa5a9495b99bc18dcbb83]
+@startuml
+title Academic Pipeline mid-entry：材料识别不等于 branch Decision
+skinparam shadowing false
+start
+:User provides goal and existing material;
+:Agent inspects registered evidence;
+:CLI instructions expose the entry graph;
+:Start confirmed mid-entry subflow;
+if (Accepted workflow_branch Decision?) then (research)
+  :Enter research;
+elseif (write)
+  :Require trusted synthesis_report;
+  :Enter write;
+elseif (pre-review)
+  :Require trusted paper_draft;
+  :Enter pre-review integrity;
+else (revision)
+  :Require trusted review_report;
+  :Enter revision round;
+endif
+:Continue through normal profile;
+note right
+  Material Passport may be imported only with this Start
+  and remains non-authoritative evidence.
+end note
+stop
+@enduml
+
+PlantUML version 1.2020.02(Sun Mar 01 18:22:07 CST 2020)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 21.0.11+10-1-24.04.2-Ubuntu
+Operating System: Linux
+Default Encoding: UTF-8
+Language: en
+Country: null
+-->
+</g>
+</svg>

@@ -23,6 +23,10 @@ export interface StatusView {
   blocking_gates: Array<Record<string, unknown>>;
 }
 
+interface ActionDescriptorView {
+  availability: { basis_sha256: string };
+}
+
 export interface SubflowPacket {
   selector: string;
   subject_kind: "template" | "child" | "instance";
@@ -36,6 +40,7 @@ export interface SubflowPacket {
   gates: Array<Record<string, unknown>>;
   transitions: Array<Record<string, unknown>>;
   instruction_basis_sha256: string;
+  action_descriptor: ActionDescriptorView;
   runtime?: { parent_subflow_id: string | null; parent_node_id?: string | null; round_number: number | null };
 }
 
@@ -46,6 +51,7 @@ export interface WorkPacket {
   dependencies: { artifacts: Array<{ artifact_type: string; artifact_ids: string[] }> };
   validation: { profile: string };
   completion: { submit_available: boolean };
+  action_descriptor: ActionDescriptorView;
 }
 
 export interface GatePacket {
@@ -53,6 +59,7 @@ export interface GatePacket {
   instruction_basis_sha256: string;
   evidence: Array<Record<string, unknown>>;
   latest_attempt: { event_id: string; verdict: string } | null;
+  action_descriptor: ActionDescriptorView;
 }
 
 export interface JourneyContext { root: string; workspace: string }
@@ -66,9 +73,16 @@ export function cliJson<T>(args: string[], cwd: string): Envelope<T> {
 }
 
 export function status(context: JourneyContext): StatusView {
-  const data = cliJson<StatusView>(["status"], context.root).data;
-  assert.ok(data);
-  return data;
+  const summary = cliJson<{ lifecycle: string }>(["status"], context.root).data;
+  const detail = cliJson<{ run: StatusView["run"]; workflow_control: WorkflowControlView }>(["show", "workflow:current"], context.root).data;
+  const actions = cliJson<{ items: Array<{ selector?: string }> }>(["list", "case-actions"], context.root).data;
+  assert.ok(summary && detail && actions);
+  return {
+    run: detail.run,
+    workflow_control: detail.workflow_control,
+    pending_items: actions.items.flatMap((item) => item.selector ? [item.selector] : []),
+    blocking_gates: detail.workflow_control.gates.filter((item) => item.state === "failed"),
+  };
 }
 
 export function instructions(context: JourneyContext, selector: string): unknown {
@@ -97,11 +111,11 @@ export async function startSubflow(context: JourneyContext, selector: string): P
   const inputPath = await writePayload(context, "start", payload);
   const base = ["start", selector, "--input", inputPath, "--actor-kind", "agent", "--actor-name", "acceptance-driver"];
   if (packet.subject_kind === "template") base.push("--confirmed-by", "Acceptance Researcher");
-  const preview = cliJson<{ plan_sha256: string; instance_selector: string }>([...base, "--dry-run"], context.root).data;
-  assert.ok(preview?.plan_sha256);
-  const execution = cliJson<{ instance_selector: string }>([...base, "--expected-plan-sha256", preview.plan_sha256, "--yes"], context.root).data;
-  assert.ok(execution?.instance_selector);
-  return execution.instance_selector;
+  const preview = cliJson<{ identity: { plan_sha256?: string } }>([...base, "--dry-run"], context.root).data;
+  assert.ok(preview?.identity.plan_sha256);
+  const execution = cliJson<{ identity: { selector: string } }>([...base, "--expected-action-basis-sha256", packet.action_descriptor.availability.basis_sha256, "--expected-plan-sha256", preview.identity.plan_sha256, "--yes"], context.root).data;
+  assert.match(execution?.identity.selector ?? "", /^subflow:sf-/);
+  return execution?.identity.selector ?? "";
 }
 
 export async function submitWork(context: JourneyContext, selector: string): Promise<void> {
@@ -118,9 +132,9 @@ export async function submitWork(context: JourneyContext, selector: string): Pro
   };
   const inputPath = await writePayload(context, "submit", payload);
   const base = ["submit", selector, "--input", inputPath, "--actor-kind", "agent", "--actor-name", packet.producer_skill];
-  const preview = cliJson<{ candidate_sha256: string }>([...base, "--dry-run"], context.root).data;
-  assert.ok(preview?.candidate_sha256);
-  cliJson([...base, "--expected-sha256", preview.candidate_sha256, "--yes"], context.root);
+  const preview = cliJson<{ identity: { sha256?: string } }>([...base, "--dry-run"], context.root).data;
+  assert.ok(preview?.identity.sha256);
+  cliJson([...base, "--expected-action-basis-sha256", packet.action_descriptor.availability.basis_sha256, "--expected-sha256", preview.identity.sha256, "--yes"], context.root);
 }
 
 export async function submitGate(context: JourneyContext, selector: string, verdict: "pass" | "fail", verificationKind: "initial" | "reverification" = "initial"): Promise<{ event_id: string }> {
@@ -137,30 +151,34 @@ export async function submitGate(context: JourneyContext, selector: string, verd
   };
   const inputPath = await writePayload(context, "gate", payload);
   const base = ["submit", selector, "--input", inputPath, "--actor-kind", "validator", "--actor-name", "researchspec-verify", "--confirmed-by", "Acceptance Researcher"];
-  const preview = cliJson<{ plan_sha256: string }>([...base, "--dry-run"], context.root).data;
-  assert.ok(preview?.plan_sha256);
-  const execution = cliJson<{ event: { event_id: string } }>([...base, "--expected-plan-sha256", preview.plan_sha256, "--yes"], context.root).data;
-  assert.ok(execution?.event.event_id);
-  return execution.event;
+  const preview = cliJson<{ identity: { plan_sha256?: string } }>([...base, "--dry-run"], context.root).data;
+  assert.ok(preview?.identity.plan_sha256);
+  const execution = cliJson<{ identity: { selector: string } }>([...base, "--expected-action-basis-sha256", packet.action_descriptor.availability.basis_sha256, "--expected-plan-sha256", preview.identity.plan_sha256, "--yes"], context.root).data;
+  const eventId = execution?.identity.selector.replace(/^gate-event:/, "") ?? "";
+  assert.ok(eventId);
+  return { event_id: eventId };
 }
 
 export function decideTransition(context: JourneyContext, selector: string): void {
+  const packet = instructions(context, selector) as { action_descriptor: ActionDescriptorView };
   const base = ["decide", selector, "--decision", "accept", "--actor-name", "Acceptance Researcher", "--reason", "Selected by acceptance journey"];
-  cliJson([...base, "--dry-run"], context.root);
-  cliJson(base, context.root);
+  const preview = cliJson<{ identity: { plan_sha256?: string } }>([...base, "--dry-run"], context.root).data;
+  cliJson([...base, "--expected-action-basis-sha256", packet.action_descriptor.availability.basis_sha256, "--expected-plan-sha256", preview?.identity.plan_sha256 ?? "", "--yes"], context.root);
 }
 
 export function overrideGate(context: JourneyContext, selector: string): void {
+  const packet = instructions(context, selector) as { action_descriptor: ActionDescriptorView };
   const base = ["decide", selector, "--decision", "accept", "--actor-name", "Acceptance Researcher", "--reason", "Explicit acceptance override"];
-  cliJson([...base, "--dry-run"], context.root);
-  cliJson(base, context.root);
+  const preview = cliJson<{ identity: { plan_sha256?: string } }>([...base, "--dry-run"], context.root).data;
+  cliJson([...base, "--expected-action-basis-sha256", packet.action_descriptor.availability.basis_sha256, "--expected-plan-sha256", preview?.identity.plan_sha256 ?? "", "--yes"], context.root);
 }
 
 export function advanceTransition(context: JourneyContext, selector: string): void {
+  const packet = instructions(context, selector) as { action_descriptor: ActionDescriptorView };
   const base = ["advance", selector, "--actor-kind", "agent", "--actor-name", "acceptance-driver"];
-  const preview = cliJson<{ plan_sha256: string }>([...base, "--dry-run"], context.root).data;
-  assert.ok(preview?.plan_sha256);
-  cliJson([...base, "--expected-plan-sha256", preview.plan_sha256, "--yes"], context.root);
+  const preview = cliJson<{ identity: { plan_sha256?: string } }>([...base, "--dry-run"], context.root).data;
+  assert.ok(preview?.identity.plan_sha256);
+  cliJson([...base, "--expected-action-basis-sha256", packet.action_descriptor.availability.basis_sha256, "--expected-plan-sha256", preview.identity.plan_sha256, "--yes"], context.root);
 }
 
 export async function drive(context: JourneyContext, rootSelector: string, choose: (candidates: WorkflowControlView["transitions"]) => string = chooseAccepted): Promise<StatusView> {

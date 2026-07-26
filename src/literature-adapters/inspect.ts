@@ -30,7 +30,7 @@ export interface LiteratureAdapterInspection {
     sha256: string | null;
   };
   skills: {
-    skill_ids: [string, string];
+    skill_ids: string[];
     projection_state: "complete" | "deferred" | "incomplete";
     expected_tool_ids: string[];
     projected_tool_ids: string[];
@@ -224,7 +224,7 @@ export async function inspectLiteratureAdapters(
       target_platform: targetPlatform,
       runtime: { supported: platformResolution.supported, installed_path: installedPath, sha256: runtimeSha256 },
       skills: {
-        skill_ids: [adapter.primary_skill_id, adapter.helper_skill_id],
+        skill_ids: adapter.skills.map((skill) => skill.skill_id),
         projection_state: projectionState,
         expected_tool_ids: selectedToolIds,
         projected_tool_ids: completeTools,
@@ -297,10 +297,9 @@ function resolutionMatchesCatalog(
   return resolution.release_set_id === adapter.identity.release_set_id
     && resolution.bundle_version === adapter.versions.bundle
     && resolution.cli_version === adapter.versions.cli
-    && resolution.skill_ids[0] === adapter.primary_skill_id
-    && resolution.skill_ids[1] === adapter.helper_skill_id
-    && resolution.skill_versions[adapter.primary_skill_id] === adapter.versions.skills[adapter.primary_skill_id]
-    && resolution.skill_versions[adapter.helper_skill_id] === adapter.versions.skills[adapter.helper_skill_id]
+    && sameOrderedStrings(resolution.skill_ids, adapter.skills.map((skill) => skill.skill_id))
+    && adapter.skills.every((skill) => resolution.skill_versions[skill.skill_id] === skill.version)
+    && Object.keys(resolution.skill_versions).length === adapter.skills.length
     && resolution.target_platform === targetPlatform
     && (runtimeSupported
       ? resolution.runtime_asset?.protocol === adapter.identity.protocol
@@ -325,6 +324,10 @@ function stringArray(value: unknown): string[] {
 
 function sameStrings(left: readonly string[], right: readonly string[]): boolean {
   return [...left].sort().join("\0") === [...right].sort().join("\0");
+}
+
+function sameOrderedStrings(left: readonly string[], right: readonly string[]): boolean {
+  return left.length === right.length && left.every((value, index) => value === right[index]);
 }
 
 function posix(value: string): string {

@@ -1,0 +1,42 @@
+@startuml
+title Academic Paper Reviewer：只读评审语义与外层控制
+skinparam shadowing false
+actor User
+participant "Host Agent" as Agent
+participant "ResearchSpec CLI" as CLI
+participant "academic-paper-reviewer\n7-agent team" as Reviewer
+database "Workspace" as Files
+
+Agent -> CLI : status + route instructions
+CLI --> Agent : one of 6 routes, registered manuscript,
+CLI --> Agent : output DAG and Gate policy
+Agent -> User : route and read-only boundary
+User --> Agent : confirm route
+Agent -> CLI : Start
+CLI -> Files : receipt then subflow state
+
+loop each declared review artifact
+  Agent -> CLI : scoped work instructions
+  CLI --> Agent : manuscript/evidence reads + output path
+  Agent -> Reviewer : perform bounded review
+  note over Reviewer
+    Internal full route:
+    field analysis -> independent five-person panel
+    -> editorial synthesis and roadmap.
+    Panel parallelism is semantic, not CLI work parallelism.
+  end note
+  Reviewer -> Files : separate review candidate
+  note right of Files : Manuscript is never rewritten.
+  Agent -> CLI : hash-bound Submit
+  CLI -> Files : submit receipt + registry
+end
+
+opt required route Gate
+  Agent -> User : Verify review-quality verdict
+  User --> Agent : confirm Gate
+  Agent -> CLI : submit Gate
+  CLI -> Files : Gate receipt + ledger
+end
+Agent -> CLI : Advance completion
+CLI -> Files : receipt + state
+@enduml

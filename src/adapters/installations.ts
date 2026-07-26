@@ -90,7 +90,7 @@ export const LiteratureAdapterResolutionSchema = z.strictObject({
   skill_versions: z.record(IdentifierSchema, IdentifierSchema),
   target_platform: IdentifierSchema,
   runtime_asset: LiteratureAdapterRuntimeResolutionSchema.nullable(),
-  skill_ids: z.tuple([IdentifierSchema, IdentifierSchema]),
+  skill_ids: z.array(IdentifierSchema).min(1),
   projected_tool_ids: z.array(IdentifierSchema),
   projection_state: z.enum(["complete", "deferred", "incomplete"]),
 });

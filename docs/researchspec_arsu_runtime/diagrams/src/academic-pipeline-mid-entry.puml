@@ -1,0 +1,27 @@
+@startuml
+title Academic Pipeline mid-entry：材料识别不等于 branch Decision
+skinparam shadowing false
+start
+:User provides goal and existing material;
+:Agent inspects registered evidence;
+:CLI instructions expose the entry graph;
+:Start confirmed mid-entry subflow;
+if (Accepted workflow_branch Decision?) then (research)
+  :Enter research;
+elseif (write)
+  :Require trusted synthesis_report;
+  :Enter write;
+elseif (pre-review)
+  :Require trusted paper_draft;
+  :Enter pre-review integrity;
+else (revision)
+  :Require trusted review_report;
+  :Enter revision round;
+endif
+:Continue through normal profile;
+note right
+  Material Passport may be imported only with this Start
+  and remains non-authoritative evidence.
+end note
+stop
+@enduml

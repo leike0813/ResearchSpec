@@ -5,8 +5,9 @@ import path from "node:path";
 import { test } from "node:test";
 import { stringify } from "yaml";
 
+import { WorkflowDefinitionSchema } from "../src/core/contracts/workflow.js";
 import { buildSubflowInstructions, executeSubflowStart, planSubflowStart } from "../src/core/runtime/subflow-control.js";
-import { buildWorkflowInstructions, evaluateWorkflowControl } from "../src/core/runtime/workflow-control.js";
+import { buildWorkflowInstructions, evaluateStartActionAvailability, evaluateWorkflowControl } from "../src/core/runtime/workflow-control.js";
 import { runWorkspaceChecks } from "../src/core/validation/check.js";
 import { getWorkspaceEntries } from "../src/core/workspace/layout.js";
 import { loadWorkspaceSnapshot } from "../src/core/workspace/snapshot.js";
@@ -17,8 +18,15 @@ void test("current workflow exposes only a confirmed subflow frontier and scoped
   try {
     const workspace = path.join(root, "researchspec");
     let snapshot = await loadWorkspaceSnapshot(workspace);
+    assert.equal(snapshot.runState?.schema_version, "0.2");
+    assert.equal(snapshot.workflow?.schema_version, "0.2");
     const initial = await evaluateWorkflowControl(snapshot);
     assert.deepEqual(initial.startable_subflows, ["subflow:tpl-research"]);
+    assert.equal(initial.configured, true);
+    assert.equal(initial.valid, true);
+    assert.equal(initial.state, "not_started");
+    assert.deepEqual(initial.frontier, initial.startable_subflows);
+    assert.equal(evaluateStartActionAvailability(snapshot, initial, "subflow:tpl-research").disposition, "allowed");
     assert.equal("active_stage_id" in initial, false);
     const instructions = await buildSubflowInstructions(snapshot, "subflow:tpl-research");
     assert.equal(instructions.ok, true);
@@ -33,6 +41,29 @@ void test("current workflow exposes only a confirmed subflow frontier and scoped
     assert.equal(work.ok, true);
     if (work.ok) assert.equal(work.packet.validation.profile, "text-artifact");
   } finally { await rm(root, { recursive: true, force: true }); }
+});
+
+void test("Schema 0.2 legacy transition effects normalize in memory only", () => {
+  const legacy = structuredClone(TEST_WORKFLOW) as unknown as {
+    subflow_templates: Array<{ transitions: Array<Record<string, unknown>> }>;
+  };
+  const transition = legacy.subflow_templates[0]?.transitions[0];
+  assert.ok(transition);
+  const effects = transition.effects;
+  delete transition.effects;
+  transition.effect = (effects as unknown[])[0];
+
+  const parsed = WorkflowDefinitionSchema.parse(legacy);
+  assert.deepEqual(parsed.subflow_templates[0]?.transitions[0]?.effects, [{ kind: "complete_subflow" }]);
+  assert.equal("effect" in transition, true);
+  assert.equal("effects" in transition, false);
+  assert.equal(WorkflowDefinitionSchema.safeParse({
+    ...legacy,
+    subflow_templates: [{
+      ...legacy.subflow_templates[0],
+      transitions: [{ ...transition, effects: [{ kind: "complete_subflow" }] }],
+    }],
+  }).success, false);
 });
 
 void test("static workflow and run-state contracts are rejected", async () => {

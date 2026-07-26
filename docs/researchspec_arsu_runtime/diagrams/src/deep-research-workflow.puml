@@ -1,0 +1,43 @@
+@startuml
+title Deep Research：ARSU 内层语义与 ResearchSpec 外层控制
+skinparam shadowing false
+actor User
+participant "Host Agent" as Agent
+participant "ResearchSpec CLI" as CLI
+participant "deep-research\n13-agent team" as ARSU
+database "Workspace" as Files
+
+Agent -> CLI : status + route instructions
+CLI --> Agent : one of 8 routes, prerequisites,
+CLI --> Agent : artifact DAG, Gate, risk and cost
+Agent -> User : route summary
+User --> Agent : confirm exact route
+Agent -> CLI : Start
+CLI -> Files : receipt then subflow state
+
+loop artifact work frontier
+  Agent -> CLI : instructions work:<scoped-node>
+  CLI --> Agent : declared input/output boundary
+  Agent -> ARSU : invoke selected route for this artifact
+  note over ARSU
+    Semantic procedure as applicable:
+    scoping -> investigation -> analysis
+    -> composition -> review -> revision
+    Systematic routes add risk-of-bias/meta-analysis;
+    Socratic and monitoring roles are route-specific.
+  end note
+  ARSU -> Files : candidate artifact only
+  Agent -> CLI : hash-bound Submit
+  CLI -> Files : submit receipt + registry
+end
+
+opt required route Gate
+  Agent -> CLI : gate instructions
+  Agent -> User : Verify verdict and evidence
+  User --> Agent : explicit confirmation
+  Agent -> CLI : submit formal Gate
+  CLI -> Files : Gate receipt + ledger
+end
+Agent -> CLI : Advance complete transition
+CLI -> Files : transition receipt + state
+@enduml

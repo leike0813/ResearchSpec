@@ -6,7 +6,23 @@ import path from "node:path";
 const CLI = path.resolve(".test-dist/src/cli/bin.js");
 
 export interface CliProcessResult { status: number | null; stdout: string; stderr: string }
-export interface Envelope<T = unknown> { schema_version: string; command: string; ok: boolean; data: T | null; diagnostics: unknown[]; error?: { code?: string; message?: string } }
+export interface Envelope<T = unknown> {
+  schema_version: string;
+  command: string;
+  ok: boolean;
+  data: T | null;
+  diagnostics: unknown[];
+  error?: {
+    code?: string;
+    message?: string;
+    validation?: Array<{
+      code: string;
+      field_path: string;
+      expectation: string;
+      schema_ref: string;
+    }>;
+  };
+}
 
 export function runCli(args: string[], cwd = process.cwd(), env?: NodeJS.ProcessEnv): CliProcessResult {
   const result = spawnSync(process.execPath, [CLI, ...args], { cwd, encoding: "utf8", env: { ...process.env, ...env } });

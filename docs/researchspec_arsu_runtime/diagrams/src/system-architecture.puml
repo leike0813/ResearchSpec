@@ -1,0 +1,48 @@
+@startuml
+title ResearchSpec 与 ARSU：系统架构和权威边界
+skinparam componentStyle rectangle
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+actor "Researcher" as User
+rectangle "Host Agent\n(Codex / Claude / etc.)" as Host
+
+package "Semantic plane" {
+  component "4 ARSU Skills\ndeep-research\nacademic-paper\nreviewer\npipeline" as ARSU
+  component "4 Companion Skills\nnavigate / propose\ndecide / verify" as Companion
+  component "Optional domain Skills" as Plugin
+  component "Zotero literature\nadapter Skills" as Zotero
+}
+
+package "Deterministic control plane" {
+  component "ResearchSpec CLI\nstatus / instructions\nstart / submit / advance" as CLI
+  component "Workflow evaluator\nprofile + evidence -> frontier" as Eval
+}
+
+database "Typed workspace files\nstable specs\nstate / registry\nGate + Decision ledgers\nreceipts / changes / patches" as Files
+
+package "Build and delivery time" {
+  component "ARSU converter" as Converter
+  artifact "routing catalog\nworkflow catalog\ngenerated Skills" as Catalog
+}
+
+User --> Host : goal, confirmation, decision
+Host --> Companion : route / verify / decide
+Host --> ARSU : semantic production
+ARSU --> Plugin : bounded advisory help
+ARSU --> Zotero : bounded literature input
+Host --> CLI : canonical selectors + strict payloads
+CLI --> Eval
+Eval --> Files : read profile and evidence
+CLI --> Files : authority writes\nthrough transactions only
+Plugin ..> ARSU : working material
+Zotero ..> ARSU : working material
+Converter --> Catalog
+Catalog ..> ARSU : projected instructions
+Catalog ..> Eval : arsu-v0-1 profile
+
+note right of Files
+  ARSU, Companion, plugins and adapters
+  never hand-edit authority files.
+end note
+@enduml

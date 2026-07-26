@@ -1,0 +1,34 @@
+@startuml
+title 高影响研究语义的 current / proposed 生命周期
+skinparam shadowing false
+start
+:Inspect stable contract and evidence;
+:Propose creates proposal.md,
+tasks.md and contract-patch.yaml;
+note right
+  Stable specs and ledgers
+  remain unchanged.
+end note
+:Human reviews exact current/proposed values,
+evidence, risk and write plan;
+if (Decision?) then (accept)
+  :Revalidate target, current value
+  and evidence;
+  :Apply stable spec;
+  :Write apply receipt and registry evidence;
+  :Update patch lifecycle;
+  :Append Decision ledger last;
+elseif (reject)
+  :Resolve lifecycle without applying;
+  :Append rejection Decision;
+else (postpone)
+  :Append non-terminal Decision event;
+  :Keep item pending;
+endif
+if (Resolved with trusted evidence?) then (yes)
+  :Archive change or draft patch;
+else (no)
+  :Remain visible for review;
+endif
+stop
+@enduml

@@ -22,3 +22,4 @@
 [submodule "vendor/zotero-library-agent-bundle"]
 	path = vendor/zotero-library-agent-bundle
 	url = https://github.com/leike0813/zotero-library-agent-bundle
+	branch = main

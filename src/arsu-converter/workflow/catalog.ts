@@ -80,7 +80,7 @@ function formalGates(route: ArsuRouteDefinition): GateTemplateDefinition[] {
 }
 
 function completeTransition(route: ArsuRouteDefinition, gates: GateTemplateDefinition[]): TransitionTemplateDefinition {
-  return { id: "complete", from_stage_id: "work", effect: { kind: "complete_subflow" }, requires: { gate_ids: gates.map((gate) => gate.id), decision_types: [] }, branch: null };
+  return { id: "complete", from_stage_id: "work", effects: [{ kind: "complete_subflow" }], requires: { gate_ids: gates.map((gate) => gate.id), decision_types: [] }, branch: null };
 }
 
 function externalTemplate(route: ArsuRouteDefinition): SubflowTemplateDefinition {
@@ -116,21 +116,21 @@ function pipelineGates(): GateTemplateDefinition[] {
 
 function pipelineTransitions(includeEntry: boolean): TransitionTemplateDefinition[] {
   const transitions: TransitionTemplateDefinition[] = [
-    { id: "research-to-write", from_stage_id: "research", effect: { kind: "activate_stage", stage_id: "write" }, requires: { gate_ids: [], decision_types: [] }, branch: null },
-    { id: "write-to-pre-review", from_stage_id: "write", effect: { kind: "activate_stage", stage_id: "pre-review" }, requires: { gate_ids: [], decision_types: [] }, branch: null },
-    { id: "pre-review-to-review", from_stage_id: "pre-review", effect: { kind: "activate_stage", stage_id: "review" }, requires: { gate_ids: ["pre-review-integrity"], decision_types: [] }, branch: null },
-    { id: "accept-review", from_stage_id: "review", effect: { kind: "activate_stage", stage_id: "final-integrity" }, requires: { gate_ids: ["review-confirmation"], decision_types: ["workflow_branch"] }, branch: { decision_point_id: "editorial-outcome", option_id: "accepted" } },
-    { id: "revise-review", from_stage_id: "review", effect: { kind: "activate_stage", stage_id: "revision" }, requires: { gate_ids: ["review-confirmation"], decision_types: ["workflow_branch"] }, branch: { decision_point_id: "editorial-outcome", option_id: "revision" } },
-    { id: "rounds-to-final", from_stage_id: "revision", effect: { kind: "activate_stage", stage_id: "final-integrity" }, requires: { gate_ids: [], decision_types: [] }, branch: null },
-    { id: "final-integrity-to-finalize", from_stage_id: "final-integrity", effect: { kind: "activate_stage", stage_id: "finalize" }, requires: { gate_ids: ["final-integrity"], decision_types: [] }, branch: null },
-    { id: "finalize-to-summary", from_stage_id: "finalize", effect: { kind: "activate_stage", stage_id: "summary" }, requires: { gate_ids: [], decision_types: [] }, branch: null },
-    { id: "complete-pipeline", from_stage_id: "summary", effect: { kind: "complete_subflow" }, requires: { gate_ids: [], decision_types: [] }, branch: null },
+    { id: "research-to-write", from_stage_id: "research", effects: [{ kind: "activate_stage", stage_id: "write" }], requires: { gate_ids: [], decision_types: [] }, branch: null },
+    { id: "write-to-pre-review", from_stage_id: "write", effects: [{ kind: "activate_stage", stage_id: "pre-review" }], requires: { gate_ids: [], decision_types: [] }, branch: null },
+    { id: "pre-review-to-review", from_stage_id: "pre-review", effects: [{ kind: "activate_stage", stage_id: "review" }], requires: { gate_ids: ["pre-review-integrity"], decision_types: [] }, branch: null },
+    { id: "accept-review", from_stage_id: "review", effects: [{ kind: "activate_stage", stage_id: "final-integrity" }], requires: { gate_ids: ["review-confirmation"], decision_types: ["workflow_branch"] }, branch: { decision_point_id: "editorial-outcome", option_id: "accepted" } },
+    { id: "revise-review", from_stage_id: "review", effects: [{ kind: "activate_stage", stage_id: "revision" }], requires: { gate_ids: ["review-confirmation"], decision_types: ["workflow_branch"] }, branch: { decision_point_id: "editorial-outcome", option_id: "revision" } },
+    { id: "rounds-to-final", from_stage_id: "revision", effects: [{ kind: "activate_stage", stage_id: "final-integrity" }], requires: { gate_ids: [], decision_types: [] }, branch: null },
+    { id: "final-integrity-to-finalize", from_stage_id: "final-integrity", effects: [{ kind: "activate_stage", stage_id: "finalize" }], requires: { gate_ids: ["final-integrity"], decision_types: [] }, branch: null },
+    { id: "finalize-to-summary", from_stage_id: "finalize", effects: [{ kind: "activate_stage", stage_id: "summary" }], requires: { gate_ids: [], decision_types: [] }, branch: null },
+    { id: "complete-pipeline", from_stage_id: "summary", effects: [{ kind: "complete_subflow" }, { kind: "complete_run" }], requires: { gate_ids: [], decision_types: [] }, branch: null },
   ];
   if (includeEntry) transitions.unshift(
-    { id: "enter-research", from_stage_id: "entry", effect: { kind: "activate_stage", stage_id: "research" }, requires: { gate_ids: [], decision_types: ["workflow_branch"], artifact_types: [] }, branch: { decision_point_id: "pipeline-entry", option_id: "research" } },
-    { id: "enter-write", from_stage_id: "entry", effect: { kind: "activate_stage", stage_id: "write" }, requires: { gate_ids: [], decision_types: ["workflow_branch"], artifact_types: ["synthesis_report"] }, branch: { decision_point_id: "pipeline-entry", option_id: "write" } },
-    { id: "enter-pre-review", from_stage_id: "entry", effect: { kind: "activate_stage", stage_id: "pre-review" }, requires: { gate_ids: [], decision_types: ["workflow_branch"], artifact_types: ["paper_draft"] }, branch: { decision_point_id: "pipeline-entry", option_id: "pre-review" } },
-    { id: "enter-revision", from_stage_id: "entry", effect: { kind: "activate_stage", stage_id: "revision" }, requires: { gate_ids: [], decision_types: ["workflow_branch"], artifact_types: ["review_report"] }, branch: { decision_point_id: "pipeline-entry", option_id: "revision" } },
+    { id: "enter-research", from_stage_id: "entry", effects: [{ kind: "activate_stage", stage_id: "research" }], requires: { gate_ids: [], decision_types: ["workflow_branch"], artifact_types: [] }, branch: { decision_point_id: "pipeline-entry", option_id: "research" } },
+    { id: "enter-write", from_stage_id: "entry", effects: [{ kind: "activate_stage", stage_id: "write" }], requires: { gate_ids: [], decision_types: ["workflow_branch"], artifact_types: ["synthesis_report"] }, branch: { decision_point_id: "pipeline-entry", option_id: "write" } },
+    { id: "enter-pre-review", from_stage_id: "entry", effects: [{ kind: "activate_stage", stage_id: "pre-review" }], requires: { gate_ids: [], decision_types: ["workflow_branch"], artifact_types: ["paper_draft"] }, branch: { decision_point_id: "pipeline-entry", option_id: "pre-review" } },
+    { id: "enter-revision", from_stage_id: "entry", effects: [{ kind: "activate_stage", stage_id: "revision" }], requires: { gate_ids: [], decision_types: ["workflow_branch"], artifact_types: ["review_report"] }, branch: { decision_point_id: "pipeline-entry", option_id: "revision" } },
   );
   return transitions;
 }
@@ -171,9 +171,9 @@ function roundTemplate(): SubflowTemplateDefinition {
     ],
     subflow_parallel_groups: [], gates: [], advisory_gate_kinds: [],
     transitions: [
-      { id: "revision-to-re-review", from_stage_id: "revise", effect: { kind: "activate_stage", stage_id: "re-review" }, requires: { gate_ids: [], decision_types: [] }, branch: null },
-      { id: "accept-round", from_stage_id: "re-review", effect: { kind: "complete_subflow" }, requires: { gate_ids: [], decision_types: ["workflow_branch"] }, branch: { decision_point_id: "revision-outcome", option_id: "accepted" } },
-      { id: "revise-round", from_stage_id: "re-review", effect: { kind: "complete_subflow" }, requires: { gate_ids: [], decision_types: ["workflow_branch"] }, branch: { decision_point_id: "revision-outcome", option_id: "revision" } },
+      { id: "revision-to-re-review", from_stage_id: "revise", effects: [{ kind: "activate_stage", stage_id: "re-review" }], requires: { gate_ids: [], decision_types: [] }, branch: null },
+      { id: "accept-round", from_stage_id: "re-review", effects: [{ kind: "complete_subflow" }], requires: { gate_ids: [], decision_types: ["workflow_branch"] }, branch: { decision_point_id: "revision-outcome", option_id: "accepted" } },
+      { id: "revise-round", from_stage_id: "re-review", effects: [{ kind: "complete_subflow" }], requires: { gate_ids: [], decision_types: ["workflow_branch"] }, branch: { decision_point_id: "revision-outcome", option_id: "revision" } },
     ],
   };
 }

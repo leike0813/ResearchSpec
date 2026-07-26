@@ -78,9 +78,12 @@ The locked direction is:
 The fixed user-visible agent surface is exactly four ARSU Skills
 (`deep-research`, `academic-paper`, `academic-paper-reviewer`,
 `academic-pipeline`) and four Companion Skills (`researchspec-navigate`,
-`researchspec-propose`, `researchspec-decide`, `researchspec-verify`), plus two
+`researchspec-propose`, `researchspec-decide`, `researchspec-verify`), plus seven
 fixed Zotero literature Adapter Skills (`zotero-library-agent`,
-`zotero-bridge-cli`). The 31 registered tools therefore receive ten fixed
+`zotero-library-query`, `zotero-literature-acquisition`,
+`zotero-literature-analysis`, `zotero-research-synthesis`,
+`zotero-library-curation`, `zotero-bridge-cli`). The 31 registered tools
+therefore receive fifteen fixed
 Skills, while the 28 command-capable tools still receive only eight wrappers.
 Optional
 ResearchSpec-maintained domain plugin Skills may extend that base surface from
@@ -92,7 +95,10 @@ ResearchSpec-maintained domain plugin Skills may extend that base surface from
 contact Zotero. Bundle, CLI, and Skill versions are component-local identities:
 never compare their patch versions with one another or reject an update merely
 because those patch versions differ. Admission follows the fixed release-set,
-protocol/schema, build fingerprint, command checksum and reviewed hashes.
+protocol/schema, build fingerprint, command checksum and reviewed hashes. The
+seven runner files and seven output schemas are opaque runtime metadata:
+conversion, delivery, status, checking and packaging preserve their bytes but
+never execute or interpret them.
 
 The target public CLI has sixteen top-level commands: `init`, `update`, `status`,
 `instructions`, `start`, `submit`, `advance`, `check`, `list`, `show`, `handoff`,

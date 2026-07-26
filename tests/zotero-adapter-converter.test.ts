@@ -8,19 +8,36 @@ import { promisify } from "node:util";
 
 import { sha256 } from "../src/core/workspace/write-plan.js";
 import { checkZoteroIdempotence, checkZoteroOutput, convertZoteroBundle } from "../src/vendor-converters/zotero-library-agent-bundle/converter.js";
-import { loadZoteroBundleAudit, renderZoteroBundleAuditReport } from "../src/vendor-audits/zotero-library-agent-bundle.js";
+import {
+  checkZoteroBundleAudit,
+  loadZoteroBundleAudit,
+  renderZoteroBundleAuditReport,
+  ZOTERO_BUNDLE_AUDIT_RELATIVE_PATH,
+  ZOTERO_BUNDLE_RELEASE_SET_ID,
+  ZoteroBundleAuditSchema,
+} from "../src/vendor-audits/zotero-library-agent-bundle.js";
 
 const execFileAsync = promisify(execFile);
 
 void test("Zotero immutable audit covers the complete approved tag tree", async () => {
   const audit = await loadZoteroBundleAudit(process.cwd());
+  assert.deepEqual(await checkZoteroBundleAudit(process.cwd()), audit);
   assert.equal(audit.files.length, audit.counts.tracked_files);
-  assert.equal(audit.counts.tracked_files, 65);
-  assert.equal(audit.counts.included, 56);
-  assert.equal(audit.counts.excluded, 9);
+  assert.equal(audit.counts.tracked_files, 176);
+  assert.equal(audit.counts.included, 172);
+  assert.equal(audit.counts.excluded, 4);
+  assert.equal(audit.skills.length, 7);
+  assert.equal(audit.opaque_runtime_metadata.length, 14);
   assert.equal(audit.review.cross_component_patch_equality_required, false);
   assert.equal(audit.identity.runtimes.length, 7);
-  assert.equal(await readFile("audits/zotero-library-agent-bundle/hbrs-3d834c0f075f3122ac566e9a/report.md", "utf8"), renderZoteroBundleAuditReport(audit));
+  assert.equal(await readFile(`audits/zotero-library-agent-bundle/${ZOTERO_BUNDLE_RELEASE_SET_ID}/report.md`, "utf8"), renderZoteroBundleAuditReport(audit));
+
+  const invalidDependency = structuredClone(audit);
+  invalidDependency.skills[0]?.hard_skill_dependencies.push("zotero-library-agent");
+  assert.equal(ZoteroBundleAuditSchema.safeParse(invalidDependency).success, false);
+  const invalidOpaqueHash = structuredClone(audit);
+  if (invalidOpaqueHash.opaque_runtime_metadata[0]) invalidOpaqueHash.opaque_runtime_metadata[0].sha256 = "0".repeat(64);
+  assert.equal(ZoteroBundleAuditSchema.safeParse(invalidOpaqueHash).success, false);
 });
 
 void test("Zotero generated adapter output is admitted and byte-identical", async () => {
@@ -33,14 +50,28 @@ void test("Zotero generated adapter output is admitted and byte-identical", asyn
     runtime_platforms: string[];
     generated_skill_ids: string[];
   };
-  assert.equal(manifest.release_set_id, "hbrs-3d834c0f075f3122ac566e9a");
+  assert.equal(manifest.release_set_id, "hbrs-f9f28ddce98be3008e13bbdb");
   assert.equal(manifest.runtime_platforms.length, 7);
-  assert.deepEqual(manifest.generated_skill_ids, ["zotero-library-agent", "zotero-bridge-cli"]);
-  for (const excluded of ["install.sh", "install.ps1", "skills/zotero-library-agent/agents/openai.yaml", "skills/zotero-library-agent/assets/runner.json", "skills/zotero-library-agent/assets/output.schema.json"]) {
+  assert.deepEqual(manifest.generated_skill_ids, [
+    "zotero-library-agent",
+    "zotero-library-query",
+    "zotero-literature-acquisition",
+    "zotero-literature-analysis",
+    "zotero-research-synthesis",
+    "zotero-library-curation",
+    "zotero-bridge-cli",
+  ]);
+  for (const excluded of ["install.sh", "install.ps1", "skills/zotero-library-agent/agents/openai.yaml"]) {
     await assert.rejects(stat(path.join("literature-adapters/zotero", excluded)));
   }
+  const audit = await loadZoteroBundleAudit(process.cwd());
+  for (const metadata of audit.opaque_runtime_metadata) {
+    const bytes = await readFile(path.join("literature-adapters/zotero", metadata.path));
+    assert.equal(bytes.byteLength, metadata.bytes);
+    assert.equal(sha256(bytes), metadata.sha256);
+  }
   const runtime = await readFile("literature-adapters/zotero/bin/linux-x64/zotero-bridge");
-  assert.equal(sha256(runtime), "18510ca1f85d1ffa1a5c9e5375078f1af5dbd7295fb5478f0a7d35b3e552b64a");
+  assert.equal(sha256(runtime), "de902311dfc357657cfd94b11012c4141108cd97468bf4d6157f07c2a4e96060");
   if (process.platform !== "win32") assert.equal((await stat("literature-adapters/zotero/bin/linux-x64/zotero-bridge")).mode & 0o111, 0o111);
 });
 
@@ -49,8 +80,8 @@ void test("dirty Zotero source blocks conversion before output", async () => {
   try {
     await mkdir(path.join(root, "vendor"), { recursive: true });
     await execFileAsync("git", ["clone", "--quiet", "--no-hardlinks", path.resolve("vendor/zotero-library-agent-bundle"), path.join(root, "vendor/zotero-library-agent-bundle")]);
-    await mkdir(path.join(root, "audits/zotero-library-agent-bundle/hbrs-3d834c0f075f3122ac566e9a"), { recursive: true });
-    await cp("audits/zotero-library-agent-bundle/hbrs-3d834c0f075f3122ac566e9a", path.join(root, "audits/zotero-library-agent-bundle/hbrs-3d834c0f075f3122ac566e9a"), { recursive: true });
+    await mkdir(path.dirname(path.join(root, ZOTERO_BUNDLE_AUDIT_RELATIVE_PATH)), { recursive: true });
+    await cp(path.dirname(ZOTERO_BUNDLE_AUDIT_RELATIVE_PATH), path.dirname(path.join(root, ZOTERO_BUNDLE_AUDIT_RELATIVE_PATH)), { recursive: true });
     await mkdir(path.join(root, "LICENSES"), { recursive: true });
     await cp("LICENSES/AGPL-3.0.txt", path.join(root, "LICENSES/AGPL-3.0.txt"));
     await writeFile(path.join(root, "vendor/zotero-library-agent-bundle/README.md"), "dirty source", "utf8");

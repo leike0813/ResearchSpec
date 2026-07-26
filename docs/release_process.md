@@ -13,6 +13,7 @@ pnpm lint
 pnpm check
 pnpm arsu:check
 pnpm arsu:idempotence
+pnpm zotero-adapter:audit
 pnpm zotero-adapter:check
 pnpm zotero-adapter:idempotence
 pnpm tooluniverse:check
@@ -34,7 +35,7 @@ pnpm dlx @fission-ai/openspec@1.5.0 validate --specs --strict --no-interactive
 git diff --check
 ```
 
-`release:verify` runs the package lifecycle, inspects the real tarball, verifies all seven packaged Zotero runtimes, installs it into an OS temporary directory, invokes the installed bin, initializes an isolated Codex delivery with ten fixed Skills and eight wrappers, and completes `check all --strict` without executing the Adapter runtime. Repository source or internal planners are not substitutes for this check.
+`release:verify` runs the package lifecycle, inspects the real tarball, verifies all seven packaged Zotero runtimes and fourteen opaque runtime-metadata assets, installs it into an OS temporary directory, invokes the installed bin, initializes an isolated Codex delivery with fifteen fixed Skills and eight wrappers, and completes `check all --strict` without executing the Adapter runtime, runners, or output schemas. Repository source or internal planners are not substitutes for this check.
 
 The Scientific Agent Skills gates also require all 40 manual-security targets to have finding-level maintainer decisions consistent with admission, resource curation, dependencies, and generated hashes. Upstream scanner labels alone are neither release approval nor a production blocker override.
 

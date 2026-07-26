@@ -4,7 +4,8 @@ import { stringify } from "yaml";
 
 import {
   GateSubmitPayloadSchema, GateSubmitReceiptSchema, RuntimeActorSchema, Sha256Schema, TransitionAdvanceReceiptSchema,
-  type GateSubmitReceipt, type TransitionAdvanceReceipt,
+  TransitionAdvanceReceiptV2Schema,
+  type AppliedTransitionEffect, type GateSubmitReceipt, type TransitionAdvanceReceipt,
 } from "../contracts/gate-transition.js";
 import type { RunState } from "../contracts/run-state.js";
 import { parseRuntimeSelector } from "../contracts/runtime-selector.js";
@@ -32,6 +33,7 @@ export interface TransitionAdvancePlan {
   selector: string;
   plan_sha256: string;
   receipt: TransitionAdvanceReceipt;
+  effects: AppliedTransitionEffect[];
   from: { stage_id: string; status: string };
   to: { stage_id: string; status: string };
   writePlan: WritePlan;
@@ -136,25 +138,33 @@ export async function planTransitionAdvance(input: { snapshot: WorkspaceSnapshot
   const instructions = await buildGateTransitionInstructions(snapshot, input.selector);
   if (!instructions.ok) throw new GateTransitionError(instructions.code, "Transition instructions are unavailable.", "domain", instructions.item);
   const instructionBasis = String(instructions.packet.instruction_basis_sha256);
-  const identity = { selector: input.selector, actor: actor.data, instruction_basis_sha256: instructionBasis, from_stage_id: status.from_stage_id, effect: status.effect, gate_event_ids: status.gate_event_ids, decision_ids: status.decision_ids };
+  const effects: AppliedTransitionEffect[] = status.effects.map((effect) =>
+    effect.kind === "complete_subflow"
+      ? { kind: "complete_subflow", subflow_instance_id: parsed.instanceId }
+      : effect
+  );
+  const identity = { selector: input.selector, actor: actor.data, instruction_basis_sha256: instructionBasis, from_stage_id: status.from_stage_id, effects, gate_event_ids: status.gate_event_ids, decision_ids: status.decision_ids };
   const planSha256 = sha256(`${JSON.stringify(identity)}\n`);
   if (input.expectedPlanSha256 && input.expectedPlanSha256 !== planSha256) throw new GateTransitionError("transition_advance_conflict", "Transition plan differs from the preview.", "conflict", { expected: input.expectedPlanSha256, actual: planSha256 });
   const instance = snapshot.runState.subflows.find((item) => item.instance_id === parsed.instanceId);
   if (!instance || instance.active_stage_id !== status.from_stage_id || instance.status !== "active") throw new GateTransitionError("transition_advance_conflict", "Transition source state changed.", "conflict");
   const relativeReceiptPath = `runs/current/receipts/transition-advance/${parsed.instanceId}/${parsed.id}.json`;
   const receiptPath = path.join(snapshot.workspace, relativeReceiptPath);
-  let receipt = TransitionAdvanceReceiptSchema.parse({ schema_version: "1", receipt_type: "transition_advance", plan_sha256: planSha256, instruction_basis_sha256: instructionBasis, selector: input.selector, transition_id: `${parsed.instanceId}/${parsed.id}`, transition_node_id: parsed.id, subflow_instance_id: parsed.instanceId, template_id: status.template_id, from_stage_id: status.from_stage_id, effect: status.effect, gate_event_ids: status.gate_event_ids, decision_ids: status.decision_ids, actor: actor.data, advanced_at: input.now ?? new Date().toISOString() });
+  let receipt: TransitionAdvanceReceipt = TransitionAdvanceReceiptV2Schema.parse({ schema_version: "2", receipt_type: "transition_advance", plan_sha256: planSha256, instruction_basis_sha256: instructionBasis, selector: input.selector, transition_id: `${parsed.instanceId}/${parsed.id}`, transition_node_id: parsed.id, subflow_instance_id: parsed.instanceId, template_id: status.template_id, from_stage_id: status.from_stage_id, effects, gate_event_ids: status.gate_event_ids, decision_ids: status.decision_ids, actor: actor.data, advanced_at: input.now ?? new Date().toISOString() });
   const existingBytes = await readOptionalBytes(receiptPath);
   if (existingBytes) {
     const existing = TransitionAdvanceReceiptSchema.safeParse(JSON.parse(Buffer.from(existingBytes).toString("utf8")) as unknown);
-    if (!existing.success || existing.data.plan_sha256 !== planSha256) throw new GateTransitionError("transition_advance_conflict", `Transition receipt conflicts: ${receiptPath}`, "conflict");
+    if (!existing.success || existing.data.schema_version !== "2" || existing.data.plan_sha256 !== planSha256) throw new GateTransitionError("transition_advance_conflict", `Transition receipt conflicts: ${receiptPath}`, "conflict");
     receipt = existing.data;
   }
   const receiptText = `${JSON.stringify(receipt, null, 2)}\n`;
   const receiptHash = sha256(receiptText);
-  const nextInstance = { ...instance, status: status.effect.kind === "complete_subflow" ? "complete" as const : "active" as const, active_stage_id: status.effect.kind === "activate_stage" ? status.effect.stage_id : instance.active_stage_id, transition_receipts: [...instance.transition_receipts, { transition_id: status.transition_id, path: relativeReceiptPath, sha256: receiptHash, plan_sha256: planSha256 }] };
+  const activateStage = effects.find((effect) => effect.kind === "activate_stage");
+  const completesSubflow = effects.some((effect) => effect.kind === "complete_subflow");
+  const completesRun = effects.some((effect) => effect.kind === "complete_run");
+  const nextInstance = { ...instance, status: completesSubflow ? "complete" as const : "active" as const, active_stage_id: activateStage?.kind === "activate_stage" ? activateStage.stage_id : instance.active_stage_id, transition_receipts: [...instance.transition_receipts, { transition_id: status.transition_id, path: relativeReceiptPath, sha256: receiptHash, plan_sha256: planSha256 }] };
   const nextInstances = snapshot.runState.subflows.map((item) => item.instance_id === instance.instance_id ? nextInstance : item);
-  const nextRunStatus = nextInstances.every((item) => ["complete", "failed", "cancelled"].includes(item.status)) ? "complete" as const : "in_progress" as const;
+  const nextRunStatus = completesRun ? "complete" as const : snapshot.runState.status;
   const nextState: RunState = { ...snapshot.runState, status: nextRunStatus, updated_at: receipt.advanced_at, subflows: nextInstances };
   const stateFile = snapshot.files.get("runs/current/state.yaml");
   if (!stateFile) throw new GateTransitionError("workflow_invalid", "Run state is unavailable.", "domain");
@@ -162,7 +172,7 @@ export async function planTransitionAdvance(input: { snapshot: WorkspaceSnapshot
   const receiptOperation = await planFile({ path: receiptPath, relativePath: relativeReceiptPath, content: receiptText, scope: "workspace", ownership: "user" });
   if (receiptOperation.action === "conflict") throw new GateTransitionError("transition_advance_conflict", `Transition receipt conflicts: ${receiptPath}`, "conflict");
   const stateOperation = { action: "refresh" as const, path: stateFile.absolutePath, relativePath: "runs/current/state.yaml", content: stateText, scope: "workspace" as const, ownership: "user" as const, previousHash: stateFile.hash, nextHash: sha256(stateText), reason: "commit transition state last" };
-  return { status: "would_advance", selector: input.selector, plan_sha256: planSha256, receipt, from: { stage_id: instance.active_stage_id, status: instance.status }, to: { stage_id: nextInstance.active_stage_id, status: nextInstance.status }, writePlan: { operations: [receiptOperation, stateOperation], readPreconditions: runtimePreconditions(snapshot, ["specs/workflow.yaml", "runs/current/artifact-registry.json", "runs/current/gate-ledger.jsonl", "runs/current/decision-ledger.jsonl"]) } };
+  return { status: "would_advance", selector: input.selector, plan_sha256: planSha256, receipt, effects, from: { stage_id: instance.active_stage_id, status: instance.status }, to: { stage_id: nextInstance.active_stage_id, status: nextInstance.status }, writePlan: { operations: [receiptOperation, stateOperation], readPreconditions: runtimePreconditions(snapshot, ["specs/workflow.yaml", "runs/current/artifact-registry.json", "runs/current/gate-ledger.jsonl", "runs/current/decision-ledger.jsonl"]) } };
 }
 
 export async function executeTransitionAdvance(plan: TransitionAdvancePlan, workspace: string): Promise<{ status: "advanced" | "already_advanced"; plan: TransitionAdvancePlan; workflow_control_after: WorkflowControlResult }> {
@@ -210,10 +220,19 @@ async function existingTransitionPlan(snapshot: WorkspaceSnapshot, selector: str
     const bytes = await readFile(path.resolve(snapshot.workspace, ref.path));
     const receipt = TransitionAdvanceReceiptSchema.parse(JSON.parse(Buffer.from(bytes).toString("utf8")) as unknown);
     if (sha256(bytes) !== ref.sha256 || receipt.plan_sha256 !== planSha256 || receipt.selector !== selector) throw new Error("receipt mismatch");
-    const status = receipt.effect.kind === "complete_subflow" ? "complete" : "active";
-    const targetStage = receipt.effect.kind === "activate_stage" ? receipt.effect.stage_id : receipt.from_stage_id;
-    return { status: "already_advanced", selector, plan_sha256: planSha256, receipt, from: { stage_id: receipt.from_stage_id, status: "active" }, to: { stage_id: targetStage, status }, writePlan: { operations: [] } };
+    const effects = appliedReceiptEffects(receipt);
+    const status = effects.some((effect) => effect.kind === "complete_subflow") ? "complete" : "active";
+    const activateStage = effects.find((effect) => effect.kind === "activate_stage");
+    const targetStage = activateStage?.kind === "activate_stage" ? activateStage.stage_id : receipt.from_stage_id;
+    return { status: "already_advanced", selector, plan_sha256: planSha256, receipt, effects, from: { stage_id: receipt.from_stage_id, status: "active" }, to: { stage_id: targetStage, status }, writePlan: { operations: [] } };
   } catch (error) { throw new GateTransitionError("transition_advance_conflict", `Existing transition receipt is untrusted: ${error instanceof Error ? error.message : String(error)}`, "conflict"); }
+}
+
+function appliedReceiptEffects(receipt: TransitionAdvanceReceipt): AppliedTransitionEffect[] {
+  if (receipt.schema_version === "2") return receipt.effects;
+  return receipt.effect.kind === "complete_subflow"
+    ? [{ kind: "complete_subflow", subflow_instance_id: receipt.subflow_instance_id }]
+    : [receipt.effect];
 }
 
 function runtimePreconditions(snapshot: WorkspaceSnapshot, paths: string[]) {

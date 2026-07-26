@@ -53,16 +53,27 @@ export const GateTemplateDefinitionSchema = z.strictObject({
   confirmation_required: z.literal(true),
 });
 
-export const TransitionTemplateDefinitionSchema = z.strictObject({
+export const TransitionTemplateEffectSchema = z.discriminatedUnion("kind", [
+  z.strictObject({ kind: z.literal("activate_stage"), stage_id: SafeIdSchema }),
+  z.strictObject({ kind: z.literal("complete_subflow") }),
+  z.strictObject({ kind: z.literal("complete_run") }),
+]);
+
+const CurrentTransitionTemplateDefinitionSchema = z.strictObject({
   id: SafeIdSchema,
   from_stage_id: SafeIdSchema,
-  effect: z.discriminatedUnion("kind", [
-    z.strictObject({ kind: z.literal("activate_stage"), stage_id: SafeIdSchema }),
-    z.strictObject({ kind: z.literal("complete_subflow") }),
-  ]),
+  effects: z.array(TransitionTemplateEffectSchema).min(1),
   requires: z.strictObject({ gate_ids: z.array(SafeIdSchema), decision_types: z.array(SafeIdSchema), artifact_types: z.array(SafeIdSchema).optional() }),
   branch: z.strictObject({ decision_point_id: SafeIdSchema, option_id: SafeIdSchema }).nullable(),
 });
+
+export const TransitionTemplateDefinitionSchema = z.preprocess((value) => {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return value;
+  const record = value as Record<string, unknown>;
+  if (!("effect" in record) || "effects" in record) return value;
+  const { effect, ...rest } = record;
+  return { ...rest, effects: [effect] };
+}, CurrentTransitionTemplateDefinitionSchema);
 
 export const WorkflowNodeDefinitionSchema = z.looseObject({
   ...CommonNodeShape,
@@ -141,6 +152,7 @@ export type SubflowNodeDefinition = z.infer<typeof SubflowNodeDefinitionSchema>;
 export type SubflowParallelGroupDefinition = z.infer<typeof SubflowParallelGroupDefinitionSchema>;
 export type SubflowTemplateDefinition = z.infer<typeof SubflowTemplateDefinitionSchema>;
 export type GateTemplateDefinition = z.infer<typeof GateTemplateDefinitionSchema>;
+export type TransitionTemplateEffect = z.infer<typeof TransitionTemplateEffectSchema>;
 export type TransitionTemplateDefinition = z.infer<typeof TransitionTemplateDefinitionSchema>;
 export type WorkflowDefinition = z.infer<typeof WorkflowDefinitionSchema>;
 
@@ -179,7 +191,13 @@ function validateInstanceWorkflow(workflow: WorkflowDefinition): WorkflowDefinit
     for (const gate of template.gates) if (!stageIds.has(gate.stage_id)) issues.push({ code: "gate_stage_missing", message: `Gate ${gate.id} references missing stage: ${gate.stage_id}` });
     for (const transition of template.transitions) {
       if (!stageIds.has(transition.from_stage_id)) issues.push({ code: "transition_stage_missing", message: `Transition ${transition.id} references missing source stage: ${transition.from_stage_id}` });
-      if (transition.effect.kind === "activate_stage" && !stageIds.has(transition.effect.stage_id)) issues.push({ code: "transition_target_missing", message: `Transition ${transition.id} references missing target stage: ${transition.effect.stage_id}` });
+      const effectKinds = transition.effects.map((effect) => effect.kind);
+      if (new Set(effectKinds).size !== effectKinds.length) issues.push({ code: "transition_effect_duplicate", message: `Transition ${transition.id} repeats an effect kind.` });
+      if (effectKinds.includes("activate_stage") && transition.effects.length !== 1) issues.push({ code: "transition_effect_combination_invalid", message: `Transition ${transition.id} cannot combine stage activation with completion.` });
+      if (effectKinds.includes("complete_run") && (effectKinds.join(",") !== "complete_subflow,complete_run" || template.template_kind !== "pipeline")) issues.push({ code: "transition_run_completion_invalid", message: `Transition ${transition.id} may complete a run only after completing its pipeline subflow.` });
+      for (const effect of transition.effects) {
+        if (effect.kind === "activate_stage" && !stageIds.has(effect.stage_id)) issues.push({ code: "transition_target_missing", message: `Transition ${transition.id} references missing target stage: ${effect.stage_id}` });
+      }
       for (const gateId of transition.requires.gate_ids) if (!gateIds.has(gateId)) issues.push({ code: "transition_gate_missing", message: `Transition ${transition.id} references missing Gate: ${gateId}` });
       if (transition.branch && !transition.requires.decision_types.includes("workflow_branch")) issues.push({ code: "transition_branch_invalid", message: `Branch transition ${transition.id} must require workflow_branch.` });
     }

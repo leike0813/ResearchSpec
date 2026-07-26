@@ -67,6 +67,12 @@ export interface HarnessSkill {
   direct_domain_ids: string[];
   resolved_domain_ids: string[];
   vendor: HarnessVendor | null;
+  adapter: {
+    role: "router" | "task" | "mechanism";
+    visibility: "broad-route" | "explicit-or-nested" | "explicit-only" | "mechanism-direct";
+    capabilities: string[];
+    authority_boundary: string;
+  } | null;
   files: HarnessFile[];
   file_tree: HarnessFileTreeNode[];
 }
@@ -173,10 +179,9 @@ async function loadLiteratureAdapters(
   diagnostics: HarnessDiagnostic[],
 ): Promise<void> {
   for (const adapter of LITERATURE_ADAPTER_CATALOG) {
-    for (const skillId of [adapter.primary_skill_id, adapter.helper_skill_id]) {
-      const sourcePath = adapter.skill_source_paths[skillId];
-      if (!sourcePath) throw new Error(`Literature adapter Skill path is missing: ${skillId}`);
-      const root = path.join(repoRoot, sourcePath);
+    for (const adapterSkill of adapter.skills) {
+      const skillId = adapterSkill.skill_id;
+      const root = path.join(repoRoot, adapterSkill.source_path);
       try {
         const sources = await diskSources(root);
         const entry = await readFile(path.join(root, "SKILL.md"), "utf8");
@@ -188,7 +193,7 @@ async function loadLiteratureAdapters(
           title: titleCase(skillId),
           description: stringValue(frontmatter.description) ?? "",
           license: "AGPL-3.0-only",
-          dependencies: [],
+          dependencies: [...adapterSkill.hard_skill_dependencies],
           direct_domain_ids: [],
           resolved_domain_ids: [],
           vendor: {
@@ -197,6 +202,12 @@ async function loadLiteratureAdapters(
             release: adapter.identity.release_set_id,
             revision: adapter.source.bundle_commit,
             repository_url: `https://github.com/${adapter.source.bundle_repository}`,
+          },
+          adapter: {
+            role: adapterSkill.role,
+            visibility: adapterSkill.visibility,
+            capabilities: [...adapterSkill.capabilities],
+            authority_boundary: adapterSkill.authority_boundary,
           },
           files,
           file_tree: buildHarnessFileTree(files),
@@ -261,6 +272,7 @@ async function loadArsu(
         direct_domain_ids: [],
         resolved_domain_ids: [],
         vendor: null,
+        adapter: null,
         files,
         file_tree: buildHarnessFileTree(files),
       });
@@ -290,6 +302,7 @@ function loadCompanions(skills: HarnessSkill[], fileSources: Map<string, Readonl
       direct_domain_ids: [],
       resolved_domain_ids: [],
       vendor: null,
+      adapter: null,
       files,
       file_tree: buildHarnessFileTree(files),
     });
@@ -359,6 +372,7 @@ async function loadPlugins(
           revision: registered.vendor.revision,
           repository_url: registered.vendor.repository_url,
         },
+        adapter: null,
         files,
         file_tree: buildHarnessFileTree(files),
       });

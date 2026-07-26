@@ -20,13 +20,11 @@ export async function readLiteratureAdapterProfile(adapter: LiteratureAdapterDef
 
 export async function readLiteratureAdapterSkillAssets(adapter: LiteratureAdapterDefinition): Promise<LiteratureAdapterSkillAsset[]> {
   const result: LiteratureAdapterSkillAsset[] = [];
-  for (const skillId of [adapter.primary_skill_id, adapter.helper_skill_id]) {
-    const sourcePath = adapter.skill_source_paths[skillId];
-    if (!sourcePath) throw new Error(`Literature adapter Skill path is missing: ${skillId}`);
-    const sourceRoot = path.join(LITERATURE_ADAPTER_PACKAGE_ROOT, sourcePath);
+  for (const skill of adapter.skills) {
+    const sourceRoot = path.join(LITERATURE_ADAPTER_PACKAGE_ROOT, skill.source_path);
     for (const sourceFile of await walkFiles(sourceRoot)) {
       result.push({
-        skillId,
+        skillId: skill.skill_id,
         relativePath: path.relative(sourceRoot, sourceFile.path),
         sourcePath: sourceFile.path,
         content: await readFile(sourceFile.path),

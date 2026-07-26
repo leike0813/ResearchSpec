@@ -6,6 +6,7 @@ import { ARSU_ROUTING_CATALOG } from "../../arsu-converter/routing/catalog.js";
 import { renderArsuArtifactContract } from "../../arsu-converter/workflow/artifact-contracts.js";
 import { fileExists } from "../../utils/fs.js";
 import { ArtifactSubmitReceiptSchema, SubmittedArtifactRecordSchema, SubmitReceiptArtifactRecordSchema } from "../contracts/artifact.js";
+import { ActionAvailabilitySchema, type ActionAvailability } from "../contracts/case-control.js";
 import { GateSubmitReceiptSchema, TransitionAdvanceReceiptSchema } from "../contracts/gate-transition.js";
 import { SubflowStartReceiptSchema } from "../contracts/subflow.js";
 import { resolveWorkNode, validateWorkflowDefinition, type ParallelGroupDefinition, type SubflowTemplateDefinition, type WorkflowNodeDefinition, type WorkflowNodeTemplate } from "../contracts/workflow.js";
@@ -94,7 +95,7 @@ export interface TransitionControlStatus {
   state: "blocked" | "ready" | "decision_required" | "advanced";
   automatic: boolean;
   decision_point_id?: string;
-  effect: { kind: "activate_stage"; stage_id: string } | { kind: "complete_subflow" };
+  effects: Array<{ kind: "activate_stage"; stage_id: string } | { kind: "complete_subflow" } | { kind: "complete_run" }>;
   gate_event_ids: string[];
   decision_ids: string[];
 }
@@ -235,6 +236,10 @@ export async function evaluateWorkflowControl(snapshot: WorkspaceSnapshot): Prom
   if (validateWorkflowDefinition(workflow).length > 0) return empty("blocked", true, false, "workflow_invalid");
   if (!snapshot.runState) return empty("blocked", true, false, "workflow_invalid");
   return evaluateInstanceWorkflow(snapshot, workflow.subflow_templates, profile);
+}
+
+export function evaluateStartActionAvailability(snapshot: WorkspaceSnapshot, control: WorkflowControlResult, selector: string): ActionAvailability {
+  return startActionAvailability(snapshot, control.subflows, selector);
 }
 
 async function evaluateInstanceWorkflow(snapshot: WorkspaceSnapshot, templates: SubflowTemplateDefinition[], profile: string): Promise<WorkflowControlResult> {
@@ -384,7 +389,7 @@ async function evaluateInstanceWorkflow(snapshot: WorkspaceSnapshot, templates: 
         subflow_instance_id: instance.instance_id, template_id: template.template_id, from_stage_id: transition.from_stage_id,
         state, automatic: state === "ready" && transition.branch === null && !ambiguous,
         ...(decisionPointId ? { decision_point_id: decisionPointId } : {}),
-        effect: transition.effect, gate_event_ids: gateEventIds, decision_ids: decisionIds,
+        effects: transition.effects, gate_event_ids: gateEventIds, decision_ids: decisionIds,
       };
     });
     instanceCompletion.push(complete);
@@ -396,19 +401,71 @@ async function evaluateInstanceWorkflow(snapshot: WorkspaceSnapshot, templates: 
     instanceStatuses.push(...childStatuses);
   }
 
-  const startable = [...templateStatuses, ...instanceStatuses.filter((item) => item.kind === "child")].filter((item) => item.state === "available").map((item) => item.selector);
+  const subflowStatuses = [...templateStatuses, ...instanceStatuses];
+  const startAvailabilities = subflowStatuses
+    .filter((item) => item.kind === "template" || item.kind === "child")
+    .map((item) => startActionAvailability(snapshot, subflowStatuses, item.selector));
+  const startable = startAvailabilities
+    .filter((item) => item.disposition !== "blocked")
+    .map((item) => item.selector);
+  const terminallyBlockedStarts = new Set(startAvailabilities
+    .filter((item) => item.reason_code === "run_terminal")
+    .map((item) => item.selector));
+  const projectedSubflowStatuses = subflowStatuses.map((item): SubflowControlStatus =>
+    terminallyBlockedStarts.has(item.selector) ? { ...item, state: "blocked" } : item
+  );
   const readyItems = allWork.filter((item) => item.state === "ready" && item.dispatchable).map((item) => item.selector);
   const stageWorkComplete = instanceCompletion.length > 0 && instanceCompletion.every(Boolean);
   const readyGates = allGates.filter((gate) => gate.state === "ready").map((gate) => gate.selector);
   const readyTransitions = allTransitions.filter((transition) => transition.state === "ready").map((transition) => transition.selector);
   const decisionTransitions = allTransitions.filter((transition) => transition.state === "decision_required").map((transition) => transition.selector);
-  const activeInstances = snapshot.runState.subflows.filter((instance) => instance.status === "active");
-  const state: WorkflowControlResult["state"] = activeInstances.length === 0 && snapshot.runState.subflows.length > 0 ? "complete"
+  const hasActiveInstance = snapshot.runState.subflows.some((instance) => instance.status === "active");
+  const state: WorkflowControlResult["state"] = snapshot.runState.status === "complete" ? "complete"
     : decisionTransitions.length ? "decision_required"
       : readyGates.length ? "gate_required"
         : readyTransitions.length ? "transition_ready"
-          : stageWorkComplete ? "stage_work_complete" : readyItems.length ? "ready" : snapshot.runState.subflows.length === 0 ? "not_started" : "blocked";
-  return { profile, state, configured: true, valid: true, work_items: allWork, ready_items: readyItems, stage_work_complete: stageWorkComplete, transition_required: readyTransitions.length > 0 || decisionTransitions.length > 0, frontier: [...startable, ...readyItems, ...readyGates, ...readyTransitions, ...decisionTransitions], startable_subflows: startable, subflows: [...templateStatuses, ...instanceStatuses], parallel_groups: allGroups, gates: allGates, transitions: allTransitions };
+          : hasActiveInstance && stageWorkComplete ? "stage_work_complete"
+            : readyItems.length ? "ready"
+              : snapshot.runState.subflows.length === 0 ? "not_started"
+                : startable.length ? "ready" : "blocked";
+  return { profile, state, configured: true, valid: true, work_items: allWork, ready_items: readyItems, stage_work_complete: stageWorkComplete, transition_required: readyTransitions.length > 0 || decisionTransitions.length > 0, frontier: [...startable, ...readyItems, ...readyGates, ...readyTransitions, ...decisionTransitions], startable_subflows: startable, subflows: projectedSubflowStatuses, parallel_groups: allGroups, gates: allGates, transitions: allTransitions };
+}
+
+function startActionAvailability(snapshot: WorkspaceSnapshot, subflows: SubflowControlStatus[], selector: string): ActionAvailability {
+  const candidate = subflows.find((item) => item.selector === selector && (item.kind === "template" || item.kind === "child"));
+  const terminal = snapshot.runState && ["complete", "failed", "cancelled"].includes(snapshot.runState.status);
+  const disposition = !snapshot.runState || terminal || candidate?.state !== "available" ? "blocked" as const : "allowed" as const;
+  const reasonCode = !snapshot.runState ? "workflow_unconfigured"
+    : terminal ? "run_terminal"
+      : candidate?.state === "available" ? "start_allowed" : "subflow_blocked";
+  const blockingRefs = terminal
+    ? [`run:${snapshot.runState?.run_id ?? "unknown"}`]
+    : candidate?.missing_dependencies.map((item) => `${item.kind}:${item.id}`) ?? [selector];
+  const expiresWhen = [
+    "specs/workflow.yaml",
+    "runs/current/state.yaml",
+    "runs/current/artifact-registry.json",
+    "runs/current/gate-ledger.jsonl",
+    "runs/current/decision-ledger.jsonl",
+  ].flatMap((relativePath) => {
+    const file = snapshot.files.get(relativePath);
+    return file ? [{ path: relativePath, sha256: file.hash }] : [];
+  });
+  return ActionAvailabilitySchema.parse({
+    selector,
+    disposition,
+    reason_code: reasonCode,
+    obligation_scope: [],
+    blocking_refs: blockingRefs,
+    basis_sha256: sha256(`${JSON.stringify({
+      selector,
+      run_status: snapshot.runState?.status ?? null,
+      candidate_state: candidate?.state ?? null,
+      blocking_refs: blockingRefs,
+      expires_when: expiresWhen,
+    })}\n`),
+    expires_when: expiresWhen,
+  });
 }
 
 async function evaluateChildNodes(snapshot: WorkspaceSnapshot, templates: SubflowTemplateDefinition[], parent: import("../contracts/run-state.js").SubflowInstanceState, template: SubflowTemplateDefinition): Promise<SubflowControlStatus[]> {
@@ -612,7 +669,7 @@ export async function buildGateTransitionInstructions(snapshot: WorkspaceSnapsho
   const instructionBasis = runtimeInstructionBasis(snapshot, selector, status);
   return { ok: true, packet: {
     kind: "transition", selector, state: status.state, instance_id: status.subflow_instance_id, template_id: status.template_id,
-    from_stage_id: status.from_stage_id, effect: status.effect, gate_event_ids: status.gate_event_ids, decision_ids: status.decision_ids,
+    from_stage_id: status.from_stage_id, effects: status.effects, gate_event_ids: status.gate_event_ids, decision_ids: status.decision_ids,
     decision_point_id: status.decision_point_id ?? null, automatic: status.automatic, instruction_basis_sha256: instructionBasis,
     advance: { available: status.state === "ready", command: `researchspec advance ${selector} --actor-kind agent --actor-name <name> --dry-run --json`, expected_plan_required_for_noninteractive_execution: true },
   } };

@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { CompletionEffectSchema } from "./case-state.js";
+
 export const SafeRuntimeIdSchema = z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]*$/).refine((value) => !value.includes(".."));
 export const Sha256Schema = z.string().regex(/^[a-f0-9]{64}$/);
 export const RuntimeActorSchema = z.strictObject({ kind: z.enum(["human", "agent", "script", "validator"]), name: z.string().min(1) });
@@ -68,7 +70,19 @@ export const TransitionReceiptReferenceSchema = z.strictObject({
   sha256: Sha256Schema, plan_sha256: Sha256Schema,
 });
 
-export const TransitionAdvanceReceiptSchema = z.strictObject({
+export const AppliedTransitionEffectSchema = z.union([
+  z.strictObject({ kind: z.literal("activate_stage"), stage_id: SafeRuntimeIdSchema }),
+  CompletionEffectSchema,
+]);
+
+export const AppliedTransitionEffectsSchema = z.array(AppliedTransitionEffectSchema).min(1).superRefine((effects, context) => {
+  const kinds = effects.map((effect) => effect.kind);
+  if (new Set(kinds).size !== kinds.length) context.addIssue({ code: "custom", message: "Applied transition effect kinds must be unique." });
+  if (kinds.includes("activate_stage") && effects.length !== 1) context.addIssue({ code: "custom", message: "Stage activation cannot be combined with completion effects." });
+  if (kinds.includes("complete_run") && kinds.join(",") !== "complete_subflow,complete_run") context.addIssue({ code: "custom", message: "Run completion must follow subflow completion." });
+});
+
+export const TransitionAdvanceReceiptV1Schema = z.strictObject({
   schema_version: z.literal("1"), receipt_type: z.literal("transition_advance"), plan_sha256: Sha256Schema,
   instruction_basis_sha256: Sha256Schema, selector: z.string().min(1), transition_id: ScopedRuntimeIdSchema,
   transition_node_id: SafeRuntimeIdSchema, subflow_instance_id: z.string().regex(/^sf-[A-Za-z0-9][A-Za-z0-9._-]*$/),
@@ -77,6 +91,27 @@ export const TransitionAdvanceReceiptSchema = z.strictObject({
   gate_event_ids: z.array(SafeRuntimeIdSchema), decision_ids: z.array(SafeRuntimeIdSchema), actor: RuntimeActorSchema, advanced_at: z.iso.datetime(),
 });
 
+export const TransitionAdvanceReceiptV2Schema = z.strictObject({
+  schema_version: z.literal("2"), receipt_type: z.literal("transition_advance"), plan_sha256: Sha256Schema,
+  instruction_basis_sha256: Sha256Schema, selector: z.string().min(1), transition_id: ScopedRuntimeIdSchema,
+  transition_node_id: SafeRuntimeIdSchema, subflow_instance_id: z.string().regex(/^sf-[A-Za-z0-9][A-Za-z0-9._-]*$/),
+  template_id: z.string().regex(/^tpl-[A-Za-z0-9][A-Za-z0-9._-]*$/), from_stage_id: SafeRuntimeIdSchema,
+  effects: AppliedTransitionEffectsSchema,
+  gate_event_ids: z.array(SafeRuntimeIdSchema), decision_ids: z.array(SafeRuntimeIdSchema), actor: RuntimeActorSchema, advanced_at: z.iso.datetime(),
+}).superRefine((receipt, context) => {
+  for (const effect of receipt.effects) {
+    if (effect.kind === "complete_subflow" && effect.subflow_instance_id !== receipt.subflow_instance_id) {
+      context.addIssue({ code: "custom", path: ["effects"], message: "Subflow completion effect must target the receipt instance." });
+    }
+  }
+});
+
+export const TransitionAdvanceReceiptSchema = z.discriminatedUnion("schema_version", [
+  TransitionAdvanceReceiptV1Schema,
+  TransitionAdvanceReceiptV2Schema,
+]);
+
 export type GateSubmitPayload = z.infer<typeof GateSubmitPayloadSchema>;
 export type GateSubmitReceipt = z.infer<typeof GateSubmitReceiptSchema>;
+export type AppliedTransitionEffect = z.infer<typeof AppliedTransitionEffectSchema>;
 export type TransitionAdvanceReceipt = z.infer<typeof TransitionAdvanceReceiptSchema>;

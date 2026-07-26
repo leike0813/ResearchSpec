@@ -211,10 +211,10 @@ export async function planLiteratureAdapterDelivery(input: {
       release_set_id: adapter.identity.release_set_id,
       bundle_version: adapter.versions.bundle,
       cli_version: adapter.versions.cli,
-      skill_versions: { ...adapter.versions.skills },
+      skill_versions: Object.fromEntries(adapter.skills.map((skill) => [skill.skill_id, skill.version])),
       target_platform: platform.platform,
       runtime_asset: runtimeAsset,
-      skill_ids: [adapter.primary_skill_id, adapter.helper_skill_id],
+      skill_ids: adapter.skills.map((skill) => skill.skill_id),
       projected_tool_ids: projectedToolIds,
       projection_state: incomplete ? "incomplete" : input.toolIds.length === 0 ? "deferred" : "complete",
     });

@@ -1,4 +1,5 @@
 import type { Diagnostic } from "../core/validation/types.js";
+import type { ValidationViolation } from "../core/contracts/runtime-protocol.js";
 
 export type ExitCode = 0 | 1 | 2 | 3 | 4;
 
@@ -19,6 +20,7 @@ export interface CliErrorBody {
   message: string;
   hint?: string;
   details?: unknown;
+  validation?: ValidationViolation[];
 }
 
 export interface CommandResult<T = unknown> {
@@ -47,6 +49,7 @@ export class CliError extends Error {
     readonly exitCode: ExitCode,
     readonly hint?: string,
     readonly details?: unknown,
+    readonly validation?: ValidationViolation[],
   ) {
     super(message);
     this.name = "CliError";
@@ -68,7 +71,7 @@ export function failure(command: string, error: CliError, diagnostics: Diagnosti
     ok: false,
     exitCode: error.exitCode,
     diagnostics,
-    error: { code: error.code, message: error.message, hint: error.hint, details: error.details },
+    error: { code: error.code, message: error.message, hint: error.hint, details: error.details, validation: error.validation },
     human: { stderr: `${error.message}${error.hint ? `\n${error.hint}` : ""}\n` },
   };
 }

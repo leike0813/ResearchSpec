@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="906px" preserveAspectRatio="none" style="width:1038px;height:906px;" version="1.1" viewBox="0 0 1038 906" width="1038px" zoomAndPan="magnify">
+<defs/>
+<g>
+<text fill="#000000" font-family="sans-serif" font-size="18" lengthAdjust="spacingAndGlyphs" textLength="512" x="264.25" y="26.708">Academic Paper：ARSU 内层语义与 ResearchSpec 外层控制</text>
+<rect fill="#FFFFFF" height="287.5938" style="stroke: #000000; stroke-width: 2.0;" width="766" x="261.5" y="309.0469"/>
+<rect fill="#FFFFFF" height="133.6641" style="stroke: #000000; stroke-width: 2.0;" width="1014.5" x="13" y="610.6406"/>
+<line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="42" x2="42" y1="117.25" y2="819.5703"/>
+<line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="316.5" x2="316.5" y1="117.25" y2="819.5703"/>
+<line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="596.5" x2="596.5" y1="117.25" y2="819.5703"/>
+<line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="738.5" x2="738.5" y1="117.25" y2="819.5703"/>
+<line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="975.5" x2="975.5" y1="117.25" y2="819.5703"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="32" x="23" y="113.9482">User</text>
+<ellipse cx="42" cy="47.9531" fill="#FEFECE" rx="8" ry="8" style="stroke: #A80036; stroke-width: 2.0;"/>
+<path d="M42,55.9531 L42,82.9531 M29,63.9531 L55,63.9531 M42,82.9531 L29,97.9531 M42,82.9531 L55,97.9531 " fill="none" style="stroke: #A80036; stroke-width: 2.0;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="32" x="23" y="831.5654">User</text>
+<ellipse cx="42" cy="844.8672" fill="#FEFECE" rx="8" ry="8" style="stroke: #A80036; stroke-width: 2.0;"/>
+<path d="M42,852.8672 L42,879.8672 M29,860.8672 L55,860.8672 M42,879.8672 L29,894.8672 M42,879.8672 L55,894.8672 " fill="none" style="stroke: #A80036; stroke-width: 2.0;"/>
+<rect fill="#FEFECE" height="30.2969" style="stroke: #A80036; stroke-width: 1.5;" width="91" x="271.5" y="85.9531"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="77" x="278.5" y="105.9482">Host Agent</text>
+<rect fill="#FEFECE" height="30.2969" style="stroke: #A80036; stroke-width: 1.5;" width="91" x="271.5" y="818.5703"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="77" x="278.5" y="838.5654">Host Agent</text>
+<rect fill="#FEFECE" height="30.2969" style="stroke: #A80036; stroke-width: 1.5;" width="139" x="527.5" y="85.9531"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="125" x="534.5" y="105.9482">ResearchSpec CLI</text>
+<rect fill="#FEFECE" height="30.2969" style="stroke: #A80036; stroke-width: 1.5;" width="139" x="527.5" y="818.5703"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="125" x="534.5" y="838.5654">ResearchSpec CLI</text>
+<rect fill="#FEFECE" height="46.5938" style="stroke: #A80036; stroke-width: 1.5;" width="125" x="676.5" y="69.6563"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="111" x="683.5" y="89.6514">academic-paper</text>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="102" x="688" y="105.9482">12-agent team</text>
+<rect fill="#FEFECE" height="46.5938" style="stroke: #A80036; stroke-width: 1.5;" width="125" x="676.5" y="818.5703"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="111" x="683.5" y="838.5654">academic-paper</text>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="102" x="688" y="854.8623">12-agent team</text>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="77" x="934.5" y="113.9482">Workspace</text>
+<path d="M958,64.9531 C958,54.9531 976,54.9531 976,54.9531 C976,54.9531 994,54.9531 994,64.9531 L994,90.9531 C994,100.9531 976,100.9531 976,100.9531 C976,100.9531 958,100.9531 958,90.9531 L958,64.9531 " fill="#FEFECE" style="stroke: #000000; stroke-width: 1.5;"/>
+<path d="M958,64.9531 C958,74.9531 976,74.9531 976,74.9531 C976,74.9531 994,74.9531 994,64.9531 " fill="none" style="stroke: #000000; stroke-width: 1.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="77" x="934.5" y="831.5654">Workspace</text>
+<path d="M958,844.8672 C958,834.8672 976,834.8672 976,834.8672 C976,834.8672 994,834.8672 994,844.8672 L994,870.8672 C994,880.8672 976,880.8672 976,880.8672 C976,880.8672 958,880.8672 958,870.8672 L958,844.8672 " fill="#FEFECE" style="stroke: #000000; stroke-width: 1.5;"/>
+<path d="M958,844.8672 C958,854.8672 976,854.8672 976,854.8672 C976,854.8672 994,854.8672 994,844.8672 " fill="none" style="stroke: #000000; stroke-width: 1.5;"/>
+<polygon fill="#A80036" points="585,144.3828,595,148.3828,585,152.3828,589,148.3828" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.0;" x1="317" x2="591" y1="148.3828" y2="148.3828"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="171" x="324" y="143.3169">status + route instructions</text>
+<polygon fill="#A80036" points="328,173.5156,318,177.5156,328,181.5156,324,177.5156" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 2.0,2.0;" x1="322" x2="596" y1="177.5156" y2="177.5156"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="253" x="334" y="172.4497">one of 11 routes and current availability</text>
+<polygon fill="#A80036" points="53,202.6484,43,206.6484,53,210.6484,49,206.6484" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.0;" x1="47" x2="316" y1="206.6484" y2="206.6484"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="251" x="59" y="201.5825">prerequisites, outputs, Gates, risk, cost</text>
+<polygon fill="#A80036" points="305,231.7813,315,235.7813,305,239.7813,309,235.7813" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 2.0,2.0;" x1="42" x2="311" y1="235.7813" y2="235.7813"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="125" x="49" y="230.7153">confirm exact route</text>
+<polygon fill="#A80036" points="585,260.9141,595,264.9141,585,268.9141,589,264.9141" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.0;" x1="317" x2="591" y1="264.9141" y2="264.9141"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="32" x="324" y="259.8481">Start</text>
+<polygon fill="#A80036" points="964,290.0469,974,294.0469,964,298.0469,968,294.0469" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.0;" x1="597" x2="970" y1="294.0469" y2="294.0469"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="165" x="604" y="288.981">receipt then subflow state</text>
+<path d="M261.5,309.0469 L338.5,309.0469 L338.5,316.0469 L328.5,326.0469 L261.5,326.0469 L261.5,309.0469 " fill="#EEEEEE" style="stroke: #000000; stroke-width: 1.0;"/>
+<rect fill="none" height="287.5938" style="stroke: #000000; stroke-width: 2.0;" width="766" x="261.5" y="309.0469"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="32" x="276.5" y="322.1138">loop</text>
+<text fill="#000000" font-family="sans-serif" font-size="11" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="167" x="353.5" y="321.2573">[each ready artifact work]</text>
+<polygon fill="#A80036" points="585,343.3125,595,347.3125,585,351.3125,589,347.3125" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.0;" x1="317" x2="591" y1="347.3125" y2="347.3125"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="157" x="324" y="342.2466">scoped work instructions</text>
+<polygon fill="#A80036" points="328,372.4453,318,376.4453,328,380.4453,324,376.4453" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 2.0,2.0;" x1="322" x2="596" y1="376.4453" y2="376.4453"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="256" x="334" y="371.3794">producer, registered inputs, output path</text>
+<polygon fill="#A80036" points="727,401.5781,737,405.5781,727,409.5781,731,405.5781" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.0;" x1="317" x2="733" y1="405.5781" y2="405.5781"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="132" x="324" y="400.5122">bounded writing task</text>
+<path d="M596,418.5781 L596,503.5781 L882,503.5781 L882,428.5781 L872,418.5781 L596,418.5781 " fill="#FBFB77" style="stroke: #A80036; stroke-width: 1.0;"/>
+<path d="M872,418.5781 L872,428.5781 L882,428.5781 L872,418.5781 " fill="#FBFB77" style="stroke: #A80036; stroke-width: 1.0;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="157" x="602" y="435.645">Full semantic procedure:</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="219" x="602" y="450.7778">config -&gt; research -&gt; architecture</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="265" x="602" y="465.9106">-&gt; argument -&gt; draft -&gt; citation/abstract</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="205" x="602" y="481.0435">-&gt; internal evaluation -&gt; format</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="248" x="602" y="496.1763">Other routes select only relevant roles.</text>
+<polygon fill="#A80036" points="964,526.375,974,530.375,964,534.375,968,530.375" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.0;" x1="739" x2="970" y1="530.375" y2="530.375"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="213" x="746" y="525.3091">candidate or declared draft patch</text>
+<polygon fill="#A80036" points="585,555.5078,595,559.5078,585,563.5078,589,559.5078" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.0;" x1="317" x2="591" y1="559.5078" y2="559.5078"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="126" x="324" y="554.4419">hash-bound Submit</text>
+<polygon fill="#A80036" points="964,584.6406,974,588.6406,964,592.6406,968,588.6406" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.0;" x1="597" x2="970" y1="588.6406" y2="588.6406"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="159" x="604" y="583.5747">submit receipt + registry</text>
+<path d="M13,610.6406 L83,610.6406 L83,617.6406 L73,627.6406 L13,627.6406 L13,610.6406 " fill="#EEEEEE" style="stroke: #000000; stroke-width: 1.0;"/>
+<rect fill="none" height="133.6641" style="stroke: #000000; stroke-width: 2.0;" width="1014.5" x="13" y="610.6406"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="25" x="28" y="623.7075">opt</text>
+<text fill="#000000" font-family="sans-serif" font-size="11" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="136" x="98" y="622.8511">[required route Gate]</text>
+<polygon fill="#A80036" points="53,644.9063,43,648.9063,53,652.9063,49,648.9063" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.0;" x1="47" x2="316" y1="648.9063" y2="648.9063"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="220" x="59" y="643.8403">Verify manuscript/evidence verdict</text>
+<polygon fill="#A80036" points="305,674.0391,315,678.0391,305,682.0391,309,678.0391" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 2.0,2.0;" x1="42" x2="311" y1="678.0391" y2="678.0391"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="83" x="49" y="672.9731">confirm Gate</text>
+<polygon fill="#A80036" points="585,703.1719,595,707.1719,585,711.1719,589,707.1719" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.0;" x1="317" x2="591" y1="707.1719" y2="707.1719"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="79" x="324" y="702.106">submit Gate</text>
+<polygon fill="#A80036" points="964,732.3047,974,736.3047,964,740.3047,968,736.3047" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.0;" x1="597" x2="970" y1="736.3047" y2="736.3047"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="138" x="604" y="731.2388">Gate receipt + ledger</text>
+<polygon fill="#A80036" points="585,768.4375,595,772.4375,585,776.4375,589,772.4375" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.0;" x1="317" x2="591" y1="772.4375" y2="772.4375"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="130" x="324" y="767.3716">Advance completion</text>
+<polygon fill="#A80036" points="964,797.5703,974,801.5703,964,805.5703,968,801.5703" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.0;" x1="597" x2="970" y1="801.5703" y2="801.5703"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="96" x="604" y="796.5044">receipt + state</text>
+<!--MD5=[0fa6747ace7db1a3f1fa4b67e36b0ec1]
+@startuml
+title Academic Paper：ARSU 内层语义与 ResearchSpec 外层控制
+skinparam shadowing false
+actor User
+participant "Host Agent" as Agent
+participant "ResearchSpec CLI" as CLI
+participant "academic-paper\n12-agent team" as ARSU
+database "Workspace" as Files
+
+Agent -> CLI : status + route instructions
+CLI - -> Agent : one of 11 routes and current availability
+Agent -> User : prerequisites, outputs, Gates, risk, cost
+User - -> Agent : confirm exact route
+Agent -> CLI : Start
+CLI -> Files : receipt then subflow state
+
+loop each ready artifact work
+  Agent -> CLI : scoped work instructions
+  CLI - -> Agent : producer, registered inputs, output path
+  Agent -> ARSU : bounded writing task
+  note over ARSU
+    Full semantic procedure:
+    config -> research -> architecture
+    -> argument -> draft -> citation/abstract
+    -> internal evaluation -> format
+    Other routes select only relevant roles.
+  end note
+  ARSU -> Files : candidate or declared draft patch
+  Agent -> CLI : hash-bound Submit
+  CLI -> Files : submit receipt + registry
+end
+
+opt required route Gate
+  Agent -> User : Verify manuscript/evidence verdict
+  User - -> Agent : confirm Gate
+  Agent -> CLI : submit Gate
+  CLI -> Files : Gate receipt + ledger
+end
+Agent -> CLI : Advance completion
+CLI -> Files : receipt + state
+@enduml
+
+PlantUML version 1.2020.02(Sun Mar 01 18:22:07 CST 2020)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 21.0.11+10-1-24.04.2-Ubuntu
+Operating System: Linux
+Default Encoding: UTF-8
+Language: en
+Country: null
+-->
+</g>
+</svg>

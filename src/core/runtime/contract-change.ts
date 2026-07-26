@@ -2,44 +2,27 @@ import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { isDeepStrictEqual } from "node:util";
 import { parse, stringify } from "yaml";
-import { z } from "zod";
-
 import { fileExists } from "../../utils/fs.js";
+import {
+  ProposalInputSchema,
+  STABLE_CONTRACT_PATHS,
+  type ContractPatchOperation,
+  type ProposalInput,
+  type ProposalRisk,
+  type StableContractPath,
+} from "../contracts/contract-change.js";
+import { CaseSafeIdSchema } from "../contracts/case-state.js";
 import type { WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { planFile, sha256, type PlannedWrite } from "../workspace/write-plan.js";
 
-export const STABLE_CONTRACT_PATHS = [
-  "specs/project.md",
-  "specs/sources.yaml",
-  "specs/claims.yaml",
-  "specs/manuscript.yaml",
-  "specs/workflow.yaml",
-] as const;
-
-export type StableContractPath = typeof STABLE_CONTRACT_PATHS[number];
-export type ContractPatchOperation = "add" | "replace" | "remove" | "append" | "merge";
-export type ProposalRisk = "low" | "medium" | "high";
-
-const SafeIdSchema = z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]*$/).refine((value) => !value.includes(".."), "ID cannot contain '..'");
-const PatchInputSchema = z.strictObject({
-  target_contract: z.enum(STABLE_CONTRACT_PATHS),
-  operation: z.enum(["add", "replace", "remove", "append", "merge"]),
-  target_path: z.string().min(1),
-  current_value: z.unknown().optional(),
-  proposed_value: z.unknown().optional(),
-  reason: z.string().min(1),
-  source_artifact_ids: z.array(SafeIdSchema),
-  source_decision_ids: z.array(SafeIdSchema),
-});
-export const ProposalInputSchema = z.strictObject({
-  title: z.string().min(1).regex(/^[^\r\n]+$/),
-  rationale: z.string().min(1),
-  risk_level: z.enum(["low", "medium", "high"]),
-  impact: z.array(z.string().min(1)).min(1),
-  patches: z.array(PatchInputSchema).min(1),
-});
-
-export type ProposalInput = z.infer<typeof ProposalInputSchema>;
+export {
+  ProposalInputSchema,
+  STABLE_CONTRACT_PATHS,
+  type ContractPatchOperation,
+  type ProposalInput,
+  type ProposalRisk,
+  type StableContractPath,
+};
 
 export interface CanonicalContractPatch extends ProposalInput {
   schema_version: "0.1";
@@ -72,7 +55,7 @@ export async function planContractChangeProposal(input: {
   actorName: string;
   now?: string;
 }): Promise<{ patch: CanonicalContractPatch; operations: PlannedWrite[] }> {
-  const idResult = SafeIdSchema.safeParse(input.changeId);
+  const idResult = CaseSafeIdSchema.safeParse(input.changeId);
   if (!idResult.success) throw usage("invalid_change_id", `Unsafe change ID: ${input.changeId}`, idResult.error.issues);
   if (!input.actorName.trim()) throw usage("invalid_actor", "Actor name must not be empty.");
   const payloadResult = ProposalInputSchema.safeParse(input.payload);

@@ -1,11 +1,11 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { existsSync } from "node:fs";
-import { readFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { test } from "node:test";
 
-import { cleanup, runCli, tempProject } from "./helpers/cli.js";
+import { cleanup, parseEnvelope, runCli, tempProject } from "./helpers/cli.js";
 import {
   advanceTransition,
   cliJson,
@@ -23,14 +23,14 @@ import {
   type WorkflowControlView,
 } from "./helpers/arsu-journey.js";
 
-void test("[journey.bootstrap] init installs the ten-Skill surface without starting academic work", async () => {
+void test("[journey.bootstrap] init installs the fifteen-Skill surface without starting academic work", async () => {
   const root = await tempProject();
   try {
     const context = initialize(root);
     const current = status(context);
     assert.equal(current.run.status, "not_started");
     assert.equal(current.workflow_control.subflows.some((item) => item.kind === "instance"), false);
-    for (const skill of ["deep-research", "academic-paper", "academic-paper-reviewer", "academic-pipeline", "researchspec-navigate", "researchspec-propose", "researchspec-decide", "researchspec-verify", "zotero-library-agent", "zotero-bridge-cli"]) {
+    for (const skill of ["deep-research", "academic-paper", "academic-paper-reviewer", "academic-pipeline", "researchspec-navigate", "researchspec-propose", "researchspec-decide", "researchspec-verify", "zotero-library-agent", "zotero-library-query", "zotero-literature-acquisition", "zotero-literature-analysis", "zotero-research-synthesis", "zotero-library-curation", "zotero-bridge-cli"]) {
       assert.equal(existsSync(path.join(root, ".forge/skills", skill, "SKILL.md")), true, skill);
     }
     const commandNames = [...runCli(["--help"], root).stdout.matchAll(/^ {2}([a-z]+)(?:\s|$)/gm)].map((item) => item[1]).filter((item) => item !== "help");
@@ -110,16 +110,12 @@ void test("[journey.plugin-fallback] failed augmentation leaves core work ready 
     ], root);
     assert.equal(failed.status, 3);
 
-    const afterFailure = cliJson<{
-      plugins: { selected: string[] };
-      pending_items: string[];
-      blocking_gates: unknown[];
-      workflow_control: WorkflowControlView;
-    }>(["status"], root).data;
-    assert.deepEqual(afterFailure?.plugins.selected, []);
-    assert.deepEqual(afterFailure?.workflow_control.frontier, before.workflow_control.frontier);
-    assert.deepEqual(afterFailure?.pending_items, before.pending_items);
-    assert.deepEqual(afterFailure?.blocking_gates, before.blocking_gates);
+    const installed = cliJson<{ domains: unknown[] }>(["plugin", "list", "--installed"], root).data;
+    const afterFailure = status(context);
+    assert.deepEqual(installed?.domains, []);
+    assert.deepEqual(afterFailure.workflow_control.frontier, before.workflow_control.frontier);
+    assert.deepEqual(afterFailure.pending_items, before.pending_items);
+    assert.deepEqual(afterFailure.blocking_gates, before.blocking_gates);
     assert.equal((instructions(context, ready) as { producer_skill: string }).producer_skill, producerBefore);
 
     await submitWork(context, ready);
@@ -149,6 +145,10 @@ void test("[journey.standalone] standalone work submits candidates and advances 
     const instance = await startSubflow(context, "subflow:tpl-deep-research-quick");
     const complete = await drive(context, instance);
     assert.equal(complete.workflow_control.subflows.find((item) => item.selector === instance)?.state, "complete");
+    assert.equal(complete.run.status, "in_progress");
+    assert.ok(complete.workflow_control.startable_subflows.includes("subflow:tpl-deep-research-quick"));
+    const nextInstance = await startSubflow(context, "subflow:tpl-deep-research-quick");
+    assert.equal(status(context).workflow_control.subflows.find((item) => item.selector === nextInstance)?.state, "active");
     assert.equal(cliJson<{ ok: boolean }>(["check", "runtime"], root).data?.ok, true);
   } finally { await cleanup(root); }
 });
@@ -252,11 +252,11 @@ void test("[journey.resume] a fresh CLI process resumes only from persisted fron
     const instance = await startSubflow(context, "subflow:tpl-deep-research-quick");
     const before = status(context).workflow_control.frontier;
     assert.ok(before.length > 0);
-    const resumed = cliJson<{ workflow_control: WorkflowControlView }>(["status"], root).data?.workflow_control;
-    assert.deepEqual(resumed?.frontier, before);
+    const resumed = status(context).workflow_control;
+    assert.deepEqual(resumed.frontier, before);
     const navigate = await readFile(path.join(root, ".forge/skills/researchspec-navigate/SKILL.md"), "utf8");
     assert.match(navigate, /Resume follows only the CLI frontier|\*\*Resume:\*\*/);
-    assert.ok(resumed?.ready_items.every((selector) => selector.includes(instance.slice(8))));
+    assert.ok(resumed.ready_items.every((selector) => selector.includes(instance.slice(8))));
   } finally { await cleanup(root); }
 });
 
@@ -287,7 +287,24 @@ void test("[journey.terminal-completion] the full pipeline reaches terminal stat
     const parent = await startSubflow(context, "subflow:tpl-academic-pipeline-end-to-end");
     const complete = await drive(context, parent);
     assert.equal(complete.workflow_control.subflows.find((item) => item.selector === parent)?.state, "complete");
+    assert.equal(complete.run.status, "complete");
     assert.equal(complete.workflow_control.frontier.some((selector) => selector.includes(parent.slice(8))), false);
+    const blockedInput = path.join(root, "terminal-start.json");
+    await writeFile(blockedInput, `${JSON.stringify({
+      schema_version: "1",
+      instruction_basis_sha256: "0".repeat(64),
+      acknowledged_user_input_ids: [],
+      prerequisite_artifact_ids: [],
+      prerequisite_decision_ids: [],
+      parent_subflow_selector: null,
+    }, null, 2)}\n`, "utf8");
+    const blocked = runCli([
+      "start", "subflow:tpl-deep-research-quick", "--input", blockedInput,
+      "--actor-kind", "agent", "--actor-name", "acceptance-driver",
+      "--confirmed-by", "Acceptance Researcher", "--dry-run", "--json",
+    ], root);
+    assert.notEqual(blocked.status, 0);
+    assert.equal(parseEnvelope(blocked).error?.code, "run_terminal");
     assert.equal(cliJson<{ ok: boolean }>(["check", "all"], root).data?.ok, true);
   } finally { await cleanup(root); }
 });

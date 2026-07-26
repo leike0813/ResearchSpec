@@ -21,6 +21,20 @@ const expectedSkills = [
   "researchspec-verify",
   "zotero-bridge-cli",
   "zotero-library-agent",
+  "zotero-library-curation",
+  "zotero-library-query",
+  "zotero-literature-acquisition",
+  "zotero-literature-analysis",
+  "zotero-research-synthesis",
+];
+const expectedAdapterSkills = [
+  "zotero-library-agent",
+  "zotero-library-query",
+  "zotero-literature-acquisition",
+  "zotero-literature-analysis",
+  "zotero-research-synthesis",
+  "zotero-library-curation",
+  "zotero-bridge-cli",
 ];
 const expectedCommands = [
   "advance", "archive", "check", "decide", "handoff", "init", "instructions", "list",
@@ -122,8 +136,10 @@ function verifyTarballFiles(files) {
     "LICENSES/MIT.txt", "LICENSES/CC-BY-NC-4.0.txt", "LICENSES/CC-BY-SA-4.0.txt", "LICENSES/Apache-2.0.txt", "LICENSES/AGPL-3.0.txt", "docs/release_process.md",
     "docs/arsu_user_usage_model.md", "docs/cli_interface_design.md", "docs/domain_skill_plugins.md", "docs/domain_taxonomy.md", "docs/education_agent_skills_vendor_adapter.md", "docs/literature_system_adapters.md", "docs/finrobot_vendor_adapter.md", "docs/histagent_vendor_adapter.md", "docs/materials_science_skills_vendor_adapter.md", "docs/scientific_agent_skills_vendor_adapter.md", "docs/tooluniverse_vendor_adapter.md",
     "literature-adapters/zotero/profile.template.json",
-    "literature-adapters/zotero/skills/zotero-library-agent/SKILL.md",
-    "literature-adapters/zotero/skills/zotero-bridge-cli/SKILL.md",
+    "literature-adapters/zotero/LICENSE",
+    "literature-adapters/zotero/NOTICE.md",
+    "literature-adapters/zotero/DERIVATION.json",
+    "literature-adapters/zotero/conversion-manifest.json",
     "literature-adapters/zotero/bin/win32-x64/zotero-bridge.exe",
     "literature-adapters/zotero/bin/darwin-x64/zotero-bridge",
     "literature-adapters/zotero/bin/darwin-arm64/zotero-bridge",
@@ -176,6 +192,17 @@ function verifyTarballFiles(files) {
   for (const skill of expectedSkills.slice(0, 4)) {
     required.push(`skills/arsu/${skill}/SKILL.md`, `skills/arsu/${skill}/LICENSE`, `skills/arsu/${skill}/NOTICE.md`);
   }
+  for (const skill of expectedAdapterSkills) {
+    const root = `literature-adapters/zotero/skills/${skill}`;
+    required.push(
+      `${root}/SKILL.md`,
+      `${root}/LICENSE`,
+      `${root}/NOTICE.md`,
+      `${root}/DERIVATION.json`,
+      `${root}/assets/runner.json`,
+      `${root}/assets/output.schema.json`,
+    );
+  }
   for (const item of required) assert(files.includes(item), `Tarball is missing required file: ${item}`);
   const educationFiles = files.filter((file) => file.startsWith("skills/plugins/vendors/education-agent-skills/"));
   assert(educationFiles.length === 136 * 3, `Tarball Education Skill file count mismatch: ${String(educationFiles.length)}`);
@@ -185,6 +212,10 @@ function verifyTarballFiles(files) {
   );
   const adapterRuntimeFiles = files.filter((file) => /^literature-adapters\/zotero\/bin\/[^/]+\/zotero-bridge(?:\.exe)?$/.test(file));
   assert(adapterRuntimeFiles.length === 7, `Tarball Zotero runtime count mismatch: ${String(adapterRuntimeFiles.length)}`);
+  const adapterOpaqueFiles = files.filter((file) =>
+    /^literature-adapters\/zotero\/skills\/[^/]+\/assets\/(?:runner|output\.schema)\.json$/.test(file)
+  );
+  assert(adapterOpaqueFiles.length === 14, `Tarball Zotero opaque runtime metadata count mismatch: ${String(adapterOpaqueFiles.length)}`);
 
   const allowed = /^(?:package\.json|README\.md|CHANGELOG\.md|SECURITY\.md|LICENSE|NOTICE|LICENSES\/[^/]+|docs\/(?:release_process|arsu_user_usage_model|cli_interface_design|domain_skill_plugins|domain_taxonomy|education_agent_skills_vendor_adapter|literature_system_adapters|finrobot_vendor_adapter|histagent_vendor_adapter|materials_science_skills_vendor_adapter|scientific_agent_skills_vendor_adapter|tooluniverse_vendor_adapter)\.md|artifacts\/mvp_release_checklist\.md|dist\/src\/.*\.js|skills\/.*|literature-adapters\/.*)$/;
   const retired = /^dist\/src\/adapters\/companion\/workflows\/(?:archive|check|context|explore|next|submit)\.js$/;

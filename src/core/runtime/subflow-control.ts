@@ -10,7 +10,7 @@ import type { SubflowTemplateDefinition } from "../contracts/workflow.js";
 import type { WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { loadWorkspaceSnapshot } from "../workspace/snapshot.js";
 import { executeWritePlan, planFile, sha256, type WritePlan } from "../workspace/write-plan.js";
-import { evaluateWorkflowControl, inspectArtifacts, type WorkflowControlResult } from "./workflow-control.js";
+import { evaluateStartActionAvailability, evaluateWorkflowControl, inspectArtifacts, type WorkflowControlResult } from "./workflow-control.js";
 import { buildMaterialPassportImportPlan, MaterialPassportImportError, prepareMaterialPassportImport, type MaterialPassportImportPlan, type PreparedMaterialPassportImport } from "./material-passport-import.js";
 import { buildRuntimeContext } from "./runtime-context.js";
 
@@ -42,7 +42,7 @@ export interface SubflowInstructionPacket {
   runtime?: { parent_subflow_id: string | null; parent_node_id?: string | null; round_number: number | null; active_stage_id?: string; ready_items: string[]; blockers: unknown[] };
 }
 
-export type SubflowInstructionResult = { ok: true; packet: SubflowInstructionPacket } | { ok: false; code: "workflow_unconfigured" | "workflow_invalid" | "subflow_template_not_found" | "subflow_instance_not_found" | "subflow_blocked" };
+export type SubflowInstructionResult = { ok: true; packet: SubflowInstructionPacket } | { ok: false; code: "workflow_unconfigured" | "workflow_invalid" | "subflow_template_not_found" | "subflow_instance_not_found" | "subflow_blocked" | "run_terminal" };
 
 export interface SubflowStartPlan {
   status: "would_start" | "already_started";
@@ -65,7 +65,8 @@ export async function buildSubflowInstructions(snapshot: WorkspaceSnapshot, sele
     const template = snapshot.workflow.subflow_templates.find((item) => item.template_id === parsed.templateId);
     const status = control.subflows.find((item) => item.selector === selector && item.kind === "template");
     if (!template || !status) return { ok: false, code: "subflow_template_not_found" };
-    if (status.state === "blocked") return { ok: false, code: "subflow_blocked" };
+    const availability = evaluateStartActionAvailability(snapshot, control, selector);
+    if (availability.disposition === "blocked") return { ok: false, code: availability.reason_code === "run_terminal" ? "run_terminal" : "subflow_blocked" };
     return { ok: true, packet: await templatePacket(snapshot, template, "available") };
   }
   if (parsed?.kind === "scoped_subflow_node") {
@@ -73,7 +74,8 @@ export async function buildSubflowInstructions(snapshot: WorkspaceSnapshot, sele
     const parent = snapshot.runState.subflows.find((item) => item.instance_id === parsed.instanceId);
     const template = status ? snapshot.workflow.subflow_templates.find((item) => item.template_id === status.template_id) : undefined;
     if (!status || !parent || !template) return { ok: false, code: "subflow_template_not_found" };
-    if (status.state !== "available") return { ok: false, code: "subflow_blocked" };
+    const availability = evaluateStartActionAvailability(snapshot, control, selector);
+    if (availability.disposition === "blocked") return { ok: false, code: availability.reason_code === "run_terminal" ? "run_terminal" : "subflow_blocked" };
     const packet = await templatePacket(snapshot, template, "available", selector, "child", parent.instance_id);
     return { ok: true, packet: { ...packet, runtime: { parent_subflow_id: parent.instance_id, parent_node_id: status.parent_node_id, round_number: status.round_number ?? null, ready_items: [], blockers: status.missing_dependencies } } };
   }
@@ -154,14 +156,18 @@ export async function planSubflowStart(input: { snapshot: WorkspaceSnapshot; sel
   const parsed = parseRuntimeSelector(input.selector);
   if (parsed?.kind !== "subflow_template" && parsed?.kind !== "scoped_subflow_node") throw new SubflowStartError("invalid_subflow_selector", "Start requires an external template or parent-scoped child selector.", "usage");
   const control = await evaluateWorkflowControl(snapshot);
-  const childStatus = parsed.kind === "scoped_subflow_node" ? control.subflows.find((item) => item.selector === input.selector && item.kind === "child" && item.state === "available") : undefined;
+  const childStatus = parsed.kind === "scoped_subflow_node" ? control.subflows.find((item) => item.selector === input.selector && item.kind === "child") : undefined;
   if (parsed.kind === "scoped_subflow_node" && !childStatus) throw new SubflowStartError("subflow_blocked", "Child subflow is not in the current frontier.", "domain");
   const templateId = parsed.kind === "subflow_template" ? parsed.templateId : childStatus?.template_id;
   const template = snapshot.workflow.subflow_templates.find((item) => item.template_id === templateId);
   if (!template) throw new SubflowStartError("subflow_template_not_found", `Subflow template not found: ${input.selector}`, "domain");
   if (parsed.kind === "subflow_template" && template.visibility === "internal") throw new SubflowStartError("subflow_template_not_found", "Internal subflows can only start from a parent frontier.", "domain");
   if (preparedImport && (parsed.kind !== "subflow_template" || template.route_ref !== "academic-pipeline:mid-entry")) throw new SubflowStartError("invalid_start_input", "Material Passport import is allowed only for the external academic-pipeline mid-entry template.", "usage");
-  if (["complete", "failed", "cancelled"].includes(snapshot.runState.status)) throw new SubflowStartError("run_terminal", `Run status is terminal: ${snapshot.runState.status}`, "domain");
+  const availability = evaluateStartActionAvailability(snapshot, control, input.selector);
+  if (availability.disposition === "blocked") {
+    const code = availability.reason_code === "run_terminal" ? "run_terminal" : "subflow_blocked";
+    throw new SubflowStartError(code, code === "run_terminal" ? `Run status is terminal: ${snapshot.runState.status}` : "Subflow is not in the current frontier.", "domain", availability);
+  }
   const instructions = await buildSubflowInstructions(snapshot, input.selector);
   if (!instructions.ok) throw new SubflowStartError(instructions.code, "Subflow cannot be started.", "domain");
   if (payloadResult.data.instruction_basis_sha256 !== instructions.packet.instruction_basis_sha256) throw new SubflowStartError("subflow_start_conflict", "Instruction basis changed after route confirmation.", "conflict");

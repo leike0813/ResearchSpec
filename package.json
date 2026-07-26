@@ -49,6 +49,7 @@
     "arsu:check": "pnpm build && node dist/src/arsu-converter/cli.js check",
     "arsu:idempotence": "pnpm build && node dist/src/arsu-converter/cli.js idempotence",
     "zotero-adapter:convert": "pnpm build && node dist/src/vendor-converters/zotero-library-agent-bundle/cli.js convert",
+    "zotero-adapter:audit": "pnpm build && node dist/src/vendor-converters/zotero-library-agent-bundle/cli.js audit",
     "zotero-adapter:check": "pnpm build && node dist/src/vendor-converters/zotero-library-agent-bundle/cli.js check",
     "zotero-adapter:idempotence": "pnpm build && node dist/src/vendor-converters/zotero-library-agent-bundle/cli.js idempotence",
     "arsu:anchors:manifest": "pnpm build && node dist/src/arsu-converter/anchors/generate.js",

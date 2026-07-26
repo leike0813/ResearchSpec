@@ -32,12 +32,9 @@ ResearchSpec 的设计深受 **[OpenSpec](https://github.com/Fission-AI/OpenSpec
 
 **ResearchSpec 内置了与 [Zotero-Agents](https://github.com/leike0813/zotero-agents) 的深度集成。**
 
-Zotero-Agents 是面向 Zotero 文献管理生态的 Agent 自动化框架。ResearchSpec 通过两个固定文献适配器 Skill 与之联动：
+Zotero-Agents 是面向 Zotero 文献管理生态的 Agent 自动化框架。ResearchSpec 通过七个固定文献适配器 Skill 与之联动：`zotero-library-agent` 负责宽泛路由，Query、Acquisition、Analysis、Synthesis 与 Curation 五个任务 Skill 各自处理有界意图，`zotero-bridge-cli` 提供精确操作和恢复机制。
 
-- **`zotero-library-agent`**：提供对 Zotero 库的有界只读访问（文献检索、条目查询、PDF 附件定位）
-- **`zotero-bridge-cli`**：ZoteroBridge CLI 的 Agent 侧接口，负责工作流提交、状态监控和 apply-back
-
-初始化 ResearchSpec 项目后，`.zotero-bridge/` 运行时目录自动生成。当用户配置的 Host Bridge 可用时，这两个 Adapter Skill 即可在 ResearchSpec 研究流程中无缝调用 Zotero 文献库。Zotero 保持文献数据的唯一权威，ResearchSpec 保持工作流状态的唯一权威——双方通过文件接口松耦合协作。
+初始化 ResearchSpec 项目后，`.zotero-bridge/` 运行时目录自动生成。当用户配置的 Host Bridge 可用时，这些 Adapter Skill 即可调用 Zotero 文献库。Zotero 保持文献数据的唯一权威，ResearchSpec 保持工作流状态的唯一权威——双方通过文件接口松耦合协作。
 
 > **详情参见 [Zotero-Agents 项目](https://github.com/leike0813/zotero-agents) 及 [文献系统适配器文档](docs/literature_system_adapters.md)。**
 
@@ -107,13 +104,13 @@ researchspec check all --strict
 
 > I want to study how generative AI affects writing instruction in higher education. Show candidate routes, prerequisites, artifacts, formal Gates, risks, and cost. Do not start a route until I confirm it.
 
-ResearchSpec 安装十个固定项目 Skills：
+ResearchSpec 安装十五个固定项目 Skills：
 
 - **ARSU**：`deep-research`、`academic-paper`、`academic-paper-reviewer`、`academic-pipeline`
 - **Companion**：`researchspec-navigate`、`researchspec-propose`、`researchspec-decide`、`researchspec-verify`
-- **Zotero 文献适配器**：`zotero-library-agent`、`zotero-bridge-cli`
+- **Zotero 文献适配器**：`zotero-library-agent`、`zotero-library-query`、`zotero-literature-acquisition`、`zotero-literature-analysis`、`zotero-research-synthesis`、`zotero-library-curation`、`zotero-bridge-cli`
 
-固定[文献系统适配器](docs/literature_system_adapters.md)还会安装一个项目级 `.zotero-bridge` 运行时和配置模板。初始化及状态检查阶段不与 Zotero 通信。两个适配器 Skill 在用户配置的 Host Bridge 可用时提供有界库访问；Zotero 为文献权威方，ResearchSpec 为工作流权威方。
+固定[文献系统适配器](docs/literature_system_adapters.md)还会安装一个项目级 `.zotero-bridge` 运行时和配置模板。初始化及状态检查阶段不与 Zotero 通信。七个适配器 Skill 在用户配置的 Host Bridge 可用时提供有界任务访问；Zotero 为文献权威方，ResearchSpec 为工作流权威方。
 
 可选 ResearchSpec 维护的[领域 Skill 插件](docs/domain_skill_plugins.md)可为工作空间添加经审查的 Open Agent Skills。用户按稳定域选择（厂商透明）；维护者转换器拥有上游出处和 Skill 依赖。学科域遵循 [ANZSRC 2020 FoR 组](docs/domain_taxonomy.md) 分类，Field 代码仅为审计元数据。空固定域在有经审查 Skills 前保持内部不可见。插件不增加命令包装器，永不拥有工作流状态、Gate、Decision 或收据。正常研究对话期间，Navigate 可静默检测紧凑插件元数据，建议少量相关域，获得单独同意后预览并执行精确的哈希绑定安装，将输出 Skill 用作当前 ARSU producer 的建议助手。用户拒绝或增强不可用时，核心工作保持不变。可通过 `researchspec plugin list` 手动查看捆绑目录；手动 CLI 选择仍是可选项。
 
@@ -179,6 +176,7 @@ researchspec init . --tools codex
 
 ## 文档
 
+- [ResearchSpec 与 ARSU 核心运行模型](docs/researchspec_arsu_runtime/README.md) — CLI/Agent/ARSU 权威边界、OpenSpec 融合、四个 Skill workflow 与 current-state 审计
 - [ARSU 用户使用模型](docs/arsu_user_usage_model.md)
 - [CLI 接口设计](docs/cli_interface_design.md)
 - [领域 Skill 插件](docs/domain_skill_plugins.md)

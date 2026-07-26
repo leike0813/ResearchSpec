@@ -361,7 +361,7 @@ Target 建议：
 | `artifacts` | artifact paths、hash、payload schema refs |
 | `tools` | 已安装 agent-facing generated files |
 | `plugins` | 已选择领域、resolution 与投影文件 |
-| `literature-adapters` | 固定 Adapter catalog/resolution、runtime、hash、executable mode 与两个 Skill 投影 |
+| `literature-adapters` | 固定 Adapter catalog/resolution、runtime、hash、executable mode 与七个 Skill 投影 |
 
 规则：
 

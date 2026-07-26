@@ -19,14 +19,23 @@ import { DEFAULT_WORKFLOW_PROFILE_ID, WorkItemSelectorSchema } from "../core/con
 import { Sha256Schema, SubmitActorKindSchema, SubmitActorSchema } from "../core/contracts/artifact.js";
 import { RuntimeActorSchema } from "../core/contracts/gate-transition.js";
 import { GateSelectorSchema, RuntimeSelectorSchema, SubflowSelectorSchema, TransitionSelectorSchema, parseRuntimeSelector } from "../core/contracts/runtime-selector.js";
+import { ActionTargetSelectorSchema } from "../core/contracts/action-selector.js";
 import { StartActorSchema } from "../core/contracts/subflow.js";
 import { ArtifactSubmitError, executeArtifactSubmit, planArtifactSubmit } from "../core/runtime/artifact-submit.js";
 import { executeGateSubmit, executeTransitionAdvance, GateTransitionError, isSha256, planGateSubmit, planTransitionAdvance } from "../core/runtime/gate-transition-control.js";
-import { archiveItem, decideItem, type DecisionChoice } from "../core/runtime/lifecycle.js";
+import { archiveItem, decideItem, LifecycleError, type DecisionChoice } from "../core/runtime/lifecycle.js";
 import { assertProposalBasisCurrent, ContractChangeError, planContractChangeProposal } from "../core/runtime/contract-change.js";
 import { renderHandoff } from "../core/runtime/handoff.js";
 import { buildContextPack } from "../core/runtime/pack.js";
-import { buildStatus, formatStatusHuman, listItems, showItem, type ListType } from "../core/runtime/query.js";
+import {
+  buildCaseStatusSummary,
+  formatCaseStatusHuman,
+  listItemsPage,
+  RuntimeQueryError,
+  showRuntimeDetail,
+  type ListType,
+} from "../core/runtime/query.js";
+import { buildActionDescriptor } from "../core/runtime/action-descriptor.js";
 import { buildGateTransitionInstructions, buildWorkflowInstructions } from "../core/runtime/workflow-control.js";
 import { buildSubflowInstructions, executeSubflowStart, planSubflowStart, SubflowStartError } from "../core/runtime/subflow-control.js";
 import { runWorkspaceChecks, type CheckTarget } from "../core/validation/check.js";
@@ -50,17 +59,21 @@ import {
   selectedPluginIds,
   unavailablePluginCatalogItem,
 } from "../plugins/status.js";
-import { inspectLiteratureAdapters } from "../literature-adapters/inspect.js";
+import { evaluateActionAvailability } from "../core/runtime/action-availability.js";
+import { compactTransactionResult } from "../core/runtime/transaction-result.js";
+import { validationViolations, zodIssues } from "./validation.js";
+import type { CompactTransactionEffect } from "../core/contracts/runtime-protocol.js";
 
 export interface InitOptions { tools?: string }
 export interface UpdateOptions { tools?: string }
 export interface HandoffOptions { stdout?: boolean; out?: string }
 export interface PackOptions { out?: string; includeArtifacts?: boolean }
-export interface DecideOptions { decision?: DecisionChoice; actorName?: string; reason?: string }
-export interface ProposeOptions { input: string; actorKind: "human" | "agent"; actorName: string }
-export interface SubmitOptions { input: string; actorKind: string; actorName: string; confirmedBy?: string; expectedSha256?: string; expectedPlanSha256?: string }
-export interface StartOptions { input: string; actorKind: string; actorName: string; confirmedBy?: string; expectedPlanSha256?: string }
-export interface AdvanceOptions { actorKind: string; actorName: string; expectedPlanSha256?: string }
+export interface DecideOptions { decision?: DecisionChoice; actorName?: string; reason?: string; expectedActionBasisSha256?: string; expectedPlanSha256?: string }
+export interface ProposeOptions { input: string; actorKind: "human" | "agent"; actorName: string; expectedActionBasisSha256?: string; expectedPlanSha256?: string }
+export interface SubmitOptions { input: string; actorKind: string; actorName: string; confirmedBy?: string; expectedSha256?: string; expectedPlanSha256?: string; expectedActionBasisSha256?: string }
+export interface StartOptions { input: string; actorKind: string; actorName: string; confirmedBy?: string; expectedPlanSha256?: string; expectedActionBasisSha256?: string }
+export interface AdvanceOptions { actorKind: string; actorName: string; expectedPlanSha256?: string; expectedActionBasisSha256?: string }
+export interface ListOptions { limit?: string; cursor?: string }
 export interface PluginListOptions { installed?: boolean; summary?: boolean }
 export interface PluginShowOptions { summary?: boolean }
 export interface PluginInstallOptions { expectedPlanSha256?: string; summary?: boolean }
@@ -179,28 +192,34 @@ export async function handleUpdate(inputPath: string | undefined, options: Updat
 export async function handleStatus(context: CommandContext): Promise<CommandResult> {
   const workspace = await requireWorkspace(context);
   const snapshot = await loadWorkspaceSnapshot(workspace);
-  const pluginRegistry = await bundledPluginRegistry();
-  const literatureAdapters = await inspectLiteratureAdapters(snapshot);
-  const data = await buildStatus(snapshot, pluginStatusSummary(snapshot.config, snapshot.manifest, pluginRegistry), literatureAdapters.adapters);
-  const diagnostics = [...snapshot.diagnostics, ...literatureAdapters.diagnostics];
+  const data = await buildCaseStatusSummary(snapshot);
+  const diagnostics = snapshot.diagnostics;
   const ok = diagnostics.every((item) => !item.blocking);
-  return { ...success("status", data, { stdout: formatStatusHuman(data) }, diagnostics), ok, exitCode: ok ? 0 : 1 };
+  return { ...success("status", data, { stdout: formatCaseStatusHuman(data) }), ok, exitCode: ok ? 0 : 1 };
 }
 
 export async function handleInstructions(selector: string, context: CommandContext): Promise<CommandResult> {
-  if (!RuntimeSelectorSchema.safeParse(selector).success) throw new CliError("invalid_runtime_selector", `Invalid runtime selector: ${selector}`, 2, "Use subflow:<id>, work:<id>, gate:<id>, or transition:<id>.");
+  if (!ActionTargetSelectorSchema.safeParse(selector).success) throw new CliError("invalid_runtime_selector", `Invalid runtime selector: ${selector}`, 2, "Use subflow:<id>, work:<id>, gate:<id>, transition:<id>, change:<id>, or patch:<id>.");
   const workspace = await requireWorkspace(context);
   const snapshot = await loadWorkspaceSnapshot(workspace);
+  const descriptor = await buildActionDescriptor(snapshot, selector);
+  if (!descriptor) throw new CliError("action_descriptor_unavailable", `Action descriptor is unavailable: ${selector}`, 1);
+  if (!RuntimeSelectorSchema.safeParse(selector).success) {
+    if (descriptor.availability.disposition === "blocked") throw new CliError("action_blocked", `Action is blocked: ${selector}`, 1, undefined, { descriptor });
+    const packet = { kind: descriptor.command, selector, action_descriptor: descriptor };
+    return success("instructions", packet, { stdout: `${JSON.stringify(packet, null, 2)}\n` });
+  }
   const parsed = parseRuntimeSelector(selector);
   if (parsed?.kind === "gate" || parsed?.kind === "transition") {
     const result = await buildGateTransitionInstructions(snapshot, selector);
     if (!result.ok) throw new CliError(result.code, `Runtime instructions are unavailable: ${selector}`, 1, undefined, { selector, item: result.item });
-    return success("instructions", result.packet, { stdout: `${JSON.stringify(result.packet, null, 2)}\n` });
+    const packet = { ...result.packet, action_descriptor: descriptor };
+    return success("instructions", packet, { stdout: `${JSON.stringify(packet, null, 2)}\n` });
   }
   if (parsed?.kind === "subflow_template" || parsed?.kind === "subflow_instance" || parsed?.kind === "scoped_subflow_node") {
     const result = await buildSubflowInstructions(snapshot, selector);
     if (!result.ok) throw new CliError(result.code, `Subflow instructions are unavailable: ${selector}`, 1, undefined, { selector });
-    return success("instructions", result.packet, { stdout: [`Subflow: ${selector}`, `Route: ${result.packet.route.route_ref}`, `State: ${result.packet.state}`, ""].join("\n") });
+    return success("instructions", { ...result.packet, action_descriptor: descriptor }, { stdout: [`Subflow: ${selector}`, `Route: ${result.packet.route.route_ref}`, `State: ${result.packet.state}`, ""].join("\n") });
   }
   const result = await buildWorkflowInstructions(snapshot, selector);
   if (!result.ok) {
@@ -215,7 +234,7 @@ export async function handleInstructions(selector: string, context: CommandConte
     throw new CliError(result.code, messages[result.code], 1, undefined, { selector, item: result.item, resolver: result.details });
   }
   const packet = result.packet;
-  return success("instructions", packet, { stdout: [`Work item: ${packet.selector}`, `Producer skill: ${packet.producer_skill}`, `Output: ${packet.output.resolved_path}`, `Template: ${packet.output.template_ref}`, ""].join("\n") });
+  return success("instructions", { ...packet, action_descriptor: descriptor }, { stdout: [`Work item: ${packet.selector}`, `Producer skill: ${packet.producer_skill}`, `Output: ${packet.output.resolved_path}`, `Template: ${packet.output.template_ref}`, ""].join("\n") });
 }
 
 export async function handleStart(selector: string, options: StartOptions, context: CommandContext): Promise<CommandResult> {
@@ -225,14 +244,16 @@ export async function handleStart(selector: string, options: StartOptions, conte
   const actorResult = StartActorSchema.safeParse({ kind: options.actorKind, name: options.actorName });
   if (!actorResult.success) throw new CliError("invalid_start_input", "Start actor is invalid.", 2, undefined, actorResult.error.issues);
   if (selectorKind === "subflow_template" && !options.confirmedBy?.trim()) throw new CliError("invalid_start_input", "External template start requires --confirmed-by.", 2);
-  if (!context.dryRun && !context.interactive && (!context.yes || !options.expectedPlanSha256)) throw new CliError("confirmation_required", "Non-interactive Start requires --expected-plan-sha256 and --yes.", 2, "Preview the identical Start input with --dry-run --json after the user confirms the route.");
+  if (!context.dryRun && !context.interactive && (!context.yes || !options.expectedPlanSha256 || !options.expectedActionBasisSha256)) throw new CliError("confirmation_required", "Non-interactive Start requires --expected-action-basis-sha256, --expected-plan-sha256, and --yes.", 2, "Obtain a current descriptor and preview the identical Start input with --dry-run --json after the user confirms the route.");
   const workspace = await requireWorkspace(context);
+  const snapshot = await loadWorkspaceSnapshot(workspace);
   const inputPath = path.resolve(context.cwd, options.input);
   let payload: unknown;
   try { payload = JSON.parse(await readFile(inputPath, "utf8")) as unknown; }
   catch (error) { throw new CliError("invalid_start_input", `Cannot read Start input: ${error instanceof Error ? error.message : String(error)}`, 2); }
   try {
-    const plan = await planSubflowStart({ snapshot: await loadWorkspaceSnapshot(workspace), selector, payload, actor: actorResult.data, confirmedBy: options.confirmedBy, expectedPlanSha256: options.expectedPlanSha256, sourceRoot: context.cwd });
+    const plan = await planSubflowStart({ snapshot, selector, payload, actor: actorResult.data, confirmedBy: options.confirmedBy, expectedPlanSha256: options.expectedPlanSha256, sourceRoot: context.cwd });
+    if (plan.status !== "already_started") await assertActionBasis(snapshot, selector, options.expectedActionBasisSha256);
     if (!context.dryRun && plan.status !== "already_started" && !context.yes) {
       const importSummary = plan.material_passport_import ? ` Import ${String(plan.material_passport_import.artifact_ids.length)} ARS artifacts and ${String(plan.material_passport_import.gate_evidence_ids.length + plan.material_passport_import.decision_evidence_ids.length)} non-authoritative evidence records.` : "";
       const approved = await confirm({ message: `Start ${selector} as ${plan.instance.instance_id}?${importSummary} This authorizes declared automatic artifact registration but not current Gates, Decisions, or transitions.`, default: false });
@@ -240,10 +261,29 @@ export async function handleStart(selector: string, options: StartOptions, conte
     }
     const outcome = context.dryRun ? undefined : await executeSubflowStart(plan, workspace);
     const status = context.dryRun ? plan.status : outcome?.status ?? plan.status;
-    return success("start", { status, selector, plan_sha256: plan.plan_sha256, instance_selector: `subflow:${plan.instance.instance_id}`, instance: plan.instance, receipt: plan.receipt, material_passport_import: plan.material_passport_import ?? null, dry_run: context.dryRun, plan: summarizePlan(plan.writePlan.operations), workflow_control_after: outcome?.workflow_control_after ?? null, artifact_registry_updated: Boolean(plan.material_passport_import), imported_gate_evidence_appended: (plan.material_passport_import?.gate_evidence_ids.length ?? 0) > 0, imported_decision_evidence_appended: (plan.material_passport_import?.decision_evidence_ids.length ?? 0) > 0, state_updated: !context.dryRun && status === "started", semantic_work_executed: false }, { stdout: `${context.dryRun ? "Would start" : status === "already_started" ? "Already started" : "Started"} ${selector} as ${plan.instance.instance_id}.\n` });
+    const instanceSelector = `subflow:${plan.instance.instance_id}`;
+    const effects: CompactTransactionEffect[] = status === "already_started"
+      ? [{ kind: "no_change", refs: [instanceSelector] }]
+      : [{ kind: "subflow_started", refs: [instanceSelector] }];
+    if (plan.material_passport_import) effects.push({
+      kind: "material_passport_imported",
+      refs: [...plan.material_passport_import.artifact_ids.map((id) => `artifact:${id}`), ...plan.material_passport_import.gate_evidence_ids.map((id) => `gate:${id}`), ...plan.material_passport_import.decision_evidence_ids.map((id) => `decision:${id}`)].slice(0, 20),
+    });
+    const data = compactTransactionResult({
+      command: "start",
+      selector,
+      outcome: status,
+      dryRun: context.dryRun,
+      identity: context.dryRun
+        ? { kind: "plan", selector, plan_sha256: plan.plan_sha256 }
+        : { kind: "receipt", selector: instanceSelector, sha256: plan.instance.start_receipt.sha256, plan_sha256: plan.plan_sha256 },
+      effects,
+      nextSelectors: [`show:${instanceSelector}`, `instructions:${instanceSelector}`],
+    });
+    return success("start", data, { stdout: `${context.dryRun ? "Would start" : status === "already_started" ? "Already started" : "Started"} ${selector} as ${plan.instance.instance_id}.\n` });
   } catch (error) {
     if (error instanceof CliError) throw error;
-    if (error instanceof SubflowStartError) throw new CliError(error.code, error.message, error.kind === "usage" ? 2 : error.kind === "conflict" ? 3 : 1, undefined, error.details);
+    if (error instanceof SubflowStartError) throw actionCliError("start", error.code, error.message, error.kind, error.details, payload);
     if ((error as NodeJS.ErrnoException).code === "EWRITE_CONFLICT") throw new CliError("subflow_start_conflict", error instanceof Error ? error.message : String(error), 3);
     throw new CliError("internal_error", error instanceof Error ? error.message : String(error), 4);
   }
@@ -257,9 +297,11 @@ export async function handleSubmit(selector: string, options: SubmitOptions, con
   const actorResult = SubmitActorSchema.safeParse({ kind: options.actorKind, name: options.actorName });
   if (!actorResult.success) throw new CliError("invalid_submission_input", "Submit actor is invalid.", 2, undefined, actorResult.error.issues);
   if (!context.dryRun && !context.interactive && (!context.yes || !options.expectedSha256)) {
-    throw new CliError("confirmation_required", "Non-interactive Submit requires --expected-sha256 and --yes.", 2, "Run the identical payload with --dry-run --json first; --yes authorizes registration only.");
+    throw new CliError("confirmation_required", "Non-interactive Submit requires --expected-sha256, --expected-action-basis-sha256, and --yes.", 2, "Obtain a current descriptor and run the identical payload with --dry-run --json first; --yes authorizes registration only.");
   }
   const workspace = await requireWorkspace(context);
+  const snapshot = await loadWorkspaceSnapshot(workspace);
+  if (!context.dryRun && !context.interactive && !options.expectedActionBasisSha256) throw new CliError("confirmation_required", "Non-interactive Submit requires --expected-action-basis-sha256.", 2);
   const inputPath = path.resolve(context.cwd, options.input);
   let payload: unknown;
   try { payload = JSON.parse(await readFile(inputPath, "utf8")) as unknown; }
@@ -268,32 +310,31 @@ export async function handleSubmit(selector: string, options: SubmitOptions, con
     throw new CliError("invalid_submission_input", nodeError.code === "ENOENT" ? `Submission input file not found: ${inputPath}` : `Cannot read submission input: ${error instanceof Error ? error.message : String(error)}`, 2);
   }
   try {
-    const plan = await planArtifactSubmit({ snapshot: await loadWorkspaceSnapshot(workspace), selector, payload, actor: actorResult.data, expectedSha256: options.expectedSha256 });
+    const plan = await planArtifactSubmit({ snapshot, selector, payload, actor: actorResult.data, expectedSha256: options.expectedSha256 });
+    if (plan.status !== "already_submitted") await assertActionBasis(snapshot, selector, options.expectedActionBasisSha256);
     if (!context.dryRun && plan.status !== "already_submitted" && plan.confirmation_basis !== "subflow_start" && !context.yes) {
       const approved = await confirm({ message: `Submit ${selector} at SHA-256 ${plan.candidate_sha256} and register its receipt? This does not update state, Gates, or Decisions.`, default: false });
       if (!approved) throw new CliError("cancelled", "Artifact submission cancelled.", 1);
     }
     const result = context.dryRun ? undefined : await executeArtifactSubmit(plan, workspace);
     const status = context.dryRun ? plan.status : result?.status ?? plan.status;
-    return success("submit", {
-      status,
+    const artifactSelector = `artifact:${plan.artifact.artifact_id}`;
+    const receiptSelector = `artifact:${plan.receipt_artifact.artifact_id}`;
+    const data = compactTransactionResult({
+      command: "submit",
       selector,
-      candidate_sha256: plan.candidate_sha256,
-      artifact: plan.artifact,
-      receipt_artifact: plan.receipt_artifact,
-      validation: plan.validation,
-      projected_completion: plan.projected_completion,
-      confirmation_basis: plan.confirmation_basis,
-      dry_run: context.dryRun,
-      plan: summarizePlan(plan.writePlan.operations),
-      workflow_control_after: result?.workflow_control_after ?? null,
-      state_updated: false,
-      gate_appended: false,
-      decision_appended: false,
-    }, { stdout: `${context.dryRun ? "Would submit" : status === "already_submitted" ? "Already submitted" : "Submitted"} ${selector} at ${plan.candidate_sha256}.\n` });
+      outcome: status,
+      dryRun: context.dryRun,
+      identity: { kind: "artifact", selector: artifactSelector, sha256: plan.candidate_sha256 },
+      effects: status === "already_submitted"
+        ? [{ kind: "no_change", refs: [artifactSelector] }]
+        : [{ kind: "artifact_registered", refs: [artifactSelector, receiptSelector] }],
+      nextSelectors: [`show:${artifactSelector}`, `show:${receiptSelector}`, `instructions:${selector}`],
+    });
+    return success("submit", data, { stdout: `${context.dryRun ? "Would submit" : status === "already_submitted" ? "Already submitted" : "Submitted"} ${selector} at ${plan.candidate_sha256}.\n` });
   } catch (error) {
     if (error instanceof CliError) throw error;
-    if (error instanceof ArtifactSubmitError) throw new CliError(error.code, error.message, error.kind === "usage" ? 2 : error.kind === "conflict" ? 3 : 1, undefined, error.details);
+    if (error instanceof ArtifactSubmitError) throw actionCliError("submit_artifact", error.code, error.message, error.kind, error.details, payload);
     if ((error as NodeJS.ErrnoException).code === "EWRITE_CONFLICT") throw new CliError("submission_conflict", error instanceof Error ? error.message : String(error), 3);
     if (isFileSystemError(error)) throw error;
     throw new CliError("internal_error", error instanceof Error ? error.message : String(error), 4);
@@ -304,21 +345,37 @@ async function handleGateSubmit(selector: string, options: SubmitOptions, contex
   if (!isSha256(options.expectedPlanSha256)) throw new CliError("invalid_expected_plan_sha256", "--expected-plan-sha256 must be 64 lowercase hexadecimal characters.", 2);
   const actor = RuntimeActorSchema.safeParse({ kind: options.actorKind, name: options.actorName });
   if (!actor.success || actor.data.kind !== "validator" || !options.confirmedBy?.trim()) throw new CliError("invalid_gate_input", "Gate submit requires a validator actor and --confirmed-by human identity.", 2, undefined, actor.success ? undefined : actor.error.issues);
-  if (!context.dryRun && !context.interactive && (!context.yes || !options.expectedPlanSha256)) throw new CliError("confirmation_required", "Non-interactive Gate submit requires --expected-plan-sha256 and --yes after explicit human confirmation.", 2);
+  if (!context.dryRun && !context.interactive && (!context.yes || !options.expectedPlanSha256 || !options.expectedActionBasisSha256)) throw new CliError("confirmation_required", "Non-interactive Gate submit requires --expected-action-basis-sha256, --expected-plan-sha256, and --yes after explicit human confirmation.", 2);
   const workspace = await requireWorkspace(context);
+  const snapshot = await loadWorkspaceSnapshot(workspace);
   let payload: unknown;
   try { payload = JSON.parse(await readFile(path.resolve(context.cwd, options.input), "utf8")) as unknown; }
   catch (error) { throw new CliError("invalid_gate_input", `Cannot read Gate input: ${error instanceof Error ? error.message : String(error)}`, 2); }
   try {
-    const plan = await planGateSubmit({ snapshot: await loadWorkspaceSnapshot(workspace), selector, payload, actor: actor.data, confirmedBy: options.confirmedBy, expectedPlanSha256: options.expectedPlanSha256 });
+    const plan = await planGateSubmit({ snapshot, selector, payload, actor: actor.data, confirmedBy: options.confirmedBy, expectedPlanSha256: options.expectedPlanSha256 });
+    if (plan.status !== "already_submitted") await assertActionBasis(snapshot, selector, options.expectedActionBasisSha256);
     if (!context.dryRun && plan.status !== "already_submitted" && !context.yes) {
       const approved = await confirm({ message: `Record the user-confirmed Gate verdict for ${selector}?`, default: false });
       if (!approved) throw new CliError("cancelled", "Gate submission cancelled.", 1);
     }
     const outcome = context.dryRun ? undefined : await executeGateSubmit(plan, workspace);
     const status = context.dryRun ? plan.status : outcome?.status ?? plan.status;
-    return success("submit", { status, selector, plan_sha256: plan.plan_sha256, event: plan.event, receipt: plan.receipt, dry_run: context.dryRun, plan: summarizePlan(plan.writePlan.operations), workflow_control_after: outcome?.workflow_control_after ?? null, state_updated: false, artifact_registry_updated: false, decision_appended: false }, { stdout: `${context.dryRun ? "Would submit" : status === "already_submitted" ? "Already submitted" : "Submitted"} ${selector}.\n` });
-  } catch (error) { throw gateTransitionCliError(error); }
+    const eventSelector = `gate-event:${String(plan.event.event_id)}`;
+    const data = compactTransactionResult({
+      command: "submit",
+      selector,
+      outcome: status,
+      dryRun: context.dryRun,
+      identity: context.dryRun
+        ? { kind: "plan", selector, plan_sha256: plan.plan_sha256 }
+        : { kind: "receipt", selector: eventSelector, sha256: String(record(plan.event.receipt).sha256), plan_sha256: plan.plan_sha256 },
+      effects: status === "already_submitted"
+        ? [{ kind: "no_change", refs: [eventSelector] }]
+        : [{ kind: "gate_recorded", refs: [selector, eventSelector] }],
+      nextSelectors: [`show:${eventSelector}`, `instructions:${selector}`],
+    });
+    return success("submit", data, { stdout: `${context.dryRun ? "Would submit" : status === "already_submitted" ? "Already submitted" : "Submitted"} ${selector}.\n` });
+  } catch (error) { throw gateTransitionCliError(error, "submit_gate", payload); }
 }
 
 export async function handleAdvance(selector: string, options: AdvanceOptions, context: CommandContext): Promise<CommandResult> {
@@ -326,23 +383,41 @@ export async function handleAdvance(selector: string, options: AdvanceOptions, c
   if (!isSha256(options.expectedPlanSha256)) throw new CliError("invalid_expected_plan_sha256", "--expected-plan-sha256 must be 64 lowercase hexadecimal characters.", 2);
   const actor = RuntimeActorSchema.safeParse({ kind: options.actorKind, name: options.actorName });
   if (!actor.success || !["agent", "script"].includes(actor.data.kind)) throw new CliError("invalid_advance_input", "Advance actor must be an agent or script.", 2, undefined, actor.success ? undefined : actor.error.issues);
-  if (!context.dryRun && !context.interactive && (!context.yes || !options.expectedPlanSha256)) throw new CliError("confirmation_required", "Non-interactive Advance requires --expected-plan-sha256 and --yes.", 2);
+  if (!context.dryRun && !context.interactive && (!context.yes || !options.expectedPlanSha256 || !options.expectedActionBasisSha256)) throw new CliError("confirmation_required", "Non-interactive Advance requires --expected-action-basis-sha256, --expected-plan-sha256, and --yes.", 2);
   const workspace = await requireWorkspace(context);
+  const snapshot = await loadWorkspaceSnapshot(workspace);
   try {
-    const plan = await planTransitionAdvance({ snapshot: await loadWorkspaceSnapshot(workspace), selector, actor: actor.data, expectedPlanSha256: options.expectedPlanSha256 });
+    const plan = await planTransitionAdvance({ snapshot, selector, actor: actor.data, expectedPlanSha256: options.expectedPlanSha256 });
+    if (plan.status !== "already_advanced") await assertActionBasis(snapshot, selector, options.expectedActionBasisSha256);
     if (!context.dryRun && plan.status !== "already_advanced" && !context.yes) {
       const approved = await confirm({ message: `Advance the unique authorized transition ${selector}?`, default: false });
       if (!approved) throw new CliError("cancelled", "Transition advance cancelled.", 1);
     }
     const outcome = context.dryRun ? undefined : await executeTransitionAdvance(plan, workspace);
     const status = context.dryRun ? plan.status : outcome?.status ?? plan.status;
-    return success("advance", { status, selector, plan_sha256: plan.plan_sha256, from: plan.from, to: plan.to, receipt: plan.receipt, dry_run: context.dryRun, plan: summarizePlan(plan.writePlan.operations), workflow_control_after: outcome?.workflow_control_after ?? null, artifact_registry_updated: false, gate_appended: false, decision_appended: false }, { stdout: `${context.dryRun ? "Would advance" : status === "already_advanced" ? "Already advanced" : "Advanced"} ${selector}.\n` });
-  } catch (error) { throw gateTransitionCliError(error); }
+    const effects: CompactTransactionEffect[] = status === "already_advanced"
+      ? [{ kind: "no_change", refs: [selector] }]
+      : plan.effects.map((effect): CompactTransactionEffect => effect.kind === "activate_stage"
+        ? { kind: "stage_activated", refs: [`stage:${effect.stage_id}`] }
+        : effect.kind === "complete_subflow"
+          ? { kind: "subflow_completed", refs: [`subflow:${plan.receipt.subflow_instance_id}`] }
+          : { kind: "run_completed", refs: [`run:${snapshot.runState?.run_id ?? "current"}`] });
+    const data = compactTransactionResult({
+      command: "advance",
+      selector,
+      outcome: status,
+      dryRun: context.dryRun,
+      identity: { kind: "plan", selector, plan_sha256: plan.plan_sha256 },
+      effects,
+      nextSelectors: [`instructions:${selector}`, `show:subflow:${plan.receipt.subflow_instance_id}`],
+    });
+    return success("advance", data, { stdout: `${context.dryRun ? "Would advance" : status === "already_advanced" ? "Already advanced" : "Advanced"} ${selector}.\n` });
+  } catch (error) { throw gateTransitionCliError(error, "advance"); }
 }
 
-function gateTransitionCliError(error: unknown): CliError {
+function gateTransitionCliError(error: unknown, key: "submit_gate" | "advance", validationInput?: unknown): CliError {
   if (error instanceof CliError) return error;
-  if (error instanceof GateTransitionError) return new CliError(error.code, error.message, error.kind === "usage" ? 2 : error.kind === "conflict" ? 3 : 1, undefined, error.details);
+  if (error instanceof GateTransitionError) return actionCliError(key, error.code, error.message, error.kind, error.details, validationInput);
   if ((error as NodeJS.ErrnoException).code === "EWRITE_CONFLICT") return new CliError("runtime_write_conflict", error instanceof Error ? error.message : String(error), 3);
   if (isFileSystemError(error)) throw error;
   return new CliError("internal_error", error instanceof Error ? error.message : String(error), 4);
@@ -483,23 +558,30 @@ export async function handlePluginUninstall(pluginIds: readonly string[], contex
   return success("plugin", { action: "uninstall", workspace, domain_ids: requested, selected_domains: selected, resolved_skills: [...desiredSkillIds].sort(), dry_run: context.dryRun, plan: summarizePlan(operations) }, { stdout: formatPlan(context.dryRun ? "ResearchSpec plugin uninstall dry run" : "ResearchSpec domain plugins uninstalled", workspace, operations, context.dryRun) });
 }
 
-export async function handleList(type: string | undefined, context: CommandContext): Promise<CommandResult> {
+export async function handleList(type: string | undefined, options: ListOptions, context: CommandContext): Promise<CommandResult> {
   const workspace = await requireWorkspace(context);
-  const allowed = ["changes", "artifacts", "gates", "decisions", "tools"];
+  const allowed = ["changes", "artifacts", "gates", "decisions", "tools", "actions", "history", "case-actions", "diagnostics"];
   const listType = type ?? "changes";
   if (!allowed.includes(listType)) throw new CliError("invalid_list_type", `Unknown list type: ${listType}`, 2);
-  const items = listItems(await loadWorkspaceSnapshot(workspace), listType as ListType);
-  return success("list", { type: listType, items }, { stdout: items.length ? `${items.map((item) => `${item.selector}\t${item.path ?? ""}`).join("\n")}\n` : `No ${listType}.\n` });
+  const limit = options.limit === undefined ? undefined : Number(options.limit);
+  try {
+    const page = await listItemsPage(await loadWorkspaceSnapshot(workspace), listType as ListType, { ...(limit === undefined ? {} : { limit }), ...(options.cursor ? { cursor: options.cursor } : {}) });
+    return success("list", page, { stdout: page.items.length ? `${page.items.map((item) => text(record(item).selector)).join("\n")}\n` : `No ${listType}.\n` });
+  } catch (error) {
+    if (error instanceof RuntimeQueryError) throw new CliError(error.code, error.message, error.code === "page_cursor_stale" ? 3 : 2);
+    throw error;
+  }
 }
 
 export async function handleShow(selector: string, context: CommandContext): Promise<CommandResult> {
   const workspace = await requireWorkspace(context);
-  const result = showItem(await loadWorkspaceSnapshot(workspace), selector);
+  const result = await showRuntimeDetail(await loadWorkspaceSnapshot(workspace), selector);
   if (!result.item) {
     if (result.candidates.length) throw new CliError("item_ambiguous", `Item selector is ambiguous: ${selector}`, 2, undefined, { candidates: result.candidates.map((item) => item.selector) });
     throw new CliError("item_not_found", `Item not found: ${selector}`, 1);
   }
-  return success("show", result.item, { stdout: `${JSON.stringify(result.item.value, null, 2)}\n` });
+  const value = "value" in record(result.item) ? record(result.item).value : result.item;
+  return success("show", result.item, { stdout: `${JSON.stringify(value, null, 2)}\n` });
 }
 
 export async function handleHandoff(options: HandoffOptions, context: CommandContext): Promise<CommandResult> {
@@ -537,7 +619,25 @@ export async function handlePropose(changeId: string, options: ProposeOptions, c
   }
   try {
     const snapshot = await loadWorkspaceSnapshot(workspace);
+    const selector = `change:${changeId}`;
+    await assertActionBasis(snapshot, selector, options.expectedActionBasisSha256);
     const proposal = await planContractChangeProposal({ snapshot, changeId, payload, actorKind: options.actorKind, actorName: options.actorName });
+    const planSha256 = sha256(`${JSON.stringify({
+      selector,
+      actor: { kind: options.actorKind, name: options.actorName.trim() },
+      proposal: {
+        title: proposal.patch.title,
+        rationale: proposal.patch.rationale,
+        risk_level: proposal.patch.risk_level,
+        impact: proposal.patch.impact,
+        patches: proposal.patch.patches,
+      },
+      target_hashes: proposal.patch.validation.target_hashes,
+    })}\n`);
+    if (options.expectedPlanSha256 && options.expectedPlanSha256 !== planSha256) throw new CliError("proposal_plan_stale", "Proposal plan no longer matches the approved preview.", 3, undefined, { expected: options.expectedPlanSha256, actual: planSha256 });
+    if (!context.dryRun && !context.interactive && (!context.yes || !options.expectedActionBasisSha256 || !options.expectedPlanSha256)) {
+      throw new CliError("confirmation_required", "Non-interactive proposal creation requires --expected-action-basis-sha256, --expected-plan-sha256, and --yes.", 2);
+    }
     if (!context.dryRun && !context.yes) {
       if (!context.interactive) throw new CliError("confirmation_required", "Non-interactive proposal creation requires --yes.", 2, "This confirms creation of a pending proposal only; it does not accept the change.");
       const approved = await confirm({ message: `Create pending ${proposal.patch.risk_level}-risk change ${changeId} with ${String(proposal.patch.patches.length)} patch(es)?`, default: false });
@@ -547,20 +647,22 @@ export async function handlePropose(changeId: string, options: ProposeOptions, c
       await assertProposalBasisCurrent(workspace, proposal.patch);
       await executeWritePlan({ operations: proposal.operations });
     }
-    return success("propose", {
-      workspace,
-      selector: `change:${changeId}`,
-      status: proposal.patch.status,
-      risk_level: proposal.patch.risk_level,
-      requires_human_decision: true,
-      dry_run: context.dryRun,
-      plan: summarizePlan(proposal.operations),
-    }, { stdout: `${context.dryRun ? "Would create" : "Created"} pending contract change change:${changeId}.\n` });
+    const data = compactTransactionResult({
+      command: "propose",
+      selector,
+      outcome: proposal.patch.status,
+      dryRun: context.dryRun,
+      identity: context.dryRun
+        ? { kind: "plan", selector, plan_sha256: planSha256 }
+        : { kind: "change", selector, plan_sha256: planSha256 },
+      effects: [{ kind: "change_proposed", refs: [selector] }],
+      nextSelectors: [`show:${selector}`, `instructions:${selector}`, "list:case-actions"],
+    });
+    return success("propose", data, { stdout: `${context.dryRun ? "Would create" : "Created"} pending contract change change:${changeId}.\n` });
   } catch (error) {
     if (error instanceof CliError) throw error;
     if (error instanceof ContractChangeError) {
-      const exitCode = error.kind === "usage" ? 2 : error.kind === "conflict" ? 3 : 1;
-      throw new CliError(error.code, error.message, exitCode, undefined, error.details);
+      throw actionCliError("propose", error.code, error.message, error.kind, error.details, payload);
     }
     if (isFileSystemError(error)) throw error;
     throw new CliError("proposal_blocked", error instanceof Error ? error.message : String(error), 1);
@@ -571,8 +673,8 @@ export async function handleDecide(selector: string | undefined, options: Decide
   const workspace = await requireWorkspace(context);
   const snapshot = await loadWorkspaceSnapshot(workspace);
   if (!selector) {
-    const items = [...snapshot.changes, ...snapshot.patches].filter((item) => !["applied", "rejected", "superseded"].includes(String(record(item.value).status)));
-    return success("decide", { pending_items: items }, { stdout: items.length ? `${items.map((item) => item.selector).join("\n")}\n` : "No pending items.\n" });
+    const page = await listItemsPage(snapshot, "case-actions");
+    return success("decide", page, { stdout: page.items.length ? `${page.items.map((item) => text(record(item).selector)).join("\n")}\n` : "No pending items.\n" });
   }
   let decision = options.decision;
   const selectedItem = snapshot.items.find((item) => item.selector === selector);
@@ -584,10 +686,38 @@ export async function handleDecide(selector: string | undefined, options: Decide
   if (!actorName) throw new CliError("actor_required", "--actor-name is required for a human decision.", 2);
   const reason = options.reason ?? (context.interactive && decision !== "postpone" ? await input({ message: "Decision rationale", validate: (value) => Boolean(value.trim()) || "Rationale is required." }) : undefined);
   try {
-    const outcome = await decideItem({ snapshot, selector, decision, actorName, reason, dryRun: context.dryRun });
-    return success("decide", { ...outcome, dry_run: context.dryRun }, { stdout: `${context.dryRun ? "Would record" : "Recorded"} ${outcome.status} decision for ${outcome.item}.\n` });
+    await assertActionBasis(snapshot, selector, options.expectedActionBasisSha256);
+    const preview = await decideItem({ snapshot, selector, decision, actorName, reason, dryRun: true });
+    if (options.expectedPlanSha256 && options.expectedPlanSha256 !== preview.plan_sha256) {
+      throw new CliError("decision_plan_stale", "Decision plan no longer matches the approved preview.", 3, undefined, { expected: options.expectedPlanSha256, actual: preview.plan_sha256 });
+    }
+    if (!context.dryRun && !context.interactive && (!context.yes || !options.expectedActionBasisSha256 || !options.expectedPlanSha256)) {
+      throw new CliError("confirmation_required", "Non-interactive Decide requires --expected-action-basis-sha256, --expected-plan-sha256, and --yes.", 2);
+    }
+    const outcome = context.dryRun
+      ? preview
+      : await decideItem({ snapshot, selector, decision, actorName, reason, dryRun: false, expectedPlanSha256: options.expectedPlanSha256 });
+    const data = compactTransactionResult({
+      command: "decide",
+      selector,
+      outcome: outcome.status,
+      dryRun: context.dryRun,
+      identity: context.dryRun
+        ? { kind: "plan", selector, plan_sha256: outcome.plan_sha256 }
+        : { kind: "decision", selector: `decision:${outcome.decision_id}`, plan_sha256: outcome.plan_sha256 },
+      effects: outcome.effects,
+      nextSelectors: outcome.next_selectors,
+    });
+    return success("decide", data, { stdout: `${context.dryRun ? "Would record" : "Recorded"} ${outcome.status} decision for ${outcome.item}.\n` });
   } catch (error) {
     if (error instanceof ContractChangeError) throw new CliError(error.code, error.message, 1, undefined, error.details);
+    if (error instanceof LifecycleError) {
+      throw actionCliError("decide", error.code, error.message, error.kind, error.details, {
+        decision,
+        actor_name: actorName,
+        ...(reason ? { reason } : {}),
+      });
+    }
     if (isFileSystemError(error)) throw error;
     throw new CliError("decision_blocked", error instanceof Error ? error.message : String(error), 1);
   }
@@ -785,6 +915,7 @@ function formatPlan(title: string, workspace: string, operations: PlannedWrite[]
   return `${title}\nWorkspace: ${workspace}\n${operations.map((item) => `${labels[item.action]}: ${item.path}`).join("\n")}\n`;
 }
 function record(value: unknown): Record<string, unknown> { return value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : {}; }
+function text(value: unknown): string { return typeof value === "string" ? value : ""; }
 function strings(value: unknown): string[] { return Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : []; }
 
 function operationDiagnostics(operations: PlannedWrite[]): Diagnostic[] { return operations.filter((item) => item.action === "skip-drift" || item.action === "conflict").map((item) => ({ severity: "warning", code: item.action === "skip-drift" ? "generated_file_drift" : "generated_file_conflict", message: item.reason, path: item.path, blocking: false })); }
@@ -809,6 +940,43 @@ function previewSummary(operations: PlannedWrite[]): string {
   for (const operation of operations) counts.set(operation.action, (counts.get(operation.action) ?? 0) + 1);
   const globals = operations.filter((operation) => operation.scope === "shared-global").map((operation) => operation.path);
   return [`Plan: ${[...counts].map(([action, count]) => `${action}=${String(count)}`).join(", ")}`, ...(globals.length ? ["Shared-global writes:", ...globals.map((filePath) => `- ${filePath}`)] : [])].join("\n");
+}
+
+async function assertActionBasis(snapshot: Awaited<ReturnType<typeof loadWorkspaceSnapshot>>, selector: string, expected: string | undefined): Promise<void> {
+  if (expected !== undefined && !Sha256Schema.safeParse(expected).success) {
+    throw new CliError("invalid_expected_action_basis_sha256", "--expected-action-basis-sha256 must be 64 lowercase hexadecimal characters.", 2);
+  }
+  const evaluated = await evaluateActionAvailability(snapshot, selector);
+  if (!evaluated) throw new CliError("action_descriptor_unavailable", `Action descriptor is unavailable: ${selector}`, 1);
+  if (evaluated.availability.disposition === "blocked") {
+    throw new CliError("action_blocked", `Action is blocked: ${selector}`, 1, `Refresh instructions:${selector}.`, { availability: evaluated.availability });
+  }
+  if (expected && expected !== evaluated.availability.basis_sha256) {
+    throw new CliError("action_basis_stale", `Action descriptor is stale: ${selector}`, 3, `Refresh instructions:${selector}.`, {
+      expected,
+      actual: evaluated.availability.basis_sha256,
+      next_selector: `instructions:${selector}`,
+    });
+  }
+}
+
+function actionCliError(
+  key: "start" | "submit_artifact" | "submit_gate" | "advance" | "propose" | "decide",
+  code: string,
+  message: string,
+  kind: "usage" | "domain" | "conflict",
+  details?: unknown,
+  validationInput?: unknown,
+): CliError {
+  const issues = zodIssues(details);
+  return new CliError(
+    code,
+    message,
+    kind === "usage" ? 2 : kind === "conflict" ? 3 : 1,
+    undefined,
+    issues ? undefined : details,
+    issues ? validationViolations(key, issues, validationInput) : undefined,
+  );
 }
 
 function isFileSystemError(value: unknown): value is NodeJS.ErrnoException { return value instanceof Error && typeof (value as NodeJS.ErrnoException).code === "string"; }

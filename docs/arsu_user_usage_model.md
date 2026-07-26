@@ -401,7 +401,7 @@ ResearchSpec 维护的领域插件可以从 bundled registry 增加可选 Open A
 
 command wrapper 只是不同 agent 工具的 adapter。目标交付量是：
 
-- 31 个 registered tools × 10 个固定 Skills，加 workspace 选择的 plugin Skills；
+- 31 个 registered tools × 15 个固定 Skills，加 workspace 选择的 plugin Skills；
 - 28 个 command-capable tools × 8 thin wrappers。
 
 这个乘积不是产品能力数量，不能用 wrapper 数量反推新 surface。

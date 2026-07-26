@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="1676px" preserveAspectRatio="none" style="width:663px;height:1676px;" version="1.1" viewBox="0 0 663 1676" width="663px" zoomAndPan="magnify">
+<defs/>
+<g>
+<text fill="#000000" font-family="sans-serif" font-size="18" lengthAdjust="spacingAndGlyphs" textLength="378" x="141.75" y="26.708">Academic Pipeline：当前 end-to-end 控制图</text>
+<ellipse cx="180.5" cy="40.9531" fill="#000000" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;"/>
+<rect fill="#FEFECE" height="47.9375" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="253" x="54" y="70.9531"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="132" x="64" y="92.0918">Human + Host Agent</text>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="233" x="64" y="106.0605">confirm route, graph, Gates and cost</text>
+<rect fill="#FEFECE" height="47.9375" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="276" x="42.5" y="138.8906"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="52" x="52.5" y="160.0293">CLI Start</text>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="256" x="52.5" y="173.998">write receipt, then parent instance state</text>
+<rect fill="#FEFECE" height="47.9375" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="134" x="113.5" y="206.8281"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="66" x="123.5" y="227.9668">ARSU child</text>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="114" x="123.5" y="241.9355">deep-research:full</text>
+<rect fill="#FEFECE" height="47.9375" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="128" x="116.5" y="274.7656"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="81" x="126.5" y="295.9043">CLI transition</text>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="108" x="126.5" y="309.873">research -&gt; write</text>
+<rect fill="#FEFECE" height="47.9375" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="143" x="109" y="342.7031"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="66" x="119" y="363.8418">ARSU child</text>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="123" x="119" y="377.8105">academic-paper:full</text>
+<rect fill="#FEFECE" height="47.9375" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="136" x="112.5" y="410.6406"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="81" x="122.5" y="431.7793">CLI transition</text>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="116" x="122.5" y="445.748">write -&gt; pre-review</text>
+<rect fill="#FEFECE" height="47.9375" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="194" x="83.5" y="478.5781"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="174" x="93.5" y="499.7168">academic-pipeline producer</text>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="130" x="93.5" y="513.6855">write integrity_report</text>
+<rect fill="#FEFECE" height="47.9375" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="223" x="69" y="546.5156"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="96" x="79" y="567.6543">Verify + Human</text>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="203" x="79" y="581.623">confirm pre-review integrity Gate</text>
+<rect fill="#FEFECE" height="47.9375" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="145" x="108" y="614.4531"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="81" x="118" y="635.5918">CLI transition</text>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="125" x="118" y="649.5605">pre-review -&gt; review</text>
+<rect fill="#FEFECE" height="47.9375" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="199" x="81" y="682.3906"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="66" x="91" y="703.5293">ARSU child</text>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="179" x="91" y="717.498">academic-paper-reviewer:full</text>
+<rect fill="#FEFECE" height="47.9375" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="143" x="109" y="750.3281"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="96" x="119" y="771.4668">Verify + Human</text>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="123" x="119" y="785.4355">confirm review Gate</text>
+<rect fill="#FEFECE" height="47.9375" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="176" x="92.5" y="873.9761"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="52" x="102.5" y="895.1147">CLI Start</text>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="156" x="102.5" y="909.0835">dynamic revision round n</text>
+<rect fill="#FEFECE" height="47.9375" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="173" x="94" y="941.9136"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="66" x="104" y="963.0522">ARSU child</text>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="153" x="104" y="977.021">academic-paper:revision</text>
+<rect fill="#FEFECE" height="47.9375" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="135" x="113" y="1009.8511"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="81" x="123" y="1030.9897">CLI transition</text>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="115" x="123" y="1044.9585">revise -&gt; re-review</text>
+<rect fill="#FEFECE" height="47.9375" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="237" x="62" y="1077.7886"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="66" x="72" y="1098.9272">ARSU child</text>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="217" x="72" y="1112.896">academic-paper-reviewer:re-review</text>
+<rect fill="#FEFECE" height="47.9375" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="127" x="117" y="1145.7261"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="91" x="127" y="1166.8647">Human Decide</text>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="107" x="127" y="1180.8335">revision-outcome</text>
+<polygon fill="#FEFECE" points="73,818.2656,288,818.2656,300,830.2656,288,842.2656,73,842.2656,61,830.2656,73,818.2656" style="stroke: #A80036; stroke-width: 1.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="20" x="184.5" y="852.4761">yes</text>
+<text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="215" x="73" y="834.0737">workflow_branch Decision = revision?</text>
+<text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="51" x="10" y="827.6714">accepted</text>
+<rect fill="#FEFECE" height="47.9375" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="194" x="83.5" y="1235.6636"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="174" x="93.5" y="1256.8022">academic-pipeline producer</text>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="162" x="93.5" y="1270.771">write final_integrity_report</text>
+<rect fill="#FEFECE" height="47.9375" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="185" x="88" y="1303.6011"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="96" x="98" y="1324.7397">Verify + Human</text>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="165" x="98" y="1338.7085">confirm final-integrity Gate</text>
+<rect fill="#FEFECE" height="47.9375" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="217" x="72" y="1371.5386"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="66" x="82" y="1392.6772">ARSU child</text>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="197" x="82" y="1406.646">academic-paper:format-convert</text>
+<rect fill="#FEFECE" height="47.9375" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="194" x="83.5" y="1439.4761"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="174" x="93.5" y="1460.6147">academic-pipeline producer</text>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="146" x="93.5" y="1474.5835">write process_summary</text>
+<rect fill="#FEFECE" height="47.9375" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="172" x="94.5" y="1507.4136"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="143" x="104.5" y="1528.5522">CLI complete transition</text>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="152" x="104.5" y="1542.521">write receipt, then state</text>
+<path d="M323.5,1579.187 L323.5,1595.3198 L303.5,1599.3198 L323.5,1603.3198 L323.5,1619.4526 A0,0 0 0 0 323.5,1619.4526 L651.5,1619.4526 A0,0 0 0 0 651.5,1619.4526 L651.5,1589.187 L641.5,1579.187 L323.5,1579.187 A0,0 0 0 0 323.5,1579.187 " fill="#FBFB77" style="stroke: #A80036; stroke-width: 1.0;"/>
+<path d="M641.5,1579.187 L641.5,1589.187 L651.5,1589.187 L641.5,1579.187 " fill="#FBFB77" style="stroke: #A80036; stroke-width: 1.0;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="263" x="329.5" y="1596.2539">academic-pipeline consumes CLI frontier.</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="307" x="329.5" y="1611.3867">It does not maintain a second operational state.</text>
+<rect fill="#FEFECE" height="47.9375" rx="12.5" ry="12.5" style="stroke: #A80036; stroke-width: 1.5;" width="246" x="57.5" y="1575.3511"/>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="117" x="67.5" y="1596.4897">Workspace retains</text>
+<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="226" x="67.5" y="1610.4585">state, registry, ledgers and receipts</text>
+<ellipse cx="180.5" cy="1654.2886" fill="#FFFFFF" rx="11" ry="11" style="stroke: #000000; stroke-width: 1.0;"/>
+<ellipse cx="180.5" cy="1654.2886" fill="#000000" rx="6" ry="6" style="stroke: #7F7F7F; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="180.5" x2="180.5" y1="50.9531" y2="70.9531"/>
+<polygon fill="#A80036" points="176.5,60.9531,180.5,70.9531,184.5,60.9531,180.5,64.9531" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="180.5" x2="180.5" y1="118.8906" y2="138.8906"/>
+<polygon fill="#A80036" points="176.5,128.8906,180.5,138.8906,184.5,128.8906,180.5,132.8906" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="180.5" x2="180.5" y1="186.8281" y2="206.8281"/>
+<polygon fill="#A80036" points="176.5,196.8281,180.5,206.8281,184.5,196.8281,180.5,200.8281" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="180.5" x2="180.5" y1="254.7656" y2="274.7656"/>
+<polygon fill="#A80036" points="176.5,264.7656,180.5,274.7656,184.5,264.7656,180.5,268.7656" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="180.5" x2="180.5" y1="322.7031" y2="342.7031"/>
+<polygon fill="#A80036" points="176.5,332.7031,180.5,342.7031,184.5,332.7031,180.5,336.7031" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="180.5" x2="180.5" y1="390.6406" y2="410.6406"/>
+<polygon fill="#A80036" points="176.5,400.6406,180.5,410.6406,184.5,400.6406,180.5,404.6406" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="180.5" x2="180.5" y1="458.5781" y2="478.5781"/>
+<polygon fill="#A80036" points="176.5,468.5781,180.5,478.5781,184.5,468.5781,180.5,472.5781" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="180.5" x2="180.5" y1="526.5156" y2="546.5156"/>
+<polygon fill="#A80036" points="176.5,536.5156,180.5,546.5156,184.5,536.5156,180.5,540.5156" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="180.5" x2="180.5" y1="594.4531" y2="614.4531"/>
+<polygon fill="#A80036" points="176.5,604.4531,180.5,614.4531,184.5,604.4531,180.5,608.4531" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="180.5" x2="180.5" y1="662.3906" y2="682.3906"/>
+<polygon fill="#A80036" points="176.5,672.3906,180.5,682.3906,184.5,672.3906,180.5,676.3906" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="180.5" x2="180.5" y1="730.3281" y2="750.3281"/>
+<polygon fill="#A80036" points="176.5,740.3281,180.5,750.3281,184.5,740.3281,180.5,744.3281" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="180.5" x2="180.5" y1="921.9136" y2="941.9136"/>
+<polygon fill="#A80036" points="176.5,931.9136,180.5,941.9136,184.5,931.9136,180.5,935.9136" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="180.5" x2="180.5" y1="989.8511" y2="1009.8511"/>
+<polygon fill="#A80036" points="176.5,999.8511,180.5,1009.8511,184.5,999.8511,180.5,1003.8511" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="180.5" x2="180.5" y1="1057.7886" y2="1077.7886"/>
+<polygon fill="#A80036" points="176.5,1067.7886,180.5,1077.7886,184.5,1067.7886,180.5,1071.7886" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="180.5" x2="180.5" y1="1125.7261" y2="1145.7261"/>
+<polygon fill="#A80036" points="176.5,1135.7261,180.5,1145.7261,184.5,1135.7261,180.5,1139.7261" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="180.5" x2="180.5" y1="842.2656" y2="873.9761"/>
+<polygon fill="#A80036" points="176.5,863.9761,180.5,873.9761,184.5,863.9761,180.5,867.9761" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="180.5" x2="180.5" y1="1193.6636" y2="1203.6636"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="180.5" x2="312" y1="1203.6636" y2="1203.6636"/>
+<polygon fill="#A80036" points="308,1025.4175,312,1015.4175,316,1025.4175,312,1021.4175" style="stroke: #A80036; stroke-width: 1.5;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="312" x2="312" y1="830.2656" y2="1203.6636"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="312" x2="300" y1="830.2656" y2="830.2656"/>
+<polygon fill="#A80036" points="310,826.2656,300,830.2656,310,834.2656,306,830.2656" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="61" x2="49" y1="830.2656" y2="830.2656"/>
+<polygon fill="#A80036" points="45,1011.4175,49,1021.4175,53,1011.4175,49,1015.4175" style="stroke: #A80036; stroke-width: 1.5;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="49" x2="49" y1="830.2656" y2="1215.6636"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="49" x2="180.5" y1="1215.6636" y2="1215.6636"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="180.5" x2="180.5" y1="1215.6636" y2="1235.6636"/>
+<polygon fill="#A80036" points="176.5,1225.6636,180.5,1235.6636,184.5,1225.6636,180.5,1229.6636" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="180.5" x2="180.5" y1="798.2656" y2="818.2656"/>
+<polygon fill="#A80036" points="176.5,808.2656,180.5,818.2656,184.5,808.2656,180.5,812.2656" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="180.5" x2="180.5" y1="1283.6011" y2="1303.6011"/>
+<polygon fill="#A80036" points="176.5,1293.6011,180.5,1303.6011,184.5,1293.6011,180.5,1297.6011" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="180.5" x2="180.5" y1="1351.5386" y2="1371.5386"/>
+<polygon fill="#A80036" points="176.5,1361.5386,180.5,1371.5386,184.5,1361.5386,180.5,1365.5386" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="180.5" x2="180.5" y1="1419.4761" y2="1439.4761"/>
+<polygon fill="#A80036" points="176.5,1429.4761,180.5,1439.4761,184.5,1429.4761,180.5,1433.4761" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="180.5" x2="180.5" y1="1487.4136" y2="1507.4136"/>
+<polygon fill="#A80036" points="176.5,1497.4136,180.5,1507.4136,184.5,1497.4136,180.5,1501.4136" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="180.5" x2="180.5" y1="1555.3511" y2="1575.3511"/>
+<polygon fill="#A80036" points="176.5,1565.3511,180.5,1575.3511,184.5,1565.3511,180.5,1569.3511" style="stroke: #A80036; stroke-width: 1.0;"/>
+<line style="stroke: #A80036; stroke-width: 1.5;" x1="180.5" x2="180.5" y1="1623.2886" y2="1643.2886"/>
+<polygon fill="#A80036" points="176.5,1633.2886,180.5,1643.2886,184.5,1633.2886,180.5,1637.2886" style="stroke: #A80036; stroke-width: 1.0;"/>
+<!--MD5=[c28005c59fafdd3b8031e1a4a8f8d132]
+@startuml
+title Academic Pipeline：当前 end-to-end 控制图
+skinparam shadowing false
+start
+:Human + Host Agent\nconfirm route, graph, Gates and cost;
+:CLI Start\nwrite receipt, then parent instance state;
+:ARSU child\ndeep-research:full;
+:CLI transition\nresearch -> write;
+:ARSU child\nacademic-paper:full;
+:CLI transition\nwrite -> pre-review;
+:academic-pipeline producer\nwrite integrity_report;
+:Verify + Human\nconfirm pre-review integrity Gate;
+:CLI transition\npre-review -> review;
+:ARSU child\nacademic-paper-reviewer:full;
+:Verify + Human\nconfirm review Gate;
+while (workflow_branch Decision = revision?) is (yes)
+  :CLI Start\ndynamic revision round n;
+  :ARSU child\nacademic-paper:revision;
+  :CLI transition\nrevise -> re-review;
+  :ARSU child\nacademic-paper-reviewer:re-review;
+  :Human Decide\nrevision-outcome;
+endwhile (accepted)
+:academic-pipeline producer\nwrite final_integrity_report;
+:Verify + Human\nconfirm final-integrity Gate;
+:ARSU child\nacademic-paper:format-convert;
+:academic-pipeline producer\nwrite process_summary;
+:CLI complete transition\nwrite receipt, then state;
+:Workspace retains\nstate, registry, ledgers and receipts;
+note right
+  academic-pipeline consumes CLI frontier.
+  It does not maintain a second operational state.
+end note
+stop
+@enduml
+
+PlantUML version 1.2020.02(Sun Mar 01 18:22:07 CST 2020)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 21.0.11+10-1-24.04.2-Ubuntu
+Operating System: Linux
+Default Encoding: UTF-8
+Language: en
+Country: null
+-->
+</g>
+</svg>

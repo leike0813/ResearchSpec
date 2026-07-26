@@ -1,4 +1,3 @@
-import { randomUUID } from "node:crypto";
 import { readFile, realpath } from "node:fs/promises";
 import path from "node:path";
 import { parse, stringify } from "yaml";
@@ -10,38 +9,52 @@ import { executeWritePlan, hashPath, sha256, type PlannedWrite } from "../worksp
 import { validateAndApplyContractOperations, validateEvidenceReferences } from "./contract-change.js";
 import { evaluateWorkflowControl } from "./workflow-control.js";
 import { GateSubmitReceiptSchema } from "../contracts/gate-transition.js";
+import { DecisionInputSchema, type DecisionInput } from "../contracts/case-control.js";
 
-export type DecisionChoice = "accept" | "reject" | "postpone";
+export type DecisionChoice = DecisionInput["decision"];
 
 export interface DecisionOutcome {
   item: string;
   decision_id: string;
+  event_id: string;
+  plan_sha256: string;
   status: "accepted" | "rejected" | "postponed";
-  writes: string[];
+  effects: Array<{ kind: "decision_recorded" | "contract_applied" | "draft_output_created" | "item_rejected" | "item_postponed"; refs: string[] }>;
+  next_selectors: string[];
 }
 
-export async function decideItem(input: { snapshot: WorkspaceSnapshot; selector: string; decision: DecisionChoice; actorName: string; reason?: string; dryRun: boolean }): Promise<DecisionOutcome> {
+export class LifecycleError extends Error {
+  constructor(readonly kind: "usage" | "domain" | "conflict", readonly code: string, message: string, readonly details?: unknown) {
+    super(message);
+    this.name = "LifecycleError";
+  }
+}
+
+export async function decideItem(input: { snapshot: WorkspaceSnapshot; selector: string; decision: DecisionChoice; actorName: string; reason?: string; dryRun: boolean; expectedPlanSha256?: string }): Promise<DecisionOutcome> {
+  const semantic = DecisionInputSchema.safeParse({ decision: input.decision, actor_name: input.actorName, ...(input.reason ? { reason: input.reason } : {}) });
+  if (!semantic.success) throw new LifecycleError("usage", "invalid_decision_input", "Decision input does not match the action schema.", semantic.error.issues);
   const blockingDiagnostic = input.snapshot.diagnostics.find((diagnostic) => diagnostic.blocking);
-  if (blockingDiagnostic) throw new Error(`Workspace is not valid for decisions: ${blockingDiagnostic.code}`);
+  if (blockingDiagnostic) throw new LifecycleError("domain", "decision_workspace_invalid", `Workspace is not valid for decisions: ${blockingDiagnostic.code}`, blockingDiagnostic);
   if (input.selector.startsWith("transition:")) return decideTransition(input);
   const resolved = resolveItem(input.snapshot, input.selector);
-  if (!resolved.item) throw new Error(resolved.candidates.length > 1 ? `Ambiguous item: ${resolved.candidates.map((item) => item.selector).join(", ")}` : `Item not found: ${input.selector}`);
+  if (!resolved.item) throw new LifecycleError("usage", resolved.candidates.length > 1 ? "decision_target_ambiguous" : "decision_target_missing", resolved.candidates.length > 1 ? `Ambiguous item: ${resolved.candidates.map((item) => item.selector).join(", ")}` : `Item not found: ${input.selector}`);
   const item = resolved.item;
-  if (!(["change", "patch", "gate"] as string[]).includes(item.type)) throw new Error(`Item type cannot be decided: ${item.type}`);
+  if (!(["change", "patch", "gate"] as string[]).includes(item.type)) throw new LifecycleError("usage", "decision_target_unsupported", `Item type cannot be decided: ${item.type}`);
   if (item.type !== "gate") assertSafeId(item.id, "item ID");
   if (item.type === "change" || item.type === "patch") {
     const currentStatus = string(record(item.value).status) || "proposed";
-    if (!["proposed", "postponed"].includes(currentStatus)) throw new Error(`Item is already resolved: ${currentStatus}`);
+    if (!["proposed", "postponed"].includes(currentStatus)) throw new LifecycleError("conflict", "decision_target_resolved", `Item is already resolved: ${currentStatus}`);
   } else {
     const gate = record(item.value);
     const existingOverride = latestDecisions(input.snapshot).find((decision) => decision.gate_id === item.id && decision.status === "accepted");
-    if (gate.blocking !== true || gate.verdict === "pass" || existingOverride) throw new Error("Gate is not a pending blocking item.");
+    if (gate.blocking !== true || gate.verdict === "pass" || existingOverride) throw new LifecycleError("conflict", "decision_target_resolved", "Gate is not a pending blocking item.");
     if (gate.schema_version === "1") await assertTrustedGateForOverride(input.snapshot, gate);
   }
-  if ((input.decision === "accept" || input.decision === "reject") && !input.reason) throw new Error("--reason is required for accept or reject.");
-
   const now = new Date().toISOString();
-  const decisionId = `D-${randomUUID()}`;
+  const planSha256 = decisionPlanSha256(input);
+  if (input.expectedPlanSha256 && input.expectedPlanSha256 !== planSha256) throw new LifecycleError("conflict", "decision_plan_stale", "Decision plan no longer matches the approved preview.", { expected: input.expectedPlanSha256, actual: planSha256 });
+  const decisionId = `D-${planSha256.slice(0, 24)}`;
+  const eventId = `E-${planSha256.slice(24, 48)}`;
   const operations: PlannedWrite[] = [];
   if (input.decision !== "postpone" && (item.type === "change" || item.type === "patch")) {
     if (input.decision === "accept") operations.push(...await acceptItem(input.snapshot, item, decisionId, now));
@@ -51,7 +64,7 @@ export async function decideItem(input: { snapshot: WorkspaceSnapshot; selector:
   const ledgerPath = path.join(input.snapshot.workspace, "runs/current/decision-ledger.jsonl");
   const ledger = await readOptionalText(ledgerPath) ?? "";
   const event = {
-    event_id: `E-${randomUUID()}`, decision_id: decisionId, timestamp: now,
+    event_id: eventId, decision_id: decisionId, timestamp: now,
     actor: { kind: "human", name: input.actorName }, decision_type: item.type === "gate" ? "gate_override" : "patch_acceptance",
     selected_option: input.decision, status: input.decision === "accept" ? "accepted" : input.decision === "reject" ? "rejected" : "postponed",
     rationale: input.reason, ...(item.type === "change" ? { change_id: item.id } : {}), ...(item.type === "patch" ? { draft_patch_id: item.id } : {}), ...(item.type === "gate" ? { gate_id: item.id } : {}),
@@ -59,7 +72,20 @@ export async function decideItem(input: { snapshot: WorkspaceSnapshot; selector:
   };
   operations.push({ action: await fileExists(ledgerPath) ? "refresh" : "create", path: ledgerPath, relativePath: "runs/current/decision-ledger.jsonl", content: `${ledger}${JSON.stringify(event)}\n`, scope: "workspace", ownership: "user", previousHash: sha256(ledger), nextHash: sha256(`${ledger}${JSON.stringify(event)}\n`), reason: "append human decision last" });
   if (!input.dryRun) await executeWritePlan({ operations });
-  return { item: item.selector, decision_id: decisionId, status: event.status as DecisionOutcome["status"], writes: operations.map((operation) => operation.path) };
+  const effects: DecisionOutcome["effects"] = [{ kind: "decision_recorded", refs: [`decision:${decisionId}`, `decision-event:${eventId}`] }];
+  if (input.decision === "postpone") effects.push({ kind: "item_postponed", refs: [item.selector] });
+  else if (input.decision === "reject") effects.push({ kind: "item_rejected", refs: [item.selector] });
+  else if (item.type === "change") effects.push({ kind: "contract_applied", refs: [item.selector, `artifact:A-receipt-${item.id}`] });
+  else if (item.type === "patch") effects.push({ kind: "draft_output_created", refs: [item.selector, `artifact:A-${item.id}`, `artifact:A-receipt-${item.id}`] });
+  return {
+    item: item.selector,
+    decision_id: decisionId,
+    event_id: eventId,
+    plan_sha256: planSha256,
+    status: event.status as DecisionOutcome["status"],
+    effects,
+    next_selectors: ["status", `show:decision:${decisionId}`, "list:history", "list:case-actions"],
+  };
 }
 
 async function assertTrustedGateForOverride(snapshot: WorkspaceSnapshot, gate: Record<string, unknown>): Promise<void> {
@@ -76,17 +102,19 @@ async function assertTrustedGateForOverride(snapshot: WorkspaceSnapshot, gate: R
   } catch (error) { throw new Error(`Gate override requires a trusted receipt: ${error instanceof Error ? error.message : String(error)}`); }
 }
 
-async function decideTransition(input: { snapshot: WorkspaceSnapshot; selector: string; decision: DecisionChoice; actorName: string; reason?: string; dryRun: boolean }): Promise<DecisionOutcome> {
+async function decideTransition(input: { snapshot: WorkspaceSnapshot; selector: string; decision: DecisionChoice; actorName: string; reason?: string; dryRun: boolean; expectedPlanSha256?: string }): Promise<DecisionOutcome> {
   const control = await evaluateWorkflowControl(input.snapshot);
   const transition = control.transitions.find((item) => item.selector === input.selector);
-  if (!transition || transition.state !== "decision_required" || !transition.decision_point_id) throw new Error("Transition is not awaiting a branch Decision.");
-  if ((input.decision === "accept" || input.decision === "reject") && !input.reason) throw new Error("--reason is required for accept or reject.");
+  if (!transition || transition.state !== "decision_required" || !transition.decision_point_id) throw new LifecycleError("conflict", "decision_target_resolved", "Transition is not awaiting a branch Decision.");
   const existingAccepted = latestDecisions(input.snapshot).find((decision) => decision.decision_type === "workflow_branch" && decision.status === "accepted" && decision.decision_point_id === transition.decision_point_id);
-  if (existingAccepted) throw new Error(`Decision point is already resolved: ${transition.decision_point_id}`);
+  if (existingAccepted) throw new LifecycleError("conflict", "decision_target_resolved", `Decision point is already resolved: ${transition.decision_point_id}`);
   const now = new Date().toISOString();
-  const decisionId = `D-${randomUUID()}`;
+  const planSha256 = decisionPlanSha256(input);
+  if (input.expectedPlanSha256 && input.expectedPlanSha256 !== planSha256) throw new LifecycleError("conflict", "decision_plan_stale", "Decision plan no longer matches the approved preview.", { expected: input.expectedPlanSha256, actual: planSha256 });
+  const decisionId = `D-${planSha256.slice(0, 24)}`;
+  const eventId = `E-${planSha256.slice(24, 48)}`;
   const event = {
-    event_id: `E-${randomUUID()}`, decision_id: decisionId, timestamp: now, actor: { kind: "human", name: input.actorName },
+    event_id: eventId, decision_id: decisionId, timestamp: now, actor: { kind: "human", name: input.actorName },
     decision_type: "workflow_branch", decision_point_id: transition.decision_point_id, transition_id: transition.transition_id,
     subflow_instance_id: transition.subflow_instance_id, selected_option: transition.transition_node_id,
     status: input.decision === "accept" ? "accepted" : input.decision === "reject" ? "rejected" : "postponed", rationale: input.reason,
@@ -96,7 +124,39 @@ async function decideTransition(input: { snapshot: WorkspaceSnapshot; selector: 
   const content = `${ledger}${JSON.stringify(event)}\n`;
   const operation: PlannedWrite = { action: await fileExists(ledgerPath) ? "refresh" : "create", path: ledgerPath, relativePath: "runs/current/decision-ledger.jsonl", content, scope: "workspace", ownership: "user", previousHash: sha256(ledger), nextHash: sha256(content), reason: "append workflow branch decision" };
   if (!input.dryRun) await executeWritePlan({ operations: [operation] });
-  return { item: input.selector, decision_id: decisionId, status: event.status as DecisionOutcome["status"], writes: [ledgerPath] };
+  const effects: DecisionOutcome["effects"] = [
+    { kind: "decision_recorded", refs: [`decision:${decisionId}`, `decision-event:${eventId}`, input.selector] },
+    ...(input.decision === "postpone" ? [{ kind: "item_postponed" as const, refs: [input.selector] }] : input.decision === "reject" ? [{ kind: "item_rejected" as const, refs: [input.selector] }] : []),
+  ];
+  return {
+    item: input.selector,
+    decision_id: decisionId,
+    event_id: eventId,
+    plan_sha256: planSha256,
+    status: event.status as DecisionOutcome["status"],
+    effects,
+    next_selectors: ["status", `show:decision:${decisionId}`, "list:history", `instructions:${input.selector}`],
+  };
+}
+
+function decisionPlanSha256(input: { snapshot: WorkspaceSnapshot; selector: string; decision: DecisionChoice; actorName: string; reason?: string }): string {
+  const reads = [
+    "specs/workflow.yaml",
+    "runs/current/state.yaml",
+    "runs/current/artifact-registry.json",
+    "runs/current/gate-ledger.jsonl",
+    "runs/current/decision-ledger.jsonl",
+  ].flatMap((relativePath) => {
+    const file = input.snapshot.files.get(relativePath);
+    return file ? [{ path: relativePath, sha256: file.hash }] : [];
+  });
+  return sha256(`${JSON.stringify({
+    selector: input.selector,
+    decision: input.decision,
+    actor_name: input.actorName.trim(),
+    reason: input.reason?.trim() ?? null,
+    reads,
+  })}\n`);
 }
 
 export async function archiveItem(input: { snapshot: WorkspaceSnapshot; selector: string; dryRun: boolean }): Promise<{ source: string; target: string }> {

@@ -1,0 +1,53 @@
+@startuml
+title 统一运行协议：Human / Agent / ARSU / CLI / Workspace
+skinparam shadowing false
+actor Human
+participant "Host Agent / Navigate" as Agent
+participant "ARSU producer" as ARSU
+participant "Verify / Decide" as Companion
+participant "ResearchSpec CLI" as CLI
+database "Workspace files" as Files
+
+Agent -> CLI : status --json
+CLI -> Files : load snapshot
+Files --> CLI : profile + state + evidence
+CLI --> Agent : canonical frontier
+Agent -> CLI : instructions subflow:<template>
+CLI --> Agent : route, graph, prerequisites, cost, Gates
+Agent -> Human : exact route summary
+Human --> Agent : confirm route
+Agent -> CLI : Start dry-run then expected-plan execution
+CLI -> Files : start receipt, then state.yaml
+
+loop each ready work selector
+  Agent -> CLI : instructions work:<instance>/<node>
+  CLI --> Agent : producer, inputs, output path, validation
+  Agent -> ARSU : bounded semantic task
+  ARSU -> Files : write candidate only
+  Agent -> CLI : Submit dry-run then expected-hash execution
+  CLI -> Files : submit receipt, then artifact registry
+  Agent -> CLI : status --json
+end
+
+opt formal Gate
+  Agent -> Companion : verify declared evidence
+  Companion --> Human : proposed verdict and consequences
+  Human --> Companion : confirm / challenge
+  Companion -> CLI : submit gate:<instance>/<node>
+  CLI -> Files : Gate receipt, then Gate ledger
+end
+
+opt branch or override
+  Agent -> Companion : present canonical Decision target
+  Companion --> Human : choices and semantic effect
+  Human --> Companion : explicit choice and rationale
+  Companion -> CLI : decide dry-run then execution
+  CLI -> Files : apply evidence, Decision ledger last
+end
+
+Agent -> CLI : instructions transition:<instance>/<node>
+Agent -> CLI : Advance dry-run then expected-plan execution
+CLI -> Files : transition receipt, then state.yaml
+Agent -> CLI : status --json
+CLI --> Agent : next authoritative frontier
+@enduml

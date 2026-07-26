@@ -61,26 +61,24 @@ void test("status and check use the versioned JSON envelope", async () => {
 
   assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
   const status = parseEnvelope<{
-    status: string;
-    run: { status: string };
-    tools: { selected: string[] };
-    plugins: { selected: string[]; available: string[]; projected: string[] };
-    literature_adapters: Array<{ adapter_id: string; state: string; connection_state: string; skills: { projection_state: string } }>;
+    schema_version: string;
+    workspace_id: string;
+    run_id: string;
+    lifecycle: string;
+    profile: { mode: string };
+    pending: { gate_count: number; decision_count: number };
+    next_selectors: string[];
   }>(runCli(["status", "--json"], root));
   assert.equal(status.ok, true);
-  assert.equal(status.data?.status, "initialized");
-  assert.equal(status.data?.run.status, "not_started");
-  assert.deepEqual(status.data?.tools.selected, []);
-  assert.deepEqual(status.data?.plugins.selected, []);
-  assert.equal(status.data?.plugins.available.length, 56);
-  assert.equal(status.data?.plugins.available.includes("scientific-visualization-and-communication"), true);
-  assert.deepEqual(status.data?.plugins.projected, []);
-  assert.deepEqual(status.data?.literature_adapters.map((adapter) => ({
-    adapter_id: adapter.adapter_id,
-    state: adapter.state,
-    connection_state: adapter.connection_state,
-    projection_state: adapter.skills.projection_state,
-  })), [{ adapter_id: "zotero-library", state: "installed", connection_state: "unchecked", projection_state: "deferred" }]);
+  assert.equal(status.data?.schema_version, "1");
+  assert.equal(status.data?.run_id, "current");
+  assert.equal(status.data?.lifecycle, "open");
+  assert.equal(status.data?.profile.mode, "strict");
+  assert.equal(status.data?.pending.gate_count, 0);
+  assert.equal(status.data?.pending.decision_count, 0);
+  assert.ok(status.data?.next_selectors.includes("show:workflow:current"));
+  assert.equal(status.data && "workflow_control" in status.data, false);
+  assert.equal(status.data && "diagnostics" in status.data, false);
   const check = parseEnvelope<{ ok: boolean; target: string }>(runCli(["check", "contracts", "--json"], root));
   assert.equal(check.data?.ok, true);
   assert.equal(check.data?.target, "contracts");
@@ -186,24 +184,24 @@ void test("universal init exposes dynamic status and resolved instructions", asy
   const workspace = path.join(root, "researchspec");
   assert.equal(existsSync(path.join(workspace, "runs/current/subflows")), false);
 
-  const status = parseEnvelope<{
-    workflow_control: {
-      profile: string; state: string; configured: boolean; valid: boolean;
-      ready_items: string[]; startable_subflows: string[]; work_items: Array<{ id: string; selector: string; work_item_id: string; state: string }>;
-    };
-  }>(runCli(["status", "--json"], root));
+  const status = parseEnvelope<{ lifecycle: string; allowed_actions: Array<{ selector: string }> }>(runCli(["status", "--json"], root));
   assert.equal(status.ok, true);
-  assert.equal(status.data?.workflow_control.configured, true);
-  assert.equal(status.data?.workflow_control.valid, true);
-  assert.equal(status.data?.workflow_control.profile, "arsu-v0-1");
-  assert.equal(status.data?.workflow_control.state, "not_started");
-  assert.deepEqual(status.data?.workflow_control.ready_items, []);
-  assert.ok(status.data?.workflow_control.startable_subflows.includes("subflow:tpl-deep-research-full"));
-  assert.deepEqual(status.data?.workflow_control.work_items, []);
-  assert.equal(status.data && "work_items" in status.data, false);
+  assert.equal(status.data?.lifecycle, "open");
+  assert.ok((status.data?.allowed_actions.length ?? 0) > 0);
+  const workflow = parseEnvelope<{ workflow_control: { profile: string; state: string; configured: boolean; valid: boolean; ready_items: string[]; startable_subflows: string[]; work_items: unknown[] } }>(
+    runCli(["show", "workflow:current", "--json"], root),
+  );
+  assert.equal(workflow.data?.workflow_control.configured, true);
+  assert.equal(workflow.data?.workflow_control.valid, true);
+  assert.equal(workflow.data?.workflow_control.profile, "arsu-v0-1");
+  assert.equal(workflow.data?.workflow_control.state, "not_started");
+  assert.deepEqual(workflow.data?.workflow_control.ready_items, []);
+  assert.ok(workflow.data?.workflow_control.startable_subflows.includes("subflow:tpl-deep-research-full"));
+  assert.deepEqual(workflow.data?.workflow_control.work_items, []);
 
   const subflow = parseEnvelope<{
     selector: string; route: { route_ref: string }; route_coverage: string; instruction_basis_sha256: string; required_user_input_ids: string[];
+    action_descriptor: { availability: { basis_sha256: string } };
   }>(runCli(["instructions", "subflow:tpl-deep-research-full", "--json"], root));
   assert.equal(subflow.ok, true);
   assert.equal(subflow.data?.route.route_ref, "deep-research:full");
@@ -211,12 +209,12 @@ void test("universal init exposes dynamic status and resolved instructions", asy
   assert.ok(subflow.data?.required_user_input_ids.includes("research_goal"));
   const startInput = path.join(root, "start.json");
   await writeFile(startInput, `${JSON.stringify({ schema_version: "1", instruction_basis_sha256: subflow.data?.instruction_basis_sha256, acknowledged_user_input_ids: ["research_goal"], prerequisite_artifact_ids: [], prerequisite_decision_ids: [], parent_subflow_selector: null }, null, 2)}\n`, "utf8");
-  const startPreview = parseEnvelope<{ status: string; plan_sha256: string; instance: { instance_id: string }; plan: Array<{ action: string }> }>(runCli(["start", "subflow:tpl-deep-research-full", "--input", startInput, "--actor-kind", "agent", "--actor-name", "academic-pipeline", "--confirmed-by", "researcher", "--dry-run", "--json"], root));
-  assert.equal(startPreview.data?.status, "would_start");
-  assert.deepEqual(startPreview.data?.plan.map((item) => item.action), ["create", "refresh"]);
-  const start = parseEnvelope<{ status: string; workflow_control_after: { ready_items: string[] } }>(runCli(["start", "subflow:tpl-deep-research-full", "--input", startInput, "--actor-kind", "agent", "--actor-name", "academic-pipeline", "--confirmed-by", "researcher", "--expected-plan-sha256", startPreview.data?.plan_sha256 ?? "", "--yes", "--json"], root));
-  assert.equal(start.data?.status, "started");
-  const workSelector = start.data?.workflow_control_after.ready_items[0] ?? "";
+  const startPreview = parseEnvelope<{ outcome: string; identity: { plan_sha256?: string } }>(runCli(["start", "subflow:tpl-deep-research-full", "--input", startInput, "--actor-kind", "agent", "--actor-name", "academic-pipeline", "--confirmed-by", "researcher", "--dry-run", "--json"], root));
+  assert.equal(startPreview.data?.outcome, "would_start");
+  const start = parseEnvelope<{ outcome: string; identity: { selector: string } }>(runCli(["start", "subflow:tpl-deep-research-full", "--input", startInput, "--actor-kind", "agent", "--actor-name", "academic-pipeline", "--confirmed-by", "researcher", "--expected-action-basis-sha256", subflow.data?.action_descriptor.availability.basis_sha256 ?? "", "--expected-plan-sha256", startPreview.data?.identity.plan_sha256 ?? "", "--yes", "--json"], root));
+  assert.equal(start.data?.outcome, "started");
+  const afterStart = parseEnvelope<{ workflow_control: { ready_items: string[] } }>(runCli(["show", "workflow:current", "--json"], root));
+  const workSelector = afterStart.data?.workflow_control.ready_items[0] ?? "";
   assert.match(workSelector, /^work:sf-.+\/rq-brief$/);
 
   const instructions = parseEnvelope<{
@@ -284,34 +282,36 @@ void test("submit previews an exact candidate hash then atomically registers its
   const protectedPaths = ["runs/current/state.yaml", "runs/current/gate-ledger.jsonl", "runs/current/decision-ledger.jsonl"];
   const protectedBefore = await Promise.all(protectedPaths.map((item) => readFile(path.join(workspace, item), "utf8")));
 
+  const basis = actionBasis(root, selector);
   const preview = parseEnvelope<{
-    status: string; candidate_sha256: string; artifact: { artifact_id: string };
-    receipt_artifact: { artifact_type: string }; plan: Array<{ action: string }>;
-    workflow_control_after: null; state_updated: boolean; gate_appended: boolean; decision_appended: boolean;
+    outcome: string;
+    identity: { selector: string; sha256?: string };
+    effects: Array<{ kind: string; refs: string[] }>;
+    next_selectors: string[];
   }>(runCli(["submit", selector, "--input", inputPath, "--actor-kind", "agent", "--actor-name", "deep-research", "--dry-run", "--json"], root));
   assert.equal(preview.ok, true);
-  assert.equal(preview.data?.status, "would_submit");
-  assert.match(preview.data?.candidate_sha256 ?? "", /^[a-f0-9]{64}$/);
-  assert.equal(preview.data?.receipt_artifact.artifact_type, "artifact_submit_receipt");
-  assert.deepEqual(preview.data?.plan.map((item) => item.action), ["create", "refresh"]);
-  assert.equal(preview.data?.workflow_control_after, null);
-  assert.equal(preview.data?.state_updated, false);
-  assert.equal(preview.data?.gate_appended, false);
-  assert.equal(preview.data?.decision_appended, false);
+  assert.equal(preview.data?.outcome, "would_submit");
+  assert.match(preview.data?.identity.sha256 ?? "", /^[a-f0-9]{64}$/);
+  assert.match(preview.data?.identity.selector ?? "", /^artifact:/);
+  assert.equal(preview.data?.effects[0]?.kind, "artifact_registered");
+  assert.ok(preview.data?.next_selectors.includes("show:workflow:current"));
+  assert.equal(preview.data && "workflow_control_after" in preview.data, false);
+  assert.equal(preview.data && "plan" in preview.data, false);
   assert.deepEqual(await Promise.all(protectedPaths.map((item) => readFile(path.join(workspace, item), "utf8"))), protectedBefore);
 
   const missingConfirmation = runCli(["submit", selector, "--input", inputPath, "--actor-kind", "agent", "--actor-name", "deep-research", "--json"], root);
   assert.equal(missingConfirmation.status, 2);
   assert.equal(parseEnvelope(missingConfirmation).error?.code, "confirmation_required");
 
-  const confirmedArgs = ["submit", selector, "--input", inputPath, "--actor-kind", "agent", "--actor-name", "deep-research", "--expected-sha256", preview.data?.candidate_sha256 ?? "", "--yes", "--json"];
-  const submitted = parseEnvelope<{ status: string; workflow_control_after: { ready_items: string[] } }>(runCli(confirmedArgs, root));
+  const confirmedArgs = ["submit", selector, "--input", inputPath, "--actor-kind", "agent", "--actor-name", "deep-research", "--expected-action-basis-sha256", basis, "--expected-sha256", preview.data?.identity.sha256 ?? "", "--yes", "--json"];
+  const submitted = parseEnvelope<{ outcome: string }>(runCli(confirmedArgs, root));
   assert.equal(submitted.ok, true);
-  assert.equal(submitted.data?.status, "submitted");
-  assert.deepEqual(submitted.data?.workflow_control_after.ready_items, [`work:${instanceId}/methodology-blueprint`, `work:${instanceId}/bibliography`]);
-  const retried = parseEnvelope<{ status: string; plan: unknown[] }>(runCli(confirmedArgs, root));
-  assert.equal(retried.data?.status, "already_submitted");
-  assert.deepEqual(retried.data?.plan, []);
+  assert.equal(submitted.data?.outcome, "submitted");
+  const workflow = parseEnvelope<{ workflow_control: { ready_items: string[] } }>(runCli(["show", "workflow:current", "--json"], root));
+  assert.deepEqual(workflow.data?.workflow_control.ready_items, [`work:${instanceId}/methodology-blueprint`, `work:${instanceId}/bibliography`]);
+  const retried = parseEnvelope<{ outcome: string; effects: Array<{ kind: string }> }>(runCli(confirmedArgs, root));
+  assert.equal(retried.data?.outcome, "already_submitted");
+  assert.equal(retried.data?.effects[0]?.kind, "no_change");
   assert.deepEqual(await Promise.all(protectedPaths.map((item) => readFile(path.join(workspace, item), "utf8"))), protectedBefore);
 
   const invalidActor = runCli(["submit", selector, "--input", inputPath, "--actor-kind", "model", "--actor-name", "bad", "--dry-run", "--json"], root);
@@ -384,21 +384,22 @@ void test("propose creates a pending change that decide applies and archive clos
     patches: [{ target_contract: "specs/claims.yaml", operation: "replace", target_path: "claims[C001].strength", current_value: "strong", proposed_value: "moderate", reason: "Evidence supports moderation.", source_artifact_ids: [], source_decision_ids: [] }],
   };
   await writeFile(payloadPath, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
-  const dryRun = parseEnvelope<{ plan: Array<{ action: string; path: string }>; dry_run: boolean }>(runCli(["propose", "change-one", "--input", payloadPath, "--actor-kind", "agent", "--actor-name", "reviewer", "--dry-run", "--json"], root));
+  const dryRun = parseEnvelope<{ dry_run: boolean; identity: { kind: string; plan_sha256?: string }; effects: Array<{ kind: string }> }>(runCli(["propose", "change-one", "--input", payloadPath, "--actor-kind", "agent", "--actor-name", "reviewer", "--dry-run", "--json"], root));
   assert.equal(dryRun.data?.dry_run, true);
-  assert.deepEqual(dryRun.data?.plan.map((item) => item.action), ["create", "create", "create"]);
-  assert.match(dryRun.data?.plan.at(-1)?.path ?? "", /contract-patch\.yaml$/);
+  assert.equal(dryRun.data?.identity.kind, "plan");
+  assert.match(dryRun.data?.identity.plan_sha256 ?? "", /^[a-f0-9]{64}$/);
+  assert.equal(dryRun.data?.effects[0]?.kind, "change_proposed");
   assert.equal(existsSync(path.join(workspace, "changes/change-one")), false);
   assert.equal(await readFile(path.join(workspace, "specs/claims.yaml"), "utf8"), stableBefore);
   assert.equal(runCli(["propose", "change-one", "--input", payloadPath, "--actor-kind", "agent", "--actor-name", "reviewer", "--json"], root).status, 2);
-  const proposed = runCli(["propose", "change-one", "--input", payloadPath, "--actor-kind", "agent", "--actor-name", "reviewer", "--yes", "--json"], root);
+  const proposed = executePropose(root, ["propose", "change-one", "--input", payloadPath, "--actor-kind", "agent", "--actor-name", "reviewer"]);
   assert.equal(proposed.status, 0, proposed.stderr || proposed.stdout);
   const changeRoot = path.join(workspace, "changes/change-one");
   for (const file of ["proposal.md", "tasks.md", "contract-patch.yaml"]) assert.equal(existsSync(path.join(changeRoot, file)), true);
   assert.equal(await readFile(path.join(workspace, "specs/claims.yaml"), "utf8"), stableBefore);
   assert.equal(runCli(["show", "change:change-one", "--json"], root).status, 0);
   assert.equal(runCli(["propose", "change-one", "--input", payloadPath, "--actor-kind", "agent", "--actor-name", "reviewer", "--yes", "--json"], root).status, 3);
-  const decided = runCli(["decide", "change:change-one", "--decision", "accept", "--actor-name", "Researcher", "--reason", "Evidence supports moderation", "--json"], root);
+  const decided = executeDecision(root, ["decide", "change:change-one", "--decision", "accept", "--actor-name", "Researcher", "--reason", "Evidence supports moderation"]);
   assert.equal(decided.status, 0, decided.stderr || decided.stdout);
   assert.match(await readFile(path.join(workspace, "specs/claims.yaml"), "utf8"), /strength: moderate/);
   assert.equal(existsSync(path.join(workspace, "runs/current/receipts/change-one.json")), true);
@@ -434,7 +435,7 @@ void test("propose validates strict targets, evidence, and current-value drift a
   await writeFile(payloadPath, JSON.stringify({ ...base, unexpected: true }), "utf8");
   assert.equal(runCli(["propose", "strict-payload", "--input", payloadPath, "--actor-kind", "agent", "--actor-name", "reviewer", "--yes", "--json"], root).status, 2);
   await writeFile(payloadPath, JSON.stringify(base), "utf8");
-  assert.equal(runCli(["propose", "drifted", "--input", payloadPath, "--actor-kind", "agent", "--actor-name", "reviewer", "--yes", "--json"], root).status, 0);
+  assert.equal(executePropose(root, ["propose", "drifted", "--input", payloadPath, "--actor-kind", "agent", "--actor-name", "reviewer"]).status, 0);
   await writeFile(path.join(workspace, "specs/claims.yaml"), 'schema_version: "0.1"\nclaims:\n  - claim_id: C001\n    strength: weak\n', "utf8");
   const ledgerBefore = await readFile(path.join(workspace, "runs/current/decision-ledger.jsonl"), "utf8");
   assert.equal(runCli(["decide", "change:drifted", "--decision", "accept", "--actor-name", "Researcher", "--reason", "Review complete", "--json"], root).status, 1);
@@ -452,7 +453,7 @@ void test("decide revalidates Markdown section current values before applying a 
     patches: [{ target_contract: "specs/project.md", operation: "replace", target_path: "section[Research Question]", current_value: "TBD", proposed_value: "What changes in the target population?", reason: "Make the population explicit.", source_artifact_ids: [], source_decision_ids: [] }],
   };
   await writeFile(payloadPath, JSON.stringify(payload), "utf8");
-  assert.equal(runCli(["propose", "markdown-drift", "--input", payloadPath, "--actor-kind", "agent", "--actor-name", "reviewer", "--yes", "--json"], root).status, 0);
+  assert.equal(executePropose(root, ["propose", "markdown-drift", "--input", payloadPath, "--actor-kind", "agent", "--actor-name", "reviewer"]).status, 0);
   const projectPath = path.join(workspace, "specs/project.md");
   await writeFile(projectPath, (await readFile(projectPath, "utf8")).replace("\nTBD\n\n## Scope", "\nChanged outside the proposal.\n\n## Scope"), "utf8");
   const decided = runCli(["decide", "change:markdown-drift", "--decision", "accept", "--actor-name", "Researcher", "--reason", "Reviewed", "--json"], root);
@@ -502,7 +503,7 @@ void test("decide applies ARSU standalone block-marker draft patches without cha
     ops: [{ op: "replace_block", block_id: "B0001", old_hash: hash("Original first paragraph.").slice(0, 12), new_text: "Revised first paragraph." }],
   };
   await writeFile(path.join(workspace, "draft-patches/dp-one.json"), `${JSON.stringify(patch, null, 2)}\n`, "utf8");
-  const decided = runCli(["decide", "patch:dp-one", "--decision", "accept", "--actor-name", "Researcher", "--reason", "Apply reviewed revision", "--json"], root);
+  const decided = executeDecision(root, ["decide", "patch:dp-one", "--decision", "accept", "--actor-name", "Researcher", "--reason", "Apply reviewed revision"]);
   assert.equal(decided.status, 0, decided.stderr || decided.stdout);
   const revised = await readFile(path.join(root, "draft.dp-one.md"), "utf8");
   assert.match(revised, /<!--block:B0001-->\nRevised first paragraph\./);
@@ -654,16 +655,41 @@ void test("pack excludes registered artifacts whose symlink resolves outside the
 });
 
 async function startSliceViaCli(root: string): Promise<string> {
-  const instruction = parseEnvelope<{ instruction_basis_sha256: string }>(runCli(["instructions", "subflow:tpl-deep-research-full", "--json"], root));
+  const instruction = parseEnvelope<{ instruction_basis_sha256: string; action_descriptor: { availability: { basis_sha256: string } } }>(runCli(["instructions", "subflow:tpl-deep-research-full", "--json"], root));
   assert.equal(instruction.ok, true);
   const inputPath = path.join(root, "start-helper.json");
   await writeFile(inputPath, `${JSON.stringify({ schema_version: "1", instruction_basis_sha256: instruction.data?.instruction_basis_sha256, acknowledged_user_input_ids: ["research_goal"], prerequisite_artifact_ids: [], prerequisite_decision_ids: [], parent_subflow_selector: null }, null, 2)}\n`, "utf8");
   const base = ["start", "subflow:tpl-deep-research-full", "--input", inputPath, "--actor-kind", "agent", "--actor-name", "academic-pipeline", "--confirmed-by", "researcher"];
-  const preview = parseEnvelope<{ plan_sha256: string }>(runCli([...base, "--dry-run", "--json"], root));
+  const preview = parseEnvelope<{ identity: { plan_sha256?: string } }>(runCli([...base, "--dry-run", "--json"], root));
   assert.equal(preview.ok, true);
-  const result = parseEnvelope<{ instance: { instance_id: string } }>(runCli([...base, "--expected-plan-sha256", preview.data?.plan_sha256 ?? "", "--yes", "--json"], root));
+  const result = parseEnvelope<{ identity: { selector: string } }>(runCli([...base, "--expected-action-basis-sha256", instruction.data?.action_descriptor.availability.basis_sha256 ?? "", "--expected-plan-sha256", preview.data?.identity.plan_sha256 ?? "", "--yes", "--json"], root));
   assert.equal(result.ok, true);
-  return result.data?.instance.instance_id ?? "";
+  return result.data?.identity.selector.replace(/^subflow:/, "") ?? "";
+}
+
+function actionBasis(root: string, selector: string): string {
+  const instructions = parseEnvelope<{ action_descriptor: { availability: { basis_sha256: string } } }>(
+    runCli(["instructions", selector, "--json"], root),
+  );
+  assert.equal(instructions.ok, true, JSON.stringify(instructions.error));
+  return instructions.data?.action_descriptor.availability.basis_sha256 ?? "";
+}
+
+function executePropose(root: string, base: string[]): ReturnType<typeof runCli> {
+  const changeId = base[1] ?? "";
+  const selector = `change:${changeId}`;
+  const basis = actionBasis(root, selector);
+  const preview = parseEnvelope<{ identity: { plan_sha256?: string } }>(runCli([...base, "--dry-run", "--json"], root));
+  assert.equal(preview.ok, true, JSON.stringify(preview.error));
+  return runCli([...base, "--expected-action-basis-sha256", basis, "--expected-plan-sha256", preview.data?.identity.plan_sha256 ?? "", "--yes", "--json"], root);
+}
+
+function executeDecision(root: string, base: string[]): ReturnType<typeof runCli> {
+  const selector = base[1] ?? "";
+  const basis = actionBasis(root, selector);
+  const preview = parseEnvelope<{ identity: { plan_sha256?: string } }>(runCli([...base, "--dry-run", "--json"], root));
+  assert.equal(preview.ok, true, JSON.stringify(preview.error));
+  return runCli([...base, "--expected-action-basis-sha256", basis, "--expected-plan-sha256", preview.data?.identity.plan_sha256 ?? "", "--yes", "--json"], root);
 }
 
 function fixtureInstallation(toolId: string, targetPath: string, scope: "project" | "shared-global", sha: string, skillId: string): ManagedInstallation {

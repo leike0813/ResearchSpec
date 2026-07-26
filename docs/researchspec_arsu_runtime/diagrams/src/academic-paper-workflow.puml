@@ -1,0 +1,41 @@
+@startuml
+title Academic Paper：ARSU 内层语义与 ResearchSpec 外层控制
+skinparam shadowing false
+actor User
+participant "Host Agent" as Agent
+participant "ResearchSpec CLI" as CLI
+participant "academic-paper\n12-agent team" as ARSU
+database "Workspace" as Files
+
+Agent -> CLI : status + route instructions
+CLI --> Agent : one of 11 routes and current availability
+Agent -> User : prerequisites, outputs, Gates, risk, cost
+User --> Agent : confirm exact route
+Agent -> CLI : Start
+CLI -> Files : receipt then subflow state
+
+loop each ready artifact work
+  Agent -> CLI : scoped work instructions
+  CLI --> Agent : producer, registered inputs, output path
+  Agent -> ARSU : bounded writing task
+  note over ARSU
+    Full semantic procedure:
+    config -> research -> architecture
+    -> argument -> draft -> citation/abstract
+    -> internal evaluation -> format
+    Other routes select only relevant roles.
+  end note
+  ARSU -> Files : candidate or declared draft patch
+  Agent -> CLI : hash-bound Submit
+  CLI -> Files : submit receipt + registry
+end
+
+opt required route Gate
+  Agent -> User : Verify manuscript/evidence verdict
+  User --> Agent : confirm Gate
+  Agent -> CLI : submit Gate
+  CLI -> Files : Gate receipt + ledger
+end
+Agent -> CLI : Advance completion
+CLI -> Files : receipt + state
+@enduml

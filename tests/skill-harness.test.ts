@@ -18,6 +18,12 @@ void test("harness catalog projects the production ARSU, Companion, and domain s
   assert.equal(loaded.catalog.summary.arsu_skills, ARSU_SKILL_IDS.length);
   assert.equal(loaded.catalog.summary.companion_skills, COMPANION_INTENTS.length);
   assert.equal(loaded.catalog.summary.literature_adapter_skills, LITERATURE_ADAPTER_SKILL_IDS.length);
+  const adapterSkills = loaded.catalog.skills.filter((skill) => skill.family === "literature-adapter");
+  assert.equal(adapterSkills.length, 7);
+  assert.equal(adapterSkills.filter((skill) => skill.adapter?.role === "router").length, 1);
+  assert.equal(adapterSkills.filter((skill) => skill.adapter?.role === "task").length, 5);
+  assert.equal(adapterSkills.filter((skill) => skill.adapter?.role === "mechanism").length, 1);
+  assert.equal(adapterSkills.every((skill) => skill.files.some((file) => file.path === "assets/runner.json")), true);
   assert.equal(loaded.catalog.summary.domains, 218);
   assert.equal(loaded.catalog.summary.available_domains, loaded.catalog.domains.filter((domain) => domain.direct_skill_ids.length > 0).length);
   assert.ok(loaded.catalog.summary.plugin_skills > 0);
