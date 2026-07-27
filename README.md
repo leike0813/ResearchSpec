@@ -120,19 +120,34 @@ ResearchSpec 安装十五个固定项目 Skills：
 
 ## 运行时协议
 
-标准运行时协议为：
+CLI 使用分为三个层次：
 
 ```text
-status → instructions <selector> → start / submit / advance → status
+researchspec --help
+→ researchspec <command> --help
+→ status --json
+→ instructions <selector> --json
+→ start / submit / advance / decide
+→ next_selectors
+→ 定向读取
 ```
 
-Selector 类型：
-- `subflow:<id>` — 启动子流程
-- `work:<id>` — 生产候选工件并提交
-- `gate:<id>` — 人工确认 Gate 并提交判定
-- `transition:<id>` — 推进至下一状态
+前两层提供不依赖 workspace 的静态命令发现；它们不会授权当前运行中的动作。完整命令、
+选项和 selector 说明见 [CLI handbook](docs/cli_handbook.md)。当问题涉及当前 workspace 时，
+Agent 必须读取 `status --json`，再为返回的 selector 获取动态 instructions。
+
+Selector family 包括：
+
+- 共用入口：`subflow:<id>`；
+- adaptive：`obligation:<instance>/<id>`、`gate:<id>`、
+  `completion:<instance>/<id>`、`case-action:<id>`、`patch:<id>`、
+  `change:<id>`；
+- strict compatibility：`work:<instance>/<node>`、`gate:<instance>/<node>`、
+  `transition:<instance>/<node>`。
 
 CLI 是唯一的工作流状态权威。Agent 生产语义候选工件；不得直接编辑状态、注册表、账本或收据。
+每次写入成功后优先消费返回的 `next_selectors` 并进行定向读取；仅在重新路由、冲突恢复或
+没有返回 selector 时重新读取完整 status。
 `doctor` 对损坏的 runtime 做只读诊断，并只执行已预览、hash-bound 的确定性修复。Schema
 `0.2` workspace 如需转为 adaptive，先运行
 `researchspec update --migrate-runtime --dry-run`，再用返回的 `plan_sha256` 执行；迁移会保留
@@ -149,29 +164,14 @@ export CODEX_HOME="$PWD/.codex-home"
 researchspec init . --tools codex
 ```
 
-从相同环境运行 Codex。维护者可使用仓库专属 [Codex 内部试用适配器](playbooks/dogfooding/adapters/codex.md)和标准 playbook（均不包含在 npm 包中）。
+从相同环境运行 Codex。仓库维护者可以使用内部试用 playbook；这些材料不包含在 npm 包中。
 
-## 17 个 CLI 命令
+## CLI 命令
 
-| 命令 | 说明 |
-|---|---|
-| `init [path]` | 初始化或安全扩展 ResearchSpec 工作空间 |
-| `update [path]` | 刷新 Agent 文件，或显式计划/执行/回滚 runtime 迁移 |
-| `status` | 显示当前运行与待处理项 |
-| `instructions <selector>` | 显示运行时 selector 动态指令 |
-| `start <subflow>` | 原子启动已确认子流程 |
-| `submit <runtime-item>` | 提交候选工件或 Gate 判定（哈希绑定） |
-| `advance <transition>` | 原子推进唯一已授权 transition |
-| `check [target]` | 检查合约/运行时/工件/工具/插件/适配器 |
-| `doctor` | 诊断 runtime 损坏并执行 plan-bound 确定性修复 |
-| `list [type]` | 列出变更/工件/gate/决策/工具 |
-| `show <item>` | 显示 spec 项或全局唯一项 |
-| `handoff` | 渲染当前交接视图 |
-| `pack` | 创建确定性上下文包 |
-| `propose <change-id>` | 创建已验证的待处理合约变更 |
-| `decide [item]` | 解决待处理人工决策 |
-| `archive [item]` | 归档已解决变更或草稿补丁 |
-| `plugin` | 子命令：list、show、install、uninstall、update、instructions |
+ResearchSpec 保持 17 个顶层命令。使用 `researchspec --help` 查看当前命令集合，
+使用 `researchspec <command> --help` 查看具体语法；完整静态参考见
+[CLI handbook](docs/cli_handbook.md)。当前可执行动作及其 payload、确认和执行策略始终以
+workspace 的 `status` 与 `instructions <selector>` 为准。
 
 ## 隐私与安全
 
@@ -185,8 +185,8 @@ researchspec init . --tools codex
 
 ## 文档
 
-- [ResearchSpec 与 ARSU 核心运行模型](docs/researchspec_arsu_runtime/README.md) — CLI/Agent/ARSU 权威边界、OpenSpec 融合、四个 Skill workflow 与 current-state 审计
 - [ARSU 用户使用模型](docs/arsu_user_usage_model.md)
+- [CLI handbook](docs/cli_handbook.md)
 - [CLI 接口设计](docs/cli_interface_design.md)
 - [领域 Skill 插件](docs/domain_skill_plugins.md)
 - [领域分类标准](docs/domain_taxonomy.md)
@@ -196,12 +196,8 @@ researchspec init . --tools codex
 - [HistAgent 厂商适配器](docs/histagent_vendor_adapter.md)
 - [Materials-Science-Skills-For-LLM 厂商适配器](docs/materials_science_skills_vendor_adapter.md)
 - [Scientific Agent Skills 厂商适配器](docs/scientific_agent_skills_vendor_adapter.md)
-- [Scientific Agent Skills v2.53.0 手动安全审查](artifacts/scientific_agent_skills_v2_53_0_manual_security_review.md)
-- [Scientific Agent Skills v2.53.0 吸纳结论](artifacts/scientific_agent_skills_v2_53_0_ingest_report.md)
 - [ToolUniverse 厂商适配器](docs/tooluniverse_vendor_adapter.md)
 - [发布流程](docs/release_process.md)
-- [项目维护者导览](playbooks/owner-walkthrough/README.md) — 推荐了解实际运行模型
-- [Playbooks 索引](playbooks/README.md) — 维护者导览与内部试用 QA 指引；仓库专用，不包含在 npm 包中
 
 ## 许可证
 

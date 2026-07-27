@@ -6,8 +6,8 @@ import type {
   ContractProfile,
 } from "./types.js";
 
-export const RESEARCHSPEC_PREFLIGHT_PROFILE_ID = "researchspec-preflight-v8";
-export const RESEARCHSPEC_PREFLIGHT_MARKER = "<!-- researchspec-contract-preflight:v8 -->";
+export const RESEARCHSPEC_PREFLIGHT_PROFILE_ID = "researchspec-preflight-v9";
+export const RESEARCHSPEC_PREFLIGHT_MARKER = "<!-- researchspec-contract-preflight:v9 -->";
 export const RESEARCHSPEC_LITERATURE_ADAPTER_MARKER = "<!-- researchspec-literature-adapter:zotero-library:v2 -->";
 
 export const RESEARCHSPEC_MUTATION_OWNERSHIP = {
@@ -110,7 +110,7 @@ function buildProfile(skillGroup: string): ContractProfile {
       `${skillGroup} uses the shared ResearchSpec runtime preflight profile.`,
       "Load only stage/mode-relevant contracts into agent context.",
       "Treat ARS Material Passport as imported external evidence, not runtime truth.",
-      "Per-stage and per-mode graphs are supplied by the workflow profile layer.",
+      "The current runtime profile and CLI action descriptor select the adaptive or strict control protocol.",
       skillGroup === "deep-research"
         ? "Use the fixed Zotero task Skills through the provider-neutral handoff; Deep Research retains screening, coverage, and artifact ownership."
         : "Use fixed literature Adapter results only as bounded working material owned by the active ARSU producer.",
@@ -130,11 +130,10 @@ then load only the contracts and artifact references needed for the current
 skill, stage, phase, or mode.
 
 Use \`runs/current/artifact-registry.json\` to read prior artifacts. Call
-\`researchspec status --json\` and consume its canonical frontier. Request
-instructions for the selected external \`subflow:<template>\`, delegated
-\`subflow:<parent>/<node>\`, scoped \`work:<instance>/<node>\`,
-\`gate:<instance>/<node>\`, or \`transition:<instance>/<node>\` selector. Never
-reconstruct stage, Gate, or transition order from this Skill text.
+\`researchspec status --json\` and treat its \`profile.mode\`, canonical action
+frontier, and each selected action descriptor as authority. Request details only
+for selectors returned by status or a transaction's \`next_selectors\`; do not
+reconstruct work order, stages, Gates, or transitions from this Skill text.
 
 At a new or materially changed route, a newly ready work item, or an explicit
 specialist request, evaluate optional reviewed domain assistance with
@@ -169,41 +168,77 @@ The packaged \`academic-pipeline/scripts/adapters/zotero.py\` path is separate: 
 reads only a user-supplied Better BibTeX JSON export, requires a user-provided
 Python 3.11+ environment with PyYAML, and is not a live Zotero fact source.
 
-After producing the candidate, inspect \`submission\` and \`completion.submit\`.
-When policy is \`automatic\`, the start authorization is valid, and Submit is
-available, build the strict dependency payload in a temporary file, run Submit
-with \`--dry-run --json\`, then execute the identical selector/payload/actor with
-the returned SHA-256, \`--expected-sha256\`, and \`--yes --json\`. Re-query status
-and artifact checks. This registration is mechanical and is not Gate pass or
-academic approval. For \`manual\` or missing automatic authorization,
-build the strict payload only from dynamic instructions, run direct
-\`researchspec submit\` with \`--dry-run --json\`, present its candidate hash,
-validation, and planned writes, then obtain explicit confirmation before the
-identical expected-hash execution. If Submit or its required authority is
-unavailable, report the boundary. Never invent path, type, provenance, or runtime writes, and never hand-edit
-state, registries, receipts, or JSONL ledgers.
+### Shared Runtime Boundaries
+
+Use the selected action descriptor's command, execution policy, input schema,
+and current basis. \`direct\` actions may use their returned hash-bound preview;
+\`human_confirmed\` Start requires the displayed route confirmation; and
+\`plan_bound\` Gate, Decision, and patch-Advance actions require their stated
+human confirmation before the identical dry-run plan is executed. Never infer an
+expected hash flag: use the descriptor and preview returned for that action.
+
+After a durable transaction, use its \`next_selectors\` and targeted
+\`instructions\` reads to continue. Refresh full status when route availability,
+profile, or a material working context may have changed; it is not required after
+every mechanical step. Never invent paths, artifact types, provenance, runtime
+writes, or direct edits to state, registries, receipts, or JSONL ledgers.
 
 For a formal Gate, use \`researchspec-verify\` to produce evidence-linked findings,
 show the proposed verdict and consequences, and obtain explicit human confirmation.
-On challenge, reverify before offering an override. Submit the strict confirmed
-payload with \`researchspec submit gate:<instance>/<node>\`; Start confirmation and
+On challenge, reverify before offering an override. Start confirmation and
 \`--yes\` are not Gate confirmation. A failed reverification may advance only after
 \`researchspec-decide\` records an override bound to that Gate event and receipt.
 
-When exactly one transition is authorized, request its instructions and run
-receipt-bound Advance dry-run followed by identical expected-plan execution. When
-multiple candidates remain, route the branch through \`researchspec-decide\`.
-Start a child subflow only when its parent-scoped selector is present in the
-current frontier. Parent confirmation authorizes that exact mechanical Start;
-it never confirms a Gate or branch. Revision rounds have no inferred maximum:
-after re-review, follow only the next round selector returned by status.
+### Adaptive Runtime (\`profile.mode: adaptive\`)
 
-Do not treat ARS Material Passport as ResearchSpec runtime truth. It may be
-imported as external evidence, while runtime provenance,
-decisions, gates, and resume state live in ResearchSpec registries and ledgers.
+After a confirmed external \`subflow:<template>\` Start, follow only ready
+\`obligation:<instance>/<id>\`, \`gate:<instance>/<id>\`,
+\`completion:<instance>/<id>\`, \`case-action:<id>\`, \`patch:<id>\`, or
+\`change:<id>\` selectors. An obligation descriptor defines the hard evidence
+boundary and output path. Within those hard dependencies, ARSU may reorder,
+parallelize, retry, replace, or rework semantic tasks.
+
+Use \`researchspec submit obligation:<instance>/<id>\` with the descriptor's
+action schema: record a provisional attempt, pause it with a reason, request a
+waiver or not-applicable resolution, or accept validated durable evidence. Only
+\`accept_evidence\` satisfies the obligation and registers its evidence; ordinary
+working material remains provisional. Resolve a requested waiver or
+not-applicable case through its returned \`case-action:\` Decision. Submit a
+ready formal Gate only after its evidence is accepted and the user confirms the
+Verify verdict. When all required obligations and Gates are complete, use the
+returned \`completion:\` selector with \`researchspec advance\`.
+
+Adaptive work has no \`work:\` or \`transition:\` graph, parent-child stage
+frontier, automatic submission policy, or Material Passport import. Handle
+high-impact semantic changes and draft patches only through their returned
+\`change:\` or \`patch:\` case actions and the corresponding Propose, Decide, or
+Advance transaction.
+
+### Strict Runtime (\`profile.mode: strict\`)
+
+Follow the profile graph through external \`subflow:<template>\`, delegated
+\`subflow:<parent>/<node>\`, scoped \`work:<instance>/<node>\`,
+\`gate:<instance>/<node>\`, and \`transition:<instance>/<node>\` selectors.
+Work instructions define the candidate, dependency, validation, and submission
+policy. A trusted automatic work item may use direct hash-bound artifact Submit;
+manual work requires the preview and explicit confirmation stated by its
+descriptor. Registration is mechanical and is not academic approval.
+
+Start a child only when its parent-scoped selector is in the frontier. Parent
+confirmation authorizes that exact mechanical Start; it never confirms a Gate or
+branch. Use Verify and a human-confirmed Gate submission for every formal Gate.
+When one transition is authorized, request its instructions and execute its
+receipt-bound Advance; route branch choices and overrides through
+\`researchspec-decide\`. Revision rounds have no inferred maximum: after
+re-review, follow only the next selector returned by the strict frontier.
+
+An ARS Material Passport is never runtime truth. Strict
+\`academic-pipeline:mid-entry\` Start may import it as external evidence only;
+the current adaptive runtime does not support Passport import.
 
 This generated contract integration block uses profile \`${RESEARCHSPEC_PREFLIGHT_PROFILE_ID}\` for
-\`${skillGroup}\`. Per-stage and per-mode graphs remain workflow-profile data.
+\`${skillGroup}\`. The active workspace profile and CLI action descriptors choose
+the applicable runtime protocol.
 `;
 }
 

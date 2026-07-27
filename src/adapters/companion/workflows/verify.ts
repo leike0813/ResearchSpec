@@ -3,104 +3,82 @@ import type { CompanionWorkflowSource } from "../types.js";
 export const verifyWorkflow = {
   id: "verify",
   name: "ResearchSpec Verify",
-  description: "Assess semantic coherence and readiness across ResearchSpec questions, sources, claims, evidence, manuscript constraints, workflow artifacts, gates, and decisions after deterministic checks pass. Use for evidence-linked readiness, not schema validation or manuscript peer review.",
+  description: "Assess semantic coherence and readiness across ResearchSpec questions, sources, claims, evidence, manuscript constraints, workflow artifacts, Gates, and decisions after deterministic checks pass.",
   instructions: `## Mission
 
-Produce an evidence-linked readiness scorecard and, for a formal workflow Gate, prepare the strict CLI-owned Gate payload. Deterministic validity is a prerequisite, not proof of semantic readiness; no Gate is submitted until the user confirms the displayed verdict and evidence.
+Produce an evidence-linked readiness scorecard and, for a formal Gate, submit only the action descriptor's evidence-bound verdict. Deterministic validity is necessary but not proof of semantic readiness; a Gate is always plan-bound and requires human confirmation.
 
 ## When to Use
 
 - The user asks whether a stage, claim set, research plan, or handoff is ready to advance.
 - Contracts validate mechanically but may conflict in meaning, support, limits, or workflow expectations.
-- A gate review needs traceable semantic findings without modifying workspace state.
+- A Gate review needs traceable semantic findings without bypassing CLI-owned state.
 
 ## Do Not Use
 
-- Do not diagnose malformed YAML, schemas, hashes, or generated ownership as the primary job; use the direct targeted \`researchspec check\` command.
-- Do not propose or apply fixes while verifying. Route semantic changes to propose and human choices to decide.
-- Do not perform manuscript peer review, copy-editing, or new literature synthesis; use ARSU reviewer or deep research.
+- Do not use semantic review as a substitute for malformed schema/hash repair; use direct targeted \`researchspec check\`.
+- Do not propose or apply semantic fixes while verifying. Route changes to Propose and choices/overrides to Decide.
+- Do not perform manuscript peer review, copy-editing, or new literature synthesis; use the relevant ARSU Skill.
 
 ## Inputs
 
-- Verification scope: whole workspace, active stage, selected claim(s), manuscript readiness, or a pending lifecycle item.
-- Readiness criterion or destination stage/audience.
-- Optional claim, source, artifact, gate, or decision selectors and known constraints.
+- Verification scope, readiness criterion or destination, and optional claim, source, artifact, Gate, or decision selectors.
 
 ## CLI Examples
 
 \`\`\`bash
 researchspec check all --json
 researchspec status --json
-researchspec show contract:project --json
-researchspec show claim:C001 --json
-researchspec list artifacts --json
-researchspec list gates --json
-researchspec list decisions --json
 researchspec instructions gate:sf-<instance>/<node> --json
 researchspec submit gate:sf-<instance>/<node> --input verdict.json --actor-kind validator --actor-name researchspec-verify --confirmed-by "<human>" --dry-run --json
+researchspec show gate:sf-<instance>/<node> --json
 \`\`\`
 
 ## Workflow
 
-1. Define the readiness question and scope. “Valid workspace” and “ready to draft/advance/share” are different claims.
-2. Run the relevant deterministic check first. If any blocking diagnostic exists, stop semantic scoring and report the direct check/repair boundary; record semantic assessment as not evaluated.
-3. Read project research question, scope, target output, language, and constraints. Extract the criteria that claims, sources, manuscript, and workflow must satisfy.
-4. Inspect source contracts and registered evidence artifacts. Assess coverage, relevance, provenance visibility, and explicit gaps without conducting new research.
-5. Inspect each in-scope claim: statement, support links, strength, limits, wording constraints, and relation to the research question. Flag support that is missing, indirect, contradictory, or weaker than the declared strength.
-6. Inspect manuscript constraints and sections. Determine whether allowed claims, required sections, target output, and language align; do not judge prose quality unless routing to ARSU review.
-7. Inspect active workflow stage, required artifacts, current artifact registry entries, hashes/verification state, and producer/stage metadata. Distinguish an artifact's existence from evidence that it meets semantic expectations.
-8. Inspect latest gate events and linked human decisions. A passed gate does not erase contradictory evidence; an unresolved blocking gate prevents readiness.
-9. Cross-check lifecycle state: pending changes may make current specs intentionally provisional; applied items need receipts and ledger linkage; postponed items remain unresolved choices.
-10. Rate each dimension as pass, concern, blocker, or unknown. Cite at least one stable ID or workspace-relative path for every nontrivial rating.
-11. Produce an overall readiness conclusion based on blockers and unknowns, not a numeric average. If useful, include counts but do not imply false precision.
-12. For a formal Gate, fetch its dynamic instructions and construct a strict payload using only the declared validator/evidence contract. Show verdict, evidence, limitations, conditions, and advancement consequences to the user.
-13. If the user challenges the verdict, re-run verification and mark the payload as reverification, binding challenged basis and any superseded confirmed event. Never offer override before this step.
-14. If the user confirms, dry-run and execute the identical submit-gate plan with their real confirmed_by; --yes only binds the mechanical plan. If the confirmed reverification still fails and the user requests an override, route that exact event to Decide.
-15. Route remaining findings: mechanical validity to direct check, semantic contract change to Propose, human pending choice to Decide, manuscript quality to ARSU reviewer, missing scholarly evidence to ARSU research.
+1. Define the readiness question and run the relevant deterministic check. Blocking diagnostics stop semantic scoring and are reported through their direct repair boundary.
+2. Inspect the minimum project, source, claim, manuscript, artifact, lifecycle, and prior Gate/decision evidence needed for the scope. Rate each dimension pass, concern, blocker, or unknown with stable IDs or workspace-relative paths.
+3. For a formal Gate, begin with bounded \`status --json\`, select the \`gate:\` selector, and fetch its instructions/action descriptor. Use only its declared validator/evidence contract; do not construct a strict payload from general prose.
+4. Explain the verdict, evidence, limitations, conditions, and advancement consequence. If challenged, reverify and bind the new verdict to the challenged basis before any override discussion.
+5. Gate submission is \`plan_bound\`: preview the exact descriptor-declared verdict, show writes and \`plan_sha256\`, obtain the named human confirmation, then execute the unchanged plan with the matching expected hash. A failed confirmed reverification may route its exact event to Decide; it never passes itself.
+6. Follow returned \`next_selectors\` for targeted Gate visibility or the next frontier. Route remaining mechanical defects to Check, semantic contract changes to Propose, human choices to Decide, and scholarly/manuscript work to ARSU.
 
 ## Readiness Scorecard
 
 | Dimension | Questions |
 | --- | --- |
 | Research intent | Are RQ, scope, target output, language, and constraints mutually consistent? |
-| Sources | Is required coverage represented and traceable to registered evidence? |
-| Claims | Do support, strength, limits, and permitted wording align? |
-| Manuscript contract | Do sections and constraints permit only the intended argument? |
-| Workflow/runtime | Are stage, required artifacts, state, and pending items coherent? |
-| Gates/decisions | Are blocking judgments resolved and linked to authoritative records? |
-| Lifecycle evidence | Do applied/rejected/archive candidates have matching ledger and receipt evidence? |
+| Sources and claims | Are coverage, support, strength, limits, and wording traceable and aligned? |
+| Manuscript contract | Do sections and constraints permit the intended argument? |
+| Workflow/lifecycle | Are required artifacts, state, pending items, Gates, and decisions coherent? |
 
 ## Decision Table
 
 | Finding | Route |
 | --- | --- |
-| Deterministic check fails | Stop and use check. |
-| Evidence exists but claim strength exceeds it | Block readiness and propose a claim change or obtain stronger evidence via ARSU. |
-| Manuscript prose quality is uncertain | Mark outside scope and route to ARSU reviewer. |
-| Contract is coherent but evidence coverage is unknown | Mark unknown; do not pass. |
-| Pending high-impact change affects scope | Treat readiness as conditional and route to decide. |
-| All dimensions pass outside a formal Gate | Report ready for the named destination, without advancing state. |
-| Formal Gate verdict is confirmed | Submit the exact evidence-bound Gate transaction, then re-query status. |
+| Deterministic check fails | Stop and use Check. |
+| Evidence is weaker than a claim | Block readiness and route to Propose or ARSU research. |
+| Semantic criterion is undefined | Ask for a destination or use the formal Gate descriptor. |
+| Formal Gate verdict is confirmed | Use the exact plan-bound Gate transaction and returned next selector. |
 | User challenges a Gate verdict | Reverify; do not submit the challenged proposal or jump to override. |
 
 ## Failure Recovery
 
 - If an item cannot resolve uniquely, present canonical candidates and stop that dimension.
-- If evidence files are unavailable or hashes fail, mark the affected conclusions unknown/blocker and route to check.
-- If contracts contradict each other, cite both and recommend a proposal; do not choose which is authoritative by preference.
-- If the requested readiness criterion is undefined, ask for the destination or use the current workflow stage's explicit gate criteria only.
+- If evidence files are unavailable or hashes fail, mark the conclusion unknown/blocker and route to Check.
+- If contracts contradict, cite both and route a proposal; do not choose by preference.
 
 ## Output Contract
 
-Return scope and destination, deterministic precheck, a table of dimensions with pass/concern/blocker/unknown, evidence IDs/paths, contradictions and missing evidence, overall readiness, and routed next actions. For a submitted Gate also return confirmer, event/receipt/plan IDs and post-status; otherwise state that no runtime file changed.
+Return scope, deterministic precheck, evidence-linked ratings, overall readiness, routed next actions, and for a submitted Gate the confirmer, event/receipt/plan evidence, and \`next_selectors\`. Otherwise state that no runtime file changed.
 
 ## Guardrails
 
 - Semantic findings must be falsifiable from cited workspace evidence.
 - Do not award readiness merely because files exist or a schema passes.
-- Do not hand-edit a Gate event or receipt. Only the confirmed CLI Gate transaction may write them.
+- Only the confirmed plan-bound CLI Gate transaction may write a Gate event or receipt.
 
 ## Completion
 
-Finish when every in-scope readiness dimension has an evidence-linked rating, blockers and unknowns are explicit, adjacent work is routed correctly, and the workspace remains unchanged.`,
+Finish when every in-scope dimension has an evidence-linked rating, blockers and unknowns are explicit, and the next owner is clear.`,
 } satisfies CompanionWorkflowSource;

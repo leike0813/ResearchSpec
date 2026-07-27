@@ -1,5 +1,5 @@
 @startuml
-title 两个 OpenSpec 风格层次：产品治理与科研运行
+title Shared：两个 OpenSpec 风格层次：产品治理与科研运行
 skinparam componentStyle rectangle
 skinparam shadowing false
 

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { existsSync } from "node:fs";
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { test } from "node:test";
 
@@ -25,6 +25,12 @@ import {
   type WorkflowControlView,
 } from "./helpers/arsu-journey.js";
 
+const PUBLIC_COMMANDS = [
+  "init", "update", "status", "instructions", "start", "submit", "advance", "check", "doctor",
+  "list", "show", "handoff", "pack", "propose", "decide", "archive", "plugin",
+];
+const PLUGIN_COMMANDS = ["list", "show", "install", "uninstall", "update", "instructions"];
+
 void test("[journey.bootstrap] init installs the fifteen-Skill surface without starting academic work", async () => {
   const root = await tempProject();
   try {
@@ -42,8 +48,49 @@ void test("[journey.bootstrap] init installs the fifteen-Skill surface without s
     for (const skill of ["deep-research", "academic-paper", "academic-paper-reviewer", "academic-pipeline", "researchspec-navigate", "researchspec-propose", "researchspec-decide", "researchspec-verify", "zotero-library-agent", "zotero-library-query", "zotero-literature-acquisition", "zotero-literature-analysis", "zotero-research-synthesis", "zotero-library-curation", "zotero-bridge-cli"]) {
       assert.equal(existsSync(path.join(root, ".forge/skills", skill, "SKILL.md")), true, skill);
     }
-    const commandNames = [...runCli(["--help"], root).stdout.matchAll(/^ {2}([a-z]+)(?:\s|$)/gm)].map((item) => item[1]).filter((item) => item !== "help");
-    assert.deepEqual(commandNames, ["init", "update", "status", "instructions", "start", "submit", "advance", "check", "doctor", "list", "show", "handoff", "pack", "propose", "decide", "archive", "plugin"]);
+    assert.deepEqual(helpCommandNames(runCli(["--help"], root).stdout), PUBLIC_COMMANDS);
+  } finally { await cleanup(root); }
+});
+
+void test("[journey.cli-discovery] static help and optional Navigate handbook remain separate from runtime authorization", async () => {
+  const root = await tempProject();
+  try {
+    const rootHelp = runCli(["--help"], root);
+    assert.equal(rootHelp.status, 0, rootHelp.stderr);
+    assert.deepEqual(helpCommandNames(rootHelp.stdout), PUBLIC_COMMANDS);
+
+    const instructionsHelp = runCli(["instructions", "--help"], root);
+    assert.equal(instructionsHelp.status, 0, instructionsHelp.stderr);
+    assert.match(instructionsHelp.stdout, /^Usage: researchspec instructions /m);
+    assert.match(instructionsHelp.stdout, /<selector>/);
+
+    const pluginHelp = runCli(["plugin", "--help"], root);
+    assert.equal(pluginHelp.status, 0, pluginHelp.stderr);
+    assert.deepEqual(helpCommandNames(pluginHelp.stdout), PLUGIN_COMMANDS);
+
+    const context = initialize(root);
+    const navigateRoot = path.join(root, ".forge/skills/researchspec-navigate");
+    const navigate = await readFile(path.join(navigateRoot, "SKILL.md"), "utf8");
+    const handbookPath = path.join(navigateRoot, "references/cli-handbook.md");
+    const handbook = await readFile(handbookPath, "utf8");
+    for (const discoveryStep of [
+      "researchspec --help",
+      "researchspec <command> --help",
+      "researchspec status --json",
+      "researchspec instructions <selector> --json",
+    ]) assert.ok(navigate.includes(discoveryStep), `Navigate lacks discovery step: ${discoveryStep}`);
+    assert.ok(handbook.includes("researchspec --help"));
+    assert.equal(handbook.includes("\"basis_sha256\":"), false);
+    assert.equal(handbook.includes("\"execution_policy\":"), false);
+
+    await unlink(handbookPath);
+    assert.equal(runCli(["instructions", "--help"], root).status, 0);
+    const selector = "subflow:tpl-deep-research-quick";
+    const packet = instructions(context, selector) as SubflowPacket;
+    assert.equal(packet.action_descriptor.selector, selector);
+    assert.match(packet.action_descriptor.availability.basis_sha256, /^[a-f0-9]{64}$/);
+    assert.ok(["direct", "human_confirmed", "plan_bound"].includes(packet.action_descriptor.execution_policy));
+    assert.equal(status(context).run.status, "not_started");
   } finally { await cleanup(root); }
 });
 
@@ -57,7 +104,7 @@ void test("[journey.vague-routing] Navigate combines catalog route meaning with 
     assert.match(navigate, /deep-research:lit-review/);
     assert.match(navigate, /Near misses:/);
     assert.match(navigate, /plugin list --summary --json/);
-    assert.match(navigate, /propose at most three domains in one batch/);
+    assert.match(navigate, /at most three domains/);
     assert.match(navigate, /continue the same canonical selector with the base ARSU producer/);
     const candidate = instructions(context, "subflow:tpl-academic-pipeline-end-to-end") as SubflowPacket;
     assert.equal(candidate.route.route_ref, "academic-pipeline:end-to-end");
@@ -88,9 +135,9 @@ void test("[journey.source-policy-consent] source policy, readiness and managed-
   try {
     initialize(root);
     const navigate = await readFile(path.join(root, ".forge/skills/researchspec-navigate/SKILL.md"), "utf8");
-    assert.match(navigate, /Ordinary unchecked readiness may be skipped/);
-    assert.match(navigate, /readiness failure pauses rather than silently changing policy/);
-    assert.match(navigate, /Keep source policy and readiness separate from route confirmation, plugin consent, and managed-library authorization/);
+    assert.match(navigate, /## Literature Provider Policy/);
+    assert.match(navigate, /`library-bound` failure pauses/);
+    assert.match(navigate, /library readiness, route confirmation, plugin consent, and managed-library authorization separate/);
     const summary = cliJson<{
       pending: { decision_count: number };
       literature_adapters: Array<{ adapter_id: string; connection_state: string }>;
@@ -352,3 +399,9 @@ void test("[journey.terminal-completion] the full pipeline reaches terminal stat
 
 function hash(bytes: Uint8Array): string { return createHash("sha256").update(bytes).digest("hex"); }
 function escapeRegex(value: string): string { return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
+function helpCommandNames(help: string): string[] {
+  const commandSection = help.split(/Commands:\r?\n/)[1] ?? "";
+  return [...commandSection.matchAll(/^ {2}([a-z][a-z-]*)(?:\s|$)/gm)]
+    .map((item) => item[1])
+    .filter((item): item is string => Boolean(item) && item !== "help");
+}

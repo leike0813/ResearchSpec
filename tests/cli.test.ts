@@ -6,6 +6,17 @@ import path from "node:path";
 import { test } from "node:test";
 import type { ManagedInstallation } from "../src/adapters/installations.js";
 import { strFromU8, unzipSync } from "fflate";
+import {
+  CLI_COMMAND_CATALOG,
+  CLI_GLOBAL_OPTIONS,
+  CLI_PLUGIN_COMMANDS,
+  CLI_TOP_LEVEL_COMMANDS,
+} from "../src/cli/command-catalog.js";
+import { renderCliHandbook } from "../src/cli/handbook.js";
+import {
+  ACTION_SELECTOR_FAMILY_DISPLAYS,
+  ActionTargetSelectorSchema,
+} from "../src/core/contracts/action-selector.js";
 
 import { cleanup, parseEnvelope, runCli, tempProject } from "./helpers/cli.js";
 
@@ -20,6 +31,59 @@ void test("help, version, and usage errors expose the complete public boundary",
   assert.equal(invalid.status, 2);
   assert.equal(parseEnvelope(invalid).error?.code, "usage_error");
   assert.equal(parseEnvelope(invalid).data, null);
+});
+
+void test("typed CLI discovery stays complete, workspace-free, and context-specific", () => {
+  assert.equal(CLI_TOP_LEVEL_COMMANDS.length, 17);
+  assert.equal(CLI_PLUGIN_COMMANDS.length, 6);
+  assert.equal(CLI_GLOBAL_OPTIONS.length, 7);
+  assert.equal(new Set(CLI_COMMAND_CATALOG.map((command) => command.id)).size, CLI_COMMAND_CATALOG.length);
+  assert.equal(new Set(CLI_COMMAND_CATALOG.map((command) => command.path.join(" "))).size, CLI_COMMAND_CATALOG.length);
+
+  for (const command of CLI_TOP_LEVEL_COMMANDS) {
+    const result = runCli([command.path[0] ?? "", "--help"]);
+    assert.equal(result.status, 0, command.id);
+    assert.match(result.stdout, /Usage:/);
+  }
+  for (const command of CLI_PLUGIN_COMMANDS) {
+    const result = runCli(["plugin", command.path[1] ?? "", "--help"]);
+    assert.equal(result.status, 0, command.id);
+    assert.match(result.stdout, /Usage:/);
+  }
+
+  assert.match(parseEnvelope(runCli(["start", "--json"])).error?.hint ?? "", /researchspec start --help/);
+  assert.match(
+    parseEnvelope(runCli(["plugin", "install", "--json"])).error?.hint ?? "",
+    /researchspec plugin install --help/,
+  );
+  assert.match(parseEnvelope(runCli(["unknown", "--json"])).error?.hint ?? "", /researchspec --help/);
+});
+
+void test("selector discovery examples are accepted and the handbook is deterministic", async () => {
+  assert.equal(new Set(ACTION_SELECTOR_FAMILY_DISPLAYS.map((family) => family.id)).size, 9);
+  for (const family of ACTION_SELECTOR_FAMILY_DISPLAYS) {
+    assert.ok(family.patterns.length > 0, family.id);
+    for (const example of family.examples) {
+      assert.equal(ActionTargetSelectorSchema.safeParse(example).success, true, `${family.id}: ${example}`);
+    }
+  }
+
+  assert.equal(await readFile(path.resolve("docs/cli_handbook.md"), "utf8"), renderCliHandbook());
+});
+
+void test("invalid instructions selectors recover through every public family", async () => {
+  const root = await tempProject();
+  try {
+    assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
+    const invalid = parseEnvelope(runCli(["instructions", "unknown-selector", "--json"], root));
+    assert.match(invalid.error?.code ?? "", /^invalid_.+selector$/);
+    assert.match(invalid.error?.hint ?? "", /researchspec instructions --help/);
+    for (const family of ACTION_SELECTOR_FAMILY_DISPLAYS) {
+      assert.ok(family.patterns.some((pattern) => invalid.error?.hint?.includes(pattern)), family.id);
+    }
+  } finally {
+    await cleanup(root);
+  }
 });
 
 void test("init dry-run and execution share a protected workspace plan", async () => {

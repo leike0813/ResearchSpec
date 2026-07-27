@@ -1,5 +1,5 @@
 @startuml
-title 统一运行协议：Human / Agent / ARSU / CLI / Workspace
+title Strict compatibility：Human / Agent / ARSU / CLI / Workspace
 skinparam shadowing false
 actor Human
 participant "Host Agent / Navigate" as Agent
@@ -16,24 +16,39 @@ Agent -> CLI : instructions subflow:<template>
 CLI --> Agent : route, graph, prerequisites, cost, Gates
 Agent -> Human : exact route summary
 Human --> Agent : confirm route
-Agent -> CLI : Start dry-run then expected-plan execution
+Agent -> CLI : Start with current action basis
 CLI -> Files : start receipt, then state.yaml
 
 loop each ready work selector
   Agent -> CLI : instructions work:<instance>/<node>
-  CLI --> Agent : producer, inputs, output path, validation
-  Agent -> ARSU : bounded semantic task
-  ARSU -> Files : write candidate only
-  Agent -> CLI : Submit dry-run then expected-hash execution
+  CLI --> Agent : descriptor policy, producer, inputs, output and validation
+  alt policy = direct
+    Agent -> ARSU : one bounded semantic execution
+    ARSU -> Files : write candidate only
+    Agent -> CLI : Submit once with current action basis
+  else policy = human_confirmed
+    Agent -> Human : request named confirmation for exact action
+    Human --> Agent : confirm named action
+    Agent -> ARSU : one confirmed semantic execution
+    ARSU -> Files : write candidate only
+    Agent -> CLI : Submit once with confirmer identity
+  else policy = plan_bound
+    Agent -> ARSU : bounded semantic task
+    ARSU -> Files : write candidate only
+    Agent -> CLI : preview Submit
+    CLI --> Agent : plan_sha256
+    Agent -> CLI : execute with expected plan hash
+  end
   CLI -> Files : submit receipt, then artifact registry
-  Agent -> CLI : status --json
 end
 
 opt formal Gate
   Agent -> Companion : verify declared evidence
   Companion --> Human : proposed verdict and consequences
   Human --> Companion : confirm / challenge
-  Companion -> CLI : submit gate:<instance>/<node>
+  Companion -> CLI : preview submit gate:<instance>/<node>\npolicy = plan_bound
+  CLI --> Companion : Gate plan_sha256
+  Companion -> CLI : execute Gate with expected plan hash
   CLI -> Files : Gate receipt, then Gate ledger
 end
 
@@ -41,13 +56,22 @@ opt branch or override
   Agent -> Companion : present canonical Decision target
   Companion --> Human : choices and semantic effect
   Human --> Companion : explicit choice and rationale
-  Companion -> CLI : decide dry-run then execution
+  Companion -> CLI : preview Decision\npolicy = plan_bound
+  CLI --> Companion : Decision plan_sha256
+  Companion -> CLI : execute Decision with expected plan hash
   CLI -> Files : apply evidence, Decision ledger last
 end
 
 Agent -> CLI : instructions transition:<instance>/<node>
-Agent -> CLI : Advance dry-run then expected-plan execution
+Agent -> CLI : Advance under its descriptor policy
 CLI -> Files : transition receipt, then state.yaml
-Agent -> CLI : status --json
-CLI --> Agent : next authoritative frontier
+group after each Start / Submit / Advance / Decide write result
+  CLI --> Agent : identities, effects and next_selectors
+  alt next_selectors are returned
+    Agent -> CLI : directed instructions / show / list read
+  else reroute, conflict, or no selector
+    Agent -> CLI : full status --json
+    CLI --> Agent : refreshed authoritative frontier
+  end
+end
 @enduml

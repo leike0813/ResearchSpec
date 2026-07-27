@@ -9,7 +9,7 @@ wire contract 供迁移使用。用户从对话进入 ARSU 工作的顺序以
 状态约定：
 
 - **Target v0.1**：17 个顶层命令和
-  `status → instructions → start/submit/advance → status`。
+  `status → instructions → start/submit/advance/decide → next_selectors → 定向读取`。
 - **Current implementation（2026-07-27）**：已有 adaptive Case runtime、完整
   `arsu-v0-1` strict compatibility、显式 migration/rollback、external 与
   parent-scoped child subflow、`submit work:|gate:`、`advance transition:`、Decision 与
@@ -92,11 +92,10 @@ Target v0.1 公共命令：
 | `researchspec init [path]` | 交互式初始化 workspace 并选择 agent tools | 是 | 否 | 是 |
 | `researchspec update [path]` | 刷新用户已选择的 agent-facing files | 是 | 是 | 是 |
 | `researchspec status` | 查看当前 run 和 pending items | 否 | 是 | 否 |
-| `researchspec instructions <selector>` | 获取 subflow/work/gate/transition 的动态工作包 | 否 | 是 | 否 |
-| `researchspec start subflow:<id>` | 实例化用户已确认的 subflow | 是 | 是 | 是 |
-| `researchspec submit work:<id>` | 校验并登记 workflow candidate 与 receipt | 是 | 是 | 是 |
-| `researchspec submit gate:<id>` | 登记 verification evidence、verdict 与用户确认 | 是 | 是 | 是 |
-| `researchspec advance transition:<id>` | 执行唯一合法的状态转换并记录 receipt | 是 | 是 | 是 |
+| `researchspec instructions <selector>` | 获取当前 runtime action 的 descriptor 与动态工作包 | 否 | 是 | 否 |
+| `researchspec start <subflow>` | 实例化用户已确认或父流程委派的 subflow | 是 | 是 | 是 |
+| `researchspec submit <runtime-item>` | 记录 candidate、attempt、evidence、resolution、patch 或 Gate verdict | 是 | 是 | 是 |
+| `researchspec advance <transition>` | 完成或推进当前获准的 runtime action | 是 | 是 | 是 |
 | `researchspec check [target]` | 检查 workspace/contracts/runtime/tools | 否 | 是 | 否 |
 | `researchspec doctor` | 容错诊断 runtime 并执行 plan-bound 确定性修复 | 仅 repair | 是 | repair 支持 |
 | `researchspec list [type]` | 列出 changes/artifacts/gates/decisions/tools | 否 | 是 | 否 |
@@ -108,32 +107,44 @@ Target v0.1 公共命令：
 | `researchspec archive [item]` | 归档已处理的 change 或 draft patch | 是 | 是 | 是 |
 | `researchspec plugin <subcommand>` | 查看并管理随包分发的领域 Skill plugins | 视子命令 | 是 | 写子命令支持 |
 
-`submit` 是一个顶层命令但有两个 selector 语义；`doctor` 是独立恢复入口，加入 `plugin`
+`submit` 是一个顶层命令但按当前 action descriptor 分派多个 selector family；`doctor` 是独立恢复入口，加入 `plugin`
 命令组后上表共 17 个顶层命令。`start` 只接受可启动 subflow，`advance` 只接受可执行 transition，不提供含义模糊的
 通用 `execute`。
 
-Current implementation 已提供全部 17 个目标顶层命令。`submit` 按 scoped selector 分派
-`work:` 与 `gate:`，`advance` 只接受唯一授权的 scoped `transition:`；下文参数和 envelope
-描述当前 wire contract。
+Current implementation 已提供全部 17 个目标顶层命令。静态命令目录和 options 由 typed
+CLI catalog 投影到 Commander help 与[生成式 CLI handbook](./cli_handbook.md)；当前 action
+的 availability、semantic input、execution policy、basis 与后续 selector 仍只来自
+`status` 和 `instructions`。
 
-### 2.1 Selector-Based Runtime Protocol（Target v0.1）
+### 2.1 静态发现与 Selector-Based Runtime Protocol
 
 ```text
-status
-→ instructions <subflow:|work:|gate:|transition:>
-→ start / submit / advance
+researchspec --help
+→ researchspec <command> --help
 → status
+→ instructions <current selector>
+→ start / submit / advance / decide
+→ next_selectors
+→ 定向 instructions / show / list
 ```
 
-| Selector | 只读 packet | 唯一执行入口 |
-| --- | --- | --- |
-| `subflow:<id>` | 路线、依赖、实例参数、成本、start capability | `start` |
-| `work:<id>` | producer、inputs、candidate path、validation/completion | `submit work:` |
-| `gate:<id>` | validator、evidence、proposed verdict、confirmation | `submit gate:` |
-| `transition:<id>` | basis、目标、branch conditions、effects | `advance` |
+前两步只回答“有哪些命令、语法和 options”；它们不要求 workspace，也不授权写入。
+以下 selector 只有在当前 `status` 或 instructions descriptor 返回时才表示可执行：
+
+| Runtime mode | Selector | instructions 回答 | 执行入口 |
+| --- | --- | --- | --- |
+| shared | `subflow:` | 路线、依赖、实例参数、成本与 Start policy | `start` |
+| adaptive | `obligation:` | evidence boundary、attempt/resolution 与 basis | `submit` |
+| adaptive | `completion:` | completion criterion 与 effects | `advance` |
+| adaptive | `case-action:` | waiver/not-applicable 等显式 resolution | `decide` 或 descriptor 指定命令 |
+| strict compatibility | `work:` | producer、candidate、validation 与 completion | `submit` |
+| shared/strict | `gate:` | validator、evidence、verdict 与确认 | `submit` |
+| strict compatibility | `transition:` | basis、branch conditions 与 effects | `advance` |
+| governance | `patch:`、`change:` | pending lifecycle 与允许的语义动作 | `submit`、`decide`、`advance` 或 `propose` |
 
 CLI 不向 Agent 暴露低层 registry/ledger/state append。`academic-pipeline`、Navigate 和其他
-Skills 都消费同一 protocol，不另建 stage mapping。
+Skills 都消费同一 protocol，不另建 stage mapping。成功写入优先跟随 `next_selectors`；
+只有重新选路、冲突或缺少后续 selector 时才刷新完整 status。
 
 特意不采用的公共命令：
 
@@ -286,12 +297,14 @@ researchspec status [--json]
 
 `status` 是只读命令，不改变 workspace。
 
-### 6.1 `researchspec instructions work:<id>`
+### 6.1 Strict compatibility：`researchspec instructions work:<instance>/<id>`
 
-用途：为一个 `ready` work item 返回由 workflow contract 和当前 runtime 状态动态组装的工作包。
+用途：在 Schema `0.2` strict compatibility workspace 中，为一个 `ready` work item
+返回由 workflow contract 和当前 runtime 状态动态组装的工作包。Adaptive workspace
+改用 `instructions obligation:<instance>/<id>`。
 
 ```bash
-researchspec instructions work:rq-brief [--json]
+researchspec instructions work:sf-20260727-001/rq-brief [--json]
 ```
 
 成功输出是扁平 instruction packet：`selector`、`work_item_id`、`stage_id`、`producer_skill`、`state`、`description`、typed runtime context；`output` 只保存 artifact type、workspace/resolved path 和 `template_ref`，实际解析后的 `template` 位于顶层。其余字段包括 dependencies、semantic instruction、rules、allowed/forbidden writes、`validation {profile, suggested_command}`、completion policy 和 unlocks。支持 `text-artifact` 或 `binary-file-artifact` 的节点返回 `submit_available: true` 及 selector、candidate path、semantic input schema、执行策略和可选 dry-run，并明确声明不写 state、Gate 或 Decision。命令不内嵌依赖文件全文，也不写 workspace。
@@ -308,13 +321,13 @@ researchspec instructions work:rq-brief [--json]
 | `work_item_already_done` | 节点已经完成；本命令不承担 revise |
 | `workflow_resource_unavailable` | `template_ref` 无法解析为随包模板 |
 
-### 6.2 `researchspec submit work:<id>`
+### 6.2 Strict compatibility：`researchspec submit work:<instance>/<id>`
 
 用途：对 workflow 声明路径中的候选文件执行确定性验证，并把候选 artifact 与
 submission receipt 原子登记到 registry。
 
 ```bash
-researchspec submit work:rq-brief \
+researchspec submit work:sf-20260727-001/rq-brief \
   --input submission.json \
   --actor-kind agent \
   --actor-name deep-research \
@@ -726,16 +739,16 @@ interface CliEnvelope<T> {
 
 ### 17.3 Item selectors
 
-Current canonical selectors 还包括 external `subflow:<template>`、parent-scoped
-`subflow:<parent>/<node>`、instance-scoped `work:`/`gate:`/`transition:`，以及 `change:`、`patch:`、`artifact:`、
-`decision:`、`source:`、`claim:`、`tool:` 和 `contract:`。裸 ID 只有在所有
-index 中唯一时才可解析；歧义时返回候选 canonical selectors。
+Current control-plane selectors 包括 external `subflow:<template>`、parent-scoped
+`subflow:<parent>/<node>`；adaptive 的 `obligation:<instance>/<id>`、
+`completion:<instance>`、`case-action:<instance>/<action>`；strict compatibility 的
+instance-scoped `work:<instance>/<id>`、`gate:<instance>/<id>`、
+`transition:<instance>/<id>`；以及全局 `patch:<id>`、`change:<id>`。
 
-Workflow work item 使用独立的 `work:<id>` selector，由 `instructions`、`submit` 和 status
-work-item view 消费，不进入通用 `show/list` item index。
-
-Target v0.1 将 `subflow:`、`work:`、`gate:`、`transition:` 统一纳入 control-plane
-selector contract；既有 governance selectors 继续服务 `list/show/propose/decide/archive`。
+`artifact:`、`decision:`、`source:`、`claim:`、`tool:` 和 `contract:` 等查询 selector
+继续服务 `list/show`。裸 ID 只有在相应 index 中唯一时才可解析；歧义时返回候选
+canonical selectors。Selector 语法的存在不代表当前可执行性，Agent 必须以
+`status` 返回的 actions 和对应 instructions descriptor 为准。
 
 ### 17.4 Tool delivery facts
 
@@ -743,10 +756,13 @@ selector contract；既有 governance selectors 继续服务 `list/show/propose/
 - `tool-installation-manifest.json` 保存 generated path、scope、source、adapter
   version 和 SHA-256 ownership evidence。
 - Current implementation / Target v0.1：Project-local skill 路径统一为
-  `<skillsDir>/skills/<skill-id>/**`；四个 ARSU、四个 self-contained Companion 与两个固定
+  `<skillsDir>/skills/<skill-id>/**`；四个 ARSU、四个 self-contained Companion 与七个固定
   Zotero Adapter Skills 被投影到 31 个 registered tools，28 个 command-capable tools
   仍只从 ARSU/Companion 同源生成 8 个 wrappers。
   可选 registry-driven plugin Skills 同样可投影到 31 个 tools，但 wrapper 总数始终为 28×8。
+- `researchspec-navigate` 额外接收 project-local `references/cli-handbook.md`；其他
+  Companion 和 ARSU Skills 不接收这份引用。该文件只提供静态命令发现，缺失或 drift
+  时回退到 root/command-scoped `--help`，不影响 Navigate 的核心路由能力。
 - 迁移前后都不得用一个通用 Markdown 文件覆盖工具的 Markdown/TOML 格式差异。
 - Codex prompts 是 `$CODEX_HOME/prompts` 或 `~/.codex/prompts` 下的
   shared-global files，不因单个项目 deselect 被删除。

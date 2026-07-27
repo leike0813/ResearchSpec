@@ -1,0 +1,35 @@
+@startuml
+title Adaptive default：Academic Pipeline route
+skinparam shadowing false
+actor User
+participant "Host Agent / Navigate" as Agent
+participant "ResearchSpec CLI" as CLI
+participant "academic-pipeline" as Pipeline
+database "Workspace" as Files
+
+Agent -> CLI : status
+Agent -> CLI : instructions subflow:tpl-academic-pipeline-end-to-end\nor subflow:tpl-academic-pipeline-mid-entry
+CLI --> Agent : route obligations, formal policies, completion criterion
+Agent -> User : route summary, risk and cost
+User --> Agent : confirm route
+Agent -> CLI : Start
+CLI -> Files : adaptive-start receipt + obligations
+
+loop current allowed obligation
+  Agent -> CLI : instructions obligation:<instance>/<id>
+  Agent -> Pipeline : produce bounded research/paper/review material
+  Pipeline -> Files : candidate evidence
+  Agent -> CLI : accept evidence or record attempt
+end
+
+opt formal Gate or case action
+  Agent -> CLI : current gate: or case-action: instructions
+  Agent -> User : Verify verdict or resolution choice
+end
+Agent -> CLI : advance completion:<instance>/<id>
+note right of CLI
+  No stage graph, child dispatch,
+  revision-round template or Passport import.
+  Soft playbook recommends; hard dependencies constrain.
+end note
+@enduml

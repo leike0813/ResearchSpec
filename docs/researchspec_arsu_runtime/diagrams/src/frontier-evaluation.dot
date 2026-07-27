@@ -1,5 +1,5 @@
 digraph frontier_evaluation {
-  graph [label="Workflow frontier is derived, not stored", labelloc=t, rankdir=LR, fontname="DejaVu Sans"];
+  graph [label="Strict compatibility frontier is derived, not stored", labelloc=t, rankdir=LR, fontname="DejaVu Sans"];
   node [shape=box, style="rounded", fontname="DejaVu Sans"];
   edge [fontname="DejaVu Sans"];
 

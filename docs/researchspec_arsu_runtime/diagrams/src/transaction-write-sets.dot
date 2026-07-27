@@ -1,5 +1,5 @@
 digraph transaction_write_sets {
-  graph [label="Receipt first, authority last", labelloc=t, rankdir=LR, fontname="DejaVu Sans"];
+  graph [label="Strict compatibility: receipt first, authority last", labelloc=t, rankdir=LR, fontname="DejaVu Sans"];
   node [shape=box, style="rounded", fontname="DejaVu Sans"];
   edge [fontname="DejaVu Sans"];
 

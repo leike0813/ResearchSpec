@@ -9,7 +9,7 @@
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 394)">
 <title>frontier_evaluation</title>
 <polygon fill="white" stroke="transparent" points="-4,4 -4,-394 1805,-394 1805,4 -4,4"/>
-<text text-anchor="middle" x="900.5" y="-374.8" font-family="DejaVu Sans" font-size="14.00">Workflow frontier is derived, not stored</text>
+<text text-anchor="middle" x="900.5" y="-374.8" font-family="DejaVu Sans" font-size="14.00">Strict compatibility frontier is derived, not stored</text>
 <g id="clust1" class="cluster">
 <title>cluster_inputs</title>
 <polygon fill="none" stroke="black" points="8,-8 8,-359 293,-359 293,-8 8,-8"/>

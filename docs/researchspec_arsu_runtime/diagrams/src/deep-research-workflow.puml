@@ -1,5 +1,5 @@
 @startuml
-title Deep Research：ARSU 内层语义与 ResearchSpec 外层控制
+title Strict compatibility：Deep Research 外层 work graph
 skinparam shadowing false
 actor User
 participant "Host Agent" as Agent

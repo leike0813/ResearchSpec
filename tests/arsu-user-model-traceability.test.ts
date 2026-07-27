@@ -20,20 +20,29 @@ interface TraceabilityManifest {
     spec_path: string;
     requirements: Array<{
       requirement: string;
-      scenarios: Array<{ scenario: string; test_files: string[] }>;
+      scenarios: Array<{
+        scenario: string;
+        journey_ids?: string[];
+        test_ids?: string[];
+        test_files: string[];
+        verifier_evidence?: Array<{
+          kind: "guidance" | "documentation" | "package";
+          paths: string[];
+        }>;
+      }>;
     }>;
   }>;
 }
 
-void test("traceability covers every canonical user-model requirement and scenario", async () => {
+void test("[traceability.user-model] traceability covers every canonical user-model requirement and scenario", async () => {
   const manifest = JSON.parse(await readFile("tests/fixtures/arsu-user-model-traceability.json", "utf8")) as TraceabilityManifest;
   assert.equal(manifest.schema_version, "1");
   assert.deepEqual(manifest.capabilities.map((item) => item.capability_id).sort(), ["agent-surface-model", "arsu-run-usage", "arsu-user-routing"]);
 
   const journeyIds = new Set(manifest.journeys.map((item) => item.journey_id));
   const testIds = new Set(manifest.journeys.map((item) => item.test_id));
-  assert.equal(journeyIds.size, 16);
-  assert.equal(testIds.size, 16);
+  assert.equal(journeyIds.size, 17);
+  assert.equal(testIds.size, 17);
   const journeySource = (await Promise.all([
     readFile("tests/arsu-user-journeys.test.ts", "utf8"),
     readFile("tests/material-passport-import.test.ts", "utf8"),
@@ -45,6 +54,19 @@ void test("traceability covers every canonical user-model requirement and scenar
     const active = await exists(path.join("openspec/changes", change));
     assert.equal(active || archived.some((entry) => entry.endsWith(`-${change}`)), true, `Unknown technical change: ${change}`);
   }
+  const convergence = manifest.active_delta_capabilities.filter((item) => item.change_id === "converge-fluid-runtime-surface");
+  assert.deepEqual(convergence.map((item) => item.capability_id).sort(), ["arsu-run-usage", "arsu-user-model-acceptance"]);
+  assert.deepEqual(verifierEvidenceKinds(convergence), ["documentation", "guidance"]);
+  const discoverability = manifest.active_delta_capabilities.filter((item) => item.change_id === "improve-cli-discoverability");
+  assert.deepEqual(discoverability.map((item) => item.capability_id).sort(), [
+    "agent-tool-delivery",
+    "arsu-user-model-acceptance",
+    "arsu-user-routing",
+    "cli-interface",
+    "companion-skills",
+    "mvp-release-readiness",
+  ]);
+  assert.deepEqual(verifierEvidenceKinds(discoverability), ["documentation", "guidance", "package"]);
 
   for (const capability of manifest.capabilities) {
     const text = await readFile(path.join("openspec/specs", capability.capability_id, "spec.md"), "utf8");
@@ -75,6 +97,15 @@ void test("traceability covers every canonical user-model requirement and scenar
     for (const requirement of capability.requirements) for (const scenario of requirement.scenarios) {
       assert.ok(scenario.test_files.length > 0, `${capability.capability_id}/${scenario.scenario} needs a test file`);
       for (const testFile of scenario.test_files) assert.equal(await fileExists(testFile), true, `Missing traceability test file: ${testFile}`);
+      for (const journeyId of scenario.journey_ids ?? []) assert.ok(journeyIds.has(journeyId), `Unknown active journey ref: ${journeyId}`);
+      for (const testId of scenario.test_ids ?? []) {
+        const sources = await Promise.all(scenario.test_files.map((testFile) => readFile(testFile, "utf8")));
+        assert.equal(sources.some((source) => source.includes(`[${testId}]`)), true, `Missing stable active test ID: ${testId}`);
+      }
+      for (const evidence of scenario.verifier_evidence ?? []) {
+        assert.ok(evidence.paths.length > 0, `${capability.capability_id}/${scenario.scenario} needs ${evidence.kind} evidence`);
+        for (const evidencePath of evidence.paths) assert.equal(await fileExists(evidencePath), true, `Missing ${evidence.kind} verifier evidence: ${evidencePath}`);
+      }
     }
   }
 });
@@ -101,3 +132,13 @@ async function fileExists(target: string): Promise<boolean> {
 }
 
 function escapeRegex(value: string): string { return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
+
+function verifierEvidenceKinds(capabilities: TraceabilityManifest["active_delta_capabilities"]): string[] {
+  return [...new Set(capabilities.flatMap((item) =>
+    item.requirements.flatMap((requirement) =>
+      requirement.scenarios.flatMap((scenario) =>
+        scenario.verifier_evidence?.map((evidence) => evidence.kind) ?? [],
+      ),
+    ),
+  ))].sort();
+}

@@ -1,29 +1,46 @@
 @startuml
-title 高影响研究语义的 current / proposed 生命周期
+title Shared：Contract change 与 draft patch 的独立生命周期
 skinparam shadowing false
 start
-:Inspect stable contract and evidence;
-:Propose creates proposal.md,
-tasks.md and contract-patch.yaml;
-note right
-  Stable specs and ledgers
-  remain unchanged.
-end note
-:Human reviews exact current/proposed values,
-evidence, risk and write plan;
-if (Decision?) then (accept)
-  :Revalidate target, current value
-  and evidence;
-  :Apply stable spec;
-  :Write apply receipt and registry evidence;
-  :Update patch lifecycle;
-  :Append Decision ledger last;
-elseif (reject)
-  :Resolve lifecycle without applying;
-  :Append rejection Decision;
-else (postpone)
-  :Append non-terminal Decision event;
-  :Keep item pending;
+if (Change target?) then (stable contract)
+  partition "Contract change" {
+    :Inspect stable contract and evidence;
+    :Propose creates proposal.md,
+    tasks.md and contract-patch.yaml;
+    :Human reviews exact current/proposed values,
+    evidence, risk and write plan;
+    if (Contract Decision?) then (accept)
+      :Revalidate target/current value;
+      :Apply stable spec;
+      :Write apply receipt and registry evidence;
+      :Append contract Decision ledger last;
+    elseif (reject)
+      :Resolve contract change without applying;
+      :Append rejection Decision;
+    else (postpone)
+      :Append non-terminal Decision;
+      :Keep contract change pending;
+    endif
+  }
+else (draft text)
+  partition "Draft patch" {
+    :Submit revision patch bound to base artifact/hash;
+    :Write patch submit receipt;
+    :Human reviews revision ops,
+    semantic delta and write plan;
+    if (Patch Decision?) then (accept)
+      :Revalidate base hash and operations;
+      :Apply patch to a new revised draft;
+      :Write apply report and patch receipts;
+      :Append patch Decision ledger last;
+    elseif (reject)
+      :Resolve draft patch without applying;
+      :Append rejection Decision;
+    else (postpone)
+      :Append non-terminal Decision;
+      :Keep draft patch pending;
+    endif
+  }
 endif
 if (Resolved with trusted evidence?) then (yes)
   :Archive change or draft patch;

@@ -377,19 +377,22 @@ replacement bodies.
 
 ### Requirement: Generated Skill Submit Handoff
 
-ResearchSpec SHALL generate ARSU contract preflight guidance that consumes generalized runtime instructions and follows the declared automatic/manual submission policy.
+ResearchSpec SHALL generate ARSU contract preflight guidance that consumes
+current action descriptors and follows their declared execution policy.
 
 #### Scenario: Automatic instance work submits directly
 
 - **WHEN** a generated ARSU Skill completes a candidate whose instructions prove `submission.policy: automatic` and trusted start authorization
-- **THEN** guidance SHALL perform Submit dry-run followed by execution bound to the returned exact hash
-- **AND** it SHALL query status/check afterward without asking for per-artifact confirmation
+- **THEN** guidance SHALL submit the descriptor's semantic input through the
+  declared direct policy without external plan replay
+- **AND** it SHALL continue from returned next selectors or a directed check
+  without asking for per-artifact confirmation
 
 #### Scenario: Manual work uses direct CLI submit
 
 - **WHEN** work instructions are manual or lack trusted automatic authorization
-- **THEN** guidance SHALL present the direct `researchspec submit` dry-run and
-  confirmation boundary or report that registration cannot proceed
+- **THEN** guidance SHALL present the descriptor-declared human-confirmation
+  boundary or report that registration cannot proceed
 - **AND** it SHALL NOT invoke a Submit Companion or invent automatic authority,
   paths, provenance, or runtime writes
 
@@ -419,7 +422,9 @@ The ARSU converter SHALL generate, register, validate, and report the canonical 
 
 ### Requirement: Generated Full Runtime Preflight
 
-ResearchSpec SHALL generate ARSU contract preflight guidance that consumes subflow, work, Gate and transition frontier without duplicating control-plane semantics.
+ResearchSpec SHALL generate ARSU contract preflight guidance that consumes the
+selector families exposed by the current adaptive or strict frontier without
+duplicating control-plane semantics.
 
 #### Scenario: Generated Skill encounters a Gate
 
@@ -626,3 +631,39 @@ expected by `submit patch:<selector>`.
 - **AND** it SHALL NOT also register an ordinary `revision_patch` artifact for
   the same modification
 
+### Requirement: Generated Preflight Is Dual-Runtime And Descriptor-Driven
+
+The converter SHALL generate one contract-preflight guidance source for all four
+ARSU Skills. The generated guidance SHALL obtain runtime mode, allowed actions,
+canonical selectors, semantic input templates, execution policy, and next
+selectors from CLI status and instructions; it SHALL not reconstruct strict
+graph order or caller-authored mechanical payload fields.
+
+#### Scenario: Generated Skill operates in adaptive mode
+
+- **WHEN** an adaptive workspace exposes an `obligation:`, `completion:`,
+  `case-action:`, `patch:`, or `change:` descriptor
+- **THEN** generated guidance SHALL route durable work through that descriptor
+- **AND** it SHALL not require a `work:` or `transition:` selector that the
+  adaptive frontier does not expose
+
+#### Scenario: Generated Skill operates in strict mode
+
+- **WHEN** a strict workspace exposes scoped `work:`, `gate:`, or `transition:`
+  instructions
+- **THEN** generated guidance SHALL retain the strict graph, Gate, branch, and
+  delegated-child authority boundaries
+
+### Requirement: Generated Guidance Mirrors Execution Policy
+
+Generated ARSU guidance SHALL describe direct actions as one-invocation semantic
+transactions, human-confirmed actions as requiring their named confirmation, and
+plan-bound actions as requiring their current approved plan hash. It SHALL
+preserve formal Gate, Decision, and high-impact patch/change protections.
+
+#### Scenario: Converter regenerates runtime guidance
+
+- **WHEN** converter output is regenerated and checked
+- **THEN** all four generated trees, manifests, and reports SHALL derive from
+  the same preflight source and pass deterministic validation and idempotence
+- **AND** generated Skill files SHALL not require hand edits

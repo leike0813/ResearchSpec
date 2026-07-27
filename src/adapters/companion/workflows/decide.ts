@@ -3,90 +3,75 @@ import type { CompanionWorkflowSource } from "../types.js";
 export const decideWorkflow = {
   id: "decide",
   name: "ResearchSpec Decide",
-  description: "Review, dry-run, explicitly confirm, and accept, reject, or postpone one pending ResearchSpec change, draft patch, or blocking gate. This is the only public semantic apply workflow.",
+  description: "Review and explicitly resolve one pending ResearchSpec semantic change, draft patch, case action, or eligible Gate override. This is the only public semantic apply workflow.",
   instructions: `## Mission
 
-Record one explicit human decision and, for acceptance, apply its already-authored semantic payload through the CLI's validated lifecycle. Keep target selection, meaning, actor, rationale, preview, confirmation, and postconditions auditable.
+Record one explicit human decision and, for acceptance, apply its already-authored Semantic v2 payload through the CLI lifecycle. Keep target selection, meaning, actor, rationale, confirmation, and postconditions auditable.
 
 ## When to Use
 
 - The user wants to accept, reject, or postpone a pending contract change or manuscript draft patch.
-- The user wants to resolve an eligible blocking gate through an explicit human override decision.
-- Multiple transition candidates require one explicit workflow-branch choice.
-- A proposal or patch has already been authored and now requires review.
+- The user wants to resolve a \`case-action:<id>\`, an eligible Gate override, or a decision-required transition.
+- A proposal or patch is authored and now requires human review.
 
 ## Do Not Use
 
-- Do not author a new semantic change; use propose. Do not author manuscript revision ops; use the responsible ARSU workflow.
-- Do not decide a decision-ledger event directly, guess a candidate, or treat \`--yes\` as acceptance.
+- Do not author a new semantic change; use Propose. Do not author manuscript revision operations; use the responsible ARSU workflow.
+- Do not guess a candidate, decide a ledger event directly, or treat \`--yes\` as acceptance.
 - Do not hand-edit stable specs, patched drafts, receipts, artifact registry, change status, or decision ledger.
 
 ## Inputs
 
-- One canonical \`change:<id>\`, \`patch:<id>\`, eligible \`gate:<id>\`, or decision-required \`transition:<instance>/<id>\` selector.
-- Decision: accept, reject, or postpone.
-- Human actor name and rationale required for accept/reject.
-- Explicit confirmation after review of semantic impact and dry-run writes.
+- One canonical \`change:<id>\`, \`patch:<id>\`, \`case-action:<id>\`, eligible \`gate:<id>\`, or decision-required \`transition:<instance>/<id>\` selector.
+- The human decision, actor name, and rationale required by its action descriptor.
 
 ## CLI Examples
 
 \`\`\`bash
-researchspec decide --json
 researchspec status --json
+researchspec instructions change:weaken-c001 --json
+researchspec instructions case-action:<id> --json
 researchspec show change:weaken-c001 --json
-researchspec decide change:weaken-c001 --decision accept --actor-name "Research Lead" --reason "Evidence supports moderate strength" --dry-run --json
 researchspec decide change:weaken-c001 --decision accept --actor-name "Research Lead" --reason "Evidence supports moderate strength" --json
 researchspec check contracts --json
-researchspec decide transition:sf-<instance>/<node> --decision accept --actor-name "Research Lead" --reason "Selected branch" --dry-run --json
 \`\`\`
 
 ## Workflow
 
-1. If no selector is supplied, inspect \`decide --json\`, status, and relevant lists. Map pending decision events back to their change, draft patch, or gate IDs.
-2. Resolve exactly one canonical target. If multiple items remain, present title/status/risk/evidence and ask the user; do not preselect.
-3. Run \`show <selector> --json\` where applicable. For changes, inspect every target/current/proposed value and evidence reference. For draft patches, inspect base artifact/hash and operations. For gates, require the latest confirmed failed reverification and its trusted receipt. For transitions, inspect all candidates from status/instructions and the shared decision point.
-4. Explain what accept, reject, and postpone mean for this item. Acceptance may change stable specs or create a revised draft and receipt; rejection resolves without applying; postponement records the pending choice without resolving the item.
-5. Ask the user for the decision, actor name, and rationale. Preserve their meaning; do not strengthen a vague statement into a different rationale.
-6. Construct the complete command and run it with \`--dry-run --json\`. Never preview with placeholder actor/reason or a different decision.
-7. Inspect all planned writes and semantic effects. For contract changes, verify stable targets, current values, evidence IDs, lifecycle update, receipt, registry, and ledger order. For draft patches, verify base hash, output path, artifact IDs, receipt, registry, and ledger. For gates, verify only the authorized decision record.
-8. Treat target drift, missing evidence, ambiguous selector, invalid base hash, blocking prerequisite, receipt conflict, or output conflict as authoritative blockers. Return to propose/ARSU/check as appropriate.
-9. Present a confirmation summary containing selector, risk, decision, actor, rationale, before/after meaning, paths written, and irreversible/external consequences. Ask for explicit confirmation.
-10. Execute the identical command without \`--dry-run\`. Do not add \`--yes\` as a proxy for confirmation and do not alter reason or decision.
-11. Re-run \`show\` when the active item remains visible, \`status --json\`, and the relevant contract/runtime/artifact check. Inspect receipt and registry evidence for accepted change/patch items.
-12. Report the decision ID, final lifecycle status, affected outputs, post-check result, and whether the item is now eligible for archive.
+1. Run bounded \`status --json\`. If no selector was supplied, present only the current decision-capable selectors; map ledger evidence back to its originating change, patch, case action, Gate, or transition.
+2. Resolve exactly one target, then fetch \`instructions <selector> --json\`. Its Semantic v2 action descriptor defines allowed decisions, actor/reason fields, prerequisites, policy, and postconditions.
+3. Inspect the selected item and its evidence: affected current/proposed values for changes, base artifact/hash for patches, exact event/receipt for Gate overrides, or candidate list for a branch action.
+4. Explain accept, reject, and postpone in the descriptor's terms. Ask the human for the decision, actor, and rationale without strengthening their stated reason.
+5. Apply the descriptor policy. Decide is normally \`plan_bound\`: preview the exact chosen decision, show semantic effect and writes, obtain explicit human confirmation, then execute the unchanged action with the returned plan hash. If a descriptor specifies another policy, follow it exactly.
+6. Follow \`next_selectors\` for targeted visibility or checks. Report decision ID, lifecycle status, affected outputs, receipt evidence where applicable, and the next owner.
 
 ## Decision Table
 
 | State | Allowed response |
 | --- | --- |
-| Proposed/postponed change with valid targets | Accept, reject, or postpone after preview. |
-| Proposed/postponed draft patch with valid base | Accept, reject, or postpone after preview. |
-| Blocking failed reverification eligible for override | Bind the override to its exact Gate event and receipt. |
-| Multiple eligible transition candidates | Accept exactly one canonical transition option; reject/postpone does not select another implicitly. |
-| Already applied/rejected/superseded item | Stop; do not record a second resolution. |
-| Target/current value changed since proposal | Block acceptance; revise or supersede proposal. |
-| Missing artifact/decision evidence | Block acceptance until authoritative evidence exists. |
+| Pending Semantic v2 change or patch with valid basis | Only descriptor-allowed decision after human review. |
+| Pending case action | Resolve the named case only; do not infer a different branch. |
+| Failed Gate eligible for override | Bind the decision to the exact Gate event and receipt. |
+| Multiple transition candidates | Accept exactly one canonical option; reject/postpone does not select another. |
+| Target, evidence, base hash, or receipt drift | Stop and route to its owner; do not execute stale intent. |
 | User has not stated a decision | Stop; \`--yes\` is irrelevant. |
 
 ## Failure Recovery
 
-- Ambiguity: return candidates and request a canonical selector.
-- Domain block: preserve all files, cite the failed precondition, and route to check, propose, or ARSU patch authoring.
-- Write conflict: inspect existing receipt/output/ledger state before retrying; never delete evidence to make the command succeed.
-- Partial-looking state: run status/check and inspect the transactional outputs. Do not manually finish an interrupted lifecycle.
-- Post-check failure: report the decision and resulting evidence accurately, then use check; do not conceal or reverse it outside a new authorized workflow.
+- Ambiguity: return canonical candidates and request a selector.
+- Domain block: preserve files, cite the failed descriptor prerequisite, and route to Check, Propose, or ARSU patch authoring.
+- Write conflict or post-check failure: inspect targeted receipts/state and report accurately; never manually finish or reverse a lifecycle.
 
 ## Output Contract
 
-Before execution return review summary, complete dry-run command, semantic effect, planned writes, risks, and explicit confirmation request. After execution return selector, decision ID/status, actor/rationale, outputs and receipt/registry/ledger evidence, post-checks, archive eligibility, and any unresolved blocker.
+Return the reviewed selector, human decision and rationale, descriptor policy, semantic effect, confirmation, result, \`next_selectors\`, authoritative receipt/status/check evidence, and any unresolved blocker.
 
 ## Guardrails
 
 - This workflow records human intent; the agent cannot manufacture consent.
-- Acceptance revalidates targets and evidence against current workspace state.
-- Ledger append is last and CLI-owned. Never reorder or recreate lifecycle writes manually.
+- Acceptance revalidates targets and evidence through the CLI. Ledger writes are CLI-owned.
 
 ## Completion
 
-Finish only when the exact reviewed decision has executed, authoritative receipts/status/checks confirm its outcome, and the user knows whether archive or further repair is next.`,
+Finish only when the exact reviewed decision has executed or been authoritatively blocked, and the next action is explicit.`,
 } satisfies CompanionWorkflowSource;

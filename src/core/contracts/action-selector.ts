@@ -21,6 +21,68 @@ export const CompletionSelectorSchema = z.string().regex(new RegExp(`^completion
 export const CaseActionSelectorSchema = z.string().regex(new RegExp(`^case-action:${SafeId}$`))
   .refine((value) => !value.includes(".."));
 export const WorkflowDetailSelectorSchema = z.literal("workflow:current");
+
+export interface ActionSelectorFamilyDisplay {
+  id: "subflow" | "obligation" | "gate" | "completion" | "case-action" | "patch" | "change" | "work" | "transition";
+  patterns: readonly string[];
+  examples: readonly string[];
+}
+
+export const ACTION_SELECTOR_FAMILY_DISPLAYS = [
+  {
+    id: "subflow",
+    patterns: ["subflow:tpl-<id>", "subflow:sf-<id>", "subflow:sf-<instance>/<node>"],
+    examples: ["subflow:tpl-deep-research-quick"],
+  },
+  {
+    id: "obligation",
+    patterns: ["obligation:sf-<instance>/<id>"],
+    examples: ["obligation:sf-example/rq-brief"],
+  },
+  {
+    id: "gate",
+    patterns: ["gate:<id>", "gate:sf-<instance>/<id>"],
+    examples: ["gate:sf-example/evidence-quality"],
+  },
+  {
+    id: "completion",
+    patterns: ["completion:sf-<instance>/<id>"],
+    examples: ["completion:sf-example/route-complete"],
+  },
+  {
+    id: "case-action",
+    patterns: ["case-action:<id>"],
+    examples: ["case-action:scope-resolution"],
+  },
+  {
+    id: "patch",
+    patterns: ["patch:<id>"],
+    examples: ["patch:revision-001"],
+  },
+  {
+    id: "change",
+    patterns: ["change:<id>"],
+    examples: ["change:weaken-c001"],
+  },
+  {
+    id: "work",
+    patterns: ["work:sf-<instance>/<node>"],
+    examples: ["work:sf-example/rq-brief"],
+  },
+  {
+    id: "transition",
+    patterns: ["transition:sf-<instance>/<node>"],
+    examples: ["transition:sf-example/complete"],
+  },
+] as const satisfies readonly ActionSelectorFamilyDisplay[];
+
+export function formatActionTargetSelectorHint(): string {
+  const families = ACTION_SELECTOR_FAMILY_DISPLAYS
+    .map((family) => family.patterns.join(" | "))
+    .join("; ");
+  return `Run researchspec instructions --help. Accepted selector forms: ${families}. Syntax does not imply current workspace availability; use status and current instructions.`;
+}
+
 export const ActionTargetSelectorSchema = z.union([
   RuntimeSelectorSchema,
   ChangeSelectorSchema,

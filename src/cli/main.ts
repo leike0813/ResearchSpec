@@ -8,6 +8,7 @@ import {
   handlePluginInstall, handlePluginInstructions, handlePluginList, handlePluginShow, handlePluginUninstall, handlePluginUpdate,
   type AdvanceOptions, type DoctorOptions, type HandoffOptions, type InitOptions, type ListOptions, type PackOptions, type PluginInstallOptions, type PluginListOptions, type PluginShowOptions, type ProposeOptions, type StartOptions, type SubmitOptions, type UpdateOptions,
 } from "./handlers.js";
+import { applyGlobalCliOptions, cliHelpTarget, registerCliCommand } from "./command-catalog.js";
 import { presentResult } from "./presenter.js";
 import { CliError, failure, type CommandContext, type CommandResult } from "./types.js";
 
@@ -48,7 +49,7 @@ export async function main(argv = process.argv.slice(2)): Promise<CliResult> {
   } catch (error) {
     if (error instanceof CommanderError && (error.code === "commander.helpDisplayed" || error.code === "commander.version")) return { exitCode: 0 };
     const message = error instanceof Error ? error.message : String(error);
-    const usage = failure(argv[0] ?? "cli", new CliError("usage_error", message, 2, "Run researchspec --help for usage."));
+    const usage = failure(argv[0] ?? "cli", new CliError("usage_error", message, 2, `Run ${cliHelpTarget(argv)} for usage.`));
     if (jsonRequested) presentResult(usage, true);
     return { exitCode: 2 };
   }
@@ -57,113 +58,59 @@ export async function main(argv = process.argv.slice(2)): Promise<CliResult> {
 type Runner = (command: string, commandObject: Command, action: () => Promise<CommandResult>) => Promise<void>;
 
 function registerCommands(program: Command, run: Runner): void {
-  program.command("init [path]").description("Initialize or safely extend a ResearchSpec workspace")
-    .option("--tools <ids>", "all, none, or comma-separated tool IDs")
-    .option("--profile <mode>", "adaptive or strict runtime profile")
+  registerCliCommand(program, "init")
     .action(async (target: string | undefined, options: InitOptions, command: Command) => run("init", command, () => handleInit(target, options, commandContext("init", command))));
-  program.command("update [path]").description("Refresh selected generated agent files")
-    .option("--tools <ids>", "refresh/add a tool subset")
-    .option("--migrate-runtime", "migrate a valid Schema 0.2 runtime to adaptive")
-    .option("--rollback <migration-id>", "restore the pre-migration runtime captured by a migration")
-    .option("--expected-plan-sha256 <hash>", "bind execution to the previewed migration or rollback plan")
+  registerCliCommand(program, "update")
     .action(async (target: string | undefined, options: UpdateOptions, command: Command) => run("update", command, () => handleUpdate(target, options, commandContext("update", command))));
-  program.command("status").description("Show current run and pending-item status")
+  registerCliCommand(program, "status")
     .action(async (_options: Record<string, never>, command: Command) => run("status", command, () => handleStatus(commandContext("status", command))));
-  program.command("instructions <selector>").description("Show dynamic instructions for a runtime selector")
+  registerCliCommand(program, "instructions")
     .action(async (selector: string, _options: Record<string, never>, command: Command) => run("instructions", command, () => handleInstructions(selector, commandContext("instructions", command))));
-  program.command("start <subflow>").description("Atomically start a confirmed template or delegated child subflow")
-    .requiredOption("--input <start.json>", "strict subflow Start JSON")
-    .requiredOption("--actor-kind <kind>", "human, agent, or script")
-    .requiredOption("--actor-name <name>", "Start requester name")
-    .option("--confirmed-by <name>", "human who confirmed an external route")
-    .option("--expected-action-basis-sha256 <hash>", "bind execution to the current action descriptor")
-    .option("--expected-plan-sha256 <hash>", "bind execution to the previewed Start plan")
+  registerCliCommand(program, "start")
     .action(async (subflow: string, options: StartOptions, command: Command) => run("start", command, () => handleStart(subflow, options, commandContext("start", command))));
-  program.command("submit <runtime-item>").description("Submit a workflow-owned work candidate or confirmed Gate verdict")
-    .requiredOption("--input <payload.json>", "strict work or Gate submission JSON")
-    .requiredOption("--actor-kind <kind>", "human, agent, script, converter, or validator")
-    .requiredOption("--actor-name <name>", "artifact producer name")
-    .option("--confirmed-by <name>", "human who confirmed a Gate verdict")
-    .option("--expected-action-basis-sha256 <hash>", "bind execution to the current action descriptor")
-    .option("--expected-sha256 <hash>", "bind execution to the previewed candidate SHA-256")
-    .option("--expected-plan-sha256 <hash>", "bind Gate execution to the previewed plan")
+  registerCliCommand(program, "submit")
     .action(async (runtimeItem: string, options: SubmitOptions, command: Command) => run("submit", command, () => handleSubmit(runtimeItem, options, commandContext("submit", command))));
-  program.command("advance <transition>").description("Atomically advance one uniquely authorized transition")
-    .requiredOption("--actor-kind <kind>", "agent or script")
-    .requiredOption("--actor-name <name>", "transition executor name")
-    .option("--expected-action-basis-sha256 <hash>", "bind execution to the current action descriptor")
-    .option("--expected-plan-sha256 <hash>", "bind execution to the previewed transition plan")
+  registerCliCommand(program, "advance")
     .action(async (transition: string, options: AdvanceOptions, command: Command) => run("advance", command, () => handleAdvance(transition, options, commandContext("advance", command))));
-  program.command("check [target]").description("Check all, contracts, runtime, artifacts, tools, plugins, or literature-adapters")
-    .option("--strict", "treat warnings as failures")
+  registerCliCommand(program, "check")
     .action(async (target: string | undefined, options: { strict?: boolean }, command: Command) => run("check", command, () => handleCheck(target, Boolean(options.strict), commandContext("check", command))));
-  program.command("doctor").description("Diagnose runtime damage or apply one plan-bound deterministic repair")
-    .option("--repair <finding-id>", "preview or apply a deterministically repairable finding")
-    .option("--expected-plan-sha256 <hash>", "bind execution to the previewed Doctor repair plan")
+  registerCliCommand(program, "doctor")
     .action(async (options: DoctorOptions, command: Command) => run("doctor", command, () => handleDoctor(options, commandContext("doctor", command))));
-  program.command("list [type]").description("List paginated runtime collections")
-    .option("--limit <count>", "page size from 1 to 50")
-    .option("--cursor <cursor>", "opaque cursor returned by the prior page")
+  registerCliCommand(program, "list")
     .action(async (type: string | undefined, options: ListOptions, command: Command) => run("list", command, () => handleList(type, options, commandContext("list", command))));
-  program.command("show <item>").description("Show a canonical or globally unique item")
+  registerCliCommand(program, "show")
     .action(async (item: string, _options: Record<string, never>, command: Command) => run("show", command, () => handleShow(item, commandContext("show", command))));
-  program.command("handoff").description("Render the current handoff view")
-    .option("--stdout", "print without writing")
-    .option("--out <path>", "output path")
+  registerCliCommand(program, "handoff")
     .action(async (options: HandoffOptions, command: Command) => run("handoff", command, () => handleHandoff(options, commandContext("handoff", command))));
-  program.command("pack").description("Create a deterministic context bundle")
-    .option("--out <path>", "output ZIP path")
-    .option("--include-artifacts", "include safe registered artifacts")
+  registerCliCommand(program, "pack")
     .action(async (options: PackOptions, command: Command) => run("pack", command, () => handlePack(options, commandContext("pack", command))));
-  program.command("propose <change-id>").description("Create a validated pending contract change")
-    .requiredOption("--input <payload.json>", "strict semantic proposal JSON")
-    .requiredOption("--actor-kind <kind>", "human or agent", parseActorKind)
-    .requiredOption("--actor-name <name>", "proposal author name")
-    .option("--expected-action-basis-sha256 <hash>", "bind execution to the current action descriptor")
-    .option("--expected-plan-sha256 <hash>", "bind execution to the previewed proposal plan")
+  registerCliCommand(program, "propose", { actorKind: parseActorKind })
     .action(async (changeId: string, options: ProposeOptions, command: Command) => run("propose", command, () => handlePropose(changeId, options, commandContext("propose", command))));
-  program.command("decide [item]").description("Resolve a pending human decision")
-    .option("--decision <choice>", "accept, reject, or postpone", parseDecision)
-    .option("--actor-name <name>", "human actor name")
-    .option("--reason <text>", "decision rationale")
-    .option("--expected-action-basis-sha256 <hash>", "bind execution to the current action descriptor")
-    .option("--expected-plan-sha256 <hash>", "bind execution to the previewed decision plan")
+  registerCliCommand(program, "decide", { decision: parseDecision })
     .action(async (item: string | undefined, options: DecideOptions, command: Command) => run("decide", command, () => handleDecide(item, options, commandContext("decide", command))));
-  program.command("archive [item]").description("Archive a resolved change or draft patch")
+  registerCliCommand(program, "archive")
     .action(async (item: string | undefined, _options: Record<string, never>, command: Command) => run("archive", command, () => handleArchive(item, commandContext("archive", command))));
-  const plugin = program.command("plugin").description("Inspect and manage bundled domain Skill plugins");
-  plugin.command("list").description("List bundled domain Skill plugins")
-    .option("--installed", "show only workspace-selected plugins")
-    .option("--summary", "emit compact discovery metadata")
+  const plugin = registerCliCommand(program, "plugin");
+  registerCliCommand(plugin, "plugin-list")
     .action(async (options: PluginListOptions, command: Command) => run("plugin", command, () => handlePluginList(options, commandContext("plugin", command))));
-  plugin.command("show <plugin-id>").description("Show bundled plugin metadata and provenance")
-    .option("--summary", "emit compact Skill descriptions without full provenance")
+  registerCliCommand(plugin, "plugin-show")
     .action(async (pluginId: string, options: PluginShowOptions, command: Command) => run("plugin", command, () => handlePluginShow(pluginId, options, commandContext("plugin", command))));
-  plugin.command("install <plugin-ids...>").description("Select and project plugins into the current workspace")
-    .option("--expected-plan-sha256 <hash>", "bind execution to the previewed plugin install plan")
-    .option("--summary", "emit aggregate write-plan impact")
+  registerCliCommand(plugin, "plugin-install")
     .action(async (pluginIds: string[], options: PluginInstallOptions, command: Command) => run("plugin", command, () => handlePluginInstall(pluginIds, options, commandContext("plugin", command))));
-  plugin.command("uninstall <plugin-ids...>").description("Remove selected plugins from the current workspace")
+  registerCliCommand(plugin, "plugin-uninstall")
     .action(async (pluginIds: string[], _options: Record<string, never>, command: Command) => run("plugin", command, () => handlePluginUninstall(pluginIds, commandContext("plugin", command))));
-  plugin.command("update [plugin-ids...]").description("Refresh selected plugins, or all when IDs are omitted")
+  registerCliCommand(plugin, "plugin-update")
     .action(async (pluginIds: string[], _options: Record<string, never>, command: Command) => run("plugin", command, () => handlePluginUpdate(pluginIds ?? [], commandContext("plugin", command))));
-  plugin.command("instructions <skill-id>").description("Read an installed hash-clean plugin Skill for immediate advisory use")
+  registerCliCommand(plugin, "plugin-instructions")
     .action(async (skillId: string, _options: Record<string, never>, command: Command) => run("plugin", command, () => handlePluginInstructions(skillId, commandContext("plugin", command))));
 }
 
 async function createProgram(): Promise<Command> {
-  return new Command()
+  const program = new Command()
     .name("researchspec")
     .description("Agent-neutral, file-based research contract framework")
-    .version(await readPackageVersion(), "-v, --version")
-    .option("--cwd <path>", "project working directory")
-    .option("--workspace <path>", "explicit researchspec workspace")
-    .option("--json", "emit one machine-readable envelope")
-    .option("--dry-run", "plan writes without modifying files")
-    .option("--force", "refresh manifest-owned generated files")
-    .option("--yes", "skip low-risk confirmations")
-    .option("--quiet", "suppress nonessential human output")
-    .showHelpAfterError();
+    .version(await readPackageVersion(), "-v, --version");
+  return applyGlobalCliOptions(program).showHelpAfterError();
 }
 
 function commandContext(command: string, commandObject: Command): CommandContext {

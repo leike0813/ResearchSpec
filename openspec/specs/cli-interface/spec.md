@@ -9,12 +9,13 @@ agent-tool-delivery, and derived context artifacts.
 
 ResearchSpec SHALL expose `init`, `update`, `status`, `instructions`, `start`,
 `submit`, `advance`, `check`, `list`, `show`, `handoff`, `pack`, `propose`,
-`decide`, `archive`, and `plugin` as the complete public CLI command set.
+`decide`, `archive`, `doctor`, and `plugin` as the complete public CLI command
+set.
 
 #### Scenario: Help lists public commands
 
 - **WHEN** a user runs `researchspec --help`
-- **THEN** the CLI SHALL list all sixteen public commands
+- **THEN** the CLI SHALL list all seventeen public commands
 - **AND** it SHALL NOT list ARSU converter or upstream-maintenance commands
 
 #### Scenario: Unsupported syntax is a usage error
@@ -35,7 +36,7 @@ change creation.
 - **WHEN** a valid proposal is invoked with `--dry-run`
 - **THEN** the command SHALL return the three create operations in JSON envelope
   version 1 and SHALL write nothing
-- **AND** confirmed execution SHALL apply the same plan
+- **AND** execution SHALL derive the current plan under read preconditions
 - **AND** the created change SHALL be visible to `list`, `show`, and `check`
 
 #### Scenario: Creation confirmation is not semantic acceptance
@@ -130,8 +131,8 @@ SHALL also support package-only inspection without a workspace.
 The CLI SHALL expose `plugin list [--installed] [--summary]`,
 `plugin show <domain-id> [--summary]`, `plugin install <domain-ids...>`,
 `plugin uninstall <domain-ids...>`, `plugin update [domain-ids...]`, and
-`plugin instructions <skill-id>` while retaining `plugin` as the single
-sixteenth top-level command.
+`plugin instructions <skill-id>` while retaining `plugin` as one top-level
+command.
 
 #### Scenario: Domain catalog is listed outside a workspace
 - **WHEN** a user runs normal `plugin list` without a workspace
@@ -288,13 +289,15 @@ ResearchSpec SHALL expose read-only instructions for available subflow templates
 
 ### Requirement: Public Artifact Submit Command
 
-ResearchSpec SHALL expose `submit work:<id>` with strict provenance input, actor identity, dry-run, expected-hash binding, confirmation, and versioned JSON results.
+ResearchSpec SHALL expose `submit work:<id>` with semantic-only provenance
+input, actor identity, descriptor-declared execution policy, optional dry-run,
+and versioned JSON results.
 
-#### Scenario: Non-interactive execution binds previewed content
+#### Scenario: Non-interactive execution follows submission policy
 
 - **WHEN** Submit executes without an interactive TTY
-- **THEN** it SHALL require `--expected-sha256` and `--yes`
-- **AND** the expected hash SHALL match the candidate at execution time
+- **THEN** it SHALL require only the confirmation or plan binding declared by
+  its action descriptor
 - **AND** `--yes` SHALL NOT imply academic acceptance, Gate pass, Decision, or stage transition
 
 #### Scenario: Success states are stable
@@ -305,7 +308,7 @@ ResearchSpec SHALL expose `submit work:<id>` with strict provenance input, actor
 
 #### Scenario: Submit failures use stable exit classes
 
-- **WHEN** selector, input, actor, or expected hash syntax is invalid
+- **WHEN** selector, semantic input, actor, or declared policy input is invalid
 - **THEN** Submit SHALL return exit code 2
 - **WHEN** workflow readiness, candidate validation, or dependency trust fails
 - **THEN** Submit SHALL return exit code 1
@@ -320,15 +323,21 @@ Dynamic work-item instructions SHALL advertise whether the runtime can submit th
 
 - **WHEN** a ready work item uses a supported validation profile
 - **THEN** instructions SHALL retain existing fields and set `submit_available: true`
-- **AND** it SHALL include candidate path, input shape, dry-run command, confirmation/hash requirements, and explicit state/Gate/Decision non-effects
+- **AND** it SHALL include candidate path, semantic input shape, execution
+  policy, optional dry-run command, required confirmation or plan binding, and
+  explicit state/Gate/Decision non-effects
 
 ### Requirement: Public Subflow Start Command
-ResearchSpec SHALL expose `start subflow:<template-id>` with strict input, actor/confirmation identity, dry-run, expected-plan binding and versioned JSON results.
+ResearchSpec SHALL expose `start subflow:<template-id>` with semantic input,
+actor/confirmation identity, descriptor-declared execution policy, optional
+dry-run, and versioned JSON results.
 
-#### Scenario: Non-interactive start binds the previewed plan
+#### Scenario: Non-interactive Start follows descriptor policy
 - **WHEN** Start executes without an interactive TTY
-- **THEN** it SHALL require `--expected-plan-sha256` and `--yes`
-- **AND** the expected hash SHALL match the current route/template/prerequisite/state plan
+- **THEN** it SHALL require the named confirmation or approved plan hash declared
+  by the selected action descriptor
+- **AND** it SHALL derive the current route, template, prerequisite, and state
+  facts from authority
 
 #### Scenario: Start success states are stable
 - **WHEN** Start is previewed, first committed or exactly retried
@@ -345,12 +354,15 @@ ResearchSpec SHALL expose `start subflow:<template-id>` with strict input, actor
 
 ### Requirement: Public Gate Submit Command
 
-ResearchSpec SHALL dispatch `submit gate:<instance>/<node>` through a strict, dry-runnable and receipt-backed Gate transaction while preserving `submit work:` behavior.
+ResearchSpec SHALL dispatch `submit gate:<instance>/<node>` through a semantic
+input, plan-bound, receipt-backed Gate transaction while preserving `submit
+work:` behavior.
 
 #### Scenario: Non-interactive Gate submit is fully bound
 
 - **WHEN** Gate submit runs outside an interactive TTY
-- **THEN** it SHALL require strict input, validator actor, `confirmed_by`, matching `--expected-plan-sha256` and `--yes`
+- **THEN** it SHALL require descriptor-declared semantic input, validator actor,
+  `confirmed_by`, matching `--expected-plan-sha256`, and `--yes`
 - **AND** `--yes` SHALL NOT substitute for the named human confirmation
 
 #### Scenario: Gate results use stable classes
@@ -361,12 +373,14 @@ ResearchSpec SHALL dispatch `submit gate:<instance>/<node>` through a strict, dr
 
 ### Requirement: Public Transition Advance Command
 
-ResearchSpec SHALL expose `advance transition:<instance>/<node>` as the only public state-transition transaction.
+ResearchSpec SHALL expose `advance` for descriptor-authorized strict
+`transition:`, adaptive `completion:`, and accepted `patch:` state effects.
 
-#### Scenario: Advance binds the previewed state plan
+#### Scenario: Advance follows its execution policy
 
 - **WHEN** Advance runs non-interactively
-- **THEN** it SHALL require actor identity, a matching expected plan hash and `--yes`
+- **THEN** it SHALL require actor identity and the confirmation or matching plan
+  hash declared by its action descriptor
 
 #### Scenario: Advance reports scoped effects
 
@@ -394,7 +408,8 @@ ResearchSpec SHALL expose `advance transition:<instance>/<node>` as the only pub
 
 #### Scenario: Pipeline child becomes ready
 - **WHEN** a parent stage makes one child node ready
-- **THEN** status and instructions expose its scoped selector and start can dry-run and execute it with normal plan-hash safeguards
+- **THEN** status and instructions expose its scoped selector and Start SHALL
+  follow the delegated child's declared direct execution policy
 
 ### Requirement: Public command surface remains fixed
 
@@ -523,3 +538,120 @@ pending patch and contract-change case actions through canonical selectors.
 - **AND** `decide patch:<id>` and `advance patch:<id>` SHALL govern acceptance
   and controlled application without a new top-level command
 
+### Requirement: Action Descriptor V2 And Execution Policy
+
+Every Agent-callable write instruction SHALL expose a version-2 action descriptor
+whose public input template contains only semantic fields. The descriptor SHALL
+declare exactly one execution policy: `direct`, `human_confirmed`, or
+`plan_bound`; the CLI SHALL derive mechanical identities, hashes, dependency
+facts, receipt fields, and current basis from the selected action.
+
+#### Scenario: Direct action receives semantic input
+
+- **WHEN** a caller executes a currently allowed `direct` action with the
+  descriptor's semantic input
+- **THEN** the CLI SHALL plan, validate, and commit under current read
+  preconditions in that invocation
+- **AND** it SHALL NOT require an externally replayed plan hash
+
+#### Scenario: Caller supplies a mechanical field
+
+- **WHEN** a caller includes a CLI-derived identity, hash, receipt, dependency,
+  schema-version, or basis field in a version-2 semantic input
+- **THEN** the CLI SHALL reject the input before creating any runtime write
+
+#### Scenario: Plan-bound action is executed
+
+- **WHEN** a descriptor declares `plan_bound`
+- **THEN** the CLI SHALL require an approved current plan hash and the explicit
+  execution confirmation required by that action
+- **AND** a direct or human-confirmed execution path SHALL NOT bypass that
+  requirement
+
+### Requirement: Status And Transaction Continuation Are Directed
+
+Default status SHALL remain bounded and SHALL expose recommended actions, other
+allowed actions, blockers, pending counts, and directed detail selectors. A
+successful write transaction SHALL return compact effects and next selectors so
+that a caller can continue with a directed read instead of requiring a complete
+status round trip after every mechanical action.
+
+#### Scenario: A durable action succeeds
+
+- **WHEN** Start, Submit, Advance, Decide, Propose, Doctor repair, or runtime
+  migration completes successfully
+- **THEN** its result SHALL identify its receipt or plan, effects, and next
+  selectors without embedding an unbounded post-write workflow snapshot
+
+### Requirement: Catalog-Backed Static CLI Discovery
+
+ResearchSpec SHALL maintain one typed static CLI catalog for the seven global
+options, the exact seventeen top-level commands, and the `plugin` subcommands.
+The catalog SHALL provide the stable synopsis and help metadata used by
+Commander help and by the deterministic packaged CLI handbook. Handler binding
+and command execution MAY remain explicit, but they SHALL consume the same
+catalog identity rather than define a second public command surface.
+
+#### Scenario: Root, command, and plugin help require no workspace
+
+- **WHEN** a user runs `researchspec --help`, `researchspec <command> --help`,
+  or `researchspec plugin --help` outside a ResearchSpec workspace
+- **THEN** the CLI SHALL render the applicable catalog-backed help without
+  attempting workspace discovery or mutation
+- **AND** root help SHALL list each of the seventeen top-level commands exactly
+  once
+- **AND** plugin help SHALL list only its declared subcommands
+
+#### Scenario: Packaged handbook is derived static discovery
+
+- **WHEN** ResearchSpec packages its public documentation
+- **THEN** it SHALL include a deterministic CLI handbook derived from the
+  static catalog
+- **AND** the handbook SHALL identify global options, command and plugin
+  synopsis, selector-family discovery, and the boundary to runtime
+  instructions
+- **AND** it SHALL not require a workspace or encode live action availability
+
+### Requirement: Contextual Usage And Complete Selector-Family Hints
+
+Usage failures SHALL retain exit code 2 and provide a help target appropriate
+to the invoked root command or plugin subcommand. Invalid runtime-action
+selectors SHALL additionally identify every supported selector family:
+`subflow:`, `obligation:`, `gate:`, `completion:`, `case-action:`, `patch:`,
+`change:`, `work:`, and `transition:`.
+
+#### Scenario: Invalid action selector is discoverable across profiles
+
+- **WHEN** a caller supplies an invalid selector to `researchspec instructions`
+- **THEN** the CLI SHALL return the stable invalid-selector usage error and
+  exit code 2
+- **AND** its hint SHALL direct the caller to `researchspec instructions --help`
+  and identify the complete selector-family set
+- **AND** the hint SHALL not imply that every family is currently available in
+  the caller's workspace
+
+#### Scenario: Plugin usage failure remains contextual
+
+- **WHEN** a caller supplies invalid syntax to a `plugin` subcommand
+- **THEN** the CLI SHALL direct the caller to the corresponding plugin help
+  surface
+- **AND** it SHALL not redirect the caller to an unrelated runtime selector or
+  require a workspace merely to render usage guidance
+
+### Requirement: Static Discovery Does Not Authorize Runtime Actions
+
+Static help and the CLI handbook SHALL describe command shape and discovery
+only. They SHALL NOT expand the runtime selector grammar, create an action
+descriptor, reveal a live frontier, construct a semantic payload, or authorize
+a write. `status` and `instructions <runtime-selector>` remain the only public
+sources for current runtime action availability and descriptor-owned execution
+requirements.
+
+#### Scenario: Handbook precedes a runtime write
+
+- **WHEN** a user reads static help or the handbook and then intends a
+  workspace-bound write
+- **THEN** the guidance SHALL direct the caller to current `status` and the
+  selected runtime `instructions` packet
+- **AND** no `cli:<command>` selector or additional public command SHALL be
+  introduced

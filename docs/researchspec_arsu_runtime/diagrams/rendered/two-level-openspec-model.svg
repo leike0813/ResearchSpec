@@ -1,116 +1,24 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="433px" preserveAspectRatio="none" style="width:1190px;height:433px;" version="1.1" viewBox="0 0 1190 433" width="1190px" zoomAndPan="magnify">
-<defs/>
-<g>
-<text fill="#000000" font-family="sans-serif" font-size="18" lengthAdjust="spacingAndGlyphs" textLength="389" x="406.5" y="16.708">两个 OpenSpec 风格层次：产品治理与科研运行</text>
-<!--MD5=[ab2b0a3559a59795c6bebd8e3853e36b]
-cluster Repository development governance-->
-<polygon fill="#FFFFFF" points="581,44.9531,879,44.9531,886,67.25,1168,67.25,1168,264.9531,581,264.9531,581,44.9531" style="stroke: #000000; stroke-width: 1.5;"/>
-<line style="stroke: #000000; stroke-width: 1.5;" x1="581" x2="886" y1="67.25" y2="67.25"/>
-<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="292" x="585" y="59.9482">Repository development governance</text>
-<!--MD5=[9eea778eeaf4e62d19e24f1bb035a5e8]
-cluster Initialized research workspace-->
-<polygon fill="#FFFFFF" points="22,44.9531,270,44.9531,277,67.25,557,67.25,557,421.9531,22,421.9531,22,44.9531" style="stroke: #000000; stroke-width: 1.5;"/>
-<line style="stroke: #000000; stroke-width: 1.5;" x1="22" x2="277" y1="67.25" y2="67.25"/>
-<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="242" x="26" y="59.9482">Initialized research workspace</text>
-<!--MD5=[54598fc1a3a168e894df3504de3801f4]
-entity ProductSpecs-->
-<rect fill="#FEFECE" height="55.5938" style="stroke: #000000; stroke-width: 1.5;" width="226" x="597" y="79.9531"/>
-<polygon fill="#FEFECE" points="806,84.9531,806,98.9531,818,98.9531,818,90.9531,812,84.9531,806,84.9531" style="stroke: #000000; stroke-width: 1.5;"/>
-<line style="stroke: #000000; stroke-width: 1.5;" x1="812" x2="812" y1="84.9531" y2="90.9531"/>
-<line style="stroke: #000000; stroke-width: 1.5;" x1="818" x2="812" y1="90.9531" y2="90.9531"/>
-<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="136" x="607" y="105.9482">openspec/specs/**</text>
-<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="196" x="607" y="122.2451">ResearchSpec product truth</text>
-<!--MD5=[e07e4813d43e0ae978c45bac76a43220]
-entity ProductChange-->
-<rect fill="#FEFECE" height="55.5938" style="stroke: #000000; stroke-width: 1.5;" width="293" x="858.5" y="79.9531"/>
-<polygon fill="#FEFECE" points="1134.5,84.9531,1134.5,98.9531,1146.5,98.9531,1146.5,90.9531,1140.5,84.9531,1134.5,84.9531" style="stroke: #000000; stroke-width: 1.5;"/>
-<line style="stroke: #000000; stroke-width: 1.5;" x1="1140.5" x2="1140.5" y1="84.9531" y2="90.9531"/>
-<line style="stroke: #000000; stroke-width: 1.5;" x1="1146.5" x2="1140.5" y1="90.9531" y2="90.9531"/>
-<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="195" x="868.5" y="105.9482">openspec/changes/&lt;id&gt;/**</text>
-<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="263" x="868.5" y="122.2451">proposal / design / delta specs / tasks</text>
-<!--MD5=[442253d83f8e128586b7e919ab7f21a6]
-entity ProductLifecycle-->
-<rect fill="#FEFECE" height="36.2969" style="stroke: #A80036; stroke-width: 1.5;" width="246" x="793" y="212.9531"/>
-<rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="788" y="217.9531"/>
-<rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="788" y="239.25"/>
-<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="226" x="803" y="235.9482">OpenSpec development lifecycle</text>
-<!--MD5=[250f664cea79a7e6882a42eb4d905427]
-entity ResearchSpecs-->
-<rect fill="#FEFECE" height="55.5938" style="stroke: #000000; stroke-width: 1.5;" width="214" x="38" y="79.9531"/>
-<polygon fill="#FEFECE" points="235,84.9531,235,98.9531,247,98.9531,247,90.9531,241,84.9531,235,84.9531" style="stroke: #000000; stroke-width: 1.5;"/>
-<line style="stroke: #000000; stroke-width: 1.5;" x1="241" x2="241" y1="84.9531" y2="90.9531"/>
-<line style="stroke: #000000; stroke-width: 1.5;" x1="247" x2="241" y1="90.9531" y2="90.9531"/>
-<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="161" x="48" y="105.9482">researchspec/specs/**</text>
-<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="184" x="48" y="122.2451">current research contracts</text>
-<!--MD5=[35225cbc222af83b3b87fb555b5d9b84]
-entity ResearchChange-->
-<rect fill="#FEFECE" height="55.5938" style="stroke: #000000; stroke-width: 1.5;" width="254" x="287" y="79.9531"/>
-<polygon fill="#FEFECE" points="524,84.9531,524,98.9531,536,98.9531,536,90.9531,530,84.9531,524,84.9531" style="stroke: #000000; stroke-width: 1.5;"/>
-<line style="stroke: #000000; stroke-width: 1.5;" x1="530" x2="530" y1="84.9531" y2="90.9531"/>
-<line style="stroke: #000000; stroke-width: 1.5;" x1="536" x2="530" y1="90.9531" y2="90.9531"/>
-<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="220" x="297" y="105.9482">researchspec/changes/&lt;id&gt;/**</text>
-<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="224" x="297" y="122.2451">proposal / tasks / contract-patch</text>
-<!--MD5=[4bbb3182caa561aa78270834e4a11b26]
-entity Run-->
-<path d="M272,337.9531 C272,327.9531 360,327.9531 360,327.9531 C360,327.9531 448,327.9531 448,337.9531 L448,395.8438 C448,405.8438 360,405.8438 360,405.8438 C360,405.8438 272,405.8438 272,395.8438 L272,337.9531 " fill="#FEFECE" style="stroke: #000000; stroke-width: 1.5;"/>
-<path d="M272,337.9531 C272,347.9531 360,347.9531 360,347.9531 C360,347.9531 448,347.9531 448,337.9531 " fill="none" style="stroke: #000000; stroke-width: 1.5;"/>
-<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="105" x="282" y="364.9482">runs/current/**</text>
-<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="156" x="282" y="381.2451">state / artifacts / Gates</text>
-<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="137" x="282" y="397.542">Decisions / receipts</text>
-<!--MD5=[1bff9c4a9fda48b9755312da782cd56e]
-entity ResearchLifecycle-->
-<rect fill="#FEFECE" height="36.2969" style="stroke: #A80036; stroke-width: 1.5;" width="203" x="312.5" y="212.9531"/>
-<rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="307.5" y="217.9531"/>
-<rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="307.5" y="239.25"/>
-<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="183" x="322.5" y="235.9482">ResearchSpec CLI lifecycle</text>
-<path d="M572.5,346.9531 L572.5,387.2188 A0,0 0 0 0 572.5,387.2188 L1023.5,387.2188 A0,0 0 0 0 1023.5,387.2188 L1023.5,356.9531 L1013.5,346.9531 L747.39,346.9531 L463.02,249.0631 L739.39,346.9531 L572.5,346.9531 A0,0 0 0 0 572.5,346.9531 " fill="#FBFB77" style="stroke: #A80036; stroke-width: 1.0;"/>
-<path d="M1013.5,346.9531 L1013.5,356.9531 L1023.5,356.9531 L1013.5,346.9531 " fill="#FBFB77" style="stroke: #A80036; stroke-width: 1.0;"/>
-<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="321" x="578.5" y="364.02">The two layers share current/proposed separation,</text>
-<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="430" x="578.5" y="379.1528">but a user's research change is not a repository OpenSpec change.</text>
-<!--MD5=[55be509fdb3353940ba840073a773694]
-link ProductSpecs to ProductLifecycle-->
-<path d="M823.14,135.3131 C865.29,146.2031 904.56,158.0931 911,165.9531 C920.35,177.3731 921.37,194.1031 920.17,207.5931 " fill="none" id="ProductSpecs-&gt;ProductLifecycle" style="stroke: #A80036; stroke-width: 1.0;"/>
-<polygon fill="#A80036" points="919.59,212.7731,924.5675,204.2746,920.1469,207.8042,916.6172,203.3836,919.59,212.7731" style="stroke: #A80036; stroke-width: 1.0;"/>
-<!--MD5=[1471119e2b0d90b20af9e6884fff8781]
-link ProductLifecycle to ProductSpecs-->
-<path d="M792.94,216.1531 C752.8,208.9431 715.33,198.3031 703,182.9531 C693.79,171.4831 694.17,155.5531 697.42,141.4131 " fill="none" id="ProductLifecycle-&gt;ProductSpecs" style="stroke: #A80036; stroke-width: 1.0;"/>
-<polygon fill="#A80036" points="698.74,136.2931,692.6283,144.0163,697.4971,141.1362,700.3772,146.0049,698.74,136.2931" style="stroke: #A80036; stroke-width: 1.0;"/>
-<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="198" x="704" y="179.02">archive merges accepted delta</text>
-<!--MD5=[415333382a154a49b80f174e6d8ed5ea]
-link ProductChange to ProductLifecycle-->
-<path d="M985.03,136.1031 C968.95,157.9631 946.66,188.2631 931.81,208.4631 " fill="none" id="ProductChange-&gt;ProductLifecycle" style="stroke: #A80036; stroke-width: 1.0;"/>
-<polygon fill="#A80036" points="928.76,212.6131,937.3101,207.7249,931.7187,208.5825,930.8611,202.991,928.76,212.6131" style="stroke: #A80036; stroke-width: 1.0;"/>
-<!--MD5=[7c930ba4eb8aa34e28794281ee9f04f7]
-link ResearchSpecs to ResearchLifecycle-->
-<path d="M252,131.3431 C281.54,139.8631 312.9,151.1931 340,165.9531 C360.59,177.1631 380.49,194.8931 394.45,208.8531 " fill="none" id="ResearchSpecs-&gt;ResearchLifecycle" style="stroke: #A80036; stroke-width: 1.0;"/>
-<polygon fill="#A80036" points="398.23,212.6731,394.769,203.4524,394.7232,209.1091,389.0665,209.0633,398.23,212.6731" style="stroke: #A80036; stroke-width: 1.0;"/>
-<!--MD5=[987fdc4f1b74888bda1d01583f03141d]
-link ResearchLifecycle to ResearchSpecs-->
-<path d="M312.48,221.0931 C254.63,214.0631 189.48,202.1431 168,182.9531 C156.29,172.4931 150.48,156.2031 147.62,141.5631 " fill="none" id="ResearchLifecycle-&gt;ResearchSpecs" style="stroke: #A80036; stroke-width: 1.0;"/>
-<polygon fill="#A80036" points="146.69,136.2531,144.2912,145.8054,147.5467,141.1792,152.1729,144.4347,146.69,136.2531" style="stroke: #A80036; stroke-width: 1.0;"/>
-<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="162" x="169" y="179.02">accepted semantic patch</text>
-<!--MD5=[693ad358925bdb1999557c32bfd825d6]
-link ResearchChange to ResearchLifecycle-->
-<path d="M414,136.1031 C414,157.6031 414,187.2531 414,207.4331 " fill="none" id="ResearchChange-&gt;ResearchLifecycle" style="stroke: #A80036; stroke-width: 1.0;"/>
-<polygon fill="#A80036" points="414,212.6131,418,203.6131,414,207.6131,410,203.6131,414,212.6131" style="stroke: #A80036; stroke-width: 1.0;"/>
-<!--MD5=[ff1b408ccf1d2ec27aad6ad50f970da8]
-link Run to ResearchLifecycle-->
-<path d="M445.2,327.9031 C455.92,319.5631 465.42,309.6531 472,297.9531 C481.59,280.9231 467.04,264.4031 450.13,252.1531 " fill="none" id="Run-&gt;ResearchLifecycle" style="stroke: #A80036; stroke-width: 1.0;"/>
-<polygon fill="#A80036" points="445.79,249.1331,450.887,257.5605,449.8922,251.9918,455.4609,250.997,445.79,249.1331" style="stroke: #A80036; stroke-width: 1.0;"/>
-<!--MD5=[ee117a58e2051b67de0ff189df487f0e]
-link ResearchLifecycle to Run-->
-<path d="M312.4,246.1531 C293.46,253.5231 275.9,264.5431 264,280.9531 C252.49,296.8131 260.25,311.8231 275.39,324.6831 " fill="none" id="ResearchLifecycle-&gt;Run" style="stroke: #A80036; stroke-width: 1.0;"/>
-<polygon fill="#A80036" points="279.39,327.9031,274.8922,319.1413,275.4968,324.7658,269.8724,325.3704,279.39,327.9031" style="stroke: #A80036; stroke-width: 1.0;"/>
-<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="198" x="265" y="294.02">receipts and Decision evidence</text>
-<!--MD5=[1017269881ebba95bd7dcbe4ba743275]
-link ProductSpecs to ResearchLifecycle-->
-<path d="M605.54,136.0631 C578.22,144.4231 549.11,154.5031 523,165.9531 C494.86,178.3031 464.89,196.2931 443.51,210.0531 " fill="none" id="ProductSpecs-&gt;ResearchLifecycle" style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/>
-<polygon fill="#A80036" points="439.08,212.9231,448.81,211.3976,443.2794,210.2092,444.4678,204.6786,439.08,212.9231" style="stroke: #A80036; stroke-width: 1.0;"/>
-<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="163" x="524" y="179.02">defines software behavior</text>
-<!--MD5=[c9d1db64233f3edf1b2c7a8180744e3a]
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="433px" preserveAspectRatio="none" style="width:1190px;height:433px;" version="1.1" viewBox="0 0 1190 433" width="1190px" zoomAndPan="magnify"><defs/><g><text fill="#000000" font-family="sans-serif" font-size="18" lengthAdjust="spacingAndGlyphs" textLength="469" x="366.5" y="16.708">Shared：两个 OpenSpec 风格层次：产品治理与科研运行</text><!--MD5=[ab2b0a3559a59795c6bebd8e3853e36b]
+cluster Repository development governance--><polygon fill="#FFFFFF" points="581,44.9531,879,44.9531,886,67.25,1168,67.25,1168,264.9531,581,264.9531,581,44.9531" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="581" x2="886" y1="67.25" y2="67.25"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="292" x="585" y="59.9482">Repository development governance</text><!--MD5=[9eea778eeaf4e62d19e24f1bb035a5e8]
+cluster Initialized research workspace--><polygon fill="#FFFFFF" points="22,44.9531,270,44.9531,277,67.25,557,67.25,557,421.9531,22,421.9531,22,44.9531" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="22" x2="277" y1="67.25" y2="67.25"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="242" x="26" y="59.9482">Initialized research workspace</text><!--MD5=[54598fc1a3a168e894df3504de3801f4]
+entity ProductSpecs--><rect fill="#FEFECE" height="55.5938" style="stroke: #000000; stroke-width: 1.5;" width="226" x="597" y="79.9531"/><polygon fill="#FEFECE" points="806,84.9531,806,98.9531,818,98.9531,818,90.9531,812,84.9531,806,84.9531" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="812" x2="812" y1="84.9531" y2="90.9531"/><line style="stroke: #000000; stroke-width: 1.5;" x1="818" x2="812" y1="90.9531" y2="90.9531"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="136" x="607" y="105.9482">openspec/specs/**</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="196" x="607" y="122.2451">ResearchSpec product truth</text><!--MD5=[e07e4813d43e0ae978c45bac76a43220]
+entity ProductChange--><rect fill="#FEFECE" height="55.5938" style="stroke: #000000; stroke-width: 1.5;" width="293" x="858.5" y="79.9531"/><polygon fill="#FEFECE" points="1134.5,84.9531,1134.5,98.9531,1146.5,98.9531,1146.5,90.9531,1140.5,84.9531,1134.5,84.9531" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="1140.5" x2="1140.5" y1="84.9531" y2="90.9531"/><line style="stroke: #000000; stroke-width: 1.5;" x1="1146.5" x2="1140.5" y1="90.9531" y2="90.9531"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="195" x="868.5" y="105.9482">openspec/changes/&lt;id&gt;/**</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="263" x="868.5" y="122.2451">proposal / design / delta specs / tasks</text><!--MD5=[442253d83f8e128586b7e919ab7f21a6]
+entity ProductLifecycle--><rect fill="#FEFECE" height="36.2969" style="stroke: #A80036; stroke-width: 1.5;" width="246" x="793" y="212.9531"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="788" y="217.9531"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="788" y="239.25"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="226" x="803" y="235.9482">OpenSpec development lifecycle</text><!--MD5=[250f664cea79a7e6882a42eb4d905427]
+entity ResearchSpecs--><rect fill="#FEFECE" height="55.5938" style="stroke: #000000; stroke-width: 1.5;" width="214" x="38" y="79.9531"/><polygon fill="#FEFECE" points="235,84.9531,235,98.9531,247,98.9531,247,90.9531,241,84.9531,235,84.9531" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="241" x2="241" y1="84.9531" y2="90.9531"/><line style="stroke: #000000; stroke-width: 1.5;" x1="247" x2="241" y1="90.9531" y2="90.9531"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="161" x="48" y="105.9482">researchspec/specs/**</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="184" x="48" y="122.2451">current research contracts</text><!--MD5=[35225cbc222af83b3b87fb555b5d9b84]
+entity ResearchChange--><rect fill="#FEFECE" height="55.5938" style="stroke: #000000; stroke-width: 1.5;" width="254" x="287" y="79.9531"/><polygon fill="#FEFECE" points="524,84.9531,524,98.9531,536,98.9531,536,90.9531,530,84.9531,524,84.9531" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="530" x2="530" y1="84.9531" y2="90.9531"/><line style="stroke: #000000; stroke-width: 1.5;" x1="536" x2="530" y1="90.9531" y2="90.9531"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="220" x="297" y="105.9482">researchspec/changes/&lt;id&gt;/**</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="224" x="297" y="122.2451">proposal / tasks / contract-patch</text><!--MD5=[4bbb3182caa561aa78270834e4a11b26]
+entity Run--><path d="M272,337.9531 C272,327.9531 360,327.9531 360,327.9531 C360,327.9531 448,327.9531 448,337.9531 L448,395.8438 C448,405.8438 360,405.8438 360,405.8438 C360,405.8438 272,405.8438 272,395.8438 L272,337.9531 " fill="#FEFECE" style="stroke: #000000; stroke-width: 1.5;"/><path d="M272,337.9531 C272,347.9531 360,347.9531 360,347.9531 C360,347.9531 448,347.9531 448,337.9531 " fill="none" style="stroke: #000000; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="105" x="282" y="364.9482">runs/current/**</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="156" x="282" y="381.2451">state / artifacts / Gates</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="137" x="282" y="397.542">Decisions / receipts</text><!--MD5=[1bff9c4a9fda48b9755312da782cd56e]
+entity ResearchLifecycle--><rect fill="#FEFECE" height="36.2969" style="stroke: #A80036; stroke-width: 1.5;" width="203" x="312.5" y="212.9531"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="307.5" y="217.9531"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="307.5" y="239.25"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="183" x="322.5" y="235.9482">ResearchSpec CLI lifecycle</text><path d="M572.5,346.9531 L572.5,387.2188 A0,0 0 0 0 572.5,387.2188 L1023.5,387.2188 A0,0 0 0 0 1023.5,387.2188 L1023.5,356.9531 L1013.5,346.9531 L747.39,346.9531 L463.02,249.0631 L739.39,346.9531 L572.5,346.9531 A0,0 0 0 0 572.5,346.9531 " fill="#FBFB77" style="stroke: #A80036; stroke-width: 1.0;"/><path d="M1013.5,346.9531 L1013.5,356.9531 L1023.5,356.9531 L1013.5,346.9531 " fill="#FBFB77" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="321" x="578.5" y="364.02">The two layers share current/proposed separation,</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="430" x="578.5" y="379.1528">but a user's research change is not a repository OpenSpec change.</text><!--MD5=[55be509fdb3353940ba840073a773694]
+link ProductSpecs to ProductLifecycle--><path d="M823.14,135.3131 C865.29,146.2031 904.56,158.0931 911,165.9531 C920.35,177.3731 921.37,194.1031 920.17,207.5931 " fill="none" id="ProductSpecs-&gt;ProductLifecycle" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="919.59,212.7731,924.5675,204.2746,920.1469,207.8042,916.6172,203.3836,919.59,212.7731" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[1471119e2b0d90b20af9e6884fff8781]
+link ProductLifecycle to ProductSpecs--><path d="M792.94,216.1531 C752.8,208.9431 715.33,198.3031 703,182.9531 C693.79,171.4831 694.17,155.5531 697.42,141.4131 " fill="none" id="ProductLifecycle-&gt;ProductSpecs" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="698.74,136.2931,692.6283,144.0163,697.4971,141.1362,700.3772,146.0049,698.74,136.2931" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="198" x="704" y="179.02">archive merges accepted delta</text><!--MD5=[415333382a154a49b80f174e6d8ed5ea]
+link ProductChange to ProductLifecycle--><path d="M985.03,136.1031 C968.95,157.9631 946.66,188.2631 931.81,208.4631 " fill="none" id="ProductChange-&gt;ProductLifecycle" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="928.76,212.6131,937.3101,207.7249,931.7187,208.5825,930.8611,202.991,928.76,212.6131" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[7c930ba4eb8aa34e28794281ee9f04f7]
+link ResearchSpecs to ResearchLifecycle--><path d="M252,131.3431 C281.54,139.8631 312.9,151.1931 340,165.9531 C360.59,177.1631 380.49,194.8931 394.45,208.8531 " fill="none" id="ResearchSpecs-&gt;ResearchLifecycle" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="398.23,212.6731,394.769,203.4524,394.7232,209.1091,389.0665,209.0633,398.23,212.6731" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[987fdc4f1b74888bda1d01583f03141d]
+link ResearchLifecycle to ResearchSpecs--><path d="M312.48,221.0931 C254.63,214.0631 189.48,202.1431 168,182.9531 C156.29,172.4931 150.48,156.2031 147.62,141.5631 " fill="none" id="ResearchLifecycle-&gt;ResearchSpecs" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="146.69,136.2531,144.2912,145.8054,147.5467,141.1792,152.1729,144.4347,146.69,136.2531" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="162" x="169" y="179.02">accepted semantic patch</text><!--MD5=[693ad358925bdb1999557c32bfd825d6]
+link ResearchChange to ResearchLifecycle--><path d="M414,136.1031 C414,157.6031 414,187.2531 414,207.4331 " fill="none" id="ResearchChange-&gt;ResearchLifecycle" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="414,212.6131,418,203.6131,414,207.6131,410,203.6131,414,212.6131" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[ff1b408ccf1d2ec27aad6ad50f970da8]
+link Run to ResearchLifecycle--><path d="M445.2,327.9031 C455.92,319.5631 465.42,309.6531 472,297.9531 C481.59,280.9231 467.04,264.4031 450.13,252.1531 " fill="none" id="Run-&gt;ResearchLifecycle" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="445.79,249.1331,450.887,257.5605,449.8922,251.9918,455.4609,250.997,445.79,249.1331" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[ee117a58e2051b67de0ff189df487f0e]
+link ResearchLifecycle to Run--><path d="M312.4,246.1531 C293.46,253.5231 275.9,264.5431 264,280.9531 C252.49,296.8131 260.25,311.8231 275.39,324.6831 " fill="none" id="ResearchLifecycle-&gt;Run" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="279.39,327.9031,274.8922,319.1413,275.4968,324.7658,269.8724,325.3704,279.39,327.9031" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="198" x="265" y="294.02">receipts and Decision evidence</text><!--MD5=[1017269881ebba95bd7dcbe4ba743275]
+link ProductSpecs to ResearchLifecycle--><path d="M605.54,136.0631 C578.22,144.4231 549.11,154.5031 523,165.9531 C494.86,178.3031 464.89,196.2931 443.51,210.0531 " fill="none" id="ProductSpecs-&gt;ResearchLifecycle" style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><polygon fill="#A80036" points="439.08,212.9231,448.81,211.3976,443.2794,210.2092,444.4678,204.6786,439.08,212.9231" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="163" x="524" y="179.02">defines software behavior</text><!--MD5=[254f14887147a85a04b3a76849657212]
 @startuml
-title 两个 OpenSpec 风格层次：产品治理与科研运行
+title Shared：两个 OpenSpec 风格层次：产品治理与科研运行
 skinparam componentStyle rectangle
 skinparam shadowing false
 
@@ -151,6 +59,4 @@ Operating System: Linux
 Default Encoding: UTF-8
 Language: en
 Country: null
--->
-</g>
-</svg>
+--></g></svg>

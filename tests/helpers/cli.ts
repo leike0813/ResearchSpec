@@ -15,6 +15,7 @@ export interface Envelope<T = unknown> {
   error?: {
     code?: string;
     message?: string;
+    hint?: string;
     validation?: Array<{
       code: string;
       field_path: string;

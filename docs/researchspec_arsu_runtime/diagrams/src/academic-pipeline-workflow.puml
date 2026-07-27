@@ -1,5 +1,5 @@
 @startuml
-title Academic Pipeline：当前 end-to-end 控制图
+title Strict compatibility：Academic Pipeline end-to-end control graph
 skinparam shadowing false
 start
 :Human + Host Agent\nconfirm route, graph, Gates and cost;

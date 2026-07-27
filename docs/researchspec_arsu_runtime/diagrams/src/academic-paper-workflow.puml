@@ -1,5 +1,5 @@
 @startuml
-title Academic Paper：ARSU 内层语义与 ResearchSpec 外层控制
+title Strict compatibility：Academic Paper 外层 work graph
 skinparam shadowing false
 actor User
 participant "Host Agent" as Agent
@@ -25,9 +25,25 @@ loop each ready artifact work
     -> internal evaluation -> format
     Other routes select only relevant roles.
   end note
-  ARSU -> Files : candidate or declared draft patch
-  Agent -> CLI : hash-bound Submit
-  CLI -> Files : submit receipt + registry
+  alt ordinary artifact candidate
+    ARSU -> Files : candidate artifact
+    Agent -> CLI : hash-bound Work Submit
+    CLI -> Files : submit receipt + registry
+  else revision_patch
+    ARSU -> Files : draft-patch candidate bound to base artifact/hash
+    Agent -> CLI : submit patch:<patch-id>
+    CLI -> Files : patch submit receipt + pending patch
+    Agent -> User : exact patch, semantic delta and write plan
+    User --> Agent : accept / reject / postpone
+    Agent -> CLI : decide patch:<patch-id> resolve
+    CLI -> Files : patch Decision receipt + resolved/pending lifecycle
+    alt accepted
+      Agent -> CLI : advance patch:<patch-id> apply
+      CLI -> Files : revised draft + apply report + apply receipts
+    else rejected or postponed
+      CLI --> Agent : no apply; retain resolution or pending state
+    end
+  end
 end
 
 opt required route Gate
@@ -36,6 +52,6 @@ opt required route Gate
   Agent -> CLI : submit Gate
   CLI -> Files : Gate receipt + ledger
 end
-Agent -> CLI : Advance completion
-CLI -> Files : receipt + state
+Agent -> CLI : Advance transition:<instance>/<completion-node>
+CLI -> Files : transition receipt + state
 @enduml

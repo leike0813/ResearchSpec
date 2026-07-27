@@ -27,7 +27,8 @@ ResearchSpec SHALL derive subflow route summaries and prerequisites from the can
 #### Scenario: Template instructions are confirmation-ready
 - **WHEN** a caller requests instructions for an available subflow template
 - **THEN** the packet SHALL separate Skill/route, prerequisites, artifacts, Gate policy, risk, cost, coverage, parent/round policy and work/parallel summary
-- **AND** it SHALL include a deterministic instruction basis hash and strict Start contract
+- **AND** it SHALL include a deterministic instruction basis hash and
+  descriptor-owned Start contract
 
 #### Scenario: Missing prerequisite does not auto-expand
 - **WHEN** a route prerequisite group is not satisfied
@@ -66,7 +67,8 @@ ResearchSpec SHALL allow a started subflow to delegate deterministic candidate r
 
 #### Scenario: Automatic work needs no second human prompt
 - **WHEN** an automatic instance work item has a valid start authorization and candidate
-- **THEN** the Agent MAY perform Submit dry-run and exact-hash execution without another user confirmation
+- **THEN** the Agent MAY execute the descriptor-declared direct Submit without
+  another user confirmation or external plan replay
 - **AND** the submission SHALL remain mechanical rather than academic approval
 
 #### Scenario: Invalid start evidence blocks delegation
@@ -82,10 +84,13 @@ The subflow frontier SHALL expose a ready child as `subflow:<parent-instance>/<n
 - **THEN** each scoped selector resolves only the child candidate of its named parent
 
 ### Requirement: Parent confirmation delegates exact child starts
-A child start SHALL reuse a confirmed parent plan only when the parent receipt, graph, node, frontier, input artifacts, Decisions, and computed round match the confirmed basis.
+A child start SHALL derive and validate parent receipt, graph, node, frontier,
+input artifacts, Decisions, and computed round from current authority before a
+direct delegated execution.
 
 #### Scenario: Parent graph or inputs drift
-- **WHEN** a child executes against a different graph hash, prerequisite hash, Decision, or round than its dry-run plan
+- **WHEN** a child executes against changed graph, prerequisite, Decision, or
+  round authority
 - **THEN** execution returns a conflict and creates no child instance
 
 ### Requirement: Child start receipts bind orchestration identity
@@ -125,3 +130,24 @@ dependency.
 - **THEN** its diagnostics and obligations SHALL remain discoverable
 - **AND** an unrelated allowed subflow SHALL remain startable
 
+### Requirement: Start Follows Declared Execution Policy
+
+Subflow Start SHALL derive route, instance, parent, prerequisite, authorization,
+and receipt identities from current authority. An external route Start SHALL be
+`human_confirmed`; an exact delegated strict child Start SHALL be `direct` when
+its parent authority and current frontier permit it.
+
+#### Scenario: User starts an external route
+
+- **WHEN** an available external `subflow:` action is selected
+- **THEN** the CLI SHALL require the named user confirmation declared by its
+  descriptor and create the start receipt and instance under current read
+  preconditions
+
+#### Scenario: Parent starts an exact child
+
+- **WHEN** a strict parent frontier exposes one delegated child selector with
+  valid parent authorization
+- **THEN** the CLI SHALL permit a direct child Start without a second human
+  confirmation or external plan replay
+- **AND** it SHALL reject changed parent, graph, prerequisite, or decision facts

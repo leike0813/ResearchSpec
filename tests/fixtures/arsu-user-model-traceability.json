@@ -16,7 +16,9 @@
     "agent-assisted-domain-plugin-routing",
     "add-fixed-zotero-literature-adapter",
     "establish-fluid-research-runtime",
-    "close-fluid-runtime-acceptance-gaps"
+    "close-fluid-runtime-acceptance-gaps",
+    "converge-fluid-runtime-surface",
+    "improve-cli-discoverability"
   ],
   "journeys": [
     { "journey_id": "bootstrap", "test_id": "journey.bootstrap" },
@@ -34,7 +36,8 @@
     { "journey_id": "plugin-augmentation", "test_id": "journey.plugin-augmentation" },
     { "journey_id": "plugin-fallback", "test_id": "journey.plugin-fallback" },
     { "journey_id": "zotero-entry-routing", "test_id": "journey.zotero-entry-routing" },
-    { "journey_id": "source-policy-consent", "test_id": "journey.source-policy-consent" }
+    { "journey_id": "source-policy-consent", "test_id": "journey.source-policy-consent" },
+    { "journey_id": "cli-discovery", "test_id": "journey.cli-discovery" }
   ],
   "capabilities": [
     {
@@ -76,6 +79,14 @@
           "scenarios": [
             { "scenario": "Ordinary research skips Adapter setup", "technical_changes": ["add-fixed-zotero-literature-adapter", "close-fluid-runtime-acceptance-gaps"], "journey_ids": ["source-policy-consent"], "test_ids": ["journey.source-policy-consent"] },
             { "scenario": "Private collection is required", "technical_changes": ["add-fixed-zotero-literature-adapter", "close-fluid-runtime-acceptance-gaps"], "journey_ids": ["source-policy-consent"], "test_ids": ["journey.source-policy-consent"] }
+          ]
+        },
+        {
+          "requirement": "Natural-Language CLI Discovery Uses Navigate Without Starting Work",
+          "scenarios": [
+            { "scenario": "User asks for a CLI operation manual", "technical_changes": ["improve-cli-discoverability"], "journey_ids": ["cli-discovery"], "test_ids": ["journey.cli-discovery"] },
+            { "scenario": "CLI discovery becomes a runtime action question", "technical_changes": ["improve-cli-discoverability"], "journey_ids": ["cli-discovery"], "test_ids": ["journey.cli-discovery"] },
+            { "scenario": "Discovery is requested before workspace initialization", "technical_changes": ["improve-cli-discoverability"], "journey_ids": ["cli-discovery"], "test_ids": ["journey.cli-discovery"] }
           ]
         }
       ]
@@ -132,6 +143,19 @@
             { "scenario": "Helper is used during a work item", "technical_changes": ["agent-assisted-domain-plugin-routing"], "journey_ids": ["plugin-augmentation"], "test_ids": ["journey.plugin-augmentation"] },
             { "scenario": "Helper is unavailable", "technical_changes": ["agent-assisted-domain-plugin-routing"], "journey_ids": ["plugin-fallback"], "test_ids": ["journey.plugin-fallback"] }
           ]
+        },
+        {
+          "requirement": "Dual-Runtime Producer Protocol",
+          "scenarios": [
+            { "scenario": "Adaptive producer receives several allowed obligations", "technical_changes": ["converge-fluid-runtime-surface"], "journey_ids": ["standalone"], "test_ids": ["journey.standalone"] },
+            { "scenario": "Strict pipeline is active", "technical_changes": ["converge-fluid-runtime-surface"], "journey_ids": ["pipeline"], "test_ids": ["journey.pipeline"] }
+          ]
+        },
+        {
+          "requirement": "Selector-Directed Durable Boundaries",
+          "scenarios": [
+            { "scenario": "A mechanical action completes", "technical_changes": ["converge-fluid-runtime-surface"], "journey_ids": ["standalone"], "test_ids": ["journey.standalone"] }
+          ]
         }
       ]
     },
@@ -185,6 +209,390 @@
     }
   ],
   "active_delta_capabilities": [
+    {
+      "capability_id": "agent-tool-delivery",
+      "change_id": "improve-cli-discoverability",
+      "spec_path": "openspec/changes/improve-cli-discoverability/specs/agent-tool-delivery/spec.md",
+      "requirements": [
+        {
+          "requirement": "Navigate CLI Handbook Reference Delivery",
+          "scenarios": [
+            {
+              "scenario": "Selected tool receives Navigate guidance",
+              "test_files": ["tests/adapters.test.ts"],
+              "verifier_evidence": [
+                { "kind": "guidance", "paths": ["src/adapters/delivery.ts", "src/cli/handbook.ts"] }
+              ]
+            },
+            {
+              "scenario": "Handbook reference has drifted",
+              "test_files": ["tests/cli.test.ts", "tests/arsu-user-journeys.test.ts"],
+              "verifier_evidence": [
+                { "kind": "guidance", "paths": ["src/adapters/delivery.ts", "src/adapters/companion/workflows/navigate.ts"] }
+              ]
+            },
+            {
+              "scenario": "Reference delivery does not expand the agent surface",
+              "test_files": ["tests/adapters.test.ts", "scripts/verify-package.mjs"],
+              "verifier_evidence": [
+                { "kind": "package", "paths": ["src/adapters/delivery.ts", "scripts/verify-package.mjs"] }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "capability_id": "arsu-user-routing",
+      "change_id": "improve-cli-discoverability",
+      "spec_path": "openspec/changes/improve-cli-discoverability/specs/arsu-user-routing/spec.md",
+      "requirements": [
+        {
+          "requirement": "Natural-Language CLI Discovery Uses Navigate Without Starting Work",
+          "scenarios": [
+            {
+              "scenario": "User asks for a CLI operation manual",
+              "journey_ids": ["cli-discovery"],
+              "test_ids": ["journey.cli-discovery"],
+              "test_files": ["tests/arsu-user-journeys.test.ts"],
+              "verifier_evidence": [
+                { "kind": "guidance", "paths": ["src/adapters/companion/workflows/navigate.ts", "docs/cli_handbook.md"] }
+              ]
+            },
+            {
+              "scenario": "CLI discovery becomes a runtime action question",
+              "journey_ids": ["cli-discovery"],
+              "test_ids": ["journey.cli-discovery"],
+              "test_files": ["tests/arsu-user-journeys.test.ts"],
+              "verifier_evidence": [
+                { "kind": "guidance", "paths": ["src/adapters/companion/shared-guidance.ts", "src/adapters/companion/workflows/navigate.ts"] }
+              ]
+            },
+            {
+              "scenario": "Discovery is requested before workspace initialization",
+              "journey_ids": ["cli-discovery"],
+              "test_ids": ["journey.cli-discovery"],
+              "test_files": ["tests/arsu-user-journeys.test.ts"],
+              "verifier_evidence": [
+                { "kind": "guidance", "paths": ["src/cli/main.ts", "src/cli/command-catalog.ts"] }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "capability_id": "cli-interface",
+      "change_id": "improve-cli-discoverability",
+      "spec_path": "openspec/changes/improve-cli-discoverability/specs/cli-interface/spec.md",
+      "requirements": [
+        {
+          "requirement": "Catalog-Backed Static CLI Discovery",
+          "scenarios": [
+            {
+              "scenario": "Root, command, and plugin help require no workspace",
+              "test_files": ["tests/cli.test.ts"],
+              "verifier_evidence": [
+                { "kind": "guidance", "paths": ["src/cli/command-catalog.ts", "src/cli/main.ts"] }
+              ]
+            },
+            {
+              "scenario": "Packaged handbook is derived static discovery",
+              "test_files": ["tests/cli.test.ts", "scripts/verify-package.mjs"],
+              "verifier_evidence": [
+                { "kind": "package", "paths": ["docs/cli_handbook.md", "src/cli/handbook.ts", "scripts/verify-package.mjs"] }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement": "Contextual Usage And Complete Selector-Family Hints",
+          "scenarios": [
+            {
+              "scenario": "Invalid action selector is discoverable across profiles",
+              "test_files": ["tests/cli.test.ts"],
+              "verifier_evidence": [
+                { "kind": "guidance", "paths": ["src/core/contracts/action-selector.ts", "src/cli/handlers.ts"] }
+              ]
+            },
+            {
+              "scenario": "Plugin usage failure remains contextual",
+              "test_files": ["tests/cli.test.ts"],
+              "verifier_evidence": [
+                { "kind": "guidance", "paths": ["src/cli/command-catalog.ts", "src/cli/main.ts"] }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement": "Static Discovery Does Not Authorize Runtime Actions",
+          "scenarios": [
+            {
+              "scenario": "Handbook precedes a runtime write",
+              "journey_ids": ["cli-discovery"],
+              "test_ids": ["journey.cli-discovery"],
+              "test_files": ["tests/arsu-user-journeys.test.ts"],
+              "verifier_evidence": [
+                { "kind": "documentation", "paths": ["docs/cli_handbook.md", "docs/arsu_user_usage_model.md"] }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "capability_id": "companion-skills",
+      "change_id": "improve-cli-discoverability",
+      "spec_path": "openspec/changes/improve-cli-discoverability/specs/companion-skills/spec.md",
+      "requirements": [
+        {
+          "requirement": "Navigate Provides Progressive CLI Discovery",
+          "scenarios": [
+            {
+              "scenario": "User asks which command or option to use",
+              "journey_ids": ["cli-discovery"],
+              "test_ids": ["journey.cli-discovery"],
+              "test_files": ["tests/arsu-user-journeys.test.ts", "tests/adapters.test.ts"],
+              "verifier_evidence": [
+                { "kind": "guidance", "paths": ["src/adapters/companion/shared-guidance.ts", "src/adapters/companion/workflows/navigate.ts"] }
+              ]
+            },
+            {
+              "scenario": "Static discovery reaches a workspace action",
+              "journey_ids": ["cli-discovery"],
+              "test_ids": ["journey.cli-discovery"],
+              "test_files": ["tests/arsu-user-journeys.test.ts"],
+              "verifier_evidence": [
+                { "kind": "guidance", "paths": ["src/adapters/companion/shared-guidance.ts", "src/adapters/companion/workflows/navigate.ts"] }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement": "Navigate CLI Handbook Is Optional Progressive Disclosure",
+          "scenarios": [
+            {
+              "scenario": "Handbook is available for a CLI explanation",
+              "journey_ids": ["cli-discovery"],
+              "test_ids": ["journey.cli-discovery"],
+              "test_files": ["tests/arsu-user-journeys.test.ts", "tests/adapters.test.ts"],
+              "verifier_evidence": [
+                { "kind": "guidance", "paths": ["src/adapters/companion/workflows/navigate.ts", "docs/cli_handbook.md"] }
+              ]
+            },
+            {
+              "scenario": "Handbook is missing or drifted",
+              "journey_ids": ["cli-discovery"],
+              "test_ids": ["journey.cli-discovery"],
+              "test_files": ["tests/arsu-user-journeys.test.ts"],
+              "verifier_evidence": [
+                { "kind": "guidance", "paths": ["src/adapters/companion/workflows/navigate.ts", "src/cli/main.ts"] }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "capability_id": "arsu-user-model-acceptance",
+      "change_id": "improve-cli-discoverability",
+      "spec_path": "openspec/changes/improve-cli-discoverability/specs/arsu-user-model-acceptance/spec.md",
+      "requirements": [
+        {
+          "requirement": "Converged Runtime Guidance Has Black-Box Acceptance",
+          "scenarios": [
+            {
+              "scenario": "Adaptive and strict guidance is exercised",
+              "journey_ids": ["pipeline"],
+              "test_ids": ["adaptive.reorder-recovery", "journey.pipeline"],
+              "test_files": ["tests/adaptive-case-runtime.test.ts", "tests/arsu-user-journeys.test.ts"],
+              "verifier_evidence": [
+                { "kind": "guidance", "paths": ["src/adapters/companion/shared-guidance.ts", "src/adapters/companion/workflows/navigate.ts"] }
+              ]
+            },
+            {
+              "scenario": "Static help is discoverable without a workspace",
+              "journey_ids": ["cli-discovery"],
+              "test_ids": ["journey.cli-discovery"],
+              "test_files": ["tests/arsu-user-journeys.test.ts"],
+              "verifier_evidence": [
+                { "kind": "guidance", "paths": ["src/cli/command-catalog.ts", "src/cli/main.ts"] }
+              ]
+            },
+            {
+              "scenario": "Navigate falls back when its handbook reference is unavailable",
+              "journey_ids": ["cli-discovery"],
+              "test_ids": ["journey.cli-discovery"],
+              "test_files": ["tests/arsu-user-journeys.test.ts"],
+              "verifier_evidence": [
+                { "kind": "guidance", "paths": ["src/adapters/companion/workflows/navigate.ts", "docs/cli_handbook.md"] }
+              ]
+            },
+            {
+              "scenario": "Static guidance does not authorize a runtime action",
+              "journey_ids": ["cli-discovery"],
+              "test_ids": ["journey.cli-discovery"],
+              "test_files": ["tests/arsu-user-journeys.test.ts"],
+              "verifier_evidence": [
+                { "kind": "guidance", "paths": ["src/adapters/companion/shared-guidance.ts", "src/core/runtime/action-descriptor.ts"] }
+              ]
+            },
+            {
+              "scenario": "Documentation facts are checked structurally",
+              "test_ids": ["traceability.user-model"],
+              "test_files": ["tests/arsu-user-model-traceability.test.ts", "scripts/verify-package.mjs"],
+              "verifier_evidence": [
+                { "kind": "documentation", "paths": ["README.md", "docs/cli_handbook.md", "docs/arsu_user_usage_model.md"] }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "capability_id": "mvp-release-readiness",
+      "change_id": "improve-cli-discoverability",
+      "spec_path": "openspec/changes/improve-cli-discoverability/specs/mvp-release-readiness/spec.md",
+      "requirements": [
+        {
+          "requirement": "Installed Tarball Verification",
+          "scenarios": [
+            {
+              "scenario": "Release tarball is verified",
+              "test_files": ["scripts/verify-package.mjs"],
+              "verifier_evidence": [
+                { "kind": "package", "paths": ["package.json", "README.md", "docs/cli_handbook.md", "scripts/verify-package.mjs"] }
+              ]
+            },
+            {
+              "scenario": "Installed Codex delivery is smoke tested",
+              "test_files": ["scripts/verify-package.mjs"],
+              "verifier_evidence": [
+                { "kind": "package", "paths": ["scripts/verify-package.mjs", "src/adapters/delivery.ts"] }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement": "Release Surface And Guidance Are Converged",
+          "scenarios": [
+            {
+              "scenario": "Installed release is smoke tested",
+              "test_files": ["scripts/verify-package.mjs"],
+              "verifier_evidence": [
+                { "kind": "package", "paths": ["scripts/verify-package.mjs", "src/adapters/tools.ts"] }
+              ]
+            },
+            {
+              "scenario": "Handbook source and renderer remain converged",
+              "test_files": ["scripts/verify-package.mjs"],
+              "verifier_evidence": [
+                { "kind": "package", "paths": ["docs/cli_handbook.md", "src/cli/handbook.ts", "scripts/verify-package.mjs"] }
+              ]
+            },
+            {
+              "scenario": "Every Navigate projection receives the same handbook",
+              "test_files": ["scripts/verify-package.mjs"],
+              "verifier_evidence": [
+                { "kind": "package", "paths": ["src/adapters/delivery.ts", "scripts/verify-package.mjs"] }
+              ]
+            },
+            {
+              "scenario": "Guidance convergence gate fails",
+              "test_files": ["scripts/verify-package.mjs", "tests/arsu-user-model-traceability.test.ts"],
+              "verifier_evidence": [
+                { "kind": "documentation", "paths": ["README.md", "docs/cli_handbook.md", "docs/arsu_user_usage_model.md"] }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "capability_id": "arsu-run-usage",
+      "change_id": "converge-fluid-runtime-surface",
+      "spec_path": "openspec/changes/archive/2026-07-27-converge-fluid-runtime-surface/specs/arsu-run-usage/spec.md",
+      "requirements": [
+        {
+          "requirement": "Dual-Runtime Producer Protocol",
+          "scenarios": [
+            {
+              "scenario": "Adaptive producer receives several allowed obligations",
+              "test_ids": ["adaptive.reorder-recovery"],
+              "test_files": ["tests/adaptive-case-runtime.test.ts"],
+              "verifier_evidence": [
+                { "kind": "guidance", "paths": ["src/adapters/companion/shared-guidance.ts", "tests/adapters.test.ts"] }
+              ]
+            },
+            {
+              "scenario": "Strict pipeline is active",
+              "journey_ids": ["pipeline"],
+              "test_ids": ["journey.pipeline"],
+              "test_files": ["tests/arsu-user-journeys.test.ts"],
+              "verifier_evidence": [
+                { "kind": "guidance", "paths": ["src/adapters/companion/workflows/navigate.ts", "tests/adapters.test.ts"] }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement": "Selector-Directed Durable Boundaries",
+          "scenarios": [
+            {
+              "scenario": "A mechanical action completes",
+              "journey_ids": ["standalone"],
+              "test_ids": ["adaptive.case-actions", "journey.standalone"],
+              "test_files": ["tests/adaptive-case-runtime.test.ts", "tests/arsu-user-journeys.test.ts"],
+              "verifier_evidence": [
+                { "kind": "guidance", "paths": ["src/adapters/companion/shared-guidance.ts", "src/adapters/companion/workflows/navigate.ts"] }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "capability_id": "arsu-user-model-acceptance",
+      "change_id": "converge-fluid-runtime-surface",
+      "spec_path": "openspec/changes/archive/2026-07-27-converge-fluid-runtime-surface/specs/arsu-user-model-acceptance/spec.md",
+      "requirements": [
+        {
+          "requirement": "Converged Runtime Guidance Has Black-Box Acceptance",
+          "scenarios": [
+            {
+              "scenario": "Adaptive and strict guidance is exercised",
+              "journey_ids": ["pipeline"],
+              "test_ids": ["adaptive.reorder-recovery", "journey.pipeline"],
+              "test_files": ["tests/adaptive-case-runtime.test.ts", "tests/arsu-user-journeys.test.ts"],
+              "verifier_evidence": [
+                { "kind": "guidance", "paths": ["tests/adapters.test.ts", "src/adapters/companion/shared-guidance.ts", "src/adapters/companion/workflows/navigate.ts"] }
+              ]
+            },
+            {
+              "scenario": "Documentation facts are checked structurally",
+              "test_ids": ["traceability.user-model"],
+              "test_files": ["tests/arsu-user-model-traceability.test.ts"],
+              "verifier_evidence": [
+                { "kind": "documentation", "paths": ["docs/arsu_user_usage_model.md", "docs/researchspec_arsu_runtime/runtime_protocols.md"] }
+              ]
+            }
+          ]
+        },
+        {
+          "requirement": "Traceability Covers Convergence Evidence",
+          "scenarios": [
+            {
+              "scenario": "Archived fluid-runtime changes remain traceable",
+              "test_ids": ["traceability.user-model"],
+              "test_files": ["tests/arsu-user-model-traceability.test.ts"],
+              "verifier_evidence": [
+                { "kind": "documentation", "paths": ["tests/fixtures/arsu-user-model-traceability.json", "openspec/changes/archive/2026-07-27-establish-fluid-research-runtime/specs/arsu-user-model-acceptance/spec.md"] }
+              ]
+            }
+          ]
+        }
+      ]
+    },
     {
       "capability_id": "framework-core",
       "change_id": "establish-fluid-research-runtime",

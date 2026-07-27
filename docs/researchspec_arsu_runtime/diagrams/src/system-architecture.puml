@@ -1,5 +1,5 @@
 @startuml
-title ResearchSpec 与 ARSU：系统架构和权威边界
+title Shared：ResearchSpec 与 ARSU 的双模式架构和权威边界
 skinparam componentStyle rectangle
 skinparam shadowing false
 skinparam defaultTextAlignment center
@@ -15,15 +15,15 @@ package "Semantic plane" {
 }
 
 package "Deterministic control plane" {
-  component "ResearchSpec CLI\nstatus / instructions\nstart / submit / advance" as CLI
-  component "Workflow evaluator\nprofile + evidence -> frontier" as Eval
+  component "ResearchSpec CLI\nstatus / instructions\nstart / submit / advance / decide" as CLI
+  component "Action evaluator\nadaptive availability / strict frontier" as Eval
 }
 
-database "Typed workspace files\nstable specs\nstate / registry\nGate + Decision ledgers\nreceipts / changes / patches" as Files
+database "Typed workspace authority\nstable specs\nadaptive state / accepted evidence\nartifact registry / attempt ledger\nGate + Decision ledgers\nreceipts / changes / patches" as Files
 
 package "Build and delivery time" {
   component "ARSU converter" as Converter
-  artifact "routing catalog\nworkflow catalog\ngenerated Skills" as Catalog
+  artifact "routing catalog\nadaptive profile + playbook\nstrict graph + generated Skills" as Catalog
 }
 
 User --> Host : goal, confirmation, decision
@@ -31,7 +31,7 @@ Host --> Companion : route / verify / decide
 Host --> ARSU : semantic production
 ARSU --> Plugin : bounded advisory help
 ARSU --> Zotero : bounded literature input
-Host --> CLI : canonical selectors + strict payloads
+Host --> CLI : canonical selectors + action-bound payloads
 CLI --> Eval
 Eval --> Files : read profile and evidence
 CLI --> Files : authority writes\nthrough transactions only
@@ -39,7 +39,7 @@ Plugin ..> ARSU : working material
 Zotero ..> ARSU : working material
 Converter --> Catalog
 Catalog ..> ARSU : projected instructions
-Catalog ..> Eval : arsu-v0-1 profile
+Catalog ..> Eval : adaptive default / strict compatibility
 
 note right of Files
   ARSU, Companion, plugins and adapters

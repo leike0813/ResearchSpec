@@ -1,0 +1,44 @@
+@startuml
+title Adaptive default：Obligation、evidence、Gate 与 completion
+skinparam shadowing false
+actor User
+participant "Host Agent" as Agent
+participant "ResearchSpec CLI" as CLI
+participant "ARSU producer" as ARSU
+database "Workspace" as Files
+
+Agent -> CLI : status + instructions subflow:<route>
+Agent -> User : route, obligations, Gates, risk and cost
+User --> Agent : confirm route
+Agent -> CLI : Start
+CLI -> Files : adaptive-start receipt + obligations
+
+loop each available obligation
+  Agent -> CLI : instructions obligation:<instance>/<id>
+  Agent -> ARSU : bounded semantic work
+  ARSU -> Files : candidate / attempt material
+  alt record_attempt
+    Agent -> CLI : submit obligation:<instance>/<id>\noperation: record_attempt
+    CLI -> Files : append attempt ledger only
+  else accept_evidence
+    Agent -> CLI : submit obligation:<instance>/<id>\noperation: accept_evidence
+    CLI -> Files : attempt + obligation receipt\nregistry + accepted evidence in state
+  end
+end
+
+opt formal Gate
+  Agent -> User : Verify verdict and evidence
+  User --> Agent : confirm or challenge
+  Agent -> CLI : submit gate:<instance>/<id>
+  CLI -> Files : Gate receipt + ledger
+end
+
+opt waiver or not-applicable
+  Agent -> User : case action choices and risk
+  User --> Agent : explicit Decision
+  Agent -> CLI : decide case-action:<id>
+end
+
+Agent -> CLI : advance completion:<instance>/<id>
+CLI -> Files : completion receipt + state
+@enduml

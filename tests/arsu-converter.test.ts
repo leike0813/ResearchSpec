@@ -13,6 +13,7 @@ import { normalizeManifest } from "../src/arsu-converter/manifest.js";
 import { ArsuConverterError, type ConversionManifest } from "../src/arsu-converter/types.js";
 import { ARSU_ROUTING_CATALOG, getArsuSkillDefinition } from "../src/arsu-converter/routing/catalog.js";
 import { readSkillFrontmatterDescription, renderArsuSkillDescription } from "../src/arsu-converter/routing/projection.js";
+import { RESEARCHSPEC_PREFLIGHT_MARKER, RESEARCHSPEC_PREFLIGHT_PROFILE_ID } from "../src/arsu-converter/contracts.js";
 
 void test("converter generates four ResearchSpec-compatible skill groups", async () => {
   const root = await tempRepoRoot();
@@ -24,7 +25,7 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
   for (const group of ["deep-research", "academic-paper", "academic-paper-reviewer", "academic-pipeline"]) {
     const skillPath = path.join(root, "skills/arsu", group, "SKILL.md");
     assert.equal(existsSync(skillPath), true);
-    assert.match(await readFile(skillPath, "utf8"), /ResearchSpec Contract Preflight/);
+    assert.equal((await readFile(skillPath, "utf8")).includes(RESEARCHSPEC_PREFLIGHT_MARKER), true);
     assert.match(await readFile(skillPath, "utf8"), /researchspec-literature-adapter:zotero-library:v2/);
     assert.match(await readFile(path.join(root, "skills/arsu", group, "LICENSE"), "utf8"), /Attribution-NonCommercial 4.0 International/);
     assert.match(await readFile(path.join(root, "skills/arsu", group, "NOTICE.md"), "utf8"), /Cheng-I Wu/);
@@ -44,13 +45,7 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
   assert.match(deepResearch, /ManagedLibraryAuthorization/);
   assert.match(deepResearch, /empty result is not proof/);
   assert.match(deepResearch, /private collection/);
-  assert.match(deepResearch, /work:<instance>\/<node>/);
-  assert.match(deepResearch, /policy is `automatic`/);
-  assert.match(deepResearch, /--expected-sha256/);
-  assert.match(deepResearch, /For `manual` or missing automatic authorization/);
-  assert.match(deepResearch, /run direct\s+`researchspec submit` with `--dry-run --json`/);
   assert.doesNotMatch(deepResearch, /researchspec-submit/);
-  assert.match(deepResearch, /never hand-edit\s+state, registries, receipts, or JSONL ledgers/);
   assert.match(deepResearch, /references\/shared\/handoff_schemas\.md/);
   assert.match(deepResearch, /references\/cross-skill\/academic-paper\/references\/writing_quality_check\.md/);
   assert.doesNotMatch(deepResearch, /\.\.\/docs\/design\/old\.md/);
@@ -63,7 +58,8 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
 
   const contracts = JSON.parse(
     await readFile(path.join(root, "skills/arsu/researchspec-contracts.json"), "utf8"),
-  ) as { material_passport_policy?: string; anchor_replacement?: { coverage_policy?: string; profile_id?: string } };
+  ) as { integration_profile?: string; material_passport_policy?: string; anchor_replacement?: { coverage_policy?: string; profile_id?: string } };
+  assert.equal(contracts.integration_profile, RESEARCHSPEC_PREFLIGHT_PROFILE_ID);
   assert.equal(contracts.material_passport_policy, "imported_evidence_only_not_runtime_ssot");
   assert.equal(contracts.anchor_replacement?.profile_id, "researchspec-anchor-replacement-v3");
   assert.equal(contracts.anchor_replacement?.coverage_policy, "required_and_recommended");

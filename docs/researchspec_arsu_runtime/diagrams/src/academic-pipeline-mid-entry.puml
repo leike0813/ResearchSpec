@@ -1,5 +1,5 @@
 @startuml
-title Academic Pipeline mid-entry：材料识别不等于 branch Decision
+title Strict compatibility：Academic Pipeline mid-entry
 skinparam shadowing false
 start
 :User provides goal and existing material;
@@ -20,7 +20,7 @@ else (revision)
 endif
 :Continue through normal profile;
 note right
-  Material Passport may be imported only with this Start
+  Material Passport may be imported only with this strict Start
   and remains non-authoritative evidence.
 end note
 stop

@@ -1,5 +1,5 @@
 @startuml
-title Dynamic Revision Round：每轮隔离、可重复、无推定上限
+title Strict compatibility：Dynamic Revision Round
 skinparam shadowing false
 actor User
 participant "Host Agent / Pipeline" as Agent

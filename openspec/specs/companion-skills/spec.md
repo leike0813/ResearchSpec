@@ -38,13 +38,15 @@ Each installed companion SHALL be usable from its own `SKILL.md` without a runti
 - **WHEN** the user supplies a vague, cross-Skill, or changed academic goal
 - **THEN** Navigate SHALL present matching routes and near misses with Skill, mode, prerequisites, artifacts, formal Gate policy, risk, and cost
 - **AND** it SHALL pair those facts with current workspace availability
-- **AND** Start execution SHALL require confirmation of the exact dry-run plan
+- **AND** Start execution SHALL require the descriptor-declared named
+  confirmation or plan binding
 
 #### Scenario: Resume follows only the CLI frontier
 
 - **WHEN** work already exists
 - **THEN** Navigate SHALL dispatch ready work to its ARSU producer, Gates to Verify, and multiple transitions to Decide
-- **AND** it MAY execute an exact receipt-bound unique non-semantic transition
+- **AND** it MAY execute a unique non-semantic transition according to its
+  descriptor-declared execution policy
 - **AND** it SHALL NOT reconstruct graph state or require route reconfirmation without route or plan drift
 
 #### Scenario: Explain remains read-only
@@ -58,7 +60,8 @@ Each installed companion SHALL be usable from its own `SKILL.md` without a runti
 - **WHEN** the user asks to resume elsewhere, hand off, export, or share context
 - **THEN** Navigate SHALL select handoff stdout, handoff write, or pack based on the audience and persistence need
 - **AND** it SHALL explain derivation, staleness, privacy, artifact inclusion, size, and overwrite risk
-- **AND** any write SHALL use dry-run followed by explicit confirmation
+- **AND** any plan-bound write SHALL use dry-run followed by the explicit
+  confirmation required by its descriptor
 
 ### Requirement: Propose Workflow
 
@@ -68,8 +71,9 @@ Each installed companion SHALL be usable from its own `SKILL.md` without a runti
 
 - **WHEN** a user asks to change research intent, claim strength or limits, manuscript constraints, source policy, or workflow semantics
 - **THEN** the skill SHALL inspect the current target and referenced evidence
-- **AND** it SHALL build the strict proposal JSON input, run `propose` with `--dry-run --json`, and explain diff and risk
-- **AND** it SHALL require explicit creation confirmation before execution
+- **AND** it SHALL build the descriptor-declared semantic proposal input and
+  explain diff and risk
+- **AND** it SHALL require the creation confirmation declared by that descriptor
 - **AND** it SHALL finish with `show` and relevant `check` views
 
 #### Scenario: Proposal cannot silently become accepted state
@@ -220,3 +224,90 @@ transitions or payload schemas.
   human semantic choice
 - **AND** the CLI SHALL derive and validate mechanical fields
 
+### Requirement: Companions Dispatch Through Current Descriptors
+
+Navigate, Propose, Decide, and Verify SHALL consume the current runtime mode,
+selector, semantic input template, execution policy, availability basis, and
+next selectors from CLI descriptors. They SHALL not reimplement availability,
+strict-only selector assumptions, or caller-authored mechanical DTO fields.
+
+#### Scenario: Navigate resumes an adaptive run
+
+- **WHEN** status exposes an adaptive allowed action
+- **THEN** Navigate SHALL dispatch the relevant ARSU producer, Verify, or Decide
+  from that action's descriptor and ownership boundary
+- **AND** it SHALL not invent a strict work stage or transition
+
+#### Scenario: Companion executes a direct action
+
+- **WHEN** a current descriptor declares `direct`
+- **THEN** the responsible Companion SHALL submit the semantic input once and
+  continue from returned next selectors
+- **AND** it SHALL not require external preview replay unless the user requests
+  an optional dry run
+
+### Requirement: Companions Preserve Formal Boundaries By Policy
+
+Companions SHALL obtain named human confirmation for `human_confirmed` actions
+and an approved plan hash for `plan_bound` actions. They SHALL continue to route
+formal Gate verification to Verify and semantic Decisions to Decide.
+
+#### Scenario: Verify prepares a formal Gate
+
+- **WHEN** Verify receives a current Gate descriptor
+- **THEN** it SHALL construct only the descriptor-declared semantic verdict
+  input, display evidence and consequences, and obtain the required human
+  confirmation and plan binding before submission
+
+### Requirement: Navigate Provides Progressive CLI Discovery
+
+`researchspec-navigate` SHALL keep the core distinction between static command
+discovery and runtime authorization self-contained in its `SKILL.md`. It SHALL
+use a three-level discovery rule: classify whether the user needs a static CLI
+explanation or a workspace action; use root and command-scoped CLI help to
+identify a static command and its invocation; and use current `status` followed
+by `instructions <runtime-selector>` before any workspace-bound action.
+
+#### Scenario: User asks which command or option to use
+
+- **WHEN** the user asks for a CLI command, option, command family, or static
+  invocation explanation
+- **THEN** Navigate SHALL identify the smallest relevant command family from
+  static discovery guidance
+- **AND** it SHALL use `researchspec --help` or the selected command's `--help`
+  when current executable detail is required
+- **AND** it SHALL explain that static help does not authorize a workspace write
+
+#### Scenario: Static discovery reaches a workspace action
+
+- **WHEN** a static CLI explanation identifies an action that depends on current
+  workspace state, a selector, availability, confirmation, or a plan
+- **THEN** Navigate SHALL resume the canonical `status` then
+  `instructions <runtime-selector>` protocol before proposing or executing that
+  action
+- **AND** it SHALL NOT use static guidance to infer a selector, action basis,
+  accepted payload, execution policy, or authorization
+
+### Requirement: Navigate CLI Handbook Is Optional Progressive Disclosure
+
+The complete generated CLI handbook MAY be delivered as a Navigate-local
+progressive-disclosure reference. Navigate SHALL read that reference only while
+explaining static CLI behavior; its core Route, Resume, Explain, Export, and
+runtime-control workflow SHALL remain complete without the reference.
+
+#### Scenario: Handbook is available for a CLI explanation
+
+- **WHEN** the user needs a broader static explanation that the compact
+  self-contained discovery rules cannot answer
+- **THEN** Navigate MAY read its local CLI handbook reference
+- **AND** it SHALL treat the handbook as static discovery material rather than
+  runtime state or action authority
+
+#### Scenario: Handbook is missing or drifted
+
+- **WHEN** the local handbook reference is missing, unavailable, or known to
+  differ from its manifest-owned generated bytes
+- **THEN** Navigate SHALL fall back to the relevant root or command-scoped
+  `--help` output
+- **AND** it SHALL continue the canonical route or runtime workflow without
+  treating the reference as a blocker

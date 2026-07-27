@@ -25,7 +25,9 @@ export interface StatusView {
 }
 
 interface ActionDescriptorView {
+  selector: string;
   availability: { basis_sha256: string };
+  execution_policy: "direct" | "human_confirmed" | "plan_bound";
 }
 
 export interface SubflowPacket {

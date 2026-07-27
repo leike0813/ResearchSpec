@@ -1,5 +1,5 @@
 @startuml
-title Academic Paper Reviewer：只读评审语义与外层控制
+title Strict compatibility：Academic Paper Reviewer 外层 work graph
 skinparam shadowing false
 actor User
 participant "Host Agent" as Agent
@@ -37,6 +37,6 @@ opt required route Gate
   Agent -> CLI : submit Gate
   CLI -> Files : Gate receipt + ledger
 end
-Agent -> CLI : Advance completion
-CLI -> Files : receipt + state
+Agent -> CLI : Advance transition:<instance>/<completion-node>
+CLI -> Files : transition receipt + state
 @enduml

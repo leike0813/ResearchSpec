@@ -6,6 +6,7 @@ import type { Diagnostic } from "../core/validation/types.js";
 import { planFile, type PlannedWrite, sha256 } from "../core/workspace/write-plan.js";
 import { COMPANION_INTENTS, renderCompanionSkill } from "./companion/index.js";
 import { ARSU_COMMAND_CONTENTS, renderCommand } from "./command-renderer.js";
+import { renderCliHandbook } from "../cli/handbook.js";
 import { getTool } from "./tools.js";
 import { ARSU_SKILL_IDS } from "../arsu-converter/routing/contracts.js";
 import { MIT_LICENSE_TEXT } from "../licensing.js";
@@ -69,6 +70,17 @@ export async function planToolDelivery(input: {
           { kind: "companion-skill", skill_id: intent.skillId },
           toolId,
         );
+        if (intent.id === "navigate") {
+          const handbookTarget = path.join(skillRoot, "references", "cli-handbook.md");
+          await addPlanned(
+            handbookTarget,
+            posix(path.relative(input.projectRoot, handbookTarget)),
+            "project",
+            renderCliHandbook(),
+            { kind: "companion-skill", skill_id: intent.skillId },
+            toolId,
+          );
+        }
       }
 
       if (pluginRegistry) {

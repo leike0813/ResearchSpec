@@ -19,7 +19,7 @@ import { WorkItemSelectorSchema } from "../core/contracts/workflow.js";
 import { Sha256Schema, SubmitActorKindSchema, SubmitActorSchema } from "../core/contracts/artifact.js";
 import { RuntimeActorSchema } from "../core/contracts/gate-transition.js";
 import { GateSelectorSchema, RuntimeSelectorSchema, SubflowSelectorSchema, TransitionSelectorSchema, parseRuntimeSelector } from "../core/contracts/runtime-selector.js";
-import { ActionTargetSelectorSchema, CaseActionSelectorSchema, CompletionSelectorSchema, ObligationSelectorSchema, PatchSelectorSchema } from "../core/contracts/action-selector.js";
+import { ActionTargetSelectorSchema, CaseActionSelectorSchema, CompletionSelectorSchema, formatActionTargetSelectorHint, ObligationSelectorSchema, PatchSelectorSchema } from "../core/contracts/action-selector.js";
 import { StartActorSchema } from "../core/contracts/subflow.js";
 import { ArtifactSubmitError, executeArtifactSubmit, planArtifactSubmit } from "../core/runtime/artifact-submit.js";
 import { executeGateSubmit, executeTransitionAdvance, GateTransitionError, isSha256, planGateSubmit, planTransitionAdvance } from "../core/runtime/gate-transition-control.js";
@@ -311,7 +311,7 @@ export async function handleStatus(context: CommandContext): Promise<CommandResu
 }
 
 export async function handleInstructions(selector: string, context: CommandContext): Promise<CommandResult> {
-  if (!ActionTargetSelectorSchema.safeParse(selector).success) throw new CliError("invalid_runtime_selector", `Invalid runtime selector: ${selector}`, 2, "Use subflow:<id>, work:<id>, gate:<id>, transition:<id>, change:<id>, or patch:<id>.");
+  if (!ActionTargetSelectorSchema.safeParse(selector).success) throw new CliError("invalid_runtime_selector", `Invalid runtime selector: ${selector}`, 2, formatActionTargetSelectorHint());
   const workspace = await requireWorkspace(context);
   const snapshot = await loadWorkspaceSnapshot(workspace);
   const descriptor = await buildActionDescriptor(snapshot, selector);

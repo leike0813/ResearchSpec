@@ -8,13 +8,13 @@
 
 - **Target v0.1**：已经锁定的目标用户体验和职责边界。
 - **Current implementation（2026-07-27）**：仓库中已经可运行的能力。
-- **Acceptance status**：Target v0.1 的十二条公共 CLI 用户旅程已经通过验收。
+- **Acceptance status**：公共 CLI 用户旅程覆盖 adaptive default、strict compatibility、migration、Doctor、patch/change 与恢复路径。
 
 本模型由 main capability specs 持续约束；原 umbrella change `define-arsu-user-usage-model-v0-1` 在全部技术层和端到端验收通过后归档。
 
 ## 1. 一句话使用模型
 
-> 用户先初始化 workspace，再用自然语言说明学术目标；Agent 解析并展示一条包含 Skill、mode、依赖、产物、Gate 与成本的路线，用户确认后，ARSU Skill 负责语义生产，ResearchSpec CLI 负责状态、instructions、提交、Gate 与推进。
+> 用户先初始化 workspace，再用自然语言说明学术目标；Agent 解析并展示一条包含 Skill、mode、依赖、产物、Gate 与成本的路线，用户确认后，ARSU Skill 负责语义生产，ResearchSpec CLI 负责状态、instructions、evidence、Gate、completion 与受控决策。
 
 最重要的边界有四条：
 
@@ -57,7 +57,7 @@ flowchart TD
     S --> C{"用户确认这条路线？"}
     C -->|"否"| U
     C -->|"是"| ST["start subflow:<id>"]
-    ST --> L["进入统一运行循环"]
+    ST --> L["进入与 workspace profile 对应的运行循环"]
 ```
 
 确认绑定的是已展示的精确路线。如果 Skill、mode、前置 subflow、正式 Gate 或成本发生实质变化，Agent 必须重新展示摘要并确认。
@@ -148,50 +148,57 @@ ARSU Skill 与 command wrapper descriptions 已从该 catalog 投影。后续
 
 | 使用方式 | 入口 | 行为 |
 | --- | --- | --- |
-| End-to-end | 从研究目标或种子材料启动 | 创建 pipeline parent subflow，按 profile frontier 调度 Research、Write、Integrity、Review、Revision、Finalization |
-| Mid-entry / resume | 从已有稿件、审稿意见、active run 或 ARS Material Passport 恢复 | Navigate 识别现有 artifacts/state；对 JSON/YAML passport 展示 hash-bound 兼容导入摘要；确认后从合法 frontier 继续 |
+| End-to-end | 从研究目标或种子材料启动 | adaptive 创建 durable-output obligations；strict compatibility 才创建 pipeline parent graph 并调度 child |
+| Mid-entry / resume | 从已有稿件、审稿意见或 active run 恢复 | Navigate 识别现有 artifacts/state；ARS Material Passport 仅能在 strict compatibility workspace 中作为 hash-bound 非权威导入 |
 
 ## 5. 统一运行协议
 
-Target v0.1 的 Agent 循环只有四步：
+所有 workspace 共享同一入口循环；当前 selector 由 runtime mode 决定：
 
 ```text
 status
-→ instructions <subflow:|work:|gate:|transition:>
-→ start / submit / advance
-→ status
+→ instructions <current selector>
+→ start / submit / advance / decide
+→ next_selectors
+→ 定向 instructions / show / list
 ```
 
-各 selector 和动作的关系如下：
+新 workspace 默认 adaptive：
 
 | Selector | instructions 回答 | 执行动作 |
 | --- | --- | --- |
-| `subflow:<id>` | 路线、前置依赖、实例参数、成本和启动能力 | `start subflow:<id>` |
-| `work:<id>` | producer Skill、输入引用、规则、模板、候选路径、校验和完成策略 | Agent 调用 ARSU Skill 产出候选，再 `submit work:<id>` |
-| `gate:<id>` | validator、evidence、risk、proposed verdict、确认要求 | `researchspec-verify` 组织语义审查，再 `submit gate:<id>` |
-| `transition:<id>` | 当前 basis、目标状态、分支条件和副作用 | 唯一合法时 `advance transition:<id>`；歧义时先 Decision |
+| `subflow:<id>` | route、前置条件、成本与 action-v2 risk policy | `start` 创建 route instance 与 obligations |
+| `obligation:<instance>/<id>` | evidence boundary、attempt/resolution policy 与 basis | `submit` 记录 attempt、接受 evidence、暂停或重试 |
+| `gate:<id>` | validator、evidence、risk、proposed verdict、确认要求 | `researchspec-verify` 组织审查，再 `submit gate:` |
+| `completion:<id>` | 已满足 obligations 的完成条件 | `advance completion:` |
+| `case-action:<id>` | waiver/not-applicable 等明确 resolution | `decide` |
+
+Schema `0.2` strict compatibility 使用 `subflow:`、scoped child、`work:`、`gate:` 和 `transition:`。它保留模板、DAG、parallel/join、pipeline child、Material Passport import 与 revision round，但不是新 workspace 的默认指令。
 
 ```mermaid
 flowchart LR
     S["status<br/>计算 frontier"] --> I["instructions selector<br/>生成动态 packet"]
     I --> K{"selector 类型"}
     K -->|"subflow"| A["start"]
-    K -->|"work"| W["ARSU Skill 产生 candidate"]
-    W --> SW["submit work"]
+    K -->|"obligation"| W["ARSU Skill 产生 candidate / attempt"]
+    W --> SW["submit evidence / attempt"]
     K -->|"gate"| V["Verify + 用户确认"]
     V --> SG["submit gate"]
-    K -->|"transition"| T["advance"]
-    A --> S
-    SW --> S
-    SG --> S
-    T --> S
+    K -->|"completion / case action"| T["advance / decide"]
+    A --> NS["result.next_selectors"]
+    SW --> NS
+    SG --> NS
+    T --> NS
+    NS --> D["定向 instructions / show / list"]
+    D --> I
+    NS -. "重新选路、冲突或缺少 selector" .-> S
 ```
 
-CLI 是这套循环的状态权威。Companion 和 ARSU Skill 可以选择、解释、循环，但不能复制 DAG、猜路径或直接写 state/registry/ledger。
+CLI 是这套循环的状态权威。Companion 和 ARSU Skill 可以选择、解释、循环，但不能复制 graph、猜路径或直接写 state/registry/ledger。
 
 ## 6. Standalone 与 Pipeline
 
-### 6.1 Standalone 时序
+### 6.1 Adaptive standalone 时序
 
 ```mermaid
 sequenceDiagram
@@ -208,22 +215,26 @@ sequenceDiagram
     N-->>U: 展示路线摘要
     U->>N: 确认
     N->>C: start subflow:systematic-review
-    loop 直到 frontier 不再有 ready work
-        N->>C: status + instructions work:<id>
+    loop 直到 obligations 满足或需要 resolution
+        N->>C: status + instructions obligation:<id>
         N->>S: 调用 producer Skill
         S-->>N: 写 candidate artifact
-        N->>C: submit work:<id>（hash-bound）
+        N->>C: submit obligation:<id>（hash-bound attempt/evidence）
     end
     N->>C: instructions gate:<id>
     N-->>U: 展示 verdict 与 evidence
     U->>N: 确认 Gate
     N->>C: submit gate:<id>
-    N->>C: advance transition:<id>
+    N->>C: advance completion:<id>
 ```
 
 standalone 不是“无状态的一次 Skill 调用”，而是 active run 下一个有 identity 的 subflow。它可以被暂停、恢复，也可以作为另一个路线的 prerequisite。
 
-### 6.2 Pipeline 调度
+### 6.2 Strict compatibility 的 graph 时序
+
+`work:`、parallel/join、parent/child pipeline 和 `transition:` 仅适用于 Schema `0.2` strict compatibility。它们保留给既有 workspace 与显式 `init --profile strict`，不应作为默认 Agent 指令。
+
+### 6.3 Pipeline 调度
 
 `academic-pipeline` 只做语义层调度：解释 frontier、调用正确的 ARSU Skill/mode、汇总进度。它不保存第二套 stage truth。
 
@@ -242,9 +253,9 @@ flowchart TD
     F --> PS["Process Summary"]
 ```
 
-具体 stage 名称可以由 profile 演进，但强制 integrity、review branch 和 revision round 的用户语义不能由 Agent 静默跳过。
+上图是 strict compatibility pipeline graph。adaptive pipeline 以 obligations、formal Gate、completion 和 case action 表达 durable outputs，不承诺 stage、branch、round 或 child dispatch；两种模式都不允许 Agent 静默跳过 formal Gate 或高影响 Decision。
 
-## 7. 并行组与 Join
+## 7. Strict compatibility 的并行组与 Join
 
 并行是 workflow profile 的声明，不是 Agent 的即时优化猜测。
 
@@ -309,7 +320,7 @@ sequenceDiagram
 
 Gate 记录必须保存 validator、evidence、verdict 与 `confirmed_by`。确认 Gate 不自动制造 Decision；只有 branch choice、语义变更或 override 进入 Decision ledger。
 
-## 9. Revision Round
+## 9. Strict compatibility 的 Revision Round
 
 revision 不是写死的 Stage 4/4' 两格。Target v0.1 使用可实例化 round template：
 
@@ -355,7 +366,7 @@ flowchart TD
 
 恢复已有 ready work 不等于启动新路线，不重复要求路线确认；但如果要补建 prerequisite、改变 mode 或选择新 branch，则必须再次确认或进入 Decision。
 
-从 ARS Material Passport 恢复时，Navigate 使用
+从 ARS Material Passport 恢复仅适用于 strict compatibility。Navigate 使用
 `start subflow:tpl-academic-pipeline-mid-entry` 的 `material_passport_import` 输入。CLI
 保存原件和规范化投影，并把导入的 ARS Gate/Decision 记录作为非权威 evidence 暴露给
 后续 scoped instructions。Passport 中的 pass、branch、override 或 stage 不直接改变
@@ -377,7 +388,7 @@ flowchart TD
 | Companion | `researchspec-verify` | 阶段边界语义审查与 proposed Gate verdict |
 | Zotero Adapter | `zotero-library-agent` | 跨 Query、Acquisition、Analysis、Synthesis 与 Curation 的有界路由 |
 | Zotero Adapter | `zotero-library-query` | 当前 library、collection、selection、metadata 与 attachment 查询 |
-| Zotero Adapter | `zotero-literature-acquisition` | 外部发现、候选评估及经单独授权的有界 acquisition |
+| Zotero Adapter | `zotero-literature-acquisition` | 有界发现、评估、导入准备与去重 |
 | Zotero Adapter | `zotero-literature-analysis` | 有来源引用的单篇或小集合证据分析 |
 | Zotero Adapter | `zotero-research-synthesis` | 跨来源主题、主张、缺口与研究上下文综合 |
 | Zotero Adapter | `zotero-library-curation` | 单独批准的 metadata、tag、collection、note 与链接维护 |
@@ -394,6 +405,13 @@ ResearchSpec 维护的领域插件可以从 bundled registry 增加可选 Open A
 整合。拒绝、不可用、漂移或调用失败都不阻断核心路由。
 
 ### 11.2 CLI：17 个顶层命令
+
+CLI 的静态发现从 `researchspec --help` 开始，再进入
+`researchspec <command> --help`。随包生成的 [CLI handbook](./cli_handbook.md)
+汇总相同的命令目录，Navigate 可将其作为可选的渐进式参考；缺失或 drift 时直接回退到
+对应 help。静态资料只说明命令、语法和 options，当前可执行 selector、semantic input、
+确认要求、execution policy 与后续动作仍必须由 `status` 和
+`instructions <selector>` 给出。
 
 | 分组 | 命令 | 用户模型中的作用 |
 | --- | --- | --- |
@@ -416,8 +434,8 @@ command wrapper 只是不同 agent 工具的 adapter。目标交付量是：
 
 | 层 | 拥有 | 不得拥有 |
 | --- | --- | --- |
-| ResearchSpec CLI | 路径、typed state、DAG/frontier、hash、registry/receipt、Gate/Decision transaction、transition | 研究结论、稿件内容、审稿判断 |
-| ARSU workflow profile | work graph、parallel/join、Gate policy、transition、round template | workspace 实际状态、手写 ledger |
+| ResearchSpec CLI | 路径、typed state、action availability、hash、registry/receipt、Gate/Decision transaction、adaptive completion 或 strict transition | 研究结论、稿件内容、审稿判断 |
+| ARSU workflow profile | adaptive obligations/policies/completion，或 strict graph/parallel/join/transition | workspace 实际状态、手写 ledger |
 | ARSU Skill | 文献研究、综合、写作、审稿、修改、候选 artifact；审查并整合 Adapter 工作材料 | 直接改 registry/state/ledger、猜 stage |
 | Companion | 路由、解释、提案、决策、语义验证的人机流程 | 第二套状态机、低层写入、重复 ARSU 语义能力 |
 | Zotero Adapter | Zotero library/Host Bridge 访问与证据输出 | ResearchSpec workflow authority、未经单独授权的 mutation/submit/apply/upload/delete |
@@ -427,8 +445,8 @@ command wrapper 只是不同 agent 工具的 adapter。目标交付量是：
 
 截至 2026-07-27，当前实现已经具备：
 
-- 全部 17 个目标顶层命令，包括 `doctor`、`submit work:|gate:`、`advance transition:` 与 `plugin`；
-- typed workflow work items、`done/ready/blocked` evaluator 和动态 `instructions work:`；
+- 全部 17 个目标顶层命令，包括 `doctor`、`plugin`、change/patch lifecycle 与 strict-to-adaptive migration；
+- adaptive action-v2 descriptors、hard obligations、attempt/evidence、formal Gate、completion、case resolution 与动态 `instructions`；
 - `RQ Brief → Bibliography → Synthesis` 实验 Slice；
 - receipt-backed、hash-bound candidate submit；
 - contract change / Decision / archive 的确定性事务；
@@ -441,7 +459,7 @@ command wrapper 只是不同 agent 工具的 adapter。目标交付量是：
   内部空 domain 不出现在普通用户 catalog，已选后变空或缺失的项仅作为 unavailable 恢复状态。
 - converter-owned routing catalog，覆盖 25 个 modes、2 个 pipeline entries、artifacts、
   prerequisites、near-misses、risk/Gate policy 和粗粒度成本，并投影 ARSU descriptions。
-- active-run `state.yaml` 下的 strict subflow/round instances、parent/round identity、
+- active-run `state.yaml` 下的 strict compatibility subflow/round instances、parent/round identity、
   all/quorum parallel frontier、`instructions subflow:` 与原子 `start`；
 - instance-scoped `work:<instance>/<node>` 和由 Start confirmation 授权的 automatic
   hash-bound `submit work:`。
@@ -450,7 +468,8 @@ command wrapper 只是不同 agent 工具的 adapter。目标交付量是：
 - 新 workspace 默认 adaptive runtime；`init --profile strict` 保留 Schema `0.2`
   `arsu-v0-1` graph。既有 strict workspace 仅通过 dry-run、plan-hash-bound、带 backup/receipt
   且可回滚的 `update --migrate-runtime` 显式迁移。
-- 受控 `arsu-artifact:` contracts，以及 receipt-backed 的 UTF-8 text 与原生 binary candidate Submit。
+- 受控 `arsu-artifact:` contracts，以及 receipt-backed 的 UTF-8 text 与原生 binary candidate Submit；
+- `doctor` 诊断与 plan-bound deterministic repair，`propose`/`decide`/`archive` 的 contract change 与 draft-patch lifecycle。
 
 当前实现已经通过 bootstrap、vague/expert routing、standalone、pipeline、parallel join、
 Gate challenge/override、revision round、cross-process resume、context export 与 terminal
@@ -478,10 +497,10 @@ Umbrella change 只有在以下用户旅程全部通过时才能归档：Bootstr
 已锁定：
 
 - 对话优先入口与路线确认；
-- 单 active run + 动态 subflow/round；
+- 单 active run；strict compatibility 另有动态 subflow/round graph；
 - CLI 状态权威与 ARSU 语义生产边界；
-- work 自动提交、Gate 逐次确认、Decision 使用范围；
-- workflow-declared parallelism 与 unique-transition 自动推进；
+- adaptive evidence 接受、Gate 逐次确认、completion/case-action 与 Decision 使用范围；
+- strict compatibility 的 workflow-declared parallelism 与 unique-transition 自动推进；
 - 固定 4 ARSU + 4 Companion + 7 Zotero Adapter、可选 domain plugin Skills、17 CLI；
 - selector-based 运行协议。
 

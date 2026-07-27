@@ -9,7 +9,7 @@
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 284)">
 <title>transaction_write_sets</title>
 <polygon fill="white" stroke="transparent" points="-4,4 -4,-284 1207,-284 1207,4 -4,4"/>
-<text text-anchor="middle" x="601.5" y="-264.8" font-family="DejaVu Sans" font-size="14.00">Receipt first, authority last</text>
+<text text-anchor="middle" x="601.5" y="-264.8" font-family="DejaVu Sans" font-size="14.00">Strict compatibility: receipt first, authority last</text>
 <!-- start -->
 <g id="node1" class="node">
 <title>start</title>
