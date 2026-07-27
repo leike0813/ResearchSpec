@@ -1,6 +1,6 @@
 {
   "schema_version": "0.1",
-  "integration_profile": "researchspec-preflight-v7",
+  "integration_profile": "researchspec-preflight-v8",
   "source": "vendor/ars",
   "output": "skills/arsu",
   "material_passport_policy": "imported_evidence_only_not_runtime_ssot",
@@ -12,7 +12,7 @@
   },
   "skill_groups": {
     "academic-paper": {
-      "profile_id": "researchspec-preflight-v7",
+      "profile_id": "researchspec-preflight-v8",
       "required_contracts": [
         "researchspec/specs/workflow.yaml",
         "researchspec/runs/current/state.yaml",
@@ -38,12 +38,12 @@
         "Load only stage/mode-relevant contracts into agent context.",
         "Treat ARS Material Passport as imported external evidence, not runtime truth.",
         "Per-stage and per-mode graphs are supplied by the workflow profile layer.",
-        "Use the fixed Zotero literature adapter only as bounded working-material input to the active producer."
+        "Use fixed literature Adapter results only as bounded working material owned by the active ARSU producer."
       ],
       "full_matrix_injection": false
     },
     "academic-paper-reviewer": {
-      "profile_id": "researchspec-preflight-v7",
+      "profile_id": "researchspec-preflight-v8",
       "required_contracts": [
         "researchspec/specs/workflow.yaml",
         "researchspec/runs/current/state.yaml",
@@ -69,12 +69,12 @@
         "Load only stage/mode-relevant contracts into agent context.",
         "Treat ARS Material Passport as imported external evidence, not runtime truth.",
         "Per-stage and per-mode graphs are supplied by the workflow profile layer.",
-        "Use the fixed Zotero literature adapter only as bounded working-material input to the active producer."
+        "Use fixed literature Adapter results only as bounded working material owned by the active ARSU producer."
       ],
       "full_matrix_injection": false
     },
     "academic-pipeline": {
-      "profile_id": "researchspec-preflight-v7",
+      "profile_id": "researchspec-preflight-v8",
       "required_contracts": [
         "researchspec/specs/workflow.yaml",
         "researchspec/runs/current/state.yaml",
@@ -100,12 +100,12 @@
         "Load only stage/mode-relevant contracts into agent context.",
         "Treat ARS Material Passport as imported external evidence, not runtime truth.",
         "Per-stage and per-mode graphs are supplied by the workflow profile layer.",
-        "Use the fixed Zotero literature adapter only as bounded working-material input to the active producer."
+        "Use fixed literature Adapter results only as bounded working material owned by the active ARSU producer."
       ],
       "full_matrix_injection": false
     },
     "deep-research": {
-      "profile_id": "researchspec-preflight-v7",
+      "profile_id": "researchspec-preflight-v8",
       "required_contracts": [
         "researchspec/specs/workflow.yaml",
         "researchspec/runs/current/state.yaml",
@@ -131,7 +131,7 @@
         "Load only stage/mode-relevant contracts into agent context.",
         "Treat ARS Material Passport as imported external evidence, not runtime truth.",
         "Per-stage and per-mode graphs are supplied by the workflow profile layer.",
-        "Use the fixed Zotero literature adapter only as bounded working-material input to the active producer."
+        "Use the fixed Zotero task Skills through the provider-neutral handoff; Deep Research retains screening, coverage, and artifact ownership."
       ],
       "full_matrix_injection": false
     }

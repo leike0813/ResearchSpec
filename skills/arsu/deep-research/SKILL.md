@@ -12,8 +12,8 @@ metadata:
     - academic-pipeline
 ---
 
-<!-- researchspec-contract-preflight:v7 -->
-<!-- researchspec-literature-adapter:zotero-library:v1 -->
+<!-- researchspec-contract-preflight:v8 -->
+<!-- researchspec-literature-adapter:zotero-library:v2 -->
 ## ResearchSpec Contract Preflight
 
 Before running this ARSU-derived skill, locate the project `researchspec/`
@@ -55,26 +55,22 @@ continue the same core work without the plugin. A declined suggestion is not a
 Decision and should not be repeated in the current conversation unless the
 research need materially changes.
 
-For literature work, inspect the fixed `zotero-library` entry in
-`researchspec status --json`; status is static and its
-`connection_state: unchecked` does not prove that Zotero or Host Bridge is
-reachable. When available, use the installed `zotero-library-agent` and
-`zotero-bridge-cli` Skills for a bounded, read-only query of the user's library
-before supplementing with external discovery when needed. An empty Zotero result
-is not evidence that relevant literature does not exist. Treat every adapter
-result only as working material for this same ARSU producer to review and
-integrate into its candidate.
+## Literature Provider Policy
 
-If the adapter is unavailable during ordinary literature work, disclose the
-limitation and continue through this producer's existing external-search or
-user-supplied-input path. If the request explicitly depends on the current
-Zotero selection, a private collection, private metadata, or private
-attachments, pause and request adapter configuration or alternative user input;
-never substitute public search as though it represented private library state.
-Adapter output must not directly modify ResearchSpec specs, state, artifact
-registry, Gates, Decisions, transitions, or receipts. Zotero mutation, workflow
-submit/apply, upload, deletion, and maintenance require separate user
-authorization and remain subject to Host Bridge approval.
+Classify broad or cross-task Zotero requests to `zotero-library-agent`. Route an already bounded task directly: current-library reads to `zotero-library-query`, gap-aware discovery or permitted import to `zotero-literature-acquisition`, source-level evidence work to `zotero-literature-analysis`, cross-source context to `zotero-research-synthesis`, and separately approved maintenance to `zotero-library-curation`. Zotero use nested inside ARSU research remains a provider operation owned by the active ARSU producer.
+
+| Source policy | Provider priority | If live readiness fails |
+| --- | --- | --- |
+| `adapter-native` | Query the current library first, then use Acquisition or bounded external search only for recorded gaps. | Continue with bounded external or user-supplied sources and disclose the coverage limit. |
+| `protocol-multi-source` | Follow the review protocol; use Zotero for seeds, duplicate checks, full text, and supplemental coverage. | Continue only where the protocol permits and record the missing provider coverage. |
+| `external-first` | Use current authoritative external sources first or in parallel; use Zotero for academic context. | Continue with the external evidence plan and disclose unavailable library context. |
+| `library-bound` | Use only the requested current selection, private collection, or offline library scope. | Pause; public search cannot substitute for private or library-only state. |
+
+The selected Adapter Skill checks profile, bridge, authentication, and required capability just in time. Static `connection_state: unchecked` is neither success nor failure, and live readiness is not persisted as ResearchSpec workflow authority.
+
+Adapter task output reaches the producer only through a provider-neutral `ProviderRetrievalHandoff` that references the upstream result path and SHA-256. It remains working evidence: the ARSU producer owns screening, deduplication, verification, coverage, and durable submission. An empty result is not proof that relevant literature does not exist.
+
+Without a current run-, route-, collection-, candidate-, effect-, and time-bound `ManagedLibraryAuthorization`, `zotero-literature-acquisition` is candidate-only. Route confirmation and plugin consent do not grant this authorization. It never authorizes `zotero-library-curation`, metadata maintenance, tagging, notes, merging, deletion, or library-wide mutation.
 
 The packaged `academic-pipeline/scripts/adapters/zotero.py` path is separate: it
 reads only a user-supplied Better BibTeX JSON export, requires a user-provided
@@ -113,7 +109,7 @@ Do not treat ARS Material Passport as ResearchSpec runtime truth. It may be
 imported as external evidence, while runtime provenance,
 decisions, gates, and resume state live in ResearchSpec registries and ledgers.
 
-This generated contract integration block uses profile `researchspec-preflight-v7` for
+This generated contract integration block uses profile `researchspec-preflight-v8` for
 `deep-research`. Per-stage and per-mode graphs remain workflow-profile data.
 
 # Deep Research — Universal Academic Research Agent Team

@@ -20,19 +20,39 @@ The project SHALL provide a development command that compiles the current produc
 - **THEN** harness sources and static assets are not added to the production `dist` output or public command surface
 
 ### Requirement: Production Skill projection
-The harness SHALL derive each Skill family from the same production source used for installation: ARSU from the fixed ARSU IDs and generated trees, Companion Skills from the typed manifest and renderer, and plugin Skills from a non-writing assembly of the domain catalog and vendor bundles. It MUST NOT run converters or maintain copied Companion documents.
+
+The harness SHALL derive each Skill family from the same production source used
+for installation: ARSU from fixed IDs and generated trees, Companion Skills
+from the typed manifest and renderer, Literature Adapter Skills from the
+role-aware fixed catalog and generated bundle, and plugin Skills from a
+non-writing assembly of domain and vendor catalogs. It MUST NOT run converters,
+Adapter assets or maintain copied Companion documents.
 
 #### Scenario: Complete base surface is loaded
+
 - **WHEN** the harness builds its catalog
-- **THEN** it exposes exactly the four registered ARSU Skills and four dynamically rendered Companion Skills
+- **THEN** it exposes exactly four ARSU, four dynamically rendered Companion
+  and seven fixed Literature Adapter Skills
+- **AND** router and visibility SHALL distinguish router, task and mechanism
+  discovery
 
 #### Scenario: Plugin catalog is loaded
+
 - **WHEN** the harness builds its plugin view
-- **THEN** it validates the in-memory assembled registry and exposes every domain with direct and dependency-resolved Skill membership
+- **THEN** it validates the in-memory assembled registry and exposes every
+  domain with direct and dependency-resolved Skill membership
 
 #### Scenario: Checked-in registry has drift
-- **WHEN** the in-memory plugin assembly differs from `skills/plugins/registry.json`
+
+- **WHEN** in-memory plugin assembly differs from
+  `skills/plugins/registry.json`
 - **THEN** the harness reports a drift diagnostic without writing either source
+
+#### Scenario: Adapter runner is browsed
+
+- **WHEN** a user selects an Adapter runtime metadata asset
+- **THEN** the harness MAY render its content read-only
+- **AND** it SHALL NOT execute or interpret the asset
 
 ### Requirement: Interactive Skill browsing
 The harness SHALL present Skills through three expandable top-level branches named ARSU, Companion, and Plugin. ARSU and Companion SHALL contain their Skills directly. Plugin SHALL contain domain branches that separate direct members from dependency-only members. Search MUST preserve and filter this hierarchy, and the UI MUST include an explicit option to reveal empty domains.
@@ -86,3 +106,35 @@ The harness MUST disable raw HTML in Markdown, rewrite relative Skill links to h
 #### Scenario: Large text file is opened
 - **WHEN** a text resource exceeds the configured 1 MiB preview limit
 - **THEN** the harness returns file metadata and a raw-file link without placing the full text in the preview payload
+
+### Requirement: Subflow And Run Completion Are Independent
+
+The harness SHALL treat subflow instance completion and run completion as
+separate lifecycle events. A subflow instance reaching a terminal state SHALL
+NOT imply run completion, and run completion SHALL require all active subflow
+instances to have reached terminal states.
+
+#### Scenario: Subflow completes before run
+
+- **WHEN** a subflow instance reaches its terminal state while other instances
+  remain active
+- **THEN** the harness SHALL report the instance as complete without marking
+  the run as complete
+
+#### Scenario: Run completes only when all subflows finish
+
+- **WHEN** the last active subflow instance reaches its terminal state
+- **THEN** the harness SHALL mark the run as complete
+
+### Requirement: Subflow Attempts Are Scoped
+
+Each subflow instance attempt SHALL be scoped to its parent run and SHALL NOT
+share mutable state with prior attempts of the same subflow template within
+the same run.
+
+#### Scenario: Retry creates a new scoped attempt
+
+- **WHEN** a subflow instance is retried within the same run
+- **THEN** the new attempt SHALL start from the template's initial state
+  without inheriting mutable artifacts from the prior attempt
+- **AND** the prior attempt's records SHALL remain accessible for audit

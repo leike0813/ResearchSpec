@@ -15,7 +15,7 @@ import {
   type ManagedInstallation,
 } from "../adapters/installations.js";
 import { detectTools, orderTools, parseToolExpression } from "../adapters/tools.js";
-import { DEFAULT_WORKFLOW_PROFILE_ID, WorkItemSelectorSchema } from "../core/contracts/workflow.js";
+import { WorkItemSelectorSchema } from "../core/contracts/workflow.js";
 import { Sha256Schema, SubmitActorKindSchema, SubmitActorSchema } from "../core/contracts/artifact.js";
 import { RuntimeActorSchema } from "../core/contracts/gate-transition.js";
 import { GateSelectorSchema, RuntimeSelectorSchema, SubflowSelectorSchema, TransitionSelectorSchema, parseRuntimeSelector } from "../core/contracts/runtime-selector.js";
@@ -37,6 +37,7 @@ import {
 } from "../core/runtime/query.js";
 import { buildActionDescriptor } from "../core/runtime/action-descriptor.js";
 import { buildGateTransitionInstructions, buildWorkflowInstructions } from "../core/runtime/workflow-control.js";
+import { evaluateWorkflowControl } from "../core/runtime/workflow-control.js";
 import { buildSubflowInstructions, executeSubflowStart, planSubflowStart, SubflowStartError } from "../core/runtime/subflow-control.js";
 import { runWorkspaceChecks, type CheckTarget } from "../core/validation/check.js";
 import type { Diagnostic } from "../core/validation/types.js";
@@ -79,11 +80,23 @@ import {
   executeDoctorRepair,
   prepareDoctorRepair,
 } from "../core/runtime/runtime-recovery.js";
+import {
+  executeRuntimeMigration,
+  executeRuntimeMigrationRollback,
+  planRuntimeMigration,
+  planRuntimeMigrationRollback,
+  RuntimeMigrationError,
+} from "../core/runtime/runtime-migration.js";
 import { validationViolations, zodIssues } from "./validation.js";
 import type { CompactTransactionEffect } from "../core/contracts/runtime-protocol.js";
 
 export interface InitOptions { tools?: string; profile?: string }
-export interface UpdateOptions { tools?: string }
+export interface UpdateOptions {
+  tools?: string;
+  migrateRuntime?: boolean;
+  rollback?: string;
+  expectedPlanSha256?: string;
+}
 export interface HandoffOptions { stdout?: boolean; out?: string }
 export interface PackOptions { out?: string; includeArtifacts?: boolean }
 export interface DecideOptions { decision?: DecisionChoice; actorName?: string; reason?: string; expectedActionBasisSha256?: string; expectedPlanSha256?: string }
@@ -105,14 +118,14 @@ export async function handleInit(inputPath: string | undefined, options: InitOpt
   if (options.profile !== undefined && options.profile !== "adaptive" && options.profile !== "strict") {
     throw new CliError("invalid_profile", "--profile must be adaptive or strict.", 2);
   }
-  const requestedProfile: InitRuntimeProfile = options.profile ?? "legacy";
+  const requestedProfile: InitRuntimeProfile = options.profile ?? "adaptive";
   const priorProfile = typeof priorSnapshot?.config.profile === "string" ? priorSnapshot.config.profile : undefined;
   if (existing && options.profile && priorSnapshot && priorSnapshot.runtimeMode !== options.profile) {
     throw new CliError("profile_change_requires_migration", "init cannot replace an existing workspace runtime profile.", 2, "Use the explicit runtime migration workflow when it becomes available.");
   }
-  const profile = existing ? priorProfile ?? DEFAULT_WORKFLOW_PROFILE_ID : requestedProfile === "legacy" ? DEFAULT_WORKFLOW_PROFILE_ID : requestedProfile;
+  const profile = existing ? priorProfile ?? (priorSnapshot?.runtimeMode === "adaptive" ? "adaptive" : "strict") : requestedProfile;
   const templateProfile: InitRuntimeProfile = existing
-    ? priorSnapshot?.runtimeMode === "adaptive" ? "adaptive" : "legacy"
+    ? priorSnapshot?.runtimeMode === "adaptive" ? "adaptive" : "strict"
     : requestedProfile;
   const configured = strings(record(priorSnapshot?.config.agent_tools).selected);
   const configuredPlugins = selectedPluginIds(record(priorSnapshot?.config));
@@ -185,6 +198,73 @@ export async function handleInit(inputPath: string | undefined, options: InitOpt
 export async function handleUpdate(inputPath: string | undefined, options: UpdateOptions, context: CommandContext, providedPluginRegistry?: LoadedPluginRegistry): Promise<CommandResult> {
   const workspace = await requireWorkspace(context, inputPath);
   const snapshot = await loadWorkspaceSnapshot(workspace);
+  if (options.rollback && !options.migrateRuntime) {
+    throw new CliError("migration_option_invalid", "--rollback requires --migrate-runtime.", 2);
+  }
+  if (options.migrateRuntime) {
+    if (options.tools !== undefined) throw new CliError("migration_option_invalid", "--migrate-runtime cannot be combined with --tools.", 2);
+    try {
+      const prepared = options.rollback
+        ? await planRuntimeMigrationRollback(snapshot, options.rollback)
+        : await planRuntimeMigration(snapshot, await evaluateWorkflowControl(snapshot));
+      const plan = prepared.plan;
+      if (context.dryRun) {
+        return success("update", {
+          workspace,
+          operation: options.rollback ? "runtime_migration_rollback" : "runtime_migration",
+          dry_run: true,
+          plan,
+        }, { stdout: `${options.rollback ? "Runtime migration rollback" : "Runtime migration"} dry run\nPlan: ${plan.plan_sha256}\nExecutable: ${String(plan.executable)}\n` });
+      }
+      if (!context.yes || !options.expectedPlanSha256) {
+        throw new CliError(
+          "migration_confirmation_required",
+          "Runtime migration execution requires --yes and --expected-plan-sha256 from a dry run.",
+          2,
+        );
+      }
+      if (!isSha256(options.expectedPlanSha256)) throw new CliError("invalid_expected_plan_sha256", "--expected-plan-sha256 must be 64 lowercase hexadecimal characters.", 2);
+      if (options.expectedPlanSha256 !== plan.plan_sha256) {
+        throw new CliError("migration_plan_stale", "Runtime migration plan differs from the approved dry run.", 3, undefined, {
+          expected: options.expectedPlanSha256,
+          actual: plan.plan_sha256,
+        });
+      }
+      if (options.rollback) {
+        const execution = await executeRuntimeMigrationRollback(prepared as Awaited<ReturnType<typeof planRuntimeMigrationRollback>>);
+        return success("update", {
+          workspace,
+          operation: "runtime_migration_rollback",
+          dry_run: false,
+          identity: {
+            migration_id: execution.receipt.migration_id,
+            rollback_id: execution.receipt.rollback_id,
+            plan_sha256: execution.plan.plan_sha256,
+            receipt_path: execution.receiptPath,
+            receipt_sha256: execution.receiptSha256,
+          },
+        }, { stdout: `Rolled back runtime migration ${execution.receipt.migration_id}.\n` });
+      }
+      const execution = await executeRuntimeMigration(prepared as Awaited<ReturnType<typeof planRuntimeMigration>>);
+      return success("update", {
+        workspace,
+        operation: "runtime_migration",
+        dry_run: false,
+        identity: {
+          migration_id: execution.receipt.migration_id,
+          plan_sha256: execution.plan.plan_sha256,
+          receipt_path: execution.receiptPath,
+          receipt_sha256: execution.receiptSha256,
+        },
+      }, { stdout: `Migrated Schema 0.2 runtime ${execution.receipt.migration_id} to adaptive.\n` });
+    } catch (error) {
+      if (error instanceof CliError) throw error;
+      if (error instanceof RuntimeMigrationError) {
+        throw new CliError(error.code, error.message, error.kind === "conflict" ? 3 : 1, undefined, error.details);
+      }
+      throw error;
+    }
+  }
   const projectRoot = path.dirname(workspace);
   const configured = strings(record(snapshot.config.agent_tools).selected);
   const configuredPlugins = selectedPluginIds(snapshot.config);

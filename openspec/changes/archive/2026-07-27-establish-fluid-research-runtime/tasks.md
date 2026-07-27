@@ -122,36 +122,36 @@
 
 ## 9. Z3 — Adapter-Native Runtime
 
-- [ ] 9.1 Update Navigate to distinguish ARSU research from direct Zotero tasks
+- [x] 9.1 Update Navigate to distinguish ARSU research from direct Zotero tasks
   and present contextual source-policy/readiness guidance separately from
   route, plugin and managed-library confirmations.
-- [ ] 9.2 Implement just-in-time Adapter readiness invocation and the
+- [x] 9.2 Implement just-in-time Adapter readiness invocation and the
   provider-neutral retrieval handoff without persisting live connection state
   or Adapter-specific output as ResearchSpec authority.
-- [ ] 9.3 Update Deep Research bibliography coordination to call Query,
+- [x] 9.3 Update Deep Research bibliography coordination to call Query,
   gap-aware Acquisition and evidence-goal-driven Analysis/Synthesis task Skills
   directly while retaining ARSU screening, verification, coverage and artifact
   ownership.
-- [ ] 9.4 Implement run- and collection-bound managed-library authorization,
+- [x] 9.4 Implement run- and collection-bound managed-library authorization,
   candidate-only fallback, expiry/revocation and the hard separation from
   Curation.
-- [ ] 9.5 Add ordinary gap-fill, systematic multi-source, external-first,
+- [x] 9.5 Add ordinary gap-fill, systematic multi-source, external-first,
   private/library-bound pause, managed import and Adapter failure journeys.
 
 ## 10. M7 — Convergence, Migration, And Default Switch
 
-- [ ] 10.1 Regenerate and verify all ARSU, Companion and workflow-profile
+- [x] 10.1 Regenerate and verify all ARSU, Companion and workflow-profile
   outputs so generated guidance consumes the bounded adaptive protocol,
   canonical patches and Adapter-native provider contracts.
-- [ ] 10.2 Implement `update --migrate-runtime` dry-run, plan hash,
+- [x] 10.2 Implement `update --migrate-runtime` dry-run, plan hash,
   non-interactive binding, backup, receipt, rollback and failure preservation
   for legacy Schema `0.2` workspaces.
-- [ ] 10.3 Update the canonical user usage model, CLI and contract
+- [x] 10.3 Update the canonical user usage model, CLI and contract
   documentation, README, project AGENTS, release process and capability
   traceability from the implemented SSOTs.
-- [ ] 10.4 Run targeted and full tests, type checks, lint, build, all converter
+- [x] 10.4 Run targeted and full tests, type checks, lint, build, all converter
   checks/idempotence, package verification, strict OpenSpec validation and the
   full user-journey matrix.
-- [ ] 10.5 Switch new workspace initialization to adaptive only after every
+- [x] 10.5 Switch new workspace initialization to adaptive only after every
   runtime, recovery, migration, proposed/current, Adapter, package and
   acceptance gate passes; retain strict as an explicit supported profile.

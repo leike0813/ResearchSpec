@@ -20,8 +20,11 @@ artifacts.
 and source identities, inclusion state, and trust metadata from
 `researchspec/specs/sources.yaml`. Resolve the registered RQ brief, methodology
 blueprint, and any permitted existing bibliography artifacts through
-`researchspec/runs/current/artifact-registry.json`. Do not infer inputs from
-`phase*_` directories or consume downstream synthesis, draft, review, or
+`researchspec/runs/current/artifact-registry.json`. For Adapter-backed work,
+also read the confirmed source policy and each hash-bound
+`ProviderRetrievalHandoff` as working evidence. A handoff references its
+upstream result; it is not accepted bibliography evidence. Do not infer inputs
+from `phase*_` directories or consume downstream synthesis, draft, review, or
 revision artifacts.
 
 **Contract outputs:** emit only the annotated bibliography and search-strategy
@@ -30,10 +33,13 @@ agent, or continue into a downstream stage. Return any recommended downstream
 work to the caller.
 
 **Writes allowed:** write new bibliography/search artifacts and return them to
-the runtime registration helper. Do not modify `sources.yaml`, run state,
-registries, decisions, or gates directly. Prompt fences and local integrity
-scripts remain diagnostics; ResearchSpec contracts and runtime validation own
-the boundary.
+the runtime registration helper. Adapter queries and candidate-only acquisition
+may produce working handoffs and candidate artifacts. Import is allowed only
+for screened candidates covered by a current `ManagedLibraryAuthorization`;
+library Curation requires a separate explicit request. Do not modify
+`sources.yaml`, run state, registries, decisions, or gates directly. Prompt
+fences and local integrity scripts remain diagnostics; ResearchSpec contracts
+and runtime validation own the boundary.
 <!--/rs:IO-003-->
 
 ## Core Principles
@@ -175,12 +181,34 @@ Studies included in review: ___
 When `researchspec/specs/sources.yaml` contains included literature sources,
 resolve their registered source and screening artifacts through
 `researchspec/runs/current/artifact-registry.json` and present them to the
-Bibliography Agent as a read-only `literature_corpus[]` working projection. The
-agent then runs the existing **corpus-first, search-fills-gap** flow with all
-five steps, four Iron Rules, and the PRE-SCREENED reproducibility block intact.
-External search results and proposed additions remain output artifacts until an
-accepted source-contract change is applied; the agent must not mutate
-`sources.yaml`, the registry, or the projected corpus.
+Bibliography Agent as a read-only `literature_corpus[]` working projection.
+Apply the confirmed source policy without turning provider priority into
+workflow authority:
+
+- `adapter-native`: call `zotero-library-query` first and record the uncovered
+  source class before using `zotero-literature-acquisition` or bounded external
+  search.
+- `protocol-multi-source`: let the systematic-review protocol determine
+  databases, searches, screening, and coverage; use Zotero for seeds,
+  duplicate checks, full text, and supplemental coverage.
+- `external-first`: use current authoritative external sources first or in
+  parallel, then use Zotero for academic context.
+- `library-bound`: use only the requested current selection, private
+  collection, or offline library; pause when just-in-time readiness fails.
+
+Call `zotero-literature-analysis` only for a source-level evidence goal and
+`zotero-research-synthesis` only for a bounded cross-source goal. Do not invoke
+every task mechanically. Consume results through a hash-bound
+`ProviderRetrievalHandoff`; an empty result is not proof of absence, and the
+handoff remains working evidence until this producer screens, verifies, and
+submits a durable bibliography artifact. Without a current run- and
+collection-bound `ManagedLibraryAuthorization`, Acquisition is candidate-only.
+That authorization never permits `zotero-library-curation`.
+
+Keep the existing five-step flow, four Iron Rules, and PRE-SCREENED
+reproducibility block intact. External search results and proposed additions
+remain output artifacts until an accepted source-contract change is applied;
+the agent must not mutate `sources.yaml`, the registry, or the projected corpus.
 <!--/rs:SOURCE-003-->
 
 ### The four Iron Rules

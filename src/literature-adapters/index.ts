@@ -4,3 +4,5 @@ export * from "./contracts.js";
 export * from "./delivery.js";
 export * from "./inspect.js";
 export * from "./platform.js";
+export * from "./provider-contracts.js";
+export * from "./provider-policy.js";

@@ -11,6 +11,7 @@ import { cleanup, tempProject } from "./helpers/cli.js";
 import { ARSU_ROUTING_CATALOG } from "../src/arsu-converter/routing/catalog.js";
 import { renderNavigateRoutingProjection } from "../src/arsu-converter/routing/navigation-projection.js";
 import { renderArsuCommandDescription } from "../src/arsu-converter/routing/projection.js";
+import { renderLiteratureSourcePolicyProjection } from "../src/literature-adapters/provider-policy.js";
 
 void test("tool registry contains the exact 31-tool surface and 28 command adapters", () => {
   assert.equal(TOOL_IDS.length, 31);
@@ -138,6 +139,11 @@ void test("companion manifest renders four self-contained workflow skills with d
   assert.match(navigate.instructions, /bounded brief: current task, necessary inputs, expected response, and forbidden ResearchSpec authority writes/);
   assert.match(navigate.instructions, /continue the same canonical selector with the base ARSU producer/);
   assert.match(navigate.instructions, /recommendation never creates a route, subflow, work item, Gate, Decision, receipt, frontier, or second state machine/);
+  assert.match(navigate.instructions, /Broad or cross-task Zotero request/);
+  assert.match(navigate.instructions, /Explicit bounded Zotero task/);
+  assert.match(navigate.instructions, /Library-bound readiness failure/);
+  assert.match(navigate.instructions, /route confirmation, plugin consent, and managed-library authorization/);
+  assert.ok(navigate.instructions.includes(renderLiteratureSourcePolicyProjection()));
   assert.ok(navigate.instructions.endsWith(renderNavigateRoutingProjection()));
   for (const skill of ARSU_ROUTING_CATALOG.skills) {
     assert.match(navigate.instructions, new RegExp(skill.skill_id));

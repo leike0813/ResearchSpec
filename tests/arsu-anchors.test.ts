@@ -11,6 +11,29 @@ import { generateUpstreamManifest } from "../src/arsu-converter/anchors/manifest
 import type { ContractAnchor } from "../src/arsu-converter/anchors/types.js";
 import type { ContractAnchorFile } from "../src/arsu-converter/anchors/types.js";
 
+void test("bibliography replacements preserve provider and authority boundaries", async () => {
+  const [io, source] = await Promise.all([
+    readFile("src/arsu-converter/anchors/replacements/IO-003.md", "utf8"),
+    readFile("src/arsu-converter/anchors/replacements/SOURCE-003.md", "utf8"),
+  ]);
+  for (const stableTerm of ["ProviderRetrievalHandoff", "ManagedLibraryAuthorization"]) {
+    assert.match(io, new RegExp(stableTerm));
+    assert.match(source, new RegExp(stableTerm));
+  }
+  for (const mode of ["adapter-native", "protocol-multi-source", "external-first", "library-bound"]) {
+    assert.match(source, new RegExp(mode));
+  }
+  for (const skillId of [
+    "zotero-library-query",
+    "zotero-literature-acquisition",
+    "zotero-literature-analysis",
+    "zotero-research-synthesis",
+    "zotero-library-curation",
+  ]) {
+    assert.match(source, new RegExp(skillId));
+  }
+});
+
 void test("ARSU contract anchor assets validate against vendored upstream", async () => {
   const result = await validateAnchorAssets(process.cwd());
 

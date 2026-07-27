@@ -33,7 +33,7 @@ export const REQUIRED_DIRECTORIES = [
   "draft-patches/archive",
 ] as const;
 
-export type InitRuntimeProfile = "legacy" | "strict" | "adaptive";
+export type InitRuntimeProfile = "strict" | "adaptive";
 
 const WORKSPACE_TEMPLATES: readonly WorkspaceTemplateDefinition[] = [
   {
@@ -127,8 +127,8 @@ const ADAPTIVE_TEMPLATES: readonly WorkspaceTemplateDefinition[] = [
   },
 ];
 
-export function getWorkspaceTemplates(profile: InitRuntimeProfile = "legacy"): readonly WorkspaceTemplateDefinition[] {
-  const profileId = profile === "legacy" ? "arsu-v0-1" : profile;
+export function getWorkspaceTemplates(profile: InitRuntimeProfile = "adaptive"): readonly WorkspaceTemplateDefinition[] {
+  const profileId = profile;
   const templates = WORKSPACE_TEMPLATES.map((template) => {
     if (template.relativePath === "config.yaml") {
       return { ...template, content: `schema_version: "0.1"\nprofile: ${profileId}\nagent_tools:\n  selected: []\n  delivery: both\nplugins:\n  selected: []\n` };
@@ -156,7 +156,7 @@ export function resolveInitTarget(inputPath: string | undefined, cwd: string): s
   return path.basename(base) === "researchspec" ? base : path.join(base, "researchspec");
 }
 
-export function getWorkspaceEntries(workspaceRoot: string, profile: InitRuntimeProfile = "legacy"): WorkspaceEntry[] {
+export function getWorkspaceEntries(workspaceRoot: string, profile: InitRuntimeProfile = "adaptive"): WorkspaceEntry[] {
   const templates = getWorkspaceTemplates(profile);
   return [
     ...REQUIRED_DIRECTORIES.map((dir): WorkspaceEntry => ({ kind: "dir", path: path.join(workspaceRoot, dir) })),

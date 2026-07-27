@@ -25,7 +25,7 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
     const skillPath = path.join(root, "skills/arsu", group, "SKILL.md");
     assert.equal(existsSync(skillPath), true);
     assert.match(await readFile(skillPath, "utf8"), /ResearchSpec Contract Preflight/);
-    assert.match(await readFile(skillPath, "utf8"), /researchspec-literature-adapter:zotero-library:v1/);
+    assert.match(await readFile(skillPath, "utf8"), /researchspec-literature-adapter:zotero-library:v2/);
     assert.match(await readFile(path.join(root, "skills/arsu", group, "LICENSE"), "utf8"), /Attribution-NonCommercial 4.0 International/);
     assert.match(await readFile(path.join(root, "skills/arsu", group, "NOTICE.md"), "utf8"), /Cheng-I Wu/);
   }
@@ -38,10 +38,12 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
   assert.match(deepResearch, /propose at most three domains in one batch/);
   assert.match(deepResearch, /does not become the candidate producer/);
   assert.match(deepResearch, /continue the same core work without the plugin/);
-  assert.match(deepResearch, /bounded, read-only query of the user's library/);
-  assert.match(deepResearch, /empty Zotero result/);
+  assert.match(deepResearch, /zotero-library-query/);
+  assert.match(deepResearch, /zotero-literature-acquisition/);
+  assert.match(deepResearch, /ProviderRetrievalHandoff/);
+  assert.match(deepResearch, /ManagedLibraryAuthorization/);
+  assert.match(deepResearch, /empty result is not proof/);
   assert.match(deepResearch, /private collection/);
-  assert.match(deepResearch, /Host Bridge approval/);
   assert.match(deepResearch, /work:<instance>\/<node>/);
   assert.match(deepResearch, /policy is `automatic`/);
   assert.match(deepResearch, /--expected-sha256/);
@@ -125,7 +127,7 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
   const crossSkillDeepResearch = await readFile(crossSkillDeepResearchPath, "utf8");
   assert.match(crossSkillDeepResearch, /<!--rs:STATE-001-->/);
   assert.match(crossSkillDeepResearch, /description: test/);
-  assert.doesNotMatch(crossSkillDeepResearch, /researchspec-contract-preflight:v7/);
+  assert.doesNotMatch(crossSkillDeepResearch, /researchspec-contract-preflight:v8/);
   for (const relativePath of ["scripts/adapters/zotero.py", "scripts/adapters/_common.py", "scripts/__init__.py", "scripts/adapters/__init__.py"]) {
     assert.equal(existsSync(path.join(root, "skills/arsu/academic-pipeline", relativePath)), true);
   }

@@ -24,6 +24,10 @@ export interface WritePlan {
   readPreconditions?: ReadPrecondition[];
 }
 
+export interface WritePlanExecutionOptions {
+  validateCommittedState?: () => Promise<void>;
+}
+
 export interface ReadPrecondition {
   path: string;
   expectedHash: string;
@@ -81,7 +85,7 @@ export async function planFile(input: {
   return { ...input, action: "refresh", previousHash, nextHash, previousMode, ...(nextMode === undefined ? {} : { nextMode }), reason: input.force ? "forced manifest-owned refresh" : "safe manifest-owned refresh" };
 }
 
-export async function executeWritePlan(plan: WritePlan): Promise<void> {
+export async function executeWritePlan(plan: WritePlan, options: WritePlanExecutionOptions = {}): Promise<void> {
   const actionable = plan.operations.filter((operation) => operation.action === "create" || operation.action === "refresh" || operation.action === "remove-owned" || operation.action === "move");
   const transaction = actionable.map((operation) => ({ operation, temporary: `${operation.path}.researchspec-${randomUUID()}.tmp`, backup: `${operation.path}.researchspec-${randomUUID()}.bak`, hadOriginal: false, committed: false }));
   try {
@@ -111,6 +115,7 @@ export async function executeWritePlan(plan: WritePlan): Promise<void> {
       if (entry.operation.action !== "remove-owned") await rename(entry.temporary, entry.operation.path);
       entry.committed = true;
     }
+    await options.validateCommittedState?.();
   } catch (error) {
     for (const entry of [...transaction].reverse()) {
       if (entry.committed && entry.operation.action === "move" && entry.operation.sourcePath) {

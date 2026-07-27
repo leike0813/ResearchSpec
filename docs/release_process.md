@@ -37,6 +37,14 @@ git diff --check
 
 `release:verify` runs the package lifecycle, inspects the real tarball, verifies all seven packaged Zotero runtimes and fourteen opaque runtime-metadata assets, installs it into an OS temporary directory, invokes the installed bin, initializes an isolated Codex delivery with fifteen fixed Skills and eight wrappers, and completes `check all --strict` without executing the Adapter runtime, runners, or output schemas. Repository source or internal planners are not substitutes for this check.
 
+The installed-package gate must also prove that an unqualified `init` creates an
+adaptive CaseProfile/CaseState workspace, `init --profile strict` still creates a
+valid Schema `0.2` workspace, ordinary `update` leaves that authority unchanged,
+and `update --migrate-runtime` supports deterministic preview, plan-bound
+execution, durable backup/receipt, and plan-bound rollback. The default must not
+switch when any runtime, Doctor, patch, Adapter, converter, package, journey, or
+strict OpenSpec gate fails.
+
 The Scientific Agent Skills gates also require all 40 manual-security targets to have finding-level maintainer decisions consistent with admission, resource curation, dependencies, and generated hashes. Upstream scanner labels alone are neither release approval nor a production blocker override.
 
 The Education Agent Skills gates require the immutable 165-Skill audit, all 872

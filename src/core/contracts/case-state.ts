@@ -167,6 +167,8 @@ export const CaseStateSchema = z.strictObject({
 });
 
 export type HardObligation = z.infer<typeof HardObligationSchema>;
+export type FormalGateReference = z.infer<typeof FormalGateReferenceSchema>;
+export type FormalDecisionReference = z.infer<typeof FormalDecisionReferenceSchema>;
 export type WorkingEvidence = z.infer<typeof WorkingEvidenceSchema>;
 export type AttemptRecord = z.infer<typeof AttemptRecordSchema>;
 export type CaseState = z.infer<typeof CaseStateSchema>;

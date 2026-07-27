@@ -14,7 +14,8 @@
     "add-atomic-artifact-submit",
     "add-arsu-material-passport-import",
     "agent-assisted-domain-plugin-routing",
-    "add-fixed-zotero-literature-adapter"
+    "add-fixed-zotero-literature-adapter",
+    "establish-fluid-research-runtime"
   ],
   "journeys": [
     { "journey_id": "bootstrap", "test_id": "journey.bootstrap" },
@@ -147,6 +148,171 @@
           "requirement": "Optional Domain Skills Do Not Expand Fixed Base Surface",
           "scenarios": [
             { "scenario": "Domain installation preserves wrapper frontier", "technical_changes": ["add-vendor-domain-plugin-ingestion"], "journey_ids": ["bootstrap"], "test_ids": ["journey.bootstrap"] }
+          ]
+        }
+      ]
+    }
+  ],
+  "active_delta_capabilities": [
+    {
+      "capability_id": "framework-core",
+      "change_id": "establish-fluid-research-runtime",
+      "spec_path": "openspec/changes/establish-fluid-research-runtime/specs/framework-core/spec.md",
+      "requirements": [
+        {
+          "requirement": "Universal Workflow Profile",
+          "scenarios": [
+            { "scenario": "Initialization creates adaptive workspace", "test_files": ["tests/arsu-workflow-profiles.test.ts", "tests/arsu-user-journeys.test.ts"] },
+            { "scenario": "Strict profile is selected", "test_files": ["tests/arsu-workflow-profiles.test.ts", "tests/strict-compatibility.test.ts"] },
+            { "scenario": "Schema 0.2 workspace is opened", "test_files": ["tests/strict-compatibility.test.ts", "tests/runtime-migration.test.ts"] }
+          ]
+        },
+        {
+          "requirement": "Explicit Runtime Migration",
+          "scenarios": [
+            { "scenario": "Ordinary update inspects a legacy workspace", "test_files": ["tests/runtime-migration.test.ts"] },
+            { "scenario": "Migration fails before authority commit", "test_files": ["tests/runtime-migration.test.ts", "tests/write-plan.test.ts"] }
+          ]
+        },
+        {
+          "requirement": "Authority And Agent Projections Are Separate",
+          "scenarios": [
+            { "scenario": "Runtime history grows", "test_files": ["tests/runtime-protocol.test.ts"] }
+          ]
+        }
+      ]
+    },
+    {
+      "capability_id": "runtime-recovery",
+      "change_id": "establish-fluid-research-runtime",
+      "spec_path": "openspec/changes/establish-fluid-research-runtime/specs/runtime-recovery/spec.md",
+      "requirements": [
+        {
+          "requirement": "Tolerant Runtime Observation",
+          "scenarios": [
+            { "scenario": "State YAML is invalid", "test_files": ["tests/runtime-recovery.test.ts"] }
+          ]
+        },
+        {
+          "requirement": "Fixed Recovery Finding Taxonomy",
+          "scenarios": [
+            { "scenario": "Receipt proves an interrupted transaction", "test_files": ["tests/runtime-recovery.test.ts"] },
+            { "scenario": "Receipts conflict", "test_files": ["tests/runtime-recovery.test.ts"] }
+          ]
+        },
+        {
+          "requirement": "Deterministic Repair Planning",
+          "scenarios": [
+            { "scenario": "Repair is previewed", "test_files": ["tests/runtime-recovery.test.ts"] }
+          ]
+        },
+        {
+          "requirement": "Receipt-Bound Repair Commit",
+          "scenarios": [
+            { "scenario": "Repair precondition changed", "test_files": ["tests/runtime-recovery.test.ts", "tests/write-plan.test.ts"] },
+            { "scenario": "Semantic evidence is missing", "test_files": ["tests/runtime-recovery.test.ts"] }
+          ]
+        }
+      ]
+    },
+    {
+      "capability_id": "literature-system-adapters",
+      "change_id": "establish-fluid-research-runtime",
+      "spec_path": "openspec/changes/establish-fluid-research-runtime/specs/literature-system-adapters/spec.md",
+      "requirements": [
+        {
+          "requirement": "Fixed Literature Adapter Catalog",
+          "scenarios": [
+            { "scenario": "Fixed Zotero adapter is discovered", "test_files": ["tests/adapters.test.ts", "tests/skill-harness.test.ts"] },
+            { "scenario": "Skill roles are inspected", "test_files": ["tests/adapters.test.ts", "tests/literature-provider-contracts.test.ts"] },
+            { "scenario": "Configuration is rendered", "test_files": ["tests/adapters.test.ts"] }
+          ]
+        },
+        {
+          "requirement": "Adapter Facts Have Three Distinct Layers",
+          "scenarios": [
+            { "scenario": "Static status is requested", "test_files": ["tests/adapters.test.ts"] },
+            { "scenario": "Provider is selected for use", "test_files": ["tests/literature-provider-contracts.test.ts"] }
+          ]
+        },
+        {
+          "requirement": "Provider Retrieval Handoff",
+          "scenarios": [
+            { "scenario": "Producer receives Adapter evidence", "test_files": ["tests/literature-provider-contracts.test.ts", "tests/arsu-converter.test.ts"] }
+          ]
+        },
+        {
+          "requirement": "Source Policy Controls Provider Priority",
+          "scenarios": [
+            { "scenario": "Ordinary library has a coverage gap", "test_files": ["tests/literature-provider-contracts.test.ts"] },
+            { "scenario": "Library-bound provider is unavailable", "test_files": ["tests/literature-provider-contracts.test.ts"] }
+          ]
+        },
+        {
+          "requirement": "Managed Library Authorization Is Bounded",
+          "scenarios": [
+            { "scenario": "Accepted item is imported", "test_files": ["tests/literature-provider-contracts.test.ts"] }
+          ]
+        },
+        {
+          "requirement": "Upstream Runner And Schema Assets Are Opaque",
+          "scenarios": [
+            { "scenario": "Static delivery verifies runtime metadata", "test_files": ["tests/zotero-adapter-converter.test.ts", "scripts/verify-package.mjs"] }
+          ]
+        }
+      ]
+    },
+    {
+      "capability_id": "arsu-user-model-acceptance",
+      "change_id": "establish-fluid-research-runtime",
+      "spec_path": "openspec/changes/establish-fluid-research-runtime/specs/arsu-user-model-acceptance/spec.md",
+      "requirements": [
+        {
+          "requirement": "Public CLI User Journey Acceptance",
+          "scenarios": [
+            { "scenario": "Journey mutates authority only through public CLI", "test_files": ["tests/arsu-user-journeys.test.ts", "tests/runtime-migration.test.ts"] },
+            { "scenario": "Semantic work is simulated at the allowed boundary", "test_files": ["tests/arsu-user-journeys.test.ts"] },
+            { "scenario": "Journey follows adaptive availability", "test_files": ["tests/adaptive-case-runtime.test.ts", "tests/arsu-user-journeys.test.ts"] },
+            { "scenario": "Journey follows strict process", "test_files": ["tests/arsu-user-journeys.test.ts", "tests/strict-compatibility.test.ts"] }
+          ]
+        },
+        {
+          "requirement": "Fixed Surface Acceptance",
+          "scenarios": [
+            { "scenario": "Fixed surface is projected", "test_files": ["tests/adapters.test.ts", "tests/skill-harness.test.ts", "scripts/verify-package.mjs"] }
+          ]
+        },
+        {
+          "requirement": "Recovery And Completion Journeys",
+          "scenarios": [
+            { "scenario": "Standalone work is followed by another subflow", "test_files": ["tests/arsu-user-journeys.test.ts"] },
+            { "scenario": "Doctor sees conflicting receipts", "test_files": ["tests/runtime-recovery.test.ts"] }
+          ]
+        },
+        {
+          "requirement": "Adapter-Native User Journeys",
+          "scenarios": [
+            { "scenario": "Managed-library journey runs", "test_files": ["tests/literature-provider-contracts.test.ts", "tests/adapters.test.ts"] },
+            { "scenario": "Adapter runtime metadata is packaged", "test_files": ["tests/zotero-adapter-converter.test.ts", "scripts/verify-package.mjs"] }
+          ]
+        }
+      ]
+    },
+    {
+      "capability_id": "mvp-release-readiness",
+      "change_id": "establish-fluid-research-runtime",
+      "spec_path": "openspec/changes/establish-fluid-research-runtime/specs/mvp-release-readiness/spec.md",
+      "requirements": [
+        {
+          "requirement": "Fixed Zotero Release Assets",
+          "scenarios": [
+            { "scenario": "Installed package verifies Zotero assets", "test_files": ["scripts/verify-package.mjs", "tests/skill-harness.test.ts"] }
+          ]
+        },
+        {
+          "requirement": "Fluid Runtime Release Gate",
+          "scenarios": [
+            { "scenario": "One convergence gate fails", "test_files": ["scripts/verify-package.mjs", "tests/arsu-user-model-traceability.test.ts"] }
           ]
         }
       ]

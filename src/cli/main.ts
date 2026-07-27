@@ -63,6 +63,9 @@ function registerCommands(program: Command, run: Runner): void {
     .action(async (target: string | undefined, options: InitOptions, command: Command) => run("init", command, () => handleInit(target, options, commandContext("init", command))));
   program.command("update [path]").description("Refresh selected generated agent files")
     .option("--tools <ids>", "refresh/add a tool subset")
+    .option("--migrate-runtime", "migrate a valid Schema 0.2 runtime to adaptive")
+    .option("--rollback <migration-id>", "restore the pre-migration runtime captured by a migration")
+    .option("--expected-plan-sha256 <hash>", "bind execution to the previewed migration or rollback plan")
     .action(async (target: string | undefined, options: UpdateOptions, command: Command) => run("update", command, () => handleUpdate(target, options, commandContext("update", command))));
   program.command("status").description("Show current run and pending-item status")
     .action(async (_options: Record<string, never>, command: Command) => run("status", command, () => handleStatus(commandContext("status", command))));

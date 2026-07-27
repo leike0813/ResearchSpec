@@ -24,9 +24,26 @@ Bundle、CLI 和七个 Skill 的版本分别属于各自组件。ResearchSpec �
 
 ## ARSU 使用边界
 
-需要文献时，当前 ARSU producer 先在可用情况下执行有界、只读的 Zotero 查询，再按需要补充外部检索。空结果不证明相关文献不存在。普通任务在 Adapter 不可用时沿既有外部检索或用户输入路径降级并披露限制；明确依赖当前 Zotero 选择、私有 collection、私有 metadata 或 attachment 的任务必须暂停，请求配置或替代输入。
+需要文献时，当前 ARSU producer 先声明 source policy：`adapter-native` 以当前 library
+Query 为先并只为已记录缺口调用 Acquisition；`protocol-multi-source` 服从系统综述协议，
+把 Zotero 用于 seeds、去重、full text 与补充覆盖；`external-first` 以当前权威外部来源为先或
+并行，并用 Zotero 补充学术上下文；`library-bound` 只接受指定 selection、私有 collection
+或离线 library 范围。前三类在 Adapter 不可用时可按政策继续并披露覆盖限制；
+`library-bound` 必须暂停。空结果不证明相关文献不存在。
 
-Adapter 输出只是原 producer 的工作材料。它不能直接修改 ResearchSpec specs、state、artifact registry、Gate、Decision、transition 或 receipts。Zotero mutation、workflow submit/apply、上传、删除和维护需要单独的用户授权，并继续受 Host Bridge 审批。
+所选 Skill 在调用时才检查 profile、bridge、authentication 与 capability；静态
+`connection_state: unchecked` 既不表示成功，也不表示失败。结果通过 hash-bound
+`ProviderRetrievalHandoff` 返回原 producer，仍是 working evidence；筛选、去重、验证、覆盖判断
+和 durable submit 由 ARSU producer 负责。
+
+Acquisition 的 item import、collection link 与 attachment import 需要同时绑定 run、route、
+adapter、library、collection、candidate、effect 与有效期的 `ManagedLibraryAuthorization`。
+缺少授权时只能返回 candidate。该授权不扩展到 Curation；metadata、tag、note、merge、delete
+或 library-wide maintenance 必须单独路由 `zotero-library-curation` 并取得批准。
+
+Adapter 不能直接修改 ResearchSpec specs、state、artifact registry、Gate、Decision、
+transition 或 receipts。Route confirmation、plugin consent 和 Host Bridge readiness 都不等于
+managed-library authorization。
 
 `academic-pipeline/scripts/adapters/zotero.py` 是另一条人工离线路径：它只读取用户提供的 Better BibTeX JSON export，依赖用户自己的 Python 3.11+ 与 PyYAML，不读取实时 Zotero 状态，也不能替代固定 Adapter。
 

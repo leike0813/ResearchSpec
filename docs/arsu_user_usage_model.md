@@ -7,7 +7,7 @@
 本文同时使用三种状态标签：
 
 - **Target v0.1**：已经锁定的目标用户体验和职责边界。
-- **Current implementation（2026-07-11）**：仓库中已经可运行的能力。
+- **Current implementation（2026-07-27）**：仓库中已经可运行的能力。
 - **Acceptance status**：Target v0.1 的十二条公共 CLI 用户旅程已经通过验收。
 
 本模型由 main capability specs 持续约束；原 umbrella change `define-arsu-user-usage-model-v0-1` 在全部技术层和端到端验收通过后归档。
@@ -36,7 +36,7 @@ researchspec init
 `init` 的 Target v0.1 职责仅包括：
 
 - 创建或补齐 ResearchSpec workspace；
-- 安装或投影四个 ARSU Skills、四个 Companion Skills 与两个固定 Zotero Adapter Skills；
+- 安装或投影四个 ARSU Skills、四个 Companion Skills 与七个固定 Zotero Adapter Skills；
 - 离线安装项目内 `.zotero-bridge` runtime 与 profile template；
 - 记录可用工具和配置；
 - 不选择 ARSU mode；
@@ -363,7 +363,7 @@ flowchart TD
 
 ## 11. 目标最小 Surface
 
-### 11.1 固定 Skills：4 + 4 + 2；可选领域 Skills
+### 11.1 固定 Skills：4 + 4 + 7；可选领域 Skills
 
 | 类别 | Skill | 用户作用 |
 | --- | --- | --- |
@@ -375,12 +375,17 @@ flowchart TD
 | Companion | `researchspec-propose` | 起草高影响语义变更 |
 | Companion | `researchspec-decide` | 人类决策、review branch、Gate override |
 | Companion | `researchspec-verify` | 阶段边界语义审查与 proposed Gate verdict |
-| Zotero Adapter | `zotero-library-agent` | 有界、只读的文献库发现与证据工作材料 |
-| Zotero Adapter | `zotero-bridge-cli` | 项目内 Host Bridge CLI 协议与用户授权操作边界 |
+| Zotero Adapter | `zotero-library-agent` | 跨 Query、Acquisition、Analysis、Synthesis 与 Curation 的有界路由 |
+| Zotero Adapter | `zotero-library-query` | 当前 library、collection、selection、metadata 与 attachment 查询 |
+| Zotero Adapter | `zotero-literature-acquisition` | 外部发现、候选评估及经单独授权的有界 acquisition |
+| Zotero Adapter | `zotero-literature-analysis` | 有来源引用的单篇或小集合证据分析 |
+| Zotero Adapter | `zotero-research-synthesis` | 跨来源主题、主张、缺口与研究上下文综合 |
+| Zotero Adapter | `zotero-library-curation` | 单独批准的 metadata、tag、collection、note 与链接维护 |
+| Zotero Adapter | `zotero-bridge-cli` | 项目内 Host Bridge CLI 协议、readiness 与恢复机制 |
 
 Check、Submit 和 Archive 是 CLI transaction，不需要同名 Companion。Explore、Next 与 Context 的用户意图并入 Navigate。
 ResearchSpec 维护的领域插件可以从 bundled registry 增加可选 Open Agent Skills；它们不改变固定
-4+4+2 成员、wrapper 数量或 workflow authority。Navigate 与当前 ARSU producer 会在新路由、
+4+4+7 成员、wrapper 数量或 workflow authority。Navigate 与当前 ARSU producer 会在新路由、
 研究需要显著变化、出现新 ready work item 或用户明确要求专业能力时，使用紧凑插件元数据判断
 是否存在实质帮助。未安装能力最多按三个 domain 合并建议，必须与路由确认分开征得用户同意，
 并以 dry-run 返回的 `plan_sha256` 绑定安装执行。安装后优先使用宿主已热加载的 Skill；若宿主
@@ -388,13 +393,14 @@ ResearchSpec 维护的领域插件可以从 bundled registry 增加可选 Open A
 同一份指令。插件只作为当前 ARSU producer 的嵌套语义助手，其结果必须回到原 producer 审查和
 整合。拒绝、不可用、漂移或调用失败都不阻断核心路由。
 
-### 11.2 CLI：16 个顶层命令
+### 11.2 CLI：17 个顶层命令
 
 | 分组 | 命令 | 用户模型中的作用 |
 | --- | --- | --- |
 | Bootstrap | `init`, `update` | 准备/刷新 workspace 与投影，不启动工作 |
 | Control plane | `status`, `instructions`, `start`, `submit`, `advance` | 计算 frontier、返回 packet、执行生命周期 transaction |
 | Inspection | `check`, `list`, `show` | 校验和查看权威对象 |
+| Recovery | `doctor` | 容错观察损坏 runtime，并只执行已预览的确定性修复 |
 | Context | `handoff`, `pack` | 渲染或打包可移交上下文 |
 | Governance | `propose`, `decide`, `archive` | 高影响 change、显式决策与生命周期收尾 |
 | Domain Skills | `plugin` | 查看稳定 domain catalog，按依赖闭包管理 workspace 级可选 Skills，并读取已投影 Skill 的 hash-bound 指令；vendor 仅作为详细 provenance |
@@ -419,9 +425,9 @@ command wrapper 只是不同 agent 工具的 adapter。目标交付量是：
 
 ## 13. Current implementation 与 Target 差距
 
-截至 2026-07-13，当前实现已经具备：
+截至 2026-07-27，当前实现已经具备：
 
-- 全部 16 个目标顶层命令，包括 `submit work:|gate:`、`advance transition:` 与 `plugin`；
+- 全部 17 个目标顶层命令，包括 `doctor`、`submit work:|gate:`、`advance transition:` 与 `plugin`；
 - typed workflow work items、`done/ready/blocked` evaluator 和动态 `instructions work:`；
 - `RQ Brief → Bibliography → Synthesis` 实验 Slice；
 - receipt-backed、hash-bound candidate submit；
@@ -441,13 +447,15 @@ command wrapper 只是不同 agent 工具的 adapter。目标交付量是：
   hash-bound `submit work:`。
 - instance-scoped `gate:`/`transition:` frontier、用户确认 Gate submit、challenge 后重验、
   receipt-bound override/branch Decision，以及 receipt-first/state-last Advance。
-- 新 workspace 默认 `arsu-v0-1`，完整覆盖 25 个 operational modes、2 个 pipeline entries，
-  并以 parent-scoped child selector、委托确认和无上限 dynamic revision rounds 组合 pipeline。
+- 新 workspace 默认 adaptive runtime；`init --profile strict` 保留 Schema `0.2`
+  `arsu-v0-1` graph。既有 strict workspace 仅通过 dry-run、plan-hash-bound、带 backup/receipt
+  且可回滚的 `update --migrate-runtime` 显式迁移。
 - 受控 `arsu-artifact:` contracts，以及 receipt-backed 的 UTF-8 text 与原生 binary candidate Submit。
 
 当前实现已经通过 bootstrap、vague/expert routing、standalone、pipeline、parallel join、
 Gate challenge/override、revision round、cross-process resume、context export 与 terminal
-completion 与 Material Passport resume 的公共 CLI 黑盒验收。本文中的四 Companion、十六个 CLI 和 31×10/28×8 base 数量
+completion、Material Passport resume、adaptive obligations、Doctor recovery 与 runtime
+migration 的公共 CLI 黑盒验收。本文中的四 Companion、十七个 CLI 和 31×15/28×8 base 数量
 是当前 generated delivery 的事实。
 
 ## 14. 技术层落地顺序
@@ -458,7 +466,7 @@ completion 与 Material Passport resume 的公共 CLI 黑盒验收。本文中�
 | 2 | `add-subflow-instance-control-plane` | subflow/round instances、parallel groups、通用 selector、`start`、自动 work submit policy |
 | 3 | `add-gate-transition-control-plane` | `submit gate:`、`advance transition:`、Gate confirmation/challenge/override、transition receipt |
 | 4 | `add-arsu-workflow-profiles` | deep-research、academic-paper、reviewer、pipeline 的完整 mode/profile graphs |
-| 5 | `consolidate-researchspec-agent-surface` | Navigate、四 Companion、旧投影清理与 ARSU/Companion delivery；固定 Zotero Adapter 在现行 31×10/28×8 surface 中补充 |
+| 5 | `consolidate-researchspec-agent-surface` | Navigate、四 Companion、旧投影清理与 ARSU/Companion delivery；七个固定 Zotero Adapter Skills 形成现行 31×15/28×8 surface |
 
 其中 routing catalog、subflow instance control plane、Gate/transition control plane 与完整
 workflow profiles、surface consolidation 与端到端 acceptance 已实现并通过；v0.1 不再有待实现技术层。
@@ -474,13 +482,14 @@ Umbrella change 只有在以下用户旅程全部通过时才能归档：Bootstr
 - CLI 状态权威与 ARSU 语义生产边界；
 - work 自动提交、Gate 逐次确认、Decision 使用范围；
 - workflow-declared parallelism 与 unique-transition 自动推进；
-- 固定 4 ARSU + 4 Companion、可选 domain plugin Skills、16 CLI；
+- 固定 4 ARSU + 4 Companion + 7 Zotero Adapter、可选 domain plugin Skills、17 CLI；
 - selector-based 运行协议。
 
 v0.1 已实现并仍可通过后续 change 演进：
 
-- catalog、subflow、Gate、transition 与 receipt DTO 以 main specs 和 Schema 0.2 实现为准；
-- 旧 0.1/0.2 workspace 继续兼容读取，未来迁移工具仍属于独立 change；
+- catalog、Case/strict compatibility、subflow、Gate、transition 与 receipt DTO 以实现和
+  当前已验证的 OpenSpec change 为准；
+- Schema `0.2` workspace 继续 strict 兼容读取；只有显式、plan-bound migration 才切换 authority；
 - 成本与并发策略由 routing/workflow profile 声明，不进入通用 core 硬编码；
 - artifact type、validator 与 Gate IDs 由 converter-owned catalogs/profile 投影拥有；
 - terminal 与当前生命周期状态以 run-state schema 和控制面实现为准。

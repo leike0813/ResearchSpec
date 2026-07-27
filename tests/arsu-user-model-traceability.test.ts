@@ -14,6 +14,15 @@ interface TraceabilityManifest {
       scenarios: Array<{ scenario: string; technical_changes: string[]; journey_ids: string[]; test_ids: string[] }>;
     }>;
   }>;
+  active_delta_capabilities: Array<{
+    capability_id: string;
+    change_id: string;
+    spec_path: string;
+    requirements: Array<{
+      requirement: string;
+      scenarios: Array<{ scenario: string; test_files: string[] }>;
+    }>;
+  }>;
 }
 
 void test("traceability covers every canonical user-model requirement and scenario", async () => {
@@ -53,6 +62,21 @@ void test("traceability covers every canonical user-model requirement and scenar
       for (const testId of scenario.test_ids) assert.ok(testIds.has(testId), `Unknown test ref: ${testId}`);
     }
   }
+
+  for (const capability of manifest.active_delta_capabilities) {
+    assert.ok(manifest.technical_changes.includes(capability.change_id));
+    const text = await readFile(capability.spec_path, "utf8");
+    const expected = parseSpec(text);
+    const actual = new Map(capability.requirements.map((item) => [item.requirement, new Set(item.scenarios.map((scenario) => scenario.scenario))]));
+    assert.deepEqual([...actual.keys()].sort(), [...expected.keys()].sort(), `${capability.capability_id} active requirement coverage`);
+    for (const [requirement, scenarios] of expected) {
+      assert.deepEqual([...(actual.get(requirement) ?? [])].sort(), [...scenarios].sort(), `${capability.capability_id}/${requirement} active scenario coverage`);
+    }
+    for (const requirement of capability.requirements) for (const scenario of requirement.scenarios) {
+      assert.ok(scenario.test_files.length > 0, `${capability.capability_id}/${scenario.scenario} needs a test file`);
+      for (const testFile of scenario.test_files) assert.equal(await fileExists(testFile), true, `Missing traceability test file: ${testFile}`);
+    }
+  }
 });
 
 function parseSpec(text: string): Map<string, Set<string>> {
@@ -70,6 +94,10 @@ function parseSpec(text: string): Map<string, Set<string>> {
 
 async function exists(target: string): Promise<boolean> {
   try { await readdir(target); return true; } catch { return false; }
+}
+
+async function fileExists(target: string): Promise<boolean> {
+  try { await readFile(target); return true; } catch { return false; }
 }
 
 function escapeRegex(value: string): string { return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }

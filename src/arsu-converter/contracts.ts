@@ -1,13 +1,14 @@
 import { GENERATED_OUTPUT_PATH, VENDOR_SOURCE_PATH } from "./config.js";
+import { renderLiteratureSourcePolicyProjection } from "../literature-adapters/provider-policy.js";
 import type {
   ContractIntegrationManifest,
   ContractInjectionResult,
   ContractProfile,
 } from "./types.js";
 
-export const RESEARCHSPEC_PREFLIGHT_PROFILE_ID = "researchspec-preflight-v7";
-export const RESEARCHSPEC_PREFLIGHT_MARKER = "<!-- researchspec-contract-preflight:v7 -->";
-export const RESEARCHSPEC_LITERATURE_ADAPTER_MARKER = "<!-- researchspec-literature-adapter:zotero-library:v1 -->";
+export const RESEARCHSPEC_PREFLIGHT_PROFILE_ID = "researchspec-preflight-v8";
+export const RESEARCHSPEC_PREFLIGHT_MARKER = "<!-- researchspec-contract-preflight:v8 -->";
+export const RESEARCHSPEC_LITERATURE_ADAPTER_MARKER = "<!-- researchspec-literature-adapter:zotero-library:v2 -->";
 
 export const RESEARCHSPEC_MUTATION_OWNERSHIP = {
   stable_specs: "human_or_accepted_contract_patch",
@@ -110,7 +111,9 @@ function buildProfile(skillGroup: string): ContractProfile {
       "Load only stage/mode-relevant contracts into agent context.",
       "Treat ARS Material Passport as imported external evidence, not runtime truth.",
       "Per-stage and per-mode graphs are supplied by the workflow profile layer.",
-      "Use the fixed Zotero literature adapter only as bounded working-material input to the active producer.",
+      skillGroup === "deep-research"
+        ? "Use the fixed Zotero task Skills through the provider-neutral handoff; Deep Research retains screening, coverage, and artifact ownership."
+        : "Use fixed literature Adapter results only as bounded working material owned by the active ARSU producer.",
     ],
     full_matrix_injection: false,
   };
@@ -160,26 +163,7 @@ continue the same core work without the plugin. A declined suggestion is not a
 Decision and should not be repeated in the current conversation unless the
 research need materially changes.
 
-For literature work, inspect the fixed \`zotero-library\` entry in
-\`researchspec status --json\`; status is static and its
-\`connection_state: unchecked\` does not prove that Zotero or Host Bridge is
-reachable. When available, use the installed \`zotero-library-agent\` and
-\`zotero-bridge-cli\` Skills for a bounded, read-only query of the user's library
-before supplementing with external discovery when needed. An empty Zotero result
-is not evidence that relevant literature does not exist. Treat every adapter
-result only as working material for this same ARSU producer to review and
-integrate into its candidate.
-
-If the adapter is unavailable during ordinary literature work, disclose the
-limitation and continue through this producer's existing external-search or
-user-supplied-input path. If the request explicitly depends on the current
-Zotero selection, a private collection, private metadata, or private
-attachments, pause and request adapter configuration or alternative user input;
-never substitute public search as though it represented private library state.
-Adapter output must not directly modify ResearchSpec specs, state, artifact
-registry, Gates, Decisions, transitions, or receipts. Zotero mutation, workflow
-submit/apply, upload, deletion, and maintenance require separate user
-authorization and remain subject to Host Bridge approval.
+${literatureProviderBlock(skillGroup)}
 
 The packaged \`academic-pipeline/scripts/adapters/zotero.py\` path is separate: it
 reads only a user-supplied Better BibTeX JSON export, requires a user-provided
@@ -221,4 +205,17 @@ decisions, gates, and resume state live in ResearchSpec registries and ledgers.
 This generated contract integration block uses profile \`${RESEARCHSPEC_PREFLIGHT_PROFILE_ID}\` for
 \`${skillGroup}\`. Per-stage and per-mode graphs remain workflow-profile data.
 `;
+}
+
+function literatureProviderBlock(skillGroup: string): string {
+  if (skillGroup === "deep-research") {
+    return renderLiteratureSourcePolicyProjection();
+  }
+  return `For literature work, the active ARSU producer may use an installed
+Zotero task Skill as a bounded provider after a just-in-time readiness check.
+Adapter results remain working evidence and cannot directly modify ResearchSpec
+specs, state, artifact registry, Gates, Decisions, transitions, or receipts.
+Private or library-bound work pauses when readiness fails. Acquisition is
+candidate-only without a current bounded authorization, and Curation always
+requires a separate request.`;
 }

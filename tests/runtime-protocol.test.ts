@@ -30,7 +30,7 @@ interface Descriptor {
 void test("bounded runtime reads page long multi-round history and keep action surfaces consistent", async () => {
   const root = await tempProject();
   try {
-    assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
+    assert.equal(runCli(["init", root, "--tools", "none", "--profile", "strict"]).status, 0);
     const workspace = path.join(root, "researchspec");
     await writeLongRunState(workspace, 32);
     for (let index = 0; index < 45; index += 1) {

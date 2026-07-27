@@ -3,12 +3,14 @@ import { mkdtemp, mkdir, readFile, readdir, rm, stat, writeFile } from "node:fs/
 import { tmpdir } from "node:os";
 import path from "node:path";
 import process from "node:process";
+import { parse as parseYaml } from "yaml";
 
 const packageRoot = process.cwd();
 const temporaryRoot = await mkdtemp(path.join(tmpdir(), "researchspec-release-"));
 const packageDirectory = path.join(temporaryRoot, "package");
 const installDirectory = path.join(temporaryRoot, "install");
 const projectDirectory = path.join(temporaryRoot, "project");
+const strictProjectDirectory = path.join(temporaryRoot, "strict-project");
 const codexHome = path.join(temporaryRoot, "codex-home");
 const expectedSkills = [
   "academic-paper",
@@ -65,6 +67,7 @@ try {
     mkdir(packageDirectory, { recursive: true }),
     mkdir(installDirectory, { recursive: true }),
     mkdir(projectDirectory, { recursive: true }),
+    mkdir(strictProjectDirectory, { recursive: true }),
     mkdir(codexHome, { recursive: true }),
   ]);
 
@@ -103,6 +106,10 @@ try {
 
   const environment = { ...process.env, CODEX_HOME: codexHome };
   run(bin, ["init", projectDirectory, "--tools", "codex", "--json"], installDirectory, environment);
+  const defaultWorkflow = parseYaml(await readFile(path.join(projectDirectory, "researchspec", "specs", "workflow.yaml"), "utf8"));
+  const defaultState = parseYaml(await readFile(path.join(projectDirectory, "researchspec", "runs", "current", "state.yaml"), "utf8"));
+  assert(defaultWorkflow?.mode === "adaptive", "Unqualified installed init did not select the adaptive profile.");
+  assert(defaultState?.profile_mode === "adaptive", "Unqualified installed init did not create adaptive CaseState authority.");
   const installedSkills = (await directoryNames(path.join(projectDirectory, ".codex", "skills"))).sort();
   assert(equal(installedSkills, expectedSkills), `Installed Skill surface mismatch: ${installedSkills.join(", ")}`);
   for (const skill of expectedSkills) {
@@ -124,6 +131,37 @@ try {
   const prompts = (await readdir(path.join(codexHome, "prompts"))).filter((file) => file.startsWith("researchspec-") && file.endsWith(".md")).sort();
   assert(prompts.length === 8, `Installed Codex prompt count mismatch: ${String(prompts.length)}`);
   run(bin, ["check", "all", "--strict", "--json"], projectDirectory, environment);
+
+  run(bin, ["init", strictProjectDirectory, "--tools", "none", "--profile", "strict", "--json"], installDirectory, environment);
+  const strictWorkspace = path.join(strictProjectDirectory, "researchspec");
+  const strictAuthorityPaths = ["config.yaml", "specs/workflow.yaml", "runs/current/state.yaml"];
+  const strictAuthority = new Map(await Promise.all(strictAuthorityPaths.map(async (relativePath) => [
+    relativePath,
+    await readFile(path.join(strictWorkspace, relativePath), "utf8"),
+  ])));
+  const strictWorkflow = parseYaml(strictAuthority.get("specs/workflow.yaml"));
+  const strictState = parseYaml(strictAuthority.get("runs/current/state.yaml"));
+  assert(strictWorkflow?.schema_version === "0.2", "Explicit strict init did not create the Schema 0.2 workflow.");
+  assert(strictState?.schema_version === "0.2", "Explicit strict init did not create Schema 0.2 state.");
+  run(bin, ["update", strictWorkspace, "--tools", "none", "--json"], installDirectory, environment);
+  assert(await readFile(path.join(strictWorkspace, "runs/current/state.yaml"), "utf8") === strictAuthority.get("runs/current/state.yaml"), "Ordinary update changed strict runtime authority.");
+
+  const migrationPreview = JSON.parse(run(bin, ["update", strictWorkspace, "--migrate-runtime", "--dry-run", "--json"], installDirectory, environment).stdout);
+  const migrationPlan = migrationPreview.data?.plan;
+  assert(migrationPlan?.executable === true && /^[a-f0-9]{64}$/.test(migrationPlan.plan_sha256), "Installed migration preview is unavailable or non-deterministic.");
+  const migration = JSON.parse(run(bin, ["update", strictWorkspace, "--migrate-runtime", "--yes", "--expected-plan-sha256", migrationPlan.plan_sha256, "--json"], installDirectory, environment).stdout);
+  const migrationId = migration.data?.identity?.migration_id;
+  assert(typeof migrationId === "string", "Installed migration did not return a migration identity.");
+  const migratedState = parseYaml(await readFile(path.join(strictWorkspace, "runs/current/state.yaml"), "utf8"));
+  assert(migratedState?.profile_mode === "adaptive", "Installed migration did not commit adaptive state.");
+
+  const rollbackPreview = JSON.parse(run(bin, ["update", strictWorkspace, "--migrate-runtime", "--rollback", migrationId, "--dry-run", "--json"], installDirectory, environment).stdout);
+  const rollbackPlan = rollbackPreview.data?.plan;
+  assert(rollbackPlan?.executable === true && /^[a-f0-9]{64}$/.test(rollbackPlan.plan_sha256), "Installed migration rollback preview is unavailable.");
+  run(bin, ["update", strictWorkspace, "--migrate-runtime", "--rollback", migrationId, "--yes", "--expected-plan-sha256", rollbackPlan.plan_sha256, "--json"], installDirectory, environment);
+  for (const [relativePath, original] of strictAuthority) {
+    assert(await readFile(path.join(strictWorkspace, relativePath), "utf8") === original, `Installed rollback did not restore ${relativePath}.`);
+  }
 
   process.stdout.write(`Release package verified: ${metadata.filename} (${String(metadata.files.length)} files, ${String(metadata.unpackedSize)} bytes unpacked)\n`);
 } finally {

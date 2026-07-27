@@ -8,8 +8,13 @@ Unchecked items are factual missing evidence. Do not convert them to completed s
 
 - [x] Full local release command set passed on the release candidate worktree.
 - [x] `release:verify` inspected and installed the real npm tarball.
-- [x] OpenSpec change and all main specs passed strict validation.
+- [ ] OpenSpec change passed strict validation; full main-spec validation still reports short
+  Purpose sections in the two Education Agent Skills specs pending archive-time spec sync.
 - [x] Final tarball and worktree scope audit found no forbidden or unrelated files.
+- [x] Adaptive-default convergence passed: explicit strict compatibility, runtime migration/rollback,
+  Doctor recovery, canonical patch lifecycle, Adapter-native provider journeys, all converter
+  idempotence checks, and installed-tarball verification. Evidence: local release command set,
+  246/246 tests, and `release:verify` passed on the current worktree on 2026-07-27.
 
 ## Hosted CI
 

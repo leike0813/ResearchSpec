@@ -11,10 +11,12 @@ schema、validator、CLI 行为和 ARSU wrapper preflight 协议。
 
 - **Target v0.1**：单 active run、动态 subflow/round、parallel/join、Gate confirmation、
   transition receipt 与 selector instructions 所需的领域信息。
-- **Current implementation（2026-07-11）**：唯一 Schema 0.2 subflow-instance 模型、完整
-  `arsu-v0-1` profile、parent/child/round graph、parallel join、Gate/transition receipts、
-  typed routing catalog、text/binary scoped Submit，以及四 Companion、两个固定 Zotero Adapter Skills 和 31×10 delivery。
-- **Acceptance status**：Schema 0.2 与旧 workspace 兼容路径已通过 v0.1 journeys；未来显式迁移工具不属于 v0.1。
+- **Current implementation（2026-07-27）**：CaseProfile/CaseState Schema `1` adaptive
+  runtime、Schema `0.2` strict compatibility projector、显式 migration/rollback、完整
+  `arsu-v0-1` graph、Gate/transition receipts、typed routing catalog，以及四 Companion、
+  七个固定 Zotero Adapter Skills 和 31×15 delivery。
+- **Acceptance status**：adaptive default、Schema `0.2` 兼容、显式迁移、Doctor recovery 与
+  bounded action protocol 均由公共 CLI journeys 和 release verifier 验证。
 
 本文不是最终 JSON Schema，不冻结 TypeScript 类型、CLI wire shape 或
 converter 注入实现。后续实现可以调整字段命名细节，但不应改变本文确立
@@ -1519,7 +1521,7 @@ process summary；不得伪装成 gate verdict。
 3. Gate/transition Schema：proposed verdict、evidence、`confirmed_by`、override linkage、
    transition receipt 和 state preconditions。
 4. ARSU profile Schema：四类 Skill 的完整 mode graph 和 round templates。
-5. Agent surface projection：四 Companion registry、固定 Zotero Adapter catalog 与 31×10/28×8 derived delivery 已实现，
+5. Agent surface projection：四 Companion registry、七 Skill Zotero Adapter catalog 与 31×15/28×8 derived delivery 已实现，
    不成为 workspace contract Schema 的新状态源。
 
 ## 12. 非目标

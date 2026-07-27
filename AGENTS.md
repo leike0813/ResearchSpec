@@ -100,9 +100,12 @@ seven runner files and seven output schemas are opaque runtime metadata:
 conversion, delivery, status, checking and packaging preserve their bytes but
 never execute or interpret them.
 
-The target public CLI has sixteen top-level commands: `init`, `update`, `status`,
+The target public CLI has seventeen top-level commands: `init`, `update`, `status`,
 `instructions`, `start`, `submit`, `advance`, `check`, `list`, `show`, `handoff`,
-`pack`, `propose`, `decide`, `archive`, and `plugin`. The runtime protocol is
+`pack`, `propose`, `decide`, `archive`, `doctor`, and `plugin`. New workspaces
+default to the adaptive runtime; `init --profile strict` remains explicit and
+existing Schema `0.2` workspaces remain strict until a plan-bound
+`update --migrate-runtime` transaction is executed. The runtime protocol is
 `status -> instructions <selector> -> start/submit/advance -> status`.
 Command wrappers are adapters, not separate product capabilities. Do not add a
 new public command or Companion merely to expose a low-level transaction.

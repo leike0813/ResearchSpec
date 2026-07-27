@@ -24,7 +24,7 @@ void test("public Doctor diagnoses damaged state and performs one approved hash-
   const workspace = path.join(root, "researchspec");
   const statePath = path.join(workspace, "runs/current/state.yaml");
   try {
-    assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
+    assert.equal(runCli(["init", root, "--tools", "none", "--profile", "strict"]).status, 0);
     const healthy = parseEnvelope<Report>(runCli(["doctor", "--json"], root));
     assert.equal(healthy.ok, true);
     assert.equal(healthy.data?.healthy, true);
@@ -102,7 +102,7 @@ void test("public Doctor prefers original retry and reports incompatible orphan 
   const workspace = path.join(root, "researchspec");
   const statePath = path.join(workspace, "runs/current/state.yaml");
   try {
-    assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
+    assert.equal(runCli(["init", root, "--tools", "none", "--profile", "strict"]).status, 0);
     const priorState = await readFile(statePath);
     await startViaCli(root);
     await writeFile(statePath, priorState);

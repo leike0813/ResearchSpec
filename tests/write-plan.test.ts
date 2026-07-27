@@ -48,6 +48,25 @@ void test("write plan rejects a changed read dependency before staging writes", 
   await cleanup(root);
 });
 
+void test("write plan restores committed files when postcondition validation fails", async () => {
+  const root = await tempProject();
+  const existing = path.join(root, "existing.txt");
+  const created = path.join(root, "created.txt");
+  await writeFile(existing, "original", "utf8");
+  const refresh = await planFile({ path: existing, content: "changed", scope: "project", ownership: "generated", recordedHash: hash("original") });
+  const create = await planFile({ path: created, content: "created", scope: "project", ownership: "generated" });
+  await assert.rejects(
+    () => executeWritePlan(
+      { operations: [refresh, create] },
+      { validateCommittedState: () => Promise.reject(new Error("postcondition failed")) },
+    ),
+    /postcondition failed/,
+  );
+  assert.equal(await readFile(existing, "utf8"), "original");
+  await assert.rejects(() => readFile(created), (error: unknown) => (error as NodeJS.ErrnoException).code === "ENOENT");
+  await cleanup(root);
+});
+
 void test("write plan creates executable files with the requested mode", { skip: process.platform === "win32" }, async () => {
   const root = await tempProject();
   const target = path.join(root, "tool");

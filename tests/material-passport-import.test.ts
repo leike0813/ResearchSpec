@@ -147,7 +147,7 @@ void test("the nine Material Passport runtime anchors resolve to implemented imp
 async function createWorkspace(): Promise<string> {
   const root = await mkdtemp(path.join(tmpdir(), "researchspec-passport-"));
   const workspace = path.join(root, "researchspec");
-  for (const entry of getWorkspaceEntries(workspace)) {
+  for (const entry of getWorkspaceEntries(workspace, "strict")) {
     if (entry.kind === "dir") await mkdir(entry.path, { recursive: true });
     else { await mkdir(path.dirname(entry.path), { recursive: true }); await writeFile(entry.path, entry.content, "utf8"); }
   }

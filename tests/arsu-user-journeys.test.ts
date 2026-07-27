@@ -5,6 +5,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { test } from "node:test";
 
+import { loadWorkspaceSnapshot } from "../src/core/workspace/snapshot.js";
 import { cleanup, parseEnvelope, runCli, tempProject } from "./helpers/cli.js";
 import {
   advanceTransition,
@@ -27,10 +28,17 @@ import {
 void test("[journey.bootstrap] init installs the fifteen-Skill surface without starting academic work", async () => {
   const root = await tempProject();
   try {
-    const context = initialize(root);
-    const current = status(context);
-    assert.equal(current.run.status, "not_started");
-    assert.equal(current.workflow_control.subflows.some((item) => item.kind === "instance"), false);
+    const initialized = runCli(["init", root, "--tools", "forgecode", "--json"]);
+    assert.equal(initialized.status, 0, initialized.stderr || initialized.stdout);
+    const workspace = path.join(root, "researchspec");
+    const snapshot = await loadWorkspaceSnapshot(workspace);
+    assert.equal(snapshot.runtimeMode, "adaptive");
+    assert.equal(snapshot.caseProfile?.mode, "adaptive");
+    assert.equal(snapshot.caseState?.profile_mode, "adaptive");
+    assert.deepEqual(snapshot.caseState?.obligations, []);
+    const current = parseEnvelope<{ lifecycle: string; active_instance_ids: string[] }>(runCli(["status", "--json"], root)).data;
+    assert.equal(current?.lifecycle, "open");
+    assert.deepEqual(current?.active_instance_ids, []);
     for (const skill of ["deep-research", "academic-paper", "academic-paper-reviewer", "academic-pipeline", "researchspec-navigate", "researchspec-propose", "researchspec-decide", "researchspec-verify", "zotero-library-agent", "zotero-library-query", "zotero-literature-acquisition", "zotero-literature-analysis", "zotero-research-synthesis", "zotero-library-curation", "zotero-bridge-cli"]) {
       assert.equal(existsSync(path.join(root, ".forge/skills", skill, "SKILL.md")), true, skill);
     }

@@ -30,7 +30,7 @@ void test("init dry-run and execution share a protected workspace plan", async (
   assert.equal(existsSync(path.join(root, "researchspec")), false);
 
   assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
-  assert.match(await readFile(path.join(root, "researchspec/config.yaml"), "utf8"), /^profile: arsu-v0-1$/m);
+  assert.match(await readFile(path.join(root, "researchspec/config.yaml"), "utf8"), /^profile: adaptive$/m);
   assert.match(await readFile(path.join(root, "researchspec/config.yaml"), "utf8"), /plugins:\n\s+selected: \[\]/);
   assert.equal(runCli(["init", root, "--tools", "none", "--profile", "unknown", "--json"]).status, 2);
   for (const relative of ["config.yaml", "tool-installation-manifest.json", "specs/project.md", "runs/current/state.yaml"]) assert.equal(existsSync(path.join(root, "researchspec", relative)), true);
@@ -73,7 +73,7 @@ void test("status and check use the versioned JSON envelope", async () => {
   assert.equal(status.data?.schema_version, "1");
   assert.equal(status.data?.run_id, "current");
   assert.equal(status.data?.lifecycle, "open");
-  assert.equal(status.data?.profile.mode, "strict");
+  assert.equal(status.data?.profile.mode, "adaptive");
   assert.equal(status.data?.pending.gate_count, 0);
   assert.equal(status.data?.pending.decision_count, 0);
   assert.ok(status.data?.next_selectors.includes("show:workflow:current"));
@@ -180,7 +180,7 @@ void test("non-interactive plugin install binds the preview and exposes immediat
 
 void test("universal init exposes dynamic status and resolved instructions", async () => {
   const root = await tempProject();
-  assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
+  assert.equal(runCli(["init", root, "--tools", "none", "--profile", "strict"]).status, 0);
   const workspace = path.join(root, "researchspec");
   assert.equal(existsSync(path.join(workspace, "runs/current/subflows")), false);
 
@@ -193,7 +193,7 @@ void test("universal init exposes dynamic status and resolved instructions", asy
   );
   assert.equal(workflow.data?.workflow_control.configured, true);
   assert.equal(workflow.data?.workflow_control.valid, true);
-  assert.equal(workflow.data?.workflow_control.profile, "arsu-v0-1");
+  assert.equal(workflow.data?.workflow_control.profile, "strict");
   assert.equal(workflow.data?.workflow_control.state, "not_started");
   assert.deepEqual(workflow.data?.workflow_control.ready_items, []);
   assert.ok(workflow.data?.workflow_control.startable_subflows.includes("subflow:tpl-deep-research-full"));
@@ -270,7 +270,7 @@ void test("universal init exposes dynamic status and resolved instructions", asy
 
 void test("submit previews an exact candidate hash then atomically registers its receipt", async () => {
   const root = await tempProject();
-  assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
+  assert.equal(runCli(["init", root, "--tools", "none", "--profile", "strict"]).status, 0);
   const workspace = path.join(root, "researchspec");
   const instanceId = await startSliceViaCli(root);
   const selector = `work:${instanceId}/rq-brief`;

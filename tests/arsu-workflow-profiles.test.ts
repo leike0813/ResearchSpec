@@ -39,27 +39,23 @@ void test("ARSU strict and adaptive projections cover the generated routing cata
   assert.equal(SoftPlaybookSchema.safeParse(ARSU_ADAPTIVE_PLAYBOOK).success, true);
 });
 
-void test("workspace templates preserve legacy authority and emit adaptive authority only when selected", () => {
+void test("workspace templates default to adaptive and preserve explicit strict authority", () => {
   const templates = getWorkspaceTemplates();
-  const workflow = WorkflowDefinitionSchema.parse(parse(templates.find((item) => item.relativePath === "specs/workflow.yaml")?.content ?? "") as unknown);
-  const state = RunStateSchema.parse(parse(templates.find((item) => item.relativePath === "runs/current/state.yaml")?.content ?? "") as unknown);
-  assert.equal(WorkflowDefinitionSchema.safeParse(workflow).success, true);
-  assert.equal(RunStateSchema.safeParse(state).success, true);
-  assert.equal("active_stage_id" in state, false);
-  assert.deepEqual(state.material_passport_imports, []);
-
-  const adaptiveTemplates = getWorkspaceTemplates("adaptive");
-  const adaptiveProfile = CaseProfileSchema.parse(parse(adaptiveTemplates.find((item) => item.relativePath === "specs/workflow.yaml")?.content ?? "") as unknown);
-  const adaptiveState = CaseStateSchema.parse(parse(adaptiveTemplates.find((item) => item.relativePath === "runs/current/state.yaml")?.content ?? "") as unknown);
-  const playbook = SoftPlaybookSchema.parse(parse(adaptiveTemplates.find((item) => item.relativePath === "playbooks/arsu-adaptive.yaml")?.content ?? "") as unknown);
+  const adaptiveProfile = CaseProfileSchema.parse(parse(templates.find((item) => item.relativePath === "specs/workflow.yaml")?.content ?? "") as unknown);
+  const adaptiveState = CaseStateSchema.parse(parse(templates.find((item) => item.relativePath === "runs/current/state.yaml")?.content ?? "") as unknown);
+  const playbook = SoftPlaybookSchema.parse(parse(templates.find((item) => item.relativePath === "playbooks/arsu-adaptive.yaml")?.content ?? "") as unknown);
   assert.equal(adaptiveProfile.mode, "adaptive");
   assert.equal(adaptiveState.profile_mode, "adaptive");
   assert.deepEqual(adaptiveState.obligations, []);
   assert.ok(playbook.recommended_steps.length > 27);
   assert.equal("recommended_steps" in adaptiveState, false);
-  assert.equal(adaptiveTemplates.find((item) => item.relativePath === "playbooks/arsu-adaptive.yaml")?.required, false);
+  assert.equal(templates.find((item) => item.relativePath === "playbooks/arsu-adaptive.yaml")?.required, false);
 
   const strictTemplates = getWorkspaceTemplates("strict");
-  assert.equal(WorkflowDefinitionSchema.safeParse(parse(strictTemplates.find((item) => item.relativePath === "specs/workflow.yaml")?.content ?? "") as unknown).success, true);
-  assert.equal(RunStateSchema.safeParse(parse(strictTemplates.find((item) => item.relativePath === "runs/current/state.yaml")?.content ?? "") as unknown).success, true);
+  const strictWorkflow = WorkflowDefinitionSchema.parse(parse(strictTemplates.find((item) => item.relativePath === "specs/workflow.yaml")?.content ?? "") as unknown);
+  const strictState = RunStateSchema.parse(parse(strictTemplates.find((item) => item.relativePath === "runs/current/state.yaml")?.content ?? "") as unknown);
+  assert.equal(WorkflowDefinitionSchema.safeParse(strictWorkflow).success, true);
+  assert.equal(RunStateSchema.safeParse(strictState).success, true);
+  assert.equal("active_stage_id" in strictState, false);
+  assert.deepEqual(strictState.material_passport_imports, []);
 });

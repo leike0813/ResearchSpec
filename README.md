@@ -100,6 +100,10 @@ researchspec init . --tools codex
 researchspec check all --strict
 ```
 
+新 workspace 默认使用 adaptive runtime。需要复现 Schema `0.2` 固定工作图时可显式执行
+`researchspec init . --tools codex --profile strict`；已有 strict workspace 不会被
+`init`、普通 `update`、`status` 或 `check` 隐式迁移。
+
 随后在相同项目中启动 Codex，以自然语言描述研究目标：
 
 > I want to study how generative AI affects writing instruction in higher education. Show candidate routes, prerequisites, artifacts, formal Gates, risks, and cost. Do not start a route until I confirm it.
@@ -129,6 +133,10 @@ Selector 类型：
 - `transition:<id>` — 推进至下一状态
 
 CLI 是唯一的工作流状态权威。Agent 生产语义候选工件；不得直接编辑状态、注册表、账本或收据。
+`doctor` 对损坏的 runtime 做只读诊断，并只执行已预览、hash-bound 的确定性修复。Schema
+`0.2` workspace 如需转为 adaptive，先运行
+`researchspec update --migrate-runtime --dry-run`，再用返回的 `plan_sha256` 执行；迁移会保留
+原始字节、写 receipt，并支持 `update --migrate-runtime --rollback <migration-id>`。
 
 ## Codex 安装范围
 
@@ -143,18 +151,19 @@ researchspec init . --tools codex
 
 从相同环境运行 Codex。维护者可使用仓库专属 [Codex 内部试用适配器](playbooks/dogfooding/adapters/codex.md)和标准 playbook（均不包含在 npm 包中）。
 
-## 16 个 CLI 命令
+## 17 个 CLI 命令
 
 | 命令 | 说明 |
 |---|---|
 | `init [path]` | 初始化或安全扩展 ResearchSpec 工作空间 |
-| `update [path]` | 刷新选定已生成 Agent 文件 |
+| `update [path]` | 刷新 Agent 文件，或显式计划/执行/回滚 runtime 迁移 |
 | `status` | 显示当前运行与待处理项 |
 | `instructions <selector>` | 显示运行时 selector 动态指令 |
 | `start <subflow>` | 原子启动已确认子流程 |
 | `submit <runtime-item>` | 提交候选工件或 Gate 判定（哈希绑定） |
 | `advance <transition>` | 原子推进唯一已授权 transition |
 | `check [target]` | 检查合约/运行时/工件/工具/插件/适配器 |
+| `doctor` | 诊断 runtime 损坏并执行 plan-bound 确定性修复 |
 | `list [type]` | 列出变更/工件/gate/决策/工具 |
 | `show <item>` | 显示 spec 项或全局唯一项 |
 | `handoff` | 渲染当前交接视图 |

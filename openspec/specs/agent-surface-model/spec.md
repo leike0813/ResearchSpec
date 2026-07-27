@@ -5,41 +5,65 @@ Define the minimal user-visible ARSU, Companion, CLI, and adapter-delivery surfa
 ## Requirements
 
 ### Requirement: Minimal User-Visible Skill Surface
-ResearchSpec SHALL target exactly four ARSU Skills, four ResearchSpec Companion Skills, and two fixed Zotero Adapter Skills as the base agent capability surface, with optional domain plugin Skills kept as a distinct registry-driven extension.
+
+ResearchSpec SHALL target exactly four ARSU Skills, four ResearchSpec Companion
+Skills, and seven fixed Zotero Adapter Skills as the base Agent capability
+surface, with optional domain plugin Skills kept as a distinct registry-driven
+extension.
 
 #### Scenario: ARSU semantic Skills are exposed
-- **WHEN** ResearchSpec projects its target Skill set to a supported agent tool
-- **THEN** it SHALL expose `deep-research`, `academic-paper`, `academic-paper-reviewer`, and `academic-pipeline`
+
+- **WHEN** ResearchSpec projects its target Skill set to a supported Agent tool
+- **THEN** it SHALL expose `deep-research`, `academic-paper`,
+  `academic-paper-reviewer`, and `academic-pipeline`
 
 #### Scenario: Companion intents are exposed
+
 - **WHEN** ResearchSpec projects its target Companion set
-- **THEN** it SHALL expose `researchspec-navigate`, `researchspec-propose`, `researchspec-decide`, and `researchspec-verify`
+- **THEN** it SHALL expose `researchspec-navigate`,
+  `researchspec-propose`, `researchspec-decide`, and `researchspec-verify`
 
 #### Scenario: Literature Adapter Skills are exposed
+
 - **WHEN** ResearchSpec projects its fixed Skill set to a supported Agent tool
-- **THEN** it SHALL expose `zotero-library-agent` and `zotero-bridge-cli`
-- **AND** those Skills SHALL remain distinct from ARSU, Companion, command-wrapper, and domain-plugin membership
+- **THEN** it SHALL expose `zotero-library-agent`, `zotero-library-query`,
+  `zotero-literature-acquisition`, `zotero-literature-analysis`,
+  `zotero-research-synthesis`, `zotero-library-curation`, and
+  `zotero-bridge-cli`
+- **AND** role and visibility SHALL distinguish router, task and mechanism
+  discovery
 
 #### Scenario: Optional domain Skills do not redefine the base surface
+
 - **WHEN** one or more domain plugins are selected
 - **THEN** their Skills SHALL be added from the plugin registry
-- **AND** the fixed ARSU, Companion, and Literature Adapter membership SHALL remain unchanged
+- **AND** fixed ARSU, Companion and Literature Adapter membership SHALL remain
+  unchanged
 
 #### Scenario: Transaction helpers do not become Companions
-- **WHEN** an Agent needs checking, candidate submit, context packaging, or archive primitives
+
+- **WHEN** an Agent needs checking, submission, recovery, context packaging or
+  archive primitives
 - **THEN** it SHALL use the CLI directly or through Navigate orchestration
-- **AND** the system SHALL NOT require separate Check, Submit, Context, Next, Explore, or Archive Companion products
+- **AND** the system SHALL NOT require additional Companion products
 
 ### Requirement: Minimal CLI Surface
-ResearchSpec SHALL target sixteen top-level CLI commands with plugin catalog lifecycle separated from workflow query and governance actions.
+
+ResearchSpec SHALL target seventeen top-level CLI commands with recovery,
+plugin lifecycle, workflow query and governance actions kept explicit.
 
 #### Scenario: Target command set is projected
+
 - **WHEN** a user or Agent inspects the target CLI surface
-- **THEN** it SHALL consist of `init`, `update`, `status`, `instructions`, `start`, `submit`, `advance`, `check`, `list`, `show`, `handoff`, `pack`, `propose`, `decide`, `archive`, and `plugin`
+- **THEN** it SHALL consist of `init`, `update`, `status`, `instructions`,
+  `start`, `submit`, `advance`, `check`, `doctor`, `list`, `show`, `handoff`,
+  `pack`, `propose`, `decide`, `archive`, and `plugin`
 
 #### Scenario: Selectors distinguish runtime entities
-- **WHEN** `instructions`, `start`, `submit`, or `advance` acts on a runtime entity
-- **THEN** the command SHALL use a canonical selector namespace rather than adding entity-specific top-level commands
+
+- **WHEN** an existing command acts on a runtime entity
+- **THEN** it SHALL use a canonical selector namespace rather than adding
+  entity-specific top-level commands
 
 ### Requirement: Adapter Delivery Does Not Define Product Capabilities
 ResearchSpec SHALL treat command wrappers as thin tool adapters, derive the fixed ten-Skill surface from four ARSU, four Companion, and two Literature Adapter Skills, and derive optional Skill projections independently from the plugin registry.
@@ -61,3 +85,35 @@ Dependency-resolved domain Skills SHALL remain optional additions to the exact f
 - **WHEN** any combination of domains is installed
 - **THEN** all supported tools SHALL retain exactly the ten fixed base Skills and optional resolved domain Skills
 - **AND** command-capable tools SHALL retain exactly eight fixed wrappers
+
+### Requirement: Adapter Roles Control Projection Discovery
+
+Delivery SHALL preserve Adapter role, visibility, capability and hard
+dependency metadata without creating command wrappers for any Adapter Skill.
+
+#### Scenario: Command-capable tool is selected
+
+- **WHEN** one of the 28 command-capable tools is installed
+- **THEN** it SHALL receive fifteen fixed Skills and exactly eight ResearchSpec
+  wrappers
+- **AND** the CLI mechanism SHALL remain available as a Skill dependency rather
+  than a ninth wrapper
+
+#### Scenario: Skills-only tool is selected
+
+- **WHEN** ForgeCode, Kimi, or Mistral Vibe is selected
+- **THEN** it SHALL receive all fifteen fixed Skills
+- **AND** command absence SHALL remain a non-blocking diagnostic
+
+### Requirement: Adapter Runtime Metadata Is Delivered Statically
+
+Each projected Zotero Skill SHALL retain its admitted `runner.json` and
+`output.schema.json` when present, with ownership and hashes managed like other
+generated Skill files.
+
+#### Scenario: Projected runner has drifted
+
+- **WHEN** a projected runner differs from its recorded bytes
+- **THEN** update SHALL preserve the user-modified file under the common drift
+  policy
+- **AND** it SHALL report degraded projection without executing the file

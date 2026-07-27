@@ -2060,11 +2060,11 @@ Resolve the current graph from `researchspec/specs/workflow.yaml`.
 - Severity: `recommended`
 - Semantic role: `contract_io_boundary`
 - Replacement shape: `io_contract_block`
-- Replacement body SHA-256: `0d6d1df4ae37f5662e6e0e53c5ece94bfee04670163732adc52d0466c35ccf73`
+- Replacement body SHA-256: `580328ac134911acfe7498229821df8641da70b2268581ee753eb0c81ad3282c`
 - ResearchSpec targets: `researchspec/specs/project.md`, `researchspec/specs/sources.yaml`, `researchspec/runs/current/artifact-registry.json`
 - Generated output paths: `academic-paper/references/cross-skill/deep-research/agents/bibliography_agent.md`, `academic-paper-reviewer/references/cross-skill/deep-research/agents/bibliography_agent.md`, `academic-pipeline/references/cross-skill/deep-research/agents/bibliography_agent.md`, `deep-research/agents/bibliography_agent.md`
 - Before SHA-256: `0309480229b94876752945cbb3483dea6b34b403fa51b207640131ffc7c7087f`
-- After SHA-256: `e88d4cd811a7aa8bfb619460b291065f83e084f5844124f22ef1a58408becfa3`
+- After SHA-256: `6c277506da6c12505bbc7adadf2f676e9b666becfd7ae377d9d6b7ae668088b9`
 
 #### Before
 
@@ -2096,8 +2096,11 @@ artifacts.
 and source identities, inclusion state, and trust metadata from
 `researchspec/specs/sources.yaml`. Resolve the registered RQ brief, methodology
 blueprint, and any permitted existing bibliography artifacts through
-`researchspec/runs/current/artifact-registry.json`. Do not infer inputs from
-`phase*_` directories or consume downstream synthesis, draft, review, or
+`researchspec/runs/current/artifact-registry.json`. For Adapter-backed work,
+also read the confirmed source policy and each hash-bound
+`ProviderRetrievalHandoff` as working evidence. A handoff references its
+upstream result; it is not accepted bibliography evidence. Do not infer inputs
+from `phase*_` directories or consume downstream synthesis, draft, review, or
 revision artifacts.
 
 **Contract outputs:** emit only the annotated bibliography and search-strategy
@@ -2106,10 +2109,13 @@ agent, or continue into a downstream stage. Return any recommended downstream
 work to the caller.
 
 **Writes allowed:** write new bibliography/search artifacts and return them to
-the runtime registration helper. Do not modify `sources.yaml`, run state,
-registries, decisions, or gates directly. Prompt fences and local integrity
-scripts remain diagnostics; ResearchSpec contracts and runtime validation own
-the boundary.
+the runtime registration helper. Adapter queries and candidate-only acquisition
+may produce working handoffs and candidate artifacts. Import is allowed only
+for screened candidates covered by a current `ManagedLibraryAuthorization`;
+library Curation requires a separate explicit request. Do not modify
+`sources.yaml`, run state, registries, decisions, or gates directly. Prompt
+fences and local integrity scripts remain diagnostics; ResearchSpec contracts
+and runtime validation own the boundary.
 <!--/rs:IO-003-->
 ````
 
@@ -2121,11 +2127,11 @@ the boundary.
 - Severity: `required`
 - Semantic role: `source_contract_projection`
 - Replacement shape: `artifact_projection_block`
-- Replacement body SHA-256: `d9cb2238fb30b7cc60fd265c2e68cfb803765d2f954a92dc474a5037b4b0f51b`
+- Replacement body SHA-256: `a0768a3df6635641f2bca7f00715695566ac0a1af5839d5876cefaadbfafda3d`
 - ResearchSpec targets: `researchspec/specs/sources.yaml`, `researchspec/runs/current/artifact-registry.json`
 - Generated output paths: `academic-paper/references/cross-skill/deep-research/agents/bibliography_agent.md`, `academic-paper-reviewer/references/cross-skill/deep-research/agents/bibliography_agent.md`, `academic-pipeline/references/cross-skill/deep-research/agents/bibliography_agent.md`, `deep-research/agents/bibliography_agent.md`
 - Before SHA-256: `2dcd0a3b130b7117e4f207ff6e7bca2ecec04e1207e44f62087a806a3af4f9c6`
-- After SHA-256: `80c255d8361c9ecdfc7c81161c6d1f951509d6a50196614d2800be10fe053b76`
+- After SHA-256: `6bbfd341941e20d4c1c4c2e8174da0bd0f454bf97671bc82130f11e109f335af`
 
 #### Before
 
@@ -2140,12 +2146,34 @@ When the input Material Passport carries a non-empty `literature_corpus[]`, this
 When `researchspec/specs/sources.yaml` contains included literature sources,
 resolve their registered source and screening artifacts through
 `researchspec/runs/current/artifact-registry.json` and present them to the
-Bibliography Agent as a read-only `literature_corpus[]` working projection. The
-agent then runs the existing **corpus-first, search-fills-gap** flow with all
-five steps, four Iron Rules, and the PRE-SCREENED reproducibility block intact.
-External search results and proposed additions remain output artifacts until an
-accepted source-contract change is applied; the agent must not mutate
-`sources.yaml`, the registry, or the projected corpus.
+Bibliography Agent as a read-only `literature_corpus[]` working projection.
+Apply the confirmed source policy without turning provider priority into
+workflow authority:
+
+- `adapter-native`: call `zotero-library-query` first and record the uncovered
+  source class before using `zotero-literature-acquisition` or bounded external
+  search.
+- `protocol-multi-source`: let the systematic-review protocol determine
+  databases, searches, screening, and coverage; use Zotero for seeds,
+  duplicate checks, full text, and supplemental coverage.
+- `external-first`: use current authoritative external sources first or in
+  parallel, then use Zotero for academic context.
+- `library-bound`: use only the requested current selection, private
+  collection, or offline library; pause when just-in-time readiness fails.
+
+Call `zotero-literature-analysis` only for a source-level evidence goal and
+`zotero-research-synthesis` only for a bounded cross-source goal. Do not invoke
+every task mechanically. Consume results through a hash-bound
+`ProviderRetrievalHandoff`; an empty result is not proof of absence, and the
+handoff remains working evidence until this producer screens, verifies, and
+submits a durable bibliography artifact. Without a current run- and
+collection-bound `ManagedLibraryAuthorization`, Acquisition is candidate-only.
+That authorization never permits `zotero-library-curation`.
+
+Keep the existing five-step flow, four Iron Rules, and PRE-SCREENED
+reproducibility block intact. External search results and proposed additions
+remain output artifacts until an accepted source-contract change is applied;
+the agent must not mutate `sources.yaml`, the registry, or the projected corpus.
 <!--/rs:SOURCE-003-->
 ````
 

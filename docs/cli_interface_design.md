@@ -8,12 +8,13 @@ wire contract 供迁移使用。用户从对话进入 ARSU 工作的顺序以
 
 状态约定：
 
-- **Target v0.1**：16 个顶层命令和
+- **Target v0.1**：17 个顶层命令和
   `status → instructions → start/submit/advance → status`。
-- **Current implementation（2026-07-10）**：已有完整 `arsu-v0-1` profile、external 与
+- **Current implementation（2026-07-27）**：已有 adaptive Case runtime、完整
+  `arsu-v0-1` strict compatibility、显式 migration/rollback、external 与
   parent-scoped child subflow、`submit work:|gate:`、`advance transition:`、Decision 与
   dynamic revision-round frontier。
-- **Acceptance status**：十六命令、Navigate、四 Companion 与 selector runtime 已通过公共 CLI 用户旅程验收。
+- **Acceptance status**：十七命令、Navigate、四 Companion 与 selector runtime 已通过公共 CLI 用户旅程验收。
 
 事实源：
 
@@ -97,6 +98,7 @@ Target v0.1 公共命令：
 | `researchspec submit gate:<id>` | 登记 verification evidence、verdict 与用户确认 | 是 | 是 | 是 |
 | `researchspec advance transition:<id>` | 执行唯一合法的状态转换并记录 receipt | 是 | 是 | 是 |
 | `researchspec check [target]` | 检查 workspace/contracts/runtime/tools | 否 | 是 | 否 |
+| `researchspec doctor` | 容错诊断 runtime 并执行 plan-bound 确定性修复 | 仅 repair | 是 | repair 支持 |
 | `researchspec list [type]` | 列出 changes/artifacts/gates/decisions/tools | 否 | 是 | 否 |
 | `researchspec show <item>` | 查看某个合同、artifact 或 pending item | 否 | 是 | 否 |
 | `researchspec handoff` | 生成或打印当前 handoff view | 可选 | 是 | 是 |
@@ -106,11 +108,11 @@ Target v0.1 公共命令：
 | `researchspec archive [item]` | 归档已处理的 change 或 draft patch | 是 | 是 | 是 |
 | `researchspec plugin <subcommand>` | 查看并管理随包分发的领域 Skill plugins | 视子命令 | 是 | 写子命令支持 |
 
-`submit` 是一个顶层命令但有两个 selector 语义；加入 `plugin` 命令组后，上表是 16 个顶层命令，而不是
-17 个。`start` 只接受可启动 subflow，`advance` 只接受可执行 transition，不提供含义模糊的
+`submit` 是一个顶层命令但有两个 selector 语义；`doctor` 是独立恢复入口，加入 `plugin`
+命令组后上表共 17 个顶层命令。`start` 只接受可启动 subflow，`advance` 只接受可执行 transition，不提供含义模糊的
 通用 `execute`。
 
-Current implementation 已提供全部 16 个目标顶层命令。`submit` 按 scoped selector 分派
+Current implementation 已提供全部 17 个目标顶层命令。`submit` 按 scoped selector 分派
 `work:` 与 `gate:`，`advance` 只接受唯一授权的 scoped `transition:`；下文参数和 envelope
 描述当前 wire contract。
 
@@ -171,7 +173,7 @@ Skills 都消费同一 protocol，不另建 stage mapping。
 Synopsis：
 
 ```bash
-researchspec init [path] [--tools <ids>] [--dry-run] [--force]
+researchspec init [path] [--tools <ids>] [--profile adaptive|strict] [--dry-run] [--force]
 ```
 
 OpenSpec-like TUI 流程：
@@ -180,7 +182,8 @@ OpenSpec-like TUI 流程：
 2. Detect：检测当前目录是否已有 workspace，检测可用 agent tools。
 3. Select tools：从 agent registry 搜索并多选工具。`--tools all` 表示 registry
    中的全部 31 个工具；ForgeCode、Kimi CLI 和 Mistral Vibe 为 skills-only。
-4. Load workflow：固定使用 `arsu-v0-1`，展示可用的外部 subflow templates。
+4. Load runtime：新 workspace 默认 adaptive；显式 `--profile strict` 使用 Schema `0.2`
+   `arsu-v0-1` graph。两种模式都展示可用外部 routes。
 5. Preview writes：展示将创建的 workspace files 和将安装的 tool files。
 6. Confirm：用户确认后写入。
 7. Next steps：提示用户打开对应 agent，使用已安装的 ResearchSpec/ARSU wrapper。
@@ -190,7 +193,7 @@ OpenSpec-like TUI 流程：
 ```bash
 researchspec init --tools codex,claude --yes
 researchspec init --tools none
-researchspec init --tools none
+researchspec init --tools none --profile strict
 ```
 
 读写边界：
@@ -204,7 +207,8 @@ researchspec init --tools none
 规则：
 
 - 已存在 workspace 时默认不覆盖。
-- `init` 固定写入 `arsu-v0-1`；CLI 不提供 profile 选择或切换入口。
+- `init` 无 profile 时创建 adaptive workspace；`--profile strict` 创建 Schema `0.2`
+  workspace。已有 workspace 的 profile 不会被 `init` 改写。
 - 用户材料不足时只生成 skeleton 和待填位置，不让 CLI 猜研究内容。
 - Agent-facing files 是 generated files；若用户已修改，默认跳过或提示 drift。
 - `--force` 只允许覆盖 generated files，不允许覆盖 research contracts 中的用户内容。
@@ -218,6 +222,10 @@ Synopsis：
 
 ```bash
 researchspec update [path] [--tools <ids>] [--dry-run] [--force] [--json]
+researchspec update [path] --migrate-runtime --dry-run [--json]
+researchspec update [path] --migrate-runtime --yes --expected-plan-sha256 <sha256> [--json]
+researchspec update [path] --migrate-runtime --rollback <migration-id> --dry-run [--json]
+researchspec update [path] --migrate-runtime --rollback <migration-id> --yes --expected-plan-sha256 <sha256> [--json]
 ```
 
 使用场景：
@@ -225,6 +233,8 @@ researchspec update [path] [--tools <ids>] [--dry-run] [--force] [--json]
 - ResearchSpec 包升级后刷新 agent instructions/wrappers。
 - 用户新增一个 agent tool，需要安装同一套 ResearchSpec user-facing assets。
 - 检测到 generated files drift 后重新生成。
+- 用户明确把一个有效 Schema `0.2` strict workspace 迁移到 adaptive，或在未发生迁移后
+  runtime drift 时恢复 plan 捕获的原始 strict authority。
 
 读写边界：
 
@@ -232,13 +242,18 @@ researchspec update [path] [--tools <ids>] [--dry-run] [--force] [--json]
 | --- | --- |
 | 读取 | workspace config、selected tools、packaged user-facing assets |
 | 写入 | selected tool directories 中的 generated files |
-| 不写入 | stable specs、state、registry、ledgers、ARSU source package |
+| 不写入 | 普通 update 不写 stable specs、state、registry、ledgers 或 ARSU source package；只有显式 migration transaction 写 config/workflow/state、backup 与 receipt |
 
 规则：
 
 - `update` 不运行 converter，不同步 ARS upstream。
 - 默认跳过用户修改过的 generated files。
 - `--tools <ids>` 可添加或限制目标 tools。
+- `--migrate-runtime` 与 `--tools` 互斥。dry-run 返回 compatibility findings、projected
+  obligations、retained strict policies、target hashes 和 `plan_sha256`，且不写文件。
+- 执行必须同时提供 `--yes` 和刚预览的 `--expected-plan-sha256`；state authority 最后提交。
+- 迁移前原始字节保存在 durable backup，成功写 migration receipt；失败由同一事务恢复旧
+  strict workspace。主动 rollback 同样 dry-run、hash-bound，发现后续 adaptive drift 时拒绝覆盖。
 
 ## 6. `researchspec status`
 
@@ -370,6 +385,21 @@ Target 建议：
   默认当成阻断项。
 - `check` 不维护 ARSU source，不运行 converter。
 - `status` 与 `check` 不启动 Zotero runtime，也不探测 Host Bridge；connection 始终报告为 `unchecked`。
+
+### 7.1 `researchspec doctor`
+
+用途：在正常 snapshot 无法安全加载时容错观察 raw runtime 文件，并把问题分类为 healthy、
+可重试、可确定修复、需要人工重建或证据冲突。
+
+```bash
+researchspec doctor [--json]
+researchspec doctor --repair <finding-id> --dry-run [--json]
+researchspec doctor --repair <finding-id> --expected-plan-sha256 <sha256> --yes [--json]
+```
+
+Doctor repair 只接受唯一可确定的内容，绑定 read preconditions、backup、postconditions 与
+plan hash；authority 写入失败或 postcheck 失败时恢复原字节。Doctor 不承担 runtime profile
+migration，也不猜测学术语义。
 
 ## 8. `researchspec list [type]`
 
