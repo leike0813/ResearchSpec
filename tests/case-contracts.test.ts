@@ -11,6 +11,7 @@ import { CaseStateSchema, WorkingEvidenceSchema } from "../src/core/contracts/ca
 import { GateSubmitPayloadSchema, GateSubmitSemanticInputSchema } from "../src/core/contracts/gate-transition.js";
 import { DoctorFindingSchema, DoctorRepairPlanSchema, DoctorRepairReceiptSchema, DoctorReportSchema } from "../src/core/contracts/runtime-recovery.js";
 import { SubflowStartInputSchema, SubflowStartSemanticInputSchema } from "../src/core/contracts/subflow.js";
+import { executionRequirements } from "../src/core/runtime/action-descriptor.js";
 
 const SHA = "a".repeat(64);
 const NOW = "2026-07-26T00:00:00.000Z";
@@ -183,6 +184,33 @@ void test("action registry reuses every current write validator and declares adv
     assert.ok(registration.schema_ref);
     assert.ok(["direct", "human_confirmed", "plan_bound"].includes(registration.execution_policy));
   }
+});
+
+void test("execution requirements are derived only from the registered policy", () => {
+  assert.deepEqual([
+    ["direct", executionRequirements("direct")],
+    ["human_confirmed", executionRequirements("human_confirmed")],
+    ["plan_bound", executionRequirements("plan_bound")],
+  ], [
+    ["direct", {
+      preview_required: false,
+      action_basis_required: true,
+      plan_sha256_required: false,
+      confirmation_required: false,
+    }],
+    ["human_confirmed", {
+      preview_required: false,
+      action_basis_required: true,
+      plan_sha256_required: false,
+      confirmation_required: true,
+    }],
+    ["plan_bound", {
+      preview_required: true,
+      action_basis_required: true,
+      plan_sha256_required: true,
+      confirmation_required: true,
+    }],
+  ]);
 });
 
 void test("semantic action schemas reject caller-authored CLI mechanics", () => {

@@ -47,6 +47,10 @@ import { loadWorkspaceSnapshot } from "../core/workspace/snapshot.js";
 import { executeWritePlan, planFile, sha256, type PlannedWrite } from "../core/workspace/write-plan.js";
 import { fileExists, readOptionalText } from "../utils/fs.js";
 import { CliError, success, type CommandContext, type CommandResult } from "./types.js";
+import {
+  assertPlanBoundActionAvailable,
+  authorizePlanBoundExecution,
+} from "./execution-guard.js";
 import { searchableMultiSelect } from "./prompts/searchable-multi-select.js";
 import { availableDomains, domainIsAvailable, loadPluginRegistry, PluginRegistryError, resolveDomainSelection, type LoadedPluginRegistry } from "../plugins/registry.js";
 import { buildPluginSkillInstructions, PluginSkillInstructionsError } from "../plugins/instructions.js";
@@ -520,7 +524,6 @@ async function handleGateSubmit(selector: string, options: SubmitOptions, contex
   if (options.expectedPlanSha256 !== undefined && !isSha256(options.expectedPlanSha256)) throw new CliError("invalid_expected_plan_sha256", "--expected-plan-sha256 must be 64 lowercase hexadecimal characters.", 2);
   const actor = RuntimeActorSchema.safeParse({ kind: options.actorKind, name: options.actorName });
   if (!actor.success || actor.data.kind !== "validator" || !options.confirmedBy?.trim()) throw new CliError("invalid_gate_input", "Gate submit requires a validator actor and --confirmed-by human identity.", 2, undefined, actor.success ? undefined : actor.error.issues);
-  if (!context.dryRun && !context.interactive && (!context.yes || !options.expectedPlanSha256 || !options.expectedActionBasisSha256)) throw new CliError("confirmation_required", "Non-interactive Gate submit requires --expected-action-basis-sha256, --expected-plan-sha256, and --yes after explicit human confirmation.", 2);
   const workspace = await requireWorkspace(context);
   const snapshot = await loadWorkspaceSnapshot(workspace);
   let payload: unknown;
@@ -529,16 +532,30 @@ async function handleGateSubmit(selector: string, options: SubmitOptions, contex
   try {
     if (snapshot.runtimeMode === "adaptive") {
       const plan = await planAdaptiveGate({ snapshot, selector, payload, actor: actor.data, confirmedBy: options.confirmedBy, expectedPlanSha256: options.expectedPlanSha256 });
-      if (plan.status !== "already_applied") await assertActionBasis(snapshot, selector, options.expectedActionBasisSha256);
+      await authorizePlanBoundExecution({
+        snapshot,
+        selector,
+        planSha256: plan.plan_sha256,
+        expectedActionBasisSha256: options.expectedActionBasisSha256,
+        expectedPlanSha256: options.expectedPlanSha256,
+        context,
+        action: "Gate submit",
+        alreadyApplied: plan.status === "already_applied",
+      });
       if (!context.dryRun) await executeAdaptivePlan(plan);
       return adaptiveTransactionResult("submit", plan, context);
     }
     const plan = await planGateSubmit({ snapshot, selector, payload, actor: actor.data, confirmedBy: options.confirmedBy, expectedPlanSha256: options.expectedPlanSha256 });
-    if (plan.status !== "already_submitted") await assertActionBasis(snapshot, selector, options.expectedActionBasisSha256);
-    if (!context.dryRun && plan.status !== "already_submitted" && !context.yes) {
-      const approved = await confirm({ message: `Record the user-confirmed Gate verdict for ${selector}?`, default: false });
-      if (!approved) throw new CliError("cancelled", "Gate submission cancelled.", 1);
-    }
+    await authorizePlanBoundExecution({
+      snapshot,
+      selector,
+      planSha256: plan.plan_sha256,
+      expectedActionBasisSha256: options.expectedActionBasisSha256,
+      expectedPlanSha256: options.expectedPlanSha256,
+      context,
+      action: "Gate submit",
+      alreadyApplied: plan.status === "already_submitted",
+    });
     const outcome = context.dryRun ? undefined : await executeGateSubmit(plan, workspace);
     const status = context.dryRun ? plan.status : outcome?.status ?? plan.status;
     const eventSelector = `gate-event:${String(plan.event.event_id)}`;
@@ -571,11 +588,17 @@ export async function handleAdvance(selector: string, options: AdvanceOptions, c
   const snapshot = await loadWorkspaceSnapshot(workspace);
   try {
     if (PatchSelectorSchema.safeParse(selector).success) {
-      if (!context.dryRun && !context.interactive && (!context.yes || !options.expectedPlanSha256 || !options.expectedActionBasisSha256)) {
-        throw new CliError("confirmation_required", "Non-interactive patch Advance requires --expected-action-basis-sha256, --expected-plan-sha256, and --yes.", 2);
-      }
       const plan = await planPatchAdvance({ snapshot, selector, actor: actor.data, expectedPlanSha256: options.expectedPlanSha256 });
-      if (!plan.status.startsWith("already_")) await assertActionBasis(snapshot, selector, options.expectedActionBasisSha256);
+      await authorizePlanBoundExecution({
+        snapshot,
+        selector,
+        planSha256: plan.plan_sha256,
+        expectedActionBasisSha256: options.expectedActionBasisSha256,
+        expectedPlanSha256: options.expectedPlanSha256,
+        context,
+        action: "Patch advance",
+        alreadyApplied: plan.status.startsWith("already_"),
+      });
       if (!context.dryRun) await executePatchPlan(plan);
       const effects: CompactTransactionEffect[] = plan.status === "already_applied" || plan.status === "already_stale"
         ? [{ kind: "no_change", refs: [selector] }]
@@ -961,23 +984,33 @@ export async function handleDecide(selector: string | undefined, options: Decide
   if (!actorName) throw new CliError("actor_required", "--actor-name is required for a human decision.", 2);
   const reason = options.reason ?? (context.interactive && decision !== "postpone" ? await input({ message: "Decision rationale", validate: (value) => Boolean(value.trim()) || "Rationale is required." }) : undefined);
   try {
+    await assertPlanBoundActionAvailable(snapshot, selector, options.expectedActionBasisSha256);
     if (snapshot.runtimeMode === "adaptive" && CaseActionSelectorSchema.safeParse(selector).success) {
-      await assertActionBasis(snapshot, selector, options.expectedActionBasisSha256);
       const plan = await planAdaptiveResolutionDecision({ snapshot, selector, decision, actorName, reason, expectedPlanSha256: options.expectedPlanSha256 });
-      if (!context.dryRun && !context.interactive && (!context.yes || !options.expectedActionBasisSha256 || !options.expectedPlanSha256)) {
-        throw new CliError("confirmation_required", "Non-interactive Decide requires --expected-action-basis-sha256, --expected-plan-sha256, and --yes.", 2);
-      }
+      await authorizePlanBoundExecution({
+        snapshot,
+        selector,
+        planSha256: plan.plan_sha256,
+        expectedActionBasisSha256: options.expectedActionBasisSha256,
+        expectedPlanSha256: options.expectedPlanSha256,
+        context,
+        action: "Decision",
+        alreadyApplied: plan.status === "already_applied",
+      });
       if (!context.dryRun) await executeAdaptivePlan(plan);
       return adaptiveTransactionResult("decide", plan, context);
     }
-    await assertActionBasis(snapshot, selector, options.expectedActionBasisSha256);
     const preview = await decideItem({ snapshot, selector, decision, actorName, reason, dryRun: true });
-    if (options.expectedPlanSha256 && options.expectedPlanSha256 !== preview.plan_sha256) {
-      throw new CliError("decision_plan_stale", "Decision plan no longer matches the approved preview.", 3, undefined, { expected: options.expectedPlanSha256, actual: preview.plan_sha256 });
-    }
-    if (!context.dryRun && !context.interactive && (!context.yes || !options.expectedActionBasisSha256 || !options.expectedPlanSha256)) {
-      throw new CliError("confirmation_required", "Non-interactive Decide requires --expected-action-basis-sha256, --expected-plan-sha256, and --yes.", 2);
-    }
+    await authorizePlanBoundExecution({
+      snapshot,
+      selector,
+      planSha256: preview.plan_sha256,
+      expectedActionBasisSha256: options.expectedActionBasisSha256,
+      expectedPlanSha256: options.expectedPlanSha256,
+      context,
+      action: "Decision",
+      alreadyApplied: preview.status.startsWith("already_"),
+    });
     const outcome = context.dryRun
       ? preview
       : await decideItem({ snapshot, selector, decision, actorName, reason, dryRun: false, expectedPlanSha256: options.expectedPlanSha256 });

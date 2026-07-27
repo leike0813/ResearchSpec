@@ -46,21 +46,27 @@ research and terminal completion.
 - **AND** the harness SHALL still use the public CLI rather than internal
   evaluators
 
-### Requirement: Canonical Capability Traceability
+### Requirement: Observable User-Model Acceptance
 
-ResearchSpec SHALL maintain one machine-readable traceability manifest covering every requirement and scenario in `arsu-user-routing`, `arsu-run-usage`, and `agent-surface-model`.
+ResearchSpec SHALL demonstrate the canonical user model through observable CLI
+and runtime journeys rather than documentation-title or archived-change
+traceability.
 
-#### Scenario: Main specs are covered exactly
+#### Scenario: Main behavior is accepted through public interfaces
 
-- **WHEN** the acceptance suite reads the three main capability specs
-- **THEN** every requirement and scenario SHALL have at least one responsible technical change, journey ID, and stable test ID
-- **AND** the manifest SHALL NOT contain unknown capability, requirement, scenario, journey, test, or technical-change references
+- **WHEN** acceptance exercises routing, runtime, recovery, completion, export,
+  or plugin journeys
+- **THEN** it SHALL assert stable CLI results, state, receipts, Gate events,
+  Decisions, and generated interfaces
+- **AND** it SHALL NOT require exact documentation headings, prose wording,
+  archived change IDs, or source-code layout
 
-#### Scenario: Archived implementation evidence remains resolvable
+#### Scenario: Fixed product surface is checked structurally
 
-- **WHEN** technical changes and the umbrella change are archived
-- **THEN** traceability SHALL resolve implementation ownership through archived change IDs and stable repository test paths
-- **AND** it SHALL NOT depend on the active umbrella change directory
+- **WHEN** acceptance enumerates the public product surface
+- **THEN** it SHALL verify seventeen commands, fifteen fixed Skills, eight
+  wrappers, and the registered and command-capable tool counts through
+  structured interfaces
 
 ### Requirement: Acceptance Preserves Product Boundaries
 
@@ -229,15 +235,15 @@ through current status and action descriptors.
   structured assertions
 - **AND** it SHALL not assert complete natural-language paragraphs or field order
 
-### Requirement: Traceability Covers Convergence Evidence
+## ADDED Requirements
 
-The traceability manifest SHALL link every affected runtime requirement and
-scenario to its convergence change, black-box journey, stable test ID, and any
-generated-guidance or documentation verification that proves it.
+### Requirement: Observable user-model acceptance
+User-model acceptance SHALL be demonstrated through observable CLI and runtime journeys rather than a prose-title traceability manifest.
 
-#### Scenario: Archived fluid-runtime changes remain traceable
+#### Scenario: Current surface remains fixed
+- **WHEN** release acceptance enumerates the public product surface
+- **THEN** it SHALL verify seventeen commands, fifteen fixed Skills, eight wrappers, and the registered and command-capable tool counts through structured interfaces
 
-- **WHEN** the traceability checker resolves this convergence change and the two
-  archived fluid-runtime changes
-- **THEN** it SHALL resolve their stable main-spec requirements and repository
-  test paths without depending on an active historical change directory
+#### Scenario: Runtime journey acceptance
+- **WHEN** release acceptance exercises adaptive default, strict compatibility, migration, Doctor, patch/change, or recovery
+- **THEN** it SHALL assert stable state, receipt, Gate, Decision, and result behavior without requiring exact documentation headings or archived-change IDs

@@ -112,10 +112,6 @@ void test("companion manifest renders four self-contained workflow skills with d
   for (const intent of COMPANION_INTENTS) {
     const rendered = renderCompanionSkill(intent);
     assert.match(rendered, new RegExp(`^---\\nname: ${intent.skillId}\\n`, "m"));
-    for (const heading of ["Mission", "When to Use", "Do Not Use", "Inputs", "CLI Examples", "Workflow", "Decision Table", "Failure Recovery", "Output Contract", "Guardrails", "Completion", "Shared CLI Discipline"]) {
-      assert.match(rendered, new RegExp(`## ${heading}`));
-    }
-    assert.match(rendered, /--dry-run --json/);
     assert.doesNotMatch(rendered, /references\/cli-discipline\.md|<<|Authoring hint/);
   }
 

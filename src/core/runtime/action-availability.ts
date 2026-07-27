@@ -8,6 +8,7 @@ import {
 } from "./workflow-control.js";
 import { evaluateAdaptiveActionAvailability } from "./adaptive-case-control.js";
 import { createActionAvailability } from "./availability-facts.js";
+import { resolveGateAuthority } from "./gate-authority.js";
 
 export { actionReadPreconditions, createActionAvailability } from "./availability-facts.js";
 
@@ -104,8 +105,7 @@ export async function evaluateActionAvailability(
   const status = string(record(existing.value).status) ?? (existing.type === "gate" ? undefined : "proposed");
   const gatePending = existing.type === "gate"
     && record(existing.value).blocking === true
-    && record(existing.value).verdict !== "pass"
-    && !snapshot.decisions.some((decision) => decision.gate_id === existing.id && decision.status === "accepted");
+    && !resolveGateAuthority(snapshot, existing.id).satisfied;
   const pending = existing.type === "gate" ? gatePending : status === "proposed" || status === "postponed";
   return {
     key: "decide",

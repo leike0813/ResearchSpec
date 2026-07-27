@@ -73,7 +73,6 @@ void test("dogfooding playbook catalog covers routes, fixtures, and release mapp
   assert.equal(canonicalRoutes.size, 27);
   assert.deepEqual([...referencedRoutes].sort(), [...canonicalRoutes].sort());
 
-  const checklist = await readFile("artifacts/mvp_release_checklist.md", "utf8");
   const expectedChecklistRefs = new Set(["quick-standalone", "new-session-resume", "context-export", "gate-challenge-override", "end-to-end-pipeline"]);
   assert.deepEqual(new Set(catalog.release_mappings.map((item) => item.checklist_ref)), expectedChecklistRefs);
   for (const mapping of catalog.release_mappings) {
@@ -81,7 +80,6 @@ void test("dogfooding playbook catalog covers routes, fixtures, and release mapp
     assert.ok(scenario, `Unknown release scenario: ${mapping.scenario_id}`);
     assert.equal(scenario.tier, 1);
     assert.equal(scenario.release_checklist_ref, mapping.checklist_ref);
-    assert.match(checklist, new RegExp(`\\b${mapping.scenario_id}\\b`));
   }
 });
 

@@ -514,11 +514,15 @@ The converter SHALL apply source-path anchor replacements to public entrypoints 
 - **AND** the copy SHALL retain its upstream description and SHALL NOT receive a duplicate Contract Preflight
 
 ### Requirement: Current Contract Integration Metadata
-The converter SHALL describe ResearchSpec contract integration and one-way ARS Material Passport evidence import without legacy or compatibility runtime paths.
+The converter SHALL describe the current adaptive-default ResearchSpec contract
+integration and the bounded Schema `0.2` strict compatibility path. ARS Material
+Passport evidence import SHALL remain one-way and strict-compatibility-only.
 
 #### Scenario: Generated output is inspected
 - **WHEN** conversion completes
-- **THEN** metadata and generated guidance SHALL use current integration/import terminology and SHALL not offer Passport export as runtime state authority
+- **THEN** metadata and generated guidance SHALL distinguish adaptive-default and
+  strict compatibility operation and SHALL not offer Passport export as runtime
+  state authority
 
 #### Scenario: Upstream history is retained
 - **WHEN** vendored source or audit Before text contains historical terminology
@@ -667,3 +671,16 @@ preserve formal Gate, Decision, and high-impact patch/change protections.
 - **THEN** all four generated trees, manifests, and reports SHALL derive from
   the same preflight source and pass deterministic validation and idempotence
 - **AND** generated Skill files SHALL not require hand edits
+
+## ADDED Requirements
+
+### Requirement: Current dual-runtime generated guidance
+The ARSU converter SHALL generate entrypoints and metadata that describe adaptive-default operation and bounded strict compatibility without asserting that compatibility paths are absent.
+
+#### Scenario: Converter regeneration
+- **WHEN** maintained runtime guidance changes
+- **THEN** generated Skills, contracts manifest, reports, and handbook-derived references SHALL be regenerated through their owning converter and pass drift and idempotence checks
+
+#### Scenario: Portable converter build
+- **WHEN** converter and release verification run on the supported Node matrix
+- **THEN** executable permission handling SHALL use Node file APIs without depending on a Unix `chmod` command

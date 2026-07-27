@@ -26,7 +26,12 @@ interface Descriptor {
   semantic_input_slots: Array<{ field_path: string; expectation: string }>;
   minimal_input_template: Record<string, unknown> | null;
   execution_policy: "direct" | "human_confirmed" | "plan_bound";
-  dry_run: "optional";
+  execution_requirements: {
+    preview_required: boolean;
+    action_basis_required: boolean;
+    plan_sha256_required: boolean;
+    confirmation_required: boolean;
+  };
   possible_next_selectors: string[];
 }
 
@@ -42,7 +47,12 @@ void test("descriptor v2 round-trips semantic Start input in adaptive and strict
       assert.equal(packet.ok, true);
       assert.equal(packet.data?.action_descriptor.schema_version, "2");
       assert.equal(packet.data?.action_descriptor.execution_policy, "human_confirmed");
-      assert.equal(packet.data?.action_descriptor.dry_run, "optional");
+      assert.deepEqual(packet.data?.action_descriptor.execution_requirements, {
+        preview_required: false,
+        action_basis_required: true,
+        plan_sha256_required: false,
+        confirmation_required: true,
+      });
       assert.deepEqual(packet.data?.action_descriptor.minimal_input_template, {});
       assert.ok(packet.data?.action_descriptor.cli_derived_fields.includes("instruction_basis_sha256"));
 

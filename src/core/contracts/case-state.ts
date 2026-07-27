@@ -6,6 +6,9 @@ export const CaseSafeIdSchema = z.string()
 export const CaseSha256Schema = z.string().regex(/^[a-f0-9]{64}$/);
 export const CaseWorkspacePathSchema = z.string().min(1)
   .refine((value) => !value.startsWith("/") && !value.split("/").includes(".."));
+export const CaseGateIdSchema = z.string()
+  .regex(/^sf-[A-Za-z0-9][A-Za-z0-9._-]*\/[A-Za-z0-9][A-Za-z0-9._-]*$/)
+  .refine((value) => !value.includes(".."));
 
 export const CaseAuthorityOwnerSchema = z.enum([
   "researchspec-cli",
@@ -25,13 +28,19 @@ export const HardObligationDependencySchema = z.strictObject({
 });
 
 export const FormalGateReferenceSchema = z.strictObject({
-  gate_id: CaseSafeIdSchema,
+  gate_id: CaseGateIdSchema,
   event_id: CaseSafeIdSchema.nullable(),
 });
 
 export const FormalDecisionReferenceSchema = z.strictObject({
   decision_id: CaseSafeIdSchema,
   decision_type: CaseSafeIdSchema,
+  event_id: CaseSafeIdSchema.optional(),
+  receipt: z.strictObject({
+    path: CaseWorkspacePathSchema,
+    sha256: CaseSha256Schema,
+    plan_sha256: CaseSha256Schema,
+  }).optional(),
 });
 
 export const CompletionEffectSchema = z.discriminatedUnion("kind", [
@@ -102,11 +111,20 @@ export const CaseActionSchema = z.strictObject({
   kind: z.enum(["gate", "decision", "patch", "contract_change", "completion"]),
   obligation_scope: z.array(CaseSafeIdSchema),
   status: z.enum(["pending", "accepted", "rejected", "postponed", "applied", "stale"]),
-  requested_effect: z.enum(["waive", "not_applicable"]).nullable().optional(),
+  requested_effect: z.enum(["waive", "not_applicable", "gate_override"]).nullable().optional(),
   rationale: z.string().trim().min(1).nullable().optional(),
   payload_ref: z.strictObject({
     path: CaseWorkspacePathSchema,
     sha256: CaseSha256Schema,
+  }).nullable().optional(),
+  gate_authority: z.strictObject({
+    gate_id: CaseGateIdSchema,
+    event_id: CaseSafeIdSchema,
+    receipt: z.strictObject({
+      path: CaseWorkspacePathSchema,
+      sha256: CaseSha256Schema,
+      plan_sha256: CaseSha256Schema,
+    }),
   }).nullable().optional(),
   created_at: z.iso.datetime(),
 });
@@ -116,6 +134,8 @@ export const CaseReceiptReferenceSchema = z.strictObject({
   receipt_type: CaseSafeIdSchema,
   path: CaseWorkspacePathSchema,
   sha256: CaseSha256Schema,
+  plan_sha256: CaseSha256Schema.optional(),
+  authority_selector: z.string().min(1).optional(),
 });
 
 export const CaseStateSchema = z.strictObject({

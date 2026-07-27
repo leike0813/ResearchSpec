@@ -47,6 +47,7 @@ export async function buildActionDescriptor(
       .filter((field) => (required.has(field) && field in templateProperties) || conditionalSemanticField(evaluated.key, field))
       .map((field) => [field, templateSlot(field, templateProperties[field] ?? properties[field])]));
 
+  const policy = executionPolicy(snapshot, selector, evaluated.key, registration.execution_policy);
   return ActionDescriptorSchema.parse({
     schema_version: "2",
     selector,
@@ -57,10 +58,35 @@ export async function buildActionDescriptor(
     semantic_input_slots: semanticInputSlots,
     constraints: [...registration.constraints],
     minimal_input_template: minimalInputTemplate,
-    execution_policy: executionPolicy(snapshot, selector, evaluated.key, registration.execution_policy),
-    dry_run: "optional",
+    execution_policy: policy,
+    execution_requirements: executionRequirements(policy),
     possible_next_selectors: nextSelectors(snapshot, selector),
   });
+}
+
+export function executionRequirements(policy: ActionDescriptor["execution_policy"]): ActionDescriptor["execution_requirements"] {
+  if (policy === "plan_bound") {
+    return {
+      preview_required: true,
+      action_basis_required: true,
+      plan_sha256_required: true,
+      confirmation_required: true,
+    };
+  }
+  if (policy === "human_confirmed") {
+    return {
+      preview_required: false,
+      action_basis_required: true,
+      plan_sha256_required: false,
+      confirmation_required: true,
+    };
+  }
+  return {
+    preview_required: false,
+    action_basis_required: true,
+    plan_sha256_required: false,
+    confirmation_required: false,
+  };
 }
 
 export function actionSchemaRegistration(key: RuntimeActionKey): ActionSchemaRegistration {

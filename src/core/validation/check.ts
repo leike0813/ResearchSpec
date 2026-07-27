@@ -19,6 +19,7 @@ import { getTool } from "../../adapters/tools.js";
 import { installationRecords, isDomainSkillInstallation } from "../../adapters/installations.js";
 import { inspectLiteratureAdapters } from "../../literature-adapters/inspect.js";
 import {
+  adaptiveReceiptMatchesAuthority,
   gateReceiptMatchesAuthority,
   startReceiptMatchesAuthority,
   transitionReceiptMatchesAuthority,
@@ -168,9 +169,12 @@ async function inspectAdaptiveReceipts(snapshot: WorkspaceSnapshot): Promise<Dia
             : reference.receipt_type === "contract_change_decision"
               ? ContractChangeDecisionReceiptSchema.safeParse(value)
             : AdaptiveCaseReceiptSchema.safeParse(value);
-      const identityMatches = reference.receipt_type === "gate_submit"
-        || (receipt.success && record(receipt.data).receipt_id === reference.receipt_id);
-      if (!receipt.success || sha256(bytes) !== reference.sha256 || !identityMatches) {
+      const parsedReceipt = receipt.success ? record(receipt.data) : undefined;
+      if (
+        !receipt.success
+        || sha256(bytes) !== reference.sha256
+        || !adaptiveReceiptMatchesAuthority(reference, reference.receipt_type, parsedReceipt)
+      ) {
         diagnostics.push(dangling("adaptive_receipt_mismatch", `Adaptive receipt does not match state reference ${reference.receipt_id}.`, receiptPath));
       }
     } catch {

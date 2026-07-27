@@ -10,6 +10,16 @@ export const ScopedRuntimeIdSchema = z.string().regex(/^sf-[A-Za-z0-9][A-Za-z0-9
 export const GateEvidenceRefSchema = z.discriminatedUnion("kind", [
   z.strictObject({ kind: z.literal("artifact"), artifact_id: SafeRuntimeIdSchema, sha256: Sha256Schema }),
   z.strictObject({ kind: z.literal("contract"), path: z.string().min(1).refine((value) => !value.startsWith("/") && !value.split("/").includes("..")), sha256: Sha256Schema }),
+  z.strictObject({
+    kind: z.literal("decision"),
+    decision_id: SafeRuntimeIdSchema,
+    event_id: SafeRuntimeIdSchema,
+    receipt: z.strictObject({
+      path: z.string().min(1).refine((value) => !value.startsWith("/") && !value.split("/").includes("..")),
+      sha256: Sha256Schema,
+      plan_sha256: Sha256Schema,
+    }),
+  }),
 ]);
 
 const GateSubmitSemanticFields = {
@@ -58,8 +68,8 @@ export const GateReceiptReferenceSchema = z.strictObject({
   plan_sha256: Sha256Schema,
 });
 
-export const GateSubmitReceiptSchema = z.strictObject({
-  schema_version: z.literal("1"), receipt_type: z.literal("gate_submit"), plan_sha256: Sha256Schema,
+const GateSubmitReceiptFields = {
+  receipt_type: z.literal("gate_submit"), plan_sha256: Sha256Schema,
   instruction_basis_sha256: Sha256Schema, selector: z.string().min(1), gate_id: ScopedRuntimeIdSchema,
   gate_node_id: SafeRuntimeIdSchema, subflow_instance_id: z.string().regex(/^sf-[A-Za-z0-9][A-Za-z0-9._-]*$/),
   template_id: z.string().regex(/^tpl-[A-Za-z0-9][A-Za-z0-9._-]*$/), event_id: SafeRuntimeIdSchema,
@@ -69,8 +79,36 @@ export const GateSubmitReceiptSchema = z.strictObject({
   findings: z.array(z.strictObject({ code: SafeRuntimeIdSchema, summary: z.string().min(1), evidence_indexes: z.array(z.number().int().nonnegative()).min(1) })),
   actor: RuntimeActorSchema, confirmed_by: z.strictObject({ kind: z.literal("human"), name: z.string().min(1) }),
   challenged_basis_sha256: Sha256Schema.optional(), supersedes_event_id: SafeRuntimeIdSchema.optional(), submitted_at: z.iso.datetime(),
+} as const;
+
+const GateSubmitReceiptV1Schema = z.strictObject({
+  schema_version: z.literal("1"),
+  ...GateSubmitReceiptFields,
 });
 
+export const GateSubmitReceiptV2Schema = z.strictObject({
+  schema_version: z.literal("2"),
+  ...GateSubmitReceiptFields,
+  action_identity: z.strictObject({
+    action_type: z.literal("gate_submit"),
+    identity_selector: z.string().min(1),
+  }),
+  semantic_input: z.unknown(),
+  read_preconditions: z.array(z.discriminatedUnion("state", [
+    z.strictObject({ path: z.string().min(1), state: z.literal("present"), sha256: Sha256Schema }),
+    z.strictObject({ path: z.string().min(1), state: z.literal("absent") }),
+  ])).min(1),
+  authority_target: z.strictObject({
+    kind: z.literal("gate_authority"),
+    selector: z.string().min(1),
+    paths: z.array(z.string().min(1)).min(1),
+  }),
+});
+
+export const GateSubmitReceiptSchema = z.discriminatedUnion("schema_version", [
+  GateSubmitReceiptV1Schema,
+  GateSubmitReceiptV2Schema,
+]);
 export const GateEventV1Schema = z.strictObject({
   schema_version: z.literal("1"), event_id: SafeRuntimeIdSchema, gate_id: ScopedRuntimeIdSchema,
   gate_node_id: SafeRuntimeIdSchema, subflow_instance_id: z.string().regex(/^sf-[A-Za-z0-9][A-Za-z0-9._-]*$/),

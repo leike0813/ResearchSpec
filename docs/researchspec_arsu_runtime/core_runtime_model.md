@@ -18,7 +18,7 @@ ResearchSpec CLI 是文件化控制面；ARSU Skills 生产研究、写作、评
 | Passport | 不支持 import | confirmed mid-entry 中以非权威 evidence 导入 |
 | 选择 | 新 workspace 默认 | `--profile strict` 或既有 Schema `0.2` workspace |
 
-两者都要求以 `status` 和 `instructions` 取得当前行动许可。CLI 始终在当前读前置条件下规划、校验并以 receipt-first 写入 authority；但外部执行边界由 action descriptor 的 policy 决定：`direct` 可单次执行，`human_confirmed` 需要声明的人类确认，只有 `plan_bound` 要求 preview、匹配的 plan hash 和执行确认。formal Gate 始终需要用户确认；scope、claim、structure、branch 与 override 则使用明确 Decision。
+两者都要求以 `status` 和 `instructions` 取得当前行动许可。CLI 始终在当前读前置条件下规划、校验并以 receipt-first 写入 authority；外部执行边界由 action descriptor 的 policy 决定，并投影为 `execution_requirements`。`direct` 可单次执行，`human_confirmed` 需要声明的人类确认，`plan_bound` 要求 preview、匹配的 action basis、plan hash 和执行确认。formal Gate 始终需要用户确认；scope、claim、structure、branch 与 override 则使用明确 Decision。
 
 ## 3. Agent 与风险边界
 
@@ -26,7 +26,7 @@ Companion 负责路由、提议、决策和验证的人机流程；plugin 与 Zo
 
 Action v2 descriptor 是运行时的风险边界：执行者必须消费当前 selector、availability、basis、语义输入槽和 execution policy，而不是从静态 Skill 或旧会话猜测顺序。成功写入返回 `next_selectors`；调用者优先进行定向读取，只有需要重新选择路线、处理冲突或缺少下一 selector 时才刷新完整 status。
 
-`doctor` 默认只读，按 `healthy`、`retry_existing_transaction`、`deterministically_repairable`、`requires_human_reconstruction` 或 `conflicting_evidence` 分类。它只为唯一可推导的修复给出 plan；执行属于 `plan_bound`，需当前 plan hash，先写 repair receipt、再替换 authority 并 post-check。已有 receipt 证明但 authority 未落盘的情况只能精确 retry，不能重建语义。strict-to-adaptive migration 同样只经 `update --migrate-runtime` 的 plan、backup、receipt 与 rollback 进行。
+`doctor` 默认只读，按 `healthy`、`retry_existing_transaction`、`deterministically_repairable`、`requires_human_reconstruction` 或 `conflicting_evidence` 分类。它同时检查 receipt→authority 与 authority→receipt/state。新 adaptive 写入使用 receipt v2，保存 action identity、规范化语义输入、完整读前置条件和 authority target；中断事务只能按原 plan 精确补齐缺失阶段。receipt v1 保持可读，信息不足时报告 `requires_human_reconstruction`，不迁移也不猜测。确定性 repair 仍属于 `plan_bound`，先写 repair receipt、再替换 authority 并 post-check。strict-to-adaptive migration同样只经 plan、backup、receipt 与 rollback 进行。
 
 ## 4. 双层 OpenSpec
 

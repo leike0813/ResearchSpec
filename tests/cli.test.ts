@@ -11,6 +11,7 @@ import {
   CLI_GLOBAL_OPTIONS,
   CLI_PLUGIN_COMMANDS,
   CLI_TOP_LEVEL_COMMANDS,
+  cliHelpTarget,
 } from "../src/cli/command-catalog.js";
 import { renderCliHandbook } from "../src/cli/handbook.js";
 import {
@@ -57,6 +58,17 @@ void test("typed CLI discovery stays complete, workspace-free, and context-speci
     /researchspec plugin install --help/,
   );
   assert.match(parseEnvelope(runCli(["unknown", "--json"])).error?.hint ?? "", /researchspec --help/);
+});
+
+void test("contextual help skips catalog option values and selects the longest command path", () => {
+  const cases = [
+    { argv: ["--cwd", "plugin", "status"], target: "researchspec status --help" },
+    { argv: ["--workspace=plugin", "status"], target: "researchspec status --help" },
+    { argv: ["--cwd", "status", "plugin", "install"], target: "researchspec plugin install --help" },
+    { argv: ["plugin", "show", "--summary"], target: "researchspec plugin show --help" },
+    { argv: ["plugin", "unknown"], target: "researchspec plugin --help" },
+  ];
+  for (const { argv, target } of cases) assert.equal(cliHelpTarget(argv), target, argv.join(" "));
 });
 
 void test("selector discovery examples are accepted and the handbook is deterministic", async () => {

@@ -39,6 +39,13 @@ export const ActionAvailabilitySchema = z.strictObject({
   expires_when: z.array(ReadPreconditionSchema),
 });
 
+export const ExecutionRequirementsSchema = z.strictObject({
+  preview_required: z.boolean(),
+  action_basis_required: z.boolean(),
+  plan_sha256_required: z.boolean(),
+  confirmation_required: z.boolean(),
+});
+
 export const ActionDescriptorSchema = z.strictObject({
   schema_version: z.literal("2"),
   selector: z.string().min(1),
@@ -53,7 +60,7 @@ export const ActionDescriptorSchema = z.strictObject({
   constraints: z.array(z.string().min(1)),
   minimal_input_template: z.record(z.string(), z.unknown()).nullable(),
   execution_policy: z.enum(["direct", "human_confirmed", "plan_bound"]),
-  dry_run: z.literal("optional"),
+  execution_requirements: ExecutionRequirementsSchema,
   possible_next_selectors: z.array(z.string().min(1)),
 });
 
@@ -235,5 +242,6 @@ export const ACTION_SCHEMA_REGISTRY = {
 export type ReadPrecondition = z.infer<typeof ReadPreconditionSchema>;
 export type ActionAvailability = z.infer<typeof ActionAvailabilitySchema>;
 export type ActionDescriptor = z.infer<typeof ActionDescriptorSchema>;
+export type ExecutionRequirements = z.infer<typeof ExecutionRequirementsSchema>;
 export type CaseStatusSummary = z.infer<typeof CaseStatusSummarySchema>;
 export type DecisionInput = z.infer<typeof DecisionInputSchema>;

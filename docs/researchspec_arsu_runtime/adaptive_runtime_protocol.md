@@ -20,7 +20,18 @@ status → instructions <selector> → start / submit / advance / decide → nex
 | `patch:<id>` | 全局 draft-patch lifecycle 项 | `decide` 解析选择，`advance` 只应用已接受 patch |
 | `change:<id>` | 全局 pending contract change | `decide` 接受、拒绝或 postpone；不属于 obligation graph |
 
-Agent 必须先读取当前 `instructions` 返回的 action descriptor。`direct` 动作由 CLI 单次规划、校验和提交，dry-run 可选；`human_confirmed` 动作要求 descriptor 指定的人类确认；`plan_bound` 动作才需要 preview、匹配的 plan hash 和执行确认。普通 attempt 可以重试，接受 evidence 才会满足 obligation。软 playbook 可以建议顺序，但未声明的顺序不成为 hard edge。
+Agent 必须先读取当前 `instructions` 返回的 action descriptor，并逐项满足由
+`execution_policy` 派生的 `execution_requirements`。`direct` 动作由 CLI 单次规划、校验和
+提交；`human_confirmed` 动作要求 descriptor 指定的人类确认；`plan_bound` 动作需要
+preview、匹配的 action basis、plan hash 和执行确认。普通 attempt 可以重试，接受 evidence
+才会满足 obligation。软 playbook 可以建议顺序，但未声明的顺序不成为 hard edge。
+
+Gate authority 以同一 Gate 的最新可信事件为准。`pass` 与
+`pass_with_conditions` 均满足 Gate；reverification 必须 supersede 同一 Gate 的最新事件。
+failed reverification 产生绑定该 event/receipt 的 pending override case action，只有绑定仍为
+最新事件的 accepted Decision 才生效。waiver 或 not-applicable Decision 可满足 obligation 的
+Gate readiness，但 Gate evidence 必须携带该 Decision/event 与 receipt path/hash/plan hash，
+且 Verify 仍须提交用户确认的 verdict。
 
 ## 2. 风险与人类控制
 

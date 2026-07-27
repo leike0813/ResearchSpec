@@ -2,6 +2,7 @@ import type { HardObligation } from "../contracts/case-state.js";
 import type { WorkspaceSnapshot } from "../workspace/snapshot.js";
 import type { EvaluatedRuntimeAction } from "./action-availability.js";
 import { createActionAvailability } from "./availability-facts.js";
+import { isPassingGateVerdict, resolveGateAuthority } from "./gate-authority.js";
 
 export function adaptiveActionCandidates(snapshot: WorkspaceSnapshot): string[] {
   if (!snapshot.caseProfile || !snapshot.caseState) return [];
@@ -148,11 +149,30 @@ function rawAdaptiveAvailability(snapshot: WorkspaceSnapshot, selector: string):
       return definition?.formal_gate_ids.includes(gateId ?? "") ?? false;
     });
     if (!gateId || scoped.length === 0) return undefined;
-    const passed = state.formal_gate_refs.some((item) => item.gate_id === `${instanceId}/${gateId}` && item.event_id);
-    const evidenceReady = scoped.every((item) => item.accepted_evidence_ids.length > 0);
+    const authority = resolveGateAuthority(snapshot, `${instanceId}/${gateId}`);
+    const verified = isPassingGateVerdict(authority.latestEvent?.verdict);
+    const evidenceReady = scoped.every((item) =>
+      item.accepted_evidence_ids.length > 0
+      || (
+        (item.status === "waived" || item.status === "not_applicable")
+        && item.formal_decision_refs.some((reference) => reference.event_id && reference.receipt)
+    ));
     return {
       key: "submit_gate",
-      availability: createActionAvailability(snapshot, selector, passed || !evidenceReady ? "blocked" : "allowed", passed ? "gate_complete" : evidenceReady ? "gate_verdict_allowed" : "gate_evidence_missing", passed ? [] : evidenceReady ? [] : scoped.map(obligationSelector), scoped.map((item) => item.obligation_id)),
+      availability: createActionAvailability(
+        snapshot,
+        selector,
+        verified || !evidenceReady ? "blocked" : "allowed",
+        verified
+          ? "gate_complete"
+          : authority.acceptedOverride
+            ? "gate_reverification_allowed"
+            : evidenceReady
+              ? "gate_verdict_allowed"
+              : "gate_evidence_missing",
+        verified ? [] : evidenceReady ? [] : scoped.map(obligationSelector),
+        scoped.map((item) => item.obligation_id),
+      ),
     };
   }
   if (selector.startsWith("completion:sf-")) {
@@ -169,7 +189,7 @@ function rawAdaptiveAvailability(snapshot: WorkspaceSnapshot, selector: string):
       const definition = profile.obligations.find((candidate) => candidate.obligation_id === (item?.definition_id ?? item?.obligation_id));
       return definition?.formal_gate_ids ?? [];
     }))];
-    const missingGates = gateIds.filter((id) => !state.formal_gate_refs.some((item) => item.gate_id === `${instanceId}/${id}` && item.event_id));
+    const missingGates = gateIds.filter((id) => !resolveGateAuthority(snapshot, `${instanceId}/${id}`).satisfied);
     const already = state.completion_effects.some((effect) => effect.kind === "complete_subflow" && effect.subflow_instance_id === instanceId);
     const blockers = [...unresolved.map((item) => item ? obligationSelector(item) : "obligation:missing"), ...missingGates.map((id) => `gate:${instanceId}/${id}`)];
     return {

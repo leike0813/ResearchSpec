@@ -28,6 +28,12 @@ interface ActionDescriptorView {
   selector: string;
   availability: { basis_sha256: string };
   execution_policy: "direct" | "human_confirmed" | "plan_bound";
+  execution_requirements: {
+    preview_required: boolean;
+    action_basis_required: boolean;
+    plan_sha256_required: boolean;
+    confirmation_required: boolean;
+  };
 }
 
 export interface SubflowPacket {

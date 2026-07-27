@@ -13,6 +13,7 @@ import { DecisionInputSchema, type DecisionInput } from "../contracts/case-contr
 import { CaseStateSchema } from "../contracts/case-state.js";
 import { DraftPatchReceiptSchema } from "../contracts/draft-patch.js";
 import { ContractChangeDecisionReceiptSchema } from "../contracts/contract-change.js";
+import { isPassingGateVerdict, resolveGateAuthority } from "./gate-authority.js";
 
 export type DecisionChoice = DecisionInput["decision"];
 
@@ -49,8 +50,9 @@ export async function decideItem(input: { snapshot: WorkspaceSnapshot; selector:
     if (!["proposed", "postponed"].includes(currentStatus)) throw new LifecycleError("conflict", "decision_target_resolved", `Item is already resolved: ${currentStatus}`);
   } else {
     const gate = record(item.value);
-    const existingOverride = latestDecisions(input.snapshot).find((decision) => decision.gate_id === item.id && decision.status === "accepted");
-    if (gate.blocking !== true || gate.verdict === "pass" || existingOverride) throw new LifecycleError("conflict", "decision_target_resolved", "Gate is not a pending blocking item.");
+    if (gate.blocking !== true || isPassingGateVerdict(gate.verdict) || resolveGateAuthority(input.snapshot, item.id).acceptedOverride) {
+      throw new LifecycleError("conflict", "decision_target_resolved", "Gate is not a pending blocking item.");
+    }
     if (gate.schema_version === "1") await assertTrustedGateForOverride(input.snapshot, gate);
   }
   const now = new Date().toISOString();
@@ -87,7 +89,11 @@ export async function decideItem(input: { snapshot: WorkspaceSnapshot; selector:
     actor: { kind: "human", name: input.actorName }, decision_type: item.type === "gate" ? "gate_override" : "patch_acceptance",
     selected_option: input.decision, status: input.decision === "accept" ? "accepted" : input.decision === "reject" ? "rejected" : "postponed",
     rationale: input.reason, ...(item.type === "change" ? { change_id: item.id } : {}), ...(item.type === "patch" ? { draft_patch_id: item.id } : {}), ...(item.type === "gate" ? { gate_id: item.id } : {}),
-    ...(item.type === "gate" && typeof record(item.value).event_id === "string" ? { gate_event_id: record(item.value).event_id, gate_receipt_sha256: string(record(record(item.value).receipt).sha256) } : {}),
+    ...(item.type === "gate" && typeof record(item.value).event_id === "string" ? {
+      gate_event_id: record(item.value).event_id,
+      gate_receipt_sha256: string(record(record(item.value).receipt).sha256),
+      gate_receipt_plan_sha256: string(record(record(item.value).receipt).plan_sha256),
+    } : {}),
   };
   operations.push({ action: await fileExists(ledgerPath) ? "refresh" : "create", path: ledgerPath, relativePath: "runs/current/decision-ledger.jsonl", content: `${ledger}${JSON.stringify(event)}\n`, scope: "workspace", ownership: "user", previousHash: sha256(ledger), nextHash: sha256(`${ledger}${JSON.stringify(event)}\n`), reason: "append human decision last" });
   if (!input.dryRun) await executeWritePlan({ operations });

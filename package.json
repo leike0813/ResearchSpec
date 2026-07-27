@@ -39,7 +39,7 @@
   ],
   "scripts": {
     "clean": "node scripts/clean-output.mjs dist .test-dist",
-    "build": "node scripts/clean-output.mjs dist && tsc -p tsconfig.build.json && chmod +x dist/src/cli/bin.js",
+    "build": "node scripts/clean-output.mjs dist && tsc -p tsconfig.build.json && node scripts/mark-cli-executable.mjs",
     "test": "node scripts/clean-output.mjs .test-dist && tsc -p tsconfig.test.json && node scripts/run-tests.mjs",
     "check": "tsc -p tsconfig.json",
     "lint": "eslint .",

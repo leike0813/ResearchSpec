@@ -32,6 +32,11 @@ import type { CompactTransactionEffect } from "../contracts/runtime-protocol.js"
 import type { WorkspaceSnapshot, SnapshotFile } from "../workspace/snapshot.js";
 import { executeWritePlan, planFile, sha256, type PlannedWrite, type ReadPrecondition, type WritePlan } from "../workspace/write-plan.js";
 import { evaluateActionAvailability } from "./action-availability.js";
+import { observeRuntimeRaw } from "./runtime-observation.js";
+import {
+  assertCurrentGateReverification,
+  isPassingGateVerdict,
+} from "./gate-authority.js";
 
 export class AdaptiveCaseError extends Error {
   constructor(
@@ -85,7 +90,9 @@ export async function planAdaptiveStart(input: {
       parent_subflow_selector: null,
     }),
   };
-  const planSha256 = bindPlan(input.snapshot, input.selector, { payload: payload.data, actor: actor.data, confirmed_by: input.confirmedBy.trim() });
+  const planSemantic = { payload: payload.data, actor: actor.data, confirmed_by: input.confirmedBy.trim() };
+  const planSha256 = await recoverablePlanSha256(input.snapshot, "adaptive_start", input.selector, planSemantic)
+    ?? bindPlan(input.snapshot, input.selector, planSemantic);
   assertExpectedPlan(input.expectedPlanSha256, planSha256);
   const instanceId = `sf-${route.template_id.slice(4)}-${planSha256.slice(0, 12)}`;
   const existing = state.obligations.some((item) => item.scope.subflow_instance_id === instanceId);
@@ -117,12 +124,18 @@ export async function planAdaptiveStart(input: {
     };
   });
   const now = input.now ?? new Date().toISOString();
-  const receipt = AdaptiveCaseReceiptSchema.parse({
-    schema_version: "1",
+  const receipt = adaptiveReceipt(input.snapshot, {
     receipt_type: "adaptive_start",
     receipt_id: receiptId,
     selector: input.selector,
     plan_sha256: planSha256,
+    identity_selector: `subflow:${instanceId}`,
+    semantic_input: { payload: payload.data, actor: actor.data, confirmed_by: input.confirmedBy.trim() },
+    authority_target: {
+      kind: "case_state",
+      selector: `subflow:${instanceId}`,
+      paths: ["runs/current/state.yaml"],
+    },
     actor: actor.data,
     effects: [{ kind: "subflow_started", refs: [`subflow:${instanceId}`, `route:${route.route_ref}`] }],
     committed_at: now,
@@ -133,7 +146,14 @@ export async function planAdaptiveStart(input: {
     ...state,
     lifecycle: "open",
     obligations: [...state.obligations, ...obligations],
-    receipts: [...state.receipts, { receipt_id: receiptId, receipt_type: receipt.receipt_type, path: receiptPath, sha256: receiptHash }],
+    receipts: [...state.receipts, {
+      receipt_id: receiptId,
+      receipt_type: receipt.receipt_type,
+      path: receiptPath,
+      sha256: receiptHash,
+      plan_sha256: planSha256,
+      authority_selector: `subflow:${instanceId}`,
+    }],
     updated_at: now,
   });
   return planned(input.snapshot, input.selector, planSha256, `subflow:${instanceId}`, receiptHash, [{ kind: "subflow_started", refs: [`subflow:${instanceId}`] }], obligations.map((item) => `instructions:obligation:${instanceId}/${item.obligation_id}`), [receiptOperation, stateWrite(input.snapshot, nextState)]);
@@ -155,11 +175,15 @@ export async function planAdaptiveObligationSubmit(input: {
   const obligation = obligationForSelector(state, input.selector);
   const definition = profile.obligations.find((item) => item.obligation_id === (obligation.definition_id ?? obligation.obligation_id));
   if (!definition) throw new AdaptiveCaseError("adaptive_profile_invalid", "Obligation definition is unavailable.", "domain");
-  const planSha256 = bindPlan(input.snapshot, input.selector, { payload: payload.data, actor: actor.data });
+  const planSemantic = { payload: payload.data, actor: actor.data };
+  const planSha256 = await recoverablePlanSha256(input.snapshot, receiptTypeForPayload(payload.data), input.selector, planSemantic)
+    ?? bindPlan(input.snapshot, input.selector, planSemantic);
   assertExpectedPlan(input.expectedPlanSha256, planSha256);
   const now = input.now ?? new Date().toISOString();
   const attemptId = `AT-${planSha256.slice(0, 22)}`;
-  if (input.snapshot.attempts.some((item) => item.attempt_id === attemptId)) {
+  const existingAttempt = input.snapshot.attempts.find((item) => item.attempt_id === attemptId);
+  const receiptId = `R-obligation-${planSha256.slice(0, 20)}`;
+  if (existingAttempt && state.receipts.some((item) => item.receipt_id === receiptId)) {
     return already(input.selector, planSha256, `attempt:${attemptId}`, [{ kind: "no_change", refs: [`attempt:${attemptId}`] }]);
   }
 
@@ -188,21 +212,35 @@ export async function planAdaptiveObligationSubmit(input: {
     recorded_at: now,
   });
   assertAttemptReferences(input.snapshot, obligation, payload.data);
-  const attemptOperation = attemptWrite(input.snapshot, attempt);
+  if (existingAttempt && !sameAttempt(existingAttempt, attempt)) {
+    throw new AdaptiveCaseError(
+      "adaptive_retry_conflict",
+      `Attempt identity conflicts with receipt-bound retry: ${attemptId}`,
+      "conflict",
+    );
+  }
+  const attemptOperation = existingAttempt ? undefined : attemptWrite(input.snapshot, attempt);
 
   if (payload.data.operation === "record_attempt" && !(obligation.status === "blocked" && payload.data.retry_of_attempt_id)) {
-    return planned(input.snapshot, input.selector, planSha256, `attempt:${attemptId}`, undefined, [{ kind: "attempt_recorded", refs: [`attempt:${attemptId}`] }], [`instructions:${input.selector}`], [attemptOperation]);
+    return planned(input.snapshot, input.selector, planSha256, `attempt:${attemptId}`, undefined, [{ kind: "attempt_recorded", refs: [`attempt:${attemptId}`] }], [`instructions:${input.selector}`], attemptOperation ? [attemptOperation] : []);
   }
 
   const receiptType = payload.data.operation === "pause" ? "obligation_pause" : "obligation_commit";
-  const receiptId = `R-obligation-${planSha256.slice(0, 20)}`;
   const receiptPath = `runs/current/receipts/${receiptType.replaceAll("_", "-")}/${attemptId}.json`;
-  const receipt = AdaptiveCaseReceiptSchema.parse({
-    schema_version: "1",
+  const receipt = adaptiveReceipt(input.snapshot, {
     receipt_type: receiptType,
     receipt_id: receiptId,
     selector: input.selector,
     plan_sha256: planSha256,
+    identity_selector: `attempt:${attemptId}`,
+    semantic_input: { payload: payload.data, actor: actor.data },
+    authority_target: {
+      kind: payload.data.operation === "accept_evidence" ? "accepted_evidence" : "case_state",
+      selector: `attempt:${attemptId}`,
+      paths: payload.data.operation === "accept_evidence"
+        ? ["runs/current/artifact-registry.json", "runs/current/attempt-ledger.jsonl", "runs/current/state.yaml"]
+        : ["runs/current/attempt-ledger.jsonl", "runs/current/state.yaml"],
+    },
     actor: actor.data,
     effects: [{ kind: payload.data.operation === "accept_evidence" ? "evidence_accepted" : payload.data.operation === "pause" ? "obligation_paused" : "obligation_retried", refs: [obligation.obligation_id, `attempt:${attemptId}`] }],
     committed_at: now,
@@ -220,11 +258,26 @@ export async function planAdaptiveObligationSubmit(input: {
     const registryFile = requiredFile(input.snapshot, "runs/current/artifact-registry.json");
     const registry = ArtifactRegistrySchema.parse(input.snapshot.documents["runs/current/artifact-registry.json"]);
     const records = accepted.map((item) => item.artifact);
-    if (records.some((item) => registry.artifacts.some((existing) => existing.artifact_id === item.artifact_id))) throw new AdaptiveCaseError("artifact_id_conflict", "Accepted evidence artifact ID already exists.", "conflict");
-    const registryText = `${JSON.stringify({ ...registry, artifacts: [...registry.artifacts, ...records] }, null, 2)}\n`;
-    operations.push(refresh(registryFile, registryText, "register adaptive accepted evidence"));
-    acceptedEvidence = [...acceptedEvidence, ...accepted.map((item) => item.evidence)];
-    acceptedIds = [...acceptedIds, ...accepted.map((item) => item.evidence.evidence_id)];
+    for (const record of records) {
+      const existing = registry.artifacts.find((candidate) => candidate.artifact_id === record.artifact_id);
+      if (existing && (
+        existing.path !== record.path
+        || existing.sha256 !== record.sha256
+        || existing.artifact_type !== record.artifact_type
+      )) {
+        throw new AdaptiveCaseError("artifact_id_conflict", "Accepted evidence artifact ID already exists with different authority.", "conflict");
+      }
+    }
+    const newRecords = records.filter((record) =>
+      !registry.artifacts.some((existing) => existing.artifact_id === record.artifact_id));
+    if (newRecords.length > 0) {
+      const registryText = `${JSON.stringify({ ...registry, artifacts: [...registry.artifacts, ...newRecords] }, null, 2)}\n`;
+      operations.push(refresh(registryFile, registryText, "register adaptive accepted evidence"));
+    }
+    const newEvidence = accepted.map((item) => item.evidence)
+      .filter((evidence) => !acceptedEvidence.some((existing) => existing.evidence_id === evidence.evidence_id));
+    acceptedEvidence = [...acceptedEvidence, ...newEvidence];
+    acceptedIds = [...new Set([...acceptedIds, ...accepted.map((item) => item.evidence.evidence_id)])];
     nextStatus = "satisfied";
   } else if (payload.data.operation === "pause") {
     nextStatus = "blocked";
@@ -237,10 +290,17 @@ export async function planAdaptiveObligationSubmit(input: {
     lifecycle: recomputeLifecycle(state, obligation.obligation_id, nextObligation),
     obligations: state.obligations.map((item) => item.obligation_id === obligation.obligation_id ? nextObligation : item),
     accepted_evidence: acceptedEvidence,
-    receipts: [...state.receipts, { receipt_id: receiptId, receipt_type: receipt.receipt_type, path: receiptPath, sha256: receiptHash }],
+    receipts: [...state.receipts, {
+      receipt_id: receiptId,
+      receipt_type: receipt.receipt_type,
+      path: receiptPath,
+      sha256: receiptHash,
+      plan_sha256: planSha256,
+      authority_selector: `attempt:${attemptId}`,
+    }],
     updated_at: now,
   });
-  operations.push(receiptOperation, attemptOperation, stateWrite(input.snapshot, nextState));
+  operations.push(receiptOperation, ...(attemptOperation ? [attemptOperation] : []), stateWrite(input.snapshot, nextState));
   const effects: CompactTransactionEffect[] = [
     { kind: "attempt_recorded", refs: [`attempt:${attemptId}`] },
     payload.data.operation === "accept_evidence"
@@ -266,19 +326,27 @@ export async function planAdaptiveCompletion(input: {
   const [instanceId = "", criterionId = ""] = input.selector.slice("completion:".length).split("/", 2);
   const criterion = profile.completion_criteria.find((item) => item.criterion_id === criterionId);
   if (!criterion) throw new AdaptiveCaseError("completion_not_found", "Completion criterion is unavailable.", "domain");
-  const planSha256 = bindPlan(input.snapshot, input.selector, { actor: actor.data, effects: criterion.effects });
+  const planSemantic = { actor: actor.data, effects: criterion.effects };
+  const planSha256 = await recoverablePlanSha256(input.snapshot, "adaptive_completion", input.selector, planSemantic)
+    ?? bindPlan(input.snapshot, input.selector, planSemantic);
   assertExpectedPlan(input.expectedPlanSha256, planSha256);
   const receiptId = `R-completion-${planSha256.slice(0, 20)}`;
   if (state.receipts.some((item) => item.receipt_id === receiptId)) return already(input.selector, planSha256, input.selector, [{ kind: "no_change", refs: [input.selector] }]);
   const effects = criterion.effects.map((effect) => effect.kind === "complete_subflow" ? { kind: "complete_subflow" as const, subflow_instance_id: instanceId } : { kind: "complete_run" as const });
   const now = input.now ?? new Date().toISOString();
   const receiptPath = `runs/current/receipts/adaptive-completion/${instanceId}/${criterionId}.json`;
-  const receipt = AdaptiveCaseReceiptSchema.parse({
-    schema_version: "1",
+  const receipt = adaptiveReceipt(input.snapshot, {
     receipt_type: "adaptive_completion",
     receipt_id: receiptId,
     selector: input.selector,
     plan_sha256: planSha256,
+    identity_selector: input.selector,
+    semantic_input: { actor: actor.data, effects: criterion.effects },
+    authority_target: {
+      kind: "case_state",
+      selector: input.selector,
+      paths: ["runs/current/state.yaml"],
+    },
     actor: actor.data,
     effects: effects.map((effect) => ({ kind: effect.kind, refs: effect.kind === "complete_subflow" ? [`subflow:${instanceId}`] : [`run:${state.run_id}`] })),
     committed_at: now,
@@ -289,7 +357,14 @@ export async function planAdaptiveCompletion(input: {
     ...state,
     lifecycle: effects.some((effect) => effect.kind === "complete_run") ? "complete" : "open",
     completion_effects: [...state.completion_effects, ...effects],
-    receipts: [...state.receipts, { receipt_id: receiptId, receipt_type: receipt.receipt_type, path: receiptPath, sha256: receiptHash }],
+    receipts: [...state.receipts, {
+      receipt_id: receiptId,
+      receipt_type: receipt.receipt_type,
+      path: receiptPath,
+      sha256: receiptHash,
+      plan_sha256: planSha256,
+      authority_selector: input.selector,
+    }],
     updated_at: now,
   });
   const compactEffects: CompactTransactionEffect[] = effects.map((effect) => effect.kind === "complete_subflow"
@@ -323,15 +398,50 @@ export async function planAdaptiveGate(input: {
   };
   validateGateEvidence(input.snapshot, payload.data.evidence);
   const [instanceId = "", gateNodeId = ""] = input.selector.slice("gate:".length).split("/", 2);
-  const planSha256 = bindPlan(input.snapshot, input.selector, { payload: payload.data, actor: actor.data, confirmed_by: input.confirmedBy.trim() });
+  const gateId = `${instanceId}/${gateNodeId}`;
+  const requiredDecisionIds = state.obligations
+    .filter((item) =>
+      item.scope.subflow_instance_id === instanceId
+      && (item.status === "waived" || item.status === "not_applicable"))
+    .flatMap((item) => item.formal_decision_refs.map((reference) => reference.decision_id));
+  const submittedDecisionIds = new Set(payload.data.evidence.flatMap((item) =>
+    item.kind === "decision" ? [item.decision_id] : []));
+  if (requiredDecisionIds.some((decisionId) => !submittedDecisionIds.has(decisionId))) {
+    throw new AdaptiveCaseError(
+      "gate_decision_evidence_missing",
+      "Gate evidence must bind every waiver or not-applicable Decision used for readiness.",
+      "domain",
+      { required_decision_ids: requiredDecisionIds },
+    );
+  }
+  try {
+    assertCurrentGateReverification(
+      input.snapshot,
+      gateId,
+      payload.data.verification_kind,
+      payload.data.supersedes_event_id,
+    );
+  } catch (error) {
+    throw new AdaptiveCaseError(
+      "gate_reverification_stale",
+      error instanceof Error ? error.message : "Gate reverification does not bind the latest event.",
+      "conflict",
+    );
+  }
+  const planSemantic = { payload: payload.data, actor: actor.data, confirmed_by: input.confirmedBy.trim() };
+  const planSha256 = await recoverablePlanSha256(input.snapshot, "gate_submit", input.selector, planSemantic)
+    ?? bindPlan(input.snapshot, input.selector, planSemantic);
   assertExpectedPlan(input.expectedPlanSha256, planSha256);
   const eventId = `E-${planSha256.slice(0, 24)}`;
-  if (input.snapshot.gates.some((item) => item.event_id === eventId)) return already(input.selector, planSha256, `gate-event:${eventId}`, [{ kind: "no_change", refs: [`gate-event:${eventId}`] }]);
+  const receiptId = `R-gate-${planSha256.slice(0, 20)}`;
+  const existingGateEvent = input.snapshot.gates.find((item) => item.event_id === eventId);
+  if (existingGateEvent && state.receipts.some((item) => item.receipt_id === receiptId)) {
+    return already(input.selector, planSha256, `gate-event:${eventId}`, [{ kind: "no_change", refs: [`gate-event:${eventId}`] }]);
+  }
   const now = input.now ?? new Date().toISOString();
-  const gateId = `${instanceId}/${gateNodeId}`;
   const receiptPath = `runs/current/receipts/gate-submit/${instanceId}/${gateNodeId}/${eventId}.json`;
   const receipt = GateSubmitReceiptSchema.parse({
-    schema_version: "1",
+    schema_version: "2",
     receipt_type: "gate_submit",
     plan_sha256: planSha256,
     instruction_basis_sha256: payload.data.instruction_basis_sha256,
@@ -354,6 +464,22 @@ export async function planAdaptiveGate(input: {
     challenged_basis_sha256: payload.data.challenged_basis_sha256,
     supersedes_event_id: payload.data.supersedes_event_id,
     submitted_at: now,
+    action_identity: {
+      action_type: "gate_submit",
+      identity_selector: `gate-event:${eventId}`,
+    },
+    semantic_input: planSemantic,
+    read_preconditions: ADAPTIVE_BASIS_PATHS.map((relativePath) => {
+      const file = input.snapshot.files.get(relativePath);
+      return file
+        ? { path: relativePath, state: "present" as const, sha256: file.hash }
+        : { path: relativePath, state: "absent" as const };
+    }),
+    authority_target: {
+      kind: "gate_authority",
+      selector: `gate-event:${eventId}`,
+      paths: ["runs/current/gate-ledger.jsonl", "runs/current/state.yaml"],
+    },
   });
   const receiptOperation = await receiptWrite(input.snapshot, receiptPath, receipt);
   const receiptHash = requiredNextHash(receiptOperation);
@@ -380,19 +506,67 @@ export async function planAdaptiveGate(input: {
     ...(payload.data.supersedes_event_id ? { supersedes_event_id: payload.data.supersedes_event_id } : {}),
   };
   const ledgerFile = requiredFile(input.snapshot, "runs/current/gate-ledger.jsonl");
-  const ledgerOperation = refresh(ledgerFile, `${ledgerFile.text}${JSON.stringify(event)}\n`, "append adaptive Gate event");
-  const receiptId = `R-gate-${planSha256.slice(0, 20)}`;
-  const passed = payload.data.verdict === "pass";
+  if (existingGateEvent && !sameGateEvent(existingGateEvent, event)) {
+    throw new AdaptiveCaseError(
+      "adaptive_retry_conflict",
+      `Gate event identity conflicts with receipt-bound retry: ${eventId}`,
+      "conflict",
+    );
+  }
+  const ledgerOperation = existingGateEvent
+    ? undefined
+    : refresh(ledgerFile, `${ledgerFile.text}${JSON.stringify(event)}\n`, "append adaptive Gate event");
+  const passed = isPassingGateVerdict(payload.data.verdict);
+  const gateReference = { gate_id: gateId, event_id: eventId };
+  const withoutGate = state.formal_gate_refs.filter((reference) => reference.gate_id !== gateId);
+  const overrideAction = payload.data.verification_kind === "reverification" && payload.data.verdict === "fail"
+    ? {
+        action_id: `CA-gate-${eventId}`,
+        selector: `case-action:CA-gate-${eventId}`,
+        kind: "gate" as const,
+        obligation_scope: state.obligations
+          .filter((item) => item.scope.subflow_instance_id === instanceId)
+          .map((item) => item.obligation_id),
+        status: "pending" as const,
+        requested_effect: "gate_override" as const,
+        rationale: "Failed Gate reverification requires an explicit human override Decision.",
+        gate_authority: {
+          gate_id: gateId,
+          event_id: eventId,
+          receipt: { path: receiptPath, sha256: receiptHash, plan_sha256: planSha256 },
+        },
+        created_at: now,
+      }
+    : undefined;
   const nextState = CaseStateSchema.parse({
     ...state,
-    formal_gate_refs: passed ? [...state.formal_gate_refs, { gate_id: gateId, event_id: eventId }] : state.formal_gate_refs,
-    obligations: passed ? state.obligations.map((item) => item.scope.subflow_instance_id === instanceId
-      ? { ...item, formal_gate_refs: item.formal_gate_refs.some((ref) => ref.gate_id === gateId) ? item.formal_gate_refs : [...item.formal_gate_refs, { gate_id: gateId, event_id: eventId }] }
-      : item) : state.obligations,
-    receipts: [...state.receipts, { receipt_id: receiptId, receipt_type: "gate_submit", path: receiptPath, sha256: receiptHash }],
+    formal_gate_refs: passed ? [...withoutGate, gateReference] : withoutGate,
+    obligations: state.obligations.map((item) => item.scope.subflow_instance_id === instanceId
+      ? {
+          ...item,
+          formal_gate_refs: passed
+            ? [...item.formal_gate_refs.filter((reference) => reference.gate_id !== gateId), gateReference]
+            : item.formal_gate_refs.filter((reference) => reference.gate_id !== gateId),
+        }
+      : item),
+    case_actions: [
+      ...state.case_actions.map((action) =>
+        action.gate_authority?.gate_id === gateId && action.status !== "applied"
+          ? { ...action, status: "stale" as const }
+          : action),
+      ...(overrideAction ? [overrideAction] : []),
+    ],
+    receipts: [...state.receipts.filter((reference) => reference.receipt_id !== receiptId), {
+      receipt_id: receiptId,
+      receipt_type: "gate_submit",
+      path: receiptPath,
+      sha256: receiptHash,
+      plan_sha256: planSha256,
+      authority_selector: `gate-event:${eventId}`,
+    }],
     updated_at: now,
   });
-  return planned(input.snapshot, input.selector, planSha256, `gate-event:${eventId}`, receiptHash, [{ kind: "gate_recorded", refs: [input.selector, `gate-event:${eventId}`] }], [`instructions:${input.selector}`], [receiptOperation, ledgerOperation, stateWrite(input.snapshot, nextState)]);
+  return planned(input.snapshot, input.selector, planSha256, `gate-event:${eventId}`, receiptHash, [{ kind: "gate_recorded", refs: [input.selector, `gate-event:${eventId}`] }], [`instructions:${input.selector}`], [receiptOperation, ...(ledgerOperation ? [ledgerOperation] : []), stateWrite(input.snapshot, nextState)]);
 }
 
 export async function planAdaptiveResolutionDecision(input: {
@@ -411,62 +585,123 @@ export async function planAdaptiveResolutionDecision(input: {
   const action = state.case_actions.find((item) => `case-action:${item.action_id}` === input.selector);
   const obligation = action ? state.obligations.find((item) => item.obligation_id === action.obligation_scope[0]) : undefined;
   if (!action || !obligation || !action.requested_effect) throw new AdaptiveCaseError("decision_target_missing", "Adaptive resolution case action is unavailable.", "domain");
-  const planSha256 = bindPlan(input.snapshot, input.selector, { decision: semantic.data, requested_effect: action.requested_effect });
+  const planSemantic = { decision: semantic.data, requested_effect: action.requested_effect };
+  const planSha256 = await recoverablePlanSha256(input.snapshot, "obligation_resolution", input.selector, planSemantic)
+    ?? bindPlan(input.snapshot, input.selector, planSemantic);
   assertExpectedPlan(input.expectedPlanSha256, planSha256);
   const decisionId = `D-${planSha256.slice(0, 24)}`;
   const eventId = `E-${planSha256.slice(24, 48)}`;
-  if (input.snapshot.decisions.some((item) => item.event_id === eventId)) return already(input.selector, planSha256, `decision:${decisionId}`, [{ kind: "no_change", refs: [`decision:${decisionId}`] }]);
+  const receiptId = `R-resolution-${planSha256.slice(0, 20)}`;
+  const existingDecisionEvent = input.snapshot.decisions.find((item) => item.event_id === eventId);
+  if (existingDecisionEvent && state.receipts.some((item) => item.receipt_id === receiptId)) {
+    return already(input.selector, planSha256, `decision:${decisionId}`, [{ kind: "no_change", refs: [`decision:${decisionId}`] }]);
+  }
   const now = input.now ?? new Date().toISOString();
   const accepted = input.decision === "accept";
   const status = accepted ? "accepted" : input.decision === "reject" ? "rejected" : "postponed";
+  const gateOverride = action.requested_effect === "gate_override";
   const event = {
     event_id: eventId,
     decision_id: decisionId,
     timestamp: now,
     actor: { kind: "human", name: input.actorName },
-    decision_type: action.requested_effect === "waive" ? "obligation_waiver" : "obligation_not_applicable",
+    decision_type: action.requested_effect === "waive"
+      ? "obligation_waiver"
+      : action.requested_effect === "not_applicable"
+        ? "obligation_not_applicable"
+        : "gate_override",
     selected_option: action.requested_effect,
     status,
     rationale: input.reason,
     case_action_id: action.action_id,
     obligation_id: obligation.obligation_id,
     subflow_instance_id: obligation.scope.subflow_instance_id ?? undefined,
+    ...(gateOverride && action.gate_authority ? {
+      gate_id: action.gate_authority.gate_id,
+      gate_event_id: action.gate_authority.event_id,
+      gate_receipt_sha256: action.gate_authority.receipt.sha256,
+      gate_receipt_plan_sha256: action.gate_authority.receipt.plan_sha256,
+    } : {}),
   };
-  const receiptId = `R-resolution-${planSha256.slice(0, 20)}`;
   const receiptPath = `runs/current/receipts/obligation-resolution/${action.action_id}/${eventId}.json`;
-  const receipt = AdaptiveCaseReceiptSchema.parse({
-    schema_version: "1",
+  const receipt = adaptiveReceipt(input.snapshot, {
     receipt_type: "obligation_resolution",
     receipt_id: receiptId,
     selector: input.selector,
     plan_sha256: planSha256,
+    identity_selector: `decision:${decisionId}`,
+    semantic_input: { decision: semantic.data, requested_effect: action.requested_effect },
+    authority_target: {
+      kind: gateOverride ? "gate_override" : "obligation_resolution",
+      selector: `decision:${decisionId}`,
+      paths: ["runs/current/decision-ledger.jsonl", "runs/current/state.yaml"],
+    },
     actor: { kind: "human", name: input.actorName },
-    effects: [{ kind: accepted ? "obligation_resolved" : `resolution_${status}`, refs: [obligation.obligation_id, `decision:${decisionId}`] }],
+    effects: [{
+      kind: accepted
+        ? gateOverride ? "gate_overridden" : "obligation_resolved"
+        : `resolution_${status}`,
+      refs: [
+        obligation.obligation_id,
+        `decision:${decisionId}`,
+        ...(gateOverride && action.gate_authority ? [`gate:${action.gate_authority.gate_id}`] : []),
+      ],
+    }],
     committed_at: now,
   });
   const receiptOperation = await receiptWrite(input.snapshot, receiptPath, receipt);
   const receiptHash = requiredNextHash(receiptOperation);
   const ledgerFile = requiredFile(input.snapshot, "runs/current/decision-ledger.jsonl");
-  const ledgerOperation = refresh(ledgerFile, `${ledgerFile.text}${JSON.stringify(event)}\n`, "append adaptive obligation Decision");
-  const nextObligation = accepted ? {
+  if (existingDecisionEvent && !sameDecisionEvent(existingDecisionEvent, event)) {
+    throw new AdaptiveCaseError(
+      "adaptive_retry_conflict",
+      `Decision event identity conflicts with receipt-bound retry: ${eventId}`,
+      "conflict",
+    );
+  }
+  const ledgerOperation = existingDecisionEvent
+    ? undefined
+    : refresh(ledgerFile, `${ledgerFile.text}${JSON.stringify(event)}\n`, "append adaptive obligation Decision");
+  const decisionReference = {
+    decision_id: decisionId,
+    decision_type: event.decision_type,
+    event_id: eventId,
+    receipt: { path: receiptPath, sha256: receiptHash, plan_sha256: planSha256 },
+  };
+  const nextObligation = accepted && !gateOverride ? {
     ...obligation,
     status: action.requested_effect === "waive" ? "waived" as const : "not_applicable" as const,
     status_reason: action.rationale ?? input.reason ?? null,
-    formal_decision_refs: [...obligation.formal_decision_refs, { decision_id: decisionId, decision_type: event.decision_type }],
+    formal_decision_refs: [...obligation.formal_decision_refs, decisionReference],
+  } : accepted ? {
+    ...obligation,
+    formal_decision_refs: [...obligation.formal_decision_refs, decisionReference],
   } : obligation;
   const nextState = CaseStateSchema.parse({
     ...state,
     lifecycle: recomputeLifecycle(state, obligation.obligation_id, nextObligation),
     obligations: state.obligations.map((item) => item.obligation_id === obligation.obligation_id ? nextObligation : item),
-    formal_decision_refs: accepted ? [...state.formal_decision_refs, { decision_id: decisionId, decision_type: event.decision_type }] : state.formal_decision_refs,
+    formal_decision_refs: accepted ? [...state.formal_decision_refs, decisionReference] : state.formal_decision_refs,
     case_actions: state.case_actions.map((item) => item.action_id === action.action_id ? { ...item, status } : item),
-    receipts: [...state.receipts, { receipt_id: receiptId, receipt_type: receipt.receipt_type, path: receiptPath, sha256: receiptHash }],
+    receipts: [...state.receipts.filter((reference) => reference.receipt_id !== receiptId), {
+      receipt_id: receiptId,
+      receipt_type: receipt.receipt_type,
+      path: receiptPath,
+      sha256: receiptHash,
+      plan_sha256: planSha256,
+      authority_selector: `decision:${decisionId}`,
+    }],
     updated_at: now,
   });
   return planned(input.snapshot, input.selector, planSha256, `decision:${decisionId}`, receiptHash, [
     { kind: "decision_recorded", refs: [`decision:${decisionId}`] },
-    ...(accepted ? [{ kind: "obligation_resolved" as const, refs: [obligation.obligation_id] }] : []),
-  ], [`instructions:obligation:${obligation.scope.subflow_instance_id ?? state.run_id}/${obligation.obligation_id}`], [receiptOperation, ledgerOperation, stateWrite(input.snapshot, nextState)]);
+    ...(accepted ? [{
+      kind: gateOverride ? "gate_recorded" as const : "obligation_resolved" as const,
+      refs: gateOverride && action.gate_authority
+        ? [`gate:${action.gate_authority.gate_id}`]
+        : [obligation.obligation_id],
+    }] : []),
+  ], [`instructions:obligation:${obligation.scope.subflow_instance_id ?? state.run_id}/${obligation.obligation_id}`], [receiptOperation, ...(ledgerOperation ? [ledgerOperation] : []), stateWrite(input.snapshot, nextState)]);
 }
 
 export async function executeAdaptivePlan(plan: AdaptiveTransactionPlan): Promise<"applied" | "already_applied"> {
@@ -491,12 +726,18 @@ function planResolutionRequest(
   if (state.case_actions.some((item) => item.action_id === actionId)) return Promise.resolve(already(selector, planSha256, `case-action:${actionId}`, [{ kind: "no_change", refs: [`case-action:${actionId}`] }]));
   const receiptId = `R-resolution-request-${planSha256.slice(0, 16)}`;
   const receiptPath = `runs/current/receipts/obligation-resolution-request/${actionId}.json`;
-  const receipt = AdaptiveCaseReceiptSchema.parse({
-    schema_version: "1",
+  const receipt = adaptiveReceipt(snapshot, {
     receipt_type: "obligation_resolution_request",
     receipt_id: receiptId,
     selector,
     plan_sha256: planSha256,
+    identity_selector: `case-action:${actionId}`,
+    semantic_input: { payload, actor },
+    authority_target: {
+      kind: "case_action",
+      selector: `case-action:${actionId}`,
+      paths: ["runs/current/state.yaml"],
+    },
     actor,
     effects: [{ kind: policy === "profile_allowed" ? "obligation_resolved" : "obligation_resolution_requested", refs: [obligation.obligation_id, `case-action:${actionId}`] }],
     committed_at: now,
@@ -525,7 +766,14 @@ function planResolutionRequest(
         rationale: payload.rationale,
         created_at: now,
       }],
-      receipts: [...state.receipts, { receipt_id: receiptId, receipt_type: receipt.receipt_type, path: receiptPath, sha256: receiptHash }],
+      receipts: [...state.receipts, {
+        receipt_id: receiptId,
+        receipt_type: receipt.receipt_type,
+        path: receiptPath,
+        sha256: receiptHash,
+        plan_sha256: planSha256,
+        authority_selector: `case-action:${actionId}`,
+      }],
       updated_at: now,
     });
     return planned(snapshot, selector, planSha256, `case-action:${actionId}`, receiptHash, [direct
@@ -598,9 +846,26 @@ function assertAttemptReferences(snapshot: WorkspaceSnapshot, obligation: HardOb
   }
 }
 
-function validateGateEvidence(snapshot: WorkspaceSnapshot, evidence: Array<{ kind: "artifact"; artifact_id: string; sha256: string } | { kind: "contract"; path: string; sha256: string }>): void {
+function validateGateEvidence(snapshot: WorkspaceSnapshot, evidence: Array<
+  | { kind: "artifact"; artifact_id: string; sha256: string }
+  | { kind: "contract"; path: string; sha256: string }
+  | { kind: "decision"; decision_id: string; event_id: string; receipt: { path: string; sha256: string; plan_sha256: string } }
+>): void {
   for (const item of evidence) {
-    if (item.kind === "contract") {
+    if (item.kind === "decision") {
+      const decision = snapshot.decisions.find((candidate) =>
+        candidate.decision_id === item.decision_id
+        && candidate.event_id === item.event_id
+        && candidate.status === "accepted");
+      const receipt = snapshot.files.get(item.receipt.path);
+      if (!decision || !receipt || receipt.hash !== item.receipt.sha256) {
+        throw new AdaptiveCaseError("gate_evidence_untrusted", `Gate Decision evidence is stale: ${item.decision_id}`, "conflict");
+      }
+      const parsed = AdaptiveCaseReceiptSchema.safeParse(receipt.value);
+      if (!parsed.success || parsed.data.plan_sha256 !== item.receipt.plan_sha256) {
+        throw new AdaptiveCaseError("gate_evidence_untrusted", `Gate Decision receipt is invalid: ${item.decision_id}`, "conflict");
+      }
+    } else if (item.kind === "contract") {
       const file = snapshot.files.get(item.path);
       if (!file || file.hash !== item.sha256) throw new AdaptiveCaseError("gate_evidence_untrusted", `Gate contract evidence is stale: ${item.path}`, "conflict");
     } else {
@@ -625,18 +890,61 @@ async function requireAllowed(snapshot: WorkspaceSnapshot, selector: string) {
 }
 
 function bindPlan(snapshot: WorkspaceSnapshot, selector: string, semantic: unknown): string {
-  const basis = [
-    "specs/workflow.yaml",
-    "runs/current/state.yaml",
-    "runs/current/artifact-registry.json",
-    "runs/current/gate-ledger.jsonl",
-    "runs/current/decision-ledger.jsonl",
-    "runs/current/attempt-ledger.jsonl",
-  ].flatMap((relativePath) => {
+  const basis = ADAPTIVE_BASIS_PATHS.flatMap((relativePath) => {
     const file = snapshot.files.get(relativePath);
     return file ? [[relativePath, file.hash] as const] : [];
   });
   return sha256(`${JSON.stringify({ selector, semantic, basis })}\n`);
+}
+
+function receiptTypeForPayload(payload: AdaptiveObligationSubmitInput) {
+  if (payload.operation === "request_resolution") return "obligation_resolution_request" as const;
+  return payload.operation === "pause" ? "obligation_pause" as const : "obligation_commit" as const;
+}
+
+async function recoverablePlanSha256(
+  snapshot: WorkspaceSnapshot,
+  receiptType: string,
+  selector: string,
+  semanticInput: unknown,
+): Promise<string | undefined> {
+  const observation = await observeRuntimeRaw(snapshot.workspace);
+  const candidates = observation.receipts.filter((candidate) =>
+    candidate.receiptType === receiptType
+    && candidate.receipt?.schema_version === "2"
+    && candidate.receipt.selector === selector
+    && JSON.stringify(candidate.receipt.semantic_input) === JSON.stringify(semanticInput)
+    && recordedBasisIsCompatible(snapshot, candidate.receipt));
+  const plans = [...new Set(candidates.flatMap((candidate) =>
+    typeof candidate.receipt?.plan_sha256 === "string" ? [candidate.receipt.plan_sha256] : []))];
+  if (plans.length > 1) {
+    throw new AdaptiveCaseError(
+      "adaptive_retry_conflict",
+      `Multiple receipt-bound plans match ${selector}.`,
+      "conflict",
+      { plan_sha256: plans },
+    );
+  }
+  return plans[0];
+}
+
+function recordedBasisIsCompatible(snapshot: WorkspaceSnapshot, receipt: Record<string, unknown>): boolean {
+  const target = record(receipt.authority_target);
+  const mutablePaths = new Set(Array.isArray(target.paths)
+    ? target.paths.filter((item): item is string => typeof item === "string")
+    : []);
+  const recorded = Array.isArray(receipt.read_preconditions) ? receipt.read_preconditions : [];
+  return recorded.every((value) => {
+    const precondition = record(value);
+    const relativePath = typeof precondition.path === "string" ? precondition.path : "";
+    if (!relativePath || mutablePaths.has(relativePath)) return true;
+    const current = snapshot.files.get(relativePath);
+    return precondition.state === "absent"
+      ? !current
+      : precondition.state === "present"
+        && typeof precondition.sha256 === "string"
+        && current?.hash === precondition.sha256;
+  });
 }
 
 function assertExpectedPlan(expected: string | undefined, actual: string): void {
@@ -670,22 +978,92 @@ function already(selector: string, planSha256: string, identitySelector: string,
 }
 
 function preconditions(snapshot: WorkspaceSnapshot): ReadPrecondition[] {
-  return [
-    "specs/workflow.yaml",
-    "runs/current/state.yaml",
-    "runs/current/artifact-registry.json",
-    "runs/current/gate-ledger.jsonl",
-    "runs/current/decision-ledger.jsonl",
-    "runs/current/attempt-ledger.jsonl",
-  ].flatMap((relativePath) => {
+  return ADAPTIVE_BASIS_PATHS.flatMap((relativePath) => {
     const file = snapshot.files.get(relativePath);
     return file ? [{ path: file.absolutePath, expectedHash: file.hash, reason: `adaptive basis ${relativePath}` }] : [];
   });
 }
 
+const ADAPTIVE_BASIS_PATHS = [
+  "specs/workflow.yaml",
+  "runs/current/state.yaml",
+  "runs/current/artifact-registry.json",
+  "runs/current/gate-ledger.jsonl",
+  "runs/current/decision-ledger.jsonl",
+  "runs/current/attempt-ledger.jsonl",
+] as const;
+
+function adaptiveReceipt(
+  snapshot: WorkspaceSnapshot,
+  input: {
+    receipt_type: "adaptive_start" | "obligation_commit" | "obligation_pause" | "obligation_resolution_request" | "obligation_resolution" | "adaptive_completion";
+    receipt_id: string;
+    selector: string;
+    plan_sha256: string;
+    identity_selector: string;
+    semantic_input: unknown;
+    authority_target: { kind: string; selector: string; paths: string[] };
+    actor: SubmitActor;
+    effects: Array<{ kind: string; refs: string[] }>;
+    committed_at: string;
+  },
+) {
+  return AdaptiveCaseReceiptSchema.parse({
+    schema_version: "2",
+    receipt_type: input.receipt_type,
+    receipt_id: input.receipt_id,
+    selector: input.selector,
+    plan_sha256: input.plan_sha256,
+    action_identity: {
+      action_type: input.receipt_type,
+      identity_selector: input.identity_selector,
+    },
+    semantic_input: input.semantic_input,
+    read_preconditions: ADAPTIVE_BASIS_PATHS.map((relativePath) => {
+      const file = snapshot.files.get(relativePath);
+      return file
+        ? { path: relativePath, state: "present" as const, sha256: file.hash }
+        : { path: relativePath, state: "absent" as const };
+    }),
+    authority_target: input.authority_target,
+    actor: input.actor,
+    effects: input.effects,
+    committed_at: input.committed_at,
+  });
+}
+
 async function receiptWrite(snapshot: WorkspaceSnapshot, relativePath: string, receipt: unknown): Promise<PlannedWrite> {
   const content = `${JSON.stringify(receipt, null, 2)}\n`;
-  const operation = await planFile({ path: path.join(snapshot.workspace, relativePath), relativePath, content, scope: "workspace", ownership: "user" });
+  const absolutePath = path.join(snapshot.workspace, relativePath);
+  try {
+    const existingBytes = await readFile(absolutePath);
+    const existingText = Buffer.from(existingBytes).toString("utf8");
+    const existing = record(JSON.parse(existingText) as unknown);
+    const requested = record(receipt);
+    if (
+      existing.schema_version === "2"
+      && existing.receipt_type === requested.receipt_type
+      && existing.selector === requested.selector
+      && existing.plan_sha256 === requested.plan_sha256
+      && JSON.stringify(existing.action_identity) === JSON.stringify(requested.action_identity)
+    ) {
+      const existingHash = sha256(existingBytes);
+      return {
+        action: "skip-unchanged",
+        path: absolutePath,
+        relativePath,
+        content: existingText,
+        scope: "workspace",
+        ownership: "user",
+        previousHash: existingHash,
+        nextHash: existingHash,
+        reason: "reuse exact receipt-bound transaction intent",
+      };
+    }
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+  }
+  const operation = await planFile({ path: absolutePath, relativePath, content, scope: "workspace", ownership: "user" });
   if (operation.action === "conflict") throw new AdaptiveCaseError("adaptive_receipt_conflict", `Adaptive receipt conflicts: ${relativePath}`, "conflict");
   return operation;
 }
@@ -703,6 +1081,33 @@ function attemptWrite(snapshot: WorkspaceSnapshot, attempt: AttemptRecord): Plan
     nextHash: sha256(content),
     reason: "create scoped adaptive attempt ledger",
   };
+}
+
+function sameAttempt(left: AttemptRecord, right: AttemptRecord): boolean {
+  const withoutTimestamp = (attempt: AttemptRecord) => {
+    const semantic: Record<string, unknown> = { ...attempt };
+    Reflect.deleteProperty(semantic, "recorded_at");
+    return semantic;
+  };
+  return JSON.stringify(withoutTimestamp(left)) === JSON.stringify(withoutTimestamp(right));
+}
+
+function sameGateEvent(left: Record<string, unknown>, right: Record<string, unknown>): boolean {
+  const withoutTimestamp = (event: Record<string, unknown>) => {
+    const semantic = { ...event };
+    Reflect.deleteProperty(semantic, "timestamp");
+    return semantic;
+  };
+  return JSON.stringify(withoutTimestamp(left)) === JSON.stringify(withoutTimestamp(right));
+}
+
+function sameDecisionEvent(left: Record<string, unknown>, right: Record<string, unknown>): boolean {
+  const withoutTimestamp = (event: Record<string, unknown>) => {
+    const semantic = { ...event };
+    Reflect.deleteProperty(semantic, "timestamp");
+    return semantic;
+  };
+  return JSON.stringify(withoutTimestamp(left)) === JSON.stringify(withoutTimestamp(right));
 }
 
 function stateWrite(snapshot: WorkspaceSnapshot, state: CaseState): PlannedWrite {
@@ -747,4 +1152,10 @@ function recomputeLifecycle(state: CaseState, changedId: string, changed: HardOb
 function inside(root: string, target: string): boolean {
   const relative = path.relative(root, target);
   return relative === "" || (!relative.startsWith("..") && !path.isAbsolute(relative));
+}
+
+function record(value: unknown): Record<string, unknown> {
+  return value && typeof value === "object" && !Array.isArray(value)
+    ? value as Record<string, unknown>
+    : {};
 }

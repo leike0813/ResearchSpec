@@ -131,17 +131,6 @@ void test("[journey.resume-passport] public CLI imports a passport and resumes f
   } finally { await rm(root, { recursive: true, force: true }); }
 });
 
-void test("the nine Material Passport runtime anchors resolve to implemented import capabilities", async () => {
-  const registry = JSON.parse(await readFile("src/arsu-converter/anchors/contract-anchors.json", "utf8")) as { anchors: Array<{ id: string; contract_category: string }> };
-  const anchors = registry.anchors.filter((item) => item.contract_category === "material_passport_runtime_ssot");
-  assert.deepEqual(anchors.map((item) => item.id).sort(), ["STATE-001", "STATE-002", "STATE-003", "STATE-004", "STATE-005", "STATE-006", "STATE-007", "STATE-008", "STATE-009"]);
-  const runtime = await readFile("src/core/runtime/material-passport-import.ts", "utf8");
-  assert.match(runtime, /prepareMaterialPassportImport/);
-  assert.match(runtime, /buildMaterialPassportImportPlan/);
-  const context = await readFile("src/core/runtime/runtime-context.ts", "utf8");
-  assert.match(context, /buildRuntimeContext/);
-});
-
 async function createWorkspace(): Promise<string> {
   const root = await mkdtemp(path.join(tmpdir(), "researchspec-passport-"));
   const workspace = path.join(root, "researchspec");

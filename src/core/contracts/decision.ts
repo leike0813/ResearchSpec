@@ -20,6 +20,7 @@ export const DecisionEventSchema = z.strictObject({
   gate_id: ScopedIdSchema.optional(),
   gate_event_id: SafeIdSchema.optional(),
   gate_receipt_sha256: z.string().regex(/^[a-f0-9]{64}$/).optional(),
+  gate_receipt_plan_sha256: z.string().regex(/^[a-f0-9]{64}$/).optional(),
   decision_point_id: ScopedIdSchema.optional(),
   transition_id: ScopedIdSchema.optional(),
   subflow_instance_id: SafeIdSchema.optional(),

@@ -567,3 +567,21 @@ A change is acceptable when:
 - it keeps human decisions explicit for high-impact research changes;
 - it improves the ability to absorb, maintain, or run ARSU-derived skills through
   ResearchSpec contracts.
+
+## User-Model Acceptance
+
+Treat the packaged CLI and installed Agent surface as the acceptance boundary for
+the canonical user model.
+
+- Exercise authoritative workflow mutations through a fresh packaged CLI
+  process. Test harnesses may create producer candidates only at paths returned
+  by instructions; they must not edit state, registries, receipts, Gate ledgers,
+  or Decision ledgers directly.
+- For plan-bound writes, preview and execution must use the same action basis,
+  semantic input, and plan hash.
+- Test stable user-observable journeys and structured contracts. Do not require
+  exact documentation headings, archived change identifiers, prose wording,
+  diagram labels, source-code layout, or field order unless one is an explicit
+  public contract.
+- A failing journey must be repaired in its owning implementation. Do not weaken
+  the user model or add a test-only authority bypass to make acceptance pass.

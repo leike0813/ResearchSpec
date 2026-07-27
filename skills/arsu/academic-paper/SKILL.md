@@ -70,11 +70,12 @@ Python 3.11+ environment with PyYAML, and is not a live Zotero fact source.
 ### Shared Runtime Boundaries
 
 Use the selected action descriptor's command, execution policy, input schema,
-and current basis. `direct` actions may use their returned hash-bound preview;
-`human_confirmed` Start requires the displayed route confirmation; and
-`plan_bound` Gate, Decision, and patch-Advance actions require their stated
-human confirmation before the identical dry-run plan is executed. Never infer an
-expected hash flag: use the descriptor and preview returned for that action.
+current basis, and policy-derived `execution_requirements`. `direct` actions
+run in one CLI transaction; `human_confirmed` Start requires the displayed
+route confirmation; and `plan_bound` Gate, Decision, and patch-Advance actions
+require an exact preview followed by execution with the matching action basis,
+plan hash, and confirmation. Never infer an expected hash flag: use the
+descriptor and preview returned for that action.
 
 After a durable transaction, use its `next_selectors` and targeted
 `instructions` reads to continue. Refresh full status when route availability,

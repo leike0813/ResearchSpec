@@ -890,8 +890,10 @@ interface EventFacts {
 function eventFacts(snapshot: WorkspaceSnapshot): EventFacts {
   const latestDecisions = latestById(snapshot.decisions.filter((item) => item.authority !== "imported_evidence"), "decision_id");
   const latestGates = latestById(snapshot.gates.filter((item) => item.authority !== "imported_evidence"), "gate_id");
-  const overriddenGateIds = new Set(latestDecisions.filter((item) => item.status === "accepted" && item.decision_type === "gate_override" && typeof item.gate_id === "string").map((item) => String(item.gate_id)));
-  const passedGates = latestGates.filter((item) => item.verdict === "pass" || item.verdict === "pass_with_conditions" || overriddenGateIds.has(String(item.gate_id)));
+  const passedGates = latestGates.filter((item) =>
+    item.verdict === "pass"
+    || item.verdict === "pass_with_conditions"
+    || hasTrustedGateOverride(snapshot, String(item.gate_id), String(item.event_id)));
   const passedGateIds = new Set(passedGates.filter((item) => typeof item.gate_id === "string").map((item) => String(item.gate_id)));
   const passedGateTypes = new Set(passedGates.filter((item) => typeof item.gate_type === "string").map((item) => String(item.gate_type)));
   const acceptedDecisionTypes = new Set(latestDecisions.filter((item) => item.status === "accepted" && typeof item.decision_type === "string").map((item) => String(item.decision_type)));
@@ -923,8 +925,16 @@ async function trustedGateEvents(snapshot: WorkspaceSnapshot): Promise<Record<st
 }
 
 function hasTrustedGateOverride(snapshot: WorkspaceSnapshot, gateId: string, gateEventId: string): boolean {
+  const gate = snapshot.gates.find((event) => event.gate_id === gateId && event.event_id === gateEventId);
+  const receipt = gate?.receipt && typeof gate.receipt === "object" && !Array.isArray(gate.receipt)
+    ? gate.receipt as Record<string, unknown>
+    : undefined;
+  if (!receipt) return false;
   return latestById(snapshot.decisions, "decision_id").some((decision) => decision.status === "accepted" && decision.decision_type === "gate_override"
-    && decision.gate_id === gateId && (decision.gate_event_id === undefined || decision.gate_event_id === gateEventId));
+    && decision.gate_id === gateId
+    && decision.gate_event_id === gateEventId
+    && decision.gate_receipt_sha256 === receipt.sha256
+    && decision.gate_receipt_plan_sha256 === receipt.plan_sha256);
 }
 
 function isInside(root: string, target: string): boolean {

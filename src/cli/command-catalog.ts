@@ -199,16 +199,39 @@ export function applyGlobalCliOptions(program: Command): Command {
 }
 
 export function cliHelpTarget(argv: readonly string[]): string {
-  const topLevelNames = new Set(CLI_TOP_LEVEL_COMMANDS.map((item) => item.path[0]));
-  const topLevelIndex = argv.findIndex((token) => topLevelNames.has(token));
-  if (topLevelIndex < 0) return "researchspec --help";
-  const topLevel = argv[topLevelIndex] ?? "";
-  if (topLevel !== "plugin") return `researchspec ${topLevel} --help`;
-  const pluginName = argv[topLevelIndex + 1];
-  const pluginDefinition = CLI_PLUGIN_COMMANDS.find((item) => item.path[1] === pluginName);
-  return pluginDefinition
-    ? `researchspec plugin ${pluginDefinition.path[1]} --help`
-    : "researchspec plugin --help";
+  const positional = cliPositionalTokens(argv);
+  const target = [...CLI_COMMAND_CATALOG]
+    .sort((left, right) => right.path.length - left.path.length)
+    .find((definition) => definition.path.every((part, index) => positional[index] === part));
+  return target ? `researchspec ${target.path.join(" ")} --help` : "researchspec --help";
+}
+
+function cliPositionalTokens(argv: readonly string[]): string[] {
+  const optionDefinitions = [
+    ...CLI_GLOBAL_OPTIONS,
+    ...CLI_COMMAND_CATALOG.flatMap((definition) => definition.options),
+  ];
+  const valueOptions = new Set(
+    optionDefinitions
+      .filter((definition) => /[<[].+[>\]]/.test(definition.flags))
+      .flatMap((definition) => definition.flags.match(/--[a-z0-9-]+/gi) ?? []),
+  );
+  const positional: string[] = [];
+  for (let index = 0; index < argv.length; index += 1) {
+    const token = argv[index] ?? "";
+    if (token === "--") {
+      positional.push(...argv.slice(index + 1));
+      break;
+    }
+    if (token.startsWith("--")) {
+      const optionName = token.split("=", 1)[0] ?? token;
+      if (!token.includes("=") && valueOptions.has(optionName)) index += 1;
+      continue;
+    }
+    if (token.startsWith("-")) continue;
+    positional.push(token);
+  }
+  return positional;
 }
 
 function command(

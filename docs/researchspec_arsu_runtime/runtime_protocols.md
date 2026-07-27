@@ -29,7 +29,11 @@ help。静态资料不声明当前 action availability，也不替代 `status` �
 
 `doctor` 不自行选择修复：默认只读；只有唯一可推导的控制面事实才会给出 repair plan。它按 `healthy`、`retry_existing_transaction`、`deterministically_repairable`、`requires_human_reconstruction` 或 `conflicting_evidence` 分类。repair 是 `plan_bound`：preview 绑定读哈希和 postcondition，执行需匹配 plan hash，先写 repair receipt、再替换 authority 并 post-check；已存在 receipt 的中断事务只能精确 retry。
 
-Action v2 descriptor 精确声明写入政策。`direct` 由 CLI 在单次调用中规划、校验并提交，dry-run 可选且不重放外部 plan hash；`human_confirmed` 需要 descriptor 指定的人类确认，dry-run 仅在 descriptor 要求时使用；`plan_bound` 必须先 preview，再以匹配的 plan hash 和所需确认执行。`--yes` 不能代替 formal Gate 的人类确认，也不能制造语义 Decision。
+Action v2 descriptor 精确声明写入政策，并从 `execution_policy` 派生
+`execution_requirements`。`direct` 由 CLI 在单次调用中规划、校验并提交；
+`human_confirmed` 需要 descriptor 指定的人类确认；`plan_bound` 必须先 preview，再以匹配的
+action basis、plan hash 和所需确认执行。`--yes` 不能代替 formal Gate 的人类确认，也不能
+制造语义 Decision。
 
 ## 2. 共用审计与风险规则
 

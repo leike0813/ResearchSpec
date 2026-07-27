@@ -196,6 +196,11 @@ flowchart LR
 
 CLI 是这套循环的状态权威。Companion 和 ARSU Skill 可以选择、解释、循环，但不能复制 graph、猜路径或直接写 state/registry/ledger。
 
+每个 Action v2 descriptor 都从 `execution_policy` 派生
+`execution_requirements`。`plan_bound` Gate、Decision 与 patch apply 在 TTY 中先展示同一
+plan/hash 再确认；非 TTY 必须提交匹配的 action basis、plan hash 与 `--yes`。拒绝确认或
+任一绑定缺失时不写 authority。
+
 ## 6. Standalone 与 Pipeline
 
 ### 6.1 Adaptive standalone 时序
@@ -447,6 +452,11 @@ command wrapper 只是不同 agent 工具的 adapter。目标交付量是：
 
 - 全部 17 个目标顶层命令，包括 `doctor`、`plugin`、change/patch lifecycle 与 strict-to-adaptive migration；
 - adaptive action-v2 descriptors、hard obligations、attempt/evidence、formal Gate、completion、case resolution 与动态 `instructions`；
+- adaptive receipt v2 记录 action identity、规范化语义输入、完整读前置条件与 authority
+  target；精确 retry 只补齐缺失阶段，receipt v1 信息不足时由 Doctor 报告人工重建；
+- adaptive Gate 以同一 Gate 的最新可信 event/receipt 为准，`pass` 与
+  `pass_with_conditions` 均可满足 Gate；failed reverification 的 override Decision 绑定该
+  最新 event/receipt，waiver/not-applicable 仍须通过用户确认的 Verify；
 - `RQ Brief → Bibliography → Synthesis` 实验 Slice；
 - receipt-backed、hash-bound candidate submit；
 - contract change / Decision / archive 的确定性事务；

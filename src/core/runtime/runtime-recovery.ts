@@ -27,6 +27,7 @@ import {
   type RawRuntimeObservation,
 } from "./runtime-observation.js";
 import {
+  adaptiveReceiptMatchesAuthority,
   gateReceiptMatchesAuthority,
   startReceiptMatchesAuthority,
   transitionReceiptMatchesAuthority,
@@ -415,15 +416,12 @@ function collectBindings(
   if (adaptiveState.success) {
     for (const reference of adaptiveState.data.receipts) {
       const receipt = receiptsByPath.get(reference.path) ?? missingReceipt(reference.path);
-      const adaptiveReceiptId = stringValue(receipt.receipt?.receipt_id);
       bindings.push({
         authorityPath: STATE_PATH,
         oldHash: reference.sha256,
         receiptPath: reference.path,
         receipt,
-        semanticMatch: receipt.receipt !== undefined
-          && receipt.receiptType === reference.receipt_type
-          && (receipt.receiptType === "gate_submit" || adaptiveReceiptId === reference.receipt_id),
+        semanticMatch: adaptiveReceiptMatchesAuthority(reference, receipt.receiptType, receipt.receipt),
         scope: `receipt:${reference.receipt_id}`,
       });
     }
@@ -498,11 +496,17 @@ async function orphanReceiptFindings(observation: RawRuntimeObservation, referen
     const receipt = group[0];
     if (!receipt?.receipt) continue;
     const selector = typeof receipt.receipt.selector === "string" ? receipt.receipt.selector : null;
-    const retryable = selector && await receiptBasisMatches(observation, receipt);
+    const legacyAdaptive = isAdaptiveReceiptType(receipt.receiptType)
+      && receipt.receipt.schema_version === "1";
+    const retryable = !legacyAdaptive && selector && await receiptBasisMatches(observation, receipt);
     findings.push(finding({
       disposition: retryable ? "retry_existing_transaction" : "requires_human_reconstruction",
       scope: `transaction:${key}`,
-      code: retryable ? "orphan_transaction_retryable" : "orphan_transaction_basis_stale",
+      code: retryable
+        ? "orphan_transaction_retryable"
+        : legacyAdaptive
+          ? "legacy_receipt_requires_human_reconstruction"
+          : "orphan_transaction_basis_stale",
       affectedPaths: group.map((item) => item.relativePath),
       evidenceRefs: [stringValue(receipt.receipt.plan_sha256)],
       retrySelector: retryable ? selector : null,
@@ -512,7 +516,34 @@ async function orphanReceiptFindings(observation: RawRuntimeObservation, referen
 }
 
 async function receiptBasisMatches(observation: RawRuntimeObservation, receipt: ObservedRuntimeReceipt): Promise<boolean> {
-  if (!receipt.receipt || (receipt.receiptType !== "subflow_start" && receipt.receiptType !== "artifact_submit")) return false;
+  if (!receipt.receipt) return false;
+  if (receipt.receipt.schema_version === "2" && (
+    isAdaptiveReceiptType(receipt.receiptType) || receipt.receiptType === "gate_submit"
+  )) {
+    const target = asRecord(receipt.receipt.authority_target);
+    const mutablePaths = new Set(Array.isArray(target.paths)
+      ? target.paths.filter((item): item is string => typeof item === "string")
+      : []);
+    const preconditions = Array.isArray(receipt.receipt.read_preconditions)
+      ? receipt.receipt.read_preconditions.map(asRecord)
+      : [];
+    if (preconditions.length === 0) return false;
+    for (const precondition of preconditions) {
+      const relativePath = stringValue(precondition.path);
+      if (!relativePath || mutablePaths.has(relativePath)) continue;
+      const observed = observation.authority.get(relativePath);
+      if (precondition.state === "absent") {
+        if (observed?.kind === "file" || await safeRelativeFileHash(observation.workspace, observation.workspace, relativePath)) return false;
+      } else if (
+        precondition.state !== "present"
+        || !/^[a-f0-9]{64}$/.test(stringValue(precondition.sha256))
+        || (observed?.sha256 ?? await safeRelativeFileHash(observation.workspace, observation.workspace, relativePath))
+          !== precondition.sha256
+      ) return false;
+    }
+    return true;
+  }
+  if (receipt.receiptType !== "subflow_start" && receipt.receiptType !== "artifact_submit") return false;
   const basis = asRecord(receipt.receipt.basis);
   if (receipt.receiptType === "subflow_start"
     && basis.catalog_sha256 !== sha256(`${JSON.stringify(ARSU_ROUTING_CATALOG)}\n`)) return false;
@@ -564,6 +595,15 @@ async function receiptBasisMatches(observation: RawRuntimeObservation, receipt: 
     if (!decisionEventIds.every((eventId) => current.has(eventId))) return false;
   }
   return true;
+}
+
+function isAdaptiveReceiptType(receiptType: ObservedRuntimeReceipt["receiptType"]): boolean {
+  return receiptType === "adaptive_start"
+    || receiptType === "obligation_commit"
+    || receiptType === "obligation_pause"
+    || receiptType === "obligation_resolution_request"
+    || receiptType === "obligation_resolution"
+    || receiptType === "adaptive_completion";
 }
 
 async function safeRelativeFileHash(root: string, containmentRoot: string, relativePath: string): Promise<string | undefined> {

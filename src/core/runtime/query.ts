@@ -27,19 +27,22 @@ import {
   adaptiveInstanceIds,
   adaptiveInstanceState,
 } from "./adaptive-case-control.js";
+import { isPassingGateVerdict, resolveGateAuthority } from "./gate-authority.js";
 
 export type ListType = "changes" | "artifacts" | "gates" | "decisions" | "tools" | "actions" | "history" | "case-actions" | "diagnostics";
 
 export async function buildStatus(snapshot: WorkspaceSnapshot, plugins?: PluginStatusSummary, literatureAdapters: LiteratureAdapterInspection[] = []) {
   const latestDecisions = latestById(snapshot.decisions.filter((item) => item.authority !== "imported_evidence"), "decision_id");
   const latestGates = latestById(snapshot.gates.filter((item) => item.authority !== "imported_evidence"), "gate_id");
-  const overriddenGateIds = new Set(latestDecisions.filter((item) => item.status === "accepted" && item.decision_type === "gate_override" && typeof item.gate_id === "string").map((item) => item.gate_id as string));
   const pendingDecisions = latestDecisions.filter((item) => item.status === "proposed" || item.status === "postponed");
   const pendingChanges = [...snapshot.changes, ...snapshot.patches].filter((item) => {
     const status = record(item.value).status;
     return status === undefined || status === "proposed" || status === "postponed";
   });
-  const blockingGates = latestGates.filter((item) => item.blocking === true && item.verdict !== "pass" && !overriddenGateIds.has(String(item.gate_id)));
+  const blockingGates = latestGates.filter((item) =>
+    item.blocking === true
+    && !isPassingGateVerdict(item.verdict)
+    && !resolveGateAuthority(snapshot, String(item.gate_id)).satisfied);
   const selectedTools = stringArray(record(snapshot.config.agent_tools).selected);
   const workflowControl = await evaluateWorkflowControl(snapshot);
   return {
@@ -86,10 +89,10 @@ export async function buildCaseStatusSummary(
   const control = await evaluateWorkflowControl(snapshot);
   const latestDecisions = latestById(snapshot.decisions.filter((item) => item.authority !== "imported_evidence"), "decision_id");
   const latestGates = latestById(snapshot.gates.filter((item) => item.authority !== "imported_evidence"), "gate_id");
-  const overriddenGateIds = new Set(latestDecisions
-    .filter((item) => item.status === "accepted" && item.decision_type === "gate_override" && typeof item.gate_id === "string")
-    .map((item) => String(item.gate_id)));
-  const pendingGates = latestGates.filter((item) => item.blocking === true && item.verdict !== "pass" && !overriddenGateIds.has(String(item.gate_id)));
+  const pendingGates = latestGates.filter((item) =>
+    item.blocking === true
+    && !isPassingGateVerdict(item.verdict)
+    && !resolveGateAuthority(snapshot, String(item.gate_id)).satisfied);
   const pendingDecisions = latestDecisions.filter((item) => item.status === "proposed" || item.status === "postponed");
   const pendingChanges = snapshot.changes.filter((item) => pendingStatus(item.value));
   const pendingPatches = snapshot.patches.filter((item) => pendingPatchStatus(item.value));
@@ -386,9 +389,6 @@ function caseActionProjection(snapshot: WorkspaceSnapshot): unknown[] {
     snapshot.gates.filter((item) => item.authority !== "imported_evidence"),
     "gate_id",
   );
-  const overriddenGateIds = new Set(latestDecisions
-    .filter((item) => item.status === "accepted" && item.decision_type === "gate_override" && typeof item.gate_id === "string")
-    .map((item) => String(item.gate_id)));
   const proposedDecisions = latestDecisions
     .filter((item) => item.status === "proposed" || item.status === "postponed")
     .map((value) => ({
@@ -398,7 +398,10 @@ function caseActionProjection(snapshot: WorkspaceSnapshot): unknown[] {
       value,
     }));
   const blockingGates = latestGates
-    .filter((item) => item.blocking === true && item.verdict !== "pass" && !overriddenGateIds.has(String(item.gate_id)))
+    .filter((item) =>
+      item.blocking === true
+      && !isPassingGateVerdict(item.verdict)
+      && !resolveGateAuthority(snapshot, String(item.gate_id)).satisfied)
     .map((value) => ({
       selector: `gate:${String(value.gate_id)}`,
       type: "gate",

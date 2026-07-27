@@ -364,12 +364,14 @@ researchspec advance transition:<id> [--dry-run] [--json]
 
 - 所有 Agent-callable action descriptor 使用 schema version 2，并从 semantic/derived schema
   生成输入槽、CLI 派生字段和模板。执行策略只有 `direct`、`human_confirmed`、
-  `plan_bound`；`--dry-run` 是可选诊断路径。
+  `plan_bound`。descriptor 的 `execution_requirements` 由执行策略派生，分别声明 preview、
+  action basis、plan hash 与确认要求；不再提供与策略无关的固定 dry-run 提示。
 - `start` 只接收语义输入。CLI 绑定 instructions basis、先决 artifact/Decision、parent 和
   round。外部 route 是 `human_confirmed`，parent-scoped child 继承父 Start receipt 并
   `direct` 执行。Start receipt 先写、`state.yaml` 最后刷新；不执行 ARSU semantic work。
 - `submit gate:` 只接受 CLI instructions 指定的 validator/evidence contract，并要求实际用户
-  确认。它保存 verdict 与 `confirmed_by`，按 `plan_bound` 执行，不把 Agent 自报文本当作 Gate。
+  确认。它保存 verdict 与 `confirmed_by`，按 `plan_bound` 执行：TTY 展示同一 plan/hash 后
+  确认，非 TTY 需要匹配的 action basis、plan hash 与 `--yes`。Agent 自报文本不构成 Gate。
 - `advance` 校验 Gate/Decision basis、目标 state 与 read preconditions 后执行 transition
   receipt。唯一合法 transition 使用 `direct` policy；多分支必须先 `decide`。
 - Gate/transition DTO、usage/domain/conflict 错误类和 operational receipt shape 已冻结；
