@@ -11,6 +11,7 @@ import {
   directedListSelector,
   directedShowSelector,
 } from "../contracts/action-selector.js";
+import { parseRuntimeSelector } from "../contracts/runtime-selector.js";
 import type { WorkspaceSnapshot } from "../workspace/snapshot.js";
 import {
   evaluateActionAvailability,
@@ -26,35 +27,38 @@ export async function buildActionDescriptor(
   const evaluated = await evaluateActionAvailability(snapshot, selector, control);
   if (!evaluated) return undefined;
   const registration = ACTION_SCHEMA_REGISTRY[evaluated.key];
-  const schema = registration.kind === "input" ? jsonSchema(registration) : undefined;
-  const branches = schemaBranches(schema);
+  const semanticSchema = registration.kind === "input" ? jsonSchema(registration.semantic_validator) : undefined;
+  const derivedSchema = registration.kind === "input" ? jsonSchema(registration.derived_validator) : undefined;
+  const branches = schemaBranches(semanticSchema);
   const templateBranch = branches[0] ?? {};
   const required = new Set(Array.isArray(templateBranch.required) ? templateBranch.required.filter((item): item is string => typeof item === "string") : []);
   const properties: Record<string, unknown> = {};
   for (const branch of branches) Object.assign(properties, record(branch.properties));
   const templateProperties = record(templateBranch.properties);
-  const semanticInputSlots = registration.semantic_input_fields.map((field) => ({
+  const semanticFields = schemaFieldNames(semanticSchema);
+  const derivedFields = schemaFieldNames(derivedSchema);
+  const semanticInputSlots = semanticFields.map((field) => ({
     field_path: `/${escapePointer(field)}`,
     expectation: expectation(properties[field]),
   }));
   const minimalInputTemplate = registration.kind === "no-input"
     ? null
-    : Object.fromEntries(registration.semantic_input_fields
+    : Object.fromEntries(semanticFields
       .filter((field) => (required.has(field) && field in templateProperties) || conditionalSemanticField(evaluated.key, field))
       .map((field) => [field, templateSlot(field, templateProperties[field] ?? properties[field])]));
 
   return ActionDescriptorSchema.parse({
-    schema_version: "1",
+    schema_version: "2",
     selector,
     command: registration.command,
     action_schema_ref: registration.schema_ref,
     availability: evaluated.availability,
-    cli_derived_fields: [...registration.cli_derived_fields],
+    cli_derived_fields: derivedFields,
     semantic_input_slots: semanticInputSlots,
     constraints: [...registration.constraints],
     minimal_input_template: minimalInputTemplate,
-    requires_dry_run: registration.requires_dry_run,
-    requires_confirmation: registration.requires_confirmation,
+    execution_policy: executionPolicy(snapshot, selector, evaluated.key, registration.execution_policy),
+    dry_run: "optional",
     possible_next_selectors: nextSelectors(snapshot, selector),
   });
 }
@@ -63,8 +67,33 @@ export function actionSchemaRegistration(key: RuntimeActionKey): ActionSchemaReg
   return ACTION_SCHEMA_REGISTRY[key];
 }
 
-function jsonSchema(registration: Extract<ActionSchemaRegistration, { kind: "input" }>): Record<string, unknown> {
-  return record(z.toJSONSchema(registration.validator, { target: "draft-2020-12" }));
+function jsonSchema(validator: z.ZodType): Record<string, unknown> {
+  return record(z.toJSONSchema(validator, { target: "draft-2020-12" }));
+}
+
+function schemaFieldNames(schema: Record<string, unknown> | undefined): string[] {
+  const names = new Set<string>();
+  for (const branch of schemaBranches(schema)) {
+    for (const field of Object.keys(record(branch.properties))) names.add(field);
+  }
+  return [...names].sort();
+}
+
+function executionPolicy(
+  snapshot: WorkspaceSnapshot,
+  selector: string,
+  key: RuntimeActionKey,
+  fallback: ActionDescriptor["execution_policy"],
+): ActionDescriptor["execution_policy"] {
+  const parsed = parseRuntimeSelector(selector);
+  if (key === "start" && parsed?.kind === "scoped_subflow_node") return "direct";
+  if (key === "submit_artifact" && parsed?.kind === "scoped_work") {
+    const instance = snapshot.runState?.subflows.find((item) => item.instance_id === parsed.instanceId);
+    const template = instance && snapshot.workflow?.subflow_templates.find((item) => item.template_id === instance.template_id);
+    const workItem = template?.work_items.find((item) => item.id === parsed.workItemId);
+    if (workItem?.submission.policy === "manual") return "human_confirmed";
+  }
+  return fallback;
 }
 
 function schemaBranches(schema: Record<string, unknown> | undefined): Record<string, unknown>[] {

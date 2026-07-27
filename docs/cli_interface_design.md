@@ -272,16 +272,17 @@ researchspec status [--json]
 - `runs/current/artifact-registry.json`
 - `runs/current/decision-ledger.jsonl`
 - `runs/current/gate-ledger.jsonl`
+- 固定 Literature Adapter catalog、manifest-owned runtime/Skill bytes 与文件 mode；
+  不执行 Adapter binary，也不连接 Zotero。
 
 输出：
 
-- 当前 workflow/stage/mode。
-- pending decisions 或 pending items。
-- blocking gates。
-- 最近 artifacts。
-- 已安装 agent tools 摘要。
-- 最近 check/gate 摘要。
-- 单一 `workflow_control` object：`profile`、`active_stage_id`、`state`（`unconfigured / blocked / ready / stage_work_complete`）、`ready_items` canonical selectors、`done/ready/blocked` work items、缺失依赖、unlocks、`stage_work_complete` 和 `transition_required`。顶层不重复输出 `work_items`。
+- 当前 lifecycle、profile 和 active/idle/recent subflow IDs。
+- 有界的 recommended/allowed actions、blocker refs 与 pending Gate/Decision/Patch/Change 计数。
+- compact Literature Adapter health：安装状态、runtime support、Skill projection、
+  静态 diagnostics 计数，以及固定 `connection_state: unchecked`。
+- diagnostics 计数与后续 selector。完整 workflow 细节通过
+  `show workflow:current` 有界读取，不在 `status` 中重复。
 
 `status` 是只读命令，不改变 workspace。
 
@@ -293,7 +294,7 @@ researchspec status [--json]
 researchspec instructions work:rq-brief [--json]
 ```
 
-成功输出是扁平 instruction packet：`selector`、`work_item_id`、`stage_id`、`producer_skill`、`state`、`description`、typed runtime context；`output` 只保存 artifact type、workspace/resolved path 和 `template_ref`，实际解析后的 `template` 位于顶层。其余字段包括 dependencies、semantic instruction、rules、allowed/forbidden writes、`validation {profile, suggested_command}`、completion policy 和 unlocks。支持 `text-artifact` 或 `binary-file-artifact` 的节点返回 `submit_available: true` 及 selector、candidate path、dry-run command、strict input 字段和确认/hash 要求，并明确声明不写 state、Gate 或 Decision。命令不内嵌依赖文件全文，也不写 workspace。
+成功输出是扁平 instruction packet：`selector`、`work_item_id`、`stage_id`、`producer_skill`、`state`、`description`、typed runtime context；`output` 只保存 artifact type、workspace/resolved path 和 `template_ref`，实际解析后的 `template` 位于顶层。其余字段包括 dependencies、semantic instruction、rules、allowed/forbidden writes、`validation {profile, suggested_command}`、completion policy 和 unlocks。支持 `text-artifact` 或 `binary-file-artifact` 的节点返回 `submit_available: true` 及 selector、candidate path、semantic input schema、执行策略和可选 dry-run，并明确声明不写 state、Gate 或 Decision。命令不内嵌依赖文件全文，也不写 workspace。
 
 约定错误：
 
@@ -320,11 +321,13 @@ researchspec submit work:rq-brief \
   [--expected-sha256 <hash>] [--dry-run] [--yes] [--json]
 ```
 
-输入文件严格限定为 `schema_version: "1"`、`dependency_artifact_ids` 和可选
-`producer_mode`。路径、artifact type、stage、producer Skill、template ref 与确定性 ID
-均来自 workflow node，调用方不能覆盖。首次执行前先 dry-run；非交互写入必须同时传入
-dry-run 返回的 64 位小写 SHA-256 与 `--yes`。该确认只授权登记精确字节，不表示学术认可、
-Gate 通过或 stage 推进。
+输入文件是 Action v2 的 strict semantic object，仅接受可选 `producer_mode`。依赖
+artifact IDs、路径、artifact type、stage、producer Skill、template ref、schema version
+与确定性 ID 均由 CLI 从 selector 和当前 authority 派生，调用方不能覆盖。automatic
+submission 使用 `direct` policy，可在一次调用中提交；manual submission 使用
+`human_confirmed` policy，并要求命名确认。`--dry-run`、expected hash 与 action basis
+都可用于诊断或并发保护，但 direct 执行不依赖预览重放。登记不表示学术认可、Gate 通过
+或 stage 推进。
 
 成功状态为 `would_submit`、`submitted` 或 `already_submitted`。成功 envelope 返回 candidate
 hash、candidate/receipt registry records、validation、write plan、projected completion 和写后
@@ -341,18 +344,21 @@ UTF-8 非空文件、path containment、SHA-256、template ref 与依赖 artifac
 ### 6.3 `start`、`submit gate:` 与 `advance`（Current）
 
 ```bash
-researchspec start subflow:<id> [--dry-run] [--yes] [--json]
+researchspec start subflow:<id> --input <semantic-input.json> [--confirmed-by <human>] [--dry-run] [--json]
 researchspec submit gate:<id> --input <verdict.json> [--dry-run] [--yes] [--json]
-researchspec advance transition:<id> [--dry-run] [--yes] [--json]
+researchspec advance transition:<id> [--dry-run] [--json]
 ```
 
-- `start` 已实现：strict JSON 输入绑定 subflow instructions basis；dry-run 返回 plan SHA-256，
-  非交互执行要求相同输入、`--expected-plan-sha256` 与 `--yes`。Start receipt 先写、
-  `state.yaml` 最后刷新，并持久化 parent/round/actor/confirmed-by；不执行 ARSU semantic work。
+- 所有 Agent-callable action descriptor 使用 schema version 2，并从 semantic/derived schema
+  生成输入槽、CLI 派生字段和模板。执行策略只有 `direct`、`human_confirmed`、
+  `plan_bound`；`--dry-run` 是可选诊断路径。
+- `start` 只接收语义输入。CLI 绑定 instructions basis、先决 artifact/Decision、parent 和
+  round。外部 route 是 `human_confirmed`，parent-scoped child 继承父 Start receipt 并
+  `direct` 执行。Start receipt 先写、`state.yaml` 最后刷新；不执行 ARSU semantic work。
 - `submit gate:` 只接受 CLI instructions 指定的 validator/evidence contract，并要求实际用户
-  确认。它保存 verdict 与 `confirmed_by`，不把 Agent 自报文本当作 Gate。
+  确认。它保存 verdict 与 `confirmed_by`，按 `plan_bound` 执行，不把 Agent 自报文本当作 Gate。
 - `advance` 校验 Gate/Decision basis、目标 state 与 read preconditions 后执行 transition
-  receipt。唯一合法 transition 可由 Agent 自动调用；多分支必须先 `decide`。
+  receipt。唯一合法 transition 使用 `direct` policy；多分支必须先 `decide`。
 - Gate/transition DTO、usage/domain/conflict 错误类和 operational receipt shape 已冻结；
   receipts 不登记为 academic artifacts。
 
@@ -398,8 +404,9 @@ researchspec doctor --repair <finding-id> --expected-plan-sha256 <sha256> --yes 
 ```
 
 Doctor repair 只接受唯一可确定的内容，绑定 read preconditions、backup、postconditions 与
-plan hash；authority 写入失败或 postcheck 失败时恢复原字节。Doctor 不承担 runtime profile
-migration，也不猜测学术语义。
+plan hash。提交顺序固定为 original-byte backup、repair intent receipt、authority，
+随后运行 post-check；相同 plan 的中断 repair receipt 会被复用并继续完成。写入失败或
+post-check 失败时恢复原字节。Doctor 不承担 runtime profile migration，也不猜测学术语义。
 
 ## 8. `researchspec list [type]`
 
@@ -537,7 +544,8 @@ operation 所需的 current/proposed value、`reason`、`source_artifact_ids` �
   和 validation metadata。
 - Write plan 按 `proposal.md`、`tasks.md`、`contract-patch.yaml` 顺序 create-only；最后
   一个文件是 machine contract。三个文件均为 user-owned。
-- 非交互执行需要 `--yes`；它只确认创建 pending proposal，不表示接受该 proposal。
+- 创建 pending proposal 使用 `direct` policy；一次调用只创建候选变更，不表示接受该
+  proposal。接受或拒绝仍由 `decide` 的 `plan_bound` 事务完成。
 - 参数/schema error 返回 2，target/current/reference domain conflict 返回 1，existing
   output/I/O conflict 返回 3。JSON mode 始终只输出一个 envelope。
 

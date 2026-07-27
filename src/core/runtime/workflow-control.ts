@@ -165,10 +165,11 @@ export interface WorkflowInstructionPacket {
     submit?: {
       selector: string;
       candidate_path: string;
-      dry_run_command: string;
+      command: string;
+      semantic_input_schema_version: "2";
       input_schema: { required: string[]; optional: string[] };
-      requires_confirmation: boolean;
-      requires_expected_sha256_for_noninteractive_execution: true;
+      execution_policy: "direct" | "human_confirmed";
+      dry_run: "optional";
       updates_state: false;
       appends_gate: false;
       appends_decision: false;
@@ -841,10 +842,11 @@ function submitCapability(node: WorkflowNodeDefinition, status: WorkItemStatus):
       submit: {
         selector: status.selector,
         candidate_path: status.output_path,
-        dry_run_command: `researchspec submit ${status.selector} --input <submission.json> --actor-kind <kind> --actor-name <name> --dry-run --json`,
-        input_schema: { required: ["schema_version", "dependency_artifact_ids"], optional: ["producer_mode"] },
-        requires_confirmation: status.submission_policy !== "automatic",
-        requires_expected_sha256_for_noninteractive_execution: true as const,
+        command: `researchspec submit ${status.selector} --input <semantic-input.json> --actor-kind <kind> --actor-name <name>${status.submission_policy === "manual" ? " --confirmed-by <human>" : ""} --json`,
+        semantic_input_schema_version: "2" as const,
+        input_schema: { required: [], optional: ["producer_mode"] },
+        execution_policy: status.submission_policy === "automatic" ? "direct" as const : "human_confirmed" as const,
+        dry_run: "optional" as const,
         updates_state: false as const,
         appends_gate: false as const,
         appends_decision: false as const,

@@ -7,6 +7,7 @@ import { getArsuArtifactContract } from "../../arsu-converter/workflow/artifact-
 import {
   ArtifactRegistrySchema,
   ArtifactSubmitInputSchema,
+  ArtifactSubmitSemanticInputSchema,
   ArtifactSubmitReceiptSchema,
   SubmittedArtifactRecordSchema,
   SubmitReceiptArtifactRecordSchema,
@@ -59,10 +60,10 @@ export async function planArtifactSubmit(input: {
   now?: string;
 }): Promise<ArtifactSubmitPlan> {
   const selector = resolveSubmitTarget(input.snapshot, input.selector);
-  const payload = parsePayload(input.payload);
   const snapshot = input.snapshot;
   if (snapshot.diagnostics.some((item) => item.blocking)) throw new ArtifactSubmitError("workflow_invalid", "Workspace or workflow has blocking diagnostics.", "domain", { diagnostics: snapshot.diagnostics.filter((item) => item.blocking) });
   const node = selector.node;
+  const payload = await parsePayload(input.payload, snapshot, node);
   if (!["text-artifact", "binary-file-artifact"].includes(node.validation_profile)) throw new ArtifactSubmitError("candidate_validation_failed", `Unsupported validation profile: ${node.validation_profile}`, "domain");
 
   const candidate = await validateCandidate(snapshot, node, input.expectedSha256);
@@ -218,10 +219,23 @@ function validateStartAuthorization(snapshot: WorkspaceSnapshot, instanceId: str
   } catch { return undefined; }
 }
 
-function parsePayload(payload: unknown): ArtifactSubmitInput {
-  const parsed = ArtifactSubmitInputSchema.safeParse(payload);
-  if (!parsed.success) throw new ArtifactSubmitError("invalid_submission_input", "Submission input does not match the strict schema.", "usage", parsed.error.issues);
-  return parsed.data;
+async function parsePayload(payload: unknown, snapshot: WorkspaceSnapshot, node: WorkflowNodeDefinition): Promise<ArtifactSubmitInput> {
+  const semantic = ArtifactSubmitSemanticInputSchema.safeParse(payload);
+  if (!semantic.success) throw new ArtifactSubmitError("invalid_submission_input", "Submission semantic input does not match the strict schema.", "usage", semantic.error.issues);
+  const inspections = await inspectArtifacts(snapshot);
+  const dependencyArtifactIds = inspections
+    .filter((item) =>
+      node.requires.artifact_types.includes(String(item.artifact.artifact_type))
+      && item.exists
+      && item.inside_project
+      && item.hash_matches === true)
+    .map((item) => String(item.artifact.artifact_id))
+    .sort();
+  return ArtifactSubmitInputSchema.parse({
+    ...semantic.data,
+    schema_version: "1",
+    dependency_artifact_ids: dependencyArtifactIds,
+  });
 }
 
 async function validateCandidate(snapshot: WorkspaceSnapshot, node: WorkflowNodeDefinition, expectedSha256?: string): Promise<{ path: string; hash: string }> {

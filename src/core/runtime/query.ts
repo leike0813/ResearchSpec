@@ -78,8 +78,11 @@ export function showItem(snapshot: WorkspaceSnapshot, selector: string): { item?
   return resolveItem(snapshot, selector);
 }
 
-export async function buildCaseStatusSummary(snapshot: WorkspaceSnapshot): Promise<CaseStatusSummary> {
-  if (snapshot.runtimeMode === "adaptive") return buildAdaptiveCaseStatusSummary(snapshot);
+export async function buildCaseStatusSummary(
+  snapshot: WorkspaceSnapshot,
+  literatureAdapters: LiteratureAdapterInspection[] = [],
+): Promise<CaseStatusSummary> {
+  if (snapshot.runtimeMode === "adaptive") return buildAdaptiveCaseStatusSummary(snapshot, literatureAdapters);
   const control = await evaluateWorkflowControl(snapshot);
   const latestDecisions = latestById(snapshot.decisions.filter((item) => item.authority !== "imported_evidence"), "decision_id");
   const latestGates = latestById(snapshot.gates.filter((item) => item.authority !== "imported_evidence"), "gate_id");
@@ -139,17 +142,21 @@ export async function buildCaseStatusSummary(snapshot: WorkspaceSnapshot): Promi
       change_ids: pendingChanges.map((item) => item.id).sort().slice(0, 20),
       change_count: pendingChanges.length,
     },
+    literature_adapters: compactLiteratureAdapters(literatureAdapters),
     diagnostic_counts: {
-      error: snapshot.diagnostics.filter((item) => item.severity === "error").length,
-      warning: snapshot.diagnostics.filter((item) => item.severity === "warning").length,
-      info: snapshot.diagnostics.filter((item) => item.severity === "info").length,
-      blocking: snapshot.diagnostics.filter((item) => item.blocking).length,
+      error: snapshot.diagnostics.filter((item) => item.severity === "error").length + adapterDiagnosticCount(literatureAdapters, "error"),
+      warning: snapshot.diagnostics.filter((item) => item.severity === "warning").length + adapterDiagnosticCount(literatureAdapters, "warning"),
+      info: snapshot.diagnostics.filter((item) => item.severity === "info").length + adapterDiagnosticCount(literatureAdapters, "info"),
+      blocking: snapshot.diagnostics.filter((item) => item.blocking).length + literatureAdapters.flatMap((item) => item.diagnostics).filter((item) => item.blocking).length,
     },
     next_selectors: [...new Set(nextSelectors)].slice(0, 20),
   });
 }
 
-async function buildAdaptiveCaseStatusSummary(snapshot: WorkspaceSnapshot): Promise<CaseStatusSummary> {
+async function buildAdaptiveCaseStatusSummary(
+  snapshot: WorkspaceSnapshot,
+  literatureAdapters: LiteratureAdapterInspection[],
+): Promise<CaseStatusSummary> {
   const state = snapshot.caseState;
   if (!state) throw new Error("Adaptive CaseState is unavailable.");
   const candidates = adaptiveActionCandidates(snapshot);
@@ -194,11 +201,12 @@ async function buildAdaptiveCaseStatusSummary(snapshot: WorkspaceSnapshot): Prom
       change_ids: pendingChanges.map((item) => item.id).sort().slice(0, 20),
       change_count: pendingChanges.length,
     },
+    literature_adapters: compactLiteratureAdapters(literatureAdapters),
     diagnostic_counts: {
-      error: snapshot.diagnostics.filter((item) => item.severity === "error").length,
-      warning: snapshot.diagnostics.filter((item) => item.severity === "warning").length,
-      info: snapshot.diagnostics.filter((item) => item.severity === "info").length,
-      blocking: snapshot.diagnostics.filter((item) => item.blocking).length,
+      error: snapshot.diagnostics.filter((item) => item.severity === "error").length + adapterDiagnosticCount(literatureAdapters, "error"),
+      warning: snapshot.diagnostics.filter((item) => item.severity === "warning").length + adapterDiagnosticCount(literatureAdapters, "warning"),
+      info: snapshot.diagnostics.filter((item) => item.severity === "info").length + adapterDiagnosticCount(literatureAdapters, "info"),
+      blocking: snapshot.diagnostics.filter((item) => item.blocking).length + literatureAdapters.flatMap((item) => item.diagnostics).filter((item) => item.blocking).length,
     },
     next_selectors: [...new Set([
       directedShowSelector("workflow:current"),
@@ -283,9 +291,28 @@ export function formatCaseStatusHuman(status: CaseStatusSummary): string {
     `Pending Decisions: ${String(status.pending.decision_count)}`,
     `Recommended actions: ${String(status.recommended_actions.length)}`,
     `Allowed actions: ${String(status.allowed_actions.length)}`,
+    `Literature adapters: ${status.literature_adapters.length ? status.literature_adapters.map((adapter) => `${adapter.adapter_id}=${adapter.state}`).join(", ") : "none"}`,
     `Blocking diagnostics: ${String(status.diagnostic_counts.blocking ?? 0)}`,
     "",
   ].join("\n");
+}
+
+function compactLiteratureAdapters(adapters: LiteratureAdapterInspection[]): CaseStatusSummary["literature_adapters"] {
+  return adapters.map((adapter) => ({
+    adapter_id: adapter.adapter_id,
+    state: adapter.state,
+    connection_state: adapter.connection_state,
+    runtime_supported: adapter.runtime.supported,
+    projection_state: adapter.skills.projection_state,
+    diagnostic_count: adapter.diagnostics.length,
+  })).slice(0, 10);
+}
+
+function adapterDiagnosticCount(
+  adapters: LiteratureAdapterInspection[],
+  severity: "error" | "warning" | "info",
+): number {
+  return adapters.flatMap((item) => item.diagnostics).filter((item) => item.severity === severity).length;
 }
 
 async function listProjection(snapshot: WorkspaceSnapshot, type: ListType): Promise<unknown[]> {

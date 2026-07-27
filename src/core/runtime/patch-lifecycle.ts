@@ -14,6 +14,7 @@ import {
   CanonicalDraftPatchSchema,
   DraftPatchApplyReportSchema,
   DraftPatchReceiptSchema,
+  DraftPatchSemanticInputSchema,
   DraftPatchSubmitInputSchema,
   type CanonicalDraftPatch,
   type DraftPatchSubmitInput,
@@ -61,8 +62,13 @@ export async function planPatchSubmit(input: {
   now?: string;
 }): Promise<PatchSubmitPlan> {
   const patchId = patchIdFromSelector(input.selector);
-  const parsed = DraftPatchSubmitInputSchema.safeParse(input.payload);
-  if (!parsed.success) throw usage("invalid_patch_input", "Patch input does not match the strict schema.", parsed.error.issues);
+  const semantic = DraftPatchSemanticInputSchema.safeParse(input.payload);
+  if (!semantic.success) throw usage("invalid_patch_input", "Patch semantic input does not match the strict schema.", semantic.error.issues);
+  const parsed = DraftPatchSubmitInputSchema.safeParse({
+    ...semantic.data,
+    patch_format_version: "2",
+  });
+  if (!parsed.success) throw usage("invalid_patch_input", "CLI-derived patch input is invalid.", parsed.error.issues);
   assertWorkspaceValid(input.snapshot, "patch_submit_workspace_invalid");
   validateScope(input.snapshot, parsed.data);
   await validateBase(input.snapshot, parsed.data.base_artifact_id, parsed.data.base_sha256);

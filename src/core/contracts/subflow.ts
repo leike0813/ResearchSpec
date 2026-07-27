@@ -7,14 +7,22 @@ const SafeIdSchema = z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]*$/).refine((va
 const Sha256Schema = z.string().regex(/^[a-f0-9]{64}$/);
 
 export const StartActorSchema = SubmitActorSchema.refine((value) => value.kind === "human" || value.kind === "agent" || value.kind === "script", "Start actor must be human, agent, or script.");
-export const SubflowStartInputSchema = z.strictObject({
+
+export const SubflowStartSemanticInputSchema = z.strictObject({
+  material_passport_import: MaterialPassportImportSchema.optional(),
+});
+
+export const SubflowStartDerivedInputSchema = z.strictObject({
   schema_version: z.literal("1"),
   instruction_basis_sha256: Sha256Schema,
   acknowledged_user_input_ids: z.array(SafeIdSchema).refine(unique, "acknowledged_user_input_ids must be unique"),
   prerequisite_artifact_ids: z.array(SafeIdSchema).refine(unique, "prerequisite_artifact_ids must be unique"),
   prerequisite_decision_ids: z.array(SafeIdSchema).refine(unique, "prerequisite_decision_ids must be unique"),
   parent_subflow_selector: z.string().regex(/^subflow:sf-[A-Za-z0-9][A-Za-z0-9._-]*$/).nullable(),
-  material_passport_import: MaterialPassportImportSchema.optional(),
+});
+
+export const SubflowStartInputSchema = SubflowStartSemanticInputSchema.extend({
+  ...SubflowStartDerivedInputSchema.shape,
 });
 
 export const SubflowStartReceiptSchema = z.strictObject({
@@ -67,6 +75,7 @@ export const SubflowStartReceiptSchema = z.strictObject({
 });
 
 export type StartActor = z.infer<typeof StartActorSchema>;
+export type SubflowStartSemanticInput = z.infer<typeof SubflowStartSemanticInputSchema>;
 export type SubflowStartInput = z.infer<typeof SubflowStartInputSchema>;
 export type SubflowStartReceipt = z.infer<typeof SubflowStartReceiptSchema>;
 

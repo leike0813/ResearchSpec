@@ -138,7 +138,8 @@ export async function executeDoctorRepair(prepared: PreparedDoctorRepair, now = 
   const receiptOperation = prepared.plan.operations.find((operation) => operation.kind === "append_receipt");
   if (!receiptOperation) throw new DoctorRecoveryError("repair_conflict", "Repair plan has no receipt operation.");
 
-  const receipt = DoctorRepairReceiptSchema.parse({
+  const receiptAbsolute = path.join(prepared.workspace, receiptOperation.target_path);
+  let receipt = DoctorRepairReceiptSchema.parse({
     schema_version: "1",
     receipt_type: "runtime_repair",
     finding_id: prepared.finding.finding_id,
@@ -148,10 +149,26 @@ export async function executeDoctorRepair(prepared: PreparedDoctorRepair, now = 
     postcondition_hashes: prepared.plan.postconditions,
     repaired_at: now,
   });
+  try {
+    const existingBytes = await readFile(receiptAbsolute);
+    const existing = DoctorRepairReceiptSchema.parse(JSON.parse(Buffer.from(existingBytes).toString("utf8")) as unknown);
+    if (
+      existing.finding_id !== receipt.finding_id
+      || existing.plan_sha256 !== receipt.plan_sha256
+      || JSON.stringify(existing.backup_paths) !== JSON.stringify(receipt.backup_paths)
+      || JSON.stringify(existing.applied_operations) !== JSON.stringify(receipt.applied_operations)
+      || JSON.stringify(existing.postcondition_hashes) !== JSON.stringify(receipt.postcondition_hashes)
+    ) {
+      throw new DoctorRecoveryError("repair_conflict", "Existing Doctor repair receipt belongs to a different repair intent.");
+    }
+    receipt = existing;
+  } catch (error) {
+    if (error instanceof DoctorRecoveryError) throw error;
+    if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+  }
   const receiptText = `${JSON.stringify(receipt, null, 2)}\n`;
   const backupAbsolute = path.join(prepared.workspace, backupPath);
   const targetAbsolute = path.join(prepared.workspace, prepared.targetPath);
-  const receiptAbsolute = path.join(prepared.workspace, receiptOperation.target_path);
   const backupOperation = await planFile({
     path: backupAbsolute,
     relativePath: backupPath,
@@ -178,7 +195,7 @@ export async function executeDoctorRepair(prepared: PreparedDoctorRepair, now = 
     ownership: "user",
     previousHash: sha256(prepared.originalBytes),
     nextHash: sha256(prepared.determinedBytes),
-    reason: "commit uniquely determined runtime authority after preserving original bytes",
+    reason: "commit uniquely determined runtime authority after preserving original bytes and recording the repair receipt",
   };
   const readPreconditions: ReadPrecondition[] = prepared.plan.read_preconditions.map((item) => ({
     path: path.join(prepared.workspace, item.path),
@@ -188,7 +205,7 @@ export async function executeDoctorRepair(prepared: PreparedDoctorRepair, now = 
 
   try {
     await executeWritePlan({
-      operations: [backupOperation, authorityWrite, receiptWrite],
+      operations: [backupOperation, receiptWrite, authorityWrite],
       readPreconditions,
     });
   } catch (error) {
@@ -573,8 +590,8 @@ function prepareRepair(workspace: string, draft: RepairDraft): PreparedDoctorRep
     ...draft.evidencePreconditions,
   ];
   const operations: DoctorRepairOperation[] = [
-    { kind: "write_determined_content", target_path: draft.targetPath, content_sha256: nextHash },
     { kind: "append_receipt", target_path: receiptPath },
+    { kind: "write_determined_content", target_path: draft.targetPath, content_sha256: nextHash },
   ];
   const unsigned = {
     schema_version: "1" as const,

@@ -31,7 +31,7 @@ void test("current workflow exposes only a confirmed subflow frontier and scoped
     const instructions = await buildSubflowInstructions(snapshot, "subflow:tpl-research");
     assert.equal(instructions.ok, true);
     if (!instructions.ok) return;
-    const payload = { schema_version: "1", instruction_basis_sha256: instructions.packet.instruction_basis_sha256, acknowledged_user_input_ids: ["research_goal"], prerequisite_artifact_ids: [], prerequisite_decision_ids: [], parent_subflow_selector: null };
+    const payload = {};
     const plan = await planSubflowStart({ snapshot, selector: "subflow:tpl-research", payload, actor: { kind: "agent", name: "deep-research" }, confirmedBy: "researcher", now: "2026-07-10T00:00:00.000Z" });
     await executeSubflowStart(plan, workspace);
     snapshot = await loadWorkspaceSnapshot(workspace);

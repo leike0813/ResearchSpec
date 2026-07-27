@@ -28,8 +28,7 @@ export const DraftPatchSemanticDeltaSchema = z.discriminatedUnion("level", [
   }),
 ]);
 
-export const DraftPatchSubmitInputSchema = z.strictObject({
-  patch_format_version: z.literal("2"),
+export const DraftPatchSemanticInputSchema = z.strictObject({
   revision_round: z.number().int().nonnegative(),
   base_artifact_id: CaseSafeIdSchema,
   base_sha256: Sha256Schema,
@@ -40,6 +39,14 @@ export const DraftPatchSubmitInputSchema = z.strictObject({
   evidence_artifact_ids: UniqueIdsSchema,
   semantic_delta: DraftPatchSemanticDeltaSchema,
   ops: z.array(DraftPatchOperationSchema).min(1),
+});
+
+export const DraftPatchDerivedInputSchema = z.strictObject({
+  patch_format_version: z.literal("2"),
+});
+
+export const DraftPatchSubmitInputSchema = DraftPatchSemanticInputSchema.extend({
+  ...DraftPatchDerivedInputSchema.shape,
 });
 
 export const DraftPatchStatusSchema = z.enum([
@@ -122,5 +129,6 @@ export const DraftPatchApplyReportSchema = z.strictObject({
 });
 
 export type DraftPatchSubmitInput = z.infer<typeof DraftPatchSubmitInputSchema>;
+export type DraftPatchSemanticInput = z.infer<typeof DraftPatchSemanticInputSchema>;
 export type CanonicalDraftPatch = z.infer<typeof CanonicalDraftPatchSchema>;
 export type DraftPatchStatus = z.infer<typeof DraftPatchStatusSchema>;

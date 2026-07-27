@@ -32,7 +32,7 @@ void test("parallel frontier enforces capacity and quorum join", async () => {
     assert.ok(itemA);
     await mkdir(path.dirname(itemA.output_path), { recursive: true });
     await writeFile(itemA.output_path, "# A\n", "utf8");
-    const submit = await planArtifactSubmit({ snapshot, selector: itemA.selector, payload: { schema_version: "1", dependency_artifact_ids: [] }, actor: { kind: "agent", name: "deep-research" }, now: "2026-07-10T00:01:00.000Z" });
+    const submit = await planArtifactSubmit({ snapshot, selector: itemA.selector, payload: {}, actor: { kind: "agent", name: "deep-research" }, now: "2026-07-10T00:01:00.000Z" });
     await executeArtifactSubmit(submit, workspace);
     snapshot = await loadWorkspaceSnapshot(workspace);
     control = await evaluateWorkflowControl(snapshot);
@@ -66,13 +66,19 @@ void test("round templates derive parent-scoped unbounded round numbers", async 
     const round = structuredClone(base);
     round.template_id = "tpl-round";
     round.template_kind = "round";
+    round.visibility = "internal";
+    round.route_ref = null;
     round.parent_policy = "required";
     round.work_items = round.work_items.map((item) => ({ ...item, output: { ...item.output, workspace_path_template: item.output.workspace_path_template.replace("/artifacts/", "/round-artifacts/") } }));
+    base.subflow_nodes = [
+      { id: "round-one", stage_id: base.entry_stage_id, template_id: "tpl-round", depends_on: [], multiplicity: "once", completion: "child_complete" },
+      { id: "round-two", stage_id: base.entry_stage_id, template_id: "tpl-round", depends_on: [], multiplicity: "once", completion: "child_complete" },
+    ];
     workflow.subflow_templates = [base, round];
     await writeFile(path.join(workspace, "specs/workflow.yaml"), stringify(workflow), "utf8");
     const parentId = await startTemplate(workspace, "tpl-parent", null);
-    const first = await startTemplate(workspace, "tpl-round", `subflow:${parentId}`);
-    const second = await startTemplate(workspace, "tpl-round", `subflow:${parentId}`);
+    const first = await startTemplate(workspace, "tpl-round", `subflow:${parentId}`, "round-one");
+    const second = await startTemplate(workspace, "tpl-round", `subflow:${parentId}`, "round-two");
     const state = await loadWorkspaceSnapshot(workspace);
     const rounds = state.runState?.subflows.filter((item) => item.instance_id === first || item.instance_id === second) ?? [];
     assert.deepEqual(rounds.map((item) => item.round_number), [1, 2]);
@@ -103,13 +109,15 @@ async function createWorkspace(): Promise<string> {
   return root;
 }
 
-async function startTemplate(workspace: string, templateId: string, parent: string | null): Promise<string> {
+async function startTemplate(workspace: string, templateId: string, parent: string | null, parentNodeId?: string): Promise<string> {
   const snapshot = await loadWorkspaceSnapshot(workspace);
-  const selector = `subflow:${templateId}`;
+  const selector = parent && parentNodeId
+    ? `subflow:${parent.slice("subflow:".length)}/${parentNodeId}`
+    : `subflow:${templateId}`;
   const instructions = await buildSubflowInstructions(snapshot, selector);
   assert.equal(instructions.ok, true);
   if (!instructions.ok) throw new Error("instructions unavailable");
-  const plan = await planSubflowStart({ snapshot, selector, payload: { schema_version: "1", instruction_basis_sha256: instructions.packet.instruction_basis_sha256, acknowledged_user_input_ids: ["research_goal"], prerequisite_artifact_ids: [], prerequisite_decision_ids: [], parent_subflow_selector: parent }, actor: { kind: "agent", name: "academic-pipeline" }, confirmedBy: "researcher", now: `2026-07-10T00:00:0${String(snapshot.runState?.subflows.length ?? 0)}.000Z` });
+  const plan = await planSubflowStart({ snapshot, selector, payload: {}, actor: { kind: "agent", name: "academic-pipeline" }, confirmedBy: "researcher", now: `2026-07-10T00:00:0${String(snapshot.runState?.subflows.length ?? 0)}.000Z` });
   await executeSubflowStart(plan, workspace);
   return plan.instance.instance_id;
 }

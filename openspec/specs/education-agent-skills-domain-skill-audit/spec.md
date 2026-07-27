@@ -2,7 +2,9 @@
 
 ## Purpose
 
-TBD
+Define the immutable Education Agent Skills source, evidence, licensing,
+classification, relationship, safety, and production-admission audit boundary
+that ResearchSpec must verify before any domain Skill can be published.
 
 ## Requirements
 

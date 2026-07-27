@@ -100,15 +100,7 @@ export function initialize(root: string): JourneyContext {
 
 export async function startSubflow(context: JourneyContext, selector: string): Promise<string> {
   const packet = instructions(context, selector) as SubflowPacket;
-  const decisions = cliJson<{ items: Array<{ id?: string; value?: { decision_id?: string; status?: string } }> }>(["list", "decisions"], context.root).data?.items ?? [];
-  const payload = {
-    schema_version: "1",
-    instruction_basis_sha256: packet.instruction_basis_sha256,
-    acknowledged_user_input_ids: packet.required_user_input_ids,
-    prerequisite_artifact_ids: [...new Set(packet.prerequisites.flatMap((group) => group.requirements.flatMap((item) => item.available ? item.artifact_ids ?? [] : [])))],
-    prerequisite_decision_ids: decisions.filter((item) => item.value?.status === "accepted").map((item) => item.value?.decision_id ?? item.id).filter((item): item is string => Boolean(item)),
-    parent_subflow_selector: packet.subject_kind === "child" ? `subflow:${packet.runtime?.parent_subflow_id ?? ""}` : null,
-  };
+  const payload = {};
   const inputPath = await writePayload(context, "start", payload);
   const base = ["start", selector, "--input", inputPath, "--actor-kind", "agent", "--actor-name", "acceptance-driver"];
   if (packet.subject_kind === "template") base.push("--confirmed-by", "Acceptance Researcher");
@@ -127,10 +119,7 @@ export async function submitWork(context: JourneyContext, selector: string): Pro
     ? Buffer.from([0x50, 0x4b, 0x03, 0x04, 0x52, 0x53])
     : Buffer.from(`<!--block:B0001-->\n# Acceptance candidate\n\n${selector}\n`, "utf8");
   await writeFile(packet.output.resolved_path, content);
-  const payload = {
-    schema_version: "1",
-    dependency_artifact_ids: [...new Set(packet.dependencies.artifacts.flatMap((item) => item.artifact_ids))],
-  };
+  const payload = {};
   const inputPath = await writePayload(context, "submit", payload);
   const base = ["submit", selector, "--input", inputPath, "--actor-kind", "agent", "--actor-name", packet.producer_skill];
   const preview = cliJson<{ identity: { sha256?: string } }>([...base, "--dry-run"], context.root).data;
@@ -142,8 +131,6 @@ export async function submitGate(context: JourneyContext, selector: string, verd
   const packet = instructions(context, selector) as GatePacket;
   assert.ok(packet.evidence.length > 0);
   const payload = {
-    schema_version: "1",
-    instruction_basis_sha256: packet.instruction_basis_sha256,
     verdict,
     verification_kind: verificationKind,
     evidence: packet.evidence,
@@ -203,7 +190,6 @@ export async function applyRevisionPatch(context: JourneyContext, instanceSelect
   const selector = `patch:${patchId}`;
   const runtime = status(context).workflow_control.subflows.find((item) => item.selector === instanceSelector);
   const payload = {
-    patch_format_version: "2",
     revision_round: runtime?.round_number ?? 1,
     base_artifact_id: String(base.artifact_id),
     base_sha256: createHash("sha256").update(baseBytes).digest("hex"),

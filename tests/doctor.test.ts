@@ -154,14 +154,7 @@ async function startViaCli(root: string): Promise<void> {
   }>(runCli(["instructions", selector, "--json"], root));
   assert.equal(instructions.ok, true);
   const inputPath = path.join(root, "doctor-start.json");
-  await writeFile(inputPath, `${JSON.stringify({
-    schema_version: "1",
-    instruction_basis_sha256: instructions.data?.instruction_basis_sha256,
-    acknowledged_user_input_ids: ["research_goal"],
-    prerequisite_artifact_ids: [],
-    prerequisite_decision_ids: [],
-    parent_subflow_selector: null,
-  }, null, 2)}\n`, "utf8");
+  await writeFile(inputPath, "{}\n", "utf8");
   const base = ["start", selector, "--input", inputPath, "--actor-kind", "agent", "--actor-name", "deep-research", "--confirmed-by", "researcher"];
   const preview = parseEnvelope<{ identity: { plan_sha256: string } }>(runCli([...base, "--dry-run", "--json"], root));
   assert.equal(preview.ok, true);

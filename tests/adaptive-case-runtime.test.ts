@@ -193,7 +193,6 @@ void test("[adaptive.case-actions] high-impact patch blocks only its scope until
 
     const patchSelector = "patch:adaptive-high";
     const patchInput = await payloadFile(root, "patch", {
-      patch_format_version: "2",
       revision_round: 1,
       base_artifact_id: "A-adaptive-base",
       base_sha256: createHash("sha256").update(draft).digest("hex"),
@@ -268,14 +267,7 @@ function initializeAdaptive(root: string): void {
 
 async function startAdaptive(root: string, selector: string): Promise<string> {
   const packet = instructions(root, selector) as { action_descriptor: Descriptor };
-  const payload = {
-    schema_version: "1",
-    instruction_basis_sha256: packet.action_descriptor.availability.basis_sha256,
-    acknowledged_user_input_ids: [],
-    prerequisite_artifact_ids: [],
-    prerequisite_decision_ids: [],
-    parent_subflow_selector: null,
-  };
+  const payload = {};
   const inputPath = await payloadFile(root, "start", payload);
   const result = executePlanned(root, ["start", selector, "--input", inputPath, "--actor-kind", "agent", "--actor-name", "adaptive-driver", "--confirmed-by", "Acceptance Researcher"], packet.action_descriptor.availability.basis_sha256);
   return result.identity.selector.replace(/^subflow:/, "");

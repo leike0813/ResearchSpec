@@ -62,6 +62,7 @@ import {
 } from "../plugins/status.js";
 import { evaluateActionAvailability, type RuntimeActionKey } from "../core/runtime/action-availability.js";
 import { compactTransactionResult } from "../core/runtime/transaction-result.js";
+import { inspectLiteratureAdapters } from "../literature-adapters/inspect.js";
 import { executePatchPlan, PatchLifecycleError, planPatchAdvance, planPatchSubmit } from "../core/runtime/patch-lifecycle.js";
 import { buildAdaptiveInstructions } from "../core/runtime/adaptive-case-control.js";
 import {
@@ -302,10 +303,11 @@ export async function handleUpdate(inputPath: string | undefined, options: Updat
 export async function handleStatus(context: CommandContext): Promise<CommandResult> {
   const workspace = await requireWorkspace(context);
   const snapshot = await loadWorkspaceSnapshot(workspace);
-  const data = await buildCaseStatusSummary(snapshot);
-  const diagnostics = snapshot.diagnostics;
+  const adapterInspection = await inspectLiteratureAdapters(snapshot);
+  const data = await buildCaseStatusSummary(snapshot, adapterInspection.adapters);
+  const diagnostics = [...snapshot.diagnostics, ...adapterInspection.diagnostics];
   const ok = diagnostics.every((item) => !item.blocking);
-  return { ...success("status", data, { stdout: formatCaseStatusHuman(data) }), ok, exitCode: ok ? 0 : 1 };
+  return { ...success("status", data, { stdout: formatCaseStatusHuman(data) }), ok, exitCode: ok ? 0 : 1, diagnostics };
 }
 
 export async function handleInstructions(selector: string, context: CommandContext): Promise<CommandResult> {
@@ -358,7 +360,6 @@ export async function handleStart(selector: string, options: StartOptions, conte
   const actorResult = StartActorSchema.safeParse({ kind: options.actorKind, name: options.actorName });
   if (!actorResult.success) throw new CliError("invalid_start_input", "Start actor is invalid.", 2, undefined, actorResult.error.issues);
   if (selectorKind === "subflow_template" && !options.confirmedBy?.trim()) throw new CliError("invalid_start_input", "External template start requires --confirmed-by.", 2);
-  if (!context.dryRun && !context.interactive && (!context.yes || !options.expectedPlanSha256 || !options.expectedActionBasisSha256)) throw new CliError("confirmation_required", "Non-interactive Start requires --expected-action-basis-sha256, --expected-plan-sha256, and --yes.", 2, "Obtain a current descriptor and preview the identical Start input with --dry-run --json after the user confirms the route.");
   const workspace = await requireWorkspace(context);
   const snapshot = await loadWorkspaceSnapshot(workspace);
   const inputPath = path.resolve(context.cwd, options.input);
@@ -369,20 +370,11 @@ export async function handleStart(selector: string, options: StartOptions, conte
     if (snapshot.runtimeMode === "adaptive") {
       const plan = await planAdaptiveStart({ snapshot, selector, payload, actor: actorResult.data, confirmedBy: options.confirmedBy, expectedPlanSha256: options.expectedPlanSha256 });
       if (plan.status !== "already_applied") await assertActionBasis(snapshot, selector, options.expectedActionBasisSha256);
-      if (!context.dryRun && !context.yes && context.interactive) {
-        const approved = await confirm({ message: `Start the confirmed adaptive route ${selector}?`, default: false });
-        if (!approved) throw new CliError("cancelled", "Adaptive Start cancelled.", 1);
-      }
       if (!context.dryRun) await executeAdaptivePlan(plan);
       return adaptiveTransactionResult("start", plan, context);
     }
     const plan = await planSubflowStart({ snapshot, selector, payload, actor: actorResult.data, confirmedBy: options.confirmedBy, expectedPlanSha256: options.expectedPlanSha256, sourceRoot: context.cwd });
     if (plan.status !== "already_started") await assertActionBasis(snapshot, selector, options.expectedActionBasisSha256);
-    if (!context.dryRun && plan.status !== "already_started" && !context.yes) {
-      const importSummary = plan.material_passport_import ? ` Import ${String(plan.material_passport_import.artifact_ids.length)} ARS artifacts and ${String(plan.material_passport_import.gate_evidence_ids.length + plan.material_passport_import.decision_evidence_ids.length)} non-authoritative evidence records.` : "";
-      const approved = await confirm({ message: `Start ${selector} as ${plan.instance.instance_id}?${importSummary} This authorizes declared automatic artifact registration but not current Gates, Decisions, or transitions.`, default: false });
-      if (!approved) throw new CliError("cancelled", "Subflow start cancelled.", 1);
-    }
     const outcome = context.dryRun ? undefined : await executeSubflowStart(plan, workspace);
     const status = context.dryRun ? plan.status : outcome?.status ?? plan.status;
     const instanceSelector = `subflow:${plan.instance.instance_id}`;
@@ -423,12 +415,8 @@ export async function handleSubmit(selector: string, options: SubmitOptions, con
   if (!SubmitActorKindSchema.safeParse(options.actorKind).success) throw new CliError("invalid_actor_kind", "--actor-kind must be human, agent, script, converter, or validator.", 2);
   const actorResult = SubmitActorSchema.safeParse({ kind: options.actorKind, name: options.actorName });
   if (!actorResult.success) throw new CliError("invalid_submission_input", "Submit actor is invalid.", 2, undefined, actorResult.error.issues);
-  if (!context.dryRun && !context.interactive && (!context.yes || !options.expectedSha256)) {
-    throw new CliError("confirmation_required", "Non-interactive Submit requires --expected-sha256, --expected-action-basis-sha256, and --yes.", 2, "Obtain a current descriptor and run the identical payload with --dry-run --json first; --yes authorizes registration only.");
-  }
   const workspace = await requireWorkspace(context);
   const snapshot = await loadWorkspaceSnapshot(workspace);
-  if (!context.dryRun && !context.interactive && !options.expectedActionBasisSha256) throw new CliError("confirmation_required", "Non-interactive Submit requires --expected-action-basis-sha256.", 2);
   const inputPath = path.resolve(context.cwd, options.input);
   let payload: unknown;
   try { payload = JSON.parse(await readFile(inputPath, "utf8")) as unknown; }
@@ -439,6 +427,9 @@ export async function handleSubmit(selector: string, options: SubmitOptions, con
   try {
     const plan = await planArtifactSubmit({ snapshot, selector, payload, actor: actorResult.data, expectedSha256: options.expectedSha256 });
     if (plan.status !== "already_submitted") await assertActionBasis(snapshot, selector, options.expectedActionBasisSha256);
+    if (!context.dryRun && plan.status !== "already_submitted" && plan.confirmation_basis === "per_artifact" && !context.interactive && !options.confirmedBy?.trim()) {
+      throw new CliError("confirmation_required", "Manual artifact Submit requires --confirmed-by outside a TTY.", 2);
+    }
     if (!context.dryRun && plan.status !== "already_submitted" && plan.confirmation_basis !== "subflow_start" && !context.yes) {
       const approved = await confirm({ message: `Submit ${selector} at SHA-256 ${plan.candidate_sha256} and register its receipt? This does not update state, Gates, or Decisions.`, default: false });
       if (!approved) throw new CliError("cancelled", "Artifact submission cancelled.", 1);
@@ -472,9 +463,6 @@ async function handlePatchSubmit(selector: string, options: SubmitOptions, conte
   if (options.expectedPlanSha256 !== undefined && !isSha256(options.expectedPlanSha256)) throw new CliError("invalid_expected_plan_sha256", "--expected-plan-sha256 must be 64 lowercase hexadecimal characters.", 2);
   const actor = SubmitActorSchema.safeParse({ kind: options.actorKind, name: options.actorName });
   if (!actor.success) throw new CliError("invalid_patch_input", "Patch actor is invalid.", 2, undefined, actor.error.issues);
-  if (!context.dryRun && !context.interactive && (!context.yes || !options.expectedPlanSha256 || !options.expectedActionBasisSha256)) {
-    throw new CliError("confirmation_required", "Non-interactive patch Submit requires action basis, plan hash, and --yes.", 2);
-  }
   const workspace = await requireWorkspace(context);
   const snapshot = await loadWorkspaceSnapshot(workspace);
   let payload: unknown;
@@ -483,10 +471,6 @@ async function handlePatchSubmit(selector: string, options: SubmitOptions, conte
   try {
     const plan = await planPatchSubmit({ snapshot, selector, payload, actor: actor.data, expectedPlanSha256: options.expectedPlanSha256 });
     if (plan.status !== "already_submitted") await assertActionBasis(snapshot, selector, options.expectedActionBasisSha256);
-    if (!context.dryRun && !context.yes && context.interactive) {
-      const approved = await confirm({ message: `Create canonical pending ${selector}?`, default: false });
-      if (!approved) throw new CliError("cancelled", "Patch submission cancelled.", 1);
-    }
     if (!context.dryRun) await executePatchPlan(plan);
     const outcome = context.dryRun ? plan.status : plan.status === "already_submitted" ? "already_submitted" : "submitted";
     const data = compactTransactionResult({
@@ -516,7 +500,6 @@ async function handleObligationSubmit(selector: string, options: SubmitOptions, 
   if (options.expectedPlanSha256 !== undefined && !isSha256(options.expectedPlanSha256)) throw new CliError("invalid_expected_plan_sha256", "--expected-plan-sha256 must be 64 lowercase hexadecimal characters.", 2);
   const actor = SubmitActorSchema.safeParse({ kind: options.actorKind, name: options.actorName });
   if (!actor.success) throw new CliError("invalid_obligation_input", "Adaptive obligation actor is invalid.", 2, undefined, actor.error.issues);
-  if (!context.dryRun && !context.interactive && (!context.yes || !options.expectedPlanSha256 || !options.expectedActionBasisSha256)) throw new CliError("confirmation_required", "Non-interactive obligation Submit requires action basis, plan hash, and --yes.", 2);
   const workspace = await requireWorkspace(context);
   const snapshot = await loadWorkspaceSnapshot(workspace);
   if (snapshot.runtimeMode !== "adaptive") throw new CliError("adaptive_runtime_unavailable", "Obligation selectors require an adaptive workspace.", 1);
@@ -526,10 +509,6 @@ async function handleObligationSubmit(selector: string, options: SubmitOptions, 
   try {
     const plan = await planAdaptiveObligationSubmit({ snapshot, selector, payload, actor: actor.data, expectedPlanSha256: options.expectedPlanSha256 });
     if (plan.status !== "already_applied") await assertActionBasis(snapshot, selector, options.expectedActionBasisSha256);
-    if (!context.dryRun && !context.yes && context.interactive) {
-      const approved = await confirm({ message: `Commit the adaptive obligation action for ${selector}?`, default: false });
-      if (!approved) throw new CliError("cancelled", "Obligation submission cancelled.", 1);
-    }
     if (!context.dryRun) await executeAdaptivePlan(plan);
     return adaptiveTransactionResult("submit", plan, context);
   } catch (error) {
@@ -588,11 +567,13 @@ export async function handleAdvance(selector: string, options: AdvanceOptions, c
   if (options.expectedPlanSha256 !== undefined && !isSha256(options.expectedPlanSha256)) throw new CliError("invalid_expected_plan_sha256", "--expected-plan-sha256 must be 64 lowercase hexadecimal characters.", 2);
   const actor = RuntimeActorSchema.safeParse({ kind: options.actorKind, name: options.actorName });
   if (!actor.success || !["agent", "script"].includes(actor.data.kind)) throw new CliError("invalid_advance_input", "Advance actor must be an agent or script.", 2, undefined, actor.success ? undefined : actor.error.issues);
-  if (!context.dryRun && !context.interactive && (!context.yes || !options.expectedPlanSha256 || !options.expectedActionBasisSha256)) throw new CliError("confirmation_required", "Non-interactive Advance requires --expected-action-basis-sha256, --expected-plan-sha256, and --yes.", 2);
   const workspace = await requireWorkspace(context);
   const snapshot = await loadWorkspaceSnapshot(workspace);
   try {
     if (PatchSelectorSchema.safeParse(selector).success) {
+      if (!context.dryRun && !context.interactive && (!context.yes || !options.expectedPlanSha256 || !options.expectedActionBasisSha256)) {
+        throw new CliError("confirmation_required", "Non-interactive patch Advance requires --expected-action-basis-sha256, --expected-plan-sha256, and --yes.", 2);
+      }
       const plan = await planPatchAdvance({ snapshot, selector, actor: actor.data, expectedPlanSha256: options.expectedPlanSha256 });
       if (!plan.status.startsWith("already_")) await assertActionBasis(snapshot, selector, options.expectedActionBasisSha256);
       if (!context.dryRun) await executePatchPlan(plan);
@@ -625,10 +606,6 @@ export async function handleAdvance(selector: string, options: AdvanceOptions, c
     }
     const plan = await planTransitionAdvance({ snapshot, selector, actor: actor.data, expectedPlanSha256: options.expectedPlanSha256 });
     if (plan.status !== "already_advanced") await assertActionBasis(snapshot, selector, options.expectedActionBasisSha256);
-    if (!context.dryRun && plan.status !== "already_advanced" && !context.yes) {
-      const approved = await confirm({ message: `Advance the unique authorized transition ${selector}?`, default: false });
-      if (!approved) throw new CliError("cancelled", "Transition advance cancelled.", 1);
-    }
     const outcome = context.dryRun ? undefined : await executeTransitionAdvance(plan, workspace);
     const status = context.dryRun ? plan.status : outcome?.status ?? plan.status;
     const effects: CompactTransactionEffect[] = status === "already_advanced"
@@ -941,14 +918,6 @@ export async function handlePropose(changeId: string, options: ProposeOptions, c
       target_hashes: proposal.patch.validation.target_hashes,
     })}\n`);
     if (options.expectedPlanSha256 && options.expectedPlanSha256 !== planSha256) throw new CliError("proposal_plan_stale", "Proposal plan no longer matches the approved preview.", 3, undefined, { expected: options.expectedPlanSha256, actual: planSha256 });
-    if (!context.dryRun && !context.interactive && (!context.yes || !options.expectedActionBasisSha256 || !options.expectedPlanSha256)) {
-      throw new CliError("confirmation_required", "Non-interactive proposal creation requires --expected-action-basis-sha256, --expected-plan-sha256, and --yes.", 2);
-    }
-    if (!context.dryRun && !context.yes) {
-      if (!context.interactive) throw new CliError("confirmation_required", "Non-interactive proposal creation requires --yes.", 2, "This confirms creation of a pending proposal only; it does not accept the change.");
-      const approved = await confirm({ message: `Create pending ${proposal.patch.risk_level}-risk change ${changeId} with ${String(proposal.patch.patches.length)} patch(es)?`, default: false });
-      if (!approved) throw new CliError("cancelled", "Proposal creation cancelled.", 1);
-    }
     if (!context.dryRun) {
       await assertProposalBasisCurrent(workspace, proposal.patch);
       await executeWritePlan({ operations: proposal.operations });

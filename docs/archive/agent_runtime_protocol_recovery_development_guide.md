@@ -1,5 +1,11 @@
 # Agent 流动运行模型、交互协议、恢复能力与 OpenSpec 闭环开发指引
 
+> 历史开发记录。本文不再是现行运行契约。当前权威来源为
+> [ARSU 用户使用模型](../arsu_user_usage_model.md)、
+> [CLI 接口设计](../cli_interface_design.md)、
+> [文献系统适配器](../literature_system_adapters.md)，以及
+> `openspec/specs/` 下的现行规范。
+
 ## 文档定位
 
 本文汇总 ResearchSpec 实际运行问题与固定 Zotero Literature Adapter 融合问题的只读调查结论，以及已经确认的产品决策。它是后续 OpenSpec change、DTO/Schema 设计、实现和验收的共同输入，不描述当前代码已经具备的能力，也不替代 `docs/arsu_user_usage_model.md` 的现行用户模型权威。

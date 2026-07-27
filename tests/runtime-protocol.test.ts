@@ -18,14 +18,68 @@ interface Availability {
 }
 
 interface Descriptor {
+  schema_version: string;
   selector: string;
   action_schema_ref: string;
   availability: Availability;
   cli_derived_fields: string[];
   semantic_input_slots: Array<{ field_path: string; expectation: string }>;
   minimal_input_template: Record<string, unknown> | null;
+  execution_policy: "direct" | "human_confirmed" | "plan_bound";
+  dry_run: "optional";
   possible_next_selectors: string[];
 }
+
+void test("descriptor v2 round-trips semantic Start input in adaptive and strict workspaces", async () => {
+  for (const profile of ["adaptive", "strict"] as const) {
+    const root = await tempProject();
+    try {
+      assert.equal(runCli(["init", root, "--tools", "none", "--profile", profile]).status, 0);
+      const selector = "subflow:tpl-deep-research-quick";
+      const packet = parseEnvelope<{ action_descriptor: Descriptor }>(
+        runCli(["instructions", selector, "--json"], root),
+      );
+      assert.equal(packet.ok, true);
+      assert.equal(packet.data?.action_descriptor.schema_version, "2");
+      assert.equal(packet.data?.action_descriptor.execution_policy, "human_confirmed");
+      assert.equal(packet.data?.action_descriptor.dry_run, "optional");
+      assert.deepEqual(packet.data?.action_descriptor.minimal_input_template, {});
+      assert.ok(packet.data?.action_descriptor.cli_derived_fields.includes("instruction_basis_sha256"));
+
+      const mechanicalPath = path.join(root, `${profile}-mechanical.json`);
+      await writeFile(mechanicalPath, `${JSON.stringify({
+        schema_version: "1",
+        instruction_basis_sha256: "0".repeat(64),
+        acknowledged_user_input_ids: [],
+        prerequisite_artifact_ids: [],
+        prerequisite_decision_ids: [],
+        parent_subflow_selector: null,
+      })}\n`, "utf8");
+      const rejected = runCli([
+        "start", selector, "--input", mechanicalPath,
+        "--actor-kind", "agent", "--actor-name", "round-trip",
+        "--confirmed-by", "Researcher", "--dry-run", "--json",
+      ], root);
+      assert.equal(rejected.status, 2);
+      assert.equal(parseEnvelope(rejected).error?.code, "invalid_start_input");
+      assert.ok(parseEnvelope(rejected).error?.validation?.some((item) =>
+        item.code === "unrecognized_key"
+        && item.schema_ref === "researchspec://actions/start/v2"));
+
+      const semanticPath = path.join(root, `${profile}-semantic.json`);
+      await writeFile(semanticPath, "{}\n", "utf8");
+      const executed = parseEnvelope<{ outcome: string }>(runCli([
+        "start", selector, "--input", semanticPath,
+        "--actor-kind", "agent", "--actor-name", "round-trip",
+        "--confirmed-by", "Researcher", "--json",
+      ], root));
+      assert.equal(executed.ok, true);
+      assert.ok(["started", "applied"].includes(executed.data?.outcome ?? ""));
+    } finally {
+      await cleanup(root);
+    }
+  }
+});
 
 void test("bounded runtime reads page long multi-round history and keep action surfaces consistent", async () => {
   const root = await tempProject();
@@ -104,7 +158,7 @@ void test("bounded runtime reads page long multi-round history and keep action s
       runCli(["instructions", "change:new-proposal", "--json"], root),
     );
     assert.equal(proposal.ok, true);
-    assert.equal(proposal.data?.action_descriptor.action_schema_ref, "researchspec://actions/propose/v1");
+    assert.equal(proposal.data?.action_descriptor.action_schema_ref, "researchspec://actions/propose/v2");
     assert.ok(proposal.data?.action_descriptor.semantic_input_slots.some((slot) => slot.field_path === "/patches"));
     assert.equal("schema_version" in (proposal.data?.action_descriptor.minimal_input_template ?? {}), false);
   } finally {
@@ -160,7 +214,7 @@ void test("write protocol rejects stale descriptors and reports stable schema vi
     assert.ok(proposalError?.validation?.some((item) =>
       item.code === "required"
       && item.field_path === "/title"
-      && item.schema_ref === "researchspec://actions/propose/v1"
+      && item.schema_ref === "researchspec://actions/propose/v2"
       && item.expectation.length > 0));
 
     await writePendingChange(workspace, "pending-decision", payload);
@@ -177,7 +231,7 @@ void test("write protocol rejects stale descriptors and reports stable schema vi
     assert.ok(decisionError?.validation?.some((item) =>
       item.code === "required"
       && item.field_path === "/reason"
-      && item.schema_ref === "researchspec://actions/decide/v1"
+      && item.schema_ref === "researchspec://actions/decide/v2"
       && item.expectation.length > 0));
 
     const preview = parseEnvelope<Record<string, unknown>>(runCli([

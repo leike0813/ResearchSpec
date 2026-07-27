@@ -12,7 +12,7 @@ import { getWorkspaceEntries } from "../src/core/workspace/layout.js";
 import { loadWorkspaceSnapshot } from "../src/core/workspace/snapshot.js";
 import { TEST_RUN_STATE, TEST_WORKFLOW } from "./helpers/test-workflow.js";
 
-const payload = { schema_version: "1", dependency_artifact_ids: [], producer_mode: "full" } as const;
+const payload = { producer_mode: "full" } as const;
 const actor = { kind: "agent", name: "deep-research" } as const;
 
 void test("scoped artifact submit registers a receipt and advances the instance frontier", async () => {
@@ -65,7 +65,7 @@ async function createStartedWorkspace() {
   const instructions = await buildSubflowInstructions(snapshot, "subflow:tpl-research");
   assert.equal(instructions.ok, true);
   if (!instructions.ok) throw new Error("instructions unavailable");
-  const startPayload = { schema_version: "1", instruction_basis_sha256: instructions.packet.instruction_basis_sha256, acknowledged_user_input_ids: ["research_goal"], prerequisite_artifact_ids: [], prerequisite_decision_ids: [], parent_subflow_selector: null };
+  const startPayload = {};
   const plan = await planSubflowStart({ snapshot, selector: "subflow:tpl-research", payload: startPayload, actor: { kind: "agent", name: "deep-research" }, confirmedBy: "researcher", now: "2026-07-10T00:00:00.000Z" });
   await executeSubflowStart(plan, workspace);
   return { root, workspace, instanceId: plan.instance.instance_id };

@@ -69,6 +69,40 @@ void test("[journey.vague-routing] Navigate combines catalog route meaning with 
   } finally { await cleanup(root); }
 });
 
+void test("[journey.zotero-entry-routing] ARSU and bounded Zotero requests keep distinct route ownership", async () => {
+  const root = await tempProject();
+  try {
+    const context = initialize(root);
+    const navigate = await readFile(path.join(root, ".forge/skills/researchspec-navigate/SKILL.md"), "utf8");
+    const producer = await readFile(path.join(root, ".forge/skills/deep-research/SKILL.md"), "utf8");
+    assert.match(navigate, /zotero-library-agent/);
+    assert.match(navigate, /zotero-library-query/);
+    assert.match(navigate, /Keep the ARSU producer/);
+    assert.match(producer, /Zotero use nested inside ARSU research remains a provider operation owned by the active ARSU producer/);
+    assert.equal(status(context).run.status, "not_started");
+  } finally { await cleanup(root); }
+});
+
+void test("[journey.source-policy-consent] source policy, readiness and managed-library consent stay separate", async () => {
+  const root = await tempProject();
+  try {
+    initialize(root);
+    const navigate = await readFile(path.join(root, ".forge/skills/researchspec-navigate/SKILL.md"), "utf8");
+    assert.match(navigate, /Ordinary unchecked readiness may be skipped/);
+    assert.match(navigate, /readiness failure pauses rather than silently changing policy/);
+    assert.match(navigate, /Keep source policy and readiness separate from route confirmation, plugin consent, and managed-library authorization/);
+    const summary = cliJson<{
+      pending: { decision_count: number };
+      literature_adapters: Array<{ adapter_id: string; connection_state: string }>;
+    }>(["status"], root).data;
+    assert.equal(summary?.pending.decision_count, 0);
+    assert.deepEqual(summary?.literature_adapters.map((adapter) => ({
+      adapter_id: adapter.adapter_id,
+      connection_state: adapter.connection_state,
+    })), [{ adapter_id: "zotero-library", connection_state: "unchecked" }]);
+  } finally { await cleanup(root); }
+});
+
 void test("[journey.plugin-augmentation] confirmed plugin installation leaves the core frontier and producer unchanged", async () => {
   const root = await tempProject();
   try {
@@ -304,14 +338,7 @@ void test("[journey.terminal-completion] the full pipeline reaches terminal stat
     assert.equal(complete.run.status, "complete");
     assert.equal(complete.workflow_control.frontier.some((selector) => selector.includes(parent.slice(8))), false);
     const blockedInput = path.join(root, "terminal-start.json");
-    await writeFile(blockedInput, `${JSON.stringify({
-      schema_version: "1",
-      instruction_basis_sha256: "0".repeat(64),
-      acknowledged_user_input_ids: [],
-      prerequisite_artifact_ids: [],
-      prerequisite_decision_ids: [],
-      parent_subflow_selector: null,
-    }, null, 2)}\n`, "utf8");
+    await writeFile(blockedInput, "{}\n", "utf8");
     const blocked = runCli([
       "start", "subflow:tpl-deep-research-quick", "--input", blockedInput,
       "--actor-kind", "agent", "--actor-name", "acceptance-driver",

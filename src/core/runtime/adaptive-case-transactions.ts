@@ -23,10 +23,11 @@ import {
 } from "../contracts/case-state.js";
 import {
   GateSubmitPayloadSchema,
+  GateSubmitSemanticInputSchema,
   GateSubmitReceiptSchema,
   RuntimeActorSchema,
 } from "../contracts/gate-transition.js";
-import { SubflowStartInputSchema } from "../contracts/subflow.js";
+import { SubflowStartInputSchema, SubflowStartSemanticInputSchema } from "../contracts/subflow.js";
 import type { CompactTransactionEffect } from "../contracts/runtime-protocol.js";
 import type { WorkspaceSnapshot, SnapshotFile } from "../workspace/snapshot.js";
 import { executeWritePlan, planFile, sha256, type PlannedWrite, type ReadPrecondition, type WritePlan } from "../workspace/write-plan.js";
@@ -65,15 +66,25 @@ export async function planAdaptiveStart(input: {
   now?: string;
 }): Promise<AdaptiveTransactionPlan> {
   const { profile, state } = adaptive(input.snapshot);
-  const payload = SubflowStartInputSchema.safeParse(input.payload);
+  const semantic = SubflowStartSemanticInputSchema.safeParse(input.payload);
   const actor = SubmitActorSchema.safeParse(input.actor);
   const route = profile.routes.find((item) => `subflow:${item.template_id}` === input.selector);
-  if (!payload.success || !actor.success || !["human", "agent", "script"].includes(actor.data.kind) || !route || !input.confirmedBy?.trim()) {
-    throw new AdaptiveCaseError("invalid_start_input", "Adaptive Start input, actor, confirmer or route is invalid.", "usage", payload.success ? actor.success ? undefined : actor.error.issues : payload.error.issues);
+  if (!semantic.success || !actor.success || !["human", "agent", "script"].includes(actor.data.kind) || !route || !input.confirmedBy?.trim()) {
+    throw new AdaptiveCaseError("invalid_start_input", "Adaptive Start input, actor, confirmer or route is invalid.", "usage", semantic.success ? actor.success ? undefined : actor.error.issues : semantic.error.issues);
   }
-  if (payload.data.material_passport_import) throw new AdaptiveCaseError("adaptive_import_not_supported", "Material Passport import remains a strict compatibility transaction until migration convergence.", "domain");
+  if (semantic.data.material_passport_import) throw new AdaptiveCaseError("adaptive_import_not_supported", "Material Passport import remains a strict compatibility transaction until migration convergence.", "domain");
   const availability = await requireAllowed(input.snapshot, input.selector);
-  if (payload.data.instruction_basis_sha256 !== availability.availability.basis_sha256) throw new AdaptiveCaseError("subflow_start_conflict", "Adaptive Start instruction basis changed.", "conflict");
+  const payload = {
+    data: SubflowStartInputSchema.parse({
+      ...semantic.data,
+      schema_version: "1",
+      instruction_basis_sha256: availability.availability.basis_sha256,
+      acknowledged_user_input_ids: [],
+      prerequisite_artifact_ids: [],
+      prerequisite_decision_ids: [],
+      parent_subflow_selector: null,
+    }),
+  };
   const planSha256 = bindPlan(input.snapshot, input.selector, { payload: payload.data, actor: actor.data, confirmed_by: input.confirmedBy.trim() });
   assertExpectedPlan(input.expectedPlanSha256, planSha256);
   const instanceId = `sf-${route.template_id.slice(4)}-${planSha256.slice(0, 12)}`;
@@ -297,12 +308,19 @@ export async function planAdaptiveGate(input: {
   now?: string;
 }): Promise<AdaptiveTransactionPlan> {
   const { state } = adaptive(input.snapshot);
-  const payload = GateSubmitPayloadSchema.safeParse(input.payload);
+  const semantic = GateSubmitSemanticInputSchema.safeParse(input.payload);
   const actor = RuntimeActorSchema.safeParse(input.actor);
-  if (!payload.success || !actor.success || actor.data.kind !== "validator" || !input.confirmedBy?.trim()) throw new AdaptiveCaseError("invalid_gate_input", "Adaptive Gate input requires a validator and human confirmer.", "usage", payload.success ? actor.success ? undefined : actor.error.issues : payload.error.issues);
-  await requireAllowed(input.snapshot, input.selector);
+  if (!semantic.success || !actor.success || actor.data.kind !== "validator" || !input.confirmedBy?.trim()) throw new AdaptiveCaseError("invalid_gate_input", "Adaptive Gate input requires a validator and human confirmer.", "usage", semantic.success ? actor.success ? undefined : actor.error.issues : semantic.error.issues);
+  const availability = await requireAllowed(input.snapshot, input.selector);
   const descriptor = await evaluateActionAvailability(input.snapshot, input.selector);
-  if (!descriptor || payload.data.instruction_basis_sha256 !== descriptor.availability.basis_sha256) throw new AdaptiveCaseError("gate_submit_conflict", "Gate instruction basis changed.", "conflict");
+  if (!descriptor || descriptor.availability.basis_sha256 !== availability.availability.basis_sha256) throw new AdaptiveCaseError("gate_submit_conflict", "Gate instruction basis changed.", "conflict");
+  const payload = {
+    data: GateSubmitPayloadSchema.parse({
+      ...semantic.data,
+      schema_version: "1",
+      instruction_basis_sha256: availability.availability.basis_sha256,
+    }),
+  };
   validateGateEvidence(input.snapshot, payload.data.evidence);
   const [instanceId = "", gateNodeId = ""] = input.selector.slice("gate:".length).split("/", 2);
   const planSha256 = bindPlan(input.snapshot, input.selector, { payload: payload.data, actor: actor.data, confirmed_by: input.confirmedBy.trim() });

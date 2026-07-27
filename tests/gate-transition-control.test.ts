@@ -7,7 +7,6 @@ import { test } from "node:test";
 import { parse, stringify } from "yaml";
 
 import { TransitionAdvanceReceiptV2Schema } from "../src/core/contracts/gate-transition.js";
-import type { WorkflowDefinition } from "../src/core/contracts/workflow.js";
 import { executeArtifactSubmit, planArtifactSubmit } from "../src/core/runtime/artifact-submit.js";
 import { executeGateSubmit, executeTransitionAdvance, planGateSubmit, planTransitionAdvance } from "../src/core/runtime/gate-transition-control.js";
 import { decideItem } from "../src/core/runtime/lifecycle.js";
@@ -260,10 +259,7 @@ async function createWorkspace(options: { withBranch?: boolean; completeRun?: bo
 
 async function completeSliceWork(workspace: string): Promise<string> {
   const before = await loadWorkspaceSnapshot(workspace);
-  const instructions = await buildSubflowInstructions(before, "subflow:tpl-research");
-  assert.equal(instructions.ok, true);
-  if (!instructions.ok) throw new Error("Subflow instructions unavailable");
-  const start = await planSubflowStart({ snapshot: before, selector: "subflow:tpl-research", payload: { schema_version: "1", instruction_basis_sha256: instructions.packet.instruction_basis_sha256, acknowledged_user_input_ids: ["research_goal"], prerequisite_artifact_ids: [], prerequisite_decision_ids: [], parent_subflow_selector: null }, actor: { kind: "agent", name: "academic-pipeline" }, confirmedBy: "researcher", now: "2026-07-10T00:00:00.000Z" });
+  const start = await planSubflowStart({ snapshot: before, selector: "subflow:tpl-research", payload: {}, actor: { kind: "agent", name: "academic-pipeline" }, confirmedBy: "researcher", now: "2026-07-10T00:00:00.000Z" });
   await executeSubflowStart(start, workspace);
   for (let index = 0; index < 3; index += 1) {
     const snapshot = await loadWorkspaceSnapshot(workspace);
@@ -272,10 +268,7 @@ async function completeSliceWork(workspace: string): Promise<string> {
     assert.ok(status);
     await mkdir(path.dirname(status.output_path), { recursive: true });
     await writeFile(status.output_path, `# ${status.work_item_id}\n\nEvidence.\n`, "utf8");
-    const template = (snapshot.workflow as WorkflowDefinition).subflow_templates[0]?.work_items.find((item) => item.id === status.work_item_id);
-    assert.ok(template);
-    const dependencies = template.requires.work_items.map((workId) => snapshot.artifacts.find((artifact) => artifact.subflow_instance_id === start.instance.instance_id && artifact.work_item_id === workId && artifact.artifact_type !== "artifact_submit_receipt")?.artifact_id).filter((id): id is string => typeof id === "string");
-    const plan = await planArtifactSubmit({ snapshot, selector: status.selector, payload: { schema_version: "1", dependency_artifact_ids: dependencies, producer_mode: "full" }, actor: { kind: "agent", name: "deep-research" }, now: `2026-07-10T00:0${String(index + 1)}:00.000Z` });
+    const plan = await planArtifactSubmit({ snapshot, selector: status.selector, payload: { producer_mode: "full" }, actor: { kind: "agent", name: "deep-research" }, now: `2026-07-10T00:0${String(index + 1)}:00.000Z` });
     await executeArtifactSubmit(plan, workspace);
   }
   return start.instance.instance_id;
@@ -292,5 +285,5 @@ async function submitPassingGate(workspace: string, instanceId: string): Promise
 
 function gatePayload(packet: Record<string, unknown>, verdict: "pass" | "pass_with_conditions" | "fail", overrides: Record<string, unknown> = {}) {
   const evidence = packet.evidence as Array<Record<string, unknown>>;
-  return { schema_version: "1", instruction_basis_sha256: packet.instruction_basis_sha256, verdict, verification_kind: "initial", evidence, findings: [{ code: "evidence-review", summary: "Evidence reviewed against the declared Gate contract.", evidence_indexes: evidence.map((_item, index) => index) }], ...overrides };
+  return { verdict, verification_kind: "initial", evidence, findings: [{ code: "evidence-review", summary: "Evidence reviewed against the declared Gate contract.", evidence_indexes: evidence.map((_item, index) => index) }], ...overrides };
 }

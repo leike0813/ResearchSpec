@@ -5,7 +5,14 @@ import { ARSU_ROUTING_CATALOG, getArsuRoute } from "../../arsu-converter/routing
 import type { PrerequisiteGroup, PrerequisiteRequirement, RouteRef } from "../../arsu-converter/routing/contracts.js";
 import type { RunState, SubflowInstanceState } from "../contracts/run-state.js";
 import { parseRuntimeSelector } from "../contracts/runtime-selector.js";
-import { StartActorSchema, SubflowStartInputSchema, SubflowStartReceiptSchema, type SubflowStartInput, type SubflowStartReceipt } from "../contracts/subflow.js";
+import {
+  StartActorSchema,
+  SubflowStartInputSchema,
+  SubflowStartReceiptSchema,
+  SubflowStartSemanticInputSchema,
+  type SubflowStartInput,
+  type SubflowStartReceipt,
+} from "../contracts/subflow.js";
 import type { SubflowTemplateDefinition } from "../contracts/workflow.js";
 import type { WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { loadWorkspaceSnapshot } from "../workspace/snapshot.js";
@@ -38,7 +45,13 @@ export interface SubflowInstructionPacket {
   warnings: Array<{ code: "profile_partial"; covered_artifact_types: string[]; route_artifact_types: string[] }>;
   instruction_basis_sha256: string;
   runtime_context: ReturnType<typeof buildRuntimeContext>;
-  start?: { input_schema: { required: string[] }; preview_command: string; requires_expected_plan_sha256: true; requires_confirmation: boolean };
+  start?: {
+    semantic_input_schema_version: "2";
+    required_semantic_fields: string[];
+    execution_policy: "direct" | "human_confirmed";
+    dry_run: "optional";
+    command: string;
+  };
   runtime?: { parent_subflow_id: string | null; parent_node_id?: string | null; round_number: number | null; active_stage_id?: string; ready_items: string[]; blockers: unknown[] };
 }
 
@@ -121,7 +134,13 @@ async function templatePacket(snapshot: WorkspaceSnapshot, template: SubflowTemp
     warnings: template.route_coverage === "partial" ? [{ code: "profile_partial", covered_artifact_types: covered, route_artifact_types: route.primary_artifact_types }] : [],
     instruction_basis_sha256: instructionBasis,
     runtime_context: runtimeContext,
-    start: { input_schema: { required: ["schema_version", "instruction_basis_sha256", "acknowledged_user_input_ids", "prerequisite_artifact_ids", "prerequisite_decision_ids", "parent_subflow_selector"] }, preview_command: `researchspec start ${selector} --input <start.json> --actor-kind <kind> --actor-name <name>${subjectKind === "template" ? " --confirmed-by <human>" : ""} --dry-run --json`, requires_expected_plan_sha256: true, requires_confirmation: subjectKind === "template" },
+    start: {
+      semantic_input_schema_version: "2",
+      required_semantic_fields: [],
+      execution_policy: subjectKind === "template" ? "human_confirmed" : "direct",
+      dry_run: "optional",
+      command: `researchspec start ${selector} --input <semantic-input.json> --actor-kind <kind> --actor-name <name>${subjectKind === "template" ? " --confirmed-by <human>" : ""} --json`,
+    },
   };
 }
 
@@ -139,15 +158,15 @@ function prerequisiteView(snapshot: WorkspaceSnapshot, inspections: Awaited<Retu
 }
 
 export async function planSubflowStart(input: { snapshot: WorkspaceSnapshot; selector: string; payload: unknown; actor: unknown; confirmedBy?: string; expectedPlanSha256?: string; now?: string; sourceRoot?: string }): Promise<SubflowStartPlan> {
-  const payloadResult = SubflowStartInputSchema.safeParse(input.payload);
-  if (!payloadResult.success) throw new SubflowStartError("invalid_start_input", "Start input is invalid.", "usage", payloadResult.error.issues);
+  const semanticResult = SubflowStartSemanticInputSchema.safeParse(input.payload);
+  if (!semanticResult.success) throw new SubflowStartError("invalid_start_input", "Start semantic input is invalid.", "usage", semanticResult.error.issues);
   const actorResult = StartActorSchema.safeParse(input.actor);
   if (!actorResult.success) throw new SubflowStartError("invalid_start_input", "Start actor is invalid.", "usage", actorResult.error.issues);
   const snapshot = input.snapshot;
   if (!snapshot.workflow || !snapshot.runState) throw new SubflowStartError("workflow_unconfigured", "Workflow has no subflow templates.", "domain");
   if (snapshot.diagnostics.some((item) => item.blocking)) throw new SubflowStartError("workflow_invalid", "Workspace has blocking diagnostics.", "domain", snapshot.diagnostics.filter((item) => item.blocking));
 
-  const preparedImport = payloadResult.data.material_passport_import ? await preparePassportImport(snapshot, payloadResult.data.material_passport_import, input.sourceRoot ?? path.dirname(snapshot.workspace)) : undefined;
+  const preparedImport = semanticResult.data.material_passport_import ? await preparePassportImport(snapshot, semanticResult.data.material_passport_import, input.sourceRoot ?? path.dirname(snapshot.workspace)) : undefined;
 
   if (input.expectedPlanSha256) {
     const existing = snapshot.runState.subflows.find((item) => item.start_receipt.plan_sha256 === input.expectedPlanSha256);
@@ -170,13 +189,29 @@ export async function planSubflowStart(input: { snapshot: WorkspaceSnapshot; sel
   }
   const instructions = await buildSubflowInstructions(snapshot, input.selector);
   if (!instructions.ok) throw new SubflowStartError(instructions.code, "Subflow cannot be started.", "domain");
-  if (payloadResult.data.instruction_basis_sha256 !== instructions.packet.instruction_basis_sha256) throw new SubflowStartError("subflow_start_conflict", "Instruction basis changed after route confirmation.", "conflict");
+  const payloadResult = SubflowStartInputSchema.safeParse({
+    ...semanticResult.data,
+    schema_version: "1",
+    instruction_basis_sha256: instructions.packet.instruction_basis_sha256,
+    acknowledged_user_input_ids: instructions.packet.required_user_input_ids,
+    prerequisite_artifact_ids: [...new Set(instructions.packet.prerequisites.flatMap((group) =>
+      group.requirements.flatMap((requirement) => requirement.kind === "artifact" ? requirement.artifact_ids ?? [] : [])))].sort(),
+    prerequisite_decision_ids: snapshot.decisions
+      .filter((item) => item.status === "accepted" && template.start_requires.decision_types.includes(String(item.decision_type)))
+      .map((item) => String(item.decision_id))
+      .sort(),
+    parent_subflow_selector: parsed.kind === "scoped_subflow_node" ? `subflow:${parsed.instanceId}` : null,
+  });
+  if (!payloadResult.success) throw new SubflowStartError("invalid_start_input", "CLI-derived Start input is invalid.", "domain", payloadResult.error.issues);
 
   const parentId = parsed.kind === "scoped_subflow_node" ? parsed.instanceId : validateParent(snapshot.runState, template, payloadResult.data.parent_subflow_selector);
   const parentNodeId = parsed.kind === "scoped_subflow_node" ? parsed.nodeId : null;
-  if (parsed.kind === "scoped_subflow_node" && payloadResult.data.parent_subflow_selector && payloadResult.data.parent_subflow_selector !== `subflow:${parsed.instanceId}`) throw new SubflowStartError("subflow_start_conflict", "Payload parent differs from scoped selector.", "conflict");
   const parentInstance = parentId ? snapshot.runState.subflows.find((item) => item.instance_id === parentId) : undefined;
-  const roundNumber = parsed.kind === "scoped_subflow_node" ? childStatus?.round_number ?? null : template.template_kind === "round" ? nextRound(snapshot.runState, template.template_id, parentId, null) : null;
+  const roundNumber = template.template_kind === "round"
+    ? nextRound(snapshot.runState, template.template_id, parentId, parsed.kind === "scoped_subflow_node" ? undefined : null)
+    : parsed.kind === "scoped_subflow_node"
+      ? childStatus?.round_number ?? null
+      : null;
   const parentReceipt = parsed.kind === "scoped_subflow_node" && parentInstance ? await trustedParentReceipt(snapshot, parentInstance) : undefined;
   if (parsed.kind === "scoped_subflow_node" && !parentReceipt) throw new SubflowStartError("subflow_start_conflict", "Parent start receipt is unavailable or untrusted.", "conflict");
   const confirmer = parentReceipt?.confirmed_by.name ?? input.confirmedBy?.trim();
@@ -255,8 +290,13 @@ function validateParent(state: RunState, template: SubflowTemplateDefinition, se
   return parsed.instanceId;
 }
 
-function nextRound(state: RunState, templateId: string, parentId: string | null, parentNodeId: string | null): number {
-  return Math.max(0, ...state.subflows.filter((item) => item.template_id === templateId && item.parent_subflow_id === parentId && (item.parent_node_id ?? null) === parentNodeId).map((item) => item.round_number ?? 0)) + 1;
+function nextRound(state: RunState, templateId: string, parentId: string | null, parentNodeId: string | null | undefined): number {
+  return Math.max(0, ...state.subflows
+    .filter((item) =>
+      item.template_id === templateId
+      && item.parent_subflow_id === parentId
+      && (parentNodeId === undefined || (item.parent_node_id ?? null) === parentNodeId))
+    .map((item) => item.round_number ?? 0)) + 1;
 }
 
 async function validateStartPrerequisites(snapshot: WorkspaceSnapshot, template: SubflowTemplateDefinition, payload: SubflowStartInput) {

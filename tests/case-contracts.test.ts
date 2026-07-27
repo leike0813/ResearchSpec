@@ -1,16 +1,16 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { ArtifactSubmitInputSchema } from "../src/core/contracts/artifact.js";
+import { ArtifactSubmitInputSchema, ArtifactSubmitSemanticInputSchema } from "../src/core/contracts/artifact.js";
 import { ACTION_SCHEMA_REGISTRY, ActionAvailabilitySchema, CaseStatusSummarySchema, DecisionInputSchema } from "../src/core/contracts/case-control.js";
 import { ProposalInputSchema } from "../src/core/contracts/contract-change.js";
-import { DraftPatchSubmitInputSchema } from "../src/core/contracts/draft-patch.js";
+import { DraftPatchSemanticInputSchema, DraftPatchSubmitInputSchema } from "../src/core/contracts/draft-patch.js";
 import { CompactTransactionResultSchema, RuntimePageSchema, ValidationViolationSchema } from "../src/core/contracts/runtime-protocol.js";
 import { AdaptiveCaseProfileSchema, StrictCaseProfileSchema } from "../src/core/contracts/case-profile.js";
 import { CaseStateSchema, WorkingEvidenceSchema } from "../src/core/contracts/case-state.js";
-import { GateSubmitPayloadSchema } from "../src/core/contracts/gate-transition.js";
+import { GateSubmitPayloadSchema, GateSubmitSemanticInputSchema } from "../src/core/contracts/gate-transition.js";
 import { DoctorFindingSchema, DoctorRepairPlanSchema, DoctorRepairReceiptSchema, DoctorReportSchema } from "../src/core/contracts/runtime-recovery.js";
-import { SubflowStartInputSchema } from "../src/core/contracts/subflow.js";
+import { SubflowStartInputSchema, SubflowStartSemanticInputSchema } from "../src/core/contracts/subflow.js";
 
 const SHA = "a".repeat(64);
 const NOW = "2026-07-26T00:00:00.000Z";
@@ -159,25 +159,46 @@ void test("case contracts accept representative current facts and reject authori
     recommended_actions: [],
     allowed_actions: [],
     pending: { gate_ids: [], gate_count: 0, decision_ids: [], decision_count: 0, patch_ids: [], patch_count: 0, change_ids: [], change_count: 0 },
+    literature_adapters: [],
     diagnostic_counts: {},
     next_selectors: [],
   }).success, false);
 });
 
 void test("action registry reuses every current write validator and declares advance as no-input", () => {
-  assert.equal(ACTION_SCHEMA_REGISTRY.start.validator, SubflowStartInputSchema);
-  assert.equal(ACTION_SCHEMA_REGISTRY.submit_artifact.validator, ArtifactSubmitInputSchema);
-  assert.equal(ACTION_SCHEMA_REGISTRY.submit_gate.validator, GateSubmitPayloadSchema);
-  assert.equal(ACTION_SCHEMA_REGISTRY.submit_patch.validator, DraftPatchSubmitInputSchema);
-  assert.equal(ACTION_SCHEMA_REGISTRY.propose.validator, ProposalInputSchema);
-  assert.equal(ACTION_SCHEMA_REGISTRY.decide.validator, DecisionInputSchema);
+  assert.equal(ACTION_SCHEMA_REGISTRY.start.semantic_validator, SubflowStartSemanticInputSchema);
+  assert.equal(ACTION_SCHEMA_REGISTRY.start.canonical_validator, SubflowStartInputSchema);
+  assert.equal(ACTION_SCHEMA_REGISTRY.submit_artifact.semantic_validator, ArtifactSubmitSemanticInputSchema);
+  assert.equal(ACTION_SCHEMA_REGISTRY.submit_artifact.canonical_validator, ArtifactSubmitInputSchema);
+  assert.equal(ACTION_SCHEMA_REGISTRY.submit_gate.semantic_validator, GateSubmitSemanticInputSchema);
+  assert.equal(ACTION_SCHEMA_REGISTRY.submit_gate.canonical_validator, GateSubmitPayloadSchema);
+  assert.equal(ACTION_SCHEMA_REGISTRY.submit_patch.semantic_validator, DraftPatchSemanticInputSchema);
+  assert.equal(ACTION_SCHEMA_REGISTRY.submit_patch.canonical_validator, DraftPatchSubmitInputSchema);
+  assert.equal(ACTION_SCHEMA_REGISTRY.propose.semantic_validator, ProposalInputSchema);
+  assert.equal(ACTION_SCHEMA_REGISTRY.decide.semantic_validator, DecisionInputSchema);
   assert.equal(ACTION_SCHEMA_REGISTRY.advance.kind, "no-input");
   assert.equal(ACTION_SCHEMA_REGISTRY.advance.schema_ref, "researchspec://actions/advance/no-input");
   assert.equal(ACTION_SCHEMA_REGISTRY.advance_patch.kind, "no-input");
   for (const registration of Object.values(ACTION_SCHEMA_REGISTRY)) {
     assert.ok(registration.schema_ref);
-    assert.equal(registration.requires_dry_run, true);
+    assert.ok(["direct", "human_confirmed", "plan_bound"].includes(registration.execution_policy));
   }
+});
+
+void test("semantic action schemas reject caller-authored CLI mechanics", () => {
+  assert.equal(SubflowStartSemanticInputSchema.safeParse({ schema_version: "1" }).success, false);
+  assert.equal(ArtifactSubmitSemanticInputSchema.safeParse({ dependency_artifact_ids: [] }).success, false);
+  assert.equal(GateSubmitSemanticInputSchema.safeParse({
+    schema_version: "1",
+    verdict: "pass",
+    verification_kind: "initial",
+    evidence: [],
+    findings: [],
+  }).success, false);
+  assert.equal(DraftPatchSemanticInputSchema.safeParse({
+    patch_format_version: "2",
+    revision_round: 1,
+  }).success, false);
 });
 
 void test("canonical draft patch input closes semantic-delta and producer-scope combinations", () => {

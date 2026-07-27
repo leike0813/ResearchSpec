@@ -15,7 +15,8 @@
     "add-arsu-material-passport-import",
     "agent-assisted-domain-plugin-routing",
     "add-fixed-zotero-literature-adapter",
-    "establish-fluid-research-runtime"
+    "establish-fluid-research-runtime",
+    "close-fluid-runtime-acceptance-gaps"
   ],
   "journeys": [
     { "journey_id": "bootstrap", "test_id": "journey.bootstrap" },
@@ -31,7 +32,9 @@
     { "journey_id": "terminal-completion", "test_id": "journey.terminal-completion" },
     { "journey_id": "resume-passport", "test_id": "journey.resume-passport" },
     { "journey_id": "plugin-augmentation", "test_id": "journey.plugin-augmentation" },
-    { "journey_id": "plugin-fallback", "test_id": "journey.plugin-fallback" }
+    { "journey_id": "plugin-fallback", "test_id": "journey.plugin-fallback" },
+    { "journey_id": "zotero-entry-routing", "test_id": "journey.zotero-entry-routing" },
+    { "journey_id": "source-policy-consent", "test_id": "journey.source-policy-consent" }
   ],
   "capabilities": [
     {
@@ -59,6 +62,21 @@
             { "scenario": "Mode mapping is projected consistently", "technical_changes": ["add-arsu-routing-catalog", "consolidate-researchspec-agent-surface"], "journey_ids": ["vague-routing"], "test_ids": ["journey.vague-routing"] },
             { "scenario": "Near-miss intent is disambiguated", "technical_changes": ["add-arsu-routing-catalog", "consolidate-researchspec-agent-surface"], "journey_ids": ["vague-routing"], "test_ids": ["journey.vague-routing"] }
           ]
+        },
+        {
+          "requirement": "Routing Distinguishes ARSU And Zotero Entry",
+          "scenarios": [
+            { "scenario": "User asks a broad Zotero question", "technical_changes": ["add-fixed-zotero-literature-adapter", "close-fluid-runtime-acceptance-gaps"], "journey_ids": ["zotero-entry-routing"], "test_ids": ["journey.zotero-entry-routing"] },
+            { "scenario": "User explicitly requests a library query", "technical_changes": ["add-fixed-zotero-literature-adapter", "close-fluid-runtime-acceptance-gaps"], "journey_ids": ["zotero-entry-routing"], "test_ids": ["journey.zotero-entry-routing"] },
+            { "scenario": "Academic research needs sources", "technical_changes": ["add-arsu-routing-catalog", "add-fixed-zotero-literature-adapter", "close-fluid-runtime-acceptance-gaps"], "journey_ids": ["zotero-entry-routing"], "test_ids": ["journey.zotero-entry-routing"] }
+          ]
+        },
+        {
+          "requirement": "Source Policy And Library Consent Are Separate",
+          "scenarios": [
+            { "scenario": "Ordinary research skips Adapter setup", "technical_changes": ["add-fixed-zotero-literature-adapter", "close-fluid-runtime-acceptance-gaps"], "journey_ids": ["source-policy-consent"], "test_ids": ["journey.source-policy-consent"] },
+            { "scenario": "Private collection is required", "technical_changes": ["add-fixed-zotero-literature-adapter", "close-fluid-runtime-acceptance-gaps"], "journey_ids": ["source-policy-consent"], "test_ids": ["journey.source-policy-consent"] }
+          ]
         }
       ]
     },
@@ -75,15 +93,15 @@
         {
           "requirement": "CLI-Owned Workflow Frontier",
           "scenarios": [
-            { "scenario": "Pipeline dispatch follows CLI state", "technical_changes": ["add-subflow-instance-control-plane", "add-arsu-workflow-profiles", "consolidate-researchspec-agent-surface"], "journey_ids": ["pipeline", "resume"], "test_ids": ["journey.pipeline", "journey.resume"] },
-            { "scenario": "Parallel work follows profile declarations", "technical_changes": ["add-subflow-instance-control-plane", "add-arsu-workflow-profiles"], "journey_ids": ["parallel-join"], "test_ids": ["journey.parallel-join"] }
+            { "scenario": "Adaptive work follows current commitments", "technical_changes": ["establish-fluid-research-runtime", "close-fluid-runtime-acceptance-gaps"], "journey_ids": ["bootstrap", "vague-routing"], "test_ids": ["journey.bootstrap", "journey.vague-routing"] },
+            { "scenario": "Strict pipeline is active", "technical_changes": ["add-subflow-instance-control-plane", "add-arsu-workflow-profiles", "close-fluid-runtime-acceptance-gaps"], "journey_ids": ["pipeline", "resume"], "test_ids": ["journey.pipeline", "journey.resume"] }
           ]
         },
         {
           "requirement": "Uniform Runtime Protocol",
           "scenarios": [
-            { "scenario": "Agent advances one runtime action", "technical_changes": ["implement-complete-cli-interface", "add-subflow-instance-control-plane", "add-gate-transition-control-plane"], "journey_ids": ["standalone", "pipeline", "terminal-completion"], "test_ids": ["journey.standalone", "journey.pipeline", "journey.terminal-completion"] },
-            { "scenario": "Work submission records an existing candidate", "technical_changes": ["add-atomic-artifact-submit", "add-subflow-instance-control-plane"], "journey_ids": ["standalone", "parallel-join"], "test_ids": ["journey.standalone", "journey.parallel-join"] }
+            { "scenario": "Agent executes one durable action", "technical_changes": ["implement-complete-cli-interface", "add-subflow-instance-control-plane", "add-gate-transition-control-plane", "close-fluid-runtime-acceptance-gaps"], "journey_ids": ["standalone", "pipeline", "terminal-completion"], "test_ids": ["journey.standalone", "journey.pipeline", "journey.terminal-completion"] },
+            { "scenario": "Working material remains provisional", "technical_changes": ["add-atomic-artifact-submit", "establish-fluid-research-runtime", "close-fluid-runtime-acceptance-gaps"], "journey_ids": ["standalone", "parallel-join"], "test_ids": ["journey.standalone", "journey.parallel-join"] }
           ]
         },
         {
@@ -149,6 +167,19 @@
           "scenarios": [
             { "scenario": "Domain installation preserves wrapper frontier", "technical_changes": ["add-vendor-domain-plugin-ingestion"], "journey_ids": ["bootstrap"], "test_ids": ["journey.bootstrap"] }
           ]
+        },
+        {
+          "requirement": "Adapter Roles Control Projection Discovery",
+          "scenarios": [
+            { "scenario": "Command-capable tool is selected", "technical_changes": ["consolidate-researchspec-agent-surface", "establish-fluid-research-runtime"], "journey_ids": ["bootstrap"], "test_ids": ["journey.bootstrap"] },
+            { "scenario": "Skills-only tool is selected", "technical_changes": ["consolidate-researchspec-agent-surface", "establish-fluid-research-runtime"], "journey_ids": ["bootstrap"], "test_ids": ["journey.bootstrap"] }
+          ]
+        },
+        {
+          "requirement": "Adapter Runtime Metadata Is Delivered Statically",
+          "scenarios": [
+            { "scenario": "Projected runner has drifted", "technical_changes": ["add-fixed-zotero-literature-adapter", "establish-fluid-research-runtime", "close-fluid-runtime-acceptance-gaps"], "journey_ids": ["source-policy-consent"], "test_ids": ["journey.source-policy-consent"] }
+          ]
         }
       ]
     }
@@ -157,7 +188,7 @@
     {
       "capability_id": "framework-core",
       "change_id": "establish-fluid-research-runtime",
-      "spec_path": "openspec/changes/establish-fluid-research-runtime/specs/framework-core/spec.md",
+      "spec_path": "openspec/changes/archive/2026-07-27-establish-fluid-research-runtime/specs/framework-core/spec.md",
       "requirements": [
         {
           "requirement": "Universal Workflow Profile",
@@ -185,7 +216,7 @@
     {
       "capability_id": "runtime-recovery",
       "change_id": "establish-fluid-research-runtime",
-      "spec_path": "openspec/changes/establish-fluid-research-runtime/specs/runtime-recovery/spec.md",
+      "spec_path": "openspec/changes/archive/2026-07-27-establish-fluid-research-runtime/specs/runtime-recovery/spec.md",
       "requirements": [
         {
           "requirement": "Tolerant Runtime Observation",
@@ -218,7 +249,7 @@
     {
       "capability_id": "literature-system-adapters",
       "change_id": "establish-fluid-research-runtime",
-      "spec_path": "openspec/changes/establish-fluid-research-runtime/specs/literature-system-adapters/spec.md",
+      "spec_path": "openspec/changes/archive/2026-07-27-establish-fluid-research-runtime/specs/literature-system-adapters/spec.md",
       "requirements": [
         {
           "requirement": "Fixed Literature Adapter Catalog",
@@ -265,7 +296,7 @@
     {
       "capability_id": "arsu-user-model-acceptance",
       "change_id": "establish-fluid-research-runtime",
-      "spec_path": "openspec/changes/establish-fluid-research-runtime/specs/arsu-user-model-acceptance/spec.md",
+      "spec_path": "openspec/changes/archive/2026-07-27-establish-fluid-research-runtime/specs/arsu-user-model-acceptance/spec.md",
       "requirements": [
         {
           "requirement": "Public CLI User Journey Acceptance",
@@ -301,7 +332,7 @@
     {
       "capability_id": "mvp-release-readiness",
       "change_id": "establish-fluid-research-runtime",
-      "spec_path": "openspec/changes/establish-fluid-research-runtime/specs/mvp-release-readiness/spec.md",
+      "spec_path": "openspec/changes/archive/2026-07-27-establish-fluid-research-runtime/specs/mvp-release-readiness/spec.md",
       "requirements": [
         {
           "requirement": "Fixed Zotero Release Assets",

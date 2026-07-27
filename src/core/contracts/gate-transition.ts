@@ -12,16 +12,22 @@ export const GateEvidenceRefSchema = z.discriminatedUnion("kind", [
   z.strictObject({ kind: z.literal("contract"), path: z.string().min(1).refine((value) => !value.startsWith("/") && !value.split("/").includes("..")), sha256: Sha256Schema }),
 ]);
 
-export const GateSubmitPayloadSchema = z.strictObject({
-  schema_version: z.literal("1"),
-  instruction_basis_sha256: Sha256Schema,
+const GateSubmitSemanticFields = {
   verdict: z.enum(["pass", "pass_with_conditions", "fail"]),
   verification_kind: z.enum(["initial", "reverification"]),
   evidence: z.array(GateEvidenceRefSchema).min(1),
   findings: z.array(z.strictObject({ code: SafeRuntimeIdSchema, summary: z.string().min(1), evidence_indexes: z.array(z.number().int().nonnegative()).min(1) })),
   challenged_basis_sha256: Sha256Schema.optional(),
   supersedes_event_id: SafeRuntimeIdSchema.optional(),
-}).superRefine((value, context) => {
+} as const;
+
+function validateGateSubmitSemantics(value: {
+  verification_kind: "initial" | "reverification";
+  evidence: unknown[];
+  findings: Array<{ evidence_indexes: number[] }>;
+  challenged_basis_sha256?: string;
+  supersedes_event_id?: string;
+}, context: z.RefinementCtx): void {
   if (value.verification_kind === "reverification" && !value.challenged_basis_sha256 && !value.supersedes_event_id) {
     context.addIssue({ code: "custom", message: "Reverification must bind challenged evidence or a superseded event." });
   }
@@ -31,7 +37,20 @@ export const GateSubmitPayloadSchema = z.strictObject({
   for (const finding of value.findings) for (const index of finding.evidence_indexes) if (index >= value.evidence.length) {
     context.addIssue({ code: "custom", message: `Finding evidence index is out of range: ${String(index)}` });
   }
+}
+
+export const GateSubmitSemanticInputSchema = z.strictObject(GateSubmitSemanticFields)
+  .superRefine(validateGateSubmitSemantics);
+
+export const GateSubmitDerivedInputSchema = z.strictObject({
+  schema_version: z.literal("1"),
+  instruction_basis_sha256: Sha256Schema,
 });
+
+export const GateSubmitPayloadSchema = z.strictObject({
+  ...GateSubmitSemanticFields,
+  ...GateSubmitDerivedInputSchema.shape,
+}).superRefine(validateGateSubmitSemantics);
 
 export const GateReceiptReferenceSchema = z.strictObject({
   path: z.string().regex(/^runs\/current\/receipts\/gate-submit\/sf-[A-Za-z0-9][A-Za-z0-9._-]*\/[A-Za-z0-9][A-Za-z0-9._-]*\/E-[A-Za-z0-9][A-Za-z0-9._-]*\.json$/),
@@ -112,6 +131,7 @@ export const TransitionAdvanceReceiptSchema = z.discriminatedUnion("schema_versi
 ]);
 
 export type GateSubmitPayload = z.infer<typeof GateSubmitPayloadSchema>;
+export type GateSubmitSemanticInput = z.infer<typeof GateSubmitSemanticInputSchema>;
 export type GateSubmitReceipt = z.infer<typeof GateSubmitReceiptSchema>;
 export type AppliedTransitionEffect = z.infer<typeof AppliedTransitionEffectSchema>;
 export type TransitionAdvanceReceipt = z.infer<typeof TransitionAdvanceReceiptSchema>;

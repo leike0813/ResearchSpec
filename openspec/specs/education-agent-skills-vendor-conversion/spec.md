@@ -2,7 +2,9 @@
 
 ## Purpose
 
-TBD
+Define the reviewed conversion and publication contract that turns admitted
+Education Agent Skills records into complete static ResearchSpec Skill trees
+without adding runtime authority, commands, dependencies, or provider behavior.
 
 ## Requirements
 

@@ -9,11 +9,18 @@ export const SubmitActorSchema = z.object({
   name: z.string().trim().min(1),
 }).strict();
 
-export const ArtifactSubmitInputSchema = z.object({
+export const ArtifactSubmitSemanticInputSchema = z.strictObject({
+  producer_mode: SafeIdSchema.optional(),
+});
+
+export const ArtifactSubmitDerivedInputSchema = z.strictObject({
   schema_version: z.literal("1"),
   dependency_artifact_ids: z.array(SafeIdSchema).refine((items) => new Set(items).size === items.length, "dependency_artifact_ids must be unique"),
-  producer_mode: SafeIdSchema.optional(),
-}).strict();
+});
+
+export const ArtifactSubmitInputSchema = ArtifactSubmitSemanticInputSchema.extend({
+  ...ArtifactSubmitDerivedInputSchema.shape,
+});
 
 const VerificationSchema = z.object({
   profile: z.string().min(1),
@@ -179,6 +186,7 @@ export const ArtifactRegistrySchema = z.strictObject({
 });
 
 export type ArtifactSubmitInput = z.infer<typeof ArtifactSubmitInputSchema>;
+export type ArtifactSubmitSemanticInput = z.infer<typeof ArtifactSubmitSemanticInputSchema>;
 export type SubmitActor = z.infer<typeof SubmitActorSchema>;
 export type SubmittedArtifactRecord = z.infer<typeof SubmittedArtifactRecordSchema>;
 export type SubmitReceiptArtifactRecord = z.infer<typeof SubmitReceiptArtifactRecordSchema>;

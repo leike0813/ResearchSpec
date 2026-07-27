@@ -32,8 +32,6 @@ void test("Material Passport import projects evidence and runtime context withou
     assert.equal(instructions.ok, true);
     if (!instructions.ok) throw new Error("mid-entry instructions unavailable");
     const payload = {
-      schema_version: "1", instruction_basis_sha256: instructions.packet.instruction_basis_sha256,
-      acknowledged_user_input_ids: ["research_materials"], prerequisite_artifact_ids: [], prerequisite_decision_ids: [], parent_subflow_selector: null,
       material_passport_import: { kind: "ars-material-passport", passport_path: "passports/material_passport.yaml", expected_passport_sha256: sha256(passportBytes), boundary_hash: "a3f2b7c9d0e1", accompanied_artifact: { path: "artifacts/paper.md", artifact_type: "paper_draft", expected_sha256: sha256(artifactBytes) } },
     };
     const plan = await planSubflowStart({ snapshot, selector, payload, actor: { kind: "agent", name: "academic-pipeline" }, confirmedBy: "researcher", sourceRoot: root, now: "2026-07-11T09:00:00.000Z" });
@@ -68,7 +66,7 @@ void test("Material Passport import projects evidence and runtime context withou
     const laterInstructions = await buildSubflowInstructions(imported, selector);
     assert.equal(laterInstructions.ok, true);
     if (laterInstructions.ok) {
-      await assert.rejects(() => planSubflowStart({ snapshot: imported, selector, payload: { ...payload, instruction_basis_sha256: laterInstructions.packet.instruction_basis_sha256 }, actor: { kind: "agent", name: "academic-pipeline" }, confirmedBy: "researcher", sourceRoot: root }), (error: unknown) => error instanceof SubflowStartError && error.code === "material_passport_import_conflict");
+      await assert.rejects(() => planSubflowStart({ snapshot: imported, selector, payload, actor: { kind: "agent", name: "academic-pipeline" }, confirmedBy: "researcher", sourceRoot: root }), (error: unknown) => error instanceof SubflowStartError && error.code === "material_passport_import_conflict");
     }
   } finally { await rm(root, { recursive: true, force: true }); }
 });
@@ -108,7 +106,7 @@ void test("Material Passport import is rejected outside the mid-entry route", as
     const instructions = await buildSubflowInstructions(snapshot, direct);
     assert.equal(instructions.ok, true);
     if (!instructions.ok) return;
-    await assert.rejects(() => planSubflowStart({ snapshot, selector: direct, payload: { schema_version: "1", instruction_basis_sha256: instructions.packet.instruction_basis_sha256, acknowledged_user_input_ids: ["research_goal"], prerequisite_artifact_ids: [], prerequisite_decision_ids: [], parent_subflow_selector: null, material_passport_import: { kind: "ars-material-passport", passport_path: "passport.yaml", expected_passport_sha256: passportHash } }, actor: { kind: "agent", name: "deep-research" }, confirmedBy: "researcher", sourceRoot: root }), (error: unknown) => error instanceof SubflowStartError && error.code === "invalid_start_input");
+    await assert.rejects(() => planSubflowStart({ snapshot, selector: direct, payload: { material_passport_import: { kind: "ars-material-passport", passport_path: "passport.yaml", expected_passport_sha256: passportHash } }, actor: { kind: "agent", name: "deep-research" }, confirmedBy: "researcher", sourceRoot: root }), (error: unknown) => error instanceof SubflowStartError && error.code === "invalid_start_input");
   } finally { await rm(root, { recursive: true, force: true }); }
 });
 
@@ -120,7 +118,7 @@ void test("[journey.resume-passport] public CLI imports a passport and resumes f
     const instructionResult = parseEnvelope<{ instruction_basis_sha256: string; action_descriptor: { availability: { basis_sha256: string } } }>(runCli(["instructions", selector, "--json"], root));
     assert.equal(instructionResult.ok, true);
     const inputPath = path.join(root, "start.json");
-    await writeFile(inputPath, JSON.stringify({ schema_version: "1", instruction_basis_sha256: instructionResult.data?.instruction_basis_sha256, acknowledged_user_input_ids: ["research_materials"], prerequisite_artifact_ids: [], prerequisite_decision_ids: [], parent_subflow_selector: null, material_passport_import: { kind: "ars-material-passport", passport_path: "passport.yaml", expected_passport_sha256: sha256(await readFile(passportPath)), boundary_hash: "a3f2b7c9d0e1" } }), "utf8");
+    await writeFile(inputPath, JSON.stringify({ material_passport_import: { kind: "ars-material-passport", passport_path: "passport.yaml", expected_passport_sha256: sha256(await readFile(passportPath)), boundary_hash: "a3f2b7c9d0e1" } }), "utf8");
     const base = ["start", selector, "--input", inputPath, "--actor-kind", "agent", "--actor-name", "academic-pipeline", "--confirmed-by", "researcher"];
     const preview = parseEnvelope<{ identity: { plan_sha256?: string }; effects: Array<{ kind: string }> }>(runCli([...base, "--dry-run", "--json"], root));
     assert.equal(preview.ok, true);

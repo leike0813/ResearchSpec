@@ -3,7 +3,7 @@ import path from "node:path";
 import { stringify } from "yaml";
 
 import {
-  GateSubmitPayloadSchema, GateSubmitReceiptSchema, RuntimeActorSchema, Sha256Schema, TransitionAdvanceReceiptSchema,
+  GateSubmitPayloadSchema, GateSubmitReceiptSchema, GateSubmitSemanticInputSchema, RuntimeActorSchema, Sha256Schema, TransitionAdvanceReceiptSchema,
   TransitionAdvanceReceiptV2Schema,
   type AppliedTransitionEffect, type GateSubmitReceipt, type TransitionAdvanceReceipt,
 } from "../contracts/gate-transition.js";
@@ -40,9 +40,9 @@ export interface TransitionAdvancePlan {
 }
 
 export async function planGateSubmit(input: { snapshot: WorkspaceSnapshot; selector: string; payload: unknown; actor: unknown; confirmedBy: string; expectedPlanSha256?: string; now?: string }): Promise<GateSubmitPlan> {
-  const payload = GateSubmitPayloadSchema.safeParse(input.payload);
+  const semantic = GateSubmitSemanticInputSchema.safeParse(input.payload);
   const actor = RuntimeActorSchema.safeParse(input.actor);
-  if (!payload.success || !actor.success || actor.data.kind !== "validator" || !input.confirmedBy.trim()) throw new GateTransitionError("invalid_gate_input", "Gate payload, validator actor or human confirmer is invalid.", "usage", payload.success ? actor.success ? undefined : actor.error.issues : payload.error.issues);
+  if (!semantic.success || !actor.success || actor.data.kind !== "validator" || !input.confirmedBy.trim()) throw new GateTransitionError("invalid_gate_input", "Gate semantic input, validator actor or human confirmer is invalid.", "usage", semantic.success ? actor.success ? undefined : actor.error.issues : semantic.error.issues);
   const { snapshot } = input;
   assertInstanceControl(snapshot);
   const parsed = parseRuntimeSelector(input.selector);
@@ -56,7 +56,14 @@ export async function planGateSubmit(input: { snapshot: WorkspaceSnapshot; selec
   const instructions = await buildGateTransitionInstructions(snapshot, input.selector);
   if (!instructions.ok) throw new GateTransitionError(instructions.code, "Gate instructions are unavailable.", "domain", instructions.item);
   const packet = instructions.packet;
-  if (packet.kind !== "gate" || payload.data.instruction_basis_sha256 !== packet.instruction_basis_sha256) throw new GateTransitionError("gate_submit_conflict", "Gate instruction basis changed.", "conflict");
+  if (packet.kind !== "gate") throw new GateTransitionError("gate_submit_conflict", "Gate instruction basis changed.", "conflict");
+  const payload = {
+    data: GateSubmitPayloadSchema.parse({
+      ...semantic.data,
+      schema_version: "1",
+      instruction_basis_sha256: packet.instruction_basis_sha256,
+    }),
+  };
   const template = snapshot.workflow.subflow_templates.find((item) => item.template_id === packet.template_id);
   const gate = template?.gates.find((item) => item.id === parsed.id);
   if (!gate) throw new GateTransitionError("gate_not_found", `Gate is not declared: ${input.selector}`, "domain");
