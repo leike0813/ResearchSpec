@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { lstat, mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { test } from "node:test";
@@ -15,11 +16,13 @@ import {
 } from "../src/literature-adapters/index.js";
 import { cleanup, tempProject } from "./helpers/cli.js";
 
+const hash = (value: string): string => createHash("sha256").update(value).digest("hex");
+
 void test("fixed Zotero catalog binds the approved release set and seven runtimes", () => {
   const [adapter] = LITERATURE_ADAPTER_CATALOG;
   assert.equal(adapter?.adapter_id, "zotero-library");
   assert.equal(adapter?.install_policy, "fixed");
-  assert.equal(adapter?.identity.release_set_id, "hbrs-f9f28ddce98be3008e13bbdb");
+  assert.equal(adapter?.identity.release_set_id, "hbrs-8c6de08010d459a0e87e74f2");
   assert.equal(adapter?.skills.length, 7);
   assert.deepEqual(adapter?.skills.map((skill) => skill.role), ["router", "task", "task", "task", "task", "task", "mechanism"]);
   assert.equal(adapter?.skills.every((skill) => skill.researchspec_workflow_authority === "none"), true);
@@ -134,6 +137,44 @@ void test("adapter delivery never adopts or overwrites an unowned target", async
     assert.equal(delivery.resolutions[0]?.projection_state, "incomplete");
     await executeWritePlan({ operations: delivery.operations });
     assert.equal(await readFile(target, "utf8"), "user binary");
+  } finally {
+    await cleanup(root);
+  }
+});
+
+void test("forced adapter refresh replaces a drifted v1 managed profile with the v2 release", async () => {
+  const root = await tempProject();
+  const relativePath = ".zotero-bridge/profile.template.json";
+  const target = path.join(root, relativePath);
+  const priorContent = "{\"protocol\":\"host-bridge.v1\"}\n";
+  try {
+    await mkdir(path.dirname(target), { recursive: true });
+    await writeFile(target, "locally modified v1 profile\n", "utf8");
+    const delivery = await planLiteratureAdapterDelivery({
+      projectRoot: root,
+      toolIds: [],
+      existingInstallations: [{
+        owner: "literature-adapter",
+        tool_id: null,
+        source: {
+          kind: "literature-adapter",
+          adapter_id: "zotero-library",
+          release_set_id: "hbrs-f9f28ddce98be3008e13bbdb",
+          component: "profile-template",
+        },
+        target: { scope: "project", path: relativePath, executable: false },
+        sha256: hash(priorContent),
+      }],
+      force: true,
+      platform: "linux",
+      architecture: "x64",
+    });
+    assert.equal(delivery.resolutions[0]?.release_set_id, "hbrs-8c6de08010d459a0e87e74f2");
+    assert.equal(delivery.operations.find((item) => item.path === target)?.action, "refresh");
+    await executeWritePlan({ operations: delivery.operations });
+    const profile = JSON.parse(await readFile(target, "utf8")) as { protocol?: string; endpoint?: string };
+    assert.equal(profile.protocol, "host-bridge.v2");
+    assert.equal(profile.endpoint, "http://127.0.0.1:26570/bridge/v2");
   } finally {
     await cleanup(root);
   }

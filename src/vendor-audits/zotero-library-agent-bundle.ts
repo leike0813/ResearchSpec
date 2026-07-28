@@ -25,7 +25,7 @@ const SkillIdSchema = z.enum([
   "zotero-bridge-cli",
 ]);
 
-export const ZOTERO_BUNDLE_RELEASE_SET_ID = "hbrs-f9f28ddce98be3008e13bbdb";
+export const ZOTERO_BUNDLE_RELEASE_SET_ID = "hbrs-8c6de08010d459a0e87e74f2";
 export const ZOTERO_BUNDLE_AUDIT_RELATIVE_PATH = `audits/zotero-library-agent-bundle/${ZOTERO_BUNDLE_RELEASE_SET_ID}/bundle-audit.json`;
 export const ZOTERO_BUNDLE_AUDIT_REPORT_RELATIVE_PATH = `audits/zotero-library-agent-bundle/${ZOTERO_BUNDLE_RELEASE_SET_ID}/report.md`;
 export const ZOTERO_BUNDLE_SOURCE_RELATIVE_PATH = "vendor/zotero-library-agent-bundle";
@@ -47,7 +47,7 @@ const AuditFileSchema = z.strictObject({
 
 const AuditedSkillSchema = z.strictObject({
   skill_id: SkillIdSchema,
-  version: z.literal("0.4.1"),
+  version: z.literal("0.5.2"),
   role: z.enum(LITERATURE_ADAPTER_SKILL_ROLES),
   visibility: z.enum(LITERATURE_ADAPTER_SKILL_VISIBILITIES),
   reviewed_capabilities: z.array(z.enum(LITERATURE_ADAPTER_REVIEWED_CAPABILITIES)).min(1),
@@ -69,16 +69,16 @@ const OpaqueRuntimeMetadataSchema = z.strictObject({
 
 export const ZoteroBundleAuditSchema = z.strictObject({
   schema_version: z.literal("2"),
-  audit_id: z.literal("zotero-library-agent-bundle-hbrs-f9f28ddce98be3008e13bbdb"),
+  audit_id: z.literal("zotero-library-agent-bundle-hbrs-8c6de08010d459a0e87e74f2"),
   source: z.strictObject({
     repository: z.literal("https://github.com/leike0813/zotero-library-agent-bundle"),
-    immutable_tag: z.literal("host-bridge/hbrs-f9f28ddce98be3008e13bbdb"),
-    revision: z.literal("cec8fcddd8a3ef134bf6bdd80fcb2324c15707de"),
-    tree: z.literal("4dd72cda2fd54b119f7a651f040399755fe7e0cd"),
+    immutable_tag: z.literal("host-bridge/hbrs-8c6de08010d459a0e87e74f2"),
+    revision: z.literal("ff1475eea7d3fb6cb07dbdd872e3c7603e7f1a19"),
+    tree: z.literal("a648caba463dbd30bae69315ae57c39e44ca5902"),
     clean: z.literal(true),
-    release_set_id: z.literal("hbrs-f9f28ddce98be3008e13bbdb"),
+    release_set_id: z.literal("hbrs-8c6de08010d459a0e87e74f2"),
     source_repository: z.literal("https://github.com/leike0813/zotero-agents"),
-    source_commit: z.literal("de4bcf12a3589776f79c985d13a8500b1eea59ce"),
+    source_commit: z.literal("a0fe8e324834e2fcfd1b513552f9013e9be4b491"),
   }),
   license: z.strictObject({
     expression: z.literal("AGPL-3.0-only"),
@@ -86,11 +86,11 @@ export const ZoteroBundleAuditSchema = z.strictObject({
     source_sha256: z.literal("76a97c878c9c7a8321bb395c2b44d3fe2f8d81314d219b20138ed0e2dddd5182"),
   }),
   identity: z.strictObject({
-    protocol: z.literal("host-bridge.v1"),
-    cli_schema: z.literal("zotero-bridge.cli.v4"),
-    bundle_version: z.literal("0.4.1"),
-    cli_version: z.literal("0.4.0"),
-    skill_versions: z.record(SkillIdSchema, z.literal("0.4.1")),
+    protocol: z.literal("host-bridge.v2"),
+    cli_schema: z.literal("zotero-bridge.cli.v5"),
+    bundle_version: z.literal("0.5.2"),
+    cli_version: z.literal("0.5.1"),
+    skill_versions: z.record(SkillIdSchema, z.literal("0.5.2")),
     build_fingerprint: Sha256Schema,
     command_catalog_checksum: Sha256Schema,
     binary_aggregate_sha256: Sha256Schema,
@@ -175,7 +175,7 @@ export const ZoteroBundleAuditSchema = z.strictObject({
   if (new Set(audit.identity.runtimes.map((runtime) => runtime.platform)).size !== 7) {
     context.addIssue({ code: "custom", path: ["identity", "runtimes"], message: "runtime platforms must be unique" });
   }
-  if (Object.keys(audit.identity.skill_versions).length !== 7 || skillIds.some((skillId) => audit.identity.skill_versions[skillId] !== "0.4.1")) {
+  if (Object.keys(audit.identity.skill_versions).length !== 7 || skillIds.some((skillId) => audit.identity.skill_versions[skillId] !== "0.5.2")) {
     context.addIssue({ code: "custom", path: ["identity", "skill_versions"], message: "Skill version identities must match the complete audited Skill closure" });
   }
 });

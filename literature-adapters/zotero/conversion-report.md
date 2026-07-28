@@ -1,12 +1,12 @@
 # Zotero Literature Adapter Conversion
 
-- Release set: `hbrs-f9f28ddce98be3008e13bbdb`
-- Bundle revision: `cec8fcddd8a3ef134bf6bdd80fcb2324c15707de`
-- Source commit: `de4bcf12a3589776f79c985d13a8500b1eea59ce`
-- Protocol: `host-bridge.v1`
-- CLI schema: `zotero-bridge.cli.v4`
-- Bundle version: `0.4.1`
-- CLI version: `0.4.0`
+- Release set: `hbrs-8c6de08010d459a0e87e74f2`
+- Bundle revision: `ff1475eea7d3fb6cb07dbdd872e3c7603e7f1a19`
+- Source commit: `a0fe8e324834e2fcfd1b513552f9013e9be4b491`
+- Protocol: `host-bridge.v2`
+- CLI schema: `zotero-bridge.cli.v5`
+- Bundle version: `0.5.2`
+- CLI version: `0.5.1`
 - Runtime platforms: 7
 - Generated Skills: `zotero-library-agent`, `zotero-library-query`, `zotero-literature-acquisition`, `zotero-literature-analysis`, `zotero-research-synthesis`, `zotero-library-curation`, `zotero-bridge-cli`
 - Opaque runtime metadata assets: 14

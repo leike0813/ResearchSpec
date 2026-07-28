@@ -50,7 +50,7 @@ void test("Zotero generated adapter output is admitted and byte-identical", asyn
     runtime_platforms: string[];
     generated_skill_ids: string[];
   };
-  assert.equal(manifest.release_set_id, "hbrs-f9f28ddce98be3008e13bbdb");
+  assert.equal(manifest.release_set_id, "hbrs-8c6de08010d459a0e87e74f2");
   assert.equal(manifest.runtime_platforms.length, 7);
   assert.deepEqual(manifest.generated_skill_ids, [
     "zotero-library-agent",
@@ -71,7 +71,7 @@ void test("Zotero generated adapter output is admitted and byte-identical", asyn
     assert.equal(sha256(bytes), metadata.sha256);
   }
   const runtime = await readFile("literature-adapters/zotero/bin/linux-x64/zotero-bridge");
-  assert.equal(sha256(runtime), "de902311dfc357657cfd94b11012c4141108cd97468bf4d6157f07c2a4e96060");
+  assert.equal(sha256(runtime), "c0fbbd10ff6ee4333cf8c96711575d40a3435f008791c4a2d8eec252090563d3");
   if (process.platform !== "win32") assert.equal((await stat("literature-adapters/zotero/bin/linux-x64/zotero-bridge")).mode & 0o111, 0o111);
 });
 

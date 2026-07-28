@@ -13,10 +13,10 @@ ResearchSpec conversion changes paths, routing descriptions, contract preflight 
 ResearchSpec distributes a fixed Zotero literature Adapter derived from Zotero Agents:
 
 - Bundle source: https://github.com/leike0813/zotero-library-agent-bundle
-- Bundle release-set: `hbrs-f9f28ddce98be3008e13bbdb`
-- Bundle revision: `cec8fcddd8a3ef134bf6bdd80fcb2324c15707de`
+- Bundle release-set: `hbrs-8c6de08010d459a0e87e74f2`
+- Bundle revision: `ff1475eea7d3fb6cb07dbdd872e3c7603e7f1a19`
 - Source: https://github.com/leike0813/zotero-agents
-- Source revision: `de4bcf12a3589776f79c985d13a8500b1eea59ce`
+- Source revision: `a0fe8e324834e2fcfd1b513552f9013e9be4b491`
 - License: GNU Affero General Public License v3.0 only
 
 The generated `literature-adapters/zotero` tree contains the seven reviewed

@@ -1,16 +1,16 @@
 {
   "schema_version": "1",
   "adapter_id": "zotero-library",
-  "release_set_id": "hbrs-f9f28ddce98be3008e13bbdb",
+  "release_set_id": "hbrs-8c6de08010d459a0e87e74f2",
   "upstream": {
     "repository": "https://github.com/leike0813/zotero-library-agent-bundle",
-    "immutable_tag": "host-bridge/hbrs-f9f28ddce98be3008e13bbdb",
-    "bundle_revision": "cec8fcddd8a3ef134bf6bdd80fcb2324c15707de",
-    "bundle_tree": "4dd72cda2fd54b119f7a651f040399755fe7e0cd",
+    "immutable_tag": "host-bridge/hbrs-8c6de08010d459a0e87e74f2",
+    "bundle_revision": "ff1475eea7d3fb6cb07dbdd872e3c7603e7f1a19",
+    "bundle_tree": "a648caba463dbd30bae69315ae57c39e44ca5902",
     "source_repository": "https://github.com/leike0813/zotero-agents",
-    "source_commit": "de4bcf12a3589776f79c985d13a8500b1eea59ce"
+    "source_commit": "a0fe8e324834e2fcfd1b513552f9013e9be4b491"
   },
-  "audit_included_tree_sha256": "7a291bf6fbdca7753ed7aa0d2805581b57477ab96d0c1ce088b93aeff543f4c4",
+  "audit_included_tree_sha256": "f5fafc5943e927fc43063d94b21680563d3230bb4f964592bdc2866408e6b148",
   "license": {
     "expression": "AGPL-3.0-only",
     "source_path": "LICENSE",

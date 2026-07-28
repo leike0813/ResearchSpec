@@ -64,7 +64,7 @@ void test("provider readiness remains an invocation fact", () => {
     schema_version: "1",
     invocation_id: "invocation-1",
     adapter_id: "zotero-library",
-    release_set_id: "hbrs-f9f28ddce98be3008e13bbdb",
+    release_set_id: "hbrs-8c6de08010d459a0e87e74f2",
     skill_id: "zotero-library-query",
     checked_at: "2026-07-26T02:00:00.000Z",
     status: "ready",
@@ -88,7 +88,7 @@ void test("provider handoff references upstream bytes without adopting their out
     source_policy: "adapter-native",
     provider: {
       adapter_id: "zotero-library",
-      release_set_id: "hbrs-f9f28ddce98be3008e13bbdb",
+      release_set_id: "hbrs-8c6de08010d459a0e87e74f2",
       skill_id: "zotero-library-query",
     },
     operation: "library-query",
