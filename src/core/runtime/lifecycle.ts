@@ -13,6 +13,7 @@ import { DecisionInputSchema, type DecisionInput } from "../contracts/case-contr
 import { CaseStateSchema } from "../contracts/case-state.js";
 import { DraftPatchReceiptSchema } from "../contracts/draft-patch.js";
 import { ContractChangeDecisionReceiptSchema } from "../contracts/contract-change.js";
+import { resolveRegisteredArtifactPath, serializeRegisteredArtifactPath } from "./artifact-path.js";
 import { isPassingGateVerdict, resolveGateAuthority } from "./gate-authority.js";
 
 export type DecisionChoice = DecisionInput["decision"];
@@ -209,10 +210,11 @@ export async function archiveItem(input: { snapshot: WorkspaceSnapshot; selector
     const receiptId = string(itemValue.apply_receipt_artifact_id);
     const receipt = input.snapshot.artifacts.find((artifact) => artifact.artifact_id === receiptId);
     if (!receipt || typeof receipt.path !== "string" || typeof receipt.sha256 !== "string") throw new Error("Applied item is missing its registered receipt.");
-    const projectRoot = path.dirname(input.snapshot.workspace);
-    const receiptPath = path.resolve(projectRoot, receipt.path);
+    const resolvedReceipt = resolveRegisteredArtifactPath(input.snapshot, receipt.path);
+    if (!resolvedReceipt.contained) throw new Error("Apply receipt escapes its runtime root.");
+    const receiptPath = resolvedReceipt.absolutePath;
     if (!(await fileExists(receiptPath))) throw new Error(`Apply receipt is missing: ${receiptPath}`);
-    await assertContained(projectRoot, receiptPath, "apply receipt");
+    await assertContained(resolvedReceipt.root, receiptPath, "apply receipt");
     const receiptBytes = await readFile(receiptPath);
     if (sha256(receiptBytes) !== receipt.sha256) throw new Error("Apply receipt hash does not match the artifact registry.");
     const receiptBody = record(JSON.parse(receiptBytes.toString("utf8")) as unknown);
@@ -265,8 +267,7 @@ async function acceptContractChange(snapshot: WorkspaceSnapshot, item: IndexedIt
 
 function receiptWrites(snapshot: WorkspaceSnapshot, item: IndexedItem, decisionId: string, planSha256: string, now: string, outputHashes: Record<string, string>, createdArtifacts: Record<string, unknown>[] = []): PlannedWrite[] {
   const receiptPath = path.join(snapshot.workspace, "runs/current/receipts", `${item.id}.json`);
-  const projectRoot = path.dirname(snapshot.workspace);
-  const receiptRelative = path.relative(projectRoot, receiptPath).split(path.sep).join("/");
+  const receiptRelative = serializeRegisteredArtifactPath(snapshot, receiptPath);
   const receiptArtifact: Record<string, unknown> = { artifact_id: `A-receipt-${item.id}`, artifact_type: "apply_receipt", path: receiptRelative, status: "verified", produced_by: "researchspec decide", created_at: now };
   const receipt = `${JSON.stringify({ schema_version: "1", receipt_type: item.type === "change" ? "contract_patch_apply" : "draft_patch_apply", item_selector: item.selector, decision_id: decisionId, plan_sha256: planSha256, applied_at: now, output_hashes: outputHashes, created_artifact_ids: createdArtifacts.map((artifact) => artifact.artifact_id) }, null, 2)}\n`;
   receiptArtifact.sha256 = sha256(receipt);

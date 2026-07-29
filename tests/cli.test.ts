@@ -563,7 +563,7 @@ void test("archive rejects forged lifecycle state without matching ledger eviden
   await cleanup(root);
 });
 
-void test("advance rejects draft artifact paths outside the project root", async () => {
+void test("advance rejects draft artifact paths outside the runtime root", async () => {
   const root = await tempProject();
   assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
   const outside = path.join(path.dirname(root), `${path.basename(root)}-outside.md`);
@@ -585,7 +585,7 @@ void test("advance applies accepted ARSU block-marker patches without changing u
   assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
   const workspace = path.join(root, "researchspec");
   const draft = "---\ntitle: Draft\n---\n\n<!--block:B0001-->\nOriginal first paragraph.\n\n<!--block:B0002-->\nUntouched second paragraph.\n";
-  await writeFile(path.join(root, "draft.md"), draft, "utf8");
+  await writeFile(path.join(workspace, "draft.md"), draft, "utf8");
   await writeFile(path.join(workspace, "runs/current/artifact-registry.json"), `${JSON.stringify({ schema_version: "0.1", run_id: "current", artifacts: [draftArtifact("A-DRAFT", "draft.md", draft)] }, null, 2)}\n`, "utf8");
   const patch = {
     revision_round: 1,
@@ -603,10 +603,10 @@ void test("advance applies accepted ARSU block-marker patches without changing u
   assert.equal(registryAfterSubmit.artifacts.some((artifact) => artifact.artifact_type === "revision_patch"), false);
   const decided = executeDecision(root, ["decide", "patch:dp-one", "--decision", "accept", "--actor-name", "Researcher", "--reason", "Apply reviewed revision"]);
   assert.equal(decided.status, 0, decided.stderr || decided.stdout);
-  assert.equal(existsSync(path.join(root, "draft.dp-one.md")), false);
+  assert.equal(existsSync(path.join(workspace, "draft.dp-one.md")), false);
   const advanced = executeAdvance(root, ["advance", "patch:dp-one", "--actor-kind", "agent", "--actor-name", "academic-paper"]);
   assert.equal(advanced.status, 0, advanced.stderr || advanced.stdout);
-  const revised = await readFile(path.join(root, "draft.dp-one.md"), "utf8");
+  const revised = await readFile(path.join(workspace, "draft.dp-one.md"), "utf8");
   assert.match(revised, /<!--block:B0001-->\nRevised first paragraph\./);
   assert.match(revised, /<!--block:B0002-->\nUntouched second paragraph\./);
   assert.equal(executeAdvance(root, ["advance", "patch:dp-one", "--actor-kind", "agent", "--actor-name", "academic-paper"]).status, 0);
@@ -619,7 +619,7 @@ void test("patch decisions do not apply text and stale Advance remains atomic", 
   assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
   const workspace = path.join(root, "researchspec");
   const draft = "<!--block:B0001-->\nOriginal.\n";
-  await writeFile(path.join(root, "draft.md"), draft, "utf8");
+  await writeFile(path.join(workspace, "draft.md"), draft, "utf8");
   await writeFile(path.join(workspace, "runs/current/artifact-registry.json"), `${JSON.stringify({ schema_version: "0.1", run_id: "current", artifacts: [draftArtifact("A-DRAFT", "draft.md", draft)] }, null, 2)}\n`, "utf8");
   const inputPath = path.join(root, "patch-stale-input.json");
   await writeFile(inputPath, `${JSON.stringify({
@@ -640,16 +640,16 @@ void test("patch decisions do not apply text and stale Advance remains atomic", 
     const selector = `patch:dp-${decision}`;
     assert.equal(executePatchSubmit(root, ["submit", selector, "--input", inputPath, "--actor-kind", "agent", "--actor-name", "writer"]).status, 0);
     assert.equal(executeDecision(root, ["decide", selector, "--decision", decision, "--actor-name", "Researcher", ...(decision === "reject" ? ["--reason", "Not approved"] : [])]).status, 0);
-    assert.equal(existsSync(path.join(root, `draft.dp-${decision}.md`)), false);
+    assert.equal(existsSync(path.join(workspace, `draft.dp-${decision}.md`)), false);
   }
   assert.equal(executeDecision(root, ["decide", "patch:dp-stale", "--decision", "accept", "--actor-name", "Researcher", "--reason", "Reviewed"]).status, 0);
-  assert.equal(await readFile(path.join(root, "draft.md"), "utf8"), draft);
-  assert.equal(existsSync(path.join(root, "draft.dp-stale.md")), false);
-  await writeFile(path.join(root, "draft.md"), "<!--block:B0001-->\nChanged after review.\n", "utf8");
+  assert.equal(await readFile(path.join(workspace, "draft.md"), "utf8"), draft);
+  assert.equal(existsSync(path.join(workspace, "draft.dp-stale.md")), false);
+  await writeFile(path.join(workspace, "draft.md"), "<!--block:B0001-->\nChanged after review.\n", "utf8");
   const advanced = executeAdvance(root, ["advance", "patch:dp-stale", "--actor-kind", "agent", "--actor-name", "academic-paper"]);
   assert.equal(advanced.status, 0, advanced.stderr || advanced.stdout);
   assert.equal(parseEnvelope<{ outcome: string }>(advanced).data?.outcome, "stale");
-  assert.equal(existsSync(path.join(root, "draft.dp-stale.md")), false);
+  assert.equal(existsSync(path.join(workspace, "draft.dp-stale.md")), false);
   assert.equal(existsSync(path.join(workspace, "runs/current/apply-reports/dp-stale.json")), false);
   assert.match(await readFile(path.join(workspace, "draft-patches/dp-stale.json"), "utf8"), /"status": "stale"/);
   await cleanup(root);
@@ -788,12 +788,32 @@ void test("pack excludes registered artifacts whose symlink resolves outside the
   assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
   const outside = path.join(path.dirname(root), `${path.basename(root)}-secret.txt`);
   await writeFile(outside, "secret", "utf8");
-  await symlink(outside, path.join(root, "linked-secret.txt"));
+  await symlink(outside, path.join(root, "researchspec/linked-secret.txt"));
   await writeFile(path.join(root, "researchspec/runs/current/artifact-registry.json"), `${JSON.stringify({ schema_version: "0.1", run_id: "current", artifacts: [draftArtifact("A-SECRET", "linked-secret.txt", "secret")] }, null, 2)}\n`, "utf8");
   const output = path.join(root, "safe.zip");
   assert.equal(runCli(["pack", "--include-artifacts", "--out", output], root).status, 0);
   assert.equal(Object.keys(unzipSync(await readFile(output))).some((entry) => entry.includes("linked-secret")), false);
   await rm(outside, { force: true });
+  await cleanup(root);
+});
+
+void test("adaptive pack includes registered artifacts at their workspace-relative path", async () => {
+  const root = await tempProject();
+  assert.equal(runCli(["init", root, "--tools", "none", "--profile", "adaptive"]).status, 0);
+  const relativePath = "runs/current/artifacts/pack-evidence.md";
+  const content = "# Pack evidence\n";
+  const artifactPath = path.join(root, "researchspec", relativePath);
+  await mkdir(path.dirname(artifactPath), { recursive: true });
+  await writeFile(artifactPath, content, "utf8");
+  await writeFile(path.join(root, "researchspec/runs/current/artifact-registry.json"), `${JSON.stringify({
+    schema_version: "0.1",
+    run_id: "current",
+    artifacts: [draftArtifact("A-PACK", relativePath, content)],
+  }, null, 2)}\n`, "utf8");
+  const output = path.join(root, "adaptive-pack.zip");
+  assert.equal(runCli(["pack", "--include-artifacts", "--out", output], root).status, 0);
+  const entries = unzipSync(await readFile(output));
+  assert.equal(strFromU8(entries[`artifacts/${relativePath}`] ?? new Uint8Array()), content);
   await cleanup(root);
 });
 

@@ -6,6 +6,7 @@ import { test } from "node:test";
 import { parse, stringify } from "yaml";
 
 import { DoctorRepairReceiptSchema } from "../src/core/contracts/runtime-recovery.js";
+import { executeArtifactSubmit, planArtifactSubmit } from "../src/core/runtime/artifact-submit.js";
 import { DoctorRecoveryError, diagnoseRuntime, executeDoctorRepair, prepareDoctorRepair } from "../src/core/runtime/runtime-recovery.js";
 import { buildSubflowInstructions, executeSubflowStart, planSubflowStart } from "../src/core/runtime/subflow-control.js";
 import { getWorkspaceEntries } from "../src/core/workspace/layout.js";
@@ -167,6 +168,42 @@ void test("Doctor prefers retry for a proven orphan and refuses incompatible rec
     const conflictDiagnosis = await diagnoseRuntime(workspace);
     assert.ok(conflictDiagnosis.report.findings.some((item) => item.disposition === "conflicting_evidence" && item.code === "orphan_receipts_conflict"));
     assert.equal(conflictDiagnosis.repairs.size, 0);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+void test("Doctor verifies strict orphan candidate and dependency paths from the project basis", async () => {
+  const root = await createWorkspace();
+  const workspace = path.join(root, "researchspec");
+  try {
+    const instanceId = await startTemplate(workspace);
+    const submit = async (workItemId: "rq-brief" | "bibliography", content: string) => {
+      const candidatePath = path.join(workspace, `runs/current/subflows/${instanceId}/artifacts/${workItemId}.md`);
+      await mkdir(path.dirname(candidatePath), { recursive: true });
+      await writeFile(candidatePath, content, "utf8");
+      const snapshot = await loadWorkspaceSnapshot(workspace);
+      const plan = await planArtifactSubmit({
+        snapshot,
+        selector: `work:${instanceId}/${workItemId}`,
+        payload: { producer_mode: "full" },
+        actor: { kind: "agent", name: "deep-research" },
+        now: "2026-07-26T11:00:00.000Z",
+      });
+      await executeArtifactSubmit(plan, workspace);
+    };
+
+    await submit("rq-brief", "# RQ Brief\n");
+    const registryBasis = await readFile(path.join(workspace, "runs/current/artifact-registry.json"));
+    await submit("bibliography", "# Bibliography\n");
+    assert.equal((await diagnoseRuntime(workspace)).report.healthy, true);
+
+    await writeFile(path.join(workspace, "runs/current/artifact-registry.json"), registryBasis);
+    const diagnosis = await diagnoseRuntime(workspace);
+    const retry = diagnosis.report.findings.find((item) =>
+      item.code === "orphan_transaction_retryable"
+      && item.retry_selector === `work:${instanceId}/bibliography`);
+    assert.ok(retry);
   } finally {
     await rm(root, { recursive: true, force: true });
   }

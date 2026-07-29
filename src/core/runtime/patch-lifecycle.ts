@@ -22,6 +22,12 @@ import {
 import { resolveWorkNode, type WorkflowNodeDefinition } from "../contracts/workflow.js";
 import type { IndexedItem, WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { executeWritePlan, planFile, sha256, type PlannedWrite, type WritePlan } from "../workspace/write-plan.js";
+import {
+  isPathContained,
+  resolveRegisteredArtifactPath,
+  serializeRegisteredArtifactPath,
+  toPosixPath,
+} from "./artifact-path.js";
 import { applyDraftOperations } from "./lifecycle.js";
 
 export type PatchLifecycleErrorKind = "usage" | "domain" | "conflict";
@@ -144,7 +150,7 @@ export async function planPatchSubmit(input: {
     patch,
     plan_sha256: planSha256,
     receipt_sha256: sha256(receiptText),
-    writePlan: { operations, readPreconditions: await patchReadPreconditions(input.snapshot, patch.base_artifact_id) },
+    writePlan: { operations, readPreconditions: patchReadPreconditions(input.snapshot, patch.base_artifact_id) },
   };
 }
 
@@ -177,9 +183,9 @@ export async function planPatchAdvance(input: {
 
   const base = input.snapshot.artifacts.find((artifact) => artifact.artifact_id === patch.base_artifact_id);
   if (!base || typeof base.path !== "string") throw domain("patch_base_missing", `Base artifact not found: ${patch.base_artifact_id}`);
-  const projectRoot = path.dirname(input.snapshot.workspace);
-  const basePath = await resolveArtifactPath(input.snapshot, base.path);
-  await assertRegularContained(projectRoot, basePath, "base draft");
+  const baseResolution = requiredRegisteredArtifactPath(input.snapshot, base.path);
+  const basePath = baseResolution.absolutePath;
+  await assertRegularContained(baseResolution.root, basePath, "base draft");
   const original = await readFile(basePath, "utf8");
   const actualBaseSha256 = sha256(original);
   const now = input.now ?? new Date().toISOString();
@@ -201,14 +207,13 @@ export async function planPatchAdvance(input: {
   const output = workflowBinding
     ? path.join(input.snapshot.workspace, workflowBinding.revised.output.workspace_path)
     : path.join(path.dirname(basePath), `${path.basename(basePath, extension)}.${patchId}${extension || ".md"}`);
-  if (!inside(projectRoot, output)) throw domain("patch_output_escape", "Revised draft output escapes the project root.");
-  const outputRelative = posix(path.relative(projectRoot, output));
+  const outputRelative = serializePatchArtifactPath(input.snapshot, output, "revised draft");
   const reportRelativeWorkspace = workflowBinding?.report.output.workspace_path ?? `runs/current/apply-reports/${patchId}.json`;
   const reportPath = path.join(input.snapshot.workspace, reportRelativeWorkspace);
-  const reportRegistryPath = posix(path.relative(projectRoot, reportPath));
+  const reportRegistryPath = serializePatchArtifactPath(input.snapshot, reportPath, "apply report");
   const receiptRelativeWorkspace = `runs/current/receipts/draft-patch/${patchId}-apply.json`;
   const receiptPath = path.join(input.snapshot.workspace, receiptRelativeWorkspace);
-  const receiptRegistryPath = posix(path.relative(projectRoot, receiptPath));
+  const receiptRegistryPath = serializePatchArtifactPath(input.snapshot, receiptPath, "apply receipt");
   const revisedArtifactId = `A-${patchId}`;
   const reportArtifactId = `A-apply-report-${patchId}`;
   const receiptArtifactId = `A-receipt-${patchId}`;
@@ -312,7 +317,7 @@ export async function planPatchAdvance(input: {
       workflowBinding?.revised.output.workspace_path ?? outputRelative,
       revised,
       "create revised draft from accepted patch",
-      workflowBinding ? "workspace" : "project",
+      workflowBinding || input.snapshot.runtimeMode === "adaptive" ? "workspace" : "project",
     ),
     await createOnly(reportPath, reportRelativeWorkspace, reportText, "write patch apply report"),
     await createOnly(receiptPath, receiptRelativeWorkspace, receiptText, "write patch apply receipt"),
@@ -587,9 +592,9 @@ async function validateBase(snapshot: WorkspaceSnapshot, artifactId: string, exp
   const artifact = snapshot.artifacts.find((item) => item.artifact_id === artifactId);
   if (!artifact || typeof artifact.path !== "string" || typeof artifact.sha256 !== "string") throw domain("patch_base_missing", `Base artifact not found: ${artifactId}`);
   if (artifact.sha256 !== expectedHash) throw conflict("patch_base_hash_mismatch", "Patch base hash does not match the artifact registry.", { expected: expectedHash, actual: artifact.sha256 });
-  const projectRoot = path.dirname(snapshot.workspace);
-  const basePath = await resolveArtifactPath(snapshot, artifact.path);
-  await assertRegularContained(projectRoot, basePath, "base draft");
+  const baseResolution = requiredRegisteredArtifactPath(snapshot, artifact.path);
+  const basePath = baseResolution.absolutePath;
+  await assertRegularContained(baseResolution.root, basePath, "base draft");
   const actual = sha256(await readFile(basePath));
   if (actual !== expectedHash) throw conflict("patch_base_hash_mismatch", "Patch base file does not match the declared hash.", { expected: expectedHash, actual });
 }
@@ -611,32 +616,32 @@ function patchPlanSha256(snapshot: WorkspaceSnapshot, selector: string, operatio
   });
   const item = snapshot.patches.find((candidate) => candidate.selector === selector);
   if (item?.path) {
-    const relative = posix(path.relative(snapshot.workspace, item.path));
+    const relative = toPosixPath(path.relative(snapshot.workspace, item.path));
     const file = snapshot.files.get(relative);
     if (file) reads.push({ path: relative, sha256: file.hash });
   }
   return sha256(`${JSON.stringify({ selector, operation, semantic, reads })}\n`);
 }
 
-async function patchReadPreconditions(snapshot: WorkspaceSnapshot, artifactId: string) {
+function patchReadPreconditions(snapshot: WorkspaceSnapshot, artifactId: string) {
   const artifact = snapshot.artifacts.find((item) => item.artifact_id === artifactId);
   if (!artifact || typeof artifact.path !== "string" || typeof artifact.sha256 !== "string") return [];
-  return [{ path: await resolveArtifactPath(snapshot, artifact.path), expectedHash: artifact.sha256, reason: "canonical patch base" }];
+  return [{ path: requiredRegisteredArtifactPath(snapshot, artifact.path).absolutePath, expectedHash: artifact.sha256, reason: "canonical patch base" }];
 }
 
-async function resolveArtifactPath(snapshot: WorkspaceSnapshot, artifactPath: string): Promise<string> {
-  const projectRoot = path.dirname(snapshot.workspace);
-  const candidates = [path.resolve(projectRoot, artifactPath), path.resolve(snapshot.workspace, artifactPath)];
-  for (const candidate of candidates) {
-    if (!inside(projectRoot, candidate)) continue;
-    try {
-      const info = await lstat(candidate);
-      if (info.isFile() && !info.isSymbolicLink()) return candidate;
-    } catch (error) {
-      if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
-    }
+function requiredRegisteredArtifactPath(snapshot: WorkspaceSnapshot, artifactPath: string) {
+  const resolved = resolveRegisteredArtifactPath(snapshot, artifactPath);
+  if (!resolved.contained) throw domain("patch_path_escape", "Registered Artifact path escapes its runtime root.");
+  return resolved;
+}
+
+function serializePatchArtifactPath(snapshot: WorkspaceSnapshot, absolutePath: string, label: string): string {
+  try {
+    return serializeRegisteredArtifactPath(snapshot, absolutePath);
+  } catch (error) {
+    if (!(error instanceof RangeError)) throw error;
+    throw domain("patch_output_escape", `${label} escapes its runtime root.`);
   }
-  return candidates[0];
 }
 
 function lifecyclePatchText(item: IndexedItem, updates: Record<string, unknown>): string {
@@ -676,11 +681,11 @@ function assertArtifactIdsAvailable(snapshot: WorkspaceSnapshot, ids: string[]):
 }
 
 async function assertRegularContained(root: string, candidate: string, label: string): Promise<void> {
-  if (!inside(root, candidate)) throw domain("patch_path_escape", `${label} escapes its allowed root.`);
+  if (!isPathContained(root, candidate)) throw domain("patch_path_escape", `${label} escapes its allowed root.`);
   const info = await lstat(candidate);
   if (!info.isFile() || info.isSymbolicLink()) throw domain("patch_path_escape", `${label} must be a regular non-symlink file.`);
   const [realRoot, realCandidate] = await Promise.all([realpath(root), realpath(candidate)]);
-  if (!inside(realRoot, realCandidate)) throw domain("patch_path_escape", `${label} resolves outside its allowed root.`);
+  if (!isPathContained(realRoot, realCandidate)) throw domain("patch_path_escape", `${label} resolves outside its allowed root.`);
 }
 
 function assertWorkspaceValid(snapshot: WorkspaceSnapshot, code: string): void {
@@ -748,14 +753,6 @@ function record(value: unknown): Record<string, unknown> {
 
 function string(value: unknown): string {
   return typeof value === "string" ? value : "";
-}
-
-function posix(value: string): string {
-  return value.split(path.sep).join("/");
-}
-
-function inside(root: string, candidate: string): boolean {
-  return candidate === root || candidate.startsWith(`${root}${path.sep}`);
 }
 
 function usage(code: string, message: string, details?: unknown): PatchLifecycleError {

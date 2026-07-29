@@ -27,7 +27,13 @@ void test("scoped artifact submit registers a receipt and advances the instance 
     const outcome = await executeArtifactSubmit(preview, workspace);
     assert.equal(outcome.status, "submitted");
     assert.equal(outcome.workflow_control_after.work_items.find((item) => item.selector === selector)?.state, "done");
-    assert.ok((JSON.parse(await readFile(path.join(workspace, "runs/current/artifact-registry.json"), "utf8")) as { artifacts: unknown[] }).artifacts.length === 2);
+    const registry = JSON.parse(await readFile(path.join(workspace, "runs/current/artifact-registry.json"), "utf8")) as {
+      artifacts: Array<{ path: string }>;
+    };
+    assert.equal(registry.artifacts.length, 2);
+    assert.ok(registry.artifacts.every((artifact) => artifact.path.startsWith("researchspec/")));
+    const reloaded = await loadWorkspaceSnapshot(workspace);
+    assert.ok((await evaluateWorkflowControl(reloaded)).work_items.find((item) => item.selector === selector)?.state === "done");
   } finally { await rm(root, { recursive: true, force: true }); }
 });
 

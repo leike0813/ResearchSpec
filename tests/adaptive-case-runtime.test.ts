@@ -39,6 +39,8 @@ interface AdaptiveStatus {
 
 interface RegistryArtifact {
   artifact_id: string;
+  artifact_type?: string;
+  path?: string;
   sha256: string;
   obligation_id?: string;
 }
@@ -307,6 +309,33 @@ void test("[adaptive.receipt-v2-retry] receipt-first adaptive phases resume the 
       .trim().split("\n").filter(Boolean);
     assert.equal(attempts.length, 1);
     assert.equal(decisions.length, 1);
+    assert.equal(cliJson<{ healthy: boolean }>(root, ["doctor"]).data?.healthy, true);
+  } finally {
+    await cleanup(root);
+  }
+});
+
+void test("[adaptive.artifact-path] shared consumers use only the workspace-relative registry basis", async () => {
+  const root = await tempProject();
+  try {
+    initializeAdaptive(root);
+    const instance = await startAdaptive(root, "subflow:tpl-deep-research-quick");
+    const obligation = currentActions(root).find((item) =>
+      item.selector.startsWith(`obligation:${instance}/`) && item.disposition !== "blocked");
+    assert.ok(obligation);
+    await acceptEvidence(root, obligation?.selector ?? "", "A-runtime-basis");
+
+    const registry = JSON.parse(
+      await readFile(path.join(root, "researchspec/runs/current/artifact-registry.json"), "utf8"),
+    ) as { artifacts: RegistryArtifact[] };
+    const artifact = registry.artifacts.find((item) => item.artifact_id === "A-runtime-basis");
+    assert.ok(artifact?.path?.startsWith("runs/"));
+    const lurePath = path.join(root, artifact?.path ?? "");
+    await mkdir(path.dirname(lurePath), { recursive: true });
+    await writeFile(lurePath, "project-root lure with different bytes\n", "utf8");
+
+    assert.equal(cliJson<{ ok: boolean }>(root, ["check", "artifacts"]).data?.ok, true);
+    assert.equal(cliJson<{ ok: boolean }>(root, ["check", "all"]).data?.ok, true);
     assert.equal(cliJson<{ healthy: boolean }>(root, ["doctor"]).data?.healthy, true);
   } finally {
     await cleanup(root);
@@ -670,10 +699,16 @@ void test("[adaptive.case-actions] high-impact patch blocks only its scope until
     assert.equal(parseEnvelope(unboundAdvance).error?.code, "confirmation_required");
     assert.deepEqual(await readFile(path.join(root, "researchspec", sourceRelative)), baseBeforeAdvance);
     executePlanned(root, ["advance", patchSelector, "--actor-kind", "agent", "--actor-name", "academic-paper"], advancePacket.action_descriptor.availability.basis_sha256);
-    const registry = JSON.parse(await readFile(path.join(root, "researchspec/runs/current/artifact-registry.json"), "utf8")) as { artifacts: Array<{ artifact_type: string }> };
+    const registry = JSON.parse(await readFile(path.join(root, "researchspec/runs/current/artifact-registry.json"), "utf8")) as { artifacts: RegistryArtifact[] };
     assert.ok(registry.artifacts.some((artifact) => artifact.artifact_type === "revised_draft"));
     assert.ok(registry.artifacts.some((artifact) => artifact.artifact_type === "apply_report"));
     assert.equal(registry.artifacts.some((artifact) => artifact.artifact_type === "revision_patch"), false);
+    const lifecycleArtifacts = registry.artifacts.filter((artifact) =>
+      ["revised_draft", "apply_report", "apply_receipt"].includes(artifact.artifact_type ?? ""));
+    assert.equal(lifecycleArtifacts.length, 4);
+    assert.ok(lifecycleArtifacts.every((artifact) => artifact.path?.startsWith("runs/")));
+    assert.ok(lifecycleArtifacts.every((artifact) => !artifact.path?.startsWith("researchspec/")));
+    assert.equal(cliJson<{ ok: boolean }>(root, ["check", "artifacts"]).data?.ok, true);
     assert.equal(cliJson<{ ok: boolean }>(root, ["check", "runtime"]).data?.ok, true);
     assert.equal(cliJson<{ healthy: boolean }>(root, ["doctor"]).data?.healthy, true);
   } finally {

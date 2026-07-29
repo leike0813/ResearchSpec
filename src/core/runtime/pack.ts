@@ -4,6 +4,7 @@ import { strToU8, zipSync, type Zippable } from "fflate";
 
 import type { WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { sha256 } from "../workspace/write-plan.js";
+import { isPathContained, resolveRegisteredArtifactPath, toPosixPath } from "./artifact-path.js";
 import { renderHandoff } from "./handoff.js";
 
 const FIXED_DATE = new Date("1980-01-01T00:00:00.000Z");
@@ -18,18 +19,14 @@ export async function buildContextPack(snapshot: WorkspaceSnapshot, includeArtif
   content.set("runs/current/handoff.md", strToU8(await renderHandoff(snapshot)));
 
   if (includeArtifacts) {
-    const projectRoot = path.dirname(snapshot.workspace);
-    const realProjectRoot = await realpath(projectRoot);
     for (const artifact of snapshot.artifacts) {
       if (typeof artifact.path !== "string") continue;
-      const absolute = path.resolve(projectRoot, artifact.path);
-      if (!inside(projectRoot, absolute)) continue;
+      const resolved = resolveRegisteredArtifactPath(snapshot, artifact.path);
+      if (!resolved.contained) continue;
       try {
-        const realArtifact = await realpath(absolute);
-        if (!inside(realProjectRoot, realArtifact)) continue;
-        const safeRelative = posix(path.relative(projectRoot, absolute));
-        if (safeRelative.startsWith("../") || path.isAbsolute(safeRelative)) continue;
-        content.set(`artifacts/${safeRelative}`, await readFile(realArtifact));
+        const [realRoot, realArtifact] = await Promise.all([realpath(resolved.root), realpath(resolved.absolutePath)]);
+        if (!isPathContained(realRoot, realArtifact)) continue;
+        content.set(`artifacts/${toPosixPath(artifact.path)}`, await readFile(realArtifact));
       } catch { /* check reports missing artifacts */ }
     }
   }
@@ -58,6 +55,5 @@ async function addTree(content: Map<string, Uint8Array>, workspace: string, rela
   }
 }
 
-function inside(root: string, candidate: string): boolean { return candidate === root || candidate.startsWith(`${root}${path.sep}`); }
 function posix(value: string): string { return value.split(path.sep).join("/"); }
 function compareText(left: string, right: string): number { return left < right ? -1 : left > right ? 1 : 0; }

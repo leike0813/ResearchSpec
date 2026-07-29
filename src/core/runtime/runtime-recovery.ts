@@ -1,4 +1,4 @@
-import { lstat, readFile } from "node:fs/promises";
+import { lstat, readFile, realpath } from "node:fs/promises";
 import path from "node:path";
 import { parse as parseYamlDocument } from "yaml";
 
@@ -32,6 +32,11 @@ import {
   startReceiptMatchesAuthority,
   transitionReceiptMatchesAuthority,
 } from "./runtime-receipt-integrity.js";
+import {
+  isPathContained,
+  resolveRegisteredArtifactPath,
+  toPosixPath,
+} from "./artifact-path.js";
 
 const STATE_PATH = "runs/current/state.yaml";
 const REGISTRY_PATH = "runs/current/artifact-registry.json";
@@ -450,7 +455,7 @@ function collectBindings(
   for (const artifact of artifacts) {
     if (artifact.artifact_type !== "artifact_submit_receipt" && artifact.artifact_type !== "apply_receipt") continue;
     if (typeof artifact.path !== "string" || typeof artifact.sha256 !== "string") continue;
-    const receiptPath = registryReceiptPath(observation.workspace, artifact.path);
+    const receiptPath = registryReceiptPath(observation, artifact.path);
     if (!receiptPath) continue;
     const receipt = receiptsByPath.get(receiptPath) ?? missingReceipt(receiptPath);
     bindings.push({
@@ -482,7 +487,7 @@ async function orphanReceiptFindings(observation: RawRuntimeObservation, referen
   }
   const findings: DoctorFinding[] = [];
   for (const [key, group] of groups) {
-    const plans = new Set(group.map((item) => stringValue(item.receipt?.plan_sha256)));
+    const plans = new Set(group.map(receiptIntentId));
     if (group.length > 1 && plans.size > 1) {
       findings.push(finding({
         disposition: "conflicting_evidence",
@@ -508,11 +513,18 @@ async function orphanReceiptFindings(observation: RawRuntimeObservation, referen
           ? "legacy_receipt_requires_human_reconstruction"
           : "orphan_transaction_basis_stale",
       affectedPaths: group.map((item) => item.relativePath),
-      evidenceRefs: [stringValue(receipt.receipt.plan_sha256)],
+      evidenceRefs: [receiptIntentId(receipt)],
       retrySelector: retryable ? selector : null,
     }));
   }
   return findings;
+}
+
+function receiptIntentId(receipt: ObservedRuntimeReceipt): string {
+  return stringValue(receipt.receipt?.plan_sha256)
+    || stringValue(receipt.receipt?.submission_id)
+    || stringValue(receipt.receipt?.receipt_id)
+    || receipt.relativePath;
 }
 
 async function receiptBasisMatches(observation: RawRuntimeObservation, receipt: ObservedRuntimeReceipt): Promise<boolean> {
@@ -572,18 +584,18 @@ async function receiptBasisMatches(observation: RawRuntimeObservation, receipt: 
     if (typeof expectedHash !== "string") return false;
     const artifact = artifacts.find((item) => item.artifact_id === artifactId);
     if (!artifact || typeof artifact.path !== "string") return false;
-    if (await safeRelativeFileHash(path.dirname(observation.workspace), observation.workspace, artifact.path) !== expectedHash) return false;
+    if (await safeRegisteredArtifactHash(observation, artifact.path) !== expectedHash) return false;
   }
   if (receipt.receiptType === "artifact_submit") {
     const candidate = asRecord(receipt.receipt.artifact);
     if (typeof candidate.path !== "string" || typeof candidate.sha256 !== "string") return false;
-    if (await safeRelativeFileHash(path.dirname(observation.workspace), observation.workspace, candidate.path) !== candidate.sha256) return false;
+    if (await safeRegisteredArtifactHash(observation, candidate.path) !== candidate.sha256) return false;
     const dependencies = Array.isArray(receipt.receipt.dependency_artifacts)
       ? receipt.receipt.dependency_artifacts.map(asRecord)
       : [];
     for (const dependency of dependencies) {
       if (typeof dependency.path !== "string" || typeof dependency.sha256 !== "string") return false;
-      if (await safeRelativeFileHash(path.dirname(observation.workspace), observation.workspace, dependency.path) !== dependency.sha256) return false;
+      if (await safeRegisteredArtifactHash(observation, dependency.path) !== dependency.sha256) return false;
     }
   }
   const decisionEventIds = Array.isArray(basis.decision_event_ids)
@@ -614,6 +626,26 @@ async function safeRelativeFileHash(root: string, containmentRoot: string, relat
     const info = await lstat(resolved);
     if (!info.isFile() || info.isSymbolicLink()) return undefined;
     return sha256(await readFile(resolved));
+  } catch {
+    return undefined;
+  }
+}
+
+async function safeRegisteredArtifactHash(
+  context: Pick<RawRuntimeObservation, "workspace" | "runtimeMode">,
+  registeredPath: string,
+): Promise<string | undefined> {
+  const resolved = resolveRegisteredArtifactPath(context, registeredPath);
+  if (!resolved.contained) return undefined;
+  try {
+    const info = await lstat(resolved.absolutePath);
+    if (!info.isFile() || info.isSymbolicLink()) return undefined;
+    const [realRoot, realArtifact] = await Promise.all([
+      realpath(resolved.root),
+      realpath(resolved.absolutePath),
+    ]);
+    if (!isPathContained(realRoot, realArtifact)) return undefined;
+    return sha256(await readFile(realArtifact));
   } catch {
     return undefined;
   }
@@ -712,10 +744,13 @@ function artifactReceiptMatches(
     && asRecord(receipt.artifact).artifact_id === related[0];
 }
 
-function registryReceiptPath(workspace: string, registryPath: string): string | undefined {
-  const resolved = path.resolve(path.dirname(workspace), registryPath);
-  if (resolved !== workspace && !resolved.startsWith(`${workspace}${path.sep}`)) return undefined;
-  return path.relative(workspace, resolved).split(path.sep).join("/");
+function registryReceiptPath(
+  observation: Pick<RawRuntimeObservation, "workspace" | "runtimeMode">,
+  registryPath: string,
+): string | undefined {
+  const resolved = resolveRegisteredArtifactPath(observation, registryPath);
+  if (!resolved.contained || !isPathContained(observation.workspace, resolved.absolutePath)) return undefined;
+  return toPosixPath(path.relative(observation.workspace, resolved.absolutePath));
 }
 
 function finding(input: {

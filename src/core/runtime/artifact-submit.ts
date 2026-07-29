@@ -22,6 +22,7 @@ import { SubflowStartReceiptSchema } from "../contracts/subflow.js";
 import { resolveWorkNode, WorkItemSelectorSchema, type WorkflowNodeDefinition, type WorkflowNodeTemplate } from "../contracts/workflow.js";
 import { loadWorkspaceSnapshot, type WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { executeWritePlan, planFile, sha256, type PlannedWrite, type ReadPrecondition, type WritePlan } from "../workspace/write-plan.js";
+import { serializeRegisteredArtifactPath } from "./artifact-path.js";
 import { evaluateWorkflowControl, inspectArtifacts, passedCompletionGateIds, resolveTemplateReference, type WorkflowControlResult } from "./workflow-control.js";
 
 export type ArtifactSubmitErrorKind = "usage" | "domain" | "conflict";
@@ -76,11 +77,10 @@ export async function planArtifactSubmit(input: {
   const validationChecks = ["declared_path", "regular_file", "workspace_containment", ...(node.validation_profile === "binary-file-artifact" ? ["allowed_extension"] : ["utf8"]), "non_empty", "candidate_sha256", "template_ref", "dependency_coverage"];
   const validatorName = `researchspec:${node.validation_profile}`;
   const registryPath = path.join(snapshot.workspace, "runs/current/artifact-registry.json");
-  const projectRoot = path.dirname(snapshot.workspace);
-  const candidateRegistryPath = toPosix(path.relative(projectRoot, candidate.path));
+  const candidateRegistryPath = serializeRegisteredArtifactPath(snapshot, candidate.path);
   const receiptRelativeWorkspacePath = `runs/current/receipts/artifact-submit/${ids.submissionId}.json`;
   const receiptPath = path.join(snapshot.workspace, receiptRelativeWorkspacePath);
-  const receiptRegistryPath = toPosix(path.relative(projectRoot, receiptPath));
+  const receiptRegistryPath = serializeRegisteredArtifactPath(snapshot, receiptPath);
   const passedGateIds = passedCompletionGateIds(snapshot);
   const satisfiedCompletionGateIds = node.completion.required_gate_ids.filter((id) => passedGateIds.has(id));
 
@@ -366,5 +366,4 @@ function canonical(value: unknown): unknown {
   return Object.fromEntries(Object.entries(value as Record<string, unknown>).sort(([left], [right]) => left.localeCompare(right)).map(([key, entry]) => [key, canonical(entry)]));
 }
 
-function toPosix(value: string): string { return value.split(path.sep).join("/"); }
 function isInside(root: string, target: string): boolean { return target === root || target.startsWith(`${root}${path.sep}`); }

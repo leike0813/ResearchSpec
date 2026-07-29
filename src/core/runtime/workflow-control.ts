@@ -21,6 +21,7 @@ import { resolveWorkNode, validateWorkflowDefinition, type ParallelGroupDefiniti
 import type { Diagnostic } from "../validation/types.js";
 import { latestById, type WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { sha256 } from "../workspace/write-plan.js";
+import { isPathContained, resolveRegisteredArtifactPath } from "./artifact-path.js";
 import { buildRuntimeContext } from "./runtime-context.js";
 
 export type WorkItemState = "done" | "ready" | "blocked";
@@ -204,10 +205,10 @@ export async function inspectArtifact(snapshot: WorkspaceSnapshot, artifact: Rec
   const declaredPath = typeof artifact.path === "string" ? artifact.path : undefined;
   if (!declaredPath) return { artifact, exists: false, inside_project: false, diagnostics };
 
-  const projectRoot = path.dirname(snapshot.workspace);
-  const resolvedPath = path.resolve(projectRoot, declaredPath);
-  if (!isInside(projectRoot, resolvedPath)) {
-    diagnostics.push({ severity: "error", code: "artifact_path_escape", message: "Artifact path escapes the project root.", path: declaredPath, blocking: true });
+  const resolved = resolveRegisteredArtifactPath(snapshot, declaredPath);
+  const resolvedPath = resolved.absolutePath;
+  if (!resolved.contained) {
+    diagnostics.push({ severity: "error", code: "artifact_path_escape", message: "Artifact path escapes its runtime root.", path: declaredPath, blocking: true });
     return { artifact, resolved_path: resolvedPath, exists: false, inside_project: false, diagnostics };
   }
   if (!(await fileExists(resolvedPath))) {
@@ -215,9 +216,9 @@ export async function inspectArtifact(snapshot: WorkspaceSnapshot, artifact: Rec
     return { artifact, resolved_path: resolvedPath, exists: false, inside_project: true, diagnostics };
   }
 
-  const [realProject, realArtifact] = await Promise.all([realpath(projectRoot), realpath(resolvedPath)]);
-  if (!isInside(realProject, realArtifact)) {
-    diagnostics.push({ severity: "error", code: "artifact_path_escape", message: "Artifact symlink resolves outside the project root.", path: resolvedPath, blocking: true });
+  const [realRoot, realArtifact] = await Promise.all([realpath(resolved.root), realpath(resolvedPath)]);
+  if (!isPathContained(realRoot, realArtifact)) {
+    diagnostics.push({ severity: "error", code: "artifact_path_escape", message: "Artifact symlink resolves outside its runtime root.", path: resolvedPath, blocking: true });
     return { artifact, resolved_path: resolvedPath, exists: true, inside_project: false, diagnostics };
   }
 

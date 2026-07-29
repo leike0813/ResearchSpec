@@ -37,6 +37,11 @@ import {
   type ReadPrecondition,
   type WritePlan,
 } from "../workspace/write-plan.js";
+import {
+  isPathContained,
+  resolveRegisteredArtifactPath,
+  serializeRegisteredArtifactPath,
+} from "./artifact-path.js";
 
 const CONFIG_PATH = "config.yaml";
 const WORKFLOW_PATH = "specs/workflow.yaml";
@@ -735,13 +740,14 @@ function requireSnapshotFile(snapshot: WorkspaceSnapshot, relativePath: string):
 }
 
 function workspaceRelativeArtifactPath(snapshot: WorkspaceSnapshot, artifactPath: string): string {
-  const projectRoot = path.dirname(snapshot.workspace);
-  const absolute = path.resolve(projectRoot, artifactPath);
-  const relative = path.relative(snapshot.workspace, absolute).replaceAll(path.sep, "/");
-  if (!relative || relative.startsWith("../") || path.isAbsolute(relative)) {
+  const source = resolveRegisteredArtifactPath(snapshot, artifactPath);
+  if (!source.contained || !isPathContained(snapshot.workspace, source.absolutePath)) {
     throw new RuntimeMigrationError("migration_source_invalid", `Artifact path is outside the workspace: ${artifactPath}`);
   }
-  return relative;
+  return serializeRegisteredArtifactPath(
+    { workspace: snapshot.workspace, runtimeMode: "adaptive" },
+    source.absolutePath,
+  );
 }
 
 function backupName(relativePath: string): string {

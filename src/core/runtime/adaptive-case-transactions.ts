@@ -32,7 +32,9 @@ import type { CompactTransactionEffect } from "../contracts/runtime-protocol.js"
 import type { WorkspaceSnapshot, SnapshotFile } from "../workspace/snapshot.js";
 import { executeWritePlan, planFile, sha256, type PlannedWrite, type ReadPrecondition, type WritePlan } from "../workspace/write-plan.js";
 import { evaluateActionAvailability } from "./action-availability.js";
+import { resolveRegisteredArtifactPath, serializeRegisteredArtifactPath } from "./artifact-path.js";
 import { observeRuntimeRaw } from "./runtime-observation.js";
+import { inspectArtifact } from "./workflow-control.js";
 import {
   assertCurrentGateReverification,
   isPassingGateVerdict,
@@ -396,7 +398,7 @@ export async function planAdaptiveGate(input: {
       instruction_basis_sha256: availability.availability.basis_sha256,
     }),
   };
-  validateGateEvidence(input.snapshot, payload.data.evidence);
+  await validateGateEvidence(input.snapshot, payload.data.evidence);
   const [instanceId = "", gateNodeId = ""] = input.selector.slice("gate:".length).split("/", 2);
   const gateId = `${instanceId}/${gateNodeId}`;
   const requiredDecisionIds = state.obligations
@@ -801,8 +803,10 @@ async function validateAcceptedEvidence(
     if (!instanceId) throw new AdaptiveCaseError("obligation_scope_invalid", "Adaptive evidence requires a subflow-scoped obligation.", "domain");
     const expectedPath = output.path_template.replaceAll("{subflow_instance_id}", instanceId);
     if (candidate.path !== expectedPath) throw new AdaptiveCaseError("evidence_path_mismatch", "Evidence path differs from the profile output contract.", "domain", { expected: expectedPath, actual: candidate.path });
-    const absolutePath = path.resolve(snapshot.workspace, candidate.path);
-    if (!inside(snapshot.workspace, absolutePath)) throw new AdaptiveCaseError("evidence_path_escape", "Evidence path escapes the workspace.", "domain");
+    const resolvedPath = resolveRegisteredArtifactPath(snapshot, candidate.path);
+    if (!resolvedPath.contained) throw new AdaptiveCaseError("evidence_path_escape", "Evidence path escapes the workspace.", "domain");
+    const absolutePath = resolvedPath.absolutePath;
+    const registryPath = serializeRegisteredArtifactPath(snapshot, absolutePath);
     let bytes: Uint8Array;
     try { bytes = await readFile(absolutePath); } catch { throw new AdaptiveCaseError("evidence_missing", `Evidence file is unavailable: ${candidate.path}`, "domain"); }
     if (sha256(bytes) !== candidate.sha256) throw new AdaptiveCaseError("evidence_hash_mismatch", `Evidence hash changed: ${candidate.path}`, "conflict");
@@ -816,7 +820,7 @@ async function validateAcceptedEvidence(
         artifact_type: candidate.artifact_type,
         obligation_id: obligation.obligation_id,
         subflow_instance_id: instanceId,
-        path: candidate.path,
+        path: registryPath,
         sha256: candidate.sha256,
         status: "accepted",
         verification_state: "verified",
@@ -829,7 +833,7 @@ async function validateAcceptedEvidence(
         obligation_id: obligation.obligation_id,
         artifact_id: candidate.artifact_id,
         artifact_type: candidate.artifact_type,
-        path: candidate.path,
+        path: registryPath,
         sha256: candidate.sha256,
         accepted_at: now,
         acceptance_receipt: { path: receiptPath, sha256: receiptHash },
@@ -846,11 +850,11 @@ function assertAttemptReferences(snapshot: WorkspaceSnapshot, obligation: HardOb
   }
 }
 
-function validateGateEvidence(snapshot: WorkspaceSnapshot, evidence: Array<
+async function validateGateEvidence(snapshot: WorkspaceSnapshot, evidence: Array<
   | { kind: "artifact"; artifact_id: string; sha256: string }
   | { kind: "contract"; path: string; sha256: string }
   | { kind: "decision"; decision_id: string; event_id: string; receipt: { path: string; sha256: string; plan_sha256: string } }
->): void {
+>): Promise<void> {
   for (const item of evidence) {
     if (item.kind === "decision") {
       const decision = snapshot.decisions.find((candidate) =>
@@ -870,7 +874,10 @@ function validateGateEvidence(snapshot: WorkspaceSnapshot, evidence: Array<
       if (!file || file.hash !== item.sha256) throw new AdaptiveCaseError("gate_evidence_untrusted", `Gate contract evidence is stale: ${item.path}`, "conflict");
     } else {
       const artifact = snapshot.artifacts.find((candidate) => candidate.artifact_id === item.artifact_id);
-      if (!artifact || artifact.sha256 !== item.sha256) throw new AdaptiveCaseError("gate_evidence_untrusted", `Gate artifact evidence is stale: ${item.artifact_id}`, "conflict");
+      const inspection = artifact ? await inspectArtifact(snapshot, artifact) : undefined;
+      if (!artifact || artifact.sha256 !== item.sha256 || inspection?.hash_matches !== true) {
+        throw new AdaptiveCaseError("gate_evidence_untrusted", `Gate artifact evidence is stale: ${item.artifact_id}`, "conflict");
+      }
     }
   }
 }
@@ -1147,11 +1154,6 @@ function recomputeLifecycle(state: CaseState, changedId: string, changed: HardOb
   const obligations = state.obligations.map((item) => item.obligation_id === changedId ? changed : item);
   const unresolved = obligations.filter((item) => !["satisfied", "waived", "not_applicable"].includes(item.status));
   return unresolved.length > 0 && unresolved.every((item) => item.status === "blocked") ? "waiting" : "open";
-}
-
-function inside(root: string, target: string): boolean {
-  const relative = path.relative(root, target);
-  return relative === "" || (!relative.startsWith("..") && !path.isAbsolute(relative));
 }
 
 function record(value: unknown): Record<string, unknown> {

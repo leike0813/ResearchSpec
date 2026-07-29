@@ -169,6 +169,14 @@ wrapper 不应把完整 registry、完整 ledgers 或完整 ARS artifact payload
 | `enum` | string | 后续 schema 必须显式列出允许值 |
 | `ref` | string | 指向其他合同或 artifact 的 ID；validator 负责跨引用检查 |
 
+当前 adaptive runtime 的 registry Artifact `path` 以 `researchspec/` 为基准，
+因此保存为 `runs/current/...` 等 workspace-relative POSIX 路径。未迁移的
+Schema `0.2` strict workspace 是唯一兼容例外：其既有 registry path 仍以项目根
+为基准，形如 `researchspec/runs/current/...`。读取方必须根据 runtime mode
+选择一个基准，不得按文件是否存在尝试两个位置。只有显式
+`update --migrate-runtime` transaction 才把 strict 表示转换成 adaptive 表示；
+普通读取、检查和更新不会改写 registry。
+
 ### 2.2 共享元数据字段
 
 机器可读合同文件应优先包含以下字段。
@@ -925,6 +933,9 @@ payload schema 和验证状态。Downstream stages 必须通过 registry 找 art
   hash、created_at 和 path existence。
 - Downstream consumers 通过 `artifact_type`、`status`、`verification_state`
   和 dependency fields 选择 artifact。
+- Submit、check、workflow/Gate、Doctor、pack 和 lifecycle 必须共享上述
+  runtime-aware path 基准及 containment 规则；adaptive path 只能指向
+  `researchspec/` 内部，strict path 保留项目根边界。
 - `metadata` 只能放小型索引信息；完整 ARS payload 留在 artifact 文件中。
 
 顶层字段：

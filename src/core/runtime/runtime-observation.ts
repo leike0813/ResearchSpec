@@ -67,6 +67,7 @@ export interface ObservedRuntimeReceipt extends RawRuntimeFile {
 
 export interface RawRuntimeObservation {
   workspace: string;
+  runtimeMode: "adaptive" | "strict";
   authority: Map<string, RawRuntimeFile>;
   receipts: ObservedRuntimeReceipt[];
 }
@@ -78,7 +79,10 @@ export async function observeRuntimeRaw(workspace: string): Promise<RawRuntimeOb
     authority.set(definition.relativePath, observed);
   }
   const receipts = await observeReceiptTree(workspace);
-  return { workspace, authority, receipts };
+  const runtimeMode = asRecord(authority.get("specs/workflow.yaml")?.value).mode === "adaptive"
+    ? "adaptive"
+    : "strict";
+  return { workspace, runtimeMode, authority, receipts };
 }
 
 async function observeAuthorityFile(
