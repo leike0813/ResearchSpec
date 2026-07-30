@@ -19,15 +19,18 @@ steps 1 and 3:**
 2. **Dispatch the writer.** Provide the exact registered draft, its block
    manifest, and the round's accepted Revision Roadmap. The writer emits
    `researchspec/draft-patches/<patch-id>.json` with target artifact id, target
-   hash, block preconditions, operations, and roadmap traceability. In review
-   rounds it also emits provisional response items containing judgment content;
-   it does not apply the patch or update registries and ledgers.
+   hash, block preconditions, stable operation ids, Annotation references when
+   present, complete Annotation resolution entries, and roadmap traceability.
+   In review rounds it also emits provisional response items containing judgment
+   content; it does not apply the patch or update registries and ledgers.
 3. **Validate and apply deterministically.** The draft-patch apply helper first
    validates schema, target artifact identity, base hash, block preconditions,
    operation shape, and structural-change limits. Validation is fail-closed and
    byte-preserving on rejection. A successful apply creates a new manuscript
-   artifact plus a separate apply report; it never overwrites the registered
-   base. The default structural touched-ratio threshold remains `0.6` with a
+   artifact plus a separate apply report; when Annotation resolution is present,
+   it also derives and registers an immutable Annotation Resolution Report from
+   the v3 operation mapping. It never overwrites the registered base. The
+   default structural touched-ratio threshold remains `0.6` with a
    strict `>` comparison. A different threshold requires a human-confirmed
    decision returned to the decision runtime for
    `researchspec/runs/current/decision-ledger.jsonl` before apply.
@@ -38,9 +41,9 @@ steps 1 and 3:**
    the existing finalizer contract.
 5. **Complete mechanical response facts.** For review rounds, fill response-item
    block ids, fresh insertion ids, word-count delta, and counters from the apply
-   report while preserving the writer's judgment text. Return the response and
-   apply report as artifacts for runtime registration, then require the apply
-   report as an input to re-review.
+   report while preserving the writer's judgment text. Return the response,
+   apply report, and any CLI-derived Annotation Resolution Report as registered
+   evidence, then require the apply report as an input to re-review.
 6. **Surface preservation and interaction state.** Include `preserved_ratio`
    from the apply report beside the accumulated round-trip count in the stage
    checkpoint, for example `round-trips: 3/9 · preserved_ratio: 0.91`.

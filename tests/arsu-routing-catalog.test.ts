@@ -38,7 +38,9 @@ void test("catalog exposes structured routing facts without runtime Gate IDs", (
   assert.equal(paper.risk_level, "high");
   assert.deepEqual(paper.gate_policy, { level: "required", gate_kinds: ["revision_completeness"] });
   assert.ok(paper.primary_artifact_types.includes("response_to_reviewers"));
+  assert.ok(paper.primary_artifact_types.includes("annotation_resolution_report"));
   assert.ok(paper.prerequisite_groups.some((item) => item.operator === "any_of" && item.requirements.some((requirement) => requirement.id === "reviewer_comments")));
+  assert.ok(paper.prerequisite_groups.some((item) => item.operator === "any_of" && item.requirements.some((requirement) => requirement.id === "annotation_set")));
 
   const fullPaper = getArsuRoute("academic-paper:full");
   assert.ok(fullPaper.prerequisite_groups.some((item) => item.fallback_route_refs.includes("deep-research:full")));
@@ -46,6 +48,8 @@ void test("catalog exposes structured routing facts without runtime Gate IDs", (
   assert.equal(pipeline.route_kind, "entry");
   assert.equal(pipeline.mode_id, null);
   assert.deepEqual(pipeline.gate_policy.gate_kinds, ["integrity", "review", "final_integrity"]);
+  assert.ok(pipeline.prerequisite_groups.some((item) =>
+    item.requirements.some((requirement) => requirement.id === "annotation_set")));
 
   const reviewer = getArsuSkillDefinition("academic-paper-reviewer");
   assert.ok(reviewer.near_misses.some((item) => item.route_ref === "academic-paper:rebuttal-audit"));

@@ -93,8 +93,8 @@ const definitions: readonly CliCommandDefinition[] = [
     option("expectedActionBasisSha256", "--expected-action-basis-sha256 <hash>", "bind execution to the current action descriptor"),
     option("expectedPlanSha256", "--expected-plan-sha256 <hash>", "bind execution to the previewed Start plan"),
   ], ["status", "instructions"]),
-  command("submit", ["submit"], "submit <runtime-item>", "control-plane", "Submit a runtime candidate, attempt, evidence, resolution, patch, or confirmed Gate verdict", "required", "write", [
-    option("input", "--input <payload.json>", "strict semantic submission JSON", true),
+  command("submit", ["submit"], "submit <runtime-item>", "control-plane", "Submit a runtime candidate, attempt, evidence, annotation, patch, or confirmed Gate verdict", "required", "write", [
+    option("input", "--input <payload.json>", "strict semantic submission JSON; omitted for annotation:<id>"),
     option("actorKind", "--actor-kind <kind>", "human, agent, script, converter, or validator", true),
     option("actorName", "--actor-name <name>", "artifact producer name", true),
     option("confirmedBy", "--confirmed-by <name>", "human who confirmed a Gate verdict"),

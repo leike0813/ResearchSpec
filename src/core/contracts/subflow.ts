@@ -10,6 +10,7 @@ export const StartActorSchema = SubmitActorSchema.refine((value) => value.kind =
 
 export const SubflowStartSemanticInputSchema = z.strictObject({
   material_passport_import: MaterialPassportImportSchema.optional(),
+  annotation_set_id: SafeIdSchema.optional(),
 });
 
 export const SubflowStartDerivedInputSchema = z.strictObject({

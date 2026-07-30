@@ -19,6 +19,7 @@ status → instructions <selector> → start / submit / advance / decide → nex
 | `case-action:<id>` | waiver、not-applicable 或其他 resolution | `decide` 记录明确的人类选择 |
 | `patch:<id>` | 全局 draft-patch lifecycle 项 | `decide` 解析选择，`advance` 只应用已接受 patch |
 | `change:<id>` | 全局 pending contract change | `decide` 接受、拒绝或 postpone；不属于 obligation graph |
+| `annotation:<id>` | 全局稿件批注注册项 | `submit` 在人类确认后冻结 Annotation Set；不属于 obligation graph |
 
 Agent 必须先读取当前 `instructions` 返回的 action descriptor，并逐项满足由
 `execution_policy` 派生的 `execution_requirements`。`direct` 动作由 CLI 单次规划、校验和
@@ -42,6 +43,12 @@ Action v2 risk policy 由 action descriptor 随 instructions 返回：Agent 只�
 ## 3. Pipeline、Passport 与恢复
 
 `academic-pipeline` 在 adaptive 中是一个 route：其 durable outputs 以 obligations/evidence/completion 表示。它不承诺 strict 的 parent/child stage graph、editorial transition、动态 revision-round template 或自动 child dispatch。
+
+从已注册批注进入 revision 时，Start receipt 绑定用户实际选择的 Annotation Set
+prerequisite；不会建立隐藏的 round graph。Patch apply 派生的 Annotation Resolution
+Report 可以作为 re-review 的补充 evidence。`revision_completeness` 在接受 passing verdict
+前机械核验全部 annotation resolution 与 hash 链，语义充分性仍由 reviewer、Verify 与用户
+确认。
 
 Adaptive Start 不接受 ARS Material Passport import。需要该兼容导入的既有工作区保持 strict，或先按受控 migration 评估；Passport 的历史阶段、Gate、branch 和 override 不会直接成为 adaptive authority。
 

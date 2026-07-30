@@ -4,7 +4,11 @@ import { test } from "node:test";
 import { ArtifactSubmitInputSchema, ArtifactSubmitSemanticInputSchema } from "../src/core/contracts/artifact.js";
 import { ACTION_SCHEMA_REGISTRY, ActionAvailabilitySchema, CaseStatusSummarySchema, DecisionInputSchema } from "../src/core/contracts/case-control.js";
 import { ProposalInputSchema } from "../src/core/contracts/contract-change.js";
-import { DraftPatchSemanticInputSchema, DraftPatchSubmitInputSchema } from "../src/core/contracts/draft-patch.js";
+import {
+  DraftPatchSemanticInputSchema,
+  DraftPatchSubmitInputSchema,
+  StoredDraftPatchSchema,
+} from "../src/core/contracts/draft-patch.js";
 import { CompactTransactionResultSchema, RuntimePageSchema, ValidationViolationSchema } from "../src/core/contracts/runtime-protocol.js";
 import { AdaptiveCaseProfileSchema, StrictCaseProfileSchema } from "../src/core/contracts/case-profile.js";
 import { CaseStateSchema, WorkingEvidenceSchema } from "../src/core/contracts/case-state.js";
@@ -231,7 +235,7 @@ void test("semantic action schemas reject caller-authored CLI mechanics", () => 
 
 void test("canonical draft patch input closes semantic-delta and producer-scope combinations", () => {
   const base = {
-    patch_format_version: "2",
+    patch_format_version: "3",
     revision_round: 1,
     base_artifact_id: "A-draft",
     base_sha256: SHA,
@@ -240,7 +244,14 @@ void test("canonical draft patch input closes semantic-delta and producer-scope 
     subflow_instance_id: "sf-revision",
     obligation_scope: ["revised-draft", "apply-report"],
     evidence_artifact_ids: ["A-review"],
-    ops: [{ op: "replace_block", block_id: "B0001", old_hash: "a".repeat(12), new_text: "Revised text." }],
+    ops: [{
+      operation_id: "op-replace-b0001",
+      op: "replace_block",
+      block_id: "B0001",
+      old_hash: "a".repeat(12),
+      new_text: "Revised text.",
+      annotation_refs: [],
+    }],
   };
   assert.equal(DraftPatchSubmitInputSchema.safeParse({ ...base, semantic_delta: { level: "none" } }).success, true);
   assert.equal(DraftPatchSubmitInputSchema.safeParse({
@@ -255,6 +266,16 @@ void test("canonical draft patch input closes semantic-delta and producer-scope 
     ...base,
     semantic_delta: { level: "ordinary", summary: "Local wording.", linked_change_id: "forbidden" },
   }).success, false);
+  assert.equal(StoredDraftPatchSchema.safeParse({
+    ...base,
+    patch_format_version: "2",
+    patch_id: "legacy-v2",
+    status: "proposed",
+    emitted_by: { kind: "agent", name: "academic-paper" },
+    created_at: NOW,
+    ops: [{ op: "replace_block", block_id: "B0001", old_hash: "a".repeat(12), new_text: "Legacy v2 text." }],
+    semantic_delta: { level: "ordinary", summary: "Readable legacy patch." },
+  }).success, true);
 });
 
 void test("runtime protocol contracts accept bounded pages, compact writes, and stable validation fields", () => {

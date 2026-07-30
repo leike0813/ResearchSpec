@@ -19,7 +19,7 @@ import { WorkItemSelectorSchema } from "../core/contracts/workflow.js";
 import { Sha256Schema, SubmitActorKindSchema, SubmitActorSchema } from "../core/contracts/artifact.js";
 import { RuntimeActorSchema } from "../core/contracts/gate-transition.js";
 import { GateSelectorSchema, RuntimeSelectorSchema, SubflowSelectorSchema, TransitionSelectorSchema, parseRuntimeSelector } from "../core/contracts/runtime-selector.js";
-import { ActionTargetSelectorSchema, CaseActionSelectorSchema, CompletionSelectorSchema, formatActionTargetSelectorHint, ObligationSelectorSchema, PatchSelectorSchema } from "../core/contracts/action-selector.js";
+import { ActionTargetSelectorSchema, AnnotationSelectorSchema, CaseActionSelectorSchema, CompletionSelectorSchema, formatActionTargetSelectorHint, ObligationSelectorSchema, PatchSelectorSchema } from "../core/contracts/action-selector.js";
 import { StartActorSchema } from "../core/contracts/subflow.js";
 import { ArtifactSubmitError, executeArtifactSubmit, planArtifactSubmit } from "../core/runtime/artifact-submit.js";
 import { executeGateSubmit, executeTransitionAdvance, GateTransitionError, isSha256, planGateSubmit, planTransitionAdvance } from "../core/runtime/gate-transition-control.js";
@@ -68,6 +68,7 @@ import { evaluateActionAvailability, type RuntimeActionKey } from "../core/runti
 import { compactTransactionResult } from "../core/runtime/transaction-result.js";
 import { inspectLiteratureAdapters } from "../literature-adapters/inspect.js";
 import { executePatchPlan, PatchLifecycleError, planPatchAdvance, planPatchSubmit } from "../core/runtime/patch-lifecycle.js";
+import { annotationCandidateRelativePath, AnnotationLifecycleError, executeAnnotationPlan, planAnnotationSubmit } from "../core/runtime/annotation-lifecycle.js";
 import { buildAdaptiveInstructions } from "../core/runtime/adaptive-case-control.js";
 import {
   AdaptiveCaseError,
@@ -106,7 +107,7 @@ export interface HandoffOptions { stdout?: boolean; out?: string }
 export interface PackOptions { out?: string; includeArtifacts?: boolean }
 export interface DecideOptions { decision?: DecisionChoice; actorName?: string; reason?: string; expectedActionBasisSha256?: string; expectedPlanSha256?: string }
 export interface ProposeOptions { input: string; actorKind: "human" | "agent"; actorName: string; expectedActionBasisSha256?: string; expectedPlanSha256?: string }
-export interface SubmitOptions { input: string; actorKind: string; actorName: string; confirmedBy?: string; expectedSha256?: string; expectedPlanSha256?: string; expectedActionBasisSha256?: string }
+export interface SubmitOptions { input?: string; actorKind: string; actorName: string; confirmedBy?: string; expectedSha256?: string; expectedPlanSha256?: string; expectedActionBasisSha256?: string }
 export interface StartOptions { input: string; actorKind: string; actorName: string; confirmedBy?: string; expectedPlanSha256?: string; expectedActionBasisSha256?: string }
 export interface AdvanceOptions { actorKind: string; actorName: string; expectedPlanSha256?: string; expectedActionBasisSha256?: string }
 export interface DoctorOptions { repair?: string; expectedPlanSha256?: string }
@@ -320,6 +321,22 @@ export async function handleInstructions(selector: string, context: CommandConte
   const snapshot = await loadWorkspaceSnapshot(workspace);
   const descriptor = await buildActionDescriptor(snapshot, selector);
   if (!descriptor) throw new CliError("action_descriptor_unavailable", `Action descriptor is unavailable: ${selector}`, 1);
+  if (AnnotationSelectorSchema.safeParse(selector).success) {
+    if (descriptor.availability.disposition === "blocked") throw new CliError("action_blocked", `Action is blocked: ${selector}`, 1, undefined, { descriptor });
+    const annotationSetId = selector.slice("annotation:".length);
+    const packet = {
+      kind: "submit",
+      selector,
+      candidate: {
+        path: annotationCandidateRelativePath(annotationSetId),
+        schema_ref: "researchspec://contracts/annotation-set-candidate/v1",
+        normalized_json_only: true,
+      },
+      registered: snapshot.annotations.some((item) => item.id === annotationSetId),
+      action_descriptor: descriptor,
+    };
+    return success("instructions", packet, { stdout: `${JSON.stringify(packet, null, 2)}\n` });
+  }
   if (snapshot.runtimeMode === "adaptive") {
     const packet = { ...buildAdaptiveInstructions(snapshot, selector), action_descriptor: descriptor };
     return success("instructions", packet, { stdout: `${JSON.stringify(packet, null, 2)}\n` });
@@ -411,6 +428,7 @@ export async function handleStart(selector: string, options: StartOptions, conte
 }
 
 export async function handleSubmit(selector: string, options: SubmitOptions, context: CommandContext): Promise<CommandResult> {
+  if (AnnotationSelectorSchema.safeParse(selector).success) return handleAnnotationSubmit(selector, options, context);
   if (PatchSelectorSchema.safeParse(selector).success) return handlePatchSubmit(selector, options, context);
   if (ObligationSelectorSchema.safeParse(selector).success) return handleObligationSubmit(selector, options, context);
   if (GateSelectorSchema.safeParse(selector).success && parseRuntimeSelector(selector)?.kind === "gate") return handleGateSubmit(selector, options, context);
@@ -421,6 +439,7 @@ export async function handleSubmit(selector: string, options: SubmitOptions, con
   if (!actorResult.success) throw new CliError("invalid_submission_input", "Submit actor is invalid.", 2, undefined, actorResult.error.issues);
   const workspace = await requireWorkspace(context);
   const snapshot = await loadWorkspaceSnapshot(workspace);
+  if (!options.input) throw new CliError("invalid_submission_input", "--input is required for work-item submission.", 2);
   const inputPath = path.resolve(context.cwd, options.input);
   let payload: unknown;
   try { payload = JSON.parse(await readFile(inputPath, "utf8")) as unknown; }
@@ -463,12 +482,73 @@ export async function handleSubmit(selector: string, options: SubmitOptions, con
   }
 }
 
+async function handleAnnotationSubmit(selector: string, options: SubmitOptions, context: CommandContext): Promise<CommandResult> {
+  if (options.input) throw new CliError("annotation_input_not_supported", "Annotation Submit reads only the candidate path returned by instructions; do not pass --input.", 2);
+  if (options.expectedPlanSha256) throw new CliError("annotation_plan_hash_not_supported", "Annotation Submit is human_confirmed and does not accept --expected-plan-sha256.", 2);
+  const actor = SubmitActorSchema.safeParse({ kind: options.actorKind, name: options.actorName });
+  if (!actor.success) throw new CliError("invalid_annotation_input", "Annotation actor is invalid.", 2, undefined, actor.error.issues);
+  if (!options.confirmedBy?.trim()) throw new CliError("annotation_confirmation_missing", "Annotation Submit requires --confirmed-by.", 2);
+  if (!context.dryRun && !context.interactive && !context.yes) {
+    throw new CliError("annotation_confirmation_required", "Non-interactive Annotation Submit requires --yes.", 2);
+  }
+  if (!context.dryRun && !context.interactive && !options.expectedActionBasisSha256) {
+    throw new CliError("annotation_action_basis_required", "Non-interactive Annotation Submit requires --expected-action-basis-sha256.", 2);
+  }
+  const workspace = await requireWorkspace(context);
+  const snapshot = await loadWorkspaceSnapshot(workspace);
+  try {
+    await assertActionBasis(snapshot, selector, options.expectedActionBasisSha256);
+    const plan = await planAnnotationSubmit({
+      snapshot,
+      selector,
+      actor: actor.data,
+      confirmedBy: options.confirmedBy,
+      expectedActionBasis: options.expectedActionBasisSha256,
+    });
+    if (!context.dryRun && context.interactive && !context.yes && plan.status !== "already_submitted") {
+      const approved = await confirm({
+        message: `Freeze and register ${selector} at candidate SHA-256 ${plan.candidate_sha256}?`,
+        default: false,
+      });
+      if (!approved) throw new CliError("cancelled", "Annotation submission cancelled.", 1);
+    }
+    if (!context.dryRun) await executeAnnotationPlan(plan);
+    const setArtifactSelector = `artifact:A-annotation-set-${plan.annotation_set.annotation_set_id}`;
+    const receiptArtifactSelector = `artifact:A-annotation-receipt-${plan.annotation_set.annotation_set_id}`;
+    const data = compactTransactionResult({
+      command: "submit",
+      selector,
+      outcome: context.dryRun ? plan.status : plan.status === "already_submitted" ? "already_submitted" : "submitted",
+      dryRun: context.dryRun,
+      identity: { kind: "artifact", selector: setArtifactSelector, sha256: plan.frozen_sha256 },
+      effects: plan.status === "already_submitted"
+        ? [{ kind: "no_change", refs: [selector, setArtifactSelector] }]
+        : [{ kind: "annotation_registered", refs: [selector, setArtifactSelector, receiptArtifactSelector] }],
+      nextSelectors: [`show:${selector}`, `show:${setArtifactSelector}`, "list:annotations"],
+    });
+    return success("submit", data, {
+      stdout: `${context.dryRun ? "Would submit" : plan.status === "already_submitted" ? "Already submitted" : "Submitted"} ${selector}.\n`,
+    });
+  } catch (error) {
+    if (error instanceof CliError) throw error;
+    if (error instanceof AnnotationLifecycleError) {
+      throw actionCliError("submit_annotation", error.code, error.message, error.kind, error.details);
+    }
+    if ((error as NodeJS.ErrnoException).code === "EWRITE_CONFLICT") {
+      throw new CliError("annotation_write_conflict", error instanceof Error ? error.message : String(error), 3);
+    }
+    if (isFileSystemError(error)) throw error;
+    throw new CliError("internal_error", error instanceof Error ? error.message : String(error), 4);
+  }
+}
+
 async function handlePatchSubmit(selector: string, options: SubmitOptions, context: CommandContext): Promise<CommandResult> {
   if (options.expectedPlanSha256 !== undefined && !isSha256(options.expectedPlanSha256)) throw new CliError("invalid_expected_plan_sha256", "--expected-plan-sha256 must be 64 lowercase hexadecimal characters.", 2);
   const actor = SubmitActorSchema.safeParse({ kind: options.actorKind, name: options.actorName });
   if (!actor.success) throw new CliError("invalid_patch_input", "Patch actor is invalid.", 2, undefined, actor.error.issues);
   const workspace = await requireWorkspace(context);
   const snapshot = await loadWorkspaceSnapshot(workspace);
+  if (!options.input) throw new CliError("invalid_patch_input", "--input is required for patch submission.", 2);
   let payload: unknown;
   try { payload = JSON.parse(await readFile(path.resolve(context.cwd, options.input), "utf8")) as unknown; }
   catch (error) { throw new CliError("invalid_patch_input", `Cannot read patch input: ${error instanceof Error ? error.message : String(error)}`, 2); }
@@ -506,6 +586,7 @@ async function handleObligationSubmit(selector: string, options: SubmitOptions, 
   if (!actor.success) throw new CliError("invalid_obligation_input", "Adaptive obligation actor is invalid.", 2, undefined, actor.error.issues);
   const workspace = await requireWorkspace(context);
   const snapshot = await loadWorkspaceSnapshot(workspace);
+  if (!options.input) throw new CliError("invalid_obligation_input", "--input is required for obligation submission.", 2);
   if (snapshot.runtimeMode !== "adaptive") throw new CliError("adaptive_runtime_unavailable", "Obligation selectors require an adaptive workspace.", 1);
   let payload: unknown;
   try { payload = JSON.parse(await readFile(path.resolve(context.cwd, options.input), "utf8")) as unknown; }
@@ -526,6 +607,7 @@ async function handleGateSubmit(selector: string, options: SubmitOptions, contex
   if (!actor.success || actor.data.kind !== "validator" || !options.confirmedBy?.trim()) throw new CliError("invalid_gate_input", "Gate submit requires a validator actor and --confirmed-by human identity.", 2, undefined, actor.success ? undefined : actor.error.issues);
   const workspace = await requireWorkspace(context);
   const snapshot = await loadWorkspaceSnapshot(workspace);
+  if (!options.input) throw new CliError("invalid_gate_input", "--input is required for Gate submission.", 2);
   let payload: unknown;
   try { payload = JSON.parse(await readFile(path.resolve(context.cwd, options.input), "utf8")) as unknown; }
   catch (error) { throw new CliError("invalid_gate_input", `Cannot read Gate input: ${error instanceof Error ? error.message : String(error)}`, 2); }
@@ -604,7 +686,15 @@ export async function handleAdvance(selector: string, options: AdvanceOptions, c
         ? [{ kind: "no_change", refs: [selector] }]
         : plan.status === "would_mark_stale"
           ? [{ kind: "patch_marked_stale", refs: [selector] }]
-          : [{ kind: "patch_applied", refs: [selector, ...(plan.revised_artifact_id ? [`artifact:${plan.revised_artifact_id}`] : []), ...(plan.apply_report_artifact_id ? [`artifact:${plan.apply_report_artifact_id}`] : [])] }];
+          : [{
+            kind: "patch_applied",
+            refs: [
+              selector,
+              ...(plan.revised_artifact_id ? [`artifact:${plan.revised_artifact_id}`] : []),
+              ...(plan.apply_report_artifact_id ? [`artifact:${plan.apply_report_artifact_id}`] : []),
+              ...(plan.annotation_resolution_report_artifact_id ? [`artifact:${plan.annotation_resolution_report_artifact_id}`] : []),
+            ],
+          }];
       const data = compactTransactionResult({
         command: "advance",
         selector,
@@ -865,7 +955,7 @@ export async function handlePluginUninstall(pluginIds: readonly string[], contex
 
 export async function handleList(type: string | undefined, options: ListOptions, context: CommandContext): Promise<CommandResult> {
   const workspace = await requireWorkspace(context);
-  const allowed = ["changes", "artifacts", "gates", "decisions", "tools", "actions", "history", "case-actions", "diagnostics"];
+  const allowed = ["changes", "artifacts", "annotations", "gates", "decisions", "tools", "actions", "history", "case-actions", "diagnostics"];
   const listType = type ?? "changes";
   if (!allowed.includes(listType)) throw new CliError("invalid_list_type", `Unknown list type: ${listType}`, 2);
   const limit = options.limit === undefined ? undefined : Number(options.limit);

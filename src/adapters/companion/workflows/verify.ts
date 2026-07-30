@@ -28,6 +28,7 @@ Produce an evidence-linked readiness scorecard and, for a formal Gate, submit on
 
 \`\`\`bash
 researchspec check all --json
+researchspec check artifacts --json
 researchspec status --json
 researchspec instructions gate:sf-<instance>/<node> --json
 researchspec submit gate:sf-<instance>/<node> --input verdict.json --actor-kind validator --actor-name researchspec-verify --confirmed-by "<human>" --dry-run --json
@@ -38,10 +39,11 @@ researchspec show gate:sf-<instance>/<node> --json
 
 1. Define the readiness question and run the relevant deterministic check. Blocking diagnostics stop semantic scoring and are reported through their direct repair boundary.
 2. Inspect the minimum project, source, claim, manuscript, artifact, lifecycle, and prior Gate/decision evidence needed for the scope. Rate each dimension pass, concern, blocker, or unknown with stable IDs or workspace-relative paths.
-3. For a formal Gate, begin with bounded \`status --json\`, select the \`gate:\` selector, and fetch its instructions/action descriptor. Use only its declared validator/evidence contract; do not construct a strict payload from general prose.
-4. Explain the verdict, evidence, limitations, conditions, and advancement consequence. If challenged, reverify and bind the new verdict to the challenged basis before any override discussion.
-5. Gate submission is \`plan_bound\`: preview the exact descriptor-declared verdict, show writes and \`plan_sha256\`, obtain the named human confirmation, then execute the unchanged plan with the matching expected hash. A failed confirmed reverification may route its exact event to Decide; it never passes itself.
-6. Follow returned \`next_selectors\` for targeted Gate visibility or the next frontier. Route remaining mechanical defects to Check, semantic contract changes to Propose, human choices to Decide, and scholarly/manuscript work to ARSU.
+3. For \`revision_completeness\`, first run the artifact check and inspect the accepted Draft Patch v3, apply report, Annotation Sets, and Annotation Resolution Report. Mechanical coverage must validate hashes, complete dispositions, and operation mappings with zero unresolved entries. Treat answered, deferred, rejected, and superseded items according to their recorded evidence; this check does not prove the response is academically sufficient.
+4. For a formal Gate, begin with bounded \`status --json\`, select the \`gate:\` selector, and fetch its instructions/action descriptor. Use only its declared validator/evidence contract; do not construct a strict payload from general prose.
+5. Explain the verdict, evidence, limitations, conditions, and advancement consequence. After mechanical annotation coverage passes, independently assess whether each response actually addresses the review intent. If challenged, reverify and bind the new verdict to the challenged basis before any override discussion.
+6. Gate submission is \`plan_bound\`: preview the exact descriptor-declared verdict, show writes and \`plan_sha256\`, obtain the named human confirmation, then execute the unchanged plan with the matching expected hash. A failed confirmed reverification may route its exact event to Decide; it never passes itself.
+7. Follow returned \`next_selectors\` for targeted Gate visibility or the next frontier. Route remaining mechanical defects to Check, semantic contract changes to Propose, human choices to Decide, and scholarly/manuscript work to ARSU.
 
 ## Readiness Scorecard
 

@@ -107,7 +107,9 @@ For each parsed reviewer comment (from Step 2), decompose into an explicit list 
    Research-scope or claim commitments require a proposed
    `researchspec/changes/<change-id>/contract-patch.yaml`; manuscript-edit
    commitments become traceability inputs for
-   `researchspec/draft-patches/<patch-id>.json`; strategic acceptance, rejection,
+   `researchspec/draft-patches/<patch-id>.json`. Existing registered Annotation
+   Sets remain separate immutable review evidence and Draft Patch v3 operation
+   references provide their only text-operation mapping; strategic acceptance, rejection,
    or tradeoff choices wait for a human-confirmed decision in
    `researchspec/runs/current/decision-ledger.jsonl`. Revision execution and
    independent re-review append fulfillment evidence later; this agent does not

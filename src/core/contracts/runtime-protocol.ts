@@ -48,6 +48,7 @@ export const CompactTransactionEffectSchema = z.strictObject({
     "subflow_started",
     "material_passport_imported",
     "artifact_registered",
+    "annotation_registered",
     "attempt_recorded",
     "evidence_accepted",
     "obligation_paused",

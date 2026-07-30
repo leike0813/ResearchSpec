@@ -7,6 +7,14 @@ response artifacts, the relevant
 `researchspec/runs/current/artifact-registry.json`. Verify the evidence itself;
 do not accept an author's claim or an imported Schema 11 status as proof.
 
+If an Annotation Resolution Report is linked, first confirm that the CLI
+mechanical coverage check passes: hashes and identities match, every Annotation
+has exactly one disposition, operation links come only from Draft Patch v3, and
+`unresolved_count` is zero. Then assess semantic fulfillment independently.
+`implemented` is not proof that the edit answers the concern;
+`answered_without_text_change`, `deferred`, `rejected`, and `superseded` still
+require a reviewer judgment against their recorded answer, reason, or successor.
+
 For each commitment, assign one `fulfillment_status`:
 
 - `fulfilled` — the required evidence exists and substantively satisfies the

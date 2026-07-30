@@ -39,6 +39,7 @@ import {
   assertCurrentGateReverification,
   isPassingGateVerdict,
 } from "./gate-authority.js";
+import { boundAnnotationSetIds, verifyAnnotationCoverage } from "./annotation-coverage.js";
 
 export class AdaptiveCaseError extends Error {
   constructor(
@@ -80,6 +81,22 @@ export async function planAdaptiveStart(input: {
     throw new AdaptiveCaseError("invalid_start_input", "Adaptive Start input, actor, confirmer or route is invalid.", "usage", semantic.success ? actor.success ? undefined : actor.error.issues : semantic.error.issues);
   }
   if (semantic.data.material_passport_import) throw new AdaptiveCaseError("adaptive_import_not_supported", "Material Passport import remains a strict compatibility transaction until migration convergence.", "domain");
+  const annotationSetArtifact = semantic.data.annotation_set_id
+    ? input.snapshot.artifacts.find((artifact) =>
+      artifact.artifact_type === "annotation_set"
+      && artifact.annotation_set_id === semantic.data.annotation_set_id)
+    : undefined;
+  if (semantic.data.annotation_set_id && !annotationSetArtifact) {
+    throw new AdaptiveCaseError("annotation_prerequisite_missing", `Registered Annotation Set is unavailable: ${semantic.data.annotation_set_id}`, "domain");
+  }
+  if (annotationSetArtifact && ![
+    "academic-paper:revision",
+    "academic-paper:revision-coach",
+    "academic-paper-reviewer:re-review",
+    "academic-pipeline:mid-entry",
+  ].includes(route.route_ref)) {
+    throw new AdaptiveCaseError("annotation_prerequisite_unsupported", `Route does not accept an Annotation Set prerequisite: ${route.route_ref}`, "usage");
+  }
   const availability = await requireAllowed(input.snapshot, input.selector);
   const payload = {
     data: SubflowStartInputSchema.parse({
@@ -87,7 +104,9 @@ export async function planAdaptiveStart(input: {
       schema_version: "1",
       instruction_basis_sha256: availability.availability.basis_sha256,
       acknowledged_user_input_ids: [],
-      prerequisite_artifact_ids: [],
+      prerequisite_artifact_ids: annotationSetArtifact && typeof annotationSetArtifact.artifact_id === "string"
+        ? [annotationSetArtifact.artifact_id]
+        : [],
       prerequisite_decision_ids: [],
       parent_subflow_selector: null,
     }),
@@ -400,6 +419,27 @@ export async function planAdaptiveGate(input: {
   };
   await validateGateEvidence(input.snapshot, payload.data.evidence);
   const [instanceId = "", gateNodeId = ""] = input.selector.slice("gate:".length).split("/", 2);
+  if (
+    (gateNodeId === "revision_completeness" || gateNodeId === "gate-revision-completeness")
+    && isPassingGateVerdict(payload.data.verdict)
+  ) {
+    const requiredAnnotationSetIds = await boundAnnotationSetIds(input.snapshot, instanceId);
+    const coverage = await verifyAnnotationCoverage(input.snapshot, {
+      evidenceArtifactIds: payload.data.evidence
+        .filter((item) => item.kind === "artifact")
+        .map((item) => item.artifact_id),
+      requiredAnnotationSetIds,
+    });
+    if (!coverage.complete) {
+      const finding = coverage.findings[0];
+      throw new AdaptiveCaseError(
+        finding?.code ?? "annotation_coverage_incomplete",
+        finding?.message ?? "Annotation coverage is incomplete.",
+        "domain",
+        coverage,
+      );
+    }
+  }
   const gateId = `${instanceId}/${gateNodeId}`;
   const requiredDecisionIds = state.obligations
     .filter((item) =>

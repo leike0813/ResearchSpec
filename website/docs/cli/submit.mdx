@@ -1,14 +1,14 @@
 ---
 sidebar_position: 6
 title: "submit"
-description: "Submit a runtime candidate, attempt, evidence, resolution, patch, or confirmed Gate verdict"
+description: "Submit a runtime candidate, attempt, evidence, annotation, patch, or confirmed Gate verdict"
 ---
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
 # `researchspec submit <runtime-item>`
 
-Submit a runtime candidate, attempt, evidence, resolution, patch, or confirmed Gate verdict
+Submit a runtime candidate, attempt, evidence, annotation, patch, or confirmed Gate verdict
 
 - **Group**: Control plane
 - **Workspace**: `required`
@@ -17,7 +17,7 @@ Submit a runtime candidate, attempt, evidence, resolution, patch, or confirmed G
 
 | Option | Required | Description |
 | --- | --- | --- |
-| `--input <payload.json>` | yes | strict semantic submission JSON |
+| `--input <payload.json>` | no | strict semantic submission JSON; omitted for annotation:<id> |
 | `--actor-kind <kind>` | yes | human, agent, script, converter, or validator |
 | `--actor-name <name>` | yes | artifact producer name |
 | `--confirmed-by <name>` | no | human who confirmed a Gate verdict |
@@ -34,4 +34,3 @@ command is executed under a plan-bound workflow. Run
 semantic input and binding rules.
 
 :::
-

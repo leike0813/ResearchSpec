@@ -105,6 +105,46 @@ export const ApplyReceiptArtifactRecordSchema = z.strictObject({
   related_artifact_ids: z.array(SafeIdSchema).optional(),
 });
 
+export const AnnotationSetArtifactRecordSchema = z.strictObject({
+  artifact_id: SafeIdSchema,
+  artifact_type: z.literal("annotation_set"),
+  path: z.string().min(1),
+  sha256: Sha256Schema,
+  status: z.literal("accepted"),
+  verification_state: z.literal("verified"),
+  produced_by: z.literal("researchspec submit"),
+  base_artifact_id: SafeIdSchema,
+  annotation_set_id: SafeIdSchema,
+  created_at: z.iso.datetime(),
+  submit_receipt_artifact_id: SafeIdSchema,
+});
+
+export const AnnotationSubmitReceiptArtifactRecordSchema = z.strictObject({
+  artifact_id: SafeIdSchema,
+  artifact_type: z.literal("annotation_submit_receipt"),
+  path: z.string().min(1),
+  sha256: Sha256Schema,
+  status: z.literal("verified"),
+  produced_by: z.literal("researchspec submit"),
+  annotation_set_id: SafeIdSchema,
+  related_artifact_ids: z.array(SafeIdSchema).length(1),
+  created_at: z.iso.datetime(),
+});
+
+export const AnnotationResolutionReportArtifactRecordSchema = z.strictObject({
+  artifact_id: SafeIdSchema,
+  artifact_type: z.literal("annotation_resolution_report"),
+  path: z.string().min(1),
+  sha256: Sha256Schema,
+  status: z.literal("accepted"),
+  verification_state: z.literal("verified"),
+  produced_by: z.literal("researchspec advance"),
+  patch_id: SafeIdSchema,
+  related_artifact_ids: z.array(SafeIdSchema).min(3),
+  created_at: z.iso.datetime(),
+  apply_receipt_artifact_id: SafeIdSchema,
+});
+
 export const AdaptiveAcceptedArtifactRecordSchema = z.strictObject({
   artifact_id: SafeIdSchema,
   artifact_type: z.string().trim().min(1),
@@ -181,6 +221,9 @@ export const ArtifactRegistrySchema = z.strictObject({
     AppliedDraftArtifactRecordSchema,
     ApplyReportArtifactRecordSchema,
     ApplyReceiptArtifactRecordSchema,
+    AnnotationSetArtifactRecordSchema,
+    AnnotationSubmitReceiptArtifactRecordSchema,
+    AnnotationResolutionReportArtifactRecordSchema,
     AdaptiveAcceptedArtifactRecordSchema,
   ])),
 });

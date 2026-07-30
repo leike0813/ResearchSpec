@@ -6,12 +6,14 @@ import {
   AppliedDraftArtifactRecordSchema,
   ApplyReceiptArtifactRecordSchema,
   ApplyReportArtifactRecordSchema,
+  AnnotationResolutionReportArtifactRecordSchema,
   ArtifactRegistrySchema,
   type SubmitActor,
 } from "../contracts/artifact.js";
 import { CaseStateSchema, type CaseState } from "../contracts/case-state.js";
 import {
   CanonicalDraftPatchSchema,
+  CanonicalDraftPatchV2Schema,
   DraftPatchApplyReportSchema,
   DraftPatchReceiptSchema,
   DraftPatchSemanticInputSchema,
@@ -19,6 +21,11 @@ import {
   type CanonicalDraftPatch,
   type DraftPatchSubmitInput,
 } from "../contracts/draft-patch.js";
+import {
+  AnnotationResolutionReportSchema,
+  FrozenAnnotationSetSchema,
+  type AnnotationResolutionEntry,
+} from "../contracts/annotation.js";
 import { resolveWorkNode, type WorkflowNodeDefinition } from "../contracts/workflow.js";
 import type { IndexedItem, WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { executeWritePlan, planFile, sha256, type PlannedWrite, type WritePlan } from "../workspace/write-plan.js";
@@ -55,6 +62,7 @@ export interface PatchAdvancePlan {
   plan_sha256: string;
   revised_artifact_id?: string;
   apply_report_artifact_id?: string;
+  annotation_resolution_report_artifact_id?: string;
   receipt_sha256?: string;
   writePlan: WritePlan;
 }
@@ -72,13 +80,19 @@ export async function planPatchSubmit(input: {
   if (!semantic.success) throw usage("invalid_patch_input", "Patch semantic input does not match the strict schema.", semantic.error.issues);
   const parsed = DraftPatchSubmitInputSchema.safeParse({
     ...semantic.data,
-    patch_format_version: "2",
+    patch_format_version: "3",
+    ops: semantic.data.ops.map((operation, index) => ({
+      ...operation,
+      operation_id: operation.operation_id ?? `op-${String(index + 1).padStart(3, "0")}`,
+      annotation_refs: operation.annotation_refs ?? [],
+    })),
   });
   if (!parsed.success) throw usage("invalid_patch_input", "CLI-derived patch input is invalid.", parsed.error.issues);
   assertWorkspaceValid(input.snapshot, "patch_submit_workspace_invalid");
   validateScope(input.snapshot, parsed.data);
   await validateBase(input.snapshot, parsed.data.base_artifact_id, parsed.data.base_sha256);
   validateEvidence(input.snapshot, parsed.data.evidence_artifact_ids);
+  validateAnnotationResolution(input.snapshot, parsed.data);
 
   const now = input.now ?? new Date().toISOString();
   const patch = CanonicalDraftPatchSchema.parse({
@@ -216,8 +230,16 @@ export async function planPatchAdvance(input: {
   const receiptRegistryPath = serializePatchArtifactPath(input.snapshot, receiptPath, "apply receipt");
   const revisedArtifactId = `A-${patchId}`;
   const reportArtifactId = `A-apply-report-${patchId}`;
+  const resolutionReportArtifactId = patch.annotation_resolution ? `A-annotation-resolution-${patchId}` : undefined;
   const receiptArtifactId = `A-receipt-${patchId}`;
   const revisedSha256 = sha256(revised);
+  const resolution = resolutionReportArtifactId
+    ? deriveAnnotationResolutionReport(input.snapshot, patch, {
+      revisedArtifactId,
+      revisedSha256,
+      now,
+    })
+    : undefined;
   const report = DraftPatchApplyReportSchema.parse({
     schema_version: "1",
     report_type: "draft_patch_apply",
@@ -230,6 +252,7 @@ export async function planPatchAdvance(input: {
     evidence_artifact_ids: patch.evidence_artifact_ids,
     semantic_delta: patch.semantic_delta,
     decision_id: patch.decision_id,
+    ...(resolutionReportArtifactId ? { annotation_resolution_report_artifact_id: resolutionReportArtifactId } : {}),
     applied_at: now,
   });
   const reportText = `${JSON.stringify(report, null, 2)}\n`;
@@ -244,9 +267,21 @@ export async function planPatchAdvance(input: {
     decision_id: patch.decision_id,
     base_artifact_id: patch.base_artifact_id,
     base_sha256: patch.base_sha256,
-    output_hashes: { [outputRelative]: revisedSha256, [reportRegistryPath]: sha256(reportText) },
-    artifact_ids: [revisedArtifactId, reportArtifactId, receiptArtifactId],
-    effects: [{ kind: "patch_applied", refs: [input.selector, `artifact:${revisedArtifactId}`, `artifact:${reportArtifactId}`] }],
+    output_hashes: {
+      [outputRelative]: revisedSha256,
+      [reportRegistryPath]: sha256(reportText),
+      ...(resolution ? { [resolution.registryPath]: resolution.sha256 } : {}),
+    },
+    artifact_ids: [revisedArtifactId, reportArtifactId, ...(resolutionReportArtifactId ? [resolutionReportArtifactId] : []), receiptArtifactId],
+    effects: [{
+      kind: "patch_applied",
+      refs: [
+        input.selector,
+        `artifact:${revisedArtifactId}`,
+        `artifact:${reportArtifactId}`,
+        ...(resolutionReportArtifactId ? [`artifact:${resolutionReportArtifactId}`] : []),
+      ],
+    }],
     committed_at: now,
   });
   const receiptText = `${JSON.stringify(receipt, null, 2)}\n`;
@@ -295,12 +330,32 @@ export async function planPatchAdvance(input: {
     produced_by: "researchspec advance",
     created_at: now,
     patch_id: patchId,
-    related_artifact_ids: [revisedArtifactId, reportArtifactId],
+    related_artifact_ids: [revisedArtifactId, reportArtifactId, ...(resolutionReportArtifactId ? [resolutionReportArtifactId] : [])],
   });
-  assertArtifactIdsAvailable(input.snapshot, [revisedArtifactId, reportArtifactId, receiptArtifactId]);
+  const resolutionArtifact = resolution && resolutionReportArtifactId
+    ? AnnotationResolutionReportArtifactRecordSchema.parse({
+      artifact_id: resolutionReportArtifactId,
+      artifact_type: "annotation_resolution_report",
+      path: resolution.registryPath,
+      sha256: resolution.sha256,
+      status: "accepted",
+      verification_state: "verified",
+      produced_by: "researchspec advance",
+      patch_id: patchId,
+      related_artifact_ids: [
+        patch.base_artifact_id,
+        revisedArtifactId,
+        reportArtifactId,
+        ...resolution.annotationSetArtifactIds,
+      ],
+      created_at: now,
+      apply_receipt_artifact_id: receiptArtifactId,
+    })
+    : undefined;
+  assertArtifactIdsAvailable(input.snapshot, [revisedArtifactId, reportArtifactId, ...(resolutionReportArtifactId ? [resolutionReportArtifactId] : []), receiptArtifactId]);
   const registry = ArtifactRegistrySchema.parse({
     ...input.snapshot.documents["runs/current/artifact-registry.json"] as object,
-    artifacts: [...input.snapshot.artifacts, revisedArtifact, reportArtifact, receiptArtifact],
+    artifacts: [...input.snapshot.artifacts, revisedArtifact, reportArtifact, ...(resolutionArtifact ? [resolutionArtifact] : []), receiptArtifact],
   });
   const registryText = `${JSON.stringify(registry, null, 2)}\n`;
   const registryFile = requiredFile(input.snapshot, "runs/current/artifact-registry.json");
@@ -309,6 +364,7 @@ export async function planPatchAdvance(input: {
     resolved_at: now,
     applied_artifact_id: revisedArtifactId,
     apply_report_artifact_id: reportArtifactId,
+    ...(resolutionReportArtifactId ? { annotation_resolution_report_artifact_id: resolutionReportArtifactId } : {}),
     apply_receipt_artifact_id: receiptArtifactId,
   });
   const operations: PlannedWrite[] = [
@@ -320,6 +376,7 @@ export async function planPatchAdvance(input: {
       workflowBinding || input.snapshot.runtimeMode === "adaptive" ? "workspace" : "project",
     ),
     await createOnly(reportPath, reportRelativeWorkspace, reportText, "write patch apply report"),
+    ...(resolution ? [await createOnly(resolution.path, resolution.relativePath, resolution.text, "write Annotation Resolution Report")] : []),
     await createOnly(receiptPath, receiptRelativeWorkspace, receiptText, "write patch apply receipt"),
     refresh(registryFile, registryText, "register patch outputs and receipt"),
     refreshPatch(item, patchText, "commit applied patch lifecycle"),
@@ -341,6 +398,7 @@ export async function planPatchAdvance(input: {
     plan_sha256: planSha256,
     revised_artifact_id: revisedArtifactId,
     apply_report_artifact_id: reportArtifactId,
+    ...(resolutionReportArtifactId ? { annotation_resolution_report_artifact_id: resolutionReportArtifactId } : {}),
     receipt_sha256: sha256(receiptText),
     writePlan: { operations, readPreconditions: [{ path: basePath, expectedHash: patch.base_sha256, reason: "accepted patch base" }] },
   };
@@ -356,13 +414,25 @@ function normalizedPatch(snapshot: WorkspaceSnapshot, item: IndexedItem): Canoni
   const value = record(item.value);
   const canonical = CanonicalDraftPatchSchema.safeParse(value);
   if (canonical.success) return canonical.data;
+  const canonicalV2 = CanonicalDraftPatchV2Schema.safeParse(value);
+  if (canonicalV2.success) {
+    return CanonicalDraftPatchSchema.parse({
+      ...canonicalV2.data,
+      patch_format_version: "3",
+      ops: canonicalV2.data.ops.map((operation, index) => ({
+        ...operation,
+        operation_id: `legacy-op-${String(index + 1).padStart(3, "0")}`,
+        annotation_refs: [],
+      })),
+    });
+  }
   const emitted = typeof value.emitted_by === "string" ? { kind: "agent" as const, name: value.emitted_by } : record(value.emitted_by);
   const baseHash = string(value.base_draft_hash).replace(/^sha256:/, "");
   const artifactHash = snapshot.artifacts.find((artifact) => artifact.artifact_id === value.base_artifact_id)?.sha256;
   const normalizedBaseHash = baseHash.length === 64 ? baseHash : typeof artifactHash === "string" ? artifactHash : "";
   if (!/^[a-f0-9]{64}$/.test(normalizedBaseHash)) throw domain("patch_base_hash_missing", "Legacy patch has no complete trusted base artifact hash.");
   return CanonicalDraftPatchSchema.parse({
-    patch_format_version: "2",
+    patch_format_version: "3",
     patch_id: value.patch_id,
     revision_round: value.revision_round,
     status: value.status,
@@ -375,7 +445,11 @@ function normalizedPatch(snapshot: WorkspaceSnapshot, item: IndexedItem): Canoni
     obligation_scope: [],
     evidence_artifact_ids: [],
     semantic_delta: { level: "none" },
-    ops: value.ops,
+    ops: Array.isArray(value.ops) ? value.ops.map((operation, index) => ({
+      ...record(operation),
+      operation_id: `legacy-op-${String(index + 1).padStart(3, "0")}`,
+      annotation_refs: [],
+    })) : [],
     created_at: typeof value.created_at === "string" ? value.created_at : new Date(0).toISOString(),
     ...(typeof value.decision_id === "string" ? { decision_id: value.decision_id } : {}),
   });
@@ -605,6 +679,169 @@ function validateEvidence(snapshot: WorkspaceSnapshot, ids: string[]): void {
   if (missing.length) throw domain("patch_evidence_missing", "Patch evidence references are missing.", { missing });
 }
 
+function deriveAnnotationResolutionReport(
+  snapshot: WorkspaceSnapshot,
+  patch: CanonicalDraftPatch,
+  input: {
+    revisedArtifactId: string;
+    revisedSha256: string;
+    now: string;
+  },
+) {
+  if (!patch.annotation_resolution || !patch.decision_id) {
+    throw domain("patch_annotation_resolution_missing", "Annotation Resolution Report requires patch resolution entries and Decision.");
+  }
+  const operationIds = new Map<string, string[]>();
+  for (const operation of patch.ops) {
+    for (const reference of operation.annotation_refs) {
+      const key = annotationKey(reference.annotation_set_id, reference.annotation_id);
+      operationIds.set(key, [...(operationIds.get(key) ?? []), operation.operation_id]);
+    }
+  }
+  const setIds = [...new Set(patch.annotation_resolution.entries.map((entry) => entry.annotation_set_id))].sort();
+  const annotationSets = setIds.map((setId) => {
+    const artifact = snapshot.artifacts.find((item) => item.artifact_type === "annotation_set"
+      && item.annotation_set_id === setId);
+    if (!artifact || typeof artifact.artifact_id !== "string" || typeof artifact.sha256 !== "string") {
+      throw domain("patch_annotation_set_unregistered", `Annotation Set is not registered: annotation:${setId}`);
+    }
+    return {
+      annotation_set_id: setId,
+      artifact_id: artifact.artifact_id,
+      sha256: artifact.sha256,
+    };
+  });
+  const entries = patch.annotation_resolution.entries.map((entry) => ({
+    ...entry,
+    operation_ids: operationIds.get(annotationKey(entry.annotation_set_id, entry.annotation_id)) ?? [],
+  }));
+  const count = (disposition: AnnotationResolutionEntry["disposition"]) =>
+    entries.filter((entry) => entry.disposition === disposition).length;
+  const report = AnnotationResolutionReportSchema.parse({
+    schema_version: "1",
+    report_type: "annotation_resolution",
+    report_id: `AR-${patch.patch_id}`,
+    patch_id: patch.patch_id,
+    decision_id: patch.decision_id,
+    base_artifact_id: patch.base_artifact_id,
+    base_sha256: patch.base_sha256,
+    revised_artifact_id: input.revisedArtifactId,
+    revised_sha256: input.revisedSha256,
+    annotation_sets: annotationSets,
+    entries,
+    coverage: {
+      total_count: entries.length,
+      implemented_count: count("implemented"),
+      answered_count: count("answered_without_text_change"),
+      deferred_count: count("deferred"),
+      rejected_count: count("rejected"),
+      superseded_count: count("superseded"),
+      unresolved_count: count("unresolved"),
+    },
+    generated_at: input.now,
+  });
+  const relativePath = `runs/current/annotation-resolution-reports/${patch.patch_id}.json`;
+  const target = path.join(snapshot.workspace, relativePath);
+  const text = `${JSON.stringify(report, null, 2)}\n`;
+  return {
+    path: target,
+    relativePath,
+    registryPath: serializePatchArtifactPath(snapshot, target, "Annotation Resolution Report"),
+    text,
+    sha256: sha256(text),
+    annotationSetArtifactIds: annotationSets.map((item) => item.artifact_id),
+  };
+}
+
+function validateAnnotationResolution(snapshot: WorkspaceSnapshot, patch: DraftPatchSubmitInput): void {
+  const operationRefs = new Map<string, string[]>();
+  for (const operation of patch.ops) {
+    for (const reference of operation.annotation_refs) {
+      const key = annotationKey(reference.annotation_set_id, reference.annotation_id);
+      operationRefs.set(key, [...(operationRefs.get(key) ?? []), operation.operation_id]);
+    }
+  }
+  if (!patch.annotation_resolution) {
+    if (operationRefs.size) {
+      throw usage("patch_annotation_resolution_missing", "Patch operations reference annotations but annotation_resolution is missing.");
+    }
+    return;
+  }
+
+  const entries = new Map<string, AnnotationResolutionEntry>();
+  for (const entry of patch.annotation_resolution.entries) {
+    entries.set(annotationKey(entry.annotation_set_id, entry.annotation_id), entry);
+  }
+  const setIds = new Set([
+    ...patch.annotation_resolution.entries.map((entry) => entry.annotation_set_id),
+    ...patch.ops.flatMap((operation) => operation.annotation_refs.map((reference) => reference.annotation_set_id)),
+  ]);
+  const annotations = new Map<string, ReturnType<typeof FrozenAnnotationSetSchema.parse>["annotations"][number]>();
+  for (const setId of setIds) {
+    const item = snapshot.annotations.find((candidate) => candidate.id === setId);
+    if (!item) throw domain("patch_annotation_set_missing", `Annotation Set is missing: annotation:${setId}`);
+    const set = FrozenAnnotationSetSchema.parse(item.value);
+    if (set.base_artifact_id !== patch.base_artifact_id || set.base_sha256 !== patch.base_sha256) {
+      throw conflict("patch_annotation_base_mismatch", `Annotation Set does not bind the patch base: annotation:${setId}`);
+    }
+    const recordValue = snapshot.artifacts.find((artifact) => artifact.artifact_type === "annotation_set"
+      && artifact.annotation_set_id === setId);
+    if (!recordValue || typeof recordValue.sha256 !== "string" || !item.path) {
+      throw domain("patch_annotation_set_unregistered", `Annotation Set is not registered: annotation:${setId}`);
+    }
+    const text = `${JSON.stringify(set, null, 2)}\n`;
+    if (sha256(text) !== recordValue.sha256) {
+      throw conflict("patch_annotation_set_hash_mismatch", `Annotation Set registry hash has drifted: annotation:${setId}`);
+    }
+    for (const annotation of set.annotations) annotations.set(annotationKey(setId, annotation.annotation_id), annotation);
+  }
+
+  const expected = new Set(annotations.keys());
+  const actual = new Set(entries.keys());
+  const missing = [...expected].filter((key) => !actual.has(key));
+  const dangling = [...actual].filter((key) => !expected.has(key));
+  if (missing.length || dangling.length) {
+    throw usage("patch_annotation_coverage_invalid", "Annotation resolution must cover every annotation in every related set exactly once.", { missing, dangling });
+  }
+
+  for (const [key, entry] of entries) {
+    const linkedOperations = operationRefs.get(key) ?? [];
+    if (entry.disposition === "implemented" && !linkedOperations.length) {
+      throw usage("patch_annotation_operation_missing", `Implemented annotation has no operation mapping: ${key}`);
+    }
+    if (entry.disposition !== "implemented" && linkedOperations.length) {
+      throw usage("patch_annotation_operation_invalid", `Only implemented annotations may be mapped to operations: ${key}`);
+    }
+    if (entry.superseded_by) {
+      const successor = annotationKey(entry.superseded_by.annotation_set_id, entry.superseded_by.annotation_id);
+      const successorSet = snapshot.annotations.find((candidate) => candidate.id === entry.superseded_by?.annotation_set_id);
+      const successorValue = successorSet && FrozenAnnotationSetSchema.safeParse(successorSet.value);
+      if (!successorValue?.success || !successorValue.data.annotations.some((annotation) => annotation.annotation_id === entry.superseded_by?.annotation_id)) {
+        throw domain("patch_annotation_successor_missing", `Superseding annotation is missing: ${successor}`);
+      }
+    }
+    const annotation = annotations.get(key);
+    if (entry.disposition === "implemented" && annotation?.semantic_impact.level === "high") {
+      const semanticDelta = patch.semantic_delta;
+      if (semanticDelta.level !== "high") {
+        throw domain("patch_annotation_high_impact_unlinked", `High-impact annotation requires a high semantic delta: ${key}`);
+      }
+      const missingCategories = annotation.semantic_impact.categories
+        .filter((category) => !semanticDelta.categories.includes(category));
+      if (missingCategories.length) {
+        throw domain("patch_annotation_high_impact_uncovered", `Patch semantic delta does not cover high-impact annotation ${key}.`, { missing_categories: missingCategories });
+      }
+    }
+  }
+  for (const key of operationRefs.keys()) {
+    if (!entries.has(key)) throw usage("patch_annotation_reference_dangling", `Operation references an unresolved annotation: ${key}`);
+  }
+}
+
+function annotationKey(annotationSetId: string, annotationId: string): string {
+  return `${annotationSetId}:${annotationId}`;
+}
+
 function patchPlanSha256(snapshot: WorkspaceSnapshot, selector: string, operation: string, semantic: unknown): string {
   const reads = [
     "runs/current/artifact-registry.json",
@@ -714,6 +951,7 @@ function canonicalInputEqual(value: unknown, expected: CanonicalDraftPatch): boo
       resolved_at: resolvedAt,
       applied_artifact_id: appliedArtifactId,
       apply_report_artifact_id: applyReportArtifactId,
+      annotation_resolution_report_artifact_id: annotationResolutionReportArtifactId,
       apply_receipt_artifact_id: applyReceiptArtifactId,
       stale_receipt_path: staleReceiptPath,
       ...semantic
@@ -724,6 +962,7 @@ function canonicalInputEqual(value: unknown, expected: CanonicalDraftPatch): boo
     void resolvedAt;
     void appliedArtifactId;
     void applyReportArtifactId;
+    void annotationResolutionReportArtifactId;
     void applyReceiptArtifactId;
     void staleReceiptPath;
     return semantic;

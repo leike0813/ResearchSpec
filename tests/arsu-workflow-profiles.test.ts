@@ -36,6 +36,11 @@ void test("ARSU strict and adaptive projections cover the generated routing cata
   assert.equal(revisionRoute?.obligation_ids.some((id) => id.endsWith("--revision-patch")), false);
   const strictRevision = ARSU_V0_1_WORKFLOW.subflow_templates.find((item) => item.route_ref === "academic-paper:revision");
   assert.equal(strictRevision?.work_items.some((item) => item.output.artifact_type === "revision_patch"), false);
+  assert.equal(strictRevision?.work_items.some((item) => item.output.artifact_type === "annotation_resolution_report"), false);
+  const midEntry = ARSU_V0_1_WORKFLOW.subflow_templates.find((item) => item.route_ref === "academic-pipeline:mid-entry");
+  const annotatedRevision = midEntry?.transitions.find((item) => item.id === "enter-annotated-revision");
+  assert.deepEqual(annotatedRevision?.requires.artifact_types, ["paper_draft", "annotation_set"]);
+  assert.equal(annotatedRevision?.branch?.option_id, "annotated-revision");
   assert.equal(SoftPlaybookSchema.safeParse(ARSU_ADAPTIVE_PLAYBOOK).success, true);
 });
 

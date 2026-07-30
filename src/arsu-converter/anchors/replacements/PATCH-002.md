@@ -19,8 +19,16 @@ and per-block `old_hash` values.
 5. `new_text` contains no block markers because the apply helper owns fresh id
    assignment. Preserve the existing reference and locator marker discipline for
    every inserted citation.
-6. Every operation has non-empty `roadmap_item_ids` identifying the accepted
-   review concern or integrity finding it serves.
+6. Emit Draft Patch format v3. Every operation has a stable `operation_id` and
+   zero or more `{annotation_set_id, annotation_id}` references. These
+   references are the only Annotation-to-operation mapping; do not duplicate
+   the mapping in prose or another artifact.
+7. When an Annotation Set is in scope, include one
+   `annotation_resolution.entries` item for every Annotation in every related
+   set. `implemented` items require an operation reference;
+   `answered_without_text_change`, `deferred`, `rejected`, `unresolved`, and
+   `superseded` carry their required answer, reason, or successor evidence.
+   Keep `roadmap_item_ids` only when the route also supplies a Revision Roadmap.
 
 **Pre-drafting structural classification:** before emitting operations, identify
 roadmap items that require section split, merge, reorder, heading changes, or
@@ -38,6 +46,9 @@ returns control for a human choice.
 block ids, changed block ids, word-count delta, counters, and preservation ratio—
 belong to the apply report. Keep response text, status judgments, and decline
 rationales provisional until the orchestrator combines them with that report.
+For annotation-driven work, the CLI derives a separate immutable Annotation
+Resolution Report from the accepted v3 mapping after apply. The writer never
+authors or registers that report.
 
 **Integrity-correction rounds:** when the input is an integrity correction list,
 use each stable integrity issue id as operation traceability, emit no Schema 8

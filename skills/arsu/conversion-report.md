@@ -4,7 +4,7 @@
 - Source: `vendor/ars`
 - Source commit: `becfcc40c6e9e93c187cf4a088333f83373e002d`
 - Output: `skills/arsu`
-- Generated at: `2026-07-27T13:41:59Z`
+- Generated at: `2026-07-30T14:43:54Z`
 - Validation: pass
 
 ## Source Checkout

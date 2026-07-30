@@ -585,12 +585,13 @@
           "route_ref": "academic-paper:revision",
           "title": "Manuscript revision",
           "intents": [
-            "revise a draft against reviewer feedback"
+            "revise a draft against reviewer feedback or registered annotations"
           ],
           "primary_artifact_types": [
             "revision_patch",
             "revised_draft",
             "apply_report",
+            "annotation_resolution_report",
             "response_to_reviewers"
           ],
           "prerequisite_groups": [
@@ -642,6 +643,10 @@
                 {
                   "kind": "artifact",
                   "id": "revision_roadmap"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "annotation_set"
                 }
               ],
               "fallback_route_refs": [
@@ -991,7 +996,7 @@
           "route_ref": "academic-paper:revision-coach",
           "title": "Revision coaching",
           "intents": [
-            "parse reviewer comments and develop a revision strategy"
+            "parse reviewer comments or registered annotations and develop a revision strategy"
           ],
           "primary_artifact_types": [
             "revision_roadmap",
@@ -1018,6 +1023,10 @@
                 {
                   "kind": "artifact",
                   "id": "review_report"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "annotation_set"
                 }
               ],
               "fallback_route_refs": []
@@ -1277,7 +1286,7 @@
           "route_ref": "academic-paper-reviewer:re-review",
           "title": "Revision re-review",
           "intents": [
-            "verify whether a revised manuscript addresses prior review"
+            "verify whether a revised manuscript addresses prior review or annotations"
           ],
           "primary_artifact_types": [
             "verification_review_report",
@@ -1325,6 +1334,14 @@
                 {
                   "kind": "user_input",
                   "id": "reviewer_comments"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "annotation_set"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "annotation_resolution_report"
                 }
               ],
               "fallback_route_refs": []
@@ -1653,7 +1670,7 @@
           "route_ref": "academic-pipeline:mid-entry",
           "title": "Mid-entry or resume",
           "intents": [
-            "continue the pipeline from research materials, a draft, or review feedback"
+            "continue the pipeline from research materials, a draft, review feedback, or registered annotations"
           ],
           "primary_artifact_types": [
             "submission_package",
@@ -1714,6 +1731,10 @@
                 {
                   "kind": "artifact",
                   "id": "review_report"
+                },
+                {
+                  "kind": "artifact",
+                  "id": "annotation_set"
                 }
               ],
               "fallback_route_refs": [

@@ -372,12 +372,15 @@ Dedicated mode for Pipeline Stage 3'. Re-review verifies each first-round concer
 against the exact revised manuscript, response, and applied patch evidence
 resolved through `researchspec/runs/current/artifact-registry.json`. Read
 `researchspec/draft-patches/<patch-id>.json` and its apply report when manuscript
-changes were patch-applied; do not rely on a Material Passport-carried Schema 11
-copy as the sole traceability record.
+changes were patch-applied. When the patch resolves registered annotations,
+also read the CLI-derived Annotation Resolution Report and its referenced
+Annotation Sets. Do not rely on a Material Passport-carried Schema 11 copy as
+the sole traceability record.
 
 **Input:** original Revision Roadmap, registered revised-manuscript artifact,
 registered Response to Reviewers when present, relevant draft patch and apply
-report, and the prior review/commitment artifacts.
+report, optional Annotation Sets and Annotation Resolution Report, and the prior
+review/commitment artifacts.
 
 **Output:** an immutable Verification Review Report containing the traceability
 matrix, new issues, and decision. Return the report for runtime registration and

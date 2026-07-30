@@ -15,6 +15,7 @@ import { DraftPatchReceiptSchema } from "../contracts/draft-patch.js";
 import { ContractChangeDecisionReceiptSchema } from "../contracts/contract-change.js";
 import { resolveRegisteredArtifactPath, serializeRegisteredArtifactPath } from "./artifact-path.js";
 import { isPassingGateVerdict, resolveGateAuthority } from "./gate-authority.js";
+import { markdownBodyStart, parseAnchoredBlocks, splitMarkdownBlocks } from "./markdown-blocks.js";
 
 export type DecisionChoice = DecisionInput["decision"];
 
@@ -467,7 +468,7 @@ export function applyDraftOperations(text: string, operations: Record<string, un
     if (blockId === "DOC-BODY-START") {
       if (op !== "insert_after" || string(operation.old_hash)) throw new Error("DOC-BODY-START is only valid for hash-less insert_after.");
       const replacement = anchorize(newText, undefined);
-      edits.push({ start: blocks[0]?.markerStart ?? bodyStart(text), end: blocks[0]?.markerStart ?? bodyStart(text), replacement: `${replacement}\n\n`, order });
+      edits.push({ start: blocks[0]?.markerStart ?? markdownBodyStart(text), end: blocks[0]?.markerStart ?? markdownBodyStart(text), replacement: `${replacement}\n\n`, order });
       continue;
     }
 
@@ -490,56 +491,6 @@ export function applyDraftOperations(text: string, operations: Record<string, un
       return `<!--block:${id}-->\n${content}`;
     }).join("\n\n");
   }
-}
-
-interface AnchoredBlock { id: string; markerStart: number; end: number; content: string; hash: string }
-
-function parseAnchoredBlocks(text: string): AnchoredBlock[] {
-  const marker = /^<!--block:([A-Za-z0-9][A-Za-z0-9._-]*)-->[ \t]*(?:\r?\n|$)/gm;
-  const matches = [...text.matchAll(marker)];
-  const markerOccurrences = text.match(/<!--\s*block:/gi)?.length ?? 0;
-  if (matches.length !== markerOccurrences) throw new Error("Draft contains a malformed or non-standalone block marker.");
-  if (!matches.length) throw new Error("Draft has no ResearchSpec block markers.");
-  const ids = new Set<string>();
-  return matches.map((match, index) => {
-    const id = match[1];
-    if (ids.has(id)) throw new Error(`Draft contains duplicate block marker: ${id}`);
-    ids.add(id);
-    const markerStart = match.index;
-    const contentStart = markerStart + match[0].length;
-    const end = matches[index + 1]?.index ?? text.length;
-    const content = text.slice(contentStart, end);
-    return { id, markerStart, end, content, hash: sha256(normalizeBlock(content)).slice(0, 12) };
-  });
-}
-
-function splitMarkdownBlocks(value: string): string[] {
-  const normalized = value.replaceAll("\r\n", "\n").trim();
-  if (!normalized) throw new Error("Inserted draft text is empty.");
-  const lines = normalized.split("\n");
-  const blocks: string[] = [];
-  let current: string[] = [];
-  let fence: string | undefined;
-  const flush = () => { if (current.length) { blocks.push(current.join("\n").trim()); current = []; } };
-  for (const line of lines) {
-    const fenceMatch = /^\s*(```+|~~~+)/.exec(line);
-    if (fenceMatch) fence = fence ? undefined : fenceMatch[1][0];
-    if (!fence && /^(?: {0,3}(?:=+|-+)\s*$|<[^!][^>]*>\s*$|\[\^[^\]]+\]:)/.test(line)) throw new Error("Inserted text contains an unsupported ambiguous Markdown block shape.");
-    if (!fence && !line.trim()) { flush(); continue; }
-    if (!fence && /^#{1,6}\s+/.test(line)) { flush(); current.push(line); flush(); continue; }
-    current.push(line);
-  }
-  if (fence) throw new Error("Inserted text contains an unclosed code fence.");
-  flush();
-  return blocks;
-}
-
-function normalizeBlock(value: string): string { return value.replaceAll("\r\n", "\n").replace(/^\n+|\n+$/g, ""); }
-
-function bodyStart(text: string): number {
-  if (!text.startsWith("---")) return 0;
-  const end = text.indexOf("\n---", 3);
-  return end === -1 ? 0 : text.indexOf("\n", end + 4) + 1;
 }
 
 function record(value: unknown): Record<string, unknown> { return value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : {}; }

@@ -35,6 +35,7 @@ A valid selector shape does not imply that the action is available in the curren
 | `gate` | `gate:<id>`<br>`gate:sf-<instance>/<id>` |
 | `completion` | `completion:sf-<instance>/<id>` |
 | `case-action` | `case-action:<id>` |
+| `annotation` | `annotation:<id>` |
 | `patch` | `patch:<id>` |
 | `change` | `change:<id>` |
 | `work` | `work:sf-<instance>/<node>` |
@@ -107,7 +108,7 @@ Atomically start a confirmed template or delegated child subflow
 
 ### `researchspec submit <runtime-item>`
 
-Submit a runtime candidate, attempt, evidence, resolution, patch, or confirmed Gate verdict
+Submit a runtime candidate, attempt, evidence, annotation, patch, or confirmed Gate verdict
 
 - Workspace: `required`
 - Static effect: `write`
@@ -115,7 +116,7 @@ Submit a runtime candidate, attempt, evidence, resolution, patch, or confirmed G
 
 | Command option | Required | Purpose |
 | --- | --- | --- |
-| `--input <payload.json>` | yes | strict semantic submission JSON |
+| `--input <payload.json>` | no | strict semantic submission JSON; omitted for annotation:<id> |
 | `--actor-kind <kind>` | yes | human, agent, script, converter, or validator |
 | `--actor-name <name>` | yes | artifact producer name |
 | `--confirmed-by <name>` | no | human who confirmed a Gate verdict |

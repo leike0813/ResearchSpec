@@ -268,7 +268,7 @@ export function buildAnchorReplacementReport(plan: AnchorReplacementPlan | null)
     }
   }
 
-  return `${lines.join("\n")}\n`;
+  return `${lines.join("\n").trimEnd()}\n`;
 }
 
 export function normalizeManifest(manifest: ConversionManifest): unknown {

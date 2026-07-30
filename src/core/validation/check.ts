@@ -24,6 +24,7 @@ import {
   startReceiptMatchesAuthority,
   transitionReceiptMatchesAuthority,
 } from "../runtime/runtime-receipt-integrity.js";
+import { verifyAnnotationCoverage } from "../runtime/annotation-coverage.js";
 
 export type { CheckResult, CheckTarget, Diagnostic } from "./types.js";
 
@@ -40,6 +41,15 @@ export async function runWorkspaceChecks(workspace: string, target: CheckTarget 
 
   if (target === "all" || target === "artifacts") {
     for (const inspection of await inspectArtifacts(snapshot)) diagnostics.push(...inspection.diagnostics);
+    const coverage = await verifyAnnotationCoverage(snapshot);
+    diagnostics.push(...coverage.findings.map((finding): Diagnostic => ({
+      severity: "error",
+      code: finding.code,
+      message: finding.message,
+      ...(finding.path ? { path: finding.path } : {}),
+      ...(finding.details === undefined ? {} : { details: finding.details }),
+      blocking: true,
+    })));
   }
 
   if (target === "all" || target === "runtime") diagnostics.push(...await inspectSubflowStartReceipts(snapshot), ...await inspectGateTransitionReceipts(snapshot), ...await inspectAdaptiveReceipts(snapshot));

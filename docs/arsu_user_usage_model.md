@@ -121,7 +121,7 @@ ARSU Skill 与 command wrapper descriptions 已从该 catalog 投影。后续
 | --- | --- | --- | --- |
 | `full` | 从材料形成完整稿件 | Configuration、Outline、Evidence Map、Argument Blueprint、Draft、submission package | 稿件与引用 Gate |
 | `outline-only` | 只规划论文结构和证据布局 | Outline、Evidence Map | 结构是高影响选择时进入 Decision |
-| `revision` | 根据审稿意见实施修改 | Revision Patch、Revised Draft、Apply Report、Response to Reviewers | 修改完整性与 re-review Gate |
+| `revision` | 根据审稿意见或已注册稿件批注实施修改 | Revision Patch、Revised Draft、Apply Report、Annotation Resolution Report、Response to Reviewers | 修改完整性与 re-review Gate |
 | `abstract-only` | 为既有稿件生成摘要与关键词 | Abstract、Keywords | 通常 deterministic/advisory |
 | `lit-review` | 形成论文中的文献综述材料或章节 | Annotated Bibliography、Literature Matrix、Synthesis/section draft | 稿件语义 Gate |
 | `format-convert` | 不改变语义地转换交付格式 | DOCX/LaTeX/PDF/Markdown 等 | deterministic format check |
@@ -149,7 +149,7 @@ ARSU Skill 与 command wrapper descriptions 已从该 catalog 投影。后续
 | 使用方式 | 入口 | 行为 |
 | --- | --- | --- |
 | End-to-end | 从研究目标或种子材料启动 | adaptive 创建 durable-output obligations；strict compatibility 才创建 pipeline parent graph 并调度 child |
-| Mid-entry / resume | 从已有稿件、审稿意见或 active run 恢复 | Navigate 识别现有 artifacts/state；ARS Material Passport 仅能在 strict compatibility workspace 中作为 hash-bound 非权威导入 |
+| Mid-entry / resume | 从已有稿件、审稿意见、已注册 Annotation Set 或 active run 恢复 | Navigate 识别现有 artifacts/state；strict 可进入既有 revision round，adaptive 把实际选中的 Annotation Set 绑定到 start receipt；ARS Material Passport 仅能在 strict compatibility workspace 中作为 hash-bound 非权威导入 |
 
 ## 5. 统一运行协议
 
@@ -172,6 +172,7 @@ status
 | `gate:<id>` | validator、evidence、risk、proposed verdict、确认要求 | `researchspec-verify` 组织审查，再 `submit gate:` |
 | `completion:<id>` | 已满足 obligations 的完成条件 | `advance completion:` |
 | `case-action:<id>` | waiver/not-applicable 等明确 resolution | `decide` |
+| `annotation:<id>` | 固定 candidate、base/target 校验、确认与注册状态 | `submit` 冻结 Annotation Set；非交互需 action basis、`--confirmed-by` 与 `--yes` |
 
 Schema `0.2` strict compatibility 使用 `subflow:`、scoped child、`work:`、`gate:` 和 `transition:`。它保留模板、DAG、parallel/join、pipeline child、Material Passport import 与 revision round，但不是新 workspace 的默认指令。
 
@@ -195,6 +196,13 @@ flowchart LR
 ```
 
 CLI 是这套循环的状态权威。Companion 和 ARSU Skill 可以选择、解释、循环，但不能复制 graph、猜路径或直接写 state/registry/ledger。
+
+Annotation Set 也是 CLI 管理的全局 selector，但不进入 workflow state。Agent 只能在
+`instructions annotation:<id>` 返回的
+`runs/current/annotation-sessions/<id>/candidate.json` 写入规范化 JSON candidate。CLI
+验证已注册 Markdown 稿件、完整 base/block hash、quote 唯一性、clarification 与
+supersedes 后，create-only 冻结 set、先写 receipt、再刷新 registry。`status` 只给出
+`list:annotations` 定向入口，不展开批注正文。
 
 每个 Action v2 descriptor 都从 `execution_policy` 派生
 `execution_requirements`。`plan_bound` Gate、Decision 与 patch apply 在 TTY 中先展示同一
@@ -350,6 +358,13 @@ stateDiagram-v2
 - 独立 work、Gate 和 transition records。
 
 workflow 可以通过 policy 限制最大 round、预算或人工审批，但 runtime 不把固定轮数硬编码进 core。
+
+已有注册稿件与 Annotation Set 可通过 strict 的
+`enter-annotated-revision` mid-entry 进入同一个 revision round；不会新建 annotation
+stage。Patch v3 用稳定 operation ID 和 Annotation 引用保存唯一映射。成功 apply 后，CLI
+从该映射派生 Annotation Resolution Report。`revision_completeness` 在允许 `pass` 或
+`pass_with_conditions` 前机械核验 set、patch、apply report、resolution report 与 hashes，
+但 reviewer、Verify 和用户仍负责判断回应是否充分。
 
 ## 10. Pause、Resume、Explain 与 Export
 

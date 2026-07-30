@@ -95,6 +95,39 @@ export function buildAdaptiveInstructions(snapshot: WorkspaceSnapshot, selector:
     const item = snapshot.items.find((candidate) => candidate.selector === selector);
     return { kind: action?.kind === "patch" ? "draft_patch_case_action" : "contract_change_case_action", selector, case_action: action ?? null, item: item?.value ?? null };
   }
+  if (selector.startsWith("gate:sf-")) {
+    const [, body = ""] = selector.split(":", 2);
+    const [instanceId = ""] = body.split("/", 2);
+    const obligationIds = new Set(instanceObligations(snapshot, instanceId).map((item) => item.obligation_id));
+    const acceptedEvidence = state.accepted_evidence
+      .filter((item) => obligationIds.has(item.obligation_id))
+      .map((item) => ({
+        kind: "artifact",
+        artifact_id: item.artifact_id,
+        sha256: item.sha256,
+      }));
+    const resolutionEvidence = snapshot.artifacts
+      .filter((artifact) => {
+        if (
+          artifact.artifact_type !== "annotation_resolution_report"
+          || typeof artifact.artifact_id !== "string"
+          || typeof artifact.sha256 !== "string"
+          || typeof artifact.patch_id !== "string"
+        ) return false;
+        const patch = snapshot.patches.find((item) => item.id === artifact.patch_id);
+        return record(patch?.value).subflow_instance_id === instanceId;
+      })
+      .map((artifact) => ({
+        kind: "artifact",
+        artifact_id: String(artifact.artifact_id),
+        sha256: String(artifact.sha256),
+      }));
+    return {
+      kind: "adaptive_gate",
+      selector,
+      evidence: [...acceptedEvidence, ...resolutionEvidence],
+    };
+  }
   return { kind: "adaptive_gate", selector };
 }
 
@@ -256,6 +289,12 @@ function rawAdaptiveAvailability(snapshot: WorkspaceSnapshot, selector: string):
   return undefined;
 }
 
+function record(value: unknown): Record<string, unknown> {
+  return value && typeof value === "object" && !Array.isArray(value)
+    ? value as Record<string, unknown>
+    : {};
+}
+
 function recommendedSelector(snapshot: WorkspaceSnapshot): string | undefined {
   const candidates = adaptiveActionCandidates(snapshot);
   const active = candidates.filter((item) => item.startsWith("obligation:") || item.startsWith("gate:") || item.startsWith("completion:") || item.startsWith("case-action:") || item.startsWith("patch:") || item.startsWith("change:"));
@@ -287,10 +326,6 @@ function highImpactPatchIsBlocked(snapshot: WorkspaceSnapshot, selector: string)
   if (!changeId) return false;
   const change = snapshot.changes.find((item) => item.id === changeId);
   return !change || string(record(change.value).status) !== "applied";
-}
-
-function record(value: unknown): Record<string, unknown> {
-  return value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : {};
 }
 
 function string(value: unknown): string | undefined {

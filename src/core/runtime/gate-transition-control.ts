@@ -14,6 +14,8 @@ import type { WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { loadWorkspaceSnapshot } from "../workspace/snapshot.js";
 import { executeWritePlan, planFile, sha256, type WritePlan } from "../workspace/write-plan.js";
 import { buildGateTransitionInstructions, evaluateWorkflowControl, inspectArtifact, type WorkflowControlResult } from "./workflow-control.js";
+import { boundAnnotationSetIds, verifyAnnotationCoverage } from "./annotation-coverage.js";
+import { isPassingGateVerdict } from "./gate-authority.js";
 
 export class GateTransitionError extends Error {
   constructor(public readonly code: string, message: string, public readonly kind: "usage" | "domain" | "conflict", public readonly details?: unknown) { super(message); }
@@ -68,6 +70,25 @@ export async function planGateSubmit(input: { snapshot: WorkspaceSnapshot; selec
   const gate = template?.gates.find((item) => item.id === parsed.id);
   if (!gate) throw new GateTransitionError("gate_not_found", `Gate is not declared: ${input.selector}`, "domain");
   await validateGateEvidence(snapshot, gate.validator.evidence, payload.data.evidence);
+  if ((gate.gate_type === "revision_completeness" || parsed.id === "revision_completeness")
+    && isPassingGateVerdict(payload.data.verdict)) {
+    const requiredAnnotationSetIds = await boundAnnotationSetIds(snapshot, parsed.instanceId);
+    const coverage = await verifyAnnotationCoverage(snapshot, {
+      evidenceArtifactIds: payload.data.evidence
+        .filter((item) => item.kind === "artifact")
+        .map((item) => item.artifact_id),
+      requiredAnnotationSetIds,
+    });
+    if (!coverage.complete) {
+      const finding = coverage.findings[0];
+      throw new GateTransitionError(
+        finding?.code ?? "annotation_coverage_incomplete",
+        finding?.message ?? "Annotation coverage is incomplete.",
+        "domain",
+        coverage,
+      );
+    }
+  }
   const latest = [...snapshot.gates].reverse().find((event) => event.gate_id === `${instanceId}/${parsed.id}`);
   if (payload.data.supersedes_event_id && latest?.event_id !== payload.data.supersedes_event_id) throw new GateTransitionError("gate_submit_conflict", "Reverification does not supersede the latest Gate event.", "conflict");
 

@@ -18,6 +18,7 @@ import {
   DraftPatchSubmitInputSchema,
 } from "./draft-patch.js";
 import { ProposalInputSchema } from "./contract-change.js";
+import { AnnotationSubmitInputSchema } from "./annotation.js";
 import {
   SubflowStartDerivedInputSchema,
   SubflowStartInputSchema,
@@ -195,6 +196,16 @@ export const ACTION_SCHEMA_REGISTRY = {
     canonical_validator: DraftPatchSubmitInputSchema,
     constraints: ["A patch is the sole authority for its text modification; high-impact deltas require a linked contract change."],
     execution_policy: "direct",
+  },
+  submit_annotation: {
+    kind: "input",
+    command: "submit",
+    schema_ref: "researchspec://actions/submit-annotation/v1",
+    semantic_validator: AnnotationSubmitInputSchema,
+    derived_validator: EmptyDerivedInputSchema,
+    canonical_validator: AnnotationSubmitInputSchema,
+    constraints: ["The candidate path, base draft, target hashes, frozen set, receipt, and registry records are CLI-derived and create-only."],
+    execution_policy: "human_confirmed",
   },
   advance: {
     kind: "no-input",

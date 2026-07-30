@@ -72,7 +72,7 @@ void test("contextual help skips catalog option values and selects the longest c
 });
 
 void test("selector discovery examples are accepted and the handbook is deterministic", async () => {
-  assert.equal(new Set(ACTION_SELECTOR_FAMILY_DISPLAYS.map((family) => family.id)).size, 9);
+  assert.equal(new Set(ACTION_SELECTOR_FAMILY_DISPLAYS.map((family) => family.id)).size, 10);
   for (const family of ACTION_SELECTOR_FAMILY_DISPLAYS) {
     assert.ok(family.patterns.length > 0, family.id);
     for (const example of family.examples) {

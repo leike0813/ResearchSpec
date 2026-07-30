@@ -25,6 +25,7 @@ help。静态资料不声明当前 action availability，也不替代 `status` �
 | Inspection and recovery | `check`、`doctor`、`list`、`show` | 校验、诊断、预览确定性修复和查看权威对象 |
 | Context | `handoff`、`pack` | 生成可移交的派生上下文 |
 | Governance | `propose`、`decide`、`archive` | 处理高影响 contract change、case resolution 与 draft patch lifecycle |
+| Manuscript annotation | `instructions annotation:<id>`、`submit annotation:<id>`、`list annotations`、`show annotation:<id>` | 校验并冻结注册稿件上的确定性 Annotation Set |
 | Domain Skills | `plugin` | 检查、安装、更新或卸载已审查的可选 domain Skill |
 
 `doctor` 不自行选择修复：默认只读；只有唯一可推导的控制面事实才会给出 repair plan。它按 `healthy`、`retry_existing_transaction`、`deterministically_repairable`、`requires_human_reconstruction` 或 `conflicting_evidence` 分类。repair 是 `plan_bound`：preview 绑定读哈希和 postcondition，执行需匹配 plan hash，先写 repair receipt、再替换 authority 并 post-check；已存在 receipt 的中断事务只能精确 retry。
@@ -50,7 +51,9 @@ action basis、plan hash 和所需确认执行。`--yes` 不能代替 formal Gat
 
 ## 3. Patch、change、resume 与外部材料
 
-高影响 contract change 通过 `propose` 创建 pending proposal，再由 `decide` 接受、拒绝或 postpone；`archive` 只归档已有可信 resolution 的 change 或 draft patch。`revision_patch` 是 draft-patch lifecycle 的可审阅输入：它绑定 base artifact/hash，由 CLI 的 patch transaction 形成 revised output、apply report 与 receipt，ARSU producer 不直接覆盖原稿。
+高影响 contract change 通过 `propose` 创建 pending proposal，再由 `decide` 接受、拒绝或 postpone；`archive` 只归档已有可信 resolution 的 change 或 draft patch。`annotation:<id>` 使用 `human_confirmed` descriptor；非交互提交需匹配 action basis、`--confirmed-by` 与 `--yes`，但不需要 plan hash。它把规范化 candidate 绑定到已注册 Markdown 稿件和完整 target hashes，按 frozen set、receipt、registry 的顺序提交并支持精确恢复。
+
+`revision_patch` 是 draft-patch lifecycle 的可审阅输入：它绑定 base artifact/hash，由 CLI 的 patch transaction 形成 revised output、apply report 与 receipt，ARSU producer 不直接覆盖原稿。Patch v3 以 operation 上的 Annotation 引用作为唯一映射，并在成功 apply 后派生、注册 Annotation Resolution Report。stale 或 rejected patch 不产生报告。`revision_completeness` 与 `check artifacts` 复用同一机械覆盖验证器；机械完整不等于 reviewer 或用户认可回应充分。
 
 新会话从 `status` 恢复，再读取当前 selector 的 instructions。写入成功后优先跟随结果的 `next_selectors` 取得所需细节，而非无条件重读完整 status。`handoff` 和 `pack` 是派生视图，不覆盖 authority state。Zotero 与插件只提供有界辅助材料；其不可用不会让 Agent 编造私有 library、证据、Gate 或下一动作。
 

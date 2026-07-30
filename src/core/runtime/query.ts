@@ -29,7 +29,7 @@ import {
 } from "./adaptive-case-control.js";
 import { isPassingGateVerdict, resolveGateAuthority } from "./gate-authority.js";
 
-export type ListType = "changes" | "artifacts" | "gates" | "decisions" | "tools" | "actions" | "history" | "case-actions" | "diagnostics";
+export type ListType = "changes" | "artifacts" | "annotations" | "gates" | "decisions" | "tools" | "actions" | "history" | "case-actions" | "diagnostics";
 
 export async function buildStatus(snapshot: WorkspaceSnapshot, plugins?: PluginStatusSummary, literatureAdapters: LiteratureAdapterInspection[] = []) {
   const latestDecisions = latestById(snapshot.decisions.filter((item) => item.authority !== "imported_evidence"), "decision_id");
@@ -66,6 +66,7 @@ export function listItems(snapshot: WorkspaceSnapshot, type: ListType): IndexedI
   switch (type) {
     case "changes": return [...snapshot.changes, ...snapshot.patches];
     case "artifacts": return snapshot.items.filter((item) => item.type === "artifact");
+    case "annotations": return snapshot.annotations;
     case "gates": return snapshot.items.filter((item) => item.type === "gate");
     case "decisions": return snapshot.items.filter((item) => item.type === "decision");
     case "tools": return snapshot.items.filter((item) => item.type === "tool");
@@ -117,6 +118,7 @@ export async function buildCaseStatusSummary(
     directedListSelector("actions"),
     directedListSelector("history"),
     directedListSelector("artifacts"),
+    directedListSelector("annotations"),
     directedListSelector("case-actions"),
     directedListSelector("diagnostics"),
     ...recommended.map((item) => directedInstructionsSelector(item.selector)),
@@ -215,6 +217,7 @@ async function buildAdaptiveCaseStatusSummary(
       directedShowSelector("workflow:current"),
       directedListSelector("actions"),
       directedListSelector("history"),
+      directedListSelector("annotations"),
       directedListSelector("case-actions"),
       ...recommended.map((item) => directedInstructionsSelector(item.selector)),
       ...allowed.map((item) => directedInstructionsSelector(item.selector)),

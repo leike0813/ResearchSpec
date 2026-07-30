@@ -659,8 +659,6 @@ requirements.
 - **AND** no `cli:<command>` selector or additional public command SHALL be
   introduced
 
-## ADDED Requirements
-
 ### Requirement: Policy-derived execution requirements
 Action Descriptor v2 SHALL expose `execution_requirements` derived from its catalog-owned `execution_policy`, and every `plan_bound` CLI execution SHALL enforce the same preview, basis, plan-hash, and confirmation contract.
 
@@ -682,3 +680,32 @@ The CLI SHALL parse contextual help targets by skipping recognized option values
 #### Scenario: Plugin subcommand help
 - **WHEN** the positional path identifies a registered plugin subcommand
 - **THEN** the usage hint SHALL target that longest registered command path
+
+### Requirement: Annotation Selector Command Integration
+
+ResearchSpec SHALL support canonical `annotation:<safe-id>` selectors through
+the existing `instructions`, `submit`, and `show` commands, and SHALL support
+`list annotations`, without adding a top-level command.
+
+#### Scenario: Annotation action is discovered
+
+- **WHEN** a normalized candidate session exists or a frozen Annotation Set is
+  registered
+- **THEN** status SHALL expose only the bounded `list:annotations` discovery
+  entry
+- **AND** instructions and show SHALL resolve current annotation metadata
+  without embedding annotation bodies in status
+
+#### Scenario: Non-interactive annotation submit is confirmed
+
+- **WHEN** an Agent submits `annotation:<id>` outside a TTY
+- **THEN** it SHALL provide the current action basis, `--confirmed-by`, and
+  `--yes`
+- **AND** it SHALL not require a plan hash
+
+#### Scenario: Annotation command fails
+
+- **WHEN** selector syntax, confirmation, candidate content, target evidence, or
+  retry state is invalid
+- **THEN** the CLI SHALL return the stable usage, domain, or write-conflict exit
+  class and one parseable JSON failure envelope in JSON mode

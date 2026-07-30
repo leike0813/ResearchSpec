@@ -1,17 +1,39 @@
 import { z } from "zod";
 
 import { Sha256Schema, SubmitActorSchema } from "./artifact.js";
+import {
+  AnnotationReferenceSchema,
+  AnnotationResolutionSchema,
+} from "./annotation.js";
 import { CaseSafeIdSchema } from "./case-state.js";
 
 const UniqueIdsSchema = z.array(CaseSafeIdSchema)
   .refine((values) => new Set(values).size === values.length, "IDs must be unique.");
 
-export const DraftPatchOperationSchema = z.strictObject({
+const DraftPatchOperationCoreSchema = {
   op: z.enum(["replace_block", "insert_after", "delete_block"]),
   block_id: z.string().trim().min(1),
   old_hash: z.string().regex(/^[a-f0-9]{12,64}$/).optional(),
   new_text: z.string().optional(),
+} as const;
+
+export const DraftPatchSemanticOperationSchema = z.strictObject({
+  ...DraftPatchOperationCoreSchema,
+  operation_id: CaseSafeIdSchema.optional(),
+  annotation_refs: z.array(AnnotationReferenceSchema).optional(),
 });
+
+export const DraftPatchOperationSchema = z.strictObject({
+  ...DraftPatchOperationCoreSchema,
+  operation_id: CaseSafeIdSchema,
+  annotation_refs: z.array(AnnotationReferenceSchema)
+    .refine((values) => {
+      const keys = values.map((item) => `${item.annotation_set_id}:${item.annotation_id}`);
+      return new Set(keys).size === keys.length;
+    }, "Annotation references on an operation must be unique."),
+});
+
+const DraftPatchV2OperationSchema = z.strictObject(DraftPatchOperationCoreSchema);
 
 export const DraftPatchSemanticDeltaSchema = z.discriminatedUnion("level", [
   z.strictObject({ level: z.literal("none") }),
@@ -38,15 +60,18 @@ export const DraftPatchSemanticInputSchema = z.strictObject({
   obligation_scope: UniqueIdsSchema,
   evidence_artifact_ids: UniqueIdsSchema,
   semantic_delta: DraftPatchSemanticDeltaSchema,
-  ops: z.array(DraftPatchOperationSchema).min(1),
+  ops: z.array(DraftPatchSemanticOperationSchema).min(1),
+  annotation_resolution: AnnotationResolutionSchema.optional(),
 });
 
 export const DraftPatchDerivedInputSchema = z.strictObject({
-  patch_format_version: z.literal("2"),
+  patch_format_version: z.literal("3"),
 });
 
-export const DraftPatchSubmitInputSchema = DraftPatchSemanticInputSchema.extend({
+export const DraftPatchSubmitInputSchema = DraftPatchSemanticInputSchema.omit({ ops: true }).extend({
   ...DraftPatchDerivedInputSchema.shape,
+  ops: z.array(DraftPatchOperationSchema).min(1)
+    .refine((values) => new Set(values.map((item) => item.operation_id)).size === values.length, "Operation IDs must be unique."),
 });
 
 export const DraftPatchStatusSchema = z.enum([
@@ -63,6 +88,31 @@ export const CanonicalDraftPatchSchema = DraftPatchSubmitInputSchema.extend({
   patch_id: CaseSafeIdSchema,
   status: DraftPatchStatusSchema,
   emitted_by: SubmitActorSchema,
+  created_at: z.iso.datetime(),
+  decision_id: CaseSafeIdSchema.optional(),
+  resolved_at: z.iso.datetime().optional(),
+  applied_artifact_id: CaseSafeIdSchema.optional(),
+  apply_report_artifact_id: CaseSafeIdSchema.optional(),
+  annotation_resolution_report_artifact_id: CaseSafeIdSchema.optional(),
+  apply_receipt_artifact_id: CaseSafeIdSchema.optional(),
+  stale_receipt_path: z.string().min(1).optional(),
+});
+
+export const CanonicalDraftPatchV2Schema = z.strictObject({
+  patch_format_version: z.literal("2"),
+  patch_id: CaseSafeIdSchema,
+  revision_round: z.number().int().nonnegative(),
+  status: DraftPatchStatusSchema,
+  base_artifact_id: CaseSafeIdSchema,
+  base_sha256: Sha256Schema,
+  emitted_by: SubmitActorSchema,
+  producer_skill: CaseSafeIdSchema,
+  producer_mode: CaseSafeIdSchema.nullable().optional(),
+  subflow_instance_id: z.string().regex(/^sf-[A-Za-z0-9][A-Za-z0-9._-]*$/).nullable(),
+  obligation_scope: UniqueIdsSchema,
+  evidence_artifact_ids: UniqueIdsSchema,
+  semantic_delta: DraftPatchSemanticDeltaSchema,
+  ops: z.array(DraftPatchV2OperationSchema).min(1),
   created_at: z.iso.datetime(),
   decision_id: CaseSafeIdSchema.optional(),
   resolved_at: z.iso.datetime().optional(),
@@ -90,6 +140,7 @@ export const LegacyDraftPatchSchema = z.looseObject({
 
 export const StoredDraftPatchSchema = z.union([
   CanonicalDraftPatchSchema,
+  CanonicalDraftPatchV2Schema,
   LegacyDraftPatchSchema,
 ]);
 
@@ -125,6 +176,7 @@ export const DraftPatchApplyReportSchema = z.strictObject({
   evidence_artifact_ids: UniqueIdsSchema,
   semantic_delta: DraftPatchSemanticDeltaSchema,
   decision_id: CaseSafeIdSchema,
+  annotation_resolution_report_artifact_id: CaseSafeIdSchema.optional(),
   applied_at: z.iso.datetime(),
 });
 

@@ -23,6 +23,7 @@ import { latestById, type WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { sha256 } from "../workspace/write-plan.js";
 import { isPathContained, resolveRegisteredArtifactPath } from "./artifact-path.js";
 import { buildRuntimeContext } from "./runtime-context.js";
+import { boundAnnotationSetIds } from "./annotation-coverage.js";
 
 export type WorkItemState = "done" | "ready" | "blocked";
 
@@ -660,8 +661,19 @@ export async function buildGateTransitionInstructions(snapshot: WorkspaceSnapsho
     const artifactEvidence: Array<Record<string, unknown>> = gate.validator.evidence.artifact_types.flatMap((artifactType) => snapshot.artifacts
       .filter((artifact) => artifact.artifact_type === artifactType && typeof artifact.artifact_id === "string" && typeof artifact.sha256 === "string")
       .map((artifact) => ({ kind: "artifact", artifact_id: artifact.artifact_id, sha256: artifact.sha256 })));
+    const annotationSetIds = gate.gate_type === "revision_completeness"
+      ? await boundAnnotationSetIds(snapshot, status.subflow_instance_id)
+      : [];
+    const annotationEvidence: Array<Record<string, unknown>> = annotationSetIds.length
+      ? snapshot.artifacts
+          .filter((artifact) =>
+            artifact.artifact_type === "annotation_resolution_report"
+            && typeof artifact.artifact_id === "string"
+            && typeof artifact.sha256 === "string")
+          .map((artifact) => ({ kind: "artifact", artifact_id: artifact.artifact_id, sha256: artifact.sha256 }))
+      : [];
     const contractEvidence: Array<Record<string, unknown>> = gate.validator.evidence.contracts.map((contractPath) => ({ kind: "contract", path: contractPath, sha256: snapshot.files.get(contractPath)?.hash ?? "" })).filter((item) => item.sha256);
-    const evidence = [...artifactEvidence, ...contractEvidence];
+    const evidence = [...artifactEvidence, ...annotationEvidence, ...contractEvidence];
     const runtimeContext = buildRuntimeContext(snapshot, status.subflow_instance_id);
     const instructionBasis = runtimeInstructionBasis(snapshot, selector, { gate, status, evidence, runtimeContext });
     return { ok: true, packet: {

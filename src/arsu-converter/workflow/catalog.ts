@@ -48,7 +48,8 @@ function obligationId(routeRef: string, artifactType: string): string { return `
 function completionCriterionId(routeRef: string): string { return `${slug(routeRef)}--complete`; }
 function runtimeArtifactTypes(route: ArsuRouteDefinition): string[] {
   return route.route_ref === "academic-paper:revision"
-    ? route.primary_artifact_types.filter((artifactType) => artifactType !== "revision_patch")
+    ? route.primary_artifact_types.filter((artifactType) =>
+      artifactType !== "revision_patch" && artifactType !== "annotation_resolution_report")
     : route.primary_artifact_types;
 }
 
@@ -147,6 +148,7 @@ function pipelineTransitions(includeEntry: boolean): TransitionTemplateDefinitio
     { id: "enter-write", from_stage_id: "entry", effects: [{ kind: "activate_stage", stage_id: "write" }], requires: { gate_ids: [], decision_types: ["workflow_branch"], artifact_types: ["synthesis_report"] }, branch: { decision_point_id: "pipeline-entry", option_id: "write" } },
     { id: "enter-pre-review", from_stage_id: "entry", effects: [{ kind: "activate_stage", stage_id: "pre-review" }], requires: { gate_ids: [], decision_types: ["workflow_branch"], artifact_types: ["paper_draft"] }, branch: { decision_point_id: "pipeline-entry", option_id: "pre-review" } },
     { id: "enter-revision", from_stage_id: "entry", effects: [{ kind: "activate_stage", stage_id: "revision" }], requires: { gate_ids: [], decision_types: ["workflow_branch"], artifact_types: ["review_report"] }, branch: { decision_point_id: "pipeline-entry", option_id: "revision" } },
+    { id: "enter-annotated-revision", from_stage_id: "entry", effects: [{ kind: "activate_stage", stage_id: "revision" }], requires: { gate_ids: [], decision_types: ["workflow_branch"], artifact_types: ["paper_draft", "annotation_set"] }, branch: { decision_point_id: "pipeline-entry", option_id: "annotated-revision" } },
   );
   return transitions;
 }

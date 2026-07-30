@@ -114,11 +114,11 @@ verifiers are optional diagnostics, not the source of authority.
 - Severity: `required`
 - Semantic role: `draft_patch_protocol`
 - Replacement shape: `patch_protocol_block`
-- Replacement body SHA-256: `648672343f1ccdc3b4ef890eb46219091e0fddfded6e3590264f10cb96072448`
+- Replacement body SHA-256: `8e7abc5c34a4f917025283d3789d51693e161ebf4ac664437a33135480cbc67d`
 - ResearchSpec targets: `researchspec/draft-patches/<patch-id>.json`, `researchspec/runs/current/artifact-registry.json`
 - Generated output paths: `academic-paper/agents/draft_writer_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `academic-pipeline/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `deep-research/references/cross-skill/academic-paper/agents/draft_writer_agent.md`
 - Before SHA-256: `303cf33ae73e69553a6cc6b2da370857fe0640a3a418fd7648e018d9cff493fd`
-- After SHA-256: `85813356c216eddd3aa328e65f2f2cc0b17014675cc6957ce53ae5f703d02916`
+- After SHA-256: `bcf35adcab3765b390c2447dfbe72efdc7c32a69d408a96348371f67732a746d`
 
 #### Before
 
@@ -176,8 +176,16 @@ and per-block `old_hash` values.
 5. `new_text` contains no block markers because the apply helper owns fresh id
    assignment. Preserve the existing reference and locator marker discipline for
    every inserted citation.
-6. Every operation has non-empty `roadmap_item_ids` identifying the accepted
-   review concern or integrity finding it serves.
+6. Emit Draft Patch format v3. Every operation has a stable `operation_id` and
+   zero or more `{annotation_set_id, annotation_id}` references. These
+   references are the only Annotation-to-operation mapping; do not duplicate
+   the mapping in prose or another artifact.
+7. When an Annotation Set is in scope, include one
+   `annotation_resolution.entries` item for every Annotation in every related
+   set. `implemented` items require an operation reference;
+   `answered_without_text_change`, `deferred`, `rejected`, `unresolved`, and
+   `superseded` carry their required answer, reason, or successor evidence.
+   Keep `roadmap_item_ids` only when the route also supplies a Revision Roadmap.
 
 **Pre-drafting structural classification:** before emitting operations, identify
 roadmap items that require section split, merge, reorder, heading changes, or
@@ -195,6 +203,9 @@ returns control for a human choice.
 block ids, changed block ids, word-count delta, counters, and preservation ratio—
 belong to the apply report. Keep response text, status judgments, and decline
 rationales provisional until the orchestrator combines them with that report.
+For annotation-driven work, the CLI derives a separate immutable Annotation
+Resolution Report from the accepted v3 mapping after apply. The writer never
+authors or registers that report.
 
 **Integrity-correction rounds:** when the input is an integrity correction list,
 use each stable integrity issue id as operation traceability, emit no Schema 8
@@ -364,11 +375,11 @@ registered corpus in place.
 - Severity: `required`
 - Semantic role: `review_commitment_tracking`
 - Replacement shape: `schema_projection_table`
-- Replacement body SHA-256: `ba4466879e3cfafc9663d1127c26d1fd7f64a872615fe6f766cc1e0b83052c12`
+- Replacement body SHA-256: `54a22bd7763cabb81322a5c8d85cdf55701c0c54c8f4785a3ebfae80093bc86e`
 - ResearchSpec targets: `researchspec/changes/<change-id>/contract-patch.yaml`, `researchspec/draft-patches/<patch-id>.json`, `researchspec/runs/current/decision-ledger.jsonl`
 - Generated output paths: `academic-paper/agents/revision_coach_agent.md`
 - Before SHA-256: `58ab269816913477f725577ef4eec70c4c805150153c59ebf2058f7a0920680b`
-- After SHA-256: `d31b189a44988b57c48d3fff1740fac87c04a1c053a4e0f2295b890b72cdc202`
+- After SHA-256: `2c172948897668c0a5c326cdef44e933f1fb50efea552c9e5bee865340955ecd`
 
 #### Before
 
@@ -387,7 +398,9 @@ registered corpus in place.
    Research-scope or claim commitments require a proposed
    `researchspec/changes/<change-id>/contract-patch.yaml`; manuscript-edit
    commitments become traceability inputs for
-   `researchspec/draft-patches/<patch-id>.json`; strategic acceptance, rejection,
+   `researchspec/draft-patches/<patch-id>.json`. Existing registered Annotation
+   Sets remain separate immutable review evidence and Draft Patch v3 operation
+   references provide their only text-operation mapping; strategic acceptance, rejection,
    or tradeoff choices wait for a human-confirmed decision in
    `researchspec/runs/current/decision-ledger.jsonl`. Revision execution and
    independent re-review append fulfillment evidence later; this agent does not
@@ -956,11 +969,11 @@ blocking perspective findings to the review gate helper for
 - Severity: `required`
 - Semantic role: `review_commitment_tracking`
 - Replacement shape: `gate_rule_block`
-- Replacement body SHA-256: `88b7fe0f14165c6001529c676246655d2088e05c28b4eed39460d652dd15dcb7`
+- Replacement body SHA-256: `8dab2da70607d4463fc91df3101a1901044124179b28f2146e16fe123cbca1d7`
 - ResearchSpec targets: `researchspec/draft-patches/<patch-id>.json`, `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
 - Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/references/re_review_mode_protocol.md`, `academic-paper-reviewer/references/re_review_mode_protocol.md`
 - Before SHA-256: `7c8c2df7ae376490050837455ab372d71a8f81db66ccfb4cc29c6cb7f27f888c`
-- After SHA-256: `5184e80271a5ae02e73b73d84bc35af86ffbde6647a44d31e74bcaea926ab897`
+- After SHA-256: `05acb742a4dd4272d5c46e77408aa74fe990c1137150fb23a6f61c96921cef09`
 
 #### Before
 
@@ -998,6 +1011,14 @@ response artifacts, the relevant
 `researchspec/draft-patches/<patch-id>.json`, and its apply report through
 `researchspec/runs/current/artifact-registry.json`. Verify the evidence itself;
 do not accept an author's claim or an imported Schema 11 status as proof.
+
+If an Annotation Resolution Report is linked, first confirm that the CLI
+mechanical coverage check passes: hashes and identities match, every Annotation
+has exactly one disposition, operation links come only from Draft Patch v3, and
+`unresolved_count` is zero. Then assess semantic fulfillment independently.
+`implemented` is not proof that the edit answers the concern;
+`answered_without_text_change`, `deferred`, `rejected`, and `superseded` still
+require a reviewer judgment against their recorded answer, reason, or successor.
 
 For each commitment, assign one `fulfillment_status`:
 
@@ -1169,11 +1190,11 @@ write boundary.
 - Severity: `required`
 - Semantic role: `review_commitment_tracking`
 - Replacement shape: `checklist`
-- Replacement body SHA-256: `d933c4ff8af9cbde5d517887d9d7ac959cdb9b23427422a201451acee9ff75ed`
+- Replacement body SHA-256: `c1c0448a9f2e5323987a7c78e1b0912010b3d637476ca11fa0c0a97e9acc7169`
 - ResearchSpec targets: `researchspec/draft-patches/<patch-id>.json`, `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
 - Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/SKILL.md`, `academic-paper-reviewer/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/SKILL.md`, `deep-research/references/cross-skill/academic-paper-reviewer/SKILL.md`
 - Before SHA-256: `d3e0caa77bc3053aa43336f81ce022ff312362f4618320db26d3db729c51b733`
-- After SHA-256: `a5132ac2d3ffaf4546345b7363322ab86905cfdbf95751ee0eb8c87f2140a23b`
+- After SHA-256: `bf5b136018ef41227ddf901c75cea1320723e15a09eca967e2c8320432da186b`
 
 #### Before
 
@@ -1194,12 +1215,15 @@ Dedicated mode for Pipeline Stage 3'. Re-review verifies each first-round concer
 against the exact revised manuscript, response, and applied patch evidence
 resolved through `researchspec/runs/current/artifact-registry.json`. Read
 `researchspec/draft-patches/<patch-id>.json` and its apply report when manuscript
-changes were patch-applied; do not rely on a Material Passport-carried Schema 11
-copy as the sole traceability record.
+changes were patch-applied. When the patch resolves registered annotations,
+also read the CLI-derived Annotation Resolution Report and its referenced
+Annotation Sets. Do not rely on a Material Passport-carried Schema 11 copy as
+the sole traceability record.
 
 **Input:** original Revision Roadmap, registered revised-manuscript artifact,
 registered Response to Reviewers when present, relevant draft patch and apply
-report, and the prior review/commitment artifacts.
+report, optional Annotation Sets and Annotation Resolution Report, and the prior
+review/commitment artifacts.
 
 **Output:** an immutable Verification Review Report containing the traceability
 matrix, new issues, and decision. Return the report for runtime registration and
@@ -1384,11 +1408,11 @@ Register the handoff payload through `researchspec/runs/current/artifact-registr
 - Severity: `required`
 - Semantic role: `draft_patch_protocol`
 - Replacement shape: `patch_protocol_block`
-- Replacement body SHA-256: `856c8b7839a81e2599b669eaee1e8726fd47cdba2e33d24c2bc6b825963382dc`
+- Replacement body SHA-256: `67848a9eb5c03674c8f082ab40d434ad828c0b621ddddf5e8e3ba7cb75ce5e16`
 - ResearchSpec targets: `researchspec/draft-patches/<patch-id>.json`, `researchspec/runs/current/decision-ledger.jsonl`, `researchspec/runs/current/gate-ledger.jsonl`, `researchspec/runs/current/artifact-registry.json`
 - Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
 - Before SHA-256: `cd54fc8af9aab880c01c0cbc083475c7dffdc0f0a16c83873c46017f26fc3878`
-- After SHA-256: `6947cf15ac08f41a5d7c53e0f2f6cdcfca4c0a55bac7531d786c78bd6b3bb688`
+- After SHA-256: `96ef57be664d560e568bfd3cb09fcd6e57d46e234353e5cb22babe4dc061572c`
 
 #### Before
 
@@ -1464,15 +1488,18 @@ steps 1 and 3:**
 2. **Dispatch the writer.** Provide the exact registered draft, its block
    manifest, and the round's accepted Revision Roadmap. The writer emits
    `researchspec/draft-patches/<patch-id>.json` with target artifact id, target
-   hash, block preconditions, operations, and roadmap traceability. In review
-   rounds it also emits provisional response items containing judgment content;
-   it does not apply the patch or update registries and ledgers.
+   hash, block preconditions, stable operation ids, Annotation references when
+   present, complete Annotation resolution entries, and roadmap traceability.
+   In review rounds it also emits provisional response items containing judgment
+   content; it does not apply the patch or update registries and ledgers.
 3. **Validate and apply deterministically.** The draft-patch apply helper first
    validates schema, target artifact identity, base hash, block preconditions,
    operation shape, and structural-change limits. Validation is fail-closed and
    byte-preserving on rejection. A successful apply creates a new manuscript
-   artifact plus a separate apply report; it never overwrites the registered
-   base. The default structural touched-ratio threshold remains `0.6` with a
+   artifact plus a separate apply report; when Annotation resolution is present,
+   it also derives and registers an immutable Annotation Resolution Report from
+   the v3 operation mapping. It never overwrites the registered base. The
+   default structural touched-ratio threshold remains `0.6` with a
    strict `>` comparison. A different threshold requires a human-confirmed
    decision returned to the decision runtime for
    `researchspec/runs/current/decision-ledger.jsonl` before apply.
@@ -1483,9 +1510,9 @@ steps 1 and 3:**
    the existing finalizer contract.
 5. **Complete mechanical response facts.** For review rounds, fill response-item
    block ids, fresh insertion ids, word-count delta, and counters from the apply
-   report while preserving the writer's judgment text. Return the response and
-   apply report as artifacts for runtime registration, then require the apply
-   report as an input to re-review.
+   report while preserving the writer's judgment text. Return the response,
+   apply report, and any CLI-derived Annotation Resolution Report as registered
+   evidence, then require the apply report as an input to re-review.
 6. **Surface preservation and interaction state.** Include `preserved_ratio`
    from the apply report beside the accumulated round-trip count in the stage
    checkpoint, for example `round-trips: 3/9 · preserved_ratio: 0.91`.
@@ -2677,4 +2704,3 @@ Register the immutable source in `researchspec/runs/current/artifact-registry.js
 - Matched: `true`
 - Severity: `diagnostic`
 - Diagnostics: _none_
-

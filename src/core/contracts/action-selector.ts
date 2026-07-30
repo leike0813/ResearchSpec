@@ -12,6 +12,8 @@ export const ChangeSelectorSchema = z.string().regex(new RegExp(`^change:${SafeI
   .refine((value) => !value.includes(".."));
 export const PatchSelectorSchema = z.string().regex(new RegExp(`^patch:${SafeId}$`))
   .refine((value) => !value.includes(".."));
+export const AnnotationSelectorSchema = z.string().regex(new RegExp(`^annotation:${SafeId}$`))
+  .refine((value) => !value.includes(".."));
 export const LedgerGateSelectorSchema = z.string().regex(new RegExp(`^gate:${SafeId}$`))
   .refine((value) => !value.includes(".."));
 export const ObligationSelectorSchema = z.string().regex(new RegExp(`^obligation:sf-${SafeId}/${SafeId}$`))
@@ -23,7 +25,7 @@ export const CaseActionSelectorSchema = z.string().regex(new RegExp(`^case-actio
 export const WorkflowDetailSelectorSchema = z.literal("workflow:current");
 
 export interface ActionSelectorFamilyDisplay {
-  id: "subflow" | "obligation" | "gate" | "completion" | "case-action" | "patch" | "change" | "work" | "transition";
+  id: "subflow" | "obligation" | "gate" | "completion" | "case-action" | "annotation" | "patch" | "change" | "work" | "transition";
   patterns: readonly string[];
   examples: readonly string[];
 }
@@ -53,6 +55,11 @@ export const ACTION_SELECTOR_FAMILY_DISPLAYS = [
     id: "case-action",
     patterns: ["case-action:<id>"],
     examples: ["case-action:scope-resolution"],
+  },
+  {
+    id: "annotation",
+    patterns: ["annotation:<id>"],
+    examples: ["annotation:review-001"],
   },
   {
     id: "patch",
@@ -87,6 +94,7 @@ export const ActionTargetSelectorSchema = z.union([
   RuntimeSelectorSchema,
   ChangeSelectorSchema,
   PatchSelectorSchema,
+  AnnotationSelectorSchema,
   LedgerGateSelectorSchema,
   ObligationSelectorSchema,
   CompletionSelectorSchema,
@@ -103,6 +111,7 @@ export type ActionTargetSelector =
   | RuntimeSelector
   | { kind: "change"; selector: string; id: string }
   | { kind: "patch"; selector: string; id: string }
+  | { kind: "annotation"; selector: string; id: string }
   | { kind: "ledger_gate"; selector: string; id: string }
   | { kind: "obligation"; selector: string; instanceId: string; id: string }
   | { kind: "completion"; selector: string; instanceId: string; id: string }
@@ -113,6 +122,7 @@ export function parseActionTargetSelector(value: string): ActionTargetSelector |
   if (runtime) return runtime;
   if (ChangeSelectorSchema.safeParse(value).success) return { kind: "change", selector: value, id: value.slice("change:".length) };
   if (PatchSelectorSchema.safeParse(value).success) return { kind: "patch", selector: value, id: value.slice("patch:".length) };
+  if (AnnotationSelectorSchema.safeParse(value).success) return { kind: "annotation", selector: value, id: value.slice("annotation:".length) };
   if (LedgerGateSelectorSchema.safeParse(value).success) return { kind: "ledger_gate", selector: value, id: value.slice("gate:".length) };
   if (ObligationSelectorSchema.safeParse(value).success) {
     const [instanceId, id] = value.slice("obligation:".length).split("/", 2);

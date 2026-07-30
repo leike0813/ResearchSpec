@@ -157,7 +157,7 @@ function renderMdxCommandPage(command: CliCommandDefinition, position: number, g
       ":::",
       "",
     ] : []),
-  ].join("\n") + "\n";
+  ].join("\n").trimEnd() + "\n";
 }
 
 function renderCommandCard(command: CliCommandDefinition): string[] {

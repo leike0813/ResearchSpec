@@ -37,6 +37,7 @@ researchspec instructions subflow:tpl-<route> --json
 researchspec instructions obligation:<instance>/<node> --json
 researchspec instructions completion:<instance>/<node> --json
 researchspec instructions case-action:<id> --json
+researchspec instructions annotation:<id> --json
 researchspec instructions patch:<id> --json
 researchspec instructions change:<id> --json
 researchspec instructions work:<instance>/<node> --json
@@ -70,6 +71,7 @@ If the local handbook reference is missing, unreadable, or known to have drifted
 6. Use the descriptor policy for Start: \`direct\` starts with descriptor-declared input; \`human_confirmed\` requires the named route confirmation; \`plan_bound\` requires an exact preview and matching plan hash. A changed route, graph, input, decision basis, or plan requires a new descriptor read.
 7. At a new/materially changed route or newly ready producer, discover optional domain help with \`plugin list --summary --json\` and inspect only plausible \`plugin show\` results. Suggest at most three domains, preview the exact batch after separate plugin consent, and install only through its plan-bound transaction. Installation never authorizes scripts, dependencies, credentials, network, or sensitive-data transfer.
 8. **Resume:** use the current selector family and its descriptor, not a hard-coded pipeline graph:
+   - A manuscript-annotation request first uses \`annotation:<id>\` instructions and the returned fixed candidate path. After human-confirmed registration, keep the original \`academic-paper:revision\`, \`academic-paper:revision-coach\`, \`academic-paper-reviewer:re-review\`, or pipeline route; never invent an annotation Skill or stage.
    - Adaptive \`obligation:\` routes to the returned ARSU producer; \`completion:\` follows its descriptor, normally direct Advance; \`case-action:\`, \`patch:\`, and \`change:\` route to Propose or Decide according to their action descriptor.
    - Strict \`work:\` routes to its returned producer; \`gate:\` routes to Verify; \`transition:\` with a human choice routes to Decide, while an explicitly direct unique transition may Advance.
    - A candidate submission follows its descriptor policy. Do not create a parallel confirmation rule or require a hash when the descriptor is \`direct\`.
@@ -89,6 +91,7 @@ If the local handbook reference is missing, unreadable, or known to have drifted
 | Adaptive obligation | Dispatch the returned producer Skill. |
 | Adaptive completion | Follow its descriptor policy and returned next selector. |
 | Adaptive case action, patch, or change | Read the action descriptor; route semantic proposal/choice to Propose or Decide. |
+| Registered manuscript annotations | Submit the normalized candidate through \`annotation:<id>\`, then continue the existing revision/re-review route with that exact prerequisite. |
 | Strict work, Gate, or transition | Dispatch producer, Verify Gate, or apply the transition descriptor respectively. |
 | Relevant plugin | Suggest at most three optional domains; keep consent and authority separate. |
 | Explanation only | Stay read-only and distinguish evidence from inference. |

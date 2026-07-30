@@ -18,6 +18,7 @@ export type RuntimeActionKey =
   | "submit_gate"
   | "submit_obligation"
   | "submit_patch"
+  | "submit_annotation"
   | "advance"
   | "advance_completion"
   | "advance_patch"
@@ -70,6 +71,18 @@ export async function evaluateActionAvailability(
   }
 
   const existing = snapshot.items.find((item) => item.selector === selector);
+  if (parsed.kind === "annotation") {
+    return {
+      key: "submit_annotation",
+      availability: createActionAvailability(
+        snapshot,
+        selector,
+        "allowed",
+        "annotation_submission_allowed",
+        [],
+      ),
+    };
+  }
   if (parsed.kind === "patch") {
     if (!existing) {
       return {

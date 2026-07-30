@@ -9,6 +9,7 @@ import { CaseProfileSchema, SoftPlaybookSchema, type CaseProfile, type SoftPlayb
 import { ImportedGateEvidenceSchema } from "../contracts/material-passport.js";
 import { DecisionLedgerEventSchema } from "../contracts/decision.js";
 import { StoredDraftPatchSchema } from "../contracts/draft-patch.js";
+import { FrozenAnnotationSetSchema } from "../contracts/annotation.js";
 import { GateEventV1Schema } from "../contracts/gate-transition.js";
 import { RunStateSchema, type RunState } from "../contracts/run-state.js";
 import { validateWorkflowDefinition, WorkflowDefinitionSchema, WORKFLOW_PROFILE_IDS, type WorkflowDefinition } from "../contracts/workflow.js";
@@ -54,7 +55,7 @@ export interface SnapshotFile {
 }
 
 export interface IndexedItem {
-  type: "change" | "patch" | "artifact" | "gate" | "decision" | "source" | "claim" | "tool" | "contract" | "case_action" | "attempt";
+  type: "change" | "patch" | "annotation" | "artifact" | "gate" | "decision" | "source" | "claim" | "tool" | "contract" | "case_action" | "attempt";
   id: string;
   selector: string;
   value: unknown;
@@ -82,6 +83,7 @@ export interface WorkspaceSnapshot {
   gates: Record<string, unknown>[];
   changes: IndexedItem[];
   patches: IndexedItem[];
+  annotations: IndexedItem[];
   items: IndexedItem[];
   diagnostics: Diagnostic[];
 }
@@ -181,10 +183,11 @@ export async function loadWorkspaceSnapshot(workspace: string): Promise<Workspac
 
   const changes = await loadActiveChanges(workspace, diagnostics);
   const patches = await loadDraftPatches(workspace, diagnostics);
+  const annotations = await loadAnnotationSets(workspace, diagnostics);
   await validateCaseActionProjections(workspace, caseState, changes, patches, diagnostics);
-  const items = buildItems(documents, artifacts, decisions, gates, changes, patches, config, manifest, caseState, attempts);
+  const items = buildItems(documents, artifacts, decisions, gates, changes, patches, annotations, config, manifest, caseState, attempts);
 
-  return { workspace, project, files, documents, config, manifest, workflow, runState, caseProfile, caseState, playbook, attempts, runtimeMode, state, artifacts, decisions, gates, changes, patches, items, diagnostics };
+  return { workspace, project, files, documents, config, manifest, workflow, runState, caseProfile, caseState, playbook, attempts, runtimeMode, state, artifacts, decisions, gates, changes, patches, annotations, items, diagnostics };
 }
 
 async function validateCaseActionProjections(
@@ -379,10 +382,35 @@ async function loadDraftPatches(workspace: string, diagnostics: Diagnostic[]): P
   return items;
 }
 
+async function loadAnnotationSets(workspace: string, diagnostics: Diagnostic[]): Promise<IndexedItem[]> {
+  const root = path.join(workspace, "runs/current/annotation-sets");
+  const entries = await safeReadDir(root);
+  const items: IndexedItem[] = [];
+  for (const entry of entries) {
+    if (!entry.isFile() || !entry.name.endsWith(".json")) continue;
+    const setPath = path.join(root, entry.name);
+    const text = await readOptionalText(setPath);
+    if (text === undefined) continue;
+    const parsed = parseJson(text, setPath);
+    if (!parsed.ok) {
+      diagnostics.push(parsed.diagnostic);
+      continue;
+    }
+    const value = asRecord(parsed.value);
+    const id = stringValue(value.annotation_set_id) ?? entry.name.slice(0, -5);
+    validateValue(value, FrozenAnnotationSetSchema, setPath, "invalid_annotation_set", diagnostics);
+    if (`${id}.json` !== entry.name) {
+      diagnostics.push({ severity: "error", code: "annotation_set_id_mismatch", message: "Annotation Set ID must match its filename.", path: setPath, blocking: true });
+    }
+    items.push({ type: "annotation", id, selector: `annotation:${id}`, value, path: setPath });
+  }
+  return items;
+}
+
 function buildItems(
-  documents: Record<string, unknown>, artifacts: Record<string, unknown>[], decisions: Record<string, unknown>[], gates: Record<string, unknown>[], changes: IndexedItem[], patches: IndexedItem[], config: Record<string, unknown>, manifest: Record<string, unknown>, caseState: CaseState | undefined, attempts: AttemptRecord[],
+  documents: Record<string, unknown>, artifacts: Record<string, unknown>[], decisions: Record<string, unknown>[], gates: Record<string, unknown>[], changes: IndexedItem[], patches: IndexedItem[], annotations: IndexedItem[], config: Record<string, unknown>, manifest: Record<string, unknown>, caseState: CaseState | undefined, attempts: AttemptRecord[],
 ): IndexedItem[] {
-  const result: IndexedItem[] = [...changes, ...patches];
+  const result: IndexedItem[] = [...changes, ...patches, ...annotations];
   for (const artifact of artifacts) addRecord(result, "artifact", artifact, "artifact_id", "runs/current/artifact-registry.json");
   for (const source of records(asRecord(documents["specs/sources.yaml"]).sources)) addRecord(result, "source", source, "source_id", "specs/sources.yaml");
   for (const claim of records(asRecord(documents["specs/claims.yaml"]).claims)) addRecord(result, "claim", claim, "claim_id", "specs/claims.yaml");
