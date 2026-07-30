@@ -109,7 +109,8 @@ async function createProgram(): Promise<Command> {
   const program = new Command()
     .name("researchspec")
     .description("Agent-neutral, file-based research contract framework")
-    .version(await readPackageVersion(), "-v, --version");
+    .version(await readPackageVersion(), "-v, --version")
+    .addHelpText("after", "\nFull documentation: https://leike0813.github.io/ResearchSpec/\n中文文档: https://leike0813.github.io/ResearchSpec/zh-Hans/\n");
   return applyGlobalCliOptions(program).showHelpAfterError();
 }
 

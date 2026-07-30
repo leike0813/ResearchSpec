@@ -16,6 +16,12 @@ const GROUPS: readonly { id: CliCommandGroup; title: string }[] = [
   { id: "plugins", title: "Domain Skills" },
 ];
 
+export interface MdxCommandPage {
+  filename: string;
+  content: string;
+  sidebarPosition: number;
+}
+
 export function renderCliHandbook(): string {
   const lines = [
     "# ResearchSpec CLI Handbook",
@@ -58,6 +64,100 @@ export function renderCliHandbook(): string {
   }
 
   return `${lines.join("\n").trimEnd()}\n`;
+}
+
+export function renderMdxCommandPages(): MdxCommandPage[] {
+  const pages: MdxCommandPage[] = [];
+  let position = 0;
+
+  for (const group of GROUPS) {
+    const commands = CLI_COMMAND_CATALOG.filter((command) => command.group === group.id);
+    if (commands.length === 0) continue;
+    for (const command of commands) {
+      position += 1;
+      const filename = command.path.join("-") + ".mdx";
+      const content = renderMdxCommandPage(command, position, group.title);
+      pages.push({ filename, content, sidebarPosition: position });
+    }
+  }
+
+  return pages;
+}
+
+export function renderMdxCliSidebar(): string {
+  const lines = [
+    "// Generated from the typed public CLI catalog. Do not edit by hand.",
+    "export const cliSidebar = [",
+  ];
+
+  for (const group of GROUPS) {
+    const commands = CLI_COMMAND_CATALOG.filter((command) => command.group === group.id);
+    if (commands.length === 0) continue;
+    lines.push(`  { type: "category" as const, label: "${group.title}", items: [`);
+    for (const command of commands) {
+      lines.push(`    "cli/${command.path.join("-")}",`);
+    }
+    lines.push("  ] },");
+  }
+
+  lines.push("];");
+  return `${lines.join("\n")}\n`;
+}
+
+function renderMdxCommandPage(command: CliCommandDefinition, position: number, group: string): string {
+  const invocation = command.path.length === 1
+    ? `researchspec ${command.syntax}`
+    : `researchspec ${command.path[0]} ${command.syntax}`;
+
+  const related = command.related
+    .map((id) => CLI_COMMAND_CATALOG.find((candidate) => candidate.id === id))
+    .filter((candidate): candidate is CliCommandDefinition => Boolean(candidate))
+    .map((candidate) => `[\`${candidate.path.join(" ")}\`](./${candidate.path.join("-")})`)
+    .join(", ");
+
+  const optionRows = command.options.length > 0
+    ? [
+        "",
+        "| Option | Required | Description |",
+        "| --- | --- | --- |",
+        ...command.options.map((opt) =>
+          `| \`${opt.flags}\` | ${opt.required ? "yes" : "no"} | ${opt.description} |`
+        ),
+      ]
+    : [];
+
+  return [
+    "---",
+    `sidebar_position: ${String(position)}`,
+    `title: "${command.path.join(" ")}"`,
+    `description: "${command.description}"`,
+    "---",
+    `import Tabs from "@theme/Tabs";`,
+    `import TabItem from "@theme/TabItem";`,
+    "",
+    `# \`${invocation}\``,
+    "",
+    command.description,
+    "",
+    `- **Group**: ${group}`,
+    `- **Workspace**: \`${command.workspace}\``,
+    `- **Effect**: \`${command.effect}\``,
+    `- **Related**: ${related || "none"}`,
+    ...optionRows,
+    "",
+    ...(command.options.length > 0 ? [
+      ":::info Runtime binding",
+      "",
+      "Many options require a SHA-256 action-plan or action-basis binding",
+      "(`--expected-action-basis-sha256`, `--expected-plan-sha256`) when the",
+      "command is executed under a plan-bound workflow. Run",
+      "`researchspec instructions <selector> --json` for the exact required",
+      "semantic input and binding rules.",
+      "",
+      ":::",
+      "",
+    ] : []),
+  ].join("\n") + "\n";
 }
 
 function renderCommandCard(command: CliCommandDefinition): string[] {

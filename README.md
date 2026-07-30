@@ -89,6 +89,14 @@ researchspec --version
 
 `npm link` 仅用于开发和内部试用，不表示 npm 包已正式发布。
 
+构建文档站：
+
+```bash
+pnpm docs:generate   # 从 CLI catalog 生成指令参考
+pnpm docs:check      # 验证生成内容未漂移
+pnpm docs:build      # 构建完整 Docusaurus 网站
+```
+
 ## 快速入门
 
 初始化新研究项目（不启动学术工作）：
@@ -185,6 +193,7 @@ workspace 的 `status` 与 `instructions <selector>` 为准。
 
 ## 文档
 
+- **文档站**: [https://leike0813.github.io/ResearchSpec/](https://leike0813.github.io/ResearchSpec/) (中文: [zh-Hans](https://leike0813.github.io/ResearchSpec/zh-Hans/))
 - [ARSU 用户使用模型](docs/arsu_user_usage_model.md)
 - [CLI handbook](docs/cli_handbook.md)
 - [CLI 接口设计](docs/cli_interface_design.md)

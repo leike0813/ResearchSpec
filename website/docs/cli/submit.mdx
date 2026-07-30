@@ -1,0 +1,37 @@
+---
+sidebar_position: 6
+title: "submit"
+description: "Submit a runtime candidate, attempt, evidence, resolution, patch, or confirmed Gate verdict"
+---
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# `researchspec submit <runtime-item>`
+
+Submit a runtime candidate, attempt, evidence, resolution, patch, or confirmed Gate verdict
+
+- **Group**: Control plane
+- **Workspace**: `required`
+- **Effect**: `write`
+- **Related**: [`status`](./status), [`instructions`](./instructions), [`check`](./check)
+
+| Option | Required | Description |
+| --- | --- | --- |
+| `--input <payload.json>` | yes | strict semantic submission JSON |
+| `--actor-kind <kind>` | yes | human, agent, script, converter, or validator |
+| `--actor-name <name>` | yes | artifact producer name |
+| `--confirmed-by <name>` | no | human who confirmed a Gate verdict |
+| `--expected-action-basis-sha256 <hash>` | no | bind execution to the current action descriptor |
+| `--expected-sha256 <hash>` | no | bind execution to the previewed candidate SHA-256 |
+| `--expected-plan-sha256 <hash>` | no | bind execution to the previewed submission plan |
+
+:::info Runtime binding
+
+Many options require a SHA-256 action-plan or action-basis binding
+(`--expected-action-basis-sha256`, `--expected-plan-sha256`) when the
+command is executed under a plan-bound workflow. Run
+`researchspec instructions <selector> --json` for the exact required
+semantic input and binding rules.
+
+:::
+

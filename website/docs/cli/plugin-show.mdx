@@ -1,0 +1,31 @@
+---
+sidebar_position: 19
+title: "plugin show"
+description: "Show bundled plugin metadata and provenance"
+---
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# `researchspec plugin show <plugin-id>`
+
+Show bundled plugin metadata and provenance
+
+- **Group**: Domain Skills
+- **Workspace**: `optional`
+- **Effect**: `read`
+- **Related**: [`plugin list`](./plugin-list), [`plugin install`](./plugin-install)
+
+| Option | Required | Description |
+| --- | --- | --- |
+| `--summary` | no | emit compact Skill descriptions without full provenance |
+
+:::info Runtime binding
+
+Many options require a SHA-256 action-plan or action-basis binding
+(`--expected-action-basis-sha256`, `--expected-plan-sha256`) when the
+command is executed under a plan-bound workflow. Run
+`researchspec instructions <selector> --json` for the exact required
+semantic input and binding rules.
+
+:::
+

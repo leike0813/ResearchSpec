@@ -1,0 +1,34 @@
+---
+sidebar_position: 7
+title: "advance"
+description: "Complete or advance one currently authorized runtime action"
+---
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# `researchspec advance <transition>`
+
+Complete or advance one currently authorized runtime action
+
+- **Group**: Control plane
+- **Workspace**: `required`
+- **Effect**: `write`
+- **Related**: [`status`](./status), [`instructions`](./instructions)
+
+| Option | Required | Description |
+| --- | --- | --- |
+| `--actor-kind <kind>` | yes | agent or script |
+| `--actor-name <name>` | yes | action executor name |
+| `--expected-action-basis-sha256 <hash>` | no | bind execution to the current action descriptor |
+| `--expected-plan-sha256 <hash>` | no | bind execution to the previewed action plan |
+
+:::info Runtime binding
+
+Many options require a SHA-256 action-plan or action-basis binding
+(`--expected-action-basis-sha256`, `--expected-plan-sha256`) when the
+command is executed under a plan-bound workflow. Run
+`researchspec instructions <selector> --json` for the exact required
+semantic input and binding rules.
+
+:::
+

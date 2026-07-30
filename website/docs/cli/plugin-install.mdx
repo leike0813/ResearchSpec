@@ -1,0 +1,32 @@
+---
+sidebar_position: 20
+title: "plugin install"
+description: "Select and project plugins into the current workspace"
+---
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# `researchspec plugin install <plugin-ids...>`
+
+Select and project plugins into the current workspace
+
+- **Group**: Domain Skills
+- **Workspace**: `required`
+- **Effect**: `write`
+- **Related**: [`plugin list`](./plugin-list), [`plugin show`](./plugin-show), [`plugin uninstall`](./plugin-uninstall), [`plugin update`](./plugin-update)
+
+| Option | Required | Description |
+| --- | --- | --- |
+| `--expected-plan-sha256 <hash>` | no | bind execution to the previewed plugin install plan |
+| `--summary` | no | emit aggregate write-plan impact |
+
+:::info Runtime binding
+
+Many options require a SHA-256 action-plan or action-basis binding
+(`--expected-action-basis-sha256`, `--expected-plan-sha256`) when the
+command is executed under a plan-bound workflow. Run
+`researchspec instructions <selector> --json` for the exact required
+semantic input and binding rules.
+
+:::
+

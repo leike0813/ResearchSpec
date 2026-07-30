@@ -1,0 +1,32 @@
+---
+sidebar_position: 12
+title: "handoff"
+description: "Render the current handoff view"
+---
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# `researchspec handoff`
+
+Render the current handoff view
+
+- **Group**: Context
+- **Workspace**: `required`
+- **Effect**: `conditional-write`
+- **Related**: [`pack`](./pack), [`status`](./status)
+
+| Option | Required | Description |
+| --- | --- | --- |
+| `--stdout` | no | print without writing |
+| `--out <path>` | no | output path |
+
+:::info Runtime binding
+
+Many options require a SHA-256 action-plan or action-basis binding
+(`--expected-action-basis-sha256`, `--expected-plan-sha256`) when the
+command is executed under a plan-bound workflow. Run
+`researchspec instructions <selector> --json` for the exact required
+semantic input and binding rules.
+
+:::
+

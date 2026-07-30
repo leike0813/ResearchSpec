@@ -1,0 +1,26 @@
+/**
+ * Root CSS variables for the ResearchSpec documentation site.
+ */
+
+:root {
+  --ifm-color-primary: #2e4a8e;
+  --ifm-color-primary-dark: #294280;
+  --ifm-color-primary-darker: #273f79;
+  --ifm-color-primary-darkest: #203464;
+  --ifm-color-primary-light: #33529c;
+  --ifm-color-primary-lighter: #3555a3;
+  --ifm-color-primary-lightest: #3c60b8;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] {
+  --ifm-color-primary: #7ba0e8;
+  --ifm-color-primary-dark: #5e8be3;
+  --ifm-color-primary-darker: #4f80e0;
+  --ifm-color-primary-darkest: #2b60cb;
+  --ifm-color-primary-light: #98b5ed;
+  --ifm-color-primary-lighter: #a7c0f0;
+  --ifm-color-primary-lightest: #d4e0f7;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}

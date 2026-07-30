@@ -1,0 +1,35 @@
+---
+sidebar_position: 15
+title: "decide"
+description: "Resolve a pending human decision"
+---
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# `researchspec decide [item]`
+
+Resolve a pending human decision
+
+- **Group**: Governance
+- **Workspace**: `required`
+- **Effect**: `write`
+- **Related**: [`instructions`](./instructions), [`show`](./show), [`archive`](./archive)
+
+| Option | Required | Description |
+| --- | --- | --- |
+| `--decision <choice>` | no | accept, reject, or postpone |
+| `--actor-name <name>` | no | human actor name |
+| `--reason <text>` | no | decision rationale |
+| `--expected-action-basis-sha256 <hash>` | no | bind execution to the current action descriptor |
+| `--expected-plan-sha256 <hash>` | no | bind execution to the previewed decision plan |
+
+:::info Runtime binding
+
+Many options require a SHA-256 action-plan or action-basis binding
+(`--expected-action-basis-sha256`, `--expected-plan-sha256`) when the
+command is executed under a plan-bound workflow. Run
+`researchspec instructions <selector> --json` for the exact required
+semantic input and binding rules.
+
+:::
+

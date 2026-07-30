@@ -1,0 +1,32 @@
+---
+sidebar_position: 9
+title: "list"
+description: "List paginated runtime collections"
+---
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# `researchspec list [type]`
+
+List paginated runtime collections
+
+- **Group**: Inspection
+- **Workspace**: `required`
+- **Effect**: `read`
+- **Related**: [`show`](./show), [`status`](./status)
+
+| Option | Required | Description |
+| --- | --- | --- |
+| `--limit <count>` | no | page size from 1 to 50 |
+| `--cursor <cursor>` | no | opaque cursor returned by the prior page |
+
+:::info Runtime binding
+
+Many options require a SHA-256 action-plan or action-basis binding
+(`--expected-action-basis-sha256`, `--expected-plan-sha256`) when the
+command is executed under a plan-bound workflow. Run
+`researchspec instructions <selector> --json` for the exact required
+semantic input and binding rules.
+
+:::
+
