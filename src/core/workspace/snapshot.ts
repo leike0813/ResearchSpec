@@ -18,6 +18,7 @@ import type { Diagnostic } from "../validation/types.js";
 import { JSON_FILES, JSONL_FILES, MARKDOWN_FILES, OPTIONAL_FILES, REQUIRED_FILES, YAML_FILES } from "./layout.js";
 import { sha256 } from "./write-plan.js";
 import { ToolInstallationManifestSchema } from "../../adapters/installations.js";
+import { AnnotationProvenanceError, validateAnnotationRawProvenance } from "../runtime/annotation-provenance.js";
 
 const SafeId = z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]*$/).refine((value) => !value.includes(".."));
 const ActorSchema = z.union([z.string().min(1), z.looseObject({ kind: z.string().min(1), name: z.string().min(1) })]);
@@ -398,7 +399,22 @@ async function loadAnnotationSets(workspace: string, diagnostics: Diagnostic[]):
     }
     const value = asRecord(parsed.value);
     const id = stringValue(value.annotation_set_id) ?? entry.name.slice(0, -5);
+    const validated = FrozenAnnotationSetSchema.safeParse(value);
     validateValue(value, FrozenAnnotationSetSchema, setPath, "invalid_annotation_set", diagnostics);
+    if (validated.success) {
+      try {
+        await validateAnnotationRawProvenance({ workspace, annotationSet: validated.data });
+      } catch (error) {
+        diagnostics.push({
+          severity: "error",
+          code: error instanceof AnnotationProvenanceError ? error.code : "invalid_annotation_provenance",
+          message: error instanceof Error ? error.message : String(error),
+          path: setPath,
+          blocking: true,
+          ...(error instanceof AnnotationProvenanceError && error.details !== undefined ? { details: error.details } : {}),
+        });
+      }
+    }
     if (`${id}.json` !== entry.name) {
       diagnostics.push({ severity: "error", code: "annotation_set_id_mismatch", message: "Annotation Set ID must match its filename.", path: setPath, blocking: true });
     }

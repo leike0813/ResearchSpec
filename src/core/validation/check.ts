@@ -268,7 +268,11 @@ function diagnosticMatchesTarget(workspace: string, diagnostic: Diagnostic, targ
   const relative = path.relative(workspace, diagnostic.path).split(path.sep).join("/");
   if (target === "contracts") return relative.startsWith("specs/");
   if (target === "runtime") return relative.startsWith("runs/") || relative.startsWith("changes/") || relative.startsWith("draft-patches/");
-  if (target === "artifacts") return relative === "runs/current/artifact-registry.json" || diagnostic.code.startsWith("artifact_");
+  if (target === "artifacts") {
+    return relative === "runs/current/artifact-registry.json"
+      || diagnostic.code.startsWith("artifact_")
+      || diagnostic.code.startsWith("annotation_");
+  }
   if (target === "tools") return relative === "config.yaml" || relative === "tool-installation-manifest.json" || diagnostic.code.startsWith("generated_file_");
   if (target === "plugins") return relative === "config.yaml" || relative === "tool-installation-manifest.json" || diagnostic.code.startsWith("plugin_");
   if (target === "literature-adapters") return relative === "tool-installation-manifest.json" || diagnostic.code.startsWith("literature_adapter_");

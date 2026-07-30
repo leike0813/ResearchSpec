@@ -5,6 +5,13 @@
   "license": "SEE LICENSE IN LICENSE",
   "type": "module",
   "packageManager": "pnpm@10.13.1",
+  "exports": {
+    "./annotation-intake": {
+      "types": "./dist/src/annotation-intake.d.ts",
+      "import": "./dist/src/annotation-intake.js"
+    },
+    "./package.json": "./package.json"
+  },
   "bin": {
     "researchspec": "./dist/src/cli/bin.js"
   },
@@ -30,6 +37,7 @@
     "docs/domain_taxonomy.md",
     "docs/education_agent_skills_vendor_adapter.md",
     "docs/literature_system_adapters.md",
+    "docs/manuscript_annotation_adapters.md",
     "docs/finrobot_vendor_adapter.md",
     "docs/histagent_vendor_adapter.md",
     "docs/materials_science_skills_vendor_adapter.md",

@@ -10,6 +10,7 @@ import {
 import type { WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { sha256 } from "../workspace/write-plan.js";
 import { resolveRegisteredArtifactPath } from "./artifact-path.js";
+import { AnnotationProvenanceError, validateAnnotationRawProvenance } from "./annotation-provenance.js";
 
 export interface AnnotationCoverageFinding {
   code: string;
@@ -193,6 +194,16 @@ export async function verifyAnnotationCoverage(
         });
         continue;
       }
+      try {
+        await validateAnnotationRawProvenance({ workspace: snapshot.workspace, annotationSet: set.data });
+      } catch (error) {
+        findings.push({
+          code: error instanceof AnnotationProvenanceError ? error.code : "annotation_coverage_provenance_invalid",
+          message: error instanceof Error ? error.message : String(error),
+          details: error instanceof AnnotationProvenanceError ? error.details : undefined,
+        });
+        continue;
+      }
       if (set.data.base_artifact_id !== patch.data.base_artifact_id || set.data.base_sha256 !== patch.data.base_sha256) {
         findings.push({
           code: "annotation_coverage_set_base_mismatch",
@@ -354,7 +365,7 @@ async function readRegisteredJson(
   artifact: Record<string, unknown>,
   codePrefix: string,
   findings: AnnotationCoverageFinding[],
-): Promise<unknown | undefined> {
+): Promise<unknown> {
   if (typeof artifact.path !== "string" || typeof artifact.sha256 !== "string") {
     findings.push({ code: `${codePrefix}_unregistered`, message: "Registered artifact path or hash is missing." });
     return undefined;

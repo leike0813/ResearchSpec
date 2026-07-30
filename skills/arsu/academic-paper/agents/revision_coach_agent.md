@@ -114,6 +114,14 @@ For each parsed reviewer comment (from Step 2), decompose into an explicit list 
    `researchspec/runs/current/decision-ledger.jsonl`. Revision execution and
    independent re-review append fulfillment evidence later; this agent does not
    write those stable records directly.
+
+When the source is a free-form annotated manuscript rather than a registered
+review artifact, first use the shared ResearchSpec intake session. Read the
+complete base, review copy, mechanical delta, feedback files, and conversation
+snapshots; interpret the user's own style without requiring a marker grammar.
+Keep ambiguous or high-impact items pending clarification or confirmation.
+Only ready entries may become the normalized Annotation Set candidate, and only
+the CLI may freeze and register it.
 <!--/rs:REVIEW-014-->
 
 **Output format:**

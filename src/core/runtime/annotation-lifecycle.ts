@@ -17,8 +17,9 @@ import {
 import type { WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { executeWritePlan, planFile, sha256, type PlannedWrite, type WritePlan } from "../workspace/write-plan.js";
 import { isPathContained, resolveRegisteredArtifactPath, serializeRegisteredArtifactPath } from "./artifact-path.js";
-import { markdownSectionHeadings, parseAnchoredBlocks } from "./markdown-blocks.js";
 import { createActionAvailability } from "./availability-facts.js";
+import { AnnotationTargetError, validateAnnotationTargetAgainstMarkdown } from "./annotation-target.js";
+import { AnnotationProvenanceError, validateAnnotationRawProvenance } from "./annotation-provenance.js";
 
 export type AnnotationLifecycleErrorKind = "usage" | "domain" | "conflict";
 
@@ -42,6 +43,26 @@ export interface AnnotationSubmitPlan {
 
 export function annotationCandidateRelativePath(annotationSetId: string): string {
   return `runs/current/annotation-sessions/${annotationSetId}/candidate.json`;
+}
+
+export function annotationSessionRelativePath(annotationSetId: string): string {
+  return `runs/current/annotation-sessions/${annotationSetId}/session.json`;
+}
+
+export function annotationReviewCopyRelativePath(annotationSetId: string): string {
+  return `runs/current/annotation-sessions/${annotationSetId}/review.md`;
+}
+
+export function annotationInterpretationRelativePath(annotationSetId: string): string {
+  return `runs/current/annotation-sessions/${annotationSetId}/interpretation.json`;
+}
+
+export function annotationDeltaRelativePath(annotationSetId: string): string {
+  return `runs/current/annotation-sessions/${annotationSetId}/derived/review-delta.json`;
+}
+
+export function annotationRawSourcesRelativeDirectory(annotationSetId: string): string {
+  return `runs/current/annotation-sessions/${annotationSetId}/sources`;
 }
 
 export function annotationFrozenRelativePath(annotationSetId: string): string {
@@ -78,12 +99,31 @@ export async function planAnnotationSubmit(input: {
     throw usage("invalid_annotation_candidate_json", "Annotation candidate is not valid JSON.", String(error));
   }
   const parsed = AnnotationSetCandidateSchema.safeParse(candidateValue);
-  if (!parsed.success) throw usage("invalid_annotation_candidate", "Annotation candidate does not match Annotation Set v1.", parsed.error.issues);
+  if (!parsed.success) {
+    throw usage(
+      "invalid_annotation_candidate",
+      "Annotation candidate does not match a supported Annotation Set contract.",
+      parsed.error.issues,
+    );
+  }
   if (parsed.data.annotation_set_id !== annotationSetId) {
     throw usage("annotation_set_id_mismatch", "Candidate annotation_set_id must match the selector.");
   }
 
   const base = await validateBaseAndTargets(input.snapshot, parsed.data);
+  let provenancePreconditions;
+  try {
+    provenancePreconditions = await validateAnnotationRawProvenance({
+      workspace: input.snapshot.workspace,
+      annotationSet: parsed.data,
+    });
+  } catch (error) {
+    if (error instanceof AnnotationProvenanceError) {
+      if (error.conflict) throw conflict(error.code, error.message, error.details);
+      throw domain(error.code, error.message, error.details);
+    }
+    throw error;
+  }
   validateSupersedes(input.snapshot, parsed.data);
   const existingFrozen = input.snapshot.annotations.find((item) => item.id === annotationSetId);
   const existingFrozenValue = existingFrozen ? FrozenAnnotationSetSchema.safeParse(existingFrozen.value) : undefined;
@@ -189,6 +229,7 @@ export async function planAnnotationSubmit(input: {
       readPreconditions: [
         { path: candidatePath, expectedHash: candidateSha256, reason: "normalized annotation candidate" },
         { path: base.absolutePath, expectedHash: parsed.data.base_sha256, reason: "registered annotation base draft" },
+        ...provenancePreconditions,
       ],
     },
   };
@@ -241,34 +282,15 @@ async function validateBaseAndTargets(
       actual: actualSha256,
     });
   }
-  const headings = markdownSectionHeadings(text);
-  const blocks = parseAnchoredBlocks(text);
-  const byId = new Map(blocks.map((block) => [block.id, block]));
   for (const annotation of candidate.annotations) {
-    const target = annotation.target;
-    if (target.kind === "document") continue;
-    if (target.kind === "section") {
-      if (headings.filter((heading) => heading === target.heading).length !== 1) {
-        throw domain("annotation_section_not_unique", `Annotation section target is missing or ambiguous: ${target.heading}`);
+    try {
+      validateAnnotationTargetAgainstMarkdown(text, annotation.target);
+    } catch (error) {
+      if (error instanceof AnnotationTargetError) {
+        if (error.conflict) throw conflict(error.code, error.message);
+        throw domain(error.code, error.message);
       }
-      continue;
-    }
-    const block = byId.get(target.block_id);
-    if (!block) throw domain("annotation_block_missing", `Annotation block target is missing: ${target.block_id}`);
-    if (block.hash !== target.block_sha256) {
-      throw conflict("annotation_block_hash_mismatch", `Annotation block hash has drifted: ${target.block_id}`);
-    }
-    if (target.kind === "quote") {
-      const first = block.content.indexOf(target.exact_quote);
-      const last = block.content.lastIndexOf(target.exact_quote);
-      if (first < 0 || first !== last) {
-        throw domain("annotation_quote_not_unique", `Annotation quote must occur exactly once in block ${target.block_id}.`);
-      }
-      const before = block.content.slice(0, first);
-      const after = block.content.slice(first + target.exact_quote.length);
-      if (!before.endsWith(target.prefix) || !after.startsWith(target.suffix)) {
-        throw conflict("annotation_quote_context_mismatch", `Annotation quote context has drifted in block ${target.block_id}.`);
-      }
+      throw error;
     }
   }
   return { absolutePath: resolved.absolutePath };

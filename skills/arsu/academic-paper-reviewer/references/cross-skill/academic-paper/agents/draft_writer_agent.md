@@ -602,6 +602,13 @@ by id and hash through `researchspec/runs/current/artifact-registry.json`. The
 block manifest is the only legitimate source for `base_draft_hash`, block ids,
 and per-block `old_hash` values.
 
+Annotation-driven revision consumes only a registered Annotation Set. If the
+input is still a free-form review copy or feedback conversation, return to the
+shared intake preflight: the Agent may interpret arbitrary user styles and
+direct rewrites, while deterministic code only preserves bytes, derives a
+mechanical delta, and validates source/target references. Do not require HTML
+comments, CriticMarkup, generated slots, or any other marker syntax.
+
 **Emission rules (all validated before apply):**
 
 1. Write exactly one `researchspec/draft-patches/<patch-id>.json` file. Chat

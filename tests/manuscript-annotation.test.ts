@@ -6,6 +6,16 @@ import test from "node:test";
 import { AnnotationResolutionReportSchema, FrozenAnnotationSetSchema } from "../src/core/contracts/annotation.js";
 import { parseAnchoredBlocks } from "../src/core/runtime/markdown-blocks.js";
 import {
+  captureAnnotationSource,
+  createAnnotationIntakeSession,
+  deriveReviewDelta,
+  materializeAnnotationCandidate,
+  planMaterializedAnnotationCandidate,
+  withCapturedAnnotationSources,
+  withDerivedReviewDelta,
+} from "../src/annotation-intake.js";
+import { sha256 } from "../src/core/workspace/write-plan.js";
+import {
   cliJson,
   initialize,
   instructions,
@@ -193,6 +203,145 @@ void test("packaged CLI freezes annotations, applies Draft Patch v3, and gates t
     const gate = status(context).workflow_control.gates.find((item) => item.state === "ready");
     assert.ok(gate);
     await submitGate(context, gate.selector, "pass");
+  } finally {
+    await cleanup(root);
+  }
+});
+
+void test("packaged CLI freezes a free-form intake candidate with v2 raw provenance", async () => {
+  const root = await tempProject();
+  try {
+    const context = initialize(root);
+    const base = await producePaperDraft(context);
+    const baseText = await readFile(path.join(root, base.path), "utf8");
+    const annotationSetId = "free-form-v2";
+    const selector = `annotation:${annotationSetId}`;
+    const packet = instructions(context, selector) as {
+      candidate: { path: string; schema_ref: string; accepted_schema_versions: string[] };
+      intake: {
+        paths: {
+          session: string;
+          review_copy: string;
+          interpretation: string;
+          review_delta: string;
+          raw_sources: string;
+          candidate: string;
+        };
+      };
+      action_descriptor: { availability: { basis_sha256: string } };
+    };
+    assert.equal(packet.candidate.schema_ref, "researchspec://contracts/annotation-set-candidate/v2");
+    assert.deepEqual(packet.candidate.accepted_schema_versions, ["1", "2"]);
+    assert.equal(packet.intake.paths.candidate, packet.candidate.path);
+
+    const created = createAnnotationIntakeSession({
+      annotationSetId,
+      baseArtifactId: base.artifact_id,
+      baseSha256: base.sha256,
+      baseText,
+    });
+    const reviewText = created.reviewCopy.content.replace(
+      "Acceptance candidate",
+      "Acceptance candidate\n\n这里是我自由写下的批注，不使用固定格式。",
+    );
+    const reviewSource = captureAnnotationSource({
+      annotationSetId,
+      content: reviewText,
+      format: "markdown_review_copy",
+    });
+    const captured = withCapturedAnnotationSources({
+      session: created.session,
+      sources: [reviewSource],
+      currentReviewText: reviewText,
+    });
+    const delta = deriveReviewDelta({
+      baseText,
+      templateText: created.reviewCopy.content,
+      reviewText,
+    });
+    assert.equal(delta.diagnostics.length, 0);
+    const deltaEntry = delta.entries[0];
+    assert.ok(deltaEntry);
+    const withDelta = withDerivedReviewDelta({ session: captured.session, delta });
+    const deltaText = `${JSON.stringify(delta, null, 2)}\n`;
+    const interpretation = {
+      schema_version: "1" as const,
+      session_id: annotationSetId,
+      base_sha256: base.sha256,
+      review_sha256: sha256(reviewText),
+      delta_sha256: sha256(deltaText),
+      entries: [{
+        annotation_id: "ann-free-form",
+        status: "ready" as const,
+        raw_body: deltaEntry.after_text,
+        source_pointer: "/entries/0",
+        source_ref: {
+          kind: "review_delta" as const,
+          source_id: withDelta.deltaSource.source.source_id,
+          delta_id: deltaEntry.delta_id,
+        },
+        target: { kind: "document" as const },
+        agent_interpretation: "The reviewer asks for a revision based on a freely written note.",
+        expected_action: "Address the free-form review note in the revision.",
+        semantic_impact: { level: "ordinary" as const },
+        clarification: null,
+      }],
+    };
+    const candidate = materializeAnnotationCandidate({
+      session: withDelta.session,
+      interpretation,
+      baseText,
+      reviewText,
+      delta,
+      sourceContents: {
+        [created.reviewSource.source.source_id]: created.reviewSource.content,
+        [reviewSource.source.source_id]: reviewSource.content,
+        [withDelta.deltaSource.source.source_id]: withDelta.deltaSource.content,
+      },
+    });
+    const writes = [
+      ...created.writes,
+      ...captured.writes,
+      ...withDelta.writes,
+      planMaterializedAnnotationCandidate({ session: withDelta.session, candidate }),
+    ];
+    for (const write of writes) {
+      assert.ok(
+        write.path === packet.intake.paths.session
+          || write.path === packet.intake.paths.review_copy
+          || write.path === packet.intake.paths.review_delta
+          || write.path === packet.intake.paths.candidate
+          || write.path.startsWith(`${packet.intake.paths.raw_sources}/`),
+        write.path,
+      );
+      const target = path.join(context.workspace, write.path);
+      await mkdir(path.dirname(target), { recursive: true });
+      await writeFile(target, write.content, "utf8");
+    }
+
+    cliJson([
+      "submit", selector,
+      "--actor-kind", "agent",
+      "--actor-name", "researchspec-navigate",
+      "--confirmed-by", "Acceptance Researcher",
+      "--expected-action-basis-sha256", packet.action_descriptor.availability.basis_sha256,
+      "--yes",
+    ], context.root);
+    const frozen = FrozenAnnotationSetSchema.parse(JSON.parse(
+      await readFile(path.join(context.workspace, `runs/current/annotation-sets/${annotationSetId}.json`), "utf8"),
+    ));
+    assert.equal(frozen.schema_version, "2");
+    if (frozen.schema_version === "2") {
+      assert.equal(frozen.intake_session_id, annotationSetId);
+      assert.equal(frozen.raw_sources.length, 3);
+      assert.equal(frozen.annotations[0]?.source_ref.kind, "review_delta");
+    }
+
+    await writeFile(path.join(context.workspace, withDelta.deltaSource.source.path), "{}\n", "utf8");
+    const check = parseEnvelope(runCli(["check", "artifacts", "--json"], context.root));
+    assert.equal(check.ok, false);
+    assert.ok(check.diagnostics.some((diagnostic) =>
+      (diagnostic as { code?: string }).code === "annotation_raw_source_hash_mismatch"));
   } finally {
     await cleanup(root);
   }

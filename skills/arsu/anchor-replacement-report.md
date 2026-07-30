@@ -114,11 +114,11 @@ verifiers are optional diagnostics, not the source of authority.
 - Severity: `required`
 - Semantic role: `draft_patch_protocol`
 - Replacement shape: `patch_protocol_block`
-- Replacement body SHA-256: `8e7abc5c34a4f917025283d3789d51693e161ebf4ac664437a33135480cbc67d`
+- Replacement body SHA-256: `8f70331c0e1aec676b8dfc33e28aaf26ebbeb41809f5c65948c5eaec14d78105`
 - ResearchSpec targets: `researchspec/draft-patches/<patch-id>.json`, `researchspec/runs/current/artifact-registry.json`
 - Generated output paths: `academic-paper/agents/draft_writer_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `academic-pipeline/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `deep-research/references/cross-skill/academic-paper/agents/draft_writer_agent.md`
 - Before SHA-256: `303cf33ae73e69553a6cc6b2da370857fe0640a3a418fd7648e018d9cff493fd`
-- After SHA-256: `bcf35adcab3765b390c2447dfbe72efdc7c32a69d408a96348371f67732a746d`
+- After SHA-256: `c05ca5729f9884df9b6642ce0b64cb146ab4cc9809cd6c9a90f2c813a50900b5`
 
 #### Before
 
@@ -160,6 +160,13 @@ not a complete replacement draft. Resolve the base manuscript and block manifest
 by id and hash through `researchspec/runs/current/artifact-registry.json`. The
 block manifest is the only legitimate source for `base_draft_hash`, block ids,
 and per-block `old_hash` values.
+
+Annotation-driven revision consumes only a registered Annotation Set. If the
+input is still a free-form review copy or feedback conversation, return to the
+shared intake preflight: the Agent may interpret arbitrary user styles and
+direct rewrites, while deterministic code only preserves bytes, derives a
+mechanical delta, and validates source/target references. Do not require HTML
+comments, CriticMarkup, generated slots, or any other marker syntax.
 
 **Emission rules (all validated before apply):**
 
@@ -375,11 +382,11 @@ registered corpus in place.
 - Severity: `required`
 - Semantic role: `review_commitment_tracking`
 - Replacement shape: `schema_projection_table`
-- Replacement body SHA-256: `54a22bd7763cabb81322a5c8d85cdf55701c0c54c8f4785a3ebfae80093bc86e`
+- Replacement body SHA-256: `70c8131c1164e8a991f3b3eecdb0a2bf4e3cf6d56f32add5c71166ad2050a72f`
 - ResearchSpec targets: `researchspec/changes/<change-id>/contract-patch.yaml`, `researchspec/draft-patches/<patch-id>.json`, `researchspec/runs/current/decision-ledger.jsonl`
 - Generated output paths: `academic-paper/agents/revision_coach_agent.md`
 - Before SHA-256: `58ab269816913477f725577ef4eec70c4c805150153c59ebf2058f7a0920680b`
-- After SHA-256: `2c172948897668c0a5c326cdef44e933f1fb50efea552c9e5bee865340955ecd`
+- After SHA-256: `439c2a2bf8fafe958d8ad10e9bbdd31b4afcc65d0779f6c70e3d915db056e440`
 
 #### Before
 
@@ -405,6 +412,14 @@ registered corpus in place.
    `researchspec/runs/current/decision-ledger.jsonl`. Revision execution and
    independent re-review append fulfillment evidence later; this agent does not
    write those stable records directly.
+
+When the source is a free-form annotated manuscript rather than a registered
+review artifact, first use the shared ResearchSpec intake session. Read the
+complete base, review copy, mechanical delta, feedback files, and conversation
+snapshots; interpret the user's own style without requiring a marker grammar.
+Keep ambiguous or high-impact items pending clarification or confirmation.
+Only ready entries may become the normalized Annotation Set candidate, and only
+the CLI may freeze and register it.
 <!--/rs:REVIEW-014-->
 ````
 
@@ -603,11 +618,11 @@ write boundary.
 - Severity: `required`
 - Semantic role: `draft_patch_protocol`
 - Replacement shape: `patch_protocol_block`
-- Replacement body SHA-256: `a85dd6ee84e0247038baddf6c5bdb3b5ce1c137a2e0e2333de4c8b9ff8e5c80b`
+- Replacement body SHA-256: `6c5be8b4446c75f4fc183475445f90d072ad7d68a887f53c64adc684dc5e51f6`
 - ResearchSpec targets: `researchspec/draft-patches/<patch-id>.json`, `researchspec/runs/current/decision-ledger.jsonl`
 - Generated output paths: `academic-paper/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper/SKILL.md`, `deep-research/references/cross-skill/academic-paper/SKILL.md`
 - Before SHA-256: `3746fd60636d23f14f9740192da44549c9fa0427537852d370a54d20acbdcde2`
-- After SHA-256: `6dc529c4fc4e538db62f29a829b30c6c67828c98b4e983ac036412bd2b23230b`
+- After SHA-256: `909771f000d9e7ab2e07a85833562070c16c3763d4db12fae8bdbc26247376c3`
 
 #### Before
 
@@ -628,6 +643,16 @@ Orchestrated runs follow `pipeline_orchestrator_agent.md` § Revision-Round Patc
 <!--rs:PATCH-001-->
 In `academic-paper` revision mode, `draft_writer_agent` does not re-emit the
 complete manuscript. The round uses the following bounded patch workflow:
+
+If the user enters with an unregistered annotated Markdown copy, feedback file,
+or conversational comments, first follow the ResearchSpec annotation-intake
+contract returned by `instructions annotation:<id>`. Preserve the complete base,
+review material, content-addressed raw snapshots, and mechanical Review Delta.
+The Host Agent—not a Markdown parser—identifies feedback, resolves its target,
+and records interpretation, expected action, semantic impact, and clarification.
+Generated slots and familiar markup are optional hints only. Register the ready
+candidate through `submit annotation:<id>` before revision; never treat the
+mutable session as route evidence or workflow authority.
 
 1. **Prepare the base artifact.** Resolve the current manuscript id and hash
    through `researchspec/runs/current/artifact-registry.json`. The deterministic
@@ -1408,11 +1433,11 @@ Register the handoff payload through `researchspec/runs/current/artifact-registr
 - Severity: `required`
 - Semantic role: `draft_patch_protocol`
 - Replacement shape: `patch_protocol_block`
-- Replacement body SHA-256: `67848a9eb5c03674c8f082ab40d434ad828c0b621ddddf5e8e3ba7cb75ce5e16`
+- Replacement body SHA-256: `c488ee7918463349eda31edccf0f4e992a156d7606f4e8761c2876d4c47b6553`
 - ResearchSpec targets: `researchspec/draft-patches/<patch-id>.json`, `researchspec/runs/current/decision-ledger.jsonl`, `researchspec/runs/current/gate-ledger.jsonl`, `researchspec/runs/current/artifact-registry.json`
 - Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
 - Before SHA-256: `cd54fc8af9aab880c01c0cbc083475c7dffdc0f0a16c83873c46017f26fc3878`
-- After SHA-256: `96ef57be664d560e568bfd3cb09fcd6e57d46e234353e5cb22babe4dc061572c`
+- After SHA-256: `7c04a82b17a6a8c28e1733eeea4403ed07897483e17572342a5ee016aab0e856`
 
 #### Before
 
@@ -1475,6 +1500,13 @@ deterministic preparation, apply, registration, and gate steps around that
 patch. The Stage 4.5 FAIL route enters Stage 5's revision sub-step, not the
 PASS-path finalization handoff, and the gate that issued any FAIL must re-verify
 the applied result before finalization.
+
+For a pipeline entry carrying unregistered free-form manuscript feedback, run
+the same annotation intake preflight before Stage 4 dispatch. The review copy,
+raw snapshots, and mechanical Review Delta are working material; the Host Agent
+owns interpretation and clarification. Only the human-confirmed registered
+Annotation Set becomes a revision prerequisite. This preflight creates no
+pipeline stage, hidden round, state event, Gate, Decision, or receipt of its own.
 
 **Normative order per revision round — nothing may rewrite the draft between
 steps 1 and 3:**

@@ -197,12 +197,15 @@ flowchart LR
 
 CLI 是这套循环的状态权威。Companion 和 ARSU Skill 可以选择、解释、循环，但不能复制 graph、猜路径或直接写 state/registry/ledger。
 
-Annotation Set 也是 CLI 管理的全局 selector，但不进入 workflow state。Agent 只能在
-`instructions annotation:<id>` 返回的
-`runs/current/annotation-sessions/<id>/candidate.json` 写入规范化 JSON candidate。CLI
-验证已注册 Markdown 稿件、完整 base/block hash、quote 唯一性、clarification 与
-supersedes 后，create-only 冻结 set、先写 receipt、再刷新 registry。`status` 只给出
-`list:annotations` 定向入口，不展开批注正文。
+Annotation Set 也是 CLI 管理的全局 selector，但不进入 workflow state。
+`instructions annotation:<id>` 返回 session、review copy、raw source、Review Delta、
+Agent interpretation 和 candidate 的有界 working 路径。用户可以自由批注审阅副本、提交
+反馈文件或在对话中给出意见；预插入的批注区域只是建议，不是格式要求。确定性 adapter
+保存原始材料并计算机械差异，Host Agent 负责识别批注、解释意图、提出澄清和影响分类。
+只有完整且经确认的 interpretation 才写入固定 candidate 路径。CLI 随后验证已注册
+Markdown 稿件、raw-source hashes、完整 base/block hash、quote 唯一性、clarification 与
+supersedes，create-only 冻结 set、先写 receipt、再刷新 registry。`status` 只给出
+`list:annotations` 定向入口，不展开批注正文或 mutable session。
 
 每个 Action v2 descriptor 都从 `execution_policy` 派生
 `execution_requirements`。`plan_bound` Gate、Decision 与 patch apply 在 TTY 中先展示同一

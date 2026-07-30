@@ -53,6 +53,12 @@ action basis、plan hash 和所需确认执行。`--yes` 不能代替 formal Gat
 
 高影响 contract change 通过 `propose` 创建 pending proposal，再由 `decide` 接受、拒绝或 postpone；`archive` 只归档已有可信 resolution 的 change 或 draft patch。`annotation:<id>` 使用 `human_confirmed` descriptor；非交互提交需匹配 action basis、`--confirmed-by` 与 `--yes`，但不需要 plan hash。它把规范化 candidate 绑定到已注册 Markdown 稿件和完整 target hashes，按 frozen set、receipt、registry 的顺序提交并支持精确恢复。
 
+Annotation instructions 还返回 review copy、raw snapshot、mechanical delta 与 Agent
+interpretation 的 working 路径。用户批注没有固定 Markdown 语法；adapter 不做语义解析，
+Host Agent 对完整原稿和审阅材料作解释。Annotation Set v2 在 submit 时绑定 raw source 与
+delta hashes，v1 继续兼容。Working session 的变化不更新 registry、state、Gate、Decision
+或 receipt。
+
 `revision_patch` 是 draft-patch lifecycle 的可审阅输入：它绑定 base artifact/hash，由 CLI 的 patch transaction 形成 revised output、apply report 与 receipt，ARSU producer 不直接覆盖原稿。Patch v3 以 operation 上的 Annotation 引用作为唯一映射，并在成功 apply 后派生、注册 Annotation Resolution Report。stale 或 rejected patch 不产生报告。`revision_completeness` 与 `check artifacts` 复用同一机械覆盖验证器；机械完整不等于 reviewer 或用户认可回应充分。
 
 新会话从 `status` 恢复，再读取当前 selector 的 instructions。写入成功后优先跟随结果的 `next_selectors` 取得所需细节，而非无条件重读完整 status。`handoff` 和 `pack` 是派生视图，不覆盖 authority state。Zotero 与插件只提供有界辅助材料；其不可用不会让 Agent 编造私有 library、证据、Gate 或下一动作。

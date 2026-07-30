@@ -69,6 +69,7 @@ import { compactTransactionResult } from "../core/runtime/transaction-result.js"
 import { inspectLiteratureAdapters } from "../literature-adapters/inspect.js";
 import { executePatchPlan, PatchLifecycleError, planPatchAdvance, planPatchSubmit } from "../core/runtime/patch-lifecycle.js";
 import { annotationCandidateRelativePath, AnnotationLifecycleError, executeAnnotationPlan, planAnnotationSubmit } from "../core/runtime/annotation-lifecycle.js";
+import { annotationIntakePaths } from "../annotation-intake/paths.js";
 import { buildAdaptiveInstructions } from "../core/runtime/adaptive-case-control.js";
 import {
   AdaptiveCaseError,
@@ -324,13 +325,22 @@ export async function handleInstructions(selector: string, context: CommandConte
   if (AnnotationSelectorSchema.safeParse(selector).success) {
     if (descriptor.availability.disposition === "blocked") throw new CliError("action_blocked", `Action is blocked: ${selector}`, 1, undefined, { descriptor });
     const annotationSetId = selector.slice("annotation:".length);
+    const intakePaths = annotationIntakePaths(annotationSetId);
     const packet = {
       kind: "submit",
       selector,
       candidate: {
         path: annotationCandidateRelativePath(annotationSetId),
-        schema_ref: "researchspec://contracts/annotation-set-candidate/v1",
+        schema_ref: "researchspec://contracts/annotation-set-candidate/v2",
+        accepted_schema_versions: ["1", "2"],
         normalized_json_only: true,
+      },
+      intake: {
+        schema_ref: "researchspec://contracts/annotation-intake-session/v1",
+        paths: intakePaths,
+        slot_densities: ["section", "block", "none"],
+        semantic_interpretation: "host_agent",
+        authority: "working_material_only",
       },
       registered: snapshot.annotations.some((item) => item.id === annotationSetId),
       action_descriptor: descriptor,

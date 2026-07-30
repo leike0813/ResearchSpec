@@ -312,8 +312,6 @@ runtime-control workflow SHALL remain complete without the reference.
 - **AND** it SHALL continue the canonical route or runtime workflow without
   treating the reference as a blocker
 
-## ADDED Requirements
-
 ### Requirement: Companion plan and Gate guidance
 Companion Skills SHALL instruct Agents to consume policy-derived execution requirements, present the bound plan, obtain required confirmation, and preserve formal Gate authority.
 
@@ -324,3 +322,18 @@ Companion Skills SHALL instruct Agents to consume policy-derived execution requi
 #### Scenario: Decision-assisted Gate evidence
 - **WHEN** a waiver, not-applicable choice, or Gate override contributes to readiness
 - **THEN** the Companion SHALL retain typed Decision and receipt evidence and still route the formal Gate through user-confirmed Verify
+
+### Requirement: Navigate Orchestrates Free-Form Annotation Intake
+ResearchSpec Navigate SHALL treat manuscript annotation intake as an
+Agent-assisted pre-route activity over the shared session and interpretation
+contracts, then continue through the existing annotation registration and
+revision routes.
+
+#### Scenario: User supplies a free-form review
+- **WHEN** a user provides an annotated copy, feedback file, or conversational comments
+- **THEN** Navigate SHALL preserve the raw material, ask the Host Agent to interpret it, surface ambiguities and high-impact items, and materialize only confirmed ready entries
+- **AND** it SHALL NOT require a Markdown annotation syntax
+
+#### Scenario: Annotation set is ready
+- **WHEN** the interpretation candidate is complete and the human confirms submission
+- **THEN** Navigate SHALL use the existing `annotation:<id>` descriptor and submit transaction before selecting the existing revision, revision-coach, re-review, or pipeline route

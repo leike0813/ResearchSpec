@@ -11,8 +11,10 @@
 Adaptive 将每条 route 的 durable outputs 作为 obligations，例如 outline、evidence map、draft、citation audit、revised draft 或 response。Agent 按 `obligation:` instructions 记录 attempts，并仅在 CLI 验证 artifact/hash/producer/declared dependency 后接受 evidence。没有声明的文本顺序或 ARSU phase 不构成 hard edge。
 
 `annotation:<id>` 把确定性 JSON candidate 冻结为绑定已注册 Markdown 稿件的
-Annotation Set。自由 Markdown/CriticMarkup 解析不属于当前流程。Adaptive Start 会把选中的
-set 绑定到 receipt；它不创建 hidden round。
+Annotation Set。Candidate 可以来自自由 Markdown review copy、反馈文件或对话：headless
+adapter 保存原始材料和机械 block delta，Host Agent 负责识别、解释、澄清并生成候选。
+预插入批注区域只是可删除的提示，不是解析语法。Adaptive Start 会把选中的 set 绑定到
+receipt；mutable intake session 不进入 authority，也不创建 hidden round。
 
 `revision_patch` 不作为 adaptive obligation output；它是跨 runtime 的 draft-patch lifecycle 候选，绑定 base artifact/hash，经 `submit patch:` 创建 pending patch，再由 `decide patch:` 解析并只通过 `advance patch:` 形成 revised output、apply report、Annotation Resolution Report 和 receipt。Patch v3 的 operation references 是 annotation-to-operation mapping 的唯一事实源；answered、deferred、rejected、unresolved 与 superseded 也在同一 resolution entries 中完整记录。ARSU producer 不得直接覆盖原稿。高影响 scope、claim、structure 或 failed-Gate override 进入 Decision；Gate 和 completion 使用当前 `gate:`/`completion:` selector。
 

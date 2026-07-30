@@ -672,8 +672,6 @@ preserve formal Gate, Decision, and high-impact patch/change protections.
   the same preflight source and pass deterministic validation and idempotence
 - **AND** generated Skill files SHALL not require hand edits
 
-## ADDED Requirements
-
 ### Requirement: Current dual-runtime generated guidance
 The ARSU converter SHALL generate entrypoints and metadata that describe adaptive-default operation and bounded strict compatibility without asserting that compatibility paths are absent.
 
@@ -684,3 +682,18 @@ The ARSU converter SHALL generate entrypoints and metadata that describe adaptiv
 #### Scenario: Portable converter build
 - **WHEN** converter and release verification run on the supported Node matrix
 - **THEN** executable permission handling SHALL use Node file APIs without depending on a Unix `chmod` command
+
+### Requirement: ARSU Guidance Shares The Annotation Intake Contract
+Converter-owned Academic Paper and Pipeline guidance SHALL consume the same
+free-form intake, Agent interpretation, Annotation Set submission, and
+authority boundary as Navigate without defining a second parser or workflow
+stage.
+
+#### Scenario: User enters through an ARSU producer
+- **WHEN** a direct Academic Paper or Pipeline request includes unregistered free-form manuscript feedback
+- **THEN** generated guidance SHALL complete the shared intake preflight before revision work
+- **AND** only a registered Annotation Set SHALL become route prerequisite evidence
+
+#### Scenario: Generated surfaces are checked
+- **WHEN** ARSU conversion and idempotence checks run
+- **THEN** all generated Skills, manifests, and reports SHALL match the converter-owned intake guidance

@@ -7,6 +7,13 @@ patch. The Stage 4.5 FAIL route enters Stage 5's revision sub-step, not the
 PASS-path finalization handoff, and the gate that issued any FAIL must re-verify
 the applied result before finalization.
 
+For a pipeline entry carrying unregistered free-form manuscript feedback, run
+the same annotation intake preflight before Stage 4 dispatch. The review copy,
+raw snapshots, and mechanical Review Delta are working material; the Host Agent
+owns interpretation and clarification. Only the human-confirmed registered
+Annotation Set becomes a revision prerequisite. This preflight creates no
+pipeline stage, hidden round, state event, Gate, Decision, or receipt of its own.
+
 **Normative order per revision round — nothing may rewrite the draft between
 steps 1 and 3:**
 
