@@ -82,3 +82,68 @@ void test("an unowned existing profile blocks update without claiming ownership"
     await cleanup(root);
   }
 });
+
+void test("fresh CLI processes read instructions, start idempotently, decide a Gate and advance the owning control", async () => {
+  const root = await tempProject();
+  try {
+    assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
+    const workspace = path.join(root, "researchspec");
+    const before = await readFile(path.join(workspace, "config.yaml"), "utf8");
+    const instructions = runCli(["instructions", "route:deep-research:full", "--json"], root);
+    assert.equal(instructions.status, 0);
+    assert.equal(parseEnvelope<{ confirmation_required: boolean }>(instructions).data?.confirmation_required, true);
+    assert.equal(await readFile(path.join(workspace, "config.yaml"), "utf8"), before);
+
+    const evidence = path.join(root, "outputs/research-report.md");
+    await mkdir(path.dirname(evidence), { recursive: true });
+    await writeFile(evidence, "report\n", "utf8");
+    const startInput = path.join(root, "start.json");
+    await writeFile(startInput, JSON.stringify({
+      schema_version: "1",
+      confirmed_at: "2026-08-02T15:00:00+08:00",
+      prerequisites: [],
+      handoff_inputs: [],
+      planned_outputs: [{ role: "research-report", type: "report", path: "outputs/research-report.md", purpose: "Gate evidence" }],
+      formal_gates: ["evidence-quality"],
+      cost: { effort: "high", interaction: "long_horizon" },
+    }), "utf8");
+    const started = parseEnvelope<{ instance_id: string }>(runCli(["start", "deep-research:full", "--input", startInput, "--confirmed-by", "researcher", "--json"], root));
+    assert.equal(started.ok, true);
+    const instanceId = started.data?.instance_id;
+    assert.ok(instanceId);
+    assert.equal(parseEnvelope<{ status: string }>(runCli(["start", "deep-research:full", "--input", startInput, "--confirmed-by", "researcher", "--json"], root)).data?.status, "already_started");
+    assert.equal((await readdir(path.join(workspace, "subflows"))).length, 1);
+
+    const decided = runCli(["decide", `gate:${instanceId}/evidence-quality`, "--verdict", "pass", "--reason", "Evidence reviewed.", "--evidence-role", "research-report", "--actor-name", "researcher", "--json"], root);
+    assert.equal(decided.status, 0, decided.stderr);
+    const advanced = runCli(["advance", `subflow:${instanceId}`, "--transition", "complete", "--actor-name", "academic-pipeline", "--json"], root);
+    assert.equal(advanced.status, 0, advanced.stderr);
+    const status = parseEnvelope<{ active_instances: Array<{ instance_id: string }>; subflows: Record<string, number>; frontier: unknown[] }>(runCli(["status", "--json"], root));
+    assert.equal(status.data?.subflows.complete, 1);
+    assert.equal(status.data?.active_instances.some((item) => item.instance_id === instanceId), false);
+  } finally { await cleanup(root); }
+});
+
+void test("current start dry-run and unsafe boundary failures are zero-write", async () => {
+  const root = await tempProject();
+  try {
+    assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
+    const workspace = path.join(root, "researchspec");
+    const input = path.join(root, "unsafe-start.json");
+    const base = {
+      schema_version: "1",
+      confirmed_at: "2026-08-02T16:00:00+08:00",
+      prerequisites: [], handoff_inputs: [], formal_gates: [],
+      cost: { effort: "low", interaction: "single_pass" },
+    };
+    await writeFile(input, JSON.stringify({ ...base, planned_outputs: [{ role: "brief", type: "report", path: "outputs/future.md", purpose: "result" }] }), "utf8");
+    assert.equal(runCli(["start", "deep-research:quick", "--input", input, "--confirmed-by", "researcher", "--dry-run", "--json"], root).status, 0);
+    assert.equal((await readdir(path.join(workspace, "subflows"))).length, 0);
+
+    await writeFile(input, JSON.stringify({ ...base, planned_outputs: [{ role: "brief", type: "report", path: "researchspec/leak.md", purpose: "invalid" }] }), "utf8");
+    const rejected = runCli(["start", "deep-research:quick", "--input", input, "--confirmed-by", "researcher", "--json"], root);
+    assert.equal(rejected.status, 2);
+    assert.equal(parseEnvelope(rejected).error?.code, "boundary_path_managed");
+    assert.equal((await readdir(path.join(workspace, "subflows"))).length, 0);
+  } finally { await cleanup(root); }
+});

@@ -1,289 +1,91 @@
 import assert from "node:assert/strict";
-import { createHash } from "node:crypto";
-import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
-import { tmpdir } from "node:os";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { test } from "node:test";
-import { parse, stringify } from "yaml";
 
-import { TransitionAdvanceReceiptV2Schema } from "../src/core/contracts/gate-transition.js";
-import { executeArtifactSubmit, planArtifactSubmit } from "../src/core/runtime/artifact-submit.js";
-import { executeGateSubmit, executeTransitionAdvance, planGateSubmit, planTransitionAdvance } from "../src/core/runtime/gate-transition-control.js";
-import { decideItem } from "../src/core/runtime/lifecycle.js";
-import { buildSubflowInstructions, executeSubflowStart, planSubflowStart } from "../src/core/runtime/subflow-control.js";
-import { buildGateTransitionInstructions, evaluateWorkflowControl } from "../src/core/runtime/workflow-control.js";
-import { getWorkspaceEntries } from "../src/core/workspace/layout.js";
-import { loadWorkspaceSnapshot } from "../src/core/workspace/snapshot.js";
-import { TEST_RUN_STATE, TEST_WORKFLOW } from "./helpers/test-workflow.js";
+import {
+  advanceSubflow,
+  appendGateAttempt,
+  overrideFailedGate,
+  recordLocalDecision,
+  startSubflow,
+  SubflowControlError,
+} from "../src/core/runtime/subflow-control.js";
+import { loadCurrentWorkspaceIndex } from "../src/core/runtime/workspace-index.js";
+import { createCurrentWorkspace, startCommand } from "./helpers/current-workspace.js";
 
-void test("transition receipt v2 rejects invalid completion effect authority", () => {
-  const receipt = {
-    schema_version: "2",
-    receipt_type: "transition_advance",
-    plan_sha256: "a".repeat(64),
-    instruction_basis_sha256: "b".repeat(64),
-    selector: "transition:sf-research/complete",
-    transition_id: "sf-research/complete",
-    transition_node_id: "complete",
-    subflow_instance_id: "sf-research",
-    template_id: "tpl-research",
-    from_stage_id: "research",
-    effects: [{ kind: "complete_subflow", subflow_instance_id: "sf-research" }, { kind: "complete_run" }],
-    gate_event_ids: [],
-    decision_ids: [],
-    actor: { kind: "agent", name: "agent" },
-    advanced_at: "2026-07-10T00:00:00.000Z",
-  };
-  assert.equal(TransitionAdvanceReceiptV2Schema.safeParse(receipt).success, true);
-  assert.equal(TransitionAdvanceReceiptV2Schema.safeParse({
-    ...receipt,
-    effects: [...receipt.effects].reverse(),
-  }).success, false);
-  assert.equal(TransitionAdvanceReceiptV2Schema.safeParse({
-    ...receipt,
-    effects: [{ kind: "complete_subflow", subflow_instance_id: "sf-other" }],
-  }).success, false);
-});
-
-void test("confirmed Gate submit completes only the selected subflow", async () => {
-  const root = await createWorkspace();
+void test("Gate reverification appends attempts and a current fail can be overridden without advancing", async () => {
+  const fixture = await createCurrentWorkspace();
   try {
-    const workspace = path.join(root, "researchspec");
-    const instanceId = await completeSliceWork(workspace);
-    let snapshot = await loadWorkspaceSnapshot(workspace);
-    let control = await evaluateWorkflowControl(snapshot);
-    const gateSelector = `gate:${instanceId}/research-completion`;
-    assert.equal(control.state, "gate_required");
-    assert.ok(control.frontier.includes(gateSelector));
-    const packet = await buildGateTransitionInstructions(snapshot, gateSelector);
-    assert.equal(packet.ok, true);
-    if (!packet.ok) return;
-    const gatePlan = await planGateSubmit({
-      snapshot, selector: gateSelector, payload: gatePayload(packet.packet, "pass"),
-      actor: { kind: "validator", name: "researchspec-verify" }, confirmedBy: "researcher", now: "2026-07-10T01:00:00.000Z",
+    const evidencePath = path.join(fixture.root, "outputs/report.md");
+    await mkdir(path.dirname(evidencePath), { recursive: true });
+    await writeFile(evidencePath, "evidence\n", "utf8");
+    let index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    const started = await startSubflow({
+      index,
+      routeRef: "deep-research:full",
+      command: startCommand("deep-research:full", "2026-08-02T10:00:00+08:00", {
+        formal_gates: ["evidence-quality"],
+        planned_outputs: [{ role: "research-report", type: "report", path: "outputs/report.md", purpose: "Gate review" }],
+      }),
+      confirmedBy: "researcher",
     });
-    assert.equal(gatePlan.status, "would_submit");
-    assert.deepEqual(gatePlan.writePlan.operations.map((item) => item.action), ["create", "refresh"]);
-    assert.equal((await readFile(path.join(workspace, "runs/current/gate-ledger.jsonl"), "utf8")).trim(), "");
-    await executeGateSubmit(gatePlan, workspace);
+    index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    const checkpoint = index.subflows[0]?.control.checkpoint;
+    await appendGateAttempt({ index, instanceId: started.instance_id, gateId: "evidence-quality", verdict: "fail", confirmedBy: "researcher", confirmedAt: "2026-08-02T10:10:00+08:00", summary: "Evidence gap remains." });
+    await appendGateAttempt({ index, instanceId: started.instance_id, gateId: "evidence-quality", verdict: "pass", confirmedBy: "researcher", confirmedAt: "2026-08-02T10:20:00+08:00", summary: "New evidence closes the gap.", evidenceRole: "research-report" });
+    await appendGateAttempt({ index, instanceId: started.instance_id, gateId: "evidence-quality", verdict: "fail", confirmedBy: "researcher", confirmedAt: "2026-08-02T10:30:00+08:00", summary: "Residual limitation remains." });
+    await overrideFailedGate({ index, instanceId: started.instance_id, gateId: "evidence-quality", approvedBy: "researcher", approvedAt: "2026-08-02T10:31:00+08:00", reason: "Proceed with the limitation disclosed." });
 
-    snapshot = await loadWorkspaceSnapshot(workspace);
-    control = await evaluateWorkflowControl(snapshot);
-    const transitionSelector = `transition:${instanceId}/complete-research`;
-    assert.equal(control.state, "transition_ready");
-    assert.deepEqual(control.transitions.filter((item) => item.state === "ready").map((item) => item.selector), [transitionSelector]);
-    const advance = await planTransitionAdvance({ snapshot, selector: transitionSelector, actor: { kind: "agent", name: "academic-pipeline" }, now: "2026-07-10T01:01:00.000Z" });
-    assert.equal(advance.status, "would_advance");
-    assert.equal(advance.receipt.schema_version, "2");
-    assert.deepEqual(advance.effects, [{ kind: "complete_subflow", subflow_instance_id: instanceId }]);
-    assert.deepEqual(advance.writePlan.operations.map((item) => item.action), ["create", "refresh"]);
-    const outcome = await executeTransitionAdvance(advance, workspace);
-    assert.equal(outcome.status, "advanced");
-    assert.equal(outcome.workflow_control_after.state, "ready");
-    assert.ok(outcome.workflow_control_after.startable_subflows.includes("subflow:tpl-research"));
-    assert.equal((await loadWorkspaceSnapshot(workspace)).runState?.status, "in_progress");
-    const retry = await planTransitionAdvance({ snapshot: await loadWorkspaceSnapshot(workspace), selector: transitionSelector, actor: { kind: "agent", name: "academic-pipeline" }, expectedPlanSha256: advance.plan_sha256 });
-    assert.equal(retry.status, "already_advanced");
-    assert.deepEqual(retry.effects, advance.effects);
-  } finally { await rm(root, { recursive: true, force: true }); }
+    index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    const control = index.subflows[0]?.control;
+    assert.equal(control?.gates[0]?.attempts.length, 3);
+    assert.equal(control?.gates[0]?.attempts[1]?.evidence?.[0]?.role, "research-report");
+    assert.match(control?.gates[0]?.override?.decision_id ?? "", /^override-/);
+    assert.equal(control?.checkpoint, checkpoint);
+    assert.equal(control?.transitions.length, 0);
+  } finally { await fixture.cleanup(); }
 });
 
-void test("explicit complete_run terminates the run through the same receipt", async () => {
-  const root = await createWorkspace({ completeRun: true });
+void test("local scope, claim, structure and branch-shaped Decisions remain in one control", async () => {
+  const fixture = await createCurrentWorkspace();
   try {
-    const workspace = path.join(root, "researchspec");
-    const instanceId = await completeSliceWork(workspace);
-    await submitPassingGate(workspace, instanceId);
-    const snapshot = await loadWorkspaceSnapshot(workspace);
-    const selector = `transition:${instanceId}/complete-research`;
-    const advance = await planTransitionAdvance({ snapshot, selector, actor: { kind: "agent", name: "academic-pipeline" }, now: "2026-07-10T01:30:00.000Z" });
-    assert.deepEqual(advance.effects, [
-      { kind: "complete_subflow", subflow_instance_id: instanceId },
-      { kind: "complete_run" },
-    ]);
-    await executeTransitionAdvance(advance, workspace);
-    const after = await loadWorkspaceSnapshot(workspace);
-    assert.equal(after.runState?.status, "complete");
-    const control = await evaluateWorkflowControl(after);
-    assert.equal(control.state, "complete");
-    assert.equal(control.subflows.find((item) => item.selector === "subflow:tpl-research")?.state, "blocked");
-    assert.deepEqual(control.startable_subflows, []);
-    assert.deepEqual(await buildSubflowInstructions(after, "subflow:tpl-research"), { ok: false, code: "run_terminal" });
-  } finally { await rm(root, { recursive: true, force: true }); }
+    let index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    const started = await startSubflow({ index, routeRef: "deep-research:quick", command: startCommand("deep-research:quick", "2026-08-02T11:00:00+08:00"), confirmedBy: "researcher" });
+    index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    for (const [offset, kind] of (["scope", "claim", "structure"] as const).entries()) {
+      await recordLocalDecision({ index, instanceId: started.instance_id, decisionId: `${kind}-choice`, kind, choice: `choice-${kind}`, decidedBy: "researcher", decidedAt: `2026-08-02T11:0${String(offset + 1)}:00+08:00` });
+    }
+    index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    assert.deepEqual(index.subflows[0]?.control.decisions.map((item) => item.kind), ["scope", "claim", "structure"]);
+    assert.equal(index.subflows[0]?.control.gates.length, 0);
+  } finally { await fixture.cleanup(); }
 });
 
-void test("legacy v1 transition receipts remain replayable without rewriting", async () => {
-  const root = await createWorkspace();
+void test("lifecycle transitions are explicit and control writes reject stale bytes", async () => {
+  const fixture = await createCurrentWorkspace();
   try {
-    const workspace = path.join(root, "researchspec");
-    const instanceId = await completeSliceWork(workspace);
-    const planSha256 = "b".repeat(64);
-    const selector = `transition:${instanceId}/complete-research`;
-    const receipt = {
-      schema_version: "1",
-      receipt_type: "transition_advance",
-      plan_sha256: planSha256,
-      instruction_basis_sha256: "c".repeat(64),
-      selector,
-      transition_id: `${instanceId}/complete-research`,
-      transition_node_id: "complete-research",
-      subflow_instance_id: instanceId,
-      template_id: "tpl-research",
-      from_stage_id: "research",
-      effect: { kind: "complete_subflow" },
-      gate_event_ids: [],
-      decision_ids: [],
-      actor: { kind: "agent", name: "legacy-agent" },
-      advanced_at: "2026-07-10T01:45:00.000Z",
-    };
-    const receiptText = `${JSON.stringify(receipt, null, 2)}\n`;
-    const relativeReceiptPath = `runs/current/receipts/transition-advance/${instanceId}/complete-research.json`;
-    const receiptPath = path.join(workspace, relativeReceiptPath);
-    await mkdir(path.dirname(receiptPath), { recursive: true });
-    await writeFile(receiptPath, receiptText, "utf8");
-    const statePath = path.join(workspace, "runs/current/state.yaml");
-    const state = parse(await readFile(statePath, "utf8")) as typeof TEST_RUN_STATE;
-    const instance = state.subflows.find((item) => item.instance_id === instanceId);
-    assert.ok(instance);
-    instance.status = "complete";
-    instance.transition_receipts.push({
-      transition_id: `${instanceId}/complete-research`,
-      path: relativeReceiptPath,
-      sha256: createHash("sha256").update(receiptText).digest("hex"),
-      plan_sha256: planSha256,
-    });
-    await writeFile(statePath, stringify(state), "utf8");
+    let index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    const first = await startSubflow({ index, routeRef: "deep-research:quick", command: startCommand("deep-research:quick", "2026-08-02T12:00:00+08:00"), confirmedBy: "researcher" });
+    index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    const original = index.subflows[0];
+    assert.ok(original);
+    await advanceSubflow({ index, instanceId: first.instance_id, transition: "pause", actor: "agent", transitionedAt: "2026-08-02T12:01:00+08:00" });
+    await assert.rejects(
+      appendGateAttempt({ index, instanceId: first.instance_id, gateId: "missing", verdict: "pass", confirmedBy: "researcher", confirmedAt: "2026-08-02T12:02:00+08:00", summary: "No.", expectedControlText: original.controlText }),
+      (error: unknown) => error instanceof SubflowControlError && error.code === "control_write_conflict",
+    );
+    await advanceSubflow({ index, instanceId: first.instance_id, transition: "resume", actor: "agent", transitionedAt: "2026-08-02T12:03:00+08:00" });
+    await advanceSubflow({ index, instanceId: first.instance_id, transition: "cancel", actor: "agent", transitionedAt: "2026-08-02T12:04:00+08:00" });
 
-    const replay = await planTransitionAdvance({
-      snapshot: await loadWorkspaceSnapshot(workspace),
-      selector,
-      actor: { kind: "agent", name: "academic-pipeline" },
-      expectedPlanSha256: planSha256,
-    });
-    assert.equal(replay.status, "already_advanced");
-    assert.equal(replay.receipt.schema_version, "1");
-    assert.deepEqual(replay.effects, [{ kind: "complete_subflow", subflow_instance_id: instanceId }]);
-    assert.equal(await readFile(receiptPath, "utf8"), receiptText);
-  } finally { await rm(root, { recursive: true, force: true }); }
+    index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    const second = await startSubflow({ index, routeRef: "deep-research:quick", command: startCommand("deep-research:quick", "2026-08-02T12:10:00+08:00"), confirmedBy: "researcher" });
+    index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    await advanceSubflow({ index, instanceId: second.instance_id, transition: "complete", actor: "agent", transitionedAt: "2026-08-02T12:11:00+08:00" });
+    index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    assert.equal(index.subflows.find((item) => item.control.instance_id === first.instance_id)?.control.status, "cancelled");
+    assert.deepEqual(index.subflows.find((item) => item.control.instance_id === first.instance_id)?.control.transitions.map((item) => item.transition_id), ["pause", "resume", "cancel"]);
+    assert.equal(index.subflows.find((item) => item.control.instance_id === second.instance_id)?.control.status, "complete");
+    assert.doesNotMatch(await readFile(original.controlPath, "utf8"), /plan_sha256|receipt/);
+  } finally { await fixture.cleanup(); }
 });
-
-void test("failed Gate requires confirmed reverification before override", async () => {
-  const root = await createWorkspace();
-  try {
-    const workspace = path.join(root, "researchspec");
-    const instanceId = await completeSliceWork(workspace);
-    const selector = `gate:${instanceId}/research-completion`;
-    let snapshot = await loadWorkspaceSnapshot(workspace);
-    let instructions = await buildGateTransitionInstructions(snapshot, selector);
-    assert.equal(instructions.ok, true);
-    if (!instructions.ok) return;
-    const initial = await planGateSubmit({ snapshot, selector, payload: gatePayload(instructions.packet, "fail"), actor: { kind: "validator", name: "researchspec-verify" }, confirmedBy: "researcher", now: "2026-07-10T02:00:00.000Z" });
-    await executeGateSubmit(initial, workspace);
-    snapshot = await loadWorkspaceSnapshot(workspace);
-    await assert.rejects(() => decideItem({ snapshot, selector, decision: "accept", actorName: "researcher", reason: "Proceed despite limitation", dryRun: true }), /reverification/);
-
-    instructions = await buildGateTransitionInstructions(snapshot, selector);
-    assert.equal(instructions.ok, true);
-    if (!instructions.ok) return;
-    const reverificationPayload = gatePayload(instructions.packet, "fail", { verification_kind: "reverification", supersedes_event_id: String(initial.event.event_id) });
-    const reverification = await planGateSubmit({ snapshot, selector, payload: reverificationPayload, actor: { kind: "validator", name: "researchspec-verify" }, confirmedBy: "researcher", now: "2026-07-10T02:01:00.000Z" });
-    await executeGateSubmit(reverification, workspace);
-    const override = await decideItem({ snapshot: await loadWorkspaceSnapshot(workspace), selector, decision: "accept", actorName: "researcher", reason: "Risk accepted explicitly", dryRun: false });
-    assert.equal(override.status, "accepted");
-    const control = await evaluateWorkflowControl(await loadWorkspaceSnapshot(workspace));
-    assert.equal(control.gates[0]?.state, "overridden");
-    assert.equal(control.transitions[0]?.state, "ready");
-  } finally { await rm(root, { recursive: true, force: true }); }
-});
-
-void test("multiple transition candidates require one workflow-branch Decision", async () => {
-  const root = await createWorkspace({ withBranch: true });
-  try {
-    const workspace = path.join(root, "researchspec");
-    const instanceId = await completeSliceWork(workspace);
-    await submitPassingGate(workspace, instanceId);
-    let snapshot = await loadWorkspaceSnapshot(workspace);
-    let control = await evaluateWorkflowControl(snapshot);
-    const branchSelector = `transition:${instanceId}/alternate-completion`;
-    assert.equal(control.state, "decision_required");
-    assert.ok(control.transitions.filter((item) => item.state === "decision_required").length >= 2);
-    await assert.rejects(() => planTransitionAdvance({ snapshot, selector: branchSelector, actor: { kind: "agent", name: "academic-pipeline" } }), /Decision/);
-    const decision = await decideItem({ snapshot, selector: branchSelector, decision: "accept", actorName: "researcher", reason: "Choose alternate branch", dryRun: false });
-    assert.equal(decision.status, "accepted");
-    snapshot = await loadWorkspaceSnapshot(workspace);
-    control = await evaluateWorkflowControl(snapshot);
-    assert.deepEqual(control.transitions.filter((item) => item.state === "ready").map((item) => item.selector), [branchSelector]);
-    assert.equal((await planTransitionAdvance({ snapshot, selector: branchSelector, actor: { kind: "agent", name: "academic-pipeline" } })).status, "would_advance");
-  } finally { await rm(root, { recursive: true, force: true }); }
-});
-
-void test("Schema 0.2 requires explicit Gate and transition fields", async () => {
-  const root = await createWorkspace();
-  try {
-    const workspace = path.join(root, "researchspec");
-    const workflowPath = path.join(workspace, "specs/workflow.yaml");
-    const raw = parse(await readFile(workflowPath, "utf8")) as Record<string, unknown>;
-    const templates = raw.subflow_templates as Array<Record<string, unknown>>;
-    delete templates[0]?.gates;
-    delete templates[0]?.transitions;
-    await writeFile(workflowPath, stringify(raw), "utf8");
-    const snapshot = await loadWorkspaceSnapshot(workspace);
-    assert.ok(snapshot.diagnostics.some((item) => item.code === "invalid_contract_shape"));
-  } finally { await rm(root, { recursive: true, force: true }); }
-});
-
-async function createWorkspace(options: { withBranch?: boolean; completeRun?: boolean } = {}): Promise<string> {
-  const root = await mkdtemp(path.join(tmpdir(), "researchspec-gate-transition-"));
-  const workspace = path.join(root, "researchspec");
-  for (const entry of getWorkspaceEntries(workspace)) {
-    if (entry.kind === "dir") await mkdir(entry.path, { recursive: true });
-    else { await mkdir(path.dirname(entry.path), { recursive: true }); await writeFile(entry.path, entry.content, "utf8"); }
-  }
-  const workflow = structuredClone(TEST_WORKFLOW);
-  if (options.withBranch) {
-    const template = workflow.subflow_templates[0];
-    assert.ok(template);
-    template.transitions.push({ id: "alternate-completion", from_stage_id: "research", effects: [{ kind: "complete_subflow" }], requires: { gate_ids: ["research-completion"], decision_types: ["workflow_branch"] }, branch: { decision_point_id: "research-outcome", option_id: "alternate" } });
-  }
-  if (options.completeRun) {
-    const template = workflow.subflow_templates[0];
-    const transition = template?.transitions.find((item) => item.id === "complete-research");
-    assert.ok(template && transition);
-    template.template_kind = "pipeline";
-    transition.effects.push({ kind: "complete_run" });
-  }
-  await writeFile(path.join(workspace, "specs/workflow.yaml"), stringify(workflow), "utf8");
-  await writeFile(path.join(workspace, "runs/current/state.yaml"), stringify(TEST_RUN_STATE), "utf8");
-  return root;
-}
-
-async function completeSliceWork(workspace: string): Promise<string> {
-  const before = await loadWorkspaceSnapshot(workspace);
-  const start = await planSubflowStart({ snapshot: before, selector: "subflow:tpl-research", payload: {}, actor: { kind: "agent", name: "academic-pipeline" }, confirmedBy: "researcher", now: "2026-07-10T00:00:00.000Z" });
-  await executeSubflowStart(start, workspace);
-  for (let index = 0; index < 3; index += 1) {
-    const snapshot = await loadWorkspaceSnapshot(workspace);
-    const control = await evaluateWorkflowControl(snapshot);
-    const status = control.work_items.find((item) => item.state === "ready" && item.dispatchable);
-    assert.ok(status);
-    await mkdir(path.dirname(status.output_path), { recursive: true });
-    await writeFile(status.output_path, `# ${status.work_item_id}\n\nEvidence.\n`, "utf8");
-    const plan = await planArtifactSubmit({ snapshot, selector: status.selector, payload: { producer_mode: "full" }, actor: { kind: "agent", name: "deep-research" }, now: `2026-07-10T00:0${String(index + 1)}:00.000Z` });
-    await executeArtifactSubmit(plan, workspace);
-  }
-  return start.instance.instance_id;
-}
-
-async function submitPassingGate(workspace: string, instanceId: string): Promise<void> {
-  const snapshot = await loadWorkspaceSnapshot(workspace);
-  const selector = `gate:${instanceId}/research-completion`;
-  const instructions = await buildGateTransitionInstructions(snapshot, selector);
-  assert.equal(instructions.ok, true);
-  if (!instructions.ok) throw new Error("Gate instructions unavailable");
-  await executeGateSubmit(await planGateSubmit({ snapshot, selector, payload: gatePayload(instructions.packet, "pass"), actor: { kind: "validator", name: "researchspec-verify" }, confirmedBy: "researcher", now: "2026-07-10T03:00:00.000Z" }), workspace);
-}
-
-function gatePayload(packet: Record<string, unknown>, verdict: "pass" | "pass_with_conditions" | "fail", overrides: Record<string, unknown> = {}) {
-  const evidence = packet.evidence as Array<Record<string, unknown>>;
-  return { verdict, verification_kind: "initial", evidence, findings: [{ code: "evidence-review", summary: "Evidence reviewed against the declared Gate contract.", evidence_indexes: evidence.map((_item, index) => index) }], ...overrides };
-}

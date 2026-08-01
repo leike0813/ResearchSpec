@@ -72,13 +72,16 @@ export const SubflowControlSchema = z.strictObject({
   decisions: z.array(SubflowDecisionSchema),
   transitions: z.array(SubflowTransitionSchema),
 }).superRefine((value, context) => {
-  if ((value.profile === null) !== (value.parent === null)) {
-    context.addIssue({ code: "custom", path: ["parent"], message: "Profile and parent must both be null for standalone roots or both be present for pipeline children." });
+  if (value.parent !== null && value.profile === null) {
+    context.addIssue({ code: "custom", path: ["profile"], message: "Pipeline children require a profile." });
   }
   if (value.round !== undefined && value.parent === null) {
     context.addIssue({ code: "custom", path: ["round"], message: "Only pipeline children can declare a round." });
   }
   uniqueBy(value.gates, (item) => item.gate_id, ["gates"], context);
+  for (const [gateIndex, gate] of value.gates.entries()) {
+    uniqueBy(gate.attempts, (item) => item.attempt_id, ["gates", gateIndex, "attempts"], context);
+  }
   uniqueBy(value.decisions, (item) => item.decision_id, ["decisions"], context);
   uniqueBy(value.transitions, (item) => item.transition_id, ["transitions"], context);
 });

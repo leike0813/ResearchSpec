@@ -17,7 +17,7 @@ import {
   evaluateActionAvailability,
   type RuntimeActionKey,
 } from "./action-availability.js";
-import type { WorkflowControlResult } from "./workflow-control.js";
+import type { WorkflowControlResult } from "./legacy-workflow-control.js";
 
 export async function buildActionDescriptor(
   snapshot: WorkspaceSnapshot,

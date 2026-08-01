@@ -79,15 +79,11 @@ const definitions: readonly CliCommandDefinition[] = [
   command("update", ["update"], "update [path]", "bootstrap", "Refresh selected generated agent files", "required", "write", [
     option("tools", "--tools <ids>", "refresh/add a tool subset"),
   ], ["init", "status", "doctor"]),
-  command("status", ["status"], "status", "control-plane", "Show current run and pending-item status", "required", "read", [], ["instructions", "show", "list"]),
-  command("instructions", ["instructions"], "instructions <selector>", "control-plane", "Show dynamic instructions for a runtime action selector", "required", "read", [], ["status", "start", "submit", "advance", "decide"]),
-  command("start", ["start"], "start <subflow>", "control-plane", "Atomically start a confirmed template or delegated child subflow", "required", "write", [
-    option("input", "--input <start.json>", "strict semantic Start JSON", true),
-    option("actorKind", "--actor-kind <kind>", "human, agent, or script", true),
-    option("actorName", "--actor-name <name>", "Start requester name", true),
-    option("confirmedBy", "--confirmed-by <name>", "human who confirmed an external route"),
-    option("expectedActionBasisSha256", "--expected-action-basis-sha256 <hash>", "bind execution to the current action descriptor"),
-    option("expectedPlanSha256", "--expected-plan-sha256 <hash>", "bind execution to the previewed Start plan"),
+  command("status", ["status"], "status", "control-plane", "Show derived current workspace and subflow status", "required", "read", [], ["instructions", "show", "list"]),
+  command("instructions", ["instructions"], "instructions <selector>", "control-plane", "Show current route, subflow, Gate, or Decision instructions", "required", "read", [], ["status", "start", "submit", "advance", "decide"]),
+  command("start", ["start"], "start <route-ref>", "control-plane", "Atomically start one independently confirmed route", "required", "write", [
+    option("input", "--input <start.yaml|json>", "schema 1 semantic Start input", true),
+    option("confirmedBy", "--confirmed-by <name>", "human who confirmed this exact instance", true),
   ], ["status", "instructions"]),
   command("submit", ["submit"], "submit <runtime-item>", "control-plane", "Submit a runtime candidate, attempt, evidence, annotation, patch, or confirmed Gate verdict", "required", "write", [
     option("input", "--input <payload.json>", "strict semantic submission JSON; omitted for annotation:<id>"),
@@ -98,11 +94,9 @@ const definitions: readonly CliCommandDefinition[] = [
     option("expectedSha256", "--expected-sha256 <hash>", "bind execution to the previewed candidate SHA-256"),
     option("expectedPlanSha256", "--expected-plan-sha256 <hash>", "bind execution to the previewed submission plan"),
   ], ["status", "instructions", "check"]),
-  command("advance", ["advance"], "advance <transition>", "control-plane", "Complete or advance one currently authorized runtime action", "required", "write", [
-    option("actorKind", "--actor-kind <kind>", "agent or script", true),
+  command("advance", ["advance"], "advance <subflow-selector>", "control-plane", "Complete or advance one currently authorized subflow", "required", "write", [
+    option("transition", "--transition <id>", "profile transition ID or pause, resume, cancel, complete"),
     option("actorName", "--actor-name <name>", "action executor name", true),
-    option("expectedActionBasisSha256", "--expected-action-basis-sha256 <hash>", "bind execution to the current action descriptor"),
-    option("expectedPlanSha256", "--expected-plan-sha256 <hash>", "bind execution to the previewed action plan"),
   ], ["status", "instructions"]),
   command("check", ["check"], "check [target]", "inspection", "Check specs, profiles, subflows, changes, handoffs, tools, plugins, or literature-adapters", "required", "read", [
     option("strict", "--strict", "treat warnings as failures"),
@@ -132,8 +126,11 @@ const definitions: readonly CliCommandDefinition[] = [
     option("decision", "--decision <choice>", "accept, reject, or postpone"),
     option("actorName", "--actor-name <name>", "human actor name"),
     option("reason", "--reason <text>", "decision rationale"),
-    option("expectedActionBasisSha256", "--expected-action-basis-sha256 <hash>", "bind execution to the current action descriptor"),
-    option("expectedPlanSha256", "--expected-plan-sha256 <hash>", "bind execution to the previewed decision plan"),
+    option("verdict", "--verdict <verdict>", "Gate verdict: pass, pass_with_conditions, or fail"),
+    option("kind", "--kind <kind>", "local Decision kind: scope, claim, structure, or branch"),
+    option("choice", "--choice <choice>", "confirmed local Decision choice"),
+    option("override", "--override", "approve an override of the current failed Gate"),
+    option("evidenceRole", "--evidence-role <role>", "owning handoff role used as Gate evidence"),
   ], ["instructions", "show", "archive"]),
   command("archive", ["archive"], "archive [item]", "governance", "Archive a resolved change or draft patch", "required", "write", [], ["list", "show"]),
   command("plugin", ["plugin"], "plugin", "plugins", "Inspect and manage bundled domain Skill plugins", "optional", "conditional-write", [], [

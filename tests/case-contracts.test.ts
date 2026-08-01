@@ -1,4 +1,6 @@
 import assert from "node:assert/strict";
+import { mkdir, symlink, writeFile } from "node:fs/promises";
+import path from "node:path";
 import { test } from "node:test";
 
 import { ACADEMIC_PIPELINE_PROFILE } from "../src/arsu-converter/workflow/academic-pipeline.js";
@@ -9,6 +11,8 @@ import { ClaimsSpecSchema, ManuscriptSpecSchema, SourcesSpecSchema, parseProject
 import { SubflowControlSchema } from "../src/core/contracts/subflow-control.js";
 import { SubflowHandoffSchema } from "../src/core/contracts/subflow-handoff.js";
 import { CurrentWorkspaceConfigSchema } from "../src/core/contracts/workspace-format.js";
+import { BoundaryPathError, resolveBoundaryPath } from "../src/core/runtime/boundary-path.js";
+import { cleanup, tempProject } from "./helpers/cli.js";
 
 const NOW = "2026-08-01T12:00:00+08:00";
 
@@ -40,12 +44,22 @@ void test("pipeline profile and local subflow authority reject duplicate or leak
     transitions: [],
   };
   assert.equal(SubflowControlSchema.safeParse(control).success, true);
+  assert.equal(SubflowControlSchema.safeParse({ ...control, parent: null, round: undefined }).success, true);
   assert.equal(SubflowControlSchema.safeParse({ ...control, artifact_registry: [] }).success, false);
-  assert.equal(SubflowControlSchema.safeParse({ ...control, parent: null }).success, false);
+  assert.equal(SubflowControlSchema.safeParse({ ...control, profile: null }).success, false);
   assert.equal(SubflowControlSchema.safeParse({ ...control, decisions: [
     { decision_id: "d-1", kind: "branch", choice: "revision", decided_by: "user", decided_at: NOW },
     { decision_id: "d-1", kind: "branch", choice: "accepted", decided_by: "user", decided_at: NOW },
   ] }).success, false);
+  assert.equal(SubflowControlSchema.safeParse({ ...control, gates: [{ gate_id: "review", attempts: [
+    { attempt_id: "attempt-1", verdict: "fail", confirmed_by: "user", confirmed_at: NOW, summary: "gap" },
+    { attempt_id: "attempt-1", verdict: "pass", confirmed_by: "user", confirmed_at: NOW, summary: "fixed" },
+  ] }] }).success, false);
+
+  const invalidProfile = structuredClone(ACADEMIC_PIPELINE_PROFILE);
+  invalidProfile.children[0]?.prerequisites.push("missing-child");
+  invalidProfile.transitions[0]?.required_gate_ids.push("missing-gate");
+  assert.equal(PipelineProfileSchema.safeParse(invalidProfile).success, false);
 });
 
 void test("handoff and project change contracts preserve single ownership", () => {
@@ -64,4 +78,20 @@ void test("current selectors require explicit immutable IDs", () => {
     assert.equal(ControlSelectorSchema.safeParse(selector).success, true, selector);
   }
   for (const selector of ["latest", "subflow:../current", "gate:recent", "handoff:paper/manuscript.md"]) assert.equal(ControlSelectorSchema.safeParse(selector).success, false, selector);
+});
+
+void test("external boundary paths reject escape, managed paths and existing symlink components", { skip: process.platform === "win32" }, async () => {
+  const root = await tempProject();
+  try {
+    await mkdir(path.join(root, "outputs"), { recursive: true });
+    await writeFile(path.join(root, "outputs/input.md"), "input\n", "utf8");
+    assert.equal((await resolveBoundaryPath(root, "outputs/future.md")).relativePath, "outputs/future.md");
+    assert.equal((await resolveBoundaryPath(root, "outputs/input.md", "consume-input")).relativePath, "outputs/input.md");
+    for (const candidate of ["../outside.md", path.join(root, "absolute.md"), "researchspec/subflows/leak.md"]) {
+      await assert.rejects(resolveBoundaryPath(root, candidate), BoundaryPathError);
+    }
+    await symlink(path.join(root, "outputs"), path.join(root, "linked"));
+    await assert.rejects(resolveBoundaryPath(root, "linked/future.md"), (error: unknown) => error instanceof BoundaryPathError && error.code === "boundary_path_symlink");
+    await assert.rejects(resolveBoundaryPath(root, "outputs/missing.md", "consume-input"), (error: unknown) => error instanceof BoundaryPathError && error.code === "boundary_input_missing");
+  } finally { await cleanup(root); }
 });

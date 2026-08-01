@@ -26,7 +26,7 @@ import {
   type FormalGateReference,
   type HardObligation,
 } from "../contracts/case-state.js";
-import { evaluateWorkflowControl, type WorkflowControlResult } from "./workflow-control.js";
+import { evaluateWorkflowControl, type WorkflowControlResult } from "./legacy-workflow-control.js";
 import { projectStrictCompatibility } from "./strict-compatibility.js";
 import { loadWorkspaceSnapshot, type SnapshotFile, type WorkspaceSnapshot } from "../workspace/snapshot.js";
 import {

@@ -36,9 +36,9 @@ import {
   type ListType,
 } from "../core/runtime/query.js";
 import { buildActionDescriptor } from "../core/runtime/action-descriptor.js";
-import { buildGateTransitionInstructions, buildWorkflowInstructions } from "../core/runtime/workflow-control.js";
-import { evaluateWorkflowControl } from "../core/runtime/workflow-control.js";
-import { buildSubflowInstructions, executeSubflowStart, planSubflowStart, SubflowStartError } from "../core/runtime/subflow-control.js";
+import { buildGateTransitionInstructions, buildWorkflowInstructions } from "../core/runtime/legacy-workflow-control.js";
+import { evaluateWorkflowControl } from "../core/runtime/legacy-workflow-control.js";
+import { buildSubflowInstructions, executeSubflowStart, planSubflowStart, SubflowStartError } from "../core/runtime/legacy-subflow-control.js";
 import { runWorkspaceChecks, type CheckTarget } from "../core/validation/check.js";
 import type { Diagnostic } from "../core/validation/types.js";
 import { resolveWorkspace } from "../core/workspace/discover.js";

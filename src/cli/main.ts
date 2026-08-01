@@ -3,19 +3,26 @@ import path from "node:path";
 import { Command, CommanderError, InvalidArgumentError } from "commander";
 
 import {
-  handleAdvance, handleArchive, handleDecide, handleHandoff, handleInstructions, handleList,
-  handlePack, handlePropose, handleShow, handleStart, handleSubmit, type DecideOptions,
+  handleArchive, handleHandoff, handleList,
+  handlePack, handlePropose, handleShow, handleSubmit,
   handlePluginInstall, handlePluginInstructions, handlePluginList, handlePluginShow, handlePluginUninstall, handlePluginUpdate,
-  type AdvanceOptions, type HandoffOptions, type ListOptions, type PackOptions, type PluginInstallOptions, type PluginListOptions, type PluginShowOptions, type ProposeOptions, type StartOptions, type SubmitOptions,
+  type HandoffOptions, type ListOptions, type PackOptions, type PluginInstallOptions, type PluginListOptions, type PluginShowOptions, type ProposeOptions, type SubmitOptions,
 } from "./handlers.js";
 import {
+  handleCurrentAdvance,
   handleCurrentCheck,
+  handleCurrentDecide,
   handleCurrentDoctor,
   handleCurrentInit,
+  handleCurrentInstructions,
+  handleCurrentStart,
   handleCurrentStatus,
   handleCurrentUpdate,
+  type CurrentAdvanceOptions,
+  type CurrentDecideOptions,
   type CurrentDoctorOptions,
   type CurrentInitOptions,
+  type CurrentStartOptions,
   type CurrentUpdateOptions,
 } from "./current-handlers.js";
 import { applyGlobalCliOptions, cliHelpTarget, registerCliCommand } from "./command-catalog.js";
@@ -75,13 +82,13 @@ function registerCommands(program: Command, run: Runner): void {
   registerCliCommand(program, "status")
     .action(async (_options: Record<string, never>, command: Command) => run("status", command, () => handleCurrentStatus(commandContext("status", command))));
   registerCliCommand(program, "instructions")
-    .action(async (selector: string, _options: Record<string, never>, command: Command) => run("instructions", command, () => handleInstructions(selector, commandContext("instructions", command))));
+    .action(async (selector: string, _options: Record<string, never>, command: Command) => run("instructions", command, () => handleCurrentInstructions(selector, commandContext("instructions", command))));
   registerCliCommand(program, "start")
-    .action(async (subflow: string, options: StartOptions, command: Command) => run("start", command, () => handleStart(subflow, options, commandContext("start", command))));
+    .action(async (routeRef: string, options: CurrentStartOptions, command: Command) => run("start", command, () => handleCurrentStart(routeRef, options, commandContext("start", command))));
   registerCliCommand(program, "submit")
     .action(async (runtimeItem: string, options: SubmitOptions, command: Command) => run("submit", command, () => handleSubmit(runtimeItem, options, commandContext("submit", command))));
   registerCliCommand(program, "advance")
-    .action(async (transition: string, options: AdvanceOptions, command: Command) => run("advance", command, () => handleAdvance(transition, options, commandContext("advance", command))));
+    .action(async (selector: string, options: CurrentAdvanceOptions, command: Command) => run("advance", command, () => handleCurrentAdvance(selector, options, commandContext("advance", command))));
   registerCliCommand(program, "check")
     .action(async (target: string | undefined, options: { strict?: boolean }, command: Command) => run("check", command, () => handleCurrentCheck(target, Boolean(options.strict), commandContext("check", command))));
   registerCliCommand(program, "doctor")
@@ -96,8 +103,8 @@ function registerCommands(program: Command, run: Runner): void {
     .action(async (options: PackOptions, command: Command) => run("pack", command, () => handlePack(options, commandContext("pack", command))));
   registerCliCommand(program, "propose", { actorKind: parseActorKind })
     .action(async (changeId: string, options: ProposeOptions, command: Command) => run("propose", command, () => handlePropose(changeId, options, commandContext("propose", command))));
-  registerCliCommand(program, "decide", { decision: parseDecision })
-    .action(async (item: string | undefined, options: DecideOptions, command: Command) => run("decide", command, () => handleDecide(item, options, commandContext("decide", command))));
+  registerCliCommand(program, "decide", { decision: parseDecision, verdict: parseVerdict, kind: parseLocalDecisionKind })
+    .action(async (item: string | undefined, options: CurrentDecideOptions, command: Command) => run("decide", command, () => handleCurrentDecide(item, options, commandContext("decide", command))));
   registerCliCommand(program, "archive")
     .action(async (item: string | undefined, _options: Record<string, never>, command: Command) => run("archive", command, () => handleArchive(item, commandContext("archive", command))));
   const plugin = registerCliCommand(program, "plugin");
@@ -145,6 +152,16 @@ function parseDecision(value: string): "accept" | "reject" | "postpone" {
 function parseActorKind(value: string): "human" | "agent" {
   if (value === "human" || value === "agent") return value;
   throw new InvalidArgumentError("actor kind must be human or agent");
+}
+
+function parseVerdict(value: string): "pass" | "pass_with_conditions" | "fail" {
+  if (value === "pass" || value === "pass_with_conditions" || value === "fail") return value;
+  throw new InvalidArgumentError("verdict must be pass, pass_with_conditions, or fail");
+}
+
+function parseLocalDecisionKind(value: string): "scope" | "claim" | "structure" | "branch" {
+  if (value === "scope" || value === "claim" || value === "structure" || value === "branch") return value;
+  throw new InvalidArgumentError("kind must be scope, claim, structure, or branch");
 }
 
 async function readPackageVersion(): Promise<string> {

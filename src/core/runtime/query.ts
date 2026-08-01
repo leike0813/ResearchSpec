@@ -1,6 +1,6 @@
 import type { IndexedItem, WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { latestById, resolveItem } from "../workspace/snapshot.js";
-import { evaluateWorkflowControl } from "./workflow-control.js";
+import { evaluateWorkflowControl } from "./legacy-workflow-control.js";
 import type { PluginStatusSummary } from "../../plugins/status.js";
 import type { LiteratureAdapterInspection } from "../../literature-adapters/inspect.js";
 import {

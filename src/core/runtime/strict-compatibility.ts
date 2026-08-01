@@ -4,7 +4,7 @@ import { CaseSha256Schema } from "../contracts/case-state.js";
 import { StrictCaseProfileSchema } from "../contracts/case-profile.js";
 import { RunStateSchema, type RunState } from "../contracts/run-state.js";
 import { WorkflowDefinitionSchema, type WorkflowDefinition } from "../contracts/workflow.js";
-import type { WorkflowControlResult } from "./workflow-control.js";
+import type { WorkflowControlResult } from "./legacy-workflow-control.js";
 import { createArsuStrictCaseProfile } from "../../arsu-converter/workflow/catalog.js";
 
 const StrictReadinessStateSchema = z.enum([

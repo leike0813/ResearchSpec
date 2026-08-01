@@ -23,7 +23,7 @@ import { resolveWorkNode, WorkItemSelectorSchema, type WorkflowNodeDefinition, t
 import { loadWorkspaceSnapshot, type WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { executeWritePlan, planFile, sha256, type PlannedWrite, type ReadPrecondition, type WritePlan } from "../workspace/write-plan.js";
 import { serializeRegisteredArtifactPath } from "./artifact-path.js";
-import { evaluateWorkflowControl, inspectArtifacts, passedCompletionGateIds, resolveTemplateReference, type WorkflowControlResult } from "./workflow-control.js";
+import { evaluateWorkflowControl, inspectArtifacts, passedCompletionGateIds, resolveTemplateReference, type WorkflowControlResult } from "./legacy-workflow-control.js";
 
 export type ArtifactSubmitErrorKind = "usage" | "domain" | "conflict";
 

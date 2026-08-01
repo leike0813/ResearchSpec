@@ -1,123 +1,83 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
-import { tmpdir } from "node:os";
+import { readdir } from "node:fs/promises";
 import path from "node:path";
 import { test } from "node:test";
-import { stringify } from "yaml";
 
-import type { WorkflowDefinition, WorkflowNodeTemplate } from "../src/core/contracts/workflow.js";
-import { executeArtifactSubmit, planArtifactSubmit } from "../src/core/runtime/artifact-submit.js";
-import { buildSubflowInstructions, executeSubflowStart, planSubflowStart } from "../src/core/runtime/subflow-control.js";
+import { startSubflow } from "../src/core/runtime/subflow-control.js";
 import { evaluateWorkflowControl } from "../src/core/runtime/workflow-control.js";
-import { getWorkspaceEntries } from "../src/core/workspace/layout.js";
-import { loadWorkspaceSnapshot } from "../src/core/workspace/snapshot.js";
-import { TEST_RUN_STATE, TEST_WORKFLOW } from "./helpers/test-workflow.js";
+import { loadCurrentWorkspaceIndex } from "../src/core/runtime/workspace-index.js";
+import { createCurrentWorkspace, startCommand } from "./helpers/current-workspace.js";
 
-void test("parallel frontier enforces capacity and quorum join", async () => {
-  const root = await createWorkspace();
+const FIRST = "2026-08-02T09:00:00+08:00";
+
+void test("standalone start atomically creates one authority directory and exact retry reuses it", async () => {
+  const fixture = await createCurrentWorkspace();
   try {
-    const workspace = path.join(root, "researchspec");
-    const workflow = parallelWorkflow();
-    await writeFile(path.join(workspace, "specs/workflow.yaml"), stringify(workflow), "utf8");
-    const instanceId = await startTemplate(workspace, "tpl-parallel", null);
-    let snapshot = await loadWorkspaceSnapshot(workspace);
-    let control = await evaluateWorkflowControl(snapshot);
-    assert.deepEqual(control.ready_items, [`work:${instanceId}/a`, `work:${instanceId}/b`]);
-    const deferred = control.work_items.find((item) => item.work_item_id === "c");
-    assert.equal(deferred?.state, "ready");
-    assert.equal(deferred?.dispatchable, false);
-    assert.equal(deferred?.deferred_reason, "parallel_capacity_deferred");
+    let index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    const command = startCommand("deep-research:quick", FIRST, {
+      planned_outputs: [{ role: "research-brief", type: "report", path: "outputs/research-brief.md", purpose: "share the result" }],
+    });
+    const started = await startSubflow({ index, routeRef: "deep-research:quick", command, confirmedBy: "researcher" });
+    assert.equal(started.status, "started");
+    assert.notEqual(path.basename(started.directory), started.instance_id);
+    assert.deepEqual((await readdir(started.directory)).sort(), ["control.yaml", "handoff.md", "work"]);
 
-    const itemA = control.work_items.find((item) => item.work_item_id === "a");
-    assert.ok(itemA);
-    await mkdir(path.dirname(itemA.output_path), { recursive: true });
-    await writeFile(itemA.output_path, "# A\n", "utf8");
-    const submit = await planArtifactSubmit({ snapshot, selector: itemA.selector, payload: {}, actor: { kind: "agent", name: "deep-research" }, now: "2026-07-10T00:01:00.000Z" });
-    await executeArtifactSubmit(submit, workspace);
-    snapshot = await loadWorkspaceSnapshot(workspace);
-    control = await evaluateWorkflowControl(snapshot);
-    assert.equal(control.parallel_groups[0]?.state, "satisfied");
-    assert.ok(control.ready_items.includes(`work:${instanceId}/join-output`));
-  } finally { await rm(root, { recursive: true, force: true }); }
+    index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    const retry = await startSubflow({ index, routeRef: "deep-research:quick", command, confirmedBy: "researcher" });
+    assert.equal(retry.status, "already_started");
+    assert.equal(retry.instance_id, started.instance_id);
+    assert.equal(index.subflows.length, 1);
+
+    const second = await startSubflow({ index, routeRef: "deep-research:quick", command: { ...command, confirmed_at: "2026-08-02T09:01:00+08:00" }, confirmedBy: "researcher" });
+    assert.notEqual(second.instance_id, started.instance_id);
+  } finally { await fixture.cleanup(); }
 });
 
-void test("all join keeps downstream work blocked until every required member completes", async () => {
-  const root = await createWorkspace();
+void test("pipeline parent does not pre-create children and each child binds an independent confirmation", async () => {
+  const fixture = await createCurrentWorkspace();
   try {
-    const workspace = path.join(root, "researchspec");
-    await writeFile(path.join(workspace, "specs/workflow.yaml"), stringify(parallelWorkflow("all")), "utf8");
-    const instanceId = await startTemplate(workspace, "tpl-parallel", null);
-    const control = await evaluateWorkflowControl(await loadWorkspaceSnapshot(workspace));
-    assert.equal(control.parallel_groups[0]?.state, "pending");
-    const downstream = control.work_items.find((item) => item.selector === `work:${instanceId}/join-output`);
-    assert.equal(downstream?.state, "blocked");
-    assert.ok(downstream?.missing_dependencies.some((item) => item.reason === "parallel_join_not_satisfied"));
-  } finally { await rm(root, { recursive: true, force: true }); }
+    let index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    const parent = await startSubflow({
+      index,
+      routeRef: "academic-pipeline:end-to-end",
+      command: startCommand("academic-pipeline:end-to-end", FIRST, { profile_entry: "end-to-end" }),
+      confirmedBy: "researcher",
+    });
+    index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    assert.equal(index.subflows.length, 1);
+    assert.equal(index.subflows[0]?.control.profile?.id, "academic-pipeline");
+    assert.equal(index.subflows[0]?.control.parent, null);
+    const candidate = evaluateWorkflowControl(index).frontier.find((item) => item.kind === "route" && item.parent_instance_id === parent.instance_id);
+    assert.equal(candidate?.kind, "route");
+    if (!candidate || candidate.kind !== "route") return;
+    assert.equal(candidate.node_id, "research");
+
+    const child = await startSubflow({
+      index,
+      routeRef: "deep-research:full",
+      command: startCommand("deep-research:full", "2026-08-02T09:05:00+08:00", {
+        parent: { instance_id: parent.instance_id, node_id: "research" },
+        formal_gates: ["evidence-integrity"],
+      }),
+      confirmedBy: "child-approver",
+    });
+    index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    const childRecord = index.subflows.find((item) => item.control.instance_id === child.instance_id);
+    assert.deepEqual(childRecord?.control.parent, { instance_id: parent.instance_id, node_id: "research" });
+    assert.equal(childRecord?.control.start_confirmation.confirmed_by, "child-approver");
+    assert.notEqual(childRecord?.control.start_confirmation.confirmed_at, index.subflows.find((item) => item.control.instance_id === parent.instance_id)?.control.start_confirmation.confirmed_at);
+    assert.equal("children" in (index.subflows.find((item) => item.control.instance_id === parent.instance_id)?.control ?? {}), false);
+  } finally { await fixture.cleanup(); }
 });
 
-void test("round templates derive parent-scoped unbounded round numbers", async () => {
-  const root = await createWorkspace();
+void test("dry-run computes stable authority without creating a directory", async () => {
+  const fixture = await createCurrentWorkspace();
   try {
-    const workspace = path.join(root, "researchspec");
-    const workflow = structuredClone(TEST_WORKFLOW);
-    const base = workflow.subflow_templates[0];
-    assert.ok(base);
-    base.template_id = "tpl-parent";
-    const round = structuredClone(base);
-    round.template_id = "tpl-round";
-    round.template_kind = "round";
-    round.visibility = "internal";
-    round.route_ref = null;
-    round.parent_policy = "required";
-    round.work_items = round.work_items.map((item) => ({ ...item, output: { ...item.output, workspace_path_template: item.output.workspace_path_template.replace("/artifacts/", "/round-artifacts/") } }));
-    base.subflow_nodes = [
-      { id: "round-one", stage_id: base.entry_stage_id, template_id: "tpl-round", depends_on: [], multiplicity: "once", completion: "child_complete" },
-      { id: "round-two", stage_id: base.entry_stage_id, template_id: "tpl-round", depends_on: [], multiplicity: "once", completion: "child_complete" },
-    ];
-    workflow.subflow_templates = [base, round];
-    await writeFile(path.join(workspace, "specs/workflow.yaml"), stringify(workflow), "utf8");
-    const parentId = await startTemplate(workspace, "tpl-parent", null);
-    const first = await startTemplate(workspace, "tpl-round", `subflow:${parentId}`, "round-one");
-    const second = await startTemplate(workspace, "tpl-round", `subflow:${parentId}`, "round-two");
-    const state = await loadWorkspaceSnapshot(workspace);
-    const rounds = state.runState?.subflows.filter((item) => item.instance_id === first || item.instance_id === second) ?? [];
-    assert.deepEqual(rounds.map((item) => item.round_number), [1, 2]);
-    assert.ok(rounds.every((item) => item.parent_subflow_id === parentId));
-  } finally { await rm(root, { recursive: true, force: true }); }
+    const index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    const result = await startSubflow({ index, routeRef: "deep-research:quick", command: startCommand("deep-research:quick", FIRST), confirmedBy: "researcher", dryRun: true });
+    assert.equal(result.status, "would_start");
+    assert.equal((await readdir(path.join(fixture.workspace, "subflows"))).length, 0);
+    assert.equal("plan_sha256" in result, false);
+    assert.equal("receipt" in result, false);
+  } finally { await fixture.cleanup(); }
 });
-
-function parallelWorkflow(joinPolicy: "all" | "quorum" = "quorum"): WorkflowDefinition {
-  const sourceDefinition = TEST_WORKFLOW.subflow_templates[0]?.work_items[0];
-  assert.ok(sourceDefinition);
-  const source: WorkflowNodeTemplate = structuredClone(sourceDefinition);
-  const work = (id: string, requiresGroups: string[] = []): WorkflowNodeTemplate => ({ ...structuredClone(source), id, title: id, requires: { ...structuredClone(source.requires), parallel_groups: requiresGroups }, output: { ...source.output, artifact_type: `artifact_${id}`, workspace_path_template: `runs/current/subflows/{subflow_instance_id}/artifacts/${id}.md` } });
-  return {
-    schema_version: "0.2", workflow_id: "parallel-test", workflow_kind: "test",
-    subflow_templates: [{ template_id: "tpl-parallel", template_kind: "standalone", route_ref: "deep-research:full", route_coverage: "partial", parent_policy: "none", entry_stage_id: "research", stages: [{ stage_id: "research", title: "Research" }], start_requires: { decision_types: [] }, work_items: [work("a"), work("b"), work("c"), work("join-output", ["panel"])], parallel_groups: [{ id: "panel", members: [{ work_item_id: "a", required: true }, { work_item_id: "b", required: true }, { work_item_id: "c", required: false }], max_concurrency: 2, join: joinPolicy === "all" ? { policy: "all" } : { policy: "quorum", required_count: 1 } }], subflow_nodes: [], subflow_parallel_groups: [], gates: [], transitions: [] }],
-  };
-}
-
-async function createWorkspace(): Promise<string> {
-  const root = await mkdtemp(path.join(tmpdir(), "researchspec-subflow-"));
-  const workspace = path.join(root, "researchspec");
-  for (const entry of getWorkspaceEntries(workspace)) {
-    if (entry.kind === "dir") await mkdir(entry.path, { recursive: true });
-    else { await mkdir(path.dirname(entry.path), { recursive: true }); await writeFile(entry.path, entry.content, "utf8"); }
-  }
-  await writeFile(path.join(workspace, "specs/workflow.yaml"), stringify(TEST_WORKFLOW), "utf8");
-  await writeFile(path.join(workspace, "runs/current/state.yaml"), stringify(TEST_RUN_STATE), "utf8");
-  return root;
-}
-
-async function startTemplate(workspace: string, templateId: string, parent: string | null, parentNodeId?: string): Promise<string> {
-  const snapshot = await loadWorkspaceSnapshot(workspace);
-  const selector = parent && parentNodeId
-    ? `subflow:${parent.slice("subflow:".length)}/${parentNodeId}`
-    : `subflow:${templateId}`;
-  const instructions = await buildSubflowInstructions(snapshot, selector);
-  assert.equal(instructions.ok, true);
-  if (!instructions.ok) throw new Error("instructions unavailable");
-  const plan = await planSubflowStart({ snapshot, selector, payload: {}, actor: { kind: "agent", name: "academic-pipeline" }, confirmedBy: "researcher", now: `2026-07-10T00:00:0${String(snapshot.runState?.subflows.length ?? 0)}.000Z` });
-  await executeSubflowStart(plan, workspace);
-  return plan.instance.instance_id;
-}

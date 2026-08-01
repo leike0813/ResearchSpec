@@ -2,7 +2,7 @@ import path from "node:path";
 import { readFile } from "node:fs/promises";
 
 import { fileExists, isDirectory } from "../../utils/fs.js";
-import { inspectArtifacts } from "../runtime/workflow-control.js";
+import { inspectArtifacts } from "../runtime/legacy-workflow-control.js";
 import { SubflowStartReceiptSchema } from "../contracts/subflow.js";
 import { GateSubmitReceiptSchema, TransitionAdvanceReceiptSchema } from "../contracts/gate-transition.js";
 import { AdaptiveCaseReceiptSchema } from "../contracts/adaptive-runtime.js";

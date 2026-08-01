@@ -5,7 +5,7 @@ import {
   evaluateStartActionAvailability,
   evaluateWorkflowControl,
   type WorkflowControlResult,
-} from "./workflow-control.js";
+} from "./legacy-workflow-control.js";
 import { evaluateAdaptiveActionAvailability } from "./adaptive-case-control.js";
 import { createActionAvailability } from "./availability-facts.js";
 import { resolveGateAuthority } from "./gate-authority.js";

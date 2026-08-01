@@ -1,360 +1,423 @@
-import { readFile, readdir } from "node:fs/promises";
+import { randomUUID } from "node:crypto";
+import { lstat, mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { parse as parseYaml, stringify } from "yaml";
 
-import { ARSU_ROUTING_CATALOG, getArsuRoute } from "../../arsu-converter/routing/catalog.js";
-import type { PrerequisiteGroup, PrerequisiteRequirement, RouteRef } from "../../arsu-converter/routing/contracts.js";
-import type { RunState, SubflowInstanceState } from "../contracts/run-state.js";
-import { parseRuntimeSelector } from "../contracts/runtime-selector.js";
+import { getArsuRoute } from "../../arsu-converter/routing/catalog.js";
+import { RouteRefSchema, type RouteRef } from "../../arsu-converter/routing/contracts.js";
+import { SubflowStartCommandSchema, type SubflowStartCommand } from "../contracts/subflow-command.js";
 import {
-  StartActorSchema,
-  SubflowStartInputSchema,
-  SubflowStartReceiptSchema,
-  SubflowStartSemanticInputSchema,
-  type SubflowStartInput,
-  type SubflowStartReceipt,
-} from "../contracts/subflow.js";
-import type { SubflowTemplateDefinition } from "../contracts/workflow.js";
-import type { WorkspaceSnapshot } from "../workspace/snapshot.js";
-import { loadWorkspaceSnapshot } from "../workspace/snapshot.js";
-import { executeWritePlan, planFile, sha256, type WritePlan } from "../workspace/write-plan.js";
-import { evaluateStartActionAvailability, evaluateWorkflowControl, inspectArtifacts, type WorkflowControlResult } from "./workflow-control.js";
-import { buildMaterialPassportImportPlan, MaterialPassportImportError, prepareMaterialPassportImport, type MaterialPassportImportPlan, type PreparedMaterialPassportImport } from "./material-passport-import.js";
-import { buildRuntimeContext } from "./runtime-context.js";
+  SubflowControlSchema,
+  type SubflowControl,
+} from "../contracts/subflow-control.js";
+import type { SubflowHandoff } from "../contracts/subflow-handoff.js";
+import { sha256 } from "../workspace/write-plan.js";
+import { BoundaryPathError, resolveBoundaryPath } from "./boundary-path.js";
+import {
+  childStartCandidates,
+  eligibleProfileTransitions,
+  isGateAccepted,
+  isSubflowCompletionReady,
+} from "./workflow-control.js";
+import type { CurrentWorkspaceIndex, SubflowRecord } from "./workspace-index.js";
 
-export class SubflowStartError extends Error {
-  constructor(public readonly code: string, message: string, public readonly kind: "usage" | "domain" | "conflict", public readonly details?: unknown) { super(message); }
-}
+export type LifecycleTransition = "pause" | "resume" | "cancel" | "complete";
+export type GateVerdict = "pass" | "pass_with_conditions" | "fail";
+export type LocalDecisionKind = "scope" | "claim" | "structure" | "branch";
 
-export interface SubflowInstructionPacket {
-  selector: string;
-  subject_kind: "template" | "instance" | "child";
-  state: string;
-  template_id: string;
-  instance_id?: string;
-  route: ReturnType<typeof getArsuRoute>;
-  route_coverage: "complete" | "partial";
-  parent_policy: SubflowTemplateDefinition["parent_policy"];
-  prerequisites: Array<{ operator: "all_of" | "any_of"; requirements: Array<PrerequisiteRequirement & { available: boolean; artifact_ids?: string[] }>; satisfied_without_user_input: boolean; fallback_route_refs: string[] }>;
-  required_user_input_ids: string[];
-  work_items: Array<{ id: string; title: string; producer_skill: string; artifact_type: string; submission_policy: "automatic" | "manual" }>;
-  parallel_groups: SubflowTemplateDefinition["parallel_groups"];
-  subflow_nodes: NonNullable<SubflowTemplateDefinition["subflow_nodes"]>;
-  subflow_parallel_groups: NonNullable<SubflowTemplateDefinition["subflow_parallel_groups"]>;
-  gates: SubflowTemplateDefinition["gates"];
-  transitions: SubflowTemplateDefinition["transitions"];
-  warnings: Array<{ code: "profile_partial"; covered_artifact_types: string[]; route_artifact_types: string[] }>;
-  instruction_basis_sha256: string;
-  runtime_context: ReturnType<typeof buildRuntimeContext>;
-  start?: {
-    semantic_input_schema_version: "2";
-    required_semantic_fields: string[];
-    execution_policy: "direct" | "human_confirmed";
-    dry_run: "optional";
-    command: string;
-  };
-  runtime?: { parent_subflow_id: string | null; parent_node_id?: string | null; round_number: number | null; active_stage_id?: string; ready_items: string[]; blockers: unknown[] };
-}
-
-export type SubflowInstructionResult = { ok: true; packet: SubflowInstructionPacket } | { ok: false; code: "workflow_unconfigured" | "workflow_invalid" | "subflow_template_not_found" | "subflow_instance_not_found" | "subflow_blocked" | "run_terminal" };
-
-export interface SubflowStartPlan {
-  status: "would_start" | "already_started";
-  selector: string;
-  plan_sha256: string;
-  instance: SubflowInstanceState;
-  receipt: SubflowStartReceipt;
-  material_passport_import?: { import_id: string; projection: unknown; artifact_ids: string[]; gate_evidence_ids: string[]; decision_evidence_ids: string[]; diagnostics: Array<{ code: string; message: string }> };
-  writePlan: WritePlan;
-}
-
-export interface SubflowStartOutcome { status: "started" | "already_started"; plan: SubflowStartPlan; workflow_control_after: WorkflowControlResult }
-
-export async function buildSubflowInstructions(snapshot: WorkspaceSnapshot, selector: string): Promise<SubflowInstructionResult> {
-  if (!snapshot.workflow || !snapshot.runState) return { ok: false, code: "workflow_unconfigured" };
-  const parsed = parseRuntimeSelector(selector);
-  const control = await evaluateWorkflowControl(snapshot);
-  if (!control.valid) return { ok: false, code: "workflow_invalid" };
-  if (parsed?.kind === "subflow_template") {
-    const template = snapshot.workflow.subflow_templates.find((item) => item.template_id === parsed.templateId);
-    const status = control.subflows.find((item) => item.selector === selector && item.kind === "template");
-    if (!template || !status) return { ok: false, code: "subflow_template_not_found" };
-    const availability = evaluateStartActionAvailability(snapshot, control, selector);
-    if (availability.disposition === "blocked") return { ok: false, code: availability.reason_code === "run_terminal" ? "run_terminal" : "subflow_blocked" };
-    return { ok: true, packet: await templatePacket(snapshot, template, "available") };
+export class SubflowControlError extends Error {
+  constructor(readonly code: string, message: string, readonly kind: "usage" | "domain" | "conflict" = "domain", readonly details?: unknown) {
+    super(message);
+    this.name = "SubflowControlError";
   }
-  if (parsed?.kind === "scoped_subflow_node") {
-    const status = control.subflows.find((item) => item.selector === selector && item.kind === "child");
-    const parent = snapshot.runState.subflows.find((item) => item.instance_id === parsed.instanceId);
-    const template = status ? snapshot.workflow.subflow_templates.find((item) => item.template_id === status.template_id) : undefined;
-    if (!status || !parent || !template) return { ok: false, code: "subflow_template_not_found" };
-    const availability = evaluateStartActionAvailability(snapshot, control, selector);
-    if (availability.disposition === "blocked") return { ok: false, code: availability.reason_code === "run_terminal" ? "run_terminal" : "subflow_blocked" };
-    const packet = await templatePacket(snapshot, template, "available", selector, "child", parent.instance_id);
-    return { ok: true, packet: { ...packet, runtime: { parent_subflow_id: parent.instance_id, parent_node_id: status.parent_node_id, round_number: status.round_number ?? null, ready_items: [], blockers: status.missing_dependencies } } };
-  }
-  if (parsed?.kind === "subflow_instance") {
-    const instance = snapshot.runState.subflows.find((item) => item.instance_id === parsed.instanceId);
-    if (!instance) return { ok: false, code: "subflow_instance_not_found" };
-    const template = snapshot.workflow.subflow_templates.find((item) => item.template_id === instance.template_id);
-    if (!template) return { ok: false, code: "workflow_invalid" };
-    const packet = await templatePacket(snapshot, template, instance.status, selector, "template", instance.instance_id);
-    return { ok: true, packet: { ...packet, selector, subject_kind: "instance", instance_id: instance.instance_id, runtime: { parent_subflow_id: instance.parent_subflow_id, parent_node_id: instance.parent_node_id ?? null, round_number: instance.round_number, active_stage_id: instance.active_stage_id, ready_items: control.frontier.filter((item) => item.includes(instance.instance_id)), blockers: control.work_items.filter((item) => item.instance_id === instance.instance_id && item.state === "blocked").map((item) => ({ selector: item.selector, missing_dependencies: item.missing_dependencies })) }, start: undefined } };
-  }
-  return { ok: false, code: "subflow_template_not_found" };
 }
 
-async function templatePacket(snapshot: WorkspaceSnapshot, template: SubflowTemplateDefinition, state: string, selector = `subflow:${template.template_id}`, subjectKind: "template" | "child" = "template", contextInstanceId?: string): Promise<SubflowInstructionPacket> {
-  const parsedSelector = parseRuntimeSelector(selector);
-  const inheritedRouteRef = parsedSelector?.kind === "scoped_subflow_node" ? snapshot.runState?.subflows.find((item) => item.instance_id === parsedSelector.instanceId)?.route_ref : null;
-  const routeRef = template.route_ref ?? inheritedRouteRef;
-  if (!routeRef) throw new Error(`Internal template ${template.template_id} has no parent route context.`);
-  const route = getArsuRoute(routeRef as RouteRef);
-  const inspections = await inspectArtifacts(snapshot);
-  const prerequisites = template.route_ref ? route.prerequisite_groups.map((group) => prerequisiteView(snapshot, inspections, group)) : [];
-  const requiredUserInputs = [...new Set(template.route_ref ? route.prerequisite_groups.flatMap((group) => group.requirements.filter((item) => item.kind === "user_input").map((item) => item.id)) : [])];
-  const covered = template.work_items.map((item) => item.output.artifact_type);
-  const runtimeContext = buildRuntimeContext(snapshot, contextInstanceId);
-  const basis = {
-    catalog_id: ARSU_ROUTING_CATALOG.catalog_id,
-    catalog_sha256: sha256(`${JSON.stringify(ARSU_ROUTING_CATALOG)}\n`),
-    workflow_sha256: snapshot.files.get("specs/workflow.yaml")?.hash,
-    state_sha256: snapshot.files.get("runs/current/state.yaml")?.hash,
-    template,
-    route,
-    prerequisites,
-    runtime_context: runtimeContext,
-  };
-  const instructionBasis = sha256(`${JSON.stringify(basis)}\n`);
-  return {
-    selector, subject_kind: subjectKind, state, template_id: template.template_id, route, route_coverage: template.route_coverage, parent_policy: template.parent_policy,
-    prerequisites, required_user_input_ids: requiredUserInputs,
-    work_items: template.work_items.map((item) => ({ id: item.id, title: item.title, producer_skill: item.producer_skill, artifact_type: item.output.artifact_type, submission_policy: item.submission.policy })),
-    parallel_groups: template.parallel_groups,
-    subflow_nodes: template.subflow_nodes ?? [], subflow_parallel_groups: template.subflow_parallel_groups ?? [], gates: template.gates, transitions: template.transitions,
-    warnings: template.route_coverage === "partial" ? [{ code: "profile_partial", covered_artifact_types: covered, route_artifact_types: route.primary_artifact_types }] : [],
-    instruction_basis_sha256: instructionBasis,
-    runtime_context: runtimeContext,
-    start: {
-      semantic_input_schema_version: "2",
-      required_semantic_fields: [],
-      execution_policy: subjectKind === "template" ? "human_confirmed" : "direct",
-      dry_run: "optional",
-      command: `researchspec start ${selector} --input <semantic-input.json> --actor-kind <kind> --actor-name <name>${subjectKind === "template" ? " --confirmed-by <human>" : ""} --json`,
-    },
-  };
+export interface StartSubflowInput {
+  index: CurrentWorkspaceIndex;
+  routeRef: string;
+  command: unknown;
+  confirmedBy: string;
+  dryRun?: boolean;
 }
 
-function prerequisiteView(snapshot: WorkspaceSnapshot, inspections: Awaited<ReturnType<typeof inspectArtifacts>>, group: PrerequisiteGroup): SubflowInstructionPacket["prerequisites"][number] {
-  const requirements = group.requirements.map((requirement) => {
-    if (requirement.kind === "contract") return { ...requirement, available: snapshot.files.has(requirement.id) && !snapshot.diagnostics.some((item) => item.blocking && item.path === snapshot.files.get(requirement.id)?.absolutePath) };
-    if (requirement.kind === "artifact") {
-      const artifacts = inspections.filter((item) => item.artifact.artifact_type === requirement.id && item.exists && item.inside_project && item.hash_matches === true);
-      return { ...requirement, available: artifacts.length > 0, artifact_ids: artifacts.map((item) => String(item.artifact.artifact_id)) };
+export interface StartSubflowResult {
+  status: "started" | "would_start" | "already_started";
+  instance_id: string;
+  directory: string;
+  control: SubflowControl;
+  handoff: SubflowHandoff;
+}
+
+export async function startSubflow(input: StartSubflowInput): Promise<StartSubflowResult> {
+  const parsedRoute = RouteRefSchema.safeParse(input.routeRef);
+  if (!parsedRoute.success) throw new SubflowControlError("route_invalid", `Unknown or invalid route reference: ${input.routeRef}`, "usage");
+  const command = parseStartCommand(input.command);
+  const confirmedBy = input.confirmedBy.trim();
+  if (!confirmedBy) throw new SubflowControlError("confirmation_missing", "Start requires a human confirmer.", "usage");
+  const route = getArsuRoute(parsedRoute.data as RouteRef);
+  if (command.cost.effort !== route.cost.effort || command.cost.interaction !== route.cost.interaction) {
+    throw new SubflowControlError("start_cost_mismatch", "Confirmed cost must match the selected route summary.", "conflict");
+  }
+
+  for (const item of command.handoff_inputs) {
+    await resolveCommandBoundaryPath(input.index.projectRoot, item.path, "consume-input");
+    if (item.source_instance_id && findRecords(input.index, item.source_instance_id).length !== 1) {
+      throw new SubflowControlError("handoff_source_invalid", `Input source instance is unavailable: ${item.source_instance_id}`);
     }
-    return { ...requirement, available: false };
-  });
-  const deterministic = group.operator === "all_of" ? requirements.every((item) => item.available || item.kind === "user_input") : requirements.some((item) => item.available || item.kind === "user_input");
-  return { operator: group.operator, requirements, satisfied_without_user_input: deterministic && requirements.every((item) => item.kind !== "user_input" || item.available), fallback_route_refs: group.fallback_route_refs };
-}
-
-export async function planSubflowStart(input: { snapshot: WorkspaceSnapshot; selector: string; payload: unknown; actor: unknown; confirmedBy?: string; expectedPlanSha256?: string; now?: string; sourceRoot?: string }): Promise<SubflowStartPlan> {
-  const semanticResult = SubflowStartSemanticInputSchema.safeParse(input.payload);
-  if (!semanticResult.success) throw new SubflowStartError("invalid_start_input", "Start semantic input is invalid.", "usage", semanticResult.error.issues);
-  const actorResult = StartActorSchema.safeParse(input.actor);
-  if (!actorResult.success) throw new SubflowStartError("invalid_start_input", "Start actor is invalid.", "usage", actorResult.error.issues);
-  const snapshot = input.snapshot;
-  if (!snapshot.workflow || !snapshot.runState) throw new SubflowStartError("workflow_unconfigured", "Workflow has no subflow templates.", "domain");
-  if (snapshot.diagnostics.some((item) => item.blocking)) throw new SubflowStartError("workflow_invalid", "Workspace has blocking diagnostics.", "domain", snapshot.diagnostics.filter((item) => item.blocking));
-
-  const preparedImport = semanticResult.data.material_passport_import ? await preparePassportImport(snapshot, semanticResult.data.material_passport_import, input.sourceRoot ?? path.dirname(snapshot.workspace)) : undefined;
-
-  if (input.expectedPlanSha256) {
-    const existing = snapshot.runState.subflows.find((item) => item.start_receipt.plan_sha256 === input.expectedPlanSha256);
-    if (existing) return existingStartPlan(snapshot, existing, input.selector, input.expectedPlanSha256, preparedImport);
   }
-  const parsed = parseRuntimeSelector(input.selector);
-  if (parsed?.kind !== "subflow_template" && parsed?.kind !== "scoped_subflow_node") throw new SubflowStartError("invalid_subflow_selector", "Start requires an external template or parent-scoped child selector.", "usage");
-  const control = await evaluateWorkflowControl(snapshot);
-  const childStatus = parsed.kind === "scoped_subflow_node" ? control.subflows.find((item) => item.selector === input.selector && item.kind === "child") : undefined;
-  if (parsed.kind === "scoped_subflow_node" && !childStatus) throw new SubflowStartError("subflow_blocked", "Child subflow is not in the current frontier.", "domain");
-  const templateId = parsed.kind === "subflow_template" ? parsed.templateId : childStatus?.template_id;
-  const template = snapshot.workflow.subflow_templates.find((item) => item.template_id === templateId);
-  if (!template) throw new SubflowStartError("subflow_template_not_found", `Subflow template not found: ${input.selector}`, "domain");
-  if (parsed.kind === "subflow_template" && template.visibility === "internal") throw new SubflowStartError("subflow_template_not_found", "Internal subflows can only start from a parent frontier.", "domain");
-  if (preparedImport && (parsed.kind !== "subflow_template" || template.route_ref !== "academic-pipeline:mid-entry")) throw new SubflowStartError("invalid_start_input", "Material Passport import is allowed only for the external academic-pipeline mid-entry template.", "usage");
-  const availability = evaluateStartActionAvailability(snapshot, control, input.selector);
-  if (availability.disposition === "blocked") {
-    const code = availability.reason_code === "run_terminal" ? "run_terminal" : "subflow_blocked";
-    throw new SubflowStartError(code, code === "run_terminal" ? `Run status is terminal: ${snapshot.runState.status}` : "Subflow is not in the current frontier.", "domain", availability);
+  for (const item of command.planned_outputs) await resolveCommandBoundaryPath(input.index.projectRoot, item.path);
+
+  const context = resolveStartContext(input.index, parsedRoute.data, command);
+  const semanticIdentity = { route_ref: parsedRoute.data, confirmed_by: confirmedBy, command };
+  const identityHash = sha256(JSON.stringify(semanticIdentity));
+  const instanceId = `sf-${identityHash.slice(0, 24)}`;
+  const existing = findRecords(input.index, instanceId);
+  if (existing.length > 1) throw new SubflowControlError("subflow_identity_ambiguous", `Multiple controls use instance ID ${instanceId}.`, "conflict");
+  if (existing[0]) {
+    return {
+      status: "already_started",
+      instance_id: instanceId,
+      directory: existing[0].directoryPath,
+      control: existing[0].control,
+      handoff: existing[0].handoff,
+    };
   }
-  const instructions = await buildSubflowInstructions(snapshot, input.selector);
-  if (!instructions.ok) throw new SubflowStartError(instructions.code, "Subflow cannot be started.", "domain");
-  const payloadResult = SubflowStartInputSchema.safeParse({
-    ...semanticResult.data,
+
+  const [skillId, modeId] = parsedRoute.data.split(":", 2) as [string, string];
+  const control = SubflowControlSchema.parse({
     schema_version: "1",
-    instruction_basis_sha256: instructions.packet.instruction_basis_sha256,
-    acknowledged_user_input_ids: instructions.packet.required_user_input_ids,
-    prerequisite_artifact_ids: [...new Set(instructions.packet.prerequisites.flatMap((group) =>
-      group.requirements.flatMap((requirement) => requirement.kind === "artifact" ? requirement.artifact_ids ?? [] : [])))].sort(),
-    prerequisite_decision_ids: snapshot.decisions
-      .filter((item) => item.status === "accepted" && template.start_requires.decision_types.includes(String(item.decision_type)))
-      .map((item) => String(item.decision_id))
-      .sort(),
-    parent_subflow_selector: parsed.kind === "scoped_subflow_node" ? `subflow:${parsed.instanceId}` : null,
+    instance_id: instanceId,
+    route_ref: parsedRoute.data,
+    skill_id: skillId,
+    mode_id: modeId,
+    profile: context.profile,
+    parent: context.parent,
+    ...(context.round === undefined ? {} : { round: context.round }),
+    started_at: command.confirmed_at,
+    start_confirmation: {
+      confirmed_by: confirmedBy,
+      confirmed_at: command.confirmed_at,
+      prerequisites: command.prerequisites,
+      expected_outputs: command.planned_outputs.map((item) => item.role),
+      formal_gates: command.formal_gates,
+      cost: command.cost,
+    },
+    status: "active",
+    checkpoint: context.checkpoint,
+    gates: command.formal_gates.map((gateId) => ({ gate_id: gateId, attempts: [] })),
+    decisions: [],
+    transitions: [],
   });
-  if (!payloadResult.success) throw new SubflowStartError("invalid_start_input", "CLI-derived Start input is invalid.", "domain", payloadResult.error.issues);
+  const handoff: SubflowHandoff = {
+    schema_version: "1",
+    subflow_instance_id: instanceId,
+    updated_at: command.confirmed_at,
+    inputs: command.handoff_inputs,
+    outputs: command.planned_outputs,
+  };
+  const directoryName = startDirectoryName(skillId, modeId, command.confirmed_at, identityHash);
+  const directory = path.join(input.index.workspace, "subflows", directoryName);
+  if (input.dryRun) return { status: "would_start", instance_id: instanceId, directory, control, handoff };
 
-  const parentId = parsed.kind === "scoped_subflow_node" ? parsed.instanceId : validateParent(snapshot.runState, template, payloadResult.data.parent_subflow_selector);
-  const parentNodeId = parsed.kind === "scoped_subflow_node" ? parsed.nodeId : null;
-  const parentInstance = parentId ? snapshot.runState.subflows.find((item) => item.instance_id === parentId) : undefined;
-  const roundNumber = template.template_kind === "round"
-    ? nextRound(snapshot.runState, template.template_id, parentId, parsed.kind === "scoped_subflow_node" ? undefined : null)
-    : parsed.kind === "scoped_subflow_node"
-      ? childStatus?.round_number ?? null
-      : null;
-  const parentReceipt = parsed.kind === "scoped_subflow_node" && parentInstance ? await trustedParentReceipt(snapshot, parentInstance) : undefined;
-  if (parsed.kind === "scoped_subflow_node" && !parentReceipt) throw new SubflowStartError("subflow_start_conflict", "Parent start receipt is unavailable or untrusted.", "conflict");
-  const confirmer = parentReceipt?.confirmed_by.name ?? input.confirmedBy?.trim();
-  if (!confirmer) throw new SubflowStartError("invalid_start_input", "External start requires a human confirmer.", "usage");
-  const selectedArtifacts = await validateStartPrerequisites(snapshot, template, payloadResult.data);
-  validateDecisionPrerequisites(snapshot, template, payloadResult.data.prerequisite_decision_ids);
-  const basis = startBasis(snapshot, selectedArtifacts, payloadResult.data.prerequisite_decision_ids);
-  const authorization = parentReceipt && parentInstance && parentNodeId ? { kind: "parent_delegated" as const, parent_instance_id: parentInstance.instance_id, parent_node_id: parentNodeId, parent_start_receipt_path: parentInstance.start_receipt.path, parent_start_receipt_sha256: parentInstance.start_receipt.sha256, parent_plan_sha256: parentInstance.start_receipt.plan_sha256 } : { kind: "user_confirmed" as const };
-  const planIdentity = { selector: input.selector, template_id: template.template_id, route_ref: template.route_ref, route_coverage: template.route_coverage, parent_subflow_id: parentId, parent_node_id: parentNodeId, round_number: roundNumber, actor: actorResult.data, confirmed_by: { kind: "human", name: confirmer }, authorization, payload: payloadResult.data, material_passport_import_identity: preparedImport?.identity ?? null, basis };
-  const planSha256 = sha256(`${JSON.stringify(planIdentity)}\n`);
-  if (input.expectedPlanSha256 && input.expectedPlanSha256 !== planSha256) throw new SubflowStartError("subflow_start_conflict", "Start plan differs from the confirmed preview.", "conflict", { expected: input.expectedPlanSha256, actual: planSha256 });
-  await assertNoConflictingOrphanReceipt(snapshot, input.selector, planSha256);
-  const instanceId = `sf-${template.template_id.slice(4)}-${planSha256.slice(0, 12)}`;
-  if (snapshot.runState.subflows.some((item) => item.instance_id === instanceId)) throw new SubflowStartError("subflow_start_conflict", `Subflow instance ID collision: ${instanceId}`, "conflict");
-  const receiptRelativePath = `runs/current/receipts/subflow-start/${instanceId}.json`;
-  const receiptPath = path.join(snapshot.workspace, receiptRelativePath);
-  let startedAt = input.now ?? new Date().toISOString();
-  const importPlan = preparedImport ? await buildPassportImportPlan(snapshot, preparedImport, instanceId, startedAt) : undefined;
-  let receipt = SubflowStartReceiptSchema.parse({ schema_version: "1", receipt_type: "subflow_start", plan_sha256: planSha256, instruction_basis_sha256: payloadResult.data.instruction_basis_sha256, selector: input.selector, instance_id: instanceId, template_id: template.template_id, route_ref: template.route_ref, route_coverage: template.route_coverage, parent_subflow_id: parentId, parent_node_id: parentNodeId, round_number: roundNumber, actor: actorResult.data, confirmed_by: { kind: "human", name: confirmer }, authorization, acknowledged_user_input_ids: payloadResult.data.acknowledged_user_input_ids, prerequisite_artifact_ids: payloadResult.data.prerequisite_artifact_ids, prerequisite_decision_ids: payloadResult.data.prerequisite_decision_ids, ...(importPlan ? { material_passport_import: importPlan.receiptSummary } : {}), basis, started_at: startedAt });
-  try {
-    const orphanBytes = await readFile(receiptPath);
-    const orphan = SubflowStartReceiptSchema.parse(JSON.parse(Buffer.from(orphanBytes).toString("utf8")) as unknown);
-    if (orphan.plan_sha256 !== planSha256 || orphan.selector !== input.selector || orphan.instance_id !== instanceId || orphan.template_id !== template.template_id || orphan.parent_subflow_id !== parentId || (orphan.parent_node_id ?? null) !== parentNodeId || orphan.round_number !== roundNumber) throw new Error("receipt identity mismatch");
-    receipt = orphan;
-    startedAt = orphan.started_at;
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw new SubflowStartError("subflow_start_conflict", `Orphan start receipt conflicts: ${error instanceof Error ? error.message : String(error)}`, "conflict");
-  }
-  const receiptText = `${JSON.stringify(receipt, null, 2)}\n`;
-  const receiptHash = sha256(receiptText);
-  const instance: SubflowInstanceState = { instance_id: instanceId, template_id: template.template_id, route_ref: template.route_ref, parent_subflow_id: parentId, parent_node_id: parentNodeId, round_number: roundNumber, status: "active", active_stage_id: template.entry_stage_id, acknowledged_user_input_ids: payloadResult.data.acknowledged_user_input_ids, prerequisite_artifact_ids: payloadResult.data.prerequisite_artifact_ids, prerequisite_decision_ids: payloadResult.data.prerequisite_decision_ids, start_receipt: { path: receiptRelativePath, sha256: receiptHash, plan_sha256: planSha256 }, transition_receipts: [], started_at: startedAt };
-  const nextState: RunState = { ...snapshot.runState, status: "in_progress", started_at: snapshot.runState.started_at ?? startedAt, updated_at: startedAt, subflows: [...snapshot.runState.subflows, instance], material_passport_imports: importPlan ? [...snapshot.runState.material_passport_imports, importPlan.stateEntry] : snapshot.runState.material_passport_imports, resume_candidate: importPlan?.resumeCandidate ?? snapshot.runState.resume_candidate };
-  const statePath = snapshot.files.get("runs/current/state.yaml")?.absolutePath;
-  if (!statePath) throw new SubflowStartError("workflow_invalid", "Run state file is unavailable.", "domain");
-  const { stringify } = await import("yaml");
-  const stateText = stringify(nextState);
-  const receiptOperation = await planFile({ path: receiptPath, relativePath: receiptRelativePath, content: receiptText, scope: "workspace", ownership: "user" });
-  if (receiptOperation.action === "conflict") throw new SubflowStartError("subflow_start_conflict", `Start receipt conflicts: ${receiptPath}`, "conflict");
-  const stateOperation = { action: "refresh" as const, path: statePath, relativePath: "runs/current/state.yaml", content: stateText, scope: "workspace" as const, ownership: "user" as const, previousHash: snapshot.files.get("runs/current/state.yaml")?.hash, nextHash: sha256(stateText), reason: "commit subflow instance state last" };
-  return { status: "would_start", selector: input.selector, plan_sha256: planSha256, instance, receipt, ...(importPlan ? { material_passport_import: { import_id: importPlan.importId, projection: importPlan.projection, artifact_ids: importPlan.artifacts.map((item) => item.artifact_id), gate_evidence_ids: importPlan.gateEvidence.map((item) => item.event_id), decision_evidence_ids: importPlan.decisionEvidence.map((item) => item.event_id), diagnostics: preparedImport?.diagnostics ?? [] } } : {}), writePlan: { operations: [...(importPlan?.operations ?? []), receiptOperation, stateOperation], readPreconditions: [...startPreconditions(snapshot, selectedArtifacts, parentInstance), ...(importPlan?.readPreconditions ?? [])] } };
+  await createSubflowDirectory(directory, control, handoff);
+  return { status: "started", instance_id: instanceId, directory, control, handoff };
 }
 
-export async function executeSubflowStart(plan: SubflowStartPlan, workspace: string): Promise<SubflowStartOutcome> {
-  if (plan.status === "already_started") return { status: "already_started", plan, workflow_control_after: await evaluateWorkflowControl(await loadWorkspaceSnapshot(workspace)) };
-  await executeWritePlan(plan.writePlan);
-  return { status: "started", plan, workflow_control_after: await evaluateWorkflowControl(await loadWorkspaceSnapshot(workspace)) };
-}
-
-async function existingStartPlan(snapshot: WorkspaceSnapshot, instance: SubflowInstanceState, selector: string, planSha256: string, preparedImport?: PreparedMaterialPassportImport): Promise<SubflowStartPlan> {
-  const receiptPath = path.resolve(snapshot.workspace, instance.start_receipt.path);
-  try {
-    const bytes = await readFile(receiptPath);
-    const parsed = SubflowStartReceiptSchema.parse(JSON.parse(Buffer.from(bytes).toString("utf8")) as unknown);
-    if (sha256(bytes) !== instance.start_receipt.sha256 || parsed.plan_sha256 !== planSha256 || parsed.instance_id !== instance.instance_id || parsed.selector !== selector || parsed.template_id !== instance.template_id || parsed.route_ref !== instance.route_ref || parsed.parent_subflow_id !== instance.parent_subflow_id || (parsed.parent_node_id ?? null) !== (instance.parent_node_id ?? null) || parsed.round_number !== instance.round_number) throw new Error("receipt mismatch");
-    if ((preparedImport?.source.sha256 ?? null) !== (parsed.material_passport_import?.passport_sha256 ?? null) || (preparedImport?.request.boundary_hash ?? null) !== (parsed.material_passport_import?.boundary_hash ?? null)) throw new Error("Material Passport import source mismatch");
-    return { status: "already_started", selector, plan_sha256: planSha256, instance, receipt: parsed, writePlan: { operations: [] } };
-  } catch (error) { throw new SubflowStartError("subflow_start_conflict", `Existing start receipt is untrusted: ${error instanceof Error ? error.message : String(error)}`, "conflict"); }
-}
-
-async function preparePassportImport(snapshot: WorkspaceSnapshot, request: SubflowStartInput["material_passport_import"] & {}, sourceRoot: string): Promise<PreparedMaterialPassportImport> {
-  try { return await prepareMaterialPassportImport(snapshot, request, sourceRoot); }
-  catch (error) { if (error instanceof MaterialPassportImportError) throw new SubflowStartError(error.code, error.message, error.kind, error.details); throw error; }
-}
-
-async function buildPassportImportPlan(snapshot: WorkspaceSnapshot, prepared: PreparedMaterialPassportImport, instanceId: string, now: string): Promise<MaterialPassportImportPlan> {
-  try { return await buildMaterialPassportImportPlan(snapshot, prepared, instanceId, now); }
-  catch (error) { if (error instanceof MaterialPassportImportError) throw new SubflowStartError(error.code, error.message, error.kind, error.details); throw error; }
-}
-
-function validateParent(state: RunState, template: SubflowTemplateDefinition, selector: string | null): string | null {
-  if (template.parent_policy === "required" && !selector) throw new SubflowStartError("subflow_parent_required", "This subflow requires a parent instance.", "domain");
-  if (template.parent_policy === "none" && selector) throw new SubflowStartError("subflow_parent_invalid", "This subflow does not accept a parent.", "domain");
-  if (!selector) return null;
-  const parsed = parseRuntimeSelector(selector);
-  if (parsed?.kind !== "subflow_instance" || !state.subflows.some((item) => item.instance_id === parsed.instanceId)) throw new SubflowStartError("subflow_parent_invalid", `Parent subflow does not exist: ${selector}`, "domain");
-  return parsed.instanceId;
-}
-
-function nextRound(state: RunState, templateId: string, parentId: string | null, parentNodeId: string | null | undefined): number {
-  return Math.max(0, ...state.subflows
-    .filter((item) =>
-      item.template_id === templateId
-      && item.parent_subflow_id === parentId
-      && (parentNodeId === undefined || (item.parent_node_id ?? null) === parentNodeId))
-    .map((item) => item.round_number ?? 0)) + 1;
-}
-
-async function validateStartPrerequisites(snapshot: WorkspaceSnapshot, template: SubflowTemplateDefinition, payload: SubflowStartInput) {
-  const inspections = await inspectArtifacts(snapshot);
-  const selected = payload.prerequisite_artifact_ids.map((id) => inspections.find((item) => item.artifact.artifact_id === id));
-  if (selected.some((item) => !item || !item.exists || !item.inside_project || item.hash_matches !== true)) throw new SubflowStartError("subflow_prerequisite_missing", "A prerequisite artifact is missing or untrusted.", "domain");
-  if (!template.route_ref) return selected.filter((item): item is NonNullable<typeof item> => Boolean(item));
-  const route = getArsuRoute(template.route_ref as RouteRef);
-  const acknowledged = new Set(payload.acknowledged_user_input_ids);
-  for (const group of route.prerequisite_groups) {
-    const satisfied = group.requirements.map((requirement) => {
-      if (requirement.kind === "user_input") return acknowledged.has(requirement.id);
-      if (requirement.kind === "contract") return snapshot.files.has(requirement.id) && !snapshot.diagnostics.some((item) => item.blocking && item.path === snapshot.files.get(requirement.id)?.absolutePath);
-      return selected.some((item) => item?.artifact.artifact_type === requirement.id);
-    });
-    if (group.operator === "all_of" ? !satisfied.every(Boolean) : !satisfied.some(Boolean)) throw new SubflowStartError("subflow_prerequisite_missing", "Route prerequisites are not satisfied.", "domain", { requirements: group.requirements, fallback_route_refs: group.fallback_route_refs });
-  }
-  return selected.filter((item): item is NonNullable<typeof item> => Boolean(item));
-}
-
-function validateDecisionPrerequisites(snapshot: WorkspaceSnapshot, template: SubflowTemplateDefinition, ids: string[]): void {
-  const selected = ids.map((id) => snapshot.decisions.find((item) => item.decision_id === id && item.status === "accepted"));
-  if (selected.some((item) => !item)) throw new SubflowStartError("subflow_prerequisite_missing", "A prerequisite decision is missing or not accepted.", "domain");
-  for (const decisionType of template.start_requires.decision_types) if (!selected.some((item) => item?.decision_type === decisionType)) throw new SubflowStartError("subflow_prerequisite_missing", `Accepted decision type is missing: ${decisionType}`, "domain");
-}
-
-function startBasis(snapshot: WorkspaceSnapshot, artifacts: Awaited<ReturnType<typeof validateStartPrerequisites>>, decisionIds: string[]): SubflowStartReceipt["basis"] {
-  const required = (relativePath: string) => { const file = snapshot.files.get(relativePath); if (!file) throw new SubflowStartError("workflow_invalid", `Start basis is missing: ${relativePath}`, "domain"); return file.hash; };
-  const routeContracts = snapshot.workflow ? snapshot.workflow.subflow_templates.flatMap((template) => template.route_ref ? getArsuRoute(template.route_ref as RouteRef).prerequisite_groups.flatMap((group) => group.requirements.filter((item) => item.kind === "contract").map((item) => item.id)) : []) : [];
-  return { workflow_sha256: required("specs/workflow.yaml"), state_sha256: required("runs/current/state.yaml"), registry_sha256: required("runs/current/artifact-registry.json"), gate_ledger_sha256: required("runs/current/gate-ledger.jsonl"), decision_ledger_sha256: required("runs/current/decision-ledger.jsonl"), catalog_sha256: sha256(`${JSON.stringify(ARSU_ROUTING_CATALOG)}\n`), contract_hashes: Object.fromEntries([...new Set(routeContracts)].filter((item) => snapshot.files.has(item)).map((item) => [item, required(item)])), artifact_hashes: Object.fromEntries(artifacts.map((item) => [String(item.artifact.artifact_id), String(item.artifact.sha256)])), decision_event_ids: snapshot.decisions.filter((item) => decisionIds.includes(String(item.decision_id))).map((item) => String(item.event_id)) };
-}
-
-function startPreconditions(snapshot: WorkspaceSnapshot, artifacts: Awaited<ReturnType<typeof validateStartPrerequisites>>, parent?: SubflowInstanceState) {
-  const paths = ["specs/workflow.yaml", "runs/current/state.yaml", "runs/current/artifact-registry.json", "runs/current/gate-ledger.jsonl", "runs/current/decision-ledger.jsonl", ...Object.keys(startBasis(snapshot, artifacts, []).contract_hashes)];
-  return [...new Set(paths)].map((item) => { const file = snapshot.files.get(item); if (!file) throw new SubflowStartError("workflow_invalid", `Start precondition is missing: ${item}`, "domain"); return { path: file.absolutePath, expectedHash: file.hash, reason: `subflow start basis ${item}` }; }).concat(artifacts.flatMap((item) => item.resolved_path && typeof item.artifact.sha256 === "string" ? [{ path: item.resolved_path, expectedHash: item.artifact.sha256, reason: `prerequisite artifact ${String(item.artifact.artifact_id)}` }] : []), parent ? [{ path: path.resolve(snapshot.workspace, parent.start_receipt.path), expectedHash: parent.start_receipt.sha256, reason: `delegated parent start ${parent.instance_id}` }] : []);
-}
-
-async function trustedParentReceipt(snapshot: WorkspaceSnapshot, parent: SubflowInstanceState): Promise<SubflowStartReceipt | undefined> {
-  try {
-    const bytes = await readFile(path.resolve(snapshot.workspace, parent.start_receipt.path));
-    const receipt = SubflowStartReceiptSchema.parse(JSON.parse(Buffer.from(bytes).toString("utf8")) as unknown);
-    if (sha256(bytes) !== parent.start_receipt.sha256 || receipt.plan_sha256 !== parent.start_receipt.plan_sha256 || receipt.instance_id !== parent.instance_id) return undefined;
-    return receipt;
-  } catch { return undefined; }
-}
-
-async function assertNoConflictingOrphanReceipt(snapshot: WorkspaceSnapshot, selector: string, planSha256: string): Promise<void> {
-  const directory = path.join(snapshot.workspace, "runs/current/receipts/subflow-start");
-  let entries: string[];
-  try { entries = await readdir(directory); }
-  catch (error) { if ((error as NodeJS.ErrnoException).code === "ENOENT") return; throw error; }
-  const stateInstanceIds = new Set(snapshot.runState?.subflows.map((item) => item.instance_id) ?? []);
-  for (const entry of entries.filter((item) => item.endsWith(".json"))) {
-    try {
-      const receipt = SubflowStartReceiptSchema.parse(JSON.parse(await readFile(path.join(directory, entry), "utf8")) as unknown);
-      if (receipt.selector === selector && !stateInstanceIds.has(receipt.instance_id) && receipt.plan_sha256 !== planSha256) throw new SubflowStartError("subflow_start_conflict", `A different orphan start receipt already owns ${selector}.`, "conflict", { orphan_plan_sha256: receipt.plan_sha256 });
-    } catch (error) {
-      if (error instanceof SubflowStartError) throw error;
+export async function appendGateAttempt(input: {
+  index: CurrentWorkspaceIndex;
+  instanceId: string;
+  gateId: string;
+  verdict: GateVerdict;
+  confirmedBy: string;
+  confirmedAt: string;
+  summary: string;
+  evidenceRole?: string;
+  dryRun?: boolean;
+  expectedControlText?: string;
+}): Promise<SubflowControl> {
+  const record = requireRecord(input.index, input.instanceId);
+  const evidence = input.evidenceRole ? await gateEvidence(input.index, record, input.evidenceRole) : undefined;
+  const attemptId = `attempt-${sha256(JSON.stringify({ gate: input.gateId, verdict: input.verdict, by: input.confirmedBy, at: input.confirmedAt, summary: input.summary, evidence })).slice(0, 20)}`;
+  return mutateControl(record, (control) => {
+    const gate = control.gates.find((item) => item.gate_id === input.gateId);
+    if (!gate) throw new SubflowControlError("gate_not_found", `Gate does not belong to this subflow: ${input.gateId}`, "usage");
+    const allowed = profileGateVerdicts(input.index, input.gateId);
+    if (allowed && !allowed.includes(input.verdict)) throw new SubflowControlError("gate_verdict_invalid", `Verdict ${input.verdict} is not allowed for Gate ${input.gateId}.`, "usage");
+    const attempt = { attempt_id: attemptId, verdict: input.verdict, confirmed_by: requiredText(input.confirmedBy, "Gate confirmer"), confirmed_at: input.confirmedAt, summary: requiredText(input.summary, "Gate summary"), ...(evidence ? { evidence: [evidence] } : {}) };
+    const prior = gate.attempts.find((item) => item.attempt_id === attemptId);
+    if (prior) {
+      if (JSON.stringify(prior) !== JSON.stringify(attempt)) throw new SubflowControlError("gate_attempt_conflict", `Gate attempt ID conflicts: ${attemptId}`, "conflict");
+      return control;
     }
+    gate.attempts.push(attempt);
+    return control;
+  }, input);
+}
+
+export async function recordLocalDecision(input: {
+  index: CurrentWorkspaceIndex;
+  instanceId: string;
+  decisionId: string;
+  kind: LocalDecisionKind;
+  choice: string;
+  decidedBy: string;
+  decidedAt: string;
+  reason?: string;
+  dryRun?: boolean;
+  expectedControlText?: string;
+}): Promise<SubflowControl> {
+  const record = requireRecord(input.index, input.instanceId);
+  return mutateControl(record, (control) => {
+    if (control.decisions.some((item) => item.decision_id === input.decisionId)) {
+      throw new SubflowControlError("decision_exists", `Decision already exists: ${input.decisionId}`, "conflict");
+    }
+    if (input.kind === "branch") validateBranchChoice(input.index, record, input.decisionId, input.choice);
+    control.decisions.push({
+      decision_id: input.decisionId,
+      kind: input.kind,
+      choice: requiredText(input.choice, "Decision choice"),
+      decided_by: requiredText(input.decidedBy, "Decision actor"),
+      decided_at: input.decidedAt,
+      ...(input.reason?.trim() ? { reason: input.reason.trim() } : {}),
+    });
+    return control;
+  }, input);
+}
+
+export async function overrideFailedGate(input: {
+  index: CurrentWorkspaceIndex;
+  instanceId: string;
+  gateId: string;
+  approvedBy: string;
+  approvedAt: string;
+  reason: string;
+  dryRun?: boolean;
+  expectedControlText?: string;
+}): Promise<SubflowControl> {
+  const record = requireRecord(input.index, input.instanceId);
+  return mutateControl(record, (control) => {
+    const gate = control.gates.find((item) => item.gate_id === input.gateId);
+    const latest = gate?.attempts.at(-1);
+    if (!gate || latest?.verdict !== "fail") throw new SubflowControlError("gate_override_unavailable", "Only the current failed Gate attempt can be overridden.", "conflict");
+    if (!input.index.profile.override_policy.failed_gate_requires_decision) throw new SubflowControlError("gate_override_forbidden", "The project profile does not allow failed-Gate override.");
+    if (gate.override && Date.parse(gate.override.approved_at) >= Date.parse(latest.confirmed_at)) {
+      throw new SubflowControlError("gate_override_exists", `Gate already has a current override: ${input.gateId}`, "conflict");
+    }
+    gate.override = {
+      decision_id: `override-${sha256(JSON.stringify({ gate: input.gateId, by: input.approvedBy, at: input.approvedAt, reason: input.reason })).slice(0, 20)}`,
+      approved_by: requiredText(input.approvedBy, "Override approver"),
+      approved_at: input.approvedAt,
+      reason: requiredText(input.reason, "Override reason"),
+    };
+    return control;
+  }, input);
+}
+
+export async function advanceSubflow(input: {
+  index: CurrentWorkspaceIndex;
+  instanceId: string;
+  transition?: string;
+  actor: string;
+  transitionedAt: string;
+  dryRun?: boolean;
+  expectedControlText?: string;
+}): Promise<{ control: SubflowControl; transition: string }> {
+  const record = requireRecord(input.index, input.instanceId);
+  const transition = resolveAdvanceTransition(input.index, record, input.transition);
+  const control = await mutateControl(record, (current) => {
+    if (current.transitions.some((item) => item.transition_id === transition)) {
+      throw new SubflowControlError("transition_exists", `Transition already recorded: ${transition}`, "conflict");
+    }
+    const from = current.checkpoint;
+    if (isLifecycleTransition(transition)) applyLifecycle(input.index, record, current, transition);
+    else {
+      const definition = eligibleProfileTransitions(input.index, record).find((item) => item.transition_id === transition);
+      if (!definition) throw new SubflowControlError("transition_blocked", `Profile transition is not currently eligible: ${transition}`, "conflict");
+      current.checkpoint = definition.to;
+    }
+    current.transitions.push({ transition_id: transition, from, to: current.status === "active" ? current.checkpoint : current.status, transitioned_at: input.transitionedAt, actor: requiredText(input.actor, "Transition actor") });
+    return current;
+  }, input);
+  return { control, transition };
+}
+
+function resolveStartContext(index: CurrentWorkspaceIndex, routeRef: string, command: SubflowStartCommand): {
+  profile: SubflowControl["profile"];
+  parent: SubflowControl["parent"];
+  round?: number;
+  checkpoint: string;
+} {
+  if (command.parent) {
+    const parent = requireRecord(index, command.parent.instance_id);
+    const node = index.profile.children.find((item) => item.node_id === command.parent?.node_id && item.route_ref === routeRef);
+    if (!node) throw new SubflowControlError("profile_child_invalid", "Parent node does not match the selected route.", "conflict");
+    const available = childStartCandidates(index).some((item) => item.parent.control.instance_id === parent.control.instance_id && item.node.node_id === node.node_id && item.round === command.round);
+    if (!available) throw new SubflowControlError("child_start_blocked", "The selected child is not in the current profile frontier.", "conflict");
+    const requiredGates = node.required_gate_ids.filter((gateId) => index.profile.gates.find((item) => item.gate_id === gateId)?.policy === "required");
+    if (!requiredGates.every((gateId) => command.formal_gates.includes(gateId)) || command.formal_gates.some((gateId) => !node.required_gate_ids.includes(gateId))) {
+      throw new SubflowControlError("start_gates_mismatch", "Confirmed Gates must include required profile Gates and only triggered conditional Gates.", "conflict");
+    }
+    return {
+      profile: { id: index.profile.profile_id, version: index.profile.profile_version, path: "profiles/academic-pipeline.yaml" },
+      parent: command.parent,
+      ...(command.round === undefined ? {} : { round: command.round }),
+      checkpoint: node.node_id,
+    };
+  }
+  const entry = command.profile_entry
+    ? index.profile.entries.find((item) => item.entry_id === command.profile_entry && item.route_ref === routeRef)
+    : index.profile.entries.find((item) => item.route_ref === routeRef);
+  if (entry) {
+    if (command.formal_gates.length > 0) throw new SubflowControlError("start_gates_mismatch", "Pipeline parent confirmation cannot declare child Gates.", "conflict");
+    return {
+      profile: { id: index.profile.profile_id, version: index.profile.profile_version, path: "profiles/academic-pipeline.yaml" },
+      parent: null,
+      checkpoint: entry.checkpoint,
+    };
+  }
+  if (command.profile_entry) throw new SubflowControlError("profile_entry_invalid", `Profile entry does not match route ${routeRef}.`, "usage");
+  return { profile: null, parent: null, checkpoint: routeRef.split(":", 2)[1] ?? "started" };
+}
+
+function resolveAdvanceTransition(index: CurrentWorkspaceIndex, record: SubflowRecord, requested: string | undefined): string {
+  if (requested) {
+    if (isLifecycleTransition(requested)) return requested;
+    if (!index.profile.transitions.some((item) => item.transition_id === requested)) throw new SubflowControlError("transition_invalid", `Unknown transition: ${requested}`, "usage");
+    return requested;
+  }
+  const eligible = eligibleProfileTransitions(index, record);
+  if (eligible.length === 1) return eligible[0]?.transition_id ?? "";
+  if (eligible.length > 1) throw new SubflowControlError("transition_ambiguous", "Multiple profile transitions are eligible; pass --transition.", "conflict", { transitions: eligible.map((item) => item.transition_id) });
+  if (record.control.status === "paused") return "resume";
+  if (isSubflowCompletionReady(index, record)) return "complete";
+  throw new SubflowControlError("transition_blocked", "No transition is currently eligible.", "conflict");
+}
+
+function applyLifecycle(index: CurrentWorkspaceIndex, record: SubflowRecord, control: SubflowControl, transition: LifecycleTransition): void {
+  if (transition === "pause") {
+    if (control.status !== "active") throw new SubflowControlError("lifecycle_invalid", "Only an active subflow can be paused.", "conflict");
+    control.status = "paused";
+  } else if (transition === "resume") {
+    if (control.status !== "paused") throw new SubflowControlError("lifecycle_invalid", "Only a paused subflow can be resumed.", "conflict");
+    control.status = "active";
+  } else if (transition === "cancel") {
+    if (control.status === "complete" || control.status === "cancelled") throw new SubflowControlError("lifecycle_invalid", "A terminal subflow cannot be cancelled.", "conflict");
+    control.status = "cancelled";
+  } else {
+    if (!isSubflowCompletionReady(index, { ...record, control })) throw new SubflowControlError("completion_blocked", "Subflow completion requirements are not satisfied.", "conflict");
+    control.status = "complete";
+  }
+}
+
+async function mutateControl(
+  record: SubflowRecord,
+  mutate: (control: SubflowControl) => SubflowControl,
+  options: { dryRun?: boolean; expectedControlText?: string },
+): Promise<SubflowControl> {
+  const currentText = await readRegularControl(record.controlPath);
+  if (options.expectedControlText !== undefined && currentText !== options.expectedControlText) {
+    throw new SubflowControlError("control_write_conflict", "Control changed after it was read.", "conflict");
+  }
+  const current = SubflowControlSchema.parse(parseYaml(currentText));
+  const next = SubflowControlSchema.parse(mutate(structuredClone(current)));
+  const nextText = stringify(next);
+  if (nextText === currentText || options.dryRun) return next;
+  const temporary = `${record.controlPath}.${randomUUID()}.tmp`;
+  try {
+    await writeFile(temporary, nextText, { encoding: "utf8", flag: "wx" });
+    if (await readFile(record.controlPath, "utf8") !== currentText) throw new SubflowControlError("control_write_conflict", "Control changed during mutation.", "conflict");
+    await rename(temporary, record.controlPath);
+  } catch (error) {
+    await rm(temporary, { force: true }).catch(() => undefined);
+    throw error;
+  }
+  return next;
+}
+
+async function createSubflowDirectory(directory: string, control: SubflowControl, handoff: SubflowHandoff): Promise<void> {
+  const root = path.dirname(directory);
+  const temporary = path.join(root, `.subflow-${randomUUID()}.tmp`);
+  try {
+    await mkdir(temporary, { recursive: false });
+    await mkdir(path.join(temporary, "work"));
+    await writeFile(path.join(temporary, "control.yaml"), stringify(control), { encoding: "utf8", flag: "wx" });
+    await writeFile(path.join(temporary, "handoff.md"), renderHandoff(handoff), { encoding: "utf8", flag: "wx" });
+    await rename(temporary, directory);
+  } catch (error) {
+    await rm(temporary, { recursive: true, force: true }).catch(() => undefined);
+    if ((error as NodeJS.ErrnoException).code === "EEXIST" || (error as NodeJS.ErrnoException).code === "ENOTEMPTY") {
+      throw new SubflowControlError("subflow_create_conflict", `Subflow directory already exists: ${directory}`, "conflict");
+    }
+    throw error;
+  }
+}
+
+function renderHandoff(handoff: SubflowHandoff): string {
+  return `---\n${stringify(handoff)}---\n\n# Subflow handoff\n`;
+}
+
+async function gateEvidence(index: CurrentWorkspaceIndex, record: SubflowRecord, role: string): Promise<{ role: string; path: string }> {
+  const matches = [...record.handoff.inputs, ...record.handoff.outputs].filter((item) => item.role === role);
+  if (matches.length !== 1) throw new SubflowControlError("gate_evidence_role_invalid", `Evidence role must resolve exactly once in the owning handoff: ${role}`, "usage");
+  const match = matches[0];
+  if (!match) throw new SubflowControlError("gate_evidence_role_invalid", `Unknown evidence role: ${role}`, "usage");
+  await resolveCommandBoundaryPath(index.projectRoot, match.path, "consume-input");
+  return { role, path: match.path };
+}
+
+function validateBranchChoice(index: CurrentWorkspaceIndex, record: SubflowRecord, decisionId: string, choice: string): void {
+  const nodeId = record.control.parent?.node_id;
+  const branch = index.profile.branches.find((item) => item.decision_id === decisionId && item.owner_node_id === nodeId);
+  if (!branch) throw new SubflowControlError("branch_decision_invalid", `Branch does not belong to this subflow: ${decisionId}`, "usage");
+  if (!branch.options.some((item) => item.option_id === choice)) throw new SubflowControlError("branch_choice_invalid", `Unknown branch choice: ${choice}`, "usage");
+  if (!record.control.gates.every(isGateAccepted)) throw new SubflowControlError("branch_gate_blocked", "Branch choice requires accepted owning Gates.", "conflict");
+}
+
+function profileGateVerdicts(index: CurrentWorkspaceIndex, gateId: string): GateVerdict[] | undefined {
+  return index.profile.gates.find((item) => item.gate_id === gateId)?.verdicts;
+}
+
+function parseStartCommand(value: unknown): SubflowStartCommand {
+  const parsed = SubflowStartCommandSchema.safeParse(value);
+  if (!parsed.success) throw new SubflowControlError("start_input_invalid", "Start input does not match schema 1.", "usage", parsed.error.issues);
+  return parsed.data;
+}
+
+function requireRecord(index: CurrentWorkspaceIndex, instanceId: string): SubflowRecord {
+  const records = findRecords(index, instanceId);
+  if (records.length !== 1) throw new SubflowControlError(records.length === 0 ? "subflow_not_found" : "subflow_identity_ambiguous", `Subflow selector must resolve exactly once: ${instanceId}`, records.length === 0 ? "usage" : "conflict");
+  return records[0];
+}
+
+function findRecords(index: CurrentWorkspaceIndex, instanceId: string): SubflowRecord[] {
+  return index.subflows.filter((item) => item.control.instance_id === instanceId);
+}
+
+async function readRegularControl(controlPath: string): Promise<string> {
+  const info = await lstat(controlPath);
+  if (!info.isFile() || info.isSymbolicLink()) throw new SubflowControlError("control_file_invalid", `Control must be a regular file: ${controlPath}`, "conflict");
+  return readFile(controlPath, "utf8");
+}
+
+function requiredText(value: string, label: string): string {
+  const trimmed = value.trim();
+  if (!trimmed) throw new SubflowControlError("command_text_missing", `${label} must not be empty.`, "usage");
+  return trimmed;
+}
+
+function startDirectoryName(skillId: string, modeId: string, confirmedAt: string, identityHash: string): string {
+  const timestamp = confirmedAt.replace(/[^0-9]/g, "").slice(0, 14);
+  return `${skillId}-${modeId}-${timestamp}-${identityHash.slice(0, 8)}`;
+}
+
+function isLifecycleTransition(value: string): value is LifecycleTransition {
+  return value === "pause" || value === "resume" || value === "cancel" || value === "complete";
+}
+
+async function resolveCommandBoundaryPath(projectRoot: string, requestedPath: string, use: "reference" | "consume-input" = "reference"): Promise<void> {
+  try { await resolveBoundaryPath(projectRoot, requestedPath, use); }
+  catch (error) {
+    if (error instanceof BoundaryPathError) throw new SubflowControlError(error.code, error.message, "usage");
+    throw error;
   }
 }

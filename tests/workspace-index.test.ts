@@ -20,7 +20,8 @@ void test("current workspace index is derived and catches duplicate instance IDs
       await writeFile(path.join(directory, "handoff.md"), handoff("sf-duplicate"), "utf8");
     }
     const index = await loadCurrentWorkspaceIndex(workspace);
-    assert.equal(index.controls.length, 2);
+    assert.equal(index.subflows.length, 2);
+    assert.deepEqual(index.subflows.map((item) => item.directoryName), ["one", "two"]);
     assert.ok(index.diagnostics.some((item) => item.code === "duplicate_subflow_instance_id"));
     assert.equal(index.files.has("runs/current/state.yaml"), false);
   } finally {
@@ -68,4 +69,3 @@ function control(instanceId: string) {
 function handoff(instanceId: string): string {
   return `---\nschema_version: "1"\nsubflow_instance_id: ${instanceId}\nupdated_at: 2026-08-01T12:00:00+08:00\ninputs: []\noutputs: []\n---\n`;
 }
-

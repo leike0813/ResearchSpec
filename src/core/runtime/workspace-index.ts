@@ -20,6 +20,7 @@ import { parseSubflowHandoff, type SubflowHandoff } from "../contracts/subflow-h
 import { CurrentWorkspaceConfigSchema, type CurrentWorkspaceConfig } from "../contracts/workspace-format.js";
 import type { Diagnostic } from "../validation/types.js";
 import { sha256 } from "../workspace/write-plan.js";
+import { resolveBoundaryPath } from "./boundary-path.js";
 
 const REQUIRED_DIRECTORIES = ["profiles", "specs", "changes", "subflows"] as const;
 const REQUIRED_FILES = [
@@ -50,10 +51,20 @@ export interface CurrentWorkspaceIndex {
   claims: ClaimsSpec;
   manuscript: ManuscriptSpec;
   profile: PipelineProfile;
-  controls: SubflowControl[];
-  handoffs: SubflowHandoff[];
+  subflows: SubflowRecord[];
   changes: Array<{ id: string; status: string; targets: string[]; path: string }>;
   diagnostics: Diagnostic[];
+}
+
+export interface SubflowRecord {
+  directoryName: string;
+  directoryPath: string;
+  controlPath: string;
+  handoffPath: string;
+  controlText: string;
+  handoffText: string;
+  control: SubflowControl;
+  handoff: SubflowHandoff;
 }
 
 export interface WorkspaceStaticContext {
@@ -106,8 +117,9 @@ export async function loadCurrentWorkspaceIndex(workspace: string): Promise<Curr
     if (!claimIds.has(claimId)) diagnostics.push(problem("section_claim_missing", `Section references missing claim: ${claimId}`, path.join(workspace, "specs/manuscript.yaml")));
   }
 
-  const { controls, handoffs } = await scanSubflows(workspace, diagnostics);
-  addDuplicateIds(controls, "instance_id", "duplicate_subflow_instance_id", "subflows", workspace, diagnostics);
+  const subflows = await scanSubflows(workspace, diagnostics);
+  addDuplicateIds(subflows.map((item) => item.control), "instance_id", "duplicate_subflow_instance_id", "subflows", workspace, diagnostics);
+  await validateSubflowReferences(workspace, subflows, profile, diagnostics);
   const changes = await scanChanges(workspace, diagnostics);
 
   return {
@@ -121,8 +133,7 @@ export async function loadCurrentWorkspaceIndex(workspace: string): Promise<Curr
     claims: claims ?? ClaimsSpecSchema.parse({ schema_version: "1", claims: [] }),
     manuscript: manuscript ?? ManuscriptSpecSchema.parse({ schema_version: "1", manuscript_id: "invalid", output_type: null, working_title: null, language: null, audience: null, venue: null, citation_requirements: [], format_requirements: [], outline: [] }),
     profile: profile ?? emptyProfile(),
-    controls,
-    handoffs,
+    subflows,
     changes,
     diagnostics,
   };
@@ -168,27 +179,30 @@ function parseRequired<T>(files: Map<string, CurrentWorkspaceFile>, relativePath
   }
 }
 
-async function scanSubflows(workspace: string, diagnostics: Diagnostic[]): Promise<{ controls: SubflowControl[]; handoffs: SubflowHandoff[] }> {
+async function scanSubflows(workspace: string, diagnostics: Diagnostic[]): Promise<SubflowRecord[]> {
   const root = path.join(workspace, "subflows");
-  const controls: SubflowControl[] = [];
-  const handoffs: SubflowHandoff[] = [];
+  const records: SubflowRecord[] = [];
   for (const entry of await safeReadDirectory(root)) {
     const directory = path.join(root, entry.name);
     if (!entry.isDirectory() || entry.isSymbolicLink()) {
       diagnostics.push(problem("subflow_entry_invalid", "Subflow entries must be regular directories.", directory));
       continue;
     }
-    const controlFile = await readOptionalRegularFile(path.join(directory, "control.yaml"), diagnostics, "subflow_control_missing");
-    if (controlFile) try { controls.push(SubflowControlSchema.parse(parseYaml(controlFile))); }
-    catch (error) { diagnostics.push({ ...problem("subflow_control_invalid", error instanceof Error ? error.message : String(error), path.join(directory, "control.yaml")), details: error }); }
-    const handoffFile = await readOptionalRegularFile(path.join(directory, "handoff.md"), diagnostics, "subflow_handoff_missing");
-    if (handoffFile) try {
-      const handoff = parseSubflowHandoff(handoffFile).frontmatter;
-      validateHandoffPaths(workspace, handoff, path.join(directory, "handoff.md"), diagnostics);
-      handoffs.push(handoff);
-    } catch (error) { diagnostics.push({ ...problem("subflow_handoff_invalid", error instanceof Error ? error.message : String(error), path.join(directory, "handoff.md")), details: error }); }
+    const controlPath = path.join(directory, "control.yaml");
+    const handoffPath = path.join(directory, "handoff.md");
+    const controlText = await readOptionalRegularFile(controlPath, diagnostics, "subflow_control_missing");
+    const handoffText = await readOptionalRegularFile(handoffPath, diagnostics, "subflow_handoff_missing");
+    let control: SubflowControl | undefined;
+    let handoff: SubflowHandoff | undefined;
+    if (controlText) try { control = SubflowControlSchema.parse(parseYaml(controlText)); }
+    catch (error) { diagnostics.push({ ...problem("subflow_control_invalid", error instanceof Error ? error.message : String(error), controlPath), details: error }); }
+    if (handoffText) try { handoff = parseSubflowHandoff(handoffText).frontmatter; }
+    catch (error) { diagnostics.push({ ...problem("subflow_handoff_invalid", error instanceof Error ? error.message : String(error), handoffPath), details: error }); }
+    if (controlText && handoffText && control && handoff) {
+      records.push({ directoryName: entry.name, directoryPath: directory, controlPath, handoffPath, controlText, handoffText, control, handoff });
+    }
   }
-  return { controls, handoffs };
+  return records;
 }
 
 async function scanChanges(workspace: string, diagnostics: Diagnostic[]): Promise<Array<{ id: string; status: string; targets: string[]; path: string }>> {
@@ -231,15 +245,62 @@ async function readOptionalRegularFile(filePath: string, diagnostics: Diagnostic
   }
 }
 
-function validateHandoffPaths(workspace: string, handoff: SubflowHandoff, handoffPath: string, diagnostics: Diagnostic[]): void {
-  const projectRoot = path.dirname(workspace);
-  for (const item of [...handoff.inputs, ...handoff.outputs]) {
-    if (path.isAbsolute(item.path)) {
-      diagnostics.push(problem("handoff_path_absolute", "Handoff paths must be project-relative.", handoffPath));
-      continue;
+async function validateSubflowReferences(
+  workspace: string,
+  records: readonly SubflowRecord[],
+  profile: PipelineProfile | undefined,
+  diagnostics: Diagnostic[],
+): Promise<void> {
+  const byId = new Map<string, SubflowRecord[]>();
+  for (const record of records) {
+    const entries = byId.get(record.control.instance_id) ?? [];
+    entries.push(record);
+    byId.set(record.control.instance_id, entries);
+  }
+  const childById = new Map(profile?.children.map((item) => [item.node_id, item]) ?? []);
+  const entriesByRoute = new Map(profile?.entries.map((item) => [item.route_ref, item]) ?? []);
+
+  for (const record of records) {
+    const { control, handoff } = record;
+    if (handoff.subflow_instance_id !== control.instance_id) {
+      diagnostics.push(problem("subflow_handoff_id_mismatch", "Handoff instance ID must match its owning control.", record.handoffPath));
     }
-    const resolved = path.resolve(projectRoot, item.path);
-    if (!isWithin(projectRoot, resolved) || isWithin(workspace, resolved)) diagnostics.push(problem("handoff_path_outside_boundary", "Handoff paths must remain inside the project and outside researchspec/.", handoffPath));
+    if (control.profile !== null && profile) {
+      if (control.profile.id !== profile.profile_id || control.profile.version !== profile.profile_version) {
+        diagnostics.push(problem("subflow_profile_mismatch", "Subflow profile identity does not match the project profile.", record.controlPath));
+      }
+      if (control.parent === null && !entriesByRoute.has(control.route_ref)) {
+        diagnostics.push(problem("pipeline_entry_route_invalid", "Pipeline parent route is not a project profile entry.", record.controlPath));
+      }
+    }
+    if (control.parent !== null) {
+      const parents = byId.get(control.parent.instance_id) ?? [];
+      if (parents.length !== 1) {
+        diagnostics.push(problem("subflow_parent_invalid", "Child parent reference must resolve to exactly one control.", record.controlPath));
+      } else if (parents[0]?.control.profile === null) {
+        diagnostics.push(problem("subflow_parent_not_pipeline", "A child parent must be governed by the project profile.", record.controlPath));
+      }
+      if (control.parent.instance_id === control.instance_id) {
+        diagnostics.push(problem("subflow_parent_self", "A subflow cannot parent itself.", record.controlPath));
+      }
+      const node = childById.get(control.parent.node_id);
+      if (!node || node.route_ref !== control.route_ref) {
+        diagnostics.push(problem("subflow_parent_node_invalid", "Child parent node must exist and match the child route.", record.controlPath));
+      } else if ((control.round !== undefined) !== (node.multiplicity === "repeatable")) {
+        diagnostics.push(problem("subflow_round_invalid", "Round is required exactly for repeatable profile children.", record.controlPath));
+      }
+    }
+    for (const input of handoff.inputs) {
+      if (input.source_instance_id && (byId.get(input.source_instance_id)?.length ?? 0) !== 1) {
+        diagnostics.push(problem("handoff_source_instance_invalid", "Handoff source instance must resolve to exactly one control.", record.handoffPath));
+      }
+    }
+    for (const item of [...handoff.inputs, ...handoff.outputs]) {
+      try { await resolveBoundaryPath(path.dirname(workspace), item.path); }
+      catch (error) {
+        diagnostics.push(problem("handoff_path_invalid", error instanceof Error ? error.message : String(error), record.handoffPath));
+      }
+    }
   }
 }
 
@@ -260,11 +321,6 @@ async function safeReadDirectory(directory: string) {
   }
 }
 
-function isWithin(root: string, target: string): boolean {
-  const relative = path.relative(root, target);
-  return relative === "" || (!relative.startsWith("..") && !path.isAbsolute(relative));
-}
-
 function problem(code: string, message: string, filePath: string): Diagnostic {
   return { severity: "error", code, message, path: filePath, blocking: true };
 }
@@ -272,10 +328,16 @@ function problem(code: string, message: string, filePath: string): Diagnostic {
 function emptyProfile(): PipelineProfile {
   return PipelineProfileSchema.parse({
     schema_version: "1", profile_id: "academic-pipeline", profile_version: "invalid",
-    entries: [{ entry_id: "invalid", route_ref: "academic-pipeline:end-to-end", checkpoint: "invalid", kind: "end-to-end" }],
-    children: [{ node_id: "invalid", route_ref: "deep-research:full", prerequisites: [], required_gate_ids: [], branch_ids: [], multiplicity: "one", round_role: null }],
-    parallel_groups: [], gates: [], branches: [], transitions: [],
+    entries: [{ entry_id: "invalid", route_ref: "academic-pipeline:end-to-end", checkpoint: "revision", kind: "end-to-end" }],
+    children: [
+      { node_id: "revision", route_ref: "academic-paper:revision", prerequisites: [], required_gate_ids: [], branch_ids: [], multiplicity: "repeatable", round_role: "revision" },
+      { node_id: "review", route_ref: "academic-paper-reviewer:re-review", prerequisites: ["revision"], required_gate_ids: [], branch_ids: ["review-outcome"], multiplicity: "repeatable", round_role: "review" },
+    ],
+    parallel_groups: [], gates: [], branches: [{ decision_id: "review-outcome", owner_node_id: "review", options: [
+      { option_id: "continue", unlocks: ["revision"] },
+      { option_id: "exit", unlocks: ["review"] },
+    ] }], transitions: [],
     override_policy: { failed_gate_requires_decision: true },
-    revision_round_template: { revision_node_id: "invalid", review_node_id: "invalid", continue_option_id: "continue", exit_option_id: "exit" },
+    revision_round_template: { revision_node_id: "revision", review_node_id: "review", continue_option_id: "continue", exit_option_id: "exit" },
   });
 }

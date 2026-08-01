@@ -7,7 +7,7 @@ import type { IndexedItem, WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { resolveItem } from "../workspace/snapshot.js";
 import { executeWritePlan, hashPath, sha256, type PlannedWrite } from "../workspace/write-plan.js";
 import { ContractChangeError, validateAndApplyContractOperations, validateEvidenceReferences } from "./contract-change.js";
-import { evaluateWorkflowControl } from "./workflow-control.js";
+import { evaluateWorkflowControl } from "./legacy-workflow-control.js";
 import { GateSubmitReceiptSchema } from "../contracts/gate-transition.js";
 import { DecisionInputSchema, type DecisionInput } from "../contracts/case-control.js";
 import { CaseStateSchema } from "../contracts/case-state.js";

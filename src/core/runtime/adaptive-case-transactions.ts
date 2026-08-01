@@ -34,7 +34,7 @@ import { executeWritePlan, planFile, sha256, type PlannedWrite, type ReadPrecond
 import { evaluateActionAvailability } from "./action-availability.js";
 import { resolveRegisteredArtifactPath, serializeRegisteredArtifactPath } from "./artifact-path.js";
 import { observeRuntimeRaw } from "./runtime-observation.js";
-import { inspectArtifact } from "./workflow-control.js";
+import { inspectArtifact } from "./legacy-workflow-control.js";
 import {
   assertCurrentGateReverification,
   isPassingGateVerdict,

@@ -13,7 +13,7 @@ import type { WorkflowDefinition } from "../contracts/workflow.js";
 import type { WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { loadWorkspaceSnapshot } from "../workspace/snapshot.js";
 import { executeWritePlan, planFile, sha256, type WritePlan } from "../workspace/write-plan.js";
-import { buildGateTransitionInstructions, evaluateWorkflowControl, inspectArtifact, type WorkflowControlResult } from "./workflow-control.js";
+import { buildGateTransitionInstructions, evaluateWorkflowControl, inspectArtifact, type WorkflowControlResult } from "./legacy-workflow-control.js";
 import { boundAnnotationSetIds, verifyAnnotationCoverage } from "./annotation-coverage.js";
 import { isPassingGateVerdict } from "./gate-authority.js";
 

@@ -24,11 +24,11 @@
 
 ## 2. Authoritative Subflow Engine
 
-- [ ] 2.1 Implement atomic start, lifecycle, Gate attempts, Decisions, override and transition mutation
+- [x] 2.1 Implement atomic start, lifecycle, Gate attempts, Decisions, override and transition mutation
   against one owning `control.yaml`.
-- [ ] 2.2 Implement profile frontier, parent/child joins, independent child confirmation and dynamic
+- [x] 2.2 Implement profile frontier, parent/child joins, independent child confirmation and dynamic
   revision rounds without global state.
-- [ ] 2.3 Replace artifact-path allocation with safe external boundary-path validation and migrate the
+- [x] 2.3 Replace artifact-path allocation with safe external boundary-path validation and migrate the
   subflow/Gate/workflow tests.
 
 ## 3. Handoff, Project Change, Query And Pack

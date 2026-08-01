@@ -61,7 +61,109 @@ export const PipelineProfileSchema = z.strictObject({
     continue_option_id: StableIdSchema,
     exit_option_id: StableIdSchema,
   }),
+}).superRefine((value, context) => {
+  unique(value.entries, (item) => item.entry_id, "entries", context);
+  unique(value.children, (item) => item.node_id, "children", context);
+  unique(value.parallel_groups, (item) => item.group_id, "parallel_groups", context);
+  unique(value.gates, (item) => item.gate_id, "gates", context);
+  unique(value.branches, (item) => item.decision_id, "branches", context);
+  unique(value.transitions, (item) => item.transition_id, "transitions", context);
+
+  const childIds = new Set(value.children.map((item) => item.node_id));
+  const gateOwners = new Map(value.gates.map((item) => [item.gate_id, item.owner_node_id]));
+  const branchOwners = new Map(value.branches.map((item) => [item.decision_id, item.owner_node_id]));
+  for (const [index, child] of value.children.entries()) {
+    refs(child.prerequisites, childIds, ["children", index, "prerequisites"], "child node", context);
+    refs(child.required_gate_ids, new Set(gateOwners.keys()), ["children", index, "required_gate_ids"], "Gate", context);
+    refs(child.branch_ids, new Set(branchOwners.keys()), ["children", index, "branch_ids"], "branch", context);
+    if (child.multiplicity === "repeatable" && child.round_role === null) {
+      context.addIssue({ code: "custom", path: ["children", index, "round_role"], message: "Repeatable children require a round role." });
+    }
+    if (child.multiplicity !== "repeatable" && child.round_role !== null) {
+      context.addIssue({ code: "custom", path: ["children", index, "round_role"], message: "Only repeatable children may declare a round role." });
+    }
+    uniqueStrings(child.prerequisites, ["children", index, "prerequisites"], context);
+    uniqueStrings(child.required_gate_ids, ["children", index, "required_gate_ids"], context);
+    uniqueStrings(child.branch_ids, ["children", index, "branch_ids"], context);
+    for (const gateId of child.required_gate_ids) {
+      if (gateOwners.get(gateId) !== child.node_id) {
+        context.addIssue({ code: "custom", path: ["children", index, "required_gate_ids"], message: `Gate ${gateId} is not owned by child ${child.node_id}.` });
+      }
+    }
+    for (const branchId of child.branch_ids) {
+      if (branchOwners.get(branchId) !== child.node_id) {
+        context.addIssue({ code: "custom", path: ["children", index, "branch_ids"], message: `Branch ${branchId} is not owned by child ${child.node_id}.` });
+      }
+    }
+  }
+
+  const groupedChildren = new Set<string>();
+  for (const [index, group] of value.parallel_groups.entries()) {
+    refs(group.child_node_ids, childIds, ["parallel_groups", index, "child_node_ids"], "child node", context);
+    uniqueStrings(group.child_node_ids, ["parallel_groups", index, "child_node_ids"], context);
+    for (const childId of group.child_node_ids) {
+      if (groupedChildren.has(childId)) context.addIssue({ code: "custom", path: ["parallel_groups", index, "child_node_ids"], message: `Child belongs to multiple parallel groups: ${childId}` });
+      groupedChildren.add(childId);
+    }
+  }
+  for (const [index, gate] of value.gates.entries()) {
+    ref(gate.owner_node_id, childIds, ["gates", index, "owner_node_id"], "child node", context);
+    uniqueStrings(gate.verdicts, ["gates", index, "verdicts"], context);
+  }
+  for (const [index, branch] of value.branches.entries()) {
+    ref(branch.owner_node_id, childIds, ["branches", index, "owner_node_id"], "child node", context);
+    unique(branch.options, (item) => item.option_id, `branches.${String(index)}.options`, context, ["branches", index, "options"]);
+    for (const [optionIndex, option] of branch.options.entries()) {
+      refs(option.unlocks, childIds, ["branches", index, "options", optionIndex, "unlocks"], "child node", context);
+      uniqueStrings(option.unlocks, ["branches", index, "options", optionIndex, "unlocks"], context);
+    }
+  }
+  const checkpoints = new Set([...childIds, ...value.entries.map((item) => item.checkpoint)]);
+  for (const [index, transition] of value.transitions.entries()) {
+    ref(transition.from, checkpoints, ["transitions", index, "from"], "checkpoint", context);
+    ref(transition.to, checkpoints, ["transitions", index, "to"], "checkpoint", context);
+    refs(transition.required_child_node_ids, childIds, ["transitions", index, "required_child_node_ids"], "child node", context);
+    refs(transition.required_gate_ids, new Set(gateOwners.keys()), ["transitions", index, "required_gate_ids"], "Gate", context);
+    refs(transition.required_branch_ids, new Set(branchOwners.keys()), ["transitions", index, "required_branch_ids"], "branch", context);
+    uniqueStrings(transition.required_child_node_ids, ["transitions", index, "required_child_node_ids"], context);
+    uniqueStrings(transition.required_gate_ids, ["transitions", index, "required_gate_ids"], context);
+    uniqueStrings(transition.required_branch_ids, ["transitions", index, "required_branch_ids"], context);
+  }
+
+  const template = value.revision_round_template;
+  ref(template.revision_node_id, childIds, ["revision_round_template", "revision_node_id"], "child node", context);
+  ref(template.review_node_id, childIds, ["revision_round_template", "review_node_id"], "child node", context);
+  const reviewBranch = value.branches.find((item) => item.owner_node_id === template.review_node_id);
+  const reviewOptions = new Set(reviewBranch?.options.map((item) => item.option_id) ?? []);
+  ref(template.continue_option_id, reviewOptions, ["revision_round_template", "continue_option_id"], "review branch option", context);
+  ref(template.exit_option_id, reviewOptions, ["revision_round_template", "exit_option_id"], "review branch option", context);
 });
 
-export type PipelineProfile = z.infer<typeof PipelineProfileSchema>;
+function unique<T>(
+  values: readonly T[],
+  key: (value: T) => string,
+  label: string,
+  context: z.RefinementCtx,
+  basePath: (string | number)[] = [label],
+): void {
+  const seen = new Set<string>();
+  for (const [index, value] of values.entries()) {
+    const id = key(value);
+    if (seen.has(id)) context.addIssue({ code: "custom", path: [...basePath, index], message: `Duplicate ID: ${id}` });
+    seen.add(id);
+  }
+}
 
+function uniqueStrings(values: readonly string[], path: (string | number)[], context: z.RefinementCtx): void {
+  unique(values, (value) => value, path.join("."), context, path);
+}
+
+function ref(value: string, ids: ReadonlySet<string>, path: (string | number)[], label: string, context: z.RefinementCtx): void {
+  if (!ids.has(value)) context.addIssue({ code: "custom", path, message: `Unknown ${label}: ${value}` });
+}
+
+function refs(values: readonly string[], ids: ReadonlySet<string>, path: (string | number)[], label: string, context: z.RefinementCtx): void {
+  for (const [index, value] of values.entries()) ref(value, ids, [...path, index], label, context);
+}
+
+export type PipelineProfile = z.infer<typeof PipelineProfileSchema>;
