@@ -47,6 +47,27 @@ void test("current workspace index refuses symlinked managed files", { skip: pro
   }
 });
 
+void test("current workspace index preserves partial subflows and scans archived changes", async () => {
+  const root = await tempProject();
+  const workspace = path.join(root, "researchspec");
+  try {
+    await writeSkeleton(workspace);
+    const subflow = path.join(workspace, "subflows/partial");
+    await mkdir(subflow, { recursive: true });
+    await writeFile(path.join(subflow, "control.yaml"), stringify(control("sf-partial")), "utf8");
+    const archived = path.join(workspace, "changes/archive/old-change");
+    await mkdir(archived, { recursive: true });
+    await writeFile(path.join(archived, "change.md"), `---\nschema_version: "1"\nid: old-change\nstatus: rejected\ntargets:\n  - project.md\ndecision:\n  outcome: rejected\n  decided_by: user\n  decided_at: 2026-08-01T12:00:00+08:00\n  reason: Out of scope.\n---\n\n# Rejected change\n`, "utf8");
+    const index = await loadCurrentWorkspaceIndex(workspace);
+    assert.equal(index.subflowEntries.length, 1);
+    assert.equal(index.subflows.length, 0);
+    assert.equal(index.subflowEntries[0]?.control?.instance_id, "sf-partial");
+    assert.ok(index.diagnostics.some((item) => item.code === "subflow_handoff_missing"));
+    assert.equal(index.archivedChanges[0]?.id, "old-change");
+    assert.equal(index.archivedChanges[0]?.archived, true);
+  } finally { await cleanup(root); }
+});
+
 async function writeSkeleton(workspace: string): Promise<void> {
   for (const entry of getWorkspaceEntries(workspace)) {
     if (entry.kind === "dir") await mkdir(entry.path, { recursive: true });

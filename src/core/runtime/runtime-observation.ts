@@ -15,7 +15,7 @@ import { CaseProfileSchema } from "../contracts/case-profile.js";
 import { CaseStateSchema } from "../contracts/case-state.js";
 import { AdaptiveCaseReceiptSchema } from "../contracts/adaptive-runtime.js";
 import { DraftPatchReceiptSchema } from "../contracts/draft-patch.js";
-import { ContractChangeDecisionReceiptSchema, ContractChangeProposalReceiptSchema, ContractChangeRevalidationReceiptSchema } from "../contracts/contract-change.js";
+import { ContractChangeDecisionReceiptSchema, ContractChangeProposalReceiptSchema, ContractChangeRevalidationReceiptSchema } from "../contracts/legacy-contract-change.js";
 import { parseJson, parseJsonLines, parseYaml } from "../validation/parse.js";
 import { sha256 } from "../workspace/write-plan.js";
 

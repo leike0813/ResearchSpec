@@ -1,51 +1,116 @@
 import assert from "node:assert/strict";
+import { existsSync } from "node:fs";
+import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
+import path from "node:path";
 import { test } from "node:test";
-import { parse } from "yaml";
+import { stringify } from "yaml";
 
-import { ContractChangeError, validateAndApplyContractOperations } from "../src/core/runtime/contract-change.js";
+import {
+  archiveProjectChange,
+  ChangeDocumentError,
+  decideProjectChange,
+  renderProjectChange,
+  scaffoldProjectChange,
+  validateProjectChangeDelta,
+} from "../src/core/runtime/change-documents.js";
+import { loadCurrentWorkspaceIndex } from "../src/core/runtime/workspace-index.js";
+import { getWorkspaceEntries } from "../src/core/workspace/layout.js";
+import { cleanup, tempProject } from "./helpers/cli.js";
 
-void test("contract target resolver applies the five operation contracts deterministically", () => {
-  const source = 'schema_version: "0.1"\nclaims:\n  - claim_id: C001\n    strength: strong\n    limits: []\n    metadata:\n      reviewed: false\n';
-  const next = validateAndApplyContractOperations("specs/claims.yaml", source, [
-    patch("add", "claims[C001].note", undefined, "bounded"),
-    patch("replace", "claims[C001].strength", "strong", "moderate"),
-    patch("append", "claims[C001].limits", [], "observational"),
-    patch("merge", "claims[C001].metadata", { reviewed: false }, { reviewer: "R1" }),
-    patch("remove", "claims[C001].note", "bounded", undefined),
-  ]);
-  const document = parse(next) as { claims: Array<{ strength: string; limits: string[]; metadata: Record<string, unknown>; note?: string }> };
-  assert.equal(document.claims[0].strength, "moderate");
-  assert.deepEqual(document.claims[0].limits, ["observational"]);
-  assert.deepEqual(document.claims[0].metadata, { reviewed: false, reviewer: "R1" });
-  assert.equal(Object.hasOwn(document.claims[0], "note"), false);
+const NOW = "2026-08-02T12:00:00+08:00";
+
+void test("project change scaffold creates only requested documents", async () => {
+  const root = await tempProject();
+  const workspace = path.join(root, "researchspec");
+  try {
+    await writeSkeleton(workspace);
+    const index = await loadCurrentWorkspaceIndex(workspace);
+    await scaffoldProjectChange({ index, changeId: "narrow-claim", targets: ["claims.yaml"], withDocuments: ["design", "delta"] });
+    assert.deepEqual((await readdir(path.join(workspace, "changes/narrow-claim"))).sort(), ["change.md", "delta.yaml", "design.md"]);
+    assert.equal(existsSync(path.join(workspace, "changes/narrow-claim/tasks.md")), false);
+    const reloaded = await loadCurrentWorkspaceIndex(workspace);
+    assert.equal(reloaded.changes[0]?.change.status, "proposed");
+  } finally { await cleanup(root); }
 });
 
-void test("contract target resolver rejects ambiguous selectors and invalid operation values", () => {
-  const duplicate = 'schema_version: "0.1"\nclaims:\n  - claim_id: C001\n    strength: strong\n  - claim_id: C001\n    strength: weak\n';
-  assertContractError(() => validateAndApplyContractOperations("specs/claims.yaml", duplicate, [patch("replace", "claims[C001].strength", "strong", "moderate")]), "selector_not_unique");
-  const source = 'schema_version: "0.1"\nclaims:\n  - claim_id: C001\n    strength: strong\n';
-  assertContractError(() => validateAndApplyContractOperations("specs/claims.yaml", source, [patch("add", "claims[C001].strength", undefined, "moderate")]), "proposal_target_exists");
-  assertContractError(() => validateAndApplyContractOperations("specs/claims.yaml", source, [patch("replace", "claims[C001].strength", "weak", "moderate")]), "current_value_conflict");
-  assertContractError(() => validateAndApplyContractOperations("specs/claims.yaml", source, [patch("append", "claims[C001].strength", "strong", "moderate")]), "append_target_not_array");
+void test("accepted change does not edit specs and only applied change can archive", async () => {
+  const root = await tempProject();
+  const workspace = path.join(root, "researchspec");
+  try {
+    await writeSkeleton(workspace);
+    let index = await loadCurrentWorkspaceIndex(workspace);
+    await scaffoldProjectChange({ index, changeId: "accepted-change", targets: ["claims.yaml"] });
+    const claimsPath = path.join(workspace, "specs/claims.yaml");
+    const before = await readFile(claimsPath, "utf8");
+    index = await loadCurrentWorkspaceIndex(workspace);
+    await decideProjectChange({ index, changeId: "accepted-change", decision: "accept", actorName: "Researcher", reason: "Evidence supports the direction.", decidedAt: NOW });
+    assert.equal(await readFile(claimsPath, "utf8"), before);
+    index = await loadCurrentWorkspaceIndex(workspace);
+    await assert.rejects(archiveProjectChange({ index, changeId: "accepted-change" }), (error: unknown) => error instanceof ChangeDocumentError && error.code === "change_not_archivable");
+
+    await writeFile(claimsPath, stringify({ schema_version: "1", claims: [{ claim_id: "claim-1", wording: "A bounded claim.", strength: "supported", supporting_source_ids: [] }] }), "utf8");
+    const record = (await loadCurrentWorkspaceIndex(workspace)).changes[0];
+    assert.ok(record);
+    await writeFile(record.changePath, renderProjectChange({ ...record.change, status: "applied" }, record.body), "utf8");
+    index = await loadCurrentWorkspaceIndex(workspace);
+    await archiveProjectChange({ index, changeId: "accepted-change" });
+    assert.equal(existsSync(path.join(workspace, "changes/accepted-change")), false);
+    assert.equal(existsSync(path.join(workspace, "changes/archive/accepted-change/change.md")), true);
+  } finally { await cleanup(root); }
 });
 
-void test("Markdown resolver permits only unique section replacement and checks current body", () => {
-  const source = "# Project\n\n## Research Question\n\nTBD\n\n## Scope\n\nBounded\n";
-  const next = validateAndApplyContractOperations("specs/project.md", source, [patch("replace", "section[Research Question]", "TBD", "What is the effect?")]);
-  assert.match(next, /## Research Question\n\nWhat is the effect\?/);
-  assertContractError(() => validateAndApplyContractOperations("specs/project.md", source, [patch("replace", "section[Research Question]", "Changed", "New")]), "current_value_conflict");
-  assertContractError(() => validateAndApplyContractOperations("specs/project.md", source, [patch("add", "section[Research Question]", undefined, "New")]), "invalid_markdown_operation");
+void test("delta validation projects complete source and claim records without writing specs", async () => {
+  const root = await tempProject();
+  const workspace = path.join(root, "researchspec");
+  try {
+    await writeSkeleton(workspace);
+    await writeFile(path.join(workspace, "specs/sources.yaml"), stringify({ schema_version: "1", sources: [{ source_id: "source-1", title: "Source", source_type: "article" }] }), "utf8");
+    await writeFile(path.join(workspace, "specs/claims.yaml"), stringify({ schema_version: "1", claims: [{ claim_id: "claim-1", wording: "Original", strength: "tentative", supporting_source_ids: ["source-1"] }] }), "utf8");
+    let index = await loadCurrentWorkspaceIndex(workspace);
+    await scaffoldProjectChange({ index, changeId: "delta-change", targets: ["sources.yaml", "claims.yaml"], withDocuments: ["delta"] });
+    const deltaPath = path.join(workspace, "changes/delta-change/delta.yaml");
+    await writeFile(deltaPath, stringify({ schema_version: "1", operations: [
+      { operation: "add", target: "sources", id: "source-2", value: { source_id: "source-2", title: "Second source", source_type: "report" } },
+      { operation: "update", target: "claims", id: "claim-1", value: { claim_id: "claim-1", wording: "Updated", strength: "supported", supporting_source_ids: ["source-2"] } },
+    ] }), "utf8");
+    const sourcesBefore = await readFile(path.join(workspace, "specs/sources.yaml"), "utf8");
+    index = await loadCurrentWorkspaceIndex(workspace);
+    const record = index.changes[0];
+    assert.ok(record);
+    assert.equal(validateProjectChangeDelta(index, record)?.operations.length, 2);
+    assert.equal(await readFile(path.join(workspace, "specs/sources.yaml"), "utf8"), sourcesBefore);
+
+    await writeFile(deltaPath, stringify({ schema_version: "1", operations: [{ operation: "remove", target: "sources", id: "source-1" }] }), "utf8");
+    index = await loadCurrentWorkspaceIndex(workspace);
+    const invalidRecord = index.changes[0];
+    assert.ok(invalidRecord);
+    assert.throws(() => validateProjectChangeDelta(index, invalidRecord), (error: unknown) => error instanceof ChangeDocumentError && error.code === "change_delta_claim_source_missing");
+  } finally { await cleanup(root); }
 });
 
-function patch(operation: string, targetPath: string, currentValue: unknown, proposedValue: unknown): Record<string, unknown> {
-  return {
-    operation,
-    target_path: targetPath,
-    ...(currentValue !== undefined ? { current_value: currentValue } : {}),
-    ...(proposedValue !== undefined ? { proposed_value: proposedValue } : {}),
-  };
-}
+void test("archive stops when a scanned change directory is edited", async () => {
+  const root = await tempProject();
+  const workspace = path.join(root, "researchspec");
+  try {
+    await writeSkeleton(workspace);
+    let index = await loadCurrentWorkspaceIndex(workspace);
+    await scaffoldProjectChange({ index, changeId: "rejected-change", targets: ["project.md"], withDocuments: ["tasks"] });
+    index = await loadCurrentWorkspaceIndex(workspace);
+    await decideProjectChange({ index, changeId: "rejected-change", decision: "reject", actorName: "Researcher", reason: "Out of scope.", decidedAt: NOW });
+    index = await loadCurrentWorkspaceIndex(workspace);
+    await writeFile(path.join(workspace, "changes/rejected-change/tasks.md"), "user edit after scan\n", "utf8");
+    await assert.rejects(archiveProjectChange({ index, changeId: "rejected-change" }), (error: unknown) => error instanceof ChangeDocumentError && error.code === "change_write_conflict");
+    assert.equal(existsSync(path.join(workspace, "changes/rejected-change/change.md")), true);
+    assert.equal(existsSync(path.join(workspace, "changes/archive/rejected-change")), false);
+  } finally { await cleanup(root); }
+});
 
-function assertContractError(action: () => unknown, code: string): void {
-  assert.throws(action, (error: unknown) => error instanceof ContractChangeError && error.code === code);
+async function writeSkeleton(workspace: string): Promise<void> {
+  for (const entry of getWorkspaceEntries(workspace)) {
+    if (entry.kind === "dir") await mkdir(entry.path, { recursive: true });
+    else {
+      await mkdir(path.dirname(entry.path), { recursive: true });
+      await writeFile(entry.path, entry.content, "utf8");
+    }
+  }
 }

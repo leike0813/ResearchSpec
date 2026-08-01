@@ -10,7 +10,7 @@ import {
   type ProposalInput,
   type ProposalRisk,
   type StableContractPath,
-} from "../contracts/contract-change.js";
+} from "../contracts/legacy-contract-change.js";
 import { CaseSafeIdSchema, CaseStateSchema } from "../contracts/case-state.js";
 import type { WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { planFile, sha256, type PlannedWrite } from "../workspace/write-plan.js";

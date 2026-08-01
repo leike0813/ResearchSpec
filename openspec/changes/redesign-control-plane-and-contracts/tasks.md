@@ -33,9 +33,9 @@
 
 ## 3. Handoff, Project Change, Query And Pack
 
-- [ ] 3.1 Implement directly editable handoff and project-change workflows with validation-only deltas.
-- [ ] 3.2 Derive status/list/show/history from scans and make pack exclude private work and external bytes.
-- [ ] 3.3 Migrate change, handoff, query and pack tests to the current contracts.
+- [x] 3.1 Implement directly editable handoff and project-change workflows with validation-only deltas.
+- [x] 3.2 Derive status/list/show/history from scans and make pack exclude private work and external bytes.
+- [x] 3.3 Migrate change, handoff, query and pack tests to the current contracts.
 
 ## 4. CLI, Companion And Projection Convergence
 

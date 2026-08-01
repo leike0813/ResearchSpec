@@ -4,7 +4,7 @@ import path from "node:path";
 import { test } from "node:test";
 
 import { ACADEMIC_PIPELINE_PROFILE } from "../src/arsu-converter/workflow/academic-pipeline.js";
-import { ControlSelectorSchema } from "../src/core/contracts/control-selector.js";
+import { ControlSelectorSchema, InspectionSelectorSchema } from "../src/core/contracts/control-selector.js";
 import { PipelineProfileSchema } from "../src/core/contracts/pipeline-profile.js";
 import { ProjectChangeDeltaSchema, ProjectChangeFrontmatterSchema } from "../src/core/contracts/project-change.js";
 import { ClaimsSpecSchema, ManuscriptSpecSchema, SourcesSpecSchema, parseProjectSpec } from "../src/core/contracts/stable-specs.js";
@@ -69,8 +69,15 @@ void test("handoff and project change contracts preserve single ownership", () =
     { role: "draft", type: "manuscript", path: "paper/b.md", purpose: "review" },
   ] }).success, false);
   assert.equal(ProjectChangeFrontmatterSchema.safeParse({ schema_version: "1", id: "narrow-claim", status: "accepted", targets: ["claims.yaml"], decision: { outcome: "accepted", decided_by: "user", decided_at: NOW, reason: "Evidence supports a narrower claim." } }).success, true);
+  assert.equal(ProjectChangeFrontmatterSchema.safeParse({ schema_version: "1", id: "narrow-claim", status: "draft", targets: ["claims.yaml"] }).success, true);
+  assert.equal(ProjectChangeFrontmatterSchema.safeParse({ schema_version: "1", id: "narrow-claim", status: "proposed", targets: ["claims.yaml", "claims.yaml"] }).success, false);
   assert.equal(ProjectChangeFrontmatterSchema.safeParse({ schema_version: "1", id: "narrow-claim", status: "applied", targets: ["claims.yaml"], decision: { outcome: "rejected", decided_by: "user", decided_at: NOW, reason: "No." } }).success, false);
   assert.equal(ProjectChangeDeltaSchema.safeParse({ schema_version: "1", operations: [{ operation: "remove", target: "claims", id: "claim-1", value: { wording: "leak" } }] }).success, false);
+  assert.equal(ProjectChangeDeltaSchema.safeParse({ schema_version: "1", operations: [{ operation: "add", target: "sources", id: "source-1", value: { source_id: "different", title: "Source", source_type: "article" } }] }).success, false);
+  assert.equal(ProjectChangeDeltaSchema.safeParse({ schema_version: "1", operations: [
+    { operation: "remove", target: "claims", id: "claim-1" },
+    { operation: "remove", target: "claims", id: "claim-1" },
+  ] }).success, false);
 });
 
 void test("current selectors require explicit immutable IDs", () => {
@@ -78,6 +85,7 @@ void test("current selectors require explicit immutable IDs", () => {
     assert.equal(ControlSelectorSchema.safeParse(selector).success, true, selector);
   }
   for (const selector of ["latest", "subflow:../current", "gate:recent", "handoff:paper/manuscript.md"]) assert.equal(ControlSelectorSchema.safeParse(selector).success, false, selector);
+  for (const selector of ["spec:project", "spec:sources", "spec:claims", "spec:manuscript", "profile:academic-pipeline", "tool:codex"]) assert.equal(InspectionSelectorSchema.safeParse(selector).success, true, selector);
 });
 
 void test("external boundary paths reject escape, managed paths and existing symlink components", { skip: process.platform === "win32" }, async () => {

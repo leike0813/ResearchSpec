@@ -1,4 +1,4 @@
-import { parse as parseYaml } from "yaml";
+import { parse as parseYaml, stringify } from "yaml";
 import { z } from "zod";
 
 import { StableIdSchema } from "./stable-specs.js";
@@ -27,6 +27,15 @@ export const SubflowHandoffSchema = z.strictObject({
   addDuplicateRoleIssues(value.outputs, "outputs", context);
 });
 
+export const SubflowHandoffInputSchema = z.strictObject({
+  inputs: z.array(HandoffInputSchema),
+  outputs: z.array(HandoffOutputSchema),
+  body: z.string().optional(),
+}).superRefine((value, context) => {
+  addDuplicateRoleIssues(value.inputs, "inputs", context);
+  addDuplicateRoleIssues(value.outputs, "outputs", context);
+});
+
 export function parseSubflowHandoff(text: string): { frontmatter: z.infer<typeof SubflowHandoffSchema>; body: string } {
   if (!text.startsWith("---\n")) throw new Error("Handoff requires YAML frontmatter.");
   const end = text.indexOf("\n---\n", 4);
@@ -35,6 +44,11 @@ export function parseSubflowHandoff(text: string): { frontmatter: z.infer<typeof
     frontmatter: SubflowHandoffSchema.parse(parseYaml(text.slice(4, end))),
     body: text.slice(end + 5),
   };
+}
+
+export function renderSubflowHandoff(handoff: SubflowHandoff, body = "\n# Subflow handoff\n"): string {
+  const normalizedBody = body.startsWith("\n") ? body : `\n${body}`;
+  return `---\n${stringify(handoff)}---\n${normalizedBody}`;
 }
 
 function addDuplicateRoleIssues(values: readonly { role: string }[], field: string, context: z.RefinementCtx): void {
@@ -46,3 +60,4 @@ function addDuplicateRoleIssues(values: readonly { role: string }[], field: stri
 }
 
 export type SubflowHandoff = z.infer<typeof SubflowHandoffSchema>;
+export type SubflowHandoffInput = z.infer<typeof SubflowHandoffInputSchema>;

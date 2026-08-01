@@ -7,7 +7,7 @@ import { SubflowStartReceiptSchema } from "../contracts/subflow.js";
 import { GateSubmitReceiptSchema, TransitionAdvanceReceiptSchema } from "../contracts/gate-transition.js";
 import { AdaptiveCaseReceiptSchema } from "../contracts/adaptive-runtime.js";
 import { DraftPatchReceiptSchema } from "../contracts/draft-patch.js";
-import { ContractChangeDecisionReceiptSchema, ContractChangeProposalReceiptSchema } from "../contracts/contract-change.js";
+import { ContractChangeDecisionReceiptSchema, ContractChangeProposalReceiptSchema } from "../contracts/legacy-contract-change.js";
 import { loadWorkspaceSnapshot } from "../workspace/snapshot.js";
 import type { WorkspaceSnapshot } from "../workspace/snapshot.js";
 import { REQUIRED_DIRECTORIES } from "../workspace/layout.js";

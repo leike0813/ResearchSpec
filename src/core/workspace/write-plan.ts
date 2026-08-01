@@ -85,6 +85,40 @@ export async function planFile(input: {
   return { ...input, action: "refresh", previousHash, nextHash, previousMode, ...(nextMode === undefined ? {} : { nextMode }), reason: input.force ? "forced manifest-owned refresh" : "safe manifest-owned refresh" };
 }
 
+export function planDirectFileEdit(input: {
+  path: string;
+  relativePath?: string;
+  content: string | Uint8Array;
+  previousContent?: string | Uint8Array;
+  scope?: PlannedWrite["scope"];
+  reason: string;
+}): PlannedWrite {
+  const nextHash = sha256(input.content);
+  if (input.previousContent === undefined) {
+    return {
+      action: "create",
+      path: input.path,
+      ...(input.relativePath === undefined ? {} : { relativePath: input.relativePath }),
+      content: input.content,
+      scope: input.scope ?? "workspace",
+      ownership: "user",
+      nextHash,
+      reason: input.reason,
+    };
+  }
+  return {
+    action: sha256(input.previousContent) === nextHash ? "skip-unchanged" : "refresh",
+    path: input.path,
+    ...(input.relativePath === undefined ? {} : { relativePath: input.relativePath }),
+    content: input.content,
+    scope: input.scope ?? "workspace",
+    ownership: "user",
+    previousHash: sha256(input.previousContent),
+    nextHash,
+    reason: input.reason,
+  };
+}
+
 export async function executeWritePlan(plan: WritePlan, options: WritePlanExecutionOptions = {}): Promise<void> {
   const actionable = plan.operations.filter((operation) => operation.action === "create" || operation.action === "refresh" || operation.action === "remove-owned" || operation.action === "move");
   const transaction = actionable.map((operation) => ({ operation, temporary: `${operation.path}.researchspec-${randomUUID()}.tmp`, backup: `${operation.path}.researchspec-${randomUUID()}.bak`, hadOriginal: false, committed: false }));

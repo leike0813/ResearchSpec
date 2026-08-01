@@ -80,7 +80,7 @@ const definitions: readonly CliCommandDefinition[] = [
     option("tools", "--tools <ids>", "refresh/add a tool subset"),
   ], ["init", "status", "doctor"]),
   command("status", ["status"], "status", "control-plane", "Show derived current workspace and subflow status", "required", "read", [], ["instructions", "show", "list"]),
-  command("instructions", ["instructions"], "instructions <selector>", "control-plane", "Show current route, subflow, Gate, or Decision instructions", "required", "read", [], ["status", "start", "submit", "advance", "decide"]),
+  command("instructions", ["instructions"], "instructions <selector>", "control-plane", "Show current route, subflow, Gate, Decision, change, or handoff instructions", "required", "read", [], ["status", "start", "advance", "decide"]),
   command("start", ["start"], "start <route-ref>", "control-plane", "Atomically start one independently confirmed route", "required", "write", [
     option("input", "--input <start.yaml|json>", "schema 1 semantic Start input", true),
     option("confirmedBy", "--confirmed-by <name>", "human who confirmed this exact instance", true),
@@ -102,28 +102,24 @@ const definitions: readonly CliCommandDefinition[] = [
     option("strict", "--strict", "treat warnings as failures"),
   ], ["status", "doctor", "show"]),
   command("doctor", ["doctor"], "doctor", "recovery", "Diagnose current workspace contracts without modifying them", "required", "read", [], ["check", "status"]),
-  command("list", ["list"], "list [type]", "inspection", "List paginated runtime collections", "required", "read", [
+  command("list", ["list"], "list [type]", "inspection", "List current subflows, changes, Gates, Decisions, handoffs, profiles, tools, diagnostics, or derived history", "required", "read", [
     option("limit", "--limit <count>", "page size from 1 to 50"),
     option("cursor", "--cursor <cursor>", "opaque cursor returned by the prior page"),
   ], ["show", "status"]),
-  command("show", ["show"], "show <item>", "inspection", "Show a canonical or globally unique item", "required", "read", [], ["list", "check"]),
-  command("handoff", ["handoff"], "handoff", "context", "Render the current handoff view", "required", "conditional-write", [
-    option("stdout", "--stdout", "print without writing"),
-    option("out", "--out <path>", "output path"),
+  command("show", ["show"], "show <selector>", "inspection", "Show one exact current item, stable spec, or project profile", "required", "read", [], ["list", "check"]),
+  command("handoff", ["handoff"], "handoff <subflow-selector>", "context", "Render or replace one directly editable subflow handoff", "required", "conditional-write", [
+    option("input", "--input <handoff.yaml|json>", "semantic inputs, outputs, and optional Markdown body"),
   ], ["pack", "status"]),
-  command("pack", ["pack"], "pack", "context", "Create a deterministic context bundle", "required", "write", [
-    option("out", "--out <path>", "output ZIP path"),
-    option("includeArtifacts", "--include-artifacts", "include safe registered artifacts"),
+  command("pack", ["pack"], "pack", "context", "Create a deterministic bounded current-workspace context bundle", "required", "write", [
+    option("output", "--output <zip>", "output ZIP path", true),
+    option("scope", "--scope <scope>", "all, specs, profile, subflows, changes, subflow:<id>, or change:<id>"),
   ], ["handoff", "check"]),
-  command("propose", ["propose"], "propose <change-id>", "governance", "Create a validated pending contract change", "required", "write", [
-    option("input", "--input <payload.json>", "strict semantic proposal JSON", true),
-    option("actorKind", "--actor-kind <kind>", "human or agent", true),
-    option("actorName", "--actor-name <name>", "proposal author name", true),
-    option("expectedActionBasisSha256", "--expected-action-basis-sha256 <hash>", "bind execution to the current action descriptor"),
-    option("expectedPlanSha256", "--expected-plan-sha256 <hash>", "bind execution to the previewed proposal plan"),
+  command("propose", ["propose"], "propose <change-id>", "governance", "Create an adaptable project change document package", "required", "write", [
+    option("targets", "--targets <specs>", "comma-separated project.md, sources.yaml, claims.yaml, or manuscript.yaml", true),
+    option("with", "--with <documents>", "optional comma-separated design,tasks,delta documents"),
   ], ["decide", "show", "check"]),
-  command("decide", ["decide"], "decide [item]", "governance", "Resolve a pending human decision", "required", "write", [
-    option("decision", "--decision <choice>", "accept, reject, or postpone"),
+  command("decide", ["decide"], "decide <selector>", "governance", "Resolve a pending human decision", "required", "write", [
+    option("decision", "--decision <choice>", "accept, reject, defer, or supersede"),
     option("actorName", "--actor-name <name>", "human actor name"),
     option("reason", "--reason <text>", "decision rationale"),
     option("verdict", "--verdict <verdict>", "Gate verdict: pass, pass_with_conditions, or fail"),
@@ -132,7 +128,7 @@ const definitions: readonly CliCommandDefinition[] = [
     option("override", "--override", "approve an override of the current failed Gate"),
     option("evidenceRole", "--evidence-role <role>", "owning handoff role used as Gate evidence"),
   ], ["instructions", "show", "archive"]),
-  command("archive", ["archive"], "archive [item]", "governance", "Archive a resolved change or draft patch", "required", "write", [], ["list", "show"]),
+  command("archive", ["archive"], "archive <change-id>", "governance", "Archive an applied, rejected, deferred, or superseded project change", "required", "write", [], ["list", "show"]),
   command("plugin", ["plugin"], "plugin", "plugins", "Inspect and manage bundled domain Skill plugins", "optional", "conditional-write", [], [
     "plugin-list", "plugin-show", "plugin-install", "plugin-uninstall", "plugin-update", "plugin-instructions",
   ]),

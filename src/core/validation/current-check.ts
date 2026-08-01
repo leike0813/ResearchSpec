@@ -1,14 +1,17 @@
 import path from "node:path";
+import { parse as parseYaml } from "yaml";
 
 import { ACADEMIC_PIPELINE_PROFILE, ACADEMIC_PIPELINE_PROFILE_TEXT } from "../../arsu-converter/workflow/academic-pipeline.js";
 import { inspectLiteratureAdapters } from "../../literature-adapters/inspect.js";
+import { ProjectChangeDeltaSchema } from "../contracts/project-change.js";
+import { ChangeDocumentError, validateProjectChangeDelta } from "../runtime/change-documents.js";
 import { loadCurrentWorkspaceIndex } from "../runtime/workspace-index.js";
 import { sha256 } from "../workspace/write-plan.js";
 import type { CurrentCheckResult, CurrentCheckTarget, Diagnostic } from "./types.js";
 
 export async function runCurrentWorkspaceChecks(workspace: string, target: CurrentCheckTarget = "all", strict = false): Promise<CurrentCheckResult> {
   const index = await loadCurrentWorkspaceIndex(workspace);
-  const diagnostics = [...index.diagnostics, ...profileOwnershipDiagnostics(index)];
+  const diagnostics = [...index.diagnostics, ...profileOwnershipDiagnostics(index), ...changeDiagnostics(index)];
   if (target === "all" || target === "literature-adapters") {
     const inspection = await inspectLiteratureAdapters(index);
     diagnostics.push(...inspection.diagnostics);
@@ -16,6 +19,31 @@ export async function runCurrentWorkspaceChecks(workspace: string, target: Curre
   const filtered = diagnostics.filter((item) => matchesTarget(workspace, item, target));
   const ok = filtered.every((item) => !item.blocking && (!strict || item.severity !== "warning"));
   return { ok, workspace, target, diagnostics: filtered };
+}
+
+function changeDiagnostics(index: Awaited<ReturnType<typeof loadCurrentWorkspaceIndex>>): Diagnostic[] {
+  const diagnostics: Diagnostic[] = [];
+  for (const record of [...index.changes, ...index.archivedChanges]) {
+    const delta = record.documents.get("delta.yaml");
+    if (!delta) continue;
+    let value: unknown;
+    try { value = parseYaml(delta.text); }
+    catch (error) {
+      diagnostics.push({ ...problem("change_delta_invalid", `Invalid delta.yaml for change ${record.id}.`, delta.absolutePath), details: error });
+      continue;
+    }
+    const structural = ProjectChangeDeltaSchema.safeParse(value);
+    if (!structural.success) {
+      diagnostics.push({ ...problem("change_delta_invalid", `Invalid delta.yaml for change ${record.id}.`, delta.absolutePath), details: structural.error.issues });
+      continue;
+    }
+    if (record.archived || !["draft", "proposed", "accepted"].includes(record.change.status)) continue;
+    try { validateProjectChangeDelta(index, record); }
+    catch (error) {
+      diagnostics.push({ ...problem(error instanceof ChangeDocumentError ? error.code : "change_delta_invalid", error instanceof Error ? error.message : String(error), delta.absolutePath), details: error instanceof ChangeDocumentError ? error.details : error });
+    }
+  }
+  return diagnostics;
 }
 
 function profileOwnershipDiagnostics(index: Awaited<ReturnType<typeof loadCurrentWorkspaceIndex>>): Diagnostic[] {

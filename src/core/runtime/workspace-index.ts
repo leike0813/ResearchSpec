@@ -4,7 +4,7 @@ import { parse as parseYaml } from "yaml";
 
 import { ToolInstallationManifestSchema, type ToolInstallationManifest } from "../../adapters/installations.js";
 import { PipelineProfileSchema, type PipelineProfile } from "../contracts/pipeline-profile.js";
-import { parseProjectChange } from "../contracts/project-change.js";
+import { parseProjectChange, type ProjectChange } from "../contracts/project-change.js";
 import {
   ClaimsSpecSchema,
   ManuscriptSpecSchema,
@@ -19,7 +19,7 @@ import { SubflowControlSchema, type SubflowControl } from "../contracts/subflow-
 import { parseSubflowHandoff, type SubflowHandoff } from "../contracts/subflow-handoff.js";
 import { CurrentWorkspaceConfigSchema, type CurrentWorkspaceConfig } from "../contracts/workspace-format.js";
 import type { Diagnostic } from "../validation/types.js";
-import { sha256 } from "../workspace/write-plan.js";
+import { hashPath, sha256 } from "../workspace/write-plan.js";
 import { resolveBoundaryPath } from "./boundary-path.js";
 
 const REQUIRED_DIRECTORIES = ["profiles", "specs", "changes", "subflows"] as const;
@@ -51,20 +51,50 @@ export interface CurrentWorkspaceIndex {
   claims: ClaimsSpec;
   manuscript: ManuscriptSpec;
   profile: PipelineProfile;
+  subflowEntries: SubflowScanRecord[];
   subflows: SubflowRecord[];
-  changes: Array<{ id: string; status: string; targets: string[]; path: string }>;
+  changes: ProjectChangeRecord[];
+  archivedChanges: ProjectChangeRecord[];
   diagnostics: Diagnostic[];
+}
+
+export interface SubflowScanRecord {
+  directoryName: string;
+  directoryPath: string;
+  directoryHash: string;
+  controlPath: string;
+  handoffPath: string;
+  controlText?: string;
+  handoffText?: string;
+  control?: SubflowControl;
+  handoff?: SubflowHandoff;
+  handoffBody?: string;
 }
 
 export interface SubflowRecord {
   directoryName: string;
   directoryPath: string;
+  directoryHash: string;
   controlPath: string;
   handoffPath: string;
   controlText: string;
   handoffText: string;
   control: SubflowControl;
   handoff: SubflowHandoff;
+  handoffBody: string;
+}
+
+export interface ProjectChangeRecord {
+  id: string;
+  archived: boolean;
+  directoryName: string;
+  directoryPath: string;
+  directoryHash: string;
+  changePath: string;
+  changeText: string;
+  change: ProjectChange["frontmatter"];
+  body: string;
+  documents: Map<string, CurrentWorkspaceFile>;
 }
 
 export interface WorkspaceStaticContext {
@@ -117,10 +147,14 @@ export async function loadCurrentWorkspaceIndex(workspace: string): Promise<Curr
     if (!claimIds.has(claimId)) diagnostics.push(problem("section_claim_missing", `Section references missing claim: ${claimId}`, path.join(workspace, "specs/manuscript.yaml")));
   }
 
-  const subflows = await scanSubflows(workspace, diagnostics);
-  addDuplicateIds(subflows.map((item) => item.control), "instance_id", "duplicate_subflow_instance_id", "subflows", workspace, diagnostics);
+  const subflowEntries = await scanSubflows(workspace, files, diagnostics);
+  const subflows = subflowEntries.filter(isCompleteSubflowRecord);
+  addDuplicateIds(subflowEntries.flatMap((item) => item.control ? [item.control] : []), "instance_id", "duplicate_subflow_instance_id", "subflows", workspace, diagnostics);
   await validateSubflowReferences(workspace, subflows, profile, diagnostics);
-  const changes = await scanChanges(workspace, diagnostics);
+  await checkOptionalDirectory(path.join(workspace, "changes", "archive"), diagnostics);
+  const changes = await scanChanges(workspace, false, files, diagnostics);
+  const archivedChanges = await scanChanges(workspace, true, files, diagnostics);
+  addDuplicateIds([...changes, ...archivedChanges], "id", "duplicate_change_id", "changes", workspace, diagnostics);
 
   return {
     workspace,
@@ -133,8 +167,10 @@ export async function loadCurrentWorkspaceIndex(workspace: string): Promise<Curr
     claims: claims ?? ClaimsSpecSchema.parse({ schema_version: "1", claims: [] }),
     manuscript: manuscript ?? ManuscriptSpecSchema.parse({ schema_version: "1", manuscript_id: "invalid", output_type: null, working_title: null, language: null, audience: null, venue: null, citation_requirements: [], format_requirements: [], outline: [] }),
     profile: profile ?? emptyProfile(),
+    subflowEntries,
     subflows,
     changes,
+    archivedChanges,
     diagnostics,
   };
 }
@@ -147,6 +183,15 @@ async function checkDirectory(workspace: string, relativePath: string, diagnosti
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === "ENOENT") diagnostics.push(problem("required_directory_missing", "Required directory is missing.", absolutePath));
     else throw error;
+  }
+}
+
+async function checkOptionalDirectory(absolutePath: string, diagnostics: Diagnostic[]): Promise<void> {
+  try {
+    const info = await lstat(absolutePath);
+    if (!info.isDirectory() || info.isSymbolicLink()) diagnostics.push(problem("managed_directory_invalid", "Managed path must be a regular directory.", absolutePath));
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
   }
 }
 
@@ -179,9 +224,9 @@ function parseRequired<T>(files: Map<string, CurrentWorkspaceFile>, relativePath
   }
 }
 
-async function scanSubflows(workspace: string, diagnostics: Diagnostic[]): Promise<SubflowRecord[]> {
+async function scanSubflows(workspace: string, files: Map<string, CurrentWorkspaceFile>, diagnostics: Diagnostic[]): Promise<SubflowScanRecord[]> {
   const root = path.join(workspace, "subflows");
-  const records: SubflowRecord[] = [];
+  const records: SubflowScanRecord[] = [];
   for (const entry of await safeReadDirectory(root)) {
     const directory = path.join(root, entry.name);
     if (!entry.isDirectory() || entry.isSymbolicLink()) {
@@ -190,59 +235,85 @@ async function scanSubflows(workspace: string, diagnostics: Diagnostic[]): Promi
     }
     const controlPath = path.join(directory, "control.yaml");
     const handoffPath = path.join(directory, "handoff.md");
-    const controlText = await readOptionalRegularFile(controlPath, diagnostics, "subflow_control_missing");
-    const handoffText = await readOptionalRegularFile(handoffPath, diagnostics, "subflow_handoff_missing");
+    const controlFile = await readOptionalRegularFile(workspace, controlPath, diagnostics, "subflow_control_missing");
+    const handoffFile = await readOptionalRegularFile(workspace, handoffPath, diagnostics, "subflow_handoff_missing");
+    if (controlFile) files.set(controlFile.relativePath, controlFile);
+    if (handoffFile) files.set(handoffFile.relativePath, handoffFile);
+    const controlText = controlFile?.text;
+    const handoffText = handoffFile?.text;
     let control: SubflowControl | undefined;
     let handoff: SubflowHandoff | undefined;
+    let handoffBody: string | undefined;
     if (controlText) try { control = SubflowControlSchema.parse(parseYaml(controlText)); }
     catch (error) { diagnostics.push({ ...problem("subflow_control_invalid", error instanceof Error ? error.message : String(error), controlPath), details: error }); }
-    if (handoffText) try { handoff = parseSubflowHandoff(handoffText).frontmatter; }
-    catch (error) { diagnostics.push({ ...problem("subflow_handoff_invalid", error instanceof Error ? error.message : String(error), handoffPath), details: error }); }
-    if (controlText && handoffText && control && handoff) {
-      records.push({ directoryName: entry.name, directoryPath: directory, controlPath, handoffPath, controlText, handoffText, control, handoff });
+    if (handoffText) try {
+      const parsed = parseSubflowHandoff(handoffText);
+      handoff = parsed.frontmatter;
+      handoffBody = parsed.body;
     }
+    catch (error) { diagnostics.push({ ...problem("subflow_handoff_invalid", error instanceof Error ? error.message : String(error), handoffPath), details: error }); }
+    records.push({ directoryName: entry.name, directoryPath: directory, directoryHash: await hashPath(directory), controlPath, handoffPath, ...(controlText === undefined ? {} : { controlText }), ...(handoffText === undefined ? {} : { handoffText }), ...(control === undefined ? {} : { control }), ...(handoff === undefined ? {} : { handoff }), ...(handoffBody === undefined ? {} : { handoffBody }) });
   }
   return records;
 }
 
-async function scanChanges(workspace: string, diagnostics: Diagnostic[]): Promise<Array<{ id: string; status: string; targets: string[]; path: string }>> {
-  const root = path.join(workspace, "changes");
-  const changes: Array<{ id: string; status: string; targets: string[]; path: string }> = [];
+async function scanChanges(workspace: string, archived: boolean, files: Map<string, CurrentWorkspaceFile>, diagnostics: Diagnostic[]): Promise<ProjectChangeRecord[]> {
+  const root = path.join(workspace, "changes", ...(archived ? ["archive"] : []));
+  const changes: ProjectChangeRecord[] = [];
   for (const entry of await safeReadDirectory(root)) {
-    if (entry.name === "archive") continue;
+    if (!archived && entry.name === "archive") continue;
     const directory = path.join(root, entry.name);
     if (!entry.isDirectory() || entry.isSymbolicLink()) {
       diagnostics.push(problem("change_entry_invalid", "Change entries must be regular directories.", directory));
       continue;
     }
+    const allowedDocuments = new Set(["change.md", "design.md", "tasks.md", "delta.yaml"]);
+    for (const documentEntry of await safeReadDirectory(directory)) {
+      if (!allowedDocuments.has(documentEntry.name) || !documentEntry.isFile() || documentEntry.isSymbolicLink()) {
+        diagnostics.push(problem("change_document_unexpected", "Change packages may contain only regular change.md, design.md, tasks.md, and delta.yaml documents.", path.join(directory, documentEntry.name)));
+      }
+    }
     const changePath = path.join(directory, "change.md");
-    const text = await readOptionalRegularFile(changePath, diagnostics, "change_document_missing");
-    if (!text) continue;
+    const changeFile = await readOptionalRegularFile(workspace, changePath, diagnostics, "change_document_missing");
+    if (!changeFile) continue;
+    files.set(changeFile.relativePath, changeFile);
+    const documents = new Map<string, CurrentWorkspaceFile>([["change.md", changeFile]]);
+    for (const name of ["design.md", "tasks.md", "delta.yaml"] as const) {
+      const optional = await readOptionalRegularFile(workspace, path.join(directory, name), diagnostics);
+      if (optional) {
+        documents.set(name, optional);
+        files.set(optional.relativePath, optional);
+      }
+    }
     try {
-      const change = parseProjectChange(text).frontmatter;
-      if (change.id !== entry.name) diagnostics.push(problem("change_directory_id_mismatch", "Change ID must match its directory name.", changePath));
-      changes.push({ id: change.id, status: change.status, targets: change.targets, path: changePath });
+      const parsed = parseProjectChange(changeFile.text);
+      if (parsed.frontmatter.id !== entry.name) diagnostics.push(problem("change_directory_id_mismatch", "Change ID must match its directory name.", changePath));
+      changes.push({ id: parsed.frontmatter.id, archived, directoryName: entry.name, directoryPath: directory, directoryHash: await hashPath(directory), changePath, changeText: changeFile.text, change: parsed.frontmatter, body: parsed.body, documents });
     } catch (error) { diagnostics.push({ ...problem("change_document_invalid", error instanceof Error ? error.message : String(error), changePath), details: error }); }
   }
-  addDuplicateIds(changes, "id", "duplicate_change_id", "changes", workspace, diagnostics);
   return changes;
 }
 
-async function readOptionalRegularFile(filePath: string, diagnostics: Diagnostic[], missingCode: string): Promise<string | undefined> {
+async function readOptionalRegularFile(workspace: string, filePath: string, diagnostics: Diagnostic[], missingCode?: string): Promise<CurrentWorkspaceFile | undefined> {
   try {
     const info = await lstat(filePath);
     if (!info.isFile() || info.isSymbolicLink()) {
       diagnostics.push(problem("managed_file_invalid", "Managed path must be a regular file.", filePath));
       return undefined;
     }
-    return await readFile(filePath, "utf8");
+    const text = await readFile(filePath, "utf8");
+    return { relativePath: path.relative(workspace, filePath).split(path.sep).join("/"), absolutePath: filePath, text, hash: sha256(text) };
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === "ENOENT") {
-      diagnostics.push(problem(missingCode, "Required owning file is missing.", filePath));
+      if (missingCode) diagnostics.push(problem(missingCode, "Required owning file is missing.", filePath));
       return undefined;
     }
     throw error;
   }
+}
+
+function isCompleteSubflowRecord(record: SubflowScanRecord): record is SubflowRecord {
+  return record.controlText !== undefined && record.handoffText !== undefined && record.control !== undefined && record.handoff !== undefined && record.handoffBody !== undefined;
 }
 
 async function validateSubflowReferences(
@@ -304,7 +375,7 @@ async function validateSubflowReferences(
   }
 }
 
-function addDuplicateIds<T extends Record<string, unknown>>(values: readonly T[], key: keyof T, code: string, relativePath: string, workspace: string, diagnostics: Diagnostic[]): void {
+function addDuplicateIds<T>(values: readonly T[], key: keyof T, code: string, relativePath: string, workspace: string, diagnostics: Diagnostic[]): void {
   const seen = new Set<unknown>();
   for (const value of values) {
     const id = value[key];

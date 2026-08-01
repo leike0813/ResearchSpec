@@ -1,9 +1,11 @@
 import assert from "node:assert/strict";
-import { readdir } from "node:fs/promises";
+import { readFile, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { test } from "node:test";
 
 import { startSubflow } from "../src/core/runtime/subflow-control.js";
+import { CurrentHandoffError, updateCurrentHandoff } from "../src/core/runtime/handoff.js";
+import { listCurrentItems } from "../src/core/runtime/query.js";
 import { evaluateWorkflowControl } from "../src/core/runtime/workflow-control.js";
 import { loadCurrentWorkspaceIndex } from "../src/core/runtime/workspace-index.js";
 import { createCurrentWorkspace, startCommand } from "./helpers/current-workspace.js";
@@ -67,6 +69,8 @@ void test("pipeline parent does not pre-create children and each child binds an 
     assert.equal(childRecord?.control.start_confirmation.confirmed_by, "child-approver");
     assert.notEqual(childRecord?.control.start_confirmation.confirmed_at, index.subflows.find((item) => item.control.instance_id === parent.instance_id)?.control.start_confirmation.confirmed_at);
     assert.equal("children" in (index.subflows.find((item) => item.control.instance_id === parent.instance_id)?.control ?? {}), false);
+    const parentView = listCurrentItems(index, "subflows").find((item): item is { selector: string; children: string[] } => item !== null && item !== undefined && typeof item === "object" && "selector" in item && item.selector === `subflow:${parent.instance_id}` && "children" in item && Array.isArray(item.children));
+    assert.deepEqual(parentView?.children, [child.instance_id]);
   } finally { await fixture.cleanup(); }
 });
 
@@ -79,5 +83,20 @@ void test("dry-run computes stable authority without creating a directory", asyn
     assert.equal((await readdir(path.join(fixture.workspace, "subflows"))).length, 0);
     assert.equal("plan_sha256" in result, false);
     assert.equal("receipt" in result, false);
+  } finally { await fixture.cleanup(); }
+});
+
+void test("handoff update stops on a direct edit made after the workspace scan", async () => {
+  const fixture = await createCurrentWorkspace();
+  try {
+    let index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    const started = await startSubflow({ index, routeRef: "deep-research:quick", command: startCommand("deep-research:quick", FIRST), confirmedBy: "researcher" });
+    index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    const record = index.subflows.find((item) => item.control.instance_id === started.instance_id);
+    assert.ok(record);
+    const directEdit = `${await readFile(record.handoffPath, "utf8")}\nUser note.\n`;
+    await writeFile(record.handoffPath, directEdit, "utf8");
+    await assert.rejects(updateCurrentHandoff({ index, instanceId: started.instance_id, semanticInput: { inputs: [], outputs: [] }, updatedAt: "2026-08-02T09:10:00+08:00" }), (error: unknown) => error instanceof CurrentHandoffError && error.code === "handoff_write_conflict");
+    assert.equal(await readFile(record.handoffPath, "utf8"), directEdit);
   } finally { await fixture.cleanup(); }
 });

@@ -11,6 +11,22 @@ import { selectedPluginIds } from "../plugins/status.js";
 import { getArsuRoute } from "../arsu-converter/routing/catalog.js";
 import type { RouteRef } from "../arsu-converter/routing/contracts.js";
 import { ControlSelectorSchema } from "../core/contracts/control-selector.js";
+import type { ConditionalChangeDocument, ProjectChangeDecision } from "../core/runtime/change-documents.js";
+import {
+  archiveProjectChange,
+  ChangeDocumentError,
+  decideProjectChange,
+  scaffoldProjectChange,
+} from "../core/runtime/change-documents.js";
+import { CurrentHandoffError, currentHandoff, updateCurrentHandoff } from "../core/runtime/handoff.js";
+import { buildCurrentContextPack, CurrentPackError, type CurrentPackScope } from "../core/runtime/pack.js";
+import {
+  buildCurrentStatus,
+  listCurrentItemsPage,
+  RuntimeQueryError,
+  showCurrentItem,
+  type CurrentListType,
+} from "../core/runtime/query.js";
 import {
   advanceSubflow,
   appendGateAttempt,
@@ -27,7 +43,7 @@ import { runCurrentWorkspaceChecks } from "../core/validation/current-check.js";
 import type { CurrentCheckTarget } from "../core/validation/types.js";
 import { resolveWorkspace } from "../core/workspace/discover.js";
 import { getWorkspaceEntries, getWorkspaceTemplates, resolveInitTarget } from "../core/workspace/layout.js";
-import { executeWritePlan, planFile, type PlannedWrite } from "../core/workspace/write-plan.js";
+import { executeWritePlan, planFile, sha256, type PlannedWrite } from "../core/workspace/write-plan.js";
 import { fileExists } from "../utils/fs.js";
 import { CliError, success, type CommandContext, type CommandResult } from "./types.js";
 import { searchableMultiSelect } from "./prompts/searchable-multi-select.js";
@@ -50,6 +66,10 @@ export interface CurrentUpdateOptions { tools?: string }
 export type CurrentDoctorOptions = Record<string, never>;
 export interface CurrentStartOptions { input: string; confirmedBy: string }
 export interface CurrentAdvanceOptions { transition?: string; actorName?: string }
+export interface CurrentListOptions { limit?: string; cursor?: string }
+export interface CurrentHandoffOptions { input?: string }
+export interface CurrentPackOptions { output: string; scope?: string }
+export interface CurrentProposeOptions { targets: string; with?: string }
 export interface CurrentDecideOptions {
   verdict?: GateVerdict;
   kind?: LocalDecisionKind;
@@ -58,7 +78,7 @@ export interface CurrentDecideOptions {
   reason?: string;
   evidenceRole?: string;
   actorName?: string;
-  decision?: string;
+  decision?: ProjectChangeDecision;
 }
 
 export async function handleCurrentInit(inputPath: string | undefined, options: CurrentInitOptions, context: CommandContext): Promise<CommandResult> {
@@ -187,21 +207,17 @@ export async function handleCurrentStatus(context: CommandContext): Promise<Comm
   const workspace = await requireCurrentWorkspace(context);
   const index = await loadCurrentWorkspaceIndex(workspace);
   const adapterInspection = await inspectLiteratureAdapters(index);
-  const diagnostics = [...index.diagnostics, ...adapterInspection.diagnostics];
+  const checked = await runCurrentWorkspaceChecks(workspace, "all", false);
+  const diagnostics = checked.diagnostics;
   const workflow = evaluateWorkflowControl(index);
   const controls = index.subflows.map((item) => item.control);
+  const derived = buildCurrentStatus(index);
   const data = {
-    workspace,
-    schema_version: index.config.schema_version,
-    profile: { id: index.profile.profile_id, version: index.profile.profile_version, path: "profiles/academic-pipeline.yaml" },
-    specs: { sources: index.sources.sources.length, claims: index.claims.claims.length, manuscript_sections: index.manuscript.outline.length },
-    subflows: summarizeStatuses(controls.map((item) => item.status)),
-    active_instances: controls.filter((item) => item.status === "active" || item.status === "paused" || item.status === "blocked").map((item) => ({ instance_id: item.instance_id, route_ref: item.route_ref, status: item.status, checkpoint: item.checkpoint })),
+    ...derived,
     frontier: workflow.frontier,
     pending_gates: workflow.pending_gates,
     pending_decisions: workflow.pending_decisions,
     blockers: workflow.blockers,
-    pending_changes: index.changes.filter((item) => item.status === "proposed" || item.status === "accepted"),
     literature_adapters: adapterInspection.adapters,
     diagnostics,
   };
@@ -217,11 +233,141 @@ export async function handleCurrentStatus(context: CommandContext): Promise<Comm
   return { ...success("status", data, { stdout }), ok, exitCode: ok ? 0 : 1, diagnostics };
 }
 
+export async function handleCurrentList(type: string | undefined, options: CurrentListOptions, context: CommandContext): Promise<CommandResult> {
+  const allowed: CurrentListType[] = ["subflows", "changes", "gates", "decisions", "handoffs", "profiles", "tools", "diagnostics", "history"];
+  const resolved = (type ?? "subflows") as CurrentListType;
+  if (!allowed.includes(resolved)) throw new CliError("invalid_list_type", `Unknown current list type: ${resolved}`, 2);
+  const workspace = await requireCurrentWorkspace(context);
+  const index = await loadCurrentWorkspaceIndex(workspace);
+  if (resolved === "diagnostics") index.diagnostics = (await runCurrentWorkspaceChecks(workspace, "all", false)).diagnostics;
+  const limit = options.limit === undefined ? undefined : Number(options.limit);
+  try {
+    const page = listCurrentItemsPage(index, resolved, { ...(limit === undefined ? {} : { limit }), ...(options.cursor ? { cursor: options.cursor } : {}) });
+    const selectors = page.items.map((item) => isRecord(item) && typeof item.selector === "string" ? item.selector : JSON.stringify(item));
+    return success("list", page, { stdout: selectors.length ? `${selectors.join("\n")}\n` : `No ${resolved}.\n` });
+  } catch (error) { throw currentQueryCliError(error); }
+}
+
+export async function handleCurrentShow(selector: string, context: CommandContext): Promise<CommandResult> {
+  const workspace = await requireCurrentWorkspace(context);
+  const index = await loadCurrentWorkspaceIndex(workspace);
+  try {
+    const item = showCurrentItem(index, selector);
+    if (item === undefined) throw new CliError("item_not_found", `Item not found: ${selector}`, 1);
+    return success("show", item, { stdout: `${JSON.stringify(item, null, 2)}\n` });
+  } catch (error) {
+    if (error instanceof CliError) throw error;
+    throw currentQueryCliError(error);
+  }
+}
+
+export async function handleCurrentHandoff(selector: string, options: CurrentHandoffOptions, context: CommandContext): Promise<CommandResult> {
+  if (options.input && context.force) throw new CliError("force_not_supported", "--force cannot overwrite a directly editable handoff.", 2);
+  const instanceId = parseSubflowSelector(selector, "Handoff");
+  const workspace = await requireCurrentWorkspace(context);
+  const index = await loadCurrentWorkspaceIndex(workspace);
+  try {
+    if (!options.input) {
+      const result = currentHandoff(index, instanceId);
+      return success("handoff", { selector, path: result.path, handoff: result.handoff, body: result.body, content: result.content }, { stdout: result.content });
+    }
+    const inputPath = path.resolve(context.cwd, options.input);
+    let semanticInput: unknown;
+    try { semanticInput = parseYaml(await readFile(inputPath, "utf8")); }
+    catch (error) { throw new CliError("handoff_input_unreadable", `Cannot read Handoff input: ${error instanceof Error ? error.message : String(error)}`, 2); }
+    const result = await updateCurrentHandoff({ index, instanceId, semanticInput, updatedAt: new Date().toISOString(), dryRun: context.dryRun });
+    return success("handoff", { selector, path: result.path, handoff: result.handoff, body: result.body, created: result.created, dry_run: context.dryRun }, { stdout: `${context.dryRun ? "Would update" : "Updated"} ${selector}.\n` });
+  } catch (error) {
+    if (error instanceof CliError) throw error;
+    throw currentHandoffCliError(error);
+  }
+}
+
+export async function handleCurrentPack(options: CurrentPackOptions, context: CommandContext): Promise<CommandResult> {
+  const workspace = await requireCurrentWorkspace(context);
+  const index = await loadCurrentWorkspaceIndex(workspace);
+  const scope = (options.scope ?? "all") as CurrentPackScope;
+  const output = path.resolve(context.cwd, options.output);
+  const relativeToWorkspace = path.relative(workspace, output);
+  if (relativeToWorkspace === "" || (!relativeToWorkspace.startsWith("..") && !path.isAbsolute(relativeToWorkspace))) {
+    throw new CliError("pack_output_managed", "Pack output must remain outside researchspec/.", 2);
+  }
+  try {
+    const bundle = buildCurrentContextPack(index, scope);
+    let previous: Uint8Array | undefined;
+    try { previous = await readFile(output); }
+    catch (error) { if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error; }
+    if (previous !== undefined && !context.force) throw new CliError("output_exists", `Pack output already exists: ${output}`, 3, "Use --force to replace this derived bundle.");
+    const operation: PlannedWrite = {
+      action: previous === undefined ? "create" : "refresh",
+      path: output,
+      content: bundle.bytes,
+      scope: "project",
+      ownership: "generated",
+      ...(previous === undefined ? {} : { previousHash: sha256(previous) }),
+      nextHash: bundle.sha256,
+      reason: `write deterministic current context pack (${scope})`,
+    };
+    if (!context.dryRun) await executeWritePlan({ operations: [operation] });
+    return success("pack", { path: output, scope, bytes: bundle.bytes.length, sha256: bundle.sha256, entries: bundle.entries, dry_run: context.dryRun }, { stdout: `${context.dryRun ? "Would write" : "Wrote"} context pack: ${output}\n` });
+  } catch (error) {
+    if (error instanceof CliError) throw error;
+    if (error instanceof CurrentPackError) throw new CliError(error.code, error.message, 2);
+    throw error;
+  }
+}
+
+export async function handleCurrentPropose(changeId: string, options: CurrentProposeOptions, context: CommandContext): Promise<CommandResult> {
+  if (context.force) throw new CliError("force_not_supported", "--force does not apply to create-only project changes.", 2);
+  const workspace = await requireCurrentWorkspace(context);
+  const index = await loadCurrentWorkspaceIndex(workspace);
+  const targets = commaSeparated(options.targets);
+  const withDocuments = commaSeparated(options.with ?? "") as ConditionalChangeDocument[];
+  if (withDocuments.some((item) => !["design", "tasks", "delta"].includes(item))) throw new CliError("change_documents_invalid", "--with accepts only design,tasks,delta.", 2);
+  try {
+    const result = await scaffoldProjectChange({ index, changeId, targets, withDocuments, dryRun: context.dryRun });
+    return success("propose", { change_id: result.change_id, directory: result.directory, documents: result.documents, dry_run: context.dryRun }, { stdout: `${context.dryRun ? "Would create" : "Created"} project change change:${changeId}.\n` });
+  } catch (error) { throw currentChangeCliError(error); }
+}
+
+export async function handleCurrentArchive(changeId: string, context: CommandContext): Promise<CommandResult> {
+  if (context.force) throw new CliError("force_not_supported", "--force cannot override project change archive safety.", 2);
+  const workspace = await requireCurrentWorkspace(context);
+  const index = await loadCurrentWorkspaceIndex(workspace);
+  try {
+    const result = await archiveProjectChange({ index, changeId, dryRun: context.dryRun });
+    return success("archive", { ...result, dry_run: context.dryRun }, { stdout: `${context.dryRun ? "Would archive" : "Archived"} change:${changeId}.\n` });
+  } catch (error) { throw currentChangeCliError(error); }
+}
+
 export async function handleCurrentInstructions(selector: string, context: CommandContext): Promise<CommandResult> {
   if (!ControlSelectorSchema.safeParse(selector).success) throw new CliError("selector_invalid", `Invalid current selector: ${selector}`, 2);
   const workspace = await requireCurrentWorkspace(context);
   const index = await loadCurrentWorkspaceIndex(workspace);
   const workflow = evaluateWorkflowControl(index);
+  if (selector.startsWith("change:")) {
+    const changeId = selector.slice("change:".length);
+    const records = [...index.changes, ...index.archivedChanges].filter((item) => item.id === changeId);
+    if (records.length !== 1) throw new CliError(records.length ? "change_ambiguous" : "change_not_found", `Change selector must resolve exactly once: ${changeId}`, records.length ? 3 : 1);
+    const record = records[0];
+    return success("instructions", {
+      selector,
+      kind: "change",
+      archived: record?.archived,
+      frontmatter: record?.change,
+      body: record?.body,
+      documents: [...(record?.documents.keys() ?? [])],
+      allowed_actions: record?.archived ? ["show", "pack"] : record?.change.status === "proposed" ? ["edit", "decide", "check"] : ["edit", "check", "archive"],
+      accepted_does_not_apply_specs: true,
+    }, { stdout: `Project change instructions: ${changeId}\n` });
+  }
+  if (selector.startsWith("handoff:")) {
+    const instanceId = selector.slice("handoff:".length);
+    try {
+      const handoff = currentHandoff(index, instanceId);
+      return success("instructions", { selector, kind: "handoff", path: handoff.path, handoff: handoff.handoff, body: handoff.body, allowed_actions: ["render", "edit", "replace"] }, { stdout: `Handoff instructions: ${instanceId}\n` });
+    } catch (error) { throw currentHandoffCliError(error); }
+  }
   if (selector.startsWith("route:")) {
     const routeRef = selector.slice("route:".length) as RouteRef;
     let route;
@@ -293,6 +439,21 @@ export async function handleCurrentStart(routeRef: string, options: CurrentStart
 
 export async function handleCurrentDecide(selector: string | undefined, options: CurrentDecideOptions, context: CommandContext): Promise<CommandResult> {
   if (!selector) throw new CliError("selector_required", "Decide requires a Gate or Decision selector.", 2);
+  if (context.force) throw new CliError("force_not_supported", "--force cannot overwrite a control or project change decision.", 2);
+  if (selector.startsWith("change:")) {
+    const changeId = selector.slice("change:".length);
+    if (!options.decision) throw new CliError("change_decision_required", "Project change Decide requires --decision.", 2);
+    const actor = options.actorName?.trim();
+    if (!actor) throw new CliError("human_actor_required", "Decide requires --actor-name.", 2);
+    const reason = options.reason?.trim();
+    if (!reason) throw new CliError("change_reason_required", "Project change Decide requires --reason.", 2);
+    const workspace = await requireCurrentWorkspace(context);
+    const index = await loadCurrentWorkspaceIndex(workspace);
+    try {
+      const result = await decideProjectChange({ index, changeId, decision: options.decision, actorName: actor, reason, decidedAt: new Date().toISOString(), dryRun: context.dryRun });
+      return success("decide", { selector, action: "change_decision", frontmatter: result.change.frontmatter, path: result.path, stable_specs_modified: false, dry_run: context.dryRun }, { stdout: `${context.dryRun ? "Would decide" : "Decided"} ${selector}.\n` });
+    } catch (error) { throw currentChangeCliError(error); }
+  }
   const parsed = parseOwnedSelector(selector);
   if (parsed.kind === "subflow") throw new CliError("selector_invalid", "Decide requires gate:<instance>/<gate> or decision:<instance>/<decision>.", 2);
   const actor = options.actorName?.trim();
@@ -382,12 +543,6 @@ async function requireCurrentWorkspace(context: CommandContext, positional?: str
   throw new CliError("workspace_missing", "No researchspec workspace found.", 1, "Run researchspec init to create one.");
 }
 
-function summarizeStatuses(statuses: readonly string[]): Record<string, number> {
-  const result: Record<string, number> = {};
-  for (const status of statuses) result[status] = (result[status] ?? 0) + 1;
-  return result;
-}
-
 function currentOperationDiagnostics(operations: readonly PlannedWrite[]) {
   return operationDiagnostics([...operations]).map((item) => item.code === "generated_file_conflict"
     ? { ...item, severity: "error" as const, blocking: true }
@@ -404,4 +559,33 @@ function parseOwnedSelector(selector: string): { kind: "subflow"; instanceId: st
 function currentControlCliError(error: unknown): CliError {
   if (!(error instanceof SubflowControlError)) return new CliError("control_internal_error", error instanceof Error ? error.message : String(error), 4);
   return new CliError(error.code, error.message, error.kind === "usage" ? 2 : error.kind === "conflict" ? 3 : 1, undefined, error.details);
+}
+
+function currentQueryCliError(error: unknown): CliError {
+  if (!(error instanceof RuntimeQueryError)) return new CliError("query_internal_error", error instanceof Error ? error.message : String(error), 4);
+  return new CliError(error.code, error.message, error.code === "page_cursor_stale" ? 3 : 2);
+}
+
+function currentHandoffCliError(error: unknown): CliError {
+  if (!(error instanceof CurrentHandoffError)) return new CliError("handoff_internal_error", error instanceof Error ? error.message : String(error), 4);
+  return new CliError(error.code, error.message, error.kind === "usage" ? 2 : error.kind === "conflict" ? 3 : 1, undefined, error.details);
+}
+
+function currentChangeCliError(error: unknown): CliError {
+  if (error instanceof CliError) return error;
+  if (!(error instanceof ChangeDocumentError)) return new CliError("change_internal_error", error instanceof Error ? error.message : String(error), 4);
+  return new CliError(error.code, error.message, error.kind === "usage" ? 2 : error.kind === "conflict" ? 3 : 1, undefined, error.details);
+}
+
+function parseSubflowSelector(selector: string, command: string): string {
+  if (!selector.startsWith("subflow:") || !ControlSelectorSchema.safeParse(selector).success) throw new CliError("selector_invalid", `${command} requires subflow:<instance-id>.`, 2);
+  return selector.slice("subflow:".length);
+}
+
+function commaSeparated(value: string): string[] {
+  return value.split(",").map((item) => item.trim()).filter(Boolean);
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
 }

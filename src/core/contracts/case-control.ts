@@ -17,7 +17,7 @@ import {
   DraftPatchSemanticInputSchema,
   DraftPatchSubmitInputSchema,
 } from "./draft-patch.js";
-import { ProposalInputSchema } from "./contract-change.js";
+import { ProposalInputSchema } from "./legacy-contract-change.js";
 import { AnnotationSubmitInputSchema } from "./annotation.js";
 import {
   SubflowStartDerivedInputSchema,

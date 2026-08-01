@@ -8,6 +8,9 @@ export const GateControlSelectorSchema = z.string().regex(/^gate:[A-Za-z0-9][A-Z
 export const DecisionControlSelectorSchema = z.string().regex(/^decision:[A-Za-z0-9][A-Za-z0-9._-]*\/[A-Za-z0-9][A-Za-z0-9._-]*$/);
 export const ChangeControlSelectorSchema = z.templateLiteral(["change:", StableIdSchema]);
 export const HandoffControlSelectorSchema = z.templateLiteral(["handoff:", StableIdSchema]);
+export const SpecInspectionSelectorSchema = z.enum(["spec:project", "spec:sources", "spec:claims", "spec:manuscript"]);
+export const ProfileInspectionSelectorSchema = z.literal("profile:academic-pipeline");
+export const ToolInspectionSelectorSchema = z.templateLiteral(["tool:", StableIdSchema]);
 
 export const ControlSelectorSchema = z.union([
   RouteSelectorSchema,
@@ -18,5 +21,16 @@ export const ControlSelectorSchema = z.union([
   HandoffControlSelectorSchema,
 ]);
 
-export type ControlSelector = z.infer<typeof ControlSelectorSchema>;
+export const InspectionSelectorSchema = z.union([
+  SubflowControlSelectorSchema,
+  GateControlSelectorSchema,
+  DecisionControlSelectorSchema,
+  ChangeControlSelectorSchema,
+  HandoffControlSelectorSchema,
+  SpecInspectionSelectorSchema,
+  ProfileInspectionSelectorSchema,
+  ToolInspectionSelectorSchema,
+]);
 
+export type ControlSelector = z.infer<typeof ControlSelectorSchema>;
+export type InspectionSelector = z.infer<typeof InspectionSelectorSchema>;

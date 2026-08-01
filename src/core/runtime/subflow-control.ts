@@ -10,7 +10,7 @@ import {
   SubflowControlSchema,
   type SubflowControl,
 } from "../contracts/subflow-control.js";
-import type { SubflowHandoff } from "../contracts/subflow-handoff.js";
+import { renderSubflowHandoff, type SubflowHandoff } from "../contracts/subflow-handoff.js";
 import { sha256 } from "../workspace/write-plan.js";
 import { BoundaryPathError, resolveBoundaryPath } from "./boundary-path.js";
 import {
@@ -71,6 +71,10 @@ export async function startSubflow(input: StartSubflowInput): Promise<StartSubfl
   const semanticIdentity = { route_ref: parsedRoute.data, confirmed_by: confirmedBy, command };
   const identityHash = sha256(JSON.stringify(semanticIdentity));
   const instanceId = `sf-${identityHash.slice(0, 24)}`;
+  const scanned = input.index.subflowEntries.filter((item) => item.control?.instance_id === instanceId);
+  if (scanned.some((item) => item.handoff === undefined)) {
+    throw new SubflowControlError("subflow_identity_damaged", `Existing subflow identity has an invalid or missing handoff: ${instanceId}`, "conflict");
+  }
   const existing = findRecords(input.index, instanceId);
   if (existing.length > 1) throw new SubflowControlError("subflow_identity_ambiguous", `Multiple controls use instance ID ${instanceId}.`, "conflict");
   if (existing[0]) {
@@ -341,7 +345,7 @@ async function createSubflowDirectory(directory: string, control: SubflowControl
     await mkdir(temporary, { recursive: false });
     await mkdir(path.join(temporary, "work"));
     await writeFile(path.join(temporary, "control.yaml"), stringify(control), { encoding: "utf8", flag: "wx" });
-    await writeFile(path.join(temporary, "handoff.md"), renderHandoff(handoff), { encoding: "utf8", flag: "wx" });
+    await writeFile(path.join(temporary, "handoff.md"), renderSubflowHandoff(handoff), { encoding: "utf8", flag: "wx" });
     await rename(temporary, directory);
   } catch (error) {
     await rm(temporary, { recursive: true, force: true }).catch(() => undefined);
@@ -350,10 +354,6 @@ async function createSubflowDirectory(directory: string, control: SubflowControl
     }
     throw error;
   }
-}
-
-function renderHandoff(handoff: SubflowHandoff): string {
-  return `---\n${stringify(handoff)}---\n\n# Subflow handoff\n`;
 }
 
 async function gateEvidence(index: CurrentWorkspaceIndex, record: SubflowRecord, role: string): Promise<{ role: string; path: string }> {

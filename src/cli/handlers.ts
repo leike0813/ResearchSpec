@@ -24,9 +24,9 @@ import { StartActorSchema } from "../core/contracts/subflow.js";
 import { ArtifactSubmitError, executeArtifactSubmit, planArtifactSubmit } from "../core/runtime/artifact-submit.js";
 import { executeGateSubmit, executeTransitionAdvance, GateTransitionError, isSha256, planGateSubmit, planTransitionAdvance } from "../core/runtime/gate-transition-control.js";
 import { archiveItem, decideItem, LifecycleError, type DecisionChoice } from "../core/runtime/lifecycle.js";
-import { assertProposalBasisCurrent, ContractChangeError, planContractChangeProposal } from "../core/runtime/contract-change.js";
-import { renderHandoff } from "../core/runtime/handoff.js";
-import { buildContextPack } from "../core/runtime/pack.js";
+import { assertProposalBasisCurrent, ContractChangeError, planContractChangeProposal } from "../core/runtime/legacy-contract-change.js";
+import { renderHandoff } from "../core/runtime/legacy-handoff.js";
+import { buildContextPack } from "../core/runtime/legacy-pack.js";
 import {
   buildCaseStatusSummary,
   formatCaseStatusHuman,
@@ -34,7 +34,7 @@ import {
   RuntimeQueryError,
   showRuntimeDetail,
   type ListType,
-} from "../core/runtime/query.js";
+} from "../core/runtime/legacy-query.js";
 import { buildActionDescriptor } from "../core/runtime/action-descriptor.js";
 import { buildGateTransitionInstructions, buildWorkflowInstructions } from "../core/runtime/legacy-workflow-control.js";
 import { evaluateWorkflowControl } from "../core/runtime/legacy-workflow-control.js";
