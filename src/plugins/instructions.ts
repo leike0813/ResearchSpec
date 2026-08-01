@@ -3,7 +3,7 @@ import path from "node:path";
 
 import { getTool } from "../adapters/tools.js";
 import { sha256 } from "../core/workspace/write-plan.js";
-import type { WorkspaceSnapshot } from "../core/workspace/snapshot.js";
+import type { WorkspaceStaticContext } from "../core/runtime/workspace-index.js";
 import {
   filesForSkill,
   pluginSkillRoot,
@@ -26,16 +26,16 @@ export class PluginSkillInstructionsError extends Error {
 }
 
 export async function buildPluginSkillInstructions(
-  snapshot: WorkspaceSnapshot,
+  snapshot: WorkspaceStaticContext,
   loaded: LoadedPluginRegistry,
   skillId: string,
 ) {
   const registered = loaded.skills.get(skillId);
   if (!registered) throw new PluginSkillInstructionsError("plugin_skill_not_found", `Plugin Skill not found: ${skillId}`);
 
-  const selected = selectedPluginIds(snapshot.config);
+  const selected = selectedPluginIds(record(snapshot.config));
   const resolution = resolveDomainSelection(loaded, selected);
-  const unavailableSnapshots = resolutionSnapshots(snapshot.manifest.plugin_resolutions)
+  const unavailableSnapshots = resolutionSnapshots(record(snapshot.manifest).plugin_resolutions)
     .filter((item) => resolution.unavailableDomainIds.includes(item.domain_id) && item.resolved_skill_ids.includes(skillId));
   if (unavailableSnapshots.length) {
     throw new PluginSkillInstructionsError(
@@ -49,7 +49,7 @@ export async function buildPluginSkillInstructions(
   }
 
   const projectRoot = path.dirname(snapshot.workspace);
-  const toolIds = strings(record(snapshot.config.agent_tools).selected);
+  const toolIds = strings(record(record(snapshot.config).agent_tools).selected);
   if (!toolIds.length) throw new PluginSkillInstructionsError("plugin_skill_unprojected", `Plugin Skill has no configured Agent tool projection: ${skillId}`);
 
   const expectedFiles = filesForSkill(loaded, skillId);
@@ -66,7 +66,7 @@ export async function buildPluginSkillInstructions(
       );
     }
   }
-  const installations = installationRecords(snapshot.manifest.installations).filter(isDomainSkillInstallation);
+  const installations = installationRecords(record(snapshot.manifest).installations).filter(isDomainSkillInstallation);
   const drift: Array<{ tool_id: string; path: string; reason: string }> = [];
   for (const toolId of toolIds) {
     const tool = getTool(toolId);

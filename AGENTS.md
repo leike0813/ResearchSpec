@@ -62,18 +62,20 @@ The locked direction is:
   export requests route through `researchspec-navigate`; an explicit ARSU Skill
   or mode may route directly after the same prerequisite and route-summary check.
 - Starting a subflow requires a user-confirmed summary of Skill, mode,
-  prerequisites, artifacts, formal Gates, and cost.
-- ResearchSpec CLI is the only workflow-state authority. ARSU Skills produce
-  semantic artifacts, and `academic-pipeline` dispatches only from the CLI
-  frontier.
+  prerequisites, boundary outputs, formal Gates, and cost. Every child, branch,
+  and dynamic revision round requires its own confirmation.
+- ResearchSpec CLI is the only workflow-state mutation authority. Each
+  subflow's `control.yaml` is its sole runtime authority; ARSU Skills produce
+  semantic files outside `researchspec/` and describe cross-subflow exchange in
+  that subflow's `handoff.md`.
 - Workflow profiles own work graphs, parallel/join policy, Gates, transitions,
   and dynamic revision-round templates. Do not hard-code the ARSU pipeline graph
   in core.
-- Candidate artifacts may be submitted automatically with hash binding. Every
-  formal Gate requires human confirmation; a failed-Gate override requires an
-  explicit Decision.
-- Only scope, claim, structure, branch, and override choices belong in the
-  Decision ledger. Ordinary exploration belongs in the relevant artifact.
+- Boundary deliverables are ordinary project files outside `researchspec/`;
+  ResearchSpec does not register, hash-bind, copy, or lifecycle-manage them.
+- Every formal Gate requires human confirmation. Failed-Gate overrides and
+  scope, claim, structure, and branch choices are recorded only in the owning
+  subflow control. Ordinary exploration belongs in working material.
 
 The fixed user-visible agent surface is exactly four ARSU Skills
 (`deep-research`, `academic-paper`, `academic-paper-reviewer`,
@@ -83,8 +85,8 @@ fixed Zotero literature Adapter Skills (`zotero-library-agent`,
 `zotero-library-query`, `zotero-literature-acquisition`,
 `zotero-literature-analysis`, `zotero-research-synthesis`,
 `zotero-library-curation`, `zotero-bridge-cli`). The 31 registered tools
-therefore receive fifteen fixed
-Skills, while the 28 command-capable tools still receive only eight wrappers.
+therefore receive fifteen fixed Skills, while the 28 command-capable tools
+receive the sixteen current command wrappers.
 Optional
 ResearchSpec-maintained domain plugin Skills may extend that base surface from
 `skills/plugins/registry.json`; they do not add Companion Skills or wrappers.
@@ -100,27 +102,28 @@ seven runner files and seven output schemas are opaque runtime metadata:
 conversion, delivery, status, checking and packaging preserve their bytes but
 never execute or interpret them.
 
-The target public CLI has seventeen top-level commands: `init`, `update`, `status`,
-`instructions`, `start`, `submit`, `advance`, `check`, `list`, `show`, `handoff`,
-`pack`, `propose`, `decide`, `archive`, `doctor`, and `plugin`. New workspaces
-default to the adaptive runtime; `init --profile strict` remains explicit and
-existing Schema `0.2` workspaces remain strict until a plan-bound
-`update --migrate-runtime` transaction is executed. The runtime protocol is
-`status -> instructions <selector> -> start/submit/advance -> status`.
+The public CLI has sixteen top-level commands: `init`, `update`, `status`,
+`instructions`, `start`, `advance`, `check`, `list`, `show`, `handoff`, `pack`,
+`propose`, `decide`, `archive`, `doctor`, and `plugin`. New workspaces use only
+the current schema `"1"` contract. Old or unknown workspaces are reported and
+left unchanged; ResearchSpec provides no compatibility reader, migration,
+rollback, or semantic repair. The runtime protocol is
+`status -> instructions <selector> -> start/decide/advance -> status`.
 Command wrappers are adapters, not separate product capabilities. Do not add a
 new public command or Companion merely to expose a low-level transaction.
 
 Domain plugins are stable user installation units assembled from project-maintained vendor Skills,
 not third-party runtimes. Vendor and domain are separate many-to-many layers: vendor converters own upstream version, provenance, adaptation, and hard Skill dependencies; domains own fixed reviewed Skill lists. They may assist semantic work but must not own or
-directly modify workflow state, routes, work items, artifact registry, Gates,
-Decisions, transitions, or receipts. ResearchSpec distributes static reviewed
+directly modify stable specs, routes, subflow controls, handoffs, Gates,
+Decisions, or transitions. ResearchSpec distributes static reviewed
 content and never executes plugin scripts or installs their dependencies.
 
 At runtime, Navigate and the active ARSU producer may discover optional domain
 assistance from compact packaged Skill metadata. Suggest at most three domains
 in one batch, keep plugin consent separate from route confirmation, preview the
-exact install, and bind non-interactive execution to its `plan_sha256`. Use a
-newly projected Skill natively when the host has loaded it; otherwise use
+exact install, and require explicit domain IDs plus `--yes` for non-interactive
+execution. Use a newly projected Skill natively when the host has loaded it;
+otherwise use
 `plugin instructions <skill-id>` only after selection, availability, projection,
 and manifest-hash checks. The plugin is a bounded advisory helper whose result
 returns to the original ARSU producer. Decline or failure must leave the core
@@ -382,39 +385,39 @@ Prefer a typed file-contract model: human-readable Markdown where useful,
 machine-checkable YAML/JSON/JSONL where downstream skills or gates depend on
 stable fields.
 
-Recommended conceptual layout:
+Current workspace layout:
 
 ```text
 researchspec/
   config.yaml
+  tool-installation-manifest.json
+
+  profiles/
+    academic-pipeline.yaml
 
   specs/
     project.md
     sources.yaml
     claims.yaml
     manuscript.yaml
-    workflow.yaml
-
-  runs/
-    current/
-      state.yaml
-      artifact-registry.json
-      decision-ledger.jsonl
-      gate-ledger.jsonl
-      handoff.md
 
   changes/
     <change-id>/
-      proposal.md
-      contract-patch.yaml
-      tasks.md
+      change.md
+      design.md        # optional
+      tasks.md         # optional
+      delta.yaml       # optional
 
-  draft-patches/
-    <patch-id>.json
+  subflows/
+    <instance-directory>/
+      control.yaml
+      handoff.md
+      work/
 ```
 
-This layout is directional, not yet a frozen implementation contract. If code or
-specs establish a newer layout, follow the code/specs and update this file.
+Boundary deliverables live outside `researchspec/`. Generated profiles and Agent
+tool projections are manifest-owned static content; stable specs, controls,
+handoffs, changes, and subflow work are not generated projections.
 
 ## Contract Design Principles
 
@@ -425,7 +428,9 @@ Artifacts are drafts, reports, reviews, integrity checks, synthesis outputs,
 figures, tables, and generated files.
 
 Do not make a draft or review report the source of truth for research intent.
-Register artifacts by path, hash, type, producer, stage, and verification state.
+Keep boundary deliverables outside `researchspec/` and reference them from the
+owning subflow handoff by role, safe project-relative path, purpose, producer,
+and intended consumer.
 
 ### 2. Make Claims First-Class
 
@@ -438,52 +443,58 @@ require a proposed contract change and human decision.
 
 ### 3. Make Human Decisions First-Class
 
-Human decisions are part of the runtime record, not chat residue.
+Human decisions are part of the owning control or project change, not chat
+residue.
 
 Changing research questions, target output, contribution scope, manuscript
 structure, review-response strategy, or accepted limitations must be represented
-in a decision ledger or proposed change.
+in the relevant subflow control or proposed project change.
 
 ### 4. Keep Workflow State Separate From Research Specs
 
 The ARSU pipeline stage graph belongs to the ARSU skill pack. ResearchSpec core
-should provide generic run-state and gate-ledger contracts, not hard-code one
-paper pipeline into every project.
+provides generic per-subflow control contracts and must not hard-code one paper
+pipeline. The converter-owned graph is projected to
+`profiles/academic-pipeline.yaml`.
 
 ### 5. Gate Progress, Do Not Invent Semantics
 
-Gate logic should check state, blockers, required artifacts, schema validity,
-hashes, and pending decisions. It should not replace LLM or human academic
-judgment.
+Gate logic should check the owning control, blockers, required handoff roles,
+schema validity, and pending decisions. It should not replace LLM or human
+academic judgment.
 
-LLMs produce semantic payloads and writing. Scripts validate, register, hash,
-render, and gate deterministic state.
+LLMs produce semantic payloads and writing. Scripts validate, render, and apply
+deterministic single-owner mutations.
 
 ### 6. Prefer Proposed Changes For High-Impact Updates
 
 Follow the OpenSpec pattern: current specs are the truth; proposed changes live
 separately until accepted.
 
-Do not silently edit core specs for high-impact changes. Create a reviewable
-proposal or contract patch.
+Do not silently edit stable specs for high-impact changes. Create a reviewable
+project change. Accepting a change does not apply it; the specs must be edited
+explicitly and validated before the change becomes `applied`.
 
 ## ARSU Mapping Guidance
 
 Use this as the default mapping when designing the integration:
 
-- ARSU RQ Brief -> `specs/project.md` and artifact registry
+- ARSU RQ Brief -> `specs/project.md` plus the producing subflow handoff when an
+  external brief is retained
 - ARSU Bibliography / literature corpus -> `specs/sources.yaml`
-- ARSU Synthesis Report -> artifact registry; proposed claim/spec changes when
-  it changes research meaning
-- ARSU Paper Draft -> artifact registry plus `specs/manuscript.yaml`
-- ARSU Integrity Report -> gate ledger and artifact registry
-- ARSU Review Report / Revision Roadmap -> artifact registry plus proposed
-  changes or draft patches
-- ARSU Response to Reviewers -> artifact registry plus decision/gate ledger
-- ARSU Material Passport -> split into artifact registry, state, decision
-  ledger, and gate ledger rather than copying one monolithic object by default
-- ARSU Revision Patch -> `draft-patches/<patch-id>.json`, preserving the
-  useful block/hash discipline
+- ARSU Synthesis Report -> external boundary file in a handoff; accepted claims
+  go to `specs/claims.yaml`, with a project change when meaning changes materially
+- ARSU Paper Draft -> external boundary file plus `specs/manuscript.yaml`
+- ARSU Integrity Report -> external handoff output plus a human-confirmed Gate
+  attempt in the owning control
+- ARSU Review Report / Revision Roadmap -> external handoff outputs plus a
+  project change when stable research meaning changes
+- ARSU Response to Reviewers -> external handoff output plus owning-control
+  Gate/Decision records where formally required
+- ARSU Material Passport -> ordinary external input only; it is not imported as
+  ResearchSpec authority
+- ARSU Revision Patch -> the ARSU `revision_patch` contract and optional
+  stateless helper; there is no ResearchSpec patch lifecycle
 
 ## Skill And Converter Rules
 
@@ -574,11 +585,12 @@ Treat the packaged CLI and installed Agent surface as the acceptance boundary fo
 the canonical user model.
 
 - Exercise authoritative workflow mutations through a fresh packaged CLI
-  process. Test harnesses may create producer candidates only at paths returned
-  by instructions; they must not edit state, registries, receipts, Gate ledgers,
-  or Decision ledgers directly.
-- For plan-bound writes, preview and execution must use the same action basis,
-  semantic input, and plan hash.
+  process. Test harnesses may create producer files only at explicit external
+  paths returned by instructions; they must not edit controls, Gates, Decisions,
+  transitions, generated profiles, or hidden indexes directly.
+- Static generated projection writes preserve manifest ownership and drift
+  protection. Runtime authority writes use the owning file's current bytes as
+  their precondition and do not create a public plan hash or receipt.
 - Test stable user-observable journeys and structured contracts. Do not require
   exact documentation headings, archived change identifiers, prose wording,
   diagram labels, source-code layout, or field order unless one is an explicit

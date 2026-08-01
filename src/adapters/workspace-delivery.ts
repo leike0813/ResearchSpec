@@ -1,5 +1,8 @@
+import path from "node:path";
+
+import { ACADEMIC_PIPELINE_PROFILE, ACADEMIC_PIPELINE_PROFILE_TEXT } from "../arsu-converter/workflow/academic-pipeline.js";
 import type { Diagnostic } from "../core/validation/types.js";
-import type { PlannedWrite } from "../core/workspace/write-plan.js";
+import { planFile, sha256, type PlannedWrite } from "../core/workspace/write-plan.js";
 import {
   LITERATURE_ADAPTER_SKILL_IDS,
   planLiteratureAdapterDelivery,
@@ -23,6 +26,7 @@ export interface WorkspaceDeliveryPlan {
 
 export async function planWorkspaceDelivery(input: {
   projectRoot: string;
+  workspaceRoot?: string;
   toolIds: readonly string[];
   selectedToolIds: readonly string[];
   reconciledToolIds: readonly string[];
@@ -34,6 +38,26 @@ export async function planWorkspaceDelivery(input: {
   platform?: NodeJS.Platform;
   architecture?: NodeJS.Architecture;
 }): Promise<WorkspaceDeliveryPlan> {
+  const profileAbsolutePath = path.join(input.workspaceRoot ?? path.join(input.projectRoot, "researchspec"), "profiles/academic-pipeline.yaml");
+  const profileTarget = path.relative(input.projectRoot, profileAbsolutePath).split(path.sep).join("/");
+  const existingProfile = input.existingInstallations.find((item) => item.owner === "framework" && item.target.scope === "project" && item.target.path === profileTarget);
+  const profileOperation = await planFile({
+    path: profileAbsolutePath,
+    relativePath: profileTarget,
+    content: ACADEMIC_PIPELINE_PROFILE_TEXT,
+    scope: "project",
+    ownership: "generated",
+    recordedHash: existingProfile?.sha256,
+    requireRecordedOwnership: existingProfile === undefined,
+    force: input.force,
+  });
+  const profileInstallation: ManagedInstallation = {
+    owner: "framework",
+    tool_id: null,
+    source: { kind: "framework-profile", profile_id: ACADEMIC_PIPELINE_PROFILE.profile_id, profile_version: ACADEMIC_PIPELINE_PROFILE.profile_version },
+    target: { scope: "project", path: profileTarget, executable: false },
+    sha256: sha256(ACADEMIC_PIPELINE_PROFILE_TEXT),
+  };
   const toolDelivery = await planToolDelivery({
     projectRoot: input.projectRoot,
     toolIds: input.toolIds,
@@ -66,12 +90,14 @@ export async function planWorkspaceDelivery(input: {
 
   return {
     operations: [
+      profileOperation,
       ...toolDelivery.operations,
       ...toolReconciliation.operations,
       ...literatureDelivery.operations,
       ...literatureReconciliation.operations,
     ],
     installations: deduplicateInstallations([
+      profileInstallation,
       ...literatureReconciliation.retainedInstallations,
       ...literatureDelivery.installations,
     ]),

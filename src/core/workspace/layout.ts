@@ -1,43 +1,26 @@
 import path from "node:path";
-import { createHash } from "node:crypto";
 import { stringify } from "yaml";
 
-import {
-  ARSU_ADAPTIVE_PLAYBOOK,
-  ARSU_V0_1_WORKFLOW,
-  createArsuAdaptiveProfile,
-} from "../../arsu-converter/workflow/catalog.js";
+import { ACADEMIC_PIPELINE_PROFILE_TEXT } from "../../arsu-converter/workflow/academic-pipeline.js";
 
-export type WorkspaceFileKind = "markdown" | "yaml" | "json" | "jsonl";
+export type WorkspaceFileKind = "markdown" | "yaml" | "json";
 export type OverwritePolicy = "user" | "generated";
+/** Temporary source-level type for legacy modules that are removed in later change tasks. */
+export type InitRuntimeProfile = "strict" | "adaptive";
 
 export interface WorkspaceTemplateDefinition {
   relativePath: string;
   kind: WorkspaceFileKind;
   content: string;
   overwritePolicy: OverwritePolicy;
-  required: boolean;
+  required: true;
 }
 
 export type WorkspaceEntry =
   | { kind: "dir"; path: string }
   | { kind: "file"; path: string; content: string; overwritePolicy: OverwritePolicy };
 
-export const REQUIRED_DIRECTORIES = [
-  "specs",
-  "playbooks",
-  "runs/current",
-  "runs/current/annotation-sessions",
-  "runs/current/annotation-sets",
-  "runs/current/annotation-resolution-reports",
-  "runs/current/receipts/annotation-submit",
-  "changes",
-  "changes/archive",
-  "draft-patches",
-  "draft-patches/archive",
-] as const;
-
-export type InitRuntimeProfile = "strict" | "adaptive";
+export const REQUIRED_DIRECTORIES = ["profiles", "specs", "changes", "subflows"] as const;
 
 const WORKSPACE_TEMPLATES: readonly WorkspaceTemplateDefinition[] = [
   {
@@ -45,7 +28,11 @@ const WORKSPACE_TEMPLATES: readonly WorkspaceTemplateDefinition[] = [
     kind: "yaml",
     overwritePolicy: "user",
     required: true,
-    content: `schema_version: "0.1"\nprofile: arsu-v0-1\nagent_tools:\n  selected: []\n  delivery: both\nplugins:\n  selected: []\n`,
+    content: stringify({
+      schema_version: "1",
+      agent_tools: { selected: [], delivery: "both" },
+      plugins: { selected: [] },
+    }),
   },
   {
     relativePath: "tool-installation-manifest.json",
@@ -55,104 +42,64 @@ const WORKSPACE_TEMPLATES: readonly WorkspaceTemplateDefinition[] = [
     content: `${JSON.stringify({ schema_version: "1", package_version: "0.1.0", plugin_resolutions: [], literature_adapter_resolutions: [], installations: [] }, null, 2)}\n`,
   },
   {
+    relativePath: "profiles/academic-pipeline.yaml",
+    kind: "yaml",
+    overwritePolicy: "generated",
+    required: true,
+    content: ACADEMIC_PIPELINE_PROFILE_TEXT,
+  },
+  {
     relativePath: "specs/project.md",
     kind: "markdown",
     overwritePolicy: "user",
     required: true,
-    content: `---\nschema_version: "0.1"\nproject_id: project\ntitle: "Untitled research project"\ntarget_output: other\nprimary_language: und\n---\n\n# ResearchSpec Project\n\n## Research Question\n\nTBD\n\n## Scope\n\nTBD\n\n## Constraints\n\n- Complete this contract before semantic research begins.\n`,
+    content: `---\nschema_version: "1"\nproject_id: project\nworking_name: null\n---\n\n# Project intent\n\n## Research question\n\n## Scope and boundaries\n\n## Method stance\n\n## Expected contribution\n`,
   },
-  { relativePath: "specs/sources.yaml", kind: "yaml", overwritePolicy: "user", required: true, content: `schema_version: "0.1"\nsources: []\n` },
-  { relativePath: "specs/claims.yaml", kind: "yaml", overwritePolicy: "user", required: true, content: `schema_version: "0.1"\nclaims: []\n` },
+  {
+    relativePath: "specs/sources.yaml",
+    kind: "yaml",
+    overwritePolicy: "user",
+    required: true,
+    content: stringify({ schema_version: "1", sources: [] }),
+  },
+  {
+    relativePath: "specs/claims.yaml",
+    kind: "yaml",
+    overwritePolicy: "user",
+    required: true,
+    content: stringify({ schema_version: "1", claims: [] }),
+  },
   {
     relativePath: "specs/manuscript.yaml",
     kind: "yaml",
     overwritePolicy: "user",
     required: true,
-    content: `schema_version: "0.1"\nmanuscript_id: manuscript\ntitle: "Untitled manuscript"\nstatus: planning\nsections: []\n`,
+    content: stringify({
+      schema_version: "1",
+      manuscript_id: "manuscript",
+      output_type: null,
+      working_title: null,
+      language: null,
+      audience: null,
+      venue: null,
+      citation_requirements: [],
+      format_requirements: [],
+      outline: [],
+    }),
   },
-  {
-    relativePath: "specs/workflow.yaml",
-    kind: "yaml",
-    overwritePolicy: "user",
-    required: true,
-    content: stringify(ARSU_V0_1_WORKFLOW),
-  },
-  {
-    relativePath: "runs/current/state.yaml",
-    kind: "yaml",
-    overwritePolicy: "user",
-    required: true,
-    content: stringify({ schema_version: "0.2", run_id: "current", workflow_id: "arsu-v0-1", status: "not_started", started_at: null, updated_at: null, subflows: [], material_passport_imports: [], resume_candidate: null, pending_decisions: [], diagnostics: [] }),
-  },
-  {
-    relativePath: "runs/current/artifact-registry.json",
-    kind: "json",
-    overwritePolicy: "user",
-    required: true,
-    content: `${JSON.stringify({ schema_version: "0.1", run_id: "current", artifacts: [] }, null, 2)}\n`,
-  },
-  { relativePath: "runs/current/decision-ledger.jsonl", kind: "jsonl", overwritePolicy: "user", required: true, content: "" },
-  { relativePath: "runs/current/gate-ledger.jsonl", kind: "jsonl", overwritePolicy: "user", required: true, content: "" },
 ] as const;
 
-const ADAPTIVE_PLAYBOOK_TEXT = stringify(ARSU_ADAPTIVE_PLAYBOOK);
-const ADAPTIVE_PLAYBOOK_SHA256 = createHash("sha256").update(ADAPTIVE_PLAYBOOK_TEXT).digest("hex");
-const ADAPTIVE_PROFILE_TEXT = stringify(createArsuAdaptiveProfile(ADAPTIVE_PLAYBOOK_SHA256));
-const ADAPTIVE_STATE_TEXT = stringify({
-  schema_version: "1",
-  case_id: "current",
-  run_id: "current",
-  profile_mode: "adaptive",
-  lifecycle: "open",
-  obligations: [],
-  accepted_evidence: [],
-  formal_gate_refs: [],
-  formal_decision_refs: [],
-  case_actions: [],
-  completion_effects: [],
-  receipts: [],
-  updated_at: null,
-});
-
-const ADAPTIVE_TEMPLATES: readonly WorkspaceTemplateDefinition[] = [
-  {
-    relativePath: "playbooks/arsu-adaptive.yaml",
-    kind: "yaml",
-    overwritePolicy: "generated",
-    required: false,
-    content: ADAPTIVE_PLAYBOOK_TEXT,
-  },
-  {
-    relativePath: "runs/current/attempt-ledger.jsonl",
-    kind: "jsonl",
-    overwritePolicy: "user",
-    required: false,
-    content: "",
-  },
-];
-
-export function getWorkspaceTemplates(profile: InitRuntimeProfile = "adaptive"): readonly WorkspaceTemplateDefinition[] {
-  const profileId = profile;
-  const templates = WORKSPACE_TEMPLATES.map((template) => {
-    if (template.relativePath === "config.yaml") {
-      return { ...template, content: `schema_version: "0.1"\nprofile: ${profileId}\nagent_tools:\n  selected: []\n  delivery: both\nplugins:\n  selected: []\n` };
-    }
-    if (profile === "adaptive" && template.relativePath === "specs/workflow.yaml") {
-      return { ...template, content: ADAPTIVE_PROFILE_TEXT };
-    }
-    if (profile === "adaptive" && template.relativePath === "runs/current/state.yaml") {
-      return { ...template, content: ADAPTIVE_STATE_TEXT };
-    }
-    return template;
-  });
-  return profile === "adaptive" ? [...templates, ...ADAPTIVE_TEMPLATES] : templates;
+export function getWorkspaceTemplates(_legacyProfile?: InitRuntimeProfile): readonly WorkspaceTemplateDefinition[] {
+  void _legacyProfile;
+  return WORKSPACE_TEMPLATES;
 }
 
-export const REQUIRED_FILES = WORKSPACE_TEMPLATES.filter((item) => item.required).map((item) => item.relativePath);
-export const OPTIONAL_FILES = ADAPTIVE_TEMPLATES.map((item) => item.relativePath);
-export const YAML_FILES = [...WORKSPACE_TEMPLATES.filter((item) => item.kind === "yaml").map((item) => item.relativePath), "playbooks/arsu-adaptive.yaml"];
+export const REQUIRED_FILES = WORKSPACE_TEMPLATES.map((item) => item.relativePath);
+/** Empty source-level exports keep not-yet-migrated modules compilable without creating legacy files. */
+export const OPTIONAL_FILES: readonly string[] = [];
+export const YAML_FILES = WORKSPACE_TEMPLATES.filter((item) => item.kind === "yaml").map((item) => item.relativePath);
 export const JSON_FILES = WORKSPACE_TEMPLATES.filter((item) => item.kind === "json").map((item) => item.relativePath);
-export const JSONL_FILES = [...WORKSPACE_TEMPLATES.filter((item) => item.kind === "jsonl").map((item) => item.relativePath), "runs/current/attempt-ledger.jsonl"];
+export const JSONL_FILES: readonly string[] = [];
 export const MARKDOWN_FILES = WORKSPACE_TEMPLATES.filter((item) => item.kind === "markdown").map((item) => item.relativePath);
 
 export function resolveInitTarget(inputPath: string | undefined, cwd: string): string {
@@ -160,11 +107,11 @@ export function resolveInitTarget(inputPath: string | undefined, cwd: string): s
   return path.basename(base) === "researchspec" ? base : path.join(base, "researchspec");
 }
 
-export function getWorkspaceEntries(workspaceRoot: string, profile: InitRuntimeProfile = "adaptive"): WorkspaceEntry[] {
-  const templates = getWorkspaceTemplates(profile);
+export function getWorkspaceEntries(workspaceRoot: string, _legacyProfile?: InitRuntimeProfile): WorkspaceEntry[] {
+  void _legacyProfile;
   return [
     ...REQUIRED_DIRECTORIES.map((dir): WorkspaceEntry => ({ kind: "dir", path: path.join(workspaceRoot, dir) })),
-    ...templates.map((item): WorkspaceEntry => ({
+    ...WORKSPACE_TEMPLATES.map((item): WorkspaceEntry => ({
       kind: "file",
       path: path.join(workspaceRoot, item.relativePath),
       content: item.content,

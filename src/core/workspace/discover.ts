@@ -1,25 +1,32 @@
 import path from "node:path";
 
 import { fileExists, isDirectory } from "../../utils/fs.js";
+import { inspectCurrentWorkspaceFormat } from "../runtime/workspace-index.js";
 
 export type WorkspaceResolution =
   | { status: "found"; workspace: string; source: "explicit" | "nearest" }
   | { status: "missing"; searchedFrom: string }
-  | { status: "invalid"; path: string };
+  | { status: "invalid"; path: string }
+  | { status: "unsupported"; path: string; reason: string };
 
 export async function resolveWorkspace(cwd: string, explicitWorkspace?: string): Promise<WorkspaceResolution> {
   if (explicitWorkspace) {
     const resolved = path.resolve(cwd, explicitWorkspace);
-    return (await isDirectory(resolved))
+    if (!(await isDirectory(resolved))) return { status: "invalid", path: resolved };
+    const format = await inspectCurrentWorkspaceFormat(resolved);
+    return format.current
       ? { status: "found", workspace: resolved, source: "explicit" }
-      : { status: "invalid", path: resolved };
+      : { status: "unsupported", path: resolved, reason: format.reason };
   }
 
   let current = path.resolve(cwd);
   while (true) {
     const candidate = path.join(current, "researchspec");
     if ((await fileExists(candidate)) && (await isDirectory(candidate))) {
-      return { status: "found", workspace: candidate, source: "nearest" };
+      const format = await inspectCurrentWorkspaceFormat(candidate);
+      return format.current
+        ? { status: "found", workspace: candidate, source: "nearest" }
+        : { status: "unsupported", path: candidate, reason: format.reason };
     }
     const parent = path.dirname(current);
     if (parent === current) return { status: "missing", searchedFrom: cwd };

@@ -3,11 +3,21 @@ import path from "node:path";
 import { Command, CommanderError, InvalidArgumentError } from "commander";
 
 import {
-  handleAdvance, handleArchive, handleCheck, handleDecide, handleHandoff, handleInit, handleInstructions, handleList,
-  handleDoctor, handlePack, handlePropose, handleShow, handleStart, handleStatus, handleSubmit, handleUpdate, type DecideOptions,
+  handleAdvance, handleArchive, handleDecide, handleHandoff, handleInstructions, handleList,
+  handlePack, handlePropose, handleShow, handleStart, handleSubmit, type DecideOptions,
   handlePluginInstall, handlePluginInstructions, handlePluginList, handlePluginShow, handlePluginUninstall, handlePluginUpdate,
-  type AdvanceOptions, type DoctorOptions, type HandoffOptions, type InitOptions, type ListOptions, type PackOptions, type PluginInstallOptions, type PluginListOptions, type PluginShowOptions, type ProposeOptions, type StartOptions, type SubmitOptions, type UpdateOptions,
+  type AdvanceOptions, type HandoffOptions, type ListOptions, type PackOptions, type PluginInstallOptions, type PluginListOptions, type PluginShowOptions, type ProposeOptions, type StartOptions, type SubmitOptions,
 } from "./handlers.js";
+import {
+  handleCurrentCheck,
+  handleCurrentDoctor,
+  handleCurrentInit,
+  handleCurrentStatus,
+  handleCurrentUpdate,
+  type CurrentDoctorOptions,
+  type CurrentInitOptions,
+  type CurrentUpdateOptions,
+} from "./current-handlers.js";
 import { applyGlobalCliOptions, cliHelpTarget, registerCliCommand } from "./command-catalog.js";
 import { presentResult } from "./presenter.js";
 import { CliError, failure, type CommandContext, type CommandResult } from "./types.js";
@@ -59,11 +69,11 @@ type Runner = (command: string, commandObject: Command, action: () => Promise<Co
 
 function registerCommands(program: Command, run: Runner): void {
   registerCliCommand(program, "init")
-    .action(async (target: string | undefined, options: InitOptions, command: Command) => run("init", command, () => handleInit(target, options, commandContext("init", command))));
+    .action(async (target: string | undefined, options: CurrentInitOptions, command: Command) => run("init", command, () => handleCurrentInit(target, options, commandContext("init", command))));
   registerCliCommand(program, "update")
-    .action(async (target: string | undefined, options: UpdateOptions, command: Command) => run("update", command, () => handleUpdate(target, options, commandContext("update", command))));
+    .action(async (target: string | undefined, options: CurrentUpdateOptions, command: Command) => run("update", command, () => handleCurrentUpdate(target, options, commandContext("update", command))));
   registerCliCommand(program, "status")
-    .action(async (_options: Record<string, never>, command: Command) => run("status", command, () => handleStatus(commandContext("status", command))));
+    .action(async (_options: Record<string, never>, command: Command) => run("status", command, () => handleCurrentStatus(commandContext("status", command))));
   registerCliCommand(program, "instructions")
     .action(async (selector: string, _options: Record<string, never>, command: Command) => run("instructions", command, () => handleInstructions(selector, commandContext("instructions", command))));
   registerCliCommand(program, "start")
@@ -73,9 +83,9 @@ function registerCommands(program: Command, run: Runner): void {
   registerCliCommand(program, "advance")
     .action(async (transition: string, options: AdvanceOptions, command: Command) => run("advance", command, () => handleAdvance(transition, options, commandContext("advance", command))));
   registerCliCommand(program, "check")
-    .action(async (target: string | undefined, options: { strict?: boolean }, command: Command) => run("check", command, () => handleCheck(target, Boolean(options.strict), commandContext("check", command))));
+    .action(async (target: string | undefined, options: { strict?: boolean }, command: Command) => run("check", command, () => handleCurrentCheck(target, Boolean(options.strict), commandContext("check", command))));
   registerCliCommand(program, "doctor")
-    .action(async (options: DoctorOptions, command: Command) => run("doctor", command, () => handleDoctor(options, commandContext("doctor", command))));
+    .action(async (options: CurrentDoctorOptions, command: Command) => run("doctor", command, () => handleCurrentDoctor(options, commandContext("doctor", command))));
   registerCliCommand(program, "list")
     .action(async (type: string | undefined, options: ListOptions, command: Command) => run("list", command, () => handleList(type, options, commandContext("list", command))));
   registerCliCommand(program, "show")

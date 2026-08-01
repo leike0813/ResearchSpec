@@ -10,10 +10,18 @@ export interface Diagnostic {
 export type ParseResult<T> = { ok: true; value: T } | { ok: false; diagnostic: Diagnostic };
 
 export type CheckTarget = "all" | "contracts" | "runtime" | "artifacts" | "tools" | "plugins" | "literature-adapters";
+export type CurrentCheckTarget = "all" | "specs" | "profiles" | "subflows" | "changes" | "handoffs" | "tools" | "plugins" | "literature-adapters";
 
 export interface CheckResult {
   ok: boolean;
   workspace: string;
   target: CheckTarget;
+  diagnostics: Diagnostic[];
+}
+
+export interface CurrentCheckResult {
+  ok: boolean;
+  workspace: string;
+  target: CurrentCheckTarget;
   diagnostics: Diagnostic[];
 }

@@ -42,11 +42,25 @@ import { buildSubflowInstructions, executeSubflowStart, planSubflowStart, Subflo
 import { runWorkspaceChecks, type CheckTarget } from "../core/validation/check.js";
 import type { Diagnostic } from "../core/validation/types.js";
 import { resolveWorkspace } from "../core/workspace/discover.js";
+import { loadCurrentWorkspaceIndex, type CurrentWorkspaceIndex } from "../core/runtime/workspace-index.js";
 import { getWorkspaceEntries, getWorkspaceTemplates, resolveInitTarget, type InitRuntimeProfile } from "../core/workspace/layout.js";
 import { loadWorkspaceSnapshot } from "../core/workspace/snapshot.js";
 import { executeWritePlan, planFile, sha256, type PlannedWrite } from "../core/workspace/write-plan.js";
 import { fileExists, readOptionalText } from "../utils/fs.js";
 import { CliError, success, type CommandContext, type CommandResult } from "./types.js";
+import {
+  diagnoseRuntime,
+  DoctorRecoveryError,
+  executeDoctorRepair,
+  prepareDoctorRepair,
+} from "../core/runtime/runtime-recovery.js";
+import {
+  executeRuntimeMigration,
+  executeRuntimeMigrationRollback,
+  planRuntimeMigration,
+  planRuntimeMigrationRollback,
+  RuntimeMigrationError,
+} from "../core/runtime/runtime-migration.js";
 import {
   assertPlanBoundActionAvailable,
   authorizePlanBoundExecution,
@@ -81,19 +95,6 @@ import {
   planAdaptiveStart,
   type AdaptiveTransactionPlan,
 } from "../core/runtime/adaptive-case-transactions.js";
-import {
-  diagnoseRuntime,
-  DoctorRecoveryError,
-  executeDoctorRepair,
-  prepareDoctorRepair,
-} from "../core/runtime/runtime-recovery.js";
-import {
-  executeRuntimeMigration,
-  executeRuntimeMigrationRollback,
-  planRuntimeMigration,
-  planRuntimeMigrationRollback,
-  RuntimeMigrationError,
-} from "../core/runtime/runtime-migration.js";
 import { validationViolations, zodIssues } from "./validation.js";
 import type { CompactTransactionEffect } from "../core/contracts/runtime-protocol.js";
 
@@ -843,7 +844,7 @@ export async function handleDoctor(options: DoctorOptions, context: CommandConte
 export async function handlePluginList(options: PluginListOptions, context: CommandContext, providedRegistry?: LoadedPluginRegistry): Promise<CommandResult> {
   const pluginRegistry = providedRegistry ?? await bundledPluginRegistry();
   const workspace = await optionalWorkspace(context);
-  const snapshot = workspace ? await loadWorkspaceSnapshot(workspace) : undefined;
+  const snapshot = workspace ? await loadCurrentWorkspaceIndex(workspace) : undefined;
   const selected = snapshot ? selectedPluginIds(snapshot.config) : [];
   const projected = new Set(snapshot ? pluginStatusSummary(snapshot.config, snapshot.manifest, pluginRegistry).projected : []);
   const domains = options.installed
@@ -872,7 +873,7 @@ export async function handlePluginShow(pluginId: string, options: PluginShowOpti
   const domain = pluginRegistry.domains.get(pluginId);
   if (!domainIsAvailable(domain)) throw new CliError("plugin_not_found", `Domain plugin not found or unavailable: ${pluginId}`, 1);
   const workspace = await optionalWorkspace(context);
-  const snapshot = workspace ? await loadWorkspaceSnapshot(workspace) : undefined;
+  const snapshot = workspace ? await loadCurrentWorkspaceIndex(workspace) : undefined;
   const selected = snapshot ? selectedPluginIds(snapshot.config) : [];
   const projected = snapshot ? pluginStatusSummary(snapshot.config, snapshot.manifest, pluginRegistry).projected.includes(domain.domain_id) : false;
   const item = options.summary
@@ -890,7 +891,7 @@ export async function handlePluginInstall(pluginIds: readonly string[], options:
   const pluginRegistry = providedRegistry ?? await bundledPluginRegistry();
   assertPluginsAvailable(requested, pluginRegistry);
   const workspace = await requireWorkspace(context);
-  const snapshot = await loadWorkspaceSnapshot(workspace);
+  const snapshot = await loadCurrentWorkspaceIndex(workspace);
   const selected = uniqueSorted([...selectedPluginIds(snapshot.config), ...requested]);
   return reconcilePluginSelection("install", workspace, snapshot, selected, context, pluginRegistry, options);
 }
@@ -898,7 +899,7 @@ export async function handlePluginInstall(pluginIds: readonly string[], options:
 export async function handlePluginInstructions(skillId: string, context: CommandContext, providedRegistry?: LoadedPluginRegistry): Promise<CommandResult> {
   const pluginRegistry = providedRegistry ?? await bundledPluginRegistry();
   const workspace = await requireWorkspace(context);
-  const snapshot = await loadWorkspaceSnapshot(workspace);
+  const snapshot = await loadCurrentWorkspaceIndex(workspace);
   try {
     const packet = await buildPluginSkillInstructions(snapshot, pluginRegistry, skillId);
     return success("plugin", { action: "instructions", workspace, ...packet }, { stdout: `${JSON.stringify(packet, null, 2)}\n` });
@@ -911,7 +912,7 @@ export async function handlePluginInstructions(skillId: string, context: Command
 export async function handlePluginUpdate(pluginIds: readonly string[], context: CommandContext, providedRegistry?: LoadedPluginRegistry): Promise<CommandResult> {
   const pluginRegistry = providedRegistry ?? await bundledPluginRegistry();
   const workspace = await requireWorkspace(context);
-  const snapshot = await loadWorkspaceSnapshot(workspace);
+  const snapshot = await loadCurrentWorkspaceIndex(workspace);
   const selected = selectedPluginIds(snapshot.config);
   const requested = pluginIds.length ? normalizePluginIds(pluginIds) : selected;
   const notInstalled = requested.filter((id) => !selected.includes(id));
@@ -925,7 +926,7 @@ export async function handlePluginUninstall(pluginIds: readonly string[], contex
   const requested = normalizePluginIds(pluginIds);
   if (!requested.length) throw new CliError("plugin_ids_required", "At least one plugin ID is required.", 2);
   const workspace = await requireWorkspace(context);
-  const snapshot = await loadWorkspaceSnapshot(workspace);
+  const snapshot = await loadCurrentWorkspaceIndex(workspace);
   const selectedBefore = selectedPluginIds(snapshot.config);
   const notInstalled = requested.filter((id) => !selectedBefore.includes(id));
   if (notInstalled.length) throw new CliError("plugin_not_installed", `Plugin is not installed: ${notInstalled.join(", ")}`, 1);
@@ -1195,6 +1196,7 @@ async function requireWorkspace(context: CommandContext, positional?: string): P
   const resolution = await resolveWorkspace(context.cwd, explicit);
   if (resolution.status === "found") return resolution.workspace;
   if (resolution.status === "invalid") throw new CliError("workspace_invalid", `Invalid ResearchSpec workspace: ${resolution.path}`, 1);
+  if (resolution.status === "unsupported") throw new CliError("workspace_unsupported", `Unsupported workspace format: ${resolution.path}`, 1, undefined, { reason: resolution.reason });
   throw new CliError("workspace_missing", "No researchspec workspace found.", 1, "Run researchspec init to create one.");
 }
 
@@ -1202,13 +1204,14 @@ async function optionalWorkspace(context: CommandContext): Promise<string | unde
   const resolution = await resolveWorkspace(context.cwd, context.workspace);
   if (resolution.status === "found") return resolution.workspace;
   if (resolution.status === "invalid") throw new CliError("workspace_invalid", `Invalid ResearchSpec workspace: ${resolution.path}`, 1);
+  if (resolution.status === "unsupported") throw new CliError("workspace_unsupported", `Unsupported workspace format: ${resolution.path}`, 1, undefined, { reason: resolution.reason });
   return undefined;
 }
 
 async function reconcilePluginSelection(
   action: "install" | "update",
   workspace: string,
-  snapshot: Awaited<ReturnType<typeof loadWorkspaceSnapshot>>,
+  snapshot: CurrentWorkspaceIndex,
   selected: string[],
   context: CommandContext,
   pluginRegistry: LoadedPluginRegistry,
@@ -1221,6 +1224,7 @@ async function reconcilePluginSelection(
   const unavailableSelected = selected.filter((id) => !domainIsAvailable(pluginRegistry.domains.get(id)));
   const delivery = await planWorkspaceDelivery({
     projectRoot,
+    workspaceRoot: workspace,
     toolIds,
     selectedToolIds: toolIds,
     existingInstallations,
@@ -1291,7 +1295,7 @@ async function reconcilePluginSelection(
   }, { stdout: formatPlan(context.dryRun ? `ResearchSpec plugin ${action} dry run` : `ResearchSpec domain plugins ${action === "install" ? "installed" : "updated"}`, workspace, operations, context.dryRun) }, diagnostics);
 }
 
-async function bundledPluginRegistry(): Promise<LoadedPluginRegistry> {
+export async function bundledPluginRegistry(): Promise<LoadedPluginRegistry> {
   try { return await loadPluginRegistry(undefined, false); }
   catch (error) {
     if (error instanceof PluginRegistryError) throw new CliError("plugin_registry_invalid", "The bundled domain Skill plugin registry is invalid.", 1, undefined, { diagnostics: error.diagnostics });
@@ -1299,12 +1303,12 @@ async function bundledPluginRegistry(): Promise<LoadedPluginRegistry> {
   }
 }
 
-function assertPluginsAvailable(ids: readonly string[], registry: LoadedPluginRegistry): void {
+export function assertPluginsAvailable(ids: readonly string[], registry: LoadedPluginRegistry): void {
   const unknown = ids.filter((id) => !domainIsAvailable(registry.domains.get(id)));
   if (unknown.length) throw new CliError("plugin_unavailable", `Domain plugin is unavailable in this ResearchSpec package: ${unknown.join(", ")}`, 1, "Unavailable selected domains may still be safely removed with researchspec plugin uninstall.", { domain_ids: unknown });
 }
 
-function pluginManifestText(
+export function pluginManifestText(
   installations: readonly ManagedInstallation[],
   registry: LoadedPluginRegistry,
   selectedDomainIds: readonly string[],
@@ -1342,14 +1346,14 @@ function uniqueSorted(values: readonly string[]): string[] {
   return [...new Set(values)].sort((left, right) => left.localeCompare(right));
 }
 
-async function authoritativeWrite(target: string, relativePath: string, content: string | Uint8Array, scope: PlannedWrite["scope"], reason: string): Promise<PlannedWrite> {
+export async function authoritativeWrite(target: string, relativePath: string, content: string | Uint8Array, scope: PlannedWrite["scope"], reason: string): Promise<PlannedWrite> {
   const existing = await readOptionalText(target);
   const nextHash = sha256(content);
   const previousHash = existing === undefined ? undefined : sha256(existing);
   return { action: existing === undefined ? "create" : previousHash === nextHash ? "skip-unchanged" : "refresh", path: target, relativePath, content, scope, ownership: "user", ...(previousHash ? { previousHash } : {}), nextHash, reason };
 }
 
-function summarizePlan(operations: PlannedWrite[]) {
+export function summarizePlan(operations: PlannedWrite[]) {
   return operations.map((operation) => ({ action: operation.action, path: operation.path, relativePath: operation.relativePath, scope: operation.scope, ownership: operation.ownership, previousHash: operation.previousHash, nextHash: operation.nextHash, reason: operation.reason }));
 }
 function summarizePluginOperations(operations: ReturnType<typeof summarizePlan>) {
@@ -1361,8 +1365,8 @@ function summarizePluginOperations(operations: ReturnType<typeof summarizePlan>)
     actions: Object.fromEntries([...counts.entries()].sort(([left], [right]) => left.localeCompare(right))),
   };
 }
-function writableCount(operations: PlannedWrite[]): number { return operations.filter((item) => item.action === "create" || item.action === "refresh" || item.action === "remove-owned").length; }
-function formatPlan(title: string, workspace: string, operations: PlannedWrite[], dryRun: boolean): string {
+export function writableCount(operations: PlannedWrite[]): number { return operations.filter((item) => item.action === "create" || item.action === "refresh" || item.action === "remove-owned").length; }
+export function formatPlan(title: string, workspace: string, operations: PlannedWrite[], dryRun: boolean): string {
   const labels: Record<PlannedWrite["action"], string> = dryRun
     ? { create: "Would create", refresh: "Would refresh", "remove-owned": "Would remove", move: "Would move", "skip-unchanged": "skip-unchanged", "skip-drift": "skip-drift", conflict: "conflict" }
     : { create: "Created", refresh: "Refreshed", "remove-owned": "Removed", move: "Moved", "skip-unchanged": "skip-unchanged", "skip-drift": "skip-drift", conflict: "conflict" };
@@ -1372,8 +1376,8 @@ function record(value: unknown): Record<string, unknown> { return value && typeo
 function text(value: unknown): string { return typeof value === "string" ? value : ""; }
 function strings(value: unknown): string[] { return Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : []; }
 
-function operationDiagnostics(operations: PlannedWrite[]): Diagnostic[] { return operations.filter((item) => item.action === "skip-drift" || item.action === "conflict").map((item) => ({ severity: "warning", code: item.action === "skip-drift" ? "generated_file_drift" : "generated_file_conflict", message: item.reason, path: item.path, blocking: false })); }
-function deliveryResult<T>(command: string, data: T, human: { stdout: string }, diagnostics: Diagnostic[]): CommandResult<T> {
+export function operationDiagnostics(operations: PlannedWrite[]): Diagnostic[] { return operations.filter((item) => item.action === "skip-drift" || item.action === "conflict").map((item) => ({ severity: "warning", code: item.action === "skip-drift" ? "generated_file_drift" : "generated_file_conflict", message: item.reason, path: item.path, blocking: false })); }
+export function deliveryResult<T>(command: string, data: T, human: { stdout: string }, diagnostics: Diagnostic[]): CommandResult<T> {
   const base = success(command, data, human, diagnostics);
   return diagnostics.some((item) => item.blocking)
     ? { ...base, ok: false, exitCode: 1, error: { code: "tool_delivery_incomplete", message: "One or more selected tools could not be delivered." } }
@@ -1389,7 +1393,7 @@ async function readBytes(filePath: string): Promise<Uint8Array | undefined> {
   }
 }
 
-function previewSummary(operations: PlannedWrite[]): string {
+export function previewSummary(operations: PlannedWrite[]): string {
   const counts = new Map<string, number>();
   for (const operation of operations) counts.set(operation.action, (counts.get(operation.action) ?? 0) + 1);
   const globals = operations.filter((operation) => operation.scope === "shared-global").map((operation) => operation.path);

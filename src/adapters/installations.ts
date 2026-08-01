@@ -20,6 +20,11 @@ export const ManagedInstallationSourceSchema = z.discriminatedUnion("kind", [
   }),
   z.strictObject({ kind: z.literal("command"), command_id: IdentifierSchema }),
   z.strictObject({
+    kind: z.literal("framework-profile"),
+    profile_id: IdentifierSchema,
+    profile_version: IdentifierSchema,
+  }),
+  z.strictObject({
     kind: z.literal("literature-adapter"),
     adapter_id: IdentifierSchema,
     release_set_id: IdentifierSchema,
@@ -30,7 +35,7 @@ export const ManagedInstallationSourceSchema = z.discriminatedUnion("kind", [
 ]);
 
 export const ManagedInstallationSchema = z.strictObject({
-  owner: z.enum(["agent-tool", "literature-adapter"]),
+  owner: z.enum(["agent-tool", "literature-adapter", "framework"]),
   tool_id: IdentifierSchema.nullable(),
   source: ManagedInstallationSourceSchema,
   target: z.strictObject({
@@ -46,8 +51,14 @@ export const ManagedInstallationSchema = z.strictObject({
   if (value.owner === "literature-adapter" && value.tool_id !== null) {
     context.addIssue({ code: "custom", path: ["tool_id"], message: "shared literature-adapter installations require null tool_id" });
   }
+  if (value.owner === "framework" && (value.tool_id !== null || value.source.kind !== "framework-profile" || value.target.scope !== "project")) {
+    context.addIssue({ code: "custom", path: ["owner"], message: "framework profile installations require null tool_id, project scope, and framework-profile source" });
+  }
+  if (value.source.kind === "framework-profile" && value.owner !== "framework") {
+    context.addIssue({ code: "custom", path: ["source"], message: "framework-profile sources require framework ownership" });
+  }
   if (value.source.kind !== "literature-adapter" && value.owner !== "agent-tool") {
-    context.addIssue({ code: "custom", path: ["owner"], message: "non-adapter sources require agent-tool ownership" });
+    if (value.source.kind !== "framework-profile") context.addIssue({ code: "custom", path: ["owner"], message: "non-adapter sources require agent-tool ownership" });
   }
   if (value.source.kind === "literature-adapter") {
     const isSkill = value.source.component === "skill";

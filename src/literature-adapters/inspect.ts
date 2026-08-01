@@ -9,7 +9,7 @@ import {
 } from "../adapters/installations.js";
 import { getTool } from "../adapters/tools.js";
 import type { Diagnostic } from "../core/validation/types.js";
-import type { WorkspaceSnapshot } from "../core/workspace/snapshot.js";
+import type { WorkspaceStaticContext } from "../core/runtime/workspace-index.js";
 import { sha256 } from "../core/workspace/write-plan.js";
 import { LITERATURE_ADAPTER_PACKAGE_ROOT, readLiteratureAdapterProfile, readLiteratureAdapterSkillAssets } from "./assets.js";
 import { LITERATURE_ADAPTER_CATALOG } from "./catalog.js";
@@ -45,12 +45,12 @@ export interface LiteratureAdapterInspectionResult {
 }
 
 export async function inspectLiteratureAdapters(
-  snapshot: WorkspaceSnapshot,
+  snapshot: WorkspaceStaticContext,
   platform: NodeJS.Platform = process.platform,
   architecture: NodeJS.Architecture = process.arch,
 ): Promise<LiteratureAdapterInspectionResult> {
   const parsedManifest = ToolInstallationManifestSchema.safeParse(snapshot.manifest);
-  const selectedToolIds = stringArray(record(snapshot.config.agent_tools).selected);
+  const selectedToolIds = stringArray(record(record(snapshot.config).agent_tools).selected);
   const projectRoot = path.dirname(snapshot.workspace);
   const adapters: LiteratureAdapterInspection[] = [];
 
