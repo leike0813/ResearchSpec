@@ -4,7 +4,10 @@ import {
   type CliCommandDefinition,
   type CliCommandGroup,
 } from "./command-catalog.js";
-import { ACTION_SELECTOR_FAMILY_DISPLAYS } from "../core/contracts/action-selector.js";
+import {
+  CONTROL_SELECTOR_FAMILY_DISPLAYS,
+  INSPECTION_SELECTOR_FAMILY_DISPLAYS,
+} from "../core/contracts/control-selector.js";
 
 const GROUPS: readonly { id: CliCommandGroup; title: string }[] = [
   { id: "bootstrap", title: "Bootstrap" },
@@ -36,7 +39,7 @@ export function renderCliHandbook(): string {
     "1. Run `researchspec --help` to discover the public commands.",
     "2. Run `researchspec <command> --help` (or the relevant `plugin` subcommand help) to inspect syntax and options.",
     "3. For a current workspace action, run `researchspec status --json`, select a returned action selector, and read `researchspec instructions <selector> --json`.",
-    "4. Follow the action descriptor's semantic input, availability basis, execution policy and returned `next_selectors`; static help never supplies those facts.",
+    "4. Follow the selector-specific prerequisites, handoff roles, confirmation points and allowed actions; static help never supplies those facts.",
     "",
     "## Global options",
     "",
@@ -44,13 +47,13 @@ export function renderCliHandbook(): string {
     "| --- | --- |",
     ...CLI_GLOBAL_OPTIONS.map((option) => `| \`${option.flags}\` | ${option.description} |`),
     "",
-    "## Action selector families",
+    "## Current selector families",
     "",
     "A valid selector shape does not imply that the action is available in the current workspace.",
     "",
     "| Family | Accepted forms |",
     "| --- | --- |",
-    ...ACTION_SELECTOR_FAMILY_DISPLAYS.map((family) =>
+    ...selectorDisplays().map((family) =>
       `| \`${family.id}\` | ${family.patterns.map((pattern) => `\`${pattern}\``).join("<br>")} |`
     ),
     "",
@@ -145,19 +148,13 @@ function renderMdxCommandPage(command: CliCommandDefinition, position: number, g
     `- **Related**: ${related || "none"}`,
     ...optionRows,
     "",
-    ...(command.options.length > 0 ? [
-      ":::info Runtime binding",
-      "",
-      "Many options require a SHA-256 action-plan or action-basis binding",
-      "(`--expected-action-basis-sha256`, `--expected-plan-sha256`) when the",
-      "command is executed under a plan-bound workflow. Run",
-      "`researchspec instructions <selector> --json` for the exact required",
-      "semantic input and binding rules.",
-      "",
-      ":::",
-      "",
-    ] : []),
   ].join("\n").trimEnd() + "\n";
+}
+
+function selectorDisplays(): ReadonlyArray<{ id: string; patterns: readonly string[] }> {
+  const seen = new Set<string>();
+  return [...CONTROL_SELECTOR_FAMILY_DISPLAYS, ...INSPECTION_SELECTOR_FAMILY_DISPLAYS]
+    .filter((item) => !seen.has(item.id) && seen.add(item.id));
 }
 
 function renderCommandCard(command: CliCommandDefinition): string[] {

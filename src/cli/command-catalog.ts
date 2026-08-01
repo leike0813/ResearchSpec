@@ -37,7 +37,6 @@ export type CliCommandId =
   | "status"
   | "instructions"
   | "start"
-  | "submit"
   | "advance"
   | "check"
   | "doctor"
@@ -85,15 +84,6 @@ const definitions: readonly CliCommandDefinition[] = [
     option("input", "--input <start.yaml|json>", "schema 1 semantic Start input", true),
     option("confirmedBy", "--confirmed-by <name>", "human who confirmed this exact instance", true),
   ], ["status", "instructions"]),
-  command("submit", ["submit"], "submit <runtime-item>", "control-plane", "Submit a runtime candidate, attempt, evidence, annotation, patch, or confirmed Gate verdict", "required", "write", [
-    option("input", "--input <payload.json>", "strict semantic submission JSON; omitted for annotation:<id>"),
-    option("actorKind", "--actor-kind <kind>", "human, agent, script, converter, or validator", true),
-    option("actorName", "--actor-name <name>", "artifact producer name", true),
-    option("confirmedBy", "--confirmed-by <name>", "human who confirmed a Gate verdict"),
-    option("expectedActionBasisSha256", "--expected-action-basis-sha256 <hash>", "bind execution to the current action descriptor"),
-    option("expectedSha256", "--expected-sha256 <hash>", "bind execution to the previewed candidate SHA-256"),
-    option("expectedPlanSha256", "--expected-plan-sha256 <hash>", "bind execution to the previewed submission plan"),
-  ], ["status", "instructions", "check"]),
   command("advance", ["advance"], "advance <subflow-selector>", "control-plane", "Complete or advance one currently authorized subflow", "required", "write", [
     option("transition", "--transition <id>", "profile transition ID or pause, resume, cancel, complete"),
     option("actorName", "--actor-name <name>", "action executor name", true),
@@ -140,7 +130,6 @@ const definitions: readonly CliCommandDefinition[] = [
     option("summary", "--summary", "emit compact Skill descriptions without full provenance"),
   ], ["plugin-list", "plugin-install"]),
   command("plugin-install", ["plugin", "install"], "install <plugin-ids...>", "plugins", "Select and project plugins into the current workspace", "required", "write", [
-    option("expectedPlanSha256", "--expected-plan-sha256 <hash>", "bind execution to the previewed plugin install plan"),
     option("summary", "--summary", "emit aggregate write-plan impact"),
   ], ["plugin-list", "plugin-show", "plugin-uninstall", "plugin-update"]),
   command("plugin-uninstall", ["plugin", "uninstall"], "uninstall <plugin-ids...>", "plugins", "Remove selected plugins from the current workspace", "required", "write", [], ["plugin-list", "plugin-install"]),

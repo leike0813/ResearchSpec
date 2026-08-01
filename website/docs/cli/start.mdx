@@ -1,14 +1,14 @@
 ---
 sidebar_position: 5
 title: "start"
-description: "Atomically start a confirmed template or delegated child subflow"
+description: "Atomically start one independently confirmed route"
 ---
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
-# `researchspec start <subflow>`
+# `researchspec start <route-ref>`
 
-Atomically start a confirmed template or delegated child subflow
+Atomically start one independently confirmed route
 
 - **Group**: Control plane
 - **Workspace**: `required`
@@ -17,19 +17,5 @@ Atomically start a confirmed template or delegated child subflow
 
 | Option | Required | Description |
 | --- | --- | --- |
-| `--input <start.json>` | yes | strict semantic Start JSON |
-| `--actor-kind <kind>` | yes | human, agent, or script |
-| `--actor-name <name>` | yes | Start requester name |
-| `--confirmed-by <name>` | no | human who confirmed an external route |
-| `--expected-action-basis-sha256 <hash>` | no | bind execution to the current action descriptor |
-| `--expected-plan-sha256 <hash>` | no | bind execution to the previewed Start plan |
-
-:::info Runtime binding
-
-Many options require a SHA-256 action-plan or action-basis binding
-(`--expected-action-basis-sha256`, `--expected-plan-sha256`) when the
-command is executed under a plan-bound workflow. Run
-`researchspec instructions <selector> --json` for the exact required
-semantic input and binding rules.
-
-:::
+| `--input <start.yaml|json>` | yes | schema 1 semantic Start input |
+| `--confirmed-by <name>` | yes | human who confirmed this exact instance |

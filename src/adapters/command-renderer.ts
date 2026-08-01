@@ -1,11 +1,9 @@
 import type { ToolDefinition } from "./tools.js";
-import { ARSU_ROUTING_CATALOG } from "../arsu-converter/routing/catalog.js";
-import { renderArsuCommandDescription } from "../arsu-converter/routing/projection.js";
+import { CLI_TOP_LEVEL_COMMANDS, type CliCommandId } from "../cli/command-catalog.js";
 
 export interface CommandContent {
-  id: string;
-  skillId: string;
-  family: "arsu" | "companion";
+  id: CliCommandId;
+  family: "cli";
   name: string;
   description: string;
   category: string;
@@ -13,14 +11,13 @@ export interface CommandContent {
   body: string;
 }
 
-export const ARSU_COMMAND_CONTENTS: readonly CommandContent[] = ARSU_ROUTING_CATALOG.skills.map(command);
+export const COMMAND_WRAPPER_CONTENTS: readonly CommandContent[] = CLI_TOP_LEVEL_COMMANDS.map(commandContent);
 
 export function renderCommand(tool: ToolDefinition, content: CommandContent): string {
   if (!tool.command) throw new Error(`${tool.id} does not support commands.`);
-  let body = tool.command.replaceColon ? content.body.replaceAll("/researchspec:", "/researchspec-") : content.body;
-  if (tool.command.injectArguments && !body.includes("$@") && !body.includes("$ARGUMENTS")) {
-    body = `**Provided arguments**: $@\n\n${body}`;
-  }
+  const argumentToken = tool.command.injectArguments ? "$@" : "$ARGUMENTS";
+  let body = content.body.replaceAll("{{arguments}}", argumentToken);
+  if (tool.command.replaceColon) body = body.replaceAll("/researchspec:", "/researchspec-");
   const description = yamlScalar(content.description);
   const name = `researchspec-${content.id}`;
   const category = yamlScalar(content.category);
@@ -42,17 +39,16 @@ export function renderCommand(tool: ToolDefinition, content: CommandContent): st
   }
 }
 
-function command(skill: (typeof ARSU_ROUTING_CATALOG.skills)[number]): CommandContent {
-  const id = skill.skill_id;
+function commandContent(command: (typeof CLI_TOP_LEVEL_COMMANDS)[number]): CommandContent {
+  const id = command.id;
   return {
     id,
-    skillId: id,
-    family: "arsu",
-    name: skill.title,
-    description: renderArsuCommandDescription(skill),
+    family: "cli",
+    name: `ResearchSpec ${id}`,
+    description: command.description,
     category: "researchspec",
-    tags: ["researchspec", "arsu"],
-    body: `Use the installed \`${id}\` skill. Discover the nearest \`researchspec/\` workspace, run \`researchspec check\`, and follow the skill while treating contracts and ledgers as the source of truth. Do not call an LLM API or silently accept pending decisions.`,
+    tags: ["researchspec", "cli", id],
+    body: `Run \`researchspec ${id} {{arguments}}\` using the user's provided arguments. Use \`researchspec ${id} --help\` when syntax is uncertain. Preserve structured diagnostics and the current file-ownership boundaries; this wrapper is an adapter to the packaged CLI, not a separate workflow authority.`,
   };
 }
 

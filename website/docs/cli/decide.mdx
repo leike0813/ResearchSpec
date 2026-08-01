@@ -1,12 +1,12 @@
 ---
-sidebar_position: 15
+sidebar_position: 14
 title: "decide"
 description: "Resolve a pending human decision"
 ---
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
-# `researchspec decide [item]`
+# `researchspec decide <selector>`
 
 Resolve a pending human decision
 
@@ -17,18 +17,11 @@ Resolve a pending human decision
 
 | Option | Required | Description |
 | --- | --- | --- |
-| `--decision <choice>` | no | accept, reject, or postpone |
+| `--decision <choice>` | no | accept, reject, defer, or supersede |
 | `--actor-name <name>` | no | human actor name |
 | `--reason <text>` | no | decision rationale |
-| `--expected-action-basis-sha256 <hash>` | no | bind execution to the current action descriptor |
-| `--expected-plan-sha256 <hash>` | no | bind execution to the previewed decision plan |
-
-:::info Runtime binding
-
-Many options require a SHA-256 action-plan or action-basis binding
-(`--expected-action-basis-sha256`, `--expected-plan-sha256`) when the
-command is executed under a plan-bound workflow. Run
-`researchspec instructions <selector> --json` for the exact required
-semantic input and binding rules.
-
-:::
+| `--verdict <verdict>` | no | Gate verdict: pass, pass_with_conditions, or fail |
+| `--kind <kind>` | no | local Decision kind: scope, claim, structure, or branch |
+| `--choice <choice>` | no | confirmed local Decision choice |
+| `--override` | no | approve an override of the current failed Gate |
+| `--evidence-role <role>` | no | owning handoff role used as Gate evidence |

@@ -11,15 +11,8 @@ const WORKFLOWS: readonly CompanionWorkflowSource[] = [
 export const COMPANION_INTENTS: readonly CompanionIntent[] = WORKFLOWS.map((workflow) => {
   const skillId = `researchspec-${workflow.id}` as const;
   return {
-    id: workflow.id,
+    ...workflow,
     skillId,
-    family: "companion",
-    name: workflow.name,
-    description: workflow.description,
-    category: "researchspec",
-    tags: ["researchspec", "companion", workflow.id],
-    instructions: workflow.instructions,
-    body: `Use the installed \`${skillId}\` skill. Follow its complete workflow and pass through provided arguments. Do not duplicate its semantic procedure in this command wrapper.`,
   };
 });
 

@@ -6,10 +6,10 @@ import { test } from "node:test";
 import { planToolDelivery } from "../src/adapters/delivery.js";
 import { isDomainSkillInstallation, type ManagedInstallation } from "../src/adapters/installations.js";
 import { TOOL_IDS, TOOLS } from "../src/adapters/tools.js";
-import { handlePluginInstall, handlePluginInstructions, handlePluginList, handlePluginShow, handlePluginUninstall, handlePluginUpdate, handleUpdate } from "../src/cli/handlers.js";
+import { handleCurrentUpdate, handlePluginInstall, handlePluginInstructions, handlePluginList, handlePluginShow, handlePluginUninstall, handlePluginUpdate } from "../src/cli/handlers.js";
 import type { CommandContext } from "../src/cli/types.js";
-import { runWorkspaceChecks } from "../src/core/validation/check.js";
-import { loadWorkspaceSnapshot } from "../src/core/workspace/snapshot.js";
+import { runCurrentWorkspaceChecks } from "../src/core/validation/current-check.js";
+import { loadCurrentWorkspaceIndex } from "../src/core/runtime/workspace-index.js";
 import { availableDomains, loadPluginRegistry, PluginRegistryError, resolveDomainSelection, validatePluginRegistry } from "../src/plugins/registry.js";
 import { pluginStatusSummary } from "../src/plugins/status.js";
 import { cleanup, runCli, tempProject } from "./helpers/cli.js";
@@ -67,10 +67,10 @@ void test("production domain installation projects Scientific Agent Skills witho
     for (const id of ["cirq", "pennylane", "qiskit"]) {
       assert.equal(await exists(path.join(root, ".claude/skills", `scientific-agent-skills-${id}`, "SKILL.md")), true);
     }
-    const snapshot = await loadWorkspaceSnapshot(path.join(root, "researchspec"));
+    const snapshot = await loadCurrentWorkspaceIndex(path.join(root, "researchspec"));
     assert.deepEqual(pluginStatusSummary(snapshot.config, snapshot.manifest, registry).selected, ["quantum-physics"]);
     const manifest = JSON.parse(await readFile(path.join(root, "researchspec/tool-installation-manifest.json"), "utf8")) as { installations: ManagedInstallation[] };
-    assert.equal(manifest.installations.filter((item) => item.source.kind === "command").length, 8);
+    assert.equal(manifest.installations.filter((item) => item.source.kind === "command").length, 16);
     await handlePluginUninstall(["quantum-physics"], context(root), registry);
     assert.equal(await exists(path.join(root, ".claude/skills/scientific-agent-skills-qiskit/SKILL.md")), false);
   } finally { await cleanup(root); }
@@ -92,7 +92,7 @@ void test("production Education domain installs complete static Skills without n
       assert.equal(await exists(path.join(skillRoot, "scripts")), false);
     }
     const manifest = JSON.parse(await readFile(path.join(root, "researchspec/tool-installation-manifest.json"), "utf8")) as { installations: ManagedInstallation[] };
-    assert.equal(manifest.installations.filter((item) => item.source.kind === "command").length, 8);
+    assert.equal(manifest.installations.filter((item) => item.source.kind === "command").length, 16);
     await handlePluginUninstall(["education-systems"], context(root), registry);
     assert.equal(await exists(path.join(root, ".claude/skills", educationSkills[0] ?? "missing", "SKILL.md")), false);
   } finally { await cleanup(root); }
@@ -153,7 +153,7 @@ void test("resolved domain delivery reaches all adapters without wrappers or scr
     assert.equal(new Set(domainFiles.map((item) => item.tool_id)).size, 31);
     assert.deepEqual([...new Set(domainFiles.map((item) => item.source.skill_id))].sort(), ["research-tables", "rock-mechanics"]);
     assert.ok(domainFiles.every((item) => item.source.vendor_id && item.source.vendor_release));
-    assert.equal(delivery.installations.filter((item) => item.source.kind === "command").length, TOOLS.filter((tool) => tool.command).length * 8);
+    assert.equal(delivery.installations.filter((item) => item.source.kind === "command").length, TOOLS.filter((tool) => tool.command).length * 16);
     assert.equal(await exists(path.join(root, "researchspec-plugin-script-executed")), false);
   } finally {
     if (previousCodexHome === undefined) Reflect.deleteProperty(process.env, "CODEX_HOME"); else process.env.CODEX_HOME = previousCodexHome;
@@ -168,19 +168,22 @@ void test("domain selection persists without tools and tool update backfills the
     const registry = await loadPluginRegistry(FIXTURE_ROOT);
     const install = await handlePluginInstall(["geoscience"], {}, context(root), registry);
     assert.ok(install.diagnostics.some((item) => item.code === "plugin_projection_deferred"));
-    await handleUpdate(undefined, { tools: "forgecode" }, context(root), registry);
+    await handleCurrentUpdate(undefined, { tools: "forgecode" }, context(root), registry);
     const script = path.join(root, ".forge/skills/rock-mechanics/scripts/calculate.py");
     assert.equal(await readFile(script, "utf8"), await readFile(path.join(FIXTURE_ROOT, "vendors/domain-source/rock-mechanics/scripts/calculate.py"), "utf8"));
     assert.equal(await exists(path.join(root, ".forge/skills/research-tables/SKILL.md")), true);
-    const snapshot = await loadWorkspaceSnapshot(path.join(root, "researchspec"));
+    const snapshot = await loadCurrentWorkspaceIndex(path.join(root, "researchspec"));
     assert.deepEqual(pluginStatusSummary(snapshot.config, snapshot.manifest, registry), { selected: ["geoscience"], available: ["geoscience", "quantitative-methods"], unavailable: [], projected: ["geoscience"], resolved_skills: ["research-tables", "rock-mechanics"] });
-    assert.equal((await runWorkspaceChecks(snapshot.workspace, "plugins", false, registry)).ok, true);
+    assert.equal((await runCurrentWorkspaceChecks(snapshot.workspace, "plugins", false)).ok, true);
     await rm(script);
-    assert.ok((await runWorkspaceChecks(snapshot.workspace, "plugins", false, registry)).diagnostics.some((item) => item.code === "plugin_file_missing"));
+    await assert.rejects(
+      handlePluginInstructions("rock-mechanics", context(root), registry),
+      (error: unknown) => isCliCode(error, "plugin_skill_projection_drift"),
+    );
   } finally { await cleanup(root); }
 });
 
-void test("agent install is plan-bound and installed Skill instructions require a clean projection", async () => {
+void test("agent install requires explicit consent and installed Skill instructions require a clean projection", async () => {
   const root = await tempProject();
   const fixture = await fixtureCopy();
   try {
@@ -189,27 +192,22 @@ void test("agent install is plan-bound and installed Skill instructions require 
     const preview = await handlePluginInstall(
       ["geoscience"],
       { summary: true },
-      { ...context(root), dryRun: true, interactive: false },
+      { ...context(root), dryRun: true, interactive: false, yes: false },
       registry,
     );
-    const previewData = preview.data as { plan_sha256: string; plan: { operation_count: number; actions: Record<string, number> } };
-    assert.match(previewData.plan_sha256, /^[a-f0-9]{64}$/);
+    const previewData = preview.data as { plan: { operation_count: number; actions: Record<string, number> } };
     assert.ok(previewData.plan.operation_count > 0);
     await assert.rejects(
-      handlePluginInstall(["geoscience"], {}, { ...context(root), interactive: false }, registry),
+      handlePluginInstall(["geoscience"], {}, { ...context(root), interactive: false, yes: false }, registry),
       (error: unknown) => isCliCode(error, "confirmation_required"),
-    );
-    await assert.rejects(
-      handlePluginInstall(["geoscience"], { expectedPlanSha256: "0".repeat(64) }, { ...context(root), interactive: false }, registry),
-      (error: unknown) => isCliCode(error, "plugin_install_plan_conflict"),
     );
     const installed = await handlePluginInstall(
       ["geoscience"],
-      { expectedPlanSha256: previewData.plan_sha256, summary: true },
-      { ...context(root), interactive: false },
+      { summary: true },
+      { ...context(root), interactive: false, yes: true },
       registry,
     );
-    assert.equal((installed.data as { plan_sha256: string }).plan_sha256, previewData.plan_sha256);
+    assert.equal("plan_sha256" in (installed.data as Record<string, unknown>), false);
 
     const instructions = await handlePluginInstructions("rock-mechanics", context(root), registry);
     const packet = instructions.data as {

@@ -9,7 +9,7 @@ export function renderNavigateRoutingProjection(): string {
     `Skill intents: ${skill.intents.join("; ")}.`,
     `Near misses: ${skill.near_misses.map((item) => `${item.intent} -> \`${item.route_ref}\` (${item.reason})`).join("; ")}.`,
     "",
-    "| Route | Intent | Primary artifacts | Prerequisites | Risk | Formal Gate policy | Cost |",
+    "| Route | Intent | Boundary outputs | Prerequisites | Risk | Formal Gate policy | Cost |",
     "| --- | --- | --- | --- | --- | --- | --- |",
     ...skill.routes.map(renderRouteRow),
   ].join("\n"));
@@ -31,7 +31,11 @@ function renderRouteRow(route: ArsuRouteDefinition): string {
 }
 
 function renderPrerequisiteGroup(group: PrerequisiteGroup): string {
-  const requirements = group.requirements.map((item) => `${item.kind}:${item.id}`).join(group.operator === "all_of" ? " + " : " OR ");
+  const requirements = group.requirements.map((item) => {
+    if (item.kind === "artifact") return `handoff-role:${item.id}`;
+    if (item.kind === "contract") return `stable-spec:${item.id}`;
+    return `user-input:${item.id}`;
+  }).join(group.operator === "all_of" ? " + " : " OR ");
   const fallback = group.fallback_route_refs.length ? `; fallback ${group.fallback_route_refs.join(", ")}` : "";
   return `${group.operator}(${requirements}${fallback})`;
 }

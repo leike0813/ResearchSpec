@@ -10,7 +10,7 @@ workflow frontier or authorize a workspace write.
 1. Run `researchspec --help` to discover the public commands.
 2. Run `researchspec <command> --help` (or the relevant `plugin` subcommand help) to inspect syntax and options.
 3. For a current workspace action, run `researchspec status --json`, select a returned action selector, and read `researchspec instructions <selector> --json`.
-4. Follow the action descriptor's semantic input, availability basis, execution policy and returned `next_selectors`; static help never supplies those facts.
+4. Follow the selector-specific prerequisites, handoff roles, confirmation points and allowed actions; static help never supplies those facts.
 
 ## Global options
 
@@ -24,22 +24,21 @@ workflow frontier or authorize a workspace write.
 | `--yes` | skip low-risk confirmations |
 | `--quiet` | suppress nonessential human output |
 
-## Action selector families
+## Current selector families
 
 A valid selector shape does not imply that the action is available in the current workspace.
 
 | Family | Accepted forms |
 | --- | --- |
-| `subflow` | `subflow:tpl-<id>`<br>`subflow:sf-<id>`<br>`subflow:sf-<instance>/<node>` |
-| `obligation` | `obligation:sf-<instance>/<id>` |
-| `gate` | `gate:<id>`<br>`gate:sf-<instance>/<id>` |
-| `completion` | `completion:sf-<instance>/<id>` |
-| `case-action` | `case-action:<id>` |
-| `annotation` | `annotation:<id>` |
-| `patch` | `patch:<id>` |
-| `change` | `change:<id>` |
-| `work` | `work:sf-<instance>/<node>` |
-| `transition` | `transition:sf-<instance>/<node>` |
+| `route` | `route:<skill-id>:<mode>` |
+| `subflow` | `subflow:<instance-id>` |
+| `gate` | `gate:<instance-id>/<gate-id>` |
+| `decision` | `decision:<instance-id>/<decision-id>` |
+| `change` | `change:<change-id>` |
+| `handoff` | `handoff:<instance-id>` |
+| `spec` | `spec:project`<br>`spec:sources`<br>`spec:claims`<br>`spec:manuscript` |
+| `profile` | `profile:academic-pipeline` |
+| `tool` | `tool:<tool-id>` |
 
 ## Bootstrap
 
@@ -54,7 +53,6 @@ Initialize or safely extend a ResearchSpec workspace
 | Command option | Required | Purpose |
 | --- | --- | --- |
 | `--tools <ids>` | no | all, none, or comma-separated tool IDs |
-| `--profile <mode>` | no | adaptive or strict runtime profile |
 
 ### `researchspec update [path]`
 
@@ -67,15 +65,12 @@ Refresh selected generated agent files
 | Command option | Required | Purpose |
 | --- | --- | --- |
 | `--tools <ids>` | no | refresh/add a tool subset |
-| `--migrate-runtime` | no | migrate a valid Schema 0.2 runtime to adaptive |
-| `--rollback <migration-id>` | no | restore the pre-migration runtime captured by a migration |
-| `--expected-plan-sha256 <hash>` | no | bind execution to the previewed migration or rollback plan |
 
 ## Control plane
 
 ### `researchspec status`
 
-Show current run and pending-item status
+Show derived current workspace and subflow status
 
 - Workspace: `required`
 - Static effect: `read`
@@ -83,50 +78,15 @@ Show current run and pending-item status
 
 ### `researchspec instructions <selector>`
 
-Show dynamic instructions for a runtime action selector
+Show current route, subflow, Gate, Decision, change, or handoff instructions
 
 - Workspace: `required`
 - Static effect: `read`
-- Related commands: `status`, `start`, `submit`, `advance`, `decide`
+- Related commands: `status`, `start`, `advance`, `decide`
 
-### `researchspec start <subflow>`
+### `researchspec start <route-ref>`
 
-Atomically start a confirmed template or delegated child subflow
-
-- Workspace: `required`
-- Static effect: `write`
-- Related commands: `status`, `instructions`
-
-| Command option | Required | Purpose |
-| --- | --- | --- |
-| `--input <start.json>` | yes | strict semantic Start JSON |
-| `--actor-kind <kind>` | yes | human, agent, or script |
-| `--actor-name <name>` | yes | Start requester name |
-| `--confirmed-by <name>` | no | human who confirmed an external route |
-| `--expected-action-basis-sha256 <hash>` | no | bind execution to the current action descriptor |
-| `--expected-plan-sha256 <hash>` | no | bind execution to the previewed Start plan |
-
-### `researchspec submit <runtime-item>`
-
-Submit a runtime candidate, attempt, evidence, annotation, patch, or confirmed Gate verdict
-
-- Workspace: `required`
-- Static effect: `write`
-- Related commands: `status`, `instructions`, `check`
-
-| Command option | Required | Purpose |
-| --- | --- | --- |
-| `--input <payload.json>` | no | strict semantic submission JSON; omitted for annotation:<id> |
-| `--actor-kind <kind>` | yes | human, agent, script, converter, or validator |
-| `--actor-name <name>` | yes | artifact producer name |
-| `--confirmed-by <name>` | no | human who confirmed a Gate verdict |
-| `--expected-action-basis-sha256 <hash>` | no | bind execution to the current action descriptor |
-| `--expected-sha256 <hash>` | no | bind execution to the previewed candidate SHA-256 |
-| `--expected-plan-sha256 <hash>` | no | bind execution to the previewed submission plan |
-
-### `researchspec advance <transition>`
-
-Complete or advance one currently authorized runtime action
+Atomically start one independently confirmed route
 
 - Workspace: `required`
 - Static effect: `write`
@@ -134,16 +94,27 @@ Complete or advance one currently authorized runtime action
 
 | Command option | Required | Purpose |
 | --- | --- | --- |
-| `--actor-kind <kind>` | yes | agent or script |
+| `--input <start.yaml|json>` | yes | schema 1 semantic Start input |
+| `--confirmed-by <name>` | yes | human who confirmed this exact instance |
+
+### `researchspec advance <subflow-selector>`
+
+Complete or advance one currently authorized subflow
+
+- Workspace: `required`
+- Static effect: `write`
+- Related commands: `status`, `instructions`
+
+| Command option | Required | Purpose |
+| --- | --- | --- |
+| `--transition <id>` | no | profile transition ID or pause, resume, cancel, complete |
 | `--actor-name <name>` | yes | action executor name |
-| `--expected-action-basis-sha256 <hash>` | no | bind execution to the current action descriptor |
-| `--expected-plan-sha256 <hash>` | no | bind execution to the previewed action plan |
 
 ## Inspection
 
 ### `researchspec check [target]`
 
-Check all, contracts, runtime, artifacts, tools, plugins, or literature-adapters
+Check specs, profiles, subflows, changes, handoffs, tools, plugins, or literature-adapters
 
 - Workspace: `required`
 - Static effect: `read`
@@ -155,7 +126,7 @@ Check all, contracts, runtime, artifacts, tools, plugins, or literature-adapters
 
 ### `researchspec list [type]`
 
-List paginated runtime collections
+List current subflows, changes, Gates, Decisions, handoffs, profiles, tools, diagnostics, or derived history
 
 - Workspace: `required`
 - Static effect: `read`
@@ -166,9 +137,9 @@ List paginated runtime collections
 | `--limit <count>` | no | page size from 1 to 50 |
 | `--cursor <cursor>` | no | opaque cursor returned by the prior page |
 
-### `researchspec show <item>`
+### `researchspec show <selector>`
 
-Show a canonical or globally unique item
+Show one exact current item, stable spec, or project profile
 
 - Workspace: `required`
 - Static effect: `read`
@@ -178,22 +149,17 @@ Show a canonical or globally unique item
 
 ### `researchspec doctor`
 
-Diagnose runtime damage or apply one plan-bound deterministic repair
+Diagnose current workspace contracts without modifying them
 
 - Workspace: `required`
-- Static effect: `conditional-write`
+- Static effect: `read`
 - Related commands: `check`, `status`
-
-| Command option | Required | Purpose |
-| --- | --- | --- |
-| `--repair <finding-id>` | no | preview or apply a deterministically repairable finding |
-| `--expected-plan-sha256 <hash>` | no | bind execution to the previewed Doctor repair plan |
 
 ## Context
 
-### `researchspec handoff`
+### `researchspec handoff <subflow-selector>`
 
-Render the current handoff view
+Render or replace one directly editable subflow handoff
 
 - Workspace: `required`
 - Static effect: `conditional-write`
@@ -201,12 +167,11 @@ Render the current handoff view
 
 | Command option | Required | Purpose |
 | --- | --- | --- |
-| `--stdout` | no | print without writing |
-| `--out <path>` | no | output path |
+| `--input <handoff.yaml|json>` | no | semantic inputs, outputs, and optional Markdown body |
 
 ### `researchspec pack`
 
-Create a deterministic context bundle
+Create a deterministic bounded current-workspace context bundle
 
 - Workspace: `required`
 - Static effect: `write`
@@ -214,14 +179,14 @@ Create a deterministic context bundle
 
 | Command option | Required | Purpose |
 | --- | --- | --- |
-| `--out <path>` | no | output ZIP path |
-| `--include-artifacts` | no | include safe registered artifacts |
+| `--output <zip>` | yes | output ZIP path |
+| `--scope <scope>` | no | all, specs, profile, subflows, changes, subflow:<id>, or change:<id> |
 
 ## Governance
 
 ### `researchspec propose <change-id>`
 
-Create a validated pending contract change
+Create an adaptable project change document package
 
 - Workspace: `required`
 - Static effect: `write`
@@ -229,13 +194,10 @@ Create a validated pending contract change
 
 | Command option | Required | Purpose |
 | --- | --- | --- |
-| `--input <payload.json>` | yes | strict semantic proposal JSON |
-| `--actor-kind <kind>` | yes | human or agent |
-| `--actor-name <name>` | yes | proposal author name |
-| `--expected-action-basis-sha256 <hash>` | no | bind execution to the current action descriptor |
-| `--expected-plan-sha256 <hash>` | no | bind execution to the previewed proposal plan |
+| `--targets <specs>` | yes | comma-separated project.md, sources.yaml, claims.yaml, or manuscript.yaml |
+| `--with <documents>` | no | optional comma-separated design,tasks,delta documents |
 
-### `researchspec decide [item]`
+### `researchspec decide <selector>`
 
 Resolve a pending human decision
 
@@ -245,15 +207,18 @@ Resolve a pending human decision
 
 | Command option | Required | Purpose |
 | --- | --- | --- |
-| `--decision <choice>` | no | accept, reject, or postpone |
+| `--decision <choice>` | no | accept, reject, defer, or supersede |
 | `--actor-name <name>` | no | human actor name |
 | `--reason <text>` | no | decision rationale |
-| `--expected-action-basis-sha256 <hash>` | no | bind execution to the current action descriptor |
-| `--expected-plan-sha256 <hash>` | no | bind execution to the previewed decision plan |
+| `--verdict <verdict>` | no | Gate verdict: pass, pass_with_conditions, or fail |
+| `--kind <kind>` | no | local Decision kind: scope, claim, structure, or branch |
+| `--choice <choice>` | no | confirmed local Decision choice |
+| `--override` | no | approve an override of the current failed Gate |
+| `--evidence-role <role>` | no | owning handoff role used as Gate evidence |
 
-### `researchspec archive [item]`
+### `researchspec archive <change-id>`
 
-Archive a resolved change or draft patch
+Archive an applied, rejected, deferred, or superseded project change
 
 - Workspace: `required`
 - Static effect: `write`
@@ -304,7 +269,6 @@ Select and project plugins into the current workspace
 
 | Command option | Required | Purpose |
 | --- | --- | --- |
-| `--expected-plan-sha256 <hash>` | no | bind execution to the previewed plugin install plan |
 | `--summary` | no | emit aggregate write-plan impact |
 
 ### `researchspec plugin uninstall <plugin-ids...>`

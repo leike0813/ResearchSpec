@@ -19,6 +19,7 @@ import {
   validateEducationAgentSkillsSnapshotIdentity,
   type EducationAgentSkillsAudit,
 } from "../src/vendor-audits/education-agent-skills.js";
+import { CLI_TOP_LEVEL_COMMANDS } from "../src/cli/command-catalog.js";
 import { gitOutput } from "./helpers/vendor-audit.js";
 import { runCli } from "./helpers/cli.js";
 
@@ -176,9 +177,9 @@ void test("approved ingestion publishes only reviewed static Skills without chan
   assert.match(report, /来源哈希绑定批准|source-hash-bound approval/);
   const help = runCli(["--help"]);
   assert.equal(help.status, 0);
-  const publicCommands = ["init", "update", "status", "instructions", "start", "submit", "advance", "check", "doctor", "list", "show", "handoff", "pack", "propose", "decide", "archive", "plugin"];
-  assert.equal(publicCommands.length, 17);
-  for (const command of publicCommands) assert.match(help.stdout, new RegExp(`\\b${command}\\b`));
+  assert.equal(CLI_TOP_LEVEL_COMMANDS.length, 16);
+  for (const command of CLI_TOP_LEVEL_COMMANDS) assert.match(help.stdout, new RegExp(`\\b${command.id}\\b`));
+  assert.doesNotMatch(help.stdout, /\bsubmit\b/);
   assert.doesNotMatch(help.stdout, /education-agent-skills/);
 });
 

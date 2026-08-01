@@ -1,14 +1,14 @@
 ---
-sidebar_position: 14
+sidebar_position: 13
 title: "propose"
-description: "Create a validated pending contract change"
+description: "Create an adaptable project change document package"
 ---
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
 # `researchspec propose <change-id>`
 
-Create a validated pending contract change
+Create an adaptable project change document package
 
 - **Group**: Governance
 - **Workspace**: `required`
@@ -17,18 +17,5 @@ Create a validated pending contract change
 
 | Option | Required | Description |
 | --- | --- | --- |
-| `--input <payload.json>` | yes | strict semantic proposal JSON |
-| `--actor-kind <kind>` | yes | human or agent |
-| `--actor-name <name>` | yes | proposal author name |
-| `--expected-action-basis-sha256 <hash>` | no | bind execution to the current action descriptor |
-| `--expected-plan-sha256 <hash>` | no | bind execution to the previewed proposal plan |
-
-:::info Runtime binding
-
-Many options require a SHA-256 action-plan or action-basis binding
-(`--expected-action-basis-sha256`, `--expected-plan-sha256`) when the
-command is executed under a plan-bound workflow. Run
-`researchspec instructions <selector> --json` for the exact required
-semantic input and binding rules.
-
-:::
+| `--targets <specs>` | yes | comma-separated project.md, sources.yaml, claims.yaml, or manuscript.yaml |
+| `--with <documents>` | no | optional comma-separated design,tasks,delta documents |

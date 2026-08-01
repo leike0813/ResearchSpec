@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import type { Diagnostic } from "../core/validation/types.js";
 import { planFile, type PlannedWrite, sha256 } from "../core/workspace/write-plan.js";
 import { COMPANION_INTENTS, renderCompanionSkill } from "./companion/index.js";
-import { ARSU_COMMAND_CONTENTS, renderCommand } from "./command-renderer.js";
+import { COMMAND_WRAPPER_CONTENTS, renderCommand } from "./command-renderer.js";
 import { renderCliHandbook } from "../cli/handbook.js";
 import { getTool } from "./tools.js";
 import { ARSU_SKILL_IDS } from "../arsu-converter/routing/contracts.js";
@@ -108,7 +108,7 @@ export async function planToolDelivery(input: {
         diagnostics.push({ severity: "info", code: "commands_not_supported", message: `${tool.name} supports skills only.`, blocking: false, details: { tool_id: tool.id } });
         continue;
       }
-      for (const content of [...ARSU_COMMAND_CONTENTS, ...COMPANION_INTENTS]) {
+      for (const content of COMMAND_WRAPPER_CONTENTS) {
         const target = tool.command.path(content.id, input.projectRoot);
         const scope = tool.command.scope;
         const manifestPath = scope === "shared-global" ? target : posix(path.relative(input.projectRoot, target));

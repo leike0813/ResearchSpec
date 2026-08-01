@@ -39,10 +39,10 @@
 
 ## 4. CLI, Companion And Projection Convergence
 
-- [ ] 4.1 Remove `submit` and obsolete runtime options, register the sixteen-command selector surface,
+- [x] 4.1 Remove `submit` and obsolete runtime options, register the sixteen-command selector surface,
   and finish current command handlers.
-- [ ] 4.2 Rewrite Navigate, Propose, Decide and Verify against current instructions and file ownership.
-- [ ] 4.3 Regenerate static Skill/wrapper projections and restore the applicable full CLI test suite.
+- [x] 4.2 Rewrite Navigate, Propose, Decide and Verify against current instructions and file ownership.
+- [x] 4.3 Regenerate static Skill/wrapper projections and restore the applicable full CLI test suite.
 
 ## 5. Revision Patch And Annotation Intake
 

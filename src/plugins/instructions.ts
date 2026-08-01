@@ -123,11 +123,11 @@ export async function buildPluginSkillInstructions(
       producer_unchanged: true,
       executes_resources: false,
       forbidden_writes: [
-        "researchspec/runs/current/state.yaml",
-        "researchspec/runs/current/artifact-registry.json",
-        "researchspec/runs/current/decision-ledger.jsonl",
-        "researchspec/runs/current/gate-ledger.jsonl",
-        "researchspec/runs/current/receipts/**",
+        "researchspec/specs/**",
+        "researchspec/profiles/**",
+        "researchspec/subflows/*/control.yaml",
+        "researchspec/subflows/*/handoff.md",
+        "researchspec/changes/**",
       ],
     },
   };

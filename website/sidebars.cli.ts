@@ -8,7 +8,6 @@ export const cliSidebar = [
     "cli/status",
     "cli/instructions",
     "cli/start",
-    "cli/submit",
     "cli/advance",
   ] },
   { type: "category" as const, label: "Inspection", items: [

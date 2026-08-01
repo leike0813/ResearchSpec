@@ -1,14 +1,14 @@
 ---
-sidebar_position: 8
+sidebar_position: 7
 title: "check"
-description: "Check all, contracts, runtime, artifacts, tools, plugins, or literature-adapters"
+description: "Check specs, profiles, subflows, changes, handoffs, tools, plugins, or literature-adapters"
 ---
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
 # `researchspec check [target]`
 
-Check all, contracts, runtime, artifacts, tools, plugins, or literature-adapters
+Check specs, profiles, subflows, changes, handoffs, tools, plugins, or literature-adapters
 
 - **Group**: Inspection
 - **Workspace**: `required`
@@ -18,13 +18,3 @@ Check all, contracts, runtime, artifacts, tools, plugins, or literature-adapters
 | Option | Required | Description |
 | --- | --- | --- |
 | `--strict` | no | treat warnings as failures |
-
-:::info Runtime binding
-
-Many options require a SHA-256 action-plan or action-basis binding
-(`--expected-action-basis-sha256`, `--expected-plan-sha256`) when the
-command is executed under a plan-bound workflow. Run
-`researchspec instructions <selector> --json` for the exact required
-semantic input and binding rules.
-
-:::

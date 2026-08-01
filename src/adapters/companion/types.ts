@@ -1,5 +1,3 @@
-import type { CommandContent } from "../command-renderer.js";
-
 export const COMPANION_WORKFLOW_IDS = ["navigate", "propose", "decide", "verify"] as const;
 export type CompanionWorkflowId = typeof COMPANION_WORKFLOW_IDS[number];
 export type CompanionSkillId = `researchspec-${CompanionWorkflowId}`;
@@ -11,9 +9,7 @@ export interface CompanionWorkflowSource {
   instructions: string;
 }
 
-export interface CompanionIntent extends CommandContent {
-  family: "companion";
+export interface CompanionIntent extends CompanionWorkflowSource {
   id: CompanionWorkflowId;
   skillId: CompanionSkillId;
-  instructions: string;
 }

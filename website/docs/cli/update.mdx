@@ -18,16 +18,3 @@ Refresh selected generated agent files
 | Option | Required | Description |
 | --- | --- | --- |
 | `--tools <ids>` | no | refresh/add a tool subset |
-| `--migrate-runtime` | no | migrate a valid Schema 0.2 runtime to adaptive |
-| `--rollback <migration-id>` | no | restore the pre-migration runtime captured by a migration |
-| `--expected-plan-sha256 <hash>` | no | bind execution to the previewed migration or rollback plan |
-
-:::info Runtime binding
-
-Many options require a SHA-256 action-plan or action-basis binding
-(`--expected-action-basis-sha256`, `--expected-plan-sha256`) when the
-command is executed under a plan-bound workflow. Run
-`researchspec instructions <selector> --json` for the exact required
-semantic input and binding rules.
-
-:::

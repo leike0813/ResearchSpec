@@ -18,14 +18,3 @@ Initialize or safely extend a ResearchSpec workspace
 | Option | Required | Description |
 | --- | --- | --- |
 | `--tools <ids>` | no | all, none, or comma-separated tool IDs |
-| `--profile <mode>` | no | adaptive or strict runtime profile |
-
-:::info Runtime binding
-
-Many options require a SHA-256 action-plan or action-basis binding
-(`--expected-action-basis-sha256`, `--expected-plan-sha256`) when the
-command is executed under a plan-bound workflow. Run
-`researchspec instructions <selector> --json` for the exact required
-semantic input and binding rules.
-
-:::

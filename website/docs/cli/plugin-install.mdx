@@ -1,5 +1,5 @@
 ---
-sidebar_position: 20
+sidebar_position: 19
 title: "plugin install"
 description: "Select and project plugins into the current workspace"
 ---
@@ -17,15 +17,4 @@ Select and project plugins into the current workspace
 
 | Option | Required | Description |
 | --- | --- | --- |
-| `--expected-plan-sha256 <hash>` | no | bind execution to the previewed plugin install plan |
 | `--summary` | no | emit aggregate write-plan impact |
-
-:::info Runtime binding
-
-Many options require a SHA-256 action-plan or action-basis binding
-(`--expected-action-basis-sha256`, `--expected-plan-sha256`) when the
-command is executed under a plan-bound workflow. Run
-`researchspec instructions <selector> --json` for the exact required
-semantic input and binding rules.
-
-:::

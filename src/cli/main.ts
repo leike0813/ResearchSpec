@@ -3,11 +3,6 @@ import path from "node:path";
 import { Command, CommanderError, InvalidArgumentError } from "commander";
 
 import {
-  handleSubmit,
-  handlePluginInstall, handlePluginInstructions, handlePluginList, handlePluginShow, handlePluginUninstall, handlePluginUpdate,
-  type PluginInstallOptions, type PluginListOptions, type PluginShowOptions, type SubmitOptions,
-} from "./handlers.js";
-import {
   handleCurrentAdvance,
   handleCurrentCheck,
   handleCurrentDecide,
@@ -33,7 +28,16 @@ import {
   type CurrentProposeOptions,
   type CurrentStartOptions,
   type CurrentUpdateOptions,
-} from "./current-handlers.js";
+  handlePluginInstall,
+  handlePluginInstructions,
+  handlePluginList,
+  handlePluginShow,
+  handlePluginUninstall,
+  handlePluginUpdate,
+  type PluginInstallOptions,
+  type PluginListOptions,
+  type PluginShowOptions,
+} from "./handlers.js";
 import { applyGlobalCliOptions, cliHelpTarget, registerCliCommand } from "./command-catalog.js";
 import { presentResult } from "./presenter.js";
 import { CliError, failure, type CommandContext, type CommandResult } from "./types.js";
@@ -94,8 +98,6 @@ function registerCommands(program: Command, run: Runner): void {
     .action(async (selector: string, _options: Record<string, never>, command: Command) => run("instructions", command, () => handleCurrentInstructions(selector, commandContext("instructions", command))));
   registerCliCommand(program, "start")
     .action(async (routeRef: string, options: CurrentStartOptions, command: Command) => run("start", command, () => handleCurrentStart(routeRef, options, commandContext("start", command))));
-  registerCliCommand(program, "submit")
-    .action(async (runtimeItem: string, options: SubmitOptions, command: Command) => run("submit", command, () => handleSubmit(runtimeItem, options, commandContext("submit", command))));
   registerCliCommand(program, "advance")
     .action(async (selector: string, options: CurrentAdvanceOptions, command: Command) => run("advance", command, () => handleCurrentAdvance(selector, options, commandContext("advance", command))));
   registerCliCommand(program, "check")

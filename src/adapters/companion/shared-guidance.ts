@@ -1,46 +1,41 @@
 export const SHARED_CLI_GUIDANCE = `## Shared CLI Discipline
 
-### Authority boundary
+### File ownership
 
-- Discover the nearest \`researchspec/\` workspace unless the user explicitly supplies \`--workspace\` or \`--cwd\`.
-- Use \`--json\` for inspection and preview. Read the envelope's \`ok\`, \`data\`, \`diagnostics\`, and \`error\` fields; do not scrape human prose when structured data exists.
-- Treat stable specs, runtime records, registries, ledgers, receipts, CLI validation, action descriptors, and CLI write plans as authoritative. Chat context is not a substitute for workspace evidence.
-- The agent may interpret evidence, explain trade-offs, identify unknowns, and request human choices. It must not hand-assemble CLI-owned ledgers, receipts, manifests, or lifecycle state.
+- Stable specs under \`researchspec/specs/\` own current research intent, sources, claims, and manuscript structure.
+- The project profile owns the pipeline graph. Each subflow's \`control.yaml\` is that instance's sole runtime authority.
+- Stable specs, project changes, and handoffs are directly editable. Only the ResearchSpec CLI may modify \`control.yaml\`.
+- Boundary deliverables remain outside \`researchspec/\`. Exchange them through explicit handoff roles and safe project-relative paths.
+- Do not invent a registry, ledger, receipt, runtime index, plan hash, or second workflow state.
 
-### Static discovery
+### Read before acting
 
-- Use \`researchspec --help\` to discover the public command surface, then the smallest relevant \`researchspec <command> --help\` or \`researchspec plugin <subcommand> --help\` surface for syntax and options. These reads require no workspace.
-- Static help describes command shape only. If the question becomes workspace-bound, return to \`status --json\` and the selected action's \`instructions <selector> --json\`; never infer availability, semantic input, confirmation, policy, or authorization from help text.
+1. Discover the nearest current workspace unless the user supplies \`--workspace\` or \`--cwd\`.
+2. Begin workspace work with the smallest relevant \`status --json\`, \`list\`, or \`show\` read.
+3. Before a route or control action, read \`instructions <selector> --json\`. Use its actual prerequisites, handoff roles, boundary outputs, formal Gates, cost, blockers, and allowed actions.
+4. Use machine instance IDs in selectors. Directory names are for browsing and never resolve identity.
 
-### Selector and descriptor protocol
+### Human authority
 
-1. Start a workflow write with a bounded \`researchspec status --json\` read. Use its current profile mode, frontier, blockers, allowed/recommended actions, and selectors only to locate the next action.
-2. Fetch \`researchspec instructions <selector> --json\` before choosing a write. Its action descriptor is the source of truth for accepted semantic input, prerequisites, execution policy, confirmation, and postconditions.
-3. Supply semantic input only. Never derive mechanical fields such as hashes, receipts, transition state, or ledger records outside the CLI.
-4. Follow the result's \`next_selectors\` first. Read only the named next selector or a directly relevant \`show\`/\`check\`; refresh full status only when route selection, a conflict, or missing next selector requires it.
+- Starting a standalone subflow, child, branch, or dynamic revision round requires its own route summary and human confirmation.
+- Plugin consent is separate from route confirmation. A parent confirmation does not authorize a child.
+- Verify may recommend a Gate verdict. Only a human-confirmed Decide action records the formal attempt.
+- Gate confirmation, a branch choice, and Advance are separate actions. None silently performs another.
 
-### Execution policy
+### Command behavior
 
-- \`direct\`: the CLI plans and revalidates during the single invocation. A dry-run is optional unless the descriptor requires it; do not manufacture or replay a plan hash.
-- \`human_confirmed\`: explain the exact semantic consequence and obtain the named human confirmation required by the descriptor. A dry-run is optional unless the descriptor requires it.
-- \`plan_bound\`: preview the exact semantic payload with \`--dry-run --json\`, show the resulting writes and \`plan_sha256\`, obtain the required human confirmation, then execute the unchanged payload with the matching expected plan hash and any descriptor-required \`--yes\`.
-- \`--yes\` confirms only the CLI prompt or binds an already reviewed plan. It never supplies a research decision, Gate confirmation, changed payload, or consent for a drifted plan.
+- Use \`--json\` when structured output is useful. Read \`ok\`, \`data\`, \`diagnostics\`, and \`error\` instead of scraping prose.
+- Use \`--dry-run\` to preview file operations. A preview is informative and creates no reusable transaction identity.
+- \`--force\` applies only to manifest-owned generated projections or an explicit derived pack output. It cannot overwrite specs, controls, handoffs, changes, or external deliverables.
+- Direct edits to stable specs, changes, and handoffs are valid when their contracts remain valid. Recheck the narrowest affected target afterward.
 
-### Selectors and evidence
+### Failure handling
 
-- Prefer canonical selectors such as \`change:<id>\`, \`patch:<id>\`, \`case-action:<id>\`, \`gate:<id>\`, and \`claim:<id>\` after confirming them through \`list\`, \`status\`, or \`show\`.
-- Never resolve ambiguity by recency, filename resemblance, or conversational proximity. Present candidates and stop for selection.
-- A decision-ledger event is evidence, not usually the object to decide. Follow it back to the originating change, patch, case action, or Gate.
-- Cite workspace-relative paths and stable IDs in conclusions. Mark missing or contradictory evidence as unknown rather than filling gaps from expectation.
+| Exit | Meaning | Response |
+| --- | --- | --- |
+| 1 | Current workspace or domain blocker | Explain the owning file and blocker; do not invent a repair. |
+| 2 | Usage or semantic input error | Correct the selector, option, or input before retrying. |
+| 3 | Write conflict | Preserve current bytes, reread the owner, and retry only with current intent. |
+| 4 | Internal failure | Stop and report the reproducible command and structured error. |
 
-### Failure classes
-
-| Failure | Response |
-| --- | --- |
-| Exit 2 / usage or schema error | Correct arguments or payload; do not retry unchanged. |
-| Exit 1 / domain blocker | Explain the target, evidence, Gate, or current-value conflict and route to the owning workflow. |
-| Exit 3 / write conflict | Preserve existing content; inspect ownership or choose a new create-only target. |
-| Exit 4 / internal failure | Stop, retain the command and envelope, and report a reproducible failure. |
-| Warning-only diagnostics | Explain impact; use strict mode only when the requested completion rule requires zero warnings. |
-
-ARSU owns literature research, synthesis, academic drafting, manuscript review, revision planning, and manuscript draft-patch authoring. ResearchSpec companions own navigation and safe use of ResearchSpec's deterministic contract lifecycle.`;
+ARSU Skills own research, synthesis, drafting, review, and revision work. ResearchSpec Companions help the user navigate, propose, decide, and verify the file contracts without taking scholarly or human authority.`;

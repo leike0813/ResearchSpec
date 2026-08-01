@@ -34,3 +34,19 @@ export const InspectionSelectorSchema = z.union([
 
 export type ControlSelector = z.infer<typeof ControlSelectorSchema>;
 export type InspectionSelector = z.infer<typeof InspectionSelectorSchema>;
+
+export const CONTROL_SELECTOR_FAMILY_DISPLAYS = [
+  { id: "route", patterns: ["route:<skill-id>:<mode>"] },
+  { id: "subflow", patterns: ["subflow:<instance-id>"] },
+  { id: "gate", patterns: ["gate:<instance-id>/<gate-id>"] },
+  { id: "decision", patterns: ["decision:<instance-id>/<decision-id>"] },
+  { id: "change", patterns: ["change:<change-id>"] },
+  { id: "handoff", patterns: ["handoff:<instance-id>"] },
+] as const;
+
+export const INSPECTION_SELECTOR_FAMILY_DISPLAYS = [
+  ...CONTROL_SELECTOR_FAMILY_DISPLAYS.filter((item) => item.id !== "route"),
+  { id: "spec", patterns: ["spec:project", "spec:sources", "spec:claims", "spec:manuscript"] },
+  { id: "profile", patterns: ["profile:academic-pipeline"] },
+  { id: "tool", patterns: ["tool:<tool-id>"] },
+] as const;

@@ -1,14 +1,14 @@
 ---
-sidebar_position: 13
+sidebar_position: 12
 title: "pack"
-description: "Create a deterministic context bundle"
+description: "Create a deterministic bounded current-workspace context bundle"
 ---
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
 # `researchspec pack`
 
-Create a deterministic context bundle
+Create a deterministic bounded current-workspace context bundle
 
 - **Group**: Context
 - **Workspace**: `required`
@@ -17,15 +17,5 @@ Create a deterministic context bundle
 
 | Option | Required | Description |
 | --- | --- | --- |
-| `--out <path>` | no | output ZIP path |
-| `--include-artifacts` | no | include safe registered artifacts |
-
-:::info Runtime binding
-
-Many options require a SHA-256 action-plan or action-basis binding
-(`--expected-action-basis-sha256`, `--expected-plan-sha256`) when the
-command is executed under a plan-bound workflow. Run
-`researchspec instructions <selector> --json` for the exact required
-semantic input and binding rules.
-
-:::
+| `--output <zip>` | yes | output ZIP path |
+| `--scope <scope>` | no | all, specs, profile, subflows, changes, subflow:<id>, or change:<id> |
