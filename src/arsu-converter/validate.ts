@@ -12,11 +12,13 @@ import { readSkillFrontmatterDescription, renderArsuSkillDescription } from "./r
 import { RESEARCHSPEC_LITERATURE_ADAPTER_MARKER, RESEARCHSPEC_PREFLIGHT_MARKER } from "./contracts.js";
 import { ARSU_LICENSE_FILENAME, ARSU_NOTICE_FILENAME } from "./licensing.js";
 import { revisionPatchJsonSchema } from "./revision/contract.js";
+import { ARSU_RUNTIME_POLICY_CATALOG, FORBIDDEN_ACTIVE_GUIDANCE } from "./runtime-policy/catalog.js";
+import type { RuntimePolicyCatalog } from "./runtime-policy/types.js";
 
 const LINK_RE = /\[[^\]]+\]\((?<link>[^)#]+)(?:#[^)]+)?\)/g;
 const OPERATIONAL_CODE_PATH_RE = /`(?<path>(?:docs|scripts)\/[A-Za-z0-9_./@+%:-]+)`/g;
 
-export async function validateArsuOutput(outputRoot: string): Promise<ValidationResult> {
+export async function validateArsuOutput(outputRoot: string, runtimePolicyCatalog: RuntimePolicyCatalog = ARSU_RUNTIME_POLICY_CATALOG): Promise<ValidationResult> {
   const errors: string[] = [];
   const warnings: string[] = [];
 
@@ -28,9 +30,11 @@ export async function validateArsuOutput(outputRoot: string): Promise<Validation
   const reportPath = path.join(outputRoot, "conversion-report.md");
   const contractsPath = path.join(outputRoot, "researchspec-contracts.json");
   const routingCatalogPath = path.join(outputRoot, "routing-catalog.json");
+  const runtimePolicyReportPath = path.join(outputRoot, "runtime-policy-report.md");
   const manifest = await readJsonFile<ConversionManifest>(manifestPath, errors);
 
   if (!(await pathExists(reportPath))) errors.push("Missing conversion-report.md");
+  if (!(await pathExists(runtimePolicyReportPath))) errors.push("Missing runtime-policy-report.md");
   if (!(await pathExists(contractsPath))) {
     errors.push("Missing researchspec-contracts.json");
   } else {
@@ -97,6 +101,7 @@ export async function validateArsuOutput(outputRoot: string): Promise<Validation
     }
 
     errors.push(...await validateRiskFindingCoverage(outputRoot, manifest));
+    errors.push(...await validateRuntimePolicyOutput(outputRoot, manifest, runtimePolicyCatalog));
     const routingRecord = manifest.output_files.find((item) => item.output_path === manifest.routing_catalog.path);
     if (!routingRecord || routingRecord.sha256 !== manifest.routing_catalog.sha256) {
       errors.push("Manifest routing catalog metadata does not match its output-file record");
@@ -229,6 +234,7 @@ function validateManifestShape(manifest: ConversionManifest): { errors: string[]
     "risk_findings",
     "contract_integration",
     "routing_catalog",
+    "runtime_policy",
     "validation_summary",
   ] as const;
   for (const key of required) {
@@ -319,7 +325,7 @@ async function validateAnchorReplacementMarkers(outputRoot: string, manifest: Co
   const oldMarkerRe = /<!--\/?rs:a:[0-9a-f]{12}-->/;
   const markdownFiles = (await collectFiles(outputRoot, outputRoot)).filter((rel) => rel.endsWith(".md"));
   for (const rel of markdownFiles) {
-    if (rel === "conversion-report.md" || rel === "anchor-replacement-report.md") continue;
+    if (rel === "conversion-report.md" || rel === "anchor-replacement-report.md" || rel === "runtime-policy-report.md") continue;
     const text = await readUtf8(path.join(outputRoot, rel));
     if (oldMarkerRe.test(text)) errors.push(`Generated output retains a v2 hash marker: ${rel}`);
     for (const match of text.matchAll(markerRe)) {
@@ -405,12 +411,66 @@ function outputFilesByPath(manifest: ConversionManifest): Map<string, { sha256: 
 async function collectGeneratedFiles(outputRoot: string): Promise<string[]> {
   const files: string[] = ["researchspec-contracts.json", "routing-catalog.json"];
   if (await pathExists(path.join(outputRoot, "anchor-replacement-report.md"))) files.push("anchor-replacement-report.md");
+  if (await pathExists(path.join(outputRoot, "runtime-policy-report.md"))) files.push("runtime-policy-report.md");
   for (const group of DEFAULT_SKILL_GROUPS) {
     const groupRoot = path.join(outputRoot, group);
     if (!(await pathExists(groupRoot))) continue;
     files.push(...await collectFiles(groupRoot, outputRoot));
   }
   return files.sort();
+}
+
+async function validateRuntimePolicyOutput(outputRoot: string, manifest: ConversionManifest, catalog: RuntimePolicyCatalog): Promise<string[]> {
+  const errors: string[] = [];
+  const policy = manifest.runtime_policy;
+  if (!policy) return ["Manifest missing runtime_policy"];
+  if (policy.catalog_id !== catalog.catalog_id) errors.push("Manifest runtime-policy catalog id is not expected");
+  if (policy.source_commit !== manifest.source_commit || (catalog.source_commit !== "*" && policy.source_commit !== catalog.source_commit)) {
+    errors.push("Manifest runtime-policy source commit is inconsistent");
+  }
+  if (policy.classified_source_count !== catalog.entries.length) {
+    errors.push("Manifest runtime-policy classified source count is incomplete");
+  }
+  const reportRecord = manifest.output_files.find((item) => item.output_path === policy.report_path);
+  if (!reportRecord || reportRecord.sha256 !== policy.report_sha256) {
+    errors.push("Manifest runtime-policy report metadata does not match its output-file record");
+  }
+
+  const approvedRootScripts = new Set<string>(catalog.checker_closure.map((item) => item.source_path));
+  for (const file of manifest.output_files) {
+    if (/^scripts\/[^/]+$/.test(file.source_path) && !approvedRootScripts.has(file.source_path)) {
+      errors.push(`Unapproved upstream root script entered generated output: ${file.source_path}`);
+    }
+  }
+  for (const checker of catalog.checker_closure) {
+    const record = manifest.output_files.find((item) => item.source_path === checker.source_path && item.output_path === checker.output_path);
+    if (!record) errors.push(`Missing reviewer checker closure file: ${checker.output_path}`);
+  }
+  const sprintCheckerPath = path.join(outputRoot, "academic-paper-reviewer/scripts/check_sprint_contract.py");
+  if (catalog.checker_closure.some((item) => item.adaptation === "sprint_schema_path") && await pathExists(sprintCheckerPath)) {
+    const sprintChecker = await readUtf8(sprintCheckerPath);
+    if (!sprintChecker.includes('parent.parent / "assets" / "shared" / "sprint_contract.schema.json"')) {
+      errors.push("Generated sprint checker does not reuse assets/shared/sprint_contract.schema.json");
+    }
+  }
+  if (catalog.checker_closure.some((item) => item.adaptation === "sprint_schema_path") && !(await pathExists(path.join(outputRoot, "academic-paper-reviewer/assets/shared/sprint_contract.schema.json")))) {
+    errors.push("Reviewer checker closure is missing assets/shared/sprint_contract.schema.json");
+  }
+
+  const activePaths = new Set(catalog.entries.filter((entry) => entry.disposition === "adapt").map((entry) => entry.source_path));
+  for (const file of manifest.output_files) {
+    if (!activePaths.has(file.source_path) || !file.output_path.endsWith(".md")) continue;
+    const text = await readUtf8(path.join(outputRoot, file.output_path));
+    for (const rule of FORBIDDEN_ACTIVE_GUIDANCE) {
+      if (rule.pattern.test(text)) errors.push(`Active generated guidance contains ${rule.label}: ${file.output_path}`);
+    }
+  }
+  for (const record of policy.records) {
+    if (record.disposition === "adapt" && (!record.adapted || record.output_paths.length === 0 || !record.before_sha256 || !record.after_sha256)) {
+      errors.push(`Runtime-policy adaptation is incomplete: ${record.rewrite_id}`);
+    }
+  }
+  return errors.sort();
 }
 
 function markerStartForManifest(anchorId: string, requiresSemantic: boolean): string {
@@ -444,7 +504,7 @@ async function validateMarkdownLinks(outputRoot: string): Promise<string[]> {
   const errors: string[] = [];
   const markdownFiles = (await collectFiles(outputRoot, outputRoot)).filter((rel) => rel.endsWith(".md"));
   for (const rel of markdownFiles) {
-    if (rel === "conversion-report.md" || rel === "anchor-replacement-report.md") continue;
+    if (rel === "conversion-report.md" || rel === "anchor-replacement-report.md" || rel === "runtime-policy-report.md") continue;
     const absolute = path.join(outputRoot, rel);
     const text = await readUtf8(absolute);
     for (const match of text.matchAll(LINK_RE)) {
@@ -467,7 +527,7 @@ async function validateRiskFindingCoverage(outputRoot: string, manifest: Convers
   const reported = new Set(manifest.risk_findings.map(riskKey));
   const markdownFiles = (await collectFiles(outputRoot, outputRoot)).filter((rel) => rel.endsWith(".md"));
   for (const rel of markdownFiles) {
-    if (rel === "conversion-report.md" || rel === "anchor-replacement-report.md") continue;
+    if (rel === "conversion-report.md" || rel === "anchor-replacement-report.md" || rel === "runtime-policy-report.md") continue;
     const findings = scanFindings(await readUtf8(path.join(outputRoot, rel)), rel);
     for (const finding of findings) {
       const key = riskKey({

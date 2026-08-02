@@ -13,6 +13,8 @@ A single LLM reviewer produces an absolute 0-100 rubric score, but that score is
 
 Lu et al. (2026, Nature 651:914-919) demonstrated in Table 1 that an LLM-based Automated Reviewer can approach human balanced accuracy (0.65 vs human 0.67-0.73 on 500 ICLR 2022 papers) while having a dramatically different error profile: FNR 0.17 vs human 0.52, at the cost of FPR 0.50 vs human 0.17-0.34. Human reviewers miss half of the papers that should be rejected; the Automated Reviewer misses very few but over-rejects more.
 
+Ren et al. (2026, arXiv:2607.13104, §8.1.2) frame the judge side of the same problem: a system optimized against the same judge that reports its results over-optimizes to that judge's latent biases, so rigorous protocols should enforce evaluator independence and transparency about the judge's identity, rubric, and budget; reliability can additionally be supported by repeated runs with variance estimates, aggregation across judge instances, and **calibration against a verifiable subset** via metric-based checks or targeted human review. Calibration mode instantiates that last safeguard: the user's gold set — papers with known outcomes — is the verifiable subset.
+
 Translation for ARS: **our reviewer has an error profile too, and we do not currently measure it.** Calibration mode closes that gap. It does not try to make the reviewer perfect; it makes the reviewer's imperfections legible.
 
 ---
@@ -46,7 +48,22 @@ For each paper, run the standard `full` review pipeline **5 times** (ensembling,
 - Variance across the 5 runs (reported as a stability indicator)
 - Editorial decision (majority vote across 5)
 
-**Cross-model verification**: In calibration mode, `ARS_CROSS_MODEL` is **default-on** rather than opt-in. At least one of the 5 runs should use a different model family if available, to avoid single-model blind spots. If no cross-model is configured, emit a warning and run all 5 on the primary model.
+### Host-native alternate-model review
+
+Use the current session model by default. If an independent model could improve
+this subflow, the main Agent may propose one model that the host already exposes
+through its native subagent mechanism. Before dispatch, obtain a separate user
+confirmation covering the proposed model, the category of content that will be
+shared, and the expected cost. This consent applies only to the current subflow;
+every child, branch, and revision round asks again. Do not store the consent in a
+stable spec, control, handoff, or model configuration file.
+
+Freeze the main Agent's judgment before dispatch. Send only the minimum
+de-anchored material needed for the check, without the main judgment, scores, or
+reasoning. Treat disagreement as a reason for targeted review. Do not vote,
+average results, or let the subagent silently rewrite the frozen judgment. If
+the host cannot dispatch the confirmed model or the result is structurally
+invalid, disclose the limitation and continue with a single-model result.
 
 ### Phase 2: Build the confusion matrix
 
@@ -92,12 +109,22 @@ This produces a histogram of low/med/high counts reported alongside FNR/FPR in P
 
 Output document structured as:
 
-```
-# Calibration Report for <Reviewer Instance>
-Domain: <domain>
-Gold set: n=<N> (accept=<a>, reject=<r>, borderline=<b>)
-Runs per paper: 5 (ensembled)
-Cross-model: <yes/no, model families used>
+### Host-native alternate-model review
+
+Use the current session model by default. If an independent model could improve
+this subflow, the main Agent may propose one model that the host already exposes
+through its native subagent mechanism. Before dispatch, obtain a separate user
+confirmation covering the proposed model, the category of content that will be
+shared, and the expected cost. This consent applies only to the current subflow;
+every child, branch, and revision round asks again. Do not store the consent in a
+stable spec, control, handoff, or model configuration file.
+
+Freeze the main Agent's judgment before dispatch. Send only the minimum
+de-anchored material needed for the check, without the main judgment, scores, or
+reasoning. Treat disagreement as a reason for targeted review. Do not vote,
+average results, or let the subagent silently rewrite the frozen judgment. If
+the host cannot dispatch the confirmed model or the result is structurally
+invalid, disclose the limitation and continue with a single-model result.
 
 ## Summary metrics
 - Balanced accuracy: 0.XX [95% CI: 0.XX - 0.XX]
@@ -185,14 +212,34 @@ There is a second reason a measured profile can be optimistic, independent of th
 
 This is an interpretive caveat only. ARS does **not** detect, prevent, or correct rubric-aware judging — the behavior can be unverbalized and is not reliably visible in chain-of-thought. The note changes how you *read* the numbers; it does not change any threshold or gate.
 
-**Cross-model evaluation — stronger evidence where available.** Running the evaluation across model families provides **stronger evidence** than a same-family-only run; it still does **not** detect or rule out rubric-aware judging. Positioning:
+### Host-native alternate-model review
 
-- In ordinary reviewer / judge paths, cross-model is **opt-in, "for best results"** — the citation-claim alignment judge already supports a non-default judge model, and the suite is designed to work single-model.
-- **Calibration mode is the exception**: calibration itself is opt-in, but once invoked `ARS_CROSS_MODEL` is **default-on** (see "Cross-model verification" under Phase 1) — at least one of the runs should use a different family when configured.
-- Absent cross-model is **warn-and-continue**, never a gate.
-- Sending a user's manuscript to another provider still requires the explicit consent / privacy step in `../../../shared/cross_model_verification.md` — this recommendation does not weaken that boundary.
+Use the current session model by default. If an independent model could improve
+this subflow, the main Agent may propose one model that the host already exposes
+through its native subagent mechanism. Before dispatch, obtain a separate user
+confirmation covering the proposed model, the category of content that will be
+shared, and the expected cost. This consent applies only to the current subflow;
+every child, branch, and revision round asks again. Do not store the consent in a
+stable spec, control, handoff, or model configuration file.
+
+Freeze the main Agent's judgment before dispatch. Send only the minimum
+de-anchored material needed for the check, without the main judgment, scores, or
+reasoning. Treat disagreement as a reason for targeted review. Do not vote,
+average results, or let the subagent silently rewrite the frozen judgment. If
+the host cannot dispatch the confirmed model or the result is structurally
+invalid, disclose the limitation and continue with a single-model result.
 
 **A single-model spot-check (weak, optional).** With no second model, you can reword the rubric and re-judge, then check whether the verdict changed. Be clear about what this does: it only tells you whether a *change of wording* shifts the judgment — surface wording sensitivity. It does **not** reveal whether the model is quietly optimizing toward the grader (that can be unverbalized), and a verdict that survives rewording is **not** evidence the judgment is correct — only that it is stable to that paraphrase. It is one model checking itself, so its power against grader-awareness is limited. No score, no threshold, no gate.
+
+### Directional prior: assume leniency relative to human expert review (FARS external anchor)
+
+Beyond the same-family optimism above, there is a citable **directional** prior on the sign of the error: when the simulated 5-reviewer panel's output is read as a pass/fail signal, assume it runs **lenient relative to human expert review** until your own calibration measurement shows otherwise. FARS (Tang et al. 2026, arXiv:2606.31651) provides a deployment-scale external anchor: on the FARS deployment corpus, an ICLR-style automated reviewer (Stanford Agentic Reviewer) averaged 5.00 over the 165 papers it reviewed, while the paper-level mean from 282 human expert reviews covering 140 of those papers was 3.23 on the same 0-10 scale — a ~1.8-point gap (a descriptive difference between overlapping-but-unequal paper sets, not a paired estimate), and the automated score never functioned as an acceptance probability, only as a relative ranking.
+
+How to use this prior:
+
+- The **direction** is a working prior, not a law: FARS measured one setup (ICLR-style ML reviewing, one reviewer system), so carrying its sign to other domains, rubrics, or this panel is a heuristic extrapolation — which is exactly why it lands as a default-until-measured assumption rather than a fact. Under this prior, a panel "accept" is weaker evidence than a panel "reject", and a panel score is better read as a relative ranking within a batch than as an acceptance probability.
+- The **magnitude** (~1.8 points) is **NOT portable** across domains, rubrics, or model setups. Never apply it as a correction factor, threshold shift, or score adjustment — if you need a number for your setup, measure it with this mode (Phases 2/4, using the optional human reviewer scores in the gold set).
+- This is an interpretive caveat only: no behavior, schema, gate, or threshold changes. The simulated panel remains advisory infrastructure behind human checkpoints — the caveat is about how to read its output, not about its authority.
 
 ---
 
@@ -219,10 +266,22 @@ This is an interpretive caveat only. ARS does **not** detect, prevent, or correc
 
 ## References
 
-- Lu, C. et al. (2026). Towards end-to-end automation of AI research. *Nature* 651, 914-919. doi:10.1038/s41586-026-10265-5 — Table 1 (reviewer validation), Methods A.1.1 (ensembling).
-- Efron, B. & Tibshirani, R. J. (1993). *An Introduction to the Bootstrap*. Chapman & Hall/CRC — bootstrap CI methodology.
-- ARS `../../../shared/cross_model_verification.md` — cross-model reviewer integration.
-- ARS `quality_rubrics.md` — scoring rubric definitions.
+### Host-native alternate-model review
+
+Use the current session model by default. If an independent model could improve
+this subflow, the main Agent may propose one model that the host already exposes
+through its native subagent mechanism. Before dispatch, obtain a separate user
+confirmation covering the proposed model, the category of content that will be
+shared, and the expected cost. This consent applies only to the current subflow;
+every child, branch, and revision round asks again. Do not store the consent in a
+stable spec, control, handoff, or model configuration file.
+
+Freeze the main Agent's judgment before dispatch. Send only the minimum
+de-anchored material needed for the check, without the main judgment, scores, or
+reasoning. Treat disagreement as a reason for targeted review. Do not vote,
+average results, or let the subagent silently rewrite the frozen judgment. If
+the host cannot dispatch the confirmed model or the result is structurally
+invalid, disclose the limitation and continue with a single-model result.
 
 ## v3.6.2 sprint contract status
 

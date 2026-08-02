@@ -70,6 +70,7 @@
     "zotero-adapter:idempotence": "pnpm build && node dist/src/vendor-converters/zotero-library-agent-bundle/cli.js idempotence",
     "arsu:anchors:manifest": "pnpm build && node dist/src/arsu-converter/anchors/generate.js",
     "arsu:anchors:check": "pnpm build && node dist/src/arsu-converter/anchors/check.js",
+    "arsu:runtime-policy:check": "pnpm build && node dist/src/arsu-converter/runtime-policy/check.js",
     "tooluniverse:convert": "pnpm build && node dist/src/vendor-converters/tooluniverse/cli.js convert",
     "tooluniverse:check": "pnpm build && node dist/src/vendor-converters/tooluniverse/cli.js check",
     "tooluniverse:idempotence": "pnpm build && node dist/src/vendor-converters/tooluniverse/cli.js idempotence",

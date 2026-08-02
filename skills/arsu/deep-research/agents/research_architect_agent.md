@@ -2,6 +2,7 @@
 name: research_architect_agent
 description: "Designs the methodological blueprint; selects research paradigm, method, data strategy, and analytical framework"
 model: inherit
+tools: Read, Write, Edit, Grep, Glob
 ---
 
 # Research Architect Agent — Methodology Blueprint Designer
@@ -190,7 +191,23 @@ Recommended platforms: PROSPERO for systematic reviews, OSF Registries for all o
 - Recommended: [Yes / No]
 - Platform: [OSF / PROSPERO / AsPredicted / N/A]
 - Status: [Planned / Completed / Not applicable]
-```
+
+### Host-native alternate-model review
+
+Use the current session model by default. If an independent model could improve
+this subflow, the main Agent may propose one model that the host already exposes
+through its native subagent mechanism. Before dispatch, obtain a separate user
+confirmation covering the proposed model, the category of content that will be
+shared, and the expected cost. This consent applies only to the current subflow;
+every child, branch, and revision round asks again. Do not store the consent in a
+stable spec, control, handoff, or model configuration file.
+
+Freeze the main Agent's judgment before dispatch. Send only the minimum
+de-anchored material needed for the check, without the main judgment, scores, or
+reasoning. Treat disagreement as a reason for targeted review. Do not vote,
+average results, or let the subagent silently rewrite the frozen judgment. If
+the host cannot dispatch the confirmed model or the result is structurally
+invalid, disclose the limitation and continue with a single-model result.
 
 ## Quality Criteria
 
@@ -201,6 +218,23 @@ Recommended platforms: PROSPERO for systematic reviews, OSF Registries for all o
 - If human subjects are involved, IRB planning is mandatory (ref: `references/irb_decision_tree.md`)
 - Reporting standard should be identified at design stage (ref: `references/equator_reporting_guidelines.md`)
 - Preregistration should be considered for confirmatory research (ref: `references/preregistration_guide.md`)
+
+### Host-native alternate-model review
+
+Use the current session model by default. If an independent model could improve
+this subflow, the main Agent may propose one model that the host already exposes
+through its native subagent mechanism. Before dispatch, obtain a separate user
+confirmation covering the proposed model, the category of content that will be
+shared, and the expected cost. This consent applies only to the current subflow;
+every child, branch, and revision round asks again. Do not store the consent in a
+stable spec, control, handoff, or model configuration file.
+
+Freeze the main Agent's judgment before dispatch. Send only the minimum
+de-anchored material needed for the check, without the main judgment, scores, or
+reasoning. Treat disagreement as a reason for targeted review. Do not vote,
+average results, or let the subagent silently rewrite the frozen judgment. If
+the host cannot dispatch the confirmed model or the result is structurally
+invalid, disclose the limitation and continue with a single-model result.
 
 ## PATTERN PROTECTION (v3.6.7)
 

@@ -3,7 +3,7 @@ import path from "node:path";
 
 import { injectContractPreflight, RESEARCHSPEC_PREFLIGHT_MARKER, RESEARCHSPEC_PREFLIGHT_PROFILE_ID } from "./contracts.js";
 import { ARSU_OFFLINE_ZOTERO_PACKAGE_MARKERS, ARSU_OFFLINE_ZOTERO_SOURCE_FILES } from "./config.js";
-import { applyAnchorReplacements } from "./anchors/replace.js";
+import { applyCombinedReplacements } from "./anchors/replace.js";
 import { readUtf8, sha256File, writeUtf8 } from "./fs-utils.js";
 import {
   discoverDependencies,
@@ -24,6 +24,7 @@ import type {
   SkillGroupInventory,
 } from "./types.js";
 import type { AnchorReplacementPlan } from "./anchors/types.js";
+import type { RuntimePolicyPlan } from "./runtime-policy/types.js";
 import { ArsuSkillIdSchema, type ArsuSkillId } from "./routing/contracts.js";
 import { projectSkillFrontmatterDescription, type SkillDescriptionProjection } from "./routing/projection.js";
 import { emitArsuSkillLicensing } from "./licensing.js";
@@ -39,6 +40,7 @@ export async function emitSkillGroup(
   groupInventory: SkillGroupInventory,
   knownSourcePaths: Set<string>,
   anchorReplacements: AnchorReplacementPlan,
+  runtimePolicy: RuntimePolicyPlan,
 ): Promise<SkillConversion> {
   const skillId = ArsuSkillIdSchema.parse(groupName);
   const groupOut = path.join(outputRoot, groupName);
@@ -49,6 +51,7 @@ export async function emitSkillGroup(
   const sourceToOutput = new Map<string, string>();
   const filesToCopy = groupFiles(groupInventory, groupName);
   addAnchoredRuntimeFiles(filesToCopy, groupName, anchorReplacements);
+  addRuntimePolicyFiles(filesToCopy, groupName, runtimePolicy);
   const pending = [...filesToCopy.entries()];
   const seen = new Set<string>();
   const dependencyMeta = new Map<string, DependencyRef>();
@@ -113,6 +116,7 @@ export async function emitSkillGroup(
       sourceToOutput,
       knownSourcePaths,
       anchorReplacements,
+      runtimePolicy,
       skillId,
     );
     if (copied.contractInjection) contractInjection = copied.contractInjection;
@@ -212,6 +216,21 @@ function addAnchoredRuntimeFiles(files: Map<string, string>, groupName: string, 
   }
 }
 
+function addRuntimePolicyFiles(files: Map<string, string>, groupName: string, plan: RuntimePolicyPlan): void {
+  for (const sourcePath of plan.spans_by_source.keys()) {
+    if (sourcePath.startsWith(`${groupName}/`)) {
+      files.set(sourcePath, sourcePath.split("/").slice(1).join("/"));
+    } else if (sourcePath.startsWith("shared/")) {
+      files.set(sourcePath, `references/shared/${sourcePath.slice("shared/".length)}`);
+    }
+  }
+  if (groupName === "academic-paper-reviewer") {
+    for (const item of plan.checker_closure) {
+      files.set(item.source_path, item.output_path.split("/").slice(1).join("/"));
+    }
+  }
+}
+
 async function copyTransformedFile(
   sourceRoot: string,
   groupOut: string,
@@ -221,6 +240,7 @@ async function copyTransformedFile(
   sourceToOutput: Map<string, string>,
   knownSourcePaths: Set<string>,
   anchorReplacements: AnchorReplacementPlan,
+  runtimePolicy: RuntimePolicyPlan,
   skillId: ArsuSkillId,
 ): Promise<{
   file: CopiedFile;
@@ -238,9 +258,9 @@ async function copyTransformedFile(
   if (sourcePath === REVISION_PATCH_SOURCE) {
     await writeUtf8(outputFile, revisionPatchJsonSchema());
     transformRule = "researchspec_revision_patch_schema_projection";
-  } else if (isTextResource(sourcePath)) {
+  } else if (isTextResource(sourcePath) || runtimePolicy.spans_by_source.has(sourcePath)) {
     let text = await readUtf8(sourceFile);
-    text = applyAnchorReplacements(text, sourcePath, `${groupName}/${outputPath}`, anchorReplacements);
+    text = applyCombinedReplacements(text, sourcePath, `${groupName}/${outputPath}`, anchorReplacements, runtimePolicy);
     const protectedAnchors = protectAnchorBlocks(text);
     text = protectedAnchors.text;
     text = neutralizeUnresolvedMarkdownLinks(text, sourcePath, sourceToOutput, knownSourcePaths);
@@ -273,7 +293,7 @@ async function copyTransformedFile(
       transform_rule: transformRule,
       sha256: await sha256File(outputFile),
     },
-    findings: isTextResource(sourcePath)
+    findings: isTextResource(sourcePath) || runtimePolicy.spans_by_source.has(sourcePath)
       ? scanFindings(await readUtf8(outputFile), `${groupName}/${outputPath}`)
       : [],
     contractInjection,

@@ -168,9 +168,22 @@ When the user or another agent rebuts a DA finding, the DA **must not automatica
 - **Track concession rate.** If >50% of findings conceded in one checkpoint, pause: "I've conceded several points — am I being too lenient, or have your rebuttals genuinely addressed my concerns?" After the pause, raise the bar to 5/5 for all remaining rebuttals in this checkpoint.
 - **Frame-lock detection.** After each checkpoint (and after 3+ rebuttal rounds within a single checkpoint), ask yourself: "Is there a premise underlying this entire discussion that I haven't questioned?" If yes, raise it as a new issue.
 
-### Cross-Model DA (Optional, v3.0)
+### Host-native alternate-model review
 
-When `ARS_CROSS_MODEL` is set, do not send the reviewed material automatically. First ask for explicit user consent and identify the external provider, model, and content class that would be sent. If the user approves, after completing each checkpoint report, send only the reviewed material needed for an independent critique (without your own DA findings — to prevent anchoring) to the cross-model. Add any novel findings as `[CROSS-MODEL-FINDING]`. If the cross-model API fails or consent is not granted, log `[CROSS-MODEL-SKIPPED]` or `[CROSS-MODEL-ERROR]` as appropriate and continue with single-model DA. See `../references/shared/cross_model_verification.md` for setup and API patterns. When not set, standard single-model DA operates unchanged.
+Use the current session model by default. If an independent model could improve
+this subflow, the main Agent may propose one model that the host already exposes
+through its native subagent mechanism. Before dispatch, obtain a separate user
+confirmation covering the proposed model, the category of content that will be
+shared, and the expected cost. This consent applies only to the current subflow;
+every child, branch, and revision round asks again. Do not store the consent in a
+stable spec, control, handoff, or model configuration file.
+
+Freeze the main Agent's judgment before dispatch. Send only the minimum
+de-anchored material needed for the check, without the main judgment, scores, or
+reasoning. Treat disagreement as a reason for targeted review. Do not vote,
+average results, or let the subagent silently rewrite the frozen judgment. If
+the host cannot dispatch the confirmed model or the result is structurally
+invalid, disclose the limitation and continue with a single-model result.
 
 ### Relationship to Reviewer DA
 

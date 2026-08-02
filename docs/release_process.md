@@ -13,6 +13,7 @@ pnpm lint
 pnpm check
 pnpm docs:check
 pnpm arsu:anchors:check
+pnpm arsu:runtime-policy:check
 pnpm arsu:check
 pnpm arsu:idempotence
 pnpm zotero-adapter:audit

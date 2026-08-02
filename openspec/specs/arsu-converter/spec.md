@@ -120,7 +120,7 @@ artifacts during conversion.
 
 - **WHEN** converter output is generated
 - **THEN** `skills/arsu/researchspec-contracts.json` SHALL declare anchor
-  replacement profile `researchspec-anchor-replacement-v3`
+  replacement profile `researchspec-anchor-replacement-v4`
 - **AND** it SHALL declare coverage policy `required_and_recommended`
 - **AND** it SHALL treat Material Passport content as imported external evidence or
   payload projection sources rather than runtime sources of truth
@@ -697,3 +697,45 @@ stage.
 #### Scenario: Generated surfaces are checked
 - **WHEN** ARSU conversion and idempotence checks run
 - **THEN** all generated Skills, manifests, and reports SHALL match the converter-owned intake guidance
+
+### Requirement: Runtime Model Policy Is Complete And Agent-Neutral
+
+ResearchSpec SHALL classify every policy-sensitive ARS v3.19.0 source match and
+adapt active instructions so generated Skills use only user-confirmed,
+host-native subagents. Conversion SHALL reject unclassified matches and active
+instructions that configure credentials or directly call model services.
+
+#### Scenario: Alternate-model review is authorized
+
+- **WHEN** an Agent proposes an alternate host model for the current subflow
+- **THEN** the user SHALL confirm the model, content category, and cost before dispatch
+- **AND** the Agent SHALL minimize and de-anchor the dispatched material
+- **AND** the consent SHALL NOT be persisted as ResearchSpec authority
+
+#### Scenario: Alternate-model review is unavailable
+
+- **WHEN** dispatch fails or the returned review is structurally invalid
+- **THEN** the Skill SHALL disclose the limitation and fall back to the current session model
+- **AND** it SHALL NOT vote, average, or silently replace the main Agent's frozen judgment
+
+#### Scenario: Policy source changes
+
+- **WHEN** a policy match is unclassified or an adaptation is missing, ambiguous, or overlaps another rewrite
+- **THEN** conversion SHALL fail before writing generated Skill output
+
+### Requirement: Reviewer Panel Checker Closure Is Bounded
+
+ResearchSpec SHALL package only `check_panel_synthesis.py` and
+`check_sprint_contract.py` from the upstream root scripts, place them under the
+reviewer Skill, and reuse the packaged shared sprint-contract schema.
+
+#### Scenario: Checker prerequisites are missing
+
+- **WHEN** Python 3.11+ or `jsonschema>=4.17` is unavailable at explicit Skill runtime
+- **THEN** the panel flow SHALL pause with a prerequisite diagnostic
+- **AND** conversion, installation, and checking SHALL NOT install dependencies or substitute Agent judgment
+
+#### Scenario: Unapproved root script is present
+
+- **WHEN** conversion considers any other upstream root script
+- **THEN** it SHALL exclude that script from the generated tree and manifest

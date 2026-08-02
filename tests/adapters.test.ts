@@ -93,6 +93,13 @@ void test("companion manifest renders four fixed self-contained Skills", () => {
     assert.match(rendered, new RegExp(`^---\\nname: ${intent.skillId}\\n`, "m"));
     assert.doesNotMatch(rendered, /<<|Authoring hint/);
   }
+  const navigate = COMPANION_INTENTS.find((intent) => intent.skillId === "researchspec-navigate");
+  assert.ok(navigate);
+  const renderedNavigate = renderCompanionSkill(navigate);
+  assert.match(renderedNavigate, /host's native subagent mechanism/);
+  assert.match(renderedNavigate, /content category, and cost/);
+  assert.match(renderedNavigate, /children, branches, and revision rounds ask again/);
+  assert.doesNotMatch(renderedNavigate, /API key|endpoint|curl/i);
 });
 
 void test("Copilot uses its explicit detection paths", async () => {

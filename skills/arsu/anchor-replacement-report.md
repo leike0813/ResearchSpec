@@ -1096,7 +1096,7 @@ Current ResearchSpec owners:
 - Replacement shape: `gate_rule_block`
 - Replacement body SHA-256: `258435dda9ecb5abe38c531808bf4da3fb6574b6f5d6eba392d12868f5adaaff`
 - ResearchSpec targets: `assets/shared/contracts/patch/revision_patch.schema.json`, `researchspec/subflows/<instance>/handoff.md`, `researchspec/subflows/<instance>/control.yaml`
-- Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/references/re_review_mode_protocol.md`, `academic-paper-reviewer/references/re_review_mode_protocol.md`
+- Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/references/re_review_mode_protocol.md`, `academic-paper-reviewer/references/re_review_mode_protocol.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/references/re_review_mode_protocol.md`, `deep-research/references/cross-skill/academic-paper-reviewer/references/re_review_mode_protocol.md`
 - Before SHA-256: `7c8c2df7ae376490050837455ab372d71a8f81db66ccfb4cc29c6cb7f27f888c`
 - After SHA-256: `ae38161c2ff0f763b6f5ff38160c3c8bc4e3aaf5220491220c49f9841fcb8362`
 
@@ -1320,7 +1320,7 @@ Current ResearchSpec owners:
 - Replacement body SHA-256: `ba8a503d486e5bea68009f175365af848ce49eb4b45b79dd67061a8a08374eab`
 - ResearchSpec targets: `researchspec/subflows/<instance>/handoff.md`, `researchspec/subflows/<instance>/control.yaml`
 - Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/SKILL.md`, `academic-paper-reviewer/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/SKILL.md`, `deep-research/references/cross-skill/academic-paper-reviewer/SKILL.md`
-- Before SHA-256: `d3e0caa77bc3053aa43336f81ce022ff312362f4618320db26d3db729c51b733`
+- Before SHA-256: `717bc6b1a277ccb027d68adb55cdd8122245f9b2cda05f232031c60ba83a6b74`
 - After SHA-256: `82494847e18c6800f56274dc8943f8f09ebfd556f8728f52f212a43d425715f1`
 
 #### Before
@@ -1328,7 +1328,7 @@ Current ResearchSpec owners:
 ````markdown
 Dedicated mode for Pipeline Stage 3' — verifies whether revisions address first-round review comments. Uses R&R Traceability Matrix (Schema 11) with Author's Claim + Verified? columns.
 
-**Input**: Original Revision Roadmap + Revised manuscript + Response to Reviewers (optional)
+**Input**: Original Revision Roadmap + Revised manuscript + Response to Reviewers (optional) + Editorial Decision Letter (optional, #539 — its Review Panel Provenance block feeds the Judge Record)
 **Output**: Verification Review Report with traceability matrix + new issues + Decision
 
 > See `references/re_review_mode_protocol.md` for full verification logic, output format template, and Socratic guidance details.
@@ -1412,6 +1412,61 @@ Current ResearchSpec owners:
 - `researchspec/subflows/<instance>/handoff.md`
 - `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:REVIEW-002-->
+````
+
+### REVIEW-016
+
+- Anchor name: `reviewer.skill.panel-checker-gate-boundary`
+- Owner skill: `academic-paper-reviewer`
+- Source path: `academic-paper-reviewer/SKILL.md`
+- Severity: `required`
+- Semantic role: `gate_policy`
+- Replacement shape: `gate_rule_block`
+- Replacement body SHA-256: `e522a78fbb292ab4cb3c909ce5df7a31d25582951c4bfef89836efc8a571b15b`
+- ResearchSpec targets: `researchspec/subflows/<instance>/handoff.md`, `researchspec/subflows/<instance>/control.yaml`
+- Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/SKILL.md`, `academic-paper-reviewer/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/SKILL.md`, `deep-research/references/cross-skill/academic-paper-reviewer/SKILL.md`
+- Before SHA-256: `52749b227c759a48c537e03d7c7b47d00925e1db065bce22edaeb843e33af56a`
+- After SHA-256: `ec85c3b2a5ef6808a3ce62f9f881c75e83241f93b5aaf123957acecabfe4bcff`
+
+#### Before
+
+````markdown
+- **Panel self-consistency checker (#510).** After synthesis, the orchestrator runs `scripts/check_panel_synthesis.py` to recompute each reviewer's decision and the panel decision from the emitted scores (protocol §8.1). A synthesis mismatch voids the synthesis (one retry); an inconsistent reviewer report is unusable (`[PANEL-SHRUNK]`).
+````
+
+#### After
+
+````markdown
+<!--rs:REVIEW-016-->
+### ResearchSpec Current Owner: Deterministic Panel Check
+
+The sprint contract and panel synthesis remain machine-checked working
+artifacts. Before starting a contract-backed panel, confirm that the local host
+provides Python 3.11 or newer and `jsonschema>=4.17`. These are user-managed
+prerequisites: do not install, upgrade, or fetch them. If either prerequisite is
+missing, pause the panel flow and report the missing prerequisite. Agent judgment
+cannot replace the deterministic checks.
+
+1. Validate the sprint contract with
+   `scripts/check_sprint_contract.py <contract.json>`.
+2. After all reviewer reports and the synthesis exist, run
+   `scripts/check_panel_synthesis.py --contract <contract.json> --report
+   <r1.md> ... --report <rN.md> --synthesis <synthesis.md>`.
+3. Treat a nonzero exit as a failed candidate check and follow the bounded retry
+   or abort behavior reported by the checker. Never rewrite a checker verdict or
+   accept a malformed candidate by inspection.
+4. Record accepted review and synthesis files as boundary outputs in
+   `researchspec/subflows/<instance>/handoff.md`. A passing checker establishes
+   only mechanical self-consistency. It does not confirm a formal ResearchSpec
+   Gate; Verify prepares that judgment and only a human-confirmed Decide action
+   records it in `researchspec/subflows/<instance>/control.yaml`.
+
+The packaged checker closure is exactly:
+
+- `scripts/check_sprint_contract.py`
+- `scripts/check_panel_synthesis.py`
+- `assets/shared/sprint_contract.schema.json`
+<!--/rs:REVIEW-016-->
 ````
 
 ### GATE-001
@@ -1605,7 +1660,7 @@ Current ResearchSpec owners:
 - Replacement body SHA-256: `90ba6240b0ce635923b8789ad56ec57a67f77844a2a26774581cde0d4c183255`
 - ResearchSpec targets: `assets/shared/contracts/patch/revision_patch.schema.json`, `scripts/apply-revision-patch.mjs`, `researchspec/subflows/<instance>/handoff.md`, `researchspec/subflows/<instance>/control.yaml`
 - Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
-- Before SHA-256: `cd54fc8af9aab880c01c0cbc083475c7dffdc0f0a16c83873c46017f26fc3878`
+- Before SHA-256: `fa6f54ea01dfda113c1d0c2c1271466070c508cc9b17bb3a74e3fcd9251a8d9a`
 - After SHA-256: `159a2aea83c9d1e193f124a88ce1b661be259f3edc002d5682c54c90b88fdd14`
 
 #### Before
@@ -1618,9 +1673,12 @@ When a revision stage dispatches `academic-paper` revision mode (Stage 3 → 4 /
 1. **Anchorize (manifest refresh):** `python scripts/ars_anchorize_draft.py <draft.md>` — idempotent, content-neutral; stamps any unlabeled blocks and regenerates `<draft>.block-manifest.json`. Run it at every round entry (including legacy pre-anchor drafts at revision-mode intake) so the manifest matches the exact text the writer is about to see.
 2. **Dispatch the writer** with the anchored draft + the block manifest + the round's Revision Roadmap in context. The writer emits the patch as `phase6_*/revision_patch_round<N>.json` plus provisional Schema 8 response items (see `draft_writer_agent.md` § Patch-Document Revision Emission).
 3. **Apply:** `python scripts/ars_apply_revision_patch.py <draft.md> <patch.json> --output <draft.rev<N>.md>` — two-phase fail-closed; the output is a NEW versioned artifact (supersession convention above) and the apply report lands beside it. The touched-ratio trigger defaults to the #424 ship decision (0.6, strict `>`); do not pass a different threshold without a recorded user decision.
+3a. **Token-conservation advisory (#570):** `python scripts/check_revision_token_conservation.py patch --patch <patch.json> --base <draft.md>` on the same patch, before the finalizer pass (append `--protected-terms "<phrase1>,<phrase2>"` from the paper's `protected_hedges` roster when one is in context, so hedge-phrase deltas are covered too). Deterministic complement to the E6 claim-strength check (#569). What it does — and does NOT — do: it emits one `ADV-REV-<n>` row for **every op whose numeric/citation/protected-term multiset changed**, each row carrying that op's own `roadmap_item_ids` verbatim. It does NOT judge whether the roadmap actually authorized the change — that authorization judgment is E6's job (it reads the same patch bundle). The `ADV-REV` row is the deterministic *signal* ("this op moved tokens; here are the items it claimed"); E6 supplies the *verdict*. Advisory only — it never blocks the apply and never re-runs the apply script's fail-closed gate (that is step 3's job); its rows join the Integrity Report advisory table and are displayed per-row at the MANDATORY checkpoint like any `ADV-*` family. A conserved patch emits no rows.
 4. **Finalizer pass:** the Cite-Time Provenance Finalizer runs on the apply OUTPUT, resolving any newly inserted bare `<!--ref:-->` markers per its shipped contract. A finalizer pass between steps 1 and 3 would legitimately mutate `<!--ref:-->` status tokens and produce spurious hash mismatches at apply — the sequencing exists to make every hash mismatch MEAN staleness, not pipeline noise.
 5. **Complete Schema 8 mechanical fields** from the apply report (§3.5 role split): `change_block_ids` per response item (including fresh insert IDs from `ops_applied[].new_block_ids` / `fresh_block_ids`), `word_count_delta`, counters. The writer's provisional items carry the judgment content; the orchestrator fills in the post-apply facts. Then the response moves to re-review with the **apply report named as a required input** alongside it.
 6. **Surface `preserved_ratio`** from the apply report's counters next to the accumulated round-trip count in the stage checkpoint line (the #389 interaction-count budget surface; advisory, one line — e.g. `round-trips: 3/9 · preserved_ratio: 0.91`).
+
+**Revision-Evidence Bundle (#569 — feeds E6).** Each revision round already writes its patch sidecar (`phase6_*/revision_patch_round<N>.json`) and its pre-round anchored draft as durable artifacts (steps 1–3). Accumulate them: the orchestrator carries the **complete chain** of `{round N: patch sidecar, pre-round anchored draft, Revision Roadmap (or FAIL-correction Issue List)}` — every round since the last integrity PASS, not just the latest — and names it in the Stage 4/4'→4.5 (and Stage 2.5/4.5 FAIL re-verification) dispatch context under this declaration. This is what makes the bundle a *declared* artifact, satisfying context hygiene: E6 (`claim_verification_protocol.md` § E6) consumes it to audit claim-strength drift per round, and #570 step 3a already ran on each patch as it landed. When no chain exists (first-pass audit, standalone run), the bundle is absent and E6 SKIPs — no reconstruction.
 
 **Integrity-correction variant (Stage 2.5 / 4.5 FAIL rounds, #89 Item 8).** A correction round follows steps 1–4 and 6 unchanged, with two destination differences. (a) **No Schema 8 response items in this round** — response items are review-round artifacts and no review round occurred; the writer maps each patch op's `roadmap_item_ids` to the integrity report's stable correction IDs instead (the `IL-<SEVERITY>-<n>` Issue List IDs, or a finding's native `EA-NNN`; see `integrity_verification_agent.md` § Issue List and `draft_writer_agent.md` § Patch-Document Revision Emission), and step 5's mechanical completion is skipped. (b) **The applied output returns to the SAME integrity gate that issued the FAIL** (Stage 2.5 or 4.5) for re-verification — never forward to review or finalization on the strength of the apply report alone; the apply report is a required input to that re-verification, not a substitute for it. The integrity gate's own caps are unchanged (max 3 correction rounds; abort after the 2nd Stage 4.5 FAIL).
 
@@ -1707,7 +1765,7 @@ Current ResearchSpec owners:
 - Replacement body SHA-256: `8ce21ff901760108b379ccd9c835e8a7a785c23726cec4252a9eef4c4c3ac085`
 - ResearchSpec targets: `researchspec/subflows/<instance>/control.yaml`
 - Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
-- Before SHA-256: `72382a607b0750669bffe9274ede6c7f76e64853b606432c80f13122c85fb760`
+- Before SHA-256: `2bd3d8eeecf46005d627d4e05935f09059225cd8ee92a060e209b8393f4cf627`
 - After SHA-256: `55e9710edf25135aaea61c72cb61f28508ea7a769ddbcce1971a6c7fc48d727d`
 
 #### Before
@@ -1740,7 +1798,7 @@ Current ResearchSpec owners:
 4. The `[PASSPORT-RESET: ...]` tag is the sole machine-stable handoff anchor. The `### Resume Instruction` subsection is for user ergonomics.
 5. Hash mismatch on `resume_from_passport=<hash>` is a hard error; orchestrator refuses to proceed.
 6. A `boundary` is consumed only by appending a `kind: resume` entry with matching `consumes_hash`. Double-resume (second resume of an already-consumed boundary) is a hard error.
-7. MANDATORY checkpoints (Stage 2.5 / 4.5, review decisions, Stage 5) remain MANDATORY even when reset co-occurs. Integrity gates are never diluted. If the boundary carries `pending_decision`, resume must re-prompt the user; `next` is advisory. Actual routing comes from the matched option's `next_stage`/`next_mode`, not from the boundary `next` field.
+7. MANDATORY checkpoints (Stage 2.5 / 4.5, review decisions, the Stage 5 entry gate) remain MANDATORY even when reset co-occurs. Integrity gates are never diluted. If the boundary carries `pending_decision`, resume must re-prompt the user; `next` is advisory. Actual routing comes from the matched option's `next_stage`/`next_mode`, not from the boundary `next` field.
 8. `collaboration_depth_agent` observer fires on FULL checkpoints as before; its output is included in the checkpoint notification regardless of reset state. Observer state does NOT cross reset boundaries.
 9. Resume consumption MUST hold an exclusive advisory lock on the passport file for the entire read-check-append sequence (acquire the lock on the "Acquire passport lock" obligation, hold across the read-ledger, no-prior-resume check, and resume-entry append steps, release only after the append is durable). Releasing the lock between the no-prior-resume check and the resume-entry append reopens the double-resume race this rule exists to prevent. Non-POSIX implementations that cannot provide OS-level exclusion MUST refuse to resume rather than degrade silently (fail with an explicit error surfaced to the user). See §"Concurrency model" in the protocol doc.
 ````
@@ -1917,7 +1975,7 @@ Current ResearchSpec owners:
 - Replacement body SHA-256: `a24e9d17ec4d30aa24c958fe882d260187edf3d52ad91e39f3b352a11bf1b7ae`
 - ResearchSpec targets: `researchspec/profiles/academic-pipeline.yaml`, `researchspec/subflows/<instance>/control.yaml`, `researchspec/subflows/<instance>/handoff.md`
 - Generated output paths: `academic-pipeline/agents/state_tracker_agent.md`
-- Before SHA-256: `af2c12271685216e4047e8bf9797f886641df29709779b5310c612e5dced4d5c`
+- Before SHA-256: `19f8d3da92612e67552e99a6c6f0b9033f5e7d599b4e73becb885eb26c7576a7`
 - After SHA-256: `2a9fa37acf454a59cf6f8907c9d2aee95c96c8b188e02286d4ffbbfdb28a3c74`
 
 #### Before
@@ -1937,11 +1995,11 @@ The State Tracker is the **single source of truth** for pipeline state. No other
 
 ### Dialogue log references (v3.3.0)
 
-For every stage transition, the tracker records a `dialogue_log_ref` containing the turn range covering that stage (e.g. `turns #47..#91`). This is a lightweight pointer — the full dialogue lives in the live conversation, not in state. The pointer is passed to `collaboration_depth_agent` when the orchestrator invokes it at checkpoints and at pipeline completion. Turn-range entries are immutable once a stage closes.
+For every stage transition, the tracker records a `dialogue_log_ref` containing the turn range covering that stage (e.g. `turns #47..#91`). This is a lightweight pointer — the full dialogue lives in the live conversation, not in state. The pointer is passed to `collaboration_depth_agent` when the orchestrator invokes it at checkpoints and during Stage 6 record compilation (the whole-pipeline pass). Turn-range entries are immutable once a stage closes.
 
 ### `collaboration_depth_history[]`
 
-Append-only list. Each entry is an observer report produced at a FULL/SLIM checkpoint or at pipeline completion. Entries never gate state transitions — they are stored for the final Process Record's "Collaboration Depth Trajectory" chapter only. The tracker must reject any write request that attempts to turn observer output into a blocking condition.
+Append-only list. Each entry is an observer report produced at a FULL/SLIM checkpoint or during Stage 6 record compilation (the whole-pipeline pass). Entries never gate state transitions — they are stored for the final Process Record's "Collaboration Depth Trajectory" chapter only. The tracker must reject any write request that attempts to turn observer output into a blocking condition.
 
 ### State Update Protocol
 
@@ -2160,7 +2218,7 @@ Current ResearchSpec owners:
 - Replacement body SHA-256: `e4fc5ca2733d91a905570924f9f240baf88ae59d34434d1eef4961ee3c6551a3`
 - ResearchSpec targets: `researchspec/profiles/academic-pipeline.yaml`, `researchspec/subflows/<instance>/control.yaml`, `researchspec/subflows/<instance>/handoff.md`
 - Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/SKILL.md`, `academic-pipeline/SKILL.md`, `deep-research/references/cross-skill/academic-pipeline/SKILL.md`
-- Before SHA-256: `a6431f1c70388ec07a0dc28a1ec2ee850e25386648beb3c32e51602da59068d9`
+- Before SHA-256: `1801291f0d22786b14538e39de3e787ae4a6a143f94cbcd1765b1646d2e1936f`
 - After SHA-256: `eaae176c4946547ab78c9fbb1b84f506e9fda63691eeff6732ffee289a9b2d19`
 
 #### Before
@@ -2171,7 +2229,7 @@ In Mode B, **single-phase agents (Bucket A per `docs/design/2026-05-18-ars-v3.9.
 - `pipeline_orchestrator_agent` (D — orchestrator, full pipeline visibility)
 - `state_tracker_agent` (D — meta state, all phases)
 - `integrity_verification_agent` (C — Stage 2.5 / 4.5 cross-skill gate)
-- `collaboration_depth_agent` (C — FULL/SLIM checkpoints + pipeline completion, advisory-only)
+- `collaboration_depth_agent` (C — FULL/SLIM checkpoints + Stage 6 record compilation, advisory-only)
 - `claim_ref_alignment_audit_agent` (C — opt-in claim audit, phase-orthogonal)
 
 Routing into Mode B requires explicit user signal — `/ars-<mode>` slash command or `[direct-mode]` prefix. Ambiguous cross-phase input defaults to clarification per `.claude/CLAUDE.md` Routing Discipline + `shared/references/intent_clarification_protocol.md`. **Critically:** if `pipeline_orchestrator_agent` is dispatched on ambiguous cross-phase materials, the orchestrator itself currently cannot reconcile (this is the v3.10 conductor #134 work) — v3.9.2 routes such cases to clarification BEFORE the orchestrator runs.

@@ -54,11 +54,11 @@ When invoked under a sprint contract, your job is **arithmetic, not interpretive
 1. Parse `expression` against the recognised patterns published in `sprint_contract_protocol.md §9`. Unrecognised → emit `[EXPRESSION-UNRECOGNISED: condition_id=<F>, expression=<...>]` and abort.
 2. Apply `cross_reviewer_quantifier` with panel-relative thresholds:
    - `any`: fires if predicate holds for ≥ 1 of N reviewers.
-   - `majority`: for N ≥ 3, fires if ≥ `⌈N/2⌉ + 1`; for N == 2, fires if all 2; for N == 1, vacuous (validator SC-11 warns).
+   - `majority`: simple majority — for N ≥ 3, fires if ≥ `⌊N/2⌋ + 1` (N=5 → 3, N=3 → 2); for N == 2, fires if all 2; for N == 1, vacuous (never fires; validator SC-11 warns). Formula corrected from a `⌈⌉` transcription error; evidence chain in issue #531.
    - `all`: fires if predicate holds for all N reviewers.
 3. Record `{condition_id, fired: true | false}`.
 
-**Step 3 — Precedence and decision.** Among fired conditions, pick the one with highest `severity`. Ties break by ordinal position (earliest in the `failure_conditions[]` array wins). Emit its `action` as `editorial_decision`.
+**Step 3 — Precedence and decision.** Among fired conditions, pick the one with highest `severity`. Ties break by ordinal position (earliest in the `failure_conditions[]` array wins). Emit its `action` as `editorial_decision`. If no condition fired, emit the contract's accept-grade action (the `failure_conditions[]` entry whose `action` is `editorial_decision=accept`). Your output MUST carry the pinned emission block, machine-verified by `../scripts/check_panel_synthesis.py` (protocol §8.1): exactly one line `fired_conditions: [<comma-separated condition_ids that fired, empty allowed>]`, and exactly one line stating the decision action string verbatim (e.g. `editorial_decision=major_revision`) — nowhere else in your output may a bare `editorial_decision=<...>` line appear.
 
 ### Forbidden operations
 
@@ -237,6 +237,23 @@ Based on the decision matrix in `references/editorial_decision_standards.md`:
 - Even when Rejecting, provide constructive improvement directions
 - Suggest more suitable journals or research directions
 
+### Host-native alternate-model review
+
+Use the current session model by default. If an independent model could improve
+this subflow, the main Agent may propose one model that the host already exposes
+through its native subagent mechanism. Before dispatch, obtain a separate user
+confirmation covering the proposed model, the category of content that will be
+shared, and the expected cost. This consent applies only to the current subflow;
+every child, branch, and revision round asks again. Do not store the consent in a
+stable spec, control, handoff, or model configuration file.
+
+Freeze the main Agent's judgment before dispatch. Send only the minimum
+de-anchored material needed for the check, without the main judgment, scores, or
+reasoning. Treat disagreement as a reason for targeted review. Do not vote,
+average results, or let the subagent silently rewrite the frozen judgment. If
+the host cannot dispatch the confirmed model or the result is structurally
+invalid, disclose the limitation and continue with a single-model result.
+
 ### Step 5: Revision Roadmap Construction
 
 Organize all items requiring revision into an executable checklist by priority. **Roadmap items are keyed to `sub_claim_id`, not to weakness bundles**: a compound weakness whose sub-claims reached different consensus levels (e.g. SC-1 at CONSENSUS-4, SC-2 a single-reviewer finding) produces **separate, correctly-prioritized items**, never one blurred item that buries the minority sub-claim. Each item carries its `sub_claim_id` so it traces back to the Step 1b inventory and forward into `academic-paper` revision mode (the id is additive provenance — it does not change the roadmap's input format).
@@ -405,3 +422,20 @@ Thank you for submitting your manuscript titled "[Paper Title]" to [Journal Name
 - In Guided Mode, do not produce a full Editorial Decision Letter
 - Instead: Based on the 4 reports, prepare an "issue list" and discuss with the author one by one in priority order
 - Start from the EIC's perspective, gradually introducing other reviewers' perspectives
+
+### Host-native alternate-model review
+
+Use the current session model by default. If an independent model could improve
+this subflow, the main Agent may propose one model that the host already exposes
+through its native subagent mechanism. Before dispatch, obtain a separate user
+confirmation covering the proposed model, the category of content that will be
+shared, and the expected cost. This consent applies only to the current subflow;
+every child, branch, and revision round asks again. Do not store the consent in a
+stable spec, control, handoff, or model configuration file.
+
+Freeze the main Agent's judgment before dispatch. Send only the minimum
+de-anchored material needed for the check, without the main judgment, scores, or
+reasoning. Treat disagreement as a reason for targeted review. Do not vote,
+average results, or let the subagent silently rewrite the frozen judgment. If
+the host cannot dispatch the confirmed model or the result is structurally
+invalid, disclose the limitation and continue with a single-model result.

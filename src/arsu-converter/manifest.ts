@@ -2,6 +2,7 @@ import { CONVERTER_VERSION, GENERATED_OUTPUT_PATH, VENDOR_SOURCE_PATH } from "./
 import { serializableAnchorReplacementPlan } from "./anchors/replace.js";
 import { REPLACEMENT_PROFILE_ID } from "./anchors/types.js";
 import type { AnchorReplacementPlan, SerializableAnchorReplacementPlan } from "./anchors/types.js";
+import { serializableRuntimePolicyPlan } from "./runtime-policy/planner.js";
 import type {
   ConversionManifest,
   ConversionResult,
@@ -17,6 +18,7 @@ export function buildManifest(
   contractManifestHash: string,
   routingCatalogHash: string,
   anchorReplacementReportHash?: string,
+  runtimePolicyReportHash?: string,
 ): ConversionManifest {
   const skillGroups: ConversionManifest["skill_groups"] = {};
   const outputFiles: OutputFileRecord[] = [];
@@ -59,6 +61,15 @@ export function buildManifest(
       output_path: "anchor-replacement-report.md",
       transform_rule: "anchor_replacement_human_report",
       sha256: anchorReplacementReportHash,
+    });
+  }
+  if (runtimePolicyReportHash) {
+    outputFiles.push({
+      group: "root",
+      source_path: "generated:runtime-policy-report",
+      output_path: "runtime-policy-report.md",
+      transform_rule: "runtime_policy_human_report",
+      sha256: runtimePolicyReportHash,
     });
   }
 
@@ -115,6 +126,11 @@ export function buildManifest(
       sha256: routingCatalogHash,
     },
     anchor_replacements: anchorReplacements,
+    runtime_policy: {
+      ...serializableRuntimePolicyPlan(result.runtime_policy),
+      report_path: "runtime-policy-report.md",
+      report_sha256: runtimePolicyReportHash ?? "",
+    },
     validation_summary: validationSummary,
   };
 }
@@ -151,6 +167,9 @@ export function buildReport(manifest: ConversionManifest): string {
     `- Anchor replacement coverage: ${String(manifest.anchor_replacements.replaced_anchors)}/${String(manifest.anchor_replacements.replaceable_anchors)} replaceable anchors`,
     `- Diagnostic anchors matched: ${String(manifest.anchor_replacements.diagnostic_matched)}/${String(manifest.anchor_replacements.diagnostic_anchors)}`,
     `- Human replacement report: \`anchor-replacement-report.md\``,
+    `- Runtime policy catalog: \`${manifest.runtime_policy.catalog_id}\``,
+    `- Runtime policy coverage: ${String(manifest.runtime_policy.classified_source_count)} classified sources`,
+    `- Runtime policy report: \`${manifest.runtime_policy.report_path}\``,
     "",
     "## Routing Catalog",
     "",
@@ -296,6 +315,13 @@ export function normalizeManifest(manifest: ConversionManifest): unknown {
           diagnostics: [...record.diagnostics].sort(),
         }))
         .sort((left, right) => left.anchor_id.localeCompare(right.anchor_id)),
+    },
+    runtime_policy: {
+      ...manifest.runtime_policy,
+      checker_closure: [...manifest.runtime_policy.checker_closure].sort((left, right) => left.source_path.localeCompare(right.source_path)),
+      records: [...manifest.runtime_policy.records]
+        .map((record) => ({ ...record, output_paths: [...record.output_paths].sort() }))
+        .sort((left, right) => left.rewrite_id.localeCompare(right.rewrite_id)),
     },
   };
   return canonicalizeObject(normalized);

@@ -35,3 +35,17 @@ export async function gitOutput(cwd: string, args: string[]): Promise<string> {
   const result = await gitResult(cwd, args);
   return result.exitCode === 0 ? result.stdout : "";
 }
+
+export async function listTrackedFiles(cwd: string): Promise<string[]> {
+  const result = await gitResult(cwd, ["ls-files", "--stage", "-z"]);
+  if (result.exitCode !== 0) throw new Error(`Unable to list tracked upstream files: ${result.stderr}`);
+  return result.stdout
+    .split("\0")
+    .filter(Boolean)
+    .flatMap((record) => {
+      const match = /^(?<mode>\d+) [0-9a-f]+ \d+\t(?<path>.+)$/s.exec(record);
+      if (!match || !["100644", "100755"].includes(match.groups?.mode ?? "") || !match.groups?.path) return [];
+      return [match.groups.path];
+    })
+    .sort();
+}

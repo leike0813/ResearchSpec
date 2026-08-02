@@ -13,6 +13,7 @@ through stable files instead of platform-specific runtime assumptions.
 Current external reference paths:
 
 - ResearchSpec project: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec`
+- ARS converter input pinned in ResearchSpec: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/ars`
 - ARSU project to be absorbed: `/home/joshua/Workspace/Code/Skill/academic-research-skills-universal`
 - ARS upstream checkout inside ARSU: `/home/joshua/Workspace/Code/Skill/academic-research-skills-universal/vendor/ars`
 - ToolUniverse vendor converter source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/tooluniverse`
@@ -76,6 +77,11 @@ The locked direction is:
 - Every formal Gate requires human confirmation. Failed-Gate overrides and
   scope, claim, structure, and branch choices are recorded only in the owning
   subflow control. Ordinary exploration belongs in working material.
+- Alternate-model review uses only a host-native subagent after separate
+  confirmation of model, content category, and cost for the current subflow.
+  Route confirmation does not grant this consent, children and revision rounds
+  ask again, and ResearchSpec never stores model consent or configures/calls a
+  model service.
 
 The fixed user-visible agent surface is exactly four ARSU Skills
 (`deep-research`, `academic-paper`, `academic-paper-reviewer`,

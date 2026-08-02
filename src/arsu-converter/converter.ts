@@ -3,8 +3,12 @@ import path from "node:path";
 
 import { buildContractIntegrationManifest } from "./contracts.js";
 import { emitSkillGroup } from "./emit.js";
-import { listFiles, pathExists, removeTree, sha256File, writeJson, writeUtf8 } from "./fs-utils.js";
+import { pathExists, removeTree, sha256File, writeJson, writeUtf8 } from "./fs-utils.js";
 import { buildAnchorReplacementPlan } from "./anchors/match.js";
+import { buildRuntimePolicyPlan, buildRuntimePolicyReport } from "./runtime-policy/planner.js";
+import { ARSU_RUNTIME_POLICY_CATALOG } from "./runtime-policy/catalog.js";
+import type { RuntimePolicyCatalog } from "./runtime-policy/types.js";
+import { validateCombinedRewritePlan } from "./source-rewrite.js";
 import { checkExistingOutputClean, checkIdempotence } from "./idempotence.js";
 import { buildInventory } from "./ingest.js";
 import { buildAnchorReplacementReport, buildManifest, buildReport } from "./manifest.js";
@@ -16,6 +20,7 @@ import { validateArsuOutput } from "./validate.js";
 import { ARSU_ROUTING_CATALOG } from "./routing/catalog.js";
 import { renderAcademicPipelineProfile } from "./workflow/generate.js";
 import { validateArsuWorkflowCatalog } from "./workflow/catalog.js";
+import { listTrackedFiles } from "./git.js";
 
 export interface ConvertOptions {
   repoRoot: string;
@@ -23,6 +28,7 @@ export interface ConvertOptions {
   force?: boolean;
   dryRun?: boolean;
   skipExistingCheck?: boolean;
+  runtimePolicyCatalog?: RuntimePolicyCatalog;
 }
 
 export async function convertArsu(options: ConvertOptions): Promise<ConversionResult> {
@@ -30,9 +36,19 @@ export async function convertArsu(options: ConvertOptions): Promise<ConversionRe
   const outputRoot = path.resolve(options.outputRoot ?? path.join(repoRoot, GENERATED_OUTPUT_PATH));
   const { sourceRoot, sourceVersion } = await validateUpstreamCheckout(repoRoot);
   const anchorReplacements = await buildAnchorReplacementPlan(repoRoot, sourceRoot, sourceVersion.commit);
+  const runtimePolicyCatalog = options.runtimePolicyCatalog ?? ARSU_RUNTIME_POLICY_CATALOG;
+  const runtimePolicy = await buildRuntimePolicyPlan(repoRoot, sourceRoot, sourceVersion.commit, runtimePolicyCatalog);
+  const rewriteErrors = validateCombinedRewritePlan(anchorReplacements, runtimePolicy);
+  if (rewriteErrors.length > 0) {
+    throw new ArsuConverterError(
+      "source_rewrite_overlap",
+      "ARSU source rewrite planning failed before generated output was touched.",
+      rewriteErrors,
+    );
+  }
 
   if (options.dryRun) {
-    return dryRunResult(sourceRoot, sourceVersion, outputRoot, anchorReplacements);
+    return dryRunResult(sourceRoot, sourceVersion, outputRoot, anchorReplacements, runtimePolicy);
   }
 
   if (await pathExists(outputRoot)) {
@@ -50,8 +66,9 @@ export async function convertArsu(options: ConvertOptions): Promise<ConversionRe
   }
   await mkdir(outputRoot, { recursive: true });
 
-  const inventory = await buildInventory(sourceRoot, sourceVersion.commit);
-  const knownSourcePaths = new Set(await listFiles(sourceRoot));
+  const trackedSourcePaths = await listTrackedFiles(sourceRoot);
+  const inventory = await buildInventory(sourceRoot, sourceVersion.commit, trackedSourcePaths);
+  const knownSourcePaths = new Set(trackedSourcePaths);
   const generatedGroups: ConversionResult["skill_groups"] = {};
 
   for (const [groupName, groupInventory] of Object.entries(inventory.skill_groups)) {
@@ -62,6 +79,7 @@ export async function convertArsu(options: ConvertOptions): Promise<ConversionRe
       groupInventory,
       knownSourcePaths,
       anchorReplacements,
+      runtimePolicy,
     );
   }
 
@@ -80,11 +98,12 @@ export async function convertArsu(options: ConvertOptions): Promise<ConversionRe
     contract_manifest: contractManifest,
     routing_catalog: ARSU_ROUTING_CATALOG,
     anchor_replacements: anchorReplacements,
+    runtime_policy: runtimePolicy,
     validation: null,
   };
 
   await writeConversionOutputs(result, outputRoot, null, contractManifestHash, routingCatalogHash);
-  const validation = await validateArsuOutput(outputRoot);
+  const validation = await validateArsuOutput(outputRoot, runtimePolicyCatalog);
   result.validation = validation;
   await writeConversionOutputs(result, outputRoot, validation, contractManifestHash, routingCatalogHash);
   return result;
@@ -120,7 +139,9 @@ async function writeConversionOutputs(
 ): Promise<void> {
   await writeUtf8(path.join(outputRoot, "anchor-replacement-report.md"), buildAnchorReplacementReport(result.anchor_replacements));
   const anchorReplacementReportHash = await sha256File(path.join(outputRoot, "anchor-replacement-report.md"));
-  const manifest = buildManifest(result, validation, contractManifestHash, routingCatalogHash, anchorReplacementReportHash);
+  await writeUtf8(path.join(outputRoot, "runtime-policy-report.md"), buildRuntimePolicyReport(result.runtime_policy));
+  const runtimePolicyReportHash = await sha256File(path.join(outputRoot, "runtime-policy-report.md"));
+  const manifest = buildManifest(result, validation, contractManifestHash, routingCatalogHash, anchorReplacementReportHash, runtimePolicyReportHash);
   await writeJson(path.join(outputRoot, "conversion-manifest.json"), manifest);
   await writeUtf8(path.join(outputRoot, "conversion-report.md"), buildReport(manifest));
 }
@@ -130,6 +151,7 @@ function dryRunResult(
   sourceVersion: ConversionResult["source_version"],
   outputRoot: string,
   anchorReplacements: ConversionResult["anchor_replacements"],
+  runtimePolicy: ConversionResult["runtime_policy"],
 ): ConversionResult {
   return {
     source_root: sourceRoot,
@@ -147,6 +169,7 @@ function dryRunResult(
     contract_manifest: buildContractIntegrationManifest([]),
     routing_catalog: ARSU_ROUTING_CATALOG,
     anchor_replacements: anchorReplacements,
+    runtime_policy: runtimePolicy,
     validation: { ok: true, errors: [], warnings: [] },
   };
 }

@@ -87,7 +87,7 @@ Current ResearchSpec owners:
 |------|--------|
 | **Who hands off** | Lead Author |
 | **Who receives** | Review Coordinator |
-| **Materials** | Revised Draft + Response to Reviewers (Schema 8) |
+| **Materials** | Revised Draft + Response to Reviewers (Schema 8) + Editorial Decision Letter (Schema 6 — its Review Panel Provenance block feeds the #539 Judge Record) |
 | **Approval needed** | Lead Author confirms all addressable items are handled |
 | **Handoff checklist** | Response to Reviewers covers every roadmap item; new references verified |
 

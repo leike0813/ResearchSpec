@@ -9,6 +9,7 @@ Input:
 1. Original Revision Roadmap (Stage 3 output)
 2. Revised manuscript
 3. Response to Reviewers (optional)
+4. Editorial Decision Letter (optional, #539 — its Review Panel Provenance block feeds the Judge Record's Round-1 provenance; absent → "unknown (provenance block absent)")
 
 Phase 0: Reads the Revision Roadmap, builds a checklist
 Phase 1: EIC checks each item (other reviewers not activated)
@@ -39,6 +40,31 @@ Priority 2 (Suggested):
 Priority 3 (Nice to Fix):
   -> Check but does not affect Decision
 ```
+
+### Judge Independence (#539)
+
+The re-review judges revisions on the same model family that drove them — an analogous correlated-judge configuration to the one Ren et al. (2026, arXiv:2607.13104 §8.1.2) warn about (their warning addresses the identical evaluation operator driving updates AND reporting final results; here the correlation is family-level), with the same failure direction: the revision loop can converge on "what this judge likes" instead of quality.
+
+### Host-native alternate-model review
+
+Use the current session model by default. If an independent model could improve
+this subflow, the main Agent may propose one model that the host already exposes
+through its native subagent mechanism. Before dispatch, obtain a separate user
+confirmation covering the proposed model, the category of content that will be
+shared, and the expected cost. This consent applies only to the current subflow;
+every child, branch, and revision round asks again. Do not store the consent in a
+stable spec, control, handoff, or model configuration file.
+
+Freeze the main Agent's judgment before dispatch. Send only the minimum
+de-anchored material needed for the check, without the main judgment, scores, or
+reasoning. Treat disagreement as a reason for targeted review. Do not vote,
+average results, or let the subagent silently rewrite the frozen judgment. If
+the host cannot dispatch the confirmed model or the result is structurally
+invalid, disclose the limitation and continue with a single-model result.
+
+**When not active** (or the pass came back `unavailable`): the re-review proceeds single-family and the Re-Review Output carries the disclosure line verbatim (it is part of the output template below): "This verification round ran on the same model family that drove the revisions; over-optimization to this judge's latent biases is possible (Ren et al. 2026, arXiv:2607.13104 §8.1.2)." Never omit it in single-family runs.
+
+**Judge identity recording (both cases):** the Re-Review Output's Judge Record block (below) records the judge configuration — the verification judge's family/id (the running session knows its own), the Round-1 panel provenance copied seat-level from the Editorial Decision Letter's Review Panel Provenance block (#540; carried into Stage 3' with the letter — no per-seat model id is invented), the prompt/rubric surfaces used, the evidence the judge saw, and the judging budget noted separately from generation. Schema 6 carries these as the optional `judge_record` field.
 
 <!--rs:REVIEW-008-->
 ### ResearchSpec Current Owner
@@ -102,6 +128,27 @@ If Re-Review Decision = Major Revision:
 ```markdown
 # Verification Review Report
 
+## Judge Record (#539)
+
+### Host-native alternate-model review
+
+Use the current session model by default. If an independent model could improve
+this subflow, the main Agent may propose one model that the host already exposes
+through its native subagent mechanism. Before dispatch, obtain a separate user
+confirmation covering the proposed model, the category of content that will be
+shared, and the expected cost. This consent applies only to the current subflow;
+every child, branch, and revision round asks again. Do not store the consent in a
+stable spec, control, handoff, or model configuration file.
+
+Freeze the main Agent's judgment before dispatch. Send only the minimum
+de-anchored material needed for the check, without the main judgment, scores, or
+reasoning. Treat disagreement as a reason for targeted review. Do not vote,
+average results, or let the subagent silently rewrite the frozen judgment. If
+the host cannot dispatch the confirmed model or the result is structurally
+invalid, disclose the limitation and continue with a single-model result.
+
+[Single-family runs: include the disclosure line verbatim here — "This verification round ran on the same model family that drove the revisions; over-optimization to this judge's latent biases is possible (Ren et al. 2026, arXiv:2607.13104 §8.1.2)."]
+
 ## Decision
 [Accept / Minor Revision / Major Revision]
 
@@ -109,10 +156,22 @@ If Re-Review Decision = Major Revision:
 
 ### Priority 1 — Required Revisions
 
-| # | Original Review Comment | Author's Claim | Response Status | Revision Location | Verified? | Quality Assessment |
-|---|------------------------|---------------|-----------------|-------------------|-----------|-------------------|
-| R1 | [Original text] | [What the author claims to have done in Response to Reviewers] | FULLY_ADDRESSED | Section X.X | ✅ Yes | Adequately addressed; newly added content effectively resolves the issue |
-| R2 | [Original text] | [Author's stated change] | PARTIALLY_ADDRESSED | Section Y.Y | ⚠️ Partial | Partially addressed, but still missing [specific gap] |
+### Host-native alternate-model review
+
+Use the current session model by default. If an independent model could improve
+this subflow, the main Agent may propose one model that the host already exposes
+through its native subagent mechanism. Before dispatch, obtain a separate user
+confirmation covering the proposed model, the category of content that will be
+shared, and the expected cost. This consent applies only to the current subflow;
+every child, branch, and revision round asks again. Do not store the consent in a
+stable spec, control, handoff, or model configuration file.
+
+Freeze the main Agent's judgment before dispatch. Send only the minimum
+de-anchored material needed for the check, without the main judgment, scores, or
+reasoning. Treat disagreement as a reason for targeted review. Do not vote,
+average results, or let the subagent silently rewrite the frozen judgment. If
+the host cannot dispatch the confirmed model or the result is structurally
+invalid, disclose the limitation and continue with a single-model result.
 
 ### Priority 2 — Suggested Revisions
 

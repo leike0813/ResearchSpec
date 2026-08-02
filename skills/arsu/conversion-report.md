@@ -2,9 +2,9 @@
 
 - Output kind: `final`
 - Source: `vendor/ars`
-- Source commit: `becfcc40c6e9e93c187cf4a088333f83373e002d`
+- Source commit: `828ef3b613b0e8b91830da3328a1e33d4eb5ab4c`
 - Output: `skills/arsu`
-- Generated at: `2026-08-02T06:08:43Z`
+- Generated at: `2026-08-02T15:42:56Z`
 - Validation: pass
 
 ## Source Checkout
@@ -27,9 +27,12 @@
 - Profile: `researchspec-preflight-v10`
 - Full matrix injection: `false`
 - Anchor replacement profile: `researchspec-anchor-replacement-v4`
-- Anchor replacement coverage: 53/53 replaceable anchors
+- Anchor replacement coverage: 54/54 replaceable anchors
 - Diagnostic anchors matched: 2/2
 - Human replacement report: `anchor-replacement-report.md`
+- Runtime policy catalog: `ars-v3.19.0-agent-neutral-runtime`
+- Runtime policy coverage: 33 classified sources
+- Runtime policy report: `runtime-policy-report.md`
 
 ## Routing Catalog
 
@@ -44,7 +47,7 @@
 - `boundary_deliverable_contract`: 6
 - `boundary_deliverable_provenance`: 4
 - `control_decision_record`: 2
-- `gate_policy`: 5
+- `gate_policy`: 6
 - `generator_evaluator_contract`: 10
 - `handoff_projection`: 3
 - `review_handoff_tracking`: 4
@@ -55,30 +58,31 @@
 
 ## File Summary
 
-- Output files: 488
-- Excluded source files: 499
-- Unclassified source files: 321
-- Risk findings: 1118
+- Output files: 510
+- Excluded source files: 529
+- Unclassified source files: 358
+- Risk findings: 1472
 
 ## Risk Findings
 
 - `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 33: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 33: platform_term `hook`
-- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 148: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 234: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 245: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 249: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 259: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 297: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 153: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 239: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 250: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 254: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 264: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 302: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/agents/domain_reviewer_agent.md` line 32: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/agents/domain_reviewer_agent.md` line 32: platform_term `hook`
-- `academic-paper-reviewer/agents/domain_reviewer_agent.md` line 188: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/domain_reviewer_agent.md` line 193: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 31: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 31: platform_term `hook`
+- `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 57: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 118: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 122: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 131: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 400: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 417: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/agents/eic_agent.md` line 31: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/agents/eic_agent.md` line 31: platform_term `hook`
 - `academic-paper-reviewer/agents/methodology_reviewer_agent.md` line 32: issue_reference `issue_or_pr_reference`
@@ -89,30 +93,29 @@
 - `academic-paper-reviewer/examples/subclaim_decomposition_example.md` line 3: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/examples/subclaim_decomposition_example.md` line 70: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/references/calibration_mode_protocol.md` line 6: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/references/calibration_mode_protocol.md` line 66: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/references/calibration_mode_protocol.md` line 77: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/references/calibration_mode_protocol.md` line 121: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/references/calibration_mode_protocol.md` line 83: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/references/calibration_mode_protocol.md` line 94: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/references/calibration_mode_protocol.md` line 148: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/references/changelog.md` line 1: history_term `Changelog`
 - `academic-paper-reviewer/references/changelog.md` line 9: version_marker `version marker`
 - `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md` line 42: platform_term `hook`
-- `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md` line 179: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md` line 555: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md` line 569: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md` line 600: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md` line 626: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md` line 180: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md` line 284: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md` line 371: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md` line 437: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md` line 490: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md` line 557: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md` line 571: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md` line 602: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md` line 628: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md` line 663: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md` line 671: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md` line 676: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md` line 689: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/references/cross-skill/academic-paper/agents/formatter_agent.md` line 26: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/references/cross-skill/academic-paper/agents/formatter_agent.md` line 26: platform_term `hook`
 - `academic-paper-reviewer/references/cross-skill/academic-paper/agents/formatter_agent.md` line 103: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/references/cross-skill/academic-paper/agents/formatter_agent.md` line 107: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/references/cross-skill/academic-paper/agents/formatter_agent.md` line 328: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/references/cross-skill/academic-paper/agents/formatter_agent.md` line 378: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/references/cross-skill/academic-paper/agents/formatter_agent.md` line 384: history_term `legacy`
-- `academic-paper-reviewer/references/cross-skill/academic-paper/agents/formatter_agent.md` line 384: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/references/cross-skill/academic-paper/agents/formatter_agent.md` line 386: history_term `legacy`
-- `academic-paper-reviewer/references/cross-skill/academic-paper/agents/formatter_agent.md` line 390: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/references/cross-skill/academic-paper/agents/formatter_agent.md` line 396: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/references/cross-skill/academic-paper/agents/formatter_agent.md` line 416: issue_reference `issue_or_pr_reference`
-- ... 1068 more findings in `conversion-manifest.json`
+- ... 1422 more findings in `conversion-manifest.json`
 
 ## Validation
 

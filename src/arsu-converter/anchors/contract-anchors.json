@@ -1,7 +1,7 @@
 {
   "schema_version": "researchspec.arsu.contract-anchors.v4",
   "upstream_source": "vendor/ars",
-  "audited_commit": "becfcc40c6e9e93c187cf4a088333f83373e002d",
+  "audited_commit": "828ef3b613b0e8b91830da3328a1e33d4eb5ab4c",
   "anchors": [
     {
       "id": "STATE-002",
@@ -1568,6 +1568,37 @@
       "replacement_scope": {
         "start_snippet": "All Material Passports (Schema 9) attached",
         "end_snippet": "All Material Passports (Schema 9) attached"
+      }
+    },
+    {
+      "id": "REVIEW-016",
+      "name": "reviewer.skill.panel-checker-gate-boundary",
+      "source_path": "academic-paper-reviewer/SKILL.md",
+      "owner_skill": "academic-paper-reviewer",
+      "contract_category": "sprint_contract",
+      "severity": "required",
+      "match_hints": {
+        "headings": [
+          "v3.6.2 Sprint Contract Hard Gate"
+        ],
+        "snippets": [
+          "Panel self-consistency checker (#510)",
+          "scripts/check_panel_synthesis.py"
+        ],
+        "keywords": [
+          "check_sprint_contract.py",
+          "failure_conditions"
+        ]
+      },
+      "semantic_role": "gate_policy",
+      "researchspec_targets": [
+        "researchspec/subflows/<instance>/handoff.md",
+        "researchspec/subflows/<instance>/control.yaml"
+      ],
+      "replacement_shape": "gate_rule_block",
+      "replacement_scope": {
+        "start_snippet": "Panel self-consistency checker (#510)",
+        "end_snippet": "Panel self-consistency checker (#510)"
       }
     },
     {

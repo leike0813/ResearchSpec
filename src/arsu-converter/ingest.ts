@@ -14,7 +14,7 @@ const EMPTY_GROUP = (): SkillGroupInventory => ({
   scripts: [],
 });
 
-export async function buildInventory(sourceRoot: string, sourceCommit: string): Promise<Inventory> {
+export async function buildInventory(sourceRoot: string, sourceCommit: string, sourcePaths?: readonly string[]): Promise<Inventory> {
   const inventory: Inventory = {
     source_root: sourceRoot,
     source_commit: sourceCommit,
@@ -30,7 +30,7 @@ export async function buildInventory(sourceRoot: string, sourceCommit: string): 
     }
   }
 
-  for (const relPath of await listFiles(sourceRoot)) {
+  for (const relPath of sourcePaths ?? await listFiles(sourceRoot)) {
     const classification = classifyPath(relPath);
     if (classification.category === "runtime_core") {
       const group = classification.skill_group;

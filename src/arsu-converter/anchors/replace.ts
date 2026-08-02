@@ -7,26 +7,47 @@ import type {
   SerializableAnchorMatchRecord,
   SerializableAnchorReplacementPlan,
 } from "./types.js";
+import { markRuntimePolicyAdapted } from "../runtime-policy/planner.js";
+import type { RuntimePolicyPlan } from "../runtime-policy/types.js";
 
 export { markerEnd, markerStart } from "./markers.js";
 
-export function applyAnchorReplacements(
+export function applyCombinedReplacements(
   text: string,
   sourcePath: string,
   outputPath: string,
-  plan: AnchorReplacementPlan,
+  anchorPlan: AnchorReplacementPlan,
+  runtimePlan: RuntimePolicyPlan,
 ): string {
-  const spans = [...(plan.spans_by_source.get(sourcePath) ?? [])].sort((left, right) => right.start - left.start);
+  const rewrites = [
+    ...(anchorPlan.spans_by_source.get(sourcePath) ?? []).map((span) => ({
+      id: span.anchor.id,
+      start: span.start,
+      end: span.end,
+      replacementBody: span.replacement_body,
+      kind: "anchor" as const,
+    })),
+    ...(runtimePlan.spans_by_source.get(sourcePath) ?? []).map((span) => ({
+      id: span.rewrite_id,
+      start: span.start,
+      end: span.end,
+      replacementBody: span.replacement_text,
+      kind: "runtime" as const,
+    })),
+  ].sort((left, right) => right.start - left.start || right.end - left.end || right.id.localeCompare(left.id));
+
   let rewritten = text;
-  for (const span of spans) {
-    const before = rewritten.slice(span.start, span.end);
+  for (const rewrite of rewrites) {
+    const before = rewritten.slice(rewrite.start, rewrite.end);
     const lineEnding = before.includes("\r\n") ? "\r\n" : "\n";
     const trailingLineEnding = before.endsWith("\r\n") ? "\r\n" : before.endsWith("\n") ? "\n" : "";
-    const body = span.replacement_body.replace(/\n/g, lineEnding);
-    const rendered = [markerStart(span.anchor.id), body, markerEnd(span.anchor.id)].join(lineEnding);
-    const replacement = `${rendered}${trailingLineEnding}`;
-    rewritten = `${rewritten.slice(0, span.start)}${replacement}${rewritten.slice(span.end)}`;
-    markReplaced(plan, span.anchor.id, outputPath, rendered);
+    const body = rewrite.replacementBody.replace(/\n/g, lineEnding);
+    const rendered = rewrite.kind === "anchor"
+      ? [markerStart(rewrite.id), body, markerEnd(rewrite.id)].join(lineEnding)
+      : body;
+    rewritten = `${rewritten.slice(0, rewrite.start)}${rendered}${trailingLineEnding}${rewritten.slice(rewrite.end)}`;
+    if (rewrite.kind === "anchor") markReplaced(anchorPlan, rewrite.id, outputPath, rendered);
+    else markRuntimePolicyAdapted(runtimePlan, rewrite.id, outputPath, rendered);
   }
   return rewritten;
 }

@@ -6,14 +6,34 @@ import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { test } from "node:test";
 
-import { convertArsu } from "../src/arsu-converter/converter.js";
-import { validateArsuOutput } from "../src/arsu-converter/validate.js";
+import { convertArsu as convertArsuImpl } from "../src/arsu-converter/converter.js";
+import { validateArsuOutput as validateArsuOutputImpl } from "../src/arsu-converter/validate.js";
 import { checkExistingOutputClean } from "../src/arsu-converter/idempotence.js";
 import { normalizeManifest } from "../src/arsu-converter/manifest.js";
 import { ArsuConverterError, type ConversionManifest } from "../src/arsu-converter/types.js";
 import { ARSU_ROUTING_CATALOG, getArsuSkillDefinition } from "../src/arsu-converter/routing/catalog.js";
 import { readSkillFrontmatterDescription, renderArsuSkillDescription } from "../src/arsu-converter/routing/projection.js";
 import { RESEARCHSPEC_PREFLIGHT_MARKER, RESEARCHSPEC_PREFLIGHT_PROFILE_ID } from "../src/arsu-converter/contracts.js";
+import type { ConvertOptions } from "../src/arsu-converter/converter.js";
+import type { RuntimePolicyCatalog } from "../src/arsu-converter/runtime-policy/types.js";
+
+const FIXTURE_RUNTIME_POLICY_CATALOG: RuntimePolicyCatalog = {
+  schema_version: "researchspec.arsu.runtime-policy.v1",
+  catalog_id: "arsu-runtime-policy-test-fixture",
+  source_commit: "*",
+  excluded_non_runtime_paths: [],
+  match_keywords: ["ARS_CROSS_MODEL", "ARS_MODEL_TIERING", "cross-model", "cross_model", "model tiering"],
+  entries: [],
+  checker_closure: [],
+};
+
+function convertArsu(options: ConvertOptions) {
+  return convertArsuImpl({ ...options, runtimePolicyCatalog: FIXTURE_RUNTIME_POLICY_CATALOG });
+}
+
+function validateArsuOutput(outputRoot: string) {
+  return validateArsuOutputImpl(outputRoot, FIXTURE_RUNTIME_POLICY_CATALOG);
+}
 
 void test("converter generates four ResearchSpec-compatible skill groups", async () => {
   const root = await tempRepoRoot();

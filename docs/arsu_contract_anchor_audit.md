@@ -7,7 +7,7 @@ Anchor manifest 记录 vendored ARSU 中需要由 ResearchSpec current contracts
 
 ## 2. Replacement owner
 
-55 个 anchors 的 replacements 只引用以下 current owners：
+56 个 anchors 的 replacements 只引用以下 current owners：
 
 - 四份 stable specs；
 - `profiles/academic-pipeline.yaml`；
@@ -27,6 +27,8 @@ revision traceability、annotation raw/interpretation 分离和 pipeline Gate �
 ## 4. 验证
 
 `pnpm arsu:anchors:check` 校验 vendored source 边界、replacement targets、coverage、唯一匹配和
-current-owner markers。`pnpm arsu:check` 校验生成树，`pnpm arsu:idempotence` 证明重复转换不改变
+current-owner markers。`pnpm arsu:runtime-policy:check` 校验 ARS v3.19.0 的 33 个 runtime-policy
+命中分类、宿主原生委派改造与两文件 panel checker 闭包。`pnpm arsu:check` 校验生成树，
+`pnpm arsu:idempotence` 证明重复转换不改变
 bytes。旧控制面残留检查只作用于 ResearchSpec-authored injection 和 replacement，不扫描未改造的
 upstream history prose。

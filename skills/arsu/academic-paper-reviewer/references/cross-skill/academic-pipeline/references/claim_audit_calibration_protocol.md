@@ -149,10 +149,22 @@ If a deploying operator brings a gold set that is itself biased (all tuples from
 
 ## Resolved design decisions (2026-05-15, per spec §10 OQs)
 
-- **Activation**: opt-in. The audit agent ships with default thresholds and the canonical fixture; operators run `scripts/test_claim_audit_calibration` as a CI gate. Re-calibration with a domain-specific gold set is the operator's call, not auto-triggered.
-- **Threshold values**: FNR < 0.15 + FPR < 0.10. Tightened from the reviewer-mode 0.17 / 0.50 Lu 2026 reference points because the audit unit (per-claim) is simpler than the reviewer unit (whole paper) — the gate should track the stricter end of plausible LLM-as-judge accuracy.
-- **Ensembling**: not in v3.8.0. Per-tuple alignment calls are short and the judge's response shape is constrained; majority-vote ensembling adds cost without obvious accuracy gain for this unit of analysis. Re-evaluate if calibration evidence in v3.8.x shows high variance.
-- **Cross-model verification**: out of scope for the calibration runner — `ARS_CROSS_MODEL` interacts with the audit agent dispatch path, not the calibration script. An operator wanting cross-model calibration runs the runner twice with different `judge_model` settings.
+### Host-native alternate-model review
+
+Use the current session model by default. If an independent model could improve
+this subflow, the main Agent may propose one model that the host already exposes
+through its native subagent mechanism. Before dispatch, obtain a separate user
+confirmation covering the proposed model, the category of content that will be
+shared, and the expected cost. This consent applies only to the current subflow;
+every child, branch, and revision round asks again. Do not store the consent in a
+stable spec, control, handoff, or model configuration file.
+
+Freeze the main Agent's judgment before dispatch. Send only the minimum
+de-anchored material needed for the check, without the main judgment, scores, or
+reasoning. Treat disagreement as a reason for targeted review. Do not vote,
+average results, or let the subagent silently rewrite the frozen judgment. If
+the host cannot dispatch the confirmed model or the result is structurally
+invalid, disclose the limitation and continue with a single-model result.
 
 ---
 

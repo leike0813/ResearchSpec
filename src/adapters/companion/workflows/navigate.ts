@@ -50,11 +50,12 @@ Use only selectors returned by current status, list, show, or the catalog-derive
    - any current blocker.
 4. Ask for confirmation scoped to this exact instance. If the route summary materially changes, present the new summary and obtain a new confirmation.
 5. Start only the confirmed instance. A pipeline parent never pre-creates children; each child, branch, and dynamic round repeats the route-summary check and confirmation.
-6. Dispatch semantic production to the named ARSU Skill. The producer writes ordinary project files outside \`researchspec/\` and maintains its own handoff.
-7. For Resume, read the exact subflow instructions and handoff. Route a ready producer to its ARSU Skill, a formal Gate to Verify, a human choice to Decide, and a high-impact stable-spec change to Propose.
-8. For optional domain help, suggest at most three relevant domains. Keep plugin consent separate, preview the exact IDs, and install only after explicit consent. Return helper results to the original ARSU producer.
-9. For Zotero work, use a direct Zotero Adapter Skill when the task is bounded; use \`zotero-library-agent\` for broad library requests. Zotero remains a nested provider when an ARSU producer owns the academic task.
-10. For Explain, use targeted status/list/show/check reads and write nothing. For Export, use a bounded pack or an explicit handoff; state that external bytes and private \`work/\` content are excluded.
+6. If the producer proposes independent model review, keep it separate from route confirmation. Name one host-available model and disclose the content category and expected cost. Dispatch only through the host's native subagent mechanism after confirmation for this exact subflow; never configure or call a model service. Failure leaves the route unchanged and falls back to the current session model with disclosure.
+7. Dispatch semantic production to the named ARSU Skill. The producer writes ordinary project files outside \`researchspec/\` and maintains its own handoff.
+8. For Resume, read the exact subflow instructions and handoff. Route a ready producer to its ARSU Skill, a formal Gate to Verify, a human choice to Decide, and a high-impact stable-spec change to Propose.
+9. For optional domain help, suggest at most three relevant domains. Keep plugin consent separate, preview the exact IDs, and install only after explicit consent. Return helper results to the original ARSU producer.
+10. For Zotero work, use a direct Zotero Adapter Skill when the task is bounded; use \`zotero-library-agent\` for broad library requests. Zotero remains a nested provider when an ARSU producer owns the academic task.
+11. For Explain, use targeted status/list/show/check reads and write nothing. For Export, use a bounded pack or an explicit handoff; state that external bytes and private \`work/\` content are excluded.
 
 ## Decision table
 

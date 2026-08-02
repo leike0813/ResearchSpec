@@ -3,7 +3,7 @@ name: deep-research
 description: "Research questions, evidence discovery, literature synthesis, fact-checking, and research reports. Routes: deep-research:full, deep-research:quick, deep-research:review, deep-research:lit-review, deep-research:three-way-scan, deep-research:fact-check, deep-research:socratic, deep-research:systematic-review. Use for: investigate a research question; synthesize scholarly evidence; verify claims; design a systematic review. Near-miss routing: write a literature-review section for a manuscript -> academic-paper:lit-review; peer-review an academic manuscript -> academic-paper-reviewer:full; complete research-to-publication workflow -> academic-pipeline:end-to-end. Before each start, present stable-spec and handoff prerequisites, boundary outputs, formal Gates, risk, cost, and obtain an instance-scoped confirmation."
 metadata:
   version: "2.11.0"
-  last_updated: "2026-06-18"
+  last_updated: "2026-07-11"
   status: active
   data_access_level: raw
   task_type: open-ended
@@ -118,6 +118,8 @@ Guide my research on the impact of declining birth rates on private universities
 **English**: research, deep research, literature review, systematic review, meta-analysis, PRISMA, evidence synthesis, fact-check, methodology, APA report, academic analysis, policy analysis, WHY HOW WHAT papers, 3W literature scan, guide my research, help me think through, monitor this topic, set up alerts
 
 **繁體中文**: 研究, 深度研究, 文獻回顧, 文獻探討, 系統性回顧, 後設分析, 證據綜整, 事實查核, 三段式文獻掃描, WHY HOW WHAT 論文比較, 研究方法, 學術分析, 政策分析, 引導我的研究, 幫我釐清, 監測這個主題, 設定追蹤
+
+**한국어**: 심층 연구, 문헌 조사, 문헌 고찰, 체계적 문헌고찰, 메타분석, 근거 종합, 사실 확인, 팩트체크, 연구 방법 설계, 학술 분석, 연구 방향을 잡아줘, 연구 주제 정하는 것을 도와줘, 무엇을 연구할지 모르겠어, 이 주제 계속 모니터링해줘
 
 ### Socratic Mode Activation
 
@@ -632,12 +634,31 @@ deep-research (systematic-review) + academic-paper -> PRISMA systematic review p
 
 ---
 
+### Host-native alternate-model review
+
+Use the current session model by default. If an independent model could improve
+this subflow, the main Agent may propose one model that the host already exposes
+through its native subagent mechanism. Before dispatch, obtain a separate user
+confirmation covering the proposed model, the category of content that will be
+shared, and the expected cost. This consent applies only to the current subflow;
+every child, branch, and revision round asks again. Do not store the consent in a
+stable spec, control, handoff, or model configuration file.
+
+Freeze the main Agent's judgment before dispatch. Send only the minimum
+de-anchored material needed for the check, without the main judgment, scores, or
+reasoning. Treat disagreement as a reason for targeted review. Do not vote,
+average results, or let the subagent silently rewrite the frozen judgment. If
+the host cannot dispatch the confirmed model or the result is structurally
+invalid, disclose the limitation and continue with a single-model result.
+
+---
+
 ## Version Info
 
 | Item | Content |
 |------|---------|
 | Skill Version | 2.11.0 |
-| Last Updated | 2026-06-18 |
+| Last Updated | 2026-07-11 |
 | Maintainer | Cheng-I Wu |
 | Dependent Skills | academic-paper v1.0+ (downstream) |
 

@@ -144,6 +144,7 @@ export interface ConversionResult {
   contract_manifest: ContractIntegrationManifest;
   routing_catalog: ArsuRoutingCatalog;
   anchor_replacements: import("./anchors/types.js").AnchorReplacementPlan | null;
+  runtime_policy: import("./runtime-policy/types.js").RuntimePolicyPlan;
   validation: ValidationResult | null;
 }
 
@@ -186,6 +187,10 @@ export interface ConversionManifest {
     sha256: string;
   };
   anchor_replacements: Omit<import("./anchors/types.js").AnchorReplacementPlan, "spans_by_source">;
+  runtime_policy: import("./runtime-policy/types.js").SerializableRuntimePolicyPlan & {
+    report_path: "runtime-policy-report.md";
+    report_sha256: string;
+  };
   validation_summary: ValidationResult;
 }
 

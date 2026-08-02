@@ -193,7 +193,19 @@ annotation ID、raw feedback、normalized interpretation 和 patch mapping。需
 Mechanical precheck 不是 formal Gate。`revision_completeness` 仍由 Verify 组织判断、用户确认，
 再由 Decide 写入 owning control。
 
-## 11. Plugin 与 Zotero 边界
+## 11. 异模型复核
+
+异模型复核只使用宿主原生 subagent。默认沿用当前会话模型；Agent 可以从宿主实际可用的模型中
+提议一个异模型，但必须在派发前另行说明模型、将要发送的内容类别和成本，并取得仅对当前 subflow
+有效的确认。Route、Plugin、Adapter、Gate 或 branch confirmation 都不包含这项授权。child、branch
+和 dynamic revision round 如需异模型，必须重新确认。
+
+主 Agent 先冻结自己的结构化判断，只发送完成复核所需的最小、去锚材料。分歧触发针对证据的复核，
+不得投票、平均或自动覆盖主判断。宿主无法派发或返回结构不合格时，披露限制并回退当前会话模型。
+ResearchSpec 不读取模型凭证、不配置 endpoint、不直调模型服务，也不把授权写入 stable spec、control、
+handoff 或模型配置文件。
+
+## 12. Plugin 与 Zotero 边界
 
 Plugin consent 与 route confirmation 分开。一次最多建议三个 domain，preview 显示精确 domain
 IDs；非交互安装要求显式 IDs 和 `--yes`。Plugin 失败或拒绝不改变原 ARSU producer、selector、
@@ -203,7 +215,7 @@ Zotero status/check 是静态检查，不执行 runner、不联系 Zotero、不�
 用户明确授权的 Adapter Skill 可以访问相应 library 或 Host Bridge；Adapter 输出返回 ARSU
 producer，不成为 ResearchSpec workflow authority。
 
-## 12. 恢复、检查与导出
+## 13. 恢复、检查与导出
 
 恢复工作时，Navigate 先用 status 找到 machine instance ID，再用 instructions 定向读取当前
 checkpoint。若存在多个可能实例，必须请用户选择，不能靠目录名猜测。
@@ -217,7 +229,7 @@ control 或 external file，也不执行 repair transaction。
 旧或未知 workspace 会被报告为 unsupported 并保持不变。要重用材料，用户先在框架外保留所需
 文件，再在 fresh workspace 中通过 stable specs 或 handoff 明确引入。
 
-## 13. 验收边界
+## 14. 验收边界
 
 验收使用 fresh packaged CLI 进程完成所有权威 mutation。测试 helper 只能在 instructions 返回的
 外部路径创建 producer 文件，不能直接写 control、Gate、Decision、transition、generated profile

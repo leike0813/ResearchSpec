@@ -52,12 +52,22 @@ This project's own paper contained a Mashup Fabrication (Pattern #3):
 
 #### Key Statistics from Literature
 
-| Study | Finding |
-|-------|---------|
-| Walters et al. (2023), *Scientific Reports* | GPT-3.5: 55% fabricated; GPT-4: 18% fabricated; even real citations had 24-43% bibliographic errors |
-| Deakin University (2025), GPT-4o | 56% of citations fabricated or erroneous; niche topics up to 46% fabrication rate |
-| GPTZero × NeurIPS (2026) | 100+ hallucinated citations in 53 papers passed 3+ peer reviewers |
-| Citation frequency study (2025) | Papers cited >1,000 times: near-verbatim recall; papers cited <100 times: high hallucination risk |
+### Host-native alternate-model review
+
+Use the current session model by default. If an independent model could improve
+this subflow, the main Agent may propose one model that the host already exposes
+through its native subagent mechanism. Before dispatch, obtain a separate user
+confirmation covering the proposed model, the category of content that will be
+shared, and the expected cost. This consent applies only to the current subflow;
+every child, branch, and revision round asks again. Do not store the consent in a
+stable spec, control, handoff, or model configuration file.
+
+Freeze the main Agent's judgment before dispatch. Send only the minimum
+de-anchored material needed for the check, without the main judgment, scores, or
+reasoning. Treat disagreement as a reason for targeted review. Do not vote,
+average results, or let the subagent silently rewrite the frozen judgment. If
+the host cannot dispatch the confirmed model or the result is structurally
+invalid, disclose the limitation and continue with a single-model result.
 
 #### References
 
@@ -97,6 +107,14 @@ Before WebSearch-based verification, run a batch S2 API check on ALL references.
 | `S2_NOT_FOUND` | Proceed to A1 (WebSearch existence check) as normal |
 | `DOI_MISMATCH` | Flag as SERIOUS — possible DOI Misdirection (Compound Deception Pattern #5) |
 | `API_UNAVAILABLE` | Skip A0, proceed to A1 for all references |
+
+#### A0.5 Cache Staleness Advisory (#541 — advisory-only)
+
+The executable layer is the verification gate itself (#541 closed the Delta-2 forward-decl): `verification_gate.verify_citation` / `verify_passport` run cache-through by default and stamp `cache_age_days` + `cache_stale_advisory` (threshold `ARS_CACHE_STALE_ADVISORY_DAYS`, default 30, `0` disables) on every summary row that was served from cache. Read those fields off the summaries: for each row flagged `cache_stale_advisory`, emit an advisory row with stable ID `ADV-CACHE-<n>` (citation_key, cache age in days, threshold, re-verified-live?) into the Integrity Report's advisory table — the same advisory-row semantics as E4/E5: not an issue, never gates, displayed with per-row options at the MANDATORY checkpoint (proceed open is the default; the user may run `/ars-cache-invalidate <citation_key>` to force a live re-verification next run).
+
+**Opt-in live re-verification (`ARS_CACHE_REVALIDATE=1`)**: the gate re-verifies stale cached rows live (per-row bypass, then re-population) instead of serving them — the session-native, executable form of the survey's scheduled re-validation. Cost scales with the stale-row count. Default off = advisory-only.
+
+**Invalidation cascade (unconditional)**: after ANY re-validation (manual invalidate + re-verify, or the opt-in path above), the affected citation's verification summary row is regenerated and Phase E audit verdicts for claims citing that reference re-run at this gate before the report is emitted — unconditionally, not only when a change is detected (no baseline diff exists to condition on). Framing note: Ren et al. (2026, arXiv:2607.13104 §6.2.3) names scheduled review-and-attenuation as a core memory-update pattern and staleness as the signature failure mode of integrated external knowledge; applying it to the citation cache is ARS's design inference.
 
 A0 is additive — it does not replace A1. The audit trail must record both A0 and A1 results.
 
@@ -458,14 +476,14 @@ Scan the paper for all quantitative/factual claims:
 2. Identify all categorical assertions ("X is the largest...", "Y was the first to...")
 3. Identify all trend claims ("increasing", "declining", "stable")
 4. Identify all causal claims ("X causes Y", "X leads to Y")
-5. For each claim, record: claim text, cited source(s), paper section, page/line
+5. For each claim, record: claim text, cited source(s), paper section, page/line, selection tier (#549 — Mode 1: HIGH-IMPACT / RANDOM / TOP-UP / NOT-SELECTED; Mode 2: ALL)
 
 Output: Claim Registry table
 ```
 
 #### E2. Source Tracing
 ```
-For each claim in the registry:
+For each selected claim (Mode 1: the #549 stratified selection — HIGH-IMPACT / RANDOM / TOP-UP tiers; Mode 2: the whole registry):
 1. Locate the specific passage in the cited source that supports the claim
 2. Use WebSearch + DOI lookup to find the original source text
 3. If source is behind paywall, note as UNVERIFIABLE_ACCESS
@@ -499,11 +517,34 @@ Flag any discrepancies with verdict.
 | UNVERIFIABLE_ACCESS  | MEDIUM   | Source exists but full text not accessible                |
 ```
 
-#### Sampling Strategy
-```
-- Mode 1 (pre-review): 30% random sample of claims (minimum 10 claims)
-- Mode 2 (final-check): 100% of claims
-```
+### Host-native alternate-model review
+
+Use the current session model by default. If an independent model could improve
+this subflow, the main Agent may propose one model that the host already exposes
+through its native subagent mechanism. Before dispatch, obtain a separate user
+confirmation covering the proposed model, the category of content that will be
+shared, and the expected cost. This consent applies only to the current subflow;
+every child, branch, and revision round asks again. Do not store the consent in a
+stable spec, control, handoff, or model configuration file.
+
+Freeze the main Agent's judgment before dispatch. Send only the minimum
+de-anchored material needed for the check, without the main judgment, scores, or
+reasoning. Treat disagreement as a reason for targeted review. Do not vote,
+average results, or let the subagent silently rewrite the frozen judgment. If
+the host cannot dispatch the confirmed model or the result is structurally
+invalid, disclose the limitation and continue with a single-model result.
+
+#### E4. Scope-Conformance Advisory (#547)
+
+See `references/claim_verification_protocol.md` § E4 (authority). Inputs from the dispatch context: RQ Brief `scope` (required — skip with `[E4-SKIPPED: no scope context]` only when IT is unavailable, never guess one) plus optional `sub_question_bindings` and section→sub-question map (absent → compare every section against the full parent `scope`; a fallback, not a skip). During E3, compare each audited claim's population / timeframe / geography / domain against the section's EFFECTIVE scope (named `inherits` axes → their values; omitted axes → parent `scope`; approved deviations replace their axis, so approved extensions are never re-flagged). Emit advisory `SCOPE-BROADENED` rows with stable IDs `ADV-E4-<n>`. Advisory-only, never in the gate's issue count; checkpoint options: proceed open (default) or accept with justification. No reword route is defined and no downstream agent carries an obligation — the rows are visible wherever the Integrity Report travels, and a user-requested reword is an ordinary revision instruction citing the ADV-E4 ID; rows still open at Stage 4.5 remain recorded in the Final Integrity Report deliverable.
+
+#### E5. Novelty-Claim Classification (#548)
+
+See `references/claim_verification_protocol.md` § E5 (authority). E1 category-2 primacy assertions ("Y was the first to...") assert the absence of literature — E2/E3 cannot trace a source for an absence. Classify each against the documented Schema 2 `search_strategy`: `SUPPORTED_WITHIN_SEARCH` (search-bounded wording whose databases + date range match the documented search exactly AND `last_searched_at` recorded, nearest prior work acknowledged or its absence stated) or `UNRESOLVED` (absolute wording, mismatched bound, missing `last_searched_at`, or no documented search). Never "globally verified". Advisory-only, stable IDs `ADV-E5-<n>`, rows are not issues and may remain open on PASS; checkpoint options per row: proceed open (default) / user explicitly confirms the absolute form — both recorded in the checkpoint conversation, not in a report field. No reword route is defined and no downstream agent carries an obligation: a requested bounded reword is an ordinary revision instruction citing the ADV-E5 ID (rows are visible wherever the Integrity Report travels); rows still open at Stage 4.5 remain recorded in the Final Integrity Report deliverable.
+
+#### E6. Claim-Strength Drift (#569) — revision rounds only
+
+See `references/claim_verification_protocol.md` § E6 (authority). Runs ONLY when a prior draft of the same block-anchored paper exists (a revision-round Stage 4.5 or 2.5 re-verification); on a first-pass audit skip with `[E6-SKIPPED: no prior draft]`. This is the epistemic complement to the deterministic `scripts/check_revision_token_conservation.py` (#570): that script conserves numeric/citation tokens; E6 checks whether a touched claim's strength moved along the ladder (`../references/shared/references/claim_strength_ladder.md`). For each claim whose block was touched this round, compare its rung and its load-bearing hedges / null results / limitations / causal caveats against the prior draft; a move (either direction, or a dropped qualifier) that no roadmap item authorized as a *strength change* is flagged `STRENGTH-DRIFTED` with stable ID `ADV-E6-<n>` (claim location, prior rung → current rung or dropped qualifier, the roadmap items the op claimed, direction). Advisory-only, not in the gate's issue count, may remain open on PASS; checkpoint options per row: proceed open (default) / accept the change with a justifying note — both recorded in the checkpoint conversation. No reword route, no downstream obligation; a requested restoration is an ordinary revision instruction citing the ADV-E6 ID; rows still open at Stage 4.5 remain recorded in the Final Integrity Report deliverable.
 
 ---
 
@@ -512,10 +553,10 @@ Flag any discrepancies with verdict.
 ### Mode 1: Initial Verification (Stage 2.5 — Pre-Review Integrity)
 
 **Goal**: Catch all integrity issues before submission for review
-- Execute Phase A (all) + Phase B (30%+ spot-check) + Phase C (all) + **Phase D (30%+ spot-check)** + **Phase E (30% claim spot-check)**
+- Execute Phase A (all) + Phase B (30%+ spot-check) + Phase C (all) + **Phase D (30%+ spot-check)** + **Phase E (risk-stratified claim check, #549)**
 - Phase D executes D1 (paragraph-level originality check, sampling rate >= 30%) + D2 (self-plagiarism check, if author name provided)
-- Phase E executes E1 (claim extraction) + E2 (source tracing) + E3 (cross-referencing) on a 30% random sample of claims (minimum 10 claims)
-- **Phase C4 (#260): the D7 declaration-anchored anti-skip runs on the passport (not sampled — it is a single passport-level check); experiment_alignment_results[] rows are produced for the sampled experiment-backed claims (>= 30%, mirroring the claim spot-check).**
+- Phase E executes E1 (claim extraction) on ALL claims, then E2 (source tracing) + E3 (cross-referencing) on the #549 risk-stratified selection: 100% of HIGH-IMPACT claims + a 10% RANDOM sentinel of the remainder, topped up to min(10, total claims) — fewer than 10 claims total → audit all
+- **Phase C4 (#260): the D7 declaration-anchored anti-skip runs on the passport (not sampled — it is a single passport-level check); experiment_alignment_results[] rows are produced for the sampled experiment-backed claims (>= 30% — C4's own rate; the general claim check is #549 risk-stratified, no longer a flat 30%).**
 - Issues found -> produce correction list -> fix -> re-verify corrected items
 - **Must PASS to proceed to Stage 3 (REVIEW)**
 
@@ -588,7 +629,7 @@ The following patterns are PROHIBITED in integrity reports:
 | Internal Consistency | -- | Pass/Fail | X inconsistencies |
 | Originality Check (D1) | X (spot-check Z%) | X | X (CLOSE_MATCH / VERBATIM) |
 | Self-Plagiarism (D2) | X | X | X |
-| Claim Verification (E) | X (spot-check Z%) | X | X (MAJOR_DISTORTION / UNVERIFIABLE) |
+| Claim Verification (E) | X of [registry total] (Mode 1: #549 tiers — HIGH-IMPACT: X, RANDOM: X, TOP-UP: X; NOT-SELECTED: X. Mode 2: ALL: X) | X | X (MAJOR_DISTORTION / UNVERIFIABLE) |
 
 ## Phase D: Originality Verification Results
 
@@ -609,6 +650,31 @@ The following patterns are PROHIBITED in integrity reports:
 | MAJOR_DISTORTION | X | X% |
 | UNVERIFIABLE | X | X% |
 | UNVERIFIABLE_ACCESS | X | X% |
+
+**Scope-conformance advisory (#547)** — advisory-only, not counted in verdicts or the gate decision:
+
+| ID | Claim location | Effective scope | Drafted scope | Broadened axis |
+|----|---------------|-----------------|---------------|----------------|
+
+**Novelty-claim classification (#548)** — advisory-only, not counted in verdicts or the gate decision:
+
+| ID | Claim location | Claim wording | Classification | Nearest prior work / recommended bounded rewording |
+|----|---------------|--------------|----------------|---------------------------------------------------|
+
+**Cache staleness advisory (#541)** — advisory-only, not counted in verdicts or the gate decision:
+
+| ID | Citation key | Cache age (days) | Threshold | Re-verified live? |
+|----|-------------|------------------|-----------|-------------------|
+
+**Claim-strength drift advisory (#569, revision rounds)** — advisory-only, not counted in verdicts or the gate decision; empty / `[E6-SKIPPED: no revision evidence]` on a first-pass audit:
+
+| ID | Round | Claim location | Prior rung → current rung (or dropped qualifier) | Roadmap items the op claimed | Direction |
+|----|-------|----------------|--------------------------------------------------|------------------------------|-----------|
+
+**Token-conservation advisory (#570, revision rounds)** — the deterministic `ADV-REV-<n>` signal from `scripts/check_revision_token_conservation.py` (see `pipeline_orchestrator_agent.md` step 3a); advisory-only, not counted in verdicts, empty when every patch op conserved its numeric/citation/protected-term tokens:
+
+| ID | Op / block | Numeric delta | Citation delta | Protected-term delta | Roadmap items the op claimed |
+|----|-----------|---------------|----------------|----------------------|------------------------------|
 
 ## Issue List (Sorted by Severity)
 
@@ -658,33 +724,59 @@ To ensure the verification process is reproducible:
 
 ---
 
-## Cross-Model Verification (Optional, v3.0)
+### Host-native alternate-model review
 
-When the environment variable `ARS_CROSS_MODEL` is set, this agent enables cross-model verification as an additional layer. See `../references/shared/cross_model_verification.md` for full protocol, setup guide, and API call patterns.
+Use the current session model by default. If an independent model could improve
+this subflow, the main Agent may propose one model that the host already exposes
+through its native subagent mechanism. Before dispatch, obtain a separate user
+confirmation covering the proposed model, the category of content that will be
+shared, and the expected cost. This consent applies only to the current subflow;
+every child, branch, and revision round asks again. Do not store the consent in a
+stable spec, control, handoff, or model configuration file.
 
-**Consent gate (required before any upload):** When `ARS_CROSS_MODEL` is set, do not send the sampled references automatically. First ask for explicit user consent (if not already granted in this session) and identify the external provider, model, and content class (citation/reference metadata drawn from the user's manuscript) that would be sent. If consent is not granted, log `[CROSS-MODEL-SKIPPED]` and continue with single-model verification. The environment variable alone is not consent to upload user-derived material. See `../references/shared/cross_model_verification.md` for the consent boundary.
-
-**Summary of behavior when enabled (and consent granted):**
-- After Phase A completes, randomly sample 30% of references (min 5, max 15; if total < 5, sample all)
-- Send **one API call per reference** (not a batch) to the cross-model for independent verification — the cross-model does NOT see Claude's result, and the call patterns enable the provider's web-search/grounding tool so "search the web to confirm" is actually executable
-- Each cross-model verdict is one of `VERIFIED` / `MISMATCH` / `NOT_FOUND` / `NOT_SEARCHED`. A `VERIFIED` with no supporting source URL/DOI, or a **successful (2xx)** response that carries no grounding evidence, is treated as `NOT_SEARCHED` (a non-2xx response is a transport error, not `NOT_SEARCHED` — see Graceful degradation)
-- Disagreements (Claude `VERIFIED` vs cross-model `NOT_FOUND` / `MISMATCH`) → `[CROSS-MODEL-DISAGREEMENT]` → prioritized for human review
-- `NOT_SEARCHED` / ungrounded results **never count as agreement** with a Claude `VERIFIED`: count them separately and surface them for re-run or human review — an ungrounded cross-model verdict carries no evidence and must not be laundered into a confirmation
-- Add "Cross-Model Verification Results" section to the integrity report (with the per-reference Source column and a `NOT_SEARCHED` count)
+Freeze the main Agent's judgment before dispatch. Send only the minimum
+de-anchored material needed for the check, without the main judgment, scores, or
+reasoning. Treat disagreement as a reason for targeted review. Do not vote,
+average results, or let the subagent silently rewrite the frozen judgment. If
+the host cannot dispatch the confirmed model or the result is structurally
+invalid, disclose the limitation and continue with a single-model result.
 
 **When not enabled:** Standard single-model verification. No behavioral change.
 
-**Graceful degradation:** If cross-model verification fails **at the transport level** (API error, rate limit, key expired), log `[CROSS-MODEL-ERROR]` and continue single-model — never block the pipeline. A `NOT_SEARCHED` is **not** a transport failure: the call succeeded but produced no grounded evidence, so do not fall back to single-model on its account — record it as `NOT_SEARCHED` and surface it (see `../references/shared/cross_model_verification.md` § Graceful Degradation).
+### Host-native alternate-model review
+
+Use the current session model by default. If an independent model could improve
+this subflow, the main Agent may propose one model that the host already exposes
+through its native subagent mechanism. Before dispatch, obtain a separate user
+confirmation covering the proposed model, the category of content that will be
+shared, and the expected cost. This consent applies only to the current subflow;
+every child, branch, and revision round asks again. Do not store the consent in a
+stable spec, control, handoff, or model configuration file.
+
+Freeze the main Agent's judgment before dispatch. Send only the minimum
+de-anchored material needed for the check, without the main judgment, scores, or
+reasoning. Treat disagreement as a reason for targeted review. Do not vote,
+average results, or let the subagent silently rewrite the frozen judgment. If
+the host cannot dispatch the confirmed model or the result is structurally
+invalid, disclose the limitation and continue with a single-model result.
 
 ---
 
 ## Quality Standards
 
-| Dimension | Requirement |
-|-----------|------------|
-| Coverage | References 100%, statistical data 100%, citation context >= 30% (initial) / 100% (final), originality >= 30% (initial) / >= 50% (final), claim verification >= 30% (initial) / 100% (final) |
-| Accuracy | Every determination must be supported by WebSearch evidence |
-| Transparency | Audit Trail fully documented, available for third-party review |
-| Efficiency | Do existence batch checks first, then deep investigation on NOT_FOUND / MISMATCH items |
-| No overstepping | Do not make paper quality judgments, only factual verification |
-| Cross-model (optional) | When `ARS_CROSS_MODEL` is set, 30% sample (min 5, max 15) cross-verified by second model, **one grounded API call per reference**; ungrounded (`NOT_SEARCHED`) verdicts never count as agreement |
+### Host-native alternate-model review
+
+Use the current session model by default. If an independent model could improve
+this subflow, the main Agent may propose one model that the host already exposes
+through its native subagent mechanism. Before dispatch, obtain a separate user
+confirmation covering the proposed model, the category of content that will be
+shared, and the expected cost. This consent applies only to the current subflow;
+every child, branch, and revision round asks again. Do not store the consent in a
+stable spec, control, handoff, or model configuration file.
+
+Freeze the main Agent's judgment before dispatch. Send only the minimum
+de-anchored material needed for the check, without the main judgment, scores, or
+reasoning. Treat disagreement as a reason for targeted review. Do not vote,
+average results, or let the subagent silently rewrite the frozen judgment. If
+the host cannot dispatch the confirmed model or the result is structurally
+invalid, disclose the limitation and continue with a single-model result.

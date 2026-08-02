@@ -19,6 +19,7 @@ export const SHARED_CLI_GUIDANCE = `## Shared CLI Discipline
 
 - Starting a standalone subflow, child, branch, or dynamic revision round requires its own route summary and human confirmation.
 - Plugin consent is separate from route confirmation. A parent confirmation does not authorize a child.
+- Alternate-model consent is also separate. Propose only a model the host already exposes through native subagent delegation, and obtain confirmation of the exact model, disclosed content category, and cost for this subflow. Never persist that consent in a stable spec, control, handoff, or model configuration; children, branches, and revision rounds ask again.
 - Verify may recommend a Gate verdict. Only a human-confirmed Decide action records the formal attempt.
 - Gate confirmation, a branch choice, and Advance are separate actions. None silently performs another.
 

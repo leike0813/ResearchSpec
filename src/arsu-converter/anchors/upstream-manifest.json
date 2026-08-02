@@ -2,7 +2,7 @@
   "schema_version": "researchspec.arsu.upstream-manifest.v0",
   "upstream": {
     "source_path": "vendor/ars",
-    "commit": "becfcc40c6e9e93c187cf4a088333f83373e002d"
+    "commit": "828ef3b613b0e8b91830da3328a1e33d4eb5ab4c"
   },
   "audited_roots": [
     "deep-research",
@@ -34,7 +34,7 @@
     {
       "path": "academic-paper-reviewer/SKILL.md",
       "kind": "markdown",
-      "normalized_sha256": "dae32f3908e8b282bcdf6839e5da37b7ebca82fd88eaf0611fb3c716cc3f88ed",
+      "normalized_sha256": "d24a8ba6d98d37b3fd44e571b4bace046df2d12d5f9c09043abcbee3da78bb66",
       "risk_hits": [
         {
           "keyword": "Schema 11",
@@ -50,7 +50,7 @@
         },
         {
           "keyword": "scripts/",
-          "count": 2
+          "count": 3
         }
       ],
       "frontmatter": {
@@ -61,7 +61,7 @@
         ],
         "values": {
           "name": "academic-paper-reviewer",
-          "description": "Multi-perspective academic paper review with dynamic reviewer personas. Simulates 5 independent reviewers (EIC + 3 peer reviewers + Devil's Advocate) with field-specific expertise. Supports full review, re-review (verification), quick assessment, methodology focus, Socratic guided, and calibration modes. Triggers on: review paper, peer review, manuscript review, referee report, review my paper, critique paper, simulate review, editorial review, calibrate reviewer, reviewer calibration, measure reviewer accuracy.",
+          "description": "Multi-perspective academic paper review with dynamic reviewer personas. Simulates 5 independent reviewers (EIC + 3 peer reviewers + Devil's Advocate) with field-specific expertise. Supports full review, re-review (verification), quick assessment, methodology focus, Socratic guided, and calibration modes. Triggers on: review paper, peer review, manuscript review, referee report, review my paper, critique paper, simulate review, editorial review, calibrate reviewer, reviewer calibration, measure reviewer accuracy, 審查論文, 論文審查, 模擬審查, 同儕審查, 幫我審這篇, 以審查人角度評估, 審查者校準, 논문 심사, 동료 심사, 모의 심사, 심사자 관점에서 평가, 심사자 보정.",
           "metadata": ""
         }
       },
@@ -140,6 +140,10 @@
         },
         {
           "level": 2,
+          "title": "Cross-Model Reviewer Track (#540)"
+        },
+        {
+          "level": 2,
           "title": "Integration"
         },
         {
@@ -192,6 +196,10 @@
         },
         {
           "level": 2,
+          "title": "Model Tiering (#517, optional)"
+        },
+        {
+          "level": 2,
           "title": "Version Info"
         },
         {
@@ -203,11 +211,15 @@
     {
       "path": "academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md",
       "kind": "markdown",
-      "normalized_sha256": "99726d513680882d2fb5919d15b5fad0ccd87484feb0966de11d907f171ad749",
+      "normalized_sha256": "1faf3a87101d16cc14e0c2d2e6f5962f670cbcbef04a381c947998497dd166cc",
       "risk_hits": [
         {
+          "keyword": "handoff",
+          "count": 2
+        },
+        {
           "keyword": "phase",
-          "count": 26
+          "count": 27
         },
         {
           "keyword": "sprint contract",
@@ -215,7 +227,7 @@
         },
         {
           "keyword": "scripts/",
-          "count": 1
+          "count": 2
         }
       ],
       "frontmatter": {
@@ -402,7 +414,7 @@
     {
       "path": "academic-paper-reviewer/agents/domain_reviewer_agent.md",
       "kind": "markdown",
-      "normalized_sha256": "aa4db7bfb30515975a205bf91332aa2dde527b0e24e02c25f3af274e776a252a",
+      "normalized_sha256": "9689f3c9f4b0deb3628efda981f08fa211608595d36c4a3fb56bcadb146f03b3",
       "risk_hits": [
         {
           "keyword": "phase",
@@ -414,7 +426,7 @@
         },
         {
           "keyword": "scripts/",
-          "count": 1
+          "count": 2
         }
       ],
       "frontmatter": {
@@ -601,19 +613,23 @@
     {
       "path": "academic-paper-reviewer/agents/editorial_synthesizer_agent.md",
       "kind": "markdown",
-      "normalized_sha256": "45391e70ef8812b50fd2a81c95df88a336d9436abab1666a9b7e8e8747974d24",
+      "normalized_sha256": "5c348e422c0e77f3f27bc3b7b47c710415913378794cf97194bfce8b901c2087",
       "risk_hits": [
         {
+          "keyword": "handoff",
+          "count": 3
+        },
+        {
           "keyword": "phase",
-          "count": 12
+          "count": 13
         },
         {
           "keyword": "sprint contract",
-          "count": 4
+          "count": 5
         },
         {
           "keyword": "scripts/",
-          "count": 1
+          "count": 3
         }
       ],
       "frontmatter": {
@@ -710,6 +726,10 @@
         {
           "level": 3,
           "title": "Step 4: Decision Making"
+        },
+        {
+          "level": 3,
+          "title": "Step 4b: Cross-Model Blind Decision Check (Optional, #518)"
         },
         {
           "level": 3,
@@ -838,13 +858,17 @@
         {
           "level": 3,
           "title": "5. Guided Mode (Socratic Guidance)"
+        },
+        {
+          "level": 2,
+          "title": "Cross-Model Reviewer Track (#540)"
         }
       ]
     },
     {
       "path": "academic-paper-reviewer/agents/eic_agent.md",
       "kind": "markdown",
-      "normalized_sha256": "d5a92bfd2502b5b8636d3f2ec0f2e5145a31a58f9164f1b0ecbaaa29a481d77d",
+      "normalized_sha256": "c7c0e16c0a9af9d981322b4f1a4e258dbe12376848375ddb1caec576a6e42812",
       "risk_hits": [
         {
           "keyword": "phase",
@@ -856,7 +880,7 @@
         },
         {
           "keyword": "scripts/",
-          "count": 1
+          "count": 2
         }
       ],
       "frontmatter": {
@@ -1169,7 +1193,7 @@
     {
       "path": "academic-paper-reviewer/agents/methodology_reviewer_agent.md",
       "kind": "markdown",
-      "normalized_sha256": "ca39bb5f16c1fde73915d75158db4a89d3566678a5bd81358385071987307be3",
+      "normalized_sha256": "c721b8e542f72905474743fcf51cb30f33efb4464317049a6d170d878301d775",
       "risk_hits": [
         {
           "keyword": "phase",
@@ -1181,7 +1205,7 @@
         },
         {
           "keyword": "scripts/",
-          "count": 1
+          "count": 2
         }
       ],
       "frontmatter": {
@@ -1392,7 +1416,7 @@
     {
       "path": "academic-paper-reviewer/agents/perspective_reviewer_agent.md",
       "kind": "markdown",
-      "normalized_sha256": "2d744a700c361e4c09d38bae532ff550eb0a4ea8c8c568a93cf31693067cad36",
+      "normalized_sha256": "4bd9c67c8d1c3ad9e7abe75da4c3cb19cef59200be3b92bf1dbc0278d0dcdbdb",
       "risk_hits": [
         {
           "keyword": "phase",
@@ -1404,7 +1428,7 @@
         },
         {
           "keyword": "scripts/",
-          "count": 1
+          "count": 2
         }
       ],
       "frontmatter": {
@@ -1990,11 +2014,11 @@
     {
       "path": "academic-paper-reviewer/references/calibration_mode_protocol.md",
       "kind": "markdown",
-      "normalized_sha256": "9f6bb8bf0f06a36c4d7146c3d18967326d8f649ad12fb57287a53f36264473a0",
+      "normalized_sha256": "ce1549bb893a28909a5044885ef4c07928191f785735bdf5cf5d9a0bf4658446",
       "risk_hits": [
         {
           "keyword": "phase",
-          "count": 12
+          "count": 13
         },
         {
           "keyword": "sprint contract",
@@ -2085,6 +2109,10 @@
         {
           "level": 3,
           "title": "Same-family / rubric-aware judging — read the numbers as a possible under-estimate"
+        },
+        {
+          "level": 3,
+          "title": "Directional prior: assume leniency relative to human expert review (FARS external anchor)"
         },
         {
           "level": 2,
@@ -2325,7 +2353,7 @@
     {
       "path": "academic-paper-reviewer/references/re_review_mode_protocol.md",
       "kind": "markdown",
-      "normalized_sha256": "f029ecce4311f2d1ed9384bd6e8dc7fee843b6fe0b70d9f67affe3223b04240e",
+      "normalized_sha256": "4c5b9f69814bb1b97d1bab1c2b3ccc4951e09cecd19fda59dc945982ddaf3282",
       "risk_hits": [
         {
           "keyword": "Schema 8",
@@ -2337,11 +2365,11 @@
         },
         {
           "keyword": "handoff",
-          "count": 1
+          "count": 2
         },
         {
           "keyword": "phase",
-          "count": 3
+          "count": 4
         },
         {
           "keyword": "sprint contract",
@@ -2367,6 +2395,10 @@
         },
         {
           "level": 3,
+          "title": "Judge Independence (#539)"
+        },
+        {
+          "level": 3,
           "title": "Commitment Ledger Verification (Kong A1 / v3.11)"
         },
         {
@@ -2384,6 +2416,10 @@
         {
           "level": 1,
           "title": "Verification Review Report"
+        },
+        {
+          "level": 2,
+          "title": "Judge Record (#539)"
         },
         {
           "level": 2,
@@ -2546,7 +2582,7 @@
     {
       "path": "academic-paper-reviewer/references/sprint_contract_protocol.md",
       "kind": "markdown",
-      "normalized_sha256": "66a76668065502e7c12b43249e5fd1945cf39a87a04d7613a4e1cd81c36f0165",
+      "normalized_sha256": "bec202c21e7e357401222972a46e9b7cafa4b9017045fcd757bc0f89ffa7a68a",
       "risk_hits": [
         {
           "keyword": "handoff",
@@ -2554,7 +2590,7 @@
         },
         {
           "keyword": "phase",
-          "count": 39
+          "count": 41
         },
         {
           "keyword": "sprint contract",
@@ -2563,6 +2599,10 @@
         {
           "keyword": "generator-evaluator",
           "count": 3
+        },
+        {
+          "keyword": "scripts/",
+          "count": 2
         }
       ],
       "headings": [
@@ -2601,6 +2641,10 @@
         {
           "level": 2,
           "title": "8. Synthesizer three-step protocol"
+        },
+        {
+          "level": 2,
+          "title": "8.1 Executable recomputation (#510)"
         },
         {
           "level": 2,
@@ -2879,7 +2923,7 @@
     {
       "path": "academic-paper-reviewer/templates/editorial_decision_template.md",
       "kind": "markdown",
-      "normalized_sha256": "bc0ee3cb2e8bdd63f656c4c13ef5f47c53693460ceaa3c505f0c6f83f6952fe5",
+      "normalized_sha256": "416cf94008c3699aea9f87a1b51a5564ed0087da75ffee5cf2544d6f76d5885d",
       "risk_hits": [],
       "headings": [
         {
@@ -2897,6 +2941,10 @@
         {
           "level": 2,
           "title": "Manuscript Information"
+        },
+        {
+          "level": 2,
+          "title": "Review Panel Provenance (#540)"
         },
         {
           "level": 2,
@@ -3371,7 +3419,7 @@
     {
       "path": "academic-paper/SKILL.md",
       "kind": "markdown",
-      "normalized_sha256": "16b263fac75ff1917a614620a3cb5f4a33bc39727200928aebf4e88573236254",
+      "normalized_sha256": "4713cde54d17b0e34c1c2ed5a65cb9cfe2534986baf09d859695b237145ebe5d",
       "risk_hits": [
         {
           "keyword": "Material Passport",
@@ -3410,7 +3458,7 @@
         ],
         "values": {
           "name": "academic-paper",
-          "description": "12-agent academic paper writing pipeline. 11 modes (full/plan/outline/revision/revision-coach/abstract/lit-review/format-convert/citation-check/disclosure/rebuttal-audit). 6 paper types, 5 citation formats, bilingual abstracts, LaTeX/DOCX-via-Pandoc/PDF output. Style Calibration + Writing Quality Check + Anti-Patterns with IRON RULE markers. Triggers: write paper, academic paper, guide my paper, parse reviews, audit my rebuttal, check my response draft, AI disclosure, 寫論文, 學術論文, 引導我寫論文, 審查意見, 評估回覆.",
+          "description": "12-agent academic paper writing pipeline. 11 modes (full/plan/outline/revision/revision-coach/abstract/lit-review/format-convert/citation-check/disclosure/rebuttal-audit). 6 paper types, 5 citation formats, bilingual abstracts, LaTeX/DOCX-via-Pandoc/PDF output. Style Calibration + Writing Quality Check + Anti-Patterns with IRON RULE markers. Triggers: write paper, academic paper, guide my paper, parse reviews, audit my rebuttal, check my response draft, AI disclosure, 寫論文, 學術論文, 引導我寫論文, 審查意見, 評估回覆, 논문 작성, 초록 작성, 논문 수정, 논문 계획을 도와줘, 심사 의견 반영, 답변서 점검, AI 사용 고지.",
           "metadata": ""
         }
       },
@@ -3597,6 +3645,10 @@
         },
         {
           "level": 2,
+          "title": "Model Tiering (#517, optional)"
+        },
+        {
+          "level": 2,
           "title": "Version Info"
         },
         {
@@ -3608,7 +3660,7 @@
     {
       "path": "academic-paper/agents/abstract_bilingual_agent.md",
       "kind": "markdown",
-      "normalized_sha256": "0fe5c546b9031cc1a4e57abe1666ed86c673016091c3c0679359d542752d5687",
+      "normalized_sha256": "03ce976e44c335c83a86d9ff296954e389c2eef982f3f16fd288aae4212f1edc",
       "risk_hits": [
         {
           "keyword": "phase",
@@ -3689,6 +3741,10 @@
         {
           "level": 3,
           "title": "Independence Verification"
+        },
+        {
+          "level": 2,
+          "title": "Protected Hedges (#548 + v3.6.7 roster)"
         },
         {
           "level": 2,
@@ -4085,7 +4141,7 @@
     {
       "path": "academic-paper/agents/draft_writer_agent.md",
       "kind": "markdown",
-      "normalized_sha256": "0ca8e260b3f30cdf0859757ba109ab08ccfe59ab91f2c99d12332a0b8738d67c",
+      "normalized_sha256": "465e9f22ee7f4448cbb0ecd202bc082f202521583d5560320c03259c3e274a02",
       "risk_hits": [
         {
           "keyword": "Material Passport",
@@ -4101,7 +4157,7 @@
         },
         {
           "keyword": "phase",
-          "count": 67
+          "count": 68
         },
         {
           "keyword": "generator-evaluator",
@@ -4109,11 +4165,11 @@
         },
         {
           "keyword": "integrity gate",
-          "count": 2
+          "count": 3
         },
         {
           "keyword": "scripts/",
-          "count": 1
+          "count": 2
         }
       ],
       "frontmatter": {
@@ -4318,13 +4374,21 @@
         {
           "level": 2,
           "title": "Patch-Document Revision Emission (#390)"
+        },
+        {
+          "level": 2,
+          "title": "Search-Bounded Novelty Claims (#548)"
+        },
+        {
+          "level": 2,
+          "title": "Claim-Strength Ladder (#569)"
         }
       ]
     },
     {
       "path": "academic-paper/agents/formatter_agent.md",
       "kind": "markdown",
-      "normalized_sha256": "da00bbc161ed2833b007b6443b418b8393ce8a9c76eb7c231c0a21d96915d66b",
+      "normalized_sha256": "d766385558dbac6fef8338bcf9463f195c7f942a33be7a96a5dae429798f2dcb",
       "risk_hits": [
         {
           "keyword": "handoff",
@@ -4790,7 +4854,7 @@
     {
       "path": "academic-paper/agents/literature_strategist_agent.md",
       "kind": "markdown",
-      "normalized_sha256": "f8e25b6d56c8983588d514afdbc0e7870509aa78d62aabb9243285bc07d9fffa",
+      "normalized_sha256": "211dbc40d756070aee195bd5b69fa65c543bb17e5aaa595f536a6de5f3ea96db",
       "risk_hits": [
         {
           "keyword": "Material Passport",
@@ -5587,7 +5651,7 @@
     {
       "path": "academic-paper/agents/socratic_mentor_agent.md",
       "kind": "markdown",
-      "normalized_sha256": "c8e0364fd604c06bdeee1f3fd83759c8410d1df09bd3c4065e664ad2cc53aaae",
+      "normalized_sha256": "3bdb9d42c3b7d303c79c936ec04e6e00a33ba74b6e0d5bf0fdd519a842ec1321",
       "risk_hits": [
         {
           "keyword": "handoff",
@@ -5806,7 +5870,7 @@
     {
       "path": "academic-paper/agents/structure_architect_agent.md",
       "kind": "markdown",
-      "normalized_sha256": "94b642ec4257869be28ec00073d69f05f18034b30d2d3967d906021deebdf84d",
+      "normalized_sha256": "958afd16c3cad380a40ea1dffbb22370458d5324f2feb882ecfe7cda47f794c1",
       "risk_hits": [
         {
           "keyword": "handoff",
@@ -7131,7 +7195,7 @@
     {
       "path": "academic-paper/examples/revision_recovery_example.md",
       "kind": "markdown",
-      "normalized_sha256": "598eddbe98e3bb8a645932529b235a96973a947c9fe2d2a47fee01db6475983c",
+      "normalized_sha256": "15b5fcce34fae2ca7b125586814005b4e175530dc61fd2c12b17271b1fcd7a2e",
       "risk_hits": [],
       "frontmatter": {
         "keys": [
@@ -7620,7 +7684,7 @@
     {
       "path": "academic-paper/references/anti_leakage_protocol.md",
       "kind": "markdown",
-      "normalized_sha256": "6cff981c29b03c77e475412f925ed003f090acc4aa5755f86443f9a2eb57aef7",
+      "normalized_sha256": "e8672e1c69c511dda11ab90e5805a9c8b528298a59ce46b94fbf1b460784d53d",
       "risk_hits": [
         {
           "keyword": "handoff",
@@ -8336,7 +8400,7 @@
     {
       "path": "academic-paper/references/failure_paths.md",
       "kind": "markdown",
-      "normalized_sha256": "17fdb9355dc2db112df75d51c0a4a726e5dab1a9812e4d5125d19a25ddd1fd8d",
+      "normalized_sha256": "8296eb1bdb056c5076478c827d948f671fe44fb696a71e3bef262f037359ff0f",
       "risk_hits": [
         {
           "keyword": "handoff",
@@ -8583,6 +8647,71 @@
         {
           "level": 2,
           "title": "Assessment Domains (HEEACT)"
+        }
+      ]
+    },
+    {
+      "path": "academic-paper/references/intro_title_rhetoric_guide.md",
+      "kind": "markdown",
+      "normalized_sha256": "cb70355d377b34f8aae790f8b50e3d52e5a6eb4927123d31f8c047d0e5c1288a",
+      "risk_hits": [
+        {
+          "keyword": "integrity gate",
+          "count": 1
+        }
+      ],
+      "headings": [
+        {
+          "level": 1,
+          "title": "Introduction & Title Rhetoric Guide"
+        },
+        {
+          "level": 2,
+          "title": "Part 1: Introduction Rhetoric (CARS Model)"
+        },
+        {
+          "level": 3,
+          "title": "Move 1 — Establish the territory"
+        },
+        {
+          "level": 3,
+          "title": "Move 2 — Establish the niche"
+        },
+        {
+          "level": 3,
+          "title": "Move 3 — Occupy the niche"
+        },
+        {
+          "level": 3,
+          "title": "Proportions and length"
+        },
+        {
+          "level": 3,
+          "title": "Common failures"
+        },
+        {
+          "level": 2,
+          "title": "Part 2: Title Crafting"
+        },
+        {
+          "level": 3,
+          "title": "Title anatomy"
+        },
+        {
+          "level": 3,
+          "title": "Title types"
+        },
+        {
+          "level": 3,
+          "title": "Checklist"
+        },
+        {
+          "level": 3,
+          "title": "Worked examples"
+        },
+        {
+          "level": 2,
+          "title": "Provenance"
         }
       ]
     },
@@ -10920,7 +11049,7 @@
     {
       "path": "academic-pipeline/SKILL.md",
       "kind": "markdown",
-      "normalized_sha256": "a81d6b2b20de82b5e578d99838af7e90c4900819d58932307781254bd289b3b1",
+      "normalized_sha256": "c90b45777b9d5415acf8b6e8fc47d2aadbdafb70895f76ab7fba3f73cd826f4d",
       "risk_hits": [
         {
           "keyword": "Material Passport",
@@ -10959,7 +11088,7 @@
         ],
         "values": {
           "name": "academic-pipeline",
-          "description": "Orchestrator for the full academic research pipeline: research -> write -> integrity check -> review -> revise -> re-review -> re-revise -> final integrity check -> finalize. Coordinates deep-research, academic-paper, and academic-paper-reviewer into a seamless 10-stage workflow with mandatory integrity verification, two-stage peer review, and reproducible quality gates. Triggers on: academic pipeline, research to paper, full paper workflow, paper pipeline, end-to-end paper, research-to-publication, complete paper workflow.",
+          "description": "Orchestrator for the full academic research pipeline: research -> write -> integrity check -> review -> revise -> re-review -> re-revise -> final integrity check -> finalize. Coordinates deep-research, academic-paper, and academic-paper-reviewer into a seamless 10-stage workflow with mandatory integrity verification, two-stage peer review, and reproducible quality gates. Triggers on: academic pipeline, research to paper, full paper workflow, paper pipeline, end-to-end paper, research-to-publication, complete paper workflow, 연구부터 논문까지, 연구 주제 설정부터 논문 완성까지, 논문 전체 워크플로.",
           "metadata": ""
         }
       },
@@ -11138,6 +11267,10 @@
         },
         {
           "level": 2,
+          "title": "Model Tiering (#517, optional)"
+        },
+        {
+          "level": 2,
           "title": "Version Info"
         },
         {
@@ -11149,7 +11282,7 @@
     {
       "path": "academic-pipeline/agents/claim_ref_alignment_audit_agent.md",
       "kind": "markdown",
-      "normalized_sha256": "71087a6031b21f810031252458d415898a9ca59e84cc7d83c1f199eb9c6c2d58",
+      "normalized_sha256": "1b78325420b927095b54157385c38db5cc301501963b5a930e1d75821956b3be",
       "risk_hits": [
         {
           "keyword": "handoff",
@@ -11161,7 +11294,7 @@
         },
         {
           "keyword": "scripts/",
-          "count": 17
+          "count": 20
         }
       ],
       "frontmatter": {
@@ -11256,7 +11389,7 @@
     {
       "path": "academic-pipeline/agents/collaboration_depth_agent.md",
       "kind": "markdown",
-      "normalized_sha256": "b0f27d64dd0d64310b1d355a7f19ff9ddb55636bad71b186d4f2ed70c54c0606",
+      "normalized_sha256": "cb7b351696e5f85e80255f4478db047fa0f8819dc9a2b290a09bd836246fc641",
       "risk_hits": [
         {
           "keyword": "handoff",
@@ -11373,15 +11506,19 @@
     {
       "path": "academic-pipeline/agents/integrity_verification_agent.md",
       "kind": "markdown",
-      "normalized_sha256": "3b335201fc22f75d50947bbae25a3e31a8debd7d6752e77753f6ba1434e090e1",
+      "normalized_sha256": "d53e1f5ac75aaf81f3cd80fbf88a136a795f2286cd3acb0e54ca82dc2a44c167",
       "risk_hits": [
         {
           "keyword": "phase",
-          "count": 38
+          "count": 39
         },
         {
           "keyword": "integrity gate",
           "count": 1
+        },
+        {
+          "keyword": "scripts/",
+          "count": 2
         }
       ],
       "frontmatter": {
@@ -11446,6 +11583,10 @@
         {
           "level": 4,
           "title": "A0. Semantic Scholar API Batch Verification — NEW v3.3"
+        },
+        {
+          "level": 4,
+          "title": "A0.5 Cache Staleness Advisory (#541 — advisory-only)"
         },
         {
           "level": 4,
@@ -11533,7 +11674,19 @@
         },
         {
           "level": 4,
-          "title": "Sampling Strategy"
+          "title": "Sampling Strategy (#549 — risk-stratified)"
+        },
+        {
+          "level": 4,
+          "title": "E4. Scope-Conformance Advisory (#547)"
+        },
+        {
+          "level": 4,
+          "title": "E5. Novelty-Claim Classification (#548)"
+        },
+        {
+          "level": 4,
+          "title": "E6. Claim-Strength Drift (#569) — revision rounds only"
         },
         {
           "level": 2,
@@ -11628,7 +11781,7 @@
     {
       "path": "academic-pipeline/agents/pipeline_orchestrator_agent.md",
       "kind": "markdown",
-      "normalized_sha256": "8aba9135d5efe6b84ff2f38a9667437d0e009e0956188b24e5c3642ee0e3ceab",
+      "normalized_sha256": "c445d63c3bdf63019e34343873f894bbddc6299178d69c20bb7c1aacda7819b6",
       "risk_hits": [
         {
           "keyword": "Material Passport",
@@ -11652,11 +11805,11 @@
         },
         {
           "keyword": "handoff",
-          "count": 16
+          "count": 24
         },
         {
           "keyword": "phase",
-          "count": 12
+          "count": 15
         },
         {
           "keyword": "integrity gate",
@@ -11664,7 +11817,7 @@
         },
         {
           "keyword": "scripts/",
-          "count": 13
+          "count": 17
         }
       ],
       "frontmatter": {
@@ -11911,7 +12064,7 @@
     {
       "path": "academic-pipeline/agents/state_tracker_agent.md",
       "kind": "markdown",
-      "normalized_sha256": "e0424b72e04b885e7cc79c813433dddc55f420de2683bd93cef8df499b2923f5",
+      "normalized_sha256": "6528349959ae9ef9c126bab3117a57da894e9517104a83a0d1d7ad74daf36d5f",
       "risk_hits": [
         {
           "keyword": "Material Passport",
@@ -12046,7 +12199,7 @@
     {
       "path": "academic-pipeline/examples/full_pipeline_example.md",
       "kind": "markdown",
-      "normalized_sha256": "2e4586afd69c013136e8851cd9878f51a39d5d873ade9b50b8ef46eeb4e6248b",
+      "normalized_sha256": "76199709ec6c5b85e878bd2c15f67f02fbecad4077b524e1d2b0f9d934ca44ea",
       "risk_hits": [
         {
           "keyword": "handoff",
@@ -12131,7 +12284,7 @@
     {
       "path": "academic-pipeline/examples/integrity_failure_recovery.md",
       "kind": "markdown",
-      "normalized_sha256": "4891ba9b5f2def3d0d90587ca9d37717b6fd625ebd32f39dad12b1849a15e289",
+      "normalized_sha256": "6a6d3e02fdc43fd22c0aeb4fe9cc5e9e8fe0bd4237953427da13b98303955b81",
       "risk_hits": [
         {
           "keyword": "phase",
@@ -12195,7 +12348,7 @@
         },
         {
           "level": 4,
-          "title": "Phase E: Claim Verification (30% spot-check, 6/18 claims)"
+          "title": "Phase E: Claim Verification (#549 risk-stratified, 18/18 claims)"
         },
         {
           "level": 3,
@@ -12302,7 +12455,7 @@
     {
       "path": "academic-pipeline/examples/mid_entry_example.md",
       "kind": "markdown",
-      "normalized_sha256": "a539be211fba2e10ec3f0ee0ec3925c9932a3ee2f3555124276f26b64fda97cc",
+      "normalized_sha256": "79a349ef4d46a857aa8949089839581b70d6cb429b2ade340c35018af400f943",
       "risk_hits": [],
       "headings": [
         {
@@ -12376,7 +12529,7 @@
     {
       "path": "academic-pipeline/references/adapters/overview.md",
       "kind": "markdown",
-      "normalized_sha256": "6e8a9b4099c5fa850f1aa83c2c7400c47a6316e908e894cec81afcfb9dbe9b80",
+      "normalized_sha256": "44089cfee4c78c75c9e2ca5234bed7ff8eb96a3b5dda78406b427ebbd455e08f",
       "risk_hits": [
         {
           "keyword": "Material Passport",
@@ -12656,11 +12809,23 @@
     {
       "path": "academic-pipeline/references/claim_verification_protocol.md",
       "kind": "markdown",
-      "normalized_sha256": "50517675fade20345fd207ad0d83a74ba162196af1fab4d6d74bdfee41005d5d",
+      "normalized_sha256": "080d074ccf6f1cc7accf04605f4de8770d94645ecc05255da1bd9b8a38484c42",
       "risk_hits": [
         {
+          "keyword": "handoff",
+          "count": 2
+        },
+        {
           "keyword": "phase",
-          "count": 3
+          "count": 8
+        },
+        {
+          "keyword": "revision patch",
+          "count": 1
+        },
+        {
+          "keyword": "scripts/",
+          "count": 1
         }
       ],
       "headings": [
@@ -12687,6 +12852,18 @@
         {
           "level": 2,
           "title": "E3: Cross-Referencing"
+        },
+        {
+          "level": 2,
+          "title": "E4: Scope-Conformance Advisory (#547 — advisory-only)"
+        },
+        {
+          "level": 2,
+          "title": "E5: Novelty-Claim Classification (#548 — advisory-only)"
+        },
+        {
+          "level": 2,
+          "title": "E6: Claim-Strength Drift (#569 — advisory-only, revision rounds)"
         },
         {
           "level": 2,
@@ -12753,7 +12930,7 @@
     {
       "path": "academic-pipeline/references/integrity_review_protocol.md",
       "kind": "markdown",
-      "normalized_sha256": "6f2fb72c5a8b1793c54c84b11b6fbd315a541f00c9b3229fab495ddc9190c8bf",
+      "normalized_sha256": "2cf3bcca64a90277d74d1698e8d546c527319eefa5b85cb4a4dadd0408378d73",
       "risk_hits": [
         {
           "keyword": "Schema 5",
@@ -12761,7 +12938,7 @@
         },
         {
           "keyword": "phase",
-          "count": 10
+          "count": 12
         }
       ],
       "headings": [
@@ -12976,7 +13153,7 @@
     {
       "path": "academic-pipeline/references/pipeline_state_machine.md",
       "kind": "markdown",
-      "normalized_sha256": "079e91005cffc3576554e06182b1faefe2529fba3b1a023e715f27df702ddb7d",
+      "normalized_sha256": "d61ac458e39d8bd7f8ad0c85b01887a1ffc5657578b883af15989e2677d60e89",
       "risk_hits": [
         {
           "keyword": "handoff",
@@ -13027,6 +13204,18 @@
         {
           "level": 3,
           "title": "Prohibited Transitions (Illegal)"
+        },
+        {
+          "level": 2,
+          "title": "Stage 5 and Stage 6 Boundary Semantics (#528)"
+        },
+        {
+          "level": 3,
+          "title": "Stage 5 boundary semantics"
+        },
+        {
+          "level": 3,
+          "title": "Stage 6 terminal semantics"
         },
         {
           "level": 2,
@@ -13194,7 +13383,7 @@
     {
       "path": "academic-pipeline/references/process_summary_protocol.md",
       "kind": "markdown",
-      "normalized_sha256": "79ea39434425594a5a0df19313f5e5d9cbcdafb1d1a39489160afbe7d3f19fee",
+      "normalized_sha256": "5c7053230d73b39d0a5d9d6f5e9f339c12570ae6d3aa2eae2eaf74f51d571e94",
       "risk_hits": [],
       "headings": [
         {
@@ -13363,7 +13552,7 @@
     {
       "path": "academic-pipeline/references/team_collaboration_protocol.md",
       "kind": "markdown",
-      "normalized_sha256": "a2781c22ebd2f9178ffae2b0897279645f0df8f23b8096141e2e52a4525f0a51",
+      "normalized_sha256": "4ffb094544ca3e701864653b060d2c7ba04a6549c70609d57033669dd0a61204",
       "risk_hits": [
         {
           "keyword": "Material Passport",
@@ -13512,7 +13701,7 @@
     {
       "path": "academic-pipeline/references/two_stage_review_protocol.md",
       "kind": "markdown",
-      "normalized_sha256": "261660a1e39187b848cffbd9bad1dd41cbfe2b3c9a30f7022c93ebd50a79af18",
+      "normalized_sha256": "21a6d9dc5710013e8eab6f5886ab2aa54a253f7cff3cfa24c0208793daaec220",
       "risk_hits": [
         {
           "keyword": "Schema 11",
@@ -13613,7 +13802,7 @@
     {
       "path": "deep-research/SKILL.md",
       "kind": "markdown",
-      "normalized_sha256": "72d2bad13569767a19bca43eb9a5057ebf6b1fe95d2ac7c257b954a13580a9ea",
+      "normalized_sha256": "f903840f07c447abe51fc7f52c6fe2354a9b15af25bfd254728a199cd26985be",
       "risk_hits": [
         {
           "keyword": "Material Passport",
@@ -13640,7 +13829,7 @@
         ],
         "values": {
           "name": "deep-research",
-          "description": "Universal deep research agent team. 13-agent pipeline for rigorous academic research on any topic. 8 modes: full research, quick brief, paper review, lit-review, fact-check, three-way literature scan, Socratic guided research dialogue, and systematic review with optional meta-analysis. Covers research question formulation, Socratic mentoring, methodology design, systematic literature search, source verification, cross-source synthesis, risk of bias assessment, meta-analysis, APA 7.0 report compilation, editorial review, devil's advocate challenges, ethics review, and post-research literature monitoring. Triggers on: research, deep research, literature review, systematic review, meta-analysis, PRISMA, evidence synthesis, fact-check, WHY HOW WHAT papers, 3W literature scan, guide my research, help me think through, 研究, 深度研究, 文獻回顧, 文獻探討, 系統性回顧, 後設分析, 事實查核, 三段式文獻掃描, 引導我的研究, 幫我釐清, 幫我想想, 我不確定要研究什麼, 研究方向, 研究主題.",
+          "description": "Universal deep research agent team. 13-agent pipeline for rigorous academic research on any topic. 8 modes: full research, quick brief, paper review, lit-review, fact-check, three-way literature scan, Socratic guided research dialogue, and systematic review with optional meta-analysis. Covers research question formulation, Socratic mentoring, methodology design, systematic literature search, source verification, cross-source synthesis, risk of bias assessment, meta-analysis, APA 7.0 report compilation, editorial review, devil's advocate challenges, ethics review, and post-research literature monitoring. Triggers on: research, deep research, literature review, systematic review, meta-analysis, PRISMA, evidence synthesis, fact-check, WHY HOW WHAT papers, 3W literature scan, guide my research, help me think through, 研究, 深度研究, 文獻回顧, 文獻探討, 系統性回顧, 後設分析, 事實查核, 三段式文獻掃描, 引導我的研究, 幫我釐清, 幫我想想, 我不確定要研究什麼, 研究方向, 研究主題, 심층 연구, 문헌 조사, 체계적 문헌고찰, 메타분석, 사실 확인, 연구 방향을 잡아줘, 연구 주제 정하는 것을 도와줘.",
           "metadata": ""
         }
       },
@@ -13771,6 +13960,10 @@
         },
         {
           "level": 2,
+          "title": "Model Tiering (#517, optional)"
+        },
+        {
+          "level": 2,
           "title": "Version Info"
         },
         {
@@ -13782,7 +13975,7 @@
     {
       "path": "deep-research/agents/bibliography_agent.md",
       "kind": "markdown",
-      "normalized_sha256": "39370675561f74fae9a8595bdeb03939402d273a0734b6bcaa1230d5e9928616",
+      "normalized_sha256": "885ef79f7a37cc03e0fcb9c4a7deecb9bb9f9bbae5b98ce2c7c9e42804e76dea",
       "risk_hits": [
         {
           "keyword": "Material Passport",
@@ -14811,7 +15004,7 @@
     {
       "path": "deep-research/agents/report_compiler_agent.md",
       "kind": "markdown",
-      "normalized_sha256": "24f8d0d111be936bc62720fb9cade9423f11ed77847fdeaa6e11b3d09b04495a",
+      "normalized_sha256": "1d86d6163df5cda7f45a686d16abcd81386560cf03dd8e0b20b992556d233cb7",
       "risk_hits": [
         {
           "keyword": "Material Passport",
@@ -14831,19 +15024,21 @@
         },
         {
           "keyword": "scripts/",
-          "count": 1
+          "count": 2
         }
       ],
       "frontmatter": {
         "keys": [
           "description",
           "model",
-          "name"
+          "name",
+          "tools"
         ],
         "values": {
           "name": "report_compiler_agent",
           "description": "Transforms research findings into polished APA 7.0 academic reports; activated in Phase 4 and Phase 6",
-          "model": "inherit"
+          "model": "inherit",
+          "tools": "Read, Write, Edit, Grep, Glob"
         }
       },
       "headings": [
@@ -14948,27 +15143,33 @@
     {
       "path": "deep-research/agents/research_architect_agent.md",
       "kind": "markdown",
-      "normalized_sha256": "c38c7034c42d7afb8743fc68fa9f9e6a3970052b9e013f3a232597df71b6dbd3",
+      "normalized_sha256": "438a7f09d669193c1256c5a36601787d64a03eecded4b65f3128e9ca27732a8c",
       "risk_hits": [
+        {
+          "keyword": "handoff",
+          "count": 2
+        },
         {
           "keyword": "phase",
           "count": 10
         },
         {
           "keyword": "scripts/",
-          "count": 1
+          "count": 2
         }
       ],
       "frontmatter": {
         "keys": [
           "description",
           "model",
-          "name"
+          "name",
+          "tools"
         ],
         "values": {
           "name": "research_architect_agent",
           "description": "Designs the methodological blueprint; selects research paradigm, method, data strategy, and analytical framework",
-          "model": "inherit"
+          "model": "inherit",
+          "tools": "Read, Write, Edit, Grep, Glob"
         }
       },
       "headings": [
@@ -15077,8 +15278,16 @@
           "title": "Preregistration"
         },
         {
+          "level": 3,
+          "title": "Design-Freeze Checkpoint Audit (cross-model, only when `ARS_CROSS_MODEL` is set + consent granted; populated AFTER the comparison — never sent to the cross-model)"
+        },
+        {
           "level": 2,
           "title": "Quality Criteria"
+        },
+        {
+          "level": 2,
+          "title": "Cross-Model Blind Checkpoint at Design Freeze (Optional, #518)"
         },
         {
           "level": 2,
@@ -15089,7 +15298,7 @@
     {
       "path": "deep-research/agents/research_question_agent.md",
       "kind": "markdown",
-      "normalized_sha256": "71a37f1ee3ea2bd23d67ae2c258c4b9cbdb934ba5a03d25feedfc4271e182dcc",
+      "normalized_sha256": "d5d8df51f7fbe54ddec08ba335346c1c49a5264a1a1b0cd1ef680c026092523e",
       "risk_hits": [
         {
           "keyword": "phase",
@@ -15182,6 +15391,10 @@
         {
           "level": 3,
           "title": "Sub-questions"
+        },
+        {
+          "level": 3,
+          "title": "Sub-Question Bindings (#547)"
         },
         {
           "level": 3,
@@ -15407,7 +15620,7 @@
     {
       "path": "deep-research/agents/socratic_mentor_agent.md",
       "kind": "markdown",
-      "normalized_sha256": "8ecb9d24722c0fefb67d838bb7ab17f6f6ff837cd3d152d4601beeb2e95d991c",
+      "normalized_sha256": "6d9218971f0787603f0453693af63b2f36c894e4655ccd365aa868bcbd8748c0",
       "risk_hits": [
         {
           "keyword": "handoff",
@@ -15857,7 +16070,7 @@
     {
       "path": "deep-research/agents/synthesis_agent.md",
       "kind": "markdown",
-      "normalized_sha256": "fabeff7776e9860227642f196f9f496da99070b7979b2f90633f83a4a89f31ab",
+      "normalized_sha256": "6aae4702e25ff40d103beb57b76635a550f2c5944b1a8811de797feb82c09403",
       "risk_hits": [
         {
           "keyword": "Material Passport",
@@ -15873,19 +16086,21 @@
         },
         {
           "keyword": "scripts/",
-          "count": 1
+          "count": 2
         }
       ],
       "frontmatter": {
         "keys": [
           "description",
           "model",
-          "name"
+          "name",
+          "tools"
         ],
         "values": {
           "name": "synthesis_agent",
           "description": "Integrates findings across sources, resolves evidence conflicts, and maps knowledge gaps",
-          "model": "inherit"
+          "model": "inherit",
+          "tools": "Read, Write, Edit, Grep, Glob"
         }
       },
       "headings": [
@@ -20110,7 +20325,7 @@
     {
       "path": "shared/contracts/README.md",
       "kind": "markdown",
-      "normalized_sha256": "41a3c81291af3d4355e4483f69dc18f176c27a29435574e4239e4315b7f61961",
+      "normalized_sha256": "33af34d243dee509c767097be79ef81be466cb81ae366d6da3f985d39bcf9a20",
       "risk_hits": [
         {
           "keyword": "Material Passport",
@@ -20134,7 +20349,7 @@
         },
         {
           "keyword": "scripts/",
-          "count": 5
+          "count": 6
         }
       ],
       "headings": [
@@ -20214,9 +20429,28 @@
       ]
     },
     {
+      "path": "shared/contracts/degradation_registry.json",
+      "kind": "json",
+      "normalized_sha256": "99c57b656ff357113584d3535dd7d6949297990c8c65767dcc97074b85521d24",
+      "risk_hits": [
+        {
+          "keyword": "phase",
+          "count": 1
+        },
+        {
+          "keyword": "integrity gate",
+          "count": 1
+        },
+        {
+          "keyword": "scripts/",
+          "count": 17
+        }
+      ]
+    },
+    {
       "path": "shared/contracts/evaluator/full.json",
       "kind": "json",
-      "normalized_sha256": "7859f1caa5ad9dc10c5a8a21eeda79a547ee8e235ba7380ae234065432fb1996",
+      "normalized_sha256": "ce3b3e19f1da68985ebeb2dd2d7904d7343724d0847fff4e08704d79f083158a",
       "risk_hits": [
         {
           "keyword": "phase",
@@ -20265,7 +20499,7 @@
     {
       "path": "shared/contracts/passport/citation_verification_summary.schema.json",
       "kind": "json",
-      "normalized_sha256": "de0b946d10da6338fb0d0ddc6755de109cf168a7b877ae984a51aca6333316a1",
+      "normalized_sha256": "5e7b83d4309ff4baff6148318d431296065e0ac3cc1357e8b8c260362a644503",
       "risk_hits": [
         {
           "keyword": "scripts/",
@@ -20400,9 +20634,24 @@
       ]
     },
     {
+      "path": "shared/contracts/passport/human_read_log.schema.json",
+      "kind": "json",
+      "normalized_sha256": "fa5b7bec58fdc12d324f0975e5d05f8dfcf51bab7c3793a296841524a2c61707",
+      "risk_hits": [
+        {
+          "keyword": "Material Passport",
+          "count": 1
+        },
+        {
+          "keyword": "scripts/",
+          "count": 1
+        }
+      ]
+    },
+    {
       "path": "shared/contracts/passport/literature_corpus_entry.schema.json",
       "kind": "json",
-      "normalized_sha256": "4451f7026b9d640a801d7844c928d8fe75c420d70ed8d5c3d4f57d500d6a20b3",
+      "normalized_sha256": "6859666aa870c2f4e8d539339e40998ca6ca8ad515db1666ec31a607519f197e",
       "risk_hits": [
         {
           "keyword": "Material Passport",
@@ -20617,7 +20866,7 @@
     {
       "path": "shared/contracts/writer/full.json",
       "kind": "json",
-      "normalized_sha256": "bbfa682e31c8c7ca82326546d9a0c9c8c786c65f5a98c85f534709eeedadc4f5",
+      "normalized_sha256": "9340ad80971f643ca772243a645d0a52b4ab059e27e04e0bce463e0760d1553b",
       "risk_hits": [
         {
           "keyword": "handoff",
@@ -20632,15 +20881,23 @@
     {
       "path": "shared/cross_model_verification.md",
       "kind": "markdown",
-      "normalized_sha256": "6f90de5bd25a7809806a1e1d714050a7424f281eb5c29d976a30a9daa71e9265",
+      "normalized_sha256": "fb41934d884eef51005ecd79be44b21497bde89263f78f556ec6c9c87a84f5e9",
       "risk_hits": [
         {
+          "keyword": "handoff",
+          "count": 10
+        },
+        {
           "keyword": "phase",
-          "count": 3
+          "count": 11
+        },
+        {
+          "keyword": "sprint contract",
+          "count": 1
         },
         {
           "keyword": "scripts/",
-          "count": 7
+          "count": 14
         }
       ],
       "headings": [
@@ -20690,6 +20947,30 @@
         },
         {
           "level": 1,
+          "title": "Frontier alternative, provisional pending ARS validation (see Supported Models):"
+        },
+        {
+          "level": 1,
+          "title": "export ARS_CROSS_MODEL=\"gpt-5.6-sol\""
+        },
+        {
+          "level": 1,
+          "title": "Optional: reasoning effort for OpenAI verifier calls (unset = the provider's own"
+        },
+        {
+          "level": 1,
+          "title": "default for the chosen model). GPT-5.6 accepts none|low|medium|high|xhigh|max;"
+        },
+        {
+          "level": 1,
+          "title": "GPT-5.5 tops out at xhigh."
+        },
+        {
+          "level": 1,
+          "title": "export ARS_CROSS_MODEL_REASONING_EFFORT=\"medium\""
+        },
+        {
+          "level": 1,
           "title": "--- Option B: Google Gemini (first-party, grounded) ---"
         },
         {
@@ -20730,7 +21011,19 @@
         },
         {
           "level": 3,
-          "title": "Peer Review (academic-paper-reviewer) — Future"
+          "title": "Cross-Model Reviewer Track (#540 — academic-paper-reviewer full mode)"
+        },
+        {
+          "level": 3,
+          "title": "Re-Review Judge Independence (#539 — Stage 3' verification round)"
+        },
+        {
+          "level": 3,
+          "title": "Blind Disagreement Checkpoints (research-design freeze + final editorial decision)"
+        },
+        {
+          "level": 3,
+          "title": "Cross-model handoff envelope (#527)"
         },
         {
           "level": 2,
@@ -20738,7 +21031,7 @@
         },
         {
           "level": 3,
-          "title": "OpenAI (GPT-5.5 / GPT-5.5 Pro)"
+          "title": "OpenAI (GPT-5.5 / GPT-5.5 Pro / GPT-5.6 Sol)"
         },
         {
           "level": 1,
@@ -20825,6 +21118,10 @@
           "title": "Requires: jq (for JSON parsing). Fallback: python3 -c \"import sys,json; ...\""
         },
         {
+          "level": 3,
+          "title": "Promotion Bakeoff (provisional → validated → recommended default)"
+        },
+        {
           "level": 2,
           "title": "Cost Considerations"
         },
@@ -20909,7 +21206,7 @@
     {
       "path": "shared/handoff_schemas.md",
       "kind": "markdown",
-      "normalized_sha256": "259f24fa381a8600ba0d06bc8aadac468de307f7e4791f21f52b24862c590950",
+      "normalized_sha256": "2759259ece7d28824c697e9390a3dbe22457cdef1a7d2cb0bb0f865349f8f8bf",
       "risk_hits": [
         {
           "keyword": "Material Passport",
@@ -21103,6 +21400,10 @@
         },
         {
           "level": 3,
+          "title": "Optional Fields"
+        },
+        {
+          "level": 3,
           "title": "ReviewerReport Object"
         },
         {
@@ -21285,6 +21586,79 @@
       ]
     },
     {
+      "path": "shared/model_tiering.md",
+      "kind": "markdown",
+      "normalized_sha256": "bdcd7472698448521a77f34c7174b4a0f5ae0c5196982611079a555b57f2fd4e",
+      "risk_hits": [
+        {
+          "keyword": "handoff",
+          "count": 1
+        },
+        {
+          "keyword": "integrity gate",
+          "count": 1
+        },
+        {
+          "keyword": "scripts/",
+          "count": 4
+        }
+      ],
+      "headings": [
+        {
+          "level": 1,
+          "title": "Model Tiering (#517)"
+        },
+        {
+          "level": 2,
+          "title": "The switch"
+        },
+        {
+          "level": 1,
+          "title": "Pick ONE direction, or leave unset (default: session model everywhere)."
+        },
+        {
+          "level": 2,
+          "title": "Relative tiers, never hard-pinned ids"
+        },
+        {
+          "level": 3,
+          "title": "Resolving a tier at dispatch time"
+        },
+        {
+          "level": 2,
+          "title": "Direction 1 — `quality-boost` (for sessions below the frontier tier)"
+        },
+        {
+          "level": 2,
+          "title": "Direction 2 — `economy` (for frontier-tier sessions)"
+        },
+        {
+          "level": 2,
+          "title": "Where the decision is made"
+        },
+        {
+          "level": 2,
+          "title": "Prompt-caching guidance (article item 4)"
+        },
+        {
+          "level": 2,
+          "title": "Classification table (39 agents; frozen 2026-07-11, #517)"
+        },
+        {
+          "level": 3,
+          "title": "Judgment-type (26) — session model; quality-boost upgrade candidates at checkpoint surfaces"
+        },
+        {
+          "level": 3,
+          "title": "Execution-type (13) — economy-direction downgrade candidates (one tier, floor Opus-class)"
+        },
+        {
+          "level": 2,
+          "title": "Interaction with cross-model verification"
+        }
+      ]
+    },
+    {
       "path": "shared/policy_data/nature_policy.md",
       "kind": "markdown",
       "normalized_sha256": "eb0a33dbf6b7dc8b9e7f788aa45e1e888b127d0b520aac0f3e694d00fdbd5685",
@@ -21455,7 +21829,7 @@
     {
       "path": "shared/raise_framework.md",
       "kind": "markdown",
-      "normalized_sha256": "7901caa916410a7348e5240a25950432ed32ee3234f448a981083d7040e26bc1",
+      "normalized_sha256": "af15da9469769306ea8fa25b2d212ffa8a96e66a84085180f724c7d662a43b6f",
       "risk_hits": [
         {
           "keyword": "phase",
@@ -21548,6 +21922,47 @@
         {
           "level": 2,
           "title": "Usage in compliance_agent"
+        }
+      ]
+    },
+    {
+      "path": "shared/references/claim_strength_ladder.md",
+      "kind": "markdown",
+      "normalized_sha256": "1aad2e8b42023660a830c27fe0a1c53d5c3b312c178b84eed8268b267e8cf7f4",
+      "risk_hits": [
+        {
+          "keyword": "integrity gate",
+          "count": 1
+        },
+        {
+          "keyword": "scripts/",
+          "count": 1
+        }
+      ],
+      "headings": [
+        {
+          "level": 1,
+          "title": "Claim-Strength Ladder"
+        },
+        {
+          "level": 2,
+          "title": "The ladder"
+        },
+        {
+          "level": 2,
+          "title": "What counts as a move (and what does not)"
+        },
+        {
+          "level": 2,
+          "title": "Load-bearing overlap with existing protections"
+        },
+        {
+          "level": 2,
+          "title": "Where this is consumed"
+        },
+        {
+          "level": 2,
+          "title": "Measurement"
         }
       ]
     },

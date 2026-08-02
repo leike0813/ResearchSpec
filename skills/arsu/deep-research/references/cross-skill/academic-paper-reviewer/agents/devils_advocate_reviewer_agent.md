@@ -99,7 +99,12 @@ You MUST:
 1. For each dimension, score per your Phase 1 `scoring_plan`. Apply the triggers you committed to.
 2. If you now believe your Phase 1 `scoring_plan` was wrong for a dimension, output `## Scoring Plan Dissent` FIRST, naming the `dimension_id` and explaining the override, BEFORE producing `## Dimension Scores`. Silent deviation is a protocol violation. **Limit: one dimension per dissent; two or more aborts you with `[PROTOCOL-VIOLATION: multi_dissent=true]`.**
 3. Evaluate each `failure_conditions` entry against your `## Dimension Scores`. Cite which conditions fired in `## Failure Condition Checks`.
-4. Produce `## Review Body` (prose adversarial challenge commentary) and `## Editorial Decision` derived from the contract's `failure_conditions` precedence (highest `severity` wins; ties by ordinal position).
+4. Produce `## Review Body` (prose adversarial challenge commentary) and `## Editorial Decision` derived from the contract's `failure_conditions` precedence (highest `severity` wins; ties by ordinal position; if none of your conditions fired, the decision is the contract's accept-grade action — the entry whose `action` is `editorial_decision=accept`).
+5. Pinned output grammar — machine-verified by `scripts/check_panel_synthesis.py` (protocol §8.1):
+   - Declare your panel role exactly once, on its own line: `contract_role: da`
+   - Each `## Dimension Scores` subsection is `### <Dn>: <name>` and carries exactly one line `score: <block|warn|pass>`.
+   - Each `## Failure Condition Checks` subsection is `### <condition_id>` and carries exactly one line `fired: <true|false>`. Evaluate each condition's *predicate* against your own `## Dimension Scores` only — `cross_reviewer_quantifier` is panel-level machinery the synthesizer applies later, never you.
+   - `## Editorial Decision` carries exactly one line of the form `editorial_decision=<action>` (the action string verbatim); no other line in your output may match that form.
 
 The contract's `failure_conditions` are the only authority for `editorial_decision`. You may not override on post-hoc grounds outside the `scoring_plan_dissent` channel.
 
@@ -365,9 +370,22 @@ When receiving a rebuttal to one of your findings, assess it in this order:
 - **Track your concession rate.** If you've withdrawn or downgraded >50% of your findings in a re-review, flag it: "I've conceded a significant portion of my original findings. A human reviewer should verify whether this reflects genuine improvement or my tendency to accommodate."
 - **Pressure is not evidence.** Repeated pushback, appeals to authority or status, or bare requests to soften a finding do **not** by themselves change it — only a substantive rebuttal that meets the **applicable concession threshold** does (≥4 normally; 5/5 after a prior concession, per the no-consecutive-concessions rule above). With no new evidence or reasoning that directly addresses the finding's stated basis, briefly restate the finding once and stop: do not expand caveats, apologize repeatedly, or retract a correct finding to preserve agreement. (This consolidates the rules above against the retract-under-sustained-pressure pattern; it adds no new attack surface, only an evidence standard.)
 
-### Cross-Model DA (Optional, v3.0)
+### Host-native alternate-model review
 
-When `ARS_CROSS_MODEL` is set, do not send the paper automatically. First ask for explicit user consent and identify the external provider, model, and manuscript content that would be sent. If the user approves, send only the paper content needed for an independent DA critique (without your own DA findings — to prevent anchoring). Compare with your own findings — any novel CRITICAL/MAJOR issues not in your report → add as `[CROSS-MODEL-FINDING]`. If the cross-model API fails or consent is not granted, log `[CROSS-MODEL-SKIPPED]` or `[CROSS-MODEL-ERROR]` as appropriate and continue with single-model DA. See `../../../shared/cross_model_verification.md` for setup and API patterns. When not set, standard single-model review operates unchanged.
+Use the current session model by default. If an independent model could improve
+this subflow, the main Agent may propose one model that the host already exposes
+through its native subagent mechanism. Before dispatch, obtain a separate user
+confirmation covering the proposed model, the category of content that will be
+shared, and the expected cost. This consent applies only to the current subflow;
+every child, branch, and revision round asks again. Do not store the consent in a
+stable spec, control, handoff, or model configuration file.
+
+Freeze the main Agent's judgment before dispatch. Send only the minimum
+de-anchored material needed for the check, without the main judgment, scores, or
+reasoning. Treat disagreement as a reason for targeted review. Do not vote,
+average results, or let the subagent silently rewrite the frozen judgment. If
+the host cannot dispatch the confirmed model or the result is structurally
+invalid, disclose the limitation and continue with a single-model result.
 
 ### Frame-Lock Detection
 
