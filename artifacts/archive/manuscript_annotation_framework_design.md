@@ -1,6 +1,10 @@
 # 稿件批注框架设计基线
 
-- **状态：** 后续 OpenSpec change 与分批实现的设计输入
+> 归档说明：本文记录已退出产品的 annotation registry/receipt 与通用 Draft Patch 设计。
+> 当前实现以 `docs/manuscript_annotation_adapters.md`、ARSU `revision_patch` 合同和所属
+> revision subflow 的私有 `work/` 为准。
+
+- **状态：** 已归档，由当前 annotation intake 与 ARSU revision 合同取代
 - **默认稿件格式：** Markdown
 - **主要交互客户端：** VS Code
 - **适用范围：** 已注册稿件的人工审阅、批注澄清、修订提案、受控应用与复核

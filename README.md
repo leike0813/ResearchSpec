@@ -1,6 +1,6 @@
 # ResearchSpec
 
-ResearchSpec is an agent-neutral, file-based control plane for Academic Research Skills Universal (ARSU). It installs research Skills into supported Agent tools while keeping workflow state, artifacts, formal Gates, human Decisions, transitions, and receipts in an explicit local workspace.
+ResearchSpec is an agent-neutral, file-based control plane for Academic Research Skills Universal (ARSU). It installs research Skills into supported Agent tools, keeps stable research contracts explicit, and records each subflow's state, formal Gates, human Decisions, transitions, and handoff paths in its own control directory.
 
 Version `0.1.0` is an MVP release candidate. The functional user model is implemented and covered by public-CLI acceptance journeys; publication remains blocked until the hosted CI and manual dogfooding checklist are signed.
 
@@ -15,7 +15,7 @@ AI Agent 驱动的学术研究面临三个核心问题：
 ResearchSpec 的应对方案：
 
 - **Agent-neutral Skills**：所有研究 Skills 以文件形式分发，通过 CLI 适配层安装到不同 Agent 工具，不依赖任何平台的私有运行时
-- **CLI 为中心的执行框架**：CLI 是工作流状态的唯一权威；Agent 只生产语义工件，不直接编辑状态、注册表或账本
+- **CLI 为中心的执行框架**：CLI 是 `control.yaml` 运行状态的唯一修改入口；Agent 维护研究规格、外部语义交付物和 handoff，不直接编辑控制记录
 - **文件合约 (File Contracts)**：研究意图、来源、claims、稿件结构、project profile、per-subflow control、handoff 与 project change 都有明确的 Markdown / YAML / JSON owner
 
 ## 灵感来源
@@ -23,8 +23,8 @@ ResearchSpec 的应对方案：
 ResearchSpec 的设计深受 **[OpenSpec](https://github.com/Fission-AI/OpenSpec)** spec-driven 开发模式的启发：
 
 - **当前 specs 即为真理**：核心研究意图和约束存放在 `specs/`，实时生效
-- **变更隔离**：高影响修改以独立 proposal + contract-patch 形式存在于 `changes/`，人工确认后才合并
-- **决策 first-class**：Human-in-the-loop 不依赖聊天记录，而是显式写入结构化 Decision 账本
+- **变更隔离**：高影响修改以可审阅的 project change 文档包存在于 `changes/`；接受 change 不会自动修改 stable specs
+- **决策 first-class**：Human-in-the-loop 不依赖聊天记录；正式 Gate、override 和局部研究选择写入所属 subflow 的 `control.yaml`
 
 与 OpenSpec 遵循相同理念：代码（此处为研究工件）是附带产物，specs 才应驱动行为。
 
@@ -114,7 +114,7 @@ researchspec check all --strict
 
 随后在相同项目中启动 Codex，以自然语言描述研究目标：
 
-> I want to study how generative AI affects writing instruction in higher education. Show candidate routes, prerequisites, artifacts, formal Gates, risks, and cost. Do not start a route until I confirm it.
+> I want to study how generative AI affects writing instruction in higher education. Show candidate routes, prerequisites, boundary outputs, formal Gates, risks, and cost. Do not start a route until I confirm it.
 
 ResearchSpec 安装十五个固定项目 Skills：
 

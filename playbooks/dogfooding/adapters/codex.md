@@ -37,7 +37,7 @@ researchspec list tools
 researchspec status --json
 ```
 
-应发现以下 8 个项目级 Skills：
+应发现以下 15 个项目级 Skills：
 
 - `deep-research`
 - `academic-paper`
@@ -47,6 +47,13 @@ researchspec status --json
 - `researchspec-propose`
 - `researchspec-decide`
 - `researchspec-verify`
+- `zotero-library-agent`
+- `zotero-library-query`
+- `zotero-literature-acquisition`
+- `zotero-literature-analysis`
+- `zotero-research-synthesis`
+- `zotero-library-curation`
+- `zotero-bridge-cli`
 
 ## 启动与新会话
 
@@ -58,7 +65,8 @@ codex
 
 Resume 场景必须完全退出当前 Codex 会话，再从相同目录和相同 `CODEX_HOME` 启动新会话。不得把旧聊天摘要或复制的上一轮回复提供给新会话。
 
-transcript 可使用 Codex 提供的会话导出能力或人工保存，但不得把观察记录写入研究 workspace。所有 CLI JSON 和 candidate hash 仍按主 playbook 的证据结构保存。
+Transcript 可使用 Codex 提供的会话导出能力或人工保存，但不得把观察记录写入研究 workspace。
+所有 CLI JSON、相关 control/handoff 快照和外部交付物 hash 仍按主 playbook 的证据结构保存。
 
 ## 清理
 

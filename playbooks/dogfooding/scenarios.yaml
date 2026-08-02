@@ -3,6 +3,7 @@ canonical_playbook: README.md
 adapters:
   - adapters/codex.md
 soft_rubric: README.md#7-评分与结论
+
 fixture_variants:
   - fixture_variant: goal-only
     paths:
@@ -40,6 +41,7 @@ fixture_variants:
       - benchmark/revision-context.md
       - benchmark/variants/stale-manuscript.md
       - benchmark/variants/conflicting-review.md
+
 release_mappings:
   - checklist_ref: quick-standalone
     scenario_id: DF-T1-STANDALONE
@@ -51,49 +53,50 @@ release_mappings:
     scenario_id: DF-T1-GATE
   - checklist_ref: end-to-end-pipeline
     scenario_id: DF-T1-PIPELINE
+
 scenarios:
   - scenario_id: DF-T0-BOOTSTRAP
     tier: 0
     title: 隔离环境中的首次初始化与 Skill 发现
-    intent: 验证 init 只准备 workspace，且 Agent 能发现固定的 4+4 Skill surface。
+    intent: 验证 init 只准备 current workspace，且固定的 4+4+7 Skill surface 可发现。
     personas: [first-time-maintainer]
     route_refs: []
     fixture_variant: goal-only
     initial_state: empty-disposable-project
     prompts:
-      - 初始化这个项目，但不要开始任何研究工作。完成后告诉我当前状态和可用的研究能力。
+      - 初始化这个项目，但不要开始研究。完成后说明 workspace 状态和可用研究能力。
     checkpoints:
-      - init 前后保存 status、check、tool list 与 Skill 目录清单。
-      - 确认 run 为 not_started，且不存在 instance subflow。
+      - 保存 init 前后目录树、status、check、CLI help 和 Skill inventory。
+      - 确认四份 stable specs、项目 profile 和空 subflows 目录存在。
     prohibited_actions:
-      - 在 init 中选择或启动任一 ARSU route。
-      - 写入真实 Agent 全局目录。
+      - 在 init 中选择或启动 ARSU route。
+      - 写入未隔离的 Agent 全局目录或联系 Zotero。
     hard_assertions:
-      - 八个 Skills 可发现且没有学术 subflow 被启动。
-      - check all --strict 通过且全局投影位于隔离目录。
-    required_evidence: [manifest, prompts, transcript, initial-status, final-status, final-check, skill-inventory]
+      - 十五个固定 Skills 与十六个顶层命令可发现。
+      - 没有 subflow 被创建，check all --strict 通过。
+    required_evidence: [manifest, prompts, transcript, workspace-tree, final-status, final-check, skill-inventory, cli-help]
     soft_rubric: default
-    cleanup: [保留本轮 Tier 1 所需 workspace 或仅删除已确认属于本轮的隔离目录。]
+    cleanup: [保留 Tier 1 所需 workspace，或只删除已确认属于本轮的隔离目录。]
     acceptance_journey_refs: [bootstrap]
 
   - scenario_id: DF-T0-UPDATE-DRIFT
     tier: 0
-    title: 重复 init、update 与投影漂移保护
-    intent: 验证维护操作不启动工作、不覆盖用户漂移，也不依赖 --force。
+    title: 重复 init、update 与静态投影 drift 保护
+    intent: 验证维护操作不启动工作，不覆盖无法确认所有权的本地修改。
     personas: [maintainer-upgrading-workspace]
     route_refs: []
     fixture_variant: goal-only
-    initial_state: initialized-not-started-workspace-with-one-drifted-projection
+    initial_state: initialized-workspace-with-one-drifted-generated-projection
     prompts:
-      - 检查并更新 ResearchSpec 安装；保留任何不能确认所有权的本地修改，不要开始研究。
+      - 检查并更新 ResearchSpec 安装；保留不能确认所有权的修改，也不要开始研究。
     checkpoints:
-      - 保存漂移文件更新前后 hash 与 init/update preview、execution。
-      - 再次确认 status 仍为 not_started。
-    prohibited_actions: [使用 --force 覆盖漂移, 把 update 解释为启动路线]
+      - 保存 drift 文件、manifest、dry-run 和实际 update 结果。
+      - 再次确认没有 active subflow，stable specs 未变化。
+    prohibited_actions: [使用 --force 掩盖未知所有权, 修改 stable specs, 把 update 解释为启动路线]
     hard_assertions:
-      - 漂移文件保持不变且 clean owned projections 可更新。
-      - 重复操作不创建 subflow、Decision、Gate 或 receipt。
-    required_evidence: [manifest, prompts, transcript, before-after-hashes, preview, execution, final-status, final-check]
+      - Drift 文件保持不变，clean manifest-owned projections 可以更新。
+      - 重复操作不创建 control、Gate、Decision 或 handoff。
+    required_evidence: [manifest, prompts, transcript, before-after-hashes, dry-run, update-result, final-status, final-check]
     soft_rubric: default
     cleanup: [恢复或删除隔离 workspace，不回滚仓库文件。]
     acceptance_journey_refs: [bootstrap]
@@ -101,145 +104,145 @@ scenarios:
   - scenario_id: DF-T1-STANDALONE
     tier: 1
     title: 模糊路由到 quick standalone 并完成
-    intent: 验证 Navigate、near miss、路线确认、candidate 提交与 terminal completion 的完整低成本旅程。
+    intent: 验证 Navigate 消歧、路线确认、外部边界交付物、handoff 和 owning control 的完整低成本旅程。
     personas: [researcher-with-vague-goal]
     route_refs: [deep-research:quick]
     fixture_variant: goal-only
     initial_state: initialized-not-started-workspace
     prompts:
-      - 我想研究生成式 AI 对高校写作教学的影响，但还没想清楚问题。请展示候选、near miss、前置条件、主要产物、正式 Gates、风险和成本；我确认前不要启动。
-      - 我确认 deep-research:quick。按当前 frontier 继续，每一步动态读取 status 和 instructions；遇到正式 Gate 或需要我决定的分支时停下。
+      - 我想研究生成式 AI 对高校写作教学的影响。请展示候选 route、near miss、前置条件、边界输出、正式 Gates、风险和成本；我确认前不要启动。
+      - 我确认 deep-research:quick。按当前 frontier 继续，遇到正式 Gate 或需要我选择时停下。
     checkpoints:
-      - 确认路线摘要前 status 仍无 instance subflow。
-      - 保存 Start preview/execute、每个 work candidate hash/receipt 与独立 transition。
-      - 保存 terminal status 与 check runtime。
-    prohibited_actions: [跳过 Navigate 消歧, 未确认即 start, submit 顺便推进 transition, 手改权威状态]
+      - 确认路线摘要前没有 instance。
+      - 保存 Start input、确认者、control、外部输出和 handoff 的变化。
+      - 保存 terminal status 与 final check。
+    prohibited_actions: [跳过 Navigate 消歧, 未确认即 start, 把输出写入 researchspec, 手改 control]
     hard_assertions:
-      - start 绑定已展示且未漂移的 quick 路线计划。
-      - 所有 candidate 位于 instructions 路径且 completion 来自 CLI terminal state。
-    required_evidence: [manifest, prompts, transcript, route-summary, status-sequence, instructions-sequence, previews, executions, candidate-hashes, receipts, final-check]
+      - Start 只创建一个精确实例，精确重试复用该实例。
+      - 边界交付物位于 researchspec 外，handoff 可定位它们，完成由 owning control 表示。
+    required_evidence: [manifest, prompts, transcript, route-summary, status-sequence, instructions-sequence, start-input, control-snapshots, handoff, external-files, final-check]
     soft_rubric: default
-    cleanup: [保留 workspace 给 DF-T1-RESUME，复制证据到 workspace 外。]
+    cleanup: [保留 workspace 给 DF-T1-RESUME，并把证据复制到 workspace 外。]
     release_checklist_ref: quick-standalone
-    acceptance_journey_refs: [vague-routing, standalone, terminal-completion]
+    acceptance_journey_refs: [routing, standalone]
 
   - scenario_id: DF-T1-RESUME
     tier: 1
     title: 无聊天记忆的新会话恢复
-    intent: 验证 Agent 仅依据持久化 workspace、status 与 scoped frontier 恢复工作。
+    intent: 验证 Agent 仅依据 stable specs、profile、controls、handoffs 与精确 selector 恢复。
     personas: [returning-researcher]
     route_refs: [deep-research:quick]
     fixture_variant: goal-only
     initial_state: active-or-complete-workspace-from-DF-T1-STANDALONE
     prompts:
-      - 请恢复这个研究项目。不要依据上一段聊天或猜测流程；只根据 workspace、status 和 scoped frontier 告诉我已完成、阻塞与下一步，并在我同意后继续。
+      - 恢复这个研究项目。不要使用上一段聊天；只根据 workspace 告诉我已完成、阻塞与下一步。
     checkpoints:
-      - 完全退出旧 Agent 会话并启动没有旧聊天内容的新会话。
-      - 比较退出前与恢复后的 frontier 和 active instance identity。
-    prohibited_actions: [向新会话粘贴旧聊天摘要, 重复确认未漂移的 active route, 猜测 selector]
+      - 完全退出旧 Agent 会话，再从相同项目启动无聊天记忆的新会话。
+      - 比较退出前后的 instance ID、control、handoff 和 frontier。
+    prohibited_actions: [粘贴旧聊天摘要, 根据目录名猜实例, 重建同一 active subflow]
     hard_assertions:
-      - 恢复结论只引用持久化事实并区分事实、推断与未知。
-      - selector 始终绑定原 subflow instance，恢复动作不重建或串线。
-    required_evidence: [manifest, fresh-session-proof, prompts, transcript, before-status, resumed-status, instructions, final-check]
+      - 恢复结论区分文件事实、推断和未知。
+      - Selector 绑定原 machine instance ID，恢复不创建新实例。
+    required_evidence: [manifest, fresh-session-proof, prompts, transcript, before-status, resumed-status, instructions, control, handoff, final-check]
     soft_rubric: default
     cleanup: [保留 workspace 给后续 Tier 1 场景或按 adapter 安全清理。]
     release_checklist_ref: new-session-resume
-    acceptance_journey_refs: [resume]
+    acceptance_journey_refs: [resume-pack-failure]
 
   - scenario_id: DF-T1-EXPORT
     tier: 1
-    title: 只读 handoff 与默认 context pack
-    intent: 验证 Agent 解释导出差异、隐私和陈旧性，并且导出不推进 workflow。
+    title: Handoff 与有界 context pack
+    intent: 验证 handoff 记录外部路径，而 pack 只包含选定的 ResearchSpec 控制上下文。
     personas: [researcher-handing-off-work]
     route_refs: []
     fixture_variant: partial-manuscript
-    initial_state: initialized-workspace-with-active-subflow
+    initial_state: initialized-workspace-with-active-subflow-and-external-output
     prompts:
-      - 请说明 handoff 与 pack 的差异，先预览一个默认不包含 artifacts 的交接包；展示隐私、大小、陈旧性和覆盖风险，确认后再生成。
+      - 说明 handoff 与 pack 的差异。先展示 pack 的 scope 和排除边界，确认输出路径后生成。
     checkpoints:
-      - 对比导出前后 state、frontier 与 ledger hashes。
-      - 检查 pack preview、manifest 和实际 entries 均默认排除 artifacts。
-    prohibited_actions: [未确认即导出, 默认包含 artifacts, 通过导出推进 workflow]
+      - 保存 handoff 修改前后内容与相关 control hash。
+      - 检查 pack entries 排除 work 和所有 handoff 指向的外部文件。
+    prohibited_actions: [通过 handoff 或 pack 推进 workflow, 把 work 打入 pack, 把外部交付物字节打入 pack]
     hard_assertions:
-      - handoff 与 pack 只生成派生输出，权威运行态 hash 不变。
-      - pack 默认不包含 artifacts，输出路径不会覆盖未确认文件。
-    required_evidence: [manifest, prompts, transcript, before-after-authority-hashes, handoff-preview, pack-preview, pack-manifest, final-status]
+      - Handoff 只记录角色、路径、用途和限制，不改变 control。
+      - Pack 保持有界且不会覆盖既有输出。
+    required_evidence: [manifest, prompts, transcript, handoff-before-after, control-hashes, pack-command, pack-entries, final-status]
     soft_rubric: default
-    cleanup: [保留已确认的导出证据，删除一次性 pack 副本。]
+    cleanup: [保留已确认的 handoff，删除一次性 pack 副本。]
     release_checklist_ref: context-export
-    acceptance_journey_refs: [context-export]
+    acceptance_journey_refs: [resume-pack-failure]
 
   - scenario_id: DF-T1-GATE
     tier: 1
     title: Gate challenge、reverification 与显式 override
-    intent: 验证失败 Gate 保持阻塞、challenge 追加事件，override 绑定最新确认的失败重验。
+    intent: 验证失败 Gate 保持阻塞，challenge 追加 attempt，override 写入同一 owning control。
     personas: [researcher-challenging-verdict]
     route_refs: [deep-research:full]
     fixture_variant: evidence-corpus
     initial_state: blocking-formal-gate-ready
     prompts:
-      - 我对这个 Gate 结论提出 challenge。展示原结论及绑定证据，重新验证并提交 reverification；不要覆盖旧事件。若仍失败，停下来让我决定。
-      - 我理解风险并决定 override 最新的失败重验；请记录理由为“仅继续探索，不将结论视为已验证”。
+      - 我对 Gate 结论提出 challenge。展示原 attempt 与证据，重新验证；不要覆盖旧 attempt。若仍失败，停下来让我决定。
+      - 我理解风险并 override 最新失败结论；理由是“仅继续探索，不将结论视为已验证”。
     checkpoints:
-      - 保存原 Gate event、reverification event、最新证据与确认者。
-      - override 前确认 Gate 仍阻塞，Decision 绑定最新失败 event。
-    prohibited_actions: [覆盖旧 Gate event, challenge 后直接改为 pass, 未经 Decision override, override 绑定陈旧 event]
+      - 保存原 attempt、reverification、相关 handoff evidence 和确认者。
+      - Override 前确认 Gate 仍阻塞，并核对 Decision ID 与理由。
+    prohibited_actions: [覆盖旧 attempt, challenge 后直接改为 pass, 未经用户确认 override, override 后删除 fail]
     hard_assertions:
-      - reverification 创建新 event 且旧事件可查询。
-      - failed Gate 在 Decision 前持续阻塞，override 有显式理由与最新事件绑定。
-    required_evidence: [manifest, prompts, transcript, gate-instructions, original-gate-event, reverification-event, blocked-status, decision, overridden-status]
+      - Reverification 追加新 attempt，旧 attempt 保留。
+      - Override 位于同一 Gate control 记录中，advance 仍是独立动作。
+    required_evidence: [manifest, prompts, transcript, gate-instructions, control-before-after, handoff-evidence, blocked-status, override, advanced-status]
     soft_rubric: default
-    cleanup: [保存 Gate 与 Decision ledger 导出，不手工恢复状态。]
+    cleanup: [保存 owning control 快照，不手工恢复状态。]
     release_checklist_ref: gate-challenge-override
-    acceptance_journey_refs: [gate-challenge-override]
+    acceptance_journey_refs: [gate-override]
 
   - scenario_id: DF-T1-PIPELINE
     tier: 1
     title: 两轮 revision 的完整 pipeline
-    intent: 验证 parent/child 调度、正式 Gates、editorial Decision、动态 revision rounds 与 terminal completion。
+    intent: 验证 project profile、parent/child 独立确认、parallel/join、正式 Gates、branch 和动态 revision rounds。
     personas: [researcher-requesting-full-paper-workflow]
     route_refs: [academic-pipeline:end-to-end]
     fixture_variant: goal-only
     initial_state: initialized-not-started-workspace
     prompts:
-      - 展示 academic-pipeline:end-to-end 的完整 child graph、Gates、分支、主要产物和成本；我确认前不要启动。
-      - 我确认这条路线。严格依据 scoped frontier 驱动流程；遇到 editorial Decision 时停下。先选择 revision，完成 round 1 和 round 2，再选择接受路径完成流程。
+      - 展示 academic-pipeline:end-to-end 的完整 child graph、Gates、分支、边界输出和成本；我确认前不要启动。
+      - 我确认 parent。每个 child 和 revision round 仍要分别展示摘要并等我确认；先完成两轮 revision，再选择接受路径。
     checkpoints:
-      - 保存 parent 确认、child instances、parallel/join、Gate 与 Decision 序列。
-      - 分别记录 round 1 和 2 的 instance、输入输出 artifact IDs 与 receipts。
-      - 保存 final integrity、process summary、terminal status 和 check all。
-    prohibited_actions: [硬编码 pipeline stage 顺序, 子流程绕过 parent confirmation, revision round 串线, 绕过 integrity Gate, 非 CLI terminal 宣称完成]
+      - 保存 parent 确认后尚无 child 的状态，以及每个 child 的独立确认。
+      - 保存 parallel/join、Gate、branch、round 1 和 round 2 的 controls 与 handoffs。
+      - 保存 final integrity、parent terminal status 和 check all。
+    prohibited_actions: [硬编码 stage 顺序, parent 确认后预创建 child, 复用 child 确认, revision round 串线, 绕过 final integrity]
     hard_assertions:
-      - parent、child、round 和 artifacts 的 provenance 完整且两轮互不串线。
-      - 接受分支后经过 final integrity，并由 CLI 进入 terminal state。
-    required_evidence: [manifest, prompts, transcript, route-summary, graph-snapshots, status-sequence, gate-events, decisions, round-identities, artifact-hashes, receipts, final-check]
+      - Parent、child 和两轮 revision 拥有不同 instance ID，并通过 profile 与 handoff 衔接。
+      - Child 完成不自动推进 parent；接受分支后经 final integrity 才能完成。
+    required_evidence: [manifest, prompts, transcript, route-summary, profile, status-sequence, control-snapshots, handoffs, gate-attempts, decisions, round-identities, final-check]
     soft_rubric: default
     cleanup: [归档完整证据目录后按 adapter 安全清理隔离 workspace。]
     release_checklist_ref: end-to-end-pipeline
-    acceptance_journey_refs: [pipeline, parallel-join, revision-round, terminal-completion]
+    acceptance_journey_refs: [pipeline-confirmation, revision-rounds]
 
   - scenario_id: DF-T2-EXPERT-DIRECT
     tier: 2
     title: 专家明确指定 route 的直接入口
-    intent: 验证明确 route 可跳过猜测，但不能跳过依赖检查、摘要与确认。
+    intent: 验证明示 route 可以减少消歧，但不能跳过 prerequisite、summary 和确认。
     personas: [expert-researcher]
     route_refs: [academic-paper:revision]
     fixture_variant: review-cycle
     initial_state: initialized-not-started-workspace
     prompts:
-      - 使用 academic-paper:revision 修改这篇稿件。先检查依赖并展示路线摘要，我确认前不要启动。
-    checkpoints: [保存 route packet、确认前后 status 与精确 Start plan。]
-    prohibited_actions: [重新猜测无关 Skill, 把专家直达当成启动授权]
-    hard_assertions: [依赖和 Gate 被展示且确认只授权一个精确 route。]
-    required_evidence: [manifest, prompts, transcript, route-summary, before-status, start-preview, start-execution, after-status]
+      - 使用 academic-paper:revision 修改稿件。先检查依赖并展示路线摘要，我确认前不要启动。
+    checkpoints: [保存 route instructions、确认前后 status、Start input 和新 control。]
+    prohibited_actions: [重新猜测无关 Skill, 把专家直达当作启动授权, 把审稿材料复制进 managed control 区]
+    hard_assertions: [依赖、handoff inputs、Gates 和成本被展示，确认只启动一个精确 route。]
+    required_evidence: [manifest, prompts, transcript, route-summary, before-status, start-input, control, after-status]
     soft_rubric: default
     cleanup: [按 adapter 安全清理。]
-    acceptance_journey_refs: [expert-direct-route]
+    acceptance_journey_refs: [routing]
 
   - scenario_id: DF-T2-ROUTE-SWEEP
     tier: 2
     title: 全部 ARSU routes 的参数化摘要检查
-    intent: 对每条 route 验证识别、near miss、依赖、产物、Gate、风险、成本与未确认不启动。
+    intent: 对每条 route 验证识别、near miss、prerequisites、边界输出、Gates、风险、成本和未确认不启动。
     personas: [route-catalog-auditor]
     route_refs:
       - deep-research:full
@@ -272,210 +275,168 @@ scenarios:
     fixture_variant: review-cycle
     initial_state: fresh-initialized-workspace-per-route
     prompts:
-      - 针对参数指定的 route，说明何时应使用、near miss、现有依赖、主要产物、正式 Gates、风险和成本；不要启动。
-    checkpoints: [逐 route 保存摘要、instructions 与未变化的 status。]
-    prohibited_actions: [在 sweep 中启动 route, 使用独立于 routing catalog 的映射]
-    hard_assertions: [27 条 route 各执行一次且未确认前均无 instance subflow。]
+      - 针对参数指定的 route，说明使用时机、near miss、依赖、边界输出、正式 Gates、风险和成本；不要启动。
+    checkpoints: [逐 route 保存 instructions、自然语言摘要和未变化的 status。]
+    prohibited_actions: [在 sweep 中启动 route, 使用 routing catalog 之外的硬编码映射]
+    hard_assertions: [27 条 route 各检查一次，未确认前均无 instance。]
     required_evidence: [manifest, route-matrix, prompts, summaries, instructions, before-after-status]
     soft_rubric: default
     cleanup: [每个 route 后丢弃其一次性 workspace。]
-    acceptance_journey_refs: [vague-routing, expert-direct-route]
-
-  - scenario_id: DF-T2-ROUTE-REPLAN
-    tier: 2
-    title: near miss、拒绝路线与改变目标
-    intent: 验证拒绝不会隐式选路，目标实质变化会生成新摘要并重新确认。
-    personas: [researcher-refining-intent]
-    route_refs: [deep-research:lit-review, academic-paper:lit-review]
-    fixture_variant: evidence-corpus
-    initial_state: initialized-not-started-workspace
-    prompts:
-      - 我需要“文献综述”，但还不确定是研究综合还是论文成稿章节。比较两个 near miss，不要启动。
-      - 我拒绝当前建议，改为先生成论文中的文献综述章节。请重新展示路线。
-    checkpoints: [保存两次摘要、拒绝后的 status 和新 confirmation basis。]
-    prohibited_actions: [把拒绝解释为选择另一 route, 复用旧确认启动新目标]
-    hard_assertions: [拒绝后无 route 启动且新目标要求新的精确确认。]
-    required_evidence: [manifest, prompts, transcript, first-summary, rejected-status, second-summary, confirmation-bases]
-    soft_rubric: default
-    cleanup: [按 adapter 安全清理。]
-    acceptance_journey_refs: [vague-routing]
-
-  - scenario_id: DF-T2-REPRESENTATIVE-EXECUTION
-    tier: 2
-    title: 代表性 standalone routes 完整执行
-    intent: 以参数化独立 workspace 覆盖低成本、required/conditional Gate、iterative 与格式转换路径。
-    personas: [regression-maintainer]
-    route_refs:
-      - deep-research:quick
-      - deep-research:lit-review
-      - deep-research:fact-check
-      - academic-paper:abstract-only
-      - academic-paper:revision
-      - academic-paper:format-convert
-      - academic-paper-reviewer:quick
-      - academic-paper-reviewer:methodology-focus
-    fixture_variant: review-cycle
-    initial_state: fresh-initialized-workspace-per-route
-    prompts: [使用参数指定的 route 和适用 fixture，展示并确认路线后，严格按公开 frontier 完成。]
-    checkpoints: [每条 route 保存完整 status/instructions/transaction/receipt 序列和最终 check。]
-    prohibited_actions: [跨参数复用 workspace 状态, 省略 route 特有 Gate, 用占位空 candidate 完成]
-    hard_assertions: [每条代表 route 独立完成且 candidate 具有与阶段相符的可用语义内容。]
-    required_evidence: [manifest, route-matrix, prompts, transcripts, status-sequences, instructions-sequences, candidate-hashes, receipts, final-checks]
-    soft_rubric: default
-    cleanup: [逐 route 归档证据并清理其 workspace。]
-    acceptance_journey_refs: [standalone, gate-challenge-override, terminal-completion]
+    acceptance_journey_refs: [routing]
 
   - scenario_id: DF-T2-MID-ENTRY
     tier: 2
     title: 基于已有稿件和审稿材料进入 pipeline
-    intent: 验证 mid-entry 识别已有 artifacts、过滤不适用分支并锁定一次显式入口 Decision。
+    intent: 验证 mid-entry 把既有项目文件作为普通外部输入，识别缺口并要求入口与 child 独立确认。
     personas: [author-with-existing-materials]
     route_refs: [academic-pipeline:mid-entry]
     fixture_variant: review-cycle
-    initial_state: initialized-workspace-with-unregistered-input-materials
-    prompts: [我已有稿件、claims 和审稿意见，希望从合适位置进入 pipeline。展示可复用材料、缺口、分支、Gates 和成本，确认前不要启动。]
-    checkpoints: [保存 artifact 识别、mid-entry candidates、Decision 与 parent/child provenance。]
-    prohibited_actions: [假装已有材料已可信注册, 从头运行无关阶段, 隐式选择入口]
-    hard_assertions: [入口由显式 Decision 锁定且 downstream 只消费可信已登记 artifacts。]
-    required_evidence: [manifest, prompts, transcript, material-inventory, route-summary, decision, parent-child-status, receipts]
+    initial_state: initialized-workspace-with-external-manuscript-and-review
+    prompts:
+      - 我已有稿件、claims 和审稿意见，希望从合适位置进入 pipeline。展示可复用输入、缺口、分支、Gates 和成本，确认前不要启动。
+    checkpoints: [保存输入路径检查、route summary、parent control、入口选择和第一个 child 的独立确认。]
+    prohibited_actions: [把旧 Passport 或 registry ID 当作权威, 从头运行无关阶段, 隐式选择入口, 读取其它 subflow 的 work]
+    hard_assertions: [入口选择写入 owning control，downstream 只消费明确 handoff input paths。]
+    required_evidence: [manifest, prompts, transcript, input-inventory, route-summary, parent-control, decision, child-confirmation, handoffs]
     soft_rubric: default
     cleanup: [按 adapter 安全清理。]
-    acceptance_journey_refs: [pipeline]
+    acceptance_journey_refs: [pipeline-confirmation]
 
   - scenario_id: DF-T2-PARALLEL-JOIN
     tier: 2
-    title: profile 声明的并行与 all-join
-    intent: 验证 Agent 只执行 CLI 暴露的并行成员，且 downstream 在全部 required member 完成前保持阻塞。
+    title: Profile 声明的并行与 all-join
+    intent: 验证 Agent 只启动当前 frontier 暴露的成员，downstream 在 required children 完成前保持阻塞。
     personas: [pipeline-coordinator]
     route_refs: [deep-research:full]
     fixture_variant: evidence-corpus
-    initial_state: active-subflow-before-parallel-group
-    prompts: [继续当前 frontier；如果出现并行组，说明容量和 join policy，并只执行 CLI 当前允许的成员。]
-    checkpoints: [保存 parallel group 初态、每个 member 完成后的状态和 join 满足后的 frontier。]
-    prohibited_actions: [自行创建并行工作, 提前解锁 downstream, 把 optional 当 required 或反之]
-    hard_assertions: [all-join 在所有 required member 完成前保持 pending，之后才 satisfied。]
-    required_evidence: [manifest, prompts, transcript, group-status-sequence, member-receipts, downstream-status]
+    initial_state: active-parent-before-parallel-group
+    prompts: [继续当前 frontier；出现并行组时说明 join policy，并逐个取得 child 启动确认。]
+    checkpoints: [保存 group 初态、每个 child control、handoff 和 join 满足后的 parent frontier。]
+    prohibited_actions: [自行创建 profile 外工作, 提前解锁 downstream, 把 optional 当 required, 复用 child 确认]
+    hard_assertions: [All-join 在全部 required children 完成前保持 pending，之后才暴露 downstream。]
+    required_evidence: [manifest, prompts, transcript, profile-node, status-sequence, child-controls, handoffs, downstream-status]
     soft_rubric: default
     cleanup: [按 adapter 安全清理。]
-    acceptance_journey_refs: [parallel-join]
+    acceptance_journey_refs: [pipeline-confirmation]
 
   - scenario_id: DF-T2-GOVERNANCE
     tier: 2
-    title: propose、decide 与 archive 生命周期
-    intent: 验证高影响 claim 变化通过 proposal 和 Decision 落账，而普通探索留在 artifact。
+    title: Propose、decide、显式 spec edit 与 archive
+    intent: 验证高影响 claim 变化使用 project change，接受 change 不自动修改 stable specs。
     personas: [research-lead-changing-claim-scope]
     route_refs: [academic-paper:revision]
     fixture_variant: review-cycle
     initial_state: active-revision-with-CLM-02
     prompts:
-      - 我想把 CLM-02 改成“生成式 AI 普遍降低教师工作量”。先说明证据冲突并提出可审查变更，不要直接改 current specs。
-      - 我拒绝增强 claim，接受改成“可能转移工作量构成”。记录决定并在完成生命周期后归档提案。
-    checkpoints: [保存 proposal preview/execute、Decision、current-value basis 与 archive 证据。]
-    prohibited_actions: [静默修改 claim contract, 把普通措辞编辑全部写入 Decision ledger, 无匹配 ledger 即 archive]
-    hard_assertions: [高影响变更通过完整治理生命周期且拒绝分支不应用原提案。]
-    required_evidence: [manifest, prompts, transcript, proposal, proposal-receipt, decision, applied-contract-evidence, archive-evidence]
+      - 我想增强 CLM-02。先说明证据冲突并建立可审阅 change，不要直接改 current specs。
+      - 我接受收窄后的措辞。记录接受；待我确认实际 spec diff 和 check 后，再标记 applied 并归档。
+    checkpoints: [保存 change 文档包、接受前后 specs bytes、实际 spec diff、check、applied 状态和 archive 结果。]
+    prohibited_actions: [接受时自动编辑 specs, 自动执行 delta, 在 accepted 状态归档, 把普通探索写成 control Decision]
+    hard_assertions: [Accepted 与 applied 分离，归档前 stable spec 已显式修改并通过检查。]
+    required_evidence: [manifest, prompts, transcript, change-package, specs-before-after, decision, check, applied-change, archive-result]
     soft_rubric: default
-    cleanup: [保留治理 ledger 导出并按 adapter 清理。]
-    acceptance_journey_refs: []
+    cleanup: [保留 change 与 spec diff 证据，按 adapter 清理隔离项目。]
+    acceptance_journey_refs: [change]
 
   - scenario_id: DF-T2-PRIVACY-EXPORT
     tier: 2
-    title: 显式 include-artifacts 的隐私敏感导出
-    intent: 验证 Agent 在包含 artifacts 前展示内容、大小、路径与隐私风险并取得独立确认。
+    title: Pack 与敏感外部交付物严格分离
+    intent: 验证 pack 无论 scope 如何都不包含 handoff 指向的外部文件，敏感材料只能由用户另行选择。
     personas: [researcher-exporting-to-another-agent]
     route_refs: []
     fixture_variant: partial-manuscript
-    initial_state: workspace-with-registered-artifacts
-    prompts: [我需要把 artifacts 一并交给另一个 Agent。先预览包含内容、大小和隐私风险；我确认后才生成。]
-    checkpoints: [比较默认 pack 与 include-artifacts preview，保存确认和最终 manifest。]
-    prohibited_actions: [沿用默认 pack 确认授权 include-artifacts, 包含 workspace 外 symlink target, 覆盖现有输出]
-    hard_assertions: [include-artifacts 有独立明确确认且不包含 project root 外内容。]
-    required_evidence: [manifest, prompts, transcript, default-preview, sensitive-preview, explicit-confirmation, pack-manifest, before-after-authority-hashes]
+    initial_state: workspace-with-external-manuscript-handoff
+    prompts:
+      - 生成 subflow scope 的 context pack。稿件内容不要放进包；如果另一个 Agent 需要稿件，请单独列出需要我选择的路径。
+    checkpoints: [保存 handoff、pack command、ZIP entries、外部稿件 hash 和 control hash。]
+    prohibited_actions: [把外部文件复制进 work 再打包, 跟随 handoff 路径读取并嵌入 bytes, 覆盖既有 pack]
+    hard_assertions: [Pack 只含有界 ResearchSpec 文件，外部稿件 bytes 不出现。]
+    required_evidence: [manifest, prompts, transcript, handoff, pack-command, pack-entries, external-file-hash, control-hash]
     soft_rubric: default
-    cleanup: [安全保存或销毁隐私敏感 pack，并记录处理结果。]
-    acceptance_journey_refs: [context-export]
+    cleanup: [安全保存或销毁 pack，并记录外部材料未被复制。]
+    acceptance_journey_refs: [resume-pack-failure]
 
-  - scenario_id: DF-T3-PLAN-DRIFT
-    tier: 3
-    title: stale plan、basis 与 candidate hash 漂移
-    intent: 验证 preview 后的依据变化会阻止 execution，且不会产生部分权威写入。
-    personas: [fault-injection-maintainer]
-    route_refs: [deep-research:quick]
+  - scenario_id: DF-T2-PLUGIN-ZOTERO
+    tier: 2
+    title: Plugin 与 Zotero 不改变 ARSU frontier
+    intent: 验证 domain plugin 安装失败或成功、Zotero readiness 检查都不修改当前 subflow authority。
+    personas: [researcher-using-optional-assistance]
+    route_refs: []
     fixture_variant: evidence-corpus
-    initial_state: ready-work-with-preview
-    prompts: [在 preview 后按故障步骤改变 candidate 或 basis，再尝试原 execution；解释拒绝并重新读取 frontier。]
-    checkpoints: [保存 drift 前后 hash、失败 exit/error、权威文件前后 hash 和新 instructions。]
-    prohibited_actions: [用 --force 忽略漂移, 自动替换 expected hash, 失败后手改 receipt]
-    hard_assertions: [陈旧 execution 被拒绝且所有权威文件保持原 hash。]
-    required_evidence: [manifest, prompts, transcript, original-preview, drift-hashes, failed-execution, authority-hashes, refreshed-instructions]
+    initial_state: active-standalone-subflow
+    prompts: [检查 Zotero readiness，并预览一个适用 domain plugin；不要改变当前研究路线或推进 subflow。]
+    checkpoints: [保存操作前后 status、control hash、plugin preview/result 和 Zotero connection_state。]
+    prohibited_actions: [因 plugin 失败改走另一 route, 把 plugin 选择记成研究 Decision, 在 status 中联系 Zotero]
+    hard_assertions: [Plugin 与 Zotero 操作前后 frontier 和 owning control 不变。]
+    required_evidence: [manifest, prompts, transcript, before-after-status, control-hash, plugin-result, zotero-readiness]
     soft_rubric: default
-    cleanup: [丢弃故障 candidate 或按新 preview 正常重试。]
-    acceptance_journey_refs: []
+    cleanup: [只卸载本场景安装且保持 clean 的 plugin projection。]
+    acceptance_journey_refs: [plugin-zotero]
 
-  - scenario_id: DF-T3-CANDIDATE-VALIDATION
+  - scenario_id: DF-T3-BOUNDARY-VALIDATION
     tier: 3
-    title: candidate 路径、内容与编码验证
-    intent: 验证越界、空内容、非法 UTF-8 和未满足依赖均在提交前被拒绝。
+    title: 外部边界路径与消费前置验证
+    intent: 验证 managed path、项目逃逸、symlink、目录输出和缺失消费输入均被拒绝且零写入。
     personas: [fault-injection-maintainer]
     route_refs: [deep-research:quick]
     fixture_variant: fault-injection
-    initial_state: ready-work-item
-    prompts: [依次使用场景声明的非法 candidate 变体尝试 preview；每次失败后检查权威状态未变化。]
-    checkpoints: [按非法变体保存 error code、candidate bytes/hash 与 authority hashes。]
-    prohibited_actions: [为通过校验修改 instructions, 登记 workspace 外路径, 把非法输入替换成未记录内容]
-    hard_assertions: [所有非法 candidate 均被结构化拒绝且无 receipt 或 artifact registration。]
-    required_evidence: [manifest, prompts, transcript, invalid-case-matrix, errors, candidate-hashes, authority-hashes, final-check]
+    initial_state: initialized-not-started-workspace
+    prompts: [依次使用场景声明的非法输入和输出路径尝试 Start；每次失败后检查 subflows 目录与配置未变化。]
+    checkpoints: [保存非法路径矩阵、error code、目录树和 authority hashes。]
+    prohibited_actions: [用 --force 绕过边界, 自动改成未记录路径, 跟随 symlink 写出项目]
+    hard_assertions: [所有非法路径结构化拒绝，且没有 control、handoff 或外部输出产生。]
+    required_evidence: [manifest, prompts, transcript, invalid-path-matrix, errors, before-after-tree, authority-hashes, final-check]
     soft_rubric: default
-    cleanup: [删除只属于本轮的非法临时 candidate。]
-    acceptance_journey_refs: []
+    cleanup: [删除只属于本轮的非法路径 fixture。]
+    acceptance_journey_refs: [resume-pack-failure]
 
   - scenario_id: DF-T3-SELECTOR-IDEMPOTENCY
     tier: 3
-    title: 错误 selector、重复提交与跨实例串线
-    intent: 验证 selector 必须绑定当前实例，精确重试可恢复，语义不同的重复操作被拒绝。
+    title: 错误 selector、精确重试与跨实例串线
+    intent: 验证 selector 使用 machine ID，精确 Start retry 复用实例，语义不同或跨实例操作被拒绝。
     personas: [fault-injection-maintainer]
     route_refs: [academic-pipeline:end-to-end]
     fixture_variant: review-cycle
-    initial_state: two-active-scoped-instances
-    prompts: [按场景步骤尝试错误实例 selector、精确重试和不同 provenance 的重复提交；不要修 state。]
-    checkpoints: [保存两个实例 frontier、每次操作 payload、receipt 与失败前后状态。]
-    prohibited_actions: [跨实例复用 receipt, 伪造 selector, 重复推进已完成 transition]
-    hard_assertions: [错误或语义不同的操作被拒绝，精确重试不产生重复权威记录。]
-    required_evidence: [manifest, prompts, transcript, instance-statuses, operation-payloads, receipts, structured-errors, final-check]
+    initial_state: two-active-subflow-instances
+    prompts: [按场景步骤尝试错误 instance selector、精确 Start retry 和跨实例 Gate/advance；不要手改 control。]
+    checkpoints: [保存两个 controls、每次 CLI input/output、目录计数和失败前后 hashes。]
+    prohibited_actions: [根据目录名猜 selector, 伪造 machine ID, 跨实例复用 Gate selector, 重复推进完成态]
+    hard_assertions: [错误操作零写入，精确 Start retry 返回原实例且不创建重复目录。]
+    required_evidence: [manifest, prompts, transcript, controls, cli-inputs, cli-results, directory-counts, authority-hashes, final-check]
     soft_rubric: default
     cleanup: [按 adapter 安全清理。]
-    acceptance_journey_refs: []
+    acceptance_journey_refs: [standalone, pipeline-confirmation]
 
   - scenario_id: DF-T3-GATE-REFUSAL
     tier: 3
-    title: failed Gate 后拒绝 override
-    intent: 验证 postpone 或拒绝 override 不会隐式选择其他 transition，Gate 持续阻塞。
+    title: Failed Gate 后拒绝 override
+    intent: 验证 postpone 或拒绝 override 不会隐式选择 transition，Gate 持续阻塞。
     personas: [risk-averse-researcher]
     route_refs: [academic-paper-reviewer:methodology-focus]
     fixture_variant: partial-manuscript
     initial_state: failed-formal-gate-after-confirmed-reverification
-    prompts: [我不接受 override，也不选择其他分支。保留当前失败结论并告诉我阻塞状态和可选的后续补救。]
-    checkpoints: [保存拒绝前后 Gate、Decision ledger 和 frontier。]
-    prohibited_actions: [把拒绝转成 override, 隐式选择 transition, 覆盖失败 event]
+    prompts: [我不接受 override，也不选择其他分支。保留失败结论，并说明阻塞状态与补救选项。]
+    checkpoints: [保存拒绝前后 owning control、status 和 frontier。]
+    prohibited_actions: [把拒绝转成 override, 隐式选择 transition, 覆盖失败 attempt]
     hard_assertions: [没有 override Decision，failed Gate 与 downstream blocker 保持不变。]
-    required_evidence: [manifest, prompts, transcript, gate-events, before-after-status, decision-ledger, remediation-explanation]
+    required_evidence: [manifest, prompts, transcript, control-before-after, before-after-status, remediation-explanation]
     soft_rubric: default
-    cleanup: [保留阻塞 workspace 用于复现或按 adapter 清理。]
-    acceptance_journey_refs: [gate-challenge-override]
+    cleanup: [保留阻塞 workspace 用于复现，或按 adapter 清理。]
+    acceptance_journey_refs: [gate-override]
 
   - scenario_id: DF-T3-AUTHORITY-TAMPER
     tier: 3
-    title: 权威运行态被外部篡改后的诊断
-    intent: 验证 check 能发现篡改，Agent 不会手工修复或继续使用不可信 frontier。
-    personas: [incident-investigator]
-    route_refs: []
+    title: Authority 文件外部篡改与只读诊断
+    intent: 验证受损 control、重复 instance ID 或 symlinked managed file 被报告，status/check/doctor 不修复。
+    personas: [fault-injection-maintainer]
+    route_refs: [deep-research:quick]
     fixture_variant: fault-injection
-    initial_state: copied-workspace-with-intentionally-tampered-authority-file
-    prompts: [这个复制的测试 workspace 可能被外部修改。只做诊断，保存证据，不要修复或继续流程。]
-    checkpoints: [在复制品上保存篡改前记录、check/status/show 输出和 Agent 解释。]
-    prohibited_actions: [在原始 workspace 注入故障, 手工修权威文件, 在不可信 frontier 上执行 mutation]
-    hard_assertions: [篡改被报告且场景结束时没有新的 transaction 或权威写入。]
-    required_evidence: [manifest, prompts, transcript, tamper-description, status, strict-check, show-output, authority-hashes]
+    initial_state: copied-workspace-safe-for-fault-injection
+    prompts: [按故障步骤篡改复制品中的 authority 文件，然后只运行 status、check、show 和 doctor；不要修复或推进。]
+    checkpoints: [保存 tamper 描述、原始 bytes、诊断输出和命令前后目录树。]
+    prohibited_actions: [在原 workspace 注入故障, 自动修复 control, 在不可信 frontier 上 mutation]
+    hard_assertions: [篡改被报告，所有诊断命令保持只读，没有新 authority 写入。]
+    required_evidence: [manifest, prompts, transcript, tamper-description, status, strict-check, show-output, doctor, before-after-tree]
     soft_rubric: default
     cleanup: [只删除已确认属于故障场景的复制品。]
-    acceptance_journey_refs: []
+    acceptance_journey_refs: [resume-pack-failure]
