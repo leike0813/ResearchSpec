@@ -1,6 +1,5 @@
 ## Purpose
-
-Define the technical and human authorization gates for a clean, attributable, install-tested ResearchSpec MVP package without conflating release readiness with permission to publish.
+Define package, runtime, licensing, vendor, and current-contract release gates.
 
 ## Requirements
 
@@ -45,7 +44,7 @@ generated CLI handbook, in isolated temporary directories.
 - **THEN** the temporary project SHALL receive four ARSU, four Companion, and seven Zotero Adapter Skills
 - **AND** the isolated prompt directory SHALL receive eight command prompts
 - **AND** the project SHALL receive one current-platform `.zotero-bridge` runtime and profile template
-- **AND** the installed CLI SHALL expose seventeen top-level commands and pass strict workspace checking
+- **AND** the installed CLI SHALL expose sixteen top-level commands and pass strict workspace checking
 
 ### Requirement: Supported Release Runtime Matrix
 
@@ -185,66 +184,13 @@ unconsumed upstream surfaces.
 - **AND** default delivery SHALL expose fifteen fixed Skills and exactly eight
   wrapper types
 
-### Requirement: Fluid Runtime Release Gate
-
-Release verification SHALL cover the seventeen-command registry, adaptive
-default, strict legacy compatibility, bounded Agent protocol, explicit
-completion, Doctor, proposed/current case actions and Adapter-native user
-journeys before the adaptive default is published.
-
-#### Scenario: One convergence gate fails
-
-- **WHEN** any runtime, migration, converter, idempotence, package, OpenSpec or
-  acceptance gate fails
-- **THEN** the release SHALL retain the prior default behavior
-- **AND** maintainers SHALL NOT declare the fluid runtime converged
-
 ### Requirement: Release Surface And Guidance Are Converged
+The release SHALL contain the fixed fifteen-Skill surface, sixteen-command CLI, current profile and
+current user guidance, with no generated or packaged path depending on legacy runtime authority.
 
-Release verification SHALL require exactly seventeen public top-level commands,
-fifteen fixed Skills for all thirty-one registered tools, and exactly eight
-command wrappers for the twenty-eight command-capable tools. It SHALL verify
-that packaged and projected guidance uses the current adaptive-default,
-strict-compatible action-descriptor protocol and one catalog-rendered static
-CLI handbook.
-
-#### Scenario: Installed release is smoke tested
-
-- **WHEN** the release verifier initializes an isolated installed package
-- **THEN** it SHALL observe four ARSU, four Companion, and seven Zotero Adapter
-  Skills, seventeen CLI commands, and eight wrappers for a command-capable tool
-- **AND** it SHALL reject stale release expectations for sixteen commands or two
-  adapter Skills
-
-#### Scenario: Handbook source and renderer remain converged
-
-- **WHEN** release verification renders the CLI handbook from the typed static
-  command catalog
-- **THEN** the rendered bytes SHALL match the source-controlled
-  `docs/cli_handbook.md`
-- **AND** the packaged handbook SHALL have the same digest
-- **AND** verification SHALL derive expected command identities and structural
-  sections from the catalog rather than lock the complete handbook prose
-
-#### Scenario: Every Navigate projection receives the same handbook
-
-- **WHEN** release verification projects all thirty-one registered tools
-- **THEN** each `researchspec-navigate` Skill SHALL receive one manifest-owned
-  CLI handbook reference whose digest matches packaged `docs/cli_handbook.md`
-- **AND** all tools SHALL still receive exactly fifteen fixed Skills
-- **AND** only the twenty-eight command-capable tools SHALL receive the same
-  eight wrapper types
-
-#### Scenario: Guidance convergence gate fails
-
-- **WHEN** static help, the source-controlled or packaged CLI handbook,
-  projected Navigate references, generated guidance, canonical usage
-  documentation, runtime documentation, or rendered diagrams contradict the
-  current runtime protocol
-- **THEN** release verification SHALL fail before declaring the adaptive default
-  converged
-
-## ADDED Requirements
+#### Scenario: Package is verified
+- **WHEN** the packed tarball is installed and exercised in a fresh environment
+- **THEN** init creates only the current workspace and all documented base journeys are executable
 
 ### Requirement: Stable-contract release verification
 Release verification SHALL validate package structure, schemas, hashes, links, licenses, safety boundaries, approved bytes, fixed public interfaces, and generated equality without treating documentation prose or diagram text as executable contracts.
@@ -256,3 +202,12 @@ Release verification SHALL validate package structure, schemas, hashes, links, l
 #### Scenario: Non-contract prose changes
 - **WHEN** documentation headings, wording, Markdown IDs, diagram labels, or unordered field presentation change without altering a structured contract
 - **THEN** release verification SHALL NOT fail solely because of that prose or ordering change
+
+### Requirement: Current Contract Release Gate
+A release SHALL be blocked until fresh packaged CLI journeys, generated Skills, Companion guidance,
+canonical documentation and package verification all use the same current workspace contract.
+
+#### Scenario: Legacy control-plane behavior remains published
+- **WHEN** release verification finds a public `submit`, strict/adaptive runtime, migration, registry,
+  ledger, receipt, Passport or generic Draft Patch authority
+- **THEN** the release fails

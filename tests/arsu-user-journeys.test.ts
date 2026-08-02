@@ -1,399 +1,279 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { existsSync } from "node:fs";
-import { readFile, readdir, unlink, writeFile } from "node:fs/promises";
+import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { test } from "node:test";
+import { unzipSync } from "fflate";
 
 import { cleanup, parseEnvelope, runCli, tempProject } from "./helpers/cli.js";
 import {
-  advanceTransition,
-  applyRevisionPatch,
+  advanceSubflow,
   cliJson,
-  decideTransition,
-  drive,
+  decideGate,
+  drivePipeline,
   initialize,
   instructions,
   overrideGate,
-  startSubflow,
+  retryStart,
+  showSubflow,
+  startRoute,
   status,
-  submitGate,
-  submitWork,
-  type GatePacket,
-  type SubflowPacket,
-  type WorkflowControlView,
+  type ControlFrontierItem,
+  type RouteFrontierItem,
+  type RouteInstructions,
 } from "./helpers/arsu-journey.js";
 
 const PUBLIC_COMMANDS = [
   "init", "update", "status", "instructions", "start", "advance", "check", "doctor", "list",
   "show", "handoff", "pack", "propose", "decide", "archive", "plugin",
 ];
-const PLUGIN_COMMANDS = ["list", "show", "install", "uninstall", "update", "instructions"];
+const FIXED_SKILLS = [
+  "deep-research", "academic-paper", "academic-paper-reviewer", "academic-pipeline",
+  "researchspec-navigate", "researchspec-propose", "researchspec-decide", "researchspec-verify",
+  "zotero-library-agent", "zotero-library-query", "zotero-literature-acquisition",
+  "zotero-literature-analysis", "zotero-research-synthesis", "zotero-library-curation",
+  "zotero-bridge-cli",
+];
 
-void test("[journey.bootstrap] init installs the fifteen-Skill surface without starting academic work", async () => {
+void test("[journey.bootstrap] packaged surface initializes current authority without starting academic work", async () => {
   const root = await tempProject();
   try {
     const initialized = runCli(["init", root, "--tools", "forgecode", "--json"]);
     assert.equal(initialized.status, 0, initialized.stderr || initialized.stdout);
     const workspace = path.join(root, "researchspec");
-    assert.deepEqual((await readdir(workspace)).sort(), ["changes", "config.yaml", "profiles", "specs", "subflows", "tool-installation-manifest.json"]);
-    const current = parseEnvelope<{ active_instances: unknown[]; subflows: Record<string, number> }>(runCli(["status", "--json"], root)).data;
+    assert.deepEqual((await readdir(workspace)).sort(), [
+      "changes", "config.yaml", "profiles", "specs", "subflows", "tool-installation-manifest.json",
+    ]);
+    assert.equal(existsSync(path.join(workspace, "runs")), false);
+    assert.equal(existsSync(path.join(workspace, "artifact-registry.json")), false);
+    const current = parseEnvelope<{ active_instances: unknown[]; subflows: Record<string, number> }>(
+      runCli(["status", "--json"], root),
+    ).data;
     assert.deepEqual(current?.active_instances, []);
     assert.deepEqual(current?.subflows, {});
-    for (const skill of ["deep-research", "academic-paper", "academic-paper-reviewer", "academic-pipeline", "researchspec-navigate", "researchspec-propose", "researchspec-decide", "researchspec-verify", "zotero-library-agent", "zotero-library-query", "zotero-literature-acquisition", "zotero-literature-analysis", "zotero-research-synthesis", "zotero-library-curation", "zotero-bridge-cli"]) {
+    for (const skill of FIXED_SKILLS) {
       assert.equal(existsSync(path.join(root, ".forge/skills", skill, "SKILL.md")), true, skill);
     }
     assert.deepEqual(helpCommandNames(runCli(["--help"], root).stdout), PUBLIC_COMMANDS);
   } finally { await cleanup(root); }
 });
 
-void test("[journey.cli-discovery] static help and optional Navigate handbook remain separate from runtime authorization", async () => {
-  const root = await tempProject();
-  try {
-    const rootHelp = runCli(["--help"], root);
-    assert.equal(rootHelp.status, 0, rootHelp.stderr);
-    assert.deepEqual(helpCommandNames(rootHelp.stdout), PUBLIC_COMMANDS);
-
-    const instructionsHelp = runCli(["instructions", "--help"], root);
-    assert.equal(instructionsHelp.status, 0, instructionsHelp.stderr);
-    assert.match(instructionsHelp.stdout, /^Usage: researchspec instructions /m);
-    assert.match(instructionsHelp.stdout, /<selector>/);
-
-    const pluginHelp = runCli(["plugin", "--help"], root);
-    assert.equal(pluginHelp.status, 0, pluginHelp.stderr);
-    assert.deepEqual(helpCommandNames(pluginHelp.stdout), PLUGIN_COMMANDS);
-
-    const context = initialize(root);
-    const navigateRoot = path.join(root, ".forge/skills/researchspec-navigate");
-    const navigate = await readFile(path.join(navigateRoot, "SKILL.md"), "utf8");
-    const handbookPath = path.join(navigateRoot, "references/cli-handbook.md");
-    const handbook = await readFile(handbookPath, "utf8");
-    for (const discoveryStep of [
-      "researchspec --help",
-      "researchspec <command> --help",
-      "researchspec status --json",
-      "researchspec instructions <selector> --json",
-    ]) assert.ok(navigate.includes(discoveryStep), `Navigate lacks discovery step: ${discoveryStep}`);
-    assert.ok(handbook.includes("researchspec --help"));
-    assert.equal(handbook.includes("\"basis_sha256\":"), false);
-    assert.equal(handbook.includes("\"execution_policy\":"), false);
-
-    await unlink(handbookPath);
-    assert.equal(runCli(["instructions", "--help"], root).status, 0);
-    const selector = "subflow:tpl-deep-research-quick";
-    const packet = instructions(context, selector) as SubflowPacket;
-    assert.equal(packet.action_descriptor.selector, selector);
-    assert.match(packet.action_descriptor.availability.basis_sha256, /^[a-f0-9]{64}$/);
-    assert.ok(["direct", "human_confirmed", "plan_bound"].includes(packet.action_descriptor.execution_policy));
-    assert.equal(status(context).run.status, "not_started");
-  } finally { await cleanup(root); }
-});
-
-void test("[journey.vague-routing] Navigate combines catalog route meaning with current CLI availability", async () => {
+void test("[journey.routing] route summaries, Zotero readiness and consent boundaries remain read-only", async () => {
   const root = await tempProject();
   try {
     const context = initialize(root);
-    const navigate = await readFile(path.join(root, ".forge/skills/researchspec-navigate/SKILL.md"), "utf8");
-    for (const branch of ["Route", "Resume", "Explain", "Export"]) assert.match(navigate, new RegExp(`\\*\\*${branch}:\\*\\*`));
-    assert.match(navigate, /academic-paper:lit-review/);
-    assert.match(navigate, /deep-research:lit-review/);
-    assert.match(navigate, /Near misses:/);
-    assert.match(navigate, /plugin list --summary --json/);
-    assert.match(navigate, /at most three domains/);
-    assert.match(navigate, /continue the same canonical selector with the base ARSU producer/);
-    const candidate = instructions(context, "subflow:tpl-academic-pipeline-end-to-end") as SubflowPacket;
-    assert.equal(candidate.route.route_ref, "academic-pipeline:end-to-end");
-    assert.ok(candidate.required_user_input_ids.includes("research_goal"));
-    assert.ok(candidate.work_items.length > 0 || candidate.subflow_nodes.length > 0);
-    assert.ok(candidate.gates.length > 0);
-    assert.ok(candidate.transitions.length > 0);
-    assert.equal(status(context).run.status, "not_started");
-  } finally { await cleanup(root); }
-});
+    const configPath = path.join(context.workspace, "config.yaml");
+    const before = hash(await readFile(configPath));
+    const standalone = instructions(context, "route:deep-research:quick") as RouteInstructions;
+    const pipeline = instructions(context, "route:academic-pipeline:end-to-end") as RouteInstructions;
+    assert.equal(standalone.confirmation_required, true);
+    assert.deepEqual(standalone.boundary_outputs.map((item) => item.role), ["research_brief", "bibliography"]);
+    assert.equal(pipeline.start_input.profile_entry, "end-to-end");
+    assert.equal(pipeline.formal_gates.length, 0);
+    assert.equal(hash(await readFile(configPath)), before);
 
-void test("[journey.zotero-entry-routing] ARSU and bounded Zotero requests keep distinct route ownership", async () => {
-  const root = await tempProject();
-  try {
-    const context = initialize(root);
-    const navigate = await readFile(path.join(root, ".forge/skills/researchspec-navigate/SKILL.md"), "utf8");
-    const producer = await readFile(path.join(root, ".forge/skills/deep-research/SKILL.md"), "utf8");
-    assert.match(navigate, /zotero-library-agent/);
-    assert.match(navigate, /zotero-library-query/);
-    assert.match(navigate, /Keep the ARSU producer/);
-    assert.match(producer, /Zotero use nested inside ARSU research remains a provider operation owned by the active ARSU producer/);
-    assert.equal(status(context).run.status, "not_started");
-  } finally { await cleanup(root); }
-});
-
-void test("[journey.source-policy-consent] source policy, readiness and managed-library consent stay separate", async () => {
-  const root = await tempProject();
-  try {
-    initialize(root);
-    const navigate = await readFile(path.join(root, ".forge/skills/researchspec-navigate/SKILL.md"), "utf8");
-    assert.match(navigate, /## Literature Provider Policy/);
-    assert.match(navigate, /`library-bound` failure pauses/);
-    assert.match(navigate, /library readiness, route confirmation, plugin consent, and managed-library authorization separate/);
-    const summary = cliJson<{
-      pending: { decision_count: number };
-      literature_adapters: Array<{ adapter_id: string; connection_state: string }>;
-    }>(["status"], root).data;
-    assert.equal(summary?.pending.decision_count, 0);
-    assert.deepEqual(summary?.literature_adapters.map((adapter) => ({
+    const current = status(context);
+    assert.deepEqual(current.literature_adapters.map((adapter) => ({
       adapter_id: adapter.adapter_id,
       connection_state: adapter.connection_state,
     })), [{ adapter_id: "zotero-library", connection_state: "unchecked" }]);
+    assert.equal(current.active_instances.length, 0);
+    assert.equal(existsSync(path.join(root, ".forge/skills/zotero-library-agent/SKILL.md")), true);
+    assert.equal(existsSync(path.join(root, ".forge/skills/zotero-library-query/SKILL.md")), true);
   } finally { await cleanup(root); }
 });
 
-void test("[journey.plugin-augmentation] confirmed plugin installation leaves the core frontier and producer unchanged", async () => {
+void test("[journey.standalone] confirmed standalone work writes external outputs and advances one owning control", async () => {
   const root = await tempProject();
   try {
     const context = initialize(root);
-    await startSubflow(context, "subflow:tpl-deep-research-quick");
-    const before = status(context);
-    const ready = before.workflow_control.ready_items[0];
-    assert.ok(ready);
-    const producerBefore = (instructions(context, ready) as { producer_skill: string }).producer_skill;
+    const started = await startRoute(context, "deep-research:quick");
+    assert.equal(retryStart(context, started).status, "already_started");
+    assert.equal((await readdir(path.join(context.workspace, "subflows"))).length, 1);
+    const control = showSubflow(context, started.instanceId);
+    assert.equal(control.status, "active");
+    assert.equal(control.parent, null);
+    assert.deepEqual(control.start_confirmation.expected_outputs, ["research_brief", "bibliography"]);
+    for (const output of started.outputs) assert.equal(existsSync(path.join(root, output.path)), true, output.path);
 
-    const preview = cliJson<{ plan_sha256: string }>([
-      "plugin", "install", "quantum-physics", "--dry-run", "--summary",
-    ], root).data;
-    assert.ok(preview?.plan_sha256);
-    cliJson([
-      "plugin", "install", "quantum-physics",
-      "--expected-plan-sha256", preview.plan_sha256,
-      "--yes", "--summary",
-    ], root);
-
-    const after = status(context);
-    assert.deepEqual(after.workflow_control.frontier, before.workflow_control.frontier);
-    assert.equal((instructions(context, ready) as { producer_skill: string }).producer_skill, producerBefore);
-    const helper = cliJson<{
-      skill_id: string;
-      authority: { workflow_binding: string; producer_unchanged: boolean };
-    }>(["plugin", "instructions", "scientific-agent-skills-qiskit"], root).data;
-    assert.equal(helper?.skill_id, "scientific-agent-skills-qiskit");
-    assert.equal(helper?.authority.workflow_binding, "none");
-    assert.equal(helper?.authority.producer_unchanged, true);
-  } finally { await cleanup(root); }
-});
-
-void test("[journey.plugin-fallback] failed augmentation leaves core work ready and does not add authority state", async () => {
-  const root = await tempProject();
-  try {
-    const context = initialize(root);
-    await startSubflow(context, "subflow:tpl-deep-research-quick");
-    const before = status(context);
-    const ready = before.workflow_control.ready_items[0];
-    assert.ok(ready);
-    const producerBefore = (instructions(context, ready) as { producer_skill: string }).producer_skill;
-
-    const failed = runCli([
-      "plugin", "install", "quantum-physics",
-      "--expected-plan-sha256", "0".repeat(64),
-      "--yes", "--summary", "--json",
-    ], root);
-    assert.equal(failed.status, 3);
-
-    const installed = cliJson<{ domains: unknown[] }>(["plugin", "list", "--installed"], root).data;
-    const afterFailure = status(context);
-    assert.deepEqual(installed?.domains, []);
-    assert.deepEqual(afterFailure.workflow_control.frontier, before.workflow_control.frontier);
-    assert.deepEqual(afterFailure.pending_items, before.pending_items);
-    assert.deepEqual(afterFailure.blocking_gates, before.blocking_gates);
-    assert.equal((instructions(context, ready) as { producer_skill: string }).producer_skill, producerBefore);
-
-    await submitWork(context, ready);
-    assert.equal(status(context).workflow_control.ready_items.includes(ready), false);
-  } finally { await cleanup(root); }
-});
-
-void test("[journey.expert-direct-route] an explicit route still requires one exact confirmed Start plan", async () => {
-  const root = await tempProject();
-  try {
-    const context = initialize(root);
-    const selector = "subflow:tpl-deep-research-quick";
-    const packet = instructions(context, selector) as SubflowPacket;
-    assert.equal(packet.route.route_ref, "deep-research:quick");
-    assert.ok(packet.instruction_basis_sha256);
-    const instance = await startSubflow(context, selector);
-    assert.match(instance, /^subflow:sf-/);
-    const active = status(context).workflow_control.subflows.find((item) => item.selector === instance);
-    assert.equal(active?.state, "active");
-  } finally { await cleanup(root); }
-});
-
-void test("[journey.standalone] standalone work submits candidates and advances from the public frontier", async () => {
-  const root = await tempProject();
-  try {
-    const context = initialize(root);
-    const instance = await startSubflow(context, "subflow:tpl-deep-research-quick");
-    const complete = await drive(context, instance);
-    assert.equal(complete.workflow_control.subflows.find((item) => item.selector === instance)?.state, "complete");
-    assert.equal(complete.run.status, "in_progress");
-    assert.ok(complete.workflow_control.startable_subflows.includes("subflow:tpl-deep-research-quick"));
-    const nextInstance = await startSubflow(context, "subflow:tpl-deep-research-quick");
-    assert.equal(status(context).workflow_control.subflows.find((item) => item.selector === nextInstance)?.state, "active");
-    assert.equal(cliJson<{ ok: boolean }>(["check", "runtime"], root).data?.ok, true);
-  } finally { await cleanup(root); }
-});
-
-void test("[journey.pipeline] pipeline dispatch starts parent-scoped children from CLI state", async () => {
-  const root = await tempProject();
-  try {
-    const context = initialize(root);
-    const parent = await startSubflow(context, "subflow:tpl-academic-pipeline-end-to-end");
-    const child = status(context).workflow_control.subflows.find((item) => item.kind === "child" && item.state === "available");
-    assert.ok(child);
-    assert.match(child.selector, new RegExp(`^${escapeRegex(parent)}/`));
-    const childInstance = await startSubflow(context, child.selector);
-    const after = status(context);
-    assert.equal(after.workflow_control.subflows.find((item) => item.selector === childInstance)?.parent_subflow_id, parent.slice("subflow:".length));
-  } finally { await cleanup(root); }
-});
-
-void test("[journey.parallel-join] declared parallel capacity and all-join control downstream readiness", async () => {
-  const root = await tempProject();
-  try {
-    const context = initialize(root);
-    await startSubflow(context, "subflow:tpl-deep-research-full");
-    let group: WorkflowControlView["parallel_groups"][number] | undefined;
-    for (let step = 0; step < 20 && !group; step += 1) {
-      const current = status(context);
-      group = current.workflow_control.parallel_groups.find((item) => item.dispatchable_members.length > 1);
-      if (!group) {
-        const ready = current.workflow_control.ready_items[0];
-        assert.ok(ready);
-        await submitWork(context, ready);
-      }
-    }
-    assert.ok(group);
-    assert.equal(group.join_policy, "all");
-    const initialMembers = [...group.dispatchable_members];
-    await submitWork(context, initialMembers[0] ?? "");
-    const pending = status(context).workflow_control.parallel_groups.find((item) => item.selector === group?.selector);
-    assert.equal(pending?.state, "pending");
-    for (const selector of initialMembers.slice(1)) if (status(context).workflow_control.ready_items.includes(selector)) await submitWork(context, selector);
-    const satisfied = status(context).workflow_control.parallel_groups.find((item) => item.selector === group?.selector);
-    assert.equal(satisfied?.state, "satisfied");
-  } finally { await cleanup(root); }
-});
-
-void test("[journey.gate-challenge-override] challenge requires confirmed reverification before override", async () => {
-  const root = await tempProject();
-  try {
-    const context = initialize(root);
-    await startSubflow(context, "subflow:tpl-academic-paper-reviewer-methodology-focus");
-    while (status(context).workflow_control.ready_items.length) await submitWork(context, status(context).workflow_control.ready_items[0] ?? "");
-    const gate = status(context).workflow_control.gates.find((item) => item.state === "ready");
-    assert.ok(gate);
-    const initial = await submitGate(context, gate.selector, "fail", "initial");
-    const challenged = instructions(context, gate.selector) as GatePacket;
-    assert.equal(challenged.latest_attempt?.event_id, initial.event_id);
-    const reverification = await submitGate(context, gate.selector, "fail", "reverification");
-    assert.notEqual(reverification.event_id, initial.event_id);
-    overrideGate(context, gate.selector);
-    assert.equal(status(context).workflow_control.gates.find((item) => item.selector === gate.selector)?.state, "overridden");
-  } finally { await cleanup(root); }
-});
-
-void test("[journey.revision-round] a revision branch exposes isolated round one and round two", async () => {
-  const root = await tempProject();
-  try {
-    const context = initialize(root);
-    const parent = await startSubflow(context, "subflow:tpl-academic-pipeline-end-to-end");
-    let sawRoundOne = false;
-    let sawRoundTwo = false;
-    for (let step = 0; step < 300 && !sawRoundTwo; step += 1) {
-      const current = status(context);
-      sawRoundOne ||= current.workflow_control.subflows.some((item) => item.kind === "instance" && item.parent_subflow_id === parent.slice(8) && item.round_number === 1);
-      sawRoundTwo ||= current.workflow_control.subflows.some((item) => item.parent_subflow_id === parent.slice(8) && item.round_number === 2);
-      if (sawRoundTwo) break;
-      const revision = current.workflow_control.subflows.find((item) =>
-        item.kind === "instance"
-        && item.state === "active"
-        && item.template_id === "tpl-academic-paper-revision");
-      if (revision && await applyRevisionPatch(context, revision.selector)) continue;
-      const ready = current.workflow_control.ready_items[0];
-      if (ready) { await submitWork(context, ready); continue; }
-      const child = current.workflow_control.subflows.find((item) => item.kind === "child" && item.state === "available");
-      if (child) { await startSubflow(context, child.selector); continue; }
-      const gate = current.workflow_control.gates.find((item) => item.state === "ready");
-      if (gate) { await submitGate(context, gate.selector, "pass"); continue; }
-      const decisions = current.workflow_control.transitions.filter((item) => item.state === "decision_required");
-      if (decisions.length) {
-        const revision = decisions.find((item) => item.transition_node_id === "revise-review" || item.transition_node_id === "revise-round");
-        decideTransition(context, (revision ?? decisions[0])?.selector ?? "");
-        continue;
-      }
-      const transition = current.workflow_control.transitions.find((item) => item.state === "ready");
-      if (transition) { advanceTransition(context, transition.selector); continue; }
-      throw new Error(`Revision journey stalled: ${JSON.stringify(current.workflow_control.frontier)}`);
-    }
-    assert.equal(sawRoundOne, true);
-    assert.equal(sawRoundTwo, true);
-  } finally { await cleanup(root); }
-});
-
-void test("[journey.resume] a fresh CLI process resumes only from persisted frontier evidence", async () => {
-  const root = await tempProject();
-  try {
-    const context = initialize(root);
-    const instance = await startSubflow(context, "subflow:tpl-deep-research-quick");
-    const before = status(context).workflow_control.frontier;
-    assert.ok(before.length > 0);
-    const resumed = status(context).workflow_control;
-    assert.deepEqual(resumed.frontier, before);
-    const navigate = await readFile(path.join(root, ".forge/skills/researchspec-navigate/SKILL.md"), "utf8");
-    assert.match(navigate, /Resume follows only the CLI frontier|\*\*Resume:\*\*/);
-    assert.ok(resumed.ready_items.every((selector) => selector.includes(instance.slice(8))));
-  } finally { await cleanup(root); }
-});
-
-void test("[journey.context-export] handoff and pack remain derived and do not advance state", async () => {
-  const root = await tempProject();
-  try {
-    const context = initialize(root);
-    await startSubflow(context, "subflow:tpl-deep-research-quick");
-    const statePath = path.join(context.workspace, "runs/current/state.yaml");
-    const before = hash(await readFile(statePath));
-    const handoff = path.join(context.workspace, "runs/current/handoff.md");
-    cliJson(["handoff", "--out", handoff, "--dry-run"], root);
-    cliJson(["handoff", "--out", handoff], root);
-    const pack = path.join(root, "acceptance-context.zip");
-    const preview = cliJson<{ entries: Array<{ path: string }> }>(["pack", "--out", pack, "--dry-run"], root).data;
-    assert.equal(preview?.entries.some((item) => item.path.startsWith("artifacts/")), false);
-    cliJson(["pack", "--out", pack], root);
-    assert.equal(existsSync(handoff), true);
-    assert.equal(existsSync(pack), true);
-    assert.equal(hash(await readFile(statePath)), before);
-  } finally { await cleanup(root); }
-});
-
-void test("[journey.terminal-completion] the full pipeline reaches terminal state through public actions", async () => {
-  const root = await tempProject();
-  try {
-    const context = initialize(root);
-    const parent = await startSubflow(context, "subflow:tpl-academic-pipeline-end-to-end");
-    const complete = await drive(context, parent);
-    assert.equal(complete.workflow_control.subflows.find((item) => item.selector === parent)?.state, "complete");
-    assert.equal(complete.run.status, "complete");
-    assert.equal(complete.workflow_control.frontier.some((selector) => selector.includes(parent.slice(8))), false);
-    const blockedInput = path.join(root, "terminal-start.json");
-    await writeFile(blockedInput, "{}\n", "utf8");
-    const blocked = runCli([
-      "start", "subflow:tpl-deep-research-quick", "--input", blockedInput,
-      "--actor-kind", "agent", "--actor-name", "acceptance-driver",
-      "--confirmed-by", "Acceptance Researcher", "--dry-run", "--json",
-    ], root);
-    assert.notEqual(blocked.status, 0);
-    assert.equal(parseEnvelope(blocked).error?.code, "run_terminal");
+    const completion = status(context).frontier.find((item): item is ControlFrontierItem =>
+      item.kind === "advance" && item.instance_id === started.instanceId);
+    assert.ok(completion);
+    advanceSubflow(context, completion);
+    assert.equal(showSubflow(context, started.instanceId).status, "complete");
     assert.equal(cliJson<{ ok: boolean }>(["check", "all"], root).data?.ok, true);
   } finally { await cleanup(root); }
 });
 
-function hash(bytes: Uint8Array): string { return createHash("sha256").update(bytes).digest("hex"); }
-function escapeRegex(value: string): string { return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
+void test("[journey.pipeline-confirmation] a parent exposes but does not pre-create its independently confirmed child", async () => {
+  const root = await tempProject();
+  try {
+    const context = initialize(root);
+    const parent = await startRoute(context, "academic-pipeline:end-to-end");
+    assert.deepEqual(showSubflow(context, parent.instanceId).children, []);
+    assert.equal((await readdir(path.join(context.workspace, "subflows"))).length, 1);
+    const childCandidate = status(context).frontier.find((item): item is RouteFrontierItem =>
+      item.kind === "route" && item.parent_instance_id === parent.instanceId);
+    assert.ok(childCandidate);
+    const summary = instructions(context, childCandidate.selector) as RouteInstructions;
+    assert.equal(summary.confirmation_required, true);
+    const child = await startRoute(context, childCandidate.route_ref, childCandidate);
+    const childControl = showSubflow(context, child.instanceId);
+    assert.deepEqual(childControl.parent, { instance_id: parent.instanceId, node_id: childCandidate.node_id });
+    assert.equal(childControl.start_confirmation.confirmed_by, "Acceptance Researcher");
+    assert.deepEqual(showSubflow(context, parent.instanceId).children, [child.instanceId]);
+  } finally { await cleanup(root); }
+});
+
+void test("[journey.gate-override] failed Gate attempts append before one explicit owning-control override", async () => {
+  const root = await tempProject();
+  try {
+    const context = initialize(root);
+    const started = await startRoute(context, "academic-paper-reviewer:methodology-focus");
+    const gate = status(context).frontier.find((item): item is ControlFrontierItem =>
+      item.kind === "gate" && item.instance_id === started.instanceId);
+    assert.ok(gate);
+    decideGate(context, gate.selector, "fail");
+    decideGate(context, gate.selector, "fail");
+    overrideGate(context, gate.selector);
+    const current = showSubflow(context, started.instanceId);
+    assert.equal(current.gates[0]?.attempts.length, 2);
+    assert.equal(current.gates[0]?.attempts.at(-1)?.verdict, "fail");
+    assert.ok(current.gates[0]?.override?.decision_id);
+    const completion = status(context).frontier.find((item): item is ControlFrontierItem =>
+      item.kind === "advance" && item.instance_id === started.instanceId);
+    assert.ok(completion);
+    advanceSubflow(context, completion);
+    assert.equal(showSubflow(context, started.instanceId).status, "complete");
+  } finally { await cleanup(root); }
+});
+
+void test("[journey.change] acceptance leaves stable specs untouched and terminal decisions can archive", async () => {
+  const root = await tempProject();
+  try {
+    initialize(root, "none");
+    const claimsPath = path.join(root, "researchspec/specs/claims.yaml");
+    const claimsBefore = await readFile(claimsPath, "utf8");
+    cliJson(["propose", "accepted-scope", "--targets", "claims.yaml", "--with", "design,delta"], root);
+    const accepted = cliJson<{ stable_specs_modified: boolean }>([
+      "decide", "change:accepted-scope", "--decision", "accept", "--actor-name", "Acceptance Researcher",
+      "--reason", "The proposed claim scope is reviewable.",
+    ], root).data;
+    assert.equal(accepted?.stable_specs_modified, false);
+    assert.equal(await readFile(claimsPath, "utf8"), claimsBefore);
+    const blocked = runCli(["archive", "accepted-scope", "--json"], root);
+    assert.equal(parseEnvelope(blocked).error?.code, "change_not_archivable");
+
+    cliJson(["propose", "rejected-scope", "--targets", "project.md"], root);
+    cliJson([
+      "decide", "change:rejected-scope", "--decision", "reject", "--actor-name", "Acceptance Researcher",
+      "--reason", "The proposed scope exceeds the agreed research question.",
+    ], root);
+    cliJson(["archive", "rejected-scope"], root);
+    assert.equal(existsSync(path.join(root, "researchspec/changes/archive/rejected-scope/change.md")), true);
+  } finally { await cleanup(root); }
+});
+
+void test("[journey.plugin-zotero] plugin failure or installation never changes the ARSU frontier or provider authority", async () => {
+  const root = await tempProject();
+  try {
+    const context = initialize(root);
+    const started = await startRoute(context, "deep-research:quick");
+    const before = status(context);
+    const failed = runCli([
+      "plugin", "install", "not-a-reviewed-domain", "--yes", "--summary", "--json",
+    ], root);
+    assert.notEqual(failed.status, 0);
+    assert.deepEqual(status(context).frontier, before.frontier);
+
+    const preview = cliJson<{ plan: { operation_count: number; writable_count: number } }>([
+      "plugin", "install", "quantum-physics", "--dry-run", "--summary",
+    ], root).data;
+    assert.ok((preview?.plan.operation_count ?? 0) > 0);
+    assert.ok((preview?.plan.writable_count ?? 0) > 0);
+    cliJson([
+      "plugin", "install", "quantum-physics", "--yes", "--summary",
+    ], root);
+    const after = status(context);
+    assert.deepEqual(after.frontier, before.frontier);
+    assert.equal(after.literature_adapters[0]?.connection_state, "unchecked");
+    assert.equal(showSubflow(context, started.instanceId).route_ref, "deep-research:quick");
+  } finally { await cleanup(root); }
+});
+
+void test("[journey.revision-rounds] the public frontier completes two independently confirmed revision rounds", async () => {
+  const root = await tempProject();
+  try {
+    const context = initialize(root);
+    const parent = await startRoute(context, "academic-pipeline:end-to-end");
+    const complete = await drivePipeline(context, parent.instanceId, { revisionRounds: 2 });
+    assert.equal(showSubflow(context, parent.instanceId).status, "complete");
+    assert.equal(complete.active_instances.some((item) => item.instance_id === parent.instanceId), false);
+    const revisions = context.starts.filter((item) => item.routeRef === "academic-paper:revision");
+    assert.deepEqual(revisions.map((item) => item.candidate?.round), [1, 2]);
+    assert.equal(new Set(revisions.map((item) => item.instanceId)).size, 2);
+    assert.equal(existsSync(path.join(context.workspace, "runs")), false);
+    assert.equal(existsSync(path.join(context.workspace, "draft-patches")), false);
+    assert.equal(existsSync(path.join(context.workspace, "artifact-registry.json")), false);
+  } finally { await cleanup(root); }
+});
+
+void test("[journey.resume-pack-failure] fresh reads resume exactly, packs stay bounded, and invalid workspaces are zero-write", async () => {
+  const root = await tempProject();
+  const unsupportedRoot = await tempProject();
+  try {
+    const context = initialize(root, "none");
+    const started = await startRoute(context, "deep-research:quick");
+    const before = status(context);
+    assert.deepEqual(status(context).frontier, before.frontier);
+    assert.equal(showSubflow(context, started.instanceId).status, "active");
+
+    const packPath = path.join(root, "exports/context.zip");
+    cliJson(["pack", "--output", packPath, "--scope", `subflow:${started.instanceId}`], root);
+    const entries = Object.keys(unzipSync(await readFile(packPath)));
+    assert.ok(entries.some((entry) => entry.endsWith("/control.yaml")));
+    assert.ok(entries.some((entry) => entry.endsWith("/handoff.md")));
+    assert.equal(entries.some((entry) => entry.includes("/work/")), false);
+    for (const output of started.outputs) assert.equal(entries.includes(output.path), false);
+
+    const unsafeInput = path.join(root, "unsafe-start.json");
+    await writeFile(unsafeInput, JSON.stringify({
+      schema_version: "1",
+      confirmed_at: "2026-08-02T18:00:00+08:00",
+      prerequisites: [], handoff_inputs: [], formal_gates: [],
+      planned_outputs: [{ role: "brief", type: "report", path: "researchspec/leak.md", purpose: "invalid" }],
+      cost: { effort: "low", interaction: "single_pass" },
+    }), "utf8");
+    const countBefore = (await readdir(path.join(context.workspace, "subflows"))).length;
+    const unsafe = runCli([
+      "start", "deep-research:quick", "--input", unsafeInput, "--confirmed-by", "Acceptance Researcher", "--json",
+    ], root);
+    assert.equal(parseEnvelope(unsafe).error?.code, "boundary_path_managed");
+    assert.equal((await readdir(path.join(context.workspace, "subflows"))).length, countBefore);
+
+    const unsupportedWorkspace = path.join(unsupportedRoot, "researchspec");
+    await mkdir(path.join(unsupportedWorkspace, "runs/current"), { recursive: true });
+    const config = "schema_version: \"0.2\"\nprofile: strict\n";
+    const state = "semantic: preserve-me\n";
+    await writeFile(path.join(unsupportedWorkspace, "config.yaml"), config, "utf8");
+    await writeFile(path.join(unsupportedWorkspace, "runs/current/state.yaml"), state, "utf8");
+    for (const args of [["status", "--json"], ["check", "all", "--json"], ["doctor", "--json"], ["update", "--tools", "none", "--json"]]) {
+      const failure = runCli(args, unsupportedRoot);
+      assert.equal(parseEnvelope(failure).error?.code, "workspace_unsupported", args.join(" "));
+    }
+    assert.equal(await readFile(path.join(unsupportedWorkspace, "config.yaml"), "utf8"), config);
+    assert.equal(await readFile(path.join(unsupportedWorkspace, "runs/current/state.yaml"), "utf8"), state);
+  } finally {
+    await cleanup(root);
+    await cleanup(unsupportedRoot);
+  }
+});
+
+function hash(bytes: Uint8Array): string {
+  return createHash("sha256").update(bytes).digest("hex");
+}
+
 function helpCommandNames(help: string): string[] {
   const commandSection = help.split(/Commands:\r?\n/)[1] ?? "";
   return [...commandSection.matchAll(/^ {2}([a-z][a-z-]*)(?:\s|$)/gm)]

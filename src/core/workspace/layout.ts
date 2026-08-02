@@ -5,8 +5,6 @@ import { ACADEMIC_PIPELINE_PROFILE_PROJECTION } from "../../arsu-converter/workf
 
 export type WorkspaceFileKind = "markdown" | "yaml" | "json";
 export type OverwritePolicy = "user" | "generated";
-/** Temporary source-level type for legacy modules that are removed in later change tasks. */
-export type InitRuntimeProfile = "strict" | "adaptive";
 
 export interface WorkspaceTemplateDefinition {
   relativePath: string;
@@ -89,13 +87,11 @@ const WORKSPACE_TEMPLATES: readonly WorkspaceTemplateDefinition[] = [
   },
 ] as const;
 
-export function getWorkspaceTemplates(_legacyProfile?: InitRuntimeProfile): readonly WorkspaceTemplateDefinition[] {
-  void _legacyProfile;
+export function getWorkspaceTemplates(): readonly WorkspaceTemplateDefinition[] {
   return WORKSPACE_TEMPLATES;
 }
 
 export const REQUIRED_FILES = WORKSPACE_TEMPLATES.map((item) => item.relativePath);
-/** Empty source-level exports keep not-yet-migrated modules compilable without creating legacy files. */
 export const OPTIONAL_FILES: readonly string[] = [];
 export const YAML_FILES = WORKSPACE_TEMPLATES.filter((item) => item.kind === "yaml").map((item) => item.relativePath);
 export const JSON_FILES = WORKSPACE_TEMPLATES.filter((item) => item.kind === "json").map((item) => item.relativePath);
@@ -107,8 +103,7 @@ export function resolveInitTarget(inputPath: string | undefined, cwd: string): s
   return path.basename(base) === "researchspec" ? base : path.join(base, "researchspec");
 }
 
-export function getWorkspaceEntries(workspaceRoot: string, _legacyProfile?: InitRuntimeProfile): WorkspaceEntry[] {
-  void _legacyProfile;
+export function getWorkspaceEntries(workspaceRoot: string): WorkspaceEntry[] {
   return [
     ...REQUIRED_DIRECTORIES.map((dir): WorkspaceEntry => ({ kind: "dir", path: path.join(workspaceRoot, dir) })),
     ...WORKSPACE_TEMPLATES.map((item): WorkspaceEntry => ({

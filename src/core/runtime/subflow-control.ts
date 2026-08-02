@@ -229,9 +229,6 @@ export async function advanceSubflow(input: {
   const record = requireRecord(input.index, input.instanceId);
   const transition = resolveAdvanceTransition(input.index, record, input.transition);
   const control = await mutateControl(record, (current) => {
-    if (current.transitions.some((item) => item.transition_id === transition)) {
-      throw new SubflowControlError("transition_exists", `Transition already recorded: ${transition}`, "conflict");
-    }
     const from = current.checkpoint;
     if (isLifecycleTransition(transition)) applyLifecycle(input.index, record, current, transition);
     else {

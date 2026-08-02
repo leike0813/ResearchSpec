@@ -1,77 +1,118 @@
 import assert from "node:assert/strict";
-import { createHash } from "node:crypto";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import { parseEnvelope, runCli, type Envelope } from "./cli.js";
 
-export interface WorkflowControlView {
-  state: string;
-  frontier: string[];
-  ready_items: string[];
-  startable_subflows: string[];
-  work_items: Array<{ selector: string; state: string; dispatchable: boolean; instance_id?: string; work_item_id: string }>;
-  subflows: Array<{ selector: string; kind: string; state: string; template_id?: string; instance_id?: string; parent_subflow_id?: string | null; parent_node_id?: string | null; round_number?: number | null }>;
-  parallel_groups: Array<{ selector: string; state: string; join_policy: string; ready_members: string[]; dispatchable_members: string[]; done_members: string[] }>;
-  gates: Array<{ selector: string; state: string; latest_event_id?: string; subflow_instance_id: string }>;
-  transitions: Array<{ selector: string; transition_node_id: string; decision_point_id?: string; state: string; automatic: boolean; subflow_instance_id: string }>;
+export interface BoundaryOutput {
+  role: string;
+  type: string;
+  purpose: string;
+  structure: string;
+  validation_profile: "text-artifact" | "binary-file-artifact";
 }
+
+export interface RouteFrontierItem {
+  kind: "route";
+  selector: string;
+  route_ref: string;
+  profile_entry?: string;
+  parent_instance_id?: string;
+  node_id?: string;
+  round?: number;
+}
+
+export interface ControlFrontierItem {
+  kind: "gate" | "decision" | "advance";
+  selector: string;
+  instance_id: string;
+  local_id?: string;
+  transition?: string;
+}
+
+export type FrontierItem = RouteFrontierItem | ControlFrontierItem;
 
 export interface StatusView {
-  run: { status: string; subflows?: Array<Record<string, unknown>> };
-  workflow_control: WorkflowControlView;
-  pending_items: string[];
-  blocking_gates: Array<Record<string, unknown>>;
+  schema_version: "1";
+  profile: { id: string; version: string; path: string };
+  subflows: Record<string, number>;
+  active_instances: Array<{ instance_id: string; route_ref: string; status: string; checkpoint: string }>;
+  recent_instances: Array<{ instance_id: string; route_ref: string; status: string; started_at: string }>;
+  pending_gates: unknown[];
+  pending_decisions: unknown[];
+  pending_changes: unknown[];
+  frontier: FrontierItem[];
+  blockers: Array<{ instance_id: string; code: string; message: string; refs: string[] }>;
+  literature_adapters: Array<{ adapter_id: string; connection_state: string }>;
 }
 
-interface ActionDescriptorView {
+export interface RouteInstructions {
   selector: string;
-  availability: { basis_sha256: string };
-  execution_policy: "direct" | "human_confirmed" | "plan_bound";
-  execution_requirements: {
-    preview_required: boolean;
-    action_basis_required: boolean;
-    plan_sha256_required: boolean;
-    confirmation_required: boolean;
+  kind: "route";
+  route: {
+    route_ref: string;
+    cost: { effort: string; interaction: string };
+    boundary_outputs: BoundaryOutput[];
+  };
+  current_candidates: RouteFrontierItem[];
+  boundary_outputs: BoundaryOutput[];
+  formal_gates: string[];
+  cost: { effort: string; interaction: string };
+  confirmation_required: true;
+  start_input: {
+    schema_version: "1";
+    confirmed_at: string;
+    profile_entry?: string;
+    prerequisites: string[];
+    handoff_inputs: HandoffEntry[];
+    planned_outputs: HandoffEntry[];
+    formal_gates: string[];
+    cost: { effort: string; interaction: string };
   };
 }
 
-export interface SubflowPacket {
-  selector: string;
-  subject_kind: "template" | "child" | "instance";
-  template_id: string;
-  route: Record<string, unknown>;
-  required_user_input_ids: string[];
-  prerequisites: Array<{ requirements: Array<{ kind: string; available: boolean; artifact_ids?: string[] }> }>;
-  work_items: Array<Record<string, unknown>>;
-  parallel_groups: Array<Record<string, unknown>>;
-  subflow_nodes: Array<Record<string, unknown>>;
-  gates: Array<Record<string, unknown>>;
-  transitions: Array<Record<string, unknown>>;
-  instruction_basis_sha256: string;
-  action_descriptor: ActionDescriptorView;
-  runtime?: { parent_subflow_id: string | null; parent_node_id?: string | null; round_number: number | null };
+export interface HandoffEntry {
+  role: string;
+  type: string;
+  path: string;
+  purpose: string;
+  limits?: string[];
+  notes?: string;
+  intended_consumer?: string;
+  source_instance_id?: string;
 }
 
-export interface WorkPacket {
+export interface SubflowView {
   selector: string;
-  producer_skill: string;
-  output: { artifact_type: string; resolved_path: string; template_ref: string };
-  dependencies: { artifacts: Array<{ artifact_type: string; artifact_ids: string[] }> };
-  validation: { profile: string };
-  completion: { submit_available: boolean };
-  action_descriptor: ActionDescriptorView;
+  instance_id: string;
+  route_ref: string;
+  status: string;
+  checkpoint: string;
+  parent: { instance_id: string; node_id: string } | null;
+  round?: number;
+  start_confirmation: { confirmed_by: string; expected_outputs: string[]; formal_gates: string[] };
+  gates: Array<{ gate_id: string; attempts: Array<{ verdict: string }>; override?: { decision_id: string } | null }>;
+  decisions: Array<{ decision_id: string; kind: string; choice: string }>;
+  transitions: Array<{ transition_id: string; from: string; to: string }>;
+  children: string[];
 }
 
-export interface GatePacket {
+export interface StartResult {
+  instanceId: string;
   selector: string;
-  instruction_basis_sha256: string;
-  evidence: Array<Record<string, unknown>>;
-  latest_attempt: { event_id: string; verdict: string } | null;
-  action_descriptor: ActionDescriptorView;
+  routeRef: string;
+  inputPath: string;
+  command: Record<string, unknown>;
+  outputs: HandoffEntry[];
+  candidate?: RouteFrontierItem;
 }
 
-export interface JourneyContext { root: string; workspace: string }
+export interface JourneyContext {
+  root: string;
+  workspace: string;
+  sequence: number;
+  starts: StartResult[];
+}
 
 export function cliJson<T>(args: string[], cwd: string): Envelope<T> {
   const result = runCli([...args, "--json"], cwd);
@@ -81,17 +122,16 @@ export function cliJson<T>(args: string[], cwd: string): Envelope<T> {
   return envelope;
 }
 
+export function initialize(root: string, tools = "forgecode"): JourneyContext {
+  const initialized = runCli(["init", root, "--tools", tools, "--json"]);
+  assert.equal(initialized.status, 0, initialized.stderr || initialized.stdout);
+  return { root, workspace: path.join(root, "researchspec"), sequence: 0, starts: [] };
+}
+
 export function status(context: JourneyContext): StatusView {
-  const summary = cliJson<{ lifecycle: string }>(["status"], context.root).data;
-  const detail = cliJson<{ run: StatusView["run"]; workflow_control: WorkflowControlView }>(["show", "workflow:current"], context.root).data;
-  const actions = cliJson<{ items: Array<{ selector?: string }> }>(["list", "case-actions"], context.root).data;
-  assert.ok(summary && detail && actions);
-  return {
-    run: detail.run,
-    workflow_control: detail.workflow_control,
-    pending_items: actions.items.flatMap((item) => item.selector ? [item.selector] : []),
-    blocking_gates: detail.workflow_control.gates.filter((item) => item.state === "failed"),
-  };
+  const data = cliJson<StatusView>(["status"], context.root).data;
+  assert.ok(data);
+  return data;
 }
 
 export function instructions(context: JourneyContext, selector: string): unknown {
@@ -100,180 +140,200 @@ export function instructions(context: JourneyContext, selector: string): unknown
   return data;
 }
 
-export function initialize(root: string): JourneyContext {
-  const result = runCli(["init", root, "--tools", "forgecode", "--profile", "strict", "--json"]);
-  assert.equal(result.status, 0, result.stderr || result.stdout);
-  return { root, workspace: path.join(root, "researchspec") };
+export function showSubflow(context: JourneyContext, instanceId: string): SubflowView {
+  const data = cliJson<SubflowView>(["show", `subflow:${instanceId}`], context.root).data;
+  assert.ok(data);
+  return data;
 }
 
-export async function startSubflow(context: JourneyContext, selector: string): Promise<string> {
-  const packet = instructions(context, selector) as SubflowPacket;
-  const payload = {};
-  const inputPath = await writePayload(context, "start", payload);
-  const base = ["start", selector, "--input", inputPath, "--actor-kind", "agent", "--actor-name", "acceptance-driver"];
-  if (packet.subject_kind === "template") base.push("--confirmed-by", "Acceptance Researcher");
-  const preview = cliJson<{ identity: { plan_sha256?: string } }>([...base, "--dry-run"], context.root).data;
-  assert.ok(preview?.identity.plan_sha256);
-  const execution = cliJson<{ identity: { selector: string } }>([...base, "--expected-action-basis-sha256", packet.action_descriptor.availability.basis_sha256, "--expected-plan-sha256", preview.identity.plan_sha256, "--yes"], context.root).data;
-  assert.match(execution?.identity.selector ?? "", /^subflow:sf-/);
-  return execution?.identity.selector ?? "";
-}
-
-export async function submitWork(context: JourneyContext, selector: string): Promise<void> {
-  const packet = instructions(context, selector) as WorkPacket;
-  assert.equal(packet.completion.submit_available, true);
-  await mkdir(path.dirname(packet.output.resolved_path), { recursive: true });
-  const content = packet.validation.profile === "binary-file-artifact"
-    ? Buffer.from([0x50, 0x4b, 0x03, 0x04, 0x52, 0x53])
-    : Buffer.from(`<!--block:B0001-->\n# Acceptance candidate\n\n${selector}\n`, "utf8");
-  await writeFile(packet.output.resolved_path, content);
-  const payload = {};
-  const inputPath = await writePayload(context, "submit", payload);
-  const base = ["submit", selector, "--input", inputPath, "--actor-kind", "agent", "--actor-name", packet.producer_skill];
-  const preview = cliJson<{ identity: { sha256?: string } }>([...base, "--dry-run"], context.root).data;
-  assert.ok(preview?.identity.sha256);
-  cliJson([...base, "--expected-action-basis-sha256", packet.action_descriptor.availability.basis_sha256, "--expected-sha256", preview.identity.sha256, "--yes"], context.root);
-}
-
-export async function submitGate(context: JourneyContext, selector: string, verdict: "pass" | "fail", verificationKind: "initial" | "reverification" = "initial"): Promise<{ event_id: string }> {
-  const packet = instructions(context, selector) as GatePacket;
-  assert.ok(packet.evidence.length > 0);
-  const payload = {
-    verdict,
-    verification_kind: verificationKind,
-    evidence: packet.evidence,
-    findings: [{ code: verdict === "pass" ? "acceptance-pass" : "acceptance-fail", summary: `Acceptance ${verdict}`, evidence_indexes: [0] }],
-    ...(verificationKind === "reverification" ? { supersedes_event_id: packet.latest_attempt?.event_id } : {}),
+export async function startRoute(
+  context: JourneyContext,
+  routeRef: string,
+  candidate?: RouteFrontierItem,
+): Promise<StartResult> {
+  const packet = instructions(context, `route:${routeRef}`) as RouteInstructions;
+  assert.equal(packet.confirmation_required, true);
+  assert.equal(packet.route.route_ref, routeRef);
+  const selected = candidate ?? packet.current_candidates.find((item) => item.profile_entry !== undefined);
+  const sequence = context.sequence++;
+  const outputs = selected?.profile_entry
+    ? []
+    : packet.boundary_outputs.map((output) => ({
+        role: output.role,
+        type: output.type,
+        path: `outputs/journey-${String(sequence)}/${output.role}.${output.validation_profile === "binary-file-artifact" ? "bin" : "md"}`,
+        purpose: output.purpose,
+        intended_consumer: selected?.parent_instance_id ? `subflow:${selected.parent_instance_id}` : "user",
+      }));
+  const formalGates = selected?.node_id
+    ? gatesForProfileNode(context, selected.node_id)
+    : packet.formal_gates;
+  const command = {
+    schema_version: "1",
+    confirmed_at: new Date(Date.UTC(2026, 7, 2, 2, sequence, 0)).toISOString(),
+    ...(selected?.profile_entry ? { profile_entry: selected.profile_entry } : {}),
+    ...(selected?.parent_instance_id && selected.node_id
+      ? { parent: { instance_id: selected.parent_instance_id, node_id: selected.node_id } }
+      : {}),
+    ...(selected?.round === undefined ? {} : { round: selected.round }),
+    prerequisites: [],
+    handoff_inputs: [],
+    planned_outputs: outputs,
+    formal_gates: formalGates,
+    cost: packet.cost,
   };
-  const inputPath = await writePayload(context, "gate", payload);
-  const base = ["submit", selector, "--input", inputPath, "--actor-kind", "validator", "--actor-name", "researchspec-verify", "--confirmed-by", "Acceptance Researcher"];
-  const preview = cliJson<{ identity: { plan_sha256?: string } }>([...base, "--dry-run"], context.root).data;
-  assert.ok(preview?.identity.plan_sha256);
-  const execution = cliJson<{ identity: { selector: string } }>([...base, "--expected-action-basis-sha256", packet.action_descriptor.availability.basis_sha256, "--expected-plan-sha256", preview.identity.plan_sha256, "--yes"], context.root).data;
-  const eventId = execution?.identity.selector.replace(/^gate-event:/, "") ?? "";
-  assert.ok(eventId);
-  return { event_id: eventId };
+  const inputPath = await writePayload(context, `start-${slug(routeRef)}`, command);
+  const started = cliJson<{ status: string; instance_id: string }>([
+    "start", routeRef, "--input", inputPath, "--confirmed-by", "Acceptance Researcher",
+  ], context.root).data;
+  assert.ok(started?.instance_id);
+  assert.ok(started.status === "started" || started.status === "already_started");
+  await writeProducerOutputs(context, outputs, routeRef);
+  const result: StartResult = {
+    instanceId: started.instance_id,
+    selector: `subflow:${started.instance_id}`,
+    routeRef,
+    inputPath,
+    command,
+    outputs,
+    ...(selected ? { candidate: selected } : {}),
+  };
+  context.starts.push(result);
+  return result;
 }
 
-export function decideTransition(context: JourneyContext, selector: string): void {
-  const packet = instructions(context, selector) as { action_descriptor: ActionDescriptorView };
-  const base = ["decide", selector, "--decision", "accept", "--actor-name", "Acceptance Researcher", "--reason", "Selected by acceptance journey"];
-  const preview = cliJson<{ identity: { plan_sha256?: string } }>([...base, "--dry-run"], context.root).data;
-  cliJson([...base, "--expected-action-basis-sha256", packet.action_descriptor.availability.basis_sha256, "--expected-plan-sha256", preview?.identity.plan_sha256 ?? "", "--yes"], context.root);
+export function retryStart(context: JourneyContext, start: StartResult): { status: string; instance_id: string } {
+  const retried = cliJson<{ status: string; instance_id: string }>([
+    "start", start.routeRef, "--input", start.inputPath, "--confirmed-by", "Acceptance Researcher",
+  ], context.root).data;
+  assert.ok(retried);
+  return retried;
+}
+
+export function decideGate(
+  context: JourneyContext,
+  selector: string,
+  verdict: "pass" | "pass_with_conditions" | "fail",
+): void {
+  const packet = instructions(context, selector) as {
+    kind: "gate";
+    handoff: { outputs: HandoffEntry[] };
+  };
+  const evidenceRole = packet.handoff.outputs[0]?.role;
+  assert.ok(evidenceRole, `Gate ${selector} requires a produced handoff role.`);
+  cliJson([
+    "decide", selector,
+    "--verdict", verdict,
+    "--actor-name", "Acceptance Researcher",
+    "--reason", `Acceptance journey recorded ${verdict}.`,
+    "--evidence-role", evidenceRole,
+  ], context.root);
 }
 
 export function overrideGate(context: JourneyContext, selector: string): void {
-  const packet = instructions(context, selector) as { action_descriptor: ActionDescriptorView };
-  const base = ["decide", selector, "--decision", "accept", "--actor-name", "Acceptance Researcher", "--reason", "Explicit acceptance override"];
-  const preview = cliJson<{ identity: { plan_sha256?: string } }>([...base, "--dry-run"], context.root).data;
-  cliJson([...base, "--expected-action-basis-sha256", packet.action_descriptor.availability.basis_sha256, "--expected-plan-sha256", preview?.identity.plan_sha256 ?? "", "--yes"], context.root);
+  cliJson([
+    "decide", selector,
+    "--override",
+    "--actor-name", "Acceptance Researcher",
+    "--reason", "Explicit acceptance override after confirmed failure.",
+  ], context.root);
 }
 
-export function advanceTransition(context: JourneyContext, selector: string): void {
-  const packet = instructions(context, selector) as { action_descriptor: ActionDescriptorView };
-  const base = ["advance", selector, "--actor-kind", "agent", "--actor-name", "acceptance-driver"];
-  const preview = cliJson<{ identity: { plan_sha256?: string } }>([...base, "--dry-run"], context.root).data;
-  assert.ok(preview?.identity.plan_sha256);
-  cliJson([...base, "--expected-action-basis-sha256", packet.action_descriptor.availability.basis_sha256, "--expected-plan-sha256", preview.identity.plan_sha256, "--yes"], context.root);
+export function decideBranch(context: JourneyContext, selector: string, choice: string): void {
+  cliJson([
+    "decide", selector,
+    "--kind", "branch",
+    "--choice", choice,
+    "--actor-name", "Acceptance Researcher",
+    "--reason", "Selected by the packaged CLI journey.",
+  ], context.root);
 }
 
-export async function applyRevisionPatch(context: JourneyContext, instanceSelector: string): Promise<boolean> {
-  const instanceId = instanceSelector.replace(/^subflow:/, "");
-  const patchId = `acceptance-${instanceId}`;
-  try {
-    await readFile(path.join(context.workspace, `draft-patches/${patchId}.json`));
-    return false;
-  } catch {
-    // The canonical patch does not exist yet.
-  }
-  const registry = await readRegistry(context);
-  const base = [...registry.artifacts].reverse().find((artifact) =>
-    (artifact.artifact_type === "revised_draft" || artifact.artifact_type === "paper_draft")
-    && typeof artifact.artifact_id === "string"
-    && typeof artifact.path === "string"
-    && typeof artifact.sha256 === "string");
-  assert.ok(base, "Revision journey requires a registered base draft.");
-  const basePath = path.join(context.root, String(base.path));
-  const baseBytes = await readFile(basePath);
-  const selector = `patch:${patchId}`;
-  const runtime = status(context).workflow_control.subflows.find((item) => item.selector === instanceSelector);
-  const payload = {
-    revision_round: runtime?.round_number ?? 1,
-    base_artifact_id: String(base.artifact_id),
-    base_sha256: createHash("sha256").update(baseBytes).digest("hex"),
-    producer_skill: "academic-paper",
-    producer_mode: "revision",
-    subflow_instance_id: instanceId,
-    obligation_scope: [],
-    evidence_artifact_ids: [String(base.artifact_id)],
-    semantic_delta: { level: "ordinary", summary: "Apply the accepted revision-round edit." },
-    ops: [{ op: "insert_after", block_id: "DOC-BODY-START", new_text: `Revision round ${String(runtime?.round_number ?? 1)} accepted text.` }],
-  };
-  const inputPath = await writePayload(context, "patch", payload);
-  executePlanned(context, selector, ["submit", selector, "--input", inputPath, "--actor-kind", "agent", "--actor-name", "academic-paper"]);
-  executePlanned(context, selector, ["decide", selector, "--decision", "accept", "--actor-name", "Acceptance Researcher", "--reason", "Accepted by revision journey"]);
-  executePlanned(context, selector, ["advance", selector, "--actor-kind", "agent", "--actor-name", "academic-paper"]);
-  return true;
+export function advanceSubflow(context: JourneyContext, item: ControlFrontierItem): void {
+  const args = ["advance", item.selector, "--actor-name", "acceptance-driver"];
+  if (item.transition) args.push("--transition", item.transition);
+  cliJson(args, context.root);
 }
 
-export async function drive(context: JourneyContext, rootSelector: string, choose: (candidates: WorkflowControlView["transitions"]) => string = chooseAccepted): Promise<StatusView> {
-  const instanceId = rootSelector.slice("subflow:".length);
-  for (let step = 0; step < 300; step += 1) {
+export async function drivePipeline(
+  context: JourneyContext,
+  parentId: string,
+  options: { revisionRounds: number },
+): Promise<StatusView> {
+  let revisionOutcomeCount = 0;
+  for (let step = 0; step < 200; step += 1) {
     const current = status(context);
-    const root = current.workflow_control.subflows.find((item) => item.kind === "instance" && item.instance_id === instanceId);
-    if (root?.state === "complete") return current;
+    if (showSubflow(context, parentId).status === "complete") return current;
 
-    const revision = current.workflow_control.subflows.find((item) =>
-      item.kind === "instance"
-      && item.state === "active"
-      && item.template_id === "tpl-academic-paper-revision");
-    if (revision && await applyRevisionPatch(context, revision.selector)) continue;
+    const route = current.frontier.find((item): item is RouteFrontierItem =>
+      item.kind === "route" && item.parent_instance_id === parentId);
+    if (route) {
+      await startRoute(context, route.route_ref, route);
+      continue;
+    }
 
-    const readyWork = current.workflow_control.ready_items[0];
-    if (readyWork) { await submitWork(context, readyWork); continue; }
+    const gate = current.frontier.find((item): item is ControlFrontierItem => item.kind === "gate");
+    if (gate) {
+      decideGate(context, gate.selector, "pass");
+      continue;
+    }
 
-    const child = current.workflow_control.subflows.find((item) => item.kind === "child" && item.state === "available");
-    if (child) { await startSubflow(context, child.selector); continue; }
+    const decision = current.frontier.find((item): item is ControlFrontierItem => item.kind === "decision");
+    if (decision) {
+      const packet = instructions(context, decision.selector) as {
+        branch: { options: Array<{ option_id: string }> } | null;
+      };
+      const optionsAvailable = packet.branch?.options.map((item) => item.option_id) ?? [];
+      let choice = optionsAvailable[0] ?? "";
+      if (decision.local_id === "editorial-outcome") {
+        choice = options.revisionRounds > 0 ? "revision" : "accepted";
+      } else if (decision.local_id === "revision-outcome") {
+        choice = revisionOutcomeCount < options.revisionRounds - 1 ? "continue-revision" : "accepted";
+        revisionOutcomeCount += 1;
+      }
+      assert.ok(optionsAvailable.includes(choice), `Unsupported branch choice ${choice} for ${decision.selector}`);
+      decideBranch(context, decision.selector, choice);
+      continue;
+    }
 
-    const gate = current.workflow_control.gates.find((item) => item.state === "ready");
-    if (gate) { await submitGate(context, gate.selector, "pass"); continue; }
-
-    const decisionCandidates = current.workflow_control.transitions.filter((item) => item.state === "decision_required");
-    if (decisionCandidates.length) { decideTransition(context, choose(decisionCandidates)); continue; }
-
-    const transition = current.workflow_control.transitions.find((item) => item.state === "ready");
-    if (transition) { advanceTransition(context, transition.selector); continue; }
-
-    throw new Error(`Journey stalled at step ${String(step)}: ${JSON.stringify(current.workflow_control.frontier)}`);
+    const advance = current.frontier.find((item): item is ControlFrontierItem => item.kind === "advance");
+    if (advance) {
+      advanceSubflow(context, advance);
+      continue;
+    }
+    throw new Error(`Pipeline journey stalled at step ${String(step)}: ${JSON.stringify(current.frontier)}`);
   }
-  throw new Error("Journey exceeded 300 public CLI actions.");
+  throw new Error("Pipeline journey exceeded 200 public CLI actions.");
 }
 
-export function chooseAccepted(candidates: WorkflowControlView["transitions"]): string {
-  const accepted = candidates.find((item) => /accept/.test(item.transition_node_id));
-  return (accepted ?? candidates[0])?.selector ?? "";
+function gatesForProfileNode(context: JourneyContext, nodeId: string): string[] {
+  const profile = cliJson<{
+    children: Array<{ node_id: string; required_gate_ids: string[] }>;
+  }>(["show", "profile:academic-pipeline"], context.root).data;
+  const node = profile?.children.find((item) => item.node_id === nodeId);
+  assert.ok(node, `Unknown pipeline node: ${nodeId}`);
+  return node.required_gate_ids;
 }
 
-export async function readRegistry(context: JourneyContext): Promise<{ artifacts: Array<Record<string, unknown>> }> {
-  return JSON.parse(await readFile(path.join(context.workspace, "runs/current/artifact-registry.json"), "utf8")) as { artifacts: Array<Record<string, unknown>> };
+async function writeProducerOutputs(context: JourneyContext, outputs: HandoffEntry[], routeRef: string): Promise<void> {
+  for (const output of outputs) {
+    const outputPath = path.join(context.root, output.path);
+    await mkdir(path.dirname(outputPath), { recursive: true });
+    const bytes = output.path.endsWith(".bin")
+      ? Buffer.from([0x50, 0x4b, 0x03, 0x04, 0x52, 0x53])
+      : Buffer.from(`# Acceptance deliverable\n\nRoute: ${routeRef}\nRole: ${output.role}\n`, "utf8");
+    await writeFile(outputPath, bytes);
+  }
 }
 
 async function writePayload(context: JourneyContext, prefix: string, value: unknown): Promise<string> {
   const directory = path.join(context.root, ".acceptance-inputs");
   await mkdir(directory, { recursive: true });
-  const filePath = path.join(directory, `${prefix}-${String(Date.now())}-${Math.random().toString(16).slice(2)}.json`);
+  const filePath = path.join(directory, `${prefix}-${String(context.sequence)}.json`);
   await writeFile(filePath, `${JSON.stringify(value, null, 2)}\n`, "utf8");
   return filePath;
 }
 
-function executePlanned(context: JourneyContext, selector: string, base: string[]): void {
-  const packet = instructions(context, selector) as { action_descriptor: ActionDescriptorView };
-  const preview = cliJson<{ identity: { plan_sha256?: string } }>([...base, "--dry-run"], context.root).data;
-  assert.ok(preview?.identity.plan_sha256);
-  cliJson([
-    ...base,
-    "--expected-action-basis-sha256", packet.action_descriptor.availability.basis_sha256,
-    "--expected-plan-sha256", preview.identity.plan_sha256,
-    "--yes",
-  ], context.root);
+function slug(value: string): string {
+  return value.replace(/[^a-z0-9]+/g, "-");
 }

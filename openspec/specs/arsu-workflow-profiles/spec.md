@@ -1,41 +1,24 @@
 ## Purpose
-
-ResearchSpec SHALL provide a universal, converter-owned ARSU workflow profile
-(`arsu-v0-1`) that covers every supported deep-research, academic-paper,
-academic-paper-reviewer operational route and each academic-pipeline entry route,
-composes standalone subflows into an end-to-end pipeline, exposes only legal
-mid-entry stages, supports dynamic unbounded revision rounds, and is semantically
-validated. This capability is the canonical ARSU work-graph source of truth.
+Define converter-owned workflow profiles that compose independently confirmed ARSU subflows.
 
 ## Requirements
 
 ### Requirement: Universal ARSU profile covers every supported route
+The converter SHALL publish one `academic-pipeline` project profile covering the pipeline entries,
+children, dependencies, parallel/join policies, Gates, branches, transitions, override policy and
+dynamic revision-round template required by supported pipeline routes.
 
-The system SHALL provide adaptive and strict universal ARSU profile projections
-covering exactly one external entry for each supported deep-research,
-academic-paper, academic-paper-reviewer operational route and each
-academic-pipeline entry route. Adaptive profiles SHALL express obligations and
-completion; strict profiles SHALL additionally express the enforceable graph.
-
-#### Scenario: Catalog and profile coverage agree
-
-- **WHEN** each workflow profile projection is validated against the routing
-  catalog
-- **THEN** all 25 operational routes and both pipeline entries SHALL be covered
-  exactly once and no unknown external route SHALL be present
-
-#### Scenario: Route ordering lacks a hard justification
-
-- **WHEN** the routing catalog lists two operations in an editorial order but
-  the profile declares no academic or governance dependency
-- **THEN** the adaptive profile SHALL NOT generate a hard edge from that order
+#### Scenario: Profile coverage is checked
+- **WHEN** converter validation examines every supported pipeline entry and child route
+- **THEN** each has one profile node with all declared formal boundaries
 
 ### Requirement: Workflow data has a single converter-owned source
-The system SHALL keep ARSU work graphs, artifact contracts, Gate realization, transitions, joins, and round composition in converter-owned source data and SHALL generate the runtime profile projection deterministically.
+The converter workflow source SHALL be the only authored source for the project pipeline profile;
+the workspace YAML SHALL be a manifest-owned static projection.
 
-#### Scenario: Generated projection is current
-- **WHEN** converter check and idempotence validation run
-- **THEN** the runtime profile, generated Skill guidance, manifest, and report match the converter-owned source without hand-maintained drift
+#### Scenario: Project profile drifts
+- **WHEN** update detects modified projected bytes
+- **THEN** it reports drift and preserves the file unless `--force` is explicit
 
 ### Requirement: End-to-end pipeline composes standalone subflows
 The `academic-pipeline:end-to-end` template SHALL invoke full research, full writing, full review, integrity, finalization, and summary stages through a parent-owned frontier.
@@ -47,13 +30,6 @@ The `academic-pipeline:end-to-end` template SHALL invoke full research, full wri
 #### Scenario: Review requests revision
 - **WHEN** the confirmed review branch requests revision
 - **THEN** the parent exposes the next revision-round child and does not expose final integrity
-
-### Requirement: Mid-entry pipeline exposes only legal entries
-The `academic-pipeline:mid-entry` template SHALL derive entry transitions from trusted registered artifacts and SHALL require a workflow branch Decision when multiple entries are eligible.
-
-#### Scenario: Multiple entry stages are possible
-- **WHEN** registered artifacts satisfy more than one declared mid-entry prerequisite set
-- **THEN** no entry is selected until an accepted `workflow_branch` Decision names one eligible option
 
 ### Requirement: Revision rounds are dynamic and unbounded
 The profile SHALL instantiate revision rounds with parent-scoped monotonically increasing round numbers and SHALL not define a maximum round count.
@@ -68,55 +44,3 @@ The profile validator SHALL check producer route ownership, primary artifact cov
 #### Scenario: A primary artifact has no work node
 - **WHEN** a complete external template omits a routing-catalog primary artifact
 - **THEN** profile generation or validation fails before initialization can use the profile
-
-### Requirement: Profile Authority And Playbook Are Separate
-
-Converter-owned profiles SHALL keep hard obligations, justified dependencies,
-formal policies and completion criteria separate from the default soft
-playbook. The playbook SHALL guide Agents without becoming blocking runtime
-state.
-
-#### Scenario: Default playbook changes
-
-- **WHEN** a converter update changes a recommended internal sequence without
-  changing hard commitments
-- **THEN** existing accepted evidence and CaseState SHALL remain valid
-- **AND** the change SHALL NOT require a runtime migration
-
-### Requirement: Strict Profiles Preserve Process Guarantees
-
-Strict profiles SHALL retain their declared work graph, parallel and join
-policy, formal Gates, transitions and dynamic revision-round templates.
-
-#### Scenario: User selects strict pipeline
-
-- **WHEN** a run is initialized with a strict profile
-- **THEN** ResearchSpec SHALL enforce all declared graph and Gate constraints
-- **AND** adaptive planning SHALL operate only inside work boundaries permitted
-  by that strict profile
-
-### Requirement: Annotated Revision Workflow Entry
-
-Workflow profiles SHALL admit a registered Markdown draft and Annotation Set
-into existing revision and re-review work without adding a workflow stage.
-
-#### Scenario: Strict annotated mid-entry starts
-
-- **WHEN** `enter-annotated-revision` is selected with a registered draft and
-  matching Annotation Set
-- **THEN** strict mode SHALL instantiate the existing revision round, child work,
-  Decisions, and Gates
-- **AND** it SHALL not add a separate annotation stage
-
-#### Scenario: Adaptive annotated work starts
-
-- **WHEN** adaptive mode starts a revision route with one selected Annotation Set
-- **THEN** the start receipt SHALL bind that exact prerequisite
-- **AND** progress SHALL continue through ordinary obligations and completion
-  without a hidden round graph
-
-#### Scenario: Revision continues to re-review
-
-- **WHEN** patch application creates a Resolution Report
-- **THEN** the existing re-review and later revision-round recovery paths SHALL
-  consume registered evidence through their declared any-of prerequisites

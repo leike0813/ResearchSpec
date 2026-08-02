@@ -54,44 +54,20 @@ A registered Skill derived from a third-party source SHALL retain the applicable
 - **AND** those files SHALL use the normal manifest ownership and drift rules
 
 ### Requirement: Workspace Plugin Lifecycle
-ResearchSpec SHALL manage workspace-level explicit available-domain selections and dependency-resolved Skill projections through incremental install, update, and uninstall operations while retaining unavailable selections for recovery.
+Plugin installation and update SHALL use exact domain IDs, explicit consent and generated-file drift
+protection without binding ordinary execution to a generic runtime `plan_sha256`.
 
-#### Scenario: Install without a configured tool preserves intent
-- **WHEN** a user installs an available non-empty domain in a workspace with no configured Agent tool
-- **THEN** ResearchSpec SHALL save only the domain selection
-- **AND** it SHALL return a non-blocking projection warning
-
-#### Scenario: Update refreshes resolved selections
-- **WHEN** a user updates specified selected domains or omits IDs to update all selected domains
-- **THEN** ResearchSpec SHALL recompute their dependency closures and reconcile clean or forced desired files through one write plan
-- **AND** missing or empty selected domains SHALL block update
-
-#### Scenario: Uninstall preserves shared dependencies
-- **WHEN** a selected domain is removed and a Skill remains reachable from another selected domain
-- **THEN** the Skill and its owned files SHALL remain installed
-
-#### Scenario: Uninstall is transactionally drift-safe
-- **WHEN** any no-longer-reachable manifest-owned file differs from its recorded hash
-- **THEN** the entire uninstall SHALL be blocked without changing selection or deleting files
-- **AND** `--force` SHALL NOT weaken this protection
-
-#### Scenario: Unavailable domain can be removed safely
-- **WHEN** a selected domain is missing from the bundled registry or remains internally present with no Skills
-- **THEN** installed status SHALL expose it as unavailable
-- **AND** its saved resolution snapshot SHALL support removal of clean files not shared by remaining domain snapshots
-
-#### Scenario: Empty domain can recover
-- **WHEN** a selected empty domain receives reviewed Skills in a later package version
-- **THEN** it SHALL become available again under the same stable ID
-- **AND** update SHALL resolve its current dependency closure normally
+#### Scenario: Non-interactive plugin installation is approved
+- **WHEN** exact domain IDs and `--yes` are supplied after preview
+- **THEN** ResearchSpec reconciles only plugin-owned static projections
 
 ### Requirement: Plugin Core Authority Boundary
-Plugin Skills SHALL be optional semantic helpers and SHALL NOT own ResearchSpec workflow state, routes, work items, artifact registry, Gates, Decisions, or receipts.
+Domain Skills SHALL remain advisory and SHALL NOT own or directly modify stable specs, routes,
+subflow controls, Gates, Decisions, transitions or handoffs.
 
-#### Scenario: Explicit plugin invocation remains non-authoritative
-- **WHEN** a user or ARSU Skill invokes an installed plugin Skill
-- **THEN** any authoritative workflow mutation SHALL still occur only through the existing ResearchSpec CLI contracts
-- **AND** the plugin SHALL NOT become a workflow-profile node automatically
+#### Scenario: Plugin helps an ARSU producer
+- **WHEN** a selected domain Skill returns semantic assistance
+- **THEN** the result returns to the original producer without changing the workflow frontier
 
 ### Requirement: Offline Maintainer-Owned Distribution
 ResearchSpec SHALL consume no upstream repository or remote plugin registry during user runtime.

@@ -5,6 +5,7 @@ wrappers to a registry of selectable agent tools, with generated-file drift
 protection and shared-global prompt management. This capability is the generated
 tool delivery layer driven by `init` / `update`.
 ## Requirements
+
 ### Requirement: Complete Agent Tool Registry
 
 ResearchSpec SHALL provide a single registry for all 31 selectable agent tools
@@ -63,26 +64,12 @@ Literature Adapter surface at its registered project-local Skill root.
 - **AND** a missing stale file SHALL be removed from the manifest without error
 
 ### Requirement: Capability-Aware Command Delivery
+Each command-capable registered tool SHALL receive wrapper projections for the sixteen current public
+commands, while Skill-only tools SHALL receive only the fixed Skills.
 
-ResearchSpec SHALL render typed ARSU and Companion wrapper intents through the
-registered tool-specific command format without creating wrappers for Literature Adapter Skills or conflating metadata and installed Skill IDs.
-
-#### Scenario: Command-capable tools receive the target eight-wrapper surface
-
-- **WHEN** one of the 28 command-capable tools is selected
-- **THEN** it SHALL receive wrappers for four ARSU Skills and four Companion Skills
-  at the registered command paths and syntax
-- **AND** it SHALL receive no wrapper for any fixed Zotero Adapter Skill
-- **AND** each Companion wrapper SHALL route to its installed Skill instead of
-  duplicating the workflow
-- **AND** Companion metadata SHALL not inherit ARSU categories or tags
-
-#### Scenario: Skills-only tools remain non-blocking
-
-- **WHEN** ForgeCode, Kimi, or Mistral Vibe is selected
-- **THEN** its four ARSU, four Companion, and seven fixed Zotero Adapter Skills SHALL be installed
-- **AND** the CLI SHALL report a non-blocking `commands_not_supported`
-  diagnostic instead of inventing a command format
+#### Scenario: Tool installation is planned
+- **WHEN** a user selects Agent tools during init or update
+- **THEN** delivery is derived from the current command and Skill catalogs without `submit`
 
 ### Requirement: Interactive And Detected Selection
 
@@ -125,15 +112,12 @@ ResearchSpec SHALL store selected tool intent in `researchspec/config.yaml` and 
 - **AND** ResearchSpec SHALL NOT migrate, dual-write, or interpret the legacy shape
 
 ### Requirement: Generated File Drift Protection
-`init` and `update` SHALL preserve unknown or modified generated files and SHALL reconcile obsolete project-local manifest-owned files without recognizing product-history identifiers.
+ResearchSpec SHALL create missing manifest-owned projections and preserve modified generated files
+unless an explicit force operation authorizes replacement.
 
-#### Scenario: No-longer-desired project file is manifest-owned
-- **WHEN** its bytes match the recorded hash
-- **THEN** generic reconciliation SHALL remove it without a retired-product classification
-
-#### Scenario: No-longer-desired file is modified
-- **WHEN** its bytes differ from the recorded hash
-- **THEN** it SHALL be preserved and reported as generated-file drift
+#### Scenario: Project profile was edited
+- **WHEN** update compares the profile with its converter-owned source
+- **THEN** it reports drift and does not overwrite the profile without `--force`
 
 ### Requirement: Shared Global Codex Prompts
 
@@ -306,3 +290,11 @@ separate hand-maintained command description.
   ARSU and Companion wrappers
 - **AND** the handbook reference SHALL NOT create a new Skill, command wrapper,
   public CLI command, or Literature Adapter projection
+
+### Requirement: Framework Profile Projection Ownership
+The installation manifest SHALL identify `academic-pipeline.yaml` as a project-level
+`framework-profile` projection with its source version and generated content identity.
+
+#### Scenario: Fresh workspace is initialized
+- **WHEN** init projects the current workspace
+- **THEN** the manifest contains exactly one owner record for the project pipeline profile

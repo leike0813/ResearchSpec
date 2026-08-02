@@ -29,47 +29,21 @@ locale.
 - **AND** the locale dropdown SHALL show the Chinese locale label
 
 ### Requirement: Auto-Generated CLI Command Reference
+The documentation generator SHALL derive a bilingual reference for exactly sixteen current top-level
+commands and their current selector and option contracts.
 
-The website SHALL include a CLI Reference section with one page per public
-command, auto-generated from the typed CLI catalog at
-`src/cli/command-catalog.ts`.
-
-#### Scenario: Command pages match the catalog
-
-- **WHEN** `pnpm docs:generate` is run
-- **THEN** exactly 23 command MDX pages SHALL be written to `website/docs/cli/`
-- **AND** each page SHALL contain the command syntax, description, options
-  table, workspace requirement, effect type, and related commands
-- **AND** `pnpm docs:check` SHALL exit zero when the generated pages match
-  the catalog
-
-#### Scenario: Sidebar groups commands by catalog group
-
-- **WHEN** the CLI sidebar is generated
-- **THEN** commands SHALL be grouped by their catalog group (Bootstrap, Control
-  Plane, Inspection, Recovery, Context, Governance, Domain Skills)
-- **AND** the sidebar SHALL be importable by the Docusaurus `sidebars.ts`
+#### Scenario: Documentation drift is checked
+- **WHEN** generated CLI documentation differs from the command catalog
+- **THEN** documentation checking fails without rewriting the checked-in file
 
 ### Requirement: User-Facing Documentation Content
+Current documentation SHALL describe the hard-cut workspace, stable specs, project profile,
+per-subflow controls, handoffs and project changes without presenting removed runtime behavior as
+supported.
 
-The website SHALL include hand-written documentation covering installation,
-quick-start, workflow concepts, skills usage, plugin management, literature
-adapters, selector protocol, glossary, user model, and frequently asked
-questions.
-
-#### Scenario: Quick-start guide is self-contained
-
-- **WHEN** a new user follows the quick-start guide
-- **THEN** they SHALL be able to install, initialize, and run their first
-  workflow without consulting other documentation pages
-
-#### Scenario: All guide pages are reachable from the sidebar
-
-- **WHEN** the documentation site is built
-- **THEN** all guide pages (workflow, skills, plugins, literature,
-  selector-protocol) SHALL appear in the "Guides" sidebar category
-- **AND** the glossary, user-model reference, and FAQ SHALL appear in their
-  respective sidebar categories
+#### Scenario: User reads lifecycle guidance
+- **WHEN** documentation describes init, update, resume, verification or export
+- **THEN** it uses the same current contract and sixteen-command surface as the packaged CLI
 
 ### Requirement: GitHub Pages Deployment
 

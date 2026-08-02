@@ -21,20 +21,14 @@ syntax.
 - **THEN** the remaining registered manuscript bytes and stable block markers SHALL match the base draft
 
 ### Requirement: Mutable Intake Sessions Preserve Working Context
-ResearchSpec SHALL represent free-form annotation intake as a mutable,
-non-authoritative session that binds the base artifact and hash, review copy,
-raw source snapshots, mechanical delta, Agent interpretation draft, and fixed
-candidate path.
+Free-form intake SHALL preserve raw source material, stable annotation IDs, normalized
+interpretations and patch mappings inside the owning revision subflow's `work/annotation-intake/`
+directory without registry, receipt or frozen-set authority.
 
-#### Scenario: Working material is resumed
-- **WHEN** the user or Agent resumes an unfinished annotation session
-- **THEN** the session SHALL expose the same base identity, current source hashes, interpretation state, and structured diagnostics
-- **AND** it SHALL NOT appear in the artifact registry or workflow authority
-
-#### Scenario: Raw input is snapshotted
-- **WHEN** Markdown, feedback-file, or conversation input is captured
-- **THEN** the adapter SHALL plan a contained content-addressed source snapshot
-- **AND** later candidate material SHALL reference the snapshot hash rather than mutable external bytes
+#### Scenario: Intake is resumed
+- **WHEN** the Agent reopens an existing intake session
+- **THEN** it reads the session's explicit private files and preserves raw observations separately
+  from interpretation
 
 ### Requirement: Review Delta Is Mechanical Evidence
 ResearchSpec SHALL derive a stable block-aware Review Delta from the exact base
@@ -66,13 +60,9 @@ traceable entries.
 - **THEN** candidate materialization SHALL fail closed with structured diagnostics
 
 ### Requirement: Public Headless Adapter API
-The packaged `researchspec` module SHALL expose typed, editor-neutral functions
-for review-copy generation, source capture, delta derivation, interpretation
-validation, and candidate materialization without invoking a model or mutating
-ResearchSpec authority.
+The headless intake adapter SHALL accept explicit source and destination paths and SHALL return
+structured diagnostics without loading workspace snapshot, registry or control state.
 
-#### Scenario: External consumer uses the adapter
-- **WHEN** a TypeScript consumer imports the packaged adapter API
-- **THEN** runtime JavaScript and matching type declarations SHALL be available
-- **AND** the API SHALL return DTOs or planned working-material writes only
-
+#### Scenario: Adapter input is invalid
+- **WHEN** source material or annotation mapping fails validation
+- **THEN** the adapter returns a structured error and does not write a completed annotation set

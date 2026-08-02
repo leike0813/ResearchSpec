@@ -83,7 +83,6 @@ export const SubflowControlSchema = z.strictObject({
     uniqueBy(gate.attempts, (item) => item.attempt_id, ["gates", gateIndex, "attempts"], context);
   }
   uniqueBy(value.decisions, (item) => item.decision_id, ["decisions"], context);
-  uniqueBy(value.transitions, (item) => item.transition_id, ["transitions"], context);
 });
 
 function uniqueBy<T>(

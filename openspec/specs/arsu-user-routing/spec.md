@@ -22,32 +22,22 @@ ResearchSpec SHALL treat user-Agent dialogue as the entry to academic work and S
 - **AND** it SHALL still validate prerequisites and request route confirmation
 
 ### Requirement: Route Summary And Start Authorization
-ResearchSpec SHALL present one route summary and obtain explicit user confirmation before starting any new subflow.
+Before starting any route, Navigate or a directly invoked ARSU Skill SHALL summarize Skill, mode,
+stable-spec prerequisites, handoff input roles, boundary outputs, formal Gates and cost, then obtain a
+confirmation scoped only to that instance.
 
-#### Scenario: Route summary is complete
-- **WHEN** a route candidate has been resolved
-- **THEN** the Agent SHALL present the selected Skill, mode, prerequisite expansion, expected artifacts, formal Gates, and cost summary
-
-#### Scenario: Missing prerequisites expand the route
-- **WHEN** the selected route lacks required upstream work
-- **THEN** the route summary SHALL include the required prerequisite subflows
-- **AND** the Agent SHALL NOT silently start them before confirmation
-
-#### Scenario: Confirmation authorizes one route
-- **WHEN** the user confirms the displayed route
-- **THEN** the Agent SHALL authorize start of that exact subflow plan
-- **AND** a materially different route SHALL require a new summary and confirmation
+#### Scenario: Route summary is confirmed
+- **WHEN** the user confirms the displayed route summary
+- **THEN** the CLI may create exactly that subflow instance
+- **AND** the confirmation does not authorize future children, branches or rounds
 
 ### Requirement: Routing Catalog Is The Mapping Authority
-ResearchSpec SHALL derive ARSU routing and Skill-description projections from one typed converter-owned routing catalog.
+The routing catalog SHALL map supported user intents to route references and semantic
+prerequisites without embedding artifact IDs, registry state or fixed output paths.
 
-#### Scenario: Mode mapping is projected consistently
-- **WHEN** Navigate or an installed Skill describes an ARSU mode
-- **THEN** skill identity, primary artifacts, prerequisites, risk, Gate policy, and near-miss guidance SHALL originate from the same catalog entry
-
-#### Scenario: Near-miss intent is disambiguated
-- **WHEN** a user request can plausibly map to evidence synthesis, manuscript writing, manuscript review, or a cross-stage pipeline
-- **THEN** the Agent SHALL use catalog near-miss guidance to expose the distinction before route confirmation
+#### Scenario: Route instructions are requested
+- **WHEN** Navigate resolves a supported ARSU route
+- **THEN** instructions identify stable-spec and handoff-role prerequisites from the catalog
 
 ### Requirement: Routing Distinguishes ARSU And Zotero Entry
 

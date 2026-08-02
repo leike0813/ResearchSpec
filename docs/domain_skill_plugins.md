@@ -155,7 +155,7 @@ plugins:
     - bioinformatics-and-computational-biology
 ```
 
-For each operation ResearchSpec computes the sorted union of selected domains' direct Skills and transitive required dependencies. Multiple domains and dependency paths are deduplicated by global Skill ID. All configured Agent tools receive the same resolved set; adding a tool later backfills the current closure. Domain Skills add no command wrappers, so the fixed wrapper frontier remains eight wrappers on each of the 28 command-capable tools.
+For each operation ResearchSpec computes the sorted union of selected domains' direct Skills and transitive required dependencies. Multiple domains and dependency paths are deduplicated by global Skill ID. All configured Agent tools receive the same resolved set; adding a tool later backfills the current closure. Domain Skills add no command wrappers, so the fixed wrapper frontier remains sixteen wrappers on each of the 28 command-capable tools.
 
 `tool-installation-manifest.json` records vendor/Skill file ownership and a resolution snapshot for every selected available domain. Config is user intent; snapshots are derived recovery evidence retained while a selection is unavailable.
 
@@ -164,7 +164,7 @@ For each operation ResearchSpec computes the sorted union of selected domains' d
 ```bash
 researchspec plugin list [--installed] [--summary]
 researchspec plugin show <domain-id> [--summary]
-researchspec plugin install <domain-ids...> [--expected-plan-sha256 <sha256>] [--summary]
+researchspec plugin install <domain-ids...> [--summary] [--yes]
 researchspec plugin update [domain-ids...]
 researchspec plugin uninstall <domain-ids...>
 researchspec plugin instructions <skill-id>
@@ -188,7 +188,7 @@ user-modified file. Config and manifest commit after generated operations, with 
 
 Navigate and the current ARSU producer evaluate optional plugin assistance at bounded semantic moments: a new or materially changed route, a newly ready work item, or an explicit specialist request. They query compact metadata, inspect only plausible domains, and recommend nothing unless one or more named Skills materially help the current research task.
 
-For uninstalled assistance, the Agent proposes at most three domains in one batch, states the matching Skills and installation counts, and obtains consent separately from route confirmation. After the core Start is confirmed, the Agent previews the plugin install, shows the exact plan hash and impact, executes only that same hash-bound batch, then reloads plugin status. Installation authorizes static Skill projection only; it does not authorize network access, script or dependency execution, credentials, external services, or sensitive-data transfer.
+For uninstalled assistance, the Agent proposes at most three domains in one batch, states the matching Skills and installation counts, and obtains consent separately from route confirmation. After the core Start is confirmed, the Agent previews the exact domain IDs, resolved Skills, configured tools, and write impact, executes only the explicitly confirmed domain set, then reloads plugin status. Installation authorizes static Skill projection only; it does not authorize network access, script or dependency execution, credentials, external services, or sensitive-data transfer.
 
 An installed Skill remains a bounded advisory helper of the current ARSU producer. If the host has loaded it, the Agent may invoke it natively. Otherwise the Agent reads the exact current instructions through the bridge. The helper receives only the current task, necessary inputs, expected response, and forbidden ResearchSpec authority writes. Its result returns to the original ARSU producer for validation and integration; it is not itself a submitted workflow candidate.
 

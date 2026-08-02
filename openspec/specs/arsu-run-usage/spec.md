@@ -1,167 +1,21 @@
 ## Purpose
+Define the current file-based protocol by which ARSU Skills enter, run, and compose ResearchSpec subflows.
 
-Define the canonical user-visible active-run, subflow, frontier, Gate, transition, and Decision protocol.
 ## Requirements
-### Requirement: Active Run And Dynamic Subflows
-ResearchSpec SHALL maintain at most one active run per workspace and SHALL represent standalone work, pipeline work, and revision rounds as identifiable subflow instances.
 
-#### Scenario: Standalone work starts under the active run
-- **WHEN** a confirmed standalone route is started
-- **THEN** the system SHALL create a subflow instance under the workspace active run
-- **AND** it SHALL preserve the selected Skill, mode, parent identity, and instance identity
+### Requirement: Current File-Based ARSU Runtime Protocol
+ARSU Skills SHALL read stable specs and CLI instructions, write semantic outputs outside
+`researchspec/`, maintain their own handoff, and request formal control mutations through the CLI.
 
-#### Scenario: Revision round is instantiated dynamically
-- **WHEN** an accepted review branch requires another revision
-- **THEN** the system SHALL instantiate the workflow's revision-round template with parent and round identity
-- **AND** it SHALL NOT require a statically predeclared maximum number of rounds
+#### Scenario: Producer completes ordinary work
+- **WHEN** an ARSU producer creates a boundary deliverable
+- **THEN** it records the explicit role and project-relative path in its handoff
+- **AND** it does not submit, register or hash-bind the deliverable
 
-### Requirement: CLI-Owned Workflow Frontier
+### Requirement: Independent Subflow Confirmation
+Every standalone, child, branch and dynamic revision-round start SHALL receive a route summary and a
+separate human confirmation.
 
-ResearchSpec CLI SHALL be the authoritative evaluator of hard obligations,
-accepted evidence, formal Gates and Decisions, case actions and completion.
-ARSU Skills SHALL perform semantic work from bounded CLI action summaries and
-descriptors while selecting their own soft plan within those commitments.
-
-#### Scenario: Adaptive work follows current commitments
-
-- **WHEN** an ARSU producer operates an adaptive run
-- **THEN** it SHALL obtain allowed and recommended actions from ResearchSpec
-- **AND** it MAY reorder, parallelize, retry, replace or rework semantic tasks
-  that have no declared hard dependency
-
-#### Scenario: Strict pipeline is active
-
-- **WHEN** `academic-pipeline` coordinates a strict profile
-- **THEN** it SHALL request status and instructions from ResearchSpec
-- **AND** it SHALL NOT maintain an independent graph, Gate or readiness truth
-
-### Requirement: Uniform Runtime Protocol
-
-ResearchSpec SHALL expose subflows, obligations, case actions, Gates and
-completion through bounded status plus selector-based instructions. A caller
-SHALL execute only an allowed descriptor and SHALL use directed reads for
-detail rather than requiring a full status round trip after every mechanical
-step.
-
-#### Scenario: Agent executes one durable action
-
-- **WHEN** an Agent reaches a durable commitment boundary
-- **THEN** it SHALL obtain the selected action descriptor and execute the
-  corresponding `start`, `submit`, `advance`, `decide` or `propose` transaction
-- **AND** it SHALL use returned next selectors to continue
-
-#### Scenario: Working material remains provisional
-
-- **WHEN** an ARSU Skill has produced intermediate or provider-derived material
-- **THEN** it SHALL retain that material as scoped working evidence
-- **AND** it SHALL use a durable submit only when a declared artifact,
-  evidence, patch or case-action boundary is reached
-
-### Requirement: Human-Confirmed Gates And Controlled Transitions
-ResearchSpec SHALL require user confirmation for every formal Gate and SHALL distinguish Gate challenge, override, and transition authorization.
-
-#### Scenario: Gate submission includes confirmation
-- **WHEN** a validator proposes a Gate verdict
-- **THEN** the Agent SHALL show the validator and evidence to the user
-- **AND** `submit gate:<id>` SHALL persist the evidence, verdict, and `confirmed_by`
-
-#### Scenario: User challenges a Gate verdict
-- **WHEN** the user disagrees with the proposed Gate verdict
-- **THEN** the Agent SHALL re-run verification before offering an override
-- **AND** advancing past a failed verdict SHALL require an explicit `researchspec-decide` override record
-
-#### Scenario: Unique transition advances automatically
-- **WHEN** a passed Gate or accepted branch decision leaves exactly one eligible transition
-- **THEN** the Agent SHALL advance that transition without requesting a second semantic decision
-
-#### Scenario: Ambiguous transition requires Decision
-- **WHEN** multiple transitions are eligible or the next step changes scope, claims, structure, or branch semantics
-- **THEN** the Agent SHALL route the choice through `researchspec-decide`
-
-### Requirement: Decisions Capture Only High-Impact Interaction
-ResearchSpec SHALL persist user choices in the Decision ledger only when they affect scope, claims, manuscript structure, workflow branch, or Gate override.
-
-#### Scenario: Ordinary exploration remains with the artifact
-- **WHEN** a user asks exploratory questions or gives low-impact working feedback
-- **THEN** the interaction SHALL remain in the relevant working artifact or conversation context
-- **AND** it SHALL NOT create a Decision ledger event solely for audit volume
-
-### Requirement: External Passport Mid-Entry Journey
-ResearchSpec SHALL route a user continuing from an ARS Material Passport through the current mid-entry summary, confirmation and workflow frontier.
-
-#### Scenario: User imports a Passport
-- **WHEN** Navigate identifies a local Material Passport and the user confirms the import summary
-- **THEN** the Agent SHALL preview and execute the hash-bound Start transaction
-- **AND** subsequent work SHALL use current status and scoped instructions
-
-#### Scenario: Imported claims require current authority
-- **WHEN** the Passport contains a branch, Gate pass or override
-- **THEN** the Agent SHALL expose it as imported evidence and use the current Gate or Decision flow before advancing
-
-### Requirement: Plugin Helpers Do Not Enter The Runtime Frontier
-ResearchSpec SHALL treat domain Skill invocation as nested semantic assistance
-inside the current ARSU producer rather than a selector-addressable runtime
-entity.
-
-#### Scenario: Helper is used during a work item
-- **WHEN** the Agent invokes a plugin Skill while producing a ready work
-  candidate
-- **THEN** status and instructions SHALL retain the original work selector and
-  producer
-- **AND** Submit SHALL register only the producer-reviewed candidate
-
-#### Scenario: Helper is unavailable
-- **WHEN** helper discovery, installation, or invocation fails
-- **THEN** the current selector SHALL remain ready or active according to the
-  existing core evaluator
-- **AND** no plugin-specific blocker SHALL be added to workflow state
-
-### Requirement: Dual-Runtime Producer Protocol
-
-ARSU producers SHALL obtain the current runtime mode, allowed actions, and
-action descriptors from ResearchSpec before a durable action. In adaptive mode,
-they SHALL work within hard obligations and may reorder, parallelize, retry, or
-replace semantic work that has no declared hard dependency. In strict mode, they
-SHALL obey the declared graph, joins, Gates, and transitions.
-
-#### Scenario: Adaptive producer receives several allowed obligations
-
-- **WHEN** an adaptive status result exposes independent `obligation:` actions
-- **THEN** the producer MAY choose any allowed action or work on independent
-  actions concurrently
-- **AND** it SHALL submit durable evidence only through the selected descriptor
-
-#### Scenario: Strict pipeline is active
-
-- **WHEN** a strict pipeline status result exposes scoped work, Gate, or
-  transition actions
-- **THEN** the producer SHALL follow the declared strict frontier
-- **AND** it SHALL NOT create a parallel graph or infer an unreturned action
-
-### Requirement: Selector-Directed Durable Boundaries
-
-The runtime protocol SHALL support the selector families exposed by the current
-mode, including `subflow:`, `obligation:`, `gate:`, `completion:`,
-`case-action:`, `patch:`, `change:`, `work:`, and `transition:`. A producer
-SHALL execute only a current allowed descriptor and SHALL continue from returned
-next selectors or a directed read.
-
-#### Scenario: A mechanical action completes
-
-- **WHEN** a direct durable action returns next selectors
-- **THEN** the producer SHALL use those selectors for the next required detail
-- **AND** it SHALL NOT require an unconditional full status refresh or external
-  plan replay
-
-## ADDED Requirements
-
-### Requirement: Bounded adaptive runtime guidance
-ARSU run guidance SHALL use bounded status followed by selector-specific instructions and SHALL describe the compact action result without presenting strict graph selectors as the adaptive default.
-
-#### Scenario: Adaptive resume
-- **WHEN** an Agent resumes an adaptive run
-- **THEN** it SHALL obtain bounded status and instructions for the current obligation, Gate, completion, or case-action selector before acting
-
-#### Scenario: Strict compatibility resume
-- **WHEN** an Agent resumes an unmigrated Schema `0.2` run
-- **THEN** it MAY use strict work, Gate, transition, and subflow selectors under the documented compatibility protocol
+#### Scenario: Pipeline parent is confirmed
+- **WHEN** a user confirms an academic-pipeline parent
+- **THEN** no child is created until that child has its own confirmation

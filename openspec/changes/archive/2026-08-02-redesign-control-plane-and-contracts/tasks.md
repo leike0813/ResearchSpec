@@ -67,9 +67,9 @@
 
 ## 8. User-Model Acceptance And Release Gate
 
-- [ ] 8.1 Rewrite packaged CLI user journeys for standalone, pipeline, Gate, change, revision, plugin,
+- [x] 8.1 Rewrite packaged CLI user journeys for standalone, pipeline, Gate, change, revision, plugin,
   Zotero, resume and failure scenarios.
-- [ ] 8.2 Run the complete typecheck, lint, test, build, documentation, converter, idempotence and package
+- [x] 8.2 Run the complete typecheck, lint, test, build, documentation, converter, idempotence and package
   verification sequence.
-- [ ] 8.3 Perform bounded semantic residual searches and archive the change only after all current
+- [x] 8.3 Perform bounded semantic residual searches and archive the change only after all current
   authorities and public surfaces agree.

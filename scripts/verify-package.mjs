@@ -159,6 +159,7 @@ try {
   const prompts = (await readdir(path.join(codexHome, "prompts"))).filter((file) => file.startsWith("researchspec-") && file.endsWith(".md")).sort();
   assert(prompts.length === 16, `Installed Codex prompt count mismatch: ${String(prompts.length)}`);
   run(bin, ["check", "all", "--strict", "--json"], projectDirectory, environment);
+  await verifyInstalledCurrentJourney(bin, projectDirectory, environment);
 
   run(bin, ["init", allToolsProjectDirectory, "--tools", "all", "--json"], installDirectory, environment);
   await verifyAllToolDelivery(allToolsProjectDirectory, handbookDigest);
@@ -507,6 +508,75 @@ function runExpectFailure(command, args, cwd, env = process.env) {
   if (result.error) throw result.error;
   if (result.status === 0) throw new Error(`${command} ${args.join(" ")} unexpectedly succeeded.`);
   return result;
+}
+
+async function verifyInstalledCurrentJourney(bin, projectDirectory, environment) {
+  const instructions = runJson(bin, ["instructions", "route:deep-research:full", "--json"], projectDirectory, environment).data;
+  assert(instructions?.confirmation_required === true, "Installed route instructions do not require confirmation.");
+  assert(Array.isArray(instructions.formal_gates) && instructions.formal_gates.length > 0, "Installed standalone route exposes no formal Gate.");
+  const boundary = instructions.boundary_outputs?.[0];
+  assert(boundary?.role && boundary?.type && boundary?.purpose, "Installed route exposes no usable boundary output.");
+
+  const output = {
+    role: boundary.role,
+    type: boundary.type,
+    path: `outputs/${boundary.role}.md`,
+    purpose: boundary.purpose,
+    intended_consumer: "user",
+  };
+  const startInputPath = path.join(projectDirectory, "packaged-start.json");
+  await writeFile(startInputPath, `${JSON.stringify({
+    schema_version: "1",
+    confirmed_at: "2026-08-02T12:00:00+08:00",
+    prerequisites: [],
+    handoff_inputs: [],
+    planned_outputs: [output],
+    formal_gates: instructions.formal_gates,
+    cost: instructions.cost,
+  }, null, 2)}\n`, "utf8");
+  const started = runJson(bin, [
+    "start", "deep-research:full", "--input", startInputPath,
+    "--confirmed-by", "Release Verifier", "--json",
+  ], projectDirectory, environment).data;
+  assert(started?.status === "started" && started.instance_id, "Installed CLI did not start the standalone subflow.");
+
+  const outputPath = path.join(projectDirectory, output.path);
+  await mkdir(path.dirname(outputPath), { recursive: true });
+  await writeFile(outputPath, "# Packaged research output\n\nEvidence prepared for the release Gate.\n", "utf8");
+  const handoffInputPath = path.join(projectDirectory, "packaged-handoff.json");
+  await writeFile(handoffInputPath, `${JSON.stringify({
+    inputs: [],
+    outputs: [output],
+    body: "# Packaged handoff\n\nThe external output is ready for human Gate review.\n",
+  }, null, 2)}\n`, "utf8");
+  runJson(bin, ["handoff", `subflow:${started.instance_id}`, "--input", handoffInputPath, "--json"], projectDirectory, environment);
+
+  for (const gateId of instructions.formal_gates) {
+    runJson(bin, [
+      "decide", `gate:${started.instance_id}/${gateId}`,
+      "--verdict", "pass",
+      "--actor-name", "Release Verifier",
+      "--reason", "The packaged boundary output was reviewed.",
+      "--evidence-role", output.role,
+      "--json",
+    ], projectDirectory, environment);
+  }
+  runJson(bin, [
+    "advance", `subflow:${started.instance_id}`, "--transition", "complete",
+    "--actor-name", "release-verifier", "--json",
+  ], projectDirectory, environment);
+  const status = runJson(bin, ["status", "--json"], projectDirectory, environment).data;
+  assert(status?.subflows?.complete === 1, "Installed standalone journey did not reach completion.");
+  assert(!status?.active_instances?.some((item) => item.instance_id === started.instance_id), "Installed completed subflow remains active.");
+  runJson(bin, ["show", `handoff:${started.instance_id}`, "--json"], projectDirectory, environment);
+  runJson(bin, ["check", "all", "--strict", "--json"], projectDirectory, environment);
+}
+
+function runJson(command, args, cwd, env = process.env) {
+  const result = run(command, args, cwd, env);
+  const envelope = JSON.parse(result.stdout);
+  assert(envelope.ok === true, `${command} ${args.join(" ")} returned a failed JSON envelope.`);
+  return envelope;
 }
 
 async function directoryNames(directory) {

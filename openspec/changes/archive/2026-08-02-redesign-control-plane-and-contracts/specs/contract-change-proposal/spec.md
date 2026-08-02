@@ -1,6 +1,6 @@
 ## ADDED Requirements
 
-### Requirement: Adaptive Project Change Package
+### Requirement: Project Change Package
 A project change SHALL consist of `change.md` and optional design, tasks and delta documents selected
 for the change's semantic scope. Direct editing of every document SHALL remain valid.
 
@@ -33,4 +33,3 @@ validate collisions, missing targets and stable cross-references without executi
 ### Requirement: Contract Changes Are Case Actions
 **Reason**: There is no global CaseState or case-action runtime.
 **Migration**: Discover changes by scanning `researchspec/changes`.
-

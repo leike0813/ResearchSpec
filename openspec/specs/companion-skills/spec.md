@@ -1,7 +1,8 @@
 ## Purpose
+Define the four generated Companion Skills and their authority boundaries over current file contracts.
 
-ResearchSpec defines four self-contained Companion workflows that combine user intent, catalog route facts, and CLI-owned workspace evidence without duplicating ARSU semantic work or deterministic runtime authority.
 ## Requirements
+
 ### Requirement: Canonical Four-Workflow Manifest
 
 ResearchSpec SHALL define exactly four companion workflows named `researchspec-navigate`, `researchspec-propose`, `researchspec-decide`, and `researchspec-verify` in one typed manifest.
@@ -26,147 +27,8 @@ Each installed companion SHALL be usable from its own `SKILL.md` without a runti
 
 #### Scenario: Near-miss routes to the correct owner
 
-- **WHEN** a request belongs to an ARSU producer, deterministic check, artifact submit, transition advance, or archive transaction
+- **WHEN** a request belongs to an ARSU producer, deterministic check, control mutation, or archive transaction
 - **THEN** the skill SHALL route to that ARSU workflow or existing CLI command instead of expanding its own responsibility
-
-### Requirement: Navigate Workflow
-
-`researchspec-navigate` SHALL provide Route, Resume, Explain, and Export branches by combining catalog-derived route facts with CLI-owned workspace state.
-
-#### Scenario: Route presents a confirmable route summary
-
-- **WHEN** the user supplies a vague, cross-Skill, or changed academic goal
-- **THEN** Navigate SHALL present matching routes and near misses with Skill, mode, prerequisites, artifacts, formal Gate policy, risk, and cost
-- **AND** it SHALL pair those facts with current workspace availability
-- **AND** Start execution SHALL require the descriptor-declared named
-  confirmation or plan binding
-
-#### Scenario: Resume follows only the CLI frontier
-
-- **WHEN** work already exists
-- **THEN** Navigate SHALL dispatch ready work to its ARSU producer, Gates to Verify, and multiple transitions to Decide
-- **AND** it MAY execute a unique non-semantic transition according to its
-  descriptor-declared execution policy
-- **AND** it SHALL NOT reconstruct graph state or require route reconfirmation without route or plan drift
-
-#### Scenario: Explain remains read-only
-
-- **WHEN** the user asks what exists, how state relates, or why work is blocked
-- **THEN** Navigate SHALL use status, list, show, and targeted check
-- **AND** it SHALL distinguish evidence, inference, unknown, and conflict without writing files
-
-#### Scenario: Export previews derived output
-
-- **WHEN** the user asks to resume elsewhere, hand off, export, or share context
-- **THEN** Navigate SHALL select handoff stdout, handoff write, or pack based on the audience and persistence need
-- **AND** it SHALL explain derivation, staleness, privacy, artifact inclusion, size, and overwrite risk
-- **AND** any plan-bound write SHALL use dry-run followed by the explicit
-  confirmation required by its descriptor
-
-### Requirement: Propose Workflow
-
-`researchspec-propose` SHALL transform an evidence-backed high-impact semantic change into one validated pending contract change without applying it.
-
-#### Scenario: Proposal is inspected, previewed, and confirmed
-
-- **WHEN** a user asks to change research intent, claim strength or limits, manuscript constraints, source policy, or workflow semantics
-- **THEN** the skill SHALL inspect the current target and referenced evidence
-- **AND** it SHALL build the descriptor-declared semantic proposal input and
-  explain diff and risk
-- **AND** it SHALL require the creation confirmation declared by that descriptor
-- **AND** it SHALL finish with `show` and relevant `check` views
-
-#### Scenario: Proposal cannot silently become accepted state
-
-- **WHEN** proposal creation succeeds
-- **THEN** the skill SHALL report the pending selector and required human review
-- **AND** it SHALL NOT apply stable-spec changes, append a decision, or treat `--yes` as acceptance
-
-### Requirement: Verify Workflow
-
-`researchspec-verify` SHALL perform evidence-linked semantic readiness and formal Gate verification only after deterministic contract checks have passed.
-
-#### Scenario: Verification produces an evidence-linked scorecard
-
-- **WHEN** the user asks whether research work is coherent or ready to advance
-- **THEN** the skill SHALL first run relevant deterministic checks
-- **AND** it SHALL assess applicable research and workflow evidence and distinguish pass, concern, blocker, and unknown
-- **AND** every finding SHALL cite an evidence ID or workspace path
-
-#### Scenario: Gate challenge triggers reverification
-
-- **WHEN** a formal Gate verdict is challenged
-- **THEN** Verify SHALL display validator, evidence, limitations and consequences, create a reverification attempt, and require human confirmation before Gate submission
-- **AND** it SHALL NOT turn a challenge into an override shortcut
-
-### Requirement: Decide Workflow
-
-`researchspec-decide` SHALL be the only Companion that records a semantic branch, pending-item decision, or failed-Gate override.
-
-#### Scenario: Decision uses a complete preview-confirm-execute cycle
-
-- **WHEN** one unique decision target is selected
-- **THEN** the skill SHALL inspect the exact target and trusted evidence, collect the selected outcome and required reason, and run the complete command with `--dry-run --json`
-- **AND** it SHALL explain semantic impact and planned writes before explicit confirmation
-- **AND** it SHALL execute the identical payload and recheck receipt, status, and the relevant deterministic target
-- **AND** `--yes` SHALL NOT substitute for the user's decision
-
-#### Scenario: Parent confirmation does not select a branch
-
-- **WHEN** a pipeline exposes multiple transitions, a mid-entry choice, review branch, or failed-Gate override
-- **THEN** Decide SHALL bind only the explicit user choice to the current scoped evidence
-- **AND** delegated parent confirmation SHALL NOT authorize the decision
-
-### Requirement: Companion Guidance Respects Composed Subflow Authority
-
-Companion Skills SHALL treat the CLI child-aware frontier as the only authority for starting pipeline stages and revision rounds.
-
-#### Scenario: A pipeline plan names a likely next Skill
-
-- **WHEN** the named child selector is not present in current CLI status
-- **THEN** the Agent SHALL NOT start or simulate that child from prose alone
-
-### Requirement: Companion Guidance Preserves Human Boundaries
-
-Companion Skills SHALL distinguish delegated mechanical child starts and unique transitions from formal Gate confirmation, override Decisions, mid-entry choices, and review branch Decisions.
-
-#### Scenario: Parent route was confirmed
-
-- **WHEN** a child start is delegated by the exact parent plan
-- **THEN** the Agent MAY execute that start but SHALL NOT use the parent confirmation to pass a Gate or select a branch
-
-### Requirement: Current Companion Submission Guidance
-Companion Skills SHALL describe only scoped automatic or manual submission and SHALL contain no retired workflow migration record.
-
-#### Scenario: Navigate explains candidate submission
-- **WHEN** a candidate is ready
-- **THEN** guidance SHALL use the current scoped submission policy and authority boundary
-
-### Requirement: Navigate Plugin Skill Recommendation
-The Navigate Companion SHALL use compact packaged-domain JSON to discover
-installed or uninstalled semantically matching Skills, obtain batch consent
-before installation, and invoke eligible installed Skills only as advisory
-helpers of the canonical ARSU producer.
-
-#### Scenario: Uninstalled domain matches user intent
-- **WHEN** one or more specific Skills in an available uninstalled domain
-  materially fit a Route or ready-work need
-- **THEN** Navigate MAY propose at most three domains with compact impact
-- **AND** it SHALL install them only through preview, explicit confirmation, and
-  matching plan-hash execution
-
-#### Scenario: Installed helper matches active work
-- **WHEN** a projected Skill materially assists the current ARSU producer
-- **THEN** Navigate MAY dispatch it natively or through the read-only instruction
-  bridge with a bounded helper brief
-- **AND** the recommendation or invocation SHALL NOT create a route, subflow,
-  work item, Gate, Decision, receipt, frontier, producer change, or second state
-  machine
-
-#### Scenario: Augmentation is declined or unavailable
-- **WHEN** the user declines installation or the Skill cannot be used safely
-- **THEN** Navigate SHALL continue the canonical ARSU route without treating the
-  plugin as a blocker
 
 ### Requirement: Navigate Distinguishes Research And Zotero Tasks
 
@@ -210,54 +72,6 @@ or managed-library behavior applies.
 - **WHEN** the route would import accepted literature into a collection
 - **THEN** Navigate SHALL request separate run- and collection-bound consent
 - **AND** plugin or route confirmation SHALL NOT imply that consent
-
-### Requirement: Companions Consume Runtime Descriptors
-
-Navigate, Propose, Decide and Verify SHALL consume CLI status summaries, action
-descriptors and case actions without reimplementing availability, state
-transitions or payload schemas.
-
-#### Scenario: Companion executes a decision
-
-- **WHEN** Decide handles a pending Gate, patch or contract-change action
-- **THEN** it SHALL obtain the current descriptor and submit only the required
-  human semantic choice
-- **AND** the CLI SHALL derive and validate mechanical fields
-
-### Requirement: Companions Dispatch Through Current Descriptors
-
-Navigate, Propose, Decide, and Verify SHALL consume the current runtime mode,
-selector, semantic input template, execution policy, availability basis, and
-next selectors from CLI descriptors. They SHALL not reimplement availability,
-strict-only selector assumptions, or caller-authored mechanical DTO fields.
-
-#### Scenario: Navigate resumes an adaptive run
-
-- **WHEN** status exposes an adaptive allowed action
-- **THEN** Navigate SHALL dispatch the relevant ARSU producer, Verify, or Decide
-  from that action's descriptor and ownership boundary
-- **AND** it SHALL not invent a strict work stage or transition
-
-#### Scenario: Companion executes a direct action
-
-- **WHEN** a current descriptor declares `direct`
-- **THEN** the responsible Companion SHALL submit the semantic input once and
-  continue from returned next selectors
-- **AND** it SHALL not require external preview replay unless the user requests
-  an optional dry run
-
-### Requirement: Companions Preserve Formal Boundaries By Policy
-
-Companions SHALL obtain named human confirmation for `human_confirmed` actions
-and an approved plan hash for `plan_bound` actions. They SHALL continue to route
-formal Gate verification to Verify and semantic Decisions to Decide.
-
-#### Scenario: Verify prepares a formal Gate
-
-- **WHEN** Verify receives a current Gate descriptor
-- **THEN** it SHALL construct only the descriptor-declared semantic verdict
-  input, display evidence and consequences, and obtain the required human
-  confirmation and plan binding before submission
 
 ### Requirement: Navigate Provides Progressive CLI Discovery
 
@@ -312,28 +126,19 @@ runtime-control workflow SHALL remain complete without the reference.
 - **AND** it SHALL continue the canonical route or runtime workflow without
   treating the reference as a blocker
 
-### Requirement: Companion plan and Gate guidance
-Companion Skills SHALL instruct Agents to consume policy-derived execution requirements, present the bound plan, obtain required confirmation, and preserve formal Gate authority.
+### Requirement: Companions Use Current File Contracts
+Navigate, Propose, Decide and Verify SHALL use stable specs, route metadata, per-subflow controls,
+handoffs and project changes without reading or writing removed runtime authorities.
 
-#### Scenario: Plan-bound Companion action
-- **WHEN** a Companion receives a plan-bound descriptor
-- **THEN** it SHALL satisfy the descriptor's preview, basis, plan-hash, and confirmation requirements before execution
+#### Scenario: Navigate explains current work
+- **WHEN** a user asks to resume or understand a project
+- **THEN** Navigate uses status and directed selectors, identifies known facts and unknowns, and does
+  not create a subflow without confirmation
 
-#### Scenario: Decision-assisted Gate evidence
-- **WHEN** a waiver, not-applicable choice, or Gate override contributes to readiness
-- **THEN** the Companion SHALL retain typed Decision and receipt evidence and still route the formal Gate through user-confirmed Verify
+### Requirement: Companion Decisions Respect File Ownership
+Verify SHALL propose Gate findings, Decide SHALL record only the relevant owning-control or
+project-change decision, and Propose SHALL create adaptable project change documents.
 
-### Requirement: Navigate Orchestrates Free-Form Annotation Intake
-ResearchSpec Navigate SHALL treat manuscript annotation intake as an
-Agent-assisted pre-route activity over the shared session and interpretation
-contracts, then continue through the existing annotation registration and
-revision routes.
-
-#### Scenario: User supplies a free-form review
-- **WHEN** a user provides an annotated copy, feedback file, or conversational comments
-- **THEN** Navigate SHALL preserve the raw material, ask the Host Agent to interpret it, surface ambiguities and high-impact items, and materialize only confirmed ready entries
-- **AND** it SHALL NOT require a Markdown annotation syntax
-
-#### Scenario: Annotation set is ready
-- **WHEN** the interpretation candidate is complete and the human confirms submission
-- **THEN** Navigate SHALL use the existing `annotation:<id>` descriptor and submit transaction before selecting the existing revision, revision-coach, re-review, or pipeline route
+#### Scenario: Formal Gate is reviewed
+- **WHEN** Verify has prepared a recommendation and the user confirms a verdict
+- **THEN** Decide updates only the Gate in the owning control
