@@ -53,10 +53,10 @@
 
 ## 6. ARSU Profile, Routing And Anchors
 
-- [ ] 6.1 Replace strict/adaptive workflow catalog output with current standalone routing and the
+- [x] 6.1 Replace strict/adaptive workflow catalog output with current standalone routing and the
   project `academic-pipeline` profile.
-- [ ] 6.2 Replace legacy contract anchors and preflight guidance, then regenerate and verify ARSU output.
-- [ ] 6.3 Prove route/profile coverage and converter idempotence for all supported modes and entries.
+- [x] 6.2 Replace legacy contract anchors and preflight guidance, then regenerate and verify ARSU output.
+- [x] 6.3 Prove route/profile coverage and converter idempotence for all supported modes and entries.
 
 ## 7. Legacy Removal And Current Documentation
 

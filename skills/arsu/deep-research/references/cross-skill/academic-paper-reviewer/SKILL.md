@@ -193,9 +193,13 @@ Two invocation modes:
 **Mode B — phase-by-phase (cross-session resume):** User invokes one reviewer agent per phase across sessions, or runs the full reviewer panel standalone via `/ars-review` equivalent.
 
 <!--rs:IO-006-->
+### ResearchSpec Current Owner
+
+Replacement scope: `IO-006` for `academic-paper-reviewer`.
+
 In phase-by-phase mode, the review panel and editorial synthesizer may write only
-the outputs declared by the selected review work item. Reviewers are expected
-to read the complete registered manuscript needed for evaluation; read access
+the outputs declared by the selected review route instructions. Reviewers are expected
+to read the complete handoff-referenced manuscript needed for evaluation; read access
 does not extend their write scope. `field_analyst` remains a panel-configuration
 role and may emit only its declared configuration artifact. The Sprint Contract
 paper-blind and paper-visible call discipline remains active inside these stage
@@ -203,10 +207,16 @@ boundaries; neither rule overrides the other.
 
 Phase-by-phase routing requires an explicit user signal. Ambiguous cross-stage
 material must be clarified before dispatch. The configured graph in
-`researchspec/specs/workflow.yaml`, the frontier in
-`researchspec/runs/current/state.yaml`, and registered inputs in
-`researchspec/runs/current/artifact-registry.json` define the permitted read and
+`researchspec/profiles/academic-pipeline.yaml`, the frontier in
+`researchspec/subflows/<instance>/control.yaml`, and handoff-referenced inputs in
+`researchspec/subflows/<instance>/handoff.md` define the permitted read and
 write boundary.
+
+Current ResearchSpec owners:
+
+- `researchspec/profiles/academic-pipeline.yaml`
+- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:IO-006-->
 
 ---
@@ -241,11 +251,16 @@ write boundary.
 ## Re-Review Mode (Verification Review)
 
 <!--rs:REVIEW-001-->
+### ResearchSpec Current Owner
+
+Replacement scope: `REVIEW-001` for `academic-paper-reviewer`.
+
 Dedicated mode for Pipeline Stage 3'. Re-review verifies each first-round
 concern against the current revised manuscript and the response to reviewers.
 When the revision producer exposed an ARSU patch, annotation set, or helper
 summary, resolve those files by role and safe project-relative path from the
-producer subflow's `handoff.md`; do not infer them from a registry or receipt.
+producer subflow's `handoff.md`; do not infer them from directory names or
+another authority file.
 
 **Input:** the original Revision Roadmap, revised manuscript, response to
 reviewers when present, prior review material, and any explicitly handed-off
@@ -259,6 +274,11 @@ records the formal re-review Gate verdict in the owning subflow `control.yaml`.
 
 > See `references/re_review_mode_protocol.md` for the verification rules,
 > output format, and Socratic guidance.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:REVIEW-001-->
 
 ---
@@ -428,7 +448,24 @@ Follows the paper's language. Academic terms remain in English. User can overrid
 
 - **Reviewer hard gate.** All reviewer modes that ship with contracts (`reviewer_full`, `reviewer_methodology_focus`) now run two-call Phase 1 (paper-content-blind) + Phase 2 (paper-visible) orchestration. See `references/sprint_contract_protocol.md`.
 <!--rs:REVIEW-002-->
-- **Schema 13 sprint contract.** Resolve the mode-specific frozen contract JSON through `researchspec/runs/current/artifact-registry.json`, then deep-copy it for runtime fields. Preserve `panel_size`, `acceptance_dimensions`, severity and cross-reviewer quantifiers, measurement procedure, override ladder, and bounded amendments. Return the instantiated contract and each phase output for registration; send lint, panel-cardinality, and failure-condition results to the review gate helper for `researchspec/runs/current/gate-ledger.jsonl`. The following synthesizer protocol and mode-specific panel sizes remain unchanged.
+### ResearchSpec Current Owner
+
+Replacement scope: `REVIEW-002` for `academic-paper-reviewer`.
+
+- **Sprint contract.** Resolve the mode-specific frozen contract JSON through
+  `researchspec/subflows/<instance>/handoff.md`, then deep-copy it for permitted
+  invocation fields. Preserve `panel_size`, `acceptance_dimensions`, severity
+  and cross-reviewer quantifiers, measurement procedure, override ladder, and
+  bounded amendments. Return the instantiated contract and each phase output to
+  the producing subflow for handoff recording; send lint, panel-cardinality,
+  and failure-condition results to the review Gate helper for
+  `researchspec/subflows/<instance>/control.yaml`. The following synthesizer
+  protocol and mode-specific panel sizes remain unchanged.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:REVIEW-002-->
 - **Synthesizer three-step mechanical protocol.** Build cross-reviewer matrix → evaluate each failure_condition with panel-relative quantifier + expression vocabulary → resolve precedence by severity. Forbidden operations explicit in `agents/editorial_synthesizer_agent.md`.
 - **methodology_focus reduced panel.** `reviewer_methodology_focus` mode runs a 2-reviewer panel (EIC + methodology only) instead of the default 5.

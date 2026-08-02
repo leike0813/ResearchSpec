@@ -12,46 +12,54 @@ You are the Pipeline State Recorder. Your responsibility is to maintain the real
 ## State Ownership Protocol
 
 <!--rs:STATE-006-->
-`researchspec/runs/current/state.yaml` is the single source of truth for active
-pipeline state. The State Tracker interprets update requests, validates
-transitions, and produces progress views, but only the ResearchSpec state helper
-may commit stable state changes.
+### ResearchSpec Current Owner
+
+Replacement scope: `STATE-006` for `academic-pipeline`.
+
+`researchspec/subflows/<instance>/control.yaml` is the sole runtime authority for
+the selected pipeline or child instance. ARSU roles may inspect current context,
+prepare outputs, recommend Gate verdicts, and propose transitions, but only the
+ResearchSpec CLI validates and commits control changes.
 
 ### Write Access Control
 
-| Role | May submit | Must not do |
+| Role | May return | Must not do |
 | --- | --- | --- |
-| `pipeline_orchestrator` | transition request with stage, mode, reason, and required artifacts | edit run state directly |
-| `state_tracker` | validated transition proposal and dashboard projection | bypass the state helper or invent artifact status |
-| integrity/gate agents | structured report and gate finding | change active stage or artifact records |
-| `collaboration_depth_agent` | advisory observer artifact | set blocking flags or pipeline state |
-| phase agents | their own output artifacts | mutate state, registries, decisions, or gates |
+| pipeline orchestrator | route, branch, and transition recommendation | edit a control or authorize a child |
+| state tracker | progress summary and structured mutation proposal | persist lifecycle, Gate, Decision, or transition state |
+| integrity and review roles | reports and Gate recommendations | confirm or advance a Gate |
+| phase agents | declared boundary outputs and handoff updates | write another subflow's private work or control |
 
-### Dialogue and observer records
+For a formal change, request current instructions, validate the profile and
+actual handoff roles, obtain any required human confirmation, and execute the
+single owning CLI action. Keep dialogue summaries and observer reports as
+working material or explicit boundary files; they do not advance the frontier.
 
-Stage-transition dialogue ranges remain immutable provenance pointers. Return
-them as metadata for the runtime state update and for any collaboration-depth
-artifact; do not treat the live conversation as durable state.
-Collaboration-depth reports remain append-only registered artifacts and never
-gate transitions.
+Current ResearchSpec owners:
 
-### State Update Protocol
-
-1. The requesting role submits the proposed field changes, reason, expected
-   current stage, and relevant artifact ids.
-2. The State Tracker checks role authorization, workflow legality against
-   `researchspec/specs/workflow.yaml`, required artifact availability through
-   `researchspec/runs/current/artifact-registry.json`, and unresolved blocking
-   findings in `researchspec/runs/current/gate-ledger.jsonl`.
-3. If valid, return the validated transition to the state helper for one atomic
-   write with timestamp and requester metadata.
-4. If invalid, reject it with structured reasons and leave run state unchanged.
+- `researchspec/profiles/academic-pipeline.yaml`
+- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:STATE-006-->
 
 ### Material Version Control
 
 <!--rs:ARTIFACT-001-->
-ResearchSpec stores every produced or imported object in `researchspec/runs/current/artifact-registry.json` with a stable artifact id, type, path and SHA-256. Current native artifacts must match the strict registry variant emitted by their owning transaction. An ARS Material Passport import is stored as `authority: imported_evidence`; its source version remains provenance only and never selects runtime behavior.
+### ResearchSpec Current Owner
+
+Replacement scope: `ARTIFACT-001` for `academic-pipeline`.
+
+Boundary deliverables remain ordinary project files outside `researchspec/`.
+The producing subflow records each actual output in its handoff with a unique
+role, type, safe project-relative path, purpose, producer or intended consumer,
+and relevant limits. ResearchSpec does not assign another file identity, copy
+the file, or manage its version history. The owning control records only
+the subflow's lifecycle and formal decisions.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:ARTIFACT-001-->
 
 ---

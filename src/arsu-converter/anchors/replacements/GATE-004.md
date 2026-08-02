@@ -1,6 +1,15 @@
-chain must remain traceable through stable source ids in
-`researchspec/specs/sources.yaml` and immutable evidence artifacts registered in
-`researchspec/runs/current/artifact-registry.json`. Preserve producer, stage,
-content hash, source links, verification evidence, and supersession metadata on
-each artifact. A Material Passport may be retained as imported provenance
-evidence, but it is not the active traceability carrier.
+### ResearchSpec Current Owner
+
+Replacement scope: `GATE-004` for `shared`.
+
+Maintain traceability through stable source IDs in `sources.yaml`, stable claim
+support where applicable, and explicit boundary roles and paths in the owning
+handoff. Preserve producer, purpose, source links, verification evidence,
+limitations, and supersession notes in the semantic deliverable or handoff.
+External metadata is contextual evidence and never the active traceability
+authority.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/specs/sources.yaml`

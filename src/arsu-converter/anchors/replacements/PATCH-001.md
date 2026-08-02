@@ -1,3 +1,7 @@
+### ResearchSpec Current Owner
+
+Replacement scope: `PATCH-001` for `academic-paper`.
+
 In `academic-paper` revision mode, the writer may emit a bounded revision patch
 instead of rewriting the complete manuscript. The adapted ARSU contract at
 `assets/shared/contracts/patch/revision_patch.schema.json` is the sole manuscript
@@ -6,7 +10,7 @@ preconditions, replace/insert/delete operations, annotation dispositions,
 revision rationale, and roadmap traceability.
 
 The patch and manuscript are explicit files selected by the caller. They are not
-registered ResearchSpec runtime entities. When safe mechanical application is
+handoff-referenced ResearchSpec runtime entities. When safe mechanical application is
 useful, run `node scripts/apply-revision-patch.mjs` with explicit `--base`, `--patch`,
 and `--output` paths and, optionally, `--report`. The helper validates the whole
 patch before creating output. Schema errors, stale hashes, unknown blocks,
@@ -26,3 +30,11 @@ optional safety tool and never mutates control state.
 
 This patch protocol does not apply to the `academic-paper full` in-pair Phase
 6→4 loop when that loop's contract requires a complete `## Draft Body`.
+
+Current ResearchSpec owners:
+
+- `assets/shared/contracts/patch/revision_patch.schema.json`
+- `scripts/apply-revision-patch.mjs`
+- `researchspec/subflows/<instance>/work/annotation-intake/`
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`

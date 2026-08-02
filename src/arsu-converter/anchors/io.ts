@@ -33,7 +33,7 @@ export function normalizeReplacementBody(content: string): string {
 export function isAnchorFile(value: unknown): value is ContractAnchorFile {
   if (!isRecord(value)) return false;
   return (
-    value.schema_version === "researchspec.arsu.contract-anchors.v3" &&
+    value.schema_version === "researchspec.arsu.contract-anchors.v4" &&
     value.upstream_source === "vendor/ars" &&
     typeof value.audited_commit === "string" &&
     Array.isArray(value.anchors) &&
@@ -90,10 +90,10 @@ function isReplacementScope(value: unknown): boolean {
 
 function isSemanticRole(value: unknown): value is AnchorSemanticRole {
   return typeof value === "string" && [
-    "runtime_state_boundary", "contract_io_boundary", "handoff_projection",
-    "draft_patch_protocol", "gate_policy", "artifact_provenance",
-    "review_commitment_tracking", "generator_evaluator_contract",
-    "claim_contract_projection", "source_contract_projection", "decision_ledger_entry",
+    "subflow_control_boundary", "boundary_deliverable_contract", "handoff_projection",
+    "revision_patch_protocol", "gate_policy", "boundary_deliverable_provenance",
+    "review_handoff_tracking", "generator_evaluator_contract",
+    "stable_claim_contract", "stable_source_contract", "control_decision_record",
   ].includes(value);
 }
 

@@ -43,15 +43,26 @@ Determine the entry point from the user's first message. Use the following keywo
 #### Resume Mode: `resume_from_passport`
 
 <!--rs:STATE-005-->
-**ARS import contract:** the selected Material Passport boundary is external evidence, not runtime state.
+### ResearchSpec Current Owner
 
-1. Require an explicit Passport path, expected SHA-256 and, when resuming a boundary, its 12-character boundary hash.
-2. Parse only strict JSON or YAML and reject path escape, symlink escape, hash drift, ambiguous boundary selection and duplicate consumption.
-3. Normalize the source into a deterministic projection without modifying the source bytes.
-4. Preview `start subflow:tpl-academic-pipeline-mid-entry` with `material_passport_import` and bind the import identity into the Start plan hash.
-5. After human confirmation, register the source, projection and accompanied artifact; append imported Gate/Decision evidence with `authority: imported_evidence`; record the consumed boundary; then commit the new instance state last.
-6. Begin at the current template entry stage. Imported records cannot satisfy a current Gate, branch Decision or transition.
-The import transaction commits consumption through `researchspec/runs/current/state.yaml`.
+Replacement scope: `STATE-005` for `academic-pipeline`.
+
+Existing project materials are ordinary mid-entry inputs:
+
+1. Select explicit safe project-relative paths outside `researchspec/` and state
+   the role, type, purpose, and relevant limits of each input.
+2. Request current mid-entry route instructions and verify only the prerequisites
+   required by the chosen entry point.
+3. Present Skill, mode, inputs, outputs, formal Gates, risk, and cost; start only
+   after a fresh human confirmation.
+4. Record the actual input roles and paths in the new subflow handoff.
+5. Keep all prior Gate, Decision, checkpoint, and completion claims outside the
+   new control. They may inform verification but cannot satisfy current rules.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:STATE-005-->
 11. Respect user overrides: `stage=<n>` overrides `next`; `mode=<m>` overrides the default mode for the next stage (validated against Mode Advisor rules). User overrides are recorded on the resume entry's `user_override` field.
 
@@ -149,8 +160,16 @@ SLIM checkpoints never reset. MANDATORY checkpoints co-occur with reset when app
 **Reset-boundary emission sequence (flag ON, FULL checkpoint):**
 
 <!--rs:STATE-004-->
-Checkpoint by registering the produced artifacts and advancing only through current ResearchSpec Gate and transition transactions. Do not write or append an ARS Material Passport. When an external Passport is supplied later, import it as hash-bound evidence and preserve the original bytes unchanged.
-Checkpoint authority remains in `researchspec/runs/current/state.yaml`.
+### ResearchSpec Current Owner
+
+Replacement scope: `STATE-004` for `academic-pipeline`.
+
+Checkpoint by recording the produced artifacts and advancing only through current ResearchSpec Gate and transition CLI actions. Do not write or append an ARS external input. When an external external input is supplied later, import it as explicit evidence and preserve the original bytes unchanged.
+Checkpoint authority remains in `researchspec/subflows/<instance>/control.yaml`.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:STATE-004-->
 
 Full protocol: [`../references/passport_as_reset_boundary.md`](../references/passport_as_reset_boundary.md).
@@ -456,7 +475,32 @@ Reference helper: `scripts/slr_lineage.py` `emit(stages, incoming_slr_lineage)`.
 | Stage 4.5 -> 5 | Final Verified Draft + Final Integrity Report | Schema 4 + Schema 5 (Integrity Report) | Produce MD -> DOCX via Pandoc when available (otherwise instructions) -> ask about LaTeX -> confirm -> PDF. Carry forward `experiment_alignment_results[]` + `experiment_intake_declaration` (#260) to formatter surface + Stage 6 histogram |
 
 <!--rs:HANDOFF-001-->
-Register the handoff payload through `researchspec/runs/current/artifact-registry.json`, bind it to a hash, and identify every source artifact and unresolved Decision. When the payload originated in an ARS Material Passport, retain its Schema 9 fields as imported provenance on the registered evidence; the current ResearchSpec contracts and ledgers remain authoritative.
+### ResearchSpec Current Owner
+
+Replacement scope: `HANDOFF-001` for `academic-pipeline`.
+
+Record every boundary input and output in the owning subflow's
+`researchspec/subflows/<instance>/handoff.md`. Each entry identifies its role,
+type, safe project-relative path, purpose, producer or intended consumer, and
+relevant limits. The referenced file remains an ordinary project file outside
+`researchspec/`; external metadata may stay in that file but does not become
+ResearchSpec authority.
+
+Place stable research intent, source identity, accepted claims, and manuscript
+structure in their four owning specs. Place formal Gate attempts, Decisions,
+and the active frontier in the owning `control.yaml`. Manuscript revision
+operations may use the ARSU revision patch contract, but the patch remains a
+stateless boundary file and creates no separate ResearchSpec lifecycle.
+
+Current ResearchSpec owners:
+
+- `researchspec/specs/project.md`
+- `researchspec/specs/sources.yaml`
+- `researchspec/specs/claims.yaml`
+- `researchspec/specs/manuscript.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
+- `assets/shared/contracts/patch/revision_patch.schema.json`
 <!--/rs:HANDOFF-001-->
 
 **Style Profile carry-through**: If a Style Profile (Schema 10) was produced during `academic-paper` intake (Step 10), carry it through all stages in the Material Passport. The Style Profile is consumed by `draft_writer_agent` (Stage 2) and optionally by `report_compiler_agent` (Stage 1, if applicable). The Style Profile does not affect integrity verification or review stages.
@@ -841,6 +885,10 @@ The per-pass resolution counts gain a `terminal_blocked[]` bucket recording each
 ## Revision-Round Patch Sequencing (#390)
 
 <!--rs:PATCH-004-->
+### ResearchSpec Current Owner
+
+Replacement scope: `PATCH-004` for `academic-pipeline`.
+
 When an `academic-pipeline` revision child dispatches `academic-paper` revision
 mode, the child may produce a patch conforming to
 `assets/shared/contracts/patch/revision_patch.schema.json`. The patch, revised
@@ -852,9 +900,9 @@ required boundary deliverables at safe project paths through the child's
 `node scripts/apply-revision-patch.mjs` is an optional stateless application helper.
 Invoke it only with explicit base, patch, output, and optional report paths. It
 validates all operations and annotation mappings before atomically creating the
-destination. It does not read the pipeline profile, mutate `control.yaml`, write
-a receipt, register artifacts, or decide whether the revision is academically
-complete. Manual revision remains valid.
+destination. It does not read the pipeline profile, mutate `control.yaml` or
+`handoff.md`, or decide whether the revision is academically complete. Manual
+revision remains valid.
 
 Each revision child has its own start confirmation and formal Gates. After the
 producer finishes, the current manuscript and relevant boundary evidence return
@@ -862,6 +910,13 @@ through the handoff. A human records the revision Gate verdict in the owning
 child `control.yaml`; the parent advances only under the profile's declared
 join and transition rules. Structural re-emission, scope changes, and other
 research choices follow the same explicit confirmation discipline.
+
+Current ResearchSpec owners:
+
+- `assets/shared/contracts/patch/revision_patch.schema.json`
+- `scripts/apply-revision-patch.mjs`
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:PATCH-004-->
 
 ---
@@ -875,18 +930,23 @@ A **package-level** gate, explicitly NOT the ref-marker stamp path above: the v3
 ### Procedure (after the formatter emits the output package)
 
 <!--rs:GATE-002-->
+### ResearchSpec Current Owner
+
+Replacement scope: `GATE-002` for `academic-pipeline`.
+
 1. **Resolve the policy.** Read supported submission-package policy values from
-   `researchspec/specs/workflow.yaml`. Use the latest human-confirmed choice for
-   this run from `researchspec/runs/current/decision-ledger.jsonl`; absence
+   `researchspec/profiles/academic-pipeline.yaml`. Use the latest human-confirmed choice for
+   this run from `researchspec/subflows/<instance>/control.yaml`; absence
    resolves to `advisory`. Always pass the resolved value explicitly to the
    deterministic verifier. The orchestrator selects policy but never
    re-evaluates package findings itself.
 2. **Resolve and verify the package inputs.** Resolve the formatted manuscript,
    figures, tables, supplementary material, venue profile, provenance inputs,
-   and prior verifier reports by artifact id and hash through
-   `researchspec/runs/current/artifact-registry.json`. Run the local package
+   and prior verifier reports by explicit handoff role and path through
+   `researchspec/subflows/<instance>/handoff.md`. Run the local package
    verifier with the resolved policy and exact input set so its package and
-   inputs fingerprints are reproducible. Return the new report for registration.
+   inputs fingerprints are reproducible. Return the new report to the producing
+   subflow for handoff recording.
 3. **Gate on structured verifier tokens, never on exit code alone.** Under
    `strict`, `TERMINAL-BLOCK policy=submission_package` starts a formatter repair
    loop bounded to two rounds; after the second failure, stop and surface the
@@ -894,25 +954,30 @@ A **package-level** gate, explicitly NOT the ref-marker stamp path above: the v3
    parsers are not formatter-fixable: ask the scholar to provide the missing
    input or choose advisory policy. Return every pass, warning, incomplete, and
    blocking outcome to the submission-package gate helper for
-   `researchspec/runs/current/gate-ledger.jsonl`.
-4. **Preserve the advisory path.** After a report is registered, dispatch the
+   `researchspec/subflows/<instance>/control.yaml`.
+4. **Preserve the advisory path.** After a report is handoff-referenced, dispatch the
    formatter once in append-only mode to copy package advisories into
    `provenance_summary.md`. This may add the report and advisories section but
-   must not change manuscript bytes or reference markers. Register the updated
-   provenance summary as a new artifact version.
+   must not change manuscript bytes or reference markers. Record the updated
+   Record the updated provenance summary as an updated boundary deliverable.
 5. **Require freshness before reuse.** A resume, re-entry, or later finalization
    pass may reuse a report only after the verifier confirms the current package,
    input-set, and policy fingerprints. Stale, unreadable, null-policy, or
    mismatched reports are re-run; a fresh report still re-emits and re-evaluates
    its verdict. Never infer pass merely from freshness.
-6. **Recompute every pass.** The gate result is a function of current registered
+6. **Recompute every pass.** The gate result is a function of current handoff-referenced
    package bytes, current resolved inputs, and the current accepted policy.
    Package edits or policy changes invalidate prior permission. Do not cache a
    previously granted delivery result across resume or finalization.
 
-The orchestrator returns artifacts, human choices, and gate findings to their
-responsible runtime helpers; it does not edit the registry, decision ledger, or
-gate ledger directly.
+The orchestrator returns artifacts, human choices, and Gate findings to their
+owning subflow and CLI; it does not edit the handoff, Decision records, or Gate
+attempts directly.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:GATE-002-->
 
 ---

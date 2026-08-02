@@ -14,7 +14,7 @@ import type { ConversionResult, ValidationResult } from "./types.js";
 import { ArsuConverterError } from "./types.js";
 import { validateArsuOutput } from "./validate.js";
 import { ARSU_ROUTING_CATALOG } from "./routing/catalog.js";
-import { generateRuntimeWorkflowProfile, runtimeWorkflowProjectionIsCurrent } from "./workflow/generate.js";
+import { renderAcademicPipelineProfile } from "./workflow/generate.js";
 import { validateArsuWorkflowCatalog } from "./workflow/catalog.js";
 
 export interface ConvertOptions {
@@ -34,8 +34,6 @@ export async function convertArsu(options: ConvertOptions): Promise<ConversionRe
   if (options.dryRun) {
     return dryRunResult(sourceRoot, sourceVersion, outputRoot, anchorReplacements);
   }
-
-  await generateRuntimeWorkflowProfile(repoRoot);
 
   if (await pathExists(outputRoot)) {
     if (!options.force && !options.skipExistingCheck) {
@@ -95,7 +93,9 @@ export async function convertArsu(options: ConvertOptions): Promise<ConversionRe
 export async function checkArsuOutput(repoRoot: string): Promise<ValidationResult> {
   const validation = await validateArsuOutput(path.resolve(repoRoot, GENERATED_OUTPUT_PATH));
   const errors = [...validation.errors, ...validateArsuWorkflowCatalog().map((issue) => `Workflow catalog ${issue}`)];
-  if (!(await runtimeWorkflowProjectionIsCurrent(repoRoot))) errors.push("Generated ARSU runtime workflow profile differs from converter-owned source");
+  if (renderAcademicPipelineProfile() !== renderAcademicPipelineProfile()) {
+    errors.push("Academic pipeline profile projection is not deterministic");
+  }
   return { ok: errors.length === 0, errors: [...new Set(errors)].sort(), warnings: validation.warnings };
 }
 

@@ -245,12 +245,12 @@ function validateManifestShape(manifest: ConversionManifest): { errors: string[]
   if (JSON.stringify(manifest.generated_groups) !== JSON.stringify([...DEFAULT_SKILL_GROUPS].sort())) {
     errors.push("Manifest generated_groups must list the required skill groups");
   }
-  if (manifest.contract_integration?.material_passport_policy !== "imported_evidence_only_not_runtime_ssot") {
-    errors.push("Manifest contract integration must keep imported Material Passport evidence out of runtime SSOT");
+  if ("material_passport_policy" in (manifest.contract_integration ?? {})) {
+    errors.push("Manifest contract integration must not publish Material Passport runtime policy");
   }
-  if (requiresAnchorReplacement(manifest) && manifest.contract_integration?.anchor_replacement?.profile_id !== "researchspec-anchor-replacement-v3") {
+  if (requiresAnchorReplacement(manifest) && manifest.contract_integration?.anchor_replacement?.profile_id !== "researchspec-anchor-replacement-v4") {
     if (requiresSemanticAnchorReplacement(manifest)) {
-      errors.push("Manifest contract integration must declare v3 anchor replacement profile");
+      errors.push("Manifest contract integration must declare v4 anchor replacement profile");
     }
   }
   if (requiresAnchorReplacement(manifest) && manifest.contract_integration?.anchor_replacement?.coverage_policy !== "required_and_recommended") {

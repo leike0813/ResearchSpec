@@ -1,6 +1,6 @@
 ---
 name: academic-pipeline
-description: "Cross-stage orchestration from research through writing, integrity, review, revision, and finalization. Routes: academic-pipeline:end-to-end, academic-pipeline:mid-entry. Use for: complete a research-to-publication workflow; continue a cross-stage paper workflow; enter the pipeline from existing materials. Near-miss routing: perform one focused research task -> deep-research:full; write from completed research materials -> academic-paper:full; review one existing manuscript -> academic-paper-reviewer:full. Before starting, validate prerequisites and present expected artifacts, formal Gates, and cost for user confirmation."
+description: "Cross-stage orchestration from research through writing, integrity, review, revision, and finalization. Routes: academic-pipeline:end-to-end, academic-pipeline:mid-entry. Use for: complete a research-to-publication workflow; continue a cross-stage paper workflow; enter the pipeline from existing materials. Near-miss routing: perform one focused research task -> deep-research:full; write from completed research materials -> academic-paper:full; review one existing manuscript -> academic-paper-reviewer:full. Before each start, present stable-spec and handoff prerequisites, boundary outputs, formal Gates, risk, cost, and obtain an instance-scoped confirmation."
 metadata:
   version: "3.15.0"
   last_updated: "2026-07-04"
@@ -14,132 +14,60 @@ metadata:
     - academic-paper-reviewer
 ---
 
-<!-- researchspec-contract-preflight:v9 -->
+<!-- researchspec-contract-preflight:v10 -->
 <!-- researchspec-literature-adapter:zotero-library:v2 -->
 ## ResearchSpec Contract Preflight
 
-Before running this ARSU-derived skill, locate the project `researchspec/`
-workspace. Read `specs/workflow.yaml` and `runs/current/state.yaml` first,
-then load only the contracts and artifact references needed for the current
-skill, stage, phase, or mode.
+Locate the project researchspec/ workspace and run "researchspec status --json".
+For a new route, request "researchspec instructions route:<skill>:<mode> --json" and
+present its Skill, mode, stable-spec and handoff-role prerequisites, boundary
+outputs, formal Gates, risk, cost, and confirmation scope. Start only after the
+user confirms that one instance. A pipeline parent confirmation never authorizes
+a child, branch, specialist subflow, or later revision round.
 
-Use `runs/current/artifact-registry.json` to read prior artifacts. Call
-`researchspec status --json` and treat its `profile.mode`, canonical action
-frontier, and each selected action descriptor as authority. Request details only
-for selectors returned by status or a transaction's `next_selectors`; do not
-reconstruct work order, stages, Gates, or transitions from this Skill text.
+Read only the route-relevant parts of specs/project.md, specs/sources.yaml,
+specs/claims.yaml, and specs/manuscript.yaml. Pipeline work also reads the
+managed profiles/academic-pipeline.yaml. After start, treat the selected
+subflow's control.yaml as its sole runtime authority and its handoff.md as
+the boundary input/output reference. Do not reconstruct the frontier from Skill
+prose; use directed instructions selectors and the current status view.
 
-At a new or materially changed route, a newly ready work item, or an explicit
-specialist request, evaluate optional reviewed domain assistance with
-`researchspec plugin list --summary --json`, then inspect only plausible domains
-with `researchspec plugin show <domain-id> --summary --json`. Semantic matching
-is the Agent's judgment, not CLI authority. If one or more specific uninstalled
-Skills would materially help, propose at most three domains in one batch and
-show the matching Skills, purpose, and direct/resolved Skill counts. Keep this
-consent separate from route confirmation. After the confirmed core Start,
-dry-run the exact plugin batch with `--summary --json`, show its domain
-versions, resolved Skills, projected tools, write summary, and
-`plan_sha256`, obtain explicit confirmation, then execute with
-`--expected-plan-sha256 <sha256> --yes --summary --json`.
+Produce semantic files at explicit project-relative paths outside
+researchspec/, then update the owning handoff with unique roles, types,
+purposes, paths, producers or intended consumers, and relevant limits. Do not
+register, copy, hash-bind, or assign framework IDs to boundary files.
+Only the ResearchSpec CLI may mutate lifecycle state, checkpoints, formal Gates,
+Decisions, overrides, and transitions in control.yaml.
 
-When an installed, available, projected plugin Skill materially assists the
-current work, invoke it natively if the host has loaded it; otherwise request
-`researchspec plugin instructions <skill-id> --json` and follow that exact
-hash-bound entry. Give the helper only the current task, necessary inputs,
-expected response, and forbidden ResearchSpec authority writes. Its result is
-working material returned to this ARSU producer for review and integration; it
-does not become the candidate producer, workflow dependency, subflow, work item,
-Gate, Decision, transition, or receipt. Installation consent does not authorize
-scripts, dependencies, network, credentials, services, or sensitive-data use.
-If discovery, consent, installation, activation, or invocation is unavailable,
-continue the same core work without the plugin. A declined suggestion is not a
-Decision and should not be repeated in the current conversation unless the
-research need materially changes.
+For a formal Gate, use researchspec-verify to prepare evidence-linked findings,
+show the proposed verdict and consequences, and obtain explicit human
+confirmation. Record the verdict with "researchspec decide gate:<instance>/<gate>";
+use a separate "researchspec advance subflow:<instance>" only after the owning
+control, profile, directly required child controls, and handoff prerequisites
+permit the transition. A failed-Gate override requires its own human-approved
+Decision and reason in the owning Gate.
+
+Optional domain Skills are bounded advisory helpers. Suggest at most three
+domains, keep plugin consent separate from route confirmation, preview the exact
+domain IDs and resolved Skills, and install only after explicit consent. Invoke a
+projected Skill natively when loaded; otherwise use plugin instructions only
+after selection, availability, projection, and manifest-hash checks. Decline or
+failure leaves the core route and workflow frontier unchanged.
 
 For literature work, the active ARSU producer may use an installed
 Zotero task Skill as a bounded provider after a just-in-time readiness check.
-Adapter results remain working evidence and cannot directly modify ResearchSpec
-specs, state, artifact registry, Gates, Decisions, transitions, or receipts.
-Private or library-bound work pauses when readiness fails. Acquisition is
-candidate-only without a current bounded authorization, and Curation always
-requires a separate request.
+Adapter results remain working evidence and cannot directly modify stable specs,
+subflow controls, Gates, Decisions, transitions, or handoffs. Private or
+library-bound work pauses when readiness fails. Acquisition is candidate-only
+without a current bounded authorization, and Curation requires a separate request.
 
-The packaged `academic-pipeline/scripts/adapters/zotero.py` path is separate: it
+The packaged academic-pipeline/scripts/adapters/zotero.py path is separate: it
 reads only a user-supplied Better BibTeX JSON export, requires a user-provided
 Python 3.11+ environment with PyYAML, and is not a live Zotero fact source.
 
-### Shared Runtime Boundaries
-
-Use the selected action descriptor's command, execution policy, input schema,
-current basis, and policy-derived `execution_requirements`. `direct` actions
-run in one CLI transaction; `human_confirmed` Start requires the displayed
-route confirmation; and `plan_bound` Gate, Decision, and patch-Advance actions
-require an exact preview followed by execution with the matching action basis,
-plan hash, and confirmation. Never infer an expected hash flag: use the
-descriptor and preview returned for that action.
-
-After a durable transaction, use its `next_selectors` and targeted
-`instructions` reads to continue. Refresh full status when route availability,
-profile, or a material working context may have changed; it is not required after
-every mechanical step. Never invent paths, artifact types, provenance, runtime
-writes, or direct edits to state, registries, receipts, or JSONL ledgers.
-
-For a formal Gate, use `researchspec-verify` to produce evidence-linked findings,
-show the proposed verdict and consequences, and obtain explicit human confirmation.
-On challenge, reverify before offering an override. Start confirmation and
-`--yes` are not Gate confirmation. A failed reverification may advance only after
-`researchspec-decide` records an override bound to that Gate event and receipt.
-
-### Adaptive Runtime (`profile.mode: adaptive`)
-
-After a confirmed external `subflow:<template>` Start, follow only ready
-`obligation:<instance>/<id>`, `gate:<instance>/<id>`,
-`completion:<instance>/<id>`, `case-action:<id>`, `patch:<id>`, or
-`change:<id>` selectors. An obligation descriptor defines the hard evidence
-boundary and output path. Within those hard dependencies, ARSU may reorder,
-parallelize, retry, replace, or rework semantic tasks.
-
-Use `researchspec submit obligation:<instance>/<id>` with the descriptor's
-action schema: record a provisional attempt, pause it with a reason, request a
-waiver or not-applicable resolution, or accept validated durable evidence. Only
-`accept_evidence` satisfies the obligation and registers its evidence; ordinary
-working material remains provisional. Resolve a requested waiver or
-not-applicable case through its returned `case-action:` Decision. Submit a
-ready formal Gate only after its evidence is accepted and the user confirms the
-Verify verdict. When all required obligations and Gates are complete, use the
-returned `completion:` selector with `researchspec advance`.
-
-Adaptive work has no `work:` or `transition:` graph, parent-child stage
-frontier, automatic submission policy, or Material Passport import. Handle
-high-impact semantic changes and draft patches only through their returned
-`change:` or `patch:` case actions and the corresponding Propose, Decide, or
-Advance transaction.
-
-### Strict Runtime (`profile.mode: strict`)
-
-Follow the profile graph through external `subflow:<template>`, delegated
-`subflow:<parent>/<node>`, scoped `work:<instance>/<node>`,
-`gate:<instance>/<node>`, and `transition:<instance>/<node>` selectors.
-Work instructions define the candidate, dependency, validation, and submission
-policy. A trusted automatic work item may use direct hash-bound artifact Submit;
-manual work requires the preview and explicit confirmation stated by its
-descriptor. Registration is mechanical and is not academic approval.
-
-Start a child only when its parent-scoped selector is in the frontier. Parent
-confirmation authorizes that exact mechanical Start; it never confirms a Gate or
-branch. Use Verify and a human-confirmed Gate submission for every formal Gate.
-When one transition is authorized, request its instructions and execute its
-receipt-bound Advance; route branch choices and overrides through
-`researchspec-decide`. Revision rounds have no inferred maximum: after
-re-review, follow only the next selector returned by the strict frontier.
-
-An ARS Material Passport is never runtime truth. Strict
-`academic-pipeline:mid-entry` Start may import it as external evidence only;
-the current adaptive runtime does not support Passport import.
-
-This generated contract integration block uses profile `researchspec-preflight-v9` for
-`academic-pipeline`. The active workspace profile and CLI action descriptors choose
-the applicable runtime protocol.
+This generated block uses profile researchspec-preflight-v10 for
+academic-pipeline and the current file-based protocol:
+status -> instructions <selector> -> start/decide/advance -> status.
 
 # Academic Pipeline v3.15.0 — Full Academic Research Workflow Orchestrator
 
@@ -184,8 +112,22 @@ I received reviewer comments, help me revise
 resume_from_passport=<hash> [stage=<n>] [mode=<m>]
 ```
 <!--rs:STATE-002-->
-Treat `resume_from_passport=<hash>` as a request to prepare `material_passport_import` for the external `academic-pipeline:mid-entry` Start. Resolve the source path, verify the declared SHA-256 and selected boundary, preview the exact Start transaction, and require human confirmation. The transaction registers the source and normalized projection, appends imported evidence, records the consumed boundary in current state, and starts the instance at its declared entry stage. No Passport file is mutated or emitted.
-Current authority is committed through `researchspec/runs/current/state.yaml`.
+### ResearchSpec Current Owner
+
+Replacement scope: `STATE-002` for `academic-pipeline`.
+
+Do not use the upstream resume token or state carrier. To enter from existing
+materials, request instructions for `academic-pipeline:mid-entry`, identify the
+actual external prerequisite roles and paths, present the route summary, and
+obtain a new instance-scoped confirmation. The CLI creates the new owning
+control; the Agent records only the selected boundary inputs in its handoff.
+No external record can supply current Gate, Decision, checkpoint, or transition
+authority.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:STATE-002-->
 
 **Execution flow:**
@@ -438,14 +380,28 @@ Checkpoint: [MANDATORY/ADVISORY] — [What user needs to confirm]
 academic-pipeline is the orchestrator skill that coordinates the full ARS pipeline across 10 stages (delegating to deep-research, academic-paper, academic-paper-reviewer). Two invocation modes:
 
 <!--rs:STATE-003-->
-Resume from ResearchSpec state and registered artifacts. If the user supplies an ARS Material Passport, route it through the one-way `material_passport_import` input on the confirmed mid-entry Start; otherwise use the current CLI frontier directly. Never infer current Gate or Decision authority from external records.
-Resolve the current graph from `researchspec/specs/workflow.yaml`.
+### ResearchSpec Current Owner
+
+Replacement scope: `STATE-003` for `academic-pipeline`.
+
+Resume from ResearchSpec state and handoff-referenced artifacts. If the user supplies an ARS external input, route it through the one-way `explicit handoff input` input on the confirmed mid-entry Start; otherwise use the current CLI frontier directly. Never infer current Gate or Decision authority from external records.
+Resolve the current graph from `researchspec/profiles/academic-pipeline.yaml`.
+
+Current ResearchSpec owners:
+
+- `researchspec/profiles/academic-pipeline.yaml`
+- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:STATE-003-->
 
 <!--rs:IO-002-->
+### ResearchSpec Current Owner
+
+Replacement scope: `IO-002` for `academic-pipeline`.
+
 In phase-by-phase mode, downstream single-phase agents remain confined to the
-stage selected in `researchspec/runs/current/state.yaml`. They may read only the
-contracts and registered artifacts required by that stage and may emit only its
+stage selected in `researchspec/subflows/<instance>/control.yaml`. They may read only the
+contracts and handoff-referenced artifacts required by that stage and may emit only its
 declared output artifacts. The academic-pipeline orchestrator, state-tracking,
 integrity, collaboration-depth, and claim-audit roles retain their documented
 cross-stage visibility, but that visibility does not grant direct write access
@@ -453,15 +409,21 @@ to stable ResearchSpec files.
 
 Routing into phase-by-phase mode still requires an explicit user signal.
 Ambiguous cross-phase requests stop for clarification before dispatch. The
-configured workflow and current run state—not an ARS phase-directory name—decide
+configured workflow and the owning control—not an ARS phase-directory name—decide
 which stage may execute.
 
 Enforcement is contract-based: preflight checks
-`researchspec/specs/workflow.yaml`, `researchspec/runs/current/state.yaml`, and
-required entries in `researchspec/runs/current/artifact-registry.json` before
+`researchspec/profiles/academic-pipeline.yaml`, `researchspec/subflows/<instance>/control.yaml`, and
+required entries in `researchspec/subflows/<instance>/handoff.md` before
 dispatch; the runtime rejects outputs outside the selected stage. Existing
 prompt fences, local verifiers, or tool hooks may report diagnostics but do not
 replace the ResearchSpec boundary.
+
+Current ResearchSpec owners:
+
+- `researchspec/profiles/academic-pipeline.yaml`
+- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:IO-002-->
 
 ---

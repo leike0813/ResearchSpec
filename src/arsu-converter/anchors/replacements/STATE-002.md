@@ -1,2 +1,16 @@
-Treat `resume_from_passport=<hash>` as a request to prepare `material_passport_import` for the external `academic-pipeline:mid-entry` Start. Resolve the source path, verify the declared SHA-256 and selected boundary, preview the exact Start transaction, and require human confirmation. The transaction registers the source and normalized projection, appends imported evidence, records the consumed boundary in current state, and starts the instance at its declared entry stage. No Passport file is mutated or emitted.
-Current authority is committed through `researchspec/runs/current/state.yaml`.
+### ResearchSpec Current Owner
+
+Replacement scope: `STATE-002` for `academic-pipeline`.
+
+Do not use the upstream resume token or state carrier. To enter from existing
+materials, request instructions for `academic-pipeline:mid-entry`, identify the
+actual external prerequisite roles and paths, present the route summary, and
+obtain a new instance-scoped confirmation. The CLI creates the new owning
+control; the Agent records only the selected boundary inputs in its handoff.
+No external record can supply current Gate, Decision, checkpoint, or transition
+authority.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/subflows/<instance>/handoff.md`

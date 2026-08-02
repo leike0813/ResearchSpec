@@ -10,13 +10,13 @@ This report is for human audit of generated ARSU contract replacements. It is no
 - Owner skill: `academic-paper`
 - Source path: `academic-paper/agents/draft_writer_agent.md`
 - Severity: `required`
-- Semantic role: `claim_contract_projection`
+- Semantic role: `stable_claim_contract`
 - Replacement shape: `artifact_projection_block`
-- Replacement body SHA-256: `10d66d32cf9525b4f816a7bdd99c5c9fef71e53e576e984bf34fd001202435fd`
-- ResearchSpec targets: `researchspec/specs/claims.yaml`, `researchspec/changes/<change-id>/contract-patch.yaml`, `researchspec/runs/current/artifact-registry.json`
+- Replacement body SHA-256: `70a669b030f206da92dc038352aa16b567b233ea1eaa7fb04bafcb1acf1e3384`
+- ResearchSpec targets: `researchspec/specs/claims.yaml`, `researchspec/changes/<change-id>/change.md`, `researchspec/subflows/<instance>/handoff.md`
 - Generated output paths: `academic-paper/agents/draft_writer_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `academic-pipeline/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `deep-research/references/cross-skill/academic-paper/agents/draft_writer_agent.md`
 - Before SHA-256: `cd600a01478b854779f28248cfde9c4be266358c4ba2232ca4e88b4f51f22134`
-- After SHA-256: `f3ed9ab430fde7a67ad83e3bbbbbeb56efdaad61c0400e07f5946700d8e63507`
+- After SHA-256: `7a9ee150b564cd7478d5133e1d15dc4082e19178393cd6cb1d471d7eb8f76b9e`
 
 #### Before
 
@@ -28,17 +28,27 @@ Before drafting the first prose block of the paper draft, append ONE `claim_inte
 
 ````markdown
 <!--rs:CLAIM-001-->
+### ResearchSpec Current Owner
+
+Replacement scope: `CLAIM-001` for `academic-paper`.
+
 Before drafting the first prose block of the paper, read accepted claim ids,
 allowed wording, support strength, evidence links, and limits from
 `researchspec/specs/claims.yaml`. Emit exactly ONE immutable
 `claim_intent_manifest` artifact that lists the claims this draft intends to
 make and all author-declared "must not" rules. Reuse stable ids for accepted
 claims. Any new claim, stronger wording, or changed limit must also be proposed
-through `researchspec/changes/<change-id>/contract-patch.yaml`; never edit
-`claims.yaml` from the drafting agent. Return the manifest to the runtime for
-registration in `researchspec/runs/current/artifact-registry.json`. The audit
-agent uses that registered pre-commitment for the intended ∩ emitted ∩ supported
+through `researchspec/changes/<change-id>/change.md`; never edit
+`claims.yaml` from the drafting agent. Record the manifest by role and path in
+`researchspec/subflows/<instance>/handoff.md`. The audit
+agent uses that handoff-referenced pre-commitment for the intended ∩ emitted ∩ supported
 diff in spec §4 step 5 (D6).
+
+Current ResearchSpec owners:
+
+- `researchspec/specs/claims.yaml`
+- `researchspec/changes/<change-id>/change.md`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:CLAIM-001-->
 ````
 
@@ -48,13 +58,13 @@ diff in spec §4 step 5 (D6).
 - Owner skill: `academic-paper`
 - Source path: `academic-paper/agents/draft_writer_agent.md`
 - Severity: `recommended`
-- Semantic role: `contract_io_boundary`
+- Semantic role: `boundary_deliverable_contract`
 - Replacement shape: `io_contract_block`
-- Replacement body SHA-256: `ed3b8f7e8244f7494b24c5c95d66ab63e79a70a88e9229b935ec76c22b4db4e3`
-- ResearchSpec targets: `researchspec/specs/manuscript.yaml`, `researchspec/specs/claims.yaml`, `researchspec/runs/current/artifact-registry.json`, `researchspec/draft-patches/<patch-id>.json`
+- Replacement body SHA-256: `6129080a91595c34561b00aafa447ba80a076ec42e4c3084afef5143a0216e71`
+- ResearchSpec targets: `researchspec/specs/manuscript.yaml`, `researchspec/specs/claims.yaml`, `researchspec/subflows/<instance>/handoff.md`, `assets/shared/contracts/patch/revision_patch.schema.json`
 - Generated output paths: `academic-paper/agents/draft_writer_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `academic-pipeline/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `deep-research/references/cross-skill/academic-paper/agents/draft_writer_agent.md`
 - Before SHA-256: `0208068fc817d98c4c38fb0ef2da645475a0707080ccdef4d400f91b73e3a246`
-- After SHA-256: `1bf4aa32ca7b3661994cda1900be263b4a4422b12192858a211599f30d19c5e3`
+- After SHA-256: `6978fb740efb070e6db9ec664b76f76d0e0703ab27d7bfed9c630a6c65b989e9`
 
 #### Before
 
@@ -78,17 +88,21 @@ If downstream work is needed, return control to the caller. The v3.6.6 generator
 
 ````markdown
 <!--rs:IO-001-->
+### ResearchSpec Current Owner
+
+Replacement scope: `IO-001` for `academic-paper`.
+
 You are a phase-scoped Draft Writer assigned to Phase 4 initial drafting or one
 explicitly dispatched Phase 6 revision round. The caller's invocation determines
 the phase. Phase 4 and a human-approved `full_reemission_escalated` round may
 emit a complete manuscript; a normal Phase 6 round emits only
-`researchspec/draft-patches/<patch-id>.json`.
+`assets/shared/contracts/patch/revision_patch.schema.json`.
 
 **Contract inputs:** read manuscript structure and claim limits from
 `researchspec/specs/manuscript.yaml` and `researchspec/specs/claims.yaml`.
 Resolve the exact outline, argument blueprint, bibliography, current manuscript,
-review roadmap, and other permitted upstream artifacts by id and hash through
-`researchspec/runs/current/artifact-registry.json`. Do not infer permission from
+review roadmap, and other permitted upstream artifacts by role and safe path through
+`researchspec/subflows/<instance>/handoff.md`. Do not infer permission from
 `phase*_` directory names or consume unregistered downstream output.
 
 **Contract outputs:** produce only the deliverable for this invocation: an
@@ -98,11 +112,18 @@ formatted manuscripts, or another agent's output. Return downstream work to the
 caller.
 
 **Writes allowed:** write the new deliverable file only. Return ordinary
-artifacts to the runtime registration helper; write manuscript revision
+artifacts to the owning subflow handoff; write manuscript revision
 operations only to the dedicated draft-patch file. Do not edit stable specs,
-run state, registries, decisions, or gates directly. Contract preflight and
+the owning control, handoff, Decisions, or Gates directly. Contract preflight and
 runtime validation enforce this boundary; platform hooks and ARS directory
 verifiers are optional diagnostics, not the source of authority.
+
+Current ResearchSpec owners:
+
+- `researchspec/specs/manuscript.yaml`
+- `researchspec/specs/claims.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
+- `assets/shared/contracts/patch/revision_patch.schema.json`
 <!--/rs:IO-001-->
 ````
 
@@ -112,13 +133,13 @@ verifiers are optional diagnostics, not the source of authority.
 - Owner skill: `academic-paper`
 - Source path: `academic-paper/agents/draft_writer_agent.md`
 - Severity: `required`
-- Semantic role: `draft_patch_protocol`
+- Semantic role: `revision_patch_protocol`
 - Replacement shape: `patch_protocol_block`
-- Replacement body SHA-256: `54c24b9aefbfe863a1f43d3570d6f2f2598b6eaf55b8b55708d15091fbd83b45`
-- ResearchSpec targets: `assets/shared/contracts/patch/revision_patch.schema.json`, `scripts/apply-revision-patch.mjs`, `handoff.md`, `control.yaml`
+- Replacement body SHA-256: `353763f0687e861ca11cc77e7d7d6f8d19b3606d8e8a81eb4af1f5369f28f0b6`
+- ResearchSpec targets: `assets/shared/contracts/patch/revision_patch.schema.json`, `scripts/apply-revision-patch.mjs`, `researchspec/subflows/<instance>/handoff.md`, `researchspec/subflows/<instance>/control.yaml`
 - Generated output paths: `academic-paper/agents/draft_writer_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `academic-pipeline/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `deep-research/references/cross-skill/academic-paper/agents/draft_writer_agent.md`
 - Before SHA-256: `303cf33ae73e69553a6cc6b2da370857fe0640a3a418fd7648e018d9cff493fd`
-- After SHA-256: `c502405463ae8b2a037a972be45a105ff42d2909458dbe9f7c8c0fec2e5b4685`
+- After SHA-256: `e3d9422aa9c789ef44f62930802a7ecb4c219dc90a4c6388c0dca49f6f7f9d70`
 
 #### Before
 
@@ -155,6 +176,10 @@ and return control to the caller. The escalation decision (re-emit in full vs na
 
 ````markdown
 <!--rs:PATCH-002-->
+### ResearchSpec Current Owner
+
+Replacement scope: `PATCH-002` for `academic-paper`.
+
 In revision mode, emit a patch against the exact manuscript bytes supplied by
 the caller. Validate the document against
 `assets/shared/contracts/patch/revision_patch.schema.json` and use stable
@@ -174,6 +199,13 @@ The caller may review it, edit the manuscript manually, or invoke
 produces no output. After revision, expose only the boundary files needed by
 another subflow through the owning `handoff.md`. Formal adequacy remains a
 human-confirmed Gate in the owning `control.yaml`.
+
+Current ResearchSpec owners:
+
+- `assets/shared/contracts/patch/revision_patch.schema.json`
+- `scripts/apply-revision-patch.mjs`
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:PATCH-002-->
 ````
 
@@ -185,11 +217,11 @@ human-confirmed Gate in the owning `control.yaml`.
 - Severity: `required`
 - Semantic role: `generator_evaluator_contract`
 - Replacement shape: `checklist`
-- Replacement body SHA-256: `f46267804a181a2e398012e84564b5c2cb208ca301eef9508898443404475468`
-- ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
+- Replacement body SHA-256: `d57b76c09b323d5abe8569e57d27f74780066db0314ccd3f147bb04792a59a9a`
+- ResearchSpec targets: `researchspec/subflows/<instance>/handoff.md`, `researchspec/subflows/<instance>/control.yaml`
 - Generated output paths: `academic-paper/agents/draft_writer_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `academic-pipeline/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `deep-research/references/cross-skill/academic-paper/agents/draft_writer_agent.md`
 - Before SHA-256: `e63341155ff9ca906c4cdcadf2c49149d211c5cda6745813b54f684c8de8ff08`
-- After SHA-256: `fa5505457e4b76646d55d68f8b3fd85cb88a2796db725034c3e3c0ccdec1cb5b`
+- After SHA-256: `041aa07c3734db6c0e3b43e77344af36c6553efcd05cf3579ba2cfe89a1b6c3b`
 
 #### Before
 
@@ -201,16 +233,25 @@ human-confirmed Gate in the owning `control.yaml`.
 
 ````markdown
 <!--rs:REVIEW-012-->
+### ResearchSpec Current Owner
+
+Replacement scope: `REVIEW-012` for `academic-paper`.
+
 > This block is the authoritative writer-side system-prompt protocol for the
 > `academic-paper full` generator/evaluator split. Resolve the frozen writer
-> contract and the exact registered Phase 4a/4b inputs and outputs through
-> `researchspec/runs/current/artifact-registry.json`. Preserve the paper-blind
+> contract and the exact handoff-referenced Phase 4a/4b inputs and outputs through
+> `researchspec/subflows/<instance>/handoff.md`. Preserve the paper-blind
 > Phase 4a pre-commitment, paper-visible Phase 4b drafting, verbatim system-prompt
-> subsections, data-delimiter rules, and lint checks below. Register an accepted
-> Phase 4a output before Phase 4b consumes it, then register the Phase 4b draft.
+> subsections, data-delimiter rules, and lint checks below. Record an accepted
+> Phase 4a output before Phase 4b consumes it, then record the Phase 4b draft.
 > Return lint or contract failures to the gate helper for
-> `researchspec/runs/current/gate-ledger.jsonl`; the writer and orchestrator do
-> not write registry or gate records directly.
+> `researchspec/subflows/<instance>/control.yaml`; the writer and orchestrator do
+> not write the owning handoff or Gate records directly.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:REVIEW-012-->
 ````
 
@@ -220,13 +261,13 @@ human-confirmed Gate in the owning `control.yaml`.
 - Owner skill: `academic-paper`
 - Source path: `academic-paper/agents/intake_agent.md`
 - Severity: `required`
-- Semantic role: `decision_ledger_entry`
+- Semantic role: `control_decision_record`
 - Replacement shape: `checklist`
-- Replacement body SHA-256: `e8355746137f67cb2ddadbb77c04603417e0cabf0cf615fce9f11f0e6d25487c`
-- ResearchSpec targets: `researchspec/specs/workflow.yaml`, `researchspec/runs/current/decision-ledger.jsonl`
+- Replacement body SHA-256: `4dcc50f1eb45e98cc22dc3aae9558fc7a77174bafcf0e925d32f611c9b02b6ab`
+- ResearchSpec targets: `researchspec/profiles/academic-pipeline.yaml`, `researchspec/subflows/<instance>/control.yaml`
 - Generated output paths: `academic-paper/agents/intake_agent.md`
 - Before SHA-256: `66fffc1747a10574b1ba1cbacb3fdcb5d0e8ce221b60fc4e8c4114a1c31ea0c5`
-- After SHA-256: `549b1b6a4fd6a47078e8a2a7a0a888f135427882200354f77fd74d421bdbf94c`
+- After SHA-256: `56e39f7cfa8e071269e648733f9c2a5ee9a33b219f67bfdd5d3bb12e082f1586`
 
 #### Before
 
@@ -239,16 +280,25 @@ human-confirmed Gate in the owning `control.yaml`.
 
 ````markdown
 <!--rs:DECISION-001-->
+### ResearchSpec Current Owner
+
+Replacement scope: `DECISION-001` for `academic-paper`.
+
 - Answer `strict` → record `strict` in the PCR `Citation Verification` row and
   return the scholar's confirmed policy choice to the ResearchSpec decision
-  runtime for `researchspec/runs/current/decision-ledger.jsonl`. The runtime
+  runtime for `researchspec/subflows/<instance>/control.yaml`. The runtime
   validates that `strict` is a supported option in
-  `researchspec/specs/workflow.yaml` and exposes the accepted decision to the
+  `researchspec/profiles/academic-pipeline.yaml` and exposes the accepted decision to the
   finalizer. This step selects policy; it never evaluates citations.
 - Answer `mark only`, or no answer → record `advisory (mark only, default)` in
-  the PCR row. Do not invent a decision-ledger entry for silence; the workflow
-  default remains advisory. No Material Passport policy mutation is required in
+  the PCR row. Do not invent a decision-owning control record entry for silence; the workflow
+  default remains advisory. No external input policy mutation is required in
   either branch.
+
+Current ResearchSpec owners:
+
+- `researchspec/profiles/academic-pipeline.yaml`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:DECISION-001-->
 ````
 
@@ -258,13 +308,13 @@ human-confirmed Gate in the owning `control.yaml`.
 - Owner skill: `academic-paper`
 - Source path: `academic-paper/agents/literature_strategist_agent.md`
 - Severity: `required`
-- Semantic role: `source_contract_projection`
+- Semantic role: `stable_source_contract`
 - Replacement shape: `artifact_projection_block`
-- Replacement body SHA-256: `ed81b9a74b5724f96458d654fc9124baa0dd368ba2f1aaf67413c62565b71f5d`
-- ResearchSpec targets: `researchspec/specs/sources.yaml`, `researchspec/runs/current/artifact-registry.json`
+- Replacement body SHA-256: `3270a7d9cb706cfd6bd10c576e1174704b75e2798a875705e67116683309d15f`
+- ResearchSpec targets: `researchspec/specs/sources.yaml`, `researchspec/subflows/<instance>/handoff.md`
 - Generated output paths: `academic-paper/agents/literature_strategist_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/agents/literature_strategist_agent.md`, `academic-pipeline/references/cross-skill/academic-paper/agents/literature_strategist_agent.md`, `deep-research/references/cross-skill/academic-paper/agents/literature_strategist_agent.md`
 - Before SHA-256: `c91c0b02261c8f02fd616f201a5531d6822ad17ce31dd2a79cc2fd36dec838a8`
-- After SHA-256: `e722dd08b6b8bff533a975bbd4bf75a41370eb02cfac62a3f4b818f7ed71b974`
+- After SHA-256: `bcac30c57864a5630b2bfc6f55ce2f31fc6a29ef85e455800e603c955d425481`
 
 #### Before
 
@@ -276,16 +326,25 @@ When the input Material Passport carries a non-empty `literature_corpus[]`, this
 
 ````markdown
 <!--rs:SOURCE-001-->
+### ResearchSpec Current Owner
+
+Replacement scope: `SOURCE-001` for `academic-paper`.
+
 When `researchspec/specs/sources.yaml` contains included literature sources,
 resolve their bibliography, screening, and full-text artifacts through
-`researchspec/runs/current/artifact-registry.json` and expose them to this agent
+`researchspec/subflows/<instance>/handoff.md` and expose them to this agent
 as a read-only `literature_corpus[]` working projection. Enter the existing
 **corpus-first, search-fills-gap** flow using that projection. Preserve the five
 steps, four Iron Rules, PRE-SCREENED reproducibility block, and the formats of
 the Annotated Bibliography, Literature Matrix, Research Gap Identification, and
 Recommended Sources by Paper Section. Consumer output may propose new source
 candidates as artifacts, but this agent must not edit `sources.yaml` or the
-registered corpus in place.
+handoff-referenced corpus in place.
+
+Current ResearchSpec owners:
+
+- `researchspec/specs/sources.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:SOURCE-001-->
 ````
 
@@ -297,11 +356,11 @@ registered corpus in place.
 - Severity: `required`
 - Semantic role: `generator_evaluator_contract`
 - Replacement shape: `checklist`
-- Replacement body SHA-256: `f801620387415a0b8e61e520d6e1cc86e108ed28325be2ae3f2a5af94b50ec97`
-- ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
+- Replacement body SHA-256: `92e27db8296188e5b36e229c70df643838efa3241b8ce077d543e3bc19dca9b1`
+- ResearchSpec targets: `researchspec/subflows/<instance>/handoff.md`, `researchspec/subflows/<instance>/control.yaml`
 - Generated output paths: `academic-paper/agents/peer_reviewer_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/agents/peer_reviewer_agent.md`, `academic-pipeline/references/cross-skill/academic-paper/agents/peer_reviewer_agent.md`, `deep-research/references/cross-skill/academic-paper/agents/peer_reviewer_agent.md`
 - Before SHA-256: `4ab16f5faffe69438ca13115b19eede4d3b4cea8bd173d4112910d9243820158`
-- After SHA-256: `148d7e20c33cd60cd74f74de9feb287b02e88942fa1fb28457a9de41729e9e69`
+- After SHA-256: `c908dcbfb336491f2d2d8785b3f25e6c981af80305e98b5e2893e1af1c7315b1`
 
 #### Before
 
@@ -315,17 +374,26 @@ registered corpus in place.
 
 ````markdown
 <!--rs:REVIEW-013-->
+### ResearchSpec Current Owner
+
+Replacement scope: `REVIEW-013` for `academic-paper`.
+
 > This block is the authoritative evaluator-side system-prompt protocol for the
 > `academic-paper full` generator/evaluator split. Resolve the frozen evaluator
-> contract, the writer's registered pre-commitment, the draft, and exact Phase
-> 6a/6b artifacts through `researchspec/runs/current/artifact-registry.json`.
+> contract, the writer's handoff-referenced pre-commitment, the draft, and exact Phase
+> 6a/6b artifacts through `researchspec/subflows/<instance>/handoff.md`.
 > Preserve the distinction between this in-pair quality evaluator and the
 > external Stage 3 reviewer panel, plus the paper-blind Phase 6a commitment,
 > paper-visible Phase 6b evaluation, verbatim prompt sections, scoring plan,
-> dissent rules, and lint checks below. Register accepted phase outputs in order
+> dissent rules, and lint checks below. Record accepted phase outputs in order
 > and return blocking failures to the gate helper for
-> `researchspec/runs/current/gate-ledger.jsonl`; do not write runtime records
-> directly.
+> `researchspec/subflows/<instance>/control.yaml`; do not write the owning
+> handoff or control directly.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:REVIEW-013-->
 ````
 
@@ -335,13 +403,13 @@ registered corpus in place.
 - Owner skill: `academic-paper`
 - Source path: `academic-paper/agents/revision_coach_agent.md`
 - Severity: `required`
-- Semantic role: `review_commitment_tracking`
+- Semantic role: `review_handoff_tracking`
 - Replacement shape: `schema_projection_table`
-- Replacement body SHA-256: `1eee555e7a71037fffd78a4ca3b03ea121db47e04b9a2b3627205142a2d21dd5`
-- ResearchSpec targets: `researchspec/changes/<change-id>/contract-patch.yaml`, `assets/shared/contracts/patch/revision_patch.schema.json`, `work/annotation-intake/`, `handoff.md`
+- Replacement body SHA-256: `8a730526aba2d22bbbe5bcc66b87eeab5e4c5f631dd95234aa068a42134d7751`
+- ResearchSpec targets: `researchspec/changes/<change-id>/change.md`, `assets/shared/contracts/patch/revision_patch.schema.json`, `researchspec/subflows/<instance>/work/annotation-intake/`, `researchspec/subflows/<instance>/handoff.md`
 - Generated output paths: `academic-paper/agents/revision_coach_agent.md`
 - Before SHA-256: `58ab269816913477f725577ef4eec70c4c805150153c59ebf2058f7a0920680b`
-- After SHA-256: `6f8fe7bd3f6464ec902609e3c92e5068582fe4fa92baac3662fbafc1370f919b`
+- After SHA-256: `9bb96da2af4f3333117aa4a272994180394b3c991a13dd9d428bcf298886706e`
 
 #### Before
 
@@ -353,6 +421,10 @@ registered corpus in place.
 
 ````markdown
 <!--rs:REVIEW-014-->
+### ResearchSpec Current Owner
+
+Replacement scope: `REVIEW-014` for `academic-paper`.
+
 5. Emit the extracted commitment list as review working material or as a
    boundary deliverable at an ordinary project path. If another subflow needs
    it, record its role, purpose, producer, consumer, and safe path in the owning
@@ -365,9 +437,17 @@ When the source is a free-form annotated manuscript, use the owning revision
 subflow's `work/annotation-intake/` directory. Preserve the complete base, raw
 feedback, mechanical delta, stable annotation IDs, normalized interpretations,
 and proposed patch mappings. Keep ambiguous or high-impact items pending human
-clarification. There is no freeze, registry, submit receipt, or annotation
-lifecycle. If the normalized annotation set must cross a subflow boundary,
+clarification. This working directory does not create a separate freeze,
+control record, or annotation lifecycle. If the normalized annotation set must
+cross a subflow boundary,
 write an explicit copy outside `researchspec/` and reference it in the handoff.
+
+Current ResearchSpec owners:
+
+- `researchspec/changes/<change-id>/change.md`
+- `assets/shared/contracts/patch/revision_patch.schema.json`
+- `researchspec/subflows/<instance>/work/annotation-intake/`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:REVIEW-014-->
 ````
 
@@ -377,13 +457,13 @@ write an explicit copy outside `researchspec/` and reference it in the handoff.
 - Owner skill: `academic-paper`
 - Source path: `academic-paper/references/revision_patch_protocol.md`
 - Severity: `required`
-- Semantic role: `draft_patch_protocol`
+- Semantic role: `revision_patch_protocol`
 - Replacement shape: `patch_protocol_block`
-- Replacement body SHA-256: `1b32a45e7e09f2c8d6e9fa5bb98a5289a83bf12b72cdd1ef306bda0c612a7025`
-- ResearchSpec targets: `assets/shared/contracts/patch/revision_patch.schema.json`, `scripts/apply-revision-patch.mjs`, `work/annotation-intake/`, `handoff.md`, `control.yaml`
+- Replacement body SHA-256: `4027e85d43433c12dac1bf04ff078f1a27ac7fc4c79da0abd6d1f03133b112db`
+- ResearchSpec targets: `assets/shared/contracts/patch/revision_patch.schema.json`, `scripts/apply-revision-patch.mjs`, `researchspec/subflows/<instance>/work/annotation-intake/`, `researchspec/subflows/<instance>/handoff.md`, `researchspec/subflows/<instance>/control.yaml`
 - Generated output paths: `academic-paper/references/revision_patch_protocol.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/references/revision_patch_protocol.md`, `academic-pipeline/references/cross-skill/academic-paper/references/revision_patch_protocol.md`, `deep-research/references/cross-skill/academic-paper/references/revision_patch_protocol.md`
 - Before SHA-256: `18dba4bb77ed7bc1b408655dfff094f53bc726e9575395c7d6c4d19b75f32cb3`
-- After SHA-256: `6b4dcaaee748d1ca3bbd434c079c45ff4770509be9469acc75ae1ba16b1cfa09`
+- After SHA-256: `5f4c1e10d057ed42353351a4c27cd38e1debf9388ec8871d1997cb59bb0f7b00`
 
 #### Before
 
@@ -450,12 +530,16 @@ python scripts/ars_apply_revision_patch.py draft.md patch.json \
 
 ````markdown
 <!--rs:PATCH-003-->
+### ResearchSpec Current Owner
+
+Replacement scope: `PATCH-003` for `academic-paper`.
+
 ## ResearchSpec revision patch protocol
 
 The adapted contract at
 `assets/shared/contracts/patch/revision_patch.schema.json` is the only
 manuscript patch schema. A revision patch is an ARSU revision input/output file,
-not a ResearchSpec registry record or lifecycle object.
+not a ResearchSpec framework lifecycle record or lifecycle object.
 
 One bounded mechanical application is:
 
@@ -479,6 +563,14 @@ Annotation intake material is private under `work/annotation-intake/` by
 default. Cross-subflow patch, manuscript, annotation, response, or report files
 must use safe project-relative paths outside `researchspec/` and be listed by
 role in the owning `handoff.md`.
+
+Current ResearchSpec owners:
+
+- `assets/shared/contracts/patch/revision_patch.schema.json`
+- `scripts/apply-revision-patch.mjs`
+- `researchspec/subflows/<instance>/work/annotation-intake/`
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:PATCH-003-->
 ````
 
@@ -488,13 +580,13 @@ role in the owning `handoff.md`.
 - Owner skill: `academic-paper`
 - Source path: `academic-paper/SKILL.md`
 - Severity: `recommended`
-- Semantic role: `contract_io_boundary`
+- Semantic role: `boundary_deliverable_contract`
 - Replacement shape: `io_contract_block`
-- Replacement body SHA-256: `44675e57902903de876367f5dcbc37229e38977ac9937f61a2c9348b1bff2dbb`
-- ResearchSpec targets: `researchspec/specs/workflow.yaml`, `researchspec/runs/current/state.yaml`, `researchspec/runs/current/artifact-registry.json`
+- Replacement body SHA-256: `6d7f1df45c82b6f94c531fead8f923aa1f1b05905ddbb8ecff1204cbdf9095b7`
+- ResearchSpec targets: `researchspec/profiles/academic-pipeline.yaml`, `researchspec/subflows/<instance>/control.yaml`, `researchspec/subflows/<instance>/handoff.md`
 - Generated output paths: `academic-paper/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper/SKILL.md`, `deep-research/references/cross-skill/academic-paper/SKILL.md`
 - Before SHA-256: `3bd2f9351b27b5857b7cec2bcaf47d51ba7356a7add6d378c7a6d095175f5a2e`
-- After SHA-256: `b4817ec61276dd952eff4159fca06b6f0b48e25f978b9382a6486738725b488f`
+- After SHA-256: `88038f8a356b4b173d6419fb65a6c1855e5dbf0e9119ac71a7c4851f8bf97140`
 
 #### Before
 
@@ -512,10 +604,14 @@ Routing into Mode B requires explicit user signal — `/ars-<mode>` slash comman
 
 ````markdown
 <!--rs:IO-005-->
+### ResearchSpec Current Owner
+
+Replacement scope: `IO-005` for `academic-paper`.
+
 In phase-by-phase mode, the literature strategist, structure architect, draft
 writer, citation compliance, bilingual abstract, peer review, and formatting
-roles may write only the outputs declared by the selected work item. They may
-read registered upstream artifacts required by that work. The argument-building
+roles may write only the outputs declared by the selected route instructions. They may
+read handoff-referenced upstream artifacts required by that work. The argument-building
 and visualization roles may span their documented stages only when the current
 frontier instructions explicitly select that work; one invocation does not
 authorize work in another stage. The generator-evaluator contract continues to
@@ -524,10 +620,16 @@ work.
 
 Phase-by-phase routing requires an explicit user signal. Ambiguous cross-stage
 material must be clarified before dispatch. The configured graph in
-`researchspec/specs/workflow.yaml`, the frontier in
-`researchspec/runs/current/state.yaml`, and registered inputs in
-`researchspec/runs/current/artifact-registry.json` define the permitted read and
+`researchspec/profiles/academic-pipeline.yaml`, the frontier in
+`researchspec/subflows/<instance>/control.yaml`, and handoff-referenced inputs in
+`researchspec/subflows/<instance>/handoff.md` define the permitted read and
 write boundary.
+
+Current ResearchSpec owners:
+
+- `researchspec/profiles/academic-pipeline.yaml`
+- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:IO-005-->
 ````
 
@@ -537,13 +639,13 @@ write boundary.
 - Owner skill: `academic-paper`
 - Source path: `academic-paper/SKILL.md`
 - Severity: `required`
-- Semantic role: `draft_patch_protocol`
+- Semantic role: `revision_patch_protocol`
 - Replacement shape: `patch_protocol_block`
-- Replacement body SHA-256: `37ca055436c3ba90612cd478c1af35b8eda785d64c49b0f559d204999a0365d6`
-- ResearchSpec targets: `assets/shared/contracts/patch/revision_patch.schema.json`, `scripts/apply-revision-patch.mjs`, `work/annotation-intake/`, `handoff.md`, `control.yaml`
+- Replacement body SHA-256: `c2578f839535b9ee5bd84a2c4a720c2f7325473bdc5a97baa06ee44bd05350b4`
+- ResearchSpec targets: `assets/shared/contracts/patch/revision_patch.schema.json`, `scripts/apply-revision-patch.mjs`, `researchspec/subflows/<instance>/work/annotation-intake/`, `researchspec/subflows/<instance>/handoff.md`, `researchspec/subflows/<instance>/control.yaml`
 - Generated output paths: `academic-paper/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper/SKILL.md`, `deep-research/references/cross-skill/academic-paper/SKILL.md`
 - Before SHA-256: `3746fd60636d23f14f9740192da44549c9fa0427537852d370a54d20acbdcde2`
-- After SHA-256: `46b24bb2deb3a2398f3f96155f45497355f28d12e51f83d22f37e44b6b203b88`
+- After SHA-256: `100f20cecd514970f27227c777b76f8f76e907d0a17a621efba8b9d6a8d6bece`
 
 #### Before
 
@@ -562,6 +664,10 @@ Orchestrated runs follow `pipeline_orchestrator_agent.md` § Revision-Round Patc
 
 ````markdown
 <!--rs:PATCH-001-->
+### ResearchSpec Current Owner
+
+Replacement scope: `PATCH-001` for `academic-paper`.
+
 In `academic-paper` revision mode, the writer may emit a bounded revision patch
 instead of rewriting the complete manuscript. The adapted ARSU contract at
 `assets/shared/contracts/patch/revision_patch.schema.json` is the sole manuscript
@@ -570,7 +676,7 @@ preconditions, replace/insert/delete operations, annotation dispositions,
 revision rationale, and roadmap traceability.
 
 The patch and manuscript are explicit files selected by the caller. They are not
-registered ResearchSpec runtime entities. When safe mechanical application is
+handoff-referenced ResearchSpec runtime entities. When safe mechanical application is
 useful, run `node scripts/apply-revision-patch.mjs` with explicit `--base`, `--patch`,
 and `--output` paths and, optionally, `--report`. The helper validates the whole
 patch before creating output. Schema errors, stale hashes, unknown blocks,
@@ -590,6 +696,14 @@ optional safety tool and never mutates control state.
 
 This patch protocol does not apply to the `academic-paper full` in-pair Phase
 6→4 loop when that loop's contract requires a complete `## Draft Body`.
+
+Current ResearchSpec owners:
+
+- `assets/shared/contracts/patch/revision_patch.schema.json`
+- `scripts/apply-revision-patch.mjs`
+- `researchspec/subflows/<instance>/work/annotation-intake/`
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:PATCH-001-->
 ````
 
@@ -601,11 +715,11 @@ This patch protocol does not apply to the `academic-paper full` in-pair Phase
 - Severity: `required`
 - Semantic role: `generator_evaluator_contract`
 - Replacement shape: `checklist`
-- Replacement body SHA-256: `d310f17e2dc856358aeda1a78d8e0136521172b26e6e2d01e3ebe3e51079635b`
-- ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
+- Replacement body SHA-256: `0f353e001a0f7d32f653a7c916404787e62e47687c45c58bee1e2defb99ece32`
+- ResearchSpec targets: `researchspec/subflows/<instance>/handoff.md`, `researchspec/subflows/<instance>/control.yaml`
 - Generated output paths: `academic-paper/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper/SKILL.md`, `deep-research/references/cross-skill/academic-paper/SKILL.md`
 - Before SHA-256: `f946f4b2af4d0f2988d516e7be7441defc3f3b1973f80e8a545acb57260bbf94`
-- After SHA-256: `9ab811aeb22785a96119690073e3396c7ae02e75b9c0bf73f1603beb279aa0cf`
+- After SHA-256: `3709da69037c54573bc3ed7098a9c97815d25b9b2ea211cf0405e307e8010ccd`
 
 #### Before
 
@@ -617,17 +731,26 @@ This patch protocol does not apply to the `academic-paper full` in-pair Phase
 
 ````markdown
 <!--rs:REVIEW-010-->
+### ResearchSpec Current Owner
+
+Replacement scope: `REVIEW-010` for `academic-paper`.
+
 > This block defines the `academic-paper full` generator/evaluator split. Resolve
 > the frozen `writer_full` and `evaluator_full` contract JSON plus every Phase
 > 4a/4b and 6a/6b artifact through
-> `researchspec/runs/current/artifact-registry.json`. Preserve the four-call
+> `researchspec/subflows/<instance>/handoff.md`. Preserve the four-call
 > paper-blind/paper-visible separation, mode exclusions, baseline fields, system
 > prompt text, lint rules, and writer/evaluator role distinction described
-> below. Register each accepted phase output before it is consumed downstream;
-> submit lint, disagreement, or failure-condition results to the responsible gate
-> helper for `researchspec/runs/current/gate-ledger.jsonl`. The orchestrator may
-> instantiate allowed runtime fields but must not mutate the frozen contract or
-> write runtime records directly.
+> below. Record each accepted phase output before it is consumed downstream;
+> return lint, disagreement, or failure-condition results to the responsible gate
+> helper for `researchspec/subflows/<instance>/control.yaml`. The orchestrator may
+> instantiate allowed invocation fields but must not mutate the frozen contract
+> or write the owning handoff or control directly.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:REVIEW-010-->
 ````
 
@@ -637,13 +760,13 @@ This patch protocol does not apply to the `academic-paper full` in-pair Phase
 - Owner skill: `academic-paper`
 - Source path: `academic-paper/SKILL.md`
 - Severity: `recommended`
-- Semantic role: `artifact_provenance`
+- Semantic role: `boundary_deliverable_provenance`
 - Replacement shape: `artifact_projection_block`
-- Replacement body SHA-256: `e487e530d9cff9adbde399eb6798a5862dbe87bfbae32438f18014df9b77f017`
-- ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/decision-ledger.jsonl`
+- Replacement body SHA-256: `259f15b05905e32e311f315273b583ec463ceff1591f5c5aa3a5b300dd9a162b`
+- ResearchSpec targets: `researchspec/subflows/<instance>/handoff.md`, `researchspec/subflows/<instance>/control.yaml`
 - Generated output paths: `academic-paper/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper/SKILL.md`, `deep-research/references/cross-skill/academic-paper/SKILL.md`
 - Before SHA-256: `9c9e7b8667bdd300ce840cc9ef5290ceba98e67aa5428ee9d60ecc90a402ea70`
-- After SHA-256: `1112c9d33ff9d2da0bac46fa29ece0e82a266653377820354d12eb0032c91160`
+- After SHA-256: `3ff15e30d70f2c8f06f7806cd50694a7856b2c07d51cae1d481cecfa29e4087d`
 
 #### Before
 
@@ -655,17 +778,27 @@ This patch protocol does not apply to the `academic-paper full` in-pair Phase
 
 ````markdown
 <!--rs:REVIEW-011-->
+### ResearchSpec Current Owner
+
+Replacement scope: `REVIEW-011` for `academic-paper`.
+
 **IRON RULE — advisory integrity boundary:** standalone `rebuttal-audit` may
 reuse comment parsing, but it remains outside Stage 4.5 integrity and produces
 only an advisory response-letter QA artifact. Return the coverage table, gap
-list, tone/evidence risks, and suggestions for registration in
-`researchspec/runs/current/artifact-registry.json`. It MUST NOT emit verified
-commitment status, apply a draft patch, mark a package `ready_to_submit`, or
-write ResearchSpec registries or ledgers. If its findings imply a change in
+list, tone/evidence risks, and suggestions for the producing subflow to record
+in
+`researchspec/subflows/<instance>/handoff.md`. It MUST NOT emit verified
+commitment status, apply a draft patch, mark a delivery package ready, or
+write ResearchSpec authority files. If its findings imply a change in
 accepted response strategy or claim scope, propose that change and wait for a
 human decision recorded through
-`researchspec/runs/current/decision-ledger.jsonl`; the audit itself never
+`researchspec/subflows/<instance>/control.yaml`; the audit itself never
 certifies acceptance.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:REVIEW-011-->
 ````
 
@@ -675,13 +808,13 @@ certifies acceptance.
 - Owner skill: `academic-paper`
 - Source path: `academic-paper/SKILL.md`
 - Severity: `required`
-- Semantic role: `runtime_state_boundary`
+- Semantic role: `subflow_control_boundary`
 - Replacement shape: `protocol_block`
-- Replacement body SHA-256: `2efe94176085cfc04cebb61fdf34ee14e7769c8c92ad1f33673c88cc98343f53`
-- ResearchSpec targets: `researchspec/specs/workflow.yaml`, `researchspec/runs/current/state.yaml`, `researchspec/runs/current/artifact-registry.json`
+- Replacement body SHA-256: `68027da058d430ad6645b944a1658831b54e344669f465813bb316511634e80c`
+- ResearchSpec targets: `researchspec/profiles/academic-pipeline.yaml`, `researchspec/subflows/<instance>/control.yaml`, `researchspec/subflows/<instance>/handoff.md`
 - Generated output paths: `academic-paper/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper/SKILL.md`, `deep-research/references/cross-skill/academic-paper/SKILL.md`
 - Before SHA-256: `a4996c0d2b682365c4675cb5bde7b106fdad529c301bff428e303b418615f63d`
-- After SHA-256: `5b168e119ba883b81c62a4dd1ef11de7bdf3a8240424d0a65ebf64a8c6013491`
+- After SHA-256: `eaabcbbfe2157fa00a7330afa989b913c32ce13bf8da97077e05161809633c1f`
 
 #### Before
 
@@ -695,7 +828,21 @@ certifies acceptance.
 
 ````markdown
 <!--rs:STATE-001-->
-ResearchSpec owns the active run through `researchspec/runs/current/state.yaml`. Read the current subflow instances, frontier, Gate ledger and Decision ledger before dispatch. An ARS Material Passport may be imported as non-authoritative evidence through `material_passport_import`, but it never replaces current state or grants a transition.
+### ResearchSpec Current Owner
+
+Replacement scope: `STATE-001` for `academic-paper`.
+
+Resume only from the selected subflow's control and handoff. Read the project
+profile when pipeline graph rules apply, use status and directed instructions to
+derive the current frontier, and let the CLI perform every lifecycle, Gate,
+Decision, override, or transition change. External files may provide explicit
+inputs but never replace current control authority.
+
+Current ResearchSpec owners:
+
+- `researchspec/profiles/academic-pipeline.yaml`
+- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:STATE-001-->
 ````
 
@@ -707,11 +854,11 @@ ResearchSpec owns the active run through `researchspec/runs/current/state.yaml`.
 - Severity: `recommended`
 - Semantic role: `generator_evaluator_contract`
 - Replacement shape: `io_contract_block`
-- Replacement body SHA-256: `1351c9edb74f4a3d440aea118395a9969bad269ebb98bcf63837c636fecb9c43`
-- ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
+- Replacement body SHA-256: `ffc07c1e0fcc29b3398854c1d59b45b7aaa8a71a76ff452dc2a41949563cc042`
+- ResearchSpec targets: `researchspec/subflows/<instance>/handoff.md`, `researchspec/subflows/<instance>/control.yaml`
 - Generated output paths: `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md`, `deep-research/references/cross-skill/academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md`
 - Before SHA-256: `8f4f7fb28a599cbccf8ec5b8030db24d4d60bd3b3c18cb9541dcb9edf1d25d00`
-- After SHA-256: `f878b7f073d1ef7b6e9eb4d29c35d57746b23d438d35c77890f9d2e7eda00447`
+- After SHA-256: `1b1ae83ea4e8f05cf20df5e37a3323983f8d91bb7ea28a9e7eb2be84b07de68b`
 
 #### Before
 
@@ -723,18 +870,27 @@ You operate in two phases when invoked under a sprint contract. The orchestrator
 
 ````markdown
 <!--rs:REVIEW-003-->
+### ResearchSpec Current Owner
+
+Replacement scope: `REVIEW-003` for `academic-paper-reviewer`.
+
 When invoked under a sprint contract, you operate in two strictly separated
 phases. The orchestrator selects the phase through the system prompt and resolves
 the sprint contract and prior phase artifacts through
-`researchspec/runs/current/artifact-registry.json`. Phase 1 is a
+`researchspec/subflows/<instance>/handoff.md`. Phase 1 is a
 paper-content-blind adversarial pre-commitment: define the challenge standard
-without seeing the paper. Its exact output must be registered before Phase 2.
+without seeing the paper. Its exact output must be handoff-referenced before Phase 2.
 Phase 2 receives that output as read-only data and stress-tests the visible paper
 against the committed standard without silently changing the plan. Return each
-phase output for registration and submit protocol violations or blocking
-adversarial findings to the review gate helper for
-`researchspec/runs/current/gate-ledger.jsonl`. Do not write runtime files
-directly.
+phase output to the producing subflow for handoff recording and return protocol
+violations or blocking adversarial findings to the review gate helper for
+`researchspec/subflows/<instance>/control.yaml`. Do not write the owning handoff
+or control directly.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:REVIEW-003-->
 ````
 
@@ -746,11 +902,11 @@ directly.
 - Severity: `recommended`
 - Semantic role: `generator_evaluator_contract`
 - Replacement shape: `io_contract_block`
-- Replacement body SHA-256: `65a7840022ebda0b424500615dedf8afd5090820ef15cd1becf554a0250be9ce`
-- ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
+- Replacement body SHA-256: `4e7e29131d366eb028e981243f8d94c87427759ddc9ef7868bedec83cb41c016`
+- ResearchSpec targets: `researchspec/subflows/<instance>/handoff.md`, `researchspec/subflows/<instance>/control.yaml`
 - Generated output paths: `academic-paper-reviewer/agents/domain_reviewer_agent.md`
 - Before SHA-256: `8f4f7fb28a599cbccf8ec5b8030db24d4d60bd3b3c18cb9541dcb9edf1d25d00`
-- After SHA-256: `efb0b832a9248eb14ff4c0d68ed07c93531c553e8c143d688418a787de5351a7`
+- After SHA-256: `9ae06574118e6c2c234c6684726efcbb64181e1825312ff200a0108bc3b8b8d7`
 
 #### Before
 
@@ -762,16 +918,27 @@ You operate in two phases when invoked under a sprint contract. The orchestrator
 
 ````markdown
 <!--rs:REVIEW-004-->
+### ResearchSpec Current Owner
+
+Replacement scope: `REVIEW-004` for `academic-paper-reviewer`.
+
 When invoked under a sprint contract, you operate in two strictly separated
 phases selected by the orchestrator's system prompt. Resolve the frozen contract
 and phase artifacts through
-`researchspec/runs/current/artifact-registry.json`. Phase 1 is a
-paper-content-blind domain-accuracy pre-commitment and must be registered before
+`researchspec/subflows/<instance>/handoff.md`. Phase 1 is a
+paper-content-blind domain-accuracy pre-commitment and must be handoff-referenced before
 Phase 2. Phase 2 receives that exact output as read-only data, examines the paper
 for field-specific accuracy and significance, and may deviate only through the
-declared dissent channel. Return both outputs for registration and send protocol
+declared dissent channel. Return both outputs to the producing subflow for
+handoff recording and send protocol
 violations or blocking domain findings to the review gate helper for
-`researchspec/runs/current/gate-ledger.jsonl`; do not edit runtime records.
+`researchspec/subflows/<instance>/control.yaml`; do not edit either authority
+file directly.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:REVIEW-004-->
 ````
 
@@ -783,11 +950,11 @@ violations or blocking domain findings to the review gate helper for
 - Severity: `recommended`
 - Semantic role: `generator_evaluator_contract`
 - Replacement shape: `io_contract_block`
-- Replacement body SHA-256: `116dcb3986a532c35a56c2601d6381907f0978a562964b7943a4a2e8390412ef`
-- ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
+- Replacement body SHA-256: `c62258b56e8458fab591429b2d6ddb262be834ff3667cee1160437c3bc80aeb1`
+- ResearchSpec targets: `researchspec/subflows/<instance>/handoff.md`, `researchspec/subflows/<instance>/control.yaml`
 - Generated output paths: `academic-paper-reviewer/agents/eic_agent.md`
 - Before SHA-256: `8f4f7fb28a599cbccf8ec5b8030db24d4d60bd3b3c18cb9541dcb9edf1d25d00`
-- After SHA-256: `18c1d7444ae7de0cdce3eb38ac48aa54559c7bfc9916291b08774c9d50ee32c3`
+- After SHA-256: `9369d5d3d37cfd67d4ba3bb68962f8caddfbca9714fea54f5e278f0b40eb1065`
 
 #### Before
 
@@ -799,17 +966,27 @@ You operate in two phases when invoked under a sprint contract. The orchestrator
 
 ````markdown
 <!--rs:REVIEW-005-->
+### ResearchSpec Current Owner
+
+Replacement scope: `REVIEW-005` for `academic-paper-reviewer`.
+
 When invoked under a sprint contract, you operate in two strictly separated
 phases selected by the orchestrator's system prompt. Resolve the frozen contract
 and phase artifacts through
-`researchspec/runs/current/artifact-registry.json`. Phase 1 is a
+`researchspec/subflows/<instance>/handoff.md`. Phase 1 is a
 paper-content-blind editorial pre-commitment covering the acceptance dimensions,
-decision precedence, and oversight standard; register it before Phase 2. Phase 2
+decision precedence, and oversight standard; record it before Phase 2. Phase 2
 receives that exact output as read-only data and applies the committed editorial
-standard to the visible paper. Return both outputs for registration and submit
+standard to the visible paper. Return both outputs to the producing subflow for
+handoff recording and return
 protocol violations, panel-level blockers, and the editorial verdict to the
-review gate helper for `researchspec/runs/current/gate-ledger.jsonl`; do not edit
-runtime records directly.
+review gate helper for `researchspec/subflows/<instance>/control.yaml`; do not
+edit the owning handoff or control directly.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:REVIEW-005-->
 ````
 
@@ -821,11 +998,11 @@ runtime records directly.
 - Severity: `recommended`
 - Semantic role: `generator_evaluator_contract`
 - Replacement shape: `io_contract_block`
-- Replacement body SHA-256: `d3707290b78ef46a5bce34c819de00c84dfaac94501b97e89a09573251cca99a`
-- ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
+- Replacement body SHA-256: `68624c4914b15aa4019cda9cc0cddaad6b4b81bec11fb60a915476e77c7372ac`
+- ResearchSpec targets: `researchspec/subflows/<instance>/handoff.md`, `researchspec/subflows/<instance>/control.yaml`
 - Generated output paths: `academic-paper-reviewer/agents/methodology_reviewer_agent.md`
 - Before SHA-256: `8f4f7fb28a599cbccf8ec5b8030db24d4d60bd3b3c18cb9541dcb9edf1d25d00`
-- After SHA-256: `bc65dc35128470dbc4f1cfac021aad8964cbef3bdf08feac58416ff93b7afa3b`
+- After SHA-256: `3b0b967dedf5fa6445d61b1dbb34120d30b9bf5838220aa143f9277b2358a041`
 
 #### Before
 
@@ -837,17 +1014,27 @@ You operate in two phases when invoked under a sprint contract. The orchestrator
 
 ````markdown
 <!--rs:REVIEW-006-->
+### ResearchSpec Current Owner
+
+Replacement scope: `REVIEW-006` for `academic-paper-reviewer`.
+
 When invoked under a sprint contract, you still operate in two strictly
 separated phases. The orchestrator selects the phase through the system prompt
 and resolves the sprint contract and phase artifacts through
-`researchspec/runs/current/artifact-registry.json`. Phase 1 is the
+`researchspec/subflows/<instance>/handoff.md`. Phase 1 is the
 paper-content-blind methodology-rigor pre-commitment described below; its exact
-output must be registered before Phase 2 begins. Phase 2 receives that registered
+output must be handoff-referenced before Phase 2 begins. Phase 2 receives that handoff-referenced
 output as read-only data and performs the paper-visible methodology review
-without silently changing the scoring plan. Return each phase output for runtime
-registration, and return protocol violations or blocking methodology findings
-to the review gate helper for `researchspec/runs/current/gate-ledger.jsonl`.
-Do not write the registry or gate ledger directly.
+without silently changing the scoring plan. Return each phase output to the
+producing subflow for handoff recording, and return protocol violations or
+blocking methodology findings to the review gate helper for
+`researchspec/subflows/<instance>/control.yaml`.
+Do not write the owning handoff or Gate attempts directly.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:REVIEW-006-->
 ````
 
@@ -859,11 +1046,11 @@ Do not write the registry or gate ledger directly.
 - Severity: `recommended`
 - Semantic role: `generator_evaluator_contract`
 - Replacement shape: `io_contract_block`
-- Replacement body SHA-256: `0d56c2f9c5153bbd1ed2ccf7fe6e36f6960b3471bbaf954133071a2cb99bde70`
-- ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
+- Replacement body SHA-256: `4a502f7dcb796a66a859a70c599f562557bc384ea333af118f459dcee916f754`
+- ResearchSpec targets: `researchspec/subflows/<instance>/handoff.md`, `researchspec/subflows/<instance>/control.yaml`
 - Generated output paths: `academic-paper-reviewer/agents/perspective_reviewer_agent.md`
 - Before SHA-256: `8f4f7fb28a599cbccf8ec5b8030db24d4d60bd3b3c18cb9541dcb9edf1d25d00`
-- After SHA-256: `c912e2c3d249f10472cced1094bce88562b0f042e82f341bd982a6be60d4e7a7`
+- After SHA-256: `9380cf38edf7da0623d79ec3e49f2e039dcdd857ed3136139c036f23fb3b30c0`
 
 #### Before
 
@@ -875,17 +1062,27 @@ You operate in two phases when invoked under a sprint contract. The orchestrator
 
 ````markdown
 <!--rs:REVIEW-007-->
+### ResearchSpec Current Owner
+
+Replacement scope: `REVIEW-007` for `academic-paper-reviewer`.
+
 When invoked under a sprint contract, you operate in two strictly separated
 phases selected by the orchestrator's system prompt. Resolve the frozen contract
 and phase artifacts through
-`researchspec/runs/current/artifact-registry.json`. Phase 1 is a
+`researchspec/subflows/<instance>/handoff.md`. Phase 1 is a
 paper-content-blind cross-disciplinary pre-commitment focused on relevance,
-framing, transferability, and overlooked perspectives; register it before Phase
+framing, transferability, and overlooked perspectives; record it before Phase
 2. Phase 2 receives that exact output as read-only data and evaluates the visible
 paper without silently changing the plan or taking over the devil's-advocate
-role. Return both outputs for registration and send protocol violations or
-blocking perspective findings to the review gate helper for
-`researchspec/runs/current/gate-ledger.jsonl`; do not write runtime files.
+role. Return both outputs to the producing subflow for handoff recording and
+send protocol violations or blocking perspective findings to the review gate helper for
+`researchspec/subflows/<instance>/control.yaml`; do not write either authority
+file directly.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:REVIEW-007-->
 ````
 
@@ -895,13 +1092,13 @@ blocking perspective findings to the review gate helper for
 - Owner skill: `academic-paper-reviewer`
 - Source path: `academic-paper-reviewer/references/re_review_mode_protocol.md`
 - Severity: `required`
-- Semantic role: `review_commitment_tracking`
+- Semantic role: `review_handoff_tracking`
 - Replacement shape: `gate_rule_block`
-- Replacement body SHA-256: `66144573957090af3a3098d6b350bf4837f53797bea19baa8417b52cb3f9420c`
-- ResearchSpec targets: `assets/shared/contracts/patch/revision_patch.schema.json`, `handoff.md`, `control.yaml`
+- Replacement body SHA-256: `258435dda9ecb5abe38c531808bf4da3fb6574b6f5d6eba392d12868f5adaaff`
+- ResearchSpec targets: `assets/shared/contracts/patch/revision_patch.schema.json`, `researchspec/subflows/<instance>/handoff.md`, `researchspec/subflows/<instance>/control.yaml`
 - Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/references/re_review_mode_protocol.md`, `academic-paper-reviewer/references/re_review_mode_protocol.md`
 - Before SHA-256: `7c8c2df7ae376490050837455ab372d71a8f81db66ccfb4cc29c6cb7f27f888c`
-- After SHA-256: `a4add92b9d3467f2e281a6ba5a8015539ccad2296c671953e4307ac543313530`
+- After SHA-256: `ae38161c2ff0f763b6f5ff38160c3c8bc4e3aaf5220491220c49f9841fcb8362`
 
 #### Before
 
@@ -931,6 +1128,10 @@ This section is the verification analog of `revision_coach_agent` Step 3.5 (Kong
 
 ````markdown
 <!--rs:REVIEW-008-->
+### ResearchSpec Current Owner
+
+Replacement scope: `REVIEW-008` for `academic-paper-reviewer`.
+
 ### Commitment verification against revision evidence
 
 Run this step for every commitment-bearing concern. Resolve the original review,
@@ -949,9 +1150,15 @@ For each commitment, assign one `fulfillment_status`:
 
 For a non-fulfilled status, preserve the corresponding rationale. Verify prose,
 citations, figures, tables, methods, and acknowledgments against their actual
-boundary files rather than a registry-backed apply or resolution report. Return
+boundary files rather than a framework-managed apply or resolution report. Return
 the verification report through this subflow's `handoff.md`; a human records
 the formal Gate verdict in the owning `control.yaml`.
+
+Current ResearchSpec owners:
+
+- `assets/shared/contracts/patch/revision_patch.schema.json`
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:REVIEW-008-->
 ````
 
@@ -963,11 +1170,11 @@ the formal Gate verdict in the owning `control.yaml`.
 - Severity: `required`
 - Semantic role: `generator_evaluator_contract`
 - Replacement shape: `artifact_projection_block`
-- Replacement body SHA-256: `695ca3357465fe4d97c6432cdfc36ebe5ff710abb8dbff5f007cdd9eadb5c79a`
-- ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
+- Replacement body SHA-256: `194f321732c1233b0d56f1ba8f69884508f4bef6e98ae553453a73d89bcc80dd`
+- ResearchSpec targets: `researchspec/subflows/<instance>/handoff.md`, `researchspec/subflows/<instance>/control.yaml`
 - Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/references/sprint_contract_protocol.md`, `academic-paper-reviewer/references/sprint_contract_protocol.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/references/sprint_contract_protocol.md`, `deep-research/references/cross-skill/academic-paper-reviewer/references/sprint_contract_protocol.md`
 - Before SHA-256: `18f2761d610a2273d90963b19f490963f8600c8aa8b581e60fcab15c153f799c`
-- After SHA-256: `e041c1964d950e04dbc7f6b29df76c5c54058082ebc87a2f60f540247e33ef6c`
+- After SHA-256: `7c8555149bdd61d04f4514915e0444390a13069ce2f85195ad88d527a23d0f1d`
 
 #### Before
 
@@ -999,10 +1206,14 @@ For each reviewer in `range(panel_size)`:
 
 ````markdown
 <!--rs:REVIEW-009-->
+### ResearchSpec Current Owner
+
+Replacement scope: `REVIEW-009` for `academic-paper-reviewer`.
+
 A reviewer sprint contract is a frozen, machine-checkable acceptance baseline.
 Resolve the selected template through
-`researchspec/runs/current/artifact-registry.json`, deep-copy it for permitted
-runtime fields, and register the instantiated contract before reviewer calls.
+`researchspec/subflows/<instance>/handoff.md`, deep-copy it for permitted
+runtime fields, and record the instantiated contract before reviewer calls.
 The protocol prevents post-hoc standard rationalization by physically separating
 paper-blind Phase 1 from paper-visible Phase 2.
 
@@ -1012,25 +1223,30 @@ For every reviewer required by `panel_size`:
    conditions, measurement procedure, override ladder, mode, stage, contract id,
    baseline version, and panel size. Add only allowed runtime fields such as
    `generated_at` and bounded agent amendments. Validate deterministically; on
-   failure, stop before dispatch and submit the finding to the review gate helper.
-2. **Run Phase 1 paper-blind.** Provide only the registered contract and paper
+   failure, stop before dispatch and return the finding to the review gate helper.
+2. **Run Phase 1 paper-blind.** Provide only the handoff-referenced contract and paper
    metadata. Require the role-specific contract paraphrase, scoring plan, and
    terminal acknowledgement.
-3. **Lint and register Phase 1.** Apply the existing structural and content-blind
+3. **Lint and record Phase 1.** Apply the existing structural and content-blind
    checks. Retry once with the specific lint gap; a second failure aborts that
-   reviewer. Register the accepted Phase 1 output before Phase 2.
-4. **Run Phase 2 paper-visible.** Re-inject the same contract, the exact registered
+   reviewer. Record the accepted Phase 1 output before Phase 2.
+4. **Run Phase 2 paper-visible.** Re-inject the same contract, the exact handoff-referenced
    Phase 1 output inside the read-only data delimiter, and the manuscript.
-5. **Lint and register Phase 2.** Require the declared scores, failure-condition
+5. **Lint and record Phase 2.** Require the declared scores, failure-condition
    checks, review body, and decision; retain the dissent limits and retry policy.
 6. **Enforce panel cardinality.** If usable Phase 2 outputs do not equal
-   `panel_size`, emit `[PANEL-SHRUNK]`, submit a blocking review-gate finding,
+   `panel_size`, emit `[PANEL-SHRUNK]`, return a blocking review-gate finding,
    and abort the round rather than synthesizing a smaller panel.
-7. Pass only the complete registered Phase 2 panel to the editorial synthesizer.
+7. Pass only the complete handoff-referenced Phase 2 panel to the editorial synthesizer.
 
-The orchestrator returns contract and phase artifacts to the runtime registration
-helper and gate findings to
-`researchspec/runs/current/gate-ledger.jsonl`; it does not edit either file.
+The orchestrator returns contract and phase artifacts to the producing subflow
+for handoff recording and returns Gate findings to
+`researchspec/subflows/<instance>/control.yaml`; it does not edit either file.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:REVIEW-009-->
 ````
 
@@ -1040,13 +1256,13 @@ helper and gate findings to
 - Owner skill: `academic-paper-reviewer`
 - Source path: `academic-paper-reviewer/SKILL.md`
 - Severity: `recommended`
-- Semantic role: `contract_io_boundary`
+- Semantic role: `boundary_deliverable_contract`
 - Replacement shape: `io_contract_block`
-- Replacement body SHA-256: `e665ac26430d9e202dd1c52d47e4f47059eb7fa834f86d875650f3e8d03d3b28`
-- ResearchSpec targets: `researchspec/specs/workflow.yaml`, `researchspec/runs/current/state.yaml`, `researchspec/runs/current/artifact-registry.json`
+- Replacement body SHA-256: `426a948c715f989ce3ca157b3dbde0cf0d4adf13f03f6b1dd8fa932fde224f36`
+- ResearchSpec targets: `researchspec/profiles/academic-pipeline.yaml`, `researchspec/subflows/<instance>/control.yaml`, `researchspec/subflows/<instance>/handoff.md`
 - Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/SKILL.md`, `academic-paper-reviewer/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/SKILL.md`, `deep-research/references/cross-skill/academic-paper-reviewer/SKILL.md`
 - Before SHA-256: `705235af035ad4891b186f930f741fc99f46bf5f4dae3e5d0b77e281da29cc27`
-- After SHA-256: `3ede2c8e628e8c959f5da7a5db92f3f8188813ceafadfb8bd0fe5f89f5999a65`
+- After SHA-256: `d54c3cc26779415a75c66a631b07faad15c324df67232576eb0582878f85897f`
 
 #### Before
 
@@ -1066,9 +1282,13 @@ Routing into Mode B requires explicit user signal — `/ars-<mode>` slash comman
 
 ````markdown
 <!--rs:IO-006-->
+### ResearchSpec Current Owner
+
+Replacement scope: `IO-006` for `academic-paper-reviewer`.
+
 In phase-by-phase mode, the review panel and editorial synthesizer may write only
-the outputs declared by the selected review work item. Reviewers are expected
-to read the complete registered manuscript needed for evaluation; read access
+the outputs declared by the selected review route instructions. Reviewers are expected
+to read the complete handoff-referenced manuscript needed for evaluation; read access
 does not extend their write scope. `field_analyst` remains a panel-configuration
 role and may emit only its declared configuration artifact. The Sprint Contract
 paper-blind and paper-visible call discipline remains active inside these stage
@@ -1076,10 +1296,16 @@ boundaries; neither rule overrides the other.
 
 Phase-by-phase routing requires an explicit user signal. Ambiguous cross-stage
 material must be clarified before dispatch. The configured graph in
-`researchspec/specs/workflow.yaml`, the frontier in
-`researchspec/runs/current/state.yaml`, and registered inputs in
-`researchspec/runs/current/artifact-registry.json` define the permitted read and
+`researchspec/profiles/academic-pipeline.yaml`, the frontier in
+`researchspec/subflows/<instance>/control.yaml`, and handoff-referenced inputs in
+`researchspec/subflows/<instance>/handoff.md` define the permitted read and
 write boundary.
+
+Current ResearchSpec owners:
+
+- `researchspec/profiles/academic-pipeline.yaml`
+- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:IO-006-->
 ````
 
@@ -1089,13 +1315,13 @@ write boundary.
 - Owner skill: `academic-paper-reviewer`
 - Source path: `academic-paper-reviewer/SKILL.md`
 - Severity: `required`
-- Semantic role: `review_commitment_tracking`
+- Semantic role: `review_handoff_tracking`
 - Replacement shape: `checklist`
-- Replacement body SHA-256: `0f62101fe37568ce80c83fa9d1b7a416f44389aa17e878e43ef70ceee3df3e05`
-- ResearchSpec targets: `handoff.md`, `control.yaml`
+- Replacement body SHA-256: `ba8a503d486e5bea68009f175365af848ce49eb4b45b79dd67061a8a08374eab`
+- ResearchSpec targets: `researchspec/subflows/<instance>/handoff.md`, `researchspec/subflows/<instance>/control.yaml`
 - Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/SKILL.md`, `academic-paper-reviewer/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/SKILL.md`, `deep-research/references/cross-skill/academic-paper-reviewer/SKILL.md`
 - Before SHA-256: `d3e0caa77bc3053aa43336f81ce022ff312362f4618320db26d3db729c51b733`
-- After SHA-256: `380432bfaaf3ae06d76962bc930db15c44c08070b33595190cd121e789f6369c`
+- After SHA-256: `82494847e18c6800f56274dc8943f8f09ebfd556f8728f52f212a43d425715f1`
 
 #### Before
 
@@ -1112,11 +1338,16 @@ Dedicated mode for Pipeline Stage 3' — verifies whether revisions address firs
 
 ````markdown
 <!--rs:REVIEW-001-->
+### ResearchSpec Current Owner
+
+Replacement scope: `REVIEW-001` for `academic-paper-reviewer`.
+
 Dedicated mode for Pipeline Stage 3'. Re-review verifies each first-round
 concern against the current revised manuscript and the response to reviewers.
 When the revision producer exposed an ARSU patch, annotation set, or helper
 summary, resolve those files by role and safe project-relative path from the
-producer subflow's `handoff.md`; do not infer them from a registry or receipt.
+producer subflow's `handoff.md`; do not infer them from directory names or
+another authority file.
 
 **Input:** the original Revision Roadmap, revised manuscript, response to
 reviewers when present, prior review material, and any explicitly handed-off
@@ -1130,6 +1361,11 @@ records the formal re-review Gate verdict in the owning subflow `control.yaml`.
 
 > See `references/re_review_mode_protocol.md` for the verification rules,
 > output format, and Socratic guidance.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:REVIEW-001-->
 ````
 
@@ -1141,11 +1377,11 @@ records the formal re-review Gate verdict in the owning subflow `control.yaml`.
 - Severity: `required`
 - Semantic role: `generator_evaluator_contract`
 - Replacement shape: `checklist`
-- Replacement body SHA-256: `d4558b29f60b57ad02e828d51cbcffba967adaeb622b95a6c1cc529ca83b6d03`
-- ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
+- Replacement body SHA-256: `5ba5d6ecfe58cb158c40108e936acbff63d3435aa2654afba7d82eed41981303`
+- ResearchSpec targets: `researchspec/subflows/<instance>/handoff.md`, `researchspec/subflows/<instance>/control.yaml`
 - Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/SKILL.md`, `academic-paper-reviewer/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/SKILL.md`, `deep-research/references/cross-skill/academic-paper-reviewer/SKILL.md`
 - Before SHA-256: `298ff2410ac39704bbef06179f6b97818d0716e074aedbf4c28719aee43ede2e`
-- After SHA-256: `9fb77e7a46e9bed7073f47225fd3a0b0263e89919c12ddc52b3db4f2d16766ed`
+- After SHA-256: `8eed7542b5d63903c76839f6ebf2effb3bfe6c1e30604ccc41b3dffa4d50137e`
 
 #### Before
 
@@ -1157,7 +1393,24 @@ records the formal re-review Gate verdict in the owning subflow `control.yaml`.
 
 ````markdown
 <!--rs:REVIEW-002-->
-- **Schema 13 sprint contract.** Resolve the mode-specific frozen contract JSON through `researchspec/runs/current/artifact-registry.json`, then deep-copy it for runtime fields. Preserve `panel_size`, `acceptance_dimensions`, severity and cross-reviewer quantifiers, measurement procedure, override ladder, and bounded amendments. Return the instantiated contract and each phase output for registration; send lint, panel-cardinality, and failure-condition results to the review gate helper for `researchspec/runs/current/gate-ledger.jsonl`. The following synthesizer protocol and mode-specific panel sizes remain unchanged.
+### ResearchSpec Current Owner
+
+Replacement scope: `REVIEW-002` for `academic-paper-reviewer`.
+
+- **Sprint contract.** Resolve the mode-specific frozen contract JSON through
+  `researchspec/subflows/<instance>/handoff.md`, then deep-copy it for permitted
+  invocation fields. Preserve `panel_size`, `acceptance_dimensions`, severity
+  and cross-reviewer quantifiers, measurement procedure, override ladder, and
+  bounded amendments. Return the instantiated contract and each phase output to
+  the producing subflow for handoff recording; send lint, panel-cardinality,
+  and failure-condition results to the review Gate helper for
+  `researchspec/subflows/<instance>/control.yaml`. The following synthesizer
+  protocol and mode-specific panel sizes remain unchanged.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:REVIEW-002-->
 ````
 
@@ -1169,11 +1422,11 @@ records the formal re-review Gate verdict in the owning subflow `control.yaml`.
 - Severity: `required`
 - Semantic role: `gate_policy`
 - Replacement shape: `gate_rule_block`
-- Replacement body SHA-256: `a13c2b038cc5737ea2237926128dd0ea9bdd63e318c61e0741f58d15039c7cab`
-- ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
+- Replacement body SHA-256: `c4b2d202928cc03ae4872c0e6873ca95cc5e5819dc6e43044f25752fb7e3d579`
+- ResearchSpec targets: `researchspec/subflows/<instance>/handoff.md`, `researchspec/subflows/<instance>/control.yaml`
 - Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/claim_ref_alignment_audit_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/claim_ref_alignment_audit_agent.md`, `academic-pipeline/agents/claim_ref_alignment_audit_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/claim_ref_alignment_audit_agent.md`
 - Before SHA-256: `c879665cdb2c55aa75c9c8493988fa201ee146b78e0e9c3ecdcdcee7ea206008`
-- After SHA-256: `d0a4700e9b43c0c6208c5172e74bd2ffaf116aad66b476d33d2526ea4df90730`
+- After SHA-256: `918eb1d9e76265f7070135ef38e453bf3391cf50d65fdeeda13c981a34d8dfdb`
 
 #### Before
 
@@ -1185,15 +1438,24 @@ Per audit run, populate the six aggregates:
 
 ````markdown
 <!--rs:GATE-001-->
+### ResearchSpec Current Owner
+
+Replacement scope: `GATE-001` for `academic-pipeline`.
+
 Per audit run, emit one immutable claim-audit artifact containing all six
 aggregates listed below plus the pass-through claim-intent inputs and any Stage 6
-self-reflection appendix. Return the artifact path, hash, producer, stage, and
-sampling metadata to the runtime registration helper for
-`researchspec/runs/current/artifact-registry.json`. Submit HIGH-WARN constraint
+self-reflection appendix. Record the artifact's role, safe path, purpose,
+producer, intended consumer, and sampling limits in the owning subflow handoff at
+`researchspec/subflows/<instance>/handoff.md`. Return HIGH-WARN constraint
 violations and other configured blockers to the claim-integrity gate helper for
-`researchspec/runs/current/gate-ledger.jsonl`; keep LOW/MED warnings as findings
+`researchspec/subflows/<instance>/control.yaml`; keep LOW/MED warnings as findings
 without silently promoting them. The audit agent does not mutate claim
-contracts, manifests, the registry, or the gate ledger.
+contracts, the owning handoff, or the owning-control Gate attempts.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:GATE-001-->
 ````
 
@@ -1205,11 +1467,11 @@ contracts, manifests, the registry, or the gate ledger.
 - Severity: `recommended`
 - Semantic role: `gate_policy`
 - Replacement shape: `gate_rule_block`
-- Replacement body SHA-256: `2ea19732275431419b97cc208635de8ee4aabbab92be9429b98b26468fbf9b60`
-- ResearchSpec targets: `researchspec/runs/current/gate-ledger.jsonl`, `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/decision-ledger.jsonl`
+- Replacement body SHA-256: `6eb338975acf1056e2b28ac2892defcde513538848346d22493777775950623a`
+- ResearchSpec targets: `researchspec/subflows/<instance>/control.yaml`, `researchspec/subflows/<instance>/handoff.md`
 - Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
 - Before SHA-256: `42d9ea2b008ebe3229aa685f60ff584be9ea2250879a5180f1392ce7f11b8591`
-- After SHA-256: `9782e3604afd85ff19de3638e140e61ac77fd62940723ee99ba95954d81d641b`
+- After SHA-256: `cf6d64b53c9ff57c2d5cd47be1bbacf158b7d2b0fabfd4e618b126d2f4bebf36`
 
 #### Before
 
@@ -1228,18 +1490,23 @@ contracts, manifests, the registry, or the gate ledger.
 
 ````markdown
 <!--rs:GATE-002-->
+### ResearchSpec Current Owner
+
+Replacement scope: `GATE-002` for `academic-pipeline`.
+
 1. **Resolve the policy.** Read supported submission-package policy values from
-   `researchspec/specs/workflow.yaml`. Use the latest human-confirmed choice for
-   this run from `researchspec/runs/current/decision-ledger.jsonl`; absence
+   `researchspec/profiles/academic-pipeline.yaml`. Use the latest human-confirmed choice for
+   this run from `researchspec/subflows/<instance>/control.yaml`; absence
    resolves to `advisory`. Always pass the resolved value explicitly to the
    deterministic verifier. The orchestrator selects policy but never
    re-evaluates package findings itself.
 2. **Resolve and verify the package inputs.** Resolve the formatted manuscript,
    figures, tables, supplementary material, venue profile, provenance inputs,
-   and prior verifier reports by artifact id and hash through
-   `researchspec/runs/current/artifact-registry.json`. Run the local package
+   and prior verifier reports by explicit handoff role and path through
+   `researchspec/subflows/<instance>/handoff.md`. Run the local package
    verifier with the resolved policy and exact input set so its package and
-   inputs fingerprints are reproducible. Return the new report for registration.
+   inputs fingerprints are reproducible. Return the new report to the producing
+   subflow for handoff recording.
 3. **Gate on structured verifier tokens, never on exit code alone.** Under
    `strict`, `TERMINAL-BLOCK policy=submission_package` starts a formatter repair
    loop bounded to two rounds; after the second failure, stop and surface the
@@ -1247,25 +1514,30 @@ contracts, manifests, the registry, or the gate ledger.
    parsers are not formatter-fixable: ask the scholar to provide the missing
    input or choose advisory policy. Return every pass, warning, incomplete, and
    blocking outcome to the submission-package gate helper for
-   `researchspec/runs/current/gate-ledger.jsonl`.
-4. **Preserve the advisory path.** After a report is registered, dispatch the
+   `researchspec/subflows/<instance>/control.yaml`.
+4. **Preserve the advisory path.** After a report is handoff-referenced, dispatch the
    formatter once in append-only mode to copy package advisories into
    `provenance_summary.md`. This may add the report and advisories section but
-   must not change manuscript bytes or reference markers. Register the updated
-   provenance summary as a new artifact version.
+   must not change manuscript bytes or reference markers. Record the updated
+   Record the updated provenance summary as an updated boundary deliverable.
 5. **Require freshness before reuse.** A resume, re-entry, or later finalization
    pass may reuse a report only after the verifier confirms the current package,
    input-set, and policy fingerprints. Stale, unreadable, null-policy, or
    mismatched reports are re-run; a fresh report still re-emits and re-evaluates
    its verdict. Never infer pass merely from freshness.
-6. **Recompute every pass.** The gate result is a function of current registered
+6. **Recompute every pass.** The gate result is a function of current handoff-referenced
    package bytes, current resolved inputs, and the current accepted policy.
    Package edits or policy changes invalidate prior permission. Do not cache a
    previously granted delivery result across resume or finalization.
 
-The orchestrator returns artifacts, human choices, and gate findings to their
-responsible runtime helpers; it does not edit the registry, decision ledger, or
-gate ledger directly.
+The orchestrator returns artifacts, human choices, and Gate findings to their
+owning subflow and CLI; it does not edit the handoff, Decision records, or Gate
+attempts directly.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:GATE-002-->
 ````
 
@@ -1277,11 +1549,11 @@ gate ledger directly.
 - Severity: `required`
 - Semantic role: `handoff_projection`
 - Replacement shape: `schema_projection_table`
-- Replacement body SHA-256: `9172b4e1b0808396db166c8d2e8631ececc4fe883cae1f75707db9cee358ebd8`
-- ResearchSpec targets: `researchspec/specs/project.md`, `researchspec/specs/sources.yaml`, `researchspec/specs/claims.yaml`, `researchspec/specs/manuscript.yaml`, `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/decision-ledger.jsonl`, `researchspec/runs/current/gate-ledger.jsonl`, `researchspec/draft-patches/<patch-id>.json`
+- Replacement body SHA-256: `d1a6f5470479398326cebbff6cca6acdd556524710c2389bb24b17351e6d342f`
+- ResearchSpec targets: `researchspec/specs/project.md`, `researchspec/specs/sources.yaml`, `researchspec/specs/claims.yaml`, `researchspec/specs/manuscript.yaml`, `researchspec/subflows/<instance>/handoff.md`, `researchspec/subflows/<instance>/control.yaml`, `assets/shared/contracts/patch/revision_patch.schema.json`
 - Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
 - Before SHA-256: `c4da59716b0f456089bd4e96ca36de57011f33eeca6c40296efa82564f89f465`
-- After SHA-256: `02997065a0779bd4109101ccf94a9fbcc53731852210d439f7f9872366028c73`
+- After SHA-256: `6ea0a7cb5f64b9806e598611f4e60cc2cd3a30fe78469445500088ac0e65607e`
 
 #### Before
 
@@ -1293,7 +1565,32 @@ gate ledger directly.
 
 ````markdown
 <!--rs:HANDOFF-001-->
-Register the handoff payload through `researchspec/runs/current/artifact-registry.json`, bind it to a hash, and identify every source artifact and unresolved Decision. When the payload originated in an ARS Material Passport, retain its Schema 9 fields as imported provenance on the registered evidence; the current ResearchSpec contracts and ledgers remain authoritative.
+### ResearchSpec Current Owner
+
+Replacement scope: `HANDOFF-001` for `academic-pipeline`.
+
+Record every boundary input and output in the owning subflow's
+`researchspec/subflows/<instance>/handoff.md`. Each entry identifies its role,
+type, safe project-relative path, purpose, producer or intended consumer, and
+relevant limits. The referenced file remains an ordinary project file outside
+`researchspec/`; external metadata may stay in that file but does not become
+ResearchSpec authority.
+
+Place stable research intent, source identity, accepted claims, and manuscript
+structure in their four owning specs. Place formal Gate attempts, Decisions,
+and the active frontier in the owning `control.yaml`. Manuscript revision
+operations may use the ARSU revision patch contract, but the patch remains a
+stateless boundary file and creates no separate ResearchSpec lifecycle.
+
+Current ResearchSpec owners:
+
+- `researchspec/specs/project.md`
+- `researchspec/specs/sources.yaml`
+- `researchspec/specs/claims.yaml`
+- `researchspec/specs/manuscript.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
+- `assets/shared/contracts/patch/revision_patch.schema.json`
 <!--/rs:HANDOFF-001-->
 ````
 
@@ -1303,13 +1600,13 @@ Register the handoff payload through `researchspec/runs/current/artifact-registr
 - Owner skill: `academic-pipeline`
 - Source path: `academic-pipeline/agents/pipeline_orchestrator_agent.md`
 - Severity: `required`
-- Semantic role: `draft_patch_protocol`
+- Semantic role: `revision_patch_protocol`
 - Replacement shape: `patch_protocol_block`
-- Replacement body SHA-256: `6141f60064b0b8ec8ffd60d559f02e174b4ce4f7e33d686af140e11228198d6c`
-- ResearchSpec targets: `assets/shared/contracts/patch/revision_patch.schema.json`, `scripts/apply-revision-patch.mjs`, `handoff.md`, `control.yaml`
+- Replacement body SHA-256: `90ba6240b0ce635923b8789ad56ec57a67f77844a2a26774581cde0d4c183255`
+- ResearchSpec targets: `assets/shared/contracts/patch/revision_patch.schema.json`, `scripts/apply-revision-patch.mjs`, `researchspec/subflows/<instance>/handoff.md`, `researchspec/subflows/<instance>/control.yaml`
 - Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
 - Before SHA-256: `cd54fc8af9aab880c01c0cbc083475c7dffdc0f0a16c83873c46017f26fc3878`
-- After SHA-256: `77f4b8ad6052fdd72c2d691e0df5963346f68927ee662593efe2778a12fa1df6`
+- After SHA-256: `159a2aea83c9d1e193f124a88ce1b661be259f3edc002d5682c54c90b88fdd14`
 
 #### Before
 
@@ -1364,6 +1661,10 @@ Only on explicit user choice (c) does a round run as full re-emission; afterward
 
 ````markdown
 <!--rs:PATCH-004-->
+### ResearchSpec Current Owner
+
+Replacement scope: `PATCH-004` for `academic-pipeline`.
+
 When an `academic-pipeline` revision child dispatches `academic-paper` revision
 mode, the child may produce a patch conforming to
 `assets/shared/contracts/patch/revision_patch.schema.json`. The patch, revised
@@ -1375,9 +1676,9 @@ required boundary deliverables at safe project paths through the child's
 `node scripts/apply-revision-patch.mjs` is an optional stateless application helper.
 Invoke it only with explicit base, patch, output, and optional report paths. It
 validates all operations and annotation mappings before atomically creating the
-destination. It does not read the pipeline profile, mutate `control.yaml`, write
-a receipt, register artifacts, or decide whether the revision is academically
-complete. Manual revision remains valid.
+destination. It does not read the pipeline profile, mutate `control.yaml` or
+`handoff.md`, or decide whether the revision is academically complete. Manual
+revision remains valid.
 
 Each revision child has its own start confirmation and formal Gates. After the
 producer finishes, the current manuscript and relevant boundary evidence return
@@ -1385,6 +1686,13 @@ through the handoff. A human records the revision Gate verdict in the owning
 child `control.yaml`; the parent advances only under the profile's declared
 join and transition rules. Structural re-emission, scope changes, and other
 research choices follow the same explicit confirmation discipline.
+
+Current ResearchSpec owners:
+
+- `assets/shared/contracts/patch/revision_patch.schema.json`
+- `scripts/apply-revision-patch.mjs`
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:PATCH-004-->
 ````
 
@@ -1394,13 +1702,13 @@ research choices follow the same explicit confirmation discipline.
 - Owner skill: `academic-pipeline`
 - Source path: `academic-pipeline/agents/pipeline_orchestrator_agent.md`
 - Severity: `required`
-- Semantic role: `runtime_state_boundary`
+- Semantic role: `subflow_control_boundary`
 - Replacement shape: `protocol_block`
-- Replacement body SHA-256: `166ce4a98f1ee61229909f0876db0a3c3a6895e9878695f7570e69d4c6864b7e`
-- ResearchSpec targets: `researchspec/runs/current/state.yaml`, `researchspec/runs/current/decision-ledger.jsonl`, `researchspec/runs/current/gate-ledger.jsonl`
+- Replacement body SHA-256: `8ce21ff901760108b379ccd9c835e8a7a785c23726cec4252a9eef4c4c3ac085`
+- ResearchSpec targets: `researchspec/subflows/<instance>/control.yaml`
 - Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
 - Before SHA-256: `72382a607b0750669bffe9274ede6c7f76e64853b606432c80f13122c85fb760`
-- After SHA-256: `aabb090c31395d13f3df680fe4d6076b48318b8cfda09dc754d3af9fe1cd1530`
+- After SHA-256: `55e9710edf25135aaea61c72cb61f28508ea7a769ddbcce1971a6c7fc48d727d`
 
 #### Before
 
@@ -1441,8 +1749,16 @@ research choices follow the same explicit confirmation discipline.
 
 ````markdown
 <!--rs:STATE-004-->
-Checkpoint by registering the produced artifacts and advancing only through current ResearchSpec Gate and transition transactions. Do not write or append an ARS Material Passport. When an external Passport is supplied later, import it as hash-bound evidence and preserve the original bytes unchanged.
-Checkpoint authority remains in `researchspec/runs/current/state.yaml`.
+### ResearchSpec Current Owner
+
+Replacement scope: `STATE-004` for `academic-pipeline`.
+
+Checkpoint by recording the produced artifacts and advancing only through current ResearchSpec Gate and transition CLI actions. Do not write or append an ARS external input. When an external external input is supplied later, import it as explicit evidence and preserve the original bytes unchanged.
+Checkpoint authority remains in `researchspec/subflows/<instance>/control.yaml`.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:STATE-004-->
 ````
 
@@ -1452,13 +1768,13 @@ Checkpoint authority remains in `researchspec/runs/current/state.yaml`.
 - Owner skill: `academic-pipeline`
 - Source path: `academic-pipeline/agents/pipeline_orchestrator_agent.md`
 - Severity: `required`
-- Semantic role: `runtime_state_boundary`
+- Semantic role: `subflow_control_boundary`
 - Replacement shape: `protocol_block`
-- Replacement body SHA-256: `19502dfac075a662087c3a88d2376602130c67e1ad0d0ebb4f350473fa30cf4d`
-- ResearchSpec targets: `researchspec/runs/current/state.yaml`, `researchspec/runs/current/decision-ledger.jsonl`, `researchspec/runs/current/gate-ledger.jsonl`, `researchspec/runs/current/artifact-registry.json`
+- Replacement body SHA-256: `d81167bc2b4f7993261896370686f5979c5f7abe04f6307c958004f92aaa8174`
+- ResearchSpec targets: `researchspec/subflows/<instance>/control.yaml`, `researchspec/subflows/<instance>/handoff.md`
 - Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
 - Before SHA-256: `c8adfde9beb5b3fac35351b03b749cbd4102b469601dae18a026480f5b53a758`
-- After SHA-256: `a6c12379b1cc420db4edd259ba64dede0c5fbe1eb7b42ae79ca0a6e7cbc43ab1`
+- After SHA-256: `3d011e18d28950470cdda90567bb9cdd718542dcc08d9384754e328c52067bec`
 
 #### Before
 
@@ -1508,15 +1824,26 @@ Checkpoint authority remains in `researchspec/runs/current/state.yaml`.
 
 ````markdown
 <!--rs:STATE-005-->
-**ARS import contract:** the selected Material Passport boundary is external evidence, not runtime state.
+### ResearchSpec Current Owner
 
-1. Require an explicit Passport path, expected SHA-256 and, when resuming a boundary, its 12-character boundary hash.
-2. Parse only strict JSON or YAML and reject path escape, symlink escape, hash drift, ambiguous boundary selection and duplicate consumption.
-3. Normalize the source into a deterministic projection without modifying the source bytes.
-4. Preview `start subflow:tpl-academic-pipeline-mid-entry` with `material_passport_import` and bind the import identity into the Start plan hash.
-5. After human confirmation, register the source, projection and accompanied artifact; append imported Gate/Decision evidence with `authority: imported_evidence`; record the consumed boundary; then commit the new instance state last.
-6. Begin at the current template entry stage. Imported records cannot satisfy a current Gate, branch Decision or transition.
-The import transaction commits consumption through `researchspec/runs/current/state.yaml`.
+Replacement scope: `STATE-005` for `academic-pipeline`.
+
+Existing project materials are ordinary mid-entry inputs:
+
+1. Select explicit safe project-relative paths outside `researchspec/` and state
+   the role, type, purpose, and relevant limits of each input.
+2. Request current mid-entry route instructions and verify only the prerequisites
+   required by the chosen entry point.
+3. Present Skill, mode, inputs, outputs, formal Gates, risk, and cost; start only
+   after a fresh human confirmation.
+4. Record the actual input roles and paths in the new subflow handoff.
+5. Keep all prior Gate, Decision, checkpoint, and completion claims outside the
+   new control. They may inform verification but cannot satisfy current rules.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:STATE-005-->
 ````
 
@@ -1526,13 +1853,13 @@ The import transaction commits consumption through `researchspec/runs/current/st
 - Owner skill: `academic-pipeline`
 - Source path: `academic-pipeline/agents/state_tracker_agent.md`
 - Severity: `recommended`
-- Semantic role: `artifact_provenance`
+- Semantic role: `boundary_deliverable_provenance`
 - Replacement shape: `artifact_projection_block`
-- Replacement body SHA-256: `b40f2d060a900785052b91e455a4b01662995c643cf83eea1d56956fa494b729`
-- ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
+- Replacement body SHA-256: `f0c8057204781318976940736df40e9bdb8c407d4afea0931608ea3a85849cfd`
+- ResearchSpec targets: `researchspec/subflows/<instance>/handoff.md`, `researchspec/subflows/<instance>/control.yaml`
 - Generated output paths: `academic-pipeline/agents/state_tracker_agent.md`
 - Before SHA-256: `eb48ce56ef73b0581071ff2d2d383a45f562b4258980ce910035f67cf2fe1cfd`
-- After SHA-256: `38f8a2703a4b68fbe062340ab2e647b8e86531cf7932d23924fa847b796ca511`
+- After SHA-256: `de2f08e4ecf142cff961170c63eeaf627df1dbefb6649949ceaff6e8cedd9507`
 
 #### Before
 
@@ -1561,7 +1888,21 @@ Every material artifact produced by the pipeline carries a version label. These 
 
 ````markdown
 <!--rs:ARTIFACT-001-->
-ResearchSpec stores every produced or imported object in `researchspec/runs/current/artifact-registry.json` with a stable artifact id, type, path and SHA-256. Current native artifacts must match the strict registry variant emitted by their owning transaction. An ARS Material Passport import is stored as `authority: imported_evidence`; its source version remains provenance only and never selects runtime behavior.
+### ResearchSpec Current Owner
+
+Replacement scope: `ARTIFACT-001` for `academic-pipeline`.
+
+Boundary deliverables remain ordinary project files outside `researchspec/`.
+The producing subflow records each actual output in its handoff with a unique
+role, type, safe project-relative path, purpose, producer or intended consumer,
+and relevant limits. ResearchSpec does not assign another file identity, copy
+the file, or manage its version history. The owning control records only
+the subflow's lifecycle and formal decisions.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:ARTIFACT-001-->
 ````
 
@@ -1571,13 +1912,13 @@ ResearchSpec stores every produced or imported object in `researchspec/runs/curr
 - Owner skill: `academic-pipeline`
 - Source path: `academic-pipeline/agents/state_tracker_agent.md`
 - Severity: `required`
-- Semantic role: `runtime_state_boundary`
+- Semantic role: `subflow_control_boundary`
 - Replacement shape: `protocol_block`
-- Replacement body SHA-256: `5e830df08c4fb46c42f445584f0c01eb709aec35320dfb11025a1fd139d86c06`
-- ResearchSpec targets: `researchspec/specs/workflow.yaml`, `researchspec/runs/current/state.yaml`, `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
+- Replacement body SHA-256: `a24e9d17ec4d30aa24c958fe882d260187edf3d52ad91e39f3b352a11bf1b7ae`
+- ResearchSpec targets: `researchspec/profiles/academic-pipeline.yaml`, `researchspec/subflows/<instance>/control.yaml`, `researchspec/subflows/<instance>/handoff.md`
 - Generated output paths: `academic-pipeline/agents/state_tracker_agent.md`
 - Before SHA-256: `af2c12271685216e4047e8bf9797f886641df29709779b5310c612e5dced4d5c`
-- After SHA-256: `ffb890e6100669bf38c14270913a5f500e2f0eeacb8f5da3af0436e190ba5e76`
+- After SHA-256: `2a9fa37acf454a59cf6f8907c9d2aee95c96c8b188e02286d4ffbbfdb28a3c74`
 
 #### Before
 
@@ -1617,40 +1958,34 @@ Append-only list. Each entry is an observer report produced at a FULL/SLIM check
 
 ````markdown
 <!--rs:STATE-006-->
-`researchspec/runs/current/state.yaml` is the single source of truth for active
-pipeline state. The State Tracker interprets update requests, validates
-transitions, and produces progress views, but only the ResearchSpec state helper
-may commit stable state changes.
+### ResearchSpec Current Owner
+
+Replacement scope: `STATE-006` for `academic-pipeline`.
+
+`researchspec/subflows/<instance>/control.yaml` is the sole runtime authority for
+the selected pipeline or child instance. ARSU roles may inspect current context,
+prepare outputs, recommend Gate verdicts, and propose transitions, but only the
+ResearchSpec CLI validates and commits control changes.
 
 ### Write Access Control
 
-| Role | May submit | Must not do |
+| Role | May return | Must not do |
 | --- | --- | --- |
-| `pipeline_orchestrator` | transition request with stage, mode, reason, and required artifacts | edit run state directly |
-| `state_tracker` | validated transition proposal and dashboard projection | bypass the state helper or invent artifact status |
-| integrity/gate agents | structured report and gate finding | change active stage or artifact records |
-| `collaboration_depth_agent` | advisory observer artifact | set blocking flags or pipeline state |
-| phase agents | their own output artifacts | mutate state, registries, decisions, or gates |
+| pipeline orchestrator | route, branch, and transition recommendation | edit a control or authorize a child |
+| state tracker | progress summary and structured mutation proposal | persist lifecycle, Gate, Decision, or transition state |
+| integrity and review roles | reports and Gate recommendations | confirm or advance a Gate |
+| phase agents | declared boundary outputs and handoff updates | write another subflow's private work or control |
 
-### Dialogue and observer records
+For a formal change, request current instructions, validate the profile and
+actual handoff roles, obtain any required human confirmation, and execute the
+single owning CLI action. Keep dialogue summaries and observer reports as
+working material or explicit boundary files; they do not advance the frontier.
 
-Stage-transition dialogue ranges remain immutable provenance pointers. Return
-them as metadata for the runtime state update and for any collaboration-depth
-artifact; do not treat the live conversation as durable state.
-Collaboration-depth reports remain append-only registered artifacts and never
-gate transitions.
+Current ResearchSpec owners:
 
-### State Update Protocol
-
-1. The requesting role submits the proposed field changes, reason, expected
-   current stage, and relevant artifact ids.
-2. The State Tracker checks role authorization, workflow legality against
-   `researchspec/specs/workflow.yaml`, required artifact availability through
-   `researchspec/runs/current/artifact-registry.json`, and unresolved blocking
-   findings in `researchspec/runs/current/gate-ledger.jsonl`.
-3. If valid, return the validated transition to the state helper for one atomic
-   write with timestamp and requester metadata.
-4. If invalid, reject it with structured reasons and leave run state unchanged.
+- `researchspec/profiles/academic-pipeline.yaml`
+- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:STATE-006-->
 ````
 
@@ -1660,13 +1995,13 @@ gate transitions.
 - Owner skill: `academic-pipeline`
 - Source path: `academic-pipeline/references/literature_corpus_consumers.md`
 - Severity: `required`
-- Semantic role: `source_contract_projection`
+- Semantic role: `stable_source_contract`
 - Replacement shape: `artifact_projection_block`
-- Replacement body SHA-256: `80638137954c2441664b05098e0fa163b3598bf2f7facb2d8e2a13f56f76c3cd`
-- ResearchSpec targets: `researchspec/specs/sources.yaml`, `researchspec/runs/current/artifact-registry.json`
+- Replacement body SHA-256: `9e48469a81a6a9fb39e39a667dbca040d891dd1975686f50228d41f3c8a52f6f`
+- ResearchSpec targets: `researchspec/specs/sources.yaml`, `researchspec/subflows/<instance>/handoff.md`
 - Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/references/literature_corpus_consumers.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/references/literature_corpus_consumers.md`, `academic-pipeline/references/literature_corpus_consumers.md`, `deep-research/references/cross-skill/academic-pipeline/references/literature_corpus_consumers.md`
 - Before SHA-256: `590a6addf7c5280e4096aacd741ce56750e4ac47885a7a0db3ff9ac307477123`
-- After SHA-256: `751a3cca39a155379821da24700dc3b440a2415caab1fb4903cda7b1fdb0e673`
+- After SHA-256: `6f7d8155230470a8d9d54872aba810ebba1126dfad64dfa6e454515e7690b5bb`
 
 #### Before
 
@@ -1678,16 +2013,25 @@ This is the contract every literature-reading consumer agent must follow. The v3
 
 ````markdown
 <!--rs:SOURCE-002-->
+### ResearchSpec Current Owner
+
+Replacement scope: `SOURCE-002` for `academic-pipeline`.
+
 This is the contract every literature-reading consumer follows after
 ResearchSpec has projected source records from
 `researchspec/specs/sources.yaml` and resolved associated corpus artifacts
-through `researchspec/runs/current/artifact-registry.json`. The resulting
+through `researchspec/subflows/<instance>/handoff.md`. The resulting
 read-only `literature_corpus[]` working payload retains citation keys, titles,
 authors, dates, source pointers, inclusion state, and trust metadata required by
 the protocol below. Consumers apply the existing corpus-first,
 search-fills-gap flow, four Iron Rules, PRE-SCREENED block, and graceful parse
-fallback without mutating either the payload, the source contract, or registry
-records.
+fallback without mutating the payload, the source contract, or the owning
+handoff.
+
+Current ResearchSpec owners:
+
+- `researchspec/specs/sources.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:SOURCE-002-->
 ````
 
@@ -1697,13 +2041,13 @@ records.
 - Owner skill: `academic-pipeline`
 - Source path: `academic-pipeline/references/passport_as_reset_boundary.md`
 - Severity: `required`
-- Semantic role: `runtime_state_boundary`
+- Semantic role: `subflow_control_boundary`
 - Replacement shape: `protocol_block`
-- Replacement body SHA-256: `048c481e9ca9500e311702374b8c040ea02ae6301d825173ee01e4c5f4ca384a`
-- ResearchSpec targets: `researchspec/runs/current/state.yaml`, `researchspec/runs/current/decision-ledger.jsonl`, `researchspec/runs/current/gate-ledger.jsonl`, `researchspec/runs/current/artifact-registry.json`
+- Replacement body SHA-256: `6d53a42d14508cb3bbc294d541617e70906cfc11d43684238a0ade9303bf714c`
+- ResearchSpec targets: `researchspec/subflows/<instance>/control.yaml`, `researchspec/subflows/<instance>/handoff.md`
 - Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/references/passport_as_reset_boundary.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/references/passport_as_reset_boundary.md`, `academic-pipeline/references/passport_as_reset_boundary.md`, `deep-research/references/cross-skill/academic-pipeline/references/passport_as_reset_boundary.md`
 - Before SHA-256: `f5373d307584b4ace1e95535a60b5b54f489d30a47bb67a2d00ee9454b8114aa`
-- After SHA-256: `80468758f41510883fb448e9c81a5afbf19746d3bdc92b7af4a5f2f379020f54`
+- After SHA-256: `68a7415db94a6334396388731949794f00c2000e3e4ab282d3d807602369eb56`
 
 #### Before
 
@@ -1754,8 +2098,17 @@ Without coordination, two processes can complete step 2 in parallel before eithe
 
 ````markdown
 <!--rs:STATE-007-->
-ResearchSpec reset and resume state lives only in current subflow instances, artifact records, Gate receipts and Decisions. Material Passport handling is one-way: the importer reads immutable external bytes, registers their normalized evidence and records consumption in current state. Re-running work creates new hash-bound artifacts; it never appends boundary or resume entries to the source Passport.
-Current resume state lives in `researchspec/runs/current/state.yaml`.
+### ResearchSpec Current Owner
+
+Replacement scope: `STATE-007` for `academic-pipeline`.
+
+ResearchSpec reset and resume state lives only in current subflow instances, artifact records, human-confirmed Gate attempts and Decisions. external input handling is one-way: the importer reads immutable external bytes, registers their normalized evidence and records consumption in current state. Re-running work creates new explicit artifacts; it never appends boundary or resume entries to the source external input.
+Current resume state lives in `researchspec/subflows/<instance>/control.yaml`.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:STATE-007-->
 ````
 
@@ -1767,11 +2120,11 @@ Current resume state lives in `researchspec/runs/current/state.yaml`.
 - Severity: `recommended`
 - Semantic role: `handoff_projection`
 - Replacement shape: `schema_projection_table`
-- Replacement body SHA-256: `20c2ca012fd4bfe55edfa55d2305b3790820d7c4d7f86822f38bdc4e3925a7a5`
-- ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/decision-ledger.jsonl`, `researchspec/runs/current/gate-ledger.jsonl`
+- Replacement body SHA-256: `afb2115635549409cd4b1d04c423586904e9e125ff0eba87581c98a4fd3c7169`
+- ResearchSpec targets: `researchspec/subflows/<instance>/handoff.md`, `researchspec/subflows/<instance>/control.yaml`
 - Generated output paths: `academic-pipeline/references/team_collaboration_protocol.md`
 - Before SHA-256: `b7b3d15b245fd412b906ce9f391fd247a21b2e54fe3eed96fe6bbb1036c4a1aa`
-- After SHA-256: `65691d7039b26b9b943d9dc993aea53fd1071969456789897b3f24f80400f930`
+- After SHA-256: `08462cc1732677afff63396b1af2a270f4bb1b30a1a352f294f7111bb6f5541e`
 
 #### Before
 
@@ -1783,7 +2136,16 @@ Current resume state lives in `researchspec/runs/current/state.yaml`.
 
 ````markdown
 <!--rs:HANDOFF-002-->
-| **Handoff checklist** | Resolve every required source, bibliography, and synthesis artifact through `researchspec/runs/current/artifact-registry.json`; verify hashes and minimum source/theme requirements; require the responsible current Gate receipt; and return human choices to the Decision runtime. An imported Material Passport is optional external evidence, not a prerequisite or authority source. |
+### ResearchSpec Current Owner
+
+Replacement scope: `HANDOFF-002` for `academic-pipeline`.
+
+| **Handoff checklist** | Resolve every required source, bibliography, and synthesis input from explicit handoff roles and safe project-relative paths; check current readability only when the consuming action needs the file; apply the declared source and theme requirements; and require the relevant current human-confirmed Gate or Decision from the owning control. External files do not carry workflow authority. |
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:HANDOFF-002-->
 ````
 
@@ -1793,13 +2155,13 @@ Current resume state lives in `researchspec/runs/current/state.yaml`.
 - Owner skill: `academic-pipeline`
 - Source path: `academic-pipeline/SKILL.md`
 - Severity: `recommended`
-- Semantic role: `contract_io_boundary`
+- Semantic role: `boundary_deliverable_contract`
 - Replacement shape: `io_contract_block`
-- Replacement body SHA-256: `d2cb1d7af3919463fdd7a68e4bbe64760b1d67233db272cfa9f16d89aadeb443`
-- ResearchSpec targets: `researchspec/specs/workflow.yaml`, `researchspec/runs/current/state.yaml`, `researchspec/runs/current/artifact-registry.json`
+- Replacement body SHA-256: `e4fc5ca2733d91a905570924f9f240baf88ae59d34434d1eef4961ee3c6551a3`
+- ResearchSpec targets: `researchspec/profiles/academic-pipeline.yaml`, `researchspec/subflows/<instance>/control.yaml`, `researchspec/subflows/<instance>/handoff.md`
 - Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/SKILL.md`, `academic-pipeline/SKILL.md`, `deep-research/references/cross-skill/academic-pipeline/SKILL.md`
 - Before SHA-256: `a6431f1c70388ec07a0dc28a1ec2ee850e25386648beb3c32e51602da59068d9`
-- After SHA-256: `bb4d9c5abf9a7d01e543dd378fcf0c6e67bb438171c2a18752446067ffe66049`
+- After SHA-256: `eaae176c4946547ab78c9fbb1b84f506e9fda63691eeff6732ffee289a9b2d19`
 
 #### Before
 
@@ -1821,9 +2183,13 @@ Routing into Mode B requires explicit user signal — `/ars-<mode>` slash comman
 
 ````markdown
 <!--rs:IO-002-->
+### ResearchSpec Current Owner
+
+Replacement scope: `IO-002` for `academic-pipeline`.
+
 In phase-by-phase mode, downstream single-phase agents remain confined to the
-stage selected in `researchspec/runs/current/state.yaml`. They may read only the
-contracts and registered artifacts required by that stage and may emit only its
+stage selected in `researchspec/subflows/<instance>/control.yaml`. They may read only the
+contracts and handoff-referenced artifacts required by that stage and may emit only its
 declared output artifacts. The academic-pipeline orchestrator, state-tracking,
 integrity, collaboration-depth, and claim-audit roles retain their documented
 cross-stage visibility, but that visibility does not grant direct write access
@@ -1831,15 +2197,21 @@ to stable ResearchSpec files.
 
 Routing into phase-by-phase mode still requires an explicit user signal.
 Ambiguous cross-phase requests stop for clarification before dispatch. The
-configured workflow and current run state—not an ARS phase-directory name—decide
+configured workflow and the owning control—not an ARS phase-directory name—decide
 which stage may execute.
 
 Enforcement is contract-based: preflight checks
-`researchspec/specs/workflow.yaml`, `researchspec/runs/current/state.yaml`, and
-required entries in `researchspec/runs/current/artifact-registry.json` before
+`researchspec/profiles/academic-pipeline.yaml`, `researchspec/subflows/<instance>/control.yaml`, and
+required entries in `researchspec/subflows/<instance>/handoff.md` before
 dispatch; the runtime rejects outputs outside the selected stage. Existing
 prompt fences, local verifiers, or tool hooks may report diagnostics but do not
 replace the ResearchSpec boundary.
+
+Current ResearchSpec owners:
+
+- `researchspec/profiles/academic-pipeline.yaml`
+- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:IO-002-->
 ````
 
@@ -1849,13 +2221,13 @@ replace the ResearchSpec boundary.
 - Owner skill: `academic-pipeline`
 - Source path: `academic-pipeline/SKILL.md`
 - Severity: `required`
-- Semantic role: `runtime_state_boundary`
+- Semantic role: `subflow_control_boundary`
 - Replacement shape: `protocol_block`
-- Replacement body SHA-256: `dad3869646c2c70bfcf64ed1a22c1d56f46aeb854458608d12cf761903073803`
-- ResearchSpec targets: `researchspec/runs/current/state.yaml`, `researchspec/runs/current/decision-ledger.jsonl`, `researchspec/runs/current/gate-ledger.jsonl`, `researchspec/runs/current/artifact-registry.json`
+- Replacement body SHA-256: `1f91bfa15688d6f03d3fc402614fff2a9d0b799f694b7539da7bcabf3f849a6d`
+- ResearchSpec targets: `researchspec/subflows/<instance>/control.yaml`, `researchspec/subflows/<instance>/handoff.md`
 - Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/SKILL.md`, `academic-pipeline/SKILL.md`, `deep-research/references/cross-skill/academic-pipeline/SKILL.md`
 - Before SHA-256: `9d830fcc9b071b1d1fca2c5d985b809e37cfed37cc97290a34fc633ba125d01f`
-- After SHA-256: `b0891300ad9294c669a412af26939c1c9807f8d17d2a87918ace212a4afde116`
+- After SHA-256: `56c58bd3e78925761c78f39448c59ebba064d992d1510fa881c9068fc0e5e18e`
 
 #### Before
 
@@ -1872,8 +2244,22 @@ replace the ResearchSpec boundary.
 
 ````markdown
 <!--rs:STATE-002-->
-Treat `resume_from_passport=<hash>` as a request to prepare `material_passport_import` for the external `academic-pipeline:mid-entry` Start. Resolve the source path, verify the declared SHA-256 and selected boundary, preview the exact Start transaction, and require human confirmation. The transaction registers the source and normalized projection, appends imported evidence, records the consumed boundary in current state, and starts the instance at its declared entry stage. No Passport file is mutated or emitted.
-Current authority is committed through `researchspec/runs/current/state.yaml`.
+### ResearchSpec Current Owner
+
+Replacement scope: `STATE-002` for `academic-pipeline`.
+
+Do not use the upstream resume token or state carrier. To enter from existing
+materials, request instructions for `academic-pipeline:mid-entry`, identify the
+actual external prerequisite roles and paths, present the route summary, and
+obtain a new instance-scoped confirmation. The CLI creates the new owning
+control; the Agent records only the selected boundary inputs in its handoff.
+No external record can supply current Gate, Decision, checkpoint, or transition
+authority.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:STATE-002-->
 ````
 
@@ -1883,13 +2269,13 @@ Current authority is committed through `researchspec/runs/current/state.yaml`.
 - Owner skill: `academic-pipeline`
 - Source path: `academic-pipeline/SKILL.md`
 - Severity: `required`
-- Semantic role: `runtime_state_boundary`
+- Semantic role: `subflow_control_boundary`
 - Replacement shape: `protocol_block`
-- Replacement body SHA-256: `3c34a816d24c508d6ffc869c4329b976c566aee97fecb092b8423c1e173794c5`
-- ResearchSpec targets: `researchspec/specs/workflow.yaml`, `researchspec/runs/current/state.yaml`, `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
+- Replacement body SHA-256: `7c1327acd9365e89cc5b7fbbd28db66a4c552e78b160db4520b4de74609c0872`
+- ResearchSpec targets: `researchspec/profiles/academic-pipeline.yaml`, `researchspec/subflows/<instance>/control.yaml`, `researchspec/subflows/<instance>/handoff.md`
 - Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/SKILL.md`, `academic-pipeline/SKILL.md`, `deep-research/references/cross-skill/academic-pipeline/SKILL.md`
 - Before SHA-256: `885ee4c094ad0a77870257e2968363063330ba64f9f6732797b64dc947132826`
-- After SHA-256: `78ec3ac26b283feaff1df2ba097455abb81edd0d509b3e418d97fae8b700e391`
+- After SHA-256: `423cb8d5cd20b8fe0b573f3c0be6fbf8022e7c274d362283f63ac0e77c8a1272`
 
 #### Before
 
@@ -1903,8 +2289,18 @@ Current authority is committed through `researchspec/runs/current/state.yaml`.
 
 ````markdown
 <!--rs:STATE-003-->
-Resume from ResearchSpec state and registered artifacts. If the user supplies an ARS Material Passport, route it through the one-way `material_passport_import` input on the confirmed mid-entry Start; otherwise use the current CLI frontier directly. Never infer current Gate or Decision authority from external records.
-Resolve the current graph from `researchspec/specs/workflow.yaml`.
+### ResearchSpec Current Owner
+
+Replacement scope: `STATE-003` for `academic-pipeline`.
+
+Resume from ResearchSpec state and handoff-referenced artifacts. If the user supplies an ARS external input, route it through the one-way `explicit handoff input` input on the confirmed mid-entry Start; otherwise use the current CLI frontier directly. Never infer current Gate or Decision authority from external records.
+Resolve the current graph from `researchspec/profiles/academic-pipeline.yaml`.
+
+Current ResearchSpec owners:
+
+- `researchspec/profiles/academic-pipeline.yaml`
+- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:STATE-003-->
 ````
 
@@ -1914,13 +2310,13 @@ Resolve the current graph from `researchspec/specs/workflow.yaml`.
 - Owner skill: `deep-research`
 - Source path: `deep-research/agents/bibliography_agent.md`
 - Severity: `recommended`
-- Semantic role: `contract_io_boundary`
+- Semantic role: `boundary_deliverable_contract`
 - Replacement shape: `io_contract_block`
-- Replacement body SHA-256: `580328ac134911acfe7498229821df8641da70b2268581ee753eb0c81ad3282c`
-- ResearchSpec targets: `researchspec/specs/project.md`, `researchspec/specs/sources.yaml`, `researchspec/runs/current/artifact-registry.json`
+- Replacement body SHA-256: `8cc2409933e209e77cdae3ad1574d5d3f5a9d6344998639d1c7e80b7b7de0188`
+- ResearchSpec targets: `researchspec/specs/project.md`, `researchspec/specs/sources.yaml`, `researchspec/subflows/<instance>/handoff.md`
 - Generated output paths: `academic-paper/references/cross-skill/deep-research/agents/bibliography_agent.md`, `academic-paper-reviewer/references/cross-skill/deep-research/agents/bibliography_agent.md`, `academic-pipeline/references/cross-skill/deep-research/agents/bibliography_agent.md`, `deep-research/agents/bibliography_agent.md`
 - Before SHA-256: `0309480229b94876752945cbb3483dea6b34b403fa51b207640131ffc7c7087f`
-- After SHA-256: `6c277506da6c12505bbc7adadf2f676e9b666becfd7ae377d9d6b7ae668088b9`
+- After SHA-256: `f8f030778cfd0b87b8b8bd3dd3da5119a9ff57f2eae118e2b2d26e4d2e45a693`
 
 #### Before
 
@@ -1944,16 +2340,20 @@ If downstream work is needed (synthesis, drafting, review), return control to th
 
 ````markdown
 <!--rs:IO-003-->
+### ResearchSpec Current Owner
+
+Replacement scope: `IO-003` for `deep-research`.
+
 You are the Bibliography Agent for the Investigation stage. Your sole
 deliverables are the annotated bibliography and reproducible search-strategy
 artifacts.
 
 **Contract inputs:** read research intent from `researchspec/specs/project.md`
 and source identities, inclusion state, and trust metadata from
-`researchspec/specs/sources.yaml`. Resolve the registered RQ brief, methodology
+`researchspec/specs/sources.yaml`. Resolve the handoff-referenced RQ brief, methodology
 blueprint, and any permitted existing bibliography artifacts through
-`researchspec/runs/current/artifact-registry.json`. For Adapter-backed work,
-also read the confirmed source policy and each hash-bound
+`researchspec/subflows/<instance>/handoff.md`. For Adapter-backed work,
+also read the confirmed source policy and each explicit
 `ProviderRetrievalHandoff` as working evidence. A handoff references its
 upstream result; it is not accepted bibliography evidence. Do not infer inputs
 from `phase*_` directories or consume downstream synthesis, draft, review, or
@@ -1965,13 +2365,19 @@ agent, or continue into a downstream stage. Return any recommended downstream
 work to the caller.
 
 **Writes allowed:** write new bibliography/search artifacts and return them to
-the runtime registration helper. Adapter queries and candidate-only acquisition
+the owning subflow handoff. Adapter queries and candidate-only acquisition
 may produce working handoffs and candidate artifacts. Import is allowed only
 for screened candidates covered by a current `ManagedLibraryAuthorization`;
 library Curation requires a separate explicit request. Do not modify
-`sources.yaml`, run state, registries, decisions, or gates directly. Prompt
+`sources.yaml`, the owning control, handoff, Decisions, or Gates directly. Prompt
 fences and local integrity scripts remain diagnostics; ResearchSpec contracts
 and runtime validation own the boundary.
+
+Current ResearchSpec owners:
+
+- `researchspec/specs/project.md`
+- `researchspec/specs/sources.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:IO-003-->
 ````
 
@@ -1981,13 +2387,13 @@ and runtime validation own the boundary.
 - Owner skill: `deep-research`
 - Source path: `deep-research/agents/bibliography_agent.md`
 - Severity: `required`
-- Semantic role: `source_contract_projection`
+- Semantic role: `stable_source_contract`
 - Replacement shape: `artifact_projection_block`
-- Replacement body SHA-256: `a0768a3df6635641f2bca7f00715695566ac0a1af5839d5876cefaadbfafda3d`
-- ResearchSpec targets: `researchspec/specs/sources.yaml`, `researchspec/runs/current/artifact-registry.json`
+- Replacement body SHA-256: `8bd1af0fb96b6ce38e7e54f680446c9223d6a0db475478e144564c55531f8115`
+- ResearchSpec targets: `researchspec/specs/sources.yaml`, `researchspec/subflows/<instance>/handoff.md`
 - Generated output paths: `academic-paper/references/cross-skill/deep-research/agents/bibliography_agent.md`, `academic-paper-reviewer/references/cross-skill/deep-research/agents/bibliography_agent.md`, `academic-pipeline/references/cross-skill/deep-research/agents/bibliography_agent.md`, `deep-research/agents/bibliography_agent.md`
 - Before SHA-256: `2dcd0a3b130b7117e4f207ff6e7bca2ecec04e1207e44f62087a806a3af4f9c6`
-- After SHA-256: `6bbfd341941e20d4c1c4c2e8174da0bd0f454bf97671bc82130f11e109f335af`
+- After SHA-256: `2b5e23d0fcb40bb72218fbfcca266fe0c0fc65860395b65d171ce5f8e3e6088d`
 
 #### Before
 
@@ -1999,9 +2405,13 @@ When the input Material Passport carries a non-empty `literature_corpus[]`, this
 
 ````markdown
 <!--rs:SOURCE-003-->
+### ResearchSpec Current Owner
+
+Replacement scope: `SOURCE-003` for `deep-research`.
+
 When `researchspec/specs/sources.yaml` contains included literature sources,
-resolve their registered source and screening artifacts through
-`researchspec/runs/current/artifact-registry.json` and present them to the
+resolve their handoff-referenced source and screening artifacts through
+`researchspec/subflows/<instance>/handoff.md` and present them to the
 Bibliography Agent as a read-only `literature_corpus[]` working projection.
 Apply the confirmed source policy without turning provider priority into
 workflow authority:
@@ -2019,17 +2429,23 @@ workflow authority:
 
 Call `zotero-literature-analysis` only for a source-level evidence goal and
 `zotero-research-synthesis` only for a bounded cross-source goal. Do not invoke
-every task mechanically. Consume results through a hash-bound
+every task mechanically. Consume results through a explicit
 `ProviderRetrievalHandoff`; an empty result is not proof of absence, and the
 handoff remains working evidence until this producer screens, verifies, and
-submits a durable bibliography artifact. Without a current run- and
+returns a durable bibliography artifact. Without a current, user-authorized,
 collection-bound `ManagedLibraryAuthorization`, Acquisition is candidate-only.
 That authorization never permits `zotero-library-curation`.
 
 Keep the existing five-step flow, four Iron Rules, and PRE-SCREENED
 reproducibility block intact. External search results and proposed additions
 remain output artifacts until an accepted source-contract change is applied;
-the agent must not mutate `sources.yaml`, the registry, or the projected corpus.
+the agent must not mutate `sources.yaml`, the projected corpus, or any other
+ResearchSpec authority file.
+
+Current ResearchSpec owners:
+
+- `researchspec/specs/sources.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:SOURCE-003-->
 ````
 
@@ -2039,13 +2455,13 @@ the agent must not mutate `sources.yaml`, the registry, or the projected corpus.
 - Owner skill: `deep-research`
 - Source path: `deep-research/agents/report_compiler_agent.md`
 - Severity: `required`
-- Semantic role: `claim_contract_projection`
+- Semantic role: `stable_claim_contract`
 - Replacement shape: `artifact_projection_block`
-- Replacement body SHA-256: `7b61ee95a0de6c36b0edbefb91393e6f3e06e27cbec8c5a03b71fabd13861e87`
-- ResearchSpec targets: `researchspec/specs/claims.yaml`, `researchspec/changes/<change-id>/contract-patch.yaml`, `researchspec/runs/current/artifact-registry.json`
+- Replacement body SHA-256: `7044228356b92f06afe671f9b91cc6e1ea187622767256a02eb87cfc6c4de903`
+- ResearchSpec targets: `researchspec/specs/claims.yaml`, `researchspec/changes/<change-id>/change.md`, `researchspec/subflows/<instance>/handoff.md`
 - Generated output paths: `academic-paper/references/cross-skill/deep-research/agents/report_compiler_agent.md`, `academic-paper-reviewer/references/cross-skill/deep-research/agents/report_compiler_agent.md`, `academic-pipeline/references/cross-skill/deep-research/agents/report_compiler_agent.md`, `deep-research/agents/report_compiler_agent.md`
 - Before SHA-256: `85473afda2c0be70de68028c2b5eeb6dd2308a1c97baeeab12fa102999d574bb`
-- After SHA-256: `71a60b61e40494838d1f0ecb008d655859c0dd1a3fb5b018d3c61362aba498e6`
+- After SHA-256: `db84590147e04bd790a6e61e8d2dbc3a7b674c546eb07346d041d9829d4e54e6`
 
 #### Before
 
@@ -2057,18 +2473,28 @@ Before compiling the first prose block of the report, append ONE `claim_intent_m
 
 ````markdown
 <!--rs:CLAIM-002-->
+### ResearchSpec Current Owner
+
+Replacement scope: `CLAIM-002` for `deep-research`.
+
 Before compiling the first prose block of the report, read the accepted claim
 contract from `researchspec/specs/claims.yaml` and emit exactly ONE immutable
 `claim_intent_manifest` artifact covering the substantive claims the compiled
 report will make and every declared negative constraint. Preserve stable ids
 and limits for accepted claims. If compilation introduces a new claim or changes
 claim strength, emit a proposed
-`researchspec/changes/<change-id>/contract-patch.yaml` alongside the manifest
+`researchspec/changes/<change-id>/change.md` alongside the manifest
 rather than mutating the stable claim contract. Return the manifest to the
-runtime registration helper for
-`researchspec/runs/current/artifact-registry.json`; the audit agent reads this
-registered baseline for the intended ∩ emitted ∩ supported diff in spec §4 step
+owning subflow handoff for
+`researchspec/subflows/<instance>/handoff.md`; the audit agent reads this
+handoff-referenced baseline for the intended ∩ emitted ∩ supported diff in spec §4 step
 5 (D6).
+
+Current ResearchSpec owners:
+
+- `researchspec/specs/claims.yaml`
+- `researchspec/changes/<change-id>/change.md`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:CLAIM-002-->
 ````
 
@@ -2078,13 +2504,13 @@ registered baseline for the intended ∩ emitted ∩ supported diff in spec §4 
 - Owner skill: `deep-research`
 - Source path: `deep-research/agents/synthesis_agent.md`
 - Severity: `required`
-- Semantic role: `claim_contract_projection`
+- Semantic role: `stable_claim_contract`
 - Replacement shape: `artifact_projection_block`
-- Replacement body SHA-256: `7bc7693f1c366b628d3c62b04b7477e1201557ad6229b82f59f0c8543c17f9fd`
-- ResearchSpec targets: `researchspec/specs/claims.yaml`, `researchspec/changes/<change-id>/contract-patch.yaml`, `researchspec/runs/current/artifact-registry.json`
+- Replacement body SHA-256: `cc3b90da56a327715ea9960f6d4dec2b0076dbbffac90029fd416c8f8f6fdbeb`
+- ResearchSpec targets: `researchspec/specs/claims.yaml`, `researchspec/changes/<change-id>/change.md`, `researchspec/subflows/<instance>/handoff.md`
 - Generated output paths: `academic-paper/references/cross-skill/deep-research/agents/synthesis_agent.md`, `academic-paper-reviewer/references/cross-skill/deep-research/agents/synthesis_agent.md`, `academic-pipeline/references/cross-skill/deep-research/agents/synthesis_agent.md`, `deep-research/agents/synthesis_agent.md`
 - Before SHA-256: `36472500843439df65bfe69c96070b4ebd056b9905959db6eaeda0d2ceb37517`
-- After SHA-256: `70ae69778d8cdd9a3864fc0fba37775857e7a9f195d775f508063287d615d0ae`
+- After SHA-256: `0276b5f719683a22e690996d179011855e5e5fb25119a552fcf518436c153b49`
 
 #### Before
 
@@ -2096,6 +2522,10 @@ Before drafting the first prose block of the synthesis output, append ONE `claim
 
 ````markdown
 <!--rs:CLAIM-003-->
+### ResearchSpec Current Owner
+
+Replacement scope: `CLAIM-003` for `deep-research`.
+
 Before drafting the first prose block of the synthesis output, read the accepted
 claim ids, support limits, evidence links, and wording constraints from
 `researchspec/specs/claims.yaml`. Emit exactly ONE immutable
@@ -2103,11 +2533,17 @@ claim ids, support limits, evidence links, and wording constraints from
 intends to make and every author-declared "must not" rule. Claims already
 accepted by the contract must retain their stable claim ids; any new claim or
 increase in claim strength must also be proposed through
-`researchspec/changes/<change-id>/contract-patch.yaml`, never written directly
-to `claims.yaml`. Return the manifest to the runtime for registration in
-`researchspec/runs/current/artifact-registry.json`. The audit agent reads that
-registered pre-commitment to run the three-set diff (intended ∩ emitted ∩
+`researchspec/changes/<change-id>/change.md`, never written directly
+to `claims.yaml`. Record the manifest by role and path in
+`researchspec/subflows/<instance>/handoff.md`. The audit agent reads that
+handoff-referenced pre-commitment to run the three-set diff (intended ∩ emitted ∩
 supported) per spec §4 step 5 (D6).
+
+Current ResearchSpec owners:
+
+- `researchspec/specs/claims.yaml`
+- `researchspec/changes/<change-id>/change.md`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:CLAIM-003-->
 ````
 
@@ -2117,13 +2553,13 @@ supported) per spec §4 step 5 (D6).
 - Owner skill: `deep-research`
 - Source path: `deep-research/agents/timeline_extraction_agent.md`
 - Severity: `recommended`
-- Semantic role: `artifact_provenance`
+- Semantic role: `boundary_deliverable_provenance`
 - Replacement shape: `artifact_projection_block`
-- Replacement body SHA-256: `0ddd301167c398063c64031c581307132dfbd37aaa46c4532e4471101d128067`
-- ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/specs/sources.yaml`, `researchspec/specs/claims.yaml`
+- Replacement body SHA-256: `22b4aea61f4142e5887c6ac5d3da4a81b2ec1fc9bc441d301379e12d502978f2`
+- ResearchSpec targets: `researchspec/subflows/<instance>/handoff.md`, `researchspec/specs/sources.yaml`, `researchspec/specs/claims.yaml`
 - Generated output paths: `deep-research/agents/timeline_extraction_agent.md`
 - Before SHA-256: `73967e6cef5a24b1365c643846e2a7eb9735756f593b283d78557576349dbef4`
-- After SHA-256: `1aa1996fd5e249cea9265a17971b5edee87ea0227727ee454d7cb45212309ec5`
+- After SHA-256: `e3a29e9c7b1035c4ede29fe37e4ba6f8ab1a297f46916775f3bae5682612e26c`
 
 #### Before
 
@@ -2137,15 +2573,25 @@ supported) per spec §4 step 5 (D6).
 
 ````markdown
 <!--rs:ARTIFACT-002-->
+### ResearchSpec Current Owner
+
+Replacement scope: `ARTIFACT-002` for `deep-research`.
+
 - Emit `timeline.yaml` as the temporal-facts artifact for this Investigation-stage invocation; link every source reference to its stable source id in `researchspec/specs/sources.yaml`.
 - Emit `citation_provenance.yaml` as the first-party citation-verification artifact; include the source ids, checks performed, evidence locations, and result status without changing source records.
 - Emit `version_records.yaml` as the citation version-family artifact for preprint → proceedings → journal chains; link any claim relevance to stable ids in `researchspec/specs/claims.yaml`.
 
 Return all three paths, hashes, producer identity, and stage metadata to the
-runtime registration helper for
-`researchspec/runs/current/artifact-registry.json`. These are separate immutable
-artifacts; do not store their contents in phase state, Material Passport, or
+owning subflow handoff for
+`researchspec/subflows/<instance>/handoff.md`. These are separate immutable
+artifacts; do not store their contents in the owning subflow control, external input, or
 stable specs.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/specs/sources.yaml`
+- `researchspec/specs/claims.yaml`
 <!--/rs:ARTIFACT-002-->
 ````
 
@@ -2155,13 +2601,13 @@ stable specs.
 - Owner skill: `deep-research`
 - Source path: `deep-research/SKILL.md`
 - Severity: `recommended`
-- Semantic role: `contract_io_boundary`
+- Semantic role: `boundary_deliverable_contract`
 - Replacement shape: `io_contract_block`
-- Replacement body SHA-256: `34c8b5c6b8e268e89d7c73ce7a9345a9576992d565826fe50d09e4df1263a4c9`
-- ResearchSpec targets: `researchspec/specs/workflow.yaml`, `researchspec/runs/current/state.yaml`, `researchspec/runs/current/artifact-registry.json`
+- Replacement body SHA-256: `5479c6bf4352d57c93e88bf826cd249f4c6518a08d36f83fb6e6ab2421bc02f4`
+- ResearchSpec targets: `researchspec/profiles/academic-pipeline.yaml`, `researchspec/subflows/<instance>/control.yaml`, `researchspec/subflows/<instance>/handoff.md`
 - Generated output paths: `academic-paper/references/cross-skill/deep-research/SKILL.md`, `academic-paper-reviewer/references/cross-skill/deep-research/SKILL.md`, `academic-pipeline/references/cross-skill/deep-research/SKILL.md`, `deep-research/SKILL.md`
 - Before SHA-256: `34fa2a8037254957e47bf3e73b95468c5d28a0cbf180f92abeef97855d83a3ef`
-- After SHA-256: `bb2d16d4897b95f1ac0717b93b7a15a93913a2b569bcf344f1f6d6a01862fcfc`
+- After SHA-256: `834a17f58fbdb6bf1dbc97574478fe160c4d6337e69f9170e26a15bcc5b5b2be`
 
 #### Before
 
@@ -2177,8 +2623,12 @@ Routing into Mode B requires explicit user signal — `/ars-<mode>` slash comman
 
 ````markdown
 <!--rs:IO-004-->
+### ResearchSpec Current Owner
+
+Replacement scope: `IO-004` for `deep-research`.
+
 In phase-by-phase mode, single-stage deep-research agents may read the contracts
-and registered upstream artifacts required by the selected work item, but may
+and handoff-referenced upstream artifacts required by the selected route instructions, but may
 write only its declared outputs. `devils_advocate_agent` and
 `report_compiler_agent` retain multi-stage responsibilities only when the
 current frontier instructions explicitly select that work; one invocation does
@@ -2186,10 +2636,16 @@ not authorize either role to extend itself into another stage.
 
 Phase-by-phase routing requires an explicit user signal. Ambiguous cross-stage
 material must be clarified before dispatch. The configured graph in
-`researchspec/specs/workflow.yaml`, the frontier in
-`researchspec/runs/current/state.yaml`, and registered inputs in
-`researchspec/runs/current/artifact-registry.json` define the permitted read and
+`researchspec/profiles/academic-pipeline.yaml`, the frontier in
+`researchspec/subflows/<instance>/control.yaml`, and handoff-referenced inputs in
+`researchspec/subflows/<instance>/handoff.md` define the permitted read and
 write boundary.
+
+Current ResearchSpec owners:
+
+- `researchspec/profiles/academic-pipeline.yaml`
+- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:IO-004-->
 ````
 
@@ -2199,13 +2655,13 @@ write boundary.
 - Owner skill: `deep-research`
 - Source path: `deep-research/SKILL.md`
 - Severity: `required`
-- Semantic role: `runtime_state_boundary`
+- Semantic role: `subflow_control_boundary`
 - Replacement shape: `protocol_block`
-- Replacement body SHA-256: `2ff7b7f41425ae474dbaec6b25a2dd49056484e5cce52e7ec74b6587714470fb`
-- ResearchSpec targets: `researchspec/specs/project.md`, `researchspec/specs/workflow.yaml`, `researchspec/runs/current/state.yaml`, `researchspec/runs/current/artifact-registry.json`
+- Replacement body SHA-256: `50c50420939b61b2ecc076dfe901b2d345311823410aff16bf9904f7fc6ce39b`
+- ResearchSpec targets: `researchspec/specs/project.md`, `researchspec/profiles/academic-pipeline.yaml`, `researchspec/subflows/<instance>/control.yaml`, `researchspec/subflows/<instance>/handoff.md`
 - Generated output paths: `academic-paper/references/cross-skill/deep-research/SKILL.md`, `academic-paper-reviewer/references/cross-skill/deep-research/SKILL.md`, `academic-pipeline/references/cross-skill/deep-research/SKILL.md`, `deep-research/SKILL.md`
 - Before SHA-256: `b2e0df17b51dcebaa974776543cb401f621b21e95d33735ea1ac0ce58b0436b3`
-- After SHA-256: `f8833714e542d9001419de910566314d0aa405b468ff89798734dee4139f58a7`
+- After SHA-256: `a23be1499f2efdbf0ca71d3459360bbd39db0b1ff968c6f4b392011546a9a53f`
 
 #### Before
 
@@ -2219,8 +2675,22 @@ write boundary.
 
 ````markdown
 <!--rs:STATE-008-->
-Use `researchspec status` and dynamic instructions to locate the current resume frontier. A Passport boundary tag may help select imported ARS evidence, but only the hash-bound `material_passport_import` transaction can register it, and only current ResearchSpec Decisions and Gate receipts can authorize progress.
-Resolve the current route from `researchspec/specs/workflow.yaml`.
+### ResearchSpec Current Owner
+
+Replacement scope: `STATE-008` for `deep-research`.
+
+Use `researchspec status` and directed subflow instructions to resume an existing
+instance from its owning control and handoff. When existing materials require a
+new pipeline entry, select `academic-pipeline:mid-entry`, declare the actual
+handoff input roles, and obtain a separate start confirmation. External metadata
+never changes the current profile, frontier, Gate, or Decision authority.
+
+Current ResearchSpec owners:
+
+- `researchspec/specs/project.md`
+- `researchspec/profiles/academic-pipeline.yaml`
+- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:STATE-008-->
 ````
 
@@ -2232,11 +2702,11 @@ Resolve the current route from `researchspec/specs/workflow.yaml`.
 - Severity: `required`
 - Semantic role: `gate_policy`
 - Replacement shape: `gate_rule_block`
-- Replacement body SHA-256: `417a7f350d1f71c079689ffc68396019ea22eac45d7e2474f923d6a9e3ad5620`
-- ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
+- Replacement body SHA-256: `572e33a9766c8352011df7f6371ffb1efc426b8586fd8b50c7eb39f9e90e2609`
+- ResearchSpec targets: `researchspec/subflows/<instance>/handoff.md`, `researchspec/subflows/<instance>/control.yaml`
 - Generated output paths: `academic-paper/references/shared/agents/compliance_agent.md`, `academic-paper-reviewer/references/shared/agents/compliance_agent.md`, `academic-pipeline/references/shared/agents/compliance_agent.md`, `deep-research/references/shared/agents/compliance_agent.md`
 - Before SHA-256: `19e4e6ce31b20a25097014f2feadb07fbf642696eb7cef7f61c90ae47149bf33`
-- After SHA-256: `48746b9a0c92d728adfbe9e58c2cb19624303fd41e036a306d7dfa13e9495ec1`
+- After SHA-256: `b174ada609c1e9679a4fb0b3e4b71effb8a2a1756ea8542bfa4ffa35341fa031`
 
 #### Before
 
@@ -2248,15 +2718,24 @@ Resolve the current route from `researchspec/specs/workflow.yaml`.
 
 ````markdown
 <!--rs:GATE-003-->
+### ResearchSpec Current Owner
+
+Replacement scope: `GATE-003` for `shared`.
+
 Return a `compliance_report` conforming to
-`shared/compliance_report.schema.json` (Schema 12) as a standalone artifact. The
-orchestrator must first validate the report, then pass its path, hash, producer,
-stage, and mode to the runtime registration helper for
-`researchspec/runs/current/artifact-registry.json`. Pass the validated decision,
+`shared/compliance_report.schema.json` as a standalone boundary file. The
+orchestrator must first validate the report, then record its role, safe path,
+purpose, producer, and intended consumer in the owning subflow handoff at
+`researchspec/subflows/<instance>/handoff.md`. Pass the validated decision,
 tiered findings, evidence, and material gaps to the compliance gate helper for
-`researchspec/runs/current/gate-ledger.jsonl`. The compliance agent and
-orchestrator MUST NOT append the report to a Material Passport or edit either
-ResearchSpec runtime file directly.
+`researchspec/subflows/<instance>/control.yaml`. The compliance agent and
+orchestrator MUST NOT append the report to an external input or edit either
+ResearchSpec authority file directly.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:GATE-003-->
 ````
 
@@ -2266,13 +2745,13 @@ ResearchSpec runtime file directly.
 - Owner skill: `shared`
 - Source path: `shared/compliance_checkpoint_protocol.md`
 - Severity: `recommended`
-- Semantic role: `decision_ledger_entry`
+- Semantic role: `control_decision_record`
 - Replacement shape: `checklist`
-- Replacement body SHA-256: `c3d6f2d74acccd020c0db0543a5f3dcf23a5c70e66f1d9a3727e126ae8ab7687`
-- ResearchSpec targets: `researchspec/runs/current/decision-ledger.jsonl`, `researchspec/runs/current/artifact-registry.json`
+- Replacement body SHA-256: `f12d1a13c8712340990e86a8313b8fd363b53b0cbf00dda5744fe965b4d7b7d3`
+- ResearchSpec targets: `researchspec/subflows/<instance>/control.yaml`, `researchspec/subflows/<instance>/handoff.md`
 - Generated output paths: `academic-paper/references/shared/compliance_checkpoint_protocol.md`, `academic-paper-reviewer/references/shared/compliance_checkpoint_protocol.md`, `academic-pipeline/references/shared/compliance_checkpoint_protocol.md`, `deep-research/references/shared/compliance_checkpoint_protocol.md`
 - Before SHA-256: `52a20afa717bdd39a4d63c6e66457f91341803a8389a874409e82e68b933b863`
-- After SHA-256: `01ddc9567224b3460f33caba5a11ea4ae8475de96a3da5b7216b37b0c1de0098`
+- After SHA-256: `bc8b469ec39e19f9f501873fa60f0d26d2ecab5f7e87498a637190c5a7ff0d99`
 
 #### Before
 
@@ -2284,17 +2763,24 @@ ResearchSpec runtime file directly.
 
 ````markdown
 <!--rs:DECISION-002-->
-> **Enforcement boundary.** The compliance override ladder is evaluated by the
-> compliance decision runtime over prior accepted override decisions for the
-> same stage and run in `researchspec/runs/current/decision-ledger.jsonl`.
-> Schema 12 remains the compliance-report payload and deliberately does not
-> enforce cross-round rationale length. The runtime applies the first-, second-,
-> and third-round friction rules, stops for human confirmation, and records the
-> selected override, rationale, scope, report artifact id, and round count only
-> after confirmation. The Schema 12 report itself is returned for registration
-> in `researchspec/runs/current/artifact-registry.json`. Hand-written passport or
-> ledger content that did not pass this decision path is unaudited and cannot
-> authorize an override.
+### ResearchSpec Current Owner
+
+Replacement scope: `DECISION-002` for `shared`.
+
+> **Enforcement boundary.** Resolve prior accepted compliance overrides for the
+> same subflow and Gate from
+> `researchspec/subflows/<instance>/control.yaml`. Apply the configured
+> first-, second-, and third-round friction rules, stop for human confirmation,
+> and ask ResearchSpec CLI to record the selected override, rationale, scope,
+> report handoff role and path, and round count only after confirmation. The
+> compliance report remains an ordinary boundary file referenced through
+> `researchspec/subflows/<instance>/handoff.md`; its contents cannot authorize
+> an override or mutate the owning control.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:DECISION-002-->
 ````
 
@@ -2304,13 +2790,13 @@ ResearchSpec runtime file directly.
 - Owner skill: `shared`
 - Source path: `shared/ground_truth_isolation_pattern.md`
 - Severity: `recommended`
-- Semantic role: `artifact_provenance`
+- Semantic role: `boundary_deliverable_provenance`
 - Replacement shape: `artifact_projection_block`
-- Replacement body SHA-256: `7419053900a8cc2ee4b769596d080fe95cce3ab97dd05b10dee933b43ba63ef8`
-- ResearchSpec targets: `researchspec/runs/current/artifact-registry.json`, `researchspec/specs/sources.yaml`
+- Replacement body SHA-256: `63fe50d6a8812189a090c5d6b05da6a1c2b61538c73a12a08c924f65dae718bf`
+- ResearchSpec targets: `researchspec/subflows/<instance>/handoff.md`, `researchspec/specs/sources.yaml`
 - Generated output paths: `academic-paper/references/shared/ground_truth_isolation_pattern.md`, `academic-paper-reviewer/references/shared/ground_truth_isolation_pattern.md`, `academic-pipeline/references/shared/ground_truth_isolation_pattern.md`, `deep-research/references/shared/ground_truth_isolation_pattern.md`
 - Before SHA-256: `8489fcd47b2e4871bd0a2f4044149638bcd5db48c9f201e499f783671c97c860`
-- After SHA-256: `e0c7f54c92903aaeb9ecfc990e916171d342beb6be0c85007ee08a4443335bb0`
+- After SHA-256: `bd882544b5584ecf80a4456d4e986556b94efcbfe10b4034955e485b1a6f6b87`
 
 #### Before
 
@@ -2323,12 +2809,21 @@ artifact.
 
 ````markdown
 <!--rs:GATE-004-->
-chain must remain traceable through stable source ids in
-`researchspec/specs/sources.yaml` and immutable evidence artifacts registered in
-`researchspec/runs/current/artifact-registry.json`. Preserve producer, stage,
-content hash, source links, verification evidence, and supersession metadata on
-each artifact. A Material Passport may be retained as imported provenance
-evidence, but it is not the active traceability carrier.
+### ResearchSpec Current Owner
+
+Replacement scope: `GATE-004` for `shared`.
+
+Maintain traceability through stable source IDs in `sources.yaml`, stable claim
+support where applicable, and explicit boundary roles and paths in the owning
+handoff. Preserve producer, purpose, source links, verification evidence,
+limitations, and supersession notes in the semantic deliverable or handoff.
+External metadata is contextual evidence and never the active traceability
+authority.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/specs/sources.yaml`
 <!--/rs:GATE-004-->
 ````
 
@@ -2340,11 +2835,11 @@ evidence, but it is not the active traceability carrier.
 - Severity: `recommended`
 - Semantic role: `gate_policy`
 - Replacement shape: `gate_rule_block`
-- Replacement body SHA-256: `559c294a19a17bc74e79d477db35d2fbb2d11772929ff6c6d27907450d125e4c`
-- ResearchSpec targets: `researchspec/specs/workflow.yaml`, `researchspec/runs/current/gate-ledger.jsonl`
+- Replacement body SHA-256: `a9d8c29befb0ac0b2f59db39fc0e5175354cc435dbe19acf99194663b06054f9`
+- ResearchSpec targets: `researchspec/profiles/academic-pipeline.yaml`, `researchspec/subflows/<instance>/control.yaml`
 - Generated output paths: `academic-paper/references/shared/ground_truth_isolation_pattern.md`, `academic-paper-reviewer/references/shared/ground_truth_isolation_pattern.md`, `academic-pipeline/references/shared/ground_truth_isolation_pattern.md`, `deep-research/references/shared/ground_truth_isolation_pattern.md`
 - Before SHA-256: `ef679f383fea1e2cca7b486ef8b495a0bf41050c09d279285883e030a11dedf5`
-- After SHA-256: `d0847491b834fd9a62504bcd888e97d542d2abf8120bd6bb194e6e934fda015e`
+- After SHA-256: `6cfbf0ff735260afa36277227ef2234f816a42b51f978ee1a4145147f2abc626`
 
 #### Before
 
@@ -2356,8 +2851,20 @@ Only a passed integrity gate with a verified Material Passport does that.
 
 ````markdown
 <!--rs:GATE-005-->
-Imported ARS Gate records are evidence only. They may be cited by current verification, but they cannot pass, preserve, override or unlock a ResearchSpec Gate. Only a current scoped Gate event with a trusted receipt and explicit human confirmation contributes runtime authority.
-Current verdicts live in `researchspec/runs/current/gate-ledger.jsonl`.
+### ResearchSpec Current Owner
+
+Replacement scope: `GATE-005` for `shared`.
+
+An external Gate report is evidence only. It cannot pass, preserve, override,
+or unlock a ResearchSpec Gate. Use the current profile to identify the owning
+Gate, present a fresh verification recommendation, and require explicit human
+confirmation. Append the resulting attempt—and any separately approved failed-
+Gate override—only to the owning subflow control.
+
+Current ResearchSpec owners:
+
+- `researchspec/profiles/academic-pipeline.yaml`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:GATE-005-->
 ````
 
@@ -2369,11 +2876,11 @@ Current verdicts live in `researchspec/runs/current/gate-ledger.jsonl`.
 - Severity: `required`
 - Semantic role: `gate_policy`
 - Replacement shape: `gate_rule_block`
-- Replacement body SHA-256: `3bad69d2a76f8b4e8249e4221cea71ce4a08352eab02da6f7e714113a090c6fd`
-- ResearchSpec targets: `researchspec/runs/current/gate-ledger.jsonl`, `researchspec/runs/current/artifact-registry.json`
+- Replacement body SHA-256: `d0197bbb90aacedc9dd5c73665f50587682277e79f56633bd829d1bbf626432e`
+- ResearchSpec targets: `researchspec/subflows/<instance>/control.yaml`, `researchspec/subflows/<instance>/handoff.md`
 - Generated output paths: `academic-paper/references/shared/handoff_schemas.md`, `academic-paper-reviewer/references/shared/handoff_schemas.md`, `academic-pipeline/references/shared/handoff_schemas.md`, `deep-research/references/shared/handoff_schemas.md`
 - Before SHA-256: `e1bc4e6eec4c6a6b12d5645553e7b93dc589076b9bf8a8d6554b0b0c0f7de557`
-- After SHA-256: `5d62547b8fc7115fc84874443d45142bdb99672fbe6a86e76501cc464d4d1088`
+- After SHA-256: `8381bca56099e227fe300406f9a73b7e38aa9c3ce1ac0058fc677529cb67dd5d`
 
 #### Before
 
@@ -2393,34 +2900,46 @@ Current verdicts live in `researchspec/runs/current/gate-ledger.jsonl`.
 
 ````markdown
 <!--rs:GATE-006-->
-4. **Version tracking:** every handoff resolves a stable artifact id, version
-   label, content hash, and supersession relationship from
-   `researchspec/runs/current/artifact-registry.json`. Version labels increase
-   monotonically within a lineage.
-5. **Failure on missing:** missing required fields or artifacts produce
-   `HANDOFF_INCOMPLETE` with the exact gaps; consumers do not proceed partially.
-6. **Producer validation:** the producer validates payload shape before returning
-   the artifact for runtime registration.
-7. **Consumer validation:** the consumer checks payload shape, expected artifact
-   id/hash, and required upstream gate receipts before use; violations request a
-   corrected artifact rather than an in-place edit.
-8. **Integrity gating:** verification status comes from the gate entry tied to
-   the artifact hash in `researchspec/runs/current/gate-ledger.jsonl`, not from a
-   mutable payload field.
-9. **Staleness detection:** when an upstream artifact hash changes or is
-   superseded, dependent artifacts and prior gate receipts are stale until their
-   responsible helpers recompute them.
-10. **Freshness:** apply the configured freshness policy to gate timestamps and
-    current artifact hashes. Expired evidence requires re-verification.
-11. **Stage-skip eligibility:** Stage 2.5 may be skipped only when the current
-    artifact hash has a fresh VERIFIED receipt, version expectations match, the
-    workflow permits the skip, and the user confirms it. Return that confirmation
-    to the decision runtime; otherwise run full verification.
-12. **Final integrity is never skipped:** Stage 4.5 always performs its configured
-    full verification, regardless of imported Passport status or earlier gates.
+### ResearchSpec Current Owner
 
-Validators and runtime helpers own registry and gate writes; producer and
-consumer agents only emit payloads and findings.
+Replacement scope: `GATE-006` for `shared`.
+
+4. **Traceable handoff:** every boundary file is resolved by its unique role and
+   safe project-relative path from
+   `researchspec/subflows/<instance>/handoff.md`. When a producer supersedes a
+   file, it updates the owning handoff entry instead of creating another
+   lifecycle authority.
+5. **Failure on missing:** missing required fields or boundary files produce
+   `HANDOFF_INCOMPLETE` with the exact gaps; consumers do not proceed partially.
+6. **Producer validation:** the producer validates the payload shape before
+   returning the file to the producing subflow for handoff recording.
+7. **Consumer validation:** the consumer checks the declared role, path, payload
+   shape, and required upstream human-confirmed Gate attempts before use;
+   violations request a corrected boundary file rather than an in-place edit.
+8. **Integrity gating:** verification status comes from the Gate attempt in
+   `researchspec/subflows/<instance>/control.yaml`, not from a mutable field in
+   the boundary file.
+9. **Staleness detection:** when an upstream boundary file changes, dependent
+   findings and prior Gate attempts must be recomputed before they authorize a
+   transition.
+10. **Freshness:** apply the profile's configured freshness policy to Gate
+    attempts and their referenced boundary inputs. Expired evidence requires
+    re-verification.
+11. **Stage-skip eligibility:** a profile-declared optional stage may be skipped
+    only when the current inputs satisfy its Gate requirements and the user
+    confirms the skip through the CLI.
+12. **Final integrity is never skipped:** a required final-integrity Gate always
+    performs its configured verification, regardless of external metadata or
+    earlier Gate attempts.
+
+The producing Agent writes validated boundary references to the owning handoff
+and returns formal findings to ResearchSpec CLI. The CLI is the only writer for
+Gate, Decision, frontier, and transition mutations in `control.yaml`.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:GATE-006-->
 ````
 
@@ -2432,11 +2951,11 @@ consumer agents only emit payloads and findings.
 - Severity: `required`
 - Semantic role: `handoff_projection`
 - Replacement shape: `schema_projection_table`
-- Replacement body SHA-256: `7752e4465a0e26601e970f32c677477b867250b13159759bb6b1b0c8f30ee0be`
-- ResearchSpec targets: `researchspec/specs/project.md`, `researchspec/specs/sources.yaml`, `researchspec/specs/claims.yaml`, `researchspec/specs/manuscript.yaml`, `researchspec/runs/current/artifact-registry.json`
+- Replacement body SHA-256: `137a443071b29772cac9ed76618ab7305798b9ee10c34f039455bb314eba4f7a`
+- ResearchSpec targets: `researchspec/specs/project.md`, `researchspec/specs/sources.yaml`, `researchspec/specs/claims.yaml`, `researchspec/specs/manuscript.yaml`, `researchspec/subflows/<instance>/handoff.md`
 - Generated output paths: `academic-paper/references/shared/handoff_schemas.md`, `academic-paper-reviewer/references/shared/handoff_schemas.md`, `academic-pipeline/references/shared/handoff_schemas.md`, `deep-research/references/shared/handoff_schemas.md`
 - Before SHA-256: `24f2f8a9080227d39b038d392b831f95ef5dc249a0ccb74644b80d965449b2a7`
-- After SHA-256: `878a375843f107544a5caefcb46f9a39e7e077d470ae64167aa26df3c04fd5bb`
+- After SHA-256: `bb567dfe542919cd2b72e95a476b7e9b666d4326bbaac3a5b32f5bc9f6318d3c`
 
 #### Before
 
@@ -2448,15 +2967,27 @@ consumer agents only emit payloads and findings.
 
 ````markdown
 <!--rs:HANDOFF-003-->
-> **Convention**: ARS Markdown schemas remain human-readable payload formats,
-> but ResearchSpec contracts and runtime records are the stable interfaces.
-> Producers must validate every required payload field, emit the payload as an
-> artifact, and return it to the runtime for registration in
-> `researchspec/runs/current/artifact-registry.json`. Project research intent,
+### ResearchSpec Current Owner
+
+Replacement scope: `HANDOFF-003` for `shared`.
+
+> **Convention**: ARSU Markdown contracts remain human-readable payload formats,
+> while ResearchSpec specs, controls, and handoffs are the stable project
+> interfaces. Producers must validate every required payload field, write the
+> boundary file outside `researchspec/`, and record its role and path in
+> `researchspec/subflows/<instance>/handoff.md`. Project research intent,
 > sources, claims, and manuscript constraints into their corresponding
 > `researchspec/specs/*` files only through accepted contract changes. Missing
 > required fields trigger `HANDOFF_INCOMPLETE`; consumers must not proceed with
 > a partial handoff.
+
+Current ResearchSpec owners:
+
+- `researchspec/specs/project.md`
+- `researchspec/specs/sources.yaml`
+- `researchspec/specs/claims.yaml`
+- `researchspec/specs/manuscript.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:HANDOFF-003-->
 ````
 
@@ -2466,13 +2997,13 @@ consumer agents only emit payloads and findings.
 - Owner skill: `shared`
 - Source path: `shared/handoff_schemas.md`
 - Severity: `required`
-- Semantic role: `review_commitment_tracking`
+- Semantic role: `review_handoff_tracking`
 - Replacement shape: `schema_projection_table`
-- Replacement body SHA-256: `089b4a2ffaf4deca2fe7f718008ee7c7ab24c7e2f3f1237e3ad64c26f471191b`
-- ResearchSpec targets: `researchspec/changes/<change-id>/contract-patch.yaml`, `researchspec/draft-patches/<patch-id>.json`, `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/decision-ledger.jsonl`
+- Replacement body SHA-256: `7fe36cd42da1ecb9be1ae6a2a42b6dbe7fa0136078640078ddc98bd87d7c24a1`
+- ResearchSpec targets: `researchspec/changes/<change-id>/change.md`, `assets/shared/contracts/patch/revision_patch.schema.json`, `researchspec/subflows/<instance>/handoff.md`, `researchspec/subflows/<instance>/control.yaml`
 - Generated output paths: `academic-paper/references/shared/handoff_schemas.md`, `academic-paper-reviewer/references/shared/handoff_schemas.md`, `academic-pipeline/references/shared/handoff_schemas.md`, `deep-research/references/shared/handoff_schemas.md`
 - Before SHA-256: `3773a18fe88945df922430c6423aa3a96c68d8c2ffafd991abba6442aa119d87`
-- After SHA-256: `f138e95d0e2825eb28e5e270378fa4ff35dad8018c204a365918371a2431ac55`
+- After SHA-256: `cd1a187e77824c8f61e0cfc6bad846eb49d7d0c63dc7c4d8371d4532fee7f14e`
 
 #### Before
 
@@ -2484,8 +3015,23 @@ consumer agents only emit payloads and findings.
 
 ````markdown
 <!--rs:REVIEW-015-->
-Register the canonical revision roadmap and review report as current ResearchSpec artifacts. Any Schema 11 representation originating outside ResearchSpec is imported evidence only; cross-stage work must reference the registered artifact id and hash.
-Register the roadmap through `researchspec/runs/current/artifact-registry.json`.
+### ResearchSpec Current Owner
+
+Replacement scope: `REVIEW-015` for `shared`.
+
+Write the review report and revision roadmap as explicit boundary deliverables
+outside `researchspec/`, then record their roles and paths in the producing
+handoff. A downstream revision reads those paths directly. Use a project change
+when the accepted response alters stable scope, claims, or manuscript structure;
+use the ARSU revision patch only for explicit manuscript operations. Formal
+review and revision consequences remain in the owning control.
+
+Current ResearchSpec owners:
+
+- `researchspec/changes/<change-id>/change.md`
+- `assets/shared/contracts/patch/revision_patch.schema.json`
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:REVIEW-015-->
 ````
 
@@ -2495,13 +3041,13 @@ Register the roadmap through `researchspec/runs/current/artifact-registry.json`.
 - Owner skill: `shared`
 - Source path: `shared/handoff_schemas.md`
 - Severity: `required`
-- Semantic role: `runtime_state_boundary`
+- Semantic role: `subflow_control_boundary`
 - Replacement shape: `artifact_projection_block`
-- Replacement body SHA-256: `88598b2ff1c18832ff817f92e104e45ffcde819438567dfe8a9b2d1c63aab250`
-- ResearchSpec targets: `researchspec/runs/current/state.yaml`, `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/decision-ledger.jsonl`, `researchspec/runs/current/gate-ledger.jsonl`
+- Replacement body SHA-256: `367c00a2453c02f482fc5d4c17b352713ccfc123ddd1cb402c787deaf18a828d`
+- ResearchSpec targets: `researchspec/subflows/<instance>/control.yaml`, `researchspec/subflows/<instance>/handoff.md`
 - Generated output paths: `academic-paper/references/shared/handoff_schemas.md`, `academic-paper-reviewer/references/shared/handoff_schemas.md`, `academic-pipeline/references/shared/handoff_schemas.md`, `deep-research/references/shared/handoff_schemas.md`
 - Before SHA-256: `66d6edfd32f6fbfc4ea2198020b68fd8bc21c91265e5fadd22b3a69e8ecd59f5`
-- After SHA-256: `28aad69c1931885562b844f9f48b425f0abe47117886cfd30dde9574a2a1945a`
+- After SHA-256: `fddaa1b8fb562c009c01db7ff60222de97a299120c32f0e369752045b606600e`
 
 #### Before
 
@@ -2513,8 +3059,19 @@ When `ARS_PASSPORT_RESET=1`, Schema 9 gains an append-only `reset_boundary[]` le
 
 ````markdown
 <!--rs:STATE-009-->
-When importing an ARS Schema 9 `reset_boundary[]`, preserve the selected boundary and related records inside the immutable source artifact and deterministic projection. Record the consumed boundary in `material_passport_imports`; do not copy the external ledger into current state or emit a modified Passport.
-Register the immutable source in `researchspec/runs/current/artifact-registry.json`.
+### ResearchSpec Current Owner
+
+Replacement scope: `STATE-009` for `shared`.
+
+Treat any external state bundle as an ordinary immutable input file. Record only
+its current role, type, path, purpose, and limits in the consuming subflow's
+handoff. Do not copy its state fields into the current control or infer a Gate,
+Decision, checkpoint, transition, or completion result from it.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:STATE-009-->
 ````
 

@@ -57,8 +57,22 @@ I received reviewer comments, help me revise
 resume_from_passport=<hash> [stage=<n>] [mode=<m>]
 ```
 <!--rs:STATE-002-->
-Treat `resume_from_passport=<hash>` as a request to prepare `material_passport_import` for the external `academic-pipeline:mid-entry` Start. Resolve the source path, verify the declared SHA-256 and selected boundary, preview the exact Start transaction, and require human confirmation. The transaction registers the source and normalized projection, appends imported evidence, records the consumed boundary in current state, and starts the instance at its declared entry stage. No Passport file is mutated or emitted.
-Current authority is committed through `researchspec/runs/current/state.yaml`.
+### ResearchSpec Current Owner
+
+Replacement scope: `STATE-002` for `academic-pipeline`.
+
+Do not use the upstream resume token or state carrier. To enter from existing
+materials, request instructions for `academic-pipeline:mid-entry`, identify the
+actual external prerequisite roles and paths, present the route summary, and
+obtain a new instance-scoped confirmation. The CLI creates the new owning
+control; the Agent records only the selected boundary inputs in its handoff.
+No external record can supply current Gate, Decision, checkpoint, or transition
+authority.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:STATE-002-->
 
 **Execution flow:**
@@ -311,14 +325,28 @@ Checkpoint: [MANDATORY/ADVISORY] — [What user needs to confirm]
 academic-pipeline is the orchestrator skill that coordinates the full ARS pipeline across 10 stages (delegating to deep-research, academic-paper, academic-paper-reviewer). Two invocation modes:
 
 <!--rs:STATE-003-->
-Resume from ResearchSpec state and registered artifacts. If the user supplies an ARS Material Passport, route it through the one-way `material_passport_import` input on the confirmed mid-entry Start; otherwise use the current CLI frontier directly. Never infer current Gate or Decision authority from external records.
-Resolve the current graph from `researchspec/specs/workflow.yaml`.
+### ResearchSpec Current Owner
+
+Replacement scope: `STATE-003` for `academic-pipeline`.
+
+Resume from ResearchSpec state and handoff-referenced artifacts. If the user supplies an ARS external input, route it through the one-way `explicit handoff input` input on the confirmed mid-entry Start; otherwise use the current CLI frontier directly. Never infer current Gate or Decision authority from external records.
+Resolve the current graph from `researchspec/profiles/academic-pipeline.yaml`.
+
+Current ResearchSpec owners:
+
+- `researchspec/profiles/academic-pipeline.yaml`
+- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:STATE-003-->
 
 <!--rs:IO-002-->
+### ResearchSpec Current Owner
+
+Replacement scope: `IO-002` for `academic-pipeline`.
+
 In phase-by-phase mode, downstream single-phase agents remain confined to the
-stage selected in `researchspec/runs/current/state.yaml`. They may read only the
-contracts and registered artifacts required by that stage and may emit only its
+stage selected in `researchspec/subflows/<instance>/control.yaml`. They may read only the
+contracts and handoff-referenced artifacts required by that stage and may emit only its
 declared output artifacts. The academic-pipeline orchestrator, state-tracking,
 integrity, collaboration-depth, and claim-audit roles retain their documented
 cross-stage visibility, but that visibility does not grant direct write access
@@ -326,15 +354,21 @@ to stable ResearchSpec files.
 
 Routing into phase-by-phase mode still requires an explicit user signal.
 Ambiguous cross-phase requests stop for clarification before dispatch. The
-configured workflow and current run state—not an ARS phase-directory name—decide
+configured workflow and the owning control—not an ARS phase-directory name—decide
 which stage may execute.
 
 Enforcement is contract-based: preflight checks
-`researchspec/specs/workflow.yaml`, `researchspec/runs/current/state.yaml`, and
-required entries in `researchspec/runs/current/artifact-registry.json` before
+`researchspec/profiles/academic-pipeline.yaml`, `researchspec/subflows/<instance>/control.yaml`, and
+required entries in `researchspec/subflows/<instance>/handoff.md` before
 dispatch; the runtime rejects outputs outside the selected stage. Existing
 prompt fences, local verifiers, or tool hooks may report diagnostics but do not
 replace the ResearchSpec boundary.
+
+Current ResearchSpec owners:
+
+- `researchspec/profiles/academic-pipeline.yaml`
+- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:IO-002-->
 
 ---

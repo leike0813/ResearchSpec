@@ -7,15 +7,27 @@ All agents that produce or consume these artifacts MUST conform to these schemas
 Consuming agents should validate input and request re-generation if schema violations are found.
 
 <!--rs:HANDOFF-003-->
-> **Convention**: ARS Markdown schemas remain human-readable payload formats,
-> but ResearchSpec contracts and runtime records are the stable interfaces.
-> Producers must validate every required payload field, emit the payload as an
-> artifact, and return it to the runtime for registration in
-> `researchspec/runs/current/artifact-registry.json`. Project research intent,
+### ResearchSpec Current Owner
+
+Replacement scope: `HANDOFF-003` for `shared`.
+
+> **Convention**: ARSU Markdown contracts remain human-readable payload formats,
+> while ResearchSpec specs, controls, and handoffs are the stable project
+> interfaces. Producers must validate every required payload field, write the
+> boundary file outside `researchspec/`, and record its role and path in
+> `researchspec/subflows/<instance>/handoff.md`. Project research intent,
 > sources, claims, and manuscript constraints into their corresponding
 > `researchspec/specs/*` files only through accepted contract changes. Missing
 > required fields trigger `HANDOFF_INCOMPLETE`; consumers must not proceed with
 > a partial handoff.
+
+Current ResearchSpec owners:
+
+- `researchspec/specs/project.md`
+- `researchspec/specs/sources.yaml`
+- `researchspec/specs/claims.yaml`
+- `researchspec/specs/manuscript.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:HANDOFF-003-->
 
 ---
@@ -538,8 +550,19 @@ score_trajectory: {
 ### Reset Boundary Extension (v3.6.3)
 
 <!--rs:STATE-009-->
-When importing an ARS Schema 9 `reset_boundary[]`, preserve the selected boundary and related records inside the immutable source artifact and deterministic projection. Record the consumed boundary in `material_passport_imports`; do not copy the external ledger into current state or emit a modified Passport.
-Register the immutable source in `researchspec/runs/current/artifact-registry.json`.
+### ResearchSpec Current Owner
+
+Replacement scope: `STATE-009` for `shared`.
+
+Treat any external state bundle as an ordinary immutable input file. Record only
+its current role, type, path, purpose, and limits in the consuming subflow's
+handoff. Do not copy its state fields into the current control or infer a Gate,
+Decision, checkpoint, transition, or completion result from it.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:STATE-009-->
 
 ```yaml
@@ -796,8 +819,23 @@ See `style_calibration_protocol.md` for full consumption rules and conflict reso
 - `verified` / `status` / `quality_assessment`: academic-paper-reviewer (re-review mode)
 
 <!--rs:REVIEW-015-->
-Register the canonical revision roadmap and review report as current ResearchSpec artifacts. Any Schema 11 representation originating outside ResearchSpec is imported evidence only; cross-stage work must reference the registered artifact id and hash.
-Register the roadmap through `researchspec/runs/current/artifact-registry.json`.
+### ResearchSpec Current Owner
+
+Replacement scope: `REVIEW-015` for `shared`.
+
+Write the review report and revision roadmap as explicit boundary deliverables
+outside `researchspec/`, then record their roles and paths in the producing
+handoff. A downstream revision reads those paths directly. Use a project change
+when the accepted response alters stable scope, claims, or manuscript structure;
+use the ARSU revision patch only for explicit manuscript operations. Formal
+review and revision consequences remain in the owning control.
+
+Current ResearchSpec owners:
+
+- `researchspec/changes/<change-id>/change.md`
+- `assets/shared/contracts/patch/revision_patch.schema.json`
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:REVIEW-015-->
 
 **Purpose**: Maps every reviewer concern through the full revision cycle — what was raised, what the author claims to have done, where the change is, and whether it was independently verified.
@@ -876,34 +914,46 @@ Ordering: chronological by `generated_at`. A Stage 2.5 FAIL followed by backfill
 2. **Type check**: Fields must match declared types (e.g., `enum` values must be from the allowed set)
 3. **Cross-reference check**: Source IDs referenced in Synthesis must exist in Bibliography; RevisionItem IDs in Response to Reviewers must match the Revision Roadmap
 <!--rs:GATE-006-->
-4. **Version tracking:** every handoff resolves a stable artifact id, version
-   label, content hash, and supersession relationship from
-   `researchspec/runs/current/artifact-registry.json`. Version labels increase
-   monotonically within a lineage.
-5. **Failure on missing:** missing required fields or artifacts produce
-   `HANDOFF_INCOMPLETE` with the exact gaps; consumers do not proceed partially.
-6. **Producer validation:** the producer validates payload shape before returning
-   the artifact for runtime registration.
-7. **Consumer validation:** the consumer checks payload shape, expected artifact
-   id/hash, and required upstream gate receipts before use; violations request a
-   corrected artifact rather than an in-place edit.
-8. **Integrity gating:** verification status comes from the gate entry tied to
-   the artifact hash in `researchspec/runs/current/gate-ledger.jsonl`, not from a
-   mutable payload field.
-9. **Staleness detection:** when an upstream artifact hash changes or is
-   superseded, dependent artifacts and prior gate receipts are stale until their
-   responsible helpers recompute them.
-10. **Freshness:** apply the configured freshness policy to gate timestamps and
-    current artifact hashes. Expired evidence requires re-verification.
-11. **Stage-skip eligibility:** Stage 2.5 may be skipped only when the current
-    artifact hash has a fresh VERIFIED receipt, version expectations match, the
-    workflow permits the skip, and the user confirms it. Return that confirmation
-    to the decision runtime; otherwise run full verification.
-12. **Final integrity is never skipped:** Stage 4.5 always performs its configured
-    full verification, regardless of imported Passport status or earlier gates.
+### ResearchSpec Current Owner
 
-Validators and runtime helpers own registry and gate writes; producer and
-consumer agents only emit payloads and findings.
+Replacement scope: `GATE-006` for `shared`.
+
+4. **Traceable handoff:** every boundary file is resolved by its unique role and
+   safe project-relative path from
+   `researchspec/subflows/<instance>/handoff.md`. When a producer supersedes a
+   file, it updates the owning handoff entry instead of creating another
+   lifecycle authority.
+5. **Failure on missing:** missing required fields or boundary files produce
+   `HANDOFF_INCOMPLETE` with the exact gaps; consumers do not proceed partially.
+6. **Producer validation:** the producer validates the payload shape before
+   returning the file to the producing subflow for handoff recording.
+7. **Consumer validation:** the consumer checks the declared role, path, payload
+   shape, and required upstream human-confirmed Gate attempts before use;
+   violations request a corrected boundary file rather than an in-place edit.
+8. **Integrity gating:** verification status comes from the Gate attempt in
+   `researchspec/subflows/<instance>/control.yaml`, not from a mutable field in
+   the boundary file.
+9. **Staleness detection:** when an upstream boundary file changes, dependent
+   findings and prior Gate attempts must be recomputed before they authorize a
+   transition.
+10. **Freshness:** apply the profile's configured freshness policy to Gate
+    attempts and their referenced boundary inputs. Expired evidence requires
+    re-verification.
+11. **Stage-skip eligibility:** a profile-declared optional stage may be skipped
+    only when the current inputs satisfy its Gate requirements and the user
+    confirms the skip through the CLI.
+12. **Final integrity is never skipped:** a required final-integrity Gate always
+    performs its configured verification, regardless of external metadata or
+    earlier Gate attempts.
+
+The producing Agent writes validated boundary references to the owning handoff
+and returns formal findings to ResearchSpec CLI. The CLI is the only writer for
+Gate, Decision, frontier, and transition mutations in `control.yaml`.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:GATE-006-->
 
 ## `data_access_level` (v3.3.2+)

@@ -1,1 +1,15 @@
-ResearchSpec stores every produced or imported object in `researchspec/runs/current/artifact-registry.json` with a stable artifact id, type, path and SHA-256. Current native artifacts must match the strict registry variant emitted by their owning transaction. An ARS Material Passport import is stored as `authority: imported_evidence`; its source version remains provenance only and never selects runtime behavior.
+### ResearchSpec Current Owner
+
+Replacement scope: `ARTIFACT-001` for `academic-pipeline`.
+
+Boundary deliverables remain ordinary project files outside `researchspec/`.
+The producing subflow records each actual output in its handoff with a unique
+role, type, safe project-relative path, purpose, producer or intended consumer,
+and relevant limits. ResearchSpec does not assign another file identity, copy
+the file, or manage its version history. The owning control records only
+the subflow's lifecycle and formal decisions.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`

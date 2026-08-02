@@ -1,6 +1,7 @@
 import path from "node:path";
 
-import { ACADEMIC_PIPELINE_PROFILE, ACADEMIC_PIPELINE_PROFILE_TEXT } from "../arsu-converter/workflow/academic-pipeline.js";
+import { ACADEMIC_PIPELINE_PROFILE } from "../arsu-converter/workflow/academic-pipeline.js";
+import { ACADEMIC_PIPELINE_PROFILE_PROJECTION } from "../arsu-converter/workflow/generate.js";
 import type { Diagnostic } from "../core/validation/types.js";
 import { planFile, sha256, type PlannedWrite } from "../core/workspace/write-plan.js";
 import {
@@ -44,7 +45,7 @@ export async function planWorkspaceDelivery(input: {
   const profileOperation = await planFile({
     path: profileAbsolutePath,
     relativePath: profileTarget,
-    content: ACADEMIC_PIPELINE_PROFILE_TEXT,
+    content: ACADEMIC_PIPELINE_PROFILE_PROJECTION,
     scope: "project",
     ownership: "generated",
     recordedHash: existingProfile?.sha256,
@@ -56,7 +57,7 @@ export async function planWorkspaceDelivery(input: {
     tool_id: null,
     source: { kind: "framework-profile", profile_id: ACADEMIC_PIPELINE_PROFILE.profile_id, profile_version: ACADEMIC_PIPELINE_PROFILE.profile_version },
     target: { scope: "project", path: profileTarget, executable: false },
-    sha256: sha256(ACADEMIC_PIPELINE_PROFILE_TEXT),
+    sha256: sha256(ACADEMIC_PIPELINE_PROFILE_PROJECTION),
   };
   const toolDelivery = await planToolDelivery({
     projectRoot: input.projectRoot,

@@ -1,6 +1,10 @@
+### ResearchSpec Current Owner
+
+Replacement scope: `SOURCE-003` for `deep-research`.
+
 When `researchspec/specs/sources.yaml` contains included literature sources,
-resolve their registered source and screening artifacts through
-`researchspec/runs/current/artifact-registry.json` and present them to the
+resolve their handoff-referenced source and screening artifacts through
+`researchspec/subflows/<instance>/handoff.md` and present them to the
 Bibliography Agent as a read-only `literature_corpus[]` working projection.
 Apply the confirmed source policy without turning provider priority into
 workflow authority:
@@ -18,14 +22,20 @@ workflow authority:
 
 Call `zotero-literature-analysis` only for a source-level evidence goal and
 `zotero-research-synthesis` only for a bounded cross-source goal. Do not invoke
-every task mechanically. Consume results through a hash-bound
+every task mechanically. Consume results through a explicit
 `ProviderRetrievalHandoff`; an empty result is not proof of absence, and the
 handoff remains working evidence until this producer screens, verifies, and
-submits a durable bibliography artifact. Without a current run- and
+returns a durable bibliography artifact. Without a current, user-authorized,
 collection-bound `ManagedLibraryAuthorization`, Acquisition is candidate-only.
 That authorization never permits `zotero-library-curation`.
 
 Keep the existing five-step flow, four Iron Rules, and PRE-SCREENED
 reproducibility block intact. External search results and proposed additions
 remain output artifacts until an accepted source-contract change is applied;
-the agent must not mutate `sources.yaml`, the registry, or the projected corpus.
+the agent must not mutate `sources.yaml`, the projected corpus, or any other
+ResearchSpec authority file.
+
+Current ResearchSpec owners:
+
+- `researchspec/specs/sources.yaml`
+- `researchspec/subflows/<instance>/handoff.md`

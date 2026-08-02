@@ -1,20 +1,20 @@
-export const REPLACEMENT_PROFILE_ID = "researchspec-anchor-replacement-v3" as const;
+export const REPLACEMENT_PROFILE_ID = "researchspec-anchor-replacement-v4" as const;
 export const ANCHOR_ID_PATTERN = /^(STATE|IO|HANDOFF|PATCH|GATE|ARTIFACT|CLAIM|DECISION|SOURCE|REVIEW)-\d{3}$/;
 
 export type AnchorSeverity = "required" | "recommended" | "diagnostic";
 export type AnchorReplacementProfileId = typeof REPLACEMENT_PROFILE_ID;
 export type AnchorSemanticRole =
-  | "runtime_state_boundary"
-  | "contract_io_boundary"
+  | "subflow_control_boundary"
+  | "boundary_deliverable_contract"
   | "handoff_projection"
-  | "draft_patch_protocol"
+  | "revision_patch_protocol"
   | "gate_policy"
-  | "artifact_provenance"
-  | "review_commitment_tracking"
+  | "boundary_deliverable_provenance"
+  | "review_handoff_tracking"
   | "generator_evaluator_contract"
-  | "claim_contract_projection"
-  | "source_contract_projection"
-  | "decision_ledger_entry";
+  | "stable_claim_contract"
+  | "stable_source_contract"
+  | "control_decision_record";
 export type AnchorReplacementShape =
   | "protocol_block"
   | "io_contract_block"
@@ -69,7 +69,7 @@ export interface CoverageDecision {
 }
 
 export interface ContractAnchorFile {
-  schema_version: "researchspec.arsu.contract-anchors.v3";
+  schema_version: "researchspec.arsu.contract-anchors.v4";
   upstream_source: "vendor/ars";
   audited_commit: string;
   anchors: ContractAnchor[];

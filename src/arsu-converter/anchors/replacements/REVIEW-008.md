@@ -1,3 +1,7 @@
+### ResearchSpec Current Owner
+
+Replacement scope: `REVIEW-008` for `academic-paper-reviewer`.
+
 ### Commitment verification against revision evidence
 
 Run this step for every commitment-bearing concern. Resolve the original review,
@@ -16,6 +20,12 @@ For each commitment, assign one `fulfillment_status`:
 
 For a non-fulfilled status, preserve the corresponding rationale. Verify prose,
 citations, figures, tables, methods, and acknowledgments against their actual
-boundary files rather than a registry-backed apply or resolution report. Return
+boundary files rather than a framework-managed apply or resolution report. Return
 the verification report through this subflow's `handoff.md`; a human records
 the formal Gate verdict in the owning `control.yaml`.
+
+Current ResearchSpec owners:
+
+- `assets/shared/contracts/patch/revision_patch.schema.json`
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`

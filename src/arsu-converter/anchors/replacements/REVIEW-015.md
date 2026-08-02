@@ -1,2 +1,17 @@
-Register the canonical revision roadmap and review report as current ResearchSpec artifacts. Any Schema 11 representation originating outside ResearchSpec is imported evidence only; cross-stage work must reference the registered artifact id and hash.
-Register the roadmap through `researchspec/runs/current/artifact-registry.json`.
+### ResearchSpec Current Owner
+
+Replacement scope: `REVIEW-015` for `shared`.
+
+Write the review report and revision roadmap as explicit boundary deliverables
+outside `researchspec/`, then record their roles and paths in the producing
+handoff. A downstream revision reads those paths directly. Use a project change
+when the accepted response alters stable scope, claims, or manuscript structure;
+use the ARSU revision patch only for explicit manuscript operations. Formal
+review and revision consequences remain in the owning control.
+
+Current ResearchSpec owners:
+
+- `researchspec/changes/<change-id>/change.md`
+- `assets/shared/contracts/patch/revision_patch.schema.json`
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`

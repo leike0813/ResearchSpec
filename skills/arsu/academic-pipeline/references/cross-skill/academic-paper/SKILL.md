@@ -147,14 +147,32 @@ Phase 7: FORMAT        -> [formatter]                  -> Final Output Package
 academic-paper pipeline runs in 8 phases (Phase 0 intake → 7 formatting). Two invocation modes:
 
 <!--rs:STATE-001-->
-ResearchSpec owns the active run through `researchspec/runs/current/state.yaml`. Read the current subflow instances, frontier, Gate ledger and Decision ledger before dispatch. An ARS Material Passport may be imported as non-authoritative evidence through `material_passport_import`, but it never replaces current state or grants a transition.
+### ResearchSpec Current Owner
+
+Replacement scope: `STATE-001` for `academic-paper`.
+
+Resume only from the selected subflow's control and handoff. Read the project
+profile when pipeline graph rules apply, use status and directed instructions to
+derive the current frontier, and let the CLI perform every lifecycle, Gate,
+Decision, override, or transition change. External files may provide explicit
+inputs but never replace current control authority.
+
+Current ResearchSpec owners:
+
+- `researchspec/profiles/academic-pipeline.yaml`
+- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:STATE-001-->
 
 <!--rs:IO-005-->
+### ResearchSpec Current Owner
+
+Replacement scope: `IO-005` for `academic-paper`.
+
 In phase-by-phase mode, the literature strategist, structure architect, draft
 writer, citation compliance, bilingual abstract, peer review, and formatting
-roles may write only the outputs declared by the selected work item. They may
-read registered upstream artifacts required by that work. The argument-building
+roles may write only the outputs declared by the selected route instructions. They may
+read handoff-referenced upstream artifacts required by that work. The argument-building
 and visualization roles may span their documented stages only when the current
 frontier instructions explicitly select that work; one invocation does not
 authorize work in another stage. The generator-evaluator contract continues to
@@ -163,26 +181,41 @@ work.
 
 Phase-by-phase routing requires an explicit user signal. Ambiguous cross-stage
 material must be clarified before dispatch. The configured graph in
-`researchspec/specs/workflow.yaml`, the frontier in
-`researchspec/runs/current/state.yaml`, and registered inputs in
-`researchspec/runs/current/artifact-registry.json` define the permitted read and
+`researchspec/profiles/academic-pipeline.yaml`, the frontier in
+`researchspec/subflows/<instance>/control.yaml`, and handoff-referenced inputs in
+`researchspec/subflows/<instance>/handoff.md` define the permitted read and
 write boundary.
+
+Current ResearchSpec owners:
+
+- `researchspec/profiles/academic-pipeline.yaml`
+- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:IO-005-->
 
 ## v3.6.6 Generator-Evaluator Contract Protocol
 
 <!--rs:REVIEW-010-->
+### ResearchSpec Current Owner
+
+Replacement scope: `REVIEW-010` for `academic-paper`.
+
 > This block defines the `academic-paper full` generator/evaluator split. Resolve
 > the frozen `writer_full` and `evaluator_full` contract JSON plus every Phase
 > 4a/4b and 6a/6b artifact through
-> `researchspec/runs/current/artifact-registry.json`. Preserve the four-call
+> `researchspec/subflows/<instance>/handoff.md`. Preserve the four-call
 > paper-blind/paper-visible separation, mode exclusions, baseline fields, system
 > prompt text, lint rules, and writer/evaluator role distinction described
-> below. Register each accepted phase output before it is consumed downstream;
-> submit lint, disagreement, or failure-condition results to the responsible gate
-> helper for `researchspec/runs/current/gate-ledger.jsonl`. The orchestrator may
-> instantiate allowed runtime fields but must not mutate the frozen contract or
-> write runtime records directly.
+> below. Record each accepted phase output before it is consumed downstream;
+> return lint, disagreement, or failure-condition results to the responsible gate
+> helper for `researchspec/subflows/<instance>/control.yaml`. The orchestrator may
+> instantiate allowed invocation fields but must not mutate the frozen contract
+> or write the owning handoff or control directly.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:REVIEW-010-->
 >
 > **Applies to `academic-paper full` mode only.** Nine non-full modes (`plan`, `outline-only`, `revision`, `revision-coach`, `abstract-only`, `lit-review`, `format-convert`, `citation-check`, `disclosure`) are byte-equivalent across v3.6.5 → v3.6.6 and do not invoke this protocol. (The later-added `rebuttal-audit` mode is likewise non-full and does not invoke this protocol.) Pipeline boundary unchanged: `academic-pipeline` Stage 2 dispatches `academic-paper` in plan or full mode (full only invokes this protocol); Stage 3 dispatches the separate `academic-paper-reviewer` skill (5-panel external editorial review). The in-pair Phase 6 evaluator under this protocol and the Stage 3 reviewer are different review layers — see design doc §5.1 audit conclusion 2.
@@ -339,17 +372,27 @@ Not sure? Start with `plan` — it will guide you step by step. `disclosure` is 
 - Improvement suggestions (advisory).
 
 <!--rs:REVIEW-011-->
+### ResearchSpec Current Owner
+
+Replacement scope: `REVIEW-011` for `academic-paper`.
+
 **IRON RULE — advisory integrity boundary:** standalone `rebuttal-audit` may
 reuse comment parsing, but it remains outside Stage 4.5 integrity and produces
 only an advisory response-letter QA artifact. Return the coverage table, gap
-list, tone/evidence risks, and suggestions for registration in
-`researchspec/runs/current/artifact-registry.json`. It MUST NOT emit verified
-commitment status, apply a draft patch, mark a package `ready_to_submit`, or
-write ResearchSpec registries or ledgers. If its findings imply a change in
+list, tone/evidence risks, and suggestions for the producing subflow to record
+in
+`researchspec/subflows/<instance>/handoff.md`. It MUST NOT emit verified
+commitment status, apply a draft patch, mark a delivery package ready, or
+write ResearchSpec authority files. If its findings imply a change in
 accepted response strategy or claim scope, propose that change and wait for a
 human decision recorded through
-`researchspec/runs/current/decision-ledger.jsonl`; the audit itself never
+`researchspec/subflows/<instance>/control.yaml`; the audit itself never
 certifies acceptance.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:REVIEW-011-->
 
 **Boundary vs `re-review`:** `academic-paper-reviewer`'s `re-review` mode verifies the **revised manuscript** (did the author's claimed changes actually appear in the paper) and runs inside the pipeline. `rebuttal-audit` verifies the **response letter itself** (does the rebuttal cover every comment, is its tone/evidence sound) and runs standalone, advisory. Different artifacts, different layers.
@@ -359,6 +402,10 @@ certifies acceptance.
 ## Revision Mode Patch Protocol (#390)
 
 <!--rs:PATCH-001-->
+### ResearchSpec Current Owner
+
+Replacement scope: `PATCH-001` for `academic-paper`.
+
 In `academic-paper` revision mode, the writer may emit a bounded revision patch
 instead of rewriting the complete manuscript. The adapted ARSU contract at
 `assets/shared/contracts/patch/revision_patch.schema.json` is the sole manuscript
@@ -367,7 +414,7 @@ preconditions, replace/insert/delete operations, annotation dispositions,
 revision rationale, and roadmap traceability.
 
 The patch and manuscript are explicit files selected by the caller. They are not
-registered ResearchSpec runtime entities. When safe mechanical application is
+handoff-referenced ResearchSpec runtime entities. When safe mechanical application is
 useful, run `node scripts/apply-revision-patch.mjs` with explicit `--base`, `--patch`,
 and `--output` paths and, optionally, `--report`. The helper validates the whole
 patch before creating output. Schema errors, stale hashes, unknown blocks,
@@ -387,6 +434,14 @@ optional safety tool and never mutates control state.
 
 This patch protocol does not apply to the `academic-paper full` in-pair Phase
 6→4 loop when that loop's contract requires a complete `## Draft Body`.
+
+Current ResearchSpec owners:
+
+- `assets/shared/contracts/patch/revision_patch.schema.json`
+- `scripts/apply-revision-patch.mjs`
+- `researchspec/subflows/<instance>/work/annotation-intake/`
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:PATCH-001-->
 
 ---

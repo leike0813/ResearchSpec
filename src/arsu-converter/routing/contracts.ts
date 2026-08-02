@@ -11,18 +11,30 @@ export const ArsuSkillIdSchema = z.enum(ARSU_SKILL_IDS);
 export type ArsuSkillId = z.infer<typeof ArsuSkillIdSchema>;
 
 const SafeIdSchema = z.string().regex(/^[a-z0-9][a-z0-9_-]*$/);
-const ContractPathSchema = z.string().regex(/^specs\/[A-Za-z0-9._/-]+$/)
-  .refine((value) => !value.split("/").includes(".."));
+const StableSpecPathSchema = z.enum([
+  "specs/project.md",
+  "specs/sources.yaml",
+  "specs/claims.yaml",
+  "specs/manuscript.yaml",
+]);
 export const RouteRefSchema = z.string().regex(
   /^(?:deep-research|academic-paper|academic-paper-reviewer|academic-pipeline):[a-z0-9][a-z0-9_-]*$/,
 );
 export type RouteRef = `${ArsuSkillId}:${string}`;
 
 export const PrerequisiteRequirementSchema = z.discriminatedUnion("kind", [
-  z.strictObject({ kind: z.literal("contract"), id: ContractPathSchema }),
-  z.strictObject({ kind: z.literal("artifact"), id: SafeIdSchema }),
+  z.strictObject({ kind: z.literal("stable_spec"), id: StableSpecPathSchema }),
+  z.strictObject({ kind: z.literal("handoff_role"), id: SafeIdSchema }),
   z.strictObject({ kind: z.literal("user_input"), id: SafeIdSchema }),
 ]);
+
+export const BoundaryOutputDescriptorSchema = z.strictObject({
+  role: SafeIdSchema,
+  type: SafeIdSchema,
+  purpose: z.string().trim().min(1),
+  structure: z.string().trim().min(1),
+  validation_profile: z.enum(["text-artifact", "binary-file-artifact"]),
+});
 
 export const PrerequisiteGroupSchema = z.strictObject({
   operator: z.enum(["all_of", "any_of"]),
@@ -44,11 +56,12 @@ const RouteBaseShape = {
   route_ref: RouteRefSchema,
   title: z.string().min(1),
   intents: z.array(z.string().min(1)).min(1),
-  primary_artifact_types: z.array(SafeIdSchema).min(1),
+  boundary_outputs: z.array(BoundaryOutputDescriptorSchema).min(1),
   prerequisite_groups: z.array(PrerequisiteGroupSchema),
   risk_level: z.enum(["low", "medium", "high"]),
   gate_policy: GatePolicySchema,
   cost: RouteCostSchema,
+  start_confirmation: z.literal("required"),
 };
 
 export const ArsuRouteDefinitionSchema = z.discriminatedUnion("route_kind", [
@@ -88,6 +101,7 @@ export const ArsuRoutingCatalogSchema = z.strictObject({
 
 export type PrerequisiteRequirement = z.infer<typeof PrerequisiteRequirementSchema>;
 export type PrerequisiteGroup = z.infer<typeof PrerequisiteGroupSchema>;
+export type BoundaryOutputDescriptor = z.infer<typeof BoundaryOutputDescriptorSchema>;
 export type ArsuRouteDefinition = z.infer<typeof ArsuRouteDefinitionSchema>;
 export type NearMissRoute = z.infer<typeof NearMissRouteSchema>;
 export type ArsuSkillRouteDefinition = z.infer<typeof ArsuSkillRouteDefinitionSchema>;
@@ -128,6 +142,9 @@ export function validateRoutingCatalogReferences(catalog: ArsuRoutingCatalog): R
       }
       if (route.gate_policy.level !== "none" && route.gate_policy.gate_kinds.length === 0) {
         issues.push({ code: "gate_policy_inconsistent", message: `Route ${route.route_ref} has ${route.gate_policy.level} Gate policy without Gate kinds.` });
+      }
+      if (new Set(route.boundary_outputs.map((item) => item.role)).size !== route.boundary_outputs.length) {
+        issues.push({ code: "duplicate_boundary_output_role", message: `Route ${route.route_ref} repeats a boundary output role.` });
       }
       for (const group of route.prerequisite_groups) {
         if (new Set(group.requirements.map((item) => `${item.kind}:${item.id}`)).size !== group.requirements.length) {

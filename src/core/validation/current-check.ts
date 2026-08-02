@@ -1,7 +1,8 @@
 import path from "node:path";
 import { parse as parseYaml } from "yaml";
 
-import { ACADEMIC_PIPELINE_PROFILE, ACADEMIC_PIPELINE_PROFILE_TEXT } from "../../arsu-converter/workflow/academic-pipeline.js";
+import { ACADEMIC_PIPELINE_PROFILE } from "../../arsu-converter/workflow/academic-pipeline.js";
+import { ACADEMIC_PIPELINE_PROFILE_PROJECTION } from "../../arsu-converter/workflow/generate.js";
 import { inspectLiteratureAdapters } from "../../literature-adapters/inspect.js";
 import { ProjectChangeDeltaSchema } from "../contracts/project-change.js";
 import { ChangeDocumentError, validateProjectChangeDelta } from "../runtime/change-documents.js";
@@ -54,7 +55,7 @@ function profileOwnershipDiagnostics(index: Awaited<ReturnType<typeof loadCurren
   if (record.source.kind !== "framework-profile" || record.source.profile_id !== ACADEMIC_PIPELINE_PROFILE.profile_id || record.source.profile_version !== ACADEMIC_PIPELINE_PROFILE.profile_version) {
     return [problem("framework_profile_source_mismatch", "The project profile manifest source does not match the packaged profile.", path.join(index.workspace, "tool-installation-manifest.json"))];
   }
-  const packagedHash = sha256(ACADEMIC_PIPELINE_PROFILE_TEXT);
+  const packagedHash = sha256(ACADEMIC_PIPELINE_PROFILE_PROJECTION);
   if (record.sha256 !== packagedHash) return [problem("framework_profile_manifest_drift", "The recorded profile hash does not match the packaged profile.", path.join(index.workspace, "tool-installation-manifest.json"))];
   const file = index.files.get("profiles/academic-pipeline.yaml");
   if (file && file.hash !== record.sha256) return [problem("framework_profile_file_drift", "The projected profile differs from its manifest-owned source.", file.absolutePath)];

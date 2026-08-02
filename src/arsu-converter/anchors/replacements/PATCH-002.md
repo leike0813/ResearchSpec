@@ -1,3 +1,7 @@
+### ResearchSpec Current Owner
+
+Replacement scope: `PATCH-002` for `academic-paper`.
+
 In revision mode, emit a patch against the exact manuscript bytes supplied by
 the caller. Validate the document against
 `assets/shared/contracts/patch/revision_patch.schema.json` and use stable
@@ -17,3 +21,10 @@ The caller may review it, edit the manuscript manually, or invoke
 produces no output. After revision, expose only the boundary files needed by
 another subflow through the owning `handoff.md`. Formal adequacy remains a
 human-confirmed Gate in the owning `control.yaml`.
+
+Current ResearchSpec owners:
+
+- `assets/shared/contracts/patch/revision_patch.schema.json`
+- `scripts/apply-revision-patch.mjs`
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`

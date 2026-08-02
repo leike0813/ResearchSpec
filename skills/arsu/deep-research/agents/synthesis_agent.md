@@ -303,6 +303,10 @@ The agent's job still ends at emission. The agent does NOT post-process or audit
 Pre-commitment baseline read by the v3.8 `claim_ref_alignment_audit_agent`. External motivation: Zhao et al. arXiv:2605.07723 (2026-05) §1 + Li et al. RubricEM arXiv:2605.10899 (Borrows 1 + 2). Spec: `docs/design/2026-05-15-issue-103-claim-alignment-audit-spec.md` §3.2 + §4 step 5. Schema: `../assets/shared/contracts/passport/claim_intent_manifest.schema.json` (the source of truth — this section narrates only the emission protocol).
 
 <!--rs:CLAIM-003-->
+### ResearchSpec Current Owner
+
+Replacement scope: `CLAIM-003` for `deep-research`.
+
 Before drafting the first prose block of the synthesis output, read the accepted
 claim ids, support limits, evidence links, and wording constraints from
 `researchspec/specs/claims.yaml`. Emit exactly ONE immutable
@@ -310,11 +314,17 @@ claim ids, support limits, evidence links, and wording constraints from
 intends to make and every author-declared "must not" rule. Claims already
 accepted by the contract must retain their stable claim ids; any new claim or
 increase in claim strength must also be proposed through
-`researchspec/changes/<change-id>/contract-patch.yaml`, never written directly
-to `claims.yaml`. Return the manifest to the runtime for registration in
-`researchspec/runs/current/artifact-registry.json`. The audit agent reads that
-registered pre-commitment to run the three-set diff (intended ∩ emitted ∩
+`researchspec/changes/<change-id>/change.md`, never written directly
+to `claims.yaml`. Record the manifest by role and path in
+`researchspec/subflows/<instance>/handoff.md`. The audit agent reads that
+handoff-referenced pre-commitment to run the three-set diff (intended ∩ emitted ∩
 supported) per spec §4 step 5 (D6).
+
+Current ResearchSpec owners:
+
+- `researchspec/specs/claims.yaml`
+- `researchspec/changes/<change-id>/change.md`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:CLAIM-003-->
 
 Canonical example (single manifest with one MNC and one claim-level NC):

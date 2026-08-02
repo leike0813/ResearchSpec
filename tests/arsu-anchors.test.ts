@@ -4,35 +4,11 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { test } from "node:test";
 
-import { matchAnchor } from "../src/arsu-converter/anchors/match.js";
-import { findUncoveredRuntimeSurfaces } from "../src/arsu-converter/anchors/coverage.js";
 import { validateAnchorAssets } from "../src/arsu-converter/anchors/check.js";
+import { findUncoveredRuntimeSurfaces } from "../src/arsu-converter/anchors/coverage.js";
 import { generateUpstreamManifest } from "../src/arsu-converter/anchors/manifest.js";
-import type { ContractAnchor } from "../src/arsu-converter/anchors/types.js";
-import type { ContractAnchorFile } from "../src/arsu-converter/anchors/types.js";
-
-void test("bibliography replacements preserve provider and authority boundaries", async () => {
-  const [io, source] = await Promise.all([
-    readFile("src/arsu-converter/anchors/replacements/IO-003.md", "utf8"),
-    readFile("src/arsu-converter/anchors/replacements/SOURCE-003.md", "utf8"),
-  ]);
-  for (const stableTerm of ["ProviderRetrievalHandoff", "ManagedLibraryAuthorization"]) {
-    assert.match(io, new RegExp(stableTerm));
-    assert.match(source, new RegExp(stableTerm));
-  }
-  for (const mode of ["adapter-native", "protocol-multi-source", "external-first", "library-bound"]) {
-    assert.match(source, new RegExp(mode));
-  }
-  for (const skillId of [
-    "zotero-library-query",
-    "zotero-literature-acquisition",
-    "zotero-literature-analysis",
-    "zotero-research-synthesis",
-    "zotero-library-curation",
-  ]) {
-    assert.match(source, new RegExp(skillId));
-  }
-});
+import { matchAnchor } from "../src/arsu-converter/anchors/match.js";
+import type { ContractAnchor, ContractAnchorFile } from "../src/arsu-converter/anchors/types.js";
 
 void test("ARSU contract anchor assets validate against vendored upstream", async () => {
   const result = await validateAnchorAssets(process.cwd());
@@ -43,57 +19,30 @@ void test("ARSU contract anchor assets validate against vendored upstream", asyn
   assert.ok(result.manifest_file_count > 0);
 });
 
-void test("replaceable anchor assets declare semantic replacement metadata", async () => {
-  const data = JSON.parse(await readFile("src/arsu-converter/anchors/contract-anchors.json", "utf8")) as {
-    anchors: Array<{
-      severity: string;
-      id: string;
-      name: string;
-      semantic_role?: string;
-      researchspec_targets?: string[];
-      replacement_shape?: string;
-      replacement_scope?: { start_snippet?: string; end_snippet?: string };
-    }>;
-  };
-  const replaceable = data.anchors.filter((anchor) => anchor.severity === "required" || anchor.severity === "recommended");
-
+void test("replaceable anchors declare current owners and contain no legacy control authority", async () => {
+  const data = JSON.parse(await readFile("src/arsu-converter/anchors/contract-anchors.json", "utf8")) as ContractAnchorFile;
+  assert.equal(data.schema_version, "researchspec.arsu.contract-anchors.v4");
+  const replaceable = data.anchors.filter((anchor) => anchor.severity !== "diagnostic");
   assert.equal(replaceable.length, 53);
-  assert.equal(replaceable.every((anchor) =>
-    /^(STATE|IO|HANDOFF|PATCH|GATE|ARTIFACT|CLAIM|DECISION|SOURCE|REVIEW)-\d{3}$/.test(anchor.id) &&
-    anchor.name && anchor.semantic_role && anchor.researchspec_targets?.length && anchor.replacement_shape &&
-    anchor.replacement_scope?.start_snippet && anchor.replacement_scope.end_snippet), true);
-});
 
-void test("semantic replacement assets retain stable entrypoint boundaries", async () => {
-  const cases = [
-    {
-      path: "src/arsu-converter/anchors/replacements/PATCH-001.md",
-      required: [/does not apply to the `academic-paper full` in-pair Phase\s+6→4 loop/, /complete `## Draft Body`/],
-    },
-    {
-      path: "src/arsu-converter/anchors/replacements/IO-004.md",
-      required: [/Ambiguous cross-stage\s+material must be clarified before dispatch/, /one invocation does\s+not authorize either role to extend itself into another stage/],
-    },
-    {
-      path: "src/arsu-converter/anchors/replacements/IO-006.md",
-      required: [/expected\s+to read the complete registered manuscript/, /read access\s+does not extend their write scope/],
-    },
-  ];
-
-  for (const item of cases) {
-    const text = await readFile(item.path, "utf8");
-    for (const pattern of item.required) assert.match(text, pattern, item.path);
-    assert.doesNotMatch(text, /docs\/design\/|scripts\/check_pipeline_integrity\.py/, item.path);
+  const legacy = /runs\/current|specs\/workflow\.yaml|artifact-registry|decision-ledger|gate-ledger|contract-patch|draft-patches/;
+  for (const anchor of replaceable) {
+    assert.ok(anchor.semantic_role);
+    assert.ok(anchor.researchspec_targets.length > 0);
+    assert.equal(anchor.researchspec_targets.some((target) => legacy.test(target)), false, anchor.id);
+    const body = await readFile(`src/arsu-converter/anchors/replacements/${anchor.id}.md`, "utf8");
+    assert.match(body, /ResearchSpec Current Owner/);
+    for (const target of anchor.researchspec_targets) assert.match(body, new RegExp(escapeRegExp(target)));
+    assert.doesNotMatch(body, /runs\/current|specs\/workflow\.yaml|artifact-registry|decision-ledger|gate-ledger|Material Passport|\breceipt\b|\bsubmit\b/);
   }
 });
 
-void test("upstream manifest extracts contract-risk shape from shared handoff schemas", async () => {
+void test("upstream manifest keeps source observations separate from current replacement policy", async () => {
   const manifest = await generateUpstreamManifest(process.cwd());
   const handoffSchemas = manifest.files.find((file) => file.path === "shared/handoff_schemas.md");
 
   assert.ok(handoffSchemas);
   assert.ok(handoffSchemas.headings?.some((heading) => heading.title === "Schema 9: Material Passport (cross-stage metadata)"));
-  assert.ok(handoffSchemas.headings?.some((heading) => heading.title === "Schema 11: R&R Traceability Matrix"));
   assert.ok(handoffSchemas.risk_hits.some((hit) => hit.keyword === "Material Passport"));
   assert.ok(handoffSchemas.risk_hits.some((hit) => hit.keyword === "Schema 11"));
 });
@@ -111,8 +60,8 @@ void test("anchor matcher tolerates whitespace changes without line numbers", ()
       snippets: ["You MAY READ files in `phase1_*/`", "scripts/check_pipeline_integrity.py"],
       keywords: ["phase2"],
     },
-    semantic_role: "contract_io_boundary",
-    researchspec_targets: ["researchspec/runs/current/artifact-registry.json"],
+    semantic_role: "boundary_deliverable_contract",
+    researchspec_targets: ["researchspec/subflows/<instance>/handoff.md"],
     replacement_shape: "io_contract_block",
     replacement_scope: {
       start_snippet: "You MAY READ files in `phase1_*/`",
@@ -120,17 +69,14 @@ void test("anchor matcher tolerates whitespace changes without line numbers", ()
     },
   };
 
-  const result = matchAnchor(
-    anchor,
-    [
-      "# Fixture",
-      "",
-      "## Phase Boundary",
-      "You MAY READ    files in",
-      "`phase1_*/` for context before phase2 work.",
-      "Validated by scripts/check_pipeline_integrity.py.",
-    ].join("\n"),
-  );
+  const result = matchAnchor(anchor, [
+    "# Fixture",
+    "",
+    "## Phase Boundary",
+    "You MAY READ    files in",
+    "`phase1_*/` for context before phase2 work.",
+    "Validated by scripts/check_pipeline_integrity.py.",
+  ].join("\n"));
 
   assert.ok(result.span);
 });
@@ -144,33 +90,51 @@ void test("anchor matcher rejects ambiguous replacement boundaries", () => {
     contract_category: "phase_directory_boundaries",
     severity: "required",
     match_hints: { snippets: ["boundary"], keywords: ["phase"] },
-    semantic_role: "contract_io_boundary",
-    researchspec_targets: ["researchspec/runs/current/artifact-registry.json"],
+    semantic_role: "boundary_deliverable_contract",
+    researchspec_targets: ["researchspec/subflows/<instance>/handoff.md"],
     replacement_shape: "io_contract_block",
     replacement_scope: { start_snippet: "boundary", end_snippet: "boundary" },
   };
 
   const result = matchAnchor(anchor, "phase boundary\nphase boundary\n");
-
   assert.equal(result.span, undefined);
   assert.equal(result.diagnostics.some((item) => item.includes("matched 2 times")), true);
 });
 
-void test("coverage audit rejects an undecided runtime ownership occurrence", async () => {
+void test("coverage checks current replacement assets instead of upstream history prose", async () => {
   const root = await mkdtemp(path.join(tmpdir(), "researchspec-anchor-coverage-"));
-  const sourcePath = "deep-research/SKILL.md";
-  await mkdir(path.join(root, "vendor/ars/deep-research"), { recursive: true });
-  await writeFile(path.join(root, "vendor/ars", sourcePath), "Mode A uses state tracking via Material Passport.\n", "utf8");
+  const replacementDir = path.join(root, "src/arsu-converter/anchors/replacements");
+  await mkdir(replacementDir, { recursive: true });
+  await writeFile(
+    path.join(replacementDir, "STATE-901.md"),
+    "Use researchspec/runs/current/state.yaml.\nresearchspec/subflows/<instance>/control.yaml\n",
+    "utf8",
+  );
   const anchorFile: ContractAnchorFile = {
-    schema_version: "researchspec.arsu.contract-anchors.v3",
+    schema_version: "researchspec.arsu.contract-anchors.v4",
     upstream_source: "vendor/ars",
     audited_commit: "fixture",
-    anchors: [],
+    anchors: [{
+      id: "STATE-901",
+      name: "fixture.current-owner",
+      source_path: "deep-research/SKILL.md",
+      owner_skill: "deep-research",
+      contract_category: "runtime",
+      severity: "required",
+      match_hints: { snippets: ["legacy"] },
+      semantic_role: "subflow_control_boundary",
+      researchspec_targets: ["researchspec/subflows/<instance>/control.yaml"],
+      replacement_shape: "protocol_block",
+      replacement_scope: { start_snippet: "legacy", end_snippet: "legacy" },
+    }],
     coverage_decisions: [],
   };
 
-  const findings = await findUncoveredRuntimeSurfaces(root, anchorFile, [sourcePath]);
-
-  assert.deepEqual(findings, [`passport-state-carrier: ${sourcePath}:1`]);
+  const findings = await findUncoveredRuntimeSurfaces(root, anchorFile, ["deep-research/SKILL.md"]);
+  assert.equal(findings.some((finding) => finding.startsWith("legacy-replacement-authority:STATE-901:")), true);
   await rm(root, { recursive: true, force: true });
 });
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}

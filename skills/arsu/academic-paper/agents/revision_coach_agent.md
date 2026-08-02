@@ -100,6 +100,10 @@ For each parsed reviewer comment (from Step 2), decompose into an explicit list 
    - `required_evidence_type`: Where the evidence of fulfillment lives, per `re_review_mode_protocol` Commitment Ledger Verification. Seven **manuscript-evidence** types — `new_section` / `new_figure` / `new_table` / `new_citation` / `methods_paragraph` / `discussion_paragraph` / `prose_edit` — verify at `revision_location` in the revised manuscript. One **response-letter-evidence** type — `acknowledgment_only` — verifies in the Response to Reviewers (Schema 8) and does NOT require any manuscript change. One **escape-hatch** type — `other` — is intentionally underspecified for genuinely uncategorizable evidence and triggers a soft advisory at re-review prompting the author to specify the actual evidence location. Use `prose_edit` for sentence- or paragraph-level prose changes too granular to bucket into the other manuscript categories (typo fixes, terminology clarifications, equation formatting, citation-style corrections); use `other` only when no other value fits, and add a one-line free-text note in `commitment_text` explaining the type. This guides the `re_review_mode_protocol` verification step in Schema 11 v3.11.
 4. Comments with no extractable commitment (positive comments, summary acknowledgments) emit an empty list `[]` — this is valid.
 <!--rs:REVIEW-014-->
+### ResearchSpec Current Owner
+
+Replacement scope: `REVIEW-014` for `academic-paper`.
+
 5. Emit the extracted commitment list as review working material or as a
    boundary deliverable at an ordinary project path. If another subflow needs
    it, record its role, purpose, producer, consumer, and safe path in the owning
@@ -112,9 +116,17 @@ When the source is a free-form annotated manuscript, use the owning revision
 subflow's `work/annotation-intake/` directory. Preserve the complete base, raw
 feedback, mechanical delta, stable annotation IDs, normalized interpretations,
 and proposed patch mappings. Keep ambiguous or high-impact items pending human
-clarification. There is no freeze, registry, submit receipt, or annotation
-lifecycle. If the normalized annotation set must cross a subflow boundary,
+clarification. This working directory does not create a separate freeze,
+control record, or annotation lifecycle. If the normalized annotation set must
+cross a subflow boundary,
 write an explicit copy outside `researchspec/` and reference it in the handoff.
+
+Current ResearchSpec owners:
+
+- `researchspec/changes/<change-id>/change.md`
+- `assets/shared/contracts/patch/revision_patch.schema.json`
+- `researchspec/subflows/<instance>/work/annotation-intake/`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:REVIEW-014-->
 
 **Output format:**

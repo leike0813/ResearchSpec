@@ -1,137 +1,133 @@
 {
-  "schema_version": "0.1",
-  "integration_profile": "researchspec-preflight-v9",
+  "schema_version": "1",
+  "integration_profile": "researchspec-preflight-v10",
   "source": "vendor/ars",
   "output": "skills/arsu",
-  "material_passport_policy": "imported_evidence_only_not_runtime_ssot",
   "anchor_replacement": {
-    "profile_id": "researchspec-anchor-replacement-v3",
+    "profile_id": "researchspec-anchor-replacement-v4",
     "coverage_policy": "required_and_recommended",
     "marker": "<!--rs:<anchor-id>-->",
     "diagnostic_anchor_policy": "report_only"
   },
   "skill_groups": {
     "academic-paper": {
-      "profile_id": "researchspec-preflight-v9",
+      "profile_id": "researchspec-preflight-v10",
       "required_contracts": [
-        "researchspec/specs/workflow.yaml",
-        "researchspec/runs/current/state.yaml",
         "researchspec/specs/project.md",
         "researchspec/specs/sources.yaml",
         "researchspec/specs/claims.yaml",
-        "researchspec/specs/manuscript.yaml"
+        "researchspec/specs/manuscript.yaml",
+        "researchspec/profiles/academic-pipeline.yaml when the selected route is a pipeline entry or child",
+        "the owning researchspec/subflows/<instance>/control.yaml and handoff.md after start"
       ],
-      "artifact_reads": [
-        "researchspec/runs/current/artifact-registry.json"
+      "handoff_reads": [
+        "explicit input roles and safe project-relative paths returned by route or subflow instructions"
       ],
       "writes_allowed": [
-        "artifact files declared by the current ARSU stage or mode",
-        "researchspec/changes/<change-id>/contract-patch.yaml for high-impact semantic proposals",
-        "researchspec/draft-patches/<patch-id>.json for manuscript text revisions"
+        "boundary deliverables at explicit project-relative paths outside researchspec/",
+        "the owning subflow handoff.md",
+        "researchspec/changes/<change-id>/ documents for proposed high-impact semantic changes",
+        "the ARSU revision patch and optional stateless helper output"
       ],
-      "ledgers": [
-        "researchspec/runs/current/decision-ledger.jsonl written by runtime after human-confirmed decisions",
-        "researchspec/runs/current/gate-ledger.jsonl written by submit gate after explicit human confirmation"
+      "mutation_authorities": [
+        "ResearchSpec CLI exclusively mutates control.yaml lifecycle, Gate, Decision, override, and transition state",
+        "the owning Agent or human directly edits handoff.md and project change documents",
+        "stable specs may be edited directly; high-impact changes should be proposed and reviewed first"
       ],
       "notes": [
-        "academic-paper uses the shared ResearchSpec runtime preflight profile.",
-        "Load only stage/mode-relevant contracts into agent context.",
-        "Treat ARS Material Passport as imported external evidence, not runtime truth.",
-        "The current runtime profile and CLI action descriptor select the adaptive or strict control protocol.",
+        "academic-paper uses the shared current ResearchSpec file-contract preflight.",
+        "Load only route-relevant stable specs, handoff roles, and boundary files into Agent context.",
         "Use fixed literature Adapter results only as bounded working material owned by the active ARSU producer."
       ],
       "full_matrix_injection": false
     },
     "academic-paper-reviewer": {
-      "profile_id": "researchspec-preflight-v9",
+      "profile_id": "researchspec-preflight-v10",
       "required_contracts": [
-        "researchspec/specs/workflow.yaml",
-        "researchspec/runs/current/state.yaml",
         "researchspec/specs/project.md",
         "researchspec/specs/sources.yaml",
         "researchspec/specs/claims.yaml",
-        "researchspec/specs/manuscript.yaml"
+        "researchspec/specs/manuscript.yaml",
+        "researchspec/profiles/academic-pipeline.yaml when the selected route is a pipeline entry or child",
+        "the owning researchspec/subflows/<instance>/control.yaml and handoff.md after start"
       ],
-      "artifact_reads": [
-        "researchspec/runs/current/artifact-registry.json"
+      "handoff_reads": [
+        "explicit input roles and safe project-relative paths returned by route or subflow instructions"
       ],
       "writes_allowed": [
-        "artifact files declared by the current ARSU stage or mode",
-        "researchspec/changes/<change-id>/contract-patch.yaml for high-impact semantic proposals",
-        "researchspec/draft-patches/<patch-id>.json for manuscript text revisions"
+        "boundary deliverables at explicit project-relative paths outside researchspec/",
+        "the owning subflow handoff.md",
+        "researchspec/changes/<change-id>/ documents for proposed high-impact semantic changes"
       ],
-      "ledgers": [
-        "researchspec/runs/current/decision-ledger.jsonl written by runtime after human-confirmed decisions",
-        "researchspec/runs/current/gate-ledger.jsonl written by submit gate after explicit human confirmation"
+      "mutation_authorities": [
+        "ResearchSpec CLI exclusively mutates control.yaml lifecycle, Gate, Decision, override, and transition state",
+        "the owning Agent or human directly edits handoff.md and project change documents",
+        "stable specs may be edited directly; high-impact changes should be proposed and reviewed first"
       ],
       "notes": [
-        "academic-paper-reviewer uses the shared ResearchSpec runtime preflight profile.",
-        "Load only stage/mode-relevant contracts into agent context.",
-        "Treat ARS Material Passport as imported external evidence, not runtime truth.",
-        "The current runtime profile and CLI action descriptor select the adaptive or strict control protocol.",
+        "academic-paper-reviewer uses the shared current ResearchSpec file-contract preflight.",
+        "Load only route-relevant stable specs, handoff roles, and boundary files into Agent context.",
         "Use fixed literature Adapter results only as bounded working material owned by the active ARSU producer."
       ],
       "full_matrix_injection": false
     },
     "academic-pipeline": {
-      "profile_id": "researchspec-preflight-v9",
+      "profile_id": "researchspec-preflight-v10",
       "required_contracts": [
-        "researchspec/specs/workflow.yaml",
-        "researchspec/runs/current/state.yaml",
         "researchspec/specs/project.md",
         "researchspec/specs/sources.yaml",
         "researchspec/specs/claims.yaml",
-        "researchspec/specs/manuscript.yaml"
+        "researchspec/specs/manuscript.yaml",
+        "researchspec/profiles/academic-pipeline.yaml when the selected route is a pipeline entry or child",
+        "the owning researchspec/subflows/<instance>/control.yaml and handoff.md after start"
       ],
-      "artifact_reads": [
-        "researchspec/runs/current/artifact-registry.json"
+      "handoff_reads": [
+        "explicit input roles and safe project-relative paths returned by route or subflow instructions"
       ],
       "writes_allowed": [
-        "artifact files declared by the current ARSU stage or mode",
-        "researchspec/changes/<change-id>/contract-patch.yaml for high-impact semantic proposals",
-        "researchspec/draft-patches/<patch-id>.json for manuscript text revisions"
+        "boundary deliverables at explicit project-relative paths outside researchspec/",
+        "the owning subflow handoff.md",
+        "researchspec/changes/<change-id>/ documents for proposed high-impact semantic changes"
       ],
-      "ledgers": [
-        "researchspec/runs/current/decision-ledger.jsonl written by runtime after human-confirmed decisions",
-        "researchspec/runs/current/gate-ledger.jsonl written by submit gate after explicit human confirmation"
+      "mutation_authorities": [
+        "ResearchSpec CLI exclusively mutates control.yaml lifecycle, Gate, Decision, override, and transition state",
+        "the owning Agent or human directly edits handoff.md and project change documents",
+        "stable specs may be edited directly; high-impact changes should be proposed and reviewed first"
       ],
       "notes": [
-        "academic-pipeline uses the shared ResearchSpec runtime preflight profile.",
-        "Load only stage/mode-relevant contracts into agent context.",
-        "Treat ARS Material Passport as imported external evidence, not runtime truth.",
-        "The current runtime profile and CLI action descriptor select the adaptive or strict control protocol.",
+        "academic-pipeline uses the shared current ResearchSpec file-contract preflight.",
+        "Load only route-relevant stable specs, handoff roles, and boundary files into Agent context.",
         "Use fixed literature Adapter results only as bounded working material owned by the active ARSU producer."
       ],
       "full_matrix_injection": false
     },
     "deep-research": {
-      "profile_id": "researchspec-preflight-v9",
+      "profile_id": "researchspec-preflight-v10",
       "required_contracts": [
-        "researchspec/specs/workflow.yaml",
-        "researchspec/runs/current/state.yaml",
         "researchspec/specs/project.md",
         "researchspec/specs/sources.yaml",
         "researchspec/specs/claims.yaml",
-        "researchspec/specs/manuscript.yaml"
+        "researchspec/specs/manuscript.yaml",
+        "researchspec/profiles/academic-pipeline.yaml when the selected route is a pipeline entry or child",
+        "the owning researchspec/subflows/<instance>/control.yaml and handoff.md after start"
       ],
-      "artifact_reads": [
-        "researchspec/runs/current/artifact-registry.json"
+      "handoff_reads": [
+        "explicit input roles and safe project-relative paths returned by route or subflow instructions"
       ],
       "writes_allowed": [
-        "artifact files declared by the current ARSU stage or mode",
-        "researchspec/changes/<change-id>/contract-patch.yaml for high-impact semantic proposals",
-        "researchspec/draft-patches/<patch-id>.json for manuscript text revisions"
+        "boundary deliverables at explicit project-relative paths outside researchspec/",
+        "the owning subflow handoff.md",
+        "researchspec/changes/<change-id>/ documents for proposed high-impact semantic changes"
       ],
-      "ledgers": [
-        "researchspec/runs/current/decision-ledger.jsonl written by runtime after human-confirmed decisions",
-        "researchspec/runs/current/gate-ledger.jsonl written by submit gate after explicit human confirmation"
+      "mutation_authorities": [
+        "ResearchSpec CLI exclusively mutates control.yaml lifecycle, Gate, Decision, override, and transition state",
+        "the owning Agent or human directly edits handoff.md and project change documents",
+        "stable specs may be edited directly; high-impact changes should be proposed and reviewed first"
       ],
       "notes": [
-        "deep-research uses the shared ResearchSpec runtime preflight profile.",
-        "Load only stage/mode-relevant contracts into agent context.",
-        "Treat ARS Material Passport as imported external evidence, not runtime truth.",
-        "The current runtime profile and CLI action descriptor select the adaptive or strict control protocol.",
-        "Use the fixed Zotero task Skills through the provider-neutral handoff; Deep Research retains screening, coverage, and artifact ownership."
+        "deep-research uses the shared current ResearchSpec file-contract preflight.",
+        "Load only route-relevant stable specs, handoff roles, and boundary files into Agent context.",
+        "Use fixed Zotero task Skills through the provider-neutral handoff; Deep Research retains screening and evidence judgment."
       ],
       "full_matrix_injection": false
     }

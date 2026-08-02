@@ -1,5 +1,5 @@
 {
-  "schema_version": "researchspec.arsu.contract-anchors.v3",
+  "schema_version": "researchspec.arsu.contract-anchors.v4",
   "upstream_source": "vendor/ars",
   "audited_commit": "becfcc40c6e9e93c187cf4a088333f83373e002d",
   "anchors": [
@@ -20,12 +20,10 @@
           "reset_boundary"
         ]
       },
-      "semantic_role": "runtime_state_boundary",
+      "semantic_role": "subflow_control_boundary",
       "researchspec_targets": [
-        "researchspec/runs/current/state.yaml",
-        "researchspec/runs/current/decision-ledger.jsonl",
-        "researchspec/runs/current/gate-ledger.jsonl",
-        "researchspec/runs/current/artifact-registry.json"
+        "researchspec/subflows/<instance>/control.yaml",
+        "researchspec/subflows/<instance>/handoff.md"
       ],
       "replacement_shape": "protocol_block",
       "replacement_scope": {
@@ -50,12 +48,11 @@
           "integrity_verification_agent"
         ]
       },
-      "semantic_role": "runtime_state_boundary",
+      "semantic_role": "subflow_control_boundary",
       "researchspec_targets": [
-        "researchspec/specs/workflow.yaml",
-        "researchspec/runs/current/state.yaml",
-        "researchspec/runs/current/artifact-registry.json",
-        "researchspec/runs/current/gate-ledger.jsonl"
+        "researchspec/profiles/academic-pipeline.yaml",
+        "researchspec/subflows/<instance>/control.yaml",
+        "researchspec/subflows/<instance>/handoff.md"
       ],
       "replacement_shape": "protocol_block",
       "replacement_scope": {
@@ -80,11 +77,11 @@
           "write-scope guard"
         ]
       },
-      "semantic_role": "contract_io_boundary",
+      "semantic_role": "boundary_deliverable_contract",
       "researchspec_targets": [
-        "researchspec/specs/workflow.yaml",
-        "researchspec/runs/current/state.yaml",
-        "researchspec/runs/current/artifact-registry.json"
+        "researchspec/profiles/academic-pipeline.yaml",
+        "researchspec/subflows/<instance>/control.yaml",
+        "researchspec/subflows/<instance>/handoff.md"
       ],
       "replacement_shape": "io_contract_block",
       "replacement_scope": {
@@ -112,11 +109,9 @@
           "sole machine-stable handoff anchor"
         ]
       },
-      "semantic_role": "runtime_state_boundary",
+      "semantic_role": "subflow_control_boundary",
       "researchspec_targets": [
-        "researchspec/runs/current/state.yaml",
-        "researchspec/runs/current/decision-ledger.jsonl",
-        "researchspec/runs/current/gate-ledger.jsonl"
+        "researchspec/subflows/<instance>/control.yaml"
       ],
       "replacement_shape": "protocol_block",
       "replacement_scope": {
@@ -151,10 +146,9 @@
         "researchspec/specs/sources.yaml",
         "researchspec/specs/claims.yaml",
         "researchspec/specs/manuscript.yaml",
-        "researchspec/runs/current/artifact-registry.json",
-        "researchspec/runs/current/decision-ledger.jsonl",
-        "researchspec/runs/current/gate-ledger.jsonl",
-        "researchspec/draft-patches/<patch-id>.json"
+        "researchspec/subflows/<instance>/handoff.md",
+        "researchspec/subflows/<instance>/control.yaml",
+        "assets/shared/contracts/patch/revision_patch.schema.json"
       ],
       "replacement_shape": "schema_projection_table",
       "replacement_scope": {
@@ -180,12 +174,12 @@
           "apply report"
         ]
       },
-      "semantic_role": "draft_patch_protocol",
+      "semantic_role": "revision_patch_protocol",
       "researchspec_targets": [
         "assets/shared/contracts/patch/revision_patch.schema.json",
         "scripts/apply-revision-patch.mjs",
-        "handoff.md",
-        "control.yaml"
+        "researchspec/subflows/<instance>/handoff.md",
+        "researchspec/subflows/<instance>/control.yaml"
       ],
       "replacement_shape": "patch_protocol_block",
       "replacement_scope": {
@@ -215,9 +209,8 @@
       },
       "semantic_role": "gate_policy",
       "researchspec_targets": [
-        "researchspec/runs/current/gate-ledger.jsonl",
-        "researchspec/runs/current/artifact-registry.json",
-        "researchspec/runs/current/decision-ledger.jsonl"
+        "researchspec/subflows/<instance>/control.yaml",
+        "researchspec/subflows/<instance>/handoff.md"
       ],
       "replacement_shape": "gate_rule_block",
       "replacement_scope": {
@@ -242,10 +235,10 @@
           "current_version"
         ]
       },
-      "semantic_role": "artifact_provenance",
+      "semantic_role": "boundary_deliverable_provenance",
       "researchspec_targets": [
-        "researchspec/runs/current/artifact-registry.json",
-        "researchspec/runs/current/gate-ledger.jsonl"
+        "researchspec/subflows/<instance>/handoff.md",
+        "researchspec/subflows/<instance>/control.yaml"
       ],
       "replacement_shape": "artifact_projection_block",
       "replacement_scope": {
@@ -273,12 +266,10 @@
           "resume"
         ]
       },
-      "semantic_role": "runtime_state_boundary",
+      "semantic_role": "subflow_control_boundary",
       "researchspec_targets": [
-        "researchspec/runs/current/state.yaml",
-        "researchspec/runs/current/decision-ledger.jsonl",
-        "researchspec/runs/current/gate-ledger.jsonl",
-        "researchspec/runs/current/artifact-registry.json"
+        "researchspec/subflows/<instance>/control.yaml",
+        "researchspec/subflows/<instance>/handoff.md"
       ],
       "replacement_shape": "protocol_block",
       "replacement_scope": {
@@ -309,7 +300,7 @@
         "researchspec/specs/sources.yaml",
         "researchspec/specs/claims.yaml",
         "researchspec/specs/manuscript.yaml",
-        "researchspec/runs/current/artifact-registry.json"
+        "researchspec/subflows/<instance>/handoff.md"
       ],
       "replacement_shape": "schema_projection_table",
       "replacement_scope": {
@@ -338,12 +329,10 @@
           "slr_lineage"
         ]
       },
-      "semantic_role": "runtime_state_boundary",
+      "semantic_role": "subflow_control_boundary",
       "researchspec_targets": [
-        "researchspec/runs/current/state.yaml",
-        "researchspec/runs/current/artifact-registry.json",
-        "researchspec/runs/current/decision-ledger.jsonl",
-        "researchspec/runs/current/gate-ledger.jsonl"
+        "researchspec/subflows/<instance>/control.yaml",
+        "researchspec/subflows/<instance>/handoff.md"
       ],
       "replacement_shape": "artifact_projection_block",
       "replacement_scope": {
@@ -371,12 +360,12 @@
           "Response to Reviewers"
         ]
       },
-      "semantic_role": "review_commitment_tracking",
+      "semantic_role": "review_handoff_tracking",
       "researchspec_targets": [
-        "researchspec/changes/<change-id>/contract-patch.yaml",
-        "researchspec/draft-patches/<patch-id>.json",
-        "researchspec/runs/current/artifact-registry.json",
-        "researchspec/runs/current/decision-ledger.jsonl"
+        "researchspec/changes/<change-id>/change.md",
+        "assets/shared/contracts/patch/revision_patch.schema.json",
+        "researchspec/subflows/<instance>/handoff.md",
+        "researchspec/subflows/<instance>/control.yaml"
       ],
       "replacement_shape": "schema_projection_table",
       "replacement_scope": {
@@ -406,8 +395,8 @@
       },
       "semantic_role": "gate_policy",
       "researchspec_targets": [
-        "researchspec/runs/current/gate-ledger.jsonl",
-        "researchspec/runs/current/artifact-registry.json"
+        "researchspec/subflows/<instance>/control.yaml",
+        "researchspec/subflows/<instance>/handoff.md"
       ],
       "replacement_shape": "gate_rule_block",
       "replacement_scope": {
@@ -432,11 +421,11 @@
           "Mode A"
         ]
       },
-      "semantic_role": "runtime_state_boundary",
+      "semantic_role": "subflow_control_boundary",
       "researchspec_targets": [
-        "researchspec/specs/workflow.yaml",
-        "researchspec/runs/current/state.yaml",
-        "researchspec/runs/current/artifact-registry.json"
+        "researchspec/profiles/academic-pipeline.yaml",
+        "researchspec/subflows/<instance>/control.yaml",
+        "researchspec/subflows/<instance>/handoff.md"
       ],
       "replacement_shape": "protocol_block",
       "replacement_scope": {
@@ -466,8 +455,8 @@
       },
       "semantic_role": "generator_evaluator_contract",
       "researchspec_targets": [
-        "researchspec/runs/current/artifact-registry.json",
-        "researchspec/runs/current/gate-ledger.jsonl"
+        "researchspec/subflows/<instance>/handoff.md",
+        "researchspec/subflows/<instance>/control.yaml"
       ],
       "replacement_shape": "checklist",
       "replacement_scope": {
@@ -492,10 +481,10 @@
           "advisory QA report"
         ]
       },
-      "semantic_role": "artifact_provenance",
+      "semantic_role": "boundary_deliverable_provenance",
       "researchspec_targets": [
-        "researchspec/runs/current/artifact-registry.json",
-        "researchspec/runs/current/decision-ledger.jsonl"
+        "researchspec/subflows/<instance>/handoff.md",
+        "researchspec/subflows/<instance>/control.yaml"
       ],
       "replacement_shape": "artifact_projection_block",
       "replacement_scope": {
@@ -522,13 +511,13 @@
           "apply report"
         ]
       },
-      "semantic_role": "draft_patch_protocol",
+      "semantic_role": "revision_patch_protocol",
       "researchspec_targets": [
         "assets/shared/contracts/patch/revision_patch.schema.json",
         "scripts/apply-revision-patch.mjs",
-        "work/annotation-intake/",
-        "handoff.md",
-        "control.yaml"
+        "researchspec/subflows/<instance>/work/annotation-intake/",
+        "researchspec/subflows/<instance>/handoff.md",
+        "researchspec/subflows/<instance>/control.yaml"
       ],
       "replacement_shape": "patch_protocol_block",
       "replacement_scope": {
@@ -554,11 +543,11 @@
           "Phase Boundary"
         ]
       },
-      "semantic_role": "contract_io_boundary",
+      "semantic_role": "boundary_deliverable_contract",
       "researchspec_targets": [
-        "researchspec/specs/workflow.yaml",
-        "researchspec/runs/current/state.yaml",
-        "researchspec/runs/current/artifact-registry.json"
+        "researchspec/profiles/academic-pipeline.yaml",
+        "researchspec/subflows/<instance>/control.yaml",
+        "researchspec/subflows/<instance>/handoff.md"
       ],
       "replacement_shape": "io_contract_block",
       "replacement_scope": {
@@ -584,11 +573,11 @@
           "generator-evaluator contract"
         ]
       },
-      "semantic_role": "contract_io_boundary",
+      "semantic_role": "boundary_deliverable_contract",
       "researchspec_targets": [
-        "researchspec/specs/workflow.yaml",
-        "researchspec/runs/current/state.yaml",
-        "researchspec/runs/current/artifact-registry.json"
+        "researchspec/profiles/academic-pipeline.yaml",
+        "researchspec/subflows/<instance>/control.yaml",
+        "researchspec/subflows/<instance>/handoff.md"
       ],
       "replacement_shape": "io_contract_block",
       "replacement_scope": {
@@ -614,11 +603,11 @@
           "Sprint Contract Protocol"
         ]
       },
-      "semantic_role": "contract_io_boundary",
+      "semantic_role": "boundary_deliverable_contract",
       "researchspec_targets": [
-        "researchspec/specs/workflow.yaml",
-        "researchspec/runs/current/state.yaml",
-        "researchspec/runs/current/artifact-registry.json"
+        "researchspec/profiles/academic-pipeline.yaml",
+        "researchspec/subflows/<instance>/control.yaml",
+        "researchspec/subflows/<instance>/handoff.md"
       ],
       "replacement_shape": "io_contract_block",
       "replacement_scope": {
@@ -643,12 +632,12 @@
           "Phase 6 invocation"
         ]
       },
-      "semantic_role": "contract_io_boundary",
+      "semantic_role": "boundary_deliverable_contract",
       "researchspec_targets": [
         "researchspec/specs/manuscript.yaml",
         "researchspec/specs/claims.yaml",
-        "researchspec/runs/current/artifact-registry.json",
-        "researchspec/draft-patches/<patch-id>.json"
+        "researchspec/subflows/<instance>/handoff.md",
+        "assets/shared/contracts/patch/revision_patch.schema.json"
       ],
       "replacement_shape": "io_contract_block",
       "replacement_scope": {
@@ -673,11 +662,11 @@
           "planned_experiment_ids"
         ]
       },
-      "semantic_role": "claim_contract_projection",
+      "semantic_role": "stable_claim_contract",
       "researchspec_targets": [
         "researchspec/specs/claims.yaml",
-        "researchspec/changes/<change-id>/contract-patch.yaml",
-        "researchspec/runs/current/artifact-registry.json"
+        "researchspec/changes/<change-id>/change.md",
+        "researchspec/subflows/<instance>/handoff.md"
       ],
       "replacement_shape": "artifact_projection_block",
       "replacement_scope": {
@@ -702,12 +691,12 @@
           "roadmap_item_ids"
         ]
       },
-      "semantic_role": "draft_patch_protocol",
+      "semantic_role": "revision_patch_protocol",
       "researchspec_targets": [
         "assets/shared/contracts/patch/revision_patch.schema.json",
         "scripts/apply-revision-patch.mjs",
-        "handoff.md",
-        "control.yaml"
+        "researchspec/subflows/<instance>/handoff.md",
+        "researchspec/subflows/<instance>/control.yaml"
       ],
       "replacement_shape": "patch_protocol_block",
       "replacement_scope": {
@@ -735,12 +724,12 @@
           "re_review_mode_protocol"
         ]
       },
-      "semantic_role": "review_commitment_tracking",
+      "semantic_role": "review_handoff_tracking",
       "researchspec_targets": [
-        "researchspec/changes/<change-id>/contract-patch.yaml",
+        "researchspec/changes/<change-id>/change.md",
         "assets/shared/contracts/patch/revision_patch.schema.json",
-        "work/annotation-intake/",
-        "handoff.md"
+        "researchspec/subflows/<instance>/work/annotation-intake/",
+        "researchspec/subflows/<instance>/handoff.md"
       ],
       "replacement_shape": "schema_projection_table",
       "replacement_scope": {
@@ -768,10 +757,10 @@
           "source verification"
         ]
       },
-      "semantic_role": "source_contract_projection",
+      "semantic_role": "stable_source_contract",
       "researchspec_targets": [
         "researchspec/specs/sources.yaml",
-        "researchspec/runs/current/artifact-registry.json"
+        "researchspec/subflows/<instance>/handoff.md"
       ],
       "replacement_shape": "artifact_projection_block",
       "replacement_scope": {
@@ -797,13 +786,13 @@
           "ars_apply_revision_patch.py"
         ]
       },
-      "semantic_role": "draft_patch_protocol",
+      "semantic_role": "revision_patch_protocol",
       "researchspec_targets": [
         "assets/shared/contracts/patch/revision_patch.schema.json",
         "scripts/apply-revision-patch.mjs",
-        "work/annotation-intake/",
-        "handoff.md",
-        "control.yaml"
+        "researchspec/subflows/<instance>/work/annotation-intake/",
+        "researchspec/subflows/<instance>/handoff.md",
+        "researchspec/subflows/<instance>/control.yaml"
       ],
       "replacement_shape": "patch_protocol_block",
       "replacement_scope": {
@@ -828,10 +817,10 @@
           "Pipeline Stage 3'"
         ]
       },
-      "semantic_role": "review_commitment_tracking",
+      "semantic_role": "review_handoff_tracking",
       "researchspec_targets": [
-        "handoff.md",
-        "control.yaml"
+        "researchspec/subflows/<instance>/handoff.md",
+        "researchspec/subflows/<instance>/control.yaml"
       ],
       "replacement_shape": "checklist",
       "replacement_scope": {
@@ -858,8 +847,8 @@
       },
       "semantic_role": "generator_evaluator_contract",
       "researchspec_targets": [
-        "researchspec/runs/current/artifact-registry.json",
-        "researchspec/runs/current/gate-ledger.jsonl"
+        "researchspec/subflows/<instance>/handoff.md",
+        "researchspec/subflows/<instance>/control.yaml"
       ],
       "replacement_shape": "checklist",
       "replacement_scope": {
@@ -886,8 +875,8 @@
       },
       "semantic_role": "generator_evaluator_contract",
       "researchspec_targets": [
-        "researchspec/runs/current/artifact-registry.json",
-        "researchspec/runs/current/gate-ledger.jsonl"
+        "researchspec/subflows/<instance>/handoff.md",
+        "researchspec/subflows/<instance>/control.yaml"
       ],
       "replacement_shape": "io_contract_block",
       "replacement_scope": {
@@ -912,11 +901,11 @@
           "COMMITMENT_GAP"
         ]
       },
-      "semantic_role": "review_commitment_tracking",
+      "semantic_role": "review_handoff_tracking",
       "researchspec_targets": [
         "assets/shared/contracts/patch/revision_patch.schema.json",
-        "handoff.md",
-        "control.yaml"
+        "researchspec/subflows/<instance>/handoff.md",
+        "researchspec/subflows/<instance>/control.yaml"
       ],
       "replacement_shape": "gate_rule_block",
       "replacement_scope": {
@@ -943,8 +932,8 @@
       },
       "semantic_role": "generator_evaluator_contract",
       "researchspec_targets": [
-        "researchspec/runs/current/artifact-registry.json",
-        "researchspec/runs/current/gate-ledger.jsonl"
+        "researchspec/subflows/<instance>/handoff.md",
+        "researchspec/subflows/<instance>/control.yaml"
       ],
       "replacement_shape": "artifact_projection_block",
       "replacement_scope": {
@@ -969,12 +958,12 @@
           "handoff"
         ]
       },
-      "semantic_role": "runtime_state_boundary",
+      "semantic_role": "subflow_control_boundary",
       "researchspec_targets": [
         "researchspec/specs/project.md",
-        "researchspec/specs/workflow.yaml",
-        "researchspec/runs/current/state.yaml",
-        "researchspec/runs/current/artifact-registry.json"
+        "researchspec/profiles/academic-pipeline.yaml",
+        "researchspec/subflows/<instance>/control.yaml",
+        "researchspec/subflows/<instance>/handoff.md"
       ],
       "replacement_shape": "protocol_block",
       "replacement_scope": {
@@ -999,11 +988,11 @@
           "write-scope guard"
         ]
       },
-      "semantic_role": "contract_io_boundary",
+      "semantic_role": "boundary_deliverable_contract",
       "researchspec_targets": [
         "researchspec/specs/project.md",
         "researchspec/specs/sources.yaml",
-        "researchspec/runs/current/artifact-registry.json"
+        "researchspec/subflows/<instance>/handoff.md"
       ],
       "replacement_shape": "io_contract_block",
       "replacement_scope": {
@@ -1031,10 +1020,10 @@
           "trust-chain"
         ]
       },
-      "semantic_role": "source_contract_projection",
+      "semantic_role": "stable_source_contract",
       "researchspec_targets": [
         "researchspec/specs/sources.yaml",
-        "researchspec/runs/current/artifact-registry.json"
+        "researchspec/subflows/<instance>/handoff.md"
       ],
       "replacement_shape": "artifact_projection_block",
       "replacement_scope": {
@@ -1059,11 +1048,11 @@
           "planned_experiment_ids"
         ]
       },
-      "semantic_role": "claim_contract_projection",
+      "semantic_role": "stable_claim_contract",
       "researchspec_targets": [
         "researchspec/specs/claims.yaml",
-        "researchspec/changes/<change-id>/contract-patch.yaml",
-        "researchspec/runs/current/artifact-registry.json"
+        "researchspec/changes/<change-id>/change.md",
+        "researchspec/subflows/<instance>/handoff.md"
       ],
       "replacement_shape": "artifact_projection_block",
       "replacement_scope": {
@@ -1088,9 +1077,9 @@
           "version_records"
         ]
       },
-      "semantic_role": "artifact_provenance",
+      "semantic_role": "boundary_deliverable_provenance",
       "researchspec_targets": [
-        "researchspec/runs/current/artifact-registry.json",
+        "researchspec/subflows/<instance>/handoff.md",
         "researchspec/specs/sources.yaml",
         "researchspec/specs/claims.yaml"
       ],
@@ -1120,10 +1109,10 @@
           "user_override"
         ]
       },
-      "semantic_role": "decision_ledger_entry",
+      "semantic_role": "control_decision_record",
       "researchspec_targets": [
-        "researchspec/runs/current/decision-ledger.jsonl",
-        "researchspec/runs/current/artifact-registry.json"
+        "researchspec/subflows/<instance>/control.yaml",
+        "researchspec/subflows/<instance>/handoff.md"
       ],
       "replacement_shape": "checklist",
       "replacement_scope": {
@@ -1148,9 +1137,9 @@
           "integrity gate"
         ]
       },
-      "semantic_role": "artifact_provenance",
+      "semantic_role": "boundary_deliverable_provenance",
       "researchspec_targets": [
-        "researchspec/runs/current/artifact-registry.json",
+        "researchspec/subflows/<instance>/handoff.md",
         "researchspec/specs/sources.yaml"
       ],
       "replacement_shape": "artifact_projection_block",
@@ -1212,12 +1201,10 @@
           "reset_boundary[]"
         ]
       },
-      "semantic_role": "runtime_state_boundary",
+      "semantic_role": "subflow_control_boundary",
       "researchspec_targets": [
-        "researchspec/runs/current/state.yaml",
-        "researchspec/runs/current/decision-ledger.jsonl",
-        "researchspec/runs/current/gate-ledger.jsonl",
-        "researchspec/runs/current/artifact-registry.json"
+        "researchspec/subflows/<instance>/control.yaml",
+        "researchspec/subflows/<instance>/handoff.md"
       ],
       "replacement_shape": "protocol_block",
       "replacement_scope": {
@@ -1241,12 +1228,11 @@
           "current_stage"
         ]
       },
-      "semantic_role": "runtime_state_boundary",
+      "semantic_role": "subflow_control_boundary",
       "researchspec_targets": [
-        "researchspec/specs/workflow.yaml",
-        "researchspec/runs/current/state.yaml",
-        "researchspec/runs/current/artifact-registry.json",
-        "researchspec/runs/current/gate-ledger.jsonl"
+        "researchspec/profiles/academic-pipeline.yaml",
+        "researchspec/subflows/<instance>/control.yaml",
+        "researchspec/subflows/<instance>/handoff.md"
       ],
       "replacement_shape": "protocol_block",
       "replacement_scope": {
@@ -1270,11 +1256,11 @@
           "claim_ref_alignment_audit_agent"
         ]
       },
-      "semantic_role": "claim_contract_projection",
+      "semantic_role": "stable_claim_contract",
       "researchspec_targets": [
         "researchspec/specs/claims.yaml",
-        "researchspec/changes/<change-id>/contract-patch.yaml",
-        "researchspec/runs/current/artifact-registry.json"
+        "researchspec/changes/<change-id>/change.md",
+        "researchspec/subflows/<instance>/handoff.md"
       ],
       "replacement_shape": "artifact_projection_block",
       "replacement_scope": {
@@ -1300,8 +1286,8 @@
       },
       "semantic_role": "gate_policy",
       "researchspec_targets": [
-        "researchspec/runs/current/artifact-registry.json",
-        "researchspec/runs/current/gate-ledger.jsonl"
+        "researchspec/subflows/<instance>/handoff.md",
+        "researchspec/subflows/<instance>/control.yaml"
       ],
       "replacement_shape": "gate_rule_block",
       "replacement_scope": {
@@ -1327,8 +1313,8 @@
       },
       "semantic_role": "generator_evaluator_contract",
       "researchspec_targets": [
-        "researchspec/runs/current/artifact-registry.json",
-        "researchspec/runs/current/gate-ledger.jsonl"
+        "researchspec/subflows/<instance>/handoff.md",
+        "researchspec/subflows/<instance>/control.yaml"
       ],
       "replacement_shape": "checklist",
       "replacement_scope": {
@@ -1355,8 +1341,8 @@
       },
       "semantic_role": "generator_evaluator_contract",
       "researchspec_targets": [
-        "researchspec/runs/current/artifact-registry.json",
-        "researchspec/runs/current/gate-ledger.jsonl"
+        "researchspec/subflows/<instance>/handoff.md",
+        "researchspec/subflows/<instance>/control.yaml"
       ],
       "replacement_shape": "checklist",
       "replacement_scope": {
@@ -1383,8 +1369,8 @@
       },
       "semantic_role": "generator_evaluator_contract",
       "researchspec_targets": [
-        "researchspec/runs/current/artifact-registry.json",
-        "researchspec/runs/current/gate-ledger.jsonl"
+        "researchspec/subflows/<instance>/handoff.md",
+        "researchspec/subflows/<instance>/control.yaml"
       ],
       "replacement_shape": "io_contract_block",
       "replacement_scope": {
@@ -1411,8 +1397,8 @@
       },
       "semantic_role": "generator_evaluator_contract",
       "researchspec_targets": [
-        "researchspec/runs/current/artifact-registry.json",
-        "researchspec/runs/current/gate-ledger.jsonl"
+        "researchspec/subflows/<instance>/handoff.md",
+        "researchspec/subflows/<instance>/control.yaml"
       ],
       "replacement_shape": "io_contract_block",
       "replacement_scope": {
@@ -1439,8 +1425,8 @@
       },
       "semantic_role": "generator_evaluator_contract",
       "researchspec_targets": [
-        "researchspec/runs/current/artifact-registry.json",
-        "researchspec/runs/current/gate-ledger.jsonl"
+        "researchspec/subflows/<instance>/handoff.md",
+        "researchspec/subflows/<instance>/control.yaml"
       ],
       "replacement_shape": "io_contract_block",
       "replacement_scope": {
@@ -1467,8 +1453,8 @@
       },
       "semantic_role": "generator_evaluator_contract",
       "researchspec_targets": [
-        "researchspec/runs/current/artifact-registry.json",
-        "researchspec/runs/current/gate-ledger.jsonl"
+        "researchspec/subflows/<instance>/handoff.md",
+        "researchspec/subflows/<instance>/control.yaml"
       ],
       "replacement_shape": "io_contract_block",
       "replacement_scope": {
@@ -1492,10 +1478,10 @@
           "Material Passport"
         ]
       },
-      "semantic_role": "source_contract_projection",
+      "semantic_role": "stable_source_contract",
       "researchspec_targets": [
         "researchspec/specs/sources.yaml",
-        "researchspec/runs/current/artifact-registry.json"
+        "researchspec/subflows/<instance>/handoff.md"
       ],
       "replacement_shape": "artifact_projection_block",
       "replacement_scope": {
@@ -1519,10 +1505,10 @@
           "finalizer"
         ]
       },
-      "semantic_role": "decision_ledger_entry",
+      "semantic_role": "control_decision_record",
       "researchspec_targets": [
-        "researchspec/specs/workflow.yaml",
-        "researchspec/runs/current/decision-ledger.jsonl"
+        "researchspec/profiles/academic-pipeline.yaml",
+        "researchspec/subflows/<instance>/control.yaml"
       ],
       "replacement_shape": "checklist",
       "replacement_scope": {
@@ -1548,8 +1534,8 @@
       },
       "semantic_role": "gate_policy",
       "researchspec_targets": [
-        "researchspec/runs/current/artifact-registry.json",
-        "researchspec/runs/current/gate-ledger.jsonl"
+        "researchspec/subflows/<instance>/handoff.md",
+        "researchspec/subflows/<instance>/control.yaml"
       ],
       "replacement_shape": "gate_rule_block",
       "replacement_scope": {
@@ -1575,9 +1561,8 @@
       },
       "semantic_role": "handoff_projection",
       "researchspec_targets": [
-        "researchspec/runs/current/artifact-registry.json",
-        "researchspec/runs/current/decision-ledger.jsonl",
-        "researchspec/runs/current/gate-ledger.jsonl"
+        "researchspec/subflows/<instance>/handoff.md",
+        "researchspec/subflows/<instance>/control.yaml"
       ],
       "replacement_shape": "schema_projection_table",
       "replacement_scope": {
@@ -1603,8 +1588,8 @@
       },
       "semantic_role": "gate_policy",
       "researchspec_targets": [
-        "researchspec/specs/workflow.yaml",
-        "researchspec/runs/current/gate-ledger.jsonl"
+        "researchspec/profiles/academic-pipeline.yaml",
+        "researchspec/subflows/<instance>/control.yaml"
       ],
       "replacement_shape": "gate_rule_block",
       "replacement_scope": {

@@ -33,12 +33,13 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
 
   const deepResearch = await readFile(path.join(root, "skills/arsu/deep-research/SKILL.md"), "utf8");
   assert.match(deepResearch, /researchspec status --json/);
-  assert.match(deepResearch, /researchspec plugin list --summary --json/);
-  assert.match(deepResearch, /researchspec plugin show <domain-id> --summary --json/);
-  assert.match(deepResearch, /researchspec plugin instructions <skill-id> --json/);
-  assert.match(deepResearch, /propose at most three domains in one batch/);
-  assert.match(deepResearch, /does not become the candidate producer/);
-  assert.match(deepResearch, /continue the same core work without the plugin/);
+  assert.match(deepResearch, /researchspec instructions route:/);
+  assert.match(deepResearch, /pipeline parent confirmation never authorizes/);
+  assert.match(deepResearch, /control\.yaml/);
+  assert.match(deepResearch, /handoff\.md/);
+  assert.match(deepResearch, /researchspec decide gate:/);
+  assert.match(deepResearch, /researchspec advance subflow:/);
+  assert.match(deepResearch, /Suggest at most three/);
   assert.match(deepResearch, /zotero-library-query/);
   assert.match(deepResearch, /zotero-literature-acquisition/);
   assert.match(deepResearch, /ProviderRetrievalHandoff/);
@@ -60,8 +61,8 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
     await readFile(path.join(root, "skills/arsu/researchspec-contracts.json"), "utf8"),
   ) as { integration_profile?: string; material_passport_policy?: string; anchor_replacement?: { coverage_policy?: string; profile_id?: string } };
   assert.equal(contracts.integration_profile, RESEARCHSPEC_PREFLIGHT_PROFILE_ID);
-  assert.equal(contracts.material_passport_policy, "imported_evidence_only_not_runtime_ssot");
-  assert.equal(contracts.anchor_replacement?.profile_id, "researchspec-anchor-replacement-v3");
+  assert.equal("material_passport_policy" in contracts, false);
+  assert.equal(contracts.anchor_replacement?.profile_id, "researchspec-anchor-replacement-v4");
   assert.equal(contracts.anchor_replacement?.coverage_policy, "required_and_recommended");
 
   const manifest = JSON.parse(
@@ -95,7 +96,7 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
   assert.equal(manifest.anchor_replacements.replaceable_anchors, 2);
   assert.equal(manifest.anchor_replacements.replaced_anchors, 2);
   assert.equal(manifest.anchor_replacements.diagnostic_anchors, 1);
-  assert.equal(manifest.anchor_replacements.profile_id, "researchspec-anchor-replacement-v3");
+  assert.equal(manifest.anchor_replacements.profile_id, "researchspec-anchor-replacement-v4");
   assert.deepEqual(
     { path: manifest.routing_catalog.path, catalog_id: manifest.routing_catalog.catalog_id, skills: manifest.routing_catalog.skill_count, modes: manifest.routing_catalog.mode_route_count, entries: manifest.routing_catalog.entry_route_count },
     { path: "routing-catalog.json", catalog_id: "arsu-routing-v0.1", skills: 4, modes: 25, entries: 2 },
@@ -107,7 +108,7 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
     manifest.anchor_replacements.records.some((item) =>
       item.anchor_id === "STATE-001" &&
       item.anchor_name === "fixture.required.material" &&
-      item.semantic_role === "runtime_state_boundary" &&
+      item.semantic_role === "subflow_control_boundary" &&
       item.replacement_body_sha256 && item.before_sha256 && item.after_sha256 &&
       item.marker_id === undefined && item.template_id === undefined),
     true,
@@ -115,7 +116,7 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
   assert.match(deepResearch, /<!--rs:STATE-001-->/);
   assert.match(deepResearch, /<!--\/rs:STATE-001-->\n/);
   assert.doesNotMatch(deepResearch, /ResearchSpec Contract Replacement/);
-  assert.match(deepResearch, /researchspec\/runs\/current\/state\.yaml/);
+  assert.match(deepResearch, /researchspec\/subflows\/<instance>\/control\.yaml/);
   const crossSkillDeepResearchPath = path.join(
     root,
     "skills/arsu/academic-paper/references/cross-skill/deep-research/SKILL.md",
@@ -123,7 +124,7 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
   const crossSkillDeepResearch = await readFile(crossSkillDeepResearchPath, "utf8");
   assert.match(crossSkillDeepResearch, /<!--rs:STATE-001-->/);
   assert.match(crossSkillDeepResearch, /description: test/);
-  assert.doesNotMatch(crossSkillDeepResearch, /researchspec-contract-preflight:v8/);
+  assert.doesNotMatch(crossSkillDeepResearch, /researchspec-contract-preflight:v9/);
   for (const relativePath of ["scripts/adapters/zotero.py", "scripts/adapters/_common.py", "scripts/__init__.py", "scripts/adapters/__init__.py"]) {
     assert.equal(existsSync(path.join(root, "skills/arsu/academic-pipeline", relativePath)), true);
   }
@@ -460,7 +461,7 @@ async function makeAnchorAssets(root: string): Promise<void> {
     path.join(root, "src/arsu-converter/anchors/contract-anchors.json"),
     `${JSON.stringify(
       {
-        schema_version: "researchspec.arsu.contract-anchors.v3",
+        schema_version: "researchspec.arsu.contract-anchors.v4",
         upstream_source: "vendor/ars",
         audited_commit: "fixture",
         anchors: [
@@ -475,8 +476,8 @@ async function makeAnchorAssets(root: string): Promise<void> {
               snippets: ["state tracking via Material Passport", "pipeline_orchestrator_agent"],
               keywords: ["Mode A"],
             },
-            semantic_role: "runtime_state_boundary",
-            researchspec_targets: ["researchspec/runs/current/state.yaml"],
+            semantic_role: "subflow_control_boundary",
+            researchspec_targets: ["researchspec/subflows/<instance>/control.yaml"],
             replacement_shape: "protocol_block",
             replacement_scope: {
               start_snippet: "state tracking via Material Passport",
@@ -494,8 +495,8 @@ async function makeAnchorAssets(root: string): Promise<void> {
               snippets: ["You MAY READ files in `phase1_*/`", "scripts/check_pipeline_integrity.py"],
               keywords: ["phase2"],
             },
-            semantic_role: "contract_io_boundary",
-            researchspec_targets: ["researchspec/runs/current/artifact-registry.json"],
+            semantic_role: "boundary_deliverable_contract",
+            researchspec_targets: ["researchspec/subflows/<instance>/handoff.md"],
             replacement_shape: "io_contract_block",
             replacement_scope: {
               start_snippet: "You MAY READ files in `phase1_*/`",
@@ -524,12 +525,12 @@ async function makeAnchorAssets(root: string): Promise<void> {
   );
   await writeFile(
     path.join(root, "src/arsu-converter/anchors/replacements/STATE-001.md"),
-    "Validate `^[a-z]+$` and use `researchspec/runs/current/state.yaml` as active runtime state.\n",
+    "Use `researchspec/subflows/<instance>/control.yaml` as the sole runtime authority.\n",
     "utf8",
   );
   await writeFile(
     path.join(root, "src/arsu-converter/anchors/replacements/IO-001.md"),
-    "Resolve phase inputs through `researchspec/runs/current/artifact-registry.json`.\n",
+    "Resolve boundary inputs through `researchspec/subflows/<instance>/handoff.md`.\n",
     "utf8",
   );
 }

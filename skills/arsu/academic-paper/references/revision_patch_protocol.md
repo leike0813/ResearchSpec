@@ -1,12 +1,16 @@
 # Revision Patch Protocol (#390)
 
 <!--rs:PATCH-003-->
+### ResearchSpec Current Owner
+
+Replacement scope: `PATCH-003` for `academic-paper`.
+
 ## ResearchSpec revision patch protocol
 
 The adapted contract at
 `assets/shared/contracts/patch/revision_patch.schema.json` is the only
 manuscript patch schema. A revision patch is an ARSU revision input/output file,
-not a ResearchSpec registry record or lifecycle object.
+not a ResearchSpec framework lifecycle record or lifecycle object.
 
 One bounded mechanical application is:
 
@@ -30,6 +34,14 @@ Annotation intake material is private under `work/annotation-intake/` by
 default. Cross-subflow patch, manuscript, annotation, response, or report files
 must use safe project-relative paths outside `researchspec/` and be listed by
 role in the owning `handoff.md`.
+
+Current ResearchSpec owners:
+
+- `assets/shared/contracts/patch/revision_patch.schema.json`
+- `scripts/apply-revision-patch.mjs`
+- `researchspec/subflows/<instance>/work/annotation-intake/`
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:PATCH-003-->
 
 ## Marker lifecycle (one rule for all marker kinds)

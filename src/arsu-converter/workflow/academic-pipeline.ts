@@ -1,6 +1,6 @@
-import { stringify } from "yaml";
-
 import { PipelineProfileSchema, type PipelineProfile } from "../../core/contracts/pipeline-profile.js";
+import { ARSU_ROUTING_CATALOG } from "../routing/catalog.js";
+import type { ArsuRoutingCatalog } from "../routing/contracts.js";
 
 export const ACADEMIC_PIPELINE_PROFILE: PipelineProfile = PipelineProfileSchema.parse({
   schema_version: "1",
@@ -55,4 +55,38 @@ export const ACADEMIC_PIPELINE_PROFILE: PipelineProfile = PipelineProfileSchema.
   },
 });
 
-export const ACADEMIC_PIPELINE_PROFILE_TEXT = stringify(ACADEMIC_PIPELINE_PROFILE);
+export function validateAcademicPipelineProfileRouting(
+  profile: PipelineProfile = ACADEMIC_PIPELINE_PROFILE,
+  catalog: ArsuRoutingCatalog = ARSU_ROUTING_CATALOG,
+): string[] {
+  const parsed = PipelineProfileSchema.parse(profile);
+  const routes = new Map(catalog.skills.flatMap((skill) => skill.routes).map((route) => [route.route_ref, route]));
+  const issues: string[] = [];
+  const childIds = new Set(parsed.children.map((child) => child.node_id));
+
+  for (const entry of parsed.entries) {
+    const route = routes.get(entry.route_ref);
+    if (!route) issues.push(`profile_entry_route_missing:${entry.entry_id}:${entry.route_ref}`);
+    else if (route.route_kind !== "entry") issues.push(`profile_entry_route_kind_invalid:${entry.entry_id}:${entry.route_ref}`);
+    if (entry.checkpoint !== "entry" && !childIds.has(entry.checkpoint)) {
+      issues.push(`profile_entry_checkpoint_missing:${entry.entry_id}:${entry.checkpoint}`);
+    }
+  }
+
+  for (const child of parsed.children) {
+    const route = routes.get(child.route_ref);
+    if (!route) {
+      issues.push(`profile_child_route_missing:${child.node_id}:${child.route_ref}`);
+      continue;
+    }
+    if (route.route_kind !== "mode") issues.push(`profile_child_route_kind_invalid:${child.node_id}:${child.route_ref}`);
+    if (route.gate_policy.level === "none" && child.required_gate_ids.length > 0) {
+      issues.push(`profile_child_gate_unexpected:${child.node_id}`);
+    }
+    if (route.gate_policy.level === "required" && child.required_gate_ids.length === 0) {
+      issues.push(`profile_child_gate_missing:${child.node_id}`);
+    }
+  }
+
+  return issues;
+}

@@ -88,9 +88,9 @@ export interface IdempotenceResult {
 export interface ContractProfile {
   profile_id: string;
   required_contracts: string[];
-  artifact_reads: string[];
+  handoff_reads: string[];
   writes_allowed: string[];
-  ledgers: string[];
+  mutation_authorities: string[];
   notes: string[];
   full_matrix_injection: false;
 }
@@ -113,7 +113,6 @@ export interface ContractIntegrationManifest {
   integration_profile: string;
   source: string;
   output: string;
-  material_passport_policy: string;
   anchor_replacement: AnchorReplacementIntegration;
   skill_groups: Record<string, ContractProfile>;
 }
@@ -174,7 +173,6 @@ export interface ConversionManifest {
     manifest_path: string;
     integration_profile: string;
     generated_groups: string[];
-    material_passport_policy: string;
     full_matrix_injection: false;
     anchor_replacement: AnchorReplacementIntegration;
   };

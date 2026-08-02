@@ -5,6 +5,7 @@ import { ARSU_ROUTING_CATALOG, getArsuRoute, getArsuSkillDefinition } from "../s
 import {
   ARSU_SKILL_IDS,
   ArsuRoutingCatalogSchema,
+  PrerequisiteRequirementSchema,
   type ArsuRoutingCatalog,
   validateRoutingCatalogReferences,
 } from "../src/arsu-converter/routing/contracts.js";
@@ -12,6 +13,7 @@ import {
   projectSkillFrontmatterDescription,
   readSkillFrontmatterDescription,
   renderArsuCommandDescription,
+  renderArsuRouteSummary,
   renderArsuSkillDescription,
 } from "../src/arsu-converter/routing/projection.js";
 
@@ -33,12 +35,24 @@ void test("canonical routing catalog covers the locked ARSU surface", () => {
   assert.deepEqual(validateRoutingCatalogReferences(ARSU_ROUTING_CATALOG), []);
 });
 
-void test("catalog exposes structured routing facts without runtime Gate IDs", () => {
+void test("all routes expose current summaries without framework-owned artifact paths", () => {
+  for (const route of ARSU_ROUTING_CATALOG.skills.flatMap((skill) => skill.routes)) {
+    const summary = renderArsuRouteSummary(route);
+    assert.ok(summary.prerequisites.length > 0);
+    assert.ok(summary.boundary_outputs.length > 0);
+    assert.ok(summary.formal_gates.length > 0);
+    assert.match(summary.risk_cost, /low|medium|high/);
+    assert.equal(summary.confirmation, "independent confirmation required");
+    assert.equal(route.start_confirmation, "required");
+    assert.equal(route.boundary_outputs.every((output) => output.role && output.type && output.purpose && output.structure), true);
+  }
+
   const paper = getArsuRoute("academic-paper:revision");
   assert.equal(paper.risk_level, "high");
   assert.deepEqual(paper.gate_policy, { level: "required", gate_kinds: ["revision_completeness"] });
-  assert.ok(paper.primary_artifact_types.includes("response_to_reviewers"));
-  assert.ok(paper.primary_artifact_types.includes("annotation_resolution_report"));
+  assert.ok(paper.boundary_outputs.some((output) => output.role === "response_to_reviewers"));
+  assert.equal(paper.boundary_outputs.some((output) => output.role === "annotation_resolution_report"), false);
+  assert.equal(paper.boundary_outputs.some((output) => output.role === "apply_report"), false);
   assert.ok(paper.prerequisite_groups.some((item) => item.operator === "any_of" && item.requirements.some((requirement) => requirement.id === "reviewer_comments")));
   assert.ok(paper.prerequisite_groups.some((item) => item.operator === "any_of" && item.requirements.some((requirement) => requirement.id === "annotation_set")));
 
@@ -53,6 +67,11 @@ void test("catalog exposes structured routing facts without runtime Gate IDs", (
 
   const reviewer = getArsuSkillDefinition("academic-paper-reviewer");
   assert.ok(reviewer.near_misses.some((item) => item.route_ref === "academic-paper:rebuttal-audit"));
+
+  assert.equal(PrerequisiteRequirementSchema.safeParse({ kind: "artifact", id: "paper_draft" }).success, false);
+  assert.equal(PrerequisiteRequirementSchema.safeParse({ kind: "contract", id: "specs/workflow.yaml" }).success, false);
+  assert.equal(PrerequisiteRequirementSchema.safeParse({ kind: "stable_spec", id: "specs/manuscript.yaml" }).success, true);
+  assert.equal(PrerequisiteRequirementSchema.safeParse({ kind: "handoff_role", id: "paper_draft" }).success, true);
 });
 
 void test("routing catalog rejects structural and semantic inconsistencies", () => {
@@ -64,6 +83,12 @@ void test("routing catalog rejects structural and semantic inconsistencies", () 
     ["route owner", (catalog) => { firstRoute(catalog).route_ref = "academic-paper:full"; }, "route_skill_mismatch"],
     ["unknown near miss", (catalog) => { firstNearMiss(catalog).route_ref = "academic-paper:missing"; }, "near_miss_route_missing"],
     ["empty gate", (catalog) => { firstRoute(catalog).gate_policy.gate_kinds = []; }, "gate_policy_inconsistent"],
+    ["duplicate output role", (catalog) => {
+      const route = firstRoute(catalog);
+      const output = route.boundary_outputs[0];
+      if (!output) throw new Error("Fixture route has no boundary output.");
+      route.boundary_outputs.push(structuredClone(output));
+    }, "duplicate_boundary_output_role"],
     ["fallback cycle", (catalog) => { firstPrerequisiteGroup(catalog).fallback_route_refs = ["academic-paper:full"]; }, "fallback_route_cycle"],
   ];
   for (const [label, mutate, code] of cases) {

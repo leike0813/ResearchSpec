@@ -81,12 +81,21 @@ training-time memory, citation existence proofs, or the
 4.5. Once an artifact is at layer 2, downstream skills may treat it as
 provisionally reliable for argument building and paper drafting. The provenance
 <!--rs:GATE-004-->
-chain must remain traceable through stable source ids in
-`researchspec/specs/sources.yaml` and immutable evidence artifacts registered in
-`researchspec/runs/current/artifact-registry.json`. Preserve producer, stage,
-content hash, source links, verification evidence, and supersession metadata on
-each artifact. A Material Passport may be retained as imported provenance
-evidence, but it is not the active traceability carrier.
+### ResearchSpec Current Owner
+
+Replacement scope: `GATE-004` for `shared`.
+
+Maintain traceability through stable source IDs in `sources.yaml`, stable claim
+support where applicable, and explicit boundary roles and paths in the owning
+handoff. Preserve producer, purpose, source links, verification evidence,
+limitations, and supersession notes in the semantic deliverable or handoff.
+External metadata is contextual evidence and never the active traceability
+authority.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/specs/sources.yaml`
 <!--/rs:GATE-004-->
 
 **Layer 3 — ground truth and evaluation rubrics** includes gold labels,
@@ -243,8 +252,20 @@ at each gate. This pattern document explains the design reasoning behind those
 gates and the data-flow structure that makes them meaningful. Reading this
 document does not grant confidence that any specific pipeline run was clean.
 <!--rs:GATE-005-->
-Imported ARS Gate records are evidence only. They may be cited by current verification, but they cannot pass, preserve, override or unlock a ResearchSpec Gate. Only a current scoped Gate event with a trusted receipt and explicit human confirmation contributes runtime authority.
-Current verdicts live in `researchspec/runs/current/gate-ledger.jsonl`.
+### ResearchSpec Current Owner
+
+Replacement scope: `GATE-005` for `shared`.
+
+An external Gate report is evidence only. It cannot pass, preserve, override,
+or unlock a ResearchSpec Gate. Use the current profile to identify the owning
+Gate, present a fresh verification recommendation, and require explicit human
+confirmation. Append the resulting attempt—and any separately approved failed-
+Gate override—only to the owning subflow control.
+
+Current ResearchSpec owners:
+
+- `researchspec/profiles/academic-pipeline.yaml`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:GATE-005-->
 
 **Not a benchmark protocol.** All current ARS skills are `task_type:

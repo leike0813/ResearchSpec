@@ -20,19 +20,49 @@
           "intents": [
             "complete evidence-grounded research report"
           ],
-          "primary_artifact_types": [
-            "rq_brief",
-            "methodology_blueprint",
-            "bibliography",
-            "synthesis_report",
-            "research_report"
+          "boundary_outputs": [
+            {
+              "role": "rq_brief",
+              "type": "rq_brief",
+              "purpose": "Rq Brief produced by deep-research:full for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "methodology_blueprint",
+              "type": "methodology_blueprint",
+              "purpose": "Methodology Blueprint produced by deep-research:full for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "bibliography",
+              "type": "bibliography",
+              "purpose": "Bibliography produced by deep-research:full for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "synthesis_report",
+              "type": "synthesis_report",
+              "purpose": "Synthesis Report produced by deep-research:full for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "research_report",
+              "type": "research_report",
+              "purpose": "Research Report produced by deep-research:full for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            }
           ],
           "prerequisite_groups": [
             {
               "operator": "all_of",
               "requirements": [
                 {
-                  "kind": "contract",
+                  "kind": "stable_spec",
                   "id": "specs/project.md"
                 }
               ],
@@ -60,6 +90,7 @@
             "effort": "high",
             "interaction": "long_horizon"
           },
+          "start_confirmation": "required",
           "route_kind": "mode",
           "mode_id": "full"
         },
@@ -69,16 +100,28 @@
           "intents": [
             "short research brief with key sources"
           ],
-          "primary_artifact_types": [
-            "research_brief",
-            "bibliography"
+          "boundary_outputs": [
+            {
+              "role": "research_brief",
+              "type": "research_brief",
+              "purpose": "Research Brief produced by deep-research:quick for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "bibliography",
+              "type": "bibliography",
+              "purpose": "Bibliography produced by deep-research:quick for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            }
           ],
           "prerequisite_groups": [
             {
               "operator": "all_of",
               "requirements": [
                 {
-                  "kind": "contract",
+                  "kind": "stable_spec",
                   "id": "specs/project.md"
                 }
               ],
@@ -104,6 +147,7 @@
             "effort": "low",
             "interaction": "single_pass"
           },
+          "start_confirmation": "required",
           "route_kind": "mode",
           "mode_id": "quick"
         },
@@ -113,15 +157,21 @@
           "intents": [
             "review an existing research text or report"
           ],
-          "primary_artifact_types": [
-            "research_review_report"
+          "boundary_outputs": [
+            {
+              "role": "research_review_report",
+              "type": "research_review_report",
+              "purpose": "Research Review Report produced by deep-research:review for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            }
           ],
           "prerequisite_groups": [
             {
               "operator": "all_of",
               "requirements": [
                 {
-                  "kind": "contract",
+                  "kind": "stable_spec",
                   "id": "specs/project.md"
                 }
               ],
@@ -135,7 +185,7 @@
                   "id": "research_text"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "research_report"
                 }
               ],
@@ -153,6 +203,7 @@
             "effort": "medium",
             "interaction": "single_pass"
           },
+          "start_confirmation": "required",
           "route_kind": "mode",
           "mode_id": "review"
         },
@@ -162,18 +213,42 @@
           "intents": [
             "search and synthesize literature on a topic"
           ],
-          "primary_artifact_types": [
-            "bibliography",
-            "source_corpus",
-            "literature_matrix",
-            "synthesis_report"
+          "boundary_outputs": [
+            {
+              "role": "bibliography",
+              "type": "bibliography",
+              "purpose": "Bibliography produced by deep-research:lit-review for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "source_corpus",
+              "type": "source_corpus",
+              "purpose": "Source Corpus produced by deep-research:lit-review for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "literature_matrix",
+              "type": "literature_matrix",
+              "purpose": "Literature Matrix produced by deep-research:lit-review for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "synthesis_report",
+              "type": "synthesis_report",
+              "purpose": "Synthesis Report produced by deep-research:lit-review for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            }
           ],
           "prerequisite_groups": [
             {
               "operator": "all_of",
               "requirements": [
                 {
-                  "kind": "contract",
+                  "kind": "stable_spec",
                   "id": "specs/project.md"
                 }
               ],
@@ -201,6 +276,7 @@
             "effort": "medium",
             "interaction": "iterative"
           },
+          "start_confirmation": "required",
           "route_kind": "mode",
           "mode_id": "lit-review"
         },
@@ -210,16 +286,28 @@
           "intents": [
             "rapidly compare a focused paper shortlist"
           ],
-          "primary_artifact_types": [
-            "comparison_matrix",
-            "reading_shortlist"
+          "boundary_outputs": [
+            {
+              "role": "comparison_matrix",
+              "type": "comparison_matrix",
+              "purpose": "Comparison Matrix produced by deep-research:three-way-scan for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "reading_shortlist",
+              "type": "reading_shortlist",
+              "purpose": "Reading Shortlist produced by deep-research:three-way-scan for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            }
           ],
           "prerequisite_groups": [
             {
               "operator": "all_of",
               "requirements": [
                 {
-                  "kind": "contract",
+                  "kind": "stable_spec",
                   "id": "specs/project.md"
                 }
               ],
@@ -245,6 +333,7 @@
             "effort": "low",
             "interaction": "single_pass"
           },
+          "start_confirmation": "required",
           "route_kind": "mode",
           "mode_id": "three-way-scan"
         },
@@ -254,15 +343,21 @@
           "intents": [
             "verify specific factual or scholarly claims"
           ],
-          "primary_artifact_types": [
-            "fact_check_report"
+          "boundary_outputs": [
+            {
+              "role": "fact_check_report",
+              "type": "fact_check_report",
+              "purpose": "Fact Check Report produced by deep-research:fact-check for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            }
           ],
           "prerequisite_groups": [
             {
               "operator": "all_of",
               "requirements": [
                 {
-                  "kind": "contract",
+                  "kind": "stable_spec",
                   "id": "specs/project.md"
                 }
               ],
@@ -276,7 +371,7 @@
                   "id": "claims"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "synthesis_report"
                 }
               ],
@@ -294,6 +389,7 @@
             "effort": "low",
             "interaction": "single_pass"
           },
+          "start_confirmation": "required",
           "route_kind": "mode",
           "mode_id": "fact-check"
         },
@@ -303,16 +399,28 @@
           "intents": [
             "clarify a vague research idea through guided dialogue"
           ],
-          "primary_artifact_types": [
-            "rq_brief",
-            "research_plan_summary"
+          "boundary_outputs": [
+            {
+              "role": "rq_brief",
+              "type": "rq_brief",
+              "purpose": "Rq Brief produced by deep-research:socratic for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "research_plan_summary",
+              "type": "research_plan_summary",
+              "purpose": "Research Plan Summary produced by deep-research:socratic for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            }
           ],
           "prerequisite_groups": [
             {
               "operator": "all_of",
               "requirements": [
                 {
-                  "kind": "contract",
+                  "kind": "stable_spec",
                   "id": "specs/project.md"
                 }
               ],
@@ -338,6 +446,7 @@
             "effort": "variable",
             "interaction": "iterative"
           },
+          "start_confirmation": "required",
           "route_kind": "mode",
           "mode_id": "socratic"
         },
@@ -347,19 +456,49 @@
           "intents": [
             "conduct a PRISMA systematic review or meta-analysis"
           ],
-          "primary_artifact_types": [
-            "systematic_review_protocol",
-            "prisma_materials",
-            "risk_of_bias_report",
-            "meta_analysis_report",
-            "research_report"
+          "boundary_outputs": [
+            {
+              "role": "systematic_review_protocol",
+              "type": "systematic_review_protocol",
+              "purpose": "Systematic Review Protocol produced by deep-research:systematic-review for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "prisma_materials",
+              "type": "prisma_materials",
+              "purpose": "Prisma Materials produced by deep-research:systematic-review for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "risk_of_bias_report",
+              "type": "risk_of_bias_report",
+              "purpose": "Risk Of Bias Report produced by deep-research:systematic-review for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "meta_analysis_report",
+              "type": "meta_analysis_report",
+              "purpose": "Meta Analysis Report produced by deep-research:systematic-review for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "research_report",
+              "type": "research_report",
+              "purpose": "Research Report produced by deep-research:systematic-review for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            }
           ],
           "prerequisite_groups": [
             {
               "operator": "all_of",
               "requirements": [
                 {
-                  "kind": "contract",
+                  "kind": "stable_spec",
                   "id": "specs/project.md"
                 }
               ],
@@ -373,7 +512,7 @@
                   "id": "review_question"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "rq_brief"
                 }
               ],
@@ -394,6 +533,7 @@
             "effort": "high",
             "interaction": "long_horizon"
           },
+          "start_confirmation": "required",
           "route_kind": "mode",
           "mode_id": "systematic-review"
         }
@@ -434,20 +574,56 @@
           "intents": [
             "draft a complete paper from existing research materials"
           ],
-          "primary_artifact_types": [
-            "paper_configuration",
-            "paper_outline",
-            "evidence_map",
-            "argument_blueprint",
-            "paper_draft",
-            "submission_package"
+          "boundary_outputs": [
+            {
+              "role": "paper_configuration",
+              "type": "paper_configuration",
+              "purpose": "Paper Configuration produced by academic-paper:full for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "paper_outline",
+              "type": "paper_outline",
+              "purpose": "Paper Outline produced by academic-paper:full for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "evidence_map",
+              "type": "evidence_map",
+              "purpose": "Evidence Map produced by academic-paper:full for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "argument_blueprint",
+              "type": "argument_blueprint",
+              "purpose": "Argument Blueprint produced by academic-paper:full for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "paper_draft",
+              "type": "paper_draft",
+              "purpose": "Paper Draft produced by academic-paper:full for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "submission_package",
+              "type": "submission_package",
+              "purpose": "Submission Package produced by academic-paper:full for an explicit handoff or user delivery.",
+              "structure": "A non-empty native document or archive appropriate to the declared type.",
+              "validation_profile": "binary-file-artifact"
+            }
           ],
           "prerequisite_groups": [
             {
               "operator": "all_of",
               "requirements": [
                 {
-                  "kind": "contract",
+                  "kind": "stable_spec",
                   "id": "specs/project.md"
                 }
               ],
@@ -457,7 +633,7 @@
               "operator": "all_of",
               "requirements": [
                 {
-                  "kind": "contract",
+                  "kind": "stable_spec",
                   "id": "specs/manuscript.yaml"
                 }
               ],
@@ -471,19 +647,19 @@
                   "id": "research_materials"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "rq_brief"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "bibliography"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "source_corpus"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "synthesis_report"
                 }
               ],
@@ -504,6 +680,7 @@
             "effort": "high",
             "interaction": "long_horizon"
           },
+          "start_confirmation": "required",
           "route_kind": "mode",
           "mode_id": "full"
         },
@@ -513,16 +690,28 @@
           "intents": [
             "create a detailed manuscript outline and evidence map"
           ],
-          "primary_artifact_types": [
-            "paper_outline",
-            "evidence_map"
+          "boundary_outputs": [
+            {
+              "role": "paper_outline",
+              "type": "paper_outline",
+              "purpose": "Paper Outline produced by academic-paper:outline-only for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "evidence_map",
+              "type": "evidence_map",
+              "purpose": "Evidence Map produced by academic-paper:outline-only for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            }
           ],
           "prerequisite_groups": [
             {
               "operator": "all_of",
               "requirements": [
                 {
-                  "kind": "contract",
+                  "kind": "stable_spec",
                   "id": "specs/project.md"
                 }
               ],
@@ -532,7 +721,7 @@
               "operator": "all_of",
               "requirements": [
                 {
-                  "kind": "contract",
+                  "kind": "stable_spec",
                   "id": "specs/manuscript.yaml"
                 }
               ],
@@ -546,19 +735,19 @@
                   "id": "research_materials"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "rq_brief"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "bibliography"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "source_corpus"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "synthesis_report"
                 }
               ],
@@ -578,6 +767,7 @@
             "effort": "medium",
             "interaction": "single_pass"
           },
+          "start_confirmation": "required",
           "route_kind": "mode",
           "mode_id": "outline-only"
         },
@@ -585,21 +775,37 @@
           "route_ref": "academic-paper:revision",
           "title": "Manuscript revision",
           "intents": [
-            "revise a draft against reviewer feedback or registered annotations"
+            "revise a draft against reviewer feedback or annotations"
           ],
-          "primary_artifact_types": [
-            "revision_patch",
-            "revised_draft",
-            "apply_report",
-            "annotation_resolution_report",
-            "response_to_reviewers"
+          "boundary_outputs": [
+            {
+              "role": "revision_patch",
+              "type": "revision_patch",
+              "purpose": "Revision Patch produced by academic-paper:revision for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "revised_draft",
+              "type": "revised_draft",
+              "purpose": "Revised Draft produced by academic-paper:revision for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "response_to_reviewers",
+              "type": "response_to_reviewers",
+              "purpose": "Response To Reviewers produced by academic-paper:revision for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            }
           ],
           "prerequisite_groups": [
             {
               "operator": "all_of",
               "requirements": [
                 {
-                  "kind": "contract",
+                  "kind": "stable_spec",
                   "id": "specs/manuscript.yaml"
                 }
               ],
@@ -613,15 +819,15 @@
                   "id": "manuscript"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "paper_draft"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "verified_draft"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "revised_draft"
                 }
               ],
@@ -637,15 +843,15 @@
                   "id": "reviewer_comments"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "review_report"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "revision_roadmap"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "annotation_set"
                 }
               ],
@@ -665,6 +871,7 @@
             "effort": "high",
             "interaction": "iterative"
           },
+          "start_confirmation": "required",
           "route_kind": "mode",
           "mode_id": "revision"
         },
@@ -674,16 +881,28 @@
           "intents": [
             "write an abstract and keywords for an existing manuscript"
           ],
-          "primary_artifact_types": [
-            "abstract",
-            "keywords"
+          "boundary_outputs": [
+            {
+              "role": "abstract",
+              "type": "abstract",
+              "purpose": "Abstract produced by academic-paper:abstract-only for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "keywords",
+              "type": "keywords",
+              "purpose": "Keywords produced by academic-paper:abstract-only for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            }
           ],
           "prerequisite_groups": [
             {
               "operator": "all_of",
               "requirements": [
                 {
-                  "kind": "contract",
+                  "kind": "stable_spec",
                   "id": "specs/manuscript.yaml"
                 }
               ],
@@ -697,15 +916,15 @@
                   "id": "manuscript"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "paper_draft"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "verified_draft"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "revised_draft"
                 }
               ],
@@ -723,6 +942,7 @@
             "effort": "low",
             "interaction": "single_pass"
           },
+          "start_confirmation": "required",
           "route_kind": "mode",
           "mode_id": "abstract-only"
         },
@@ -732,18 +952,42 @@
           "intents": [
             "prepare literature-review material or prose for a manuscript"
           ],
-          "primary_artifact_types": [
-            "bibliography",
-            "literature_matrix",
-            "synthesis_report",
-            "literature_review_draft"
+          "boundary_outputs": [
+            {
+              "role": "bibliography",
+              "type": "bibliography",
+              "purpose": "Bibliography produced by academic-paper:lit-review for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "literature_matrix",
+              "type": "literature_matrix",
+              "purpose": "Literature Matrix produced by academic-paper:lit-review for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "synthesis_report",
+              "type": "synthesis_report",
+              "purpose": "Synthesis Report produced by academic-paper:lit-review for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "literature_review_draft",
+              "type": "literature_review_draft",
+              "purpose": "Literature Review Draft produced by academic-paper:lit-review for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            }
           ],
           "prerequisite_groups": [
             {
               "operator": "all_of",
               "requirements": [
                 {
-                  "kind": "contract",
+                  "kind": "stable_spec",
                   "id": "specs/project.md"
                 }
               ],
@@ -753,7 +997,7 @@
               "operator": "all_of",
               "requirements": [
                 {
-                  "kind": "contract",
+                  "kind": "stable_spec",
                   "id": "specs/manuscript.yaml"
                 }
               ],
@@ -767,19 +1011,19 @@
                   "id": "research_materials"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "rq_brief"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "bibliography"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "source_corpus"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "synthesis_report"
                 }
               ],
@@ -800,6 +1044,7 @@
             "effort": "medium",
             "interaction": "iterative"
           },
+          "start_confirmation": "required",
           "route_kind": "mode",
           "mode_id": "lit-review"
         },
@@ -809,16 +1054,28 @@
           "intents": [
             "convert a final draft to a submission format"
           ],
-          "primary_artifact_types": [
-            "formatted_manuscript",
-            "submission_package"
+          "boundary_outputs": [
+            {
+              "role": "formatted_manuscript",
+              "type": "formatted_manuscript",
+              "purpose": "Formatted Manuscript produced by academic-paper:format-convert for an explicit handoff or user delivery.",
+              "structure": "A non-empty native document or archive appropriate to the declared type.",
+              "validation_profile": "binary-file-artifact"
+            },
+            {
+              "role": "submission_package",
+              "type": "submission_package",
+              "purpose": "Submission Package produced by academic-paper:format-convert for an explicit handoff or user delivery.",
+              "structure": "A non-empty native document or archive appropriate to the declared type.",
+              "validation_profile": "binary-file-artifact"
+            }
           ],
           "prerequisite_groups": [
             {
               "operator": "all_of",
               "requirements": [
                 {
-                  "kind": "contract",
+                  "kind": "stable_spec",
                   "id": "specs/manuscript.yaml"
                 }
               ],
@@ -832,15 +1089,15 @@
                   "id": "manuscript"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "paper_draft"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "verified_draft"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "revised_draft"
                 }
               ],
@@ -858,6 +1115,7 @@
             "effort": "low",
             "interaction": "single_pass"
           },
+          "start_confirmation": "required",
           "route_kind": "mode",
           "mode_id": "format-convert"
         },
@@ -867,15 +1125,21 @@
           "intents": [
             "audit citations and references in a draft"
           ],
-          "primary_artifact_types": [
-            "citation_audit_report"
+          "boundary_outputs": [
+            {
+              "role": "citation_audit_report",
+              "type": "citation_audit_report",
+              "purpose": "Citation Audit Report produced by academic-paper:citation-check for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            }
           ],
           "prerequisite_groups": [
             {
               "operator": "all_of",
               "requirements": [
                 {
-                  "kind": "contract",
+                  "kind": "stable_spec",
                   "id": "specs/manuscript.yaml"
                 }
               ],
@@ -889,15 +1153,15 @@
                   "id": "manuscript"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "paper_draft"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "verified_draft"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "revised_draft"
                 }
               ],
@@ -917,6 +1181,7 @@
             "effort": "low",
             "interaction": "single_pass"
           },
+          "start_confirmation": "required",
           "route_kind": "mode",
           "mode_id": "citation-check"
         },
@@ -926,16 +1191,28 @@
           "intents": [
             "plan a paper through structured dialogue"
           ],
-          "primary_artifact_types": [
-            "chapter_plan",
-            "insight_collection"
+          "boundary_outputs": [
+            {
+              "role": "chapter_plan",
+              "type": "chapter_plan",
+              "purpose": "Chapter Plan produced by academic-paper:plan for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "insight_collection",
+              "type": "insight_collection",
+              "purpose": "Insight Collection produced by academic-paper:plan for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            }
           ],
           "prerequisite_groups": [
             {
               "operator": "all_of",
               "requirements": [
                 {
-                  "kind": "contract",
+                  "kind": "stable_spec",
                   "id": "specs/project.md"
                 }
               ],
@@ -945,7 +1222,7 @@
               "operator": "all_of",
               "requirements": [
                 {
-                  "kind": "contract",
+                  "kind": "stable_spec",
                   "id": "specs/manuscript.yaml"
                 }
               ],
@@ -959,19 +1236,19 @@
                   "id": "research_materials"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "rq_brief"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "bibliography"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "source_corpus"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "synthesis_report"
                 }
               ],
@@ -989,6 +1266,7 @@
             "effort": "variable",
             "interaction": "iterative"
           },
+          "start_confirmation": "required",
           "route_kind": "mode",
           "mode_id": "plan"
         },
@@ -996,18 +1274,30 @@
           "route_ref": "academic-paper:revision-coach",
           "title": "Revision coaching",
           "intents": [
-            "parse reviewer comments or registered annotations and develop a revision strategy"
+            "parse reviewer comments or annotations and develop a revision strategy"
           ],
-          "primary_artifact_types": [
-            "revision_roadmap",
-            "response_letter_skeleton"
+          "boundary_outputs": [
+            {
+              "role": "revision_roadmap",
+              "type": "revision_roadmap",
+              "purpose": "Revision Roadmap produced by academic-paper:revision-coach for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "response_letter_skeleton",
+              "type": "response_letter_skeleton",
+              "purpose": "Response Letter Skeleton produced by academic-paper:revision-coach for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            }
           ],
           "prerequisite_groups": [
             {
               "operator": "all_of",
               "requirements": [
                 {
-                  "kind": "contract",
+                  "kind": "stable_spec",
                   "id": "specs/manuscript.yaml"
                 }
               ],
@@ -1021,11 +1311,11 @@
                   "id": "reviewer_comments"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "review_report"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "annotation_set"
                 }
               ],
@@ -1041,6 +1331,7 @@
             "effort": "medium",
             "interaction": "iterative"
           },
+          "start_confirmation": "required",
           "route_kind": "mode",
           "mode_id": "revision-coach"
         },
@@ -1050,15 +1341,21 @@
           "intents": [
             "prepare a venue-specific AI-use disclosure"
           ],
-          "primary_artifact_types": [
-            "ai_disclosure"
+          "boundary_outputs": [
+            {
+              "role": "ai_disclosure",
+              "type": "ai_disclosure",
+              "purpose": "Ai Disclosure produced by academic-paper:disclosure for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            }
           ],
           "prerequisite_groups": [
             {
               "operator": "all_of",
               "requirements": [
                 {
-                  "kind": "contract",
+                  "kind": "stable_spec",
                   "id": "specs/manuscript.yaml"
                 }
               ],
@@ -1072,15 +1369,15 @@
                   "id": "manuscript"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "paper_draft"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "verified_draft"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "revised_draft"
                 }
               ],
@@ -1114,6 +1411,7 @@
             "effort": "low",
             "interaction": "single_pass"
           },
+          "start_confirmation": "required",
           "route_kind": "mode",
           "mode_id": "disclosure"
         },
@@ -1123,15 +1421,21 @@
           "intents": [
             "audit an existing rebuttal against reviewer comments"
           ],
-          "primary_artifact_types": [
-            "rebuttal_qa_report"
+          "boundary_outputs": [
+            {
+              "role": "rebuttal_qa_report",
+              "type": "rebuttal_qa_report",
+              "purpose": "Rebuttal Qa Report produced by academic-paper:rebuttal-audit for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            }
           ],
           "prerequisite_groups": [
             {
               "operator": "all_of",
               "requirements": [
                 {
-                  "kind": "contract",
+                  "kind": "stable_spec",
                   "id": "specs/manuscript.yaml"
                 }
               ],
@@ -1145,7 +1449,7 @@
                   "id": "reviewer_comments"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "review_report"
                 }
               ],
@@ -1159,7 +1463,7 @@
                   "id": "rebuttal_draft"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "response_to_reviewers"
                 }
               ],
@@ -1177,6 +1481,7 @@
             "effort": "low",
             "interaction": "single_pass"
           },
+          "start_confirmation": "required",
           "route_kind": "mode",
           "mode_id": "rebuttal-audit"
         }
@@ -1217,17 +1522,35 @@
           "intents": [
             "run a complete multi-perspective manuscript review"
           ],
-          "primary_artifact_types": [
-            "review_report",
-            "editorial_decision",
-            "revision_roadmap"
+          "boundary_outputs": [
+            {
+              "role": "review_report",
+              "type": "review_report",
+              "purpose": "Review Report produced by academic-paper-reviewer:full for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "editorial_decision",
+              "type": "editorial_decision",
+              "purpose": "Editorial Decision produced by academic-paper-reviewer:full for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "revision_roadmap",
+              "type": "revision_roadmap",
+              "purpose": "Revision Roadmap produced by academic-paper-reviewer:full for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            }
           ],
           "prerequisite_groups": [
             {
               "operator": "all_of",
               "requirements": [
                 {
-                  "kind": "contract",
+                  "kind": "stable_spec",
                   "id": "specs/project.md"
                 }
               ],
@@ -1237,7 +1560,7 @@
               "operator": "all_of",
               "requirements": [
                 {
-                  "kind": "contract",
+                  "kind": "stable_spec",
                   "id": "specs/manuscript.yaml"
                 }
               ],
@@ -1251,15 +1574,15 @@
                   "id": "manuscript"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "paper_draft"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "verified_draft"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "revised_draft"
                 }
               ],
@@ -1279,6 +1602,7 @@
             "effort": "medium",
             "interaction": "single_pass"
           },
+          "start_confirmation": "required",
           "route_kind": "mode",
           "mode_id": "full"
         },
@@ -1288,17 +1612,35 @@
           "intents": [
             "verify whether a revised manuscript addresses prior review or annotations"
           ],
-          "primary_artifact_types": [
-            "verification_review_report",
-            "rr_traceability_matrix",
-            "revision_roadmap"
+          "boundary_outputs": [
+            {
+              "role": "verification_review_report",
+              "type": "verification_review_report",
+              "purpose": "Verification Review Report produced by academic-paper-reviewer:re-review for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "rr_traceability_matrix",
+              "type": "rr_traceability_matrix",
+              "purpose": "Rr Traceability Matrix produced by academic-paper-reviewer:re-review for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "revision_roadmap",
+              "type": "revision_roadmap",
+              "purpose": "Revision Roadmap produced by academic-paper-reviewer:re-review for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            }
           ],
           "prerequisite_groups": [
             {
               "operator": "all_of",
               "requirements": [
                 {
-                  "kind": "contract",
+                  "kind": "stable_spec",
                   "id": "specs/manuscript.yaml"
                 }
               ],
@@ -1312,7 +1654,7 @@
                   "id": "revised_manuscript"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "revised_draft"
                 }
               ],
@@ -1324,11 +1666,11 @@
               "operator": "any_of",
               "requirements": [
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "review_report"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "revision_roadmap"
                 },
                 {
@@ -1336,12 +1678,8 @@
                   "id": "reviewer_comments"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "annotation_set"
-                },
-                {
-                  "kind": "artifact",
-                  "id": "annotation_resolution_report"
                 }
               ],
               "fallback_route_refs": []
@@ -1358,6 +1696,7 @@
             "effort": "medium",
             "interaction": "single_pass"
           },
+          "start_confirmation": "required",
           "route_kind": "mode",
           "mode_id": "re-review"
         },
@@ -1367,15 +1706,21 @@
           "intents": [
             "identify the most important manuscript issues quickly"
           ],
-          "primary_artifact_types": [
-            "eic_quick_assessment"
+          "boundary_outputs": [
+            {
+              "role": "eic_quick_assessment",
+              "type": "eic_quick_assessment",
+              "purpose": "Eic Quick Assessment produced by academic-paper-reviewer:quick for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            }
           ],
           "prerequisite_groups": [
             {
               "operator": "all_of",
               "requirements": [
                 {
-                  "kind": "contract",
+                  "kind": "stable_spec",
                   "id": "specs/manuscript.yaml"
                 }
               ],
@@ -1389,15 +1734,15 @@
                   "id": "manuscript"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "paper_draft"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "verified_draft"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "revised_draft"
                 }
               ],
@@ -1415,6 +1760,7 @@
             "effort": "low",
             "interaction": "single_pass"
           },
+          "start_confirmation": "required",
           "route_kind": "mode",
           "mode_id": "quick"
         },
@@ -1424,15 +1770,21 @@
           "intents": [
             "assess research design and methodology in depth"
           ],
-          "primary_artifact_types": [
-            "methodology_review"
+          "boundary_outputs": [
+            {
+              "role": "methodology_review",
+              "type": "methodology_review",
+              "purpose": "Methodology Review produced by academic-paper-reviewer:methodology-focus for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            }
           ],
           "prerequisite_groups": [
             {
               "operator": "all_of",
               "requirements": [
                 {
-                  "kind": "contract",
+                  "kind": "stable_spec",
                   "id": "specs/project.md"
                 }
               ],
@@ -1442,7 +1794,7 @@
               "operator": "all_of",
               "requirements": [
                 {
-                  "kind": "contract",
+                  "kind": "stable_spec",
                   "id": "specs/manuscript.yaml"
                 }
               ],
@@ -1456,15 +1808,15 @@
                   "id": "manuscript"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "paper_draft"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "verified_draft"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "revised_draft"
                 }
               ],
@@ -1484,6 +1836,7 @@
             "effort": "medium",
             "interaction": "single_pass"
           },
+          "start_confirmation": "required",
           "route_kind": "mode",
           "mode_id": "methodology-focus"
         },
@@ -1493,15 +1846,21 @@
           "intents": [
             "work through manuscript issues through Socratic dialogue"
           ],
-          "primary_artifact_types": [
-            "guided_review_notes"
+          "boundary_outputs": [
+            {
+              "role": "guided_review_notes",
+              "type": "guided_review_notes",
+              "purpose": "Guided Review Notes produced by academic-paper-reviewer:guided for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            }
           ],
           "prerequisite_groups": [
             {
               "operator": "all_of",
               "requirements": [
                 {
-                  "kind": "contract",
+                  "kind": "stable_spec",
                   "id": "specs/manuscript.yaml"
                 }
               ],
@@ -1515,15 +1874,15 @@
                   "id": "manuscript"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "paper_draft"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "verified_draft"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "revised_draft"
                 }
               ],
@@ -1541,6 +1900,7 @@
             "effort": "variable",
             "interaction": "iterative"
           },
+          "start_confirmation": "required",
           "route_kind": "mode",
           "mode_id": "guided"
         },
@@ -1550,9 +1910,21 @@
           "intents": [
             "measure reviewer accuracy against a gold set"
           ],
-          "primary_artifact_types": [
-            "calibration_report",
-            "confidence_disclosure"
+          "boundary_outputs": [
+            {
+              "role": "calibration_report",
+              "type": "calibration_report",
+              "purpose": "Calibration Report produced by academic-paper-reviewer:calibration for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "confidence_disclosure",
+              "type": "confidence_disclosure",
+              "purpose": "Confidence Disclosure produced by academic-paper-reviewer:calibration for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            }
           ],
           "prerequisite_groups": [
             {
@@ -1575,6 +1947,7 @@
             "effort": "high",
             "interaction": "long_horizon"
           },
+          "start_confirmation": "required",
           "route_kind": "mode",
           "mode_id": "calibration"
         }
@@ -1614,26 +1987,28 @@
           "intents": [
             "start from a research goal and continue to a submission package"
           ],
-          "primary_artifact_types": [
-            "submission_package",
-            "process_summary"
+          "boundary_outputs": [
+            {
+              "role": "submission_package",
+              "type": "submission_package",
+              "purpose": "Submission Package produced by academic-pipeline:end-to-end for an explicit handoff or user delivery.",
+              "structure": "A non-empty native document or archive appropriate to the declared type.",
+              "validation_profile": "binary-file-artifact"
+            },
+            {
+              "role": "process_summary",
+              "type": "process_summary",
+              "purpose": "Process Summary produced by academic-pipeline:end-to-end for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            }
           ],
           "prerequisite_groups": [
             {
               "operator": "all_of",
               "requirements": [
                 {
-                  "kind": "contract",
-                  "id": "specs/workflow.yaml"
-                }
-              ],
-              "fallback_route_refs": []
-            },
-            {
-              "operator": "all_of",
-              "requirements": [
-                {
-                  "kind": "contract",
+                  "kind": "stable_spec",
                   "id": "specs/project.md"
                 }
               ],
@@ -1663,6 +2038,7 @@
             "effort": "high",
             "interaction": "long_horizon"
           },
+          "start_confirmation": "required",
           "route_kind": "entry",
           "mode_id": null
         },
@@ -1670,28 +2046,30 @@
           "route_ref": "academic-pipeline:mid-entry",
           "title": "Mid-entry or resume",
           "intents": [
-            "continue the pipeline from research materials, a draft, review feedback, or registered annotations"
+            "continue the pipeline from research materials, a draft, review feedback, or annotations"
           ],
-          "primary_artifact_types": [
-            "submission_package",
-            "process_summary"
+          "boundary_outputs": [
+            {
+              "role": "submission_package",
+              "type": "submission_package",
+              "purpose": "Submission Package produced by academic-pipeline:mid-entry for an explicit handoff or user delivery.",
+              "structure": "A non-empty native document or archive appropriate to the declared type.",
+              "validation_profile": "binary-file-artifact"
+            },
+            {
+              "role": "process_summary",
+              "type": "process_summary",
+              "purpose": "Process Summary produced by academic-pipeline:mid-entry for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            }
           ],
           "prerequisite_groups": [
             {
               "operator": "all_of",
               "requirements": [
                 {
-                  "kind": "contract",
-                  "id": "specs/workflow.yaml"
-                }
-              ],
-              "fallback_route_refs": []
-            },
-            {
-              "operator": "all_of",
-              "requirements": [
-                {
-                  "kind": "contract",
+                  "kind": "stable_spec",
                   "id": "specs/project.md"
                 }
               ],
@@ -1705,15 +2083,15 @@
                   "id": "research_materials"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "rq_brief"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "bibliography"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "synthesis_report"
                 },
                 {
@@ -1721,7 +2099,7 @@
                   "id": "manuscript"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "paper_draft"
                 },
                 {
@@ -1729,11 +2107,11 @@
                   "id": "reviewer_comments"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "review_report"
                 },
                 {
-                  "kind": "artifact",
+                  "kind": "handoff_role",
                   "id": "annotation_set"
                 }
               ],
@@ -1755,6 +2133,7 @@
             "effort": "high",
             "interaction": "long_horizon"
           },
+          "start_confirmation": "required",
           "route_kind": "entry",
           "mode_id": null
         }

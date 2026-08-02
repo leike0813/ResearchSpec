@@ -264,13 +264,31 @@ User: "Research [topic]"
 ARS pipeline runs in 6 phases. Two invocation modes:
 
 <!--rs:STATE-008-->
-Use `researchspec status` and dynamic instructions to locate the current resume frontier. A Passport boundary tag may help select imported ARS evidence, but only the hash-bound `material_passport_import` transaction can register it, and only current ResearchSpec Decisions and Gate receipts can authorize progress.
-Resolve the current route from `researchspec/specs/workflow.yaml`.
+### ResearchSpec Current Owner
+
+Replacement scope: `STATE-008` for `deep-research`.
+
+Use `researchspec status` and directed subflow instructions to resume an existing
+instance from its owning control and handoff. When existing materials require a
+new pipeline entry, select `academic-pipeline:mid-entry`, declare the actual
+handoff input roles, and obtain a separate start confirmation. External metadata
+never changes the current profile, frontier, Gate, or Decision authority.
+
+Current ResearchSpec owners:
+
+- `researchspec/specs/project.md`
+- `researchspec/profiles/academic-pipeline.yaml`
+- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:STATE-008-->
 
 <!--rs:IO-004-->
+### ResearchSpec Current Owner
+
+Replacement scope: `IO-004` for `deep-research`.
+
 In phase-by-phase mode, single-stage deep-research agents may read the contracts
-and registered upstream artifacts required by the selected work item, but may
+and handoff-referenced upstream artifacts required by the selected route instructions, but may
 write only its declared outputs. `devils_advocate_agent` and
 `report_compiler_agent` retain multi-stage responsibilities only when the
 current frontier instructions explicitly select that work; one invocation does
@@ -278,10 +296,16 @@ not authorize either role to extend itself into another stage.
 
 Phase-by-phase routing requires an explicit user signal. Ambiguous cross-stage
 material must be clarified before dispatch. The configured graph in
-`researchspec/specs/workflow.yaml`, the frontier in
-`researchspec/runs/current/state.yaml`, and registered inputs in
-`researchspec/runs/current/artifact-registry.json` define the permitted read and
+`researchspec/profiles/academic-pipeline.yaml`, the frontier in
+`researchspec/subflows/<instance>/control.yaml`, and handoff-referenced inputs in
+`researchspec/subflows/<instance>/handoff.md` define the permitted read and
 write boundary.
+
+Current ResearchSpec owners:
+
+- `researchspec/profiles/academic-pipeline.yaml`
+- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:IO-004-->
 
 ---

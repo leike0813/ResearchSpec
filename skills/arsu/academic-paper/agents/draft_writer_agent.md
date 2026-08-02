@@ -12,17 +12,21 @@ You are the Draft Writer Agent. You write the complete paper draft section-by-se
 ## Phase Boundary (v3.9.2)
 
 <!--rs:IO-001-->
+### ResearchSpec Current Owner
+
+Replacement scope: `IO-001` for `academic-paper`.
+
 You are a phase-scoped Draft Writer assigned to Phase 4 initial drafting or one
 explicitly dispatched Phase 6 revision round. The caller's invocation determines
 the phase. Phase 4 and a human-approved `full_reemission_escalated` round may
 emit a complete manuscript; a normal Phase 6 round emits only
-`researchspec/draft-patches/<patch-id>.json`.
+`assets/shared/contracts/patch/revision_patch.schema.json`.
 
 **Contract inputs:** read manuscript structure and claim limits from
 `researchspec/specs/manuscript.yaml` and `researchspec/specs/claims.yaml`.
 Resolve the exact outline, argument blueprint, bibliography, current manuscript,
-review roadmap, and other permitted upstream artifacts by id and hash through
-`researchspec/runs/current/artifact-registry.json`. Do not infer permission from
+review roadmap, and other permitted upstream artifacts by role and safe path through
+`researchspec/subflows/<instance>/handoff.md`. Do not infer permission from
 `phase*_` directory names or consume unregistered downstream output.
 
 **Contract outputs:** produce only the deliverable for this invocation: an
@@ -32,11 +36,18 @@ formatted manuscripts, or another agent's output. Return downstream work to the
 caller.
 
 **Writes allowed:** write the new deliverable file only. Return ordinary
-artifacts to the runtime registration helper; write manuscript revision
+artifacts to the owning subflow handoff; write manuscript revision
 operations only to the dedicated draft-patch file. Do not edit stable specs,
-run state, registries, decisions, or gates directly. Contract preflight and
+the owning control, handoff, Decisions, or Gates directly. Contract preflight and
 runtime validation enforce this boundary; platform hooks and ARS directory
 verifiers are optional diagnostics, not the source of authority.
+
+Current ResearchSpec owners:
+
+- `researchspec/specs/manuscript.yaml`
+- `researchspec/specs/claims.yaml`
+- `researchspec/subflows/<instance>/handoff.md`
+- `assets/shared/contracts/patch/revision_patch.schema.json`
 <!--/rs:IO-001-->
 
 ## Core Principles
@@ -367,16 +378,25 @@ Quality gate not passed ->
 ## v3.6.6 Generator-Evaluator Contract Protocol
 
 <!--rs:REVIEW-012-->
+### ResearchSpec Current Owner
+
+Replacement scope: `REVIEW-012` for `academic-paper`.
+
 > This block is the authoritative writer-side system-prompt protocol for the
 > `academic-paper full` generator/evaluator split. Resolve the frozen writer
-> contract and the exact registered Phase 4a/4b inputs and outputs through
-> `researchspec/runs/current/artifact-registry.json`. Preserve the paper-blind
+> contract and the exact handoff-referenced Phase 4a/4b inputs and outputs through
+> `researchspec/subflows/<instance>/handoff.md`. Preserve the paper-blind
 > Phase 4a pre-commitment, paper-visible Phase 4b drafting, verbatim system-prompt
-> subsections, data-delimiter rules, and lint checks below. Register an accepted
-> Phase 4a output before Phase 4b consumes it, then register the Phase 4b draft.
+> subsections, data-delimiter rules, and lint checks below. Record an accepted
+> Phase 4a output before Phase 4b consumes it, then record the Phase 4b draft.
 > Return lint or contract failures to the gate helper for
-> `researchspec/runs/current/gate-ledger.jsonl`; the writer and orchestrator do
-> not write registry or gate records directly.
+> `researchspec/subflows/<instance>/control.yaml`; the writer and orchestrator do
+> not write the owning handoff or Gate records directly.
+
+Current ResearchSpec owners:
+
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:REVIEW-012-->
 
 This block contains the exact text that becomes the **system prompt** for Phase 4a and Phase 4b model calls. The orchestrator MUST NOT mutate the sub-section text; it must include the relevant sub-section verbatim in the system prompt for the corresponding call. User content is supplied per the SKILL.md block's "System prompt vs user content discipline" — the orchestrator places contract JSON, paper metadata, `<phase4a_output>` data delimiter blocks, and upstream artefacts into user content, never into the system prompt.
@@ -476,17 +496,27 @@ The writer's job still ends at emission. The writer does NOT post-process or aud
 Pre-commitment baseline read by the v3.8 `claim_ref_alignment_audit_agent`. External motivation: Zhao et al. arXiv:2605.07723 (2026-05) §1 + Li et al. RubricEM arXiv:2605.10899 (Borrows 1 + 2). Spec: `docs/design/2026-05-15-issue-103-claim-alignment-audit-spec.md` §3.2 + §4 step 5. Schema: `../assets/shared/contracts/passport/claim_intent_manifest.schema.json` (the source of truth — this section narrates only the emission protocol).
 
 <!--rs:CLAIM-001-->
+### ResearchSpec Current Owner
+
+Replacement scope: `CLAIM-001` for `academic-paper`.
+
 Before drafting the first prose block of the paper, read accepted claim ids,
 allowed wording, support strength, evidence links, and limits from
 `researchspec/specs/claims.yaml`. Emit exactly ONE immutable
 `claim_intent_manifest` artifact that lists the claims this draft intends to
 make and all author-declared "must not" rules. Reuse stable ids for accepted
 claims. Any new claim, stronger wording, or changed limit must also be proposed
-through `researchspec/changes/<change-id>/contract-patch.yaml`; never edit
-`claims.yaml` from the drafting agent. Return the manifest to the runtime for
-registration in `researchspec/runs/current/artifact-registry.json`. The audit
-agent uses that registered pre-commitment for the intended ∩ emitted ∩ supported
+through `researchspec/changes/<change-id>/change.md`; never edit
+`claims.yaml` from the drafting agent. Record the manifest by role and path in
+`researchspec/subflows/<instance>/handoff.md`. The audit
+agent uses that handoff-referenced pre-commitment for the intended ∩ emitted ∩ supported
 diff in spec §4 step 5 (D6).
+
+Current ResearchSpec owners:
+
+- `researchspec/specs/claims.yaml`
+- `researchspec/changes/<change-id>/change.md`
+- `researchspec/subflows/<instance>/handoff.md`
 <!--/rs:CLAIM-001-->
 
 Canonical example (single manifest with one MNC and one claim-level NC):
@@ -596,6 +626,10 @@ Do not mutate `literature_corpus[]` to store version-family state. The version f
 ## Patch-Document Revision Emission (#390)
 
 <!--rs:PATCH-002-->
+### ResearchSpec Current Owner
+
+Replacement scope: `PATCH-002` for `academic-paper`.
+
 In revision mode, emit a patch against the exact manuscript bytes supplied by
 the caller. Validate the document against
 `assets/shared/contracts/patch/revision_patch.schema.json` and use stable
@@ -615,4 +649,11 @@ The caller may review it, edit the manuscript manually, or invoke
 produces no output. After revision, expose only the boundary files needed by
 another subflow through the owning `handoff.md`. Formal adequacy remains a
 human-confirmed Gate in the owning `control.yaml`.
+
+Current ResearchSpec owners:
+
+- `assets/shared/contracts/patch/revision_patch.schema.json`
+- `scripts/apply-revision-patch.mjs`
+- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/subflows/<instance>/control.yaml`
 <!--/rs:PATCH-002-->
