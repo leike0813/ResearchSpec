@@ -1,7 +1,7 @@
 import type { z } from "zod";
 
 import { AnnotationTargetSchema } from "../contracts/annotation.js";
-import { markdownSectionHeadings, parseAnchoredBlocks } from "./markdown-blocks.js";
+import { markdownSectionHeadings, parseAnchoredBlocks } from "../../arsu-converter/revision/markdown-blocks.js";
 
 export type AnnotationTarget = z.infer<typeof AnnotationTargetSchema>;
 
@@ -60,4 +60,3 @@ export function validateAnnotationTargetAgainstMarkdown(text: string, target: An
     );
   }
 }
-

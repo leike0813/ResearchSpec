@@ -13,9 +13,9 @@ import { generateAnnotationReviewCopy } from "./review-copy.js";
 import { captureAnnotationSource, type CapturedAnnotationSource } from "./sources.js";
 
 export function createAnnotationIntakeSession(input: {
+  workRoot: string;
   annotationSetId: string;
-  baseArtifactId: string;
-  baseSha256: string;
+  manuscriptPath: string;
   baseText: string;
   slotDensity?: AnnotationSlotDensity;
 }): {
@@ -24,11 +24,11 @@ export function createAnnotationIntakeSession(input: {
   reviewSource: CapturedAnnotationSource;
   writes: PlannedAnnotationWorkingWrite[];
 } {
-  if (sha256(input.baseText) !== input.baseSha256) throw new Error("Annotation intake base bytes do not match baseSha256.");
-  const paths = annotationIntakePaths(input.annotationSetId);
+  const baseSha256 = sha256(input.baseText);
+  const paths = annotationIntakePaths({ workRoot: input.workRoot, annotationSetId: input.annotationSetId });
   const reviewCopy = generateAnnotationReviewCopy({ baseText: input.baseText, slotDensity: input.slotDensity });
   const reviewSource = captureAnnotationSource({
-    annotationSetId: input.annotationSetId,
+    destinationRoot: paths.raw_sources,
     content: reviewCopy.content,
     format: "markdown_review_copy",
   });
@@ -36,8 +36,7 @@ export function createAnnotationIntakeSession(input: {
     schema_version: "1",
     session_id: input.annotationSetId,
     annotation_set_id: input.annotationSetId,
-    base_artifact_id: input.baseArtifactId,
-    base_sha256: input.baseSha256,
+    manuscript: { path: input.manuscriptPath, sha256: baseSha256 },
     paths,
     slot_density: reviewCopy.slot_density,
     review_copy: { path: paths.review_copy, sha256: reviewCopy.template_sha256 },
@@ -78,10 +77,10 @@ export function withDerivedReviewDelta(input: {
   deltaSource: CapturedAnnotationSource;
   writes: PlannedAnnotationWorkingWrite[];
 } {
-  if (input.delta.base_sha256 !== input.session.base_sha256) throw new Error("Review Delta base does not match the intake session.");
+  if (input.delta.base_sha256 !== input.session.manuscript.sha256) throw new Error("Review Delta base does not match the intake session.");
   const deltaText = serialize(input.delta);
   const deltaSource = captureAnnotationSource({
-    annotationSetId: input.session.annotation_set_id,
+    destinationRoot: input.session.paths.raw_sources,
     content: deltaText,
     format: "review_delta_json",
     mediaType: "application/json",

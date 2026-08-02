@@ -4,7 +4,7 @@
 - Source: `vendor/ars`
 - Source commit: `becfcc40c6e9e93c187cf4a088333f83373e002d`
 - Output: `skills/arsu`
-- Generated at: `2026-07-30T16:44:03Z`
+- Generated at: `2026-08-02T01:40:53Z`
 - Validation: pass
 
 ## Source Checkout
@@ -56,7 +56,7 @@
 
 ## File Summary
 
-- Output files: 487
+- Output files: 488
 - Excluded source files: 499
 - Unclassified source files: 321
 - Risk findings: 1118

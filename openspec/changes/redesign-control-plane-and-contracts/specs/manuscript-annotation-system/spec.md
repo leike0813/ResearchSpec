@@ -1,7 +1,8 @@
 ## ADDED Requirements
 
 ### Requirement: ARSU Revision Patch Is The Sole Patch Contract
-The ARSU `revision_patch` schema SHALL remain the only manuscript patch contract and SHALL NOT be
+The converter-owned ResearchSpec adaptation of the ARSU `revision_patch` schema SHALL be the only
+manuscript patch contract, SHALL be projected consistently into the ARSU Skills, and SHALL NOT be
 registered in a ResearchSpec patch lifecycle.
 
 #### Scenario: Revision patch is applied mechanically
@@ -26,4 +27,3 @@ mapping under the owning revision subflow's private work directory.
 ### Requirement: Derived Annotation Resolution Report
 **Reason**: A mandatory registry-backed resolution report duplicates the patch result.
 **Migration**: Produce an optional helper report when the user or workflow needs it.
-

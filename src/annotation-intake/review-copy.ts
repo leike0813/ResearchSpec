@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 
-import { parseAnchoredBlocks } from "../core/runtime/markdown-blocks.js";
+import { parseAnchoredBlocks } from "../arsu-converter/revision/markdown-blocks.js";
 import {
   GeneratedReviewCopySchema,
   type AnnotationSlotDensity,
@@ -119,4 +119,3 @@ function safeFragment(value: string): string {
 function sha256(value: string | Uint8Array): string {
   return createHash("sha256").update(value).digest("hex");
 }
-

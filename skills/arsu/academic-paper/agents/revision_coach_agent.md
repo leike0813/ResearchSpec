@@ -100,28 +100,21 @@ For each parsed reviewer comment (from Step 2), decompose into an explicit list 
    - `required_evidence_type`: Where the evidence of fulfillment lives, per `re_review_mode_protocol` Commitment Ledger Verification. Seven **manuscript-evidence** types — `new_section` / `new_figure` / `new_table` / `new_citation` / `methods_paragraph` / `discussion_paragraph` / `prose_edit` — verify at `revision_location` in the revised manuscript. One **response-letter-evidence** type — `acknowledgment_only` — verifies in the Response to Reviewers (Schema 8) and does NOT require any manuscript change. One **escape-hatch** type — `other` — is intentionally underspecified for genuinely uncategorizable evidence and triggers a soft advisory at re-review prompting the author to specify the actual evidence location. Use `prose_edit` for sentence- or paragraph-level prose changes too granular to bucket into the other manuscript categories (typo fixes, terminology clarifications, equation formatting, citation-style corrections); use `other` only when no other value fits, and add a one-line free-text note in `commitment_text` explaining the type. This guides the `re_review_mode_protocol` verification step in Schema 11 v3.11.
 4. Comments with no extractable commitment (positive comments, summary acknowledgments) emit an empty list `[]` — this is valid.
 <!--rs:REVIEW-014-->
-5. Emit the extracted commitment list as an immutable review-analysis artifact
-   keyed by `concern_id` and return it for registration in
-   `researchspec/runs/current/artifact-registry.json`. Preserve only the three
-   extraction fields at this stage; do not invent lifecycle placeholders.
-   Research-scope or claim commitments require a proposed
-   `researchspec/changes/<change-id>/contract-patch.yaml`; manuscript-edit
-   commitments become traceability inputs for
-   `researchspec/draft-patches/<patch-id>.json`. Existing registered Annotation
-   Sets remain separate immutable review evidence and Draft Patch v3 operation
-   references provide their only text-operation mapping; strategic acceptance, rejection,
-   or tradeoff choices wait for a human-confirmed decision in
-   `researchspec/runs/current/decision-ledger.jsonl`. Revision execution and
-   independent re-review append fulfillment evidence later; this agent does not
-   write those stable records directly.
+5. Emit the extracted commitment list as review working material or as a
+   boundary deliverable at an ordinary project path. If another subflow needs
+   it, record its role, purpose, producer, consumer, and safe path in the owning
+   `handoff.md`. Research-scope or claim commitments require a proposed
+   `researchspec/changes/<change-id>/` package; manuscript-edit commitments may
+   become roadmap traceability in an ARSU revision patch conforming to
+   `assets/shared/contracts/patch/revision_patch.schema.json`.
 
-When the source is a free-form annotated manuscript rather than a registered
-review artifact, first use the shared ResearchSpec intake session. Read the
-complete base, review copy, mechanical delta, feedback files, and conversation
-snapshots; interpret the user's own style without requiring a marker grammar.
-Keep ambiguous or high-impact items pending clarification or confirmation.
-Only ready entries may become the normalized Annotation Set candidate, and only
-the CLI may freeze and register it.
+When the source is a free-form annotated manuscript, use the owning revision
+subflow's `work/annotation-intake/` directory. Preserve the complete base, raw
+feedback, mechanical delta, stable annotation IDs, normalized interpretations,
+and proposed patch mappings. Keep ambiguous or high-impact items pending human
+clarification. There is no freeze, registry, submit receipt, or annotation
+lifecycle. If the normalized annotation set must cross a subflow boundary,
+write an explicit copy outside `researchspec/` and reference it in the handoff.
 <!--/rs:REVIEW-014-->
 
 **Output format:**

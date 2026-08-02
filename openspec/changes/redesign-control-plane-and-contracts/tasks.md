@@ -46,10 +46,10 @@
 
 ## 5. Revision Patch And Annotation Intake
 
-- [ ] 5.1 Add the stateless fail-closed ARSU revision patch helper and keep its schema as the sole patch
+- [x] 5.1 Add the stateless fail-closed ARSU revision patch helper and keep its schema as the sole patch
   contract.
-- [ ] 5.2 Move annotation intake to revision-subflow private work and remove registry/receipt lifecycle.
-- [ ] 5.3 Add patch and annotation behavior tests without locking incidental prose.
+- [x] 5.2 Move annotation intake to revision-subflow private work and remove registry/receipt lifecycle.
+- [x] 5.3 Add patch and annotation behavior tests without locking incidental prose.
 
 ## 6. ARSU Profile, Routing And Anchors
 

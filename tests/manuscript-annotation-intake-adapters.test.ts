@@ -1,8 +1,10 @@
 import assert from "node:assert/strict";
+import path from "node:path";
 import test from "node:test";
 
 import {
   AnnotationInterpretationError,
+  annotationIntakePaths,
   captureAnnotationSource,
   captureConversationFeedback,
   createAnnotationIntakeSession,
@@ -15,8 +17,7 @@ import {
   withCapturedAnnotationSources,
   withDerivedReviewDelta,
 } from "../src/annotation-intake.js";
-import { parseAnchoredBlocks } from "../src/core/runtime/markdown-blocks.js";
-import { sha256 } from "../src/core/workspace/write-plan.js";
+import { parseAnchoredBlocks, sha256 } from "../src/arsu-converter/revision/markdown-blocks.js";
 
 const BASE = [
   "<!--block:b-intro-->",
@@ -28,7 +29,7 @@ const BASE = [
   "",
 ].join("\n");
 
-void test("review-copy slots are optional affordances and preserve the exact base", () => {
+void test("review-copy slots remain optional and preserve the exact base", () => {
   const section = generateAnnotationReviewCopy({ baseText: BASE });
   assert.equal(section.slot_density, "section");
   assert.deepEqual(section.slots.map((slot) => slot.target.kind), ["document", "section", "section"]);
@@ -43,26 +44,23 @@ void test("review-copy slots are optional affordances and preserve the exact bas
   assert.deepEqual(none.slots, []);
 });
 
-void test("arbitrary Markdown review is preserved for Agent interpretation and v2 materialization", () => {
+void test("free-form intake materializes a private annotation candidate from explicit paths", () => {
+  const workRoot = path.resolve("/tmp/revision-work");
   const created = createAnnotationIntakeSession({
+    workRoot,
     annotationSetId: "free-review",
-    baseArtifactId: "A-paper",
-    baseSha256: sha256(BASE),
+    manuscriptPath: path.resolve("/tmp/manuscript.md"),
     baseText: BASE,
   });
+  assert.equal(created.session.paths.root, path.join(workRoot, "annotation-intake/free-review"));
+  assert.ok(created.writes.every((write) => write.path.startsWith(created.session.paths.root)));
+
   const reviewText = created.reviewCopy.content.replace(
     "Original methods.",
-    [
-      "Rewritten methods.",
-      "",
-      "这段我直接改了，看看是否更清楚 🙂",
-      "",
-      "- 也可以把样本选择再解释一下",
-      "- {>>这里是我习惯用的 CriticMarkup 提醒<<}",
-    ].join("\n"),
+    "Rewritten methods.\n\n这段我直接改了，也请解释样本选择。",
   );
   const reviewSource = captureAnnotationSource({
-    annotationSetId: "free-review",
+    destinationRoot: created.session.paths.raw_sources,
     content: reviewText,
     format: "markdown_review_copy",
   });
@@ -71,19 +69,12 @@ void test("arbitrary Markdown review is preserved for Agent interpretation and v
     sources: [reviewSource],
     currentReviewText: reviewText,
   });
-  const delta = deriveReviewDelta({
-    baseText: BASE,
-    templateText: created.reviewCopy.content,
-    reviewText,
-  });
+  const delta = deriveReviewDelta({ baseText: BASE, templateText: created.reviewCopy.content, reviewText });
   assert.equal(delta.diagnostics.length, 0);
   assert.equal(delta.entries.length, 1);
-  assert.equal(delta.entries[0]?.kind, "changed_block");
-  assert.match(delta.entries[0]?.after_text ?? "", /CriticMarkup/);
-
-  const withDelta = withDerivedReviewDelta({ session: captured.session, delta });
   const deltaEntry = delta.entries[0];
   assert.ok(deltaEntry);
+  const withDelta = withDerivedReviewDelta({ session: captured.session, delta });
   const methods = parseAnchoredBlocks(BASE).find((block) => block.id === "b-methods");
   assert.ok(methods);
   const deltaText = `${JSON.stringify(delta, null, 2)}\n`;
@@ -103,13 +94,9 @@ void test("arbitrary Markdown review is preserved for Agent interpretation and v
         source_id: withDelta.deltaSource.source.source_id,
         delta_id: deltaEntry.delta_id,
       },
-      target: {
-        kind: "block" as const,
-        block_id: methods.id,
-        block_sha256: methods.hash,
-      },
-      agent_interpretation: "The user proposes a rewrite and asks for a clearer explanation of sample selection.",
-      expected_action: "Assess the rewrite and revise the methods explanation.",
+      target: { kind: "block" as const, block_id: methods.id, block_sha256: methods.hash },
+      agent_interpretation: "The reviewer proposes a methods rewrite and asks for sample-selection detail.",
+      expected_action: "Assess the rewrite and clarify sample selection.",
       semantic_impact: { level: "ordinary" as const },
       clarification: null,
     }],
@@ -127,6 +114,7 @@ void test("arbitrary Markdown review is preserved for Agent interpretation and v
     delta,
     sourceContents,
   }), []);
+
   const candidate = materializeAnnotationCandidate({
     session: withDelta.session,
     interpretation,
@@ -135,36 +123,27 @@ void test("arbitrary Markdown review is preserved for Agent interpretation and v
     delta,
     sourceContents,
   });
-  assert.equal(candidate.schema_version, "2");
-  assert.equal(candidate.annotations.length, 1);
+  assert.equal(candidate.schema_version, "1");
+  assert.deepEqual(candidate.manuscript, created.session.manuscript);
+  assert.equal(candidate.annotations[0]?.source_ref.kind, "review_delta");
   assert.equal(candidate.raw_sources.length, 3);
-  assert.equal(candidate.annotations[0]?.raw_body, deltaEntry.after_text);
 });
 
-void test("unresolved or fabricated Agent interpretation fails closed", () => {
+void test("unresolved Agent interpretation fails closed", () => {
   const created = createAnnotationIntakeSession({
+    workRoot: "/tmp/revision-work",
     annotationSetId: "ambiguous-review",
-    baseArtifactId: "A-paper",
-    baseSha256: sha256(BASE),
+    manuscriptPath: "/tmp/manuscript.md",
     baseText: BASE,
     slotDensity: "none",
   });
   const delta = deriveReviewDelta({ baseText: BASE, templateText: BASE, reviewText: BASE });
-  const deltaSource = captureAnnotationSource({
-    annotationSetId: "ambiguous-review",
-    content: `${JSON.stringify(delta, null, 2)}\n`,
-    format: "review_delta_json",
-  });
-  const session = withCapturedAnnotationSources({
-    session: created.session,
-    sources: [deltaSource],
-  }).session;
   const interpretation = {
     schema_version: "1" as const,
     session_id: "ambiguous-review",
     base_sha256: sha256(BASE),
     review_sha256: sha256(BASE),
-    delta_sha256: deltaSource.source.sha256,
+    delta_sha256: sha256(`${JSON.stringify(delta, null, 2)}\n`),
     entries: [{
       annotation_id: "ann-ambiguous",
       status: "needs_clarification" as const,
@@ -180,28 +159,24 @@ void test("unresolved or fabricated Agent interpretation fails closed", () => {
     }],
   };
   assert.throws(() => materializeAnnotationCandidate({
-    session,
+    session: created.session,
     interpretation,
     baseText: BASE,
     reviewText: BASE,
     delta,
-    sourceContents: {
-      [created.reviewSource.source.source_id]: created.reviewSource.content,
-      [deltaSource.source.source_id]: deltaSource.content,
-    },
+    sourceContents: { [created.reviewSource.source.source_id]: created.reviewSource.content },
   }), AnnotationInterpretationError);
 });
 
-void test("conversation capture and working-write plans are deterministic", () => {
-  const first = captureConversationFeedback({
-    annotationSetId: "conversation-review",
+void test("conversation capture and working-write plans are deterministic and private", () => {
+  const paths = annotationIntakePaths({ workRoot: "/tmp/revision-work", annotationSetId: "conversation-review" });
+  const input = {
+    destinationRoot: paths.raw_sources,
     messages: [{ message_id: "m1", author: "reviewer", body: "引言太长，可以更直接。" }],
-  });
-  const second = captureConversationFeedback({
-    annotationSetId: "conversation-review",
-    messages: [{ message_id: "m1", author: "reviewer", body: "引言太长，可以更直接。" }],
-  });
+  };
+  const first = captureConversationFeedback(input);
+  const second = captureConversationFeedback(input);
   assert.deepEqual(first, second);
-  assert.match(first.source.path, /^runs\/current\/annotation-sessions\/conversation-review\/sources\/[a-f0-9]{64}\.json$/);
+  assert.equal(path.dirname(first.source.path), paths.raw_sources);
   assert.deepEqual(planAnnotationWorkingMaterial([first.write, second.write]), [first.write]);
 });

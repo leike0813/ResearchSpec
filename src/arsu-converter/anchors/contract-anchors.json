@@ -182,10 +182,10 @@
       },
       "semantic_role": "draft_patch_protocol",
       "researchspec_targets": [
-        "researchspec/draft-patches/<patch-id>.json",
-        "researchspec/runs/current/decision-ledger.jsonl",
-        "researchspec/runs/current/gate-ledger.jsonl",
-        "researchspec/runs/current/artifact-registry.json"
+        "assets/shared/contracts/patch/revision_patch.schema.json",
+        "scripts/apply-revision-patch.mjs",
+        "handoff.md",
+        "control.yaml"
       ],
       "replacement_shape": "patch_protocol_block",
       "replacement_scope": {
@@ -524,8 +524,11 @@
       },
       "semantic_role": "draft_patch_protocol",
       "researchspec_targets": [
-        "researchspec/draft-patches/<patch-id>.json",
-        "researchspec/runs/current/decision-ledger.jsonl"
+        "assets/shared/contracts/patch/revision_patch.schema.json",
+        "scripts/apply-revision-patch.mjs",
+        "work/annotation-intake/",
+        "handoff.md",
+        "control.yaml"
       ],
       "replacement_shape": "patch_protocol_block",
       "replacement_scope": {
@@ -701,8 +704,10 @@
       },
       "semantic_role": "draft_patch_protocol",
       "researchspec_targets": [
-        "researchspec/draft-patches/<patch-id>.json",
-        "researchspec/runs/current/artifact-registry.json"
+        "assets/shared/contracts/patch/revision_patch.schema.json",
+        "scripts/apply-revision-patch.mjs",
+        "handoff.md",
+        "control.yaml"
       ],
       "replacement_shape": "patch_protocol_block",
       "replacement_scope": {
@@ -733,8 +738,9 @@
       "semantic_role": "review_commitment_tracking",
       "researchspec_targets": [
         "researchspec/changes/<change-id>/contract-patch.yaml",
-        "researchspec/draft-patches/<patch-id>.json",
-        "researchspec/runs/current/decision-ledger.jsonl"
+        "assets/shared/contracts/patch/revision_patch.schema.json",
+        "work/annotation-intake/",
+        "handoff.md"
       ],
       "replacement_shape": "schema_projection_table",
       "replacement_scope": {
@@ -793,9 +799,11 @@
       },
       "semantic_role": "draft_patch_protocol",
       "researchspec_targets": [
-        "researchspec/draft-patches/<patch-id>.json",
-        "researchspec/runs/current/gate-ledger.jsonl",
-        "researchspec/runs/current/decision-ledger.jsonl"
+        "assets/shared/contracts/patch/revision_patch.schema.json",
+        "scripts/apply-revision-patch.mjs",
+        "work/annotation-intake/",
+        "handoff.md",
+        "control.yaml"
       ],
       "replacement_shape": "patch_protocol_block",
       "replacement_scope": {
@@ -822,9 +830,8 @@
       },
       "semantic_role": "review_commitment_tracking",
       "researchspec_targets": [
-        "researchspec/draft-patches/<patch-id>.json",
-        "researchspec/runs/current/artifact-registry.json",
-        "researchspec/runs/current/gate-ledger.jsonl"
+        "handoff.md",
+        "control.yaml"
       ],
       "replacement_shape": "checklist",
       "replacement_scope": {
@@ -907,9 +914,9 @@
       },
       "semantic_role": "review_commitment_tracking",
       "researchspec_targets": [
-        "researchspec/draft-patches/<patch-id>.json",
-        "researchspec/runs/current/artifact-registry.json",
-        "researchspec/runs/current/gate-ledger.jsonl"
+        "assets/shared/contracts/patch/revision_patch.schema.json",
+        "handoff.md",
+        "control.yaml"
       ],
       "replacement_shape": "gate_rule_block",
       "replacement_scope": {

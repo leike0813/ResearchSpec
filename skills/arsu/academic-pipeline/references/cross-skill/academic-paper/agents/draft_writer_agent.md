@@ -596,68 +596,23 @@ Do not mutate `literature_corpus[]` to store version-family state. The version f
 ## Patch-Document Revision Emission (#390)
 
 <!--rs:PATCH-002-->
-In revision mode, emit a patch against the exact registered manuscript artifact,
-not a complete replacement draft. Resolve the base manuscript and block manifest
-by id and hash through `researchspec/runs/current/artifact-registry.json`. The
-block manifest is the only legitimate source for `base_draft_hash`, block ids,
-and per-block `old_hash` values.
+In revision mode, emit a patch against the exact manuscript bytes supplied by
+the caller. Validate the document against
+`assets/shared/contracts/patch/revision_patch.schema.json` and use stable
+`operation_id` values, block IDs, twelve-character `old_hash` preconditions,
+the closed `replace_block`/`insert_after`/`delete_block` vocabulary, a revision
+rationale, and non-empty roadmap traceability.
 
-Annotation-driven revision consumes only a registered Annotation Set. If the
-input is still a free-form review copy or feedback conversation, return to the
-shared intake preflight: the Agent may interpret arbitrary user styles and
-direct rewrites, while deterministic code only preserves bytes, derives a
-mechanical delta, and validates source/target references. Do not require HTML
-comments, CriticMarkup, generated slots, or any other marker syntax.
+When annotations are in scope, each implemented annotation must be referenced
+by an operation and represented in `annotation_mapping`. Non-edit dispositions
+carry the answer, reason, or successor required by the schema and must not be
+attached to an operation. The patch is the only machine-readable mapping; a
+prose revision log may explain it but cannot replace it.
 
-**Emission rules (all validated before apply):**
-
-1. Write exactly one `researchspec/draft-patches/<patch-id>.json` file. Chat
-   output may contain the human revision log and provisional response judgments,
-   never the patch body as a second authority.
-2. Copy every base and old hash from the manifest. Never calculate, remember, or
-   invent a hash; use the first-line excerpt only as a targeting sanity check.
-3. Use the closed operation vocabulary `replace_block`, `insert_after`, and
-   `delete_block`. A block id appears in at most one operation role. Express a
-   move as delete plus insert; the apply helper may recognize byte-identical moves.
-4. `insert_after` carries the anchor block's `old_hash`; only the documented
-   document-body-start sentinel may omit it.
-5. `new_text` contains no block markers because the apply helper owns fresh id
-   assignment. Preserve the existing reference and locator marker discipline for
-   every inserted citation.
-6. Emit Draft Patch format v3. Every operation has a stable `operation_id` and
-   zero or more `{annotation_set_id, annotation_id}` references. These
-   references are the only Annotation-to-operation mapping; do not duplicate
-   the mapping in prose or another artifact.
-7. When an Annotation Set is in scope, include one
-   `annotation_resolution.entries` item for every Annotation in every related
-   set. `implemented` items require an operation reference;
-   `answered_without_text_change`, `deferred`, `rejected`, `unresolved`, and
-   `superseded` carry their required answer, reason, or successor evidence.
-   Keep `roadmap_item_ids` only when the route also supplies a Revision Roadmap.
-
-**Pre-drafting structural classification:** before emitting operations, identify
-roadmap items that require section split, merge, reorder, heading changes, or
-another shape outside the operation vocabulary. If any exists, emit only
-`[PATCH-ESCALATION-REQUIRED: ...]` and return control. Never silently produce a
-full draft. Full re-emission requires a human-confirmed decision returned by the
-caller through `researchspec/runs/current/decision-ledger.jsonl`.
-
-**Apply-failure retry:** when the caller returns a structured stale-hash,
-unknown-target, schema, or precondition rejection, emit one complete replacement
-patch against the new manifest. Do not patch the rejected patch. A second failure
-returns control for a human choice.
-
-**Role boundary:** you emit; you never apply. Mechanical post-apply facts—fresh
-block ids, changed block ids, word-count delta, counters, and preservation ratio—
-belong to the apply report. Keep response text, status judgments, and decline
-rationales provisional until the orchestrator combines them with that report.
-For annotation-driven work, the CLI derives a separate immutable Annotation
-Resolution Report from the accepted v3 mapping after apply. The writer never
-authors or registers that report.
-
-**Integrity-correction rounds:** when the input is an integrity correction list,
-use each stable integrity issue id as operation traceability, emit no Schema 8
-review-response items, and return only the revision log. The caller routes the
-new manuscript and apply report back to the same integrity gate for
-re-verification. The writer does not register artifacts or write gate records.
+You emit the patch; you do not silently apply it or mutate ResearchSpec control.
+The caller may review it, edit the manuscript manually, or invoke
+`node scripts/apply-revision-patch.mjs` with explicit paths. A failed preflight
+produces no output. After revision, expose only the boundary files needed by
+another subflow through the owning `handoff.md`. Formal adequacy remains a
+human-confirmed Gate in the owning `control.yaml`.
 <!--/rs:PATCH-002-->

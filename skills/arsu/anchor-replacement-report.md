@@ -114,11 +114,11 @@ verifiers are optional diagnostics, not the source of authority.
 - Severity: `required`
 - Semantic role: `draft_patch_protocol`
 - Replacement shape: `patch_protocol_block`
-- Replacement body SHA-256: `8f70331c0e1aec676b8dfc33e28aaf26ebbeb41809f5c65948c5eaec14d78105`
-- ResearchSpec targets: `researchspec/draft-patches/<patch-id>.json`, `researchspec/runs/current/artifact-registry.json`
+- Replacement body SHA-256: `54c24b9aefbfe863a1f43d3570d6f2f2598b6eaf55b8b55708d15091fbd83b45`
+- ResearchSpec targets: `assets/shared/contracts/patch/revision_patch.schema.json`, `scripts/apply-revision-patch.mjs`, `handoff.md`, `control.yaml`
 - Generated output paths: `academic-paper/agents/draft_writer_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `academic-pipeline/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `deep-research/references/cross-skill/academic-paper/agents/draft_writer_agent.md`
 - Before SHA-256: `303cf33ae73e69553a6cc6b2da370857fe0640a3a418fd7648e018d9cff493fd`
-- After SHA-256: `c05ca5729f9884df9b6642ce0b64cb146ab4cc9809cd6c9a90f2c813a50900b5`
+- After SHA-256: `c502405463ae8b2a037a972be45a105ff42d2909458dbe9f7c8c0fec2e5b4685`
 
 #### Before
 
@@ -155,70 +155,25 @@ and return control to the caller. The escalation decision (re-emit in full vs na
 
 ````markdown
 <!--rs:PATCH-002-->
-In revision mode, emit a patch against the exact registered manuscript artifact,
-not a complete replacement draft. Resolve the base manuscript and block manifest
-by id and hash through `researchspec/runs/current/artifact-registry.json`. The
-block manifest is the only legitimate source for `base_draft_hash`, block ids,
-and per-block `old_hash` values.
+In revision mode, emit a patch against the exact manuscript bytes supplied by
+the caller. Validate the document against
+`assets/shared/contracts/patch/revision_patch.schema.json` and use stable
+`operation_id` values, block IDs, twelve-character `old_hash` preconditions,
+the closed `replace_block`/`insert_after`/`delete_block` vocabulary, a revision
+rationale, and non-empty roadmap traceability.
 
-Annotation-driven revision consumes only a registered Annotation Set. If the
-input is still a free-form review copy or feedback conversation, return to the
-shared intake preflight: the Agent may interpret arbitrary user styles and
-direct rewrites, while deterministic code only preserves bytes, derives a
-mechanical delta, and validates source/target references. Do not require HTML
-comments, CriticMarkup, generated slots, or any other marker syntax.
+When annotations are in scope, each implemented annotation must be referenced
+by an operation and represented in `annotation_mapping`. Non-edit dispositions
+carry the answer, reason, or successor required by the schema and must not be
+attached to an operation. The patch is the only machine-readable mapping; a
+prose revision log may explain it but cannot replace it.
 
-**Emission rules (all validated before apply):**
-
-1. Write exactly one `researchspec/draft-patches/<patch-id>.json` file. Chat
-   output may contain the human revision log and provisional response judgments,
-   never the patch body as a second authority.
-2. Copy every base and old hash from the manifest. Never calculate, remember, or
-   invent a hash; use the first-line excerpt only as a targeting sanity check.
-3. Use the closed operation vocabulary `replace_block`, `insert_after`, and
-   `delete_block`. A block id appears in at most one operation role. Express a
-   move as delete plus insert; the apply helper may recognize byte-identical moves.
-4. `insert_after` carries the anchor block's `old_hash`; only the documented
-   document-body-start sentinel may omit it.
-5. `new_text` contains no block markers because the apply helper owns fresh id
-   assignment. Preserve the existing reference and locator marker discipline for
-   every inserted citation.
-6. Emit Draft Patch format v3. Every operation has a stable `operation_id` and
-   zero or more `{annotation_set_id, annotation_id}` references. These
-   references are the only Annotation-to-operation mapping; do not duplicate
-   the mapping in prose or another artifact.
-7. When an Annotation Set is in scope, include one
-   `annotation_resolution.entries` item for every Annotation in every related
-   set. `implemented` items require an operation reference;
-   `answered_without_text_change`, `deferred`, `rejected`, `unresolved`, and
-   `superseded` carry their required answer, reason, or successor evidence.
-   Keep `roadmap_item_ids` only when the route also supplies a Revision Roadmap.
-
-**Pre-drafting structural classification:** before emitting operations, identify
-roadmap items that require section split, merge, reorder, heading changes, or
-another shape outside the operation vocabulary. If any exists, emit only
-`[PATCH-ESCALATION-REQUIRED: ...]` and return control. Never silently produce a
-full draft. Full re-emission requires a human-confirmed decision returned by the
-caller through `researchspec/runs/current/decision-ledger.jsonl`.
-
-**Apply-failure retry:** when the caller returns a structured stale-hash,
-unknown-target, schema, or precondition rejection, emit one complete replacement
-patch against the new manifest. Do not patch the rejected patch. A second failure
-returns control for a human choice.
-
-**Role boundary:** you emit; you never apply. Mechanical post-apply facts—fresh
-block ids, changed block ids, word-count delta, counters, and preservation ratio—
-belong to the apply report. Keep response text, status judgments, and decline
-rationales provisional until the orchestrator combines them with that report.
-For annotation-driven work, the CLI derives a separate immutable Annotation
-Resolution Report from the accepted v3 mapping after apply. The writer never
-authors or registers that report.
-
-**Integrity-correction rounds:** when the input is an integrity correction list,
-use each stable integrity issue id as operation traceability, emit no Schema 8
-review-response items, and return only the revision log. The caller routes the
-new manuscript and apply report back to the same integrity gate for
-re-verification. The writer does not register artifacts or write gate records.
+You emit the patch; you do not silently apply it or mutate ResearchSpec control.
+The caller may review it, edit the manuscript manually, or invoke
+`node scripts/apply-revision-patch.mjs` with explicit paths. A failed preflight
+produces no output. After revision, expose only the boundary files needed by
+another subflow through the owning `handoff.md`. Formal adequacy remains a
+human-confirmed Gate in the owning `control.yaml`.
 <!--/rs:PATCH-002-->
 ````
 
@@ -382,11 +337,11 @@ registered corpus in place.
 - Severity: `required`
 - Semantic role: `review_commitment_tracking`
 - Replacement shape: `schema_projection_table`
-- Replacement body SHA-256: `70c8131c1164e8a991f3b3eecdb0a2bf4e3cf6d56f32add5c71166ad2050a72f`
-- ResearchSpec targets: `researchspec/changes/<change-id>/contract-patch.yaml`, `researchspec/draft-patches/<patch-id>.json`, `researchspec/runs/current/decision-ledger.jsonl`
+- Replacement body SHA-256: `1eee555e7a71037fffd78a4ca3b03ea121db47e04b9a2b3627205142a2d21dd5`
+- ResearchSpec targets: `researchspec/changes/<change-id>/contract-patch.yaml`, `assets/shared/contracts/patch/revision_patch.schema.json`, `work/annotation-intake/`, `handoff.md`
 - Generated output paths: `academic-paper/agents/revision_coach_agent.md`
 - Before SHA-256: `58ab269816913477f725577ef4eec70c4c805150153c59ebf2058f7a0920680b`
-- After SHA-256: `439c2a2bf8fafe958d8ad10e9bbdd31b4afcc65d0779f6c70e3d915db056e440`
+- After SHA-256: `6f8fe7bd3f6464ec902609e3c92e5068582fe4fa92baac3662fbafc1370f919b`
 
 #### Before
 
@@ -398,28 +353,21 @@ registered corpus in place.
 
 ````markdown
 <!--rs:REVIEW-014-->
-5. Emit the extracted commitment list as an immutable review-analysis artifact
-   keyed by `concern_id` and return it for registration in
-   `researchspec/runs/current/artifact-registry.json`. Preserve only the three
-   extraction fields at this stage; do not invent lifecycle placeholders.
-   Research-scope or claim commitments require a proposed
-   `researchspec/changes/<change-id>/contract-patch.yaml`; manuscript-edit
-   commitments become traceability inputs for
-   `researchspec/draft-patches/<patch-id>.json`. Existing registered Annotation
-   Sets remain separate immutable review evidence and Draft Patch v3 operation
-   references provide their only text-operation mapping; strategic acceptance, rejection,
-   or tradeoff choices wait for a human-confirmed decision in
-   `researchspec/runs/current/decision-ledger.jsonl`. Revision execution and
-   independent re-review append fulfillment evidence later; this agent does not
-   write those stable records directly.
+5. Emit the extracted commitment list as review working material or as a
+   boundary deliverable at an ordinary project path. If another subflow needs
+   it, record its role, purpose, producer, consumer, and safe path in the owning
+   `handoff.md`. Research-scope or claim commitments require a proposed
+   `researchspec/changes/<change-id>/` package; manuscript-edit commitments may
+   become roadmap traceability in an ARSU revision patch conforming to
+   `assets/shared/contracts/patch/revision_patch.schema.json`.
 
-When the source is a free-form annotated manuscript rather than a registered
-review artifact, first use the shared ResearchSpec intake session. Read the
-complete base, review copy, mechanical delta, feedback files, and conversation
-snapshots; interpret the user's own style without requiring a marker grammar.
-Keep ambiguous or high-impact items pending clarification or confirmation.
-Only ready entries may become the normalized Annotation Set candidate, and only
-the CLI may freeze and register it.
+When the source is a free-form annotated manuscript, use the owning revision
+subflow's `work/annotation-intake/` directory. Preserve the complete base, raw
+feedback, mechanical delta, stable annotation IDs, normalized interpretations,
+and proposed patch mappings. Keep ambiguous or high-impact items pending human
+clarification. There is no freeze, registry, submit receipt, or annotation
+lifecycle. If the normalized annotation set must cross a subflow boundary,
+write an explicit copy outside `researchspec/` and reference it in the handoff.
 <!--/rs:REVIEW-014-->
 ````
 
@@ -431,11 +379,11 @@ the CLI may freeze and register it.
 - Severity: `required`
 - Semantic role: `draft_patch_protocol`
 - Replacement shape: `patch_protocol_block`
-- Replacement body SHA-256: `2ac7b6e521458f52eabaefbef6ed6fa033468009ff4ad80af0564c209a122a86`
-- ResearchSpec targets: `researchspec/draft-patches/<patch-id>.json`, `researchspec/runs/current/gate-ledger.jsonl`, `researchspec/runs/current/decision-ledger.jsonl`
+- Replacement body SHA-256: `1b32a45e7e09f2c8d6e9fa5bb98a5289a83bf12b72cdd1ef306bda0c612a7025`
+- ResearchSpec targets: `assets/shared/contracts/patch/revision_patch.schema.json`, `scripts/apply-revision-patch.mjs`, `work/annotation-intake/`, `handoff.md`, `control.yaml`
 - Generated output paths: `academic-paper/references/revision_patch_protocol.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/references/revision_patch_protocol.md`, `academic-pipeline/references/cross-skill/academic-paper/references/revision_patch_protocol.md`, `deep-research/references/cross-skill/academic-paper/references/revision_patch_protocol.md`
 - Before SHA-256: `18dba4bb77ed7bc1b408655dfff094f53bc726e9575395c7d6c4d19b75f32cb3`
-- After SHA-256: `83f3280b0de0cf1e87142f442b69c3446e9ec884d2e0e89a5922f7824d52c442`
+- After SHA-256: `6b4dcaaee748d1ca3bbd434c079c45ff4770509be9469acc75ae1ba16b1cfa09`
 
 #### Before
 
@@ -502,62 +450,35 @@ python scripts/ars_apply_revision_patch.py draft.md patch.json \
 
 ````markdown
 <!--rs:PATCH-003-->
-**Protocol authority:** this current ResearchSpec contract replaces upstream
-design-note and script-path references for revision rounds.
+## ResearchSpec revision patch protocol
 
-**Toolchain ownership:** ResearchSpec deterministic helpers prepare block
-manifests, validate and apply `researchspec/draft-patches/<patch-id>.json`, and
-emit apply reports. Both orchestrated and phase-by-phase runs resolve inputs and
-return outputs through `researchspec/runs/current/artifact-registry.json`; users
-do not need ARS-specific script paths embedded in agent instructions.
+The adapted contract at
+`assets/shared/contracts/patch/revision_patch.schema.json` is the only
+manuscript patch schema. A revision patch is an ARSU revision input/output file,
+not a ResearchSpec registry record or lifecycle object.
 
-**What this buys:** a block not named by an operation is never passed through a
-generation step and therefore remains byte-identical. This is a deterministic
-apply guarantee, not a claim that edited blocks are correct. Structural rewrites
-remain outside ordinary patch protection and require escalation.
+One bounded mechanical application is:
 
-## Artifacts and naming
+1. Select an anchored Markdown manuscript and create a patch whose
+   `base_draft_hash` matches those exact bytes.
+2. Review the operation IDs, block targets, `old_hash` values, roadmap links,
+   rationale, and any complete annotation mapping.
+3. Run `node scripts/apply-revision-patch.mjs --base <base.md> --patch <patch.json>
+   --output <revised.md>` and add `--report <summary.json>` only when a derived
+   diagnostic summary is useful.
+4. On any preflight failure, correct the inputs or revise manually. The helper
+   creates no partial output and never changes a subflow control or handoff.
 
-| Artifact | Owner | Contract |
-| --- | --- | --- |
-| Base manuscript | runtime registry | immutable artifact id and content hash |
-| Block manifest | preparation helper | base hash plus stable block ids, old hashes, and excerpts |
-| Patch document | writer | `researchspec/draft-patches/<patch-id>.json` with target and traceability |
-| Revised manuscript | apply helper | new artifact; base is never overwritten |
-| Apply report | apply helper | operations, fresh ids, structural flags, and `preserved_ratio` |
+Untouched anchored blocks remain byte-identical under helper application. That
+mechanical guarantee says nothing about whether edited text answers the review.
+The current manuscript, response to reviewers, optional patch/summary, and
+external review material may inform a formal revision Gate, but a human records
+the verdict in the owning subflow `control.yaml`.
 
-The revised manuscript and apply report share one lifecycle and are required
-inputs to re-review and the Stage 4.5 integrity gate.
-
-## One revision round
-
-1. Resolve the current manuscript artifact and run the preparation helper to
-   refresh its block manifest. Do not rewrite the manuscript afterward.
-2. Give the writer the exact manuscript, manifest, and accepted Revision Roadmap
-   or integrity correction list. The writer emits the dedicated draft-patch file.
-3. Run the apply helper. It validates the whole patch before writing and creates
-   a new manuscript plus apply report on success.
-4. Run finalizer/citation checks on the new manuscript, return both outputs for
-   registration, and re-review using the apply report as required evidence.
-
-On stale hash, unknown target, schema failure, or precondition failure, preserve
-the base bytes and allow one full patch retry against the current manifest. A
-second failure stops for a human decision: prepare a fresh manifest and retry,
-approve full re-emission, or abort.
-
-On structural flags—heading rewrites/deletes, net section-count change, or
-`touched_ratio > 0.6`—stop for explicit human confirmation. Narrowing the patch
-does not require full re-emission; applying acknowledged structural operations
-keeps the flags in the report. Changing the threshold or approving full
-re-emission must be returned to the decision runtime for
-`researchspec/runs/current/decision-ledger.jsonl`.
-
-After confirmed full re-emission, prepare a new block manifest, retire every
-patch tied to the old manuscript hash, and record
-`mode: full_reemission_escalated`. Apply failures and structural refusals are
-submitted to the relevant gate helper for
-`researchspec/runs/current/gate-ledger.jsonl`; no agent writes the ledger
-directly.
+Annotation intake material is private under `work/annotation-intake/` by
+default. Cross-subflow patch, manuscript, annotation, response, or report files
+must use safe project-relative paths outside `researchspec/` and be listed by
+role in the owning `handoff.md`.
 <!--/rs:PATCH-003-->
 ````
 
@@ -618,11 +539,11 @@ write boundary.
 - Severity: `required`
 - Semantic role: `draft_patch_protocol`
 - Replacement shape: `patch_protocol_block`
-- Replacement body SHA-256: `6c5be8b4446c75f4fc183475445f90d072ad7d68a887f53c64adc684dc5e51f6`
-- ResearchSpec targets: `researchspec/draft-patches/<patch-id>.json`, `researchspec/runs/current/decision-ledger.jsonl`
+- Replacement body SHA-256: `37ca055436c3ba90612cd478c1af35b8eda785d64c49b0f559d204999a0365d6`
+- ResearchSpec targets: `assets/shared/contracts/patch/revision_patch.schema.json`, `scripts/apply-revision-patch.mjs`, `work/annotation-intake/`, `handoff.md`, `control.yaml`
 - Generated output paths: `academic-paper/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper/SKILL.md`, `deep-research/references/cross-skill/academic-paper/SKILL.md`
 - Before SHA-256: `3746fd60636d23f14f9740192da44549c9fa0427537852d370a54d20acbdcde2`
-- After SHA-256: `909771f000d9e7ab2e07a85833562070c16c3763d4db12fae8bdbc26247376c3`
+- After SHA-256: `46b24bb2deb3a2398f3f96155f45497355f28d12e51f83d22f37e44b6b203b88`
 
 #### Before
 
@@ -641,52 +562,34 @@ Orchestrated runs follow `pipeline_orchestrator_agent.md` § Revision-Round Patc
 
 ````markdown
 <!--rs:PATCH-001-->
-In `academic-paper` revision mode, `draft_writer_agent` does not re-emit the
-complete manuscript. The round uses the following bounded patch workflow:
+In `academic-paper` revision mode, the writer may emit a bounded revision patch
+instead of rewriting the complete manuscript. The adapted ARSU contract at
+`assets/shared/contracts/patch/revision_patch.schema.json` is the sole manuscript
+patch schema. It preserves stable operation IDs, block IDs and `old_hash`
+preconditions, replace/insert/delete operations, annotation dispositions,
+revision rationale, and roadmap traceability.
 
-If the user enters with an unregistered annotated Markdown copy, feedback file,
-or conversational comments, first follow the ResearchSpec annotation-intake
-contract returned by `instructions annotation:<id>`. Preserve the complete base,
-review material, content-addressed raw snapshots, and mechanical Review Delta.
-The Host Agent—not a Markdown parser—identifies feedback, resolves its target,
-and records interpretation, expected action, semantic impact, and clarification.
-Generated slots and familiar markup are optional hints only. Register the ready
-candidate through `submit annotation:<id>` before revision; never treat the
-mutable session as route evidence or workflow authority.
+The patch and manuscript are explicit files selected by the caller. They are not
+registered ResearchSpec runtime entities. When safe mechanical application is
+useful, run `node scripts/apply-revision-patch.mjs` with explicit `--base`, `--patch`,
+and `--output` paths and, optionally, `--report`. The helper validates the whole
+patch before creating output. Schema errors, stale hashes, unknown blocks,
+duplicate targets, injected block markers, or incomplete annotation mappings
+leave the selected manuscript and destination unchanged.
 
-1. **Prepare the base artifact.** Resolve the current manuscript id and hash
-   through `researchspec/runs/current/artifact-registry.json`. The deterministic
-   preparation helper assigns stable block markers where missing and emits a
-   refreshed block-manifest artifact. Nothing may rewrite the manuscript between
-   manifest creation and apply.
-2. **Emit the patch.** The writer creates
-   `researchspec/draft-patches/<patch-id>.json` with target artifact id/hash,
-   block preconditions copied from the manifest, closed operations, and non-empty
-   roadmap traceability. The writer does not re-emit the full manuscript, apply
-   operations, or update runtime records.
-3. **Apply deterministically.** The apply helper validates the entire patch
-   fail-closed before writing. A stale hash or invalid operation leaves the base
-   byte-identical. Success creates a new manuscript artifact and separate apply
-   report containing changed/fresh block ids, structural flags, operations, and
-   `preserved_ratio`; both are returned for runtime registration and are required
-   re-review inputs.
-4. **Escalate structural work, never silently fall back.** Heading rewrites,
-   section-count changes, or touched ratio above the accepted threshold stop for
-   a human choice. Return the choice to the decision runtime for
-   `researchspec/runs/current/decision-ledger.jsonl`. Only confirmed full
-   re-emission may regenerate the whole manuscript; mark it
-   `mode: full_reemission_escalated`, create fresh block ids afterward, and
-   invalidate patches tied to the prior hash.
+Annotation intake normally stays under the owning revision subflow's
+`work/annotation-intake/` directory. If an annotation set, patch, revised
+manuscript, response, or report must cross a subflow boundary, write it to an
+ordinary project path outside `researchspec/` and record its role and path in
+that subflow's `handoff.md`.
 
-Orchestrated and phase-by-phase runs use the same preparation and apply helpers.
-Patch mode guarantees byte preservation only for untouched blocks; it does not
-guarantee the quality of edited text. Finalizer and gate checks run on the new
-registered artifact, and any failure is returned to the responsible helper
-rather than written directly to a ledger.
+Mechanical success does not settle academic adequacy. The revision Gate remains
+human-confirmed in the owning subflow `control.yaml`. Manual editing and
+human-confirmed full re-emission remain valid revision paths; the helper is an
+optional safety tool and never mutates control state.
 
 This patch protocol does not apply to the `academic-paper full` in-pair Phase
-6→4 loop. That loop must continue to emit the complete `## Draft Body` required
-by the Phase 4b contract; it must not emit or apply a revision patch.
+6→4 loop when that loop's contract requires a complete `## Draft Body`.
 <!--/rs:PATCH-001-->
 ````
 
@@ -994,11 +897,11 @@ blocking perspective findings to the review gate helper for
 - Severity: `required`
 - Semantic role: `review_commitment_tracking`
 - Replacement shape: `gate_rule_block`
-- Replacement body SHA-256: `8dab2da70607d4463fc91df3101a1901044124179b28f2146e16fe123cbca1d7`
-- ResearchSpec targets: `researchspec/draft-patches/<patch-id>.json`, `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
+- Replacement body SHA-256: `66144573957090af3a3098d6b350bf4837f53797bea19baa8417b52cb3f9420c`
+- ResearchSpec targets: `assets/shared/contracts/patch/revision_patch.schema.json`, `handoff.md`, `control.yaml`
 - Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/references/re_review_mode_protocol.md`, `academic-paper-reviewer/references/re_review_mode_protocol.md`
 - Before SHA-256: `7c8c2df7ae376490050837455ab372d71a8f81db66ccfb4cc29c6cb7f27f888c`
-- After SHA-256: `05acb742a4dd4272d5c46e77408aa74fe990c1137150fb23a6f61c96921cef09`
+- After SHA-256: `a4add92b9d3467f2e281a6ba5a8015539ccad2296c671953e4307ac543313530`
 
 #### Before
 
@@ -1028,54 +931,27 @@ This section is the verification analog of `revision_coach_agent` Step 3.5 (Kong
 
 ````markdown
 <!--rs:REVIEW-008-->
-### Commitment Verification Against Registered Revision Evidence
+### Commitment verification against revision evidence
 
-Run this step for every commitment-bearing concern, regardless of priority.
-Resolve the original review and roadmap, the registered revised manuscript and
-response artifacts, the relevant
-`researchspec/draft-patches/<patch-id>.json`, and its apply report through
-`researchspec/runs/current/artifact-registry.json`. Verify the evidence itself;
-do not accept an author's claim or an imported Schema 11 status as proof.
-
-If an Annotation Resolution Report is linked, first confirm that the CLI
-mechanical coverage check passes: hashes and identities match, every Annotation
-has exactly one disposition, operation links come only from Draft Patch v3, and
-`unresolved_count` is zero. Then assess semantic fulfillment independently.
-`implemented` is not proof that the edit answers the concern;
-`answered_without_text_change`, `deferred`, `rejected`, and `superseded` still
-require a reviewer judgment against their recorded answer, reason, or successor.
+Run this step for every commitment-bearing concern. Resolve the original review,
+roadmap, current revised manuscript, response, and any optional patch or
+annotation evidence from explicit inputs and the producer's `handoff.md`. An
+ARSU patch must conform to
+`assets/shared/contracts/patch/revision_patch.schema.json`, but schema validity
+or a successful mechanical application is not proof of academic fulfillment.
 
 For each commitment, assign one `fulfillment_status`:
 
-- `fulfilled` — the required evidence exists and substantively satisfies the
-  commitment. Verify `new_section`, `new_figure`, `new_table`, `new_citation`,
-  `methods_paragraph`, `discussion_paragraph`, and `prose_edit` against the
-  revised manuscript and patch/apply evidence at the stated location. Verify an
-  `acknowledgment_only` commitment against the registered Response to Reviewers,
-  because no manuscript diff is expected.
-- `partial` — evidence exists but only partly satisfies the commitment.
-- `not-fulfilled` — the required evidence is absent.
-- `explicitly-rejected-with-rationale` — the author explicitly declined the
-  commitment and supplied the rationale.
+- `fulfilled` — the required evidence exists and substantively satisfies it;
+- `partial` — evidence exists but only partly satisfies it;
+- `not-fulfilled` — required evidence is absent;
+- `explicitly-rejected-with-rationale` — the author declined it with reasons.
 
-For `required_evidence_type: other`, surface the advisory
-`EVIDENCE_TYPE_UNSPECIFIED`. If `revision_location` is absent, request it; if it
-is present, verify there while retaining the advisory. This advisory is distinct
-from a missing-rationale gap.
-
-For `partial`, `not-fulfilled`, or `explicitly-rejected-with-rationale`, require
-`unfulfilled_rationale` on the same commitment object. If missing, add an
-advisory `COMMITMENT_GAP`. Keep per-commitment status/rationale pairing intact;
-do not reconstruct parallel lists or pair by index.
-
-A concern-level `residual_action` may coexist with fulfilled individual
-commitments. It states what remains for the whole concern and is not evidence of
-a contradiction by itself.
-
-Return the completed verification report as an artifact for registration. Send
-unresolved, worsened, or blocking commitment findings to the re-review gate
-helper for `researchspec/runs/current/gate-ledger.jsonl`. The reviewer does not
-apply patches or write registry/gate records directly.
+For a non-fulfilled status, preserve the corresponding rationale. Verify prose,
+citations, figures, tables, methods, and acknowledgments against their actual
+boundary files rather than a registry-backed apply or resolution report. Return
+the verification report through this subflow's `handoff.md`; a human records
+the formal Gate verdict in the owning `control.yaml`.
 <!--/rs:REVIEW-008-->
 ````
 
@@ -1215,11 +1091,11 @@ write boundary.
 - Severity: `required`
 - Semantic role: `review_commitment_tracking`
 - Replacement shape: `checklist`
-- Replacement body SHA-256: `c1c0448a9f2e5323987a7c78e1b0912010b3d637476ca11fa0c0a97e9acc7169`
-- ResearchSpec targets: `researchspec/draft-patches/<patch-id>.json`, `researchspec/runs/current/artifact-registry.json`, `researchspec/runs/current/gate-ledger.jsonl`
+- Replacement body SHA-256: `0f62101fe37568ce80c83fa9d1b7a416f44389aa17e878e43ef70ceee3df3e05`
+- ResearchSpec targets: `handoff.md`, `control.yaml`
 - Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/SKILL.md`, `academic-paper-reviewer/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/SKILL.md`, `deep-research/references/cross-skill/academic-paper-reviewer/SKILL.md`
 - Before SHA-256: `d3e0caa77bc3053aa43336f81ce022ff312362f4618320db26d3db729c51b733`
-- After SHA-256: `bf5b136018ef41227ddf901c75cea1320723e15a09eca967e2c8320432da186b`
+- After SHA-256: `380432bfaaf3ae06d76962bc930db15c44c08070b33595190cd121e789f6369c`
 
 #### Before
 
@@ -1236,28 +1112,24 @@ Dedicated mode for Pipeline Stage 3' — verifies whether revisions address firs
 
 ````markdown
 <!--rs:REVIEW-001-->
-Dedicated mode for Pipeline Stage 3'. Re-review verifies each first-round concern
-against the exact revised manuscript, response, and applied patch evidence
-resolved through `researchspec/runs/current/artifact-registry.json`. Read
-`researchspec/draft-patches/<patch-id>.json` and its apply report when manuscript
-changes were patch-applied. When the patch resolves registered annotations,
-also read the CLI-derived Annotation Resolution Report and its referenced
-Annotation Sets. Do not rely on a Material Passport-carried Schema 11 copy as
-the sole traceability record.
+Dedicated mode for Pipeline Stage 3'. Re-review verifies each first-round
+concern against the current revised manuscript and the response to reviewers.
+When the revision producer exposed an ARSU patch, annotation set, or helper
+summary, resolve those files by role and safe project-relative path from the
+producer subflow's `handoff.md`; do not infer them from a registry or receipt.
 
-**Input:** original Revision Roadmap, registered revised-manuscript artifact,
-registered Response to Reviewers when present, relevant draft patch and apply
-report, optional Annotation Sets and Annotation Resolution Report, and the prior
-review/commitment artifacts.
+**Input:** the original Revision Roadmap, revised manuscript, response to
+reviewers when present, prior review material, and any explicitly handed-off
+patch or annotation evidence relevant to the concern.
 
-**Output:** an immutable Verification Review Report containing the traceability
-matrix, new issues, and decision. Return the report for runtime registration and
-submit unresolved or blocking commitment findings to the re-review gate helper
-for `researchspec/runs/current/gate-ledger.jsonl`; do not write registry or gate
-records directly.
+**Output:** a Verification Review Report at an ordinary project path outside
+`researchspec/`, recorded as an output in this subflow's `handoff.md`. The
+reviewer assesses semantic fulfillment independently. Mechanical application or
+annotation disposition never proves that a concern was answered. A human
+records the formal re-review Gate verdict in the owning subflow `control.yaml`.
 
-> See `references/re_review_mode_protocol.md` for the verification rules, output
-> format, and Socratic guidance.
+> See `references/re_review_mode_protocol.md` for the verification rules,
+> output format, and Socratic guidance.
 <!--/rs:REVIEW-001-->
 ````
 
@@ -1433,11 +1305,11 @@ Register the handoff payload through `researchspec/runs/current/artifact-registr
 - Severity: `required`
 - Semantic role: `draft_patch_protocol`
 - Replacement shape: `patch_protocol_block`
-- Replacement body SHA-256: `c488ee7918463349eda31edccf0f4e992a156d7606f4e8761c2876d4c47b6553`
-- ResearchSpec targets: `researchspec/draft-patches/<patch-id>.json`, `researchspec/runs/current/decision-ledger.jsonl`, `researchspec/runs/current/gate-ledger.jsonl`, `researchspec/runs/current/artifact-registry.json`
+- Replacement body SHA-256: `6141f60064b0b8ec8ffd60d559f02e174b4ce4f7e33d686af140e11228198d6c`
+- ResearchSpec targets: `assets/shared/contracts/patch/revision_patch.schema.json`, `scripts/apply-revision-patch.mjs`, `handoff.md`, `control.yaml`
 - Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
 - Before SHA-256: `cd54fc8af9aab880c01c0cbc083475c7dffdc0f0a16c83873c46017f26fc3878`
-- After SHA-256: `7c04a82b17a6a8c28e1733eeea4403ed07897483e17572342a5ee016aab0e856`
+- After SHA-256: `77f4b8ad6052fdd72c2d691e0df5963346f68927ee662593efe2778a12fa1df6`
 
 #### Before
 
@@ -1492,102 +1364,27 @@ Only on explicit user choice (c) does a round run as full re-emission; afterward
 
 ````markdown
 <!--rs:PATCH-004-->
-When a revision stage dispatches `academic-paper` revision mode—normal review
-rounds (Stage 3 → 4 / 3' → 4') and integrity-FAIL correction rounds (Stage 2.5
-FAIL → 2 or Stage 4.5 FAIL → 5 revision)—the writer's deliverable is a
-ResearchSpec draft patch, not a re-emitted manuscript. The orchestrator owns the
-deterministic preparation, apply, registration, and gate steps around that
-patch. The Stage 4.5 FAIL route enters Stage 5's revision sub-step, not the
-PASS-path finalization handoff, and the gate that issued any FAIL must re-verify
-the applied result before finalization.
+When an `academic-pipeline` revision child dispatches `academic-paper` revision
+mode, the child may produce a patch conforming to
+`assets/shared/contracts/patch/revision_patch.schema.json`. The patch, revised
+manuscript, response to reviewers, and optional derived summary are ordinary
+files: keep private working copies below that child's `work/`, and expose only
+required boundary deliverables at safe project paths through the child's
+`handoff.md`.
 
-For a pipeline entry carrying unregistered free-form manuscript feedback, run
-the same annotation intake preflight before Stage 4 dispatch. The review copy,
-raw snapshots, and mechanical Review Delta are working material; the Host Agent
-owns interpretation and clarification. Only the human-confirmed registered
-Annotation Set becomes a revision prerequisite. This preflight creates no
-pipeline stage, hidden round, state event, Gate, Decision, or receipt of its own.
+`node scripts/apply-revision-patch.mjs` is an optional stateless application helper.
+Invoke it only with explicit base, patch, output, and optional report paths. It
+validates all operations and annotation mappings before atomically creating the
+destination. It does not read the pipeline profile, mutate `control.yaml`, write
+a receipt, register artifacts, or decide whether the revision is academically
+complete. Manual revision remains valid.
 
-**Normative order per revision round — nothing may rewrite the draft between
-steps 1 and 3:**
-
-1. **Prepare the immutable base.** Resolve the current manuscript artifact and
-   its recorded hash through
-   `researchspec/runs/current/artifact-registry.json`. Run the deterministic
-   draft-patch preparation helper to assign stable block ids where missing and
-   refresh the block manifest without changing prose. Register the refreshed
-   manifest as a derived artifact before dispatch.
-2. **Dispatch the writer.** Provide the exact registered draft, its block
-   manifest, and the round's accepted Revision Roadmap. The writer emits
-   `researchspec/draft-patches/<patch-id>.json` with target artifact id, target
-   hash, block preconditions, stable operation ids, Annotation references when
-   present, complete Annotation resolution entries, and roadmap traceability.
-   In review rounds it also emits provisional response items containing judgment
-   content; it does not apply the patch or update registries and ledgers.
-3. **Validate and apply deterministically.** The draft-patch apply helper first
-   validates schema, target artifact identity, base hash, block preconditions,
-   operation shape, and structural-change limits. Validation is fail-closed and
-   byte-preserving on rejection. A successful apply creates a new manuscript
-   artifact plus a separate apply report; when Annotation resolution is present,
-   it also derives and registers an immutable Annotation Resolution Report from
-   the v3 operation mapping. It never overwrites the registered base. The
-   default structural touched-ratio threshold remains `0.6` with a
-   strict `>` comparison. A different threshold requires a human-confirmed
-   decision returned to the decision runtime for
-   `researchspec/runs/current/decision-ledger.jsonl` before apply.
-4. **Run the provenance finalizer on the apply output.** Do not run it between
-   base preparation and apply: changes to reference-status markers in that
-   interval would create hash mismatches that do not represent stale writer
-   input. After apply, resolve newly inserted bare `<!--ref:-->` markers under
-   the existing finalizer contract.
-5. **Complete mechanical response facts.** For review rounds, fill response-item
-   block ids, fresh insertion ids, word-count delta, and counters from the apply
-   report while preserving the writer's judgment text. Return the response,
-   apply report, and any CLI-derived Annotation Resolution Report as registered
-   evidence, then require the apply report as an input to re-review.
-6. **Surface preservation and interaction state.** Include `preserved_ratio`
-   from the apply report beside the accumulated round-trip count in the stage
-   checkpoint, for example `round-trips: 3/9 · preserved_ratio: 0.91`.
-
-**Integrity-correction variant (Stage 2.5 / 4.5 FAIL).** Follow steps 1–4 and 6
-unchanged, with two differences:
-
-- Do not create Schema 8 response items because no review round occurred.
-  Instead, every patch operation's `roadmap_item_ids` must reference the stable
-  correction ids issued by the integrity report.
-- Return the new manuscript and apply report to the same integrity gate that
-  issued the FAIL. The apply report is required evidence, not a substitute for
-  re-verification. Submit the new gate result to the gate helper for
-  `researchspec/runs/current/gate-ledger.jsonl`; do not advance on an unresolved
-  blocking result. Existing round caps remain in force.
-
-**Structural-revision escalation — the only path to full re-emission.** A
-pre-drafting classification that requires restructuring, or an apply-time
-structural refusal caused by heading changes, section-count change, or a
-touched ratio above the accepted threshold, MUST stop at a human checkpoint.
-Present the trigger and these choices:
-
-1. narrow or defer the structural items and re-dispatch the remaining local
-   items as a patch round;
-2. for apply-time flags only, acknowledge and apply the same patch while
-   preserving the structural flags in the apply report;
-3. re-emit the full manuscript for this round.
-
-Only an explicit human choice of full re-emission permits option 3. Return that
-choice and its rationale to the decision runtime before continuing. After full
-re-emission, prepare a fresh block manifest with new block ids, invalidate all
-patches tied to the prior manuscript hash, and mark the round report
-`mode: full_reemission_escalated`. Never auto-fallback to full re-emission.
-
-**Apply-failure path (not structural escalation).** On stale hash, unknown
-target, schema failure, or failed block precondition, keep the base manuscript
-byte-unchanged and return the structured failure report to the writer for one
-new patch against the current registered base. A second failure stops for a
-human choice among: prepare a fresh block manifest and retry the round, approve
-full re-emission through the checkpoint above, or abort. Send failure and
-blocking findings to the responsible gate helper; artifact registration,
-decision recording, and gate-ledger writes remain owned by their ResearchSpec
-runtime helpers.
+Each revision child has its own start confirmation and formal Gates. After the
+producer finishes, the current manuscript and relevant boundary evidence return
+through the handoff. A human records the revision Gate verdict in the owning
+child `control.yaml`; the parent advances only under the profile's declared
+join and transition rules. Structural re-emission, scope changes, and other
+research choices follow the same explicit confirmation discipline.
 <!--/rs:PATCH-004-->
 ````
 

@@ -11,6 +11,7 @@ import { ArsuRoutingCatalogSchema, type ArsuRoutingCatalog, validateRoutingCatal
 import { readSkillFrontmatterDescription, renderArsuSkillDescription } from "./routing/projection.js";
 import { RESEARCHSPEC_LITERATURE_ADAPTER_MARKER, RESEARCHSPEC_PREFLIGHT_MARKER } from "./contracts.js";
 import { ARSU_LICENSE_FILENAME, ARSU_NOTICE_FILENAME } from "./licensing.js";
+import { revisionPatchJsonSchema } from "./revision/contract.js";
 
 const LINK_RE = /\[[^\]]+\]\((?<link>[^)#]+)(?:#[^)]+)?\)/g;
 const OPERATIONAL_CODE_PATH_RE = /`(?<path>(?:docs|scripts)\/[A-Za-z0-9_./@+%:-]+)`/g;
@@ -60,6 +61,22 @@ export async function validateArsuOutput(outputRoot: string): Promise<Validation
     const manifestFiles = outputFilesByPath(manifest);
     const actualFiles = await collectGeneratedFiles(outputRoot);
 
+    for (const group of DEFAULT_SKILL_GROUPS) {
+      const schemaPath = `${group}/assets/shared/contracts/patch/revision_patch.schema.json`;
+      const schemaRecord = manifest.output_files.find((item) => item.output_path === schemaPath);
+      if (!schemaRecord
+        || schemaRecord.source_path !== "researchspec:src/arsu-converter/revision/contract.ts#RevisionPatchSchema"
+        || schemaRecord.transform_rule !== "researchspec_revision_patch_schema_projection") {
+        errors.push(`Manifest does not identify the adapted revision patch schema source for ${group}`);
+      }
+    }
+    const helperRecord = manifest.output_files.find((item) => item.output_path === "academic-paper/scripts/apply-revision-patch.mjs");
+    if (!helperRecord
+      || helperRecord.source_path !== "researchspec:src/arsu-converter/revision/apply-revision-patch.mjs"
+      || helperRecord.transform_rule !== "researchspec_revision_patch_helper_projection") {
+      errors.push("Manifest does not identify the ResearchSpec revision patch helper source");
+    }
+
     for (const rel of actualFiles) {
       const record = manifestFiles.get(rel);
       if (!record) {
@@ -102,6 +119,7 @@ export async function validateArsuOutput(outputRoot: string): Promise<Validation
     const skillPath = path.join(groupRoot, "SKILL.md");
     const licensePath = path.join(groupRoot, ARSU_LICENSE_FILENAME);
     const noticePath = path.join(groupRoot, ARSU_NOTICE_FILENAME);
+    const revisionSchemaPath = path.join(groupRoot, "assets/shared/contracts/patch/revision_patch.schema.json");
     if (!(await pathExists(licensePath))) {
       errors.push(`Missing ${group}/${ARSU_LICENSE_FILENAME}`);
     } else {
@@ -136,6 +154,17 @@ export async function validateArsuOutput(outputRoot: string): Promise<Validation
         errors.push(`Manifest routing description mismatch for ${group}`);
       }
       errors.push(...await validateEntrypointOperationalPaths(groupRoot, group, skillText));
+    }
+    if (!(await pathExists(revisionSchemaPath))) {
+      errors.push(`Missing adapted revision patch schema in ${group}`);
+    } else if (await readUtf8(revisionSchemaPath) !== revisionPatchJsonSchema()) {
+      errors.push(`Adapted revision patch schema differs from the canonical projection in ${group}`);
+    }
+    const helperPath = path.join(groupRoot, "scripts/apply-revision-patch.mjs");
+    if (group === "academic-paper") {
+      if (!(await pathExists(helperPath))) errors.push("Missing academic-paper revision patch helper");
+    } else if (await pathExists(helperPath)) {
+      errors.push(`Revision patch helper must not be projected into ${group}`);
     }
   }
 

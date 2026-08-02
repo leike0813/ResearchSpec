@@ -27,6 +27,10 @@ import type { AnchorReplacementPlan } from "./anchors/types.js";
 import { ArsuSkillIdSchema, type ArsuSkillId } from "./routing/contracts.js";
 import { projectSkillFrontmatterDescription, type SkillDescriptionProjection } from "./routing/projection.js";
 import { emitArsuSkillLicensing } from "./licensing.js";
+import { revisionPatchJsonSchema } from "./revision/contract.js";
+
+const REVISION_PATCH_SOURCE = "shared/contracts/patch/revision_patch.schema.json";
+const REVISION_PATCH_HELPER_SOURCE = "src/arsu-converter/revision/apply-revision-patch.mjs";
 
 export async function emitSkillGroup(
   sourceRoot: string,
@@ -118,6 +122,11 @@ export async function emitSkillGroup(
   }
 
   files.push(...await emitArsuSkillLicensing(sourceRoot, groupOut, groupName));
+  const revisionSchema = await emitRevisionPatchSchema(groupOut, groupName);
+  const existingSchema = files.findIndex((file) => file.output_path === revisionSchema.output_path);
+  if (existingSchema === -1) files.push(revisionSchema);
+  else files[existingSchema] = revisionSchema;
+  if (groupName === "academic-paper") files.push(await emitRevisionPatchHelper(groupOut, groupName));
   if (groupName === "academic-pipeline") files.push(...await emitOfflineZoteroPackageMarkers(groupOut, groupName));
 
   const dependencyCopies = [...dependencyMeta.values()].sort((a, b) => a.source_path.localeCompare(b.source_path));
@@ -167,6 +176,32 @@ async function emitOfflineZoteroPackageMarkers(groupOut: string, groupName: stri
   return files;
 }
 
+async function emitRevisionPatchSchema(groupOut: string, groupName: string): Promise<CopiedFile> {
+  const outputPath = "assets/shared/contracts/patch/revision_patch.schema.json";
+  const target = path.join(groupOut, outputPath);
+  await writeUtf8(target, revisionPatchJsonSchema());
+  return {
+    group: groupName,
+    source_path: "researchspec:src/arsu-converter/revision/contract.ts#RevisionPatchSchema",
+    output_path: `${groupName}/${outputPath}`,
+    transform_rule: "researchspec_revision_patch_schema_projection",
+    sha256: await sha256File(target),
+  };
+}
+
+async function emitRevisionPatchHelper(groupOut: string, groupName: string): Promise<CopiedFile> {
+  const outputPath = "scripts/apply-revision-patch.mjs";
+  const target = path.join(groupOut, outputPath);
+  await writeUtf8(target, await readUtf8(path.resolve(REVISION_PATCH_HELPER_SOURCE)));
+  return {
+    group: groupName,
+    source_path: `researchspec:${REVISION_PATCH_HELPER_SOURCE}`,
+    output_path: `${groupName}/${outputPath}`,
+    transform_rule: "researchspec_revision_patch_helper_projection",
+    sha256: await sha256File(target),
+  };
+}
+
 function addAnchoredRuntimeFiles(files: Map<string, string>, groupName: string, plan: AnchorReplacementPlan): void {
   for (const sourcePath of plan.spans_by_source.keys()) {
     if (sourcePath.startsWith(`${groupName}/`)) {
@@ -200,7 +235,10 @@ async function copyTransformedFile(
   let transformRule = "binary_or_machine_copy";
   let contractInjection: ContractInjectionResult | undefined;
   let routingDescription: SkillDescriptionProjection | undefined;
-  if (isTextResource(sourcePath)) {
+  if (sourcePath === REVISION_PATCH_SOURCE) {
+    await writeUtf8(outputFile, revisionPatchJsonSchema());
+    transformRule = "researchspec_revision_patch_schema_projection";
+  } else if (isTextResource(sourcePath)) {
     let text = await readUtf8(sourceFile);
     text = applyAnchorReplacements(text, sourcePath, `${groupName}/${outputPath}`, anchorReplacements);
     const protectedAnchors = protectAnchorBlocks(text);
@@ -228,7 +266,9 @@ async function copyTransformedFile(
   return {
     file: {
       group: groupName,
-      source_path: sourcePath,
+      source_path: sourcePath === REVISION_PATCH_SOURCE
+        ? "researchspec:src/arsu-converter/revision/contract.ts#RevisionPatchSchema"
+        : sourcePath,
       output_path: `${groupName}/${outputPath}`,
       transform_rule: transformRule,
       sha256: await sha256File(outputFile),

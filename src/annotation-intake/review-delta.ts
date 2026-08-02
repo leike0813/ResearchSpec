@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 
-import { parseAnchoredBlocks } from "../core/runtime/markdown-blocks.js";
+import { parseAnchoredBlocks } from "../arsu-converter/revision/markdown-blocks.js";
 import { ReviewDeltaSchema, type AnnotationIntakeDiagnostic, type ReviewDelta } from "./contracts.js";
 
 export function deriveReviewDelta(input: {

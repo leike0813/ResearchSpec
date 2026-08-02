@@ -86,8 +86,9 @@ removed.
 
 `change.md` plus optional `design.md`, `tasks.md` and `delta.yaml` represents a project change.
 Accepted and applied remain distinct. Delta operations are validation aids for sources and claims,
-not an executor. The ARSU revision patch schema remains the only manuscript patch contract and its
-helper is explicit, stateless and fail-closed.
+not an executor. The converter-owned ResearchSpec adaptation of the ARSU revision patch schema is
+the only manuscript patch contract. It is projected into each ARSU Skill, while the optional
+academic-paper helper is explicit, stateless and fail-closed.
 
 ## Risks / Trade-offs
 

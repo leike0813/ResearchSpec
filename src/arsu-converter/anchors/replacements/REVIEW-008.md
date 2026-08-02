@@ -1,48 +1,21 @@
-### Commitment Verification Against Registered Revision Evidence
+### Commitment verification against revision evidence
 
-Run this step for every commitment-bearing concern, regardless of priority.
-Resolve the original review and roadmap, the registered revised manuscript and
-response artifacts, the relevant
-`researchspec/draft-patches/<patch-id>.json`, and its apply report through
-`researchspec/runs/current/artifact-registry.json`. Verify the evidence itself;
-do not accept an author's claim or an imported Schema 11 status as proof.
-
-If an Annotation Resolution Report is linked, first confirm that the CLI
-mechanical coverage check passes: hashes and identities match, every Annotation
-has exactly one disposition, operation links come only from Draft Patch v3, and
-`unresolved_count` is zero. Then assess semantic fulfillment independently.
-`implemented` is not proof that the edit answers the concern;
-`answered_without_text_change`, `deferred`, `rejected`, and `superseded` still
-require a reviewer judgment against their recorded answer, reason, or successor.
+Run this step for every commitment-bearing concern. Resolve the original review,
+roadmap, current revised manuscript, response, and any optional patch or
+annotation evidence from explicit inputs and the producer's `handoff.md`. An
+ARSU patch must conform to
+`assets/shared/contracts/patch/revision_patch.schema.json`, but schema validity
+or a successful mechanical application is not proof of academic fulfillment.
 
 For each commitment, assign one `fulfillment_status`:
 
-- `fulfilled` — the required evidence exists and substantively satisfies the
-  commitment. Verify `new_section`, `new_figure`, `new_table`, `new_citation`,
-  `methods_paragraph`, `discussion_paragraph`, and `prose_edit` against the
-  revised manuscript and patch/apply evidence at the stated location. Verify an
-  `acknowledgment_only` commitment against the registered Response to Reviewers,
-  because no manuscript diff is expected.
-- `partial` — evidence exists but only partly satisfies the commitment.
-- `not-fulfilled` — the required evidence is absent.
-- `explicitly-rejected-with-rationale` — the author explicitly declined the
-  commitment and supplied the rationale.
+- `fulfilled` — the required evidence exists and substantively satisfies it;
+- `partial` — evidence exists but only partly satisfies it;
+- `not-fulfilled` — required evidence is absent;
+- `explicitly-rejected-with-rationale` — the author declined it with reasons.
 
-For `required_evidence_type: other`, surface the advisory
-`EVIDENCE_TYPE_UNSPECIFIED`. If `revision_location` is absent, request it; if it
-is present, verify there while retaining the advisory. This advisory is distinct
-from a missing-rationale gap.
-
-For `partial`, `not-fulfilled`, or `explicitly-rejected-with-rationale`, require
-`unfulfilled_rationale` on the same commitment object. If missing, add an
-advisory `COMMITMENT_GAP`. Keep per-commitment status/rationale pairing intact;
-do not reconstruct parallel lists or pair by index.
-
-A concern-level `residual_action` may coexist with fulfilled individual
-commitments. It states what remains for the whole concern and is not evidence of
-a contradiction by itself.
-
-Return the completed verification report as an artifact for registration. Send
-unresolved, worsened, or blocking commitment findings to the re-review gate
-helper for `researchspec/runs/current/gate-ledger.jsonl`. The reviewer does not
-apply patches or write registry/gate records directly.
+For a non-fulfilled status, preserve the corresponding rationale. Verify prose,
+citations, figures, tables, methods, and acknowledgments against their actual
+boundary files rather than a registry-backed apply or resolution report. Return
+the verification report through this subflow's `handoff.md`; a human records
+the formal Gate verdict in the owning `control.yaml`.

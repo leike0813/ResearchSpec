@@ -1,8 +1,8 @@
 import { createHash } from "node:crypto";
+import path from "node:path";
 
 import { AnnotationRawSourceSchema, type AnnotationRawSource } from "../core/contracts/annotation.js";
 import { type PlannedAnnotationWorkingWrite } from "./contracts.js";
-import { annotationIntakePaths } from "./paths.js";
 
 export interface CapturedAnnotationSource {
   source: AnnotationRawSource;
@@ -11,7 +11,7 @@ export interface CapturedAnnotationSource {
 }
 
 export function captureAnnotationSource(input: {
-  annotationSetId: string;
+  destinationRoot: string;
   content: string;
   format: AnnotationRawSource["format"];
   mediaType?: string;
@@ -20,10 +20,10 @@ export function captureAnnotationSource(input: {
   const contentSha256 = sha256(input.content);
   const extension = normalizeExtension(input.extension ?? defaultExtension(input.format));
   const sourceId = `source-${contentSha256.slice(0, 20)}`;
-  const path = `${annotationIntakePaths(input.annotationSetId).raw_sources}/${contentSha256}${extension}`;
+  const sourcePath = path.join(input.destinationRoot, `${contentSha256}${extension}`);
   const source = AnnotationRawSourceSchema.parse({
     source_id: sourceId,
-    path,
+    path: sourcePath,
     sha256: contentSha256,
     format: input.format,
     media_type: input.mediaType ?? defaultMediaType(input.format),
@@ -33,7 +33,7 @@ export function captureAnnotationSource(input: {
     content: input.content,
     write: {
       action: "create_only",
-      path,
+      path: sourcePath,
       content: input.content,
       sha256: contentSha256,
     },
@@ -41,7 +41,7 @@ export function captureAnnotationSource(input: {
 }
 
 export function captureConversationFeedback(input: {
-  annotationSetId: string;
+  destinationRoot: string;
   messages: Array<{ message_id: string; author: string; body: string }>;
 }): CapturedAnnotationSource {
   const content = `${JSON.stringify({
@@ -49,7 +49,7 @@ export function captureConversationFeedback(input: {
     messages: input.messages,
   }, null, 2)}\n`;
   return captureAnnotationSource({
-    annotationSetId: input.annotationSetId,
+    destinationRoot: input.destinationRoot,
     content,
     format: "conversation_json",
     mediaType: "application/json",
@@ -74,4 +74,3 @@ function defaultMediaType(format: AnnotationRawSource["format"]): string {
 function sha256(value: string): string {
   return createHash("sha256").update(value).digest("hex");
 }
-

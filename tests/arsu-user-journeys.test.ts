@@ -1,11 +1,10 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { existsSync } from "node:fs";
-import { readFile, unlink, writeFile } from "node:fs/promises";
+import { readFile, readdir, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { test } from "node:test";
 
-import { loadWorkspaceSnapshot } from "../src/core/workspace/snapshot.js";
 import { cleanup, parseEnvelope, runCli, tempProject } from "./helpers/cli.js";
 import {
   advanceTransition,
@@ -26,8 +25,8 @@ import {
 } from "./helpers/arsu-journey.js";
 
 const PUBLIC_COMMANDS = [
-  "init", "update", "status", "instructions", "start", "submit", "advance", "check", "doctor",
-  "list", "show", "handoff", "pack", "propose", "decide", "archive", "plugin",
+  "init", "update", "status", "instructions", "start", "advance", "check", "doctor", "list",
+  "show", "handoff", "pack", "propose", "decide", "archive", "plugin",
 ];
 const PLUGIN_COMMANDS = ["list", "show", "install", "uninstall", "update", "instructions"];
 
@@ -37,14 +36,10 @@ void test("[journey.bootstrap] init installs the fifteen-Skill surface without s
     const initialized = runCli(["init", root, "--tools", "forgecode", "--json"]);
     assert.equal(initialized.status, 0, initialized.stderr || initialized.stdout);
     const workspace = path.join(root, "researchspec");
-    const snapshot = await loadWorkspaceSnapshot(workspace);
-    assert.equal(snapshot.runtimeMode, "adaptive");
-    assert.equal(snapshot.caseProfile?.mode, "adaptive");
-    assert.equal(snapshot.caseState?.profile_mode, "adaptive");
-    assert.deepEqual(snapshot.caseState?.obligations, []);
-    const current = parseEnvelope<{ lifecycle: string; active_instance_ids: string[] }>(runCli(["status", "--json"], root)).data;
-    assert.equal(current?.lifecycle, "open");
-    assert.deepEqual(current?.active_instance_ids, []);
+    assert.deepEqual((await readdir(workspace)).sort(), ["changes", "config.yaml", "profiles", "specs", "subflows", "tool-installation-manifest.json"]);
+    const current = parseEnvelope<{ active_instances: unknown[]; subflows: Record<string, number> }>(runCli(["status", "--json"], root)).data;
+    assert.deepEqual(current?.active_instances, []);
+    assert.deepEqual(current?.subflows, {});
     for (const skill of ["deep-research", "academic-paper", "academic-paper-reviewer", "academic-pipeline", "researchspec-navigate", "researchspec-propose", "researchspec-decide", "researchspec-verify", "zotero-library-agent", "zotero-library-query", "zotero-literature-acquisition", "zotero-literature-analysis", "zotero-research-synthesis", "zotero-library-curation", "zotero-bridge-cli"]) {
       assert.equal(existsSync(path.join(root, ".forge/skills", skill, "SKILL.md")), true, skill);
     }

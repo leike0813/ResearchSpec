@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 
 import {
-  AnnotationSetCandidateV2Schema,
+  AnnotationSetCandidateSchema,
   type AnnotationRawSource,
   type AnnotationSetCandidate,
 } from "../core/contracts/annotation.js";
@@ -32,7 +32,7 @@ export function validateAnnotationInterpretation(input: {
       details: { path: issue.path },
     }));
   }
-  if (sha256(input.baseText) !== input.session.base_sha256 || parsed.data.base_sha256 !== input.session.base_sha256) {
+  if (sha256(input.baseText) !== input.session.manuscript.sha256 || parsed.data.base_sha256 !== input.session.manuscript.sha256) {
     diagnostics.push({ code: "annotation_interpretation_base_stale", message: "Interpretation base hash does not match the session.", blocking: true });
   }
   if (sha256(input.reviewText) !== parsed.data.review_sha256 || input.delta.review_sha256 !== parsed.data.review_sha256) {
@@ -105,12 +105,11 @@ export function materializeAnnotationCandidate(input: {
     throw new AnnotationInterpretationError(diagnostics);
   }
   const ready = input.interpretation.entries.filter((entry) => entry.status === "ready");
-  return AnnotationSetCandidateV2Schema.parse({
-    schema_version: "2",
+  return AnnotationSetCandidateSchema.parse({
+    schema_version: "1",
     annotation_set_id: input.session.annotation_set_id,
     intake_session_id: input.session.session_id,
-    base_artifact_id: input.session.base_artifact_id,
-    base_sha256: input.session.base_sha256,
+    manuscript: input.session.manuscript,
     raw_sources: input.session.raw_sources,
     annotations: ready.map((entry) => ({
       annotation_id: entry.annotation_id,

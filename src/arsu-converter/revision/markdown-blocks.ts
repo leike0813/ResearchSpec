@@ -43,19 +43,9 @@ export function splitMarkdownBlocks(value: string): string[] {
   for (const line of lines) {
     const fenceMatch = /^\s*(```+|~~~+)/.exec(line);
     if (fenceMatch) fence = fence ? undefined : fenceMatch[1]?.[0];
-    if (!fence && /^(?: {0,3}(?:=+|-+)\s*$|<[^!][^>]*>\s*$|\[\^[^\]]+\]:)/.test(line)) {
-      throw new Error("Inserted text contains an unsupported ambiguous Markdown block shape.");
-    }
-    if (!fence && !line.trim()) {
-      flush();
-      continue;
-    }
-    if (!fence && /^#{1,6}\s+/.test(line)) {
-      flush();
-      current.push(line);
-      flush();
-      continue;
-    }
+    if (!fence && /^(?: {0,3}(?:=+|-+)\s*$|<[^!][^>]*>\s*$|\[\^[^\]]+\]:)/.test(line)) throw new Error("Inserted text contains an unsupported ambiguous Markdown block shape.");
+    if (!fence && !line.trim()) { flush(); continue; }
+    if (!fence && /^#{1,6}\s+/.test(line)) { flush(); current.push(line); flush(); continue; }
     current.push(line);
   }
   if (fence) throw new Error("Inserted text contains an unclosed code fence.");
@@ -74,10 +64,7 @@ export function markdownSectionHeadings(text: string): string[] {
   let fence: string | undefined;
   for (const line of text.replaceAll("\r\n", "\n").split("\n")) {
     const fenceMatch = /^\s*(```+|~~~+)/.exec(line);
-    if (fenceMatch) {
-      fence = fence ? undefined : fenceMatch[1]?.[0];
-      continue;
-    }
+    if (fenceMatch) { fence = fence ? undefined : fenceMatch[1]?.[0]; continue; }
     if (fence) continue;
     const heading = /^#{1,6}\s+(.+?)\s*$/.exec(line)?.[1]?.replace(/\s+#+\s*$/, "").trim();
     if (heading) headings.push(heading);
@@ -85,10 +72,10 @@ export function markdownSectionHeadings(text: string): string[] {
   return headings;
 }
 
-function normalizeBlock(value: string): string {
-  return value.replaceAll("\r\n", "\n").replace(/^\n+|\n+$/g, "");
+export function sha256(value: string | Uint8Array): string {
+  return createHash("sha256").update(value).digest("hex");
 }
 
-function sha256(value: string): string {
-  return createHash("sha256").update(value).digest("hex");
+function normalizeBlock(value: string): string {
+  return value.replaceAll("\r\n", "\n").replace(/^\n+|\n+$/g, "");
 }

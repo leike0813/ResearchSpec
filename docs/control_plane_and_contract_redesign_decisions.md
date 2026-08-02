@@ -109,8 +109,12 @@ ResearchSpec change 针对项目的稳定规格，不从属于某次 run 或 sub
 ### 7. ARSU revision patch 是唯一稿件 patch 合同
 
 ARSU `academic-paper:revision` 的 revision patch 是目标架构中唯一的稿件 patch 合同。
-它保留 block ID、`old_hash`、operation ID、replace/insert/delete、annotation mapping、
-disposition、修订理由和 traceability 等学术修订语义。ResearchSpec core 不再维护与之
+其规范源是 converter-owned 的 ResearchSpec 适配合同
+`src/arsu-converter/revision/contract.ts`，并投影为四个 ARSU Skill 中同一路径的
+`assets/shared/contracts/patch/revision_patch.schema.json`。适配合同保留 block ID、
+`old_hash`、operation ID、replace/insert/delete、annotation mapping、disposition、修订
+理由和 traceability 等学术修订语义；vendor 中的原始 schema 只是转换输入，不构成并行
+运行时合同。ResearchSpec core 不再维护与之
 竞争的通用 Draft Patch schema 或 `submit patch`、`decide patch`、`advance patch`
 生命周期，也不为稿件 patch 建立 artifact registry、receipt、独立 hash chain 或
 verification state。
@@ -150,10 +154,9 @@ apply report 和 annotation resolution report 不再作为独立事实源或必�
 和外部审查报告，但不得由 registry/hash/report 的机械闭合自动满足。正式结论写入该
 subflow 的 `control.yaml`。
 
-当前 manuscript annotation 已与 Draft Patch v3、apply report、resolution report、
-registry、receipt 和 Gate 串联。实施迁移前必须完整盘点并同时调整相关命令、schema、
-converter anchors、profile、文档和稳定行为测试，不能只删除一个 schema 或路径后留下
-隐式的第二套 patch 生命周期。
+manuscript annotation 与 revision patch 共用上述适配合同中的 annotation mapping，不再
+通过 Draft Patch、apply report、resolution report、registry 或 receipt 形成第二套
+lifecycle。相关 converter anchors、profile、文档和稳定行为测试必须引用同一合同源。
 
 ### 8. 稳定 specs 收敛为四份研究语义合同
 
@@ -912,8 +915,10 @@ Agent/用户完成实际编辑且目标 specs 通过校验后，才将状态更�
 
 #### 6. ARSU revision patch 与 annotation
 
-ARSU `revision_patch.schema.json` 继续是唯一 patch schema。新增的 Skill-local 无状态 helper
-接受显式 `base`、`patch`、`output` 和可选 report path，执行完整预检后一次性原子写 output。
+ResearchSpec-owned 的适配 ARSU `revision_patch.schema.json` 是唯一 patch schema，其规范源
+为 `src/arsu-converter/revision/contract.ts`，由 converter 投影到四个 ARSU Skill。仅
+`academic-paper` 投影 Skill-local 无状态 helper；helper 接受显式 `base`、`patch`、
+`output` 和可选 report path，执行完整预检后一次性原子写 output。
 helper 只返回 schema error、unknown block、stale `old_hash`、annotation mapping 缺失和应用
 摘要；任何失败都不得产生部分稿件。
 

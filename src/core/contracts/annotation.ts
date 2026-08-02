@@ -1,12 +1,8 @@
 import { z } from "zod";
 
-import { Sha256Schema, SubmitActorSchema } from "./artifact.js";
-import { CaseSafeIdSchema } from "./case-state.js";
-
-const UniqueIdsSchema = z.array(CaseSafeIdSchema)
-  .refine((values) => new Set(values).size === values.length, "IDs must be unique.");
-const RelativeWorkspacePathSchema = z.string().min(1)
-  .refine((value) => !value.startsWith("/") && !value.split("/").includes(".."), "Path must remain workspace-relative.");
+const SafeIdSchema = z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$/);
+const Sha256Schema = z.string().regex(/^[a-f0-9]{64}$/);
+const ExplicitPathSchema = z.string().trim().min(1);
 
 export const AnnotationSemanticImpactSchema = z.discriminatedUnion("level", [
   z.strictObject({ level: z.literal("ordinary") }),
@@ -20,14 +16,10 @@ export const AnnotationSemanticImpactSchema = z.discriminatedUnion("level", [
 export const AnnotationTargetSchema = z.discriminatedUnion("kind", [
   z.strictObject({ kind: z.literal("document") }),
   z.strictObject({ kind: z.literal("section"), heading: z.string().trim().min(1) }),
-  z.strictObject({
-    kind: z.literal("block"),
-    block_id: CaseSafeIdSchema,
-    block_sha256: Sha256Schema,
-  }),
+  z.strictObject({ kind: z.literal("block"), block_id: SafeIdSchema, block_sha256: Sha256Schema }),
   z.strictObject({
     kind: z.literal("quote"),
-    block_id: CaseSafeIdSchema,
+    block_id: SafeIdSchema,
     block_sha256: Sha256Schema,
     exact_quote: z.string().min(1),
     prefix: z.string(),
@@ -35,25 +27,9 @@ export const AnnotationTargetSchema = z.discriminatedUnion("kind", [
   }),
 ]);
 
-const ManuscriptAnnotationFields = {
-  annotation_id: CaseSafeIdSchema,
-  raw_body: z.string().min(1),
-  source_pointer: z.string().regex(/^(?:|\/(?:[^~/]|~0|~1)*)+$/),
-  target: AnnotationTargetSchema,
-  agent_interpretation: z.string().trim().min(1),
-  expected_action: z.string().trim().min(1),
-  semantic_impact: AnnotationSemanticImpactSchema,
-  clarification: z.strictObject({
-    question: z.string().trim().min(1),
-    answer: z.string().trim().min(1),
-  }).nullable(),
-};
-
-export const ManuscriptAnnotationV1Schema = z.strictObject(ManuscriptAnnotationFields);
-
 export const AnnotationRawSourceSchema = z.strictObject({
-  source_id: CaseSafeIdSchema,
-  path: RelativeWorkspacePathSchema,
+  source_id: SafeIdSchema,
+  path: ExplicitPathSchema,
   sha256: Sha256Schema,
   format: z.enum(["markdown_review_copy", "markdown_feedback", "conversation_json", "review_delta_json", "text"]),
   media_type: z.string().trim().min(1),
@@ -62,190 +38,48 @@ export const AnnotationRawSourceSchema = z.strictObject({
 export const AnnotationSourceReferenceSchema = z.discriminatedUnion("kind", [
   z.strictObject({
     kind: z.literal("source_span"),
-    source_id: CaseSafeIdSchema,
+    source_id: SafeIdSchema,
     start_byte: z.number().int().nonnegative(),
     end_byte: z.number().int().positive(),
   }).refine((value) => value.end_byte > value.start_byte, "Source span must be non-empty."),
-  z.strictObject({
-    kind: z.literal("review_delta"),
-    source_id: CaseSafeIdSchema,
-    delta_id: CaseSafeIdSchema,
-  }),
+  z.strictObject({ kind: z.literal("review_delta"), source_id: SafeIdSchema, delta_id: SafeIdSchema }),
 ]);
 
-export const ManuscriptAnnotationV2Schema = z.strictObject({
-  ...ManuscriptAnnotationFields,
+export const ManuscriptAnnotationSchema = z.strictObject({
+  annotation_id: SafeIdSchema,
+  raw_body: z.string().min(1),
+  source_pointer: z.string().regex(/^(?:|\/(?:[^~/]|~0|~1)*)+$/),
   source_ref: AnnotationSourceReferenceSchema,
+  target: AnnotationTargetSchema,
+  agent_interpretation: z.string().trim().min(1),
+  expected_action: z.string().trim().min(1),
+  semantic_impact: AnnotationSemanticImpactSchema,
+  clarification: z.strictObject({ question: z.string().trim().min(1), answer: z.string().trim().min(1) }).nullable(),
 });
 
-export const ManuscriptAnnotationSchema = z.union([
-  ManuscriptAnnotationV1Schema,
-  ManuscriptAnnotationV2Schema,
-]);
-
-const AnnotationSetCommonFields = {
-  annotation_set_id: CaseSafeIdSchema,
-  base_artifact_id: CaseSafeIdSchema,
-  base_sha256: Sha256Schema,
-  supersedes_annotation_set_id: CaseSafeIdSchema.optional(),
-};
-
-export const AnnotationSetCandidateV1Schema = z.strictObject({
+export const AnnotationSetCandidateSchema = z.strictObject({
   schema_version: z.literal("1"),
-  ...AnnotationSetCommonFields,
-  annotations: z.array(ManuscriptAnnotationV1Schema).min(1)
-    .refine((values) => new Set(values.map((item) => item.annotation_id)).size === values.length, "Annotation IDs must be unique."),
-});
-
-export const AnnotationSetCandidateV2Schema = z.strictObject({
-  schema_version: z.literal("2"),
-  ...AnnotationSetCommonFields,
-  intake_session_id: CaseSafeIdSchema,
+  annotation_set_id: SafeIdSchema,
+  intake_session_id: SafeIdSchema,
+  manuscript: z.strictObject({ path: ExplicitPathSchema, sha256: Sha256Schema }),
   raw_sources: z.array(AnnotationRawSourceSchema).min(1)
     .refine((values) => new Set(values.map((item) => item.source_id)).size === values.length, "Raw source IDs must be unique."),
-  annotations: z.array(ManuscriptAnnotationV2Schema).min(1)
+  annotations: z.array(ManuscriptAnnotationSchema).min(1)
     .refine((values) => new Set(values.map((item) => item.annotation_id)).size === values.length, "Annotation IDs must be unique."),
+  supersedes_annotation_set_id: SafeIdSchema.optional(),
 }).superRefine((value, context) => {
-  if (value.intake_session_id !== value.annotation_set_id) {
-    context.addIssue({ code: "custom", message: "intake_session_id must match annotation_set_id.", path: ["intake_session_id"] });
-  }
-  const sourceIds = new Set(value.raw_sources.map((source) => source.source_id));
+  if (value.intake_session_id !== value.annotation_set_id) context.addIssue({ code: "custom", message: "intake_session_id must match annotation_set_id.", path: ["intake_session_id"] });
+  const sources = new Set(value.raw_sources.map((source) => source.source_id));
   value.annotations.forEach((annotation, index) => {
-    if (!sourceIds.has(annotation.source_ref.source_id)) {
-      context.addIssue({ code: "custom", message: "Annotation source reference is dangling.", path: ["annotations", index, "source_ref", "source_id"] });
-    }
+    if (!sources.has(annotation.source_ref.source_id)) context.addIssue({ code: "custom", message: "Annotation source reference is dangling.", path: ["annotations", index, "source_ref", "source_id"] });
   });
 });
 
-export const AnnotationSetCandidateSchema = z.discriminatedUnion("schema_version", [
-  AnnotationSetCandidateV1Schema,
-  AnnotationSetCandidateV2Schema,
-]);
-
-const FrozenAnnotationFields = {
-  set_type: z.literal("manuscript_annotation"),
-  candidate: z.strictObject({
-    path: RelativeWorkspacePathSchema,
-    sha256: Sha256Schema,
-  }),
-  confirmed_by: z.string().trim().min(1),
-  confirmed_at: z.iso.datetime(),
-};
-
-export const FrozenAnnotationSetV1Schema = AnnotationSetCandidateV1Schema.extend(FrozenAnnotationFields);
-export const FrozenAnnotationSetV2Schema = AnnotationSetCandidateV2Schema.extend(FrozenAnnotationFields);
-export const FrozenAnnotationSetSchema = z.discriminatedUnion("schema_version", [
-  FrozenAnnotationSetV1Schema,
-  FrozenAnnotationSetV2Schema,
-]);
-
-export const AnnotationSubmitInputSchema = z.strictObject({});
-
-export const AnnotationSubmitReceiptSchema = z.strictObject({
-  schema_version: z.literal("1"),
-  receipt_type: z.literal("annotation_submit"),
-  receipt_id: CaseSafeIdSchema,
-  annotation_set_id: CaseSafeIdSchema,
-  selector: z.string().regex(/^annotation:[A-Za-z0-9][A-Za-z0-9._-]*$/).refine((value) => !value.includes("..")),
-  action_schema: z.literal("researchspec://actions/submit-annotation/v1"),
-  action_basis: Sha256Schema,
-  actor: SubmitActorSchema,
-  confirmed_by: z.string().trim().min(1),
-  base_artifact_id: CaseSafeIdSchema,
-  base_sha256: Sha256Schema,
-  candidate_path: z.string().min(1),
-  candidate_sha256: Sha256Schema,
-  frozen_path: z.string().min(1),
-  frozen_sha256: Sha256Schema,
-  artifact_ids: UniqueIdsSchema,
-  committed_at: z.iso.datetime(),
-});
-
-export const AnnotationReferenceSchema = z.strictObject({
-  annotation_set_id: CaseSafeIdSchema,
-  annotation_id: CaseSafeIdSchema,
-});
-
-export const AnnotationDispositionSchema = z.enum([
-  "implemented",
-  "answered_without_text_change",
-  "deferred",
-  "rejected",
-  "unresolved",
-  "superseded",
-]);
-
-export const AnnotationResolutionEntrySchema = z.strictObject({
-  annotation_set_id: CaseSafeIdSchema,
-  annotation_id: CaseSafeIdSchema,
-  disposition: AnnotationDispositionSchema,
-  answer: z.string().trim().min(1).optional(),
-  reason: z.string().trim().min(1).optional(),
-  superseded_by: AnnotationReferenceSchema.optional(),
-}).superRefine((entry, context) => {
-  if (entry.disposition === "answered_without_text_change" && !entry.answer) {
-    context.addIssue({ code: "custom", message: "answered_without_text_change requires answer.", path: ["answer"] });
-  }
-  if ((entry.disposition === "deferred" || entry.disposition === "rejected") && !entry.reason) {
-    context.addIssue({ code: "custom", message: `${entry.disposition} requires reason.`, path: ["reason"] });
-  }
-  if (entry.disposition === "superseded" && !entry.superseded_by) {
-    context.addIssue({ code: "custom", message: "superseded requires superseded_by.", path: ["superseded_by"] });
-  }
-});
-
-export const AnnotationResolutionSchema = z.strictObject({
-  entries: z.array(AnnotationResolutionEntrySchema).min(1)
-    .refine((values) => {
-      const keys = values.map((item) => `${item.annotation_set_id}:${item.annotation_id}`);
-      return new Set(keys).size === keys.length;
-    }, "Annotation resolution entries must be unique."),
-});
-
-export const AnnotationResolutionReportSchema = z.strictObject({
-  schema_version: z.literal("1"),
-  report_type: z.literal("annotation_resolution"),
-  report_id: CaseSafeIdSchema,
-  patch_id: CaseSafeIdSchema,
-  decision_id: CaseSafeIdSchema,
-  base_artifact_id: CaseSafeIdSchema,
-  base_sha256: Sha256Schema,
-  revised_artifact_id: CaseSafeIdSchema,
-  revised_sha256: Sha256Schema,
-  annotation_sets: z.array(z.strictObject({
-    annotation_set_id: CaseSafeIdSchema,
-    artifact_id: CaseSafeIdSchema,
-    sha256: Sha256Schema,
-  })).min(1),
-  entries: z.array(z.strictObject({
-    annotation_set_id: CaseSafeIdSchema,
-    annotation_id: CaseSafeIdSchema,
-    disposition: AnnotationDispositionSchema,
-    operation_ids: UniqueIdsSchema,
-    answer: z.string().trim().min(1).optional(),
-    reason: z.string().trim().min(1).optional(),
-    superseded_by: AnnotationReferenceSchema.optional(),
-  })).min(1),
-  coverage: z.strictObject({
-    total_count: z.number().int().nonnegative(),
-    implemented_count: z.number().int().nonnegative(),
-    answered_count: z.number().int().nonnegative(),
-    deferred_count: z.number().int().nonnegative(),
-    rejected_count: z.number().int().nonnegative(),
-    superseded_count: z.number().int().nonnegative(),
-    unresolved_count: z.number().int().nonnegative(),
-  }),
-  generated_at: z.iso.datetime(),
-});
-
 export type AnnotationSetCandidate = z.infer<typeof AnnotationSetCandidateSchema>;
-export type FrozenAnnotationSet = z.infer<typeof FrozenAnnotationSetSchema>;
 export type AnnotationRawSource = z.infer<typeof AnnotationRawSourceSchema>;
 export type AnnotationSourceReference = z.infer<typeof AnnotationSourceReferenceSchema>;
-export type AnnotationReference = z.infer<typeof AnnotationReferenceSchema>;
-export type AnnotationResolutionEntry = z.infer<typeof AnnotationResolutionEntrySchema>;
-export type AnnotationResolutionReport = z.infer<typeof AnnotationResolutionReportSchema>;
+export type ManuscriptAnnotation = z.infer<typeof ManuscriptAnnotationSchema>;
 
-export function annotationRawSources(value: AnnotationSetCandidate | FrozenAnnotationSet): AnnotationRawSource[] {
-  return value.schema_version === "2" ? value.raw_sources : [];
+export function annotationRawSources(value: AnnotationSetCandidate): AnnotationRawSource[] {
+  return value.raw_sources;
 }
