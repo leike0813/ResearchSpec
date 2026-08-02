@@ -27,7 +27,7 @@ export async function resolveBoundaryPath(
 
   const root = path.resolve(projectRoot);
   const absolutePath = path.resolve(root, trimmed);
-  if (!isWithin(root, absolutePath)) {
+  if (!isPathWithin(root, absolutePath)) {
     throw new BoundaryPathError("boundary_path_escape", "Boundary path must remain inside the project.");
   }
   const relativePath = path.relative(root, absolutePath).split(path.sep).join("/");
@@ -74,7 +74,7 @@ async function rejectExistingSymlinkComponents(root: string, relativePath: strin
   }
 }
 
-function isWithin(root: string, target: string): boolean {
+export function isPathWithin(root: string, target: string): boolean {
   const relative = path.relative(root, target);
   return relative === "" || (!relative.startsWith("..") && !path.isAbsolute(relative));
 }

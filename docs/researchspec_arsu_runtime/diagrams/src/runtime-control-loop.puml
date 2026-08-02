@@ -1,5 +1,5 @@
 @startuml
-title Strict compatibility：Human / Agent / ARSU / CLI / Workspace
+title Current subflow control loop
 skinparam shadowing false
 actor Human
 participant "Host Agent / Navigate" as Agent
@@ -7,71 +7,26 @@ participant "ARSU producer" as ARSU
 participant "Verify / Decide" as Companion
 participant "ResearchSpec CLI" as CLI
 database "Workspace files" as Files
-
-Agent -> CLI : status --json
-CLI -> Files : load snapshot
-Files --> CLI : profile + state + evidence
-CLI --> Agent : canonical frontier
-Agent -> CLI : instructions subflow:<template>
-CLI --> Agent : route, graph, prerequisites, cost, Gates
-Agent -> Human : exact route summary
-Human --> Agent : confirm route
-Agent -> CLI : Start with current action basis
-CLI -> Files : start receipt, then state.yaml
-
-loop each ready work selector
-  Agent -> CLI : instructions work:<instance>/<node>
-  CLI --> Agent : descriptor policy, producer, inputs, output and validation
-  alt policy = direct
-    Agent -> ARSU : one bounded semantic execution
-    ARSU -> Files : write candidate only
-    Agent -> CLI : Submit once with current action basis
-  else policy = human_confirmed
-    Agent -> Human : request named confirmation for exact action
-    Human --> Agent : confirm named action
-    Agent -> ARSU : one confirmed semantic execution
-    ARSU -> Files : write candidate only
-    Agent -> CLI : Submit once with confirmer identity
-  else policy = plan_bound
-    Agent -> ARSU : bounded semantic task
-    ARSU -> Files : write candidate only
-    Agent -> CLI : preview Submit
-    CLI --> Agent : plan_sha256
-    Agent -> CLI : execute with expected plan hash
-  end
-  CLI -> Files : submit receipt, then artifact registry
-end
-
+Agent -> CLI : status
+CLI -> Files : scan current owners
+CLI --> Agent : active instances + selectors
+Agent -> CLI : instructions route:<skill>:<mode>
+CLI --> Agent : prerequisites, outputs, Gates, cost
+Agent -> Human : route summary
+Human --> Agent : confirm exact instance
+Agent -> CLI : start + semantic input
+CLI -> Files : create control + handoff atomically
+Agent -> ARSU : bounded semantic work
+ARSU -> Files : external deliverable + owning handoff
 opt formal Gate
-  Agent -> Companion : verify declared evidence
-  Companion --> Human : proposed verdict and consequences
-  Human --> Companion : confirm / challenge
-  Companion -> CLI : preview submit gate:<instance>/<node>\npolicy = plan_bound
-  CLI --> Companion : Gate plan_sha256
-  Companion -> CLI : execute Gate with expected plan hash
-  CLI -> Files : Gate receipt, then Gate ledger
+  Agent -> Companion : verify evidence
+  Companion -> Human : proposed verdict
+  Human --> Companion : confirm verdict
+  Companion -> CLI : decide gate:<instance>/<gate>
+  CLI -> Files : append Gate attempt to control
 end
-
-opt branch or override
-  Agent -> Companion : present canonical Decision target
-  Companion --> Human : choices and semantic effect
-  Human --> Companion : explicit choice and rationale
-  Companion -> CLI : preview Decision\npolicy = plan_bound
-  CLI --> Companion : Decision plan_sha256
-  Companion -> CLI : execute Decision with expected plan hash
-  CLI -> Files : apply evidence, Decision ledger last
-end
-
-Agent -> CLI : instructions transition:<instance>/<node>
-Agent -> CLI : Advance under its descriptor policy
-CLI -> Files : transition receipt, then state.yaml
-group after each Start / Submit / Advance / Decide write result
-  CLI --> Agent : identities, effects and next_selectors
-  alt next_selectors are returned
-    Agent -> CLI : directed instructions / show / list read
-  else reroute, conflict, or no selector
-    Agent -> CLI : full status --json
-    CLI --> Agent : refreshed authoritative frontier
-  end
-end
+Agent -> CLI : advance subflow:<instance>
+CLI -> Files : validate profile + control + handoff
+CLI -> Files : append transition atomically
+CLI --> Agent : current status
 @enduml

@@ -1,66 +1,36 @@
 # CLI 与运行时协议
 
-ResearchSpec 的共用协议是：CLI 从 workspace 文件读取当前事实，返回 action-specific instructions；Agent 按 descriptor 的 execution policy 调用 ARSU 或 Companion；CLI 在当前读前置条件下规划、校验并以 receipt-first transaction 写入权威文件。
+![当前控制面与权威边界](diagrams/rendered/system-architecture.svg)
+
+## 1. 协议
 
 ```text
-status → instructions <selector> → start / submit / advance / decide → next_selectors → 定向读取
+status -> instructions <selector> -> start / decide / advance -> status
 ```
 
-这不是固定 stage loop。新 workspace 默认使用 [adaptive protocol](adaptive_runtime_protocol.md)：CLI 以 obligation、accepted evidence、formal Gate、completion 与 case action 控制进度。Schema `0.2` workspace 使用 [strict compatibility protocol](strict_runtime_protocol.md)：CLI 以 work graph、Gate 和 transition frontier 控制进度。
+`status` 和 `instructions` 只读。`start` 创建一个已独立确认的 control/handoff；`decide` 记录
+formal Gate、local Decision、override 或 change decision；`advance` 单独验证 profile 与 owning
+files 后推进。成功决定不会隐式 advance。
 
-命令发现从 `researchspec --help` 进入，再按需读取
-`researchspec <command> --help`；[CLI handbook](../cli_handbook.md)是由同一 typed
-catalog 生成的静态参考。Navigate 可渐进式读取该 handbook，文件缺失或 drift 时回退到
-help。静态资料不声明当前 action availability，也不替代 `status` 和
-`instructions <selector>` 返回的动态 descriptor。
+![一次 subflow 的控制循环](diagrams/rendered/runtime-control-loop.svg)
 
-![Shared：双模式控制面与权威边界](diagrams/rendered/system-architecture.svg)
+## 2. Boundary files
 
-## 1. 共用命令边界
+ARSU producer 在显式安全路径写文件，并在自己的 handoff 中记录 role、type、path、purpose 和
+source/consumer。消费动作才检查文件存在与可读性。ResearchSpec 不复制外部 bytes，也不从文件名
+推断 role。
 
-| 分组 | 命令 | 作用 |
-| --- | --- | --- |
-| Bootstrap | `init`、`update` | 建立/刷新 workspace；`update --migrate-runtime` 执行受控 strict-to-adaptive migration |
-| Control | `status`、`instructions`、`start`、`submit`、`advance` | 读取当前动作、执行运行时事务 |
-| Inspection and recovery | `check`、`doctor`、`list`、`show` | 校验、诊断、预览确定性修复和查看权威对象 |
-| Context | `handoff`、`pack` | 生成可移交的派生上下文 |
-| Governance | `propose`、`decide`、`archive` | 处理高影响 contract change、case resolution 与 draft patch lifecycle |
-| Manuscript annotation | `instructions annotation:<id>`、`submit annotation:<id>`、`list annotations`、`show annotation:<id>` | 校验并冻结注册稿件上的确定性 Annotation Set |
-| Domain Skills | `plugin` | 检查、安装、更新或卸载已审查的可选 domain Skill |
+## 3. Gate 与 change
 
-`doctor` 不自行选择修复：默认只读；只有唯一可推导的控制面事实才会给出 repair plan。它按 `healthy`、`retry_existing_transaction`、`deterministically_repairable`、`requires_human_reconstruction` 或 `conflicting_evidence` 分类。repair 是 `plan_bound`：preview 绑定读哈希和 postcondition，执行需匹配 plan hash，先写 repair receipt、再替换 authority 并 post-check；已存在 receipt 的中断事务只能精确 retry。
+Formal Gate findings 由 Verify 准备，verdict 由人确认并追加到 owning control。Failed-Gate
+override 嵌在同一 Gate 下。Scope、claim、structure 和 branch choice 记录为 local Decision。
 
-Action v2 descriptor 精确声明写入政策，并从 `execution_policy` 派生
-`execution_requirements`。`direct` 由 CLI 在单次调用中规划、校验并提交；
-`human_confirmed` 需要 descriptor 指定的人类确认；`plan_bound` 必须先 preview，再以匹配的
-action basis、plan hash 和所需确认执行。`--yes` 不能代替 formal Gate 的人类确认，也不能
-制造语义 Decision。
+![Project change 生命周期](diagrams/rendered/contract-change-lifecycle.svg)
 
-## 2. 共用审计与风险规则
+Project change 的 accepted 与 applied 分开。ARSU revision patch 是外部无状态 contract；可选 helper
+只根据显式 paths 应用，并在失败时不产生 partial output。
 
-所有模式共享以下不变量：
+## 4. 恢复与失败
 
-- ARSU Skill、Companion、plugin 和 Zotero Adapter 只能生成语义内容或 working material，不能手改 workflow authority 文件；
-- candidate 或 attempt 不等于已接受的证据，更不等于学术认可；
-- formal Gate 的 verdict 必须绑定声明证据、validator 和用户确认；challenge 后以新的 basis 重验；
-- scope、claim、structure、branch、failed-Gate override 与 obligation resolution 使用显式 Decision；
-- receipt、registry、Gate/Decision ledger、attempt ledger、state 和受控 change/patch 生命周期共同提供恢复依据；
-- `status` 与 `instructions` 是当前行动许可，历史聊天、Skill phase 和静态流程图不能替代它们。
-
-![Shared：高影响语义的 current/proposed 生命周期](diagrams/rendered/contract-change-lifecycle.svg)
-
-## 3. Patch、change、resume 与外部材料
-
-高影响 contract change 通过 `propose` 创建 pending proposal，再由 `decide` 接受、拒绝或 postpone；`archive` 只归档已有可信 resolution 的 change 或 draft patch。`annotation:<id>` 使用 `human_confirmed` descriptor；非交互提交需匹配 action basis、`--confirmed-by` 与 `--yes`，但不需要 plan hash。它把规范化 candidate 绑定到已注册 Markdown 稿件和完整 target hashes，按 frozen set、receipt、registry 的顺序提交并支持精确恢复。
-
-Annotation instructions 还返回 review copy、raw snapshot、mechanical delta 与 Agent
-interpretation 的 working 路径。用户批注没有固定 Markdown 语法；adapter 不做语义解析，
-Host Agent 对完整原稿和审阅材料作解释。Annotation Set v2 在 submit 时绑定 raw source 与
-delta hashes，v1 继续兼容。Working session 的变化不更新 registry、state、Gate、Decision
-或 receipt。
-
-`revision_patch` 是 draft-patch lifecycle 的可审阅输入：它绑定 base artifact/hash，由 CLI 的 patch transaction 形成 revised output、apply report 与 receipt，ARSU producer 不直接覆盖原稿。Patch v3 以 operation 上的 Annotation 引用作为唯一映射，并在成功 apply 后派生、注册 Annotation Resolution Report。stale 或 rejected patch 不产生报告。`revision_completeness` 与 `check artifacts` 复用同一机械覆盖验证器；机械完整不等于 reviewer 或用户认可回应充分。
-
-新会话从 `status` 恢复，再读取当前 selector 的 instructions。写入成功后优先跟随结果的 `next_selectors` 取得所需细节，而非无条件重读完整 status。`handoff` 和 `pack` 是派生视图，不覆盖 authority state。Zotero 与插件只提供有界辅助材料；其不可用不会让 Agent 编造私有 library、证据、Gate 或下一动作。
-
-Material Passport 是 strict compatibility 的导入能力，详见 [strict protocol](strict_runtime_protocol.md)。adaptive workspace 不接受 Passport import。
+新会话从 status 和精确 selector 恢复。外部文件缺失只阻塞消费者。`doctor` 只读报告损坏 owner、
+unsafe path 和 generated drift，不重建研究语义。非 schema `"1"` workspace 保持不变。

@@ -1,13 +1,13 @@
-# ResearchSpec 目标态用户使用预演
+# ResearchSpec 用户模型验收基线
 
-状态：目标态验收草案
+状态：current packaged user journey 验收基线
 
 最近更新：2026-08-01
 
 ## 这套文档解决什么问题
 
-本组文档预演控制面重构完成后的用户体验，并为后续实现提供验收基线。它不代表当前
-代码行为；现行行为仍以 [`arsu_user_usage_model.md`](./arsu_user_usage_model.md) 为准。
+本组文档定义 packaged CLI 用户旅程的验收基线。产品级使用模型以
+[`arsu_user_usage_model.md`](./arsu_user_usage_model.md) 为准；这里展开可执行场景与可观察结果。
 
 文档中的 Agent 对话、文件名和外部交付物路径是示例。以下内容属于目标合同，不能在实现
 时随意弱化：Skill/mode、启动确认、formal Gate、Decision、权威边界、文件 owner，以及
@@ -98,8 +98,7 @@ Reviewer calibration 使用同一研究主题的一组历史稿件与 gold revie
 - 是否存在 formal Gate 或高影响 Decision，由谁建议、由谁确认、写到哪里？
 - 失败、拒绝、暂停或恢复时，哪些文件必须保持不变？
 
-文中的 YAML 只展示尚需在 DTO/schema 设计中落实的语义角色，不冻结字段顺序或完整 wire
-shape。例如：
+文中的 YAML 只展示稳定语义角色，不冻结字段顺序或完整 wire shape。例如：
 
 ```yaml
 instance_id: sf_example
@@ -111,7 +110,7 @@ gates: []
 decisions: []
 ```
 
-后续 schema 可以调整字段组织，但不能把这些权威事实迁回全局 state、ledger 或 receipt。
+字段组织可以在保持公开 schema 和 owner 边界的前提下演进。
 
 ## 覆盖基线
 

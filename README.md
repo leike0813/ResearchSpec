@@ -16,7 +16,7 @@ ResearchSpec 的应对方案：
 
 - **Agent-neutral Skills**：所有研究 Skills 以文件形式分发，通过 CLI 适配层安装到不同 Agent 工具，不依赖任何平台的私有运行时
 - **CLI 为中心的执行框架**：CLI 是工作流状态的唯一权威；Agent 只生产语义工件，不直接编辑状态、注册表或账本
-- **文件合约 (File Contracts)**：研究意图 (`specs/project.md`)、证据来源 (`specs/sources.yaml`)、论证主张 (`specs/claims.yaml`)、工作流状态 (`runs/current/state.yaml`)、Gate 决策 (`runs/current/decision-ledger.jsonl`) 均以类型化的 Markdown / YAML / JSON / JSONL 文件存储
+- **文件合约 (File Contracts)**：研究意图、来源、claims、稿件结构、project profile、per-subflow control、handoff 与 project change 都有明确的 Markdown / YAML / JSON owner
 
 ## 灵感来源
 
@@ -89,12 +89,12 @@ researchspec --version
 
 `npm link` 仅用于开发和内部试用，不表示 npm 包已正式发布。
 
-构建文档站：
+生成并检查 CLI 文档，或构建文档站：
 
 ```bash
 pnpm docs:generate   # 从 CLI catalog 生成指令参考
 pnpm docs:check      # 验证生成内容未漂移
-pnpm docs:build      # 构建完整 Docusaurus 网站
+pnpm --dir website build
 ```
 
 ## 快速入门
@@ -108,9 +108,9 @@ researchspec init . --tools codex
 researchspec check all --strict
 ```
 
-新 workspace 默认使用 adaptive runtime。需要复现 Schema `0.2` 固定工作图时可显式执行
-`researchspec init . --tools codex --profile strict`；已有 strict workspace 不会被
-`init`、普通 `update`、`status` 或 `check` 隐式迁移。
+`init` 只创建 schema `"1"` workspace、项目 profile、四份 stable specs 和静态 Agent
+投影，不会启动学术工作。旧或未知 workspace 会被报告为 unsupported，且不会被读取、迁移
+或修改。
 
 随后在相同项目中启动 Codex，以自然语言描述研究目标：
 
@@ -124,42 +124,29 @@ ResearchSpec 安装十五个固定项目 Skills：
 
 固定[文献系统适配器](docs/literature_system_adapters.md)还会安装一个项目级 `.zotero-bridge` 运行时和配置模板。初始化及状态检查阶段不与 Zotero 通信。七个适配器 Skill 在用户配置的 Host Bridge 可用时提供有界任务访问；Zotero 为文献权威方，ResearchSpec 为工作流权威方。
 
-可选 ResearchSpec 维护的[领域 Skill 插件](docs/domain_skill_plugins.md)可为工作空间添加经审查的 Open Agent Skills。用户按稳定域选择（厂商透明）；维护者转换器拥有上游出处和 Skill 依赖。学科域遵循 [ANZSRC 2020 FoR 组](docs/domain_taxonomy.md) 分类，Field 代码仅为审计元数据。空固定域在有经审查 Skills 前保持内部不可见。插件不增加命令包装器，永不拥有工作流状态、Gate、Decision 或收据。正常研究对话期间，Navigate 可静默检测紧凑插件元数据，建议少量相关域，获得单独同意后预览并执行精确的哈希绑定安装，将输出 Skill 用作当前 ARSU producer 的建议助手。用户拒绝或增强不可用时，核心工作保持不变。可通过 `researchspec plugin list` 手动查看捆绑目录；手动 CLI 选择仍是可选项。
+可选 ResearchSpec 维护的[领域 Skill 插件](docs/domain_skill_plugins.md)可为 workspace 添加经审查的 Open Agent Skills。用户按稳定 domain 选择；维护者 converter 拥有上游出处和 Skill 依赖。学科域遵循 [ANZSRC 2020 FoR 组](docs/domain_taxonomy.md)，Field 代码只用于审计。插件不增加 Companion 或 CLI capability，也不能修改 stable specs、subflow control、handoff、Gate、Decision 或 transition。用户拒绝插件或插件不可用时，核心工作不变。
 
 ## 运行时协议
 
-CLI 使用分为三个层次：
+Agent 按统一协议运行：
 
 ```text
 researchspec --help
 → researchspec <command> --help
 → status --json
 → instructions <selector> --json
-→ start / submit / advance / decide
-→ next_selectors
-→ 定向读取
+→ start / decide / advance
+→ status --json
 ```
 
-前两层提供不依赖 workspace 的静态命令发现；它们不会授权当前运行中的动作。完整命令、
-选项和 selector 说明见 [CLI handbook](docs/cli_handbook.md)。当问题涉及当前 workspace 时，
-Agent 必须读取 `status --json`，再为返回的 selector 获取动态 instructions。
+前两层提供静态发现，不授权运行时动作。完整命令、选项和 selector 说明见
+[CLI handbook](docs/cli_handbook.md)。当问题涉及当前 workspace 时，Agent 先读取 status，
+再请求当前 selector 的 instructions。
 
-Selector family 包括：
-
-- 共用入口：`subflow:<id>`；
-- adaptive：`obligation:<instance>/<id>`、`gate:<id>`、
-  `completion:<instance>/<id>`、`case-action:<id>`、`patch:<id>`、
-  `change:<id>`；
-- strict compatibility：`work:<instance>/<node>`、`gate:<instance>/<node>`、
-  `transition:<instance>/<node>`。
-
-CLI 是唯一的工作流状态权威。Agent 生产语义候选工件；不得直接编辑状态、注册表、账本或收据。
-每次写入成功后优先消费返回的 `next_selectors` 并进行定向读取；仅在重新路由、冲突恢复或
-没有返回 selector 时重新读取完整 status。
-`doctor` 对损坏的 runtime 做只读诊断，并只执行已预览、hash-bound 的确定性修复。Schema
-`0.2` workspace 如需转为 adaptive，先运行
-`researchspec update --migrate-runtime --dry-run`，再用返回的 `plan_sha256` 执行；迁移会保留
-原始字节、写 receipt，并支持 `update --migrate-runtime --rollback <migration-id>`。
+Selector family 包括 `route:`、`subflow:`、`gate:`、`decision:`、`change:` 和
+`handoff:`。CLI 是 `control.yaml` 中 Gate、Decision、frontier 和 transition 的唯一写入者；
+ARSU producer 负责 `researchspec/` 外的语义文件和自己的 handoff。`doctor` 只读诊断当前
+owner，不执行修复事务。
 
 ## Codex 安装范围
 
@@ -176,7 +163,7 @@ researchspec init . --tools codex
 
 ## CLI 命令
 
-ResearchSpec 保持 17 个顶层命令。使用 `researchspec --help` 查看当前命令集合，
+ResearchSpec 保持 16 个顶层命令。使用 `researchspec --help` 查看当前命令集合，
 使用 `researchspec <command> --help` 查看具体语法；完整静态参考见
 [CLI handbook](docs/cli_handbook.md)。当前可执行动作及其 payload、确认和执行策略始终以
 workspace 的 `status` 与 `instructions <selector>` 为准。
@@ -185,9 +172,9 @@ workspace 的 `status` 与 `instructions <selector>` 为准。
 
 - ResearchSpec CLI 无运行时 LLM API 集成，不发送遥测
 - Agent 工具可能有自己的网络、模型和遥测行为，请单独审查
-- `handoff` 为派生视图，`pack` 默认排除已注册工件；`--include-artifacts` 为显式隐私敏感操作
+- `handoff` 只引用外部边界文件；`pack` 排除 subflow 私有 `work/` 和外部文件字节
 - 研究内容保留在项目内，除非用户或 Agent 工具主动导出或传输
-- 正式 Gate 需人工确认；`--yes` 仅授权已预览的机械事务
+- 正式 Gate、failed-Gate override、scope、claim、structure 和 branch 选择均需人工确认
 
 详见 [SECURITY.md](SECURITY.md)。
 

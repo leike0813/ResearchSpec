@@ -2,7 +2,7 @@
 
 ## Purpose and authority
 
-Domain Skill plugins are ResearchSpec-maintained collections of Open Agent Skills. Users select stable domains; upstream vendors are maintainer concerns, not installation products. Plugin Skills may assist semantic research work, but they never own ResearchSpec routes, workflow profiles, work items, state, artifact registry, Gates, Decisions, transitions, or receipts.
+Domain Skill plugins are ResearchSpec-maintained collections of Open Agent Skills. Users select stable domains; upstream vendors are maintainer concerns, not installation products. Plugin Skills may assist semantic research work, but they never own ResearchSpec routes, workflow profiles, stable specs, subflow controls, handoffs, Gates, Decisions, or transitions.
 
 User runtime is offline with respect to plugin maintenance. Installation,
 discovery, update, and validation read static assets distributed in the
@@ -174,7 +174,13 @@ Normal lifecycle surfaces expose domains rather than vendors. `show` includes do
 
 `list --summary` returns compact domain identity, state, and direct/resolved counts. `show --summary` adds the direct and resolved Skill IDs, descriptions, dependencies, and packaged `SKILL.md` SHA-256 values needed for Agent-side semantic matching. Full views retain license and provenance detail. ResearchSpec does not score or recommend domains in the CLI.
 
-Install and update are idempotent set reconciliation. An install dry-run returns a deterministic `plan_sha256` bound to the registry, selected domain versions, resolved Skills, configured tools, and summarized write plan. Non-interactive execution requires both `--yes` and the matching `--expected-plan-sha256`; drift fails before any write. Interactive installation retains its confirmation prompt. Install without an Agent tool saves intent and returns a non-blocking warning. Update recomputes the current graph and blocks if any selected domain is unavailable. Uninstall removes only files no longer reachable from remaining snapshots; shared dependencies remain. Drift in any file scheduled for deletion blocks the whole transaction, and `--force` never deletes a user-modified file. Config and manifest commit after generated operations, with the manifest last.
+Install and update are idempotent set reconciliation. Preview reports exact domain IDs, resolved Skills,
+configured tools, and summarized write impact. Non-interactive installation requires explicit domain IDs
+and `--yes`; interactive installation retains its confirmation prompt. Install without an Agent tool
+saves intent and returns a non-blocking warning. Update blocks when a selected domain is unavailable.
+Uninstall removes only projections no longer reachable from remaining selections; shared dependencies
+remain. Drift in a file scheduled for deletion blocks the operation, and `--force` never deletes a
+user-modified file. Config and manifest commit after generated operations, with the manifest last.
 
 `plugin instructions <skill-id>` is a read-only immediate-activation bridge. It succeeds only when the Skill belongs to the current available selected-domain closure and every configured tool has the complete manifest-owned, hash-clean projection. The packet returns the exact packaged `SKILL.md`, its entry hash, resource paths, providing domains, projected tools, and an advisory authority boundary. It never executes bundled resources.
 

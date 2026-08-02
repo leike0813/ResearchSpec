@@ -1,34 +1,26 @@
 @startuml
-title Strict compatibility：Academic Pipeline end-to-end control graph
+title Academic Pipeline current control graph
 skinparam shadowing false
 start
-:Human + Host Agent\nconfirm route, graph, Gates and cost;
-:CLI Start\nwrite receipt, then parent instance state;
-:ARSU child\ndeep-research:full;
-:CLI transition\nresearch -> write;
-:ARSU child\nacademic-paper:full;
-:CLI transition\nwrite -> pre-review;
-:academic-pipeline producer\nwrite integrity_report;
-:Verify + Human\nconfirm pre-review integrity Gate;
-:CLI transition\npre-review -> review;
-:ARSU child\nacademic-paper-reviewer:full;
-:Verify + Human\nconfirm review Gate;
-while (workflow_branch Decision = revision?) is (yes)
-  :CLI Start\ndynamic revision round n;
-  :ARSU child\nacademic-paper:revision;
-  :CLI transition\nrevise -> re-review;
-  :ARSU child\nacademic-paper-reviewer:re-review;
-  :Human Decide\nrevision-outcome;
+:Confirm pipeline parent;
+:Start parent control;
+:Confirm and start deep-research child;
+:Join research handoff;
+:Confirm and start academic-paper child;
+:Join manuscript handoff;
+:Produce integrity report;
+:Human confirms integrity Gate;
+:Confirm and start reviewer child;
+:Human confirms review Gate and branch Decision;
+while (revision required?) is (yes)
+  :Confirm and start revision round;
+  :Confirm revision child;
+  :Confirm re-review child;
+  :Human confirms round outcome;
 endwhile (accepted)
-:academic-pipeline producer\nwrite final_integrity_report;
-:Verify + Human\nconfirm final-integrity Gate;
-:ARSU child\nacademic-paper:format-convert;
-:academic-pipeline producer\nwrite process_summary;
-:CLI complete transition\nwrite receipt, then state;
-:Workspace retains\nstate, registry, ledgers and receipts;
-note right
-  academic-pipeline consumes CLI frontier.
-  It does not maintain a second operational state.
-end note
+:Human confirms final integrity Gate;
+:Confirm formatting child;
+:Produce process summary;
+:Advance parent to complete;
 stop
 @enduml

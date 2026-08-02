@@ -1,27 +1,22 @@
 @startuml
-title Strict compatibility：Academic Pipeline mid-entry
+title Academic Pipeline mid-entry
 skinparam shadowing false
 start
-:User provides goal and existing material;
-:Agent inspects registered evidence;
-:CLI instructions expose the entry graph;
-:Start confirmed mid-entry subflow;
-if (Accepted workflow_branch Decision?) then (research)
-  :Enter research;
+:Read current stable specs;
+:Resolve explicit handoff input roles and paths;
+:Present entry checkpoint, missing prerequisites, Gates and cost;
+:User confirms parent instance;
+:Start mid-entry parent;
+if (confirmed entry?) then (research)
+  :Offer deep-research child;
 elseif (write)
-  :Require trusted synthesis_report;
-  :Enter write;
-elseif (pre-review)
-  :Require trusted paper_draft;
-  :Enter pre-review integrity;
+  :Require synthesis input role;
+elseif (review)
+  :Require manuscript input role;
 else (revision)
-  :Require trusted review_report;
-  :Enter revision round;
+  :Require review roadmap input role;
 endif
-:Continue through normal profile;
-note right
-  Material Passport may be imported only with this strict Start
-  and remains non-authoritative evidence.
-end note
+:Each child receives its own confirmation;
+:Continue through project profile;
 stop
 @enduml

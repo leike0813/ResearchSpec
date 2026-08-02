@@ -1,57 +1,24 @@
 @startuml
-title Strict compatibility：Academic Paper 外层 work graph
+title Academic Paper route
 skinparam shadowing false
 actor User
 participant "Host Agent" as Agent
 participant "ResearchSpec CLI" as CLI
-participant "academic-paper\n12-agent team" as ARSU
-database "Workspace" as Files
-
-Agent -> CLI : status + route instructions
-CLI --> Agent : one of 11 routes and current availability
-Agent -> User : prerequisites, outputs, Gates, risk, cost
-User --> Agent : confirm exact route
-Agent -> CLI : Start
-CLI -> Files : receipt then subflow state
-
-loop each ready artifact work
-  Agent -> CLI : scoped work instructions
-  CLI --> Agent : producer, registered inputs, output path
-  Agent -> ARSU : bounded writing task
-  note over ARSU
-    Full semantic procedure:
-    config -> research -> architecture
-    -> argument -> draft -> citation/abstract
-    -> internal evaluation -> format
-    Other routes select only relevant roles.
-  end note
-  alt ordinary artifact candidate
-    ARSU -> Files : candidate artifact
-    Agent -> CLI : hash-bound Work Submit
-    CLI -> Files : submit receipt + registry
-  else revision_patch
-    ARSU -> Files : draft-patch candidate bound to base artifact/hash
-    Agent -> CLI : submit patch:<patch-id>
-    CLI -> Files : patch submit receipt + pending patch
-    Agent -> User : exact patch, semantic delta and write plan
-    User --> Agent : accept / reject / postpone
-    Agent -> CLI : decide patch:<patch-id> resolve
-    CLI -> Files : patch Decision receipt + resolved/pending lifecycle
-    alt accepted
-      Agent -> CLI : advance patch:<patch-id> apply
-      CLI -> Files : revised draft + apply report + apply receipts
-    else rejected or postponed
-      CLI --> Agent : no apply; retain resolution or pending state
-    end
-  end
+participant "academic-paper" as Paper
+database "Project files" as Files
+Agent -> CLI : instructions route:academic-paper:<mode>
+CLI --> Agent : specs + handoff inputs\noutputs + Gates + cost
+Agent -> User : confirm exact mode
+User --> Agent : confirm
+Agent -> CLI : start
+CLI -> Files : control.yaml + handoff.md
+Agent -> Paper : bounded writing or revision
+alt ordinary output
+  Paper -> Files : external manuscript output
+else revision patch
+  Paper -> Files : revision_patch
+  Agent -> Files : optional stateless helper output
 end
-
-opt required route Gate
-  Agent -> User : Verify manuscript/evidence verdict
-  User --> Agent : confirm Gate
-  Agent -> CLI : submit Gate
-  CLI -> Files : Gate receipt + ledger
-end
-Agent -> CLI : Advance transition:<instance>/<completion-node>
-CLI -> Files : transition receipt + state
+Paper -> Files : update owning handoff
+Agent -> CLI : decide / advance as confirmed
 @enduml

@@ -1,87 +1,41 @@
 # 稿件批注 Intake Adapter
 
-ResearchSpec 的稿件批注入口不规定 Markdown 批注语法。用户可以在审阅副本中写自然语言、
-列表、表格、HTML 注释、CriticMarkup、自定义标记，也可以直接改写某段文字或在对话中补充
-意见。Host Agent 负责理解这些材料；确定性代码只保存原文、计算差异、校验引用，并把确认
-后的结果交给现有 Annotation Submit。
+## 1. 定位
 
-## 1. 使用流程
+Annotation intake 是 `academic-paper:revision` subflow 的私有工作材料。它把原稿、自由格式反馈、
+机械 block delta、Agent interpretation 和 revision patch mapping 保存在：
 
 ```text
-registered Markdown draft
-→ instructions annotation:<id>
-→ 生成或接收自由 review copy / feedback / conversation
-→ 机械 Review Delta
-→ Host Agent interpretation + clarification
-→ candidate.json
-→ human-confirmed submit annotation:<id>
-→ 原有 revision / re-review route
+researchspec/subflows/<revision-instance>/work/annotation-intake/
 ```
 
-`instructions` 返回同一 session 目录中的 review copy、interpretation、delta、raw source 和
-candidate 路径。它只说明 working-material 位置，不创建文件，也不授权提交。
+该目录不拥有 Gate、Decision、transition 或稿件版本。其它 subflow 默认不能读取它。
 
-## 2. Review Copy
+## 2. 数据分层
 
-Headless API 支持三种 slot density：
+- Raw source 保存用户实际提供的反馈或审阅文件，不补写缺失内容。
+- Review copy 可加入便于人类批注的提示，但提示不是解析语法。
+- Mechanical delta 只记录可确定的 block change。
+- Normalized interpretation 保存 stable annotation ID、解释、歧义和所需澄清。
+- Patch mapping 将 annotation IDs 映射到 ARSU revision patch operations。
 
-- `section`：默认，提供总体意见区和按小节的提示区；
-- `block`：提供总体意见区和按稳定 block 的提示区；
-- `none`：不插入提示，保留原稿副本。
+Raw observation、normalized interpretation 和最终学术判断必须明确分开。模糊或高影响批注在用户
+确认前保持 pending。
 
-这些区域只是可删除的书写建议。用户可以留空、删除、改写，或完全在其他位置批注。系统
-不会因为缺少某种标记而拒绝 review copy，也不会扫描 canonical manuscript 猜测反馈。
+## 3. 跨边界使用
 
-## 3. 机械 Delta 与 Agent 解释
+需要让另一个 subflow 消费 annotation set 时，Agent 将明确选择的内容写入
+`researchspec/` 外的文件，并在 producing subflow handoff 中记录 role、type、path、purpose 和
+consumer。Private intake directory 不能直接充当接口。
 
-Review Delta 按现有 Markdown block ID 比较生成模板和当前 review copy，记录变化前后文本、
-byte span、block identity 和无法对齐的结构变化。它不判断变化是批注、误改、替换建议还是
-已接受修改。
+## 4. Headless API
 
-Host Agent 同时读取 base、review copy、delta、反馈文件和对话快照，输出 interpretation
-draft。每条 ready entry 必须引用真实 raw source span 或 delta entry，并给出准确 target、
-意图解释、expected action、semantic impact 和已解决的 clarification。歧义项保留为
-`needs_clarification` 或 `needs_confirmation`；不能进入 candidate。
+公开 `researchspec/annotation-intake` export 接受显式 source/destination paths，生成 review copy、
+机械 delta 或 normalized candidate，并返回结构化 diagnostics。API 不加载 workspace control，也不
+推进 workflow。输入无效、source drift、path escape 或 mapping 缺失时不写 completed output。
 
-## 4. Working Material 与 Authority
+## 5. Revision helper
 
-Session 位于：
-
-```text
-runs/current/annotation-sessions/<id>/
-  session.json
-  review.md
-  interpretation.json
-  derived/review-delta.json
-  sources/<content-sha256>.<ext>
-  candidate.json
-```
-
-Session、review copy、delta 和 interpretation 都可以更新，但不是 artifact 或 workflow
-authority。Raw source snapshot 使用内容 hash 命名。Annotation Set v2 把这些 path/hash 和
-逐条 source reference 冻结下来；v1 仍兼容读取。
-
-Registry、state、Gate、Decision 和 receipt 只能由 ResearchSpec CLI 修改。Adapter API 不
-调用模型，不提交 Annotation Set，也不应用 Draft Patch。
-
-## 5. TypeScript API
-
-打包后的入口是：
-
-```ts
-import {
-  createAnnotationIntakeSession,
-  generateAnnotationReviewCopy,
-  captureAnnotationSource,
-  captureConversationFeedback,
-  deriveReviewDelta,
-  validateAnnotationInterpretation,
-  materializeAnnotationCandidate,
-  planAnnotationWorkingMaterial,
-} from "researchspec/annotation-intake";
-```
-
-函数返回 DTO 或 planned working-material writes。调用方应先读取
-`instructions annotation:<id>`，只使用其中返回的 session 路径；权威提交仍调用
-`submit annotation:<id>`。
-
+ARSU revision patch 是唯一稿件 patch contract。Stateless helper 在写 destination 前校验全部 block、
+old hash 和 annotation mapping。Mechanical application 成功不等于 revision completeness；formal
+verdict 仍由 Verify、用户和 owning control 完成。

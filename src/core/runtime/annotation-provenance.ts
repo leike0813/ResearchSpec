@@ -3,7 +3,7 @@ import path from "node:path";
 
 import { annotationRawSources, type AnnotationSetCandidate } from "../contracts/annotation.js";
 import { sha256, type ReadPrecondition } from "../workspace/write-plan.js";
-import { isPathContained } from "./artifact-path.js";
+import { isPathWithin } from "./boundary-path.js";
 
 export class AnnotationProvenanceError extends Error {
   constructor(readonly code: string, message: string, readonly conflict: boolean, readonly details?: unknown) {
@@ -22,11 +22,11 @@ export async function validateAnnotationRawProvenance(input: {
   const preconditions: ReadPrecondition[] = [];
   for (const source of annotationRawSources(input.annotationSet)) {
     const absolutePath = path.resolve(source.path);
-    if (!isPathContained(root, absolutePath)) throw pathError(source.source_id, source.path);
+    if (!isPathWithin(root, absolutePath)) throw pathError(source.source_id, source.path);
     const info = await safeLstat(absolutePath, source.source_id);
     if (!info.isFile() || info.isSymbolicLink()) throw pathError(source.source_id, source.path);
     const sourceReal = await realpath(absolutePath);
-    if (!isPathContained(rootReal, sourceReal)) throw pathError(source.source_id, source.path);
+    if (!isPathWithin(rootReal, sourceReal)) throw pathError(source.source_id, source.path);
     const bytes = await readFile(absolutePath);
     const actual = sha256(bytes);
     if (actual !== source.sha256) throw new AnnotationProvenanceError("annotation_raw_source_hash_mismatch", `Annotation raw source hash has drifted: ${source.source_id}`, true, { expected: source.sha256, actual });

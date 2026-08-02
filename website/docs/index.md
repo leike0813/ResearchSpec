@@ -17,7 +17,7 @@ decisions, and reproducible workflow state.
 - **Guides agents through structured workflows** — literature acquisition,
   synthesis, drafting, review, and revision
 - **Keeps humans in control** of high-impact decisions through explicit gates
-  and a decision ledger
+  and explicit per-subflow Decisions
 - **Works with any AI agent** — no platform-specific runtime assumptions
 - **Maintains a reproducible paper trail** — every artifact, decision, and gate
   verdict is tracked by hash

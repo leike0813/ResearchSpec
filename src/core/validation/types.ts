@@ -7,17 +7,24 @@ export interface Diagnostic {
   details?: unknown;
 }
 
+export interface ValidationViolation {
+  code:
+    | "required"
+    | "invalid_type"
+    | "invalid_value"
+    | "invalid_format"
+    | "too_small"
+    | "too_big"
+    | "unrecognized_key"
+    | "constraint_failed";
+  field_path: string;
+  expectation: string;
+  schema_ref: string;
+}
+
 export type ParseResult<T> = { ok: true; value: T } | { ok: false; diagnostic: Diagnostic };
 
-export type CheckTarget = "all" | "contracts" | "runtime" | "artifacts" | "tools" | "plugins" | "literature-adapters";
 export type CurrentCheckTarget = "all" | "specs" | "profiles" | "subflows" | "changes" | "handoffs" | "tools" | "plugins" | "literature-adapters";
-
-export interface CheckResult {
-  ok: boolean;
-  workspace: string;
-  target: CheckTarget;
-  diagnostics: Diagnostic[];
-}
 
 export interface CurrentCheckResult {
   ok: boolean;

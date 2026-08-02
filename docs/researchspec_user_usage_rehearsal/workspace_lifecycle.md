@@ -1,7 +1,6 @@
 # Workspace 生命周期旅程
 
-本文属于 [ResearchSpec 目标态用户使用预演](../researchspec_user_usage_rehearsal.md)，描述
-目标行为，不代表当前 CLI 已经实现。
+本文属于 [ResearchSpec 用户模型验收基线](../researchspec_user_usage_rehearsal.md)。
 
 ## 1. 从空项目初始化
 
@@ -124,7 +123,7 @@ profile、control 或 handoff 使用定向 `check`，然后区分：
 > 继续上次的论文修改。
 
 Navigate 运行 `status`，扫描 controls、handoffs 与 changes，找到唯一可恢复实例；随后用
-`instructions <instance-id>` 读取当前 checkpoint，并按需读取该实例的 control、handoff、
+`instructions subflow:<instance-id>` 读取当前 checkpoint，并按需读取该实例的 control、handoff、
 私有 `work/` 和当前动作依赖的外部文件。
 
 ```yaml

@@ -1,37 +1,17 @@
 digraph frontier_evaluation {
-  graph [label="Strict compatibility frontier is derived, not stored", labelloc=t, rankdir=LR, fontname="DejaVu Sans"];
+  graph [label="Current frontier is derived, not stored", labelloc=t, rankdir=LR, fontname="DejaVu Sans"];
   node [shape=box, style="rounded", fontname="DejaVu Sans"];
-  edge [fontname="DejaVu Sans"];
-
-  subgraph cluster_inputs {
-    label="Trusted inputs";
-    profile [label="workflow profile\ntemplates / DAG / Gates / transitions"];
-    state [label="state.yaml\ninstances / active stages"];
-    registry [label="artifact registry\npaths / hashes / producers"];
-    ledgers [label="Gate + Decision ledgers"];
-    receipts [label="trusted receipts"];
-    contracts [label="stable specs"];
-  }
-
-  evaluator [shape=component, label="workflow evaluator"];
-  dependencies [label="work dependencies\nparallel capacity + join"];
-  completion [label="artifact completion\nregistry + hash + receipt"];
-  gates [label="Gate readiness / pass / override"];
-  transitions [label="unique / branch / blocked transition"];
-  frontier [shape=folder, label="canonical frontier\nsubflow / work / gate / transition"];
-  status [shape=note, label="status + scoped instructions"];
-
+  profile [label="project profile\nnodes / joins / Gates / transitions"];
+  controls [label="subflow controls\ncheckpoint / Gates / Decisions"];
+  handoffs [label="handoffs\ninput/output roles and paths"];
+  specs [label="stable specs"];
+  evaluator [shape=component, label="workspace evaluator"];
+  frontier [shape=folder, label="current frontier"];
+  views [shape=note, label="status / instructions / history"];
   profile -> evaluator;
-  state -> evaluator;
-  registry -> evaluator;
-  ledgers -> evaluator;
-  receipts -> evaluator;
-  contracts -> evaluator;
-  evaluator -> dependencies;
-  evaluator -> completion;
-  dependencies -> gates;
-  completion -> gates;
-  gates -> transitions;
-  transitions -> frontier;
-  frontier -> status;
+  controls -> evaluator;
+  handoffs -> evaluator;
+  specs -> evaluator;
+  evaluator -> frontier;
+  frontier -> views;
 }

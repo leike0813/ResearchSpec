@@ -60,10 +60,10 @@ researchspec plugin install <plugin-id>
 ```
 
 `plugin install` selects and projects plugins into the current workspace. Under
-strict runtime, you must bind execution with a plan SHA-256:
+non-interactive use, provide exact domain IDs and explicit consent:
 
 ```bash
-researchspec plugin install <plugin-id> --expected-plan-sha256 <hash>
+researchspec plugin install <domain-id> --yes
 ```
 
 With `--summary`, the command emits the aggregate write-plan impact instead of

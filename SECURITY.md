@@ -18,4 +18,4 @@ Until that channel exists, the package must not be represented as publicly relea
 - Installed Agent tools and their model providers are separate trust boundaries.
 - Codex prompts may be written to the shared `$CODEX_HOME/prompts` scope after explicit Codex selection.
 - Context packs exclude registered artifacts by default, but metadata and contract content can still be sensitive.
-- Hashes and receipts detect drift; they do not establish academic truth or make untrusted content safe.
+- Manifest hashes detect generated-file drift; they do not establish academic truth or make untrusted content safe.

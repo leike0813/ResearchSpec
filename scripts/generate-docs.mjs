@@ -7,6 +7,7 @@ import {
   renderMdxCliSidebar,
   renderMdxCommandPages,
 } from "../dist/src/cli/handbook.js";
+import { CLI_TOP_LEVEL_COMMANDS } from "../dist/src/cli/command-catalog.js";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -16,6 +17,10 @@ const handbookOnly = FLAGS.has("--handbook-only");
 const siteOnly = FLAGS.has("--site-only");
 
 const outputs = [];
+const topLevelCommandIds = CLI_TOP_LEVEL_COMMANDS.map((command) => command.id);
+if (topLevelCommandIds.length !== 16 || topLevelCommandIds.includes("submit")) {
+  throw new Error(`CLI documentation requires exactly sixteen current top-level commands: ${topLevelCommandIds.join(", ")}`);
+}
 
 if (!siteOnly) {
   outputs.push({

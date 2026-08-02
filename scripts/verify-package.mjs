@@ -13,7 +13,7 @@ const packageDirectory = path.join(temporaryRoot, "package");
 const installDirectory = path.join(temporaryRoot, "install");
 const projectDirectory = path.join(temporaryRoot, "project");
 const allToolsProjectDirectory = path.join(temporaryRoot, "all-tools-project");
-const strictProjectDirectory = path.join(temporaryRoot, "strict-project");
+const unsupportedProjectDirectory = path.join(temporaryRoot, "unsupported-project");
 const codexHome = path.join(temporaryRoot, "codex-home");
 const expectedSkills = [
   "academic-paper",
@@ -43,7 +43,7 @@ const expectedAdapterSkills = [
 ];
 const expectedCommands = [
   "advance", "archive", "check", "decide", "doctor", "handoff", "init", "instructions", "list",
-  "pack", "plugin", "propose", "show", "start", "status", "submit", "update",
+  "pack", "plugin", "propose", "show", "start", "status", "update",
 ];
 const expectedDomains = [
   "accounting-auditing-and-accountability", "analytical-chemistry", "applied-mathematics", "artificial-intelligence", "astronomical-sciences",
@@ -72,7 +72,7 @@ try {
     mkdir(installDirectory, { recursive: true }),
     mkdir(projectDirectory, { recursive: true }),
     mkdir(allToolsProjectDirectory, { recursive: true }),
-    mkdir(strictProjectDirectory, { recursive: true }),
+    mkdir(unsupportedProjectDirectory, { recursive: true }),
     mkdir(codexHome, { recursive: true }),
   ]);
 
@@ -125,10 +125,18 @@ try {
 
   const environment = { ...process.env, CODEX_HOME: codexHome };
   run(bin, ["init", projectDirectory, "--tools", "codex", "--json"], installDirectory, environment);
-  const defaultWorkflow = parseYaml(await readFile(path.join(projectDirectory, "researchspec", "specs", "workflow.yaml"), "utf8"));
-  const defaultState = parseYaml(await readFile(path.join(projectDirectory, "researchspec", "runs", "current", "state.yaml"), "utf8"));
-  assert(defaultWorkflow?.mode === "adaptive", "Unqualified installed init did not select the adaptive profile.");
-  assert(defaultState?.profile_mode === "adaptive", "Unqualified installed init did not create adaptive CaseState authority.");
+  const currentWorkspace = path.join(projectDirectory, "researchspec");
+  const currentConfig = parseYaml(await readFile(path.join(currentWorkspace, "config.yaml"), "utf8"));
+  const currentProfile = parseYaml(await readFile(path.join(currentWorkspace, "profiles", "academic-pipeline.yaml"), "utf8"));
+  assert(currentConfig?.schema_version === "1", "Installed init did not create schema 1 config.");
+  assert(currentProfile?.schema_version === "1" && currentProfile?.profile_id === "academic-pipeline", "Installed init did not project the current academic-pipeline profile.");
+  assert(equal((await directoryNames(currentWorkspace)).sort(), ["changes", "profiles", "specs", "subflows"]), "Installed current workspace directory set is invalid.");
+  for (const spec of ["project.md", "sources.yaml", "claims.yaml", "manuscript.yaml"]) {
+    await readFile(path.join(currentWorkspace, "specs", spec), "utf8");
+  }
+  for (const retiredPath of ["runs", "playbooks", "draft-patches", "artifact-registry.json"]) {
+    assert(!await pathExists(path.join(currentWorkspace, retiredPath)), `Installed init created retired path: ${retiredPath}`);
+  }
   const installedSkills = (await directoryNames(path.join(projectDirectory, ".codex", "skills"))).sort();
   assert(equal(installedSkills, expectedSkills), `Installed Skill surface mismatch: ${installedSkills.join(", ")}`);
   for (const skill of expectedSkills) {
@@ -149,42 +157,30 @@ try {
   assert(installationManifest.literature_adapter_resolutions?.length === 1, "Installed manifest has no fixed literature adapter resolution.");
   assert(installationManifest.literature_adapter_resolutions[0].projection_state === "complete", "Installed literature adapter Skill projection is incomplete.");
   const prompts = (await readdir(path.join(codexHome, "prompts"))).filter((file) => file.startsWith("researchspec-") && file.endsWith(".md")).sort();
-  assert(prompts.length === 8, `Installed Codex prompt count mismatch: ${String(prompts.length)}`);
+  assert(prompts.length === 16, `Installed Codex prompt count mismatch: ${String(prompts.length)}`);
   run(bin, ["check", "all", "--strict", "--json"], projectDirectory, environment);
 
   run(bin, ["init", allToolsProjectDirectory, "--tools", "all", "--json"], installDirectory, environment);
   await verifyAllToolDelivery(allToolsProjectDirectory, handbookDigest);
 
-  run(bin, ["init", strictProjectDirectory, "--tools", "none", "--profile", "strict", "--json"], installDirectory, environment);
-  const strictWorkspace = path.join(strictProjectDirectory, "researchspec");
-  const strictAuthorityPaths = ["config.yaml", "specs/workflow.yaml", "runs/current/state.yaml"];
-  const strictAuthority = new Map(await Promise.all(strictAuthorityPaths.map(async (relativePath) => [
-    relativePath,
-    await readFile(path.join(strictWorkspace, relativePath), "utf8"),
-  ])));
-  const strictWorkflow = parseYaml(strictAuthority.get("specs/workflow.yaml"));
-  const strictState = parseYaml(strictAuthority.get("runs/current/state.yaml"));
-  assert(strictWorkflow?.schema_version === "0.2", "Explicit strict init did not create the Schema 0.2 workflow.");
-  assert(strictState?.schema_version === "0.2", "Explicit strict init did not create Schema 0.2 state.");
-  run(bin, ["update", strictWorkspace, "--tools", "none", "--json"], installDirectory, environment);
-  assert(await readFile(path.join(strictWorkspace, "runs/current/state.yaml"), "utf8") === strictAuthority.get("runs/current/state.yaml"), "Ordinary update changed strict runtime authority.");
+  const installedConfigBeforeRemovedOptions = await readFile(path.join(currentWorkspace, "config.yaml"), "utf8");
+  runExpectFailure(bin, ["init", projectDirectory, "--tools", "none", "--profile", "strict", "--json"], installDirectory, environment);
+  runExpectFailure(bin, ["update", projectDirectory, "--migrate-runtime", "--json"], installDirectory, environment);
+  assert(await readFile(path.join(currentWorkspace, "config.yaml"), "utf8") === installedConfigBeforeRemovedOptions, "Removed CLI options changed the current workspace.");
 
-  const migrationPreview = JSON.parse(run(bin, ["update", strictWorkspace, "--migrate-runtime", "--dry-run", "--json"], installDirectory, environment).stdout);
-  const migrationPlan = migrationPreview.data?.plan;
-  assert(migrationPlan?.executable === true && /^[a-f0-9]{64}$/.test(migrationPlan.plan_sha256), "Installed migration preview is unavailable or non-deterministic.");
-  const migration = JSON.parse(run(bin, ["update", strictWorkspace, "--migrate-runtime", "--yes", "--expected-plan-sha256", migrationPlan.plan_sha256, "--json"], installDirectory, environment).stdout);
-  const migrationId = migration.data?.identity?.migration_id;
-  assert(typeof migrationId === "string", "Installed migration did not return a migration identity.");
-  const migratedState = parseYaml(await readFile(path.join(strictWorkspace, "runs/current/state.yaml"), "utf8"));
-  assert(migratedState?.profile_mode === "adaptive", "Installed migration did not commit adaptive state.");
-
-  const rollbackPreview = JSON.parse(run(bin, ["update", strictWorkspace, "--migrate-runtime", "--rollback", migrationId, "--dry-run", "--json"], installDirectory, environment).stdout);
-  const rollbackPlan = rollbackPreview.data?.plan;
-  assert(rollbackPlan?.executable === true && /^[a-f0-9]{64}$/.test(rollbackPlan.plan_sha256), "Installed migration rollback preview is unavailable.");
-  run(bin, ["update", strictWorkspace, "--migrate-runtime", "--rollback", migrationId, "--yes", "--expected-plan-sha256", rollbackPlan.plan_sha256, "--json"], installDirectory, environment);
-  for (const [relativePath, original] of strictAuthority) {
-    assert(await readFile(path.join(strictWorkspace, relativePath), "utf8") === original, `Installed rollback did not restore ${relativePath}.`);
+  const unsupportedWorkspace = path.join(unsupportedProjectDirectory, "researchspec");
+  await mkdir(path.join(unsupportedWorkspace, "runs", "current"), { recursive: true });
+  const unsupportedConfig = "schema_version: \"0.2\"\nprofile: strict\n";
+  const unsupportedState = "semantic: preserve-me\n";
+  await writeFile(path.join(unsupportedWorkspace, "config.yaml"), unsupportedConfig, "utf8");
+  await writeFile(path.join(unsupportedWorkspace, "runs", "current", "state.yaml"), unsupportedState, "utf8");
+  for (const args of [["status", "--json"], ["check", "all", "--json"], ["doctor", "--json"], ["update", "--tools", "none", "--json"]]) {
+    const failure = runExpectFailure(bin, args, unsupportedProjectDirectory, environment);
+    const envelope = JSON.parse(failure.stdout);
+    assert(envelope.error?.code === "workspace_unsupported", `Unsupported workspace returned the wrong error for ${args.join(" ")}.`);
   }
+  assert(await readFile(path.join(unsupportedWorkspace, "config.yaml"), "utf8") === unsupportedConfig, "Unsupported config was modified.");
+  assert(await readFile(path.join(unsupportedWorkspace, "runs", "current", "state.yaml"), "utf8") === unsupportedState, "Unsupported state was modified.");
 
   process.stdout.write(`Release package verified: ${metadata.filename} (${String(metadata.files.length)} files, ${String(metadata.unpackedSize)} bytes unpacked)\n`);
 } finally {
@@ -196,6 +192,9 @@ function verifyTarballFiles(files) {
     "package.json", "README.md", "CHANGELOG.md", "SECURITY.md", "LICENSE", "NOTICE",
     "LICENSES/MIT.txt", "LICENSES/CC-BY-NC-4.0.txt", "LICENSES/CC-BY-SA-4.0.txt", "LICENSES/Apache-2.0.txt", "LICENSES/AGPL-3.0.txt", "docs/release_process.md",
     "docs/arsu_user_usage_model.md", "docs/cli_handbook.md", "docs/cli_interface_design.md", "docs/domain_skill_plugins.md", "docs/domain_taxonomy.md", "docs/education_agent_skills_vendor_adapter.md", "docs/literature_system_adapters.md", "docs/manuscript_annotation_adapters.md", "docs/finrobot_vendor_adapter.md", "docs/histagent_vendor_adapter.md", "docs/materials_science_skills_vendor_adapter.md", "docs/scientific_agent_skills_vendor_adapter.md", "docs/tooluniverse_vendor_adapter.md",
+    "docs/researchspec_arsu_runtime/README.md", "docs/researchspec_arsu_runtime/core_runtime_model.md", "docs/researchspec_arsu_runtime/runtime_protocols.md",
+    "docs/researchspec_arsu_runtime/deep_research_workflow.md", "docs/researchspec_arsu_runtime/academic_paper_workflow.md", "docs/researchspec_arsu_runtime/academic_paper_reviewer_workflow.md", "docs/researchspec_arsu_runtime/academic_pipeline_workflow.md",
+    "docs/researchspec_user_usage_rehearsal.md", "docs/researchspec_user_usage_rehearsal/workspace_lifecycle.md", "docs/researchspec_user_usage_rehearsal/deep_research_journeys.md", "docs/researchspec_user_usage_rehearsal/academic_paper_journeys.md", "docs/researchspec_user_usage_rehearsal/academic_paper_reviewer_journeys.md", "docs/researchspec_user_usage_rehearsal/academic_pipeline_journeys.md", "docs/researchspec_user_usage_rehearsal/companion_journeys.md", "docs/researchspec_user_usage_rehearsal/zotero_and_plugin_journeys.md",
     "literature-adapters/zotero/profile.template.json",
     "literature-adapters/zotero/LICENSE",
     "literature-adapters/zotero/NOTICE.md",
@@ -253,6 +252,12 @@ function verifyTarballFiles(files) {
   for (const skill of expectedSkills.slice(0, 4)) {
     required.push(`skills/arsu/${skill}/SKILL.md`, `skills/arsu/${skill}/LICENSE`, `skills/arsu/${skill}/NOTICE.md`);
   }
+  for (const [name, extension] of currentRuntimeDiagrams()) {
+    required.push(
+      `docs/researchspec_arsu_runtime/diagrams/src/${name}.${extension}`,
+      `docs/researchspec_arsu_runtime/diagrams/rendered/${name}.svg`,
+    );
+  }
   for (const skill of expectedAdapterSkills) {
     const root = `literature-adapters/zotero/skills/${skill}`;
     required.push(
@@ -278,7 +283,7 @@ function verifyTarballFiles(files) {
   );
   assert(adapterOpaqueFiles.length === 14, `Tarball Zotero opaque runtime metadata count mismatch: ${String(adapterOpaqueFiles.length)}`);
 
-  const allowed = /^(?:package\.json|README\.md|CHANGELOG\.md|SECURITY\.md|LICENSE|NOTICE|LICENSES\/[^/]+|docs\/(?:release_process|arsu_user_usage_model|cli_handbook|cli_interface_design|domain_skill_plugins|domain_taxonomy|education_agent_skills_vendor_adapter|literature_system_adapters|manuscript_annotation_adapters|finrobot_vendor_adapter|histagent_vendor_adapter|materials_science_skills_vendor_adapter|scientific_agent_skills_vendor_adapter|tooluniverse_vendor_adapter)\.md|artifacts\/mvp_release_checklist\.md|dist\/src\/.*\.(?:js|d\.ts)|skills\/.*|literature-adapters\/.*)$/;
+  const allowed = /^(?:package\.json|README\.md|CHANGELOG\.md|SECURITY\.md|LICENSE|NOTICE|LICENSES\/[^/]+|docs\/(?:release_process|arsu_user_usage_model|cli_handbook|cli_interface_design|domain_skill_plugins|domain_taxonomy|education_agent_skills_vendor_adapter|literature_system_adapters|manuscript_annotation_adapters|finrobot_vendor_adapter|histagent_vendor_adapter|materials_science_skills_vendor_adapter|scientific_agent_skills_vendor_adapter|tooluniverse_vendor_adapter)\.md|docs\/researchspec_arsu_runtime\/.*|docs\/researchspec_user_usage_rehearsal(?:\.md|\/.*)|artifacts\/mvp_release_checklist\.md|dist\/src\/.*\.(?:js|d\.ts)|skills\/.*|literature-adapters\/.*)$/;
   const retired = /^dist\/src\/adapters\/companion\/workflows\/(?:archive|check|context|explore|next|submit)\.js$/;
   for (const file of files) {
     assert(allowed.test(file), `Tarball contains a path outside the release allowlist: ${file}`);
@@ -303,19 +308,12 @@ function verifyTarballFiles(files) {
     assert(!/(?:admission|relationship|file|external-resource)-decisions\.json$/.test(file), `Tarball contains maintainer-only production decisions: ${file}`);
     assert(!file.endsWith(".js.map"), `Tarball contains source maps: ${file}`);
     assert(!retired.test(file), `Tarball contains a retired Companion workflow: ${file}`);
+    assert(!retiredRuntimeModule(file), `Tarball contains a retired runtime module: ${file}`);
   }
 }
 
 async function verifyRepositoryRuntimeGuidance(root) {
-  const diagrams = [
-    ["academic-paper-reviewer-workflow", "puml"], ["academic-paper-workflow", "puml"],
-    ["academic-pipeline-mid-entry", "puml"], ["academic-pipeline-workflow", "puml"],
-    ["adaptive-obligation-lifecycle", "puml"], ["adaptive-pipeline-route", "puml"],
-    ["contract-change-lifecycle", "puml"], ["deep-research-workflow", "puml"],
-    ["frontier-evaluation", "dot"], ["revision-round", "puml"], ["runtime-control-loop", "puml"],
-    ["system-architecture", "puml"], ["transaction-write-sets", "dot"], ["two-level-openspec-model", "puml"],
-  ];
-  for (const [name, extension] of diagrams) {
+  for (const [name, extension] of currentRuntimeDiagrams()) {
     await access(path.join(root, "docs", "researchspec_arsu_runtime", "diagrams", "src", `${name}.${extension}`));
     await access(path.join(root, "docs", "researchspec_arsu_runtime", "diagrams", "rendered", `${name}.svg`));
   }
@@ -323,9 +321,9 @@ async function verifyRepositoryRuntimeGuidance(root) {
 
 async function verifyInstalledGuidance(installedPackageRoot, projectRoot, handbookDigest) {
   const contracts = JSON.parse(await readFile(path.join(installedPackageRoot, "skills", "arsu", "researchspec-contracts.json"), "utf8"));
-  assert(contracts.integration_profile === "researchspec-preflight-v9", "Installed ARSU contracts do not use preflight v9.");
+  assert(contracts.integration_profile === "researchspec-preflight-v10", "Installed ARSU contracts do not use preflight v10.");
   for (const skill of expectedSkills.slice(0, 4)) {
-    assert(contracts.skill_groups?.[skill]?.profile_id === "researchspec-preflight-v9", `Installed ARSU profile is not v9: ${skill}`);
+    assert(contracts.skill_groups?.[skill]?.profile_id === "researchspec-preflight-v10", `Installed ARSU profile is not v10: ${skill}`);
   }
   const navigateHandbook = await readFile(path.join(projectRoot, ".codex", "skills", "researchspec-navigate", "references", "cli-handbook.md"));
   assert(sha256(navigateHandbook) === handbookDigest, "Installed Codex Navigate handbook differs from the packaged handbook.");
@@ -348,7 +346,33 @@ async function verifyPackagedDocumentation(installedPackageRoot, packagedFiles) 
       : packagedFiles.includes(target);
     assert(included, `Packaged README links to a file outside the tarball: ${target}`);
   }
+  await verifyCurrentPublishedGuidance(installedPackageRoot);
   return sha256(Buffer.from(sourceHandbook, "utf8"));
+}
+
+async function verifyCurrentPublishedGuidance(installedPackageRoot) {
+  const currentGuidance = [
+    "README.md",
+    "SECURITY.md",
+    "docs/arsu_user_usage_model.md",
+    "docs/cli_handbook.md",
+    "docs/cli_interface_design.md",
+    "docs/domain_skill_plugins.md",
+    "docs/literature_system_adapters.md",
+    "docs/manuscript_annotation_adapters.md",
+    "docs/researchspec_arsu_runtime/README.md",
+    "docs/researchspec_arsu_runtime/core_runtime_model.md",
+    "docs/researchspec_arsu_runtime/runtime_protocols.md",
+    "docs/researchspec_arsu_runtime/deep_research_workflow.md",
+    "docs/researchspec_arsu_runtime/academic_paper_workflow.md",
+    "docs/researchspec_arsu_runtime/academic_paper_reviewer_workflow.md",
+    "docs/researchspec_arsu_runtime/academic_pipeline_workflow.md",
+  ];
+  const retiredBehavior = /researchspec submit|--migrate-runtime|--profile strict|--expected-plan-sha256|runs\/current|specs\/workflow\.yaml|artifact-registry|decision-ledger|gate-ledger|strict compatibility|adaptive runtime|Material Passport/i;
+  for (const relativePath of currentGuidance) {
+    const content = await readFile(path.join(installedPackageRoot, relativePath), "utf8");
+    assert(!retiredBehavior.test(content), `Packaged current guidance contains retired behavior: ${relativePath}`);
+  }
 }
 
 async function verifyAllToolDelivery(projectRoot, handbookDigest) {
@@ -369,7 +393,7 @@ async function verifyAllToolDelivery(projectRoot, handbookDigest) {
   }
 
   const commandInstallations = installations.filter((item) => item?.source?.kind === "command");
-  assert(commandInstallations.length === 28 * 8, `Expected 224 command-wrapper installations, found ${String(commandInstallations.length)}.`);
+  assert(commandInstallations.length === 28 * 16, `Expected 448 command-wrapper installations, found ${String(commandInstallations.length)}.`);
   const commandTools = new Map();
   for (const installation of commandInstallations) {
     const commands = commandTools.get(installation.tool_id) ?? new Set();
@@ -377,7 +401,7 @@ async function verifyAllToolDelivery(projectRoot, handbookDigest) {
     commandTools.set(installation.tool_id, commands);
   }
   assert(commandTools.size === 28, `Expected 28 command-capable tools, found ${String(commandTools.size)}.`);
-  for (const [toolId, commands] of commandTools) assert(commands.size === 8, `Command wrapper count differs for ${String(toolId)}.`);
+  for (const [toolId, commands] of commandTools) assert(commands.size === 16, `Command wrapper count differs for ${String(toolId)}.`);
 
   const fixedSkillsByTool = new Map();
   for (const installation of installations) {
@@ -419,6 +443,27 @@ function expectedRuntime(platform, architecture) {
   }[key];
 }
 
+function currentRuntimeDiagrams() {
+  return [
+    ["academic-paper-reviewer-workflow", "puml"],
+    ["academic-paper-workflow", "puml"],
+    ["academic-pipeline-mid-entry", "puml"],
+    ["academic-pipeline-workflow", "puml"],
+    ["contract-change-lifecycle", "puml"],
+    ["deep-research-workflow", "puml"],
+    ["frontier-evaluation", "dot"],
+    ["revision-round", "puml"],
+    ["runtime-control-loop", "puml"],
+    ["system-architecture", "puml"],
+    ["two-level-openspec-model", "puml"],
+  ];
+}
+
+function retiredRuntimeModule(file) {
+  return /^dist\/src\/core\/contracts\/(?:action-selector|adaptive-runtime|case-profile|case-state|decision|gate-transition|legacy-contract-change|material-passport|run-state|runtime-protocol|runtime-selector|workflow)\.(?:js|d\.ts)$/.test(file)
+    || /^dist\/src\/core\/runtime\/(?:artifact-path|transaction-result)\.(?:js|d\.ts)$/.test(file);
+}
+
 function parsePackMetadata(stdout) {
   const start = stdout.indexOf("[");
   if (start < 0) throw new Error(`npm pack did not return JSON: ${stdout}`);
@@ -450,9 +495,32 @@ function run(command, args, cwd, env = process.env) {
   return result;
 }
 
+function runExpectFailure(command, args, cwd, env = process.env) {
+  const result = spawnSync(command, args, {
+    cwd,
+    env,
+    encoding: "utf8",
+    shell: process.platform === "win32" && command.toLowerCase().endsWith(".cmd"),
+    stdio: ["ignore", "pipe", "pipe"],
+    maxBuffer: 64 * 1024 * 1024,
+  });
+  if (result.error) throw result.error;
+  if (result.status === 0) throw new Error(`${command} ${args.join(" ")} unexpectedly succeeded.`);
+  return result;
+}
+
 async function directoryNames(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
   return entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name);
+}
+
+async function pathExists(target) {
+  try {
+    await access(target);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 function equal(left, right) {

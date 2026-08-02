@@ -60,10 +60,10 @@
 
 ## 7. Legacy Removal And Current Documentation
 
-- [ ] 7.1 Delete legacy contracts, runtime modules and auxiliary branches after all consumers migrate.
-- [ ] 7.2 Converge README, CLI, architecture, schema, runtime and annotation documentation on the current
+- [x] 7.1 Delete legacy contracts, runtime modules and auxiliary branches after all consumers migrate.
+- [x] 7.2 Converge README, CLI, architecture, schema, runtime and annotation documentation on the current
   model and delete public strict/adaptive recovery material.
-- [ ] 7.3 Update generated documentation and package verification to reject legacy published behavior.
+- [x] 7.3 Update generated documentation and package verification to reject legacy published behavior.
 
 ## 8. User-Model Acceptance And Release Gate
 

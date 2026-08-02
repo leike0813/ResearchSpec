@@ -1,8 +1,8 @@
 # ResearchSpec MVP Release Process
 
-This document separates technical release readiness from authorization to publish. Passing local automation does not authorize a Git tag, GitHub Release, or npm publication.
+Passing technical checks does not authorize a Git tag, GitHub Release, or npm publication.
 
-## 1. Technical Gates
+## 1. Technical gates
 
 Run from a clean checkout on a supported Node release:
 
@@ -11,6 +11,8 @@ pnpm install --frozen-lockfile
 pnpm test
 pnpm lint
 pnpm check
+pnpm docs:check
+pnpm arsu:anchors:check
 pnpm arsu:check
 pnpm arsu:idempotence
 pnpm zotero-adapter:audit
@@ -31,65 +33,35 @@ pnpm education-agent-skills:evidence:check
 pnpm education-agent-skills:check
 pnpm education-agent-skills:idempotence
 pnpm release:verify
-pnpm dlx @fission-ai/openspec@1.5.0 validate --specs --strict --no-interactive
+openspec validate --specs --strict --no-interactive
 git diff --check
 ```
 
-`release:verify` runs the package lifecycle, inspects the real tarball, verifies all seven packaged Zotero runtimes and fourteen opaque runtime-metadata assets, installs it into an OS temporary directory, invokes the installed bin, initializes an isolated Codex delivery with fifteen fixed Skills and eight wrappers, and completes `check all --strict` without executing the Adapter runtime, runners, or output schemas. Repository source or internal planners are not substitutes for this check.
+`release:verify` packs and installs the real tarball in a temporary directory. It verifies fifteen
+fixed Skills, sixteen top-level commands, sixteen wrappers for each of 28 command-capable tools, the
+fixed Zotero runtime metadata, a fresh schema `"1"` workspace, unsupported-workspace zero-write
+behavior, packaged current documentation, and absence of retired public runtime modules.
 
-The installed-package gate must also prove that an unqualified `init` creates an
-adaptive CaseProfile/CaseState workspace, `init --profile strict` still creates a
-valid Schema `0.2` workspace, ordinary `update` leaves that authority unchanged,
-and `update --migrate-runtime` supports deterministic preview, plan-bound
-execution, durable backup/receipt, and plan-bound rollback. The default must not
-switch when any runtime, Doctor, patch, Adapter, converter, package, journey, or
-strict OpenSpec gate fails.
+## 2. Hosted matrix
 
-The Scientific Agent Skills gates also require all 40 manual-security targets to have finding-level maintainer decisions consistent with admission, resource curation, dependencies, and generated hashes. Upstream scanner labels alone are neither release approval nor a production blocker override.
+Ubuntu, macOS, and Windows must pass on Node 22 and Node 24. Checked-in CI has no publish job; a local
+run cannot replace the hosted matrix.
 
-The Education Agent Skills gates require the immutable 165-Skill audit, all 872
-evidence declarations, all 813 advisory relationships, and the generated
-136-Skill tree to remain bound to the approved aggregate SHA-256
-`c4fc2f93a7553a1c02538d15491ed108afd36ad4a4a291ca4db3bad39e74775d`.
-Any source, policy, evidence, license, or generated-byte drift requires a new
-human approval.
+## 3. Manual dogfooding
 
-## 2. Hosted Matrix
+Use the repository-only playbook in a disposable project and record evidence for standalone resume,
+bounded context export, Gate challenge/reverification/override, and an end-to-end pipeline with at
+least two independently confirmed revision rounds. Do not repair a failed journey by editing
+`control.yaml` or generated profile bytes.
 
-The checked-in CI workflow must pass for all six cells:
+## 4. Administrative gates
 
-| Operating system | Node 22 | Node 24 |
-| --- | --- | --- |
-| Ubuntu | required | required |
-| macOS | required | required |
-| Windows | required | required |
+Before publication, establish canonical package metadata and private security reporting, recheck the
+npm name, configure protected provenance-capable publishing, complete required license review, and
+bind hosted CI plus dogfood evidence to the exact release commit.
 
-The workflow is read-only and contains no publish job. A local run cannot be used to mark the hosted matrix complete.
+## 5. Publication boundary
 
-## 3. Manual Dogfooding
-
-Follow `playbooks/dogfooding/README.md` in a disposable research project using an adapter that satisfies the playbook's isolation contract. The playbook, synthetic benchmark, scenario catalog, adapters, and evidence templates are maintainer-only repository assets and are intentionally excluded from the npm package. Sign all of these journeys in `artifacts/mvp_release_checklist.md`:
-
-- quick standalone;
-- cross-session resume;
-- context export;
-- Gate challenge, reverification, and override;
-- end-to-end academic pipeline with at least two revision rounds.
-
-Do not repair a failed journey by editing runtime state, registries, ledgers, or receipts.
-
-## 4. Administrative Gates
-
-Before publication:
-
-1. Establish the canonical Git remote and add accurate repository, homepage, bugs, and private security-reporting metadata.
-2. Recheck that the npm name `researchspec` is available; a prior E404 does not reserve it.
-3. Configure npm account protection and a trusted publishing or equivalent provenance-capable path.
-4. Obtain any legal review needed for the MIT/CC BY-NC 4.0 mixed distribution and commercial-use claims.
-5. Confirm the release commit is the exact commit whose hosted matrix and dogfood evidence were signed.
-
-## 5. Publication Boundary
-
-This repository intentionally provides no automated publication workflow at MVP release-readiness stage. Commit, tag, push, GitHub Release, and npm publication require a separate explicit authorization after every checklist item is complete.
-
-If a published package is defective, prefer a fixed patch release and npm deprecation notice over destructive unpublishing, subject to registry policy and incident severity.
+Commit, tag, push, GitHub Release, and npm publication require separate explicit authorization after
+every checklist item is complete. Prefer a fixed patch release and deprecation notice over destructive
+unpublishing, subject to registry policy and incident severity.

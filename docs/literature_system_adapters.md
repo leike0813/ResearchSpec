@@ -32,17 +32,17 @@ Query 为先并只为已记录缺口调用 Acquisition；`protocol-multi-source`
 `library-bound` 必须暂停。空结果不证明相关文献不存在。
 
 所选 Skill 在调用时才检查 profile、bridge、authentication 与 capability；静态
-`connection_state: unchecked` 既不表示成功，也不表示失败。结果通过 hash-bound
+`connection_state: unchecked` 既不表示成功，也不表示失败。结果通过
 `ProviderRetrievalHandoff` 返回原 producer，仍是 working evidence；筛选、去重、验证、覆盖判断
-和 durable submit 由 ARSU producer 负责。
+和 stable-spec/handoff 记录由 ARSU producer 负责。
 
-Acquisition 的 item import、collection link 与 attachment import 需要同时绑定 run、route、
-adapter、library、collection、candidate、effect 与有效期的 `ManagedLibraryAuthorization`。
+Acquisition 的 item import、collection link 与 attachment import 需要同时绑定当前用户授权的
+producer、adapter、library、collection、candidate、effect 与有效期的 `ManagedLibraryAuthorization`。
 缺少授权时只能返回 candidate。该授权不扩展到 Curation；metadata、tag、note、merge、delete
 或 library-wide maintenance 必须单独路由 `zotero-library-curation` 并取得批准。
 
-Adapter 不能直接修改 ResearchSpec specs、state、artifact registry、Gate、Decision、
-transition 或 receipts。Route confirmation、plugin consent 和 Host Bridge readiness 都不等于
+Adapter 不能直接修改 ResearchSpec stable specs、subflow control、handoff、Gate、Decision 或
+transition。Route confirmation、plugin consent 和 Host Bridge readiness 都不等于
 managed-library authorization。
 
 `academic-pipeline/scripts/adapters/zotero.py` 是另一条人工离线路径：它只读取用户提供的 Better BibTeX JSON export，依赖用户自己的 Python 3.11+ 与 PyYAML，不读取实时 Zotero 状态，也不能替代固定 Adapter。

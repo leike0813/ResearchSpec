@@ -1,5 +1,4 @@
-import type { Diagnostic } from "../core/validation/types.js";
-import type { ValidationViolation } from "../core/contracts/runtime-protocol.js";
+import type { Diagnostic, ValidationViolation } from "../core/validation/types.js";
 
 export type ExitCode = 0 | 1 | 2 | 3 | 4;
 

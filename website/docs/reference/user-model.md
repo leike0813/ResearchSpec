@@ -40,7 +40,7 @@ The user confirms this summary before execution begins.
 
 ## Human Decisions
 
-Only these choices belong in the decision ledger:
+Only these choices belong in the owning subflow control:
 
 - Scope changes
 - Claim changes
@@ -48,7 +48,7 @@ Only these choices belong in the decision ledger:
 - Branch choices
 - Override choices
 
-Ordinary exploration belongs in the relevant artifact, not the decision ledger.
+Ordinary exploration belongs in working material, not formal Decisions.
 
 ## Verifying and Finishing
 

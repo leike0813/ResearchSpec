@@ -1,48 +1,38 @@
 @startuml
-title Shared：ResearchSpec 与 ARSU 的双模式架构和权威边界
+title ResearchSpec 与 ARSU 当前架构
 skinparam componentStyle rectangle
 skinparam shadowing false
-skinparam defaultTextAlignment center
-
-actor "Researcher" as User
-rectangle "Host Agent\n(Codex / Claude / etc.)" as Host
-
+actor Researcher
+rectangle "Host Agent" as Host
 package "Semantic plane" {
-  component "4 ARSU Skills\ndeep-research\nacademic-paper\nreviewer\npipeline" as ARSU
-  component "4 Companion Skills\nnavigate / propose\ndecide / verify" as Companion
-  component "Optional domain Skills" as Plugin
-  component "Zotero literature\nadapter Skills" as Zotero
+  component "4 ARSU Skills" as ARSU
+  component "4 Companion Skills" as Companion
+  component "7 Zotero Adapter Skills" as Zotero
+  component "Optional domain Skills" as Plugins
 }
-
 package "Deterministic control plane" {
-  component "ResearchSpec CLI\nstatus / instructions\nstart / submit / advance / decide" as CLI
-  component "Action evaluator\nadaptive availability / strict frontier" as Eval
+  component "ResearchSpec CLI\n16 commands" as CLI
+  component "Current workspace scanner" as Scanner
 }
-
-database "Typed workspace authority\nstable specs\nadaptive state / accepted evidence\nartifact registry / attempt ledger\nGate + Decision ledgers\nreceipts / changes / patches" as Files
-
-package "Build and delivery time" {
+database "Stable specs\nproject profile\nsubflow controls + handoffs\nproject changes" as Files
+package "Build time" {
   component "ARSU converter" as Converter
-  artifact "routing catalog\nadaptive profile + playbook\nstrict graph + generated Skills" as Catalog
+  artifact "routing catalog\nprofile projection\ngenerated Skills" as Projection
 }
-
-User --> Host : goal, confirmation, decision
-Host --> Companion : route / verify / decide
-Host --> ARSU : semantic production
-ARSU --> Plugin : bounded advisory help
-ARSU --> Zotero : bounded literature input
-Host --> CLI : canonical selectors + action-bound payloads
-CLI --> Eval
-Eval --> Files : read profile and evidence
-CLI --> Files : authority writes\nthrough transactions only
-Plugin ..> ARSU : working material
-Zotero ..> ARSU : working material
-Converter --> Catalog
-Catalog ..> ARSU : projected instructions
-Catalog ..> Eval : adaptive default / strict compatibility
-
+Researcher --> Host
+Host --> ARSU
+Host --> Companion
+ARSU --> Zotero
+ARSU --> Plugins
+Host --> CLI
+CLI --> Scanner
+Scanner --> Files
+CLI --> Files : atomic owning-control writes
+ARSU --> Files : specs / changes / handoff
+Converter --> Projection
+Projection ..> ARSU
 note right of Files
-  ARSU, Companion, plugins and adapters
-  never hand-edit authority files.
+  Boundary deliverables remain
+  outside researchspec/.
 end note
 @enduml
