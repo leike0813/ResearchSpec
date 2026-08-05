@@ -116,9 +116,10 @@ researchspec check all --strict
 
 > I want to study how generative AI affects writing instruction in higher education. Show candidate routes, prerequisites, boundary outputs, formal Gates, risks, and cost. Do not start a route until I confirm it.
 
-ResearchSpec 安装十五个固定项目 Skills：
+ResearchSpec 安装十七个固定项目 Skills：
 
 - **ARSU**：`deep-research`、`academic-paper`、`academic-paper-reviewer`、`academic-pipeline`
+- **Core**：`review-response`、`paper-humanizer`
 - **Companion**：`researchspec-navigate`、`researchspec-propose`、`researchspec-decide`、`researchspec-verify`
 - **Zotero 文献适配器**：`zotero-library-agent`、`zotero-library-query`、`zotero-literature-acquisition`、`zotero-literature-analysis`、`zotero-research-synthesis`、`zotero-library-curation`、`zotero-bridge-cli`
 

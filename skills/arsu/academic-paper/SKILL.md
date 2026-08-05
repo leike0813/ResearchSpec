@@ -1,6 +1,6 @@
 ---
 name: academic-paper
-description: "Academic manuscript planning, drafting, revision, citation work, disclosure, and format conversion. Routes: academic-paper:full, academic-paper:outline-only, academic-paper:revision, academic-paper:abstract-only, academic-paper:lit-review, academic-paper:format-convert, academic-paper:citation-check, academic-paper:plan, academic-paper:revision-coach, academic-paper:disclosure, academic-paper:rebuttal-audit. Use for: plan or draft an academic paper; revise a manuscript; prepare citation or submission outputs; respond to reviewer feedback. Near-miss routing: start from a topic and continue through review and finalization -> academic-pipeline:end-to-end; conduct a PRISMA systematic review -> deep-research:systematic-review; independently peer-review a manuscript -> academic-paper-reviewer:full. Before each start, present stable-spec and handoff prerequisites, boundary outputs, formal Gates, risk, cost, and obtain an instance-scoped confirmation."
+description: "Academic manuscript planning, drafting, revision, citation work, disclosure, and format conversion. Routes: academic-paper:full, academic-paper:outline-only, academic-paper:revision, academic-paper:abstract-only, academic-paper:lit-review, academic-paper:format-convert, academic-paper:citation-check, academic-paper:plan, academic-paper:revision-coach, academic-paper:disclosure, academic-paper:rebuttal-audit. Use for: plan or draft an academic paper; revise a manuscript; prepare citation or submission outputs; respond to reviewer feedback. Near-miss routing: start from a topic and continue through review and finalization -> academic-pipeline:end-to-end; coordinate a real post-submission revision response -> review-response:full; conduct a PRISMA systematic review -> deep-research:systematic-review; independently peer-review a manuscript -> academic-paper-reviewer:full. Before each start, present stable-spec and handoff prerequisites, boundary outputs, formal Gates, risk, cost, and obtain an instance-scoped confirmation."
 metadata:
   version: "3.2.0"
   last_updated: "2026-07-11"
@@ -50,6 +50,13 @@ separate current-subflow consent. Never install Quarto, contact the network,
 fall back to Pandoc, overwrite an existing target, or report a successful
 handoff after a partial or failed render.
 
+<!-- researchspec-paper-humanizer-reference:v1 -->
+When this route creates or edits manuscript prose (including outline, abstract,
+literature-review, revision, or full drafting), silently load the packaged
+paper-humanizer/references/prose-guidance.md reference first. This reference
+mode is advisory only: it does not start a humanizer route, run statistics,
+produce an audit, or request an additional confirmation. Do not load it for
+read-only review, citation audit, rebuttal audit, or format conversion.
 Produce semantic files at explicit project-relative paths outside
 researchspec/, then update the owning handoff with unique roles, types,
 purposes, paths, producers or intended consumers, and relevant limits. Do not

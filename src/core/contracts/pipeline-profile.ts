@@ -26,10 +26,10 @@ export const PipelineProfileChildSchema = z.strictObject({
 
 export const PipelineProfileSchema = z.strictObject({
   schema_version: z.literal(CURRENT_WORKSPACE_SCHEMA_VERSION),
-  profile_id: z.enum(["academic-pipeline", "review-response"]),
+  profile_id: z.enum(["academic-pipeline", "review-response", "paper-humanizer"]),
   profile_version: z.string().trim().min(1),
   entries: z.array(PipelineProfileEntrySchema).min(1),
-  children: z.array(PipelineProfileChildSchema).min(1),
+  children: z.array(PipelineProfileChildSchema),
   parallel_groups: z.array(z.strictObject({
     group_id: StableIdSchema,
     child_node_ids: IdListSchema.min(2),
@@ -61,7 +61,7 @@ export const PipelineProfileSchema = z.strictObject({
     review_node_id: StableIdSchema,
     continue_option_id: StableIdSchema,
     exit_option_id: StableIdSchema,
-  }),
+  }).nullable(),
 }).superRefine((value, context) => {
   unique(value.entries, (item) => item.entry_id, "entries", context);
   unique(value.children, (item) => item.node_id, "children", context);
@@ -71,6 +71,7 @@ export const PipelineProfileSchema = z.strictObject({
   unique(value.transitions, (item) => item.transition_id, "transitions", context);
 
   const childIds = new Set(value.children.map((item) => item.node_id));
+  const gateOwnerIds = new Set([...childIds, ...(value.profile_id === "paper-humanizer" ? value.entries.map((item) => item.entry_id) : [])]);
   const gateOwners = new Map(value.gates.map((item) => [item.gate_id, item.owner_node_id]));
   const branchOwners = new Map(value.branches.map((item) => [item.decision_id, item.owner_node_id]));
   for (const [index, child] of value.children.entries()) {
@@ -109,7 +110,7 @@ export const PipelineProfileSchema = z.strictObject({
     }
   }
   for (const [index, gate] of value.gates.entries()) {
-    ref(gate.owner_node_id, childIds, ["gates", index, "owner_node_id"], "child node", context);
+    ref(gate.owner_node_id, gateOwnerIds, ["gates", index, "owner_node_id"], "child or standalone entry", context);
     uniqueStrings(gate.verdicts, ["gates", index, "verdicts"], context);
   }
   for (const [index, branch] of value.branches.entries()) {
@@ -133,12 +134,20 @@ export const PipelineProfileSchema = z.strictObject({
   }
 
   const template = value.revision_round_template;
-  ref(template.revision_node_id, childIds, ["revision_round_template", "revision_node_id"], "child node", context);
-  ref(template.review_node_id, childIds, ["revision_round_template", "review_node_id"], "child node", context);
-  const reviewBranch = value.branches.find((item) => item.owner_node_id === template.review_node_id);
-  const reviewOptions = new Set(reviewBranch?.options.map((item) => item.option_id) ?? []);
-  ref(template.continue_option_id, reviewOptions, ["revision_round_template", "continue_option_id"], "review branch option", context);
-  ref(template.exit_option_id, reviewOptions, ["revision_round_template", "exit_option_id"], "review branch option", context);
+  if (value.profile_id === "paper-humanizer") {
+    if (value.children.length > 0 || value.parallel_groups.length > 0 || value.branches.length > 0 || value.transitions.length > 0 || template !== null) {
+      context.addIssue({ code: "custom", path: ["profile_id"], message: "Paper Humanizer profile must be a one-shot profile without workflow graph state." });
+    }
+  } else if (template === null) {
+    context.addIssue({ code: "custom", path: ["revision_round_template"], message: "Pipeline profiles require a revision round template." });
+  } else {
+    ref(template.revision_node_id, childIds, ["revision_round_template", "revision_node_id"], "child node", context);
+    ref(template.review_node_id, childIds, ["revision_round_template", "review_node_id"], "child node", context);
+    const reviewBranch = value.branches.find((item) => item.owner_node_id === template.review_node_id);
+    const reviewOptions = new Set(reviewBranch?.options.map((item) => item.option_id) ?? []);
+    ref(template.continue_option_id, reviewOptions, ["revision_round_template", "continue_option_id"], "review branch option", context);
+    ref(template.exit_option_id, reviewOptions, ["revision_round_template", "exit_option_id"], "review branch option", context);
+  }
 });
 
 function unique<T>(

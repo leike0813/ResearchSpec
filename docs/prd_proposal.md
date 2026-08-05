@@ -11,7 +11,7 @@ Gates 和交付物路径。
 
 ## 2. 用户表面
 
-固定表面包含四个 ARSU Skills、四个 Companion Skills、七个 Zotero Adapter Skills 和十六个
+固定表面包含四个 ARSU Skills、两个 Core Skills、四个 Companion Skills、七个 Zotero Adapter Skills 和十六个
 CLI commands。可选 domain Skills 只提供经审查的语义辅助。
 
 `init` 准备 workspace，不启动工作。模糊、跨 Skill、恢复、解释和导出请求进入 Navigate；明确

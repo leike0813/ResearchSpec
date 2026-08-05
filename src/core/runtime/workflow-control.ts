@@ -1,4 +1,5 @@
 import type { PipelineProfile } from "../contracts/pipeline-profile.js";
+import { isStandaloneRoute } from "../../arsu-converter/routing/owners.js";
 import type { SubflowControl } from "../contracts/subflow-control.js";
 import type { CurrentWorkspaceIndex, SubflowRecord } from "./workspace-index.js";
 
@@ -51,7 +52,11 @@ export function profileForRecord(index: CurrentWorkspaceIndex, record: Pick<Subf
 }
 
 export function evaluateWorkflowControl(index: CurrentWorkspaceIndex): WorkflowControl {
-  const frontier: WorkflowFrontierItem[] = index.profile.entries.map((entry) => ({
+  const profileEntries = [
+    ...index.profile.entries,
+    ...(index.profiles ? [...index.profiles.values()].filter((profile) => profile.profile_id !== index.profile.profile_id).flatMap((profile) => profile.entries) : []),
+  ];
+  const frontier: WorkflowFrontierItem[] = profileEntries.map((entry) => ({
     kind: "route",
     selector: `route:${entry.route_ref}`,
     route_ref: entry.route_ref,
@@ -129,7 +134,7 @@ export function childStartCandidates(index: CurrentWorkspaceIndex): ChildStartCa
   const candidates: ChildStartCandidate[] = [];
   for (const parent of index.subflows) {
     if (parent.control.profile === null || parent.control.parent !== null || parent.control.status !== "active") continue;
-    if (parent.control.route_ref.startsWith("review-response:")) continue;
+    if (isStandaloneRoute(parent.control.route_ref)) continue;
     for (const node of nodesAtCheckpoint(index, parent, parent.control.checkpoint)) {
       const round = nextRound(index, parent, node);
       if (node.multiplicity === "repeatable" && round === undefined) continue;
@@ -148,7 +153,7 @@ export function eligibleProfileTransitions(index: CurrentWorkspaceIndex, parent:
   if (parent.control.profile === null || parent.control.parent !== null || parent.control.status !== "active") return [];
   const profile = profileForRecord(index, parent);
   if (!profile) return [];
-  if (parent.control.route_ref.startsWith("review-response:")) {
+  if (isStandaloneRoute(parent.control.route_ref)) {
     return profile.transitions.filter((transition) => transition.from === parent.control.checkpoint
       && transition.required_gate_ids.every((gateId) => parent.control.gates.find((gate) => gate.gate_id === gateId && isGateAccepted(gate))));
   }
@@ -175,7 +180,7 @@ export function isSubflowCompletionReady(index: CurrentWorkspaceIndex, record: S
   if (!profile) return false;
   const finalNode = profile.children.find((item) => item.node_id === control.checkpoint);
   if (!finalNode) return false;
-  if (control.route_ref.startsWith("review-response:")) return control.checkpoint === "final-assembly";
+  if (isStandaloneRoute(control.route_ref)) return control.status === "active" || control.status === "blocked";
   return Boolean(latestCompletedChild(index, control.instance_id, finalNode.node_id));
 }
 
@@ -239,6 +244,7 @@ function branchUnlocks(index: CurrentWorkspaceIndex, parent: SubflowRecord, node
 function nextRound(index: CurrentWorkspaceIndex, parent: SubflowRecord, node: PipelineProfileChild): number | undefined {
   if (node.multiplicity !== "repeatable") return undefined;
   const template = (profileForRecord(index, parent) ?? index.profile).revision_round_template;
+  if (!template) return undefined;
   if (node.node_id === template.review_node_id) {
     const revisions = childrenFor(index, parent.control.instance_id, template.revision_node_id)
       .filter((item) => item.control.status === "complete" && item.control.round !== undefined)

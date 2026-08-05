@@ -40,7 +40,7 @@ function selectCurrentPackFiles(index: CurrentWorkspaceIndex, scope: CurrentPack
   const change = (file: CurrentWorkspaceFile) => /^changes\/(?:archive\/)?[^/]+\/(change\.md|design\.md|tasks\.md|delta\.yaml)$/.test(file.relativePath);
   if (scope === "all") return files.filter((file) => fixed(file) || subflow(file) || change(file));
   if (scope === "specs") return files.filter((file) => file.relativePath.startsWith("specs/"));
-  if (scope === "profile") return files.filter((file) => file.relativePath === "profiles/academic-pipeline.yaml");
+  if (scope === "profile") return files.filter((file) => file.relativePath.startsWith("profiles/") && file.relativePath.endsWith(".yaml"));
   if (scope === "subflows") return files.filter(subflow);
   if (scope === "changes") return files.filter(change);
   if (scope.startsWith("subflow:")) {

@@ -2,6 +2,7 @@ import { ARSU_ROUTING_CATALOG } from "./catalog.js";
 import type { ArsuRouteDefinition } from "./contracts.js";
 import { renderArsuRouteSummary } from "./projection.js";
 import { REVIEW_RESPONSE_ROUTE } from "./review-response.js";
+import { PAPER_HUMANIZER_ROUTES } from "./paper-humanizer.js";
 
 export function renderNavigateRoutingProjection(): string {
   const sections = ARSU_ROUTING_CATALOG.skills.map((skill) => [
@@ -31,6 +32,15 @@ export function renderNavigateRoutingProjection(): string {
       "| Route | Intent | Boundary outputs | Prerequisites | Formal Gates | Risk / cost | Start confirmation |",
       "| --- | --- | --- | --- | --- | --- | --- |",
       renderRouteRow(REVIEW_RESPONSE_ROUTE),
+    ].join("\n"),
+    [
+      "### Paper Humanizer (`paper-humanizer`)",
+      "",
+      "Standalone manuscript-prose diagnostics and humanization. These routes do not belong to the academic-pipeline graph.",
+      "",
+      "| Route | Intent | Boundary outputs | Prerequisites | Formal Gates | Risk / cost | Start confirmation |",
+      "| --- | --- | --- | --- | --- | --- | --- |",
+      ...PAPER_HUMANIZER_ROUTES.map(renderRouteRow),
     ].join("\n"),
   ].join("\n\n");
 }

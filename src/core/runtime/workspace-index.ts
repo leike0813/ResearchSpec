@@ -32,7 +32,7 @@ const REQUIRED_FILES = [
   "specs/claims.yaml",
   "specs/manuscript.yaml",
 ] as const;
-const OPTIONAL_PROFILE_FILES = ["profiles/review-response.yaml"] as const;
+const OPTIONAL_PROFILE_FILES = ["profiles/review-response.yaml", "profiles/paper-humanizer.yaml"] as const;
 
 export interface CurrentWorkspaceFile {
   relativePath: string;

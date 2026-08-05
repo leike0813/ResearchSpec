@@ -15,6 +15,7 @@ Zotero、论文文件或其它外部研究材料。
 
 - 四个 ARSU Skills：`deep-research`、`academic-paper`、
   `academic-paper-reviewer`、`academic-pipeline`；
+- 两个 Core Skills：`review-response`、`paper-humanizer`；
 - 四个 Companion Skills：`researchspec-navigate`、`researchspec-propose`、
   `researchspec-decide`、`researchspec-verify`；
 - 七个 Zotero literature Adapter Skills：`zotero-library-agent`、
@@ -105,6 +106,10 @@ Project change 的 `accepted` 只记录决定，不自动编辑 specs。实际�
 
 模糊、跨 Skill、恢复、解释和导出请求先进入 `researchspec-navigate`。用户明确指定 ARSU Skill
 或 mode 时，可以直接路由，但仍必须执行相同的 prerequisite 检查和 route summary。
+
+`paper-humanizer:review` 是独立只读诊断子流；`paper-humanizer:full` 是交互式去 AI 化子流，
+只在最终候选验收时使用 `paper-humanizer-acceptance` Gate。两者不属于
+`academic-paper` 或 `academic-pipeline` 的动态 child。
 
 启动前，Agent 必须向用户汇总：
 
@@ -267,4 +272,4 @@ QMD formatting 缺少 Quarto 或探测为 unknown 时保持可写但不可最终
 - plugin/Zotero 不取得 control authority；
 - status/list/show/check/doctor 的只读性；
 - pack 排除私有 work 和外部文件字节；
-- 四个 ARSU、四个 Companion、七个 Zotero Skills 与十六命令的一致投影。
+- 四个 ARSU、两个 Core、四个 Companion、七个 Zotero Skills 与十六命令的一致投影。

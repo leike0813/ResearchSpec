@@ -4,6 +4,7 @@ import path from "node:path";
 import { parse as parseYaml, stringify } from "yaml";
 
 import { getArsuRoute } from "../../arsu-converter/routing/catalog.js";
+import { isStandaloneRoute, standaloneProfileOwner } from "../../arsu-converter/routing/owners.js";
 import { RouteRefSchema, type RouteRef } from "../../arsu-converter/routing/contracts.js";
 import { SubflowStartCommandSchema, type SubflowStartCommand } from "../contracts/subflow-command.js";
 import {
@@ -141,7 +142,7 @@ function validateManuscriptDeliveryStart(
   const usesManuscript = routeRef.startsWith("academic-paper:")
     || routeRef.startsWith("academic-paper-reviewer:")
     || routeRef.startsWith("academic-pipeline:")
-    || routeRef.startsWith("review-response:");
+    || isStandaloneRoute(routeRef);
   if (!usesManuscript) {
     if (command.render_consent) throw new SubflowControlError("render_consent_route_invalid", "Render consent is valid only for format conversion.", "usage");
     return;
@@ -155,7 +156,7 @@ function validateManuscriptDeliveryStart(
   if (command.manuscript_delivery.working_format === null) {
     throw new SubflowControlError("manuscript_format_unselected", "Select and confirm the manuscript working format before starting this route.", "conflict");
   }
-  const qmdWritingRoute = routeRef.startsWith("academic-paper:") || routeRef.startsWith("academic-pipeline:") || routeRef.startsWith("review-response:");
+  const qmdWritingRoute = routeRef.startsWith("academic-paper:") || routeRef.startsWith("academic-pipeline:") || isStandaloneRoute(routeRef);
   if (command.manuscript_delivery.working_format === "qmd" && qmdWritingRoute && !command.quarto_probe) {
     throw new SubflowControlError("quarto_probe_missing", "QMD writing and resume starts require a current Quarto probe summary.", "usage");
   }
@@ -330,14 +331,19 @@ function resolveStartContext(index: CurrentWorkspaceIndex, routeRef: string, com
       checkpoint: node.node_id,
     };
   }
-  const selectedProfile = routeRef.startsWith("review-response:") ? index.profiles?.get("review-response") : index.profile;
+  const owner = standaloneProfileOwner(routeRef);
+  const selectedProfile = owner ? index.profiles?.get(owner) : index.profile;
   const entry = command.profile_entry
     ? selectedProfile?.entries.find((item) => item.entry_id === command.profile_entry && item.route_ref === routeRef)
     : selectedProfile?.entries.find((item) => item.route_ref === routeRef);
   if (entry) {
-    if (!routeRef.startsWith("review-response:") && command.formal_gates.length > 0) throw new SubflowControlError("start_gates_mismatch", "Pipeline parent confirmation cannot declare child Gates.", "conflict");
-    if (routeRef.startsWith("review-response:") && command.formal_gates.some((gateId) => !selectedProfile?.gates.some((gate) => gate.gate_id === gateId))) {
-      throw new SubflowControlError("start_gates_mismatch", "Confirmed Gates must belong to the review-response profile.", "conflict");
+    if (!isStandaloneRoute(routeRef) && command.formal_gates.length > 0) throw new SubflowControlError("start_gates_mismatch", "Pipeline parent confirmation cannot declare child Gates.", "conflict");
+    if (isStandaloneRoute(routeRef)) {
+      const route = getArsuRoute(RouteRefSchema.parse(routeRef) as RouteRef);
+      const allowedGates = new Set([...route.gate_policy.gate_kinds, ...(selectedProfile?.gates.map((gate) => gate.gate_id) ?? [])]);
+      if (command.formal_gates.some((gateId) => !allowedGates.has(gateId)) || route.gate_policy.gate_kinds.some((gateId) => !command.formal_gates.includes(gateId))) {
+        throw new SubflowControlError("start_gates_mismatch", "Confirmed Gates must match the standalone route policy.", "conflict");
+      }
     }
     return {
       profile: profileReference(selectedProfile),
@@ -414,6 +420,9 @@ async function createSubflowDirectory(directory: string, control: SubflowControl
     if (control.route_ref === "review-response:full") {
       await mkdir(path.join(temporary, "views"));
       await mkdir(path.join(temporary, "work", "review-response"));
+    }
+    if (control.route_ref.startsWith("paper-humanizer:")) {
+      await mkdir(path.join(temporary, "work", "paper-humanizer"));
     }
     await writeFile(path.join(temporary, "control.yaml"), stringify(control), { encoding: "utf8", flag: "wx" });
     await writeFile(path.join(temporary, "handoff.md"), renderSubflowHandoff(handoff), { encoding: "utf8", flag: "wx" });

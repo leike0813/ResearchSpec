@@ -9,6 +9,7 @@ import type {
 export const RESEARCHSPEC_PREFLIGHT_PROFILE_ID = "researchspec-preflight-v10";
 export const RESEARCHSPEC_PREFLIGHT_MARKER = "<!-- researchspec-contract-preflight:v10 -->";
 export const RESEARCHSPEC_LITERATURE_ADAPTER_MARKER = "<!-- researchspec-literature-adapter:zotero-library:v2 -->";
+export const PAPER_HUMANIZER_REFERENCE_MARKER = "<!-- researchspec-paper-humanizer-reference:v1 -->";
 
 export const RESEARCHSPEC_MUTATION_OWNERSHIP = {
   stable_specs: "human_or_agent_direct_edit_with_project_change_for_high_impact_updates",
@@ -131,6 +132,7 @@ subflow's control.yaml as its sole runtime authority and its handoff.md as
 the boundary input/output reference. Do not reconstruct the frontier from Skill
 prose; use directed instructions selectors and the current status view.
 ${manuscriptDeliveryBlock(skillGroup)}
+${paperHumanizerReferenceBlock(skillGroup)}
 Produce semantic files at explicit project-relative paths outside
 researchspec/, then update the owning handoff with unique roles, types,
 purposes, paths, producers or intended consumers, and relevant limits. Do not
@@ -163,6 +165,22 @@ This generated block uses profile ${RESEARCHSPEC_PREFLIGHT_PROFILE_ID} for
 ${skillGroup} and the current file-based protocol:
 status -> instructions <selector> -> start/decide/advance -> status.
 `;
+}
+
+function paperHumanizerReferenceBlock(skillGroup: string): string {
+  if (skillGroup === "academic-paper") {
+    return `${PAPER_HUMANIZER_REFERENCE_MARKER}
+When this route creates or edits manuscript prose (including outline, abstract,
+literature-review, revision, or full drafting), silently load the packaged
+paper-humanizer/references/prose-guidance.md reference first. This reference
+mode is advisory only: it does not start a humanizer route, run statistics,
+produce an audit, or request an additional confirmation. Do not load it for
+read-only review, citation audit, rebuttal audit, or format conversion.`;
+  }
+  if (skillGroup === "academic-pipeline") {
+    return "Pass the paper-humanizer manuscript-prose reference constraint to the active academic-paper producer; the pipeline does not execute humanization itself.";
+  }
+  return "";
 }
 
 function manuscriptDeliveryBlock(skillGroup: string): string {

@@ -20,6 +20,7 @@ const expectedSkills = [
   "academic-paper-reviewer",
   "academic-pipeline",
   "deep-research",
+  "paper-humanizer",
   "researchspec-decide",
   "researchspec-navigate",
   "researchspec-propose",
@@ -131,6 +132,8 @@ try {
   const currentProfile = parseYaml(await readFile(path.join(currentWorkspace, "profiles", "academic-pipeline.yaml"), "utf8"));
   assert(currentConfig?.schema_version === "1", "Installed init did not create schema 1 config.");
   assert(currentProfile?.schema_version === "1" && currentProfile?.profile_id === "academic-pipeline", "Installed init did not project the current academic-pipeline profile.");
+  const humanizerProfile = parseYaml(await readFile(path.join(currentWorkspace, "profiles", "paper-humanizer.yaml"), "utf8"));
+  assert(humanizerProfile?.schema_version === "1" && humanizerProfile?.profile_id === "paper-humanizer", "Installed init did not project the current paper-humanizer profile.");
   assert(equal((await directoryNames(currentWorkspace)).sort(), ["changes", "profiles", "specs", "subflows"]), "Installed current workspace directory set is invalid.");
   for (const spec of ["project.md", "sources.yaml", "claims.yaml", "manuscript.yaml"]) {
     await readFile(path.join(currentWorkspace, "specs", spec), "utf8");
@@ -437,7 +440,7 @@ async function verifyAllToolDelivery(projectRoot, handbookDigest) {
     fixedSkillsByTool.set(installation.tool_id, skills);
   }
   assert(fixedSkillsByTool.size === 31, `Expected fixed Skills for 31 tools, found ${String(fixedSkillsByTool.size)}.`);
-  for (const [toolId, skills] of fixedSkillsByTool) assert(skills.size === 16, `Fixed Skill count differs for ${String(toolId)}.`);
+  for (const [toolId, skills] of fixedSkillsByTool) assert(skills.size === 17, `Fixed Skill count differs for ${String(toolId)}.`);
 }
 
 function markdownRepositoryLinks(markdown) {

@@ -41,6 +41,7 @@ records `renderer: quarto`.
 
 
 
+
 Produce semantic files at explicit project-relative paths outside
 researchspec/, then update the owning handoff with unique roles, types,
 purposes, paths, producers or intended consumers, and relevant limits. Do not

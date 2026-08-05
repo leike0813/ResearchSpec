@@ -1,0 +1,22 @@
+{
+  "schema_version": "1",
+  "skill_id": "paper-humanizer",
+  "source_commit": "1a31f2d0ff6dab94c799f7ae1a3a469aea3e5394",
+  "license": "MIT",
+  "runtime": "node-22-standard-library",
+  "capabilities": [
+    "document-analysis",
+    "protected-region-preservation",
+    "sentence-statistics",
+    "review-diagnostics",
+    "candidate-validation",
+    "round-trip-serialization"
+  ],
+  "excluded": [
+    "agents/openai.yaml",
+    "upstream-tests",
+    "openspec-artifacts",
+    "research-materials",
+    "python-runtime"
+  ]
+}

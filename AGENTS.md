@@ -85,13 +85,13 @@ The locked direction is:
 
 The fixed user-visible agent surface is exactly four ARSU Skills
 (`deep-research`, `academic-paper`, `academic-paper-reviewer`,
-`academic-pipeline`) and four Companion Skills (`researchspec-navigate`,
+`academic-pipeline`), two Core Skills (`review-response`, `paper-humanizer`), and four Companion Skills (`researchspec-navigate`,
 `researchspec-propose`, `researchspec-decide`, `researchspec-verify`), plus seven
 fixed Zotero literature Adapter Skills (`zotero-library-agent`,
 `zotero-library-query`, `zotero-literature-acquisition`,
 `zotero-literature-analysis`, `zotero-research-synthesis`,
 `zotero-library-curation`, `zotero-bridge-cli`). The 31 registered tools
-therefore receive fifteen fixed Skills, while the 28 command-capable tools
+therefore receive seventeen fixed Skills, while the 28 command-capable tools
 receive the sixteen current command wrappers.
 Optional
 ResearchSpec-maintained domain plugin Skills may extend that base surface from

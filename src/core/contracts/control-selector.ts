@@ -9,7 +9,7 @@ export const DecisionControlSelectorSchema = z.string().regex(/^decision:[A-Za-z
 export const ChangeControlSelectorSchema = z.templateLiteral(["change:", StableIdSchema]);
 export const HandoffControlSelectorSchema = z.templateLiteral(["handoff:", StableIdSchema]);
 export const SpecInspectionSelectorSchema = z.enum(["spec:project", "spec:sources", "spec:claims", "spec:manuscript"]);
-export const ProfileInspectionSelectorSchema = z.enum(["profile:academic-pipeline", "profile:review-response"]);
+export const ProfileInspectionSelectorSchema = z.enum(["profile:academic-pipeline", "profile:review-response", "profile:paper-humanizer"]);
 export const ToolInspectionSelectorSchema = z.templateLiteral(["tool:", StableIdSchema]);
 
 export const ControlSelectorSchema = z.union([
@@ -47,6 +47,6 @@ export const CONTROL_SELECTOR_FAMILY_DISPLAYS = [
 export const INSPECTION_SELECTOR_FAMILY_DISPLAYS = [
   ...CONTROL_SELECTOR_FAMILY_DISPLAYS.filter((item) => item.id !== "route"),
   { id: "spec", patterns: ["spec:project", "spec:sources", "spec:claims", "spec:manuscript"] },
-  { id: "profile", patterns: ["profile:academic-pipeline", "profile:review-response"] },
+  { id: "profile", patterns: ["profile:academic-pipeline", "profile:review-response", "profile:paper-humanizer"] },
   { id: "tool", patterns: ["tool:<tool-id>"] },
 ] as const;

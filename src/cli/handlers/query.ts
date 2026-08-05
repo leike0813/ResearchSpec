@@ -1,4 +1,5 @@
 import { getArsuRoute } from "../../arsu-converter/routing/catalog.js";
+import { standaloneProfileOwner } from "../../arsu-converter/routing/owners.js";
 import type { RouteRef } from "../../arsu-converter/routing/contracts.js";
 import { ControlSelectorSchema } from "../../core/contracts/control-selector.js";
 import { currentHandoff } from "../../core/runtime/handoff.js";
@@ -117,13 +118,15 @@ export async function handleCurrentInstructions(selector: string, context: Comma
     try { route = getArsuRoute(routeRef); }
     catch { throw new CliError("route_not_found", `Unknown route: ${routeRef}`, 1); }
     const candidates = workflow.frontier.filter((item) => item.kind === "route" && item.selector === selector);
-    const selectedProfile = routeRef.startsWith("review-response:") ? index.profiles?.get("review-response") : index.profile;
+    const owner = standaloneProfileOwner(routeRef);
+    const selectedProfile = owner ? index.profiles?.get(owner) : index.profile;
     const profileEntry = selectedProfile?.entries.find((item) => item.route_ref === routeRef);
     const childCandidates = candidates.filter((item) => item.kind === "route" && item.node_id !== undefined);
     const firstChild = childCandidates[0];
+    const standaloneGateIds = selectedProfile?.gates.map((item) => item.gate_id) ?? [];
     const formalGates = childCandidates.length === 1
       ? selectedProfile?.children.find((item) => item.node_id === (firstChild?.kind === "route" ? firstChild.node_id : undefined))?.required_gate_ids ?? []
-      : routeRef.startsWith("review-response:") ? selectedProfile?.gates.map((item) => item.gate_id) ?? route.gate_policy.gate_kinds
+      : standaloneProfileOwner(routeRef) ? (route.gate_policy.level === "none" ? [] : (standaloneGateIds.length > 0 ? standaloneGateIds : route.gate_policy.gate_kinds))
         : profileEntry || route.gate_policy.level !== "required" ? [] : route.gate_policy.gate_kinds;
     const childDefinition = childCandidates.length === 1 && firstChild?.kind === "route"
       ? selectedProfile?.children.find((item) => item.node_id === firstChild.node_id)
@@ -131,9 +134,9 @@ export async function handleCurrentInstructions(selector: string, context: Comma
     const usesManuscript = routeRef.startsWith("academic-paper:")
       || routeRef.startsWith("academic-paper-reviewer:")
       || routeRef.startsWith("academic-pipeline:")
-      || routeRef.startsWith("review-response:");
+      || standaloneProfileOwner(routeRef) !== undefined;
     const qmdProbeExpected = index.manuscript.delivery.working_format === "qmd"
-      && (routeRef.startsWith("academic-paper:") || routeRef.startsWith("academic-pipeline:") || routeRef.startsWith("review-response:"));
+      && (routeRef.startsWith("academic-paper:") || routeRef.startsWith("academic-pipeline:") || standaloneProfileOwner(routeRef) !== undefined);
     const formatConversion = routeRef === "academic-paper:format-convert";
     return success("instructions", {
       selector,

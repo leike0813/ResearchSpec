@@ -5,6 +5,8 @@ import { ACADEMIC_PIPELINE_PROFILE } from "../../arsu-converter/workflow/academi
 import { ACADEMIC_PIPELINE_PROFILE_PROJECTION } from "../../arsu-converter/workflow/generate.js";
 import { REVIEW_RESPONSE_PROFILE } from "../../arsu-converter/workflow/review-response.js";
 import { REVIEW_RESPONSE_PROFILE_PROJECTION } from "../../arsu-converter/workflow/generate.js";
+import { PAPER_HUMANIZER_PROFILE } from "../../arsu-converter/workflow/paper-humanizer.js";
+import { PAPER_HUMANIZER_PROFILE_PROJECTION } from "../../arsu-converter/workflow/generate.js";
 import { inspectLiteratureAdapters } from "../../literature-adapters/inspect.js";
 import { ProjectChangeDeltaSchema } from "../contracts/project-change.js";
 import { ChangeDocumentError, validateProjectChangeDelta } from "../runtime/change-documents.js";
@@ -53,6 +55,7 @@ function profileOwnershipDiagnostics(index: Awaited<ReturnType<typeof loadCurren
   const definitions = [
     { profile: ACADEMIC_PIPELINE_PROFILE, projection: ACADEMIC_PIPELINE_PROFILE_PROJECTION },
     { profile: REVIEW_RESPONSE_PROFILE, projection: REVIEW_RESPONSE_PROFILE_PROJECTION },
+    { profile: PAPER_HUMANIZER_PROFILE, projection: PAPER_HUMANIZER_PROFILE_PROJECTION },
   ] as const;
   const diagnostics: Diagnostic[] = [];
   for (const definition of definitions) {

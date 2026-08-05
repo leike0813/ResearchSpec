@@ -6,7 +6,7 @@ ResearchSpec 将 Zotero 集成作为独立的固定文献系统 Adapter 交付�
 
 `researchspec init` 和 `researchspec update` 会离线复制当前平台的 `zotero-bridge-cli` runtime 到项目根 `.zotero-bridge/bin/`，并创建 `.zotero-bridge/profile.template.json`。模板不包含 token、真实 profile、PATH 修改或用户目录写入。Windows 使用 `zotero-bridge.exe` 和项目内 `.cmd` shim；POSIX runtime 使用 `0755`。
 
-七个 Agent-neutral Skills 会投影到每个已选择的 Agent tool：`zotero-library-agent` 是宽泛路由器；`zotero-library-query`、`zotero-literature-acquisition`、`zotero-literature-analysis`、`zotero-research-synthesis` 与 `zotero-library-curation` 是任务入口；`zotero-bridge-cli` 是精确操作机制。没有 Agent tool 时，共享 runtime 仍会安装，Skill 投影在 manifest 中记录为 `deferred`。固定 surface 因此是 4 个 ARSU Skills、4 个 Companion Skills 和 7 个 Zotero Adapter Skills；31 个工具各得到 15 个固定 Skills，28 个 command-capable 工具仍各只有 8 个 wrappers。
+七个 Agent-neutral Skills 会投影到每个已选择的 Agent tool：`zotero-library-agent` 是宽泛路由器；`zotero-library-query`、`zotero-literature-acquisition`、`zotero-literature-analysis`、`zotero-research-synthesis` 与 `zotero-library-curation` 是任务入口；`zotero-bridge-cli` 是精确操作机制。没有 Agent tool 时，共享 runtime 仍会安装，Skill 投影在 manifest 中记录为 `deferred`。固定 surface 因此是 4 个 ARSU Skills、2 个 Core Skills、4 个 Companion Skills 和 7 个 Zotero Adapter Skills；31 个工具各得到 17 个固定 Skills，28 个 command-capable 工具仍各只有 16 个 wrappers。
 
 交付过程不运行上游 installer、runtime、Python helper 或证据工具，不安装 Zotero XPI/backend，不访问网络，也不写用户全局 Zotero 状态。ResearchSpec release 携带全部七个平台资产，项目初始化只选择当前平台。
 

@@ -37,7 +37,7 @@ project/
 └── <host-specific Skill projection>
 ```
 
-固定 Skill 表面是 4 个 ARSU Skills、4 个 Companion Skills 和 7 个 Zotero Adapter Skills。
+固定 Skill 表面是 4 个 ARSU Skills、2 个 Core Skills、4 个 Companion Skills 和 7 个 Zotero Adapter Skills。
 没有安装任何 domain plugin。`tool-installation-manifest.json` 只管理 ResearchSpec 生成的软件、
 profile 和 Skill 投影，不登记研究交付物。
 
