@@ -11,6 +11,8 @@ const HandoffBaseSchema = z.strictObject({
   purpose: z.string().trim().min(1),
   format: QuartoFormatIdSchema.optional(),
   renderer: z.literal("quarto").optional(),
+  path_kind: z.enum(["file", "directory"]).optional(),
+  entry_path: z.string().trim().min(1).optional(),
   limits: z.array(z.string().trim().min(1)).optional(),
   notes: z.string().trim().min(1).optional(),
 }).superRefine(validateFormatDescriptor);
@@ -62,7 +64,7 @@ function addDuplicateRoleIssues(values: readonly { role: string }[], field: stri
 }
 
 function validateFormatDescriptor(
-  value: { path: string; format?: string; renderer?: "quarto" },
+  value: { path: string; format?: string; renderer?: "quarto"; path_kind?: "file" | "directory"; entry_path?: string },
   context: z.RefinementCtx,
 ): void {
   if (value.format === "qmd" && !value.path.toLowerCase().endsWith(".qmd")) {
@@ -70,6 +72,16 @@ function validateFormatDescriptor(
   }
   if (value.renderer === "quarto" && value.format === undefined) {
     context.addIssue({ code: "custom", path: ["format"], message: "Quarto-rendered handoffs require a target format ID." });
+  }
+  if (value.format === "latex" && !value.path.toLowerCase().endsWith(".tex")) {
+    context.addIssue({ code: "custom", path: ["path"], message: "Single-file LaTeX handoff paths must end in .tex." });
+  }
+  if (value.format === "latex-project") {
+    if (value.path_kind !== "directory") context.addIssue({ code: "custom", path: ["path_kind"], message: "LaTeX project handoffs require a directory path_kind." });
+    if (!value.entry_path || !value.entry_path.toLowerCase().endsWith(".tex")) context.addIssue({ code: "custom", path: ["entry_path"], message: "LaTeX project handoffs require a .tex entry_path." });
+  }
+  if (value.path_kind === "directory" && value.format !== "latex-project") {
+    context.addIssue({ code: "custom", path: ["path_kind"], message: "Only LaTeX projects may use directory path_kind." });
   }
 }
 

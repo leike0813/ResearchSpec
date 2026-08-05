@@ -9,6 +9,7 @@ import { COMMAND_WRAPPER_CONTENTS, renderCommand } from "./command-renderer.js";
 import { renderCliHandbook } from "../cli/handbook.js";
 import { getTool } from "./tools.js";
 import { ARSU_SKILL_IDS } from "../arsu-converter/routing/contracts.js";
+import { CORE_SKILL_IDS } from "../core-skills/catalog.js";
 import { MIT_LICENSE_TEXT } from "../licensing.js";
 import { filesForSkill, pluginSkillRoot, resolveDomainSelection, type LoadedPluginRegistry } from "../plugins/registry.js";
 import { installationKey, type ManagedInstallation, type ManagedInstallationSource } from "./installations.js";
@@ -47,6 +48,17 @@ export async function planToolDelivery(input: {
           const relativeTarget = posix(path.relative(input.projectRoot, target));
           const content = await readFile(sourceFile);
           await addPlanned(target, relativeTarget, "project", content, { kind: "arsu-skill", skill_id: skillId }, toolId);
+        }
+      }
+
+      for (const skillId of CORE_SKILL_IDS) {
+        const sourceRoot = path.join(PACKAGE_ROOT, "skills", skillId);
+        for (const sourceFile of await walkFiles(sourceRoot)) {
+          const relativeAsset = path.relative(sourceRoot, sourceFile);
+          const target = path.join(input.projectRoot, tool.skillsDir, "skills", skillId, relativeAsset);
+          const relativeTarget = posix(path.relative(input.projectRoot, target));
+          const content = await readFile(sourceFile);
+          await addPlanned(target, relativeTarget, "project", content, { kind: "core-skill", skill_id: skillId }, toolId);
         }
       }
 

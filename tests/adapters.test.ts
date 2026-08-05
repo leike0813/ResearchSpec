@@ -109,7 +109,7 @@ void test("Copilot uses its explicit detection paths", async () => {
   await cleanup(root);
 });
 
-void test("delivery projects fifteen fixed Skills and sixteen wrappers", async () => {
+void test("delivery projects sixteen fixed Skills and sixteen wrappers", async () => {
   const root = await tempProject();
   const previousCodexHome = process.env.CODEX_HOME;
   process.env.CODEX_HOME = path.join(root, "codex-home");
@@ -131,10 +131,10 @@ void test("delivery projects fifteen fixed Skills and sixteen wrappers", async (
     for (const toolId of TOOL_IDS) {
       const skillIds = new Set(delivery.installations.flatMap((item) => {
         if (item.tool_id !== toolId) return [];
-        if (item.source.kind === "arsu-skill" || item.source.kind === "companion-skill" || item.source.kind === "domain-skill") return [item.source.skill_id];
+        if (item.source.kind === "arsu-skill" || item.source.kind === "core-skill" || item.source.kind === "companion-skill" || item.source.kind === "domain-skill") return [item.source.skill_id];
         return item.source.kind === "literature-adapter" && item.source.component === "skill" && item.source.skill_id ? [item.source.skill_id] : [];
       }));
-      assert.equal(skillIds.size, 15, toolId);
+      assert.equal(skillIds.size, 16, toolId);
     }
     assert.equal(delivery.diagnostics.filter((item) => item.code === "commands_not_supported").length, 3);
   } finally {

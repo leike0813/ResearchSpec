@@ -32,6 +32,7 @@ const REQUIRED_FILES = [
   "specs/claims.yaml",
   "specs/manuscript.yaml",
 ] as const;
+const OPTIONAL_PROFILE_FILES = ["profiles/review-response.yaml"] as const;
 
 export interface CurrentWorkspaceFile {
   relativePath: string;
@@ -51,6 +52,7 @@ export interface CurrentWorkspaceIndex {
   claims: ClaimsSpec;
   manuscript: ManuscriptSpec;
   profile: PipelineProfile;
+  profiles?: ReadonlyMap<string, PipelineProfile>;
   subflowEntries: SubflowScanRecord[];
   subflows: SubflowRecord[];
   changes: ProjectChangeRecord[];
@@ -134,6 +136,19 @@ export async function loadCurrentWorkspaceIndex(workspace: string): Promise<Curr
   const claims = parseRequired(files, "specs/claims.yaml", (text) => ClaimsSpecSchema.parse(parseYaml(text)), diagnostics);
   const manuscript = parseRequired(files, "specs/manuscript.yaml", (text) => ManuscriptSpecSchema.parse(parseYaml(text)), diagnostics);
   const profile = parseRequired(files, "profiles/academic-pipeline.yaml", (text) => PipelineProfileSchema.parse(parseYaml(text)), diagnostics);
+  const profileMap = new Map<string, PipelineProfile>();
+  if (profile) profileMap.set(profile.profile_id, profile);
+  for (const relativePath of OPTIONAL_PROFILE_FILES) {
+    const loaded = await readOptionalRegularFile(workspace, path.join(workspace, relativePath), diagnostics);
+    if (!loaded) continue;
+    files.set(relativePath, loaded);
+    try {
+      const parsed = PipelineProfileSchema.parse(parseYaml(loaded.text));
+      profileMap.set(parsed.profile_id, parsed);
+    } catch (error) {
+      diagnostics.push({ ...problem("invalid_current_contract", error instanceof Error ? error.message : String(error), loaded.absolutePath), details: error });
+    }
+  }
 
   addDuplicateIds(sources?.sources ?? [], "source_id", "duplicate_source_id", "specs/sources.yaml", workspace, diagnostics);
   addDuplicateIds(claims?.claims ?? [], "claim_id", "duplicate_claim_id", "specs/claims.yaml", workspace, diagnostics);
@@ -150,7 +165,7 @@ export async function loadCurrentWorkspaceIndex(workspace: string): Promise<Curr
   const subflowEntries = await scanSubflows(workspace, files, diagnostics);
   const subflows = subflowEntries.filter(isCompleteSubflowRecord);
   addDuplicateIds(subflowEntries.flatMap((item) => item.control ? [item.control] : []), "instance_id", "duplicate_subflow_instance_id", "subflows", workspace, diagnostics);
-  await validateSubflowReferences(workspace, subflows, profile, diagnostics);
+  await validateSubflowReferences(workspace, subflows, profileMap, diagnostics);
   await checkOptionalDirectory(path.join(workspace, "changes", "archive"), diagnostics);
   const changes = await scanChanges(workspace, false, files, diagnostics);
   const archivedChanges = await scanChanges(workspace, true, files, diagnostics);
@@ -167,6 +182,7 @@ export async function loadCurrentWorkspaceIndex(workspace: string): Promise<Curr
     claims: claims ?? ClaimsSpecSchema.parse({ schema_version: "1", claims: [] }),
     manuscript: manuscript ?? ManuscriptSpecSchema.parse({ schema_version: "1", manuscript_id: "invalid", output_type: null, working_title: null, language: null, audience: null, venue: null, citation_requirements: [], format_requirements: [], delivery: { working_format: null, final_output_format: null }, outline: [] }),
     profile: profile ?? emptyProfile(),
+    profiles: profileMap,
     subflowEntries,
     subflows,
     changes,
@@ -319,7 +335,7 @@ function isCompleteSubflowRecord(record: SubflowScanRecord): record is SubflowRe
 async function validateSubflowReferences(
   workspace: string,
   records: readonly SubflowRecord[],
-  profile: PipelineProfile | undefined,
+  profiles: ReadonlyMap<string, PipelineProfile>,
   diagnostics: Diagnostic[],
 ): Promise<void> {
   const byId = new Map<string, SubflowRecord[]>();
@@ -328,11 +344,11 @@ async function validateSubflowReferences(
     entries.push(record);
     byId.set(record.control.instance_id, entries);
   }
-  const childById = new Map(profile?.children.map((item) => [item.node_id, item]) ?? []);
-  const entriesByRoute = new Map(profile?.entries.map((item) => [item.route_ref, item]) ?? []);
-
   for (const record of records) {
     const { control, handoff } = record;
+    const profile = control.profile ? profiles.get(control.profile.id) : undefined;
+    const childById = new Map(profile?.children.map((item) => [item.node_id, item]) ?? []);
+    const entriesByRoute = new Map(profile?.entries.map((item) => [item.route_ref, item]) ?? []);
     if (handoff.subflow_instance_id !== control.instance_id) {
       diagnostics.push(problem("subflow_handoff_id_mismatch", "Handoff instance ID must match its owning control.", record.handoffPath));
     }

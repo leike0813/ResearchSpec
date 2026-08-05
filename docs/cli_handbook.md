@@ -37,7 +37,7 @@ A valid selector shape does not imply that the action is available in the curren
 | `change` | `change:<change-id>` |
 | `handoff` | `handoff:<instance-id>` |
 | `spec` | `spec:project`<br>`spec:sources`<br>`spec:claims`<br>`spec:manuscript` |
-| `profile` | `profile:academic-pipeline` |
+| `profile` | `profile:academic-pipeline`<br>`profile:review-response` |
 | `tool` | `tool:<tool-id>` |
 
 ## Bootstrap

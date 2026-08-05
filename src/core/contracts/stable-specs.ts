@@ -7,7 +7,7 @@ export const StableIdSchema = z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]*$/)
   .refine((value) => !value.includes(".."), "ID cannot contain '..'");
 const ExtensionsSchema = z.record(z.string(), z.unknown()).optional();
 
-export const ManuscriptWorkingFormatSchema = z.enum(["markdown", "qmd"]);
+export const ManuscriptWorkingFormatSchema = z.enum(["markdown", "qmd", "latex", "latex-project"]);
 export const QuartoFormatIdSchema = z.string().trim().regex(
   /^[a-z0-9][a-z0-9._+-]*$/,
   "Quarto format ID must contain only lowercase letters, digits, dots, underscores, plus signs, and hyphens.",

@@ -54,7 +54,7 @@ void test("component patch versions are independently valid", () => {
   assert.equal(validateLiteratureAdapterCatalog([adapter]).length, 1);
 });
 
-void test("workspace delivery projects fifteen fixed Skills and sixteen wrappers", async () => {
+void test("workspace delivery projects sixteen fixed Skills and sixteen wrappers", async () => {
   const root = await tempProject();
   try {
     const delivery = await planWorkspaceDelivery({
@@ -69,11 +69,11 @@ void test("workspace delivery projects fifteen fixed Skills and sixteen wrappers
     });
     const skillIds = new Set(delivery.installations.flatMap((item) => {
       if (item.tool_id !== "claude") return [];
-      if (item.source.kind === "arsu-skill" || item.source.kind === "companion-skill" || item.source.kind === "domain-skill") return [item.source.skill_id];
+      if (item.source.kind === "arsu-skill" || item.source.kind === "core-skill" || item.source.kind === "companion-skill" || item.source.kind === "domain-skill") return [item.source.skill_id];
       return item.source.kind === "literature-adapter" && item.source.component === "skill" && item.source.skill_id ? [item.source.skill_id] : [];
     }));
     const wrappers = delivery.installations.filter((item) => item.tool_id === "claude" && item.source.kind === "command");
-    assert.equal(skillIds.size, 15);
+    assert.equal(skillIds.size, 16);
     assert.equal(wrappers.length, 16);
     assert.equal(delivery.literatureAdapterResolutions[0]?.projection_state, "complete");
     assert.equal(delivery.literatureAdapterResolutions[0]?.runtime_asset?.installed_path, ".zotero-bridge/bin/zotero-bridge");

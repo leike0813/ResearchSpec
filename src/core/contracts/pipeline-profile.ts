@@ -26,7 +26,7 @@ export const PipelineProfileChildSchema = z.strictObject({
 
 export const PipelineProfileSchema = z.strictObject({
   schema_version: z.literal(CURRENT_WORKSPACE_SCHEMA_VERSION),
-  profile_id: z.literal("academic-pipeline"),
+  profile_id: z.enum(["academic-pipeline", "review-response"]),
   profile_version: z.string().trim().min(1),
   entries: z.array(PipelineProfileEntrySchema).min(1),
   children: z.array(PipelineProfileChildSchema).min(1),

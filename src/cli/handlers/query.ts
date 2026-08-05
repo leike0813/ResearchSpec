@@ -115,22 +115,25 @@ export async function handleCurrentInstructions(selector: string, context: Comma
     const routeRef = selector.slice("route:".length) as RouteRef;
     let route;
     try { route = getArsuRoute(routeRef); }
-    catch { throw new CliError("route_not_found", `Unknown ARSU route: ${routeRef}`, 1); }
+    catch { throw new CliError("route_not_found", `Unknown route: ${routeRef}`, 1); }
     const candidates = workflow.frontier.filter((item) => item.kind === "route" && item.selector === selector);
-    const profileEntry = index.profile.entries.find((item) => item.route_ref === routeRef);
+    const selectedProfile = routeRef.startsWith("review-response:") ? index.profiles?.get("review-response") : index.profile;
+    const profileEntry = selectedProfile?.entries.find((item) => item.route_ref === routeRef);
     const childCandidates = candidates.filter((item) => item.kind === "route" && item.node_id !== undefined);
     const firstChild = childCandidates[0];
     const formalGates = childCandidates.length === 1
-      ? index.profile.children.find((item) => item.node_id === (firstChild?.kind === "route" ? firstChild.node_id : undefined))?.required_gate_ids ?? []
-      : profileEntry || route.gate_policy.level !== "required" ? [] : route.gate_policy.gate_kinds;
+      ? selectedProfile?.children.find((item) => item.node_id === (firstChild?.kind === "route" ? firstChild.node_id : undefined))?.required_gate_ids ?? []
+      : routeRef.startsWith("review-response:") ? selectedProfile?.gates.map((item) => item.gate_id) ?? route.gate_policy.gate_kinds
+        : profileEntry || route.gate_policy.level !== "required" ? [] : route.gate_policy.gate_kinds;
     const childDefinition = childCandidates.length === 1 && firstChild?.kind === "route"
-      ? index.profile.children.find((item) => item.node_id === firstChild.node_id)
+      ? selectedProfile?.children.find((item) => item.node_id === firstChild.node_id)
       : undefined;
     const usesManuscript = routeRef.startsWith("academic-paper:")
       || routeRef.startsWith("academic-paper-reviewer:")
-      || routeRef.startsWith("academic-pipeline:");
+      || routeRef.startsWith("academic-pipeline:")
+      || routeRef.startsWith("review-response:");
     const qmdProbeExpected = index.manuscript.delivery.working_format === "qmd"
-      && (routeRef.startsWith("academic-paper:") || routeRef.startsWith("academic-pipeline:"));
+      && (routeRef.startsWith("academic-paper:") || routeRef.startsWith("academic-pipeline:") || routeRef.startsWith("review-response:"));
     const formatConversion = routeRef === "academic-paper:format-convert";
     return success("instructions", {
       selector,

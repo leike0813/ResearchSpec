@@ -45,6 +45,11 @@ export interface ChildStartCandidate {
   round?: number;
 }
 
+export function profileForRecord(index: CurrentWorkspaceIndex, record: Pick<SubflowRecord, "control">): PipelineProfile | undefined {
+  const id = record.control.profile?.id;
+  return id ? (id === index.profile.profile_id ? index.profile : index.profiles?.get(id)) : undefined;
+}
+
 export function evaluateWorkflowControl(index: CurrentWorkspaceIndex): WorkflowControl {
   const frontier: WorkflowFrontierItem[] = index.profile.entries.map((entry) => ({
     kind: "route",
@@ -124,7 +129,8 @@ export function childStartCandidates(index: CurrentWorkspaceIndex): ChildStartCa
   const candidates: ChildStartCandidate[] = [];
   for (const parent of index.subflows) {
     if (parent.control.profile === null || parent.control.parent !== null || parent.control.status !== "active") continue;
-    for (const node of nodesAtCheckpoint(index, parent.control.checkpoint)) {
+    if (parent.control.route_ref.startsWith("review-response:")) continue;
+    for (const node of nodesAtCheckpoint(index, parent, parent.control.checkpoint)) {
       const round = nextRound(index, parent, node);
       if (node.multiplicity === "repeatable" && round === undefined) continue;
       if (!dependenciesSatisfied(index, parent, node, round)) continue;
@@ -140,13 +146,19 @@ export function childStartCandidates(index: CurrentWorkspaceIndex): ChildStartCa
 
 export function eligibleProfileTransitions(index: CurrentWorkspaceIndex, parent: SubflowRecord): PipelineProfileTransition[] {
   if (parent.control.profile === null || parent.control.parent !== null || parent.control.status !== "active") return [];
-  return index.profile.transitions.filter((transition) => {
+  const profile = profileForRecord(index, parent);
+  if (!profile) return [];
+  if (parent.control.route_ref.startsWith("review-response:")) {
+    return profile.transitions.filter((transition) => transition.from === parent.control.checkpoint
+      && transition.required_gate_ids.every((gateId) => parent.control.gates.find((gate) => gate.gate_id === gateId && isGateAccepted(gate))));
+  }
+  return profile.transitions.filter((transition) => {
     if (transition.from !== parent.control.checkpoint) return false;
     if (!transition.required_child_node_ids.every((nodeId) => latestCompletedChild(index, parent.control.instance_id, nodeId))) return false;
     if (!transition.required_gate_ids.every((gateId) => acceptedGateForParent(index, parent.control.instance_id, gateId))) return false;
     return transition.required_branch_ids.every((branchId) => {
       const choice = branchChoiceForParent(index, parent.control.instance_id, branchId);
-      const branch = index.profile.branches.find((item) => item.decision_id === branchId);
+      const branch = profile.branches.find((item) => item.decision_id === branchId);
       return Boolean(choice && branch?.options.find((item) => item.option_id === choice)?.unlocks.includes(transition.to));
     });
   });
@@ -159,8 +171,11 @@ export function isSubflowCompletionReady(index: CurrentWorkspaceIndex, record: S
   if (!control.start_confirmation.expected_outputs.every((role) => record.handoff.outputs.some((item) => item.role === role))) return false;
   if (requiredBranchIds(index, record).some((branchId) => !control.decisions.some((item) => item.kind === "branch" && item.decision_id === branchId))) return false;
   if (control.profile === null || control.parent !== null) return true;
-  const finalNode = index.profile.children.find((item) => item.node_id === control.checkpoint);
+  const profile = profileForRecord(index, record);
+  if (!profile) return false;
+  const finalNode = profile.children.find((item) => item.node_id === control.checkpoint);
   if (!finalNode) return false;
+  if (control.route_ref.startsWith("review-response:")) return control.checkpoint === "final-assembly";
   return Boolean(latestCompletedChild(index, control.instance_id, finalNode.node_id));
 }
 
@@ -177,19 +192,22 @@ function allGatesAccepted(control: SubflowControl): boolean {
 
 function requiredBranchIds(index: CurrentWorkspaceIndex, record: SubflowRecord): string[] {
   const nodeId = record.control.parent?.node_id;
-  return nodeId ? index.profile.children.find((item) => item.node_id === nodeId)?.branch_ids ?? [] : [];
+  const profile = profileForRecord(index, record);
+  return nodeId && profile ? profile.children.find((item) => item.node_id === nodeId)?.branch_ids ?? [] : [];
 }
 
-function nodesAtCheckpoint(index: CurrentWorkspaceIndex, checkpoint: string): PipelineProfileChild[] {
-  const direct = index.profile.children.filter((item) => item.node_id === checkpoint);
-  const groups = index.profile.parallel_groups.filter((group) => group.group_id === checkpoint || group.child_node_ids.includes(checkpoint));
-  const grouped = groups.flatMap((group) => group.child_node_ids).flatMap((nodeId) => index.profile.children.filter((item) => item.node_id === nodeId));
+function nodesAtCheckpoint(index: CurrentWorkspaceIndex, parent: SubflowRecord, checkpoint: string): PipelineProfileChild[] {
+  const profile = profileForRecord(index, parent) ?? index.profile;
+  const direct = profile.children.filter((item) => item.node_id === checkpoint);
+  const groups = profile.parallel_groups.filter((group) => group.group_id === checkpoint || group.child_node_ids.includes(checkpoint));
+  const grouped = groups.flatMap((group) => group.child_node_ids).flatMap((nodeId) => profile.children.filter((item) => item.node_id === nodeId));
   return [...new Map([...direct, ...grouped].map((item) => [item.node_id, item])).values()];
 }
 
 function dependenciesSatisfied(index: CurrentWorkspaceIndex, parent: SubflowRecord, node: PipelineProfileChild, round: number | undefined): boolean {
+  const profile = profileForRecord(index, parent) ?? index.profile;
   const pending = new Set(node.prerequisites);
-  for (const group of index.profile.parallel_groups) {
+  for (const group of profile.parallel_groups) {
     const members = group.child_node_ids.filter((item) => pending.has(item));
     if (members.length < 2) continue;
     const completed = members.filter((item) => completedChildForRound(index, parent.control.instance_id, item, round));
@@ -200,14 +218,17 @@ function dependenciesSatisfied(index: CurrentWorkspaceIndex, parent: SubflowReco
 }
 
 function completedChildForRound(index: CurrentWorkspaceIndex, parentId: string, nodeId: string, round: number | undefined): boolean {
-  const node = index.profile.children.find((item) => item.node_id === nodeId);
+  const parent = index.subflows.find((item) => item.control.instance_id === parentId);
+  const profile = parent ? profileForRecord(index, parent) ?? index.profile : index.profile;
+  const node = profile.children.find((item) => item.node_id === nodeId);
   const children = childrenFor(index, parentId, nodeId).filter((item) => item.control.status === "complete");
   if (node?.multiplicity === "repeatable" && round !== undefined) return children.some((item) => item.control.round === round);
   return children.length > 0;
 }
 
 function branchUnlocks(index: CurrentWorkspaceIndex, parent: SubflowRecord, nodeId: string): boolean {
-  const branches = index.profile.branches.filter((branch) => branch.options.some((option) => option.unlocks.includes(nodeId)));
+  const profile = profileForRecord(index, parent) ?? index.profile;
+  const branches = profile.branches.filter((branch) => branch.options.some((option) => option.unlocks.includes(nodeId)));
   if (branches.length === 0) return true;
   return branches.some((branch) => {
     const choice = branchChoiceForParent(index, parent.control.instance_id, branch.decision_id);
@@ -217,7 +238,7 @@ function branchUnlocks(index: CurrentWorkspaceIndex, parent: SubflowRecord, node
 
 function nextRound(index: CurrentWorkspaceIndex, parent: SubflowRecord, node: PipelineProfileChild): number | undefined {
   if (node.multiplicity !== "repeatable") return undefined;
-  const template = index.profile.revision_round_template;
+  const template = (profileForRecord(index, parent) ?? index.profile).revision_round_template;
   if (node.node_id === template.review_node_id) {
     const revisions = childrenFor(index, parent.control.instance_id, template.revision_node_id)
       .filter((item) => item.control.status === "complete" && item.control.round !== undefined)
@@ -251,7 +272,9 @@ function latestCompletedChild(index: CurrentWorkspaceIndex, parentId: string, no
 }
 
 function acceptedGateForParent(index: CurrentWorkspaceIndex, parentId: string, gateId: string): boolean {
-  const definition = index.profile.gates.find((item) => item.gate_id === gateId);
+  const parent = index.subflows.find((item) => item.control.instance_id === parentId);
+  const profile = parent ? profileForRecord(index, parent) ?? index.profile : index.profile;
+  const definition = profile.gates.find((item) => item.gate_id === gateId);
   const owner = definition?.owner_node_id;
   if (!owner) return false;
   const child = latestCompletedChild(index, parentId, owner);
@@ -261,7 +284,9 @@ function acceptedGateForParent(index: CurrentWorkspaceIndex, parentId: string, g
 }
 
 function branchChoiceForParent(index: CurrentWorkspaceIndex, parentId: string, branchId: string): string | undefined {
-  const owner = index.profile.branches.find((item) => item.decision_id === branchId)?.owner_node_id;
+  const parent = index.subflows.find((item) => item.control.instance_id === parentId);
+  const profile = parent ? profileForRecord(index, parent) ?? index.profile : index.profile;
+  const owner = profile.branches.find((item) => item.decision_id === branchId)?.owner_node_id;
   if (!owner) return undefined;
   const child = latestCompletedChild(index, parentId, owner) ?? childrenFor(index, parentId, owner).at(-1);
   return child?.control.decisions.find((item) => item.kind === "branch" && item.decision_id === branchId)?.choice;

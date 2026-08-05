@@ -1,7 +1,8 @@
 import path from "node:path";
 
 import { ACADEMIC_PIPELINE_PROFILE } from "../arsu-converter/workflow/academic-pipeline.js";
-import { ACADEMIC_PIPELINE_PROFILE_PROJECTION } from "../arsu-converter/workflow/generate.js";
+import { ACADEMIC_PIPELINE_PROFILE_PROJECTION, REVIEW_RESPONSE_PROFILE_PROJECTION } from "../arsu-converter/workflow/generate.js";
+import { REVIEW_RESPONSE_PROFILE } from "../arsu-converter/workflow/review-response.js";
 import type { Diagnostic } from "../core/validation/types.js";
 import { planFile, sha256, type PlannedWrite } from "../core/workspace/write-plan.js";
 import {
@@ -39,26 +40,34 @@ export async function planWorkspaceDelivery(input: {
   platform?: NodeJS.Platform;
   architecture?: NodeJS.Architecture;
 }): Promise<WorkspaceDeliveryPlan> {
-  const profileAbsolutePath = path.join(input.workspaceRoot ?? path.join(input.projectRoot, "researchspec"), "profiles/academic-pipeline.yaml");
-  const profileTarget = path.relative(input.projectRoot, profileAbsolutePath).split(path.sep).join("/");
-  const existingProfile = input.existingInstallations.find((item) => item.owner === "framework" && item.target.scope === "project" && item.target.path === profileTarget);
-  const profileOperation = await planFile({
-    path: profileAbsolutePath,
-    relativePath: profileTarget,
-    content: ACADEMIC_PIPELINE_PROFILE_PROJECTION,
-    scope: "project",
-    ownership: "generated",
-    recordedHash: existingProfile?.sha256,
-    requireRecordedOwnership: existingProfile === undefined,
-    force: input.force,
-  });
-  const profileInstallation: ManagedInstallation = {
-    owner: "framework",
-    tool_id: null,
-    source: { kind: "framework-profile", profile_id: ACADEMIC_PIPELINE_PROFILE.profile_id, profile_version: ACADEMIC_PIPELINE_PROFILE.profile_version },
-    target: { scope: "project", path: profileTarget, executable: false },
-    sha256: sha256(ACADEMIC_PIPELINE_PROFILE_PROJECTION),
-  };
+  const profileDefinitions = [
+    { profile: ACADEMIC_PIPELINE_PROFILE, projection: ACADEMIC_PIPELINE_PROFILE_PROJECTION },
+    { profile: REVIEW_RESPONSE_PROFILE, projection: REVIEW_RESPONSE_PROFILE_PROJECTION },
+  ] as const;
+  const profileOperations: PlannedWrite[] = [];
+  const profileInstallations: ManagedInstallation[] = [];
+  for (const definition of profileDefinitions) {
+    const profileAbsolutePath = path.join(input.workspaceRoot ?? path.join(input.projectRoot, "researchspec"), `profiles/${definition.profile.profile_id}.yaml`);
+    const profileTarget = path.relative(input.projectRoot, profileAbsolutePath).split(path.sep).join("/");
+    const existingProfile = input.existingInstallations.find((item) => item.owner === "framework" && item.target.scope === "project" && item.target.path === profileTarget);
+    profileOperations.push(await planFile({
+      path: profileAbsolutePath,
+      relativePath: profileTarget,
+      content: definition.projection,
+      scope: "project",
+      ownership: "generated",
+      recordedHash: existingProfile?.sha256,
+      requireRecordedOwnership: existingProfile === undefined,
+      force: input.force,
+    }));
+    profileInstallations.push({
+      owner: "framework",
+      tool_id: null,
+      source: { kind: "framework-profile", profile_id: definition.profile.profile_id, profile_version: definition.profile.profile_version },
+      target: { scope: "project", path: profileTarget, executable: false },
+      sha256: sha256(definition.projection),
+    });
+  }
   const toolDelivery = await planToolDelivery({
     projectRoot: input.projectRoot,
     toolIds: input.toolIds,
@@ -91,14 +100,14 @@ export async function planWorkspaceDelivery(input: {
 
   return {
     operations: [
-      profileOperation,
+      ...profileOperations,
       ...toolDelivery.operations,
       ...toolReconciliation.operations,
       ...literatureDelivery.operations,
       ...literatureReconciliation.operations,
     ],
     installations: deduplicateInstallations([
-      profileInstallation,
+      ...profileInstallations,
       ...literatureReconciliation.retainedInstallations,
       ...literatureDelivery.installations,
     ]),

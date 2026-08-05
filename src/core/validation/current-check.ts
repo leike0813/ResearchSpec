@@ -3,6 +3,8 @@ import { parse as parseYaml } from "yaml";
 
 import { ACADEMIC_PIPELINE_PROFILE } from "../../arsu-converter/workflow/academic-pipeline.js";
 import { ACADEMIC_PIPELINE_PROFILE_PROJECTION } from "../../arsu-converter/workflow/generate.js";
+import { REVIEW_RESPONSE_PROFILE } from "../../arsu-converter/workflow/review-response.js";
+import { REVIEW_RESPONSE_PROFILE_PROJECTION } from "../../arsu-converter/workflow/generate.js";
 import { inspectLiteratureAdapters } from "../../literature-adapters/inspect.js";
 import { ProjectChangeDeltaSchema } from "../contracts/project-change.js";
 import { ChangeDocumentError, validateProjectChangeDelta } from "../runtime/change-documents.js";
@@ -48,18 +50,30 @@ function changeDiagnostics(index: Awaited<ReturnType<typeof loadCurrentWorkspace
 }
 
 function profileOwnershipDiagnostics(index: Awaited<ReturnType<typeof loadCurrentWorkspaceIndex>>): Diagnostic[] {
-  const targetPath = path.relative(index.projectRoot, path.join(index.workspace, "profiles/academic-pipeline.yaml")).split(path.sep).join("/");
-  const records = index.manifest.installations.filter((item) => item.owner === "framework" && item.target.scope === "project" && item.target.path === targetPath);
-  if (records.length !== 1) return [problem("framework_profile_ownership_invalid", "The project profile requires exactly one manifest ownership record.", path.join(index.workspace, "tool-installation-manifest.json"))];
-  const record = records[0];
-  if (record.source.kind !== "framework-profile" || record.source.profile_id !== ACADEMIC_PIPELINE_PROFILE.profile_id || record.source.profile_version !== ACADEMIC_PIPELINE_PROFILE.profile_version) {
-    return [problem("framework_profile_source_mismatch", "The project profile manifest source does not match the packaged profile.", path.join(index.workspace, "tool-installation-manifest.json"))];
+  const definitions = [
+    { profile: ACADEMIC_PIPELINE_PROFILE, projection: ACADEMIC_PIPELINE_PROFILE_PROJECTION },
+    { profile: REVIEW_RESPONSE_PROFILE, projection: REVIEW_RESPONSE_PROFILE_PROJECTION },
+  ] as const;
+  const diagnostics: Diagnostic[] = [];
+  for (const definition of definitions) {
+    const relative = `profiles/${definition.profile.profile_id}.yaml`;
+    const targetPath = path.relative(index.projectRoot, path.join(index.workspace, relative)).split(path.sep).join("/");
+    const records = index.manifest.installations.filter((item) => item.owner === "framework" && item.target.scope === "project" && item.target.path === targetPath);
+    if (records.length !== 1) {
+      diagnostics.push(problem("framework_profile_ownership_invalid", `The ${definition.profile.profile_id} profile requires exactly one manifest ownership record.`, path.join(index.workspace, "tool-installation-manifest.json")));
+      continue;
+    }
+    const record = records[0];
+    if (record.source.kind !== "framework-profile" || record.source.profile_id !== definition.profile.profile_id || record.source.profile_version !== definition.profile.profile_version) {
+      diagnostics.push(problem("framework_profile_source_mismatch", "The project profile manifest source does not match the packaged profile.", path.join(index.workspace, "tool-installation-manifest.json")));
+      continue;
+    }
+    const packagedHash = sha256(definition.projection);
+    if (record.sha256 !== packagedHash) diagnostics.push(problem("framework_profile_manifest_drift", "The recorded profile hash does not match the packaged profile.", path.join(index.workspace, "tool-installation-manifest.json")));
+    const file = index.files.get(relative);
+    if (file && file.hash !== record.sha256) diagnostics.push(problem("framework_profile_file_drift", "The projected profile differs from its manifest-owned source.", file.absolutePath));
   }
-  const packagedHash = sha256(ACADEMIC_PIPELINE_PROFILE_PROJECTION);
-  if (record.sha256 !== packagedHash) return [problem("framework_profile_manifest_drift", "The recorded profile hash does not match the packaged profile.", path.join(index.workspace, "tool-installation-manifest.json"))];
-  const file = index.files.get("profiles/academic-pipeline.yaml");
-  if (file && file.hash !== record.sha256) return [problem("framework_profile_file_drift", "The projected profile differs from its manifest-owned source.", file.absolutePath)];
-  return [];
+  return diagnostics;
 }
 
 function matchesTarget(workspace: string, diagnostic: Diagnostic, target: CurrentCheckTarget): boolean {

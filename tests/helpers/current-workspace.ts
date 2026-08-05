@@ -9,7 +9,7 @@ import { getWorkspaceEntries } from "../../src/core/workspace/layout.js";
 import { cleanup, tempProject } from "./cli.js";
 
 export async function createCurrentWorkspace(options: {
-  manuscriptDelivery?: { working_format: "markdown" | "qmd" | null; final_output_format: string | null };
+  manuscriptDelivery?: { working_format: "markdown" | "qmd" | "latex" | "latex-project" | null; final_output_format: string | null };
 } = {}): Promise<{ root: string; workspace: string; cleanup: () => Promise<void> }> {
   const root = await tempProject();
   const workspace = path.join(root, "researchspec");

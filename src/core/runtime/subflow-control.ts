@@ -18,7 +18,9 @@ import {
   eligibleProfileTransitions,
   isGateAccepted,
   isSubflowCompletionReady,
+  profileForRecord,
 } from "./workflow-control.js";
+import type { PipelineProfile } from "../contracts/pipeline-profile.js";
 import type { CurrentWorkspaceIndex, SubflowRecord } from "./workspace-index.js";
 
 export type LifecycleTransition = "pause" | "resume" | "cancel" | "complete";
@@ -138,7 +140,8 @@ function validateManuscriptDeliveryStart(
 ): void {
   const usesManuscript = routeRef.startsWith("academic-paper:")
     || routeRef.startsWith("academic-paper-reviewer:")
-    || routeRef.startsWith("academic-pipeline:");
+    || routeRef.startsWith("academic-pipeline:")
+    || routeRef.startsWith("review-response:");
   if (!usesManuscript) {
     if (command.render_consent) throw new SubflowControlError("render_consent_route_invalid", "Render consent is valid only for format conversion.", "usage");
     return;
@@ -152,7 +155,7 @@ function validateManuscriptDeliveryStart(
   if (command.manuscript_delivery.working_format === null) {
     throw new SubflowControlError("manuscript_format_unselected", "Select and confirm the manuscript working format before starting this route.", "conflict");
   }
-  const qmdWritingRoute = routeRef.startsWith("academic-paper:") || routeRef.startsWith("academic-pipeline:");
+  const qmdWritingRoute = routeRef.startsWith("academic-paper:") || routeRef.startsWith("academic-pipeline:") || routeRef.startsWith("review-response:");
   if (command.manuscript_delivery.working_format === "qmd" && qmdWritingRoute && !command.quarto_probe) {
     throw new SubflowControlError("quarto_probe_missing", "QMD writing and resume starts require a current Quarto probe summary.", "usage");
   }
@@ -258,7 +261,8 @@ export async function overrideFailedGate(input: {
     const gate = control.gates.find((item) => item.gate_id === input.gateId);
     const latest = gate?.attempts.at(-1);
     if (!gate || latest?.verdict !== "fail") throw new SubflowControlError("gate_override_unavailable", "Only the current failed Gate attempt can be overridden.", "conflict");
-    if (!input.index.profile.override_policy.failed_gate_requires_decision) throw new SubflowControlError("gate_override_forbidden", "The project profile does not allow failed-Gate override.");
+    const profile = profileForRecord(input.index, record) ?? input.index.profile;
+    if (!profile.override_policy.failed_gate_requires_decision) throw new SubflowControlError("gate_override_forbidden", "The project profile does not allow failed-Gate override.");
     if (gate.override && Date.parse(gate.override.approved_at) >= Date.parse(latest.confirmed_at)) {
       throw new SubflowControlError("gate_override_exists", `Gate already has a current override: ${input.gateId}`, "conflict");
     }
@@ -305,7 +309,8 @@ function resolveStartContext(index: CurrentWorkspaceIndex, routeRef: string, com
 } {
   if (command.parent) {
     const parent = requireRecord(index, command.parent.instance_id);
-    const node = index.profile.children.find((item) => item.node_id === command.parent?.node_id && item.route_ref === routeRef);
+    const parentProfile = profileForRecord(index, parent);
+    const node = parentProfile?.children.find((item) => item.node_id === command.parent?.node_id && item.route_ref === routeRef);
     if (!node) throw new SubflowControlError("profile_child_invalid", "Parent node does not match the selected route.", "conflict");
     const available = childStartCandidates(index).some((item) => item.parent.control.instance_id === parent.control.instance_id && item.node.node_id === node.node_id && item.round === command.round);
     if (!available) throw new SubflowControlError("child_start_blocked", "The selected child is not in the current profile frontier.", "conflict");
@@ -314,24 +319,28 @@ function resolveStartContext(index: CurrentWorkspaceIndex, routeRef: string, com
     if (!requiredInputRoles.every((role) => suppliedInputRoles.has(role))) {
       throw new SubflowControlError("start_handoff_inputs_missing", "Confirmed handoff inputs do not include all profile-required roles.", "conflict", { required_input_roles: requiredInputRoles });
     }
-    const requiredGates = node.required_gate_ids.filter((gateId) => index.profile.gates.find((item) => item.gate_id === gateId)?.policy === "required");
+    const requiredGates = node.required_gate_ids.filter((gateId) => parentProfile?.gates.find((item) => item.gate_id === gateId)?.policy === "required");
     if (!requiredGates.every((gateId) => command.formal_gates.includes(gateId)) || command.formal_gates.some((gateId) => !node.required_gate_ids.includes(gateId))) {
       throw new SubflowControlError("start_gates_mismatch", "Confirmed Gates must include required profile Gates and only triggered conditional Gates.", "conflict");
     }
     return {
-      profile: { id: index.profile.profile_id, version: index.profile.profile_version, path: "profiles/academic-pipeline.yaml" },
+      profile: profileReference(parentProfile),
       parent: command.parent,
       ...(command.round === undefined ? {} : { round: command.round }),
       checkpoint: node.node_id,
     };
   }
+  const selectedProfile = routeRef.startsWith("review-response:") ? index.profiles?.get("review-response") : index.profile;
   const entry = command.profile_entry
-    ? index.profile.entries.find((item) => item.entry_id === command.profile_entry && item.route_ref === routeRef)
-    : index.profile.entries.find((item) => item.route_ref === routeRef);
+    ? selectedProfile?.entries.find((item) => item.entry_id === command.profile_entry && item.route_ref === routeRef)
+    : selectedProfile?.entries.find((item) => item.route_ref === routeRef);
   if (entry) {
-    if (command.formal_gates.length > 0) throw new SubflowControlError("start_gates_mismatch", "Pipeline parent confirmation cannot declare child Gates.", "conflict");
+    if (!routeRef.startsWith("review-response:") && command.formal_gates.length > 0) throw new SubflowControlError("start_gates_mismatch", "Pipeline parent confirmation cannot declare child Gates.", "conflict");
+    if (routeRef.startsWith("review-response:") && command.formal_gates.some((gateId) => !selectedProfile?.gates.some((gate) => gate.gate_id === gateId))) {
+      throw new SubflowControlError("start_gates_mismatch", "Confirmed Gates must belong to the review-response profile.", "conflict");
+    }
     return {
-      profile: { id: index.profile.profile_id, version: index.profile.profile_version, path: "profiles/academic-pipeline.yaml" },
+      profile: profileReference(selectedProfile),
       parent: null,
       checkpoint: entry.checkpoint,
     };
@@ -343,7 +352,8 @@ function resolveStartContext(index: CurrentWorkspaceIndex, routeRef: string, com
 function resolveAdvanceTransition(index: CurrentWorkspaceIndex, record: SubflowRecord, requested: string | undefined): string {
   if (requested) {
     if (isLifecycleTransition(requested)) return requested;
-    if (!index.profile.transitions.some((item) => item.transition_id === requested)) throw new SubflowControlError("transition_invalid", `Unknown transition: ${requested}`, "usage");
+    const profile = profileForRecord(index, record);
+    if (!profile?.transitions.some((item) => item.transition_id === requested)) throw new SubflowControlError("transition_invalid", `Unknown transition: ${requested}`, "usage");
     return requested;
   }
   const eligible = eligibleProfileTransitions(index, record);
@@ -401,6 +411,10 @@ async function createSubflowDirectory(directory: string, control: SubflowControl
   try {
     await mkdir(temporary, { recursive: false });
     await mkdir(path.join(temporary, "work"));
+    if (control.route_ref === "review-response:full") {
+      await mkdir(path.join(temporary, "views"));
+      await mkdir(path.join(temporary, "work", "review-response"));
+    }
     await writeFile(path.join(temporary, "control.yaml"), stringify(control), { encoding: "utf8", flag: "wx" });
     await writeFile(path.join(temporary, "handoff.md"), renderSubflowHandoff(handoff), { encoding: "utf8", flag: "wx" });
     await rename(temporary, directory);
@@ -424,14 +438,25 @@ async function gateEvidence(index: CurrentWorkspaceIndex, record: SubflowRecord,
 
 function validateBranchChoice(index: CurrentWorkspaceIndex, record: SubflowRecord, decisionId: string, choice: string): void {
   const nodeId = record.control.parent?.node_id;
-  const branch = index.profile.branches.find((item) => item.decision_id === decisionId && item.owner_node_id === nodeId);
+  const profile = profileForRecord(index, record);
+  const branch = profile?.branches.find((item) => item.decision_id === decisionId && item.owner_node_id === nodeId);
   if (!branch) throw new SubflowControlError("branch_decision_invalid", `Branch does not belong to this subflow: ${decisionId}`, "usage");
   if (!branch.options.some((item) => item.option_id === choice)) throw new SubflowControlError("branch_choice_invalid", `Unknown branch choice: ${choice}`, "usage");
   if (!record.control.gates.every(isGateAccepted)) throw new SubflowControlError("branch_gate_blocked", "Branch choice requires accepted owning Gates.", "conflict");
 }
 
 function profileGateVerdicts(index: CurrentWorkspaceIndex, gateId: string): GateVerdict[] | undefined {
+  for (const record of index.subflows) {
+    const profile = profileForRecord(index, record);
+    const gate = profile?.gates.find((item) => item.gate_id === gateId);
+    if (gate) return gate.verdicts;
+  }
   return index.profile.gates.find((item) => item.gate_id === gateId)?.verdicts;
+}
+
+function profileReference(profile: PipelineProfile | undefined): NonNullable<SubflowControl["profile"]> {
+  if (!profile) throw new SubflowControlError("profile_missing", "The selected route profile is unavailable.", "conflict");
+  return { id: profile.profile_id, version: profile.profile_version, path: `profiles/${profile.profile_id}.yaml` };
 }
 
 function parseStartCommand(value: unknown): SubflowStartCommand {

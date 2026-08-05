@@ -11,6 +11,7 @@ const Sha256Schema = z.string().regex(/^[a-f0-9]{64}$/);
 
 export const ManagedInstallationSourceSchema = z.discriminatedUnion("kind", [
   z.strictObject({ kind: z.literal("arsu-skill"), skill_id: IdentifierSchema }),
+  z.strictObject({ kind: z.literal("core-skill"), skill_id: IdentifierSchema }),
   z.strictObject({ kind: z.literal("companion-skill"), skill_id: IdentifierSchema }),
   z.strictObject({
     kind: z.literal("domain-skill"),
@@ -164,7 +165,7 @@ export function deduplicateInstallations(items: readonly ManagedInstallation[]):
 }
 
 export function managedSkillId(item: ManagedInstallation): string | undefined {
-  return item.source.kind === "arsu-skill" || item.source.kind === "companion-skill" || item.source.kind === "domain-skill"
+  return item.source.kind === "arsu-skill" || item.source.kind === "core-skill" || item.source.kind === "companion-skill" || item.source.kind === "domain-skill"
     ? item.source.skill_id
     : item.source.kind === "literature-adapter" && item.source.component === "skill"
       ? item.source.skill_id

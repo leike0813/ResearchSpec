@@ -50,7 +50,7 @@ export function listCurrentItems(index: CurrentWorkspaceIndex, type: CurrentList
   })));
   if (type === "decisions") return index.subflows.flatMap((item) => item.control.decisions.map((decision) => ({ selector: `decision:${item.control.instance_id}/${decision.decision_id}`, instance_id: item.control.instance_id, ...decision })));
   if (type === "handoffs") return index.subflows.map((item) => ({ selector: `handoff:${item.control.instance_id}`, path: item.handoffPath, ...item.handoff, body: item.handoffBody }));
-  if (type === "profiles") return [{ selector: "profile:academic-pipeline", path: "profiles/academic-pipeline.yaml", ...index.profile }];
+  if (type === "profiles") return [...(index.profiles?.values() ?? [index.profile])].map((profile) => ({ selector: `profile:${profile.profile_id}`, path: `profiles/${profile.profile_id}.yaml`, ...profile }));
   if (type === "tools") return index.config.agent_tools.selected.map((toolId) => ({ selector: `tool:${toolId}`, tool_id: toolId, installation_count: index.manifest.installations.filter((item) => item.tool_id === toolId).length }));
   if (type === "diagnostics") return index.diagnostics.map((diagnostic, indexValue) => ({ selector: `diagnostic:${String(indexValue + 1)}`, ...diagnostic }));
   return currentHistory(index);
@@ -79,7 +79,7 @@ export function showCurrentItem(index: CurrentWorkspaceIndex, selector: string):
   if (selector === "spec:sources") return { selector, path: "specs/sources.yaml", ...index.sources };
   if (selector === "spec:claims") return { selector, path: "specs/claims.yaml", ...index.claims };
   if (selector === "spec:manuscript") return { selector, path: "specs/manuscript.yaml", ...index.manuscript };
-  if (selector === "profile:academic-pipeline") return listCurrentItems(index, "profiles")[0];
+  if (selector.startsWith("profile:")) return listCurrentItems(index, "profiles").find((item) => record(item).selector === selector);
   if (selector.startsWith("change:")) {
     const id = selector.slice("change:".length);
     return uniqueProjection([...index.changes, ...index.archivedChanges].filter((item) => item.id === id).map(changeDetail), selector);

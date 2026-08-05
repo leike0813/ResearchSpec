@@ -21,7 +21,7 @@ void test("fresh init creates only the current workspace authority tree", async 
     assert.doesNotMatch(config, /^profile:/m);
     assert.match(await readFile(path.join(workspace, "specs/manuscript.yaml"), "utf8"), /delivery:\n  working_format: null\n  final_output_format: null/);
     const manifest = JSON.parse(await readFile(path.join(workspace, "tool-installation-manifest.json"), "utf8")) as { installations: Array<{ owner: string; source: { kind: string } }> };
-    assert.equal(manifest.installations.filter((item) => item.owner === "framework" && item.source.kind === "framework-profile").length, 1);
+    assert.equal(manifest.installations.filter((item) => item.owner === "framework" && item.source.kind === "framework-profile").length, 2);
     assert.equal(parseEnvelope(runCli(["status", "--json"], root)).ok, true);
     assert.equal(parseEnvelope(runCli(["check", "profiles", "--json"], root)).ok, true);
     assert.equal(parseEnvelope(runCli(["doctor", "--json"], root)).ok, true);

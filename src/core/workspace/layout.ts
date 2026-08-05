@@ -1,7 +1,7 @@
 import path from "node:path";
 import { stringify } from "yaml";
 
-import { ACADEMIC_PIPELINE_PROFILE_PROJECTION } from "../../arsu-converter/workflow/generate.js";
+import { ACADEMIC_PIPELINE_PROFILE_PROJECTION, REVIEW_RESPONSE_PROFILE_PROJECTION } from "../../arsu-converter/workflow/generate.js";
 
 export type WorkspaceFileKind = "markdown" | "yaml" | "json";
 export type OverwritePolicy = "user" | "generated";
@@ -45,6 +45,13 @@ const WORKSPACE_TEMPLATES: readonly WorkspaceTemplateDefinition[] = [
     overwritePolicy: "generated",
     required: true,
     content: ACADEMIC_PIPELINE_PROFILE_PROJECTION,
+  },
+  {
+    relativePath: "profiles/review-response.yaml",
+    kind: "yaml",
+    overwritePolicy: "generated",
+    required: true,
+    content: REVIEW_RESPONSE_PROFILE_PROJECTION,
   },
   {
     relativePath: "specs/project.md",

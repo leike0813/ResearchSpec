@@ -42,7 +42,7 @@ export async function handleCurrentInit(inputPath: string | undefined, options: 
 
   const operations: PlannedWrite[] = [];
   for (const template of getWorkspaceTemplates()) {
-    if (["config.yaml", "tool-installation-manifest.json", "profiles/academic-pipeline.yaml"].includes(template.relativePath)) continue;
+    if (["config.yaml", "tool-installation-manifest.json", "profiles/academic-pipeline.yaml", "profiles/review-response.yaml"].includes(template.relativePath)) continue;
     operations.push(await planFile({
       path: path.join(workspace, template.relativePath),
       relativePath: template.relativePath,

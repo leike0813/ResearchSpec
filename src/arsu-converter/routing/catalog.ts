@@ -10,6 +10,7 @@ import {
   validateRoutingCatalogReferences,
 } from "./contracts.js";
 import { boundaryDeliverables } from "../workflow/boundary-deliverables.js";
+import { REVIEW_RESPONSE_ROUTE } from "./review-response.js";
 
 const stableSpec = (id: Extract<PrerequisiteRequirement, { kind: "stable_spec" }>["id"]): PrerequisiteRequirement => ({ kind: "stable_spec", id });
 const handoffRole = (id: string): PrerequisiteRequirement => ({ kind: "handoff_role", id });
@@ -91,6 +92,7 @@ const rawCatalog = {
       default_route_ref: "academic-paper:full",
       near_misses: [
         { intent: "start from a topic and continue through review and finalization", route_ref: "academic-pipeline:end-to-end", reason: "From-scratch cross-stage work needs pipeline coordination and Gates." },
+        { intent: "coordinate a real post-submission revision response", route_ref: "review-response:full", reason: "A submission-specific response workboard needs its own SQLite semantic runtime and six-checkpoint control profile." },
         { intent: "conduct a PRISMA systematic review", route_ref: "deep-research:systematic-review", reason: "Systematic-review methodology is research work, not manuscript literature-section drafting." },
         { intent: "independently peer-review a manuscript", route_ref: "academic-paper-reviewer:full", reason: "Independent manuscript assessment belongs to the reviewer Skill." },
       ],
@@ -162,6 +164,7 @@ export function getArsuSkillDefinition(skillId: ArsuSkillId): ArsuSkillRouteDefi
 }
 
 export function getArsuRoute(routeRef: RouteRef): ArsuRouteDefinition {
+  if (routeRef === REVIEW_RESPONSE_ROUTE.route_ref) return REVIEW_RESPONSE_ROUTE;
   const route = ARSU_ROUTING_CATALOG.skills.flatMap((skill) => skill.routes)
     .find((item) => item.route_ref === routeRef);
   if (!route) throw new Error(`Unknown ARSU route: ${routeRef}`);

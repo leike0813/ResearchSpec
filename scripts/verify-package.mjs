@@ -24,6 +24,7 @@ const expectedSkills = [
   "researchspec-navigate",
   "researchspec-propose",
   "researchspec-verify",
+  "review-response",
   "zotero-bridge-cli",
   "zotero-library-agent",
   "zotero-library-curation",
@@ -189,6 +190,8 @@ try {
 }
 
 function verifyTarballFiles(files) {
+  const reviewResponseFiles = files.filter((file) => file.startsWith("skills/review-response/") && !file.endsWith("/"));
+  assert(reviewResponseFiles.length >= 49, `Absorbed review-response Skill is incomplete: ${String(reviewResponseFiles.length)} files.`);
   const required = [
     "package.json", "README.md", "CHANGELOG.md", "SECURITY.md", "LICENSE", "NOTICE",
     "LICENSES/MIT.txt", "LICENSES/CC-BY-NC-4.0.txt", "LICENSES/CC-BY-SA-4.0.txt", "LICENSES/Apache-2.0.txt", "LICENSES/AGPL-3.0.txt", "docs/release_process.md",
@@ -249,6 +252,22 @@ function verifyTarballFiles(files) {
     "skills/plugins/vendors/education-agent-skills/education-agent-skills-stuck-and-error-diagnosis-coach/LICENSE",
     "skills/plugins/vendors/education-agent-skills/education-agent-skills-stuck-and-error-diagnosis-coach/NOTICE.md",
     "skills/arsu/researchspec-contracts.json", "artifacts/mvp_release_checklist.md", "dist/src/cli/bin.js", "dist/src/annotation-intake.js", "dist/src/annotation-intake.d.ts",
+    "skills/review-response/SKILL.md",
+    "skills/review-response/assets/schema/review-response-schema.yaml",
+    "skills/review-response/assets/runtime/skill-runtime-digest.md",
+    "skills/review-response/assets/templates/render-manifest.yaml",
+    "skills/review-response/assets/localization/messages/en.json",
+    "skills/review-response/assets/localization/messages/zh-CN.json",
+    "skills/review-response/references/workflow-state-machine.md",
+    "skills/review-response/references/stage-1-entry-and-bootstrap.md",
+    "skills/review-response/references/stage-2-manuscript-analysis.md",
+    "skills/review-response/references/stage-3-comment-atomization.md",
+    "skills/review-response/references/stage-4-workboard-planning.md",
+    "skills/review-response/references/stage-5-strategy-and-execution.md",
+    "skills/review-response/references/stage-6-final-review-and-export.md",
+    "skills/review-response/scripts/detect_main_tex.py",
+    "skills/review-response/scripts/export_manuscript_variants.py",
+    "skills/review-response/scripts/runtime_localization.py",
   ];
   for (const skill of expectedSkills.slice(0, 4)) {
     required.push(`skills/arsu/${skill}/SKILL.md`, `skills/arsu/${skill}/LICENSE`, `skills/arsu/${skill}/NOTICE.md`);
@@ -407,7 +426,7 @@ async function verifyAllToolDelivery(projectRoot, handbookDigest) {
   const fixedSkillsByTool = new Map();
   for (const installation of installations) {
     const source = installation?.source;
-    const skillId = source?.kind === "arsu-skill" || source?.kind === "companion-skill"
+    const skillId = source?.kind === "arsu-skill" || source?.kind === "core-skill" || source?.kind === "companion-skill"
       ? source.skill_id
       : source?.kind === "literature-adapter" && source.component === "skill"
         ? source.skill_id
@@ -418,7 +437,7 @@ async function verifyAllToolDelivery(projectRoot, handbookDigest) {
     fixedSkillsByTool.set(installation.tool_id, skills);
   }
   assert(fixedSkillsByTool.size === 31, `Expected fixed Skills for 31 tools, found ${String(fixedSkillsByTool.size)}.`);
-  for (const [toolId, skills] of fixedSkillsByTool) assert(skills.size === 15, `Fixed Skill count differs for ${String(toolId)}.`);
+  for (const [toolId, skills] of fixedSkillsByTool) assert(skills.size === 16, `Fixed Skill count differs for ${String(toolId)}.`);
 }
 
 function markdownRepositoryLinks(markdown) {
