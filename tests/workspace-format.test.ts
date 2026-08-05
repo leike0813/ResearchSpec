@@ -14,10 +14,9 @@ void test("workspace format recognizes only strict current config", async () => 
     assert.deepEqual(await inspectCurrentWorkspaceFormat(workspace), { current: false, reason: "config.yaml is missing" });
     await writeFile(path.join(workspace, "config.yaml"), "schema_version: \"0.1\"\nprofile: adaptive\n", "utf8");
     assert.equal((await inspectCurrentWorkspaceFormat(workspace)).current, false);
-    await writeFile(path.join(workspace, "config.yaml"), "schema_version: \"1\"\nagent_tools:\n  selected: []\n  delivery: both\nplugins:\n  selected: []\n", "utf8");
+    await writeFile(path.join(workspace, "config.yaml"), "schema_version: \"1\"\nagent_tools:\n  selected: []\n  delivery: both\nliterature_adapters:\n  selected: []\nplugins:\n  selected: []\n", "utf8");
     assert.deepEqual(await inspectCurrentWorkspaceFormat(workspace), { current: true });
   } finally {
     await cleanup(root);
   }
 });
-

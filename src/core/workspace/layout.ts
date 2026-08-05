@@ -29,6 +29,7 @@ const WORKSPACE_TEMPLATES: readonly WorkspaceTemplateDefinition[] = [
     content: stringify({
       schema_version: "1",
       agent_tools: { selected: [], delivery: "both" },
+      literature_adapters: { selected: [] },
       plugins: { selected: [] },
     }),
   },

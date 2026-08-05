@@ -42,17 +42,21 @@ skill groups at its registered project-local skill root.
 ### Requirement: Complete Companion Skill Delivery
 
 Every selected tool SHALL receive generated copies of all four canonical
-ResearchSpec Companion Skills together with the fixed ARSU and seven-Skill
-Literature Adapter surface at its registered project-local Skill root.
+ResearchSpec Companion Skills together with the four ARSU and two Core Skills;
+selected literature Adapter Skills SHALL be projected separately from their
+catalog.
 
-#### Scenario: Every tool receives the target fifteen-Skill surface
+#### Scenario: Every tool receives the default ten-Skill surface
 
-- **WHEN** any of the 31 registered tools is selected
-- **THEN** it SHALL receive four ARSU Skills, `researchspec-navigate`,
-  `researchspec-propose`, `researchspec-decide`, `researchspec-verify`, and the
-  seven fixed Zotero Adapter Skills
-- **AND** desired projection counts and files SHALL be derived from the ARSU,
-  Companion and Literature Adapter catalogs rather than a second member list
+- **WHEN** any of the 31 registered tools is selected without optional Adapter selection
+- **THEN** it SHALL receive four ARSU, two Core and four Companion Skills
+- **AND** desired projection counts and files SHALL be derived from their owning catalogs rather than a second member list
+
+#### Scenario: Selected Adapter reaches every tool
+
+- **WHEN** `zotero-library` and one or more Agent tools are selected
+- **THEN** all seven Adapter Skills SHALL be projected to every selected tool
+- **AND** their complete trees SHALL use the normal managed ownership records
 
 #### Scenario: Obsolete generated projections are cleaned safely
 
@@ -73,43 +77,50 @@ commands, while Skill-only tools SHALL receive only the fixed Skills.
 
 ### Requirement: Interactive And Detected Selection
 
-Interactive initialization SHALL provide searchable selection informed by
-configured and detected tools.
+Interactive initialization SHALL provide searchable Agent-tool selection
+followed by optional literature-Adapter selection with catalog-backed guidance.
 
 #### Scenario: First initialization preselects detected tools
 
 - **WHEN** no tool configuration exists and a TTY is available
 - **THEN** detected tools SHALL be preselected
 
-#### Scenario: Reconfiguration preserves explicit intent
+#### Scenario: Optional Adapter choices are presented
 
-- **WHEN** a workspace already has configured tools
-- **THEN** configured tools SHALL sort first and remain selected
-- **AND** newly detected unconfigured tools SHALL be shown without automatic
-  selection
+- **WHEN** Agent-tool selection completes in an interactive init
+- **THEN** the CLI SHALL present `zotero-library` unselected by default
+- **AND** its description SHALL identify the seven-Skill bundle, require Zotero with `zotero-agents`, and link to `https://github.com/leike0813/zotero-agents`
 
 #### Scenario: Non-interactive selection is deterministic
 
 - **WHEN** no TTY is available
-- **THEN** the CLI SHALL use an explicit `--tools` expression or detected tools
-- **AND** it SHALL fail clearly if neither yields a selection
+- **THEN** tool selection SHALL use `--tools` or detected tools under the existing rules
+- **AND** Adapter selection SHALL default to none unless `--literature-adapters` is supplied
 
 ### Requirement: Local Selection And Ownership Facts
 
-ResearchSpec SHALL store selected tool intent in `researchspec/config.yaml` and all generated ownership evidence in the strict current-state `tool-installation-manifest.json` schema version `1`.
+ResearchSpec SHALL store selected tool and literature-Adapter intent in
+`researchspec/config.yaml` and all generated ownership evidence in the strict
+current-state `tool-installation-manifest.json` schema version `1`.
 
 #### Scenario: Successful writes update the manifest last
 
-- **WHEN** tool or literature-adapter files are installed or refreshed
-- **THEN** the manifest SHALL record only successful paths through structured owner, source, target, executable, and SHA-256 evidence
-- **AND** it SHALL record completed literature-adapter resolutions separately
+- **WHEN** tool or selected literature-Adapter files are installed or refreshed
+- **THEN** the manifest SHALL record only successful paths through structured owner, source, target, executable and SHA-256 evidence
+- **AND** it SHALL record resolutions only for selected literature Adapters
 - **AND** it SHALL be committed after generated files
 
-#### Scenario: Previous development manifest shape is read
+#### Scenario: Optional Skill IDs are reserved
 
-- **WHEN** the manifest contains a flat installation source or `adapter_version`
-- **THEN** validation SHALL reject it as invalid schema version `1` content
-- **AND** ResearchSpec SHALL NOT migrate, dual-write, or interpret the legacy shape
+- **WHEN** the plugin registry validates a vendor Skill ID
+- **THEN** it SHALL reject collisions with packaged literature Adapter Skill IDs even when the Adapter is not selected
+- **AND** reserved IDs SHALL NOT be counted as installed fixed Skills
+
+#### Scenario: Previous current config shape is read
+
+- **WHEN** a workspace config lacks required `literature_adapters.selected`
+- **THEN** validation SHALL reject it as an unsupported current contract
+- **AND** ResearchSpec SHALL NOT migrate, dual-write, or infer selection from old manifest records
 
 ### Requirement: Generated File Drift Protection
 ResearchSpec SHALL create missing manifest-owned projections and preserve modified generated files
@@ -188,7 +199,7 @@ Optional plugin Skills SHALL NOT create tool command wrappers.
 
 #### Scenario: Command-capable tool receives plugins
 - **WHEN** a selected plugin is projected to one of the 28 command-capable tools
-- **THEN** the tool SHALL still contain exactly the eight base command wrappers managed by ResearchSpec
+- **THEN** the tool SHALL still contain exactly the sixteen fixed wrappers managed by ResearchSpec
 - **AND** the plugin SHALL be invoked as an installed Skill
 
 ### Requirement: Plugin Reconciliation Preserves Drift
@@ -228,18 +239,16 @@ Delivery reconciliation SHALL commit per-domain resolution snapshots with the in
 Delivery SHALL preserve Adapter role, visibility, capability and hard
 dependency metadata without creating command wrappers for any Adapter Skill.
 
-#### Scenario: Command-capable tool is selected
+#### Scenario: Command-capable tool and Adapter are selected
 
-- **WHEN** one of the 28 command-capable tools is installed
-- **THEN** it SHALL receive fifteen fixed Skills and exactly eight ResearchSpec
-  wrappers
-- **AND** the CLI mechanism SHALL remain available as a Skill dependency rather
-  than a ninth wrapper
+- **WHEN** one of the 28 command-capable tools and `zotero-library` are selected
+- **THEN** the tool SHALL receive seventeen Skills and exactly sixteen ResearchSpec wrappers
+- **AND** the CLI mechanism SHALL remain available as a Skill dependency rather than another wrapper
 
-#### Scenario: Skills-only tool is selected
+#### Scenario: Skills-only tool and Adapter are selected
 
-- **WHEN** ForgeCode, Kimi, or Mistral Vibe is selected
-- **THEN** it SHALL receive all fifteen fixed Skills
+- **WHEN** ForgeCode, Kimi, or Mistral Vibe and `zotero-library` are selected
+- **THEN** the tool SHALL receive all seventeen selected Skills
 - **AND** command absence SHALL remain a non-blocking diagnostic
 
 ### Requirement: Adapter Runtime Metadata Is Delivered Statically
@@ -285,8 +294,8 @@ separate hand-maintained command description.
 #### Scenario: Reference delivery does not expand the agent surface
 
 - **WHEN** the Navigate handbook reference is projected to selected tools
-- **THEN** every tool SHALL still receive exactly the fixed fifteen Skills
-- **AND** every command-capable tool SHALL still receive exactly the eight base
+- **THEN** every tool SHALL still receive exactly the fixed ten Skills
+- **AND** every command-capable tool SHALL still receive exactly the sixteen fixed
   ARSU and Companion wrappers
 - **AND** the handbook reference SHALL NOT create a new Skill, command wrapper,
   public CLI command, or Literature Adapter projection

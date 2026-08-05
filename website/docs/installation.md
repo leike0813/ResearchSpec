@@ -44,8 +44,8 @@ Run `researchspec --help` to see the full command list.
 
 ## Workspace Setup
 
-ResearchSpec uses a **workspace root** convention. Any directory containing
-`.researchspec/` is a workspace. Initialize one:
+ResearchSpec uses a **workspace root** convention. Any project containing
+`researchspec/` is a workspace. Initialize one:
 
 ```bash
 mkdir my-research && cd my-research
@@ -54,23 +54,29 @@ researchspec init
 
 The `init` command:
 
-- Creates the `.researchspec/` workspace directory
+- Creates the `researchspec/` workspace directory
 - Installs ARSU Skills (`deep-research`, `academic-paper`,
   `academic-paper-reviewer`, `academic-pipeline`)
 - Installs companion Skills (`researchspec-navigate`,
   `researchspec-propose`, `researchspec-decide`, `researchspec-verify`)
-- Installs Zotero literature adapter Skills (7 in total)
+- Offers the optional seven-Skill Zotero literature Adapter after tool selection
 - Writes initial contract files (`specs/`, `config.yaml`)
-- Is **idempotent** — safe to re-run
+- Refuses a non-empty initialization target; use `update` for an existing workspace
 
 ### Tool Selection
 
 | Flag | Behavior |
 |------|----------|
-| (default) | Install core ARSU, companion, and literature adapter tools |
-| `--tools all` | Install all 31 registered tools |
-| `--tools none` | Skip tool installation |
-| `--tools tooluniverse,materials-science` | Install specific tool subsets |
+| (interactive default) | Select detected Agent tools, then optionally select literature Adapters |
+| `--tools all` | Project the fixed base Skills to all 31 registered Agent tools |
+| `--tools none` | Skip Agent tool projection |
+| `--tools codex,claude` | Select specific Agent tools |
+| `--literature-adapters zotero-library` | Install the optional Zotero Adapter |
+| `--literature-adapters none` | Install no literature Adapter |
+
+The `zotero-library` Adapter requires Zotero with the
+[Zotero-Agents plugin](https://github.com/leike0813/zotero-agents). ResearchSpec
+shows this prerequisite during interactive init but does not install or probe it.
 
 ## Updating
 
@@ -94,8 +100,9 @@ This regenerates managed agent files without overwriting your research content.
 pnpm remove -g researchspec
 ```
 
-ResearchSpec does not modify files outside of `.researchspec/` within your
-workspace, so uninstalling the CLI does not affect your research data.
+Removing the CLI does not remove project files, Agent projections, or an optional
+`.zotero-bridge/` directory. Use `researchspec update --literature-adapters none`
+before uninstalling when you want ResearchSpec to remove clean managed Adapter files.
 
 ## Troubleshooting
 

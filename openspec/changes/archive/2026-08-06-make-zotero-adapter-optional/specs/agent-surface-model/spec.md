@@ -1,8 +1,4 @@
-## Purpose
-
-Define the minimal user-visible ARSU, Companion, CLI, and adapter-delivery surface.
-
-## Requirements
+## MODIFIED Requirements
 
 ### Requirement: Minimal User-Visible Skill Surface
 
@@ -20,14 +16,6 @@ and reviewed domain Skills SHALL remain optional additions.
 - **WHEN** the workspace selects `zotero-library`
 - **THEN** its seven catalog-owned Skills SHALL be added to each selected Agent host
 
-### Requirement: Minimal CLI Surface
-The product SHALL expose exactly sixteen top-level CLI capabilities and SHALL NOT create another
-command for a low-level control transaction.
-
-#### Scenario: Command-capable tool is projected
-- **WHEN** ResearchSpec installs command wrappers
-- **THEN** the wrapper set reflects the sixteen-command catalog and excludes `submit`
-
 ### Requirement: Adapter Delivery Does Not Define Product Capabilities
 
 ResearchSpec SHALL treat command wrappers as thin tool adapters, derive the
@@ -42,6 +30,7 @@ catalog-backed selections.
 - **AND** the 28 command-capable tools SHALL receive exactly sixteen thin command wrappers
 
 #### Scenario: Wrapper does not own workflow semantics
+
 - **WHEN** a command wrapper invokes a Skill
 - **THEN** the wrapper SHALL delegate to the corresponding Skill or CLI protocol
 - **AND** it SHALL NOT introduce an independent product capability or state machine
@@ -74,16 +63,3 @@ dependency metadata without creating command wrappers for any Adapter Skill.
 - **WHEN** ForgeCode, Kimi, or Mistral Vibe and `zotero-library` are selected
 - **THEN** the tool SHALL receive all seventeen selected Skills
 - **AND** command absence SHALL remain a non-blocking diagnostic
-
-### Requirement: Adapter Runtime Metadata Is Delivered Statically
-
-Each projected Zotero Skill SHALL retain its admitted `runner.json` and
-`output.schema.json` when present, with ownership and hashes managed like other
-generated Skill files.
-
-#### Scenario: Projected runner has drifted
-
-- **WHEN** a projected runner differs from its recorded bytes
-- **THEN** update SHALL preserve the user-modified file under the common drift
-  policy
-- **AND** it SHALL report degraded projection without executing the file

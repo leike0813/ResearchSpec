@@ -44,7 +44,7 @@ export interface StatusView {
   pending_changes: unknown[];
   frontier: FrontierItem[];
   blockers: Array<{ instance_id: string; code: string; message: string; refs: string[] }>;
-  literature_adapters: Array<{ adapter_id: string; connection_state: string }>;
+  literature_adapters: Array<{ adapter_id: string; state: string; connection_state: string }>;
 }
 
 export interface RouteInstructions {
@@ -142,8 +142,12 @@ export function cliJson<T>(args: string[], cwd: string): Envelope<T> {
   return envelope;
 }
 
-export function initialize(root: string, tools = "forgecode"): JourneyContext {
-  const initialized = runCli(["init", root, "--tools", tools, "--json"]);
+export function initialize(root: string, tools = "forgecode", literatureAdapters?: string): JourneyContext {
+  const initialized = runCli([
+    "init", root, "--tools", tools,
+    ...(literatureAdapters === undefined ? [] : ["--literature-adapters", literatureAdapters]),
+    "--json",
+  ]);
   assert.equal(initialized.status, 0, initialized.stderr || initialized.stdout);
   return { root, workspace: path.join(root, "researchspec"), sequence: 0, starts: [] };
 }

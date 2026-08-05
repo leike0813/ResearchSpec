@@ -10,6 +10,7 @@ import {
   LITERATURE_ADAPTER_CATALOG,
   LiteratureAdapterDefinitionSchema,
   normalizeLiteratureAdapterPlatform,
+  parseLiteratureAdapterExpression,
   planLiteratureAdapterDelivery,
   resolveLiteratureAdapterPlatform,
   validateLiteratureAdapterCatalog,
@@ -18,16 +19,26 @@ import { cleanup, tempProject } from "./helpers/cli.js";
 
 const hash = (value: string): string => createHash("sha256").update(value).digest("hex");
 
-void test("fixed Zotero catalog binds the approved release set and seven runtimes", () => {
+void test("optional Zotero catalog binds the approved release set, setup guidance, and seven runtimes", () => {
   const [adapter] = LITERATURE_ADAPTER_CATALOG;
   assert.equal(adapter?.adapter_id, "zotero-library");
-  assert.equal(adapter?.install_policy, "fixed");
+  assert.equal(adapter?.install_policy, "optional");
+  assert.equal(adapter?.display.name, "Zotero Agents");
+  assert.match(adapter?.display.description ?? "", /Requires Zotero.*zotero-agents plugin/);
+  assert.equal(adapter?.display.setup_url, "https://github.com/leike0813/zotero-agents");
   assert.equal(adapter?.identity.release_set_id, "hbrs-8c6de08010d459a0e87e74f2");
   assert.equal(adapter?.skills.length, 7);
   assert.deepEqual(adapter?.skills.map((skill) => skill.role), ["router", "task", "task", "task", "task", "task", "mechanism"]);
   assert.equal(adapter?.skills.every((skill) => skill.researchspec_workflow_authority === "none"), true);
   assert.equal(adapter?.runtimes.length, 7);
   assert.equal(new Set(adapter?.runtimes.map((runtime) => runtime.platform)).size, 7);
+});
+
+void test("literature adapter expressions support none, all, and catalog IDs", () => {
+  assert.deepEqual(parseLiteratureAdapterExpression("none"), []);
+  assert.deepEqual(parseLiteratureAdapterExpression("all"), ["zotero-library"]);
+  assert.deepEqual(parseLiteratureAdapterExpression("zotero-library,zotero-library"), ["zotero-library"]);
+  assert.throws(() => parseLiteratureAdapterExpression("unknown-adapter"), /Unknown literature Adapter/);
 });
 
 void test("platform normalization is exact and unsupported combinations do not fall back", () => {
@@ -54,7 +65,7 @@ void test("component patch versions are independently valid", () => {
   assert.equal(validateLiteratureAdapterCatalog([adapter]).length, 1);
 });
 
-void test("workspace delivery projects seventeen fixed Skills and sixteen wrappers", async () => {
+void test("workspace delivery projects seventeen Skills and sixteen wrappers when Zotero is selected", async () => {
   const root = await tempProject();
   try {
     const delivery = await planWorkspaceDelivery({
@@ -62,6 +73,7 @@ void test("workspace delivery projects seventeen fixed Skills and sixteen wrappe
       toolIds: ["claude"],
       selectedToolIds: ["claude"],
       reconciledToolIds: ["claude"],
+      selectedLiteratureAdapterIds: ["zotero-library"],
       existingInstallations: [],
       force: false,
       platform: "linux",
@@ -84,10 +96,30 @@ void test("workspace delivery projects seventeen fixed Skills and sixteen wrappe
   }
 });
 
-void test("fixed runtime installs without Agent tools and defers only Skill projection", async () => {
+void test("unselected literature adapters produce no managed delivery", async () => {
   const root = await tempProject();
   try {
-    const delivery = await planLiteratureAdapterDelivery({ projectRoot: root, toolIds: [], existingInstallations: [], force: false, platform: "linux", architecture: "x64" });
+    const delivery = await planLiteratureAdapterDelivery({
+      projectRoot: root,
+      toolIds: ["claude"],
+      selectedAdapterIds: [],
+      existingInstallations: [],
+      force: false,
+      platform: "linux",
+      architecture: "x64",
+    });
+    assert.deepEqual(delivery.operations, []);
+    assert.deepEqual(delivery.installations, []);
+    assert.deepEqual(delivery.resolutions, []);
+  } finally {
+    await cleanup(root);
+  }
+});
+
+void test("selected runtime installs without Agent tools and defers only Skill projection", async () => {
+  const root = await tempProject();
+  try {
+    const delivery = await planLiteratureAdapterDelivery({ projectRoot: root, toolIds: [], selectedAdapterIds: ["zotero-library"], existingInstallations: [], force: false, platform: "linux", architecture: "x64" });
     assert.equal(delivery.resolutions[0]?.projection_state, "deferred");
     assert.ok(delivery.resolutions[0]?.runtime_asset);
     assert.equal(delivery.installations.filter((item) => item.source.kind === "literature-adapter" && item.source.component === "skill").length, 0);
@@ -101,7 +133,7 @@ void test("fixed runtime installs without Agent tools and defers only Skill proj
 void test("unsupported targets keep static projection but do not select a runtime", async () => {
   const root = await tempProject();
   try {
-    const delivery = await planLiteratureAdapterDelivery({ projectRoot: root, toolIds: ["claude"], existingInstallations: [], force: false, platform: "freebsd", architecture: "x64" });
+    const delivery = await planLiteratureAdapterDelivery({ projectRoot: root, toolIds: ["claude"], selectedAdapterIds: ["zotero-library"], existingInstallations: [], force: false, platform: "freebsd", architecture: "x64" });
     assert.equal(delivery.resolutions[0]?.target_platform, "freebsd-x64");
     assert.equal(delivery.resolutions[0]?.runtime_asset, null);
     assert.equal(delivery.resolutions[0]?.projection_state, "complete");
@@ -115,7 +147,7 @@ void test("unsupported targets keep static projection but do not select a runtim
 void test("Windows delivery selects the exe and deterministic cmd shim", async () => {
   const root = await tempProject();
   try {
-    const delivery = await planLiteratureAdapterDelivery({ projectRoot: root, toolIds: [], existingInstallations: [], force: false, platform: "win32", architecture: "x64" });
+    const delivery = await planLiteratureAdapterDelivery({ projectRoot: root, toolIds: [], selectedAdapterIds: ["zotero-library"], existingInstallations: [], force: false, platform: "win32", architecture: "x64" });
     const targets = new Set(delivery.installations.map((item) => item.target.path));
     assert.ok(targets.has(".zotero-bridge/bin/zotero-bridge.exe"));
     assert.ok(targets.has(".zotero-bridge/bin/zotero-bridge.cmd"));
@@ -132,7 +164,7 @@ void test("adapter delivery never adopts or overwrites an unowned target", async
   try {
     await mkdir(path.dirname(target), { recursive: true });
     await writeFile(target, "user binary");
-    const delivery = await planLiteratureAdapterDelivery({ projectRoot: root, toolIds: [], existingInstallations: [], force: true, platform: "linux", architecture: "x64" });
+    const delivery = await planLiteratureAdapterDelivery({ projectRoot: root, toolIds: [], selectedAdapterIds: ["zotero-library"], existingInstallations: [], force: true, platform: "linux", architecture: "x64" });
     assert.equal(delivery.operations.find((item) => item.path === target)?.action, "conflict");
     assert.equal(delivery.resolutions[0]?.projection_state, "incomplete");
     await executeWritePlan({ operations: delivery.operations });
@@ -153,6 +185,7 @@ void test("forced adapter refresh replaces a drifted v1 managed profile with the
     const delivery = await planLiteratureAdapterDelivery({
       projectRoot: root,
       toolIds: [],
+      selectedAdapterIds: ["zotero-library"],
       existingInstallations: [{
         owner: "literature-adapter",
         tool_id: null,
@@ -187,6 +220,7 @@ void test("owner-aware upgrade adds five Skill trees and preserves drifted legac
     const initial = await planLiteratureAdapterDelivery({
       projectRoot: root,
       toolIds: ["claude"],
+      selectedAdapterIds: ["zotero-library"],
       existingInstallations: [],
       force: false,
       platform: "linux",
@@ -217,6 +251,7 @@ void test("owner-aware upgrade adds five Skill trees and preserves drifted legac
     const upgraded = await planLiteratureAdapterDelivery({
       projectRoot: root,
       toolIds: ["claude"],
+      selectedAdapterIds: ["zotero-library"],
       existingInstallations: legacyInstallations,
       force: false,
       platform: "linux",

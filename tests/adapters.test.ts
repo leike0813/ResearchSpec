@@ -109,7 +109,7 @@ void test("Copilot uses its explicit detection paths", async () => {
   await cleanup(root);
 });
 
-void test("delivery projects seventeen fixed Skills and sixteen wrappers", async () => {
+void test("delivery projects ten fixed Skills and sixteen wrappers by default", async () => {
   const root = await tempProject();
   const previousCodexHome = process.env.CODEX_HOME;
   process.env.CODEX_HOME = path.join(root, "codex-home");
@@ -119,6 +119,7 @@ void test("delivery projects seventeen fixed Skills and sixteen wrappers", async
       toolIds: TOOL_IDS,
       selectedToolIds: TOOL_IDS,
       reconciledToolIds: TOOL_IDS,
+      selectedLiteratureAdapterIds: [],
       existingInstallations: [],
       force: false,
       platform: "linux",
@@ -134,7 +135,7 @@ void test("delivery projects seventeen fixed Skills and sixteen wrappers", async
         if (item.source.kind === "arsu-skill" || item.source.kind === "core-skill" || item.source.kind === "companion-skill" || item.source.kind === "domain-skill") return [item.source.skill_id];
         return item.source.kind === "literature-adapter" && item.source.component === "skill" && item.source.skill_id ? [item.source.skill_id] : [];
       }));
-      assert.equal(skillIds.size, 17, toolId);
+      assert.equal(skillIds.size, 10, toolId);
     }
     assert.equal(delivery.diagnostics.filter((item) => item.code === "commands_not_supported").length, 3);
   } finally {

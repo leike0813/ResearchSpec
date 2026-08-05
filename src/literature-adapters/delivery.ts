@@ -10,7 +10,7 @@ import {
 import { getTool } from "../adapters/tools.js";
 import type { Diagnostic } from "../core/validation/types.js";
 import { planFile, sha256, type PlannedWrite } from "../core/workspace/write-plan.js";
-import { LITERATURE_ADAPTER_CATALOG } from "./catalog.js";
+import { desiredLiteratureAdapters } from "./catalog.js";
 import { LITERATURE_ADAPTER_PACKAGE_ROOT, readLiteratureAdapterProfile, readLiteratureAdapterSkillAssets } from "./assets.js";
 import { resolveLiteratureAdapterPlatform } from "./platform.js";
 
@@ -95,6 +95,7 @@ export async function reconcileLiteratureAdapterInstallations(input: {
 export async function planLiteratureAdapterDelivery(input: {
   projectRoot: string;
   toolIds: readonly string[];
+  selectedAdapterIds: readonly string[];
   existingInstallations: readonly ManagedInstallation[];
   force: boolean;
   platform?: NodeJS.Platform;
@@ -106,7 +107,7 @@ export async function planLiteratureAdapterDelivery(input: {
   const diagnostics: Diagnostic[] = [];
   const recorded = new Map(input.existingInstallations.map((item) => [installationKey(item), item]));
 
-  for (const adapter of LITERATURE_ADAPTER_CATALOG) {
+  for (const adapter of desiredLiteratureAdapters(input.selectedAdapterIds)) {
     const adapterOperationStart = operations.length;
     const platform = resolveLiteratureAdapterPlatform(adapter, input.platform, input.architecture);
     const targetIsWindows = platform.platform.startsWith("win32-");
@@ -132,7 +133,7 @@ export async function planLiteratureAdapterDelivery(input: {
         diagnostics.push({
           severity: "error",
           code: "literature_adapter_package_drift",
-          message: "Packaged literature adapter runtime does not match the fixed catalog.",
+          message: "Packaged literature Adapter runtime does not match the catalog.",
           path: path.join(LITERATURE_ADAPTER_PACKAGE_ROOT, runtime.source_path),
           blocking: true,
           details: { adapter_id: adapter.adapter_id, platform: platform.platform },
@@ -177,7 +178,7 @@ export async function planLiteratureAdapterDelivery(input: {
       diagnostics.push({
         severity: "warning",
         code: "literature_adapter_platform_unsupported",
-        message: "No fixed Zotero literature adapter runtime is available for this platform.",
+        message: "No Zotero literature Adapter runtime is available for this platform.",
         blocking: false,
         details: { adapter_id: adapter.adapter_id, target_platform: platform.platform },
       });

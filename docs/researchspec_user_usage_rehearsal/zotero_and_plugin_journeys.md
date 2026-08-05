@@ -5,6 +5,9 @@
 
 ## 共同边界
 
+- 这些旅程以 workspace 已选择 `zotero-library`、用户已安装 Zotero 与
+  [Zotero-Agents](https://github.com/leike0813/zotero-agents) 插件为前提。未选择时 `status`
+  报告 `not-selected`，Agent 应先引导用户执行 `update --literature-adapters zotero-library`。
 - Adapter 不启动 subflow、不写 `control.yaml`、不确认 Gate、不更新 stable specs。
 - 查询/分析授权不等于馆藏写入授权；每次 acquisition/curation 的实际写入范围单独确认。
 - Producer 决定如何使用 Adapter 结果，并把接受的研究事实写入自己的交付物或 specs。

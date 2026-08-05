@@ -9,6 +9,7 @@ import { planWorkspaceDelivery } from "../../adapters/workspace-delivery.js";
 import { loadCurrentWorkspaceIndex } from "../../core/runtime/workspace-index.js";
 import { getWorkspaceEntries, getWorkspaceTemplates, resolveInitTarget } from "../../core/workspace/layout.js";
 import { executeWritePlan, planFile, type PlannedWrite } from "../../core/workspace/write-plan.js";
+import { assertLiteratureAdapterSelection, LITERATURE_ADAPTER_CATALOG, parseLiteratureAdapterExpression } from "../../literature-adapters/index.js";
 import { selectedPluginIds } from "../../plugins/status.js";
 import type { LoadedPluginRegistry } from "../../plugins/registry.js";
 import { fileExists } from "../../utils/fs.js";
@@ -28,8 +29,8 @@ import {
 } from "./plugins.js";
 import { requireCurrentWorkspace } from "./shared.js";
 
-export interface CurrentInitOptions { tools?: string }
-export interface CurrentUpdateOptions { tools?: string }
+export interface CurrentInitOptions { tools?: string; literatureAdapters?: string }
+export interface CurrentUpdateOptions { tools?: string; literatureAdapters?: string }
 
 export async function handleCurrentInit(inputPath: string | undefined, options: CurrentInitOptions, context: CommandContext): Promise<CommandResult> {
   const workspace = context.workspace ? path.resolve(context.cwd, context.workspace) : resolveInitTarget(inputPath, context.cwd);
@@ -38,6 +39,7 @@ export async function handleCurrentInit(inputPath: string | undefined, options: 
   const pluginRegistry = await bundledPluginRegistry();
   const detected = await detectTools(projectRoot);
   const selected = await selectTools({ configured: [], detected, expression: options.tools, context, fresh: true });
+  const selectedLiteratureAdapters = await selectLiteratureAdapters({ configured: [], expression: options.literatureAdapters, context });
   const configuredPlugins: string[] = [];
 
   const operations: PlannedWrite[] = [];
@@ -58,6 +60,7 @@ export async function handleCurrentInit(inputPath: string | undefined, options: 
     toolIds: selected,
     selectedToolIds: selected,
     reconciledToolIds: selected,
+    selectedLiteratureAdapterIds: selectedLiteratureAdapters,
     existingInstallations: [],
     force: context.force,
     pluginRegistry,
@@ -67,7 +70,7 @@ export async function handleCurrentInit(inputPath: string | undefined, options: 
   operations.push(await authoritativeWrite(
     path.join(workspace, "config.yaml"),
     "config.yaml",
-    stringify({ schema_version: "1", agent_tools: { selected, delivery: "both" }, plugins: { selected: configuredPlugins } }),
+    stringify({ schema_version: "1", agent_tools: { selected, delivery: "both" }, literature_adapters: { selected: selectedLiteratureAdapters }, plugins: { selected: configuredPlugins } }),
     "workspace",
     "record current workspace and selected tool intent",
   ));
@@ -90,7 +93,7 @@ export async function handleCurrentInit(inputPath: string | undefined, options: 
   const diagnostics = [...delivery.diagnostics, ...currentOperationDiagnostics(operations)];
   return deliveryResult(
     "init",
-    { workspace, schema_version: "1", selected_tools: selected, selected_plugins: configuredPlugins, dry_run: context.dryRun, plan: summarizePlan(operations) },
+    { workspace, schema_version: "1", selected_tools: selected, selected_literature_adapters: selectedLiteratureAdapters, selected_plugins: configuredPlugins, dry_run: context.dryRun, plan: summarizePlan(operations) },
     { stdout: formatPlan(context.dryRun ? "ResearchSpec init dry run" : "ResearchSpec workspace initialized", workspace, operations, context.dryRun) },
     diagnostics,
   );
@@ -101,6 +104,7 @@ export async function handleCurrentUpdate(inputPath: string | undefined, options
   const index = await loadCurrentWorkspaceIndex(workspace);
   const projectRoot = index.projectRoot;
   const configured = index.config.agent_tools.selected;
+  const configuredLiteratureAdapters = index.config.literature_adapters.selected;
   const configuredPlugins = selectedPluginIds(index.config);
   const pluginRegistry = providedPluginRegistry ?? await bundledPluginRegistry();
   assertPluginsAvailable(configuredPlugins, pluginRegistry);
@@ -110,6 +114,13 @@ export async function handleCurrentUpdate(inputPath: string | undefined, options
     try { targetTools = parseToolExpression(options.tools); }
     catch (error) { throw new CliError("invalid_tools", error instanceof Error ? error.message : String(error), 2); }
     selected = options.tools === "none" ? [] : [...new Set([...configured, ...targetTools])];
+  }
+  let selectedLiteratureAdapters = configuredLiteratureAdapters;
+  try {
+    if (options.literatureAdapters !== undefined) selectedLiteratureAdapters = parseLiteratureAdapterExpression(options.literatureAdapters);
+    else assertLiteratureAdapterSelection(configuredLiteratureAdapters);
+  } catch (error) {
+    throw new CliError("invalid_literature_adapters", error instanceof Error ? error.message : String(error), 2);
   }
   const existingInstallations = installationRecords(index.manifest.installations);
   const delivery = await planWorkspaceDelivery({
@@ -122,15 +133,16 @@ export async function handleCurrentUpdate(inputPath: string | undefined, options
     pluginRegistry,
     selectedPluginIds: configuredPlugins,
     reconciledToolIds: targetTools,
+    selectedLiteratureAdapterIds: selectedLiteratureAdapters,
   });
   const operations = [...delivery.operations];
-  if (selected.join("\0") !== configured.join("\0")) {
+  if (selected.join("\0") !== configured.join("\0") || selectedLiteratureAdapters.join("\0") !== configuredLiteratureAdapters.join("\0")) {
     operations.push(await authoritativeWrite(
       path.join(workspace, "config.yaml"),
       "config.yaml",
-      stringify({ ...index.config, agent_tools: { ...index.config.agent_tools, selected } }),
+      stringify({ ...index.config, agent_tools: { ...index.config.agent_tools, selected }, literature_adapters: { selected: selectedLiteratureAdapters } }),
       "workspace",
-      "update selected tool intent",
+      "update selected tool and literature Adapter intent",
     ));
   }
   operations.push(await authoritativeWrite(
@@ -147,7 +159,7 @@ export async function handleCurrentUpdate(inputPath: string | undefined, options
   if (!context.dryRun) await executeWritePlan({ operations });
   return deliveryResult(
     "update",
-    { workspace, selected_tools: selected, selected_plugins: configuredPlugins, dry_run: context.dryRun, plan: summarizePlan(operations) },
+    { workspace, selected_tools: selected, selected_literature_adapters: selectedLiteratureAdapters, selected_plugins: configuredPlugins, dry_run: context.dryRun, plan: summarizePlan(operations) },
     { stdout: formatPlan(context.dryRun ? "ResearchSpec update dry run" : "ResearchSpec static projections updated", workspace, operations, context.dryRun) },
     diagnostics,
   );
@@ -169,6 +181,27 @@ async function selectTools(input: { configured: string[]; detected: string[]; ex
   } catch (error) {
     if (error instanceof CliError) throw error;
     throw new CliError("invalid_tools", error instanceof Error ? error.message : String(error), 2);
+  }
+}
+
+async function selectLiteratureAdapters(input: { configured: string[]; expression?: string; context: CommandContext }): Promise<string[]> {
+  try {
+    if (input.expression !== undefined) return parseLiteratureAdapterExpression(input.expression);
+    assertLiteratureAdapterSelection(input.configured);
+    if (!input.context.interactive) return input.configured;
+    return await searchableMultiSelect({
+      message: "Select optional literature Adapters",
+      choices: LITERATURE_ADAPTER_CATALOG.filter((adapter) => adapter.install_policy === "optional").map((adapter) => ({
+        name: `${adapter.display.name} (${adapter.adapter_id})`,
+        value: adapter.adapter_id,
+        description: `${adapter.display.description} Setup: ${adapter.display.setup_url}`,
+        configured: input.configured.includes(adapter.adapter_id),
+        preSelected: input.configured.includes(adapter.adapter_id),
+      })),
+    });
+  } catch (error) {
+    if (error instanceof CliError) throw error;
+    throw new CliError("invalid_literature_adapters", error instanceof Error ? error.message : String(error), 2);
   }
 }
 

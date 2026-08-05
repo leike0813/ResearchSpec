@@ -55,9 +55,11 @@ framework-level operations:
 | `researchspec-decide` | Guide human decision-making on proposals |
 | `researchspec-verify` | Verify implementation against contracts |
 
-## Literature Adapter Skills
+## Optional Literature Adapter Skills
 
-Seven Zotero literature adapter Skills provide library management and analysis:
+Selecting `zotero-library` adds seven Skills for library management and analysis.
+The Adapter requires Zotero with the
+[Zotero-Agents plugin](https://github.com/leike0813/zotero-agents):
 
 | Adapter | Purpose |
 |---------|---------|

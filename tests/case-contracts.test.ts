@@ -17,7 +17,8 @@ import { cleanup, tempProject } from "./helpers/cli.js";
 const NOW = "2026-08-01T12:00:00+08:00";
 
 void test("current workspace contracts accept empty stable skeletons", () => {
-  assert.equal(CurrentWorkspaceConfigSchema.safeParse({ schema_version: "1", agent_tools: { selected: [], delivery: "both" }, plugins: { selected: [] } }).success, true);
+  assert.equal(CurrentWorkspaceConfigSchema.safeParse({ schema_version: "1", agent_tools: { selected: [], delivery: "both" }, literature_adapters: { selected: [] }, plugins: { selected: [] } }).success, true);
+  assert.equal(CurrentWorkspaceConfigSchema.safeParse({ schema_version: "1", agent_tools: { selected: [], delivery: "both" }, plugins: { selected: [] } }).success, false);
   assert.equal(SourcesSpecSchema.safeParse({ schema_version: "1", sources: [] }).success, true);
   assert.equal(ClaimsSpecSchema.safeParse({ schema_version: "1", claims: [] }).success, true);
   const manuscript = { schema_version: "1", manuscript_id: "manuscript", output_type: null, working_title: null, language: null, audience: null, venue: null, citation_requirements: [], format_requirements: [], delivery: { working_format: null, final_output_format: null }, outline: [] };

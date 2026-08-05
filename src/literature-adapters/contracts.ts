@@ -55,7 +55,12 @@ export const LiteratureAdapterSkillSchema = z.strictObject({
 
 export const LiteratureAdapterDefinitionSchema = z.strictObject({
   adapter_id: IdentifierSchema,
-  install_policy: z.literal("fixed"),
+  install_policy: z.enum(["fixed", "optional"]),
+  display: z.strictObject({
+    name: z.string().trim().min(1),
+    description: z.string().trim().min(1),
+    setup_url: z.url(),
+  }),
   skills: z.array(LiteratureAdapterSkillSchema).min(1),
   profile_template_path: z.string().min(1),
   source: z.strictObject({

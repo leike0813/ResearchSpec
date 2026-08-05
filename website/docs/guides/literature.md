@@ -6,8 +6,9 @@ description: Zotero library integration — query, acquisition, analysis, synthe
 
 # Literature Adapters
 
-ResearchSpec includes seven Zotero literature adapter Skills for managing
-academic literature through your Zotero library.
+ResearchSpec offers an optional seven-Skill Zotero literature Adapter for managing
+academic literature through your Zotero library. It requires Zotero with the
+[Zotero-Agents plugin](https://github.com/leike0813/zotero-agents).
 
 ## Adapter Overview
 
@@ -23,8 +24,8 @@ academic literature through your Zotero library.
 
 ## How They Work
 
-Adapters operate through the `literature-adapters/zotero/` directory in your
-workspace. They provide:
+ResearchSpec packages the reviewed Adapter under `literature-adapters/zotero/`.
+When selected, it projects:
 
 - **Skill instructions** (SKILL.md) for the agent
 - **Bundled binaries** (where applicable)
@@ -37,12 +38,29 @@ tools.
 
 ## Installation
 
-Literature adapters are installed by default with `researchspec init`. You can
-verify their presence:
+Interactive `researchspec init` offers the Adapter after Agent tool selection and
+leaves it unselected by default. For non-interactive setup:
+
+```bash
+researchspec init . --tools codex --literature-adapters zotero-library
+```
+
+For an existing workspace, selection is replaced explicitly:
+
+```bash
+researchspec update --literature-adapters zotero-library
+researchspec update --literature-adapters none
+```
+
+Omitting the option during `update` preserves the current choice. Verify static
+installation health with:
 
 ```bash
 researchspec check literature-adapters
 ```
+
+Status lists the catalog entry as `not-selected` when disabled. It does not report
+missing runtime or Skill projections until the Adapter is selected.
 
 ## Versioning
 

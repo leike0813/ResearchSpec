@@ -10,10 +10,10 @@ export const CurrentWorkspaceConfigSchema = z.strictObject({
     selected: z.array(IdentifierSchema),
     delivery: z.enum(["skills", "commands", "both"]),
   }),
+  literature_adapters: z.strictObject({ selected: z.array(IdentifierSchema) }),
   plugins: z.strictObject({ selected: z.array(IdentifierSchema) }),
 });
 
 export type CurrentWorkspaceConfig = z.infer<typeof CurrentWorkspaceConfigSchema>;
 
 export type WorkspaceFormatKind = "missing" | "current" | "unsupported";
-

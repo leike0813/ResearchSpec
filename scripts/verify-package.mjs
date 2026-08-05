@@ -15,7 +15,7 @@ const projectDirectory = path.join(temporaryRoot, "project");
 const allToolsProjectDirectory = path.join(temporaryRoot, "all-tools-project");
 const unsupportedProjectDirectory = path.join(temporaryRoot, "unsupported-project");
 const codexHome = path.join(temporaryRoot, "codex-home");
-const expectedSkills = [
+const expectedBaseSkills = [
   "academic-paper",
   "academic-paper-reviewer",
   "academic-pipeline",
@@ -26,23 +26,17 @@ const expectedSkills = [
   "researchspec-propose",
   "researchspec-verify",
   "review-response",
-  "zotero-bridge-cli",
-  "zotero-library-agent",
-  "zotero-library-curation",
-  "zotero-library-query",
-  "zotero-literature-acquisition",
-  "zotero-literature-analysis",
-  "zotero-research-synthesis",
 ];
 const expectedAdapterSkills = [
+  "zotero-bridge-cli",
   "zotero-library-agent",
+  "zotero-library-curation",
   "zotero-library-query",
   "zotero-literature-acquisition",
   "zotero-literature-analysis",
   "zotero-research-synthesis",
-  "zotero-library-curation",
-  "zotero-bridge-cli",
 ];
+const expectedSkills = [...expectedBaseSkills, ...expectedAdapterSkills].sort();
 const expectedCommands = [
   "advance", "archive", "check", "decide", "doctor", "handoff", "init", "instructions", "list",
   "pack", "plugin", "propose", "show", "start", "status", "update",
@@ -126,11 +120,12 @@ try {
   }
 
   const environment = { ...process.env, CODEX_HOME: codexHome };
-  run(bin, ["init", projectDirectory, "--tools", "codex", "--json"], installDirectory, environment);
+  run(bin, ["init", projectDirectory, "--tools", "codex", "--literature-adapters", "zotero-library", "--json"], installDirectory, environment);
   const currentWorkspace = path.join(projectDirectory, "researchspec");
   const currentConfig = parseYaml(await readFile(path.join(currentWorkspace, "config.yaml"), "utf8"));
   const currentProfile = parseYaml(await readFile(path.join(currentWorkspace, "profiles", "academic-pipeline.yaml"), "utf8"));
   assert(currentConfig?.schema_version === "1", "Installed init did not create schema 1 config.");
+  assert(equal(currentConfig?.literature_adapters?.selected, ["zotero-library"]), "Installed init did not persist the selected literature adapter.");
   assert(currentProfile?.schema_version === "1" && currentProfile?.profile_id === "academic-pipeline", "Installed init did not project the current academic-pipeline profile.");
   const humanizerProfile = parseYaml(await readFile(path.join(currentWorkspace, "profiles", "paper-humanizer.yaml"), "utf8"));
   assert(humanizerProfile?.schema_version === "1" && humanizerProfile?.profile_id === "paper-humanizer", "Installed init did not project the current paper-humanizer profile.");
@@ -158,7 +153,7 @@ try {
   if (process.platform !== "win32") assert((runtimeInfo.mode & 0o111) !== 0, `Installed Zotero runtime is not executable: ${runtimePath}`);
   if (process.platform === "win32") await readFile(path.join(adapterRoot, "bin", "zotero-bridge.cmd"), "utf8");
   const installationManifest = JSON.parse(await readFile(path.join(projectDirectory, "researchspec", "tool-installation-manifest.json"), "utf8"));
-  assert(installationManifest.literature_adapter_resolutions?.length === 1, "Installed manifest has no fixed literature adapter resolution.");
+  assert(installationManifest.literature_adapter_resolutions?.length === 1, "Installed manifest has no selected literature adapter resolution.");
   assert(installationManifest.literature_adapter_resolutions[0].projection_state === "complete", "Installed literature adapter Skill projection is incomplete.");
   const prompts = (await readdir(path.join(codexHome, "prompts"))).filter((file) => file.startsWith("researchspec-") && file.endsWith(".md")).sort();
   assert(prompts.length === 16, `Installed Codex prompt count mismatch: ${String(prompts.length)}`);
@@ -401,6 +396,8 @@ async function verifyCurrentPublishedGuidance(installedPackageRoot) {
 async function verifyAllToolDelivery(projectRoot, handbookDigest) {
   const manifest = JSON.parse(await readFile(path.join(projectRoot, "researchspec", "tool-installation-manifest.json"), "utf8"));
   const installations = Array.isArray(manifest.installations) ? manifest.installations : [];
+  assert(equal(manifest.literature_adapter_resolutions, []), "Default all-tool init unexpectedly installed a literature adapter.");
+  assert(!await pathExists(path.join(projectRoot, ".zotero-bridge")), "Default all-tool init unexpectedly created .zotero-bridge.");
   const handbookReferences = installations.filter((item) =>
     item?.source?.kind === "companion-skill"
     && item.source.skill_id === "researchspec-navigate"
@@ -426,21 +423,19 @@ async function verifyAllToolDelivery(projectRoot, handbookDigest) {
   assert(commandTools.size === 28, `Expected 28 command-capable tools, found ${String(commandTools.size)}.`);
   for (const [toolId, commands] of commandTools) assert(commands.size === 16, `Command wrapper count differs for ${String(toolId)}.`);
 
-  const fixedSkillsByTool = new Map();
+  const baseSkillsByTool = new Map();
   for (const installation of installations) {
     const source = installation?.source;
     const skillId = source?.kind === "arsu-skill" || source?.kind === "core-skill" || source?.kind === "companion-skill"
       ? source.skill_id
-      : source?.kind === "literature-adapter" && source.component === "skill"
-        ? source.skill_id
-        : undefined;
+      : undefined;
     if (!skillId || !installation.tool_id) continue;
-    const skills = fixedSkillsByTool.get(installation.tool_id) ?? new Set();
+    const skills = baseSkillsByTool.get(installation.tool_id) ?? new Set();
     skills.add(skillId);
-    fixedSkillsByTool.set(installation.tool_id, skills);
+    baseSkillsByTool.set(installation.tool_id, skills);
   }
-  assert(fixedSkillsByTool.size === 31, `Expected fixed Skills for 31 tools, found ${String(fixedSkillsByTool.size)}.`);
-  for (const [toolId, skills] of fixedSkillsByTool) assert(skills.size === 17, `Fixed Skill count differs for ${String(toolId)}.`);
+  assert(baseSkillsByTool.size === 31, `Expected base Skills for 31 tools, found ${String(baseSkillsByTool.size)}.`);
+  for (const [toolId, skills] of baseSkillsByTool) assert(skills.size === 10, `Base Skill count differs for ${String(toolId)}.`);
 }
 
 function markdownRepositoryLinks(markdown) {

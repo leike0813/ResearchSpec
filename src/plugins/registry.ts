@@ -127,7 +127,7 @@ export class PluginRegistryError extends Error {
 
 export const PACKAGE_ROOT = fileURLToPath(new URL("../../../", import.meta.url));
 export const PLUGIN_ROOT = path.join(PACKAGE_ROOT, "skills/plugins");
-export const BASE_SKILL_IDS = [...ARSU_SKILL_IDS, ...CORE_SKILL_IDS, ...COMPANION_INTENTS.map((intent) => intent.skillId), ...LITERATURE_ADAPTER_SKILL_IDS] as const;
+export const RESERVED_SKILL_IDS = [...ARSU_SKILL_IDS, ...CORE_SKILL_IDS, ...COMPANION_INTENTS.map((intent) => intent.skillId), ...LITERATURE_ADAPTER_SKILL_IDS] as const;
 
 export async function loadPluginRegistry(pluginRoot = PLUGIN_ROOT, validateSkillContent = true): Promise<LoadedPluginRegistry> {
   const registryPath = path.join(pluginRoot, "registry.json");
@@ -148,7 +148,7 @@ export async function validatePluginRegistry(raw: unknown, pluginRoot: string, r
   const warnings: Diagnostic[] = [];
   uniqueIds(registry.vendors.map((item) => item.vendor_id), "vendor", errors, registryPath);
   uniqueIds(registry.domains.map((item) => item.domain_id), "domain", errors, registryPath);
-  const baseIds = new Set<string>(BASE_SKILL_IDS);
+  const reservedIds = new Set<string>(RESERVED_SKILL_IDS);
   const skills = new Map<string, RegisteredSkill>();
   const skillMetadata = new Map<string, PluginSkillMetadata>();
   const skillFiles = new Map<string, readonly string[]>();
@@ -158,7 +158,7 @@ export async function validatePluginRegistry(raw: unknown, pluginRoot: string, r
     const localIds = new Set<string>();
     for (const skill of vendor.skills) {
       if (localIds.has(skill.skill_id) || skills.has(skill.skill_id)) errors.push(fatal("plugin_skill_id_duplicate", `Vendor Skill ID must be globally unique: ${skill.skill_id}`, registryPath, { vendor_id: vendor.vendor_id, skill_id: skill.skill_id }));
-      if (baseIds.has(skill.skill_id)) errors.push(fatal("plugin_skill_id_conflict", `Vendor Skill ID conflicts with the fixed base surface: ${skill.skill_id}`, registryPath, { vendor_id: vendor.vendor_id, skill_id: skill.skill_id }));
+      if (reservedIds.has(skill.skill_id)) errors.push(fatal("plugin_skill_id_conflict", `Vendor Skill ID conflicts with a reserved ResearchSpec Skill ID: ${skill.skill_id}`, registryPath, { vendor_id: vendor.vendor_id, skill_id: skill.skill_id }));
       localIds.add(skill.skill_id);
       skills.set(skill.skill_id, { vendor, definition: skill });
     }

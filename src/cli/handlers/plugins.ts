@@ -260,6 +260,7 @@ async function reconcilePluginSelection(
     workspaceRoot: workspace,
     toolIds,
     selectedToolIds: toolIds,
+    selectedLiteratureAdapterIds: snapshot.config.literature_adapters.selected,
     existingInstallations,
     force: context.force,
     pluginRegistry,

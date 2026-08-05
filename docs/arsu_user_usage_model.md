@@ -11,17 +11,18 @@ Zotero、论文文件或其它外部研究材料。
 
 ## 2. 用户可见表面
 
-固定 Agent Skill 表面为：
+固定 Agent Skill 基础表面为：
 
 - 四个 ARSU Skills：`deep-research`、`academic-paper`、
   `academic-paper-reviewer`、`academic-pipeline`；
 - 两个 Core Skills：`review-response`、`paper-humanizer`；
 - 四个 Companion Skills：`researchspec-navigate`、`researchspec-propose`、
   `researchspec-decide`、`researchspec-verify`；
-- 七个 Zotero literature Adapter Skills：`zotero-library-agent`、
+- 可选的 `zotero-library` Adapter 在用户选择后增加七个 Skills：`zotero-library-agent`、
   `zotero-library-query`、`zotero-literature-acquisition`、
   `zotero-literature-analysis`、`zotero-research-synthesis`、
-  `zotero-library-curation`、`zotero-bridge-cli`。
+  `zotero-library-curation`、`zotero-bridge-cli`。它要求 Zotero 已安装
+  [Zotero-Agents](https://github.com/leike0813/zotero-agents) 插件。
 
 可选 domain Skills 只能辅助语义工作，不能增加 Companion、CLI capability 或工作流权威。
 
@@ -38,7 +39,9 @@ decide      archive     doctor      plugin
 
 ## 3. Workspace 与文件所有权
 
-`researchspec init` 只准备 workspace 和静态 Agent 投影，不启动学术工作。Fresh workspace：
+`researchspec init` 先选择 Agent tools，再单独选择可选 literature Adapters；Adapter 默认不选。
+非交互调用通过 `--literature-adapters <none|all|ids>` 明确选择。它只准备 workspace 和静态
+Agent 投影，不启动学术工作。Fresh workspace：
 
 ```text
 researchspec/

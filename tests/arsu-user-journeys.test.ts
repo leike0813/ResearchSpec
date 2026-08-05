@@ -28,7 +28,7 @@ const PUBLIC_COMMANDS = [
   "init", "update", "status", "instructions", "start", "advance", "check", "doctor", "list",
   "show", "handoff", "pack", "propose", "decide", "archive", "plugin",
 ];
-const FIXED_SKILLS = [
+const INSTALLED_SKILLS = [
   "deep-research", "academic-paper", "academic-paper-reviewer", "academic-pipeline",
   "researchspec-navigate", "researchspec-propose", "researchspec-decide", "researchspec-verify",
   "zotero-library-agent", "zotero-library-query", "zotero-literature-acquisition",
@@ -39,7 +39,7 @@ const FIXED_SKILLS = [
 void test("[journey.bootstrap] packaged surface initializes current authority without starting academic work", async () => {
   const root = await tempProject();
   try {
-    const initialized = runCli(["init", root, "--tools", "forgecode", "--json"]);
+    const initialized = runCli(["init", root, "--tools", "forgecode", "--literature-adapters", "zotero-library", "--json"]);
     assert.equal(initialized.status, 0, initialized.stderr || initialized.stdout);
     const workspace = path.join(root, "researchspec");
     assert.deepEqual((await readdir(workspace)).sort(), [
@@ -52,7 +52,7 @@ void test("[journey.bootstrap] packaged surface initializes current authority wi
     ).data;
     assert.deepEqual(current?.active_instances, []);
     assert.deepEqual(current?.subflows, {});
-    for (const skill of FIXED_SKILLS) {
+    for (const skill of INSTALLED_SKILLS) {
       assert.equal(existsSync(path.join(root, ".forge/skills", skill, "SKILL.md")), true, skill);
     }
     assert.deepEqual(helpCommandNames(runCli(["--help"], root).stdout), PUBLIC_COMMANDS);
@@ -62,7 +62,7 @@ void test("[journey.bootstrap] packaged surface initializes current authority wi
 void test("[journey.routing] route summaries, Zotero readiness and consent boundaries remain read-only", async () => {
   const root = await tempProject();
   try {
-    const context = initialize(root);
+    const context = initialize(root, "forgecode", "zotero-library");
     const configPath = path.join(context.workspace, "config.yaml");
     const before = hash(await readFile(configPath));
     const standalone = instructions(context, "route:deep-research:quick") as RouteInstructions;
@@ -178,7 +178,7 @@ void test("[journey.change] acceptance leaves stable specs untouched and termina
 void test("[journey.plugin-zotero] plugin failure or installation never changes the ARSU frontier or provider authority", async () => {
   const root = await tempProject();
   try {
-    const context = initialize(root);
+    const context = initialize(root, "forgecode", "zotero-library");
     const started = await startRoute(context, "deep-research:quick");
     const before = status(context);
     const failed = runCli([
@@ -197,7 +197,9 @@ void test("[journey.plugin-zotero] plugin failure or installation never changes 
     ], root);
     const after = status(context);
     assert.deepEqual(after.frontier, before.frontier);
+    assert.equal(after.literature_adapters[0]?.state, "installed");
     assert.equal(after.literature_adapters[0]?.connection_state, "unchecked");
+    assert.equal(existsSync(path.join(root, ".forge/skills/zotero-library-agent/SKILL.md")), true);
     assert.equal(showSubflow(context, started.instanceId).route_ref, "deep-research:quick");
   } finally { await cleanup(root); }
 });

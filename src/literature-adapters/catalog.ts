@@ -4,7 +4,12 @@ export const ZOTERO_LITERATURE_ADAPTER_ID = "zotero-library" as const;
 
 const catalog = [{
   adapter_id: ZOTERO_LITERATURE_ADAPTER_ID,
-  install_policy: "fixed",
+  install_policy: "optional",
+  display: {
+    name: "Zotero Agents",
+    description: "7 Zotero literature Skills. Requires Zotero with the zotero-agents plugin.",
+    setup_url: "https://github.com/leike0813/zotero-agents",
+  },
   skills: [
     {
       skill_id: "zotero-library-agent",
@@ -123,10 +128,34 @@ const catalog = [{
 }] as const;
 
 export const LITERATURE_ADAPTER_CATALOG = validateLiteratureAdapterCatalog(catalog);
+export const LITERATURE_ADAPTER_IDS = LITERATURE_ADAPTER_CATALOG.map((adapter) => adapter.adapter_id);
 export const LITERATURE_ADAPTER_SKILL_IDS = LITERATURE_ADAPTER_CATALOG.flatMap((adapter) =>
   adapter.skills.map((skill) => skill.skill_id)
 );
 
 export function getLiteratureAdapter(adapterId: string) {
   return LITERATURE_ADAPTER_CATALOG.find((adapter) => adapter.adapter_id === adapterId);
+}
+
+export function parseLiteratureAdapterExpression(expression: string): string[] {
+  const ids = [...new Set(expression.toLowerCase().split(",").map((value) => value.trim()).filter(Boolean))];
+  if (ids.includes("all") || ids.includes("none")) {
+    if (ids.length !== 1) throw new Error("'all' and 'none' cannot be combined with literature Adapter IDs.");
+    return ids[0] === "all"
+      ? LITERATURE_ADAPTER_CATALOG.filter((adapter) => adapter.install_policy === "optional").map((adapter) => adapter.adapter_id)
+      : [];
+  }
+  assertLiteratureAdapterSelection(ids);
+  return ids;
+}
+
+export function assertLiteratureAdapterSelection(ids: readonly string[]): void {
+  const unknown = ids.filter((id) => !getLiteratureAdapter(id));
+  if (unknown.length) throw new Error(`Unknown literature Adapter ID: ${unknown.join(", ")}. Valid IDs: ${LITERATURE_ADAPTER_IDS.join(", ")}`);
+}
+
+export function desiredLiteratureAdapters(selectedIds: readonly string[]) {
+  assertLiteratureAdapterSelection(selectedIds);
+  const selected = new Set(selectedIds);
+  return LITERATURE_ADAPTER_CATALOG.filter((adapter) => adapter.install_policy === "fixed" || selected.has(adapter.adapter_id));
 }

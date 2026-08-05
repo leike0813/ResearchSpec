@@ -8,6 +8,7 @@ import chalk from "chalk";
 export interface SearchableChoice {
   name: string;
   value: string;
+  description?: string;
   configured?: boolean;
   detected?: boolean;
   preSelected?: boolean;
@@ -23,7 +24,7 @@ const prompt = createPrompt((config: Config, done: (value: string[]) => void): s
   const prefix = usePrefix({ status });
   const filtered = useMemo(() => {
     const term = search.toLowerCase();
-    return term ? config.choices.filter((choice) => choice.name.toLowerCase().includes(term) || choice.value.includes(term)) : config.choices;
+    return term ? config.choices.filter((choice) => choice.name.toLowerCase().includes(term) || choice.value.includes(term) || choice.description?.toLowerCase().includes(term)) : config.choices;
   }, [search, config.choices]);
   const selectedSet = useMemo(() => new Set(selected), [selected]);
 
@@ -54,6 +55,7 @@ const prompt = createPrompt((config: Config, done: (value: string[]) => void): s
     const chosen = selectedSet.has(choice.value);
     const label = chosen ? "selected" : choice.configured ? "configured" : choice.detected ? "detected" : "";
     lines.push(`  ${active ? chalk.cyan("›") : " "} ${chosen ? chalk.green("◉") : chalk.dim("○")} ${active ? chalk.cyan(choice.name) : choice.name}${label ? chalk.dim(` (${label})`) : ""}`);
+    if (choice.description) lines.push(chalk.dim(`      ${choice.description}`));
   }
   if (!filtered.length) lines.push(chalk.yellow("  No matches"));
   return lines.join("\n");

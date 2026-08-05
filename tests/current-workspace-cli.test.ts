@@ -18,15 +18,84 @@ void test("fresh init creates only the current workspace authority tree", async 
     for (const relativePath of ["runs", "playbooks", "draft-patches", "artifact-registry.json"]) assert.equal(existsSync(path.join(workspace, relativePath)), false);
     const config = await readFile(path.join(workspace, "config.yaml"), "utf8");
     assert.match(config, /^schema_version: "1"$/m);
+    assert.match(config, /^literature_adapters:\n {2}selected: \[\]$/m);
     assert.doesNotMatch(config, /^profile:/m);
     assert.match(await readFile(path.join(workspace, "specs/manuscript.yaml"), "utf8"), /delivery:\n {2}working_format: null\n {2}final_output_format: null/);
-    const manifest = JSON.parse(await readFile(path.join(workspace, "tool-installation-manifest.json"), "utf8")) as { installations: Array<{ owner: string; source: { kind: string } }> };
+    const manifest = JSON.parse(await readFile(path.join(workspace, "tool-installation-manifest.json"), "utf8")) as { installations: Array<{ owner: string; source: { kind: string } }>; literature_adapter_resolutions: unknown[] };
     assert.equal(manifest.installations.filter((item) => item.owner === "framework" && item.source.kind === "framework-profile").length, 3);
-    assert.equal(parseEnvelope(runCli(["status", "--json"], root)).ok, true);
+    assert.deepEqual(manifest.literature_adapter_resolutions, []);
+    assert.equal(existsSync(path.join(root, ".zotero-bridge")), false);
+    const status = parseEnvelope<{ literature_adapters: Array<{ adapter_id: string; state: string; diagnostics: unknown[] }> }>(runCli(["status", "--json"], root));
+    assert.equal(status.ok, true);
+    assert.deepEqual(status.data?.literature_adapters.map((adapter) => ({ adapter_id: adapter.adapter_id, state: adapter.state })), [
+      { adapter_id: "zotero-library", state: "not-selected" },
+    ]);
+    assert.deepEqual(status.data?.literature_adapters[0]?.diagnostics, []);
     assert.equal(parseEnvelope(runCli(["check", "profiles", "--json"], root)).ok, true);
     assert.equal(parseEnvelope(runCli(["doctor", "--json"], root)).ok, true);
     assert.deepEqual(parseEnvelope<{ domains: unknown[] }>(runCli(["plugin", "list", "--installed", "--json"], root)).data?.domains, []);
     assert.equal(parseEnvelope(runCli(["init", root, "--tools", "none", "--json"])).error?.code, "workspace_exists");
+  } finally {
+    await cleanup(root);
+  }
+});
+
+void test("explicit Zotero selection installs the adapter and update can cleanly deselect it", async () => {
+  const root = await tempProject();
+  try {
+    const initialized = runCli(["init", root, "--tools", "forgecode", "--literature-adapters", "zotero-library", "--json"]);
+    assert.equal(initialized.status, 0, initialized.stderr || initialized.stdout);
+    assert.equal(existsSync(path.join(root, ".zotero-bridge/bin/zotero-bridge")), true);
+    assert.equal(existsSync(path.join(root, ".forge/skills/zotero-library-agent/SKILL.md")), true);
+    assert.match(await readFile(path.join(root, "researchspec/config.yaml"), "utf8"), /^literature_adapters:\n {2}selected:\n {4}- zotero-library$/m);
+
+    const preserved = runCli(["update", "--tools", "forgecode", "--json"], root);
+    assert.equal(preserved.status, 0, preserved.stderr || preserved.stdout);
+    assert.equal(existsSync(path.join(root, ".zotero-bridge/bin/zotero-bridge")), true);
+
+    const deselected = runCli(["update", "--literature-adapters", "none", "--json"], root);
+    assert.equal(deselected.status, 0, deselected.stderr || deselected.stdout);
+    assert.equal(existsSync(path.join(root, ".zotero-bridge/bin/zotero-bridge")), false);
+    assert.equal(existsSync(path.join(root, ".forge/skills/zotero-library-agent/SKILL.md")), false);
+    assert.match(await readFile(path.join(root, "researchspec/config.yaml"), "utf8"), /^literature_adapters:\n {2}selected: \[\]$/m);
+    const manifest = JSON.parse(await readFile(path.join(root, "researchspec/tool-installation-manifest.json"), "utf8")) as {
+      installations: Array<{ source: { kind: string } }>;
+      literature_adapter_resolutions: unknown[];
+    };
+    assert.equal(manifest.installations.some((item) => item.source.kind === "literature-adapter"), false);
+    assert.deepEqual(manifest.literature_adapter_resolutions, []);
+    const status = parseEnvelope<{ literature_adapters: Array<{ state: string; diagnostics: unknown[] }> }>(runCli(["status", "--json"], root));
+    assert.equal(status.data?.literature_adapters[0]?.state, "not-selected");
+    assert.deepEqual(status.data?.literature_adapters[0]?.diagnostics, []);
+  } finally {
+    await cleanup(root);
+  }
+});
+
+void test("deselecting Zotero preserves locally modified managed files and reports retained evidence", async () => {
+  const root = await tempProject();
+  try {
+    assert.equal(runCli(["init", root, "--tools", "forgecode", "--literature-adapters", "zotero-library"]).status, 0);
+    const skillPath = path.join(root, ".forge/skills/zotero-library-agent/SKILL.md");
+    await writeFile(skillPath, "locally modified adapter skill\n", "utf8");
+    const deselected = runCli(["update", "--literature-adapters", "none", "--json"], root);
+    assert.equal(deselected.status, 0, deselected.stderr || deselected.stdout);
+    assert.equal(await readFile(skillPath, "utf8"), "locally modified adapter skill\n");
+    const status = parseEnvelope<{ literature_adapters: Array<{ state: string; diagnostics: Array<{ code: string }> }> }>(runCli(["status", "--json"], root));
+    assert.equal(status.data?.literature_adapters[0]?.state, "not-selected");
+    assert.equal(status.data?.literature_adapters[0]?.diagnostics.some((diagnostic) => diagnostic.code === "literature_adapter_not_selected_files_retained"), true);
+  } finally {
+    await cleanup(root);
+  }
+});
+
+void test("unknown literature adapter expressions fail before workspace creation", async () => {
+  const root = await tempProject();
+  try {
+    const result = runCli(["init", root, "--tools", "none", "--literature-adapters", "unknown-adapter", "--json"]);
+    assert.equal(result.status, 2);
+    assert.equal(parseEnvelope(result).error?.code, "invalid_literature_adapters");
+    assert.equal(existsSync(path.join(root, "researchspec")), false);
   } finally {
     await cleanup(root);
   }

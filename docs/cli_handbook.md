@@ -53,6 +53,7 @@ Initialize or safely extend a ResearchSpec workspace
 | Command option | Required | Purpose |
 | --- | --- | --- |
 | `--tools <ids>` | no | all, none, or comma-separated tool IDs |
+| `--literature-adapters <ids>` | no | all, none, or comma-separated literature Adapter IDs |
 
 ### `researchspec update [path]`
 
@@ -65,6 +66,7 @@ Refresh selected generated agent files
 | Command option | Required | Purpose |
 | --- | --- | --- |
 | `--tools <ids>` | no | refresh/add a tool subset |
+| `--literature-adapters <ids>` | no | replace selected literature Adapters |
 
 ## Control plane
 

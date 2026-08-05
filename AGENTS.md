@@ -83,24 +83,26 @@ The locked direction is:
   ask again, and ResearchSpec never stores model consent or configures/calls a
   model service.
 
-The fixed user-visible agent surface is exactly four ARSU Skills
+The fixed base user-visible agent surface is exactly four ARSU Skills
 (`deep-research`, `academic-paper`, `academic-paper-reviewer`,
 `academic-pipeline`), two Core Skills (`review-response`, `paper-humanizer`), and four Companion Skills (`researchspec-navigate`,
-`researchspec-propose`, `researchspec-decide`, `researchspec-verify`), plus seven
-fixed Zotero literature Adapter Skills (`zotero-library-agent`,
+`researchspec-propose`, `researchspec-decide`, `researchspec-verify`). The optional
+`zotero-library` Adapter adds seven literature Skills when selected (`zotero-library-agent`,
 `zotero-library-query`, `zotero-literature-acquisition`,
 `zotero-literature-analysis`, `zotero-research-synthesis`,
-`zotero-library-curation`, `zotero-bridge-cli`). The 31 registered tools
-therefore receive seventeen fixed Skills, while the 28 command-capable tools
-receive the sixteen current command wrappers.
+`zotero-library-curation`, `zotero-bridge-cli`). The 31 registered tools receive
+ten fixed base Skills, or seventeen Skills when that Adapter is selected; the 28
+command-capable tools receive the sixteen current command wrappers.
 Optional
 ResearchSpec-maintained domain plugin Skills may extend that base surface from
 `skills/plugins/registry.json`; they do not add Companion Skills or wrappers.
 
-`src/literature-adapters/catalog.ts` is the installation SSOT for the fixed
-`zotero-library` Adapter. Project runtime and profile files live only under
+`src/literature-adapters/catalog.ts` is the installation SSOT for the optional
+`zotero-library` Adapter, while `config.yaml.literature_adapters.selected` is the
+workspace selection SSOT. Project runtime and profile files live only under
 `.zotero-bridge/`; status and checks are static and never execute binaries or
-contact Zotero. Bundle, CLI, and Skill versions are component-local identities:
+contact Zotero. The Adapter requires Zotero with the `zotero-agents` plugin, but
+ResearchSpec never probes or installs either prerequisite. Bundle, CLI, and Skill versions are component-local identities:
 never compare their patch versions with one another or reject an update merely
 because those patch versions differ. Admission follows the fixed release-set,
 protocol/schema, build fingerprint, command checksum and reviewed hashes. The

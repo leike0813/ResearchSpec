@@ -33,6 +33,7 @@ export async function planWorkspaceDelivery(input: {
   toolIds: readonly string[];
   selectedToolIds: readonly string[];
   reconciledToolIds: readonly string[];
+  selectedLiteratureAdapterIds: readonly string[];
   existingInstallations: readonly ManagedInstallation[];
   force: boolean;
   pluginRegistry?: LoadedPluginRegistry;
@@ -89,6 +90,7 @@ export async function planWorkspaceDelivery(input: {
   const literatureDelivery = await planLiteratureAdapterDelivery({
     projectRoot: input.projectRoot,
     toolIds: input.selectedToolIds,
+    selectedAdapterIds: input.selectedLiteratureAdapterIds,
     existingInstallations: input.existingInstallations,
     force: input.force,
     platform: input.platform,

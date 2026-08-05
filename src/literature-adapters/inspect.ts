@@ -12,14 +12,14 @@ import type { Diagnostic } from "../core/validation/types.js";
 import type { WorkspaceStaticContext } from "../core/runtime/workspace-index.js";
 import { sha256 } from "../core/workspace/write-plan.js";
 import { LITERATURE_ADAPTER_PACKAGE_ROOT, readLiteratureAdapterProfile, readLiteratureAdapterSkillAssets } from "./assets.js";
-import { LITERATURE_ADAPTER_CATALOG } from "./catalog.js";
+import { getLiteratureAdapter, LITERATURE_ADAPTER_CATALOG } from "./catalog.js";
 import { resolveLiteratureAdapterPlatform } from "./platform.js";
 
-export type LiteratureAdapterState = "installed" | "degraded" | "unsupported" | "missing" | "conflict";
+export type LiteratureAdapterState = "not-selected" | "installed" | "degraded" | "unsupported" | "missing" | "conflict";
 
 export interface LiteratureAdapterInspection {
   adapter_id: string;
-  install_policy: "fixed";
+  install_policy: "fixed" | "optional";
   release_set_id: string;
   state: LiteratureAdapterState;
   connection_state: "unchecked";
@@ -31,7 +31,7 @@ export interface LiteratureAdapterInspection {
   };
   skills: {
     skill_ids: string[];
-    projection_state: "complete" | "deferred" | "incomplete";
+    projection_state: "not-selected" | "complete" | "deferred" | "incomplete";
     expected_tool_ids: string[];
     projected_tool_ids: string[];
     missing_tool_ids: string[];
@@ -51,13 +51,54 @@ export async function inspectLiteratureAdapters(
 ): Promise<LiteratureAdapterInspectionResult> {
   const parsedManifest = ToolInstallationManifestSchema.safeParse(snapshot.manifest);
   const selectedToolIds = stringArray(record(record(snapshot.config).agent_tools).selected);
+  const selectedAdapterIds = stringArray(record(record(snapshot.config).literature_adapters).selected);
   const projectRoot = path.dirname(snapshot.workspace);
   const adapters: LiteratureAdapterInspection[] = [];
+  const selectionDiagnostics = selectedAdapterIds.filter((adapterId) => !getLiteratureAdapter(adapterId)).map((adapterId) =>
+    problem("literature_adapter_selection_invalid", `The workspace selects an unknown literature Adapter: ${adapterId}`, path.join(snapshot.workspace, "config.yaml"), true, { adapter_id: adapterId })
+  );
 
   for (const adapter of LITERATURE_ADAPTER_CATALOG) {
     const diagnostics: Diagnostic[] = [];
     const platformResolution = resolveLiteratureAdapterPlatform(adapter, platform, architecture);
     const targetPlatform = platformResolution.platform;
+    const selected = adapter.install_policy === "fixed" || selectedAdapterIds.includes(adapter.adapter_id);
+    if (!selected) {
+      const retained = parsedManifest.success
+        ? parsedManifest.data.installations.filter((item) => item.source.kind === "literature-adapter" && item.source.adapter_id === adapter.adapter_id)
+        : [];
+      const retainedResolutions = parsedManifest.success
+        ? parsedManifest.data.literature_adapter_resolutions.filter((item) => item.adapter_id === adapter.adapter_id)
+        : [];
+      if (retained.length || retainedResolutions.length) {
+        diagnostics.push({
+          severity: "warning",
+          code: "literature_adapter_not_selected_files_retained",
+          message: "The optional literature Adapter is not selected, but managed installation evidence remains.",
+          path: path.join(snapshot.workspace, "tool-installation-manifest.json"),
+          blocking: false,
+          details: { adapter_id: adapter.adapter_id, installation_count: retained.length, resolution_count: retainedResolutions.length },
+        });
+      }
+      adapters.push({
+        adapter_id: adapter.adapter_id,
+        install_policy: adapter.install_policy,
+        release_set_id: adapter.identity.release_set_id,
+        state: "not-selected",
+        connection_state: "unchecked",
+        target_platform: targetPlatform,
+        runtime: { supported: platformResolution.supported, installed_path: null, sha256: null },
+        skills: {
+          skill_ids: adapter.skills.map((skill) => skill.skill_id),
+          projection_state: "not-selected",
+          expected_tool_ids: [],
+          projected_tool_ids: [],
+          missing_tool_ids: [],
+        },
+        diagnostics,
+      });
+      continue;
+    }
     let conflict = false;
     let missingCore = false;
     let degraded = false;
@@ -72,7 +113,7 @@ export async function inspectLiteratureAdapters(
       const matches = parsedManifest.data.literature_adapter_resolutions.filter((item) => item.adapter_id === adapter.adapter_id);
       if (matches.length === 0) {
         missingCore = true;
-        diagnostics.push(problem("literature_adapter_resolution_missing", "The fixed literature adapter has no manifest resolution.", path.join(snapshot.workspace, "tool-installation-manifest.json"), true));
+        diagnostics.push(problem("literature_adapter_resolution_missing", "The selected literature Adapter has no manifest resolution.", path.join(snapshot.workspace, "tool-installation-manifest.json"), true));
       } else if (matches.length > 1) {
         conflict = true;
         diagnostics.push(problem("literature_adapter_resolution_conflict", "The fixed literature adapter has duplicate manifest resolutions.", path.join(snapshot.workspace, "tool-installation-manifest.json"), true));
@@ -157,7 +198,7 @@ export async function inspectLiteratureAdapters(
         degraded ||= shimResult.degraded;
       }
     } else {
-      diagnostics.push({ severity: "warning", code: "literature_adapter_platform_unsupported", message: "No fixed Zotero literature adapter runtime is available for this platform.", blocking: false, details: { adapter_id: adapter.adapter_id, target_platform: targetPlatform } });
+      diagnostics.push({ severity: "warning", code: "literature_adapter_platform_unsupported", message: "No Zotero literature Adapter runtime is available for this platform.", blocking: false, details: { adapter_id: adapter.adapter_id, target_platform: targetPlatform } });
     }
 
     const skillAssets = await readLiteratureAdapterSkillAssets(adapter);
@@ -191,7 +232,7 @@ export async function inspectLiteratureAdapters(
     if (selectedToolIds.length === 0) {
       if (resolution && (resolution.projection_state !== "deferred" || resolution.projected_tool_ids.length !== 0)) conflict = true;
       projectionState = "deferred";
-      diagnostics.push({ severity: "info", code: "literature_adapter_projection_deferred", message: "The fixed adapter runtime is installed, but no Agent tool is selected for Skill projection.", blocking: false, details: { adapter_id: adapter.adapter_id } });
+      diagnostics.push({ severity: "info", code: "literature_adapter_projection_deferred", message: "The selected Adapter runtime is installed, but no Agent tool is selected for Skill projection.", blocking: false, details: { adapter_id: adapter.adapter_id } });
     } else if (missingToolIds.length || !sameStrings(projectedToolIds, completeTools) || resolution?.projection_state !== "complete") {
       projectionState = "incomplete";
       degraded = true;
@@ -217,7 +258,7 @@ export async function inspectLiteratureAdapters(
             : "installed";
     adapters.push({
       adapter_id: adapter.adapter_id,
-      install_policy: "fixed",
+      install_policy: adapter.install_policy,
       release_set_id: adapter.identity.release_set_id,
       state,
       connection_state: "unchecked",
@@ -234,7 +275,7 @@ export async function inspectLiteratureAdapters(
     });
   }
 
-  return { adapters, diagnostics: adapters.flatMap((adapter) => adapter.diagnostics) };
+  return { adapters, diagnostics: [...selectionDiagnostics, ...adapters.flatMap((adapter) => adapter.diagnostics)] };
 }
 
 async function inspectExpected(input: {

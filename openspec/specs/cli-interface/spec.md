@@ -107,32 +107,44 @@ command.
 
 ### Requirement: Init And Update Reconcile Generated Agent Projections
 
-`init` for an existing workspace and `update` SHALL use the same ownership-aware reconciliation for desired and obsolete project-local Agent projections.
+`init` and `update` SHALL use the same ownership-aware reconciliation for
+desired and obsolete project-local Agent and literature-Adapter projections.
 
-#### Scenario: Existing workspace converges through either command
+#### Scenario: Existing selection converges through update
 
-- **WHEN** a workspace manifest records clean project-local projections that are no longer desired
-- **THEN** init and update SHALL install the four-Companion desired surface and remove those stale project-local files
-- **AND** both commands SHALL produce equivalent manifest ownership facts
+- **WHEN** a current workspace records selected tools and literature Adapters
+- **THEN** update SHALL project the fixed ten-Skill surface and every selected Adapter Skill
+- **AND** it SHALL produce manifest ownership facts equivalent to fresh init with the same selections
 
 #### Scenario: Reconciliation preserves user changes
 
 - **WHEN** an obsolete projection is unmanifested or differs from its recorded hash
-- **THEN** init and update SHALL leave it unchanged and report the applicable ownership or drift boundary
+- **THEN** update SHALL leave it unchanged and report the applicable ownership or drift boundary
 - **AND** repeated reconciliation SHALL be idempotent
 
 #### Scenario: Public command surface is unchanged
 
-- **WHEN** agent projections are consolidated
-- **THEN** CLI help SHALL continue to expose exactly init, update, status, instructions, start, advance, check, list, show, handoff, pack, propose, decide, archive, and plugin
+- **WHEN** Adapter projection becomes optional
+- **THEN** CLI help SHALL continue to expose exactly sixteen top-level commands
+- **AND** no Adapter management command SHALL be added
 
 ### Requirement: Literature Adapter Status Is Static
-The existing status and check command surface SHALL report fixed literature-adapter installation health without adding a top-level command or live connection probe.
 
-#### Scenario: Status runs against adapter files
-- **WHEN** adapter runtime or Skill files are missing, drifted, unsupported, or conflicted
-- **THEN** status SHALL return the corresponding structured adapter state and diagnostics
-- **AND** it SHALL NOT execute the runtime, connect to Host Bridge, access the network, or read credentials
+The existing status and check command surface SHALL report catalog and selected
+literature-adapter installation health without adding a top-level command or
+live connection probe.
+
+#### Scenario: Unselected Adapter is reported
+
+- **WHEN** `zotero-library` is not selected
+- **THEN** status SHALL report `not-selected` and check SHALL not treat absent Adapter files as missing
+- **AND** neither command SHALL execute the runtime, connect to Host Bridge, access the network, or read credentials
+
+#### Scenario: Selected Adapter files are inspected
+
+- **WHEN** desired runtime or Skill files are missing, drifted, unsupported, or conflicted
+- **THEN** status SHALL return the corresponding structured Adapter state and diagnostics
+- **AND** the inspection SHALL remain static
 
 ### Requirement: Catalog-Backed Static CLI Discovery
 
@@ -219,13 +231,26 @@ The CLI SHALL parse contextual help targets by skipping recognized option values
 - **THEN** the usage hint SHALL target that longest registered command path
 
 ### Requirement: Current Bootstrap Options
-`init` SHALL accept tool selection without a runtime-profile option; `update` SHALL reconcile only
-manifest-owned static content and SHALL NOT expose migration, rollback or runtime plan-hash options.
+
+`init` and `update` SHALL accept `--literature-adapters <ids>` alongside tool
+selection while exposing no runtime-profile, migration, rollback or runtime
+plan-hash option.
+
+#### Scenario: Adapter expression is supplied
+
+- **WHEN** a caller supplies `--literature-adapters none`, `all`, or comma-separated catalog IDs
+- **THEN** the CLI SHALL normalize and validate the selection
+- **AND** `all` or `none` mixed with explicit IDs SHALL return a usage error
+
+#### Scenario: Update option is omitted
+
+- **WHEN** update runs without `--literature-adapters`
+- **THEN** it SHALL preserve the configured Adapter selection
 
 #### Scenario: Removed option is supplied
-- **WHEN** a user supplies `--profile`, `--migrate-runtime`, `--rollback` or a runtime expected-plan
-  option
-- **THEN** the CLI rejects the option without modifying the workspace
+
+- **WHEN** a user supplies `--profile`, `--migrate-runtime`, `--rollback` or a runtime expected-plan option
+- **THEN** the CLI SHALL reject the option without modifying the workspace
 
 ### Requirement: Unsupported Workspace Is Zero-Write
 Every command that discovers an old or unknown workspace SHALL stop before planning or performing a

@@ -12,8 +12,9 @@
 researchspec init
 ```
 
-CLI 检测可用 Agent hosts，并展示准备投影到每个 host 的固定 Skills 与 16 个 command
-wrappers。用户选择目标 hosts 后确认安装。Host 选择只决定静态投影位置，不开始任何研究。
+CLI 检测可用 Agent hosts，并展示准备投影到每个 host 的 10 个固定基础 Skills 与 16 个 command
+wrappers。用户选择目标 hosts 后，CLI 再展示可选 literature Adapters；当前只有需要 Zotero 与
+Zotero-Agents 插件的 `zotero-library`，默认不选。两项选择只决定静态投影，不开始任何研究。
 
 ### 文件结果
 
@@ -31,13 +32,11 @@ project/
 │   │   └── manuscript.yaml
 │   ├── changes/
 │   └── subflows/
-├── .zotero-bridge/
-│   ├── profile.template.json
-│   └── bin/<platform-runtime>
 └── <host-specific Skill projection>
 ```
 
-固定 Skill 表面是 4 个 ARSU Skills、2 个 Core Skills、4 个 Companion Skills 和 7 个 Zotero Adapter Skills。
+固定 Skill 基础表面是 4 个 ARSU Skills、2 个 Core Skills 和 4 个 Companion Skills。只有选择
+`zotero-library` 时，项目根才增加 `.zotero-bridge/`，每个 host 才增加 7 个 Adapter Skills。
 没有安装任何 domain plugin。`tool-installation-manifest.json` 只管理 ResearchSpec 生成的软件、
 profile 和 Skill 投影，不登记研究交付物。
 
@@ -60,7 +59,7 @@ Material Passport
 ### 验收
 
 - 用户拒绝 host 投影时，不在该 host 写文件。
-- `init` 不启动 Agent、开发服务器、Zotero 或外部服务。
+- `init` 不探测或启动 Agent、Zotero、Zotero-Agents 插件或外部服务。
 - 非空目标或未知内容触发安全停止，不覆盖现有文件。
 - 第一次可见的研究变化只能来自后续用户-Agent 对话或显式命令。
 
