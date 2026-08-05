@@ -1,0 +1,29 @@
+{
+  "schema_version": "1",
+  "skill_id": "review-response",
+  "source_skill_id": "revision-master",
+  "source_commit": "13e69610f216f816f106d1a2a1672eedfa01ac9a",
+  "source_snapshot": "snapshot-13e69610",
+  "source_repository": "https://github.com/leike0813/agent-skills",
+  "source_subpath": "skills/revision-master",
+  "license": "MIT",
+  "license_note": "Upstream root LICENSE is absent and per-skill LICENSE is absent; the only attribution is the git commit author Joshua Reed (leike0813), the same principal as ResearchSpec contributors. The published Skill is distributed under MIT, copyright 2026 ResearchSpec contributors, with upstream provenance recorded in NOTICE and audits/revision-master/snapshot-13e69610/.",
+  "runtime": "python-3-with-pyyaml-jinja2",
+  "runtime_policy": "ResearchSpec publishes the pinned Python runtime and never executes this Skill directory; PyYAML and Jinja2 are declared third-party dependencies that the runtime requires for gate-and-render view rendering.",
+  "capabilities": [
+    "six-stage-revision-workflow",
+    "raw-thread-atomization",
+    "atomic-comment-workboard",
+    "strategy-card-authoring",
+    "agent-owned-revision-log",
+    "thread-level-response-letter",
+    "manuscript-and-response-export",
+    "localization-and-runtime-language"
+  ],
+  "excluded": [
+    "upstream-conda-run-template",
+    "upstream-third-party-install-prompts",
+    "upstream-history-or-test-files",
+    "upstream-submodule-placeholder-scripts-gitkeep"
+  ]
+}

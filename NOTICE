@@ -89,4 +89,36 @@ execute the upstream installer, MCP server, tests, scripts, registries, or
 generated caches. ResearchSpec is independent from and not endorsed by Gareth
 Manning or Education Agent Skills.
 
+ResearchSpec distributes reviewed Skills derived from the leike0813/agent-skills
+revision-master Skill:
+
+- Source: https://github.com/leike0813/agent-skills
+- Subpath: skills/revision-master
+- Snapshot: snapshot-13e69610
+- Revision: 13e69610f216f816f106d1a2a1672eedfa01ac9a
+- Upstream author: Joshua Reed (leike0813), the same principal as ResearchSpec contributors
+- Content license: MIT, recorded in the published Skill's `LICENSE`. The
+  upstream root repository has no `LICENSE` file and the `skills/revision-master`
+  subtree has no per-skill `LICENSE` or copyright notice, so redistribution rests
+  on the same-author identity. The published `LICENSE` text declares
+  `Copyright (c) 2026 ResearchSpec contributors` to make the redistribution
+  authority explicit and avoid later misreads that upstream authorship was severed.
+- The published review-response Skill renames the upstream identifier to
+  `review-response`, rewrites instance paths from `revision-master.db` and
+  `revision-master/scripts/...` to `work/review-response/review-response.db`
+  and `skills/review-response/scripts/...`, adds a ResearchSpec control-plane
+  boundary, drops the upstream `conda run --no-capture-output -n DataProcessing`
+  invocation template and the user-install prompts, and adapts nine
+  references/*.md, three scripts/*.py, and four assets/* files in place. Every
+  adaptation is recorded in
+  `audits/revision-master/snapshot-13e69610/capability-audit.json` and is bound
+  to the upstream source commit.
+
+ResearchSpec conversion, checking, idempotence, packaging, installation,
+discovery, and update remain file-only. They never import or execute the
+vendor revision-master Python, install dependencies, configure credentials,
+contact services, or upload material. The audit is the sole source of binding
+evidence; production update requires the audit to validate and a human to
+review the complete generated tree bound to its hash.
+
 ResearchSpec-authored material is copyright 2026 ResearchSpec contributors and is licensed under MIT where identified by the root license map.

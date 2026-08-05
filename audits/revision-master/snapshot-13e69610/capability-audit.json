@@ -1,0 +1,313 @@
+{
+  "schema_version": "1",
+  "source": {
+    "name": "revision-master",
+    "repository": "https://github.com/leike0813/agent-skills",
+    "commit": "13e69610f216f816f106d1a2a1672eedfa01ac9a",
+    "snapshot": "snapshot-13e69610",
+    "subpath": "skills/revision-master",
+    "root_tree_sha": "0716e9227ee92273fd6016f166672cb13bbbb2fb",
+    "tracked_entries": 57,
+    "blob_entries": 48,
+    "blob_total_bytes": 567926,
+    "tracked_entry_set_sha256": "9d134f411e440250d3bcda12a082bfeb8df74467556dabb7eb7668793fa7005a",
+    "manifest_format": "<lowercase-sha256><two ASCII spaces><POSIX path>\\n per sorted entry; set_hash = sha256 of UTF-8 manifest",
+    "excluded_submodule_artifact": ["scripts/.gitkeep"],
+    "exclusion_rationale": "scripts/.gitkeep is a submodule aggregation placeholder, not Skill content",
+    "blob_sha_field_semantics": "Per-entry SHA-256 of working-tree bytes downloaded via raw.githubusercontent.com; not Git's blob SHA-1, which uses the prefixed blob header."
+  },
+  "content_origins": [
+    {
+      "id": "agent-skills-root",
+      "kind": "upstream-self-authored",
+      "scope": "skills/revision-master/**",
+      "license_evidence": "absent",
+      "license_explanation": "Upstream repo root LICENSE is absent; skills/revision-master contains no per-skill LICENSE or copyright notice; the only attribution is the git commit author 'Joshua Reed <leike0813@gmail.com>' dated 2026-06-01. The git author is the same principal as ResearchSpec contributors (Joshua Reed / leike0813).",
+      "disposition": "retain"
+    }
+  ],
+  "license_claims": [
+    {
+      "id": "root-mit-absent",
+      "expression": "MIT",
+      "status": "implicit-only",
+      "evidence": "Upstream repository root LICENSE is absent. skills/revision-master contains no LICENSE file or copyright notice. The git commit author is Joshua Reed (leike0813), the same principal as ResearchSpec contributors.",
+      "scope": "skills/revision-master/**",
+      "disposition": "retain",
+      "publish_decision": "ResearchSpec publishes the adapted Skill under MIT, copyright 2026 ResearchSpec contributors. The 'same author' identity preserves upstream provenance without claiming an upstream license grant."
+    }
+  ],
+  "runtime_authorities": [
+    {
+      "id": "python-stdlib",
+      "kind": "language-runtime",
+      "evidence": ["scripts/*.py header imports: argparse, sqlite3, dataclasses, datetime, hashlib, json, os, pathlib, re, sys, textwrap, typing"],
+      "disposition": "retain",
+      "note": "Python 3 standard library only; no third-party imports in any of the 8 scripts."
+    },
+    {
+      "id": "pyyaml",
+      "kind": "library-runtime",
+      "evidence": ["SKILL.md 第三方运行时依赖 section"],
+      "disposition": "declared-third-party",
+      "note": "Required for gate-and-render rendering of YAML manifests. ResearchSpec does not auto-install."
+    },
+    {
+      "id": "jinja2",
+      "kind": "library-runtime",
+      "evidence": ["SKILL.md 第三方运行时依赖 section"],
+      "disposition": "declared-third-party",
+      "note": "Required for gate-and-render view rendering. ResearchSpec does not auto-install."
+    },
+    {
+      "id": "sqlite3",
+      "kind": "data-runtime",
+      "evidence": ["scripts/workspace_db.py schema and runtime language context"],
+      "disposition": "retain",
+      "note": "Skill-local workspace DB; never bound to ResearchSpec control plane authority."
+    }
+  ],
+  "external_resources": [],
+  "security_findings": [
+    {
+      "id": "no-credentials",
+      "evidence": ["No hard-coded tokens, API keys, or credentials in any tracked file"],
+      "disposition": "clear"
+    },
+    {
+      "id": "no-network",
+      "evidence": ["No `urllib`, `requests`, `httpx`, `socket`, or `http.client` imports across scripts/*.py"],
+      "disposition": "clear"
+    },
+    {
+      "id": "no-subprocess",
+      "evidence": ["No `subprocess`, `os.system`, `os.popen` usage across scripts/*.py"],
+      "disposition": "clear"
+    },
+    {
+      "id": "no-browser",
+      "evidence": ["No browser-control or browser-automation imports"],
+      "disposition": "clear"
+    },
+    {
+      "id": "no-telemetry",
+      "evidence": ["No telemetry, no usage reporting"],
+      "disposition": "clear"
+    },
+    {
+      "id": "no-pii-or-sensitive-payload",
+      "evidence": ["Reviewed SKILL.md, references/*.md, scripts/*.py, assets/runtime/skill-runtime-digest.md; no Cookie material, no embedded keys, no private endpoints, no local user paths"],
+      "disposition": "clear"
+    }
+  ],
+  "knowledge_surfaces": [
+    {
+      "id": "skill-instructions",
+      "kind": "skill-instructions",
+      "files": ["SKILL.md"]
+    },
+    {
+      "id": "stage-references",
+      "kind": "stage-procedural-references",
+      "files": [
+        "references/stage-1-entry-and-bootstrap.md",
+        "references/stage-2-manuscript-analysis.md",
+        "references/stage-3-comment-atomization.md",
+        "references/stage-4-workboard-planning.md",
+        "references/stage-5-strategy-and-execution.md",
+        "references/stage-6-final-review-and-export.md"
+      ]
+    },
+    {
+      "id": "cross-cutting-references",
+      "kind": "cross-cutting-references",
+      "files": [
+        "references/helper-scripts.md",
+        "references/sql-write-recipes.md",
+        "references/workflow-glossary.md",
+        "references/workflow-state-machine.md"
+      ]
+    },
+    {
+      "id": "render-templates",
+      "kind": "render-templates",
+      "files": [
+        "assets/templates/action-copy-variants.md.j2",
+        "assets/templates/agent-resume.md.j2",
+        "assets/templates/atomic-comment-workboard.md.j2",
+        "assets/templates/atomic-review-comment-list.md.j2",
+        "assets/templates/export-patch-plan.md.j2",
+        "assets/templates/final-assembly-checklist.md.j2",
+        "assets/templates/manuscript-execution-graph.md.j2",
+        "assets/templates/manuscript-revision-guide.md.j2",
+        "assets/templates/manuscript-structure-summary.md.j2",
+        "assets/templates/raw-review-thread-list.md.j2",
+        "assets/templates/render-manifest.yaml",
+        "assets/templates/response-coverage-matrix.md.j2",
+        "assets/templates/response-letter-outline.md.j2",
+        "assets/templates/response-letter-preview.md.j2",
+        "assets/templates/response-letter-preview.tex.j2",
+        "assets/templates/response-letter-table-preview.md.j2",
+        "assets/templates/response-letter-table-preview.tex.j2",
+        "assets/templates/response-strategy-card.md.j2",
+        "assets/templates/review-comment-coverage.md.j2",
+        "assets/templates/revision-action-log.md.j2",
+        "assets/templates/style-profile.md.j2",
+        "assets/templates/supplement-intake-plan.md.j2",
+        "assets/templates/supplement-suggestion-plan.md.j2",
+        "assets/templates/thread-to-atomic-mapping.md.j2"
+      ]
+    },
+    {
+      "id": "schema",
+      "kind": "schema",
+      "files": ["assets/schema/revision-master-schema.yaml"]
+    },
+    {
+      "id": "localization",
+      "kind": "localization",
+      "files": [
+        "assets/localization/messages/en.json",
+        "assets/localization/messages/zh-CN.json",
+        "assets/localization/source-messages.yaml"
+      ]
+    },
+    {
+      "id": "runtime-digest",
+      "kind": "runtime-digest",
+      "files": ["assets/runtime/skill-runtime-digest.md"]
+    },
+    {
+      "id": "scripts",
+      "kind": "python-runtime",
+      "files": [
+        "scripts/capture_revision_action.py",
+        "scripts/commit_revision_round.py",
+        "scripts/detect_main_tex.py",
+        "scripts/export_manuscript_variants.py",
+        "scripts/gate_and_render_workspace.py",
+        "scripts/init_artifact_workspace.py",
+        "scripts/runtime_localization.py",
+        "scripts/workspace_db.py"
+      ]
+    }
+  ],
+  "adaptations": [
+    {
+      "id": "skill-rename",
+      "kind": "renamed",
+      "summary": "Skill frontmatter name `revision-master` -> `review-response`. Internal identifiers (DB filename, script paths, log keys) also renamed.",
+      "applied_to": ["SKILL.md", "scripts/**/*.py"],
+      "evidence": "skills/review-response/SKILL.md frontmatter name field; workspace DB moved to work/review-response/review-response.db.",
+      "approved": true
+    },
+    {
+      "id": "instance-root-paths",
+      "kind": "renamed",
+      "summary": "Upstream artifact-root paths (`revision-master.db`, `revision-master/scripts/...`) moved to ResearchSpec subflow layout (`work/review-response/review-response.db`, `skills/review-response/scripts/...`, `views/...`).",
+      "applied_to": ["SKILL.md", "references/*.md", "scripts/**/*.py"],
+      "evidence": "scripts/gate_and_render_workspace.py: `--instance-root <INSTANCE_ROOT>` replaces upstream `--artifact-root`; all view paths now resolve under instance-root views/.",
+      "approved": true
+    },
+    {
+      "id": "researchspec-control-plane",
+      "kind": "added",
+      "summary": "New section `ResearchSpec 控制面边界` in SKILL.md explicitly declares control.yaml / handoff.md authority and prohibits the Skill from mutating them.",
+      "applied_to": ["SKILL.md"],
+      "evidence": "skills/review-response/SKILL.md `ResearchSpec 控制面边界` section.",
+      "approved": true
+    },
+    {
+      "id": "control-projection",
+      "kind": "added",
+      "summary": "Read-only diagnostic control projection hashes (control.yaml, handoff.md, instance id, status, checkpoint) compared at gate-and-render time, fail-closed on drift.",
+      "applied_to": ["scripts/gate_and_render_workspace.py"],
+      "evidence": "researchspec_control_projection blocks in scripts/gate_and_render_workspace.py; structured `control_projection_drift` error emitted on mismatch.",
+      "approved": true
+    },
+    {
+      "id": "schema-renamed",
+      "kind": "renamed",
+      "summary": "Upstream `assets/schema/revision-master-schema.yaml` published as `assets/schema/review-response-schema.yaml` with internal table-name and key renames aligned with the Skill identifier change.",
+      "applied_to": ["assets/schema/revision-master-schema.yaml -> assets/schema/review-response-schema.yaml"],
+      "evidence": "skills/review-response/assets/schema/review-response-schema.yaml (32008 bytes vs upstream 31541 bytes; net +467 bytes for identifier rename and section additions).",
+      "approved": true
+    },
+    {
+      "id": "third-party-runtime-tone",
+      "kind": "softened",
+      "summary": "Upstream `conda run --no-capture-output -n DataProcessing python -u ...` invocation template removed; third-party dependency section rewritten to declare ResearchSpec does not auto-install and structured blocking errors are returned when PyYAML or Jinja2 is missing.",
+      "applied_to": ["SKILL.md"],
+      "evidence": "skills/review-response/SKILL.md `第三方运行时依赖` section: 'ResearchSpec 运行时不自动安装依赖... 视图渲染需要的 PyYAML/Jinja2 缺失时，脚本必须返回结构化阻断错误'.",
+      "approved": true
+    },
+    {
+      "id": "review-comment-coverage-appendix",
+      "kind": "added",
+      "summary": "Stage 3 coverage requirements (primary/supporting/duplicate_filtered span roles, hard 30% / soft 50% thresholds, character-level coverage computation) declared as canonical Stage 3 outputs in the upstream SKILL.md and references/stage-3-comment-atomization.md; the ResearchSpec adaptation restates them with ResearchSpec vocabulary.",
+      "applied_to": ["SKILL.md", "references/stage-3-comment-atomization.md"],
+      "evidence": "Comparison shows the upstream text already contained these thresholds; adaptation is editorial rename + verbatim carry-over with ResearchSpec nomenclature.",
+      "approved": true
+    }
+  ],
+  "candidate_skill": {
+    "id": "review-response",
+    "kind": "researchspec-renamed-skill",
+    "original_skill_id": "revision-master",
+    "domains": [],
+    "hard_dependencies": [],
+    "advisory_relationships": [
+      {
+        "id": "academic-paper:revision-coach",
+        "kind": "advisory-only",
+        "rationale": "Strategy-only coaching prior to reviewer comment arrival; complementary to review-response post-submission workflow."
+      },
+      {
+        "id": "academic-paper:rebuttal-audit",
+        "kind": "advisory-only",
+        "rationale": "Audit-only review of an already-written response; review-response authors the response from raw reviewer comments."
+      }
+    ],
+    "production_decision": "Already published as a Core Skill by openspec/changes/archive/2026-08-05-absorb-revision-master-core-skill. This audit only freezes source provenance evidence; it does not modify the published Skill tree."
+  },
+  "policies": {
+    "audit_is_admission": false,
+    "future_change": "ingest-revision-master",
+    "source_has_upstream_skills": true,
+    "generated_production_skills": true,
+    "converter_executes_upstream_content": false,
+    "parallel_ingest_preparation_allowed": true,
+    "production_requires_audit_validation": true,
+    "production_requires_hash_bound_human_review": true,
+    "explicit_invocation_authorizes_configured_providers_and_task_materials": true,
+    "access_control_owned_by_host": true,
+    "anzsrc_field_creates_membership": false,
+    "tool_domain_membership": false
+  },
+  "summary_counts": {
+    "tracked_entries": 57,
+    "blob_entries": 48,
+    "blob_total_bytes": 567926,
+    "dispositions": {
+      "retain": 48,
+      "adapt": 0,
+      "replace": 0,
+      "exclude": 0,
+      "confirmed-failure": 0
+    },
+    "kinds": {
+      "skill-instructions": 1,
+      "reference": 10,
+      "render-asset": 25,
+      "schema": 1,
+      "localization": 3,
+      "script": 8
+    },
+    "runtime_authorities": 4,
+    "external_resources": 0,
+    "security_findings": 6,
+    "content_origins": 1,
+    "license_claims": 1,
+    "adaptations": 7
+  }
+}

@@ -21,6 +21,8 @@ Current external reference paths:
 - Materials-Science-Skills-For-LLM audit source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/materials-science-skills-for-llm`
 - FinRobot audit source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/finrobot`
 - HistAgent audit source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/histagent`
+- Revision-Master vendor converter source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/revision-master`
+- Revision-Master audit source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/audits/revision-master/snapshot-13e69610`
 - Education Agent Skills working checkout: `/home/joshua/Workspace/Code/Skill/education-agent-skills`
 - Education Agent Skills audit source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/education-agent-skills`
 
@@ -330,6 +332,28 @@ authority.
 Six-vendor maintenance must keep converters isolated: each converter stages
 against all published vendors but emits and commits only its own bundle, while a
 source-neutral domain catalog and central assembler own the published registry.
+
+`vendor/revision-master` is the maintainer-only pinned input for the
+revision-master Skill absorption. The immutable audit at
+`audits/revision-master/snapshot-13e69610/` covers all 48 tracked blob
+files under `skills/revision-master/` at upstream commit
+`13e69610f216f816f106d1a2a1672eedfa01ac9a`. The published Skill is renamed
+to `review-response`, with seven recorded adaptations (identifier rename,
+instance-root path rewrite, ResearchSpec control-plane boundary, control
+projection, schema rename, third-party runtime tone softened, Stage 3 coverage
+appendix). The upstream repository root has no `LICENSE` file and the
+`skills/revision-master` subtree has no per-skill `LICENSE` or copyright
+notice; the only attribution is the git commit author `Joshua Reed (leike0813)`,
+the same principal as ResearchSpec contributors. The published `LICENSE`
+declares `Copyright (c) 2026 ResearchSpec contributors` to keep redistribution
+authority explicit. The maintainer converter at
+`src/vendor-converters/revision-master/cli.ts` exposes
+`pnpm revision-master:{convert,check,idempotence}` and compares byte-identical
+files between `vendor/revision-master/upstream/skills/revision-master/` and
+`skills/review-response/`, while adapted files are checked for existence only
+and listed in the audit `adaptations` array. Production checking and idempotence
+must fail on any source, audit, evidence, license, generated-tree, or metadata
+drift. Revision-master adds no public CLI command or workflow authority.
 Vendor root licensing does not replace an evidenced Skill-level content license.
 
 Non-native upstream projects such as HistAgent, FinRobot, and

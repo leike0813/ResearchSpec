@@ -1,0 +1,13 @@
+{
+  "name": "revision-master",
+  "repository": "https://github.com/leike0813/agent-skills",
+  "commit": "13e69610f216f816f106d1a2a1672eedfa01ac9a",
+  "snapshot": "snapshot-13e69610",
+  "subpath": "skills/revision-master",
+  "license": "MIT",
+  "license_status": "root-license-absent;per-skill-no-license-statement;upstream-author-equals-researchspec-contributor",
+  "upstream_author": "Joshua Reed (leike0813)",
+  "status": "maintainer-input-snapshot",
+  "source_tree": "upstream",
+  "runtime_policy": "ResearchSpec publishes the pinned source bytes and never executes this vendor directory."
+}
