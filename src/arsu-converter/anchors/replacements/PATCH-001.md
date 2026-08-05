@@ -9,6 +9,12 @@ patch schema. It preserves stable operation IDs, block IDs and `old_hash`
 preconditions, replace/insert/delete operations, annotation dispositions,
 revision rationale, and roadmap traceability.
 
+The selected manuscript may be Markdown or QMD. Treat QMD as
+Markdown-compatible text and preserve its YAML frontmatter, fenced code,
+cell-option comments, citations, cross-references, and Quarto metadata outside
+the explicitly targeted anchored blocks. Never convert a `.qmd` path to `.md`
+during revision.
+
 The patch and manuscript are explicit files selected by the caller. They are not
 handoff-referenced ResearchSpec runtime entities. When safe mechanical application is
 useful, run `node scripts/apply-revision-patch.mjs` with explicit `--base`, `--patch`,

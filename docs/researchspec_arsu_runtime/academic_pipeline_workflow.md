@@ -1,6 +1,6 @@
 # Academic Pipeline Workflow
 
-`academic-pipeline` 连接研究、写作、完整性检查、评审、修改、定稿和总结。Project
+`academic-pipeline` 连接研究、写作、完整性检查、评审、修改、格式化、定稿和总结。Project
 `academic-pipeline.yaml` profile 是 graph、parallel/join、Gate、branch、transition 和 dynamic
 revision template 的唯一 owner。
 
@@ -17,5 +17,7 @@ child controls 和 handoffs 计算 frontier。
 ![Dynamic revision round](diagrams/rendered/revision-round.svg)
 
 Revision branch 为每轮创建独立 round control，并分别启动 revision 与 re-review children。用户的
-branch Decision 决定 accepted 或继续下一轮；ARSU 文本不能自行维护 round counter。Final integrity
-Gate 仍需人类确认，完成 transition 之后 parent 才进入终态。
+branch Decision 决定 accepted 或继续下一轮；ARSU 文本不能自行维护 round counter。Accepted 分支
+先进入 `academic-paper:format-convert`；Markdown 沿用既有转换路径，QMD 在 Quarto
+unavailable/unknown 时允许继续写作但阻塞 formatting。format child 完成后，final-integrity Gate
+同时消费正式源稿和 formatted output，仍需人类确认，完成 transition 之后 parent 才进入终态。

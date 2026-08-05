@@ -32,6 +32,25 @@ subflow's control.yaml as its sole runtime authority and its handoff.md as
 the boundary input/output reference. Do not reconstruct the frontier from Skill
 prose; use directed instructions selectors and the current status view.
 
+Treat `specs/manuscript.yaml.delivery` as the source-format contract.
+The first manuscript-writing intake resolves `working_format`; a later change
+to a confirmed selection requires a project change. QMD is Markdown-compatible
+source: require a `.qmd` boundary path and preserve YAML frontmatter, fenced
+code, executable-cell options, citations, cross-references, and other Quarto
+metadata as opaque manuscript content during review, annotation, and revision.
+Record source and target format IDs on handoff entries; a rendered target also
+records `renderer: quarto`.
+
+For QMD writing or resume, run the bounded read-only `quarto --version`
+probe at the timing returned by route instructions and preserve its available,
+unavailable, or unknown result in the start confirmation. QMD writing may start
+when Quarto is unavailable, but `academic-paper:format-convert` requires an
+available probe and must use `node scripts/render-quarto.mjs` for the single
+confirmed target. The helper defaults to no-execute; code execution requires a
+separate current-subflow consent. Never install Quarto, contact the network,
+fall back to Pandoc, overwrite an existing target, or report a successful
+handoff after a partial or failed render.
+
 Produce semantic files at explicit project-relative paths outside
 researchspec/, then update the owning handoff with unique roles, types,
 purposes, paths, producers or intended consumers, and relevant limits. Do not

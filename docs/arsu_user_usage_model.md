@@ -70,7 +70,7 @@ researchspec/subflows/<instance-directory>/
 | `specs/project.md` | 研究问题、范围、边界、方法立场、贡献和长期约束 |
 | `specs/sources.yaml` | 用户接受的来源记录、identifier、用途范围和限制 |
 | `specs/claims.yaml` | 稳定 claim、强度、支持来源、范围和限制 |
-| `specs/manuscript.yaml` | 稿件体裁、标题、语言、读者、venue、格式与结构意图 |
+| `specs/manuscript.yaml` | 稿件体裁、标题、语言、读者、venue、格式约束、delivery 选择与结构意图 |
 | `profiles/academic-pipeline.yaml` | pipeline graph、并行/join、Gate、branch、transition 和 revision round template |
 | `control.yaml` | 单个 subflow 的状态、checkpoint、Gate attempts、Decision 和 transition |
 | `handoff.md` | 单个 subflow 的边界输入输出 role/path |
@@ -93,6 +93,11 @@ manuscript 内容为空；检查只验证已有字段和引用，不要求编造
 - 稿件结构、目标输出或关键限制改变；
 - review-response 策略改变研究含义。
 
+首次进入稿件写作 intake 时，用户在 `manuscript.yaml.delivery.working_format` 选择
+`markdown` 或 `qmd`；未选择时两项 delivery 字段均可为 `null`。QMD 还要确认安全的
+`final_output_format` Quarto format ID。已经确认的选择不能静默转换旧稿，后续变更必须通过
+project change。
+
 Project change 的 `accepted` 只记录决定，不自动编辑 specs。实际修改完成并通过校验后，change
 才能标为 `applied`。
 
@@ -108,6 +113,11 @@ Project change 的 `accepted` 只记录决定，不自动编辑 specs。实际�
 - 预期边界输出；
 - formal Gates；
 - 风险、成本和交互强度。
+
+若稿件格式尚未选择，route summary 必须把选择列为启动前事项。选择 QMD 时，Navigate 或
+`academic-paper` 在首次 intake、写作/恢复和 `academic-paper:format-convert` 前按 instructions
+时机只读执行 `quarto --version`，并区分 `available`、`unavailable`、`unknown`。探测不安装依赖、
+不联网、不写 workspace；确认快照和探测摘要随本轮 start 写入 control，CLI 会拒绝过期快照。
 
 只有用户确认后，Agent 才调用 `start`。一次确认只授权一个实例。Pipeline parent、每个 child、
 新 branch 和每轮动态 revision 都分别确认；确认 parent 不会预创建或授权 child。
@@ -157,7 +167,8 @@ Mid-entry 只使用用户明确提供的 stable facts 和 handoff inputs，不�
 
 每个 subflow 的 `handoff.md` 使用 machine-readable frontmatter 和自由说明。每条 input/output
 至少记录 role、type、path 和 purpose；output 可记录 intended consumer，input 可记录 source
-instance。
+instance。稿件条目还声明 `format`；QMD 条目路径必须以 `.qmd` 结尾。Quarto 渲染输出声明目标
+format ID 与 `renderer: quarto`，源稿和渲染稿都是 `researchspec/` 外的普通 boundary deliverable。
 
 路径必须：
 
@@ -189,6 +200,10 @@ block、stale `old_hash` 或 annotation mapping 缺失都不得产生部分稿�
 Annotation intake 默认位于 owning revision subflow 的 `work/annotation-intake/`，保留 stable
 annotation ID、raw feedback、normalized interpretation 和 patch mapping。需要跨边界时，Agent
 生成外部文件并在 handoff 中引用。
+
+Markdown 与 QMD 都是 Markdown-compatible 稿源。QMD 的 YAML frontmatter、代码围栏、cell options、
+引用、交叉引用和其它 Quarto 元数据在 review copy、annotation 和 revision 中保持原样；QMD 渲染
+默认 `no-execute`，代码执行需要独立的当前 formatting subflow `render_consent`。
 
 Mechanical precheck 不是 formal Gate。`revision_completeness` 仍由 Verify 组织判断、用户确认，
 再由 Decide 写入 owning control。
@@ -225,6 +240,11 @@ control 或 external file，也不执行 repair transaction。
 
 `pack` 默认只包含 config、manifest、profile、stable specs、controls、changes 和 handoffs；不
 包含 subflow `work/`，也不复制 handoff 指向的外部文件。
+
+Pipeline 的 accepted review/re-review 分支先进入 `format` child，再进入 `final-integrity`。
+QMD formatting 缺少 Quarto 或探测为 unknown 时保持可写但不可最终转换；formatting child 不覆盖
+既有目标，只有 staging 全部检查成功后才更新成功 handoff。`status`、`check`、`doctor` 和
+`init` 不触发 Quarto 探测。
 
 旧或未知 workspace 会被报告为 unsupported 并保持不变。要重用材料，用户先在框架外保留所需
 文件，再在 fresh workspace 中通过 stable specs 或 handoff 明确引入。

@@ -7,6 +7,24 @@ export const StableIdSchema = z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]*$/)
   .refine((value) => !value.includes(".."), "ID cannot contain '..'");
 const ExtensionsSchema = z.record(z.string(), z.unknown()).optional();
 
+export const ManuscriptWorkingFormatSchema = z.enum(["markdown", "qmd"]);
+export const QuartoFormatIdSchema = z.string().trim().regex(
+  /^[a-z0-9][a-z0-9._+-]*$/,
+  "Quarto format ID must contain only lowercase letters, digits, dots, underscores, plus signs, and hyphens.",
+);
+export const ManuscriptDeliverySchema = z.strictObject({
+  working_format: ManuscriptWorkingFormatSchema.nullable(),
+  final_output_format: QuartoFormatIdSchema.nullable(),
+}).superRefine((value, context) => {
+  if (value.working_format === "qmd" && value.final_output_format === null) {
+    context.addIssue({
+      code: "custom",
+      path: ["final_output_format"],
+      message: "QMD delivery requires a final Quarto output format.",
+    });
+  }
+});
+
 export const ProjectFrontmatterSchema = z.strictObject({
   schema_version: z.literal(CURRENT_WORKSPACE_SCHEMA_VERSION),
   project_id: StableIdSchema,
@@ -66,6 +84,7 @@ export const ManuscriptSpecSchema = z.strictObject({
   venue: z.string().trim().min(1).nullable(),
   citation_requirements: z.array(z.string().trim().min(1)),
   format_requirements: z.array(z.string().trim().min(1)),
+  delivery: ManuscriptDeliverySchema,
   outline: z.array(ManuscriptSectionSchema),
   extensions: ExtensionsSchema,
 });
@@ -86,4 +105,3 @@ export function parseProjectSpec(text: string): ParsedProjectSpec {
 export type SourcesSpec = z.infer<typeof SourcesSpecSchema>;
 export type ClaimsSpec = z.infer<typeof ClaimsSpecSchema>;
 export type ManuscriptSpec = z.infer<typeof ManuscriptSpecSchema>;
-

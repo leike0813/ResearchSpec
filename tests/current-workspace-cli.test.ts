@@ -19,6 +19,7 @@ void test("fresh init creates only the current workspace authority tree", async 
     const config = await readFile(path.join(workspace, "config.yaml"), "utf8");
     assert.match(config, /^schema_version: "1"$/m);
     assert.doesNotMatch(config, /^profile:/m);
+    assert.match(await readFile(path.join(workspace, "specs/manuscript.yaml"), "utf8"), /delivery:\n  working_format: null\n  final_output_format: null/);
     const manifest = JSON.parse(await readFile(path.join(workspace, "tool-installation-manifest.json"), "utf8")) as { installations: Array<{ owner: string; source: { kind: string } }> };
     assert.equal(manifest.installations.filter((item) => item.owner === "framework" && item.source.kind === "framework-profile").length, 1);
     assert.equal(parseEnvelope(runCli(["status", "--json"], root)).ok, true);
@@ -26,6 +27,53 @@ void test("fresh init creates only the current workspace authority tree", async 
     assert.equal(parseEnvelope(runCli(["doctor", "--json"], root)).ok, true);
     assert.deepEqual(parseEnvelope<{ domains: unknown[] }>(runCli(["plugin", "list", "--installed", "--json"], root)).data?.domains, []);
     assert.equal(parseEnvelope(runCli(["init", root, "--tools", "none", "--json"])).error?.code, "workspace_exists");
+  } finally {
+    await cleanup(root);
+  }
+});
+
+void test("packaged instructions stay read-only and QMD format start requires available Quarto", async () => {
+  const root = await tempProject();
+  try {
+    assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
+    const workspace = path.join(root, "researchspec");
+    const manuscriptPath = path.join(workspace, "specs/manuscript.yaml");
+    const initial = await readFile(manuscriptPath, "utf8");
+    const beforeEntries = await readdir(root);
+    const instructions = parseEnvelope<{
+      manuscript_delivery: { selection_required: boolean };
+      tool_requirements: { quarto: { probe_command: string[]; read_only: boolean } };
+    }>(runCli(["instructions", "route:academic-paper:full", "--json"], root));
+    assert.equal(instructions.data?.manuscript_delivery.selection_required, true);
+    assert.deepEqual(instructions.data?.tool_requirements.quarto.probe_command, ["quarto", "--version"]);
+    assert.equal(instructions.data?.tool_requirements.quarto.read_only, true);
+    assert.equal(await readFile(manuscriptPath, "utf8"), initial);
+    assert.deepEqual(await readdir(root), beforeEntries);
+
+    await writeFile(manuscriptPath, initial
+      .replace("working_format: null", "working_format: qmd")
+      .replace("final_output_format: null", "final_output_format: pdf"), "utf8");
+    await writeFile(path.join(root, "paper.qmd"), "---\ntitle: Test\n---\n\n# Paper\n", "utf8");
+    const inputPath = path.join(root, "format-start.json");
+    const base = {
+      schema_version: "1",
+      confirmed_at: "2026-08-05T12:00:00+08:00",
+      prerequisites: [],
+      handoff_inputs: [{ role: "manuscript_source", type: "manuscript", path: "paper.qmd", purpose: "render", format: "qmd" }],
+      planned_outputs: [{ role: "formatted_manuscript", type: "manuscript", path: "paper.pdf", purpose: "submit", format: "pdf", renderer: "quarto" }],
+      manuscript_delivery: { working_format: "qmd", final_output_format: "pdf" },
+      formal_gates: [],
+      cost: { effort: "low", interaction: "single_pass" },
+    };
+    await writeFile(inputPath, JSON.stringify({ ...base, quarto_probe: { status: "unavailable", checked_at: base.confirmed_at, reason: "not installed" } }), "utf8");
+    assert.equal(parseEnvelope(runCli(["start", "academic-paper:format-convert", "--input", inputPath, "--confirmed-by", "researcher", "--json"], root)).error?.code, "quarto_unavailable");
+    await writeFile(inputPath, JSON.stringify({ ...base, quarto_probe: { status: "unknown", checked_at: base.confirmed_at, reason: "timeout" } }), "utf8");
+    assert.equal(parseEnvelope(runCli(["start", "academic-paper:format-convert", "--input", inputPath, "--confirmed-by", "researcher", "--json"], root)).error?.code, "quarto_status_unknown");
+    await writeFile(inputPath, JSON.stringify({ ...base, quarto_probe: { status: "available", checked_at: base.confirmed_at, version: "1.7.32" } }), "utf8");
+    assert.equal(runCli(["start", "academic-paper:format-convert", "--input", inputPath, "--confirmed-by", "researcher", "--json"], root).status, 0);
+
+    await writeFile(inputPath, JSON.stringify({ ...base, manuscript_delivery: { working_format: "markdown", final_output_format: null } }), "utf8");
+    assert.equal(parseEnvelope(runCli(["start", "academic-paper:format-convert", "--input", inputPath, "--confirmed-by", "researcher", "--json"], root)).error?.code, "manuscript_delivery_snapshot_stale");
   } finally {
     await cleanup(root);
   }
@@ -258,9 +306,15 @@ void test("current packs are deterministic, scoped, and exclude private or exter
     const startInput = path.join(root, "start.json");
     await mkdir(path.join(root, "outputs"), { recursive: true });
     await writeFile(path.join(root, "outputs/report.md"), "external secret bytes\n", "utf8");
+    await writeFile(path.join(root, "outputs/manuscript.qmd"), "---\nformat: pdf\n---\n\n# Paper\n", "utf8");
+    await writeFile(path.join(root, "outputs/manuscript.pdf"), "rendered bytes\n", "utf8");
     await writeFile(startInput, JSON.stringify({
       schema_version: "1", confirmed_at: "2026-08-02T18:00:00+08:00", prerequisites: [], handoff_inputs: [],
-      planned_outputs: [{ role: "report", type: "report", path: "outputs/report.md", purpose: "handoff" }],
+      planned_outputs: [
+        { role: "report", type: "report", path: "outputs/report.md", purpose: "handoff" },
+        { role: "manuscript_source", type: "manuscript", path: "outputs/manuscript.qmd", purpose: "source", format: "qmd" },
+        { role: "formatted_manuscript", type: "manuscript", path: "outputs/manuscript.pdf", purpose: "render", format: "pdf", renderer: "quarto" },
+      ],
       formal_gates: [], cost: { effort: "low", interaction: "single_pass" },
     }), "utf8");
     const started = parseEnvelope<{ instance_id: string }>(runCli(["start", "deep-research:quick", "--input", startInput, "--confirmed-by", "researcher", "--json"], root));

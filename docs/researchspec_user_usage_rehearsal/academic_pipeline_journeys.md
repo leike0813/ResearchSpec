@@ -41,7 +41,7 @@ Default children:
   2. academic-paper:full
   3. academic-paper-reviewer:full
   4. academic-paper:revision + reviewer:re-review（条件性、可重复）
-  5. academic-paper:format-convert
+  5. academic-paper:format-convert（accepted review/re-review 后）
 Formal Gates:
   evidence quality、manuscript readiness、review/editorial outcome、final integrity
 Cost: high / long-horizon
@@ -132,7 +132,7 @@ paper/reviews/
 
 用户先确认 Review Gate，再单独选择 editorial branch：
 
-- `accept`：进入 final integrity；
+- `accept`：进入 `format`，完成后才进入 final integrity；
 - `revision`：实例化下一 revision round；
 - `reject/stop`：结束或重新规划；
 - failed Gate 后继续：需要 profile 允许的显式 override 和理由。
@@ -160,18 +160,16 @@ Re-review child 读取修订稿、原 review、response 与 patch，输出
 
 ### 1.7 格式化、final integrity 与完成
 
-用户确认 `academic-paper:format-convert` child 后，producer 读取最终稿与 manuscript spec：
+用户确认 `academic-paper:format-convert` child 后，producer 读取最终稿与 manuscript spec。Markdown
+沿用既有转换路径；QMD 以 `.qmd` 作为正式源稿，读取其同目录资源但不纳入多文件 Quarto project：
 
 ```text
 paper/submission/
-├── manuscript.docx
-├── manuscript.pdf
-├── cover-letter.md
-└── submission-checklist.md
+└── manuscript.pdf  # v1 每个 formatting child 只有一个确认目标
 ```
 
-Verify 对最终稿、submission package、稳定 claims 与已知限制提出 final-integrity verdict。
-用户确认后，format child 完成，parent control 标为 `complete`；parent handoff 汇总最终外部
+Verify 同时检查稿件源稿（QMD 或 Markdown）与 formatted output、稳定 claims 与已知限制，提出
+final-integrity verdict。用户确认后，format child 完成，parent 才能进入 final-integrity；parent handoff 汇总最终外部
 路径、限制和后续责任。所有 children 保留为按时间浏览的直接审计材料。
 
 ### 1.8 End-to-end 验收

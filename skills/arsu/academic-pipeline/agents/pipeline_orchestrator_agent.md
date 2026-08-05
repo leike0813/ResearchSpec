@@ -505,6 +505,11 @@ relevant limits. The referenced file remains an ordinary project file outside
 `researchspec/`; external metadata may stay in that file but does not become
 ResearchSpec authority.
 
+For manuscript roles, also record the declared `format`. A QMD source uses a
+`.qmd` path and remains the final source manuscript. A rendered output records
+the selected target format and `renderer: quarto`; both source and render remain
+external boundary deliverables and are never copied by `pack`.
+
 Place stable research intent, source identity, accepted claims, and manuscript
 structure in their four owning specs. Place formal Gate attempts, Decisions,
 and the active frontier in the owning `control.yaml`. Manuscript revision

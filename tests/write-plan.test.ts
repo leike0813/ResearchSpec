@@ -91,6 +91,7 @@ void test("write plan refuses a mode changed after planning", { skip: process.pl
   const root = await tempProject();
   const target = path.join(root, "tool");
   await writeFile(target, "binary", { mode: 0o644 });
+  await chmod(target, 0o644);
   const operation = await planFile({ path: target, content: "updated", scope: "project", ownership: "generated", recordedHash: hash("binary"), mode: 0o755 });
   await chmod(target, 0o600);
   await assert.rejects(() => executeWritePlan({ operations: [operation] }), (error: unknown) => (error as NodeJS.ErrnoException).code === "EWRITE_CONFLICT");

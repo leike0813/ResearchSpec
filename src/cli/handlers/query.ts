@@ -123,6 +123,15 @@ export async function handleCurrentInstructions(selector: string, context: Comma
     const formalGates = childCandidates.length === 1
       ? index.profile.children.find((item) => item.node_id === (firstChild?.kind === "route" ? firstChild.node_id : undefined))?.required_gate_ids ?? []
       : profileEntry || route.gate_policy.level !== "required" ? [] : route.gate_policy.gate_kinds;
+    const childDefinition = childCandidates.length === 1 && firstChild?.kind === "route"
+      ? index.profile.children.find((item) => item.node_id === firstChild.node_id)
+      : undefined;
+    const usesManuscript = routeRef.startsWith("academic-paper:")
+      || routeRef.startsWith("academic-paper-reviewer:")
+      || routeRef.startsWith("academic-pipeline:");
+    const qmdProbeExpected = index.manuscript.delivery.working_format === "qmd"
+      && (routeRef.startsWith("academic-paper:") || routeRef.startsWith("academic-pipeline:"));
+    const formatConversion = routeRef === "academic-paper:format-convert";
     return success("instructions", {
       selector,
       kind: "route",
@@ -131,9 +140,33 @@ export async function handleCurrentInstructions(selector: string, context: Comma
       current_candidates: candidates,
       planned_output_types: route.boundary_outputs.map((item) => item.type),
       boundary_outputs: route.boundary_outputs,
+      required_input_roles: childDefinition?.required_input_roles ?? [],
       formal_gates: formalGates,
       cost: route.cost,
       confirmation_required: true,
+      manuscript_delivery: usesManuscript ? {
+        current: index.manuscript.delivery,
+        selection_required: index.manuscript.delivery.working_format === null,
+        snapshot_required: true,
+      } : null,
+      tool_requirements: usesManuscript ? {
+        quarto: {
+          probe_command: ["quarto", "--version"],
+          probe_owner: "agent",
+          probe_required_before_start: qmdProbeExpected,
+          availability_required_before_start: formatConversion,
+          allowed_statuses: ["available", "unavailable", "unknown"],
+          read_only: true,
+          installs_dependencies: false,
+          contacts_network: false,
+          writes_workspace: false,
+          probe_timing: [
+            "before confirming a first manuscript working format",
+            "before starting or resuming QMD writing",
+            "immediately before academic-paper:format-convert",
+          ],
+        },
+      } : null,
       start_input: {
         schema_version: "1",
         confirmed_at: "<rfc3339>",
@@ -141,6 +174,8 @@ export async function handleCurrentInstructions(selector: string, context: Comma
         prerequisites: [],
         handoff_inputs: [],
         planned_outputs: [],
+        ...(usesManuscript ? { manuscript_delivery: index.manuscript.delivery } : {}),
+        ...(qmdProbeExpected ? { quarto_probe: { status: "<available|unavailable|unknown>", checked_at: "<rfc3339>" } } : {}),
         formal_gates: formalGates,
         cost: route.cost,
       },

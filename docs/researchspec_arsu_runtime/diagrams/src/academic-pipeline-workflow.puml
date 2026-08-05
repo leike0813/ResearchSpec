@@ -18,8 +18,9 @@ while (revision required?) is (yes)
   :Confirm re-review child;
   :Human confirms round outcome;
 endwhile (accepted)
-:Human confirms final integrity Gate;
 :Confirm formatting child;
+:Join manuscript source and formatted output;
+:Human confirms final integrity Gate;
 :Produce process summary;
 :Advance parent to complete;
 stop

@@ -405,11 +405,11 @@ Current ResearchSpec owners:
 - Severity: `required`
 - Semantic role: `review_handoff_tracking`
 - Replacement shape: `schema_projection_table`
-- Replacement body SHA-256: `8a730526aba2d22bbbe5bcc66b87eeab5e4c5f631dd95234aa068a42134d7751`
+- Replacement body SHA-256: `1e003de41328a1e015ba11d39fcedfbcab4e2bf76e3604088f5ff8b60eecbf4e`
 - ResearchSpec targets: `researchspec/changes/<change-id>/change.md`, `assets/shared/contracts/patch/revision_patch.schema.json`, `researchspec/subflows/<instance>/work/annotation-intake/`, `researchspec/subflows/<instance>/handoff.md`
 - Generated output paths: `academic-paper/agents/revision_coach_agent.md`
 - Before SHA-256: `58ab269816913477f725577ef4eec70c4c805150153c59ebf2058f7a0920680b`
-- After SHA-256: `9bb96da2af4f3333117aa4a272994180394b3c991a13dd9d428bcf298886706e`
+- After SHA-256: `46eb9ff59c86227f08eec7aa8d971e445530e34fabb82092b3f646c68cc0c8d0`
 
 #### Before
 
@@ -441,6 +441,9 @@ clarification. This working directory does not create a separate freeze,
 control record, or annotation lifecycle. If the normalized annotation set must
 cross a subflow boundary,
 write an explicit copy outside `researchspec/` and reference it in the handoff.
+When the manuscript is QMD, the review copy and patch mapping preserve YAML
+frontmatter, fenced code, cell options, and Quarto metadata as manuscript bytes;
+annotations must not turn those boundaries into prose or silently drop them.
 
 Current ResearchSpec owners:
 
@@ -459,11 +462,11 @@ Current ResearchSpec owners:
 - Severity: `required`
 - Semantic role: `revision_patch_protocol`
 - Replacement shape: `patch_protocol_block`
-- Replacement body SHA-256: `4027e85d43433c12dac1bf04ff078f1a27ac7fc4c79da0abd6d1f03133b112db`
+- Replacement body SHA-256: `e9d6bf5a31811b7d6484f34642e8b5acc7c899592d3e3ed13497c3da718571dc`
 - ResearchSpec targets: `assets/shared/contracts/patch/revision_patch.schema.json`, `scripts/apply-revision-patch.mjs`, `researchspec/subflows/<instance>/work/annotation-intake/`, `researchspec/subflows/<instance>/handoff.md`, `researchspec/subflows/<instance>/control.yaml`
 - Generated output paths: `academic-paper/references/revision_patch_protocol.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/references/revision_patch_protocol.md`, `academic-pipeline/references/cross-skill/academic-paper/references/revision_patch_protocol.md`, `deep-research/references/cross-skill/academic-paper/references/revision_patch_protocol.md`
 - Before SHA-256: `18dba4bb77ed7bc1b408655dfff094f53bc726e9575395c7d6c4d19b75f32cb3`
-- After SHA-256: `5f4c1e10d057ed42353351a4c27cd38e1debf9388ec8871d1997cb59bb0f7b00`
+- After SHA-256: `80e46925aa974582076caa8c8178e854d8dd10fbbccb79496dd3282f121bcdb6`
 
 #### Before
 
@@ -543,18 +546,21 @@ not a ResearchSpec framework lifecycle record or lifecycle object.
 
 One bounded mechanical application is:
 
-1. Select an anchored Markdown manuscript and create a patch whose
+1. Select an anchored Markdown or QMD manuscript and create a patch whose
    `base_draft_hash` matches those exact bytes.
 2. Review the operation IDs, block targets, `old_hash` values, roadmap links,
    rationale, and any complete annotation mapping.
-3. Run `node scripts/apply-revision-patch.mjs --base <base.md> --patch <patch.json>
-   --output <revised.md>` and add `--report <summary.json>` only when a derived
+3. Run `node scripts/apply-revision-patch.mjs --base <base.md-or.qmd> --patch <patch.json>
+   --output <revised.md-or.qmd>` and add `--report <summary.json>` only when a derived
    diagnostic summary is useful.
 4. On any preflight failure, correct the inputs or revise manually. The helper
    creates no partial output and never changes a subflow control or handoff.
 
 Untouched anchored blocks remain byte-identical under helper application. That
 mechanical guarantee says nothing about whether edited text answers the review.
+For QMD, YAML frontmatter, fenced code, cell options, and Quarto metadata are
+ordinary protected manuscript bytes unless an operation explicitly targets the
+containing anchored block; the output keeps the `.qmd` extension.
 The current manuscript, response to reviewers, optional patch/summary, and
 external review material may inform a formal revision Gate, but a human records
 the verdict in the owning subflow `control.yaml`.
@@ -641,11 +647,11 @@ Current ResearchSpec owners:
 - Severity: `required`
 - Semantic role: `revision_patch_protocol`
 - Replacement shape: `patch_protocol_block`
-- Replacement body SHA-256: `c2578f839535b9ee5bd84a2c4a720c2f7325473bdc5a97baa06ee44bd05350b4`
+- Replacement body SHA-256: `b3fd9d672be6517431e3470e652869690921b97805c937354a60671d5c78059d`
 - ResearchSpec targets: `assets/shared/contracts/patch/revision_patch.schema.json`, `scripts/apply-revision-patch.mjs`, `researchspec/subflows/<instance>/work/annotation-intake/`, `researchspec/subflows/<instance>/handoff.md`, `researchspec/subflows/<instance>/control.yaml`
 - Generated output paths: `academic-paper/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper/SKILL.md`, `deep-research/references/cross-skill/academic-paper/SKILL.md`
 - Before SHA-256: `3746fd60636d23f14f9740192da44549c9fa0427537852d370a54d20acbdcde2`
-- After SHA-256: `100f20cecd514970f27227c777b76f8f76e907d0a17a621efba8b9d6a8d6bece`
+- After SHA-256: `98b8afe31350b9bc36d91952e6d218f2a79070b887fccea959b823a77b2bf7c7`
 
 #### Before
 
@@ -674,6 +680,12 @@ instead of rewriting the complete manuscript. The adapted ARSU contract at
 patch schema. It preserves stable operation IDs, block IDs and `old_hash`
 preconditions, replace/insert/delete operations, annotation dispositions,
 revision rationale, and roadmap traceability.
+
+The selected manuscript may be Markdown or QMD. Treat QMD as
+Markdown-compatible text and preserve its YAML frontmatter, fenced code,
+cell-option comments, citations, cross-references, and Quarto metadata outside
+the explicitly targeted anchored blocks. Never convert a `.qmd` path to `.md`
+during revision.
 
 The patch and manuscript are explicit files selected by the caller. They are not
 handoff-referenced ResearchSpec runtime entities. When safe mechanical application is
@@ -1317,11 +1329,11 @@ Current ResearchSpec owners:
 - Severity: `required`
 - Semantic role: `review_handoff_tracking`
 - Replacement shape: `checklist`
-- Replacement body SHA-256: `ba8a503d486e5bea68009f175365af848ce49eb4b45b79dd67061a8a08374eab`
+- Replacement body SHA-256: `82a4fe73b660b9e837823cf8a4c7ca38a9f71be50a81817b3188a0703273e1fb`
 - ResearchSpec targets: `researchspec/subflows/<instance>/handoff.md`, `researchspec/subflows/<instance>/control.yaml`
 - Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/SKILL.md`, `academic-paper-reviewer/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/SKILL.md`, `deep-research/references/cross-skill/academic-paper-reviewer/SKILL.md`
 - Before SHA-256: `717bc6b1a277ccb027d68adb55cdd8122245f9b2cda05f232031c60ba83a6b74`
-- After SHA-256: `82494847e18c6800f56274dc8943f8f09ebfd556f8728f52f212a43d425715f1`
+- After SHA-256: `306a003d0f69c7ea42fd18319f3485e1d33334c2f9ae194dee1ea9b450db2d6f`
 
 #### Before
 
@@ -1344,6 +1356,9 @@ Replacement scope: `REVIEW-001` for `academic-paper-reviewer`.
 
 Dedicated mode for Pipeline Stage 3'. Re-review verifies each first-round
 concern against the current revised manuscript and the response to reviewers.
+The manuscript may be Markdown or QMD. Review QMD as Markdown-compatible source
+without stripping or normalizing YAML frontmatter, fenced code, cell options,
+cross-references, citations, or other Quarto metadata.
 When the revision producer exposed an ARSU patch, annotation set, or helper
 summary, resolve those files by role and safe project-relative path from the
 producer subflow's `handoff.md`; do not infer them from directory names or
@@ -1604,11 +1619,11 @@ Current ResearchSpec owners:
 - Severity: `required`
 - Semantic role: `handoff_projection`
 - Replacement shape: `schema_projection_table`
-- Replacement body SHA-256: `d1a6f5470479398326cebbff6cca6acdd556524710c2389bb24b17351e6d342f`
+- Replacement body SHA-256: `4c6e1c285711a133eef5996dc3a7dc7bff6bdc1c7604b006dd1a956c99f807d2`
 - ResearchSpec targets: `researchspec/specs/project.md`, `researchspec/specs/sources.yaml`, `researchspec/specs/claims.yaml`, `researchspec/specs/manuscript.yaml`, `researchspec/subflows/<instance>/handoff.md`, `researchspec/subflows/<instance>/control.yaml`, `assets/shared/contracts/patch/revision_patch.schema.json`
 - Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
 - Before SHA-256: `c4da59716b0f456089bd4e96ca36de57011f33eeca6c40296efa82564f89f465`
-- After SHA-256: `6ea0a7cb5f64b9806e598611f4e60cc2cd3a30fe78469445500088ac0e65607e`
+- After SHA-256: `00676d7776da2038b54688a49dec8803d18faca84439352b0578e2916ececd11`
 
 #### Before
 
@@ -1630,6 +1645,11 @@ type, safe project-relative path, purpose, producer or intended consumer, and
 relevant limits. The referenced file remains an ordinary project file outside
 `researchspec/`; external metadata may stay in that file but does not become
 ResearchSpec authority.
+
+For manuscript roles, also record the declared `format`. A QMD source uses a
+`.qmd` path and remains the final source manuscript. A rendered output records
+the selected target format and `renderer: quarto`; both source and render remain
+external boundary deliverables and are never copied by `pack`.
 
 Place stable research intent, source identity, accepted claims, and manuscript
 structure in their four owning specs. Place formal Gate attempts, Decisions,

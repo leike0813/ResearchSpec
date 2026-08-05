@@ -17,6 +17,7 @@ export const PipelineProfileChildSchema = z.strictObject({
   node_id: StableIdSchema,
   route_ref: RouteRefSchema,
   prerequisites: IdListSchema,
+  required_input_roles: IdListSchema.optional(),
   required_gate_ids: IdListSchema,
   branch_ids: IdListSchema,
   multiplicity: z.enum(["one", "optional", "repeatable"]),
@@ -83,6 +84,7 @@ export const PipelineProfileSchema = z.strictObject({
       context.addIssue({ code: "custom", path: ["children", index, "round_role"], message: "Only repeatable children may declare a round role." });
     }
     uniqueStrings(child.prerequisites, ["children", index, "prerequisites"], context);
+    if (child.required_input_roles) uniqueStrings(child.required_input_roles, ["children", index, "required_input_roles"], context);
     uniqueStrings(child.required_gate_ids, ["children", index, "required_gate_ids"], context);
     uniqueStrings(child.branch_ids, ["children", index, "branch_ids"], context);
     for (const gateId of child.required_gate_ids) {

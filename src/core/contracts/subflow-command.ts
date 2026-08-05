@@ -1,10 +1,22 @@
 import { z } from "zod";
 
-import { StableIdSchema } from "./stable-specs.js";
+import { ManuscriptDeliverySchema, StableIdSchema } from "./stable-specs.js";
 import { HandoffInputSchema, HandoffOutputSchema } from "./subflow-handoff.js";
 import { CURRENT_WORKSPACE_SCHEMA_VERSION } from "./workspace-format.js";
 
 const NonEmptySchema = z.string().trim().min(1);
+
+export const QuartoProbeSummarySchema = z.discriminatedUnion("status", [
+  z.strictObject({ status: z.literal("available"), checked_at: z.iso.datetime({ offset: true }), version: NonEmptySchema }),
+  z.strictObject({ status: z.literal("unavailable"), checked_at: z.iso.datetime({ offset: true }), reason: NonEmptySchema }),
+  z.strictObject({ status: z.literal("unknown"), checked_at: z.iso.datetime({ offset: true }), reason: NonEmptySchema }),
+]);
+
+export const RenderConsentSchema = z.strictObject({
+  execute: z.literal(true),
+  confirmed_by: NonEmptySchema,
+  confirmed_at: z.iso.datetime({ offset: true }),
+});
 
 export const SubflowStartCommandSchema = z.strictObject({
   schema_version: z.literal(CURRENT_WORKSPACE_SCHEMA_VERSION),
@@ -18,6 +30,9 @@ export const SubflowStartCommandSchema = z.strictObject({
   prerequisites: z.array(NonEmptySchema),
   handoff_inputs: z.array(HandoffInputSchema),
   planned_outputs: z.array(HandoffOutputSchema),
+  manuscript_delivery: ManuscriptDeliverySchema.optional(),
+  quarto_probe: QuartoProbeSummarySchema.optional(),
+  render_consent: RenderConsentSchema.optional(),
   formal_gates: z.array(StableIdSchema),
   cost: z.strictObject({
     effort: NonEmptySchema,

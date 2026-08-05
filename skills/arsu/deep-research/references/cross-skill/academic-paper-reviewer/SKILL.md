@@ -278,6 +278,9 @@ Replacement scope: `REVIEW-001` for `academic-paper-reviewer`.
 
 Dedicated mode for Pipeline Stage 3'. Re-review verifies each first-round
 concern against the current revised manuscript and the response to reviewers.
+The manuscript may be Markdown or QMD. Review QMD as Markdown-compatible source
+without stripping or normalizing YAML frontmatter, fenced code, cell options,
+cross-references, citations, or other Quarto metadata.
 When the revision producer exposed an ARSU patch, annotation set, or helper
 summary, resolve those files by role and safe project-relative path from the
 producer subflow's `handoff.md`; do not infer them from directory names or

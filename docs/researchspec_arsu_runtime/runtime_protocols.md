@@ -12,6 +12,11 @@ status -> instructions <selector> -> start / decide / advance -> status
 formal Gate、local Decision、override 或 change decision；`advance` 单独验证 profile 与 owning
 files 后推进。成功决定不会隐式 advance。
 
+`instructions` 只返回稿件格式选择、handoff renderer 元数据和 Quarto 探测要求，不执行 Quarto。
+Navigate 或 `academic-paper` 在写作 intake、QMD 写作/恢复和 format-convert 前按时机执行只读
+`quarto --version`；`status`、`check`、`doctor`、`init` 不探测。Start 保存 delivery snapshot 和
+probe summary，快照漂移时拒绝创建实例。
+
 ![一次 subflow 的控制循环](diagrams/rendered/runtime-control-loop.svg)
 
 ## 2. Boundary files

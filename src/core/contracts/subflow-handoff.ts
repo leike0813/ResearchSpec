@@ -1,7 +1,7 @@
 import { parse as parseYaml, stringify } from "yaml";
 import { z } from "zod";
 
-import { StableIdSchema } from "./stable-specs.js";
+import { QuartoFormatIdSchema, StableIdSchema } from "./stable-specs.js";
 import { CURRENT_WORKSPACE_SCHEMA_VERSION } from "./workspace-format.js";
 
 const HandoffBaseSchema = z.strictObject({
@@ -9,9 +9,11 @@ const HandoffBaseSchema = z.strictObject({
   type: z.string().trim().min(1),
   path: z.string().trim().min(1),
   purpose: z.string().trim().min(1),
+  format: QuartoFormatIdSchema.optional(),
+  renderer: z.literal("quarto").optional(),
   limits: z.array(z.string().trim().min(1)).optional(),
   notes: z.string().trim().min(1).optional(),
-});
+}).superRefine(validateFormatDescriptor);
 
 export const HandoffInputSchema = HandoffBaseSchema.extend({ source_instance_id: StableIdSchema.optional() });
 export const HandoffOutputSchema = HandoffBaseSchema.extend({ intended_consumer: z.string().trim().min(1).optional() });
@@ -56,6 +58,18 @@ function addDuplicateRoleIssues(values: readonly { role: string }[], field: stri
   for (const [index, value] of values.entries()) {
     if (seen.has(value.role)) context.addIssue({ code: "custom", path: [field, index, "role"], message: `Duplicate role: ${value.role}` });
     seen.add(value.role);
+  }
+}
+
+function validateFormatDescriptor(
+  value: { path: string; format?: string; renderer?: "quarto" },
+  context: z.RefinementCtx,
+): void {
+  if (value.format === "qmd" && !value.path.toLowerCase().endsWith(".qmd")) {
+    context.addIssue({ code: "custom", path: ["path"], message: "QMD handoff paths must end in .qmd." });
+  }
+  if (value.renderer === "quarto" && value.format === undefined) {
+    context.addIssue({ code: "custom", path: ["format"], message: "Quarto-rendered handoffs require a target format ID." });
   }
 }
 

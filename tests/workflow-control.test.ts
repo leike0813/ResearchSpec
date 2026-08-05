@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
+import { writeFile } from "node:fs/promises";
+import path from "node:path";
 
 import {
   advanceSubflow,
@@ -78,6 +80,60 @@ void test("dynamic revision template exposes the next independently confirmed ro
     const candidate = evaluateWorkflowControl(index).frontier.find((item) => item.kind === "route" && item.node_id === "revision" && item.round === 2);
     assert.ok(candidate);
     assert.equal(index.subflows.filter((item) => item.control.parent?.node_id === "revision").length, 1);
+  } finally { await fixture.cleanup(); }
+});
+
+void test("accepted review reaches format before final integrity and carries both final inputs", async () => {
+  const fixture = await createCurrentWorkspace();
+  try {
+    await writeFile(path.join(fixture.root, "paper.md"), "# Paper\n", "utf8");
+    let index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    const parent = await startSubflow({ index, routeRef: "academic-pipeline:end-to-end", command: startCommand("academic-pipeline:end-to-end", time(0), { profile_entry: "end-to-end" }), confirmedBy: "researcher" });
+    index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    const research = await startChild(index, parent.instance_id, "research", "deep-research:full", 1, ["evidence-integrity"]);
+    index = await loadCurrentWorkspaceIndex(fixture.workspace); await passAndComplete(index, research.instance_id, "evidence-integrity", 2);
+    index = await loadCurrentWorkspaceIndex(fixture.workspace); await advanceSubflow({ index, instanceId: parent.instance_id, actor: "agent", transitionedAt: time(3) });
+    index = await loadCurrentWorkspaceIndex(fixture.workspace); const write = await startChild(index, parent.instance_id, "write", "academic-paper:full", 4, ["manuscript-integrity"]);
+    index = await loadCurrentWorkspaceIndex(fixture.workspace); await passAndComplete(index, write.instance_id, "manuscript-integrity", 5);
+    index = await loadCurrentWorkspaceIndex(fixture.workspace); await advanceSubflow({ index, instanceId: parent.instance_id, actor: "agent", transitionedAt: time(6) });
+    index = await loadCurrentWorkspaceIndex(fixture.workspace); const review = await startChild(index, parent.instance_id, "review", "academic-paper-reviewer:full", 7, ["review-confirmation"]);
+    index = await loadCurrentWorkspaceIndex(fixture.workspace); await appendGateAttempt({ index, instanceId: review.instance_id, gateId: "review-confirmation", verdict: "pass", confirmedBy: "researcher", confirmedAt: time(8), summary: "Review confirmed." });
+    index = await loadCurrentWorkspaceIndex(fixture.workspace); await recordLocalDecision({ index, instanceId: review.instance_id, decisionId: "editorial-outcome", kind: "branch", choice: "accepted", decidedBy: "researcher", decidedAt: time(9) });
+    index = await loadCurrentWorkspaceIndex(fixture.workspace); await advanceSubflow({ index, instanceId: review.instance_id, transition: "complete", actor: "agent", transitionedAt: time(10) });
+    index = await loadCurrentWorkspaceIndex(fixture.workspace); await advanceSubflow({ index, instanceId: parent.instance_id, actor: "agent", transitionedAt: time(11) });
+    index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    assert.ok(evaluateWorkflowControl(index).frontier.some((item) => item.kind === "route" && item.node_id === "format"));
+    assert.equal(evaluateWorkflowControl(index).frontier.some((item) => item.kind === "route" && item.node_id === "final-integrity"), false);
+
+    const format = await startSubflow({
+      index,
+      routeRef: "academic-paper:format-convert",
+      command: startCommand("academic-paper:format-convert", time(12), {
+        parent: { instance_id: parent.instance_id, node_id: "format" },
+        handoff_inputs: [{ role: "manuscript_source", type: "manuscript", path: "paper.md", purpose: "format", format: "markdown" }],
+        planned_outputs: [{ role: "formatted_manuscript", type: "manuscript", path: "paper.pdf", purpose: "final check", format: "pdf" }],
+      }),
+      confirmedBy: "format-approver",
+    });
+    index = await loadCurrentWorkspaceIndex(fixture.workspace); await advanceSubflow({ index, instanceId: format.instance_id, transition: "complete", actor: "agent", transitionedAt: time(13) });
+    index = await loadCurrentWorkspaceIndex(fixture.workspace); await advanceSubflow({ index, instanceId: parent.instance_id, actor: "agent", transitionedAt: time(14) });
+    await writeFile(path.join(fixture.root, "paper.pdf"), "rendered\n", "utf8");
+    index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    assert.ok(evaluateWorkflowControl(index).frontier.some((item) => item.kind === "route" && item.node_id === "final-integrity"));
+    const final = await startSubflow({
+      index,
+      routeRef: "academic-paper:citation-check",
+      command: startCommand("academic-paper:citation-check", time(15), {
+        parent: { instance_id: parent.instance_id, node_id: "final-integrity" },
+        handoff_inputs: [
+          { role: "manuscript_source", type: "manuscript", path: "paper.md", purpose: "source integrity", format: "markdown" },
+          { role: "formatted_manuscript", type: "manuscript", path: "paper.pdf", purpose: "render integrity", format: "pdf" },
+        ],
+        formal_gates: ["final-integrity"],
+      }),
+      confirmedBy: "integrity-approver",
+    });
+    assert.deepEqual(final.handoff.inputs.map((item) => item.role), ["manuscript_source", "formatted_manuscript"]);
   } finally { await fixture.cleanup(); }
 });
 

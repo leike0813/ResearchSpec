@@ -82,6 +82,7 @@ const WORKSPACE_TEMPLATES: readonly WorkspaceTemplateDefinition[] = [
       venue: null,
       citation_requirements: [],
       format_requirements: [],
+      delivery: { working_format: null, final_output_format: null },
       outline: [],
     }),
   },

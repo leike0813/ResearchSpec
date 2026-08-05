@@ -30,6 +30,17 @@ subflow's control.yaml as its sole runtime authority and its handoff.md as
 the boundary input/output reference. Do not reconstruct the frontier from Skill
 prose; use directed instructions selectors and the current status view.
 
+Treat `specs/manuscript.yaml.delivery` as the source-format contract.
+The first manuscript-writing intake resolves `working_format`; a later change
+to a confirmed selection requires a project change. QMD is Markdown-compatible
+source: require a `.qmd` boundary path and preserve YAML frontmatter, fenced
+code, executable-cell options, citations, cross-references, and other Quarto
+metadata as opaque manuscript content during review, annotation, and revision.
+Record source and target format IDs on handoff entries; a rendered target also
+records `renderer: quarto`.
+
+
+
 Produce semantic files at explicit project-relative paths outside
 researchspec/, then update the owning handoff with unique roles, types,
 purposes, paths, producers or intended consumers, and relevant limits. Do not
@@ -333,6 +344,9 @@ Replacement scope: `REVIEW-001` for `academic-paper-reviewer`.
 
 Dedicated mode for Pipeline Stage 3'. Re-review verifies each first-round
 concern against the current revised manuscript and the response to reviewers.
+The manuscript may be Markdown or QMD. Review QMD as Markdown-compatible source
+without stripping or normalizing YAML frontmatter, fenced code, cell options,
+cross-references, citations, or other Quarto metadata.
 When the revision producer exposed an ARSU patch, annotation set, or helper
 summary, resolve those files by role and safe project-relative path from the
 producer subflow's `handoff.md`; do not infer them from directory names or

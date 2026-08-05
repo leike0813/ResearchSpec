@@ -3,7 +3,7 @@ import { readFile, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { test } from "node:test";
 
-import { startSubflow } from "../src/core/runtime/subflow-control.js";
+import { startSubflow, SubflowControlError } from "../src/core/runtime/subflow-control.js";
 import { CurrentHandoffError, updateCurrentHandoff } from "../src/core/runtime/handoff.js";
 import { listCurrentItems } from "../src/core/runtime/query.js";
 import { evaluateWorkflowControl } from "../src/core/runtime/workflow-control.js";
@@ -99,4 +99,62 @@ void test("handoff update stops on a direct edit made after the workspace scan",
     await assert.rejects(updateCurrentHandoff({ index, instanceId: started.instance_id, semanticInput: { inputs: [], outputs: [] }, updatedAt: "2026-08-02T09:10:00+08:00" }), (error: unknown) => error instanceof CurrentHandoffError && error.code === "handoff_write_conflict");
     assert.equal(await readFile(record.handoffPath, "utf8"), directEdit);
   } finally { await fixture.cleanup(); }
+});
+
+void test("QMD writing may start without Quarto while formatting requires an available probe", async () => {
+  const fixture = await createCurrentWorkspace({ manuscriptDelivery: { working_format: "qmd", final_output_format: "pdf" } });
+  try {
+    await writeFile(path.join(fixture.root, "paper.qmd"), "---\ntitle: Test\n---\n\n# Paper\n", "utf8");
+    let index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    const unavailable = { status: "unavailable" as const, checked_at: FIRST, reason: "not installed" };
+    const writing = await startSubflow({
+      index,
+      routeRef: "academic-paper:full",
+      command: startCommand("academic-paper:full", FIRST, {
+        manuscript_delivery: { working_format: "qmd", final_output_format: "pdf" },
+        quarto_probe: unavailable,
+      }),
+      confirmedBy: "researcher",
+    });
+    assert.equal(writing.control.start_confirmation.quarto_probe?.status, "unavailable");
+
+    index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    const formatCommand = startCommand("academic-paper:format-convert", "2026-08-02T09:10:00+08:00", {
+      manuscript_delivery: { working_format: "qmd", final_output_format: "pdf" },
+      quarto_probe: unavailable,
+      handoff_inputs: [{ role: "manuscript_source", type: "manuscript", path: "paper.qmd", purpose: "render", format: "qmd" }],
+      planned_outputs: [{ role: "formatted_manuscript", type: "manuscript", path: "paper.pdf", purpose: "submit", format: "pdf", renderer: "quarto" }],
+    });
+    await assert.rejects(
+      startSubflow({ index, routeRef: "academic-paper:format-convert", command: formatCommand, confirmedBy: "researcher" }),
+      (error: unknown) => error instanceof SubflowControlError && error.code === "quarto_unavailable",
+    );
+    const available = await startSubflow({
+      index,
+      routeRef: "academic-paper:format-convert",
+      command: { ...formatCommand, quarto_probe: { status: "available", checked_at: FIRST, version: "1.7.32" } },
+      confirmedBy: "researcher",
+    });
+    assert.equal(available.control.start_confirmation.manuscript_delivery?.working_format, "qmd");
+  } finally {
+    await fixture.cleanup();
+  }
+});
+
+void test("start rejects an unselected or stale manuscript delivery snapshot", async () => {
+  const fixture = await createCurrentWorkspace();
+  try {
+    const index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    await assert.rejects(
+      startSubflow({
+        index,
+        routeRef: "academic-paper:full",
+        command: startCommand("academic-paper:full", FIRST, { manuscript_delivery: { working_format: "qmd", final_output_format: "pdf" } }),
+        confirmedBy: "researcher",
+      }),
+      (error: unknown) => error instanceof SubflowControlError && error.code === "manuscript_delivery_snapshot_stale",
+    );
+  } finally {
+    await fixture.cleanup();
+  }
 });

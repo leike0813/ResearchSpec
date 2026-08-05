@@ -36,7 +36,10 @@ stable specs、controls、handoffs、changes 或外部文件。
   Markdown 保存解释。
 - `sources.yaml` 保存稳定 source ID、bibliographic identifiers、用途、include 状态与限制。
 - `claims.yaml` 保存稳定 claim ID、允许措辞、强度、support source IDs、scope 和 limits。
-- `manuscript.yaml` 保存目标体裁、语言、受众、venue、格式和结构意图。
+- `manuscript.yaml` 保存目标体裁、语言、受众、venue、格式约束、结构意图和
+  `delivery.working_format: markdown | qmd | null`、
+  `delivery.final_output_format: safe Quarto format ID | null`。未选择时两项可为空；QMD 选择必须
+  同时给出目标 Quarto format ID。
 
 Sources 和 claims 允许空数组，manuscript 允许早期字段为空。存在的 claim source reference 必须
 指向已知 source ID。
@@ -56,8 +59,9 @@ Failed-Gate override 嵌在该 Gate 下并包含唯一 Decision ID、approver、
 ## 5. Handoff
 
 `handoff.md` 使用 machine-readable YAML frontmatter 和自由 Markdown。Input/output 均包含唯一
-role、semantic type、安全项目相对 path 和 purpose；input 可声明 source instance，output 可声明
-intended consumer 与 limits。
+role、semantic type、安全项目相对 path 和 purpose；稿件条目还声明 `format`，QMD 路径必须以
+`.qmd` 结尾；Quarto 输出声明目标 format ID 与 `renderer: quarto`。input 可声明 source instance，
+output 可声明 intended consumer 与 limits。
 
 路径必须位于项目内且在 `researchspec/` 外，不能包含 symlink escape。普通结构检查不要求文件
 存在；消费动作才验证目标是可读普通文件。
@@ -74,3 +78,8 @@ ARSU `revision_patch` schema 是唯一稿件 patch 合同。它是外部边界�
 
 Validation 分为 schema、cross-reference、safe path、duplicate ID、profile/control/handoff 关系和
 manifest drift。诊断报告具体 owner 与路径，不修改语义文件，也不推断人类学术判断。
+
+Start confirmation 保存当前 manuscript delivery 快照和可选 Quarto probe summary。只有 CLI 在
+快照仍与 `manuscript.yaml` 一致时才创建 subflow；QMD `academic-paper:format-convert` 要求 probe
+`available`。Quarto helper 只处理一个项目外 `.qmd` 和一个目标，默认 no-execute，在 staging
+输出通过后原子交付，失败或已有目标时不覆盖、不更新成功 handoff。

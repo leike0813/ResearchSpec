@@ -1052,20 +1052,13 @@
           "route_ref": "academic-paper:format-convert",
           "title": "Format conversion",
           "intents": [
-            "convert a final draft to a submission format"
+            "convert a Markdown source or render one QMD source to the confirmed target format"
           ],
           "boundary_outputs": [
             {
               "role": "formatted_manuscript",
               "type": "formatted_manuscript",
               "purpose": "Formatted Manuscript produced by academic-paper:format-convert for an explicit handoff or user delivery.",
-              "structure": "A non-empty native document or archive appropriate to the declared type.",
-              "validation_profile": "binary-file-artifact"
-            },
-            {
-              "role": "submission_package",
-              "type": "submission_package",
-              "purpose": "Submission Package produced by academic-paper:format-convert for an explicit handoff or user delivery.",
               "structure": "A non-empty native document or archive appropriate to the declared type.",
               "validation_profile": "binary-file-artifact"
             }
@@ -1086,24 +1079,14 @@
               "requirements": [
                 {
                   "kind": "user_input",
-                  "id": "manuscript"
+                  "id": "manuscript_source"
                 },
                 {
                   "kind": "handoff_role",
-                  "id": "paper_draft"
-                },
-                {
-                  "kind": "handoff_role",
-                  "id": "verified_draft"
-                },
-                {
-                  "kind": "handoff_role",
-                  "id": "revised_draft"
+                  "id": "manuscript_source"
                 }
               ],
-              "fallback_route_refs": [
-                "academic-paper:full"
-              ]
+              "fallback_route_refs": []
             }
           ],
           "risk_level": "low",

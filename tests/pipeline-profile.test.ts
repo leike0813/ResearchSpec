@@ -12,6 +12,10 @@ void test("academic pipeline has one strict converter-owned projection contract"
   assert.deepEqual(PipelineProfileSchema.parse(parseYaml(ACADEMIC_PIPELINE_PROFILE_PROJECTION)), ACADEMIC_PIPELINE_PROFILE);
   assert.equal(ACADEMIC_PIPELINE_PROFILE.entries.length, 2);
   assert.ok(ACADEMIC_PIPELINE_PROFILE.children.some((item) => item.round_role === "revision"));
+  assert.deepEqual(ACADEMIC_PIPELINE_PROFILE.branches.flatMap((branch) => branch.options.filter((option) => option.option_id === "accepted").map((option) => option.unlocks)), [["format"], ["format"]]);
+  assert.ok(ACADEMIC_PIPELINE_PROFILE.transitions.some((item) => item.transition_id === "format-to-final-integrity"));
+  assert.equal(ACADEMIC_PIPELINE_PROFILE.transitions.some((item) => item.from === "review" && item.to === "final-integrity"), false);
+  assert.deepEqual(ACADEMIC_PIPELINE_PROFILE.children.find((item) => item.node_id === "final-integrity")?.required_input_roles, ["manuscript_source", "formatted_manuscript"]);
   assert.equal(ManagedInstallationSchema.safeParse({
     owner: "framework",
     tool_id: null,

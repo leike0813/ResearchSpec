@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { parse as parseYaml, stringify } from "yaml";
 
 import { parseEnvelope, runCli, type Envelope } from "./cli.js";
 
@@ -56,9 +57,15 @@ export interface RouteInstructions {
   };
   current_candidates: RouteFrontierItem[];
   boundary_outputs: BoundaryOutput[];
+  required_input_roles: string[];
   formal_gates: string[];
   cost: { effort: string; interaction: string };
   confirmation_required: true;
+  manuscript_delivery: {
+    current: ManuscriptDelivery;
+    selection_required: boolean;
+    snapshot_required: true;
+  } | null;
   start_input: {
     schema_version: "1";
     confirmed_at: string;
@@ -66,10 +73,21 @@ export interface RouteInstructions {
     prerequisites: string[];
     handoff_inputs: HandoffEntry[];
     planned_outputs: HandoffEntry[];
+    manuscript_delivery?: ManuscriptDelivery;
+    quarto_probe?: QuartoProbeSummary;
     formal_gates: string[];
     cost: { effort: string; interaction: string };
   };
 }
+
+export interface ManuscriptDelivery {
+  working_format: "markdown" | "qmd" | null;
+  final_output_format: string | null;
+}
+
+export type QuartoProbeSummary =
+  | { status: "available"; checked_at: string; version: string }
+  | { status: "unavailable" | "unknown"; checked_at: string; reason: string };
 
 export interface HandoffEntry {
   role: string;
@@ -80,6 +98,8 @@ export interface HandoffEntry {
   notes?: string;
   intended_consumer?: string;
   source_instance_id?: string;
+  format?: string;
+  renderer?: "quarto";
 }
 
 export interface SubflowView {
@@ -151,34 +171,39 @@ export async function startRoute(
   routeRef: string,
   candidate?: RouteFrontierItem,
 ): Promise<StartResult> {
-  const packet = instructions(context, `route:${routeRef}`) as RouteInstructions;
+  let packet = instructions(context, `route:${routeRef}`) as RouteInstructions;
+  if (packet.manuscript_delivery?.selection_required) {
+    await selectInitialManuscriptDelivery(context);
+    packet = instructions(context, `route:${routeRef}`) as RouteInstructions;
+  }
   assert.equal(packet.confirmation_required, true);
   assert.equal(packet.route.route_ref, routeRef);
   const selected = candidate ?? packet.current_candidates.find((item) => item.profile_entry !== undefined);
   const sequence = context.sequence++;
+  const delivery = packet.start_input.manuscript_delivery;
   const outputs = selected?.profile_entry
     ? []
-    : packet.boundary_outputs.map((output) => ({
-        role: output.role,
-        type: output.type,
-        path: `outputs/journey-${String(sequence)}/${output.role}.${output.validation_profile === "binary-file-artifact" ? "bin" : "md"}`,
-        purpose: output.purpose,
-        intended_consumer: selected?.parent_instance_id ? `subflow:${selected.parent_instance_id}` : "user",
-      }));
+    : packet.boundary_outputs.map((output) => plannedOutput(output, sequence, selected, delivery));
+  const handoffInputs = requiredInputs(context, packet.required_input_roles);
   const formalGates = selected?.node_id
     ? gatesForProfileNode(context, selected.node_id)
     : packet.formal_gates;
+  const confirmedAt = new Date(Date.UTC(2026, 7, 2, 2, sequence, 0)).toISOString();
   const command = {
     schema_version: "1",
-    confirmed_at: new Date(Date.UTC(2026, 7, 2, 2, sequence, 0)).toISOString(),
+    confirmed_at: confirmedAt,
     ...(selected?.profile_entry ? { profile_entry: selected.profile_entry } : {}),
     ...(selected?.parent_instance_id && selected.node_id
       ? { parent: { instance_id: selected.parent_instance_id, node_id: selected.node_id } }
       : {}),
     ...(selected?.round === undefined ? {} : { round: selected.round }),
     prerequisites: [],
-    handoff_inputs: [],
+    handoff_inputs: handoffInputs,
     planned_outputs: outputs,
+    ...(delivery ? { manuscript_delivery: delivery } : {}),
+    ...(packet.start_input.quarto_probe
+      ? { quarto_probe: { status: "available" as const, checked_at: confirmedAt, version: "acceptance-fixture" } }
+      : {}),
     formal_gates: formalGates,
     cost: packet.cost,
   };
@@ -313,6 +338,66 @@ function gatesForProfileNode(context: JourneyContext, nodeId: string): string[] 
   const node = profile?.children.find((item) => item.node_id === nodeId);
   assert.ok(node, `Unknown pipeline node: ${nodeId}`);
   return node.required_gate_ids;
+}
+
+async function selectInitialManuscriptDelivery(context: JourneyContext): Promise<void> {
+  const manuscriptPath = path.join(context.workspace, "specs/manuscript.yaml");
+  const manuscript = parseYaml(await readFile(manuscriptPath, "utf8")) as Record<string, unknown>;
+  manuscript.delivery = { working_format: "markdown", final_output_format: null };
+  await writeFile(manuscriptPath, stringify(manuscript), "utf8");
+}
+
+function plannedOutput(
+  output: BoundaryOutput,
+  sequence: number,
+  selected: RouteFrontierItem | undefined,
+  delivery: ManuscriptDelivery | undefined,
+): HandoffEntry {
+  const manuscriptSource = output.role === "paper_draft" || output.role === "revised_draft";
+  const renderedQmd = output.role === "formatted_manuscript" && delivery?.working_format === "qmd";
+  const extension = manuscriptSource && delivery?.working_format === "qmd"
+    ? "qmd"
+    : output.validation_profile === "binary-file-artifact" ? "bin" : "md";
+  return {
+    role: output.role,
+    type: output.type,
+    path: `outputs/journey-${String(sequence)}/${output.role}.${extension}`,
+    purpose: output.purpose,
+    intended_consumer: selected?.parent_instance_id ? `subflow:${selected.parent_instance_id}` : "user",
+    ...(manuscriptSource && delivery?.working_format ? { format: delivery.working_format } : {}),
+    ...(renderedQmd && delivery.final_output_format
+      ? { format: delivery.final_output_format, renderer: "quarto" as const }
+      : {}),
+  };
+}
+
+function requiredInputs(context: JourneyContext, roles: string[]): HandoffEntry[] {
+  return roles.map((role) => {
+    const source = findInputSource(context, role);
+    assert.ok(source, `No produced boundary output can satisfy required role ${role}.`);
+    const { intended_consumer: _consumer, ...input } = source.output;
+    return {
+      ...input,
+      role,
+      purpose: `${source.output.role} supplied to the next pipeline child as ${role}.`,
+      source_instance_id: source.instanceId,
+    };
+  });
+}
+
+function findInputSource(
+  context: JourneyContext,
+  requiredRole: string,
+): { instanceId: string; output: HandoffEntry } | undefined {
+  const acceptedRoles = requiredRole === "manuscript_source"
+    ? new Set(["revised_draft", "paper_draft"])
+    : new Set([requiredRole]);
+  for (let index = context.starts.length - 1; index >= 0; index -= 1) {
+    const start = context.starts[index];
+    const output = start?.outputs.find((item) => acceptedRoles.has(item.role));
+    if (start && output) return { instanceId: start.instanceId, output };
+  }
+  return undefined;
 }
 
 async function writeProducerOutputs(context: JourneyContext, outputs: HandoffEntry[], routeRef: string): Promise<void> {

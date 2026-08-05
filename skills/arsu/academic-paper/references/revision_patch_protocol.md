@@ -14,18 +14,21 @@ not a ResearchSpec framework lifecycle record or lifecycle object.
 
 One bounded mechanical application is:
 
-1. Select an anchored Markdown manuscript and create a patch whose
+1. Select an anchored Markdown or QMD manuscript and create a patch whose
    `base_draft_hash` matches those exact bytes.
 2. Review the operation IDs, block targets, `old_hash` values, roadmap links,
    rationale, and any complete annotation mapping.
-3. Run `node scripts/apply-revision-patch.mjs --base <base.md> --patch <patch.json>
-   --output <revised.md>` and add `--report <summary.json>` only when a derived
+3. Run `node scripts/apply-revision-patch.mjs --base <base.md-or.qmd> --patch <patch.json>
+   --output <revised.md-or.qmd>` and add `--report <summary.json>` only when a derived
    diagnostic summary is useful.
 4. On any preflight failure, correct the inputs or revise manually. The helper
    creates no partial output and never changes a subflow control or handoff.
 
 Untouched anchored blocks remain byte-identical under helper application. That
 mechanical guarantee says nothing about whether edited text answers the review.
+For QMD, YAML frontmatter, fenced code, cell options, and Quarto metadata are
+ordinary protected manuscript bytes unless an operation explicitly targets the
+containing anchored block; the output keeps the `.qmd` extension.
 The current manuscript, response to reviewers, optional patch/summary, and
 external review material may inform a formal revision Gate, but a human records
 the verdict in the owning subflow `control.yaml`.

@@ -8,6 +8,7 @@ import { AnnotationSetCandidateSchema } from "../src/core/contracts/annotation.j
 import { applyRevisionPatch } from "../src/arsu-converter/revision/apply.js";
 import { parseAnchoredBlocks, sha256 } from "../src/arsu-converter/revision/markdown-blocks.js";
 import { validateRevisionPatch } from "../src/arsu-converter/revision/contract.js";
+import { generateAnnotationReviewCopy, removeUntouchedAnnotationSlots } from "../src/annotation-intake.js";
 import { AnnotationProvenanceError, validateAnnotationRawProvenance } from "../src/core/runtime/annotation-provenance.js";
 import { cleanup, tempProject } from "./helpers/cli.js";
 
@@ -91,6 +92,53 @@ void test("stale targets, unknown blocks, and incomplete annotation mappings fai
   const validation = validateRevisionPatch(incomplete);
   assert.equal(validation.ok, false);
   if (!validation.ok) assert.ok(validation.diagnostics.some((item) => item.code === "annotation_mapping_incomplete"));
+});
+
+void test("QMD review and revision preserve frontmatter, fences, and fenced marker examples", () => {
+  const qmd = [
+    "---",
+    "title: QMD paper",
+    "format: pdf",
+    "---",
+    "",
+    "<!--block:B0001-->",
+    "# Introduction",
+    "Original text.",
+    "",
+    "<!--block:B0002-->",
+    "```{python}",
+    "#| echo: false",
+    "print('<!--block:not-an-anchor-->')",
+    "```",
+    "",
+  ].join("\n");
+  const blocks = parseAnchoredBlocks(qmd);
+  assert.deepEqual(blocks.map((block) => block.id), ["B0001", "B0002"]);
+  const reviewCopy = generateAnnotationReviewCopy({ baseText: qmd, slotDensity: "block" });
+  assert.equal(removeUntouchedAnnotationSlots(reviewCopy), qmd);
+
+  const result = applyRevisionPatch({
+    baseText: qmd,
+    patch: {
+      patch_format_version: "2.0",
+      revision_round: 1,
+      base_draft_hash: sha256(qmd).slice(0, 12),
+      revision_rationale: "Clarify the introduction.",
+      emitted_by: "academic-paper",
+      ops: [{
+        operation_id: "op-qmd-intro",
+        op: "replace_block",
+        block_id: "B0001",
+        old_hash: blocks[0]?.hash.slice(0, 12),
+        new_text: "# Introduction\nRevised text.",
+        roadmap_item_ids: ["roadmap-qmd"],
+      }],
+    },
+  });
+  assert.equal(result.ok, true);
+  if (!result.ok) return;
+  assert.match(result.manuscript, /^---\ntitle: QMD paper\nformat: pdf\n---/);
+  assert.ok(result.manuscript.includes("```{python}\n#| echo: false\nprint('<!--block:not-an-anchor-->')\n```"));
 });
 
 void test("standalone helper creates output atomically and emits no file on rejection", async () => {

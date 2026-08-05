@@ -120,6 +120,9 @@ clarification. This working directory does not create a separate freeze,
 control record, or annotation lifecycle. If the normalized annotation set must
 cross a subflow boundary,
 write an explicit copy outside `researchspec/` and reference it in the handoff.
+When the manuscript is QMD, the review copy and patch mapping preserve YAML
+frontmatter, fenced code, cell options, and Quarto metadata as manuscript bytes;
+annotations must not turn those boundaries into prose or silently drop them.
 
 Current ResearchSpec owners:
 

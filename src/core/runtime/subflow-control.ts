@@ -58,6 +58,7 @@ export async function startSubflow(input: StartSubflowInput): Promise<StartSubfl
   if (command.cost.effort !== route.cost.effort || command.cost.interaction !== route.cost.interaction) {
     throw new SubflowControlError("start_cost_mismatch", "Confirmed cost must match the selected route summary.", "conflict");
   }
+  validateManuscriptDeliveryStart(input.index, parsedRoute.data as RouteRef, command);
 
   for (const item of command.handoff_inputs) {
     await resolveCommandBoundaryPath(input.index.projectRoot, item.path, "consume-input");
@@ -103,6 +104,9 @@ export async function startSubflow(input: StartSubflowInput): Promise<StartSubfl
       confirmed_at: command.confirmed_at,
       prerequisites: command.prerequisites,
       expected_outputs: command.planned_outputs.map((item) => item.role),
+      ...(command.manuscript_delivery ? { manuscript_delivery: command.manuscript_delivery } : {}),
+      ...(command.quarto_probe ? { quarto_probe: command.quarto_probe } : {}),
+      ...(command.render_consent ? { render_consent: command.render_consent } : {}),
       formal_gates: command.formal_gates,
       cost: command.cost,
     },
@@ -125,6 +129,57 @@ export async function startSubflow(input: StartSubflowInput): Promise<StartSubfl
 
   await createSubflowDirectory(directory, control, handoff);
   return { status: "started", instance_id: instanceId, directory, control, handoff };
+}
+
+function validateManuscriptDeliveryStart(
+  index: CurrentWorkspaceIndex,
+  routeRef: RouteRef,
+  command: SubflowStartCommand,
+): void {
+  const usesManuscript = routeRef.startsWith("academic-paper:")
+    || routeRef.startsWith("academic-paper-reviewer:")
+    || routeRef.startsWith("academic-pipeline:");
+  if (!usesManuscript) {
+    if (command.render_consent) throw new SubflowControlError("render_consent_route_invalid", "Render consent is valid only for format conversion.", "usage");
+    return;
+  }
+  if (!command.manuscript_delivery) {
+    throw new SubflowControlError("manuscript_delivery_snapshot_missing", "Start requires the current manuscript delivery snapshot.", "usage");
+  }
+  if (JSON.stringify(command.manuscript_delivery) !== JSON.stringify(index.manuscript.delivery)) {
+    throw new SubflowControlError("manuscript_delivery_snapshot_stale", "Confirmed manuscript delivery does not match specs/manuscript.yaml.", "conflict");
+  }
+  if (command.manuscript_delivery.working_format === null) {
+    throw new SubflowControlError("manuscript_format_unselected", "Select and confirm the manuscript working format before starting this route.", "conflict");
+  }
+  const qmdWritingRoute = routeRef.startsWith("academic-paper:") || routeRef.startsWith("academic-pipeline:");
+  if (command.manuscript_delivery.working_format === "qmd" && qmdWritingRoute && !command.quarto_probe) {
+    throw new SubflowControlError("quarto_probe_missing", "QMD writing and resume starts require a current Quarto probe summary.", "usage");
+  }
+  if (routeRef !== "academic-paper:format-convert") {
+    if (command.render_consent) throw new SubflowControlError("render_consent_route_invalid", "Render consent is valid only for format conversion.", "usage");
+    return;
+  }
+  const source = command.handoff_inputs.find((item) => item.role === "manuscript_source" && item.format === index.manuscript.delivery.working_format);
+  if (!source) {
+    throw new SubflowControlError("format_handoff_mismatch", "Format conversion requires a manuscript source matching the selected working format.", "conflict");
+  }
+  if (index.manuscript.delivery.working_format === "markdown") {
+    if (command.render_consent) throw new SubflowControlError("render_consent_route_invalid", "Quarto render consent is not valid for Markdown delivery.", "usage");
+    return;
+  }
+  if (command.quarto_probe?.status !== "available") {
+    throw new SubflowControlError(
+      command.quarto_probe?.status === "unavailable" ? "quarto_unavailable" : "quarto_status_unknown",
+      "Format conversion requires a current available Quarto probe.",
+      "conflict",
+    );
+  }
+  const targetFormat = index.manuscript.delivery.final_output_format;
+  const rendered = command.planned_outputs.find((item) => item.role === "formatted_manuscript" && item.renderer === "quarto" && item.format === targetFormat);
+  if (!rendered) {
+    throw new SubflowControlError("format_handoff_mismatch", "Format conversion requires a QMD input and a Quarto output matching the selected target format.", "conflict");
+  }
 }
 
 export async function appendGateAttempt(input: {
@@ -254,6 +309,11 @@ function resolveStartContext(index: CurrentWorkspaceIndex, routeRef: string, com
     if (!node) throw new SubflowControlError("profile_child_invalid", "Parent node does not match the selected route.", "conflict");
     const available = childStartCandidates(index).some((item) => item.parent.control.instance_id === parent.control.instance_id && item.node.node_id === node.node_id && item.round === command.round);
     if (!available) throw new SubflowControlError("child_start_blocked", "The selected child is not in the current profile frontier.", "conflict");
+    const requiredInputRoles = node.required_input_roles ?? [];
+    const suppliedInputRoles = new Set(command.handoff_inputs.map((item) => item.role));
+    if (!requiredInputRoles.every((role) => suppliedInputRoles.has(role))) {
+      throw new SubflowControlError("start_handoff_inputs_missing", "Confirmed handoff inputs do not include all profile-required roles.", "conflict", { required_input_roles: requiredInputRoles });
+    }
     const requiredGates = node.required_gate_ids.filter((gateId) => index.profile.gates.find((item) => item.gate_id === gateId)?.policy === "required");
     if (!requiredGates.every((gateId) => command.formal_gates.includes(gateId)) || command.formal_gates.some((gateId) => !node.required_gate_ids.includes(gateId))) {
       throw new SubflowControlError("start_gates_mismatch", "Confirmed Gates must include required profile Gates and only triggered conditional Gates.", "conflict");

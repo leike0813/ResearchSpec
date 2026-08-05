@@ -32,6 +32,7 @@ import { revisionPatchJsonSchema } from "./revision/contract.js";
 
 const REVISION_PATCH_SOURCE = "shared/contracts/patch/revision_patch.schema.json";
 const REVISION_PATCH_HELPER_SOURCE = "src/arsu-converter/revision/apply-revision-patch.mjs";
+const QUARTO_RENDER_HELPER_SOURCE = "src/arsu-converter/quarto/render-quarto.mjs";
 
 export async function emitSkillGroup(
   sourceRoot: string,
@@ -130,7 +131,10 @@ export async function emitSkillGroup(
   const existingSchema = files.findIndex((file) => file.output_path === revisionSchema.output_path);
   if (existingSchema === -1) files.push(revisionSchema);
   else files[existingSchema] = revisionSchema;
-  if (groupName === "academic-paper") files.push(await emitRevisionPatchHelper(groupOut, groupName));
+  if (groupName === "academic-paper") {
+    files.push(await emitRevisionPatchHelper(groupOut, groupName));
+    files.push(await emitQuartoRenderHelper(groupOut, groupName));
+  }
   if (groupName === "academic-pipeline") files.push(...await emitOfflineZoteroPackageMarkers(groupOut, groupName));
 
   const dependencyCopies = [...dependencyMeta.values()].sort((a, b) => a.source_path.localeCompare(b.source_path));
@@ -202,6 +206,19 @@ async function emitRevisionPatchHelper(groupOut: string, groupName: string): Pro
     source_path: `researchspec:${REVISION_PATCH_HELPER_SOURCE}`,
     output_path: `${groupName}/${outputPath}`,
     transform_rule: "researchspec_revision_patch_helper_projection",
+    sha256: await sha256File(target),
+  };
+}
+
+async function emitQuartoRenderHelper(groupOut: string, groupName: string): Promise<CopiedFile> {
+  const outputPath = "scripts/render-quarto.mjs";
+  const target = path.join(groupOut, outputPath);
+  await writeUtf8(target, await readUtf8(path.resolve(QUARTO_RENDER_HELPER_SOURCE)));
+  return {
+    group: groupName,
+    source_path: `researchspec:${QUARTO_RENDER_HELPER_SOURCE}`,
+    output_path: `${groupName}/${outputPath}`,
+    transform_rule: "researchspec_quarto_render_helper_projection",
     sha256: await sha256File(target),
   };
 }

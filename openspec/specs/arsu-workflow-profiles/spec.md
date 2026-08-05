@@ -20,27 +20,17 @@ the workspace YAML SHALL be a manifest-owned static projection.
 - **WHEN** update detects modified projected bytes
 - **THEN** it reports drift and preserves the file unless `--force` is explicit
 
-### Requirement: End-to-end pipeline composes standalone subflows
-The `academic-pipeline:end-to-end` template SHALL invoke full research, full writing, full review, integrity, finalization, and summary stages through a parent-owned frontier.
+### Requirement: Profile transitions remain data-driven and gate progress
+The academic-pipeline profile SHALL include a one-shot `format` child routed to `academic-paper:format-convert`. The accepted branch from review and re-review SHALL unlock `format`; `format` SHALL complete before `final-integrity`; and final-integrity SHALL consume both the selected manuscript source and the rendered output. The profile validator SHALL continue to reject route, gate, branch, and transition drift.
 
-#### Scenario: Review accepts the manuscript
-- **WHEN** research and writing children complete, pre-review integrity passes, full review completes, and the accepted branch is confirmed
-- **THEN** final integrity, format conversion, and process summary become reachable in order
+#### Scenario: Review acceptance reaches formatting
+- **WHEN** review completes with the `accepted` branch choice
+- **THEN** the workflow frontier exposes the `format` child and does not expose `final-integrity` directly
 
-#### Scenario: Review requests revision
-- **WHEN** the confirmed review branch requests revision
-- **THEN** the parent exposes the next revision-round child and does not expose final integrity
+#### Scenario: Re-review acceptance reaches formatting
+- **WHEN** a revision round's re-review completes with `accepted`
+- **THEN** the next available child is `format`, followed by final-integrity only after formatting completes
 
-### Requirement: Revision rounds are dynamic and unbounded
-The profile SHALL instantiate revision rounds with parent-scoped monotonically increasing round numbers and SHALL not define a maximum round count.
-
-#### Scenario: Re-review requests another revision
-- **WHEN** round `n` completes and its accepted branch Decision requests revision
-- **THEN** the frontier exposes round `n+1` with the prior round Decision and output artifacts as bound prerequisites
-
-### Requirement: Profile coverage is semantically validated
-The profile validator SHALL check producer route ownership, primary artifact coverage, artifact-contract resolvability, Gate-policy realization, graph references, and external/internal template rules.
-
-#### Scenario: A primary artifact has no work node
-- **WHEN** a complete external template omits a routing-catalog primary artifact
-- **THEN** profile generation or validation fails before initialization can use the profile
+#### Scenario: Final integrity consumes source and render
+- **WHEN** formatting has completed
+- **THEN** final-integrity instructions require both the manuscript source role and the rendered output role

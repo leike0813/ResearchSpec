@@ -20,7 +20,12 @@ void test("current workspace contracts accept empty stable skeletons", () => {
   assert.equal(CurrentWorkspaceConfigSchema.safeParse({ schema_version: "1", agent_tools: { selected: [], delivery: "both" }, plugins: { selected: [] } }).success, true);
   assert.equal(SourcesSpecSchema.safeParse({ schema_version: "1", sources: [] }).success, true);
   assert.equal(ClaimsSpecSchema.safeParse({ schema_version: "1", claims: [] }).success, true);
-  assert.equal(ManuscriptSpecSchema.safeParse({ schema_version: "1", manuscript_id: "manuscript", output_type: null, working_title: null, language: null, audience: null, venue: null, citation_requirements: [], format_requirements: [], outline: [] }).success, true);
+  const manuscript = { schema_version: "1", manuscript_id: "manuscript", output_type: null, working_title: null, language: null, audience: null, venue: null, citation_requirements: [], format_requirements: [], delivery: { working_format: null, final_output_format: null }, outline: [] };
+  assert.equal(ManuscriptSpecSchema.safeParse(manuscript).success, true);
+  assert.equal(ManuscriptSpecSchema.safeParse({ ...manuscript, delivery: { working_format: "markdown", final_output_format: null } }).success, true);
+  assert.equal(ManuscriptSpecSchema.safeParse({ ...manuscript, delivery: { working_format: "qmd", final_output_format: "pdf" } }).success, true);
+  assert.equal(ManuscriptSpecSchema.safeParse({ ...manuscript, delivery: { working_format: "qmd", final_output_format: null } }).success, false);
+  assert.equal(ManuscriptSpecSchema.safeParse({ ...manuscript, delivery: { working_format: "qmd", final_output_format: "../pdf" } }).success, false);
   assert.equal(parseProjectSpec("---\nschema_version: \"1\"\nproject_id: project\n---\n\n# Project intent\n").frontmatter.project_id, "project");
 });
 
@@ -64,6 +69,9 @@ void test("pipeline profile and local subflow authority reject duplicate or leak
 
 void test("handoff and project change contracts preserve single ownership", () => {
   assert.equal(SubflowHandoffSchema.safeParse({ schema_version: "1", subflow_instance_id: "sf-one", updated_at: NOW, inputs: [], outputs: [{ role: "current-manuscript", type: "manuscript", path: "paper/manuscript.md", purpose: "independent review" }] }).success, true);
+  assert.equal(SubflowHandoffSchema.safeParse({ schema_version: "1", subflow_instance_id: "sf-one", updated_at: NOW, inputs: [{ role: "qmd-source", type: "manuscript", path: "paper/manuscript.qmd", purpose: "render", format: "qmd" }], outputs: [{ role: "rendered-manuscript", type: "manuscript", path: "paper/manuscript.pdf", purpose: "submit", format: "pdf", renderer: "quarto" }] }).success, true);
+  assert.equal(SubflowHandoffSchema.safeParse({ schema_version: "1", subflow_instance_id: "sf-one", updated_at: NOW, inputs: [{ role: "qmd-source", type: "manuscript", path: "paper/manuscript.md", purpose: "render", format: "qmd" }], outputs: [] }).success, false);
+  assert.equal(SubflowHandoffSchema.safeParse({ schema_version: "1", subflow_instance_id: "sf-one", updated_at: NOW, inputs: [], outputs: [{ role: "rendered-manuscript", type: "manuscript", path: "paper/manuscript.pdf", purpose: "submit", renderer: "quarto" }] }).success, false);
   assert.equal(SubflowHandoffSchema.safeParse({ schema_version: "1", subflow_instance_id: "sf-one", updated_at: NOW, inputs: [], outputs: [
     { role: "draft", type: "manuscript", path: "paper/a.md", purpose: "review" },
     { role: "draft", type: "manuscript", path: "paper/b.md", purpose: "review" },

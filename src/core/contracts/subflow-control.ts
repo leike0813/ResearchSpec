@@ -1,6 +1,8 @@
 import { z } from "zod";
 
 import { StableIdSchema } from "./stable-specs.js";
+import { ManuscriptDeliverySchema } from "./stable-specs.js";
+import { QuartoProbeSummarySchema, RenderConsentSchema } from "./subflow-command.js";
 import { CURRENT_WORKSPACE_SCHEMA_VERSION } from "./workspace-format.js";
 
 const Rfc3339Schema = z.iso.datetime({ offset: true });
@@ -63,6 +65,9 @@ export const SubflowControlSchema = z.strictObject({
     confirmed_at: Rfc3339Schema,
     prerequisites: z.array(NonEmptySchema),
     expected_outputs: z.array(NonEmptySchema),
+    manuscript_delivery: ManuscriptDeliverySchema.optional(),
+    quarto_probe: QuartoProbeSummarySchema.optional(),
+    render_consent: RenderConsentSchema.optional(),
     formal_gates: z.array(StableIdSchema),
     cost: z.strictObject({ effort: NonEmptySchema, interaction: NonEmptySchema }),
   }),

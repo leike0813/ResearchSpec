@@ -7,7 +7,7 @@
 ## 共同边界
 
 所有稿件和辅助材料位于 `researchspec/` 外。`manuscript.yaml` 保存当前认可的稿件蓝图、
-venue、语言与格式约束，不保存正文、draft status、round 或 patch 状态。高影响 structure、
+venue、语言、格式约束和 `delivery` 选择，不保存正文、draft status、round 或 patch 状态。高影响 structure、
 claim 或 revision strategy 选择写入 owning control；普通文字编辑由 Git 记录。
 
 ## 1. `academic-paper:full`：完整论文写作
@@ -32,7 +32,7 @@ paper/
 ├── outline.md
 ├── evidence-map.md
 ├── argument-blueprint.md
-└── manuscript.md
+└── manuscript.md  # 或首次 writing intake 选定的 manuscript.qmd
 ```
 
 Outline 有多个实质结构方案时，用户选择后由 `decide` 记录 structure Decision，Agent 再把
@@ -65,7 +65,7 @@ roadmap、round 与输出位置，区分实际改稿的 `revision` 和只制定�
 ```text
 paper/revisions/
 ├── round-01.patch.json
-├── manuscript-round-01.md
+├── manuscript-round-01.md  # QMD 稿源保持 .qmd
 └── response-to-reviewers-round-01.md
 ```
 
@@ -112,23 +112,23 @@ evidence-quality 与 manuscript-quality Gates，以及 medium/iterative 成本�
 
 ## 6. `academic-paper:format-convert`：投稿格式转换
 
-从 S6 开始。用户指定期刊模板和 DOCX/PDF 输出。Navigate 确认最终稿路径、模板、引用样式、
-图表资源与覆盖策略，展示 low/single-pass 路线。格式转换不承担正文修订或事实核查。
+从 S6 开始。用户指定期刊模板和最终输出。Navigate 确认最终稿路径、模板、引用样式、图表资源
+与覆盖策略，展示 low/single-pass 路线。格式转换不承担正文修订或事实核查。Markdown 继续沿用
+既有转换路径；QMD 每个 formatting subflow 只确认一个 Quarto target，先只读探测
+`quarto --version`，默认 no-execute，执行代码必须另行确认 `render_consent`。
 
 ```text
 paper/submission/
-├── manuscript.docx
-├── manuscript.pdf
-├── cover-letter.md
-└── submission-checklist.md
+└── manuscript.pdf  # 示例：v1 单一确认目标
 ```
 
 Producer 读取最终稿与 `manuscript.yaml`，输出到用户确认路径。确定性检查验证文件可读、必要
 section 存在、引用与资源链接闭合；通常没有独立 formal Gate。若作为 pipeline 最终 child，
 其结果随后参加 parent profile 的 final-integrity Gate。
 
-模板缺失或转换失败时不覆盖已有 submission 文件；handoff 记录失败与可恢复输入。格式化
-不得偷偷改写学术措辞。
+Quarto 缺失、探测 unknown、命令失败、输出缺失或 staging 检查失败时不覆盖已有 submission
+文件，也不更新成功 handoff。格式化不得偷偷改写学术措辞；QMD 源稿与渲染稿均由 handoff 以
+role/path 传递，`pack` 不复制它们。
 
 ## 7. `academic-paper:citation-check`：引文审计
 

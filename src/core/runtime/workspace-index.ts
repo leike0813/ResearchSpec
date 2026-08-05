@@ -165,7 +165,7 @@ export async function loadCurrentWorkspaceIndex(workspace: string): Promise<Curr
     project: project ?? parseProjectSpec("---\nschema_version: \"1\"\nproject_id: invalid\n---\n"),
     sources: sources ?? SourcesSpecSchema.parse({ schema_version: "1", sources: [] }),
     claims: claims ?? ClaimsSpecSchema.parse({ schema_version: "1", claims: [] }),
-    manuscript: manuscript ?? ManuscriptSpecSchema.parse({ schema_version: "1", manuscript_id: "invalid", output_type: null, working_title: null, language: null, audience: null, venue: null, citation_requirements: [], format_requirements: [], outline: [] }),
+    manuscript: manuscript ?? ManuscriptSpecSchema.parse({ schema_version: "1", manuscript_id: "invalid", output_type: null, working_title: null, language: null, audience: null, venue: null, citation_requirements: [], format_requirements: [], delivery: { working_format: null, final_output_format: null }, outline: [] }),
     profile: profile ?? emptyProfile(),
     subflowEntries,
     subflows,

@@ -224,21 +224,51 @@ async function atomicCreate({ outputPath, outputBytes, reportPath, reportBytes }
 }
 
 function parseAnchoredBlocks(text) {
-  const marker = /^<!--block:([A-Za-z0-9][A-Za-z0-9._-]*)-->[ \t]*(?:\r?\n|$)/gm;
-  const matches = [...text.matchAll(marker)];
-  if (matches.length !== (text.match(/<!--\s*block:/gi)?.length ?? 0)) throw new Error("Draft contains a malformed or non-standalone block marker.");
+  const matches = standaloneBlockMarkers(text);
   if (!matches.length) throw new Error("Draft has no ResearchSpec block markers.");
   const ids = new Set();
   return matches.map((match, index) => {
-    const id = match[1];
+    const id = match.id;
     if (!id || ids.has(id)) throw new Error(`Draft contains duplicate block marker: ${id ?? ""}`);
     ids.add(id);
-    const markerStart = match.index ?? 0;
-    const contentStart = markerStart + match[0].length;
+    const markerStart = match.index;
+    const contentStart = markerStart + match.length;
     const end = matches[index + 1]?.index ?? text.length;
     const content = text.slice(contentStart, end);
     return { id, markerStart, end, content, hash: sha256(content.replaceAll("\r\n", "\n").replace(/^\n+|\n+$/g, "")) };
   });
+}
+
+function standaloneBlockMarkers(text) {
+  const markers = [];
+  const bodyStart = markdownBodyStart(text);
+  let offset = bodyStart;
+  let fence;
+  for (const match of text.slice(bodyStart).matchAll(/.*(?:\r?\n|$)/g)) {
+    const line = match[0];
+    if (!line) continue;
+    const fenceMatch = /^ {0,3}(`{3,}|~{3,})(.*?)(?:\r?\n|$)/.exec(line);
+    if (fenceMatch?.[1]) {
+      const marker = fenceMatch[1][0];
+      if (!fence) {
+        fence = { marker, length: fenceMatch[1].length };
+        offset += line.length;
+        continue;
+      }
+      if (marker === fence.marker && fenceMatch[1].length >= fence.length && !(fenceMatch[2] ?? "").trim()) {
+        fence = undefined;
+        offset += line.length;
+        continue;
+      }
+    }
+    if (!fence) {
+      const markerMatch = /^<!--block:([A-Za-z0-9][A-Za-z0-9._-]*)-->[ \t]*(?:\r?\n|$)/.exec(line);
+      if (markerMatch?.[1]) markers.push({ id: markerMatch[1], index: offset, length: markerMatch[0].length });
+      else if (/<!--\s*block:/i.test(line)) throw new Error("Draft contains a malformed or non-standalone block marker.");
+    }
+    offset += line.length;
+  }
+  return markers;
 }
 
 function splitMarkdownBlocks(value) {
