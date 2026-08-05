@@ -11,14 +11,6 @@ metadata:
 
 Remove recognizable AI-writing patterns without replacing the author's text with a generic idea of “good writing.” Style is evidence for revision, not proof of authorship.
 
-## ResearchSpec runtime boundary
-
-ResearchSpec owns lifecycle state, Gates, Decisions, and transitions. The
-Python runtime stores its task-local `state.yaml` and rendered views under the
-current subflow's `work/paper-humanizer/`; these files are runtime material,
-not ResearchSpec lifecycle authority. Never edit `control.yaml`, profile files,
-or handoff authority from this Skill.
-
 ## Non-negotiable invariants
 
 1. Preserve every claim, fact, number, date, name, citation, qualification, negation, comparison, and causal relation.

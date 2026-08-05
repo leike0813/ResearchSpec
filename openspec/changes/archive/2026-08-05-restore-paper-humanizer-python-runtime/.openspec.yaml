@@ -1,0 +1,4 @@
+schema: spec-driven
+created: 2026-08-05
+goal: Publish the complete operational Paper Humanizer Skill with Python 3.11
+  standard-library scripts and deterministic static conversion.
