@@ -6,6 +6,7 @@ import { test } from "node:test";
 import { strFromU8, unzipSync } from "fflate";
 
 import { COMPANION_INTENTS, renderCompanionSkill } from "../src/adapters/companion/index.js";
+import { renderCliHandbook } from "../src/cli/handbook.js";
 import { sha256 } from "../src/core/workspace/write-plan.js";
 import { MIT_LICENSE_TEXT } from "../src/licensing.js";
 
@@ -27,12 +28,17 @@ void test("fresh init creates only the current workspace authority tree", async 
     assert.equal(manifest.installations.filter((item) => item.owner === "framework" && item.source.kind === "framework-profile").length, 3);
     assert.deepEqual(manifest.literature_adapter_resolutions, []);
     assert.equal(existsSync(path.join(root, ".zotero-bridge")), false);
-    const status = parseEnvelope<{ literature_adapters: Array<{ adapter_id: string; state: string; diagnostics: unknown[] }> }>(runCli(["status", "--json"], root));
+    const status = parseEnvelope<{ literature_adapters: { items: Array<{ adapter_id: string; state: string; diagnostics_summary: { total: number } }> } }>(runCli(["status", "--json"], root));
     assert.equal(status.ok, true);
-    assert.deepEqual(status.data?.literature_adapters.map((adapter) => ({ adapter_id: adapter.adapter_id, state: adapter.state })), [
+    assert.deepEqual(status.data?.literature_adapters.items.map((adapter) => ({ adapter_id: adapter.adapter_id, state: adapter.state })), [
       { adapter_id: "zotero-library", state: "not-selected" },
     ]);
-    assert.deepEqual(status.data?.literature_adapters[0]?.diagnostics, []);
+    assert.equal(status.data?.literature_adapters.items[0]?.diagnostics_summary.total, 0);
+    assert.deepEqual(status.diagnostics, []);
+    assert.equal(JSON.stringify(status.data).includes("recent_history"), false);
+    assert.equal(JSON.stringify(status.data).includes("expected_tool_ids"), false);
+    assert.equal(JSON.stringify(status.data).includes("projected_tool_ids"), false);
+    assert.equal(JSON.stringify(status.data).includes("missing_tool_ids"), false);
     assert.equal(parseEnvelope(runCli(["check", "profiles", "--json"], root)).ok, true);
     assert.equal(parseEnvelope(runCli(["doctor", "--json"], root)).ok, true);
     assert.deepEqual(parseEnvelope<{ domains: unknown[] }>(runCli(["plugin", "list", "--installed", "--json"], root)).data?.domains, []);
@@ -61,7 +67,13 @@ void test("new workspaces default to Skills and delivery switches reconcile both
     assert.equal(existsSync(path.join(root, ".agents/skills/researchspec-navigate/SKILL.md")), true);
     assert.equal(existsSync(path.join(root, ".kimi-code/skills/researchspec-navigate/SKILL.md")), true);
     assert.equal(existsSync(path.join(root, ".qwen/skills/researchspec-navigate/SKILL.md")), true);
+    assert.equal(existsSync(path.join(root, ".agents/skills/researchspec-cli-handbook/SKILL.md")), true);
+    assert.equal(existsSync(path.join(root, ".agents/skills/researchspec-navigate/references/cli-handbook.md")), false);
     assert.equal(existsSync(path.join(root, ".qwen/commands/researchspec-status.md")), false);
+
+    const status = parseEnvelope<{ agent_tools: { selected_count: number; skill_installation_count: number } }>(runCli(["status", "--json"], root));
+    assert.equal(status.data?.agent_tools.selected_count, 3);
+    assert.ok((status.data?.agent_tools.skill_installation_count ?? 0) > 0);
 
     const commands = parseEnvelope<{ delivery: string }>(runCli(["update", "--delivery", "commands", "--json"], root));
     assert.equal(commands.ok, true);
@@ -127,6 +139,36 @@ void test("Codex and Kimi migrate known Skills while preserving personal files a
   }
 });
 
+void test("update removes a clean managed Navigate handbook reference", async () => {
+  const root = await tempProject();
+  try {
+    assert.equal(runCli(["init", root, "--tools", "codex"]).status, 0);
+    const manifestPath = path.join(root, "researchspec/tool-installation-manifest.json");
+    const manifest = JSON.parse(await readFile(manifestPath, "utf8")) as {
+      installations: Array<Record<string, unknown> & { source: { kind: string; skill_id?: string } }>;
+    };
+    const template = manifest.installations.find((item) => item.source.kind === "companion-skill" && item.source.skill_id === "researchspec-navigate");
+    assert.ok(template);
+    const legacyRelative = ".agents/skills/researchspec-navigate/references/cli-handbook.md";
+    const legacyContent = renderCliHandbook();
+    await mkdir(path.join(root, path.dirname(legacyRelative)), { recursive: true });
+    await writeFile(path.join(root, legacyRelative), legacyContent, "utf8");
+    manifest.installations.push({
+      ...structuredClone(template),
+      target: { scope: "project", path: legacyRelative, executable: false },
+      sha256: sha256(Buffer.from(legacyContent, "utf8")),
+    });
+    await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
+
+    const updated = runCli(["update", "--json"], root);
+    assert.equal(updated.status, 0, updated.stderr || updated.stdout);
+    assert.equal(existsSync(path.join(root, legacyRelative)), false);
+    assert.equal(existsSync(path.join(root, ".agents/skills/researchspec-cli-handbook/SKILL.md")), true);
+  } finally {
+    await cleanup(root);
+  }
+});
+
 void test("explicit Zotero selection installs the adapter and update can cleanly deselect it", async () => {
   const root = await tempProject();
   try {
@@ -151,9 +193,9 @@ void test("explicit Zotero selection installs the adapter and update can cleanly
     };
     assert.equal(manifest.installations.some((item) => item.source.kind === "literature-adapter"), false);
     assert.deepEqual(manifest.literature_adapter_resolutions, []);
-    const status = parseEnvelope<{ literature_adapters: Array<{ state: string; diagnostics: unknown[] }> }>(runCli(["status", "--json"], root));
-    assert.equal(status.data?.literature_adapters[0]?.state, "not-selected");
-    assert.deepEqual(status.data?.literature_adapters[0]?.diagnostics, []);
+    const status = parseEnvelope<{ literature_adapters: { items: Array<{ state: string; diagnostics_summary: { total: number } }> } }>(runCli(["status", "--json"], root));
+    assert.equal(status.data?.literature_adapters.items[0]?.state, "not-selected");
+    assert.equal(status.data?.literature_adapters.items[0]?.diagnostics_summary.total, 0);
   } finally {
     await cleanup(root);
   }
@@ -168,9 +210,9 @@ void test("deselecting Zotero preserves locally modified managed files and repor
     const deselected = runCli(["update", "--literature-adapters", "none", "--json"], root);
     assert.equal(deselected.status, 0, deselected.stderr || deselected.stdout);
     assert.equal(await readFile(skillPath, "utf8"), "locally modified adapter skill\n");
-    const status = parseEnvelope<{ literature_adapters: Array<{ state: string; diagnostics: Array<{ code: string }> }> }>(runCli(["status", "--json"], root));
-    assert.equal(status.data?.literature_adapters[0]?.state, "not-selected");
-    assert.equal(status.data?.literature_adapters[0]?.diagnostics.some((diagnostic) => diagnostic.code === "literature_adapter_not_selected_files_retained"), true);
+    const status = parseEnvelope<{ literature_adapters: { items: Array<{ state: string; diagnostics_summary: { warning: number } }> } }>(runCli(["status", "--json"], root));
+    assert.equal(status.data?.literature_adapters.items[0]?.state, "not-selected");
+    assert.equal(status.data?.literature_adapters.items[0]?.diagnostics_summary.warning, 1);
   } finally {
     await cleanup(root);
   }
@@ -332,9 +374,9 @@ void test("fresh CLI processes read instructions, start idempotently, decide a G
     }
     const advanced = runCli(["advance", `subflow:${instanceId}`, "--transition", "complete", "--actor-name", "academic-pipeline", "--json"], root);
     assert.equal(advanced.status, 0, advanced.stderr);
-    const status = parseEnvelope<{ active_instances: Array<{ instance_id: string }>; subflows: Record<string, number>; frontier: unknown[] }>(runCli(["status", "--json"], root));
-    assert.equal(status.data?.subflows.complete, 1);
-    assert.equal(status.data?.active_instances.some((item) => item.instance_id === instanceId), false);
+    const status = parseEnvelope<{ subflows: { by_status: Record<string, number>; active_instances: { items: Array<{ selector: string }> } }; frontier: { items: unknown[] } }>(runCli(["status", "--json"], root));
+    assert.equal(status.data?.subflows.by_status.complete, 1);
+    assert.equal(status.data?.subflows.active_instances.items.some((item) => item.selector === `subflow:${instanceId}`), false);
   } finally { await cleanup(root); }
 });
 

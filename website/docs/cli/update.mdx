@@ -18,4 +18,16 @@ Refresh selected generated agent files
 | Option | Required | Description |
 | --- | --- | --- |
 | `--tools <ids>` | no | refresh/add a tool subset |
+| `--delivery <mode>` | no | skills, commands, or both |
 | `--literature-adapters <ids>` | no | replace selected literature Adapters |
+
+#### Input shape
+
+Optional replacement or extension selections for an existing current workspace.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `path` | `directory path` | no | Project root containing the workspace. |
+| `--tools` | `all \| none \| comma-separated tool IDs` | no | Refresh or add this tool subset. |
+| `--delivery` | `skills \| commands \| both` | no | Replace the generated delivery mode; omission preserves current intent. |
+| `--literature-adapters` | `all \| none \| comma-separated Adapter IDs` | no | Replace the selected Adapter set. |

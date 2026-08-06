@@ -79,13 +79,14 @@ void test("command wrappers derive exactly from the sixteen-command catalog", ()
   }
 });
 
-void test("companion manifest renders four fixed self-contained Skills", () => {
-  assert.deepEqual(COMPANION_WORKFLOW_IDS, ["navigate", "propose", "decide", "verify"]);
+void test("companion manifest renders five fixed self-contained Skills", () => {
+  assert.deepEqual(COMPANION_WORKFLOW_IDS, ["navigate", "propose", "decide", "verify", "cli-handbook"]);
   assert.deepEqual(COMPANION_INTENTS.map((intent) => intent.skillId), [
     "researchspec-navigate",
     "researchspec-propose",
     "researchspec-decide",
     "researchspec-verify",
+    "researchspec-cli-handbook",
   ]);
   for (const intent of COMPANION_INTENTS) {
     const rendered = renderCompanionSkill(intent);
@@ -99,6 +100,10 @@ void test("companion manifest renders four fixed self-contained Skills", () => {
   assert.match(renderedNavigate, /content category, and cost/);
   assert.match(renderedNavigate, /children, branches, and revision rounds ask again/);
   assert.doesNotMatch(renderedNavigate, /API key|endpoint|curl/i);
+  const handbook = COMPANION_INTENTS.find((intent) => intent.skillId === "researchspec-cli-handbook");
+  assert.ok(handbook);
+  assert.match(handbook.description, /whenever using, invoking, explaining, inspecting, troubleshooting, or modifying ResearchSpec/);
+  assert.match(renderCompanionSkill(handbook), /SubflowStartCommandSchema/);
 });
 
 void test("Copilot uses its explicit detection paths", async () => {
@@ -134,9 +139,9 @@ void test("delivery projects the fixed Skill surface and sixteen wrappers by def
         if (item.source.kind === "arsu-skill" || item.source.kind === "core-skill" || item.source.kind === "companion-skill" || item.source.kind === "domain-skill") return [item.source.skill_id];
         return item.source.kind === "literature-adapter" && item.source.component === "skill" && item.source.skill_id ? [item.source.skill_id] : [];
       }));
-      if (toolId === "codex" || toolId === "minimax-code") assert.equal(skillIds.size, 10, toolId);
-      else assert.equal(skillIds.size, 10, toolId);
+      assert.equal(skillIds.size, 11, toolId);
     }
+    assert.equal(delivery.installations.some((item) => item.target.path.replaceAll("\\", "/").endsWith("/researchspec-navigate/references/cli-handbook.md")), false);
     assert.equal(delivery.diagnostics.filter((item) => item.code === "commands_not_supported").length, 9);
   } finally {
     if (previousCodexHome === undefined) Reflect.deleteProperty(process.env, "CODEX_HOME");

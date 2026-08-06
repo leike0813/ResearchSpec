@@ -10,7 +10,7 @@ ResearchSpec 将 Zotero 集成作为独立的可选文献系统 Adapter 交付�
 
 选择后，`init` 或 `update` 离线复制当前平台的 `zotero-bridge-cli` runtime 到项目根 `.zotero-bridge/bin/`，并创建 `.zotero-bridge/profile.template.json`。模板不包含 token、真实 profile、PATH 修改或用户目录写入。Windows 使用 `zotero-bridge.exe` 和项目内 `.cmd` shim；POSIX runtime 使用 `0755`。取消选择时，hash 未变的 manifest-owned 文件会删除；有本地修改的文件保留并产生诊断。
 
-七个 Agent-neutral Skills 会投影到每个已选择的 Agent tool：`zotero-library-agent` 是宽泛路由器；`zotero-library-query`、`zotero-literature-acquisition`、`zotero-literature-analysis`、`zotero-research-synthesis` 与 `zotero-library-curation` 是任务入口；`zotero-bridge-cli` 是精确操作机制。选择 Adapter 但没有 Agent tool 时，共享 runtime 仍会安装，Skill 投影在 manifest 中记录为 `deferred`。基础 surface 是 4 个 ARSU Skills、2 个 Core Skills 和 4 个 Companion Skills；选择 Adapter 后每个 Agent tool 从 10 个增加到 17 个 Skills。28 个 command-capable 工具仍各只有 16 个 wrappers。
+七个 Agent-neutral Skills 会投影到每个已选择的 Agent tool：`zotero-library-agent` 是宽泛路由器；`zotero-library-query`、`zotero-literature-acquisition`、`zotero-literature-analysis`、`zotero-research-synthesis` 与 `zotero-library-curation` 是任务入口；`zotero-bridge-cli` 是精确操作机制。选择 Adapter 但没有 Agent tool 时，共享 runtime 仍会安装，Skill 投影在 manifest 中记录为 `deferred`。基础 surface 是 4 个 ARSU Skills、2 个 Core Skills 和 5 个 Companion Skills；选择 Adapter 后每个 Agent tool 从 11 个增加到 18 个 Skills。28 个 command-capable 工具仍各只有 16 个 wrappers。
 
 交付过程不运行上游 installer、runtime、Python helper 或证据工具，不安装 Zotero XPI/backend，不访问网络，也不写用户全局 Zotero 状态。ResearchSpec release 携带全部七个平台资产，项目初始化只选择当前平台。
 
@@ -22,7 +22,7 @@ Bundle、CLI 和七个 Skill 的版本分别属于各自组件。ResearchSpec �
 
 ## 状态与检查
 
-`researchspec status --json` 的 `literature_adapters` 字段始终列出 catalog 项。未选择时状态为 `not-selected`，且缺少 runtime 或 Skill 不产生 missing 诊断；选择后报告 `installed`、`degraded`、`unsupported`、`missing` 或 `conflict` 以及 Skill 投影。`connection_state` 固定为 `unchecked`：状态查询只读 catalog、config、manifest 和文件，不启动 runtime，不连接 Zotero 或 Host Bridge。
+`researchspec status --json` 的 `literature_adapters.items` 只给出有界的 catalog 状态摘要。未选择时状态为 `not-selected`，且缺少 runtime 或 Skill 不产生 missing 诊断；选择后报告 `installed`、`degraded`、`unsupported`、`missing` 或 `conflict`、Skill 投影状态和诊断计数。它不返回逐 Agent tool ID、文件路径、hash 或完整诊断；这些详情由 `researchspec check literature-adapters --json` 提供。`connection_state` 固定为 `unchecked`：状态查询只读 catalog、config、manifest 和文件，不启动 runtime，不连接 Zotero 或 Host Bridge。
 
 `researchspec check literature-adapters` 静态检查 catalog/resolution 身份、当前平台 runtime、manifest ownership、文件哈希、POSIX executable bit 和七个 Skill 的完整投影；`check all` 包含同一检查。它不探测 Host Bridge，也不执行七份 runner 或 output schema。
 

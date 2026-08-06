@@ -1,11 +1,12 @@
 import { decideWorkflow } from "./workflows/decide.js";
+import { cliHandbookWorkflow } from "./workflows/cli-handbook.js";
 import { navigateWorkflow } from "./workflows/navigate.js";
 import { proposeWorkflow } from "./workflows/propose.js";
 import { verifyWorkflow } from "./workflows/verify.js";
 import { COMPANION_WORKFLOW_IDS, type CompanionIntent, type CompanionWorkflowSource } from "./types.js";
 
 const WORKFLOWS: readonly CompanionWorkflowSource[] = [
-  navigateWorkflow, proposeWorkflow, decideWorkflow, verifyWorkflow,
+  navigateWorkflow, proposeWorkflow, decideWorkflow, verifyWorkflow, cliHandbookWorkflow,
 ];
 
 export const COMPANION_INTENTS: readonly CompanionIntent[] = WORKFLOWS.map((workflow) => {

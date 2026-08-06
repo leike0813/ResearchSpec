@@ -25,3 +25,19 @@ Resolve a pending human decision
 | `--choice <choice>` | no | confirmed local Decision choice |
 | `--override` | no | approve an override of the current failed Gate |
 | `--evidence-role <role>` | no | owning handoff role used as Gate evidence |
+
+#### Input shape
+
+One selector-specific human decision; option groups cannot be mixed.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `change:<id>` | `--decision + --actor-name + optional --reason` | no | Project change outcome: accept, reject, defer, or supersede. |
+| `gate:<instance>/<gate>` | `--verdict + --actor-name + optional --reason/--evidence-role` | no | Append pass, pass_with_conditions, or fail. |
+| `gate:<instance>/<gate>` | `--override + --actor-name + --reason` | no | Approve the current failed Gate override. |
+| `decision:<instance>/<decision>` | `--kind + --choice + --actor-name + optional --reason` | no | Record scope, claim, structure, or branch choice. |
+
+Constraints:
+
+- Exactly one selector-specific option group is valid.
+- --override cannot be combined with --verdict.

@@ -82,7 +82,7 @@ Reviewer calibration 使用同一研究主题的一组历史稿件与 gold revie
 5. [Academic Pipeline 旅程](researchspec_user_usage_rehearsal/academic_pipeline_journeys.md)：
    end-to-end、mid-entry 和动态 revision round。
 6. [Companion 旅程](researchspec_user_usage_rehearsal/companion_journeys.md)：Navigate、Propose、
-   Verify 与 Decide。
+   Verify、Decide 与 CLI Handbook。
 7. [Zotero 与领域插件旅程](researchspec_user_usage_rehearsal/zotero_and_plugin_journeys.md)：
    七个 Adapter 和可选 domain plugin。
 
@@ -120,7 +120,7 @@ decisions: []
 - 11 个 `academic-paper` modes；
 - 6 个 `academic-paper-reviewer` modes；
 - 2 个 `academic-pipeline` entries；
-- 4 个 Companion Skills；
+- 5 个 Companion Skills；
 - 7 个固定 Zotero Adapter Skills；
 - domain plugin 的发现、安装、使用、拒绝、失败与卸载恢复；
 - 16 个目标 CLI 命令及其用户可观察边界。

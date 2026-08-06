@@ -85,42 +85,27 @@ bound to the current run and collection.
 - **THEN** failure to establish live readiness SHALL pause the route
 - **AND** routing SHALL NOT silently change the source policy
 
-### Requirement: Natural-Language CLI Discovery Uses Navigate Without Starting Work
+### Requirement: Natural-Language CLI Discovery Loads The Handbook Companion
 
-ResearchSpec SHALL route a natural-language request to discover, explain, or
-compare public CLI commands, options, selector families, or the CLI handbook
-through `researchspec-navigate`. CLI discovery is distinct from an academic
-goal and SHALL NOT select an ARSU mode, create a route summary, or start a
-subflow merely because the user asks how to operate ResearchSpec.
+ResearchSpec SHALL load `researchspec-cli-handbook` for any request to use, discover, explain, compare, inspect, troubleshoot, or modify public CLI commands, options, payloads, selector families, status, checks, generated projections, or workspace contracts. When the same request also requires vague workflow routing, resume, explanation, or export, Navigate MAY participate without owning the handbook.
 
 #### Scenario: User asks for a CLI operation manual
 
-- **WHEN** a user asks how to use a ResearchSpec command, global option,
-  `plugin` subcommand, selector family, or the CLI handbook
-- **THEN** Navigate SHALL provide the relevant static discovery guidance or
-  direct the user to the corresponding workspace-less help surface
-- **AND** it SHALL explain that static help does not authorize a runtime write
-- **AND** it SHALL leave the current run and subflow set unchanged
+- **WHEN** a user asks about a ResearchSpec command, option, payload, plugin subcommand, selector family, or workspace contract
+- **THEN** the Agent SHALL load `researchspec-cli-handbook`
+- **AND** static guidance SHALL not authorize a runtime write or start academic work
 
 #### Scenario: CLI discovery becomes a runtime action question
 
-- **WHEN** a user asking about command syntax also asks what action is currently
-  available in a workspace
-- **THEN** Navigate SHALL first distinguish static command discovery from the
-  workspace-bound question
-- **AND** for the latter it SHALL read bounded `status`, select a returned
-  selector, and obtain its current `instructions` descriptor before proposing a
-  write
-- **AND** it SHALL follow the descriptor's execution policy and returned
-  `next_selectors` rather than treating handbook text as authority
+- **WHEN** the request asks what action is currently available in a workspace
+- **THEN** the Agent SHALL read bounded `status`, select a returned frontier item, and obtain its current `instructions` descriptor
+- **AND** handbook text SHALL not replace runtime authorization
 
 #### Scenario: Discovery is requested before workspace initialization
 
 - **WHEN** a user requests CLI discovery without an existing workspace
-- **THEN** Navigate SHALL allow static root, command, or plugin help to be
-  explained without asking the user to initialize a research run
+- **THEN** the handbook SHALL explain root, command, or plugin help without requiring initialization
 - **AND** it SHALL offer `init` only when the user asks to prepare a workspace
-  or begin work
 
 ### Requirement: Alternate-Model Consent Is Separate And Instance-Bound
 

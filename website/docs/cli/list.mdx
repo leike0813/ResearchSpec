@@ -19,3 +19,13 @@ List current subflows, changes, Gates, Decisions, handoffs, profiles, tools, dia
 | --- | --- | --- |
 | `--limit <count>` | no | page size from 1 to 50 |
 | `--cursor <cursor>` | no | opaque cursor returned by the prior page |
+
+#### Input shape
+
+An optional collection type with cursor pagination.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `type` | `subflows \| changes \| gates \| decisions \| handoffs \| profiles \| tools \| diagnostics \| history` | no | Collection to list; defaults to subflows. |
+| `--limit` | `integer 1..50` | no | Page size; defaults to 20. |
+| `--cursor` | `opaque base64url cursor` | no | Cursor returned by the immediately preceding page for the same unchanged collection. |

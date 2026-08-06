@@ -18,3 +18,16 @@ Select and project plugins into the current workspace
 | Option | Required | Description |
 | --- | --- | --- |
 | `--summary` | no | emit aggregate write-plan impact |
+
+#### Input shape
+
+One or more explicit domain IDs.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `plugin-ids` | `domain ID[]` | yes | Exact domains to select and project. |
+| `--summary` | `boolean` | no | Emit aggregate write-plan impact. |
+
+Constraints:
+
+- Non-interactive execution also requires the global --yes flag.

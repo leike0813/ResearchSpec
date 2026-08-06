@@ -6,7 +6,6 @@ import type { Diagnostic } from "../core/validation/types.js";
 import { planFile, type PlannedWrite, sha256 } from "../core/workspace/write-plan.js";
 import { COMPANION_INTENTS, renderCompanionSkill } from "./companion/index.js";
 import { COMMAND_WRAPPER_CONTENTS, renderCommand } from "./command-renderer.js";
-import { renderCliHandbook } from "../cli/handbook.js";
 import { getTool, resolveToolIdAlias, sharedSkillTarget, toolSkillsRoot, type DeliveryMode, type ToolDefinition } from "./tools.js";
 import { ARSU_SKILL_IDS } from "../arsu-converter/routing/contracts.js";
 import { CORE_SKILL_IDS } from "../core-skills/catalog.js";
@@ -77,7 +76,6 @@ export async function planToolDelivery(input: {
             tool,
           );
           await addSkill(path.join(skillRoot, "LICENSE"), MIT_LICENSE_TEXT, { kind: "companion-skill", skill_id: intent.skillId }, tool);
-          if (intent.id === "navigate") await addSkill(path.join(skillRoot, "references", "cli-handbook.md"), renderCliHandbook(), { kind: "companion-skill", skill_id: intent.skillId }, tool);
         }
         if (pluginRegistry) {
           const resolution = resolveDomainSelection(pluginRegistry, input.selectedPluginIds ?? []);

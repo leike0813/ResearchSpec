@@ -19,3 +19,13 @@ Create an adaptable project change document package
 | --- | --- | --- |
 | `--targets <specs>` | yes | comma-separated project.md, sources.yaml, claims.yaml, or manuscript.yaml |
 | `--with <documents>` | no | optional comma-separated design,tasks,delta documents |
+
+#### Input shape
+
+A safe change ID, target stable specs, and optional supporting documents.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `change-id` | `safe kebab-case ID` | yes | New project change directory and selector identity. |
+| `--targets` | `comma-separated project.md \| sources.yaml \| claims.yaml \| manuscript.yaml` | yes | Stable specs whose meaning may change. |
+| `--with` | `comma-separated design \| tasks \| delta` | no | Optional supporting documents; duplicates are ignored. |

@@ -30,7 +30,7 @@ const PUBLIC_COMMANDS = [
 ];
 const INSTALLED_SKILLS = [
   "deep-research", "academic-paper", "academic-paper-reviewer", "academic-pipeline",
-  "researchspec-navigate", "researchspec-propose", "researchspec-decide", "researchspec-verify",
+  "researchspec-navigate", "researchspec-propose", "researchspec-decide", "researchspec-verify", "researchspec-cli-handbook",
   "zotero-library-agent", "zotero-library-query", "zotero-literature-acquisition",
   "zotero-literature-analysis", "zotero-research-synthesis", "zotero-library-curation",
   "zotero-bridge-cli",
@@ -47,11 +47,12 @@ void test("[journey.bootstrap] packaged surface initializes current authority wi
     ]);
     assert.equal(existsSync(path.join(workspace, "runs")), false);
     assert.equal(existsSync(path.join(workspace, "artifact-registry.json")), false);
-    const current = parseEnvelope<{ active_instances: unknown[]; subflows: Record<string, number> }>(
+    const current = parseEnvelope<{ subflows: { total: number; by_status: Record<string, number>; active_instances: { items: unknown[] } } }>(
       runCli(["status", "--json"], root),
     ).data;
-    assert.deepEqual(current?.active_instances, []);
-    assert.deepEqual(current?.subflows, {});
+    assert.deepEqual(current?.subflows.active_instances.items, []);
+    assert.equal(current?.subflows.total, 0);
+    assert.deepEqual(current?.subflows.by_status, {});
     for (const skill of INSTALLED_SKILLS) {
       assert.equal(existsSync(path.join(root, ".forge/skills", skill, "SKILL.md")), true, skill);
     }
@@ -74,11 +75,11 @@ void test("[journey.routing] route summaries, Zotero readiness and consent bound
     assert.equal(hash(await readFile(configPath)), before);
 
     const current = status(context);
-    assert.deepEqual(current.literature_adapters.map((adapter) => ({
+    assert.deepEqual(current.literature_adapters.items.map((adapter) => ({
       adapter_id: adapter.adapter_id,
       connection_state: adapter.connection_state,
     })), [{ adapter_id: "zotero-library", connection_state: "unchecked" }]);
-    assert.equal(current.active_instances.length, 0);
+    assert.equal(current.subflows.active_instances.total, 0);
     assert.equal(existsSync(path.join(root, ".forge/skills/zotero-library-agent/SKILL.md")), true);
     assert.equal(existsSync(path.join(root, ".forge/skills/zotero-library-query/SKILL.md")), true);
   } finally { await cleanup(root); }
@@ -97,7 +98,7 @@ void test("[journey.standalone] confirmed standalone work writes external output
     assert.deepEqual(control.start_confirmation.expected_outputs, ["research_brief", "bibliography"]);
     for (const output of started.outputs) assert.equal(existsSync(path.join(root, output.path)), true, output.path);
 
-    const completion = status(context).frontier.find((item): item is ControlFrontierItem =>
+    const completion = status(context).frontier.items.find((item): item is ControlFrontierItem =>
       item.kind === "advance" && item.instance_id === started.instanceId);
     assert.ok(completion);
     advanceSubflow(context, completion);
@@ -113,7 +114,7 @@ void test("[journey.pipeline-confirmation] a parent exposes but does not pre-cre
     const parent = await startRoute(context, "academic-pipeline:end-to-end");
     assert.deepEqual(showSubflow(context, parent.instanceId).children, []);
     assert.equal((await readdir(path.join(context.workspace, "subflows"))).length, 1);
-    const childCandidate = status(context).frontier.find((item): item is RouteFrontierItem =>
+    const childCandidate = status(context).frontier.items.find((item): item is RouteFrontierItem =>
       item.kind === "route" && item.parent_instance_id === parent.instanceId);
     assert.ok(childCandidate);
     const summary = instructions(context, childCandidate.selector) as RouteInstructions;
@@ -131,7 +132,7 @@ void test("[journey.gate-override] failed Gate attempts append before one explic
   try {
     const context = initialize(root);
     const started = await startRoute(context, "academic-paper-reviewer:methodology-focus");
-    const gate = status(context).frontier.find((item): item is ControlFrontierItem =>
+    const gate = status(context).frontier.items.find((item): item is ControlFrontierItem =>
       item.kind === "gate" && item.instance_id === started.instanceId);
     assert.ok(gate);
     decideGate(context, gate.selector, "fail");
@@ -141,7 +142,7 @@ void test("[journey.gate-override] failed Gate attempts append before one explic
     assert.equal(current.gates[0]?.attempts.length, 2);
     assert.equal(current.gates[0]?.attempts.at(-1)?.verdict, "fail");
     assert.ok(current.gates[0]?.override?.decision_id);
-    const completion = status(context).frontier.find((item): item is ControlFrontierItem =>
+    const completion = status(context).frontier.items.find((item): item is ControlFrontierItem =>
       item.kind === "advance" && item.instance_id === started.instanceId);
     assert.ok(completion);
     advanceSubflow(context, completion);
@@ -197,8 +198,8 @@ void test("[journey.plugin-zotero] plugin failure or installation never changes 
     ], root);
     const after = status(context);
     assert.deepEqual(after.frontier, before.frontier);
-    assert.equal(after.literature_adapters[0]?.state, "installed");
-    assert.equal(after.literature_adapters[0]?.connection_state, "unchecked");
+    assert.equal(after.literature_adapters.items[0]?.state, "installed");
+    assert.equal(after.literature_adapters.items[0]?.connection_state, "unchecked");
     assert.equal(existsSync(path.join(root, ".forge/skills/zotero-library-agent/SKILL.md")), true);
     assert.equal(showSubflow(context, started.instanceId).route_ref, "deep-research:quick");
   } finally { await cleanup(root); }
@@ -211,7 +212,7 @@ void test("[journey.revision-rounds] the public frontier completes two independe
     const parent = await startRoute(context, "academic-pipeline:end-to-end");
     const complete = await drivePipeline(context, parent.instanceId, { revisionRounds: 2 });
     assert.equal(showSubflow(context, parent.instanceId).status, "complete");
-    assert.equal(complete.active_instances.some((item) => item.instance_id === parent.instanceId), false);
+    assert.equal(complete.subflows.active_instances.items.some((item) => item.selector === `subflow:${parent.instanceId}`), false);
     const revisions = context.starts.filter((item) => item.routeRef === "academic-paper:revision");
     assert.deepEqual(revisions.map((item) => item.candidate?.round), [1, 2]);
     assert.equal(new Set(revisions.map((item) => item.instanceId)).size, 2);

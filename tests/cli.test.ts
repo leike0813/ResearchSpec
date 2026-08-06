@@ -4,7 +4,7 @@ import { createHash } from "node:crypto";
 import path from "node:path";
 import { test } from "node:test";
 
-import { CLI_TOP_LEVEL_COMMANDS, cliHelpTarget } from "../src/cli/command-catalog.js";
+import { CLI_COMMAND_CATALOG, CLI_TOP_LEVEL_COMMANDS, cliHelpTarget } from "../src/cli/command-catalog.js";
 import { renderCliHandbook } from "../src/cli/handbook.js";
 import { cleanup, parseEnvelope, runCli, tempProject } from "./helpers/cli.js";
 
@@ -22,10 +22,28 @@ void test("help and catalog expose exactly the sixteen current top-level command
 });
 
 void test("static help is workspace-free and contextual usage targets remain precise", () => {
-  assert.equal(runCli(["plugin", "install", "--help"]).status, 0);
-  assert.equal(runCli(["start", "--help"]).status, 0);
+  const pluginHelp = runCli(["plugin", "install", "--help"]);
+  const startHelp = runCli(["start", "--help"]);
+  const decideHelp = runCli(["decide", "--help"]);
+  assert.equal(pluginHelp.status, 0);
+  assert.equal(startHelp.status, 0);
+  assert.equal(decideHelp.status, 0);
+  assert.match(pluginHelp.stdout, /plugin-ids \(domain ID\[\], required\)/);
+  assert.match(startHelp.stdout, /Runtime schema: SubflowStartCommandSchema/);
+  assert.match(startHelp.stdout, /schema_version \(literal "1", required\)/);
+  assert.match(decideHelp.stdout, /Exactly one selector-specific option group is valid/);
   assert.equal(cliHelpTarget(["plugin", "install", "domain-id", "--summary"]), "researchspec plugin install --help");
   assert.equal(cliHelpTarget(["start", "route:deep-research:full", "--input", "start.yaml"]), "researchspec start --help");
+});
+
+void test("every catalog command declares a concrete input contract", () => {
+  assert.equal(CLI_COMMAND_CATALOG.length, 22);
+  for (const command of CLI_COMMAND_CATALOG) {
+    assert.ok(command.payload.summary.length > 0, command.id);
+    if (command.payload.kind === "none") assert.equal(command.payload.fields.length, 0, command.id);
+  }
+  assert.equal(CLI_COMMAND_CATALOG.find((item) => item.id === "start")?.payload.schema, "SubflowStartCommandSchema");
+  assert.equal(CLI_COMMAND_CATALOG.find((item) => item.id === "handoff")?.payload.schema, "SubflowHandoffInputSchema");
 });
 
 void test("removed commands and options fail before any workspace write", async () => {

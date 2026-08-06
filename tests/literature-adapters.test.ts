@@ -65,7 +65,7 @@ void test("component patch versions are independently valid", () => {
   assert.equal(validateLiteratureAdapterCatalog([adapter]).length, 1);
 });
 
-void test("workspace delivery projects seventeen Skills and sixteen wrappers when Zotero is selected", async () => {
+void test("workspace delivery projects eighteen Skills and sixteen wrappers when Zotero is selected", async () => {
   const root = await tempProject();
   try {
     const delivery = await planWorkspaceDelivery({
@@ -85,7 +85,7 @@ void test("workspace delivery projects seventeen Skills and sixteen wrappers whe
       return item.source.kind === "literature-adapter" && item.source.component === "skill" && item.source.skill_id ? [item.source.skill_id] : [];
     }));
     const wrappers = delivery.installations.filter((item) => item.tool_id === "claude" && item.source.kind === "command");
-    assert.equal(skillIds.size, 17);
+    assert.equal(skillIds.size, 18);
     assert.equal(wrappers.length, 16);
     assert.equal(delivery.literatureAdapterResolutions[0]?.projection_state, "complete");
     assert.equal(delivery.literatureAdapterResolutions[0]?.runtime_asset?.installed_path, ".zotero-bridge/bin/zotero-bridge");

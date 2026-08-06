@@ -16,8 +16,8 @@ Zotero、论文文件或其它外部研究材料。
 - 四个 ARSU Skills：`deep-research`、`academic-paper`、
   `academic-paper-reviewer`、`academic-pipeline`；
 - 两个 Core Skills：`review-response`、`paper-humanizer`；
-- 四个 Companion Skills：`researchspec-navigate`、`researchspec-propose`、
-  `researchspec-decide`、`researchspec-verify`；
+- 五个 Companion Skills：`researchspec-navigate`、`researchspec-propose`、
+  `researchspec-decide`、`researchspec-verify`、`researchspec-cli-handbook`；
 - 可选的 `zotero-library` Adapter 在用户选择后增加七个 Skills：`zotero-library-agent`、
   `zotero-library-query`、`zotero-literature-acquisition`、
   `zotero-literature-analysis`、`zotero-research-synthesis`、
@@ -275,4 +275,4 @@ QMD formatting 缺少 Quarto 或探测为 unknown 时保持可写但不可最终
 - plugin/Zotero 不取得 control authority；
 - status/list/show/check/doctor 的只读性；
 - pack 排除私有 work 和外部文件字节；
-- 四个 ARSU、两个 Core、四个 Companion、七个 Zotero Skills 与十六命令的一致投影。
+- 四个 ARSU、两个 Core、五个 Companion、七个 Zotero Skills 与十六命令的一致投影。

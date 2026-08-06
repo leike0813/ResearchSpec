@@ -18,4 +18,16 @@ Initialize or safely extend a ResearchSpec workspace
 | Option | Required | Description |
 | --- | --- | --- |
 | `--tools <ids>` | no | all, none, or comma-separated tool IDs |
+| `--delivery <mode>` | no | skills, commands, or both |
 | `--literature-adapters <ids>` | no | all, none, or comma-separated literature Adapter IDs |
+
+#### Input shape
+
+Optional bootstrap selections; the path positional argument defaults to the current directory.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `path` | `directory path` | no | Project root to initialize or safely extend. |
+| `--tools` | `all \| none \| comma-separated tool IDs` | no | Initial Agent-tool selection. |
+| `--delivery` | `skills \| commands \| both` | no | Generated Agent surface mode. |
+| `--literature-adapters` | `all \| none \| comma-separated Adapter IDs` | no | Optional literature Adapter selection. |

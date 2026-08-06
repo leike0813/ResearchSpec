@@ -12,7 +12,7 @@
 researchspec init
 ```
 
-CLI 检测可用 Agent hosts，并展示准备投影到每个 host 的 10 个固定基础 Skills 与 16 个 command
+CLI 检测可用 Agent hosts，并展示准备投影到每个 host 的 11 个固定基础 Skills 与 16 个 command
 wrappers。用户选择目标 hosts 后，CLI 再展示可选 literature Adapters；当前只有需要 Zotero 与
 Zotero-Agents 插件的 `zotero-library`，默认不选。两项选择只决定静态投影，不开始任何研究。
 
@@ -35,7 +35,7 @@ project/
 └── <host-specific Skill projection>
 ```
 
-固定 Skill 基础表面是 4 个 ARSU Skills、2 个 Core Skills 和 4 个 Companion Skills。只有选择
+固定 Skill 基础表面是 4 个 ARSU Skills、2 个 Core Skills 和 5 个 Companion Skills。只有选择
 `zotero-library` 时，项目根才增加 `.zotero-bridge/`，每个 host 才增加 7 个 Adapter Skills。
 没有安装任何 domain plugin。`tool-installation-manifest.json` 只管理 ResearchSpec 生成的软件、
 profile 和 Skill 投影，不登记研究交付物。

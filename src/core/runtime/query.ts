@@ -11,29 +11,6 @@ export interface CurrentListPage {
   page: { limit: number; total: number; next_cursor: string | null };
 }
 
-export function buildCurrentStatus(index: CurrentWorkspaceIndex) {
-  const controls = index.subflows.map((item) => item.control);
-  const statusCounts: Record<string, number> = {};
-  for (const control of controls) statusCounts[control.status] = (statusCounts[control.status] ?? 0) + 1;
-  const events = currentHistory(index);
-  return {
-    workspace: index.workspace,
-    schema_version: index.config.schema_version,
-    profile: { id: index.profile.profile_id, version: index.profile.profile_version, path: "profiles/academic-pipeline.yaml" },
-    specs: { sources: index.sources.sources.length, claims: index.claims.claims.length, manuscript_sections: index.manuscript.outline.length },
-    subflows: statusCounts,
-    active_instances: controls.filter((item) => item.status === "active" || item.status === "paused" || item.status === "blocked")
-      .map((item) => ({ instance_id: item.instance_id, route_ref: item.route_ref, status: item.status, checkpoint: item.checkpoint })),
-    recent_instances: [...controls].sort((left, right) => right.started_at.localeCompare(left.started_at) || left.instance_id.localeCompare(right.instance_id)).slice(0, 10)
-      .map((item) => ({ instance_id: item.instance_id, route_ref: item.route_ref, status: item.status, started_at: item.started_at })),
-    pending_gates: listCurrentItems(index, "gates").filter((item) => record(item).accepted !== true),
-    pending_decisions: controls.flatMap((control) => control.gates.filter((gate) => gate.attempts.at(-1)?.verdict === "fail" && !gate.override).map((gate) => ({ selector: `gate:${control.instance_id}/${gate.gate_id}`, kind: "failed_gate_override" }))),
-    pending_changes: index.changes.filter((item) => item.change.status === "draft" || item.change.status === "proposed" || item.change.status === "accepted").map(changeProjection),
-    recent_history: events.slice(-10).reverse(),
-    diagnostics: index.diagnostics,
-  };
-}
-
 export function listCurrentItems(index: CurrentWorkspaceIndex, type: CurrentListType): unknown[] {
   if (type === "subflows") return index.subflows.map((item) => ({
     selector: `subflow:${item.control.instance_id}`,

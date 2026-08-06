@@ -14,3 +14,11 @@ Remove selected plugins from the current workspace
 - **Workspace**: `required`
 - **Effect**: `write`
 - **Related**: [`plugin list`](./plugin-list), [`plugin install`](./plugin-install)
+
+#### Input shape
+
+One or more installed domain IDs.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `plugin-ids` | `domain ID[]` | yes | Exact selections to remove. |

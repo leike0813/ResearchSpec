@@ -19,3 +19,13 @@ Complete or advance one currently authorized subflow
 | --- | --- | --- |
 | `--transition <id>` | no | profile transition ID or pause, resume, cancel, complete |
 | `--actor-name <name>` | yes | action executor name |
+
+#### Input shape
+
+A subflow selector plus an actor and optional authorized transition.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `subflow-selector` | `subflow:<instance-id>` | yes | Exact current subflow instance. |
+| `--transition` | `profile transition ID \| pause \| resume \| cancel \| complete` | no | Omit only when the runtime has one unambiguous authorized transition. |
+| `--actor-name` | `non-empty string` | yes | Executor recorded in the owning control. |

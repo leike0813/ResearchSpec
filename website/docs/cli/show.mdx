@@ -14,3 +14,11 @@ Show one exact current item, stable spec, or project profile
 - **Workspace**: `required`
 - **Effect**: `read`
 - **Related**: [`list`](./list), [`check`](./check)
+
+#### Input shape
+
+One exact stable spec, profile, subflow, Gate, Decision, change, handoff, or tool selector.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `selector` | `spec:... \| profile:... \| subflow:... \| gate:... \| decision:... \| change:... \| handoff:... \| tool:...` | yes | Exact item to inspect. |

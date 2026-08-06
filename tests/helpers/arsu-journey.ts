@@ -33,18 +33,25 @@ export interface ControlFrontierItem {
 
 export type FrontierItem = RouteFrontierItem | ControlFrontierItem;
 
+export interface BoundedView<T> {
+  total: number;
+  items: T[];
+  truncated: boolean;
+}
+
 export interface StatusView {
   schema_version: "1";
-  profile: { id: string; version: string; path: string };
-  subflows: Record<string, number>;
-  active_instances: Array<{ instance_id: string; route_ref: string; status: string; checkpoint: string }>;
-  recent_instances: Array<{ instance_id: string; route_ref: string; status: string; started_at: string }>;
-  pending_gates: unknown[];
-  pending_decisions: unknown[];
-  pending_changes: unknown[];
-  frontier: FrontierItem[];
-  blockers: Array<{ instance_id: string; code: string; message: string; refs: string[] }>;
-  literature_adapters: Array<{ adapter_id: string; state: string; connection_state: string }>;
+  profile: { id: string; version: string };
+  subflows: {
+    total: number;
+    by_status: Record<string, number>;
+    active_instances: BoundedView<{ selector: string; route_ref: string; status: string; checkpoint: string }>;
+  };
+  pending_gates: BoundedView<string>;
+  pending_decisions: BoundedView<string>;
+  frontier: BoundedView<FrontierItem>;
+  blockers: BoundedView<{ instance_id: string; code: string; refs: string[] }>;
+  literature_adapters: BoundedView<{ adapter_id: string; state: string; connection_state: string }>;
 }
 
 export interface RouteInstructions {
@@ -294,20 +301,20 @@ export async function drivePipeline(
     const current = status(context);
     if (showSubflow(context, parentId).status === "complete") return current;
 
-    const route = current.frontier.find((item): item is RouteFrontierItem =>
+    const route = current.frontier.items.find((item): item is RouteFrontierItem =>
       item.kind === "route" && item.parent_instance_id === parentId);
     if (route) {
       await startRoute(context, route.route_ref, route);
       continue;
     }
 
-    const gate = current.frontier.find((item): item is ControlFrontierItem => item.kind === "gate");
+    const gate = current.frontier.items.find((item): item is ControlFrontierItem => item.kind === "gate");
     if (gate) {
       decideGate(context, gate.selector, "pass");
       continue;
     }
 
-    const decision = current.frontier.find((item): item is ControlFrontierItem => item.kind === "decision");
+    const decision = current.frontier.items.find((item): item is ControlFrontierItem => item.kind === "decision");
     if (decision) {
       const packet = instructions(context, decision.selector) as {
         branch: { options: Array<{ option_id: string }> } | null;
@@ -325,7 +332,7 @@ export async function drivePipeline(
       continue;
     }
 
-    const advance = current.frontier.find((item): item is ControlFrontierItem => item.kind === "advance");
+    const advance = current.frontier.items.find((item): item is ControlFrontierItem => item.kind === "advance");
     if (advance) {
       advanceSubflow(context, advance);
       continue;

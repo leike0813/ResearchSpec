@@ -81,7 +81,7 @@ void test("revision-master:check exits 0 against the current Skill tree", () => 
   const result = spawnSync("pnpm", ["revision-master:check"], {
     cwd: root,
     encoding: "utf8",
-    env: { ...process.env, NODE_OPTIONS: "--no-warnings" },
+    env: { ...process.env, NODE_OPTIONS: "--no-warnings", PYTHONDONTWRITEBYTECODE: "1" },
   });
   rmSync(pycache, { recursive: true, force: true });
   assert.equal(result.status, 0, result.stderr || result.stdout);

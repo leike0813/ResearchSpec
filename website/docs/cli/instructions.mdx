@@ -14,3 +14,11 @@ Show current route, subflow, Gate, Decision, change, or handoff instructions
 - **Workspace**: `required`
 - **Effect**: `read`
 - **Related**: [`status`](./status), [`start`](./start), [`advance`](./advance), [`decide`](./decide)
+
+#### Input shape
+
+One exact control or inspection selector.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `selector` | `route:... \| subflow:... \| gate:... \| decision:... \| change:... \| handoff:...` | yes | Current item whose action contract is needed. |

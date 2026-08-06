@@ -237,21 +237,16 @@ state, action or receipt contracts.
 
 ### Requirement: Bounded Static Adapter Health Appears In Status
 
-Default status SHALL project a bounded static summary of each literature
-Adapter from the installation-inspection SSOT. The summary SHALL include
-selection policy, identity, installation/runtime/projection state, compact
-diagnostic counts and the directed `check:literature-adapters` selector; it
-SHALL not perform a live probe, execute Adapter assets, contact a provider, or
-read credentials.
+Default status SHALL project only compact static health for each selected literature Adapter: identity, selection/state, connection state, projection state, diagnostic counts, and the directed `check:literature-adapters` selector. It SHALL not expose expected/projected/missing tool ID arrays or full diagnostic objects. Detailed Adapter inspection SHALL remain available through `check`.
 
 #### Scenario: Adapter is not selected
 
 - **WHEN** an optional Adapter is absent from the workspace selection
-- **THEN** status SHALL expose `not-selected` with no expected runtime or Skill projection
+- **THEN** status SHALL expose `not-selected` with compact projection and diagnostic counts
 - **AND** detailed inspection SHALL remain available without changing workspace authority
 
 #### Scenario: Selected Adapter files are degraded
 
 - **WHEN** static inspection finds missing, drifted, unsupported, or conflicted desired Adapter files
-- **THEN** status SHALL expose the corresponding compact state and diagnostics
-- **AND** detailed inspection SHALL remain available through the directed check selector without changing workspace authority
+- **THEN** status SHALL expose the corresponding compact state and diagnostic counts
+- **AND** detailed inspection SHALL remain available through the directed check selector

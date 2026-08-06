@@ -147,6 +147,7 @@ function renderMdxCommandPage(command: CliCommandDefinition, position: number, g
     `- **Effect**: \`${command.effect}\``,
     `- **Related**: ${related || "none"}`,
     ...optionRows,
+    ...renderPayloadSection(command, "mdx"),
     "",
   ].join("\n").trimEnd() + "\n";
 }
@@ -186,6 +187,32 @@ function renderCommandCard(command: CliCommandDefinition): string[] {
       ),
     );
   }
+  lines.push(...renderPayloadSection(command, "markdown"));
   lines.push("");
   return lines;
+}
+
+function renderPayloadSection(command: CliCommandDefinition, mode: "markdown" | "mdx"): string[] {
+  const payload = command.payload;
+  const lines = ["", "#### Input shape", "", payload.summary];
+  if (payload.schema) lines.push("", `Runtime schema: \`${payload.schema}\`.`);
+  if (payload.fields.length > 0) {
+    lines.push(
+      "",
+      "| Field or option | Type | Required | Meaning |",
+      "| --- | --- | --- | --- |",
+      ...payload.fields.map((field) =>
+        `| \`${tableCell(field.name)}\` | \`${tableCell(field.type)}\` | ${field.required ? "yes" : "no"} | ${tableCell(field.description)} |`
+      ),
+    );
+  }
+  if (payload.constraints.length > 0) {
+    lines.push("", "Constraints:", "", ...payload.constraints.map((constraint) => `- ${constraint}`));
+  }
+  if (mode === "mdx") lines.push("");
+  return lines;
+}
+
+function tableCell(value: string): string {
+  return value.replaceAll("|", "\\|").replaceAll("\n", " ");
 }

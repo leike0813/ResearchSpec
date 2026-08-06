@@ -7,7 +7,10 @@ const testRoot = path.resolve(".test-dist/tests");
 const files = (await collect(testRoot)).filter((file) => file.endsWith(".test.js")).sort();
 if (files.length === 0) throw new Error(`No compiled tests found under ${testRoot}`);
 
-const result = spawnSync(process.execPath, ["--test", ...files], { stdio: "inherit" });
+const result = spawnSync(process.execPath, ["--test", ...files], {
+  stdio: "inherit",
+  env: { ...process.env, PYTHONDONTWRITEBYTECODE: "1" },
+});
 if (result.error) throw result.error;
 process.exitCode = result.status ?? 1;
 

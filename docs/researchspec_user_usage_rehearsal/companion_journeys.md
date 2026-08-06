@@ -1,7 +1,7 @@
 # Companion Skills 用户旅程
 
-本文属于 [ResearchSpec 目标态用户使用预演](../researchspec_user_usage_rehearsal.md)。四个
-Companion 组织路由、研究 change、验证和人类决定，不生产学术结论，也不建立第二套运行时。
+本文属于 [ResearchSpec 目标态用户使用预演](../researchspec_user_usage_rehearsal.md)。五个
+Companion 组织路由、CLI 参考、研究 change、验证和人类决定，不生产学术结论，也不建立第二套运行时。
 
 ## 1. `researchspec-navigate`
 
@@ -149,8 +149,11 @@ patch，也不检查 registry/receipt。
 
 ## 5. Companion 协作顺序
 
+`researchspec-cli-handbook` 是独立的 CLI/workspace 参考入口。Agent 只要使用、解释、检查或修改
+ResearchSpec，就加载该 Skill；Navigate 不再承载 handbook reference。
+
 一个典型阻塞的处理顺序是：Navigate 解释当前 checkpoint，Verify 检查并提出 verdict，用户
 确认后 Decide 写 Gate，最后 `advance` 推进。需要改变稳定研究含义时，Propose 先形成 change，
 Decide 只接受方向，Agent 再应用到 specs。
 
-四个 Companion 可以在同一旅程中协作，但任何一个都不能吸收其它三个的权限。
+五个 Companion 可以在同一旅程中协作，但任何一个都不能吸收其它 Companion 的权限。

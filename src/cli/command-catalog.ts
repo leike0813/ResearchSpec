@@ -1,5 +1,7 @@
 import { Command, Option } from "commander";
 
+import { getCliPayloadDefinition, type CliPayloadDefinition } from "./payload-catalog.js";
+
 export type CliCommandGroup =
   | "bootstrap"
   | "control-plane"
@@ -28,6 +30,7 @@ export interface CliCommandDefinition {
   workspace: CliWorkspaceRequirement;
   effect: CliEffect;
   options: readonly CliOptionDefinition[];
+  payload: CliPayloadDefinition;
   related: readonly CliCommandId[];
 }
 
@@ -167,7 +170,22 @@ export function registerCliCommand(
     if (parser) registeredOption.argParser(parser);
     registered.addOption(registeredOption);
   }
+  registered.addHelpText("after", `\n${renderCliPayloadHelp(definition)}`);
   return registered;
+}
+
+export function renderCliPayloadHelp(definition: CliCommandDefinition): string {
+  const payload = definition.payload;
+  const lines = ["Input shape:", `  ${payload.summary}`];
+  if (payload.schema) lines.push(`  Runtime schema: ${payload.schema}`);
+  for (const field of payload.fields) {
+    lines.push(`  ${field.name} (${field.type}${field.required ? ", required" : ", optional"}): ${field.description}`);
+  }
+  if (payload.constraints.length > 0) {
+    lines.push("  Constraints:");
+    for (const constraint of payload.constraints) lines.push(`    - ${constraint}`);
+  }
+  return `${lines.join("\n")}\n`;
 }
 
 export function applyGlobalCliOptions(program: Command): Command {
@@ -224,7 +242,7 @@ function command(
   options: readonly CliOptionDefinition[],
   related: readonly CliCommandId[],
 ): CliCommandDefinition {
-  return { id, path, syntax, group, description, workspace, effect, options, related };
+  return { id, path, syntax, group, description, workspace, effect, options, payload: getCliPayloadDefinition(id), related };
 }
 
 function option(key: string, flags: string, description: string, required = false): CliOptionDefinition {

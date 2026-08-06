@@ -14,3 +14,11 @@ Refresh selected plugins, or all when IDs are omitted
 - **Workspace**: `required`
 - **Effect**: `write`
 - **Related**: [`plugin list`](./plugin-list), [`plugin show`](./plugin-show)
+
+#### Input shape
+
+Zero or more installed domain IDs.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `plugin-ids` | `domain ID[]` | no | Specific selections to refresh; omission updates all selected domains. |

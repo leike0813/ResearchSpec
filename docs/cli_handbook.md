@@ -56,6 +56,17 @@ Initialize or safely extend a ResearchSpec workspace
 | `--delivery <mode>` | no | skills, commands, or both |
 | `--literature-adapters <ids>` | no | all, none, or comma-separated literature Adapter IDs |
 
+#### Input shape
+
+Optional bootstrap selections; the path positional argument defaults to the current directory.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `path` | `directory path` | no | Project root to initialize or safely extend. |
+| `--tools` | `all \| none \| comma-separated tool IDs` | no | Initial Agent-tool selection. |
+| `--delivery` | `skills \| commands \| both` | no | Generated Agent surface mode. |
+| `--literature-adapters` | `all \| none \| comma-separated Adapter IDs` | no | Optional literature Adapter selection. |
+
 ### `researchspec update [path]`
 
 Refresh selected generated agent files
@@ -70,6 +81,17 @@ Refresh selected generated agent files
 | `--delivery <mode>` | no | skills, commands, or both |
 | `--literature-adapters <ids>` | no | replace selected literature Adapters |
 
+#### Input shape
+
+Optional replacement or extension selections for an existing current workspace.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `path` | `directory path` | no | Project root containing the workspace. |
+| `--tools` | `all \| none \| comma-separated tool IDs` | no | Refresh or add this tool subset. |
+| `--delivery` | `skills \| commands \| both` | no | Replace the generated delivery mode; omission preserves current intent. |
+| `--literature-adapters` | `all \| none \| comma-separated Adapter IDs` | no | Replace the selected Adapter set. |
+
 ## Control plane
 
 ### `researchspec status`
@@ -80,6 +102,10 @@ Show derived current workspace and subflow status
 - Static effect: `read`
 - Related commands: `instructions`, `show`, `list`
 
+#### Input shape
+
+No command payload. Reads the nearest current workspace and returns a bounded snapshot.
+
 ### `researchspec instructions <selector>`
 
 Show current route, subflow, Gate, Decision, change, or handoff instructions
@@ -87,6 +113,14 @@ Show current route, subflow, Gate, Decision, change, or handoff instructions
 - Workspace: `required`
 - Static effect: `read`
 - Related commands: `status`, `start`, `advance`, `decide`
+
+#### Input shape
+
+One exact control or inspection selector.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `selector` | `route:... \| subflow:... \| gate:... \| decision:... \| change:... \| handoff:...` | yes | Current item whose action contract is needed. |
 
 ### `researchspec start <route-ref>`
 
@@ -101,6 +135,45 @@ Atomically start one independently confirmed route
 | `--input <start.yaml|json>` | yes | schema 1 semantic Start input |
 | `--confirmed-by <name>` | yes | human who confirmed this exact instance |
 
+#### Input shape
+
+A YAML or JSON object supplied through --input and validated before control creation.
+
+Runtime schema: `SubflowStartCommandSchema`.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `schema_version` | `literal "1"` | yes | Current workspace command schema. |
+| `confirmed_at` | `RFC 3339 timestamp with offset` | yes | Time of the exact route confirmation. |
+| `profile_entry` | `stable ID` | no | Entry ID for a pipeline parent. |
+| `parent` | `{ instance_id, node_id }` | no | Owning parent instance and child node. |
+| `round` | `positive integer` | no | Dynamic round number; requires parent. |
+| `prerequisites` | `non-empty string[]` | yes | Confirmed prerequisites, including an empty array when none apply. |
+| `handoff_inputs` | `HandoffInput[]` | yes | Confirmed input roles; each uses the descriptor fields below plus optional source_instance_id. |
+| `planned_outputs` | `HandoffOutput[]` | yes | Confirmed output roles; each uses the descriptor fields below plus optional intended_consumer. |
+| `manuscript_delivery` | `ManuscriptDelivery` | no | Current manuscript delivery contract when the route consumes it. |
+| `quarto_probe` | `available \| unavailable \| unknown object` | no | Static probe summary with checked_at and version or reason. |
+| `render_consent` | `{ execute: true, confirmed_by, confirmed_at }` | no | Explicit consent for the current render action. |
+| `formal_gates` | `stable ID[]` | yes | Confirmed formal Gate IDs. |
+| `cost` | `{ effort, interaction }` | yes | Non-empty effort and interaction summaries. |
+| `handoff descriptor.role` | `non-empty string` | yes | Unique semantic role within its input or output list. |
+| `handoff descriptor.type` | `non-empty string` | yes | Artifact or information type. |
+| `handoff descriptor.path` | `safe project-relative path` | yes | External boundary file or directory; never a researchspec authority file. |
+| `handoff descriptor.purpose` | `non-empty string` | yes | Why the producer or consumer needs this role. |
+| `handoff descriptor.format` | `qmd \| html \| docx \| pdf \| latex \| latex-project` | no | Declared manuscript/render format when applicable. |
+| `handoff descriptor.renderer` | `quarto` | no | Requires format when present. |
+| `handoff descriptor.path_kind` | `file \| directory` | no | Directory is allowed only for latex-project. |
+| `handoff descriptor.entry_path` | `relative .tex path` | no | Required for latex-project. |
+| `handoff descriptor.limits` | `string[]` | no | Known limitations or exclusions. |
+| `handoff descriptor.notes` | `string` | no | Additional role-specific context. |
+| `--confirmed-by` | `non-empty human name` | yes | Human who confirmed this exact instance. |
+
+Constraints:
+
+- profile_entry and parent are mutually exclusive.
+- round requires parent.
+- handoff input roles and planned output roles must each be unique.
+
 ### `researchspec advance <subflow-selector>`
 
 Complete or advance one currently authorized subflow
@@ -113,6 +186,16 @@ Complete or advance one currently authorized subflow
 | --- | --- | --- |
 | `--transition <id>` | no | profile transition ID or pause, resume, cancel, complete |
 | `--actor-name <name>` | yes | action executor name |
+
+#### Input shape
+
+A subflow selector plus an actor and optional authorized transition.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `subflow-selector` | `subflow:<instance-id>` | yes | Exact current subflow instance. |
+| `--transition` | `profile transition ID \| pause \| resume \| cancel \| complete` | no | Omit only when the runtime has one unambiguous authorized transition. |
+| `--actor-name` | `non-empty string` | yes | Executor recorded in the owning control. |
 
 ## Inspection
 
@@ -128,6 +211,15 @@ Check specs, profiles, subflows, changes, handoffs, tools, plugins, or literatur
 | --- | --- | --- |
 | `--strict` | no | treat warnings as failures |
 
+#### Input shape
+
+An optional validation target and strictness flag.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `target` | `all \| specs \| profiles \| subflows \| changes \| handoffs \| tools \| plugins \| literature-adapters` | no | Validation scope; defaults to all. |
+| `--strict` | `boolean` | no | Treat warnings as failures. |
+
 ### `researchspec list [type]`
 
 List current subflows, changes, Gates, Decisions, handoffs, profiles, tools, diagnostics, or derived history
@@ -141,6 +233,16 @@ List current subflows, changes, Gates, Decisions, handoffs, profiles, tools, dia
 | `--limit <count>` | no | page size from 1 to 50 |
 | `--cursor <cursor>` | no | opaque cursor returned by the prior page |
 
+#### Input shape
+
+An optional collection type with cursor pagination.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `type` | `subflows \| changes \| gates \| decisions \| handoffs \| profiles \| tools \| diagnostics \| history` | no | Collection to list; defaults to subflows. |
+| `--limit` | `integer 1..50` | no | Page size; defaults to 20. |
+| `--cursor` | `opaque base64url cursor` | no | Cursor returned by the immediately preceding page for the same unchanged collection. |
+
 ### `researchspec show <selector>`
 
 Show one exact current item, stable spec, or project profile
@@ -148,6 +250,14 @@ Show one exact current item, stable spec, or project profile
 - Workspace: `required`
 - Static effect: `read`
 - Related commands: `list`, `check`
+
+#### Input shape
+
+One exact stable spec, profile, subflow, Gate, Decision, change, handoff, or tool selector.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `selector` | `spec:... \| profile:... \| subflow:... \| gate:... \| decision:... \| change:... \| handoff:... \| tool:...` | yes | Exact item to inspect. |
 
 ## Recovery
 
@@ -158,6 +268,10 @@ Diagnose current workspace contracts without modifying them
 - Workspace: `required`
 - Static effect: `read`
 - Related commands: `check`, `status`
+
+#### Input shape
+
+No command payload. Runs the full current-workspace diagnostic report.
 
 ## Context
 
@@ -173,6 +287,33 @@ Render or replace one directly editable subflow handoff
 | --- | --- | --- |
 | `--input <handoff.yaml|json>` | no | semantic inputs, outputs, and optional Markdown body |
 
+#### Input shape
+
+Optional YAML or JSON replacement payload supplied through --input; without it the command renders the current handoff.
+
+Runtime schema: `SubflowHandoffInputSchema`.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `inputs` | `HandoffInput[]` | yes | Input role descriptors; each may add source_instance_id. |
+| `outputs` | `HandoffOutput[]` | yes | Output role descriptors; each may add intended_consumer. |
+| `body` | `Markdown string` | no | Body written after generated frontmatter. |
+| `role` | `non-empty string` | yes | Unique semantic role within its input or output list. |
+| `type` | `non-empty string` | yes | Artifact or information type. |
+| `path` | `safe project-relative path` | yes | External boundary file or directory; never a researchspec authority file. |
+| `purpose` | `non-empty string` | yes | Why the producer or consumer needs this role. |
+| `format` | `qmd \| html \| docx \| pdf \| latex \| latex-project` | no | Declared manuscript/render format when applicable. |
+| `renderer` | `quarto` | no | Requires format when present. |
+| `path_kind` | `file \| directory` | no | Directory is allowed only for latex-project. |
+| `entry_path` | `relative .tex path` | no | Required for latex-project. |
+| `limits` | `string[]` | no | Known limitations or exclusions. |
+| `notes` | `string` | no | Additional role-specific context. |
+
+Constraints:
+
+- Input roles and output roles must each be unique.
+- qmd paths end in .qmd; single-file latex paths end in .tex; latex-project requires a directory and .tex entry_path.
+
 ### `researchspec pack`
 
 Create a deterministic bounded current-workspace context bundle
@@ -185,6 +326,15 @@ Create a deterministic bounded current-workspace context bundle
 | --- | --- | --- |
 | `--output <zip>` | yes | output ZIP path |
 | `--scope <scope>` | no | all, specs, profile, subflows, changes, subflow:<id>, or change:<id> |
+
+#### Input shape
+
+A required ZIP output and an optional bounded context scope.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `--output` | `ZIP path` | yes | Destination archive path. |
+| `--scope` | `all \| specs \| profile \| subflows \| changes \| subflow:<id> \| change:<id>` | no | Bundle scope; defaults to all. |
 
 ## Governance
 
@@ -200,6 +350,16 @@ Create an adaptable project change document package
 | --- | --- | --- |
 | `--targets <specs>` | yes | comma-separated project.md, sources.yaml, claims.yaml, or manuscript.yaml |
 | `--with <documents>` | no | optional comma-separated design,tasks,delta documents |
+
+#### Input shape
+
+A safe change ID, target stable specs, and optional supporting documents.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `change-id` | `safe kebab-case ID` | yes | New project change directory and selector identity. |
+| `--targets` | `comma-separated project.md \| sources.yaml \| claims.yaml \| manuscript.yaml` | yes | Stable specs whose meaning may change. |
+| `--with` | `comma-separated design \| tasks \| delta` | no | Optional supporting documents; duplicates are ignored. |
 
 ### `researchspec decide <selector>`
 
@@ -220,6 +380,22 @@ Resolve a pending human decision
 | `--override` | no | approve an override of the current failed Gate |
 | `--evidence-role <role>` | no | owning handoff role used as Gate evidence |
 
+#### Input shape
+
+One selector-specific human decision; option groups cannot be mixed.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `change:<id>` | `--decision + --actor-name + optional --reason` | no | Project change outcome: accept, reject, defer, or supersede. |
+| `gate:<instance>/<gate>` | `--verdict + --actor-name + optional --reason/--evidence-role` | no | Append pass, pass_with_conditions, or fail. |
+| `gate:<instance>/<gate>` | `--override + --actor-name + --reason` | no | Approve the current failed Gate override. |
+| `decision:<instance>/<decision>` | `--kind + --choice + --actor-name + optional --reason` | no | Record scope, claim, structure, or branch choice. |
+
+Constraints:
+
+- Exactly one selector-specific option group is valid.
+- --override cannot be combined with --verdict.
+
 ### `researchspec archive <change-id>`
 
 Archive an applied, rejected, deferred, or superseded project change
@@ -227,6 +403,14 @@ Archive an applied, rejected, deferred, or superseded project change
 - Workspace: `required`
 - Static effect: `write`
 - Related commands: `list`, `show`
+
+#### Input shape
+
+One project change ID.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `change-id` | `safe change ID` | yes | Applied, rejected, deferred, or superseded change to archive. |
 
 ## Domain Skills
 
@@ -237,6 +421,10 @@ Inspect and manage bundled domain Skill plugins
 - Workspace: `optional`
 - Static effect: `conditional-write`
 - Related commands: `plugin list`, `plugin show`, `plugin install`, `plugin uninstall`, `plugin update`, `plugin instructions`
+
+#### Input shape
+
+No direct payload. Select one of the plugin subcommands.
 
 ### `researchspec plugin list`
 
@@ -251,6 +439,15 @@ List bundled domain Skill plugins
 | `--installed` | no | show only workspace-selected plugins |
 | `--summary` | no | emit compact discovery metadata |
 
+#### Input shape
+
+Optional discovery filters.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `--installed` | `boolean` | no | Show only workspace-selected domains. |
+| `--summary` | `boolean` | no | Use compact discovery metadata. |
+
 ### `researchspec plugin show <plugin-id>`
 
 Show bundled plugin metadata and provenance
@@ -262,6 +459,15 @@ Show bundled plugin metadata and provenance
 | Command option | Required | Purpose |
 | --- | --- | --- |
 | `--summary` | no | emit compact Skill descriptions without full provenance |
+
+#### Input shape
+
+One domain plugin ID.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `plugin-id` | `domain ID` | yes | Available or recoverable installed domain. |
+| `--summary` | `boolean` | no | Omit full provenance. |
 
 ### `researchspec plugin install <plugin-ids...>`
 
@@ -275,6 +481,19 @@ Select and project plugins into the current workspace
 | --- | --- | --- |
 | `--summary` | no | emit aggregate write-plan impact |
 
+#### Input shape
+
+One or more explicit domain IDs.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `plugin-ids` | `domain ID[]` | yes | Exact domains to select and project. |
+| `--summary` | `boolean` | no | Emit aggregate write-plan impact. |
+
+Constraints:
+
+- Non-interactive execution also requires the global --yes flag.
+
 ### `researchspec plugin uninstall <plugin-ids...>`
 
 Remove selected plugins from the current workspace
@@ -282,6 +501,14 @@ Remove selected plugins from the current workspace
 - Workspace: `required`
 - Static effect: `write`
 - Related commands: `plugin list`, `plugin install`
+
+#### Input shape
+
+One or more installed domain IDs.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `plugin-ids` | `domain ID[]` | yes | Exact selections to remove. |
 
 ### `researchspec plugin update [plugin-ids...]`
 
@@ -291,6 +518,14 @@ Refresh selected plugins, or all when IDs are omitted
 - Static effect: `write`
 - Related commands: `plugin list`, `plugin show`
 
+#### Input shape
+
+Zero or more installed domain IDs.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `plugin-ids` | `domain ID[]` | no | Specific selections to refresh; omission updates all selected domains. |
+
 ### `researchspec plugin instructions <skill-id>`
 
 Read an installed hash-clean plugin Skill for immediate advisory use
@@ -298,3 +533,11 @@ Read an installed hash-clean plugin Skill for immediate advisory use
 - Workspace: `required`
 - Static effect: `read`
 - Related commands: `plugin list`, `plugin show`
+
+#### Input shape
+
+One installed, projected, hash-clean Skill ID.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `skill-id` | `Skill ID` | yes | Plugin Skill whose advisory instructions are requested. |

@@ -21,32 +21,23 @@ The project SHALL provide a development command that compiles the current produc
 
 ### Requirement: Production Skill projection
 
-The harness SHALL derive each Skill family from the same production source used
-for installation: ARSU from fixed IDs and generated trees, Companion Skills
-from the typed manifest and renderer, Literature Adapter Skills from the
-role-aware fixed catalog and generated bundle, and plugin Skills from a
-non-writing assembly of domain and vendor catalogs. It MUST NOT run converters,
-Adapter assets or maintain copied Companion documents.
+The harness SHALL derive ARSU, all five Companion Skills, Literature Adapter Skills, and plugin Skills from their production catalogs and renderers without running converters or Adapter assets.
 
 #### Scenario: Complete base surface is loaded
 
 - **WHEN** the harness builds its catalog
-- **THEN** it exposes exactly four ARSU, four dynamically rendered Companion
-  and seven fixed Literature Adapter Skills
-- **AND** router and visibility SHALL distinguish router, task and mechanism
-  discovery
+- **THEN** it SHALL expose exactly four ARSU, five dynamically rendered Companion and seven fixed Literature Adapter Skills
+- **AND** `researchspec-cli-handbook` content SHALL come from the production Companion renderer
 
 #### Scenario: Plugin catalog is loaded
 
 - **WHEN** the harness builds its plugin view
-- **THEN** it validates the in-memory assembled registry and exposes every
-  domain with direct and dependency-resolved Skill membership
+- **THEN** it SHALL validate the in-memory assembled registry and expose every available reviewed domain and Skill without writing generated files
 
 #### Scenario: Checked-in registry has drift
 
-- **WHEN** in-memory plugin assembly differs from
-  `skills/plugins/registry.json`
-- **THEN** the harness reports a drift diagnostic without writing either source
+- **WHEN** in-memory plugin assembly differs from `skills/plugins/registry.json`
+- **THEN** the harness SHALL report drift without writing either source
 
 #### Scenario: Adapter runner is browsed
 

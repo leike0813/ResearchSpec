@@ -22,6 +22,7 @@ const expectedBaseSkills = [
   "deep-research",
   "paper-humanizer",
   "researchspec-decide",
+  "researchspec-cli-handbook",
   "researchspec-navigate",
   "researchspec-propose",
   "researchspec-verify",
@@ -346,8 +347,11 @@ async function verifyInstalledGuidance(installedPackageRoot, projectRoot, handbo
   for (const skill of expectedSkills.slice(0, 4)) {
     assert(contracts.skill_groups?.[skill]?.profile_id === "researchspec-preflight-v10", `Installed ARSU profile is not v10: ${skill}`);
   }
-  const navigateHandbook = await readFile(path.join(projectRoot, ".agents", "skills", "researchspec-navigate", "references", "cli-handbook.md"));
-  assert(sha256(navigateHandbook) === handbookDigest, "Installed Codex Navigate handbook differs from the packaged handbook.");
+  const handbookSkill = await readFile(path.join(projectRoot, ".agents", "skills", "researchspec-cli-handbook", "SKILL.md"), "utf8");
+  const packagedHandbook = await readFile(path.join(installedPackageRoot, "docs", "cli_handbook.md"), "utf8");
+  assert(handbookSkill.includes(packagedHandbook.trim()), "Installed Codex CLI handbook Skill does not contain the packaged handbook.");
+  assert(!await pathExists(path.join(projectRoot, ".agents", "skills", "researchspec-navigate", "references", "cli-handbook.md")), "Installed Navigate still contains the retired handbook reference.");
+  assert(handbookDigest === sha256(Buffer.from(packagedHandbook, "utf8")), "Packaged handbook digest changed during delivery verification.");
 }
 
 async function verifyPackagedDocumentation(installedPackageRoot, packagedFiles) {
@@ -401,20 +405,22 @@ async function verifyAllToolDelivery(projectRoot, handbookDigest) {
   const installations = Array.isArray(manifest.installations) ? manifest.installations : [];
   assert(equal(manifest.literature_adapter_resolutions, []), "Default all-tool init unexpectedly installed a literature adapter.");
   assert(!await pathExists(path.join(projectRoot, ".zotero-bridge")), "Default all-tool init unexpectedly created .zotero-bridge.");
-  const handbookReferences = installations.filter((item) =>
+  const handbookSkills = installations.filter((item) =>
     item?.source?.kind === "companion-skill"
-    && item.source.skill_id === "researchspec-navigate"
+    && item.source.skill_id === "researchspec-cli-handbook"
     && typeof item?.target?.path === "string"
-    && item.target.scope === "project"
-    && item.target.path.replaceAll("\\", "/").endsWith("/researchspec-navigate/references/cli-handbook.md"));
-  assert(handbookReferences.length === 35, `Expected 35 project Navigate handbook references, found ${String(handbookReferences.length)}.`);
-  assert(new Set(handbookReferences.map((item) => item.tool_id)).size === 35, "Navigate handbook references do not cover all project Skill writers.");
-  for (const reference of handbookReferences) {
-    assert(reference.target.scope === "project", `Navigate handbook reference is not project-local: ${String(reference.tool_id)}`);
-    assert(reference.sha256 === handbookDigest, `Navigate handbook manifest digest differs for ${String(reference.tool_id)}.`);
-    const bytes = await readFile(path.join(projectRoot, reference.target.path));
-    assert(sha256(bytes) === handbookDigest, `Navigate handbook bytes differ for ${String(reference.tool_id)}.`);
+    && item.target.path.replaceAll("\\", "/").endsWith("/researchspec-cli-handbook/SKILL.md"));
+  assert(handbookSkills.length === 36, `Expected 36 CLI handbook Skill projections, found ${String(handbookSkills.length)}.`);
+  assert(new Set(handbookSkills.map((item) => item.tool_id)).size === 36, "CLI handbook Skill projections do not cover all physical Skill writers.");
+  for (const reference of handbookSkills) {
+    const absolute = reference.target.scope === "project"
+      ? path.join(projectRoot, reference.target.path)
+      : reference.target.path;
+    const bytes = await readFile(absolute);
+    assert(sha256(bytes) === reference.sha256, `CLI handbook Skill bytes differ for ${String(reference.tool_id)}.`);
+    assert(bytes.includes(Buffer.from("SubflowStartCommandSchema", "utf8")), `CLI handbook Skill lacks payload schema detail for ${String(reference.tool_id)}.`);
   }
+  assert(handbookDigest.length === 64, "CLI handbook digest is invalid.");
 
   const commandInstallations = installations.filter((item) => item?.source?.kind === "command");
   assert(commandInstallations.length === 28 * 16, `Expected 448 command-wrapper installations, found ${String(commandInstallations.length)}.`);
@@ -439,7 +445,7 @@ async function verifyAllToolDelivery(projectRoot, handbookDigest) {
     baseSkillsByTool.set(installation.tool_id, skills);
   }
   assert(baseSkillsByTool.size === 36, `Expected base Skills for 36 physical Skill writers, found ${String(baseSkillsByTool.size)}.`);
-  for (const [toolId, skills] of baseSkillsByTool) assert(skills.size === 10, `Base Skill count differs for ${String(toolId)}.`);
+  for (const [toolId, skills] of baseSkillsByTool) assert(skills.size === 11, `Base Skill count differs for ${String(toolId)}.`);
 }
 
 function markdownRepositoryLinks(markdown) {
@@ -587,8 +593,8 @@ async function verifyInstalledCurrentJourney(bin, projectDirectory, environment)
     "--actor-name", "release-verifier", "--json",
   ], projectDirectory, environment);
   const status = runJson(bin, ["status", "--json"], projectDirectory, environment).data;
-  assert(status?.subflows?.complete === 1, "Installed standalone journey did not reach completion.");
-  assert(!status?.active_instances?.some((item) => item.instance_id === started.instance_id), "Installed completed subflow remains active.");
+  assert(status?.subflows?.by_status?.complete === 1, "Installed standalone journey did not reach completion.");
+  assert(!status?.subflows?.active_instances?.items?.some((item) => item.selector === `subflow:${started.instance_id}`), "Installed completed subflow remains active.");
   runJson(bin, ["show", `handoff:${started.instance_id}`, "--json"], projectDirectory, environment);
   runJson(bin, ["check", "all", "--strict", "--json"], projectDirectory, environment);
 }

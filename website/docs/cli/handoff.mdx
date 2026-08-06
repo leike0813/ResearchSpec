@@ -18,3 +18,30 @@ Render or replace one directly editable subflow handoff
 | Option | Required | Description |
 | --- | --- | --- |
 | `--input <handoff.yaml|json>` | no | semantic inputs, outputs, and optional Markdown body |
+
+#### Input shape
+
+Optional YAML or JSON replacement payload supplied through --input; without it the command renders the current handoff.
+
+Runtime schema: `SubflowHandoffInputSchema`.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `inputs` | `HandoffInput[]` | yes | Input role descriptors; each may add source_instance_id. |
+| `outputs` | `HandoffOutput[]` | yes | Output role descriptors; each may add intended_consumer. |
+| `body` | `Markdown string` | no | Body written after generated frontmatter. |
+| `role` | `non-empty string` | yes | Unique semantic role within its input or output list. |
+| `type` | `non-empty string` | yes | Artifact or information type. |
+| `path` | `safe project-relative path` | yes | External boundary file or directory; never a researchspec authority file. |
+| `purpose` | `non-empty string` | yes | Why the producer or consumer needs this role. |
+| `format` | `qmd \| html \| docx \| pdf \| latex \| latex-project` | no | Declared manuscript/render format when applicable. |
+| `renderer` | `quarto` | no | Requires format when present. |
+| `path_kind` | `file \| directory` | no | Directory is allowed only for latex-project. |
+| `entry_path` | `relative .tex path` | no | Required for latex-project. |
+| `limits` | `string[]` | no | Known limitations or exclusions. |
+| `notes` | `string` | no | Additional role-specific context. |
+
+Constraints:
+
+- Input roles and output roles must each be unique.
+- qmd paths end in .qmd; single-file latex paths end in .tex; latex-project requires a directory and .tex entry_path.

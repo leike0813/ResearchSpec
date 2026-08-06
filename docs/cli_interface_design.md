@@ -3,8 +3,9 @@
 ## 1. 定位与事实源
 
 ResearchSpec CLI 是 schema `"1"` workspace 的确定性文件控制面。公开命令、选项和静态帮助
-由 `src/cli/command-catalog.ts` 唯一生成；当前 selector 和允许动作由 workspace 文件按需计算。
-本文说明交互模型，不复制完整命令帮助。完整静态参考见 `docs/cli_handbook.md`。
+由 typed command/payload catalog 唯一生成；当前 selector 和允许动作由 workspace 文件按需计算。
+本文说明交互模型，不复制完整命令帮助。完整静态参考见 `docs/cli_handbook.md`，并作为
+`researchspec-cli-handbook` Companion Skill 独立投影。
 
 ## 2. 公开命令
 
@@ -47,7 +48,10 @@ selector 只接受稳定 ID；目录名相似度和“最近一个”不能替�
   `--literature-adapters <none|all|ids>`。
 - `update` 省略 `--literature-adapters` 或 `--delivery` 时保留当前选择；传值时替换选择；它只协调受管 profile、Skills、wrappers、plugins 和 literature adapter 文件。发生 drift
   时默认保留用户修改，只有显式 `--force` 才替换生成内容。
-- `status`、`list`、`show`、`instructions`、`check` 和 `doctor` 只读扫描当前 owner。
+- `status` 只返回 workspace/profile 身份、稳定 specs 计数、subflow 计数、当前 frontier、pending
+  selectors、blockers、Agent tool 聚合计数、Adapter 状态和诊断计数。每个列表有固定上限；历史、
+  完整对象、逐工具投影和诊断详情由 `list`、`show`、`check` 与 `doctor` 提供。
+- `list`、`show`、`instructions`、`check` 和 `doctor` 只读扫描当前 owner。
 - `start` 原子创建一个已独立确认的 subflow control、handoff 和可选私有 work 目录。
 - `decide` 记录 owning control 中的 Gate、Decision 或 override，或 project change 的人类决定。
 - `advance` 单独校验 profile、当前 control、直接 child、Gate、Decision 和 handoff 前置后推进。

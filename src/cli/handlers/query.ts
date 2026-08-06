@@ -4,11 +4,11 @@ import type { RouteRef } from "../../arsu-converter/routing/contracts.js";
 import { ControlSelectorSchema } from "../../core/contracts/control-selector.js";
 import { currentHandoff } from "../../core/runtime/handoff.js";
 import {
-  buildCurrentStatus,
   listCurrentItemsPage,
   showCurrentItem,
   type CurrentListType,
 } from "../../core/runtime/query.js";
+import { buildCurrentStatus } from "../../core/runtime/status.js";
 import { evaluateWorkflowControl } from "../../core/runtime/workflow-control.js";
 import { loadCurrentWorkspaceIndex } from "../../core/runtime/workspace-index.js";
 import { runCurrentWorkspaceChecks } from "../../core/validation/current-check.js";
@@ -30,30 +30,18 @@ export async function handleCurrentStatus(context: CommandContext): Promise<Comm
   const workspace = await requireCurrentWorkspace(context);
   const index = await loadCurrentWorkspaceIndex(workspace);
   const adapterInspection = await inspectLiteratureAdapters(index);
-  const checked = await runCurrentWorkspaceChecks(workspace, "all", false);
-  const diagnostics = checked.diagnostics;
   const workflow = evaluateWorkflowControl(index);
-  const controls = index.subflows.map((item) => item.control);
-  const derived = buildCurrentStatus(index);
-  const data = {
-    ...derived,
-    frontier: workflow.frontier,
-    pending_gates: workflow.pending_gates,
-    pending_decisions: workflow.pending_decisions,
-    blockers: workflow.blockers,
-    literature_adapters: adapterInspection.adapters,
-    diagnostics,
-  };
-  const ok = diagnostics.every((item) => !item.blocking);
+  const data = buildCurrentStatus(index, workflow, adapterInspection);
+  const ok = data.diagnostics_summary.blocking === 0;
   const stdout = [
     `ResearchSpec current workspace: ${workspace}`,
     `Profile: ${index.profile.profile_id}@${index.profile.profile_version}`,
     `Stable facts: ${String(index.sources.sources.length)} sources, ${String(index.claims.claims.length)} claims, ${String(index.manuscript.outline.length)} manuscript sections`,
-    `Subflows: ${String(controls.length)} total, ${String(data.active_instances.length)} active or resumable`,
-    `Frontier: ${String(workflow.frontier.length)} available action(s)`,
-    `Pending changes: ${String(data.pending_changes.length)}`,
+    `Subflows: ${String(data.subflows.total)} total, ${String(data.subflows.active_instances.total)} active or resumable`,
+    `Frontier: ${String(data.frontier.total)} available action(s)`,
+    `Diagnostics: ${String(data.diagnostics_summary.blocking)} blocking, ${String(data.diagnostics_summary.warning)} warning`,
   ].join("\n") + "\n";
-  return { ...success("status", data, { stdout }), ok, exitCode: ok ? 0 : 1, diagnostics };
+  return { ...success("status", data, { stdout }), ok, exitCode: ok ? 0 : 1, diagnostics: [] };
 }
 
 export async function handleCurrentList(type: string | undefined, options: CurrentListOptions, context: CommandContext): Promise<CommandResult> {

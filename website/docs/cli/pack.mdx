@@ -19,3 +19,12 @@ Create a deterministic bounded current-workspace context bundle
 | --- | --- | --- |
 | `--output <zip>` | yes | output ZIP path |
 | `--scope <scope>` | no | all, specs, profile, subflows, changes, subflow:<id>, or change:<id> |
+
+#### Input shape
+
+A required ZIP output and an optional bounded context scope.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `--output` | `ZIP path` | yes | Destination archive path. |
+| `--scope` | `all \| specs \| profile \| subflows \| changes \| subflow:<id> \| change:<id>` | no | Bundle scope; defaults to all. |

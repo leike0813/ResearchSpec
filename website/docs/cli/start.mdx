@@ -19,3 +19,42 @@ Atomically start one independently confirmed route
 | --- | --- | --- |
 | `--input <start.yaml|json>` | yes | schema 1 semantic Start input |
 | `--confirmed-by <name>` | yes | human who confirmed this exact instance |
+
+#### Input shape
+
+A YAML or JSON object supplied through --input and validated before control creation.
+
+Runtime schema: `SubflowStartCommandSchema`.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `schema_version` | `literal "1"` | yes | Current workspace command schema. |
+| `confirmed_at` | `RFC 3339 timestamp with offset` | yes | Time of the exact route confirmation. |
+| `profile_entry` | `stable ID` | no | Entry ID for a pipeline parent. |
+| `parent` | `{ instance_id, node_id }` | no | Owning parent instance and child node. |
+| `round` | `positive integer` | no | Dynamic round number; requires parent. |
+| `prerequisites` | `non-empty string[]` | yes | Confirmed prerequisites, including an empty array when none apply. |
+| `handoff_inputs` | `HandoffInput[]` | yes | Confirmed input roles; each uses the descriptor fields below plus optional source_instance_id. |
+| `planned_outputs` | `HandoffOutput[]` | yes | Confirmed output roles; each uses the descriptor fields below plus optional intended_consumer. |
+| `manuscript_delivery` | `ManuscriptDelivery` | no | Current manuscript delivery contract when the route consumes it. |
+| `quarto_probe` | `available \| unavailable \| unknown object` | no | Static probe summary with checked_at and version or reason. |
+| `render_consent` | `{ execute: true, confirmed_by, confirmed_at }` | no | Explicit consent for the current render action. |
+| `formal_gates` | `stable ID[]` | yes | Confirmed formal Gate IDs. |
+| `cost` | `{ effort, interaction }` | yes | Non-empty effort and interaction summaries. |
+| `handoff descriptor.role` | `non-empty string` | yes | Unique semantic role within its input or output list. |
+| `handoff descriptor.type` | `non-empty string` | yes | Artifact or information type. |
+| `handoff descriptor.path` | `safe project-relative path` | yes | External boundary file or directory; never a researchspec authority file. |
+| `handoff descriptor.purpose` | `non-empty string` | yes | Why the producer or consumer needs this role. |
+| `handoff descriptor.format` | `qmd \| html \| docx \| pdf \| latex \| latex-project` | no | Declared manuscript/render format when applicable. |
+| `handoff descriptor.renderer` | `quarto` | no | Requires format when present. |
+| `handoff descriptor.path_kind` | `file \| directory` | no | Directory is allowed only for latex-project. |
+| `handoff descriptor.entry_path` | `relative .tex path` | no | Required for latex-project. |
+| `handoff descriptor.limits` | `string[]` | no | Known limitations or exclusions. |
+| `handoff descriptor.notes` | `string` | no | Additional role-specific context. |
+| `--confirmed-by` | `non-empty human name` | yes | Human who confirmed this exact instance. |
+
+Constraints:
+
+- profile_entry and parent are mutually exclusive.
+- round requires parent.
+- handoff input roles and planned output roles must each be unique.
