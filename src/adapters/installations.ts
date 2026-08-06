@@ -20,6 +20,7 @@ export const ManagedInstallationSourceSchema = z.discriminatedUnion("kind", [
     skill_id: IdentifierSchema,
   }),
   z.strictObject({ kind: z.literal("command"), command_id: IdentifierSchema }),
+  z.strictObject({ kind: z.literal("shared-skill-target"), target_id: z.enum(["codex", "agents"]) }),
   z.strictObject({
     kind: z.literal("framework-profile"),
     profile_id: IdentifierSchema,
@@ -212,6 +213,11 @@ export async function reconcileAgentToolInstallations(input: {
 
     const selected = selectedTools.has(installation.tool_id);
     if (installation.target.scope !== "project") {
+      // Global Skill roots are shared by every workspace. A workspace may
+      // refresh its selected global namespace, but never owns its removal.
+      // Historical Codex prompts are compatibility input only and are handled
+      // by the explicit allowlisted cleanup planner instead of the manifest.
+      if (installation.tool_id === "codex" && installation.source.kind === "command") continue;
       retainedInstallations.push(installation);
       continue;
     }

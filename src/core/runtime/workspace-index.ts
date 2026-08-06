@@ -175,7 +175,7 @@ export async function loadCurrentWorkspaceIndex(workspace: string): Promise<Curr
     workspace,
     projectRoot: path.dirname(workspace),
     files,
-    config: config ?? CurrentWorkspaceConfigSchema.parse({ schema_version: "1", agent_tools: { selected: [], delivery: "both" }, literature_adapters: { selected: [] }, plugins: { selected: [] } }),
+    config: config ?? CurrentWorkspaceConfigSchema.parse({ schema_version: "1", agent_tools: { selected: [], delivery: "skills" }, literature_adapters: { selected: [] }, plugins: { selected: [] } }),
     manifest: manifest ?? ToolInstallationManifestSchema.parse({ schema_version: "1", package_version: "0.1.0", plugin_resolutions: [], literature_adapter_resolutions: [], installations: [] }),
     project: project ?? parseProjectSpec("---\nschema_version: \"1\"\nproject_id: invalid\n---\n"),
     sources: sources ?? SourcesSpecSchema.parse({ schema_version: "1", sources: [] }),

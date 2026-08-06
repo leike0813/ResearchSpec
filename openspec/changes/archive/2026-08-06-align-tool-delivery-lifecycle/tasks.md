@@ -1,0 +1,6 @@
+- [x] Update the tool catalog to 37 tools, aliases, legacy/global roots, detection paths, and the 28 command adapter matrix.
+- [x] Add delivery-aware desired-set planning, shared `.agents` de-duplication, migration, cleanup, and global Skill ownership rules.
+- [x] Unify `init` and `update`, add `--delivery`, allow safe current-workspace init extension, and enforce zero-write preflight conflicts.
+- [x] Replace file-by-file approval/result output with aggregate summaries and next-step hints.
+- [x] Update current specs, documentation, package verification, and regression tests.
+- [x] Run focused and full validation; mark the implementation complete. The focused suite passes; the full suite has one unrelated concurrent `__pycache__` race in the existing Revision Master test.

@@ -1,25 +1,25 @@
 ## Purpose
 
-ResearchSpec delivers complete ARSU skill groups and tool-neutral command
+ResearchSpec delivers complete ARSU Skill groups and tool-neutral command
 wrappers to a registry of selectable agent tools, with generated-file drift
-protection and shared-global prompt management. This capability is the generated
+protection and explicit legacy migration. This capability is the generated
 tool delivery layer driven by `init` / `update`.
 ## Requirements
 
 ### Requirement: Complete Agent Tool Registry
 
-ResearchSpec SHALL provide a single registry for all 31 selectable agent tools
+ResearchSpec SHALL provide a single registry for all 37 selectable agent tools
 supported by the bundled OpenSpec 1.5.0 reference.
 
 #### Scenario: All selects every registered tool
 
 - **WHEN** a user supplies `--tools all`
 - **THEN** the selection SHALL include exactly `amazon-q`, `antigravity`,
-  `auggie`, `bob`, `claude`, `cline`, `codex`, `forgecode`, `codebuddy`,
-  `continue`, `costrict`, `crush`, `cursor`, `factory`, `gemini`,
-  `github-copilot`, `iflow`, `junie`, `kilocode`, `kimi`, `kiro`, `lingma`,
-  `vibe`, `oh-my-pi`, `opencode`, `pi`, `qoder`, `qwen`, `roocode`, `trae`, and
-  `windsurf`
+  `auggie`, `bob`, `claude`, `cline`, `codeartsagent`, `codex`, `devin`,
+  `forgecode`, `codebuddy`, `continue`, `costrict`, `crush`, `cursor`, `factory`, `gemini`,
+  `github-copilot`, `hermes`, `iflow`, `junie`, `kilocode`, `kimi`, `kiro`, `lingma`,
+  `minimax-code`, `vibe`, `oh-my-pi`, `opencode`, `pi`, `qoder`, `qwen`, `rovodev`,
+  `roocode`, `trae`, `zcode`, and `agents`; `windsurf` resolves to `devin`
 
 #### Scenario: Tool expressions are validated
 
@@ -29,8 +29,9 @@ supported by the bundled OpenSpec 1.5.0 reference.
 
 ### Requirement: Complete ARSU Skill Delivery
 
-Every selected tool SHALL receive complete packaged copies of the four ARSU
-skill groups at its registered project-local skill root.
+Every selected Skill-capable tool SHALL receive complete packaged copies of the four ARSU
+Skill groups at its registered Skill root. Codex SHALL receive Skills even when
+the configured delivery mode is `commands`.
 
 #### Scenario: Skill trees are installed recursively
 
@@ -41,14 +42,16 @@ skill groups at its registered project-local skill root.
 
 ### Requirement: Complete Companion Skill Delivery
 
-Every selected tool SHALL receive generated copies of all four canonical
+Every selected Skill-capable tool SHALL receive generated copies of all four canonical
 ResearchSpec Companion Skills together with the four ARSU and two Core Skills;
 selected literature Adapter Skills SHALL be projected separately from their
-catalog.
+catalog. In `commands` mode, command-capable tools receive wrappers and
+Skill-only tools report a non-blocking capability diagnostic; Codex remains
+Skill-capable for this purpose.
 
 #### Scenario: Every tool receives the default ten-Skill surface
 
-- **WHEN** any of the 31 registered tools is selected without optional Adapter selection
+- **WHEN** any of the 37 registered tools is selected without optional Adapter selection
 - **THEN** it SHALL receive four ARSU, two Core and four Companion Skills
 - **AND** desired projection counts and files SHALL be derived from their owning catalogs rather than a second member list
 
@@ -68,8 +71,16 @@ catalog.
 - **AND** a missing stale file SHALL be removed from the manifest without error
 
 ### Requirement: Capability-Aware Command Delivery
-Each command-capable registered tool SHALL receive wrapper projections for the sixteen current public
-commands, while Skill-only tools SHALL receive only the fixed Skills.
+Each of the 28 command-capable registered tools SHALL receive wrapper projections for the sixteen current public commands when delivery includes commands. Skill-only tools SHALL receive only the fixed Skills, and Codex SHALL receive project Skills even in commands-only mode.
+
+#### Scenario: Commands delivery follows tool capability
+- **WHEN** `commands` delivery selects one command-backed tool and one Skill-only tool
+- **THEN** the command-backed tool SHALL receive sixteen wrappers
+- **AND** the Skill-only tool SHALL report a non-blocking capability diagnostic
+- **AND** Codex SHALL still receive its project Skills when selected
+
+### Requirement: Delivery Mode
+`agent_tools.delivery` SHALL be `skills`, `commands`, or `both`, with new workspaces defaulting to `skills` and existing values preserved when the option is omitted.
 
 #### Scenario: Tool installation is planned
 - **WHEN** a user selects Agent tools during init or update
@@ -130,16 +141,19 @@ unless an explicit force operation authorizes replacement.
 - **WHEN** update compares the profile with its converter-owned source
 - **THEN** it reports drift and does not overwrite the profile without `--force`
 
-### Requirement: Shared Global Codex Prompts
+### Requirement: Codex And Kimi Migration
 
-Codex command prompts SHALL be managed as shared-global workspace-neutral files
-under `$CODEX_HOME/prompts` or `~/.codex/prompts`.
+Codex SHALL write `.agents/skills` and Kimi SHALL write `.kimi-code/skills`.
+Known ResearchSpec files under `.codex/skills` and `.kimi/skills` MAY be migrated
+after replacement projection; custom files, configuration, drift, symlinks and
+unknown paths SHALL be preserved. Allowlisted historical Codex prompts under
+`$CODEX_HOME/prompts` MAY be removed only after the replacement Skill exists.
 
-#### Scenario: Global write is explicit outside a TTY
+#### Scenario: Legacy prompt cleanup is explicit outside a TTY
 
 - **WHEN** a non-interactive invocation would write Codex prompts
-- **THEN** Codex SHALL have been explicitly included in `--tools`
-- **AND** the write plan SHALL identify the out-of-workspace scope
+- **THEN** only allowlisted historical ResearchSpec prompt names SHALL be considered
+- **AND** cleanup SHALL be deferred unless `init`, `--force`, `--yes`, or an interactive confirmation authorizes it
 
 #### Scenario: Project deselection does not delete shared prompts
 
@@ -173,7 +187,7 @@ Every configured tool SHALL receive complete packaged copies of every currently 
 
 #### Scenario: Plugin Skills reach all tool adapters
 - **WHEN** one or more available non-empty domains are selected and tools are configured
-- **THEN** all 31 supported tools SHALL be capable of receiving every registered resource under each resolved Skill root
+- **THEN** all 37 supported tools SHALL be capable of receiving every registered resource under each resolved Skill root
 - **AND** projected paths SHALL be derived from registry IDs
 
 #### Scenario: New tool receives prior selections
@@ -307,3 +321,33 @@ The installation manifest SHALL identify `academic-pipeline.yaml` as a project-l
 #### Scenario: Fresh workspace is initialized
 - **WHEN** init projects the current workspace
 - **THEN** the manifest contains exactly one owner record for the project pipeline profile
+
+### Requirement: Current Tool Catalog
+The catalog SHALL contain exactly 37 current tools, preserve `windsurf` as an alias for `devin`, and describe legacy Skill roots, global Skill roots, detection paths, and command capability from one source of truth.
+
+#### Scenario: Catalog expressions resolve current IDs
+- **WHEN** a user selects `windsurf` or `all`
+- **THEN** `windsurf` SHALL resolve to `devin` and `all` SHALL resolve to exactly the 37 catalog IDs
+
+### Requirement: Delivery Modes
+`config.yaml.agent_tools.delivery` SHALL be `skills`, `commands`, or `both`. New workspaces SHALL default to `skills`; existing values SHALL be preserved unless explicitly changed. Codex SHALL always receive project `.agents/skills` Skills and SHALL never receive custom prompt files.
+
+#### Scenario: Commands-only keeps Codex Skills
+- **WHEN** a workspace uses `commands` delivery with Codex and a command-capable tool
+- **THEN** Codex SHALL receive `.agents/skills` and the command-capable tool SHALL receive wrappers
+- **AND** no Codex prompt target SHALL be created
+
+### Requirement: Safe Reconciliation
+Init and update SHALL calculate one ownership-aware plan, migrate known Codex/Kimi legacy trees, remove only unmodified ResearchSpec-generated files, preserve drift and user files, and perform zero writes when any blocking conflict exists.
+
+#### Scenario: Blocking conflict is zero-write
+- **WHEN** a planned generated target is a symlink or an unowned conflicting file
+- **THEN** init or update SHALL return a blocking diagnostic before changing config, manifest, or any projection
+
+### Requirement: Shared And Global Skill Roots
+Codex and the `agents` target SHALL share one `.agents/skills` tree and one ResearchSpec marker. MiniMax SHALL use a global `~/.minimax/skills` root and workspace reconciliation SHALL never remove it.
+
+#### Scenario: Shared target is written once
+- **WHEN** both Codex and `agents` are selected
+- **THEN** one `.agents/skills` tree and one ownership marker SHALL be planned
+- **AND** removing either selection SHALL preserve the shared global Skill files

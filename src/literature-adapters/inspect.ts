@@ -7,7 +7,7 @@ import {
   type LiteratureAdapterResolution,
   type ManagedInstallation,
 } from "../adapters/installations.js";
-import { getTool } from "../adapters/tools.js";
+import { getTool, toolSkillsRoot } from "../adapters/tools.js";
 import type { Diagnostic } from "../core/validation/types.js";
 import type { WorkspaceStaticContext } from "../core/runtime/workspace-index.js";
 import { sha256 } from "../core/workspace/write-plan.js";
@@ -208,8 +208,11 @@ export async function inspectLiteratureAdapters(
       if (!tool) continue;
       let complete = true;
       for (const asset of skillAssets) {
-        const targetPath = posix(path.join(tool.skillsDir, "skills", asset.skillId, asset.relativePath));
-        expectedInstallationKeys.add(`project:${targetPath}`);
+        const skillRoot = toolSkillsRoot(tool, projectRoot);
+        const targetPath = skillRoot.scope === "project"
+          ? posix(path.relative(projectRoot, path.join(skillRoot.root, asset.skillId, asset.relativePath)))
+          : path.join(skillRoot.root, asset.skillId, asset.relativePath);
+        expectedInstallationKeys.add(`${skillRoot.scope}:${targetPath}`);
         const result = await inspectExpected({
           projectRoot,
           targetPath,

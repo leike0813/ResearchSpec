@@ -13,6 +13,8 @@ import {
 } from "../literature-adapters/index.js";
 import type { LoadedPluginRegistry } from "../plugins/registry.js";
 import { planToolDelivery } from "./delivery.js";
+import type { DeliveryMode } from "./tools.js";
+import { planLegacyToolReconciliation } from "./legacy-reconciliation.js";
 import {
   deduplicateInstallations,
   reconcileAgentToolInstallations,
@@ -31,6 +33,7 @@ export async function planWorkspaceDelivery(input: {
   projectRoot: string;
   workspaceRoot?: string;
   toolIds: readonly string[];
+  delivery?: DeliveryMode;
   selectedToolIds: readonly string[];
   reconciledToolIds: readonly string[];
   selectedLiteratureAdapterIds: readonly string[];
@@ -41,6 +44,9 @@ export async function planWorkspaceDelivery(input: {
   preserveSkillIds?: readonly string[];
   platform?: NodeJS.Platform;
   architecture?: NodeJS.Architecture;
+  operation?: "init" | "update";
+  reconcileLegacy?: boolean;
+  globalCleanupAuthorized?: boolean;
 }): Promise<WorkspaceDeliveryPlan> {
   const profileDefinitions = [
     { profile: ACADEMIC_PIPELINE_PROFILE, projection: ACADEMIC_PIPELINE_PROFILE_PROJECTION },
@@ -74,6 +80,7 @@ export async function planWorkspaceDelivery(input: {
   const toolDelivery = await planToolDelivery({
     projectRoot: input.projectRoot,
     toolIds: input.toolIds,
+    delivery: input.delivery ?? "both",
     existingInstallations: input.existingInstallations,
     force: input.force,
     pluginRegistry: input.pluginRegistry,
@@ -87,9 +94,22 @@ export async function planWorkspaceDelivery(input: {
     selectedToolIds: input.selectedToolIds,
     preserveSkillIds: [...LITERATURE_ADAPTER_SKILL_IDS, ...(input.preserveSkillIds ?? [])],
   });
+  const legacyReconciliation = input.reconcileLegacy
+    ? await planLegacyToolReconciliation({
+        projectRoot: input.projectRoot,
+        selectedToolIds: input.selectedToolIds,
+        desiredInstallations: toolDelivery.installations,
+        existingInstallations: input.existingInstallations,
+        plannedOperations: [...toolDelivery.operations, ...toolReconciliation.operations],
+        operation: input.operation ?? "update",
+        globalCleanupAuthorized: input.globalCleanupAuthorized ?? false,
+        reconciledToolIds: input.reconciledToolIds,
+        delivery: input.delivery ?? "both",
+      })
+    : { operations: [] as PlannedWrite[], diagnostics: [] as Diagnostic[] };
   const literatureDelivery = await planLiteratureAdapterDelivery({
     projectRoot: input.projectRoot,
-    toolIds: input.selectedToolIds,
+    toolIds: toolDelivery.skillToolIds,
     selectedAdapterIds: input.selectedLiteratureAdapterIds,
     existingInstallations: input.existingInstallations,
     force: input.force,
@@ -107,6 +127,7 @@ export async function planWorkspaceDelivery(input: {
       ...profileOperations,
       ...toolDelivery.operations,
       ...toolReconciliation.operations,
+      ...legacyReconciliation.operations,
       ...literatureDelivery.operations,
       ...literatureReconciliation.operations,
     ],
@@ -119,6 +140,7 @@ export async function planWorkspaceDelivery(input: {
     diagnostics: [
       ...toolDelivery.diagnostics,
       ...toolReconciliation.diagnostics,
+      ...legacyReconciliation.diagnostics,
       ...literatureDelivery.diagnostics,
       ...literatureReconciliation.diagnostics,
     ],

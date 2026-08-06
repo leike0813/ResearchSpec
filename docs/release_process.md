@@ -40,7 +40,7 @@ git diff --check
 
 `release:verify` packs and installs the real tarball in a temporary directory. It verifies ten fixed
 base Skills, the explicitly selected seven-Skill Zotero Adapter, sixteen top-level commands, sixteen
-wrappers for each of 28 command-capable tools, selected Zotero runtime metadata, a fresh schema `"1"` workspace, unsupported-workspace zero-write
+wrappers for each of 28 command-capable tools when `delivery` includes commands, selected Zotero runtime metadata, a fresh schema `"1"` workspace, unsupported-workspace zero-write
 behavior, packaged current documentation, and absence of retired public runtime modules.
 
 ## 2. Hosted matrix

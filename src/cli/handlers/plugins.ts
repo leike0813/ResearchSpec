@@ -14,6 +14,7 @@ import {
   type ManagedInstallation,
 } from "../../adapters/installations.js";
 import { planWorkspaceDelivery } from "../../adapters/workspace-delivery.js";
+import { getTool, toolSupportsCommands } from "../../adapters/tools.js";
 import { buildPluginSkillInstructions, PluginSkillInstructionsError } from "../../plugins/instructions.js";
 import {
   availableDomains,
@@ -237,7 +238,7 @@ export async function handlePluginUninstall(
     selected_domains: selected,
     resolved_skills: [...desiredSkillIds].sort(),
     dry_run: context.dryRun,
-    plan: summarizePlan(operations),
+    plan: summarizePlan(operations, path.dirname(workspace)),
   }, { stdout: formatPlan(context.dryRun ? "ResearchSpec plugin uninstall dry run" : "ResearchSpec domain plugins uninstalled", workspace, operations, context.dryRun) });
 }
 
@@ -259,6 +260,7 @@ async function reconcilePluginSelection(
     projectRoot,
     workspaceRoot: workspace,
     toolIds,
+    delivery: snapshot.config.agent_tools.delivery,
     selectedToolIds: toolIds,
     selectedLiteratureAdapterIds: snapshot.config.literature_adapters.selected,
     existingInstallations,
@@ -294,7 +296,7 @@ async function reconcilePluginSelection(
     domain_id: domainId,
     version: pluginRegistry.domains.get(domainId)?.version ?? null,
   }));
-  const plan = summarizePlan(operations);
+  const plan = summarizePlan(operations, projectRoot);
   if (action === "install" && !context.dryRun && !context.interactive && !context.yes) {
     throw new CliError(
       "confirmation_required",
@@ -392,28 +394,29 @@ export async function authoritativeWrite(
   };
 }
 
-export function summarizePlan(operations: readonly PlannedWrite[]) {
-  return operations.map((operation) => ({
-    action: operation.action,
-    path: operation.path,
-    relativePath: operation.relativePath,
-    scope: operation.scope,
-    ownership: operation.ownership,
-    previousHash: operation.previousHash,
-    nextHash: operation.nextHash,
-    reason: operation.reason,
-  }));
+export function summarizePlan(operations: readonly PlannedWrite[], projectRoot?: string) {
+  return aggregatePlan(operations, projectRoot);
 }
 
 export function writableCount(operations: readonly PlannedWrite[]): number {
   return operations.filter((item) => item.action === "create" || item.action === "refresh" || item.action === "remove-owned").length;
 }
 
-export function formatPlan(title: string, workspace: string, operations: readonly PlannedWrite[], dryRun: boolean): string {
-  const labels: Record<PlannedWrite["action"], string> = dryRun
-    ? { create: "Would create", refresh: "Would refresh", "remove-owned": "Would remove", move: "Would move", "skip-unchanged": "skip-unchanged", "skip-drift": "skip-drift", conflict: "conflict" }
-    : { create: "Created", refresh: "Refreshed", "remove-owned": "Removed", move: "Moved", "skip-unchanged": "skip-unchanged", "skip-drift": "skip-drift", conflict: "conflict" };
-  return `${title}\nWorkspace: ${workspace}\n${operations.map((item) => `${labels[item.action]}: ${item.path}`).join("\n")}\n`;
+export function formatPlan(title: string, workspace: string, operations: readonly PlannedWrite[], dryRun: boolean, nextSteps: readonly string[] = []): string {
+  const summary = aggregatePlan(operations, path.dirname(workspace));
+  const verb = dryRun ? "Would" : "";
+  const lines = [title, `Workspace: ${workspace}`, `Project root: ${path.dirname(workspace)}`];
+  for (const entry of summary.directories) {
+    const prefix = verb ? `${verb} ` : "";
+    if (entry.create) lines.push(`${prefix}Created ${entry.create} files in ${entry.directory}`);
+    if (entry.refresh) lines.push(`${prefix}Refreshed ${entry.refresh} files in ${entry.directory}`);
+    if (entry.remove) lines.push(`${prefix}Removed ${entry.remove} files in ${entry.directory}`);
+    if (entry.preserve) lines.push(`Preserved ${entry.preserve} files in ${entry.directory}`);
+    if (entry.conflict) lines.push(`Conflict in ${entry.directory}: ${entry.conflict} files`);
+  }
+  if (lines.length === 3) lines.push("No generated file changes.");
+  if (nextSteps.length) lines.push("Next steps:", ...nextSteps.map((step) => `- ${step}`));
+  return `${lines.join("\n")}\n`;
 }
 
 export function operationDiagnostics(operations: readonly PlannedWrite[]): Diagnostic[] {
@@ -440,14 +443,57 @@ export function deliveryResult<T>(
     : base;
 }
 
-export function previewSummary(operations: readonly PlannedWrite[]): string {
-  const counts = new Map<string, number>();
-  for (const operation of operations) counts.set(operation.action, (counts.get(operation.action) ?? 0) + 1);
-  const globals = operations.filter((operation) => operation.scope === "shared-global").map((operation) => operation.path);
+export function previewSummary(operations: readonly PlannedWrite[], metadata: { projectRoot?: string; selectedTools?: readonly string[]; delivery?: "skills" | "commands" | "both" } = {}): string {
+  const summary = aggregatePlan(operations, metadata.projectRoot);
   return [
-    `Plan: ${[...counts].map(([action, count]) => `${action}=${String(count)}`).join(", ")}`,
-    ...(globals.length ? ["Shared-global writes:", ...globals.map((filePath) => `- ${filePath}`)] : []),
+    `Project root: ${metadata.projectRoot ?? summary.project_root ?? "unknown"}`,
+    ...(metadata.selectedTools ? [`Selected tools: ${metadata.selectedTools.join(", ") || "none"}`] : []),
+    ...(metadata.delivery ? [`Delivery: ${metadata.delivery}`] : []),
+    `Write directories: ${summary.directories.map((entry) => entry.directory).join(", ") || "none"}`,
+    `Counts: create=${summary.counts.create}, refresh=${summary.counts.refresh}, remove=${summary.counts.remove}, preserve=${summary.counts.preserve}, conflict=${summary.counts.conflict}`,
   ].join("\n");
+}
+
+export function nextStepsForTools(toolIds: readonly string[], delivery: "skills" | "commands" | "both"): string[] {
+  const steps: string[] = [];
+  for (const toolId of toolIds) {
+    if (toolId === "codex") steps.push("Codex: $researchspec-navigate");
+    else if (toolId === "kimi") steps.push("Kimi Code: /skill:researchspec-navigate");
+    else if (delivery !== "skills" && toolSupportsCommands(getTool(toolId)!)) steps.push(`${getTool(toolId)!.name}: researchspec-* command entrypoints`);
+    else steps.push(`${getTool(toolId)?.name ?? toolId}: invoke researchspec-navigate as a Skill or describe the research request`);
+  }
+  return [...new Set(steps)];
+}
+
+function aggregatePlan(operations: readonly PlannedWrite[], projectRoot?: string) {
+  const counts = { create: 0, refresh: 0, remove: 0, preserve: 0, conflict: 0 };
+  const directories = new Map<string, typeof counts>();
+  for (const operation of operations) {
+    const directory = operationDirectory(operation);
+    const bucket = directories.get(directory) ?? { create: 0, refresh: 0, remove: 0, preserve: 0, conflict: 0 };
+    if (operation.action === "create") { counts.create += 1; bucket.create += 1; }
+    else if (operation.action === "refresh") { counts.refresh += 1; bucket.refresh += 1; }
+    else if (operation.action === "remove-owned" || operation.action === "move") { counts.remove += 1; bucket.remove += 1; }
+    else if (operation.action === "conflict") { counts.conflict += 1; bucket.conflict += 1; }
+    else { counts.preserve += 1; bucket.preserve += 1; }
+    directories.set(directory, bucket);
+  }
+  return {
+    project_root: projectRoot ? path.resolve(projectRoot) : null,
+    counts,
+    directories: [...directories.entries()].sort(([left], [right]) => left.localeCompare(right)).map(([directory, bucket]) => ({ directory, ...bucket })),
+  };
+}
+
+function operationDirectory(operation: PlannedWrite): string {
+  if (operation.scope === "shared-global") return path.dirname(operation.path);
+  const relative = operation.relativePath ?? path.basename(operation.path);
+  const parts = relative.split(/[\\/]/);
+  const skillsIndex = parts.indexOf("skills");
+  if (skillsIndex >= 0) return parts.slice(0, skillsIndex + 1).join("/");
+  const commandIndex = parts.findIndex((part) => part === "commands" || part === "workflows" || part === "prompts");
+  if (commandIndex >= 0) return parts.slice(0, commandIndex + 1).join("/");
+  return path.posix.dirname(relative.split(path.sep).join("/"));
 }
 
 async function requireWorkspace(context: CommandContext): Promise<string> {
@@ -495,12 +541,11 @@ function uniqueSorted(values: readonly string[]): string[] {
 }
 
 function summarizePluginOperations(operations: ReturnType<typeof summarizePlan>) {
-  const counts = new Map<string, number>();
-  for (const operation of operations) counts.set(operation.action, (counts.get(operation.action) ?? 0) + 1);
+  const counts = operations.counts;
   return {
-    operation_count: operations.length,
-    writable_count: operations.filter((item) => item.action === "create" || item.action === "refresh" || item.action === "remove-owned").length,
-    actions: Object.fromEntries([...counts.entries()].sort(([left], [right]) => left.localeCompare(right))),
+    operation_count: operations.directories.reduce((total, item) => total + item.create + item.refresh + item.remove + item.preserve + item.conflict, 0),
+    writable_count: counts.create + counts.refresh + counts.remove,
+    actions: counts,
   };
 }
 

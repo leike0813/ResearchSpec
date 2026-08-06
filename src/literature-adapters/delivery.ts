@@ -7,7 +7,7 @@ import {
   type ManagedInstallation,
   type ManagedInstallationSource,
 } from "../adapters/installations.js";
-import { getTool } from "../adapters/tools.js";
+import { getTool, toolSkillsRoot } from "../adapters/tools.js";
 import type { Diagnostic } from "../core/validation/types.js";
 import { planFile, sha256, type PlannedWrite } from "../core/workspace/write-plan.js";
 import { desiredLiteratureAdapters } from "./catalog.js";
@@ -39,13 +39,6 @@ export async function reconcileLiteratureAdapterInstallations(input: {
     }
     if (installation.target.scope !== "project") {
       retainedInstallations.push(installation);
-      diagnostics.push({
-        severity: "error",
-        code: "literature_adapter_scope_invalid",
-        message: "Literature adapter files must be project-local.",
-        blocking: true,
-        details: { target: installation.target },
-      });
       continue;
     }
     const target = path.resolve(input.projectRoot, installation.target.path);
@@ -189,10 +182,12 @@ export async function planLiteratureAdapterDelivery(input: {
       if (!tool) continue;
       const operationStart = operations.length;
       for (const sourceFile of await readLiteratureAdapterSkillAssets(adapter)) {
-          const target = path.join(input.projectRoot, tool.skillsDir, "skills", sourceFile.skillId, sourceFile.relativePath);
+          const skillRoot = toolSkillsRoot(tool, input.projectRoot);
+          const target = path.join(skillRoot.root, sourceFile.skillId, sourceFile.relativePath);
           await addManaged({
             target,
-            manifestPath: posix(path.relative(input.projectRoot, target)),
+            manifestPath: skillRoot.scope === "project" ? posix(path.relative(input.projectRoot, target)) : target,
+            scope: skillRoot.scope,
             content: sourceFile.content,
             source: literatureSource(adapter.adapter_id, adapter.identity.release_set_id, "skill", sourceFile.skillId),
             owner: "agent-tool",
@@ -226,6 +221,7 @@ export async function planLiteratureAdapterDelivery(input: {
   async function addManaged(value: {
     target: string;
     manifestPath: string;
+    scope?: "project" | "shared-global";
     content: string | Uint8Array;
     source: ManagedInstallationSource;
     owner: ManagedInstallation["owner"];
@@ -233,7 +229,8 @@ export async function planLiteratureAdapterDelivery(input: {
     executable: boolean;
     mode?: number;
   }): Promise<void> {
-    const key = `project:${value.manifestPath}`;
+    const scope = value.scope ?? "project";
+    const key = `${scope}:${value.manifestPath}`;
     const prior = recorded.get(key);
     const operation = await planFile({
       path: value.target,
@@ -273,7 +270,7 @@ export async function planLiteratureAdapterDelivery(input: {
       owner: value.owner,
       tool_id: value.toolId,
       source: value.source,
-      target: { scope: "project", path: value.manifestPath, executable: value.executable },
+      target: { scope, path: value.manifestPath, executable: value.executable },
       sha256: hash,
     });
   }

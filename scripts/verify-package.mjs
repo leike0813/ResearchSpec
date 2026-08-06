@@ -120,7 +120,7 @@ try {
   }
 
   const environment = { ...process.env, CODEX_HOME: codexHome };
-  run(bin, ["init", projectDirectory, "--tools", "codex", "--literature-adapters", "zotero-library", "--json"], installDirectory, environment);
+  run(bin, ["init", projectDirectory, "--tools", "codex", "--delivery", "skills", "--literature-adapters", "zotero-library", "--json"], installDirectory, environment);
   const currentWorkspace = path.join(projectDirectory, "researchspec");
   const currentConfig = parseYaml(await readFile(path.join(currentWorkspace, "config.yaml"), "utf8"));
   const currentProfile = parseYaml(await readFile(path.join(currentWorkspace, "profiles", "academic-pipeline.yaml"), "utf8"));
@@ -136,10 +136,10 @@ try {
   for (const retiredPath of ["runs", "playbooks", "draft-patches", "artifact-registry.json"]) {
     assert(!await pathExists(path.join(currentWorkspace, retiredPath)), `Installed init created retired path: ${retiredPath}`);
   }
-  const installedSkills = (await directoryNames(path.join(projectDirectory, ".codex", "skills"))).sort();
+  const installedSkills = (await directoryNames(path.join(projectDirectory, ".agents", "skills"))).sort();
   assert(equal(installedSkills, expectedSkills), `Installed Skill surface mismatch: ${installedSkills.join(", ")}`);
   for (const skill of expectedSkills) {
-    const license = await readFile(path.join(projectDirectory, ".codex", "skills", skill, "LICENSE"), "utf8");
+    const license = await readFile(path.join(projectDirectory, ".agents", "skills", skill, "LICENSE"), "utf8");
     assert(license.trim().length > 0, `Installed Skill license is empty: ${skill}`);
   }
   await verifyInstalledGuidance(installedPackageRoot, projectDirectory, handbookDigest);
@@ -155,12 +155,15 @@ try {
   const installationManifest = JSON.parse(await readFile(path.join(projectDirectory, "researchspec", "tool-installation-manifest.json"), "utf8"));
   assert(installationManifest.literature_adapter_resolutions?.length === 1, "Installed manifest has no selected literature adapter resolution.");
   assert(installationManifest.literature_adapter_resolutions[0].projection_state === "complete", "Installed literature adapter Skill projection is incomplete.");
-  const prompts = (await readdir(path.join(codexHome, "prompts"))).filter((file) => file.startsWith("researchspec-") && file.endsWith(".md")).sort();
-  assert(prompts.length === 16, `Installed Codex prompt count mismatch: ${String(prompts.length)}`);
+  const promptRoot = path.join(codexHome, "prompts");
+  const prompts = await pathExists(promptRoot)
+    ? (await readdir(promptRoot)).filter((file) => file.startsWith("researchspec-") && file.endsWith(".md")).sort()
+    : [];
+  assert(prompts.length === 0, `Legacy Codex prompts were unexpectedly generated: ${prompts.join(", ")}`);
   run(bin, ["check", "all", "--strict", "--json"], projectDirectory, environment);
   await verifyInstalledCurrentJourney(bin, projectDirectory, environment);
 
-  run(bin, ["init", allToolsProjectDirectory, "--tools", "all", "--json"], installDirectory, environment);
+  run(bin, ["init", allToolsProjectDirectory, "--tools", "all", "--delivery", "both", "--json"], installDirectory, environment);
   await verifyAllToolDelivery(allToolsProjectDirectory, handbookDigest);
 
   const installedConfigBeforeRemovedOptions = await readFile(path.join(currentWorkspace, "config.yaml"), "utf8");
@@ -343,7 +346,7 @@ async function verifyInstalledGuidance(installedPackageRoot, projectRoot, handbo
   for (const skill of expectedSkills.slice(0, 4)) {
     assert(contracts.skill_groups?.[skill]?.profile_id === "researchspec-preflight-v10", `Installed ARSU profile is not v10: ${skill}`);
   }
-  const navigateHandbook = await readFile(path.join(projectRoot, ".codex", "skills", "researchspec-navigate", "references", "cli-handbook.md"));
+  const navigateHandbook = await readFile(path.join(projectRoot, ".agents", "skills", "researchspec-navigate", "references", "cli-handbook.md"));
   assert(sha256(navigateHandbook) === handbookDigest, "Installed Codex Navigate handbook differs from the packaged handbook.");
 }
 
@@ -402,9 +405,10 @@ async function verifyAllToolDelivery(projectRoot, handbookDigest) {
     item?.source?.kind === "companion-skill"
     && item.source.skill_id === "researchspec-navigate"
     && typeof item?.target?.path === "string"
+    && item.target.scope === "project"
     && item.target.path.replaceAll("\\", "/").endsWith("/researchspec-navigate/references/cli-handbook.md"));
-  assert(handbookReferences.length === 31, `Expected 31 Navigate handbook references, found ${String(handbookReferences.length)}.`);
-  assert(new Set(handbookReferences.map((item) => item.tool_id)).size === 31, "Navigate handbook references do not cover all registered tools.");
+  assert(handbookReferences.length === 35, `Expected 35 project Navigate handbook references, found ${String(handbookReferences.length)}.`);
+  assert(new Set(handbookReferences.map((item) => item.tool_id)).size === 35, "Navigate handbook references do not cover all project Skill writers.");
   for (const reference of handbookReferences) {
     assert(reference.target.scope === "project", `Navigate handbook reference is not project-local: ${String(reference.tool_id)}`);
     assert(reference.sha256 === handbookDigest, `Navigate handbook manifest digest differs for ${String(reference.tool_id)}.`);
@@ -434,7 +438,7 @@ async function verifyAllToolDelivery(projectRoot, handbookDigest) {
     skills.add(skillId);
     baseSkillsByTool.set(installation.tool_id, skills);
   }
-  assert(baseSkillsByTool.size === 31, `Expected base Skills for 31 tools, found ${String(baseSkillsByTool.size)}.`);
+  assert(baseSkillsByTool.size === 36, `Expected base Skills for 36 physical Skill writers, found ${String(baseSkillsByTool.size)}.`);
   for (const [toolId, skills] of baseSkillsByTool) assert(skills.size === 10, `Base Skill count differs for ${String(toolId)}.`);
 }
 

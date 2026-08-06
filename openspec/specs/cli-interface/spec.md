@@ -252,6 +252,33 @@ plan-hash option.
 - **WHEN** a user supplies `--profile`, `--migrate-runtime`, `--rollback` or a runtime expected-plan option
 - **THEN** the CLI SHALL reject the option without modifying the workspace
 
+### Requirement: Agent Delivery Selection
+
+`init` and `update` SHALL accept `--delivery skills|commands|both`. A new
+workspace SHALL default to `skills`; an existing current workspace SHALL retain
+its configured value when the option is omitted. Init SHALL safely refresh or
+extend an existing current workspace, while old or unknown workspaces remain
+unchanged.
+
+#### Scenario: Existing delivery is preserved
+
+- **WHEN** update runs without `--delivery`
+- **THEN** it SHALL preserve the configured delivery value
+- **AND** an explicit `--delivery` SHALL reconcile obsolete generated surfaces
+
+### Requirement: Bootstrap Summary And Preflight
+
+Bootstrap preview and result data SHALL aggregate counts by project/global
+directory and SHALL omit ordinary per-file lists. Drift and conflict
+diagnostics MAY identify their exact paths. All blocking conflicts SHALL be
+reported before config, manifest, or projection writes begin.
+
+#### Scenario: Bootstrap reports an aggregate plan
+
+- **WHEN** init, update, or dry-run reports its plan
+- **THEN** human and JSON output SHALL include directories and create, refresh, remove, preserve, and conflict counts
+- **AND** ordinary generated file paths SHALL not be listed outside drift or conflict diagnostics
+
 ### Requirement: Unsupported Workspace Is Zero-Write
 Every command that discovers an old or unknown workspace SHALL stop before planning or performing a
 write.
@@ -259,3 +286,24 @@ write.
 #### Scenario: Update sees an old workspace
 - **WHEN** `update` encounters old `runs/current` authority
 - **THEN** it returns an unsupported-format error and leaves all bytes unchanged
+
+### Requirement: Bootstrap Delivery Option
+`init` and `update` SHALL accept `--delivery <skills|commands|both>`. Current workspaces SHALL retain their configured value when omitted, and init SHALL safely extend an existing current workspace.
+
+#### Scenario: Omitted delivery preserves current intent
+- **WHEN** update runs without `--delivery`
+- **THEN** the workspace's configured delivery mode SHALL remain unchanged
+
+### Requirement: Aggregate Bootstrap Output
+Preview, human output, JSON data, and dry-run output SHALL report roots and aggregate create/refresh/remove/preserve/conflict counts. Individual paths SHALL appear only in structured diagnostics.
+
+#### Scenario: Summary omits file listings
+- **WHEN** init or update returns human or JSON output
+- **THEN** it SHALL include project root, selected tools, delivery, directories, and action counts without a per-file approval list
+
+### Requirement: Preflight Atomicity
+A bootstrap operation with a blocking tool-delivery or ownership conflict SHALL return before executing any write, including config and manifest updates.
+
+#### Scenario: Conflict leaves workspace unchanged
+- **WHEN** a selected projection conflicts during preflight
+- **THEN** the command SHALL return a blocking error and leave all workspace bytes unchanged

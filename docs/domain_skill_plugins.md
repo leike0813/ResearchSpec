@@ -155,7 +155,7 @@ plugins:
     - bioinformatics-and-computational-biology
 ```
 
-For each operation ResearchSpec computes the sorted union of selected domains' direct Skills and transitive required dependencies. Multiple domains and dependency paths are deduplicated by global Skill ID. All configured Agent tools receive the same resolved set; adding a tool later backfills the current closure. Domain Skills add no command wrappers, so the fixed wrapper frontier remains sixteen wrappers on each of the 28 command-capable tools.
+For each operation ResearchSpec computes the sorted union of selected domains' direct Skills and transitive required dependencies. Multiple domains and dependency paths are deduplicated by global Skill ID. All configured Agent tools receive the same resolved set; adding a tool later backfills the current closure. Domain Skills add no command wrappers, so the fixed wrapper frontier remains sixteen wrappers on each of the 28 command-capable tools when the configured delivery includes commands. The complete catalog contains 37 tools, and Codex plus the shared `.agents` target use one physical Skill tree.
 
 `tool-installation-manifest.json` records vendor/Skill file ownership and a resolution snapshot for every selected available domain. Config is user intent; snapshots are derived recovery evidence retained while a selection is unavailable.
 

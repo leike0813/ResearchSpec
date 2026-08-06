@@ -38,8 +38,8 @@ catalog-backed selections.
 #### Scenario: Target delivery matrix is generated
 
 - **WHEN** target Agent assets are projected to the supported tool catalog
-- **THEN** all 31 tools SHALL be capable of receiving ten fixed Skills plus selected optional Skills
-- **AND** the 28 command-capable tools SHALL receive exactly sixteen thin command wrappers
+- **THEN** all 37 tools SHALL be capable of receiving ten fixed Skills plus selected optional Skills
+- **AND** the 28 command-capable tools SHALL receive exactly sixteen thin command wrappers when delivery includes commands
 
 #### Scenario: Wrapper does not own workflow semantics
 - **WHEN** a command wrapper invokes a Skill
@@ -87,3 +87,17 @@ generated Skill files.
 - **THEN** update SHALL preserve the user-modified file under the common drift
   policy
 - **AND** it SHALL report degraded projection without executing the file
+
+### Requirement: Fixed Surface
+The public catalog SHALL expose 37 tools, of which 28 have command adapters and the remainder are Skill-only. The command matrix SHALL use current Devin, ZCode, Qwen, CodeArts, Hermes, Rovo Dev, MiniMax, and shared `.agents` paths.
+
+#### Scenario: Capability matrix is exact
+- **WHEN** the registry is loaded
+- **THEN** it SHALL contain 37 unique IDs and exactly 28 command-backed definitions
+
+### Requirement: Shared Writer
+Selecting Codex and `agents` together SHALL generate one shared Skill tree and SHALL not duplicate writes or manifest entries.
+
+#### Scenario: Codex owns the shared projection
+- **WHEN** Codex and `agents` are selected for Skill delivery
+- **THEN** the planner SHALL emit one physical Skill tree with a ResearchSpec target marker

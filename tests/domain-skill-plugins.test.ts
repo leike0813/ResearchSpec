@@ -61,7 +61,7 @@ void test("registry validates multi-vendor domains, resources, provenance, and d
 void test("production domain installation projects Scientific Agent Skills without new wrappers", async () => {
   const root = await tempProject();
   try {
-    assert.equal(runCli(["init", root, "--tools", "claude"]).status, 0);
+    assert.equal(runCli(["init", root, "--tools", "claude", "--delivery", "both"]).status, 0);
     const registry = await loadPluginRegistry();
     await handlePluginInstall(["quantum-physics"], {}, context(root), registry);
     for (const id of ["cirq", "pennylane", "qiskit"]) {
@@ -79,7 +79,7 @@ void test("production domain installation projects Scientific Agent Skills witho
 void test("production Education domain installs complete static Skills without new wrappers", async () => {
   const root = await tempProject();
   try {
-    assert.equal(runCli(["init", root, "--tools", "claude"]).status, 0);
+    assert.equal(runCli(["init", root, "--tools", "claude", "--delivery", "both"]).status, 0);
     const registry = await loadPluginRegistry();
     await handlePluginInstall(["education-systems"], {}, context(root), registry);
     const educationSkills = registry.domains.get("education-systems")?.skills ?? [];
@@ -149,8 +149,8 @@ void test("resolved domain delivery reaches all adapters without wrappers or scr
     const delivery = await planToolDelivery({ projectRoot: root, toolIds: TOOL_IDS, existingInstallations: [], force: false, pluginRegistry: registry, selectedPluginIds: ["geoscience"] });
     const domainFiles = delivery.installations.filter(isDomainSkillInstallation);
     const resourcesPerTool = (registry.skillFiles.get("rock-mechanics")?.length ?? 0) + (registry.skillFiles.get("research-tables")?.length ?? 0);
-    assert.equal(domainFiles.length, TOOL_IDS.length * resourcesPerTool);
-    assert.equal(new Set(domainFiles.map((item) => item.tool_id)).size, 31);
+    assert.equal(domainFiles.length, 36 * resourcesPerTool);
+    assert.equal(new Set(domainFiles.map((item) => item.tool_id)).size, 36);
     assert.deepEqual([...new Set(domainFiles.map((item) => item.source.skill_id))].sort(), ["research-tables", "rock-mechanics"]);
     assert.ok(domainFiles.every((item) => item.source.vendor_id && item.source.vendor_release));
     assert.equal(delivery.installations.filter((item) => item.source.kind === "command").length, TOOLS.filter((tool) => tool.command).length * 16);
@@ -253,7 +253,12 @@ void test("lifecycle is idempotent, force-refreshes drift, and retains shared de
     const registry = await loadPluginRegistry(FIXTURE_ROOT);
     await handlePluginInstall(["geoscience", "quantitative-methods"], {}, context(root), registry);
     const repeated = await handlePluginInstall(["geoscience"], {}, context(root), registry);
-    assert.ok(planActions(repeated).every((action) => action === "skip-unchanged"));
+    const repeatedPlan = planSummary(repeated);
+    assert.equal(repeatedPlan.counts.create, 0);
+    assert.equal(repeatedPlan.counts.refresh, 0);
+    assert.equal(repeatedPlan.counts.remove, 0);
+    assert.equal(repeatedPlan.counts.conflict, 0);
+    assert.ok(repeatedPlan.counts.preserve > 0);
     const skillPath = path.join(root, ".forge/skills/rock-mechanics/SKILL.md");
     await writeFile(skillPath, "user drift", "utf8");
     const preserved = await handlePluginUpdate(["geoscience"], context(root), registry);
@@ -328,7 +333,9 @@ function context(root: string): CommandContext { return { command: "plugin", cwd
 async function fixtureCopy(): Promise<string> { const root = await tempProject(); await cp(FIXTURE_ROOT, root, { recursive: true, force: true }); return root; }
 function hasDiagnostic(code: string): (error: unknown) => boolean { return (error) => error instanceof PluginRegistryError && error.diagnostics.some((item) => item.code === code); }
 function isCliCode(error: unknown, code: string): boolean { return Boolean(error && typeof error === "object" && "code" in error && (error as { code?: string }).code === code); }
-function planActions(result: { data?: unknown }): string[] { return ((result.data as { plan?: Array<{ action?: string }> } | undefined)?.plan ?? []).map((item) => item.action ?? ""); }
+function planSummary(result: { data?: unknown }): { counts: { create: number; refresh: number; remove: number; preserve: number; conflict: number } } {
+  return (result.data as { plan: { counts: { create: number; refresh: number; remove: number; preserve: number; conflict: number } } }).plan;
+}
 async function exists(filePath: string): Promise<boolean> { try { await readFile(filePath); return true; } catch { return false; } }
 
 interface RegistryObject {

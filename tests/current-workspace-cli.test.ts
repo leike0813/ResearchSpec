@@ -5,7 +5,9 @@ import path from "node:path";
 import { test } from "node:test";
 import { strFromU8, unzipSync } from "fflate";
 
+import { COMPANION_INTENTS, renderCompanionSkill } from "../src/adapters/companion/index.js";
 import { sha256 } from "../src/core/workspace/write-plan.js";
+import { MIT_LICENSE_TEXT } from "../src/licensing.js";
 
 import { cleanup, parseEnvelope, runCli, tempProject } from "./helpers/cli.js";
 
@@ -34,7 +36,92 @@ void test("fresh init creates only the current workspace authority tree", async 
     assert.equal(parseEnvelope(runCli(["check", "profiles", "--json"], root)).ok, true);
     assert.equal(parseEnvelope(runCli(["doctor", "--json"], root)).ok, true);
     assert.deepEqual(parseEnvelope<{ domains: unknown[] }>(runCli(["plugin", "list", "--installed", "--json"], root)).data?.domains, []);
-    assert.equal(parseEnvelope(runCli(["init", root, "--tools", "none", "--json"])).error?.code, "workspace_exists");
+    const refreshed = parseEnvelope(runCli(["init", root, "--tools", "none", "--json"]));
+    assert.equal(refreshed.ok, true);
+    assert.equal(refreshed.command, "init");
+  } finally {
+    await cleanup(root);
+  }
+});
+
+void test("new workspaces default to Skills and delivery switches reconcile both surfaces", async () => {
+  const root = await tempProject();
+  try {
+    const initialized = parseEnvelope<{
+      delivery: string;
+      next_steps: string[];
+      plan: { counts: Record<string, number>; directories: Array<{ directory: string }> };
+    }>(runCli(["init", root, "--tools", "codex,kimi,qwen", "--json"]));
+    assert.equal(initialized.ok, true);
+    assert.equal(initialized.data?.delivery, "skills");
+    assert.ok(initialized.data?.next_steps.includes("Codex: $researchspec-navigate"));
+    assert.ok(initialized.data?.next_steps.includes("Kimi Code: /skill:researchspec-navigate"));
+    assert.equal(Array.isArray(initialized.data?.plan), false);
+    assert.equal(JSON.stringify(initialized.data?.plan).includes("SKILL.md"), false);
+    assert.equal(existsSync(path.join(root, ".agents/skills/researchspec-navigate/SKILL.md")), true);
+    assert.equal(existsSync(path.join(root, ".kimi-code/skills/researchspec-navigate/SKILL.md")), true);
+    assert.equal(existsSync(path.join(root, ".qwen/skills/researchspec-navigate/SKILL.md")), true);
+    assert.equal(existsSync(path.join(root, ".qwen/commands/researchspec-status.md")), false);
+
+    const commands = parseEnvelope<{ delivery: string }>(runCli(["update", "--delivery", "commands", "--json"], root));
+    assert.equal(commands.ok, true);
+    assert.equal(commands.data?.delivery, "commands");
+    assert.equal(existsSync(path.join(root, ".agents/skills/researchspec-navigate/SKILL.md")), true);
+    assert.equal(existsSync(path.join(root, ".kimi-code/skills/researchspec-navigate/SKILL.md")), false);
+    assert.equal(existsSync(path.join(root, ".qwen/skills/researchspec-navigate/SKILL.md")), false);
+    assert.equal(existsSync(path.join(root, ".qwen/commands/researchspec-status.md")), true);
+
+    const both = parseEnvelope<{ delivery: string }>(runCli(["update", "--delivery", "both", "--json"], root));
+    assert.equal(both.ok, true);
+    assert.equal(both.data?.delivery, "both");
+    assert.equal(existsSync(path.join(root, ".kimi-code/skills/researchspec-navigate/SKILL.md")), true);
+    assert.equal(existsSync(path.join(root, ".qwen/skills/researchspec-navigate/SKILL.md")), true);
+    assert.equal(existsSync(path.join(root, ".qwen/commands/researchspec-status.md")), true);
+  } finally {
+    await cleanup(root);
+  }
+});
+
+void test("Codex and Kimi migrate known Skills while preserving personal files and prompt cleanup stays allowlisted", async () => {
+  const root = await tempProject();
+  const codexHome = path.join(root, "codex-home");
+  const promptRoot = path.join(codexHome, "prompts");
+  const intent = COMPANION_INTENTS.find((item) => item.skillId === "researchspec-propose");
+  assert.ok(intent);
+  try {
+    for (const legacyRoot of [".codex", ".kimi"]) {
+      const skillRoot = path.join(root, legacyRoot, "skills/researchspec-propose");
+      await mkdir(skillRoot, { recursive: true });
+      await writeFile(path.join(skillRoot, "SKILL.md"), renderCompanionSkill(intent), "utf8");
+      await writeFile(path.join(skillRoot, "LICENSE"), MIT_LICENSE_TEXT, "utf8");
+      await mkdir(path.join(root, legacyRoot, "skills/personal-skill"), { recursive: true });
+      await writeFile(path.join(root, legacyRoot, "skills/personal-skill/SKILL.md"), "personal\n", "utf8");
+    }
+    await writeFile(path.join(root, ".kimi/config.toml"), "personal = true\n", "utf8");
+    await mkdir(promptRoot, { recursive: true });
+    await writeFile(path.join(promptRoot, "researchspec-status.md"), "legacy generated prompt\n", "utf8");
+    await writeFile(path.join(promptRoot, "researchspec-personal.md"), "personal prompt\n", "utf8");
+
+    const initialized = runCli(["init", root, "--tools", "codex,kimi", "--json"], root, { CODEX_HOME: codexHome });
+    assert.equal(initialized.status, 0, initialized.stderr || initialized.stdout);
+    assert.equal(existsSync(path.join(root, ".agents/skills/researchspec-propose/SKILL.md")), true);
+    assert.equal(existsSync(path.join(root, ".kimi-code/skills/researchspec-propose/SKILL.md")), true);
+    assert.equal(existsSync(path.join(root, ".codex/skills/researchspec-propose")), false);
+    assert.equal(existsSync(path.join(root, ".kimi/skills/researchspec-propose")), false);
+    assert.equal(await readFile(path.join(root, ".codex/skills/personal-skill/SKILL.md"), "utf8"), "personal\n");
+    assert.equal(await readFile(path.join(root, ".kimi/skills/personal-skill/SKILL.md"), "utf8"), "personal\n");
+    assert.equal(await readFile(path.join(root, ".kimi/config.toml"), "utf8"), "personal = true\n");
+    assert.equal(existsSync(path.join(promptRoot, "researchspec-status.md")), false);
+    assert.equal(await readFile(path.join(promptRoot, "researchspec-personal.md"), "utf8"), "personal prompt\n");
+
+    await writeFile(path.join(promptRoot, "researchspec-status.md"), "legacy generated prompt\n", "utf8");
+    const deferred = parseEnvelope(runCli(["update", "--json"], root, { CODEX_HOME: codexHome }));
+    assert.equal(deferred.ok, true);
+    assert.equal(existsSync(path.join(promptRoot, "researchspec-status.md")), true);
+    assert.ok(deferred.diagnostics.some((item) => JSON.stringify(item).includes("legacy_global_cleanup_deferred")));
+    assert.equal(runCli(["update", "--force", "--json"], root, { CODEX_HOME: codexHome }).status, 0);
+    assert.equal(existsSync(path.join(promptRoot, "researchspec-status.md")), false);
+    assert.equal(await readFile(path.join(promptRoot, "researchspec-personal.md"), "utf8"), "personal prompt\n");
   } finally {
     await cleanup(root);
   }

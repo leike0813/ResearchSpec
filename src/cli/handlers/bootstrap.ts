@@ -4,7 +4,8 @@ import { confirm } from "@inquirer/prompts";
 import { stringify } from "yaml";
 
 import { installationRecords } from "../../adapters/installations.js";
-import { detectTools, orderTools, parseToolExpression } from "../../adapters/tools.js";
+import { detectTools, orderTools, parseToolExpression, type DeliveryMode } from "../../adapters/tools.js";
+import { inspectCurrentWorkspaceFormat } from "../../core/runtime/workspace-index.js";
 import { planWorkspaceDelivery } from "../../adapters/workspace-delivery.js";
 import { loadCurrentWorkspaceIndex } from "../../core/runtime/workspace-index.js";
 import { getWorkspaceEntries, getWorkspaceTemplates, resolveInitTarget } from "../../core/workspace/layout.js";
@@ -22,6 +23,7 @@ import {
   deliveryResult,
   formatPlan,
   operationDiagnostics,
+  nextStepsForTools,
   pluginManifestText,
   previewSummary,
   summarizePlan,
@@ -29,12 +31,16 @@ import {
 } from "./plugins.js";
 import { requireCurrentWorkspace } from "./shared.js";
 
-export interface CurrentInitOptions { tools?: string; literatureAdapters?: string }
-export interface CurrentUpdateOptions { tools?: string; literatureAdapters?: string }
+export interface CurrentInitOptions { tools?: string; literatureAdapters?: string; delivery?: DeliveryMode }
+export interface CurrentUpdateOptions { tools?: string; literatureAdapters?: string; delivery?: DeliveryMode; initMode?: boolean }
 
 export async function handleCurrentInit(inputPath: string | undefined, options: CurrentInitOptions, context: CommandContext): Promise<CommandResult> {
   const workspace = context.workspace ? path.resolve(context.cwd, context.workspace) : resolveInitTarget(inputPath, context.cwd);
-  if (await fileExists(workspace)) throw new CliError("workspace_exists", `Initialization target already exists: ${workspace}`, 1, "Use researchspec update for a current workspace or choose an empty project.");
+  if (await fileExists(workspace)) {
+    const format = await inspectCurrentWorkspaceFormat(workspace);
+    if (format.current) return handleCurrentUpdate(workspace, { ...options, initMode: true }, context);
+    throw new CliError("unsupported_workspace", `Initialization target is not a current ResearchSpec workspace: ${workspace}`, 1, "Existing files were left unchanged; choose an empty project or inspect the workspace manually.");
+  }
   const projectRoot = path.dirname(workspace);
   const pluginRegistry = await bundledPluginRegistry();
   const detected = await detectTools(projectRoot);
@@ -58,6 +64,7 @@ export async function handleCurrentInit(inputPath: string | undefined, options: 
     projectRoot,
     workspaceRoot: workspace,
     toolIds: selected,
+    delivery: options.delivery ?? "skills",
     selectedToolIds: selected,
     reconciledToolIds: selected,
     selectedLiteratureAdapterIds: selectedLiteratureAdapters,
@@ -65,12 +72,15 @@ export async function handleCurrentInit(inputPath: string | undefined, options: 
     force: context.force,
     pluginRegistry,
     selectedPluginIds: configuredPlugins,
+    operation: "init",
+    reconcileLegacy: true,
+    globalCleanupAuthorized: true,
   });
   operations.push(...delivery.operations);
   operations.push(await authoritativeWrite(
     path.join(workspace, "config.yaml"),
     "config.yaml",
-    stringify({ schema_version: "1", agent_tools: { selected, delivery: "both" }, literature_adapters: { selected: selectedLiteratureAdapters }, plugins: { selected: configuredPlugins } }),
+    stringify({ schema_version: "1", agent_tools: { selected, delivery: options.delivery ?? "skills" }, literature_adapters: { selected: selectedLiteratureAdapters }, plugins: { selected: configuredPlugins } }),
     "workspace",
     "record current workspace and selected tool intent",
   ));
@@ -82,19 +92,22 @@ export async function handleCurrentInit(inputPath: string | undefined, options: 
     "commit generated ownership last",
   ));
 
+  const diagnostics = [...delivery.diagnostics, ...currentOperationDiagnostics(operations)];
+  if (!context.dryRun && diagnostics.some((item) => item.blocking)) {
+    throw new CliError("static_projection_conflict", "Static projection initialization is blocked by ownership or path conflicts.", 1, "Resolve the reported conflict or use --force only for a manifest-owned drifted projection.", { diagnostics });
+  }
   if (!context.dryRun && context.interactive && !context.yes) {
-    const approved = await confirm({ message: `${previewSummary(operations)}\nApply these ${String(writableCount(operations))} planned file operations?`, default: true });
+    const approved = await confirm({ message: `${previewSummary(operations, { projectRoot, selectedTools: selected, delivery: options.delivery ?? "skills" })}\nApply these ${String(writableCount(operations))} planned file operations?`, default: true });
     if (!approved) throw new CliError("cancelled", "Initialization cancelled.", 1);
   }
   if (!context.dryRun) {
     for (const entry of getWorkspaceEntries(workspace)) if (entry.kind === "dir") await mkdir(entry.path, { recursive: true });
     await executeWritePlan({ operations });
   }
-  const diagnostics = [...delivery.diagnostics, ...currentOperationDiagnostics(operations)];
   return deliveryResult(
     "init",
-    { workspace, schema_version: "1", selected_tools: selected, selected_literature_adapters: selectedLiteratureAdapters, selected_plugins: configuredPlugins, dry_run: context.dryRun, plan: summarizePlan(operations) },
-    { stdout: formatPlan(context.dryRun ? "ResearchSpec init dry run" : "ResearchSpec workspace initialized", workspace, operations, context.dryRun) },
+    { workspace, schema_version: "1", selected_tools: selected, delivery: options.delivery ?? "skills", selected_literature_adapters: selectedLiteratureAdapters, selected_plugins: configuredPlugins, next_steps: nextStepsForTools(selected, options.delivery ?? "skills"), dry_run: context.dryRun, plan: summarizePlan(operations, projectRoot) },
+    { stdout: formatPlan(context.dryRun ? "ResearchSpec init dry run" : "ResearchSpec workspace initialized", workspace, operations, context.dryRun, nextStepsForTools(selected, options.delivery ?? "skills")) },
     diagnostics,
   );
 }
@@ -104,6 +117,7 @@ export async function handleCurrentUpdate(inputPath: string | undefined, options
   const index = await loadCurrentWorkspaceIndex(workspace);
   const projectRoot = index.projectRoot;
   const configured = index.config.agent_tools.selected;
+  const configuredDelivery = index.config.agent_tools.delivery;
   const configuredLiteratureAdapters = index.config.literature_adapters.selected;
   const configuredPlugins = selectedPluginIds(index.config);
   const pluginRegistry = providedPluginRegistry ?? await bundledPluginRegistry();
@@ -122,27 +136,32 @@ export async function handleCurrentUpdate(inputPath: string | undefined, options
   } catch (error) {
     throw new CliError("invalid_literature_adapters", error instanceof Error ? error.message : String(error), 2);
   }
+  const deliveryMode = options.delivery ?? configuredDelivery;
   const existingInstallations = installationRecords(index.manifest.installations);
   const delivery = await planWorkspaceDelivery({
     projectRoot,
     workspaceRoot: workspace,
     toolIds: targetTools,
+    delivery: deliveryMode,
     selectedToolIds: selected,
     existingInstallations,
     force: context.force,
     pluginRegistry,
     selectedPluginIds: configuredPlugins,
-    reconciledToolIds: targetTools,
+    operation: options.initMode ? "init" : "update",
+    reconcileLegacy: true,
+    globalCleanupAuthorized: options.initMode || context.force || context.yes || context.interactive,
+    reconciledToolIds: options.tools === undefined ? targetTools : [...new Set([...configured, ...targetTools])],
     selectedLiteratureAdapterIds: selectedLiteratureAdapters,
   });
   const operations = [...delivery.operations];
-  if (selected.join("\0") !== configured.join("\0") || selectedLiteratureAdapters.join("\0") !== configuredLiteratureAdapters.join("\0")) {
+  if (selected.join("\0") !== configured.join("\0") || selectedLiteratureAdapters.join("\0") !== configuredLiteratureAdapters.join("\0") || deliveryMode !== configuredDelivery) {
     operations.push(await authoritativeWrite(
       path.join(workspace, "config.yaml"),
       "config.yaml",
-      stringify({ ...index.config, agent_tools: { ...index.config.agent_tools, selected }, literature_adapters: { selected: selectedLiteratureAdapters } }),
+      stringify({ ...index.config, agent_tools: { ...index.config.agent_tools, selected, delivery: deliveryMode }, literature_adapters: { selected: selectedLiteratureAdapters } }),
       "workspace",
-      "update selected tool and literature Adapter intent",
+    "update selected tool, delivery, and literature Adapter intent",
     ));
   }
   operations.push(await authoritativeWrite(
@@ -156,11 +175,22 @@ export async function handleCurrentUpdate(inputPath: string | undefined, options
   if (!context.dryRun && diagnostics.some((item) => item.blocking)) {
     throw new CliError("static_projection_conflict", "Static projection update is blocked by ownership or path conflicts.", 1, "Resolve the reported conflict or use --force only for a manifest-owned drifted projection.", { diagnostics });
   }
+  if (!context.dryRun && context.interactive && !context.yes && !context.force && writableCount(operations) > 0) {
+    const approved = await confirm({ message: `${previewSummary(operations, { projectRoot, selectedTools: selected, delivery: deliveryMode })}\nApply these ${String(writableCount(operations))} planned file operations?`, default: true });
+    if (!approved) throw new CliError("cancelled", "Update cancelled.", 1);
+  }
+  if (!context.dryRun && context.interactive && !context.yes && !context.force) {
+    const legacyCleanup = operations.filter((item) => item.scope === "shared-global" && item.action === "remove-owned" && item.reason.includes("legacy Codex prompt"));
+    if (legacyCleanup.length && !(await confirm({ message: `Remove ${legacyCleanup.length} allowlisted legacy Codex prompts after Skill replacement?`, default: true }))) {
+      const rejected = new Set(legacyCleanup);
+      for (let index = operations.length - 1; index >= 0; index -= 1) if (rejected.has(operations[index]!)) operations.splice(index, 1);
+    }
+  }
   if (!context.dryRun) await executeWritePlan({ operations });
   return deliveryResult(
-    "update",
-    { workspace, selected_tools: selected, selected_literature_adapters: selectedLiteratureAdapters, selected_plugins: configuredPlugins, dry_run: context.dryRun, plan: summarizePlan(operations) },
-    { stdout: formatPlan(context.dryRun ? "ResearchSpec update dry run" : "ResearchSpec static projections updated", workspace, operations, context.dryRun) },
+    options.initMode ? "init" : "update",
+    { workspace, selected_tools: selected, delivery: deliveryMode, selected_literature_adapters: selectedLiteratureAdapters, selected_plugins: configuredPlugins, next_steps: nextStepsForTools(selected, deliveryMode), dry_run: context.dryRun, plan: summarizePlan(operations, projectRoot) },
+    { stdout: formatPlan(context.dryRun ? `ResearchSpec ${options.initMode ? "init" : "update"} dry run` : "ResearchSpec static projections updated", workspace, operations, context.dryRun, nextStepsForTools(selected, deliveryMode)) },
     diagnostics,
   );
 }

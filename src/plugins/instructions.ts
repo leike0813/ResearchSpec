@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
-import { getTool } from "../adapters/tools.js";
+import { getTool, toolSkillsRoot } from "../adapters/tools.js";
 import { sha256 } from "../core/workspace/write-plan.js";
 import type { WorkspaceStaticContext } from "../core/runtime/workspace-index.js";
 import {
@@ -75,13 +75,14 @@ export async function buildPluginSkillInstructions(
       continue;
     }
     for (const relativeAsset of expectedFiles) {
-      const expectedPath = path.join(projectRoot, tool.skillsDir, "skills", skillId, relativeAsset);
-      const expectedRelative = posix(path.relative(projectRoot, expectedPath));
+      const skillRoot = toolSkillsRoot(tool, projectRoot);
+      const expectedPath = path.join(skillRoot.root, skillId, relativeAsset);
+      const expectedRelative = skillRoot.scope === "project" ? posix(path.relative(projectRoot, expectedPath)) : expectedPath;
       const installation = installations.find((item) =>
         item.tool_id === toolId
         && item.source.skill_id === skillId
         && item.target.path === expectedRelative
-        && item.target.scope === "project");
+        && item.target.scope === skillRoot.scope);
       if (!installation) {
         drift.push({ tool_id: toolId, path: expectedRelative, reason: "manifest_record_missing" });
         continue;

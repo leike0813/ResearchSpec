@@ -92,9 +92,14 @@ The fixed base user-visible agent surface is exactly four ARSU Skills
 `zotero-library` Adapter adds seven literature Skills when selected (`zotero-library-agent`,
 `zotero-library-query`, `zotero-literature-acquisition`,
 `zotero-literature-analysis`, `zotero-research-synthesis`,
-`zotero-library-curation`, `zotero-bridge-cli`). The 31 registered tools receive
-ten fixed base Skills, or seventeen Skills when that Adapter is selected; the 28
-command-capable tools receive the sixteen current command wrappers.
+`zotero-library-curation`, `zotero-bridge-cli`). Skill-capable tools receive ten
+fixed base Skills, or seventeen Skills when that Adapter is selected, through
+the configured `skills`, `commands`, or `both` delivery mode; Codex remains
+Skill-capable in `commands` mode. The 28 command-capable tools receive the
+sixteen current command wrappers when commands are selected. Codex writes project `.agents/skills` and never generates global
+custom prompts; Kimi writes `.kimi-code/skills` and reads `.kimi` only for migration.
+`windsurf` remains an input alias for `devin`, and MiniMax Code uses the global
+`~/.minimax/skills` tree without workspace-exclusive ownership.
 Optional
 ResearchSpec-maintained domain plugin Skills may extend that base surface from
 `skills/plugins/registry.json`; they do not add Companion Skills or wrappers.

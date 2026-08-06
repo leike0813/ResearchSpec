@@ -10,11 +10,12 @@ import { TOOL_IDS, TOOLS, detectTools, getTool, parseToolExpression } from "../s
 import { CLI_TOP_LEVEL_COMMANDS } from "../src/cli/command-catalog.js";
 import { cleanup, tempProject } from "./helpers/cli.js";
 
-void test("tool registry contains the exact 31-tool surface and 28 command adapters", () => {
-  assert.equal(TOOL_IDS.length, 31);
-  assert.equal(new Set(TOOL_IDS).size, 31);
+void test("tool registry contains the exact 37-tool surface and 28 command adapters", () => {
+  assert.equal(TOOL_IDS.length, 37);
+  assert.equal(new Set(TOOL_IDS).size, 37);
   assert.equal(TOOLS.filter((tool) => tool.command).length, 28);
-  assert.deepEqual(TOOLS.filter((tool) => !tool.command).map((tool) => tool.id), ["forgecode", "kimi", "vibe"]);
+  assert.deepEqual(TOOLS.filter((tool) => !tool.command).map((tool) => tool.id), ["codeartsagent", "codex", "forgecode", "hermes", "kimi", "minimax-code", "vibe", "rovodev", "agents"]);
+  assert.equal(getTool("windsurf")?.id, "devin");
   assert.deepEqual(parseToolExpression("codex,claude,codex"), ["codex", "claude"]);
   assert.deepEqual(parseToolExpression("none"), []);
   assert.deepEqual(parseToolExpression("all"), [...TOOL_IDS]);
@@ -48,19 +49,17 @@ void test("registered command paths preserve per-tool conventions", () => {
     opencode: ".opencode/commands/researchspec-status.md",
     pi: ".pi/prompts/researchspec-status.md",
     qoder: ".qoder/commands/researchspec/status.md",
-    qwen: ".qwen/commands/researchspec-status.toml",
+    qwen: ".qwen/commands/researchspec-status.md",
     roocode: ".roo/commands/researchspec-status.md",
     trae: ".trae/commands/researchspec-status.md",
-    windsurf: ".windsurf/workflows/researchspec-status.md",
+    devin: ".devin/workflows/researchspec-status.md",
   };
   for (const [id, relative] of Object.entries(expected)) {
     assert.equal(requireTool(id).command?.path("status", root), path.join(root, relative));
   }
-  const previousCodexHome = process.env.CODEX_HOME;
-  process.env.CODEX_HOME = "/codex-home";
-  assert.equal(requireTool("codex").command?.path("status", root), "/codex-home/prompts/researchspec-status.md");
-  if (previousCodexHome === undefined) Reflect.deleteProperty(process.env, "CODEX_HOME");
-  else process.env.CODEX_HOME = previousCodexHome;
+  assert.equal(requireTool("codex").command, undefined);
+  assert.equal(requireTool("kimi").skillsDir, ".kimi-code");
+  assert.equal(requireTool("minimax-code").globalSkillsDir, ".minimax");
 });
 
 void test("command wrappers derive exactly from the sixteen-command catalog", () => {
@@ -109,7 +108,7 @@ void test("Copilot uses its explicit detection paths", async () => {
   await cleanup(root);
 });
 
-void test("delivery projects ten fixed Skills and sixteen wrappers by default", async () => {
+void test("delivery projects the fixed Skill surface and sixteen wrappers by default", async () => {
   const root = await tempProject();
   const previousCodexHome = process.env.CODEX_HOME;
   process.env.CODEX_HOME = path.join(root, "codex-home");
@@ -129,15 +128,16 @@ void test("delivery projects ten fixed Skills and sixteen wrappers by default", 
     assert.equal(wrappers.length, TOOLS.filter((tool) => tool.command).length * COMMAND_WRAPPER_CONTENTS.length);
     const wrapperIds = wrappers.flatMap((item) => item.source.kind === "command" ? [item.source.command_id] : []);
     assert.deepEqual([...new Set(wrapperIds)].sort(), COMMAND_WRAPPER_CONTENTS.map((item) => item.id).sort());
-    for (const toolId of TOOL_IDS) {
+    for (const toolId of TOOL_IDS.filter((id) => id !== "agents")) {
       const skillIds = new Set(delivery.installations.flatMap((item) => {
         if (item.tool_id !== toolId) return [];
         if (item.source.kind === "arsu-skill" || item.source.kind === "core-skill" || item.source.kind === "companion-skill" || item.source.kind === "domain-skill") return [item.source.skill_id];
         return item.source.kind === "literature-adapter" && item.source.component === "skill" && item.source.skill_id ? [item.source.skill_id] : [];
       }));
-      assert.equal(skillIds.size, 10, toolId);
+      if (toolId === "codex" || toolId === "minimax-code") assert.equal(skillIds.size, 10, toolId);
+      else assert.equal(skillIds.size, 10, toolId);
     }
-    assert.equal(delivery.diagnostics.filter((item) => item.code === "commands_not_supported").length, 3);
+    assert.equal(delivery.diagnostics.filter((item) => item.code === "commands_not_supported").length, 9);
   } finally {
     if (previousCodexHome === undefined) Reflect.deleteProperty(process.env, "CODEX_HOME");
     else process.env.CODEX_HOME = previousCodexHome;

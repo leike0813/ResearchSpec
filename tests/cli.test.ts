@@ -65,7 +65,7 @@ void test("source handbook is generated from the current command catalog", async
 void test("fresh command-capable delivery installs sixteen catalog wrappers", async () => {
   const root = await tempProject();
   try {
-    const initialized = runCli(["init", root, "--tools", "gemini", "--json"]);
+    const initialized = runCli(["init", root, "--tools", "gemini", "--delivery", "both", "--json"]);
     assert.equal(initialized.status, 0, initialized.stderr || initialized.stdout);
     const commandRoot = path.join(root, ".gemini/commands/researchspec");
     const wrappers = (await readdir(commandRoot)).filter((item) => item.endsWith(".toml")).sort();
@@ -81,7 +81,7 @@ void test("fresh command-capable delivery installs sixteen catalog wrappers", as
 void test("update removes clean obsolete wrappers and preserves drifted ones", async () => {
   const root = await tempProject();
   try {
-    assert.equal(runCli(["init", root, "--tools", "gemini"]).status, 0);
+    assert.equal(runCli(["init", root, "--tools", "gemini", "--delivery", "both"]).status, 0);
     const manifestPath = path.join(root, "researchspec/tool-installation-manifest.json");
     const manifest = JSON.parse(await readFile(manifestPath, "utf8")) as {
       installations: Array<Record<string, unknown>>;

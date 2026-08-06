@@ -156,7 +156,7 @@ owner，不执行修复事务。
 
 ## Codex 安装范围
 
-Codex Skills 为项目级，位于 `.codex/skills/`。Codex 命令提示为共享全局，位于 `$CODEX_HOME/prompts/`（`CODEX_HOME` 未设时回退为 `~/.codex/prompts/`）。非交互初始化需显式选择 Codex，使此全局写入可见。
+Codex Skills 为项目级，位于 `.agents/skills/`；不再生成 `$CODEX_HOME/prompts` 自定义提示。Kimi Code 使用 `.kimi-code/skills/`，旧 `.kimi/skills/` 仅作为迁移来源。`init/update` 的 `--delivery` 可选 `skills`、`commands` 或 `both`，新 workspace 默认 `skills`。
 
 隔离评估：
 

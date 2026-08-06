@@ -88,9 +88,9 @@ export async function main(argv = process.argv.slice(2)): Promise<CliResult> {
 type Runner = (command: string, commandObject: Command, action: () => Promise<CommandResult>) => Promise<void>;
 
 function registerCommands(program: Command, run: Runner): void {
-  registerCliCommand(program, "init")
+  registerCliCommand(program, "init", { delivery: parseDeliveryMode })
     .action(async (target: string | undefined, options: CurrentInitOptions, command: Command) => run("init", command, () => handleCurrentInit(target, options, commandContext("init", command))));
-  registerCliCommand(program, "update")
+  registerCliCommand(program, "update", { delivery: parseDeliveryMode })
     .action(async (target: string | undefined, options: CurrentUpdateOptions, command: Command) => run("update", command, () => handleCurrentUpdate(target, options, commandContext("update", command))));
   registerCliCommand(program, "status")
     .action(async (_options: Record<string, never>, command: Command) => run("status", command, () => handleCurrentStatus(commandContext("status", command))));
@@ -168,6 +168,11 @@ function parseVerdict(value: string): "pass" | "pass_with_conditions" | "fail" {
 function parseLocalDecisionKind(value: string): "scope" | "claim" | "structure" | "branch" {
   if (value === "scope" || value === "claim" || value === "structure" || value === "branch") return value;
   throw new InvalidArgumentError("kind must be scope, claim, structure, or branch");
+}
+
+function parseDeliveryMode(value: string): "skills" | "commands" | "both" {
+  if (value === "skills" || value === "commands" || value === "both") return value;
+  throw new InvalidArgumentError("delivery must be skills, commands, or both");
 }
 
 async function readPackageVersion(): Promise<string> {
