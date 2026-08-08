@@ -15,7 +15,9 @@ import { cleanup, parseEnvelope, runCli, tempProject } from "./helpers/cli.js";
 void test("review-response is a standalone route and profile with six checkpoints", () => {
   const route = getArsuRoute("review-response:full");
   assert.equal(route.route_ref, "review-response:full");
-  assert.equal(REVIEW_RESPONSE_PROFILE.entries[0]?.checkpoint, "intake");
+  const entry = REVIEW_RESPONSE_PROFILE.entries[0];
+  assert.equal(entry?.kind, "end-to-end");
+  assert.equal(entry?.kind === "end-to-end" ? entry.checkpoint : undefined, "intake");
   assert.deepEqual(REVIEW_RESPONSE_PROFILE.children.map((item) => item.node_id), [
     "intake", "manuscript-analysis", "comment-atomization", "workboard", "strategy-execution", "final-assembly",
   ]);

@@ -49,6 +49,7 @@ export const CLI_PAYLOADS = {
     field("schema_version", 'literal "1"', true, "Current workspace command schema."),
     field("confirmed_at", "RFC 3339 timestamp with offset", true, "Time of the exact route confirmation."),
     field("profile_entry", "stable ID", false, "Entry ID for a pipeline parent."),
+    field("entry_point", "profile child node ID", false, "Required declared child entry for a mid-entry pipeline parent; forbidden on every other Start."),
     field("parent", "{ instance_id, node_id }", false, "Owning parent instance and child node."),
     field("round", "positive integer", false, "Dynamic round number; requires parent."),
     field("prerequisites", "non-empty string[]", true, "Confirmed prerequisites, including an empty array when none apply."),
@@ -63,6 +64,7 @@ export const CLI_PAYLOADS = {
     field("--confirmed-by", "non-empty human name", true, "Human who confirmed this exact instance."),
   ], [
     "profile_entry and parent are mutually exclusive.",
+    "entry_point is required exactly for a mid-entry pipeline parent and must be declared by that profile entry.",
     "round requires parent.",
     "handoff input roles and planned output roles must each be unique.",
   ], "SubflowStartCommandSchema"),

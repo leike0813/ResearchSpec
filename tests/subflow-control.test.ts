@@ -12,6 +12,16 @@ import { createCurrentWorkspace, startCommand } from "./helpers/current-workspac
 
 const FIRST = "2026-08-02T09:00:00+08:00";
 
+const MID_ENTRY_CASES = [
+  { nodeId: "research", routeRef: "deep-research:full", gates: ["evidence-integrity"] },
+  { nodeId: "write", routeRef: "academic-paper:full", gates: ["manuscript-integrity"] },
+  { nodeId: "review", routeRef: "academic-paper-reviewer:full", gates: ["review-confirmation"] },
+  { nodeId: "revision", routeRef: "academic-paper:revision", gates: ["revision-completeness"], round: 1 },
+  { nodeId: "re-review", routeRef: "academic-paper-reviewer:re-review", gates: ["re-review-confirmation"], round: 1 },
+  { nodeId: "format", routeRef: "academic-paper:format-convert", gates: [], requiredInputs: ["manuscript_source"] },
+  { nodeId: "final-integrity", routeRef: "academic-paper:citation-check", gates: ["final-integrity"], requiredInputs: ["manuscript_source", "formatted_manuscript"] },
+] as const;
+
 void test("standalone start atomically creates one authority directory and exact retry reuses it", async () => {
   const fixture = await createCurrentWorkspace();
   try {
@@ -71,6 +81,76 @@ void test("pipeline parent does not pre-create children and each child binds an 
     assert.equal("children" in (index.subflows.find((item) => item.control.instance_id === parent.instance_id)?.control ?? {}), false);
     const parentView = listCurrentItems(index, "subflows").find((item): item is { selector: string; children: string[] } => item !== null && item !== undefined && typeof item === "object" && "selector" in item && item.selector === `subflow:${parent.instance_id}` && "children" in item && Array.isArray(item.children));
     assert.deepEqual(parentView?.children, [child.instance_id]);
+  } finally { await fixture.cleanup(); }
+});
+
+for (const definition of MID_ENTRY_CASES) {
+  void test(`mid-entry ${definition.nodeId} persists the choice and starts only that independently confirmed child`, async () => {
+    const fixture = await createCurrentWorkspace();
+    try {
+      await writeFile(path.join(fixture.root, "paper.md"), "# Paper\n", "utf8");
+      await writeFile(path.join(fixture.root, "paper.pdf"), "rendered\n", "utf8");
+      let index = await loadCurrentWorkspaceIndex(fixture.workspace);
+      const parent = await startSubflow({
+        index,
+        routeRef: "academic-pipeline:mid-entry",
+        command: startCommand("academic-pipeline:mid-entry", FIRST, { profile_entry: "mid-entry", entry_point: definition.nodeId }),
+        confirmedBy: "researcher",
+      });
+      index = await loadCurrentWorkspaceIndex(fixture.workspace);
+      const parentRecord = index.subflows.find((item) => item.control.instance_id === parent.instance_id);
+      assert.equal(index.subflows.length, 1);
+      assert.equal(parentRecord?.control.checkpoint, definition.nodeId);
+      assert.equal(parentRecord?.control.start_confirmation.entry_point, definition.nodeId);
+      const candidates = evaluateWorkflowControl(index).frontier.filter((item) => item.kind === "route" && item.parent_instance_id === parent.instance_id);
+      const round = "round" in definition ? definition.round : undefined;
+      assert.deepEqual(candidates.map((item) => item.kind === "route" ? item.node_id : undefined), [definition.nodeId]);
+      assert.equal(candidates[0]?.kind === "route" ? candidates[0].round : undefined, round);
+
+      const handoffInputs = ("requiredInputs" in definition ? definition.requiredInputs : []).map((role) => ({
+        role,
+        type: "manuscript",
+        path: role === "formatted_manuscript" ? "paper.pdf" : "paper.md",
+        purpose: "mid-entry child input",
+        format: role === "formatted_manuscript" ? "pdf" as const : "markdown" as const,
+      }));
+      const child = await startSubflow({
+        index,
+        routeRef: definition.routeRef,
+        command: startCommand(definition.routeRef, "2026-08-02T09:05:00+08:00", {
+          parent: { instance_id: parent.instance_id, node_id: definition.nodeId },
+          ...(round === undefined ? {} : { round }),
+          handoff_inputs: handoffInputs,
+          formal_gates: [...definition.gates],
+        }),
+        confirmedBy: "child-approver",
+      });
+      index = await loadCurrentWorkspaceIndex(fixture.workspace);
+      assert.deepEqual(index.subflows.find((item) => item.control.instance_id === child.instance_id)?.control.parent, {
+        instance_id: parent.instance_id,
+        node_id: definition.nodeId,
+      });
+      assert.equal(index.subflows.length, 2);
+    } finally { await fixture.cleanup(); }
+  });
+}
+
+void test("invalid mid-entry selections fail before creating a subflow directory", async () => {
+  const fixture = await createCurrentWorkspace();
+  try {
+    const index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    const attempts = [
+      { command: startCommand("academic-pipeline:mid-entry", FIRST, { profile_entry: "mid-entry" }), code: "entry_point_required" },
+      { command: startCommand("academic-pipeline:mid-entry", FIRST, { profile_entry: "mid-entry", entry_point: "unknown" }), code: "entry_point_invalid" },
+      { command: startCommand("academic-pipeline:end-to-end", FIRST, { profile_entry: "end-to-end", entry_point: "write" }), code: "entry_point_forbidden", routeRef: "academic-pipeline:end-to-end" as const },
+    ];
+    for (const attempt of attempts) {
+      await assert.rejects(
+        startSubflow({ index, routeRef: attempt.routeRef ?? "academic-pipeline:mid-entry", command: attempt.command, confirmedBy: "researcher" }),
+        (error: unknown) => error instanceof SubflowControlError && error.code === attempt.code,
+      );
+      assert.deepEqual(await readdir(path.join(fixture.workspace, "subflows")), []);
+    }
   } finally { await fixture.cleanup(); }
 });
 

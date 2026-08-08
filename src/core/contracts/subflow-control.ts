@@ -63,6 +63,7 @@ export const SubflowControlSchema = z.strictObject({
   start_confirmation: z.strictObject({
     confirmed_by: NonEmptySchema,
     confirmed_at: Rfc3339Schema,
+    entry_point: StableIdSchema.optional(),
     prerequisites: z.array(NonEmptySchema),
     expected_outputs: z.array(NonEmptySchema),
     manuscript_delivery: ManuscriptDeliverySchema.optional(),

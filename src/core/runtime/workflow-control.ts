@@ -138,8 +138,9 @@ export function childStartCandidates(index: CurrentWorkspaceIndex): ChildStartCa
     for (const node of nodesAtCheckpoint(index, parent, parent.control.checkpoint)) {
       const round = nextRound(index, parent, node);
       if (node.multiplicity === "repeatable" && round === undefined) continue;
-      if (!dependenciesSatisfied(index, parent, node, round)) continue;
-      if (!branchUnlocks(index, parent, node.node_id)) continue;
+      const initialEntry = isConfirmedInitialEntry(index, parent, node.node_id);
+      if (!initialEntry && !dependenciesSatisfied(index, parent, node, round)) continue;
+      if (!initialEntry && !branchUnlocks(index, parent, node.node_id)) continue;
       const existing = childrenFor(index, parent.control.instance_id, node.node_id);
       if (node.multiplicity !== "repeatable" && existing.length > 0) continue;
       if (round !== undefined && existing.some((item) => item.control.round === round)) continue;
@@ -211,6 +212,10 @@ function nodesAtCheckpoint(index: CurrentWorkspaceIndex, parent: SubflowRecord, 
 
 function dependenciesSatisfied(index: CurrentWorkspaceIndex, parent: SubflowRecord, node: PipelineProfileChild, round: number | undefined): boolean {
   const profile = profileForRecord(index, parent) ?? index.profile;
+  const template = profile.revision_round_template;
+  if (round !== undefined && round > 1 && template && node.node_id === template.revision_node_id) {
+    return completedChildForRound(index, parent.control.instance_id, template.review_node_id, round - 1);
+  }
   const pending = new Set(node.prerequisites);
   for (const group of profile.parallel_groups) {
     const members = group.child_node_ids.filter((item) => pending.has(item));
@@ -243,6 +248,7 @@ function branchUnlocks(index: CurrentWorkspaceIndex, parent: SubflowRecord, node
 
 function nextRound(index: CurrentWorkspaceIndex, parent: SubflowRecord, node: PipelineProfileChild): number | undefined {
   if (node.multiplicity !== "repeatable") return undefined;
+  if (isConfirmedInitialEntry(index, parent, node.node_id)) return 1;
   const template = (profileForRecord(index, parent) ?? index.profile).revision_round_template;
   if (!template) return undefined;
   if (node.node_id === template.review_node_id) {
@@ -265,6 +271,16 @@ function nextRound(index: CurrentWorkspaceIndex, parent: SubflowRecord, node: Pi
   const existing = childrenFor(index, parent.control.instance_id, node.node_id);
   if (existing.some((item) => item.control.status !== "complete" && item.control.status !== "cancelled")) return undefined;
   return Math.max(0, ...existing.map((item) => item.control.round ?? 0)) + 1;
+}
+
+function isConfirmedInitialEntry(index: CurrentWorkspaceIndex, parent: SubflowRecord, nodeId: string): boolean {
+  if (parent.control.parent !== null || parent.control.start_confirmation.entry_point !== nodeId || parent.control.checkpoint !== nodeId) return false;
+  const profile = profileForRecord(index, parent);
+  if (!profile) return false;
+  const entry = profile?.entries.find((item) => item.route_ref === parent.control.route_ref);
+  if (entry?.kind !== "mid-entry" || !entry.entry_points.includes(nodeId)) return false;
+  const profileTransitions = new Set(profile.transitions.map((item) => item.transition_id));
+  return !parent.control.transitions.some((item) => profileTransitions.has(item.transition_id));
 }
 
 function branchForNode(index: CurrentWorkspaceIndex, nodeId: string): string | undefined {

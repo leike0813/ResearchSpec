@@ -359,6 +359,12 @@ async function validateSubflowReferences(
       if (control.parent === null && !entriesByRoute.has(control.route_ref)) {
         diagnostics.push(problem("pipeline_entry_route_invalid", "Pipeline parent route is not a project profile entry.", record.controlPath));
       }
+      if (control.parent === null && profile.children.length > 0) {
+        const checkpoints = new Set([...profile.children.map((item) => item.node_id), ...profile.parallel_groups.map((item) => item.group_id)]);
+        if (!checkpoints.has(control.checkpoint)) {
+          diagnostics.push(problem("subflow_checkpoint_invalid", "Pipeline parent checkpoint is not executable in the current profile.", record.controlPath));
+        }
+      }
     }
     if (control.parent !== null) {
       const parents = byId.get(control.parent.instance_id) ?? [];

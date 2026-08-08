@@ -146,6 +146,7 @@ Runtime schema: `SubflowStartCommandSchema`.
 | `schema_version` | `literal "1"` | yes | Current workspace command schema. |
 | `confirmed_at` | `RFC 3339 timestamp with offset` | yes | Time of the exact route confirmation. |
 | `profile_entry` | `stable ID` | no | Entry ID for a pipeline parent. |
+| `entry_point` | `profile child node ID` | no | Required declared child entry for a mid-entry pipeline parent; forbidden on every other Start. |
 | `parent` | `{ instance_id, node_id }` | no | Owning parent instance and child node. |
 | `round` | `positive integer` | no | Dynamic round number; requires parent. |
 | `prerequisites` | `non-empty string[]` | yes | Confirmed prerequisites, including an empty array when none apply. |
@@ -171,6 +172,7 @@ Runtime schema: `SubflowStartCommandSchema`.
 Constraints:
 
 - profile_entry and parent are mutually exclusive.
+- entry_point is required exactly for a mid-entry pipeline parent and must be declared by that profile entry.
 - round requires parent.
 - handoff input roles and planned output roles must each be unique.
 

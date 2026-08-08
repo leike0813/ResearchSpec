@@ -68,10 +68,16 @@ void test("[journey.routing] route summaries, Zotero readiness and consent bound
     const before = hash(await readFile(configPath));
     const standalone = instructions(context, "route:deep-research:quick") as RouteInstructions;
     const pipeline = instructions(context, "route:academic-pipeline:end-to-end") as RouteInstructions;
+    const midEntry = instructions(context, "route:academic-pipeline:mid-entry") as RouteInstructions;
     assert.equal(standalone.confirmation_required, true);
     assert.deepEqual(standalone.boundary_outputs.map((item) => item.role), ["research_brief", "bibliography"]);
     assert.equal(pipeline.start_input.profile_entry, "end-to-end");
     assert.equal(pipeline.formal_gates.length, 0);
+    assert.deepEqual(midEntry.entry_points.map((item) => item.entry_point), [
+      "research", "write", "review", "revision", "re-review", "format", "final-integrity",
+    ]);
+    assert.equal(midEntry.start_input.entry_point, "<entry-point>");
+    assert.equal(midEntry.entry_points.every((item) => item.route_ref && item.stable_prerequisites && item.formal_gates && item.risk_level && item.cost), true);
     assert.equal(hash(await readFile(configPath)), before);
 
     const current = status(context);
@@ -124,6 +130,23 @@ void test("[journey.pipeline-confirmation] a parent exposes but does not pre-cre
     assert.deepEqual(childControl.parent, { instance_id: parent.instanceId, node_id: childCandidate.node_id });
     assert.equal(childControl.start_confirmation.confirmed_by, "Acceptance Researcher");
     assert.deepEqual(showSubflow(context, parent.instanceId).children, [child.instanceId]);
+  } finally { await cleanup(root); }
+});
+
+void test("[journey.pipeline-mid-entry] existing research materials enter at writing without an empty frontier", async () => {
+  const root = await tempProject();
+  try {
+    const context = initialize(root);
+    const parent = await startRoute(context, "academic-pipeline:mid-entry", undefined, "write");
+    const parentControl = showSubflow(context, parent.instanceId);
+    assert.equal(parentControl.checkpoint, "write");
+    assert.equal(parentControl.start_confirmation.entry_point, "write");
+    assert.deepEqual(parentControl.children, []);
+    const candidates = status(context).frontier.items.filter((item): item is RouteFrontierItem =>
+      item.kind === "route" && item.parent_instance_id === parent.instanceId);
+    assert.deepEqual(candidates.map((item) => item.node_id), ["write"]);
+    const child = await startRoute(context, candidates[0]?.route_ref ?? "academic-paper:full", candidates[0]);
+    assert.deepEqual(showSubflow(context, child.instanceId).parent, { instance_id: parent.instanceId, node_id: "write" });
   } finally { await cleanup(root); }
 });
 

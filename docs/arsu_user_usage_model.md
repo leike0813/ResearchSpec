@@ -130,6 +130,11 @@ Project change 的 `accepted` 只记录决定，不自动编辑 specs。实际�
 只有用户确认后，Agent 才调用 `start`。一次确认只授权一个实例。Pipeline parent、每个 child、
 新 branch 和每轮动态 revision 都分别确认；确认 parent 不会预创建或授权 child。
 
+`academic-pipeline:mid-entry` 的 route instructions 会列出 profile 声明的可执行入口，以及每个
+入口的 child route、前置条件、输入角色、formal Gates、风险和成本。用户必须从
+`research`、`write`、`review`、`revision`、`re-review`、`format`、`final-integrity` 中确认一个
+`entry_point`；这次 parent 确认仍不授权对应 child，child 启动前要再次确认。
+
 ## 6. 统一运行协议
 
 Agent 使用以下协议：
@@ -160,7 +165,7 @@ Standalone route 创建一个没有 profile parent 的根 subflow。它可以独
 
 `academic-pipeline` parent 使用项目 profile 调度已确认的 children。Profile 负责：
 
-- end-to-end 与 mid-entry checkpoint；
+- end-to-end 初始 checkpoint 与 mid-entry 可执行入口；
 - child dependency、parallel group 和 join policy；
 - formal Gate、branch、transition 和 override policy；
 - 动态 revision、re-review 和退出条件。
@@ -168,8 +173,14 @@ Standalone route 创建一个没有 profile parent 的根 subflow。它可以独
 Core 不硬编码 ARSU graph。Parent 通过扫描带有自身 parent reference 的 child controls 得到子项
 状态，不保存一份重复 children 列表。
 
+Mid-entry parent 的初始 checkpoint 就是用户确认的 `entry_point`。在 parent 尚未执行 profile
+transition 时，只有该入口 child 可以豁免 profile 内部的上游 child dependency 和 branch unlock；
+它自己的 inputs、formal Gates、成本、稿件快照与文件检查仍然有效。首个 child 完成并推进
+parent 后，完整 dependency、Gate、branch 和动态 round 规则恢复。`revision` 或 `re-review`
+入口从当前 ResearchSpec 实例的 round 1 开始。
+
 Mid-entry 只使用用户明确提供的 stable facts 和 handoff inputs，不导入整体运行快照，也不继承
-旧 Gate 或 Decision。
+旧 Gate、Decision、round 或 completion。
 
 ## 8. Handoff 与外部文件
 

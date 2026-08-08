@@ -404,6 +404,52 @@ void test("current start dry-run and unsafe boundary failures are zero-write", a
   } finally { await cleanup(root); }
 });
 
+void test("packaged CLI validates mid-entry selection before writes and reports legacy synthetic checkpoints", async () => {
+  const root = await tempProject();
+  try {
+    assert.equal(runCli(["init", root, "--tools", "none"]).status, 0);
+    const workspace = path.join(root, "researchspec");
+    const manuscriptPath = path.join(workspace, "specs/manuscript.yaml");
+    await writeFile(manuscriptPath, (await readFile(manuscriptPath, "utf8")).replace("working_format: null", "working_format: markdown"), "utf8");
+    const input = path.join(root, "mid-entry-start.json");
+    const base = {
+      schema_version: "1",
+      confirmed_at: "2026-08-02T16:30:00+08:00",
+      profile_entry: "mid-entry",
+      prerequisites: [],
+      handoff_inputs: [],
+      planned_outputs: [],
+      manuscript_delivery: { working_format: "markdown", final_output_format: null },
+      formal_gates: [],
+      cost: { effort: "high", interaction: "long_horizon" },
+    };
+    for (const attempt of [
+      { payload: base, route: "academic-pipeline:mid-entry", code: "entry_point_required" },
+      { payload: { ...base, entry_point: "unknown" }, route: "academic-pipeline:mid-entry", code: "entry_point_invalid" },
+      { payload: { ...base, profile_entry: "end-to-end", entry_point: "write" }, route: "academic-pipeline:end-to-end", code: "entry_point_forbidden" },
+    ]) {
+      await writeFile(input, JSON.stringify(attempt.payload), "utf8");
+      const rejected = runCli(["start", attempt.route, "--input", input, "--confirmed-by", "researcher", "--json"], root);
+      assert.equal(parseEnvelope(rejected).error?.code, attempt.code);
+      assert.deepEqual(await readdir(path.join(workspace, "subflows")), []);
+    }
+
+    await writeFile(input, JSON.stringify({ ...base, entry_point: "write" }), "utf8");
+    const started = parseEnvelope<{ instance_id: string }>(runCli(["start", "academic-pipeline:mid-entry", "--input", input, "--confirmed-by", "researcher", "--json"], root));
+    assert.equal(started.ok, true);
+    const [directoryName] = await readdir(path.join(workspace, "subflows"));
+    assert.ok(directoryName);
+    const controlPath = path.join(workspace, "subflows", directoryName, "control.yaml");
+    const legacyControl = (await readFile(controlPath, "utf8")).replace("checkpoint: write", "checkpoint: entry");
+    await writeFile(controlPath, legacyControl, "utf8");
+    const beforeCheck = await readFile(controlPath, "utf8");
+    const checked = parseEnvelope<{ diagnostics: Array<{ code: string }> }>(runCli(["check", "subflows", "--json"], root));
+    assert.equal(checked.ok, false);
+    assert.ok(checked.data?.diagnostics.some((item) => item.code === "subflow_checkpoint_invalid"));
+    assert.equal(await readFile(controlPath, "utf8"), beforeCheck);
+  } finally { await cleanup(root); }
+});
+
 void test("current handoff update, query, and checks use only the owning files", async () => {
   const root = await tempProject();
   try {

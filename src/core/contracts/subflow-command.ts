@@ -22,6 +22,7 @@ export const SubflowStartCommandSchema = z.strictObject({
   schema_version: z.literal(CURRENT_WORKSPACE_SCHEMA_VERSION),
   confirmed_at: z.iso.datetime({ offset: true }),
   profile_entry: StableIdSchema.optional(),
+  entry_point: StableIdSchema.optional(),
   parent: z.strictObject({
     instance_id: StableIdSchema,
     node_id: StableIdSchema,
@@ -44,6 +45,12 @@ export const SubflowStartCommandSchema = z.strictObject({
   }
   if (value.profile_entry !== undefined && value.parent !== undefined) {
     context.addIssue({ code: "custom", path: ["profile_entry"], message: "A profile entry starts a pipeline parent and cannot also name a parent." });
+  }
+  if (value.entry_point !== undefined && value.profile_entry === undefined) {
+    context.addIssue({ code: "custom", path: ["entry_point"], message: "An entry point requires a pipeline profile entry." });
+  }
+  if (value.entry_point !== undefined && value.parent !== undefined) {
+    context.addIssue({ code: "custom", path: ["entry_point"], message: "A pipeline child cannot select a parent entry point." });
   }
   addDuplicateIssues(value.handoff_inputs, "handoff_inputs", context);
   addDuplicateIssues(value.planned_outputs, "planned_outputs", context);

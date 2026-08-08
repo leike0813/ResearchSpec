@@ -105,6 +105,7 @@ export async function startSubflow(input: StartSubflowInput): Promise<StartSubfl
     start_confirmation: {
       confirmed_by: confirmedBy,
       confirmed_at: command.confirmed_at,
+      ...(command.entry_point ? { entry_point: command.entry_point } : {}),
       prerequisites: command.prerequisites,
       expected_outputs: command.planned_outputs.map((item) => item.role),
       ...(command.manuscript_delivery ? { manuscript_delivery: command.manuscript_delivery } : {}),
@@ -345,12 +346,25 @@ function resolveStartContext(index: CurrentWorkspaceIndex, routeRef: string, com
         throw new SubflowControlError("start_gates_mismatch", "Confirmed Gates must match the standalone route policy.", "conflict");
       }
     }
+    let checkpoint: string;
+    if (entry.kind === "mid-entry") {
+      if (!command.entry_point) throw new SubflowControlError("entry_point_required", "Mid-entry Start requires a confirmed entry point.", "usage");
+      if (!entry.entry_points.includes(command.entry_point)) {
+        throw new SubflowControlError("entry_point_invalid", `Entry point is not declared by profile entry ${entry.entry_id}: ${command.entry_point}`, "usage");
+      }
+      checkpoint = command.entry_point;
+    } else if (command.entry_point) {
+      throw new SubflowControlError("entry_point_forbidden", "This profile entry does not accept an entry point.", "usage");
+    } else {
+      checkpoint = entry.checkpoint;
+    }
     return {
       profile: profileReference(selectedProfile),
       parent: null,
-      checkpoint: entry.checkpoint,
+      checkpoint,
     };
   }
+  if (command.entry_point) throw new SubflowControlError("entry_point_forbidden", "Standalone Start does not accept an entry point.", "usage");
   if (command.profile_entry) throw new SubflowControlError("profile_entry_invalid", `Profile entry does not match route ${routeRef}.`, "usage");
   return { profile: null, parent: null, checkpoint: routeRef.split(":", 2)[1] ?? "started" };
 }

@@ -63,10 +63,9 @@ instance_id: sf_pipeline_8f31ac
 route: academic-pipeline:end-to-end
 profile: academic-pipeline
 status: active
-checkpoint: confirm-research-child
+checkpoint: research
 gates: []
 decisions: []
-children: []
 ```
 
 此时仍没有 research child、论文或报告。
@@ -210,9 +209,11 @@ Navigate 准备 mid-entry 摘要：
 ```text
 Skill: academic-pipeline
 Entry: mid-entry
-Chosen point: revision preparation
+Legal points: research、write、review、revision、re-review、format、final-integrity
+Chosen point: revision
 External inputs: manuscript、reviewer comments、research report
-Expected children: revision-coach（可选）、revision、re-review、format-convert
+First child: academic-paper:revision（单独确认）
+Expected later children: re-review、后续 revision rounds、format-convert、final-integrity
 Formal Gates: revision completeness、review outcome、final integrity
 Cost: high / long-horizon
 ```
@@ -221,8 +222,10 @@ Cost: high / long-horizon
 
 ### 2.3 Parent 与第一个 child
 
-用户确认后，`start` 创建新的 mid-entry parent，control 记录 chosen entry point 与外部 handoff
-引用，checkpoint 为“确认第一个 child”。Incoming 文件保持原路径，不复制进 parent `work/`。
+用户确认后，`start` 创建新的 mid-entry parent，payload 同时携带 `profile_entry: mid-entry` 与
+`entry_point: revision`。Control 的 `start_confirmation.entry_point` 记录该选择，初始 checkpoint
+直接是 `revision`；它不会预创建 revision child。Incoming 文件保持原路径，不复制进 parent
+`work/`。
 
 若用户先要策略，Agent 单独确认 `academic-paper:revision-coach`；若修改方案已明确，则单独
 确认 `academic-paper:revision`。Parent 确认不能替代这一步，也不能预先授权随后 re-review。
@@ -230,12 +233,17 @@ Cost: high / long-horizon
 每个 child 按 standalone 合同生产外部结果、更新自己的 handoff、经必要 Gate 与 `advance`
 完成。Parent 只依据项目 profile、child control 和 handoff 继续。
 
+在 parent 尚未发生 profile transition 时，frontier 只暴露所选入口 child。该 child 可以跳过
+profile 内部的上游 child dependency 和 branch unlock，但输入角色、Gate、成本、稿件快照和
+文件检查不变。首个 child 完成并推进 parent 后，所有普通依赖、Gate、branch 和动态 round
+规则恢复；从 `revision` 或 `re-review` 进入时，本地轮次从 round 1 开始。
+
 ### 2.4 不同起点的处理
 
-- 只有 research report：先确认 writing child；不假定 manuscript 已存在。
-- 已有 draft、没有 review：可从 reviewer 或 citation/integrity 检查开始，由用户选择。
+- 只有 research report：选择 `write`，再单独确认 writing child；不假定 manuscript 已存在。
+- 已有 draft、没有 review：可选择 `review` 或 `final-integrity`，由用户确认实际入口与所需输入。
 - 已有 comments、没有可信 current draft：请求重新定位稿件，不能猜测 base。
-- 已有 revised draft 和 response：可确认 re-review child，但本 workspace 仍需自己的 Gate。
+- 已有 revised draft 和 response：可选择 `re-review`，但本 workspace 仍需自己的 Gate，并从 round 1 开始。
 - 只有旧 Passport、registry ID 或 receipt：视为普通未知材料或拒绝，不解析为权威。
 
 ### 2.5 Mid-entry 失败与验收

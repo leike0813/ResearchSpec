@@ -137,6 +137,46 @@ void test("accepted review reaches format before final integrity and carries bot
   } finally { await fixture.cleanup(); }
 });
 
+void test("mid-entry revision keeps local round 1 across pause and resumes full round and branch rules after advance", async () => {
+  const fixture = await createCurrentWorkspace();
+  try {
+    let index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    const parent = await startSubflow({
+      index,
+      routeRef: "academic-pipeline:mid-entry",
+      command: startCommand("academic-pipeline:mid-entry", time(0), { profile_entry: "mid-entry", entry_point: "revision" }),
+      confirmedBy: "researcher",
+    });
+    index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    await advanceSubflow({ index, instanceId: parent.instance_id, transition: "pause", actor: "researcher", transitionedAt: time(1) });
+    index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    await advanceSubflow({ index, instanceId: parent.instance_id, transition: "resume", actor: "researcher", transitionedAt: time(2) });
+    index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    assert.ok(childStartCandidates(index).some((item) => item.parent.control.instance_id === parent.instance_id && item.node.node_id === "revision" && item.round === 1));
+
+    const revision = await startChild(index, parent.instance_id, "revision", "academic-paper:revision", 3, ["revision-completeness"], 1);
+    index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    await passAndComplete(index, revision.instance_id, "revision-completeness", 4);
+    index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    assert.ok(evaluateWorkflowControl(index).frontier.some((item) => item.kind === "advance" && item.instance_id === parent.instance_id && item.transition === "revision-to-re-review"));
+    await advanceSubflow({ index, instanceId: parent.instance_id, actor: "agent", transitionedAt: time(6) });
+
+    index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    const rereview = await startChild(index, parent.instance_id, "re-review", "academic-paper-reviewer:re-review", 7, ["re-review-confirmation"], 1);
+    index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    await appendGateAttempt({ index, instanceId: rereview.instance_id, gateId: "re-review-confirmation", verdict: "pass", confirmedBy: "researcher", confirmedAt: time(8), summary: "Re-review confirmed." });
+    index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    assert.ok(evaluateWorkflowControl(index).pending_decisions.includes(`decision:${rereview.instance_id}/revision-outcome`));
+    await recordLocalDecision({ index, instanceId: rereview.instance_id, decisionId: "revision-outcome", kind: "branch", choice: "continue-revision", decidedBy: "researcher", decidedAt: time(9) });
+    index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    await advanceSubflow({ index, instanceId: rereview.instance_id, transition: "complete", actor: "agent", transitionedAt: time(10) });
+    index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    await advanceSubflow({ index, instanceId: parent.instance_id, actor: "agent", transitionedAt: time(11) });
+    index = await loadCurrentWorkspaceIndex(fixture.workspace);
+    assert.ok(childStartCandidates(index).some((item) => item.parent.control.instance_id === parent.instance_id && item.node.node_id === "revision" && item.round === 2));
+  } finally { await fixture.cleanup(); }
+});
+
 void test("parallel prerequisite groups honor any/all joins and one multiplicity", async () => {
   const fixture = await createCurrentWorkspace();
   try {

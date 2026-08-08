@@ -109,6 +109,23 @@ export async function handleCurrentInstructions(selector: string, context: Comma
     const owner = standaloneProfileOwner(routeRef);
     const selectedProfile = owner ? index.profiles?.get(owner) : index.profile;
     const profileEntry = selectedProfile?.entries.find((item) => item.route_ref === routeRef);
+    const entryPoints = profileEntry?.kind === "mid-entry"
+      ? profileEntry.entry_points.flatMap((entryPoint) => {
+        const node = selectedProfile?.children.find((item) => item.node_id === entryPoint);
+        if (!node) return [];
+        const childRoute = getArsuRoute(node.route_ref as RouteRef);
+        return [{
+          entry_point: entryPoint,
+          route_ref: node.route_ref,
+          profile_prerequisites: node.prerequisites,
+          stable_prerequisites: childRoute.prerequisite_groups,
+          required_input_roles: node.required_input_roles ?? [],
+          formal_gates: node.required_gate_ids,
+          risk_level: childRoute.risk_level,
+          cost: childRoute.cost,
+        }];
+      })
+      : [];
     const childCandidates = candidates.filter((item) => item.kind === "route" && item.node_id !== undefined);
     const firstChild = childCandidates[0];
     const standaloneGateIds = selectedProfile?.gates.map((item) => item.gate_id) ?? [];
@@ -131,6 +148,7 @@ export async function handleCurrentInstructions(selector: string, context: Comma
       kind: "route",
       route,
       stable_prerequisites: route.prerequisite_groups,
+      entry_points: entryPoints,
       current_candidates: candidates,
       planned_output_types: route.boundary_outputs.map((item) => item.type),
       boundary_outputs: route.boundary_outputs,
@@ -165,6 +183,7 @@ export async function handleCurrentInstructions(selector: string, context: Comma
         schema_version: "1",
         confirmed_at: "<rfc3339>",
         ...(profileEntry ? { profile_entry: profileEntry.entry_id } : {}),
+        ...(profileEntry?.kind === "mid-entry" ? { entry_point: "<entry-point>" } : {}),
         prerequisites: [],
         handoff_inputs: [],
         planned_outputs: [],

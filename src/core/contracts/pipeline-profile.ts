@@ -6,12 +6,20 @@ import { CURRENT_WORKSPACE_SCHEMA_VERSION } from "./workspace-format.js";
 const RouteRefSchema = z.string().regex(/^[a-z0-9][a-z0-9-]*:[a-z0-9][a-z0-9-]*$/);
 const IdListSchema = z.array(StableIdSchema);
 
-export const PipelineProfileEntrySchema = z.strictObject({
-  entry_id: StableIdSchema,
-  route_ref: RouteRefSchema,
-  checkpoint: StableIdSchema,
-  kind: z.enum(["end-to-end", "mid-entry"]),
-});
+export const PipelineProfileEntrySchema = z.discriminatedUnion("kind", [
+  z.strictObject({
+    entry_id: StableIdSchema,
+    route_ref: RouteRefSchema,
+    checkpoint: StableIdSchema,
+    kind: z.literal("end-to-end"),
+  }),
+  z.strictObject({
+    entry_id: StableIdSchema,
+    route_ref: RouteRefSchema,
+    entry_points: IdListSchema.min(1),
+    kind: z.literal("mid-entry"),
+  }),
+]);
 
 export const PipelineProfileChildSchema = z.strictObject({
   node_id: StableIdSchema,
@@ -71,6 +79,11 @@ export const PipelineProfileSchema = z.strictObject({
   unique(value.transitions, (item) => item.transition_id, "transitions", context);
 
   const childIds = new Set(value.children.map((item) => item.node_id));
+  for (const [index, entry] of value.entries.entries()) {
+    if (entry.kind !== "mid-entry") continue;
+    refs(entry.entry_points, childIds, ["entries", index, "entry_points"], "child node", context);
+    uniqueStrings(entry.entry_points, ["entries", index, "entry_points"], context);
+  }
   const gateOwnerIds = new Set([...childIds, ...(value.profile_id === "paper-humanizer" ? value.entries.map((item) => item.entry_id) : [])]);
   const gateOwners = new Map(value.gates.map((item) => [item.gate_id, item.owner_node_id]));
   const branchOwners = new Map(value.branches.map((item) => [item.decision_id, item.owner_node_id]));
@@ -121,7 +134,7 @@ export const PipelineProfileSchema = z.strictObject({
       uniqueStrings(option.unlocks, ["branches", index, "options", optionIndex, "unlocks"], context);
     }
   }
-  const checkpoints = new Set([...childIds, ...value.entries.map((item) => item.checkpoint)]);
+  const checkpoints = new Set([...childIds, ...value.entries.flatMap((item) => item.kind === "end-to-end" ? [item.checkpoint] : [])]);
   for (const [index, transition] of value.transitions.entries()) {
     ref(transition.from, checkpoints, ["transitions", index, "from"], "checkpoint", context);
     ref(transition.to, checkpoints, ["transitions", index, "to"], "checkpoint", context);

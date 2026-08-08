@@ -8,7 +8,7 @@ export const ACADEMIC_PIPELINE_PROFILE: PipelineProfile = PipelineProfileSchema.
   profile_version: "1",
   entries: [
     { entry_id: "end-to-end", route_ref: "academic-pipeline:end-to-end", checkpoint: "research", kind: "end-to-end" },
-    { entry_id: "mid-entry", route_ref: "academic-pipeline:mid-entry", checkpoint: "entry", kind: "mid-entry" },
+    { entry_id: "mid-entry", route_ref: "academic-pipeline:mid-entry", entry_points: ["research", "write", "review", "revision", "re-review", "format", "final-integrity"], kind: "mid-entry" },
   ],
   children: [
     { node_id: "research", route_ref: "deep-research:full", prerequisites: [], required_gate_ids: ["evidence-integrity"], branch_ids: [], multiplicity: "optional", round_role: null },
@@ -70,8 +70,13 @@ export function validateAcademicPipelineProfileRouting(
     const route = routes.get(entry.route_ref);
     if (!route) issues.push(`profile_entry_route_missing:${entry.entry_id}:${entry.route_ref}`);
     else if (route.route_kind !== "entry") issues.push(`profile_entry_route_kind_invalid:${entry.entry_id}:${entry.route_ref}`);
-    if (entry.checkpoint !== "entry" && !childIds.has(entry.checkpoint)) {
+    if (entry.kind === "end-to-end" && !childIds.has(entry.checkpoint)) {
       issues.push(`profile_entry_checkpoint_missing:${entry.entry_id}:${entry.checkpoint}`);
+    }
+    if (entry.kind === "mid-entry") {
+      for (const entryPoint of entry.entry_points) {
+        if (!childIds.has(entryPoint)) issues.push(`profile_entry_point_missing:${entry.entry_id}:${entryPoint}`);
+      }
     }
   }
 

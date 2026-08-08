@@ -54,3 +54,20 @@ void test("workspace projects only the canonical current academic-pipeline profi
   assert.equal(templates.some((item) => item.relativePath === "specs/workflow.yaml"), false);
   assert.equal(templates.some((item) => item.relativePath.startsWith("runs/")), false);
 });
+
+void test("mid-entry profile declares only executable unique child entry points", () => {
+  const entry = ACADEMIC_PIPELINE_PROFILE.entries.find((item) => item.entry_id === "mid-entry");
+  assert.equal(entry?.kind, "mid-entry");
+  assert.deepEqual(entry?.kind === "mid-entry" ? entry.entry_points : [], [
+    "research", "write", "review", "revision", "re-review", "format", "final-integrity",
+  ]);
+  assert.equal(ACADEMIC_PIPELINE_PROFILE_PROJECTION.includes("checkpoint: entry"), false);
+
+  for (const entryPoints of [[], ["write", "write"], ["missing-child"]]) {
+    const invalid = structuredClone(ACADEMIC_PIPELINE_PROFILE);
+    const midEntry = invalid.entries.find((item) => item.kind === "mid-entry");
+    assert.ok(midEntry?.kind === "mid-entry");
+    midEntry.entry_points = entryPoints;
+    assert.equal(PipelineProfileSchema.safeParse(invalid).success, false, JSON.stringify(entryPoints));
+  }
+});

@@ -63,6 +63,16 @@ export interface RouteInstructions {
     boundary_outputs: BoundaryOutput[];
   };
   current_candidates: RouteFrontierItem[];
+  entry_points: Array<{
+    entry_point: string;
+    route_ref: string;
+    profile_prerequisites: string[];
+    stable_prerequisites: unknown[];
+    required_input_roles: string[];
+    formal_gates: string[];
+    risk_level: string;
+    cost: { effort: string; interaction: string };
+  }>;
   boundary_outputs: BoundaryOutput[];
   required_input_roles: string[];
   formal_gates: string[];
@@ -77,6 +87,7 @@ export interface RouteInstructions {
     schema_version: "1";
     confirmed_at: string;
     profile_entry?: string;
+    entry_point?: string;
     prerequisites: string[];
     handoff_inputs: HandoffEntry[];
     planned_outputs: HandoffEntry[];
@@ -117,7 +128,7 @@ export interface SubflowView {
   checkpoint: string;
   parent: { instance_id: string; node_id: string } | null;
   round?: number;
-  start_confirmation: { confirmed_by: string; expected_outputs: string[]; formal_gates: string[] };
+  start_confirmation: { confirmed_by: string; entry_point?: string; expected_outputs: string[]; formal_gates: string[] };
   gates: Array<{ gate_id: string; attempts: Array<{ verdict: string }>; override?: { decision_id: string } | null }>;
   decisions: Array<{ decision_id: string; kind: string; choice: string }>;
   transitions: Array<{ transition_id: string; from: string; to: string }>;
@@ -181,6 +192,7 @@ export async function startRoute(
   context: JourneyContext,
   routeRef: string,
   candidate?: RouteFrontierItem,
+  entryPoint?: string,
 ): Promise<StartResult> {
   let packet = instructions(context, `route:${routeRef}`) as RouteInstructions;
   if (packet.manuscript_delivery?.selection_required) {
@@ -204,6 +216,7 @@ export async function startRoute(
     schema_version: "1",
     confirmed_at: confirmedAt,
     ...(selected?.profile_entry ? { profile_entry: selected.profile_entry } : {}),
+    ...(entryPoint ? { entry_point: entryPoint } : {}),
     ...(selected?.parent_instance_id && selected.node_id
       ? { parent: { instance_id: selected.parent_instance_id, node_id: selected.node_id } }
       : {}),
