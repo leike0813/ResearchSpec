@@ -7,6 +7,9 @@ import { strFromU8, unzipSync } from "fflate";
 
 import { COMPANION_INTENTS, renderCompanionSkill } from "../src/adapters/companion/index.js";
 import { renderCliHandbook } from "../src/cli/handbook.js";
+import { handleCurrentInit, type BootstrapPromptPort } from "../src/cli/handlers.js";
+import type { CommandContext } from "../src/cli/types.js";
+import { loadCurrentWorkspaceIndex } from "../src/core/runtime/workspace-index.js";
 import { sha256 } from "../src/core/workspace/write-plan.js";
 import { MIT_LICENSE_TEXT } from "../src/licensing.js";
 
@@ -48,6 +51,77 @@ void test("fresh init creates only the current workspace authority tree", async 
   } finally {
     await cleanup(root);
   }
+});
+
+void test("interactive re-init reopens current selections and replaces the configured projection", async () => {
+  const root = await tempProject();
+  try {
+    assert.equal(runCli(["init", root, "--tools", "forgecode", "--delivery", "both", "--literature-adapters", "zotero-library"]).status, 0);
+    await mkdir(path.join(root, ".qwen"), { recursive: true });
+    const calls: Array<Parameters<BootstrapPromptPort["multiSelect"]>[0]> = [];
+    const prompts: BootstrapPromptPort = {
+      multiSelect(config) {
+        calls.push(config);
+        return Promise.resolve(config.id === "agent-tools" ? ["qwen"] : []);
+      },
+    };
+
+    const result = await handleCurrentInit(root, {}, interactiveInitContext(root), prompts);
+    assert.equal(result.ok, true);
+    assert.equal(result.command, "init");
+    assert.deepEqual(calls.map((call) => call.id), ["agent-tools", "literature-adapters"]);
+    const toolChoices = calls[0]?.choices ?? [];
+    const configuredTool = toolChoices.find((choice) => choice.value === "forgecode");
+    const detectedTool = toolChoices.find((choice) => choice.value === "qwen");
+    assert.deepEqual({ configured: configuredTool?.configured, preSelected: configuredTool?.preSelected }, { configured: true, preSelected: true });
+    assert.deepEqual({ detected: detectedTool?.detected, preSelected: detectedTool?.preSelected }, { detected: true, preSelected: false });
+    const adapterChoice = calls[1]?.choices.find((choice) => choice.value === "zotero-library");
+    assert.deepEqual({ configured: adapterChoice?.configured, preSelected: adapterChoice?.preSelected }, { configured: true, preSelected: true });
+
+    const index = await loadCurrentWorkspaceIndex(path.join(root, "researchspec"));
+    assert.deepEqual(index.config.agent_tools, { selected: ["qwen"], delivery: "both" });
+    assert.deepEqual(index.config.literature_adapters.selected, []);
+    assert.deepEqual(index.config.plugins.selected, []);
+    assert.equal(existsSync(path.join(root, ".forge/skills/researchspec-navigate/SKILL.md")), false);
+    assert.equal(existsSync(path.join(root, ".qwen/skills/researchspec-navigate/SKILL.md")), true);
+    assert.equal(existsSync(path.join(root, ".zotero-bridge/bin/zotero-bridge")), false);
+    assert.equal(existsSync(path.join(root, ".zotero-bridge/profile.template.json")), false);
+  } finally { await cleanup(root); }
+});
+
+void test("explicit and machine re-init use replacement and preserve omitted selections", async () => {
+  const root = await tempProject();
+  try {
+    assert.equal(runCli(["init", root, "--tools", "forgecode,qwen", "--delivery", "both", "--literature-adapters", "zotero-library"]).status, 0);
+    const replaced = parseEnvelope<{ selected_tools: string[]; selected_literature_adapters: string[]; delivery: string }>(runCli(["init", root, "--tools", "forgecode", "--json"]));
+    assert.deepEqual(replaced.data?.selected_tools, ["forgecode"]);
+    assert.deepEqual(replaced.data?.selected_literature_adapters, ["zotero-library"]);
+    assert.equal(replaced.data?.delivery, "both");
+    assert.equal(existsSync(path.join(root, ".qwen/skills/researchspec-navigate/SKILL.md")), false);
+    assert.equal(existsSync(path.join(root, ".zotero-bridge/bin/zotero-bridge")), true);
+
+    const preserved = parseEnvelope<{ selected_tools: string[]; selected_literature_adapters: string[]; delivery: string }>(runCli(["init", root, "--json"]));
+    assert.deepEqual(preserved.data?.selected_tools, ["forgecode"]);
+    assert.deepEqual(preserved.data?.selected_literature_adapters, ["zotero-library"]);
+    assert.equal(preserved.data?.delivery, "both");
+  } finally { await cleanup(root); }
+});
+
+void test("re-init deselection preserves a drifted generated file and its ownership evidence", async () => {
+  const root = await tempProject();
+  try {
+    assert.equal(runCli(["init", root, "--tools", "forgecode,qwen"]).status, 0);
+    const driftedPath = path.join(root, ".qwen/skills/researchspec-navigate/SKILL.md");
+    await writeFile(driftedPath, "locally modified generated Skill\n", "utf8");
+
+    const result = parseEnvelope(runCli(["init", root, "--tools", "forgecode", "--json"]));
+    assert.equal(result.ok, true);
+    assert.ok(result.diagnostics.some((item) => JSON.stringify(item).includes("generated_file_drift")));
+    assert.equal(await readFile(driftedPath, "utf8"), "locally modified generated Skill\n");
+    const index = await loadCurrentWorkspaceIndex(path.join(root, "researchspec"));
+    assert.deepEqual(index.config.agent_tools.selected, ["forgecode"]);
+    assert.ok(index.manifest.installations.some((item) => item.tool_id === "qwen" && item.target.path.endsWith("researchspec-navigate/SKILL.md")));
+  } finally { await cleanup(root); }
 });
 
 void test("new workspaces default to Skills and delivery switches reconcile both surfaces", async () => {
@@ -600,3 +674,7 @@ void test("current packs are deterministic, scoped, and exclude private or exter
     assert.equal(runCli(["pack", "--output", first, "--json"], root).status, 3);
   } finally { await cleanup(root); }
 });
+
+function interactiveInitContext(root: string): CommandContext {
+  return { command: "init", cwd: root, json: false, dryRun: false, force: false, yes: true, quiet: false, interactive: true };
+}

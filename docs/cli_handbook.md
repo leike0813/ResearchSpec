@@ -44,7 +44,7 @@ A valid selector shape does not imply that the action is available in the curren
 
 ### `researchspec init [path]`
 
-Initialize or safely extend a ResearchSpec workspace
+Initialize or reconfigure a ResearchSpec workspace
 
 - Workspace: `none`
 - Static effect: `write`
@@ -52,20 +52,20 @@ Initialize or safely extend a ResearchSpec workspace
 
 | Command option | Required | Purpose |
 | --- | --- | --- |
-| `--tools <ids>` | no | all, none, or comma-separated tool IDs |
+| `--tools <ids>` | no | replace with all, none, or comma-separated tool IDs |
 | `--delivery <mode>` | no | skills, commands, or both |
-| `--literature-adapters <ids>` | no | all, none, or comma-separated literature Adapter IDs |
+| `--literature-adapters <ids>` | no | replace with all, none, or comma-separated literature Adapter IDs |
 
 #### Input shape
 
-Optional bootstrap selections; the path positional argument defaults to the current directory.
+Optional complete bootstrap selections; the path positional argument defaults to the current directory.
 
 | Field or option | Type | Required | Meaning |
 | --- | --- | --- | --- |
-| `path` | `directory path` | no | Project root to initialize or safely extend. |
-| `--tools` | `all \| none \| comma-separated tool IDs` | no | Initial Agent-tool selection. |
-| `--delivery` | `skills \| commands \| both` | no | Generated Agent surface mode. |
-| `--literature-adapters` | `all \| none \| comma-separated Adapter IDs` | no | Optional literature Adapter selection. |
+| `path` | `directory path` | no | Project root to initialize or reconfigure. |
+| `--tools` | `all \| none \| comma-separated tool IDs` | no | Complete desired Agent-tool selection. |
+| `--delivery` | `skills \| commands \| both` | no | Generated Agent surface mode; omission preserves an existing value. |
+| `--literature-adapters` | `all \| none \| comma-separated Adapter IDs` | no | Complete desired optional literature Adapter selection. |
 
 ### `researchspec update [path]`
 

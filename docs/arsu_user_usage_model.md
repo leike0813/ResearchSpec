@@ -40,8 +40,10 @@ decide      archive     doctor      plugin
 ## 3. Workspace 与文件所有权
 
 `researchspec init` 先选择 Agent tools，再单独选择可选 literature Adapters；Adapter 默认不选。
-非交互调用通过 `--literature-adapters <none|all|ids>` 明确选择。它只准备 workspace 和静态
-Agent 投影，不启动学术工作。Fresh workspace：
+在 current workspace 中再次交互运行 `init` 会重新打开这两项选择，当前值默认选中，确认结果
+完整替换原选择；`delivery` 保持不变，domain plugins 仍由 `plugin` 命令管理。非交互调用通过
+`--tools` 和 `--literature-adapters <none|all|ids>` 提交完整选择，省略时保留 current workspace
+中的值。`init` 只准备 workspace 和静态 Agent 投影，不启动学术工作。Fresh workspace：
 
 ```text
 researchspec/

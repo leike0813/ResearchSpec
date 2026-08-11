@@ -16,6 +16,16 @@ CLI 检测可用 Agent hosts，并展示准备投影到每个 host 的 11 个固
 wrappers。用户选择目标 hosts 后，CLI 再展示可选 literature Adapters；当前只有需要 Zotero 与
 Zotero-Agents 插件的 `zotero-library`，默认不选。两项选择只决定静态投影，不开始任何研究。
 
+### 再次运行 init
+
+已有 current workspace 中再次交互运行 `researchspec init` 时，CLI 重新展示相同的两步选择。
+当前 Agent hosts 与 Adapter 默认选中；检测到但尚未配置的 hosts 只显示，不自动选中。用户确认的
+结果完整替换原选择，新增投影按当前包生成，取消选择的干净项目级投影安全移除。发生本地修改的
+受管文件会保留并报告 drift，共享全局文件不会因单个项目取消选择而删除。
+
+`delivery` 未显式传入时保持当前值，domain plugins 保持不变。非交互或 `--json` 重跑不等待
+输入：显式 `--tools`、`--literature-adapters` 表示完整选择，省略则保留已有选择。
+
 ### 文件结果
 
 ```text
@@ -59,6 +69,8 @@ Material Passport
 ### 验收
 
 - 用户拒绝 host 投影时，不在该 host 写文件。
+- 交互式 re-init 预选当前配置，并允许增加或取消 Agent hosts 与 literature Adapters。
+- 非交互 re-init 省略选择参数时，不改变当前选择，也不等待输入。
 - `init` 不探测或启动 Agent、Zotero、Zotero-Agents 插件或外部服务。
 - 非空目标或未知内容触发安全停止，不覆盖现有文件。
 - 第一次可见的研究变化只能来自后续用户-Agent 对话或显式命令。

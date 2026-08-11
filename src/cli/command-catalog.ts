@@ -75,10 +75,10 @@ export const CLI_GLOBAL_OPTIONS: readonly CliGlobalOptionDefinition[] = [
 ];
 
 const definitions: readonly CliCommandDefinition[] = [
-  command("init", ["init"], "init [path]", "bootstrap", "Initialize or safely extend a ResearchSpec workspace", "none", "write", [
-    option("tools", "--tools <ids>", "all, none, or comma-separated tool IDs"),
+  command("init", ["init"], "init [path]", "bootstrap", "Initialize or reconfigure a ResearchSpec workspace", "none", "write", [
+    option("tools", "--tools <ids>", "replace with all, none, or comma-separated tool IDs"),
     option("delivery", "--delivery <mode>", "skills, commands, or both"),
-    option("literatureAdapters", "--literature-adapters <ids>", "all, none, or comma-separated literature Adapter IDs"),
+    option("literatureAdapters", "--literature-adapters <ids>", "replace with all, none, or comma-separated literature Adapter IDs"),
   ], ["update", "status"]),
   command("update", ["update"], "update [path]", "bootstrap", "Refresh selected generated agent files", "required", "write", [
     option("tools", "--tools <ids>", "refresh/add a tool subset"),

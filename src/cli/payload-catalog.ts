@@ -29,11 +29,11 @@ const handoffDescriptor = [
 ] as const;
 
 export const CLI_PAYLOADS = {
-  init: payload("options", "Optional bootstrap selections; the path positional argument defaults to the current directory.", [
-    field("path", "directory path", false, "Project root to initialize or safely extend."),
-    field("--tools", "all | none | comma-separated tool IDs", false, "Initial Agent-tool selection."),
-    field("--delivery", "skills | commands | both", false, "Generated Agent surface mode."),
-    field("--literature-adapters", "all | none | comma-separated Adapter IDs", false, "Optional literature Adapter selection."),
+  init: payload("options", "Optional complete bootstrap selections; the path positional argument defaults to the current directory.", [
+    field("path", "directory path", false, "Project root to initialize or reconfigure."),
+    field("--tools", "all | none | comma-separated tool IDs", false, "Complete desired Agent-tool selection."),
+    field("--delivery", "skills | commands | both", false, "Generated Agent surface mode; omission preserves an existing value."),
+    field("--literature-adapters", "all | none | comma-separated Adapter IDs", false, "Complete desired optional literature Adapter selection."),
   ]),
   update: payload("options", "Optional replacement or extension selections for an existing current workspace.", [
     field("path", "directory path", false, "Project root containing the workspace."),

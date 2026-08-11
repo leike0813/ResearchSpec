@@ -43,9 +43,10 @@ selector 只接受稳定 ID；目录名相似度和“最近一个”不能替�
 ## 4. 命令职责
 
 - `init` 先选择 Agent tools，再单独选择默认关闭的 literature Adapters，然后创建 current
-  workspace 和 manifest-owned 静态投影，不启动学术工作。新 workspace 默认 `--delivery skills`；
-  `--delivery commands|both` 可显式启用命令适配器。非交互选择使用
-  `--literature-adapters <none|all|ids>`。
+  workspace 和 manifest-owned 静态投影，不启动学术工作。在已有 current workspace 中交互重跑
+  会以当前值预选并完整替换两项选择；检测到但未配置的 tools 不自动选中。非交互重跑通过
+  `--tools`、`--literature-adapters <none|all|ids>` 提交完整选择，省略的选择保持不变。新 workspace
+  默认 `--delivery skills`；`--delivery commands|both` 可显式启用命令适配器，省略时保留已有值。
 - `update` 省略 `--literature-adapters` 或 `--delivery` 时保留当前选择；传值时替换选择；它只协调受管 profile、Skills、wrappers、plugins 和 literature adapter 文件。发生 drift
   时默认保留用户修改，只有显式 `--force` 才替换生成内容。
 - `status` 只返回 workspace/profile 身份、稳定 specs 计数、subflow 计数、当前 frontier、pending
