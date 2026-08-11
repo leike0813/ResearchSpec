@@ -51,7 +51,7 @@ separate current-subflow consent. Never install Quarto, contact the network,
 fall back to Pandoc, overwrite an existing target, or report a successful
 handoff after a partial or failed render.
 
-Pass the paper-humanizer manuscript-prose reference constraint to the active academic-paper producer; the pipeline does not execute humanization itself.
+Pass the paper-humanizer Reference mode entrypoint constraint to the active academic-paper producer; the pipeline does not execute humanization itself.
 Produce semantic files at explicit project-relative paths outside
 researchspec/, then update the owning handoff with unique roles, types,
 purposes, paths, producers or intended consumers, and relevant limits. Do not

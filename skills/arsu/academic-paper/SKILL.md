@@ -50,13 +50,14 @@ separate current-subflow consent. Never install Quarto, contact the network,
 fall back to Pandoc, overwrite an existing target, or report a successful
 handoff after a partial or failed render.
 
-<!-- researchspec-paper-humanizer-reference:v1 -->
+<!-- researchspec-paper-humanizer-reference-mode:v2 -->
 When this route creates or edits manuscript prose (including outline, abstract,
 literature-review, revision, or full drafting), silently load the packaged
-paper-humanizer/references/prose-guidance.md reference first. This reference
-mode is advisory only: it does not start a humanizer route, run statistics,
-produce an audit, or request an additional confirmation. Do not load it for
-read-only review, citation audit, rebuttal audit, or format conversion.
+paper-humanizer/SKILL.md entrypoint first and follow its
+Reference mode. This advisory mode does not start a humanizer route, run
+statistics, produce an audit, or request an additional confirmation. Do not
+load it for read-only review, citation audit, rebuttal audit, or format
+conversion.
 Produce semantic files at explicit project-relative paths outside
 researchspec/, then update the owning handoff with unique roles, types,
 purposes, paths, producers or intended consumers, and relevant limits. Do not

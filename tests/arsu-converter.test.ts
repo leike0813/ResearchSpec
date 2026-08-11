@@ -14,6 +14,10 @@ import { ArsuConverterError, type ConversionManifest } from "../src/arsu-convert
 import { ARSU_ROUTING_CATALOG, getArsuSkillDefinition } from "../src/arsu-converter/routing/catalog.js";
 import { readSkillFrontmatterDescription, renderArsuSkillDescription } from "../src/arsu-converter/routing/projection.js";
 import { RESEARCHSPEC_PREFLIGHT_MARKER, RESEARCHSPEC_PREFLIGHT_PROFILE_ID } from "../src/arsu-converter/contracts.js";
+import {
+  PAPER_HUMANIZER_REFERENCE_MODE_SKILL_PATH,
+  RETIRED_PAPER_HUMANIZER_PROSE_GUIDANCE_PATH,
+} from "../src/core-skills/paper-humanizer/reference-mode.js";
 import type { ConvertOptions } from "../src/arsu-converter/converter.js";
 import type { RuntimePolicyCatalog } from "../src/arsu-converter/runtime-policy/types.js";
 
@@ -76,6 +80,10 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
   ) as unknown;
   assert.deepEqual(routingCatalog, ARSU_ROUTING_CATALOG);
   assert.equal(readSkillFrontmatterDescription(deepResearch), renderArsuSkillDescription(getArsuSkillDefinition("deep-research")));
+
+  const academicPaper = await readFile(path.join(root, "skills/arsu/academic-paper/SKILL.md"), "utf8");
+  assert.equal(academicPaper.includes(PAPER_HUMANIZER_REFERENCE_MODE_SKILL_PATH), true);
+  assert.equal(academicPaper.includes(RETIRED_PAPER_HUMANIZER_PROSE_GUIDANCE_PATH), false);
 
   const contracts = JSON.parse(
     await readFile(path.join(root, "skills/arsu/researchspec-contracts.json"), "utf8"),

@@ -343,10 +343,10 @@ revision-master Skill absorption. The immutable audit at
 `audits/revision-master/snapshot-13e69610/` covers all 48 tracked blob
 files under `skills/revision-master/` at upstream commit
 `13e69610f216f816f106d1a2a1672eedfa01ac9a`. The published Skill is renamed
-to `review-response`, with seven recorded adaptations (identifier rename,
+to `review-response`, with eight recorded adaptations (identifier rename,
 instance-root path rewrite, ResearchSpec control-plane boundary, control
 projection, schema rename, third-party runtime tone softened, Stage 3 coverage
-appendix). The upstream repository root has no `LICENSE` file and the
+appendix, Paper Humanizer Reference mode alignment). The upstream repository root has no `LICENSE` file and the
 `skills/revision-master` subtree has no per-skill `LICENSE` or copyright
 notice; the only attribution is the git commit author `Joshua Reed (leike0813)`,
 the same principal as ResearchSpec contributors. The published `LICENSE`

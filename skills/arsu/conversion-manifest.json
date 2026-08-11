@@ -11,7 +11,7 @@
     "remote_url": "https://github.com/Imbad0202/academic-research-skills",
     "dirty": false
   },
-  "generated_at": "2026-08-05T15:13:27Z",
+  "generated_at": "2026-08-11T03:25:46Z",
   "generated_groups": [
     "academic-paper",
     "academic-paper-reviewer",
@@ -958,7 +958,7 @@
           "source_path": "academic-paper/SKILL.md",
           "output_path": "academic-paper/SKILL.md",
           "transform_rule": "text_copy_with_dependency_rewrite_routing_description_and_contract_preflight",
-          "sha256": "40de481f6dc1a8583e1dba0e8c9eb4c7063a220bf69456c53bcd0d1acb1cd5a2"
+          "sha256": "7cbbb9cfdf34e0c874b1648f0b5b59f8606f5827cf781cca2ba37ab9342b8d46"
         },
         {
           "group": "academic-paper",
@@ -5031,7 +5031,7 @@
         {
           "group": "academic-paper",
           "path": "academic-paper/SKILL.md",
-          "line": 105,
+          "line": 106,
           "category": "platform_term",
           "term": ".claude/CLAUDE.md",
           "source_reason": "retained_runtime_marker",
@@ -5040,7 +5040,7 @@
         {
           "group": "academic-paper",
           "path": "academic-paper/SKILL.md",
-          "line": 323,
+          "line": 324,
           "category": "issue_reference",
           "term": "issue_or_pr_reference",
           "source_reason": "retained_runtime_marker",
@@ -5049,7 +5049,7 @@
         {
           "group": "academic-paper",
           "path": "academic-paper/SKILL.md",
-          "line": 409,
+          "line": 410,
           "category": "issue_reference",
           "term": "issue_or_pr_reference",
           "source_reason": "retained_runtime_marker",
@@ -5058,7 +5058,7 @@
         {
           "group": "academic-paper",
           "path": "academic-paper/SKILL.md",
-          "line": 485,
+          "line": 486,
           "category": "issue_reference",
           "term": "issue_or_pr_reference",
           "source_reason": "retained_runtime_marker",
@@ -5067,7 +5067,7 @@
         {
           "group": "academic-paper",
           "path": "academic-paper/SKILL.md",
-          "line": 577,
+          "line": 578,
           "category": "issue_reference",
           "term": "issue_or_pr_reference",
           "source_reason": "retained_runtime_marker",
@@ -5076,7 +5076,7 @@
         {
           "group": "academic-paper",
           "path": "academic-paper/SKILL.md",
-          "line": 590,
+          "line": 591,
           "category": "issue_reference",
           "term": "issue_or_pr_reference",
           "source_reason": "retained_runtime_marker",
@@ -5085,7 +5085,7 @@
         {
           "group": "academic-paper",
           "path": "academic-paper/SKILL.md",
-          "line": 594,
+          "line": 595,
           "category": "issue_reference",
           "term": "issue_or_pr_reference",
           "source_reason": "retained_runtime_marker",
@@ -5094,7 +5094,7 @@
         {
           "group": "academic-paper",
           "path": "academic-paper/SKILL.md",
-          "line": 624,
+          "line": 625,
           "category": "issue_reference",
           "term": "issue_or_pr_reference",
           "source_reason": "retained_runtime_marker",
@@ -5103,7 +5103,7 @@
         {
           "group": "academic-paper",
           "path": "academic-paper/SKILL.md",
-          "line": 692,
+          "line": 693,
           "category": "history_term",
           "term": "Version Info",
           "source_reason": "retained_runtime_marker",
@@ -5112,7 +5112,7 @@
         {
           "group": "academic-paper",
           "path": "academic-paper/SKILL.md",
-          "line": 703,
+          "line": 704,
           "category": "history_term",
           "term": "Version History",
           "source_reason": "retained_runtime_marker",
@@ -10287,7 +10287,7 @@
           "source_path": "academic-pipeline/SKILL.md",
           "output_path": "academic-pipeline/SKILL.md",
           "transform_rule": "text_copy_with_dependency_rewrite_routing_description_and_contract_preflight",
-          "sha256": "e41b903bec15ab410d34b3bc63b666c82efd53f875f9dee4b07e59a7bfa37458"
+          "sha256": "75a5f360205a7de855cdc3a6fe8dd944ff49e01fb41b21f0ab9947d7fe0a82ce"
         },
         {
           "group": "academic-pipeline",
@@ -20233,7 +20233,7 @@
       "source_path": "academic-paper/SKILL.md",
       "output_path": "academic-paper/SKILL.md",
       "transform_rule": "text_copy_with_dependency_rewrite_routing_description_and_contract_preflight",
-      "sha256": "40de481f6dc1a8583e1dba0e8c9eb4c7063a220bf69456c53bcd0d1acb1cd5a2"
+      "sha256": "7cbbb9cfdf34e0c874b1648f0b5b59f8606f5827cf781cca2ba37ab9342b8d46"
     },
     {
       "group": "academic-paper",
@@ -21080,7 +21080,7 @@
       "source_path": "academic-pipeline/SKILL.md",
       "output_path": "academic-pipeline/SKILL.md",
       "transform_rule": "text_copy_with_dependency_rewrite_routing_description_and_contract_preflight",
-      "sha256": "e41b903bec15ab410d34b3bc63b666c82efd53f875f9dee4b07e59a7bfa37458"
+      "sha256": "75a5f360205a7de855cdc3a6fe8dd944ff49e01fb41b21f0ab9947d7fe0a82ce"
     },
     {
       "group": "academic-pipeline",
@@ -33243,7 +33243,7 @@
     {
       "group": "academic-paper",
       "path": "academic-paper/SKILL.md",
-      "line": 105,
+      "line": 106,
       "category": "platform_term",
       "term": ".claude/CLAUDE.md",
       "source_reason": "retained_runtime_marker",
@@ -33252,7 +33252,7 @@
     {
       "group": "academic-paper",
       "path": "academic-paper/SKILL.md",
-      "line": 323,
+      "line": 324,
       "category": "issue_reference",
       "term": "issue_or_pr_reference",
       "source_reason": "retained_runtime_marker",
@@ -33261,7 +33261,7 @@
     {
       "group": "academic-paper",
       "path": "academic-paper/SKILL.md",
-      "line": 409,
+      "line": 410,
       "category": "issue_reference",
       "term": "issue_or_pr_reference",
       "source_reason": "retained_runtime_marker",
@@ -33270,7 +33270,7 @@
     {
       "group": "academic-paper",
       "path": "academic-paper/SKILL.md",
-      "line": 485,
+      "line": 486,
       "category": "issue_reference",
       "term": "issue_or_pr_reference",
       "source_reason": "retained_runtime_marker",
@@ -33279,7 +33279,7 @@
     {
       "group": "academic-paper",
       "path": "academic-paper/SKILL.md",
-      "line": 577,
+      "line": 578,
       "category": "issue_reference",
       "term": "issue_or_pr_reference",
       "source_reason": "retained_runtime_marker",
@@ -33288,7 +33288,7 @@
     {
       "group": "academic-paper",
       "path": "academic-paper/SKILL.md",
-      "line": 590,
+      "line": 591,
       "category": "issue_reference",
       "term": "issue_or_pr_reference",
       "source_reason": "retained_runtime_marker",
@@ -33297,7 +33297,7 @@
     {
       "group": "academic-paper",
       "path": "academic-paper/SKILL.md",
-      "line": 594,
+      "line": 595,
       "category": "issue_reference",
       "term": "issue_or_pr_reference",
       "source_reason": "retained_runtime_marker",
@@ -33306,7 +33306,7 @@
     {
       "group": "academic-paper",
       "path": "academic-paper/SKILL.md",
-      "line": 624,
+      "line": 625,
       "category": "issue_reference",
       "term": "issue_or_pr_reference",
       "source_reason": "retained_runtime_marker",
@@ -33315,7 +33315,7 @@
     {
       "group": "academic-paper",
       "path": "academic-paper/SKILL.md",
-      "line": 692,
+      "line": 693,
       "category": "history_term",
       "term": "Version Info",
       "source_reason": "retained_runtime_marker",
@@ -33324,7 +33324,7 @@
     {
       "group": "academic-paper",
       "path": "academic-paper/SKILL.md",
-      "line": 703,
+      "line": 704,
       "category": "history_term",
       "term": "Version History",
       "source_reason": "retained_runtime_marker",

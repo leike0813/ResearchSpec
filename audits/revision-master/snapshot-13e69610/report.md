@@ -62,7 +62,7 @@
 | `localization` | 3 |
 | `script` | 8 |
 
-> 说明：本审计将所有 48 条 blob 标记为 `retain`，因为其内容在上游阶段就是合法、自洽、可直接吸纳的产物；`skills/review-response/` 中已发布的字节相对上游所做的全部"重命名、改写、扩段"动作通过 7 条 `adaptations` 记录在 `capability-audit.json` 的 `adaptations` 数组中以段级概括登记，不重复计入 disposition 统计。
+> 说明：本审计将所有 48 条 blob 标记为 `retain`，因为其内容在上游阶段就是合法、自洽、可直接吸纳的产物；`skills/review-response/` 中已发布的字节相对上游所做的全部“重命名、改写、扩段”动作通过 8 条 `adaptations` 记录在 `capability-audit.json` 的 `adaptations` 数组中以段级概括登记，不重复计入 disposition 统计。
 
 ## 三、审计政策
 
@@ -124,7 +124,7 @@
 
 ## 七、已声明的 adaptations
 
-`capability-audit.json` 的 `adaptations` 数组登记 7 条已应用的派生决策：
+`capability-audit.json` 的 `adaptations` 数组登记 8 条已应用的派生决策：
 
 | 编号 | 类型 | 摘要 |
 | --- | --- | --- |
@@ -135,6 +135,7 @@
 | `schema-renamed` | renamed | `revision-master-schema.yaml` → `review-response-schema.yaml`，含表名/键名同步重命名 |
 | `third-party-runtime-tone` | softened | 删除 `conda run --no-capture-output -n DataProcessing` 模板；缺失 PyYAML/Jinja2 改为结构化阻断错误 |
 | `review-comment-coverage-appendix` | added | Stage 3 覆盖率硬阈值 / soft 阈值 / span_role 三分类的语义被声明为 Stage 3 canonical 输出 |
+| `paper-humanizer-reference-mode` | added | 写作约束改为加载自包含的 `paper-humanizer/SKILL.md` Reference mode 入口，不再引用已移除的 `prose-guidance.md` |
 
 > 详细差异见 `capability-audit.json` 的 `adaptations[*].evidence` 字段。每条以段级概括登记，未做行号级标注（与 paper-humanizer 模式一致）。
 

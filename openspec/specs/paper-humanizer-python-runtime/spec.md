@@ -6,6 +6,32 @@ TBD
 
 ## Requirements
 
+### Requirement: Reference mode is self-contained
+
+The published `paper-humanizer` `SKILL.md` SHALL contain the complete
+Reference mode instructions needed by other Skills that draft or revise prose.
+Consumers SHALL load `paper-humanizer/SKILL.md` and SHALL NOT require the
+retired `paper-humanizer/references/prose-guidance.md` path.
+
+#### Scenario: consumer loads Reference mode
+
+- **WHEN** a consuming Skill creates or edits manuscript prose
+- **THEN** it loads the packaged `paper-humanizer/SKILL.md` entrypoint without
+  starting a humanizer subflow, running diagnostics, or requesting an
+  additional confirmation
+
+### Requirement: Reference mode is self-contained for consumers
+
+The published `paper-humanizer/SKILL.md` SHALL be the sole packaged entrypoint
+that consumers load for Reference mode. Consumers SHALL NOT require
+`paper-humanizer/references/prose-guidance.md`.
+
+#### Scenario: drafting consumer uses Reference mode
+
+- **WHEN** a consumer creates or edits manuscript prose
+- **THEN** it loads `paper-humanizer/SKILL.md` without starting a humanizer
+  subflow, running diagnostics, or requesting additional confirmation
+
 ### Requirement: publish the pinned native runtime
 
 The published `paper-humanizer` Skill SHALL contain the pinned Python

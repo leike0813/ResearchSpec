@@ -4,11 +4,17 @@ import { access, mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  PAPER_HUMANIZER_REFERENCE_MODE_SKILL_PATH,
+  RETIRED_PAPER_HUMANIZER_PROSE_GUIDANCE_PATH,
+} from "../../core-skills/paper-humanizer/reference-mode.js";
 
 const SOURCE_COMMIT = "13e69610f216f816f106d1a2a1672eedfa01ac9a";
 const SOURCE_REPOSITORY = "https://github.com/leike0813/agent-skills";
 const SOURCE_SUBPATH = "skills/revision-master";
 const SOURCE_SNAPSHOT = "snapshot-13e69610";
+const REFERENCE_MODE_ADAPTATION_ID = "paper-humanizer-reference-mode";
+const EXPECTED_ADAPTATION_COUNT = 8;
 
 const root = path.resolve(fileURLToPath(new URL("../../../../", import.meta.url)));
 const sourceRoot = path.join(root, "vendor", "revision-master", "upstream", SOURCE_SUBPATH);
@@ -87,6 +93,15 @@ const forbiddenPaths = [
   "scripts/__pycache__",
   "agents",
 ] as const;
+
+type AuditAdaptation = {
+  id?: unknown;
+  kind?: unknown;
+  summary?: unknown;
+  applied_to?: unknown;
+  evidence?: unknown;
+  approved?: unknown;
+};
 
 type Result = {
   ok: boolean;
@@ -227,12 +242,48 @@ async function verify(): Promise<{
     else if (await exists(relative, skillRoot)) errors.push(`forbidden:${relative}`);
   }
 
+  const reviewResponseSkill = await readGenerated("SKILL.md");
+  if (reviewResponseSkill !== null) {
+    const text = reviewResponseSkill.toString("utf8");
+    if (text.includes(RETIRED_PAPER_HUMANIZER_PROSE_GUIDANCE_PATH)) {
+      errors.push(`retired-reference:${RETIRED_PAPER_HUMANIZER_PROSE_GUIDANCE_PATH}`);
+    }
+    if (!text.includes(PAPER_HUMANIZER_REFERENCE_MODE_SKILL_PATH)) {
+      errors.push(`missing-reference-mode-entrypoint:${PAPER_HUMANIZER_REFERENCE_MODE_SKILL_PATH}`);
+    }
+  }
+  errors.push(...await verifyReferenceModeAdaptation());
+
   const listed = await listFiles(skillRoot);
   for (const relative of listed) {
     if (!(allPublishedFiles as readonly string[]).includes(relative)) unexpectedPublished.push(relative);
   }
 
   return { errors, drift, missingSource, missingPublished, unexpectedPublished };
+}
+
+async function verifyReferenceModeAdaptation(): Promise<string[]> {
+  const auditPath = path.join(root, "audits", "revision-master", SOURCE_SNAPSHOT, "capability-audit.json");
+  let parsed: { adaptations?: unknown };
+  try {
+    parsed = JSON.parse(await readFile(auditPath, "utf8")) as { adaptations?: unknown };
+  } catch {
+    return ["invalid-audit:capability-audit.json"];
+  }
+  if (!Array.isArray(parsed.adaptations)) return ["invalid-audit:adaptations"];
+  const adaptations = parsed.adaptations as AuditAdaptation[];
+  const errors: string[] = [];
+  if (adaptations.length !== EXPECTED_ADAPTATION_COUNT) {
+    errors.push(`audit-adaptation-count:${String(adaptations.length)}`);
+  }
+  const adaptation = adaptations.find((item) => item.id === REFERENCE_MODE_ADAPTATION_ID);
+  if (!adaptation) return [...errors, `missing-audit-adaptation:${REFERENCE_MODE_ADAPTATION_ID}`];
+  if (adaptation.kind !== "added") errors.push(`invalid-audit-adaptation-kind:${REFERENCE_MODE_ADAPTATION_ID}`);
+  if (typeof adaptation.summary !== "string" || adaptation.summary.length === 0) errors.push(`invalid-audit-adaptation-summary:${REFERENCE_MODE_ADAPTATION_ID}`);
+  if (!Array.isArray(adaptation.applied_to) || adaptation.applied_to.length === 0) errors.push(`invalid-audit-adaptation-paths:${REFERENCE_MODE_ADAPTATION_ID}`);
+  if (typeof adaptation.evidence !== "string" || adaptation.evidence.length === 0) errors.push(`invalid-audit-adaptation-evidence:${REFERENCE_MODE_ADAPTATION_ID}`);
+  if (adaptation.approved !== true) errors.push(`unapproved-audit-adaptation:${REFERENCE_MODE_ADAPTATION_ID}`);
+  return errors;
 }
 
 async function treeDigest(base: string, files: readonly string[]): Promise<string | null> {

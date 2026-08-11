@@ -39,19 +39,22 @@ sorted entry and bind the manifest with
 - **THEN** the resulting hex string equals
   `9d134f411e440250d3bcda12a082bfeb8df74467556dabb7eb7668793fa7005a`.
 
-### Requirement: Audit records seven adaptations
+### Requirement: Audit records eight adaptations
 
-The audit SHALL declare the seven adaptations applied to produce
+The audit SHALL declare the eight adaptations applied to produce
 `skills/review-response/` from upstream `skills/revision-master/`. Each
 adaptation SHALL declare its kind (`renamed` | `added` | `softened`),
 summary, applied-to paths, evidence, and `approved = true`. No adaptation
 SHALL add a new public CLI command, change ResearchSpec lifecycle authority,
 import upstream Python, install upstream dependencies, or contact a service.
+The adaptations SHALL include `paper-humanizer-reference-mode`, which makes
+writing work load the self-contained `paper-humanizer/SKILL.md` Reference mode
+entrypoint instead of the retired `prose-guidance.md` file.
 
 #### Scenario: Adaptations are auditable
 
 - **WHEN** the `adaptations` array is parsed
-- **THEN** it contains exactly the seven planned adaptations with non-empty
+- **THEN** it contains exactly the eight planned adaptations with non-empty
   `summary`, `applied_to`, `evidence`, and `approved = true`.
 
 ### Requirement: Audit classifies zero external resources and zero credentials

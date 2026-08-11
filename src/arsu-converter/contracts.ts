@@ -1,4 +1,7 @@
 import { renderLiteratureSourcePolicyProjection } from "../literature-adapters/provider-policy.js";
+import {
+  PAPER_HUMANIZER_REFERENCE_MODE_SKILL_PATH,
+} from "../core-skills/paper-humanizer/reference-mode.js";
 import { GENERATED_OUTPUT_PATH, VENDOR_SOURCE_PATH } from "./config.js";
 import type {
   ContractInjectionResult,
@@ -9,7 +12,7 @@ import type {
 export const RESEARCHSPEC_PREFLIGHT_PROFILE_ID = "researchspec-preflight-v10";
 export const RESEARCHSPEC_PREFLIGHT_MARKER = "<!-- researchspec-contract-preflight:v10 -->";
 export const RESEARCHSPEC_LITERATURE_ADAPTER_MARKER = "<!-- researchspec-literature-adapter:zotero-library:v2 -->";
-export const PAPER_HUMANIZER_REFERENCE_MARKER = "<!-- researchspec-paper-humanizer-reference:v1 -->";
+export const PAPER_HUMANIZER_REFERENCE_MARKER = "<!-- researchspec-paper-humanizer-reference-mode:v2 -->";
 
 export const RESEARCHSPEC_MUTATION_OWNERSHIP = {
   stable_specs: "human_or_agent_direct_edit_with_project_change_for_high_impact_updates",
@@ -172,13 +175,14 @@ function paperHumanizerReferenceBlock(skillGroup: string): string {
     return `${PAPER_HUMANIZER_REFERENCE_MARKER}
 When this route creates or edits manuscript prose (including outline, abstract,
 literature-review, revision, or full drafting), silently load the packaged
-paper-humanizer/references/prose-guidance.md reference first. This reference
-mode is advisory only: it does not start a humanizer route, run statistics,
-produce an audit, or request an additional confirmation. Do not load it for
-read-only review, citation audit, rebuttal audit, or format conversion.`;
+${PAPER_HUMANIZER_REFERENCE_MODE_SKILL_PATH} entrypoint first and follow its
+Reference mode. This advisory mode does not start a humanizer route, run
+statistics, produce an audit, or request an additional confirmation. Do not
+load it for read-only review, citation audit, rebuttal audit, or format
+conversion.`;
   }
   if (skillGroup === "academic-pipeline") {
-    return "Pass the paper-humanizer manuscript-prose reference constraint to the active academic-paper producer; the pipeline does not execute humanization itself.";
+    return "Pass the paper-humanizer Reference mode entrypoint constraint to the active academic-paper producer; the pipeline does not execute humanization itself.";
   }
   return "";
 }

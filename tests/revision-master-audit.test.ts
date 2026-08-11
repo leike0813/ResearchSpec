@@ -39,6 +39,7 @@ void test("audits/revision-master/snapshot-13e69610 holds immutable machine evid
     source: Record<string, unknown>;
     summary_counts: Record<string, unknown>;
     policies: Record<string, unknown>;
+    adaptations: Array<{ id?: unknown; kind?: unknown; summary?: unknown; applied_to?: unknown; evidence?: unknown; approved?: unknown }>;
   };
   assert.equal(audit.schema_version, "1");
   assert.equal(audit.source.name, "revision-master");
@@ -48,6 +49,15 @@ void test("audits/revision-master/snapshot-13e69610 holds immutable machine evid
   assert.equal(audit.policies.audit_is_admission, false);
   assert.equal(audit.summary_counts.tracked_entries, 57);
   assert.equal(audit.summary_counts.blob_entries, 48);
+  assert.equal(audit.adaptations.length, 8);
+  assert.deepEqual(audit.adaptations.find((item) => item.id === "paper-humanizer-reference-mode"), {
+    id: "paper-humanizer-reference-mode",
+    kind: "added",
+    summary: "The Review Response writing constraint now loads the self-contained Paper Humanizer Reference mode entrypoint instead of the retired prose-guidance reference.",
+    applied_to: ["SKILL.md"],
+    evidence: "skills/review-response/SKILL.md loads paper-humanizer/SKILL.md before manuscript or response-letter writing and does not reference paper-humanizer/references/prose-guidance.md.",
+    approved: true,
+  });
 });
 
 void test("audits/revision-master/snapshot-13e69610 set hash reproduces from staged bytes", () => {

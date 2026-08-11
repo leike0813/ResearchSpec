@@ -248,6 +248,14 @@
       "applied_to": ["SKILL.md", "references/stage-3-comment-atomization.md"],
       "evidence": "Comparison shows the upstream text already contained these thresholds; adaptation is editorial rename + verbatim carry-over with ResearchSpec nomenclature.",
       "approved": true
+    },
+    {
+      "id": "paper-humanizer-reference-mode",
+      "kind": "added",
+      "summary": "The Review Response writing constraint now loads the self-contained Paper Humanizer Reference mode entrypoint instead of the retired prose-guidance reference.",
+      "applied_to": ["SKILL.md"],
+      "evidence": "skills/review-response/SKILL.md loads paper-humanizer/SKILL.md before manuscript or response-letter writing and does not reference paper-humanizer/references/prose-guidance.md.",
+      "approved": true
     }
   ],
   "candidate_skill": {
@@ -308,6 +316,6 @@
     "security_findings": 6,
     "content_origins": 1,
     "license_claims": 1,
-    "adaptations": 7
+    "adaptations": 8
   }
 }
