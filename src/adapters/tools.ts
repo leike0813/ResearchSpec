@@ -1,6 +1,8 @@
 import { homedir } from "node:os";
 import path from "node:path";
 
+import { ARSU_SKILL_IDS } from "../arsu-converter/routing/contracts.js";
+import { CORE_SKILL_IDS } from "../core-skills/catalog.js";
 import { fileExists } from "../utils/fs.js";
 
 export type CommandFormat =
@@ -139,12 +141,14 @@ export function sharedSkillTarget(toolId: string): "codex" | "agents" | undefine
   return resolved === "codex" || resolved === "agents" ? resolved : undefined;
 }
 
+const FIXED_SKILL_IDS: readonly string[] = [...ARSU_SKILL_IDS, ...CORE_SKILL_IDS];
+
 export async function detectTools(projectRoot: string): Promise<string[]> {
   const detected: string[] = [];
   for (const definition of TOOLS) {
     if (definition.globalSkillsDir) {
       const globalRoot = toolSkillsRoot(definition, projectRoot).root;
-      if (await fileExists(globalRoot)) detected.push(definition.id);
+      if ((await Promise.all(FIXED_SKILL_IDS.map((skillId) => fileExists(path.join(globalRoot, skillId, "SKILL.md"))))).some(Boolean)) detected.push(definition.id);
       continue;
     }
     const candidates = definition.detectionPaths ?? (definition.skillsDir ? [definition.skillsDir] : []);

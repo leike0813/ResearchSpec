@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { test } from "node:test";
 
@@ -111,6 +111,25 @@ void test("Copilot uses its explicit detection paths", async () => {
   await mkdir(path.join(root, ".github/agents"), { recursive: true });
   assert.ok((await detectTools(root)).includes("github-copilot"));
   await cleanup(root);
+});
+
+void test("global-only tools are detected only by managed skill files", async () => {
+  const root = await tempProject();
+  const previousHome = process.env.HOME;
+  const home = path.join(root, "home");
+  const globalSkills = path.join(home, ".minimax", "skills");
+  await mkdir(globalSkills, { recursive: true });
+  process.env.HOME = home;
+  try {
+    assert.equal((await detectTools(root)).includes("minimax-code"), false);
+    await mkdir(path.join(globalSkills, "deep-research"), { recursive: true });
+    await writeFile(path.join(globalSkills, "deep-research", "SKILL.md"), "x", "utf8");
+    assert.ok((await detectTools(root)).includes("minimax-code"));
+  } finally {
+    if (previousHome === undefined) Reflect.deleteProperty(process.env, "HOME");
+    else process.env.HOME = previousHome;
+    await cleanup(root);
+  }
 });
 
 void test("delivery projects the fixed Skill surface and sixteen wrappers by default", async () => {
