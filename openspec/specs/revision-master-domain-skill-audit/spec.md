@@ -2,7 +2,7 @@
 
 ## Purpose
 
-TBD
+Define the immutable audit contract for the Revision Master domain skill snapshot.
 
 ## Requirements
 

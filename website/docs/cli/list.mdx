@@ -1,14 +1,14 @@
 ---
 sidebar_position: 8
 title: "list"
-description: "List current subflows, changes, Gates, Decisions, handoffs, profiles, tools, diagnostics, or derived history"
+description: "List profiles, runs, nodes, changes, or diagnostics"
 ---
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
 # `researchspec list [type]`
 
-List current subflows, changes, Gates, Decisions, handoffs, profiles, tools, diagnostics, or derived history
+List profiles, runs, nodes, changes, or diagnostics
 
 - **Group**: Inspection
 - **Workspace**: `required`
@@ -26,6 +26,6 @@ An optional collection type with cursor pagination.
 
 | Field or option | Type | Required | Meaning |
 | --- | --- | --- | --- |
-| `type` | `subflows \| changes \| gates \| decisions \| handoffs \| profiles \| tools \| diagnostics \| history` | no | Collection to list; defaults to subflows. |
+| `type` | `profiles \| runs \| nodes \| changes \| diagnostics` | no | Collection to list; defaults to runs. |
 | `--limit` | `integer 1..50` | no | Page size; defaults to 20. |
 | `--cursor` | `opaque base64url cursor` | no | Cursor returned by the immediately preceding page for the same unchanged collection. |

@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARS 深度拆解 · Academic Research Skills 架构与逻辑分析</title>
+<style>
+  :root {
+    --ink: #1c2433;
+    --ink-soft: #4a5568;
+    --muted: #7a8699;
+    --bg: #f7f8fa;
+    --card: #ffffff;
+    --line: #e3e8ef;
+    --accent: #2b4c8c;
+    --accent-soft: #eef3fb;
+    --human: #b23b3b;
+    --human-soft: #fdf1f0;
+    --integrity: #b36b00;
+    --integrity-soft: #fdf6e8;
+    --ok: #2e7d4f;
+    --ok-soft: #eef7f1;
+    --machine: #5b4a9e;
+    --machine-soft: #f3f0fb;
+    --warn: #8c6d1f;
+    --warn-soft: #fbf6e5;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+  code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Courier New", monospace;
+    font-size: 0.88em;
+    background: #f0f2f5;
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: #35415a;
+  }
+  pre {
+    background: #101826;
+    color: #d6e2f2;
+    padding: 14px 18px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  pre code { background: none; color: inherit; padding: 0; }
+
+  /* ---------- layout ---------- */
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: 300px;
+    height: 100vh;
+    overflow-y: auto;
+    background: #ffffff;
+    border-right: 1px solid var(--line);
+    padding: 22px 18px 40px;
+    z-index: 10;
+  }
+  .sidebar h2 {
+    font-size: 15px;
+    margin: 0 0 6px;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+  }
+  .sidebar .subtitle { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+  .sidebar nav a {
+    display: block;
+    color: var(--ink-soft);
+    text-decoration: none;
+    font-size: 13px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    border-left: 3px solid transparent;
+    margin-bottom: 1px;
+  }
+  .sidebar nav a:hover { background: var(--accent-soft); color: var(--accent); }
+  .sidebar nav a.active { background: var(--accent-soft); color: var(--accent); border-left-color: var(--accent); font-weight: 600; }
+  .sidebar nav a.lvl2 { padding-left: 22px; }
+  main { margin-left: 300px; padding: 34px 46px 90px; max-width: 1180px; }
+
+  /* ---------- headings ---------- */
+  h1 {
+    font-size: 30px;
+    line-height: 1.35;
+    margin: 0 0 6px;
+  }
+  .doc-meta { color: var(--muted); font-size: 13px; margin-bottom: 30px; }
+  h2 {
+    font-size: 22px;
+    margin: 52px 0 14px;
+    padding: 12px 0 10px 14px;
+    border-left: 5px solid var(--accent);
+    border-bottom: 1px solid var(--line);
+    background: linear-gradient(90deg, var(--accent-soft), transparent 70%);
+    border-radius: 0 6px 6px 0;
+  }
+  h3 { font-size: 17px; margin: 30px 0 10px; color: var(--accent); }
+  h4 { font-size: 15px; margin: 22px 0 8px; }
+  p { margin: 10px 0; }
+  ul, ol { margin: 8px 0; padding-left: 24px; }
+  li { margin: 4px 0; }
+  blockquote {
+    margin: 14px 0;
+    padding: 10px 16px;
+    border-left: 4px solid var(--muted);
+    background: #f4f6f9;
+    border-radius: 0 6px 6px 0;
+    color: var(--ink-soft);
+  }
+  blockquote p { margin: 4px 0; }
+
+  /* ---------- tables ---------- */
+  .table-wrap { overflow-x: auto; margin: 14px 0; border: 1px solid var(--line); border-radius: 8px; background: var(--card); }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+  th {
+    background: #eef1f6;
+    text-align: left;
+    padding: 8px 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    border-bottom: 2px solid var(--line);
+  }
+  td { padding: 7px 12px; border-bottom: 1px solid #edf0f4; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: #fafbfd; }
+  td code { white-space: nowrap; }
+
+  /* ---------- badges ---------- */
+  .badge {
+    display: inline-block;
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 1px 8px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .b-human { background: var(--human-soft); color: var(--human); border: 1px solid #ecc8c8; }
+  .b-integrity { background: var(--integrity-soft); color: var(--integrity); border: 1px solid #ecd9b0; }
+  .b-machine { background: var(--machine-soft); color: var(--machine); border: 1px solid #d9d2ee; }
+  .b-ok { background: var(--ok-soft); color: var(--ok); border: 1px solid #c4e0cf; }
+  .b-warn { background: var(--warn-soft); color: var(--warn); border: 1px solid #e9dcc0; }
+  .b-fidelity { background: #eef4fa; color: #23587c; border: 1px solid #c6d9e8; }
+  .b-balanced { background: #f0f4ee; color: #41632d; border: 1px solid #cfdec4; }
+  .b-originality { background: #f9f1f7; color: #833c70; border: 1px solid #e3c9dc; }
+
+  /* ---------- flow diagrams ---------- */
+  .flow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 14px 0; }
+  .flow.vertical { flex-direction: column; align-items: stretch; gap: 0; }
+  .fnode {
+    background: var(--card);
+    border: 1.5px solid var(--accent);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 13px;
+    text-align: center;
+    min-width: 90px;
+  }
+  .fnode .fn-title { font-weight: 700; display: block; }
+  .fnode .fn-sub { font-size: 11.5px; color: var(--muted); display: block; margin-top: 2px; }
+  .fnode.human { border-color: var(--human); background: var(--human-soft); }
+  .fnode.integrity { border-color: var(--integrity); background: var(--integrity-soft); }
+  .fnode.machine { border-color: var(--machine); background: var(--machine-soft); }
+  .fnode.ok { border-color: var(--ok); background: var(--ok-soft); }
+  .fnode.ghost { border-style: dashed; border-color: var(--muted); background: #fbfcfd; color: var(--ink-soft); }
+  .farrow { color: var(--muted); font-size: 17px; flex: 0 0 auto; }
+  .farrow.v { align-self: center; padding: 3px 0; font-size: 15px; }
+  .flabel { font-size: 11.5px; color: var(--muted); text-align: center; padding: 2px 6px; }
+  .frow { display: flex; align-items: center; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .frow.v { flex-direction: column; }
+  .fgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin: 14px 0; }
+  .fcard {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+  .fcard h5 { margin: 0 0 6px; font-size: 13.5px; }
+  .fcard ul { margin: 0; padding-left: 18px; font-size: 12.5px; }
+
+  /* ---------- callouts ---------- */
+  .callout {
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 14px 0;
+    font-size: 13.5px;
+    border: 1px solid var(--line);
+  }
+  .callout.note { background: var(--accent-soft); border-color: #c9d8ef; }
+  .callout.risk { background: var(--human-soft); border-color: #ecc8c8; }
+  .callout.obs { background: var(--warn-soft); border-color: #e9dcc0; }
+  .callout .ct { font-weight: 700; display: block; margin-bottom: 4px; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin: 16px 0; }
+  .kpi {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    text-align: center;
+    padding: 14px 8px;
+  }
+  .kpi .num { font-size: 26px; font-weight: 800; color: var(--accent); }
+  .kpi .lbl { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  .term { font-weight: 600; color: var(--ink); }
+  .en { color: var(--muted); font-size: 0.9em; }
+  .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.9em; }
+
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    main { margin-left: 0; padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <h2>ARS 深度拆解</h2>
+  <div class="subtitle">Academic Research Skills<br>架构与逻辑分析 · 中文版</div>
+  <nav id="toc">
+    <a href="#s0">0 · 导读</a>
+    <a href="#s1">1 · 定位与设计哲学</a>
+    <a href="#s2">2 · 仓库地形与全局架构</a>
+    <a href="#s2-1" class="lvl2">2.1 数据访问分级</a>
+    <a href="#s2-2" class="lvl2">2.2 39 Agent 全景</a>
+    <a href="#s3">3 · 模式系统（27 Modes）</a>
+    <a href="#s3-1" class="lvl2">3.1 Mode Spectrum</a>
+    <a href="#s3-2" class="lvl2">3.2 两种调用模式</a>
+    <a href="#s4">4 · 四技能内部流程</a>
+    <a href="#s4-1" class="lvl2">4.1 deep-research（6 阶段）</a>
+    <a href="#s4-2" class="lvl2">4.2 academic-paper（8 阶段）</a>
+    <a href="#s4-3" class="lvl2">4.3 academic-paper-reviewer（3 阶段）</a>
+    <a href="#s4-4" class="lvl2">4.4 academic-pipeline（10 阶段）</a>
+    <a href="#s5">5 · 人类在环：Checkpoint 与 Gate</a>
+    <a href="#s6">6 · 合同层：Passport / Handoff / Sprint / Patch</a>
+    <a href="#s7">7 · 诚实原语：反幻觉与反泄漏机制族</a>
+    <a href="#s8">8 · 边界执行：从 prose 到强制</a>
+    <a href="#s9">9 · 版本演进时间线</a>
+    <a href="#s10">10 · 审阅观察：刚性来源与吸收视角</a>
+    <a href="#sa" class="lvl2">附录 A · 术语表</a>
+    <a href="#sb" class="lvl2">附录 B · 关键文件索引</a>
+  </nav>
+</aside>
+
+<main>
+<h1>ARS 深度拆解</h1>
+<div class="doc-meta">
+  Academic Research Skills（ARS）上游仓库架构与逻辑分析 · 基于 <code>vendor/ars</code> 快照（v3.19.0，MODE_REGISTRY 2026-07-22 更新）· 生成于 2026-08<br>
+  用途：为 ResearchSpec 对 ARS 的吸收重构提供理解与审阅基础。本文档为分析快照，不替代上游文件。
+</div>
+
+<!-- ==================== 0 ==================== -->
+<h2 id="s0">0 · 导读</h2>
+<p>ARS 是一个"源可用（source-available）的学术研究副驾驶框架"，以 Claude Code skills 为参考发行形态，覆盖<strong>从研究问题到论文定稿的完整链路</strong>。它的独特之处不在模型能力，而在一套高度自洽的<strong>流程纪律</strong>：39 个角色化 Agent、27 个模式、10 阶段管道、双层检查点、13 类跨技能交接合同，以及一套持续膨胀的"诚实原语"（反幻觉、反泄漏、引用忠实性验证）。</p>
+<p>理解 ARS 的关键视角有三个，建议按此顺序阅读：</p>
+<ol>
+  <li><strong>定位</strong>（§1）：ARS 先划清"不做什么"——五个被明确拒绝的自主研究机制，比它"做什么"更能解释它的设计；</li>
+  <li><strong>结构</strong>（§2–§4）：四技能 × 模式 × Agent 团队 × 阶段流程的静态架构；</li>
+  <li><strong>纪律</strong>（§5–§8）：checkpoint、合同、诚实原语、边界执行四层机制——这是 ARS 最重的部分，也是吸收时最难处理的部分。</li>
+</ol>
+<div class="kpi-row">
+  <div class="kpi"><div class="num">4</div><div class="lbl">核心 Skills</div></div>
+  <div class="kpi"><div class="num">27</div><div class="lbl">模式（Modes）</div></div>
+  <div class="kpi"><div class="num">39</div><div class="lbl">Agent 文件</div></div>
+  <div class="kpi"><div class="num">10</div><div class="lbl">管道阶段</div></div>
+  <div class="kpi"><div class="num">13+</div><div class="lbl">交接合同 Schema</div></div>
+  <div class="kpi"><div class="num">64</div><div class="lbl">check_* 校验脚本</div></div>
+</div>
+
+<!-- ==================== 1 ==================== -->
+<h2 id="s1">1 · 定位与设计哲学</h2>
+
+<h3>1.1 基本定位</h3>
+<table>
+<tr><th>维度</th><th>内容</th></tr>
+<tr><td><strong>是什么</strong></td><td>源可用的学术研究<strong>副驾驶</strong>框架（copilot），非自主写作系统；参考发行形态为 Claude Code skills，有社区维护的 Codex 等平行发行</td></tr>
+<tr><td><strong>许可证</strong></td><td>CC BY-NC 4.0（非开源，明确禁止商业使用——SaaS、咨询打包、企业付费部署、API 包装转售均被禁止）</td></tr>
+<tr><td><strong>不是</strong></td><td>不是自主论文写作系统、不替代研究者、不主张作者身份、未经人类审阅的输出不可提交</td></tr>
+<tr><td><strong>核心承诺</strong></td><td>人类在环（human-in-the-loop）永远在线；失败模式可见而非隐藏；边界记录在案而非即兴决定</td></tr>
+</table>
+
+<h3>1.2 被明确拒绝的机制（Rejected Mechanisms）</h3>
+<p>POSITIONING.md 中这五条不是范围脚注，而是承重边界。每条的评审测试都是同一句问话：<strong>"谁控制下一次研究状态转换？"</strong></p>
+<div class="fgrid">
+  <div class="fcard"><h5>端到端自主研究管道</h5><ul><li>从问题到稿件无需学者在每次状态转换时确认</li><li>被拒：学者会沦为 AI 输出的审阅者而非作者</li></ul></div>
+  <div class="fcard"><h5>Idea-generation Agent</h5><ul><li>替学者提出/排序/扩展研究假设或问题</li><li>被拒：ARS 只可对学者自拟问题做措辞模式提示 + 苏格拉底追问，绝不代拟</li></ul></div>
+  <div class="fcard"><h5>Paper2X 自动生成</h5><ul><li>自主把稿件转成 slides/海报/视频</li><li>被拒：ARS 只能对已有传播物做"保真审计"，不替作者选内容、叙事或媒介</li></ul></div>
+  <div class="fcard"><h5>自主实验执行/编码</h5><ul><li>LLM 无监督跑实验或代码</li><li>被拒：只可摄入学者声明的实验溯源（#260），不发起、不修改、不把工具输出当证据</li></ul></div>
+  <div class="fcard"><h5>物理湿实验自动化 API</h5><ul><li>驱动移液器等自动化设备</li><li>被拒：超出副驾驶范围，进入实验室基础设施领域</li></ul></div>
+</div>
+
+<h3>1.3 记录在案的非目标（Non-Goals）</h3>
+<ul>
+  <li><strong>发表后生命周期</strong>：不追踪自有论文的被引语境、勘误、OA 自存档（monitoring_agent 只监测被引文献的新进展，不监测学者自己的产出）。</li>
+  <li><strong>跨论文研究项目级状态</strong>：ARS 不记忆任何跨论文状态——无历史 claims 注册表、无 reviewer 历史档案。唯一状态载体是单篇论文的 Material Passport，每次运行从学者显式喂入的材料开始。这是反泄漏哲学的刻意结果。</li>
+  <li><strong>机构/期刊格式 profile 内容</strong>：只提供 <code>format_profile</code>（#439）的<strong>机制</strong>（schema + 合成示例），永不携带任何真实机构/期刊的模板规则。</li>
+</ul>
+
+<h3>1.4 设计哲学四原则</h3>
+<ol>
+  <li><strong>辅助而非欺骗（Assistive, not deceptive）</strong>：Style Calibration 学用户文风、Writing Quality Check 抓 AI 典型痕迹、Disclosure Mode 生成合规声明——透明是标准。</li>
+  <li><strong>人类在环，永远（Human-in-the-loop, always）</strong>：checkpoint 系统强制；"full mode"指全管道执行而非全自主；最多 2 轮修订循环，之后遗留问题转为"已确认的局限"而非静默解决。</li>
+  <li><strong>失败可见（Failure modes made visible）</strong>：7 模式 AI 研究失败清单（v3.2）+ Reviewer Calibration Mode，让用户看见 AI 可能错在哪里。</li>
+  <li><strong>边界记录而非即兴（Boundaries recorded, not improvised）</strong>：每次采纳外部系统能力触碰承重边界时，写一份 design-lesson 文档（如对 Co-Scientist 的 4 篇 L1–L4 分析、对 Kong 2026 自主研究的 2 篇），使边界可复审、可一致执行。</li>
+</ol>
+
+<!-- ==================== 2 ==================== -->
+<h2 id="s2">2 · 仓库地形与全局架构</h2>
+
+<h3>2.1 仓库地形</h3>
+<div class="table-wrap"><table>
+<tr><th>目录</th><th>内容</th><th>规模</th></tr>
+<tr><td><code>deep-research/</code><br><code>academic-paper/</code><br><code>academic-paper-reviewer/</code><br><code>academic-pipeline/</code></td><td>四个技能包，各含 SKILL.md + <code>agents/</code> + <code>references/</code> + <code>templates/</code> + <code>examples/</code></td><td>约 170 文件</td></tr>
+<tr><td><code>shared/</code></td><td>跨技能共享层：<code>contracts/</code>（schema）、<code>references/</code>（firm rules、术语表、证据强度阶梯）、<code>agents/compliance_agent.md</code>、协议模式文档（handoff_schemas、ground_truth_isolation、mode_spectrum、cross_model_verification、model_tiering…）</td><td>60 文件</td></tr>
+<tr><td><code>commands/</code></td><td>16 个斜杠命令包装（<code>ars-full</code>、<code>ars-outline</code>、<code>ars-reviewer</code>…）</td><td>16 文件</td></tr>
+<tr><td><code>hooks/</code></td><td>Claude Code hook：SessionStart 播报 + PreToolUse 写范围守卫</td><td>2 文件</td></tr>
+<tr><td><code>scripts/</code></td><td>Python 工具层：64 个 <code>check_*</code> 校验/防漂移脚本、文献适配器（Zotero/Obsidian/文件夹扫描）、引文验证门（resolver + SQLite 缓存）、revision patch 应用器、时间线引导器等</td><td>335 文件</td></tr>
+<tr><td><code>docs/</code></td><td>ARCHITECTURE.md + 83 篇设计文档（每篇对应一次版本决策）</td><td>83+ 文件</td></tr>
+<tr><td><code>skills/</code></td><td>指向四个技能目录的软链接（插件打包用）</td><td>符号链接</td></tr>
+</table></div>
+
+<h3>2.2 技能依赖关系</h3>
+<div class="flow">
+  <div class="fnode machine"><span class="fn-title">academic-pipeline</span><span class="fn-sub">编排器 · 5 agents · v3.19.0</span></div>
+  <div class="farrow">⟶</div>
+  <div class="fnode"><span class="fn-title">deep-research</span><span class="fn-sub">研究 · 13+1 agents</span></div>
+  <div class="farrow">⟶</div>
+  <div class="fnode"><span class="fn-title">academic-paper</span><span class="fn-sub">写作 · 12 agents</span></div>
+  <div class="farrow">⟶</div>
+  <div class="fnode"><span class="fn-title">academic-paper-reviewer</span><span class="fn-sub">评审 · 7 agents</span></div>
+</div>
+<div class="frow">
+  <div class="fnode ghost"><span class="fn-title">collaboration_depth_agent</span><span class="fn-sub">观察者 · 仅建议 · 永不阻断</span></div>
+</div>
+<p class="flabel">deep-research ⟶ academic-paper：RQ Brief + Bibliography + Synthesis；academic-paper ⟶ reviewer：完整稿件；reviewer ⟶ academic-paper：Revision Roadmap。全部经 shared/ 合同层。</p>
+
+<h3 id="s2-1">2.3 数据访问分级（Data Access Level）</h3>
+<p>每个 SKILL.md 的 frontmatter 声明 <code>data_access_level</code>，构成一条"数据纯度流水线"。官方明确说明：这是<strong>声明性标注</strong>，不是运行时强制权限系统——真正执法点在下游完整性门（Stage 2.5 / 4.5）。</p>
+<div class="flow">
+  <div class="fnode human"><span class="fn-title">raw</span><span class="fn-sub">deep-research<br>任意（可能对抗性）输入</span></div>
+  <div class="farrow">source_verification 抬升 →</div>
+  <div class="fnode"><span class="fn-title">redacted</span><span class="fn-sub">academic-paper<br>净化后材料，不再摄入原始数据</span></div>
+  <div class="farrow">Gate 2.5 →</div>
+  <div class="fnode ok"><span class="fn-title">verified_only</span><span class="fn-sub">reviewer / pipeline<br>仅在上游完整性门通过后运行</span></div>
+</div>
+<ul>
+  <li>评审方可<strong>私有持有 rubric</strong>：校准金标集由人类研究者运行时提供，绝不捆绑进仓库、绝不进入候选生成 Agent 的上下文（ground-truth isolation 原则）。</li>
+  <li>CI lint <code>check_data_access_level.py</code> 确认每个 SKILL.md 声明合法值，但不检查运行时上下文窗口。</li>
+</ul>
+
+<h3 id="s2-2">2.4 39 Agent 全景</h3>
+<p>ARS 把工作拆给角色化的单职责 Agent。每个 Agent 文件是一个完整的角色提示词（frontmatter 描述 + 程序 + 阶段边界 + 质量要求），由编排器或用户按阶段调用。下表为全部 Agent 的一句话职责（按 skill 分组）。</p>
+
+<div class="table-wrap"><table>
+<tr><th>Skill</th><th>Agent（.md 文件）</th><th>职责</th><th>阶段</th></tr>
+<tr><td rowspan="14"><strong>deep-research</strong><br><span class="en">14 个文件（SKILL.md 标题仍称 13，见 §10 观察）</span></td><td><code>research_question_agent</code></td><td>模糊主题 → 精确、FINER 评分的研究问题（含子问题与范围边界）</td><td>P1</td></tr>
+<tr><td><code>research_architect_agent</code></td><td>方法论蓝图：范式、方法、数据策略、分析框架、效度标准</td><td>P1</td></tr>
+<tr><td><code>bibliography_agent</code></td><td>系统检索 + 筛选 + APA 7.0 注释书目；v3.6.5+ 语料优先（corpus-first）</td><td>P2</td></tr>
+<tr><td><code>source_verification_agent</code></td><td>证据分级（Level I–VII）、掠食性期刊筛查、利益冲突标记</td><td>P2</td></tr>
+<tr><td><code>timeline_extraction_agent</code></td><td>提取时间事实与引文出处为侧车工件（v3.9.4 新增）</td><td>P2</td></tr>
+<tr><td><code>synthesis_agent</code></td><td>跨来源主题综合、矛盾消解、证据收敛/发散映射、知识缺口</td><td>P3</td></tr>
+<tr><td><code>devils_advocate_agent</code></td><td>反方压力测试：挑樱桃、确认偏误、逻辑链验证（3 个 checkpoint）</td><td>P1/P3/P5</td></tr>
+<tr><td><code>report_compiler_agent</code></td><td>APA 7.0 完整报告编制</td><td>P4/P6</td></tr>
+<tr><td><code>editor_in_chief_agent</code></td><td>Q1 期刊编辑审查，Accept/Minor/Major/Reject 判定</td><td>P5</td></tr>
+<tr><td><code>ethics_review_agent</code></td><td>伦理自检（IRB 前置，非替代）：AI 披露、署名、双重用途筛查</td><td>P5</td></tr>
+<tr><td><code>meta_analysis_agent</code></td><td>定量合成：效应量、异质性、GRADE 框架（systematic-review）</td><td>SR</td></tr>
+<tr><td><code>risk_of_bias_agent</code></td><td>RoB 2（RCT）/ ROBINS-I（非随机）偏倚评估（systematic-review）</td><td>SR</td></tr>
+<tr><td><code>monitoring_agent</code></td><td>研究完成后的文献新进展监测（可选）</td><td>post</td></tr>
+<tr><td><code>socratic_mentor_agent</code></td><td>苏格拉底式研究引导；v3.5.1 可选阅读探针层</td><td>socratic</td></tr>
+
+<tr><td rowspan="12"><strong>academic-paper</strong></td><td><code>intake_agent</code></td><td>配置访谈（论文类型/学科/期刊/引文格式/语言/字数）→ Paper Configuration Record；自动检测 deep-research 交接物并跳过冗余步骤</td><td>P0</td></tr>
+<tr><td><code>literature_strategist_agent</code></td><td>检索策略设计、来源筛选、注释书目、文献矩阵（语料优先）</td><td>P1</td></tr>
+<tr><td><code>structure_architect_agent</code></td><td>论文结构选择、详细大纲、字数分配、证据映射</td><td>P2</td></tr>
+<tr><td><code>argument_builder_agent</code></td><td>论证构建：claim-evidence 链、逻辑流、反方处理；plan mode 论证压力测试</td><td>P3</td></tr>
+<tr><td><code>draft_writer_agent</code></td><td>逐节撰写；修订轮输出 patch 文档（#390）</td><td>P4/P6</td></tr>
+<tr><td><code>citation_compliance_agent</code></td><td>引文格式合规验证、参考文献完整性、DOI 检查</td><td>P5a</td></tr>
+<tr><td><code>abstract_bilingual_agent</code></td><td>双语摘要（zh-TW + EN）+ 各 5–7 关键词</td><td>P5b</td></tr>
+<tr><td><code>peer_reviewer_agent</code></td><td>模拟双盲评审、五维评分、修改建议（最多 2 轮）</td><td>P6</td></tr>
+<tr><td><code>formatter_agent</code></td><td>LaTeX / DOCX / PDF / MD 输出；携带 REFUSE 规则 1–12 终端拒绝门</td><td>P7</td></tr>
+<tr><td><code>socratic_mentor_agent</code></td><td>plan mode 逐章引导：4 收敛信号、4 类问题分类法、INSIGHT 提取</td><td>plan</td></tr>
+<tr><td><code>visualization_agent</code></td><td>发表级图表代码（matplotlib/ggplot2，APA 7.0、色盲安全配色、LaTeX 集成）</td><td>P4/P7</td></tr>
+<tr><td><code>revision_coach_agent</code></td><td>非结构化评审意见 → 结构化 Revision Roadmap；可独立运行</td><td>revision-coach</td></tr>
+
+<tr><td rowspan="7"><strong>academic-paper-reviewer</strong></td><td><code>field_analyst_agent</code></td><td>识别论文学科并动态配置 5 位审稿人的身份与专长</td><td>P0</td></tr>
+<tr><td><code>eic_agent</code></td><td>主编：期刊契合度、原创性、重要性；修订辅导子阶段（Socratic）</td><td>P1</td></tr>
+<tr><td><code>methodology_reviewer_agent</code></td><td>R1 方法学：研究设计、采样、统计严谨性、效应量、可复现性</td><td>P1</td></tr>
+<tr><td><code>domain_reviewer_agent</code></td><td>R2 领域：文献覆盖、理论框架、贡献增量、缺失关键文献</td><td>P1</td></tr>
+<tr><td><code>perspective_reviewer_agent</code></td><td>R3 跨学科视角：跨域关联、实际应用、更广影响</td><td>P1</td></tr>
+<tr><td><code>devils_advocate_reviewer_agent</code></td><td>挑战核心论证与逻辑连贯性（特殊报告格式）</td><td>P1</td></tr>
+<tr><td><code>editorial_synthesizer_agent</code></td><td>三步骤机械协议综合全部报告 → Editorial Decision + Revision Roadmap</td><td>P2</td></tr>
+
+<tr><td rowspan="5"><strong>academic-pipeline</strong></td><td><code>pipeline_orchestrator_agent</code></td><td>全管道编排、阶段调度；finalizer——终端策略的唯一评估者</td><td>全阶段</td></tr>
+<tr><td><code>state_tracker_agent</code></td><td>管道状态维护与跨阶段会话历史</td><td>全阶段</td></tr>
+<tr><td><code>integrity_verification_agent</code></td><td>提交前/修订后的引用与数据真实性验证（2.5 pre-review + 4.5 final-check）</td><td>2.5/4.5</td></tr>
+<tr><td><code>claim_ref_alignment_audit_agent</code></td><td>L3 引用忠实性审计：逐条 claim 对检索原文裁判（opt-in，Stage 4→5）</td><td>4→5</td></tr>
+<tr><td><code>collaboration_depth_agent</code></td><td>协作深度观察者：4 维评分、仅建议、永不阻断（integrity 门明确跳过它）</td><td>各检查点</td></tr>
+
+<tr><td><strong>shared</strong></td><td><code>compliance_agent</code></td><td>PRISMA-trAIce + RAISE 原则检查（v3.4；warn-only，写入披露声明，不阻断）</td><td>定稿前</td></tr>
+</table></div>
+
+<div class="callout note">
+  <span class="ct">⚠ 关于 Agent 数的说明</span>
+  deep-research 的 SKILL.md 标题写"13 Agents"，实际目录含 14 个 agent 文件（v3.9.4 加入 <code>timeline_extraction_agent</code> 后未同步标题）；全库 agent 文件合计 39 个（14+12+7+5+1），与 model tiering 清单的"39-agent 冻结分类"一致。
+</div>
+
+<!-- ==================== 3 ==================== -->
+<h2 id="s3">3 · 模式系统（27 Modes）</h2>
+<p><code>MODE_REGISTRY.md</code> 是全部模式的唯一事实源（SSOT）。27 个模式分布在 4 个技能上，每个模式声明：输出物、监督强度、触发词、频谱位置。模式是 ARS 的"入口路由"——SKILL.md 与 CLAUDE.md 都引用注册表而非各自定义。</p>
+
+<div class="table-wrap"><table>
+<tr><th>Skill</th><th>模式</th><th>频谱</th><th>输出</th><th>监督</th></tr>
+<tr><td rowspan="8"><strong>deep-research</strong></td><td><code>full</code></td><td><span class="badge b-balanced">Balanced</span></td><td>APA 7.0 报告，3000–8000 词</td><td>高</td></tr>
+<tr><td><code>quick</code></td><td><span class="badge b-fidelity">Fidelity</span></td><td>研究简报，500–1500 词</td><td>中</td></tr>
+<tr><td><code>review</code></td><td><span class="badge b-balanced">Balanced</span></td><td>对给定文本的评审报告</td><td>高</td></tr>
+<tr><td><code>lit-review</code></td><td><span class="badge b-fidelity">Fidelity</span></td><td>注释书目 + 综合</td><td>中</td></tr>
+<tr><td><code>three-way-scan</code></td><td><span class="badge b-fidelity">Fidelity</span></td><td>WHY/HOW/WHAT 论文短名单 + 跨论文综合</td><td>低</td></tr>
+<tr><td><code>fact-check</code></td><td><span class="badge b-fidelity">Fidelity</span></td><td>逐 claim 验证报告</td><td>中</td></tr>
+<tr><td><code>socratic</code></td><td><span class="badge b-originality">Originality</span></td><td>研究计划摘要 + INSIGHT 集</td><td>极高</td></tr>
+<tr><td><code>systematic-review</code></td><td><span class="badge b-fidelity">Fidelity</span></td><td>PRISMA 2020 报告，5000–15000 词</td><td>中</td></tr>
+
+<tr><td rowspan="11"><strong>academic-paper</strong></td><td><code>full</code></td><td><span class="badge b-balanced">Balanced</span></td><td>完整论文草稿（IMRaD 或学科适配）</td><td>高</td></tr>
+<tr><td><code>plan</code></td><td><span class="badge b-originality">Originality</span></td><td>章节计划 + INSIGHT 集（苏格拉底式）</td><td>极高</td></tr>
+<tr><td><code>outline-only</code></td><td><span class="badge b-balanced">Balanced</span></td><td>详细大纲 + 证据地图</td><td>高</td></tr>
+<tr><td><code>revision</code></td><td><span class="badge b-fidelity">Fidelity</span></td><td>修订稿 + 逐条 R&amp;R 回复</td><td>高</td></tr>
+<tr><td><code>revision-coach</code></td><td><span class="badge b-balanced">Balanced</span></td><td>Revision Roadmap + 回复信骨架</td><td>中</td></tr>
+<tr><td><code>abstract-only</code></td><td><span class="badge b-fidelity">Fidelity</span></td><td>双语摘要 + 关键词</td><td>中</td></tr>
+<tr><td><code>lit-review</code></td><td><span class="badge b-fidelity">Fidelity</span></td><td>论文格式注释书目</td><td>中</td></tr>
+<tr><td><code>format-convert</code></td><td><span class="badge b-fidelity">Fidelity</span></td><td>LaTeX / DOCX / PDF / MD 成品</td><td>低</td></tr>
+<tr><td><code>citation-check</code></td><td><span class="badge b-fidelity">Fidelity</span></td><td>引文错误报告</td><td>低</td></tr>
+<tr><td><code>disclosure</code></td><td><span class="badge b-fidelity">Fidelity</span></td><td>特定会议/期刊的 AI 使用披露声明</td><td>低</td></tr>
+<tr><td><code>rebuttal-audit</code></td><td><span class="badge b-fidelity">Fidelity</span></td><td>对已有 rebuttal 草稿的逐条覆盖 QA（只审计，不生成）</td><td>低</td></tr>
+
+<tr><td rowspan="6"><strong>academic-paper-reviewer</strong></td><td><code>full</code></td><td><span class="badge b-balanced">Balanced</span></td><td>5 份审稿报告 + Editorial Decision + Revision Roadmap</td><td>高</td></tr>
+<tr><td><code>re-review</code></td><td><span class="badge b-fidelity">Fidelity</span></td><td>修订核验清单 + 遗留问题</td><td>中</td></tr>
+<tr><td><code>quick</code></td><td><span class="badge b-fidelity">Fidelity</span></td><td>EIC 快速评估 + 关键问题清单</td><td>低</td></tr>
+<tr><td><code>methodology-focus</code></td><td><span class="badge b-fidelity">Fidelity</span></td><td>深度方法学评审</td><td>中</td></tr>
+<tr><td><code>guided</code></td><td><span class="badge b-originality">Originality</span></td><td>苏格拉底式逐问题对话</td><td>极高</td></tr>
+<tr><td><code>calibration</code></td><td><span class="badge b-fidelity">Fidelity</span></td><td>校准报告（FNR/FPR/AUC）+ 置信度披露</td><td>中</td></tr>
+
+<tr><td rowspan="2"><strong>academic-pipeline</strong></td><td><code>（管道本体）</code></td><td><span class="badge b-balanced">Balanced</span></td><td>10 阶段编排工作流</td><td>极高</td></tr>
+<tr><td><code>resume_from_passport=&lt;hash&gt;</code></td><td><span class="badge b-fidelity">Fidelity</span></td><td>从 Material Passport 重置边界恢复（opt-in <code>ARS_PASSPORT_RESET=1</code>）</td><td>高</td></tr>
+</table></div>
+
+<h3 id="s3-1">3.1 Mode Spectrum：Fidelity ↔ Originality</h3>
+<p>模式频谱的理论依据是 Lu et al. (2026, Nature 651:914–919) 图 1c：模板驱动产出质量高、方差低；模板自由产出多样性高但均值低、方差高。ARS 据此决定每个模式加载多少模板材料：<strong>Fidelity</strong>（重模板、可复现、低方差）vs <strong>Originality</strong>（轻模板、探索性、高方差高上限）。统计：27 模式中 Fidelity 16（59%）、Balanced 7（26%）、Originality 4（15%）——<strong>ARS 整体偏向可复现的模板侧</strong>。</p>
+
+<h3 id="s3-2">3.2 两种调用模式（Invocation Mode）</h3>
+<div class="fgrid">
+  <div class="fcard"><h5>Mode A — 编排器驱动（默认）</h5><ul><li><code>pipeline_orchestrator_agent</code> 端到端跑全部阶段</li><li>状态经 Material Passport 跟踪</li><li>用户在每个阶段末被 checkpoint 拦住</li></ul></div>
+  <div class="fcard"><h5>Mode B — 逐阶段调用（跨会话恢复）</h5><ul><li>用户一个阶段一个 agent 地调用，跨会话长线推进</li><li>入口需显式信号：<code>/ars-&lt;mode&gt;</code> 命令或 <code>[direct-mode]</code> 前缀</li><li>模糊的跨阶段输入默认要求澄清（intent clarification protocol）</li><li>典型配合 <code>ARS_PASSPORT_RESET=1</code> + <code>resume_from_passport=&lt;hash&gt;</code></li></ul></div>
+</div>
+<p>Mode B 是"灵活性"的主要出口，但它受 <strong>v3.9.2 阶段边界（Phase Boundary）</strong>约束：Bucket A（单阶段）agent 只能写自己阶段的目录，Bucket B（多阶段）agent 只做调用方指定阶段的工作。详见 §8。</p>
+
+<!-- ==================== 4 ==================== -->
+<h2 id="s4">4 · 四技能内部流程</h2>
+
+<h3 id="s4-1">4.1 deep-research：6 阶段研究管道</h3>
+<div class="flow vertical">
+  <div class="fnode"><span class="fn-title">Phase 1 · SCOPING（交互）</span><span class="fn-sub">research_question → RQ Brief（FINER 评分）｜research_architect → Methodology Blueprint</span></div>
+  <div class="farrow v">▼ <span class="flabel">devils_advocate CHECKPOINT 1（PASS/REVISE）→ 用户确认</span></div>
+  <div class="fnode"><span class="fn-title">Phase 2 · INVESTIGATION</span><span class="fn-sub">bibliography → 来源语料 + 注释书目｜source_verification → 分级来源｜timeline_extraction → 时间侧车</span></div>
+  <div class="farrow v">▼</div>
+  <div class="fnode"><span class="fn-title">Phase 3 · ANALYSIS</span><span class="fn-sub">synthesis → 综合叙事 + 缺口分析 → devils_advocate CHECKPOINT 2</span></div>
+  <div class="farrow v">▼</div>
+  <div class="fnode"><span class="fn-title">Phase 4 · COMPOSITION</span><span class="fn-sub">report_compiler → APA 7.0 完整草稿</span></div>
+  <div class="farrow v">▼</div>
+  <div class="fnode"><span class="fn-title">Phase 5 · REVIEW（并行）</span><span class="fn-sub">editor_in_chief → 编辑判定 ｜ ethics_review → 伦理放行 ｜ devils_advocate CHECKPOINT 3</span></div>
+  <div class="farrow v">▼</div>
+  <div class="fnode ok"><span class="fn-title">Phase 6 · REVISION</span><span class="fn-sub">吸收评审意见 → 终稿交付（或进入 monitoring）</span></div>
+</div>
+<p>关键机制：devils_advocate 在 3 个 checkpoint 反复出现（范围合理吗？证据有没有挑樱桃？最强反方论点是什么？）；<code>source_verification</code> 做证据层级分级（Level I–VII）与掠食性期刊筛查；<code>socratic</code> 模式是独立于 6 阶段的引导式对话路径；<code>systematic-review</code> 模式额外挂载 meta_analysis + risk_of_bias（RoB 2 / ROBINS-I / GRADE）。</p>
+
+<h3 id="s4-2">4.2 academic-paper：8 阶段写作管道</h3>
+<div class="flow">
+  <div class="fnode"><span class="fn-title">P0 CONFIG</span><span class="fn-sub">intake</span></div>
+  <div class="farrow">→</div>
+  <div class="fnode"><span class="fn-title">P1 RESEARCH</span><span class="fn-sub">literature_strategist</span></div>
+  <div class="farrow">→</div>
+  <div class="fnode"><span class="fn-title">P2 ARCHITECTURE</span><span class="fn-sub">structure_architect</span></div>
+  <div class="farrow">→</div>
+  <div class="fnode"><span class="fn-title">P3 ARGUMENT</span><span class="fn-sub">argument_builder</span></div>
+  <div class="farrow">→</div>
+  <div class="fnode"><span class="fn-title">P4 DRAFTING</span><span class="fn-sub">draft_writer</span></div>
+</div>
+<div class="flow">
+  <div class="fnode machine"><span class="fn-title">P5a CITATIONS</span><span class="fn-sub">citation_compliance</span></div>
+  <div class="fnode machine"><span class="fn-title">P5b ABSTRACT</span><span class="fn-sub">abstract_bilingual</span></div>
+  <div class="farrow">⇉ 并行</div>
+  <div class="fnode"><span class="fn-title">P6 PEER REVIEW</span><span class="fn-sub">peer_reviewer（最多 2 轮修订循环）</span></div>
+  <div class="farrow">→</div>
+  <div class="fnode ok"><span class="fn-title">P7 FORMAT</span><span class="fn-sub">formatter（REFUSE 规则 1–12）</span></div>
+</div>
+<div class="callout risk">
+  <span class="ct">⚠ 阶段铁律（IRON RULE）</span>
+  ① Paper Configuration Record 未经用户确认不得进入 Phase 1；② Phase 2→3 大纲必须经用户批准（可要求重构）；③ 最多 2 轮修订循环，未解决项转为"Acknowledged Limitations"而非静默解决；④ P6 严重问题阻断进入 P7；⑤ 用户自带来源时可跳过 P1。
+</div>
+<p><code>visualization_agent</code> 在 P2 大纲确定后可与其他阶段并行（v3.3 并行化：大纲 → 图表生成 ∥ 论证链构建 → 撰写等待两者）。<strong>v3.6.6 Generator-Evaluator 合同</strong>把 P4（写作）与 P6（评审）改造成四调用结构（§6.4）。</p>
+
+<h3 id="s4-3">4.3 academic-paper-reviewer：3 阶段评审管道</h3>
+<div class="flow vertical">
+  <div class="fnode"><span class="fn-title">Phase 0 · 领域分析与审稿人配置</span><span class="fn-sub">field_analyst 读全文 → 生成 5 位审稿人配置卡（EIC/R1 方法/R2 领域/R3 跨学科/DA）→ 用户确认（可调整）</span></div>
+  <div class="farrow v">▼</div>
+  <div class="fnode machine"><span class="fn-title">Phase 1 · 并行多视角评审</span><span class="fn-sub">5 位审稿人并行出报告；v3.6.2 Sprint Contract：先 paper-blind 提交评分计划，再 paper-visible 评审（§6.3）</span></div>
+  <div class="farrow v">▼</div>
+  <div class="fnode ok"><span class="fn-title">Phase 2 · 编辑综合</span><span class="fn-sub">editorial_synthesizer 三步骤机械协议 → Editorial Decision（Accept/Minor/Major/Reject）+ Revision Roadmap</span></div>
+</div>
+<ul>
+  <li><strong>让渡阈值协议</strong>：DA 反驳被回应方评分 1–5，低于 4 分不让步；攻击强度在修订中不得被稀释。</li>
+  <li><strong>只读约束</strong>：评审过程不得引入新 claims。</li>
+  <li><strong>re-review 模式</strong>：收窄团队（field_analyst + eic + synthesizer 3 人），产出修订核验清单 + 遗留问题 + R&amp;R 可追溯矩阵（Schema 11：作者声称 vs 是否核验）。</li>
+  <li><strong>cross-model track（#540）</strong>：可选交叉模型评审（<code>ARS_CROSS_MODEL</code> 环境变量）。</li>
+</ul>
+
+<h3 id="s4-4">4.4 academic-pipeline：10 阶段全流程编排</h3>
+<div class="table-wrap"><table>
+<tr><th>阶段</th><th>调用</th><th>模式</th><th>产出</th><th>门/检查点</th></tr>
+<tr><td><strong>1 RESEARCH</strong></td><td><code>deep-research</code></td><td>socratic / full / quick</td><td>RQ Brief、方法蓝图、书目、综合报告</td><td><span class="badge b-human">🧑 决策</span> 用户确认 RQ + 方法论</td></tr>
+<tr><td><strong>2 WRITE</strong></td><td><code>academic-paper</code></td><td>plan / full</td><td>论文草稿</td><td><span class="badge b-human">🧑 决策</span> 大纲批准（撰写前）</td></tr>
+<tr><td><strong>2.5 INTEGRITY</strong></td><td><code>integrity_verification_agent</code></td><td>pre-review</td><td>完整性报告 + 修正稿</td><td><span class="badge b-integrity">✓ 完整门</span> 7 模式清单 + 用户确认（FAIL 最多 3 轮修复）</td></tr>
+<tr><td><strong>3 REVIEW</strong></td><td><code>academic-paper-reviewer</code></td><td>full</td><td>5 报告 + 编辑决定 + Roadmap</td><td><span class="badge b-human">🧑 决策</span> Accept→4.5 / Minor|Major→4 / Reject→结束</td></tr>
+<tr><td><strong>3→4 修订辅导</strong></td><td><code>eic_agent</code></td><td>Socratic</td><td>修订策略对话</td><td><span class="badge b-human">🧑 决策</span> 最多 8 轮，可"just fix it"跳过</td></tr>
+<tr><td><strong>4 REVISE</strong></td><td><code>academic-paper</code></td><td>revision</td><td>修订稿 + 逐条回复 + Delta 报告</td><td><span class="badge b-human">🧑 决策</span> 用户确认修订；评分轨迹监测（v3.3）</td></tr>
+<tr><td><strong>3' RE-REVIEW</strong></td><td><code>academic-paper-reviewer</code></td><td>re-review</td><td>核验清单 + 遗留问题 + 新决定</td><td><span class="badge b-human">🧑 决策</span> Accept|Minor→4.5 / Major→4'</td></tr>
+<tr><td><strong>3'→4' 遗留辅导</strong></td><td><code>eic_agent</code></td><td>Socratic</td><td>遗留问题取舍对话</td><td><span class="badge b-human">🧑 决策</span> 最多 5 轮，可跳过</td></tr>
+<tr><td><strong>4' RE-REVISE</strong></td><td><code>academic-paper</code></td><td>revision</td><td>终修订稿（<strong>内容冻结</strong>）</td><td><span class="badge b-human">🧑 决策</span> 冻结确认，禁止再循环</td></tr>
+<tr><td><strong>4.5 FINAL INTEGRITY</strong></td><td><code>integrity_verification_agent</code></td><td>final-check</td><td>100% claims 核验报告 + Passport 更新</td><td><span class="badge b-integrity">✓ 完整门</span> 7 模式零容忍重跑，不可跳过</td></tr>
+<tr><td><strong>4→5 CLAIM-AUDIT</strong> <span class="en">（opt-in v3.8）</span></td><td><code>claim_ref_alignment_audit_agent</code></td><td>audit</td><td>claim 审计结果 + 漂移 + 无出处断言 + 约束违反</td><td><span class="badge b-machine">🤖 审计门</span> 默认关（<code>ARS_CLAIM_AUDIT=1</code>）；校准门槛 FNR&lt;0.15 + FPR&lt;0.10</td></tr>
+<tr><td><strong>5 FINALIZE</strong></td><td><code>academic-paper</code></td><td>format-convert / disclosure</td><td>MD→DOCX(Pandoc)→LaTeX(确认)→PDF(tectonic) + AI 披露声明</td><td><span class="badge b-human">🧑 决策</span> 格式选择；formatter REFUSE 硬门</td></tr>
+<tr><td><strong>6 PROCESS SUMMARY</strong></td><td>orchestrator</td><td>auto</td><td>过程记录（MD+PDF）+ AI 自省报告 + 协作深度章节</td><td><span class="badge b-human">🧑 决策</span> 语言确认 + 终局确认词汇（finish/end/done/confirm）</td></tr>
+</table></div>
+
+<h4>管道状态机（State Machine v2.0）</h4>
+<p>阶段状态：<code>pending</code> / <code>in_progress</code> / <code>completed</code> / <code>skipped</code>（仅非强制阶段）/ <code>blocked</code>；管道全局状态：<code>initializing</code> / <code>running</code> / <code>awaiting_confirmation</code> / <code>paused</code> / <code>completed</code> / <code>aborted</code>。</p>
+<div class="flow">
+  <div class="fnode"><span class="fn-title">INITIALIZING</span><span class="fn-sub">检测入口点与材料</span></div>
+  <div class="farrow">→</div>
+  <div class="fnode"><span class="fn-title">Stage 1</span><span class="fn-sub">RESEARCH</span></div>
+  <div class="farrow">→</div>
+  <div class="fnode"><span class="fn-title">Stage 2</span><span class="fn-sub">WRITE</span></div>
+  <div class="farrow">→</div>
+  <div class="fnode integrity"><span class="fn-title">2.5</span><span class="fn-sub">INTEGRITY</span></div>
+  <div class="farrow">→</div>
+  <div class="fnode"><span class="fn-title">Stage 3</span><span class="fn-sub">REVIEW</span></div>
+  <div class="farrow">→</div>
+  <div class="fnode"><span class="fn-title">Stage 4</span><span class="fn-sub">REVISE</span></div>
+  <div class="farrow">→</div>
+  <div class="fnode"><span class="fn-title">3'</span><span class="fn-sub">RE-REVIEW</span></div>
+  <div class="farrow">→</div>
+  <div class="fnode"><span class="fn-title">4'</span><span class="fn-sub">RE-REVISE</span></div>
+  <div class="farrow">→</div>
+  <div class="fnode integrity"><span class="fn-title">4.5</span><span class="fn-sub">FINAL INTEGRITY</span></div>
+  <div class="farrow">→</div>
+  <div class="fnode"><span class="fn-title">Stage 5</span><span class="fn-sub">FINALIZE</span></div>
+  <div class="farrow">→</div>
+  <div class="fnode ok"><span class="fn-title">Stage 6</span><span class="fn-sub">PROCESS SUMMARY → completed</span></div>
+</div>
+<p class="flabel">关键转移规则：Stage 2.5 FAIL→回 Stage 2 修复（≤3 轮）；Stage 3 Reject→结束或回 Stage 2；Stage 3' Major→4'；Stage 4' 后禁止再回评审；4.5 零容忍；Stage 6 可拒绝（标记 skipped 直达 completed）。<strong>修订循环硬上限：全管道合计 2 轮。</strong></p>
+
+<!-- ==================== 5 ==================== -->
+<h2 id="s5">5 · 人类在环：Checkpoint 与 Gate 体系</h2>
+<p>ARS 的"人类在环"不是口号，是一套三类型检查点 + 两类门的规则体系。核心铁律：<strong>每个阶段结束后必须主动提示用户并等待确认，禁止自动跳过 MANDATORY 检查点。</strong></p>
+
+<h3>5.1 Checkpoint 三类型</h3>
+<div class="table-wrap"><table>
+<tr><th>类型</th><th>触发条件</th><th>内容</th><th>可否跳过</th></tr>
+<tr><td><span class="badge b-human">FULL</span></td><td>首个检查点；完整性边界之后；Stage 5 完成（终稿验收）</td><td>交付物清单 + 决策仪表盘 + 全部选项（含字数/参考文献/覆盖率指标）</td><td>否</td></tr>
+<tr><td><span class="badge b-human">SLIM</span></td><td>非关键阶段连续 2+ 次"continue"后</td><td>一行状态 + 继续/暂停提示</td><td>可继续降级</td></tr>
+<tr><td><span class="badge b-human">MANDATORY</span></td><td>完整性 FAIL；评审决定（Stage 3 / 3'）；Stage 5 入口门</td><td>完整报告 + 明确用户输入要求</td><td><strong>不可跳过</strong></td></tr>
+</table></div>
+<p>自适应规则：首次永远 FULL；连续 4+ 次"continue"强制插入 FULL（意识守护）；用户可随时暂停/恢复。</p>
+
+<h3>5.2 两类门（Gate）</h3>
+<div class="fgrid">
+  <div class="fcard"><h5><span class="badge b-human">🧑 决策重门（10 个）</span></h5><ul>
+    <li>Stage 1：RQ Brief + 方法蓝图</li>
+    <li>Stage 2：大纲批准</li>
+    <li>Stage 3：编辑决定</li>
+    <li>3→4：修订策略（≤8 轮）</li>
+    <li>Stage 4：修订确认</li>
+    <li>Stage 3'：核验决定</li>
+    <li>3'→4'：遗留取舍（≤5 轮）</li>
+    <li>Stage 4'：内容冻结</li>
+    <li>Stage 5：输出格式选择</li>
+    <li>Stage 6：语言确认 + 协作评审</li>
+  </ul></div>
+  <div class="fcard"><h5><span class="badge b-integrity">✓ 完整门（2 个）</span></h5><ul>
+    <li><strong>2.5</strong>：7 模式失败清单 + 预审 claim 抽样（100% 高影响 + 10% 随机哨兵，min(10,总数)）+ 数据溯源审计；FAIL→修复≤3 轮或用户带理由覆盖（记入日志）</li>
+    <li><strong>4.5</strong>：7 模式深度重跑，<strong>零容忍不可跳过</strong>；2.5 时 SUSPECTED 的模式必须 CLEAR 或被用户覆盖；100% claims 终检；Passport 置 <code>verification_status: VERIFIED</code></li>
+  </ul></div>
+</div>
+
+<h3>5.3 7 模式 AI 失败清单（M1–M7）</h3>
+<p>完整性门的核心判定工具（Lu 2026，顺序固定）：</p>
+<div class="table-wrap"><table>
+<tr><th>模式</th><th>含义</th><th>模式</th><th>含义</th></tr>
+<tr><td><strong>M1</strong></td><td>实现缺陷通过了 AI 自审</td><td><strong>M5</strong></td><td>实现缺陷被重述为"新洞见"</td></tr>
+<tr><td><strong>M2</strong></td><td>幻觉引文</td><td><strong>M6</strong></td><td>方法论捏造</td></tr>
+<tr><td><strong>M3</strong></td><td>幻觉实验结果</td><td><strong>M7</strong></td><td>管道早期阶段框架锁定（frame-lock）</td></tr>
+<tr><td><strong>M4</strong></td><td>捷径依赖</td><td>—</td><td>—</td></tr>
+</table></div>
+
+<!-- ==================== 6 ==================== -->
+<h2 id="s6">6 · 合同层：Passport / Handoff / Sprint / Patch</h2>
+
+<h3>6.1 Material Passport（Schema 9）——唯一状态载体</h3>
+<p>Material Passport 是跨阶段元数据的<strong>唯一状态载体</strong>（呼应 §1.3 的"无跨论文状态"非目标：它只承载单次运行的显式声明状态）。随版本演进挂载了多个端口：</p>
+<div class="table-wrap"><table>
+<tr><th>端口 / 机制</th><th>版本</th><th>作用</th></tr>
+<tr><td><code>literature_corpus[]</code> 输入端口</td><td>v3.6.4</td><td>用户自策文献语料（Zotero/Obsidian/文件夹经适配器产出），Phase 1 两个文献 agent 走"语料优先、检索补缺"流程</td></tr>
+<tr><td><code>rejection_log.yaml</code></td><td>v3.6.4</td><td>适配器产出伴侣：被拒条目及原因（始终生成，空则空文件）</td></tr>
+<tr><td><code>reset_boundary[]</code> 追加式账本</td><td>v3.6.3</td><td>重置边界协议：每个 FULL checkpoint 提升为上下文重置边界；<code>resume_from_passport=&lt;hash&gt;</code> 在全新会话恢复（JSON Canonical Form + SHA-256，POSIX flock 并发合同 ≤60s）</td></tr>
+<tr><td><code>repro_lock</code></td><td>v3.3.5</td><td>可复现性声明（填充或显式 null=诚实弃权）；事后文档，非运行时阻断</td></tr>
+<tr><td>claim 审计 5 新 schema</td><td>v3.8.0</td><td><code>claim_audit_result</code> / <code>claim_intent_manifest</code> / <code>claim_drift</code> / <code>uncited_assertion</code> / <code>constraint_violation</code></td></tr>
+<tr><td>引文验证/污染/时间 schema</td><td>v3.9+</td><td><code>citation_provenance</code>、<code>citation_verification_summary</code>、<code>temporal_audit_results</code>、<code>timeline</code> 等 18 个端口 schema</td></tr>
+</table></div>
+<p><strong>语料优先流程的四条铁律</strong>：① 同一筛选标准对待语料与外部库结果；② 任何跳过的语料条目必须记录原因（静默丢弃=违规）；③ 消费方绝不改写 <code>literature_corpus[]</code>（只读）；④ 解析失败→发 <code>[CORPUS PARSE FAILURE]</code> 并优雅回退外部库流程。产出 PRE-SCREENED 可复现块（F3 零命中 + F4a–F4f 来源溯源）。</p>
+
+<h3>6.2 Handoff Schemas——跨技能交接合同</h3>
+<div class="table-wrap"><table>
+<tr><th>Schema</th><th>交接物</th><th>生产者 → 消费者</th></tr>
+<tr><td><code>1</code></td><td>RQ Brief（研究问题、FINER 分、范围、方法类型、关键词）</td><td>research_question / socratic_mentor → research_architect / intake</td></tr>
+<tr><td><code>2</code></td><td>Bibliography（注释书目）</td><td>bibliography → intake / literature_strategist</td></tr>
+<tr><td><code>3</code></td><td>Synthesis Report</td><td>synthesis → intake / draft_writer</td></tr>
+<tr><td><code>4</code></td><td>Paper Draft</td><td>draft_writer → integrity / reviewer</td></tr>
+<tr><td><code>5</code></td><td>Integrity Report</td><td>integrity_verification → pipeline</td></tr>
+<tr><td><code>6</code></td><td>Review Report</td><td>reviewer → pipeline</td></tr>
+<tr><td><code>7</code></td><td>Revision Roadmap</td><td>reviewer → revision</td></tr>
+<tr><td><code>8</code></td><td>Response to Reviewers</td><td>revision → re-review</td></tr>
+<tr><td><code>9</code></td><td>Material Passport</td><td>跨阶段元数据</td></tr>
+<tr><td><code>10</code></td><td>Style Profile</td><td>intake → draft_writer / report_compiler</td></tr>
+<tr><td><code>11</code></td><td>R&amp;R Traceability Matrix（作者声称 vs 是否核验）</td><td>re-review 产出（定义于 ARCHITECTURE.md）</td></tr>
+<tr><td><code>12</code></td><td>Compliance Report（v3.4.0+）</td><td>compliance_agent → 披露声明</td></tr>
+</table></div>
+<p>约定：所有 schema 为 Markdown 结构化输出；消费方必须校验必填字段，缺失触发 <code>HANDOFF_INCOMPLETE</code> 失败路径并要求重新生成。<span class="en">（注：handoff_schemas.md 正文从 Schema 10 直接跳到 12，Schema 11 只在 ARCHITECTURE.md 定义——见 §10 漂移观察）</span></p>
+
+<h3>6.3 Sprint Contract（Schema 13 / 13.1）——评审盲审硬门</h3>
+<p>v3.6.2 引入的防"评审后验"机制，解决"先看全文再定评分计划"的套利问题：</p>
+<ol>
+  <li><strong>Phase 1（paper-content-blind）</strong>：每位审稿人在<strong>只看元数据</strong>的情况下提交评分计划（scoring plan）作为预承诺；</li>
+  <li><strong>Phase 2（paper-visible）</strong>：经 <code>&lt;phase1_output&gt;</code> 数据分隔符消费已承诺合同后开始可见全文的评审；</li>
+  <li><strong>综合方三步骤机械协议</strong>：构建矩阵 → 用面板相对量词评估 → 按严重度解决优先级；<strong>禁止事后修改 rubric</strong>（forbidden-ops 清单）。</li>
+</ol>
+<p>模板：<code>reviewer/full.json</code>（5 人面板、5 维度、4 失败条件）、<code>reviewer/methodology_focus.json</code>（2 人面板）。<code>re-review</code> / <code>calibration</code> / <code>guided</code> / <code>quick</code> 模式保留 v3.6.2 前行为。由 <code>check_sprint_contract.py</code> 验证。</p>
+
+<h3>6.4 Generator-Evaluator 合同（v3.6.6 设计，v3.6.8 落地）</h3>
+<p>把写作（P4）与内置评审（P6）改造成<strong>四调用结构</strong>，按 paper-blind / paper-visible 配对：</p>
+<div class="flow">
+  <div class="fnode"><span class="fn-title">4a 写作方盲态预承诺</span><span class="fn-sub">只看蓝图的评分承诺</span></div>
+  <div class="farrow">→</div>
+  <div class="fnode"><span class="fn-title">4b 写作方可见态撰写+自评</span><span class="fn-sub">消费 4a 输出</span></div>
+  <div class="farrow">→</div>
+  <div class="fnode"><span class="fn-title">6a 评估方盲态预承诺</span><span class="fn-sub">评分计划 + 分歧处理声明</span></div>
+  <div class="farrow">→</div>
+  <div class="fnode"><span class="fn-title">6b 评估方可见态评分+判定</span><span class="fn-sub">消费 6a 输出</span></div>
+</div>
+<ul>
+  <li>模板：<code>writer/full.json</code>（7 维度 D1–D7、5 失败条件，无 scoring_plan）、<code>evaluator/full.json</code>（5 维度、7 失败条件，携带 scoring_plan + disagreement_handling）；Schema 13.1 分支约束。</li>
+  <li>输出 lint 失败：重试一次（带具体缺口提示）；<strong>第二次失败→角色不可用</strong>（v3.6.6 只有 abort 行为，无优雅降级——明确记录"5% / 三个月监测"）。</li>
+  <li>系统提示词只携带不变策略文本；schema 字段名与运行时发射内容严格区分。</li>
+</ul>
+
+<h3>6.5 Revision Patch 协议（#390）——修订最小爆炸半径</h3>
+<p>修订轮中 <code>draft_writer_agent</code> 不再重发射全文，而是走<strong>锚定 → 补丁 → 确定性应用 → finalizer</strong>：</p>
+<ol>
+  <li><strong>Anchorize</strong>：<code>ars_anchorize_draft.py</code> 给每个块打稳定标记 <code>&lt;!--block:BNNNN--&gt;</code>，生成块清单（<code>base_draft_hash</code> + 每块 <code>old_hash</code>），此步到应用之间任何人不得改写草稿；</li>
+  <li><strong>Patch 文档</strong>：writer 发射 sidecar 补丁（<code>revision_patch.schema.json</code>），块操作携带哈希前置条件，每操作追溯到 <code>roadmap_item_ids</code>；</li>
+  <li><strong>确定性应用</strong>：<code>ars_apply_revision_patch.py</code> 两阶段 fail-closed——一个过期哈希拒绝整包且原稿字节不动；未触碰块按构造保持字节一致；结构性改动（标题改写/删除、章节数变化、触碰比>0.6）需显式确认，只有 §3.6 升级检查点可授权；</li>
+  <li><strong>升级而非静默回退</strong>：结构重构需求→MANDATORY 用户检查点；确认全量重发射则打 <code>mode: full_reemission_escalated</code> 溯源戳。</li>
+</ol>
+<p>应用报告（<code>preserved_ratio</code>、操作、新块 ID、结构标志）是 re-review 的<strong>必需输入</strong>。诚实边界声明：patch 模式消除"未触碰文本被静默改动"的通道，但不会让修订本身变得更好。academic-paper full 模式内部的 P6→4 配对循环不采用 patch（其 4b lint 要求完整 <code>## Draft Body</code>）。</p>
+
+<!-- ==================== 7 ==================== -->
+<h2 id="s7">7 · 诚实原语：反幻觉与反泄漏机制族</h2>
+<p>ARS 最重的部分是一组持续演进的"诚实原语"——每项都对应一个具体的失败模式，且大部分有独立 schema、独立脚本、独立测试。这一层解释了为什么 ARS 看起来"刚"：它把幻觉治理做成了一族带验收门槛的机制。</p>
+
+<h3>7.1 反泄漏协议（Anti-Leakage，v3.3）</h3>
+<p>草稿包含未被会话材料支撑的参数化填充（数字、统计值、具体断言）时，标记 <code>[MATERIAL GAP]</code>；用户要么提供材料，要么接受缺口。贯彻"输入即边界"的哲学：Agent 只能写进来自本次运行显式材料的证据。</p>
+
+<h3>7.2 L3 引用忠实性（v3.7.3 + v3.8.0）</h3>
+<ul>
+  <li><strong>三层引用发射（v3.7.3）</strong>：synthesis / draft_writer / report_compiler 在每条 <code>&lt;!--ref:slug--&gt;</code> 上附加定位器 <code>&lt;!--anchor:kind:value--&gt;</code>（quote / page / section / paragraph / none）。</li>
+  <li><strong>污染信号</strong>：<code>preprint_post_llm_inflection</code>（LLM 拐点后的预印本）+ <code>semantic_scholar_unmatched</code> + <code>openalex_unmatched</code> + <code>crossref_unmatched</code>（三索引三角测量，v3.9.0）。</li>
+  <li><strong>claim 审计（v3.8，opt-in）</strong>：逐条被引 claim 对检索原文做 LLM-as-judge；8 行 finalizer 矩阵按 <code>ref_retrieval_method</code> 区分 paywall（LOW-WARN）/ fabricated（HIGH-WARN）/ anchorless（HIGH-WARN）/ audit_tool_failure（MED-WARN）。<strong>校准门槛</strong>：20 元组金标集上 FNR&lt;0.15 + FPR&lt;0.10 才可上线。</li>
+  <li><strong>终端策略（terminal_policies）</strong>：formatter 是"盖章检查"（只比对 <code>policy_hash</code> 与 Passport 当前策略，从不重跑策略逻辑）；finalizer 是唯一策略评估者。REFUSE 规则 1–12：规则 6–10（v3.8 五种 HIGH-WARN）、规则 11（v3.10 任意 <code>severity=HIGH-BLOCK</code> 令牌）、规则 12（v3.11 <code>lookup_verified=false</code> 仅在 <code>citation_existence=strict</code> 时拒绝，默认 advisory 可 <code>/ars-mark-read</code> 确认放行）。</li>
+</ul>
+
+<h3>7.3 引用存在性验证门（v3.11）</h3>
+<p>确定性引文验证：arXiv resolver + 四索引污染矩阵（k=0..4）+ 持久 SQLite 验证缓存（<code>/ars-cache-invalidate</code> 清除）+ 统一 <code>lookup_verified</code> 摘要（true / false / unresolvable 三态）。<strong>关键语义</strong>：解析器全挂时 <code>unresolvable</code>——绝不降级为 false（断网不是捏造证据），也绝不升级为 true。</p>
+
+<h3>7.4 时间完整性（v3.9.4）</h3>
+<p>三层机制：M1 <code>timeline_extraction_agent</code> 提取时间事实；M2 Phase 4→5 边界 5-pass 验证器（P1 算术 / P2 时代错置 / P3 比较词 / P4 因果 / P5 指示词）；M3 编译器+写作者的 Temporal Integrity Iron Rule；M6 第一方 Crossref + pdftotext 验证。</p>
+
+<h3>7.5 Degradation Registry（#511）——优雅降级索引</h3>
+<p>机器可读的"所有优雅降级机制"索引：每行记录失败类别、降级后状态、诊断标记、下游消费者、终端策略效果、权威文件锚点、钉住测试。设计原则：<strong>没有通用分数上限列</strong>——ARS 的门模型是三态结果 + advisory 后缀 + opt-in 终端策略，拒绝共享标量评分（"Explicitly rejected: score capping"）。registry 只索引不重述，语义唯一存在于各权威文件。</p>
+
+<h3>7.6 交叉模型验证（#523 / v3.17）</h3>
+<p>三个表面（设计冻结、最终编辑决定、DA 批判）支持 <code>[CROSS-MODEL-HANDOFF v1]</code> 信封 + 规范 Python 语法（<code>cross_model_handoff.py</code>）。信封/结果畸形 → <code>[CROSS-MODEL-ERROR]</code> → 结果 <code>unavailable</code>，<strong>绝不捏造判断</strong>；一致→机械填充不再调用 owner；分歧→以最小上下文重调 owner。</p>
+
+<h3>7.7 其他辅助原语</h3>
+<ul>
+  <li><strong>证据强度阶梯</strong>：Level I–VII 分级 + 掠食性期刊筛查 + 利益冲突标记 + 时效性评估；</li>
+  <li><strong>VLM 图形验证</strong>（v3.3）：渲染图过 10 项 APA 7.0 清单，最多 2 次精修；</li>
+  <li><strong>评分轨迹监测</strong>（v3.3）：修订使某维度倒退会被标记；</li>
+  <li><strong>Style Calibration</strong>：学习用户既往文风，输出像作者本人；</li>
+  <li><strong>Compliance（v3.4）</strong>：PRISMA-trAIce + RAISE 原则检查，warn-only，写入披露声明（180 天新鲜度阈值）；</li>
+  <li><strong>collaboration_depth_agent（v3.5）</strong>：4 维协作评分（Delegation Intensity / Cognitive Vigilance / Cognitive Reallocation / Zone Classification），仅建议；</li>
+  <li><strong>苏格拉底阅读探针（v3.5.1）</strong>：opt-in，每次会话最多触发一次，拒绝记录但不处罚；</li>
+  <li><strong>Model Tiering（v3.16）</strong>：<code>economy</code>（13 个执行型 agent 降一档）/<code>quality-boost</code>（判断型 agent 在 2.5/4.5 门与终审表面升档）；39-agent 冻结分类（26 判断 / 13 执行），相对档位而非硬编码模型 ID。</li>
+</ul>
+
+<!-- ==================== 8 ==================== -->
+<h2 id="s8">8 · 边界执行：从 prose 到强制</h2>
+<p>ARS 的流程纪律经历了从"提示词里写规矩"到"确定性强制"的演进。当前有四层强制机制：</p>
+
+<h3>8.1 Phase Boundary（v3.9.2）——阶段边界块</h3>
+<p>所有 agent 按阶段分类：<strong>Bucket A</strong>（单阶段，23 个：写操作严格限于本阶段）、<strong>Bucket B</strong>（多阶段：只做调用方指定阶段的工作）、<strong>Bucket D</strong>（元 agent，如 field_analyst，无需栅栏）。三层强制：agent 文件内的 Phase Boundary 提示块 + 咨询性验证器 <code>check_pipeline_integrity.py</code> + hook-enabled 运行时中的确定性 PreToolUse 写范围守卫。</p>
+
+<h3>8.2 写范围守卫（#134）——PreToolUse 钩子</h3>
+<ul>
+  <li>机器可读清单 <code>ars_phase_scope_manifest.json</code> 定义 23 个 Bucket A agent 的 <code>allowed_write_globs</code>（只能写自己的 <code>phaseN_*/</code> 目录）；</li>
+  <li>结构化写工具（Write/Edit/MultiEdit）按 glob 判定；<strong>Bucket A agent 的 Bash 一律拒绝</strong>（命令字符串不可判定 allowlist/denylist，全拒是唯一零 fail-open 策略）；</li>
+  <li>已知有界膨胀：<code>draft_writer_agent</code> 是唯一双阶段静态并集（phase4+phase6），限制已记录在案（#330），待 Slice 3 逐调用授权；</li>
+  <li>优雅降级姿态：找不到 Python 或守卫异常时发 PASS-THROUGH 并退出 0——守卫是可选的 v3.10 加固层，不能因环境缺口锁死用户。</li>
+</ul>
+
+<h3>8.3 Firm Rules——单一事实源 + 镜像同步</h3>
+<p><code>shared/references/firm_rules.md</code> 是全部"硬规则措辞"的规范源。历史教训：污染规则 R-L3-2-* 的措辞在 v3.9.0→v3.9.4 间五处复制中真实漂移过。机制：canonical 块 + 镜像清单（<code>check_firm_rules_sync.py</code> 对逐字节镜像与矛盾措辞做 CI 校验）；ID 命名空间严格隔离（R-L3-2-* 污染 vs R-CIM-* 声明意图清单，v3.10 前曾重载冲突）。</p>
+
+<h3>8.4 防漂移基础设施</h3>
+<div class="table-wrap"><table>
+<tr><th>机制</th><th>说明</th></tr>
+<tr><td><code>check_*</code> 脚本（64 个）</td><td>每项跨文件不变量一个校验器：sprint contract、语料消费协议（9 不变量 L1–L9）、护照重置合同、claim 审计一致性（38 不变量）、时间验证、firm rules 同步、agent 镜像同步……</td></tr>
+<tr><td>内容锁（sha256）</td><td>v3.17 起，管道边界语义的五个表面（SKILL.md、orchestrator、state_tracker、state_machine、process_summary）整体 sha256 锁定，66 个 mutation 测试——任何字节改动必须同一提交更新钉住哈希</td></tr>
+<tr><td>mutation 测试</td><td>v3.6.7 pattern protection（29 测试）、v3.7.3 三层引用、边界语义（66 测试）等：故意改写被保护文本必须触发失败</td></tr>
+<tr><td>hooks</td><td>SessionStart（播报 ARS 已加载）+ PreToolUse（写范围守卫启动器，Windows 端口修复 #454）</td></tr>
+<tr><td>16 个斜杠命令</td><td><code>ars-full</code>、<code>ars-outline</code>、<code>ars-plan</code>、<code>ars-revision</code>、<code>ars-reviewer</code>、<code>ars-abstract</code>、<code>ars-lit-review</code>、<code>ars-3w</code>、<code>ars-citation-check</code>、<code>ars-disclosure</code>、<code>ars-format-convert</code>、<code>ars-rebuttal-audit</code>、<code>ars-revision-coach</code>、<code>ars-cache-invalidate</code>、<code>ars-mark-read</code>、<code>ars-unmark-read</code>——Mode B 逐阶段调用的显式入口</td></tr>
+</table></div>
+
+<!-- ==================== 9 ==================== -->
+<h2 id="s9">9 · 版本演进时间线</h2>
+<p>时间线的主线规律：<strong>每个版本加一个"诚实原语"或一个新合同</strong>。上游刻意把所有边界决策写进 docs/design/ 文档（83 篇），每篇绑定一个版本号。</p>
+<div class="table-wrap"><table>
+<tr><th>版本</th><th>主题</th><th>关键内容</th></tr>
+<tr><td>v3.3</td><td>诚实第一批</td><td>Semantic Scholar API 验证（Levenshtein ≥0.70）、反泄漏协议、VLM 图形验证、评分轨迹、Stage 2 并行化</td></tr>
+<tr><td>v3.4</td><td>合规</td><td>compliance_agent（PRISMA-trAIce + RAISE）、3 轮覆盖阶梯、披露附录、180 天新鲜度</td></tr>
+<tr><td>v3.5 / 3.5.1</td><td>协作观察</td><td>collaboration_depth_agent（advisory）、苏格拉底阅读探针（opt-in）</td></tr>
+<tr><td>v3.6.2</td><td>评审盲审</td><td>Sprint Contract 硬门：blind Phase 1 → visible Phase 2、综合方三步骤协议 + forbidden-ops</td></tr>
+<tr><td>v3.6.3</td><td>跨会话</td><td>Passport 重置边界、<code>resume_from_passport</code>、flock 并发合同</td></tr>
+<tr><td>v3.6.4 / 3.6.5</td><td>文献语料</td><td><code>literature_corpus[]</code> 端口、3 个参考适配器、语料优先流程 + 4 铁律 + PRE-SCREENED 块</td></tr>
+<tr><td>v3.6.6 / 3.6.8</td><td>生成-评估合同</td><td>四调用结构（4a/4b/6a/6b）、writer/evaluator 模板、abort-only 语义</td></tr>
+<tr><td>v3.6.7</td><td>模式保护</td><td>下游 agent 模式保护（A1–A5/B1–B5/C1–C3）、4 个参考术语表</td></tr>
+<tr><td>v3.7.0</td><td>插件化</td><td>Claude Code 插件打包、10 斜杠命令、3 个插件 agent（字节级镜像同步）、SessionStart hook</td></tr>
+<tr><td>v3.7.3</td><td>引用定位</td><td>三层引用发射 + anchor 定位器 + 污染信号（预印本拐点、S2 未匹配）</td></tr>
+<tr><td>v3.8.0</td><td>claim 审计</td><td>逐 claim LLM 裁判（opt-in）、8 行 finalizer 矩阵、formatter REFUSE 6–10、校准门槛 FNR&lt;0.15/FPR&lt;0.10</td></tr>
+<tr><td>v3.9.0–v3.9.4</td><td>三角测量与时间</td><td>OpenAlex+Crossref 三角测量（4 层 advisory）、阶段范围膨胀热修（#133）、时间验证 5-pass、写范围守卫</td></tr>
+<tr><td>v3.10</td><td>终端策略</td><td>通用 HIGH-BLOCK 拒绝规则 11、承诺账本（#256/#266/#268/#269）、领域 profile（#259）、写守卫 MVP</td></tr>
+<tr><td>v3.11</td><td>确定性引文门</td><td>arXiv resolver、四索引矩阵、SQLite 缓存、<code>citation_existence</code> strict opt-in（默认 advisory）</td></tr>
+<tr><td>v3.16</td><td>模型分层</td><td>economy / quality-boost、39-agent 冻结分类（26 判断/13 执行）</td></tr>
+<tr><td>v3.17</td><td>边界锁定</td><td>Stage 5/6 边界语义、五表面 sha256 内容锁（66 mutation 测试）、跨模型信封</td></tr>
+<tr><td>v3.19.0</td><td>当前</td><td>MODE_REGISTRY 更新至 27 模式（2026-07-22）</td></tr>
+</table></div>
+<p class="en">注：版本号在 SKILL.md、ARCHITECTURE.md、MODE_REGISTRY.md 之间存在不一致（如 academic-pipeline SKILL.md 标题仍为 v3.15.0）。这是上游自己的文档漂移——见 §10。</p>
+
+<!-- ==================== 10 ==================== -->
+<h2 id="s10">10 · 审阅观察：刚性来源与吸收视角</h2>
+<p>本节从 ResearchSpec 吸收的角度给出审阅观察。目标问题：<strong>ARS 的"刚性"具体住在哪里？吸收时哪些是知识、哪些是程序、哪些是流程？</strong></p>
+
+<h3>10.1 ARS 刚性的六个来源</h3>
+<div class="table-wrap"><table>
+<tr><th>#</th><th>刚性来源</th><th>具体表现</th><th>性质</th></tr>
+<tr><td>1</td><td>人类确认义务</td><td>10 个决策重门 + 2 个完整门；MANDATORY 不可跳过；每阶段末主动拦截</td><td>定位级（copilot 承诺，不可拆）</td></tr>
+<tr><td>2</td><td>硬上限语义</td><td>修订循环 ≤2 轮；完整性修复 ≤3 轮；辅导 ≤8/5 轮；VLM 精修 ≤2 次；超限转"Acknowledged Limitations"或强制推进</td><td>流程级</td></tr>
+<tr><td>3</td><td>版本化微协议</td><td>v3.6.6 四调用、v3.6.2 盲审合同、#390 patch 修订——运行时语义内嵌版本号，且新旧行为并存（如 patch 不覆盖 full 模式内部循环）</td><td>程序级（最脆）</td></tr>
+<tr><td>4</td><td>上游自锁（内容锁 + mutation 测试）</td><td>五表面 sha256 锁定、66+29 个 mutation 测试、镜像同步 lint——ARS 连自己改自己都要过 CI</td><td>维护级</td></tr>
+<tr><td>5</td><td>运行时强制</td><td>PreToolUse 写范围守卫（23 agent 只写自己 phase 目录、Bash 全拒）、Phase Boundary 块</td><td>执行级</td></tr>
+<tr><td>6</td><td>单事实源纪律</td><td>firm_rules 规范块 + 镜像、degradation registry"只索引不重述"、MODE_REGISTRY 先行</td><td>组织级</td></tr>
+</table></div>
+
+<h3>10.2 上游文档漂移示例（审阅时可见）</h3>
+<ul>
+  <li>deep-research SKILL.md 标题"13 Agents"，实际 14 个 agent 文件（v3.9.4 新增 <code>timeline_extraction_agent</code> 后标题未更新）；</li>
+  <li>academic-pipeline SKILL.md 标题 v3.15.0，MODE_REGISTRY 与 ARCHITECTURE.md 为 v3.19.0；</li>
+  <li><code>handoff_schemas.md</code> 从 Schema 10 直接跳到 Schema 12；Schema 11（R&amp;R Traceability Matrix）只在 ARCHITECTURE.md 出现；</li>
+  <li>academic-paper SKILL.md 含未来文本（"v3.6.7 may introduce a fallback"），被 LLM 当作运行时策略读。</li>
+</ul>
+<p class="en">这些漂移对 ARS 自身影响有限（它有 64 个 check 脚本兜底关键不变量），但说明：连纪律最强的上游都无法靠人工维护 prose 级 SSOT。这是"流程必须住进确定性载体"的强论据。</p>
+
+<h3>10.3 三分视角：知识 / 程序 / 流程</h3>
+<div class="table-wrap"><table>
+<tr><th>成分</th><th>ARS 中的位置</th><th>示例</th><th>吸收建议</th></tr>
+<tr><td><strong>知识</strong>（好工作长什么样）</td><td><code>references/</code>、shared 术语表与阶梯、各 agent 内的领域规范</td><td>证据强度阶梯（Level I–VII）、评审维度 rubric、APA 7.0 标准、统计报告标准、学科语域、可视化决策树、质量 rubric</td><td>→ 知识包（挂在能力工具上，按需加载）</td></tr>
+<tr><td><strong>程序</strong>（单步怎么做）</td><td><code>agents/*.md</code> 的步骤程序</td><td>"如何筛查一篇来源""如何做 FINER 评分""如何构建 claim-evidence 链""DA 报告格式"</td><td>→ 能力工具（node-scoped skill，无跨节点流程）</td></tr>
+<tr><td><strong>流程</strong>（何时做什么、什么条件）</td><td>SKILL.md 编排段、ARCHITECTURE.md、state machine、checkpoint 规则</td><td>10 阶段顺序、修订循环上限、门与转移、辅导子阶段</td><td>→ 图引擎（ResearchSpec profile 唯一权威）</td></tr>
+</table></div>
+
+<h3>10.4 ARS 概念 → ResearchSpec 概念映射</h3>
+<div class="table-wrap"><table>
+<tr><th>ARS 概念</th><th>ResearchSpec 现状</th><th>吸收视角</th></tr>
+<tr><td>Material Passport（唯一状态载体）</td><td>specs/* + control.yaml + handoff.md（多 owner 文件）</td><td>Passport 的"单一载体"是 ARS 的优点，但其字段按版本堆积（18+ 端口）——RS 的多 owner 模型更清晰，吸收时按概念归属拆分</td></tr>
+<tr><td>10 阶段管道 + 状态机</td><td>profiles/academic-pipeline.yaml（8 节点 route 级图）</td><td>ARS 图是"阶段级"，与 RS 现有图粒度一致；差异在 ARS 把"阶段内部"也流程化了——这正是要下沉为能力级节点的部分</td></tr>
+<tr><td>27 模式</td><td>routing catalog（25 standalone + 2 entry）</td><td>模式在吸收后应成为"命名子图预设"（outline-only = {intake, structure}），而非各自独立的 prose 流程</td></tr>
+<tr><td>Checkpoint 三类型 + 两类门</td><td>Gates（pass/pass_with_conditions/fail）+ Decisions</td><td>FULL/SLIM/MANDATORY 的自适应降级语义是 ARS 独有经验，可映射为 gate policy（required）+ 展示层逻辑</td></tr>
+<tr><td>修订循环上限、轮次模板</td><td>revision_round_template + transitions</td><td>直接对应；ARS 的"超限转已确认局限"语义可作为 loop 模板的终止选项</td></tr>
+<tr><td>Handoff Schemas 1–12</td><td>handoff.md boundary roles</td><td>ARS schema 是 Markdown 结构 + 必填校验；RS 已用 role/type/purpose 三元组实现等价物</td></tr>
+<tr><td>Sprint Contract / Generator-Evaluator</td><td>无对应物</td><td>审稿/自审的盲态预承诺是 ARS 最有价值的原创机制；吸收可作为 checker 节点或能力工具的硬约束，而非全局流程</td></tr>
+<tr><td>data_access_level 三级</td><td>无对应物</td><td>可作为图节点的数据角色声明（raw/redacted/verified），配合 RS 边界交付物语义</td></tr>
+<tr><td>Degradation Registry 语义</td><td>RS 的 fail-closed 风格</td><td>"unresolvable ≠ false、断网不产生捏造证据"这类三态语义值得整体吸收为 checker 节点的输出契约</td></tr>
+<tr><td>Firm Rules + 镜像同步 lint</td><td>SKILL.md 硬约束 + contract schema</td><td>RS 侧等价物是"每个规则只有一个 owner 文件 + 校验器"，方向一致</td></tr>
+<tr><td>写范围守卫（PreToolUse）</td><td>无（RS 不依赖宿主 hook）</td><td>ARS 依赖 Claude Code hook 是平台耦合；RS 的等价物是"CLI 是唯一 mutation 权威 + 图节点输入/输出 role 契约"，不引入宿主 hook</td></tr>
+<tr><td>env 开关（ARS_CLAIM_AUDIT / ARS_PASSPORT_RESET / ARS_CROSS_MODEL / ARS_MODEL_TIERING）</td><td>config.yaml + confirmation scope</td><td>ARS 的 opt-in 通过环境变量实现是运行时耦合；吸收后应并入 profile/route 确认摘要</td></tr>
+</table></div>
+
+<h3>10.5 吸收策略要点</h3>
+<ol>
+  <li><strong>策展而非转换</strong>：ARS 的版本化微协议（v3.6.6 四调用、盲审合同、patch 协议）必须过"提升 / 降级 / 丢弃"三道闸门，绝不把版本化 prose 原样搬进新系统。</li>
+  <li><strong>诚实原语是可复用资产</strong>：7 模式清单、证据阶梯、DA 报告格式、校准门槛（FNR&lt;0.15/FPR&lt;0.10）这些是"知识 + 程序"，吸收后直接成为 checker 节点与知识包；它们不携带流程刚性。</li>
+  <li><strong>跨技能去重是吸收的核心收益</strong>：citation_compliance（academic-paper）与 citation-check 模式、peer_reviewer_agent 与 academic-paper-reviewer、deep-research 的 DA 与 reviewer 的 DA、两个 socratic_mentor——上游的复制在吸收后应是同一批能力节点。</li>
+  <li><strong>上游自锁文化值得借鉴但不必复制</strong>：sha256 内容锁与 mutation 测试对 prose 是"防漂移"，对 RS 的图/profile 是"防漂移 + 验收边界"——但 RS 的锁应锁 schema 与 profile 字节，而非 agent 提示文本。</li>
+  <li><strong>agent 文件是角色提示词，不是模块</strong>：39 个 agent 文件相互引用、版本耦合（如 agent 文件内引用 SKILL.md 的 § 节号）。吸收时必须把每个 agent 拆成"独立可加载的能力提示 + 依赖声明"，消除交叉引用。</li>
+</ol>
+
+<!-- ==================== A ==================== -->
+<h2 id="sa">附录 A · 术语表</h2>
+<div class="table-wrap"><table>
+<tr><th>术语</th><th>含义</th></tr>
+<tr><td><span class="term">Material Passport</span></td><td>Schema 9 定义的跨阶段状态载体（唯一状态载体），承载语料、重置账本、验证摘要等端口</td></tr>
+<tr><td><span class="term">Checkpoint（FULL / SLIM / MANDATORY）</span></td><td>阶段结束的用户确认点三类型，含自适应降级规则</td></tr>
+<tr><td><span class="term">Decision-heavy vs Integrity gate</span></td><td>人类选分支的门 vs 机器先验证再由人类确认的门</td></tr>
+<tr><td><span class="term">7-Mode Failure Checklist</span></td><td>M1–M7 AI 研究失败模式清单（Lu 2026），完整性门的判定核心</td></tr>
+<tr><td><span class="term">Mode Spectrum</span></td><td>Fidelity（模板重、可复现）↔ Originality（模板轻、探索）的频谱（Lu 2026 Fig 1c 依据）</td></tr>
+<tr><td><span class="term">Sprint Contract</span></td><td>Schema 13 盲审预承诺合同：先 blind 提交评分计划，再 visible 评审</td></tr>
+<tr><td><span class="term">Generator-Evaluator Contract</span></td><td>v3.6.6 四调用结构（4a/4b/6a/6b），写作与内置评审的盲态预承诺协议</td></tr>
+<tr><td><span class="term">Revision Patch（#390）</span></td><td>anchorize → patch → 确定性 apply → finalizer 的修订最小爆炸半径协议</td></tr>
+<tr><td><span class="term">L3 Claim Faithfulness</span></td><td>引用忠实性：定位器 + claim 审计 + 污染信号 + 终端策略的统称（v3.7.3 + v3.8）</td></tr>
+<tr><td><span class="term">Terminal Policies</span></td><td>formatter 终端拒绝层：REFUSE 规则 1–12；finalizer 是唯一策略评估者，formatter 只盖章</td></tr>
+<tr><td><span class="term">Degradation Registry（#511）</span></td><td>优雅降级机制机器索引：三态结果语义（unresolvable ≠ false），拒绝通用分数上限</td></tr>
+<tr><td><span class="term">Phase Boundary（v3.9.2）</span></td><td>Bucket A/B/D agent 阶段分类 + 三层写边界强制</td></tr>
+<tr><td><span class="term">Firm Rules</span></td><td>硬规则措辞的单一事实源（canonical + 镜像同步 lint）</td></tr>
+<tr><td><span class="term">corpus-first flow</span></td><td>语料优先、检索补缺的文献流程（4 铁律 + PRE-SCREENED 块）</td></tr>
+<tr><td><span class="term">Mode A / Mode B</span></td><td>编排器驱动（默认）vs 逐阶段调用（跨会话恢复，需显式入口信号）</td></tr>
+<tr><td><span class="term">Acknowledged Limitations</span></td><td>修订循环超限后遗留问题的归宿：转为已确认局限，而非静默解决</td></tr>
+<tr><td><span class="term">frame-lock（M7）</span></td><td>管道早期阶段的框架锁定：早期假设固化导致后续阶段无法纠正</td></tr>
+</table></div>
+
+<!-- ==================== B ==================== -->
+<h2 id="sb">附录 B · 关键文件索引</h2>
+<div class="table-wrap"><table>
+<tr><th>文件（相对 vendor/ars）</th><th>作用</th></tr>
+<tr><td><code>POSITIONING.md</code></td><td>定位、拒绝机制、非目标、设计哲学（承重边界）</td></tr>
+<tr><td><code>MODE_REGISTRY.md</code></td><td>27 模式唯一事实源</td></tr>
+<tr><td><code>docs/ARCHITECTURE.md</code></td><td>全管道架构：阶段×技能×模式×数据级×工件×agent×门矩阵 + 演进时间线</td></tr>
+<tr><td><code>shared/handoff_schemas.md</code></td><td>跨技能交接合同 Schema 1–12</td></tr>
+<tr><td><code>shared/mode_spectrum.md</code></td><td>Fidelity/Originality 频谱理论依据</td></tr>
+<tr><td><code>shared/references/firm_rules.md</code></td><td>硬规则 canonical 源（R-L3-2-* / R-CIM-*）</td></tr>
+<tr><td><code>shared/contracts/</code></td><td>Sprint/passport/patch/reviewer/writer/evaluator 等全部 schema + degradation_registry</td></tr>
+<tr><td><code>academic-pipeline/references/pipeline_state_machine.md</code></td><td>状态机完整定义（阶段状态/全局状态/转移）</td></tr>
+<tr><td><code>academic-pipeline/references/passport_as_reset_boundary.md</code></td><td>重置边界协议（hash、账本、并发）</td></tr>
+<tr><td><code>academic-pipeline/references/literature_corpus_consumers.md</code></td><td>语料消费协议（4 铁律 + 5 步流程）</td></tr>
+<tr><td><code>academic-paper-reviewer/references/sprint_contract_protocol.md</code></td><td>盲审两阶段协议细节</td></tr>
+<tr><td><code>academic-paper/references/workflow_phase_details.md</code></td><td>写作 8 阶段逐阶段行为与输出</td></tr>
+<tr><td><code>scripts/ars_phase_scope_manifest.json</code></td><td>写范围守卫的 agent 阶段分类清单</td></tr>
+<tr><td><code>scripts/ars_anchorize_draft.py</code> / <code>ars_apply_revision_patch.py</code></td><td>修订 patch 协议的确定性工具</td></tr>
+<tr><td><code>scripts/check_*.py</code>（64 个）</td><td>跨文件不变量防漂移校验器</td></tr>
+<tr><td><code>commands/ars-*.md</code>（16 个）</td><td>斜杠命令入口（Mode B 显式信号）</td></tr>
+<tr><td><code>docs/design/</code>（83 篇）</td><td>逐版本的边界决策文档（每篇一个设计决策）</td></tr>
+</table></div>
+
+<footer style="margin-top:60px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;">
+  本文档由 ResearchSpec 维护者生成，基于 <code>vendor/ars</code> 钉住快照的静态分析。所有英文标识符（agent 名、模式名、schema 名）保留原文以便对照上游。ARS 上游文档自身的版本标注差异与漂移在 §10.2 中记录。
+</footer>
+
+</main>
+
+<script>
+  const toc = document.getElementById('toc');
+  const links = toc.querySelectorAll('a');
+  const headings = [...document.querySelectorAll('main h2[id]')];
+  const onScroll = () => {
+    let current = headings[0]?.id;
+    for (const h of headings) {
+      if (h.getBoundingClientRect().top <= 120) current = h.id;
+    }
+    links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
+  };
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+</script>
+</body>
+</html>

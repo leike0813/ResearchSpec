@@ -42,14 +42,14 @@ export const CLI_PAYLOADS = {
     field("--literature-adapters", "all | none | comma-separated Adapter IDs", false, "Replace the selected Adapter set."),
   ]),
   status: none("No command payload. Reads the nearest current workspace and returns a bounded snapshot."),
-  instructions: payload("selector-options", "One exact control or inspection selector.", [
-    field("selector", "route:... | subflow:... | gate:... | decision:... | change:... | handoff:...", true, "Current item whose action contract is needed."),
+  instructions: payload("selector-options", "One exact graph control or inspection selector.", [
+    field("selector", "profile:... | run:... | node:<run>/<node>[@round] | gate:... | decision:...", true, "Current item whose action contract is needed."),
   ]),
   start: payload("yaml-json", "A YAML or JSON object supplied through --input and validated before control creation.", [
-    field("schema_version", 'literal "1"', true, "Current workspace command schema."),
+    field("schema_version", 'literal "2"', true, "Graph run command schema."),
     field("confirmed_at", "RFC 3339 timestamp with offset", true, "Time of the exact route confirmation."),
-    field("profile_entry", "stable ID", false, "Entry ID for a pipeline parent."),
-    field("entry_point", "profile child node ID", false, "Required declared child entry for a mid-entry pipeline parent; forbidden on every other Start."),
+    field("entry_id", "stable ID", true, "Graph entry ID."),
+    field("entry_node_id", "graph node ID", true, "Confirmed entry node."),
     field("parent", "{ instance_id, node_id }", false, "Owning parent instance and child node."),
     field("round", "positive integer", false, "Dynamic round number; requires parent."),
     field("prerequisites", "non-empty string[]", true, "Confirmed prerequisites, including an empty array when none apply."),
@@ -67,24 +67,24 @@ export const CLI_PAYLOADS = {
     "entry_point is required exactly for a mid-entry pipeline parent and must be declared by that profile entry.",
     "round requires parent.",
     "handoff input roles and planned output roles must each be unique.",
-  ], "SubflowStartCommandSchema"),
-  advance: payload("selector-options", "A subflow selector plus an actor and optional authorized transition.", [
-    field("subflow-selector", "subflow:<instance-id>", true, "Exact current subflow instance."),
-    field("--transition", "profile transition ID | pause | resume | cancel | complete", false, "Omit only when the runtime has one unambiguous authorized transition."),
-    field("--actor-name", "non-empty string", true, "Executor recorded in the owning control."),
+  ], "GraphRunStartCommandSchema"),
+  advance: payload("selector-options", "An eligible graph node selector and its output submission.", [
+    field("node-selector", "node:<run>/<node>[@round]", true, "Exact eligible node instance."),
+    field("--input", "YAML/JSON with outputs[]", true, "Declared output role/path submissions."),
+    field("--actor-name", "non-empty string", false, "Action executor."),
   ]),
   check: payload("options", "An optional validation target and strictness flag.", [
-    field("target", "all | specs | profiles | subflows | changes | handoffs | tools | plugins | literature-adapters", false, "Validation scope; defaults to all."),
+    field("target", "all | specs | profiles | runs | changes", false, "Validation scope; defaults to all."),
     field("--strict", "boolean", false, "Treat warnings as failures."),
   ]),
   doctor: none("No command payload. Runs the full current-workspace diagnostic report."),
   list: payload("options", "An optional collection type with cursor pagination.", [
-    field("type", "subflows | changes | gates | decisions | handoffs | profiles | tools | diagnostics | history", false, "Collection to list; defaults to subflows."),
+    field("type", "profiles | runs | nodes | changes | diagnostics", false, "Collection to list; defaults to runs."),
     field("--limit", "integer 1..50", false, "Page size; defaults to 20."),
     field("--cursor", "opaque base64url cursor", false, "Cursor returned by the immediately preceding page for the same unchanged collection."),
   ]),
   show: payload("selector-options", "One exact stable spec, profile, subflow, Gate, Decision, change, handoff, or tool selector.", [
-    field("selector", "spec:... | profile:... | subflow:... | gate:... | decision:... | change:... | handoff:... | tool:...", true, "Exact item to inspect."),
+    field("selector", "profile:... | run:... | node:... | change:...", true, "Exact item to inspect."),
   ]),
   handoff: payload("yaml-json", "Optional YAML or JSON replacement payload supplied through --input; without it the command renders the current handoff.", [
     field("inputs", "HandoffInput[]", true, "Input role descriptors; each may add source_instance_id."),
@@ -97,7 +97,7 @@ export const CLI_PAYLOADS = {
   ], "SubflowHandoffInputSchema"),
   pack: payload("options", "A required ZIP output and an optional bounded context scope.", [
     field("--output", "ZIP path", true, "Destination archive path."),
-    field("--scope", "all | specs | profile | subflows | changes | subflow:<id> | change:<id>", false, "Bundle scope; defaults to all."),
+    field("--scope", "all | specs | profiles | runs | changes", false, "Bundle scope; defaults to all."),
   ]),
   propose: payload("options", "A safe change ID, target stable specs, and optional supporting documents.", [
     field("change-id", "safe kebab-case ID", true, "New project change directory and selector identity."),
@@ -106,9 +106,9 @@ export const CLI_PAYLOADS = {
   ]),
   decide: payload("selector-options", "One selector-specific human decision; option groups cannot be mixed.", [
     field("change:<id>", "--decision + --actor-name + optional --reason", false, "Project change outcome: accept, reject, defer, or supersede."),
-    field("gate:<instance>/<gate>", "--verdict + --actor-name + optional --reason/--evidence-role", false, "Append pass, pass_with_conditions, or fail."),
-    field("gate:<instance>/<gate>", "--override + --actor-name + --reason", false, "Approve the current failed Gate override."),
-    field("decision:<instance>/<decision>", "--kind + --choice + --actor-name + optional --reason", false, "Record scope, claim, structure, or branch choice."),
+    field("gate:<run>/<gate>", "--verdict + --actor-name + optional --reason", false, "Append pass, pass_with_conditions, or fail."),
+    field("gate:<run>/<gate>", "--override + --actor-name + --reason", false, "Approve the current failed Gate override."),
+    field("decision:<run>/<decision>", "--choice + --actor-name + optional --reason", false, "Record the confirmed branch choice."),
   ], [
     "Exactly one selector-specific option group is valid.",
     "--override cannot be combined with --verdict.",

@@ -1,0 +1,45 @@
+schema_version: "1"
+capability_id: cap.judgment.review-synthesis
+title: Review Synthesis
+description: Synthesizes panel reports into one editorial decision and revision roadmap.
+class: judgment
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: specialist_review
+    schema_ref: specialist-review.v1
+    required: true
+    source_policy: node_output
+  - role: editorial_decision
+    schema_ref: editorial-decision.v1
+    required: true
+    source_policy: node_output
+outputs:
+  - role: review_synthesis
+    schema_ref: review-synthesis.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - specialist_review
+      - editorial_decision
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+knowledge_refs:
+  - knowledge_id: sprint-contract
+    path: knowledge/sprint-contract.md
+    content_hash: eb6b23475079ec49380787c30dff9ae698a5264e4436dbc940bb82ca62e417a7
+    license: CC BY-NC 4.0
+gate_policy: required
+provenance:
+  origin: ars-derived
+  extraction_artifact_ids:
+    - CAP-M3-06
+    - KP-M3-06
+  upstream_sources:
+    - path: docs/ars_extraction/m3-integrity-review/capabilities/06_review_synthesis.md
+      sha256: 5c348e422c0e77f3f27bc3b7b47c710415913378794cf97194bfce8b901c2087
+license: CC BY-NC 4.0

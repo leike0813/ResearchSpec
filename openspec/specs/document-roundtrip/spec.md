@@ -2,7 +2,7 @@
 
 ## Purpose
 
-TBD
+Define byte-preserving document round-trip contracts for Markdown, Quarto, and LaTeX sources.
 
 ## Requirements
 

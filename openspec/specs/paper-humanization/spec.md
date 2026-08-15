@@ -2,18 +2,30 @@
 
 ## Purpose
 
-TBD
+Define deterministic humanization analysis, read-only review, gated full workflow, and agent-neutral runtime boundaries.
 
 ## Requirements
 
 ### Requirement: Document analysis is deterministic
 The system SHALL parse plain Markdown, Quarto, and LaTeX documents while preserving protected code, math, links, citations, and front matter. It SHALL return stable JSON-compatible analysis with sentence counts and diagnostic error codes.
 
+#### Scenario: Analysis output is stable
+- **WHEN** the same document is analyzed twice without edits
+- **THEN** the returned sentence statistics, protected spans, and diagnostic codes are identical
+
 ### Requirement: Review is read-only
 `paper-humanizer:review` SHALL accept a boundary manuscript file and emit a review report without changing the manuscript or creating a ResearchSpec Gate.
 
+#### Scenario: Review leaves inputs unchanged
+- **WHEN** review processes a manuscript boundary file
+- **THEN** the input bytes are unchanged and no Gate or control mutation is created
+
 ### Requirement: Full workflow is gated
 `paper-humanizer:full` SHALL emit a review report and revision plan, validate candidate revisions, preserve protected content, and require the `paper-humanizer-acceptance` Gate before final acceptance.
+
+#### Scenario: Acceptance waits for the Gate
+- **WHEN** a full candidate passes revision validation
+- **THEN** final acceptance remains blocked until the human confirms `paper-humanizer-acceptance`
 
 ### Requirement: Runtime remains agent-neutral
 The runtime SHALL use only Node standard-library APIs and SHALL not execute upstream code, install dependencies, contact external services, or mutate ResearchSpec control files.

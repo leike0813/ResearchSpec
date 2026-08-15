@@ -1,14 +1,14 @@
 ---
 sidebar_position: 4
 title: "instructions"
-description: "Show current route, subflow, Gate, Decision, change, or handoff instructions"
+description: "Show profile, run, node, Gate, Decision, or change instructions"
 ---
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
 # `researchspec instructions <selector>`
 
-Show current route, subflow, Gate, Decision, change, or handoff instructions
+Show profile, run, node, Gate, Decision, or change instructions
 
 - **Group**: Control plane
 - **Workspace**: `required`
@@ -17,8 +17,8 @@ Show current route, subflow, Gate, Decision, change, or handoff instructions
 
 #### Input shape
 
-One exact control or inspection selector.
+One exact graph control or inspection selector.
 
 | Field or option | Type | Required | Meaning |
 | --- | --- | --- | --- |
-| `selector` | `route:... \| subflow:... \| gate:... \| decision:... \| change:... \| handoff:...` | yes | Current item whose action contract is needed. |
+| `selector` | `profile:... \| run:... \| node:<run>/<node>[@round] \| gate:... \| decision:...` | yes | Current item whose action contract is needed. |

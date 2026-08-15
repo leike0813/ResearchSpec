@@ -2,7 +2,7 @@
 
 ## Purpose
 
-TBD
+Define candidate validation and acceptance rules for the full workflow runtime.
 
 ## Requirements
 

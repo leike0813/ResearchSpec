@@ -59,29 +59,30 @@ it through an explicit OpenSpec change before implementation.
 
 The locked direction is:
 
-- `researchspec init` prepares the workspace and installs Skills; it does not
-  start academic work.
-- User-Agent dialogue starts work. Vague, cross-Skill, resume, explanation, and
-  export requests route through `researchspec-navigate`; an explicit ARSU Skill
-  or mode may route directly after the same prerequisite and route-summary check.
-- Starting a subflow requires a user-confirmed summary of Skill, mode,
-  prerequisites, boundary outputs, formal Gates, and cost. Every child, branch,
-  and dynamic revision round requires its own confirmation.
-- ResearchSpec CLI is the only workflow-state mutation authority. Each
-  subflow's `control.yaml` is its sole runtime authority; ARSU Skills produce
-  semantic files outside `researchspec/` and describe cross-subflow exchange in
-  that subflow's `handoff.md`.
-- Workflow profiles own work graphs, parallel/join policy, Gates, transitions,
-  and dynamic revision-round templates. Do not hard-code the ARSU pipeline graph
-  in core.
+- `researchspec init` prepares a schema `"2"` graph workspace and preset
+  profiles; it does not start academic work.
+- User-Agent dialogue starts work. Vague, cross-capability, resume, explanation,
+  and export requests read `status --json` and `instructions <selector> --json`;
+  an explicit capability may route directly after the same graph selector check.
+- Starting a run requires a user-confirmed profile entry summary with
+  prerequisites, boundary outputs, formal Gates, and cost. Nodes authorized by
+  the frozen graph do not require per-node starts; each formal Gate and Decision
+  still requires its own confirmation.
+- ResearchSpec CLI is the only workflow-state mutation authority. Each run's
+  `run.yaml`, frozen `graph.yaml`, and per-node instance files are runtime
+  authority; capability Skills produce semantic files outside `researchspec/`
+  and describe exchange in the run `handoff.md`.
+- Capability graph profiles own nodes, parallel/join policy, Gates, Decisions,
+  revision-round templates, and subgraph bindings. Do not hard-code any research
+  graph in core.
 - Boundary deliverables are ordinary project files outside `researchspec/`;
   ResearchSpec does not register, hash-bind, copy, or lifecycle-manage them.
 - Every formal Gate requires human confirmation. Failed-Gate overrides and
-  scope, claim, structure, and branch choices are recorded only in the owning
-  subflow control. Ordinary exploration belongs in working material.
+  branch choices are recorded only in the owning node instance. Ordinary
+  exploration belongs in working material.
 - Alternate-model review uses only a host-native subagent after separate
-  confirmation of model, content category, and cost for the current subflow.
-  Route confirmation does not grant this consent, children and revision rounds
+  confirmation of model, content category, and cost for the current run/node.
+  Run confirmation does not grant this consent, child nodes and revision rounds
   ask again, and ResearchSpec never stores model consent or configures/calls a
   model service.
 

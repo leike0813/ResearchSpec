@@ -1,0 +1,35 @@
+schema_version: "1"
+capability_id: cap.transform.revision-patching
+title: Revision Patching
+description: Deterministically anchors and applies revision patches fail-closed.
+class: transformation
+node_kind: checker
+execution_type: mixed
+params: {}
+inputs:
+  - role: revision_patch
+    schema_ref: revision-patch.v1
+    required: true
+    source_policy: node_output
+outputs:
+  - role: patched_manuscript
+    schema_ref: patched-manuscript.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - revision_patch
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+knowledge_refs: []
+gate_policy: required
+provenance:
+  origin: ars-derived
+  extraction_artifact_ids:
+    - CAP-M4-02
+  upstream_sources:
+    - path: docs/ars_extraction/m4-revision-finalize/capabilities/02_revision_patching_apply.py
+      sha256: 00b991433fb89ab6b35c4270ce5d9f75c9a7862af014b74a88ebf69bbaf2b4d9
+license: CC BY-NC 4.0

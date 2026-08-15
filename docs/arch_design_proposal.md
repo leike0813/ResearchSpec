@@ -15,9 +15,9 @@ ResearchSpec 是服务 ARSU 的 Agent-neutral、spec-driven 文件框架。它�
 | 来源身份与限制 | `specs/sources.yaml` |
 | 接受的 claims | `specs/claims.yaml` |
 | 稿件结构意图 | `specs/manuscript.yaml` |
-| pipeline graph | `profiles/academic-pipeline.yaml` |
-| 单个 subflow 状态、Gate、Decision、transition | `subflows/<instance>/control.yaml` |
-| 跨 subflow 输入输出路径 | `subflows/<instance>/handoff.md` |
+| capability graph | `profiles/*.yaml` |
+| 单个 run 状态、frozen graph、node 状态、Gate、Decision、transition | `runs/<run>/run.yaml`、`runs/<run>/graph.yaml`、`runs/<run>/nodes/*.yaml` |
+| 跨节点/跨 run 输入输出路径 | `runs/<run>/handoff.md` |
 | 高影响 proposed/current 分离 | `changes/<change-id>/` |
 
 边界交付物是 `researchspec/` 外的普通项目文件。Git 管理其版本；ResearchSpec 只在 handoff 中

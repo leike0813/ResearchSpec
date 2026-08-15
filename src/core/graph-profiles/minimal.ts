@@ -1,0 +1,45 @@
+import { stringify } from "yaml";
+
+import type { CapabilityGraphProfile } from "../contracts/capability-graph.js";
+
+export const MINIMAL_GRAPH_PROFILE = {
+  schema_version: "2",
+  profile_id: "minimal",
+  profile_version: "0.1.0",
+  capability_registry_version: "0.1.0",
+  entries: [{ entry_id: "main", kind: "end-to-end", node_id: "rq" }],
+  nodes: [
+    {
+      node_id: "rq",
+      kind: "capability",
+      capability_id: "cap.design.research-question-formulation",
+      input_bindings: [{ role: "project_intent", source: "stable_spec" }],
+      expected_outputs: [{ role: "rq_brief", required: true }],
+      prerequisites: [],
+      required_gate_ids: [],
+      required_decision_ids: [],
+      multiplicity: "one",
+      round_role: null,
+    },
+    {
+      node_id: "report",
+      kind: "capability",
+      capability_id: "cap.generation.report-compilation",
+      input_bindings: [{ role: "rq_brief", source: "node_output", from_node_id: "rq" }],
+      expected_outputs: [{ role: "research_report", required: true }],
+      prerequisites: ["rq"],
+      required_gate_ids: [],
+      required_decision_ids: [],
+      multiplicity: "one",
+      round_role: null,
+    },
+  ],
+  parallel_groups: [],
+  subgraphs: [],
+  gates: [],
+  decisions: [],
+  revision_round_template: null,
+  override_policy: { failed_gate_requires_decision: true },
+} as const satisfies CapabilityGraphProfile;
+
+export const MINIMAL_GRAPH_PROFILE_TEXT = `${stringify(MINIMAL_GRAPH_PROFILE)}\n`;

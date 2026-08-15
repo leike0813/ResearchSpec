@@ -1,6 +1,6 @@
 # ResearchSpec
 
-ResearchSpec is an agent-neutral, file-based control plane for Academic Research Skills Universal (ARSU). It installs research Skills into supported Agent tools, keeps stable research contracts explicit, and records each subflow's state, formal Gates, human Decisions, transitions, and handoff paths in its own control directory.
+ResearchSpec is an agent-neutral, file-based execution-flow engine for academic research capabilities. It installs composable capability Skills into supported Agent tools, keeps stable research contracts explicit, and records each graph run, node state, formal Gate, human Decision, transition, and handoff path in its own control directory.
 
 Version `0.1.0` is an MVP release candidate. The functional user model is implemented and covered by public-CLI acceptance journeys; publication remains blocked until the hosted CI and manual dogfooding checklist are signed.
 
@@ -15,8 +15,8 @@ AI Agent 驱动的学术研究面临三个核心问题：
 ResearchSpec 的应对方案：
 
 - **Agent-neutral Skills**：所有研究 Skills 以文件形式分发，通过 CLI 适配层安装到不同 Agent 工具，不依赖任何平台的私有运行时
-- **CLI 为中心的执行框架**：CLI 是 `control.yaml` 运行状态的唯一修改入口；Agent 维护研究规格、外部语义交付物和 handoff，不直接编辑控制记录
-- **文件合约 (File Contracts)**：研究意图、来源、claims、稿件结构、project profile、per-subflow control、handoff 与 project change 都有明确的 Markdown / YAML / JSON owner
+- **CLI 为中心的执行框架**：CLI 是 run/node 运行状态的唯一修改入口；Agent 执行能力节点、维护研究规格、外部语义交付物和 handoff，不直接编辑 run/node 状态
+- **文件合约 (File Contracts)**：研究意图、来源、claims、稿件结构、graph profile、run/node state、handoff 与 project change 都有明确的 Markdown / YAML / JSON owner
 
 ## 灵感来源
 
@@ -24,7 +24,7 @@ ResearchSpec 的设计深受 **[OpenSpec](https://github.com/Fission-AI/OpenSpec
 
 - **当前 specs 即为真理**：核心研究意图和约束存放在 `specs/`，实时生效
 - **变更隔离**：高影响修改以可审阅的 project change 文档包存在于 `changes/`；接受 change 不会自动修改 stable specs
-- **决策 first-class**：Human-in-the-loop 不依赖聊天记录；正式 Gate、override 和局部研究选择写入所属 subflow 的 `control.yaml`
+- **决策 first-class**：Human-in-the-loop 不依赖聊天记录；正式 Gate、override 和分支选择写入所属 node instance 文件
 
 与 OpenSpec 遵循相同理念：代码（此处为研究工件）是附带产物，specs 才应驱动行为。
 
@@ -122,15 +122,11 @@ researchspec init . --tools codex --literature-adapters zotero-library
 
 > I want to study how generative AI affects writing instruction in higher education. Show candidate routes, prerequisites, boundary outputs, formal Gates, risks, and cost. Do not start a route until I confirm it.
 
-ResearchSpec 默认安装十个固定项目 Skills：
-
-- **ARSU**：`deep-research`、`academic-paper`、`academic-paper-reviewer`、`academic-pipeline`
-- **Core**：`review-response`、`paper-humanizer`
-- **Companion**：`researchspec-navigate`、`researchspec-propose`、`researchspec-decide`、`researchspec-verify`
+ResearchSpec 默认投影经过 authoring converter 生成的 capability Skills（当前 38 个），并安装四个核心 Companion 工作流与预设 graph profiles：`minimal`、`research-main`、`academic-paper`、`academic-paper-reviewer`、`academic-pipeline`。
 
 可选的 [Zotero 文献系统 Adapter](docs/literature_system_adapters.md) 会额外安装七个 Skill、项目级 `.zotero-bridge` runtime 和配置模板。`update --literature-adapters none` 可取消选择；未修改的托管文件会被移除，发生 drift 的文件会保留并报告。初始化及状态检查阶段不与 Zotero 通信。
 
-可选 ResearchSpec 维护的[领域 Skill 插件](docs/domain_skill_plugins.md)可为 workspace 添加经审查的 Open Agent Skills。用户按稳定 domain 选择；维护者 converter 拥有上游出处和 Skill 依赖。学科域遵循 [ANZSRC 2020 FoR 组](docs/domain_taxonomy.md)，Field 代码只用于审计。插件不增加 Companion 或 CLI capability，也不能修改 stable specs、subflow control、handoff、Gate、Decision 或 transition。用户拒绝插件或插件不可用时，核心工作不变。
+可选 ResearchSpec 维护的[领域 Skill 插件](docs/domain_skill_plugins.md)可为 workspace 添加经审查的 Open Agent Skills。用户按稳定 domain 选择；维护者 converter 拥有上游出处和 Skill 依赖。学科域遵循 [ANZSRC 2020 FoR 组](docs/domain_taxonomy.md)，Field 代码只用于审计。插件不增加 Companion 或 CLI capability，也不能修改 stable specs、run/node state、handoff、Gate、Decision 或 graph transition。用户拒绝插件或插件不可用时，核心工作不变。
 
 ## 运行时协议
 
@@ -141,7 +137,7 @@ researchspec --help
 → researchspec <command> --help
 → status --json
 → instructions <selector> --json
-→ start / decide / advance
+→ start profile:<id> / decide gate:|decision:|change: / advance node:<run>/<node>
 → status --json
 ```
 
@@ -149,8 +145,7 @@ researchspec --help
 [CLI handbook](docs/cli_handbook.md)。当问题涉及当前 workspace 时，Agent 先读取 status，
 再请求当前 selector 的 instructions。
 
-Selector family 包括 `route:`、`subflow:`、`gate:`、`decision:`、`change:` 和
-`handoff:`。CLI 是 `control.yaml` 中 Gate、Decision、frontier 和 transition 的唯一写入者；
+Selector family 包括 `profile:`、`run:`、`node:`、`gate:`、`decision:` 和 `change:`。CLI 是 run/node 文件中 Gate、Decision、frontier 和 transition 的唯一写入者；
 ARSU producer 负责 `researchspec/` 外的语义文件和自己的 handoff。`doctor` 只读诊断当前
 owner，不执行修复事务。
 
@@ -178,7 +173,7 @@ workspace 的 `status` 与 `instructions <selector>` 为准。
 
 - ResearchSpec CLI 无运行时 LLM API 集成，不发送遥测
 - Agent 工具可能有自己的网络、模型和遥测行为，请单独审查
-- `handoff` 只引用外部边界文件；`pack` 排除 subflow 私有 `work/` 和外部文件字节
+- `handoff` 只引用外部边界文件；`pack` 排除 run 私有 work 和外部文件字节
 - 研究内容保留在项目内，除非用户或 Agent 工具主动导出或传输
 - 正式 Gate、failed-Gate override、scope、claim、structure 和 branch 选择均需人工确认
 

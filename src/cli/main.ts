@@ -3,41 +3,42 @@ import path from "node:path";
 import { Command, CommanderError, InvalidArgumentError } from "commander";
 
 import {
-  handleCurrentAdvance,
-  handleCurrentCheck,
-  handleCurrentDecide,
-  handleCurrentDoctor,
-  handleCurrentInit,
-  handleCurrentInstructions,
-  handleCurrentArchive,
-  handleCurrentHandoff,
-  handleCurrentStart,
-  handleCurrentList,
-  handleCurrentPack,
-  handleCurrentPropose,
-  handleCurrentShow,
-  handleCurrentStatus,
-  handleCurrentUpdate,
-  type CurrentAdvanceOptions,
-  type CurrentDecideOptions,
-  type CurrentDoctorOptions,
-  type CurrentInitOptions,
-  type CurrentHandoffOptions,
-  type CurrentListOptions,
-  type CurrentPackOptions,
-  type CurrentProposeOptions,
-  type CurrentStartOptions,
-  type CurrentUpdateOptions,
-  handlePluginInstall,
-  handlePluginInstructions,
-  handlePluginList,
-  handlePluginShow,
-  handlePluginUninstall,
-  handlePluginUpdate,
-  type PluginInstallOptions,
+  handleGraphAdvance,
+  handleGraphCheck,
+  handleGraphDecide,
+  handleGraphDoctor,
+  handleGraphInstructions,
+  handleGraphStart,
+  handleGraphStatus,
+  type GraphAdvanceOptions,
+  type GraphDecideOptions,
+  type GraphDoctorOptions,
+  type GraphStartOptions,
+} from "./handlers/graph.js";
+import { handleGraphInit, handleGraphUpdate, type GraphInitOptions, type GraphUpdateOptions } from "./handlers/graph-bootstrap.js";
+import {
+  handleGraphArchive,
+  handleGraphChangeDecision,
+  handleGraphHandoff,
+  handleGraphList,
+  handleGraphPack,
+  handleGraphPropose,
+  handleGraphShow,
+  type GraphHandoffOptions,
+  type GraphListOptions,
+  type GraphPackOptions,
+  type GraphProposeOptions,
+} from "./handlers/graph-context.js";
+import {
+  handleGraphPluginInstall,
+  handleGraphPluginInstructions,
+  handleGraphPluginList,
+  handleGraphPluginShow,
+  handleGraphPluginUninstall,
+  handleGraphPluginUpdate,
   type PluginListOptions,
   type PluginShowOptions,
-} from "./handlers.js";
+} from "./handlers/graph-plugins.js";
 import { applyGlobalCliOptions, cliHelpTarget, registerCliCommand } from "./command-catalog.js";
 import { presentResult } from "./presenter.js";
 import { CliError, failure, type CommandContext, type CommandResult } from "./types.js";
@@ -89,48 +90,60 @@ type Runner = (command: string, commandObject: Command, action: () => Promise<Co
 
 function registerCommands(program: Command, run: Runner): void {
   registerCliCommand(program, "init", { delivery: parseDeliveryMode })
-    .action(async (target: string | undefined, options: CurrentInitOptions, command: Command) => run("init", command, () => handleCurrentInit(target, options, commandContext("init", command))));
+    .action(async (target: string | undefined, options: GraphInitOptions, command: Command) => run("init", command, () => handleGraphInit(target, options, commandContext("init", command))));
   registerCliCommand(program, "update", { delivery: parseDeliveryMode })
-    .action(async (target: string | undefined, options: CurrentUpdateOptions, command: Command) => run("update", command, () => handleCurrentUpdate(target, options, commandContext("update", command))));
+    .action(async (target: string | undefined, options: GraphUpdateOptions, command: Command) => run("update", command, () => handleGraphUpdate(options, commandContext("update", command))));
   registerCliCommand(program, "status")
-    .action(async (_options: Record<string, never>, command: Command) => run("status", command, () => handleCurrentStatus(commandContext("status", command))));
+    .action(async (_options: Record<string, never>, command: Command) => run("status", command, () => handleGraphStatus(commandContext("status", command))));
   registerCliCommand(program, "instructions")
-    .action(async (selector: string, _options: Record<string, never>, command: Command) => run("instructions", command, () => handleCurrentInstructions(selector, commandContext("instructions", command))));
+    .action(async (selector: string, _options: Record<string, never>, command: Command) => run("instructions", command, () => handleGraphInstructions(selector, commandContext("instructions", command))));
   registerCliCommand(program, "start")
-    .action(async (routeRef: string, options: CurrentStartOptions, command: Command) => run("start", command, () => handleCurrentStart(routeRef, options, commandContext("start", command))));
+    .action(async (profileId: string, options: GraphStartOptions, command: Command) => run("start", command, () => handleGraphStart({ input: options.input, profile: profileId, confirmedBy: options.confirmedBy }, commandContext("start", command))));
   registerCliCommand(program, "advance")
-    .action(async (selector: string, options: CurrentAdvanceOptions, command: Command) => run("advance", command, () => handleCurrentAdvance(selector, options, commandContext("advance", command))));
+    .action(async (selector: string, options: GraphAdvanceOptions, command: Command) => run("advance", command, () => handleGraphAdvance(selector, { input: options.input, actorName: options.actorName }, commandContext("advance", command))));
   registerCliCommand(program, "check")
-    .action(async (target: string | undefined, options: { strict?: boolean }, command: Command) => run("check", command, () => handleCurrentCheck(target, Boolean(options.strict), commandContext("check", command))));
+    .action(async (_target: string | undefined, options: { strict?: boolean }, command: Command) => run("check", command, () => handleGraphCheck(Boolean(options.strict), commandContext("check", command))));
   registerCliCommand(program, "doctor")
-    .action(async (options: CurrentDoctorOptions, command: Command) => run("doctor", command, () => handleCurrentDoctor(options, commandContext("doctor", command))));
+    .action(async (_options: GraphDoctorOptions, command: Command) => run("doctor", command, () => handleGraphDoctor(commandContext("doctor", command))));
   registerCliCommand(program, "list")
-    .action(async (type: string | undefined, options: CurrentListOptions, command: Command) => run("list", command, () => handleCurrentList(type, options, commandContext("list", command))));
+    .action(async (type: string | undefined, options: GraphListOptions, command: Command) => run("list", command, () => handleGraphList(type, options, commandContext("list", command))));
   registerCliCommand(program, "show")
-    .action(async (item: string, _options: Record<string, never>, command: Command) => run("show", command, () => handleCurrentShow(item, commandContext("show", command))));
+    .action(async (item: string, _options: Record<string, never>, command: Command) => run("show", command, () => handleGraphShow(item, commandContext("show", command))));
   registerCliCommand(program, "handoff")
-    .action(async (selector: string, options: CurrentHandoffOptions, command: Command) => run("handoff", command, () => handleCurrentHandoff(selector, options, commandContext("handoff", command))));
+    .action(async (selector: string, options: GraphHandoffOptions, command: Command) => run("handoff", command, () => handleGraphHandoff(selector, options, commandContext("handoff", command))));
   registerCliCommand(program, "pack")
-    .action(async (options: CurrentPackOptions, command: Command) => run("pack", command, () => handleCurrentPack(options, commandContext("pack", command))));
+    .action(async (options: GraphPackOptions, command: Command) => run("pack", command, () => handleGraphPack(options, commandContext("pack", command))));
   registerCliCommand(program, "propose")
-    .action(async (changeId: string, options: CurrentProposeOptions, command: Command) => run("propose", command, () => handleCurrentPropose(changeId, options, commandContext("propose", command))));
+    .action(async (changeId: string, options: GraphProposeOptions, command: Command) => run("propose", command, () => handleGraphPropose(changeId, options, commandContext("propose", command))));
   registerCliCommand(program, "decide", { decision: parseDecision, verdict: parseVerdict, kind: parseLocalDecisionKind })
-    .action(async (item: string | undefined, options: CurrentDecideOptions, command: Command) => run("decide", command, () => handleCurrentDecide(item, options, commandContext("decide", command))));
+    .action(async (item: string | undefined, options: GraphDecideOptions, command: Command) => run("decide", command, async () => {
+      const context = commandContext("decide", command);
+      if (item?.startsWith("change:")) {
+        const changeId = item.slice("change:".length);
+        if (!options.decision) throw new CliError("change_decision_required", "Project change Decide requires --decision.", 2);
+        const actor = options.actorName?.trim();
+        if (!actor) throw new CliError("human_actor_required", "Decide requires --actor-name.", 2);
+        const reason = options.reason?.trim();
+        if (!reason) throw new CliError("change_reason_required", "Project change Decide requires --reason.", 2);
+        return handleGraphChangeDecision(changeId, options.decision, actor, reason, context);
+      }
+      return handleGraphDecide(item ?? "", options, context);
+    }));
   registerCliCommand(program, "archive")
-    .action(async (changeId: string, _options: Record<string, never>, command: Command) => run("archive", command, () => handleCurrentArchive(changeId, commandContext("archive", command))));
+    .action(async (changeId: string, _options: Record<string, never>, command: Command) => run("archive", command, () => handleGraphArchive(changeId, commandContext("archive", command))));
   const plugin = registerCliCommand(program, "plugin");
   registerCliCommand(plugin, "plugin-list")
-    .action(async (options: PluginListOptions, command: Command) => run("plugin", command, () => handlePluginList(options, commandContext("plugin", command))));
+    .action(async (options: PluginListOptions, command: Command) => run("plugin", command, () => handleGraphPluginList(options, commandContext("plugin", command))));
   registerCliCommand(plugin, "plugin-show")
-    .action(async (pluginId: string, options: PluginShowOptions, command: Command) => run("plugin", command, () => handlePluginShow(pluginId, options, commandContext("plugin", command))));
+    .action(async (pluginId: string, options: PluginShowOptions, command: Command) => run("plugin", command, () => handleGraphPluginShow(pluginId, options, commandContext("plugin", command))));
   registerCliCommand(plugin, "plugin-install")
-    .action(async (pluginIds: string[], options: PluginInstallOptions, command: Command) => run("plugin", command, () => handlePluginInstall(pluginIds, options, commandContext("plugin", command))));
+    .action(async (pluginIds: string[], _options: Record<string, never>, command: Command) => run("plugin", command, () => handleGraphPluginInstall(pluginIds, commandContext("plugin", command))));
   registerCliCommand(plugin, "plugin-uninstall")
-    .action(async (pluginIds: string[], _options: Record<string, never>, command: Command) => run("plugin", command, () => handlePluginUninstall(pluginIds, commandContext("plugin", command))));
+    .action(async (pluginIds: string[], _options: Record<string, never>, command: Command) => run("plugin", command, () => handleGraphPluginUninstall(pluginIds, commandContext("plugin", command))));
   registerCliCommand(plugin, "plugin-update")
-    .action(async (pluginIds: string[], _options: Record<string, never>, command: Command) => run("plugin", command, () => handlePluginUpdate(pluginIds ?? [], commandContext("plugin", command))));
+    .action(async (pluginIds: string[], _options: Record<string, never>, command: Command) => run("plugin", command, () => handleGraphPluginUpdate(pluginIds, commandContext("plugin", command))));
   registerCliCommand(plugin, "plugin-instructions")
-    .action(async (skillId: string, _options: Record<string, never>, command: Command) => run("plugin", command, () => handlePluginInstructions(skillId, commandContext("plugin", command))));
+    .action(async (skillId: string, _options: Record<string, never>, command: Command) => run("plugin", command, () => handleGraphPluginInstructions(skillId, commandContext("plugin", command))));
 }
 
 async function createProgram(): Promise<Command> {

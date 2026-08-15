@@ -1,0 +1,35 @@
+schema_version: "1"
+capability_id: cap.design.argument-blueprint
+title: Argument Blueprint
+description: Builds claim-evidence-reasoning chains and handles counterarguments.
+class: design
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: paper_outline
+    schema_ref: paper-outline.v1
+    required: true
+    source_policy: node_output
+outputs:
+  - role: argument_blueprint
+    schema_ref: argument-blueprint.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - paper_outline
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+knowledge_refs: []
+gate_policy: required
+provenance:
+  origin: ars-derived
+  extraction_artifact_ids:
+    - CAP-M2-03
+  upstream_sources:
+    - path: docs/ars_extraction/m2-writing/capabilities/03_argument_blueprint.md
+      sha256: e8ddd724f2836df3e26d0012a93b9068632b77c1cbeabfaa5edf1f43d8fe2735
+license: CC BY-NC 4.0

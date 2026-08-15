@@ -1,14 +1,14 @@
 ---
 sidebar_position: 6
 title: "advance"
-description: "Complete or advance one currently authorized subflow"
+description: "Validate and complete one eligible graph node"
 ---
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
-# `researchspec advance <subflow-selector>`
+# `researchspec advance <node-selector>`
 
-Complete or advance one currently authorized subflow
+Validate and complete one eligible graph node
 
 - **Group**: Control plane
 - **Workspace**: `required`
@@ -17,15 +17,16 @@ Complete or advance one currently authorized subflow
 
 | Option | Required | Description |
 | --- | --- | --- |
-| `--transition <id>` | no | profile transition ID or pause, resume, cancel, complete |
-| `--actor-name <name>` | yes | action executor name |
+| `--input <advance.yaml|json>` | yes | output role submission payload |
+| `--transition <id>` | no | reserved for run-level transitions |
+| `--actor-name <name>` | no | action executor name |
 
 #### Input shape
 
-A subflow selector plus an actor and optional authorized transition.
+An eligible graph node selector and its output submission.
 
 | Field or option | Type | Required | Meaning |
 | --- | --- | --- | --- |
-| `subflow-selector` | `subflow:<instance-id>` | yes | Exact current subflow instance. |
-| `--transition` | `profile transition ID \| pause \| resume \| cancel \| complete` | no | Omit only when the runtime has one unambiguous authorized transition. |
-| `--actor-name` | `non-empty string` | yes | Executor recorded in the owning control. |
+| `node-selector` | `node:<run>/<node>[@round]` | yes | Exact eligible node instance. |
+| `--input` | `YAML/JSON with outputs[]` | yes | Declared output role/path submissions. |
+| `--actor-name` | `non-empty string` | no | Action executor. |

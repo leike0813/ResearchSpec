@@ -96,7 +96,7 @@ Optional replacement or extension selections for an existing current workspace.
 
 ### `researchspec status`
 
-Show derived current workspace and subflow status
+Show derived schema 2 run/node status
 
 - Workspace: `required`
 - Static effect: `read`
@@ -108,7 +108,7 @@ No command payload. Reads the nearest current workspace and returns a bounded sn
 
 ### `researchspec instructions <selector>`
 
-Show current route, subflow, Gate, Decision, change, or handoff instructions
+Show profile, run, node, Gate, Decision, or change instructions
 
 - Workspace: `required`
 - Static effect: `read`
@@ -116,15 +116,15 @@ Show current route, subflow, Gate, Decision, change, or handoff instructions
 
 #### Input shape
 
-One exact control or inspection selector.
+One exact graph control or inspection selector.
 
 | Field or option | Type | Required | Meaning |
 | --- | --- | --- | --- |
-| `selector` | `route:... \| subflow:... \| gate:... \| decision:... \| change:... \| handoff:...` | yes | Current item whose action contract is needed. |
+| `selector` | `profile:... \| run:... \| node:<run>/<node>[@round] \| gate:... \| decision:...` | yes | Current item whose action contract is needed. |
 
-### `researchspec start <route-ref>`
+### `researchspec start <profile-id>`
 
-Atomically start one independently confirmed route
+Atomically start one confirmed graph run
 
 - Workspace: `required`
 - Static effect: `write`
@@ -139,14 +139,14 @@ Atomically start one independently confirmed route
 
 A YAML or JSON object supplied through --input and validated before control creation.
 
-Runtime schema: `SubflowStartCommandSchema`.
+Runtime schema: `GraphRunStartCommandSchema`.
 
 | Field or option | Type | Required | Meaning |
 | --- | --- | --- | --- |
-| `schema_version` | `literal "1"` | yes | Current workspace command schema. |
+| `schema_version` | `literal "2"` | yes | Graph run command schema. |
 | `confirmed_at` | `RFC 3339 timestamp with offset` | yes | Time of the exact route confirmation. |
-| `profile_entry` | `stable ID` | no | Entry ID for a pipeline parent. |
-| `entry_point` | `profile child node ID` | no | Required declared child entry for a mid-entry pipeline parent; forbidden on every other Start. |
+| `entry_id` | `stable ID` | yes | Graph entry ID. |
+| `entry_node_id` | `graph node ID` | yes | Confirmed entry node. |
 | `parent` | `{ instance_id, node_id }` | no | Owning parent instance and child node. |
 | `round` | `positive integer` | no | Dynamic round number; requires parent. |
 | `prerequisites` | `non-empty string[]` | yes | Confirmed prerequisites, including an empty array when none apply. |
@@ -176,9 +176,9 @@ Constraints:
 - round requires parent.
 - handoff input roles and planned output roles must each be unique.
 
-### `researchspec advance <subflow-selector>`
+### `researchspec advance <node-selector>`
 
-Complete or advance one currently authorized subflow
+Validate and complete one eligible graph node
 
 - Workspace: `required`
 - Static effect: `write`
@@ -186,24 +186,25 @@ Complete or advance one currently authorized subflow
 
 | Command option | Required | Purpose |
 | --- | --- | --- |
-| `--transition <id>` | no | profile transition ID or pause, resume, cancel, complete |
-| `--actor-name <name>` | yes | action executor name |
+| `--input <advance.yaml|json>` | yes | output role submission payload |
+| `--transition <id>` | no | reserved for run-level transitions |
+| `--actor-name <name>` | no | action executor name |
 
 #### Input shape
 
-A subflow selector plus an actor and optional authorized transition.
+An eligible graph node selector and its output submission.
 
 | Field or option | Type | Required | Meaning |
 | --- | --- | --- | --- |
-| `subflow-selector` | `subflow:<instance-id>` | yes | Exact current subflow instance. |
-| `--transition` | `profile transition ID \| pause \| resume \| cancel \| complete` | no | Omit only when the runtime has one unambiguous authorized transition. |
-| `--actor-name` | `non-empty string` | yes | Executor recorded in the owning control. |
+| `node-selector` | `node:<run>/<node>[@round]` | yes | Exact eligible node instance. |
+| `--input` | `YAML/JSON with outputs[]` | yes | Declared output role/path submissions. |
+| `--actor-name` | `non-empty string` | no | Action executor. |
 
 ## Inspection
 
 ### `researchspec check [target]`
 
-Check specs, profiles, subflows, changes, handoffs, tools, plugins, or literature-adapters
+Check schema 2 workspace contracts
 
 - Workspace: `required`
 - Static effect: `read`
@@ -219,12 +220,12 @@ An optional validation target and strictness flag.
 
 | Field or option | Type | Required | Meaning |
 | --- | --- | --- | --- |
-| `target` | `all \| specs \| profiles \| subflows \| changes \| handoffs \| tools \| plugins \| literature-adapters` | no | Validation scope; defaults to all. |
+| `target` | `all \| specs \| profiles \| runs \| changes` | no | Validation scope; defaults to all. |
 | `--strict` | `boolean` | no | Treat warnings as failures. |
 
 ### `researchspec list [type]`
 
-List current subflows, changes, Gates, Decisions, handoffs, profiles, tools, diagnostics, or derived history
+List profiles, runs, nodes, changes, or diagnostics
 
 - Workspace: `required`
 - Static effect: `read`
@@ -241,13 +242,13 @@ An optional collection type with cursor pagination.
 
 | Field or option | Type | Required | Meaning |
 | --- | --- | --- | --- |
-| `type` | `subflows \| changes \| gates \| decisions \| handoffs \| profiles \| tools \| diagnostics \| history` | no | Collection to list; defaults to subflows. |
+| `type` | `profiles \| runs \| nodes \| changes \| diagnostics` | no | Collection to list; defaults to runs. |
 | `--limit` | `integer 1..50` | no | Page size; defaults to 20. |
 | `--cursor` | `opaque base64url cursor` | no | Cursor returned by the immediately preceding page for the same unchanged collection. |
 
 ### `researchspec show <selector>`
 
-Show one exact current item, stable spec, or project profile
+Show one exact profile, run, node, or project change
 
 - Workspace: `required`
 - Static effect: `read`
@@ -259,7 +260,7 @@ One exact stable spec, profile, subflow, Gate, Decision, change, handoff, or too
 
 | Field or option | Type | Required | Meaning |
 | --- | --- | --- | --- |
-| `selector` | `spec:... \| profile:... \| subflow:... \| gate:... \| decision:... \| change:... \| handoff:... \| tool:...` | yes | Exact item to inspect. |
+| `selector` | `profile:... \| run:... \| node:... \| change:...` | yes | Exact item to inspect. |
 
 ## Recovery
 
@@ -277,9 +278,9 @@ No command payload. Runs the full current-workspace diagnostic report.
 
 ## Context
 
-### `researchspec handoff <subflow-selector>`
+### `researchspec handoff <run-selector>`
 
-Render or replace one directly editable subflow handoff
+Render or replace one directly editable run handoff
 
 - Workspace: `required`
 - Static effect: `conditional-write`
@@ -318,7 +319,7 @@ Constraints:
 
 ### `researchspec pack`
 
-Create a deterministic bounded current-workspace context bundle
+Create a deterministic bounded schema 2 context bundle
 
 - Workspace: `required`
 - Static effect: `write`
@@ -336,7 +337,7 @@ A required ZIP output and an optional bounded context scope.
 | Field or option | Type | Required | Meaning |
 | --- | --- | --- | --- |
 | `--output` | `ZIP path` | yes | Destination archive path. |
-| `--scope` | `all \| specs \| profile \| subflows \| changes \| subflow:<id> \| change:<id>` | no | Bundle scope; defaults to all. |
+| `--scope` | `all \| specs \| profiles \| runs \| changes` | no | Bundle scope; defaults to all. |
 
 ## Governance
 
@@ -365,7 +366,7 @@ A safe change ID, target stable specs, and optional supporting documents.
 
 ### `researchspec decide <selector>`
 
-Resolve a pending human decision
+Resolve a Gate, Decision, or project change choice
 
 - Workspace: `required`
 - Static effect: `write`
@@ -389,9 +390,9 @@ One selector-specific human decision; option groups cannot be mixed.
 | Field or option | Type | Required | Meaning |
 | --- | --- | --- | --- |
 | `change:<id>` | `--decision + --actor-name + optional --reason` | no | Project change outcome: accept, reject, defer, or supersede. |
-| `gate:<instance>/<gate>` | `--verdict + --actor-name + optional --reason/--evidence-role` | no | Append pass, pass_with_conditions, or fail. |
-| `gate:<instance>/<gate>` | `--override + --actor-name + --reason` | no | Approve the current failed Gate override. |
-| `decision:<instance>/<decision>` | `--kind + --choice + --actor-name + optional --reason` | no | Record scope, claim, structure, or branch choice. |
+| `gate:<run>/<gate>` | `--verdict + --actor-name + optional --reason` | no | Append pass, pass_with_conditions, or fail. |
+| `gate:<run>/<gate>` | `--override + --actor-name + --reason` | no | Approve the current failed Gate override. |
+| `decision:<run>/<decision>` | `--choice + --actor-name + optional --reason` | no | Record the confirmed branch choice. |
 
 Constraints:
 

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-TBD
+Define the pinned Python runtime boundaries and self-contained packaging for Paper Humanizer.
 
 ## Requirements
 

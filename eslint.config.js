@@ -10,6 +10,8 @@ export default tseslint.config(
       "node_modules/**",
       "references/**",
       ".*/**",
+      "tests/**/*.legacy.ts",
+      "tests/helpers/arsu-journey.ts",
     ],
   },
   {

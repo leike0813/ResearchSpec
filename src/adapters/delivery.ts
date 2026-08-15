@@ -95,9 +95,12 @@ export async function planToolDelivery(input: {
       }
 
       if (writesCommands) {
-        for (const content of COMMAND_WRAPPER_CONTENTS) {
-          const target = tool.command!.path(content.id, input.projectRoot);
-          await addPlanned(target, tool.command!.scope === "shared-global" ? target : relativeProject(target), tool.command!.scope, renderCommand(tool, content), { kind: "command", command_id: content.id }, tool.id);
+        const command = tool.command;
+        if (command) {
+          for (const content of COMMAND_WRAPPER_CONTENTS) {
+            const target = command.path(content.id, input.projectRoot);
+            await addPlanned(target, command.scope === "shared-global" ? target : relativeProject(target), command.scope, renderCommand(tool, content), { kind: "command", command_id: content.id }, tool.id);
+          }
         }
       }
     } catch (error) {

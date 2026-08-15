@@ -1,14 +1,14 @@
 ---
 sidebar_position: 14
 title: "decide"
-description: "Resolve a pending human decision"
+description: "Resolve a Gate, Decision, or project change choice"
 ---
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
 # `researchspec decide <selector>`
 
-Resolve a pending human decision
+Resolve a Gate, Decision, or project change choice
 
 - **Group**: Governance
 - **Workspace**: `required`
@@ -33,9 +33,9 @@ One selector-specific human decision; option groups cannot be mixed.
 | Field or option | Type | Required | Meaning |
 | --- | --- | --- | --- |
 | `change:<id>` | `--decision + --actor-name + optional --reason` | no | Project change outcome: accept, reject, defer, or supersede. |
-| `gate:<instance>/<gate>` | `--verdict + --actor-name + optional --reason/--evidence-role` | no | Append pass, pass_with_conditions, or fail. |
-| `gate:<instance>/<gate>` | `--override + --actor-name + --reason` | no | Approve the current failed Gate override. |
-| `decision:<instance>/<decision>` | `--kind + --choice + --actor-name + optional --reason` | no | Record scope, claim, structure, or branch choice. |
+| `gate:<run>/<gate>` | `--verdict + --actor-name + optional --reason` | no | Append pass, pass_with_conditions, or fail. |
+| `gate:<run>/<gate>` | `--override + --actor-name + --reason` | no | Approve the current failed Gate override. |
+| `decision:<run>/<decision>` | `--choice + --actor-name + optional --reason` | no | Record the confirmed branch choice. |
 
 Constraints:
 

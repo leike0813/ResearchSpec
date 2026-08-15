@@ -1,0 +1,231 @@
+import { createHash } from "node:crypto";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+import { stringify } from "yaml";
+
+import type { CapabilityManifest } from "../../core/contracts/capability-manifest.js";
+import { CAPABILITY_REGISTRY_SCHEMA_VERSION, CapabilityRegistrySchema } from "../../capabilities/registry.js";
+
+export interface AuthoringKnowledgeSource {
+  knowledge_id: string;
+  extraction_artifact_id: string;
+  output_path: string;
+}
+
+export interface AuthoringInputSource {
+  role: string;
+  schema_ref: string;
+  required: boolean;
+  source_policy: "stable_spec" | "handoff" | "node_output" | "parameter";
+}
+
+export interface AuthoringOutputSource {
+  role: string;
+  schema_ref: string;
+  required: boolean;
+}
+
+export interface CapabilityAuthoringSource {
+  capability_id: string;
+  /** Optional extracted Python script bound as a real script validator entry. */
+  script_validator?: {
+    validator_id: string;
+    entrypoint_path: string;
+    args_template: string[];
+  };
+  title: string;
+  description: string;
+  class: CapabilityManifest["class"];
+  node_kind: CapabilityManifest["node_kind"];
+  execution_type: CapabilityManifest["execution_type"];
+  gate_policy: CapabilityManifest["gate_policy"];
+  license: string;
+  extraction_artifact_id: string;
+  knowledge_sources: AuthoringKnowledgeSource[];
+  inputs: AuthoringInputSource[];
+  outputs: AuthoringOutputSource[];
+}
+
+export interface AuthoringResult {
+  capability_id: string;
+  packageRoot: string;
+  manifest: CapabilityManifest;
+  registry_version: string;
+  files: string[];
+}
+
+export function sha256(text: string): string {
+  return createHash("sha256").update(text, "utf8").digest("hex");
+}
+
+export async function authorCapabilityPackage(outputRoot: string, source: CapabilityAuthoringSource): Promise<AuthoringResult> {
+  const index = JSON.parse(await readFile(path.resolve("docs/ars_extraction/extraction-index.json"), "utf8")) as {
+    artifacts: Array<{
+      artifact_id: string;
+      path: string;
+      kind: string;
+      verification: { status: string };
+      sha256: string;
+    }>;
+  };
+  const byId = new Map(index.artifacts.map((artifact) => [artifact.artifact_id, artifact]));
+  const requiredIds = [source.extraction_artifact_id, ...source.knowledge_sources.map((item) => item.extraction_artifact_id)];
+  for (const id of requiredIds) {
+    const artifact = byId.get(id);
+    if (!artifact || artifact.verification.status !== "pass") throw new Error(`Extraction artifact is not verified: ${id}`);
+  }
+
+  const packageRoot = path.join(outputRoot, source.capability_id);
+  await mkdir(packageRoot, { recursive: true });
+  const files: string[] = [];
+  const knowledgeRefs: CapabilityManifest["knowledge_refs"] = [];
+  for (const knowledge of source.knowledge_sources) {
+    const artifact = byId.get(knowledge.extraction_artifact_id);
+    if (!artifact) throw new Error(`Missing extraction artifact: ${knowledge.extraction_artifact_id}`);
+    const sourceText = await readFile(artifact.path, "utf8");
+    const outputPath = path.join(packageRoot, ...knowledge.output_path.split("/"));
+    await mkdir(path.dirname(outputPath), { recursive: true });
+    await writeFile(outputPath, sourceText, "utf8");
+    files.push(path.relative(packageRoot, outputPath).split(path.sep).join("/"));
+    knowledgeRefs.push({
+      knowledge_id: knowledge.knowledge_id,
+      path: knowledge.output_path,
+      content_hash: sha256(sourceText),
+      license: source.license,
+    });
+  }
+
+  const validators: CapabilityManifest["validators"] = [{
+    validator_id: "capability.policy.output_roles",
+    kind: "policy",
+    inputs: source.inputs.map((item) => item.role),
+    outputs: [],
+    error_codes: ["output_roles_invalid"],
+  }];
+  if (source.script_validator) {
+    const scriptArtifact = byId.get(source.extraction_artifact_id);
+    if (!scriptArtifact) throw new Error(`Missing script extraction artifact: ${source.extraction_artifact_id}`);
+    const scriptText = await readFile(scriptArtifact.path, "utf8");
+    const entrypointPath = source.script_validator.entrypoint_path;
+    const scriptPath = path.join(packageRoot, ...entrypointPath.split("/"));
+    await mkdir(path.dirname(scriptPath), { recursive: true });
+    await writeFile(scriptPath, scriptText, "utf8");
+    files.push(path.relative(packageRoot, scriptPath).split(path.sep).join("/"));
+    validators.push({
+      validator_id: source.script_validator.validator_id,
+      kind: "script",
+      inputs: source.inputs.map((item) => item.role),
+      outputs: source.outputs.map((item) => item.role),
+      error_codes: ["script_validator_failed"],
+      runner: {
+        argv0: "python3",
+        args_template: [entrypointPath, ...source.script_validator.args_template],
+      },
+    });
+  }
+
+  const capabilityArtifact = byId.get(source.extraction_artifact_id);
+  const manifest: CapabilityManifest = {
+    schema_version: "1",
+    capability_id: source.capability_id,
+    title: source.title,
+    description: source.description,
+    class: source.class,
+    node_kind: source.node_kind,
+    execution_type: source.execution_type,
+    params: {},
+    inputs: source.inputs.map((item) => ({ ...item, required: item.required, source_policy: item.source_policy })),
+    outputs: source.outputs.map((item) => ({ ...item, required: item.required })),
+    validators,
+    knowledge_refs: knowledgeRefs,
+    gate_policy: source.gate_policy,
+    provenance: {
+      origin: "ars-derived",
+      extraction_artifact_ids: requiredIds,
+      upstream_sources: capabilityArtifact
+        ? [{ path: capabilityArtifact.path, sha256: capabilityArtifact.sha256 }]
+        : [],
+    },
+    license: source.license,
+  };
+
+  const skillText = renderThinSkill(source, manifest);
+  await writeFile(path.join(packageRoot, "SKILL.md"), skillText, "utf8");
+  files.push("SKILL.md");
+  const manifestText = stringify(manifest);
+  await writeFile(path.join(packageRoot, "manifest.yaml"), manifestText, "utf8");
+  files.push("manifest.yaml");
+
+  const registryPath = path.join(outputRoot, "registry.json");
+  const registryValue = readRegistry(registryPath);
+  const entry = {
+    capability_id: source.capability_id,
+    source_path: source.capability_id,
+    manifest_sha256: sha256(manifestText),
+  };
+  const capabilities = [
+    ...registryValue.capabilities.filter((item) => item.capability_id !== source.capability_id),
+    entry,
+  ].sort((left, right) => left.capability_id.localeCompare(right.capability_id));
+  const registry = CapabilityRegistrySchema.parse({
+    schema_version: CAPABILITY_REGISTRY_SCHEMA_VERSION,
+    registry_version: registryValue.registry_version,
+    capabilities,
+  });
+  await writeFile(registryPath, `${JSON.stringify(registry, null, 2)}\n`, "utf8");
+
+  return {
+    capability_id: source.capability_id,
+    packageRoot,
+    manifest,
+    registry_version: registry.registry_version,
+    files: files.sort(),
+  };
+}
+
+function readRegistry(registryPath: string): { registry_version: string; capabilities: Array<{ capability_id: string; source_path: string; manifest_sha256: string }> } {
+  try {
+    const parsed = CapabilityRegistrySchema.parse(JSON.parse(readFileSync(registryPath, "utf8")));
+    return { registry_version: parsed.registry_version, capabilities: parsed.capabilities };
+  } catch {
+    return { registry_version: "0.1.0", capabilities: [] };
+  }
+}
+
+function renderThinSkill(source: CapabilityAuthoringSource, manifest: CapabilityManifest): string {
+  return `---
+name: ${source.capability_id}
+description: "${source.description}"
+metadata:
+  capability_id: ${source.capability_id}
+  node_kind: ${source.node_kind}
+  execution_type: ${source.execution_type}
+  gate_policy: ${source.gate_policy}
+  license: ${source.license}
+---
+
+# ${source.title}
+
+Execute exactly one ResearchSpec capability node.
+
+## Inputs
+
+${manifest.inputs.map((item) => `- \`${item.role}\` (${item.schema_ref})`).join("\n")}
+
+## Outputs
+
+${manifest.outputs.map((item) => `- \`${item.role}\` (${item.schema_ref})`).join("\n")}
+
+## Knowledge
+
+${manifest.knowledge_refs.map((item) => `- Load knowledge ID \`${item.knowledge_id}\` from \`${item.path}\`.`).join("\n")}
+
+## Procedure
+
+Perform only the procedure described by the referenced knowledge and extraction artifacts. Do not choose, start, or advance another node, phase, mode, or run.
+
+When finished, submit the declared outputs through \`researchspec advance node:<run>/<node>\`, then consult \`researchspec status\` for the next legal action.
+`;
+}
+

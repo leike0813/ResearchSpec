@@ -1,14 +1,14 @@
 ---
 sidebar_position: 12
 title: "pack"
-description: "Create a deterministic bounded current-workspace context bundle"
+description: "Create a deterministic bounded schema 2 context bundle"
 ---
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
 # `researchspec pack`
 
-Create a deterministic bounded current-workspace context bundle
+Create a deterministic bounded schema 2 context bundle
 
 - **Group**: Context
 - **Workspace**: `required`
@@ -27,4 +27,4 @@ A required ZIP output and an optional bounded context scope.
 | Field or option | Type | Required | Meaning |
 | --- | --- | --- | --- |
 | `--output` | `ZIP path` | yes | Destination archive path. |
-| `--scope` | `all \| specs \| profile \| subflows \| changes \| subflow:<id> \| change:<id>` | no | Bundle scope; defaults to all. |
+| `--scope` | `all \| specs \| profiles \| runs \| changes` | no | Bundle scope; defaults to all. |

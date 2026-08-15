@@ -1,0 +1,48 @@
+schema_version: "1"
+capability_id: cap.check.submission-package-verifier
+title: Submission Package Verifier
+description: Deterministic submission package verifier.
+class: verification
+node_kind: checker
+execution_type: script
+params: {}
+inputs:
+  - role: submission_package
+    schema_ref: submission-package.v1
+    required: true
+    source_policy: node_output
+outputs:
+  - role: submission_package_report
+    schema_ref: submission-package-check.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - submission_package
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: submission-package-verifier-script
+    kind: script
+    inputs:
+      - submission_package
+    outputs:
+      - submission_package_report
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/submission-package-verifier.py
+        - "{outputs_json}"
+knowledge_refs: []
+gate_policy: required
+provenance:
+  origin: ars-derived
+  extraction_artifact_ids:
+    - CAP-M5-09
+  upstream_sources:
+    - path: docs/ars_extraction/m5-side-branches/capabilities/09_submission_package_verifier.py
+      sha256: b12762172b839d0348d438903ffbf66532f70404a79113eb6ba0ace9c20355bc
+license: CC BY-NC 4.0

@@ -85,29 +85,30 @@ const definitions: readonly CliCommandDefinition[] = [
     option("delivery", "--delivery <mode>", "skills, commands, or both"),
     option("literatureAdapters", "--literature-adapters <ids>", "replace selected literature Adapters"),
   ], ["init", "status", "doctor"]),
-  command("status", ["status"], "status", "control-plane", "Show derived current workspace and subflow status", "required", "read", [], ["instructions", "show", "list"]),
-  command("instructions", ["instructions"], "instructions <selector>", "control-plane", "Show current route, subflow, Gate, Decision, change, or handoff instructions", "required", "read", [], ["status", "start", "advance", "decide"]),
-  command("start", ["start"], "start <route-ref>", "control-plane", "Atomically start one independently confirmed route", "required", "write", [
+  command("status", ["status"], "status", "control-plane", "Show derived schema 2 run/node status", "required", "read", [], ["instructions", "show", "list"]),
+  command("instructions", ["instructions"], "instructions <selector>", "control-plane", "Show profile, run, node, Gate, Decision, or change instructions", "required", "read", [], ["status", "start", "advance", "decide"]),
+  command("start", ["start"], "start <profile-id>", "control-plane", "Atomically start one confirmed graph run", "required", "write", [
     option("input", "--input <start.yaml|json>", "schema 1 semantic Start input", true),
     option("confirmedBy", "--confirmed-by <name>", "human who confirmed this exact instance", true),
   ], ["status", "instructions"]),
-  command("advance", ["advance"], "advance <subflow-selector>", "control-plane", "Complete or advance one currently authorized subflow", "required", "write", [
-    option("transition", "--transition <id>", "profile transition ID or pause, resume, cancel, complete"),
-    option("actorName", "--actor-name <name>", "action executor name", true),
+  command("advance", ["advance"], "advance <node-selector>", "control-plane", "Validate and complete one eligible graph node", "required", "write", [
+    option("input", "--input <advance.yaml|json>", "output role submission payload", true),
+    option("transition", "--transition <id>", "reserved for run-level transitions"),
+    option("actorName", "--actor-name <name>", "action executor name"),
   ], ["status", "instructions"]),
-  command("check", ["check"], "check [target]", "inspection", "Check specs, profiles, subflows, changes, handoffs, tools, plugins, or literature-adapters", "required", "read", [
+  command("check", ["check"], "check [target]", "inspection", "Check schema 2 workspace contracts", "required", "read", [
     option("strict", "--strict", "treat warnings as failures"),
   ], ["status", "doctor", "show"]),
   command("doctor", ["doctor"], "doctor", "recovery", "Diagnose current workspace contracts without modifying them", "required", "read", [], ["check", "status"]),
-  command("list", ["list"], "list [type]", "inspection", "List current subflows, changes, Gates, Decisions, handoffs, profiles, tools, diagnostics, or derived history", "required", "read", [
+  command("list", ["list"], "list [type]", "inspection", "List profiles, runs, nodes, changes, or diagnostics", "required", "read", [
     option("limit", "--limit <count>", "page size from 1 to 50"),
     option("cursor", "--cursor <cursor>", "opaque cursor returned by the prior page"),
   ], ["show", "status"]),
-  command("show", ["show"], "show <selector>", "inspection", "Show one exact current item, stable spec, or project profile", "required", "read", [], ["list", "check"]),
-  command("handoff", ["handoff"], "handoff <subflow-selector>", "context", "Render or replace one directly editable subflow handoff", "required", "conditional-write", [
+  command("show", ["show"], "show <selector>", "inspection", "Show one exact profile, run, node, or project change", "required", "read", [], ["list", "check"]),
+  command("handoff", ["handoff"], "handoff <run-selector>", "context", "Render or replace one directly editable run handoff", "required", "conditional-write", [
     option("input", "--input <handoff.yaml|json>", "semantic inputs, outputs, and optional Markdown body"),
   ], ["pack", "status"]),
-  command("pack", ["pack"], "pack", "context", "Create a deterministic bounded current-workspace context bundle", "required", "write", [
+  command("pack", ["pack"], "pack", "context", "Create a deterministic bounded schema 2 context bundle", "required", "write", [
     option("output", "--output <zip>", "output ZIP path", true),
     option("scope", "--scope <scope>", "all, specs, profile, subflows, changes, subflow:<id>, or change:<id>"),
   ], ["handoff", "check"]),
@@ -115,7 +116,7 @@ const definitions: readonly CliCommandDefinition[] = [
     option("targets", "--targets <specs>", "comma-separated project.md, sources.yaml, claims.yaml, or manuscript.yaml", true),
     option("with", "--with <documents>", "optional comma-separated design,tasks,delta documents"),
   ], ["decide", "show", "check"]),
-  command("decide", ["decide"], "decide <selector>", "governance", "Resolve a pending human decision", "required", "write", [
+  command("decide", ["decide"], "decide <selector>", "governance", "Resolve a Gate, Decision, or project change choice", "required", "write", [
     option("decision", "--decision <choice>", "accept, reject, defer, or supersede"),
     option("actorName", "--actor-name <name>", "human actor name"),
     option("reason", "--reason <text>", "decision rationale"),

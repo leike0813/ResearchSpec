@@ -132,8 +132,9 @@ export function toolSkillsRoot(tool: ToolDefinition, projectRoot: string): { sco
     const root = path.join(homedir(), tool.globalSkillsDir, "skills");
     return { scope: "shared-global", root, manifestRoot: root };
   }
-  const root = path.join(projectRoot, tool.skillsDir!, "skills");
-  return { scope: "project", root, manifestRoot: path.posix.join(tool.skillsDir!, "skills") };
+  if (tool.skillsDir === undefined) throw new Error(`Tool has no project skills directory: ${tool.id}`);
+  const root = path.join(projectRoot, tool.skillsDir, "skills");
+  return { scope: "project", root, manifestRoot: path.posix.join(tool.skillsDir, "skills") };
 }
 
 export function sharedSkillTarget(toolId: string): "codex" | "agents" | undefined {

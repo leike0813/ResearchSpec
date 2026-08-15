@@ -1,14 +1,14 @@
 ---
 sidebar_position: 9
 title: "show"
-description: "Show one exact current item, stable spec, or project profile"
+description: "Show one exact profile, run, node, or project change"
 ---
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
 # `researchspec show <selector>`
 
-Show one exact current item, stable spec, or project profile
+Show one exact profile, run, node, or project change
 
 - **Group**: Inspection
 - **Workspace**: `required`
@@ -21,4 +21,4 @@ One exact stable spec, profile, subflow, Gate, Decision, change, handoff, or too
 
 | Field or option | Type | Required | Meaning |
 | --- | --- | --- | --- |
-| `selector` | `spec:... \| profile:... \| subflow:... \| gate:... \| decision:... \| change:... \| handoff:... \| tool:...` | yes | Exact item to inspect. |
+| `selector` | `profile:... \| run:... \| node:... \| change:...` | yes | Exact item to inspect. |

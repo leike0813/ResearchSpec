@@ -1,14 +1,14 @@
 ---
 sidebar_position: 7
 title: "check"
-description: "Check specs, profiles, subflows, changes, handoffs, tools, plugins, or literature-adapters"
+description: "Check schema 2 workspace contracts"
 ---
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
 # `researchspec check [target]`
 
-Check specs, profiles, subflows, changes, handoffs, tools, plugins, or literature-adapters
+Check schema 2 workspace contracts
 
 - **Group**: Inspection
 - **Workspace**: `required`
@@ -25,5 +25,5 @@ An optional validation target and strictness flag.
 
 | Field or option | Type | Required | Meaning |
 | --- | --- | --- | --- |
-| `target` | `all \| specs \| profiles \| subflows \| changes \| handoffs \| tools \| plugins \| literature-adapters` | no | Validation scope; defaults to all. |
+| `target` | `all \| specs \| profiles \| runs \| changes` | no | Validation scope; defaults to all. |
 | `--strict` | `boolean` | no | Treat warnings as failures. |

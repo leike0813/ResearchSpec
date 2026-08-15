@@ -98,12 +98,12 @@ void test("companion manifest renders five fixed self-contained Skills", () => {
   const renderedNavigate = renderCompanionSkill(navigate);
   assert.match(renderedNavigate, /host's native subagent mechanism/);
   assert.match(renderedNavigate, /content category, and cost/);
-  assert.match(renderedNavigate, /children, branches, and revision rounds ask again/);
+  assert.match(renderedNavigate, /child nodes, branches, and revision rounds ask again/);
   assert.doesNotMatch(renderedNavigate, /API key|endpoint|curl/i);
   const handbook = COMPANION_INTENTS.find((intent) => intent.skillId === "researchspec-cli-handbook");
   assert.ok(handbook);
   assert.match(handbook.description, /whenever using, invoking, explaining, inspecting, troubleshooting, or modifying ResearchSpec/);
-  assert.match(renderCompanionSkill(handbook), /SubflowStartCommandSchema/);
+  assert.match(renderCompanionSkill(handbook), /GraphRunStartCommandSchema/);
 });
 
 void test("Copilot uses its explicit detection paths", async () => {

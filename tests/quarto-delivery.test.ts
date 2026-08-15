@@ -14,13 +14,13 @@ import { cleanup, tempProject } from "./helpers/cli.js";
 const CHECKED_AT = "2026-08-05T10:00:00+08:00";
 
 void test("Quarto probe distinguishes available, unavailable, and unknown without writing", async () => {
-  const available = await probeQuarto({ checkedAt: CHECKED_AT, runner: async () => ({ exitCode: 0, stdout: "1.7.32\n", stderr: "" }) });
+  const available = await probeQuarto({ checkedAt: CHECKED_AT, runner: async () => { await Promise.resolve(); return { exitCode: 0, stdout: "1.7.32\n", stderr: "" }; } });
   assert.deepEqual(available, { status: "available", checked_at: CHECKED_AT, version: "1.7.32" });
 
   const missing = Object.assign(new Error("missing"), { code: "ENOENT" });
-  assert.equal((await probeQuarto({ checkedAt: CHECKED_AT, runner: async () => { throw missing; } })).status, "unavailable");
+  assert.equal((await probeQuarto({ checkedAt: CHECKED_AT, runner: async () => { await Promise.resolve(); throw missing; } })).status, "unavailable");
   const timeout = Object.assign(new Error("timeout"), { code: "ETIMEDOUT" });
-  assert.equal((await probeQuarto({ checkedAt: CHECKED_AT, runner: async () => { throw timeout; } })).status, "unknown");
+  assert.equal((await probeQuarto({ checkedAt: CHECKED_AT, runner: async () => { await Promise.resolve(); throw timeout; } })).status, "unknown");
 });
 
 void test("single-file render defaults to no-execute and atomically creates one target", async () => {
@@ -55,9 +55,9 @@ void test("execution consent, existing targets, and render failures fail closed"
     const source = path.join(root, "paper.qmd");
     const output = path.join(root, "paper.pdf");
     await writeFile(source, "# Paper\n", "utf8");
-    const available: QuartoCommandRunner = async (_command, args) => args[0] === "--version"
+    const available: QuartoCommandRunner = async (_command, args) => { await Promise.resolve(); return args[0] === "--version"
       ? { exitCode: 0, stdout: "1.7.32\n", stderr: "" }
-      : { exitCode: 1, stdout: "", stderr: "render failed" };
+      : { exitCode: 1, stdout: "", stderr: "render failed" }; };
 
     await assert.rejects(
       renderQuartoSingleFile({ sourcePath: source, destinationPath: output, format: "pdf", execute: true, runner: available }),

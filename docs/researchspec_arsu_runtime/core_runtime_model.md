@@ -4,9 +4,7 @@
 
 ## 1. 文件 owner
 
-四份 stable specs 拥有研究事实；project profile 拥有 pipeline graph；每个 control 拥有一个
-subflow 的 lifecycle、checkpoint、Gate attempts、Decisions 和 transitions；handoff 拥有边界
-input/output role/path；project change 拥有尚未应用的高影响更新。
+四份 stable specs 拥有研究事实；graph profiles 拥有能力执行图；每个 run 拥有 frozen graph 与 lifecycle；每个 node instance 拥有状态、Gate attempts 和 Decisions；handoff 拥有边界 input/output role/path；project change 拥有尚未应用的高影响更新。
 
 边界论文、报告、review、图表和数据位于 `researchspec/` 外。Private working material 位于 owning
 subflow 的 `work/`，默认不能被其它 subflow 消费。
@@ -18,9 +16,7 @@ control 的 parent reference 是唯一关系事实；不会持久化 children li
 
 ## 3. Agent 边界
 
-ARSU producer 维护语义文件、stable specs、changes 和自身 handoff。ResearchSpec CLI 独占 control
-mutation。Companion 将 route、verification 和 decision 对话连接到这些 owner。Plugin 和 Zotero
-Adapter 只能把 working result 返回原 producer。
+Capability producer 维护语义文件、stable specs、changes 和自身 handoff。ResearchSpec CLI 独占 run/node mutation。Companion 将 profile、verification 和 decision 对话连接到这些 owner。Plugin 和 Adapter 只能把 working result 返回原 producer。
 
 ## 4. 两层 spec-driven 治理
 
