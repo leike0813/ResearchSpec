@@ -12,6 +12,8 @@ import { PAPER_HUMANIZER_GRAPH_PROFILE_TEXT } from "../../core/graph-profiles/pa
 import { REVIEW_RESPONSE_GRAPH_PROFILE_TEXT } from "../../core/graph-profiles/review-response.js";
 import { GraphWorkspaceConfigSchema } from "../../core/contracts/graph-workspace.js";
 import { loadCapabilityRegistry } from "../../capabilities/registry.js";
+import { PluginProjectionError, projectWorkspacePlugins } from "../../plugins/graph-delivery.js";
+import { domainIsAvailable, loadPluginRegistry } from "../../plugins/registry.js";
 import { inspectGraphWorkspaceFormat, loadGraphWorkspaceIndex } from "../../core/runtime/graph-workspace-index.js";
 import { resolveInitTarget } from "../../core/workspace/layout.js";
 import { parseLiteratureAdapterExpression } from "../../literature-adapters/index.js";
@@ -116,6 +118,7 @@ async function handleGraphReinit(workspace: string, configured: string[], option
       literature_adapters: { selected: literatureAdapters },
       plugins: { selected: index.config.plugins.selected },
     })), "utf8");
+    await synchronizeSelectedPluginProjection(workspace, await loadGraphWorkspaceIndex(workspace), context);
   }
   return success("init", { workspace, schema_version: "2", dry_run: context.dryRun, selected_tools: tools, delivery, selected_literature_adapters: literatureAdapters, previous_tools: configured, projected_capability_files: projected }, { stdout: `${context.dryRun ? "Would reconfigure" : "Reconfigured"} schema 2 workspace: ${workspace}\n` });
 }
@@ -139,8 +142,29 @@ export async function handleGraphUpdate(options: GraphUpdateOptions, context: Co
       literature_adapters: { selected: adapters },
       plugins: { selected: index.config.plugins.selected },
     })), "utf8");
+    await synchronizeSelectedPluginProjection(workspace, await loadGraphWorkspaceIndex(workspace), context);
   }
   return success("update", { workspace, schema_version: "2", dry_run: context.dryRun, selected_tools: tools, delivery, selected_literature_adapters: adapters, projected_capability_files: projected }, { stdout: `${context.dryRun ? "Would update" : "Updated"} schema 2 workspace: ${workspace}\n` });
+}
+
+async function synchronizeSelectedPluginProjection(workspace: string, index: Awaited<ReturnType<typeof loadGraphWorkspaceIndex>>, context: CommandContext): Promise<void> {
+  try {
+    const pluginRegistry = await loadPluginRegistry();
+    const unavailable = index.config.plugins.selected.filter((domainId) => !domainIsAvailable(pluginRegistry.domains.get(domainId)));
+    if (unavailable.length > 0) throw new CliError("plugin_unavailable", `Plugin unavailable: ${unavailable.join(", ")}`, 1, "Uninstall the unavailable plugin selection before refreshing projections.");
+    await projectWorkspacePlugins({
+      workspace,
+      index,
+      registry: pluginRegistry,
+      selectedDomainIds: index.config.plugins.selected,
+      force: context.force,
+    });
+  } catch (error) {
+    if (error instanceof PluginProjectionError) {
+      throw new CliError("plugin_projection_conflict", error.message, 3, "Resolve the conflicting plugin Skill projection and rerun update.", error.diagnostics);
+    }
+    throw error;
+  }
 }
 
 async function requireGraphWorkspaceForUpdate(context: CommandContext): Promise<string> {
