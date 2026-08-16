@@ -165,6 +165,8 @@ A graph-extension registry under `skills/plugins/extensions/registry.json` is th
 
 Installing a domain with graph-extension assignments now projects its capability packages to every configured skill-capable Agent tool and writes its graph profiles into `researchspec/profiles/`. `tool-installation-manifest.json` records `plugin-capability` and `plugin-profile` ownership, and `plugin_resolutions` snapshots include resolved capability and profile IDs. The graph CLI loads a base-plus-selected-extension capability registry: `start` rejects profiles with unknown capabilities, `instructions node:` includes the capability manifest contract, and `advance` runs the declared capability validators. The pilot flow is `plugin install ecology`, `start plugin-ecology-biodiversity`, `instructions node:<run>/research`, then `advance node:<run>/research`.
 
+The FinRobot-derived `plugin-financial-statement-analysis` pilot extends this to a mixed execution capability. It packages the reviewed statement and support scripts as knowledge refs and declares a deterministic `statement-brief-validator` script. `advance` fails while the `research_brief` output is missing required sections and succeeds only after the script validator passes, demonstrating the same validator runner contract as bundled core capabilities.
+
 ## CLI lifecycle
 
 ```bash

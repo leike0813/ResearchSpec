@@ -6,6 +6,11 @@
       "capability_id": "plugin-ecology-biodiversity",
       "source_path": "capabilities/plugin-ecology-biodiversity",
       "manifest_sha256": "7febc3263a7c80c3829ca11c7760b03147a874a59caa31e7662475ecbe5b1b2b"
+    },
+    {
+      "capability_id": "plugin-financial-statement-analysis",
+      "source_path": "capabilities/plugin-financial-statement-analysis",
+      "manifest_sha256": "d7b4394cdc5896a0ffaeb6e53d649aa6c045a7d2f1a87e09616afb121262578c"
     }
   ],
   "profiles": [
@@ -13,9 +18,32 @@
       "profile_id": "plugin-ecology-biodiversity",
       "source_path": "profiles/plugin-ecology-biodiversity.yaml",
       "profile_sha256": "45e6f23e0a1516f4cf2d94409a008be01750ac0e4323f48cca26288a5829430a"
+    },
+    {
+      "profile_id": "plugin-financial-statement-analysis",
+      "source_path": "profiles/plugin-financial-statement-analysis.yaml",
+      "profile_sha256": "12fd1b179b8ec29ffef0e981f6e3241788d85d02762d626cd7b70e6d2be33008"
     }
   ],
   "domains": [
+    {
+      "domain_id": "accounting-auditing-and-accountability",
+      "capabilities": [
+        "plugin-financial-statement-analysis"
+      ],
+      "profiles": [
+        "plugin-financial-statement-analysis"
+      ]
+    },
+    {
+      "domain_id": "banking-finance-and-investment",
+      "capabilities": [
+        "plugin-financial-statement-analysis"
+      ],
+      "profiles": [
+        "plugin-financial-statement-analysis"
+      ]
+    },
     {
       "domain_id": "ecology",
       "capabilities": [
