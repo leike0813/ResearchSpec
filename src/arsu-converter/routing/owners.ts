@@ -1,6 +1,4 @@
-export const STANDALONE_ROUTE_OWNERS = {
-  "review-response": "review-response",
-} as const;
+export const STANDALONE_ROUTE_OWNERS = {} as const;
 
 export type StandaloneRouteOwner = keyof typeof STANDALONE_ROUTE_OWNERS;
 

@@ -8,6 +8,7 @@ import { ACADEMIC_PAPER_GRAPH_PROFILE } from "../src/core/graph-profiles/academi
 import { ACADEMIC_PAPER_REVIEWER_GRAPH_PROFILE } from "../src/core/graph-profiles/academic-paper-reviewer.js";
 import { ACADEMIC_PIPELINE_GRAPH_PROFILE } from "../src/core/graph-profiles/academic-pipeline.js";
 import { PAPER_HUMANIZER_GRAPH_PROFILE } from "../src/core/graph-profiles/paper-humanizer.js";
+import { REVIEW_RESPONSE_GRAPH_PROFILE } from "../src/core/graph-profiles/review-response.js";
 
 void test("research-main preset resolves against the bundled capability registry", async () => {
   const parsed = parseCapabilityGraphProfile(RESEARCH_MAIN_GRAPH_PROFILE);
@@ -76,9 +77,9 @@ void test("custom graph profiles pass the same validation without engine changes
   assert.deepEqual(findUnreachableGraphNodes(custom), []);
 });
 
-void test("paper, reviewer, pipeline, and humanizer presets resolve against the bundled registry", async () => {
+void test("paper, reviewer, pipeline, humanizer, and review-response presets resolve against the bundled registry", async () => {
   const registry = await loadCapabilityRegistry();
-  for (const profile of [ACADEMIC_PAPER_GRAPH_PROFILE, ACADEMIC_PAPER_REVIEWER_GRAPH_PROFILE, ACADEMIC_PIPELINE_GRAPH_PROFILE, PAPER_HUMANIZER_GRAPH_PROFILE]) {
+  for (const profile of [ACADEMIC_PAPER_GRAPH_PROFILE, ACADEMIC_PAPER_REVIEWER_GRAPH_PROFILE, ACADEMIC_PIPELINE_GRAPH_PROFILE, PAPER_HUMANIZER_GRAPH_PROFILE, REVIEW_RESPONSE_GRAPH_PROFILE]) {
     const parsed = parseCapabilityGraphProfile(profile);
     assert.deepEqual(findUnreachableGraphNodes(parsed), []);
     assert.deepEqual(validateGraphAgainstCapabilityRegistry(registry, parsed), []);

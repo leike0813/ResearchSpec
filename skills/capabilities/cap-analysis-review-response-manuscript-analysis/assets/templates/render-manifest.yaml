@@ -1,0 +1,92 @@
+<!--
+══════════════════════════════════════════════
+Revision Master 提取工件（Extraction Artifact）
+══════════════════════════════════════════════
+工件类型: template
+能力/包 ID: RM-ASSET-14 render-manifest
+提取日期: 2026-08-16
+提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
+来源对照（source mapping）:
+    - vendor/revision-master/assets/templates/render-manifest.yaml（全文）
+变更台账（ledger）:
+    1. [保留] 上游文件全文逐字节保留。
+    2. [标注] 流程权威（stage 推进、Gate、状态机）在 authoring 阶段移交 graph engine。
+说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改
+      一律推迟到 authoring 阶段，并另行记录。
+══════════════════════════════════════════════
+-->
+
+views:
+  - name: agent_resume
+    mode: single
+    template: agent-resume.md.j2
+    output: 01-agent-resume.md
+  - name: manuscript_summary
+    mode: single
+    template: manuscript-structure-summary.md.j2
+    output: 02-manuscript-structure-summary.md
+  - name: style_profile
+    mode: single
+    template: style-profile.md.j2
+    output: 03-style-profile.md
+  - name: raw_review_threads
+    mode: single
+    template: raw-review-thread-list.md.j2
+    output: 04-raw-review-thread-list.md
+  - name: atomic_comments
+    mode: single
+    template: atomic-review-comment-list.md.j2
+    output: 05-atomic-review-comment-list.md
+  - name: thread_to_atomic_mapping
+    mode: single
+    template: thread-to-atomic-mapping.md.j2
+    output: 06-thread-to-atomic-mapping.md
+  - name: review_comment_coverage
+    mode: single
+    template: review-comment-coverage.md.j2
+    output: 07-review-comment-coverage.md
+  - name: atomic_workboard
+    mode: single
+    template: atomic-comment-workboard.md.j2
+    output: 08-atomic-comment-workboard.md
+  - name: supplement_suggestion_plan
+    mode: single
+    template: supplement-suggestion-plan.md.j2
+    output: 09-supplement-suggestion-plan.md
+  - name: supplement_intake_plan
+    mode: single
+    template: supplement-intake-plan.md.j2
+    output: 10-supplement-intake-plan.md
+  - name: revision_guide
+    mode: single
+    template: manuscript-revision-guide.md.j2
+    output: 11-manuscript-revision-guide.md
+  - name: revision_execution_graph
+    mode: single
+    template: manuscript-execution-graph.md.j2
+    output: 12-manuscript-execution-graph.md
+  - name: revision_action_log
+    mode: single
+    template: revision-action-log.md.j2
+    output: 13-revision-action-log.md
+  - name: response_coverage_matrix
+    mode: single
+    template: response-coverage-matrix.md.j2
+    output: 14-response-coverage-matrix.md
+  - name: response_letter_table_preview_md
+    mode: single
+    template: response-letter-preview.md.j2
+    output: 15-response-letter-preview.md
+  - name: response_letter_table_preview_tex
+    mode: single
+    template: response-letter-preview.tex.j2
+    output: 16-response-letter-preview.tex
+  - name: final_checklist
+    mode: single
+    template: final-assembly-checklist.md.j2
+    output: 17-final-assembly-checklist.md
+  - name: response_strategy_card
+    mode: per_comment
+    template: response-strategy-card.md.j2
+    output_dir: response-strategy-cards
+    filename_pattern: "{comment_id}.md"

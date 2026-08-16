@@ -4,8 +4,8 @@
 
 | metric | value |
 |---|---|
-| avg section coverage | 0.9507469705300531 |
-| avg rule coverage | 0.9613275613275615 |
+| avg section coverage | 0.9503128956509691 |
+| avg rule coverage | 0.9654416505480335 |
 | below section threshold | 0 |
 | below rule threshold | 0 |
 | output missing | 0 |
@@ -49,6 +49,7 @@
 |---|---|---|---|---|---|---|
 | `cap-analysis-evidence-synthesis` | 0.973 | 1.000 | 233 | 3 | yes | none |
 | `cap-analysis-meta-analysis` | 0.848 | 1.000 | 207 | 1 | yes | none |
+| `cap-analysis-review-response-manuscript-analysis` | 0.933 | 1.000 | 111 | 4 | yes | none |
 | `cap-analysis-risk-of-bias-assessment` | 0.946 | 1.000 | 202 | 1 | yes | none |
 | `cap-check-citation-existence-verification` | 1.000 | 1.000 | 46 | 1 | yes | none |
 | `cap-check-citation-format-compliance` | 0.950 | 1.000 | 293 | 1 | yes | none |
@@ -71,6 +72,8 @@
 | `cap-design-methodology-design` | 0.960 | 0.818 | 162 | 3 | yes | none |
 | `cap-design-research-question-formulation` | 0.923 | 1.000 | 148 | 2 | yes | none |
 | `cap-design-review-panel-config` | 1.000 | 1.000 | 180 | 2 | yes | none |
+| `cap-design-review-response-intake` | 1.000 | 1.000 | 114 | 4 | yes | none |
+| `cap-design-review-response-workboard-planning` | 1.000 | 1.000 | 103 | 4 | yes | none |
 | `cap-design-writing-intake` | 1.000 | 1.000 | 234 | 1 | yes | none |
 | `cap-discovery-literature-monitoring` | 1.000 | 1.000 | 207 | 1 | yes | none |
 | `cap-discovery-literature-search-screening` | 0.732 | 0.800 | 164 | 2 | yes | none |
@@ -81,11 +84,13 @@
 | `cap-generation-humanization-reference` | 0.980 | 0.667 | 196 | 1 | yes | none |
 | `cap-generation-manuscript-drafting` | 0.952 | 1.000 | 211 | 3 | yes | none |
 | `cap-generation-report-compilation` | 0.952 | 1.000 | 251 | 2 | yes | none |
+| `cap-generation-review-response-round` | 0.800 | 1.000 | 126 | 5 | yes | none |
 | `cap-judgment-devils-advocate-stress-test` | 0.923 | 1.000 | 218 | 1 | yes | none |
 | `cap-judgment-editorial-judgment` | 1.000 | 1.000 | 188 | 1 | yes | none |
 | `cap-judgment-review-synthesis` | 0.960 | 0.818 | 250 | 1 | yes | none |
 | `cap-judgment-specialist-review` | 0.952 | 1.000 | 199 | 3 | yes | none |
 | `cap-transform-paper-humanization-revision` | 1.000 | 1.000 | 86 | 2 | yes | none |
+| `cap-transform-review-response-comment-atomization` | 1.000 | 1.000 | 109 | 4 | yes | none |
 | `cap-transform-revision-patching` | 1.000 | 1.000 | 73 | 1 | yes | none |
 | `cap-transform-revision-roadmap-parsing` | 0.892 | 1.000 | 255 | 1 | yes | none |
 | `cap-transform-socratic-mentoring` | 0.853 | 0.818 | 277 | 2 | yes | none |
@@ -94,7 +99,7 @@
 
 | artifact | path | sha256 |
 |---|---|---|
-| parity report | `docs/capability-parity-report.json` | `38fdb2ab86192cd2bc68ee7d2781073c71237409647d3fa6feea0625efa610c8` |
+| parity report | `docs/capability-parity-report.json` | `249a66753e8d791094d1641217acd1983044cf9a829a313079b1cb250488a663` |
 | mode-capability review HTML | `audits/arsu/v3.19.0-828ef3b/artifacts/arsu-mode-capability-review.html` | `6f6547b2c8e313893f60645848b1582c37dc69909cee13567487b0aa04dc68d1` |
 | graph-match assessment HTML | `audits/arsu/v3.19.0-828ef3b/artifacts/arsu-mode-graph-match-assessment.html` | `8930ff9639c2285ba6e7a0ea4b3655a990dcfd4b28e1bf33991aae9f64481e48` |
 | gap semantic review HTML | `audits/arsu/v3.19.0-828ef3b/artifacts/arsu-mode-gap-semantic-review.html` | `37dc2895673c8d82a406a9aafd05f8b84a8a77e684a2c6d63a27418444ab3d13` |

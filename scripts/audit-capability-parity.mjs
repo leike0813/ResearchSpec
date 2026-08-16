@@ -8,8 +8,11 @@ const ROOT = process.cwd();
 const SKILLS = path.join(ROOT, "skills", "capabilities");
 const ARS_INDEX = JSON.parse(readFileSync(path.join(ROOT, "docs", "ars_extraction", "extraction-index.json"), "utf8"));
 const PAPER_HUMANIZER_INDEX = JSON.parse(readFileSync(path.join(ROOT, "docs", "paper-humanizer_extraction", "extraction-index.json"), "utf8"));
+const REVISION_MASTER_INDEX = JSON.parse(readFileSync(path.join(ROOT, "docs", "revision-master_extraction", "extraction-index.json"), "utf8"));
 function extractionIndex(provenance = {}) {
-  if (provenance.origin === "vendor-derived") return PAPER_HUMANIZER_INDEX;
+  const ids = provenance.extraction_artifact_ids ?? [];
+  if (ids.some((id) => id.startsWith("RM-"))) return REVISION_MASTER_INDEX;
+  if (ids.some((id) => id.startsWith("PH-"))) return PAPER_HUMANIZER_INDEX;
   return ARS_INDEX;
 }
 

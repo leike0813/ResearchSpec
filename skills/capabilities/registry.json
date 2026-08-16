@@ -13,6 +13,11 @@
       "manifest_sha256": "de5f2cd4633d440a8c2abcee15413b96167b6959285de49bdc113233f9592647"
     },
     {
+      "capability_id": "cap-analysis-review-response-manuscript-analysis",
+      "source_path": "cap-analysis-review-response-manuscript-analysis",
+      "manifest_sha256": "b35129d65bb4974115c30a0b1c14a4348041e9f9880bf4fc96747f5f7c227534"
+    },
+    {
       "capability_id": "cap-analysis-risk-of-bias-assessment",
       "source_path": "cap-analysis-risk-of-bias-assessment",
       "manifest_sha256": "d395e9d809bf758b5725716401f64f0b8654f0cb22feb69730be33af92e4a21f"
@@ -123,6 +128,16 @@
       "manifest_sha256": "39a537f78cad078f98c0149f941f25adba112d08e7002232f3fc8381ea139b2f"
     },
     {
+      "capability_id": "cap-design-review-response-intake",
+      "source_path": "cap-design-review-response-intake",
+      "manifest_sha256": "e089b857cb1149163cf0a9c30d041d8cdbfae20fa9f497486b5a4a9fe121fb07"
+    },
+    {
+      "capability_id": "cap-design-review-response-workboard-planning",
+      "source_path": "cap-design-review-response-workboard-planning",
+      "manifest_sha256": "271af3d57221fca033ef57cfdcd3cc274b4b1af3275c0f981e6bab069c6880c8"
+    },
+    {
       "capability_id": "cap-design-writing-intake",
       "source_path": "cap-design-writing-intake",
       "manifest_sha256": "9a104de9a0646e900cb2060e6bae7e26c6d85f9544a139d5e1591e82db464b5a"
@@ -173,6 +188,11 @@
       "manifest_sha256": "4851960f6ddeedde09f6daf340b324544551bc5f7db917c5e14b3e36f7888b7e"
     },
     {
+      "capability_id": "cap-generation-review-response-round",
+      "source_path": "cap-generation-review-response-round",
+      "manifest_sha256": "1487787f72fa15456ec19510304a239d354b2bf5a2ef7ae1f3bebb50f2b8e542"
+    },
+    {
       "capability_id": "cap-judgment-devils-advocate-stress-test",
       "source_path": "cap-judgment-devils-advocate-stress-test",
       "manifest_sha256": "919731aa25bd3b87e98192846fa496dd8555f52ca149a0ad9ea286e7759ba9ec"
@@ -196,6 +216,11 @@
       "capability_id": "cap-transform-paper-humanization-revision",
       "source_path": "cap-transform-paper-humanization-revision",
       "manifest_sha256": "913141498828f5daa276c5be503bfee227a61ce90066cfbc8bd72257d1160be1"
+    },
+    {
+      "capability_id": "cap-transform-review-response-comment-atomization",
+      "source_path": "cap-transform-review-response-comment-atomization",
+      "manifest_sha256": "2e8dcc3632d221e22eac18cfd4bab42c737f1367438c1e43bac712131895a9d2"
     },
     {
       "capability_id": "cap-transform-revision-patching",

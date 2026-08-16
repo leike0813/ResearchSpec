@@ -1,0 +1,1011 @@
+{
+  "schema_version": "1",
+  "source": "vendor/revision-master",
+  "extraction_root": "docs/revision-master_extraction",
+  "milestone_count": 1,
+  "artifact_count": 45,
+  "verification_summary": {
+    "pass": 45
+  },
+  "milestones": {
+    "revision-master": {
+      "total": 45,
+      "pass": 45,
+      "fail": 0,
+      "error": 0,
+      "skip": 0
+    }
+  },
+  "artifacts": [
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/capabilities/stage-1-entry-and-bootstrap.md",
+      "relative_path": "capabilities/stage-1-entry-and-bootstrap.md",
+      "kind": "capability",
+      "artifact_id": "RM-CAP-01",
+      "name": "stage-1-entry-bootstrap",
+      "sources": [
+        "vendor/revision-master/references/stage-1-entry-and-bootstrap.md（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "75e4bb7ee303006ac9dd228b36b208720aa615899ba9342ac2ffa7e1ca7dafbc",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 175 artifact lines vs 175 upstream slice lines",
+        "actual_sha256": "75e4bb7ee303006ac9dd228b36b208720aa615899ba9342ac2ffa7e1ca7dafbc",
+        "expected_sha256": "75e4bb7ee303006ac9dd228b36b208720aa615899ba9342ac2ffa7e1ca7dafbc"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/capabilities/stage-2-manuscript-analysis.md",
+      "relative_path": "capabilities/stage-2-manuscript-analysis.md",
+      "kind": "capability",
+      "artifact_id": "RM-CAP-02",
+      "name": "stage-2-manuscript-analysis",
+      "sources": [
+        "vendor/revision-master/references/stage-2-manuscript-analysis.md（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "a4cb8861f532cafdab3ac4fdf527bc8e44abbeede95874f1a7704aa32bc7c4d9",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 116 artifact lines vs 116 upstream slice lines",
+        "actual_sha256": "a4cb8861f532cafdab3ac4fdf527bc8e44abbeede95874f1a7704aa32bc7c4d9",
+        "expected_sha256": "a4cb8861f532cafdab3ac4fdf527bc8e44abbeede95874f1a7704aa32bc7c4d9"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/capabilities/stage-3-comment-atomization.md",
+      "relative_path": "capabilities/stage-3-comment-atomization.md",
+      "kind": "capability",
+      "artifact_id": "RM-CAP-03",
+      "name": "stage-3-comment-atomization",
+      "sources": [
+        "vendor/revision-master/references/stage-3-comment-atomization.md（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "98583576c55131b1caf2b52aca9d6bd7f964ef42341f64e7f605e89d9a69b3f0",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 149 artifact lines vs 149 upstream slice lines",
+        "actual_sha256": "98583576c55131b1caf2b52aca9d6bd7f964ef42341f64e7f605e89d9a69b3f0",
+        "expected_sha256": "98583576c55131b1caf2b52aca9d6bd7f964ef42341f64e7f605e89d9a69b3f0"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/capabilities/stage-4-workboard-planning.md",
+      "relative_path": "capabilities/stage-4-workboard-planning.md",
+      "kind": "capability",
+      "artifact_id": "RM-CAP-04",
+      "name": "stage-4-workboard-planning",
+      "sources": [
+        "vendor/revision-master/references/stage-4-workboard-planning.md（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "8f9c9b028c326aeae2d6874fd7724cd3c95392dfe8bb192d4fa6add0458dafd5",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 133 artifact lines vs 133 upstream slice lines",
+        "actual_sha256": "8f9c9b028c326aeae2d6874fd7724cd3c95392dfe8bb192d4fa6add0458dafd5",
+        "expected_sha256": "8f9c9b028c326aeae2d6874fd7724cd3c95392dfe8bb192d4fa6add0458dafd5"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/capabilities/stage-5-strategy-and-execution.md",
+      "relative_path": "capabilities/stage-5-strategy-and-execution.md",
+      "kind": "capability",
+      "artifact_id": "RM-CAP-05",
+      "name": "stage-5-strategy-execution",
+      "sources": [
+        "vendor/revision-master/references/stage-5-strategy-and-execution.md（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "a0fb3787f5158a824babaf73ec013002603134664656687f48aa9d7475cc2ea0",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 281 artifact lines vs 281 upstream slice lines",
+        "actual_sha256": "a0fb3787f5158a824babaf73ec013002603134664656687f48aa9d7475cc2ea0",
+        "expected_sha256": "a0fb3787f5158a824babaf73ec013002603134664656687f48aa9d7475cc2ea0"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/capabilities/stage-6-final-review-and-export.md",
+      "relative_path": "capabilities/stage-6-final-review-and-export.md",
+      "kind": "capability",
+      "artifact_id": "RM-CAP-06",
+      "name": "stage-6-final-review-export",
+      "sources": [
+        "vendor/revision-master/references/stage-6-final-review-and-export.md（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "4f78dc6ea6608a7090cdbd7becd343789f27a4146a2f710272d39f4d26ba0513",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 149 artifact lines vs 149 upstream slice lines",
+        "actual_sha256": "4f78dc6ea6608a7090cdbd7becd343789f27a4146a2f710272d39f4d26ba0513",
+        "expected_sha256": "4f78dc6ea6608a7090cdbd7becd343789f27a4146a2f710272d39f4d26ba0513"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/knowledge/helper-scripts.md",
+      "relative_path": "knowledge/helper-scripts.md",
+      "kind": "knowledge-pack",
+      "artifact_id": "RM-KP-01",
+      "name": "helper-scripts",
+      "sources": [
+        "vendor/revision-master/references/helper-scripts.md（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "e839ba23c971b02a43a5c78fafdf0e0ec26941cc7f867401a2b4f3cee5c316f2",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 132 artifact lines vs 132 upstream slice lines",
+        "actual_sha256": "e839ba23c971b02a43a5c78fafdf0e0ec26941cc7f867401a2b4f3cee5c316f2",
+        "expected_sha256": "e839ba23c971b02a43a5c78fafdf0e0ec26941cc7f867401a2b4f3cee5c316f2"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/knowledge/sql-write-recipes.md",
+      "relative_path": "knowledge/sql-write-recipes.md",
+      "kind": "knowledge-pack",
+      "artifact_id": "RM-KP-02",
+      "name": "sql-write-recipes",
+      "sources": [
+        "vendor/revision-master/references/sql-write-recipes.md（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "d936354ebeec69de02309c64cccb244d7907b4b27032d6b2e3a4b18a4bb88147",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 653 artifact lines vs 653 upstream slice lines",
+        "actual_sha256": "d936354ebeec69de02309c64cccb244d7907b4b27032d6b2e3a4b18a4bb88147",
+        "expected_sha256": "d936354ebeec69de02309c64cccb244d7907b4b27032d6b2e3a4b18a4bb88147"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/knowledge/workflow-glossary.md",
+      "relative_path": "knowledge/workflow-glossary.md",
+      "kind": "knowledge-pack",
+      "artifact_id": "RM-KP-03",
+      "name": "workflow-glossary",
+      "sources": [
+        "vendor/revision-master/references/workflow-glossary.md（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "e2fdd11465ab134de5c8e7e7fdd57d64c3599490227e360bf78146c1aec80e26",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 156 artifact lines vs 156 upstream slice lines",
+        "actual_sha256": "e2fdd11465ab134de5c8e7e7fdd57d64c3599490227e360bf78146c1aec80e26",
+        "expected_sha256": "e2fdd11465ab134de5c8e7e7fdd57d64c3599490227e360bf78146c1aec80e26"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/knowledge/workflow-state-machine.md",
+      "relative_path": "knowledge/workflow-state-machine.md",
+      "kind": "knowledge-pack",
+      "artifact_id": "RM-KP-04",
+      "name": "workflow-state-machine",
+      "sources": [
+        "vendor/revision-master/references/workflow-state-machine.md（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "cc8dc7378f04ab3cecf964e3ba49ca239f7ffb4f84dfb20fa0e4285456018f1b",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 198 artifact lines vs 198 upstream slice lines",
+        "actual_sha256": "cc8dc7378f04ab3cecf964e3ba49ca239f7ffb4f84dfb20fa0e4285456018f1b",
+        "expected_sha256": "cc8dc7378f04ab3cecf964e3ba49ca239f7ffb4f84dfb20fa0e4285456018f1b"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/scripts/detect_main_tex.py",
+      "relative_path": "scripts/detect_main_tex.py",
+      "kind": "script",
+      "artifact_id": "RM-SCRIPT-01",
+      "name": "detect-main-tex",
+      "sources": [
+        "vendor/revision-master/scripts/detect_main_tex.py（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "eed3cdc18838ecbfe59f4c547de53c91fe248849f28935c4f8a17a860fd91efc",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 140 artifact lines vs 140 upstream slice lines",
+        "actual_sha256": "eed3cdc18838ecbfe59f4c547de53c91fe248849f28935c4f8a17a860fd91efc",
+        "expected_sha256": "eed3cdc18838ecbfe59f4c547de53c91fe248849f28935c4f8a17a860fd91efc"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/scripts/init_artifact_workspace.py",
+      "relative_path": "scripts/init_artifact_workspace.py",
+      "kind": "script",
+      "artifact_id": "RM-SCRIPT-02",
+      "name": "init-artifact-workspace",
+      "sources": [
+        "vendor/revision-master/scripts/init_artifact_workspace.py（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "8538e10fb5f459ca24d9dd689a85f881257ce90f24202df7a9efafa1fd3b535f",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 238 artifact lines vs 238 upstream slice lines",
+        "actual_sha256": "8538e10fb5f459ca24d9dd689a85f881257ce90f24202df7a9efafa1fd3b535f",
+        "expected_sha256": "8538e10fb5f459ca24d9dd689a85f881257ce90f24202df7a9efafa1fd3b535f"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/scripts/gate_and_render_workspace.py",
+      "relative_path": "scripts/gate_and_render_workspace.py",
+      "kind": "script",
+      "artifact_id": "RM-SCRIPT-03",
+      "name": "gate-and-render-workspace",
+      "sources": [
+        "vendor/revision-master/scripts/gate_and_render_workspace.py（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "086d816ba70854f163b33be18bed7dc810b3fbab7d8da39bdefa35db54163a8e",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 3113 artifact lines vs 3113 upstream slice lines",
+        "actual_sha256": "086d816ba70854f163b33be18bed7dc810b3fbab7d8da39bdefa35db54163a8e",
+        "expected_sha256": "086d816ba70854f163b33be18bed7dc810b3fbab7d8da39bdefa35db54163a8e"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/scripts/workspace_db.py",
+      "relative_path": "scripts/workspace_db.py",
+      "kind": "script",
+      "artifact_id": "RM-SCRIPT-04",
+      "name": "workspace-db",
+      "sources": [
+        "vendor/revision-master/scripts/workspace_db.py（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "97690173eb1831780731fefdb87230ccb17d9f198bbb853875242fcd8b08ad61",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 2610 artifact lines vs 2610 upstream slice lines",
+        "actual_sha256": "97690173eb1831780731fefdb87230ccb17d9f198bbb853875242fcd8b08ad61",
+        "expected_sha256": "97690173eb1831780731fefdb87230ccb17d9f198bbb853875242fcd8b08ad61"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/scripts/runtime_localization.py",
+      "relative_path": "scripts/runtime_localization.py",
+      "kind": "script",
+      "artifact_id": "RM-SCRIPT-05",
+      "name": "runtime-localization",
+      "sources": [
+        "vendor/revision-master/scripts/runtime_localization.py（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "6e18f9ec958c705140ce329ee27bb97ef943e10ac8a2ab04038526f7732ab773",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 235 artifact lines vs 235 upstream slice lines",
+        "actual_sha256": "6e18f9ec958c705140ce329ee27bb97ef943e10ac8a2ab04038526f7732ab773",
+        "expected_sha256": "6e18f9ec958c705140ce329ee27bb97ef943e10ac8a2ab04038526f7732ab773"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/scripts/capture_revision_action.py",
+      "relative_path": "scripts/capture_revision_action.py",
+      "kind": "script",
+      "artifact_id": "RM-SCRIPT-06",
+      "name": "capture-revision-action",
+      "sources": [
+        "vendor/revision-master/scripts/capture_revision_action.py（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "1abad05bd2c2fc35cd8e9f9d88ae5a272055cd525507642fcadfd89cf4717ba3",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 201 artifact lines vs 201 upstream slice lines",
+        "actual_sha256": "1abad05bd2c2fc35cd8e9f9d88ae5a272055cd525507642fcadfd89cf4717ba3",
+        "expected_sha256": "1abad05bd2c2fc35cd8e9f9d88ae5a272055cd525507642fcadfd89cf4717ba3"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/scripts/commit_revision_round.py",
+      "relative_path": "scripts/commit_revision_round.py",
+      "kind": "script",
+      "artifact_id": "RM-SCRIPT-07",
+      "name": "commit-revision-round",
+      "sources": [
+        "vendor/revision-master/scripts/commit_revision_round.py（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "181acd68041dbb1f20d96d2d7f42f754704c4626f7018a7cb85df9193e1e49f3",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 56 artifact lines vs 56 upstream slice lines",
+        "actual_sha256": "181acd68041dbb1f20d96d2d7f42f754704c4626f7018a7cb85df9193e1e49f3",
+        "expected_sha256": "181acd68041dbb1f20d96d2d7f42f754704c4626f7018a7cb85df9193e1e49f3"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/scripts/export_manuscript_variants.py",
+      "relative_path": "scripts/export_manuscript_variants.py",
+      "kind": "script",
+      "artifact_id": "RM-SCRIPT-08",
+      "name": "export-manuscript-variants",
+      "sources": [
+        "vendor/revision-master/scripts/export_manuscript_variants.py（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "c51d7a7b589d076c15c965277ee18653e6eea2674fa65fcf56c500a262c6ab84",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 177 artifact lines vs 177 upstream slice lines",
+        "actual_sha256": "c51d7a7b589d076c15c965277ee18653e6eea2674fa65fcf56c500a262c6ab84",
+        "expected_sha256": "c51d7a7b589d076c15c965277ee18653e6eea2674fa65fcf56c500a262c6ab84"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/assets/schema/revision-master-schema.yaml",
+      "relative_path": "assets/schema/revision-master-schema.yaml",
+      "kind": "schema",
+      "artifact_id": "RM-ASSET-01",
+      "name": "revision-master-schema",
+      "sources": [
+        "vendor/revision-master/assets/schema/revision-master-schema.yaml（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "5a023017ad6e5b0f0642ee47722b3aa82d850244d38eb5b2f843d04d6de8eb05",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 765 artifact lines vs 765 upstream slice lines",
+        "actual_sha256": "5a023017ad6e5b0f0642ee47722b3aa82d850244d38eb5b2f843d04d6de8eb05",
+        "expected_sha256": "5a023017ad6e5b0f0642ee47722b3aa82d850244d38eb5b2f843d04d6de8eb05"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/assets/runtime/skill-runtime-digest.md",
+      "relative_path": "assets/runtime/skill-runtime-digest.md",
+      "kind": "runtime-digest",
+      "artifact_id": "RM-ASSET-02",
+      "name": "skill-runtime-digest",
+      "sources": [
+        "vendor/revision-master/assets/runtime/skill-runtime-digest.md（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "b54470e9f028a2c68c7d3b67da22ab55556e99134c7b2cef0eb9495667f23eff",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 70 artifact lines vs 70 upstream slice lines",
+        "actual_sha256": "b54470e9f028a2c68c7d3b67da22ab55556e99134c7b2cef0eb9495667f23eff",
+        "expected_sha256": "b54470e9f028a2c68c7d3b67da22ab55556e99134c7b2cef0eb9495667f23eff"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/assets/localization/source-messages.yaml",
+      "relative_path": "assets/localization/source-messages.yaml",
+      "kind": "localization",
+      "artifact_id": "RM-ASSET-03",
+      "name": "source-messages",
+      "sources": [
+        "vendor/revision-master/assets/localization/source-messages.yaml（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "62079d8f833544c005c3a71f98636af921ded67c964ebe7dcd45909a9deb3c82",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 2 artifact lines vs 2 upstream slice lines",
+        "actual_sha256": "62079d8f833544c005c3a71f98636af921ded67c964ebe7dcd45909a9deb3c82",
+        "expected_sha256": "62079d8f833544c005c3a71f98636af921ded67c964ebe7dcd45909a9deb3c82"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/assets/templates/action-copy-variants.md.j2",
+      "relative_path": "assets/templates/action-copy-variants.md.j2",
+      "kind": "template",
+      "artifact_id": "RM-ASSET-04",
+      "name": "action-copy-variants.md",
+      "sources": [
+        "vendor/revision-master/assets/templates/action-copy-variants.md.j2（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "52ea86128dacb618b77d69e6764cafcdf39eec96ebe4b7fd5a09f34de36c61e9",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 31 artifact lines vs 31 upstream slice lines",
+        "actual_sha256": "52ea86128dacb618b77d69e6764cafcdf39eec96ebe4b7fd5a09f34de36c61e9",
+        "expected_sha256": "52ea86128dacb618b77d69e6764cafcdf39eec96ebe4b7fd5a09f34de36c61e9"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/assets/templates/agent-resume.md.j2",
+      "relative_path": "assets/templates/agent-resume.md.j2",
+      "kind": "template",
+      "artifact_id": "RM-ASSET-05",
+      "name": "agent-resume.md",
+      "sources": [
+        "vendor/revision-master/assets/templates/agent-resume.md.j2（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "a2845d2c1eedefb46f8e9ba026776068d99542bef2470b9323992f332526a234",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 87 artifact lines vs 87 upstream slice lines",
+        "actual_sha256": "a2845d2c1eedefb46f8e9ba026776068d99542bef2470b9323992f332526a234",
+        "expected_sha256": "a2845d2c1eedefb46f8e9ba026776068d99542bef2470b9323992f332526a234"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/assets/templates/atomic-comment-workboard.md.j2",
+      "relative_path": "assets/templates/atomic-comment-workboard.md.j2",
+      "kind": "template",
+      "artifact_id": "RM-ASSET-06",
+      "name": "atomic-comment-workboard.md",
+      "sources": [
+        "vendor/revision-master/assets/templates/atomic-comment-workboard.md.j2（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "080005f3058ce38e6906df9592a1770c7c7b09f5c477bdffc4b4a7db7346bc20",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 13 artifact lines vs 13 upstream slice lines",
+        "actual_sha256": "080005f3058ce38e6906df9592a1770c7c7b09f5c477bdffc4b4a7db7346bc20",
+        "expected_sha256": "080005f3058ce38e6906df9592a1770c7c7b09f5c477bdffc4b4a7db7346bc20"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/assets/templates/atomic-review-comment-list.md.j2",
+      "relative_path": "assets/templates/atomic-review-comment-list.md.j2",
+      "kind": "template",
+      "artifact_id": "RM-ASSET-07",
+      "name": "atomic-review-comment-list.md",
+      "sources": [
+        "vendor/revision-master/assets/templates/atomic-review-comment-list.md.j2（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "f0955a37f33dc5e8c3f2bcd25f97546284431af97ae7bfdc3a691e40275f2dd6",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 13 artifact lines vs 13 upstream slice lines",
+        "actual_sha256": "f0955a37f33dc5e8c3f2bcd25f97546284431af97ae7bfdc3a691e40275f2dd6",
+        "expected_sha256": "f0955a37f33dc5e8c3f2bcd25f97546284431af97ae7bfdc3a691e40275f2dd6"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/assets/templates/export-patch-plan.md.j2",
+      "relative_path": "assets/templates/export-patch-plan.md.j2",
+      "kind": "template",
+      "artifact_id": "RM-ASSET-08",
+      "name": "export-patch-plan.md",
+      "sources": [
+        "vendor/revision-master/assets/templates/export-patch-plan.md.j2（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "981cf95315730a59b6461bf2660b4bd09629a033cd2c272b6172812b6f71b6c4",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 25 artifact lines vs 25 upstream slice lines",
+        "actual_sha256": "981cf95315730a59b6461bf2660b4bd09629a033cd2c272b6172812b6f71b6c4",
+        "expected_sha256": "981cf95315730a59b6461bf2660b4bd09629a033cd2c272b6172812b6f71b6c4"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/assets/templates/final-assembly-checklist.md.j2",
+      "relative_path": "assets/templates/final-assembly-checklist.md.j2",
+      "kind": "template",
+      "artifact_id": "RM-ASSET-09",
+      "name": "final-assembly-checklist.md",
+      "sources": [
+        "vendor/revision-master/assets/templates/final-assembly-checklist.md.j2（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "11378f0925df4f1d586736f30f691e0e21593155a48dadf762f29c24b0144539",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 43 artifact lines vs 43 upstream slice lines",
+        "actual_sha256": "11378f0925df4f1d586736f30f691e0e21593155a48dadf762f29c24b0144539",
+        "expected_sha256": "11378f0925df4f1d586736f30f691e0e21593155a48dadf762f29c24b0144539"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/assets/templates/manuscript-execution-graph.md.j2",
+      "relative_path": "assets/templates/manuscript-execution-graph.md.j2",
+      "kind": "template",
+      "artifact_id": "RM-ASSET-10",
+      "name": "manuscript-execution-graph.md",
+      "sources": [
+        "vendor/revision-master/assets/templates/manuscript-execution-graph.md.j2（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "967eb61aa713202cc1f39d0d34cda38ef57c4151353b52b085e267bafc0a1f85",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 11 artifact lines vs 11 upstream slice lines",
+        "actual_sha256": "967eb61aa713202cc1f39d0d34cda38ef57c4151353b52b085e267bafc0a1f85",
+        "expected_sha256": "967eb61aa713202cc1f39d0d34cda38ef57c4151353b52b085e267bafc0a1f85"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/assets/templates/manuscript-revision-guide.md.j2",
+      "relative_path": "assets/templates/manuscript-revision-guide.md.j2",
+      "kind": "template",
+      "artifact_id": "RM-ASSET-11",
+      "name": "manuscript-revision-guide.md",
+      "sources": [
+        "vendor/revision-master/assets/templates/manuscript-revision-guide.md.j2（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "cea2c7ce66000a5e16fd0da063db6e60f6bb39901af294e1081b6b98b3a9dba9",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 23 artifact lines vs 23 upstream slice lines",
+        "actual_sha256": "cea2c7ce66000a5e16fd0da063db6e60f6bb39901af294e1081b6b98b3a9dba9",
+        "expected_sha256": "cea2c7ce66000a5e16fd0da063db6e60f6bb39901af294e1081b6b98b3a9dba9"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/assets/templates/manuscript-structure-summary.md.j2",
+      "relative_path": "assets/templates/manuscript-structure-summary.md.j2",
+      "kind": "template",
+      "artifact_id": "RM-ASSET-12",
+      "name": "manuscript-structure-summary.md",
+      "sources": [
+        "vendor/revision-master/assets/templates/manuscript-structure-summary.md.j2（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "0df6523a4a0979bd673730f3ba35c7777a1d6ff42ce7e02c416cf95eb1fe41ef",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 42 artifact lines vs 42 upstream slice lines",
+        "actual_sha256": "0df6523a4a0979bd673730f3ba35c7777a1d6ff42ce7e02c416cf95eb1fe41ef",
+        "expected_sha256": "0df6523a4a0979bd673730f3ba35c7777a1d6ff42ce7e02c416cf95eb1fe41ef"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/assets/templates/raw-review-thread-list.md.j2",
+      "relative_path": "assets/templates/raw-review-thread-list.md.j2",
+      "kind": "template",
+      "artifact_id": "RM-ASSET-13",
+      "name": "raw-review-thread-list.md",
+      "sources": [
+        "vendor/revision-master/assets/templates/raw-review-thread-list.md.j2（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "0f24d0017045300027b872c97a2ef3a1a058f950a16f41a4ff087824e11ec9b4",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 26 artifact lines vs 26 upstream slice lines",
+        "actual_sha256": "0f24d0017045300027b872c97a2ef3a1a058f950a16f41a4ff087824e11ec9b4",
+        "expected_sha256": "0f24d0017045300027b872c97a2ef3a1a058f950a16f41a4ff087824e11ec9b4"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/assets/templates/render-manifest.yaml",
+      "relative_path": "assets/templates/render-manifest.yaml",
+      "kind": "template",
+      "artifact_id": "RM-ASSET-14",
+      "name": "render-manifest",
+      "sources": [
+        "vendor/revision-master/assets/templates/render-manifest.yaml（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "21ca5daf691324dc90dc5c810c76efd095207752cf174a75c338c97130953130",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 74 artifact lines vs 74 upstream slice lines",
+        "actual_sha256": "21ca5daf691324dc90dc5c810c76efd095207752cf174a75c338c97130953130",
+        "expected_sha256": "21ca5daf691324dc90dc5c810c76efd095207752cf174a75c338c97130953130"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/assets/templates/response-coverage-matrix.md.j2",
+      "relative_path": "assets/templates/response-coverage-matrix.md.j2",
+      "kind": "template",
+      "artifact_id": "RM-ASSET-15",
+      "name": "response-coverage-matrix.md",
+      "sources": [
+        "vendor/revision-master/assets/templates/response-coverage-matrix.md.j2（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "68d05740227bec56bcb96d74b5a1d173b290400352ccf73d15b5fa79ec2f9bbd",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 11 artifact lines vs 11 upstream slice lines",
+        "actual_sha256": "68d05740227bec56bcb96d74b5a1d173b290400352ccf73d15b5fa79ec2f9bbd",
+        "expected_sha256": "68d05740227bec56bcb96d74b5a1d173b290400352ccf73d15b5fa79ec2f9bbd"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/assets/templates/response-letter-outline.md.j2",
+      "relative_path": "assets/templates/response-letter-outline.md.j2",
+      "kind": "template",
+      "artifact_id": "RM-ASSET-16",
+      "name": "response-letter-outline.md",
+      "sources": [
+        "vendor/revision-master/assets/templates/response-letter-outline.md.j2（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "067cd6ce4fb6ad4301f4de54c463994abc9eb93c0d83e2d35d1fccd9d8cceccb",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 36 artifact lines vs 36 upstream slice lines",
+        "actual_sha256": "067cd6ce4fb6ad4301f4de54c463994abc9eb93c0d83e2d35d1fccd9d8cceccb",
+        "expected_sha256": "067cd6ce4fb6ad4301f4de54c463994abc9eb93c0d83e2d35d1fccd9d8cceccb"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/assets/templates/response-letter-preview.md.j2",
+      "relative_path": "assets/templates/response-letter-preview.md.j2",
+      "kind": "template",
+      "artifact_id": "RM-ASSET-17",
+      "name": "response-letter-preview.md",
+      "sources": [
+        "vendor/revision-master/assets/templates/response-letter-preview.md.j2（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "608541f61325ad7fb01c60bf7d6ce2db9580861c9c215196920228555d553360",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 20 artifact lines vs 20 upstream slice lines",
+        "actual_sha256": "608541f61325ad7fb01c60bf7d6ce2db9580861c9c215196920228555d553360",
+        "expected_sha256": "608541f61325ad7fb01c60bf7d6ce2db9580861c9c215196920228555d553360"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/assets/templates/response-letter-preview.tex.j2",
+      "relative_path": "assets/templates/response-letter-preview.tex.j2",
+      "kind": "template",
+      "artifact_id": "RM-ASSET-18",
+      "name": "response-letter-preview.tex",
+      "sources": [
+        "vendor/revision-master/assets/templates/response-letter-preview.tex.j2（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "66c9bb0c039b218f19cc7358f6719bdeca08c04b2d6e51a513fc87f4535c19e3",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 20 artifact lines vs 20 upstream slice lines",
+        "actual_sha256": "66c9bb0c039b218f19cc7358f6719bdeca08c04b2d6e51a513fc87f4535c19e3",
+        "expected_sha256": "66c9bb0c039b218f19cc7358f6719bdeca08c04b2d6e51a513fc87f4535c19e3"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/assets/templates/response-letter-table-preview.md.j2",
+      "relative_path": "assets/templates/response-letter-table-preview.md.j2",
+      "kind": "template",
+      "artifact_id": "RM-ASSET-19",
+      "name": "response-letter-table-preview.md",
+      "sources": [
+        "vendor/revision-master/assets/templates/response-letter-table-preview.md.j2（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "608541f61325ad7fb01c60bf7d6ce2db9580861c9c215196920228555d553360",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 20 artifact lines vs 20 upstream slice lines",
+        "actual_sha256": "608541f61325ad7fb01c60bf7d6ce2db9580861c9c215196920228555d553360",
+        "expected_sha256": "608541f61325ad7fb01c60bf7d6ce2db9580861c9c215196920228555d553360"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/assets/templates/response-letter-table-preview.tex.j2",
+      "relative_path": "assets/templates/response-letter-table-preview.tex.j2",
+      "kind": "template",
+      "artifact_id": "RM-ASSET-20",
+      "name": "response-letter-table-preview.tex",
+      "sources": [
+        "vendor/revision-master/assets/templates/response-letter-table-preview.tex.j2（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "2caa380ed73b6772d4b47f42af80c02224817156c2016691f423a51e606b51f2",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 45 artifact lines vs 45 upstream slice lines",
+        "actual_sha256": "2caa380ed73b6772d4b47f42af80c02224817156c2016691f423a51e606b51f2",
+        "expected_sha256": "2caa380ed73b6772d4b47f42af80c02224817156c2016691f423a51e606b51f2"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/assets/templates/response-strategy-card.md.j2",
+      "relative_path": "assets/templates/response-strategy-card.md.j2",
+      "kind": "template",
+      "artifact_id": "RM-ASSET-21",
+      "name": "response-strategy-card.md",
+      "sources": [
+        "vendor/revision-master/assets/templates/response-strategy-card.md.j2（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "c1103734df07ebcda235e3737904df8fd0d3761639fa3444d88324e84acd13a5",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 103 artifact lines vs 103 upstream slice lines",
+        "actual_sha256": "c1103734df07ebcda235e3737904df8fd0d3761639fa3444d88324e84acd13a5",
+        "expected_sha256": "c1103734df07ebcda235e3737904df8fd0d3761639fa3444d88324e84acd13a5"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/assets/templates/review-comment-coverage.md.j2",
+      "relative_path": "assets/templates/review-comment-coverage.md.j2",
+      "kind": "template",
+      "artifact_id": "RM-ASSET-22",
+      "name": "review-comment-coverage.md",
+      "sources": [
+        "vendor/revision-master/assets/templates/review-comment-coverage.md.j2（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "f6749c83aac30598ccfa9dc8f72816d0f275232628d839976c9d6ce21623ffe0",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 73 artifact lines vs 73 upstream slice lines",
+        "actual_sha256": "f6749c83aac30598ccfa9dc8f72816d0f275232628d839976c9d6ce21623ffe0",
+        "expected_sha256": "f6749c83aac30598ccfa9dc8f72816d0f275232628d839976c9d6ce21623ffe0"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/assets/templates/revision-action-log.md.j2",
+      "relative_path": "assets/templates/revision-action-log.md.j2",
+      "kind": "template",
+      "artifact_id": "RM-ASSET-23",
+      "name": "revision-action-log.md",
+      "sources": [
+        "vendor/revision-master/assets/templates/revision-action-log.md.j2（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "38245c42889720d6d20f3942324b65368b12ee322a8ca3e57529535fa085af04",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 29 artifact lines vs 29 upstream slice lines",
+        "actual_sha256": "38245c42889720d6d20f3942324b65368b12ee322a8ca3e57529535fa085af04",
+        "expected_sha256": "38245c42889720d6d20f3942324b65368b12ee322a8ca3e57529535fa085af04"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/assets/templates/style-profile.md.j2",
+      "relative_path": "assets/templates/style-profile.md.j2",
+      "kind": "template",
+      "artifact_id": "RM-ASSET-24",
+      "name": "style-profile.md",
+      "sources": [
+        "vendor/revision-master/assets/templates/style-profile.md.j2（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "64edf1cc877868ebd9710c7de6bc8e1f1a4508ea1e79a36b460d285fcc8c84a8",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 23 artifact lines vs 23 upstream slice lines",
+        "actual_sha256": "64edf1cc877868ebd9710c7de6bc8e1f1a4508ea1e79a36b460d285fcc8c84a8",
+        "expected_sha256": "64edf1cc877868ebd9710c7de6bc8e1f1a4508ea1e79a36b460d285fcc8c84a8"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/assets/templates/supplement-intake-plan.md.j2",
+      "relative_path": "assets/templates/supplement-intake-plan.md.j2",
+      "kind": "template",
+      "artifact_id": "RM-ASSET-25",
+      "name": "supplement-intake-plan.md",
+      "sources": [
+        "vendor/revision-master/assets/templates/supplement-intake-plan.md.j2（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "58bd92ae5ca5d416a71d0a2fef072ccc78706c51a99a6c606e36c326862dbe46",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 18 artifact lines vs 18 upstream slice lines",
+        "actual_sha256": "58bd92ae5ca5d416a71d0a2fef072ccc78706c51a99a6c606e36c326862dbe46",
+        "expected_sha256": "58bd92ae5ca5d416a71d0a2fef072ccc78706c51a99a6c606e36c326862dbe46"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/assets/templates/supplement-suggestion-plan.md.j2",
+      "relative_path": "assets/templates/supplement-suggestion-plan.md.j2",
+      "kind": "template",
+      "artifact_id": "RM-ASSET-26",
+      "name": "supplement-suggestion-plan.md",
+      "sources": [
+        "vendor/revision-master/assets/templates/supplement-suggestion-plan.md.j2（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "742cb463e10053c78b6d240892449c4e64bb3fab3d309b364cbefbfa4b36bae6",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 28 artifact lines vs 28 upstream slice lines",
+        "actual_sha256": "742cb463e10053c78b6d240892449c4e64bb3fab3d309b364cbefbfa4b36bae6",
+        "expected_sha256": "742cb463e10053c78b6d240892449c4e64bb3fab3d309b364cbefbfa4b36bae6"
+      }
+    },
+    {
+      "milestone": "revision-master",
+      "path": "docs/revision-master_extraction/assets/templates/thread-to-atomic-mapping.md.j2",
+      "relative_path": "assets/templates/thread-to-atomic-mapping.md.j2",
+      "kind": "template",
+      "artifact_id": "RM-ASSET-27",
+      "name": "thread-to-atomic-mapping.md",
+      "sources": [
+        "vendor/revision-master/assets/templates/thread-to-atomic-mapping.md.j2（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游文件全文逐字节保留。",
+        "[标注] 流程权威在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "8ab4f321a3b1a5186a2cb4f33acbfd1406e234ff002c21b6040d4b94666ddcaf",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 23 artifact lines vs 23 upstream slice lines",
+        "actual_sha256": "8ab4f321a3b1a5186a2cb4f33acbfd1406e234ff002c21b6040d4b94666ddcaf",
+        "expected_sha256": "8ab4f321a3b1a5186a2cb4f33acbfd1406e234ff002c21b6040d4b94666ddcaf"
+      }
+    }
+  ]
+}

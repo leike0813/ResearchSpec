@@ -97,6 +97,6 @@ void test("package scripts expose the capability authoring entrypoint", async ()
 
 void test("ARSU prose work references the capability-graph Reference-mode entrypoint", async () => {
   assert.equal(PAPER_HUMANIZER_REFERENCE_MODE_SKILL_PATH, "cap-generation-humanization-reference/SKILL.md");
-  const skill = await readFile(path.join(root, "skills/review-response/SKILL.md"), "utf8");
+  const skill = await readFile(path.join(root, "skills/arsu/academic-paper/SKILL.md"), "utf8");
   assert.match(skill, /cap-generation-humanization-reference\/SKILL\.md/);
 });

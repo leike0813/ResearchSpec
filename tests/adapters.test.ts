@@ -158,7 +158,7 @@ void test("delivery projects the fixed Skill surface and sixteen wrappers by def
         if (item.source.kind === "arsu-skill" || item.source.kind === "core-skill" || item.source.kind === "companion-skill" || item.source.kind === "domain-skill") return [item.source.skill_id];
         return item.source.kind === "literature-adapter" && item.source.component === "skill" && item.source.skill_id ? [item.source.skill_id] : [];
       }));
-      assert.equal(skillIds.size, 10, toolId);
+      assert.equal(skillIds.size, 9, toolId);
     }
     assert.equal(delivery.installations.some((item) => item.target.path.replaceAll("\\", "/").endsWith("/researchspec-navigate/references/cli-handbook.md")), false);
     assert.equal(delivery.diagnostics.filter((item) => item.code === "commands_not_supported").length, 9);

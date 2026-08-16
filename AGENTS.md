@@ -88,11 +88,12 @@ The locked direction is:
 
 The fixed base user-visible agent surface is exactly four ARSU Skills
 (`deep-research`, `academic-paper`, `academic-paper-reviewer`,
-`academic-pipeline`), one Core Skill (`review-response`), five Companion Skills
-(`researchspec-navigate`, `researchspec-propose`, `researchspec-decide`,
-`researchspec-verify`, `researchspec-cli-handbook`), and the bundled capability
-packages projected from `skills/capabilities/registry.json` (currently 42,
-including the four paper-humanizer nodes). The optional `zotero-library` Adapter
+`academic-pipeline`), five Companion Skills (`researchspec-navigate`,
+`researchspec-propose`, `researchspec-decide`, `researchspec-verify`,
+`researchspec-cli-handbook`), and the bundled capability packages projected
+from `skills/capabilities/registry.json` (currently 47, including the four
+paper-humanizer nodes and five review-response nodes). The optional
+`zotero-library` Adapter
 adds seven literature Skills when selected (`zotero-library-agent`,
 `zotero-library-query`, `zotero-literature-acquisition`,
 `zotero-literature-analysis`, `zotero-research-synthesis`,
@@ -343,27 +344,25 @@ against all published vendors but emits and commits only its own bundle, while a
 source-neutral domain catalog and central assembler own the published registry.
 
 `vendor/revision-master` is the maintainer-only pinned input for the
-revision-master Skill absorption. The immutable audit at
-`audits/revision-master/snapshot-13e69610/` covers all 48 tracked blob
-files under `skills/revision-master/` at upstream commit
-`13e69610f216f816f106d1a2a1672eedfa01ac9a`. The published Skill is renamed
-to `review-response`, with eight recorded adaptations (identifier rename,
-instance-root path rewrite, ResearchSpec control-plane boundary, control
-projection, schema rename, third-party runtime tone softened, Stage 3 coverage
-appendix, Paper Humanizer Reference mode alignment). The upstream repository root has no `LICENSE` file and the
-`skills/revision-master` subtree has no per-skill `LICENSE` or copyright
-notice; the only attribution is the git commit author `Joshua Reed (leike0813)`,
-the same principal as ResearchSpec contributors. The published `LICENSE`
-declares `Copyright (c) 2026 ResearchSpec contributors` to keep redistribution
-authority explicit. The maintainer converter at
-`src/vendor-converters/revision-master/cli.ts` exposes
-`pnpm revision-master:{convert,check,idempotence}` and compares byte-identical
-files between `vendor/revision-master/upstream/skills/revision-master/` and
-`skills/review-response/`, while adapted files are checked for existence only
-and listed in the audit `adaptations` array. Production checking and idempotence
-must fail on any source, audit, evidence, license, generated-tree, or metadata
-drift. Revision-master adds no public CLI command or workflow authority.
-Vendor root licensing does not replace an evidenced Skill-level content license.
+revision-master capability absorption. The immutable audit at
+`audits/revision-master/snapshot-13e69610/` remains historical provenance and
+covers all 48 tracked blob files under `skills/revision-master/` at upstream
+commit `13e69610f216f816f106d1a2a1672eedfa01ac9a`. The new absorption path
+uses `docs/revision-master_extraction/extraction-index.json` and authors five
+capability packages (`cap-design-review-response-intake`,
+`cap-analysis-review-response-manuscript-analysis`,
+`cap-transform-review-response-comment-atomization`,
+`cap-design-review-response-workboard-planning`,
+`cap-generation-review-response-round`). The `review-response` graph profile
+owns stage order, the five human Gates, and the continue/complete revision
+Decision. The upstream Python SQLite runtime and template assets remain
+package-local tools and never own ResearchSpec workflow authority. The upstream
+repository root has no `LICENSE` file and the `skills/revision-master` subtree
+has no per-skill `LICENSE` or copyright notice; the only attribution is the git
+commit author `Joshua Reed (leike0813)`, the same principal as ResearchSpec
+contributors. Authoring is offline and never executes upstream Python or
+installs PyYAML/Jinja2. Vendor root licensing does not replace an evidenced
+Skill-level content license.
 
 Non-native upstream projects such as HistAgent, FinRobot, and
 Materials-Science-Skills-For-LLM follow

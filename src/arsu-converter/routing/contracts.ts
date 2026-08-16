@@ -18,9 +18,9 @@ const StableSpecPathSchema = z.enum([
   "specs/manuscript.yaml",
 ]);
 export const RouteRefSchema = z.string().regex(
-  /^(?:deep-research|academic-paper|academic-paper-reviewer|academic-pipeline|review-response):[a-z0-9][a-z0-9_-]*$/,
+  /^(?:deep-research|academic-paper|academic-paper-reviewer|academic-pipeline):[a-z0-9][a-z0-9_-]*$/,
 );
-export type RouteRef = `${ArsuSkillId}:${string}` | `review-response:${string}`;
+export type RouteRef = `${ArsuSkillId}:${string}`;
 
 export const PrerequisiteRequirementSchema = z.discriminatedUnion("kind", [
   z.strictObject({ kind: z.literal("stable_spec"), id: StableSpecPathSchema }),
@@ -168,7 +168,6 @@ export function validateRoutingCatalogReferences(catalog: ArsuRoutingCatalog): R
     }
     for (const nearMiss of skill.near_misses) {
       if (!routes.has(nearMiss.route_ref)) {
-        if (nearMiss.route_ref === "review-response:full") continue;
         issues.push({ code: "near_miss_route_missing", message: `Near-miss target does not exist: ${nearMiss.route_ref}` });
       }
       if (skill.routes.some((route) => route.route_ref === nearMiss.route_ref)) {

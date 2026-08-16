@@ -1,12 +1,15 @@
 import assert from "node:assert/strict";
-import { existsSync, readFileSync, rmSync } from "node:fs";
-import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
+import { existsSync, readFileSync } from "node:fs";
+import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { test } from "node:test";
 
-import { main as revisionMasterCli } from "../src/vendor-converters/revision-master/cli.js";
-
 const root = process.cwd();
+
+function sha256(text: string | Buffer): string {
+  return createHash("sha256").update(text).digest("hex");
+}
 
 void test("vendor/revision-master/SOURCE.json declares the upstream snapshot", () => {
   const source = JSON.parse(readFileSync(path.join(root, "vendor/revision-master/SOURCE.json"), "utf8")) as Record<string, unknown>;
@@ -50,14 +53,7 @@ void test("audits/revision-master/snapshot-13e69610 holds immutable machine evid
   assert.equal(audit.summary_counts.tracked_entries, 57);
   assert.equal(audit.summary_counts.blob_entries, 48);
   assert.equal(audit.adaptations.length, 8);
-  assert.deepEqual(audit.adaptations.find((item) => item.id === "paper-humanizer-reference-mode"), {
-    id: "paper-humanizer-reference-mode",
-    kind: "added",
-    summary: "The published review-response SKILL loads the capability-graph Paper Humanizer Reference-mode entrypoint before manuscript or response-letter writing.",
-    applied_to: ["SKILL.md"],
-    evidence: "skills/review-response/SKILL.md loads cap-generation-humanization-reference/SKILL.md before manuscript or response-letter writing and does not reference paper-humanizer/references/prose-guidance.md.",
-    approved: true,
-  });
+  assert.equal(audit.adaptations.every((item) => item.approved === true), true);
 });
 
 void test("audits/revision-master/snapshot-13e69610 set hash reproduces from staged bytes", () => {
@@ -67,62 +63,15 @@ void test("audits/revision-master/snapshot-13e69610 set hash reproduces from sta
   assert.equal(expectedSetHash, "9d134f411e440250d3bcda12a082bfeb8df74467556dabb7eb7668793fa7005a");
 });
 
-void test("skills/review-response/metadata.json binds the Skill to the snapshot", () => {
-  const metadata = JSON.parse(readFileSync(path.join(root, "skills/review-response/metadata.json"), "utf8")) as Record<string, unknown>;
-  assert.equal(metadata.skill_id, "review-response");
-  assert.equal(metadata.source_skill_id, "revision-master");
-  assert.equal(metadata.source_commit, "13e69610f216f816f106d1a2a1672eedfa01ac9a");
-  assert.equal(metadata.source_snapshot, "snapshot-13e69610");
-  assert.equal(metadata.source_repository, "https://github.com/leike0813/agent-skills");
-  assert.equal(metadata.source_subpath, "skills/revision-master");
-  assert.equal(metadata.license, "MIT");
-});
-
-void test("revision-master converter exposes convert/check/idempotence via package scripts", () => {
-  const pkg = JSON.parse(readFileSync(path.join(root, "package.json"), "utf8")) as { scripts: Record<string, string> };
-  assert.match(pkg.scripts["revision-master:convert"] ?? "", /revision-master\/cli\.js convert$/);
-  assert.match(pkg.scripts["revision-master:check"] ?? "", /revision-master\/cli\.js check$/);
-  assert.match(pkg.scripts["revision-master:idempotence"] ?? "", /revision-master\/cli\.js idempotence$/);
-});
-
-void test("revision-master:check exits 0 against the current Skill tree", () => {
-  const pycache = path.join(root, "skills/review-response/scripts/__pycache__");
-  rmSync(pycache, { recursive: true, force: true });
-  const result = spawnSync("pnpm", ["revision-master:check"], {
-    cwd: root,
-    encoding: "utf8",
-    env: { ...process.env, NODE_OPTIONS: "--no-warnings", PYTHONDONTWRITEBYTECODE: "1" },
-  });
-  rmSync(pycache, { recursive: true, force: true });
-  assert.equal(result.status, 0, result.stderr || result.stdout);
-  const stdout = result.stdout;
-  const open = stdout.indexOf("{");
-  const close = stdout.lastIndexOf("}");
-  const json = JSON.parse(stdout.slice(open, close + 1)) as { ok: boolean };
-  assert.equal(json.ok, true);
-});
-
-void test("revision-master converter CLI returns ok=true for check", async () => {
-  const pycache = path.join(root, "skills/review-response/scripts/__pycache__");
-  rmSync(pycache, { recursive: true, force: true });
-  const previous = process.argv;
-  process.argv = ["node", "cli.js", "check"];
-  try {
-    const code = await revisionMasterCli();
-    assert.equal(code, 0);
-  } finally {
-    process.argv = previous;
-    rmSync(pycache, { recursive: true, force: true });
-  }
-});
-
-void test("revision-master converter rejects unknown subcommands", async () => {
-  const previous = process.argv;
-  process.argv = ["node", "cli.js", "explode"];
-  try {
-    const code = await revisionMasterCli();
-    assert.equal(code, 1);
-  } finally {
-    process.argv = previous;
+void test("revision-master extraction index verifies against the pinned snapshot", async () => {
+  const index = JSON.parse(await readFile(path.join(root, "docs/revision-master_extraction/extraction-index.json"), "utf8")) as {
+    artifact_count: number;
+    artifacts: Array<{ artifact_id: string; sha256: string; sources: string[] }>;
+  };
+  assert.equal(index.artifact_count, 45);
+  for (const artifact of index.artifacts) {
+    const source = artifact.sources[0] ?? "";
+    const sourcePath = source.replace("（全文）", "").replace("vendor/revision-master/", "vendor/revision-master/upstream/skills/revision-master/");
+    assert.equal(sha256(await readFile(path.join(root, sourcePath))), artifact.sha256, artifact.artifact_id);
   }
 });

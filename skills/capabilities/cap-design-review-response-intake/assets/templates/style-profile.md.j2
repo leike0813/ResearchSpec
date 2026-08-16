@@ -1,0 +1,41 @@
+<!--
+══════════════════════════════════════════════
+Revision Master 提取工件（Extraction Artifact）
+══════════════════════════════════════════════
+工件类型: template
+能力/包 ID: RM-ASSET-24 style-profile.md
+提取日期: 2026-08-16
+提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
+来源对照（source mapping）:
+    - vendor/revision-master/assets/templates/style-profile.md.j2（全文）
+变更台账（ledger）:
+    1. [保留] 上游文件全文逐字节保留。
+    2. [标注] 流程权威（stage 推进、Gate、状态机）在 authoring 阶段移交 graph engine。
+说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改
+      一律推迟到 authoring 阶段，并另行记录。
+══════════════════════════════════════════════
+-->
+
+# {{ msg("view.style_profile.title") }}
+
+{{ msg("view.style_profile.intro") }}
+
+{% for profile in profiles -%}
+## {{ profile.profile_target }}
+
+- {{ msg("view.style_profile.summary") }}: {{ profile.profile_summary }}
+- {{ msg("view.style_profile.anti_ai_focus") }}: {{ profile.anti_ai_focus }}
+
+| {{ msg("view.style_profile.rule_order") }} | {{ msg("view.style_profile.rule_type") }} | {{ msg("view.style_profile.rule_text") }} |
+| --- | --- | --- |
+{% for rule in profile.rules -%}
+| {{ rule.rule_order }} | {{ rule.rule_type }} | {{ rule.rule_text }} |
+{% else -%}
+|  |  |  |
+{% endfor %}
+
+{% else -%}
+## {{ msg("view.style_profile.no_profiles") }}
+
+{{ msg("view.style_profile.no_profile_data") }}
+{% endfor %}

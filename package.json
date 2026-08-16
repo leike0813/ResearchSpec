@@ -68,9 +68,6 @@
     "arsu:convert": "pnpm build && node dist/src/arsu-converter/cli.js convert",
     "arsu:check": "pnpm build && node dist/src/arsu-converter/cli.js check",
     "arsu:idempotence": "pnpm build && node dist/src/arsu-converter/cli.js idempotence",
-    "revision-master:convert": "pnpm build && node dist/src/vendor-converters/revision-master/cli.js convert",
-    "revision-master:check": "pnpm build && node dist/src/vendor-converters/revision-master/cli.js check",
-    "revision-master:idempotence": "pnpm build && node dist/src/vendor-converters/revision-master/cli.js idempotence",
     "zotero-adapter:convert": "pnpm build && node dist/src/vendor-converters/zotero-library-agent-bundle/cli.js convert",
     "zotero-adapter:audit": "pnpm build && node dist/src/vendor-converters/zotero-library-agent-bundle/cli.js audit",
     "zotero-adapter:check": "pnpm build && node dist/src/vendor-converters/zotero-library-agent-bundle/cli.js check",
@@ -109,7 +106,8 @@
     "arsu-maintenance:check": "node scripts/arsu-maintenance.mjs check v3.19.0-828ef3b",
     "arsu-maintenance:artifacts": "node scripts/arsu-maintenance.mjs artifacts",
     "arsu-maintenance:records": "node scripts/arsu-maintenance.mjs records",
-    "paper-humanizer:author": "pnpm build && node dist/src/arsu-converter/authoring/paper-humanizer-cli.js"
+    "paper-humanizer:author": "pnpm build && node dist/src/arsu-converter/authoring/paper-humanizer-cli.js",
+    "revision-master:author": "pnpm build && node dist/src/arsu-converter/authoring/revision-master-cli.js"
   },
   "engines": {
     "node": ">=22"

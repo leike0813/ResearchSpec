@@ -11,7 +11,7 @@
     "remote_url": "https://github.com/Imbad0202/academic-research-skills",
     "dirty": false
   },
-  "generated_at": "2026-08-16T04:51:37Z",
+  "generated_at": "2026-08-16T06:01:19Z",
   "generated_groups": [
     "academic-paper",
     "academic-paper-reviewer",
@@ -958,7 +958,7 @@
           "source_path": "academic-paper/SKILL.md",
           "output_path": "academic-paper/SKILL.md",
           "transform_rule": "text_copy_with_dependency_rewrite_routing_description_and_contract_preflight",
-          "sha256": "7865693f2448439318d4e781d7ee2639b12948897e1811173b3935b6855d54ce"
+          "sha256": "18e08ed6743549d064e311661ddf53a7b908b55c4569f07855471e33db1efa07"
         },
         {
           "group": "academic-paper",
@@ -5144,7 +5144,7 @@
       },
       "routing_description": {
         "skill_id": "academic-paper",
-        "description": "Academic manuscript planning, drafting, revision, citation work, disclosure, and format conversion. Routes: academic-paper:full, academic-paper:outline-only, academic-paper:revision, academic-paper:abstract-only, academic-paper:lit-review, academic-paper:format-convert, academic-paper:citation-check, academic-paper:plan, academic-paper:revision-coach, academic-paper:disclosure, academic-paper:rebuttal-audit. Use for: plan or draft an academic paper; revise a manuscript; prepare citation or submission outputs; respond to reviewer feedback. Near-miss routing: start from a topic and continue through review and finalization -> academic-pipeline:end-to-end; coordinate a real post-submission revision response -> review-response:full; conduct a PRISMA systematic review -> deep-research:systematic-review; independently peer-review a manuscript -> academic-paper-reviewer:full. Before each start, present stable-spec and handoff prerequisites, boundary outputs, formal Gates, risk, cost, and obtain an instance-scoped confirmation."
+        "description": "Academic manuscript planning, drafting, revision, citation work, disclosure, and format conversion. Routes: academic-paper:full, academic-paper:outline-only, academic-paper:revision, academic-paper:abstract-only, academic-paper:lit-review, academic-paper:format-convert, academic-paper:citation-check, academic-paper:plan, academic-paper:revision-coach, academic-paper:disclosure, academic-paper:rebuttal-audit. Use for: plan or draft an academic paper; revise a manuscript; prepare citation or submission outputs; respond to reviewer feedback. Near-miss routing: start from a topic and continue through review and finalization -> academic-pipeline:end-to-end; conduct a PRISMA systematic review -> deep-research:systematic-review; independently peer-review a manuscript -> academic-paper-reviewer:full. Before each start, present stable-spec and handoff prerequisites, boundary outputs, formal Gates, risk, cost, and obtain an instance-scoped confirmation."
       }
     },
     "academic-paper-reviewer": {
@@ -20233,7 +20233,7 @@
       "source_path": "academic-paper/SKILL.md",
       "output_path": "academic-paper/SKILL.md",
       "transform_rule": "text_copy_with_dependency_rewrite_routing_description_and_contract_preflight",
-      "sha256": "7865693f2448439318d4e781d7ee2639b12948897e1811173b3935b6855d54ce"
+      "sha256": "18e08ed6743549d064e311661ddf53a7b908b55c4569f07855471e33db1efa07"
     },
     {
       "group": "academic-paper",
@@ -22067,7 +22067,7 @@
       "source_path": "generated:routing-catalog",
       "output_path": "routing-catalog.json",
       "transform_rule": "routing_catalog_projection",
-      "sha256": "70f6d1bd37dd3ecd53dfd8feb4726b23ee950f3bfecb0af6a2a206c8b8032f64"
+      "sha256": "5d02e5f9ab91930f518d938a2be23c6ab2d21d1e6c6cc45a02a615b7b4d37f65"
     },
     {
       "group": "root",
@@ -39790,7 +39790,7 @@
     "skill_count": 4,
     "mode_route_count": 25,
     "entry_route_count": 2,
-    "sha256": "70f6d1bd37dd3ecd53dfd8feb4726b23ee950f3bfecb0af6a2a206c8b8032f64"
+    "sha256": "5d02e5f9ab91930f518d938a2be23c6ab2d21d1e6c6cc45a02a615b7b4d37f65"
   },
   "anchor_replacements": {
     "profile_id": "researchspec-anchor-replacement-v4",

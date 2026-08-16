@@ -2,48 +2,86 @@
 
 ## Purpose
 
-Provide the complete post-submission review-response workflow absorbed from `revision-master` while keeping ResearchSpec lifecycle authority in the instance control plane.
+Define the complete post-submission review-response workflow as capability-graph nodes with a
+package-local SQLite semantic runtime and deterministic gate-and-render tooling.
 
 ## Requirements
 
-### Requirement: standalone route and profile
-The system SHALL expose `review-response:full` as a standalone route owned by the `review-response` Skill, with six ordered checkpoints and no membership in `academic-pipeline`.
+### Requirement: Five capability packages own the review-response workflow
 
-#### Scenario: route is available
-- **WHEN** a current workspace requests route instructions for `review-response:full`
-- **THEN** the response identifies the six checkpoints, required Gates, review-response Skill, and confirmation cost without mutating files
+ResearchSpec SHALL author five capability packages for review-response:
+`cap-design-review-response-intake`, `cap-analysis-review-response-manuscript-analysis`,
+`cap-transform-review-response-comment-atomization`,
+`cap-design-review-response-workboard-planning`, and
+`cap-generation-review-response-round`. Each package SHALL be vendor-derived from the pinned
+`vendor/revision-master` snapshot and SHALL be registered in `skills/capabilities/registry.json`.
 
-### Requirement: SQLite semantic runtime
-The Skill SHALL initialize `work/review-response/review-response.db` with foreign keys enabled and tables for reviewer threads, atomic comments, workboard, strategy cards, evidence supplements, manuscript execution items, semantic revision logs, response rows, and local resume state.
+#### Scenario: Packages are registered
+
+- **WHEN** the capability registry loads
+- **THEN** all five review-response capability IDs resolve to operational vendor-derived packages
+
+### Requirement: Review-response graph owns stage and revision authority
+
+The `review-response` graph profile SHALL declare the ordered nodes
+`intake -> manuscript-analysis -> comment-atomization -> comment-coverage Gate -> workboard ->
+strategy Gate -> round`, with `round` as the repeatable revision node and `outcome` as the repeatable
+review Decision. The profile SHALL require `review-response-comment-coverage` and
+`review-response-strategy` before their downstream nodes, and SHALL require
+`review-response-evidence`, `review-response-response-coverage`, and
+`review-response-final-assembly` before each outcome Decision.
+
+#### Scenario: Revision loop is template-bound
+
+- **WHEN** the outcome Decision records `continue`
+- **THEN** the next `round` instance becomes eligible through the revision-round template
+- **AND** no Skill prose selects the next round
+
+#### Scenario: Run completion waits for the exit choice
+
+- **WHEN** the outcome Decision records `complete`
+- **THEN** the revision template closes and run completion becomes ready only after all other nodes
+  and Gates are complete
+
+### Requirement: SQLite runtime remains a package-local semantic truth
+
+The authored capability packages SHALL package `workspace_db.py`, `runtime_localization.py`,
+`gate_and_render_workspace.py`, the schema, localization, and template assets required to initialize,
+write, validate, and render the task-local `revision-master.db`. The database SHALL remain semantic
+truth for review-response artifacts, while graph files remain the only ResearchSpec workflow
+authority.
 
 #### Scenario: CRUD and rendering
+
 - **WHEN** a valid runtime write is committed
-- **THEN** `gate-and-render` validates the control projection, reads the SQLite truth, and renders deterministic Markdown views below the instance `views/` directory
+- **THEN** `gate-and-render` reads the SQLite truth and renders deterministic Markdown views below
+  the task-local workspace
 
-### Requirement: complete core Skill surface
-The fixed `review-response` Core Skill SHALL include the six-stage instructions, references, schema, localization, templates, SQLite runtime, revision-log helpers, manuscript export helper, and recovery views required by the absorbed workflow.
+#### Scenario: Database is not ResearchSpec authority
 
-#### Scenario: package delivery
-- **WHEN** a selected Agent tool receives the fixed Skill surface
-- **THEN** the `review-response` tree contains the complete executable Skill package and excludes upstream development-only tests, playbooks, examples, and caches
+- **WHEN** the SQLite state disagrees with the graph frontier
+- **THEN** ResearchSpec run/node files remain authoritative for eligibility and transitions
 
-### Requirement: control projection fail-closed
-The runtime SHALL treat `control.yaml` as workflow authority and SHALL fail closed when the projected instance, checkpoint, status, or control hash is missing or stale.
+### Requirement: Private runtime boundary
 
-#### Scenario: stale checkpoint
-- **WHEN** SQLite reports a different current checkpoint than `control.yaml`
-- **THEN** no view or transition is produced and the command returns a structured synchronization error
+The database, local resume material, source snapshots, and working manuscript SHALL remain below the
+task-local review-response workspace. ResearchSpec SHALL NOT register, hash-bind, copy, or
+lifecycle-manage those files as boundary deliverables.
 
-### Requirement: private runtime boundary
-The database, local resume material, source snapshots, and working manuscript SHALL remain below `work/review-response/`; `views/` SHALL be a derived instance-root directory.
+#### Scenario: Bounded pack
 
-#### Scenario: bounded pack
-- **WHEN** a subflow or full current workspace is packed
-- **THEN** control, handoff, specs, profiles, and changes may be included, while `work/`, `views/`, and SQLite bytes are excluded
+- **WHEN** a current workspace is packed
+- **THEN** ResearchSpec run/node files, specs, profiles, and changes may be included, while
+  review-response SQLite and view bytes are excluded
 
-### Requirement: manuscript format contract
-Review-response handoffs SHALL accept Markdown, QMD, single-file LaTeX, and LaTeX project descriptors, with explicit source path and project directory shape where needed. Existing ARSU revision, rebuttal-audit, and re-review routes SHALL retain their behavior.
+### Requirement: Manuscript format contract
+
+Review-response handoffs SHALL accept Markdown, QMD, single-file LaTeX, and LaTeX project
+descriptors, with explicit source path and project directory shape where needed. Existing ARSU
+revision, rebuttal-audit, and re-review routes SHALL retain their behavior.
 
 #### Scenario: LaTeX project handoff
+
 - **WHEN** a handoff declares `format: latex-project`
-- **THEN** it includes `path_kind: directory` and a `.tex` `entry_path`, while a single-file LaTeX handoff uses a `.tex` path
+- **THEN** it includes `path_kind: directory` and a `.tex` `entry_path`, while a single-file LaTeX
+  handoff uses a `.tex` path

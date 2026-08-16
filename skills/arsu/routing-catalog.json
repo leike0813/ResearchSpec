@@ -1476,11 +1476,6 @@
           "reason": "From-scratch cross-stage work needs pipeline coordination and Gates."
         },
         {
-          "intent": "coordinate a real post-submission revision response",
-          "route_ref": "review-response:full",
-          "reason": "A submission-specific response workboard needs its own SQLite semantic runtime and six-checkpoint control profile."
-        },
-        {
           "intent": "conduct a PRISMA systematic review",
           "route_ref": "deep-research:systematic-review",
           "reason": "Systematic-review methodology is research work, not manuscript literature-section drafting."

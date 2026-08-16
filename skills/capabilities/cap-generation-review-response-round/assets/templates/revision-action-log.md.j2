@@ -1,0 +1,47 @@
+<!--
+══════════════════════════════════════════════
+Revision Master 提取工件（Extraction Artifact）
+══════════════════════════════════════════════
+工件类型: template
+能力/包 ID: RM-ASSET-23 revision-action-log.md
+提取日期: 2026-08-16
+提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
+来源对照（source mapping）:
+    - vendor/revision-master/assets/templates/revision-action-log.md.j2（全文）
+变更台账（ledger）:
+    1. [保留] 上游文件全文逐字节保留。
+    2. [标注] 流程权威（stage 推进、Gate、状态机）在 authoring 阶段移交 graph engine。
+说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改
+      一律推迟到 authoring 阶段，并另行记录。
+══════════════════════════════════════════════
+-->
+
+# {{ msg("view.revision_log.title") }}
+
+{{ msg("view.revision_log.intro") }}
+
+{% for item in items -%}
+## `{{ item.log_id }}` / {{ item.summary }}
+
+- `log_order`: {{ item.log_order }}
+- `status`: {{ item.status }}
+- `operator_role`: {{ item.operator_role }}
+- `plan_action_ids`: {{ item.plan_action_ids or '' }}
+- `thread_ids`: {{ item.thread_ids or '' }}
+- `created_at`: {{ item.created_at or '' }}
+- {{ msg("view.revision_log.change_note") }}: {{ item.change_note or '' }}
+- {{ msg("view.revision_log.response_note") }}: {{ item.response_note or '' }}
+
+| `entry_order` | `target_file` | `target_locator` | `change_type` | {{ msg("view.revision_log.change_summary") }} | {{ msg("view.revision_log.rationale") }} | {{ msg("view.revision_log.evidence_source") }} | {{ msg("view.revision_log.expected_response_use") }} |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+{% for entry in item.entries -%}
+| {{ entry.entry_order }} | {{ entry.target_file or '' }} | {{ entry.target_locator or '' }} | {{ entry.change_type }} | {{ entry.change_summary }} | {{ entry.rationale or '' }} | {{ entry.evidence_source or '' }} | {{ entry.expected_response_use or '' }} |
+{% else -%}
+|  |  |  |  |  |  |  |  |
+{% endfor %}
+
+{% else -%}
+## {{ msg("view.revision_log.no_logs") }}
+
+{{ msg("view.revision_log.no_log_data") }}
+{% endfor %}
