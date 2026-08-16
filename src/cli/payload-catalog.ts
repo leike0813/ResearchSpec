@@ -74,7 +74,7 @@ export const CLI_PAYLOADS = {
     field("--actor-name", "non-empty string", false, "Action executor."),
   ]),
   check: payload("options", "An optional validation target and strictness flag.", [
-    field("target", "all | specs | profiles | runs | changes", false, "Validation scope; defaults to all."),
+    field("target", "all | specs | profiles | subflows | changes | handoffs | tools | plugins | literature-adapters", false, "Validation scope; defaults to all."),
     field("--strict", "boolean", false, "Treat warnings as failures."),
   ]),
   doctor: none("No command payload. Runs the full current-workspace diagnostic report."),

@@ -40,6 +40,7 @@ import {
   type PluginShowOptions,
 } from "./handlers/graph-plugins.js";
 import { applyGlobalCliOptions, cliHelpTarget, registerCliCommand } from "./command-catalog.js";
+import type { CurrentCheckTarget } from "../core/validation/types.js";
 import { presentResult } from "./presenter.js";
 import { CliError, failure, type CommandContext, type CommandResult } from "./types.js";
 
@@ -102,7 +103,7 @@ function registerCommands(program: Command, run: Runner): void {
   registerCliCommand(program, "advance")
     .action(async (selector: string, options: GraphAdvanceOptions, command: Command) => run("advance", command, () => handleGraphAdvance(selector, { input: options.input, actorName: options.actorName }, commandContext("advance", command))));
   registerCliCommand(program, "check")
-    .action(async (_target: string | undefined, options: { strict?: boolean }, command: Command) => run("check", command, () => handleGraphCheck(Boolean(options.strict), commandContext("check", command))));
+    .action(async (target: string | undefined, options: { strict?: boolean }, command: Command) => run("check", command, () => handleGraphCheck(Boolean(options.strict), commandContext("check", command), requireCheckTarget(target))));
   registerCliCommand(program, "doctor")
     .action(async (_options: GraphDoctorOptions, command: Command) => run("doctor", command, () => handleGraphDoctor(commandContext("doctor", command))));
   registerCliCommand(program, "list")
@@ -166,6 +167,16 @@ function commandContext(command: string, commandObject: Command): CommandContext
     yes: options.yes === true, quiet: options.quiet === true,
     interactive: process.stdin.isTTY && process.stdout.isTTY && !options.json,
   };
+}
+
+const CHECK_TARGETS = new Set<CurrentCheckTarget>([
+  "all", "specs", "profiles", "subflows", "changes", "handoffs", "tools", "plugins", "literature-adapters",
+]);
+
+function requireCheckTarget(value: string | undefined): CurrentCheckTarget {
+  const target = (value ?? "all") as CurrentCheckTarget;
+  if (!CHECK_TARGETS.has(target)) throw new CliError("check_target_invalid", `Unknown check target: ${value ?? ""}. Valid targets: ${[...CHECK_TARGETS].join(", ")}.`, 2);
+  return target;
 }
 
 function parseDecision(value: string): "accept" | "reject" | "defer" | "supersede" {

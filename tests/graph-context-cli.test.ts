@@ -103,6 +103,9 @@ void test("plugin list works outside and inside a schema 2 workspace", async () 
     const installed = parseEnvelope<{ selected_plugins: string[] }>(runCli(["plugin", "list", "--installed", "--json"], root));
     assert.equal(installed.ok, true);
     assert.deepEqual(installed.data?.selected_plugins ?? [], []);
+    const checked = parseEnvelope<{ target: string }>(runCli(["check", "plugins", "--json"], root));
+    assert.equal(checked.ok, true, JSON.stringify(checked.error));
+    assert.equal(checked.data?.target, "plugins");
   } finally {
     await cleanup(root);
   }
@@ -118,6 +121,13 @@ void test("plugin uninstall blocks when a projected Skill has drifted", async ()
 
     const projectedSkillPath = path.join(root, ".agents/skills/tooluniverse-ecology-biodiversity/SKILL.md");
     await appendFile(projectedSkillPath, "\n<!-- user drift -->\n", "utf8");
+
+    const driftCheck = parseEnvelope<{ diagnostics: Array<{ code?: string }> }>(runCli(["check", "plugins", "--json"], root));
+    assert.equal(driftCheck.ok, true, JSON.stringify(driftCheck.error));
+    assert.equal(driftCheck.data?.diagnostics.some((item) => item.code === "plugin_projection_drift"), true);
+    const strictDriftCheck = parseEnvelope<{ diagnostics: Array<{ code?: string }> }>(runCli(["check", "plugins", "--strict", "--json"], root));
+    assert.equal(strictDriftCheck.ok, false);
+    assert.equal(strictDriftCheck.data?.diagnostics.some((item) => item.code === "plugin_projection_drift"), true);
 
     const uninstalled = parseEnvelope(runCli(["plugin", "uninstall", "ecology", "--yes", "--json"], root));
     assert.equal(uninstalled.ok, false);
@@ -147,6 +157,17 @@ void test("plugin install, instructions, and uninstall reconcile graph workspace
 
     const projectedSkillPath = path.join(root, ".agents/skills/tooluniverse-ecology-biodiversity/SKILL.md");
     await readFile(projectedSkillPath, "utf8");
+
+    const status = parseEnvelope<{ plugins: { selected: string[]; resolved_skills: string[]; projected: string[] } }>(runCli(["status", "--json"], root));
+    assert.equal(status.ok, true, JSON.stringify(status.error));
+    assert.deepEqual(status.data?.plugins.selected ?? [], ["ecology"]);
+    assert.deepEqual(status.data?.plugins.resolved_skills ?? [], ["tooluniverse-ecology-biodiversity"]);
+    assert.deepEqual(status.data?.plugins.projected ?? [], ["ecology"]);
+
+    const checked = parseEnvelope<{ target: string; diagnostics: unknown[] }>(runCli(["check", "plugins", "--json"], root));
+    assert.equal(checked.ok, true, JSON.stringify(checked.error));
+    assert.equal(checked.data?.target, "plugins");
+    assert.deepEqual(checked.data?.diagnostics ?? [], []);
 
     const manifestPath = path.join(root, "researchspec/tool-installation-manifest.json");
     const manifest = JSON.parse(await readFile(manifestPath, "utf8")) as {

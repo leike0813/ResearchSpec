@@ -220,7 +220,7 @@ An optional validation target and strictness flag.
 
 | Field or option | Type | Required | Meaning |
 | --- | --- | --- | --- |
-| `target` | `all \| specs \| profiles \| runs \| changes` | no | Validation scope; defaults to all. |
+| `target` | `all \| specs \| profiles \| subflows \| changes \| handoffs \| tools \| plugins \| literature-adapters` | no | Validation scope; defaults to all. |
 | `--strict` | `boolean` | no | Treat warnings as failures. |
 
 ### `researchspec list [type]`

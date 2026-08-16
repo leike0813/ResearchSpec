@@ -13,6 +13,9 @@ import {
 } from "../../core/runtime/graph-run.js";
 import { loadGraphWorkspaceIndex } from "../../core/runtime/graph-workspace-index.js";
 import { requireGraphWorkspace } from "../../core/workspace/graph-discover.js";
+import type { CurrentCheckTarget } from "../../core/validation/types.js";
+import { pluginWorkspaceDiagnostics } from "../../plugins/graph-check.js";
+import { loadGraphPluginStatusView } from "../../plugins/graph-status.js";
 import { CliError, success, type CommandContext, type CommandResult } from "../types.js";
 
 export type GraphDoctorOptions = Record<string, never>;
@@ -50,6 +53,7 @@ function requireActor(actor: string | undefined): string {
 export async function handleGraphStatus(context: CommandContext): Promise<CommandResult> {
   const workspace = await graphWorkspace(context);
   const index = await loadGraphWorkspaceIndex(workspace);
+  const plugins = await loadGraphPluginStatusView(index);
   const frontierItems: Array<Record<string, unknown>> = [];
   const nodesByRun: Record<string, Array<Record<string, unknown>>> = {};
   for (const record of index.runs) {
@@ -64,6 +68,15 @@ export async function handleGraphStatus(context: CommandContext): Promise<Comman
     }));
     for (const item of evaluateGraphFrontier(record.run, record.graph, nodes).eligible_nodes) frontierItems.push({ selector: item.selector, run_id: record.run.run_id, node_id: item.node_id, ...(item.round === undefined ? {} : { round: item.round }) });
   }
+  const diagnostics = [...index.diagnostics];
+  if (!plugins.loadable) {
+    diagnostics.push({
+      severity: "warning",
+      code: "plugin_status_unavailable",
+      message: `Plugin status is unavailable: ${plugins.error ?? "unknown error"}`,
+      blocking: false,
+    });
+  }
   const data = {
     schema_version: "2",
     workspace,
@@ -71,18 +84,20 @@ export async function handleGraphStatus(context: CommandContext): Promise<Comman
     runs: { total: index.runs.length, active: index.runs.filter((item) => item.run?.status === "active").length },
     nodes: nodesByRun,
     frontier: frontierItems,
-    diagnostics_summary: { blocking: index.diagnostics.filter((item) => item.blocking).length, warning: index.diagnostics.filter((item) => !item.blocking).length },
+    plugins,
+    diagnostics_summary: { blocking: diagnostics.filter((item) => item.blocking).length, warning: diagnostics.filter((item) => !item.blocking).length },
   };
   const ok = data.diagnostics_summary.blocking === 0;
   return {
     ...success("status", data, { stdout: [
       `ResearchSpec graph workspace: ${workspace}`,
       `Profiles: ${String(data.profiles.length)}; runs: ${String(data.runs.total)}; frontier: ${String(data.frontier.length)} action(s)`,
+      `Plugins: ${String(plugins.selected.length)} selected, ${String(plugins.resolved_skills.length)} resolved, ${String(plugins.projected.length)} projected`,
       `Diagnostics: ${String(data.diagnostics_summary.blocking)} blocking, ${String(data.diagnostics_summary.warning)} warning`,
     ].join("\n") + "\n" }),
     ok,
     exitCode: ok ? 0 : 1,
-    diagnostics: index.diagnostics,
+    diagnostics,
   };
 }
 
@@ -244,14 +259,16 @@ export async function handleGraphAdvance(selector: string, options: GraphAdvance
   } catch (error) { throw graphControlCliError(error); }
 }
 
-export async function handleGraphCheck(strict: boolean, context: CommandContext): Promise<CommandResult> {
+export async function handleGraphCheck(strict: boolean, context: CommandContext, target: CurrentCheckTarget = "all"): Promise<CommandResult> {
   const workspace = await graphWorkspace(context);
   const index = await loadGraphWorkspaceIndex(workspace);
-  const ok = index.diagnostics.every((item) => !item.blocking && (!strict || item.severity !== "warning"));
+  const diagnostics = [...index.diagnostics];
+  if (target === "all" || target === "plugins") diagnostics.push(...await pluginWorkspaceDiagnostics(index, target === "plugins"));
+  const ok = diagnostics.every((item) => !item.blocking && (!strict || item.severity !== "warning"));
   const human = ok
     ? { stdout: `ResearchSpec graph check passed: ${workspace}\n` }
-    : { stderr: `ResearchSpec graph check failed: ${workspace}\n${index.diagnostics.map((item) => `- [${item.code}] ${item.path ?? ""} ${item.message}`).join("\n")}\n` };
-  return { command: "check", ok, exitCode: ok ? 0 : 1, data: { workspace, diagnostics: index.diagnostics }, diagnostics: index.diagnostics, human };
+    : { stderr: `ResearchSpec graph check failed: ${workspace}\n${diagnostics.map((item) => `- [${item.code}] ${item.path ?? ""} ${item.message}`).join("\n")}\n` };
+  return { command: "check", ok, exitCode: ok ? 0 : 1, data: { workspace, target, diagnostics }, diagnostics, human };
 }
 
 export async function handleGraphDoctor(context: CommandContext): Promise<CommandResult> {

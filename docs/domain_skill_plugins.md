@@ -159,7 +159,7 @@ For each operation ResearchSpec computes the sorted union of selected domains' d
 
 `tool-installation-manifest.json` records vendor/Skill file ownership and a resolution snapshot for every selected available domain. Config is user intent; snapshots are derived recovery evidence retained while a selection is unavailable.
 
-In schema 2 graph workspaces, `plugin install`, `plugin uninstall`, and `plugin update` reconcile the selected-domain Skill closure with the configured skill-capable Agent tools through the same generated-file ownership rules. `plugin instructions <skill-id>` succeeds only when the Skill belongs to the current available selected-domain closure and every configured skill-capable tool has the complete manifest-owned, hash-clean projection.
+In schema 2 graph workspaces, `plugin install`, `plugin uninstall`, and `plugin update` reconcile the selected-domain Skill closure with the configured skill-capable Agent tools through the same generated-file ownership rules. `plugin instructions <skill-id>` succeeds only when the Skill belongs to the current available selected-domain closure and every configured skill-capable tool has the complete manifest-owned, hash-clean projection. `status --json` exposes the plugin selection, resolution, availability, and projection state; `check plugins` validates registry load, selected domains, snapshots, manifest ownership, and projected file hashes without executing plugin resources.
 
 ## CLI lifecycle
 
