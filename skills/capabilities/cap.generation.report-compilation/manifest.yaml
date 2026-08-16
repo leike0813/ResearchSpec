@@ -3,6 +3,7 @@ capability_id: cap.generation.report-compilation
 title: Research Report Compilation
 description: Compiles the synthesis and method blueprint into a complete
   APA-style research report.
+maturity: operational
 class: generation
 node_kind: producer
 execution_type: llm

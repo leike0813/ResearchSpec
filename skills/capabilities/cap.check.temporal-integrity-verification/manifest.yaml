@@ -2,6 +2,7 @@ schema_version: "1"
 capability_id: cap.check.temporal-integrity-verification
 title: Temporal Integrity Verification
 description: Runs five-pass temporal lint against manuscript claims.
+maturity: operational
 class: verification
 node_kind: checker
 execution_type: script

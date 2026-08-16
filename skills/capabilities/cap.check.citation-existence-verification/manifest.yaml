@@ -2,6 +2,7 @@ schema_version: "1"
 capability_id: cap.check.citation-existence-verification
 title: Citation Existence Verification
 description: Deterministic resolver-based citation existence gate.
+maturity: operational
 class: verification
 node_kind: checker
 execution_type: script
@@ -36,12 +37,17 @@ validators:
       args_template:
         - validators/citation-verification-gate.py
         - "{outputs_json}"
-knowledge_refs: []
+knowledge_refs:
+  - knowledge_id: degradation-registry
+    path: knowledge/degradation-registry.json
+    content_hash: a81253cb7a8558718008669d43e915a08181c9202484bbc08e03d550a295fef9
+    license: CC BY-NC 4.0
 gate_policy: required
 provenance:
   origin: ars-derived
   extraction_artifact_ids:
     - CAP-M5-11
+    - KP-M4-03
   upstream_sources:
     - path: docs/ars_extraction/m5-side-branches/capabilities/11_citation_verification_gate.py
       sha256: a109e97f5d43872946e0c0ca03e3a11cac9e9153963ec575480f6b0a6bae502e

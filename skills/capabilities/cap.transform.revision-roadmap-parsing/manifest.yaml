@@ -2,6 +2,7 @@ schema_version: "1"
 capability_id: cap.transform.revision-roadmap-parsing
 title: Revision Roadmap Parsing
 description: Converts unstructured reviewer comments into a structured roadmap.
+maturity: operational
 class: transformation
 node_kind: producer
 execution_type: llm

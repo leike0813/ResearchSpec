@@ -2,6 +2,7 @@ schema_version: "1"
 capability_id: cap.check.compliance-check
 title: Compliance Check
 description: PRISMA-trAIce and RAISE advisory compliance.
+maturity: operational
 class: verification
 node_kind: observer
 execution_type: llm

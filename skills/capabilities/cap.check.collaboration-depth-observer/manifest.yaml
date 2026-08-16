@@ -2,6 +2,7 @@ schema_version: "1"
 capability_id: cap.check.collaboration-depth-observer
 title: Collaboration Depth Observer
 description: Advisory four-dimension collaboration depth score.
+maturity: operational
 class: verification
 node_kind: observer
 execution_type: llm

@@ -28,6 +28,8 @@ export interface AuthoringOutputSource {
 
 export interface CapabilityAuthoringSource {
   capability_id: string;
+  /** Curated procedure markdown inlined into the operational SKILL. */
+  procedure_path?: string;
   /** Optional extracted Python script bound as a real script validator entry. */
   script_validator?: {
     validator_id: string;
@@ -131,6 +133,7 @@ export async function authorCapabilityPackage(outputRoot: string, source: Capabi
     capability_id: source.capability_id,
     title: source.title,
     description: source.description,
+    maturity: source.procedure_path ? "operational" : "skeleton",
     class: source.class,
     node_kind: source.node_kind,
     execution_type: source.execution_type,
@@ -150,7 +153,10 @@ export async function authorCapabilityPackage(outputRoot: string, source: Capabi
     license: source.license,
   };
 
-  const skillText = renderThinSkill(source, manifest);
+  const procedureText = source.procedure_path
+    ? await readFile(path.resolve(source.procedure_path), "utf8")
+    : "";
+  const skillText = renderThinSkill(source, manifest, procedureText);
   await writeFile(path.join(packageRoot, "SKILL.md"), skillText, "utf8");
   files.push("SKILL.md");
   const manifestText = stringify(manifest);
@@ -193,7 +199,7 @@ function readRegistry(registryPath: string): { registry_version: string; capabil
   }
 }
 
-function renderThinSkill(source: CapabilityAuthoringSource, manifest: CapabilityManifest): string {
+function renderThinSkill(source: CapabilityAuthoringSource, manifest: CapabilityManifest, procedureText: string): string {
   return `---
 name: ${source.capability_id}
 description: "${source.description}"
@@ -223,9 +229,11 @@ ${manifest.knowledge_refs.map((item) => `- Load knowledge ID \`${item.knowledge_
 
 ## Procedure
 
-Perform only the procedure described by the referenced knowledge and extraction artifacts. Do not choose, start, or advance another node, phase, mode, or run.
+${procedureText.trim() ? procedureText.trim() : "Perform only the procedure described by the referenced knowledge and extraction artifacts."}
 
-When finished, submit the declared outputs through \`researchspec advance node:<run>/<node>\`, then consult \`researchspec status\` for the next legal action.
+## Completion
+
+When finished, submit the declared outputs through \`researchspec advance node:<run>/<node>\`, then consult \`researchspec status\` for the next legal action. Do not choose, start, or advance another node, phase, mode, or run.
 `;
 }
 

@@ -2,6 +2,7 @@ schema_version: "1"
 capability_id: cap.generation.abstract-writing
 title: Abstract Writing
 description: Writes independent bilingual abstract and keywords.
+maturity: operational
 class: generation
 node_kind: producer
 execution_type: llm

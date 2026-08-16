@@ -2,6 +2,7 @@ schema_version: "1"
 capability_id: cap.design.argument-blueprint
 title: Argument Blueprint
 description: Builds claim-evidence-reasoning chains and handles counterarguments.
+maturity: operational
 class: design
 node_kind: producer
 execution_type: llm
@@ -23,12 +24,27 @@ validators:
     outputs: []
     error_codes:
       - output_roles_invalid
-knowledge_refs: []
+knowledge_refs:
+  - knowledge_id: academic-writing-style
+    path: knowledge/academic-writing-style.md
+    content_hash: a4da98798b00bc633bde627b7ca324dba9c9d5feeb4ebd55026a134ab7f63f7d
+    license: CC BY-NC 4.0
+  - knowledge_id: anti-leakage
+    path: knowledge/anti-leakage.md
+    content_hash: 358cbd69b5bd0b8cfd011029c2a5d8c3b1e244ed0f4650a40ee60d5123354fbd
+    license: CC BY-NC 4.0
+  - knowledge_id: paper-structure-patterns
+    path: knowledge/paper-structure-patterns.md
+    content_hash: 9e9555803c33d7048a7b6878d14766d63b118ccc0d4f7ecc353f7a2a46f0db48
+    license: CC BY-NC 4.0
 gate_policy: required
 provenance:
   origin: ars-derived
   extraction_artifact_ids:
     - CAP-M2-03
+    - KP-M2-01
+    - KP-M2-03
+    - KP-M2-08
   upstream_sources:
     - path: docs/ars_extraction/m2-writing/capabilities/03_argument_blueprint.md
       sha256: e8ddd724f2836df3e26d0012a93b9068632b77c1cbeabfaa5edf1f43d8fe2735

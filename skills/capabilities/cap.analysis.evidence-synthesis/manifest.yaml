@@ -3,6 +3,7 @@ capability_id: cap.analysis.evidence-synthesis
 title: Evidence Synthesis
 description: Synthesizes graded sources into a convergent/divergent evidence map
   with claim-intent and citation emissions.
+maturity: operational
 class: analysis
 node_kind: producer
 execution_type: llm

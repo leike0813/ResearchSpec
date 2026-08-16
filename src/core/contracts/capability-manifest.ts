@@ -45,6 +45,12 @@ export const CapabilityGatePolicySchema = z.enum([
   "required",
 ]);
 
+export const CapabilityMaturitySchema = z.enum([
+  "skeleton",
+  "operational",
+  "deprecated",
+]);
+
 export const CapabilityOriginSchema = z.enum([
   "original",
   "ars-derived",
@@ -129,6 +135,7 @@ export const CapabilityManifestSchema = z.strictObject({
   class: CapabilityClassSchema,
   node_kind: CapabilityNodeKindSchema,
   execution_type: CapabilityExecutionTypeSchema,
+  maturity: CapabilityMaturitySchema.optional(),
   params: z.record(z.string(), z.unknown()).optional(),
   presets: z.array(CapabilityPresetSchema).optional(),
   inputs: z.array(CapabilityInputRoleSchema),

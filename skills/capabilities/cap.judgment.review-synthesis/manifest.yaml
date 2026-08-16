@@ -2,6 +2,7 @@ schema_version: "1"
 capability_id: cap.judgment.review-synthesis
 title: Review Synthesis
 description: Synthesizes panel reports into one editorial decision and revision roadmap.
+maturity: operational
 class: judgment
 node_kind: producer
 execution_type: llm

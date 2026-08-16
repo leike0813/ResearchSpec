@@ -27,6 +27,28 @@ Execute exactly one ResearchSpec capability node.
 
 ## Procedure
 
-Perform only the procedure described by the referenced knowledge and extraction artifacts. Do not choose, start, or advance another node, phase, mode, or run.
+# Procedure
 
-When finished, submit the declared outputs through `researchspec advance node:<run>/<node>`, then consult `researchspec status` for the next legal action.
+Work from `manuscript_draft` and available timeline/citation provenance. Produce `temporal_audit_report`.
+
+1. Run the five deterministic passes:
+   - P1 future-as-past arithmetic
+   - P2 version-as-evidence anachronism
+   - P3 unmaterialized comparators
+   - P4 causal inversion
+   - P5 deictic time bombs
+2. When dates are unavailable, emit `TEMPORAL-METADATA-MISSING` rather than passing silently.
+3. Classify findings as advisory or blocking according to the current degradation registry.
+4. Return machine-readable findings and a human-readable summary.
+
+## Output Format
+
+```markdown
+## Temporal Audit Report
+| pass | finding | claim | severity |
+|---|---|---|---|
+```
+
+## Completion
+
+When finished, submit the declared outputs through `researchspec advance node:<run>/<node>`, then consult `researchspec status` for the next legal action. Do not choose, start, or advance another node, phase, mode, or run.

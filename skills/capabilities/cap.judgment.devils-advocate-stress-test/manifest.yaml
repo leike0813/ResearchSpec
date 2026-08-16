@@ -2,6 +2,7 @@ schema_version: "1"
 capability_id: cap.judgment.devils-advocate-stress-test
 title: Devil's Advocate Stress Test
 description: Attacks the strongest claims without scoring.
+maturity: operational
 class: judgment
 node_kind: checker
 execution_type: llm

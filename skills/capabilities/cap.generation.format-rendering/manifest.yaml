@@ -2,6 +2,7 @@ schema_version: "1"
 capability_id: cap.generation.format-rendering
 title: Format Rendering
 description: Converts the final manuscript into declared output formats.
+maturity: operational
 class: generation
 node_kind: producer
 execution_type: mixed

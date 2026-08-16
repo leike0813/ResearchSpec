@@ -3,6 +3,7 @@ capability_id: cap.generation.manuscript-drafting
 title: Manuscript Drafting
 description: Writes manuscript sections and revision patches from outline and
   argument blueprint.
+maturity: operational
 class: generation
 node_kind: producer
 execution_type: llm

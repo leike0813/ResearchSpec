@@ -23,10 +23,22 @@ Execute exactly one ResearchSpec capability node.
 
 ## Knowledge
 
-
+- Load knowledge ID `degradation-registry` from `knowledge/degradation-registry.json`.
 
 ## Procedure
 
-Perform only the procedure described by the referenced knowledge and extraction artifacts. Do not choose, start, or advance another node, phase, mode, or run.
+# Procedure
 
-When finished, submit the declared outputs through `researchspec advance node:<run>/<node>`, then consult `researchspec status` for the next legal action.
+Run the bundled `validators/pdf-read-preflight.py` with the current submission JSON.
+
+1. Check PDF readability and extraction readiness.
+2. Report page count, text layer availability, and parse errors.
+3. Return pass/fail/unresolvable without modifying the PDF.
+
+## Output Format
+
+Structured verifier findings from the script.
+
+## Completion
+
+When finished, submit the declared outputs through `researchspec advance node:<run>/<node>`, then consult `researchspec status` for the next legal action. Do not choose, start, or advance another node, phase, mode, or run.

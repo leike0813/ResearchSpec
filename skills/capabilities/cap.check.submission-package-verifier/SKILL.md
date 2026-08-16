@@ -23,10 +23,24 @@ Execute exactly one ResearchSpec capability node.
 
 ## Knowledge
 
-
+- Load knowledge ID `terminal-firm-rules` from `knowledge/terminal-firm-rules.md`.
+- Load knowledge ID `degradation-registry` from `knowledge/degradation-registry.json`.
 
 ## Procedure
 
-Perform only the procedure described by the referenced knowledge and extraction artifacts. Do not choose, start, or advance another node, phase, mode, or run.
+# Procedure
 
-When finished, submit the declared outputs through `researchspec advance node:<run>/<node>`, then consult `researchspec status` for the next legal action.
+Run the bundled `validators/submission-package-verifier.py` with the current submission JSON.
+
+1. Read `submission_package` paths.
+2. Verify required package files exist and match declared checksums.
+3. Verify license, disclosure, and terminal-policy stamp presence.
+4. Return pass/fail findings without modifying package bytes.
+
+## Output Format
+
+Structured verifier findings from the script.
+
+## Completion
+
+When finished, submit the declared outputs through `researchspec advance node:<run>/<node>`, then consult `researchspec status` for the next legal action. Do not choose, start, or advance another node, phase, mode, or run.

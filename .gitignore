@@ -28,3 +28,5 @@ dist/
 .harness-dist/
 coverage/
 *.tsbuildinfo
+
+.pnpm-store/

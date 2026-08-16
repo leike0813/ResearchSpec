@@ -3,6 +3,7 @@ capability_id: cap.discovery.source-quality-grading
 title: Source Quality Grading
 description: Grades each source by evidence level, predatory-journal red flags
   and conflicts of interest.
+maturity: operational
 class: verification
 node_kind: checker
 execution_type: llm

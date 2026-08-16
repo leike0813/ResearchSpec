@@ -4,6 +4,7 @@ const CC = "CC BY-NC 4.0";
 
 export const M2_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   {
+    procedure_path: "src/arsu-converter/authoring/procedures/m2/writing-intake.md",
     capability_id: "cap.design.writing-intake",
     title: "Writing Intake",
     description: "Collects paper configuration and style calibration for writing work.",
@@ -18,6 +19,7 @@ export const M2_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     outputs: [{ role: "writing_configuration", schema_ref: "writing-configuration.v1", required: true }],
   },
   {
+    procedure_path: "src/arsu-converter/authoring/procedures/m2/manuscript-structure-design.md",
     capability_id: "cap.design.manuscript-structure-design",
     title: "Manuscript Structure Design",
     description: "Designs paper structure, outline, word budget and evidence mapping.",
@@ -32,6 +34,7 @@ export const M2_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     outputs: [{ role: "paper_outline", schema_ref: "paper-outline.v1", required: true }],
   },
   {
+    procedure_path: "src/arsu-converter/authoring/procedures/m2/argument-blueprint.md",
     capability_id: "cap.design.argument-blueprint",
     title: "Argument Blueprint",
     description: "Builds claim-evidence-reasoning chains and handles counterarguments.",
@@ -41,11 +44,12 @@ export const M2_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     gate_policy: "required",
     license: CC,
     extraction_artifact_id: "CAP-M2-03",
-    knowledge_sources: [],
+    knowledge_sources: [{ knowledge_id: "academic-writing-style", extraction_artifact_id: "KP-M2-01", output_path: "knowledge/academic-writing-style.md" }, { knowledge_id: "anti-leakage", extraction_artifact_id: "KP-M2-03", output_path: "knowledge/anti-leakage.md" }, { knowledge_id: "paper-structure-patterns", extraction_artifact_id: "KP-M2-08", output_path: "knowledge/paper-structure-patterns.md" }],
     inputs: [{ role: "paper_outline", schema_ref: "paper-outline.v1", required: true, source_policy: "node_output" }],
     outputs: [{ role: "argument_blueprint", schema_ref: "argument-blueprint.v1", required: true }],
   },
   {
+    procedure_path: "src/arsu-converter/authoring/procedures/m2/manuscript-drafting.md",
     capability_id: "cap.generation.manuscript-drafting",
     title: "Manuscript Drafting",
     description: "Writes manuscript sections and revision patches from outline and argument blueprint.",
@@ -60,6 +64,7 @@ export const M2_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     outputs: [{ role: "manuscript_draft", schema_ref: "manuscript-draft.v1", required: true }],
   },
   {
+    procedure_path: "src/arsu-converter/authoring/procedures/m2/abstract-writing.md",
     capability_id: "cap.generation.abstract-writing",
     title: "Abstract Writing",
     description: "Writes independent bilingual abstract and keywords.",
@@ -74,6 +79,7 @@ export const M2_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     outputs: [{ role: "abstract", schema_ref: "abstract.v1", required: true }],
   },
   {
+    procedure_path: "src/arsu-converter/authoring/procedures/m2/citation-format-compliance.md",
     capability_id: "cap.check.citation-format-compliance",
     title: "Citation Format Compliance",
     description: "Validates in-text citations and reference list formatting.",

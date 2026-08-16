@@ -2,6 +2,7 @@ schema_version: "1"
 capability_id: cap.transform.revision-patching
 title: Revision Patching
 description: Deterministically anchors and applies revision patches fail-closed.
+maturity: operational
 class: transformation
 node_kind: checker
 execution_type: mixed
@@ -23,12 +24,17 @@ validators:
     outputs: []
     error_codes:
       - output_roles_invalid
-knowledge_refs: []
+knowledge_refs:
+  - knowledge_id: revision-patch-protocol
+    path: knowledge/revision-patch-protocol.md
+    content_hash: 69ada4993ca454e8f5bfb9509df606b3abe0e260b10357b66b94d18da0434e60
+    license: CC BY-NC 4.0
 gate_policy: required
 provenance:
   origin: ars-derived
   extraction_artifact_ids:
     - CAP-M4-02
+    - KP-M4-01
   upstream_sources:
     - path: docs/ars_extraction/m4-revision-finalize/capabilities/02_revision_patching_apply.py
       sha256: 00b991433fb89ab6b35c4270ce5d9f75c9a7862af014b74a88ebf69bbaf2b4d9

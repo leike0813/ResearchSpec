@@ -2,6 +2,7 @@ schema_version: "1"
 capability_id: cap.check.reference-integrity-verification
 title: Reference Integrity Verification
 description: Verifies citations, bibliography metadata and data provenance.
+maturity: operational
 class: verification
 node_kind: checker
 execution_type: llm

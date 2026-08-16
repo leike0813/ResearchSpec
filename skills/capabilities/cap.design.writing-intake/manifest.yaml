@@ -2,6 +2,7 @@ schema_version: "1"
 capability_id: cap.design.writing-intake
 title: Writing Intake
 description: Collects paper configuration and style calibration for writing work.
+maturity: operational
 class: design
 node_kind: producer
 execution_type: llm

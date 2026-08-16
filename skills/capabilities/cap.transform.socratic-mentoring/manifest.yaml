@@ -2,6 +2,7 @@ schema_version: "1"
 capability_id: cap.transform.socratic-mentoring
 title: Socratic Mentoring
 description: Guided question-driven research or planning dialogue.
+maturity: operational
 class: transformation
 node_kind: producer
 execution_type: llm

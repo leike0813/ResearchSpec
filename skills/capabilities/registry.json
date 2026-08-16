@@ -5,192 +5,192 @@
     {
       "capability_id": "cap.analysis.evidence-synthesis",
       "source_path": "cap.analysis.evidence-synthesis",
-      "manifest_sha256": "bb420fd64105b34ed6c4d8fb428895ca063e45524a53c8a2cdaa17249c36c764"
+      "manifest_sha256": "ea73b03675c262ff476f3f744b9492add196b4fb02bbc181c2385cd08ad8fa80"
     },
     {
       "capability_id": "cap.analysis.meta-analysis",
       "source_path": "cap.analysis.meta-analysis",
-      "manifest_sha256": "d16988f99b538609fa30697deeb1de1defa8d491c9b1ed48186af6f70c7919b3"
+      "manifest_sha256": "9c16d294361bd3f8901729bf9a39e6d7685939db541941e446cb204f2b444b0f"
     },
     {
       "capability_id": "cap.analysis.risk-of-bias-assessment",
       "source_path": "cap.analysis.risk-of-bias-assessment",
-      "manifest_sha256": "1dbadab866b8a69ae48b9ba57b809b0f31625b4d27d7ede43302309fa39795ee"
+      "manifest_sha256": "98f1fa682ffbbff9564feb21bcc2311272abbf6502ddaef4c1504f37693595e2"
     },
     {
       "capability_id": "cap.check.citation-existence-verification",
       "source_path": "cap.check.citation-existence-verification",
-      "manifest_sha256": "aadf2164c961d459bdc0bbc62c278f6e821f3f5542ccca8f234efacbf2ddd1b2"
+      "manifest_sha256": "8bbe41f7c84aecbb90c33f5c9f65ec62e93d9b7c38e9b2d14fa596528bc54828"
     },
     {
       "capability_id": "cap.check.citation-format-compliance",
       "source_path": "cap.check.citation-format-compliance",
-      "manifest_sha256": "4cb28f7c4496d3bce392008e085537e5810b75edc254ca45348e7580f04aaa68"
+      "manifest_sha256": "771da11518eb04b9f4ddc67f6c07352057042f50502aff64f187226895cbe1cc"
     },
     {
       "capability_id": "cap.check.citation-verification-summary",
       "source_path": "cap.check.citation-verification-summary",
-      "manifest_sha256": "3985f4918d997ee0af1f22066fbafbfe5863d4add1755263a7de843157e192e4"
+      "manifest_sha256": "c3b0252532ffacf370eebb5d3fbd09f4ebe9bab838e1207ce123ef522e62cc42"
     },
     {
       "capability_id": "cap.check.claim-faithfulness-audit",
       "source_path": "cap.check.claim-faithfulness-audit",
-      "manifest_sha256": "43568c3f74487efa0a8acb084dc2ab9b5d6f581034645c702634174e9e88129d"
+      "manifest_sha256": "65cf7f9d5e722bb8b0fc766e5de66d952657d0f30d24412ddb55cd94a4a9c28c"
     },
     {
       "capability_id": "cap.check.collaboration-depth-observer",
       "source_path": "cap.check.collaboration-depth-observer",
-      "manifest_sha256": "40cb5006c6be18e106f4444c75af7fedbc53b246369cfb425d7f90f789c7ec5d"
+      "manifest_sha256": "7203e608b307ac2870f866e48669e217084d4f3ee9bf429c31e6ab5d9686b75c"
     },
     {
       "capability_id": "cap.check.compliance-check",
       "source_path": "cap.check.compliance-check",
-      "manifest_sha256": "5d4db0d80d590fae2370876272aff30b9e6ee89059dcbc239082da50360171b4"
+      "manifest_sha256": "418b581d32aa6da92d239e429b2f8f24a847c20e882afd2f2792328c06024aca"
     },
     {
       "capability_id": "cap.check.contamination-signals",
       "source_path": "cap.check.contamination-signals",
-      "manifest_sha256": "4b48f1cea2620ce45fc6d12f162a495674ac1e4e6f7b937ca58303f691c0e658"
+      "manifest_sha256": "93ab2520d18decd64e2315de3cc322ed55c79a8506ba09b3f0c2fc6b5a637434"
     },
     {
       "capability_id": "cap.check.passport-verifier",
       "source_path": "cap.check.passport-verifier",
-      "manifest_sha256": "65a944a018218eb9278f6ed108db0a7b60f1a2f8c51454020b62d83a49fecefe"
+      "manifest_sha256": "ea69ae3c22ad58e03eb7ccb0ce44284d7304509a29a5557e516856114ae5c5cb"
     },
     {
       "capability_id": "cap.check.pdf-read-preflight",
       "source_path": "cap.check.pdf-read-preflight",
-      "manifest_sha256": "692b6a7d6e752b0a2809a63a27c012c23261675ee636a026a10939831fb31b75"
+      "manifest_sha256": "a7d5415535164966f848e27c6f627fc6e85aea932a1a507d750e490076e7af65"
     },
     {
       "capability_id": "cap.check.pre-submission-self-check",
       "source_path": "cap.check.pre-submission-self-check",
-      "manifest_sha256": "390286004f97ae37c1aa5816007d2fa833099e3c834b867f97353ee503956110"
+      "manifest_sha256": "06fce70c4d93dcc9a0b893c08fd5cc00d635d639ea48caf8bae7014ecc9e1786"
     },
     {
       "capability_id": "cap.check.reference-integrity-verification",
       "source_path": "cap.check.reference-integrity-verification",
-      "manifest_sha256": "7397fdfe2693cbe70ddfbc24a7f37fc0399ba8d5af92ef6200e4678f8f038bb2"
+      "manifest_sha256": "9829f1784d33e6f6010cfebef8ae488daceee787fadd1936b99c92226227d590"
     },
     {
       "capability_id": "cap.check.submission-package-verifier",
       "source_path": "cap.check.submission-package-verifier",
-      "manifest_sha256": "eb02d4219280fa7d70f8ff43ff21ac09fff2a64fb91c610e863e885cd0fb9e52"
+      "manifest_sha256": "9442132647477a05934e83ec8d9c2907b0cdef4d2eec7048c7a3e6550ae10277"
     },
     {
       "capability_id": "cap.check.temporal-integrity-verification",
       "source_path": "cap.check.temporal-integrity-verification",
-      "manifest_sha256": "4ce23831adb2d81b7ed74b15edc9f2ac8f413d16416765214eb887a7ed77f890"
+      "manifest_sha256": "00ea34b173b75e1d03a6b1d9c15a4ca6e4ee1b5da89bc86e097d432636ac0131"
     },
     {
       "capability_id": "cap.check.terminal-policy-gate",
       "source_path": "cap.check.terminal-policy-gate",
-      "manifest_sha256": "ead6f52d5aff3adf8af910e97eadbc8c1f706054cfb3ce77d7051961bac0b6b2"
+      "manifest_sha256": "b2f1cdc57a030ac5597c74edc80544d7eb11a4f1a6256092a8bad9c608cdcacb"
     },
     {
       "capability_id": "cap.design.argument-blueprint",
       "source_path": "cap.design.argument-blueprint",
-      "manifest_sha256": "eaee261c790add1fcfb7019f10d6805c6bd9b472151102ec91c3ce1d5e0b1541"
+      "manifest_sha256": "9ac0b9de9e17701c255b3c285933a32131652a1b73f1cdf04720b2a33bf9f542"
     },
     {
       "capability_id": "cap.design.manuscript-structure-design",
       "source_path": "cap.design.manuscript-structure-design",
-      "manifest_sha256": "506f526fb84bbfafe4af0261c153cff84ad9dea82fd1a67239e79026089540d2"
+      "manifest_sha256": "2677640a3e717ca7d3c84a5aa7ec5e8c0bdb2110f1ed14b3b51f683bc4063891"
     },
     {
       "capability_id": "cap.design.methodology-design",
       "source_path": "cap.design.methodology-design",
-      "manifest_sha256": "6fd42104ef929d5bb9d3aeea1442f2d6eea63fea0ef29666f9d25445b15f031e"
+      "manifest_sha256": "5dee1bb7728d73fd213005af6e2f7cd57cfe5c14c24794689b739d542b96500e"
     },
     {
       "capability_id": "cap.design.research-question-formulation",
       "source_path": "cap.design.research-question-formulation",
-      "manifest_sha256": "11f39081221048feda14ab29cdf76fdb3b6d068b4ca789c8b8845eeb9c6b7883"
+      "manifest_sha256": "71f8299c32cce1f05aa741827adb1f818f13b4ece62f69407d3582e8511f5669"
     },
     {
       "capability_id": "cap.design.review-panel-config",
       "source_path": "cap.design.review-panel-config",
-      "manifest_sha256": "82c17782188b250b1ae0017604931a670c603a3e309b3404e92af7b8a1e28790"
+      "manifest_sha256": "be7d6e8c6780461b77499cf2618f8301174eec790ea78d9faeefeea32dbab5ea"
     },
     {
       "capability_id": "cap.design.writing-intake",
       "source_path": "cap.design.writing-intake",
-      "manifest_sha256": "acc3455335c7d4fb2bcab18436d23511a8ee20eb3689487423bc3aa0a3c0b82a"
+      "manifest_sha256": "0ae08c17cc42da3969fb10cf00c6a315e4d6843618f01f5b81073c6951bf99bd"
     },
     {
       "capability_id": "cap.discovery.literature-monitoring",
       "source_path": "cap.discovery.literature-monitoring",
-      "manifest_sha256": "3886c2af964e7569355d86b9617ace9ea43f69e1e1b9f93ec55b977e3d5bcba1"
+      "manifest_sha256": "66f2c4dbffb3eeb6974072c588fb2f98fd8eea6d7ef11c6fb6d9bf7645814d30"
     },
     {
       "capability_id": "cap.discovery.literature-search-screening",
       "source_path": "cap.discovery.literature-search-screening",
-      "manifest_sha256": "04cafa2f5820f62e5bcd639b65dca979d2aae3914fccc9b466aa703b9d65bd7a"
+      "manifest_sha256": "b327f29bd63c1e5f5bf8103af4142820aa0e39eaee36fb5d2677de5160b1c347"
     },
     {
       "capability_id": "cap.discovery.source-quality-grading",
       "source_path": "cap.discovery.source-quality-grading",
-      "manifest_sha256": "1938055ae385399d0dd2357d7005d0cc3288ee3d5dc7388bb22a5e22a1dcd7df"
+      "manifest_sha256": "c81950d6758b3f857bbff25b3bff606799977b1ce15e193ec7bc48a4097132b4"
     },
     {
       "capability_id": "cap.generation.abstract-writing",
       "source_path": "cap.generation.abstract-writing",
-      "manifest_sha256": "81a8adf73df18984e31b79f1b9e89e3da804330f367c9d0705d0387f8bfa8dd4"
+      "manifest_sha256": "6c9f7abba3ceeb61b187b4ac559fb300658f9f0dfeeab4997411662049f1b833"
     },
     {
       "capability_id": "cap.generation.figure-generation",
       "source_path": "cap.generation.figure-generation",
-      "manifest_sha256": "0e1fc320932d1d8f7868958d05aa7c251c4f1ecfc5cc10df4d8fb4cdfa8e8c85"
+      "manifest_sha256": "57b5a387eea7f40f948609d458ffd8c2f2bb0577f35809a0554a140fe893ca9b"
     },
     {
       "capability_id": "cap.generation.format-rendering",
       "source_path": "cap.generation.format-rendering",
-      "manifest_sha256": "b1d5806ed1d962b324a4aebc50bde3b0879ad0004aafee6130beb3fe36ed67a6"
+      "manifest_sha256": "bbe6070590a97ad8a6f3dd225ec8781277f92a86f7e5fb6c8428f6bd4f9f9685"
     },
     {
       "capability_id": "cap.generation.manuscript-drafting",
       "source_path": "cap.generation.manuscript-drafting",
-      "manifest_sha256": "c4a6d4106296fd9e9e663422a7e81d4fdba963d536f34a85527e6f08ead27c78"
+      "manifest_sha256": "197dbc8b89ae362d66c7cebc328dd22f70eb7c6a6da17859fb586914df0d49a0"
     },
     {
       "capability_id": "cap.generation.report-compilation",
       "source_path": "cap.generation.report-compilation",
-      "manifest_sha256": "44c49d7ba56801e80b441e1d7746b06d75dc387fd3bdacd5c210aad7dd173824"
+      "manifest_sha256": "e091760e074b52a28b0954a044dd6b817488499904f62962fa13525073369e02"
     },
     {
       "capability_id": "cap.judgment.devils-advocate-stress-test",
       "source_path": "cap.judgment.devils-advocate-stress-test",
-      "manifest_sha256": "f87554c64798d027c5976841d8c51cec399d829e94c51fc6985daf038414316b"
+      "manifest_sha256": "3ebab9de0b4b8215dc5c17d415e3875d75c626da4c4e38fd8d12769f2895ede7"
     },
     {
       "capability_id": "cap.judgment.editorial-judgment",
       "source_path": "cap.judgment.editorial-judgment",
-      "manifest_sha256": "2d4fc1110e923193baec105eaab1b3077a041c008c30719a575ce75366c852bc"
+      "manifest_sha256": "97b51d8ed9f5d97fcaeeaa987568b71350fad775fb927a0fac99a0f33a8625d9"
     },
     {
       "capability_id": "cap.judgment.review-synthesis",
       "source_path": "cap.judgment.review-synthesis",
-      "manifest_sha256": "0da8671833fac62ea9aaec7355395ad9f4245b7c597d9ddde4b39924129941da"
+      "manifest_sha256": "b31d6a9594656c3254051cce4bb4a7226af8ff5319ab2b2407b94d13aa37cee4"
     },
     {
       "capability_id": "cap.judgment.specialist-review",
       "source_path": "cap.judgment.specialist-review",
-      "manifest_sha256": "81df8417b98e11b17e3767641dbded2a09667bd602134b624a1c8263a004d18b"
+      "manifest_sha256": "bf6f2c930e37242e4e40199888c9bd71570cccfe9845f05e3074bcfe855fd11d"
     },
     {
       "capability_id": "cap.transform.revision-patching",
       "source_path": "cap.transform.revision-patching",
-      "manifest_sha256": "642d5db53b4dead7f74a398ff989c3e37751060c86cf4b08b0c9ea1487161564"
+      "manifest_sha256": "828b1f275fb3ae14c8761a5502a6d333fbc1db364d478484c5fc3d84e213565f"
     },
     {
       "capability_id": "cap.transform.revision-roadmap-parsing",
       "source_path": "cap.transform.revision-roadmap-parsing",
-      "manifest_sha256": "baf55b5f9e82e9a2bcf3c5cb2455523570d3513c9d5fb8920d31ee62e7c49aaa"
+      "manifest_sha256": "a0ed6f43e93d2e3b7479ba81f351bc21d0804a29fb0592784c7f5ef92919ad4e"
     },
     {
       "capability_id": "cap.transform.socratic-mentoring",
       "source_path": "cap.transform.socratic-mentoring",
-      "manifest_sha256": "2898d5f896724bba8b3c29136f4f0d4d7fa45df0f9ba6ff725ab0b52268ebeae"
+      "manifest_sha256": "e50d70dbab4e4a1dc640d10acd115084452e69ee875e81ec3a18497931da2446"
     }
   ]
 }

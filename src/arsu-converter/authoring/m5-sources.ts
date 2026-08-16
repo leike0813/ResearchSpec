@@ -4,6 +4,7 @@ const CC = "CC BY-NC 4.0";
 
 export const M5_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   {
+    procedure_path: "src/arsu-converter/authoring/procedures/m5/meta-analysis.md",
     capability_id: "cap.analysis.meta-analysis",
     title: "Meta Analysis",
     description: "Quantitative synthesis for systematic review.",
@@ -18,6 +19,7 @@ export const M5_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     outputs: [{ role: "meta_analysis_report", schema_ref: "meta-analysis.v1", required: true }],
   },
   {
+    procedure_path: "src/arsu-converter/authoring/procedures/m5/risk-of-bias.md",
     capability_id: "cap.analysis.risk-of-bias-assessment",
     title: "Risk of Bias Assessment",
     description: "RoB 2 and ROBINS-I assessments.",
@@ -27,11 +29,12 @@ export const M5_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     gate_policy: "required",
     license: CC,
     extraction_artifact_id: "CAP-M5-02",
-    knowledge_sources: [],
+    knowledge_sources: [{ knowledge_id: "systematic-review-toolkit", extraction_artifact_id: "KP-M5-02", output_path: "knowledge/systematic-review-toolkit.md" }],
     inputs: [{ role: "systematic_review_corpus", schema_ref: "systematic-review-corpus.v1", required: true, source_policy: "node_output" }],
     outputs: [{ role: "rob_assessment", schema_ref: "rob-assessment.v1", required: true }],
   },
   {
+    procedure_path: "src/arsu-converter/authoring/procedures/m5/socratic-mentoring.md",
     capability_id: "cap.transform.socratic-mentoring",
     title: "Socratic Mentoring",
     description: "Guided question-driven research or planning dialogue.",
@@ -46,6 +49,7 @@ export const M5_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     outputs: [{ role: "socratic_session_notes", schema_ref: "socratic-session.v1", required: true }],
   },
   {
+    procedure_path: "src/arsu-converter/authoring/procedures/m5/figure-generation.md",
     capability_id: "cap.generation.figure-generation",
     title: "Figure Generation",
     description: "Generates publication-grade figure code.",
@@ -60,6 +64,7 @@ export const M5_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     outputs: [{ role: "figure_code", schema_ref: "figure-code.v1", required: true }],
   },
   {
+    procedure_path: "src/arsu-converter/authoring/procedures/m5/literature-monitoring.md",
     capability_id: "cap.discovery.literature-monitoring",
     title: "Literature Monitoring",
     description: "Post-publication monitoring configuration.",
@@ -74,6 +79,7 @@ export const M5_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     outputs: [{ role: "monitoring_config", schema_ref: "monitoring-config.v1", required: true }],
   },
   {
+    procedure_path: "src/arsu-converter/authoring/procedures/m5/claim-faithfulness.md",
     capability_id: "cap.check.claim-faithfulness-audit",
     title: "Claim Faithfulness Audit",
     description: "LLM-as-judge claim-source alignment audit.",
@@ -88,6 +94,7 @@ export const M5_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     outputs: [{ role: "claim_audit_report", schema_ref: "claim-audit.v1", required: true }],
   },
   {
+    procedure_path: "src/arsu-converter/authoring/procedures/m5/compliance-check.md",
     capability_id: "cap.check.compliance-check",
     title: "Compliance Check",
     description: "PRISMA-trAIce and RAISE advisory compliance.",
@@ -102,6 +109,7 @@ export const M5_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     outputs: [{ role: "compliance_report", schema_ref: "compliance.v1", required: true }],
   },
   {
+    procedure_path: "src/arsu-converter/authoring/procedures/m5/collaboration-depth.md",
     capability_id: "cap.check.collaboration-depth-observer",
     title: "Collaboration Depth Observer",
     description: "Advisory four-dimension collaboration depth score.",
@@ -116,6 +124,7 @@ export const M5_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     outputs: [{ role: "collaboration_depth_report", schema_ref: "collaboration-depth.v1", required: true }],
   },
   {
+    procedure_path: "src/arsu-converter/authoring/procedures/m5/submission-package-verifier.md",
     capability_id: "cap.check.submission-package-verifier",
     title: "Submission Package Verifier",
     description: "Deterministic submission package verifier.",
@@ -126,11 +135,12 @@ export const M5_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     license: CC,
     extraction_artifact_id: "CAP-M5-09",
     script_validator: { validator_id: "submission-package-verifier-script", entrypoint_path: "validators/submission-package-verifier.py", args_template: ["{outputs_json}"] },
-    knowledge_sources: [],
+    knowledge_sources: [{ knowledge_id: "terminal-firm-rules", extraction_artifact_id: "KP-M4-02", output_path: "knowledge/terminal-firm-rules.md" }, { knowledge_id: "degradation-registry", extraction_artifact_id: "KP-M4-03", output_path: "knowledge/degradation-registry.json" }],
     inputs: [{ role: "submission_package", schema_ref: "submission-package.v1", required: true, source_policy: "node_output" }],
     outputs: [{ role: "submission_package_report", schema_ref: "submission-package-check.v1", required: true }],
   },
   {
+    procedure_path: "src/arsu-converter/authoring/procedures/m5/passport-verifier.md",
     capability_id: "cap.check.passport-verifier",
     title: "Passport Verifier",
     description: "Deterministic material passport verifier.",
@@ -141,11 +151,12 @@ export const M5_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     license: CC,
     extraction_artifact_id: "CAP-M5-10",
     script_validator: { validator_id: "passport-verifier-script", entrypoint_path: "validators/passport-verifier.py", args_template: ["{outputs_json}"] },
-    knowledge_sources: [],
+    knowledge_sources: [{ knowledge_id: "degradation-registry", extraction_artifact_id: "KP-M4-03", output_path: "knowledge/degradation-registry.json" }],
     inputs: [{ role: "material_passport", schema_ref: "material-passport.v1", required: true, source_policy: "node_output" }],
     outputs: [{ role: "passport_report", schema_ref: "passport-check.v1", required: true }],
   },
   {
+    procedure_path: "src/arsu-converter/authoring/procedures/m5/citation-existence.md",
     capability_id: "cap.check.citation-existence-verification",
     title: "Citation Existence Verification",
     description: "Deterministic resolver-based citation existence gate.",
@@ -156,11 +167,12 @@ export const M5_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     license: CC,
     extraction_artifact_id: "CAP-M5-11",
     script_validator: { validator_id: "citation-verification-gate-script", entrypoint_path: "validators/citation-verification-gate.py", args_template: ["{outputs_json}"] },
-    knowledge_sources: [],
+    knowledge_sources: [{ knowledge_id: "degradation-registry", extraction_artifact_id: "KP-M4-03", output_path: "knowledge/degradation-registry.json" }],
     inputs: [{ role: "annotated_bibliography", schema_ref: "annotated-bibliography.v1", required: true, source_policy: "node_output" }],
     outputs: [{ role: "citation_verification_report", schema_ref: "citation-existence.v1", required: true }],
   },
   {
+    procedure_path: "src/arsu-converter/authoring/procedures/m5/pdf-read-preflight.md",
     capability_id: "cap.check.pdf-read-preflight",
     title: "PDF Read Preflight",
     description: "Deterministic PDF extraction preflight.",
@@ -171,11 +183,12 @@ export const M5_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     license: CC,
     extraction_artifact_id: "CAP-M5-12",
     script_validator: { validator_id: "pdf-read-preflight-script", entrypoint_path: "validators/pdf-read-preflight.py", args_template: ["{outputs_json}"] },
-    knowledge_sources: [],
+    knowledge_sources: [{ knowledge_id: "degradation-registry", extraction_artifact_id: "KP-M4-03", output_path: "knowledge/degradation-registry.json" }],
     inputs: [{ role: "pdf_path", schema_ref: "pdf.v1", required: true, source_policy: "node_output" }],
     outputs: [{ role: "pdf_preflight_report", schema_ref: "pdf-preflight.v1", required: true }],
   },
   {
+    procedure_path: "src/arsu-converter/authoring/procedures/m5/citation-verification-summary.md",
     capability_id: "cap.check.citation-verification-summary",
     title: "Citation Verification Summary",
     description: "Deterministic citation verification summary.",
@@ -186,11 +199,12 @@ export const M5_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     license: CC,
     extraction_artifact_id: "CAP-M5-13",
     script_validator: { validator_id: "citation-verification-summary-script", entrypoint_path: "validators/citation-verification-summary.py", args_template: ["{outputs_json}"] },
-    knowledge_sources: [],
+    knowledge_sources: [{ knowledge_id: "degradation-registry", extraction_artifact_id: "KP-M4-03", output_path: "knowledge/degradation-registry.json" }],
     inputs: [{ role: "citation_verification_report", schema_ref: "citation-existence.v1", required: true, source_policy: "node_output" }],
     outputs: [{ role: "citation_summary", schema_ref: "citation-summary.v1", required: true }],
   },
   {
+    procedure_path: "src/arsu-converter/authoring/procedures/m5/contamination-signals.md",
     capability_id: "cap.check.contamination-signals",
     title: "Contamination Signals",
     description: "Deterministic contamination signal computation.",
@@ -201,7 +215,7 @@ export const M5_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     license: CC,
     extraction_artifact_id: "CAP-M5-14",
     script_validator: { validator_id: "contamination-signals-script", entrypoint_path: "validators/contamination-signals.py", args_template: ["{outputs_json}"] },
-    knowledge_sources: [],
+    knowledge_sources: [{ knowledge_id: "degradation-registry", extraction_artifact_id: "KP-M4-03", output_path: "knowledge/degradation-registry.json" }],
     inputs: [{ role: "corpus", schema_ref: "corpus.v1", required: true, source_policy: "node_output" }],
     outputs: [{ role: "contamination_report", schema_ref: "contamination.v1", required: true }],
   }

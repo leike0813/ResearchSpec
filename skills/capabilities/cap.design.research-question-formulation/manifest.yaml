@@ -3,6 +3,7 @@ capability_id: cap.design.research-question-formulation
 title: Research Question Formulation
 description: Turns a project intent into a FINER-scored research question brief
   with scope boundaries and bound sub-questions.
+maturity: operational
 class: design
 node_kind: producer
 execution_type: llm

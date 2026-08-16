@@ -3,6 +3,7 @@ capability_id: cap.discovery.literature-search-screening
 title: Literature Search And Screening
 description: Runs a systematic, reproducible search and screening process and
   produces an annotated bibliography with PRISMA-style documentation.
+maturity: operational
 class: discovery
 node_kind: producer
 execution_type: llm

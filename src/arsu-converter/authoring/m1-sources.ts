@@ -4,6 +4,7 @@ const CC_BY_NC = "CC BY-NC 4.0";
 
 export const M1_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   {
+    procedure_path: "src/arsu-converter/authoring/procedures/m1/research-question-formulation.md",
     capability_id: "cap.design.research-question-formulation",
     title: "Research Question Formulation",
     description: "Turns a project intent into a FINER-scored research question brief with scope boundaries and bound sub-questions.",
@@ -21,6 +22,7 @@ export const M1_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     outputs: [{ role: "rq_brief", schema_ref: "rq-brief.v1", required: true }],
   },
   {
+    procedure_path: "src/arsu-converter/authoring/procedures/m1/methodology-design.md",
     capability_id: "cap.design.methodology-design",
     title: "Methodology Design",
     description: "Selects a paradigm, methods, data strategy and analysis framework coherent with the confirmed research question.",
@@ -30,11 +32,16 @@ export const M1_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     gate_policy: "required",
     license: CC_BY_NC,
     extraction_artifact_id: "CAP-M1-05",
-    knowledge_sources: [],
+    knowledge_sources: [
+      { knowledge_id: "irb-decision-tree", extraction_artifact_id: "KP-M5-20", output_path: "knowledge/irb-decision-tree.md" },
+      { knowledge_id: "equator-guidelines", extraction_artifact_id: "KP-M5-21", output_path: "knowledge/equator-guidelines.md" },
+      { knowledge_id: "preregistration-guide", extraction_artifact_id: "KP-M5-22", output_path: "knowledge/preregistration-guide.md" },
+    ],
     inputs: [{ role: "rq_brief", schema_ref: "rq-brief.v1", required: true, source_policy: "node_output" }],
     outputs: [{ role: "methodology_blueprint", schema_ref: "methodology-blueprint.v1", required: true }],
   },
   {
+    procedure_path: "src/arsu-converter/authoring/procedures/m1/literature-search-screening.md",
     capability_id: "cap.discovery.literature-search-screening",
     title: "Literature Search And Screening",
     description: "Runs a systematic, reproducible search and screening process and produces an annotated bibliography with PRISMA-style documentation.",
@@ -55,6 +62,7 @@ export const M1_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     outputs: [{ role: "annotated_bibliography", schema_ref: "annotated-bibliography.v1", required: true }],
   },
   {
+    procedure_path: "src/arsu-converter/authoring/procedures/m1/source-quality-grading.md",
     capability_id: "cap.discovery.source-quality-grading",
     title: "Source Quality Grading",
     description: "Grades each source by evidence level, predatory-journal red flags and conflicts of interest.",
@@ -71,6 +79,7 @@ export const M1_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     outputs: [{ role: "graded_sources", schema_ref: "graded-sources.v1", required: true }],
   },
   {
+    procedure_path: "src/arsu-converter/authoring/procedures/m1/evidence-synthesis.md",
     capability_id: "cap.analysis.evidence-synthesis",
     title: "Evidence Synthesis",
     description: "Synthesizes graded sources into a convergent/divergent evidence map with claim-intent and citation emissions.",
@@ -89,6 +98,7 @@ export const M1_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     outputs: [{ role: "synthesis_report", schema_ref: "synthesis-report.v1", required: true }],
   },
   {
+    procedure_path: "src/arsu-converter/authoring/procedures/m1/report-compilation.md",
     capability_id: "cap.generation.report-compilation",
     title: "Research Report Compilation",
     description: "Compiles the synthesis and method blueprint into a complete APA-style research report.",

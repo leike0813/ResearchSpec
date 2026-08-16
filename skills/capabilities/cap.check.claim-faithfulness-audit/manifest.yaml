@@ -2,6 +2,7 @@ schema_version: "1"
 capability_id: cap.check.claim-faithfulness-audit
 title: Claim Faithfulness Audit
 description: LLM-as-judge claim-source alignment audit.
+maturity: operational
 class: verification
 node_kind: checker
 execution_type: llm

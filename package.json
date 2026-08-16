@@ -102,7 +102,9 @@
     "education-agent-skills:preview": "pnpm build && node dist/src/vendor-converters/education-agent-skills/cli.js preview",
     "education-agent-skills:convert": "pnpm build && node dist/src/vendor-converters/education-agent-skills/cli.js convert",
     "education-agent-skills:check": "pnpm build && node dist/src/vendor-converters/education-agent-skills/cli.js check",
-    "education-agent-skills:idempotence": "pnpm build && node dist/src/vendor-converters/education-agent-skills/cli.js idempotence"
+    "education-agent-skills:idempotence": "pnpm build && node dist/src/vendor-converters/education-agent-skills/cli.js idempotence",
+    "capability:parity": "node scripts/audit-capability-parity.mjs",
+    "capability:parity:report": "node scripts/audit-capability-parity.mjs --json docs/capability-parity-report.json"
   },
   "engines": {
     "node": ">=22"

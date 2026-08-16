@@ -2,6 +2,7 @@ schema_version: "1"
 capability_id: cap.check.citation-format-compliance
 title: Citation Format Compliance
 description: Validates in-text citations and reference list formatting.
+maturity: operational
 class: verification
 node_kind: checker
 execution_type: llm
