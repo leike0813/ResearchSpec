@@ -13,6 +13,7 @@ import { REVIEW_RESPONSE_GRAPH_PROFILE_TEXT } from "../../core/graph-profiles/re
 import { GraphWorkspaceConfigSchema } from "../../core/contracts/graph-workspace.js";
 import { loadCapabilityRegistry } from "../../capabilities/registry.js";
 import { PluginProjectionError, projectWorkspacePlugins } from "../../plugins/graph-delivery.js";
+import { loadPluginExtensionRegistry } from "../../plugins/extensions.js";
 import { domainIsAvailable, loadPluginRegistry } from "../../plugins/registry.js";
 import { inspectGraphWorkspaceFormat, loadGraphWorkspaceIndex } from "../../core/runtime/graph-workspace-index.js";
 import { resolveInitTarget } from "../../core/workspace/layout.js";
@@ -152,10 +153,12 @@ async function synchronizeSelectedPluginProjection(workspace: string, index: Awa
     const pluginRegistry = await loadPluginRegistry();
     const unavailable = index.config.plugins.selected.filter((domainId) => !domainIsAvailable(pluginRegistry.domains.get(domainId)));
     if (unavailable.length > 0) throw new CliError("plugin_unavailable", `Plugin unavailable: ${unavailable.join(", ")}`, 1, "Uninstall the unavailable plugin selection before refreshing projections.");
+    const extensions = await loadPluginExtensionRegistry();
     await projectWorkspacePlugins({
       workspace,
       index,
       registry: pluginRegistry,
+      extensions,
       selectedDomainIds: index.config.plugins.selected,
       force: context.force,
     });

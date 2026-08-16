@@ -91,7 +91,8 @@ export async function handleGraphPluginInstall(pluginIds: readonly string[], con
   if (unavailable.length) throw new CliError("plugin_unavailable", `Plugin unavailable: ${unavailable.join(", ")}`, 1);
   const selected = [...new Set([...index.config.plugins.selected, ...requested])];
   try {
-    const projection = await projectWorkspacePlugins({ workspace, index, registry, selectedDomainIds: selected, force: context.force, dryRun: context.dryRun, writeManifest: false, strictRemoval: true });
+    const extensions = await loadPluginExtensionRegistry();
+    const projection = await projectWorkspacePlugins({ workspace, index, registry, extensions, selectedDomainIds: selected, force: context.force, dryRun: context.dryRun, writeManifest: false, strictRemoval: true });
     await writeConfigSelection(workspace, index.config, selected, context);
     if (!context.dryRun) await writeWorkspacePluginManifest(workspace, index, projection.plan);
     return success("plugin", {
@@ -99,6 +100,8 @@ export async function handleGraphPluginInstall(pluginIds: readonly string[], con
       workspace,
       selected_plugins: selected,
       resolved_skill_ids: projection.resolvedSkillIds,
+      resolved_capability_ids: projection.resolvedCapabilityIds,
+      resolved_profile_ids: projection.resolvedProfileIds,
       projected_tools: projection.skillToolIds,
       projected_files: {
         created: projection.created,
@@ -120,7 +123,8 @@ export async function handleGraphPluginUninstall(pluginIds: readonly string[], c
   const selected = index.config.plugins.selected.filter((id) => !requested.has(id));
   try {
     const registry = await loadPluginRegistry();
-    const projection = await projectWorkspacePlugins({ workspace, index, registry, selectedDomainIds: selected, force: context.force, dryRun: context.dryRun, writeManifest: false, strictRemoval: true });
+    const extensions = await loadPluginExtensionRegistry();
+    const projection = await projectWorkspacePlugins({ workspace, index, registry, extensions, selectedDomainIds: selected, force: context.force, dryRun: context.dryRun, writeManifest: false, strictRemoval: true });
     await writeConfigSelection(workspace, index.config, selected, context);
     if (!context.dryRun) await writeWorkspacePluginManifest(workspace, index, projection.plan);
     return success("plugin", {
@@ -128,6 +132,8 @@ export async function handleGraphPluginUninstall(pluginIds: readonly string[], c
       workspace,
       selected_plugins: selected,
       resolved_skill_ids: projection.resolvedSkillIds,
+      resolved_capability_ids: projection.resolvedCapabilityIds,
+      resolved_profile_ids: projection.resolvedProfileIds,
       projected_tools: projection.skillToolIds,
       projected_files: {
         created: projection.created,
@@ -150,7 +156,8 @@ export async function handleGraphPluginUpdate(pluginIds: readonly string[], cont
     const registry = await loadPluginRegistry();
     const unavailable = selected.filter((id) => !domainIsAvailable(registry.domains.get(id)));
     if (unavailable.length) throw new CliError("plugin_unavailable", `Plugin unavailable: ${unavailable.join(", ")}`, 1);
-    const projection = await projectWorkspacePlugins({ workspace, index, registry, selectedDomainIds: selected, force: context.force, dryRun: context.dryRun });
+    const extensions = await loadPluginExtensionRegistry();
+    const projection = await projectWorkspacePlugins({ workspace, index, registry, extensions, selectedDomainIds: selected, force: context.force, dryRun: context.dryRun });
     return success("plugin", {
       action: "update",
       workspace,

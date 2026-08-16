@@ -27,6 +27,16 @@ export const ManagedInstallationSourceSchema = z.discriminatedUnion("kind", [
     profile_version: IdentifierSchema,
   }),
   z.strictObject({
+    kind: z.literal("plugin-capability"),
+    capability_id: IdentifierSchema,
+    extension_registry_version: IdentifierSchema,
+  }),
+  z.strictObject({
+    kind: z.literal("plugin-profile"),
+    profile_id: IdentifierSchema,
+    profile_version: IdentifierSchema,
+  }),
+  z.strictObject({
     kind: z.literal("literature-adapter"),
     adapter_id: IdentifierSchema,
     release_set_id: IdentifierSchema,
@@ -53,14 +63,15 @@ export const ManagedInstallationSchema = z.strictObject({
   if (value.owner === "literature-adapter" && value.tool_id !== null) {
     context.addIssue({ code: "custom", path: ["tool_id"], message: "shared literature-adapter installations require null tool_id" });
   }
-  if (value.owner === "framework" && (value.tool_id !== null || value.source.kind !== "framework-profile" || value.target.scope !== "project")) {
-    context.addIssue({ code: "custom", path: ["owner"], message: "framework profile installations require null tool_id, project scope, and framework-profile source" });
+  const frameworkProfileSource = value.source.kind === "framework-profile" || value.source.kind === "plugin-profile";
+  if (value.owner === "framework" && (value.tool_id !== null || !frameworkProfileSource || value.target.scope !== "project")) {
+    context.addIssue({ code: "custom", path: ["owner"], message: "framework profile installations require null tool_id, project scope, and a profile source" });
   }
-  if (value.source.kind === "framework-profile" && value.owner !== "framework") {
-    context.addIssue({ code: "custom", path: ["source"], message: "framework-profile sources require framework ownership" });
+  if (frameworkProfileSource && value.owner !== "framework") {
+    context.addIssue({ code: "custom", path: ["source"], message: "profile sources require framework ownership" });
   }
-  if (value.source.kind !== "literature-adapter" && value.owner !== "agent-tool") {
-    if (value.source.kind !== "framework-profile") context.addIssue({ code: "custom", path: ["owner"], message: "non-adapter sources require agent-tool ownership" });
+  if (value.source.kind !== "literature-adapter" && value.owner !== "agent-tool" && !frameworkProfileSource) {
+    context.addIssue({ code: "custom", path: ["owner"], message: "non-adapter sources require agent-tool or framework ownership" });
   }
   if (value.source.kind === "literature-adapter") {
     const isSkill = value.source.component === "skill";
@@ -81,6 +92,8 @@ export const DomainResolutionSnapshotSchema = z.strictObject({
   domain_id: IdentifierSchema,
   domain_version: IdentifierSchema,
   resolved_skill_ids: z.array(IdentifierSchema),
+  resolved_capability_ids: z.array(IdentifierSchema).optional(),
+  resolved_profile_ids: z.array(IdentifierSchema).optional(),
 });
 
 export const LiteratureAdapterRuntimeResolutionSchema = z.strictObject({
@@ -177,6 +190,18 @@ export function isDomainSkillInstallation(item: ManagedInstallation): item is Ma
   source: Extract<ManagedInstallationSource, { kind: "domain-skill" }>;
 } {
   return item.source.kind === "domain-skill";
+}
+
+export function isPluginCapabilityInstallation(item: ManagedInstallation): item is ManagedInstallation & {
+  source: Extract<ManagedInstallationSource, { kind: "plugin-capability" }>;
+} {
+  return item.source.kind === "plugin-capability";
+}
+
+export function isPluginProfileInstallation(item: ManagedInstallation): item is ManagedInstallation & {
+  source: Extract<ManagedInstallationSource, { kind: "plugin-profile" }>;
+} {
+  return item.source.kind === "plugin-profile";
 }
 
 export async function reconcileAgentToolInstallations(input: {

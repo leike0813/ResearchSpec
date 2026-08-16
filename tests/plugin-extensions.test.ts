@@ -1,6 +1,9 @@
 import assert from "node:assert/strict";
+import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { test } from "node:test";
+
+import { stringify } from "yaml";
 
 import {
   loadPluginExtensionRegistry,
@@ -33,6 +36,67 @@ void test("plugin extension registry loads the ecology pilot package", async () 
   const plugins = await loadPluginRegistry(undefined, false);
   assert.equal(plugins.domains.get("ecology") !== undefined, true);
   assert.equal(plugins.skills.has("plugin-ecology-biodiversity"), false);
+});
+
+void test("plugin graph extensions project and run through the graph engine", async () => {
+  const root = await tempProject();
+  try {
+    const initialized = parseEnvelope(runCli(["init", root, "--tools", "codex", "--delivery", "skills", "--json"], root));
+    assert.equal(initialized.ok, true, JSON.stringify(initialized.error));
+
+    const installed = parseEnvelope<{ resolved_capability_ids: string[]; resolved_profile_ids: string[] }>(
+      runCli(["plugin", "install", "ecology", "--yes", "--json"], root),
+    );
+    assert.equal(installed.ok, true, JSON.stringify(installed.error));
+    assert.deepEqual(installed.data?.resolved_capability_ids ?? [], ["plugin-ecology-biodiversity"]);
+    assert.deepEqual(installed.data?.resolved_profile_ids ?? [], ["plugin-ecology-biodiversity"]);
+
+    const status = parseEnvelope<{ plugins: { resolved_capability_ids: string[]; resolved_profile_ids: string[]; projected_capability_ids: string[]; projected_profile_ids: string[] } }>(runCli(["status", "--json"], root));
+    assert.equal(status.ok, true, JSON.stringify(status.error));
+    assert.deepEqual(status.data?.plugins.resolved_capability_ids ?? [], ["plugin-ecology-biodiversity"]);
+    assert.deepEqual(status.data?.plugins.resolved_profile_ids ?? [], ["plugin-ecology-biodiversity"]);
+    assert.deepEqual(status.data?.plugins.projected_capability_ids ?? [], ["plugin-ecology-biodiversity"]);
+    assert.deepEqual(status.data?.plugins.projected_profile_ids ?? [], ["plugin-ecology-biodiversity"]);
+
+    const capabilityPath = path.join(root, ".agents/skills/plugin-ecology-biodiversity/manifest.yaml");
+    const profilePath = path.join(root, "researchspec/profiles/plugin-ecology-biodiversity.yaml");
+    await readFile(capabilityPath, "utf8");
+    await readFile(profilePath, "utf8");
+
+    const startInput = path.join(root, "start.yaml");
+    await writeFile(startInput, stringify({
+      schema_version: "2",
+      confirmed_at: "2026-08-16T12:00:00+08:00",
+      entry_id: "main",
+      entry_node_id: "research",
+      prerequisites: [],
+      handoff_inputs: [{ role: "task_request", type: "markdown", path: "task.md", purpose: "ecology task" }],
+      planned_outputs: [{ role: "research_brief", type: "markdown", path: "brief.md", purpose: "research brief" }],
+      formal_gates: [],
+      cost: { effort: "low", interaction: "single_pass" },
+    }), "utf8");
+    const started = parseEnvelope<{ run_id: string }>(runCli(["start", "plugin-ecology-biodiversity", "--input", startInput, "--confirmed-by", "researcher", "--json"], root));
+    assert.equal(started.ok, true, JSON.stringify(started.error));
+    const runId = started.data?.run_id ?? "";
+    assert.match(runId, /^run-[a-f0-9]+$/);
+
+    const instructions = parseEnvelope<{ capability: { capability_id: string } }>(runCli(["instructions", `node:${runId}/research`, "--json"], root));
+    assert.equal(instructions.ok, true, JSON.stringify(instructions.error));
+    assert.equal(instructions.data?.capability.capability_id, "plugin-ecology-biodiversity");
+
+    const advanceInput = path.join(root, "advance.yaml");
+    await writeFile(advanceInput, stringify({ outputs: [{ role: "research_brief", path: "brief.md" }] }), "utf8");
+    const advanced = parseEnvelope<{ node: { state: string } }>(runCli(["advance", `node:${runId}/research`, "--input", advanceInput, "--json"], root));
+    assert.equal(advanced.ok, true, JSON.stringify(advanced.error));
+    assert.equal(advanced.data?.node.state, "complete");
+
+    const uninstalled = parseEnvelope(runCli(["plugin", "uninstall", "ecology", "--yes", "--json"], root));
+    assert.equal(uninstalled.ok, true, JSON.stringify(uninstalled.error));
+    await assert.rejects(readFile(capabilityPath, "utf8"), { code: "ENOENT" });
+    await assert.rejects(readFile(profilePath, "utf8"), { code: "ENOENT" });
+  } finally {
+    await cleanup(root);
+  }
 });
 
 void test("plugin show exposes graph extension counts", async () => {

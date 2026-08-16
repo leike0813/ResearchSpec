@@ -13,8 +13,10 @@ import {
 } from "../../core/runtime/graph-run.js";
 import { loadGraphWorkspaceIndex } from "../../core/runtime/graph-workspace-index.js";
 import { requireGraphWorkspace } from "../../core/workspace/graph-discover.js";
+import { validateGraphAgainstCapabilityRegistry } from "../../capabilities/registry.js";
 import type { CurrentCheckTarget } from "../../core/validation/types.js";
 import { pluginWorkspaceDiagnostics } from "../../plugins/graph-check.js";
+import { loadWorkspaceCapabilityRegistry } from "../../plugins/runtime-capabilities.js";
 import { loadGraphPluginStatusView } from "../../plugins/graph-status.js";
 import { CliError, success, type CommandContext, type CommandResult } from "../types.js";
 
@@ -92,7 +94,7 @@ export async function handleGraphStatus(context: CommandContext): Promise<Comman
     ...success("status", data, { stdout: [
       `ResearchSpec graph workspace: ${workspace}`,
       `Profiles: ${String(data.profiles.length)}; runs: ${String(data.runs.total)}; frontier: ${String(data.frontier.length)} action(s)`,
-      `Plugins: ${String(plugins.selected.length)} selected, ${String(plugins.resolved_skills.length)} resolved, ${String(plugins.projected.length)} projected`,
+      `Plugins: ${String(plugins.selected.length)} selected, ${String(plugins.resolved_skills.length)} Skills, ${String(plugins.resolved_capability_ids.length)} capabilities, ${String(plugins.resolved_profile_ids.length)} profiles`,
       `Diagnostics: ${String(data.diagnostics_summary.blocking)} blocking, ${String(data.diagnostics_summary.warning)} warning`,
     ].join("\n") + "\n" }),
     ok,
@@ -158,11 +160,32 @@ export async function handleGraphInstructions(selector: string, context: Command
     if (!definition) throw new CliError("node_not_found", `Node not found: ${nodeId}`, 1);
     const nodes = record.nodeEntries.flatMap((entry) => entry.node ? [entry.node] : []);
     const eligible = evaluateGraphFrontier(record.run, record.graph, nodes).eligible_nodes.some((item) => item.node_id === nodeId && item.round === round);
+    let capability: Record<string, unknown> | null = null;
+    if (definition.kind === "capability" && definition.capability_id !== undefined) {
+      const registry = await loadWorkspaceCapabilityRegistry(index);
+      const registered = registry.capabilities.get(definition.capability_id);
+      if (!registered) throw new CliError("capability_unknown", `Capability is not registered for this run: ${definition.capability_id}`, 1);
+      capability = {
+        capability_id: registered.manifest.capability_id,
+        title: registered.manifest.title,
+        description: registered.manifest.description,
+        class: registered.manifest.class,
+        node_kind: registered.manifest.node_kind,
+        execution_type: registered.manifest.execution_type,
+        params: registered.manifest.params ?? {},
+        inputs: registered.manifest.inputs,
+        outputs: registered.manifest.outputs,
+        validators: registered.manifest.validators,
+        knowledge_refs: registered.manifest.knowledge_refs,
+        gate_policy: registered.manifest.gate_policy,
+      };
+    }
     return success("instructions", {
       selector,
       kind: "node",
       run_id: runId,
       node: definition,
+      capability,
       round: round ?? null,
       eligible,
       required_input_roles: definition.input_bindings,
@@ -199,6 +222,14 @@ export async function handleGraphStart(options: GraphStartOptions, context: Comm
   try { command = parseYaml(await readFile(path.resolve(context.cwd, options.input), "utf8")); }
   catch (error) { throw new CliError("start_input_unreadable", `Cannot read Start input: ${error instanceof Error ? error.message : String(error)}`, 2); }
   try {
+    const profile = index.profiles.get(options.profile);
+    if (profile) {
+      const capabilityRegistry = await loadWorkspaceCapabilityRegistry(index);
+      const validation = validateGraphAgainstCapabilityRegistry(capabilityRegistry, profile);
+      if (validation.length > 0) {
+        throw new CliError("profile_capability_invalid", `Graph profile references unavailable capabilities: ${validation.map((item) => `${item.path}: ${item.message}`).join("; ")}`, 1, undefined, validation);
+      }
+    }
     const result = await startGraphRun({ index, profileId: options.profile, command, confirmedBy: options.confirmedBy, dryRun: context.dryRun });
     return success("start", { ...result, dry_run: context.dryRun }, { stdout: `${result.status === "already_started" ? "Already started" : context.dryRun ? "Would start" : "Started"} ${result.run_id}.\n` });
   } catch (error) { throw graphControlCliError(error); }
@@ -254,7 +285,8 @@ export async function handleGraphAdvance(selector: string, options: GraphAdvance
   }
   const outputs = (payload as { outputs: Array<{ role: string; path: string }> }).outputs;
   try {
-    const result = await submitGraphNode({ index, runId, nodeId, ...(round === undefined ? {} : { round }), outputs, submittedAt: new Date().toISOString(), dryRun: context.dryRun });
+    const capabilityRegistry = await loadWorkspaceCapabilityRegistry(index);
+    const result = await submitGraphNode({ index, runId, nodeId, ...(round === undefined ? {} : { round }), outputs, submittedAt: new Date().toISOString(), dryRun: context.dryRun, capabilityRegistry });
     return success("advance", { selector, node: result.node, created: result.created, dry_run: context.dryRun }, { stdout: `${context.dryRun ? "Would advance" : "Advanced"} ${selector}.\n` });
   } catch (error) { throw graphControlCliError(error); }
 }

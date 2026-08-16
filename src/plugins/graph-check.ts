@@ -4,11 +4,11 @@ import path from "node:path";
 import { selectSkillWriters } from "../adapters/delivery.js";
 import { getTool, toolSkillsRoot } from "../adapters/tools.js";
 import { capabilityIds, loadCapabilityRegistry } from "../capabilities/registry.js";
+import { validateGraphCapabilityReferences } from "../core/contracts/capability-graph.js";
 import type { GraphWorkspaceIndex } from "../core/runtime/graph-workspace-index.js";
 import type { Diagnostic } from "../core/validation/types.js";
 import { sha256 } from "../core/workspace/write-plan.js";
 import { loadPluginExtensionRegistry, resolveDomainExtensions } from "./extensions.js";
-import { validateGraphCapabilityReferences } from "../core/contracts/capability-graph.js";
 import { domainIsAvailable, filesForSkill, loadPluginRegistry, resolveDomainSelection } from "./registry.js";
 
 export async function pluginWorkspaceDiagnostics(index: GraphWorkspaceIndex, alwaysLoad = false): Promise<Diagnostic[]> {
@@ -64,8 +64,8 @@ export async function pluginWorkspaceDiagnostics(index: GraphWorkspaceIndex, alw
     });
   }
 
+  const resolvedExtensions = extensions ? resolveDomainExtensions(extensions, selected) : { capabilityIds: [], profileIds: [] };
   if (extensions) {
-    const resolvedExtensions = resolveDomainExtensions(extensions, selected);
     for (const capabilityId of resolvedExtensions.capabilityIds) {
       if (baseCapabilityIds.has(capabilityId)) {
         diagnostics.push({
@@ -115,22 +115,34 @@ export async function pluginWorkspaceDiagnostics(index: GraphWorkspaceIndex, alw
       });
       continue;
     }
-    const expected = resolveDomainSelection(registry, [domainId]).resolvedSkillIds;
+    const expectedSkills = resolveDomainSelection(registry, [domainId]).resolvedSkillIds;
+    const domainExtensions = extensions ? resolveDomainExtensions(extensions, [domainId]) : { capabilityIds: [], profileIds: [] };
     const staleVersion = snapshot.domain_version !== domain.version;
-    const staleSkills = [...snapshot.resolved_skill_ids].sort().join("\n") !== [...expected].sort().join("\n");
-    if (staleVersion || staleSkills) {
+    const staleSkills = sortedJoin(snapshot.resolved_skill_ids) !== sortedJoin(expectedSkills);
+    const staleCapabilities = sortedJoin(snapshot.resolved_capability_ids ?? []) !== sortedJoin(domainExtensions.capabilityIds);
+    const staleProfiles = sortedJoin(snapshot.resolved_profile_ids ?? []) !== sortedJoin(domainExtensions.profileIds);
+    if (staleVersion || staleSkills || staleCapabilities || staleProfiles) {
       diagnostics.push({
         severity: "warning",
         code: "plugin_resolution_snapshot_stale",
         message: `Plugin installation snapshot is stale for: ${domainId}`,
         blocking: false,
-        details: { domain_id: domainId, expected_skills: expected, recorded_skills: snapshot.resolved_skill_ids },
+        details: {
+          domain_id: domainId,
+          expected_skills: expectedSkills,
+          recorded_skills: snapshot.resolved_skill_ids,
+          expected_capabilities: domainExtensions.capabilityIds,
+          recorded_capabilities: snapshot.resolved_capability_ids ?? [],
+          expected_profiles: domainExtensions.profileIds,
+          recorded_profiles: snapshot.resolved_profile_ids ?? [],
+        },
       });
     }
   }
 
   const skillToolIds = selectSkillWriters(index.config.agent_tools.selected, index.config.agent_tools.delivery);
-  if (resolution.resolvedSkillIds.length > 0 && skillToolIds.length === 0) {
+  const hasProjectionWork = resolution.resolvedSkillIds.length > 0 || resolvedExtensions.capabilityIds.length > 0 || resolvedExtensions.profileIds.length > 0;
+  if (hasProjectionWork && skillToolIds.length === 0) {
     diagnostics.push({
       severity: "warning",
       code: "plugin_projection_deferred",
@@ -148,53 +160,102 @@ export async function pluginWorkspaceDiagnostics(index: GraphWorkspaceIndex, alw
       for (const relativeAsset of filesForSkill(registry, skillId)) {
         const target = path.join(root.root, skillId, relativeAsset);
         const manifestPath = root.scope === "project" ? path.relative(index.projectRoot, target).split(path.sep).join("/") : target;
-        const installation = index.manifest.installations.find((item) =>
-          item.target.scope === root.scope
-          && item.target.path === manifestPath
-          && item.source.kind === "domain-skill"
-          && item.source.skill_id === skillId,
-        );
-        if (!installation) {
-          diagnostics.push({
-            severity: "error",
-            code: "plugin_projection_incomplete",
-            message: `Plugin Skill file is not manifest-owned: ${skillId}/${relativeAsset}`,
-            path: target,
-            blocking: true,
-            details: { tool_id: toolId, skill_id: skillId },
-          });
-          continue;
-        }
-        try {
-          const currentHash = sha256(await readFile(target));
-          if (currentHash !== installation.sha256) {
-            diagnostics.push({
-              severity: "warning",
-              code: "plugin_projection_drift",
-              message: `Plugin Skill file has user modifications: ${skillId}/${relativeAsset}`,
-              path: target,
-              blocking: false,
-              details: { tool_id: toolId, skill_id: skillId },
-            });
-          }
-        } catch (error) {
-          const code = (error as NodeJS.ErrnoException).code;
-          if (code === "ENOENT") {
-            diagnostics.push({
-              severity: "error",
-              code: "plugin_projection_incomplete",
-              message: `Plugin Skill file is missing: ${skillId}/${relativeAsset}`,
-              path: target,
-              blocking: true,
-              details: { tool_id: toolId, skill_id: skillId },
-            });
-          } else {
-            throw error;
-          }
+        await checkProjectedFile(diagnostics, index, target, manifestPath, root.scope, {
+          kind: "domain-skill",
+          skill_id: skillId,
+        }, `Plugin Skill file: ${skillId}/${relativeAsset}`);
+      }
+    }
+    if (extensions) {
+      for (const capabilityId of resolvedExtensions.capabilityIds) {
+        const capability = extensions.capabilities.get(capabilityId);
+        if (!capability) continue;
+        for (const source of capability.files) {
+          const relativeAsset = path.relative(capability.packageRoot, source).split(path.sep).join("/");
+          const target = path.join(root.root, capabilityId, relativeAsset);
+          const manifestPath = root.scope === "project" ? path.relative(index.projectRoot, target).split(path.sep).join("/") : target;
+          await checkProjectedFile(diagnostics, index, target, manifestPath, root.scope, {
+            kind: "plugin-capability",
+            capability_id: capabilityId,
+          }, `Plugin capability file: ${capabilityId}/${relativeAsset}`);
         }
       }
     }
   }
 
+  if (extensions) {
+    for (const profileId of resolvedExtensions.profileIds) {
+      const profile = extensions.profiles.get(profileId);
+      if (!profile) continue;
+      const target = path.join(index.workspace, "profiles", `${profileId}.yaml`);
+      const manifestPath = path.relative(index.projectRoot, target).split(path.sep).join("/");
+      await checkProjectedFile(diagnostics, index, target, manifestPath, "project", {
+        kind: "plugin-profile",
+        profile_id: profileId,
+      }, `Plugin graph profile: ${profileId}`);
+    }
+  }
+
   return diagnostics;
+}
+
+async function checkProjectedFile(
+  diagnostics: Diagnostic[],
+  index: GraphWorkspaceIndex,
+  target: string,
+  manifestPath: string,
+  scope: "project" | "shared-global",
+  source: { kind: "domain-skill"; skill_id: string } | { kind: "plugin-capability"; capability_id: string } | { kind: "plugin-profile"; profile_id: string },
+  label: string,
+): Promise<void> {
+  const installation = index.manifest.installations.find((item) =>
+    item.target.scope === scope
+    && item.target.path === manifestPath
+    && item.source.kind === source.kind
+    && (source.kind === "domain-skill" && item.source.kind === "domain-skill" ? item.source.skill_id === source.skill_id : true)
+    && (source.kind === "plugin-capability" && item.source.kind === "plugin-capability" ? item.source.capability_id === source.capability_id : true)
+    && (source.kind === "plugin-profile" && item.source.kind === "plugin-profile" ? item.source.profile_id === source.profile_id : true),
+  );
+  if (!installation) {
+    diagnostics.push({
+      severity: "error",
+      code: "plugin_projection_incomplete",
+      message: `${label} is not manifest-owned`,
+      path: target,
+      blocking: true,
+      details: { source },
+    });
+    return;
+  }
+  try {
+    const currentHash = sha256(await readFile(target));
+    if (currentHash !== installation.sha256) {
+      diagnostics.push({
+        severity: "warning",
+        code: "plugin_projection_drift",
+        message: `${label} has user modifications`,
+        path: target,
+        blocking: false,
+        details: { source },
+      });
+    }
+  } catch (error) {
+    const code = (error as NodeJS.ErrnoException).code;
+    if (code === "ENOENT") {
+      diagnostics.push({
+        severity: "error",
+        code: "plugin_projection_incomplete",
+        message: `${label} is missing`,
+        path: target,
+        blocking: true,
+        details: { source },
+      });
+    } else {
+      throw error;
+    }
+  }
+}
+
+function sortedJoin(values: readonly string[]): string {
+  return [...values].sort().join("\n");
 }
