@@ -2,81 +2,66 @@
 
 ## Purpose
 
-Define the pinned Python runtime boundaries and self-contained packaging for Paper Humanizer.
+Define the pinned Python analysis tool, capability-package projection, and offline authoring rules for
+Paper Humanizer.
 
 ## Requirements
 
-### Requirement: Reference mode is self-contained
+### Requirement: Reference mode is a self-contained capability
 
-The published `paper-humanizer` `SKILL.md` SHALL contain the complete
-Reference mode instructions needed by other Skills that draft or revise prose.
-Consumers SHALL load `paper-humanizer/SKILL.md` and SHALL NOT require the
-retired `paper-humanizer/references/prose-guidance.md` path.
+The published `cap-generation-humanization-reference/SKILL.md` SHALL contain the complete Reference
+mode instructions needed by other capabilities that draft or revise prose. Consumers SHALL load that
+entrypoint and SHALL NOT require the retired `paper-humanizer/references/prose-guidance.md` path.
 
-#### Scenario: consumer loads Reference mode
+#### Scenario: Consumer loads Reference mode
 
-- **WHEN** a consuming Skill creates or edits manuscript prose
-- **THEN** it loads the packaged `paper-humanizer/SKILL.md` entrypoint without
-  starting a humanizer subflow, running diagnostics, or requesting an
-  additional confirmation
+- **WHEN** a consuming capability creates or edits manuscript prose
+- **THEN** it loads the packaged `cap-generation-humanization-reference/SKILL.md` entrypoint without
+  starting a humanizer run, running diagnostics, or requesting an additional confirmation
 
-### Requirement: Reference mode is self-contained for consumers
+### Requirement: Python analysis tool is packaged per capability
 
-The published `paper-humanizer/SKILL.md` SHALL be the sole packaged entrypoint
-that consumers load for Reference mode. Consumers SHALL NOT require
-`paper-humanizer/references/prose-guidance.md`.
+The revision, review, and verification capability packages SHALL contain the pinned
+`scripts/document_pipeline.py` bytes and SHALL NOT contain a Paper Humanizer `.mjs` runtime or
+TypeScript runtime implementation.
 
-#### Scenario: drafting consumer uses Reference mode
+#### Scenario: Capability package uses Python
 
-- **WHEN** a consumer creates or edits manuscript prose
-- **THEN** it loads `paper-humanizer/SKILL.md` without starting a humanizer
-  subflow, running diagnostics, or requesting additional confirmation
+- **WHEN** the paper-humanizer authoring converter projects the pinned source
+- **THEN** `scripts/document_pipeline.py` is present byte-for-byte in every package that invokes it
+- **AND** forbidden JS/TS runtime files cause checking to fail
 
-### Requirement: publish the pinned native runtime
+### Requirement: Operational capability surface is complete
 
-The published `paper-humanizer` Skill SHALL contain the pinned Python
-`document_pipeline.py` and `full_workflow.py` scripts and SHALL NOT contain a
-Paper Humanizer `.mjs` runtime or TypeScript runtime implementation.
-
-#### Scenario: generated tree uses Python
-
-- **WHEN** the Paper Humanizer converter projects the pinned source
-- **THEN** both Python entrypoints are present byte-for-byte and forbidden JS/TS
-  runtime files cause checking to fail
-
-### Requirement: preserve the complete operational Skill surface
-
-The published tree SHALL include the upstream `SKILL.md`, review/full
-playbooks, diagnostic guidance, and document YAML contract, while excluding
+The authored paper-humanizer packages SHALL include the Reference-mode taxonomy, review and full
+workflow procedures, diagnostic guidance, and document YAML contract, while excluding
 `agents/openai.yaml`, upstream tests, OpenSpec artifacts, and research material.
 
-#### Scenario: mode instructions are available
+#### Scenario: Node instructions are available
 
-- **WHEN** an Agent selects review or full mode
-- **THEN** the corresponding playbook and referenced deterministic contracts are
-  available inside the Skill package
+- **WHEN** an Agent executes a paper-humanizer capability node
+- **THEN** the corresponding procedure and referenced deterministic contracts are available inside
+  the capability package
 
-### Requirement: keep ResearchSpec lifecycle authority
+### Requirement: Graph engine keeps lifecycle authority
 
-Python runtime state and rendered views SHALL remain under the subflow's
-`work/paper-humanizer/` directory, while ResearchSpec `control.yaml` remains
-the only lifecycle and Gate, Decision, and transition authority.
+Task-local Python artifacts and rendered views SHALL remain ordinary boundary or working files
+outside `researchspec/`, while the graph engine remains the only lifecycle and Gate, Decision, and
+transition authority.
 
-#### Scenario: full mode writes runtime material
+#### Scenario: Revision node writes runtime material
 
-- **WHEN** full mode initializes or advances its local workflow
-- **THEN** it writes only task-local runtime artifacts and does not mutate
+- **WHEN** revision executes
+- **THEN** it writes only task-local working artifacts and boundary manuscripts and does not mutate
   ResearchSpec controls, profiles, handoffs, or Gates
 
-### Requirement: conversion is static and reproducible
+### Requirement: Authoring is static and reproducible
 
-Paper Humanizer conversion, checking, idempotence, packaging, and release
-verification SHALL not execute Python or upstream code, install dependencies,
-contact services, or read credentials.
+Paper Humanizer authoring, extraction verification, package checking, and release verification SHALL
+not execute Python or upstream code, install dependencies, contact services, or read credentials.
 
-#### Scenario: drift is detected offline
+#### Scenario: Extraction drift is detected offline
 
-- **WHEN** a generated Python file, source snapshot, license, metadata, or
-  exclusion list differs from the approved projection
-- **THEN** `paper-humanizer:check` or `paper-humanizer:idempotence` fails with
-  structured drift information without executing the runtime
+- **WHEN** an extraction artifact differs from the pinned `vendor/paper-humanizer` bytes
+- **THEN** extraction verification fails with structured drift information without executing the
+  runtime

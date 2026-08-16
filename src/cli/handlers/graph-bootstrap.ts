@@ -8,6 +8,7 @@ import { RESEARCH_MAIN_GRAPH_PROFILE_TEXT } from "../../core/graph-profiles/rese
 import { ACADEMIC_PAPER_GRAPH_PROFILE_TEXT } from "../../core/graph-profiles/academic-paper.js";
 import { ACADEMIC_PAPER_REVIEWER_GRAPH_PROFILE_TEXT } from "../../core/graph-profiles/academic-paper-reviewer.js";
 import { ACADEMIC_PIPELINE_GRAPH_PROFILE_TEXT } from "../../core/graph-profiles/academic-pipeline.js";
+import { PAPER_HUMANIZER_GRAPH_PROFILE_TEXT } from "../../core/graph-profiles/paper-humanizer.js";
 import { GraphWorkspaceConfigSchema } from "../../core/contracts/graph-workspace.js";
 import { loadCapabilityRegistry } from "../../capabilities/registry.js";
 import { inspectGraphWorkspaceFormat, loadGraphWorkspaceIndex } from "../../core/runtime/graph-workspace-index.js";
@@ -56,6 +57,7 @@ async function writeGraphWorkspace(workspace: string, tools: string[], literatur
   await writeFile(path.join(workspace, "profiles", "academic-paper.yaml"), ACADEMIC_PAPER_GRAPH_PROFILE_TEXT, "utf8");
   await writeFile(path.join(workspace, "profiles", "academic-paper-reviewer.yaml"), ACADEMIC_PAPER_REVIEWER_GRAPH_PROFILE_TEXT, "utf8");
   await writeFile(path.join(workspace, "profiles", "academic-pipeline.yaml"), ACADEMIC_PIPELINE_GRAPH_PROFILE_TEXT, "utf8");
+  await writeFile(path.join(workspace, "profiles", "paper-humanizer.yaml"), PAPER_HUMANIZER_GRAPH_PROFILE_TEXT, "utf8");
   await writeFile(path.join(workspace, "specs", "project.md"), '---\nschema_version: "2"\nproject_id: project\n---\n\n# Project intent\n\n## Research question\n\n## Scope and boundaries\n\n## Method stance\n\n## Expected contribution\n', "utf8");
   await writeFile(path.join(workspace, "specs", "sources.yaml"), stringify({ schema_version: "2", sources: [] }), "utf8");
   await writeFile(path.join(workspace, "specs", "claims.yaml"), stringify({ schema_version: "2", claims: [] }), "utf8");

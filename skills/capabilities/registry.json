@@ -53,6 +53,16 @@
       "manifest_sha256": "32f8518b11346df25865621b30d05936233a6f80a97d388e11ee6d1379df8df2"
     },
     {
+      "capability_id": "cap-check-paper-humanization-review",
+      "source_path": "cap-check-paper-humanization-review",
+      "manifest_sha256": "ce05890ad13b82e8347901bf0b0c4a088f6f0a05882878657091fde01bab7d7a"
+    },
+    {
+      "capability_id": "cap-check-paper-humanization-verification",
+      "source_path": "cap-check-paper-humanization-verification",
+      "manifest_sha256": "4a10be43f3142569456c22f96c5257f1e1b2721ceab29544d2b6b0665bad17aa"
+    },
+    {
       "capability_id": "cap-check-passport-verifier",
       "source_path": "cap-check-passport-verifier",
       "manifest_sha256": "95d22b675c1ac9e1abbc1481110b80ea7802783d8625c22226af79ca32d57753"
@@ -148,6 +158,11 @@
       "manifest_sha256": "7c5257223c52e86a3be236ebece631195e96e07be6c9501a4b734436b553f0e0"
     },
     {
+      "capability_id": "cap-generation-humanization-reference",
+      "source_path": "cap-generation-humanization-reference",
+      "manifest_sha256": "270d12dd61c079eec7f524672aace77005420180839982972b4aa953c213a0d8"
+    },
+    {
       "capability_id": "cap-generation-manuscript-drafting",
       "source_path": "cap-generation-manuscript-drafting",
       "manifest_sha256": "5fa81411a2f715edbc1d96cb87fbbb0306e48faae9ea4f40dee19a2f455bb161"
@@ -176,6 +191,11 @@
       "capability_id": "cap-judgment-specialist-review",
       "source_path": "cap-judgment-specialist-review",
       "manifest_sha256": "aebadfebdbc9ca7e75adb8fcc8d064d455c81bec95db544f616533bda82ddecc"
+    },
+    {
+      "capability_id": "cap-transform-paper-humanization-revision",
+      "source_path": "cap-transform-paper-humanization-revision",
+      "manifest_sha256": "913141498828f5daa276c5be503bfee227a61ce90066cfbc8bd72257d1160be1"
     },
     {
       "capability_id": "cap-transform-revision-patching",

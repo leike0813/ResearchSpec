@@ -34,7 +34,7 @@ export const PipelineProfileChildSchema = z.strictObject({
 
 export const PipelineProfileSchema = z.strictObject({
   schema_version: z.literal(CURRENT_WORKSPACE_SCHEMA_VERSION),
-  profile_id: z.enum(["academic-pipeline", "review-response", "paper-humanizer"]),
+  profile_id: z.enum(["academic-pipeline", "review-response"]),
   profile_version: z.string().trim().min(1),
   entries: z.array(PipelineProfileEntrySchema).min(1),
   children: z.array(PipelineProfileChildSchema),
@@ -84,7 +84,7 @@ export const PipelineProfileSchema = z.strictObject({
     refs(entry.entry_points, childIds, ["entries", index, "entry_points"], "child node", context);
     uniqueStrings(entry.entry_points, ["entries", index, "entry_points"], context);
   }
-  const gateOwnerIds = new Set([...childIds, ...(value.profile_id === "paper-humanizer" ? value.entries.map((item) => item.entry_id) : [])]);
+  const gateOwnerIds = new Set(childIds);
   const gateOwners = new Map(value.gates.map((item) => [item.gate_id, item.owner_node_id]));
   const branchOwners = new Map(value.branches.map((item) => [item.decision_id, item.owner_node_id]));
   for (const [index, child] of value.children.entries()) {
@@ -147,11 +147,7 @@ export const PipelineProfileSchema = z.strictObject({
   }
 
   const template = value.revision_round_template;
-  if (value.profile_id === "paper-humanizer") {
-    if (value.children.length > 0 || value.parallel_groups.length > 0 || value.branches.length > 0 || value.transitions.length > 0 || template !== null) {
-      context.addIssue({ code: "custom", path: ["profile_id"], message: "Paper Humanizer profile must be a one-shot profile without workflow graph state." });
-    }
-  } else if (template === null) {
+  if (template === null) {
     context.addIssue({ code: "custom", path: ["revision_round_template"], message: "Pipeline profiles require a revision round template." });
   } else {
     ref(template.revision_node_id, childIds, ["revision_round_template", "revision_node_id"], "child node", context);

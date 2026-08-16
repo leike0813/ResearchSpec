@@ -1,3 +1,21 @@
+<!--
+══════════════════════════════════════════════
+Paper Humanizer 提取工件（Extraction Artifact）
+══════════════════════════════════════════════
+工件类型: capability
+能力/包 ID: PH-CAP-02 full-workflow
+提取日期: 2026-08-16
+提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
+来源对照（source mapping）:
+    - vendor/paper-humanizer/agents/full.md（全文）
+变更台账（ledger）:
+    1. [保留] 上游 full 工作流全文保留。
+    2. [标注] 工作流状态机与 plan/gate 语义在 authoring 阶段由 graph profile/Gate/Decision 承接。
+说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改
+      一律推迟到 authoring 阶段，并另行记录。
+══════════════════════════════════════════════
+-->
+
 # Full-mode workflow
 
 Use this playbook only after `SKILL.md` routes the request to full mode. First read `agents/review.md`, `references/diagnostic-guidance.md`, and `references/document-yaml-contract.md` completely.
@@ -33,10 +51,7 @@ review → plan negotiation ↔ user
 
 The user's initial request authorizes review and plan creation only. It never approves an edit or final candidate by itself.
 
-Use one task-local workspace outside the Skill package. Its `state.yaml` is the
-sole authority for this Skill's task-local runtime state; ResearchSpec's
-subflow `control.yaml` remains the lifecycle, Gate, Decision, and transition
-authority. These files are regenerated read-only views:
+Use one task-local workspace outside the Skill package. Its `state.yaml` is the sole workflow authority. These files are regenerated read-only views:
 
 - `review-report.md`
 - `revision-plan.md`

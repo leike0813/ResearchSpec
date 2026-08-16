@@ -13,6 +13,16 @@ export interface AuthoringKnowledgeSource {
   output_path: string;
 }
 
+export interface AuthoringPackageAsset {
+  extraction_artifact_id: string;
+  output_path: string;
+}
+
+export interface AuthoringOptions {
+  extractionIndexPath?: string;
+  origin?: CapabilityManifest["provenance"]["origin"];
+}
+
 export interface AuthoringInputSource {
   role: string;
   schema_ref: string;
@@ -35,7 +45,11 @@ export interface CapabilityAuthoringSource {
     validator_id: string;
     entrypoint_path: string;
     args_template: string[];
+    /** Optional authored wrapper path; defaults to the primary extraction artifact. */
+    source_path?: string;
   };
+  /** Non-validator script/tool files copied into the package, e.g. parsers invoked by the procedure. */
+  package_assets?: AuthoringPackageAsset[];
   title: string;
   description: string;
   class: CapabilityManifest["class"];
@@ -61,8 +75,14 @@ export function sha256(text: string): string {
   return createHash("sha256").update(text, "utf8").digest("hex");
 }
 
-export async function authorCapabilityPackage(outputRoot: string, source: CapabilityAuthoringSource): Promise<AuthoringResult> {
-  const index = JSON.parse(await readFile(path.resolve("docs/ars_extraction/extraction-index.json"), "utf8")) as {
+function stripExtractionHeader(text: string): string {
+  const marker = text.indexOf("-->");
+  if (marker === -1) return text;
+  return text.slice(marker + 3).replace(/^\r?\n+/, "");
+}
+
+export async function authorCapabilityPackage(outputRoot: string, source: CapabilityAuthoringSource, options: AuthoringOptions = {}): Promise<AuthoringResult> {
+  const index = JSON.parse(await readFile(path.resolve(options.extractionIndexPath ?? "docs/ars_extraction/extraction-index.json"), "utf8")) as {
     artifacts: Array<{
       artifact_id: string;
       path: string;
@@ -98,6 +118,17 @@ export async function authorCapabilityPackage(outputRoot: string, source: Capabi
     });
   }
 
+  for (const asset of source.package_assets ?? []) {
+    const assetArtifact = byId.get(asset.extraction_artifact_id);
+    if (!assetArtifact) throw new Error(`Missing extraction artifact: ${asset.extraction_artifact_id}`);
+    const assetSourceText = await readFile(assetArtifact.path, "utf8");
+    const assetText = asset.output_path.endsWith(".py") ? stripExtractionHeader(assetSourceText) : assetSourceText;
+    const assetPath = path.join(packageRoot, ...asset.output_path.split("/"));
+    await mkdir(path.dirname(assetPath), { recursive: true });
+    await writeFile(assetPath, assetText, "utf8");
+    files.push(path.relative(packageRoot, assetPath).split(path.sep).join("/"));
+  }
+
   const validators: CapabilityManifest["validators"] = [{
     validator_id: "capability.policy.output_roles",
     kind: "policy",
@@ -106,9 +137,11 @@ export async function authorCapabilityPackage(outputRoot: string, source: Capabi
     error_codes: ["output_roles_invalid"],
   }];
   if (source.script_validator) {
-    const scriptArtifact = byId.get(source.extraction_artifact_id);
-    if (!scriptArtifact) throw new Error(`Missing script extraction artifact: ${source.extraction_artifact_id}`);
-    const scriptText = await readFile(scriptArtifact.path, "utf8");
+    const scriptArtifact = byId.get(source.script_validator.source_path ? "" : source.extraction_artifact_id);
+    const scriptText = source.script_validator.source_path
+      ? await readFile(path.resolve(source.script_validator.source_path), "utf8")
+      : (scriptArtifact ? await readFile(scriptArtifact.path, "utf8") : "");
+    if (!scriptText) throw new Error(`Missing script source for ${source.script_validator.validator_id}`);
     const entrypointPath = source.script_validator.entrypoint_path;
     const scriptPath = path.join(packageRoot, ...entrypointPath.split("/"));
     await mkdir(path.dirname(scriptPath), { recursive: true });
@@ -144,7 +177,7 @@ export async function authorCapabilityPackage(outputRoot: string, source: Capabi
     knowledge_refs: knowledgeRefs,
     gate_policy: source.gate_policy,
     provenance: {
-      origin: "ars-derived",
+      origin: options.origin ?? "ars-derived",
       extraction_artifact_ids: requiredIds,
       upstream_sources: capabilityArtifact
         ? [{ path: capabilityArtifact.path, sha256: capabilityArtifact.sha256 }]
@@ -226,7 +259,7 @@ ${manifest.outputs.map((item) => `- \`${item.role}\` (${item.schema_ref})`).join
 ## Knowledge
 
 ${manifest.knowledge_refs.map((item) => `- Load knowledge ID \`${item.knowledge_id}\` from \`${item.path}\`.`).join("\n")}
-
+${(source.package_assets ?? []).length > 0 ? `\n## Tools\n\n${(source.package_assets ?? []).map((item) => `- \`${item.output_path}\` is packaged from extraction artifact \`${item.extraction_artifact_id}\`; invoke it only through the declared runner and arguments.`).join("\n")}\n` : ""}
 ## Procedure
 
 ${procedureText.trim() ? procedureText.trim() : "Perform only the procedure described by the referenced knowledge and extraction artifacts."}

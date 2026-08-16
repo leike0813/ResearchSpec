@@ -11,7 +11,6 @@ import {
 } from "./contracts.js";
 import { boundaryDeliverables } from "../workflow/boundary-deliverables.js";
 import { REVIEW_RESPONSE_ROUTE } from "./review-response.js";
-import { PAPER_HUMANIZER_ROUTES } from "./paper-humanizer.js";
 
 const stableSpec = (id: Extract<PrerequisiteRequirement, { kind: "stable_spec" }>["id"]): PrerequisiteRequirement => ({ kind: "stable_spec", id });
 const handoffRole = (id: string): PrerequisiteRequirement => ({ kind: "handoff_role", id });
@@ -166,8 +165,6 @@ export function getArsuSkillDefinition(skillId: ArsuSkillId): ArsuSkillRouteDefi
 
 export function getArsuRoute(routeRef: RouteRef): ArsuRouteDefinition {
   if (routeRef === REVIEW_RESPONSE_ROUTE.route_ref) return REVIEW_RESPONSE_ROUTE;
-  const paperHumanizerRoute = PAPER_HUMANIZER_ROUTES.find((route) => route.route_ref === routeRef);
-  if (paperHumanizerRoute) return paperHumanizerRoute;
   const route = ARSU_ROUTING_CATALOG.skills.flatMap((skill) => skill.routes)
     .find((item) => item.route_ref === routeRef);
   if (!route) throw new Error(`Unknown ARSU route: ${routeRef}`);

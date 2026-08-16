@@ -1,97 +1,102 @@
 import assert from "node:assert/strict";
-import { mkdtempSync, readFileSync, rmSync, writeFileSync, existsSync } from "node:fs";
-import { spawnSync } from "node:child_process";
-import os from "node:os";
+import { createHash } from "node:crypto";
+import { mkdtemp, readFile, readdir, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { test } from "node:test";
 
-import { PAPER_HUMANIZER_FULL_ROUTE, PAPER_HUMANIZER_REVIEW_ROUTE } from "../src/arsu-converter/routing/paper-humanizer.js";
-import { PAPER_HUMANIZER_PROFILE } from "../src/arsu-converter/workflow/paper-humanizer.js";
+import { authorCapabilityPackage } from "../src/arsu-converter/authoring/author.js";
+import { PAPER_HUMANIZER_AUTHORING_OPTIONS, PAPER_HUMANIZER_AUTHORING_SOURCES } from "../src/arsu-converter/authoring/paper-humanizer-sources.js";
+import { parseCapabilityGraphProfile, findUnreachableGraphNodes } from "../src/core/contracts/capability-graph.js";
+import { loadCapabilityRegistry, validateGraphAgainstCapabilityRegistry } from "../src/capabilities/registry.js";
+import { PAPER_HUMANIZER_REFERENCE_MODE_SKILL_PATH } from "../src/core-skills/paper-humanizer/reference-mode.js";
+import { PAPER_HUMANIZER_GRAPH_PROFILE, PAPER_HUMANIZER_GRAPH_PROFILE_TEXT } from "../src/core/graph-profiles/paper-humanizer.js";
 
 const root = process.cwd();
-const pythonProject = path.join(process.env.HOME ?? "/home/joshua", ".ar");
-const pythonPrefix = ["run", `--project=${pythonProject}`, "--locked", "--", "python"];
-const documentScript = path.join(root, "skills/paper-humanizer/scripts/document_pipeline.py");
-const workflowScript = path.join(root, "skills/paper-humanizer/scripts/full_workflow.py");
 
-function runPython(script: string, args: string[], cwd = root): { status: number | null; output: Record<string, unknown> } {
-  const result = spawnSync("uv", [...pythonPrefix, script, ...args], { cwd, encoding: "utf8", env: { ...process.env, PYTHONDONTWRITEBYTECODE: "1" } });
-  assert.equal(result.error, undefined, result.error?.message);
-  assert.equal(result.stderr, "", result.stderr);
-  return { status: result.status, output: JSON.parse(result.stdout) as Record<string, unknown> };
+function sha256(text: string | Buffer): string {
+  return createHash("sha256").update(text).digest("hex");
 }
 
-void test("paper-humanizer exposes independent review/full routes and a one-shot profile", () => {
-  assert.equal(PAPER_HUMANIZER_REVIEW_ROUTE.route_ref, "paper-humanizer:review");
-  assert.equal(PAPER_HUMANIZER_REVIEW_ROUTE.gate_policy.level, "none");
-  assert.deepEqual(PAPER_HUMANIZER_FULL_ROUTE.gate_policy.gate_kinds, ["paper-humanizer-acceptance"]);
-  assert.deepEqual(PAPER_HUMANIZER_PROFILE.entries.map((entry) => entry.route_ref), ["paper-humanizer:review", "paper-humanizer:full"]);
-  assert.equal(PAPER_HUMANIZER_PROFILE.children.length, 0);
-  assert.deepEqual(PAPER_HUMANIZER_PROFILE.gates.map((gate) => gate.gate_id), ["paper-humanizer-acceptance"]);
-  assert.equal(PAPER_HUMANIZER_PROFILE.revision_round_template, null);
-});
-
-void test("published tree uses the complete Python operational surface", () => {
-  const skillRoot = path.join(root, "skills/paper-humanizer");
-  for (const relative of [
-    "SKILL.md",
-    "agents/review.md",
-    "agents/full.md",
-    "references/diagnostic-guidance.md",
-    "references/document-yaml-contract.md",
-    "scripts/document_pipeline.py",
-    "scripts/full_workflow.py",
-  ]) assert.equal(existsSync(path.join(skillRoot, relative)), true, relative);
-  assert.equal(existsSync(path.join(skillRoot, "agents/openai.yaml")), false);
-  assert.equal(existsSync(path.join(skillRoot, "scripts/document-pipeline.mjs")), false);
-  assert.equal(existsSync(path.join(skillRoot, "scripts/full-workflow.mjs")), false);
-  const metadata = JSON.parse(readFileSync(path.join(skillRoot, "metadata.json"), "utf8")) as { runtime?: string; excluded?: string[] };
-  assert.equal(metadata.runtime, "python-3.11-standard-library");
-  assert.ok(metadata.excluded?.includes("agents/openai.yaml"));
-});
-
-void test("Python document runtime preserves protected regions and round-trips Quarto", () => {
-  const temporary = mkdtempSync(path.join(os.tmpdir(), "paper-humanizer-document-"));
-  try {
-    const source = "---\ntitle: Demo\n---\nA sentence with enough words to produce a useful diagnostic for a human reader while preserving syntax.\n\n```js\nconst value = 1;\n```\nSee [source](https://example.com) and [@smith2020].\n";
-    const input = path.join(temporary, "demo.qmd");
-    const artifact = path.join(temporary, "document.yaml");
-    const roundTrip = path.join(temporary, "roundtrip.qmd");
-    writeFileSync(input, source);
-    const extracted = runPython(documentScript, ["extract", "--input", input, "--format", "auto", "--output", artifact]);
-    assert.equal(extracted.status, 0);
-    const document = JSON.parse(readFileSync(artifact, "utf8")) as { source: { format: string }; segments: Array<{ kind: string }>; analysis: { sentence_count: number } };
-    assert.equal(document.source.format, "quarto");
-    assert.ok(document.segments.some((segment) => segment.kind === "protected"));
-    assert.ok(document.analysis.sentence_count >= 1);
-    const rendered = runPython(documentScript, ["render", "--input", artifact, "--output", roundTrip]);
-    assert.equal(rendered.status, 0);
-    assert.equal(readFileSync(roundTrip, "utf8"), source);
-    const analyzed = path.join(temporary, "analyzed.yaml");
-    const refreshed = runPython(documentScript, ["analyze", "--input", artifact, "--output", analyzed]);
-    assert.equal(refreshed.status, 0);
-    assert.equal(runPython(documentScript, ["validate", "--input", analyzed]).status, 0);
-  } finally {
-    rmSync(temporary, { recursive: true, force: true });
+void test("paper-humanizer extraction index verifies against the pinned vendor", async () => {
+  const index = JSON.parse(await readFile(path.join(root, "docs/paper-humanizer_extraction/extraction-index.json"), "utf8")) as {
+    artifact_count: number;
+    artifacts: Array<{ artifact_id: string; path: string; sha256: string; sources: string[] }>;
+  };
+  assert.equal(index.artifact_count, 9);
+  for (const artifact of index.artifacts) {
+    assert.equal(artifact.sources.length, 1);
+    const source = artifact.sources[0] ?? "";
+    const rangeMatch = /（L(\d+)-(\d+)）$/.exec(source);
+    const sourcePath = source.replace("（全文）", "").replace(/（L\d+-\d+）$/, "").replace("vendor/paper-humanizer/", "vendor/paper-humanizer/upstream/");
+    const upstreamText = await readFile(path.join(root, sourcePath), "utf8");
+    const upstream = rangeMatch
+      ? upstreamText.split("\n").slice(Number(rangeMatch[1]) - 1, Number(rangeMatch[2])).join("\n") + "\n"
+      : upstreamText;
+    assert.equal(sha256(upstream), artifact.sha256, artifact.artifact_id);
   }
 });
 
-void test("Python full workflow starts with a local gate without owning ResearchSpec control", () => {
-  const temporary = mkdtempSync(path.join(os.tmpdir(), "paper-humanizer-workflow-"));
-  try {
-    const input = path.join(temporary, "demo.md");
-    const artifact = path.join(temporary, "document.yaml");
-    const workspace = path.join(temporary, "work");
-    writeFileSync(input, "A plain sentence for a deterministic workflow test.\n");
-    assert.equal(runPython(documentScript, ["extract", "--input", input, "--format", "auto", "--output", artifact]).status, 0);
-    const initialized = runPython(workflowScript, ["init", "--document", artifact, "--workspace", workspace]);
-    assert.equal(initialized.status, 0);
-    const gate = runPython(workflowScript, ["gate", "--workspace", workspace]);
-    assert.equal(gate.status, 0);
-    assert.equal((gate.output.summary as { next_action?: string }).next_action, "record_review");
-    assert.equal(existsSync(path.join(workspace, "state.yaml")), true);
-    assert.equal(existsSync(path.join(workspace, "review-report.md")), true);
-  } finally {
-    rmSync(temporary, { recursive: true, force: true });
+void test("paper-humanizer capability packages are authored and registered", async () => {
+  const registry = await loadCapabilityRegistry();
+  for (const capabilityId of [
+    "cap-generation-humanization-reference",
+    "cap-check-paper-humanization-review",
+    "cap-transform-paper-humanization-revision",
+    "cap-check-paper-humanization-verification",
+  ]) {
+    const registered = registry.capabilities.get(capabilityId);
+    assert.ok(registered, capabilityId);
+    assert.equal(registered.manifest.provenance.origin, "vendor-derived");
+    assert.ok(registered.manifest.provenance.extraction_artifact_ids?.some((id) => id.startsWith("PH-")));
+    assert.match(await readFile(path.join(registered.packageRoot, "SKILL.md"), "utf8"), /## Completion/);
+    assert.equal((await readdir(path.join(registered.packageRoot, "knowledge"))).length > 0, true);
   }
+});
+
+void test("paper-humanizer graph profile resolves against the bundled registry", async () => {
+  const graph = parseCapabilityGraphProfile(PAPER_HUMANIZER_GRAPH_PROFILE);
+  assert.equal(graph.profile_id, "paper-humanizer");
+  assert.deepEqual(findUnreachableGraphNodes(graph), []);
+  const registry = await loadCapabilityRegistry();
+  assert.deepEqual(validateGraphAgainstCapabilityRegistry(registry, graph), []);
+  assert.equal(PAPER_HUMANIZER_GRAPH_PROFILE_TEXT.includes("paper-humanizer-plan"), true);
+  assert.deepEqual(graph.gates.map((gate) => gate.gate_id), ["paper-humanizer-plan", "paper-humanizer-exit"]);
+  assert.deepEqual(graph.revision_round_template, {
+    revision_node_id: "revision",
+    review_node_id: "acceptance",
+    continue_option_id: "revise",
+    exit_option_id: "accept",
+  });
+});
+
+void test("paper-humanizer authoring is deterministic and idempotent", async () => {
+  const temp = await mkdtemp(path.join(tmpdir(), "researchspec-paper-authoring-"));
+  try {
+    for (const source of PAPER_HUMANIZER_AUTHORING_SOURCES) {
+      await authorCapabilityPackage(temp, source, PAPER_HUMANIZER_AUTHORING_OPTIONS);
+    }
+    const before = new Map<string, string>();
+    for (const source of PAPER_HUMANIZER_AUTHORING_SOURCES) {
+      before.set(source.capability_id, await readFile(path.join(temp, source.capability_id, "SKILL.md"), "utf8"));
+    }
+    for (const source of PAPER_HUMANIZER_AUTHORING_SOURCES) {
+      await authorCapabilityPackage(temp, source, PAPER_HUMANIZER_AUTHORING_OPTIONS);
+      assert.equal(await readFile(path.join(temp, source.capability_id, "SKILL.md"), "utf8"), before.get(source.capability_id));
+    }
+  } finally {
+    await rm(temp, { recursive: true, force: true });
+  }
+});
+
+void test("package scripts expose the capability authoring entrypoint", async () => {
+  const pkg = JSON.parse(await readFile(path.join(root, "package.json"), "utf8")) as { scripts: Record<string, string> };
+  assert.match(pkg.scripts["paper-humanizer:author"] ?? "", /paper-humanizer-cli\.js/);
+  assert.equal("paper-humanizer:convert" in pkg.scripts, false);
+});
+
+void test("ARSU prose work references the capability-graph Reference-mode entrypoint", async () => {
+  assert.equal(PAPER_HUMANIZER_REFERENCE_MODE_SKILL_PATH, "cap-generation-humanization-reference/SKILL.md");
+  const skill = await readFile(path.join(root, "skills/review-response/SKILL.md"), "utf8");
+  assert.match(skill, /cap-generation-humanization-reference\/SKILL\.md/);
 });

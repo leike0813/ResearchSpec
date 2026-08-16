@@ -25,8 +25,8 @@ void test("capability parity audit reports complete coverage above thresholds", 
       knowledge_below_threshold: string[];
       flow_retained: unknown[];
     };
-    assert.equal(summary.total, 38);
-    assert.equal(summary.operational, 38);
+    assert.equal(summary.total, 42);
+    assert.equal(summary.operational, 42);
     assert.deepEqual(summary.below_section_threshold, []);
     assert.deepEqual(summary.below_rule_threshold, []);
     assert.deepEqual(summary.output_missing, []);
@@ -36,7 +36,8 @@ void test("capability parity audit reports complete coverage above thresholds", 
     assert.ok(summary.avg_rule_coverage >= 0.6);
     const report = JSON.parse(await readFile(reportPath, "utf8")) as { schema_version: string; packages: Array<{ capability_id: string }> };
     assert.equal(report.schema_version, "1");
-    assert.equal(report.packages.length, 38);
+    assert.equal(report.packages.length, 42);
+    assert.ok(report.packages.some((item) => item.capability_id === "cap-check-paper-humanization-review"));
   } finally {
     await rm(root, { recursive: true, force: true });
   }

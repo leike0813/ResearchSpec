@@ -1,9 +1,8 @@
 import path from "node:path";
 
 import { ACADEMIC_PIPELINE_PROFILE } from "../arsu-converter/workflow/academic-pipeline.js";
-import { ACADEMIC_PIPELINE_PROFILE_PROJECTION, REVIEW_RESPONSE_PROFILE_PROJECTION, PAPER_HUMANIZER_PROFILE_PROJECTION } from "../arsu-converter/workflow/generate.js";
+import { ACADEMIC_PIPELINE_PROFILE_PROJECTION, REVIEW_RESPONSE_PROFILE_PROJECTION } from "../arsu-converter/workflow/generate.js";
 import { REVIEW_RESPONSE_PROFILE } from "../arsu-converter/workflow/review-response.js";
-import { PAPER_HUMANIZER_PROFILE } from "../arsu-converter/workflow/paper-humanizer.js";
 import type { Diagnostic } from "../core/validation/types.js";
 import { planFile, sha256, type PlannedWrite } from "../core/workspace/write-plan.js";
 import {
@@ -51,7 +50,6 @@ export async function planWorkspaceDelivery(input: {
   const profileDefinitions = [
     { profile: ACADEMIC_PIPELINE_PROFILE, projection: ACADEMIC_PIPELINE_PROFILE_PROJECTION },
     { profile: REVIEW_RESPONSE_PROFILE, projection: REVIEW_RESPONSE_PROFILE_PROJECTION },
-    { profile: PAPER_HUMANIZER_PROFILE, projection: PAPER_HUMANIZER_PROFILE_PROJECTION },
   ] as const;
   const profileOperations: PlannedWrite[] = [];
   const profileInstallations: ManagedInstallation[] = [];

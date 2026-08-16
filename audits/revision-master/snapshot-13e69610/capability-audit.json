@@ -12,7 +12,9 @@
     "blob_total_bytes": 567926,
     "tracked_entry_set_sha256": "9d134f411e440250d3bcda12a082bfeb8df74467556dabb7eb7668793fa7005a",
     "manifest_format": "<lowercase-sha256><two ASCII spaces><POSIX path>\\n per sorted entry; set_hash = sha256 of UTF-8 manifest",
-    "excluded_submodule_artifact": ["scripts/.gitkeep"],
+    "excluded_submodule_artifact": [
+      "scripts/.gitkeep"
+    ],
     "exclusion_rationale": "scripts/.gitkeep is a submodule aggregation placeholder, not Skill content",
     "blob_sha_field_semantics": "Per-entry SHA-256 of working-tree bytes downloaded via raw.githubusercontent.com; not Git's blob SHA-1, which uses the prefixed blob header."
   },
@@ -41,28 +43,36 @@
     {
       "id": "python-stdlib",
       "kind": "language-runtime",
-      "evidence": ["scripts/*.py header imports: argparse, sqlite3, dataclasses, datetime, hashlib, json, os, pathlib, re, sys, textwrap, typing"],
+      "evidence": [
+        "scripts/*.py header imports: argparse, sqlite3, dataclasses, datetime, hashlib, json, os, pathlib, re, sys, textwrap, typing"
+      ],
       "disposition": "retain",
       "note": "Python 3 standard library only; no third-party imports in any of the 8 scripts."
     },
     {
       "id": "pyyaml",
       "kind": "library-runtime",
-      "evidence": ["SKILL.md 第三方运行时依赖 section"],
+      "evidence": [
+        "SKILL.md 第三方运行时依赖 section"
+      ],
       "disposition": "declared-third-party",
       "note": "Required for gate-and-render rendering of YAML manifests. ResearchSpec does not auto-install."
     },
     {
       "id": "jinja2",
       "kind": "library-runtime",
-      "evidence": ["SKILL.md 第三方运行时依赖 section"],
+      "evidence": [
+        "SKILL.md 第三方运行时依赖 section"
+      ],
       "disposition": "declared-third-party",
       "note": "Required for gate-and-render view rendering. ResearchSpec does not auto-install."
     },
     {
       "id": "sqlite3",
       "kind": "data-runtime",
-      "evidence": ["scripts/workspace_db.py schema and runtime language context"],
+      "evidence": [
+        "scripts/workspace_db.py schema and runtime language context"
+      ],
       "disposition": "retain",
       "note": "Skill-local workspace DB; never bound to ResearchSpec control plane authority."
     }
@@ -71,32 +81,44 @@
   "security_findings": [
     {
       "id": "no-credentials",
-      "evidence": ["No hard-coded tokens, API keys, or credentials in any tracked file"],
+      "evidence": [
+        "No hard-coded tokens, API keys, or credentials in any tracked file"
+      ],
       "disposition": "clear"
     },
     {
       "id": "no-network",
-      "evidence": ["No `urllib`, `requests`, `httpx`, `socket`, or `http.client` imports across scripts/*.py"],
+      "evidence": [
+        "No `urllib`, `requests`, `httpx`, `socket`, or `http.client` imports across scripts/*.py"
+      ],
       "disposition": "clear"
     },
     {
       "id": "no-subprocess",
-      "evidence": ["No `subprocess`, `os.system`, `os.popen` usage across scripts/*.py"],
+      "evidence": [
+        "No `subprocess`, `os.system`, `os.popen` usage across scripts/*.py"
+      ],
       "disposition": "clear"
     },
     {
       "id": "no-browser",
-      "evidence": ["No browser-control or browser-automation imports"],
+      "evidence": [
+        "No browser-control or browser-automation imports"
+      ],
       "disposition": "clear"
     },
     {
       "id": "no-telemetry",
-      "evidence": ["No telemetry, no usage reporting"],
+      "evidence": [
+        "No telemetry, no usage reporting"
+      ],
       "disposition": "clear"
     },
     {
       "id": "no-pii-or-sensitive-payload",
-      "evidence": ["Reviewed SKILL.md, references/*.md, scripts/*.py, assets/runtime/skill-runtime-digest.md; no Cookie material, no embedded keys, no private endpoints, no local user paths"],
+      "evidence": [
+        "Reviewed SKILL.md, references/*.md, scripts/*.py, assets/runtime/skill-runtime-digest.md; no Cookie material, no embedded keys, no private endpoints, no local user paths"
+      ],
       "disposition": "clear"
     }
   ],
@@ -104,7 +126,9 @@
     {
       "id": "skill-instructions",
       "kind": "skill-instructions",
-      "files": ["SKILL.md"]
+      "files": [
+        "SKILL.md"
+      ]
     },
     {
       "id": "stage-references",
@@ -161,7 +185,9 @@
     {
       "id": "schema",
       "kind": "schema",
-      "files": ["assets/schema/revision-master-schema.yaml"]
+      "files": [
+        "assets/schema/revision-master-schema.yaml"
+      ]
     },
     {
       "id": "localization",
@@ -175,7 +201,9 @@
     {
       "id": "runtime-digest",
       "kind": "runtime-digest",
-      "files": ["assets/runtime/skill-runtime-digest.md"]
+      "files": [
+        "assets/runtime/skill-runtime-digest.md"
+      ]
     },
     {
       "id": "scripts",
@@ -197,7 +225,10 @@
       "id": "skill-rename",
       "kind": "renamed",
       "summary": "Skill frontmatter name `revision-master` -> `review-response`. Internal identifiers (DB filename, script paths, log keys) also renamed.",
-      "applied_to": ["SKILL.md", "scripts/**/*.py"],
+      "applied_to": [
+        "SKILL.md",
+        "scripts/**/*.py"
+      ],
       "evidence": "skills/review-response/SKILL.md frontmatter name field; workspace DB moved to work/review-response/review-response.db.",
       "approved": true
     },
@@ -205,7 +236,11 @@
       "id": "instance-root-paths",
       "kind": "renamed",
       "summary": "Upstream artifact-root paths (`revision-master.db`, `revision-master/scripts/...`) moved to ResearchSpec subflow layout (`work/review-response/review-response.db`, `skills/review-response/scripts/...`, `views/...`).",
-      "applied_to": ["SKILL.md", "references/*.md", "scripts/**/*.py"],
+      "applied_to": [
+        "SKILL.md",
+        "references/*.md",
+        "scripts/**/*.py"
+      ],
       "evidence": "scripts/gate_and_render_workspace.py: `--instance-root <INSTANCE_ROOT>` replaces upstream `--artifact-root`; all view paths now resolve under instance-root views/.",
       "approved": true
     },
@@ -213,7 +248,9 @@
       "id": "researchspec-control-plane",
       "kind": "added",
       "summary": "New section `ResearchSpec 控制面边界` in SKILL.md explicitly declares control.yaml / handoff.md authority and prohibits the Skill from mutating them.",
-      "applied_to": ["SKILL.md"],
+      "applied_to": [
+        "SKILL.md"
+      ],
       "evidence": "skills/review-response/SKILL.md `ResearchSpec 控制面边界` section.",
       "approved": true
     },
@@ -221,7 +258,9 @@
       "id": "control-projection",
       "kind": "added",
       "summary": "Read-only diagnostic control projection hashes (control.yaml, handoff.md, instance id, status, checkpoint) compared at gate-and-render time, fail-closed on drift.",
-      "applied_to": ["scripts/gate_and_render_workspace.py"],
+      "applied_to": [
+        "scripts/gate_and_render_workspace.py"
+      ],
       "evidence": "researchspec_control_projection blocks in scripts/gate_and_render_workspace.py; structured `control_projection_drift` error emitted on mismatch.",
       "approved": true
     },
@@ -229,7 +268,9 @@
       "id": "schema-renamed",
       "kind": "renamed",
       "summary": "Upstream `assets/schema/revision-master-schema.yaml` published as `assets/schema/review-response-schema.yaml` with internal table-name and key renames aligned with the Skill identifier change.",
-      "applied_to": ["assets/schema/revision-master-schema.yaml -> assets/schema/review-response-schema.yaml"],
+      "applied_to": [
+        "assets/schema/revision-master-schema.yaml -> assets/schema/review-response-schema.yaml"
+      ],
       "evidence": "skills/review-response/assets/schema/review-response-schema.yaml (32008 bytes vs upstream 31541 bytes; net +467 bytes for identifier rename and section additions).",
       "approved": true
     },
@@ -237,7 +278,9 @@
       "id": "third-party-runtime-tone",
       "kind": "softened",
       "summary": "Upstream `conda run --no-capture-output -n DataProcessing python -u ...` invocation template removed; third-party dependency section rewritten to declare ResearchSpec does not auto-install and structured blocking errors are returned when PyYAML or Jinja2 is missing.",
-      "applied_to": ["SKILL.md"],
+      "applied_to": [
+        "SKILL.md"
+      ],
       "evidence": "skills/review-response/SKILL.md `第三方运行时依赖` section: 'ResearchSpec 运行时不自动安装依赖... 视图渲染需要的 PyYAML/Jinja2 缺失时，脚本必须返回结构化阻断错误'.",
       "approved": true
     },
@@ -245,16 +288,21 @@
       "id": "review-comment-coverage-appendix",
       "kind": "added",
       "summary": "Stage 3 coverage requirements (primary/supporting/duplicate_filtered span roles, hard 30% / soft 50% thresholds, character-level coverage computation) declared as canonical Stage 3 outputs in the upstream SKILL.md and references/stage-3-comment-atomization.md; the ResearchSpec adaptation restates them with ResearchSpec vocabulary.",
-      "applied_to": ["SKILL.md", "references/stage-3-comment-atomization.md"],
+      "applied_to": [
+        "SKILL.md",
+        "references/stage-3-comment-atomization.md"
+      ],
       "evidence": "Comparison shows the upstream text already contained these thresholds; adaptation is editorial rename + verbatim carry-over with ResearchSpec nomenclature.",
       "approved": true
     },
     {
       "id": "paper-humanizer-reference-mode",
       "kind": "added",
-      "summary": "The Review Response writing constraint now loads the self-contained Paper Humanizer Reference mode entrypoint instead of the retired prose-guidance reference.",
-      "applied_to": ["SKILL.md"],
-      "evidence": "skills/review-response/SKILL.md loads paper-humanizer/SKILL.md before manuscript or response-letter writing and does not reference paper-humanizer/references/prose-guidance.md.",
+      "summary": "The published review-response SKILL loads the capability-graph Paper Humanizer Reference-mode entrypoint before manuscript or response-letter writing.",
+      "applied_to": [
+        "SKILL.md"
+      ],
+      "evidence": "skills/review-response/SKILL.md loads cap-generation-humanization-reference/SKILL.md before manuscript or response-letter writing and does not reference paper-humanizer/references/prose-guidance.md.",
       "approved": true
     }
   ],

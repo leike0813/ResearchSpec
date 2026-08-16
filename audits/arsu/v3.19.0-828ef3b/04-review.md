@@ -4,8 +4,8 @@
 
 | metric | value |
 |---|---|
-| avg section coverage | 0.9513519147963746 |
-| avg rule coverage | 0.9660287081339716 |
+| avg section coverage | 0.9507469705300531 |
+| avg rule coverage | 0.9613275613275615 |
 | below section threshold | 0 |
 | below rule threshold | 0 |
 | output missing | 0 |
@@ -57,6 +57,8 @@
 | `cap-check-collaboration-depth-observer` | 1.000 | 1.000 | 145 | 1 | yes | none |
 | `cap-check-compliance-check` | 0.917 | 1.000 | 200 | 2 | yes | none |
 | `cap-check-contamination-signals` | 1.000 | 1.000 | 46 | 1 | yes | none |
+| `cap-check-paper-humanization-review` | 0.800 | 1.000 | 122 | 3 | yes | none |
+| `cap-check-paper-humanization-verification` | 1.000 | 1.000 | 117 | 3 | yes | none |
 | `cap-check-passport-verifier` | 1.000 | 1.000 | 67 | 1 | yes | none |
 | `cap-check-pdf-read-preflight` | 1.000 | 1.000 | 45 | 1 | yes | none |
 | `cap-check-pre-submission-self-check` | 0.940 | 0.909 | 355 | 1 | yes | none |
@@ -76,12 +78,14 @@
 | `cap-generation-abstract-writing` | 1.000 | 1.000 | 155 | 1 | yes | none |
 | `cap-generation-figure-generation` | 0.763 | 0.667 | 210 | 2 | yes | none |
 | `cap-generation-format-rendering` | 0.952 | 1.000 | 309 | 2 | yes | none |
+| `cap-generation-humanization-reference` | 0.980 | 0.667 | 196 | 1 | yes | none |
 | `cap-generation-manuscript-drafting` | 0.952 | 1.000 | 211 | 3 | yes | none |
 | `cap-generation-report-compilation` | 0.952 | 1.000 | 251 | 2 | yes | none |
 | `cap-judgment-devils-advocate-stress-test` | 0.923 | 1.000 | 218 | 1 | yes | none |
 | `cap-judgment-editorial-judgment` | 1.000 | 1.000 | 188 | 1 | yes | none |
 | `cap-judgment-review-synthesis` | 0.960 | 0.818 | 250 | 1 | yes | none |
 | `cap-judgment-specialist-review` | 0.952 | 1.000 | 199 | 3 | yes | none |
+| `cap-transform-paper-humanization-revision` | 1.000 | 1.000 | 86 | 2 | yes | none |
 | `cap-transform-revision-patching` | 1.000 | 1.000 | 73 | 1 | yes | none |
 | `cap-transform-revision-roadmap-parsing` | 0.892 | 1.000 | 255 | 1 | yes | none |
 | `cap-transform-socratic-mentoring` | 0.853 | 0.818 | 277 | 2 | yes | none |
@@ -90,7 +94,7 @@
 
 | artifact | path | sha256 |
 |---|---|---|
-| parity report | `docs/capability-parity-report.json` | `0c9d95bfde9721b2268ebf1bbe3d0cb16cb41ad03fd5f868a3366674157c9931` |
+| parity report | `docs/capability-parity-report.json` | `38fdb2ab86192cd2bc68ee7d2781073c71237409647d3fa6feea0625efa610c8` |
 | mode-capability review HTML | `audits/arsu/v3.19.0-828ef3b/artifacts/arsu-mode-capability-review.html` | `6f6547b2c8e313893f60645848b1582c37dc69909cee13567487b0aa04dc68d1` |
 | graph-match assessment HTML | `audits/arsu/v3.19.0-828ef3b/artifacts/arsu-mode-graph-match-assessment.html` | `8930ff9639c2285ba6e7a0ea4b3655a990dcfd4b28e1bf33991aae9f64481e48` |
 | gap semantic review HTML | `audits/arsu/v3.19.0-828ef3b/artifacts/arsu-mode-gap-semantic-review.html` | `37dc2895673c8d82a406a9aafd05f8b84a8a77e684a2c6d63a27418444ab3d13` |

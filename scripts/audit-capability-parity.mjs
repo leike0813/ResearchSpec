@@ -6,7 +6,12 @@ import { parse } from "yaml";
 
 const ROOT = process.cwd();
 const SKILLS = path.join(ROOT, "skills", "capabilities");
-const INDEX = JSON.parse(readFileSync(path.join(ROOT, "docs", "ars_extraction", "extraction-index.json"), "utf8"));
+const ARS_INDEX = JSON.parse(readFileSync(path.join(ROOT, "docs", "ars_extraction", "extraction-index.json"), "utf8"));
+const PAPER_HUMANIZER_INDEX = JSON.parse(readFileSync(path.join(ROOT, "docs", "paper-humanizer_extraction", "extraction-index.json"), "utf8"));
+function extractionIndex(provenance = {}) {
+  if (provenance.origin === "vendor-derived") return PAPER_HUMANIZER_INDEX;
+  return ARS_INDEX;
+}
 
 const FLOW_HEADINGS = /phase boundary|enforcement|quick start|trigger conditions|trigger keywords|mode selection|mode spectrum|does not trigger|quick mode|socratic mode activation|changelog|pattern protection|cross-model|tools:|model:|frontmatter|related skills|routing discipline/i;
 const STOP = new Set(["the","a","an","and","or","of","to","in","for","on","with","is","are","be","as","that","this","it","its","from","by","at","not","no","must","shall","never","always","each","every","any","all","when","if","then","your","you","their","they","source","sources"]);
@@ -58,13 +63,16 @@ function auditPackage(packageDir) {
   const skill = readFileSync(path.join(packageDir, "SKILL.md"), "utf8");
   const provenance = manifest.provenance ?? {};
   const artifactIds = provenance.extraction_artifact_ids ?? [];
-  const byId = new Map(INDEX.artifacts.map((a) => [a.artifact_id, a]));
+  const index = extractionIndex(provenance);
+  const byId = new Map(index.artifacts.map((a) => [a.artifact_id, a]));
   const knowledgeArtifactIds = [...new Set(artifactIds)].filter((id) => byId.get(id)?.kind === "knowledge-pack");
   const knowledgeRefs = manifest.knowledge_refs ?? [];
-  const sourceIds = [...new Set(artifactIds)].filter((id) => {
-    const item = byId.get(id);
-    return item && item.path.endsWith(".md") && !item.path.includes("/knowledge/");
-  });
+  const sourceIds = provenance.origin === "vendor-derived"
+    ? [...new Set(artifactIds)].filter((id) => byId.get(id)?.kind === "capability").slice(0, 1)
+    : [...new Set(artifactIds)].filter((id) => {
+        const item = byId.get(id);
+        return item && item.path.endsWith(".md") && !item.path.includes("/knowledge/");
+      });
   const sourceBodies = [];
   for (const id of sourceIds) {
     const item = byId.get(id);

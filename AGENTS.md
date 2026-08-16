@@ -88,14 +88,17 @@ The locked direction is:
 
 The fixed base user-visible agent surface is exactly four ARSU Skills
 (`deep-research`, `academic-paper`, `academic-paper-reviewer`,
-`academic-pipeline`), two Core Skills (`review-response`, `paper-humanizer`), and five Companion Skills (`researchspec-navigate`,
-`researchspec-propose`, `researchspec-decide`, `researchspec-verify`, `researchspec-cli-handbook`). The optional
-`zotero-library` Adapter adds seven literature Skills when selected (`zotero-library-agent`,
+`academic-pipeline`), one Core Skill (`review-response`), five Companion Skills
+(`researchspec-navigate`, `researchspec-propose`, `researchspec-decide`,
+`researchspec-verify`, `researchspec-cli-handbook`), and the bundled capability
+packages projected from `skills/capabilities/registry.json` (currently 42,
+including the four paper-humanizer nodes). The optional `zotero-library` Adapter
+adds seven literature Skills when selected (`zotero-library-agent`,
 `zotero-library-query`, `zotero-literature-acquisition`,
 `zotero-literature-analysis`, `zotero-research-synthesis`,
-`zotero-library-curation`, `zotero-bridge-cli`). Skill-capable tools receive eleven
-fixed base Skills, or eighteen Skills when that Adapter is selected, through
-the configured `skills`, `commands`, or `both` delivery mode; Codex remains
+`zotero-library-curation`, `zotero-bridge-cli`). Skill-capable tools receive
+those fixed Skills plus all registered capability packages through the
+configured `skills`, `commands`, or `both` delivery mode; Codex remains
 Skill-capable in `commands` mode. The 28 command-capable tools receive the
 sixteen current command wrappers when commands are selected. Codex writes project `.agents/skills` and never generates global
 custom prompts; Kimi writes `.kimi-code/skills` and reads `.kimi` only for migration.

@@ -18,9 +18,9 @@ const StableSpecPathSchema = z.enum([
   "specs/manuscript.yaml",
 ]);
 export const RouteRefSchema = z.string().regex(
-  /^(?:deep-research|academic-paper|academic-paper-reviewer|academic-pipeline|review-response|paper-humanizer):[a-z0-9][a-z0-9_-]*$/,
+  /^(?:deep-research|academic-paper|academic-paper-reviewer|academic-pipeline|review-response):[a-z0-9][a-z0-9_-]*$/,
 );
-export type RouteRef = `${ArsuSkillId}:${string}` | `review-response:${string}` | `paper-humanizer:${string}`;
+export type RouteRef = `${ArsuSkillId}:${string}` | `review-response:${string}`;
 
 export const PrerequisiteRequirementSchema = z.discriminatedUnion("kind", [
   z.strictObject({ kind: z.literal("stable_spec"), id: StableSpecPathSchema }),

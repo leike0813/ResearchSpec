@@ -1,0 +1,57 @@
+schema_version: "1"
+capability_id: cap-check-paper-humanization-verification
+title: Paper Humanization Verification
+description: Deterministic and semantic verification that a humanization
+  candidate preserves protected content and every source information unit.
+maturity: operational
+class: verification
+node_kind: checker
+execution_type: mixed
+params: {}
+inputs:
+  - role: manuscript_source
+    schema_ref: manuscript-draft.v1
+    required: true
+    source_policy: handoff
+  - role: humanization_candidate_artifact
+    schema_ref: paper-humanizer-document.v1
+    required: true
+    source_policy: node_output
+outputs:
+  - role: humanization_verification_report
+    schema_ref: humanization-verification.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - manuscript_source
+      - humanization_candidate_artifact
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+knowledge_refs:
+  - knowledge_id: paper-humanizer-taxonomy
+    path: knowledge/paper-humanizer-taxonomy.md
+    content_hash: 1b5d7afa5f39bc2bcad69805106fcea122206e07d81722970d4f37c724c7161b
+    license: MIT
+  - knowledge_id: diagnostic-guidance
+    path: knowledge/diagnostic-guidance.md
+    content_hash: 7e9348e3ca862707e70199cb8ebad171f39dc6e261c141b3946b198d7614cdd5
+    license: MIT
+  - knowledge_id: document-yaml-contract
+    path: knowledge/document-yaml-contract.md
+    content_hash: 953ed9c15d832446b569428426c7e9914d938f2179639d1d726a8d02b9723096
+    license: MIT
+gate_policy: none
+provenance:
+  origin: vendor-derived
+  extraction_artifact_ids:
+    - PH-CAP-05
+    - PH-CAP-03
+    - PH-KP-01
+    - PH-KP-02
+  upstream_sources:
+    - path: docs/paper-humanizer_extraction/capabilities/05_verification_acceptance.md
+      sha256: 287f18d942311f16159d6470eaaa5714280fd1317abb1278e4bb6573e9f72f88
+license: MIT

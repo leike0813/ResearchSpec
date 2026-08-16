@@ -53,9 +53,9 @@ export const SubflowControlSchema = z.strictObject({
   skill_id: StableIdSchema,
   mode_id: StableIdSchema,
   profile: z.strictObject({
-    id: z.enum(["academic-pipeline", "review-response", "paper-humanizer"]),
+    id: z.enum(["academic-pipeline", "review-response"]),
     version: NonEmptySchema,
-    path: z.enum(["profiles/academic-pipeline.yaml", "profiles/review-response.yaml", "profiles/paper-humanizer.yaml"]),
+    path: z.enum(["profiles/academic-pipeline.yaml", "profiles/review-response.yaml"]),
   }).nullable(),
   parent: z.strictObject({ instance_id: StableIdSchema, node_id: StableIdSchema }).nullable(),
   round: z.number().int().positive().optional(),

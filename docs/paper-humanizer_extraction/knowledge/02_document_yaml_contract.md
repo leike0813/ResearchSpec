@@ -1,3 +1,20 @@
+<!--
+══════════════════════════════════════════════
+Paper Humanizer 提取工件（Extraction Artifact）
+══════════════════════════════════════════════
+工件类型: knowledge-pack
+能力/包 ID: PH-KP-02 document-yaml-contract
+提取日期: 2026-08-16
+提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
+来源对照（source mapping）:
+    - vendor/paper-humanizer/references/document-yaml-contract.md（全文）
+变更台账（ledger）:
+    1. [保留] document YAML 契约全文保留，作为 revision/verification 知识包。
+说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改
+      一律推迟到 authoring 阶段，并另行记录。
+══════════════════════════════════════════════
+-->
+
 # Document YAML contract
 
 Read this reference before using or editing an artifact produced by `scripts/document_pipeline.py`. The artifact is JSON text with a `.yaml` suffix. JSON is a YAML 1.2 subset and allows the dependency-free runtime to preserve strings exactly.

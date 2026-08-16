@@ -1,0 +1,215 @@
+{
+  "schema_version": "1",
+  "source": "vendor/paper-humanizer",
+  "extraction_root": "docs/paper-humanizer_extraction",
+  "milestone_count": 1,
+  "artifact_count": 9,
+  "verification_summary": {
+    "pass": 9
+  },
+  "milestones": {
+    "paper-humanizer": {
+      "total": 9,
+      "pass": 9,
+      "fail": 0,
+      "error": 0,
+      "skip": 0
+    }
+  },
+  "artifacts": [
+    {
+      "milestone": "paper-humanizer",
+      "path": "docs/paper-humanizer_extraction/capabilities/01_review_workflow.md",
+      "relative_path": "capabilities/01_review_workflow.md",
+      "kind": "capability",
+      "artifact_id": "PH-CAP-01",
+      "name": "review-workflow",
+      "sources": [
+        "vendor/paper-humanizer/agents/review.md（全文）"
+      ],
+      "ledger": [
+        "1. [保留] 上游 review 工作流全文保留。",
+        "2. [标注] 流程权威（gate 前动作、next_action 状态机）在 authoring 阶段移交 graph engine。"
+      ],
+      "sha256": "a2bc1f63c46a7b69a7bdfbad38ee7320995faf28804bd0b263c1a29b4fd5c8c7",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 228 artifact lines vs 228 upstream slice lines",
+        "actual_sha256": "a2bc1f63c46a7b69a7bdfbad38ee7320995faf28804bd0b263c1a29b4fd5c8c7",
+        "expected_sha256": "a2bc1f63c46a7b69a7bdfbad38ee7320995faf28804bd0b263c1a29b4fd5c8c7"
+      }
+    },
+    {
+      "milestone": "paper-humanizer",
+      "path": "docs/paper-humanizer_extraction/capabilities/02_full_workflow.md",
+      "relative_path": "capabilities/02_full_workflow.md",
+      "kind": "capability",
+      "artifact_id": "PH-CAP-02",
+      "name": "full-workflow",
+      "sources": [
+        "vendor/paper-humanizer/agents/full.md（全文）"
+      ],
+      "ledger": [
+        "1. [保留] 上游 full 工作流全文保留。",
+        "2. [标注] 工作流状态机与 plan/gate 语义在 authoring 阶段由 graph profile/Gate/Decision 承接。"
+      ],
+      "sha256": "b59e27ea9fa476efb278dcf0135df197b976be1fd2096e92c815e752407b1b9e",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 319 artifact lines vs 319 upstream slice lines",
+        "actual_sha256": "b59e27ea9fa476efb278dcf0135df197b976be1fd2096e92c815e752407b1b9e",
+        "expected_sha256": "b59e27ea9fa476efb278dcf0135df197b976be1fd2096e92c815e752407b1b9e"
+      }
+    },
+    {
+      "milestone": "paper-humanizer",
+      "path": "docs/paper-humanizer_extraction/capabilities/03_reference_taxonomy.md",
+      "relative_path": "capabilities/03_reference_taxonomy.md",
+      "kind": "capability",
+      "artifact_id": "PH-CAP-03",
+      "name": "reference-taxonomy",
+      "sources": [
+        "vendor/paper-humanizer/SKILL.md（全文）"
+      ],
+      "ledger": [
+        "1. [保留] SKILL.md 全文保留，含 39 patterns、false positives、protected content。",
+        "2. [标注] Routing 表与 Reference/Review/Full mode 选择属于流程层，authoring 阶段只将 taxonomy 与 invariants 作为知识包使用。"
+      ],
+      "sha256": "9e89846ed3db75238eb64bda289409e7b0fdff957fce6b77c3685778db2773b5",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 285 artifact lines vs 285 upstream slice lines",
+        "actual_sha256": "9e89846ed3db75238eb64bda289409e7b0fdff957fce6b77c3685778db2773b5",
+        "expected_sha256": "9e89846ed3db75238eb64bda289409e7b0fdff957fce6b77c3685778db2773b5"
+      }
+    },
+    {
+      "milestone": "paper-humanizer",
+      "path": "docs/paper-humanizer_extraction/knowledge/01_diagnostic_guidance.md",
+      "relative_path": "knowledge/01_diagnostic_guidance.md",
+      "kind": "knowledge-pack",
+      "artifact_id": "PH-KP-01",
+      "name": "diagnostic-guidance",
+      "sources": [
+        "vendor/paper-humanizer/references/diagnostic-guidance.md（全文）"
+      ],
+      "ledger": [
+        "1. [保留] 诊断指引全文保留，作为 review/verification 知识包。"
+      ],
+      "sha256": "7364799ca64c40f2cb7e31e966384161559b175467d2ef23a16d29f00af063ad",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 239 artifact lines vs 239 upstream slice lines",
+        "actual_sha256": "7364799ca64c40f2cb7e31e966384161559b175467d2ef23a16d29f00af063ad",
+        "expected_sha256": "7364799ca64c40f2cb7e31e966384161559b175467d2ef23a16d29f00af063ad"
+      }
+    },
+    {
+      "milestone": "paper-humanizer",
+      "path": "docs/paper-humanizer_extraction/knowledge/02_document_yaml_contract.md",
+      "relative_path": "knowledge/02_document_yaml_contract.md",
+      "kind": "knowledge-pack",
+      "artifact_id": "PH-KP-02",
+      "name": "document-yaml-contract",
+      "sources": [
+        "vendor/paper-humanizer/references/document-yaml-contract.md（全文）"
+      ],
+      "ledger": [
+        "1. [保留] document YAML 契约全文保留，作为 revision/verification 知识包。"
+      ],
+      "sha256": "3a8505e6a7fb6d8fa6c30914253d7e6cce0e192f01215beba5c07810b3147f46",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 206 artifact lines vs 206 upstream slice lines",
+        "actual_sha256": "3a8505e6a7fb6d8fa6c30914253d7e6cce0e192f01215beba5c07810b3147f46",
+        "expected_sha256": "3a8505e6a7fb6d8fa6c30914253d7e6cce0e192f01215beba5c07810b3147f46"
+      }
+    },
+    {
+      "milestone": "paper-humanizer",
+      "path": "docs/paper-humanizer_extraction/scripts/document_pipeline.py",
+      "relative_path": "scripts/document_pipeline.py",
+      "kind": "script",
+      "artifact_id": "PH-SCRIPT-01",
+      "name": "document-pipeline",
+      "sources": [
+        "vendor/paper-humanizer/scripts/document_pipeline.py（全文）"
+      ],
+      "ledger": [
+        "1. [保留] 脚本全文保留；不执行上游代码，仅作为 capability 打包工具。"
+      ],
+      "sha256": "1f58a75033ac460a64a601464535a4d4d79cfed3d402514acc2f70271ba767d7",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 1308 artifact lines vs 1308 upstream slice lines",
+        "actual_sha256": "1f58a75033ac460a64a601464535a4d4d79cfed3d402514acc2f70271ba767d7",
+        "expected_sha256": "1f58a75033ac460a64a601464535a4d4d79cfed3d402514acc2f70271ba767d7"
+      }
+    },
+    {
+      "milestone": "paper-humanizer",
+      "path": "docs/paper-humanizer_extraction/scripts/full_workflow.py",
+      "relative_path": "scripts/full_workflow.py",
+      "kind": "script",
+      "artifact_id": "PH-SCRIPT-02",
+      "name": "full-workflow",
+      "sources": [
+        "vendor/paper-humanizer/scripts/full_workflow.py（全文）"
+      ],
+      "ledger": [
+        "1. [保留] 脚本全文保留；其状态机语义由 graph engine 承接，打包为 provenance 工具。"
+      ],
+      "sha256": "9e8c7d8dad1d3bd6326452cfa0e10ae509d7773c0efee3367a5c1c280c0677f2",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 1205 artifact lines vs 1205 upstream slice lines",
+        "actual_sha256": "9e8c7d8dad1d3bd6326452cfa0e10ae509d7773c0efee3367a5c1c280c0677f2",
+        "expected_sha256": "9e8c7d8dad1d3bd6326452cfa0e10ae509d7773c0efee3367a5c1c280c0677f2"
+      }
+    },
+    {
+      "milestone": "paper-humanizer",
+      "path": "docs/paper-humanizer_extraction/capabilities/04_revision_execution.md",
+      "relative_path": "capabilities/04_revision_execution.md",
+      "kind": "capability",
+      "artifact_id": "PH-CAP-04",
+      "name": "revision-execution",
+      "sources": [
+        "vendor/paper-humanizer/agents/full.md（L141-181）"
+      ],
+      "ledger": [
+        "[保留] full 工作流第 5 节逐字节保留。",
+        "[标注] gate/apply 语义由 graph engine 承接；作为 revision procedure 上游。"
+      ],
+      "sha256": "017605fb428a5c40198cd51a82aa399287a508a3c9584ca77fa768bb16ffcbaf",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 41 artifact lines vs 41 upstream slice lines",
+        "actual_sha256": "017605fb428a5c40198cd51a82aa399287a508a3c9584ca77fa768bb16ffcbaf",
+        "expected_sha256": "017605fb428a5c40198cd51a82aa399287a508a3c9584ca77fa768bb16ffcbaf"
+      }
+    },
+    {
+      "milestone": "paper-humanizer",
+      "path": "docs/paper-humanizer_extraction/capabilities/05_verification_acceptance.md",
+      "relative_path": "capabilities/05_verification_acceptance.md",
+      "kind": "capability",
+      "artifact_id": "PH-CAP-05",
+      "name": "verification-acceptance",
+      "sources": [
+        "vendor/paper-humanizer/agents/full.md（L182-243）"
+      ],
+      "ledger": [
+        "[保留] full 工作流第 6–7 节逐字节保留。",
+        "[标注] acceptance 状态由 graph Decision 承接；作为 verification procedure 上游。"
+      ],
+      "sha256": "287f18d942311f16159d6470eaaa5714280fd1317abb1278e4bb6573e9f72f88",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 62 artifact lines vs 62 upstream slice lines",
+        "actual_sha256": "287f18d942311f16159d6470eaaa5714280fd1317abb1278e4bb6573e9f72f88",
+        "expected_sha256": "287f18d942311f16159d6470eaaa5714280fd1317abb1278e4bb6573e9f72f88"
+      }
+    }
+  ]
+}

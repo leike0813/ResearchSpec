@@ -1,3 +1,20 @@
+<!--
+══════════════════════════════════════════════
+Paper Humanizer 提取工件（Extraction Artifact）
+══════════════════════════════════════════════
+工件类型: knowledge-pack
+能力/包 ID: PH-KP-01 diagnostic-guidance
+提取日期: 2026-08-16
+提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
+来源对照（source mapping）:
+    - vendor/paper-humanizer/references/diagnostic-guidance.md（全文）
+变更台账（ledger）:
+    1. [保留] 诊断指引全文保留，作为 review/verification 知识包。
+说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改
+      一律推迟到 authoring 阶段，并另行记录。
+══════════════════════════════════════════════
+-->
+
 # Diagnostic guidance
 
 Read this reference in review and full modes after `SKILL.md` and the selected mode playbook. It supplies detailed probes and intervention guidance. The taxonomy and invariants in `SKILL.md` remain authoritative.

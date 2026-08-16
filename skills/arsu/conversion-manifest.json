@@ -11,7 +11,7 @@
     "remote_url": "https://github.com/Imbad0202/academic-research-skills",
     "dirty": false
   },
-  "generated_at": "2026-08-11T03:25:46Z",
+  "generated_at": "2026-08-16T04:51:37Z",
   "generated_groups": [
     "academic-paper",
     "academic-paper-reviewer",
@@ -958,7 +958,7 @@
           "source_path": "academic-paper/SKILL.md",
           "output_path": "academic-paper/SKILL.md",
           "transform_rule": "text_copy_with_dependency_rewrite_routing_description_and_contract_preflight",
-          "sha256": "7cbbb9cfdf34e0c874b1648f0b5b59f8606f5827cf781cca2ba37ab9342b8d46"
+          "sha256": "7865693f2448439318d4e781d7ee2639b12948897e1811173b3935b6855d54ce"
         },
         {
           "group": "academic-paper",
@@ -20233,7 +20233,7 @@
       "source_path": "academic-paper/SKILL.md",
       "output_path": "academic-paper/SKILL.md",
       "transform_rule": "text_copy_with_dependency_rewrite_routing_description_and_contract_preflight",
-      "sha256": "7cbbb9cfdf34e0c874b1648f0b5b59f8606f5827cf781cca2ba37ab9342b8d46"
+      "sha256": "7865693f2448439318d4e781d7ee2639b12948897e1811173b3935b6855d54ce"
     },
     {
       "group": "academic-paper",
@@ -24911,6 +24911,11 @@
       "reason": "unknown"
     },
     {
+      "path": "scripts/adapters/examples/folder_scan/input_fixture/中文檔名_2024.pdf",
+      "category": "needs_review",
+      "reason": "unknown"
+    },
+    {
       "path": "scripts/adapters/examples/folder_scan/input_fixture/Chen2024_AIAssessment.pdf",
       "category": "needs_review",
       "reason": "unknown"
@@ -24922,11 +24927,6 @@
     },
     {
       "path": "scripts/adapters/examples/folder_scan/input_fixture/Wang_2023_formative_feedback.pdf",
-      "category": "needs_review",
-      "reason": "unknown"
-    },
-    {
-      "path": "scripts/adapters/examples/folder_scan/input_fixture/中文檔名_2024.pdf",
       "category": "needs_review",
       "reason": "unknown"
     },

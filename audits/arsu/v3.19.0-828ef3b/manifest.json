@@ -13,15 +13,15 @@
     "error": 0
   },
   "conversion": {
-    "registry_sha256": "64e693f30a4bc82a021e593306bcc0cb1f205cde0a1a708729876f479813e831",
-    "capability_count": 38,
-    "operational_count": 38,
-    "packages_tree_sha256": "23fa6f85e5b9a12cc2bb4a785f7e54acdeed2ce33ecb761ec5808414e407c853"
+    "registry_sha256": "f87ea6a4e43c318f12b87ec99bbc5f4b65f171cab1629cc90f65e6569e7195ec",
+    "capability_count": 42,
+    "operational_count": 42,
+    "packages_tree_sha256": "3ad41fd5ba9a2bc2a04a2236cf4196d72a671a25dd29b61ab8bee24d129664ff"
   },
   "review": {
-    "parity_report_sha256": "0c9d95bfde9721b2268ebf1bbe3d0cb16cb41ad03fd5f868a3366674157c9931",
-    "section_coverage": 0.9513519147963746,
-    "rule_coverage": 0.9660287081339716,
+    "parity_report_sha256": "38fdb2ab86192cd2bc68ee7d2781073c71237409647d3fa6feea0625efa610c8",
+    "section_coverage": 0.9507469705300531,
+    "rule_coverage": 0.9613275613275615,
     "below_section_threshold": [],
     "below_rule_threshold": [],
     "output_missing": [],
@@ -32,9 +32,9 @@
   },
   "maintenance": {
     "skill_sha256": "3b8f8070e6691a939e709adb96bec9c71f70e7820517f95080b7ab7b607a4029",
-    "record_sha256": "ba92227659c110f8539e3c613aa5e5c115efc354f9a546032992b95451807097"
+    "record_sha256": "d87080ff6eb04d9e39c73a6121039dac5b59a4b19ced4d6b3674616e762a90ac"
   },
   "schema_version": "1",
   "anchor_id": "v3.19.0-828ef3b",
-  "created_at": "2026-08-16T04:07:38.510Z"
+  "created_at": "2026-08-16T05:20:23.771Z"
 }

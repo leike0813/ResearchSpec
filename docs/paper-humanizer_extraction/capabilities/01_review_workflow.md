@@ -1,3 +1,21 @@
+<!--
+══════════════════════════════════════════════
+Paper Humanizer 提取工件（Extraction Artifact）
+══════════════════════════════════════════════
+工件类型: capability
+能力/包 ID: PH-CAP-01 review-workflow
+提取日期: 2026-08-16
+提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
+来源对照（source mapping）:
+    - vendor/paper-humanizer/agents/review.md（全文）
+变更台账（ledger）:
+    1. [保留] 上游 review 工作流全文保留。
+    2. [标注] 流程权威（gate 前动作、next_action 状态机）在 authoring 阶段移交 graph engine。
+说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改
+      一律推迟到 authoring 阶段，并另行记录。
+══════════════════════════════════════════════
+-->
+
 # Review-mode workflow
 
 Use this workflow only after `SKILL.md` routes the request to review or full mode. `SKILL.md` remains authoritative for invariants, protected content, and the numbered taxonomy.

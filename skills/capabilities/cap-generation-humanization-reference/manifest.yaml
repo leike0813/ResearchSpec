@@ -1,0 +1,35 @@
+schema_version: "1"
+capability_id: cap-generation-humanization-reference
+title: Paper Humanizer Reference Mode
+description: Instruction-only writing aid that keeps surrounding prose work
+  semantically neutral and preserves author voice, protected content, and
+  information density.
+maturity: operational
+class: generation
+node_kind: observer
+execution_type: llm
+params: {}
+inputs: []
+outputs: []
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs: []
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+knowledge_refs:
+  - knowledge_id: paper-humanizer-taxonomy
+    path: knowledge/paper-humanizer-taxonomy.md
+    content_hash: 1b5d7afa5f39bc2bcad69805106fcea122206e07d81722970d4f37c724c7161b
+    license: MIT
+gate_policy: none
+provenance:
+  origin: vendor-derived
+  extraction_artifact_ids:
+    - PH-CAP-03
+    - PH-CAP-03
+  upstream_sources:
+    - path: docs/paper-humanizer_extraction/capabilities/03_reference_taxonomy.md
+      sha256: 9e89846ed3db75238eb64bda289409e7b0fdff957fce6b77c3685778db2773b5
+license: MIT

@@ -1,3 +1,21 @@
+<!--
+══════════════════════════════════════════════
+Paper Humanizer 提取工件（Extraction Artifact）
+══════════════════════════════════════════════
+工件类型: capability
+能力/包 ID: PH-CAP-03 reference-taxonomy
+提取日期: 2026-08-16
+提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
+来源对照（source mapping）:
+    - vendor/paper-humanizer/SKILL.md（全文）
+变更台账（ledger）:
+    1. [保留] SKILL.md 全文保留，含 39 patterns、false positives、protected content。
+    2. [标注] Routing 表与 Reference/Review/Full mode 选择属于流程层，authoring 阶段只将 taxonomy 与 invariants 作为知识包使用。
+说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改
+      一律推迟到 authoring 阶段，并另行记录。
+══════════════════════════════════════════════
+-->
+
 ---
 name: paper-humanizer
 description: Reduce AI-like patterns in prose while preserving meaning, facts, information density, voice, and structure. Use when drafting, reviewing, diagnosing, or humanizing plain text, Markdown, Quarto, or LaTeX through reference, review, or full mode.
@@ -10,14 +28,6 @@ metadata:
 # Paper Humanizer
 
 Remove recognizable AI-writing patterns without replacing the author's text with a generic idea of “good writing.” Style is evidence for revision, not proof of authorship.
-
-## ResearchSpec runtime boundary
-
-ResearchSpec owns lifecycle state, Gates, Decisions, and transitions. The
-Python runtime stores its task-local `state.yaml` and rendered views under the
-current subflow's `work/paper-humanizer/`; these files are runtime material,
-not ResearchSpec lifecycle authority. Never edit `control.yaml`, profile files,
-or handoff authority from this Skill.
 
 ## Non-negotiable invariants
 

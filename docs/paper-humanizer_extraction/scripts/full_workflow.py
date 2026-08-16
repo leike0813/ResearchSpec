@@ -1,3 +1,20 @@
+<!--
+══════════════════════════════════════════════
+Paper Humanizer 提取工件（Extraction Artifact）
+══════════════════════════════════════════════
+工件类型: script
+能力/包 ID: PH-SCRIPT-02 full-workflow
+提取日期: 2026-08-16
+提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
+来源对照（source mapping）:
+    - vendor/paper-humanizer/scripts/full_workflow.py（全文）
+变更台账（ledger）:
+    1. [保留] 脚本全文保留；其状态机语义由 graph engine 承接，打包为 provenance 工具。
+说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改
+      一律推迟到 authoring 阶段，并另行记录。
+══════════════════════════════════════════════
+-->
+
 #!/usr/bin/env python3
 """Gate-driven state and view runtime for Paper Humanizer full mode."""
 

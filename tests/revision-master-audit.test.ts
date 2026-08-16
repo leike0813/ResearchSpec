@@ -53,9 +53,9 @@ void test("audits/revision-master/snapshot-13e69610 holds immutable machine evid
   assert.deepEqual(audit.adaptations.find((item) => item.id === "paper-humanizer-reference-mode"), {
     id: "paper-humanizer-reference-mode",
     kind: "added",
-    summary: "The Review Response writing constraint now loads the self-contained Paper Humanizer Reference mode entrypoint instead of the retired prose-guidance reference.",
+    summary: "The published review-response SKILL loads the capability-graph Paper Humanizer Reference-mode entrypoint before manuscript or response-letter writing.",
     applied_to: ["SKILL.md"],
-    evidence: "skills/review-response/SKILL.md loads paper-humanizer/SKILL.md before manuscript or response-letter writing and does not reference paper-humanizer/references/prose-guidance.md.",
+    evidence: "skills/review-response/SKILL.md loads cap-generation-humanization-reference/SKILL.md before manuscript or response-letter writing and does not reference paper-humanizer/references/prose-guidance.md.",
     approved: true,
   });
 });

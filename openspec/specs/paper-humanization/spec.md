@@ -2,53 +2,62 @@
 
 ## Purpose
 
-Define deterministic humanization analysis, read-only review, gated full workflow, and agent-neutral runtime boundaries.
+Define deterministic humanization analysis, capability-node review, graph-owned full revision flow,
+and agent-neutral packaged Python tools.
 
 ## Requirements
 
 ### Requirement: Document analysis is deterministic
-The system SHALL parse plain Markdown, Quarto, and LaTeX documents while preserving protected code, math, links, citations, and front matter. It SHALL return stable JSON-compatible analysis with sentence counts and diagnostic error codes.
+
+The packaged `document_pipeline.py` tool SHALL parse plain Markdown, Quarto, and LaTeX documents
+while preserving protected code, math, links, citations, and front matter. It SHALL return stable
+JSON-compatible analysis with sentence counts and diagnostic error codes.
 
 #### Scenario: Analysis output is stable
+
 - **WHEN** the same document is analyzed twice without edits
 - **THEN** the returned sentence statistics, protected spans, and diagnostic codes are identical
 
-### Requirement: Review is read-only
-`paper-humanizer:review` SHALL accept a boundary manuscript file and emit a review report without changing the manuscript or creating a ResearchSpec Gate.
+### Requirement: Review is a read-only capability node
+
+`cap-check-paper-humanization-review` SHALL accept a boundary manuscript file and emit a review
+report and revision plan without changing the manuscript.
 
 #### Scenario: Review leaves inputs unchanged
+
 - **WHEN** review processes a manuscript boundary file
-- **THEN** the input bytes are unchanged and no Gate or control mutation is created
+- **THEN** the input bytes are unchanged and no ResearchSpec control file is mutated
 
-### Requirement: Full workflow is gated
-`paper-humanizer:full` SHALL emit a review report and revision plan, validate candidate revisions, preserve protected content, and require the `paper-humanizer-acceptance` Gate before final acceptance.
+### Requirement: Full humanization is graph-owned
 
-#### Scenario: Acceptance waits for the Gate
-- **WHEN** a full candidate passes revision validation
-- **THEN** final acceptance remains blocked until the human confirms `paper-humanizer-acceptance`
+The `paper-humanizer` graph profile SHALL declare review, plan approval, revision, verification, and
+acceptance nodes. It SHALL require the `paper-humanizer-plan` Gate before revision and the
+`paper-humanizer-acceptance` Decision before completion.
 
-### Requirement: Runtime remains agent-neutral
-The runtime SHALL use only Node standard-library APIs and SHALL not execute upstream code, install dependencies, contact external services, or mutate ResearchSpec control files.
-#### Scenario: Analyze a manuscript
-- **WHEN** the runtime receives Markdown, Quarto, or LaTeX text
-- **THEN** it returns stable sentence statistics and protected spans without executing document code
-#### Scenario: Review route
-- **WHEN** `paper-humanizer:review` starts with a manuscript boundary file
-- **THEN** it produces a review report and leaves the manuscript and control authority unchanged
-#### Scenario: Full acceptance
-- **WHEN** a candidate passes plan-hash and protected-content checks
-- **THEN** final output remains pending until `paper-humanizer-acceptance` receives human confirmation
-#### Scenario: Offline execution
-- **WHEN** conversion, checking, or runtime validation runs
-- **THEN** no upstream executable, dependency installer, network service, or model API is invoked
+#### Scenario: Revision waits for plan approval
 
-### Requirement: Humanization routes preserve manuscript boundaries
-`paper-humanizer:review` SHALL be read-only and `paper-humanizer:full` SHALL write only ordinary boundary deliverables while ResearchSpec control files remain lifecycle authority.
+- **WHEN** review has completed
+- **THEN** the revision node remains blocked until a human confirms `paper-humanizer-plan`
+
+#### Scenario: Acceptance waits for the Decision
+
+- **WHEN** a candidate passes verification
+- **THEN** final completion remains blocked until a human records
+  `paper-humanizer-acceptance`
+
+### Requirement: Humanization capabilities preserve manuscript boundaries
+
+The review capability SHALL be read-only. The revision capability SHALL write only ordinary boundary
+deliverables and candidate artifacts outside `researchspec/`, while the graph engine remains the only
+workflow-state authority.
 
 #### Scenario: Start review
-- **WHEN** a user confirms a manuscript input for `paper-humanizer:review`
-- **THEN** the runtime emits a report without editing the input or creating a Gate
+
+- **WHEN** a user confirms a manuscript input for the `paper-humanizer` graph
+- **THEN** the review node emits a report and plan without editing the input or creating a Gate
+  attempt
 
 #### Scenario: Accept full revision
-- **WHEN** a full candidate passes plan-hash and protected-region checks
-- **THEN** the candidate remains pending until a human confirms `paper-humanizer-acceptance`
+
+- **WHEN** a candidate passes protected-content and information-unit verification
+- **THEN** the candidate remains pending until a human records the acceptance Decision

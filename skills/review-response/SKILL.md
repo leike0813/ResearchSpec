@@ -8,7 +8,7 @@ description: Interactive Academic Paper Revision Assistant – Extracts and syst
 ## 目标
 
 当修改 working manuscript 或撰写 response letter 时，先静默加载
-`paper-humanizer/SKILL.md`，并遵循其中的 Reference mode。该模式只提供写作约束，
+`cap-generation-humanization-reference/SKILL.md`，并遵循其中的 Reference mode。该模式只提供写作约束，
 不会启动独立 humanizer 子流、统计分析或额外 Gate；只读分析和格式转换不加载它。
 
 - 帮助用户以阶段化方式推进论文修回，而不是一步到位改稿

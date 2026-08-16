@@ -8,7 +8,7 @@
 
 - 上游 4 个 Skill、27 个 mode、42 个 agent 定义、90 个 reference、22 个 template。
 - 119 个 extraction artifacts（47 capability + 72 knowledge-pack）。
-- 38 个转换后 capability package。
+- 42 个转换后 capability package（38 个 ARS-derived + 4 个 paper-humanizer vendor-derived）。
 - 5 个 graph profiles：minimal、research-main、academic-paper、academic-paper-reviewer、academic-pipeline。
 - 三份人类审阅 HTML + parity report + gap semantic review。
 
@@ -45,4 +45,4 @@
 
 ## 结论
 
-declared-fit-with-notes。首锚点语义覆盖达到审阅阈值，所有已知缺口已闭环；上述 notes 是后续增量维护的观察项，不阻塞当前锚点。
+declared-fit-with-notes。首锚点 ARS 语义覆盖达到审阅阈值，所有已知缺口已闭环；paper-humanizer 已按同一方法完成 capability 迁移，其独立锚点审计在后续变更中归档。上述 notes 是后续增量维护的观察项，不阻塞当前锚点。

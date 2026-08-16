@@ -122,7 +122,7 @@ researchspec init . --tools codex --literature-adapters zotero-library
 
 > I want to study how generative AI affects writing instruction in higher education. Show candidate routes, prerequisites, boundary outputs, formal Gates, risks, and cost. Do not start a route until I confirm it.
 
-ResearchSpec 默认投影经过 authoring converter 生成的 capability Skills（当前 38 个），并安装四个核心 Companion 工作流与预设 graph profiles：`minimal`、`research-main`、`academic-paper`、`academic-paper-reviewer`、`academic-pipeline`。
+ResearchSpec 默认投影经过 authoring converter 生成的 capability Skills（当前 42 个，含 paper-humanizer 四个节点），并安装五个核心 Companion 工作流与预设 graph profiles：`minimal`、`research-main`、`academic-paper`、`academic-paper-reviewer`、`academic-pipeline`、`paper-humanizer`。
 
 可选的 [Zotero 文献系统 Adapter](docs/literature_system_adapters.md) 会额外安装七个 Skill、项目级 `.zotero-bridge` runtime 和配置模板。`update --literature-adapters none` 可取消选择；未修改的托管文件会被移除，发生 drift 的文件会保留并报告。初始化及状态检查阶段不与 Zotero 通信。
 
