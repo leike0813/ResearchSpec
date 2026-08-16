@@ -1,0 +1,40 @@
+{
+  "upstream": {
+    "submodule_path": "vendor/ars",
+    "repository_url": "https://github.com/Imbad0202/academic-research-skills",
+    "version": "v3.19.0",
+    "commit": "828ef3b613b0e8b91830da3328a1e33d4eb5ab4c"
+  },
+  "extraction": {
+    "index_sha256": "41c409907de2f5f12b04698554bc3df42b82f1933f4ef449b0486693fc9cc564",
+    "artifact_count": 119,
+    "pass": 119,
+    "fail": 0,
+    "error": 0
+  },
+  "conversion": {
+    "registry_sha256": "64e693f30a4bc82a021e593306bcc0cb1f205cde0a1a708729876f479813e831",
+    "capability_count": 38,
+    "operational_count": 38,
+    "packages_tree_sha256": "23fa6f85e5b9a12cc2bb4a785f7e54acdeed2ce33ecb761ec5808414e407c853"
+  },
+  "review": {
+    "parity_report_sha256": "0c9d95bfde9721b2268ebf1bbe3d0cb16cb41ad03fd5f868a3366674157c9931",
+    "section_coverage": 0.9513519147963746,
+    "rule_coverage": 0.9660287081339716,
+    "below_section_threshold": [],
+    "below_rule_threshold": [],
+    "output_missing": [],
+    "flow_retained": [],
+    "review_html_sha256": "6f6547b2c8e313893f60645848b1582c37dc69909cee13567487b0aa04dc68d1",
+    "assessment_html_sha256": "8930ff9639c2285ba6e7a0ea4b3655a990dcfd4b28e1bf33991aae9f64481e48",
+    "gap_review_html_sha256": "37dc2895673c8d82a406a9aafd05f8b84a8a77e684a2c6d63a27418444ab3d13"
+  },
+  "maintenance": {
+    "skill_sha256": "3b8f8070e6691a939e709adb96bec9c71f70e7820517f95080b7ab7b607a4029",
+    "record_sha256": "ba92227659c110f8539e3c613aa5e5c115efc354f9a546032992b95451807097"
+  },
+  "schema_version": "1",
+  "anchor_id": "v3.19.0-828ef3b",
+  "created_at": "2026-08-16T04:07:38.510Z"
+}

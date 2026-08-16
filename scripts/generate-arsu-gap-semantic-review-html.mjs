@@ -3,7 +3,8 @@ import { writeFileSync } from "node:fs";
 import path from "node:path";
 import process from "node:process";
 
-const OUT = process.argv[2] ? path.resolve(process.argv[2]) : path.join(process.cwd(), "artifacts", "arsu-mode-gap-semantic-review.html");
+const DEFAULT_ANCHOR = process.env.ARSU_ANCHOR ?? "v3.19.0-828ef3b";
+const OUT = process.argv[2] ? path.resolve(process.argv[2]) : path.join(process.cwd(), "audits", "arsu", DEFAULT_ANCHOR, "artifacts", "arsu-mode-gap-semantic-review.html");
 const esc = (text) => String(text ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 
 const findings = [

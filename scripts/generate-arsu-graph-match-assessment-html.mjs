@@ -4,10 +4,12 @@ import path from "node:path";
 import process from "node:process";
 
 const ROOT = process.cwd();
-const REVIEW_HTML = path.join(ROOT, "artifacts", "arsu-mode-capability-review.html");
+const DEFAULT_ANCHOR = process.env.ARSU_ANCHOR ?? "v3.19.0-828ef3b";
+const AUDIT_ARTIFACTS = path.join(ROOT, "audits", "arsu", DEFAULT_ANCHOR, "artifacts");
+const REVIEW_HTML = path.join(AUDIT_ARTIFACTS, "arsu-mode-capability-review.html");
 const ARS = path.join(ROOT, "vendor", "ars");
 const CAPABILITIES = path.join(ROOT, "skills", "capabilities");
-const OUT = process.argv[2] ? path.resolve(process.argv[2]) : path.join(ROOT, "artifacts", "arsu-mode-graph-match-assessment.html");
+const OUT = process.argv[2] ? path.resolve(process.argv[2]) : path.join(AUDIT_ARTIFACTS, "arsu-mode-graph-match-assessment.html");
 
 const esc = (text) => String(text ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 const norm = (text) => String(text ?? "").toLowerCase().replace(/\s+/g, " ");
@@ -458,7 +460,7 @@ footer{padding:20px 22px 40px;color:var(--muted);font-size:12px;max-width:1800px
 <header class="app">
 <div class="eyebrow">Self Assessment · ARS 27 modes × capability graph matching</div>
 <h1>ARSU 27 Modes 与转换后 Graph 的流程/指令匹配性自评估</h1>
-<p class="subtitle">数据来自 <code>artifacts/arsu-mode-capability-review.html</code>：按 mode 统计上游必读/选读行数，并用关键字符串锚点核对上游指令是否在转换后的 capability SKILL 或 knowledge 中保留。该评估是审阅辅助，不是自动化语义等价证明。</p>
+<p class="subtitle">数据来自 <code>audits/arsu/&lt;anchor&gt;/artifacts/arsu-mode-capability-review.html</code>：按 mode 统计上游必读/选读行数，并用关键字符串锚点核对上游指令是否在转换后的 capability SKILL 或 knowledge 中保留。该评估是审阅辅助，不是自动化语义等价证明。</p>
 <div class="summary">
   <div class="sum-card"><span>Mode 总数</span><b>${MODE_RESULTS.length}</b></div>
   <div class="sum-card"><span>锚点总数</span><b>${allAnchors.length}</b></div>

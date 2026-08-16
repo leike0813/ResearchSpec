@@ -7,7 +7,8 @@ import { parse as parseYaml } from "yaml";
 const ROOT = process.cwd();
 const ARS = path.join(ROOT, "vendor", "ars");
 const CAPABILITIES = path.join(ROOT, "skills", "capabilities");
-const OUT = process.argv[2] ? path.resolve(process.argv[2]) : path.join(ROOT, "artifacts", "arsu-mode-capability-review.html");
+const DEFAULT_ANCHOR = process.env.ARSU_ANCHOR ?? "v3.19.0-828ef3b";
+const OUT = process.argv[2] ? path.resolve(process.argv[2]) : path.join(ROOT, "audits", "arsu", DEFAULT_ANCHOR, "artifacts", "arsu-mode-capability-review.html");
 
 const esc = (text) => String(text ?? "")
   .replaceAll("&", "&amp;")

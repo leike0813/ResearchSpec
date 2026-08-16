@@ -105,9 +105,13 @@
     "education-agent-skills:idempotence": "pnpm build && node dist/src/vendor-converters/education-agent-skills/cli.js idempotence",
     "capability:parity": "node scripts/audit-capability-parity.mjs",
     "capability:parity:report": "node scripts/audit-capability-parity.mjs --json docs/capability-parity-report.json",
-    "capability:review-html": "node scripts/generate-arsu-capability-review-html.mjs artifacts/arsu-mode-capability-review.html",
-    "capability:assessment-html": "node scripts/generate-arsu-graph-match-assessment-html.mjs artifacts/arsu-mode-graph-match-assessment.html",
-    "capability:gap-review-html": "node scripts/generate-arsu-gap-semantic-review-html.mjs artifacts/arsu-mode-gap-semantic-review.html"
+    "capability:review-html": "node scripts/generate-arsu-capability-review-html.mjs",
+    "capability:assessment-html": "node scripts/generate-arsu-graph-match-assessment-html.mjs",
+    "capability:gap-review-html": "node scripts/generate-arsu-gap-semantic-review-html.mjs",
+    "arsu-maintenance:baseline": "node scripts/arsu-maintenance.mjs baseline",
+    "arsu-maintenance:check": "node scripts/arsu-maintenance.mjs check v3.19.0-828ef3b",
+    "arsu-maintenance:artifacts": "node scripts/arsu-maintenance.mjs artifacts",
+    "arsu-maintenance:records": "node scripts/arsu-maintenance.mjs records"
   },
   "engines": {
     "node": ">=22"
