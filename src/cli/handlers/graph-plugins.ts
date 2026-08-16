@@ -10,6 +10,7 @@ import { loadGraphWorkspaceIndex } from "../../core/runtime/graph-workspace-inde
 import { requireGraphWorkspace } from "../../core/workspace/graph-discover.js";
 import { sha256 } from "../../core/workspace/write-plan.js";
 import { PluginProjectionError, projectWorkspacePlugins, writeWorkspacePluginManifest } from "../../plugins/graph-delivery.js";
+import { loadPluginExtensionRegistry, resolveDomainExtensions, type LoadedPluginExtensionRegistry } from "../../plugins/extensions.js";
 import { domainIsAvailable, filesForSkill, loadPluginRegistry, pluginSkillRoot, resolveDomainSelection } from "../../plugins/registry.js";
 import { CliError, success, type CommandContext, type CommandResult } from "../types.js";
 
@@ -19,6 +20,20 @@ export interface PluginShowOptions { summary?: boolean }
 async function graphWorkspace(context: CommandContext): Promise<string> {
   try { return await requireGraphWorkspace(context.cwd, context.workspace); }
   catch (error) { throw new CliError("workspace_unsupported", error instanceof Error ? error.message : String(error), 1); }
+}
+
+async function loadOptionalPluginExtensions(): Promise<LoadedPluginExtensionRegistry | undefined> {
+  try {
+    return await loadPluginExtensionRegistry();
+  } catch {
+    return undefined;
+  }
+}
+
+function domainExtensionCounts(extensions: LoadedPluginExtensionRegistry | undefined, domainId: string): { capabilities: number; profiles: number } {
+  if (!extensions) return { capabilities: 0, profiles: 0 };
+  const resolved = resolveDomainExtensions(extensions, [domainId]);
+  return { capabilities: resolved.capabilityIds.length, profiles: resolved.profileIds.length };
 }
 
 function projectionError(error: unknown): CliError {
@@ -38,15 +53,17 @@ export async function handleGraphPluginList(options: { installed?: boolean; summ
   } catch (error) {
     if (options.installed) throw error;
   }
+  const extensions = await loadOptionalPluginExtensions();
   const domains = [...registry.domains.values()]
     .filter(domainIsAvailable)
     .filter((domain) => !options.installed || selected.includes(domain.domain_id))
     .sort((left, right) => left.domain_id.localeCompare(right.domain_id));
   const items = domains.map((domain) => {
     const resolved = resolveDomainSelection(registry, [domain.domain_id]);
+    const extensionCounts = domainExtensionCounts(extensions, domain.domain_id);
     return options.summary
-      ? { domain_id: domain.domain_id, domain_type: domain.domain_type, title: domain.title, version: domain.version, skills: domain.skills.length, resolved_skills: resolved.resolvedSkillIds.length }
-      : { domain_id: domain.domain_id, domain_type: domain.domain_type, title: domain.title, description: domain.description, version: domain.version, skills: domain.skills, resolved_skills: resolved.resolvedSkillIds };
+      ? { domain_id: domain.domain_id, domain_type: domain.domain_type, title: domain.title, version: domain.version, skills: domain.skills.length, resolved_skills: resolved.resolvedSkillIds.length, ...extensionCounts }
+      : { domain_id: domain.domain_id, domain_type: domain.domain_type, title: domain.title, description: domain.description, version: domain.version, skills: domain.skills, resolved_skills: resolved.resolvedSkillIds, ...extensionCounts };
   });
   return success("plugin", { action: "list", workspace: workspace ?? null, selected_plugins: selected, domains: items, total: items.length }, { stdout: items.length ? `${items.map((item) => item.domain_id).join("\n")}\n` : "No plugins.\n" });
 }
@@ -57,9 +74,11 @@ export async function handleGraphPluginShow(pluginId: string, options: { summary
   const domain = registry.domains.get(pluginId);
   if (!domainIsAvailable(domain)) throw new CliError("plugin_not_found", `Domain plugin not found or unavailable: ${pluginId}`, 1);
   const resolution = resolveDomainSelection(registry, [pluginId]);
+  const extensions = await loadOptionalPluginExtensions();
+  const extensionCounts = domainExtensionCounts(extensions, pluginId);
   const item = options.summary
-    ? { domain_id: domain.domain_id, domain_type: domain.domain_type, title: domain.title, version: domain.version, skills: domain.skills.length, resolved_skills: resolution.resolvedSkillIds.length }
-    : { domain_id: domain.domain_id, domain_type: domain.domain_type, title: domain.title, description: domain.description, version: domain.version, skills: domain.skills, resolved_skills: resolution.resolvedSkillIds };
+    ? { domain_id: domain.domain_id, domain_type: domain.domain_type, title: domain.title, version: domain.version, skills: domain.skills.length, resolved_skills: resolution.resolvedSkillIds.length, ...extensionCounts }
+    : { domain_id: domain.domain_id, domain_type: domain.domain_type, title: domain.title, description: domain.description, version: domain.version, skills: domain.skills, resolved_skills: resolution.resolvedSkillIds, ...extensionCounts };
   return success("plugin", { action: "show", workspace: null, domain: item }, { stdout: `${JSON.stringify(item, null, 2)}\n` });
 }
 

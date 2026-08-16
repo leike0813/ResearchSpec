@@ -1,0 +1,29 @@
+{
+  "schema_version": "1",
+  "registry_version": "0.1.0",
+  "capabilities": [
+    {
+      "capability_id": "plugin-ecology-biodiversity",
+      "source_path": "capabilities/plugin-ecology-biodiversity",
+      "manifest_sha256": "7febc3263a7c80c3829ca11c7760b03147a874a59caa31e7662475ecbe5b1b2b"
+    }
+  ],
+  "profiles": [
+    {
+      "profile_id": "plugin-ecology-biodiversity",
+      "source_path": "profiles/plugin-ecology-biodiversity.yaml",
+      "profile_sha256": "45e6f23e0a1516f4cf2d94409a008be01750ac0e4323f48cca26288a5829430a"
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "ecology",
+      "capabilities": [
+        "plugin-ecology-biodiversity"
+      ],
+      "profiles": [
+        "plugin-ecology-biodiversity"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+schema_version: "1"
+capability_id: plugin-ecology-biodiversity
+title: Ecology and Biodiversity Research
+description: Produces a bounded advisory research brief for ecology, biodiversity,
+  and conservation questions from user-authorized evidence sources.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+knowledge_refs: []
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-ecology-biodiversity/SKILL.md
+      sha256: 1c717a0ebb9c330c02cdc68fbbfa310d0ebf5f9b4618ffa8a1e4f019b3168578
+license: Apache-2.0

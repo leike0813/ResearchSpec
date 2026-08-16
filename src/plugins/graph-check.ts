@@ -3,9 +3,12 @@ import path from "node:path";
 
 import { selectSkillWriters } from "../adapters/delivery.js";
 import { getTool, toolSkillsRoot } from "../adapters/tools.js";
+import { capabilityIds, loadCapabilityRegistry } from "../capabilities/registry.js";
 import type { GraphWorkspaceIndex } from "../core/runtime/graph-workspace-index.js";
 import type { Diagnostic } from "../core/validation/types.js";
 import { sha256 } from "../core/workspace/write-plan.js";
+import { loadPluginExtensionRegistry, resolveDomainExtensions } from "./extensions.js";
+import { validateGraphCapabilityReferences } from "../core/contracts/capability-graph.js";
 import { domainIsAvailable, filesForSkill, loadPluginRegistry, resolveDomainSelection } from "./registry.js";
 
 export async function pluginWorkspaceDiagnostics(index: GraphWorkspaceIndex, alwaysLoad = false): Promise<Diagnostic[]> {
@@ -34,6 +37,67 @@ export async function pluginWorkspaceDiagnostics(index: GraphWorkspaceIndex, alw
         message: `Selected plugin domain is missing or empty: ${domainId}`,
         blocking: true,
       });
+    }
+  }
+
+  const baseCapabilityIds = new Set<string>();
+  try {
+    for (const capabilityId of capabilityIds(await loadCapabilityRegistry())) baseCapabilityIds.add(capabilityId);
+  } catch (error) {
+    diagnostics.push({
+      severity: "error",
+      code: "capability_registry_unavailable",
+      message: `Cannot load base capability registry for plugin extension check: ${error instanceof Error ? error.message : String(error)}`,
+      blocking: true,
+    });
+  }
+
+  let extensions;
+  try {
+    extensions = await loadPluginExtensionRegistry();
+  } catch (error) {
+    diagnostics.push({
+      severity: "error",
+      code: "plugin_extension_registry_unavailable",
+      message: `Cannot load plugin extension registry: ${error instanceof Error ? error.message : String(error)}`,
+      blocking: true,
+    });
+  }
+
+  if (extensions) {
+    const resolvedExtensions = resolveDomainExtensions(extensions, selected);
+    for (const capabilityId of resolvedExtensions.capabilityIds) {
+      if (baseCapabilityIds.has(capabilityId)) {
+        diagnostics.push({
+          severity: "error",
+          code: "plugin_extension_capability_collision",
+          message: `Plugin extension capability collides with a bundled capability: ${capabilityId}`,
+          blocking: true,
+        });
+      }
+      if (registry.skills.has(capabilityId)) {
+        diagnostics.push({
+          severity: "error",
+          code: "plugin_extension_capability_collision",
+          message: `Plugin extension capability collides with a plugin Skill ID: ${capabilityId}`,
+          blocking: true,
+        });
+      }
+    }
+    for (const profileId of resolvedExtensions.profileIds) {
+      const profile = extensions.profiles.get(profileId);
+      if (!profile) continue;
+      const references = validateGraphCapabilityReferences(profile.profile, new Set([...baseCapabilityIds, ...extensions.capabilities.keys()]));
+      for (const reference of references) {
+        diagnostics.push({
+          severity: "error",
+          code: "plugin_extension_profile_capability_unknown",
+          message: `Plugin extension profile ${profileId}: ${reference.message}`,
+          path: profile.sourcePath,
+          blocking: true,
+          details: { path: reference.path },
+        });
+      }
     }
   }
 
