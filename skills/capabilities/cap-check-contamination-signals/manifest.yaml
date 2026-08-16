@@ -1,0 +1,54 @@
+schema_version: "1"
+capability_id: cap-check-contamination-signals
+title: Contamination Signals
+description: Deterministic contamination signal computation.
+maturity: operational
+class: verification
+node_kind: checker
+execution_type: script
+params: {}
+inputs:
+  - role: corpus
+    schema_ref: corpus.v1
+    required: true
+    source_policy: node_output
+outputs:
+  - role: contamination_report
+    schema_ref: contamination.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - corpus
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: contamination-signals-script
+    kind: script
+    inputs:
+      - corpus
+    outputs:
+      - contamination_report
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/contamination-signals.py
+        - "{outputs_json}"
+knowledge_refs:
+  - knowledge_id: degradation-registry
+    path: knowledge/degradation-registry.json
+    content_hash: a81253cb7a8558718008669d43e915a08181c9202484bbc08e03d550a295fef9
+    license: CC BY-NC 4.0
+gate_policy: required
+provenance:
+  origin: ars-derived
+  extraction_artifact_ids:
+    - CAP-M5-14
+    - KP-M4-03
+  upstream_sources:
+    - path: docs/ars_extraction/m5-side-branches/capabilities/14_contamination_signals.py
+      sha256: 79a9808662d80efb28e145670a0dedcbdc9558b3dcf2064e2364afe50868f7df
+license: CC BY-NC 4.0

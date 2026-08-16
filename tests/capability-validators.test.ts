@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { copyFile, mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { test } from "node:test";
@@ -21,7 +21,7 @@ function sha256(text: string): string {
 function manifest(validatorOverrides: Partial<CapabilityManifest["validators"][number]> = {}): CapabilityManifest {
   return {
     schema_version: "1",
-    capability_id: "cap.design.research-question-formulation",
+    capability_id: "cap-design-research-question-formulation",
     title: "Research Question Formulation",
     description: "Produces a research question brief.",
     class: "design",
@@ -85,7 +85,10 @@ void test("network validator failure returns degraded, never pass", async () => 
 
 void test("submitGraphNode runs declared capability validators from a registry", async () => {
   const workspaceRoot = await mkdtemp(path.join(tmpdir(), "researchspec-validator-run-"));
-  const packageDir = await packageRoot();
+  const packageBase = await packageRoot();
+  const packageDir = path.join(packageBase, "cap-design-research-question-formulation");
+  await mkdir(packageDir, { recursive: true });
+  await copyFile(path.join(packageBase, "validator.js"), path.join(packageDir, "validator.js"));
   try {
     const workspace = await writeBaseWorkspace(workspaceRoot);
     const registryText = stringify(manifest());
@@ -97,7 +100,7 @@ void test("submitGraphNode runs declared capability validators from a registry",
     const registry = {
       schema_version: "1",
       registry_version: "0.1.0",
-      capabilities: [{ capability_id: "cap.design.research-question-formulation", source_path: packageName, manifest_sha256: sha256(registryText) }],
+      capabilities: [{ capability_id: "cap-design-research-question-formulation", source_path: packageName, manifest_sha256: sha256(registryText) }],
     };
     await writeFile(registryFile, `${JSON.stringify(registry, null, 2)}\n`, "utf8");
     const loaded = await validateCapabilityRegistry(registry, registryRoot);
@@ -124,6 +127,6 @@ void test("submitGraphNode runs declared capability validators from a registry",
     assert.equal(index.runs[0].nodeEntries[0]?.node?.state, "complete");
   } finally {
     await rm(workspaceRoot, { recursive: true, force: true });
-    await rm(packageDir, { recursive: true, force: true });
+    await rm(packageBase, { recursive: true, force: true });
   }
 });

@@ -1,0 +1,54 @@
+schema_version: "1"
+capability_id: cap-check-pdf-read-preflight
+title: PDF Read Preflight
+description: Deterministic PDF extraction preflight.
+maturity: operational
+class: verification
+node_kind: checker
+execution_type: script
+params: {}
+inputs:
+  - role: pdf_path
+    schema_ref: pdf.v1
+    required: true
+    source_policy: node_output
+outputs:
+  - role: pdf_preflight_report
+    schema_ref: pdf-preflight.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - pdf_path
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: pdf-read-preflight-script
+    kind: script
+    inputs:
+      - pdf_path
+    outputs:
+      - pdf_preflight_report
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/pdf-read-preflight.py
+        - "{outputs_json}"
+knowledge_refs:
+  - knowledge_id: degradation-registry
+    path: knowledge/degradation-registry.json
+    content_hash: a81253cb7a8558718008669d43e915a08181c9202484bbc08e03d550a295fef9
+    license: CC BY-NC 4.0
+gate_policy: required
+provenance:
+  origin: ars-derived
+  extraction_artifact_ids:
+    - CAP-M5-12
+    - KP-M4-03
+  upstream_sources:
+    - path: docs/ars_extraction/m5-side-branches/capabilities/12_pdf_read_preflight.py
+      sha256: e4a2431fe2f2525ec755877869a93ee4ff2dd13a44f294d38ceb2e0736b5af16
+license: CC BY-NC 4.0

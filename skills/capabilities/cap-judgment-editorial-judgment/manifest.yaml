@@ -1,0 +1,41 @@
+schema_version: "1"
+capability_id: cap-judgment-editorial-judgment
+title: Editorial Judgment
+description: Edits and judges the manuscript as a journal editor.
+maturity: operational
+class: judgment
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: manuscript_draft
+    schema_ref: manuscript-draft.v1
+    required: true
+    source_policy: node_output
+outputs:
+  - role: editorial_decision
+    schema_ref: editorial-decision.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - manuscript_draft
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+knowledge_refs:
+  - knowledge_id: editorial-decision-standards
+    path: knowledge/editorial-decision-standards.md
+    content_hash: 64ade215d2ed45ca663065e0d5bd202439827e978ef2d3c6fc26a6f3103b1f50
+    license: CC BY-NC 4.0
+gate_policy: required
+provenance:
+  origin: ars-derived
+  extraction_artifact_ids:
+    - CAP-M3-03
+    - KP-M3-04
+  upstream_sources:
+    - path: docs/ars_extraction/m3-integrity-review/capabilities/03_editorial_judgment.reviewer-variant.md
+      sha256: c7c0e16c0a9af9d981322b4f1a4e258dbe12376848375ddb1caec576a6e42812
+license: CC BY-NC 4.0

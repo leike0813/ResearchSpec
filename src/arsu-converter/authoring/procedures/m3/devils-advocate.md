@@ -1,6 +1,6 @@
 # Procedure
 
-Work from `manuscript_draft` and available review context. Produce `stress_test_report`.
+Work from `manuscript_draft`, with the configured reviewer card from `review_panel_config` when supplied. Produce `stress_test_report`.
 
 ## Role Definition
 

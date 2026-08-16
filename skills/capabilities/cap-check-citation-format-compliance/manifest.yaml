@@ -1,0 +1,41 @@
+schema_version: "1"
+capability_id: cap-check-citation-format-compliance
+title: Citation Format Compliance
+description: Validates in-text citations and reference list formatting.
+maturity: operational
+class: verification
+node_kind: checker
+execution_type: llm
+params: {}
+inputs:
+  - role: manuscript_draft
+    schema_ref: manuscript-draft.v1
+    required: true
+    source_policy: node_output
+outputs:
+  - role: citation_compliance_report
+    schema_ref: citation-compliance.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - manuscript_draft
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+knowledge_refs:
+  - knowledge_id: citation-format-standards
+    path: knowledge/citation-format-standards.md
+    content_hash: eff271b73d6a7ce01be147ceefeed7a98671d082d365685c8357243814282cec
+    license: CC BY-NC 4.0
+gate_policy: required
+provenance:
+  origin: ars-derived
+  extraction_artifact_ids:
+    - CAP-M2-06
+    - KP-M2-05
+  upstream_sources:
+    - path: docs/ars_extraction/m2-writing/capabilities/06_citation_format_compliance.md
+      sha256: c19d59c4a8120510dffa7abd30808750e6f03dd7e26dbc1d548a188145416f36
+license: CC BY-NC 4.0

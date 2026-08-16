@@ -82,7 +82,7 @@ void test("graph init projects authored capability skills into selected Agent to
     const initialized = parseEnvelope<{ projected_capability_files: number }>(runCli(["init", root, "--tools", "codex", "--delivery", "skills", "--json"], root, { CODEX_HOME: codexHome }));
     assert.equal(initialized.ok, true);
     assert.ok((initialized.data?.projected_capability_files ?? 0) > 0);
-    await access(path.join(root, ".agents", "skills", "cap.design.research-question-formulation", "SKILL.md"));
+    await access(path.join(root, ".agents", "skills", "cap-design-research-question-formulation", "SKILL.md"));
   } finally {
     await cleanup(root);
   }

@@ -8,6 +8,7 @@ import { test } from "node:test";
 import { stringify } from "yaml";
 
 import {
+  CapabilityRegistryEntrySchema,
   capabilityIds,
   CapabilityRegistryError,
   loadCapabilityRegistry,
@@ -27,7 +28,7 @@ function sha256(text: string): string {
 function manifestValue(overrides: Record<string, unknown> = {}): Record<string, unknown> {
   return {
     schema_version: "1",
-    capability_id: "cap.design.research-question-formulation",
+    capability_id: "cap-design-research-question-formulation",
     title: "Research Question Formulation",
     description: "Turns project intent into a FINER-scored research question brief.",
     class: "design",
@@ -54,7 +55,7 @@ interface RegistryFixture {
 }
 
 function registryValue(overrides: Omit<RegistryFixture, "root" | "registry"> = {}): RegistryFixture {
-  const capabilityId = overrides.manifest?.capability_id as string | undefined ?? "cap.design.research-question-formulation";
+  const capabilityId = overrides.manifest?.capability_id as string | undefined ?? "cap-design-research-question-formulation";
   const sourcePath = overrides.sourcePath ?? capabilityId;
   const manifest = overrides.manifest ?? manifestValue();
   const manifestText = overrides.manifestText ?? stringify(manifest);
@@ -78,7 +79,7 @@ function registryValue(overrides: Omit<RegistryFixture, "root" | "registry"> = {
 
 async function writeRegistryFixture(root: string, value: { registry: CapabilityRegistry; manifest?: Record<string, unknown>; manifestText?: string; sourcePath?: string; omitSkill?: boolean }): Promise<void> {
   await writeFile(path.join(root, "registry.json"), `${JSON.stringify(value.registry, null, 2)}\n`, "utf8");
-  const capabilityId = value.manifest?.capability_id as string | undefined ?? "cap.design.research-question-formulation";
+  const capabilityId = value.manifest?.capability_id as string | undefined ?? "cap-design-research-question-formulation";
   const packageRoot = path.join(root, ...(value.sourcePath ?? capabilityId).split("/"));
   await mkdir(packageRoot, { recursive: true });
   await mkdir(path.join(packageRoot, "knowledge"), { recursive: true });
@@ -96,18 +97,38 @@ void test("bundled capability registry loads all authored packages", async () =>
   const loaded = await loadCapabilityRegistry();
   assert.equal(loaded.registry.registry_version, "0.1.0");
   for (const id of [
-    "cap.design.research-question-formulation",
-    "cap.design.methodology-design",
-    "cap.discovery.literature-search-screening",
-    "cap.discovery.source-quality-grading",
-    "cap.analysis.evidence-synthesis",
-    "cap.generation.report-compilation",
-    "cap.generation.manuscript-drafting",
-    "cap.check.reference-integrity-verification",
-    "cap.judgment.review-synthesis",
-    "cap.check.citation-existence-verification",
+    "cap-design-research-question-formulation",
+    "cap-design-methodology-design",
+    "cap-discovery-literature-search-screening",
+    "cap-discovery-source-quality-grading",
+    "cap-analysis-evidence-synthesis",
+    "cap-generation-report-compilation",
+    "cap-generation-manuscript-drafting",
+    "cap-check-reference-integrity-verification",
+    "cap-judgment-review-synthesis",
+    "cap-check-citation-existence-verification",
   ]) assert.ok(loaded.capabilities.has(id), id);
   assert.equal(loaded.capabilities.size, 38);
+});
+
+void test("every bundled capability id is a kebab-case package directory name", async () => {
+  const loaded = await loadCapabilityRegistry();
+  for (const registered of loaded.capabilities.values()) {
+    assert.match(registered.manifest.capability_id, /^[a-z0-9]+(?:-[a-z0-9]+)*$/);
+    assert.equal(registered.entry.source_path, registered.manifest.capability_id);
+  }
+});
+
+void test("capability registry entries reject non-kebab-case IDs and source path mismatches", () => {
+  const hash = "a".repeat(64);
+  assert.throws(
+    () => CapabilityRegistryEntrySchema.parse({ capability_id: "cap.design.rq", source_path: "cap.design.rq", manifest_sha256: hash }),
+    /kebab-case/,
+  );
+  assert.throws(
+    () => CapabilityRegistryEntrySchema.parse({ capability_id: "cap-design-rq", source_path: "other-dir", manifest_sha256: hash }),
+    /source_path must equal/,
+  );
 });
 
 void test("every bundled capability is operational with curated procedure and knowledge", async () => {
@@ -131,11 +152,11 @@ void test("capability registry resolves one package with content hashes", async 
       knownSchemaIds: new Set(["specs.project", "rq-brief.v1"]),
       extractionArtifactIds: new Set(["CAP-M1-04"]),
     });
-    const registered = loaded.capabilities.get("cap.design.research-question-formulation");
+    const registered = loaded.capabilities.get("cap-design-research-question-formulation");
     assert.ok(registered);
-    assert.equal(registered.manifest.capability_id, "cap.design.research-question-formulation");
+    assert.equal(registered.manifest.capability_id, "cap-design-research-question-formulation");
     assert.equal(registered.manifestSha256, fixture.registry.capabilities[0].manifest_sha256);
-    assert.deepEqual(capabilityIds(loaded), new Set(["cap.design.research-question-formulation"]));
+    assert.deepEqual(capabilityIds(loaded), new Set(["cap-design-research-question-formulation"]));
   } finally {
     await rm(root, { recursive: true, force: true });
   }
@@ -257,7 +278,7 @@ void test("graph validation reports unknown capabilities and registry version dr
         {
           node_id: "rq",
           kind: "capability",
-          capability_id: "cap.design.missing",
+          capability_id: "cap-design-missing",
           input_bindings: [{ role: "project_intent", source: "stable_spec" }],
           expected_outputs: [{ role: "rq_brief", required: true }],
           prerequisites: [],
@@ -275,7 +296,7 @@ void test("graph validation reports unknown capabilities and registry version dr
       override_policy: { failed_gate_requires_decision: true },
     });
     const diagnostics = validateGraphAgainstCapabilityRegistry(loaded, graph);
-    assert.ok(diagnostics.some((item) => item.message.includes("cap.design.missing")));
+    assert.ok(diagnostics.some((item) => item.message.includes("cap-design-missing")));
     assert.ok(diagnostics.some((item) => item.path === "capability_registry_version" && item.message.includes("0.2.0")));
   } finally {
     await rm(root, { recursive: true, force: true });

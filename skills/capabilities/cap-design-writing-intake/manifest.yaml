@@ -1,0 +1,41 @@
+schema_version: "1"
+capability_id: cap-design-writing-intake
+title: Writing Intake
+description: Collects paper configuration and style calibration for writing work.
+maturity: operational
+class: design
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: project_intent
+    schema_ref: specs.project
+    required: true
+    source_policy: node_output
+outputs:
+  - role: writing_configuration
+    schema_ref: writing-configuration.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - project_intent
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+knowledge_refs:
+  - knowledge_id: style-calibration
+    path: knowledge/style-calibration.md
+    content_hash: f4bb4fbad7c996a97fff36bf5de05aa1b53902976d3a8987b2a58cc71a91a622
+    license: CC BY-NC 4.0
+gate_policy: required
+provenance:
+  origin: ars-derived
+  extraction_artifact_ids:
+    - CAP-M2-01
+    - KP-M2-06
+  upstream_sources:
+    - path: docs/ars_extraction/m2-writing/capabilities/01_writing_intake.md
+      sha256: e5f1d2ac137945b680cedb6b38ac4c53eb8b60265a665c47cf4508254241b369
+license: CC BY-NC 4.0

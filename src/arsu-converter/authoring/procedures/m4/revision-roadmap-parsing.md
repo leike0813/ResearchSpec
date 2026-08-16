@@ -181,6 +181,37 @@ Inputs: reviewer comments in any text format; optional paper draft; optional edi
 | 4 | Actionability | every P1/P2 row has a concrete suggested action | rewrite vague actions |
 | 5 | User confirmation | parsed results are shown before the final roadmap | return to user |
 
+## Rebuttal-Audit Branch
+
+When `rebuttal_draft` is supplied together with `review_comments`, run the advisory rebuttal QA branch and return `rebuttal_qa_report` instead of a generated roadmap.
+
+1. Parse reviewer comments with the standard comment parser.
+2. Evaluate the existing rebuttal/response draft against each comment:
+   - Per-comment coverage table: every reviewer concern marked `addressed` / `partially` / `missing`.
+   - Gap list: concerns the draft fails to answer.
+   - Risk flags: tone too combative, claims made without evidence, or a response that misreads the reviewer's actual point.
+   - Improvement suggestions (advisory only).
+3. Advisory integrity boundary: never emit a commitment ledger, never write to the material passport, and never mark the package verified or ready-to-submit. Rebuttal QA is outside the final integrity stage and must not create false certification.
+4. Output:
+
+```markdown
+## Rebuttal QA Report
+
+### Coverage Table
+| # | Reviewer Comment | addressed / partially / missing | Evidence |
+|---|---|---|---|
+
+### Gap List
+- [concern not answered by the draft]
+
+### Risk Flags
+| # | Location | Risk | Suggestion |
+|---|---|---|---|
+
+### Improvement Suggestions
+- [advisory suggestions]
+```
+
 ## Rules
 
 - Never silently drop a reviewer comment.

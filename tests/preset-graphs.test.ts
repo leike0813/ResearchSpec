@@ -42,7 +42,7 @@ void test("custom graph profiles pass the same validation without engine changes
       {
         node_id: "research-question",
         kind: "capability",
-        capability_id: "cap.design.research-question-formulation",
+        capability_id: "cap-design-research-question-formulation",
         input_bindings: [],
         expected_outputs: [{ role: "rq_brief", required: true }],
         prerequisites: [],
@@ -54,7 +54,7 @@ void test("custom graph profiles pass the same validation without engine changes
       {
         node_id: "report",
         kind: "capability",
-        capability_id: "cap.generation.report-compilation",
+        capability_id: "cap-generation-report-compilation",
         input_bindings: [],
         expected_outputs: [{ role: "research_report", required: true }],
         prerequisites: ["research-question"],

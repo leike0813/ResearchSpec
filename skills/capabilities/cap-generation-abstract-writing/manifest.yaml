@@ -1,0 +1,41 @@
+schema_version: "1"
+capability_id: cap-generation-abstract-writing
+title: Abstract Writing
+description: Writes independent bilingual abstract and keywords.
+maturity: operational
+class: generation
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: manuscript_draft
+    schema_ref: manuscript-draft.v1
+    required: true
+    source_policy: node_output
+outputs:
+  - role: abstract
+    schema_ref: abstract.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - manuscript_draft
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+knowledge_refs:
+  - knowledge_id: abstract-guide
+    path: knowledge/abstract-guide.md
+    content_hash: e6ec1a069fcd11bcc3fcaee34ff6377093fedf787636f2fc204df401b3bc46aa
+    license: CC BY-NC 4.0
+gate_policy: required
+provenance:
+  origin: ars-derived
+  extraction_artifact_ids:
+    - CAP-M2-05
+    - KP-M2-02
+  upstream_sources:
+    - path: docs/ars_extraction/m2-writing/capabilities/05_abstract_writing.md
+      sha256: 03ce976e44c335c83a86d9ff296954e389c2eef982f3f16fd288aae4212f1edc
+license: CC BY-NC 4.0

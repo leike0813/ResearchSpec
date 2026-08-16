@@ -5,7 +5,7 @@ const CC = "CC BY-NC 4.0";
 export const M3_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m3/reference-integrity.md",
-    capability_id: "cap.check.reference-integrity-verification",
+    capability_id: "cap-check-reference-integrity-verification",
     title: "Reference Integrity Verification",
     description: "Verifies citations, bibliography metadata and data provenance.",
     class: "verification",
@@ -20,7 +20,7 @@ export const M3_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m3/review-panel-config.md",
-    capability_id: "cap.design.review-panel-config",
+    capability_id: "cap-design-review-panel-config",
     title: "Review Panel Configuration",
     description: "Analyzes the manuscript field and emits five reviewer cards.",
     class: "design",
@@ -35,7 +35,7 @@ export const M3_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m3/editorial-judgment.md",
-    capability_id: "cap.judgment.editorial-judgment",
+    capability_id: "cap-judgment-editorial-judgment",
     title: "Editorial Judgment",
     description: "Edits and judges the manuscript as a journal editor.",
     class: "judgment",
@@ -50,7 +50,7 @@ export const M3_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m3/specialist-review.md",
-    capability_id: "cap.judgment.specialist-review",
+    capability_id: "cap-judgment-specialist-review",
     title: "Specialist Review",
     description: "Reviews methodology, domain depth and interdisciplinary perspective.",
     class: "judgment",
@@ -65,7 +65,7 @@ export const M3_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m3/devils-advocate.md",
-    capability_id: "cap.judgment.devils-advocate-stress-test",
+    capability_id: "cap-judgment-devils-advocate-stress-test",
     title: "Devil's Advocate Stress Test",
     description: "Attacks the strongest claims without scoring.",
     class: "judgment",
@@ -75,12 +75,15 @@ export const M3_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     license: CC,
     extraction_artifact_id: "CAP-M3-05",
     knowledge_sources: [{ knowledge_id: "logical-fallacies", extraction_artifact_id: "KP-M3-08", output_path: "knowledge/logical-fallacies.md" }],
-    inputs: [{ role: "manuscript_draft", schema_ref: "manuscript-draft.v1", required: true, source_policy: "node_output" }],
+    inputs: [
+      { role: "manuscript_draft", schema_ref: "manuscript-draft.v1", required: true, source_policy: "node_output" },
+      { role: "review_panel_config", schema_ref: "review-panel-config.v1", required: false, source_policy: "handoff" },
+    ],
     outputs: [{ role: "stress_test_report", schema_ref: "stress-test.v1", required: true }],
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m3/review-synthesis.md",
-    capability_id: "cap.judgment.review-synthesis",
+    capability_id: "cap-judgment-review-synthesis",
     title: "Review Synthesis",
     description: "Synthesizes panel reports into one editorial decision and revision roadmap.",
     class: "judgment",
@@ -90,12 +93,12 @@ export const M3_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     license: CC,
     extraction_artifact_id: "CAP-M3-06",
     knowledge_sources: [{ knowledge_id: "sprint-contract", extraction_artifact_id: "KP-M3-06", output_path: "knowledge/sprint-contract.md" }],
-    inputs: [{ role: "specialist_review", schema_ref: "specialist-review.v1", required: true, source_policy: "node_output" }, { role: "editorial_decision", schema_ref: "editorial-decision.v1", required: true, source_policy: "node_output" }],
+    inputs: [{ role: "specialist_review", schema_ref: "specialist-review.v1", required: true, source_policy: "node_output" }, { role: "editorial_decision", schema_ref: "editorial-decision.v1", required: true, source_policy: "node_output" }, { role: "stress_test_report", schema_ref: "stress-test.v1", required: true, source_policy: "node_output" }],
     outputs: [{ role: "review_synthesis", schema_ref: "review-synthesis.v1", required: true }],
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m3/pre-submission-self-check.md",
-    capability_id: "cap.check.pre-submission-self-check",
+    capability_id: "cap-check-pre-submission-self-check",
     title: "Pre-submission Self Check",
     description: "Lightweight author self-check before submission.",
     class: "verification",
@@ -105,7 +108,14 @@ export const M3_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     license: CC,
     extraction_artifact_id: "CAP-M3-07",
     knowledge_sources: [{ knowledge_id: "quality-rubrics", extraction_artifact_id: "KP-M3-02a", output_path: "knowledge/quality-rubrics.md" }],
-    inputs: [{ role: "manuscript_draft", schema_ref: "manuscript-draft.v1", required: true, source_policy: "node_output" }],
-    outputs: [{ role: "self_check_report", schema_ref: "self-check.v1", required: true }],
+    inputs: [
+      { role: "manuscript_draft", schema_ref: "manuscript-draft.v1", required: true, source_policy: "node_output" },
+      { role: "revision_roadmap", schema_ref: "revision-roadmap.v1", required: false, source_policy: "handoff" },
+      { role: "response_to_reviewers", schema_ref: "response-to-reviewers.v1", required: false, source_policy: "handoff" },
+    ],
+    outputs: [
+      { role: "self_check_report", schema_ref: "self-check.v1", required: true },
+      { role: "verification_review_report", schema_ref: "verification-review.v1", required: false },
+    ],
   }
 ];

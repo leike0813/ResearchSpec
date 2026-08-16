@@ -104,7 +104,10 @@
     "education-agent-skills:check": "pnpm build && node dist/src/vendor-converters/education-agent-skills/cli.js check",
     "education-agent-skills:idempotence": "pnpm build && node dist/src/vendor-converters/education-agent-skills/cli.js idempotence",
     "capability:parity": "node scripts/audit-capability-parity.mjs",
-    "capability:parity:report": "node scripts/audit-capability-parity.mjs --json docs/capability-parity-report.json"
+    "capability:parity:report": "node scripts/audit-capability-parity.mjs --json docs/capability-parity-report.json",
+    "capability:review-html": "node scripts/generate-arsu-capability-review-html.mjs artifacts/arsu-mode-capability-review.html",
+    "capability:assessment-html": "node scripts/generate-arsu-graph-match-assessment-html.mjs artifacts/arsu-mode-graph-match-assessment.html",
+    "capability:gap-review-html": "node scripts/generate-arsu-gap-semantic-review-html.mjs artifacts/arsu-mode-gap-semantic-review.html"
   },
   "engines": {
     "node": ">=22"

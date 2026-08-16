@@ -8,6 +8,7 @@ import { z } from "zod";
 
 import {
   CapabilityManifestSchema,
+  CapabilitySkillIdSchema,
   type CapabilityManifest,
 } from "../core/contracts/capability-manifest.js";
 import {
@@ -25,9 +26,17 @@ export const CAPABILITY_REGISTRY_SCHEMA_VERSION = "1" as const;
 export const CAPABILITY_REGISTRY_FILENAME = "registry.json" as const;
 
 export const CapabilityRegistryEntrySchema = z.strictObject({
-  capability_id: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]*$/).refine((value) => !value.includes(".."), "ID cannot contain '..'"),
+  capability_id: CapabilitySkillIdSchema,
   source_path: RelativeSourcePathSchema,
   manifest_sha256: HexSha256Schema,
+}).superRefine((value, context) => {
+  if (value.source_path !== value.capability_id) {
+    context.addIssue({
+      code: "custom",
+      path: ["source_path"],
+      message: "Bundled capability source_path must equal the kebab-case capability_id directory name.",
+    });
+  }
 });
 
 export const CapabilityRegistrySchema = z.strictObject({

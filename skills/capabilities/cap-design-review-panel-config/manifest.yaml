@@ -1,0 +1,46 @@
+schema_version: "1"
+capability_id: cap-design-review-panel-config
+title: Review Panel Configuration
+description: Analyzes the manuscript field and emits five reviewer cards.
+maturity: operational
+class: design
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: manuscript_draft
+    schema_ref: manuscript-draft.v1
+    required: true
+    source_policy: node_output
+outputs:
+  - role: review_panel_config
+    schema_ref: review-panel-config.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - manuscript_draft
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+knowledge_refs:
+  - knowledge_id: review-criteria
+    path: knowledge/review-criteria.md
+    content_hash: 0616804f8027e44ecfbd3d4ade5bfc958de757bcb5f316a5f199f4628f4f098d
+    license: CC BY-NC 4.0
+  - knowledge_id: top-journals
+    path: knowledge/top-journals.md
+    content_hash: 749605065d43b5cdcb79b7d6537c5ca00cc88ae31b1bd541a186cc58a0037daf
+    license: CC BY-NC 4.0
+gate_policy: required
+provenance:
+  origin: ars-derived
+  extraction_artifact_ids:
+    - CAP-M3-02
+    - KP-M3-02b
+    - KP-M3-10
+  upstream_sources:
+    - path: docs/ars_extraction/m3-integrity-review/capabilities/02_review_panel_config.md
+      sha256: 01e988ae5bf8918d287e4a80990a7f2bb1d74bbab43c063021992bc039c854b1
+license: CC BY-NC 4.0

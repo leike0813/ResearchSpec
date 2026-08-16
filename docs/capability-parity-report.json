@@ -20,7 +20,7 @@
   },
   "packages": [
     {
-      "capability_id": "cap.analysis.evidence-synthesis",
+      "capability_id": "cap-analysis-evidence-synthesis",
       "maturity": "operational",
       "skill_lines": 233,
       "knowledge_refs": 3,
@@ -42,7 +42,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.analysis.meta-analysis",
+      "capability_id": "cap-analysis-meta-analysis",
       "maturity": "operational",
       "skill_lines": 207,
       "knowledge_refs": 1,
@@ -70,7 +70,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.analysis.risk-of-bias-assessment",
+      "capability_id": "cap-analysis-risk-of-bias-assessment",
       "maturity": "operational",
       "skill_lines": 202,
       "knowledge_refs": 1,
@@ -93,7 +93,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.check.citation-existence-verification",
+      "capability_id": "cap-check-citation-existence-verification",
       "maturity": "operational",
       "skill_lines": 46,
       "knowledge_refs": 1,
@@ -113,7 +113,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.check.citation-format-compliance",
+      "capability_id": "cap-check-citation-format-compliance",
       "maturity": "operational",
       "skill_lines": 293,
       "knowledge_refs": 1,
@@ -136,7 +136,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.check.citation-verification-summary",
+      "capability_id": "cap-check-citation-verification-summary",
       "maturity": "operational",
       "skill_lines": 46,
       "knowledge_refs": 1,
@@ -156,7 +156,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.check.claim-faithfulness-audit",
+      "capability_id": "cap-check-claim-faithfulness-audit",
       "maturity": "operational",
       "skill_lines": 211,
       "knowledge_refs": 1,
@@ -178,7 +178,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.check.collaboration-depth-observer",
+      "capability_id": "cap-check-collaboration-depth-observer",
       "maturity": "operational",
       "skill_lines": 145,
       "knowledge_refs": 1,
@@ -198,9 +198,9 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.check.compliance-check",
+      "capability_id": "cap-check-compliance-check",
       "maturity": "operational",
-      "skill_lines": 152,
+      "skill_lines": 200,
       "knowledge_refs": 2,
       "knowledge_artifacts": 2,
       "knowledge_coverage": 1,
@@ -220,7 +220,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.check.contamination-signals",
+      "capability_id": "cap-check-contamination-signals",
       "maturity": "operational",
       "skill_lines": 46,
       "knowledge_refs": 1,
@@ -240,9 +240,9 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.check.passport-verifier",
+      "capability_id": "cap-check-passport-verifier",
       "maturity": "operational",
-      "skill_lines": 46,
+      "skill_lines": 67,
       "knowledge_refs": 1,
       "knowledge_artifacts": 1,
       "knowledge_coverage": 1,
@@ -260,7 +260,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.check.pdf-read-preflight",
+      "capability_id": "cap-check-pdf-read-preflight",
       "maturity": "operational",
       "skill_lines": 45,
       "knowledge_refs": 1,
@@ -280,9 +280,9 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.check.pre-submission-self-check",
+      "capability_id": "cap-check-pre-submission-self-check",
       "maturity": "operational",
-      "skill_lines": 316,
+      "skill_lines": 355,
       "knowledge_refs": 1,
       "knowledge_artifacts": 1,
       "knowledge_coverage": 1,
@@ -307,7 +307,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.check.reference-integrity-verification",
+      "capability_id": "cap-check-reference-integrity-verification",
       "maturity": "operational",
       "skill_lines": 309,
       "knowledge_refs": 2,
@@ -336,7 +336,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.check.submission-package-verifier",
+      "capability_id": "cap-check-submission-package-verifier",
       "maturity": "operational",
       "skill_lines": 47,
       "knowledge_refs": 2,
@@ -356,7 +356,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.check.temporal-integrity-verification",
+      "capability_id": "cap-check-temporal-integrity-verification",
       "maturity": "operational",
       "skill_lines": 55,
       "knowledge_refs": 1,
@@ -376,7 +376,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.check.terminal-policy-gate",
+      "capability_id": "cap-check-terminal-policy-gate",
       "maturity": "operational",
       "skill_lines": 83,
       "knowledge_refs": 1,
@@ -396,7 +396,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.design.argument-blueprint",
+      "capability_id": "cap-design-argument-blueprint",
       "maturity": "operational",
       "skill_lines": 246,
       "knowledge_refs": 3,
@@ -419,7 +419,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.design.manuscript-structure-design",
+      "capability_id": "cap-design-manuscript-structure-design",
       "maturity": "operational",
       "skill_lines": 263,
       "knowledge_refs": 1,
@@ -443,7 +443,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.design.methodology-design",
+      "capability_id": "cap-design-methodology-design",
       "maturity": "operational",
       "skill_lines": 162,
       "knowledge_refs": 3,
@@ -468,7 +468,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.design.research-question-formulation",
+      "capability_id": "cap-design-research-question-formulation",
       "maturity": "operational",
       "skill_lines": 148,
       "knowledge_refs": 2,
@@ -491,7 +491,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.design.review-panel-config",
+      "capability_id": "cap-design-review-panel-config",
       "maturity": "operational",
       "skill_lines": 180,
       "knowledge_refs": 2,
@@ -511,7 +511,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.design.writing-intake",
+      "capability_id": "cap-design-writing-intake",
       "maturity": "operational",
       "skill_lines": 234,
       "knowledge_refs": 1,
@@ -531,7 +531,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.discovery.literature-monitoring",
+      "capability_id": "cap-discovery-literature-monitoring",
       "maturity": "operational",
       "skill_lines": 207,
       "knowledge_refs": 1,
@@ -551,7 +551,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.discovery.literature-search-screening",
+      "capability_id": "cap-discovery-literature-search-screening",
       "maturity": "operational",
       "skill_lines": 164,
       "knowledge_refs": 2,
@@ -586,7 +586,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.discovery.source-quality-grading",
+      "capability_id": "cap-discovery-source-quality-grading",
       "maturity": "operational",
       "skill_lines": 183,
       "knowledge_refs": 1,
@@ -606,7 +606,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.generation.abstract-writing",
+      "capability_id": "cap-generation-abstract-writing",
       "maturity": "operational",
       "skill_lines": 155,
       "knowledge_refs": 1,
@@ -626,7 +626,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.generation.figure-generation",
+      "capability_id": "cap-generation-figure-generation",
       "maturity": "operational",
       "skill_lines": 210,
       "knowledge_refs": 2,
@@ -660,7 +660,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.generation.format-rendering",
+      "capability_id": "cap-generation-format-rendering",
       "maturity": "operational",
       "skill_lines": 309,
       "knowledge_refs": 2,
@@ -684,7 +684,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.generation.manuscript-drafting",
+      "capability_id": "cap-generation-manuscript-drafting",
       "maturity": "operational",
       "skill_lines": 211,
       "knowledge_refs": 3,
@@ -706,7 +706,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.generation.report-compilation",
+      "capability_id": "cap-generation-report-compilation",
       "maturity": "operational",
       "skill_lines": 251,
       "knowledge_refs": 2,
@@ -728,9 +728,9 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.judgment.devils-advocate-stress-test",
+      "capability_id": "cap-judgment-devils-advocate-stress-test",
       "maturity": "operational",
-      "skill_lines": 217,
+      "skill_lines": 218,
       "knowledge_refs": 1,
       "knowledge_artifacts": 1,
       "knowledge_coverage": 1,
@@ -752,7 +752,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.judgment.editorial-judgment",
+      "capability_id": "cap-judgment-editorial-judgment",
       "maturity": "operational",
       "skill_lines": 188,
       "knowledge_refs": 1,
@@ -772,9 +772,9 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.judgment.review-synthesis",
+      "capability_id": "cap-judgment-review-synthesis",
       "maturity": "operational",
-      "skill_lines": 249,
+      "skill_lines": 250,
       "knowledge_refs": 1,
       "knowledge_artifacts": 1,
       "knowledge_coverage": 1,
@@ -798,7 +798,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.judgment.specialist-review",
+      "capability_id": "cap-judgment-specialist-review",
       "maturity": "operational",
       "skill_lines": 199,
       "knowledge_refs": 3,
@@ -821,9 +821,9 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.transform.revision-patching",
+      "capability_id": "cap-transform-revision-patching",
       "maturity": "operational",
-      "skill_lines": 56,
+      "skill_lines": 73,
       "knowledge_refs": 1,
       "knowledge_artifacts": 1,
       "knowledge_coverage": 1,
@@ -841,9 +841,9 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.transform.revision-roadmap-parsing",
+      "capability_id": "cap-transform-revision-roadmap-parsing",
       "maturity": "operational",
-      "skill_lines": 222,
+      "skill_lines": 255,
       "knowledge_refs": 1,
       "knowledge_artifacts": 1,
       "knowledge_coverage": 1,
@@ -866,7 +866,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap.transform.socratic-mentoring",
+      "capability_id": "cap-transform-socratic-mentoring",
       "maturity": "operational",
       "skill_lines": 277,
       "knowledge_refs": 2,

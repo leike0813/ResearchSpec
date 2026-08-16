@@ -5,7 +5,7 @@ const CC = "CC BY-NC 4.0";
 export const M4_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m4/revision-roadmap-parsing.md",
-    capability_id: "cap.transform.revision-roadmap-parsing",
+    capability_id: "cap-transform-revision-roadmap-parsing",
     title: "Revision Roadmap Parsing",
     description: "Converts unstructured reviewer comments into a structured roadmap.",
     class: "transformation",
@@ -15,12 +15,18 @@ export const M4_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     license: CC,
     extraction_artifact_id: "CAP-M4-01",
     knowledge_sources: [{ knowledge_id: "revision-patch-protocol", extraction_artifact_id: "KP-M4-01", output_path: "knowledge/revision-patch-protocol.md" }],
-    inputs: [{ role: "review_comments", schema_ref: "review-comments.v1", required: true, source_policy: "node_output" }],
-    outputs: [{ role: "revision_roadmap", schema_ref: "revision-roadmap.v1", required: true }],
+    inputs: [
+      { role: "review_comments", schema_ref: "review-comments.v1", required: true, source_policy: "node_output" },
+      { role: "rebuttal_draft", schema_ref: "rebuttal-draft.v1", required: false, source_policy: "handoff" },
+    ],
+    outputs: [
+      { role: "revision_roadmap", schema_ref: "revision-roadmap.v1", required: true },
+      { role: "rebuttal_qa_report", schema_ref: "rebuttal-qa.v1", required: false },
+    ],
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m4/revision-patching.md",
-    capability_id: "cap.transform.revision-patching",
+    capability_id: "cap-transform-revision-patching",
     title: "Revision Patching",
     description: "Deterministically anchors and applies revision patches fail-closed.",
     class: "transformation",
@@ -31,11 +37,14 @@ export const M4_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     extraction_artifact_id: "CAP-M4-02",
     knowledge_sources: [{ knowledge_id: "revision-patch-protocol", extraction_artifact_id: "KP-M4-01", output_path: "knowledge/revision-patch-protocol.md" }],
     inputs: [{ role: "revision_patch", schema_ref: "revision-patch.v1", required: true, source_policy: "node_output" }],
-    outputs: [{ role: "patched_manuscript", schema_ref: "patched-manuscript.v1", required: true }],
+    outputs: [
+      { role: "patched_manuscript", schema_ref: "patched-manuscript.v1", required: true },
+      { role: "response_to_reviewers", schema_ref: "response-to-reviewers.v1", required: true },
+    ],
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m4/format-rendering.md",
-    capability_id: "cap.generation.format-rendering",
+    capability_id: "cap-generation-format-rendering",
     title: "Format Rendering",
     description: "Converts the final manuscript into declared output formats.",
     class: "generation",
@@ -50,7 +59,7 @@ export const M4_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m4/terminal-policy-gate.md",
-    capability_id: "cap.check.terminal-policy-gate",
+    capability_id: "cap-check-terminal-policy-gate",
     title: "Terminal Policy Gate",
     description: "Applies the finalizer policy before submission package creation.",
     class: "verification",
@@ -65,7 +74,7 @@ export const M4_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m4/temporal-integrity.md",
-    capability_id: "cap.check.temporal-integrity-verification",
+    capability_id: "cap-check-temporal-integrity-verification",
     title: "Temporal Integrity Verification",
     description: "Runs five-pass temporal lint against manuscript claims.",
     class: "verification",

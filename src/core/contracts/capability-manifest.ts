@@ -60,6 +60,10 @@ export const CapabilityOriginSchema = z.enum([
 
 const NonEmptySchema = z.string().trim().min(1);
 const HexSha256Schema = z.string().regex(/^[0-9a-f]{64}$/, "content hash must be a lowercase SHA-256 hex string");
+export const CapabilitySkillIdSchema = z.string().min(1).max(128).regex(
+  /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+  "capability_id must be a lowercase kebab-case Open Agent Skills name",
+);
 const PackagePathSchema = z.string().trim().min(1)
   .refine((value) => !value.startsWith("/") && !/^[A-Za-z]:/.test(value), "package paths must be relative")
   .refine((value) => !value.split(/[\\/]/).includes(".."), "package paths cannot escape the package root");
@@ -129,7 +133,7 @@ export const CapabilityPresetSchema = z.strictObject({
 
 export const CapabilityManifestSchema = z.strictObject({
   schema_version: z.literal(CAPABILITY_MANIFEST_SCHEMA_VERSION),
-  capability_id: StableIdSchema,
+  capability_id: CapabilitySkillIdSchema,
   title: NonEmptySchema,
   description: NonEmptySchema,
   class: CapabilityClassSchema,

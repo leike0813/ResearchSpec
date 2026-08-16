@@ -5,7 +5,7 @@ const CC = "CC BY-NC 4.0";
 export const M2_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m2/writing-intake.md",
-    capability_id: "cap.design.writing-intake",
+    capability_id: "cap-design-writing-intake",
     title: "Writing Intake",
     description: "Collects paper configuration and style calibration for writing work.",
     class: "design",
@@ -20,7 +20,7 @@ export const M2_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m2/manuscript-structure-design.md",
-    capability_id: "cap.design.manuscript-structure-design",
+    capability_id: "cap-design-manuscript-structure-design",
     title: "Manuscript Structure Design",
     description: "Designs paper structure, outline, word budget and evidence mapping.",
     class: "design",
@@ -35,7 +35,7 @@ export const M2_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m2/argument-blueprint.md",
-    capability_id: "cap.design.argument-blueprint",
+    capability_id: "cap-design-argument-blueprint",
     title: "Argument Blueprint",
     description: "Builds claim-evidence-reasoning chains and handles counterarguments.",
     class: "design",
@@ -50,7 +50,7 @@ export const M2_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m2/manuscript-drafting.md",
-    capability_id: "cap.generation.manuscript-drafting",
+    capability_id: "cap-generation-manuscript-drafting",
     title: "Manuscript Drafting",
     description: "Writes manuscript sections and revision patches from outline and argument blueprint.",
     class: "generation",
@@ -65,7 +65,7 @@ export const M2_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m2/abstract-writing.md",
-    capability_id: "cap.generation.abstract-writing",
+    capability_id: "cap-generation-abstract-writing",
     title: "Abstract Writing",
     description: "Writes independent bilingual abstract and keywords.",
     class: "generation",
@@ -80,7 +80,7 @@ export const M2_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m2/citation-format-compliance.md",
-    capability_id: "cap.check.citation-format-compliance",
+    capability_id: "cap-check-citation-format-compliance",
     title: "Citation Format Compliance",
     description: "Validates in-text citations and reference list formatting.",
     class: "verification",

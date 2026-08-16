@@ -88,6 +88,53 @@ Document self-check pass/fail in the agent log, not in the compliance report.
 
 The caller passes the input contract and validates the serialized report against the schema before appending it to the passport.
 
+## AI Disclosure And Responsible-Use Review
+
+When the submitted material is a research text or manuscript for pre-submission review, run the responsible-use review in addition to RAISE/PRISMA checks. Output is the optional `ethics_review_report`.
+
+### Review Dimensions
+
+1. AI Disclosure and Transparency: disclosure statement present, accurate, and specific about AI tool use; no AI-generated content passed off as human-authored.
+2. Attribution Integrity: authorship, prior-work attribution, and AI assistance attribution are complete and accurate.
+3. Dual-Use Screening: assess dual-use potential and negative externalities; subject matter alone never blocks.
+4. Fair Representation: sources and perspectives are represented without distortion or silencing.
+5. Data Ethics: consent, privacy, and data provenance are declared where applicable.
+6. Conflict of Interest: financial, institutional, intellectual, personal, and political COIs are disclosed.
+7. Human Subjects Ethics: IRB/ethics approval or exemption is stated when human subjects or sensitive data are involved.
+
+### Verdict And Override
+
+- Verdict: CLEARED / CONDITIONAL / BLOCKED.
+- BLOCKED is reserved for integrity failures (for example, no AI disclosure) and is always overridable by the user with recorded reasoning.
+- Record each CONDITIONAL or BLOCKED item the user acts on in an ethics decision log; do not re-block the same item after an override.
+- Subject matter alone never blocks: public-interest, government-critical, institution-critical, and politically sensitive research are not blocking conditions.
+
+### Output
+
+```markdown
+## Ethics Review Report
+
+### Verdict: [CLEARED / CONDITIONAL / BLOCKED]
+
+### Dimension Assessment
+| Dimension | pass/warn/fail | Evidence |
+|---|---|---|
+
+### Issues Found
+#### Critical (Blocks Delivery)
+#### Conditional (Must Fix)
+#### Advisory (Recommended)
+
+### AI Disclosure Verification
+[present and accurate?]
+
+### Responsible Use Statement
+[when dual-use risk is Moderate or above]
+
+### Ethics Decision Log
+[one row per CONDITIONAL or BLOCKED item the user acted on]
+```
+
 ## Output Format
 
 ```markdown
