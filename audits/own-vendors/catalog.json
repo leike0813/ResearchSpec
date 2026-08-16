@@ -1,0 +1,37 @@
+{
+  "schema_version": "1",
+  "catalog_id": "own-vendor-maintenance-v0.1",
+  "vendors": [
+    {
+      "vendor_id": "paper-humanizer",
+      "release_label": "v2.9.1",
+      "anchor_id": "v2.9.1-1a31f2d",
+      "source_meta": "vendor/paper-humanizer/SOURCE.json",
+      "upstream_root": "vendor/paper-humanizer/upstream",
+      "extraction_index": "docs/paper-humanizer_extraction/extraction-index.json",
+      "author_script": "paper-humanizer:author",
+      "capability_ids": [
+        "cap-generation-humanization-reference",
+        "cap-check-paper-humanization-review",
+        "cap-transform-paper-humanization-revision",
+        "cap-check-paper-humanization-verification"
+      ]
+    },
+    {
+      "vendor_id": "revision-master",
+      "release_label": "snapshot-13e69610",
+      "anchor_id": "snapshot-13e69610",
+      "source_meta": "vendor/revision-master/SOURCE.json",
+      "upstream_root": "vendor/revision-master/upstream/skills/revision-master",
+      "extraction_index": "docs/revision-master_extraction/extraction-index.json",
+      "author_script": "revision-master:author",
+      "capability_ids": [
+        "cap-design-review-response-intake",
+        "cap-analysis-review-response-manuscript-analysis",
+        "cap-transform-review-response-comment-atomization",
+        "cap-design-review-response-workboard-planning",
+        "cap-generation-review-response-round"
+      ]
+    }
+  ]
+}

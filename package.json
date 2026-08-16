@@ -107,7 +107,11 @@
     "arsu-maintenance:artifacts": "node scripts/arsu-maintenance.mjs artifacts",
     "arsu-maintenance:records": "node scripts/arsu-maintenance.mjs records",
     "paper-humanizer:author": "pnpm build && node dist/src/arsu-converter/authoring/paper-humanizer-cli.js",
-    "revision-master:author": "pnpm build && node dist/src/arsu-converter/authoring/revision-master-cli.js"
+    "revision-master:author": "pnpm build && node dist/src/arsu-converter/authoring/revision-master-cli.js",
+    "own-vendor-maintenance:artifacts": "node scripts/own-vendor-maintenance.mjs artifacts",
+    "own-vendor-maintenance:records": "node scripts/own-vendor-maintenance.mjs records",
+    "own-vendor-maintenance:baseline": "node scripts/own-vendor-maintenance.mjs baseline",
+    "own-vendor-maintenance:check": "node scripts/own-vendor-maintenance.mjs check"
   },
   "engines": {
     "node": ">=22"

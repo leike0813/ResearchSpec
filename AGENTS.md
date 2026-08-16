@@ -364,6 +364,14 @@ contributors. Authoring is offline and never executes upstream Python or
 installs PyYAML/Jinja2. Vendor root licensing does not replace an evidenced
 Skill-level content license.
 
+`audits/own-vendors/catalog.json` is the unified maintenance catalog for
+user-owned upstream vendors (currently `paper-humanizer` and
+`revision-master`). `scripts/own-vendor-maintenance.mjs` and
+`.agents/skills/own-vendor-maintenance/SKILL.md` provide catalog-driven
+`artifacts / records / baseline / check / diff` anchors and the Agent semantic
+review gate. A future owned vendor is added through its extraction index,
+authoring sources, package script, and one additive catalog entry.
+
 Non-native upstream projects such as HistAgent, FinRobot, and
 Materials-Science-Skills-For-LLM follow
 `docs/non_native_vendor_skill_standard.md`. Its templates are authoring

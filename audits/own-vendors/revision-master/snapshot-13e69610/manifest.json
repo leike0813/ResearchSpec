@@ -1,0 +1,53 @@
+{
+  "schema_version": "1",
+  "vendor_id": "revision-master",
+  "anchor_id": "snapshot-13e69610",
+  "created_at": "2026-08-16T06:24:14.281Z",
+  "upstream": {
+    "source_meta": "vendor/revision-master/SOURCE.json",
+    "upstream_root": "vendor/revision-master/upstream/skills/revision-master",
+    "release_label": "snapshot-13e69610",
+    "commit": "13e69610f216f816f106d1a2a1672eedfa01ac9a",
+    "tree_sha256": "17c9a3813e7fa0f2260caaf2908f6825923828d67041020eb87a27830ed15b4c"
+  },
+  "extraction": {
+    "index_path": "docs/revision-master_extraction/extraction-index.json",
+    "index_sha256": "583c3ce78a7e48d02c204e8c46163777422de738f32cbea453b158627d62376a",
+    "artifact_count": 45,
+    "pass": 45,
+    "fail": 0,
+    "error": 0
+  },
+  "conversion": {
+    "capability_count": 5,
+    "operational_count": 5,
+    "capability_ids": [
+      "cap-analysis-review-response-manuscript-analysis",
+      "cap-design-review-response-intake",
+      "cap-design-review-response-workboard-planning",
+      "cap-generation-review-response-round",
+      "cap-transform-review-response-comment-atomization"
+    ],
+    "registry_subset_sha256": "463ab7fba548e1d44a594b98835b209ea52da84445153703848580172004bb6a",
+    "packages_tree_sha256": "3a08effb040b24cb4ea5d9f295ea0a496a6570c308e94628cf8e6ecdb29618d5"
+  },
+  "review": {
+    "parity_report_path": "/home/joshua/Workspace/Code/JavaScript/ResearchSpec/docs/capability-parity-report.json",
+    "parity_artifact_path": "audits/own-vendors/revision-master/snapshot-13e69610/artifacts/parity-packages.json",
+    "parity_artifact_sha256": "8f4453114ea1d5ed200d52328edef5e8fc4daa023f1fdafbeaaa4945f07f7f76",
+    "package_count": 5,
+    "operational_count": 5,
+    "avg_section_coverage": 0.9466666666666667,
+    "avg_rule_coverage": 1,
+    "below_section_threshold": [],
+    "below_rule_threshold": [],
+    "output_missing": [],
+    "knowledge_below_threshold": [],
+    "flow_retained": []
+  },
+  "maintenance": {
+    "skill_sha256": "8a644c683d2cac0eab5f5633eadeb3e85d397fccdba5a31ef6a1c8da3d11dc7d",
+    "catalog_sha256": "8b1038bd291899c9b672e906db59863ec9d918af8c9d506e516cfc9cdcb8d187",
+    "record_sha256": "9e2d6d6608e01879801fa81ca016462ef5fe4d6c09e0df430fbc75983d08c6b8"
+  }
+}

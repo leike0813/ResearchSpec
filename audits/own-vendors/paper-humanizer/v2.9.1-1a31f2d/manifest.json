@@ -1,0 +1,52 @@
+{
+  "schema_version": "1",
+  "vendor_id": "paper-humanizer",
+  "anchor_id": "v2.9.1-1a31f2d",
+  "created_at": "2026-08-16T06:24:14.161Z",
+  "upstream": {
+    "source_meta": "vendor/paper-humanizer/SOURCE.json",
+    "upstream_root": "vendor/paper-humanizer/upstream",
+    "release_label": "v2.9.1",
+    "commit": "1a31f2d0ff6dab94c799f7ae1a3a469aea3e5394",
+    "tree_sha256": "5094db4e59a88dc82065efe915686043621c31d77ad5f92f4debb2d1888fc853"
+  },
+  "extraction": {
+    "index_path": "docs/paper-humanizer_extraction/extraction-index.json",
+    "index_sha256": "a033ea7fe15d3735baad929b0c0ed3d30ecd0598fec495b76cdcfa8c880e3e55",
+    "artifact_count": 9,
+    "pass": 9,
+    "fail": 0,
+    "error": 0
+  },
+  "conversion": {
+    "capability_count": 4,
+    "operational_count": 4,
+    "capability_ids": [
+      "cap-check-paper-humanization-review",
+      "cap-check-paper-humanization-verification",
+      "cap-generation-humanization-reference",
+      "cap-transform-paper-humanization-revision"
+    ],
+    "registry_subset_sha256": "2072a9958bf602810fd088ff817ebbd5e439051d57fee954f2905c12ce821568",
+    "packages_tree_sha256": "a381454fd5d4e1922a88eee2cfc138e5d4c3ca0caf760bb43b3f6666fa029a53"
+  },
+  "review": {
+    "parity_report_path": "/home/joshua/Workspace/Code/JavaScript/ResearchSpec/docs/capability-parity-report.json",
+    "parity_artifact_path": "audits/own-vendors/paper-humanizer/v2.9.1-1a31f2d/artifacts/parity-packages.json",
+    "parity_artifact_sha256": "2035782b5147e1cdf06c073878712b27bd37048e7a57d6c6b6a06b9119e6c2f1",
+    "package_count": 4,
+    "operational_count": 4,
+    "avg_section_coverage": 0.9450000000000001,
+    "avg_rule_coverage": 0.9166666666666666,
+    "below_section_threshold": [],
+    "below_rule_threshold": [],
+    "output_missing": [],
+    "knowledge_below_threshold": [],
+    "flow_retained": []
+  },
+  "maintenance": {
+    "skill_sha256": "8a644c683d2cac0eab5f5633eadeb3e85d397fccdba5a31ef6a1c8da3d11dc7d",
+    "catalog_sha256": "8b1038bd291899c9b672e906db59863ec9d918af8c9d506e516cfc9cdcb8d187",
+    "record_sha256": "3eacdf43e33783b4f0b498fe0e22562c80a105e0081aee95e86eaa8987a7f902"
+  }
+}
