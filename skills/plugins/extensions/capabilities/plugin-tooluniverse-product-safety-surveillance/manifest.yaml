@@ -1,0 +1,58 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-product-safety-surveillance
+title: Product Safety Surveillance (multi-product, openFDA)
+description: Investigate product safety signals across regulatory reports,
+  recalls, adverse events, and literature with traceable evidence, uncertainty,
+  and explicit separation from clinical diagnosis or treatment advice.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-references-openfda-fields.md
+    path: references/openfda_fields.md
+    content_hash: 553863b70a19c784a2c20b8d66ed6924ccd484d34cfbf8cca6bc7be6e8c0d5bb
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-product-safety-surveillance/SKILL.md
+      sha256: 4f49e5de31a13e59e419fe36d6d5bf8e240a558e49b59b0dc25b2d83d1a92d40
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-product-safety-surveillance/references/openfda_fields.md
+      sha256: 553863b70a19c784a2c20b8d66ed6924ccd484d34cfbf8cca6bc7be6e8c0d5bb
+license: Apache-2.0

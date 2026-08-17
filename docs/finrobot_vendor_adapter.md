@@ -80,3 +80,43 @@ pnpm finrobot:idempotence
 Conversion stages all six published vendors, assembles the complete
 source-neutral registry, and commits only the FinRobot tree, bundle, manifest,
 report, and combined registry. Drift protection requires `--force` after review.
+
+## Extension mode packages
+
+The six reviewed raw Skills are also projected one-to-one into the graph-native
+extension registry under `skills/plugins/extensions/`:
+
+| raw Skill | extension capability | execution |
+| --- | --- | --- |
+| `financial-research-company-fundamentals` | `plugin-financial-company-fundamentals` | mixed |
+| `financial-research-competitive-position` | `plugin-financial-competitive-position` | llm |
+| `financial-research-corporate-risk` | `plugin-financial-corporate-risk` | llm |
+| `financial-research-event-evidence` | `plugin-financial-event-evidence` | mixed |
+| `financial-research-relative-valuation` | `plugin-financial-relative-valuation` | mixed |
+| `financial-research-statement-analysis` | `plugin-financial-statement-analysis` | mixed |
+
+Mixed packages copy the reviewed formal entrypoint and `lib/financial_support.py`
+byte-for-byte into `tools/` as hash-bound knowledge refs. Each mixed package
+declares `validators/validate_financial_brief.py` with its own evidence-bearing
+`--required` field list; llm packages use the engine-enforced output-role policy.
+Every package has a same-named one-node graph profile.
+
+`accounting-auditing-and-accountability` projects company-fundamentals and
+statement-analysis extensions; `banking-finance-and-investment` projects all six.
+Install, update, status, and check read manifests and hashes only. Only
+`advance` executes the declared `python3` validator.
+
+## Maintenance suite
+
+```bash
+pnpm finrobot-maintenance:artifacts
+pnpm finrobot-maintenance:records
+pnpm finrobot-maintenance:baseline
+pnpm finrobot-maintenance:check
+```
+
+The suite anchors at `audits/finrobot/snapshot-297a8d2`, binds the immutable
+audit, the vendor bundle, the extension registry subset, package/profile trees,
+the maintenance Skill, the maintenance catalog, and records 01–05 in
+`manifest.json`. The Agent semantic review is mandatory and `baseline` refuses
+an anchor whose `05-semantic-review.md` is not completed.

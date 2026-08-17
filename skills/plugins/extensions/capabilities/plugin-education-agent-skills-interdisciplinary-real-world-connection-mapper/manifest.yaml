@@ -1,0 +1,52 @@
+schema_version: "1"
+capability_id: plugin-education-agent-skills-interdisciplinary-real-world-connection-mapper
+title: Interdisciplinary Real-World Connection Mapper
+description: Map curriculum connections across multiple subjects for a
+  real-world problem or authentic context. Use when planning cross-curricular
+  projects or connecting content to real issues.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: education-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_education_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs: []
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-interdisciplinary-real-world-connection-mapper/SKILL.md
+      sha256: b3d2330f733175b1b32c97e4ab76eda00d1b10539f3db7cb038880b49374b79f
+license: Apache-2.0

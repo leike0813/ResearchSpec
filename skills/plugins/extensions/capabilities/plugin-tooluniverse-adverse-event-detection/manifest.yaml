@@ -1,0 +1,79 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-adverse-event-detection
+title: Adverse Drug Event Signal Detection & Analysis
+description: Detect and analyze adverse drug event signals using FDA FAERS
+  reports, drug labels, and disproportionality statistics (PRR, ROR, IC).
+  Generates quantitative safety signal scores (0-100) with evidence grading. Use
+  for post-market surveillance, pharmacovigilance, drug safety assessment,
+  regulatory submissions, and detecting rare AE signals not visible in clinical
+  trials.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-phase-details.md
+    path: PHASE_DETAILS.md
+    content_hash: d5da1640ceb2954ffea80fb636a8602f67b0f22a7aa578460fa681828f4c3488
+    license: Apache-2.0
+  - knowledge_id: tu-quick-start.md
+    path: QUICK_START.md
+    content_hash: c1432630f527fe0a65dbf50cfad38a8ec595df59b35945748c1740e91e5ef750
+    license: Apache-2.0
+  - knowledge_id: tu-report-template.md
+    path: REPORT_TEMPLATE.md
+    content_hash: 0069b7a053f7cfa1ef09d8cbd74f22bf8107eedeb4efdc283923703552db3417
+    license: Apache-2.0
+  - knowledge_id: tu-tool-reference.md
+    path: TOOL_REFERENCE.md
+    content_hash: 84b9af7e71a0cacc1f56d1fdf58099a30fc3383addba2ae666aebd0db34c044a
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-adverse-event-detection/SKILL.md
+      sha256: 3255e838fdee36bf5ac0b817f91cc403b7284ffc251fe830fa306eae014fa86f
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-adverse-event-detection/PHASE_DETAILS.md
+      sha256: d5da1640ceb2954ffea80fb636a8602f67b0f22a7aa578460fa681828f4c3488
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-adverse-event-detection/QUICK_START.md
+      sha256: c1432630f527fe0a65dbf50cfad38a8ec595df59b35945748c1740e91e5ef750
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-adverse-event-detection/REPORT_TEMPLATE.md
+      sha256: 0069b7a053f7cfa1ef09d8cbd74f22bf8107eedeb4efdc283923703552db3417
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-adverse-event-detection/TOOL_REFERENCE.md
+      sha256: 84b9af7e71a0cacc1f56d1fdf58099a30fc3383addba2ae666aebd0db34c044a
+license: Apache-2.0

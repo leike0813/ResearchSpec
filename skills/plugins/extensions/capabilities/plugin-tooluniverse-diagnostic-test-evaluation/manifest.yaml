@@ -1,0 +1,62 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-diagnostic-test-evaluation
+title: Diagnostic Test / Biomarker Accuracy Evaluation
+description: Diagnostic test / biomarker accuracy — sensitivity, specificity,
+  PPV, NPV, likelihood ratios, accuracy from a 2x2 table; ROC curve, AUC, and
+  the optimal cutoff (Youden) for a continuous biomarker; and post-test
+  probability via Bayes. Use when you have test results vs a gold standard
+  (binary 2x2, or a continuous score + true labels) and need to judge how good
+  the test is, pick a threshold, or compute the probability of disease given a
+  result. Emphasizes the prevalence-dependence of PPV/NPV.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-scripts-roc-analysis.py
+    path: scripts/roc_analysis.py
+    content_hash: 13e49efa3c0334c9906bfc4600130f22bf5a4fc1d711326ae9f30b4552b7078a
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-diagnostic-test-evaluation/SKILL.md
+      sha256: bcf0fe0f8b568700ee6067fdd20f49ce5616d34a3769a3bba2a861b4e382163b
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-diagnostic-test-evaluation/scripts/roc_analysis.py
+      sha256: 13e49efa3c0334c9906bfc4600130f22bf5a4fc1d711326ae9f30b4552b7078a
+license: Apache-2.0

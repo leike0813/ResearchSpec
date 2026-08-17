@@ -1,0 +1,92 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-protocolsio-integration
+title: Protocols.io Integration
+description: Integration with protocols.io API for managing scientific
+  protocols. This skill should be used when working with protocols.io to search,
+  create, update, or publish protocols; manage protocol steps and materials;
+  handle discussions and comments; organize workspaces; upload and manage files;
+  or integrate protocols.io functionality into workflows. Applicable for
+  protocol discovery, collaborative protocol development, experiment tracking,
+  lab protocol management, and scientific documentation.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-references-additional-features.md
+    path: references/additional_features.md
+    content_hash: 55af83378e4e427de8e3f2ac242c5063d15ac08957f8b719b646d33164179c62
+    license: Apache-2.0
+  - knowledge_id: sas-references-authentication.md
+    path: references/authentication.md
+    content_hash: 227a44f0514f5fdfffa72eeb45eb6edb798a780810ce7f5c8cbf91ded6421215
+    license: Apache-2.0
+  - knowledge_id: sas-references-discussions.md
+    path: references/discussions.md
+    content_hash: 67885f9d635af994e02cd685d8a7435e0fd7f7ed6ebfb441272dd20d557962fe
+    license: Apache-2.0
+  - knowledge_id: sas-references-file-manager.md
+    path: references/file_manager.md
+    content_hash: eb2a7170e8ca4944070a0282e434921f37fee4bef405296119d91c6cf16e8b31
+    license: Apache-2.0
+  - knowledge_id: sas-references-protocols-api.md
+    path: references/protocols_api.md
+    content_hash: ba32892bd66eb70066a455e63fd32187b9c01c97d142d40cae24a34fee396ced
+    license: Apache-2.0
+  - knowledge_id: sas-references-workspaces.md
+    path: references/workspaces.md
+    content_hash: b3e4d3a9d31886274cbde594398d24ceb321565aa2f430d4c16d2a1d18ed3aba
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-protocolsio-integration/SKILL.md
+      sha256: 1e783deda6276674942acf1a6bb54e9eefc50a2089db69b1f70e31e0f165511c
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-protocolsio-integration/references/additional_features.md
+      sha256: 55af83378e4e427de8e3f2ac242c5063d15ac08957f8b719b646d33164179c62
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-protocolsio-integration/references/authentication.md
+      sha256: 227a44f0514f5fdfffa72eeb45eb6edb798a780810ce7f5c8cbf91ded6421215
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-protocolsio-integration/references/discussions.md
+      sha256: 67885f9d635af994e02cd685d8a7435e0fd7f7ed6ebfb441272dd20d557962fe
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-protocolsio-integration/references/file_manager.md
+      sha256: eb2a7170e8ca4944070a0282e434921f37fee4bef405296119d91c6cf16e8b31
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-protocolsio-integration/references/protocols_api.md
+      sha256: ba32892bd66eb70066a455e63fd32187b9c01c97d142d40cae24a34fee396ced
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-protocolsio-integration/references/workspaces.md
+      sha256: b3e4d3a9d31886274cbde594398d24ceb321565aa2f430d4c16d2a1d18ed3aba
+license: Apache-2.0

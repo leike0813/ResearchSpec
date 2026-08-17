@@ -118,3 +118,42 @@ The npm package contains the generated Skill trees, bundle, manifest, conversion
 report, adapter documentation, and CC BY-SA 4.0 reference license. It excludes
 the upstream checkout, audit and evidence SSOTs, production-policy sources,
 preview output, and Education converter maintenance code.
+
+## Extension mode packages
+
+All 136 reviewed production Skills are also projected one-to-one into the
+graph-native extension registry under `skills/plugins/extensions/` as
+`plugin-education-agent-skills-*` capabilities with same-named one-node graph
+profiles. The generator
+`scripts/generate-education-agent-skills-extensions.mjs` produces the packages
+from the reviewed vendor bundle and the source-neutral domain catalog.
+
+- Every package is a static `execution_type: llm` tree with
+  `knowledge_refs: []`; the reviewed tree contains no scripts or references.
+- The reviewed `SKILL.md` body, including the
+  `researchspec-education-boundary` block, is preserved byte-for-byte except
+  frontmatter replacement and the appended node contract.
+- Every package declares `validate_education_brief.py` with the same six
+  evidence-bearing `research_brief` fields.
+- Domain assignments mirror the three reviewed domains:
+  `curriculum-and-pedagogy`, `education-systems`, and
+  `specialist-studies-in-education`.
+
+Install, update, status, and check read manifests and hashes only. Only
+`advance` executes the declared `python3` validator.
+
+## Maintenance suite
+
+```bash
+pnpm education-agent-skills-maintenance:artifacts
+pnpm education-agent-skills-maintenance:records
+pnpm education-agent-skills-maintenance:baseline
+pnpm education-agent-skills-maintenance:check
+```
+
+The suite anchors at `audits/education-agent-skills/snapshot-32fce5c`, binds
+the immutable skill audit, evidence map, vendor bundle, extension registry
+subset, package/profile trees, the maintenance Skill, the maintenance catalog,
+and records 01–05 in `manifest.json`. `artifacts` regenerates the 136 packages.
+The Agent semantic review is mandatory and `baseline` refuses an anchor whose
+`05-semantic-review.md` is not completed.

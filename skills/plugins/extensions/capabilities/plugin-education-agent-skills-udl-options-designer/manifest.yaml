@@ -1,0 +1,53 @@
+schema_version: "1"
+capability_id: plugin-education-agent-skills-udl-options-designer
+title: UDL Options Designer
+description: Generates multiple means of engagement, representation, and
+  action/expression for a given learning goal. Produces specific, practical
+  alternatives — not generic options — and recommends the highest-impact single
+  change.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: education-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_education_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs: []
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-udl-options-designer/SKILL.md
+      sha256: c6446cd907901592274dd0d0c9f6bc7974d04991b2417e67a3e2efb3aaa217a1
+license: Apache-2.0

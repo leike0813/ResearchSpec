@@ -1,0 +1,100 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-open-notebook
+title: Open Notebook
+description: Self-hosted, open-source alternative to Google NotebookLM for
+  AI-powered research and document analysis. Use when organizing research
+  materials into notebooks, ingesting diverse content sources (PDFs, videos,
+  audio, web pages, Office documents), generating AI-powered notes and
+  summaries, creating multi-speaker podcasts from research, chatting with
+  documents using context-aware AI, searching across materials with full-text
+  and vector search, or running custom content transformations. Supports 16+ AI
+  providers including OpenAI, Anthropic, Google, Ollama, Groq, and Mistral with
+  complete data privacy through self-hosting.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-references-api-reference.md
+    path: references/api_reference.md
+    content_hash: 6d368df0f9368d297c4db06ed0f78f23db9cbb488b986574fdf267cb8ec373c0
+    license: Apache-2.0
+  - knowledge_id: sas-references-architecture.md
+    path: references/architecture.md
+    content_hash: f491698b896af52653b6b54c928d68088ff0f69698305b7fcb97197bb7f4ecd5
+    license: Apache-2.0
+  - knowledge_id: sas-references-configuration.md
+    path: references/configuration.md
+    content_hash: a448271bba6ae082d39d0bbafc5761a1f63b8df48a49932475b59fa774e3ee29
+    license: Apache-2.0
+  - knowledge_id: sas-references-examples.md
+    path: references/examples.md
+    content_hash: b6bc527544e04b7291aa377821733089a724cee32e6e265a54d574dab0404c54
+    license: Apache-2.0
+  - knowledge_id: sas-scripts-chat-interaction.py
+    path: scripts/chat_interaction.py
+    content_hash: 64cb5283ea2ea17d00e046b902e93bc768b671f917bb9739aac0104dfaf95119
+    license: Apache-2.0
+  - knowledge_id: sas-scripts-notebook-management.py
+    path: scripts/notebook_management.py
+    content_hash: 6939dc1657930eabac310a4068178776860f15fdc6447fc86f1325cced236add
+    license: Apache-2.0
+  - knowledge_id: sas-scripts-source-ingestion.py
+    path: scripts/source_ingestion.py
+    content_hash: 96cd97e9512edf5013091607ad6bab3fec132d510446b7a8fb87a9f559b34ade
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/SKILL.md
+      sha256: 546480d5df5e67e3ea21e501a7efef7a822ec17f1296ac618473067d22a14f0f
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/references/api_reference.md
+      sha256: 6d368df0f9368d297c4db06ed0f78f23db9cbb488b986574fdf267cb8ec373c0
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/references/architecture.md
+      sha256: f491698b896af52653b6b54c928d68088ff0f69698305b7fcb97197bb7f4ecd5
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/references/configuration.md
+      sha256: a448271bba6ae082d39d0bbafc5761a1f63b8df48a49932475b59fa774e3ee29
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/references/examples.md
+      sha256: b6bc527544e04b7291aa377821733089a724cee32e6e265a54d574dab0404c54
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/scripts/chat_interaction.py
+      sha256: 64cb5283ea2ea17d00e046b902e93bc768b671f917bb9739aac0104dfaf95119
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/scripts/notebook_management.py
+      sha256: 6939dc1657930eabac310a4068178776860f15fdc6447fc86f1325cced236add
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/scripts/source_ingestion.py
+      sha256: 96cd97e9512edf5013091607ad6bab3fec132d510446b7a8fb87a9f559b34ade
+license: Apache-2.0

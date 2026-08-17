@@ -1,0 +1,66 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-spatial-transcriptomics
+title: Spatial Transcriptomics Analysis
+description: Spatial transcriptomics analysis — Visium, MERFISH, seqFISH,
+  Slide-seq. Maps gene expression to tissue architecture, identifies spatially
+  variable genes (SVGs), tissue-domain segmentation, and cell-cell interaction
+  inference. Use for spatial gene-expression questions, tissue architecture
+  analysis, and SVG identification.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-code-examples.md
+    path: code_examples.md
+    content_hash: 2be664e70ef9a7ee650e3054886bc2831b03e83777346daab49b918a824eebee
+    license: Apache-2.0
+  - knowledge_id: tu-report-template.md
+    path: report_template.md
+    content_hash: 791c2f61725349559dbbacdff5ee71c6136e58b1b9e5ef1c2ad3d1c32ab524b9
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-spatial-transcriptomics/SKILL.md
+      sha256: 5fbc5e2030c34fa22f9e10fcdb9a9ce3757e2af705d20191930d69bf4f963ffa
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-spatial-transcriptomics/code_examples.md
+      sha256: 2be664e70ef9a7ee650e3054886bc2831b03e83777346daab49b918a824eebee
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-spatial-transcriptomics/report_template.md
+      sha256: 791c2f61725349559dbbacdff5ee71c6136e58b1b9e5ef1c2ad3d1c32ab524b9
+license: Apache-2.0

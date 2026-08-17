@@ -1,0 +1,84 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-drug-drug-interaction
+title: Drug-Drug Interaction Prediction & Risk Assessment
+description: Assess drug-drug interactions — CYP metabolic interactions
+  (substrate/inhibitor/inducer), transporter (P-gp, BCRP, OATP) effects,
+  pharmacodynamic synergy/antagonism, clinical significance scoring, and
+  management recommendations. Use for polypharmacy review, prescribing decision
+  support, and safety analysis when adding or switching drugs.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-examples.md
+    path: EXAMPLES.md
+    content_hash: ff81bfc2f1515b07094cdcfd3f33b0c323229f8fa22bd540a8c78d133aafc8ac
+    license: Apache-2.0
+  - knowledge_id: tu-ddi-pipeline.py
+    path: ddi_pipeline.py
+    content_hash: 657cf7e67d0e96d2c52258b704e67a1d5ca9e2bc4d4bb0a91b0fca9a3af480c7
+    license: Apache-2.0
+  - knowledge_id: tu-ddi-working-example.py
+    path: ddi_working_example.py
+    content_hash: 0d6253d7389eb8a11c413d12b3b011d6c390c1b184d7016ce7e7fb350e09b51c
+    license: Apache-2.0
+  - knowledge_id: tu-python-implementation.py
+    path: python_implementation.py
+    content_hash: 657cf7e67d0e96d2c52258b704e67a1d5ca9e2bc4d4bb0a91b0fca9a3af480c7
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-pharmacology-ref.py
+    path: scripts/pharmacology_ref.py
+    content_hash: e18cec8c9c917b413f84473e167e649397241d8df32122426e1400531fe85109
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-drug-interaction/SKILL.md
+      sha256: 6b1acd72608716e34dd8251281ff4cdb20996525db33a24c3f762281bd38ee3b
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-drug-interaction/EXAMPLES.md
+      sha256: ff81bfc2f1515b07094cdcfd3f33b0c323229f8fa22bd540a8c78d133aafc8ac
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-drug-interaction/ddi_pipeline.py
+      sha256: 657cf7e67d0e96d2c52258b704e67a1d5ca9e2bc4d4bb0a91b0fca9a3af480c7
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-drug-interaction/ddi_working_example.py
+      sha256: 0d6253d7389eb8a11c413d12b3b011d6c390c1b184d7016ce7e7fb350e09b51c
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-drug-interaction/python_implementation.py
+      sha256: 657cf7e67d0e96d2c52258b704e67a1d5ca9e2bc4d4bb0a91b0fca9a3af480c7
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-drug-interaction/scripts/pharmacology_ref.py
+      sha256: e18cec8c9c917b413f84473e167e649397241d8df32122426e1400531fe85109
+license: Apache-2.0

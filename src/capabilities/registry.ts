@@ -159,14 +159,14 @@ export async function validateCapabilityRegistry(
 
     for (const knowledge of manifest.knowledge_refs) {
       const knowledgePath = path.join(packageRoot, ...knowledge.path.split("/"));
-      let knowledgeText: string;
+      let knowledgeBytes: Buffer;
       try {
-        knowledgeText = await readFile(knowledgePath, "utf8");
+        knowledgeBytes = await readFile(knowledgePath);
       } catch {
         errors.push(fatal("capability_knowledge_missing", `Capability ${entry.capability_id} references missing knowledge file ${knowledge.path}.`, knowledgePath));
         continue;
       }
-      const knowledgeHash = createHash("sha256").update(knowledgeText, "utf8").digest("hex");
+      const knowledgeHash = createHash("sha256").update(knowledgeBytes).digest("hex");
       if (knowledgeHash !== knowledge.content_hash) {
         errors.push(fatal("capability_knowledge_hash_mismatch", `Capability ${entry.capability_id} knowledge file ${knowledge.path} hash does not match the manifest.`, knowledgePath, { expected: knowledge.content_hash, actual: knowledgeHash }));
       }

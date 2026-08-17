@@ -1,0 +1,59 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-regulatory-genomics
+title: Regulatory Genomics Research Skill
+description: Transcription factor binding, cis-regulatory elements (cCREs),
+  chromatin accessibility, and regulatory annotation using JASPAR (motifs),
+  ENCODE (cCREs, ChIP-seq), RegulomeDB (regulatory variant scoring), UCSC — plus
+  sequence-based deep-learning prediction of regulatory activity and non-coding
+  variant effects (AlphaGenome, Enformer, Borzoi, ChromBPNet, Evo 2). Use for
+  regulatory element annotation, TF-binding-site prediction, regulatory-region
+  functional impact assessment, and predicting how a non-coding variant or a raw
+  DNA sequence affects expression/chromatin/accessibility. Use this whenever a
+  user asks what regulates a gene, whether a SNP hits a regulatory element, or
+  to predict a non-coding variant's functional effect from sequence.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs: []
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-regulatory-genomics/SKILL.md
+      sha256: 5043d3dca09734ecb46d1efe4bd15db07fa2b7a082ec46fdb83cffcbb01272b0
+license: Apache-2.0

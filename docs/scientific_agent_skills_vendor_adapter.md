@@ -47,3 +47,42 @@ pnpm scientific-agent-skills:idempotence
 `convert` refuses unexplained generated drift unless `--force` follows review. `check` validates the 49-Skill vendor output inside the combined six-vendor, 218-domain registry, including the complete manual-review catalog and approved resource curation. `idempotence` regenerates against all published vendors and compares only this vendor's owned projection plus the central registry.
 
 To update the vendor, first pin and audit a new immutable upstream release. Reconcile every admission, overlap, license, security, content, relationship, resource, ID, and domain decision before regenerating. Do not reuse v2.53.0 decisions for a changed source tree.
+
+## Extension mode packages
+
+All 49 reviewed production Skills are also projected one-to-one into the
+graph-native extension registry under `skills/plugins/extensions/` as
+`plugin-scientific-agent-skills-*` capabilities with same-named one-node graph
+profiles. The generator
+`scripts/generate-scientific-agent-skills-extensions.mjs` produces the packages
+from the reviewed vendor bundle and the source-neutral domain catalog.
+
+- Packages with reviewed `.py` resources are `execution_type: mixed`; all
+  others are `execution_type: llm`.
+- All 410 reviewed non-standard resources keep their original relative paths
+  and are bound as byte-level SHA-256 knowledge refs under MIT, including the
+  reviewed TimesFM binary example assets.
+- Every package declares `validate_scientific_brief.py` with the same six
+  evidence-bearing `research_brief` fields.
+- The 24 Scientific Agent Skills domain assignments are derived directly from
+  the domain catalog and mirrored into the extension registry.
+
+Install, update, status, and check read manifests and hashes only. Only
+`advance` executes the declared `python3` validator. ResearchSpec never imports
+or executes packaged scripts, installs dependencies, or configures credentials.
+
+## Maintenance suite
+
+```bash
+pnpm scientific-agent-skills-maintenance:artifacts
+pnpm scientific-agent-skills-maintenance:records
+pnpm scientific-agent-skills-maintenance:baseline
+pnpm scientific-agent-skills-maintenance:check
+```
+
+The suite anchors at `audits/scientific-agent-skills/v2.53.0`, binds the
+immutable skill audit, the vendor bundle, the extension registry subset,
+package/profile trees, the maintenance Skill, the maintenance catalog, and
+records 01–05 in `manifest.json`. `artifacts` regenerates the 49 packages before
+synchronizing reviewed resources. The Agent semantic review is mandatory and
+`baseline` refuses an anchor whose `05-semantic-review.md` is not completed.

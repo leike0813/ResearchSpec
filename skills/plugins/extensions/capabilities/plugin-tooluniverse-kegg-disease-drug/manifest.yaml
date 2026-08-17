@@ -1,0 +1,56 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-kegg-disease-drug
+title: KEGG Disease-Drug-Variant Research
+description: KEGG-based disease-drug-variant network research. Connects diseases
+  to causal genes, drugs to molecular targets, and variants to pathways using
+  KEGG's editorially curated databases (KEGG Disease, Drug, Network, Variant,
+  Pathway). Use for drug repurposing via shared pathways, mechanistic
+  disease-gene-drug networks, and pathway-based target discovery. Distinguishes
+  direct (binding) vs indirect (pathway co-membership) drug-target
+  relationships.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs: []
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-kegg-disease-drug/SKILL.md
+      sha256: 01609a6e63cfac01d905344dec67315e5eea66a701f39d495ccaab8cf488bad3
+license: Apache-2.0

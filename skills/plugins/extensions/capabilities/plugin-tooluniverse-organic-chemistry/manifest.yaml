@@ -1,0 +1,97 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-organic-chemistry
+title: Organic Chemistry Reasoning Guide
+description: Organic chemistry reasoning guide for reaction product prediction,
+  mechanism analysis (electrophilic/nucleophilic substitution, addition,
+  elimination, pericyclic, radical), and spectroscopy interpretation (1H/13C
+  NMR, IR, MS). Reasons from first principles (electron flow, kinetic vs
+  thermodynamic) rather than pattern-matching named reactions. Use for organic
+  synthesis problems and mechanism explanations.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-scripts-chemistry-facts.py
+    path: scripts/chemistry_facts.py
+    content_hash: cbd327bf9829d0547e3ef5ef8ba2a09a1096cbfa207786dc286f91c17514ac99
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-crystal-validator.py
+    path: scripts/crystal_validator.py
+    content_hash: 02bd8ef3760583a1a2c23d45e623107bd2aa1d190939919c693fa60ba680b63e
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-degrees-of-unsaturation.py
+    path: scripts/degrees_of_unsaturation.py
+    content_hash: 6bcec4d1b54ccf924d4e2e723c1140baccb6c102f430fa5ce53745feb36999bb
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-molecular-complexity.py
+    path: scripts/molecular_complexity.py
+    content_hash: 66fd814ebe2cb1a4130c00539a225250968c050280210d39ff9985f2eda6df3b
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-molecular-formula.py
+    path: scripts/molecular_formula.py
+    content_hash: 066a1a6f993e6bb55ec98787db4a50acbc85506d67dd6358e0aaf16e2ac15e07
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-smiles-verifier.py
+    path: scripts/smiles_verifier.py
+    content_hash: 8019abc29d21fce8c127497ff4e9584136564127bdf7e21f953135f107732559
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-stereochem-tracker.py
+    path: scripts/stereochem_tracker.py
+    content_hash: fd651c8cb84a327e0408cf7f678ef49b2280140c876c41aae3a673efa25c4462
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-organic-chemistry/SKILL.md
+      sha256: 7f6f9d72d3d137b4b5ceabf7c7ef13c7e634a3422f25cc3e74eb1c8c8938fbcc
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-organic-chemistry/scripts/chemistry_facts.py
+      sha256: cbd327bf9829d0547e3ef5ef8ba2a09a1096cbfa207786dc286f91c17514ac99
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-organic-chemistry/scripts/crystal_validator.py
+      sha256: 02bd8ef3760583a1a2c23d45e623107bd2aa1d190939919c693fa60ba680b63e
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-organic-chemistry/scripts/degrees_of_unsaturation.py
+      sha256: 6bcec4d1b54ccf924d4e2e723c1140baccb6c102f430fa5ce53745feb36999bb
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-organic-chemistry/scripts/molecular_complexity.py
+      sha256: 66fd814ebe2cb1a4130c00539a225250968c050280210d39ff9985f2eda6df3b
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-organic-chemistry/scripts/molecular_formula.py
+      sha256: 066a1a6f993e6bb55ec98787db4a50acbc85506d67dd6358e0aaf16e2ac15e07
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-organic-chemistry/scripts/smiles_verifier.py
+      sha256: 8019abc29d21fce8c127497ff4e9584136564127bdf7e21f953135f107732559
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-organic-chemistry/scripts/stereochem_tracker.py
+      sha256: fd651c8cb84a327e0408cf7f678ef49b2280140c876c41aae3a673efa25c4462
+license: Apache-2.0

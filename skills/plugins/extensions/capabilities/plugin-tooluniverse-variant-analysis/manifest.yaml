@@ -1,0 +1,132 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-variant-analysis
+title: Variant Analysis and Annotation
+description: VCF and variant analysis — parsing, annotation, classification
+  (synonymous, missense, frameshift, stop_gained), VAF filtering, coding vs
+  non-coding categorization, multi-condition variant comparison. Use for VCF
+  parsing, variant fraction calculations (denominator = coding subset only, NOT
+  all variants), and per-sample mutation profiling.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-quick-start.md
+    path: QUICK_START.md
+    content_hash: 4d5cd1e82721b90575f63e096cf4d66c30553c012afb47422589cdd0be08c0d8
+    license: Apache-2.0
+  - knowledge_id: tu-python-implementation.py
+    path: python_implementation.py
+    content_hash: cec24fa536dab1c8930207d2147f9e444520b37b4a768ba9b57c12f35fc9ea06
+    license: Apache-2.0
+  - knowledge_id: tu-references-annotation-guide.md
+    path: references/annotation_guide.md
+    content_hash: 935f718fa9fb53790bd83a9bd73fc8faca7746bab187c5ded02e4df0d10bd71e
+    license: Apache-2.0
+  - knowledge_id: tu-references-mutation-classification-guide.md
+    path: references/mutation_classification_guide.md
+    content_hash: 7e27bee3372be7cd6c0e5943b1dcdce1fe4fee0480a5d18fe9e4370a1163db16
+    license: Apache-2.0
+  - knowledge_id: tu-references-sv-cnv-analysis.md
+    path: references/sv_cnv_analysis.md
+    content_hash: 03d6a5e2480873ba3140d738cf632cf743b539a8a98445ad6728a9a07e1b6e41
+    license: Apache-2.0
+  - knowledge_id: tu-references-upstream-details.md
+    path: references/upstream-details.md
+    content_hash: 275e875750b8cb0e74d46fdb7d07e2cb4fd38cd6a5ee1866b7a0edbb3f2bad7d
+    license: Apache-2.0
+  - knowledge_id: tu-references-vcf-filtering.md
+    path: references/vcf_filtering.md
+    content_hash: c24c310e68e3d9e903629e6ed99264a3f43da0b70ae28b2f41bb05f8b04f5f7b
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-annotate-variants.py
+    path: scripts/annotate_variants.py
+    content_hash: 39b55d37bc178e6e6f0cf038f2430e013ae28e139cb737c1873ee6ed32506b16
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-coding-variant-filter.py
+    path: scripts/coding_variant_filter.py
+    content_hash: 5f3f3579bb81157f8b033719d5220343e7d14b0ba97791130dec56b7c62f2316
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-filter-variants.py
+    path: scripts/filter_variants.py
+    content_hash: ede803e5b2c201531d0b8937d6972a33227c5ab3bc91c7c1c9f0c0a06f850d40
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-gatk-haplotypecaller-pipeline.py
+    path: scripts/gatk_haplotypecaller_pipeline.py
+    content_hash: 726baf3ad06019d9da25a09ecc39b659c0b7c64061c68b16a3f6e0517c0bcfb7
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-parse-vcf.py
+    path: scripts/parse_vcf.py
+    content_hash: 04e6e2ac1ff8fd5bd5ba7b007aa189750712a33df14c2bf143dce4d81073be84
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-variant-fraction.py
+    path: scripts/variant_fraction.py
+    content_hash: b15289ad8688b9bf8bbc3843c5bb6f6eeeb434360b4108de1c75750a3e021319
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/SKILL.md
+      sha256: 1b8952d1794fb2c76c748416a9c78ef1234f8be4c65ff4ae290113e86abc0e10
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/QUICK_START.md
+      sha256: 4d5cd1e82721b90575f63e096cf4d66c30553c012afb47422589cdd0be08c0d8
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/python_implementation.py
+      sha256: cec24fa536dab1c8930207d2147f9e444520b37b4a768ba9b57c12f35fc9ea06
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/references/annotation_guide.md
+      sha256: 935f718fa9fb53790bd83a9bd73fc8faca7746bab187c5ded02e4df0d10bd71e
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/references/mutation_classification_guide.md
+      sha256: 7e27bee3372be7cd6c0e5943b1dcdce1fe4fee0480a5d18fe9e4370a1163db16
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/references/sv_cnv_analysis.md
+      sha256: 03d6a5e2480873ba3140d738cf632cf743b539a8a98445ad6728a9a07e1b6e41
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/references/upstream-details.md
+      sha256: 275e875750b8cb0e74d46fdb7d07e2cb4fd38cd6a5ee1866b7a0edbb3f2bad7d
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/references/vcf_filtering.md
+      sha256: c24c310e68e3d9e903629e6ed99264a3f43da0b70ae28b2f41bb05f8b04f5f7b
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/scripts/annotate_variants.py
+      sha256: 39b55d37bc178e6e6f0cf038f2430e013ae28e139cb737c1873ee6ed32506b16
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/scripts/coding_variant_filter.py
+      sha256: 5f3f3579bb81157f8b033719d5220343e7d14b0ba97791130dec56b7c62f2316
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/scripts/filter_variants.py
+      sha256: ede803e5b2c201531d0b8937d6972a33227c5ab3bc91c7c1c9f0c0a06f850d40
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/scripts/gatk_haplotypecaller_pipeline.py
+      sha256: 726baf3ad06019d9da25a09ecc39b659c0b7c64061c68b16a3f6e0517c0bcfb7
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/scripts/parse_vcf.py
+      sha256: 04e6e2ac1ff8fd5bd5ba7b007aa189750712a33df14c2bf143dce4d81073be84
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/scripts/variant_fraction.py
+      sha256: b15289ad8688b9bf8bbc3843c5bb6f6eeeb434360b4108de1c75750a3e021319
+license: Apache-2.0

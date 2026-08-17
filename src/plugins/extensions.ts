@@ -169,15 +169,15 @@ export async function validatePluginExtensionRegistry(
 
     for (const knowledge of manifest.knowledge_refs) {
       const knowledgePath = path.join(packageRoot, ...knowledge.path.split("/"));
-      let knowledgeText: string;
+      let knowledgeBytes: Buffer;
       try {
-        knowledgeText = await readFile(knowledgePath, "utf8");
+        knowledgeBytes = await readFile(knowledgePath);
       } catch {
         errors.push(fatal("plugin_extension_capability_knowledge_missing", `Plugin extension capability ${entry.capability_id} references missing knowledge file ${knowledge.path}.`, knowledgePath));
         continue;
       }
-      if (sha256(knowledgeText) !== knowledge.content_hash) {
-        errors.push(fatal("plugin_extension_capability_knowledge_hash_mismatch", `Plugin extension capability ${entry.capability_id} knowledge file ${knowledge.path} hash does not match the manifest.`, knowledgePath, { expected: knowledge.content_hash, actual: sha256(knowledgeText) }));
+      if (sha256(knowledgeBytes) !== knowledge.content_hash) {
+        errors.push(fatal("plugin_extension_capability_knowledge_hash_mismatch", `Plugin extension capability ${entry.capability_id} knowledge file ${knowledge.path} hash does not match the manifest.`, knowledgePath, { expected: knowledge.content_hash, actual: sha256(knowledgeBytes) }));
       }
     }
 
@@ -278,8 +278,8 @@ export function resolveDomainExtensions(loaded: LoadedPluginExtensionRegistry, d
   };
 }
 
-function sha256(value: string): string {
-  return createHash("sha256").update(value, "utf8").digest("hex");
+function sha256(value: string | Buffer): string {
+  return createHash("sha256").update(value).digest("hex");
 }
 
 function isSafeRelativePath(value: string): boolean {

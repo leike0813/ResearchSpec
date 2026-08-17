@@ -1,0 +1,67 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-immune-repertoire-analysis
+title: ToolUniverse Immune Repertoire Analysis
+description: TCR/BCR repertoire analysis — V(D)J segment usage, CDR3 sequence
+  diversity, clonality scoring, antigen specificity matching to IEDB,
+  public-clone identification. Use for adaptive immune response
+  characterization, post-treatment immune monitoring, antigen-specific clone
+  tracking, and clonal-expansion analysis in immunotherapy or vaccination
+  studies.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-analysis-details.md
+    path: ANALYSIS_DETAILS.md
+    content_hash: 73953b3c4364d082142e22e7839dbaaee729967aa39dfa872726dd58e59959a9
+    license: Apache-2.0
+  - knowledge_id: tu-use-cases.md
+    path: USE_CASES.md
+    content_hash: 3ad8891932cb263a6501ed1cb71545081e18c96bdf4e1959fd7e561c7b339e56
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-immune-repertoire-analysis/SKILL.md
+      sha256: a26e8cb886d0909fff660df374c02355acd0ef513689a0056341bf236f232a3e
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-immune-repertoire-analysis/ANALYSIS_DETAILS.md
+      sha256: 73953b3c4364d082142e22e7839dbaaee729967aa39dfa872726dd58e59959a9
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-immune-repertoire-analysis/USE_CASES.md
+      sha256: 3ad8891932cb263a6501ed1cb71545081e18c96bdf4e1959fd7e561c7b339e56
+license: Apache-2.0

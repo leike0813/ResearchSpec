@@ -1,0 +1,84 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-drug-research
+title: Drug Research Strategy
+description: Comprehensive drug profiling — mechanism, primary/secondary
+  targets, drug interactions, clinical-trial status, adverse events (FAERS),
+  pharmacogenomics, and approval history. Use for full drug investigation
+  reports, 'tell me about drug X' queries, and assembling drug profiles for
+  clinicians, researchers, or regulatory work.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-checklist.md
+    path: CHECKLIST.md
+    content_hash: f840ede178348c3fba912f8af275189ef44d24f05f00985f8c5155b2efbe6944
+    license: Apache-2.0
+  - knowledge_id: tu-examples.md
+    path: EXAMPLES.md
+    content_hash: 36bb8e2bb5e76c0a4b9ca3ac2eb983dd3af242724dcdb6593f5ef3fbd2f4268a
+    license: Apache-2.0
+  - knowledge_id: tu-report-guidelines.md
+    path: REPORT_GUIDELINES.md
+    content_hash: 83639b7ec033ccdfe925a502a668bb9a241a4c74e27139ddf088a92a38eb0027
+    license: Apache-2.0
+  - knowledge_id: tu-report-template.md
+    path: REPORT_TEMPLATE.md
+    content_hash: 0f9f901ea1a95eb5d6c0a966443f414994dd56f11a13ba4a5101950c092e8982
+    license: Apache-2.0
+  - knowledge_id: tu-tools-reference.md
+    path: TOOLS_REFERENCE.md
+    content_hash: f6f7c77513883acb94f4afb9c7ff70aa2c56ddc77229ce6d55e2b03d3a46e6e3
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-research/SKILL.md
+      sha256: cdfc607bbae65eaa4e57e08c9a7bac89c6ed02235ae1cd77167396b0d7d3d0b4
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-research/CHECKLIST.md
+      sha256: f840ede178348c3fba912f8af275189ef44d24f05f00985f8c5155b2efbe6944
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-research/EXAMPLES.md
+      sha256: 36bb8e2bb5e76c0a4b9ca3ac2eb983dd3af242724dcdb6593f5ef3fbd2f4268a
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-research/REPORT_GUIDELINES.md
+      sha256: 83639b7ec033ccdfe925a502a668bb9a241a4c74e27139ddf088a92a38eb0027
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-research/REPORT_TEMPLATE.md
+      sha256: 0f9f901ea1a95eb5d6c0a966443f414994dd56f11a13ba4a5101950c092e8982
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-research/TOOLS_REFERENCE.md
+      sha256: f6f7c77513883acb94f4afb9c7ff70aa2c56ddc77229ce6d55e2b03d3a46e6e3
+license: Apache-2.0

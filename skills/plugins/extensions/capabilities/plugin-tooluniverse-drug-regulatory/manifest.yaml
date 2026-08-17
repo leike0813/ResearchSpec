@@ -1,0 +1,55 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-drug-regulatory
+title: Drug Regulatory Research
+description: Drug regulatory and approval research — FDA substance registry,
+  ATC/EPC classification, EMA decisions, generic-drug status, FDA Orange Book
+  exclusivity, NDA/BLA pathways. Use for jurisdiction-aware approval status (FDA
+  vs EMA), generic vs brand availability, exclusivity expiry tracking, and
+  regulatory pathway selection. Always specifies the market when reporting
+  status.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs: []
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-regulatory/SKILL.md
+      sha256: e0a3977cca377f903c1dc2ae23c4397e4c13f7cf1314ec0e5f49faf082ccacea
+license: Apache-2.0

@@ -1,0 +1,103 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-crispr-screen-analysis
+title: ToolUniverse CRISPR Screen Analysis
+description: Analyze CRISPR-Cas9 genetic screens — MAGeCK gene-level scores,
+  sgRNA count QC, replicate correlation, hit prioritization, and pathway GSEA on
+  screen output. Use for genome-wide essentiality screens, synthetic-lethality
+  discovery, dropout vs positive-selection screen analysis, target
+  identification, and resistance-screen interpretation. Includes screen-QC and
+  statistical thresholds.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-analysis-details.md
+    path: ANALYSIS_DETAILS.md
+    content_hash: e81321b40741afa69b75aa996bdb191673b5462c504f08cfaf8c0d3c0e9c8aa4
+    license: Apache-2.0
+  - knowledge_id: tu-examples.md
+    path: EXAMPLES.md
+    content_hash: 8041a7d9f3ea8fda89de20fa46b9f848b05a5a4500e141deb641b062c7edae8a
+    license: Apache-2.0
+  - knowledge_id: tu-fallback-patch.md
+    path: FALLBACK_PATCH.md
+    content_hash: 6bc80d5ab5c9a7c281f65fd476d930845fd221957b1b080f862925adbf458df4
+    license: Apache-2.0
+  - knowledge_id: tu-quick-start.md
+    path: QUICK_START.md
+    content_hash: 3f70b07c0ca9722310a5504008a018173e93654afc2d2473322511a9293ad13e
+    license: Apache-2.0
+  - knowledge_id: tu-use-cases.md
+    path: USE_CASES.md
+    content_hash: 3968f2a25ec4863f1bd60a37de0654f14d1d43f6a4830b5d2dfef3c69c8ef4dc
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-cegv2-core-essential.txt
+    path: scripts/CEGv2_core_essential.txt
+    content_hash: 9bd99ae4a87ed8178b2ddf4326cb676973abcace69f25576c9fee411d40058d5
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-negv1-nonessential.txt
+    path: scripts/NEGv1_nonessential.txt
+    content_hash: b26f9ab007a73ebd8c692a34d3dd8b2b6b23d5412fe9b2481e5d7b5860038590
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-reference-gene-sets.py
+    path: scripts/reference_gene_sets.py
+    content_hash: 6767f1417b3dff7140c3bf6287ca951c5f1b2674716fc75f329cfdf4ff0cacdf
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-crispr-screen-analysis/SKILL.md
+      sha256: a7f549aa2f6b42bfac3efb3ee858bb45a18053c53999ad1215d700efe1374ec3
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-crispr-screen-analysis/ANALYSIS_DETAILS.md
+      sha256: e81321b40741afa69b75aa996bdb191673b5462c504f08cfaf8c0d3c0e9c8aa4
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-crispr-screen-analysis/EXAMPLES.md
+      sha256: 8041a7d9f3ea8fda89de20fa46b9f848b05a5a4500e141deb641b062c7edae8a
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-crispr-screen-analysis/FALLBACK_PATCH.md
+      sha256: 6bc80d5ab5c9a7c281f65fd476d930845fd221957b1b080f862925adbf458df4
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-crispr-screen-analysis/QUICK_START.md
+      sha256: 3f70b07c0ca9722310a5504008a018173e93654afc2d2473322511a9293ad13e
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-crispr-screen-analysis/USE_CASES.md
+      sha256: 3968f2a25ec4863f1bd60a37de0654f14d1d43f6a4830b5d2dfef3c69c8ef4dc
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-crispr-screen-analysis/scripts/CEGv2_core_essential.txt
+      sha256: 9bd99ae4a87ed8178b2ddf4326cb676973abcace69f25576c9fee411d40058d5
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-crispr-screen-analysis/scripts/NEGv1_nonessential.txt
+      sha256: b26f9ab007a73ebd8c692a34d3dd8b2b6b23d5412fe9b2481e5d7b5860038590
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-crispr-screen-analysis/scripts/reference_gene_sets.py
+      sha256: 6767f1417b3dff7140c3bf6287ca951c5f1b2674716fc75f329cfdf4ff0cacdf
+license: Apache-2.0

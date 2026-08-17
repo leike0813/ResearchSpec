@@ -1,0 +1,80 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-structural-variant-analysis
+title: Structural Variant Analysis Workflow
+description: "Structural variant (SV) clinical interpretation: deletions,
+  duplications, inversions, translocations, complex rearrangements. Applies
+  ACMG-adapted criteria with ClinGen HI/TS dosage scores, gnomAD frequencies,
+  and ClinVar evidence. Produces 5-tier classification with explicit
+  per-criterion evidence. Use for clinical genomics SV review,
+  dosage-sensitivity assessment, breakpoint analysis, and CNV pathogenicity
+  calls. Gene-dosage-driven reasoning."
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-analysis-procedures.md
+    path: ANALYSIS_PROCEDURES.md
+    content_hash: 5e5e3ea428274694e75606ae722cdbfdbd7238aba0a6d0d73934562338515994
+    license: Apache-2.0
+  - knowledge_id: tu-classification-guide.md
+    path: CLASSIFICATION_GUIDE.md
+    content_hash: 82f2c87db2725aa3bcd87150e3ce2f4f77d7230ae8aa10c396bdb98405af8495
+    license: Apache-2.0
+  - knowledge_id: tu-examples.md
+    path: EXAMPLES.md
+    content_hash: 67487ccead67affab396d070d8522428b0759e6851e503028a6fcb81b6d486ff
+    license: Apache-2.0
+  - knowledge_id: tu-report-template.md
+    path: REPORT_TEMPLATE.md
+    content_hash: beefc77b36aa3e25953af32ec28836d5703780047ba5e7b2016db0b5d69b157a
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-structural-variant-analysis/SKILL.md
+      sha256: 569623909c8e180996deeed581f081b4ff9e553b10e251e1d076326c743af97c
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-structural-variant-analysis/ANALYSIS_PROCEDURES.md
+      sha256: 5e5e3ea428274694e75606ae722cdbfdbd7238aba0a6d0d73934562338515994
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-structural-variant-analysis/CLASSIFICATION_GUIDE.md
+      sha256: 82f2c87db2725aa3bcd87150e3ce2f4f77d7230ae8aa10c396bdb98405af8495
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-structural-variant-analysis/EXAMPLES.md
+      sha256: 67487ccead67affab396d070d8522428b0759e6851e503028a6fcb81b6d486ff
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-structural-variant-analysis/REPORT_TEMPLATE.md
+      sha256: beefc77b36aa3e25953af32ec28836d5703780047ba5e7b2016db0b5d69b157a
+license: Apache-2.0

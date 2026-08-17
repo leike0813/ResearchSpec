@@ -1,0 +1,60 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-generate-image
+title: Generate Image
+description: Generate or edit images using AI models (FLUX, Nano Banana 2). Use
+  for general-purpose image generation including photos, illustrations, artwork,
+  visual assets, concept art, and any image that is not a technical diagram or
+  schematic. For flowcharts, circuits, pathways, and technical diagrams, use the
+  scientific-schematics skill instead.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-scripts-generate-image.py
+    path: scripts/generate_image.py
+    content_hash: f4aee183b7f192cae34813e53f094d2d14f0ca265189343f018b218415b63d9a
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-generate-image/SKILL.md
+      sha256: 0287947083b8af8439778d4c6f80f4f4d35311067d515db727d18c2429fb31da
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-generate-image/scripts/generate_image.py
+      sha256: f4aee183b7f192cae34813e53f094d2d14f0ca265189343f018b218415b63d9a
+license: Apache-2.0

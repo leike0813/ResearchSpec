@@ -1,0 +1,177 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-rnaseq-deseq2
+title: RNA-seq Differential Expression Analysis (DESeq2)
+description: RNA-seq differential expression analysis with DESeq2, edgeR, and
+  limma-voom — DEG lists, fold changes, dispersion estimation, design formulas
+  including covariates, multi-condition contrasts, and Venn-set operations
+  across groups. Routes across DESeq2 (default), edgeR (QL-F / exact test for
+  small replicate counts), and limma-voom (large n / complex designs). Use when
+  you have a count matrix + metadata, want to find DEGs, or need
+  dispersion/PCA/clustering analysis. Includes RULE ZERO precedence (read
+  executed.ipynb if present).
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-references-data-loading.md
+    path: references/data_loading.md
+    content_hash: 297e7f9d9b802ea7d572e439eb1ed0dab18b31dee495f36a01b21b3d802cc2c0
+    license: Apache-2.0
+  - knowledge_id: tu-references-dispersion-analysis.md
+    path: references/dispersion_analysis.md
+    content_hash: cbd4a609629cbc07179f7331ab6cdc6ace6aaf274e83cf1780ec08bf3fb56edd
+    license: Apache-2.0
+  - knowledge_id: tu-references-edger-limma-voom.md
+    path: references/edger_limma_voom.md
+    content_hash: 9b2ad5faa79fcf7cba18350d42485eaed0e63e43a40636492cfbe00f908a7218
+    license: Apache-2.0
+  - knowledge_id: tu-references-enrichment-analysis.md
+    path: references/enrichment_analysis.md
+    content_hash: 9f13bae36c77fa7ff304ffeff5909af630bd6206e33ddef94607f8aeadb44b24
+    license: Apache-2.0
+  - knowledge_id: tu-references-output-formatting.md
+    path: references/output_formatting.md
+    content_hash: 2bb3a4754c76fc684dc59b8e87751655a710f47ecec0fe9570622b327b1ddcfe
+    license: Apache-2.0
+  - knowledge_id: tu-references-pydeseq2-workflow.md
+    path: references/pydeseq2_workflow.md
+    content_hash: a3d348bab36ad1b9a10dd94ca9ae9f352c86f8024d4cfb3568e180c60e770c25
+    license: Apache-2.0
+  - knowledge_id: tu-references-question-parsing.md
+    path: references/question_parsing.md
+    content_hash: 27123bcef83db87a07cf48595abcc8d40deb07d694c9c976e3e2851614cddd9b
+    license: Apache-2.0
+  - knowledge_id: tu-references-result-filtering.md
+    path: references/result_filtering.md
+    content_hash: 147924ba096c11d2fe33842f427328c0205a3b1b690900e82f157a51aa2405d3
+    license: Apache-2.0
+  - knowledge_id: tu-references-troubleshooting.md
+    path: references/troubleshooting.md
+    content_hash: 5dae90acb7dac0243801d113f28bc6d2b4090dffba2d48d83b91384875f118b5
+    license: Apache-2.0
+  - knowledge_id: tu-references-upstream-details.md
+    path: references/upstream-details.md
+    content_hash: ad31a01381fd747b14aa1290f8e1f6927afccb803b52dd602937ca2d64e16efd
+    license: Apache-2.0
+  - knowledge_id: tu-references-worked-examples.md
+    path: references/worked_examples.md
+    content_hash: 5e7a8c647257621e518543e0397498c7a55f07ce05af3db33472635e6a0018e9
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-convert-rds-to-csv.py
+    path: scripts/convert_rds_to_csv.py
+    content_hash: 93489b177275929f4dbed4809a20f0993ba24c2a2c0d9a5e37640a928affc9a8
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-format-deseq2-output.py
+    path: scripts/format_deseq2_output.py
+    content_hash: bc549914f3e3a99bb5466f0efc2ea60d4f7c52803844894ef53efec343c16157
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-gene-length-correlation.py
+    path: scripts/gene_length_correlation.py
+    content_hash: 2c0ab61d03633842dcb2495d8f6444bc33d47d6a600b1cb4e3256676ccd1be83
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-load-count-matrix.py
+    path: scripts/load_count_matrix.py
+    content_hash: c96edd4ee34e446e33e9276edc0a4326b03e80aef45065cd36bf2730588d35e3
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-multi-strain-venn.py
+    path: scripts/multi_strain_venn.py
+    content_hash: a26def64917d808e9dae618f107e191df00f4b9a600600baaa185bef012184ff
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-one-way-anova-f.py
+    path: scripts/one_way_anova_f.py
+    content_hash: ff969ed192b086df2404f3a2e20351cb474c28f7350ecb590815b5101d7e4b1c
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-pca-variance.py
+    path: scripts/pca_variance.py
+    content_hash: 1a6c36fa5a2eda939e6b0cddd7cacbc2084c7c7bd54a859210b49c2a5e3b78fd
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-r-deseq2-wrapper.py
+    path: scripts/r_deseq2_wrapper.py
+    content_hash: 0073201274e796a66f8ffa599db9a1e98c59f3694a0c7f565c0cadd096cc2385
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-r-edger-limma-wrapper.py
+    path: scripts/r_edger_limma_wrapper.py
+    content_hash: bacbfd23cc96afe4d2b1f58c3a525ec24415b412d589cc9a9d35d6592335c831
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/SKILL.md
+      sha256: a2f566ce675047d8b31f322d32718f38a3037ab807ac660a2727da745deafda4
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/references/data_loading.md
+      sha256: 297e7f9d9b802ea7d572e439eb1ed0dab18b31dee495f36a01b21b3d802cc2c0
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/references/dispersion_analysis.md
+      sha256: cbd4a609629cbc07179f7331ab6cdc6ace6aaf274e83cf1780ec08bf3fb56edd
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/references/edger_limma_voom.md
+      sha256: 9b2ad5faa79fcf7cba18350d42485eaed0e63e43a40636492cfbe00f908a7218
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/references/enrichment_analysis.md
+      sha256: 9f13bae36c77fa7ff304ffeff5909af630bd6206e33ddef94607f8aeadb44b24
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/references/output_formatting.md
+      sha256: 2bb3a4754c76fc684dc59b8e87751655a710f47ecec0fe9570622b327b1ddcfe
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/references/pydeseq2_workflow.md
+      sha256: a3d348bab36ad1b9a10dd94ca9ae9f352c86f8024d4cfb3568e180c60e770c25
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/references/question_parsing.md
+      sha256: 27123bcef83db87a07cf48595abcc8d40deb07d694c9c976e3e2851614cddd9b
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/references/result_filtering.md
+      sha256: 147924ba096c11d2fe33842f427328c0205a3b1b690900e82f157a51aa2405d3
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/references/troubleshooting.md
+      sha256: 5dae90acb7dac0243801d113f28bc6d2b4090dffba2d48d83b91384875f118b5
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/references/upstream-details.md
+      sha256: ad31a01381fd747b14aa1290f8e1f6927afccb803b52dd602937ca2d64e16efd
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/references/worked_examples.md
+      sha256: 5e7a8c647257621e518543e0397498c7a55f07ce05af3db33472635e6a0018e9
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/scripts/convert_rds_to_csv.py
+      sha256: 93489b177275929f4dbed4809a20f0993ba24c2a2c0d9a5e37640a928affc9a8
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/scripts/format_deseq2_output.py
+      sha256: bc549914f3e3a99bb5466f0efc2ea60d4f7c52803844894ef53efec343c16157
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/scripts/gene_length_correlation.py
+      sha256: 2c0ab61d03633842dcb2495d8f6444bc33d47d6a600b1cb4e3256676ccd1be83
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/scripts/load_count_matrix.py
+      sha256: c96edd4ee34e446e33e9276edc0a4326b03e80aef45065cd36bf2730588d35e3
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/scripts/multi_strain_venn.py
+      sha256: a26def64917d808e9dae618f107e191df00f4b9a600600baaa185bef012184ff
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/scripts/one_way_anova_f.py
+      sha256: ff969ed192b086df2404f3a2e20351cb474c28f7350ecb590815b5101d7e4b1c
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/scripts/pca_variance.py
+      sha256: 1a6c36fa5a2eda939e6b0cddd7cacbc2084c7c7bd54a859210b49c2a5e3b78fd
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/scripts/r_deseq2_wrapper.py
+      sha256: 0073201274e796a66f8ffa599db9a1e98c59f3694a0c7f565c0cadd096cc2385
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/scripts/r_edger_limma_wrapper.py
+      sha256: bacbfd23cc96afe4d2b1f58c3a525ec24415b412d589cc9a9d35d6592335c831
+license: Apache-2.0

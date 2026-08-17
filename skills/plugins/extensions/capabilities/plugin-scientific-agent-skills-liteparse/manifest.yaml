@@ -1,0 +1,91 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-liteparse
+title: LiteParse — Local Document Parsing
+description: Local document and PDF parsing with spatial text and bounding
+  boxes. Use for extracting text from PDFs, DOCX, Office files, and images; OCR
+  on scans; layout-preserved JSON for RAG; batch-ingesting paper folders; or
+  page screenshots for multimodal agents — even when the user does not name
+  liteparse. Prefer over MarkItDown when you need bboxes, fast local parsing, or
+  PNG page renders; prefer over the pdf skill for merge/split/forms.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-references-api-reference.md
+    path: references/api_reference.md
+    content_hash: f9f6561f4497d5e17457f1802b19fe9f8c72523069d7143fbae68afc98e3d886
+    license: Apache-2.0
+  - knowledge_id: sas-references-choosing-a-parser.md
+    path: references/choosing_a_parser.md
+    content_hash: 58b198705dad134527ba824b7c02af8203d36c3bed334826cd5026137b982199
+    license: Apache-2.0
+  - knowledge_id: sas-references-cli-reference.md
+    path: references/cli_reference.md
+    content_hash: b84dd0c47a8d3426603b316fae2924c9d79e9097285be45215f88b6a2a23a8f4
+    license: Apache-2.0
+  - knowledge_id: sas-references-ocr-and-formats.md
+    path: references/ocr_and_formats.md
+    content_hash: 1031bdac3bc536aeaf8d45b4867104dad34f894d3440757ad38a75d41a58f61d
+    license: Apache-2.0
+  - knowledge_id: sas-references-output-formats.md
+    path: references/output_formats.md
+    content_hash: 78011bc2c40cc8f24bbfd906ab12a3328cd597c100cebb1ed4f89bd48766479c
+    license: Apache-2.0
+  - knowledge_id: sas-scripts-batch-parse-dir.py
+    path: scripts/batch_parse_dir.py
+    content_hash: 6d9162557da1a4d0005fb448989040a40c9246e469a62783c525aba591c6294c
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-liteparse/SKILL.md
+      sha256: 925f471d45bb5d8a526bd6a07a08895838c6b0432a912b0f2075b8081d1cf73f
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-liteparse/references/api_reference.md
+      sha256: f9f6561f4497d5e17457f1802b19fe9f8c72523069d7143fbae68afc98e3d886
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-liteparse/references/choosing_a_parser.md
+      sha256: 58b198705dad134527ba824b7c02af8203d36c3bed334826cd5026137b982199
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-liteparse/references/cli_reference.md
+      sha256: b84dd0c47a8d3426603b316fae2924c9d79e9097285be45215f88b6a2a23a8f4
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-liteparse/references/ocr_and_formats.md
+      sha256: 1031bdac3bc536aeaf8d45b4867104dad34f894d3440757ad38a75d41a58f61d
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-liteparse/references/output_formats.md
+      sha256: 78011bc2c40cc8f24bbfd906ab12a3328cd597c100cebb1ed4f89bd48766479c
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-liteparse/scripts/batch_parse_dir.py
+      sha256: 6d9162557da1a4d0005fb448989040a40c9246e469a62783c525aba591c6294c
+license: Apache-2.0

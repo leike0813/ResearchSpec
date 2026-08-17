@@ -1,0 +1,76 @@
+schema_version: "1"
+capability_id: plugin-historical-source-identification
+title: Historical Source Identification
+description: Search, retrieve, verify, and record historical-source candidates
+  through reviewed adapters with provenance-bearing evidence for one graph
+  node.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: historical-source-identification-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_historical_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,query_ledger,candidate_ledger,retrieval_ledger,verification_decisions,conclusions
+knowledge_refs:
+  - knowledge_id: source-identification-tool
+    path: tools/identify_sources.py
+    content_hash: dbaecbf5a5a23ad3fc869e60ea89457e17d54441f13a072a213756032f8c21b1
+    license: Apache-2.0
+  - knowledge_id: historical-support
+    path: tools/historical_support.py
+    content_hash: f46f1da49ee21d8e0586bc953ab0e7373802cbf631e0821437628d57ef158c91
+    license: Apache-2.0
+  - knowledge_id: provider-adapter-reference
+    path: references/provider-adapters.md
+    content_hash: 4eda74f31eac16eea956be2a37e645428e48aca4d961e32f572f43c1957bd78f
+    license: Apache-2.0
+  - knowledge_id: candidate-verification-reference
+    path: references/candidate-verification-cases.md
+    content_hash: 5c5492c102c22e61073af19b048606abcdf30a2bbafb7a6cc75eb0b93a746ce0
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/histagent/histagent-historical-source-identification/SKILL.md
+      sha256: cff2a73ed49816f9d7093a7062f4dee8037bd319e1239d344614500a1ca229b8
+    - path: skills/plugins/vendors/histagent/histagent-historical-source-identification/scripts/identify_sources.py
+      sha256: dbaecbf5a5a23ad3fc869e60ea89457e17d54441f13a072a213756032f8c21b1
+    - path: skills/plugins/vendors/histagent/histagent-historical-source-identification/lib/historical_support.py
+      sha256: f46f1da49ee21d8e0586bc953ab0e7373802cbf631e0821437628d57ef158c91
+    - path: skills/plugins/vendors/histagent/histagent-historical-source-identification/references/provider-adapters.md
+      sha256: 4eda74f31eac16eea956be2a37e645428e48aca4d961e32f572f43c1957bd78f
+    - path: skills/plugins/vendors/histagent/histagent-historical-source-identification/references/candidate-verification-cases.md
+      sha256: 5c5492c102c22e61073af19b048606abcdf30a2bbafb7a6cc75eb0b93a746ce0
+license: Apache-2.0

@@ -1,0 +1,63 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-dose-response
+title: Dose-Response / Concentration-Response Analysis
+description: Dose-response / concentration-response curve fitting — IC50, EC50,
+  Hill slope, Emax/Emin efficacy, and relative potency from paired concentration
+  vs response data (enzyme/cell assays, drug screening, agonist/antagonist
+  pharmacology). Fits the 4-parameter logistic (Hill sigmoidal) model. Use when
+  you have concentrations + responses and need a potency value, to compare two
+  compounds' potency, or to judge curve quality. NOT for image-derived
+  dose-response (use tooluniverse-image-analysis) and NOT for
+  survival/regression (use tooluniverse-statistical-modeling).
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-scripts-fit-dose-response.py
+    path: scripts/fit_dose_response.py
+    content_hash: 820d197149b872d95cc9f56ecf2e1ba09bfc0a4bd4dc3d0f943909550d983606
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-dose-response/SKILL.md
+      sha256: 55a625ff4e9c7d7d0e68ba69151497d6091be6ab7a5b7e5895d9fd8ad57f8096
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-dose-response/scripts/fit_dose_response.py
+      sha256: 820d197149b872d95cc9f56ecf2e1ba09bfc0a4bd4dc3d0f943909550d983606
+license: Apache-2.0

@@ -1,0 +1,157 @@
+{
+  "schema_version": "1",
+  "vendor_id": "materials-science-skills-for-llm",
+  "name": "Materials-Science-Skills-For-LLM",
+  "repository_url": "https://github.com/IntelligentMat/Materials-Science-Skills-For-LLM.git",
+  "upstream_root": "vendor/materials-science-skills-for-llm",
+  "generated_root": "skills/plugins/vendors/materials-science-skills-for-llm",
+  "extension_root": "skills/plugins/extensions",
+  "release": "snapshot-fafd3ab",
+  "revision": "fafd3ab011e4c363658a39c4bb62fc739839d58c",
+  "anchor_id": "snapshot-fafd3ab",
+  "audit_file": "audits/materials-science-skills-for-llm/snapshot-fafd3ab/skill-audit.json",
+  "audit_report": "audits/materials-science-skills-for-llm/snapshot-fafd3ab/report.md",
+  "extension_domains": [
+    "materials-engineering",
+    "macromolecular-and-materials-chemistry",
+    "computational-modeling-and-simulation"
+  ],
+  "extensions": [
+    {
+      "capability_id": "plugin-materials-apex-alloy-workflows",
+      "raw_skill_id": "materials-science-skills-apex-alloy-workflows",
+      "execution_type": "llm",
+      "validator": "validators/validate_materials_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "input_inventory",
+        "validation_criteria",
+        "authority_ledger",
+        "task_results",
+        "convergence_checks",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/materials-science-skills-for-llm/materials-science-skills-apex-alloy-workflows/references/property-parameters.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-materials-apex-alloy-workflows/references/property-parameters.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-materials-atomsk-cli",
+      "raw_skill_id": "materials-science-skills-atomsk-cli",
+      "execution_type": "llm",
+      "validator": "validators/validate_materials_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "operation_plan",
+        "command_ledger",
+        "confirmation_ledger",
+        "validation_evidence",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-materials-deeptb-helper",
+      "raw_skill_id": "materials-science-skills-deeptb-helper",
+      "execution_type": "llm",
+      "validator": "validators/validate_materials_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "dataset_ledger",
+        "configuration_review",
+        "command_ledger",
+        "evaluation_metrics",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/materials-science-skills-for-llm/materials-science-skills-deeptb-helper/references/dataset-and-configuration.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-materials-deeptb-helper/references/dataset-and-configuration.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-materials-dpgen-workflow",
+      "raw_skill_id": "materials-science-skills-dpgen-workflow",
+      "execution_type": "llm",
+      "validator": "validators/validate_materials_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "stage_ledger",
+        "parameter_review",
+        "authority_ledger",
+        "convergence_evidence",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/materials-science-skills-for-llm/materials-science-skills-dpgen-workflow/references/parameter-and-machine-files.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-materials-dpgen-workflow/references/parameter-and-machine-files.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-materials-gpumd-workflow",
+      "raw_skill_id": "materials-science-skills-gpumd-workflow",
+      "execution_type": "llm",
+      "validator": "validators/validate_materials_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "run_ledger",
+        "command_ledger",
+        "output_inventory",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/materials-science-skills-for-llm/materials-science-skills-gpumd-workflow/references/md-nep-and-output-playbook.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-materials-gpumd-workflow/references/md-nep-and-output-playbook.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-materials-phonopy-workflows",
+      "raw_skill_id": "materials-science-skills-phonopy-workflows",
+      "execution_type": "llm",
+      "validator": "validators/validate_materials_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "configuration_review",
+        "force_ledger",
+        "run_ledger",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/materials-science-skills-for-llm/materials-science-skills-phonopy-workflows/references/configuration-and-force-files.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-materials-phonopy-workflows/references/configuration-and-force-files.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-materials-unimol-ops",
+      "raw_skill_id": "materials-science-skills-unimol-ops",
+      "execution_type": "llm",
+      "validator": "validators/validate_materials_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "data_ledger",
+        "mode_plan",
+        "command_ledger",
+        "result_ledger",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/materials-science-skills-for-llm/materials-science-skills-unimol-ops/references/local-workflow-modes.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-materials-unimol-ops/references/local-workflow-modes.md"
+        }
+      ]
+    }
+  ]
+}

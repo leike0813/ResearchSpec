@@ -1,0 +1,72 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-proteomics-analysis
+title: Proteomics Analysis
+description: Mass-spec proteomics analysis — protein identification,
+  quantification (LFQ, TMT, iTRAQ), differential expression (tumor vs normal,
+  treatment vs control), PTM identification, and pathway enrichment on protein
+  lists. Use when you have proteomics MS output, asking about protein abundance
+  differences, or doing systems-level proteomic interpretation.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-code-reference.md
+    path: CODE_REFERENCE.md
+    content_hash: 8c037cfb23a1f6ca5136b5c50a1f1ece9f8b3904a96c5a8e0f7a3338034ad685
+    license: Apache-2.0
+  - knowledge_id: tu-phase-details.md
+    path: PHASE_DETAILS.md
+    content_hash: 26c008250181b52d3a8da5f82697501f9c35a04853b61707f7e627edd08b427b
+    license: Apache-2.0
+  - knowledge_id: tu-report-template.md
+    path: REPORT_TEMPLATE.md
+    content_hash: 504581d8666f752283c438d6244e1d9ae18a48843a9b3578eb6819b9d20cf26c
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-proteomics-analysis/SKILL.md
+      sha256: a19dcc0abfef6e72f32b2206a8db6a5c7b7602c688edde18072b1468effedf18
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-proteomics-analysis/CODE_REFERENCE.md
+      sha256: 8c037cfb23a1f6ca5136b5c50a1f1ece9f8b3904a96c5a8e0f7a3338034ad685
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-proteomics-analysis/PHASE_DETAILS.md
+      sha256: 26c008250181b52d3a8da5f82697501f9c35a04853b61707f7e627edd08b427b
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-proteomics-analysis/REPORT_TEMPLATE.md
+      sha256: 504581d8666f752283c438d6244e1d9ae18a48843a9b3578eb6819b9d20cf26c
+license: Apache-2.0

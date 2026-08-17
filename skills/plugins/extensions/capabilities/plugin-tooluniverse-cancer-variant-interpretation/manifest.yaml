@@ -1,0 +1,98 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-cancer-variant-interpretation
+title: Cancer Variant Interpretation for Precision Oncology
+description: "Clinical interpretation of somatic cancer mutations for precision
+  oncology. Transforms a gene + variant + cancer-type input into an actionable
+  report: clinical evidence tier (CIViC, OncoKB), therapeutic options
+  (FDA-approved + investigational), resistance mechanisms, prognosis, and
+  matching clinical trials. Use for tumor-board variant calls, somatic-mutation
+  actionability assessment, and treatment selection. Always
+  cancer-type-specific."
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-analysis-details.md
+    path: ANALYSIS_DETAILS.md
+    content_hash: 8fa83047e114c14d5588335efe8d15dec2a8eadae62260853822a6b7485db107
+    license: Apache-2.0
+  - knowledge_id: tu-examples.md
+    path: EXAMPLES.md
+    content_hash: 69736d1a865a0bf6a4014f0779ff2954b4c3a9ea2f60fe4338e4aa42cb53af2c
+    license: Apache-2.0
+  - knowledge_id: tu-input-parsing.md
+    path: INPUT_PARSING.md
+    content_hash: 2b4469eddb784db3f3948b63d53d015ed77936c900cbd96f276994d6c158cba9
+    license: Apache-2.0
+  - knowledge_id: tu-quick-start.md
+    path: QUICK_START.md
+    content_hash: e5ef98a8005954910aa7c6485b3dc0234f81295f2e2db145b2df5c3ff0b2bf20
+    license: Apache-2.0
+  - knowledge_id: tu-report-template.md
+    path: REPORT_TEMPLATE.md
+    content_hash: ae95893355e162c9bc73e019da6c6bd3e8c58e0ca58bae77a6f16909878c920e
+    license: Apache-2.0
+  - knowledge_id: tu-scoring-tables.md
+    path: SCORING_TABLES.md
+    content_hash: 03d34f66e86077377ed0acd2da9d8727adfb71d1db10390b1a30cb56466ed594
+    license: Apache-2.0
+  - knowledge_id: tu-tools-reference.md
+    path: TOOLS_REFERENCE.md
+    content_hash: 679bcc8d8bfa37d33b03cd0882048f1228ef3cd27e5ec5241d6e3a81b8c02af3
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-cancer-variant-interpretation/SKILL.md
+      sha256: 784627ee73e5bfb4bbb074d997d6c40d553029deee76e44621b6f8eca6a51ef4
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-cancer-variant-interpretation/ANALYSIS_DETAILS.md
+      sha256: 8fa83047e114c14d5588335efe8d15dec2a8eadae62260853822a6b7485db107
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-cancer-variant-interpretation/EXAMPLES.md
+      sha256: 69736d1a865a0bf6a4014f0779ff2954b4c3a9ea2f60fe4338e4aa42cb53af2c
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-cancer-variant-interpretation/INPUT_PARSING.md
+      sha256: 2b4469eddb784db3f3948b63d53d015ed77936c900cbd96f276994d6c158cba9
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-cancer-variant-interpretation/QUICK_START.md
+      sha256: e5ef98a8005954910aa7c6485b3dc0234f81295f2e2db145b2df5c3ff0b2bf20
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-cancer-variant-interpretation/REPORT_TEMPLATE.md
+      sha256: ae95893355e162c9bc73e019da6c6bd3e8c58e0ca58bae77a6f16909878c920e
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-cancer-variant-interpretation/SCORING_TABLES.md
+      sha256: 03d34f66e86077377ed0acd2da9d8727adfb71d1db10390b1a30cb56466ed594
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-cancer-variant-interpretation/TOOLS_REFERENCE.md
+      sha256: 679bcc8d8bfa37d33b03cd0882048f1228ef3cd27e5ec5241d6e3a81b8c02af3
+license: Apache-2.0

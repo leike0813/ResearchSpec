@@ -1,0 +1,149 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-geomaster
+title: GeoMaster
+description: Comprehensive geospatial science skill covering remote sensing,
+  GIS, spatial analysis, machine learning for earth observation, and 30+
+  scientific domains. Supports satellite imagery processing (Sentinel, Landsat,
+  MODIS, SAR, hyperspectral), vector and raster data operations, spatial
+  statistics, point cloud processing, network analysis, cloud-native workflows
+  (STAC, COG, Planetary Computer), and 8 programming languages (Python, R,
+  Julia, JavaScript, C++, Java, Go, Rust) with 500+ code examples. Use for
+  remote sensing workflows, GIS analysis, spatial ML, Earth observation data
+  processing, terrain analysis, hydrological modeling, marine spatial analysis,
+  atmospheric science, and any geospatial computation task.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-readme.md
+    path: README.md
+    content_hash: 558f55383ddaee1d82e4467b7f3f2deb3827c88aecbc48f13f0232e88cd6842e
+    license: Apache-2.0
+  - knowledge_id: sas-references-advanced-gis.md
+    path: references/advanced-gis.md
+    content_hash: cba7a139e06687547a99075e23a093f5748cfc909011d5ed789dc06ef7cc4ef3
+    license: Apache-2.0
+  - knowledge_id: sas-references-big-data.md
+    path: references/big-data.md
+    content_hash: d5b2260db23681de496db6e1e599a29d4739109dcd95cf15c885a24038634005
+    license: Apache-2.0
+  - knowledge_id: sas-references-code-examples.md
+    path: references/code-examples.md
+    content_hash: 1946ce4da59a14307fdb41980eef2342d8a110e87edb463c9471505298563551
+    license: Apache-2.0
+  - knowledge_id: sas-references-coordinate-systems.md
+    path: references/coordinate-systems.md
+    content_hash: a5a3ec7310167c1b53a1e2c10a27abfb3e435d4b9a8aeb30fe50e99d0489a69d
+    license: Apache-2.0
+  - knowledge_id: sas-references-core-libraries.md
+    path: references/core-libraries.md
+    content_hash: 58fa8f10ee79a1847f4140a948ae9c7917ecff8e2e7c10c61a1431e181a4ebc0
+    license: Apache-2.0
+  - knowledge_id: sas-references-data-sources.md
+    path: references/data-sources.md
+    content_hash: 5fdcb1f0b5a3484926864b4785d7ea12e42d1d07e610b8dd63512166ff38e907
+    license: Apache-2.0
+  - knowledge_id: sas-references-gis-software.md
+    path: references/gis-software.md
+    content_hash: 1f91e2163fe1db2e9c9cd59377566c3d9210241f89f97670323203a132e6168d
+    license: Apache-2.0
+  - knowledge_id: sas-references-industry-applications.md
+    path: references/industry-applications.md
+    content_hash: cf2819673fd1ebf8edc56adb8ee6854aaaf60302b1e47ac2dbfe04bf7da176a1
+    license: Apache-2.0
+  - knowledge_id: sas-references-machine-learning.md
+    path: references/machine-learning.md
+    content_hash: cd262726b1ff57c83a548ccfd304a9b63699952d5376c08f59774006c5a2b954
+    license: Apache-2.0
+  - knowledge_id: sas-references-programming-languages.md
+    path: references/programming-languages.md
+    content_hash: 9578da560a24f7642d212b77bb745ade0acbf716dd9d3fd915bff02c527cb48f
+    license: Apache-2.0
+  - knowledge_id: sas-references-remote-sensing.md
+    path: references/remote-sensing.md
+    content_hash: b2c730c75c51f763c70639eafebde3e554ce5aedc8c3a5ce00a6c9b1bbb17fcc
+    license: Apache-2.0
+  - knowledge_id: sas-references-scientific-domains.md
+    path: references/scientific-domains.md
+    content_hash: 9e4733e57e993be1584ca95bbc3ac89dc6cc13e625e75cb515531240117fc046
+    license: Apache-2.0
+  - knowledge_id: sas-references-specialized-topics.md
+    path: references/specialized-topics.md
+    content_hash: b0cee8b20dd7920087277e7f3286e7c190355bda210baf38c1b715276051cd81
+    license: Apache-2.0
+  - knowledge_id: sas-references-troubleshooting.md
+    path: references/troubleshooting.md
+    content_hash: 4b9ac3d3c5eac093cd0557eeb209dc208115f18c8555f057b3d369b045731ce1
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geomaster/SKILL.md
+      sha256: 7ca9f13d83cca54c012aef2800e2fcee4824eebc28a7558aa12f1308483bdacd
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geomaster/README.md
+      sha256: 558f55383ddaee1d82e4467b7f3f2deb3827c88aecbc48f13f0232e88cd6842e
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geomaster/references/advanced-gis.md
+      sha256: cba7a139e06687547a99075e23a093f5748cfc909011d5ed789dc06ef7cc4ef3
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geomaster/references/big-data.md
+      sha256: d5b2260db23681de496db6e1e599a29d4739109dcd95cf15c885a24038634005
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geomaster/references/code-examples.md
+      sha256: 1946ce4da59a14307fdb41980eef2342d8a110e87edb463c9471505298563551
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geomaster/references/coordinate-systems.md
+      sha256: a5a3ec7310167c1b53a1e2c10a27abfb3e435d4b9a8aeb30fe50e99d0489a69d
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geomaster/references/core-libraries.md
+      sha256: 58fa8f10ee79a1847f4140a948ae9c7917ecff8e2e7c10c61a1431e181a4ebc0
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geomaster/references/data-sources.md
+      sha256: 5fdcb1f0b5a3484926864b4785d7ea12e42d1d07e610b8dd63512166ff38e907
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geomaster/references/gis-software.md
+      sha256: 1f91e2163fe1db2e9c9cd59377566c3d9210241f89f97670323203a132e6168d
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geomaster/references/industry-applications.md
+      sha256: cf2819673fd1ebf8edc56adb8ee6854aaaf60302b1e47ac2dbfe04bf7da176a1
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geomaster/references/machine-learning.md
+      sha256: cd262726b1ff57c83a548ccfd304a9b63699952d5376c08f59774006c5a2b954
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geomaster/references/programming-languages.md
+      sha256: 9578da560a24f7642d212b77bb745ade0acbf716dd9d3fd915bff02c527cb48f
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geomaster/references/remote-sensing.md
+      sha256: b2c730c75c51f763c70639eafebde3e554ce5aedc8c3a5ce00a6c9b1bbb17fcc
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geomaster/references/scientific-domains.md
+      sha256: 9e4733e57e993be1584ca95bbc3ac89dc6cc13e625e75cb515531240117fc046
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geomaster/references/specialized-topics.md
+      sha256: b0cee8b20dd7920087277e7f3286e7c190355bda210baf38c1b715276051cd81
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geomaster/references/troubleshooting.md
+      sha256: 4b9ac3d3c5eac093cd0557eeb209dc208115f18c8555f057b3d369b045731ce1
+license: Apache-2.0

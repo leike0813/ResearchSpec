@@ -1,0 +1,56 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-protein-structural-annotation-pdb
+title: Protein structural annotation from a PDB
+description: "Given a PDB structure, produce a per-residue annotation table:
+  which residues sit at a binding interface (vs a partner chain), which line a
+  ligand pocket, which are buried (core) vs solvent-exposed (surface), and
+  optionally secondary structure. This is the structural track drawn under a DMS
+  heatmap and the structural prior SAE feature drops are read against. Use when
+  you need to anchor a variant-interpretation or DMS analysis to the protein's
+  actual physical context."
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs: []
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-protein-structural-annotation-pdb/SKILL.md
+      sha256: 806266029f563836f0a6c4583057cfeee12b5f8d8d1e8d1f1932ffea1fbb8e01
+license: Apache-2.0

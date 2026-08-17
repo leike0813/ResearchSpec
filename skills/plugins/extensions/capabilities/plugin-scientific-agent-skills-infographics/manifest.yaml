@@ -1,0 +1,71 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-infographics
+title: Infographics
+description: Create professional infographics using Nano Banana Pro AI with
+  smart iterative refinement. Uses Gemini 3 Pro for quality review. Integrates
+  research-lookup and web search for accurate data. Supports 10 infographic
+  types, 8 industry styles, and colorblind-safe palettes.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-references-color-palettes.md
+    path: references/color_palettes.md
+    content_hash: a195e6a32af06d224a0f4057c14804771f6293677365bbd14032e5f90bddef31
+    license: Apache-2.0
+  - knowledge_id: sas-references-design-principles.md
+    path: references/design_principles.md
+    content_hash: 8eac51fd0b0493c0968c8abe0716b4c34895d0950f8db8d252c2c74f8196abc9
+    license: Apache-2.0
+  - knowledge_id: sas-references-infographic-types.md
+    path: references/infographic_types.md
+    content_hash: f45f97e79fa0962984766b59816182263366180a6b47af65b33df9bb4600c054
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-infographics/SKILL.md
+      sha256: e2cd5e10552d71badb95edcce4d8e098a2667d0739746f13ab98a0f9080a3e65
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-infographics/references/color_palettes.md
+      sha256: a195e6a32af06d224a0f4057c14804771f6293677365bbd14032e5f90bddef31
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-infographics/references/design_principles.md
+      sha256: 8eac51fd0b0493c0968c8abe0716b4c34895d0950f8db8d252c2c74f8196abc9
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-infographics/references/infographic_types.md
+      sha256: f45f97e79fa0962984766b59816182263366180a6b47af65b33df9bb4600c054
+license: Apache-2.0

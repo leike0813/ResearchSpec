@@ -1,0 +1,61 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-comparative-genomics
+title: Comparative Genomics & Ortholog Analysis
+description: Cross-species gene comparison and ortholog analysis. Integrates
+  Ensembl Compara orthologs, NCBI Gene, UniProt, OLS, Monarch, and OpenTargets
+  to identify orthologs, paralogs, sequence conservation, functional
+  conservation across species, and lineage-specific gene gains/losses. Use for
+  phylogenetic gene tracing, model-organism mapping, and evolutionary-genomics
+  queries.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-scripts-dnds.py
+    path: scripts/dnds.py
+    content_hash: 3ffc1aa0e3d7b967d5ab0571ae625167449194441ce4d651349492ef737e24ba
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-comparative-genomics/SKILL.md
+      sha256: 76f80729c73c2c2012b5bc3917d365516acbbe9a566191c0fe0f041b72cecfab
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-comparative-genomics/scripts/dnds.py
+      sha256: 3ffc1aa0e3d7b967d5ab0571ae625167449194441ce4d651349492ef737e24ba
+license: Apache-2.0

@@ -1,0 +1,66 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-metabolomics-analysis
+title: Metabolomics Analysis
+description: Analyze metabolomics data end-to-end — metabolite identification,
+  quantification (TIC normalization, batch correction), differential analysis,
+  and pathway interpretation. Use for processing mass-spec metabolomics output,
+  normalization choice, untargeted metabolomics workflows, and integrating with
+  other omics layers.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-code-examples.md
+    path: code_examples.md
+    content_hash: 3ab493bc9524617720562503afbfbe10b1076dc50f1772139a0f5b6db905e72b
+    license: Apache-2.0
+  - knowledge_id: tu-report-template.md
+    path: report_template.md
+    content_hash: 5f74cf7c00036b59a860eeb768b909ba987695dd6b80a61bcd40e43aee405fc9
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics-analysis/SKILL.md
+      sha256: 1c548f7336321942c50ce9cd92a561e260612f5d0b9e705a3a99c35fb2f35e85
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics-analysis/code_examples.md
+      sha256: 3ab493bc9524617720562503afbfbe10b1076dc50f1772139a0f5b6db905e72b
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics-analysis/report_template.md
+      sha256: 5f74cf7c00036b59a860eeb768b909ba987695dd6b80a61bcd40e43aee405fc9
+license: Apache-2.0

@@ -1,0 +1,64 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-residue-functional-mechanism-interpretation
+title: Residue functional mechanism interpretation
+description: "Given a set of residues in a protein, explain WHY they are
+  functionally critical by combining structural context (binding interface,
+  ligand pocket, core, secondary structure), UniProt features (active sites,
+  binding sites, PTM sites, disulfides), optional SAE feature evidence, and
+  optional DMS data. Accepts residues from any source: DMS hotspots (top-K by
+  max effect), ClinVar recurrent variants, literature-reported hot regions,
+  evolutionarily conserved positions, or user-curated lists. Returns a
+  per-cluster mechanism call: catalytic / ligand-binding / interface /
+  structural-core / PTM / regulatory / unknown."
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-references-upstream-details.md
+    path: references/upstream-details.md
+    content_hash: 4ed1518ef6dd1a5dad23cd813e6ed1f4c4ed16a07e8a86a6f115b9c5b42a854b
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-residue-functional-mechanism-interpretation/SKILL.md
+      sha256: e028127a0d64ae6942c78a7f40fc9c5b2e8140b7ceaa1ecafa33f1c1990f8c49
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-residue-functional-mechanism-interpretation/references/upstream-details.md
+      sha256: 4ed1518ef6dd1a5dad23cd813e6ed1f4c4ed16a07e8a86a6f115b9c5b42a854b
+license: Apache-2.0

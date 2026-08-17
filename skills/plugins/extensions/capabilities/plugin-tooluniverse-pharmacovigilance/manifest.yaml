@@ -1,0 +1,90 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-pharmacovigilance
+title: Pharmacovigilance Safety Analyzer
+description: Drug safety and adverse event analysis — FAERS spontaneous-report
+  mining, FDA black-box warnings, signal detection (PRR, ROR, IC), risk factors
+  by demographic/comorbidity, and label change tracking. Use for post-market
+  safety surveillance, AE signal investigation, drug-AE association strength
+  scoring, and pharmacovigilance reports.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-checklist.md
+    path: CHECKLIST.md
+    content_hash: d6a7ad024110c4860be6d8bab8339cc0a547214a429f5891517dfbf33bae27ee
+    license: Apache-2.0
+  - knowledge_id: tu-examples.md
+    path: EXAMPLES.md
+    content_hash: 89da16b4a1fc5bd25f66f20bcb48c0853eb8b85e790fa1f086fb27482258bd66
+    license: Apache-2.0
+  - knowledge_id: tu-report-templates.md
+    path: REPORT_TEMPLATES.md
+    content_hash: 1f0e893b4f94565548b0eb0f61a6d38dc98dd75fd9deef5e426be8c94c393891
+    license: Apache-2.0
+  - knowledge_id: tu-signal-analysis.md
+    path: SIGNAL_ANALYSIS.md
+    content_hash: d3a74106dac1f997f16e67a6c9500a622d9b278b175ebb349250b576167f96bd
+    license: Apache-2.0
+  - knowledge_id: tu-signal-detection.md
+    path: SIGNAL_DETECTION.md
+    content_hash: 1b48206aaac055b16ac0d433d7d09b8a7aeee8434098c970fcbdb36d1c9864a2
+    license: Apache-2.0
+  - knowledge_id: tu-tools-reference.md
+    path: TOOLS_REFERENCE.md
+    content_hash: 5939c3b654716fc1ca66cd971aa8aebbb2bca214700b436e95668f48a3fcfd43
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-pharmacovigilance/SKILL.md
+      sha256: 736df0c3ffa2a10efd63f7073a6928d64f92194d507ab1ce989247272b0fdcb8
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-pharmacovigilance/CHECKLIST.md
+      sha256: d6a7ad024110c4860be6d8bab8339cc0a547214a429f5891517dfbf33bae27ee
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-pharmacovigilance/EXAMPLES.md
+      sha256: 89da16b4a1fc5bd25f66f20bcb48c0853eb8b85e790fa1f086fb27482258bd66
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-pharmacovigilance/REPORT_TEMPLATES.md
+      sha256: 1f0e893b4f94565548b0eb0f61a6d38dc98dd75fd9deef5e426be8c94c393891
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-pharmacovigilance/SIGNAL_ANALYSIS.md
+      sha256: d3a74106dac1f997f16e67a6c9500a622d9b278b175ebb349250b576167f96bd
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-pharmacovigilance/SIGNAL_DETECTION.md
+      sha256: 1b48206aaac055b16ac0d433d7d09b8a7aeee8434098c970fcbdb36d1c9864a2
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-pharmacovigilance/TOOLS_REFERENCE.md
+      sha256: 5939c3b654716fc1ca66cd971aa8aebbb2bca214700b436e95668f48a3fcfd43
+license: Apache-2.0

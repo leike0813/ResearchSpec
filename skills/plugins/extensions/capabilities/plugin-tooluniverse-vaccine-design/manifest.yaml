@@ -1,0 +1,62 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-vaccine-design
+title: Vaccine Design
+description: "Computational vaccine candidate design: peptide/subunit vaccines
+  via MHC-I/MHC-II epitope prediction (IEDB), population HLA coverage
+  optimization, B-cell epitope identification, and cross-strain conservation
+  analysis. Use for vaccine epitope prediction, HLA allele coverage,
+  multi-epitope construct design, and immunogenicity assessment. Combines
+  predicted MHC binding with experimentally validated IEDB epitopes for
+  higher-confidence designs."
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-scripts-population-coverage.py
+    path: scripts/population_coverage.py
+    content_hash: a8f1307427e036adc42bdc275bd2765eedc71b57a69569f375351c3c5fd88f9f
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-vaccine-design/SKILL.md
+      sha256: 6439f7273f5d1508032a54ee237f2b91ca2b570a7286f3508828677a5485f554
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-vaccine-design/scripts/population_coverage.py
+      sha256: a8f1307427e036adc42bdc275bd2765eedc71b57a69569f375351c3c5fd88f9f
+license: Apache-2.0

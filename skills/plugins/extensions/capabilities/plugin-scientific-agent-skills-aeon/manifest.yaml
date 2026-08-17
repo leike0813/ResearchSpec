@@ -1,0 +1,121 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-aeon
+title: Aeon Time Series Machine Learning
+description: This skill should be used for time series machine learning tasks
+  including classification, regression, clustering, forecasting, anomaly
+  detection, segmentation, and similarity search. Use when working with temporal
+  data, sequential patterns, or time-indexed observations requiring specialized
+  algorithms beyond standard ML approaches. Particularly suited for univariate
+  and multivariate time series analysis with scikit-learn compatible APIs.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-references-anomaly-detection.md
+    path: references/anomaly_detection.md
+    content_hash: f7121dbcfff6ed13356a5540488272ef7fbd6cee4eeb139d33bb1b8214cf573b
+    license: Apache-2.0
+  - knowledge_id: sas-references-classification.md
+    path: references/classification.md
+    content_hash: 5aea5ecf30840d0748077a9ac617ec460711ba70f8ef5df650a31f134b605067
+    license: Apache-2.0
+  - knowledge_id: sas-references-clustering.md
+    path: references/clustering.md
+    content_hash: ab2635b7d55ae727bc027c0b0f21dc65167c35b0379acbd19396db82594c2832
+    license: Apache-2.0
+  - knowledge_id: sas-references-datasets-benchmarking.md
+    path: references/datasets_benchmarking.md
+    content_hash: 1830d335c9fb02fbd8cf9765f22309e81ee562fdd6f199435178ef2a18beb4ce
+    license: Apache-2.0
+  - knowledge_id: sas-references-distances.md
+    path: references/distances.md
+    content_hash: 1b9a0371bad5babf386cf52405fc48b93097b05706a5c79ef6d216f94f502d04
+    license: Apache-2.0
+  - knowledge_id: sas-references-forecasting.md
+    path: references/forecasting.md
+    content_hash: 3ee8527837e92712306688301b0abb8c19b7bfb3f249cd1239f1039f5026477d
+    license: Apache-2.0
+  - knowledge_id: sas-references-networks.md
+    path: references/networks.md
+    content_hash: fccccdfd172c5f1578d462d06f66187b9f4242144a59abfd8408f467d9e40e65
+    license: Apache-2.0
+  - knowledge_id: sas-references-regression.md
+    path: references/regression.md
+    content_hash: 39ccf444ec621c1e4c89fe4ba56db5d5b7b3c55bce12cd4035fd6451f734c294
+    license: Apache-2.0
+  - knowledge_id: sas-references-segmentation.md
+    path: references/segmentation.md
+    content_hash: 7495a53b149750c2fc310a545c9f9b27523626f5d38689cde34ec9585450573a
+    license: Apache-2.0
+  - knowledge_id: sas-references-similarity-search.md
+    path: references/similarity_search.md
+    content_hash: 9d803e450a82dd864f7f7b8859fe7dc2d210b14369d0ae2ab8b74922446741e5
+    license: Apache-2.0
+  - knowledge_id: sas-references-transformations.md
+    path: references/transformations.md
+    content_hash: e7807df13949b036f30212d98b921ad6f31e0720d145ff3196f85a3584788da4
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-aeon/SKILL.md
+      sha256: e50df07e72e71acc1c4c1ac8323537bb5050e9eb9bcd1cfa21695caed37cdb98
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/anomaly_detection.md
+      sha256: f7121dbcfff6ed13356a5540488272ef7fbd6cee4eeb139d33bb1b8214cf573b
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/classification.md
+      sha256: 5aea5ecf30840d0748077a9ac617ec460711ba70f8ef5df650a31f134b605067
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/clustering.md
+      sha256: ab2635b7d55ae727bc027c0b0f21dc65167c35b0379acbd19396db82594c2832
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/datasets_benchmarking.md
+      sha256: 1830d335c9fb02fbd8cf9765f22309e81ee562fdd6f199435178ef2a18beb4ce
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/distances.md
+      sha256: 1b9a0371bad5babf386cf52405fc48b93097b05706a5c79ef6d216f94f502d04
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/forecasting.md
+      sha256: 3ee8527837e92712306688301b0abb8c19b7bfb3f249cd1239f1039f5026477d
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/networks.md
+      sha256: fccccdfd172c5f1578d462d06f66187b9f4242144a59abfd8408f467d9e40e65
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/regression.md
+      sha256: 39ccf444ec621c1e4c89fe4ba56db5d5b7b3c55bce12cd4035fd6451f734c294
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/segmentation.md
+      sha256: 7495a53b149750c2fc310a545c9f9b27523626f5d38689cde34ec9585450573a
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/similarity_search.md
+      sha256: 9d803e450a82dd864f7f7b8859fe7dc2d210b14369d0ae2ab8b74922446741e5
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/transformations.md
+      sha256: e7807df13949b036f30212d98b921ad6f31e0720d145ff3196f85a3584788da4
+license: Apache-2.0

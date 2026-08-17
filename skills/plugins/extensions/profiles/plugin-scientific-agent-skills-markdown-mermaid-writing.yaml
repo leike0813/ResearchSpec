@@ -1,0 +1,30 @@
+schema_version: "2"
+profile_id: plugin-scientific-agent-skills-markdown-mermaid-writing
+profile_version: 0.1.0
+capability_registry_version: 0.1.0
+entries:
+  - entry_id: main
+    kind: end-to-end
+    node_id: research
+nodes:
+  - node_id: research
+    kind: capability
+    capability_id: plugin-scientific-agent-skills-markdown-mermaid-writing
+    input_bindings:
+      - role: task_request
+        source: handoff
+    expected_outputs:
+      - role: research_brief
+        required: true
+    prerequisites: []
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+parallel_groups: []
+subgraphs: []
+gates: []
+decisions: []
+revision_round_template: null
+override_policy:
+  failed_gate_requires_decision: true

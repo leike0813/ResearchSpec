@@ -1,0 +1,84 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-pptx-posters
+title: PPTX Research Posters (HTML-Based)
+description: Create research posters using HTML/CSS that can be exported to PDF
+  or PPTX. Use this skill ONLY when the user explicitly requests PowerPoint/PPTX
+  poster format. For standard research posters, use latex-posters instead. This
+  skill provides modern web-based poster design with responsive layouts and easy
+  visual integration.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-assets-poster-html-template.html
+    path: assets/poster_html_template.html
+    content_hash: 4b58e0efd555e95a7f6377d2e22109b3ede9cbf827909442c662586bacc7b8ed
+    license: Apache-2.0
+  - knowledge_id: sas-assets-poster-quality-checklist.md
+    path: assets/poster_quality_checklist.md
+    content_hash: 1f2d89a68410b197f8d656cc29c3b798a7de83328ebf4c9dc042df4d71e67275
+    license: Apache-2.0
+  - knowledge_id: sas-references-poster-content-guide.md
+    path: references/poster_content_guide.md
+    content_hash: 2af1cbfa45878041de15459ccbac49f85f810d045ed5231a011bee5f54641b26
+    license: Apache-2.0
+  - knowledge_id: sas-references-poster-design-principles.md
+    path: references/poster_design_principles.md
+    content_hash: 6c3618133764687a19f30f563805bbf13996f818ba267cfbd5bbc908b9f7102b
+    license: Apache-2.0
+  - knowledge_id: sas-references-poster-layout-design.md
+    path: references/poster_layout_design.md
+    content_hash: f674c0fe352321b9bc0eb2be09d95379714a6b77624689ba100da4898c4f20df
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pptx-posters/SKILL.md
+      sha256: f1824237abd2b9ea207d8e43286836e321802d8cbbb4ad9afb8cba2dc868f66e
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pptx-posters/assets/poster_html_template.html
+      sha256: 4b58e0efd555e95a7f6377d2e22109b3ede9cbf827909442c662586bacc7b8ed
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pptx-posters/assets/poster_quality_checklist.md
+      sha256: 1f2d89a68410b197f8d656cc29c3b798a7de83328ebf4c9dc042df4d71e67275
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pptx-posters/references/poster_content_guide.md
+      sha256: 2af1cbfa45878041de15459ccbac49f85f810d045ed5231a011bee5f54641b26
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pptx-posters/references/poster_design_principles.md
+      sha256: 6c3618133764687a19f30f563805bbf13996f818ba267cfbd5bbc908b9f7102b
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pptx-posters/references/poster_layout_design.md
+      sha256: f674c0fe352321b9bc0eb2be09d95379714a6b77624689ba100da4898c4f20df
+license: Apache-2.0

@@ -1,0 +1,109 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-computational-biophysics
+title: Computational Biophysics & Quantitative Biology Skill
+description: Solve quantitative problems in biophysics — pharmacokinetics (PK
+  volume of distribution, clearance, half-life), epidemiology (R0, attack rate),
+  toxicology (LD50, NOAEL), population genetics (Hardy-Weinberg, Fst), enzyme
+  kinetics (Michaelis-Menten), thermodynamics. Use for first-principles
+  quantitative biology calculations, dose calculations, exposure assessment, and
+  biophysical-property estimation.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-scripts-burn-fluids.py
+    path: scripts/burn_fluids.py
+    content_hash: 5a3c572d7686ce0e2d1409978118172944d6e795b4812b37256f922aacab4f9d
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-env-risk-assessment.py
+    path: scripts/env_risk_assessment.py
+    content_hash: d3cc3e83e820aad4f38e0e912df1ab4323152c698d6f881968c764f3e8241e95
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-enzyme-kinetics.py
+    path: scripts/enzyme_kinetics.py
+    content_hash: 7c05b261de40d7248cbb214b89f1ce9f4bae0dcde7656f4f900e8fe0338fa563
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-epidemiology.py
+    path: scripts/epidemiology.py
+    content_hash: 6fc4af932b023abe3af02d3f155b05652a9435e7a6b97931181be1c26b555ecb
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-fluid-calculations.py
+    path: scripts/fluid_calculations.py
+    content_hash: 02e077cc453aad89cf8db08fbb4db5a32c1dd41c30995084bb2c01ced78cedbe
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-herd-immunity.py
+    path: scripts/herd_immunity.py
+    content_hash: e463840055cd46a92be2076f9eede269541ca6ba628b5c1f5a8e006ff3d4c332
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-iv-drip-rate.py
+    path: scripts/iv_drip_rate.py
+    content_hash: a61bea30b975fc9f7f3a965045f3a4943f1912f7fa39a9de20707c22cc85bee3
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-mc-analyzer.py
+    path: scripts/mc_analyzer.py
+    content_hash: 4fe234cc86f895a79d406936dbe7bc92db4c4b98ce5aece0a489d8a327b28bff
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-radioactive-decay.py
+    path: scripts/radioactive_decay.py
+    content_hash: bd9a46a806429b3416accc32f7c8c2a57955a398e8fa24ffabcdac97bcfb1f45
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-computational-biophysics/SKILL.md
+      sha256: b94cc65c834a52ae98488ddc75256bad41ffb2fc61a7b347421faa76eaf109d5
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-computational-biophysics/scripts/burn_fluids.py
+      sha256: 5a3c572d7686ce0e2d1409978118172944d6e795b4812b37256f922aacab4f9d
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-computational-biophysics/scripts/env_risk_assessment.py
+      sha256: d3cc3e83e820aad4f38e0e912df1ab4323152c698d6f881968c764f3e8241e95
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-computational-biophysics/scripts/enzyme_kinetics.py
+      sha256: 7c05b261de40d7248cbb214b89f1ce9f4bae0dcde7656f4f900e8fe0338fa563
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-computational-biophysics/scripts/epidemiology.py
+      sha256: 6fc4af932b023abe3af02d3f155b05652a9435e7a6b97931181be1c26b555ecb
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-computational-biophysics/scripts/fluid_calculations.py
+      sha256: 02e077cc453aad89cf8db08fbb4db5a32c1dd41c30995084bb2c01ced78cedbe
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-computational-biophysics/scripts/herd_immunity.py
+      sha256: e463840055cd46a92be2076f9eede269541ca6ba628b5c1f5a8e006ff3d4c332
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-computational-biophysics/scripts/iv_drip_rate.py
+      sha256: a61bea30b975fc9f7f3a965045f3a4943f1912f7fa39a9de20707c22cc85bee3
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-computational-biophysics/scripts/mc_analyzer.py
+      sha256: 4fe234cc86f895a79d406936dbe7bc92db4c4b98ce5aece0a489d8a327b28bff
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-computational-biophysics/scripts/radioactive_decay.py
+      sha256: bd9a46a806429b3416accc32f7c8c2a57955a398e8fa24ffabcdac97bcfb1f45
+license: Apache-2.0

@@ -1,0 +1,80 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-shap
+title: SHAP (SHapley Additive exPlanations)
+description: Model interpretability and explainability using SHAP (SHapley
+  Additive exPlanations). Use this skill when explaining machine learning model
+  predictions, computing feature importance, generating SHAP plots (waterfall,
+  beeswarm, bar, scatter, force, heatmap), debugging models, analyzing model
+  bias or fairness, comparing models, or implementing explainable AI. Works with
+  tree-based models (XGBoost, LightGBM, Random Forest), deep learning
+  (TensorFlow, PyTorch), linear models, and any black-box model.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-references-explainers.md
+    path: references/explainers.md
+    content_hash: 2c3ea2706977790aafa13024b876b75bc198886cf75c83cfb29518bf0d5f108f
+    license: Apache-2.0
+  - knowledge_id: sas-references-plots.md
+    path: references/plots.md
+    content_hash: cb1a7392e4592f67a5a231ba33627342e4343876ce715e83eb0fa461ebd3f6ed
+    license: Apache-2.0
+  - knowledge_id: sas-references-theory.md
+    path: references/theory.md
+    content_hash: 7afc74836fa44354799727f22fec89bd6b86b798d6b56bbf0f642c9f87cf1610
+    license: Apache-2.0
+  - knowledge_id: sas-references-workflows.md
+    path: references/workflows.md
+    content_hash: 649baa278103cce7c54be74ce7e97ce82328deb64a5599f74bd0a11d6739e864
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-shap/SKILL.md
+      sha256: 1a2c509c63a987a2ec1cf1b7f31d16fde9c1d6a1ee7a3a61805ced8d353e7eab
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-shap/references/explainers.md
+      sha256: 2c3ea2706977790aafa13024b876b75bc198886cf75c83cfb29518bf0d5f108f
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-shap/references/plots.md
+      sha256: cb1a7392e4592f67a5a231ba33627342e4343876ce715e83eb0fa461ebd3f6ed
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-shap/references/theory.md
+      sha256: 7afc74836fa44354799727f22fec89bd6b86b798d6b56bbf0f642c9f87cf1610
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-shap/references/workflows.md
+      sha256: 649baa278103cce7c54be74ce7e97ce82328deb64a5599f74bd0a11d6739e864
+license: Apache-2.0

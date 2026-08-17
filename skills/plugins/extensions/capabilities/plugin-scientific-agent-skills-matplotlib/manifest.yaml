@@ -1,0 +1,91 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-matplotlib
+title: Matplotlib
+description: Low-level plotting library for full customization. Use when you
+  need fine-grained control over every plot element, creating novel plot types,
+  or integrating with specific scientific workflows. Export to PNG/PDF/SVG for
+  publication. For quick statistical plots use seaborn; for interactive plots
+  use plotly; for publication-ready multi-panel figures with journal styling,
+  use scientific-visualization.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-references-api-reference.md
+    path: references/api_reference.md
+    content_hash: 7db16c836bf62d9ac1bf952a70f3ffed785cfe51f76d806ded428a125ec9f1b5
+    license: Apache-2.0
+  - knowledge_id: sas-references-common-issues.md
+    path: references/common_issues.md
+    content_hash: 36d5439972718697be22222ba8a53e0e52d474153eaaa999c349f41b54e01cb5
+    license: Apache-2.0
+  - knowledge_id: sas-references-plot-types.md
+    path: references/plot_types.md
+    content_hash: 99b4c3c5c6c4d6590b722b6de7e414c2e443402df51cf99c3616b9f366a04c44
+    license: Apache-2.0
+  - knowledge_id: sas-references-styling-guide.md
+    path: references/styling_guide.md
+    content_hash: e53cb0f55fd1c4b07122cf67c0aabcc3114a686598667e62856c9d797a6e7f35
+    license: Apache-2.0
+  - knowledge_id: sas-scripts-plot-template.py
+    path: scripts/plot_template.py
+    content_hash: 24b362b1c2a96d4eda19ed8f4a913f356029e836069aab564e0cfb4ac2b84a1b
+    license: Apache-2.0
+  - knowledge_id: sas-scripts-style-configurator.py
+    path: scripts/style_configurator.py
+    content_hash: 5839cebb22b21f7612c6d169b9f63f20316910d1d7a3f0eb68c2b79cc43e1b0d
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matplotlib/SKILL.md
+      sha256: 2531250c327b0bf5c3720a3804699e0bee7c11e7212dced1aeb8bc8cdd85f9e6
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matplotlib/references/api_reference.md
+      sha256: 7db16c836bf62d9ac1bf952a70f3ffed785cfe51f76d806ded428a125ec9f1b5
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matplotlib/references/common_issues.md
+      sha256: 36d5439972718697be22222ba8a53e0e52d474153eaaa999c349f41b54e01cb5
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matplotlib/references/plot_types.md
+      sha256: 99b4c3c5c6c4d6590b722b6de7e414c2e443402df51cf99c3616b9f366a04c44
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matplotlib/references/styling_guide.md
+      sha256: e53cb0f55fd1c4b07122cf67c0aabcc3114a686598667e62856c9d797a6e7f35
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matplotlib/scripts/plot_template.py
+      sha256: 24b362b1c2a96d4eda19ed8f4a913f356029e836069aab564e0cfb4ac2b84a1b
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matplotlib/scripts/style_configurator.py
+      sha256: 5839cebb22b21f7612c6d169b9f63f20316910d1d7a3f0eb68c2b79cc43e1b0d
+license: Apache-2.0

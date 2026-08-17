@@ -1,0 +1,129 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-phylogenetics
+title: Phylogenetics and Sequence Analysis
+description: Phylogenetic analysis — de novo multiple sequence alignment
+  (Clustal Omega/MUSCLE/MAFFT via EBI_msa_align) and neighbour-joining/UPGMA
+  tree building (EBI_build_phylogenetic_tree) from your own sequences, plus tree
+  analysis, treeness, saturation (PhyKIT), parsimony-informative sites,
+  alignment gap analysis, DVMC, long-branch detection, BUSCO orthologs. Uses
+  PhyKIT, Biopython, DendroPy. Use to align a set of sequences, build a tree
+  from sequences or an alignment, or for phylogenetic tree QC, multi-gene
+  phylogenomics, evolutionary-rate analysis, and comparative-genomics studies.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-quick-start.md
+    path: QUICK_START.md
+    content_hash: daaed23778ab1b4af1b514a80ba279c7401fa1203bb9dfbd79bd9ec88a25e785
+    license: Apache-2.0
+  - knowledge_id: tu-references-parsimony-analysis.md
+    path: references/parsimony_analysis.md
+    content_hash: f7191aaa4679dd0908a9a817137924438130acdf77c298902a48aa75a56ccdf9
+    license: Apache-2.0
+  - knowledge_id: tu-references-sequence-alignment.md
+    path: references/sequence_alignment.md
+    content_hash: 94965b2ac045df20d1678841e3fd3b2f7006b392963b0e9ffd35fab218abfda9
+    license: Apache-2.0
+  - knowledge_id: tu-references-tree-building.md
+    path: references/tree_building.md
+    content_hash: 6aa7f500d1bfcd9872981f88614b0d9cb038d4b4243dc7d21c41defceee16cc3
+    license: Apache-2.0
+  - knowledge_id: tu-references-troubleshooting.md
+    path: references/troubleshooting.md
+    content_hash: 79d00d3b104c7b92566f0c2591632e77ea82c71c2bafb819c075fbcb12db5e6d
+    license: Apache-2.0
+  - knowledge_id: tu-references-upstream-details.md
+    path: references/upstream-details.md
+    content_hash: f37dbe49fb467f61bb52f55e74c9538470a038a0f186e1dc4ac3f18ed8129b09
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-busco-target-orthologs.py
+    path: scripts/busco_target_orthologs.py
+    content_hash: b8d40841af3b4307be1a8ba056b3187885cc681547820323a33c368bebd00ef7
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-format-alignment.py
+    path: scripts/format_alignment.py
+    content_hash: e65eff27abc4d697aaaa11f4eebb70219c19cbe05d260023ae03121a218e7f21
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-phykit-batch.py
+    path: scripts/phykit_batch.py
+    content_hash: 9bb05446edd8917dfdd4c4ca84320594ade9fb2522e82f284bc23d0977b23987
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-scogs-paired-compare.py
+    path: scripts/scogs_paired_compare.py
+    content_hash: 5d9c0f7eff194f47d5752c157d3b6ad3baeca6af642e3bb5c0d09f5c8410fc4c
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-scogs-phykit-pipeline.py
+    path: scripts/scogs_phykit_pipeline.py
+    content_hash: 2baf4649d416e1a22046648ee35a6093ad08ebf4169eb5979e3baf4d3c5d1c48
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-tree-statistics.py
+    path: scripts/tree_statistics.py
+    content_hash: 8b78ec1c90167c1bcc51b96fed4f66a624b8c3ea97516da311646110cb899537
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/SKILL.md
+      sha256: b6bdd588bd7f2f3965223db4d3a3fd84e26e2a05fed55f4d5244cd4b91c15282
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/QUICK_START.md
+      sha256: daaed23778ab1b4af1b514a80ba279c7401fa1203bb9dfbd79bd9ec88a25e785
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/references/parsimony_analysis.md
+      sha256: f7191aaa4679dd0908a9a817137924438130acdf77c298902a48aa75a56ccdf9
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/references/sequence_alignment.md
+      sha256: 94965b2ac045df20d1678841e3fd3b2f7006b392963b0e9ffd35fab218abfda9
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/references/tree_building.md
+      sha256: 6aa7f500d1bfcd9872981f88614b0d9cb038d4b4243dc7d21c41defceee16cc3
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/references/troubleshooting.md
+      sha256: 79d00d3b104c7b92566f0c2591632e77ea82c71c2bafb819c075fbcb12db5e6d
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/references/upstream-details.md
+      sha256: f37dbe49fb467f61bb52f55e74c9538470a038a0f186e1dc4ac3f18ed8129b09
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/scripts/busco_target_orthologs.py
+      sha256: b8d40841af3b4307be1a8ba056b3187885cc681547820323a33c368bebd00ef7
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/scripts/format_alignment.py
+      sha256: e65eff27abc4d697aaaa11f4eebb70219c19cbe05d260023ae03121a218e7f21
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/scripts/phykit_batch.py
+      sha256: 9bb05446edd8917dfdd4c4ca84320594ade9fb2522e82f284bc23d0977b23987
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/scripts/scogs_paired_compare.py
+      sha256: 5d9c0f7eff194f47d5752c157d3b6ad3baeca6af642e3bb5c0d09f5c8410fc4c
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/scripts/scogs_phykit_pipeline.py
+      sha256: 2baf4649d416e1a22046648ee35a6093ad08ebf4169eb5979e3baf4d3c5d1c48
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/scripts/tree_statistics.py
+      sha256: 8b78ec1c90167c1bcc51b96fed4f66a624b8c3ea97516da311646110cb899537
+license: Apache-2.0

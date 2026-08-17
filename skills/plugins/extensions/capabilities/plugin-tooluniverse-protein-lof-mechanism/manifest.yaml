@@ -1,0 +1,56 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-protein-lof-mechanism
+title: Protein LoF Mechanism Synthesis
+description: "Propose the mechanism by which a missense variant causes
+  loss-of-function (LoF), synthesizing evidence from 5 independent layers:
+  AlphaMissense pathogenicity, AlphaFold structural context, ESMC sequence
+  likelihood, SAE feature disruption, and DynaMut2 stability ΔΔG. Distinguishes
+  'structural stability LoF' (mis-folding) from 'direct functional disruption'
+  (catalytic / binding / PTM site damage). Use for coding missense variants
+  where you need a mechanistic causal model, not just a pathogenicity score."
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs: []
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-protein-lof-mechanism/SKILL.md
+      sha256: 77f158f4377b1aa3749c914a7602269bec3ede113d912b3ba2039fdeac5d4082
+license: Apache-2.0

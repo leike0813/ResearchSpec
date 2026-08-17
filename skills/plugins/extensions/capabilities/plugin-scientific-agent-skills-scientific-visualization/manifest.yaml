@@ -1,0 +1,114 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-scientific-visualization
+title: Scientific Visualization
+description: Meta-skill for publication-ready figures. Use when creating journal
+  submission figures requiring multi-panel layouts, significance annotations,
+  error bars, colorblind-safe palettes, and specific journal formatting (Nature,
+  Science, Cell). Orchestrates matplotlib/seaborn/plotly with publication
+  styles. For quick exploration use seaborn or plotly directly.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-assets-color-palettes.py
+    path: assets/color_palettes.py
+    content_hash: ffea28da930406ecb11bbeaebfc530dfac40b772827a7653f449cb3b0bb35309
+    license: Apache-2.0
+  - knowledge_id: sas-assets-nature.mplstyle
+    path: assets/nature.mplstyle
+    content_hash: 05b5cab4b5286cd812ff3ceba31845c08baa083d77382df05ec100383e4ff040
+    license: Apache-2.0
+  - knowledge_id: sas-assets-presentation.mplstyle
+    path: assets/presentation.mplstyle
+    content_hash: a47167d633cd0695bc428a42ed4e790a69f90d0204ed560bae6902785ba2b823
+    license: Apache-2.0
+  - knowledge_id: sas-assets-publication.mplstyle
+    path: assets/publication.mplstyle
+    content_hash: 38244036fb563bdf50b6b15ac927ae62afa3a8f6acf03ec5c9b317adad9c5a14
+    license: Apache-2.0
+  - knowledge_id: sas-references-color-palettes.md
+    path: references/color_palettes.md
+    content_hash: 4d9ec64478dee9fc8de43fbde9983a413520c436099b0c560b21eadec572270b
+    license: Apache-2.0
+  - knowledge_id: sas-references-journal-requirements.md
+    path: references/journal_requirements.md
+    content_hash: 69157b820c78e9bca299ea6f7dcb49624ea778ec3ed619a98e82c3b60e6dc782
+    license: Apache-2.0
+  - knowledge_id: sas-references-matplotlib-examples.md
+    path: references/matplotlib_examples.md
+    content_hash: d9195bb8c1b80f235495ac8a63e86fef0462e99cc2cc7d5d244818bfe5ee08cf
+    license: Apache-2.0
+  - knowledge_id: sas-references-publication-guidelines.md
+    path: references/publication_guidelines.md
+    content_hash: c8430dfe7d374edc771c55a0d9c6e1f07ab803f16321d21941835e93944da2d1
+    license: Apache-2.0
+  - knowledge_id: sas-scripts-figure-export.py
+    path: scripts/figure_export.py
+    content_hash: 542f604c2a4dc642c055b24ef26b9e9e808616a33fde0cd2154c975dc83318d0
+    license: Apache-2.0
+  - knowledge_id: sas-scripts-style-presets.py
+    path: scripts/style_presets.py
+    content_hash: 3a4163c6aaaf6792665cf890ab497a2b5070c0ed0adfa524fcaee5262a3f1792
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/SKILL.md
+      sha256: 9408d11855df69aae69dcb36985fa1b4be2016a1cc90fdf7cde0fbc0b8299b33
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/assets/color_palettes.py
+      sha256: ffea28da930406ecb11bbeaebfc530dfac40b772827a7653f449cb3b0bb35309
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/assets/nature.mplstyle
+      sha256: 05b5cab4b5286cd812ff3ceba31845c08baa083d77382df05ec100383e4ff040
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/assets/presentation.mplstyle
+      sha256: a47167d633cd0695bc428a42ed4e790a69f90d0204ed560bae6902785ba2b823
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/assets/publication.mplstyle
+      sha256: 38244036fb563bdf50b6b15ac927ae62afa3a8f6acf03ec5c9b317adad9c5a14
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/references/color_palettes.md
+      sha256: 4d9ec64478dee9fc8de43fbde9983a413520c436099b0c560b21eadec572270b
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/references/journal_requirements.md
+      sha256: 69157b820c78e9bca299ea6f7dcb49624ea778ec3ed619a98e82c3b60e6dc782
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/references/matplotlib_examples.md
+      sha256: d9195bb8c1b80f235495ac8a63e86fef0462e99cc2cc7d5d244818bfe5ee08cf
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/references/publication_guidelines.md
+      sha256: c8430dfe7d374edc771c55a0d9c6e1f07ab803f16321d21941835e93944da2d1
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/scripts/figure_export.py
+      sha256: 542f604c2a4dc642c055b24ef26b9e9e808616a33fde0cd2154c975dc83318d0
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/scripts/style_presets.py
+      sha256: 3a4163c6aaaf6792665cf890ab497a2b5070c0ed0adfa524fcaee5262a3f1792
+license: Apache-2.0

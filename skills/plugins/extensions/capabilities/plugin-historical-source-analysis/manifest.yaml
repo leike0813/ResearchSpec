@@ -1,0 +1,76 @@
+schema_version: "1"
+capability_id: plugin-historical-source-analysis
+title: Historical Source Analysis
+description: Inspect, convert, OCR, translate, transcribe, sample, visually
+  analyze, collate, and validate historical sources with explicit five-layer
+  provenance for one graph node.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: historical-source-analysis-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_historical_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,layer_inventory,operation_receipts,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: source-analysis-tool
+    path: tools/analyze_source.py
+    content_hash: 7a4355ebd86dac2882b4e39ffa89cc468753a3fedaa3faf1e81a7162a2245e3a
+    license: Apache-2.0
+  - knowledge_id: historical-support
+    path: tools/historical_support.py
+    content_hash: f46f1da49ee21d8e0586bc953ab0e7373802cbf631e0821437628d57ef158c91
+    license: Apache-2.0
+  - knowledge_id: adapter-format-reference
+    path: references/adapters-and-formats.md
+    content_hash: c8eb580edbbd66bd1c235cd2e37a6f85e127e6ad6a7dcfc6fb6ec75792302546
+    license: Apache-2.0
+  - knowledge_id: layer-collation-reference
+    path: references/layer-and-collation-cases.md
+    content_hash: f3553e4f04a8621676577d8f0fe65f1a199ba6450aa091f664a8455ef0f4b002
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/histagent/histagent-historical-source-analysis/SKILL.md
+      sha256: f021d66c0e6c361bc62a1904d0f570644de9e6959fd7fac9e8645c0208befd60
+    - path: skills/plugins/vendors/histagent/histagent-historical-source-analysis/scripts/analyze_source.py
+      sha256: 7a4355ebd86dac2882b4e39ffa89cc468753a3fedaa3faf1e81a7162a2245e3a
+    - path: skills/plugins/vendors/histagent/histagent-historical-source-analysis/lib/historical_support.py
+      sha256: f46f1da49ee21d8e0586bc953ab0e7373802cbf631e0821437628d57ef158c91
+    - path: skills/plugins/vendors/histagent/histagent-historical-source-analysis/references/adapters-and-formats.md
+      sha256: c8eb580edbbd66bd1c235cd2e37a6f85e127e6ad6a7dcfc6fb6ec75792302546
+    - path: skills/plugins/vendors/histagent/histagent-historical-source-analysis/references/layer-and-collation-cases.md
+      sha256: f3553e4f04a8621676577d8f0fe65f1a199ba6450aa091f664a8455ef0f4b002
+license: Apache-2.0

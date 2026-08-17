@@ -1,0 +1,78 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-drug-target-validation
+title: Drug Target Validation Pipeline
+description: Quantitative drug-target validation pipeline. Scores druggability,
+  selectivity, safety profile, ADMET feasibility, and structural tractability
+  with a composite Target Validation Score (0-100) and GO/NO-GO recommendation.
+  Use for go/no-go decisions on a target before commit-to-medchem, target
+  prioritization across a list, and target-deselection rationale.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-quick-start.md
+    path: QUICK_START.md
+    content_hash: ca3e48a6967490c86405b8a52a1f3be31e8515131ff06629f884d1672514b77c
+    license: Apache-2.0
+  - knowledge_id: tu-report-template.md
+    path: REPORT_TEMPLATE.md
+    content_hash: afa7e1305c044062cf859038713b1c939aec142460a753c4921dcb26b4a82079
+    license: Apache-2.0
+  - knowledge_id: tu-scoring-criteria.md
+    path: SCORING_CRITERIA.md
+    content_hash: 86bef9daa7395c4cb7a0565c80d8b5d83a2f720c163359f925f6a47cf577e48c
+    license: Apache-2.0
+  - knowledge_id: tu-tool-reference.md
+    path: TOOL_REFERENCE.md
+    content_hash: 962e7349eb284bef5be2c8839f8ac54a1b4b7ad5670865e27b91af7c730a7264
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-target-validation/SKILL.md
+      sha256: 569577818575e3dfe3fd91514c2a03e302079e3edd646496975c3be73d81b08e
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-target-validation/QUICK_START.md
+      sha256: ca3e48a6967490c86405b8a52a1f3be31e8515131ff06629f884d1672514b77c
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-target-validation/REPORT_TEMPLATE.md
+      sha256: afa7e1305c044062cf859038713b1c939aec142460a753c4921dcb26b4a82079
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-target-validation/SCORING_CRITERIA.md
+      sha256: 86bef9daa7395c4cb7a0565c80d8b5d83a2f720c163359f925f6a47cf577e48c
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-target-validation/TOOL_REFERENCE.md
+      sha256: 962e7349eb284bef5be2c8839f8ac54a1b4b7ad5670865e27b91af7c730a7264
+license: Apache-2.0

@@ -1,0 +1,84 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-disease-research
+title: ToolUniverse Disease Research
+description: Generate comprehensive disease research reports covering genetics
+  (causal genes, GWAS, OMIM), pathways (Reactome, KEGG), drugs (existing
+  therapies, repurposing candidates), clinical trials, epidemiology (prevalence,
+  incidence), and phenotypes (HPO). Use for full disease overviews,
+  comprehensive disease characterization, and orphan/rare-disease profiling.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-examples.md
+    path: EXAMPLES.md
+    content_hash: e72926cf1ed0371331719138af8dc86e62b1346eca3e1beca02554e3d037b167
+    license: Apache-2.0
+  - knowledge_id: tu-report-template.md
+    path: REPORT_TEMPLATE.md
+    content_hash: c468f5a2a0b3645e14299ea4aaad50ef57990f049bde87f98dcea7d0b206bd2c
+    license: Apache-2.0
+  - knowledge_id: tu-research-protocol.md
+    path: RESEARCH_PROTOCOL.md
+    content_hash: f1be3964593c29f11d7cea40663f8029fdf1c84a69f5e8413806d4f05e0601dc
+    license: Apache-2.0
+  - knowledge_id: tu-tools-reference.md
+    path: TOOLS_REFERENCE.md
+    content_hash: 35ecb60db7f5390ba49792b504f536577fd01cd2a21a3d2eec899a16b72fe150
+    license: Apache-2.0
+  - knowledge_id: tu-tool-usage-details.md
+    path: tool_usage_details.md
+    content_hash: 574c718ebfa3c1e230478e821ab3189077db073a8eda731adea5b1248b00601e
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-disease-research/SKILL.md
+      sha256: 1b1da7518e4a9bec6e7962d755ba81f86ef4bf791f0dac280f0c3bb9e65debe8
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-disease-research/EXAMPLES.md
+      sha256: e72926cf1ed0371331719138af8dc86e62b1346eca3e1beca02554e3d037b167
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-disease-research/REPORT_TEMPLATE.md
+      sha256: c468f5a2a0b3645e14299ea4aaad50ef57990f049bde87f98dcea7d0b206bd2c
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-disease-research/RESEARCH_PROTOCOL.md
+      sha256: f1be3964593c29f11d7cea40663f8029fdf1c84a69f5e8413806d4f05e0601dc
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-disease-research/TOOLS_REFERENCE.md
+      sha256: 35ecb60db7f5390ba49792b504f536577fd01cd2a21a3d2eec899a16b72fe150
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-disease-research/tool_usage_details.md
+      sha256: 574c718ebfa3c1e230478e821ab3189077db073a8eda731adea5b1248b00601e
+license: Apache-2.0

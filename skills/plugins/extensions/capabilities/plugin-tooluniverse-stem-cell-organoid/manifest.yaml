@@ -1,0 +1,54 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-stem-cell-organoid
+title: Stem Cell & Organoid Research
+description: Stem cell, iPSC, and organoid research — pluripotency markers,
+  differentiation protocol pathways, lineage commitment factors, organoid model
+  selection. Use for iPSC characterization, differentiation protocol design via
+  developmental-pathway recapitulation, and organoid-model selection for disease
+  modeling.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs: []
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-stem-cell-organoid/SKILL.md
+      sha256: b414a8ffef9e941885e9674f185ee2d58535400a51d4f8d9f6c45ea2ba3499ce
+license: Apache-2.0

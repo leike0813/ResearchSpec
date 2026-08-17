@@ -1,0 +1,66 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-polygenic-risk-score
+title: Polygenic Risk Score (PRS) Builder
+description: Build and interpret polygenic risk scores (PRS) for complex
+  diseases using GWAS summary statistics. Covers PRS construction
+  (clumping/thresholding, PRS-CS), validation in independent cohorts,
+  ancestry-aware adjustment, and clinical interpretation (population-relative
+  risk, not absolute prediction). Use for PRS-based risk stratification.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-check-data.py
+    path: check_data.py
+    content_hash: cbac8cee1d0949e8a87c8dabab3cda934b2635d0f54d21e0befff492aa5af067
+    license: Apache-2.0
+  - knowledge_id: tu-python-implementation.py
+    path: python_implementation.py
+    content_hash: b9cb4ecc5f743b5582171b7d80ffeef768cd78bc705c8080a624ac0f5d24ae94
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-polygenic-risk-score/SKILL.md
+      sha256: bf837b2ee0e6c92012baa17544663d16cbbf2aedda824d8d7a33a7e45b5d48c2
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-polygenic-risk-score/check_data.py
+      sha256: cbac8cee1d0949e8a87c8dabab3cda934b2635d0f54d21e0befff492aa5af067
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-polygenic-risk-score/python_implementation.py
+      sha256: b9cb4ecc5f743b5582171b7d80ffeef768cd78bc705c8080a624ac0f5d24ae94
+license: Apache-2.0

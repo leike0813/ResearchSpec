@@ -1,0 +1,80 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-spatial-omics-analysis
+title: Spatial Multi-Omics Analysis Pipeline
+description: Spatial multi-omics interpretation pipeline. Transforms spatially
+  variable genes (SVGs), domain annotations, and tissue context into biological
+  insights via domain-by-domain characterization, cell-type composition, spatial
+  gene expression patterns, RNA+protein+metabolite integration. Use for Visium,
+  MERFISH, seqFISH, Slide-seq, spatial proteomics, and spatial multi-omics
+  interpretation. Goes beyond statistics to disease mechanisms and therapeutic
+  opportunities.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-phase-procedures.md
+    path: phase-procedures.md
+    content_hash: c8ca26427398e3c0bd65960a541200a18f58674c75c72a63560dca7d79788995
+    license: Apache-2.0
+  - knowledge_id: tu-reference-data.md
+    path: reference-data.md
+    content_hash: dd1b31ce0380f92f9f077461162bdd4dfae98b85914cc7203066cdbe0ec10c8e
+    license: Apache-2.0
+  - knowledge_id: tu-report-template.md
+    path: report-template.md
+    content_hash: 966a1b41b7b7128dba3ace076b2cdbb675e840aed35a0a992d6a6335462b0cfa
+    license: Apache-2.0
+  - knowledge_id: tu-tool-reference.md
+    path: tool-reference.md
+    content_hash: 673af965121d518f8d2cc03573944eb06f73fe06964c7d32c7924ea04d2d6895
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-spatial-omics-analysis/SKILL.md
+      sha256: 413c27c82a098212924d9ae38ba968ee0a449d9d78148d0d132bb9bf6d622120
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-spatial-omics-analysis/phase-procedures.md
+      sha256: c8ca26427398e3c0bd65960a541200a18f58674c75c72a63560dca7d79788995
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-spatial-omics-analysis/reference-data.md
+      sha256: dd1b31ce0380f92f9f077461162bdd4dfae98b85914cc7203066cdbe0ec10c8e
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-spatial-omics-analysis/report-template.md
+      sha256: 966a1b41b7b7128dba3ace076b2cdbb675e840aed35a0a992d6a6335462b0cfa
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-spatial-omics-analysis/tool-reference.md
+      sha256: 673af965121d518f8d2cc03573944eb06f73fe06964c7d32c7924ea04d2d6895
+license: Apache-2.0

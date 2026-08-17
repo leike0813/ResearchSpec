@@ -1,0 +1,36 @@
+schema_version: "1"
+capability_id: plugin-financial-corporate-risk
+title: Corporate Risk Research
+description: Identify, trace, prioritize, and monitor company and investment
+  risks with evidence-backed likelihood, impact, timing, mitigation, and
+  residual-exposure judgments through a complete Agent procedure.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+knowledge_refs: []
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/finrobot/financial-research-corporate-risk/SKILL.md
+      sha256: ed3b2855c35e45cd18d4a6279319393fe0a10a319e84e9d74af9aa0fae3a80df
+license: Apache-2.0

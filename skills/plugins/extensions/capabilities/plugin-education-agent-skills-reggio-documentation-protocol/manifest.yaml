@@ -1,0 +1,52 @@
+schema_version: "1"
+capability_id: plugin-education-agent-skills-reggio-documentation-protocol
+title: Reggio Documentation Protocol
+description: Design a pedagogical documentation protocol for making children's
+  learning processes visible and shareable. Use when documenting learning,
+  communicating with families, or planning next steps.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: education-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_education_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs: []
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-reggio-documentation-protocol/SKILL.md
+      sha256: 3cd09e0b1e70c203678086eae07b2c0d3b2834f13de56e2c7efe4ff65dfcb232
+license: Apache-2.0

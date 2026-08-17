@@ -1,0 +1,84 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-precision-medicine-stratification
+title: Precision Medicine Patient Stratification
+description: Patient stratification for precision medicine — integrate genomic,
+  clinical, and therapeutic data to split patients into responder/non-responder
+  groups, risk tiers, or treatment-decision groups. Use for
+  stratification-by-biomarker, treatment-selection logic, and personalized
+  therapeutic strategy reports per patient subgroup.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-examples.md
+    path: EXAMPLES.md
+    content_hash: 4192a12c27a43debe3ba3546c9140841a5ec6298e666742c8df65e528f1013af
+    license: Apache-2.0
+  - knowledge_id: tu-quick-start.md
+    path: QUICK_START.md
+    content_hash: 55e488be0f4902e8d94e14464b86ffed4ef4b58648dd7b6459bf8ea4fc554a35
+    license: Apache-2.0
+  - knowledge_id: tu-report-template.md
+    path: REPORT_TEMPLATE.md
+    content_hash: de26c5ce38f9220fa6544115d3b0650d34eec1c668eb66b5cdf06b68fb712bfa
+    license: Apache-2.0
+  - knowledge_id: tu-scoring-reference.md
+    path: SCORING_REFERENCE.md
+    content_hash: 9c4247dc360016a05e4e4b4adb078cad3ed2baa16f37593ad67d75a202049228
+    license: Apache-2.0
+  - knowledge_id: tu-tools-reference.md
+    path: TOOLS_REFERENCE.md
+    content_hash: 7282bb758a8669b5bbe4b6fd17a22d9f62796fd2282c0c3390e56f3570214032
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-precision-medicine-stratification/SKILL.md
+      sha256: 4850482faf08c92823f9f87a1089af19a8ab204396ad4806aebdc0967f10cccf
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-precision-medicine-stratification/EXAMPLES.md
+      sha256: 4192a12c27a43debe3ba3546c9140841a5ec6298e666742c8df65e528f1013af
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-precision-medicine-stratification/QUICK_START.md
+      sha256: 55e488be0f4902e8d94e14464b86ffed4ef4b58648dd7b6459bf8ea4fc554a35
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-precision-medicine-stratification/REPORT_TEMPLATE.md
+      sha256: de26c5ce38f9220fa6544115d3b0650d34eec1c668eb66b5cdf06b68fb712bfa
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-precision-medicine-stratification/SCORING_REFERENCE.md
+      sha256: 9c4247dc360016a05e4e4b4adb078cad3ed2baa16f37593ad67d75a202049228
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-precision-medicine-stratification/TOOLS_REFERENCE.md
+      sha256: 7282bb758a8669b5bbe4b6fd17a22d9f62796fd2282c0c3390e56f3570214032
+license: Apache-2.0

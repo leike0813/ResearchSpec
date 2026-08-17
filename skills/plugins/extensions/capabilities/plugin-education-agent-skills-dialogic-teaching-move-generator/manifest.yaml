@@ -1,0 +1,52 @@
+schema_version: "1"
+capability_id: plugin-education-agent-skills-dialogic-teaching-move-generator
+title: Dialogic Teaching Move Generator
+description: Generate follow-up teaching moves that extend student thinking
+  after a specific classroom response. Use when a student says something worth
+  exploring and the teacher wants to deepen the dialogue.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: education-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_education_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs: []
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-dialogic-teaching-move-generator/SKILL.md
+      sha256: 378c7701e2f3bbf5f765ee80a30e0cfc132fcde5eb624c84b01ca19ecb060cd2
+license: Apache-2.0

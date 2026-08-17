@@ -1,0 +1,114 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-pytorch-lightning
+title: PyTorch Lightning
+description: Deep learning framework (PyTorch Lightning / lightning package).
+  Organize PyTorch code into LightningModules, configure Trainers for
+  multi-GPU/TPU, implement data pipelines, callbacks, logging (W&B, TensorBoard,
+  MLflow), distributed training (DDP, FSDP, DeepSpeed), for scalable neural
+  network training.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-references-best-practices.md
+    path: references/best_practices.md
+    content_hash: 3172921ba31cd2e59d0d84b533210b852a4f8d651f06f74e2f907d28e11933ef
+    license: Apache-2.0
+  - knowledge_id: sas-references-callbacks.md
+    path: references/callbacks.md
+    content_hash: aa2140e7b684dfe8e3f47752dc4d9b14220a8d4c126f3f38cbbc1b6698466395
+    license: Apache-2.0
+  - knowledge_id: sas-references-data-module.md
+    path: references/data_module.md
+    content_hash: a94cb2aeb0ac6e04d07d05cd8a3f96bb64d0623cfb310dfcc6d2c255b03d86f9
+    license: Apache-2.0
+  - knowledge_id: sas-references-distributed-training.md
+    path: references/distributed_training.md
+    content_hash: 0828867cbfea2483ffbfec2398fa1f35784f62b4832d71a311dc10d7ae1ef9d9
+    license: Apache-2.0
+  - knowledge_id: sas-references-lightning-module.md
+    path: references/lightning_module.md
+    content_hash: 952354340eb7fa6d09fa235392ccd4eb31e023422c45068e8c780f6523363a90
+    license: Apache-2.0
+  - knowledge_id: sas-references-logging.md
+    path: references/logging.md
+    content_hash: 097cd018cdd0d4880dd861bd9405e68df7c392498bb28ad63afbeb9869ae8db1
+    license: Apache-2.0
+  - knowledge_id: sas-references-trainer.md
+    path: references/trainer.md
+    content_hash: d7761218deb392bfac4f373d4238c0595b5094115bd1645ae00bff0940b54887
+    license: Apache-2.0
+  - knowledge_id: sas-scripts-quick-trainer-setup.py
+    path: scripts/quick_trainer_setup.py
+    content_hash: a2bf7df7ea87d341b6caa282d16a0970a123ed7b17c7bbcaaf6b6b3df77aec4b
+    license: Apache-2.0
+  - knowledge_id: sas-scripts-template-datamodule.py
+    path: scripts/template_datamodule.py
+    content_hash: 82d1601800fa17a80250b640b4df530ebd78bb852316bc75c6441b1d592c80cf
+    license: Apache-2.0
+  - knowledge_id: sas-scripts-template-lightning-module.py
+    path: scripts/template_lightning_module.py
+    content_hash: 0337c694bc33f2de5bd93af0221b78d0ffcad3841ca1f540b78eb3a309e9d1c2
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/SKILL.md
+      sha256: dd59c6ccd9cbf2e414dccd99628fad415a1f1bbf1e526470ff6b586f89e7293d
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/references/best_practices.md
+      sha256: 3172921ba31cd2e59d0d84b533210b852a4f8d651f06f74e2f907d28e11933ef
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/references/callbacks.md
+      sha256: aa2140e7b684dfe8e3f47752dc4d9b14220a8d4c126f3f38cbbc1b6698466395
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/references/data_module.md
+      sha256: a94cb2aeb0ac6e04d07d05cd8a3f96bb64d0623cfb310dfcc6d2c255b03d86f9
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/references/distributed_training.md
+      sha256: 0828867cbfea2483ffbfec2398fa1f35784f62b4832d71a311dc10d7ae1ef9d9
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/references/lightning_module.md
+      sha256: 952354340eb7fa6d09fa235392ccd4eb31e023422c45068e8c780f6523363a90
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/references/logging.md
+      sha256: 097cd018cdd0d4880dd861bd9405e68df7c392498bb28ad63afbeb9869ae8db1
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/references/trainer.md
+      sha256: d7761218deb392bfac4f373d4238c0595b5094115bd1645ae00bff0940b54887
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/scripts/quick_trainer_setup.py
+      sha256: a2bf7df7ea87d341b6caa282d16a0970a123ed7b17c7bbcaaf6b6b3df77aec4b
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/scripts/template_datamodule.py
+      sha256: 82d1601800fa17a80250b640b4df530ebd78bb852316bc75c6441b1d592c80cf
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/scripts/template_lightning_module.py
+      sha256: 0337c694bc33f2de5bd93af0221b78d0ffcad3841ca1f540b78eb3a309e9d1c2
+license: Apache-2.0

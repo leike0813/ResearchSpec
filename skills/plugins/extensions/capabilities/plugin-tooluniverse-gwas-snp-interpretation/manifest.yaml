@@ -1,0 +1,67 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-gwas-snp-interpretation
+title: GWAS SNP Interpretation Skill
+description: Interpret a single GWAS SNP across multiple databases — GWAS
+  Catalog hits, LD/haplotype context, eQTL evidence, regulatory annotation,
+  ClinVar pathogenicity, gnomAD frequency. Use for 'what does this SNP do',
+  SNP-to-mechanism tracing, and resolving lead-SNP-vs-causal-variant ambiguity.
+  Always considers LD structure before claiming a SNP is mechanistically
+  responsible.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-quick-start.md
+    path: QUICK_START.md
+    content_hash: f27a1b85896821bf03e5846bbadfb0cb5ad4ed5a5edd2d938ca19ce7f8e9212e
+    license: Apache-2.0
+  - knowledge_id: tu-python-implementation.py
+    path: python_implementation.py
+    content_hash: fadd6e9b520ad5d554751c5e31fcbc36939f7db7884aa329eda4fd8af488bfff
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-gwas-snp-interpretation/SKILL.md
+      sha256: 13033a83ec151984972cc99bff7371d859f69331b77b1b61bb93f510df8be7bf
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-gwas-snp-interpretation/QUICK_START.md
+      sha256: f27a1b85896821bf03e5846bbadfb0cb5ad4ed5a5edd2d938ca19ce7f8e9212e
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-gwas-snp-interpretation/python_implementation.py
+      sha256: fadd6e9b520ad5d554751c5e31fcbc36939f7db7884aa329eda4fd8af488bfff
+license: Apache-2.0

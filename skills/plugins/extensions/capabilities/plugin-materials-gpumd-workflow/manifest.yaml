@@ -1,0 +1,57 @@
+schema_version: '1'
+capability_id: plugin-materials-gpumd-workflow
+title: GPUMD And NEP Workflows
+description: Plan, execute, and review GPUMD and NEP molecular-dynamics and training workflows with explicit
+  output and validation evidence.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+- role: task_request
+  schema_ref: plugin-task.v1
+  required: true
+  source_policy: handoff
+outputs:
+- role: research_brief
+  schema_ref: plugin-result.v1
+  required: true
+validators:
+- validator_id: capability.policy.output_roles
+  kind: policy
+  inputs:
+  - task_request
+  outputs: []
+  error_codes:
+  - output_roles_invalid
+- validator_id: gpumd-workflow-brief-validator
+  kind: script
+  inputs:
+  - task_request
+  outputs:
+  - research_brief
+  error_codes:
+  - script_validator_failed
+  runner:
+    argv0: python3
+    args_template:
+    - validators/validate_materials_brief.py
+    - --submission
+    - '{outputs_json}'
+    - --required
+    - scope,run_ledger,command_ledger,output_inventory,validation_results,conclusions
+knowledge_refs:
+- knowledge_id: md-nep-output-reference
+  path: references/md-nep-and-output-playbook.md
+  content_hash: d79b1dc714b39d1558e78a5cab864537bee42e809e4c77dd763b23e47808213e
+  license: MIT
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+  - path: skills/plugins/vendors/materials-science-skills-for-llm/materials-science-skills-gpumd-workflow/SKILL.md
+    sha256: 9c28decf1d6b8ade2ba9cfe792ec59774d2eef2dbac934deeb5f899909e6711c
+  - path: skills/plugins/vendors/materials-science-skills-for-llm/materials-science-skills-gpumd-workflow/references/md-nep-and-output-playbook.md
+    sha256: d79b1dc714b39d1558e78a5cab864537bee42e809e4c77dd763b23e47808213e
+license: MIT

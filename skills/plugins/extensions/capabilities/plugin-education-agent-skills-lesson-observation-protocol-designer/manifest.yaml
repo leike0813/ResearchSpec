@@ -1,0 +1,52 @@
+schema_version: "1"
+capability_id: plugin-education-agent-skills-lesson-observation-protocol-designer
+title: Lesson Observation Protocol Designer
+description: Design a focused lesson observation protocol with specific
+  look-fors and evidence collection methods. Use when planning peer
+  observations, coaching visits, or developmental classroom visits.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: education-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_education_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs: []
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-lesson-observation-protocol-designer/SKILL.md
+      sha256: 374032cb55208b473d1cdfd00bb2d3fa7d70e2233246d95d113dd92c2bc51e29
+license: Apache-2.0

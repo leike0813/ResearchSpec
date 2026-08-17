@@ -1,0 +1,63 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-molecular-cloning
+title: Molecular Cloning Assembly Design (Gibson & Golden Gate)
+description: Molecular cloning assembly design — Gibson Assembly (overlap design
+  for seamless multi-fragment joining) and Golden Gate Assembly (Type IIS / BsaI
+  / BbsI design with unique 4-bp fusion overhangs). Use when you need to plan
+  how to join DNA fragments into a construct, design assembly
+  overlaps/overhangs, or decide between cloning methods. Covers the
+  domestication (internal-site removal), overhang-uniqueness, and overlap-Tm
+  rules. For PCR primers to generate the fragments, see
+  tooluniverse-primer-design.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-scripts-cloning-qc.py
+    path: scripts/cloning_qc.py
+    content_hash: b5e8c8a1455e939a08a9e840d9b1526896349519f1c38582a5ec8c9d87d08287
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-molecular-cloning/SKILL.md
+      sha256: 68145898667c93c07b93d32b8c743303687ab7d0290382d0bfff12cd440587b7
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-molecular-cloning/scripts/cloning_qc.py
+      sha256: b5e8c8a1455e939a08a9e840d9b1526896349519f1c38582a5ec8c9d87d08287
+license: Apache-2.0

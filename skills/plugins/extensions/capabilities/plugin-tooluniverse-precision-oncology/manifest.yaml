@@ -1,0 +1,97 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-precision-oncology
+title: Precision Oncology Treatment Advisor
+description: Cancer treatment recommendations from molecular profile (mutations
+  + cancer type + biomarkers) — FDA-approved + investigational therapies,
+  resistance mechanisms, matching clinical trials, prognosis. Uses CIViC,
+  ClinVar, OpenTargets, ClinicalTrials.gov. Use for tumor-board treatment
+  recommendations, evidence-tiered actionability assessment, and
+  FDA-precedent-driven therapy selection.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-api-usage-patterns.md
+    path: API_USAGE_PATTERNS.md
+    content_hash: 5e987a68a4894be5f904fb4dd403261a9b8fc641241b5fedf859f01b4ae9f146
+    license: Apache-2.0
+  - knowledge_id: tu-checklist.md
+    path: CHECKLIST.md
+    content_hash: e45d8bf5091fb623a0c5fbe40a51c6c5ed322b55355cc780c48c4af980f08619
+    license: Apache-2.0
+  - knowledge_id: tu-examples.md
+    path: EXAMPLES.md
+    content_hash: ea006ad06a0ec568e8d09ead658c137ec73b826570423cc13d4b7cf9e6a32017
+    license: Apache-2.0
+  - knowledge_id: tu-report-template.md
+    path: REPORT_TEMPLATE.md
+    content_hash: f8cb09026bbfd574bce28a4403949c5f8686f5129102186dc43e52774b3cfff6
+    license: Apache-2.0
+  - knowledge_id: tu-tools-reference.md
+    path: TOOLS_REFERENCE.md
+    content_hash: 9e980e93ff6e1531aa2a5837de2136cbe498eb0d413cc3d12b2bc3809ae6a4a1
+    license: Apache-2.0
+  - knowledge_id: tu-treatment-algorithms.md
+    path: TREATMENT_ALGORITHMS.md
+    content_hash: 387d4a1f8dee269b7a7761e96c46135af74da9d86417a5a1055027ed7aea4779
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-gdsc-drug-response.py
+    path: scripts/gdsc_drug_response.py
+    content_hash: fc6ac2762077f07acd4e4bcb28d63a7725df7b20e5cb964919139cb1512c8d3a
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-precision-oncology/SKILL.md
+      sha256: 5bcb215af2fb17b6237203ff5b0be01807029ebd1f0dac44fd0c080a93338467
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-precision-oncology/API_USAGE_PATTERNS.md
+      sha256: 5e987a68a4894be5f904fb4dd403261a9b8fc641241b5fedf859f01b4ae9f146
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-precision-oncology/CHECKLIST.md
+      sha256: e45d8bf5091fb623a0c5fbe40a51c6c5ed322b55355cc780c48c4af980f08619
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-precision-oncology/EXAMPLES.md
+      sha256: ea006ad06a0ec568e8d09ead658c137ec73b826570423cc13d4b7cf9e6a32017
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-precision-oncology/REPORT_TEMPLATE.md
+      sha256: f8cb09026bbfd574bce28a4403949c5f8686f5129102186dc43e52774b3cfff6
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-precision-oncology/TOOLS_REFERENCE.md
+      sha256: 9e980e93ff6e1531aa2a5837de2136cbe498eb0d413cc3d12b2bc3809ae6a4a1
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-precision-oncology/TREATMENT_ALGORITHMS.md
+      sha256: 387d4a1f8dee269b7a7761e96c46135af74da9d86417a5a1055027ed7aea4779
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-precision-oncology/scripts/gdsc_drug_response.py
+      sha256: fc6ac2762077f07acd4e4bcb28d63a7725df7b20e5cb964919139cb1512c8d3a
+license: Apache-2.0

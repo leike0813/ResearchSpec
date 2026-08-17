@@ -1,0 +1,58 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-umap-learn
+title: UMAP-Learn
+description: Use UMAP-learn for nonlinear dimensionality reduction, 2D/3D
+  embeddings, clustering preprocessing, supervised or semi-supervised UMAP,
+  DensMAP, AlignedUMAP, and Parametric UMAP workflows.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-references-api-reference.md
+    path: references/api_reference.md
+    content_hash: d06e2ef8d7752c99be4a75209eb81799bb095424966c3204710c4813dbf81b86
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-umap-learn/SKILL.md
+      sha256: b029f53e0985ccea24a9ac15e51aa1163dd328a03efa3006fea439d6d623636e
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-umap-learn/references/api_reference.md
+      sha256: d06e2ef8d7752c99be4a75209eb81799bb095424966c3204710c4813dbf81b86
+license: Apache-2.0

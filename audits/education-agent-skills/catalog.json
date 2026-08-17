@@ -1,0 +1,2061 @@
+{
+  "schema_version": "1",
+  "vendor_id": "education-agent-skills",
+  "name": "Education Agent Skills",
+  "repository_url": "https://github.com/GarethManning/education-agent-skills",
+  "upstream_root": "vendor/education-agent-skills",
+  "generated_root": "skills/plugins/vendors/education-agent-skills",
+  "extension_root": "skills/plugins/extensions",
+  "release": "snapshot-32fce5c",
+  "revision": "32fce5c0d097ec675cf81c750a65a379e4d87e3c",
+  "anchor_id": "snapshot-32fce5c",
+  "audit_file": "audits/education-agent-skills/snapshot-32fce5c/skill-audit.json",
+  "audit_report": "audits/education-agent-skills/snapshot-32fce5c/report.md",
+  "extension_domains": [
+    "curriculum-and-pedagogy",
+    "education-systems",
+    "specialist-studies-in-education"
+  ],
+  "extensions": [
+    {
+      "capability_id": "plugin-education-agent-skills-academic-language-sentence-frame-generator",
+      "raw_skill_id": "education-agent-skills-academic-language-sentence-frame-generator",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-adaptive-hint-sequence-designer",
+      "raw_skill_id": "education-agent-skills-adaptive-hint-sequence-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-agency-circles-for-systems-action",
+      "raw_skill_id": "education-agent-skills-agency-circles-for-systems-action",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-agency-scaffold-generator",
+      "raw_skill_id": "education-agent-skills-agency-scaffold-generator",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-ai-claim-checker",
+      "raw_skill_id": "education-agent-skills-ai-claim-checker",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-ai-expertise-interrogation-designer",
+      "raw_skill_id": "education-agent-skills-ai-expertise-interrogation-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-ai-facilitated-collaborative-learning-designer",
+      "raw_skill_id": "education-agent-skills-ai-facilitated-collaborative-learning-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-ai-feedback-design-principles",
+      "raw_skill_id": "education-agent-skills-ai-feedback-design-principles",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-ai-hallucination-fact-check-protocol",
+      "raw_skill_id": "education-agent-skills-ai-hallucination-fact-check-protocol",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-ai-learning-boundary-mapper",
+      "raw_skill_id": "education-agent-skills-ai-learning-boundary-mapper",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-ai-output-critical-audit-designer",
+      "raw_skill_id": "education-agent-skills-ai-output-critical-audit-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-ai-socratic-dialogue-designer",
+      "raw_skill_id": "education-agent-skills-ai-socratic-dialogue-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-argument-structure-scaffold-generator",
+      "raw_skill_id": "education-agent-skills-argument-structure-scaffold-generator",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-aspirational-systems-iceberg",
+      "raw_skill_id": "education-agent-skills-aspirational-systems-iceberg",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-assessment-validity-checker",
+      "raw_skill_id": "education-agent-skills-assessment-validity-checker",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-awe-wonder-experience-designer",
+      "raw_skill_id": "education-agent-skills-awe-wonder-experience-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-backwards-design-unit-planner",
+      "raw_skill_id": "education-agent-skills-backwards-design-unit-planner",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-belonging-classroom-culture-designer",
+      "raw_skill_id": "education-agent-skills-belonging-classroom-culture-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-biophilic-learning-environment-designer",
+      "raw_skill_id": "education-agent-skills-biophilic-learning-environment-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-checking-for-understanding-protocol-designer",
+      "raw_skill_id": "education-agent-skills-checking-for-understanding-protocol-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-cognitive-load-analyser",
+      "raw_skill_id": "education-agent-skills-cognitive-load-analyser",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-cognitive-tutoring-architecture-designer",
+      "raw_skill_id": "education-agent-skills-cognitive-tutoring-architecture-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-competency-unpacker",
+      "raw_skill_id": "education-agent-skills-competency-unpacker",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-confidence-calibration-check",
+      "raw_skill_id": "education-agent-skills-confidence-calibration-check",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-coverage-audit",
+      "raw_skill_id": "education-agent-skills-coverage-audit",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-cpa-sequence-designer",
+      "raw_skill_id": "education-agent-skills-cpa-sequence-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-criterion-referenced-rubric-generator",
+      "raw_skill_id": "education-agent-skills-criterion-referenced-rubric-generator",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-critical-thinking-task-designer",
+      "raw_skill_id": "education-agent-skills-critical-thinking-task-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-cross-cultural-task-validity-checker",
+      "raw_skill_id": "education-agent-skills-cross-cultural-task-validity-checker",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-culturally-responsive-teaching-designer",
+      "raw_skill_id": "education-agent-skills-culturally-responsive-teaching-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-curriculum-crosswalk",
+      "raw_skill_id": "education-agent-skills-curriculum-crosswalk",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-curriculum-knowledge-architecture-designer",
+      "raw_skill_id": "education-agent-skills-curriculum-knowledge-architecture-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-dialogic-teaching-move-generator",
+      "raw_skill_id": "education-agent-skills-dialogic-teaching-move-generator",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-differentiation-adapter",
+      "raw_skill_id": "education-agent-skills-differentiation-adapter",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-digital-worked-example-sequence",
+      "raw_skill_id": "education-agent-skills-digital-worked-example-sequence",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-disciplinary-ai-literacy-sequence-designer",
+      "raw_skill_id": "education-agent-skills-disciplinary-ai-literacy-sequence-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-disciplinary-writing-scaffold",
+      "raw_skill_id": "education-agent-skills-disciplinary-writing-scaffold",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-discipline-specific-critical-thinking-task-designer",
+      "raw_skill_id": "education-agent-skills-discipline-specific-critical-thinking-task-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-discussion-protocol-selector",
+      "raw_skill_id": "education-agent-skills-discussion-protocol-selector",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-dual-coding-designer",
+      "raw_skill_id": "education-agent-skills-dual-coding-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-ecological-inquiry-anchor-designer",
+      "raw_skill_id": "education-agent-skills-ecological-inquiry-anchor-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-elaborative-interrogation-generator",
+      "raw_skill_id": "education-agent-skills-elaborative-interrogation-generator",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-emergent-project-design-scaffold",
+      "raw_skill_id": "education-agent-skills-emergent-project-design-scaffold",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-erroneous-example-designer",
+      "raw_skill_id": "education-agent-skills-erroneous-example-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-error-analysis-protocol",
+      "raw_skill_id": "education-agent-skills-error-analysis-protocol",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-experiential-learning-cycle-designer",
+      "raw_skill_id": "education-agent-skills-experiential-learning-cycle-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-explain-first-interrogator",
+      "raw_skill_id": "education-agent-skills-explain-first-interrogator",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-explicit-instruction-sequence-builder",
+      "raw_skill_id": "education-agent-skills-explicit-instruction-sequence-builder",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-fading-manager",
+      "raw_skill_id": "education-agent-skills-fading-manager",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-feedback-quality-analyser",
+      "raw_skill_id": "education-agent-skills-feedback-quality-analyser",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-flow-state-condition-designer",
+      "raw_skill_id": "education-agent-skills-flow-state-condition-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-formative-assessment-loop-designer",
+      "raw_skill_id": "education-agent-skills-formative-assessment-loop-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-formative-assessment-technique-selector",
+      "raw_skill_id": "education-agent-skills-formative-assessment-technique-selector",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-gap-analysis-from-student-work",
+      "raw_skill_id": "education-agent-skills-gap-analysis-from-student-work",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-goal-setting-protocol-designer",
+      "raw_skill_id": "education-agent-skills-goal-setting-protocol-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-hexagon-complexity-mapper",
+      "raw_skill_id": "education-agent-skills-hexagon-complexity-mapper",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-hinge-question-designer",
+      "raw_skill_id": "education-agent-skills-hinge-question-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-implementation-intention-designer",
+      "raw_skill_id": "education-agent-skills-implementation-intention-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-individual-spacing-algorithm-explainer",
+      "raw_skill_id": "education-agent-skills-individual-spacing-algorithm-explainer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-instructional-coaching-conversation-guide",
+      "raw_skill_id": "education-agent-skills-instructional-coaching-conversation-guide",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-intelligent-tutoring-dialogue-designer",
+      "raw_skill_id": "education-agent-skills-intelligent-tutoring-dialogue-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-interdisciplinary-real-world-connection-mapper",
+      "raw_skill_id": "education-agent-skills-interdisciplinary-real-world-connection-mapper",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-interleaving-unit-planner",
+      "raw_skill_id": "education-agent-skills-interleaving-unit-planner",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-kud-chart-author",
+      "raw_skill_id": "education-agent-skills-kud-chart-author",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-kud-knowledge-type-mapper",
+      "raw_skill_id": "education-agent-skills-kud-knowledge-type-mapper",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-ladder-of-inference-reflection",
+      "raw_skill_id": "education-agent-skills-ladder-of-inference-reflection",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-language-demand-analyser",
+      "raw_skill_id": "education-agent-skills-language-demand-analyser",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-learning-analytics-interpretation-guide",
+      "raw_skill_id": "education-agent-skills-learning-analytics-interpretation-guide",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-learning-progression-builder",
+      "raw_skill_id": "education-agent-skills-learning-progression-builder",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-lesson-observation-protocol-designer",
+      "raw_skill_id": "education-agent-skills-lesson-observation-protocol-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-lesson-opening-designer",
+      "raw_skill_id": "education-agent-skills-lesson-opening-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-lesson-study-cycle-designer",
+      "raw_skill_id": "education-agent-skills-lesson-study-cycle-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-leverage-and-response-design",
+      "raw_skill_id": "education-agent-skills-leverage-and-response-design",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-media-literacy-deconstruction-protocol",
+      "raw_skill_id": "education-agent-skills-media-literacy-deconstruction-protocol",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-mental-model-mapper",
+      "raw_skill_id": "education-agent-skills-mental-model-mapper",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-metacognitive-monitoring-ai-contexts",
+      "raw_skill_id": "education-agent-skills-metacognitive-monitoring-ai-contexts",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-metacognitive-prompt-library",
+      "raw_skill_id": "education-agent-skills-metacognitive-prompt-library",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-mixed-age-learning-task-designer",
+      "raw_skill_id": "education-agent-skills-mixed-age-learning-task-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-motivation-diagnostic-task-redesign",
+      "raw_skill_id": "education-agent-skills-motivation-diagnostic-task-redesign",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-outdoor-learning-sequence-designer",
+      "raw_skill_id": "education-agent-skills-outdoor-learning-sequence-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-panel-review",
+      "raw_skill_id": "education-agent-skills-panel-review",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-pedagogical-content-knowledge-developer",
+      "raw_skill_id": "education-agent-skills-pedagogical-content-knowledge-developer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-perma-based-lesson-designer",
+      "raw_skill_id": "education-agent-skills-perma-based-lesson-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-perspective-taking-designer",
+      "raw_skill_id": "education-agent-skills-perspective-taking-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-phenomenon-based-unit-anchor",
+      "raw_skill_id": "education-agent-skills-phenomenon-based-unit-anchor",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-place-based-inquiry-anchor",
+      "raw_skill_id": "education-agent-skills-place-based-inquiry-anchor",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-practice-problem-sequence-designer",
+      "raw_skill_id": "education-agent-skills-practice-problem-sequence-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-prepared-environment-designer",
+      "raw_skill_id": "education-agent-skills-prepared-environment-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-productive-failure-desirable-difficulty-designer",
+      "raw_skill_id": "education-agent-skills-productive-failure-desirable-difficulty-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-productive-failure-protocol",
+      "raw_skill_id": "education-agent-skills-productive-failure-protocol",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-professional-development-session-designer",
+      "raw_skill_id": "education-agent-skills-professional-development-session-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-progressive-hint-ladder",
+      "raw_skill_id": "education-agent-skills-progressive-hint-ladder",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-project-brief-designer",
+      "raw_skill_id": "education-agent-skills-project-brief-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-prompt-literacy-sequence-designer",
+      "raw_skill_id": "education-agent-skills-prompt-literacy-sequence-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-reading-comprehension-strategy-selector",
+      "raw_skill_id": "education-agent-skills-reading-comprehension-strategy-selector",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-reflective-practice-prompt-generator",
+      "raw_skill_id": "education-agent-skills-reflective-practice-prompt-generator",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-reggio-documentation-protocol",
+      "raw_skill_id": "education-agent-skills-reggio-documentation-protocol",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-restorative-practice-protocol-designer",
+      "raw_skill_id": "education-agent-skills-restorative-practice-protocol-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-retrieval-practice-generator",
+      "raw_skill_id": "education-agent-skills-retrieval-practice-generator",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-retrieve-first-gate",
+      "raw_skill_id": "education-agent-skills-retrieve-first-gate",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-ruler-emotional-literacy-sequence",
+      "raw_skill_id": "education-agent-skills-ruler-emotional-literacy-sequence",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-scaffolded-task-modifier",
+      "raw_skill_id": "education-agent-skills-scaffolded-task-modifier",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-scope-and-sequence-designer",
+      "raw_skill_id": "education-agent-skills-scope-and-sequence-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-self-efficacy-builder-sequence",
+      "raw_skill_id": "education-agent-skills-self-efficacy-builder-sequence",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-self-explanation-prompt-designer",
+      "raw_skill_id": "education-agent-skills-self-explanation-prompt-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-self-regulation-scaffold-generator",
+      "raw_skill_id": "education-agent-skills-self-regulation-scaffold-generator",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-service-learning-project-designer",
+      "raw_skill_id": "education-agent-skills-service-learning-project-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-sheltered-instruction-lesson-modifier",
+      "raw_skill_id": "education-agent-skills-sheltered-instruction-lesson-modifier",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-socratic-questioning-sequence-generator",
+      "raw_skill_id": "education-agent-skills-socratic-questioning-sequence-generator",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-source-credibility-evaluation-protocol",
+      "raw_skill_id": "education-agent-skills-source-credibility-evaluation-protocol",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-spaced-practice-scheduler",
+      "raw_skill_id": "education-agent-skills-spaced-practice-scheduler",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-srl-session-wrapper",
+      "raw_skill_id": "education-agent-skills-srl-session-wrapper",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-stuck-and-error-diagnosis-coach",
+      "raw_skill_id": "education-agent-skills-stuck-and-error-diagnosis-coach",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-study-strategy-selector",
+      "raw_skill_id": "education-agent-skills-study-strategy-selector",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-systems-awareness-iceberg",
+      "raw_skill_id": "education-agent-skills-systems-awareness-iceberg",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-systems-wellbeing-impact-mapper",
+      "raw_skill_id": "education-agent-skills-systems-wellbeing-impact-mapper",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-teach-back-evaluator",
+      "raw_skill_id": "education-agent-skills-teach-back-evaluator",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-teacher-inquiry-cycle-designer",
+      "raw_skill_id": "education-agent-skills-teacher-inquiry-cycle-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-technological-pedagogical-content-knowledge-developer",
+      "raw_skill_id": "education-agent-skills-technological-pedagogical-content-knowledge-developer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-text-complexity-analyser",
+      "raw_skill_id": "education-agent-skills-text-complexity-analyser",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-think-aloud-script-generator",
+      "raw_skill_id": "education-agent-skills-think-aloud-script-generator",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-three-part-lesson-designer",
+      "raw_skill_id": "education-agent-skills-three-part-lesson-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-transfer-bridge",
+      "raw_skill_id": "education-agent-skills-transfer-bridge",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-trauma-informed-practice-designer",
+      "raw_skill_id": "education-agent-skills-trauma-informed-practice-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-ubuntu-collective-knowledge-task-designer",
+      "raw_skill_id": "education-agent-skills-ubuntu-collective-knowledge-task-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-udl-barrier-anticipator",
+      "raw_skill_id": "education-agent-skills-udl-barrier-anticipator",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-udl-lesson-auditor",
+      "raw_skill_id": "education-agent-skills-udl-lesson-auditor",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-udl-options-designer",
+      "raw_skill_id": "education-agent-skills-udl-options-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-unassisted-evidence-checkpoint",
+      "raw_skill_id": "education-agent-skills-unassisted-evidence-checkpoint",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-uninterrupted-work-cycle-designer",
+      "raw_skill_id": "education-agent-skills-uninterrupted-work-cycle-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-variation-theory-task-designer",
+      "raw_skill_id": "education-agent-skills-variation-theory-task-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-vocabulary-tiering-tool",
+      "raw_skill_id": "education-agent-skills-vocabulary-tiering-tool",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-weekly-agency-review",
+      "raw_skill_id": "education-agent-skills-weekly-agency-review",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-wellbeing-learning-connection-mapper",
+      "raw_skill_id": "education-agent-skills-wellbeing-learning-connection-mapper",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-worked-example-fading-designer",
+      "raw_skill_id": "education-agent-skills-worked-example-fading-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-worked-example-to-problem-solving-transition-designer",
+      "raw_skill_id": "education-agent-skills-worked-example-to-problem-solving-transition-designer",
+      "execution_type": "llm",
+      "validator": "validators/validate_education_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    }
+  ]
+}

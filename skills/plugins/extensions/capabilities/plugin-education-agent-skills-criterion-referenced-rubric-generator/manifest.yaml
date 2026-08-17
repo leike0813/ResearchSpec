@@ -1,0 +1,53 @@
+schema_version: "1"
+capability_id: plugin-education-agent-skills-criterion-referenced-rubric-generator
+title: Criterion-Referenced Rubric Generator
+description: Generate a criterion-referenced rubric with descriptive performance
+  levels for a task or objective. Use for marking guides and general curriculum
+  contexts. For Manning programmes where Competent = success, use
+  coherent-rubric-logic-builder instead.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: education-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_education_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs: []
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-criterion-referenced-rubric-generator/SKILL.md
+      sha256: f5bb3525c8d40384ebb120670c48ff98281308a1ecdd8bbf670be296ba080514
+license: Apache-2.0

@@ -165,6 +165,26 @@ domains and two non-empty tool domains, while 20 maintenance/setup surfaces rema
 checkout nor generated admission authorizes dependency installation, script
 execution, credential setup, MCP configuration, or workflow writes.
 
+All 130 reviewed ToolUniverse Skills also project one-to-one into the new
+plugin extension mode as `plugin-tooluniverse-*` capabilities and profiles.
+`scripts/generate-tooluniverse-extensions.mjs` is the deterministic generator:
+it preserves each reviewed `SKILL.md` body, copies all 348 non-standard
+resources at their original relative paths as SHA-256 knowledge refs, and binds
+every package to `validate_tooluniverse_brief.py` with the six generic evidence
+fields. Packages with `.py` resources are `execution_type: mixed`; the rest are
+`execution_type: llm`. The 30 ToolUniverse domain assignments are derived from
+the source-neutral domain catalog. ResearchSpec never imports or executes
+packaged scripts and never installs their dependencies.
+
+`audits/tooluniverse/catalog.json` is the ToolUniverse extension maintenance
+SSOT. `scripts/tooluniverse-maintenance.mjs` and
+`.agents/skills/tooluniverse-maintenance/SKILL.md` provide catalog-driven
+`artifacts / records / baseline / check / diff` anchors and the Agent semantic
+review gate; `artifacts` regenerates the 130 packages first. The current anchor
+is `v1.3.1` under `audits/tooluniverse/v1.3.1/`. Future updates must follow the
+maintenance Skill before regenerating any `plugin-tooluniverse-*` package or
+profile.
+
 `vendor/scientific-agent-skills` is the maintainer-only pinned input for the
 Scientific Agent Skills v2.53.0 converter. Its immutable audit covers all 147
 upstream Skills. The complete production policies admit 49 reviewed,
@@ -179,6 +199,30 @@ bypass the checked-in admission, manual-review, dependency, resource, and
 source-neutral domain decisions. External model or service use must remain
 provider-neutral, use the target Agent's user-approved configuration, and
 never expose or persist secrets through ResearchSpec.
+
+All 49 reviewed Scientific Agent Skills also project one-to-one into the new
+plugin extension mode as `plugin-scientific-agent-skills-*` capabilities and
+profiles. `scripts/generate-scientific-agent-skills-extensions.mjs` is the
+deterministic generator: it preserves each reviewed `SKILL.md` body, copies all
+410 non-standard resources at their original relative paths as byte-level
+SHA-256 knowledge refs under MIT, and binds every package to
+`validate_scientific_brief.py` with the six generic evidence fields. Packages
+with `.py` resources are `execution_type: mixed`; the rest are
+`execution_type: llm`. The 24 Scientific Agent Skills domain assignments are
+derived from the source-neutral domain catalog. Knowledge-ref verification is
+byte-level so reviewed binary example assets (png/gif) project and verify
+correctly; text hashes are unchanged. ResearchSpec never imports or executes
+packaged scripts, installs dependencies, or configures credentials.
+
+`audits/scientific-agent-skills/catalog.json` is the Scientific Agent Skills
+extension maintenance SSOT. `scripts/scientific-agent-skills-maintenance.mjs`
+and `.agents/skills/scientific-agent-skills-maintenance/SKILL.md` provide
+catalog-driven `artifacts / records / baseline / check / diff` anchors and the
+Agent semantic review gate; `artifacts` regenerates the 49 packages first. The
+current anchor is `v2.53.0` under
+`audits/scientific-agent-skills/v2.53.0/`. Future updates must follow the
+maintenance Skill before regenerating any `plugin-scientific-agent-skills-*`
+package or profile.
 
 `vendor/materials-science-skills-for-llm` is the maintainer-only pinned input
 for the `snapshot-fafd3ab` audit and converter of all 12 upstream Skills. The
@@ -201,6 +245,24 @@ commands, install dependencies, configure credentials, retrieve resources,
 access external services, compile software, or run scheduler/HPC work. Do not
 bypass the checked-in admission, relationship, source-file, resource,
 capability, derivation, review, license, or source-neutral domain decisions.
+
+The seven reviewed Materials-Science Skills also project one-to-one into the
+new plugin extension mode under `skills/plugins/extensions/` as
+`plugin-materials-*` packages. All seven are `execution_type: llm`
+instruction-led packages with `validate_materials_brief.py` evidence
+validators; six copy their reviewed reference as a hash-bound knowledge ref and
+Atomsk has none. Domain assignments mirror the raw-Skill membership.
+ResearchSpec static commands and the validators never invoke APEX, Atomsk,
+DeePTB, DP-GEN, GPUMD, Phonopy, or Uni-Mol.
+
+`audits/materials-science-skills-for-llm/catalog.json` is the Materials-Science
+extension maintenance SSOT. `scripts/materials-science-skills-for-llm-maintenance.mjs`
+and `.agents/skills/materials-science-skills-for-llm-maintenance/SKILL.md`
+provide catalog-driven `artifacts / records / baseline / check / diff` anchors
+and the Agent semantic review gate. The current anchor is `snapshot-fafd3ab`
+under `audits/materials-science-skills-for-llm/snapshot-fafd3ab/`. Future
+updates must follow the maintenance Skill before regenerating any
+`plugin-materials-*` package or profile.
 
 `vendor/finrobot` is the maintainer-only pinned input for the
 `snapshot-297a8d2` audit and converter. FinRobot has no upstream `SKILL.md`; its
@@ -239,6 +301,28 @@ progressive-disclosure threshold. Do not reintroduce AgentSpec, dependency
 manifests, provider contracts/adapters, generic runners, product metadata, or
 unconsumed auxiliary resources.
 
+The six reviewed FinRobot Skills also project one-to-one into the new plugin
+extension mode under `skills/plugins/extensions/`: four mixed capabilities
+(`plugin-financial-company-fundamentals`,
+`plugin-financial-event-evidence`,
+`plugin-financial-relative-valuation`,
+`plugin-financial-statement-analysis`) copy reviewed entrypoints and
+`financial_support.py` into `tools/` as hash-bound knowledge refs and declare
+`validate_financial_brief.py` evidence validators; two llm capabilities
+(`plugin-financial-competitive-position`, `plugin-financial-corporate-risk`)
+use the output-role policy only. The two finance domain assignments mirror the
+raw-Skill domain membership. Static commands never execute extension tools or
+validators; only `advance` runs the declared `python3` validator.
+
+`audits/finrobot/catalog.json` is the FinRobot extension maintenance SSOT.
+`scripts/finrobot-maintenance.mjs` and
+`.agents/skills/finrobot-maintenance/SKILL.md` provide catalog-driven
+`artifacts / records / baseline / check / diff` anchors and the Agent semantic
+review gate. The current anchor is `snapshot-297a8d2` under
+`audits/finrobot/snapshot-297a8d2/`. Future FinRobot extension updates must
+follow the maintenance Skill before regenerating any `plugin-financial-*`
+package or profile.
+
 `vendor/histagent` is the maintainer-only pinned input for the
 `snapshot-47bbe21` audit and converter of all 120 tracked files. The approved
 production bundle contains three self-contained executable Skills:
@@ -251,6 +335,26 @@ analysis; no tool domain receives a HistAgent Skill. The converter binds the
 archived audit, complete 21-surface capability map, five attributed-source
 records, and approved aggregate tree hash
 `c44f136b6945868ddde7871b5f5ecd7bfb8ac09f84f080f46fbd37f9e173dbd3`.
+
+The three reviewed HistAgent Skills also project one-to-one into the new plugin
+extension mode under `skills/plugins/extensions/`:
+`plugin-historical-research`,
+`plugin-historical-source-analysis`, and
+`plugin-historical-source-identification`. All three are mixed packages that
+copy the reviewed entrypoint, `historical_support.py`, and both conditionally
+read references into hash-bound knowledge paths and declare
+`validate_historical_brief.py` evidence validators. The Skill-local research
+Gate remains a package tool and never gains ResearchSpec workflow authority.
+Domain assignments mirror the raw-Skill membership.
+
+`audits/histagent/catalog.json` is the HistAgent extension maintenance SSOT.
+`scripts/histagent-maintenance.mjs` and
+`.agents/skills/histagent-maintenance/SKILL.md` provide catalog-driven
+`artifacts / records / baseline / check / diff` anchors and the Agent semantic
+review gate. The current anchor is `snapshot-47bbe21` under
+`audits/histagent/snapshot-47bbe21/`. Future HistAgent extension updates must
+follow the maintenance Skill before regenerating any `plugin-historical-*`
+package or profile.
 
 HistAgent must not publish thin provider wrappers. Every generated Skill is a
 complete eight-file authored tree whose `SKILL.md` contains the ordinary runtime
@@ -338,6 +442,25 @@ the three reviewed education domains. Production checking and idempotence must
 fail on any source, audit, evidence, policy, license, generated-tree, domain, or
 registry drift. Education Agent Skills add no public CLI command or workflow
 authority.
+
+All 136 reviewed Education Agent Skills also project one-to-one into the new
+plugin extension mode as `plugin-education-agent-skills-*` capabilities and
+profiles. `scripts/generate-education-agent-skills-extensions.mjs` is the
+deterministic generator: each package is a static `execution_type: llm` tree
+with `knowledge_refs: []`, the reviewed `SKILL.md` body and
+`researchspec-education-boundary` block preserved, and the shared
+`validate_education_brief.py` six-field evidence validator. Domain assignments
+mirror the three reviewed education domains.
+
+`audits/education-agent-skills/catalog.json` is the Education Agent Skills
+extension maintenance SSOT. `scripts/education-agent-skills-maintenance.mjs`
+and `.agents/skills/education-agent-skills-maintenance/SKILL.md` provide
+catalog-driven `artifacts / records / baseline / check / diff` anchors and the
+Agent semantic review gate; `artifacts` regenerates the 136 packages. The
+current anchor is `snapshot-32fce5c` under
+`audits/education-agent-skills/snapshot-32fce5c/`. Future updates must follow
+the maintenance Skill before regenerating any
+`plugin-education-agent-skills-*` package or profile.
 
 Six-vendor maintenance must keep converters isolated: each converter stages
 against all published vendors but emits and commits only its own bundle, while a

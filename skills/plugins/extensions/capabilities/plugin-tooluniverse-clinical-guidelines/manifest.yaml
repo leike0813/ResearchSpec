@@ -1,0 +1,61 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-clinical-guidelines
+title: Clinical Guidelines Search & Retrieval
+description: Search and retrieve clinical practice guidelines from 12+
+  authoritative sources — NICE, WHO, NCCN, AHA, ADA, SIGN, USPSTF, IDSA, NIH
+  consensus, ESMO/ESC/EASL European societies, and US specialty associations.
+  Use for evidence-graded treatment recommendations, dosing protocols, screening
+  guidance, and authoritative-source-prioritized clinical guidance (NICE/WHO
+  ranked above society guidelines).
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-tools-reference.md
+    path: TOOLS_REFERENCE.md
+    content_hash: b13e82b06ba69598b050932541fd29e88dd35728151c1e6a2ff80d9f2751c04d
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-guidelines/SKILL.md
+      sha256: 4786e0e6c81953de542cb3db353f9db9b1241e0b5c2589008797084efe4a330c
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-guidelines/TOOLS_REFERENCE.md
+      sha256: b13e82b06ba69598b050932541fd29e88dd35728151c1e6a2ff80d9f2751c04d
+license: Apache-2.0

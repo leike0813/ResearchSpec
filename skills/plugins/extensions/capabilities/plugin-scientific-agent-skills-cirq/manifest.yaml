@@ -1,0 +1,90 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-cirq
+title: Cirq - Quantum Computing with Python
+description: Google quantum computing framework. Use when targeting Google
+  Quantum AI hardware, designing noise-aware circuits, or running quantum
+  characterization experiments. Best for Google hardware, noise modeling, and
+  low-level circuit design. For IBM hardware use qiskit; for quantum ML with
+  autodiff use pennylane; for physics simulations use qutip.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-references-building.md
+    path: references/building.md
+    content_hash: 14c6f9fd8a684b99748801e4219e631d8e9876b7f0ce051e944d337c908f7cba
+    license: Apache-2.0
+  - knowledge_id: sas-references-experiments.md
+    path: references/experiments.md
+    content_hash: 90a490240dfcf75fa6b3a2d94dbd6ab83b869162f9dd1534eae7f9688cab4b9e
+    license: Apache-2.0
+  - knowledge_id: sas-references-hardware.md
+    path: references/hardware.md
+    content_hash: f2fa45c1fb92344d73134de0dc9374acfe3ca69b7a8d038a6b1bb159a165bf34
+    license: Apache-2.0
+  - knowledge_id: sas-references-noise.md
+    path: references/noise.md
+    content_hash: bef62408a68bccbf0c39e6af1b9ac40ef4debbf3ef62e0b620a88a9df9bacca7
+    license: Apache-2.0
+  - knowledge_id: sas-references-simulation.md
+    path: references/simulation.md
+    content_hash: 5653cf1a672fbf21caa24b016e86da6fbde02f25571f13956ddc5637c225c17a
+    license: Apache-2.0
+  - knowledge_id: sas-references-transformation.md
+    path: references/transformation.md
+    content_hash: f77c2709d45cb826e84d0447e3465779245c93c36ed4dbcc806d37ab168b0f89
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-cirq/SKILL.md
+      sha256: f40ef63258effb4752fc049e2e0522197f41a1e2c6203757dc786c7f2e0bef81
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-cirq/references/building.md
+      sha256: 14c6f9fd8a684b99748801e4219e631d8e9876b7f0ce051e944d337c908f7cba
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-cirq/references/experiments.md
+      sha256: 90a490240dfcf75fa6b3a2d94dbd6ab83b869162f9dd1534eae7f9688cab4b9e
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-cirq/references/hardware.md
+      sha256: f2fa45c1fb92344d73134de0dc9374acfe3ca69b7a8d038a6b1bb159a165bf34
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-cirq/references/noise.md
+      sha256: bef62408a68bccbf0c39e6af1b9ac40ef4debbf3ef62e0b620a88a9df9bacca7
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-cirq/references/simulation.md
+      sha256: 5653cf1a672fbf21caa24b016e86da6fbde02f25571f13956ddc5637c225c17a
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-cirq/references/transformation.md
+      sha256: f77c2709d45cb826e84d0447e3465779245c93c36ed4dbcc806d37ab168b0f89
+license: Apache-2.0

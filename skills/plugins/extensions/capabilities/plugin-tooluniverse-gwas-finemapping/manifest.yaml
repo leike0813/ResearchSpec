@@ -1,0 +1,60 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-gwas-finemapping
+title: GWAS Fine-Mapping & Causal Variant Prioritization
+description: Statistical fine-mapping of GWAS loci using credible sets (SuSiE,
+  FINEMAP) and locus-to-gene scoring (Open Targets L2G). Identifies likely
+  causal variants and target genes — distinct from positional 'nearest gene'
+  which is often wrong. Use for prioritizing causal variants at GWAS hits,
+  comparing fine-mapping methods, and converting lead SNPs to target genes.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-python-implementation.py
+    path: python_implementation.py
+    content_hash: ca4ade48f544599538eb76d4ce123c7ef332bd0ba74a9263c77b89b00f0d6e25
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-gwas-finemapping/SKILL.md
+      sha256: 1fbed80ea1936e30300758f601695a6e894b4a7ca8bc84e60797ce9288f9b98b
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-gwas-finemapping/python_implementation.py
+      sha256: ca4ade48f544599538eb76d4ce123c7ef332bd0ba74a9263c77b89b00f0d6e25
+license: Apache-2.0

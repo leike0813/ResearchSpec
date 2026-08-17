@@ -1,0 +1,82 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-markitdown
+title: MarkItDown - File to Markdown Conversion
+description: Convert files and office documents to Markdown. Supports PDF, DOCX,
+  PPTX, XLSX, images (with OCR), audio (with transcription), HTML, CSV, JSON,
+  XML, ZIP, YouTube URLs, EPubs and more.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-assets-example-usage.md
+    path: assets/example_usage.md
+    content_hash: 5858f13be9d18d43894215c30093cba0693f85550148ad18552ffad40930c84d
+    license: Apache-2.0
+  - knowledge_id: sas-references-api-reference.md
+    path: references/api_reference.md
+    content_hash: 7ddee94691267927db6378656a60fcbbc46449969ec876f2fbb79817d5d7bfdd
+    license: Apache-2.0
+  - knowledge_id: sas-references-file-formats.md
+    path: references/file_formats.md
+    content_hash: 8af4558784b7fa727d496e79efeecf46aa71c4d4aa3b5ca68dbd9f201abc09aa
+    license: Apache-2.0
+  - knowledge_id: sas-scripts-batch-convert.py
+    path: scripts/batch_convert.py
+    content_hash: 3409effe9aae9611fd5249d2b4c09150a945ee1181d1519f59a4811cbf7ba0a3
+    license: Apache-2.0
+  - knowledge_id: sas-scripts-convert-literature.py
+    path: scripts/convert_literature.py
+    content_hash: 7023e2f3e915bf2995d72886dd37bf6e4726c8e9a258a09b540ecc150c4e108c
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markitdown/SKILL.md
+      sha256: fae29b0006c138c482cf2e6305551ccc923c41c0590977163329510547fe14f5
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markitdown/assets/example_usage.md
+      sha256: 5858f13be9d18d43894215c30093cba0693f85550148ad18552ffad40930c84d
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markitdown/references/api_reference.md
+      sha256: 7ddee94691267927db6378656a60fcbbc46449969ec876f2fbb79817d5d7bfdd
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markitdown/references/file_formats.md
+      sha256: 8af4558784b7fa727d496e79efeecf46aa71c4d4aa3b5ca68dbd9f201abc09aa
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markitdown/scripts/batch_convert.py
+      sha256: 3409effe9aae9611fd5249d2b4c09150a945ee1181d1519f59a4811cbf7ba0a3
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markitdown/scripts/convert_literature.py
+      sha256: 7023e2f3e915bf2995d72886dd37bf6e4726c8e9a258a09b540ecc150c4e108c
+license: Apache-2.0

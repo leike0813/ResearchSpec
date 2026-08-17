@@ -1,0 +1,66 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-expression-data-retrieval
+title: Gene Expression & Omics Data Retrieval
+description: Retrieve gene expression and omics datasets from ArrayExpress and
+  BioStudies with gene disambiguation and quality assessment. Use for finding
+  RNA-seq/microarray datasets by organism/tissue/condition, comparing across
+  studies (case-control, time-series, dose-response), and assessing dataset
+  suitability before downloading. Always uses English search terms.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-checklist.md
+    path: CHECKLIST.md
+    content_hash: b4fa47750713f7cece39fa56b5f0c1d2bcd17cf7ddc5f0644777c3f43afc537d
+    license: Apache-2.0
+  - knowledge_id: tu-examples.md
+    path: examples.md
+    content_hash: 6c2498a4e6ab3864a9e0131f7443a769b622ba5d4a371cadee7f9acc8b9667b7
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-expression-data-retrieval/SKILL.md
+      sha256: da757cf475d49c33141f6840c3f69c87e492dc44865eba96779a736fe7d44502
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-expression-data-retrieval/CHECKLIST.md
+      sha256: b4fa47750713f7cece39fa56b5f0c1d2bcd17cf7ddc5f0644777c3f43afc537d
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-expression-data-retrieval/examples.md
+      sha256: 6c2498a4e6ab3864a9e0131f7443a769b622ba5d4a371cadee7f9acc8b9667b7
+license: Apache-2.0

@@ -1,0 +1,63 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-microbial-genome-characterization
+title: Microbial Genome Assembly Characterization & QC
+description: Genome-ASSEMBLY discovery, QC, and replicon mapping for any
+  organism (bacteria, archaea, fungi, and beyond) using NCBI Datasets. Resolves
+  an organism name or taxid to assemblies, picks the reference/representative or
+  best-quality assembly, pulls assembly QC metrics (total length,
+  contig/scaffold N50, contig count, GC%, assembly level, RefSeq category),
+  enumerates chromosomes and plasmids via per-replicon sequence reports, and
+  compares candidate assemblies on quality. Use for "what genomes are available
+  for [organism]", "assembly stats / N50 / GC content for [GCF_/GCA_
+  accession]", "how many plasmids does [strain] have", "compare assemblies for
+  [species]", "find the reference genome for [taxon]", "is this assembly
+  Complete Genome or just contigs". NOT for gene-level orthology/synteny (use
+  tooluniverse-comparative-genomics), plant gene structure (use
+  tooluniverse-plant-genomics), de novo assembly from raw reads (no tool
+  exists), or taxonomy-only name/lineage lookups.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs: []
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-microbial-genome-characterization/SKILL.md
+      sha256: 845445fbb5fa1994208f6110e3db485204bf153ba992ed9a93f4e78eb352abd4
+license: Apache-2.0

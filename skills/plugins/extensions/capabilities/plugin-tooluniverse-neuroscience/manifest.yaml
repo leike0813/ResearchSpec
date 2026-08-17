@@ -1,0 +1,55 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-neuroscience
+title: Neuroscience Research Skill
+description: "Neuroscience research workflows: neuroanatomy, neural circuits,
+  neurotransmitter biology, neurological/psychiatric disease genetics,
+  neural-protein function. Uses Allen Brain Atlas, WormBase (C. elegans
+  connectome), UniProt for neural proteins, PubMed for primary literature. Use
+  for brain-region biology, neural development, neurodegeneration mechanisms
+  (Alzheimer's, Parkinson's, ALS), and synaptic-protein characterization."
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs: []
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-neuroscience/SKILL.md
+      sha256: af8704e8a8a9aa28ee8d6e943babe5da7f58b59d721f2e6d7e2362536fb314c8
+license: Apache-2.0

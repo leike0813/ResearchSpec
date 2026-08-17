@@ -1,0 +1,84 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-infectious-disease
+title: Infectious Disease Outbreak Intelligence
+description: Rapid pathogen characterization and drug repurposing for outbreaks.
+  Combines pathogen genomics (NCBI, BVBRC), host immune response (IEDB),
+  drug-target databases (ChEMBL, DGIdb), and literature surveillance
+  (PubMed/EuropePMC). Use for emerging-pathogen profiling, antiviral candidate
+  identification, and outbreak intelligence reporting.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-checklist.md
+    path: CHECKLIST.md
+    content_hash: 044648ef0682b5ab7311fe4b53649f1db6172d372c5fa1905e7ffdb7fb80ea97
+    license: Apache-2.0
+  - knowledge_id: tu-examples.md
+    path: EXAMPLES.md
+    content_hash: cb785583acd4cf398c1f24aafd4f3ee1891c2fe6897794370b57da5d8aedb63a
+    license: Apache-2.0
+  - knowledge_id: tu-tools-reference.md
+    path: TOOLS_REFERENCE.md
+    content_hash: c349f84578c4befdb5c02933c6891fe06328053ac56944a1f534fc9d79e4cda3
+    license: Apache-2.0
+  - knowledge_id: tu-phase-details.md
+    path: phase_details.md
+    content_hash: 7c42d34b9e4dad858ed159ac86642566abbf3436c3850a3602f4bcbf24e5d894
+    license: Apache-2.0
+  - knowledge_id: tu-report-template.md
+    path: report_template.md
+    content_hash: bb5270a9ae657be37760eed50f67d047e979de8a512185cda97cbcb197062dee
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-infectious-disease/SKILL.md
+      sha256: 9108bfd2d4905a74a5cb91f91d03a79c7716628a22aec200f064f102e82ea7b6
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-infectious-disease/CHECKLIST.md
+      sha256: 044648ef0682b5ab7311fe4b53649f1db6172d372c5fa1905e7ffdb7fb80ea97
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-infectious-disease/EXAMPLES.md
+      sha256: cb785583acd4cf398c1f24aafd4f3ee1891c2fe6897794370b57da5d8aedb63a
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-infectious-disease/TOOLS_REFERENCE.md
+      sha256: c349f84578c4befdb5c02933c6891fe06328053ac56944a1f534fc9d79e4cda3
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-infectious-disease/phase_details.md
+      sha256: 7c42d34b9e4dad858ed159ac86642566abbf3436c3850a3602f4bcbf24e5d894
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-infectious-disease/report_template.md
+      sha256: bb5270a9ae657be37760eed50f67d047e979de8a512185cda97cbcb197062dee
+license: Apache-2.0

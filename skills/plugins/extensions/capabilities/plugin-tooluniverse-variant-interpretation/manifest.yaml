@@ -1,0 +1,89 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-variant-interpretation
+title: Clinical Variant Interpreter
+description: Clinical variant interpretation from raw variant calls to
+  ACMG-classified recommendations with structural impact analysis. Use for VUS
+  classification, pathogenicity assessment with cited criteria, structure-based
+  variant impact (AlphaFold/PDB), non-coding/regulatory variant effect
+  prediction with sequence deep-learning models (AlphaGenome, Enformer, Borzoi,
+  ChromBPNet, Evo 2), and producing clinical-grade variant reports for return of
+  results or molecular tumor boards. Use this whenever a user asks about a
+  variant's significance, an intronic/promoter/enhancer/UTR non-coding variant's
+  functional impact, or needs ACMG classification — even if they don't say
+  "ACMG".
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-acmg-classification.md
+    path: ACMG_CLASSIFICATION.md
+    content_hash: 55b99a034aa38af4e6e1dc8d1f3f0e22647a5d73a654d4590b76731a516cba56
+    license: Apache-2.0
+  - knowledge_id: tu-checklist.md
+    path: CHECKLIST.md
+    content_hash: b02387c5075462008b1473c41899b84b30b796699cd8fb0b642c0c7ced5e6545
+    license: Apache-2.0
+  - knowledge_id: tu-code-patterns.md
+    path: CODE_PATTERNS.md
+    content_hash: fbf4b17893f5b5f267fa262f6a096ed24bf05a0e3f6ebfd5002ae097dc0bed6c
+    license: Apache-2.0
+  - knowledge_id: tu-examples.md
+    path: EXAMPLES.md
+    content_hash: 5063525d74acaba1ad3fcf2a6c87410b70ce5626fdf29a5033a83fe5cc1729fa
+    license: Apache-2.0
+  - knowledge_id: tu-tools-reference.md
+    path: TOOLS_REFERENCE.md
+    content_hash: 1dd350da7e14cf7fce6ed71f41384d1b91814b2e71c7d2730f93ac9c1efbb011
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-interpretation/SKILL.md
+      sha256: 6c8715378dc10ff080ababadab407b699291ea141fca97f8e96f026f1d9b53eb
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-interpretation/ACMG_CLASSIFICATION.md
+      sha256: 55b99a034aa38af4e6e1dc8d1f3f0e22647a5d73a654d4590b76731a516cba56
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-interpretation/CHECKLIST.md
+      sha256: b02387c5075462008b1473c41899b84b30b796699cd8fb0b642c0c7ced5e6545
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-interpretation/CODE_PATTERNS.md
+      sha256: fbf4b17893f5b5f267fa262f6a096ed24bf05a0e3f6ebfd5002ae097dc0bed6c
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-interpretation/EXAMPLES.md
+      sha256: 5063525d74acaba1ad3fcf2a6c87410b70ce5626fdf29a5033a83fe5cc1729fa
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-interpretation/TOOLS_REFERENCE.md
+      sha256: 1dd350da7e14cf7fce6ed71f41384d1b91814b2e71c7d2730f93ac9c1efbb011
+license: Apache-2.0

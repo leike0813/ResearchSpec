@@ -1,0 +1,90 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-torch-geometric
+title: PyTorch Geometric (PyG)
+description: PyTorch Geometric (PyG) for graph neural networks — node/link/graph
+  classification, message passing (GCN, GAT, GraphSAGE, GIN), heterogeneous
+  graphs, neighbor sampling, and custom datasets. Use when working with
+  torch_geometric, not for general NetworkX analytics or non-graph PyTorch
+  models.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-references-custom-datasets.md
+    path: references/custom_datasets.md
+    content_hash: 48700ef231c9d727f34d5ef4daf5b087fec1238c91e4a2051f51d85137a85f7b
+    license: Apache-2.0
+  - knowledge_id: sas-references-explainability.md
+    path: references/explainability.md
+    content_hash: 1e4dbbc1a6bd08503d04c6570be84f105bb2a3aae7b1a4d67b991d44f86c388b
+    license: Apache-2.0
+  - knowledge_id: sas-references-heterogeneous.md
+    path: references/heterogeneous.md
+    content_hash: 57d19d123de25fc93c4cf03483797089709efd233f9aa36e0c4a72e41eb0ce7a
+    license: Apache-2.0
+  - knowledge_id: sas-references-link-prediction.md
+    path: references/link_prediction.md
+    content_hash: c66a29c15cedcecf7615f691cab14a5871d474aec082ddbb22313d6d9848fcdc
+    license: Apache-2.0
+  - knowledge_id: sas-references-message-passing.md
+    path: references/message_passing.md
+    content_hash: 9a4fa90b74841dc531a576247caa32d158d862951c8a7199543eb180b0241954
+    license: Apache-2.0
+  - knowledge_id: sas-references-scaling.md
+    path: references/scaling.md
+    content_hash: 990b4a8deb097cf028da17a55764e7ec0bd00f1d0db9bb9abd94b8fbda316e7c
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-torch-geometric/SKILL.md
+      sha256: 7bf25bdec31d2bea29154ad0b160fd79c6202563d6d4804b47405852cf20997e
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-torch-geometric/references/custom_datasets.md
+      sha256: 48700ef231c9d727f34d5ef4daf5b087fec1238c91e4a2051f51d85137a85f7b
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-torch-geometric/references/explainability.md
+      sha256: 1e4dbbc1a6bd08503d04c6570be84f105bb2a3aae7b1a4d67b991d44f86c388b
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-torch-geometric/references/heterogeneous.md
+      sha256: 57d19d123de25fc93c4cf03483797089709efd233f9aa36e0c4a72e41eb0ce7a
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-torch-geometric/references/link_prediction.md
+      sha256: c66a29c15cedcecf7615f691cab14a5871d474aec082ddbb22313d6d9848fcdc
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-torch-geometric/references/message_passing.md
+      sha256: 9a4fa90b74841dc531a576247caa32d158d862951c8a7199543eb180b0241954
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-torch-geometric/references/scaling.md
+      sha256: 990b4a8deb097cf028da17a55764e7ec0bd00f1d0db9bb9abd94b8fbda316e7c
+license: Apache-2.0

@@ -1,0 +1,79 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-chemical-safety
+title: Chemical Safety & Toxicology Assessment
+description: Chemical safety and toxicology assessment integrating ADMET-AI
+  predictions, CTD toxicogenomics, PubChemTox experimental data, GHS/IARC hazard
+  classification, and exposure-context analysis. Use for chemical hazard
+  identification, occupational/consumer-product toxicity, dose-response
+  evaluation, and acute (LD50) vs chronic toxicity assessment. Distinguishes
+  drug toxicity from environmental chemical toxicity.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-evidence-grading.md
+    path: evidence-grading.md
+    content_hash: 8770384ef9792364c6f375f08522fd9e2a64d9d918498b82a1784fd3e2c3a4ae
+    license: Apache-2.0
+  - knowledge_id: tu-phase-details.md
+    path: phase-details.md
+    content_hash: 4c7918f5c4e0ce47c11010775c2e5f5b238d81690b4facdff8ddfd7dec8a9ca7
+    license: Apache-2.0
+  - knowledge_id: tu-phase-procedures-detailed.md
+    path: phase-procedures-detailed.md
+    content_hash: 94b721fc8846d606df31a4a9773c66d9324dca8270fff2214226e7d9dda3b647
+    license: Apache-2.0
+  - knowledge_id: tu-report-templates.md
+    path: report-templates.md
+    content_hash: 55528a63c29ccb9ebd666492e12186e6943b83c00f1508dd6b2b224bb6e60162
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-chemical-safety/SKILL.md
+      sha256: eb4bf5b9315a2896afbd27e6ec8430ca15fdd472f80c97a48e62ec81e5b33876
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-chemical-safety/evidence-grading.md
+      sha256: 8770384ef9792364c6f375f08522fd9e2a64d9d918498b82a1784fd3e2c3a4ae
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-chemical-safety/phase-details.md
+      sha256: 4c7918f5c4e0ce47c11010775c2e5f5b238d81690b4facdff8ddfd7dec8a9ca7
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-chemical-safety/phase-procedures-detailed.md
+      sha256: 94b721fc8846d606df31a4a9773c66d9324dca8270fff2214226e7d9dda3b647
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-chemical-safety/report-templates.md
+      sha256: 55528a63c29ccb9ebd666492e12186e6943b83c00f1508dd6b2b224bb6e60162
+license: Apache-2.0

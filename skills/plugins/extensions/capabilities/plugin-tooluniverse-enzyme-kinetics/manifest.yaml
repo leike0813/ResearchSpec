@@ -1,0 +1,63 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-enzyme-kinetics
+title: Enzyme Kinetics (Michaelis-Menten)
+description: Enzyme kinetics — Michaelis-Menten Km, Vmax, kcat (turnover), and
+  kcat/Km (catalytic efficiency / specificity constant) from substrate-velocity
+  data, plus inhibition-mechanism analysis (competitive / uncompetitive /
+  non-competitive, Ki). Fits the MM equation by nonlinear regression (and
+  reports Lineweaver-Burk for reference). Use when you have substrate
+  concentrations and initial reaction velocities and need kinetic parameters or
+  to classify an inhibitor. NOT for BRENDA database lookups of published
+  constants (use the BRENDA tools).
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-scripts-fit-michaelis-menten.py
+    path: scripts/fit_michaelis_menten.py
+    content_hash: 8f352d94d1257d4a9dcff24ca2d4e3d084a02c815022a164c35130923b39ef1b
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-enzyme-kinetics/SKILL.md
+      sha256: 381f4d17fac4f282fc2f05ca9c2d31a26e84a9d8feac193381af83e3c0caca1e
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-enzyme-kinetics/scripts/fit_michaelis_menten.py
+      sha256: 8f352d94d1257d4a9dcff24ca2d4e3d084a02c815022a164c35130923b39ef1b
+license: Apache-2.0

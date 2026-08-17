@@ -1,0 +1,104 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-clinical-trial-design
+title: Clinical Trial Design Feasibility Assessment
+description: Strategic clinical trial design feasibility assessment. Analyzes 6
+  dimensions (endpoint, population, comparator, effect size, duration,
+  regulatory pathway) using precedent trials and FDA guidance. Produces
+  enrollment projections, endpoint recommendations, and approval-pathway
+  analysis. Use for trial-protocol design, power/sample-size estimation,
+  comparator selection, and FDA submission strategy. Driven by precedent-based
+  reasoning rather than first-principles math.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-best-practices.md
+    path: BEST_PRACTICES.md
+    content_hash: f9b4663275ffcbff7f75f61954dd767c11d36c1e56823f806425446ebf41c422
+    license: Apache-2.0
+  - knowledge_id: tu-examples.md
+    path: EXAMPLES.md
+    content_hash: c43f6952633be02fc9832cf93ee99f26d8a70623911be2320adfe6d5974b4277
+    license: Apache-2.0
+  - knowledge_id: tu-quick-start.md
+    path: QUICK_START.md
+    content_hash: 8df6166013edae255b2813f39fbdd8585caa15256b704ccbb329d8bf379962b5
+    license: Apache-2.0
+  - knowledge_id: tu-report-template.md
+    path: REPORT_TEMPLATE.md
+    content_hash: 473c689b4b98929d38f80021500501de210624d64925f07eb18e062768151e7b
+    license: Apache-2.0
+  - knowledge_id: tu-study-design-procedures.md
+    path: STUDY_DESIGN_PROCEDURES.md
+    content_hash: 51803333e5decb3e887893a49e3e9eb416d0d8f86104d6d56f80fc880cc97a3a
+    license: Apache-2.0
+  - knowledge_id: tu-workflow-details.md
+    path: WORKFLOW_DETAILS.md
+    content_hash: d2c5ecf92248b4a179c4daf30f11dfcafd1eaf27ae3880accaa73d9e1f28261f
+    license: Apache-2.0
+  - knowledge_id: tu-python-implementation.py
+    path: python_implementation.py
+    content_hash: dfd3f71f023cdf94d02dd3137a85a59ae9e12280b33d71c6a94abf4692e2f5c0
+    license: Apache-2.0
+  - knowledge_id: tu-trial-pipeline.py
+    path: trial_pipeline.py
+    content_hash: dfd3f71f023cdf94d02dd3137a85a59ae9e12280b33d71c6a94abf4692e2f5c0
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-design/SKILL.md
+      sha256: d51922a576bf7296858ba90bad0574cfc4e698dc5e703593d8a9532342c737ac
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-design/BEST_PRACTICES.md
+      sha256: f9b4663275ffcbff7f75f61954dd767c11d36c1e56823f806425446ebf41c422
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-design/EXAMPLES.md
+      sha256: c43f6952633be02fc9832cf93ee99f26d8a70623911be2320adfe6d5974b4277
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-design/QUICK_START.md
+      sha256: 8df6166013edae255b2813f39fbdd8585caa15256b704ccbb329d8bf379962b5
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-design/REPORT_TEMPLATE.md
+      sha256: 473c689b4b98929d38f80021500501de210624d64925f07eb18e062768151e7b
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-design/STUDY_DESIGN_PROCEDURES.md
+      sha256: 51803333e5decb3e887893a49e3e9eb416d0d8f86104d6d56f80fc880cc97a3a
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-design/WORKFLOW_DETAILS.md
+      sha256: d2c5ecf92248b4a179c4daf30f11dfcafd1eaf27ae3880accaa73d9e1f28261f
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-design/python_implementation.py
+      sha256: dfd3f71f023cdf94d02dd3137a85a59ae9e12280b33d71c6a94abf4692e2f5c0
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-design/trial_pipeline.py
+      sha256: dfd3f71f023cdf94d02dd3137a85a59ae9e12280b33d71c6a94abf4692e2f5c0
+license: Apache-2.0

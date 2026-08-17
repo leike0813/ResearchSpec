@@ -1,0 +1,56 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-dataset-discovery
+title: Dataset Discovery
+description: Find and evaluate research datasets for any scientific question.
+  Maps research questions to required study designs (longitudinal vs
+  cross-sectional, observational vs experimental, single-cohort vs
+  multi-cohort). Use when the user asks 'find data about X', 'where can I get
+  data on Y', or needs a specific cohort/survey/repository. Covers GEO,
+  ArrayExpress, dbGaP, NHANES, UK Biobank, ClinicalTrials.gov, GWAS Catalog, and
+  30+ scientific repositories.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs: []
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-dataset-discovery/SKILL.md
+      sha256: 41325b535bfd26c88f9db10cf8f5c93a3955cb94d96e60d3a68ad94e0e7b1b8d
+license: Apache-2.0

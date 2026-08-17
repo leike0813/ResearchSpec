@@ -1,0 +1,84 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-immunotherapy-response-prediction
+title: Immunotherapy Response Prediction
+description: Predict patient response to immune checkpoint inhibitors (ICIs) by
+  integrating tumor mutational burden (TMB), microsatellite instability (MSI),
+  PD-L1 expression, HLA status, and immune-related gene expression. Outputs ICI
+  Response Score with drug-specific recommendations and resistance-risk
+  assessment. Use for melanoma/NSCLC/RCC immunotherapy decision support.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-examples.md
+    path: EXAMPLES.md
+    content_hash: 1e085052f3725fffb538738fe0445a5f0a0bde479988ea90511b0a82badd28d5
+    license: Apache-2.0
+  - knowledge_id: tu-input-reference.md
+    path: INPUT_REFERENCE.md
+    content_hash: c4ffaa3c8f7fd5737a32e9ab47890d3ae9387ae8513dfebd153a03048a643622
+    license: Apache-2.0
+  - knowledge_id: tu-report-template.md
+    path: REPORT_TEMPLATE.md
+    content_hash: ab3f07c50dc6c9de49d85c768b772179569793d4e2418104b053820f69159d95
+    license: Apache-2.0
+  - knowledge_id: tu-scoring-tables.md
+    path: SCORING_TABLES.md
+    content_hash: 9053bd44b5217fc141661d1fccbf28671b5ebb430d9510389aa9c831dfb3bc69
+    license: Apache-2.0
+  - knowledge_id: tu-tools-reference.md
+    path: TOOLS_REFERENCE.md
+    content_hash: e6b7a58a46dee02ea6be82638b66436c742883ba77194ce1daaf1630cb140a6c
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-immunotherapy-response-prediction/SKILL.md
+      sha256: f6ff1194ed71f85ad4809f1c86b8e002106bee89d6a1233c7270f981e1e5c06a
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-immunotherapy-response-prediction/EXAMPLES.md
+      sha256: 1e085052f3725fffb538738fe0445a5f0a0bde479988ea90511b0a82badd28d5
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-immunotherapy-response-prediction/INPUT_REFERENCE.md
+      sha256: c4ffaa3c8f7fd5737a32e9ab47890d3ae9387ae8513dfebd153a03048a643622
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-immunotherapy-response-prediction/REPORT_TEMPLATE.md
+      sha256: ab3f07c50dc6c9de49d85c768b772179569793d4e2418104b053820f69159d95
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-immunotherapy-response-prediction/SCORING_TABLES.md
+      sha256: 9053bd44b5217fc141661d1fccbf28671b5ebb430d9510389aa9c831dfb3bc69
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-immunotherapy-response-prediction/TOOLS_REFERENCE.md
+      sha256: e6b7a58a46dee02ea6be82638b66436c742883ba77194ce1daaf1630cb140a6c
+license: Apache-2.0

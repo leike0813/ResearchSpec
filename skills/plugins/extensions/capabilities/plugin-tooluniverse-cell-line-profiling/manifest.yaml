@@ -1,0 +1,62 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-cell-line-profiling
+title: Cancer Cell Line Profiling and Selection
+description: Cancer cell-line selection and profiling for experimental model
+  choice. Cross-references DepMap, Cellosaurus, COSMIC, PharmacoDB to deliver
+  identity verification, mutation/CNV profile, gene dependencies, drug
+  sensitivities, and druggable targets. Use to answer 'which cell line should I
+  use for studying gene X?' or 'is this cell line a good model for cancer Y?'.
+  Outputs ranked recommendations with rationale, growth characteristics, and
+  known pitfalls.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-scripts-depmap-gene-dependency.py
+    path: scripts/depmap_gene_dependency.py
+    content_hash: 57c3f84627d1dc6cba694b76729eb408bb227ea2658098da968ee3ee5e80685c
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-cell-line-profiling/SKILL.md
+      sha256: 8d2f1a6a7a0180a834bfb1a147e6cd1cd29868aa11fc528e249642958d8a90bf
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-cell-line-profiling/scripts/depmap_gene_dependency.py
+      sha256: 57c3f84627d1dc6cba694b76729eb408bb227ea2658098da968ee3ee5e80685c
+license: Apache-2.0

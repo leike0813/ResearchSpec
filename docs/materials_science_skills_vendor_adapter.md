@@ -71,3 +71,44 @@ installation, discovery, and update never execute scientific software, install
 dependencies, retrieve resources, read credentials, compile code, access a
 service, use GPU capacity, or submit local, remote, scheduler, DFT, ALM, or HPC
 work.
+
+## Extension mode packages
+
+The seven reviewed raw Skills are also projected one-to-one into the
+graph-native extension registry under `skills/plugins/extensions/`:
+
+| raw Skill | extension capability |
+| --- | --- |
+| `materials-science-skills-apex-alloy-workflows` | `plugin-materials-apex-alloy-workflows` |
+| `materials-science-skills-atomsk-cli` | `plugin-materials-atomsk-cli` |
+| `materials-science-skills-deeptb-helper` | `plugin-materials-deeptb-helper` |
+| `materials-science-skills-dpgen-workflow` | `plugin-materials-dpgen-workflow` |
+| `materials-science-skills-gpumd-workflow` | `plugin-materials-gpumd-workflow` |
+| `materials-science-skills-phonopy-workflows` | `plugin-materials-phonopy-workflows` |
+| `materials-science-skills-unimol-ops` | `plugin-materials-unimol-ops` |
+
+All seven are `execution_type: llm` instruction-led packages with deterministic
+`validate_materials_brief.py` evidence validators. Six package their reviewed
+reference as a hash-bound knowledge ref; Atomsk remains a Tier 1 tree with no
+reference. `materials-engineering` projects six, `macromolecular-and-materials-chemistry`
+projects two, and `computational-modeling-and-simulation` projects all seven.
+
+Install, update, status, and check read manifests and hashes only. Only
+`advance` executes the declared `python3` validator. ResearchSpec never invokes
+or configures APEX, Atomsk, DeePTB, DP-GEN, GPUMD, Phonopy, Uni-Mol, schedulers,
+GPU, or HPC resources.
+
+## Maintenance suite
+
+```bash
+pnpm materials-science-skills-for-llm-maintenance:artifacts
+pnpm materials-science-skills-for-llm-maintenance:records
+pnpm materials-science-skills-for-llm-maintenance:baseline
+pnpm materials-science-skills-for-llm-maintenance:check
+```
+
+The suite anchors at `audits/materials-science-skills-for-llm/snapshot-fafd3ab`,
+binds the immutable skill audit, the vendor bundle, the extension registry
+subset, package/profile trees, the maintenance Skill, the maintenance catalog,
+and records 01–05 in `manifest.json`. The Agent semantic review is mandatory and
+`baseline` refuses an anchor whose `05-semantic-review.md` is not completed.

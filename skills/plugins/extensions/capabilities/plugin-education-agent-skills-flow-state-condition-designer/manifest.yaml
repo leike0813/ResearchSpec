@@ -1,0 +1,52 @@
+schema_version: "1"
+capability_id: plugin-education-agent-skills-flow-state-condition-designer
+title: Flow State Condition Designer
+description: Optimise a learning activity for flow by balancing challenge level,
+  skill, clear goals, and immediate feedback. Use when students are bored,
+  anxious, or disengaged during a task.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: education-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_education_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs: []
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-flow-state-condition-designer/SKILL.md
+      sha256: 93e79a99fbd4f01aa1caee483b9708b4cdec76f1c1bb1ca38fbaa27eced8f130
+license: Apache-2.0

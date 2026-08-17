@@ -1,0 +1,57 @@
+schema_version: '1'
+capability_id: plugin-materials-unimol-ops
+title: Local Uni-Mol Workflows
+description: Plan and review local Uni-Mol representation, inference, and training workflows with explicit
+  mode and data evidence.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+- role: task_request
+  schema_ref: plugin-task.v1
+  required: true
+  source_policy: handoff
+outputs:
+- role: research_brief
+  schema_ref: plugin-result.v1
+  required: true
+validators:
+- validator_id: capability.policy.output_roles
+  kind: policy
+  inputs:
+  - task_request
+  outputs: []
+  error_codes:
+  - output_roles_invalid
+- validator_id: unimol-ops-brief-validator
+  kind: script
+  inputs:
+  - task_request
+  outputs:
+  - research_brief
+  error_codes:
+  - script_validator_failed
+  runner:
+    argv0: python3
+    args_template:
+    - validators/validate_materials_brief.py
+    - --submission
+    - '{outputs_json}'
+    - --required
+    - scope,data_ledger,mode_plan,command_ledger,result_ledger,conclusions
+knowledge_refs:
+- knowledge_id: local-workflow-modes-reference
+  path: references/local-workflow-modes.md
+  content_hash: efc9883cd2e2d840022238b767cf246a2b730e709e9095b807f88318c5be0625
+  license: MIT
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+  - path: skills/plugins/vendors/materials-science-skills-for-llm/materials-science-skills-unimol-ops/SKILL.md
+    sha256: c040d77968a2f02acebe5afeeae3435945a8b4fb2942ef6e2133e25080549996
+  - path: skills/plugins/vendors/materials-science-skills-for-llm/materials-science-skills-unimol-ops/references/local-workflow-modes.md
+    sha256: efc9883cd2e2d840022238b767cf246a2b730e709e9095b807f88318c5be0625
+license: MIT

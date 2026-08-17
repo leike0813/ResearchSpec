@@ -1,0 +1,94 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-geopandas
+title: GeoPandas
+description: Python library for working with geospatial vector data including
+  shapefiles, GeoJSON, and GeoPackage files. Use when working with geographic
+  data for spatial analysis, geometric operations, coordinate transformations,
+  spatial joins, overlay operations, choropleth mapping, or any task involving
+  reading/writing/analyzing vector geographic data. Supports PostGIS databases,
+  interactive maps, and integration with matplotlib/folium/cartopy. Use for
+  tasks like buffer analysis, spatial joins between datasets, dissolving
+  boundaries, clipping data, calculating areas/distances, reprojecting
+  coordinate systems, creating maps, or converting between spatial file formats.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-references-crs-management.md
+    path: references/crs-management.md
+    content_hash: 3e78919eef20638352689a2419b28ad7367bbd0f64686f438f3496625db6f48d
+    license: Apache-2.0
+  - knowledge_id: sas-references-data-io.md
+    path: references/data-io.md
+    content_hash: 8bfd8fc74b34e79fd42f31daef06ca582a500469c711371a6eba04cd6f8f59dc
+    license: Apache-2.0
+  - knowledge_id: sas-references-data-structures.md
+    path: references/data-structures.md
+    content_hash: 9cd950173409b04e3c57b40b24e296646931de938ebcc86b8bf6806a97fcaab8
+    license: Apache-2.0
+  - knowledge_id: sas-references-geometric-operations.md
+    path: references/geometric-operations.md
+    content_hash: f9d55230cae612770de98fb873f32d004d06f4e24624541dc9513be229c176f3
+    license: Apache-2.0
+  - knowledge_id: sas-references-spatial-analysis.md
+    path: references/spatial-analysis.md
+    content_hash: 9e846073426fdb00da1f04465036e3c992b5fb3f556f2e264c8db56e1f9e4924
+    license: Apache-2.0
+  - knowledge_id: sas-references-visualization.md
+    path: references/visualization.md
+    content_hash: b84ea68adec0fe229bb46973efc2747de69465f6bcc9ad835d526860bbfeddc4
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geopandas/SKILL.md
+      sha256: 61d10f69e9c9fea2cfe6013d91c1a069e475b17981f6eea1d94f93447b558982
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geopandas/references/crs-management.md
+      sha256: 3e78919eef20638352689a2419b28ad7367bbd0f64686f438f3496625db6f48d
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geopandas/references/data-io.md
+      sha256: 8bfd8fc74b34e79fd42f31daef06ca582a500469c711371a6eba04cd6f8f59dc
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geopandas/references/data-structures.md
+      sha256: 9cd950173409b04e3c57b40b24e296646931de938ebcc86b8bf6806a97fcaab8
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geopandas/references/geometric-operations.md
+      sha256: f9d55230cae612770de98fb873f32d004d06f4e24624541dc9513be229c176f3
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geopandas/references/spatial-analysis.md
+      sha256: 9e846073426fdb00da1f04465036e3c992b5fb3f556f2e264c8db56e1f9e4924
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geopandas/references/visualization.md
+      sha256: b84ea68adec0fe229bb46973efc2747de69465f6bcc9ad835d526860bbfeddc4
+license: Apache-2.0

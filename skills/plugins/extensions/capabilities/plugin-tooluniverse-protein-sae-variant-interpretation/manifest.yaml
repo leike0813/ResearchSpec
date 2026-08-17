@@ -1,0 +1,57 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-protein-sae-variant-interpretation
+title: Protein SAE Variant Interpretation
+description: Interpret a missense variant via ESMC-6B Sparse Autoencoder (SAE)
+  feature activations. For a given protein + variant, computes which
+  interpretable SAE features (catalytic, ligand-binding, PTM, structural motif,
+  domain, etc.) are lost or gained at the mutation site. Use when standard
+  pathogenicity scores (AlphaMissense, ClinVar) say a variant is damaging but
+  you need a MECHANISTIC explanation — e.g. 'why is this variant LoF?'
+  Complements (does not replace) variant-interpretation and variant-to-mechanism
+  skills, which focus on ACMG classification or regulatory mechanism.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs: []
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-protein-sae-variant-interpretation/SKILL.md
+      sha256: 4516f535e835dc0fa905ee803262eb59fd8d5862a8cbb6cb3409f3b257954a06
+license: Apache-2.0

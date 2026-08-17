@@ -1,0 +1,77 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-fastq-qc
+title: FASTQ Quality Control & Trimming Decisions
+description: Assess FASTQ read quality with FastQC and MultiQC, interpret
+  quality, adapter, duplication, GC, and overrepresented-sequence findings, and
+  make explicit trimming decisions with local NGS tools before downstream
+  analysis.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-references-fastqc-interpretation.md
+    path: references/fastqc_interpretation.md
+    content_hash: c047be0f25d8557011d13b1a636eba28f26cdd9adae0e543781c685eb56e38f7
+    license: Apache-2.0
+  - knowledge_id: tu-references-tools-and-install.md
+    path: references/tools_and_install.md
+    content_hash: 714250c98d27d91ffbf09221a91deb8abb7fe97c53cadfef44c2066353f45856
+    license: Apache-2.0
+  - knowledge_id: tu-references-trimming-decisions.md
+    path: references/trimming_decisions.md
+    content_hash: 6d0e8b0787769718c24507a23644fd85b60e5af3868595b0803c40e70b86b410
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-run-fastq-qc.py
+    path: scripts/run_fastq_qc.py
+    content_hash: d0c61adc6accfac12dce443f79ff0e07d005bb24eda9abef56097f5c4b4398d0
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-fastq-qc/SKILL.md
+      sha256: 9816e1746086e9a779191d55825b0a083fcafdbf3c10936c6a4c607f80f79cae
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-fastq-qc/references/fastqc_interpretation.md
+      sha256: c047be0f25d8557011d13b1a636eba28f26cdd9adae0e543781c685eb56e38f7
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-fastq-qc/references/tools_and_install.md
+      sha256: 714250c98d27d91ffbf09221a91deb8abb7fe97c53cadfef44c2066353f45856
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-fastq-qc/references/trimming_decisions.md
+      sha256: 6d0e8b0787769718c24507a23644fd85b60e5af3868595b0803c40e70b86b410
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-fastq-qc/scripts/run_fastq_qc.py
+      sha256: d0c61adc6accfac12dce443f79ff0e07d005bb24eda9abef56097f5c4b4398d0
+license: Apache-2.0

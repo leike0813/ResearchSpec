@@ -1,0 +1,84 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-target-research
+title: Comprehensive Target Intelligence Gatherer
+description: Comprehensive drug-target intelligence — tissue expression (GTEx,
+  HPA), pathways, protein interactions (STRING), variant landscape (ClinVar,
+  gnomAD), druggability (DGIdb, ChEMBL approved drugs). 9 parallel research
+  paths with citations. Use for full target profile reports, target
+  characterization for drug discovery, and 'tell me about target X' queries.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-evidence-grading.md
+    path: EVIDENCE_GRADING.md
+    content_hash: 2d37cdff015566635d9c4b5137ef91144f1c37e08081a78b3cd3a227857ca5bf
+    license: Apache-2.0
+  - knowledge_id: tu-examples.md
+    path: EXAMPLES.md
+    content_hash: bd316514673addc9c3a363fd4b40555bd1cd717accedc12b1ef162409e20a0c9
+    license: Apache-2.0
+  - knowledge_id: tu-implementation.md
+    path: IMPLEMENTATION.md
+    content_hash: 1423041516c0f7a3572e7a9bfe6420b4774c32a2d015046d03755daca5a430fd
+    license: Apache-2.0
+  - knowledge_id: tu-reference.md
+    path: REFERENCE.md
+    content_hash: 75cc059f927062e7a81b461c5f828fde849c8fd46608db16564142ad716d77aa
+    license: Apache-2.0
+  - knowledge_id: tu-report-format.md
+    path: REPORT_FORMAT.md
+    content_hash: 2dd5db75e5f4253f72fe7d2c897dee9c9da7ab733609e5929f63ecb2b88c95d1
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-target-research/SKILL.md
+      sha256: a4c0e68ab49bb93b563eed8bb3354391ec6ab62248e2fa33628d9303e1b1b3ff
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-target-research/EVIDENCE_GRADING.md
+      sha256: 2d37cdff015566635d9c4b5137ef91144f1c37e08081a78b3cd3a227857ca5bf
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-target-research/EXAMPLES.md
+      sha256: bd316514673addc9c3a363fd4b40555bd1cd717accedc12b1ef162409e20a0c9
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-target-research/IMPLEMENTATION.md
+      sha256: 1423041516c0f7a3572e7a9bfe6420b4774c32a2d015046d03755daca5a430fd
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-target-research/REFERENCE.md
+      sha256: 75cc059f927062e7a81b461c5f828fde849c8fd46608db16564142ad716d77aa
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-target-research/REPORT_FORMAT.md
+      sha256: 2dd5db75e5f4253f72fe7d2c897dee9c9da7ab733609e5929f63ecb2b88c95d1
+license: Apache-2.0

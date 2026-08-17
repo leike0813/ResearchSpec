@@ -1,0 +1,54 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-plant-genomics
+title: Plant Genomics & Biology
+description: Plant genomics and biology research — PlantReactome pathways,
+  Ensembl Plants gene structure, POWO species taxonomy, UniProt annotation, KEGG
+  plant pathways. Handles polyploidy (wheat hexaploidy etc.) and homeologous
+  gene copies. Use for crop-gene annotation, plant secondary metabolism queries,
+  and plant-disease/stress-response biology.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs: []
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-plant-genomics/SKILL.md
+      sha256: f97c2eda43b6c35be32e08ed53d9f463369a7a94f0e4eeded315f09e390cce46
+license: Apache-2.0

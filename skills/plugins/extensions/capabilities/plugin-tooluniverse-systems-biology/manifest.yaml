@@ -1,0 +1,84 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-systems-biology
+title: Systems Biology & Pathway Analysis
+description: Systems biology and pathway analysis integrating Reactome, KEGG,
+  WikiPathways, BioCarta, NCI-Nature Pathway Interaction Database.
+  Multi-database pathway enrichment, protein-pathway relationships, network
+  reasoning. Use for pathway analysis on a gene list, multi-source pathway
+  concordance, and systems-level interpretation across databases.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-python-implementation.py
+    path: python_implementation.py
+    content_hash: 822d0429c5c0c4b8289a36bdd3d46c75774899b769a650128259494b7ae71a54
+    license: Apache-2.0
+  - knowledge_id: tu-test1-genelist.md
+    path: test1_genelist.md
+    content_hash: 9895e17750be6749984fd68d8f907ded03a447ee934d38cc928485e02039e3f0
+    license: Apache-2.0
+  - knowledge_id: tu-test2-protein.md
+    path: test2_protein.md
+    content_hash: 8dd2114b5610a4db63e643fc85f64a236a446a731fa021e198c5338fc262cbfe
+    license: Apache-2.0
+  - knowledge_id: tu-test3-keyword.md
+    path: test3_keyword.md
+    content_hash: a6197818df15ff41d0cb60adabaf8e356d829bcfa6a98fb98b48f0f721baebef
+    license: Apache-2.0
+  - knowledge_id: tu-test4-combined.md
+    path: test4_combined.md
+    content_hash: 1fc6d5b7ae932041c9fb673ec79693248195df647ab8b2b455dcd0a5cfa10b91
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-systems-biology/SKILL.md
+      sha256: 1d3d28c28ca842408b83e5c7ae0cd853fef3bfcd972a0713b13f768dda2eb5f2
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-systems-biology/python_implementation.py
+      sha256: 822d0429c5c0c4b8289a36bdd3d46c75774899b769a650128259494b7ae71a54
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-systems-biology/test1_genelist.md
+      sha256: 9895e17750be6749984fd68d8f907ded03a447ee934d38cc928485e02039e3f0
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-systems-biology/test2_protein.md
+      sha256: 8dd2114b5610a4db63e643fc85f64a236a446a731fa021e198c5338fc262cbfe
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-systems-biology/test3_keyword.md
+      sha256: a6197818df15ff41d0cb60adabaf8e356d829bcfa6a98fb98b48f0f721baebef
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-systems-biology/test4_combined.md
+      sha256: 1fc6d5b7ae932041c9fb673ec79693248195df647ab8b2b455dcd0a5cfa10b91
+license: Apache-2.0

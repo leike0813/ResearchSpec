@@ -1,0 +1,138 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-scientific-slides
+title: Scientific Slides
+description: Build slide decks and presentations for research talks. Use this
+  for making PowerPoint slides, conference presentations, seminar talks,
+  research presentations, thesis defense slides, or any scientific talk.
+  Provides slide structure, design templates, timing guidance, and visual
+  validation. Works with PowerPoint and LaTeX Beamer.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-assets-beamer-template-conference.tex
+    path: assets/beamer_template_conference.tex
+    content_hash: e4049409c316a50c73da7c87c2818a7a2d62878d0bcebef316abe95d86ab132c
+    license: Apache-2.0
+  - knowledge_id: sas-assets-beamer-template-defense.tex
+    path: assets/beamer_template_defense.tex
+    content_hash: ce44a4933a70a9267514eb1950bfd64b6c18299c7a96cf5955b78778ce9a7d3e
+    license: Apache-2.0
+  - knowledge_id: sas-assets-beamer-template-seminar.tex
+    path: assets/beamer_template_seminar.tex
+    content_hash: 94f19ea1919edb822c57c699e1611f87e00650caab7aee53edcf94d776ab5cf7
+    license: Apache-2.0
+  - knowledge_id: sas-assets-powerpoint-design-guide.md
+    path: assets/powerpoint_design_guide.md
+    content_hash: cc02bbaee20f194abee2c84b5a942efcad47c93ffa7fb55070c16715480c2d48
+    license: Apache-2.0
+  - knowledge_id: sas-assets-timing-guidelines.md
+    path: assets/timing_guidelines.md
+    content_hash: 0e85b73c1997000ed0c0efa0807536d3d9cf024bf043068d6564d44351e0ba83
+    license: Apache-2.0
+  - knowledge_id: sas-references-beamer-guide.md
+    path: references/beamer_guide.md
+    content_hash: cb8a3c500ab9a3841c0e8559ad5894a4dad80fa3193589f28f5ca91e46d1c97b
+    license: Apache-2.0
+  - knowledge_id: sas-references-data-visualization-slides.md
+    path: references/data_visualization_slides.md
+    content_hash: c79d5d9552d2f132dd3be1beb230c5c0da4f3f27f1ac04f7f6e571204bbab9ba
+    license: Apache-2.0
+  - knowledge_id: sas-references-presentation-structure.md
+    path: references/presentation_structure.md
+    content_hash: deafc171b8951a43c9a8ae081158cab72fdb8dc4abc1334257ad594f454665f2
+    license: Apache-2.0
+  - knowledge_id: sas-references-slide-design-principles.md
+    path: references/slide_design_principles.md
+    content_hash: ee2d8f1b3ae0a849ee49e3e4d334c64ee3a1a79aee5ca28dbf43bbec822d98fa
+    license: Apache-2.0
+  - knowledge_id: sas-references-talk-types-guide.md
+    path: references/talk_types_guide.md
+    content_hash: 60f374e4e8d361e36a4c738c1e9e56b80470927e28f59e5c9f715343d7da6f6d
+    license: Apache-2.0
+  - knowledge_id: sas-references-visual-review-workflow.md
+    path: references/visual_review_workflow.md
+    content_hash: 463c43391f781ce60236632d88238f15976255d20fb4f3dbad9c09138fe24a28
+    license: Apache-2.0
+  - knowledge_id: sas-scripts-pdf-to-images.py
+    path: scripts/pdf_to_images.py
+    content_hash: 18f4b0326d92800313cea05bb3af153e9e7241ebe43dade30d0fbe418eac4f3b
+    license: Apache-2.0
+  - knowledge_id: sas-scripts-slides-to-pdf.py
+    path: scripts/slides_to_pdf.py
+    content_hash: 329a45ee889428f8918c2d110718eafc73ba7a338d4d8ee555c870ac86859079
+    license: Apache-2.0
+  - knowledge_id: sas-scripts-validate-presentation.py
+    path: scripts/validate_presentation.py
+    content_hash: 86e552d70feda917fe6b76f0eeb5dc9ffd45cc69d968bae9e720ab4ee46b969a
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/SKILL.md
+      sha256: 440966397cc31e725edc36de4730b58297990f0ab729eb326cb9103d4ca8b2e6
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/assets/beamer_template_conference.tex
+      sha256: e4049409c316a50c73da7c87c2818a7a2d62878d0bcebef316abe95d86ab132c
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/assets/beamer_template_defense.tex
+      sha256: ce44a4933a70a9267514eb1950bfd64b6c18299c7a96cf5955b78778ce9a7d3e
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/assets/beamer_template_seminar.tex
+      sha256: 94f19ea1919edb822c57c699e1611f87e00650caab7aee53edcf94d776ab5cf7
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/assets/powerpoint_design_guide.md
+      sha256: cc02bbaee20f194abee2c84b5a942efcad47c93ffa7fb55070c16715480c2d48
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/assets/timing_guidelines.md
+      sha256: 0e85b73c1997000ed0c0efa0807536d3d9cf024bf043068d6564d44351e0ba83
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/references/beamer_guide.md
+      sha256: cb8a3c500ab9a3841c0e8559ad5894a4dad80fa3193589f28f5ca91e46d1c97b
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/references/data_visualization_slides.md
+      sha256: c79d5d9552d2f132dd3be1beb230c5c0da4f3f27f1ac04f7f6e571204bbab9ba
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/references/presentation_structure.md
+      sha256: deafc171b8951a43c9a8ae081158cab72fdb8dc4abc1334257ad594f454665f2
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/references/slide_design_principles.md
+      sha256: ee2d8f1b3ae0a849ee49e3e4d334c64ee3a1a79aee5ca28dbf43bbec822d98fa
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/references/talk_types_guide.md
+      sha256: 60f374e4e8d361e36a4c738c1e9e56b80470927e28f59e5c9f715343d7da6f6d
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/references/visual_review_workflow.md
+      sha256: 463c43391f781ce60236632d88238f15976255d20fb4f3dbad9c09138fe24a28
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/scripts/pdf_to_images.py
+      sha256: 18f4b0326d92800313cea05bb3af153e9e7241ebe43dade30d0fbe418eac4f3b
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/scripts/slides_to_pdf.py
+      sha256: 329a45ee889428f8918c2d110718eafc73ba7a338d4d8ee555c870ac86859079
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/scripts/validate_presentation.py
+      sha256: 86e552d70feda917fe6b76f0eeb5dc9ffd45cc69d968bae9e720ab4ee46b969a
+license: Apache-2.0

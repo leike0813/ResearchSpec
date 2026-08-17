@@ -1,0 +1,77 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-benchling-integration
+title: Benchling Integration
+description: Benchling Python SDK and REST API integration for registry
+  entities, inventory, ELN entries, workflows, Benchling Apps, and Data
+  Warehouse queries. Use when automating lab data with benchling-sdk or the v2
+  API.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-references-api-endpoints.md
+    path: references/api_endpoints.md
+    content_hash: 4a5c8565551089485ea6033554b8c8427766b752bf987cafc8d3582c19c47808
+    license: Apache-2.0
+  - knowledge_id: sas-references-authentication.md
+    path: references/authentication.md
+    content_hash: 277a3fffdd9ec7e5c767168ef6b2af040229015f451895e96f57cfa4d2493d39
+    license: Apache-2.0
+  - knowledge_id: sas-references-eventbridge.md
+    path: references/eventbridge.md
+    content_hash: 6e89cfdcc0c150a0bf466630f7d0ea7da3e1734607afdb08f9df5bf00b774606
+    license: Apache-2.0
+  - knowledge_id: sas-references-sdk-reference.md
+    path: references/sdk_reference.md
+    content_hash: 8c382608201505fd448d4cabfc2541a662f892a53e3f78a9de9440d4d7c6a026
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-benchling-integration/SKILL.md
+      sha256: c0ec30fd340b46a97c53e08464c2899b2155c7b7f39c8a9f1e6617178ebe41ce
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-benchling-integration/references/api_endpoints.md
+      sha256: 4a5c8565551089485ea6033554b8c8427766b752bf987cafc8d3582c19c47808
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-benchling-integration/references/authentication.md
+      sha256: 277a3fffdd9ec7e5c767168ef6b2af040229015f451895e96f57cfa4d2493d39
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-benchling-integration/references/eventbridge.md
+      sha256: 6e89cfdcc0c150a0bf466630f7d0ea7da3e1734607afdb08f9df5bf00b774606
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-benchling-integration/references/sdk_reference.md
+      sha256: 8c382608201505fd448d4cabfc2541a662f892a53e3f78a9de9440d4d7c6a026
+license: Apache-2.0

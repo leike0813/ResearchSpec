@@ -1,0 +1,78 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-peptide-target-deorphanization
+title: Peptide Target Deorphanization
+description: Find the real protein target(s) of a peptide from its sequence —
+  peptide target deorphanization / off-target identification, for ANY target
+  class (GPCR, ion channel, protease, cytokine/growth-factor receptor, enzyme,
+  integrin), not only GPCRs. Use when a peptide has a phenotype but does not
+  bind its hypothesized target, when a peptide binds a target in one species or
+  assay but not another, or to screen candidate targets for an orphan peptide. A
+  target-class router steers a multi-route keyless pipeline (PROSITE/ELM motif,
+  BLAST homology, HGNC/InterPro/GPCRdb/GtoPdb target-family enumeration,
+  OpenTargets phenotype anchor, EnsemblCompara/Alliance cross-species
+  reconciliation) plus optional NVIDIA-NIM co-folding (Boltz2,
+  AlphaFold2-Multimer, OpenFold3) for structural confirmation.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-references-phases.md
+    path: references/phases.md
+    content_hash: ace193b813a94d19cff4c5ba8c88bb008360ad6ca91ac17a95295dbe19a5dc06
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-cofold-screen.py
+    path: scripts/cofold_screen.py
+    content_hash: 8673e751f84f6b2da26dc42536480fb601464c8f4a0b987b33f8135e84af2324
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-deorphanize-peptide.py
+    path: scripts/deorphanize_peptide.py
+    content_hash: fdc566b5e081b327ab9e399ce83b12e2c51c7c72f7d927ac0e3c4e727707bf02
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-peptide-target-deorphanization/SKILL.md
+      sha256: 3a1457f0b46ba9ddc52b60695cdee3c26606ea8bd895b20a116cf7933ce8ffca
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-peptide-target-deorphanization/references/phases.md
+      sha256: ace193b813a94d19cff4c5ba8c88bb008360ad6ca91ac17a95295dbe19a5dc06
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-peptide-target-deorphanization/scripts/cofold_screen.py
+      sha256: 8673e751f84f6b2da26dc42536480fb601464c8f4a0b987b33f8135e84af2324
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-peptide-target-deorphanization/scripts/deorphanize_peptide.py
+      sha256: fdc566b5e081b327ab9e399ce83b12e2c51c7c72f7d927ac0e3c4e727707bf02
+license: Apache-2.0

@@ -1,0 +1,60 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-inorganic-physical-chemistry
+title: Inorganic & Physical Chemistry
+description: Inorganic chemistry, physical chemistry, and materials science —
+  crystal structures, coordination chemistry, lattice parameters, thermodynamic
+  properties, electronic structure. Use for unit cell volume calculations,
+  coordination geometry, materials property estimation, and inorganic-mechanism
+  reasoning. Complementary to tooluniverse-organic-chemistry.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-scripts-equilibrium-solver.py
+    path: scripts/equilibrium_solver.py
+    content_hash: be64607ccac5b292aad81b56784ba7f1dd506f7b63940e972e8faafe12fa604b
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-inorganic-physical-chemistry/SKILL.md
+      sha256: 00e42a3fb996109096a2fe6b8c0d3ce11711567eeb58c7fc69e596dcb6cbfa90
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-inorganic-physical-chemistry/scripts/equilibrium_solver.py
+      sha256: be64607ccac5b292aad81b56784ba7f1dd506f7b63940e972e8faafe12fa604b
+license: Apache-2.0

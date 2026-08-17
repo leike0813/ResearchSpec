@@ -1,0 +1,53 @@
+schema_version: "1"
+capability_id: plugin-education-agent-skills-teach-back-evaluator
+title: Teach-Back Evaluator
+description: The learner teaches the concept to the AI, which plays a curious
+  novice peer and identifies gaps through authentic questions. Use when the
+  learner wants to test their understanding — teaching forces a different kind
+  of organisation than studying.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: education-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_education_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs: []
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-teach-back-evaluator/SKILL.md
+      sha256: 80c825b2dc48f720e30d0f773381327a10f0191d9868fcb63beb97950d72f49e
+license: Apache-2.0

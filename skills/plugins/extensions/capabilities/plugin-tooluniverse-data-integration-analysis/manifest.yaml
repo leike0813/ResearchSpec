@@ -1,0 +1,54 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-data-integration-analysis
+title: Data Integration Analysis
+description: Integrate computed statistical results (DEGs, GWAS hits,
+  associations) with biological context from ToolUniverse databases (UniProt,
+  GO, Reactome, ClinVar, OpenTargets). Use for adding gene
+  function/pathway/disease annotations to a result list, building biological
+  narrative around statistical findings, and going beyond p-values to mechanism.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs: []
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-data-integration-analysis/SKILL.md
+      sha256: 874e27ead24ea136219328e5cc89c458a19c81ad22e34af5c5dc67368307662a
+license: Apache-2.0

@@ -1,0 +1,60 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-gwas-study-explorer
+title: GWAS Study Deep Dive & Meta-Analysis
+description: Compare GWAS studies, perform meta-analyses across cohorts, and
+  assess signal replication. Uses GWAS Catalog metadata, study-level statistics,
+  and cross-cohort comparison. Use for evaluating GWAS reproducibility for a
+  trait, meta-analysis sample size and effect-size aggregation, and detecting
+  study heterogeneity (population, design, ancestry).
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-python-implementation.py
+    path: python_implementation.py
+    content_hash: da3d074e2de691d30577460e41f783d071780096d99f1da790450deefd83eb38
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-gwas-study-explorer/SKILL.md
+      sha256: 98e39dcf67cfcde0717c31ef18cf782b0c68acab1ecaabe143c2eb44f855022c
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-gwas-study-explorer/python_implementation.py
+      sha256: da3d074e2de691d30577460e41f783d071780096d99f1da790450deefd83eb38
+license: Apache-2.0

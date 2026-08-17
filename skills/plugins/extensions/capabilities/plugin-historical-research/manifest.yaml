@@ -1,0 +1,76 @@
+schema_version: "1"
+capability_id: plugin-historical-research
+title: Historical Research
+description: Run a resumable, gate-driven historical inquiry with explicit
+  source-layer applicability, evidence, conflicts, limitations, and
+  deterministic reports for one graph node.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: historical-research-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_historical_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,gate_trace,evidence_ledger,conflicts,limitations,synthesis
+knowledge_refs:
+  - knowledge_id: research-runtime-tool
+    path: tools/research_runtime.py
+    content_hash: 1bf8b39abf4fab11a0e2cd13df594a7e71a10721c69d1b81158a25a5286a6f1c
+    license: Apache-2.0
+  - knowledge_id: historical-support
+    path: tools/historical_support.py
+    content_hash: f46f1da49ee21d8e0586bc953ab0e7373802cbf631e0821437628d57ef158c91
+    license: Apache-2.0
+  - knowledge_id: stage-record-reference
+    path: references/stage-records.md
+    content_hash: 82639590d7d5f1062ea497005136e5b6d6fb950a44e21f04f7a2379ac5f9fe3b
+    license: Apache-2.0
+  - knowledge_id: evidence-conflict-reference
+    path: references/evidence-and-conflict-cases.md
+    content_hash: f91b50b40f23f4c15a3a38003d9eee8f59b1756ea9dc636db42b19b8748886b5
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/histagent/histagent-historical-research/SKILL.md
+      sha256: f3a947459670d01fba54975a7ec9e841dd1ee379d1a37ded59ed739d2d84590b
+    - path: skills/plugins/vendors/histagent/histagent-historical-research/scripts/research_runtime.py
+      sha256: 1bf8b39abf4fab11a0e2cd13df594a7e71a10721c69d1b81158a25a5286a6f1c
+    - path: skills/plugins/vendors/histagent/histagent-historical-research/lib/historical_support.py
+      sha256: f46f1da49ee21d8e0586bc953ab0e7373802cbf631e0821437628d57ef158c91
+    - path: skills/plugins/vendors/histagent/histagent-historical-research/references/stage-records.md
+      sha256: 82639590d7d5f1062ea497005136e5b6d6fb950a44e21f04f7a2379ac5f9fe3b
+    - path: skills/plugins/vendors/histagent/histagent-historical-research/references/evidence-and-conflict-cases.md
+      sha256: f91b50b40f23f4c15a3a38003d9eee8f59b1756ea9dc636db42b19b8748886b5
+license: Apache-2.0

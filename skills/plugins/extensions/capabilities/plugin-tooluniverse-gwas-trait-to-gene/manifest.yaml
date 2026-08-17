@@ -1,0 +1,60 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-gwas-trait-to-gene
+title: GWAS Trait-to-Gene Discovery
+description: Discover causal genes for diseases/traits from GWAS data using Open
+  Targets L2G (locus-to-gene) scoring — integrates eQTL, chromatin interaction,
+  and distance evidence. Use for trait-to-gene mapping, drug-target hypothesis
+  generation from GWAS, and replacing the 'nearest gene' heuristic with
+  multi-evidence L2G scores.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-python-implementation.py
+    path: python_implementation.py
+    content_hash: 94ad4982be5eb2a2df004901a9560bf74cf8b0b8f48a5b0833acf21d911ca02e
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-gwas-trait-to-gene/SKILL.md
+      sha256: 22911491be90491f50766034a7af79a6ca2b2a8a1d3ec4ef1b0c2ed1e4f2d3c1
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-gwas-trait-to-gene/python_implementation.py
+      sha256: 94ad4982be5eb2a2df004901a9560bf74cf8b0b8f48a5b0833acf21d911ca02e
+license: Apache-2.0

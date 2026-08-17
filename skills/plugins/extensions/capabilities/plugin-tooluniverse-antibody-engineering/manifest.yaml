@@ -1,0 +1,98 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-antibody-engineering
+title: Antibody Engineering & Optimization
+description: Therapeutic antibody engineering and optimization,
+  lead-to-clinical-candidate. Covers sequence humanization (germline alignment,
+  framework retention), affinity maturation, developability (aggregation,
+  stability, PTMs), structure modeling (AlphaFold/PDB CDR analysis),
+  immunogenicity prediction, and manufacturing feasibility. Use for
+  biologic-drug optimization, mAb design review, biosimilar engineering, and
+  clinical-precedent comparison.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-checklists.md
+    path: CHECKLISTS.md
+    content_hash: 9ab81d6d8b48680cf6d8c3b984f78f7fb43577f818b42912c616aea4da687a28
+    license: Apache-2.0
+  - knowledge_id: tu-examples.md
+    path: EXAMPLES.md
+    content_hash: 985038442dbf69a6b2885b8396ae5b9ddc5398794565165ece9305faaef5aba4
+    license: Apache-2.0
+  - knowledge_id: tu-manufacturing.md
+    path: MANUFACTURING.md
+    content_hash: c190ae8f28459aacf4df61ad84461a17b96611ccdd9e31f83b8cdc8ed1d48b02
+    license: Apache-2.0
+  - knowledge_id: tu-quick-start.md
+    path: QUICK_START.md
+    content_hash: 10bc68686381f906fe65ea675ce1dc37ac9a4c8e6fba969bc1098b0c50576153
+    license: Apache-2.0
+  - knowledge_id: tu-report-template.md
+    path: REPORT_TEMPLATE.md
+    content_hash: 28a70c9f6e1e570d7c12bd019ca51979a1c1e02d6935420eb8d47a609d3be7ae
+    license: Apache-2.0
+  - knowledge_id: tu-workflow-details.md
+    path: WORKFLOW_DETAILS.md
+    content_hash: 5f48ba74a1558df0a97bb60647df97952c4717b96ecdb8d551731350333be78f
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-developability.py
+    path: scripts/developability.py
+    content_hash: efc2489ee6c1e105478b965e92416f2188a0203144953ace7cf83088313f2a2e
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-antibody-engineering/SKILL.md
+      sha256: ae073a3bbd10b600d1750e3a076db3f6cf2b4ec748074e147c31183bb3e7cd0a
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-antibody-engineering/CHECKLISTS.md
+      sha256: 9ab81d6d8b48680cf6d8c3b984f78f7fb43577f818b42912c616aea4da687a28
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-antibody-engineering/EXAMPLES.md
+      sha256: 985038442dbf69a6b2885b8396ae5b9ddc5398794565165ece9305faaef5aba4
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-antibody-engineering/MANUFACTURING.md
+      sha256: c190ae8f28459aacf4df61ad84461a17b96611ccdd9e31f83b8cdc8ed1d48b02
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-antibody-engineering/QUICK_START.md
+      sha256: 10bc68686381f906fe65ea675ce1dc37ac9a4c8e6fba969bc1098b0c50576153
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-antibody-engineering/REPORT_TEMPLATE.md
+      sha256: 28a70c9f6e1e570d7c12bd019ca51979a1c1e02d6935420eb8d47a609d3be7ae
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-antibody-engineering/WORKFLOW_DETAILS.md
+      sha256: 5f48ba74a1558df0a97bb60647df97952c4717b96ecdb8d551731350333be78f
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-antibody-engineering/scripts/developability.py
+      sha256: efc2489ee6c1e105478b965e92416f2188a0203144953ace7cf83088313f2a2e
+license: Apache-2.0

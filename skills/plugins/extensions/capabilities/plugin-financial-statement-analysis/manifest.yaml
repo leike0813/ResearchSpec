@@ -36,9 +36,11 @@ validators:
     runner:
       argv0: python3
       args_template:
-        - validators/validate_statement_brief.py
+        - validators/validate_financial_brief.py
         - --submission
         - "{outputs_json}"
+        - --required
+        - scope,source_ledger,normalized_statements,metrics,conclusions
 knowledge_refs:
   - knowledge_id: statement-tool
     path: tools/statements.py
@@ -52,6 +54,8 @@ gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
+    - path: skills/plugins/vendors/finrobot/financial-research-statement-analysis/SKILL.md
+      sha256: d164aa203ea0e3a6e37c9c1b87f6d0f5be3c5cf7f728820576adf15c710cb11e
     - path: skills/plugins/vendors/finrobot/financial-research-statement-analysis/scripts/statements.py
       sha256: fe06b8a206d189d35983e720407c39fdb06022e600662e74ad62b02994aed388
     - path: skills/plugins/vendors/finrobot/financial-research-statement-analysis/lib/financial_support.py

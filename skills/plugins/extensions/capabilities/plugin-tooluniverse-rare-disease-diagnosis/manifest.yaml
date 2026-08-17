@@ -1,0 +1,90 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-rare-disease-diagnosis
+title: Rare Disease Diagnosis Advisor
+description: Rare disease differential diagnosis from patient phenotype — HPO
+  term matching to candidate diseases (Orphanet, OMIM), gene panel
+  prioritization, ACMG variant interpretation, and structure-based variant
+  analysis. Use for diagnostic odyssey assistance, phenotype-to-disease ranking,
+  and genetic-counseling differential generation.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-checklist.md
+    path: CHECKLIST.md
+    content_hash: 555912dda5fc56939c6d272cf8c2761dfba510a0f242fa78f48e310c26afeb44
+    license: Apache-2.0
+  - knowledge_id: tu-diagnostic-workflow.md
+    path: DIAGNOSTIC_WORKFLOW.md
+    content_hash: 2153e0747c3ac575d7fa0b9d90cae9b6da2c9dad1a142f5762ab7470d94beaab
+    license: Apache-2.0
+  - knowledge_id: tu-examples.md
+    path: EXAMPLES.md
+    content_hash: 81b51f3c61a9e0b991eba8e34d5ca590a244f776d8939dced79c3167004921c9
+    license: Apache-2.0
+  - knowledge_id: tu-report-template.md
+    path: REPORT_TEMPLATE.md
+    content_hash: 76585f3cb12d6bf02975c60845aa35f801dcfa959625d14ccf9929ea40755d19
+    license: Apache-2.0
+  - knowledge_id: tu-tools-reference.md
+    path: TOOLS_REFERENCE.md
+    content_hash: 117796249c4335d218d1b3accc7dfa897e1c717acd2d05a6d52353b3bbb3977b
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-clinical-patterns.py
+    path: scripts/clinical_patterns.py
+    content_hash: 6c1893fa875a5a89d2478a9782e21e8aeda0c6e332e5ee49a282950186d549c6
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-rare-disease-diagnosis/SKILL.md
+      sha256: 773c981570b709c65426ad991de5131c82a079245848781953753b440816fff6
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-rare-disease-diagnosis/CHECKLIST.md
+      sha256: 555912dda5fc56939c6d272cf8c2761dfba510a0f242fa78f48e310c26afeb44
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-rare-disease-diagnosis/DIAGNOSTIC_WORKFLOW.md
+      sha256: 2153e0747c3ac575d7fa0b9d90cae9b6da2c9dad1a142f5762ab7470d94beaab
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-rare-disease-diagnosis/EXAMPLES.md
+      sha256: 81b51f3c61a9e0b991eba8e34d5ca590a244f776d8939dced79c3167004921c9
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-rare-disease-diagnosis/REPORT_TEMPLATE.md
+      sha256: 76585f3cb12d6bf02975c60845aa35f801dcfa959625d14ccf9929ea40755d19
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-rare-disease-diagnosis/TOOLS_REFERENCE.md
+      sha256: 117796249c4335d218d1b3accc7dfa897e1c717acd2d05a6d52353b3bbb3977b
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-rare-disease-diagnosis/scripts/clinical_patterns.py
+      sha256: 6c1893fa875a5a89d2478a9782e21e8aeda0c6e332e5ee49a282950186d549c6
+license: Apache-2.0

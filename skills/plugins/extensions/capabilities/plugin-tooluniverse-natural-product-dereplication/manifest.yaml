@@ -1,0 +1,61 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-natural-product-dereplication
+title: Natural Product Dereplication & Chemotaxonomy
+description: Dereplicate a putative natural product and assign its chemical
+  taxonomy. Use to answer "is [compound] a known natural product", "what
+  microbe/organism produces [compound]", "what chemical class is [compound]",
+  "dereplicate this metabolite (by formula/exact mass/InChIKey/SMILES)", or
+  "classify this molecule into ChemOnt". Searches NPAtlas for known microbial
+  natural products (producing organism + literature reference), assigns the
+  ChemOnt kingdom→superclass→class→subclass hierarchy via ClassyFire, resolves
+  systematic IUPAC names to structure via OPSIN, and cross-references identity
+  in PubChem. NOT for general drug/compound identity or ADMET (use
+  tooluniverse-chemical-compound-retrieval /
+  tooluniverse-small-molecule-discovery) and NOT for metabolomics
+  pathway/enrichment analysis (use tooluniverse-metabolomics skills).
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs: []
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-natural-product-dereplication/SKILL.md
+      sha256: 7b16e9c9c92e7ce8eb821525a7584ac189e9e48dd85ba203d5c9518b55f7d1d7
+license: Apache-2.0

@@ -1,0 +1,108 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-gene-enrichment
+title: Gene Enrichment and Pathway Analysis
+description: Gene-set enrichment analysis — GO (Biological Process, Molecular
+  Function, Cellular Component), KEGG, Reactome pathway enrichment via
+  clusterProfiler, gseapy, ORA, GSEA. Use for interpreting DEG lists, screen hit
+  lists, or any gene-list-to-pathways query. Includes simplify-cutoff handling
+  and union-vs-total denominator conventions for percent-DE questions.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-references-enrichr-guide.md
+    path: references/enrichr_guide.md
+    content_hash: 18841df9d7bbaf568f75863661156b88c71b25729fd1e9e54fc388cb5fc09494
+    license: Apache-2.0
+  - knowledge_id: tu-references-gsea-workflow.md
+    path: references/gsea_workflow.md
+    content_hash: a0d3edd12a034b0cccaf4c79028bd06ebc8defa12fce698850594824f1e00e0e
+    license: Apache-2.0
+  - knowledge_id: tu-references-ora-workflow.md
+    path: references/ora_workflow.md
+    content_hash: 58e808dc23396c7d2a3c0cf3975e48eb9a2fba9b22e441090b807472f51da215
+    license: Apache-2.0
+  - knowledge_id: tu-references-tool-parameters.md
+    path: references/tool_parameters.md
+    content_hash: 5f73a5d4d00694b1b342571dbbd8d19191931bae6fb6ad0aadc7898d6e56277a
+    license: Apache-2.0
+  - knowledge_id: tu-references-troubleshooting.md
+    path: references/troubleshooting.md
+    content_hash: f7e32b840b901ee1c95f0a059e803e156ebc441acf767ffbe8390be0d81173fd
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-condition-enrichment-screen.py
+    path: scripts/condition_enrichment_screen.py
+    content_hash: 929ced13889e34d7170331ad98f51031453b6b81773be5126477b84f6a18fddc
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-enrichgo-runner.py
+    path: scripts/enrichgo_runner.py
+    content_hash: c88a15a632828ebd3f008fd102e6e23765a53dddb5d6b56ec4ccdef133a2153a
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-format-enrichment-output.py
+    path: scripts/format_enrichment_output.py
+    content_hash: 57822d2048c1f3ef3a2798ccf5747d5bbd531bf52fc93fc2b5cef3f06dc90699
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-gseapy-enrichment-runner.py
+    path: scripts/gseapy_enrichment_runner.py
+    content_hash: 422bd959d449c2d068138266da21d6457b1a16021de357e517a08796dbc41e24
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/SKILL.md
+      sha256: fbe9b6f5b158c7c521471f63a41c34b91fcf3bbcfe323002db27057f47f35f05
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/references/enrichr_guide.md
+      sha256: 18841df9d7bbaf568f75863661156b88c71b25729fd1e9e54fc388cb5fc09494
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/references/gsea_workflow.md
+      sha256: a0d3edd12a034b0cccaf4c79028bd06ebc8defa12fce698850594824f1e00e0e
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/references/ora_workflow.md
+      sha256: 58e808dc23396c7d2a3c0cf3975e48eb9a2fba9b22e441090b807472f51da215
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/references/tool_parameters.md
+      sha256: 5f73a5d4d00694b1b342571dbbd8d19191931bae6fb6ad0aadc7898d6e56277a
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/references/troubleshooting.md
+      sha256: f7e32b840b901ee1c95f0a059e803e156ebc441acf767ffbe8390be0d81173fd
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/scripts/condition_enrichment_screen.py
+      sha256: 929ced13889e34d7170331ad98f51031453b6b81773be5126477b84f6a18fddc
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/scripts/enrichgo_runner.py
+      sha256: c88a15a632828ebd3f008fd102e6e23765a53dddb5d6b56ec4ccdef133a2153a
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/scripts/format_enrichment_output.py
+      sha256: 57822d2048c1f3ef3a2798ccf5747d5bbd531bf52fc93fc2b5cef3f06dc90699
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/scripts/gseapy_enrichment_runner.py
+      sha256: 422bd959d449c2d068138266da21d6457b1a16021de357e517a08796dbc41e24
+license: Apache-2.0

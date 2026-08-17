@@ -38,3 +38,41 @@ pnpm tooluniverse:idempotence
 `convert` refuses unexplained generated drift unless `--force` is used after review, then refreshes the isolated bundle and invokes central assembly. It stages against all published vendors and commits only ToolUniverse-owned output plus the registry. `check` validates the 130-Skill vendor output and assembled 218-domain registry without owning the evolving public-domain count. `idempotence` compares the isolated outputs and combined registry. None of these commands executes upstream Skill scripts or installs their dependencies.
 
 When updating ToolUniverse, first pin the new submodule revision and open a new audit. Reconcile every inventory, resource, frontmatter, dependency, safety, license, Field mapping, and domain-membership change before updating converter inputs.
+
+## Extension mode packages
+
+All 130 reviewed production Skills are also projected one-to-one into the
+graph-native extension registry under `skills/plugins/extensions/` as
+`plugin-tooluniverse-<reviewed-skill-suffix>` capabilities with same-named
+one-node graph profiles. The generator
+`scripts/generate-tooluniverse-extensions.mjs` produces the packages from the
+reviewed vendor bundle and the source-neutral domain catalog.
+
+- Packages with reviewed `.py` resources are `execution_type: mixed`; all
+  others are `execution_type: llm`.
+- All 348 reviewed non-standard resources keep their original relative paths
+  and are bound as SHA-256 knowledge refs under Apache-2.0.
+- Every package declares `validate_tooluniverse_brief.py` with the same six
+  evidence-bearing `research_brief` fields.
+- The 30 ToolUniverse domain assignments are derived directly from the domain
+  catalog and mirrored into the extension registry.
+
+Install, update, status, and check read manifests and hashes only. Only
+`advance` executes the declared `python3` validator. ResearchSpec never imports
+or executes packaged scripts or installs their dependencies.
+
+## Maintenance suite
+
+```bash
+pnpm tooluniverse-maintenance:artifacts
+pnpm tooluniverse-maintenance:records
+pnpm tooluniverse-maintenance:baseline
+pnpm tooluniverse-maintenance:check
+```
+
+The suite anchors at `audits/tooluniverse/v1.3.1`, binds the immutable skill
+audit, the vendor bundle, the extension registry subset, package/profile trees,
+the maintenance Skill, the maintenance catalog, and records 01–05 in
+`manifest.json`. `artifacts` regenerates the 130 packages before synchronizing
+reviewed resources. The Agent semantic review is mandatory and `baseline`
+refuses an anchor whose `05-semantic-review.md` is not completed.

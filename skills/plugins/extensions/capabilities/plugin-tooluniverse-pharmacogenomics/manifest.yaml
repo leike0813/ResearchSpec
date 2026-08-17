@@ -1,0 +1,54 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-pharmacogenomics
+title: Pharmacogenomics (PGx) Research Skill
+description: Pharmacogenomics (PGx) research — drug-gene interactions (CPIC,
+  PharmGKB), CPIC dosing guidelines, variant-drug-response associations,
+  ethnic-allele-frequency considerations, and metabolizer-status scoring. Use
+  for PGx-informed dosing recommendations, CYP/HLA pharmacogenomic allele
+  interpretation, and clinically-actionable PGx report generation.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs: []
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-pharmacogenomics/SKILL.md
+      sha256: ac905bf5ae60c1f488a48e36dd83a89e79ee4cae232ee9cd181086214a05cf9e
+license: Apache-2.0

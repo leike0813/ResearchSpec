@@ -1,0 +1,56 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-aging-senescence
+title: Aging & Cellular Senescence Research
+description: Aging biology, cellular senescence, and longevity research. Covers
+  senescence markers (p16/CDKN2A, SASP, SA-beta-gal), aging hallmarks, senolytic
+  drug discovery (dasatinib+quercetin, fisetin, navitoclax), epigenetic clocks,
+  telomere biology, and longevity GWAS. Use for senescence-pathway analysis,
+  age-related disease genetics, senolytic-target discovery, and
+  centenarian-genetics queries. Distinguishes correlative vs causal evidence
+  (knockout, intervention).
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs: []
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-aging-senescence/SKILL.md
+      sha256: 2676ca662f225391c80302608ce4e116a235e6445fd1c5d3b32f85e7be79e1c3
+license: Apache-2.0

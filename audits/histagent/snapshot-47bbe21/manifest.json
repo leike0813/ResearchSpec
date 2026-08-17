@@ -1,0 +1,238 @@
+{
+  "schema_version": "1",
+  "vendor_id": "histagent",
+  "anchor_id": "snapshot-47bbe21",
+  "created_at": "2026-08-17T00:00:00+08:00",
+  "upstream": {
+    "root": "vendor/histagent",
+    "release": "snapshot-47bbe21",
+    "revision": "47bbe21dc81618489f5d5929358032883a3fe448",
+    "content_file_count": 120,
+    "tree_sha256": "ce31c1c55e8cb6756eb77eb582525e4ce03a9b15b7a61852ce3d5141c6ba26bc",
+    "audit_path": "audits/histagent/snapshot-47bbe21/capability-audit.json",
+    "audit_sha256": "0f0de44a13204fbbc139ec78b6f9320c4078a786e700f1f5bdcda1688cf36269",
+    "audit_report_path": "audits/histagent/snapshot-47bbe21/report.md",
+    "audit_report_sha256": "2f7f59ec57d92b745d0ea95c319e89ff67ff4fc02da40e3c6ac8e140133660ee"
+  },
+  "advisory": {
+    "root": "skills/plugins/vendors/histagent",
+    "file_count": 24,
+    "tree_sha256": "67a2333b593dc1317c84a768b9f33fa381e065783f7918dfeece32f4990d0829",
+    "raw_skill_count": 3,
+    "raw_skills": [
+      {
+        "skill_id": "histagent-historical-research",
+        "skill_sha256": "f3a947459670d01fba54975a7ec9e841dd1ee379d1a37ded59ed739d2d84590b",
+        "files": 8,
+        "tree_sha256": "7211fd4c513b9fc9bdd35a3620c68a1fccdebc1bab988955168e94b8f9ffef6d"
+      },
+      {
+        "skill_id": "histagent-historical-source-analysis",
+        "skill_sha256": "f021d66c0e6c361bc62a1904d0f570644de9e6959fd7fac9e8645c0208befd60",
+        "files": 8,
+        "tree_sha256": "641810100efb2e10d2f2cc5bc384bdd1442519218b5b5764e30d0c627f98a60a"
+      },
+      {
+        "skill_id": "histagent-historical-source-identification",
+        "skill_sha256": "cff2a73ed49816f9d7093a7062f4dee8037bd319e1239d344614500a1ca229b8",
+        "files": 8,
+        "tree_sha256": "a853e2001f9379db60e7e2119bbee3390970f573ad96a2f25504628fb046e60e"
+      }
+    ]
+  },
+  "extension": {
+    "root": "skills/plugins/extensions",
+    "registry_version": "0.7.0",
+    "capability_count": 3,
+    "profile_count": 3,
+    "mixed_count": 3,
+    "llm_count": 0,
+    "script_validator_count": 3,
+    "capability_ids": [
+      "plugin-historical-research",
+      "plugin-historical-source-analysis",
+      "plugin-historical-source-identification"
+    ],
+    "registry_subset_sha256": "65331b9f4ec39c971e33380ea095525f6789f6c8f2150aaeb5b869336fb7f527",
+    "packages_tree_sha256": "4475e5e47b3e3db28251bc3ff375275bf3d8fed5aff5ce102f6c72ec715f2507",
+    "profiles_tree_sha256": "67ff211f89c53f67ac273af1a47a125108a2584e53b750258b23b13514815a31",
+    "rows": [
+      {
+        "capability_id": "plugin-historical-research",
+        "raw_skill_id": "histagent-historical-research",
+        "execution_type": "mixed",
+        "class": "analysis",
+        "node_kind": "producer",
+        "maturity": "operational",
+        "gate_policy": "advisory",
+        "inputs": 1,
+        "outputs": 1,
+        "knowledge_refs": 4,
+        "validators": 2,
+        "script_validator": "historical-research-brief-validator",
+        "required_brief_fields": [
+          "scope",
+          "source_ledger",
+          "gate_trace",
+          "evidence_ledger",
+          "conflicts",
+          "limitations",
+          "synthesis"
+        ],
+        "required_ok": true,
+        "package_tree_sha256": "f67b1df818b9fab28bfa1191d78c93c6c3176bffb0ca91f0ee08f1f61802397e",
+        "profile_sha256": "9de5e5d7a7d5aa8bd9048adda7aef9034afe0245bab503813d6feafc99568514",
+        "manifest_sha256": "5200bb7ac8b4415f008106b27efd0da5d48b3b62f24239c69caeef4d12dde01d",
+        "files": 7,
+        "tool_files": [
+          {
+            "source": "skills/plugins/vendors/histagent/histagent-historical-research/scripts/research_runtime.py",
+            "target": "skills/plugins/extensions/capabilities/plugin-historical-research/tools/research_runtime.py",
+            "sha256": "1bf8b39abf4fab11a0e2cd13df594a7e71a10721c69d1b81158a25a5286a6f1c",
+            "byte_identical": true
+          },
+          {
+            "source": "skills/plugins/vendors/histagent/histagent-historical-research/lib/historical_support.py",
+            "target": "skills/plugins/extensions/capabilities/plugin-historical-research/tools/historical_support.py",
+            "sha256": "f46f1da49ee21d8e0586bc953ab0e7373802cbf631e0821437628d57ef158c91",
+            "byte_identical": true
+          },
+          {
+            "source": "skills/plugins/vendors/histagent/histagent-historical-research/references/stage-records.md",
+            "target": "skills/plugins/extensions/capabilities/plugin-historical-research/references/stage-records.md",
+            "sha256": "82639590d7d5f1062ea497005136e5b6d6fb950a44e21f04f7a2379ac5f9fe3b",
+            "byte_identical": true
+          },
+          {
+            "source": "skills/plugins/vendors/histagent/histagent-historical-research/references/evidence-and-conflict-cases.md",
+            "target": "skills/plugins/extensions/capabilities/plugin-historical-research/references/evidence-and-conflict-cases.md",
+            "sha256": "f91b50b40f23f4c15a3a38003d9eee8f59b1756ea9dc636db42b19b8748886b5",
+            "byte_identical": true
+          }
+        ]
+      },
+      {
+        "capability_id": "plugin-historical-source-analysis",
+        "raw_skill_id": "histagent-historical-source-analysis",
+        "execution_type": "mixed",
+        "class": "analysis",
+        "node_kind": "producer",
+        "maturity": "operational",
+        "gate_policy": "advisory",
+        "inputs": 1,
+        "outputs": 1,
+        "knowledge_refs": 4,
+        "validators": 2,
+        "script_validator": "historical-source-analysis-brief-validator",
+        "required_brief_fields": [
+          "scope",
+          "source_ledger",
+          "layer_inventory",
+          "operation_receipts",
+          "validation_results",
+          "conclusions"
+        ],
+        "required_ok": true,
+        "package_tree_sha256": "2c04c0c5ccba9284a406e572608bd37ff06d2358c8dda476cb0b2254969c628d",
+        "profile_sha256": "bee9383586e32c2d2d986a8ab91a43b4f835e79b500cb74eeaf1d34f15c80098",
+        "manifest_sha256": "b0224e3b28a5d1eb1a13a9afd2367c6675477db4d4d48cdaca81a2aa3f599eae",
+        "files": 7,
+        "tool_files": [
+          {
+            "source": "skills/plugins/vendors/histagent/histagent-historical-source-analysis/scripts/analyze_source.py",
+            "target": "skills/plugins/extensions/capabilities/plugin-historical-source-analysis/tools/analyze_source.py",
+            "sha256": "7a4355ebd86dac2882b4e39ffa89cc468753a3fedaa3faf1e81a7162a2245e3a",
+            "byte_identical": true
+          },
+          {
+            "source": "skills/plugins/vendors/histagent/histagent-historical-source-analysis/lib/historical_support.py",
+            "target": "skills/plugins/extensions/capabilities/plugin-historical-source-analysis/tools/historical_support.py",
+            "sha256": "f46f1da49ee21d8e0586bc953ab0e7373802cbf631e0821437628d57ef158c91",
+            "byte_identical": true
+          },
+          {
+            "source": "skills/plugins/vendors/histagent/histagent-historical-source-analysis/references/adapters-and-formats.md",
+            "target": "skills/plugins/extensions/capabilities/plugin-historical-source-analysis/references/adapters-and-formats.md",
+            "sha256": "c8eb580edbbd66bd1c235cd2e37a6f85e127e6ad6a7dcfc6fb6ec75792302546",
+            "byte_identical": true
+          },
+          {
+            "source": "skills/plugins/vendors/histagent/histagent-historical-source-analysis/references/layer-and-collation-cases.md",
+            "target": "skills/plugins/extensions/capabilities/plugin-historical-source-analysis/references/layer-and-collation-cases.md",
+            "sha256": "f3553e4f04a8621676577d8f0fe65f1a199ba6450aa091f664a8455ef0f4b002",
+            "byte_identical": true
+          }
+        ]
+      },
+      {
+        "capability_id": "plugin-historical-source-identification",
+        "raw_skill_id": "histagent-historical-source-identification",
+        "execution_type": "mixed",
+        "class": "analysis",
+        "node_kind": "producer",
+        "maturity": "operational",
+        "gate_policy": "advisory",
+        "inputs": 1,
+        "outputs": 1,
+        "knowledge_refs": 4,
+        "validators": 2,
+        "script_validator": "historical-source-identification-brief-validator",
+        "required_brief_fields": [
+          "scope",
+          "query_ledger",
+          "candidate_ledger",
+          "retrieval_ledger",
+          "verification_decisions",
+          "conclusions"
+        ],
+        "required_ok": true,
+        "package_tree_sha256": "08efc81316ce58b016dc7c4724cb164a34b20f50cdd0738886d32ca60905e286",
+        "profile_sha256": "5eaa68ce89bb944cafbae6bf91ecef83ae4f2f7915c9bbaa1197aabe88fcda21",
+        "manifest_sha256": "021a7422a781cd8e6c1240952e7514dea1849f1b9b529ddd13d34bdd55058d75",
+        "files": 7,
+        "tool_files": [
+          {
+            "source": "skills/plugins/vendors/histagent/histagent-historical-source-identification/scripts/identify_sources.py",
+            "target": "skills/plugins/extensions/capabilities/plugin-historical-source-identification/tools/identify_sources.py",
+            "sha256": "dbaecbf5a5a23ad3fc869e60ea89457e17d54441f13a072a213756032f8c21b1",
+            "byte_identical": true
+          },
+          {
+            "source": "skills/plugins/vendors/histagent/histagent-historical-source-identification/lib/historical_support.py",
+            "target": "skills/plugins/extensions/capabilities/plugin-historical-source-identification/tools/historical_support.py",
+            "sha256": "f46f1da49ee21d8e0586bc953ab0e7373802cbf631e0821437628d57ef158c91",
+            "byte_identical": true
+          },
+          {
+            "source": "skills/plugins/vendors/histagent/histagent-historical-source-identification/references/provider-adapters.md",
+            "target": "skills/plugins/extensions/capabilities/plugin-historical-source-identification/references/provider-adapters.md",
+            "sha256": "4eda74f31eac16eea956be2a37e645428e48aca4d961e32f572f43c1957bd78f",
+            "byte_identical": true
+          },
+          {
+            "source": "skills/plugins/vendors/histagent/histagent-historical-source-identification/references/candidate-verification-cases.md",
+            "target": "skills/plugins/extensions/capabilities/plugin-historical-source-identification/references/candidate-verification-cases.md",
+            "sha256": "5c5492c102c22e61073af19b048606abcdf30a2bbafb7a6cc75eb0b93a746ce0",
+            "byte_identical": true
+          }
+        ]
+      }
+    ]
+  },
+  "review": {
+    "artifact_path": "audits/histagent/snapshot-47bbe21/artifacts/extension-review.json",
+    "artifact_sha256": "f4cc7a777dc047e9c4143b178d06d10b743a58472dc9a6ca01134088dc4a45ce",
+    "tool_file_count": 12,
+    "tools_byte_identical": true,
+    "required_fields_bound": true
+  },
+  "maintenance": {
+    "skill_path": ".agents/skills/histagent-maintenance/SKILL.md",
+    "skill_sha256": "a2800147cd1e9e02f4f12359ada3c9ac0c8ed8384aa71851c8f007ed47c600ec",
+    "catalog_path": "audits/histagent/catalog.json",
+    "catalog_sha256": "628fb22f57903b22b16e8650d3be3db05c767fe50a6757e792465c5c2aee0e96",
+    "audit_readme_path": "audits/histagent/README.md",
+    "audit_readme_sha256": "a163bceb29ef352ce49d844b146c92eea8b864ad3b9b49fb771295512c8e82e0",
+    "record_sha256": "8ea7057a9e037017f8ac90f04a38cc02208911d1e2ab920869068c15182372da"
+  }
+}

@@ -1,0 +1,91 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-gwas-drug-discovery
+title: GWAS-to-Drug Target Discovery
+description: Transform GWAS signals into drug targets and repurposing
+  opportunities. Connects GWAS-significant loci to causal genes via
+  fine-mapping/eQTL, then to druggable proteins via DGIdb/OpenTargets, then to
+  existing drugs via ChEMBL. Use for GWAS-to-target hypothesis generation,
+  druggable-fraction analysis of disease loci, and human-genetics-validated
+  drug-repurposing prioritization.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-examples.md
+    path: EXAMPLES.md
+    content_hash: 0648b424a2ccf848643b4e1d2288b920d57da7db02d0ed7846a9af6d409d09fe
+    license: Apache-2.0
+  - knowledge_id: tu-procedures.md
+    path: PROCEDURES.md
+    content_hash: 159309a2b3dd4d450a2f806e18f66715a06d54093f8f45676e54b16eba2d51a9
+    license: Apache-2.0
+  - knowledge_id: tu-quick-start.md
+    path: QUICK_START.md
+    content_hash: beffc81c08511bd78d84af61901703dfd13267dd7dc3d45c9b6467cd6ff7cbd5
+    license: Apache-2.0
+  - knowledge_id: tu-reference.md
+    path: REFERENCE.md
+    content_hash: 935e7b2750e23ddd981b58b70cbdf18c4d9b7986407ee6775ff06009af45eeb8
+    license: Apache-2.0
+  - knowledge_id: tu-report-template.md
+    path: REPORT_TEMPLATE.md
+    content_hash: 6773dd8f995796994be3039b755f1a2dd71ed37935364ab59ea71eeb4d9fa0f5
+    license: Apache-2.0
+  - knowledge_id: tu-python-implementation.py
+    path: python_implementation.py
+    content_hash: 842890385f846d190ae3c949759439c655d6c7fd6bf7f6cc095c70a2f9f32d3d
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-gwas-drug-discovery/SKILL.md
+      sha256: 847ac728ada86e3b772a6dbca5decf98c30c9e1ed1dc2b45e33dbd08830ea978
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-gwas-drug-discovery/EXAMPLES.md
+      sha256: 0648b424a2ccf848643b4e1d2288b920d57da7db02d0ed7846a9af6d409d09fe
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-gwas-drug-discovery/PROCEDURES.md
+      sha256: 159309a2b3dd4d450a2f806e18f66715a06d54093f8f45676e54b16eba2d51a9
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-gwas-drug-discovery/QUICK_START.md
+      sha256: beffc81c08511bd78d84af61901703dfd13267dd7dc3d45c9b6467cd6ff7cbd5
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-gwas-drug-discovery/REFERENCE.md
+      sha256: 935e7b2750e23ddd981b58b70cbdf18c4d9b7986407ee6775ff06009af45eeb8
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-gwas-drug-discovery/REPORT_TEMPLATE.md
+      sha256: 6773dd8f995796994be3039b755f1a2dd71ed37935364ab59ea71eeb4d9fa0f5
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-gwas-drug-discovery/python_implementation.py
+      sha256: 842890385f846d190ae3c949759439c655d6c7fd6bf7f6cc095c70a2f9f32d3d
+license: Apache-2.0

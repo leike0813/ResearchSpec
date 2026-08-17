@@ -1,0 +1,85 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-epigenomics
+title: Genomics and Epigenomics Data Processing
+description: "Genomics and epigenomics analysis: DNA methylation (CpG, 5mC,
+  5hmC, bisulfite, RRBS), m6A RNA modification (MeRIP-seq), ChIP-seq peaks,
+  ATAC-seq accessibility, histone modifications, chromatin state, multi-omics
+  integration. Combines pandas/scipy/pysam computation with ToolUniverse
+  annotation tools. Use for genome-wide epigenomic statistics, methylation
+  analysis, and chromatin-genome integration."
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-analysis-procedures.md
+    path: ANALYSIS_PROCEDURES.md
+    content_hash: 8abe6bc40f468324bd7225a1ab54b9e42032ea59364accbc48127a497102918f
+    license: Apache-2.0
+  - knowledge_id: tu-code-reference.md
+    path: CODE_REFERENCE.md
+    content_hash: 7a41969f2bb1703ce53f8f51ea59f6144d3bb49699cc1466086d15808d2c3b7f
+    license: Apache-2.0
+  - knowledge_id: tu-quick-start.md
+    path: QUICK_START.md
+    content_hash: a7c9ccace00495429b667648be604ef3158cbb8659427d094a6c72df2bdc9c0f
+    license: Apache-2.0
+  - knowledge_id: tu-tools-reference.md
+    path: TOOLS_REFERENCE.md
+    content_hash: 34fe411f34ae0b73e0500ca1e3d0aef306d1ed6d71f33023355a0298695510c4
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-methylation-density.py
+    path: scripts/methylation_density.py
+    content_hash: 11d2448af44987f7641a93a6025167e9ab54431ccbefb9dbc7aaa9c80830842c
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-epigenomics/SKILL.md
+      sha256: f502e5137dc51593a8f4abef25e95f8af79ec0208d8b5b716640d0b3436c1db2
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-epigenomics/ANALYSIS_PROCEDURES.md
+      sha256: 8abe6bc40f468324bd7225a1ab54b9e42032ea59364accbc48127a497102918f
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-epigenomics/CODE_REFERENCE.md
+      sha256: 7a41969f2bb1703ce53f8f51ea59f6144d3bb49699cc1466086d15808d2c3b7f
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-epigenomics/QUICK_START.md
+      sha256: a7c9ccace00495429b667648be604ef3158cbb8659427d094a6c72df2bdc9c0f
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-epigenomics/TOOLS_REFERENCE.md
+      sha256: 34fe411f34ae0b73e0500ca1e3d0aef306d1ed6d71f33023355a0298695510c4
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-epigenomics/scripts/methylation_density.py
+      sha256: 11d2448af44987f7641a93a6025167e9ab54431ccbefb9dbc7aaa9c80830842c
+license: Apache-2.0

@@ -1,0 +1,180 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-statistical-modeling
+title: Statistical Modeling for Biomedical Data Analysis
+description: Statistical modeling — linear/logistic/ordinal/Poisson regression,
+  ANOVA, Kruskal-Wallis, chi-square, Mann-Whitney, Cox survival, spline fits (R
+  `ns()`), odds ratios, Cohen's d, F-statistic, p-value computation. Specializes
+  in clinical-trial AE analysis (SDTM DM/AE), severity ordinal regression, and
+  per-feature stat workflows.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-examples.md
+    path: EXAMPLES.md
+    content_hash: dea9ee15740bd35639fce36c607fb8bbd186e245535566e8d7874c53002b0be3
+    license: Apache-2.0
+  - knowledge_id: tu-quick-start.md
+    path: QUICK_START.md
+    content_hash: f02d052ea8611d6bef447d721bb5dcb47e172094af4b64297e711a1b4b22a9a6
+    license: Apache-2.0
+  - knowledge_id: tu-tools-reference.md
+    path: TOOLS_REFERENCE.md
+    content_hash: 3b482d2936706aa5182ad6d10c88feabd9e0a263d2505b27c7cb4e5860467053
+    license: Apache-2.0
+  - knowledge_id: tu-anova-and-tests.md
+    path: anova_and_tests.md
+    content_hash: 8483b4eb9bad8dff5f4468e5866eae0302117993348b17e9aa90e92c31123cf9
+    license: Apache-2.0
+  - knowledge_id: tu-references-common-patterns.md
+    path: references/common_patterns.md
+    content_hash: d91e59e90efef1b95923f1e519439a4fc702da2627831d4c0e88af0ab4d83fa5
+    license: Apache-2.0
+  - knowledge_id: tu-references-cox-regression.md
+    path: references/cox_regression.md
+    content_hash: 2e797b0e5079a5f8cc371d1b08ef4fe1841e73125f9eef562345e4f8a5978036
+    license: Apache-2.0
+  - knowledge_id: tu-references-linear-models.md
+    path: references/linear_models.md
+    content_hash: d0cb6e89d0a8bbd29a34ff5488fd16a72078ff05b3ac9e2d50ba8eded949c3e8
+    license: Apache-2.0
+  - knowledge_id: tu-references-logistic-regression.md
+    path: references/logistic_regression.md
+    content_hash: b5476f75b69bcaf396a7f1642cb837729fe76ffcb4f4225d79b54008444c55b6
+    license: Apache-2.0
+  - knowledge_id: tu-references-ordinal-logistic.md
+    path: references/ordinal_logistic.md
+    content_hash: 0f0b9d285bd965161b5b4a58042acf5252afe329432010f9af29d3bbf93d0bf2
+    license: Apache-2.0
+  - knowledge_id: tu-references-troubleshooting.md
+    path: references/troubleshooting.md
+    content_hash: 1735ff55448aaeb8854e4006bd3e6f1b736b0838adb9c7d79f438503cd9d37df
+    license: Apache-2.0
+  - knowledge_id: tu-references-upstream-details.md
+    path: references/upstream-details.md
+    content_hash: dd82469226cd2b696ef63fa2091a9f7b6f1c1692b784996c6883f45581435cb6
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-expression-anova.py
+    path: scripts/expression_anova.py
+    content_hash: 30a84cd2599210ed9d789601ad2d8e225326154dd1a8831d915d95d34872c482
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-format-statistical-output.py
+    path: scripts/format_statistical_output.py
+    content_hash: e2c40ff0a198f2e19eafcbfe0d38b47f71b2df1798e25facf5365163337daedc
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-logistic-regression-or.py
+    path: scripts/logistic_regression_or.py
+    content_hash: caafe909e25da0fc2c671902074462d3d3936f3581663468150d376c077edf53
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-model-diagnostics.py
+    path: scripts/model_diagnostics.py
+    content_hash: eef57e4ec2a9cce7b9574e585252cbb5c27241b82eee6ebe8b88913cb9c07a7a
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-power-analysis.py
+    path: scripts/power_analysis.py
+    content_hash: c2f515fbdbe38572519c503784b217f1cd6ab626adc3f185c8da8e454d330b59
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-prepare-ae-cohort.py
+    path: scripts/prepare_ae_cohort.py
+    content_hash: d518994a16d3cb5c439b003d37a6c1f3adab4048ae001d8ae782b4a79ab4bcfa
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-r-natural-spline-regression.py
+    path: scripts/r_natural_spline_regression.py
+    content_hash: 6ccd1f344c412fa908d60a69a13e3f82d9ddd8402cffbdaa72300fe15fd26f12
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-sdtm-ordinal-logistic.py
+    path: scripts/sdtm_ordinal_logistic.py
+    content_hash: 97d9516dd6fb0c131ba50b7ad9964e2d548974bd192dbb771e1476cbb562e020
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-spline-model-compare.py
+    path: scripts/spline_model_compare.py
+    content_hash: 1cfb08850bf05c8dd652a345ed7072985b526b4b0ecb63691e817006deb13bdf
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-stat-tests.py
+    path: scripts/stat_tests.py
+    content_hash: e4b8ddf73edb7ff185aa35e51c7b9947b440239d4768ff2990534eb6316d45af
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/SKILL.md
+      sha256: 8a66e33eb647dca038b4fd4ad2a09f7cd17f64451c9b880126c9eb291db29905
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/EXAMPLES.md
+      sha256: dea9ee15740bd35639fce36c607fb8bbd186e245535566e8d7874c53002b0be3
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/QUICK_START.md
+      sha256: f02d052ea8611d6bef447d721bb5dcb47e172094af4b64297e711a1b4b22a9a6
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/TOOLS_REFERENCE.md
+      sha256: 3b482d2936706aa5182ad6d10c88feabd9e0a263d2505b27c7cb4e5860467053
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/anova_and_tests.md
+      sha256: 8483b4eb9bad8dff5f4468e5866eae0302117993348b17e9aa90e92c31123cf9
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/references/common_patterns.md
+      sha256: d91e59e90efef1b95923f1e519439a4fc702da2627831d4c0e88af0ab4d83fa5
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/references/cox_regression.md
+      sha256: 2e797b0e5079a5f8cc371d1b08ef4fe1841e73125f9eef562345e4f8a5978036
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/references/linear_models.md
+      sha256: d0cb6e89d0a8bbd29a34ff5488fd16a72078ff05b3ac9e2d50ba8eded949c3e8
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/references/logistic_regression.md
+      sha256: b5476f75b69bcaf396a7f1642cb837729fe76ffcb4f4225d79b54008444c55b6
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/references/ordinal_logistic.md
+      sha256: 0f0b9d285bd965161b5b4a58042acf5252afe329432010f9af29d3bbf93d0bf2
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/references/troubleshooting.md
+      sha256: 1735ff55448aaeb8854e4006bd3e6f1b736b0838adb9c7d79f438503cd9d37df
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/references/upstream-details.md
+      sha256: dd82469226cd2b696ef63fa2091a9f7b6f1c1692b784996c6883f45581435cb6
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/scripts/expression_anova.py
+      sha256: 30a84cd2599210ed9d789601ad2d8e225326154dd1a8831d915d95d34872c482
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/scripts/format_statistical_output.py
+      sha256: e2c40ff0a198f2e19eafcbfe0d38b47f71b2df1798e25facf5365163337daedc
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/scripts/logistic_regression_or.py
+      sha256: caafe909e25da0fc2c671902074462d3d3936f3581663468150d376c077edf53
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/scripts/model_diagnostics.py
+      sha256: eef57e4ec2a9cce7b9574e585252cbb5c27241b82eee6ebe8b88913cb9c07a7a
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/scripts/power_analysis.py
+      sha256: c2f515fbdbe38572519c503784b217f1cd6ab626adc3f185c8da8e454d330b59
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/scripts/prepare_ae_cohort.py
+      sha256: d518994a16d3cb5c439b003d37a6c1f3adab4048ae001d8ae782b4a79ab4bcfa
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/scripts/r_natural_spline_regression.py
+      sha256: 6ccd1f344c412fa908d60a69a13e3f82d9ddd8402cffbdaa72300fe15fd26f12
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/scripts/sdtm_ordinal_logistic.py
+      sha256: 97d9516dd6fb0c131ba50b7ad9964e2d548974bd192dbb771e1476cbb562e020
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/scripts/spline_model_compare.py
+      sha256: 1cfb08850bf05c8dd652a345ed7072985b526b4b0ecb63691e817006deb13bdf
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/scripts/stat_tests.py
+      sha256: e4b8ddf73edb7ff185aa35e51c7b9947b440239d4768ff2990534eb6316d45af
+license: Apache-2.0

@@ -1,0 +1,84 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-qutip
+title: "QuTiP: Quantum Toolbox in Python"
+description: Quantum physics simulation library for open quantum systems. Use
+  when studying master equations, Lindblad dynamics, decoherence, quantum
+  optics, or cavity QED. Best for physics research, open system dynamics, and
+  educational simulations. NOT for circuit-based quantum computing—use qiskit,
+  cirq, or pennylane for quantum algorithms and hardware execution.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-references-advanced.md
+    path: references/advanced.md
+    content_hash: afd329f6c754d8c287277db651e82fa7114d0c50824ce18f01e6fb0797bec2f3
+    license: Apache-2.0
+  - knowledge_id: sas-references-analysis.md
+    path: references/analysis.md
+    content_hash: 87172f2a375ca9caf9daa74f58fc046bab1d77db0baca7b6aba260fb822c20bf
+    license: Apache-2.0
+  - knowledge_id: sas-references-core-concepts.md
+    path: references/core_concepts.md
+    content_hash: 313e2781add21335cb0fc00f4bde2060a4510e0c08c9a1742aeb2ac53db59c96
+    license: Apache-2.0
+  - knowledge_id: sas-references-time-evolution.md
+    path: references/time_evolution.md
+    content_hash: 7c5bca95cb69a61752cc30266c1b1a6f57992a4b63b40e66926d5bf1c8a2ac52
+    license: Apache-2.0
+  - knowledge_id: sas-references-visualization.md
+    path: references/visualization.md
+    content_hash: 962c51c0a617be95700d251b51d140f03cc7e5d8bf1df9ee5e46580409b89564
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qutip/SKILL.md
+      sha256: 3388274e810954e81fff1b22cf02e3d0a8fe456b392fd5a611b850dc3e1472b8
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qutip/references/advanced.md
+      sha256: afd329f6c754d8c287277db651e82fa7114d0c50824ce18f01e6fb0797bec2f3
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qutip/references/analysis.md
+      sha256: 87172f2a375ca9caf9daa74f58fc046bab1d77db0baca7b6aba260fb822c20bf
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qutip/references/core_concepts.md
+      sha256: 313e2781add21335cb0fc00f4bde2060a4510e0c08c9a1742aeb2ac53db59c96
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qutip/references/time_evolution.md
+      sha256: 7c5bca95cb69a61752cc30266c1b1a6f57992a4b63b40e66926d5bf1c8a2ac52
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qutip/references/visualization.md
+      sha256: 962c51c0a617be95700d251b51d140f03cc7e5d8bf1df9ee5e46580409b89564
+license: Apache-2.0

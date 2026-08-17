@@ -1,0 +1,136 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-single-cell
+title: Single-Cell Genomics and Expression Matrix Analysis
+description: Single-cell RNA-seq analysis with scanpy/anndata — h5ad data
+  loading, scRNA-seq quality control and QC gating (n_genes_by_counts,
+  total_counts, mitochondrial percent / pct_counts_mt, pct_counts_ribo, doublet
+  detection with Scrublet/scDblFinder, ambient RNA / SoupX awareness,
+  empty-droplet filtering, MAD-based thresholds), normalization, dimensionality
+  reduction (PCA, UMAP, t-SNE), clustering (Leiden, Louvain), marker gene
+  identification, cell-type annotation, pseudotime/trajectory analysis. Use for
+  any scRNA-seq workflow, including deciding which cells to filter, flag, or
+  investigate before downstream analysis.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-analysis-patterns.md
+    path: analysis_patterns.md
+    content_hash: 8c6e5aaf1f34d94b2b9db6a201ec16db718db57022825d2553f5d7e72a028310
+    license: Apache-2.0
+  - knowledge_id: tu-references-cell-communication.md
+    path: references/cell_communication.md
+    content_hash: fa54b6afdf8cc134aa18ab41389bc6c99e003f12086822fa8b46f55cca4a4c70
+    license: Apache-2.0
+  - knowledge_id: tu-references-clustering-guide.md
+    path: references/clustering_guide.md
+    content_hash: 32eb30036fec3637998c8f27cafda12e5fedccc131b6b6cde1568bf5dd58b91d
+    license: Apache-2.0
+  - knowledge_id: tu-references-marker-identification.md
+    path: references/marker_identification.md
+    content_hash: 05ef433aed2d0a05b4dfdf29bac391fe7e7bd96e0eb35198d1721d17a0e6886e
+    license: Apache-2.0
+  - knowledge_id: tu-references-scanpy-workflow.md
+    path: references/scanpy_workflow.md
+    content_hash: 0dc0cbeb311d48a1494eb247baa89bc8ed3e5a2e3ccf8cd97d2c05b56bd4b785
+    license: Apache-2.0
+  - knowledge_id: tu-references-scrna-qc.md
+    path: references/scrna_qc.md
+    content_hash: 6472be72eaad5a7dd6b1ffe390521da4bf6f0bad0141535b0fdea813e69e1365
+    license: Apache-2.0
+  - knowledge_id: tu-references-seurat-workflow.md
+    path: references/seurat_workflow.md
+    content_hash: a185c918170c83916b6339bf20fc02abf611787e05503089f1cb7783c2012e73
+    license: Apache-2.0
+  - knowledge_id: tu-references-trajectory-analysis.md
+    path: references/trajectory_analysis.md
+    content_hash: 8347b89349318e52d172abe8b59b028d25572d58602dfa798ac2127c7aea4d6d
+    license: Apache-2.0
+  - knowledge_id: tu-references-troubleshooting.md
+    path: references/troubleshooting.md
+    content_hash: 44e370a3b9fe2ccaeff8984a1854036849964c4e0565d43d82d7b9fe74facd32
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-find-markers.py
+    path: scripts/find_markers.py
+    content_hash: b1bd69855224811968f65547d2d50e59046346cfb93382673bf551ae7244c821
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-normalize-data.py
+    path: scripts/normalize_data.py
+    content_hash: 3c5de9b3168a2bce1942ef9e347d19f108073d28ccedae8a490519d6430b3985
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-qc-metrics.py
+    path: scripts/qc_metrics.py
+    content_hash: d8b9ba92a4eed99f3997b83915a3aa89ec773ccadfc0dcc71e28d54b67cc3e7b
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-scrna-qc.py
+    path: scripts/scrna_qc.py
+    content_hash: 18e70a5eb9ba450914dd1d9e856085a4575f85341953d61f37aba56caa4a137d
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/SKILL.md
+      sha256: 3410bc8850c6e999fc835c08d0e7e4845236a6259c30d49a94be4c40d2e25918
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/analysis_patterns.md
+      sha256: 8c6e5aaf1f34d94b2b9db6a201ec16db718db57022825d2553f5d7e72a028310
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/references/cell_communication.md
+      sha256: fa54b6afdf8cc134aa18ab41389bc6c99e003f12086822fa8b46f55cca4a4c70
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/references/clustering_guide.md
+      sha256: 32eb30036fec3637998c8f27cafda12e5fedccc131b6b6cde1568bf5dd58b91d
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/references/marker_identification.md
+      sha256: 05ef433aed2d0a05b4dfdf29bac391fe7e7bd96e0eb35198d1721d17a0e6886e
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/references/scanpy_workflow.md
+      sha256: 0dc0cbeb311d48a1494eb247baa89bc8ed3e5a2e3ccf8cd97d2c05b56bd4b785
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/references/scrna_qc.md
+      sha256: 6472be72eaad5a7dd6b1ffe390521da4bf6f0bad0141535b0fdea813e69e1365
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/references/seurat_workflow.md
+      sha256: a185c918170c83916b6339bf20fc02abf611787e05503089f1cb7783c2012e73
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/references/trajectory_analysis.md
+      sha256: 8347b89349318e52d172abe8b59b028d25572d58602dfa798ac2127c7aea4d6d
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/references/troubleshooting.md
+      sha256: 44e370a3b9fe2ccaeff8984a1854036849964c4e0565d43d82d7b9fe74facd32
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/scripts/find_markers.py
+      sha256: b1bd69855224811968f65547d2d50e59046346cfb93382673bf551ae7244c821
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/scripts/normalize_data.py
+      sha256: 3c5de9b3168a2bce1942ef9e347d19f108073d28ccedae8a490519d6430b3985
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/scripts/qc_metrics.py
+      sha256: d8b9ba92a4eed99f3997b83915a3aa89ec773ccadfc0dcc71e28d54b67cc3e7b
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/scripts/scrna_qc.py
+      sha256: 18e70a5eb9ba450914dd1d9e856085a4575f85341953d61f37aba56caa4a137d
+license: Apache-2.0

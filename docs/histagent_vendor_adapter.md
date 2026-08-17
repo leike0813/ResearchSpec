@@ -66,3 +66,42 @@ Conversion stages all six published vendors, invokes the source-neutral
 central assembler, and commits only the HistAgent tree, bundle, manifest,
 conversion report, and combined registry. Drift protection requires `--force`
 after review.
+
+## Extension mode packages
+
+The three reviewed raw Skills are also projected one-to-one into the
+graph-native extension registry under `skills/plugins/extensions/`:
+
+| raw Skill | extension capability |
+| --- | --- |
+| `histagent-historical-research` | `plugin-historical-research` |
+| `histagent-historical-source-analysis` | `plugin-historical-source-analysis` |
+| `histagent-historical-source-identification` | `plugin-historical-source-identification` |
+
+All three packages are mixed execution. Each copies the reviewed entrypoint and
+`lib/historical_support.py` into `tools/` plus both reviewed references into
+`references/` as hash-bound knowledge refs. Each declares
+`validators/validate_historical_brief.py` with its own evidence-bearing
+`--required` field list. `historical-studies` projects all three capability and
+profile pairs; `heritage-archive-and-museum-studies` projects source analysis
+and source identification.
+
+Install, update, status, and check read manifests and hashes only. Only
+`advance` executes the declared `python3` validator. The Skill-local
+`state.json` Gate remains a package tool and never owns ResearchSpec workflow
+state.
+
+## Maintenance suite
+
+```bash
+pnpm histagent-maintenance:artifacts
+pnpm histagent-maintenance:records
+pnpm histagent-maintenance:baseline
+pnpm histagent-maintenance:check
+```
+
+The suite anchors at `audits/histagent/snapshot-47bbe21`, binds the immutable
+audit, the vendor bundle, the extension registry subset, package/profile trees,
+the maintenance Skill, the maintenance catalog, and records 01–05 in
+`manifest.json`. The Agent semantic review is mandatory and `baseline` refuses
+an anchor whose `05-semantic-review.md` is not completed.

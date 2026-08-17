@@ -1,0 +1,80 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-pacsomatic
+title: pacsomatic
+description: Operator toolkit for nf-core/pacsomatic matched tumor-normal
+  workflows from BAM inputs. Use this skill when the user needs to validate run
+  inputs, generate pacsomatic-compliant samplesheets, prepare reproducible
+  Nextflow launch artifacts, run locally or submit to schedulers
+  (LSF/Slurm/PBS/SGE), and triage execution failures. Triggers on requests to
+  run pacsomatic, prepare launch commands/scripts, perform dry-run checks, or
+  troubleshoot pipeline startup and scheduler submission errors.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-config.yaml
+    path: config.yaml
+    content_hash: 689203b8480b3a0f5ae2c45f165fd073573053026d16f0f57a02df18a00f5e82
+    license: Apache-2.0
+  - knowledge_id: sas-references-agent-playbook.md
+    path: references/agent-playbook.md
+    content_hash: 6fb51b68ed75d66b66a187fc9484b59bb8449d50a74dce726875b0a710c37b38
+    license: Apache-2.0
+  - knowledge_id: sas-references-config-and-output.md
+    path: references/config-and-output.md
+    content_hash: 12fe249658b2cc42851f8c14f4cc39efdef0105bc38f44aeac9bb8ab12e3307f
+    license: Apache-2.0
+  - knowledge_id: sas-references-pacsomatic-guide.md
+    path: references/pacsomatic_guide.md
+    content_hash: 0393be1cdc3c16710ab550856546aa0d71126ebc577dcddf25bcb28b1a34d139
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pacsomatic/SKILL.md
+      sha256: f80d66adcaea889bb408bf365bc47166f49b8deee2a760ee69aebe84cf2dbda6
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pacsomatic/config.yaml
+      sha256: 689203b8480b3a0f5ae2c45f165fd073573053026d16f0f57a02df18a00f5e82
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pacsomatic/references/agent-playbook.md
+      sha256: 6fb51b68ed75d66b66a187fc9484b59bb8449d50a74dce726875b0a710c37b38
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pacsomatic/references/config-and-output.md
+      sha256: 12fe249658b2cc42851f8c14f4cc39efdef0105bc38f44aeac9bb8ab12e3307f
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pacsomatic/references/pacsomatic_guide.md
+      sha256: 0393be1cdc3c16710ab550856546aa0d71126ebc577dcddf25bcb28b1a34d139
+license: Apache-2.0

@@ -1,0 +1,57 @@
+schema_version: '1'
+capability_id: plugin-materials-dpgen-workflow
+title: DP-GEN Concurrent Learning Workflows
+description: Design, operate, and review DP-GEN concurrent-learning iterations with explicit stage, authority,
+  and convergence evidence.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+- role: task_request
+  schema_ref: plugin-task.v1
+  required: true
+  source_policy: handoff
+outputs:
+- role: research_brief
+  schema_ref: plugin-result.v1
+  required: true
+validators:
+- validator_id: capability.policy.output_roles
+  kind: policy
+  inputs:
+  - task_request
+  outputs: []
+  error_codes:
+  - output_roles_invalid
+- validator_id: dpgen-workflow-brief-validator
+  kind: script
+  inputs:
+  - task_request
+  outputs:
+  - research_brief
+  error_codes:
+  - script_validator_failed
+  runner:
+    argv0: python3
+    args_template:
+    - validators/validate_materials_brief.py
+    - --submission
+    - '{outputs_json}'
+    - --required
+    - scope,stage_ledger,parameter_review,authority_ledger,convergence_evidence,conclusions
+knowledge_refs:
+- knowledge_id: parameter-machine-reference
+  path: references/parameter-and-machine-files.md
+  content_hash: ed56521e82890be0c9d0def167dea0b48331c6edf20e2b6b6bbf40f569495975
+  license: MIT
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+  - path: skills/plugins/vendors/materials-science-skills-for-llm/materials-science-skills-dpgen-workflow/SKILL.md
+    sha256: e54e5d0e8d5c539f7f733e5b3242be03267ffc0c9cf249ee504c0c1bc0952e71
+  - path: skills/plugins/vendors/materials-science-skills-for-llm/materials-science-skills-dpgen-workflow/references/parameter-and-machine-files.md
+    sha256: ed56521e82890be0c9d0def167dea0b48331c6edf20e2b6b6bbf40f569495975
+license: MIT

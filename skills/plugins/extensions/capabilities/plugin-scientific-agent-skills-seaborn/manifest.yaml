@@ -1,0 +1,72 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-seaborn
+title: Seaborn Statistical Visualization
+description: Statistical visualization with pandas integration. Use for quick
+  exploration of distributions, relationships, and categorical comparisons with
+  attractive defaults. Best for box plots, violin plots, pair plots, heatmaps.
+  Built on matplotlib. For interactive plots use plotly; for publication styling
+  use scientific-visualization.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-references-examples.md
+    path: references/examples.md
+    content_hash: 0bf1279af53b7464824853696fa8e06c1904538eafaf1b9a1b1afc874de5d78b
+    license: Apache-2.0
+  - knowledge_id: sas-references-function-reference.md
+    path: references/function_reference.md
+    content_hash: d6e3098f0e2eee13c4b863b96f530b8937d4477d1d0c6b3cc3e2973d27deca64
+    license: Apache-2.0
+  - knowledge_id: sas-references-objects-interface.md
+    path: references/objects_interface.md
+    content_hash: ab5e4c8ae7309f7842ba5b9dcb7e1a098d64db45ae456c3a41b769f7467a1a5b
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-seaborn/SKILL.md
+      sha256: 43c34f5dfc25008b9567033a40dacd89509ff0b37c914ce3e11b50ca22556765
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-seaborn/references/examples.md
+      sha256: 0bf1279af53b7464824853696fa8e06c1904538eafaf1b9a1b1afc874de5d78b
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-seaborn/references/function_reference.md
+      sha256: d6e3098f0e2eee13c4b863b96f530b8937d4477d1d0c6b3cc3e2973d27deca64
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-seaborn/references/objects_interface.md
+      sha256: ab5e4c8ae7309f7842ba5b9dcb7e1a098d64db45ae456c3a41b769f7467a1a5b
+license: Apache-2.0

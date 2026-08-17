@@ -161,11 +161,51 @@ For each operation ResearchSpec computes the sorted union of selected domains' d
 
 In schema 2 graph workspaces, `plugin install`, `plugin uninstall`, and `plugin update` reconcile the selected-domain Skill closure with the configured skill-capable Agent tools through the same generated-file ownership rules. `plugin instructions <skill-id>` succeeds only when the Skill belongs to the current available selected-domain closure and every configured skill-capable tool has the complete manifest-owned, hash-clean projection. `status --json` exposes the plugin selection, resolution, availability, and projection state; `check plugins` validates registry load, selected domains, snapshots, manifest ownership, and projected file hashes without executing plugin resources.
 
-A graph-extension registry under `skills/plugins/extensions/registry.json` is the staged bridge from advisory Skills to graph-native plugins. It records capability packages, graph profiles, and domain assignments with content hashes. The pilot `ecology` assignment currently carries `plugin-ecology-biodiversity` as one validated capability package and one one-node graph profile. `plugin show` exposes extension counts and `check plugins` validates extension hashes, capability/profile identity, graph references, collisions, projected files, and projection hashes.
+A graph-extension registry under `skills/plugins/extensions/registry.json` is the staged bridge from advisory Skills to graph-native plugins. It records capability packages, graph profiles, and domain assignments with content hashes. The `ecology` assignment carries `plugin-ecology-biodiversity` as one validated capability package and one one-node graph profile, and the two finance assignments carry all six FinRobot-derived extensions. `plugin show` exposes extension counts and `check plugins` validates extension hashes, capability/profile identity, graph references, collisions, projected files, and projection hashes.
 
 Installing a domain with graph-extension assignments now projects its capability packages to every configured skill-capable Agent tool and writes its graph profiles into `researchspec/profiles/`. `tool-installation-manifest.json` records `plugin-capability` and `plugin-profile` ownership, and `plugin_resolutions` snapshots include resolved capability and profile IDs. The graph CLI loads a base-plus-selected-extension capability registry: `start` rejects profiles with unknown capabilities, `instructions node:` includes the capability manifest contract, and `advance` runs the declared capability validators. The pilot flow is `plugin install ecology`, `start plugin-ecology-biodiversity`, `instructions node:<run>/research`, then `advance node:<run>/research`.
 
-The FinRobot-derived `plugin-financial-statement-analysis` pilot extends this to a mixed execution capability. It packages the reviewed statement and support scripts as knowledge refs and declares a deterministic `statement-brief-validator` script. `advance` fails while the `research_brief` output is missing required sections and succeeds only after the script validator passes, demonstrating the same validator runner contract as bundled core capabilities.
+The FinRobot-derived extensions complete the mixed-execution pilot. `plugin-financial-company-fundamentals`, `plugin-financial-event-evidence`, `plugin-financial-relative-valuation`, and `plugin-financial-statement-analysis` package the reviewed calculation scripts plus `financial_support.py` as hash-bound knowledge refs, and each declares a deterministic `validate_financial_brief.py` script validator bound to its required `research_brief` fields. `plugin-financial-competitive-position` and `plugin-financial-corporate-risk` are complete llm Agent procedures with the engine-enforced output-role policy. `advance` fails while required sections are missing and succeeds only after the declared validator passes; install, update, status, and check never execute plugin scripts.
+
+The HistAgent-derived extensions follow the same pattern for all three reviewed
+Skills: `plugin-historical-research`, `plugin-historical-source-analysis`, and
+`plugin-historical-source-identification` package their reviewed entrypoints,
+`historical_support.py`, and both conditionally read references as hash-bound
+knowledge refs with `validate_historical_brief.py` validators. The Skill-local
+research Gate remains a package tool without ResearchSpec workflow authority.
+
+The Materials-Science-derived extensions add seven instruction-led packages:
+`plugin-materials-apex-alloy-workflows`, `plugin-materials-atomsk-cli`,
+`plugin-materials-deeptb-helper`, `plugin-materials-dpgen-workflow`,
+`plugin-materials-gpumd-workflow`, `plugin-materials-phonopy-workflows`, and
+`plugin-materials-unimol-ops`. They keep `execution_type: llm`, package the six
+reviewed references as knowledge refs (Atomsk has none), and declare
+`validate_materials_brief.py` evidence validators. ResearchSpec never invokes
+or configures the external scientific runtimes.
+
+The ToolUniverse-derived extensions complete the bulk migration: all 130
+reviewed Skills project one-to-one as `plugin-tooluniverse-*` capabilities and
+profiles. `scripts/generate-tooluniverse-extensions.mjs` preserves the reviewed
+SKILL body, copies all 348 non-standard resources at their original relative
+paths as knowledge refs, and binds every package to
+`validate_tooluniverse_brief.py` with the six generic evidence fields. Domain
+assignments for the 30 ToolUniverse domains are derived directly from the
+source-neutral domain catalog.
+
+The Scientific Agent Skills extensions add all 49 reviewed Skills as
+`plugin-scientific-agent-skills-*` capabilities and profiles through
+`scripts/generate-scientific-agent-skills-extensions.mjs`. All 410 reviewed
+resources, including the TimesFM binary example assets, project as byte-level
+SHA-256 knowledge refs under MIT. Domain assignments for the 24 Scientific
+Agent Skills domains are derived from the source-neutral domain catalog.
+
+The Education Agent Skills extensions finish the six-vendor migration: all 136
+reviewed static Skills project one-to-one as
+`plugin-education-agent-skills-*` capabilities and profiles. Each package is a
+static llm tree with `knowledge_refs: []`, a preserved
+`researchspec-education-boundary` block, and the shared six-field
+`validate_education_brief.py` validator. The three education domain assignments
+mirror the source-neutral domain catalog.
 
 ## CLI lifecycle
 

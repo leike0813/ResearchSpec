@@ -1,0 +1,100 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-clinical-trial-matching
+title: Clinical Trial Matching for Precision Medicine
+description: AI-driven patient-to-trial matching for precision oncology and
+  rare-disease care. Transforms a patient's molecular profile (mutations,
+  biomarkers, expression) and clinical state into ranked clinical-trial
+  recommendations with evidence tiers. Searches ClinicalTrials.gov, the EU CTIS
+  register (European/EEA trials), AND the ISRCTN registry (UK/international)
+  plus cross-references CIViC, OpenTargets, ChEMBL, and FDA labels. Use for
+  matching patients to trials by genotype, biomarker-driven trial selection,
+  trial-eligibility scoring, and finding trials across the US, Europe, and the
+  UK.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-examples.md
+    path: EXAMPLES.md
+    content_hash: 71f4b74aa9c7807c0188f372c2f5d7fc2afe23710cbf1adeb7c8db4d4f06ff4b
+    license: Apache-2.0
+  - knowledge_id: tu-matching-algorithms.md
+    path: MATCHING_ALGORITHMS.md
+    content_hash: 74dd357032fd071367ed179c0f9e728cf69b929ff97dd2a3bca1166d478761ce
+    license: Apache-2.0
+  - knowledge_id: tu-quick-start.md
+    path: QUICK_START.md
+    content_hash: 548be4c3bbe7f43f4ec3b500e230eea9ffc4b27bcf246b4ed4c491388ba9d279
+    license: Apache-2.0
+  - knowledge_id: tu-report-template.md
+    path: REPORT_TEMPLATE.md
+    content_hash: 3c564018a985c8e0298ee84c52c6e12ef4dd091a74d381f816388506972ce506
+    license: Apache-2.0
+  - knowledge_id: tu-scoring-criteria.md
+    path: SCORING_CRITERIA.md
+    content_hash: 97caddf9b554b2381bfef4fbc65ca8c43ac5675249abc37e01655bc9b2ab5a0e
+    license: Apache-2.0
+  - knowledge_id: tu-tools-reference.md
+    path: TOOLS_REFERENCE.md
+    content_hash: 05a01841629de14a6d90c42d7148291bbf4f631c6bcdc748f5c5ae4d45f552bb
+    license: Apache-2.0
+  - knowledge_id: tu-trial-search-patterns.md
+    path: TRIAL_SEARCH_PATTERNS.md
+    content_hash: 0c5576ad4e9556e23789559a3449177930f90a166cff22d03fd7eb1187f4b738
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-matching/SKILL.md
+      sha256: 947f50caa9cd568e19cf90ef069256503eb6874885013876c88f1aa6d56f176d
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-matching/EXAMPLES.md
+      sha256: 71f4b74aa9c7807c0188f372c2f5d7fc2afe23710cbf1adeb7c8db4d4f06ff4b
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-matching/MATCHING_ALGORITHMS.md
+      sha256: 74dd357032fd071367ed179c0f9e728cf69b929ff97dd2a3bca1166d478761ce
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-matching/QUICK_START.md
+      sha256: 548be4c3bbe7f43f4ec3b500e230eea9ffc4b27bcf246b4ed4c491388ba9d279
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-matching/REPORT_TEMPLATE.md
+      sha256: 3c564018a985c8e0298ee84c52c6e12ef4dd091a74d381f816388506972ce506
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-matching/SCORING_CRITERIA.md
+      sha256: 97caddf9b554b2381bfef4fbc65ca8c43ac5675249abc37e01655bc9b2ab5a0e
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-matching/TOOLS_REFERENCE.md
+      sha256: 05a01841629de14a6d90c42d7148291bbf4f631c6bcdc748f5c5ae4d45f552bb
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-matching/TRIAL_SEARCH_PATTERNS.md
+      sha256: 0c5576ad4e9556e23789559a3449177930f90a166cff22d03fd7eb1187f4b738
+license: Apache-2.0

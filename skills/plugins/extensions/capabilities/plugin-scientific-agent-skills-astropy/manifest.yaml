@@ -1,0 +1,95 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-astropy
+title: Astropy
+description: Core Python library for astronomy and astrophysics workflows that
+  need Astropy APIs, including units/quantities, coordinates, FITS I/O, tables,
+  time systems, WCS, and cosmology. Use when implementing or debugging
+  astronomical data analysis code with Astropy.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-references-coordinates.md
+    path: references/coordinates.md
+    content_hash: 6bba23f1cedf55411293337c0b4158f83d2babe3aaa617e9b2b364a8f4e7bd1a
+    license: Apache-2.0
+  - knowledge_id: sas-references-cosmology.md
+    path: references/cosmology.md
+    content_hash: 311751b8072ce53abcba210b5ebfaac048301ecb7314d164321fba56df93366c
+    license: Apache-2.0
+  - knowledge_id: sas-references-fits.md
+    path: references/fits.md
+    content_hash: aa1771bc8cb75a2f332bb1a9cfc31a859fd7b6e07a6314add673d17111b98838
+    license: Apache-2.0
+  - knowledge_id: sas-references-tables.md
+    path: references/tables.md
+    content_hash: abade45705a4bf6b0a9b27d6693163e26cb53d9a9750f8d57dd9a9ad57caf366
+    license: Apache-2.0
+  - knowledge_id: sas-references-time.md
+    path: references/time.md
+    content_hash: fd7c3a1a922e7b72060fa702d9702239a0b552d34efbe8e1673604a749810f61
+    license: Apache-2.0
+  - knowledge_id: sas-references-units.md
+    path: references/units.md
+    content_hash: ec3d108772f9c0f2242ede6b8499f846d21d53bfc1c255fb3306bdf685139a8e
+    license: Apache-2.0
+  - knowledge_id: sas-references-wcs-and-other-modules.md
+    path: references/wcs_and_other_modules.md
+    content_hash: b955cd3b0c75ae9dce3b24ccea2b78e0eceee6c81b836a30d1f4edf2821eb9fc
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-astropy/SKILL.md
+      sha256: a92dad416199457142fd91e7e5f5a2d0c95504758acca14a77928b4e82d60169
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-astropy/references/coordinates.md
+      sha256: 6bba23f1cedf55411293337c0b4158f83d2babe3aaa617e9b2b364a8f4e7bd1a
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-astropy/references/cosmology.md
+      sha256: 311751b8072ce53abcba210b5ebfaac048301ecb7314d164321fba56df93366c
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-astropy/references/fits.md
+      sha256: aa1771bc8cb75a2f332bb1a9cfc31a859fd7b6e07a6314add673d17111b98838
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-astropy/references/tables.md
+      sha256: abade45705a4bf6b0a9b27d6693163e26cb53d9a9750f8d57dd9a9ad57caf366
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-astropy/references/time.md
+      sha256: fd7c3a1a922e7b72060fa702d9702239a0b552d34efbe8e1673604a749810f61
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-astropy/references/units.md
+      sha256: ec3d108772f9c0f2242ede6b8499f846d21d53bfc1c255fb3306bdf685139a8e
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-astropy/references/wcs_and_other_modules.md
+      sha256: b955cd3b0c75ae9dce3b24ccea2b78e0eceee6c81b836a30d1f4edf2821eb9fc
+license: Apache-2.0

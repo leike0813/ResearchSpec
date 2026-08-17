@@ -1,0 +1,54 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-small-molecule-discovery
+title: Small Molecule Discovery Skill
+description: Small molecule identification, characterization, and procurement —
+  PubChem, ChEMBL, BindingDB, ADMET-AI, SwissADME, eMolecules, Enamine. Covers
+  compound name to structure to activity to ADMET properties to commercial
+  sourcing. Use for chemical biology, lead identification, probe selection, and
+  the full small-molecule discovery pipeline.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs: []
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-small-molecule-discovery/SKILL.md
+      sha256: 29e504ca2bf6953b9fd4a37b2eb5c8871a230d8848694ad22a57d8bc5c9511d4
+license: Apache-2.0

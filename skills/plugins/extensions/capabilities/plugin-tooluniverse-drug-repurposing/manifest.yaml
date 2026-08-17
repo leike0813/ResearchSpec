@@ -1,0 +1,85 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-drug-repurposing
+title: Drug Repurposing with ToolUniverse
+description: Identify drug repurposing candidates via target-based,
+  compound-based, and disease-based strategies. Combines drug-target-disease
+  network reasoning with mechanism rationale, clinical-trial precedent, and
+  patent/regulatory feasibility. Use for hypothesis-generating repurposing for
+  orphan diseases, finding existing drugs for new indications, and prioritizing
+  candidates by evidence and feasibility.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-examples.md
+    path: EXAMPLES.md
+    content_hash: 5867f5ccf4ddb12a04c3de79b92223537d24848e49d159c9f7d2db922a912bbd
+    license: Apache-2.0
+  - knowledge_id: tu-procedures.md
+    path: PROCEDURES.md
+    content_hash: 66068fd8f6855c5066dbc6549665328bc0a0aeb0fd3dcc9fb704340b713e084b
+    license: Apache-2.0
+  - knowledge_id: tu-reference.md
+    path: REFERENCE.md
+    content_hash: 61719b983625e482d352b1242a9abdc523c6097ab4bce514d7a1adeaacf49663
+    license: Apache-2.0
+  - knowledge_id: tu-report-template.md
+    path: REPORT_TEMPLATE.md
+    content_hash: 447a3b2363627165934bd5324a2863dec71848ddff697162da32a942e904cb77
+    license: Apache-2.0
+  - knowledge_id: tu-strategies-and-patterns.md
+    path: strategies_and_patterns.md
+    content_hash: 9fe8fed67db86755125cf3abbd53d1c44821e8c86c93b561f08d0c48d22a79a9
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-repurposing/SKILL.md
+      sha256: d3a750e751a3698348e19921dea36ee9f1fea362d1acbc482e960e20ad6245ea
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-repurposing/EXAMPLES.md
+      sha256: 5867f5ccf4ddb12a04c3de79b92223537d24848e49d159c9f7d2db922a912bbd
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-repurposing/PROCEDURES.md
+      sha256: 66068fd8f6855c5066dbc6549665328bc0a0aeb0fd3dcc9fb704340b713e084b
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-repurposing/REFERENCE.md
+      sha256: 61719b983625e482d352b1242a9abdc523c6097ab4bce514d7a1adeaacf49663
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-repurposing/REPORT_TEMPLATE.md
+      sha256: 447a3b2363627165934bd5324a2863dec71848ddff697162da32a942e904cb77
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-repurposing/strategies_and_patterns.md
+      sha256: 9fe8fed67db86755125cf3abbd53d1c44821e8c86c93b561f08d0c48d22a79a9
+license: Apache-2.0

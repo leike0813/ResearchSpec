@@ -1,0 +1,3465 @@
+{
+  "schema_version": "1",
+  "vendor_id": "tooluniverse",
+  "name": "ToolUniverse",
+  "repository_url": "https://github.com/mims-harvard/ToolUniverse",
+  "upstream_root": "vendor/tooluniverse",
+  "generated_root": "skills/plugins/vendors/tooluniverse",
+  "extension_root": "skills/plugins/extensions",
+  "release": "v1.3.1",
+  "revision": "9b7ff91ddb45b567cac2fa8ea31b82851e877617",
+  "anchor_id": "v1.3.1",
+  "audit_file": "audits/tooluniverse/v1.3.1/skill-audit.json",
+  "audit_report": "audits/tooluniverse/v1.3.1/report.md",
+  "extension_domains": [
+    "analytical-chemistry",
+    "biochemistry-and-cell-biology",
+    "bioinformatics-and-computational-biology",
+    "clinical-sciences",
+    "computational-modeling-and-simulation",
+    "computer-vision-and-multimedia-computation",
+    "data-management-and-data-science",
+    "ecological-applications",
+    "ecology",
+    "epidemiology",
+    "evolutionary-biology",
+    "experimental-design-and-data-analysis",
+    "genetics",
+    "health-services-and-systems",
+    "immunology",
+    "inorganic-chemistry",
+    "library-and-information-studies",
+    "medical-and-biological-physics",
+    "medical-biochemistry-and-metabolomics",
+    "medical-biotechnology",
+    "medical-microbiology",
+    "medicinal-and-biomolecular-chemistry",
+    "microbiology",
+    "neurosciences",
+    "oncology-and-carcinogenesis",
+    "organic-chemistry",
+    "pharmacology-and-pharmaceutical-sciences",
+    "physical-chemistry",
+    "plant-biology",
+    "statistics"
+  ],
+  "extensions": [
+    {
+      "capability_id": "plugin-tooluniverse-acmg-variant-classification",
+      "raw_skill_id": "tooluniverse-acmg-variant-classification",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-admet-prediction",
+      "raw_skill_id": "tooluniverse-admet-prediction",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-adverse-event-detection",
+      "raw_skill_id": "tooluniverse-adverse-event-detection",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-adverse-event-detection/PHASE_DETAILS.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-adverse-event-detection/PHASE_DETAILS.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-adverse-event-detection/QUICK_START.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-adverse-event-detection/QUICK_START.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-adverse-event-detection/REPORT_TEMPLATE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-adverse-event-detection/REPORT_TEMPLATE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-adverse-event-detection/TOOL_REFERENCE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-adverse-event-detection/TOOL_REFERENCE.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-adverse-outcome-pathway",
+      "raw_skill_id": "tooluniverse-adverse-outcome-pathway",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-aging-senescence",
+      "raw_skill_id": "tooluniverse-aging-senescence",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-antibody-engineering",
+      "raw_skill_id": "tooluniverse-antibody-engineering",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-antibody-engineering/CHECKLISTS.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-antibody-engineering/CHECKLISTS.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-antibody-engineering/EXAMPLES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-antibody-engineering/EXAMPLES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-antibody-engineering/MANUFACTURING.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-antibody-engineering/MANUFACTURING.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-antibody-engineering/QUICK_START.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-antibody-engineering/QUICK_START.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-antibody-engineering/REPORT_TEMPLATE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-antibody-engineering/REPORT_TEMPLATE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-antibody-engineering/WORKFLOW_DETAILS.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-antibody-engineering/WORKFLOW_DETAILS.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-antibody-engineering/scripts/developability.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-antibody-engineering/scripts/developability.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-binder-discovery",
+      "raw_skill_id": "tooluniverse-binder-discovery",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-binder-discovery/CHECKLIST.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-binder-discovery/CHECKLIST.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-binder-discovery/EXAMPLES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-binder-discovery/EXAMPLES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-binder-discovery/REPORT_TEMPLATE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-binder-discovery/REPORT_TEMPLATE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-binder-discovery/TOOLS_REFERENCE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-binder-discovery/TOOLS_REFERENCE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-binder-discovery/WORKFLOW_DETAILS.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-binder-discovery/WORKFLOW_DETAILS.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-cancer-classification",
+      "raw_skill_id": "tooluniverse-cancer-classification",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-cancer-genomics-tcga",
+      "raw_skill_id": "tooluniverse-cancer-genomics-tcga",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-cancer-variant-interpretation",
+      "raw_skill_id": "tooluniverse-cancer-variant-interpretation",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-cancer-variant-interpretation/ANALYSIS_DETAILS.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-cancer-variant-interpretation/ANALYSIS_DETAILS.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-cancer-variant-interpretation/EXAMPLES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-cancer-variant-interpretation/EXAMPLES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-cancer-variant-interpretation/INPUT_PARSING.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-cancer-variant-interpretation/INPUT_PARSING.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-cancer-variant-interpretation/QUICK_START.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-cancer-variant-interpretation/QUICK_START.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-cancer-variant-interpretation/REPORT_TEMPLATE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-cancer-variant-interpretation/REPORT_TEMPLATE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-cancer-variant-interpretation/SCORING_TABLES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-cancer-variant-interpretation/SCORING_TABLES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-cancer-variant-interpretation/TOOLS_REFERENCE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-cancer-variant-interpretation/TOOLS_REFERENCE.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-cell-line-profiling",
+      "raw_skill_id": "tooluniverse-cell-line-profiling",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-cell-line-profiling/scripts/depmap_gene_dependency.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-cell-line-profiling/scripts/depmap_gene_dependency.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-chemical-compound-retrieval",
+      "raw_skill_id": "tooluniverse-chemical-compound-retrieval",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-chemical-compound-retrieval/CHECKLIST.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-chemical-compound-retrieval/CHECKLIST.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-chemical-compound-retrieval/examples.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-chemical-compound-retrieval/examples.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-chemical-safety",
+      "raw_skill_id": "tooluniverse-chemical-safety",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-chemical-safety/evidence-grading.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-chemical-safety/evidence-grading.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-chemical-safety/phase-details.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-chemical-safety/phase-details.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-chemical-safety/phase-procedures-detailed.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-chemical-safety/phase-procedures-detailed.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-chemical-safety/report-templates.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-chemical-safety/report-templates.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-chemical-sourcing",
+      "raw_skill_id": "tooluniverse-chemical-sourcing",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-clinical-data-integration",
+      "raw_skill_id": "tooluniverse-clinical-data-integration",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-clinical-guidelines",
+      "raw_skill_id": "tooluniverse-clinical-guidelines",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-clinical-guidelines/TOOLS_REFERENCE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-clinical-guidelines/TOOLS_REFERENCE.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-clinical-risk-scoring",
+      "raw_skill_id": "tooluniverse-clinical-risk-scoring",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-clinical-trial-design",
+      "raw_skill_id": "tooluniverse-clinical-trial-design",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-design/BEST_PRACTICES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-clinical-trial-design/BEST_PRACTICES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-design/EXAMPLES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-clinical-trial-design/EXAMPLES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-design/QUICK_START.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-clinical-trial-design/QUICK_START.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-design/REPORT_TEMPLATE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-clinical-trial-design/REPORT_TEMPLATE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-design/STUDY_DESIGN_PROCEDURES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-clinical-trial-design/STUDY_DESIGN_PROCEDURES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-design/WORKFLOW_DETAILS.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-clinical-trial-design/WORKFLOW_DETAILS.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-design/python_implementation.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-clinical-trial-design/python_implementation.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-design/trial_pipeline.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-clinical-trial-design/trial_pipeline.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-clinical-trial-matching",
+      "raw_skill_id": "tooluniverse-clinical-trial-matching",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-matching/EXAMPLES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-clinical-trial-matching/EXAMPLES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-matching/MATCHING_ALGORITHMS.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-clinical-trial-matching/MATCHING_ALGORITHMS.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-matching/QUICK_START.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-clinical-trial-matching/QUICK_START.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-matching/REPORT_TEMPLATE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-clinical-trial-matching/REPORT_TEMPLATE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-matching/SCORING_CRITERIA.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-clinical-trial-matching/SCORING_CRITERIA.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-matching/TOOLS_REFERENCE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-clinical-trial-matching/TOOLS_REFERENCE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-matching/TRIAL_SEARCH_PATTERNS.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-clinical-trial-matching/TRIAL_SEARCH_PATTERNS.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-comparative-genomics",
+      "raw_skill_id": "tooluniverse-comparative-genomics",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-comparative-genomics/scripts/dnds.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-comparative-genomics/scripts/dnds.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-computational-biophysics",
+      "raw_skill_id": "tooluniverse-computational-biophysics",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-computational-biophysics/scripts/burn_fluids.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-computational-biophysics/scripts/burn_fluids.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-computational-biophysics/scripts/env_risk_assessment.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-computational-biophysics/scripts/env_risk_assessment.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-computational-biophysics/scripts/enzyme_kinetics.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-computational-biophysics/scripts/enzyme_kinetics.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-computational-biophysics/scripts/epidemiology.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-computational-biophysics/scripts/epidemiology.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-computational-biophysics/scripts/fluid_calculations.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-computational-biophysics/scripts/fluid_calculations.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-computational-biophysics/scripts/herd_immunity.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-computational-biophysics/scripts/herd_immunity.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-computational-biophysics/scripts/iv_drip_rate.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-computational-biophysics/scripts/iv_drip_rate.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-computational-biophysics/scripts/mc_analyzer.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-computational-biophysics/scripts/mc_analyzer.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-computational-biophysics/scripts/radioactive_decay.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-computational-biophysics/scripts/radioactive_decay.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-crispr-screen-analysis",
+      "raw_skill_id": "tooluniverse-crispr-screen-analysis",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-crispr-screen-analysis/ANALYSIS_DETAILS.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-crispr-screen-analysis/ANALYSIS_DETAILS.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-crispr-screen-analysis/EXAMPLES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-crispr-screen-analysis/EXAMPLES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-crispr-screen-analysis/FALLBACK_PATCH.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-crispr-screen-analysis/FALLBACK_PATCH.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-crispr-screen-analysis/QUICK_START.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-crispr-screen-analysis/QUICK_START.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-crispr-screen-analysis/USE_CASES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-crispr-screen-analysis/USE_CASES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-crispr-screen-analysis/scripts/CEGv2_core_essential.txt",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-crispr-screen-analysis/scripts/CEGv2_core_essential.txt"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-crispr-screen-analysis/scripts/NEGv1_nonessential.txt",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-crispr-screen-analysis/scripts/NEGv1_nonessential.txt"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-crispr-screen-analysis/scripts/reference_gene_sets.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-crispr-screen-analysis/scripts/reference_gene_sets.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-data-integration-analysis",
+      "raw_skill_id": "tooluniverse-data-integration-analysis",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-data-wrangling",
+      "raw_skill_id": "tooluniverse-data-wrangling",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-data-wrangling/references/specialized-domains.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-data-wrangling/references/specialized-domains.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-dataset-discovery",
+      "raw_skill_id": "tooluniverse-dataset-discovery",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-diagnostic-test-evaluation",
+      "raw_skill_id": "tooluniverse-diagnostic-test-evaluation",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-diagnostic-test-evaluation/scripts/roc_analysis.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-diagnostic-test-evaluation/scripts/roc_analysis.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-disease-research",
+      "raw_skill_id": "tooluniverse-disease-research",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-disease-research/EXAMPLES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-disease-research/EXAMPLES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-disease-research/REPORT_TEMPLATE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-disease-research/REPORT_TEMPLATE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-disease-research/RESEARCH_PROTOCOL.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-disease-research/RESEARCH_PROTOCOL.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-disease-research/TOOLS_REFERENCE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-disease-research/TOOLS_REFERENCE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-disease-research/tool_usage_details.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-disease-research/tool_usage_details.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-dose-response",
+      "raw_skill_id": "tooluniverse-dose-response",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-dose-response/scripts/fit_dose_response.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-dose-response/scripts/fit_dose_response.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-drug-drug-interaction",
+      "raw_skill_id": "tooluniverse-drug-drug-interaction",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-drug-drug-interaction/EXAMPLES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-drug-drug-interaction/EXAMPLES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-drug-drug-interaction/ddi_pipeline.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-drug-drug-interaction/ddi_pipeline.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-drug-drug-interaction/ddi_working_example.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-drug-drug-interaction/ddi_working_example.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-drug-drug-interaction/python_implementation.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-drug-drug-interaction/python_implementation.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-drug-drug-interaction/scripts/pharmacology_ref.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-drug-drug-interaction/scripts/pharmacology_ref.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-drug-mechanism-research",
+      "raw_skill_id": "tooluniverse-drug-mechanism-research",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-drug-regulatory",
+      "raw_skill_id": "tooluniverse-drug-regulatory",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-drug-repurposing",
+      "raw_skill_id": "tooluniverse-drug-repurposing",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-drug-repurposing/EXAMPLES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-drug-repurposing/EXAMPLES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-drug-repurposing/PROCEDURES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-drug-repurposing/PROCEDURES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-drug-repurposing/REFERENCE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-drug-repurposing/REFERENCE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-drug-repurposing/REPORT_TEMPLATE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-drug-repurposing/REPORT_TEMPLATE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-drug-repurposing/strategies_and_patterns.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-drug-repurposing/strategies_and_patterns.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-drug-research",
+      "raw_skill_id": "tooluniverse-drug-research",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-drug-research/CHECKLIST.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-drug-research/CHECKLIST.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-drug-research/EXAMPLES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-drug-research/EXAMPLES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-drug-research/REPORT_GUIDELINES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-drug-research/REPORT_GUIDELINES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-drug-research/REPORT_TEMPLATE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-drug-research/REPORT_TEMPLATE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-drug-research/TOOLS_REFERENCE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-drug-research/TOOLS_REFERENCE.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-drug-synergy",
+      "raw_skill_id": "tooluniverse-drug-synergy",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-drug-synergy/scripts/synergy_reference.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-drug-synergy/scripts/synergy_reference.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-drug-target-validation",
+      "raw_skill_id": "tooluniverse-drug-target-validation",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-drug-target-validation/QUICK_START.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-drug-target-validation/QUICK_START.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-drug-target-validation/REPORT_TEMPLATE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-drug-target-validation/REPORT_TEMPLATE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-drug-target-validation/SCORING_CRITERIA.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-drug-target-validation/SCORING_CRITERIA.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-drug-target-validation/TOOL_REFERENCE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-drug-target-validation/TOOL_REFERENCE.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-ecology-biodiversity",
+      "raw_skill_id": "tooluniverse-ecology-biodiversity",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-electron-microscopy",
+      "raw_skill_id": "tooluniverse-electron-microscopy",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-enzyme-kinetics",
+      "raw_skill_id": "tooluniverse-enzyme-kinetics",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-enzyme-kinetics/scripts/fit_michaelis_menten.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-enzyme-kinetics/scripts/fit_michaelis_menten.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-epidemiological-analysis",
+      "raw_skill_id": "tooluniverse-epidemiological-analysis",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-epigenomics",
+      "raw_skill_id": "tooluniverse-epigenomics",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-epigenomics/ANALYSIS_PROCEDURES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-epigenomics/ANALYSIS_PROCEDURES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-epigenomics/CODE_REFERENCE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-epigenomics/CODE_REFERENCE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-epigenomics/QUICK_START.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-epigenomics/QUICK_START.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-epigenomics/TOOLS_REFERENCE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-epigenomics/TOOLS_REFERENCE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-epigenomics/scripts/methylation_density.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-epigenomics/scripts/methylation_density.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-epigenomics-chromatin",
+      "raw_skill_id": "tooluniverse-epigenomics-chromatin",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-expression-data-retrieval",
+      "raw_skill_id": "tooluniverse-expression-data-retrieval",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-expression-data-retrieval/CHECKLIST.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-expression-data-retrieval/CHECKLIST.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-expression-data-retrieval/examples.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-expression-data-retrieval/examples.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-fastq-qc",
+      "raw_skill_id": "tooluniverse-fastq-qc",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-fastq-qc/references/fastqc_interpretation.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-fastq-qc/references/fastqc_interpretation.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-fastq-qc/references/tools_and_install.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-fastq-qc/references/tools_and_install.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-fastq-qc/references/trimming_decisions.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-fastq-qc/references/trimming_decisions.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-fastq-qc/scripts/run_fastq_qc.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-fastq-qc/scripts/run_fastq_qc.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-functional-genomics-screens",
+      "raw_skill_id": "tooluniverse-functional-genomics-screens",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-gene-disease-association",
+      "raw_skill_id": "tooluniverse-gene-disease-association",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-gene-enrichment",
+      "raw_skill_id": "tooluniverse-gene-enrichment",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/references/enrichr_guide.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-gene-enrichment/references/enrichr_guide.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/references/gsea_workflow.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-gene-enrichment/references/gsea_workflow.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/references/ora_workflow.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-gene-enrichment/references/ora_workflow.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/references/tool_parameters.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-gene-enrichment/references/tool_parameters.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/references/troubleshooting.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-gene-enrichment/references/troubleshooting.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/scripts/condition_enrichment_screen.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-gene-enrichment/scripts/condition_enrichment_screen.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/scripts/enrichgo_runner.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-gene-enrichment/scripts/enrichgo_runner.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/scripts/format_enrichment_output.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-gene-enrichment/scripts/format_enrichment_output.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/scripts/gseapy_enrichment_runner.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-gene-enrichment/scripts/gseapy_enrichment_runner.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-gene-regulatory-networks",
+      "raw_skill_id": "tooluniverse-gene-regulatory-networks",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-gpcr-structural-pharmacology",
+      "raw_skill_id": "tooluniverse-gpcr-structural-pharmacology",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-gwas-drug-discovery",
+      "raw_skill_id": "tooluniverse-gwas-drug-discovery",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-gwas-drug-discovery/EXAMPLES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-gwas-drug-discovery/EXAMPLES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-gwas-drug-discovery/PROCEDURES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-gwas-drug-discovery/PROCEDURES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-gwas-drug-discovery/QUICK_START.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-gwas-drug-discovery/QUICK_START.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-gwas-drug-discovery/REFERENCE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-gwas-drug-discovery/REFERENCE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-gwas-drug-discovery/REPORT_TEMPLATE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-gwas-drug-discovery/REPORT_TEMPLATE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-gwas-drug-discovery/python_implementation.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-gwas-drug-discovery/python_implementation.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-gwas-finemapping",
+      "raw_skill_id": "tooluniverse-gwas-finemapping",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-gwas-finemapping/python_implementation.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-gwas-finemapping/python_implementation.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-gwas-snp-interpretation",
+      "raw_skill_id": "tooluniverse-gwas-snp-interpretation",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-gwas-snp-interpretation/QUICK_START.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-gwas-snp-interpretation/QUICK_START.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-gwas-snp-interpretation/python_implementation.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-gwas-snp-interpretation/python_implementation.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-gwas-study-explorer",
+      "raw_skill_id": "tooluniverse-gwas-study-explorer",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-gwas-study-explorer/python_implementation.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-gwas-study-explorer/python_implementation.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-gwas-trait-to-gene",
+      "raw_skill_id": "tooluniverse-gwas-trait-to-gene",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-gwas-trait-to-gene/python_implementation.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-gwas-trait-to-gene/python_implementation.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-hla-immunogenomics",
+      "raw_skill_id": "tooluniverse-hla-immunogenomics",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-image-analysis",
+      "raw_skill_id": "tooluniverse-image-analysis",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-image-analysis/references/cell_counting.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-image-analysis/references/cell_counting.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-image-analysis/references/fluorescence_analysis.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-image-analysis/references/fluorescence_analysis.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-image-analysis/references/image_processing.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-image-analysis/references/image_processing.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-image-analysis/references/segmentation.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-image-analysis/references/segmentation.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-image-analysis/references/statistical_analysis.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-image-analysis/references/statistical_analysis.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-image-analysis/references/troubleshooting.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-image-analysis/references/troubleshooting.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-image-analysis/scripts/batch_process.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-image-analysis/scripts/batch_process.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-image-analysis/scripts/measure_fluorescence.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-image-analysis/scripts/measure_fluorescence.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-image-analysis/scripts/segment_cells.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-image-analysis/scripts/segment_cells.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-immune-repertoire-analysis",
+      "raw_skill_id": "tooluniverse-immune-repertoire-analysis",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-immune-repertoire-analysis/ANALYSIS_DETAILS.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-immune-repertoire-analysis/ANALYSIS_DETAILS.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-immune-repertoire-analysis/USE_CASES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-immune-repertoire-analysis/USE_CASES.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-immunology",
+      "raw_skill_id": "tooluniverse-immunology",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-immunotherapy-response-prediction",
+      "raw_skill_id": "tooluniverse-immunotherapy-response-prediction",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-immunotherapy-response-prediction/EXAMPLES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-immunotherapy-response-prediction/EXAMPLES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-immunotherapy-response-prediction/INPUT_REFERENCE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-immunotherapy-response-prediction/INPUT_REFERENCE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-immunotherapy-response-prediction/REPORT_TEMPLATE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-immunotherapy-response-prediction/REPORT_TEMPLATE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-immunotherapy-response-prediction/SCORING_TABLES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-immunotherapy-response-prediction/SCORING_TABLES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-immunotherapy-response-prediction/TOOLS_REFERENCE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-immunotherapy-response-prediction/TOOLS_REFERENCE.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-infectious-disease",
+      "raw_skill_id": "tooluniverse-infectious-disease",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-infectious-disease/CHECKLIST.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-infectious-disease/CHECKLIST.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-infectious-disease/EXAMPLES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-infectious-disease/EXAMPLES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-infectious-disease/TOOLS_REFERENCE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-infectious-disease/TOOLS_REFERENCE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-infectious-disease/phase_details.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-infectious-disease/phase_details.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-infectious-disease/report_template.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-infectious-disease/report_template.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-inorganic-physical-chemistry",
+      "raw_skill_id": "tooluniverse-inorganic-physical-chemistry",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-inorganic-physical-chemistry/scripts/equilibrium_solver.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-inorganic-physical-chemistry/scripts/equilibrium_solver.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-kegg-disease-drug",
+      "raw_skill_id": "tooluniverse-kegg-disease-drug",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-lipidomics",
+      "raw_skill_id": "tooluniverse-lipidomics",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-literature-deep-research",
+      "raw_skill_id": "tooluniverse-literature-deep-research",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-literature-deep-research/EXAMPLES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-literature-deep-research/EXAMPLES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-literature-deep-research/FULLTEXT_STRATEGY.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-literature-deep-research/FULLTEXT_STRATEGY.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-literature-deep-research/QUICK_REFERENCE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-literature-deep-research/QUICK_REFERENCE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-literature-deep-research/REPORT_TEMPLATE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-literature-deep-research/REPORT_TEMPLATE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-literature-deep-research/TOOL_NAMES_REFERENCE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-literature-deep-research/TOOL_NAMES_REFERENCE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-literature-deep-research/WORKFLOW.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-literature-deep-research/WORKFLOW.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-mendelian-randomization",
+      "raw_skill_id": "tooluniverse-mendelian-randomization",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-meta-analysis",
+      "raw_skill_id": "tooluniverse-meta-analysis",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-meta-analysis/scripts/meta_analysis.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-meta-analysis/scripts/meta_analysis.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-metabolomics",
+      "raw_skill_id": "tooluniverse-metabolomics",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics/QUICK_START.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-metabolomics/QUICK_START.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics/diabetes_analysis.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-metabolomics/diabetes_analysis.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics/example1_metabolites.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-metabolomics/example1_metabolites.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics/example2_study.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-metabolomics/example2_study.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics/example3_search.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-metabolomics/example3_search.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics/python_implementation.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-metabolomics/python_implementation.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics/scripts/metabolism_ref.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-metabolomics/scripts/metabolism_ref.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics/test1_metabolites.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-metabolomics/test1_metabolites.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics/test2_study.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-metabolomics/test2_study.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics/test3_search.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-metabolomics/test3_search.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics/test4_comprehensive.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-metabolomics/test4_comprehensive.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-metabolomics-analysis",
+      "raw_skill_id": "tooluniverse-metabolomics-analysis",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics-analysis/code_examples.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-metabolomics-analysis/code_examples.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics-analysis/report_template.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-metabolomics-analysis/report_template.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-metabolomics-pathway",
+      "raw_skill_id": "tooluniverse-metabolomics-pathway",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-metagenomics-analysis",
+      "raw_skill_id": "tooluniverse-metagenomics-analysis",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-microbial-genome-characterization",
+      "raw_skill_id": "tooluniverse-microbial-genome-characterization",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-microbiome-research",
+      "raw_skill_id": "tooluniverse-microbiome-research",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-model-organism-genetics",
+      "raw_skill_id": "tooluniverse-model-organism-genetics",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-molecular-cloning",
+      "raw_skill_id": "tooluniverse-molecular-cloning",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-molecular-cloning/scripts/cloning_qc.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-molecular-cloning/scripts/cloning_qc.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-multi-omics-integration",
+      "raw_skill_id": "tooluniverse-multi-omics-integration",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-multi-omics-integration/phase_details.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-multi-omics-integration/phase_details.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-multiomic-disease-characterization",
+      "raw_skill_id": "tooluniverse-multiomic-disease-characterization",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-multiomic-disease-characterization/integration-scoring.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-multiomic-disease-characterization/integration-scoring.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-multiomic-disease-characterization/report-template.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-multiomic-disease-characterization/report-template.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-multiomic-disease-characterization/response-formats.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-multiomic-disease-characterization/response-formats.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-multiomic-disease-characterization/tool-reference.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-multiomic-disease-characterization/tool-reference.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-multiomic-disease-characterization/use-patterns.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-multiomic-disease-characterization/use-patterns.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-natural-product-dereplication",
+      "raw_skill_id": "tooluniverse-natural-product-dereplication",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-network-pharmacology",
+      "raw_skill_id": "tooluniverse-network-pharmacology",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-network-pharmacology/ANALYSIS_PROCEDURES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-network-pharmacology/ANALYSIS_PROCEDURES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-network-pharmacology/QUICK_START.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-network-pharmacology/QUICK_START.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-network-pharmacology/REPORT_TEMPLATE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-network-pharmacology/REPORT_TEMPLATE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-network-pharmacology/SCORING_REFERENCE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-network-pharmacology/SCORING_REFERENCE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-network-pharmacology/TOOL_REFERENCE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-network-pharmacology/TOOL_REFERENCE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-network-pharmacology/USE_PATTERNS.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-network-pharmacology/USE_PATTERNS.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-network-pharmacology/scripts/network_proximity.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-network-pharmacology/scripts/network_proximity.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-neuroscience",
+      "raw_skill_id": "tooluniverse-neuroscience",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-noncoding-rna",
+      "raw_skill_id": "tooluniverse-noncoding-rna",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-organic-chemistry",
+      "raw_skill_id": "tooluniverse-organic-chemistry",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-organic-chemistry/scripts/chemistry_facts.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-organic-chemistry/scripts/chemistry_facts.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-organic-chemistry/scripts/crystal_validator.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-organic-chemistry/scripts/crystal_validator.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-organic-chemistry/scripts/degrees_of_unsaturation.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-organic-chemistry/scripts/degrees_of_unsaturation.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-organic-chemistry/scripts/molecular_complexity.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-organic-chemistry/scripts/molecular_complexity.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-organic-chemistry/scripts/molecular_formula.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-organic-chemistry/scripts/molecular_formula.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-organic-chemistry/scripts/smiles_verifier.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-organic-chemistry/scripts/smiles_verifier.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-organic-chemistry/scripts/stereochem_tracker.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-organic-chemistry/scripts/stereochem_tracker.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-pathway-disease-genetics",
+      "raw_skill_id": "tooluniverse-pathway-disease-genetics",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-peptide-target-deorphanization",
+      "raw_skill_id": "tooluniverse-peptide-target-deorphanization",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-peptide-target-deorphanization/references/phases.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-peptide-target-deorphanization/references/phases.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-peptide-target-deorphanization/scripts/cofold_screen.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-peptide-target-deorphanization/scripts/cofold_screen.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-peptide-target-deorphanization/scripts/deorphanize_peptide.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-peptide-target-deorphanization/scripts/deorphanize_peptide.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-pharmacogenomics",
+      "raw_skill_id": "tooluniverse-pharmacogenomics",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-pharmacokinetics",
+      "raw_skill_id": "tooluniverse-pharmacokinetics",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-pharmacokinetics/scripts/nca_from_csv.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-pharmacokinetics/scripts/nca_from_csv.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-pharmacovigilance",
+      "raw_skill_id": "tooluniverse-pharmacovigilance",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-pharmacovigilance/CHECKLIST.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-pharmacovigilance/CHECKLIST.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-pharmacovigilance/EXAMPLES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-pharmacovigilance/EXAMPLES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-pharmacovigilance/REPORT_TEMPLATES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-pharmacovigilance/REPORT_TEMPLATES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-pharmacovigilance/SIGNAL_ANALYSIS.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-pharmacovigilance/SIGNAL_ANALYSIS.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-pharmacovigilance/SIGNAL_DETECTION.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-pharmacovigilance/SIGNAL_DETECTION.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-pharmacovigilance/TOOLS_REFERENCE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-pharmacovigilance/TOOLS_REFERENCE.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-phewas",
+      "raw_skill_id": "tooluniverse-phewas",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-phylogenetics",
+      "raw_skill_id": "tooluniverse-phylogenetics",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/QUICK_START.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-phylogenetics/QUICK_START.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/references/parsimony_analysis.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-phylogenetics/references/parsimony_analysis.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/references/sequence_alignment.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-phylogenetics/references/sequence_alignment.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/references/tree_building.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-phylogenetics/references/tree_building.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/references/troubleshooting.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-phylogenetics/references/troubleshooting.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/references/upstream-details.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-phylogenetics/references/upstream-details.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/scripts/busco_target_orthologs.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-phylogenetics/scripts/busco_target_orthologs.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/scripts/format_alignment.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-phylogenetics/scripts/format_alignment.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/scripts/phykit_batch.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-phylogenetics/scripts/phykit_batch.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/scripts/scogs_paired_compare.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-phylogenetics/scripts/scogs_paired_compare.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/scripts/scogs_phykit_pipeline.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-phylogenetics/scripts/scogs_phykit_pipeline.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/scripts/tree_statistics.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-phylogenetics/scripts/tree_statistics.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-plant-genomics",
+      "raw_skill_id": "tooluniverse-plant-genomics",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-polygenic-risk-score",
+      "raw_skill_id": "tooluniverse-polygenic-risk-score",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-polygenic-risk-score/check_data.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-polygenic-risk-score/check_data.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-polygenic-risk-score/python_implementation.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-polygenic-risk-score/python_implementation.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-population-genetics",
+      "raw_skill_id": "tooluniverse-population-genetics",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-population-genetics/scripts/popgen_calculator.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-population-genetics/scripts/popgen_calculator.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-population-genetics-1000genomes",
+      "raw_skill_id": "tooluniverse-population-genetics-1000genomes",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-precision-medicine-stratification",
+      "raw_skill_id": "tooluniverse-precision-medicine-stratification",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-precision-medicine-stratification/EXAMPLES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-precision-medicine-stratification/EXAMPLES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-precision-medicine-stratification/QUICK_START.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-precision-medicine-stratification/QUICK_START.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-precision-medicine-stratification/REPORT_TEMPLATE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-precision-medicine-stratification/REPORT_TEMPLATE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-precision-medicine-stratification/SCORING_REFERENCE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-precision-medicine-stratification/SCORING_REFERENCE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-precision-medicine-stratification/TOOLS_REFERENCE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-precision-medicine-stratification/TOOLS_REFERENCE.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-precision-oncology",
+      "raw_skill_id": "tooluniverse-precision-oncology",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-precision-oncology/API_USAGE_PATTERNS.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-precision-oncology/API_USAGE_PATTERNS.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-precision-oncology/CHECKLIST.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-precision-oncology/CHECKLIST.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-precision-oncology/EXAMPLES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-precision-oncology/EXAMPLES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-precision-oncology/REPORT_TEMPLATE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-precision-oncology/REPORT_TEMPLATE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-precision-oncology/TOOLS_REFERENCE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-precision-oncology/TOOLS_REFERENCE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-precision-oncology/TREATMENT_ALGORITHMS.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-precision-oncology/TREATMENT_ALGORITHMS.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-precision-oncology/scripts/gdsc_drug_response.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-precision-oncology/scripts/gdsc_drug_response.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-primer-design",
+      "raw_skill_id": "tooluniverse-primer-design",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-primer-design/scripts/primer_qc.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-primer-design/scripts/primer_qc.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-product-safety-surveillance",
+      "raw_skill_id": "tooluniverse-product-safety-surveillance",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-product-safety-surveillance/references/openfda_fields.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-product-safety-surveillance/references/openfda_fields.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-protein-interactions",
+      "raw_skill_id": "tooluniverse-protein-interactions",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-protein-interactions/DESCRIPTION_UPDATE_COMPLETE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-protein-interactions/DESCRIPTION_UPDATE_COMPLETE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-protein-interactions/DOMAIN_ANALYSIS.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-protein-interactions/DOMAIN_ANALYSIS.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-protein-interactions/PHASE2_DISCOVERIES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-protein-interactions/PHASE2_DISCOVERIES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-protein-interactions/QUICK_START.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-protein-interactions/QUICK_START.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-protein-interactions/TOOL_DESCRIPTION_OPTIMIZATION.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-protein-interactions/TOOL_DESCRIPTION_OPTIMIZATION.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-protein-interactions/python_implementation.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-protein-interactions/python_implementation.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-protein-lof-mechanism",
+      "raw_skill_id": "tooluniverse-protein-lof-mechanism",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-protein-modification-analysis",
+      "raw_skill_id": "tooluniverse-protein-modification-analysis",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-protein-sae-variant-interpretation",
+      "raw_skill_id": "tooluniverse-protein-sae-variant-interpretation",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-protein-structural-annotation-pdb",
+      "raw_skill_id": "tooluniverse-protein-structural-annotation-pdb",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-protein-structure-prediction",
+      "raw_skill_id": "tooluniverse-protein-structure-prediction",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-protein-structure-retrieval",
+      "raw_skill_id": "tooluniverse-protein-structure-retrieval",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-protein-structure-retrieval/CHECKLIST.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-protein-structure-retrieval/CHECKLIST.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-protein-structure-retrieval/examples.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-protein-structure-retrieval/examples.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-protein-therapeutic-design",
+      "raw_skill_id": "tooluniverse-protein-therapeutic-design",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-protein-therapeutic-design/CHECKLIST.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-protein-therapeutic-design/CHECKLIST.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-protein-therapeutic-design/DESIGN_PROCEDURES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-protein-therapeutic-design/DESIGN_PROCEDURES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-protein-therapeutic-design/EXAMPLES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-protein-therapeutic-design/EXAMPLES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-protein-therapeutic-design/TOOLS_REFERENCE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-protein-therapeutic-design/TOOLS_REFERENCE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-protein-therapeutic-design/design_templates.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-protein-therapeutic-design/design_templates.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-proteomics-analysis",
+      "raw_skill_id": "tooluniverse-proteomics-analysis",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-proteomics-analysis/CODE_REFERENCE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-proteomics-analysis/CODE_REFERENCE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-proteomics-analysis/PHASE_DETAILS.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-proteomics-analysis/PHASE_DETAILS.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-proteomics-analysis/REPORT_TEMPLATE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-proteomics-analysis/REPORT_TEMPLATE.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-proteomics-data-retrieval",
+      "raw_skill_id": "tooluniverse-proteomics-data-retrieval",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-rare-disease-diagnosis",
+      "raw_skill_id": "tooluniverse-rare-disease-diagnosis",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-rare-disease-diagnosis/CHECKLIST.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-rare-disease-diagnosis/CHECKLIST.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-rare-disease-diagnosis/DIAGNOSTIC_WORKFLOW.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-rare-disease-diagnosis/DIAGNOSTIC_WORKFLOW.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-rare-disease-diagnosis/EXAMPLES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-rare-disease-diagnosis/EXAMPLES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-rare-disease-diagnosis/REPORT_TEMPLATE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-rare-disease-diagnosis/REPORT_TEMPLATE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-rare-disease-diagnosis/TOOLS_REFERENCE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-rare-disease-diagnosis/TOOLS_REFERENCE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-rare-disease-diagnosis/scripts/clinical_patterns.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-rare-disease-diagnosis/scripts/clinical_patterns.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-rare-disease-genomics",
+      "raw_skill_id": "tooluniverse-rare-disease-genomics",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-regulatory-genomics",
+      "raw_skill_id": "tooluniverse-regulatory-genomics",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-regulatory-variant-analysis",
+      "raw_skill_id": "tooluniverse-regulatory-variant-analysis",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-residue-functional-mechanism-interpretation",
+      "raw_skill_id": "tooluniverse-residue-functional-mechanism-interpretation",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-residue-functional-mechanism-interpretation/references/upstream-details.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-residue-functional-mechanism-interpretation/references/upstream-details.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-rnaseq-deseq2",
+      "raw_skill_id": "tooluniverse-rnaseq-deseq2",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/references/data_loading.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-rnaseq-deseq2/references/data_loading.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/references/dispersion_analysis.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-rnaseq-deseq2/references/dispersion_analysis.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/references/edger_limma_voom.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-rnaseq-deseq2/references/edger_limma_voom.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/references/enrichment_analysis.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-rnaseq-deseq2/references/enrichment_analysis.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/references/output_formatting.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-rnaseq-deseq2/references/output_formatting.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/references/pydeseq2_workflow.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-rnaseq-deseq2/references/pydeseq2_workflow.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/references/question_parsing.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-rnaseq-deseq2/references/question_parsing.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/references/result_filtering.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-rnaseq-deseq2/references/result_filtering.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/references/troubleshooting.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-rnaseq-deseq2/references/troubleshooting.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/references/upstream-details.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-rnaseq-deseq2/references/upstream-details.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/references/worked_examples.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-rnaseq-deseq2/references/worked_examples.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/scripts/convert_rds_to_csv.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-rnaseq-deseq2/scripts/convert_rds_to_csv.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/scripts/format_deseq2_output.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-rnaseq-deseq2/scripts/format_deseq2_output.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/scripts/gene_length_correlation.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-rnaseq-deseq2/scripts/gene_length_correlation.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/scripts/load_count_matrix.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-rnaseq-deseq2/scripts/load_count_matrix.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/scripts/multi_strain_venn.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-rnaseq-deseq2/scripts/multi_strain_venn.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/scripts/one_way_anova_f.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-rnaseq-deseq2/scripts/one_way_anova_f.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/scripts/pca_variance.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-rnaseq-deseq2/scripts/pca_variance.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/scripts/r_deseq2_wrapper.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-rnaseq-deseq2/scripts/r_deseq2_wrapper.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/scripts/r_edger_limma_wrapper.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-rnaseq-deseq2/scripts/r_edger_limma_wrapper.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-sequence-analysis",
+      "raw_skill_id": "tooluniverse-sequence-analysis",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-sequence-analysis/scripts/amino_acids.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-sequence-analysis/scripts/amino_acids.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-sequence-analysis/scripts/biology_facts.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-sequence-analysis/scripts/biology_facts.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-sequence-analysis/scripts/sequence_tools.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-sequence-analysis/scripts/sequence_tools.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-sequence-analysis/scripts/translate_dna.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-sequence-analysis/scripts/translate_dna.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-sequence-retrieval",
+      "raw_skill_id": "tooluniverse-sequence-retrieval",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-sequence-retrieval/CHECKLIST.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-sequence-retrieval/CHECKLIST.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-sequence-retrieval/examples.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-sequence-retrieval/examples.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-single-cell",
+      "raw_skill_id": "tooluniverse-single-cell",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/analysis_patterns.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-single-cell/analysis_patterns.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/references/cell_communication.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-single-cell/references/cell_communication.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/references/clustering_guide.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-single-cell/references/clustering_guide.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/references/marker_identification.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-single-cell/references/marker_identification.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/references/scanpy_workflow.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-single-cell/references/scanpy_workflow.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/references/scrna_qc.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-single-cell/references/scrna_qc.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/references/seurat_workflow.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-single-cell/references/seurat_workflow.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/references/trajectory_analysis.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-single-cell/references/trajectory_analysis.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/references/troubleshooting.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-single-cell/references/troubleshooting.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/scripts/find_markers.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-single-cell/scripts/find_markers.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/scripts/normalize_data.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-single-cell/scripts/normalize_data.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/scripts/qc_metrics.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-single-cell/scripts/qc_metrics.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/scripts/scrna_qc.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-single-cell/scripts/scrna_qc.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-small-molecule-discovery",
+      "raw_skill_id": "tooluniverse-small-molecule-discovery",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-spatial-omics-analysis",
+      "raw_skill_id": "tooluniverse-spatial-omics-analysis",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-spatial-omics-analysis/phase-procedures.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-spatial-omics-analysis/phase-procedures.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-spatial-omics-analysis/reference-data.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-spatial-omics-analysis/reference-data.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-spatial-omics-analysis/report-template.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-spatial-omics-analysis/report-template.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-spatial-omics-analysis/tool-reference.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-spatial-omics-analysis/tool-reference.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-spatial-transcriptomics",
+      "raw_skill_id": "tooluniverse-spatial-transcriptomics",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-spatial-transcriptomics/code_examples.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-spatial-transcriptomics/code_examples.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-spatial-transcriptomics/report_template.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-spatial-transcriptomics/report_template.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-statistical-modeling",
+      "raw_skill_id": "tooluniverse-statistical-modeling",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/EXAMPLES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-statistical-modeling/EXAMPLES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/QUICK_START.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-statistical-modeling/QUICK_START.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/TOOLS_REFERENCE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-statistical-modeling/TOOLS_REFERENCE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/anova_and_tests.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-statistical-modeling/anova_and_tests.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/references/common_patterns.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-statistical-modeling/references/common_patterns.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/references/cox_regression.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-statistical-modeling/references/cox_regression.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/references/linear_models.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-statistical-modeling/references/linear_models.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/references/logistic_regression.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-statistical-modeling/references/logistic_regression.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/references/ordinal_logistic.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-statistical-modeling/references/ordinal_logistic.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/references/troubleshooting.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-statistical-modeling/references/troubleshooting.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/references/upstream-details.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-statistical-modeling/references/upstream-details.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/scripts/expression_anova.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-statistical-modeling/scripts/expression_anova.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/scripts/format_statistical_output.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-statistical-modeling/scripts/format_statistical_output.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/scripts/logistic_regression_or.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-statistical-modeling/scripts/logistic_regression_or.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/scripts/model_diagnostics.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-statistical-modeling/scripts/model_diagnostics.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/scripts/power_analysis.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-statistical-modeling/scripts/power_analysis.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/scripts/prepare_ae_cohort.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-statistical-modeling/scripts/prepare_ae_cohort.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/scripts/r_natural_spline_regression.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-statistical-modeling/scripts/r_natural_spline_regression.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/scripts/sdtm_ordinal_logistic.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-statistical-modeling/scripts/sdtm_ordinal_logistic.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/scripts/spline_model_compare.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-statistical-modeling/scripts/spline_model_compare.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/scripts/stat_tests.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-statistical-modeling/scripts/stat_tests.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-stem-cell-organoid",
+      "raw_skill_id": "tooluniverse-stem-cell-organoid",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-structural-proteomics",
+      "raw_skill_id": "tooluniverse-structural-proteomics",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-structural-variant-analysis",
+      "raw_skill_id": "tooluniverse-structural-variant-analysis",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-structural-variant-analysis/ANALYSIS_PROCEDURES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-structural-variant-analysis/ANALYSIS_PROCEDURES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-structural-variant-analysis/CLASSIFICATION_GUIDE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-structural-variant-analysis/CLASSIFICATION_GUIDE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-structural-variant-analysis/EXAMPLES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-structural-variant-analysis/EXAMPLES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-structural-variant-analysis/REPORT_TEMPLATE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-structural-variant-analysis/REPORT_TEMPLATE.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-systems-biology",
+      "raw_skill_id": "tooluniverse-systems-biology",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-systems-biology/python_implementation.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-systems-biology/python_implementation.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-systems-biology/test1_genelist.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-systems-biology/test1_genelist.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-systems-biology/test2_protein.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-systems-biology/test2_protein.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-systems-biology/test3_keyword.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-systems-biology/test3_keyword.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-systems-biology/test4_combined.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-systems-biology/test4_combined.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-target-research",
+      "raw_skill_id": "tooluniverse-target-research",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-target-research/EVIDENCE_GRADING.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-target-research/EVIDENCE_GRADING.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-target-research/EXAMPLES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-target-research/EXAMPLES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-target-research/IMPLEMENTATION.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-target-research/IMPLEMENTATION.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-target-research/REFERENCE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-target-research/REFERENCE.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-target-research/REPORT_FORMAT.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-target-research/REPORT_FORMAT.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-toxicology",
+      "raw_skill_id": "tooluniverse-toxicology",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-vaccine-design",
+      "raw_skill_id": "tooluniverse-vaccine-design",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-vaccine-design/scripts/population_coverage.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-vaccine-design/scripts/population_coverage.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-variant-analysis",
+      "raw_skill_id": "tooluniverse-variant-analysis",
+      "execution_type": "mixed",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/QUICK_START.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-variant-analysis/QUICK_START.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/python_implementation.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-variant-analysis/python_implementation.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/references/annotation_guide.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-variant-analysis/references/annotation_guide.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/references/mutation_classification_guide.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-variant-analysis/references/mutation_classification_guide.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/references/sv_cnv_analysis.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-variant-analysis/references/sv_cnv_analysis.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/references/upstream-details.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-variant-analysis/references/upstream-details.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/references/vcf_filtering.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-variant-analysis/references/vcf_filtering.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/scripts/annotate_variants.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-variant-analysis/scripts/annotate_variants.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/scripts/coding_variant_filter.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-variant-analysis/scripts/coding_variant_filter.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/scripts/filter_variants.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-variant-analysis/scripts/filter_variants.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/scripts/gatk_haplotypecaller_pipeline.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-variant-analysis/scripts/gatk_haplotypecaller_pipeline.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/scripts/parse_vcf.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-variant-analysis/scripts/parse_vcf.py"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/scripts/variant_fraction.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-variant-analysis/scripts/variant_fraction.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-variant-functional-annotation",
+      "raw_skill_id": "tooluniverse-variant-functional-annotation",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-variant-interpretation",
+      "raw_skill_id": "tooluniverse-variant-interpretation",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-variant-interpretation/ACMG_CLASSIFICATION.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-variant-interpretation/ACMG_CLASSIFICATION.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-variant-interpretation/CHECKLIST.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-variant-interpretation/CHECKLIST.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-variant-interpretation/CODE_PATTERNS.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-variant-interpretation/CODE_PATTERNS.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-variant-interpretation/EXAMPLES.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-variant-interpretation/EXAMPLES.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-variant-interpretation/TOOLS_REFERENCE.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-variant-interpretation/TOOLS_REFERENCE.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-variant-predictor-dms-validation",
+      "raw_skill_id": "tooluniverse-variant-predictor-dms-validation",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-tooluniverse-variant-to-mechanism",
+      "raw_skill_id": "tooluniverse-variant-to-mechanism",
+      "execution_type": "llm",
+      "validator": "validators/validate_tooluniverse_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": []
+    }
+  ]
+}

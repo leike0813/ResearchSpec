@@ -1,0 +1,90 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-protein-interactions
+title: Protein Interaction Network Analysis
+description: Protein-protein interaction (PPI) network analysis — STRING
+  (predicted + experimental), BioGRID (curated), SASBDB (small-angle
+  scattering). Distinguishes physical interactions (binding) from functional
+  associations (co-expression, co-regulation). Use for interactome queries,
+  complex partner identification, and pathway-level interaction analysis.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-description-update-complete.md
+    path: DESCRIPTION_UPDATE_COMPLETE.md
+    content_hash: b531ce92b7a944a7b336a1818a720d4d659bb98c91b4cdce49e63175d4b2f873
+    license: Apache-2.0
+  - knowledge_id: tu-domain-analysis.md
+    path: DOMAIN_ANALYSIS.md
+    content_hash: 94fe4dd814874a224e238a8d052cc2dbb7632620e089c806dbc824b8864be42c
+    license: Apache-2.0
+  - knowledge_id: tu-phase2-discoveries.md
+    path: PHASE2_DISCOVERIES.md
+    content_hash: 3b264bd48c3bd84286951447743347c23723ac1406c51bf01889f37e6439d0ce
+    license: Apache-2.0
+  - knowledge_id: tu-quick-start.md
+    path: QUICK_START.md
+    content_hash: 47aee153cc96b325c21b1828e65630814eaf76108bb64acc0ac381e972d93b8b
+    license: Apache-2.0
+  - knowledge_id: tu-tool-description-optimization.md
+    path: TOOL_DESCRIPTION_OPTIMIZATION.md
+    content_hash: 31fa783933dd09bb4b2d92df282f3bf077ba89936191ea7548f8508053deaac3
+    license: Apache-2.0
+  - knowledge_id: tu-python-implementation.py
+    path: python_implementation.py
+    content_hash: 7ece8fbf88878a9c5c238f87d653dadd0a0bbb837d4f1a06051a64e189eb359f
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-protein-interactions/SKILL.md
+      sha256: 9edc3f345c4230430c13687547ae743ec09c7bfca3acce9491afe966f5d89aa1
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-protein-interactions/DESCRIPTION_UPDATE_COMPLETE.md
+      sha256: b531ce92b7a944a7b336a1818a720d4d659bb98c91b4cdce49e63175d4b2f873
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-protein-interactions/DOMAIN_ANALYSIS.md
+      sha256: 94fe4dd814874a224e238a8d052cc2dbb7632620e089c806dbc824b8864be42c
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-protein-interactions/PHASE2_DISCOVERIES.md
+      sha256: 3b264bd48c3bd84286951447743347c23723ac1406c51bf01889f37e6439d0ce
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-protein-interactions/QUICK_START.md
+      sha256: 47aee153cc96b325c21b1828e65630814eaf76108bb64acc0ac381e972d93b8b
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-protein-interactions/TOOL_DESCRIPTION_OPTIMIZATION.md
+      sha256: 31fa783933dd09bb4b2d92df282f3bf077ba89936191ea7548f8508053deaac3
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-protein-interactions/python_implementation.py
+      sha256: 7ece8fbf88878a9c5c238f87d653dadd0a0bbb837d4f1a06051a64e189eb359f
+license: Apache-2.0

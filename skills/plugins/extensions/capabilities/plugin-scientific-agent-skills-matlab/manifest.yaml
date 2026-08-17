@@ -1,0 +1,104 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-matlab
+title: MATLAB/Octave Scientific Computing
+description: MATLAB and GNU Octave numerical computing for matrix operations,
+  data analysis, visualization, and scientific computing. Use when writing
+  MATLAB/Octave scripts for linear algebra, signal processing, image processing,
+  differential equations, optimization, statistics, or creating scientific
+  visualizations. Also use when the user needs help with MATLAB syntax,
+  functions, or wants to convert between MATLAB and Python code. Scripts can be
+  executed with MATLAB or the open-source GNU Octave interpreter.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-references-data-import-export.md
+    path: references/data-import-export.md
+    content_hash: 6d598e56aa30e143426e294012ed59d1c3b3e6322b3f910a40269ff52eac2ee4
+    license: Apache-2.0
+  - knowledge_id: sas-references-executing-scripts.md
+    path: references/executing-scripts.md
+    content_hash: c9d90ab6a6888f54743818813b97c367b61911b739c030dc0c41f85affbc4195
+    license: Apache-2.0
+  - knowledge_id: sas-references-graphics-visualization.md
+    path: references/graphics-visualization.md
+    content_hash: e4721985ee482a643e9aec015ac3c8648adcf4878369af98aba69a83dc05f9df
+    license: Apache-2.0
+  - knowledge_id: sas-references-mathematics.md
+    path: references/mathematics.md
+    content_hash: 460a3de65dae9c0adbcdfeaf89a71c1b2b2947b6dc08fc1e00d9a1ff9b8dce5c
+    license: Apache-2.0
+  - knowledge_id: sas-references-matrices-arrays.md
+    path: references/matrices-arrays.md
+    content_hash: 7009f40385ea5ead39a1070ed14694b917f9e259b2051c38f617829ab706a943
+    license: Apache-2.0
+  - knowledge_id: sas-references-octave-compatibility.md
+    path: references/octave-compatibility.md
+    content_hash: 851a90612e3f0083eee0ab612eb7bf384f38b5f8459dcb03a7d5f37727b35296
+    license: Apache-2.0
+  - knowledge_id: sas-references-programming.md
+    path: references/programming.md
+    content_hash: 8ee4bc6602be8fa151f715d2ffae550eeed1002dceb60e7a5b5b612ec2ad9623
+    license: Apache-2.0
+  - knowledge_id: sas-references-python-integration.md
+    path: references/python-integration.md
+    content_hash: 1915d531af3c8a428d894c9b74caef4321f1441337b556c0f4e67364af913b12
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matlab/SKILL.md
+      sha256: 2d9e95f774096a00b9a7aebe8501bf3cc877acf1d0c2638874868a80911f0cd5
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matlab/references/data-import-export.md
+      sha256: 6d598e56aa30e143426e294012ed59d1c3b3e6322b3f910a40269ff52eac2ee4
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matlab/references/executing-scripts.md
+      sha256: c9d90ab6a6888f54743818813b97c367b61911b739c030dc0c41f85affbc4195
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matlab/references/graphics-visualization.md
+      sha256: e4721985ee482a643e9aec015ac3c8648adcf4878369af98aba69a83dc05f9df
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matlab/references/mathematics.md
+      sha256: 460a3de65dae9c0adbcdfeaf89a71c1b2b2947b6dc08fc1e00d9a1ff9b8dce5c
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matlab/references/matrices-arrays.md
+      sha256: 7009f40385ea5ead39a1070ed14694b917f9e259b2051c38f617829ab706a943
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matlab/references/octave-compatibility.md
+      sha256: 851a90612e3f0083eee0ab612eb7bf384f38b5f8459dcb03a7d5f37727b35296
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matlab/references/programming.md
+      sha256: 8ee4bc6602be8fa151f715d2ffae550eeed1002dceb60e7a5b5b612ec2ad9623
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matlab/references/python-integration.md
+      sha256: 1915d531af3c8a428d894c9b74caef4321f1441337b556c0f4e67364af913b12
+license: Apache-2.0

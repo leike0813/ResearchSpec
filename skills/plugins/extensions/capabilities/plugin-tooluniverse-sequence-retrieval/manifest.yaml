@@ -1,0 +1,66 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-sequence-retrieval
+title: Biological Sequence Retrieval
+description: "Retrieve DNA/RNA/protein sequences from NCBI and ENA with
+  disambiguation. Quality hierarchy: RefSeq (NM_/NP_) > RefSeq predicted
+  (XM_/XP_) > GenBank submissions. Use for fetching specific sequences by
+  accession, gene-symbol-to-sequence lookup, transcript-isoform retrieval, and
+  curated-vs-raw-submission preference."
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-checklist.md
+    path: CHECKLIST.md
+    content_hash: 0008163bcbb2a65d896bd9db85b0348ae1641698d02fa3b2290b96efe481d689
+    license: Apache-2.0
+  - knowledge_id: tu-examples.md
+    path: examples.md
+    content_hash: 888c97fed45f88336cc8bb22d73ddaed7056a3bd4c862bc6de54406f7efb93d8
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-sequence-retrieval/SKILL.md
+      sha256: 9f91711762d7af863cbb7d8b6797e3004d7f73f78f39f419cd8a29f58c17e060
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-sequence-retrieval/CHECKLIST.md
+      sha256: 0008163bcbb2a65d896bd9db85b0348ae1641698d02fa3b2290b96efe481d689
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-sequence-retrieval/examples.md
+      sha256: 888c97fed45f88336cc8bb22d73ddaed7056a3bd4c862bc6de54406f7efb93d8
+license: Apache-2.0

@@ -1,0 +1,55 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-variant-to-mechanism
+title: Variant-to-Mechanism Analysis Skill
+description: End-to-end variant-to-mechanism analysis — trace a variant
+  (rsID/coordinates) through regulatory context, target gene(s), molecular
+  pathway(s), and phenotypic consequences. Integrates 7+ databases across 3
+  evidence layers (regulatory, molecular, disease) for a mechanistic model. Use
+  for GWAS-hit-to-mechanism, eQTL-causal-gene tracing, and full causal-chain
+  reports.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs: []
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-to-mechanism/SKILL.md
+      sha256: 5b766b0cdca821914297cdd44e5781169ada11cf07cc44f1d3951e8f807f17ec
+license: Apache-2.0

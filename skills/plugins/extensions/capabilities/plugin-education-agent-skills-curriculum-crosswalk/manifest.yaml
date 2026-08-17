@@ -1,0 +1,53 @@
+schema_version: "1"
+capability_id: plugin-education-agent-skills-curriculum-crosswalk
+title: What This Skill Does
+description: Compares two or more band-tagged frameworks and produces a
+  framework-neutral topic matrix showing coverage and gaps across all inputs,
+  plus an optional reference-centric PLC crosswalk document when a reference
+  framework is supplied.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: education-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_education_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs: []
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-curriculum-crosswalk/SKILL.md
+      sha256: da53d7c193ea55c719d7865ba90e50a02ee5f91fe1585151b9809dc519aa81d5
+license: Apache-2.0

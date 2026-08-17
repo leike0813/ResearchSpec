@@ -1,0 +1,186 @@
+---
+name: plugin-tooluniverse-protein-therapeutic-design
+description: "AI-guided de novo protein design — RFdiffusion backbone generation, ProteinMPNN sequence design, structure validation (pLDDT, pTM, MPNN scores). Use for designing therapeutic protein binders, novel scaffolds, enzyme variants, and miniprotein/protein-interface design before experimental validation."
+metadata:
+  capability_id: plugin-tooluniverse-protein-therapeutic-design
+  node_kind: producer
+  execution_type: llm
+  gate_policy: advisory
+  license: Apache-2.0
+---
+
+
+> **ResearchSpec boundary:** This Skill may produce candidate semantic material, but it must not modify ResearchSpec workflow state, routes, work items, artifact registry, Gates, Decisions, or receipts. Use the ResearchSpec CLI for authoritative mutations.
+
+# Therapeutic Protein Designer
+
+AI-guided de novo protein design using RFdiffusion backbone generation, ProteinMPNN sequence optimization, and structure validation for therapeutic protein development.
+
+**KEY PRINCIPLES**:
+1. **Structure-first** - Generate backbone geometry before sequence
+2. **Target-guided** - Design binders with target structure in mind
+3. **Iterative validation** - Predict structure to validate designs
+4. **Developability-aware** - Consider aggregation, immunogenicity, expression
+5. **Evidence-graded** - Grade designs by confidence metrics
+6. **Actionable output** - Provide sequences ready for experimental testing
+7. **English-first queries** - Always use English terms in tool calls
+
+Therapeutic protein design starts with the target interaction. What binding surface do you need to cover? A small pocket = nanobody or peptide. A large flat surface = designed protein. Stability, immunogenicity, and manufacturability constrain the design space.
+
+## LOOK UP, DON'T GUESS
+When uncertain about any scientific fact, SEARCH databases first rather than reasoning from memory. A database-verified answer is always more reliable than a guess.
+
+---
+
+## COMPUTE, DON'T DESCRIBE
+When analysis requires computation (statistics, data processing, scoring, enrichment), write and run Python code via Bash. Don't describe what you would do — execute it and report actual results. Use ToolUniverse tools to retrieve data, then Python (pandas, scipy, statsmodels, matplotlib) to analyze it.
+
+## When to Use
+
+Apply when user asks to:
+- Design a protein binder, therapeutic protein, or scaffold
+- Optimize a protein sequence for function
+- Design a de novo enzyme
+- Generate protein variants for target binding
+
+---
+
+## Workflow Overview
+
+```
+Phase 1: Target Characterization
+  Get structure (PDB, EMDB cryo-EM, AlphaFold), identify binding epitope
+
+Phase 2: Backbone Generation (RFdiffusion)
+  Define constraints, generate >= 5 backbones, filter by geometry
+
+Phase 3: Sequence Design (ProteinMPNN)
+  Design >= 8 sequences per backbone, sample with temperature control
+
+Phase 4: Structure Validation (ESMFold/AlphaFold2)
+  Predict structure, compare to backbone, assess pLDDT/pTM
+
+Phase 5: Developability Assessment
+  Aggregation, pI, expression prediction
+
+Phase 6: Report Synthesis
+  Ranked candidates, FASTA, experimental recommendations
+```
+
+---
+
+## Critical Requirements
+
+### Report-First Approach (MANDATORY)
+1. Create `[TARGET]_protein_design_report.md` first with section headers
+2. Progressively update as designs are generated
+3. Output `[TARGET]_designed_sequences.fasta` and `[TARGET]_top_candidates.csv`
+
+### Design Documentation (MANDATORY)
+Every design MUST include: Sequence, Length, Target, Method, and Quality Metrics (pLDDT, pTM, MPNN score, binding prediction).
+
+---
+
+## NVIDIA NIM Tools
+
+| Tool | Purpose | Key Parameter |
+|------|---------|---------------|
+| `NvidiaNIM_rfdiffusion` *(requires NVIDIA_API_KEY env var; free key at build.nvidia.com)* | Backbone generation | `diffusion_steps` (NOT `num_steps`) |
+| `NvidiaNIM_proteinmpnn` *(requires NVIDIA_API_KEY env var; free key at build.nvidia.com)* | Sequence design | `pdb_string` (NOT `pdb`) |
+| `ESMFold_predict_structure` | Fast validation | `sequence` (NOT `seq`) |
+| `NvidiaNIM_alphafold2` *(requires NVIDIA_API_KEY env var; free key at build.nvidia.com)* | High-accuracy structure inference from sequence | `sequence`, `algorithm` |
+| `NvidiaNIM_esm2_650m` *(requires NVIDIA_API_KEY env var; free key at build.nvidia.com)* | Sequence embeddings | `sequences`, `format` |
+
+### Common Parameter Mistakes
+
+| Tool | Wrong | Correct |
+|------|-------|---------|
+| `NvidiaNIM_rfdiffusion` *(requires NVIDIA_API_KEY)* | `num_steps=50` | `diffusion_steps=50` |
+| `NvidiaNIM_proteinmpnn` *(requires NVIDIA_API_KEY)* | `pdb=content` | `pdb_string=content` |
+| `ESMFold_predict_structure` | `seq="MVLS..."` | `sequence="MVLS..."` |
+| `NvidiaNIM_alphafold2` *(requires NVIDIA_API_KEY)* | `seq="MVLS..."` | `sequence="MVLS..."` |
+
+### NVIDIA NIM Requirements
+- **API Key**: `NVIDIA_API_KEY` environment variable required
+- **Rate limits**: 40 RPM (1.5 second minimum between calls)
+- AlphaFold2 may return 202 (polling required); RFdiffusion and ESMFold are synchronous
+
+---
+
+## Supporting Tools
+
+| Tool | Purpose | Key Parameters |
+|------|---------|----------------|
+| `PDBe_get_uniprot_mappings` | Find PDB structures | `uniprot_id` |
+| `RCSBData_get_entry` | Download PDB file | `pdb_id` |
+| `alphafold_get_prediction` | Get AlphaFold DB structure | `accession` |
+| `EMDB_search_structures` | Search cryo-EM maps | `query` |
+| `EMDB_get_structure` | Get entry details | `entry_id` |
+| `UniProt_get_entry_by_accession` | Get target sequence | `accession` |
+| `InterPro_get_protein_domains` | Get domains | `accession` |
+
+---
+
+## Evidence Grading
+
+| Tier | Criteria |
+|------|----------|
+| T1 (best) | pLDDT >85, pTM >0.8, low aggregation, neutral pI |
+| T2 | pLDDT >75, pTM >0.7, acceptable developability |
+| T3 | pLDDT >70, pTM >0.65, developability concerns |
+| T4 | Failed validation or major developability issues |
+
+---
+
+## Completeness Checklist
+
+- [ ] Target structure obtained (PDB or predicted)
+- [ ] Binding epitope identified
+- [ ] >= 5 backbones generated, top 3-5 selected
+- [ ] >= 8 sequences per backbone, MPNN scores reported
+- [ ] All sequences validated (ESMFold), pLDDT/pTM reported, >= 3 passing
+- [ ] Developability assessed (aggregation, pI, expression)
+- [ ] Ranked candidate list, FASTA file, experimental recommendations
+
+---
+
+## Reference Files
+
+- **DESIGN_PROCEDURES.md** - Phase-by-phase code examples, sampling parameters, fallback chains
+- **TOOLS_REFERENCE.md** - Complete tool documentation with code examples
+- **EXAMPLES.md** - Sample design workflows and outputs
+- **CHECKLIST.md** - Detailed phase checklists and quality metrics
+- **design_templates.md** - Report templates and output format examples
+## ResearchSpec node contract
+
+Execute exactly one ResearchSpec capability node.
+
+- Input: `task_request` (plugin-task.v1).
+- Output: `research_brief` (plugin-result.v1), a JSON object at the declared output path.
+
+## Packaged knowledge
+
+
+- Load knowledge ID `tu-checklist.md` from `CHECKLIST.md`.
+- Load knowledge ID `tu-design-procedures.md` from `DESIGN_PROCEDURES.md`.
+- Load knowledge ID `tu-examples.md` from `EXAMPLES.md`.
+- Load knowledge ID `tu-tools-reference.md` from `TOOLS_REFERENCE.md`.
+- Load knowledge ID `tu-design-templates.md` from `design_templates.md`.
+
+All operations follow the reviewed procedure below; no packaged script exists.
+
+## Brief output
+
+Before submitting, write the `research_brief` JSON with these required sections:
+`scope` `source_ledger` `method_plan` `work_products` `validation_results` `conclusions`.
+
+Every section must be non-empty and evidence-backed. The declared
+`validate_tooluniverse_brief.py --required
+scope, source_ledger, method_plan, work_products, validation_results, conclusions`
+validator rejects missing or empty sections. It never imports or executes the packaged resources.
+
+## Completion
+
+When the brief is written, submit the declared outputs through
+`researchspec advance node:<run>/<node>`, then consult `researchspec status` for the next legal
+action. Do not choose, start, or advance another node, phase, mode, or run.

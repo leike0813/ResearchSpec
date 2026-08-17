@@ -1,0 +1,100 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-pymatgen
+title: Pymatgen - Python Materials Genomics
+description: Materials science toolkit. Crystal structures (CIF, POSCAR), phase
+  diagrams, band structure, DOS, Materials Project integration, format
+  conversion, for computational materials science.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-references-analysis-modules.md
+    path: references/analysis_modules.md
+    content_hash: 262b89d9e9fbca2692f9432f2f4b5d35500a1f749f7a2002111c3014e89937f4
+    license: Apache-2.0
+  - knowledge_id: sas-references-core-classes.md
+    path: references/core_classes.md
+    content_hash: 230c4a8be4467a7c712d95a0b4109af2b1427b9ea7cb191bc2ea78062d7143de
+    license: Apache-2.0
+  - knowledge_id: sas-references-io-formats.md
+    path: references/io_formats.md
+    content_hash: d31fab0646a5be2ceefadca786f079a6b0b62f93c502a668654548d8bae9c1d1
+    license: Apache-2.0
+  - knowledge_id: sas-references-materials-project-api.md
+    path: references/materials_project_api.md
+    content_hash: 9af1daa4bc88a0774b93d238fdf203d8cf86b817ac642166e55abd5248eb5fbc
+    license: Apache-2.0
+  - knowledge_id: sas-references-transformations-workflows.md
+    path: references/transformations_workflows.md
+    content_hash: 7c7e4cc305c4c67cbcf8d56ba7bee08170ce5264e6bba964aa0b98de44001fb9
+    license: Apache-2.0
+  - knowledge_id: sas-scripts-phase-diagram-generator.py
+    path: scripts/phase_diagram_generator.py
+    content_hash: be132bf108bb799d81f53e17280de05db286d85c80e1ff34efe1bb75640e947e
+    license: Apache-2.0
+  - knowledge_id: sas-scripts-structure-analyzer.py
+    path: scripts/structure_analyzer.py
+    content_hash: efd488516026e53108af8f96872c1c30928de92efca9e083c15d620575cec76f
+    license: Apache-2.0
+  - knowledge_id: sas-scripts-structure-converter.py
+    path: scripts/structure_converter.py
+    content_hash: a1ee392512f3e97fa014cbe2e3f290f5d049d0431e59f4dbbd80c2dce4293935
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/SKILL.md
+      sha256: a5796348533f2481d5823ca936ca7e68c7263e548f8f901d53b2f0cf9107dd50
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/references/analysis_modules.md
+      sha256: 262b89d9e9fbca2692f9432f2f4b5d35500a1f749f7a2002111c3014e89937f4
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/references/core_classes.md
+      sha256: 230c4a8be4467a7c712d95a0b4109af2b1427b9ea7cb191bc2ea78062d7143de
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/references/io_formats.md
+      sha256: d31fab0646a5be2ceefadca786f079a6b0b62f93c502a668654548d8bae9c1d1
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/references/materials_project_api.md
+      sha256: 9af1daa4bc88a0774b93d238fdf203d8cf86b817ac642166e55abd5248eb5fbc
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/references/transformations_workflows.md
+      sha256: 7c7e4cc305c4c67cbcf8d56ba7bee08170ce5264e6bba964aa0b98de44001fb9
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/scripts/phase_diagram_generator.py
+      sha256: be132bf108bb799d81f53e17280de05db286d85c80e1ff34efe1bb75640e947e
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/scripts/structure_analyzer.py
+      sha256: efd488516026e53108af8f96872c1c30928de92efca9e083c15d620575cec76f
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/scripts/structure_converter.py
+      sha256: a1ee392512f3e97fa014cbe2e3f290f5d049d0431e59f4dbbd80c2dce4293935
+license: Apache-2.0

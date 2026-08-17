@@ -1,0 +1,85 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-binder-discovery
+title: Small Molecule Binder Discovery Strategy
+description: Discover novel small-molecule binders for protein targets using
+  structure-based and ligand-based screening. Covers druggability assessment,
+  known-ligand mining (ChEMBL, BindingDB), similarity expansion, ADMET
+  filtering, and synthesis feasibility. Use for hit identification, virtual
+  screening, target-to-compounds workflows, and lead-finding before
+  commit-to-medchem.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-checklist.md
+    path: CHECKLIST.md
+    content_hash: 8294664f86e26680cb8262d6a3d1d376ecd3068f514563c8a1924d7e695b0376
+    license: Apache-2.0
+  - knowledge_id: tu-examples.md
+    path: EXAMPLES.md
+    content_hash: 5ab15a5ab0067e96c0545b7a9a98a3aa79cf87014ae8e55d652603433dc472fc
+    license: Apache-2.0
+  - knowledge_id: tu-report-template.md
+    path: REPORT_TEMPLATE.md
+    content_hash: bfc4f87181f7a953c022378245fa181d64c387b9219c5174abe46412183f04d4
+    license: Apache-2.0
+  - knowledge_id: tu-tools-reference.md
+    path: TOOLS_REFERENCE.md
+    content_hash: 6de10a85a26632fed5c53a16534ea18f28e37ec149327451d15a26f4e59794be
+    license: Apache-2.0
+  - knowledge_id: tu-workflow-details.md
+    path: WORKFLOW_DETAILS.md
+    content_hash: 1b6685cd423ba0fe17fdcf84da9cf61d28527fff20fda5265fe9cb30f4171beb
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-binder-discovery/SKILL.md
+      sha256: 72457b03c898a9725bfb1689e6d0b0a2c93b982cd8c053f85c2a7ade607e7e3c
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-binder-discovery/CHECKLIST.md
+      sha256: 8294664f86e26680cb8262d6a3d1d376ecd3068f514563c8a1924d7e695b0376
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-binder-discovery/EXAMPLES.md
+      sha256: 5ab15a5ab0067e96c0545b7a9a98a3aa79cf87014ae8e55d652603433dc472fc
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-binder-discovery/REPORT_TEMPLATE.md
+      sha256: bfc4f87181f7a953c022378245fa181d64c387b9219c5174abe46412183f04d4
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-binder-discovery/TOOLS_REFERENCE.md
+      sha256: 6de10a85a26632fed5c53a16534ea18f28e37ec149327451d15a26f4e59794be
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-binder-discovery/WORKFLOW_DETAILS.md
+      sha256: 1b6685cd423ba0fe17fdcf84da9cf61d28527fff20fda5265fe9cb30f4171beb
+license: Apache-2.0

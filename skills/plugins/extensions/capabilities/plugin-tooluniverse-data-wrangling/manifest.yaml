@@ -1,0 +1,61 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-data-wrangling
+title: "Data Wrangling: Universal Access Patterns"
+description: Universal data access patterns for downloading and parsing
+  scientific data when ToolUniverse tools don't cover the source, only return
+  metadata, or you need bulk records. Use for VCF/h5ad/BAM/SDF/GCT parsing,
+  multi-step API workflows (search to filter to download to parse), thousands of
+  records at once, or sources with no dedicated tool. Write Python code via Bash
+  for every step.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-references-specialized-domains.md
+    path: references/specialized-domains.md
+    content_hash: 39d32f3da81c1e9818590d19ddd01dad99a82a648d9d2fd1a14cf8ac22735646
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-data-wrangling/SKILL.md
+      sha256: 6d4f92340b8924c9234cc1be47c83e9a83cd098cdc21c922e8d39244dd71d862
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-data-wrangling/references/specialized-domains.md
+      sha256: 39d32f3da81c1e9818590d19ddd01dad99a82a648d9d2fd1a14cf8ac22735646
+license: Apache-2.0

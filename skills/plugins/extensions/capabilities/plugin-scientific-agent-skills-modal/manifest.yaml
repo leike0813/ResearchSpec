@@ -1,0 +1,120 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-modal
+title: Modal
+description: Modal is a serverless cloud platform for running Python on demand,
+  including on-demand GPUs. Use when deploying or serving AI/ML models, running
+  GPU-accelerated workloads (training, fine-tuning, inference), serving web
+  endpoints, scheduling batch jobs, or scaling Python code to cloud containers
+  with the Modal SDK.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-references-api-reference.md
+    path: references/api_reference.md
+    content_hash: d18de696ec9f645d8fbedcb7436a5bbfb9d454282708a3cfb31b47be902eff27
+    license: Apache-2.0
+  - knowledge_id: sas-references-examples.md
+    path: references/examples.md
+    content_hash: 257041a086a4b9ad4619efba68819f87034e1c29315d71c09ddf82751d0734ea
+    license: Apache-2.0
+  - knowledge_id: sas-references-functions.md
+    path: references/functions.md
+    content_hash: 52cbbd7fd7707cab44fb9d67206d29948cbe15be99dde783216af7d00073dcf2
+    license: Apache-2.0
+  - knowledge_id: sas-references-getting-started.md
+    path: references/getting-started.md
+    content_hash: 757c29f55343886a441f3365a5a5bc75e9033bbc2bc724f1c8c2d8bc6ac1fa4e
+    license: Apache-2.0
+  - knowledge_id: sas-references-gpu.md
+    path: references/gpu.md
+    content_hash: c06ccf16f6accf9011447e95aec0a7f2cc9d39ecec8ea5aabd5272cc49182760
+    license: Apache-2.0
+  - knowledge_id: sas-references-images.md
+    path: references/images.md
+    content_hash: 46fc6b842d7d90cf7a7d0be3ed8afaa365b0008681a0598ac2d7f3f8cb36b90b
+    license: Apache-2.0
+  - knowledge_id: sas-references-resources.md
+    path: references/resources.md
+    content_hash: f2c5b4f87147fea42a4dae7f1134958904cd727052486517f355a089d31cb7fd
+    license: Apache-2.0
+  - knowledge_id: sas-references-scaling.md
+    path: references/scaling.md
+    content_hash: d047c866a44571c6ca6d7dc8c9c2f040cfe6273a3bcdb147546ce7898a4ec544
+    license: Apache-2.0
+  - knowledge_id: sas-references-scheduled-jobs.md
+    path: references/scheduled-jobs.md
+    content_hash: f3f7a2e92d1b8bad90cd302bd44701d4dd8f3dff274785a196d8395b20f24ba1
+    license: Apache-2.0
+  - knowledge_id: sas-references-volumes.md
+    path: references/volumes.md
+    content_hash: 88a25d1f4e5d15372de23f3b53c570d1b3f26fdde19564674df089cc75180426
+    license: Apache-2.0
+  - knowledge_id: sas-references-web-endpoints.md
+    path: references/web-endpoints.md
+    content_hash: a806cc6582c21e7d9d32372ee68475afb7cce68e799cff46ceb49af37fdb94e2
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-modal/SKILL.md
+      sha256: 4976ab89119842a1a423abffaee12b2ddf94945504af74dc796d178c12aaff26
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-modal/references/api_reference.md
+      sha256: d18de696ec9f645d8fbedcb7436a5bbfb9d454282708a3cfb31b47be902eff27
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-modal/references/examples.md
+      sha256: 257041a086a4b9ad4619efba68819f87034e1c29315d71c09ddf82751d0734ea
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-modal/references/functions.md
+      sha256: 52cbbd7fd7707cab44fb9d67206d29948cbe15be99dde783216af7d00073dcf2
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-modal/references/getting-started.md
+      sha256: 757c29f55343886a441f3365a5a5bc75e9033bbc2bc724f1c8c2d8bc6ac1fa4e
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-modal/references/gpu.md
+      sha256: c06ccf16f6accf9011447e95aec0a7f2cc9d39ecec8ea5aabd5272cc49182760
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-modal/references/images.md
+      sha256: 46fc6b842d7d90cf7a7d0be3ed8afaa365b0008681a0598ac2d7f3f8cb36b90b
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-modal/references/resources.md
+      sha256: f2c5b4f87147fea42a4dae7f1134958904cd727052486517f355a089d31cb7fd
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-modal/references/scaling.md
+      sha256: d047c866a44571c6ca6d7dc8c9c2f040cfe6273a3bcdb147546ce7898a4ec544
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-modal/references/scheduled-jobs.md
+      sha256: f3f7a2e92d1b8bad90cd302bd44701d4dd8f3dff274785a196d8395b20f24ba1
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-modal/references/volumes.md
+      sha256: 88a25d1f4e5d15372de23f3b53c570d1b3f26fdde19564674df089cc75180426
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-modal/references/web-endpoints.md
+      sha256: a806cc6582c21e7d9d32372ee68475afb7cce68e799cff46ceb49af37fdb94e2
+license: Apache-2.0

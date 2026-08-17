@@ -1,0 +1,84 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-protein-therapeutic-design
+title: Therapeutic Protein Designer
+description: AI-guided de novo protein design — RFdiffusion backbone generation,
+  ProteinMPNN sequence design, structure validation (pLDDT, pTM, MPNN scores).
+  Use for designing therapeutic protein binders, novel scaffolds, enzyme
+  variants, and miniprotein/protein-interface design before experimental
+  validation.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-checklist.md
+    path: CHECKLIST.md
+    content_hash: e98c22d8cbbee3c01418a8828ba6249e787aed87b5134f25f1d793f52c052ddf
+    license: Apache-2.0
+  - knowledge_id: tu-design-procedures.md
+    path: DESIGN_PROCEDURES.md
+    content_hash: 1d0562ee1332efa97bf6a47fba2786d9f10ec75528c6acbcadde49bd69b835b9
+    license: Apache-2.0
+  - knowledge_id: tu-examples.md
+    path: EXAMPLES.md
+    content_hash: d4e9aa47379043b193675f65094a2141253155f812009b331a0823712eda962c
+    license: Apache-2.0
+  - knowledge_id: tu-tools-reference.md
+    path: TOOLS_REFERENCE.md
+    content_hash: 271755a9a17ac5ae2ee468c127532d9ed600ffcdbb517815f2a9e297e7f06283
+    license: Apache-2.0
+  - knowledge_id: tu-design-templates.md
+    path: design_templates.md
+    content_hash: 82d2d0351f21a11b9ffdb935d238bc0880b16261faa4c11a14b2cadd9b1e978c
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-protein-therapeutic-design/SKILL.md
+      sha256: c7fa4ed79ac56acae45c0ca73b7454766420ba698a1881a2143e5c4a4555cab6
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-protein-therapeutic-design/CHECKLIST.md
+      sha256: e98c22d8cbbee3c01418a8828ba6249e787aed87b5134f25f1d793f52c052ddf
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-protein-therapeutic-design/DESIGN_PROCEDURES.md
+      sha256: 1d0562ee1332efa97bf6a47fba2786d9f10ec75528c6acbcadde49bd69b835b9
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-protein-therapeutic-design/EXAMPLES.md
+      sha256: d4e9aa47379043b193675f65094a2141253155f812009b331a0823712eda962c
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-protein-therapeutic-design/TOOLS_REFERENCE.md
+      sha256: 271755a9a17ac5ae2ee468c127532d9ed600ffcdbb517815f2a9e297e7f06283
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-protein-therapeutic-design/design_templates.md
+      sha256: 82d2d0351f21a11b9ffdb935d238bc0880b16261faa4c11a14b2cadd9b1e978c
+license: Apache-2.0

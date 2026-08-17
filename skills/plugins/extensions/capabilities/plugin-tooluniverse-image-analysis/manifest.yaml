@@ -1,0 +1,109 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-image-analysis
+title: Microscopy Image Analysis and Quantitative Imaging Data
+description: Microscopy and quantitative imaging analysis — colony morphometry,
+  fluorescence intensity quantification, cell-count statistics, dose-response
+  curves, and ANOVA/Dunnett on image-derived measurements. Uses
+  pandas/numpy/scipy/scikit-image. Use for analyzing tabular outputs from
+  CellProfiler/ImageJ, image-derived measurement statistics, and image-based
+  assay quantification.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-references-cell-counting.md
+    path: references/cell_counting.md
+    content_hash: c2a44a411401c50c37b1ff9f661055c82f28901aded6ecbf302cbb3761beccc9
+    license: Apache-2.0
+  - knowledge_id: tu-references-fluorescence-analysis.md
+    path: references/fluorescence_analysis.md
+    content_hash: 5a256d6de37bb59ac00448cc6db04393de3079b5be23911b15befbf5ded7ad78
+    license: Apache-2.0
+  - knowledge_id: tu-references-image-processing.md
+    path: references/image_processing.md
+    content_hash: da2f6986e78ae92518ad6a976dfa073f2b33295b4d4a5e2fe977960f871540bf
+    license: Apache-2.0
+  - knowledge_id: tu-references-segmentation.md
+    path: references/segmentation.md
+    content_hash: 784289359a4986951a25256d24da140458419ecc99829edfab2825540409fcfe
+    license: Apache-2.0
+  - knowledge_id: tu-references-statistical-analysis.md
+    path: references/statistical_analysis.md
+    content_hash: 1f88d392c86f1e7af48dd0dbccdc5c77a3429dbf901a05140cb616719c9a42de
+    license: Apache-2.0
+  - knowledge_id: tu-references-troubleshooting.md
+    path: references/troubleshooting.md
+    content_hash: 34a5d8860437c6c49a03c43c36675dbadf1207fd5caa9ca4c3968d045265f507
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-batch-process.py
+    path: scripts/batch_process.py
+    content_hash: 43da97d93bff754cffb2bc55cee282c83f3c9edcf4a308448bfd18c8bf2cf669
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-measure-fluorescence.py
+    path: scripts/measure_fluorescence.py
+    content_hash: 662faf85e79ff30e9d968ebe3ffebb993da5509674dcbb6802b4e903d33028c8
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-segment-cells.py
+    path: scripts/segment_cells.py
+    content_hash: 2cdccafdf1dd3393815140a79660ca7e122e602010a6a1927c1b743d6cb57616
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-image-analysis/SKILL.md
+      sha256: c483d790d76a9855e7db637f8c73faa6c9410a7ca60313d2b4ce4a605dd84164
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-image-analysis/references/cell_counting.md
+      sha256: c2a44a411401c50c37b1ff9f661055c82f28901aded6ecbf302cbb3761beccc9
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-image-analysis/references/fluorescence_analysis.md
+      sha256: 5a256d6de37bb59ac00448cc6db04393de3079b5be23911b15befbf5ded7ad78
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-image-analysis/references/image_processing.md
+      sha256: da2f6986e78ae92518ad6a976dfa073f2b33295b4d4a5e2fe977960f871540bf
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-image-analysis/references/segmentation.md
+      sha256: 784289359a4986951a25256d24da140458419ecc99829edfab2825540409fcfe
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-image-analysis/references/statistical_analysis.md
+      sha256: 1f88d392c86f1e7af48dd0dbccdc5c77a3429dbf901a05140cb616719c9a42de
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-image-analysis/references/troubleshooting.md
+      sha256: 34a5d8860437c6c49a03c43c36675dbadf1207fd5caa9ca4c3968d045265f507
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-image-analysis/scripts/batch_process.py
+      sha256: 43da97d93bff754cffb2bc55cee282c83f3c9edcf4a308448bfd18c8bf2cf669
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-image-analysis/scripts/measure_fluorescence.py
+      sha256: 662faf85e79ff30e9d968ebe3ffebb993da5509674dcbb6802b4e903d33028c8
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-image-analysis/scripts/segment_cells.py
+      sha256: 2cdccafdf1dd3393815140a79660ca7e122e602010a6a1927c1b743d6cb57616
+license: Apache-2.0

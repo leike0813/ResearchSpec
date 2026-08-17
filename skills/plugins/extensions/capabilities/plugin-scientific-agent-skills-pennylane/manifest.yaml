@@ -1,0 +1,98 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-pennylane
+title: PennyLane
+description: Hardware-agnostic quantum ML framework with automatic
+  differentiation. Use when training quantum circuits via gradients, building
+  hybrid quantum-classical models, or needing device portability across
+  IBM/Google/Rigetti/IonQ. Best for variational algorithms (VQE, QAOA), quantum
+  neural networks, and integration with PyTorch or JAX. For hardware-specific
+  optimizations use qiskit (IBM) or cirq (Google); for open quantum systems use
+  qutip.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-references-advanced-features.md
+    path: references/advanced_features.md
+    content_hash: 81a52e3f1f437ceef2b20e0f447627e3acad18a4e98139eb46d93f5083f860c2
+    license: Apache-2.0
+  - knowledge_id: sas-references-devices-backends.md
+    path: references/devices_backends.md
+    content_hash: 1b2da18f0343e0d99321b5c15d5834161f298d80fe8f1afe92c931e7364b9913
+    license: Apache-2.0
+  - knowledge_id: sas-references-getting-started.md
+    path: references/getting_started.md
+    content_hash: acfa9ab3f9fb4e1ab8efa29ea110279546e5b247ee96183a2b4f27aef73dd714
+    license: Apache-2.0
+  - knowledge_id: sas-references-optimization.md
+    path: references/optimization.md
+    content_hash: 3863a127a04a5ff3a582390b64b05330722e8a0a7792c2f1b8f13af7d432f6c4
+    license: Apache-2.0
+  - knowledge_id: sas-references-quantum-chemistry.md
+    path: references/quantum_chemistry.md
+    content_hash: 57e10e42aef2b15a7638b25420b3949aebf03d528ccd0a1f523c57b652cfe752
+    license: Apache-2.0
+  - knowledge_id: sas-references-quantum-circuits.md
+    path: references/quantum_circuits.md
+    content_hash: 5f2c2077c6f99732accd654dce9edeb29d92df55a64d8c0ffa2da5171d16be1a
+    license: Apache-2.0
+  - knowledge_id: sas-references-quantum-ml.md
+    path: references/quantum_ml.md
+    content_hash: ec5a6fa56353c291e2a08ae65ffe59414021058c8b7c6d48f8035214abeac9c0
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pennylane/SKILL.md
+      sha256: 40aec2eeed16f351a000d041765e607baefcf91407b180930840b27a8f33c08e
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pennylane/references/advanced_features.md
+      sha256: 81a52e3f1f437ceef2b20e0f447627e3acad18a4e98139eb46d93f5083f860c2
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pennylane/references/devices_backends.md
+      sha256: 1b2da18f0343e0d99321b5c15d5834161f298d80fe8f1afe92c931e7364b9913
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pennylane/references/getting_started.md
+      sha256: acfa9ab3f9fb4e1ab8efa29ea110279546e5b247ee96183a2b4f27aef73dd714
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pennylane/references/optimization.md
+      sha256: 3863a127a04a5ff3a582390b64b05330722e8a0a7792c2f1b8f13af7d432f6c4
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pennylane/references/quantum_chemistry.md
+      sha256: 57e10e42aef2b15a7638b25420b3949aebf03d528ccd0a1f523c57b652cfe752
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pennylane/references/quantum_circuits.md
+      sha256: 5f2c2077c6f99732accd654dce9edeb29d92df55a64d8c0ffa2da5171d16be1a
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pennylane/references/quantum_ml.md
+      sha256: ec5a6fa56353c291e2a08ae65ffe59414021058c8b7c6d48f8035214abeac9c0
+license: Apache-2.0

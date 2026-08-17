@@ -1,0 +1,60 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-scientific-schematics
+title: Scientific Schematics and Diagrams
+description: Create publication-quality scientific diagrams using Nano Banana 2
+  AI with smart iterative refinement. Uses Gemini 3.1 Pro Preview for quality
+  review. Only regenerates if quality is below threshold for your document type.
+  Specialized in neural network architectures, system diagrams, flowcharts,
+  biological pathways, and complex scientific visualizations.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-references-best-practices.md
+    path: references/best_practices.md
+    content_hash: e0aff6abab3db84a3635f5393d098e41920667188e0aa861580379a81d597f64
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-schematics/SKILL.md
+      sha256: 34d34bfdc26a6f341d8063ce63b171ed4ad0c56df9d0e0d1957e11afa0e47e70
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-schematics/references/best_practices.md
+      sha256: e0aff6abab3db84a3635f5393d098e41920667188e0aa861580379a81d597f64
+license: Apache-2.0

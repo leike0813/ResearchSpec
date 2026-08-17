@@ -1,0 +1,90 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-literature-deep-research
+title: Literature Deep Research
+description: Deep literature review — PubMed, EuropePMC, bioRxiv preprints,
+  citation networks, evidence synthesis. Disambiguates queries, runs
+  collision-aware searches, grades evidence T1-T4, and produces structured
+  reports. Use for systematic literature review, meta-analysis evidence
+  collection, and detailed answer-with-citations workflows.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-examples.md
+    path: EXAMPLES.md
+    content_hash: 9c9359654d0d2c683a21ee53ddd030e927d37aaf90cf064d0e5a14744733d6f5
+    license: Apache-2.0
+  - knowledge_id: tu-fulltext-strategy.md
+    path: FULLTEXT_STRATEGY.md
+    content_hash: 0b3cfedc700298c7a5554782c32bf25a9353ea3ca234d3610e40b321649aee4a
+    license: Apache-2.0
+  - knowledge_id: tu-quick-reference.md
+    path: QUICK_REFERENCE.md
+    content_hash: c7bb15e272f34a9c593fd08c50810b6aea8afe59a04230b4d4c2d051e58dcb69
+    license: Apache-2.0
+  - knowledge_id: tu-report-template.md
+    path: REPORT_TEMPLATE.md
+    content_hash: 05724e8df77563fdca2638d78950cd72a998024cb2854b23c4496a380b9bd573
+    license: Apache-2.0
+  - knowledge_id: tu-tool-names-reference.md
+    path: TOOL_NAMES_REFERENCE.md
+    content_hash: a569c36d974b66e082c3fcaf28d0a6cdf7a7d655b41420c24e8a82020920b4c3
+    license: Apache-2.0
+  - knowledge_id: tu-workflow.md
+    path: WORKFLOW.md
+    content_hash: 81fb41ace3b972cd51b49be6e41bf0fba03dd4224c72f636334a76c93db8b843
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-literature-deep-research/SKILL.md
+      sha256: af91211306856082ae49b7b8bb34875469d56d18757a7e1976a4f1684aa7573a
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-literature-deep-research/EXAMPLES.md
+      sha256: 9c9359654d0d2c683a21ee53ddd030e927d37aaf90cf064d0e5a14744733d6f5
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-literature-deep-research/FULLTEXT_STRATEGY.md
+      sha256: 0b3cfedc700298c7a5554782c32bf25a9353ea3ca234d3610e40b321649aee4a
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-literature-deep-research/QUICK_REFERENCE.md
+      sha256: c7bb15e272f34a9c593fd08c50810b6aea8afe59a04230b4d4c2d051e58dcb69
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-literature-deep-research/REPORT_TEMPLATE.md
+      sha256: 05724e8df77563fdca2638d78950cd72a998024cb2854b23c4496a380b9bd573
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-literature-deep-research/TOOL_NAMES_REFERENCE.md
+      sha256: a569c36d974b66e082c3fcaf28d0a6cdf7a7d655b41420c24e8a82020920b4c3
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-literature-deep-research/WORKFLOW.md
+      sha256: 81fb41ace3b972cd51b49be6e41bf0fba03dd4224c72f636334a76c93db8b843
+license: Apache-2.0

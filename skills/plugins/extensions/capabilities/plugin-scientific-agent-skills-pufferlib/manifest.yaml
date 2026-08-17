@@ -1,0 +1,97 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-pufferlib
+title: PufferLib - High-Performance Reinforcement Learning
+description: High-performance reinforcement learning framework optimized for
+  speed and scale. Use when you need fast parallel training, vectorized
+  environments, multi-agent systems, or integration with game environments
+  (Atari, Procgen, NetHack). Achieves 2-10x speedups over standard
+  implementations. For quick prototyping or standard algorithm implementations
+  with extensive documentation, use stable-baselines3 instead.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-references-environments.md
+    path: references/environments.md
+    content_hash: eeb773e9add21d6cd37ee717dc3251e3951b89fbd5e474fadca8408b9f6cc564
+    license: Apache-2.0
+  - knowledge_id: sas-references-integration.md
+    path: references/integration.md
+    content_hash: 1ec4dbbf6923631d4e6002e7a82c9ed8fff08dc64eb75305e4a42577bbcd015e
+    license: Apache-2.0
+  - knowledge_id: sas-references-policies.md
+    path: references/policies.md
+    content_hash: fb898cbc18f6adf5d57d5338afe0e5b80ae7c669cee323228f5becdea04ee9fc
+    license: Apache-2.0
+  - knowledge_id: sas-references-training.md
+    path: references/training.md
+    content_hash: 06bba5c274ec8dba3812c0609225892122f840ba4159c810023158025cc34cba
+    license: Apache-2.0
+  - knowledge_id: sas-references-vectorization.md
+    path: references/vectorization.md
+    content_hash: 8c163431de060ee64b91a70f1057b04ca2d0c089be8150b0868f1f9af3716f49
+    license: Apache-2.0
+  - knowledge_id: sas-scripts-env-template.py
+    path: scripts/env_template.py
+    content_hash: 9f394e9c719e50926181ab603abfbc2d1d1a8747c7dd384d24836c0e4de8713e
+    license: Apache-2.0
+  - knowledge_id: sas-scripts-train-template.py
+    path: scripts/train_template.py
+    content_hash: e0dffda87ea42e890769205ea0eb71ab2d1892f5d3015a189196fc03b6729d9f
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pufferlib/SKILL.md
+      sha256: 2aeb94a05831d88f74459233cc7e570cab0bb3ed5f1eac567a4785979ce15a45
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pufferlib/references/environments.md
+      sha256: eeb773e9add21d6cd37ee717dc3251e3951b89fbd5e474fadca8408b9f6cc564
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pufferlib/references/integration.md
+      sha256: 1ec4dbbf6923631d4e6002e7a82c9ed8fff08dc64eb75305e4a42577bbcd015e
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pufferlib/references/policies.md
+      sha256: fb898cbc18f6adf5d57d5338afe0e5b80ae7c669cee323228f5becdea04ee9fc
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pufferlib/references/training.md
+      sha256: 06bba5c274ec8dba3812c0609225892122f840ba4159c810023158025cc34cba
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pufferlib/references/vectorization.md
+      sha256: 8c163431de060ee64b91a70f1057b04ca2d0c089be8150b0868f1f9af3716f49
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pufferlib/scripts/env_template.py
+      sha256: 9f394e9c719e50926181ab603abfbc2d1d1a8747c7dd384d24836c0e4de8713e
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pufferlib/scripts/train_template.py
+      sha256: e0dffda87ea42e890769205ea0eb71ab2d1892f5d3015a189196fc03b6729d9f
+license: Apache-2.0

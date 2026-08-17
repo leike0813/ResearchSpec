@@ -1,0 +1,78 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-sequence-analysis
+title: Biological Sequence Analysis
+description: Biological sequence analysis — gene/protein sequence retrieval
+  (NCBI, Ensembl, UniProt), nucleotide/protein search, ortholog discovery, and
+  FASTQ QC + alignment workflows (Trimmomatic, BWA, samtools, coverage depth).
+  Use for sequence retrieval, sequence comparison, FASTQ QC analysis, and read
+  alignment pre-processing.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-scripts-amino-acids.py
+    path: scripts/amino_acids.py
+    content_hash: 11e2b679e100836433fdda0583f8de69e650ab6409a66eea6e1e5c2703bd5032
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-biology-facts.py
+    path: scripts/biology_facts.py
+    content_hash: c57b7f79974adff5e9ca0bfe06474b1d1d3b795e9b75827f098f58eea221b69c
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-sequence-tools.py
+    path: scripts/sequence_tools.py
+    content_hash: 6780808f546c08dc2c864567bc9a6758d561e8becf294cb0adc005603c4e88a9
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-translate-dna.py
+    path: scripts/translate_dna.py
+    content_hash: 343accb5bf2bf35660c341083ffe9d50424130c42a0e0bd042d48c4d95711283
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-sequence-analysis/SKILL.md
+      sha256: 56d530331d404087e5c86be54d99832d6478073cc8abe532db4217d0a9b3f976
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-sequence-analysis/scripts/amino_acids.py
+      sha256: 11e2b679e100836433fdda0583f8de69e650ab6409a66eea6e1e5c2703bd5032
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-sequence-analysis/scripts/biology_facts.py
+      sha256: c57b7f79974adff5e9ca0bfe06474b1d1d3b795e9b75827f098f58eea221b69c
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-sequence-analysis/scripts/sequence_tools.py
+      sha256: 6780808f546c08dc2c864567bc9a6758d561e8becf294cb0adc005603c4e88a9
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-sequence-analysis/scripts/translate_dna.py
+      sha256: 343accb5bf2bf35660c341083ffe9d50424130c42a0e0bd042d48c4d95711283
+license: Apache-2.0

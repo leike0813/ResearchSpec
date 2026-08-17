@@ -1,0 +1,62 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-parallel-web
+title: Parallel Web Toolkit
+description: "All-in-one web toolkit powered by parallel-cli, with a strong
+  emphasis on academic and scientific sources. Use this skill whenever the user
+  needs to search the web, fetch/extract URL content, enrich data with
+  web-sourced fields, or run deep research reports. Covers: web search (fast
+  lookups, research, current info — prioritizing peer-reviewed papers,
+  preprints, and scholarly databases), URL extraction (fetching pages, articles,
+  academic PDFs), bulk data enrichment (adding fields to CSV/lists from the
+  web), and deep research (exhaustive multi-source reports grounded in academic
+  literature). Also handles setup, status checks, and result retrieval. Use this
+  skill for ANY web-related task — even if the user doesn't mention 'parallel'
+  or 'web' explicitly. If they want to look something up, fetch a page, enrich a
+  dataset, investigate a topic, find academic papers, check citations, or review
+  scientific literature, this is the skill to use."
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs: []
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-parallel-web/SKILL.md
+      sha256: b0107b255d6d60513e275ba3d8bfd9990711bd57c7fb5113266fcb904f2b016b
+license: Apache-2.0

@@ -1,0 +1,60 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-population-genetics
+title: Population Genetics Analysis
+description: Population genetics analysis — allele frequencies (gnomAD, 1000
+  Genomes), Hardy-Weinberg equilibrium testing, Fst between populations, GWAS
+  associations, evolutionary constraint scores. Use for cross-population variant
+  comparison, ancestry-aware allele frequency lookups, and population-level
+  evolutionary analysis.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-scripts-popgen-calculator.py
+    path: scripts/popgen_calculator.py
+    content_hash: 1abed9034d11bb64d69326c783c572c9324095aa14096210a19fdf59dbabb9a0
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-population-genetics/SKILL.md
+      sha256: f75b9c8e3651e258f7898c32e06efbf14426e0f68a0ebdcf5eb2359df78637c2
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-population-genetics/scripts/popgen_calculator.py
+      sha256: 1abed9034d11bb64d69326c783c572c9324095aa14096210a19fdf59dbabb9a0
+license: Apache-2.0

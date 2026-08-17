@@ -1,0 +1,96 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-network-pharmacology
+title: Network Pharmacology Pipeline
+description: Compound-target-disease network construction and analysis for drug
+  repurposing, polypharmacology discovery, and multi-target drug design. Uses
+  STRING, BioGRID, ChEMBL, DGIdb, OMIM, OpenTargets. Use for off-target effect
+  prediction, network-based drug repurposing, and identifying molecules with
+  desired multi-target profile.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-analysis-procedures.md
+    path: ANALYSIS_PROCEDURES.md
+    content_hash: fe8182b150a28e30a2a8d01143f0b9677cdcb1f9610c185d125ae63702f51acf
+    license: Apache-2.0
+  - knowledge_id: tu-quick-start.md
+    path: QUICK_START.md
+    content_hash: a66fffedfb004996b474cc2b42b7ff08d5cd6aa4dd9edd84a323b4b6d70a2065
+    license: Apache-2.0
+  - knowledge_id: tu-report-template.md
+    path: REPORT_TEMPLATE.md
+    content_hash: 38405f0c5f60ecab59c79b55c5cd900440162191dea2958961e292614e9dd50c
+    license: Apache-2.0
+  - knowledge_id: tu-scoring-reference.md
+    path: SCORING_REFERENCE.md
+    content_hash: 2be238e5f97e632f70986ea6869ae6a50009bec39467f40aeb91594d3e255098
+    license: Apache-2.0
+  - knowledge_id: tu-tool-reference.md
+    path: TOOL_REFERENCE.md
+    content_hash: d8445b5de3f27f507d8f22f451a45eb36691e633f15bf8c763230f04062ccc33
+    license: Apache-2.0
+  - knowledge_id: tu-use-patterns.md
+    path: USE_PATTERNS.md
+    content_hash: af5ad4a737787699b95d18fae15db1039b0504d5e42705ab676a88d22c228891
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-network-proximity.py
+    path: scripts/network_proximity.py
+    content_hash: d71c9837f66416167495a1970b76add98fadf8dba539b8c1c4da6ed86600b13c
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-network-pharmacology/SKILL.md
+      sha256: feb53ae7bdd998a54c39782088bf10ba066d7a10bf234be0b065c4c4111f4fc2
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-network-pharmacology/ANALYSIS_PROCEDURES.md
+      sha256: fe8182b150a28e30a2a8d01143f0b9677cdcb1f9610c185d125ae63702f51acf
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-network-pharmacology/QUICK_START.md
+      sha256: a66fffedfb004996b474cc2b42b7ff08d5cd6aa4dd9edd84a323b4b6d70a2065
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-network-pharmacology/REPORT_TEMPLATE.md
+      sha256: 38405f0c5f60ecab59c79b55c5cd900440162191dea2958961e292614e9dd50c
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-network-pharmacology/SCORING_REFERENCE.md
+      sha256: 2be238e5f97e632f70986ea6869ae6a50009bec39467f40aeb91594d3e255098
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-network-pharmacology/TOOL_REFERENCE.md
+      sha256: d8445b5de3f27f507d8f22f451a45eb36691e633f15bf8c763230f04062ccc33
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-network-pharmacology/USE_PATTERNS.md
+      sha256: af5ad4a737787699b95d18fae15db1039b0504d5e42705ab676a88d22c228891
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-network-pharmacology/scripts/network_proximity.py
+      sha256: d71c9837f66416167495a1970b76add98fadf8dba539b8c1c4da6ed86600b13c
+license: Apache-2.0

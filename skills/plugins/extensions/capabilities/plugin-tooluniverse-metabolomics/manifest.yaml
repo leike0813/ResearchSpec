@@ -1,0 +1,120 @@
+schema_version: "1"
+capability_id: plugin-tooluniverse-metabolomics
+title: Metabolomics Research
+description: Metabolomics research — metabolite identification, study analysis,
+  and database searches across HMDB, MetaboLights, Metabolomics Workbench, KEGG.
+  Use for annotating mass-spec features to known metabolites, finding
+  metabolomics studies of a disease, and structured metabolomics research
+  reports with metabolite-pathway mapping.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: tooluniverse-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_tooluniverse_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: tu-quick-start.md
+    path: QUICK_START.md
+    content_hash: 80cf831c162184bc6cb158109097ff591e9952f53b24c9f0c2c220693792e203
+    license: Apache-2.0
+  - knowledge_id: tu-diabetes-analysis.py
+    path: diabetes_analysis.py
+    content_hash: 9edb0c55f1b5cf5a9c2e2df731d00a1a8af9db6810581785dfaa745188fb97e5
+    license: Apache-2.0
+  - knowledge_id: tu-example1-metabolites.md
+    path: example1_metabolites.md
+    content_hash: 583b4e28890fb970e39b8c27227165171376d1a1aff2bea8509bfcff0e9c87a7
+    license: Apache-2.0
+  - knowledge_id: tu-example2-study.md
+    path: example2_study.md
+    content_hash: 034e48e9b281ee1e1e900f2ae7a0cfe920fa5ba83b765265366a5afa921a91a5
+    license: Apache-2.0
+  - knowledge_id: tu-example3-search.md
+    path: example3_search.md
+    content_hash: 9583741e729443ae8a2e95282c77db59b5dccb39e9ffcccbf00b895dee2b59ca
+    license: Apache-2.0
+  - knowledge_id: tu-python-implementation.py
+    path: python_implementation.py
+    content_hash: c52d18c88ca814304a9b5502167820d663cc2810346d7a6f28d1ae9bab8d014f
+    license: Apache-2.0
+  - knowledge_id: tu-scripts-metabolism-ref.py
+    path: scripts/metabolism_ref.py
+    content_hash: 54f479b7ff0f9c36ccb61e64fda5d673b1d07c78a3a22723e9ed571bd50f0624
+    license: Apache-2.0
+  - knowledge_id: tu-test1-metabolites.md
+    path: test1_metabolites.md
+    content_hash: 9958631b69002058a66b973bd93224840120c0b102c7150fb2b9dbbd28920b2d
+    license: Apache-2.0
+  - knowledge_id: tu-test2-study.md
+    path: test2_study.md
+    content_hash: 78161a0d3e743439071ff5d3bbb6475aa638bc89a4dbcf5a31bad685082557bf
+    license: Apache-2.0
+  - knowledge_id: tu-test3-search.md
+    path: test3_search.md
+    content_hash: 18bab536a15359450ddadf5abc2e159d5802d4159fc509d83656b1e21d312136
+    license: Apache-2.0
+  - knowledge_id: tu-test4-comprehensive.md
+    path: test4_comprehensive.md
+    content_hash: eb694aff8f97663d14adb240fd71089776aa715912f9f5c0fbbe622c66a68ccb
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics/SKILL.md
+      sha256: 76193482ea9d1bb98ef83685a0285c1d6744da7671614bf73dcf81edae067774
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics/QUICK_START.md
+      sha256: 80cf831c162184bc6cb158109097ff591e9952f53b24c9f0c2c220693792e203
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics/diabetes_analysis.py
+      sha256: 9edb0c55f1b5cf5a9c2e2df731d00a1a8af9db6810581785dfaa745188fb97e5
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics/example1_metabolites.md
+      sha256: 583b4e28890fb970e39b8c27227165171376d1a1aff2bea8509bfcff0e9c87a7
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics/example2_study.md
+      sha256: 034e48e9b281ee1e1e900f2ae7a0cfe920fa5ba83b765265366a5afa921a91a5
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics/example3_search.md
+      sha256: 9583741e729443ae8a2e95282c77db59b5dccb39e9ffcccbf00b895dee2b59ca
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics/python_implementation.py
+      sha256: c52d18c88ca814304a9b5502167820d663cc2810346d7a6f28d1ae9bab8d014f
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics/scripts/metabolism_ref.py
+      sha256: 54f479b7ff0f9c36ccb61e64fda5d673b1d07c78a3a22723e9ed571bd50f0624
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics/test1_metabolites.md
+      sha256: 9958631b69002058a66b973bd93224840120c0b102c7150fb2b9dbbd28920b2d
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics/test2_study.md
+      sha256: 78161a0d3e743439071ff5d3bbb6475aa638bc89a4dbcf5a31bad685082557bf
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics/test3_search.md
+      sha256: 18bab536a15359450ddadf5abc2e159d5802d4159fc509d83656b1e21d312136
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics/test4_comprehensive.md
+      sha256: eb694aff8f97663d14adb240fd71089776aa715912f9f5c0fbbe622c66a68ccb
+license: Apache-2.0
