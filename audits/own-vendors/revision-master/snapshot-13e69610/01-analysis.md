@@ -1,8 +1,8 @@
 # Own Vendor Anchor Analysis — revision-master @ snapshot-13e69610
 
-- generated: 2026-08-16T06:24:14.252Z
+- generated: 2026-08-24T05:38:04.802Z
 - upstream: snapshot-13e69610 @ 13e69610f216f816f106d1a2a1672eedfa01ac9a
-- maintenance skill SHA-256: `8a644c683d2cac0eab5f5633eadeb3e85d397fccdba5a31ef6a1c8da3d11dc7d`
+- maintenance skill SHA-256: `99505d3be486e54142843c94c6a5fb7c3588d820b9b80a17ef6c2dd10ac989d5`
 
 ## Upstream Inventory
 
@@ -28,11 +28,11 @@
 
 | capability_id | class | node_kind | execution | gate | maturity |
 |---|---|---|---|---|---|
-| `cap-analysis-review-response-manuscript-analysis` | analysis | producer | mixed | none | operational |
-| `cap-design-review-response-intake` | design | producer | mixed | none | operational |
-| `cap-design-review-response-workboard-planning` | design | producer | mixed | required | operational |
-| `cap-generation-review-response-round` | generation | producer | mixed | required | operational |
-| `cap-transform-review-response-comment-atomization` | transformation | producer | mixed | required | operational |
+| `analysis-review-response-manuscript-analysis` | analysis | producer | mixed | none | operational |
+| `design-review-response-intake` | design | producer | mixed | none | operational |
+| `design-review-response-workboard-planning` | design | producer | mixed | required | operational |
+| `generation-review-response-round` | generation | producer | mixed | required | operational |
+| `transform-review-response-comment-atomization` | transformation | producer | mixed | required | operational |
 
 ## Decisions
 

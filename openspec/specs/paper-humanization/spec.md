@@ -20,7 +20,7 @@ JSON-compatible analysis with sentence counts and diagnostic error codes.
 
 ### Requirement: Review is a read-only capability node
 
-`cap-check-paper-humanization-review` SHALL accept a boundary manuscript file and emit a review
+`check-paper-humanization-review` SHALL accept a boundary manuscript file and emit a review
 report and revision plan without changing the manuscript.
 
 #### Scenario: Review leaves inputs unchanged

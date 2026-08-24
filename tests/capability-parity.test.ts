@@ -37,7 +37,7 @@ void test("capability parity audit reports complete coverage above thresholds", 
     const report = JSON.parse(await readFile(reportPath, "utf8")) as { schema_version: string; packages: Array<{ capability_id: string }> };
     assert.equal(report.schema_version, "1");
     assert.equal(report.packages.length, 47);
-    assert.ok(report.packages.some((item) => item.capability_id === "cap-check-paper-humanization-review"));
+    assert.ok(report.packages.some((item) => item.capability_id === "check-paper-humanization-review"));
   } finally {
     await rm(root, { recursive: true, force: true });
   }

@@ -5,7 +5,7 @@ const CC = "CC BY-NC 4.0";
 export const M5_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m5/meta-analysis.md",
-    capability_id: "cap-analysis-meta-analysis",
+    capability_id: "analysis-meta-analysis",
     title: "Meta Analysis",
     description: "Quantitative synthesis for systematic review.",
     class: "analysis",
@@ -20,7 +20,7 @@ export const M5_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m5/risk-of-bias.md",
-    capability_id: "cap-analysis-risk-of-bias-assessment",
+    capability_id: "analysis-risk-of-bias-assessment",
     title: "Risk of Bias Assessment",
     description: "RoB 2 and ROBINS-I assessments.",
     class: "analysis",
@@ -35,7 +35,7 @@ export const M5_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m5/socratic-mentoring.md",
-    capability_id: "cap-transform-socratic-mentoring",
+    capability_id: "transform-socratic-mentoring",
     title: "Socratic Mentoring",
     description: "Guided question-driven research or planning dialogue.",
     class: "transformation",
@@ -50,7 +50,7 @@ export const M5_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m5/figure-generation.md",
-    capability_id: "cap-generation-figure-generation",
+    capability_id: "generation-figure-generation",
     title: "Figure Generation",
     description: "Generates publication-grade figure code.",
     class: "generation",
@@ -65,7 +65,7 @@ export const M5_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m5/literature-monitoring.md",
-    capability_id: "cap-discovery-literature-monitoring",
+    capability_id: "discovery-literature-monitoring",
     title: "Literature Monitoring",
     description: "Post-publication monitoring configuration.",
     class: "discovery",
@@ -80,7 +80,7 @@ export const M5_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m5/claim-faithfulness.md",
-    capability_id: "cap-check-claim-faithfulness-audit",
+    capability_id: "check-claim-faithfulness-audit",
     title: "Claim Faithfulness Audit",
     description: "LLM-as-judge claim-source alignment audit.",
     class: "verification",
@@ -95,7 +95,7 @@ export const M5_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m5/compliance-check.md",
-    capability_id: "cap-check-compliance-check",
+    capability_id: "check-compliance-check",
     title: "Compliance Check",
     description: "PRISMA-trAIce and RAISE advisory compliance.",
     class: "verification",
@@ -113,7 +113,7 @@ export const M5_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m5/collaboration-depth.md",
-    capability_id: "cap-check-collaboration-depth-observer",
+    capability_id: "check-collaboration-depth-observer",
     title: "Collaboration Depth Observer",
     description: "Advisory four-dimension collaboration depth score.",
     class: "verification",
@@ -128,7 +128,7 @@ export const M5_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m5/submission-package-verifier.md",
-    capability_id: "cap-check-submission-package-verifier",
+    capability_id: "check-submission-package-verifier",
     title: "Submission Package Verifier",
     description: "Deterministic submission package verifier.",
     class: "verification",
@@ -144,7 +144,7 @@ export const M5_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m5/passport-verifier.md",
-    capability_id: "cap-check-passport-verifier",
+    capability_id: "check-passport-verifier",
     title: "Passport Verifier",
     description: "Deterministic material passport verifier.",
     class: "verification",
@@ -160,7 +160,7 @@ export const M5_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m5/citation-existence.md",
-    capability_id: "cap-check-citation-existence-verification",
+    capability_id: "check-citation-existence-verification",
     title: "Citation Existence Verification",
     description: "Deterministic resolver-based citation existence gate.",
     class: "verification",
@@ -176,7 +176,7 @@ export const M5_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m5/pdf-read-preflight.md",
-    capability_id: "cap-check-pdf-read-preflight",
+    capability_id: "check-pdf-read-preflight",
     title: "PDF Read Preflight",
     description: "Deterministic PDF extraction preflight.",
     class: "verification",
@@ -192,7 +192,7 @@ export const M5_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m5/citation-verification-summary.md",
-    capability_id: "cap-check-citation-verification-summary",
+    capability_id: "check-citation-verification-summary",
     title: "Citation Verification Summary",
     description: "Deterministic citation verification summary.",
     class: "verification",
@@ -208,7 +208,7 @@ export const M5_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m5/contamination-signals.md",
-    capability_id: "cap-check-contamination-signals",
+    capability_id: "check-contamination-signals",
     title: "Contamination Signals",
     description: "Deterministic contamination signal computation.",
     class: "verification",

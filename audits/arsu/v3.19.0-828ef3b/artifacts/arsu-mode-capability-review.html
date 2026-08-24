@@ -6910,7 +6910,7 @@ Timing: [After publication / After study completion / Other]
       <div class="profile-banner">Graph profile <code>research-main</code> v0.1.0 · 7 个顶层节点</div><div class="profile-flow"><strong>节点顺序</strong> <span class="flow-node capability">research-question</span><span class="flow-arrow">→</span><span class="flow-node gate">rq-gate</span><span class="flow-arrow">→</span><span class="flow-node capability">methodology</span><span class="flow-arrow">→</span><span class="flow-node capability">literature</span><span class="flow-arrow">→</span><span class="flow-node capability">grading</span><span class="flow-arrow">→</span><span class="flow-node capability">synthesis</span><span class="flow-arrow">→</span><span class="flow-node capability">report</span></div><details class="node" open>
   <summary>
     <span class="node-id">research-question</span>
-    <span class="cap-id">cap-design-research-question-formulation</span>
+    <span class="cap-id">design-research-question-formulation</span>
     <span class="cap-title">Research Question Formulation</span>
     <span class="meta">profile:research-main</span>
   </summary>
@@ -6922,10 +6922,10 @@ Timing: [After publication / After study completion / Other]
     <div><strong>outputs</strong> <code>rq_brief</code> → rq-brief.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 148 行</summary><pre class="doc-body">---
-name: cap-design-research-question-formulation
+name: design-research-question-formulation
 description: "Turns a project intent into a FINER-scored research question brief with scope boundaries and bound sub-questions."
 metadata:
-  capability_id: cap-design-research-question-formulation
+  capability_id: design-research-question-formulation
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -7151,7 +7151,7 @@ ARS 提取工件（Extraction Artifact）— M1 研究段
 <details class="node" open>
   <summary>
     <span class="node-id">methodology</span>
-    <span class="cap-id">cap-design-methodology-design</span>
+    <span class="cap-id">design-methodology-design</span>
     <span class="cap-title">Methodology Design</span>
     <span class="meta">profile:research-main</span>
   </summary>
@@ -7163,10 +7163,10 @@ ARS 提取工件（Extraction Artifact）— M1 研究段
     <div><strong>outputs</strong> <code>methodology_blueprint</code> → methodology-blueprint.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 162 行</summary><pre class="doc-body">---
-name: cap-design-methodology-design
+name: design-methodology-design
 description: "Selects a paradigm, methods, data strategy and analysis framework coherent with the confirmed research question."
 metadata:
-  capability_id: cap-design-methodology-design
+  capability_id: design-methodology-design
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -8212,7 +8212,7 @@ Publication
 <details class="node" open>
   <summary>
     <span class="node-id">literature</span>
-    <span class="cap-id">cap-discovery-literature-search-screening</span>
+    <span class="cap-id">discovery-literature-search-screening</span>
     <span class="cap-title">Literature Search And Screening</span>
     <span class="meta">profile:research-main</span>
   </summary>
@@ -8224,10 +8224,10 @@ Publication
     <div><strong>outputs</strong> <code>annotated_bibliography</code> → annotated-bibliography.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 164 行</summary><pre class="doc-body">---
-name: cap-discovery-literature-search-screening
+name: discovery-literature-search-screening
 description: "Runs a systematic, reproducible search and screening process and produces an annotated bibliography with PRISMA-style documentation."
 metadata:
-  capability_id: cap-discovery-literature-search-screening
+  capability_id: discovery-literature-search-screening
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -8605,7 +8605,7 @@ When `literature_corpus[]` is non-empty and parses cleanly, the agent enters Ste
 <details class="node" open>
   <summary>
     <span class="node-id">grading</span>
-    <span class="cap-id">cap-discovery-source-quality-grading</span>
+    <span class="cap-id">discovery-source-quality-grading</span>
     <span class="cap-title">Source Quality Grading</span>
     <span class="meta">profile:research-main</span>
   </summary>
@@ -8617,10 +8617,10 @@ When `literature_corpus[]` is non-empty and parses cleanly, the agent enters Ste
     <div><strong>outputs</strong> <code>graded_sources</code> → graded-sources.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 183 行</summary><pre class="doc-body">---
-name: cap-discovery-source-quality-grading
+name: discovery-source-quality-grading
 description: "Grades each source by evidence level, predatory-journal red flags and conflicts of interest."
 metadata:
-  capability_id: cap-discovery-source-quality-grading
+  capability_id: discovery-source-quality-grading
   node_kind: checker
   execution_type: llm
   gate_policy: required
@@ -9010,7 +9010,7 @@ Not all fields use the same evidence hierarchy. Adjust expectations:
 <details class="node" open>
   <summary>
     <span class="node-id">synthesis</span>
-    <span class="cap-id">cap-analysis-evidence-synthesis</span>
+    <span class="cap-id">analysis-evidence-synthesis</span>
     <span class="cap-title">Evidence Synthesis</span>
     <span class="meta">profile:research-main</span>
   </summary>
@@ -9022,10 +9022,10 @@ Not all fields use the same evidence hierarchy. Adjust expectations:
     <div><strong>outputs</strong> <code>synthesis_report</code> → synthesis-report.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 233 行</summary><pre class="doc-body">---
-name: cap-analysis-evidence-synthesis
+name: analysis-evidence-synthesis
 description: "Synthesizes graded sources into a convergent/divergent evidence map with claim-intent and citation emissions."
 metadata:
-  capability_id: cap-analysis-evidence-synthesis
+  capability_id: analysis-evidence-synthesis
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -9444,7 +9444,7 @@ The agent's job still ends at emission. The agent does NOT post-process or audit
 <details class="node" open>
   <summary>
     <span class="node-id">report</span>
-    <span class="cap-id">cap-generation-report-compilation</span>
+    <span class="cap-id">generation-report-compilation</span>
     <span class="cap-title">Research Report Compilation</span>
     <span class="meta">profile:research-main</span>
   </summary>
@@ -9456,10 +9456,10 @@ The agent's job still ends at emission. The agent does NOT post-process or audit
     <div><strong>outputs</strong> <code>research_report</code> → research-report.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 251 行</summary><pre class="doc-body">---
-name: cap-generation-report-compilation
+name: generation-report-compilation
 description: "Compiles the synthesis and method blueprint into a complete APA-style research report."
 metadata:
-  capability_id: cap-generation-report-compilation
+  capability_id: generation-report-compilation
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -12950,7 +12950,7 @@ Per-source quality assessment card. Used by the source_verification_agent to sys
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">research-main 的 quick 子集；尚无独立 quick profile，运行时可作为 research-main 的缩短实例。</div><details class="node" open>
   <summary>
     <span class="node-id">minimal:rq, research-main:research-question, academic-pipeline:research/research-question</span>
-    <span class="cap-id">cap-design-research-question-formulation</span>
+    <span class="cap-id">design-research-question-formulation</span>
     <span class="cap-title">Research Question Formulation</span>
     <span class="meta">graph node minimal:rq / research-main:research-question / academic-pipeline:research/research-question</span>
   </summary>
@@ -12962,10 +12962,10 @@ Per-source quality assessment card. Used by the source_verification_agent to sys
     <div><strong>outputs</strong> <code>rq_brief</code> → rq-brief.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 148 行</summary><pre class="doc-body">---
-name: cap-design-research-question-formulation
+name: design-research-question-formulation
 description: "Turns a project intent into a FINER-scored research question brief with scope boundaries and bound sub-questions."
 metadata:
-  capability_id: cap-design-research-question-formulation
+  capability_id: design-research-question-formulation
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -13190,7 +13190,7 @@ ARS 提取工件（Extraction Artifact）— M1 研究段
 <details class="node" open>
   <summary>
     <span class="node-id">research-main:literature, academic-pipeline:research/literature</span>
-    <span class="cap-id">cap-discovery-literature-search-screening</span>
+    <span class="cap-id">discovery-literature-search-screening</span>
     <span class="cap-title">Literature Search And Screening</span>
     <span class="meta">graph node research-main:literature / academic-pipeline:research/literature</span>
   </summary>
@@ -13202,10 +13202,10 @@ ARS 提取工件（Extraction Artifact）— M1 研究段
     <div><strong>outputs</strong> <code>annotated_bibliography</code> → annotated-bibliography.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 164 行</summary><pre class="doc-body">---
-name: cap-discovery-literature-search-screening
+name: discovery-literature-search-screening
 description: "Runs a systematic, reproducible search and screening process and produces an annotated bibliography with PRISMA-style documentation."
 metadata:
-  capability_id: cap-discovery-literature-search-screening
+  capability_id: discovery-literature-search-screening
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -13583,7 +13583,7 @@ When `literature_corpus[]` is non-empty and parses cleanly, the agent enters Ste
 <details class="node" open>
   <summary>
     <span class="node-id">research-main:grading, academic-pipeline:research/grading</span>
-    <span class="cap-id">cap-discovery-source-quality-grading</span>
+    <span class="cap-id">discovery-source-quality-grading</span>
     <span class="cap-title">Source Quality Grading</span>
     <span class="meta">graph node research-main:grading / academic-pipeline:research/grading</span>
   </summary>
@@ -13595,10 +13595,10 @@ When `literature_corpus[]` is non-empty and parses cleanly, the agent enters Ste
     <div><strong>outputs</strong> <code>graded_sources</code> → graded-sources.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 183 行</summary><pre class="doc-body">---
-name: cap-discovery-source-quality-grading
+name: discovery-source-quality-grading
 description: "Grades each source by evidence level, predatory-journal red flags and conflicts of interest."
 metadata:
-  capability_id: cap-discovery-source-quality-grading
+  capability_id: discovery-source-quality-grading
   node_kind: checker
   execution_type: llm
   gate_policy: required
@@ -13988,7 +13988,7 @@ Not all fields use the same evidence hierarchy. Adjust expectations:
 <details class="node" open>
   <summary>
     <span class="node-id">minimal:report, research-main:report, academic-pipeline:research/report</span>
-    <span class="cap-id">cap-generation-report-compilation</span>
+    <span class="cap-id">generation-report-compilation</span>
     <span class="cap-title">Research Report Compilation</span>
     <span class="meta">graph node minimal:report / research-main:report / academic-pipeline:research/report</span>
   </summary>
@@ -14000,10 +14000,10 @@ Not all fields use the same evidence hierarchy. Adjust expectations:
     <div><strong>outputs</strong> <code>research_report</code> → research-report.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 251 行</summary><pre class="doc-body">---
-name: cap-generation-report-compilation
+name: generation-report-compilation
 description: "Compiles the synthesis and method blueprint into a complete APA-style research report."
 metadata:
-  capability_id: cap-generation-report-compilation
+  capability_id: generation-report-compilation
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -16363,7 +16363,7 @@ Unified definitions to prevent inconsistency across agents.
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">研究报告评审当前复用 reviewer 族能力 + RAISE/ethics 合规检查；尚无独立 deep-research:review profile。</div><details class="node" open>
   <summary>
     <span class="node-id">academic-paper-reviewer:editorial, academic-pipeline:review/editorial</span>
-    <span class="cap-id">cap-judgment-editorial-judgment</span>
+    <span class="cap-id">judgment-editorial-judgment</span>
     <span class="cap-title">Editorial Judgment</span>
     <span class="meta">graph node academic-paper-reviewer:editorial / academic-pipeline:review/editorial</span>
   </summary>
@@ -16375,10 +16375,10 @@ Unified definitions to prevent inconsistency across agents.
     <div><strong>outputs</strong> <code>editorial_decision</code> → editorial-decision.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 188 行</summary><pre class="doc-body">---
-name: cap-judgment-editorial-judgment
+name: judgment-editorial-judgment
 description: "Edits and judges the manuscript as a journal editor."
 metadata:
-  capability_id: cap-judgment-editorial-judgment
+  capability_id: judgment-editorial-judgment
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -16803,7 +16803,7 @@ This document defines the explicit criteria for Accept / Minor Revision / Major 
 <details class="node" open>
   <summary>
     <span class="node-id">academic-paper-reviewer:da, academic-pipeline:review/da</span>
-    <span class="cap-id">cap-judgment-devils-advocate-stress-test</span>
+    <span class="cap-id">judgment-devils-advocate-stress-test</span>
     <span class="cap-title">Devil's Advocate Stress Test</span>
     <span class="meta">graph node academic-paper-reviewer:da / academic-pipeline:review/da</span>
   </summary>
@@ -16815,10 +16815,10 @@ This document defines the explicit criteria for Accept / Minor Revision / Major 
     <div><strong>outputs</strong> <code>stress_test_report</code> → stress-test.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 218 行</summary><pre class="doc-body">---
-name: cap-judgment-devils-advocate-stress-test
+name: judgment-devils-advocate-stress-test
 description: "Attacks the strongest claims without scoring."
 metadata:
-  capability_id: cap-judgment-devils-advocate-stress-test
+  capability_id: judgment-devils-advocate-stress-test
   node_kind: checker
   execution_type: llm
   gate_policy: required
@@ -17247,7 +17247,7 @@ Reference catalog of logical fallacies commonly encountered in research. Used by
 <details class="node" open>
   <summary>
     <span class="node-id">mode-review-3</span>
-    <span class="cap-id">cap-check-compliance-check</span>
+    <span class="cap-id">check-compliance-check</span>
     <span class="cap-title">Compliance Check</span>
     <span class="meta">mode-relevant capability（未出现在预设 graph profile 中）</span>
   </summary>
@@ -17259,10 +17259,10 @@ Reference catalog of logical fallacies commonly encountered in research. Used by
     <div><strong>outputs</strong> <code>compliance_report</code> → compliance.v1 · <code>ethics_review_report</code> → ethics-review.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 200 行</summary><pre class="doc-body">---
-name: cap-check-compliance-check
+name: check-compliance-check
 description: "PRISMA-trAIce and RAISE advisory compliance."
 metadata:
-  capability_id: cap-check-compliance-check
+  capability_id: check-compliance-check
   node_kind: observer
   execution_type: llm
   gate_policy: required
@@ -20795,7 +20795,7 @@ Per-source quality assessment card. Used by the source_verification_agent to sys
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">research-main 的 lit-review 片段。</div><details class="node" open>
   <summary>
     <span class="node-id">research-main:literature, academic-pipeline:research/literature</span>
-    <span class="cap-id">cap-discovery-literature-search-screening</span>
+    <span class="cap-id">discovery-literature-search-screening</span>
     <span class="cap-title">Literature Search And Screening</span>
     <span class="meta">graph node research-main:literature / academic-pipeline:research/literature</span>
   </summary>
@@ -20807,10 +20807,10 @@ Per-source quality assessment card. Used by the source_verification_agent to sys
     <div><strong>outputs</strong> <code>annotated_bibliography</code> → annotated-bibliography.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 164 行</summary><pre class="doc-body">---
-name: cap-discovery-literature-search-screening
+name: discovery-literature-search-screening
 description: "Runs a systematic, reproducible search and screening process and produces an annotated bibliography with PRISMA-style documentation."
 metadata:
-  capability_id: cap-discovery-literature-search-screening
+  capability_id: discovery-literature-search-screening
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -21188,7 +21188,7 @@ When `literature_corpus[]` is non-empty and parses cleanly, the agent enters Ste
 <details class="node" open>
   <summary>
     <span class="node-id">research-main:grading, academic-pipeline:research/grading</span>
-    <span class="cap-id">cap-discovery-source-quality-grading</span>
+    <span class="cap-id">discovery-source-quality-grading</span>
     <span class="cap-title">Source Quality Grading</span>
     <span class="meta">graph node research-main:grading / academic-pipeline:research/grading</span>
   </summary>
@@ -21200,10 +21200,10 @@ When `literature_corpus[]` is non-empty and parses cleanly, the agent enters Ste
     <div><strong>outputs</strong> <code>graded_sources</code> → graded-sources.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 183 行</summary><pre class="doc-body">---
-name: cap-discovery-source-quality-grading
+name: discovery-source-quality-grading
 description: "Grades each source by evidence level, predatory-journal red flags and conflicts of interest."
 metadata:
-  capability_id: cap-discovery-source-quality-grading
+  capability_id: discovery-source-quality-grading
   node_kind: checker
   execution_type: llm
   gate_policy: required
@@ -21593,7 +21593,7 @@ Not all fields use the same evidence hierarchy. Adjust expectations:
 <details class="node" open>
   <summary>
     <span class="node-id">research-main:synthesis, academic-pipeline:research/synthesis</span>
-    <span class="cap-id">cap-analysis-evidence-synthesis</span>
+    <span class="cap-id">analysis-evidence-synthesis</span>
     <span class="cap-title">Evidence Synthesis</span>
     <span class="meta">graph node research-main:synthesis / academic-pipeline:research/synthesis</span>
   </summary>
@@ -21605,10 +21605,10 @@ Not all fields use the same evidence hierarchy. Adjust expectations:
     <div><strong>outputs</strong> <code>synthesis_report</code> → synthesis-report.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 233 行</summary><pre class="doc-body">---
-name: cap-analysis-evidence-synthesis
+name: analysis-evidence-synthesis
 description: "Synthesizes graded sources into a convergent/divergent evidence map with claim-intent and citation emissions."
 metadata:
-  capability_id: cap-analysis-evidence-synthesis
+  capability_id: analysis-evidence-synthesis
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -23580,7 +23580,7 @@ Unified definitions to prevent inconsistency across agents.
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">轻量检索 + 验证片段；尚无独立 profile。</div><details class="node" open>
   <summary>
     <span class="node-id">research-main:literature, academic-pipeline:research/literature</span>
-    <span class="cap-id">cap-discovery-literature-search-screening</span>
+    <span class="cap-id">discovery-literature-search-screening</span>
     <span class="cap-title">Literature Search And Screening</span>
     <span class="meta">graph node research-main:literature / academic-pipeline:research/literature</span>
   </summary>
@@ -23592,10 +23592,10 @@ Unified definitions to prevent inconsistency across agents.
     <div><strong>outputs</strong> <code>annotated_bibliography</code> → annotated-bibliography.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 164 行</summary><pre class="doc-body">---
-name: cap-discovery-literature-search-screening
+name: discovery-literature-search-screening
 description: "Runs a systematic, reproducible search and screening process and produces an annotated bibliography with PRISMA-style documentation."
 metadata:
-  capability_id: cap-discovery-literature-search-screening
+  capability_id: discovery-literature-search-screening
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -23973,7 +23973,7 @@ When `literature_corpus[]` is non-empty and parses cleanly, the agent enters Ste
 <details class="node" open>
   <summary>
     <span class="node-id">research-main:grading, academic-pipeline:research/grading</span>
-    <span class="cap-id">cap-discovery-source-quality-grading</span>
+    <span class="cap-id">discovery-source-quality-grading</span>
     <span class="cap-title">Source Quality Grading</span>
     <span class="meta">graph node research-main:grading / academic-pipeline:research/grading</span>
   </summary>
@@ -23985,10 +23985,10 @@ When `literature_corpus[]` is non-empty and parses cleanly, the agent enters Ste
     <div><strong>outputs</strong> <code>graded_sources</code> → graded-sources.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 183 行</summary><pre class="doc-body">---
-name: cap-discovery-source-quality-grading
+name: discovery-source-quality-grading
 description: "Grades each source by evidence level, predatory-journal red flags and conflicts of interest."
 metadata:
-  capability_id: cap-discovery-source-quality-grading
+  capability_id: discovery-source-quality-grading
   node_kind: checker
   execution_type: llm
   gate_policy: required
@@ -25966,7 +25966,7 @@ Per-source quality assessment card. Used by the source_verification_agent to sys
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">来源核验 + 引用完整性组合；尚无独立 fact-check profile。</div><details class="node" open>
   <summary>
     <span class="node-id">research-main:grading, academic-pipeline:research/grading</span>
-    <span class="cap-id">cap-discovery-source-quality-grading</span>
+    <span class="cap-id">discovery-source-quality-grading</span>
     <span class="cap-title">Source Quality Grading</span>
     <span class="meta">graph node research-main:grading / academic-pipeline:research/grading</span>
   </summary>
@@ -25978,10 +25978,10 @@ Per-source quality assessment card. Used by the source_verification_agent to sys
     <div><strong>outputs</strong> <code>graded_sources</code> → graded-sources.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 183 行</summary><pre class="doc-body">---
-name: cap-discovery-source-quality-grading
+name: discovery-source-quality-grading
 description: "Grades each source by evidence level, predatory-journal red flags and conflicts of interest."
 metadata:
-  capability_id: cap-discovery-source-quality-grading
+  capability_id: discovery-source-quality-grading
   node_kind: checker
   execution_type: llm
   gate_policy: required
@@ -26371,7 +26371,7 @@ Not all fields use the same evidence hierarchy. Adjust expectations:
 <details class="node" open>
   <summary>
     <span class="node-id">mode-fact-check-2</span>
-    <span class="cap-id">cap-check-reference-integrity-verification</span>
+    <span class="cap-id">check-reference-integrity-verification</span>
     <span class="cap-title">Reference Integrity Verification</span>
     <span class="meta">mode-relevant capability（未出现在预设 graph profile 中）</span>
   </summary>
@@ -26383,10 +26383,10 @@ Not all fields use the same evidence hierarchy. Adjust expectations:
     <div><strong>outputs</strong> <code>integrity_report</code> → integrity-report.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 309 行</summary><pre class="doc-body">---
-name: cap-check-reference-integrity-verification
+name: check-reference-integrity-verification
 description: "Verifies citations, bibliography metadata and data provenance."
 metadata:
-  capability_id: cap-check-reference-integrity-verification
+  capability_id: check-reference-integrity-verification
   node_kind: checker
   execution_type: llm
   gate_policy: required
@@ -29702,7 +29702,7 @@ This document lists all failure scenarios that may be encountered across all mod
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">对话引擎 + RQ 构建 + DA 挑战；尚无独立 socratic profile。</div><details class="node" open>
   <summary>
     <span class="node-id">mode-socratic-1</span>
-    <span class="cap-id">cap-transform-socratic-mentoring</span>
+    <span class="cap-id">transform-socratic-mentoring</span>
     <span class="cap-title">Socratic Mentoring</span>
     <span class="meta">mode-relevant capability（未出现在预设 graph profile 中）</span>
   </summary>
@@ -29714,10 +29714,10 @@ This document lists all failure scenarios that may be encountered across all mod
     <div><strong>outputs</strong> <code>socratic_session_notes</code> → socratic-session.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 277 行</summary><pre class="doc-body">---
-name: cap-transform-socratic-mentoring
+name: transform-socratic-mentoring
 description: "Guided question-driven research or planning dialogue."
 metadata:
-  capability_id: cap-transform-socratic-mentoring
+  capability_id: transform-socratic-mentoring
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -30341,7 +30341,7 @@ The new S5/C5 (Self-Calibration) signal tracks whether the user's commitments be
 <details class="node" open>
   <summary>
     <span class="node-id">minimal:rq, research-main:research-question, academic-pipeline:research/research-question</span>
-    <span class="cap-id">cap-design-research-question-formulation</span>
+    <span class="cap-id">design-research-question-formulation</span>
     <span class="cap-title">Research Question Formulation</span>
     <span class="meta">graph node minimal:rq / research-main:research-question / academic-pipeline:research/research-question</span>
   </summary>
@@ -30353,10 +30353,10 @@ The new S5/C5 (Self-Calibration) signal tracks whether the user's commitments be
     <div><strong>outputs</strong> <code>rq_brief</code> → rq-brief.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 148 行</summary><pre class="doc-body">---
-name: cap-design-research-question-formulation
+name: design-research-question-formulation
 description: "Turns a project intent into a FINER-scored research question brief with scope boundaries and bound sub-questions."
 metadata:
-  capability_id: cap-design-research-question-formulation
+  capability_id: design-research-question-formulation
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -30581,7 +30581,7 @@ ARS 提取工件（Extraction Artifact）— M1 研究段
 <details class="node" open>
   <summary>
     <span class="node-id">academic-paper-reviewer:da, academic-pipeline:review/da</span>
-    <span class="cap-id">cap-judgment-devils-advocate-stress-test</span>
+    <span class="cap-id">judgment-devils-advocate-stress-test</span>
     <span class="cap-title">Devil's Advocate Stress Test</span>
     <span class="meta">graph node academic-paper-reviewer:da / academic-pipeline:review/da</span>
   </summary>
@@ -30593,10 +30593,10 @@ ARS 提取工件（Extraction Artifact）— M1 研究段
     <div><strong>outputs</strong> <code>stress_test_report</code> → stress-test.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 218 行</summary><pre class="doc-body">---
-name: cap-judgment-devils-advocate-stress-test
+name: judgment-devils-advocate-stress-test
 description: "Attacks the strongest claims without scoring."
 metadata:
-  capability_id: cap-judgment-devils-advocate-stress-test
+  capability_id: judgment-devils-advocate-stress-test
   node_kind: checker
   execution_type: llm
   gate_policy: required
@@ -38337,7 +38337,7 @@ Timing: [After publication / After study completion / Other]
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">systematic-review 尚无独立 graph profile；当前为 M1 + M5 能力的组合实例。</div><details class="node" open>
   <summary>
     <span class="node-id">minimal:rq, research-main:research-question, academic-pipeline:research/research-question</span>
-    <span class="cap-id">cap-design-research-question-formulation</span>
+    <span class="cap-id">design-research-question-formulation</span>
     <span class="cap-title">Research Question Formulation</span>
     <span class="meta">graph node minimal:rq / research-main:research-question / academic-pipeline:research/research-question</span>
   </summary>
@@ -38349,10 +38349,10 @@ Timing: [After publication / After study completion / Other]
     <div><strong>outputs</strong> <code>rq_brief</code> → rq-brief.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 148 行</summary><pre class="doc-body">---
-name: cap-design-research-question-formulation
+name: design-research-question-formulation
 description: "Turns a project intent into a FINER-scored research question brief with scope boundaries and bound sub-questions."
 metadata:
-  capability_id: cap-design-research-question-formulation
+  capability_id: design-research-question-formulation
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -38577,7 +38577,7 @@ ARS 提取工件（Extraction Artifact）— M1 研究段
 <details class="node" open>
   <summary>
     <span class="node-id">research-main:methodology, academic-pipeline:research/methodology</span>
-    <span class="cap-id">cap-design-methodology-design</span>
+    <span class="cap-id">design-methodology-design</span>
     <span class="cap-title">Methodology Design</span>
     <span class="meta">graph node research-main:methodology / academic-pipeline:research/methodology</span>
   </summary>
@@ -38589,10 +38589,10 @@ ARS 提取工件（Extraction Artifact）— M1 研究段
     <div><strong>outputs</strong> <code>methodology_blueprint</code> → methodology-blueprint.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 162 行</summary><pre class="doc-body">---
-name: cap-design-methodology-design
+name: design-methodology-design
 description: "Selects a paradigm, methods, data strategy and analysis framework coherent with the confirmed research question."
 metadata:
-  capability_id: cap-design-methodology-design
+  capability_id: design-methodology-design
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -39638,7 +39638,7 @@ Publication
 <details class="node" open>
   <summary>
     <span class="node-id">research-main:literature, academic-pipeline:research/literature</span>
-    <span class="cap-id">cap-discovery-literature-search-screening</span>
+    <span class="cap-id">discovery-literature-search-screening</span>
     <span class="cap-title">Literature Search And Screening</span>
     <span class="meta">graph node research-main:literature / academic-pipeline:research/literature</span>
   </summary>
@@ -39650,10 +39650,10 @@ Publication
     <div><strong>outputs</strong> <code>annotated_bibliography</code> → annotated-bibliography.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 164 行</summary><pre class="doc-body">---
-name: cap-discovery-literature-search-screening
+name: discovery-literature-search-screening
 description: "Runs a systematic, reproducible search and screening process and produces an annotated bibliography with PRISMA-style documentation."
 metadata:
-  capability_id: cap-discovery-literature-search-screening
+  capability_id: discovery-literature-search-screening
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -40031,7 +40031,7 @@ When `literature_corpus[]` is non-empty and parses cleanly, the agent enters Ste
 <details class="node" open>
   <summary>
     <span class="node-id">research-main:grading, academic-pipeline:research/grading</span>
-    <span class="cap-id">cap-discovery-source-quality-grading</span>
+    <span class="cap-id">discovery-source-quality-grading</span>
     <span class="cap-title">Source Quality Grading</span>
     <span class="meta">graph node research-main:grading / academic-pipeline:research/grading</span>
   </summary>
@@ -40043,10 +40043,10 @@ When `literature_corpus[]` is non-empty and parses cleanly, the agent enters Ste
     <div><strong>outputs</strong> <code>graded_sources</code> → graded-sources.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 183 行</summary><pre class="doc-body">---
-name: cap-discovery-source-quality-grading
+name: discovery-source-quality-grading
 description: "Grades each source by evidence level, predatory-journal red flags and conflicts of interest."
 metadata:
-  capability_id: cap-discovery-source-quality-grading
+  capability_id: discovery-source-quality-grading
   node_kind: checker
   execution_type: llm
   gate_policy: required
@@ -40436,7 +40436,7 @@ Not all fields use the same evidence hierarchy. Adjust expectations:
 <details class="node" open>
   <summary>
     <span class="node-id">mode-systematic-review-5</span>
-    <span class="cap-id">cap-analysis-risk-of-bias-assessment</span>
+    <span class="cap-id">analysis-risk-of-bias-assessment</span>
     <span class="cap-title">Risk of Bias Assessment</span>
     <span class="meta">mode-relevant capability（未出现在预设 graph profile 中）</span>
   </summary>
@@ -40448,10 +40448,10 @@ Not all fields use the same evidence hierarchy. Adjust expectations:
     <div><strong>outputs</strong> <code>rob_assessment</code> → rob-assessment.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 202 行</summary><pre class="doc-body">---
-name: cap-analysis-risk-of-bias-assessment
+name: analysis-risk-of-bias-assessment
 description: "RoB 2 and ROBINS-I assessments."
 metadata:
-  capability_id: cap-analysis-risk-of-bias-assessment
+  capability_id: analysis-risk-of-bias-assessment
   node_kind: checker
   execution_type: llm
   gate_policy: required
@@ -41025,7 +41025,7 @@ Starting a systematic review?
 <details class="node" open>
   <summary>
     <span class="node-id">mode-systematic-review-6</span>
-    <span class="cap-id">cap-analysis-meta-analysis</span>
+    <span class="cap-id">analysis-meta-analysis</span>
     <span class="cap-title">Meta Analysis</span>
     <span class="meta">mode-relevant capability（未出现在预设 graph profile 中）</span>
   </summary>
@@ -41037,10 +41037,10 @@ Starting a systematic review?
     <div><strong>outputs</strong> <code>meta_analysis_report</code> → meta-analysis.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 207 行</summary><pre class="doc-body">---
-name: cap-analysis-meta-analysis
+name: analysis-meta-analysis
 description: "Quantitative synthesis for systematic review."
 metadata:
-  capability_id: cap-analysis-meta-analysis
+  capability_id: analysis-meta-analysis
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -41361,7 +41361,7 @@ User: "Systematic review of [topic]" / "Meta-analysis of [topic]"
 <details class="node" open>
   <summary>
     <span class="node-id">research-main:synthesis, academic-pipeline:research/synthesis</span>
-    <span class="cap-id">cap-analysis-evidence-synthesis</span>
+    <span class="cap-id">analysis-evidence-synthesis</span>
     <span class="cap-title">Evidence Synthesis</span>
     <span class="meta">graph node research-main:synthesis / academic-pipeline:research/synthesis</span>
   </summary>
@@ -41373,10 +41373,10 @@ User: "Systematic review of [topic]" / "Meta-analysis of [topic]"
     <div><strong>outputs</strong> <code>synthesis_report</code> → synthesis-report.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 233 行</summary><pre class="doc-body">---
-name: cap-analysis-evidence-synthesis
+name: analysis-evidence-synthesis
 description: "Synthesizes graded sources into a convergent/divergent evidence map with claim-intent and citation emissions."
 metadata:
-  capability_id: cap-analysis-evidence-synthesis
+  capability_id: analysis-evidence-synthesis
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -41795,7 +41795,7 @@ The agent's job still ends at emission. The agent does NOT post-process or audit
 <details class="node" open>
   <summary>
     <span class="node-id">minimal:report, research-main:report, academic-pipeline:research/report</span>
-    <span class="cap-id">cap-generation-report-compilation</span>
+    <span class="cap-id">generation-report-compilation</span>
     <span class="cap-title">Research Report Compilation</span>
     <span class="meta">graph node minimal:report / research-main:report / academic-pipeline:research/report</span>
   </summary>
@@ -41807,10 +41807,10 @@ The agent's job still ends at emission. The agent does NOT post-process or audit
     <div><strong>outputs</strong> <code>research_report</code> → research-report.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 251 行</summary><pre class="doc-body">---
-name: cap-generation-report-compilation
+name: generation-report-compilation
 description: "Compiles the synthesis and method blueprint into a complete APA-style research report."
 metadata:
-  capability_id: cap-generation-report-compilation
+  capability_id: generation-report-compilation
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -53659,7 +53659,7 @@ Before submitting the revision, verify:
       <div class="profile-banner">Graph profile <code>academic-paper</code> v0.1.0 · 7 个顶层节点</div><div class="profile-flow"><strong>节点顺序</strong> <span class="flow-node capability">intake</span><span class="flow-arrow">→</span><span class="flow-node capability">structure</span><span class="flow-arrow">→</span><span class="flow-node capability">argument</span><span class="flow-arrow">→</span><span class="flow-node capability">draft</span><span class="flow-arrow">→</span><span class="flow-node capability">cite-check</span><span class="flow-arrow">→</span><span class="flow-node gate">paper-gate</span><span class="flow-arrow">→</span><span class="flow-node capability">abstract</span></div><details class="node" open>
   <summary>
     <span class="node-id">intake</span>
-    <span class="cap-id">cap-design-writing-intake</span>
+    <span class="cap-id">design-writing-intake</span>
     <span class="cap-title">Writing Intake</span>
     <span class="meta">profile:academic-paper</span>
   </summary>
@@ -53671,10 +53671,10 @@ Before submitting the revision, verify:
     <div><strong>outputs</strong> <code>writing_configuration</code> → writing-configuration.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 234 行</summary><pre class="doc-body">---
-name: cap-design-writing-intake
+name: design-writing-intake
 description: "Collects paper configuration and style calibration for writing work."
 metadata:
-  capability_id: cap-design-writing-intake
+  capability_id: design-writing-intake
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -54078,7 +54078,7 @@ If samples span many years: weight recent samples more heavily (2x weight for sa
 <details class="node" open>
   <summary>
     <span class="node-id">structure</span>
-    <span class="cap-id">cap-design-manuscript-structure-design</span>
+    <span class="cap-id">design-manuscript-structure-design</span>
     <span class="cap-title">Manuscript Structure Design</span>
     <span class="meta">profile:academic-paper</span>
   </summary>
@@ -54090,10 +54090,10 @@ If samples span many years: weight recent samples more heavily (2x weight for sa
     <div><strong>outputs</strong> <code>paper_outline</code> → paper-outline.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 263 行</summary><pre class="doc-body">---
-name: cap-design-manuscript-structure-design
+name: design-manuscript-structure-design
 description: "Designs paper structure, outline, word budget and evidence mapping."
 metadata:
-  capability_id: cap-design-manuscript-structure-design
+  capability_id: design-manuscript-structure-design
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -54705,7 +54705,7 @@ Used by `structure_architect_agent` and `intake_agent` to select the appropriate
 <details class="node" open>
   <summary>
     <span class="node-id">argument</span>
-    <span class="cap-id">cap-design-argument-blueprint</span>
+    <span class="cap-id">design-argument-blueprint</span>
     <span class="cap-title">Argument Blueprint</span>
     <span class="meta">profile:academic-paper</span>
   </summary>
@@ -54717,10 +54717,10 @@ Used by `structure_architect_agent` and `intake_agent` to select the appropriate
     <div><strong>outputs</strong> <code>argument_blueprint</code> → argument-blueprint.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 246 行</summary><pre class="doc-body">---
-name: cap-design-argument-blueprint
+name: design-argument-blueprint
 description: "Builds claim-evidence-reasoning chains and handles counterarguments."
 metadata:
-  capability_id: cap-design-argument-blueprint
+  capability_id: design-argument-blueprint
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -55624,7 +55624,7 @@ Used by `structure_architect_agent` and `intake_agent` to select the appropriate
 <details class="node" open>
   <summary>
     <span class="node-id">draft</span>
-    <span class="cap-id">cap-generation-manuscript-drafting</span>
+    <span class="cap-id">generation-manuscript-drafting</span>
     <span class="cap-title">Manuscript Drafting</span>
     <span class="meta">profile:academic-paper</span>
   </summary>
@@ -55636,10 +55636,10 @@ Used by `structure_architect_agent` and `intake_agent` to select the appropriate
     <div><strong>outputs</strong> <code>manuscript_draft</code> → manuscript-draft.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 211 行</summary><pre class="doc-body">---
-name: cap-generation-manuscript-drafting
+name: generation-manuscript-drafting
 description: "Writes manuscript sections and revision patches from outline and argument blueprint."
 metadata:
-  capability_id: cap-generation-manuscript-drafting
+  capability_id: generation-manuscript-drafting
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -56351,7 +56351,7 @@ Do NOT report scores to the user. Just fix the issues silently during drafting.
 <details class="node" open>
   <summary>
     <span class="node-id">cite-check</span>
-    <span class="cap-id">cap-check-citation-format-compliance</span>
+    <span class="cap-id">check-citation-format-compliance</span>
     <span class="cap-title">Citation Format Compliance</span>
     <span class="meta">profile:academic-paper</span>
   </summary>
@@ -56363,10 +56363,10 @@ Do NOT report scores to the user. Just fix the issues silently during drafting.
     <div><strong>outputs</strong> <code>citation_compliance_report</code> → citation-compliance.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 293 行</summary><pre class="doc-body">---
-name: cap-check-citation-format-compliance
+name: check-citation-format-compliance
 description: "Validates in-text citations and reference list formatting."
 metadata:
-  capability_id: cap-check-citation-format-compliance
+  capability_id: check-citation-format-compliance
   node_kind: checker
   execution_type: llm
   gate_policy: required
@@ -56907,7 +56907,7 @@ Ministry of Education (2024). Publication title. https://url
 <details class="node" open>
   <summary>
     <span class="node-id">abstract</span>
-    <span class="cap-id">cap-generation-abstract-writing</span>
+    <span class="cap-id">generation-abstract-writing</span>
     <span class="cap-title">Abstract Writing</span>
     <span class="meta">profile:academic-paper</span>
   </summary>
@@ -56919,10 +56919,10 @@ Ministry of Education (2024). Publication title. https://url
     <div><strong>outputs</strong> <code>abstract</code> → abstract.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 155 行</summary><pre class="doc-body">---
-name: cap-generation-abstract-writing
+name: generation-abstract-writing
 description: "Writes independent bilingual abstract and keywords."
 metadata:
-  capability_id: cap-generation-abstract-writing
+  capability_id: generation-abstract-writing
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -61489,7 +61489,7 @@ This template provides the skeleton for a concise conference paper presenting re
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">plan mode 尚无独立 graph profile；当前为 4 个能力的对话式组合。</div><details class="node" open>
   <summary>
     <span class="node-id">academic-paper:intake, academic-pipeline:write/intake</span>
-    <span class="cap-id">cap-design-writing-intake</span>
+    <span class="cap-id">design-writing-intake</span>
     <span class="cap-title">Writing Intake</span>
     <span class="meta">graph node academic-paper:intake / academic-pipeline:write/intake</span>
   </summary>
@@ -61501,10 +61501,10 @@ This template provides the skeleton for a concise conference paper presenting re
     <div><strong>outputs</strong> <code>writing_configuration</code> → writing-configuration.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 234 行</summary><pre class="doc-body">---
-name: cap-design-writing-intake
+name: design-writing-intake
 description: "Collects paper configuration and style calibration for writing work."
 metadata:
-  capability_id: cap-design-writing-intake
+  capability_id: design-writing-intake
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -61908,7 +61908,7 @@ If samples span many years: weight recent samples more heavily (2x weight for sa
 <details class="node" open>
   <summary>
     <span class="node-id">mode-plan-2</span>
-    <span class="cap-id">cap-transform-socratic-mentoring</span>
+    <span class="cap-id">transform-socratic-mentoring</span>
     <span class="cap-title">Socratic Mentoring</span>
     <span class="meta">mode-relevant capability（未出现在预设 graph profile 中）</span>
   </summary>
@@ -61920,10 +61920,10 @@ If samples span many years: weight recent samples more heavily (2x weight for sa
     <div><strong>outputs</strong> <code>socratic_session_notes</code> → socratic-session.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 277 行</summary><pre class="doc-body">---
-name: cap-transform-socratic-mentoring
+name: transform-socratic-mentoring
 description: "Guided question-driven research or planning dialogue."
 metadata:
-  capability_id: cap-transform-socratic-mentoring
+  capability_id: transform-socratic-mentoring
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -62547,7 +62547,7 @@ The new S5/C5 (Self-Calibration) signal tracks whether the user's commitments be
 <details class="node" open>
   <summary>
     <span class="node-id">academic-paper:structure, academic-pipeline:write/structure</span>
-    <span class="cap-id">cap-design-manuscript-structure-design</span>
+    <span class="cap-id">design-manuscript-structure-design</span>
     <span class="cap-title">Manuscript Structure Design</span>
     <span class="meta">graph node academic-paper:structure / academic-pipeline:write/structure</span>
   </summary>
@@ -62559,10 +62559,10 @@ The new S5/C5 (Self-Calibration) signal tracks whether the user's commitments be
     <div><strong>outputs</strong> <code>paper_outline</code> → paper-outline.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 263 行</summary><pre class="doc-body">---
-name: cap-design-manuscript-structure-design
+name: design-manuscript-structure-design
 description: "Designs paper structure, outline, word budget and evidence mapping."
 metadata:
-  capability_id: cap-design-manuscript-structure-design
+  capability_id: design-manuscript-structure-design
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -63174,7 +63174,7 @@ Used by `structure_architect_agent` and `intake_agent` to select the appropriate
 <details class="node" open>
   <summary>
     <span class="node-id">academic-paper:argument, academic-pipeline:write/argument</span>
-    <span class="cap-id">cap-design-argument-blueprint</span>
+    <span class="cap-id">design-argument-blueprint</span>
     <span class="cap-title">Argument Blueprint</span>
     <span class="meta">graph node academic-paper:argument / academic-pipeline:write/argument</span>
   </summary>
@@ -63186,10 +63186,10 @@ Used by `structure_architect_agent` and `intake_agent` to select the appropriate
     <div><strong>outputs</strong> <code>argument_blueprint</code> → argument-blueprint.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 246 行</summary><pre class="doc-body">---
-name: cap-design-argument-blueprint
+name: design-argument-blueprint
 description: "Builds claim-evidence-reasoning chains and handles counterarguments."
 metadata:
-  capability_id: cap-design-argument-blueprint
+  capability_id: design-argument-blueprint
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -68015,7 +68015,7 @@ This template provides the skeleton for a concise conference paper presenting re
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">academic-paper profile 的前 3 个节点。</div><details class="node" open>
   <summary>
     <span class="node-id">academic-paper:intake, academic-pipeline:write/intake</span>
-    <span class="cap-id">cap-design-writing-intake</span>
+    <span class="cap-id">design-writing-intake</span>
     <span class="cap-title">Writing Intake</span>
     <span class="meta">graph node academic-paper:intake / academic-pipeline:write/intake</span>
   </summary>
@@ -68027,10 +68027,10 @@ This template provides the skeleton for a concise conference paper presenting re
     <div><strong>outputs</strong> <code>writing_configuration</code> → writing-configuration.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 234 行</summary><pre class="doc-body">---
-name: cap-design-writing-intake
+name: design-writing-intake
 description: "Collects paper configuration and style calibration for writing work."
 metadata:
-  capability_id: cap-design-writing-intake
+  capability_id: design-writing-intake
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -68434,7 +68434,7 @@ If samples span many years: weight recent samples more heavily (2x weight for sa
 <details class="node" open>
   <summary>
     <span class="node-id">research-main:literature, academic-pipeline:research/literature</span>
-    <span class="cap-id">cap-discovery-literature-search-screening</span>
+    <span class="cap-id">discovery-literature-search-screening</span>
     <span class="cap-title">Literature Search And Screening</span>
     <span class="meta">graph node research-main:literature / academic-pipeline:research/literature</span>
   </summary>
@@ -68446,10 +68446,10 @@ If samples span many years: weight recent samples more heavily (2x weight for sa
     <div><strong>outputs</strong> <code>annotated_bibliography</code> → annotated-bibliography.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 164 行</summary><pre class="doc-body">---
-name: cap-discovery-literature-search-screening
+name: discovery-literature-search-screening
 description: "Runs a systematic, reproducible search and screening process and produces an annotated bibliography with PRISMA-style documentation."
 metadata:
-  capability_id: cap-discovery-literature-search-screening
+  capability_id: discovery-literature-search-screening
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -68827,7 +68827,7 @@ When `literature_corpus[]` is non-empty and parses cleanly, the agent enters Ste
 <details class="node" open>
   <summary>
     <span class="node-id">academic-paper:structure, academic-pipeline:write/structure</span>
-    <span class="cap-id">cap-design-manuscript-structure-design</span>
+    <span class="cap-id">design-manuscript-structure-design</span>
     <span class="cap-title">Manuscript Structure Design</span>
     <span class="meta">graph node academic-paper:structure / academic-pipeline:write/structure</span>
   </summary>
@@ -68839,10 +68839,10 @@ When `literature_corpus[]` is non-empty and parses cleanly, the agent enters Ste
     <div><strong>outputs</strong> <code>paper_outline</code> → paper-outline.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 263 行</summary><pre class="doc-body">---
-name: cap-design-manuscript-structure-design
+name: design-manuscript-structure-design
 description: "Designs paper structure, outline, word budget and evidence mapping."
 metadata:
-  capability_id: cap-design-manuscript-structure-design
+  capability_id: design-manuscript-structure-design
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -73067,7 +73067,7 @@ Before submitting the revision, verify:
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">revision 尚无独立 graph profile；当前为评审/补丁/引文能力组合。</div><details class="node" open>
   <summary>
     <span class="node-id">mode-revision-1</span>
-    <span class="cap-id">cap-check-pre-submission-self-check</span>
+    <span class="cap-id">check-pre-submission-self-check</span>
     <span class="cap-title">Pre-submission Self Check</span>
     <span class="meta">mode-relevant capability（未出现在预设 graph profile 中）</span>
   </summary>
@@ -73079,10 +73079,10 @@ Before submitting the revision, verify:
     <div><strong>outputs</strong> <code>self_check_report</code> → self-check.v1 · <code>verification_review_report</code> → verification-review.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 355 行</summary><pre class="doc-body">---
-name: cap-check-pre-submission-self-check
+name: check-pre-submission-self-check
 description: "Lightweight author self-check before submission."
 metadata:
-  capability_id: cap-check-pre-submission-self-check
+  capability_id: check-pre-submission-self-check
   node_kind: checker
   execution_type: llm
   gate_policy: required
@@ -73574,7 +73574,7 @@ Optional dimensions are reported separately and factored into the editorial synt
 <details class="node" open>
   <summary>
     <span class="node-id">academic-paper:draft, academic-pipeline:write/draft</span>
-    <span class="cap-id">cap-generation-manuscript-drafting</span>
+    <span class="cap-id">generation-manuscript-drafting</span>
     <span class="cap-title">Manuscript Drafting</span>
     <span class="meta">graph node academic-paper:draft / academic-pipeline:write/draft</span>
   </summary>
@@ -73586,10 +73586,10 @@ Optional dimensions are reported separately and factored into the editorial synt
     <div><strong>outputs</strong> <code>manuscript_draft</code> → manuscript-draft.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 211 行</summary><pre class="doc-body">---
-name: cap-generation-manuscript-drafting
+name: generation-manuscript-drafting
 description: "Writes manuscript sections and revision patches from outline and argument blueprint."
 metadata:
-  capability_id: cap-generation-manuscript-drafting
+  capability_id: generation-manuscript-drafting
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -74301,7 +74301,7 @@ Do NOT report scores to the user. Just fix the issues silently during drafting.
 <details class="node" open>
   <summary>
     <span class="node-id">mode-revision-3</span>
-    <span class="cap-id">cap-transform-revision-patching</span>
+    <span class="cap-id">transform-revision-patching</span>
     <span class="cap-title">Revision Patching</span>
     <span class="meta">mode-relevant capability（未出现在预设 graph profile 中）</span>
   </summary>
@@ -74313,10 +74313,10 @@ Do NOT report scores to the user. Just fix the issues silently during drafting.
     <div><strong>outputs</strong> <code>patched_manuscript</code> → patched-manuscript.v1 · <code>response_to_reviewers</code> → response-to-reviewers.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 73 行</summary><pre class="doc-body">---
-name: cap-transform-revision-patching
+name: transform-revision-patching
 description: "Deterministically anchors and applies revision patches fail-closed."
 metadata:
-  capability_id: cap-transform-revision-patching
+  capability_id: transform-revision-patching
   node_kind: checker
   execution_type: mixed
   gate_policy: required
@@ -74473,7 +74473,7 @@ python scripts/ars_apply_revision_patch.py draft.md patch.json \
 <details class="node" open>
   <summary>
     <span class="node-id">academic-paper:cite-check, academic-pipeline:write/cite-check</span>
-    <span class="cap-id">cap-check-citation-format-compliance</span>
+    <span class="cap-id">check-citation-format-compliance</span>
     <span class="cap-title">Citation Format Compliance</span>
     <span class="meta">graph node academic-paper:cite-check / academic-pipeline:write/cite-check</span>
   </summary>
@@ -74485,10 +74485,10 @@ python scripts/ars_apply_revision_patch.py draft.md patch.json \
     <div><strong>outputs</strong> <code>citation_compliance_report</code> → citation-compliance.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 293 行</summary><pre class="doc-body">---
-name: cap-check-citation-format-compliance
+name: check-citation-format-compliance
 description: "Validates in-text citations and reference list formatting."
 metadata:
-  capability_id: cap-check-citation-format-compliance
+  capability_id: check-citation-format-compliance
   node_kind: checker
   execution_type: llm
   gate_policy: required
@@ -76993,7 +76993,7 @@ python scripts/ars_apply_revision_patch.py draft.md patch.json \
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">单能力 mode。</div><details class="node" open>
   <summary>
     <span class="node-id">mode-revision-coach-1</span>
-    <span class="cap-id">cap-transform-revision-roadmap-parsing</span>
+    <span class="cap-id">transform-revision-roadmap-parsing</span>
     <span class="cap-title">Revision Roadmap Parsing</span>
     <span class="meta">mode-relevant capability（未出现在预设 graph profile 中）</span>
   </summary>
@@ -77005,10 +77005,10 @@ python scripts/ars_apply_revision_patch.py draft.md patch.json \
     <div><strong>outputs</strong> <code>revision_roadmap</code> → revision-roadmap.v1 · <code>rebuttal_qa_report</code> → rebuttal-qa.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 255 行</summary><pre class="doc-body">---
-name: cap-transform-revision-roadmap-parsing
+name: transform-revision-roadmap-parsing
 description: "Converts unstructured reviewer comments into a structured roadmap."
 metadata:
-  capability_id: cap-transform-revision-roadmap-parsing
+  capability_id: transform-revision-roadmap-parsing
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -79484,7 +79484,7 @@ Your abstracts are truly independent if:
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">单能力 mode。</div><details class="node" open>
   <summary>
     <span class="node-id">academic-paper:abstract, academic-pipeline:write/abstract</span>
-    <span class="cap-id">cap-generation-abstract-writing</span>
+    <span class="cap-id">generation-abstract-writing</span>
     <span class="cap-title">Abstract Writing</span>
     <span class="meta">graph node academic-paper:abstract / academic-pipeline:write/abstract</span>
   </summary>
@@ -79496,10 +79496,10 @@ Your abstracts are truly independent if:
     <div><strong>outputs</strong> <code>abstract</code> → abstract.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 155 行</summary><pre class="doc-body">---
-name: cap-generation-abstract-writing
+name: generation-abstract-writing
 description: "Writes independent bilingual abstract and keywords."
 metadata:
-  capability_id: cap-generation-abstract-writing
+  capability_id: generation-abstract-writing
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -82634,7 +82634,7 @@ This template provides the skeleton for a thematic literature review paper that 
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">写作入口 + research 文献能力组合。</div><details class="node" open>
   <summary>
     <span class="node-id">academic-paper:intake, academic-pipeline:write/intake</span>
-    <span class="cap-id">cap-design-writing-intake</span>
+    <span class="cap-id">design-writing-intake</span>
     <span class="cap-title">Writing Intake</span>
     <span class="meta">graph node academic-paper:intake / academic-pipeline:write/intake</span>
   </summary>
@@ -82646,10 +82646,10 @@ This template provides the skeleton for a thematic literature review paper that 
     <div><strong>outputs</strong> <code>writing_configuration</code> → writing-configuration.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 234 行</summary><pre class="doc-body">---
-name: cap-design-writing-intake
+name: design-writing-intake
 description: "Collects paper configuration and style calibration for writing work."
 metadata:
-  capability_id: cap-design-writing-intake
+  capability_id: design-writing-intake
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -83053,7 +83053,7 @@ If samples span many years: weight recent samples more heavily (2x weight for sa
 <details class="node" open>
   <summary>
     <span class="node-id">research-main:literature, academic-pipeline:research/literature</span>
-    <span class="cap-id">cap-discovery-literature-search-screening</span>
+    <span class="cap-id">discovery-literature-search-screening</span>
     <span class="cap-title">Literature Search And Screening</span>
     <span class="meta">graph node research-main:literature / academic-pipeline:research/literature</span>
   </summary>
@@ -83065,10 +83065,10 @@ If samples span many years: weight recent samples more heavily (2x weight for sa
     <div><strong>outputs</strong> <code>annotated_bibliography</code> → annotated-bibliography.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 164 行</summary><pre class="doc-body">---
-name: cap-discovery-literature-search-screening
+name: discovery-literature-search-screening
 description: "Runs a systematic, reproducible search and screening process and produces an annotated bibliography with PRISMA-style documentation."
 metadata:
-  capability_id: cap-discovery-literature-search-screening
+  capability_id: discovery-literature-search-screening
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -83446,7 +83446,7 @@ When `literature_corpus[]` is non-empty and parses cleanly, the agent enters Ste
 <details class="node" open>
   <summary>
     <span class="node-id">research-main:grading, academic-pipeline:research/grading</span>
-    <span class="cap-id">cap-discovery-source-quality-grading</span>
+    <span class="cap-id">discovery-source-quality-grading</span>
     <span class="cap-title">Source Quality Grading</span>
     <span class="meta">graph node research-main:grading / academic-pipeline:research/grading</span>
   </summary>
@@ -83458,10 +83458,10 @@ When `literature_corpus[]` is non-empty and parses cleanly, the agent enters Ste
     <div><strong>outputs</strong> <code>graded_sources</code> → graded-sources.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 183 行</summary><pre class="doc-body">---
-name: cap-discovery-source-quality-grading
+name: discovery-source-quality-grading
 description: "Grades each source by evidence level, predatory-journal red flags and conflicts of interest."
 metadata:
-  capability_id: cap-discovery-source-quality-grading
+  capability_id: discovery-source-quality-grading
   node_kind: checker
   execution_type: llm
   gate_policy: required
@@ -83851,7 +83851,7 @@ Not all fields use the same evidence hierarchy. Adjust expectations:
 <details class="node" open>
   <summary>
     <span class="node-id">research-main:synthesis, academic-pipeline:research/synthesis</span>
-    <span class="cap-id">cap-analysis-evidence-synthesis</span>
+    <span class="cap-id">analysis-evidence-synthesis</span>
     <span class="cap-title">Evidence Synthesis</span>
     <span class="meta">graph node research-main:synthesis / academic-pipeline:research/synthesis</span>
   </summary>
@@ -83863,10 +83863,10 @@ Not all fields use the same evidence hierarchy. Adjust expectations:
     <div><strong>outputs</strong> <code>synthesis_report</code> → synthesis-report.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 233 行</summary><pre class="doc-body">---
-name: cap-analysis-evidence-synthesis
+name: analysis-evidence-synthesis
 description: "Synthesizes graded sources into a convergent/divergent evidence map with claim-intent and citation emissions."
 metadata:
-  capability_id: cap-analysis-evidence-synthesis
+  capability_id: analysis-evidence-synthesis
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -87861,7 +87861,7 @@ This paper was prepared with the assistance of AI-powered academic writing tools
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">单能力 mode；terminal policy 由相邻 gate 能力承担。</div><details class="node" open>
   <summary>
     <span class="node-id">mode-format-convert-1</span>
-    <span class="cap-id">cap-generation-format-rendering</span>
+    <span class="cap-id">generation-format-rendering</span>
     <span class="cap-title">Format Rendering</span>
     <span class="meta">mode-relevant capability（未出现在预设 graph profile 中）</span>
   </summary>
@@ -87873,10 +87873,10 @@ This paper was prepared with the assistance of AI-powered academic writing tools
     <div><strong>outputs</strong> <code>formatted_manuscript</code> → formatted-manuscript.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 309 行</summary><pre class="doc-body">---
-name: cap-generation-format-rendering
+name: generation-format-rendering
 description: "Converts the final manuscript into declared output formats."
 metadata:
-  capability_id: cap-generation-format-rendering
+  capability_id: generation-format-rendering
   node_kind: producer
   execution_type: mixed
   gate_policy: required
@@ -91064,7 +91064,7 @@ Before conversion, ALL of the following must be true:
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">格式合规 + 存在性验证组合。</div><details class="node" open>
   <summary>
     <span class="node-id">academic-paper:cite-check, academic-pipeline:write/cite-check</span>
-    <span class="cap-id">cap-check-citation-format-compliance</span>
+    <span class="cap-id">check-citation-format-compliance</span>
     <span class="cap-title">Citation Format Compliance</span>
     <span class="meta">graph node academic-paper:cite-check / academic-pipeline:write/cite-check</span>
   </summary>
@@ -91076,10 +91076,10 @@ Before conversion, ALL of the following must be true:
     <div><strong>outputs</strong> <code>citation_compliance_report</code> → citation-compliance.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 293 行</summary><pre class="doc-body">---
-name: cap-check-citation-format-compliance
+name: check-citation-format-compliance
 description: "Validates in-text citations and reference list formatting."
 metadata:
-  capability_id: cap-check-citation-format-compliance
+  capability_id: check-citation-format-compliance
   node_kind: checker
   execution_type: llm
   gate_policy: required
@@ -91619,7 +91619,7 @@ Ministry of Education (2024). Publication title. https://url
 <details class="node" open>
   <summary>
     <span class="node-id">mode-citation-check-2</span>
-    <span class="cap-id">cap-check-citation-existence-verification</span>
+    <span class="cap-id">check-citation-existence-verification</span>
     <span class="cap-title">Citation Existence Verification</span>
     <span class="meta">mode-relevant capability（未出现在预设 graph profile 中）</span>
   </summary>
@@ -91631,10 +91631,10 @@ Ministry of Education (2024). Publication title. https://url
     <div><strong>outputs</strong> <code>citation_verification_report</code> → citation-existence.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 46 行</summary><pre class="doc-body">---
-name: cap-check-citation-existence-verification
+name: check-citation-existence-verification
 description: "Deterministic resolver-based citation existence gate."
 metadata:
-  capability_id: cap-check-citation-existence-verification
+  capability_id: check-citation-existence-verification
   node_kind: checker
   execution_type: script
   gate_policy: required
@@ -94308,7 +94308,7 @@ Sincerely,
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">合规检查 + 格式输出组合；尚无独立 disclosure profile。</div><details class="node" open>
   <summary>
     <span class="node-id">mode-disclosure-1</span>
-    <span class="cap-id">cap-check-compliance-check</span>
+    <span class="cap-id">check-compliance-check</span>
     <span class="cap-title">Compliance Check</span>
     <span class="meta">mode-relevant capability（未出现在预设 graph profile 中）</span>
   </summary>
@@ -94320,10 +94320,10 @@ Sincerely,
     <div><strong>outputs</strong> <code>compliance_report</code> → compliance.v1 · <code>ethics_review_report</code> → ethics-review.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 200 行</summary><pre class="doc-body">---
-name: cap-check-compliance-check
+name: check-compliance-check
 description: "PRISMA-trAIce and RAISE advisory compliance."
 metadata:
-  capability_id: cap-check-compliance-check
+  capability_id: check-compliance-check
   node_kind: observer
   execution_type: llm
   gate_policy: required
@@ -94847,7 +94847,7 @@ Total: 17 items.
 <details class="node" open>
   <summary>
     <span class="node-id">mode-disclosure-2</span>
-    <span class="cap-id">cap-generation-format-rendering</span>
+    <span class="cap-id">generation-format-rendering</span>
     <span class="cap-title">Format Rendering</span>
     <span class="meta">mode-relevant capability（未出现在预设 graph profile 中）</span>
   </summary>
@@ -94859,10 +94859,10 @@ Total: 17 items.
     <div><strong>outputs</strong> <code>formatted_manuscript</code> → formatted-manuscript.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 309 行</summary><pre class="doc-body">---
-name: cap-generation-format-rendering
+name: generation-format-rendering
 description: "Converts the final manuscript into declared output formats."
 metadata:
-  capability_id: cap-generation-format-rendering
+  capability_id: generation-format-rendering
   node_kind: producer
   execution_type: mixed
   gate_policy: required
@@ -97731,7 +97731,7 @@ F8 (Non-convergence) → May evolve into F10 (abandonment)
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">复用 comment 解析能力；advisory QA 无独立 profile。</div><details class="node" open>
   <summary>
     <span class="node-id">mode-rebuttal-audit-1</span>
-    <span class="cap-id">cap-transform-revision-roadmap-parsing</span>
+    <span class="cap-id">transform-revision-roadmap-parsing</span>
     <span class="cap-title">Revision Roadmap Parsing</span>
     <span class="meta">mode-relevant capability（未出现在预设 graph profile 中）</span>
   </summary>
@@ -97743,10 +97743,10 @@ F8 (Non-convergence) → May evolve into F10 (abandonment)
     <div><strong>outputs</strong> <code>revision_roadmap</code> → revision-roadmap.v1 · <code>rebuttal_qa_report</code> → rebuttal-qa.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 255 行</summary><pre class="doc-body">---
-name: cap-transform-revision-roadmap-parsing
+name: transform-revision-roadmap-parsing
 description: "Converts unstructured reviewer comments into a structured roadmap."
 metadata:
-  capability_id: cap-transform-revision-roadmap-parsing
+  capability_id: transform-revision-roadmap-parsing
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -103007,7 +103007,7 @@ We sincerely appreciate the reviewers' thoughtful and constructive feedback, whi
       <div class="profile-banner">Graph profile <code>academic-paper-reviewer</code> v0.1.0 · 5 个顶层节点</div><div class="profile-flow"><strong>节点顺序</strong> <span class="flow-node capability">panel</span><span class="flow-arrow">→</span><span class="flow-node capability">specialist</span><span class="flow-arrow">→</span><span class="flow-node capability">da</span><span class="flow-arrow">→</span><span class="flow-node capability">editorial</span><span class="flow-arrow">→</span><span class="flow-node capability">synthesis</span></div><details class="node" open>
   <summary>
     <span class="node-id">panel</span>
-    <span class="cap-id">cap-design-review-panel-config</span>
+    <span class="cap-id">design-review-panel-config</span>
     <span class="cap-title">Review Panel Configuration</span>
     <span class="meta">profile:academic-paper-reviewer</span>
   </summary>
@@ -103019,10 +103019,10 @@ We sincerely appreciate the reviewers' thoughtful and constructive feedback, whi
     <div><strong>outputs</strong> <code>review_panel_config</code> → review-panel-config.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 180 行</summary><pre class="doc-body">---
-name: cap-design-review-panel-config
+name: design-review-panel-config
 description: "Analyzes the manuscript field and emits five reviewer cards."
 metadata:
-  capability_id: cap-design-review-panel-config
+  capability_id: design-review-panel-config
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -103626,7 +103626,7 @@ This document is used by `field_analyst_agent` and `eic_agent` as a reference fo
 <details class="node" open>
   <summary>
     <span class="node-id">specialist</span>
-    <span class="cap-id">cap-judgment-specialist-review</span>
+    <span class="cap-id">judgment-specialist-review</span>
     <span class="cap-title">Specialist Review</span>
     <span class="meta">profile:academic-paper-reviewer</span>
   </summary>
@@ -103638,10 +103638,10 @@ This document is used by `field_analyst_agent` and `eic_agent` as a reference fo
     <div><strong>outputs</strong> <code>specialist_review</code> → specialist-review.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 199 行</summary><pre class="doc-body">---
-name: cap-judgment-specialist-review
+name: judgment-specialist-review
 description: "Reviews methodology, domain depth and interdisciplinary perspective."
 metadata:
-  capability_id: cap-judgment-specialist-review
+  capability_id: judgment-specialist-review
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -104588,7 +104588,7 @@ Step 7: Produce completeness score (Section 6)
 <details class="node" open>
   <summary>
     <span class="node-id">da</span>
-    <span class="cap-id">cap-judgment-devils-advocate-stress-test</span>
+    <span class="cap-id">judgment-devils-advocate-stress-test</span>
     <span class="cap-title">Devil's Advocate Stress Test</span>
     <span class="meta">profile:academic-paper-reviewer</span>
   </summary>
@@ -104600,10 +104600,10 @@ Step 7: Produce completeness score (Section 6)
     <div><strong>outputs</strong> <code>stress_test_report</code> → stress-test.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 218 行</summary><pre class="doc-body">---
-name: cap-judgment-devils-advocate-stress-test
+name: judgment-devils-advocate-stress-test
 description: "Attacks the strongest claims without scoring."
 metadata:
-  capability_id: cap-judgment-devils-advocate-stress-test
+  capability_id: judgment-devils-advocate-stress-test
   node_kind: checker
   execution_type: llm
   gate_policy: required
@@ -105032,7 +105032,7 @@ Reference catalog of logical fallacies commonly encountered in research. Used by
 <details class="node" open>
   <summary>
     <span class="node-id">editorial</span>
-    <span class="cap-id">cap-judgment-editorial-judgment</span>
+    <span class="cap-id">judgment-editorial-judgment</span>
     <span class="cap-title">Editorial Judgment</span>
     <span class="meta">profile:academic-paper-reviewer</span>
   </summary>
@@ -105044,10 +105044,10 @@ Reference catalog of logical fallacies commonly encountered in research. Used by
     <div><strong>outputs</strong> <code>editorial_decision</code> → editorial-decision.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 188 行</summary><pre class="doc-body">---
-name: cap-judgment-editorial-judgment
+name: judgment-editorial-judgment
 description: "Edits and judges the manuscript as a journal editor."
 metadata:
-  capability_id: cap-judgment-editorial-judgment
+  capability_id: judgment-editorial-judgment
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -105472,7 +105472,7 @@ This document defines the explicit criteria for Accept / Minor Revision / Major 
 <details class="node" open>
   <summary>
     <span class="node-id">synthesis</span>
-    <span class="cap-id">cap-judgment-review-synthesis</span>
+    <span class="cap-id">judgment-review-synthesis</span>
     <span class="cap-title">Review Synthesis</span>
     <span class="meta">profile:academic-paper-reviewer</span>
   </summary>
@@ -105484,10 +105484,10 @@ This document defines the explicit criteria for Accept / Minor Revision / Major 
     <div><strong>outputs</strong> <code>review_synthesis</code> → review-synthesis.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 250 行</summary><pre class="doc-body">---
-name: cap-judgment-review-synthesis
+name: judgment-review-synthesis
 description: "Synthesizes panel reports into one editorial decision and revision roadmap."
 metadata:
-  capability_id: cap-judgment-review-synthesis
+  capability_id: judgment-review-synthesis
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -108253,7 +108253,7 @@ We sincerely appreciate the reviewers' thoughtful and constructive feedback, whi
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">re-review 尚无独立 graph profile；当前为综合 + 路线图 + 自检组合。</div><details class="node" open>
   <summary>
     <span class="node-id">academic-paper-reviewer:synthesis, academic-pipeline:review/synthesis</span>
-    <span class="cap-id">cap-judgment-review-synthesis</span>
+    <span class="cap-id">judgment-review-synthesis</span>
     <span class="cap-title">Review Synthesis</span>
     <span class="meta">graph node academic-paper-reviewer:synthesis / academic-pipeline:review/synthesis</span>
   </summary>
@@ -108265,10 +108265,10 @@ We sincerely appreciate the reviewers' thoughtful and constructive feedback, whi
     <div><strong>outputs</strong> <code>review_synthesis</code> → review-synthesis.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 250 行</summary><pre class="doc-body">---
-name: cap-judgment-review-synthesis
+name: judgment-review-synthesis
 description: "Synthesizes panel reports into one editorial decision and revision roadmap."
 metadata:
-  capability_id: cap-judgment-review-synthesis
+  capability_id: judgment-review-synthesis
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -108708,7 +108708,7 @@ Audit-log tags the orchestrator may emit:
 <details class="node" open>
   <summary>
     <span class="node-id">mode-re-review-2</span>
-    <span class="cap-id">cap-transform-revision-roadmap-parsing</span>
+    <span class="cap-id">transform-revision-roadmap-parsing</span>
     <span class="cap-title">Revision Roadmap Parsing</span>
     <span class="meta">mode-relevant capability（未出现在预设 graph profile 中）</span>
   </summary>
@@ -108720,10 +108720,10 @@ Audit-log tags the orchestrator may emit:
     <div><strong>outputs</strong> <code>revision_roadmap</code> → revision-roadmap.v1 · <code>rebuttal_qa_report</code> → rebuttal-qa.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 255 行</summary><pre class="doc-body">---
-name: cap-transform-revision-roadmap-parsing
+name: transform-revision-roadmap-parsing
 description: "Converts unstructured reviewer comments into a structured roadmap."
 metadata:
-  capability_id: cap-transform-revision-roadmap-parsing
+  capability_id: transform-revision-roadmap-parsing
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -109062,7 +109062,7 @@ python scripts/ars_apply_revision_patch.py draft.md patch.json \
 <details class="node" open>
   <summary>
     <span class="node-id">mode-re-review-3</span>
-    <span class="cap-id">cap-check-pre-submission-self-check</span>
+    <span class="cap-id">check-pre-submission-self-check</span>
     <span class="cap-title">Pre-submission Self Check</span>
     <span class="meta">mode-relevant capability（未出现在预设 graph profile 中）</span>
   </summary>
@@ -109074,10 +109074,10 @@ python scripts/ars_apply_revision_patch.py draft.md patch.json \
     <div><strong>outputs</strong> <code>self_check_report</code> → self-check.v1 · <code>verification_review_report</code> → verification-review.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 355 行</summary><pre class="doc-body">---
-name: cap-check-pre-submission-self-check
+name: check-pre-submission-self-check
 description: "Lightweight author self-check before submission."
 metadata:
-  capability_id: cap-check-pre-submission-self-check
+  capability_id: check-pre-submission-self-check
   node_kind: checker
   execution_type: llm
   gate_policy: required
@@ -110664,7 +110664,7 @@ Ask in order:
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">单能力 mode。</div><details class="node" open>
   <summary>
     <span class="node-id">academic-paper-reviewer:editorial, academic-pipeline:review/editorial</span>
-    <span class="cap-id">cap-judgment-editorial-judgment</span>
+    <span class="cap-id">judgment-editorial-judgment</span>
     <span class="cap-title">Editorial Judgment</span>
     <span class="meta">graph node academic-paper-reviewer:editorial / academic-pipeline:review/editorial</span>
   </summary>
@@ -110676,10 +110676,10 @@ Ask in order:
     <div><strong>outputs</strong> <code>editorial_decision</code> → editorial-decision.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 188 行</summary><pre class="doc-body">---
-name: cap-judgment-editorial-judgment
+name: judgment-editorial-judgment
 description: "Edits and judges the manuscript as a journal editor."
 metadata:
-  capability_id: cap-judgment-editorial-judgment
+  capability_id: judgment-editorial-judgment
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -112950,7 +112950,7 @@ Score each dimension 0-100 using the rubrics in `references/quality_rubrics.md`.
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">R1 视角单能力 mode。</div><details class="node" open>
   <summary>
     <span class="node-id">academic-paper-reviewer:specialist, academic-pipeline:review/specialist</span>
-    <span class="cap-id">cap-judgment-specialist-review</span>
+    <span class="cap-id">judgment-specialist-review</span>
     <span class="cap-title">Specialist Review</span>
     <span class="meta">graph node academic-paper-reviewer:specialist / academic-pipeline:review/specialist</span>
   </summary>
@@ -112962,10 +112962,10 @@ Score each dimension 0-100 using the rubrics in `references/quality_rubrics.md`.
     <div><strong>outputs</strong> <code>specialist_review</code> → specialist-review.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 199 行</summary><pre class="doc-body">---
-name: cap-judgment-specialist-review
+name: judgment-specialist-review
 description: "Reviews methodology, domain depth and interdisciplinary perspective."
 metadata:
-  capability_id: cap-judgment-specialist-review
+  capability_id: judgment-specialist-review
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -117048,7 +117048,7 @@ Score each dimension 0-100 using the rubrics in `references/quality_rubrics.md`.
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">苏格拉底对话引擎 + 评审视角组合。</div><details class="node" open>
   <summary>
     <span class="node-id">mode-guided-1</span>
-    <span class="cap-id">cap-transform-socratic-mentoring</span>
+    <span class="cap-id">transform-socratic-mentoring</span>
     <span class="cap-title">Socratic Mentoring</span>
     <span class="meta">mode-relevant capability（未出现在预设 graph profile 中）</span>
   </summary>
@@ -117060,10 +117060,10 @@ Score each dimension 0-100 using the rubrics in `references/quality_rubrics.md`.
     <div><strong>outputs</strong> <code>socratic_session_notes</code> → socratic-session.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 277 行</summary><pre class="doc-body">---
-name: cap-transform-socratic-mentoring
+name: transform-socratic-mentoring
 description: "Guided question-driven research or planning dialogue."
 metadata:
-  capability_id: cap-transform-socratic-mentoring
+  capability_id: transform-socratic-mentoring
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -117687,7 +117687,7 @@ The new S5/C5 (Self-Calibration) signal tracks whether the user's commitments be
 <details class="node" open>
   <summary>
     <span class="node-id">academic-paper-reviewer:editorial, academic-pipeline:review/editorial</span>
-    <span class="cap-id">cap-judgment-editorial-judgment</span>
+    <span class="cap-id">judgment-editorial-judgment</span>
     <span class="cap-title">Editorial Judgment</span>
     <span class="meta">graph node academic-paper-reviewer:editorial / academic-pipeline:review/editorial</span>
   </summary>
@@ -117699,10 +117699,10 @@ The new S5/C5 (Self-Calibration) signal tracks whether the user's commitments be
     <div><strong>outputs</strong> <code>editorial_decision</code> → editorial-decision.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 188 行</summary><pre class="doc-body">---
-name: cap-judgment-editorial-judgment
+name: judgment-editorial-judgment
 description: "Edits and judges the manuscript as a journal editor."
 metadata:
-  capability_id: cap-judgment-editorial-judgment
+  capability_id: judgment-editorial-judgment
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -118127,7 +118127,7 @@ This document defines the explicit criteria for Accept / Minor Revision / Major 
 <details class="node" open>
   <summary>
     <span class="node-id">academic-paper-reviewer:specialist, academic-pipeline:review/specialist</span>
-    <span class="cap-id">cap-judgment-specialist-review</span>
+    <span class="cap-id">judgment-specialist-review</span>
     <span class="cap-title">Specialist Review</span>
     <span class="meta">graph node academic-paper-reviewer:specialist / academic-pipeline:review/specialist</span>
   </summary>
@@ -118139,10 +118139,10 @@ This document defines the explicit criteria for Accept / Minor Revision / Major 
     <div><strong>outputs</strong> <code>specialist_review</code> → specialist-review.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 199 行</summary><pre class="doc-body">---
-name: cap-judgment-specialist-review
+name: judgment-specialist-review
 description: "Reviews methodology, domain depth and interdisciplinary perspective."
 metadata:
-  capability_id: cap-judgment-specialist-review
+  capability_id: judgment-specialist-review
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -122700,7 +122700,7 @@ Score each dimension 0-100 using the rubrics in `references/quality_rubrics.md`.
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">尚无 calibration capability；当前使用可评分 checker 作为最近似节点。</div><details class="node" open>
   <summary>
     <span class="node-id">mode-calibration-1</span>
-    <span class="cap-id">cap-check-pre-submission-self-check</span>
+    <span class="cap-id">check-pre-submission-self-check</span>
     <span class="cap-title">Pre-submission Self Check</span>
     <span class="meta">mode-relevant capability（未出现在预设 graph profile 中）</span>
   </summary>
@@ -122712,10 +122712,10 @@ Score each dimension 0-100 using the rubrics in `references/quality_rubrics.md`.
     <div><strong>outputs</strong> <code>self_check_report</code> → self-check.v1 · <code>verification_review_report</code> → verification-review.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 355 行</summary><pre class="doc-body">---
-name: cap-check-pre-submission-self-check
+name: check-pre-submission-self-check
 description: "Lightweight author self-check before submission."
 metadata:
-  capability_id: cap-check-pre-submission-self-check
+  capability_id: check-pre-submission-self-check
   node_kind: checker
   execution_type: llm
   gate_policy: required
@@ -123207,7 +123207,7 @@ Optional dimensions are reported separately and factored into the editorial synt
 <details class="node" open>
   <summary>
     <span class="node-id">academic-paper-reviewer:specialist, academic-pipeline:review/specialist</span>
-    <span class="cap-id">cap-judgment-specialist-review</span>
+    <span class="cap-id">judgment-specialist-review</span>
     <span class="cap-title">Specialist Review</span>
     <span class="meta">graph node academic-paper-reviewer:specialist / academic-pipeline:review/specialist</span>
   </summary>
@@ -123219,10 +123219,10 @@ Optional dimensions are reported separately and factored into the editorial synt
     <div><strong>outputs</strong> <code>specialist_review</code> → specialist-review.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 199 行</summary><pre class="doc-body">---
-name: cap-judgment-specialist-review
+name: judgment-specialist-review
 description: "Reviews methodology, domain depth and interdisciplinary perspective."
 metadata:
-  capability_id: cap-judgment-specialist-review
+  capability_id: judgment-specialist-review
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -132521,7 +132521,7 @@ Pipeline: [v]RESEARCH -&gt; [v]WRITE -&gt; [..]REVIEW -&gt; [ ]REVISE -&gt; [ ]F
       <div class="profile-banner">Graph profile <code>academic-pipeline</code> v0.1.0 · 5 个顶层节点</div><div class="profile-flow"><strong>节点顺序</strong> <span class="flow-node subgraph">research</span><span class="flow-arrow">→</span><span class="flow-node gate">research-gate</span><span class="flow-arrow">→</span><span class="flow-node subgraph">write</span><span class="flow-arrow">→</span><span class="flow-node gate">write-gate</span><span class="flow-arrow">→</span><span class="flow-node subgraph">review</span></div><details class="node subgraph" open><summary><span class="node-id">research</span><span class="cap-id">subgraph</span><span class="cap-title">research-main</span><span class="meta">profile:academic-pipeline</span></summary><div class="node-meta">子图节点，展开为子 profile 的 capability 节点：</div><details class="node" open>
   <summary>
     <span class="node-id">research/research-question</span>
-    <span class="cap-id">cap-design-research-question-formulation</span>
+    <span class="cap-id">design-research-question-formulation</span>
     <span class="cap-title">Research Question Formulation</span>
     <span class="meta">subgraph research-main</span>
   </summary>
@@ -132533,10 +132533,10 @@ Pipeline: [v]RESEARCH -&gt; [v]WRITE -&gt; [..]REVIEW -&gt; [ ]REVISE -&gt; [ ]F
     <div><strong>outputs</strong> <code>rq_brief</code> → rq-brief.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 148 行</summary><pre class="doc-body">---
-name: cap-design-research-question-formulation
+name: design-research-question-formulation
 description: "Turns a project intent into a FINER-scored research question brief with scope boundaries and bound sub-questions."
 metadata:
-  capability_id: cap-design-research-question-formulation
+  capability_id: design-research-question-formulation
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -132762,7 +132762,7 @@ ARS 提取工件（Extraction Artifact）— M1 研究段
 <details class="node" open>
   <summary>
     <span class="node-id">research/methodology</span>
-    <span class="cap-id">cap-design-methodology-design</span>
+    <span class="cap-id">design-methodology-design</span>
     <span class="cap-title">Methodology Design</span>
     <span class="meta">subgraph research-main</span>
   </summary>
@@ -132774,10 +132774,10 @@ ARS 提取工件（Extraction Artifact）— M1 研究段
     <div><strong>outputs</strong> <code>methodology_blueprint</code> → methodology-blueprint.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 162 行</summary><pre class="doc-body">---
-name: cap-design-methodology-design
+name: design-methodology-design
 description: "Selects a paradigm, methods, data strategy and analysis framework coherent with the confirmed research question."
 metadata:
-  capability_id: cap-design-methodology-design
+  capability_id: design-methodology-design
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -133823,7 +133823,7 @@ Publication
 <details class="node" open>
   <summary>
     <span class="node-id">research/literature</span>
-    <span class="cap-id">cap-discovery-literature-search-screening</span>
+    <span class="cap-id">discovery-literature-search-screening</span>
     <span class="cap-title">Literature Search And Screening</span>
     <span class="meta">subgraph research-main</span>
   </summary>
@@ -133835,10 +133835,10 @@ Publication
     <div><strong>outputs</strong> <code>annotated_bibliography</code> → annotated-bibliography.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 164 行</summary><pre class="doc-body">---
-name: cap-discovery-literature-search-screening
+name: discovery-literature-search-screening
 description: "Runs a systematic, reproducible search and screening process and produces an annotated bibliography with PRISMA-style documentation."
 metadata:
-  capability_id: cap-discovery-literature-search-screening
+  capability_id: discovery-literature-search-screening
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -134216,7 +134216,7 @@ When `literature_corpus[]` is non-empty and parses cleanly, the agent enters Ste
 <details class="node" open>
   <summary>
     <span class="node-id">research/grading</span>
-    <span class="cap-id">cap-discovery-source-quality-grading</span>
+    <span class="cap-id">discovery-source-quality-grading</span>
     <span class="cap-title">Source Quality Grading</span>
     <span class="meta">subgraph research-main</span>
   </summary>
@@ -134228,10 +134228,10 @@ When `literature_corpus[]` is non-empty and parses cleanly, the agent enters Ste
     <div><strong>outputs</strong> <code>graded_sources</code> → graded-sources.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 183 行</summary><pre class="doc-body">---
-name: cap-discovery-source-quality-grading
+name: discovery-source-quality-grading
 description: "Grades each source by evidence level, predatory-journal red flags and conflicts of interest."
 metadata:
-  capability_id: cap-discovery-source-quality-grading
+  capability_id: discovery-source-quality-grading
   node_kind: checker
   execution_type: llm
   gate_policy: required
@@ -134621,7 +134621,7 @@ Not all fields use the same evidence hierarchy. Adjust expectations:
 <details class="node" open>
   <summary>
     <span class="node-id">research/synthesis</span>
-    <span class="cap-id">cap-analysis-evidence-synthesis</span>
+    <span class="cap-id">analysis-evidence-synthesis</span>
     <span class="cap-title">Evidence Synthesis</span>
     <span class="meta">subgraph research-main</span>
   </summary>
@@ -134633,10 +134633,10 @@ Not all fields use the same evidence hierarchy. Adjust expectations:
     <div><strong>outputs</strong> <code>synthesis_report</code> → synthesis-report.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 233 行</summary><pre class="doc-body">---
-name: cap-analysis-evidence-synthesis
+name: analysis-evidence-synthesis
 description: "Synthesizes graded sources into a convergent/divergent evidence map with claim-intent and citation emissions."
 metadata:
-  capability_id: cap-analysis-evidence-synthesis
+  capability_id: analysis-evidence-synthesis
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -135055,7 +135055,7 @@ The agent's job still ends at emission. The agent does NOT post-process or audit
 <details class="node" open>
   <summary>
     <span class="node-id">research/report</span>
-    <span class="cap-id">cap-generation-report-compilation</span>
+    <span class="cap-id">generation-report-compilation</span>
     <span class="cap-title">Research Report Compilation</span>
     <span class="meta">subgraph research-main</span>
   </summary>
@@ -135067,10 +135067,10 @@ The agent's job still ends at emission. The agent does NOT post-process or audit
     <div><strong>outputs</strong> <code>research_report</code> → research-report.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 251 行</summary><pre class="doc-body">---
-name: cap-generation-report-compilation
+name: generation-report-compilation
 description: "Compiles the synthesis and method blueprint into a complete APA-style research report."
 metadata:
-  capability_id: cap-generation-report-compilation
+  capability_id: generation-report-compilation
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -135721,7 +135721,7 @@ Do NOT report scores to the user. Just fix the issues silently during drafting.
 <details class="node subgraph" open><summary><span class="node-id">write</span><span class="cap-id">subgraph</span><span class="cap-title">academic-paper</span><span class="meta">profile:academic-pipeline</span></summary><div class="node-meta">子图节点，展开为子 profile 的 capability 节点：</div><details class="node" open>
   <summary>
     <span class="node-id">write/intake</span>
-    <span class="cap-id">cap-design-writing-intake</span>
+    <span class="cap-id">design-writing-intake</span>
     <span class="cap-title">Writing Intake</span>
     <span class="meta">subgraph academic-paper</span>
   </summary>
@@ -135733,10 +135733,10 @@ Do NOT report scores to the user. Just fix the issues silently during drafting.
     <div><strong>outputs</strong> <code>writing_configuration</code> → writing-configuration.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 234 行</summary><pre class="doc-body">---
-name: cap-design-writing-intake
+name: design-writing-intake
 description: "Collects paper configuration and style calibration for writing work."
 metadata:
-  capability_id: cap-design-writing-intake
+  capability_id: design-writing-intake
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -136140,7 +136140,7 @@ If samples span many years: weight recent samples more heavily (2x weight for sa
 <details class="node" open>
   <summary>
     <span class="node-id">write/structure</span>
-    <span class="cap-id">cap-design-manuscript-structure-design</span>
+    <span class="cap-id">design-manuscript-structure-design</span>
     <span class="cap-title">Manuscript Structure Design</span>
     <span class="meta">subgraph academic-paper</span>
   </summary>
@@ -136152,10 +136152,10 @@ If samples span many years: weight recent samples more heavily (2x weight for sa
     <div><strong>outputs</strong> <code>paper_outline</code> → paper-outline.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 263 行</summary><pre class="doc-body">---
-name: cap-design-manuscript-structure-design
+name: design-manuscript-structure-design
 description: "Designs paper structure, outline, word budget and evidence mapping."
 metadata:
-  capability_id: cap-design-manuscript-structure-design
+  capability_id: design-manuscript-structure-design
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -136767,7 +136767,7 @@ Used by `structure_architect_agent` and `intake_agent` to select the appropriate
 <details class="node" open>
   <summary>
     <span class="node-id">write/argument</span>
-    <span class="cap-id">cap-design-argument-blueprint</span>
+    <span class="cap-id">design-argument-blueprint</span>
     <span class="cap-title">Argument Blueprint</span>
     <span class="meta">subgraph academic-paper</span>
   </summary>
@@ -136779,10 +136779,10 @@ Used by `structure_architect_agent` and `intake_agent` to select the appropriate
     <div><strong>outputs</strong> <code>argument_blueprint</code> → argument-blueprint.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 246 行</summary><pre class="doc-body">---
-name: cap-design-argument-blueprint
+name: design-argument-blueprint
 description: "Builds claim-evidence-reasoning chains and handles counterarguments."
 metadata:
-  capability_id: cap-design-argument-blueprint
+  capability_id: design-argument-blueprint
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -137686,7 +137686,7 @@ Used by `structure_architect_agent` and `intake_agent` to select the appropriate
 <details class="node" open>
   <summary>
     <span class="node-id">write/draft</span>
-    <span class="cap-id">cap-generation-manuscript-drafting</span>
+    <span class="cap-id">generation-manuscript-drafting</span>
     <span class="cap-title">Manuscript Drafting</span>
     <span class="meta">subgraph academic-paper</span>
   </summary>
@@ -137698,10 +137698,10 @@ Used by `structure_architect_agent` and `intake_agent` to select the appropriate
     <div><strong>outputs</strong> <code>manuscript_draft</code> → manuscript-draft.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 211 行</summary><pre class="doc-body">---
-name: cap-generation-manuscript-drafting
+name: generation-manuscript-drafting
 description: "Writes manuscript sections and revision patches from outline and argument blueprint."
 metadata:
-  capability_id: cap-generation-manuscript-drafting
+  capability_id: generation-manuscript-drafting
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -138413,7 +138413,7 @@ Do NOT report scores to the user. Just fix the issues silently during drafting.
 <details class="node" open>
   <summary>
     <span class="node-id">write/cite-check</span>
-    <span class="cap-id">cap-check-citation-format-compliance</span>
+    <span class="cap-id">check-citation-format-compliance</span>
     <span class="cap-title">Citation Format Compliance</span>
     <span class="meta">subgraph academic-paper</span>
   </summary>
@@ -138425,10 +138425,10 @@ Do NOT report scores to the user. Just fix the issues silently during drafting.
     <div><strong>outputs</strong> <code>citation_compliance_report</code> → citation-compliance.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 293 行</summary><pre class="doc-body">---
-name: cap-check-citation-format-compliance
+name: check-citation-format-compliance
 description: "Validates in-text citations and reference list formatting."
 metadata:
-  capability_id: cap-check-citation-format-compliance
+  capability_id: check-citation-format-compliance
   node_kind: checker
   execution_type: llm
   gate_policy: required
@@ -138969,7 +138969,7 @@ Ministry of Education (2024). Publication title. https://url
 <details class="node" open>
   <summary>
     <span class="node-id">write/abstract</span>
-    <span class="cap-id">cap-generation-abstract-writing</span>
+    <span class="cap-id">generation-abstract-writing</span>
     <span class="cap-title">Abstract Writing</span>
     <span class="meta">subgraph academic-paper</span>
   </summary>
@@ -138981,10 +138981,10 @@ Ministry of Education (2024). Publication title. https://url
     <div><strong>outputs</strong> <code>abstract</code> → abstract.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 155 行</summary><pre class="doc-body">---
-name: cap-generation-abstract-writing
+name: generation-abstract-writing
 description: "Writes independent bilingual abstract and keywords."
 metadata:
-  capability_id: cap-generation-abstract-writing
+  capability_id: generation-abstract-writing
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -139328,7 +139328,7 @@ State the significance, practical implications, or recommendations.
 <details class="node subgraph" open><summary><span class="node-id">review</span><span class="cap-id">subgraph</span><span class="cap-title">academic-paper-reviewer</span><span class="meta">profile:academic-pipeline</span></summary><div class="node-meta">子图节点，展开为子 profile 的 capability 节点：</div><details class="node" open>
   <summary>
     <span class="node-id">review/panel</span>
-    <span class="cap-id">cap-design-review-panel-config</span>
+    <span class="cap-id">design-review-panel-config</span>
     <span class="cap-title">Review Panel Configuration</span>
     <span class="meta">subgraph academic-paper-reviewer</span>
   </summary>
@@ -139340,10 +139340,10 @@ State the significance, practical implications, or recommendations.
     <div><strong>outputs</strong> <code>review_panel_config</code> → review-panel-config.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 180 行</summary><pre class="doc-body">---
-name: cap-design-review-panel-config
+name: design-review-panel-config
 description: "Analyzes the manuscript field and emits five reviewer cards."
 metadata:
-  capability_id: cap-design-review-panel-config
+  capability_id: design-review-panel-config
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -139947,7 +139947,7 @@ This document is used by `field_analyst_agent` and `eic_agent` as a reference fo
 <details class="node" open>
   <summary>
     <span class="node-id">review/specialist</span>
-    <span class="cap-id">cap-judgment-specialist-review</span>
+    <span class="cap-id">judgment-specialist-review</span>
     <span class="cap-title">Specialist Review</span>
     <span class="meta">subgraph academic-paper-reviewer</span>
   </summary>
@@ -139959,10 +139959,10 @@ This document is used by `field_analyst_agent` and `eic_agent` as a reference fo
     <div><strong>outputs</strong> <code>specialist_review</code> → specialist-review.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 199 行</summary><pre class="doc-body">---
-name: cap-judgment-specialist-review
+name: judgment-specialist-review
 description: "Reviews methodology, domain depth and interdisciplinary perspective."
 metadata:
-  capability_id: cap-judgment-specialist-review
+  capability_id: judgment-specialist-review
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -140909,7 +140909,7 @@ Step 7: Produce completeness score (Section 6)
 <details class="node" open>
   <summary>
     <span class="node-id">review/da</span>
-    <span class="cap-id">cap-judgment-devils-advocate-stress-test</span>
+    <span class="cap-id">judgment-devils-advocate-stress-test</span>
     <span class="cap-title">Devil's Advocate Stress Test</span>
     <span class="meta">subgraph academic-paper-reviewer</span>
   </summary>
@@ -140921,10 +140921,10 @@ Step 7: Produce completeness score (Section 6)
     <div><strong>outputs</strong> <code>stress_test_report</code> → stress-test.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 218 行</summary><pre class="doc-body">---
-name: cap-judgment-devils-advocate-stress-test
+name: judgment-devils-advocate-stress-test
 description: "Attacks the strongest claims without scoring."
 metadata:
-  capability_id: cap-judgment-devils-advocate-stress-test
+  capability_id: judgment-devils-advocate-stress-test
   node_kind: checker
   execution_type: llm
   gate_policy: required
@@ -141353,7 +141353,7 @@ Reference catalog of logical fallacies commonly encountered in research. Used by
 <details class="node" open>
   <summary>
     <span class="node-id">review/editorial</span>
-    <span class="cap-id">cap-judgment-editorial-judgment</span>
+    <span class="cap-id">judgment-editorial-judgment</span>
     <span class="cap-title">Editorial Judgment</span>
     <span class="meta">subgraph academic-paper-reviewer</span>
   </summary>
@@ -141365,10 +141365,10 @@ Reference catalog of logical fallacies commonly encountered in research. Used by
     <div><strong>outputs</strong> <code>editorial_decision</code> → editorial-decision.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 188 行</summary><pre class="doc-body">---
-name: cap-judgment-editorial-judgment
+name: judgment-editorial-judgment
 description: "Edits and judges the manuscript as a journal editor."
 metadata:
-  capability_id: cap-judgment-editorial-judgment
+  capability_id: judgment-editorial-judgment
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -141793,7 +141793,7 @@ This document defines the explicit criteria for Accept / Minor Revision / Major 
 <details class="node" open>
   <summary>
     <span class="node-id">review/synthesis</span>
-    <span class="cap-id">cap-judgment-review-synthesis</span>
+    <span class="cap-id">judgment-review-synthesis</span>
     <span class="cap-title">Review Synthesis</span>
     <span class="meta">subgraph academic-paper-reviewer</span>
   </summary>
@@ -141805,10 +141805,10 @@ This document defines the explicit criteria for Accept / Minor Revision / Major 
     <div><strong>outputs</strong> <code>review_synthesis</code> → review-synthesis.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 250 行</summary><pre class="doc-body">---
-name: cap-judgment-review-synthesis
+name: judgment-review-synthesis
 description: "Synthesizes panel reports into one editorial decision and revision roadmap."
 metadata:
-  capability_id: cap-judgment-review-synthesis
+  capability_id: judgment-review-synthesis
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -146951,7 +146951,7 @@ Pipeline: [v]RESEARCH -&gt; [v]WRITE -&gt; [..]REVIEW -&gt; [ ]REVISE -&gt; [ ]F
       <div class="profile-banner">Graph profile <code>academic-pipeline</code> v0.1.0 · 5 个顶层节点</div><div class="profile-flow"><strong>节点顺序</strong> <span class="flow-node subgraph">research</span><span class="flow-arrow">→</span><span class="flow-node gate">research-gate</span><span class="flow-arrow">→</span><span class="flow-node subgraph">write</span><span class="flow-arrow">→</span><span class="flow-node gate">write-gate</span><span class="flow-arrow">→</span><span class="flow-node subgraph">review</span></div><div class="note">复用 end-to-end pipeline profile；入口按 passport reset boundary 判定，passport-verifier 与 terminal-policy-gate 作为 resume 守卫能力并列展示。</div><details class="node subgraph" open><summary><span class="node-id">research</span><span class="cap-id">subgraph</span><span class="cap-title">research-main</span><span class="meta">profile:academic-pipeline</span></summary><div class="node-meta">子图节点，展开为子 profile 的 capability 节点：</div><details class="node" open>
   <summary>
     <span class="node-id">research/research-question</span>
-    <span class="cap-id">cap-design-research-question-formulation</span>
+    <span class="cap-id">design-research-question-formulation</span>
     <span class="cap-title">Research Question Formulation</span>
     <span class="meta">subgraph research-main</span>
   </summary>
@@ -146963,10 +146963,10 @@ Pipeline: [v]RESEARCH -&gt; [v]WRITE -&gt; [..]REVIEW -&gt; [ ]REVISE -&gt; [ ]F
     <div><strong>outputs</strong> <code>rq_brief</code> → rq-brief.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 148 行</summary><pre class="doc-body">---
-name: cap-design-research-question-formulation
+name: design-research-question-formulation
 description: "Turns a project intent into a FINER-scored research question brief with scope boundaries and bound sub-questions."
 metadata:
-  capability_id: cap-design-research-question-formulation
+  capability_id: design-research-question-formulation
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -147192,7 +147192,7 @@ ARS 提取工件（Extraction Artifact）— M1 研究段
 <details class="node" open>
   <summary>
     <span class="node-id">research/methodology</span>
-    <span class="cap-id">cap-design-methodology-design</span>
+    <span class="cap-id">design-methodology-design</span>
     <span class="cap-title">Methodology Design</span>
     <span class="meta">subgraph research-main</span>
   </summary>
@@ -147204,10 +147204,10 @@ ARS 提取工件（Extraction Artifact）— M1 研究段
     <div><strong>outputs</strong> <code>methodology_blueprint</code> → methodology-blueprint.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 162 行</summary><pre class="doc-body">---
-name: cap-design-methodology-design
+name: design-methodology-design
 description: "Selects a paradigm, methods, data strategy and analysis framework coherent with the confirmed research question."
 metadata:
-  capability_id: cap-design-methodology-design
+  capability_id: design-methodology-design
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -148253,7 +148253,7 @@ Publication
 <details class="node" open>
   <summary>
     <span class="node-id">research/literature</span>
-    <span class="cap-id">cap-discovery-literature-search-screening</span>
+    <span class="cap-id">discovery-literature-search-screening</span>
     <span class="cap-title">Literature Search And Screening</span>
     <span class="meta">subgraph research-main</span>
   </summary>
@@ -148265,10 +148265,10 @@ Publication
     <div><strong>outputs</strong> <code>annotated_bibliography</code> → annotated-bibliography.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 164 行</summary><pre class="doc-body">---
-name: cap-discovery-literature-search-screening
+name: discovery-literature-search-screening
 description: "Runs a systematic, reproducible search and screening process and produces an annotated bibliography with PRISMA-style documentation."
 metadata:
-  capability_id: cap-discovery-literature-search-screening
+  capability_id: discovery-literature-search-screening
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -148646,7 +148646,7 @@ When `literature_corpus[]` is non-empty and parses cleanly, the agent enters Ste
 <details class="node" open>
   <summary>
     <span class="node-id">research/grading</span>
-    <span class="cap-id">cap-discovery-source-quality-grading</span>
+    <span class="cap-id">discovery-source-quality-grading</span>
     <span class="cap-title">Source Quality Grading</span>
     <span class="meta">subgraph research-main</span>
   </summary>
@@ -148658,10 +148658,10 @@ When `literature_corpus[]` is non-empty and parses cleanly, the agent enters Ste
     <div><strong>outputs</strong> <code>graded_sources</code> → graded-sources.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 183 行</summary><pre class="doc-body">---
-name: cap-discovery-source-quality-grading
+name: discovery-source-quality-grading
 description: "Grades each source by evidence level, predatory-journal red flags and conflicts of interest."
 metadata:
-  capability_id: cap-discovery-source-quality-grading
+  capability_id: discovery-source-quality-grading
   node_kind: checker
   execution_type: llm
   gate_policy: required
@@ -149051,7 +149051,7 @@ Not all fields use the same evidence hierarchy. Adjust expectations:
 <details class="node" open>
   <summary>
     <span class="node-id">research/synthesis</span>
-    <span class="cap-id">cap-analysis-evidence-synthesis</span>
+    <span class="cap-id">analysis-evidence-synthesis</span>
     <span class="cap-title">Evidence Synthesis</span>
     <span class="meta">subgraph research-main</span>
   </summary>
@@ -149063,10 +149063,10 @@ Not all fields use the same evidence hierarchy. Adjust expectations:
     <div><strong>outputs</strong> <code>synthesis_report</code> → synthesis-report.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 233 行</summary><pre class="doc-body">---
-name: cap-analysis-evidence-synthesis
+name: analysis-evidence-synthesis
 description: "Synthesizes graded sources into a convergent/divergent evidence map with claim-intent and citation emissions."
 metadata:
-  capability_id: cap-analysis-evidence-synthesis
+  capability_id: analysis-evidence-synthesis
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -149485,7 +149485,7 @@ The agent's job still ends at emission. The agent does NOT post-process or audit
 <details class="node" open>
   <summary>
     <span class="node-id">research/report</span>
-    <span class="cap-id">cap-generation-report-compilation</span>
+    <span class="cap-id">generation-report-compilation</span>
     <span class="cap-title">Research Report Compilation</span>
     <span class="meta">subgraph research-main</span>
   </summary>
@@ -149497,10 +149497,10 @@ The agent's job still ends at emission. The agent does NOT post-process or audit
     <div><strong>outputs</strong> <code>research_report</code> → research-report.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 251 行</summary><pre class="doc-body">---
-name: cap-generation-report-compilation
+name: generation-report-compilation
 description: "Compiles the synthesis and method blueprint into a complete APA-style research report."
 metadata:
-  capability_id: cap-generation-report-compilation
+  capability_id: generation-report-compilation
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -150151,7 +150151,7 @@ Do NOT report scores to the user. Just fix the issues silently during drafting.
 <details class="node subgraph" open><summary><span class="node-id">write</span><span class="cap-id">subgraph</span><span class="cap-title">academic-paper</span><span class="meta">profile:academic-pipeline</span></summary><div class="node-meta">子图节点，展开为子 profile 的 capability 节点：</div><details class="node" open>
   <summary>
     <span class="node-id">write/intake</span>
-    <span class="cap-id">cap-design-writing-intake</span>
+    <span class="cap-id">design-writing-intake</span>
     <span class="cap-title">Writing Intake</span>
     <span class="meta">subgraph academic-paper</span>
   </summary>
@@ -150163,10 +150163,10 @@ Do NOT report scores to the user. Just fix the issues silently during drafting.
     <div><strong>outputs</strong> <code>writing_configuration</code> → writing-configuration.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 234 行</summary><pre class="doc-body">---
-name: cap-design-writing-intake
+name: design-writing-intake
 description: "Collects paper configuration and style calibration for writing work."
 metadata:
-  capability_id: cap-design-writing-intake
+  capability_id: design-writing-intake
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -150570,7 +150570,7 @@ If samples span many years: weight recent samples more heavily (2x weight for sa
 <details class="node" open>
   <summary>
     <span class="node-id">write/structure</span>
-    <span class="cap-id">cap-design-manuscript-structure-design</span>
+    <span class="cap-id">design-manuscript-structure-design</span>
     <span class="cap-title">Manuscript Structure Design</span>
     <span class="meta">subgraph academic-paper</span>
   </summary>
@@ -150582,10 +150582,10 @@ If samples span many years: weight recent samples more heavily (2x weight for sa
     <div><strong>outputs</strong> <code>paper_outline</code> → paper-outline.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 263 行</summary><pre class="doc-body">---
-name: cap-design-manuscript-structure-design
+name: design-manuscript-structure-design
 description: "Designs paper structure, outline, word budget and evidence mapping."
 metadata:
-  capability_id: cap-design-manuscript-structure-design
+  capability_id: design-manuscript-structure-design
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -151197,7 +151197,7 @@ Used by `structure_architect_agent` and `intake_agent` to select the appropriate
 <details class="node" open>
   <summary>
     <span class="node-id">write/argument</span>
-    <span class="cap-id">cap-design-argument-blueprint</span>
+    <span class="cap-id">design-argument-blueprint</span>
     <span class="cap-title">Argument Blueprint</span>
     <span class="meta">subgraph academic-paper</span>
   </summary>
@@ -151209,10 +151209,10 @@ Used by `structure_architect_agent` and `intake_agent` to select the appropriate
     <div><strong>outputs</strong> <code>argument_blueprint</code> → argument-blueprint.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 246 行</summary><pre class="doc-body">---
-name: cap-design-argument-blueprint
+name: design-argument-blueprint
 description: "Builds claim-evidence-reasoning chains and handles counterarguments."
 metadata:
-  capability_id: cap-design-argument-blueprint
+  capability_id: design-argument-blueprint
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -152116,7 +152116,7 @@ Used by `structure_architect_agent` and `intake_agent` to select the appropriate
 <details class="node" open>
   <summary>
     <span class="node-id">write/draft</span>
-    <span class="cap-id">cap-generation-manuscript-drafting</span>
+    <span class="cap-id">generation-manuscript-drafting</span>
     <span class="cap-title">Manuscript Drafting</span>
     <span class="meta">subgraph academic-paper</span>
   </summary>
@@ -152128,10 +152128,10 @@ Used by `structure_architect_agent` and `intake_agent` to select the appropriate
     <div><strong>outputs</strong> <code>manuscript_draft</code> → manuscript-draft.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 211 行</summary><pre class="doc-body">---
-name: cap-generation-manuscript-drafting
+name: generation-manuscript-drafting
 description: "Writes manuscript sections and revision patches from outline and argument blueprint."
 metadata:
-  capability_id: cap-generation-manuscript-drafting
+  capability_id: generation-manuscript-drafting
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -152843,7 +152843,7 @@ Do NOT report scores to the user. Just fix the issues silently during drafting.
 <details class="node" open>
   <summary>
     <span class="node-id">write/cite-check</span>
-    <span class="cap-id">cap-check-citation-format-compliance</span>
+    <span class="cap-id">check-citation-format-compliance</span>
     <span class="cap-title">Citation Format Compliance</span>
     <span class="meta">subgraph academic-paper</span>
   </summary>
@@ -152855,10 +152855,10 @@ Do NOT report scores to the user. Just fix the issues silently during drafting.
     <div><strong>outputs</strong> <code>citation_compliance_report</code> → citation-compliance.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 293 行</summary><pre class="doc-body">---
-name: cap-check-citation-format-compliance
+name: check-citation-format-compliance
 description: "Validates in-text citations and reference list formatting."
 metadata:
-  capability_id: cap-check-citation-format-compliance
+  capability_id: check-citation-format-compliance
   node_kind: checker
   execution_type: llm
   gate_policy: required
@@ -153399,7 +153399,7 @@ Ministry of Education (2024). Publication title. https://url
 <details class="node" open>
   <summary>
     <span class="node-id">write/abstract</span>
-    <span class="cap-id">cap-generation-abstract-writing</span>
+    <span class="cap-id">generation-abstract-writing</span>
     <span class="cap-title">Abstract Writing</span>
     <span class="meta">subgraph academic-paper</span>
   </summary>
@@ -153411,10 +153411,10 @@ Ministry of Education (2024). Publication title. https://url
     <div><strong>outputs</strong> <code>abstract</code> → abstract.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 155 行</summary><pre class="doc-body">---
-name: cap-generation-abstract-writing
+name: generation-abstract-writing
 description: "Writes independent bilingual abstract and keywords."
 metadata:
-  capability_id: cap-generation-abstract-writing
+  capability_id: generation-abstract-writing
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -153758,7 +153758,7 @@ State the significance, practical implications, or recommendations.
 <details class="node subgraph" open><summary><span class="node-id">review</span><span class="cap-id">subgraph</span><span class="cap-title">academic-paper-reviewer</span><span class="meta">profile:academic-pipeline</span></summary><div class="node-meta">子图节点，展开为子 profile 的 capability 节点：</div><details class="node" open>
   <summary>
     <span class="node-id">review/panel</span>
-    <span class="cap-id">cap-design-review-panel-config</span>
+    <span class="cap-id">design-review-panel-config</span>
     <span class="cap-title">Review Panel Configuration</span>
     <span class="meta">subgraph academic-paper-reviewer</span>
   </summary>
@@ -153770,10 +153770,10 @@ State the significance, practical implications, or recommendations.
     <div><strong>outputs</strong> <code>review_panel_config</code> → review-panel-config.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 180 行</summary><pre class="doc-body">---
-name: cap-design-review-panel-config
+name: design-review-panel-config
 description: "Analyzes the manuscript field and emits five reviewer cards."
 metadata:
-  capability_id: cap-design-review-panel-config
+  capability_id: design-review-panel-config
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -154377,7 +154377,7 @@ This document is used by `field_analyst_agent` and `eic_agent` as a reference fo
 <details class="node" open>
   <summary>
     <span class="node-id">review/specialist</span>
-    <span class="cap-id">cap-judgment-specialist-review</span>
+    <span class="cap-id">judgment-specialist-review</span>
     <span class="cap-title">Specialist Review</span>
     <span class="meta">subgraph academic-paper-reviewer</span>
   </summary>
@@ -154389,10 +154389,10 @@ This document is used by `field_analyst_agent` and `eic_agent` as a reference fo
     <div><strong>outputs</strong> <code>specialist_review</code> → specialist-review.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 199 行</summary><pre class="doc-body">---
-name: cap-judgment-specialist-review
+name: judgment-specialist-review
 description: "Reviews methodology, domain depth and interdisciplinary perspective."
 metadata:
-  capability_id: cap-judgment-specialist-review
+  capability_id: judgment-specialist-review
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -155339,7 +155339,7 @@ Step 7: Produce completeness score (Section 6)
 <details class="node" open>
   <summary>
     <span class="node-id">review/da</span>
-    <span class="cap-id">cap-judgment-devils-advocate-stress-test</span>
+    <span class="cap-id">judgment-devils-advocate-stress-test</span>
     <span class="cap-title">Devil's Advocate Stress Test</span>
     <span class="meta">subgraph academic-paper-reviewer</span>
   </summary>
@@ -155351,10 +155351,10 @@ Step 7: Produce completeness score (Section 6)
     <div><strong>outputs</strong> <code>stress_test_report</code> → stress-test.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 218 行</summary><pre class="doc-body">---
-name: cap-judgment-devils-advocate-stress-test
+name: judgment-devils-advocate-stress-test
 description: "Attacks the strongest claims without scoring."
 metadata:
-  capability_id: cap-judgment-devils-advocate-stress-test
+  capability_id: judgment-devils-advocate-stress-test
   node_kind: checker
   execution_type: llm
   gate_policy: required
@@ -155783,7 +155783,7 @@ Reference catalog of logical fallacies commonly encountered in research. Used by
 <details class="node" open>
   <summary>
     <span class="node-id">review/editorial</span>
-    <span class="cap-id">cap-judgment-editorial-judgment</span>
+    <span class="cap-id">judgment-editorial-judgment</span>
     <span class="cap-title">Editorial Judgment</span>
     <span class="meta">subgraph academic-paper-reviewer</span>
   </summary>
@@ -155795,10 +155795,10 @@ Reference catalog of logical fallacies commonly encountered in research. Used by
     <div><strong>outputs</strong> <code>editorial_decision</code> → editorial-decision.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 188 行</summary><pre class="doc-body">---
-name: cap-judgment-editorial-judgment
+name: judgment-editorial-judgment
 description: "Edits and judges the manuscript as a journal editor."
 metadata:
-  capability_id: cap-judgment-editorial-judgment
+  capability_id: judgment-editorial-judgment
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -156223,7 +156223,7 @@ This document defines the explicit criteria for Accept / Minor Revision / Major 
 <details class="node" open>
   <summary>
     <span class="node-id">review/synthesis</span>
-    <span class="cap-id">cap-judgment-review-synthesis</span>
+    <span class="cap-id">judgment-review-synthesis</span>
     <span class="cap-title">Review Synthesis</span>
     <span class="meta">subgraph academic-paper-reviewer</span>
   </summary>
@@ -156235,10 +156235,10 @@ This document defines the explicit criteria for Accept / Minor Revision / Major 
     <div><strong>outputs</strong> <code>review_synthesis</code> → review-synthesis.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 250 行</summary><pre class="doc-body">---
-name: cap-judgment-review-synthesis
+name: judgment-review-synthesis
 description: "Synthesizes panel reports into one editorial decision and revision roadmap."
 metadata:
-  capability_id: cap-judgment-review-synthesis
+  capability_id: judgment-review-synthesis
   node_kind: producer
   execution_type: llm
   gate_policy: required
@@ -156677,7 +156677,7 @@ Audit-log tags the orchestrator may emit:
 </details></details><div class="profile-banner">Resume 守卫能力（附加于 profile 之外）</div><details class="node" open>
   <summary>
     <span class="node-id">resume-extra-1</span>
-    <span class="cap-id">cap-check-passport-verifier</span>
+    <span class="cap-id">check-passport-verifier</span>
     <span class="cap-title">Passport Verifier</span>
     <span class="meta">mode-relevant resume guard</span>
   </summary>
@@ -156689,10 +156689,10 @@ Audit-log tags the orchestrator may emit:
     <div><strong>outputs</strong> <code>passport_report</code> → passport-check.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 67 行</summary><pre class="doc-body">---
-name: cap-check-passport-verifier
+name: check-passport-verifier
 description: "Deterministic material passport verifier."
 metadata:
-  capability_id: cap-check-passport-verifier
+  capability_id: check-passport-verifier
   node_kind: checker
   execution_type: script
   gate_policy: required
@@ -156922,7 +156922,7 @@ ARS 提取工件（Extraction Artifact）— M4 修订与定稿段
 <details class="node" open>
   <summary>
     <span class="node-id">resume-extra-2</span>
-    <span class="cap-id">cap-check-terminal-policy-gate</span>
+    <span class="cap-id">check-terminal-policy-gate</span>
     <span class="cap-title">Terminal Policy Gate</span>
     <span class="meta">mode-relevant resume guard</span>
   </summary>
@@ -156934,10 +156934,10 @@ ARS 提取工件（Extraction Artifact）— M4 修订与定稿段
     <div><strong>outputs</strong> <code>terminal_policy_report</code> → terminal-policy.v1</div>
   </div>
   <details class="sub"><summary>指令 SKILL.md · 83 行</summary><pre class="doc-body">---
-name: cap-check-terminal-policy-gate
+name: check-terminal-policy-gate
 description: "Applies the finalizer policy before submission package creation."
 metadata:
-  capability_id: cap-check-terminal-policy-gate
+  capability_id: check-terminal-policy-gate
   node_kind: checker
   execution_type: llm
   gate_policy: required

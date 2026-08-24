@@ -9,14 +9,14 @@ Paper Humanizer.
 
 ### Requirement: Reference mode is a self-contained capability
 
-The published `cap-generation-humanization-reference/SKILL.md` SHALL contain the complete Reference
+The published `generation-humanization-reference/SKILL.md` SHALL contain the complete Reference
 mode instructions needed by other capabilities that draft or revise prose. Consumers SHALL load that
 entrypoint and SHALL NOT require the retired `paper-humanizer/references/prose-guidance.md` path.
 
 #### Scenario: Consumer loads Reference mode
 
 - **WHEN** a consuming capability creates or edits manuscript prose
-- **THEN** it loads the packaged `cap-generation-humanization-reference/SKILL.md` entrypoint without
+- **THEN** it loads the packaged `generation-humanization-reference/SKILL.md` entrypoint without
   starting a humanizer run, running diagnostics, or requesting an additional confirmation
 
 ### Requirement: Python analysis tool is packaged per capability

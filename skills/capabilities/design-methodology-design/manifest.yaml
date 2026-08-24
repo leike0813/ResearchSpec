@@ -1,0 +1,52 @@
+schema_version: "1"
+capability_id: design-methodology-design
+title: Methodology Design
+description: Selects a paradigm, methods, data strategy and analysis framework
+  coherent with the confirmed research question.
+maturity: operational
+class: design
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: rq_brief
+    schema_ref: rq-brief.v1
+    required: true
+    source_policy: node_output
+outputs:
+  - role: methodology_blueprint
+    schema_ref: methodology-blueprint.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - rq_brief
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+knowledge_refs:
+  - knowledge_id: irb-decision-tree
+    path: knowledge/irb-decision-tree.md
+    content_hash: c64ba675f5afd28f46d34d33ef1308d003293da223aa37fcf9bb36d07c11ce92
+    license: CC BY-NC 4.0
+  - knowledge_id: equator-guidelines
+    path: knowledge/equator-guidelines.md
+    content_hash: 66c844623f67a1de63483bc7d804529c6ae5041077e1f8fb05f590584d0eb72f
+    license: CC BY-NC 4.0
+  - knowledge_id: preregistration-guide
+    path: knowledge/preregistration-guide.md
+    content_hash: 279a989de4b5bbbcaeba0cef037526ee6eb2b3f952ac760270eec0ba572630dd
+    license: CC BY-NC 4.0
+gate_policy: required
+provenance:
+  origin: ars-derived
+  extraction_artifact_ids:
+    - CAP-M1-05
+    - KP-M5-20
+    - KP-M5-21
+    - KP-M5-22
+  upstream_sources:
+    - path: docs/ars_extraction/m1-research/capabilities/05_methodology_design.md
+      sha256: 438a7f09d669193c1256c5a36601787d64a03eecded4b65f3128e9ca27732a8c
+license: CC BY-NC 4.0

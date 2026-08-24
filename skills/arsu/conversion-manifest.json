@@ -11,7 +11,7 @@
     "remote_url": "https://github.com/Imbad0202/academic-research-skills",
     "dirty": false
   },
-  "generated_at": "2026-08-16T06:01:19Z",
+  "generated_at": "2026-08-24T05:28:19Z",
   "generated_groups": [
     "academic-paper",
     "academic-paper-reviewer",
@@ -958,7 +958,7 @@
           "source_path": "academic-paper/SKILL.md",
           "output_path": "academic-paper/SKILL.md",
           "transform_rule": "text_copy_with_dependency_rewrite_routing_description_and_contract_preflight",
-          "sha256": "18e08ed6743549d064e311661ddf53a7b908b55c4569f07855471e33db1efa07"
+          "sha256": "7f0aafa8c6030534d1cc24925f35b0c1c83c4f5fe5d37fbfd93d36f08ace1748"
         },
         {
           "group": "academic-paper",
@@ -20233,7 +20233,7 @@
       "source_path": "academic-paper/SKILL.md",
       "output_path": "academic-paper/SKILL.md",
       "transform_rule": "text_copy_with_dependency_rewrite_routing_description_and_contract_preflight",
-      "sha256": "18e08ed6743549d064e311661ddf53a7b908b55c4569f07855471e33db1efa07"
+      "sha256": "7f0aafa8c6030534d1cc24925f35b0c1c83c4f5fe5d37fbfd93d36f08ace1748"
     },
     {
       "group": "academic-paper",

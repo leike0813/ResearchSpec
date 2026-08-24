@@ -2,7 +2,7 @@
   "schema_version": "1",
   "vendor_id": "revision-master",
   "anchor_id": "snapshot-13e69610",
-  "created_at": "2026-08-16T06:24:14.281Z",
+  "created_at": "2026-08-24T05:38:04.816Z",
   "upstream": {
     "source_meta": "vendor/revision-master/SOURCE.json",
     "upstream_root": "vendor/revision-master/upstream/skills/revision-master",
@@ -22,19 +22,19 @@
     "capability_count": 5,
     "operational_count": 5,
     "capability_ids": [
-      "cap-analysis-review-response-manuscript-analysis",
-      "cap-design-review-response-intake",
-      "cap-design-review-response-workboard-planning",
-      "cap-generation-review-response-round",
-      "cap-transform-review-response-comment-atomization"
+      "analysis-review-response-manuscript-analysis",
+      "design-review-response-intake",
+      "design-review-response-workboard-planning",
+      "generation-review-response-round",
+      "transform-review-response-comment-atomization"
     ],
-    "registry_subset_sha256": "463ab7fba548e1d44a594b98835b209ea52da84445153703848580172004bb6a",
-    "packages_tree_sha256": "3a08effb040b24cb4ea5d9f295ea0a496a6570c308e94628cf8e6ecdb29618d5"
+    "registry_subset_sha256": "e5def17e0c605db3626e01cbe30c22ac79c03eff7443fdee43ef36630c57522d",
+    "packages_tree_sha256": "ff9e59e627d869be81ecf4ce252dadc14f56613c03a802134b37f8dec9635c09"
   },
   "review": {
     "parity_report_path": "/home/joshua/Workspace/Code/JavaScript/ResearchSpec/docs/capability-parity-report.json",
     "parity_artifact_path": "audits/own-vendors/revision-master/snapshot-13e69610/artifacts/parity-packages.json",
-    "parity_artifact_sha256": "8f4453114ea1d5ed200d52328edef5e8fc4daa023f1fdafbeaaa4945f07f7f76",
+    "parity_artifact_sha256": "611b18709d3a0ee5cf80abd7c10f0f2480c4943adb6e066f073cef5226ea7650",
     "package_count": 5,
     "operational_count": 5,
     "avg_section_coverage": 0.9466666666666667,
@@ -46,8 +46,8 @@
     "flow_retained": []
   },
   "maintenance": {
-    "skill_sha256": "8a644c683d2cac0eab5f5633eadeb3e85d397fccdba5a31ef6a1c8da3d11dc7d",
-    "catalog_sha256": "8b1038bd291899c9b672e906db59863ec9d918af8c9d506e516cfc9cdcb8d187",
-    "record_sha256": "9e2d6d6608e01879801fa81ca016462ef5fe4d6c09e0df430fbc75983d08c6b8"
+    "skill_sha256": "99505d3be486e54142843c94c6a5fb7c3588d820b9b80a17ef6c2dd10ac989d5",
+    "catalog_sha256": "cbb30c1d946b0b24d8c416c7e41a9834401690a75a6c4bfa78add72ade78583d",
+    "record_sha256": "a1242a9b38a000a0cef1f7b70b75cf04c6689d51ad3d658eb3c42602e3d4a0f6"
   }
 }

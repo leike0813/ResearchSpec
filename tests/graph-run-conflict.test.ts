@@ -30,7 +30,7 @@ const GATED_PROFILE = {
     {
       node_id: "rq",
       kind: "capability",
-      capability_id: "cap-design-research-question-formulation",
+      capability_id: "design-research-question-formulation",
       input_bindings: [],
       expected_outputs: [{ role: "rq_brief", required: true }],
       prerequisites: [],
@@ -53,7 +53,7 @@ const GATED_PROFILE = {
     {
       node_id: "report",
       kind: "capability",
-      capability_id: "cap-generation-report-compilation",
+      capability_id: "generation-report-compilation",
       input_bindings: [],
       expected_outputs: [{ role: "research_report", required: true }],
       prerequisites: ["rq-gate"],

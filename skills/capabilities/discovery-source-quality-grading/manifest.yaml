@@ -1,0 +1,42 @@
+schema_version: "1"
+capability_id: discovery-source-quality-grading
+title: Source Quality Grading
+description: Grades each source by evidence level, predatory-journal red flags
+  and conflicts of interest.
+maturity: operational
+class: verification
+node_kind: checker
+execution_type: llm
+params: {}
+inputs:
+  - role: annotated_bibliography
+    schema_ref: annotated-bibliography.v1
+    required: true
+    source_policy: node_output
+outputs:
+  - role: graded_sources
+    schema_ref: graded-sources.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - annotated_bibliography
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+knowledge_refs:
+  - knowledge_id: evidence-hierarchy
+    path: knowledge/evidence-hierarchy.md
+    content_hash: cc0bbc75a183e458550cca087e6d5ebc3dc32365d4b645bd7d8ff1d66fbb8368
+    license: CC BY-NC 4.0
+gate_policy: required
+provenance:
+  origin: ars-derived
+  extraction_artifact_ids:
+    - CAP-M1-02
+    - KP-M1-01
+  upstream_sources:
+    - path: docs/ars_extraction/m1-research/capabilities/02_source_quality_grading.md
+      sha256: 3ffecae526acdde6d28bb8d2a9f5a88f95c00f51338c8f4d4a724ced3f7777bf
+license: CC BY-NC 4.0

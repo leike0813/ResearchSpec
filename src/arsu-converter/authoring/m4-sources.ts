@@ -5,7 +5,7 @@ const CC = "CC BY-NC 4.0";
 export const M4_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m4/revision-roadmap-parsing.md",
-    capability_id: "cap-transform-revision-roadmap-parsing",
+    capability_id: "transform-revision-roadmap-parsing",
     title: "Revision Roadmap Parsing",
     description: "Converts unstructured reviewer comments into a structured roadmap.",
     class: "transformation",
@@ -26,7 +26,7 @@ export const M4_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m4/revision-patching.md",
-    capability_id: "cap-transform-revision-patching",
+    capability_id: "transform-revision-patching",
     title: "Revision Patching",
     description: "Deterministically anchors and applies revision patches fail-closed.",
     class: "transformation",
@@ -44,7 +44,7 @@ export const M4_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m4/format-rendering.md",
-    capability_id: "cap-generation-format-rendering",
+    capability_id: "generation-format-rendering",
     title: "Format Rendering",
     description: "Converts the final manuscript into declared output formats.",
     class: "generation",
@@ -59,7 +59,7 @@ export const M4_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m4/terminal-policy-gate.md",
-    capability_id: "cap-check-terminal-policy-gate",
+    capability_id: "check-terminal-policy-gate",
     title: "Terminal Policy Gate",
     description: "Applies the finalizer policy before submission package creation.",
     class: "verification",
@@ -74,7 +74,7 @@ export const M4_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m4/temporal-integrity.md",
-    capability_id: "cap-check-temporal-integrity-verification",
+    capability_id: "check-temporal-integrity-verification",
     title: "Temporal Integrity Verification",
     description: "Runs five-pass temporal lint against manuscript claims.",
     class: "verification",

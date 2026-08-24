@@ -43,7 +43,9 @@ The audit SHALL declare the eight adaptations that produced the former `skills/r
 projection from upstream `skills/revision-master/`. Each adaptation SHALL declare its kind
 (`renamed` | `added` | `softened`), summary, applied-to paths, evidence, and `approved = true`.
 The adaptations SHALL include `paper-humanizer-reference-mode`, which records the self-contained
-`cap-generation-humanization-reference/SKILL.md` Reference-mode entrypoint.
+Reference-mode entrypoint path used at audit time
+(`cap-generation-humanization-reference/SKILL.md`, later published as
+`generation-humanization-reference/SKILL.md`).
 
 #### Scenario: Adaptations are auditable
 

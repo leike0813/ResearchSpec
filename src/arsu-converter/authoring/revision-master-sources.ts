@@ -61,7 +61,7 @@ const COMMON_KNOWLEDGE: AuthoringKnowledgeSource[] = [
 export const REVISION_MASTER_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   {
     procedure_path: `${PROCEDURES}/intake.md`,
-    capability_id: "cap-design-review-response-intake",
+    capability_id: "design-review-response-intake",
     title: "Review Response Intake",
     description: "Parses review-response entry, confirms languages, detects the manuscript entry, and initializes the task-local semantic workspace.",
     class: "design",
@@ -89,7 +89,7 @@ export const REVISION_MASTER_AUTHORING_SOURCES: readonly CapabilityAuthoringSour
   },
   {
     procedure_path: `${PROCEDURES}/manuscript-analysis.md`,
-    capability_id: "cap-analysis-review-response-manuscript-analysis",
+    capability_id: "analysis-review-response-manuscript-analysis",
     title: "Review Response Manuscript Analysis",
     description: "Builds the manuscript structure summary, core claims, evidence links, and high-risk modification areas needed for comment mapping.",
     class: "analysis",
@@ -105,7 +105,7 @@ export const REVISION_MASTER_AUTHORING_SOURCES: readonly CapabilityAuthoringSour
   },
   {
     procedure_path: `${PROCEDURES}/comment-atomization.md`,
-    capability_id: "cap-transform-review-response-comment-atomization",
+    capability_id: "transform-review-response-comment-atomization",
     title: "Review Response Comment Atomization",
     description: "Extracts raw reviewer threads, forms canonical atomic comments with conservative merges, and writes full source-span evidence and coverage confirmation.",
     class: "transformation",
@@ -124,7 +124,7 @@ export const REVISION_MASTER_AUTHORING_SOURCES: readonly CapabilityAuthoringSour
   },
   {
     procedure_path: `${PROCEDURES}/workboard-planning.md`,
-    capability_id: "cap-design-review-response-workboard-planning",
+    capability_id: "design-review-response-workboard-planning",
     title: "Review Response Workboard Planning",
     description: "Plans priority, dependencies, evidence gaps, target locations, and next actions for every canonical atomic comment.",
     class: "design",
@@ -140,7 +140,7 @@ export const REVISION_MASTER_AUTHORING_SOURCES: readonly CapabilityAuthoringSour
   },
   {
     procedure_path: `${PROCEDURES}/round.md`,
-    capability_id: "cap-generation-review-response-round",
+    capability_id: "generation-review-response-round",
     title: "Review Response Round",
     description: "Executes one complete strategy/draft round plus final interactive manuscript revision, semantic revision logging, response-letter coverage, and export.",
     class: "generation",

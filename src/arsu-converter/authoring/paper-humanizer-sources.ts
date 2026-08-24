@@ -12,7 +12,7 @@ export const PAPER_HUMANIZER_AUTHORING_OPTIONS = {
 export const PAPER_HUMANIZER_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   {
     procedure_path: `${PROCEDURES}/reference.md`,
-    capability_id: "cap-generation-humanization-reference",
+    capability_id: "generation-humanization-reference",
     title: "Paper Humanizer Reference Mode",
     description: "Instruction-only writing aid that keeps surrounding prose work semantically neutral and preserves author voice, protected content, and information density.",
     class: "generation",
@@ -30,7 +30,7 @@ export const PAPER_HUMANIZER_AUTHORING_SOURCES: readonly CapabilityAuthoringSour
 
   {
     procedure_path: `${PROCEDURES}/review.md`,
-    capability_id: "cap-check-paper-humanization-review",
+    capability_id: "check-paper-humanization-review",
     title: "Paper Humanization Review",
     description: "Read-only diagnosis of AI-like prose patterns and a conservative bounded revision plan for one manuscript.",
     class: "verification",
@@ -58,7 +58,7 @@ export const PAPER_HUMANIZER_AUTHORING_SOURCES: readonly CapabilityAuthoringSour
   },
   {
     procedure_path: `${PROCEDURES}/revision.md`,
-    capability_id: "cap-transform-paper-humanization-revision",
+    capability_id: "transform-paper-humanization-revision",
     title: "Paper Humanization Revision",
     description: "Executes an approved humanization plan through the deterministic document artifact contract and renders the revised manuscript.",
     class: "transformation",
@@ -85,7 +85,7 @@ export const PAPER_HUMANIZER_AUTHORING_SOURCES: readonly CapabilityAuthoringSour
   },
   {
     procedure_path: `${PROCEDURES}/verification.md`,
-    capability_id: "cap-check-paper-humanization-verification",
+    capability_id: "check-paper-humanization-verification",
     title: "Paper Humanization Verification",
     description: "Deterministic and semantic verification that a humanization candidate preserves protected content and every source information unit.",
     class: "verification",

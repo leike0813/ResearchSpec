@@ -12,7 +12,7 @@ export const PAPER_HUMANIZER_GRAPH_PROFILE = {
     {
       node_id: "review",
       kind: "capability",
-      capability_id: "cap-check-paper-humanization-review",
+      capability_id: "check-paper-humanization-review",
       input_bindings: [
         { role: "manuscript_source", source: "handoff" },
         { role: "user_constraints", source: "parameter", value: null },
@@ -52,7 +52,7 @@ export const PAPER_HUMANIZER_GRAPH_PROFILE = {
     {
       node_id: "revision",
       kind: "capability",
-      capability_id: "cap-transform-paper-humanization-revision",
+      capability_id: "transform-paper-humanization-revision",
       input_bindings: [
         { role: "manuscript_source", source: "handoff" },
         { role: "humanization_revision_plan", source: "node_output", from_node_id: "review" },
@@ -70,7 +70,7 @@ export const PAPER_HUMANIZER_GRAPH_PROFILE = {
     {
       node_id: "verification",
       kind: "capability",
-      capability_id: "cap-check-paper-humanization-verification",
+      capability_id: "check-paper-humanization-verification",
       input_bindings: [
         { role: "manuscript_source", source: "handoff" },
         { role: "humanization_candidate_artifact", source: "node_output", from_node_id: "revision" },

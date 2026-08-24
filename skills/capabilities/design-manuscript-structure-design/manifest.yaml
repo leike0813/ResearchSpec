@@ -1,0 +1,46 @@
+schema_version: "1"
+capability_id: design-manuscript-structure-design
+title: Manuscript Structure Design
+description: Designs paper structure, outline, word budget and evidence mapping.
+maturity: operational
+class: design
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: writing_configuration
+    schema_ref: writing-configuration.v1
+    required: true
+    source_policy: node_output
+  - role: annotated_bibliography
+    schema_ref: annotated-bibliography.v1
+    required: true
+    source_policy: node_output
+outputs:
+  - role: paper_outline
+    schema_ref: paper-outline.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - writing_configuration
+      - annotated_bibliography
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+knowledge_refs:
+  - knowledge_id: paper-structure-patterns
+    path: knowledge/paper-structure-patterns.md
+    content_hash: 9e9555803c33d7048a7b6878d14766d63b118ccc0d4f7ecc353f7a2a46f0db48
+    license: CC BY-NC 4.0
+gate_policy: required
+provenance:
+  origin: ars-derived
+  extraction_artifact_ids:
+    - CAP-M2-02
+    - KP-M2-08
+  upstream_sources:
+    - path: docs/ars_extraction/m2-writing/capabilities/02_manuscript_structure_design.md
+      sha256: 958afd16c3cad380a40ea1dffbb22370458d5324f2feb882ecfe7cda47f794c1
+license: CC BY-NC 4.0

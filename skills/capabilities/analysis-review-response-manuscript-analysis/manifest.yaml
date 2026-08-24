@@ -1,0 +1,57 @@
+schema_version: "1"
+capability_id: analysis-review-response-manuscript-analysis
+title: Review Response Manuscript Analysis
+description: Builds the manuscript structure summary, core claims, evidence
+  links, and high-risk modification areas needed for comment mapping.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: review_response_workspace
+    schema_ref: review-response-workspace.v1
+    required: true
+    source_policy: node_output
+outputs:
+  - role: manuscript_structure_summary
+    schema_ref: review-response-manuscript-analysis.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - review_response_workspace
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+knowledge_refs:
+  - knowledge_id: workflow-glossary
+    path: knowledge/workflow-glossary.md
+    content_hash: fe8da21de29b97aaae73b8db69ace847a6474b4c3bebccade1a04a09ae8c5b6e
+    license: MIT
+  - knowledge_id: workflow-state-machine
+    path: knowledge/workflow-state-machine.md
+    content_hash: e98385b8b64e41dc55d4b1a1fd2e2fd428970180a8fbf7db6ac0523da67280db
+    license: MIT
+  - knowledge_id: sql-write-recipes
+    path: knowledge/sql-write-recipes.md
+    content_hash: 7e89cf6d12f03b52ca7624bcf68ccd61456aaa0dfe73873866f5fc74937e6857
+    license: MIT
+  - knowledge_id: helper-scripts
+    path: knowledge/helper-scripts.md
+    content_hash: 27279ea1c86d431a82a6a38cec85f3245b6ef7be195bdc43361b1c1a6aeaf6af
+    license: MIT
+gate_policy: none
+provenance:
+  origin: vendor-derived
+  extraction_artifact_ids:
+    - RM-CAP-02
+    - RM-KP-03
+    - RM-KP-04
+    - RM-KP-02
+    - RM-KP-01
+  upstream_sources:
+    - path: docs/revision-master_extraction/capabilities/stage-2-manuscript-analysis.md
+      sha256: a4cb8861f532cafdab3ac4fdf527bc8e44abbeede95874f1a7704aa32bc7c4d9
+license: MIT

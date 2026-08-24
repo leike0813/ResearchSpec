@@ -136,7 +136,7 @@ const MODE_DEFINITIONS = [
       template(DEEP, "research_brief_template.md", "research brief 输出模板"),
       template(DEEP, "evidence_assessment_template.md", "快速证据评估模板"),
     ],
-    converted: { capabilities: ["cap-design-research-question-formulation", "cap-discovery-literature-search-screening", "cap-discovery-source-quality-grading", "cap-generation-report-compilation"], note: "research-main 的 quick 子集；尚无独立 quick profile，运行时可作为 research-main 的缩短实例。" },
+    converted: { capabilities: ["design-research-question-formulation", "discovery-literature-search-screening", "discovery-source-quality-grading", "generation-report-compilation"], note: "research-main 的 quick 子集；尚无独立 quick profile，运行时可作为 research-main 的缩短实例。" },
   },
   {
     route: "deep-research:review", skill: DEEP, mode: "review", title: "Research text review",
@@ -147,7 +147,7 @@ const MODE_DEFINITIONS = [
       drRef("ethics_checklist.md", "伦理与披露核验"),
       drRef("cross_agent_quality_definitions.md", "严重度与证据标准"),
     ],
-    converted: { capabilities: ["cap-judgment-editorial-judgment", "cap-judgment-devils-advocate-stress-test", "cap-check-compliance-check"], note: "研究报告评审当前复用 reviewer 族能力 + RAISE/ethics 合规检查；尚无独立 deep-research:review profile。" },
+    converted: { capabilities: ["judgment-editorial-judgment", "judgment-devils-advocate-stress-test", "check-compliance-check"], note: "研究报告评审当前复用 reviewer 族能力 + RAISE/ethics 合规检查；尚无独立 deep-research:review profile。" },
   },
   {
     route: "deep-research:lit-review", skill: DEEP, mode: "lit-review", title: "Evidence literature review",
@@ -162,7 +162,7 @@ const MODE_DEFINITIONS = [
       template(DEEP, "literature_matrix_template.md", "文献矩阵模板"),
       template(DEEP, "evidence_assessment_template.md", "证据评估模板"),
     ],
-    converted: { capabilities: ["cap-discovery-literature-search-screening", "cap-discovery-source-quality-grading", "cap-analysis-evidence-synthesis"], note: "research-main 的 lit-review 片段。" },
+    converted: { capabilities: ["discovery-literature-search-screening", "discovery-source-quality-grading", "analysis-evidence-synthesis"], note: "research-main 的 lit-review 片段。" },
   },
   {
     route: "deep-research:three-way-scan", skill: DEEP, mode: "three-way-scan", title: "WHY/HOW/WHAT scan",
@@ -172,7 +172,7 @@ const MODE_DEFINITIONS = [
       drRef("source_quality_hierarchy.md", "检索与验证分级"),
       drRef("cross_agent_quality_definitions.md", "来源与严重度标准"),
     ],
-    converted: { capabilities: ["cap-discovery-literature-search-screening", "cap-discovery-source-quality-grading"], note: "轻量检索 + 验证片段；尚无独立 profile。" },
+    converted: { capabilities: ["discovery-literature-search-screening", "discovery-source-quality-grading"], note: "轻量检索 + 验证片段；尚无独立 profile。" },
   },
   {
     route: "deep-research:fact-check", skill: DEEP, mode: "fact-check", title: "Claim fact-check",
@@ -187,7 +187,7 @@ const MODE_DEFINITIONS = [
       drRef("cross_agent_quality_definitions.md", "核验结论与严重度"),
       template(DEEP, "evidence_assessment_template.md", "逐 claim 证据评估模板"),
     ],
-    converted: { capabilities: ["cap-discovery-source-quality-grading", "cap-check-reference-integrity-verification"], note: "来源核验 + 引用完整性组合；尚无独立 fact-check profile。" },
+    converted: { capabilities: ["discovery-source-quality-grading", "check-reference-integrity-verification"], note: "来源核验 + 引用完整性组合；尚无独立 fact-check profile。" },
   },
   {
     route: "deep-research:socratic", skill: DEEP, mode: "socratic", title: "Socratic research planning",
@@ -200,7 +200,7 @@ const MODE_DEFINITIONS = [
       drRef("argumentation_reasoning_framework.md", "论证强度评估"),
       drRef("failure_paths.md", "对话停滞与恢复路径"),
     ],
-    converted: { capabilities: ["cap-transform-socratic-mentoring", "cap-design-research-question-formulation", "cap-judgment-devils-advocate-stress-test"], note: "对话引擎 + RQ 构建 + DA 挑战；尚无独立 socratic profile。" },
+    converted: { capabilities: ["transform-socratic-mentoring", "design-research-question-formulation", "judgment-devils-advocate-stress-test"], note: "对话引擎 + RQ 构建 + DA 挑战；尚无独立 socratic profile。" },
   },
   {
     route: "deep-research:systematic-review", skill: DEEP, mode: "systematic-review", title: "Systematic review",
@@ -223,7 +223,7 @@ const MODE_DEFINITIONS = [
       template(DEEP, "evidence_assessment_template.md", "证据评估模板"),
       template(DEEP, "preregistration_template.md", "PROSPERO 预注册模板"),
     ],
-    converted: { capabilities: ["cap-design-research-question-formulation", "cap-design-methodology-design", "cap-discovery-literature-search-screening", "cap-discovery-source-quality-grading", "cap-analysis-risk-of-bias-assessment", "cap-analysis-meta-analysis", "cap-analysis-evidence-synthesis", "cap-generation-report-compilation"], note: "systematic-review 尚无独立 graph profile；当前为 M1 + M5 能力的组合实例。" },
+    converted: { capabilities: ["design-research-question-formulation", "design-methodology-design", "discovery-literature-search-screening", "discovery-source-quality-grading", "analysis-risk-of-bias-assessment", "analysis-meta-analysis", "analysis-evidence-synthesis", "generation-report-compilation"], note: "systematic-review 尚无独立 graph profile；当前为 M1 + M5 能力的组合实例。" },
   },
 
   // ---------- academic-paper ----------
@@ -277,7 +277,7 @@ const MODE_DEFINITIONS = [
       template(PAPER, "policy_brief_template.md", "政策简报模板"),
       template(PAPER, "conference_paper_template.md", "会议论文模板"),
     ],
-    converted: { capabilities: ["cap-design-writing-intake", "cap-transform-socratic-mentoring", "cap-design-manuscript-structure-design", "cap-design-argument-blueprint"], note: "plan mode 尚无独立 graph profile；当前为 4 个能力的对话式组合。" },
+    converted: { capabilities: ["design-writing-intake", "transform-socratic-mentoring", "design-manuscript-structure-design", "design-argument-blueprint"], note: "plan mode 尚无独立 graph profile；当前为 4 个能力的对话式组合。" },
   },
   {
     route: "academic-paper:outline-only", skill: PAPER, mode: "outline-only", title: "Outline only",
@@ -295,7 +295,7 @@ const MODE_DEFINITIONS = [
       template(PAPER, "policy_brief_template.md", "政策简报模板"),
       template(PAPER, "conference_paper_template.md", "会议论文模板"),
     ],
-    converted: { capabilities: ["cap-design-writing-intake", "cap-discovery-literature-search-screening", "cap-design-manuscript-structure-design"], note: "academic-paper profile 的前 3 个节点。" },
+    converted: { capabilities: ["design-writing-intake", "discovery-literature-search-screening", "design-manuscript-structure-design"], note: "academic-paper profile 的前 3 个节点。" },
   },
   {
     route: "academic-paper:revision", skill: PAPER, mode: "revision", title: "Manuscript revision",
@@ -310,7 +310,7 @@ const MODE_DEFINITIONS = [
       paperRef("mode_selection_guide.md", "revision 选择条件"),
       template(PAPER, "revision_tracking_template.md", "修订追踪模板（4 状态类型）"),
     ],
-    converted: { capabilities: ["cap-check-pre-submission-self-check", "cap-generation-manuscript-drafting", "cap-transform-revision-patching", "cap-check-citation-format-compliance"], note: "revision 尚无独立 graph profile；当前为评审/补丁/引文能力组合。" },
+    converted: { capabilities: ["check-pre-submission-self-check", "generation-manuscript-drafting", "transform-revision-patching", "check-citation-format-compliance"], note: "revision 尚无独立 graph profile；当前为评审/补丁/引文能力组合。" },
   },
   {
     route: "academic-paper:revision-coach", skill: PAPER, mode: "revision-coach", title: "Revision coaching",
@@ -321,7 +321,7 @@ const MODE_DEFINITIONS = [
       paperRef("failure_paths.md", "解析失败与歧义处理"),
       paperRef("revision_patch_protocol.md", "下游 revision 使用的 roadmap 契约"),
     ],
-    converted: { capabilities: ["cap-transform-revision-roadmap-parsing"], note: "单能力 mode。" },
+    converted: { capabilities: ["transform-revision-roadmap-parsing"], note: "单能力 mode。" },
   },
   {
     route: "academic-paper:abstract-only", skill: PAPER, mode: "abstract-only", title: "Abstract only",
@@ -334,7 +334,7 @@ const MODE_DEFINITIONS = [
       paperRef("mode_selection_guide.md", "abstract-only 选择条件"),
       template(PAPER, "bilingual_abstract_template.md", "双语摘要模板"),
     ],
-    converted: { capabilities: ["cap-generation-abstract-writing"], note: "单能力 mode。" },
+    converted: { capabilities: ["generation-abstract-writing"], note: "单能力 mode。" },
   },
   {
     route: "academic-paper:lit-review", skill: PAPER, mode: "lit-review", title: "Manuscript literature review",
@@ -348,7 +348,7 @@ const MODE_DEFINITIONS = [
       paperRef("academic_writing_style.md", "文献综述写作规范"),
       template(PAPER, "literature_review_template.md", "文献综述结构模板"),
     ],
-    converted: { capabilities: ["cap-design-writing-intake", "cap-discovery-literature-search-screening", "cap-discovery-source-quality-grading", "cap-analysis-evidence-synthesis"], note: "写作入口 + research 文献能力组合。" },
+    converted: { capabilities: ["design-writing-intake", "discovery-literature-search-screening", "discovery-source-quality-grading", "analysis-evidence-synthesis"], note: "写作入口 + research 文献能力组合。" },
   },
   {
     route: "academic-paper:format-convert", skill: PAPER, mode: "format-convert", title: "Format conversion",
@@ -363,7 +363,7 @@ const MODE_DEFINITIONS = [
       paperRef("venue_disclosure_policies.md", "venue 披露要求"),
       template(PAPER, "latex_article_template.tex", "LaTeX 文章模板"),
     ],
-    converted: { capabilities: ["cap-generation-format-rendering"], note: "单能力 mode；terminal policy 由相邻 gate 能力承担。" },
+    converted: { capabilities: ["generation-format-rendering"], note: "单能力 mode；terminal policy 由相邻 gate 能力承担。" },
   },
   {
     route: "academic-paper:citation-check", skill: PAPER, mode: "citation-check", title: "Citation check",
@@ -375,7 +375,7 @@ const MODE_DEFINITIONS = [
       paperRef("apa7_chinese_citation_guide.md", "中文引文规则"),
       paperRef("mode_selection_guide.md", "citation-check 选择条件"),
     ],
-    converted: { capabilities: ["cap-check-citation-format-compliance", "cap-check-citation-existence-verification"], note: "格式合规 + 存在性验证组合。" },
+    converted: { capabilities: ["check-citation-format-compliance", "check-citation-existence-verification"], note: "格式合规 + 存在性验证组合。" },
   },
   {
     route: "academic-paper:disclosure", skill: PAPER, mode: "disclosure", title: "AI disclosure",
@@ -388,7 +388,7 @@ const MODE_DEFINITIONS = [
       paperRef("policy_anchor_table.md", "政策锚点表"),
       paperRef("journal_submission_guide.md", "投稿披露位置要求"),
     ],
-    converted: { capabilities: ["cap-check-compliance-check", "cap-generation-format-rendering"], note: "合规检查 + 格式输出组合；尚无独立 disclosure profile。" },
+    converted: { capabilities: ["check-compliance-check", "generation-format-rendering"], note: "合规检查 + 格式输出组合；尚无独立 disclosure profile。" },
   },
   {
     route: "academic-paper:rebuttal-audit", skill: PAPER, mode: "rebuttal-audit", title: "Rebuttal audit",
@@ -398,7 +398,7 @@ const MODE_DEFINITIONS = [
       ...PAPER_COMMON_REFS,
       paperRef("failure_paths.md", "回应信 QA 风险路径"),
     ],
-    converted: { capabilities: ["cap-transform-revision-roadmap-parsing"], note: "复用 comment 解析能力；advisory QA 无独立 profile。" },
+    converted: { capabilities: ["transform-revision-roadmap-parsing"], note: "复用 comment 解析能力；advisory QA 无独立 profile。" },
   },
 
   // ---------- academic-paper-reviewer ----------
@@ -431,7 +431,7 @@ const MODE_DEFINITIONS = [
       template(REVIEWER, "peer_review_report_template.md", "复核报告模板"),
       template(REVIEWER, "revision_response_template.md", "R&R 回应信对照模板"),
     ],
-    converted: { capabilities: ["cap-judgment-review-synthesis", "cap-transform-revision-roadmap-parsing", "cap-check-pre-submission-self-check"], note: "re-review 尚无独立 graph profile；当前为综合 + 路线图 + 自检组合。" },
+    converted: { capabilities: ["judgment-review-synthesis", "transform-revision-roadmap-parsing", "check-pre-submission-self-check"], note: "re-review 尚无独立 graph profile；当前为综合 + 路线图 + 自检组合。" },
   },
   {
     route: "academic-paper-reviewer:quick", skill: REVIEWER, mode: "quick", title: "Quick review",
@@ -441,7 +441,7 @@ const MODE_DEFINITIONS = [
       reviewerRef("editorial_decision_standards.md", "快速裁决标准"),
       reviewerRef("review_quality_thinking.md", "快速评审认知框架"),
     ],
-    converted: { capabilities: ["cap-judgment-editorial-judgment"], note: "单能力 mode。" },
+    converted: { capabilities: ["judgment-editorial-judgment"], note: "单能力 mode。" },
   },
   {
     route: "academic-paper-reviewer:methodology-focus", skill: REVIEWER, mode: "methodology-focus", title: "Methodology-focused review",
@@ -453,7 +453,7 @@ const MODE_DEFINITIONS = [
       reviewerRef("review_criteria_framework.md", "方法学维度标准"),
       template(REVIEWER, "peer_review_report_template.md", "方法学评审报告模板"),
     ],
-    converted: { capabilities: ["cap-judgment-specialist-review"], note: "R1 视角单能力 mode。" },
+    converted: { capabilities: ["judgment-specialist-review"], note: "R1 视角单能力 mode。" },
   },
   {
     route: "academic-paper-reviewer:guided", skill: REVIEWER, mode: "guided", title: "Guided review",
@@ -465,7 +465,7 @@ const MODE_DEFINITIONS = [
       reviewerRef("review_quality_thinking.md", "对话中的评审认知约束"),
       template(REVIEWER, "peer_review_report_template.md", "guided 评审笔记模板"),
     ],
-    converted: { capabilities: ["cap-transform-socratic-mentoring", "cap-judgment-editorial-judgment", "cap-judgment-specialist-review"], note: "苏格拉底对话引擎 + 评审视角组合。" },
+    converted: { capabilities: ["transform-socratic-mentoring", "judgment-editorial-judgment", "judgment-specialist-review"], note: "苏格拉底对话引擎 + 评审视角组合。" },
   },
   {
     route: "academic-paper-reviewer:calibration", skill: REVIEWER, mode: "calibration", title: "Reviewer calibration",
@@ -477,7 +477,7 @@ const MODE_DEFINITIONS = [
       reviewerRef("sprint_contract_protocol.md", "校准结果与硬门关系"),
       template(REVIEWER, "peer_review_report_template.md", "校准 gold set 评分模板"),
     ],
-    converted: { capabilities: ["cap-check-pre-submission-self-check", "cap-judgment-specialist-review"], note: "尚无 calibration capability；当前使用可评分 checker 作为最近似节点。" },
+    converted: { capabilities: ["check-pre-submission-self-check", "judgment-specialist-review"], note: "尚无 calibration capability；当前使用可评分 checker 作为最近似节点。" },
   },
 
   // ---------- academic-pipeline ----------
@@ -518,7 +518,7 @@ const MODE_DEFINITIONS = [
       sharedRef("handoff_schemas.md", "passport reset 恢复涉及的 handoff 契约"),
       template(PIPELINE, "pipeline_status_template.md", "Pipeline 状态输出模板"),
     ],
-    converted: { profile: "academic-pipeline", extraCapabilities: ["cap-check-passport-verifier", "cap-check-terminal-policy-gate"], note: "复用 end-to-end pipeline profile；入口按 passport reset boundary 判定，passport-verifier 与 terminal-policy-gate 作为 resume 守卫能力并列展示。" },
+    converted: { profile: "academic-pipeline", extraCapabilities: ["check-passport-verifier", "check-terminal-policy-gate"], note: "复用 end-to-end pipeline profile；入口按 passport reset boundary 判定，passport-verifier 与 terminal-policy-gate 作为 resume 守卫能力并列展示。" },
   },
 ];
 
@@ -527,42 +527,42 @@ const GRAPH_PROFILES = {
   minimal: {
     title: "minimal", profile_version: "0.1.0",
     nodes: [
-      { node_id: "rq", kind: "capability", capability_id: "cap-design-research-question-formulation" },
-      { node_id: "report", kind: "capability", capability_id: "cap-generation-report-compilation" },
+      { node_id: "rq", kind: "capability", capability_id: "design-research-question-formulation" },
+      { node_id: "report", kind: "capability", capability_id: "generation-report-compilation" },
     ],
   },
   "research-main": {
     title: "research-main", profile_version: "0.1.0",
     nodes: [
-      { node_id: "research-question", kind: "capability", capability_id: "cap-design-research-question-formulation" },
+      { node_id: "research-question", kind: "capability", capability_id: "design-research-question-formulation" },
       { node_id: "rq-gate", kind: "gate", gate_id: "rq-gate" },
-      { node_id: "methodology", kind: "capability", capability_id: "cap-design-methodology-design" },
-      { node_id: "literature", kind: "capability", capability_id: "cap-discovery-literature-search-screening" },
-      { node_id: "grading", kind: "capability", capability_id: "cap-discovery-source-quality-grading" },
-      { node_id: "synthesis", kind: "capability", capability_id: "cap-analysis-evidence-synthesis" },
-      { node_id: "report", kind: "capability", capability_id: "cap-generation-report-compilation" },
+      { node_id: "methodology", kind: "capability", capability_id: "design-methodology-design" },
+      { node_id: "literature", kind: "capability", capability_id: "discovery-literature-search-screening" },
+      { node_id: "grading", kind: "capability", capability_id: "discovery-source-quality-grading" },
+      { node_id: "synthesis", kind: "capability", capability_id: "analysis-evidence-synthesis" },
+      { node_id: "report", kind: "capability", capability_id: "generation-report-compilation" },
     ],
   },
   "academic-paper": {
     title: "academic-paper", profile_version: "0.1.0",
     nodes: [
-      { node_id: "intake", kind: "capability", capability_id: "cap-design-writing-intake" },
-      { node_id: "structure", kind: "capability", capability_id: "cap-design-manuscript-structure-design" },
-      { node_id: "argument", kind: "capability", capability_id: "cap-design-argument-blueprint" },
-      { node_id: "draft", kind: "capability", capability_id: "cap-generation-manuscript-drafting" },
-      { node_id: "cite-check", kind: "capability", capability_id: "cap-check-citation-format-compliance" },
+      { node_id: "intake", kind: "capability", capability_id: "design-writing-intake" },
+      { node_id: "structure", kind: "capability", capability_id: "design-manuscript-structure-design" },
+      { node_id: "argument", kind: "capability", capability_id: "design-argument-blueprint" },
+      { node_id: "draft", kind: "capability", capability_id: "generation-manuscript-drafting" },
+      { node_id: "cite-check", kind: "capability", capability_id: "check-citation-format-compliance" },
       { node_id: "paper-gate", kind: "gate", gate_id: "paper-gate" },
-      { node_id: "abstract", kind: "capability", capability_id: "cap-generation-abstract-writing" },
+      { node_id: "abstract", kind: "capability", capability_id: "generation-abstract-writing" },
     ],
   },
   "academic-paper-reviewer": {
     title: "academic-paper-reviewer", profile_version: "0.1.0",
     nodes: [
-      { node_id: "panel", kind: "capability", capability_id: "cap-design-review-panel-config" },
-      { node_id: "specialist", kind: "capability", capability_id: "cap-judgment-specialist-review" },
-      { node_id: "da", kind: "capability", capability_id: "cap-judgment-devils-advocate-stress-test" },
-      { node_id: "editorial", kind: "capability", capability_id: "cap-judgment-editorial-judgment" },
-      { node_id: "synthesis", kind: "capability", capability_id: "cap-judgment-review-synthesis" },
+      { node_id: "panel", kind: "capability", capability_id: "design-review-panel-config" },
+      { node_id: "specialist", kind: "capability", capability_id: "judgment-specialist-review" },
+      { node_id: "da", kind: "capability", capability_id: "judgment-devils-advocate-stress-test" },
+      { node_id: "editorial", kind: "capability", capability_id: "judgment-editorial-judgment" },
+      { node_id: "synthesis", kind: "capability", capability_id: "judgment-review-synthesis" },
     ],
   },
   "academic-pipeline": {

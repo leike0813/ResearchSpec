@@ -472,11 +472,11 @@ revision-master capability absorption. The immutable audit at
 covers all 48 tracked blob files under `skills/revision-master/` at upstream
 commit `13e69610f216f816f106d1a2a1672eedfa01ac9a`. The new absorption path
 uses `docs/revision-master_extraction/extraction-index.json` and authors five
-capability packages (`cap-design-review-response-intake`,
-`cap-analysis-review-response-manuscript-analysis`,
-`cap-transform-review-response-comment-atomization`,
-`cap-design-review-response-workboard-planning`,
-`cap-generation-review-response-round`). The `review-response` graph profile
+capability packages (`design-review-response-intake`,
+`analysis-review-response-manuscript-analysis`,
+`transform-review-response-comment-atomization`,
+`design-review-response-workboard-planning`,
+`generation-review-response-round`). The `review-response` graph profile
 owns stage order, the five human Gates, and the continue/complete revision
 Decision. The upstream Python SQLite runtime and template assets remain
 package-local tools and never own ResearchSpec workflow authority. The upstream

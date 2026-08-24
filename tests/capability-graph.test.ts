@@ -19,7 +19,7 @@ function profile(overrides: Partial<CapabilityGraphProfile> = {}): CapabilityGra
       {
         node_id: "research-question",
         kind: "capability",
-        capability_id: "cap-design-research-question-formulation",
+        capability_id: "design-research-question-formulation",
         input_bindings: [{ role: "project_intent", source: "stable_spec" }],
         expected_outputs: [{ role: "rq_brief", required: true }],
         prerequisites: [],
@@ -42,7 +42,7 @@ function profile(overrides: Partial<CapabilityGraphProfile> = {}): CapabilityGra
       {
         node_id: "report",
         kind: "capability",
-        capability_id: "cap-generation-report-compilation",
+        capability_id: "generation-report-compilation",
         input_bindings: [{ role: "rq_brief", source: "node_output", from_node_id: "research-question" }],
         expected_outputs: [{ role: "research_report", required: true }],
         prerequisites: ["rq-gate"],
@@ -70,8 +70,8 @@ void test("capability graph profile schema accepts a minimal acyclic graph", () 
 
 void test("unknown capability references are reported by registry validation", () => {
   const parsed = parseCapabilityGraphProfile(profile());
-  const diagnostics = validateGraphCapabilityReferences(parsed, new Set(["cap-generation-report-compilation"]));
-  assert.ok(diagnostics.some((item) => item.message.includes("cap-design-research-question-formulation")));
+  const diagnostics = validateGraphCapabilityReferences(parsed, new Set(["generation-report-compilation"]));
+  assert.ok(diagnostics.some((item) => item.message.includes("design-research-question-formulation")));
 });
 
 void test("duplicate node IDs are rejected", () => {
@@ -135,7 +135,7 @@ void test("revision round template resolves decision options", () => {
       {
         node_id: "revision",
         kind: "capability",
-        capability_id: "cap-generation-manuscript-drafting",
+        capability_id: "generation-manuscript-drafting",
         input_bindings: [],
         expected_outputs: [{ role: "revised_manuscript" }],
         prerequisites: [],

@@ -11,10 +11,10 @@
       "extraction_index": "docs/paper-humanizer_extraction/extraction-index.json",
       "author_script": "paper-humanizer:author",
       "capability_ids": [
-        "cap-generation-humanization-reference",
-        "cap-check-paper-humanization-review",
-        "cap-transform-paper-humanization-revision",
-        "cap-check-paper-humanization-verification"
+        "generation-humanization-reference",
+        "check-paper-humanization-review",
+        "transform-paper-humanization-revision",
+        "check-paper-humanization-verification"
       ]
     },
     {
@@ -26,11 +26,11 @@
       "extraction_index": "docs/revision-master_extraction/extraction-index.json",
       "author_script": "revision-master:author",
       "capability_ids": [
-        "cap-design-review-response-intake",
-        "cap-analysis-review-response-manuscript-analysis",
-        "cap-transform-review-response-comment-atomization",
-        "cap-design-review-response-workboard-planning",
-        "cap-generation-review-response-round"
+        "design-review-response-intake",
+        "analysis-review-response-manuscript-analysis",
+        "transform-review-response-comment-atomization",
+        "design-review-response-workboard-planning",
+        "generation-review-response-round"
       ]
     }
   ]

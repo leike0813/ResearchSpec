@@ -2,7 +2,7 @@
   "schema_version": "1",
   "vendor_id": "paper-humanizer",
   "anchor_id": "v2.9.1-1a31f2d",
-  "created_at": "2026-08-16T06:24:14.161Z",
+  "created_at": "2026-08-24T05:38:04.724Z",
   "upstream": {
     "source_meta": "vendor/paper-humanizer/SOURCE.json",
     "upstream_root": "vendor/paper-humanizer/upstream",
@@ -22,18 +22,18 @@
     "capability_count": 4,
     "operational_count": 4,
     "capability_ids": [
-      "cap-check-paper-humanization-review",
-      "cap-check-paper-humanization-verification",
-      "cap-generation-humanization-reference",
-      "cap-transform-paper-humanization-revision"
+      "check-paper-humanization-review",
+      "check-paper-humanization-verification",
+      "generation-humanization-reference",
+      "transform-paper-humanization-revision"
     ],
-    "registry_subset_sha256": "2072a9958bf602810fd088ff817ebbd5e439051d57fee954f2905c12ce821568",
-    "packages_tree_sha256": "a381454fd5d4e1922a88eee2cfc138e5d4c3ca0caf760bb43b3f6666fa029a53"
+    "registry_subset_sha256": "d7164f0cc446a350f2f4f56ff50360cf8d44c6ee7485b946e2bd115f8e17798d",
+    "packages_tree_sha256": "877f764a7447d68cf558753e54d896caeca69dc0231eecf64fd4faf5ce24b2e2"
   },
   "review": {
     "parity_report_path": "/home/joshua/Workspace/Code/JavaScript/ResearchSpec/docs/capability-parity-report.json",
     "parity_artifact_path": "audits/own-vendors/paper-humanizer/v2.9.1-1a31f2d/artifacts/parity-packages.json",
-    "parity_artifact_sha256": "2035782b5147e1cdf06c073878712b27bd37048e7a57d6c6b6a06b9119e6c2f1",
+    "parity_artifact_sha256": "504f9fc9e43c94c68133df6b1db7f31d293f469f0db551983059dc1055e2c836",
     "package_count": 4,
     "operational_count": 4,
     "avg_section_coverage": 0.9450000000000001,
@@ -45,8 +45,8 @@
     "flow_retained": []
   },
   "maintenance": {
-    "skill_sha256": "8a644c683d2cac0eab5f5633eadeb3e85d397fccdba5a31ef6a1c8da3d11dc7d",
-    "catalog_sha256": "8b1038bd291899c9b672e906db59863ec9d918af8c9d506e516cfc9cdcb8d187",
-    "record_sha256": "3eacdf43e33783b4f0b498fe0e22562c80a105e0081aee95e86eaa8987a7f902"
+    "skill_sha256": "99505d3be486e54142843c94c6a5fb7c3588d820b9b80a17ef6c2dd10ac989d5",
+    "catalog_sha256": "cbb30c1d946b0b24d8c416c7e41a9834401690a75a6c4bfa78add72ade78583d",
+    "record_sha256": "ff45f7df2e2533279d2c8df044d9c9b6e2bcfb6ac0320eaab8153345ca02a976"
   }
 }

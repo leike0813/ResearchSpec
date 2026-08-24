@@ -12,7 +12,7 @@
   },
   "packages": [
     {
-      "capability_id": "cap-analysis-review-response-manuscript-analysis",
+      "capability_id": "analysis-review-response-manuscript-analysis",
       "maturity": "operational",
       "skill_lines": 111,
       "knowledge_refs": 4,
@@ -34,7 +34,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap-design-review-response-intake",
+      "capability_id": "design-review-response-intake",
       "maturity": "operational",
       "skill_lines": 114,
       "knowledge_refs": 4,
@@ -54,7 +54,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap-design-review-response-workboard-planning",
+      "capability_id": "design-review-response-workboard-planning",
       "maturity": "operational",
       "skill_lines": 103,
       "knowledge_refs": 4,
@@ -74,7 +74,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap-generation-review-response-round",
+      "capability_id": "generation-review-response-round",
       "maturity": "operational",
       "skill_lines": 126,
       "knowledge_refs": 5,
@@ -99,7 +99,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap-transform-review-response-comment-atomization",
+      "capability_id": "transform-review-response-comment-atomization",
       "maturity": "operational",
       "skill_lines": 109,
       "knowledge_refs": 4,

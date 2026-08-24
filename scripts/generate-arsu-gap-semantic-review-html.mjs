@@ -28,14 +28,14 @@ const findings = [
     },
     converted: {
       points: [
-        "cap-check-compliance-check 有 disclosures_required 与 RAISE 原则，覆盖“披露存在性”这一小片语义；但它是 manuscript 合规观察器，不评估 attribution、dual-use、fair representation、data ethics、COI 或 human subjects。",
-        "cap-generation-report-compilation / manuscript-drafting 有强制 AI Disclosure Statement，但那是产出物模板，不是 review 判定。",
+        "check-compliance-check 有 disclosures_required 与 RAISE 原则，覆盖“披露存在性”这一小片语义；但它是 manuscript 合规观察器，不评估 attribution、dual-use、fair representation、data ethics、COI 或 human subjects。",
+        "generation-report-compilation / manuscript-drafting 有强制 AI Disclosure Statement，但那是产出物模板，不是 review 判定。",
         "本 mode 的转换映射未包含 compliance-check；即使加入，也只覆盖 disclosure 维度。",
       ],
       snippet: "compliance-check/SKILL.md:\n- disclosures_required: [...]\n- RAISE principles: human_oversight, fit_for_purpose, transparency, reproducibility...",
     },
     conclusion: "确认为真实缺口：缺少 ethics-review capability（或等价 checker）。AI Disclosure 锚点不是假象，但它低估了缺口范围。",
-    recommendation: "新增 cap-check-ethics-review 能力（attribution / disclosure / dual-use / fair representation / data ethics / COI / human subjects + overridable BLOCKED 语义），并在 deep-research:review 的 graph 路径中接线。",
+    recommendation: "新增 check-ethics-review 能力（attribution / disclosure / dual-use / fair representation / data ethics / COI / human subjects + overridable BLOCKED 语义），并在 deep-research:review 的 graph 路径中接线。",
   },
   {
     id: "GAP-02",
@@ -56,9 +56,9 @@ const findings = [
     },
     converted: {
       points: [
-        "cap-transform-revision-patching 只做 anchorize → patch → fail-closed apply，输出 Patch Apply Report；没有 provisional response items 或 Response-to-Reviewers 输出角色。",
-        "cap-transform-revision-roadmap-parsing 生成 Response Letter Skeleton，但它是 revision-coach 的评论解析产物，不是 revision 完成后逐点回应。",
-        "cap-judgment-review-synthesis 输出格式中有 Response Letter Template，但属于 reviewer 综合节点。",
+        "transform-revision-patching 只做 anchorize → patch → fail-closed apply，输出 Patch Apply Report；没有 provisional response items 或 Response-to-Reviewers 输出角色。",
+        "transform-revision-roadmap-parsing 生成 Response Letter Skeleton，但它是 revision-coach 的评论解析产物，不是 revision 完成后逐点回应。",
+        "judgment-review-synthesis 输出格式中有 Response Letter Template，但属于 reviewer 综合节点。",
         "三个相关能力都没有被串成 revision mode 的 response-letter 输出路径。",
       ],
       snippet: "revision-patching/SKILL.md:\nOutputs: patched_manuscript (patched-manuscript.v1)\n## Patch Apply Report\n- applied_actions / untouched_blocks / escalations / output_hash",
@@ -86,14 +86,14 @@ const findings = [
     },
     converted: {
       points: [
-        "cap-transform-revision-roadmap-parsing 只有 comment parsing + roadmap + response skeleton；它不评估“已有 rebuttal 草稿”。",
-        "cap-check-claim-faithfulness-audit 检查 claim 忠实性，不是 response-letter 覆盖度。",
+        "transform-revision-roadmap-parsing 只有 comment parsing + roadmap + response skeleton；它不评估“已有 rebuttal 草稿”。",
+        "check-claim-faithfulness-audit 检查 claim 忠实性，不是 response-letter 覆盖度。",
         "全 registry 搜索 rebuttal 仅出现在 argument-blueprint 与 devils-advocate 的修辞语境中，没有 rebuttal QA 能力。",
       ],
       snippet: "revision-roadmap-parsing/SKILL.md:\n### Step 2: Comment Parsing ... Response Letter Skeleton: comments listed with [PLACEHOLDER — user fills in]",
     },
     conclusion: "确认为真实缺口；锚点无假象，只有 gap 一词过于通用。",
-    recommendation: "新增 cap-check-rebuttal-audit（或扩展 revision-roadmap-parsing 为不可混用的独立 checker）：输入 rebuttal draft + reviewer comments，输出 coverage table、gap list、risk flags、suggestions，并保留 advisory-only / no false certification 边界。",
+    recommendation: "新增 check-rebuttal-audit（或扩展 revision-roadmap-parsing 为不可混用的独立 checker）：输入 rebuttal draft + reviewer comments，输出 coverage table、gap list、risk flags、suggestions，并保留 advisory-only / no false certification 边界。",
   },
   {
     id: "GAP-04",
@@ -114,7 +114,7 @@ const findings = [
     },
     converted: {
       points: [
-        "cap-judgment-devils-advocate-stress-test 的 SKILL.md 完整保留了 Strongest Counter-Argument 输出块与 DA 边界规则。",
+        "judgment-devils-advocate-stress-test 的 SKILL.md 完整保留了 Strongest Counter-Argument 输出块与 DA 边界规则。",
         "但 src/core/graph-profiles/academic-paper-reviewer.ts 的节点只有 panel → specialist → editorial → synthesis，没有 DA 节点。",
         "specialist-review 明确声明 R3 不接管 DA；review-synthesis 的 DA-CRITICAL 规则也说明 graph 中应存在 DA 输入。",
       ],
@@ -144,14 +144,14 @@ const findings = [
     converted: {
       points: [
         "没有 Verification Review Report / RR Traceability Matrix / Revision Response Checklist 的输出契约。",
-        "cap-transform-revision-roadmap-parsing 有 commitment_extracted 与 roadmap_item_ids 追溯，是 re-review 的前置片段。",
-        "cap-check-pre-submission-self-check 在 re-invoked 时检查 revised draft 是否真正解决 prior items，并列出 remaining Critical items；这是最接近 re-review 的 checker，但没有 commitment ledger 与 response checklist。",
-        "cap-judgment-review-synthesis 有 sub-claim 追溯与 revision checklist，但属于首轮综合，不是修订后验证。",
+        "transform-revision-roadmap-parsing 有 commitment_extracted 与 roadmap_item_ids 追溯，是 re-review 的前置片段。",
+        "check-pre-submission-self-check 在 re-invoked 时检查 revised draft 是否真正解决 prior items，并列出 remaining Critical items；这是最接近 re-review 的 checker，但没有 commitment ledger 与 response checklist。",
+        "judgment-review-synthesis 有 sub-claim 追溯与 revision checklist，但属于首轮综合，不是修订后验证。",
       ],
       snippet: "pre-submission-self-check/SKILL.md:\nWhen re-invoked on a revised draft, verify that each previously reported item is genuinely resolved ... Remaining unresolved Critical items are surfaced...",
     },
     conclusion: "确认为真实能力缺口：re-review 的验证协议没有被单一 capability 承接；锚点不是假象，但 traceability/residual issues 两个锚点已存在跨节点片段，应视为部分覆盖而非完全缺失。",
-    recommendation: "新增 cap-check-re-review（或扩展 pre-submission-self-check 为 verification-review 变体）：输入 revised manuscript + revision roadmap + commitment ledger + response-to-reviewers，输出 RR Traceability Matrix、Revision Response Checklist、Residual Issues 与 Verification Review Decision。",
+    recommendation: "新增 check-re-review（或扩展 pre-submission-self-check 为 verification-review 变体）：输入 revised manuscript + revision roadmap + commitment ledger + response-to-reviewers，输出 RR Traceability Matrix、Revision Response Checklist、Residual Issues 与 Verification Review Decision。",
   },
   {
     id: "GAP-06",
@@ -173,8 +173,8 @@ const findings = [
     },
     converted: {
       points: [
-        "cap-check-passport-verifier 只做 passport schema/字段/来源绑定校验，不实现 reset_boundary、consumes_hash、awaiting_resume。",
-        "cap-check-terminal-policy-gate 的 freshness 是 verifier report 复用新鲜度，与 run/passport resume 新鲜度不是同一语义。",
+        "check-passport-verifier 只做 passport schema/字段/来源绑定校验，不实现 reset_boundary、consumes_hash、awaiting_resume。",
+        "check-terminal-policy-gate 的 freshness 是 verifier report 复用新鲜度，与 run/passport resume 新鲜度不是同一语义。",
         "graph profile academic-pipeline 只有 research → gate → write → gate → review，没有 finalize/final integrity/passport resume 入口。",
       ],
       snippet: "terminal-policy-gate/SKILL.md:\nReport reuse REQUIRES the freshness guard ... STALE-REPORT -> re-run the verifier ...",

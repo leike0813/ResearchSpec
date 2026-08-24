@@ -53,7 +53,7 @@ handoff after a partial or failed render.
 <!-- researchspec-paper-humanizer-reference-mode:v2 -->
 When this route creates or edits manuscript prose (including outline, abstract,
 literature-review, revision, or full drafting), silently load the packaged
-cap-generation-humanization-reference/SKILL.md entrypoint first and follow its
+generation-humanization-reference/SKILL.md entrypoint first and follow its
 Reference mode. This advisory mode does not start a humanizer route, run
 statistics, produce an audit, or request an additional confirmation. Do not
 load it for read-only review, citation audit, rebuttal audit, or format

@@ -10,10 +10,10 @@ package-local SQLite semantic runtime and deterministic gate-and-render tooling.
 ### Requirement: Five capability packages own the review-response workflow
 
 ResearchSpec SHALL author five capability packages for review-response:
-`cap-design-review-response-intake`, `cap-analysis-review-response-manuscript-analysis`,
-`cap-transform-review-response-comment-atomization`,
-`cap-design-review-response-workboard-planning`, and
-`cap-generation-review-response-round`. Each package SHALL be vendor-derived from the pinned
+`design-review-response-intake`, `analysis-review-response-manuscript-analysis`,
+`transform-review-response-comment-atomization`,
+`design-review-response-workboard-planning`, and
+`generation-review-response-round`. Each package SHALL be vendor-derived from the pinned
 `vendor/revision-master` snapshot and SHALL be registered in `skills/capabilities/registry.json`.
 
 #### Scenario: Packages are registered

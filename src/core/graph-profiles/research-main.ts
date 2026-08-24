@@ -12,7 +12,7 @@ export const RESEARCH_MAIN_GRAPH_PROFILE = {
     {
       node_id: "research-question",
       kind: "capability",
-      capability_id: "cap-design-research-question-formulation",
+      capability_id: "design-research-question-formulation",
       input_bindings: [{ role: "project_intent", source: "stable_spec" }],
       expected_outputs: [{ role: "rq_brief", required: true }],
       prerequisites: [],
@@ -35,7 +35,7 @@ export const RESEARCH_MAIN_GRAPH_PROFILE = {
     {
       node_id: "methodology",
       kind: "capability",
-      capability_id: "cap-design-methodology-design",
+      capability_id: "design-methodology-design",
       input_bindings: [{ role: "rq_brief", source: "node_output", from_node_id: "research-question" }],
       expected_outputs: [{ role: "methodology_blueprint", required: true }],
       prerequisites: ["rq-gate"],
@@ -47,7 +47,7 @@ export const RESEARCH_MAIN_GRAPH_PROFILE = {
     {
       node_id: "literature",
       kind: "capability",
-      capability_id: "cap-discovery-literature-search-screening",
+      capability_id: "discovery-literature-search-screening",
       input_bindings: [
         { role: "rq_brief", source: "node_output", from_node_id: "research-question" },
         { role: "methodology_blueprint", source: "node_output", from_node_id: "methodology" },
@@ -62,7 +62,7 @@ export const RESEARCH_MAIN_GRAPH_PROFILE = {
     {
       node_id: "grading",
       kind: "capability",
-      capability_id: "cap-discovery-source-quality-grading",
+      capability_id: "discovery-source-quality-grading",
       input_bindings: [{ role: "annotated_bibliography", source: "node_output", from_node_id: "literature" }],
       expected_outputs: [{ role: "graded_sources", required: true }],
       prerequisites: ["literature"],
@@ -74,7 +74,7 @@ export const RESEARCH_MAIN_GRAPH_PROFILE = {
     {
       node_id: "synthesis",
       kind: "capability",
-      capability_id: "cap-analysis-evidence-synthesis",
+      capability_id: "analysis-evidence-synthesis",
       input_bindings: [{ role: "graded_sources", source: "node_output", from_node_id: "grading" }],
       expected_outputs: [{ role: "synthesis_report", required: true }],
       prerequisites: ["grading"],
@@ -86,7 +86,7 @@ export const RESEARCH_MAIN_GRAPH_PROFILE = {
     {
       node_id: "report",
       kind: "capability",
-      capability_id: "cap-generation-report-compilation",
+      capability_id: "generation-report-compilation",
       input_bindings: [{ role: "synthesis_report", source: "node_output", from_node_id: "synthesis" }],
       expected_outputs: [{ role: "research_report", required: true }],
       prerequisites: ["synthesis"],

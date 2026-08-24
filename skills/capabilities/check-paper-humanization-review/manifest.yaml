@@ -1,0 +1,60 @@
+schema_version: "1"
+capability_id: check-paper-humanization-review
+title: Paper Humanization Review
+description: Read-only diagnosis of AI-like prose patterns and a conservative
+  bounded revision plan for one manuscript.
+maturity: operational
+class: verification
+node_kind: checker
+execution_type: mixed
+params: {}
+inputs:
+  - role: manuscript_source
+    schema_ref: manuscript-draft.v1
+    required: true
+    source_policy: handoff
+  - role: user_constraints
+    schema_ref: humanization-constraints.v1
+    required: false
+    source_policy: parameter
+outputs:
+  - role: humanization_review_report
+    schema_ref: humanization-review.v1
+    required: true
+  - role: humanization_revision_plan
+    schema_ref: humanization-plan.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - manuscript_source
+      - user_constraints
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+knowledge_refs:
+  - knowledge_id: paper-humanizer-taxonomy
+    path: knowledge/paper-humanizer-taxonomy.md
+    content_hash: 1b5d7afa5f39bc2bcad69805106fcea122206e07d81722970d4f37c724c7161b
+    license: MIT
+  - knowledge_id: diagnostic-guidance
+    path: knowledge/diagnostic-guidance.md
+    content_hash: 7e9348e3ca862707e70199cb8ebad171f39dc6e261c141b3946b198d7614cdd5
+    license: MIT
+  - knowledge_id: document-yaml-contract
+    path: knowledge/document-yaml-contract.md
+    content_hash: 953ed9c15d832446b569428426c7e9914d938f2179639d1d726a8d02b9723096
+    license: MIT
+gate_policy: none
+provenance:
+  origin: vendor-derived
+  extraction_artifact_ids:
+    - PH-CAP-01
+    - PH-CAP-03
+    - PH-KP-01
+    - PH-KP-02
+  upstream_sources:
+    - path: docs/paper-humanizer_extraction/capabilities/01_review_workflow.md
+      sha256: a2bc1f63c46a7b69a7bdfbad38ee7320995faf28804bd0b263c1a29b4fd5c8c7
+license: MIT

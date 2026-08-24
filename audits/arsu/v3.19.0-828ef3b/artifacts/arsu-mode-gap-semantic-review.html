@@ -86,12 +86,12 @@ footer{padding:20px 24px 40px;color:var(--muted);font-size:12px;max-width:1280px
 - [ ] No AI-generated content passed off as human-authored
 ...
 - No AI disclosure (Blocking Conditions — integrity violations only)</pre></div></div>
-<div class="column converted"><h4>转换侧实际情况</h4><ul><li>cap-check-compliance-check 有 disclosures_required 与 RAISE 原则，覆盖“披露存在性”这一小片语义；但它是 manuscript 合规观察器，不评估 attribution、dual-use、fair representation、data ethics、COI 或 human subjects。</li><li>cap-generation-report-compilation / manuscript-drafting 有强制 AI Disclosure Statement，但那是产出物模板，不是 review 判定。</li><li>本 mode 的转换映射未包含 compliance-check；即使加入，也只覆盖 disclosure 维度。</li></ul><div class="snippet"><div class="snippet-label">转换侧证据</div><pre>compliance-check/SKILL.md:
+<div class="column converted"><h4>转换侧实际情况</h4><ul><li>check-compliance-check 有 disclosures_required 与 RAISE 原则，覆盖“披露存在性”这一小片语义；但它是 manuscript 合规观察器，不评估 attribution、dual-use、fair representation、data ethics、COI 或 human subjects。</li><li>generation-report-compilation / manuscript-drafting 有强制 AI Disclosure Statement，但那是产出物模板，不是 review 判定。</li><li>本 mode 的转换映射未包含 compliance-check；即使加入，也只覆盖 disclosure 维度。</li></ul><div class="snippet"><div class="snippet-label">转换侧证据</div><pre>compliance-check/SKILL.md:
 - disclosures_required: [...]
 - RAISE principles: human_oversight, fit_for_purpose, transparency, reproducibility...</pre></div></div>
 </div>
 <div class="judgement"><b>锚点质量：</b>锚点合理，但过窄：它只暴露了披露项，未暴露 ethics review 的其余四个维度<br><b>最终判断：</b>确认为真实缺口：缺少 ethics-review capability（或等价 checker）。AI Disclosure 锚点不是假象，但它低估了缺口范围。</div>
-<div class="recommendation"><b>建议：</b>新增 cap-check-ethics-review 能力（attribution / disclosure / dual-use / fair representation / data ethics / COI / human subjects + overridable BLOCKED 语义），并在 deep-research:review 的 graph 路径中接线。</div>
+<div class="recommendation"><b>建议：</b>新增 check-ethics-review 能力（attribution / disclosure / dual-use / fair representation / data ethics / COI / human subjects + overridable BLOCKED 语义），并在 deep-research:review 的 graph 路径中接线。</div>
 </section>
 <section class="gap-card">
 <div class="gap-head">
@@ -101,7 +101,7 @@ footer{padding:20px 24px 40px;color:var(--muted);font-size:12px;max-width:1280px
 <div class="gap-body">
 <div class="column upstream"><h4>上游语义义务</h4><span class="path">vendor/ars/MODE_REGISTRY.md + vendor/ars/academic-paper/agents/draft_writer_agent.md</span><ul><li>MODE_REGISTRY 定义 revision 输出为“Revised draft + point-by-point R&amp;R responses”。</li><li>draft_writer_agent 在 Patch-Document Revision Emission 中要求：chat output 携带 human-facing revision log 和 provisional Schema 8 response items（response text、status、decline justifications）。</li><li>peer_reviewer_agent 明确把 R&amp;R response letter 视为下游 deliverable；修订后需要逐点回应。</li></ul><div class="snippet"><div class="snippet-label">原文证据</div><pre>draft_writer_agent.md:
 "...Your chat output carries the human-facing revision log ... and your provisional response items — never the patch body."</pre></div></div>
-<div class="column converted"><h4>转换侧实际情况</h4><ul><li>cap-transform-revision-patching 只做 anchorize → patch → fail-closed apply，输出 Patch Apply Report；没有 provisional response items 或 Response-to-Reviewers 输出角色。</li><li>cap-transform-revision-roadmap-parsing 生成 Response Letter Skeleton，但它是 revision-coach 的评论解析产物，不是 revision 完成后逐点回应。</li><li>cap-judgment-review-synthesis 输出格式中有 Response Letter Template，但属于 reviewer 综合节点。</li><li>三个相关能力都没有被串成 revision mode 的 response-letter 输出路径。</li></ul><div class="snippet"><div class="snippet-label">转换侧证据</div><pre>revision-patching/SKILL.md:
+<div class="column converted"><h4>转换侧实际情况</h4><ul><li>transform-revision-patching 只做 anchorize → patch → fail-closed apply，输出 Patch Apply Report；没有 provisional response items 或 Response-to-Reviewers 输出角色。</li><li>transform-revision-roadmap-parsing 生成 Response Letter Skeleton，但它是 revision-coach 的评论解析产物，不是 revision 完成后逐点回应。</li><li>judgment-review-synthesis 输出格式中有 Response Letter Template，但属于 reviewer 综合节点。</li><li>三个相关能力都没有被串成 revision mode 的 response-letter 输出路径。</li></ul><div class="snippet"><div class="snippet-label">转换侧证据</div><pre>revision-patching/SKILL.md:
 Outputs: patched_manuscript (patched-manuscript.v1)
 ## Patch Apply Report
 - applied_actions / untouched_blocks / escalations / output_hash</pre></div></div>
@@ -119,11 +119,11 @@ Outputs: patched_manuscript (patched-manuscript.v1)
 - Per-comment coverage table — every reviewer concern marked addressed / partially / missing
 - Gap list — concerns the draft fails to answer
 - Risk flags — tone too combative, claims made without evidence, or a response that misreads the reviewer's actual point</pre></div></div>
-<div class="column converted"><h4>转换侧实际情况</h4><ul><li>cap-transform-revision-roadmap-parsing 只有 comment parsing + roadmap + response skeleton；它不评估“已有 rebuttal 草稿”。</li><li>cap-check-claim-faithfulness-audit 检查 claim 忠实性，不是 response-letter 覆盖度。</li><li>全 registry 搜索 rebuttal 仅出现在 argument-blueprint 与 devils-advocate 的修辞语境中，没有 rebuttal QA 能力。</li></ul><div class="snippet"><div class="snippet-label">转换侧证据</div><pre>revision-roadmap-parsing/SKILL.md:
+<div class="column converted"><h4>转换侧实际情况</h4><ul><li>transform-revision-roadmap-parsing 只有 comment parsing + roadmap + response skeleton；它不评估“已有 rebuttal 草稿”。</li><li>check-claim-faithfulness-audit 检查 claim 忠实性，不是 response-letter 覆盖度。</li><li>全 registry 搜索 rebuttal 仅出现在 argument-blueprint 与 devils-advocate 的修辞语境中，没有 rebuttal QA 能力。</li></ul><div class="snippet"><div class="snippet-label">转换侧证据</div><pre>revision-roadmap-parsing/SKILL.md:
 ### Step 2: Comment Parsing ... Response Letter Skeleton: comments listed with [PLACEHOLDER — user fills in]</pre></div></div>
 </div>
 <div class="judgement"><b>锚点质量：</b>四个锚点基本合理；“gap”过于宽泛，宜替换为 gap list / addressed-partially-missing<br><b>最终判断：</b>确认为真实缺口；锚点无假象，只有 gap 一词过于通用。</div>
-<div class="recommendation"><b>建议：</b>新增 cap-check-rebuttal-audit（或扩展 revision-roadmap-parsing 为不可混用的独立 checker）：输入 rebuttal draft + reviewer comments，输出 coverage table、gap list、risk flags、suggestions，并保留 advisory-only / no false certification 边界。</div>
+<div class="recommendation"><b>建议：</b>新增 check-rebuttal-audit（或扩展 revision-roadmap-parsing 为不可混用的独立 checker）：输入 rebuttal draft + reviewer comments，输出 coverage table、gap list、risk flags、suggestions，并保留 advisory-only / no false certification 边界。</div>
 </section>
 <section class="gap-card">
 <div class="gap-head">
@@ -134,7 +134,7 @@ Outputs: patched_manuscript (patched-manuscript.v1)
 <div class="column upstream"><h4>上游语义义务</h4><span class="path">vendor/ars/academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md</span><ul><li>DA 报告第一段即 Strongest Counter-Argument（200-300 words），是“整个审查中最重要的部分”。</li><li>DA 有独立边界：只挑战、不评分，并维护 CRITICAL 发现、Field-Norm Severity Calibration、Attack Intensity Preservation。</li><li>editorial_synthesizer 要求每个 DA-CRITICAL 进入最终决策，checkpoint rule 明确 DA CRITICAL 时不得 Accept。</li></ul><div class="snippet"><div class="snippet-label">原文证据</div><pre>## Devil's Advocate Review
 ### Strongest Counter-Argument
 [200-300 words. If you were a scholar holding the opposite view, how would you refute this paper? The most important part of the report.]</pre></div></div>
-<div class="column converted"><h4>转换侧实际情况</h4><ul><li>cap-judgment-devils-advocate-stress-test 的 SKILL.md 完整保留了 Strongest Counter-Argument 输出块与 DA 边界规则。</li><li>但 src/core/graph-profiles/academic-paper-reviewer.ts 的节点只有 panel → specialist → editorial → synthesis，没有 DA 节点。</li><li>specialist-review 明确声明 R3 不接管 DA；review-synthesis 的 DA-CRITICAL 规则也说明 graph 中应存在 DA 输入。</li></ul><div class="snippet"><div class="snippet-label">转换侧证据</div><pre>devils-advocate-stress-test/SKILL.md:
+<div class="column converted"><h4>转换侧实际情况</h4><ul><li>judgment-devils-advocate-stress-test 的 SKILL.md 完整保留了 Strongest Counter-Argument 输出块与 DA 边界规则。</li><li>但 src/core/graph-profiles/academic-paper-reviewer.ts 的节点只有 panel → specialist → editorial → synthesis，没有 DA 节点。</li><li>specialist-review 明确声明 R3 不接管 DA；review-synthesis 的 DA-CRITICAL 规则也说明 graph 中应存在 DA 输入。</li></ul><div class="snippet"><div class="snippet-label">转换侧证据</div><pre>devils-advocate-stress-test/SKILL.md:
 ### Strongest Counter-Argument
 [200-300 words ...]</pre></div></div>
 </div>
@@ -150,11 +150,11 @@ Outputs: patched_manuscript (patched-manuscript.v1)
 <div class="column upstream"><h4>上游语义义务</h4><span class="path">vendor/ars/academic-paper-reviewer/references/re_review_mode_protocol.md</span><ul><li>核心语义：逐 concern 独立验证 revised manuscript，不接受 rubber-stamp。</li><li>Commitment Ledger Verification：核对 revision-roadmap 的 commitment_extracted 与 manuscript/response 证据。</li><li>输出 Verification Review Report：Judge Record、Decision、Revision Response Checklist、New Issues、Residual Issues、sprint contract status。</li><li>Anti-pattern 明确禁止“all addressed without verification”。</li></ul><div class="snippet"><div class="snippet-label">原文证据</div><pre>re_review_mode_protocol.md:
 ## Verification Logic ... ## Commitment Ledger Verification (Kong A1 / v3.11) ... ## Re-Review Output Format
 # Verification Review Report ... ## Residual Issues (If Any)</pre></div></div>
-<div class="column converted"><h4>转换侧实际情况</h4><ul><li>没有 Verification Review Report / RR Traceability Matrix / Revision Response Checklist 的输出契约。</li><li>cap-transform-revision-roadmap-parsing 有 commitment_extracted 与 roadmap_item_ids 追溯，是 re-review 的前置片段。</li><li>cap-check-pre-submission-self-check 在 re-invoked 时检查 revised draft 是否真正解决 prior items，并列出 remaining Critical items；这是最接近 re-review 的 checker，但没有 commitment ledger 与 response checklist。</li><li>cap-judgment-review-synthesis 有 sub-claim 追溯与 revision checklist，但属于首轮综合，不是修订后验证。</li></ul><div class="snippet"><div class="snippet-label">转换侧证据</div><pre>pre-submission-self-check/SKILL.md:
+<div class="column converted"><h4>转换侧实际情况</h4><ul><li>没有 Verification Review Report / RR Traceability Matrix / Revision Response Checklist 的输出契约。</li><li>transform-revision-roadmap-parsing 有 commitment_extracted 与 roadmap_item_ids 追溯，是 re-review 的前置片段。</li><li>check-pre-submission-self-check 在 re-invoked 时检查 revised draft 是否真正解决 prior items，并列出 remaining Critical items；这是最接近 re-review 的 checker，但没有 commitment ledger 与 response checklist。</li><li>judgment-review-synthesis 有 sub-claim 追溯与 revision checklist，但属于首轮综合，不是修订后验证。</li></ul><div class="snippet"><div class="snippet-label">转换侧证据</div><pre>pre-submission-self-check/SKILL.md:
 When re-invoked on a revised draft, verify that each previously reported item is genuinely resolved ... Remaining unresolved Critical items are surfaced...</pre></div></div>
 </div>
 <div class="judgement"><b>锚点质量：</b>四个锚点均合理；traceability 与 residual issues 已有局部同义实现，宜细化为 RR Traceability Matrix / Revision Response Checklist / Verification Review Report<br><b>最终判断：</b>确认为真实能力缺口：re-review 的验证协议没有被单一 capability 承接；锚点不是假象，但 traceability/residual issues 两个锚点已存在跨节点片段，应视为部分覆盖而非完全缺失。</div>
-<div class="recommendation"><b>建议：</b>新增 cap-check-re-review（或扩展 pre-submission-self-check 为 verification-review 变体）：输入 revised manuscript + revision roadmap + commitment ledger + response-to-reviewers，输出 RR Traceability Matrix、Revision Response Checklist、Residual Issues 与 Verification Review Decision。</div>
+<div class="recommendation"><b>建议：</b>新增 check-re-review（或扩展 pre-submission-self-check 为 verification-review 变体）：输入 revised manuscript + revision roadmap + commitment ledger + response-to-reviewers，输出 RR Traceability Matrix、Revision Response Checklist、Residual Issues 与 Verification Review Decision。</div>
 </section>
 <section class="gap-card">
 <div class="gap-head">
@@ -166,7 +166,7 @@ When re-invoked on a revised draft, verify that each previously reported item is
 [PASSPORT-RESET: hash=&lt;hash&gt;, stage=&lt;completed&gt;, next=&lt;next&gt;] ...
 resume_from_passport=&lt;hash&gt; [stage=...] [mode=...] ...
 A boundary entry ... is considered awaiting resume iff no resume entry exists later with consumes_hash == H.</pre></div></div>
-<div class="column converted"><h4>转换侧实际情况</h4><ul><li>cap-check-passport-verifier 只做 passport schema/字段/来源绑定校验，不实现 reset_boundary、consumes_hash、awaiting_resume。</li><li>cap-check-terminal-policy-gate 的 freshness 是 verifier report 复用新鲜度，与 run/passport resume 新鲜度不是同一语义。</li><li>graph profile academic-pipeline 只有 research → gate → write → gate → review，没有 finalize/final integrity/passport resume 入口。</li></ul><div class="snippet"><div class="snippet-label">转换侧证据</div><pre>terminal-policy-gate/SKILL.md:
+<div class="column converted"><h4>转换侧实际情况</h4><ul><li>check-passport-verifier 只做 passport schema/字段/来源绑定校验，不实现 reset_boundary、consumes_hash、awaiting_resume。</li><li>check-terminal-policy-gate 的 freshness 是 verifier report 复用新鲜度，与 run/passport resume 新鲜度不是同一语义。</li><li>graph profile academic-pipeline 只有 research → gate → write → gate → review，没有 finalize/final integrity/passport resume 入口。</li></ul><div class="snippet"><div class="snippet-label">转换侧证据</div><pre>terminal-policy-gate/SKILL.md:
 Report reuse REQUIRES the freshness guard ... STALE-REPORT -&gt; re-run the verifier ...</pre></div></div>
 </div>
 <div class="judgement"><b>锚点质量：</b>reset boundary 锚点正确；freshness 锚点歧义，应替换为 awaiting_resume / consumes_hash / reset_boundary<br><b>最终判断：</b>确认为真实缺口；freshness 锚点存在同名不同义风险，reset boundary 锚点则非常准确。</div>

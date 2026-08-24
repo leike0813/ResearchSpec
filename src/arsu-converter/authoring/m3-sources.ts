@@ -5,7 +5,7 @@ const CC = "CC BY-NC 4.0";
 export const M3_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m3/reference-integrity.md",
-    capability_id: "cap-check-reference-integrity-verification",
+    capability_id: "check-reference-integrity-verification",
     title: "Reference Integrity Verification",
     description: "Verifies citations, bibliography metadata and data provenance.",
     class: "verification",
@@ -20,7 +20,7 @@ export const M3_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m3/review-panel-config.md",
-    capability_id: "cap-design-review-panel-config",
+    capability_id: "design-review-panel-config",
     title: "Review Panel Configuration",
     description: "Analyzes the manuscript field and emits five reviewer cards.",
     class: "design",
@@ -35,7 +35,7 @@ export const M3_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m3/editorial-judgment.md",
-    capability_id: "cap-judgment-editorial-judgment",
+    capability_id: "judgment-editorial-judgment",
     title: "Editorial Judgment",
     description: "Edits and judges the manuscript as a journal editor.",
     class: "judgment",
@@ -50,7 +50,7 @@ export const M3_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m3/specialist-review.md",
-    capability_id: "cap-judgment-specialist-review",
+    capability_id: "judgment-specialist-review",
     title: "Specialist Review",
     description: "Reviews methodology, domain depth and interdisciplinary perspective.",
     class: "judgment",
@@ -65,7 +65,7 @@ export const M3_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m3/devils-advocate.md",
-    capability_id: "cap-judgment-devils-advocate-stress-test",
+    capability_id: "judgment-devils-advocate-stress-test",
     title: "Devil's Advocate Stress Test",
     description: "Attacks the strongest claims without scoring.",
     class: "judgment",
@@ -83,7 +83,7 @@ export const M3_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m3/review-synthesis.md",
-    capability_id: "cap-judgment-review-synthesis",
+    capability_id: "judgment-review-synthesis",
     title: "Review Synthesis",
     description: "Synthesizes panel reports into one editorial decision and revision roadmap.",
     class: "judgment",
@@ -98,7 +98,7 @@ export const M3_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
   },
   {
     procedure_path: "src/arsu-converter/authoring/procedures/m3/pre-submission-self-check.md",
-    capability_id: "cap-check-pre-submission-self-check",
+    capability_id: "check-pre-submission-self-check",
     title: "Pre-submission Self Check",
     description: "Lightweight author self-check before submission.",
     class: "verification",

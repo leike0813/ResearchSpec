@@ -9,7 +9,7 @@ import {
 function manifest(overrides: Partial<CapabilityManifest> = {}): CapabilityManifest {
   return {
     schema_version: "1",
-    capability_id: "cap-design-research-question-formulation",
+    capability_id: "design-research-question-formulation",
     title: "Research Question Formulation",
     description: "Turns a project intent into a FINER-scored research question brief.",
     class: "design",
@@ -29,7 +29,7 @@ function manifest(overrides: Partial<CapabilityManifest> = {}): CapabilityManife
 }
 
 void test("capability manifest schema accepts a minimal producer package", () => {
-  assert.equal(parseCapabilityManifest(manifest()).capability_id, "cap-design-research-question-formulation");
+  assert.equal(parseCapabilityManifest(manifest()).capability_id, "design-research-question-formulation");
 });
 
 void test("producer capability without output roles is rejected", () => {

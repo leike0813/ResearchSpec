@@ -36,7 +36,7 @@ void test("first ARSU anchor records contain full ingestion, conversion and revi
   assert.match(semantic, /declared-fit/);
   assert.match(ingestion, /CAP-M1-01/);
   assert.match(ingestion, /KP-M5-33/);
-  assert.match(conversion, /cap-analysis-evidence-synthesis/);
+  assert.match(conversion, /analysis-evidence-synthesis/);
   assert.match(conversion, /academic-paper-reviewer\.ts/);
   assert.match(review, /deep-research:full/);
   assert.match(review, /academic-pipeline:end-to-end/);

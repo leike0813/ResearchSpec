@@ -18,17 +18,17 @@
 
 | capability_id | section coverage | rule coverage | skill lines | knowledge refs | output format | flow headings |
 |---|---|---|---|---|---|---|
-| `cap-check-paper-humanization-review` | 0.800 | 1.000 | 122 | 3 | yes | none |
-| `cap-check-paper-humanization-verification` | 1.000 | 1.000 | 117 | 3 | yes | none |
-| `cap-generation-humanization-reference` | 0.980 | 0.667 | 196 | 1 | yes | none |
-| `cap-transform-paper-humanization-revision` | 1.000 | 1.000 | 86 | 2 | yes | none |
+| `check-paper-humanization-review` | 0.800 | 1.000 | 122 | 3 | yes | none |
+| `check-paper-humanization-verification` | 1.000 | 1.000 | 117 | 3 | yes | none |
+| `generation-humanization-reference` | 0.980 | 0.667 | 196 | 1 | yes | none |
+| `transform-paper-humanization-revision` | 1.000 | 1.000 | 86 | 2 | yes | none |
 
 ## Artifact Hashes
 
 | artifact | path | sha256 |
 |---|---|---|
-| parity report | `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/docs/capability-parity-report.json` | `249a66753e8d791094d1641217acd1983044cf9a829a313079b1cb250488a663` |
-| parity package slice | `audits/own-vendors/paper-humanizer/v2.9.1-1a31f2d/artifacts/parity-packages.json` | `2035782b5147e1cdf06c073878712b27bd37048e7a57d6c6b6a06b9119e6c2f1` |
+| parity report | `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/docs/capability-parity-report.json` | `5ac448022152efee89a650083e036a71d84f9d7f14f227b640bd1cfba6995399` |
+| parity package slice | `audits/own-vendors/paper-humanizer/v2.9.1-1a31f2d/artifacts/parity-packages.json` | `504f9fc9e43c94c68133df6b1db7f31d293f469f0db551983059dc1055e2c836` |
 
 ## Human Confirmation
 

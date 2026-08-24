@@ -10,11 +10,11 @@
 
 | 上游语义 | 转换后承载 | 判定 | 证据 |
 |---|---|---|---|
-| Stage 1 入口解析 / 语言确认 / workspace 初始化 | `cap-design-review-response-intake` | preserved | RM-CAP-01 -> intake procedure |
-| Stage 2 原稿结构、claims、高风险修改区 | `cap-analysis-review-response-manuscript-analysis` | preserved | RM-CAP-02 -> analysis procedure |
-| Stage 3 raw threads / atomic comments / coverage 阈值 | `cap-transform-review-response-comment-atomization` + comment-coverage Gate | adapted | RM-CAP-03 -> atomization procedure；graph Gate 承接用户确认 |
-| Stage 4 workboard planning / confirmation | `cap-design-review-response-workboard-planning` + strategy Gate | adapted | RM-CAP-04 -> workboard procedure；graph Gate 承接用户确认 |
-| Stage 5 逐条策略与执行 + Stage 6 终审导出 | `cap-generation-review-response-round` | adapted | 两个阶段合并为一个 repeatable round capability，由 graph revision template 配对 |
+| Stage 1 入口解析 / 语言确认 / workspace 初始化 | `design-review-response-intake` | preserved | RM-CAP-01 -> intake procedure |
+| Stage 2 原稿结构、claims、高风险修改区 | `analysis-review-response-manuscript-analysis` | preserved | RM-CAP-02 -> analysis procedure |
+| Stage 3 raw threads / atomic comments / coverage 阈值 | `transform-review-response-comment-atomization` + comment-coverage Gate | adapted | RM-CAP-03 -> atomization procedure；graph Gate 承接用户确认 |
+| Stage 4 workboard planning / confirmation | `design-review-response-workboard-planning` + strategy Gate | adapted | RM-CAP-04 -> workboard procedure；graph Gate 承接用户确认 |
+| Stage 5 逐条策略与执行 + Stage 6 终审导出 | `generation-review-response-round` | adapted | 两个阶段合并为一个 repeatable round capability，由 graph revision template 配对 |
 | `gate_and_render_workspace.py` 状态机 | package-local SQLite 校验/渲染工具 | adapted | RM-SCRIPT-03/04/05 与模板资产打包进 capability；不再选择下一 stage |
 | continue/complete 循环 | `review-response-outcome` Decision | preserved | graph revision_round_template 用 `round`/`outcome` 配对 |
 

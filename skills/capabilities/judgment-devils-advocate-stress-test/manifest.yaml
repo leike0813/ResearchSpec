@@ -1,0 +1,46 @@
+schema_version: "1"
+capability_id: judgment-devils-advocate-stress-test
+title: Devil's Advocate Stress Test
+description: Attacks the strongest claims without scoring.
+maturity: operational
+class: judgment
+node_kind: checker
+execution_type: llm
+params: {}
+inputs:
+  - role: manuscript_draft
+    schema_ref: manuscript-draft.v1
+    required: true
+    source_policy: node_output
+  - role: review_panel_config
+    schema_ref: review-panel-config.v1
+    required: false
+    source_policy: handoff
+outputs:
+  - role: stress_test_report
+    schema_ref: stress-test.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - manuscript_draft
+      - review_panel_config
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+knowledge_refs:
+  - knowledge_id: logical-fallacies
+    path: knowledge/logical-fallacies.md
+    content_hash: 5282c4e968f35aa67b58905d7629d147bc9b432aec1773cf494b2ca79af72bc9
+    license: CC BY-NC 4.0
+gate_policy: required
+provenance:
+  origin: ars-derived
+  extraction_artifact_ids:
+    - CAP-M3-05
+    - KP-M3-08
+  upstream_sources:
+    - path: docs/ars_extraction/m3-integrity-review/capabilities/05_devils_advocate.reviewer-variant.md
+      sha256: 1faf3a87101d16cc14e0c2d2e6f5962f670cbcbef04a381c947998497dd166cc
+license: CC BY-NC 4.0

@@ -25,11 +25,11 @@ const root = process.cwd();
 void test("review-response capability packages are authored and registered", async () => {
   const registry = await loadCapabilityRegistry();
   for (const capabilityId of [
-    "cap-design-review-response-intake",
-    "cap-analysis-review-response-manuscript-analysis",
-    "cap-transform-review-response-comment-atomization",
-    "cap-design-review-response-workboard-planning",
-    "cap-generation-review-response-round",
+    "design-review-response-intake",
+    "analysis-review-response-manuscript-analysis",
+    "transform-review-response-comment-atomization",
+    "design-review-response-workboard-planning",
+    "generation-review-response-round",
   ]) {
     const registered = registry.capabilities.get(capabilityId);
     assert.ok(registered, capabilityId);

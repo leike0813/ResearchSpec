@@ -32,7 +32,7 @@ const REVISION_PROFILE = {
     {
       node_id: "revision",
       kind: "capability",
-      capability_id: "cap-generation-manuscript-drafting",
+      capability_id: "generation-manuscript-drafting",
       input_bindings: [],
       expected_outputs: [{ role: "revised_manuscript", required: true }],
       prerequisites: [],
@@ -55,7 +55,7 @@ const REVISION_PROFILE = {
     {
       node_id: "report",
       kind: "capability",
-      capability_id: "cap-generation-report-compilation",
+      capability_id: "generation-report-compilation",
       input_bindings: [],
       expected_outputs: [{ role: "research_report", required: true }],
       prerequisites: ["review"],
@@ -177,7 +177,7 @@ void test("mid-entry run exposes only the confirmed entry node", async () => {
         {
           node_id: "research",
           kind: "capability",
-          capability_id: "cap-design-research-question-formulation",
+          capability_id: "design-research-question-formulation",
           input_bindings: [],
           expected_outputs: [{ role: "rq_brief", required: true }],
           prerequisites: [],
@@ -189,7 +189,7 @@ void test("mid-entry run exposes only the confirmed entry node", async () => {
         {
           node_id: "report",
           kind: "capability",
-          capability_id: "cap-generation-report-compilation",
+          capability_id: "generation-report-compilation",
           input_bindings: [],
           expected_outputs: [{ role: "research_report", required: true }],
           prerequisites: ["research"],
@@ -256,7 +256,7 @@ void test("subgraph bindings validate parent roles against child profile", () =>
     nodes: [{
       node_id: "work",
       kind: "capability",
-      capability_id: "cap-design-research-question-formulation",
+      capability_id: "design-research-question-formulation",
       input_bindings: [{ role: "intent", source: "stable_spec" }],
       expected_outputs: [{ role: "result", required: true }],
       prerequisites: [],

@@ -12,7 +12,7 @@ export const MINIMAL_GRAPH_PROFILE = {
     {
       node_id: "rq",
       kind: "capability",
-      capability_id: "cap-design-research-question-formulation",
+      capability_id: "design-research-question-formulation",
       input_bindings: [{ role: "project_intent", source: "stable_spec" }],
       expected_outputs: [{ role: "rq_brief", required: true }],
       prerequisites: [],
@@ -24,7 +24,7 @@ export const MINIMAL_GRAPH_PROFILE = {
     {
       node_id: "report",
       kind: "capability",
-      capability_id: "cap-generation-report-compilation",
+      capability_id: "generation-report-compilation",
       input_bindings: [{ role: "rq_brief", source: "node_output", from_node_id: "rq" }],
       expected_outputs: [{ role: "research_report", required: true }],
       prerequisites: ["rq"],

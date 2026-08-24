@@ -12,7 +12,7 @@ export const REVIEW_RESPONSE_GRAPH_PROFILE = {
     {
       node_id: "intake",
       kind: "capability",
-      capability_id: "cap-design-review-response-intake",
+      capability_id: "design-review-response-intake",
       input_bindings: [
         { role: "manuscript_source", source: "handoff" },
         { role: "review_comments_source", source: "handoff" },
@@ -32,7 +32,7 @@ export const REVIEW_RESPONSE_GRAPH_PROFILE = {
     {
       node_id: "manuscript-analysis",
       kind: "capability",
-      capability_id: "cap-analysis-review-response-manuscript-analysis",
+      capability_id: "analysis-review-response-manuscript-analysis",
       input_bindings: [{ role: "review_response_workspace", source: "node_output", from_node_id: "intake" }],
       expected_outputs: [{ role: "manuscript_structure_summary", required: true }],
       prerequisites: ["intake"],
@@ -44,7 +44,7 @@ export const REVIEW_RESPONSE_GRAPH_PROFILE = {
     {
       node_id: "comment-atomization",
       kind: "capability",
-      capability_id: "cap-transform-review-response-comment-atomization",
+      capability_id: "transform-review-response-comment-atomization",
       input_bindings: [{ role: "review_response_workspace", source: "node_output", from_node_id: "intake" }],
       expected_outputs: [
         { role: "atomic_comment_list", required: true },
@@ -70,7 +70,7 @@ export const REVIEW_RESPONSE_GRAPH_PROFILE = {
     {
       node_id: "workboard",
       kind: "capability",
-      capability_id: "cap-design-review-response-workboard-planning",
+      capability_id: "design-review-response-workboard-planning",
       input_bindings: [{ role: "review_response_workspace", source: "node_output", from_node_id: "intake" }],
       expected_outputs: [{ role: "review_response_workboard", required: true }],
       prerequisites: ["comment-coverage-gate"],
@@ -93,7 +93,7 @@ export const REVIEW_RESPONSE_GRAPH_PROFILE = {
     {
       node_id: "round",
       kind: "capability",
-      capability_id: "cap-generation-review-response-round",
+      capability_id: "generation-review-response-round",
       input_bindings: [{ role: "review_response_workspace", source: "node_output", from_node_id: "intake" }],
       expected_outputs: [
         { role: "working_manuscript", required: true },

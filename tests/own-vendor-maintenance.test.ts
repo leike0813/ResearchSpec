@@ -38,7 +38,7 @@ void test("own-vendor anchors contain generated records and completed semantic r
     const semantic = await readFile(path.join(dir, "05-semantic-review.md"), "utf8");
     assert.match(analysis, /Own Vendor Anchor Analysis/);
     assert.match(ingestion, vendor === "paper-humanizer" ? /PH-CAP-01/ : /RM-CAP-01/);
-    assert.match(conversion, vendor === "paper-humanizer" ? /cap-check-paper-humanization-review/ : /cap-design-review-response-intake/);
+    assert.match(conversion, vendor === "paper-humanizer" ? /check-paper-humanization-review/ : /design-review-response-intake/);
     assert.match(review, /Parity Summary/);
     assert.doesNotMatch(semantic, /\[NOT-COMPLETED\]/);
     assert.match(semantic, /## 结论/);

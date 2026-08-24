@@ -40,10 +40,10 @@ void test("paper-humanizer extraction index verifies against the pinned vendor",
 void test("paper-humanizer capability packages are authored and registered", async () => {
   const registry = await loadCapabilityRegistry();
   for (const capabilityId of [
-    "cap-generation-humanization-reference",
-    "cap-check-paper-humanization-review",
-    "cap-transform-paper-humanization-revision",
-    "cap-check-paper-humanization-verification",
+    "generation-humanization-reference",
+    "check-paper-humanization-review",
+    "transform-paper-humanization-revision",
+    "check-paper-humanization-verification",
   ]) {
     const registered = registry.capabilities.get(capabilityId);
     assert.ok(registered, capabilityId);
@@ -96,7 +96,7 @@ void test("package scripts expose the capability authoring entrypoint", async ()
 });
 
 void test("ARSU prose work references the capability-graph Reference-mode entrypoint", async () => {
-  assert.equal(PAPER_HUMANIZER_REFERENCE_MODE_SKILL_PATH, "cap-generation-humanization-reference/SKILL.md");
+  assert.equal(PAPER_HUMANIZER_REFERENCE_MODE_SKILL_PATH, "generation-humanization-reference/SKILL.md");
   const skill = await readFile(path.join(root, "skills/arsu/academic-paper/SKILL.md"), "utf8");
-  assert.match(skill, /cap-generation-humanization-reference\/SKILL\.md/);
+  assert.match(skill, /generation-humanization-reference\/SKILL\.md/);
 });

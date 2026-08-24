@@ -1,8 +1,8 @@
 # Own Vendor Anchor Analysis — paper-humanizer @ v2.9.1-1a31f2d
 
-- generated: 2026-08-16T06:24:14.150Z
+- generated: 2026-08-24T05:38:04.712Z
 - upstream: v2.9.1 @ 1a31f2d0ff6dab94c799f7ae1a3a469aea3e5394
-- maintenance skill SHA-256: `8a644c683d2cac0eab5f5633eadeb3e85d397fccdba5a31ef6a1c8da3d11dc7d`
+- maintenance skill SHA-256: `99505d3be486e54142843c94c6a5fb7c3588d820b9b80a17ef6c2dd10ac989d5`
 
 ## Upstream Inventory
 
@@ -27,10 +27,10 @@
 
 | capability_id | class | node_kind | execution | gate | maturity |
 |---|---|---|---|---|---|
-| `cap-check-paper-humanization-review` | verification | checker | mixed | none | operational |
-| `cap-check-paper-humanization-verification` | verification | checker | mixed | none | operational |
-| `cap-generation-humanization-reference` | generation | observer | llm | none | operational |
-| `cap-transform-paper-humanization-revision` | transformation | producer | mixed | required | operational |
+| `check-paper-humanization-review` | verification | checker | mixed | none | operational |
+| `check-paper-humanization-verification` | verification | checker | mixed | none | operational |
+| `generation-humanization-reference` | generation | observer | llm | none | operational |
+| `transform-paper-humanization-revision` | transformation | producer | mixed | required | operational |
 
 ## Decisions
 

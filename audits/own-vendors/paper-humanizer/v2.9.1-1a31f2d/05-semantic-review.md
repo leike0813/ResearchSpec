@@ -10,11 +10,11 @@
 
 | 上游语义 | 转换后承载 | 判定 | 证据 |
 |---|---|---|---|
-| 39-pattern taxonomy 与 invariants | `cap-generation-humanization-reference` knowledge | preserved | PH-CAP-03 -> `knowledge/paper-humanizer-taxonomy.md` |
-| Read-only review + coverage ledger + revision plan | `cap-check-paper-humanization-review` | preserved | PH-CAP-01 -> review procedure |
+| 39-pattern taxonomy 与 invariants | `generation-humanization-reference` knowledge | preserved | PH-CAP-03 -> `knowledge/paper-humanizer-taxonomy.md` |
+| Read-only review + coverage ledger + revision plan | `check-paper-humanization-review` | preserved | PH-CAP-01 -> review procedure |
 | Plan approval before editing | `paper-humanizer-plan` Gate + plan-decision | adapted | graph profile 节点 `plan-gate` / `plan-decision` |
-| Prose-only document artifact edits + analyze/validate/render | `cap-transform-paper-humanization-revision` + `scripts/document_pipeline.py` | preserved | PH-CAP-04 + PH-SCRIPT-01 |
-| Candidate verification + user acceptance | `cap-check-paper-humanization-verification` + `paper-humanizer-acceptance` Decision | adapted | PH-CAP-05 -> verification procedure；graph `outcome` Decision 替代 Python acceptance gate |
+| Prose-only document artifact edits + analyze/validate/render | `transform-paper-humanization-revision` + `scripts/document_pipeline.py` | preserved | PH-CAP-04 + PH-SCRIPT-01 |
+| Candidate verification + user acceptance | `check-paper-humanization-verification` + `paper-humanizer-acceptance` Decision | adapted | PH-CAP-05 -> verification procedure；graph `outcome` Decision 替代 Python acceptance gate |
 | `full_workflow.py` state machine | graph revision template | adapted | 上游状态机保留为 extraction provenance，不再作为运行时流程权威 |
 
 ## 流程权威检查

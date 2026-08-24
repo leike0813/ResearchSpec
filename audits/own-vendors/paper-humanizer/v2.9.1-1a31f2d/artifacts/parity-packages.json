@@ -12,7 +12,7 @@
   },
   "packages": [
     {
-      "capability_id": "cap-check-paper-humanization-review",
+      "capability_id": "check-paper-humanization-review",
       "maturity": "operational",
       "skill_lines": 122,
       "knowledge_refs": 3,
@@ -36,7 +36,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap-check-paper-humanization-verification",
+      "capability_id": "check-paper-humanization-verification",
       "maturity": "operational",
       "skill_lines": 117,
       "knowledge_refs": 3,
@@ -56,7 +56,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap-generation-humanization-reference",
+      "capability_id": "generation-humanization-reference",
       "maturity": "operational",
       "skill_lines": 196,
       "knowledge_refs": 1,
@@ -81,7 +81,7 @@
       "flow_sections_retained": []
     },
     {
-      "capability_id": "cap-transform-paper-humanization-revision",
+      "capability_id": "transform-paper-humanization-revision",
       "maturity": "operational",
       "skill_lines": 86,
       "knowledge_refs": 2,

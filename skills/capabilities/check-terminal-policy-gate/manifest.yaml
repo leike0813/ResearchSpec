@@ -1,0 +1,41 @@
+schema_version: "1"
+capability_id: check-terminal-policy-gate
+title: Terminal Policy Gate
+description: Applies the finalizer policy before submission package creation.
+maturity: operational
+class: verification
+node_kind: checker
+execution_type: llm
+params: {}
+inputs:
+  - role: formatted_manuscript
+    schema_ref: formatted-manuscript.v1
+    required: true
+    source_policy: node_output
+outputs:
+  - role: terminal_policy_report
+    schema_ref: terminal-policy.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - formatted_manuscript
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+knowledge_refs:
+  - knowledge_id: terminal-firm-rules
+    path: knowledge/terminal-firm-rules.md
+    content_hash: ef29b0ab4e4d7a568c060f20b4b010cd9e44aca5f6ac6ed6ee949d822c3f0d74
+    license: CC BY-NC 4.0
+gate_policy: required
+provenance:
+  origin: ars-derived
+  extraction_artifact_ids:
+    - CAP-M4-04
+    - KP-M4-02
+  upstream_sources:
+    - path: docs/ars_extraction/m4-revision-finalize/capabilities/04_terminal_policy_gate.submission-gate.md
+      sha256: b6505eb11ed86164c982d6f4db2b7b4d9504b404642341b841c44fc115a9d160
+license: CC BY-NC 4.0
