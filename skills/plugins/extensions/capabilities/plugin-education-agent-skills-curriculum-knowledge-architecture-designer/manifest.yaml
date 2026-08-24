@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-curriculum-knowledge-architecture-designer/SKILL.md
       sha256: 31aa0a5690792c8c84d6fb41c0f492018f6fc3b8a9146b36f527f6a6b64b018f
-license: Apache-2.0
+license: CC-BY-SA-4.0

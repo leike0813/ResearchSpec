@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-aspirational-systems-iceberg/SKILL.md
       sha256: dcca6927cc2302f209c5725b0558594e2b7b4fcec820fa2cffc2ae51071495d5
-license: Apache-2.0
+license: CC-BY-SA-4.0

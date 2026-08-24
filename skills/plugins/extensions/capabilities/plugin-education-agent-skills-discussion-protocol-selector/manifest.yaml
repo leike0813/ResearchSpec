@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-discussion-protocol-selector/SKILL.md
       sha256: acec4c588249a7612fb319818c5856639e3b22456dcffb3152e3f91a3fdd814a
-license: Apache-2.0
+license: CC-BY-SA-4.0

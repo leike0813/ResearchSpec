@@ -2,6 +2,8 @@ import { constants } from "node:fs";
 import { access, lstat } from "node:fs/promises";
 import path from "node:path";
 
+import { isSafeProjectRelativePath } from "../contracts/project-path.js";
+
 export type BoundaryPathUse = "reference" | "consume-input";
 
 export interface BoundaryPath {
@@ -23,6 +25,14 @@ export async function resolveBoundaryPath(
 ): Promise<BoundaryPath> {
   const trimmed = requestedPath.trim();
   if (!trimmed) throw new BoundaryPathError("boundary_path_empty", "Boundary path must not be empty.");
+  if (!isSafeProjectRelativePath(trimmed)) {
+    if (trimmed.includes("\\")) throw new BoundaryPathError("boundary_path_separator", "Boundary path must use POSIX separators.");
+    if (trimmed === "." || trimmed.split("/").includes("..")) throw new BoundaryPathError("boundary_path_escape", "Boundary path must remain inside the project.");
+    if (trimmed === "researchspec" || trimmed.startsWith("researchspec/")) {
+      throw new BoundaryPathError("boundary_path_managed", "Boundary deliverables must remain outside researchspec/.");
+    }
+    if (!path.isAbsolute(trimmed)) throw new BoundaryPathError("boundary_path_invalid", "Boundary path is not a safe project-relative POSIX path.");
+  }
   if (path.isAbsolute(trimmed)) throw new BoundaryPathError("boundary_path_absolute", "Boundary path must be project-relative.");
 
   const root = path.resolve(projectRoot);

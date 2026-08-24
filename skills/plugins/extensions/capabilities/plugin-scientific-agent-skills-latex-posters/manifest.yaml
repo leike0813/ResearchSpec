@@ -48,43 +48,43 @@ knowledge_refs:
   - knowledge_id: sas-assets-baposter-template.tex
     path: assets/baposter_template.tex
     content_hash: 2caa29d36e3269e84b1fb7a74a39814c7b7c8747573c46023fe2243cfe4ae45e
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-assets-beamerposter-template.tex
     path: assets/beamerposter_template.tex
     content_hash: dc4bf4f9c344238e523492345c5108076b69f582a30b9534123bd1f23893c382
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-assets-poster-quality-checklist.md
     path: assets/poster_quality_checklist.md
     content_hash: 1f2d89a68410b197f8d656cc29c3b798a7de83328ebf4c9dc042df4d71e67275
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-assets-tikzposter-template.tex
     path: assets/tikzposter_template.tex
     content_hash: 1f58c0ebe3281ed85fbc87f03632312028205a1bd585e35a7f4058515c58dda6
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-readme.md
     path: references/README.md
     content_hash: 4fa87e237adfb8a5d0eb18bc9f0e9469f4397325f2af49b9491b5568859e27bc
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-latex-poster-packages.md
     path: references/latex_poster_packages.md
     content_hash: 75a1be24675df874f17cbea891bcfd3fc16f17e29275dd3c62d79eb9a1e1f87b
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-poster-content-guide.md
     path: references/poster_content_guide.md
     content_hash: 2af1cbfa45878041de15459ccbac49f85f810d045ed5231a011bee5f54641b26
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-poster-design-principles.md
     path: references/poster_design_principles.md
     content_hash: 6c3618133764687a19f30f563805bbf13996f818ba267cfbd5bbc908b9f7102b
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-poster-layout-design.md
     path: references/poster_layout_design.md
     content_hash: f674c0fe352321b9bc0eb2be09d95379714a6b77624689ba100da4898c4f20df
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-scripts-review-poster.sh
     path: scripts/review_poster.sh
     content_hash: db1fcfcda80c0ae1be5ceb075ec9e7f00df6908aa1bc395c029f8dfcb97f43a9
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -111,4 +111,4 @@ provenance:
       sha256: f674c0fe352321b9bc0eb2be09d95379714a6b77624689ba100da4898c4f20df
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-latex-posters/scripts/review_poster.sh
       sha256: db1fcfcda80c0ae1be5ceb075ec9e7f00df6908aa1bc395c029f8dfcb97f43a9
-license: Apache-2.0
+license: MIT

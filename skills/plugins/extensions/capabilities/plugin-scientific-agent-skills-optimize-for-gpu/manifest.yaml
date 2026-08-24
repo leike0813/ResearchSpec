@@ -54,51 +54,51 @@ knowledge_refs:
   - knowledge_id: sas-references-cucim.md
     path: references/cucim.md
     content_hash: e48a46e85a4f52f250aa88034abf681b564535e4605d66885bcc3c323947a270
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-cudf.md
     path: references/cudf.md
     content_hash: a9d7091a07c995b54a9461c554f4755f41a75614b60d7d0fbae7815d5d3424b9
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-cugraph.md
     path: references/cugraph.md
     content_hash: d0db8b3ca776d7c13ec8fba42c32a2b2926180b6a5f049ee8a9ae63c41083d17
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-cuml.md
     path: references/cuml.md
     content_hash: d30e601364b20ab2ec006790e0ddccfef18242a531d45c18f42be05e55f5787c
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-cupy.md
     path: references/cupy.md
     content_hash: d3bf80d9ce29e331dee20b71b01b9f5a206c86bd56830c83c991b4c341cc9e94
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-cuspatial.md
     path: references/cuspatial.md
     content_hash: 689983c53215ba8c91105f3c5f5aa1fce35afc9ec337f5298633d0a33422c9e6
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-cuvs.md
     path: references/cuvs.md
     content_hash: 9c32b6a8c80a84da5270242fa32e61990de56807da723d91f15f61993e8d446f
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-cuxfilter.md
     path: references/cuxfilter.md
     content_hash: ecfedef1d944010081c7303d807c257b7d99bfd8b2c58b1b415e03662c06466b
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-kvikio.md
     path: references/kvikio.md
     content_hash: a02084a5fdfe1bc7ed3bdb0fe2646ef7266145a951b76f7b3df6c6d7f2036485
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-numba.md
     path: references/numba.md
     content_hash: 7a368623d584619842a66808e32a31ecbfeff4d6258f97235f87eb6c0e219af2
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-raft.md
     path: references/raft.md
     content_hash: 40f36f7bb9165b654f6f45ea78899a1698d910541d739ef30b36d7d38b32ad40
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-warp.md
     path: references/warp.md
     content_hash: a32a920a9694b2c94edbd7cde4d378467a290060c07ee3ca4b66bf7e32b68a2e
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -129,4 +129,4 @@ provenance:
       sha256: 40f36f7bb9165b654f6f45ea78899a1698d910541d739ef30b36d7d38b32ad40
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-optimize-for-gpu/references/warp.md
       sha256: a32a920a9694b2c94edbd7cde4d378467a290060c07ee3ca4b66bf7e32b68a2e
-license: Apache-2.0
+license: MIT

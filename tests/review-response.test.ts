@@ -15,10 +15,19 @@ import {
   recordGraphDecision,
   recordGraphGate,
   startGraphRun,
-  submitGraphNode,
+  submitGraphNode as submitGraphNodeRuntime,
+  type SubmitGraphNodeInput,
 } from "../src/core/runtime/graph-run.js";
+
 import { loadGraphWorkspaceIndex } from "../src/core/runtime/graph-workspace-index.js";
-import { writeBaseWorkspace } from "./helpers/graph-workspace.js";
+import { graphTestCapabilityRegistry, writeBaseWorkspace } from "./helpers/graph-workspace.js";
+
+async function submitGraphNode(input: Omit<SubmitGraphNodeInput, "capabilityRegistry">) {
+  return submitGraphNodeRuntime({
+    ...input,
+    capabilityRegistry: await graphTestCapabilityRegistry(input.index, input.runId),
+  });
+}
 
 const root = process.cwd();
 
@@ -103,9 +112,9 @@ void test("review-response graph run continues and completes through round-scope
       index = await loadGraphWorkspaceIndex(workspace);
       await submitGraphNode({ index, runId, nodeId, round, outputs: roles.map((role) => ({ role, path: `${nodeId}-${role}.md` })), submittedAt: "2026-08-16T12:05:00+08:00" });
     }
-    async function gate(gateId: string) {
+    async function gate(gateId: string, round?: number) {
       index = await loadGraphWorkspaceIndex(workspace);
-      await recordGraphGate({ index, runId, gateId, verdict: "pass", confirmedBy: "researcher", confirmedAt: "2026-08-16T12:06:00+08:00", summary: "confirmed" });
+      await recordGraphGate({ index, runId, gateId, round, verdict: "pass", confirmedBy: "researcher", confirmedAt: "2026-08-16T12:06:00+08:00", summary: "confirmed" });
     }
     async function decide(round: number, choice: string) {
       index = await loadGraphWorkspaceIndex(workspace);
@@ -122,14 +131,17 @@ void test("review-response graph run continues and completes through round-scope
     assert.deepEqual((await frontier()).eligible_nodes.map((item) => `${item.node_id}@${String(item.round ?? 1)}`), ["round@1"]);
 
     await submit("round", 1, ["working_manuscript", "response_markdown", "response_latex", "round_summary"]);
-    await gate("review-response-evidence");
-    await gate("review-response-response-coverage");
-    await gate("review-response-final-assembly");
-    assert.deepEqual((await frontier()).pending_decisions, [`decision:${runId}/review-response-outcome`]);
+    await gate("review-response-evidence", 1);
+    await gate("review-response-response-coverage", 1);
+    await gate("review-response-final-assembly", 1);
+    assert.deepEqual((await frontier()).pending_decisions, [`decision:${runId}/review-response-outcome@1`]);
 
     await decide(1, "continue");
     assert.deepEqual((await frontier()).eligible_nodes.map((item) => `${item.node_id}@${String(item.round ?? 1)}`), ["round@2"]);
     await submit("round", 2, ["working_manuscript", "response_markdown", "response_latex", "round_summary"]);
+    await gate("review-response-evidence", 2);
+    await gate("review-response-response-coverage", 2);
+    await gate("review-response-final-assembly", 2);
     await decide(2, "complete");
 
     index = await loadGraphWorkspaceIndex(workspace);

@@ -49,27 +49,27 @@ knowledge_refs:
   - knowledge_id: sas-references-api-reference.md
     path: references/api_reference.md
     content_hash: f9f6561f4497d5e17457f1802b19fe9f8c72523069d7143fbae68afc98e3d886
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-choosing-a-parser.md
     path: references/choosing_a_parser.md
     content_hash: 58b198705dad134527ba824b7c02af8203d36c3bed334826cd5026137b982199
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-cli-reference.md
     path: references/cli_reference.md
     content_hash: b84dd0c47a8d3426603b316fae2924c9d79e9097285be45215f88b6a2a23a8f4
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-ocr-and-formats.md
     path: references/ocr_and_formats.md
     content_hash: 1031bdac3bc536aeaf8d45b4867104dad34f894d3440757ad38a75d41a58f61d
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-output-formats.md
     path: references/output_formats.md
     content_hash: 78011bc2c40cc8f24bbfd906ab12a3328cd597c100cebb1ed4f89bd48766479c
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-scripts-batch-parse-dir.py
     path: scripts/batch_parse_dir.py
     content_hash: 6d9162557da1a4d0005fb448989040a40c9246e469a62783c525aba591c6294c
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -88,4 +88,4 @@ provenance:
       sha256: 78011bc2c40cc8f24bbfd906ab12a3328cd597c100cebb1ed4f89bd48766479c
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-liteparse/scripts/batch_parse_dir.py
       sha256: 6d9162557da1a4d0005fb448989040a40c9246e469a62783c525aba591c6294c
-license: Apache-2.0
+license: MIT

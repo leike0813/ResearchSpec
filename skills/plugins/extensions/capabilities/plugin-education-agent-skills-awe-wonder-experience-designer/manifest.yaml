@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-awe-wonder-experience-designer/SKILL.md
       sha256: c906b4dfb911097e31ed17cdddb00be75bd42d4217c0f31154cc9224165e25f1
-license: Apache-2.0
+license: CC-BY-SA-4.0

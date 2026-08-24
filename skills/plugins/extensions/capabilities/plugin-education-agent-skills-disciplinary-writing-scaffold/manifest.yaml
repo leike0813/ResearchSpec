@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-disciplinary-writing-scaffold/SKILL.md
       sha256: b7ab13e8278c503d2d403bfe8ed1e34e9c736386c97a0466f006da5724eb9aa3
-license: Apache-2.0
+license: CC-BY-SA-4.0

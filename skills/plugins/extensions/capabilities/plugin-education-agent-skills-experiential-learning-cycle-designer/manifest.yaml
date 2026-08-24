@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-experiential-learning-cycle-designer/SKILL.md
       sha256: e53e08ebbcb4463e2d4a8ced4aa49733d150388c736682d015f9a0ef8057d6cb
-license: Apache-2.0
+license: CC-BY-SA-4.0

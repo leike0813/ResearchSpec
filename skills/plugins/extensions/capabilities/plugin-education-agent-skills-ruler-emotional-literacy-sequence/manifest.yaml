@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-ruler-emotional-literacy-sequence/SKILL.md
       sha256: 56d86bfb01366116f6d6dd0426940a0249c278284a4a9cbfbb8baefdda13e223
-license: Apache-2.0
+license: CC-BY-SA-4.0

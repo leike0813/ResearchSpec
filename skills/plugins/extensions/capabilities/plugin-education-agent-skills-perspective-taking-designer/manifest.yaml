@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-perspective-taking-designer/SKILL.md
       sha256: a6696e11162c620977278b30fcb243a6cef399177e04a26952d841d282c03811
-license: Apache-2.0
+license: CC-BY-SA-4.0

@@ -8,6 +8,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-aeon",
       "raw_skill_id": "scientific-agent-skills-aeon",
+      "license": "MIT",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -27,9 +28,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "9f10f6eccea4264abdf1d4578b507190812cae9f043bd378b216b0f38fef70f0",
+      "package_tree_sha256": "dd7e2021d4596670d11c2069c5b4253696637e31d52aedd34d18eb34659fe505",
       "profile_sha256": "ad7fc7838bbad822dfa343750222de1efd06920ace7d296f298aa1e56cd552e4",
-      "manifest_sha256": "c9395a2efd8bb1ae7ba475c97cdbc058aecc5d5b94a27998a8325be3bcba6dd1",
+      "manifest_sha256": "29b8621ed2ef11b98d1dc5b035ae364ed0e63067720692998d80ffdb38bee741",
       "files": 14,
       "tool_files": [
         {
@@ -103,6 +104,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-astropy",
       "raw_skill_id": "scientific-agent-skills-astropy",
+      "license": "MIT",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -122,9 +124,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "d19f0958f8670a7219c027bba1cdfc19fbb2ffd836112041b23172dcca2a3a9b",
+      "package_tree_sha256": "8d155fd83cb7abf6e349ef1d0d1aa6f281b38041d54566aaa39070395e21fd52",
       "profile_sha256": "de8cdadeda6f83558e71ed75352921c8b34d62f481ec4550589385b2782dc66e",
-      "manifest_sha256": "70d27aeea0da464004dcbf3af0a9d81046ad3a032ed29d8a8e3cd2acb323719f",
+      "manifest_sha256": "d6204ade70d75dc78fe1f7e6fcd0505e8a144c6a1c2131953fe9a3ae23e261b0",
       "files": 10,
       "tool_files": [
         {
@@ -174,6 +176,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-benchling-integration",
       "raw_skill_id": "scientific-agent-skills-benchling-integration",
+      "license": "MIT",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -193,9 +196,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "60859cce42be987ebfc40a82e3b4012c7c19abb9a6d1dc9cb9fd2cf38659daa2",
+      "package_tree_sha256": "bb8935711049e8f27a89cf2ee4bbb81f53a9523c3e3098dd0b9f64a7e6c95772",
       "profile_sha256": "f6fca0c475542e946d654e56f3b49f18f81eab57a4fd747d04f36d1ebf4c3724",
-      "manifest_sha256": "8da1d35d84313af836febaa1d3cd264409efd3168dd14bdbb497ba39cf5cdc8a",
+      "manifest_sha256": "54f97318b4187da7a501ab3a81a285bf64727e1cb9a7402b7392caa6bafdaea8",
       "files": 7,
       "tool_files": [
         {
@@ -227,6 +230,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-cirq",
       "raw_skill_id": "scientific-agent-skills-cirq",
+      "license": "MIT",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -246,9 +250,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "7cc3f1aef00e62c8830b38997845a2812611a3eaa3e37b534b1804ed2f9cb75c",
+      "package_tree_sha256": "3d720e71227a15f7e5241aace51f035b71573b279c3c5b3e09486a0eb5164027",
       "profile_sha256": "75619696bec6a10fc806d78f5c602bfec3b27541b06ef58a49b67439adee7ac6",
-      "manifest_sha256": "2fb70e45e6ff0f7acf9fa85f8ede77694b60f7d0d523b976c438eaf7d1f11fd8",
+      "manifest_sha256": "8eea5f441fcabff7b9ac0f663293e6c24ca85b2e136a57af3ee1f10ce70aee89",
       "files": 9,
       "tool_files": [
         {
@@ -292,6 +296,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-fluidsim",
       "raw_skill_id": "scientific-agent-skills-fluidsim",
+      "license": "MIT",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -311,9 +316,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "8e53494e19fbf1fd381ad5dce47019be7a8306c26df7102591592ef4dd4d1259",
+      "package_tree_sha256": "de3f7f33c7d7b4caee171c25e6e72bdb41400db984299dc97a1ec38ce8d9fd8f",
       "profile_sha256": "17c28bbf59f832e09d781da0a327176499cd93afb9cad4cb71c1cd3ec81a08f8",
-      "manifest_sha256": "5f175dea6fed7dad7c52c99f5728719626ab1389b27c0687944fb3a47140bf94",
+      "manifest_sha256": "e1208bda60177a87d9428d9af7e5f4dc0a8fa415b68a9c43ffbdf5a3ca65ddc0",
       "files": 9,
       "tool_files": [
         {
@@ -357,6 +362,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-generate-image",
       "raw_skill_id": "scientific-agent-skills-generate-image",
+      "license": "MIT",
       "execution_type": "mixed",
       "class": "analysis",
       "node_kind": "producer",
@@ -376,9 +382,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "83537447b80958fda92cb23f90a19b4e9686d587d196695ec986f2fdc8d82172",
+      "package_tree_sha256": "94b8e04380e38ea2dbd078f34f671264e83f745ae322ddd19b6ec80b4a817a88",
       "profile_sha256": "34818885084cfb22cc86319bdbb07454ad7eee78ac0320a1f4fecef1bc912c60",
-      "manifest_sha256": "1cc091098df7e7acca99aebb5b20285bf58c9782a402e851227f03bf28b98192",
+      "manifest_sha256": "9f32fad52659d2ddd94d7275c79f5ac4a91ba193d040378c3b9a2d4768e9b9e6",
       "files": 4,
       "tool_files": [
         {
@@ -392,6 +398,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-geomaster",
       "raw_skill_id": "scientific-agent-skills-geomaster",
+      "license": "MIT",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -411,9 +418,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "912667daaa1556d99317dbb214ca0e9c288b914c9deca56772aaa1224b5b6d20",
+      "package_tree_sha256": "f462259fa110b2e61b2a40cb9d0456139f7751cc8b3c20e4709fdfb575d7b58c",
       "profile_sha256": "dfaf987eafd72137c28c62fefca7f365b1be73a3181dec427de384b8c8f769a7",
-      "manifest_sha256": "dc3199793411076967eae484fba98dbec5bef4c7c9aed091a500afff50c627a7",
+      "manifest_sha256": "07b5f7253b32c5f39bda97b8a3f79791f0cf8fb5466d341209e4043049496538",
       "files": 18,
       "tool_files": [
         {
@@ -511,6 +518,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-geopandas",
       "raw_skill_id": "scientific-agent-skills-geopandas",
+      "license": "MIT",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -530,9 +538,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "972f6d1a5f26c5ab2c0ca064081fa983307275562d18fcbbb8923f09eb15cf01",
+      "package_tree_sha256": "cb36fea9abb17b0678dc014eb4298662c3f5a72ff4c291f025ef8fca8b5e2a74",
       "profile_sha256": "1582a7f68d0239f480858fe1289f111d83fa97804bf6474973a6dc294d2af2a4",
-      "manifest_sha256": "18c487cf39e23c989a04f8bf9d68141a2c0467b1b51b7013e48ee39469eb4768",
+      "manifest_sha256": "082b286bad7a674520dac5698f57f2a77c62a20308b2f978eb2c78b0368778e4",
       "files": 9,
       "tool_files": [
         {
@@ -576,6 +584,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-ginkgo-cloud-lab",
       "raw_skill_id": "scientific-agent-skills-ginkgo-cloud-lab",
+      "license": "MIT",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -595,9 +604,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "887d82abdbea61c7fd071e231adc29095c2a24edf56955fbb3fee995a9455d9c",
+      "package_tree_sha256": "4004322f15935d4c04a4823aee775cb8d8faa49eb7a11ae5403292d9032f7cd1",
       "profile_sha256": "c998e9e781860d915bc3e0a052e67bd396549855366eafac6d5dfcf019331c90",
-      "manifest_sha256": "2c11ebb751e1191fb40336db0017106fd13b1373005ccb778ab2dbfa124fa8ed",
+      "manifest_sha256": "ddd9364fce350276ed9aecb06f7e56f3382e6928e694108ff6aa2071a5fc2a66",
       "files": 20,
       "tool_files": [
         {
@@ -707,6 +716,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-infographics",
       "raw_skill_id": "scientific-agent-skills-infographics",
+      "license": "MIT",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -726,9 +736,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "66842109ded0aa0c5775d0e37e70a86c383cd4fe5526ad70ba22b225d66e0e36",
+      "package_tree_sha256": "2e9e6c4cb4c528bc6fea9e1518698cbe26811f5a34ae92efeb3496c951fb8ecc",
       "profile_sha256": "bc9f0ddfe578cc8497b5158901165cb722ae534a8a3d4c3bb692989aa930d33b",
-      "manifest_sha256": "9692f72e8430bdde178dc06a8a497cef9e309f89185c87752d0e4e6d452c2df2",
+      "manifest_sha256": "295b3b19a92a359f704d1dd041a47860a78936ba73979376a059820a0f3962cd",
       "files": 6,
       "tool_files": [
         {
@@ -754,6 +764,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-labarchive-integration",
       "raw_skill_id": "scientific-agent-skills-labarchive-integration",
+      "license": "MIT",
       "execution_type": "mixed",
       "class": "analysis",
       "node_kind": "producer",
@@ -773,9 +784,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "4a8538f9ac03729a74f3b54b94b040a41898b9c10c47a5b59257d613e94fbfbe",
+      "package_tree_sha256": "b45bdab897e80e63e1e0fab03d5c521187a27ea329d43c4c287e78ddc4099303",
       "profile_sha256": "7eb0da74b562733967766c3e9f5143248559899d8782ab398167a150a43ee8c5",
-      "manifest_sha256": "8a881f030c0ef7a5c420b08e40dd7ee4b4daad3d0a05add3e6a6c4d4053b8d66",
+      "manifest_sha256": "f534684bb37f5bc1f55f9c0d35aa0d4cf1551d86d15b1920b1c5dc88d568d2ef",
       "files": 9,
       "tool_files": [
         {
@@ -819,6 +830,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-latex-posters",
       "raw_skill_id": "scientific-agent-skills-latex-posters",
+      "license": "MIT",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -838,9 +850,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "0e29422d97566cf80c454c86b678e3c3fbb78efb3c95d5e3186adfd885a0f1b9",
+      "package_tree_sha256": "c3c9eaa4d92ec77d954862655457df7c235700613e6afa16f9b31530bbd3b9cf",
       "profile_sha256": "304dd3704ac953337d5ce1a20acc86beb79a6ac1b0b6900aacfe8fa04e8fdc8b",
-      "manifest_sha256": "a677f453cee04465555ffb891f12da9c0b4e177bc4376a2d6e7b8eaa36bcd302",
+      "manifest_sha256": "afa54de5adf91ae98a6779470b034ae65db11c54a52fda8d786350a4add10eb4",
       "files": 13,
       "tool_files": [
         {
@@ -908,6 +920,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-liteparse",
       "raw_skill_id": "scientific-agent-skills-liteparse",
+      "license": "MIT",
       "execution_type": "mixed",
       "class": "analysis",
       "node_kind": "producer",
@@ -927,9 +940,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "5b8833953ad167703e71f3a5444432e8aa469580a359f420782b2f5427a29057",
+      "package_tree_sha256": "f26cfa6b84bb449d3a18aca8a8326c0891e0dfc8aa60e7eeb0cab33a35cb6454",
       "profile_sha256": "2239de72c8cad062be4703d09d6f9ef0c1af3790ced53fcc0c9ebca125af9f32",
-      "manifest_sha256": "7e9b741ab665d24284c828d041bdb725f565524bbbf035808ddb6f951d1129c9",
+      "manifest_sha256": "732a23c27d603426c7d72e9623c276dda9798b62846583e8b4d187efb6930be4",
       "files": 9,
       "tool_files": [
         {
@@ -973,6 +986,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-markdown-mermaid-writing",
       "raw_skill_id": "scientific-agent-skills-markdown-mermaid-writing",
+      "license": "MIT",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -992,9 +1006,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "065a21dde4270f1b79d94095334bedd25849e32ce1f72f8adc1d484d0f4b50d9",
+      "package_tree_sha256": "c1a98abb77a85df266f102265564c3544c5556917e96c8fd423387ba9c9317c2",
       "profile_sha256": "5572012b92e45d994596c779312299ef2945f4d455acd96c48556a07839d963b",
-      "manifest_sha256": "80726bdc657389ee0d35a93b5d261f0166a71f8f4a75858e0c680a25315b8d2d",
+      "manifest_sha256": "b636341ce09b2abfb99a6d197be12fadbe4c4c86ec1575156d1a5255f8c41bb9",
       "files": 39,
       "tool_files": [
         {
@@ -1218,6 +1232,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-markitdown",
       "raw_skill_id": "scientific-agent-skills-markitdown",
+      "license": "MIT",
       "execution_type": "mixed",
       "class": "analysis",
       "node_kind": "producer",
@@ -1237,9 +1252,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "a6d76f9111b44f3a58815ef59e038f5e970142ea4d9c7112c5930f7295237596",
+      "package_tree_sha256": "f4df567537010c582f63f1f1b153f9f46df22a34afc9f88ef9f8dc488a32ede5",
       "profile_sha256": "a22414be86a094d0865e586bb227e2944e26168c99bdaaf8d1e876cd6834913a",
-      "manifest_sha256": "d9863642fd112b125395303a5ea9857980b48065ca48f566df8b66e325eeaa96",
+      "manifest_sha256": "756ef2345963079bfb811b089e36ce0adc1062d28af0ce78c1adfcc471c1e4cc",
       "files": 8,
       "tool_files": [
         {
@@ -1277,6 +1292,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-matlab",
       "raw_skill_id": "scientific-agent-skills-matlab",
+      "license": "MIT",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1296,9 +1312,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "8ac9b4f363e74a3280b425fd9422db4f40ce037ef7d01310f97174682ddf72e2",
+      "package_tree_sha256": "af6db7f653f9ed6a41cbfb379dda8b57bf413bd7b3a371a3a7f6afb9469b537e",
       "profile_sha256": "6a04bc6aae10be04145feb58a7a1fd4c384bd38afc367f4cca5fefc8fa9f6e1d",
-      "manifest_sha256": "35e89e1822baf92fbf6d4be6c57ad915899a2d5ff59290b58d296a2b312004bd",
+      "manifest_sha256": "474cb1a6e7e48ccefd803571859125859ea7c1d3c3b1a8e9022545ea09be1d0e",
       "files": 11,
       "tool_files": [
         {
@@ -1354,6 +1370,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-matplotlib",
       "raw_skill_id": "scientific-agent-skills-matplotlib",
+      "license": "MIT",
       "execution_type": "mixed",
       "class": "analysis",
       "node_kind": "producer",
@@ -1373,9 +1390,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "0373c49a1e4dd2ceffd30a27bccf90ffe45dca2a485202bec392fba0c673cb31",
+      "package_tree_sha256": "4b2fdcf728de6b3cdb236b781602f344557c04d3edbd20b6523cd12c45c62b50",
       "profile_sha256": "1c69886f19bbfae50119612abf6e9b1cebaca32be0879420b5d6e502f142b1b9",
-      "manifest_sha256": "ffb3f7077884e43f413d58c52e901c1f8f09209b7e055b46b347570869d4e4a0",
+      "manifest_sha256": "ae6e0baabe4d24ef4a2535bd5fddd658a8a99881dc1d85e9c20642e9a490285f",
       "files": 9,
       "tool_files": [
         {
@@ -1419,6 +1436,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-modal",
       "raw_skill_id": "scientific-agent-skills-modal",
+      "license": "MIT",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1438,9 +1456,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "d2ab96b5559c033089bd64b48459fe0e11ebb06678cca88c029ed3e15ede7f2e",
+      "package_tree_sha256": "5a5ef81e1000ba665518dfd507ac437b4f44590e7fd12483d2a22eea1adca630",
       "profile_sha256": "ea54f92df7ce3c3f9ab281a7dcb258443e7b835fed03b33aa7580e23ce57999a",
-      "manifest_sha256": "ff8c19642fd131aa74957a8da3010397424c0ea080f194d959560a00c480cc57",
+      "manifest_sha256": "7b984ec9bb6f675ca3922886147bca9423ce6c30da45d4cb3bcdb11ce30af038",
       "files": 14,
       "tool_files": [
         {
@@ -1514,6 +1532,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-networkx",
       "raw_skill_id": "scientific-agent-skills-networkx",
+      "license": "MIT",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1533,9 +1552,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "8ee4f7b53d532b51c22e5efccb720745cf9455af42e5c5584caf4868c2e0bc1e",
+      "package_tree_sha256": "e98a50856493222d319dc2e966854b9466e603fbda0af1d4cf4fd48b482066c8",
       "profile_sha256": "7683f47da83ebc03915b70979176d9f1cf12a14dae44067e08b66128528dabca",
-      "manifest_sha256": "bd9f53b1b50f7d5815087a8511e795c6ae56b6d02b44572cdb60f2240b0d545f",
+      "manifest_sha256": "c5fc9033eb496016a8269ecf70eae61f3fa69db75245549410c5d7eaf6e4f545",
       "files": 8,
       "tool_files": [
         {
@@ -1573,6 +1592,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-open-notebook",
       "raw_skill_id": "scientific-agent-skills-open-notebook",
+      "license": "MIT",
       "execution_type": "mixed",
       "class": "analysis",
       "node_kind": "producer",
@@ -1592,9 +1612,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "2a5cecfc263e10aa3d62b336a5e2ff7fda3c6a26f26ba26627fbb5e0e6dff674",
+      "package_tree_sha256": "30d6d0b29f919013d2285b157b48e7ae39053267a59aec72c6906d5d4b1b3478",
       "profile_sha256": "3867eb720a6f8ea480a339fa201ca8fafd63bfe62bb418714673d4f151015ca8",
-      "manifest_sha256": "c0ca07729800f3fa740cd3190da7ce33bd9c746caa4cfc696304050bc7de7744",
+      "manifest_sha256": "c2cabb5721847ef73ad25e846841b128ae49b3332d1f852ebb8fbe122c9b5881",
       "files": 10,
       "tool_files": [
         {
@@ -1644,6 +1664,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-opentrons-integration",
       "raw_skill_id": "scientific-agent-skills-opentrons-integration",
+      "license": "MIT",
       "execution_type": "mixed",
       "class": "analysis",
       "node_kind": "producer",
@@ -1663,9 +1684,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "1050a3246fabb98ff47cf56b2c572c99ed94573fd1d0fb47a876f3a7d2b63015",
+      "package_tree_sha256": "373cb71cdd9d8e1df4c1b6b5dd83bbf587e55dc542e72d92fc5ede4bc9e20a83",
       "profile_sha256": "ddcbb4f2ba652b7b38d7520122864082b98de52e37c1092c239fb8b2e3bc9761",
-      "manifest_sha256": "d3e65da93e813c8dd78ee1bda315447a4de75351b3c8dbfe522bf1e680ece363",
+      "manifest_sha256": "ef59c14eba9f13856e8a6476e9f8c9f0f8b53321ab91e8ca4b122b9c290a83b8",
       "files": 7,
       "tool_files": [
         {
@@ -1697,6 +1718,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-optimize-for-gpu",
       "raw_skill_id": "scientific-agent-skills-optimize-for-gpu",
+      "license": "MIT",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1716,9 +1738,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "70521f1303bf52a9f94aa73a4d5db144862f7108720583ff2a2725819623a43d",
+      "package_tree_sha256": "bcc55d98fb5e830178ab542a1c664d8e3e1b700d2a025ca2083bc8938e82ae3e",
       "profile_sha256": "59c423123b60b0742986e8f3e70aea876c2598c660864367e9e074828ad1d40d",
-      "manifest_sha256": "9c3c9a4c8e88681d604c24bf050bf028f72a58da9badf52b30d76d4b479ac59c",
+      "manifest_sha256": "a41e09eadf8e8802b9351823b99242097d47e90515cbf1d17da8659ecca069b6",
       "files": 15,
       "tool_files": [
         {
@@ -1798,6 +1820,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-pacsomatic",
       "raw_skill_id": "scientific-agent-skills-pacsomatic",
+      "license": "MIT",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1817,9 +1840,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "b19743cefcbfc2a2893d8214c42b985bca66b3b31b5a29ab1b963381f0d59600",
+      "package_tree_sha256": "75d9edae2c7fe262ca5368043b41b62788132b56b57fe32316d6fe0c83d73e53",
       "profile_sha256": "9b0652244a02885ddc1b1e13a18527502db8699ab7985a845a99bcf49aa93494",
-      "manifest_sha256": "c3291fd7132ce04d25a38dea0dc536f47d76a11b4bd5141ab0e9b83836ed61a8",
+      "manifest_sha256": "ea504ac5e8c700d311f98e3adb0cf21aee03b0c57dc52d125aecb493fd53aeb6",
       "files": 7,
       "tool_files": [
         {
@@ -1851,6 +1874,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-parallel-web",
       "raw_skill_id": "scientific-agent-skills-parallel-web",
+      "license": "MIT",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1870,15 +1894,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "42aa74fbe351efd75632ba36e3b3551391b888e3a94460e162d32e6aa25cdfb5",
+      "package_tree_sha256": "678d007806ecd3fd9c1377f1a6014c1844b20fa138950a8290401cc877e87096",
       "profile_sha256": "588cf7d466fbddcaa869951ab39bddd1872661e591ff629a86cfc95e0b63785e",
-      "manifest_sha256": "97f311977f8d64f245f658fefed125ec4f2ab1602b6bce155de65076f39881e5",
+      "manifest_sha256": "a7a8f60dcb8e1c6ef910559fcc2037cc9ef9df4fbec5969620996f5c5aef6d13",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-scientific-agent-skills-pennylane",
       "raw_skill_id": "scientific-agent-skills-pennylane",
+      "license": "MIT",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1898,9 +1923,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "90393ba2b10e18aad517158fe013bc663537915dd91f3373a0960fe11cc5f805",
+      "package_tree_sha256": "790ab950a55c7fd89908d568a6d992e8c73b44612f26f43da9bb74a43556758c",
       "profile_sha256": "a2386da94735ba7a2627e2ad7bcd69ff580d81fadaa9cc4507d37d7fd3a0c643",
-      "manifest_sha256": "cb9de36a3eb82e6b5740d51ffcffed6ca7afe3a41ac9fd3f5e6c00e310393df7",
+      "manifest_sha256": "f1fdd8671d6a5ab4aaabcfe34e7928f8b33b484bc12ae133d3202b8d6991b50a",
       "files": 10,
       "tool_files": [
         {
@@ -1950,6 +1975,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-pptx-posters",
       "raw_skill_id": "scientific-agent-skills-pptx-posters",
+      "license": "MIT",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1969,9 +1995,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "adcb741f67f2a6558694588ba53e584aefd32a063b934e81aa1022e6d21fb00a",
+      "package_tree_sha256": "7798d0305f54d5b3e6c602bb4d0e235fa170a636da6189bf51e57177a2a6a76e",
       "profile_sha256": "c3e311f6421817fb4ff8672b9b376c0b0eea6b8c30ed0cc21f8d80a1be66a3f7",
-      "manifest_sha256": "89c2b00dc22ea5f48dc92f18dece5e75ffaef8ee1426fdec84368ac3d478bf19",
+      "manifest_sha256": "9ac93adf2fa7928768c6a57c803d5abb412fcec7422304a22427f81aefc14d53",
       "files": 8,
       "tool_files": [
         {
@@ -2009,6 +2035,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-protocolsio-integration",
       "raw_skill_id": "scientific-agent-skills-protocolsio-integration",
+      "license": "MIT",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2028,9 +2055,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "9678bfe3a338b0a3d46673c1d9ca8993acba64193ebd0fb536ae4d38055853cd",
+      "package_tree_sha256": "2f016d8b9ab5c14bac29d80016526806a24689b56539938fcbaf0f2c3257afe8",
       "profile_sha256": "6562b92e58a617e6b4301d07f1e41fd7cd6d19fbf078880122393bb3dd61ceb5",
-      "manifest_sha256": "b4ef748e82b8d34f47cada1913a077ea873e63a1f9e2a689a5e163faf4972df7",
+      "manifest_sha256": "2f19f1eef020ba357881b2612700cf32c78256ac647bc18d9cdadb2dfb4f3917",
       "files": 9,
       "tool_files": [
         {
@@ -2074,6 +2101,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-pufferlib",
       "raw_skill_id": "scientific-agent-skills-pufferlib",
+      "license": "MIT",
       "execution_type": "mixed",
       "class": "analysis",
       "node_kind": "producer",
@@ -2093,9 +2121,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "2bb3262b0a7f1621fdf069709cb128c1d3af8e7a9c16d128bf818c9703bc9429",
+      "package_tree_sha256": "85d4e73956986eff3d5fda7148717a0bff103f167c99daa481798aea72bf7229",
       "profile_sha256": "c8c98524eb94b34d1e21b068a188e372efb4afc1c766b2f24e77f2b714333f20",
-      "manifest_sha256": "ca5320fce58a8013395fe6f841646ead5e61cce8ebb4ec203fae90e853cd67e1",
+      "manifest_sha256": "2a1a69615322a31d49586e364c94cfeb8890f5916c044f726c13dca4002d7063",
       "files": 10,
       "tool_files": [
         {
@@ -2145,6 +2173,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-pylabrobot",
       "raw_skill_id": "scientific-agent-skills-pylabrobot",
+      "license": "MIT",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2164,9 +2193,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "00cd09a3b146908fcb9df3fe8f542c21dd1e6bdec2c3bcce040ea3dc6246443d",
+      "package_tree_sha256": "ecaa13922c7f7f86949692da68cfd762a69e25a7d67c818b42562c8969d70bf6",
       "profile_sha256": "e0518ed56165f6e2819f7b550b616141efa69ad4d3856bed55c596f4402c6b56",
-      "manifest_sha256": "4a0fb4c79a4d7b8765dc14e1d9c507bf5adc728cde1a7b5fabfb585d88d901a8",
+      "manifest_sha256": "596c45f243b7468b5bcb98c2691279f09e45455635d196774b0d3e4ada8ad676",
       "files": 9,
       "tool_files": [
         {
@@ -2210,6 +2239,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-pymatgen",
       "raw_skill_id": "scientific-agent-skills-pymatgen",
+      "license": "MIT",
       "execution_type": "mixed",
       "class": "analysis",
       "node_kind": "producer",
@@ -2229,9 +2259,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "6d0b8480fbe60c8c8b552be4b38f24e4cca31a55ca8c88aa48289da9e5bb28c3",
+      "package_tree_sha256": "4e87b857411d94178a232cc31e2fd04ffce5556af4888ddb74a421b27a7f4a61",
       "profile_sha256": "9f7622e1541ff5828cec6dfbb5596b9eb0665bd24aa1a1d1e699261f53b4e0a4",
-      "manifest_sha256": "51648537072c70459f92a19f5cce2b48485f14ac6435a2bf017f233fd07bedf3",
+      "manifest_sha256": "8a584cb0791c049cb3ac5e3e68fd030999c0b02794bcbd4af01b0fee44fbcc8b",
       "files": 11,
       "tool_files": [
         {
@@ -2287,6 +2317,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-pymoo",
       "raw_skill_id": "scientific-agent-skills-pymoo",
+      "license": "MIT",
       "execution_type": "mixed",
       "class": "analysis",
       "node_kind": "producer",
@@ -2306,9 +2337,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "ba740188af5f85d8dc6c2ddf86ae4c9b16c1796bc4fec4e31b6d2d8fbaf3fd6a",
+      "package_tree_sha256": "8bb2647e5155d845707f7a2c6c63a64d1ea176c27577ead2aae5abf863236400",
       "profile_sha256": "7afdfecb8797e42853792e2994df6326c6c0bbd0d38dfc1c6005e8468a418dc8",
-      "manifest_sha256": "44bf9fece66fa47c7732f7eecca87e4003a3f834238bb895112e40df40400e13",
+      "manifest_sha256": "8c7978e4403887df9cfcfc1c374224f35057636bc01b8e69239b5182df3e22d2",
       "files": 14,
       "tool_files": [
         {
@@ -2382,6 +2413,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-pytorch-lightning",
       "raw_skill_id": "scientific-agent-skills-pytorch-lightning",
+      "license": "MIT",
       "execution_type": "mixed",
       "class": "analysis",
       "node_kind": "producer",
@@ -2401,9 +2433,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "df37dc57853f1b3c45277abe420bebeaac11572452d7f3ae975e39641f30d2b1",
+      "package_tree_sha256": "a7e03ffc2fc7ff8e2252914a5e82fb108b622e6af818e6e3566badd731e144f4",
       "profile_sha256": "1ecde326a531465da224641af07f437a7cb1e42659cb51d700c0ac31e27c1431",
-      "manifest_sha256": "79156e5b5baae01e0c77264574bbc6d4a6ab4354cc36b9e1540eb75fd6728c9c",
+      "manifest_sha256": "404cad58cd917dd250e3ffc2f7104c309e649ef7de5da7f2dca1d087779a58e4",
       "files": 13,
       "tool_files": [
         {
@@ -2471,6 +2503,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-pyzotero",
       "raw_skill_id": "scientific-agent-skills-pyzotero",
+      "license": "MIT",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2490,9 +2523,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "8dda29a7166ba0b8db4764f5a98056b8877d5d341266f04cba05c720ccc3a56e",
+      "package_tree_sha256": "8a85b701707f22a5898901b314e01d53ca64fcf5117c583191000d85ff3eac6b",
       "profile_sha256": "a8a98a066f691a4cb89bd3ca27c7b82e48bf83b32bc9c8f37680a4a5fc2eba89",
-      "manifest_sha256": "f1eb932e136829d69fb91c68c4454ec64cbef7e7f2031c30742be74418944d2b",
+      "manifest_sha256": "2891b9ad77f189d569a204293fb9e0301805d1d424ec40aefa6f905adcda50ba",
       "files": 17,
       "tool_files": [
         {
@@ -2584,6 +2617,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-qiskit",
       "raw_skill_id": "scientific-agent-skills-qiskit",
+      "license": "MIT",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2603,9 +2637,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "969749a3b60ab58e783e493d021c03b1bfd2b89a0412d3a7b9897687033545da",
+      "package_tree_sha256": "bd7ead2aa1ee34ca302af92806886c61aad0e7909751631602a331c2c27d7495",
       "profile_sha256": "2db490a27dea3ba28c27523349315384788e28dd99554e5a158c8a63dc3e25ac",
-      "manifest_sha256": "2813e82408cd6b2a0acf8c1086a8aa9b0472ef98503d2424de4a8df0995fd85e",
+      "manifest_sha256": "efd9f83cd69a1779d1b111b046de1eb1ae6250a07f81261f10c78822003a90bf",
       "files": 11,
       "tool_files": [
         {
@@ -2661,6 +2695,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-qutip",
       "raw_skill_id": "scientific-agent-skills-qutip",
+      "license": "MIT",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2680,9 +2715,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "2975c53be92dda2aad390f76811be6767c9298dcf38d82a44c0d684ab94930ea",
+      "package_tree_sha256": "09de58e57cd310bdac0064e381cf55575c708c291dd894049a6c7fc1542765d6",
       "profile_sha256": "624dc5d1d20f2ac8c12a4875184164d5ab1b3ba7249812d32119e5f64233287b",
-      "manifest_sha256": "69d06a5333e5da881c653bd1368cc2f9043875ec896b6ece1486ee89646f081a",
+      "manifest_sha256": "c4d1fd9cfdd169eb3486add0315c9ea7a40b0f83d5391f43e1e82505bae698a3",
       "files": 8,
       "tool_files": [
         {
@@ -2720,6 +2755,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-scientific-schematics",
       "raw_skill_id": "scientific-agent-skills-scientific-schematics",
+      "license": "MIT",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2739,9 +2775,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "20db334fdb48e008ffabb7ad6870281223a84ca40ce85ade2ba9086e98cc78b5",
+      "package_tree_sha256": "8c87abc54f31acaa89aecc42dc1f64a7f87ad6d5d6fa623d212d22aed1ea3270",
       "profile_sha256": "da86d124d6c428cd69b82cae08f6f9d2a8655afa5e87d405a7b72f5ef9c04cb6",
-      "manifest_sha256": "8a71ff7f90df38ec14e44d982e7e60ef63d376faf065734334fab87b45f0aab3",
+      "manifest_sha256": "1d3841d66a76ff725cec1e175e740b02253ecddb01dbcc21f7f41e316e51ac84",
       "files": 4,
       "tool_files": [
         {
@@ -2755,6 +2791,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-scientific-slides",
       "raw_skill_id": "scientific-agent-skills-scientific-slides",
+      "license": "MIT",
       "execution_type": "mixed",
       "class": "analysis",
       "node_kind": "producer",
@@ -2774,9 +2811,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "e12adc3b5df93846af42076873b79cbdfb59a385d34485a2a46347f564b31c22",
+      "package_tree_sha256": "3188d6012705d640b38ca5cf21419a7587b1a06aa6938c3fe61a1ccdaf1d5ab1",
       "profile_sha256": "b255cb6e4f4678001e9b73c75e1acb6281fb840e991c7d3ac4ac5b2cfbe811b5",
-      "manifest_sha256": "ae8e3fda793f6eb4e67aae50028dd169351e89f2ab701249a8e02bc11cd8b940",
+      "manifest_sha256": "56f60aba503f6c43a21978b567c5e79983916ae5ee87eabc165c7d442bc4881e",
       "files": 17,
       "tool_files": [
         {
@@ -2868,6 +2905,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-scientific-visualization",
       "raw_skill_id": "scientific-agent-skills-scientific-visualization",
+      "license": "MIT",
       "execution_type": "mixed",
       "class": "analysis",
       "node_kind": "producer",
@@ -2887,9 +2925,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "672b09d0a82b5f3c5ae288d6479146d3af75dec25063d2f48084b8994670624d",
+      "package_tree_sha256": "b04661d9a889528909fae583309023457a9c782ab1bf711140c8db17275398c2",
       "profile_sha256": "8b59a777792a5ff48d2ef1119d18bc7ab3fc484553df0203a98f9ec5f358c7f5",
-      "manifest_sha256": "1510cf456b70862e69e9c1de007350c06188fd2ba0e55250184c4a66b95a5f2e",
+      "manifest_sha256": "e8cda8f25b3857578eab5a61bd96a8eb112f51d58e7afda6ca14562bd8d9c2a7",
       "files": 13,
       "tool_files": [
         {
@@ -2957,6 +2995,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-scikit-learn",
       "raw_skill_id": "scientific-agent-skills-scikit-learn",
+      "license": "MIT",
       "execution_type": "mixed",
       "class": "analysis",
       "node_kind": "producer",
@@ -2976,9 +3015,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "02530ee0722c6a397715f333c68b2cd68fb4d5d09ad09ef221614fc35c2c9a05",
+      "package_tree_sha256": "3811b2b6b916842f6218b0ae1b0205c639e2e7321feac9d1c5fcda722d6ee8d6",
       "profile_sha256": "0ff407485fd2203d9e95089643f6e9a692d363c107007a85648c93b4a52216e5",
-      "manifest_sha256": "955843d12ba66136b8de7d893366b4b095ef53b3343254d03243df3cddcc5b93",
+      "manifest_sha256": "0cb2d652bc770996f740ca46e40e1b50420ea672b5371ceaa1ac3afb1e39f456",
       "files": 11,
       "tool_files": [
         {
@@ -3034,6 +3073,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-seaborn",
       "raw_skill_id": "scientific-agent-skills-seaborn",
+      "license": "MIT",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3053,9 +3093,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "4c97dc804d6bae0f38ff3c96465c37969d1d41f00d384bb1ae179920ec1ebbbf",
+      "package_tree_sha256": "5d980d425fb5bc56c1ac26ea3c83811509207a08b9915abc8c298bbd07d4a494",
       "profile_sha256": "7c29b46aa3161607712e7e7129422582288dc2ee41e18b7542e52d056c64cd36",
-      "manifest_sha256": "5264bd085abf5eb920bb1afdd0920d205ff8ff4395ed7346e5e55810a5b20350",
+      "manifest_sha256": "2f8415f010e88976e817a15e38949c0f90f212de8937119f3c118bd5a8d279eb",
       "files": 6,
       "tool_files": [
         {
@@ -3081,6 +3121,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-shap",
       "raw_skill_id": "scientific-agent-skills-shap",
+      "license": "MIT",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3100,9 +3141,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "288987f7df4dcfbca7b3a27505a95ee42cfdc39b9cde7536f0463e7785904811",
+      "package_tree_sha256": "d829876b3857f718ed3d6e954e9ea2e3575591ab87ac118702f85758b054b3d9",
       "profile_sha256": "f7bf9cd92797fc89b38a363d6a158e31b13186889c6486dbc17a7fe8527b0f2e",
-      "manifest_sha256": "08131f673d3ee77fac30e3ec20160908cff8aeab147a17f38f0eac6f456b88d7",
+      "manifest_sha256": "10915ff2a5f5e764ef94d33488407f16d635d1bd31baf9c5e620420e02be3340",
       "files": 7,
       "tool_files": [
         {
@@ -3134,6 +3175,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-simpy",
       "raw_skill_id": "scientific-agent-skills-simpy",
+      "license": "MIT",
       "execution_type": "mixed",
       "class": "analysis",
       "node_kind": "producer",
@@ -3153,9 +3195,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "b620460e338d8de5283c5c2d9e25ba318be5615da1dd10639c51b9b2c26025bd",
+      "package_tree_sha256": "2fd0363164687ba84caae70280dadbcb08e22dfa4db1516d77d33aa3b2d315ae",
       "profile_sha256": "e9cbe4f2c762897c7cef7cc343429f4fd4d47f2ac23af20698d05becf9b04523",
-      "manifest_sha256": "e24ddf64efdb1ee120a8206a9d7a55946bab5fb58fad4a28dc8dd872037c8f58",
+      "manifest_sha256": "377b59c3acf1cffd61967293b8eb7613396ef3002ff39d6a04cfd961dbeb65ff",
       "files": 10,
       "tool_files": [
         {
@@ -3205,6 +3247,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-stable-baselines3",
       "raw_skill_id": "scientific-agent-skills-stable-baselines3",
+      "license": "MIT",
       "execution_type": "mixed",
       "class": "analysis",
       "node_kind": "producer",
@@ -3224,9 +3267,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "bda89ae9243c3647eafd306b525114b7e35e700f2f539a757cc695bd065c5870",
+      "package_tree_sha256": "9cafa11a73094a26b0142bd69849d9867d60abdb5c5f74530528c100693603ef",
       "profile_sha256": "3b60cb4d5f0a84726a04215faa78a1fb82174c3358757c244450c92c8a602928",
-      "manifest_sha256": "87ddcb3c41bb6ad986a1e494446f48a43de7c89060de4897977aec1b0d234244",
+      "manifest_sha256": "b147f0c2d6dd92972913db4a126fc21905f3566b920b669c18877c3550d6dd93",
       "files": 10,
       "tool_files": [
         {
@@ -3276,6 +3319,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-sympy",
       "raw_skill_id": "scientific-agent-skills-sympy",
+      "license": "MIT",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3295,9 +3339,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "b48b31194de43a05cc21f1563a12ebd51c25d6ce07517e45c40b7bb03257a885",
+      "package_tree_sha256": "b04675a97f694cc74aacd8ed4fe0ff0f7efcefbd360816b0d30bf576ecb3ce66",
       "profile_sha256": "d2b5683ca7e9ee1249e408c4ccc971b17d6ac6f1cdbf55a9be2dadec774f1df6",
-      "manifest_sha256": "7497816aefb41d1bdf5861dcdecda742ec5bec4c8ac377d47003724ad3290cc3",
+      "manifest_sha256": "4e3994c5e13493472f727e93f2cd2d65626db1cd96dbdff6bdae70330780c7e0",
       "files": 8,
       "tool_files": [
         {
@@ -3335,6 +3379,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-timesfm-forecasting",
       "raw_skill_id": "scientific-agent-skills-timesfm-forecasting",
+      "license": "MIT",
       "execution_type": "mixed",
       "class": "analysis",
       "node_kind": "producer",
@@ -3354,9 +3399,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "5c6d7e923d220649d8bb5d8fc91e42fbff02b058f1bf1e186cef7f1c4efda47c",
+      "package_tree_sha256": "c4366a24698030d0d64409ae935a4f1690a609b9a1a154631fc40dcce777a700",
       "profile_sha256": "1edf09bf1411d55bcc35dee938d93cf14d71079bf9c0630500bb614d083bd99a",
-      "manifest_sha256": "4e2873bdd285fc558a89be1e389dd733c87ae1b7188acb75e66e8211dd258558",
+      "manifest_sha256": "4de0c117463eb9150da045e0f269b8eb53ae4ca74ffae25cb86798b6c28413d9",
       "files": 29,
       "tool_files": [
         {
@@ -3374,7 +3419,7 @@
         {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/anomaly-detection/output/anomaly_detection.png",
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-timesfm-forecasting/examples/anomaly-detection/output/anomaly_detection.png",
-          "sha256": "3409df727958d0329f213aba6d9e219e442bd5d5ec55a1784f657148487389ec",
+          "sha256": "c4b30e01bb01847c0eabf8367f28cd16368fd28e450c38c1cc089abb18672276",
           "byte_identical": true
         },
         {
@@ -3386,7 +3431,7 @@
         {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/covariates-forecasting/output/covariates_data.png",
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-timesfm-forecasting/examples/covariates-forecasting/output/covariates_data.png",
-          "sha256": "c824c5f0832e142c360b89a232bd915a84af6b24fe56a861757052cac2c68256",
+          "sha256": "24682a190ecae753d5531bce9841040709a64abb044bfb372bab34a6c7c17070",
           "byte_identical": true
         },
         {
@@ -3434,7 +3479,7 @@
         {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/output/forecast_animation.gif",
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-timesfm-forecasting/examples/global-temperature/output/forecast_animation.gif",
-          "sha256": "1faeac36243c7ddddf0a84c82d338a84c9045b93fe23306715c834af7eb49c80",
+          "sha256": "ca9bbbe3206a0c2c7da26e154a6a5661490f97a024ccb7a833f26fd96bd0e51b",
           "byte_identical": true
         },
         {
@@ -3452,7 +3497,7 @@
         {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/output/forecast_visualization.png",
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-timesfm-forecasting/examples/global-temperature/output/forecast_visualization.png",
-          "sha256": "e49b90cd77ab311b4959046533e51df9a3b36c4b36b44fab9e71c3dce6f06d7c",
+          "sha256": "d4b03c857b444842550fb711ee9951f0e5f159d52bbedebe4e8bbfe2d18bc2f5",
           "byte_identical": true
         },
         {
@@ -3520,6 +3565,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-torch-geometric",
       "raw_skill_id": "scientific-agent-skills-torch-geometric",
+      "license": "MIT",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3539,9 +3585,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "85b4e39bfd02a3ea955b89a5f6a7fbd39c1ae339c833fbd15ddf40a3335f0d91",
+      "package_tree_sha256": "98a77949891f5e6843382124d7d97844468c43ca1d252ccc1f46fe1d527d1113",
       "profile_sha256": "c03a4b5fdba3fc0ba90b067a05f97935d2deb66f33e81854b543257211e93b7e",
-      "manifest_sha256": "8a9e19d51dfcf1ffcaba0ddec1e44b5551aafb65b08a163b0d2ba023c9b05a8f",
+      "manifest_sha256": "b25f0153e6f2dbe58fa3e5009256d2d96db9467ddf1636aef4426126f22c03b5",
       "files": 9,
       "tool_files": [
         {
@@ -3585,6 +3631,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-transformers",
       "raw_skill_id": "scientific-agent-skills-transformers",
+      "license": "MIT",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3604,9 +3651,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "f5ecc75f525e56cb9c913cbfa90da4f7e29e3fa3b020352a3d34292b2de0a6d8",
+      "package_tree_sha256": "4b82ee57b371db700561cb7a66300be286540e4547a599248c6c73ed63b462f1",
       "profile_sha256": "e4536afa73bd2fd3c6a4c51320c01c8a21b0057bf529b496586058ffea815013",
-      "manifest_sha256": "695bd75a04a07bc0eb6997f1b74f62abae2bffcab6edf29cbc2c29ae9a9930cd",
+      "manifest_sha256": "66ccaba261bf66cacca33be0d5e34566f1a4efd645da429058b3313c7cd8be7a",
       "files": 8,
       "tool_files": [
         {
@@ -3644,6 +3691,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-umap-learn",
       "raw_skill_id": "scientific-agent-skills-umap-learn",
+      "license": "MIT",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3663,9 +3711,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "e5be72953c8b13393fa444d8f9a2e8b9105c1040e640af499e5edb34fd70f793",
+      "package_tree_sha256": "dea56c77fd9d57b63e1a8c223ad792995562c0a1c59871b41b2a3cddb302b32f",
       "profile_sha256": "5a25f9a251f9a2e76db1f439033e37c7d0a7bccf0a96d262c430755f2c94e540",
-      "manifest_sha256": "e00560bc2918db7e303a88029606f0dc7ba1ebe9a5d890618536dcb406701211",
+      "manifest_sha256": "2a60f1d7fe8674af4efafeac9a008245e96384f66b5b0ff1bf160e34cf9108ce",
       "files": 4,
       "tool_files": [
         {
@@ -3679,6 +3727,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-venue-templates",
       "raw_skill_id": "scientific-agent-skills-venue-templates",
+      "license": "MIT",
       "execution_type": "mixed",
       "class": "analysis",
       "node_kind": "producer",
@@ -3698,9 +3747,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "7d3d9200d8b9d65572f0e9eab1dce8edc541d9a32c0407fdcb4c5347b7c8b44a",
+      "package_tree_sha256": "51d1be60769c2070b01b71e81dbde071b510f8e1ab2e3c67d2674253b1a8809c",
       "profile_sha256": "afc29cf1af32b733ef9d1c0dcabfa6e07d7fccd19d8679b21803191e14f77039",
-      "manifest_sha256": "cfab1f7ea1c2bc509914678ffa07c98ed64a0a6506e59a1d9d7c65ee19342fab",
+      "manifest_sha256": "37315045020d29c1a17c44a5107f58d5eae52d9c5a8e2caeb9334ffbc92e4210",
       "files": 33,
       "tool_files": [
         {

@@ -52,71 +52,71 @@ knowledge_refs:
   - knowledge_id: sas-references-cell-free-protein-expression-hibit.md
     path: references/cell-free-protein-expression-hibit.md
     content_hash: c93d29199800737a37bd2d5e13af7b7dbeaf049864f8990cdc11471394db88e6
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-cell-free-protein-expression-optimization.md
     path: references/cell-free-protein-expression-optimization.md
     content_hash: a55de455e4bc0ec6a79d1df002baad0018c905e299180fbb9d699a53ed11538c
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-cell-free-protein-expression-validation.md
     path: references/cell-free-protein-expression-validation.md
     content_hash: 0af3fe33052fe8bcb2de62d05f38870c3c7e96ff9d1be0f04161c0e425dee896
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-cfps-expression-purification-quantification.md
     path: references/cfps-expression-purification-quantification.md
     content_hash: 36299ce12b5d8805aee78377fd5aa40f1f667c0947bf57122b6ce8c2f7582fd4
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-cfps-strep-purification-thermal-shift.md
     path: references/cfps-strep-purification-thermal-shift.md
     content_hash: 9f694714e0f24546e7e0ca11fd2bca2100de42c871413feaa2577a58acc2ec3f
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-cfps-strep-tag-purification-a280.md
     path: references/cfps-strep-tag-purification-a280.md
     content_hash: 9f57114e902d57527dcca1f50cd535d24d79ebc2e974b417e487f143e824d4a1
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-echo-ms-cfps-detection.md
     path: references/echo-ms-cfps-detection.md
     content_hash: 8559bd9cc4b42282b65a3cf112654797948824ddde89fdf8ead61a88356ef47b
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-echo-ms-method-onboarding.md
     path: references/echo-ms-method-onboarding.md
     content_hash: d2fe8ae43474fbbd4f16bcc0bd69210d27a649b0ef2a38e490acd81b48673f86
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-ecoli-expression-purification-quantification.md
     path: references/ecoli-expression-purification-quantification.md
     content_hash: 7ba569df772167a1fc2cdf3c8f01a692e7e2daa7749d37078036ee6b2166579a
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-ecoli-minibinder-expression-histag-a280.md
     path: references/ecoli-minibinder-expression-histag-a280.md
     content_hash: 08353f78bdb475f1b903f51dd075b9ce8681e56661e3b219af2321d331b3130a
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-ecoli-protein-expression-hibit.md
     path: references/ecoli-protein-expression-hibit.md
     content_hash: feb6c584536a460deea218ec30e3518ac3a10f4d7f59250dd87add91ec4d44eb
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-ecoli-protein-expression-histag-a280.md
     path: references/ecoli-protein-expression-histag-a280.md
     content_hash: 89d1214a869befde38d172cb364d6088646cebfb649c2c88552a31e7bd42e846
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-fluorescent-pixel-art-generation.md
     path: references/fluorescent-pixel-art-generation.md
     content_hash: 19978904607739dde30af0c6c2b0465018e8b11d3872f246621223d130098a53
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-ivt-rna-synthesis-qpcr.md
     path: references/ivt-rna-synthesis-qpcr.md
     content_hash: 3b955bef645452fe9656f7f01d700e746f73c14e920eff94626d821d73b274a6
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-minibinder-strep-tag-a280.md
     path: references/minibinder-strep-tag-a280.md
     content_hash: 7552088b8502d4793752d94cb2c8401ffaae09db03af6a47503c38616c3beda7
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-pichia-protein-expression-labchip.md
     path: references/pichia-protein-expression-labchip.md
     content_hash: 2ba279ce0dc6dc6237f0f4f71bf90cfa81742bd9b3a7e4084881ff6fcd864f9d
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-spr-target-onboarding.md
     path: references/spr-target-onboarding.md
     content_hash: 1024b20128ee8ac884270f4cd24b867ec00f5082741f0123381cc0a1b2c72d51
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -157,4 +157,4 @@ provenance:
       sha256: 2ba279ce0dc6dc6237f0f4f71bf90cfa81742bd9b3a7e4084881ff6fcd864f9d
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/spr-target-onboarding.md
       sha256: 1024b20128ee8ac884270f4cd24b867ec00f5082741f0123381cc0a1b2c72d51
-license: Apache-2.0
+license: MIT

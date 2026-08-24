@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-checking-for-understanding-protocol-designer/SKILL.md
       sha256: 9488623be8931405bb3d6167810728c563e188fa06ca1070d3e02cd966b40de8
-license: Apache-2.0
+license: CC-BY-SA-4.0

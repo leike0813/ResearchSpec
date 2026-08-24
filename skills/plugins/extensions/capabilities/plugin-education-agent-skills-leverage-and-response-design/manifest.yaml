@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-leverage-and-response-design/SKILL.md
       sha256: 8a9c7a62366606faa09a0d34123085528648313d1ffb0ba6d7f62b130cf2f40f
-license: Apache-2.0
+license: CC-BY-SA-4.0

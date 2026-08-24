@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-ai-learning-boundary-mapper/SKILL.md
       sha256: 3b83a6b804702c846bf64c7f68c1e37b31b79c9de3e77788239d68114dae28b6
-license: Apache-2.0
+license: CC-BY-SA-4.0

@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-restorative-practice-protocol-designer/SKILL.md
       sha256: 55c9dc7d38a7c446980a2acfa0cf895e91c4121fe0cb81edfb13b7025aeb52e3
-license: Apache-2.0
+license: CC-BY-SA-4.0

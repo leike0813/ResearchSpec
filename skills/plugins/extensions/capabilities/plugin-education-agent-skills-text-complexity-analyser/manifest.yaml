@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-text-complexity-analyser/SKILL.md
       sha256: 3e6240ecacb36a1483e1bb2e5cc3432d5729f9bcc304c0eeb088d44db9fa4e23
-license: Apache-2.0
+license: CC-BY-SA-4.0

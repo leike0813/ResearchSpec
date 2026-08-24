@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-worked-example-fading-designer/SKILL.md
       sha256: 95f45c5c7083193b49a9305750a81b870cf60f946e789501fde8d11e4047cec3
-license: Apache-2.0
+license: CC-BY-SA-4.0

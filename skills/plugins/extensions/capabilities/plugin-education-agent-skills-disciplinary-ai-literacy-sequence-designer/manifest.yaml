@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-disciplinary-ai-literacy-sequence-designer/SKILL.md
       sha256: 24cac771b3090b5c91d2eb76519661d798f1314721447086e414bd4bd7246d0e
-license: Apache-2.0
+license: CC-BY-SA-4.0

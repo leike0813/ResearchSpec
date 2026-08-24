@@ -46,35 +46,35 @@ knowledge_refs:
   - knowledge_id: sas-references-analysis-modules.md
     path: references/analysis_modules.md
     content_hash: 262b89d9e9fbca2692f9432f2f4b5d35500a1f749f7a2002111c3014e89937f4
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-core-classes.md
     path: references/core_classes.md
     content_hash: 230c4a8be4467a7c712d95a0b4109af2b1427b9ea7cb191bc2ea78062d7143de
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-io-formats.md
     path: references/io_formats.md
     content_hash: d31fab0646a5be2ceefadca786f079a6b0b62f93c502a668654548d8bae9c1d1
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-materials-project-api.md
     path: references/materials_project_api.md
     content_hash: 9af1daa4bc88a0774b93d238fdf203d8cf86b817ac642166e55abd5248eb5fbc
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-transformations-workflows.md
     path: references/transformations_workflows.md
     content_hash: 7c7e4cc305c4c67cbcf8d56ba7bee08170ce5264e6bba964aa0b98de44001fb9
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-scripts-phase-diagram-generator.py
     path: scripts/phase_diagram_generator.py
     content_hash: be132bf108bb799d81f53e17280de05db286d85c80e1ff34efe1bb75640e947e
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-scripts-structure-analyzer.py
     path: scripts/structure_analyzer.py
     content_hash: efd488516026e53108af8f96872c1c30928de92efca9e083c15d620575cec76f
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-scripts-structure-converter.py
     path: scripts/structure_converter.py
     content_hash: a1ee392512f3e97fa014cbe2e3f290f5d049d0431e59f4dbbd80c2dce4293935
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -97,4 +97,4 @@ provenance:
       sha256: efd488516026e53108af8f96872c1c30928de92efca9e083c15d620575cec76f
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/scripts/structure_converter.py
       sha256: a1ee392512f3e97fa014cbe2e3f290f5d049d0431e59f4dbbd80c2dce4293935
-license: Apache-2.0
+license: MIT

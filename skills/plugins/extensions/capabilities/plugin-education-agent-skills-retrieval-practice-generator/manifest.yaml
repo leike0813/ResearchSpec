@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-retrieval-practice-generator/SKILL.md
       sha256: fa2559d1f2c617412686a7948224a8ad1a9e97498e6cf8df0bf3170a866e7ccd
-license: Apache-2.0
+license: CC-BY-SA-4.0

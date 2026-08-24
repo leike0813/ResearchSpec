@@ -17,6 +17,7 @@ import {
 import type { CapabilityGraphProfile, GraphDecision, GraphGate } from "../contracts/capability-graph.js";
 import { sha256 } from "../workspace/write-plan.js";
 import type { GraphNodeScanRecord, GraphWorkspaceIndex } from "./graph-workspace-index.js";
+import { BoundaryPathError, resolveBoundaryPath } from "./boundary-path.js";
 import { runCapabilityValidators } from "../../capabilities/validators.js";
 import type { LoadedCapabilityRegistry } from "../../capabilities/registry.js";
 
@@ -43,6 +44,15 @@ export interface StartGraphRunResult {
   handoff: RunHandoff;
 }
 
+export interface StartGraphChildRunInput {
+  index: GraphWorkspaceIndex;
+  parentRunId: string;
+  nodeId: string;
+  round?: number;
+  startedAt: string;
+  dryRun?: boolean;
+}
+
 export interface GraphFrontierNode {
   node_id: string;
   round?: number;
@@ -59,10 +69,27 @@ export interface GraphFrontierBlock {
 export interface GraphFrontier {
   eligible_node_ids: string[];
   eligible_nodes: GraphFrontierNode[];
+  pending_subgraph_starts: GraphFrontierNode[];
   pending_gates: string[];
   pending_decisions: string[];
   blockers: GraphFrontierBlock[];
   completion_ready: boolean;
+}
+
+export interface GraphChildRunSnapshot {
+  run: GraphRun;
+  graph: CapabilityGraphProfile;
+  nodes: readonly GraphNodeInstance[];
+  handoff: RunHandoff;
+}
+
+export interface ResolvedGraphNodeInput {
+  role: string;
+  source: "stable_spec" | "handoff" | "node_output" | "parameter";
+  path?: string;
+  value?: string | number | boolean | null;
+  from_node_id?: string;
+  source_run_id?: string;
 }
 
 export interface SubmitGraphNodeInput {
@@ -73,7 +100,7 @@ export interface SubmitGraphNodeInput {
   outputs: Array<{ role: string; path: string }>;
   submittedAt: string;
   dryRun?: boolean;
-  capabilityRegistry?: LoadedCapabilityRegistry;
+  capabilityRegistry: LoadedCapabilityRegistry;
 }
 
 export interface SubmitGraphNodeResult {
@@ -156,6 +183,7 @@ export async function startGraphRun(input: StartGraphRunInput): Promise<StartGra
     entry_node_id: command.data.entry_node_id,
     status: "active",
     started_at: command.data.confirmed_at,
+    authorization_origin: "human",
     start_confirmation: {
       confirmed_by: confirmedBy,
       confirmed_at: command.data.confirmed_at,
@@ -193,22 +221,122 @@ export async function startGraphRun(input: StartGraphRunInput): Promise<StartGra
   return { status: "started", run_id: runId, directory, run, handoff };
 }
 
-export function evaluateGraphFrontier(run: GraphRun, graph: CapabilityGraphProfile, nodes: readonly GraphNodeInstance[]): GraphFrontier {
+export async function startGraphChildRun(input: StartGraphChildRunInput): Promise<StartGraphRunResult> {
+  const parent = requireRun(input.index, input.parentRunId);
+  requireActiveRun(parent.run);
+  const definition = parent.graph.nodes.find((node) => node.node_id === input.nodeId);
+  if (!definition) throw new GraphRunError("node_unknown", `Node is not declared by the frozen graph: ${input.nodeId}`, "usage");
+  if (definition.kind !== "subgraph" || !definition.subgraph_id) throw new GraphRunError("node_not_subgraph", `Node does not declare a child graph: ${input.nodeId}`, "usage");
+  if (definition.multiplicity === "repeatable" && input.round === undefined) throw new GraphRunError("node_round_required", `Repeatable subgraph start requires a round: ${input.nodeId}`, "usage");
+  if (definition.multiplicity !== "repeatable" && input.round !== undefined) throw new GraphRunError("node_round_invalid", `Subgraph ${input.nodeId} is not repeatable.`, "usage");
+
+  const snapshots = graphChildRunSnapshots(input.index);
+  const existing = boundChildren(snapshots, input.parentRunId, input.nodeId, input.round);
+  if (existing.length > 1) throw new GraphRunError("child_run_ambiguous", `Subgraph node ${input.nodeId} has multiple child runs.`, "conflict");
+  if (existing.length === 1) {
+    const child = existing[0];
+    if (!child) throw new GraphRunError("child_run_missing", "Child run binding disappeared.", "conflict");
+    const declaration = parent.graph.subgraphs.find((item) => item.subgraph_id === definition.subgraph_id);
+    if (!declaration || !childMatchesDeclaration(child, declaration)) throw new GraphRunError("child_run_binding_invalid", `Existing child run does not match subgraph ${definition.subgraph_id}.`, "conflict");
+    const record = input.index.runs.find((candidate) => candidate.run?.run_id === child.run.run_id);
+    if (!record) throw new GraphRunError("child_run_missing", `Child run is not indexed: ${child.run.run_id}`, "conflict");
+    return { status: "already_started", run_id: child.run.run_id, directory: record.directoryPath, run: child.run, handoff: child.handoff };
+  }
+
+  const frontier = evaluateGraphFrontier(parent.run, parent.graph, parent.nodeEntries.flatMap((entry) => entry.node ? [entry.node] : []), snapshots);
+  if (!frontier.pending_subgraph_starts.some((item) => item.node_id === input.nodeId && item.round === input.round)) {
+    throw new GraphRunError("node_not_eligible", `Subgraph node is not currently eligible: ${input.nodeId}`, "conflict", frontier.blockers);
+  }
+
+  const declaration = parent.graph.subgraphs.find((item) => item.subgraph_id === definition.subgraph_id);
+  if (!declaration) throw new GraphRunError("subgraph_unknown", `Subgraph declaration is missing: ${definition.subgraph_id}`, "domain");
+  const childProfile = input.index.profiles.get(declaration.profile_id);
+  const childProfileFile = input.index.profileFiles.get(declaration.profile_id);
+  const bindingDiagnostics = validateSubgraphNodeBindings(parent.graph, input.nodeId, childProfile);
+  if (!childProfile || !childProfileFile || bindingDiagnostics.length > 0) {
+    throw new GraphRunError("subgraph_binding_invalid", `Subgraph binding is invalid: ${bindingDiagnostics.join("; ")}`, "domain", bindingDiagnostics);
+  }
+
+  const binding = {
+    parent_run_id: input.parentRunId,
+    parent_node_id: input.nodeId,
+    subgraph_id: declaration.subgraph_id,
+    ...(input.round === undefined ? {} : { round: input.round }),
+  };
+  const identityHash = sha256(JSON.stringify({ binding, profile_sha256: childProfileFile.hash, entry_id: declaration.entry_id, entry_node_id: declaration.entry_node_id }));
+  const runId = `run-${identityHash.slice(0, 24)}`;
+  const run = GraphRunSchema.parse({
+    schema_version: "2",
+    run_id: runId,
+    profile_id: childProfile.profile_id,
+    profile_version: childProfile.profile_version,
+    profile_sha256: childProfileFile.hash,
+    entry_id: declaration.entry_id,
+    entry_node_id: declaration.entry_node_id,
+    status: "active",
+    started_at: input.startedAt,
+    authorization_origin: "parent_run",
+    parent_binding: binding,
+  });
+  const parentNodes = projectCompletedSubgraphs(
+    parent.run,
+    parent.graph,
+    parent.nodeEntries.flatMap((entry) => entry.node ? [entry.node] : []),
+    snapshots,
+    new Set([parent.run.run_id]),
+  );
+  const handoff = RunHandoffSchema.parse({
+    schema_version: "2",
+    run_id: runId,
+    updated_at: input.startedAt,
+    inputs: resolveChildHandoffInputs(parent.run, parent.handoff, parentNodes, definition),
+    outputs: resolveChildPlannedOutputs(parent.handoff, definition),
+  });
+  const directory = path.join(input.index.workspace, "runs", runId);
+  if (input.dryRun) return { status: "would_start", run_id: runId, directory, run, handoff };
+
+  await writeRunDirectory(input.index.workspace, directory, run, childProfileFile.text, handoff);
+  return { status: "started", run_id: runId, directory, run, handoff };
+}
+
+export function evaluateGraphFrontier(
+  run: GraphRun,
+  graph: CapabilityGraphProfile,
+  nodes: readonly GraphNodeInstance[],
+  childRuns: readonly GraphChildRunSnapshot[] = [],
+): GraphFrontier {
   const eligibleNodes: GraphFrontierNode[] = [];
+  const pendingSubgraphStarts: GraphFrontierNode[] = [];
   const pendingGates: string[] = [];
   const pendingDecisions: string[] = [];
   const blockers: GraphFrontierBlock[] = [];
   const entryNodeId = run.entry_node_id;
 
+  if (run.status !== "active") {
+    return {
+      eligible_node_ids: [],
+      eligible_nodes: [],
+      pending_subgraph_starts: [],
+      pending_gates: [],
+      pending_decisions: [],
+      blockers: [{ node_id: entryNodeId, code: "run_not_active", message: `Run ${run.run_id} is ${run.status}.`, refs: [`run:${run.run_id}`] }],
+      completion_ready: run.status === "complete",
+    };
+  }
+
+  const projectedNodes = projectCompletedSubgraphs(run, graph, nodes, childRuns, new Set([run.run_id]));
   const declaredEntryNodeIds = new Set(graph.entries.flatMap((entry) => entry.kind === "end-to-end" ? [entry.node_id] : entry.entry_points));
   for (const node of graph.nodes) {
     if (declaredEntryNodeIds.has(node.node_id) && node.node_id !== entryNodeId) continue;
-    for (const round of candidateRounds(run, graph, nodes, node.node_id)) {
-      const instance = instanceFor(nodes, node.node_id, round);
+    for (const round of candidateRounds(run, graph, projectedNodes, node.node_id)) {
+      const instance = instanceFor(projectedNodes, node.node_id, round);
       if (instance && ["complete", "cancelled", "skipped"].includes(instance.state)) continue;
 
       const failedGates = requiredGates(graph, node.required_gate_ids)
-        .filter((gate) => latestGateVerdict(nodes, gate) === "fail" && !hasGateOverride(nodes, gate));
+        .filter((gate) => {
+          const gateRound = controlRound(graph, gate.owner_node_id, round);
+          return latestGateVerdict(projectedNodes, gate, gateRound) === "fail" && !hasGateOverride(projectedNodes, gate, gateRound);
+        });
       if (failedGates.length > 0) {
         blockers.push({
           node_id: node.node_id,
@@ -219,23 +347,43 @@ export function evaluateGraphFrontier(run: GraphRun, graph: CapabilityGraphProfi
         continue;
       }
 
-      const entryExempt = node.node_id === entryNodeId && isFirstEntryRound(run, graph, nodes, node.node_id, round);
-      const prerequisitesOk = entryExempt || prerequisitesSatisfiedForRound(graph, node.node_id, node.prerequisites, nodes, round);
-      const branchOk = entryExempt || branchUnlocksForRound(graph, nodes, node.node_id, round);
-      const gatesOk = requiredGates(graph, node.required_gate_ids).every((gate) => gateAccepted(nodes, gate));
-      const decisionsOk = requiredDecisions(graph, node.required_decision_ids).every((decision) => decisionRecordedForRound(nodes, decision, round));
+      const entryExempt = node.node_id === entryNodeId && isFirstEntryRound(run, graph, projectedNodes, node.node_id, round);
+      const prerequisitesOk = entryExempt || prerequisitesSatisfiedForRound(graph, node.node_id, node.prerequisites, projectedNodes, round);
+      const branchOk = entryExempt || branchUnlocksForRound(graph, projectedNodes, node.node_id, round);
+      const gatesOk = requiredGates(graph, node.required_gate_ids)
+        .every((gate) => gateAccepted(projectedNodes, gate, controlRound(graph, gate.owner_node_id, round)));
+      const decisionsOk = requiredDecisions(graph, node.required_decision_ids)
+        .every((decision) => decisionRecordedForRound(projectedNodes, decision, controlRound(graph, decision.owner_node_id, round)));
 
       if (!prerequisitesOk || !branchOk || !gatesOk || !decisionsOk) continue;
 
       if (node.kind === "gate") {
         for (const gate of graph.gates.filter((item) => item.owner_node_id === node.node_id)) {
-          if (!gateAccepted(nodes, gate)) pendingGates.push(`gate:${run.run_id}/${gate.gate_id}`);
+          if (!gateAccepted(projectedNodes, gate, round)) pendingGates.push(round === undefined ? `gate:${run.run_id}/${gate.gate_id}` : `gate:${run.run_id}/${gate.gate_id}@${String(round)}`);
         }
         continue;
       }
       if (node.kind === "decision") {
         for (const decision of graph.decisions.filter((item) => item.owner_node_id === node.node_id)) {
-          if (!decisionRecordedForRound(nodes, decision, round)) pendingDecisions.push(`decision:${run.run_id}/${decision.decision_id}`);
+          if (!decisionRecordedForRound(projectedNodes, decision, round)) pendingDecisions.push(round === undefined ? `decision:${run.run_id}/${decision.decision_id}` : `decision:${run.run_id}/${decision.decision_id}@${String(round)}`);
+        }
+        continue;
+      }
+      if (node.kind === "subgraph") {
+        const children = boundChildren(childRuns, run.run_id, node.node_id, round);
+        const selector = round === undefined ? `node:${run.run_id}/${node.node_id}` : `node:${run.run_id}/${node.node_id}@${String(round)}`;
+        if (children.length > 1) {
+          blockers.push({ node_id: node.node_id, code: "child_run_ambiguous", message: `Subgraph node ${node.node_id} has multiple child runs.`, refs: children.map((child) => `run:${child.run.run_id}`) });
+        } else if (children.length === 0) {
+          pendingSubgraphStarts.push({ node_id: node.node_id, ...(round === undefined ? {} : { round }), selector });
+        } else {
+          const child = children[0];
+          const declaration = graph.subgraphs.find((item) => item.subgraph_id === node.subgraph_id);
+          if (!declaration || !childMatchesDeclaration(child, declaration)) {
+            blockers.push({ node_id: node.node_id, code: "child_run_binding_invalid", message: `Subgraph node ${node.node_id} has an inconsistent child binding.`, refs: [`run:${child?.run.run_id ?? "unknown"}`] });
+          } else if (child?.run.status !== "active" && child?.run.status !== "complete") {
+            blockers.push({ node_id: node.node_id, code: "child_run_blocked", message: `Child run ${child?.run.run_id ?? "unknown"} is ${child?.run.status ?? "unknown"}.`, refs: [`run:${child?.run.run_id ?? "unknown"}`] });
+          }
         }
         continue;
       }
@@ -250,10 +398,11 @@ export function evaluateGraphFrontier(run: GraphRun, graph: CapabilityGraphProfi
   return {
     eligible_node_ids: [...new Set(eligibleNodes.map((item) => item.node_id))],
     eligible_nodes: eligibleNodes,
+    pending_subgraph_starts: pendingSubgraphStarts,
     pending_gates: [...new Set(pendingGates)],
     pending_decisions: [...new Set(pendingDecisions)],
     blockers,
-    completion_ready: graphRunCompletionReady(run, graph, nodes),
+    completion_ready: graphRunCompletionReady(run, graph, projectedNodes),
   };
 }
 
@@ -263,13 +412,16 @@ export function isGraphNodeEligible(
   nodes: readonly GraphNodeInstance[],
   nodeId: string,
   round?: number,
+  childRuns: readonly GraphChildRunSnapshot[] = [],
 ): boolean {
-  return evaluateGraphFrontier(run, graph, nodes).eligible_nodes.some((item) => item.node_id === nodeId && item.round === round);
+  const frontier = evaluateGraphFrontier(run, graph, nodes, childRuns);
+  return [...frontier.eligible_nodes, ...frontier.pending_subgraph_starts].some((item) => item.node_id === nodeId && item.round === round);
 }
 
 export async function submitGraphNode(input: SubmitGraphNodeInput): Promise<SubmitGraphNodeResult> {
   const record = requireRun(input.index, input.runId);
   const { run, graph } = record;
+  requireActiveRun(run);
   const definition = graph.nodes.find((item) => item.node_id === input.nodeId);
   if (!definition) throw new GraphRunError("node_unknown", `Node is not declared by the frozen graph: ${input.nodeId}`, "usage");
   if (definition.multiplicity === "repeatable" && input.round === undefined) {
@@ -280,18 +432,34 @@ export async function submitGraphNode(input: SubmitGraphNodeInput): Promise<Subm
   }
   const nodes = record.nodeEntries.flatMap((item) => item.node ? [item.node] : []);
   const scanEntry = requireNodeScanEntry(record.nodeEntries, input.nodeId, input.round);
-  if (!isGraphNodeEligible(run, graph, nodes, input.nodeId, input.round)) {
+  if (!isGraphNodeEligible(run, graph, nodes, input.nodeId, input.round, graphChildRunSnapshots(input.index))) {
     throw new GraphRunError("node_not_eligible", `Node is not currently eligible: ${input.nodeId}${input.round === undefined ? "" : ` round ${String(input.round)}`}`, "conflict");
   }
   validateNodeOutputs(definition, input.outputs);
-  if (definition.kind === "capability" && definition.capability_id !== undefined && input.capabilityRegistry) {
+  let validatorOutputs: Array<{ role: string; path: string }>;
+  try {
+    validatorOutputs = await Promise.all(input.outputs.map(async (output) => ({
+      ...output,
+      path: (await resolveBoundaryPath(input.index.projectRoot, output.path)).absolutePath,
+    })));
+  } catch (error) {
+    if (error instanceof BoundaryPathError) throw new GraphRunError(error.code, error.message, "usage");
+    throw error;
+  }
+  if (!input.capabilityRegistry) {
+    throw new GraphRunError("capability_registry_missing", "Node submission requires a resolved capability registry.", "domain");
+  }
+  if (definition.kind === "subgraph" || definition.kind === "gate" || definition.kind === "decision") {
+    throw new GraphRunError("node_advance_forbidden", `Node kind ${definition.kind} cannot be completed through advance.`, "usage");
+  }
+  if (definition.kind === "capability" && definition.capability_id !== undefined) {
     const registered = input.capabilityRegistry.capabilities.get(definition.capability_id);
     if (!registered) throw new GraphRunError("capability_unknown", `Capability is not registered for this run: ${definition.capability_id}`, "domain");
     const validation = await runCapabilityValidators(registered.manifest, registered.packageRoot, {
       run_id: input.runId,
       node_id: input.nodeId,
       submitted_at: input.submittedAt,
-      outputs: input.outputs,
+      outputs: validatorOutputs,
     });
     if (!validation.ok) {
       throw new GraphRunError("node_validators_failed", `Node validators did not pass: ${validation.results.filter((item) => item.status !== "pass").map((item) => item.validator_id).join(", ")}`, "conflict", validation.results);
@@ -323,7 +491,8 @@ export async function submitGraphNode(input: SubmitGraphNodeInput): Promise<Subm
 
 export async function recordGraphGate(input: RecordGraphGateInput): Promise<GraphNodeInstance> {
   const record = requireRun(input.index, input.runId);
-  const { graph } = record;
+  const { graph, run } = record;
+  requireActiveRun(run);
   const gate = graph.gates.find((item) => item.gate_id === input.gateId);
   if (!gate) throw new GraphRunError("gate_unknown", `Gate is not declared by the frozen graph: ${input.gateId}`, "usage");
   const ownerDefinition = graph.nodes.find((item) => item.node_id === gate.owner_node_id);
@@ -337,6 +506,10 @@ export async function recordGraphGate(input: RecordGraphGateInput): Promise<Grap
     summary: requiredText(input.summary, "Gate summary"),
   };
   const nodes = record.nodeEntries.flatMap((item) => item.node ? [item.node] : []);
+  const gateSelector = input.round === undefined ? `gate:${input.runId}/${input.gateId}` : `gate:${input.runId}/${input.gateId}@${String(input.round)}`;
+  if (!evaluateGraphFrontier(run, graph, nodes, graphChildRunSnapshots(input.index)).pending_gates.includes(gateSelector)) {
+    throw new GraphRunError("gate_not_pending", `Gate is not currently pending: ${input.gateId}`, "conflict");
+  }
   const scanEntry = requireNodeScanEntry(record.nodeEntries, gate.owner_node_id, input.round);
   const existing = instanceFor(nodes, gate.owner_node_id, input.round);
   const node = GraphNodeInstanceSchema.parse({
@@ -345,7 +518,7 @@ export async function recordGraphGate(input: RecordGraphGateInput): Promise<Grap
     run_id: input.runId,
     node_id: gate.owner_node_id,
     ...(input.round === undefined ? {} : { round: input.round }),
-    state: input.verdict === "fail" ? "eligible" : "complete",
+    state: existing?.state ?? "pending",
     updated_at: input.confirmedAt,
     outputs: existing?.outputs ?? [],
     gate_attempts: [...(existing?.gate_attempts ?? []).filter((item) => item.gate_id !== input.gateId), attempt],
@@ -358,12 +531,17 @@ export async function recordGraphGate(input: RecordGraphGateInput): Promise<Grap
 
 export async function recordGraphDecision(input: RecordGraphDecisionInput): Promise<GraphNodeInstance> {
   const record = requireRun(input.index, input.runId);
-  const { graph } = record;
+  const { graph, run } = record;
+  requireActiveRun(run);
   const decision = graph.decisions.find((item) => item.decision_id === input.decisionId);
   if (!decision) throw new GraphRunError("decision_unknown", `Decision is not declared by the frozen graph: ${input.decisionId}`, "usage");
   const option = decision.options.find((item) => item.option_id === input.choice);
   if (!option) throw new GraphRunError("decision_choice_invalid", `Unknown choice for Decision ${input.decisionId}: ${input.choice}`, "usage");
   const nodes = record.nodeEntries.flatMap((item) => item.node ? [item.node] : []);
+  const decisionSelector = input.round === undefined ? `decision:${input.runId}/${input.decisionId}` : `decision:${input.runId}/${input.decisionId}@${String(input.round)}`;
+  if (!evaluateGraphFrontier(run, graph, nodes, graphChildRunSnapshots(input.index)).pending_decisions.includes(decisionSelector)) {
+    throw new GraphRunError("decision_not_pending", `Decision is not currently pending: ${input.decisionId}`, "conflict");
+  }
   const scanEntry = requireNodeScanEntry(record.nodeEntries, decision.owner_node_id, input.round);
   const existing = instanceFor(nodes, decision.owner_node_id, input.round);
   const node = GraphNodeInstanceSchema.parse({
@@ -372,7 +550,7 @@ export async function recordGraphDecision(input: RecordGraphDecisionInput): Prom
     run_id: input.runId,
     node_id: decision.owner_node_id,
     ...(input.round === undefined ? {} : { round: input.round }),
-    state: "complete",
+    state: existing?.state ?? "pending",
     updated_at: input.decidedAt,
     outputs: existing?.outputs ?? [],
     gate_attempts: existing?.gate_attempts ?? [],
@@ -393,11 +571,12 @@ export async function recordGraphDecision(input: RecordGraphDecisionInput): Prom
 
 export async function overrideGraphGate(input: OverrideGraphGateInput): Promise<GraphNodeInstance> {
   const record = requireRun(input.index, input.runId);
-  const { graph } = record;
+  const { graph, run } = record;
+  requireActiveRun(run);
   const gate = graph.gates.find((item) => item.gate_id === input.gateId);
   if (!gate) throw new GraphRunError("gate_unknown", `Gate is not declared by the frozen graph: ${input.gateId}`, "usage");
   const nodes = record.nodeEntries.flatMap((item) => item.node ? [item.node] : []);
-  const latest = latestGateAttempt(nodes, gate);
+  const latest = latestGateAttempt(nodes, gate, input.round);
   if (!latest || latest.verdict !== "fail") {
     throw new GraphRunError("gate_override_unavailable", `Only the current failed Gate attempt can be overridden: ${input.gateId}`, "conflict");
   }
@@ -417,7 +596,7 @@ export async function overrideGraphGate(input: OverrideGraphGateInput): Promise<
     run_id: input.runId,
     node_id: gate.owner_node_id,
     ...(input.round === undefined ? {} : { round: input.round }),
-    state: "complete",
+    state: existing?.state ?? "pending",
     updated_at: input.approvedAt,
     outputs: existing?.outputs ?? [],
     gate_attempts: existing?.gate_attempts ?? [],
@@ -451,10 +630,20 @@ export function validateSubgraphNodeBindings(
     return [`Subgraph identity mismatch: expected ${declaration.profile_id}@${declaration.profile_version}, got ${childProfile.profile_id}@${childProfile.profile_version}.`];
   }
   const diagnostics: string[] = [];
+  const childEntry = childProfile.entries.find((entry) => entry.entry_id === declaration.entry_id);
+  if (!childEntry) diagnostics.push(`Subgraph entry is not declared by child graph: ${declaration.entry_id}`);
+  else if (childEntry.kind === "end-to-end" ? childEntry.node_id !== declaration.entry_node_id : !childEntry.entry_points.includes(declaration.entry_node_id)) {
+    diagnostics.push(`Subgraph entry node is not valid for ${declaration.entry_id}: ${declaration.entry_node_id}`);
+  }
   const childInputRoles = new Set(childProfile.nodes.flatMap((item) => item.input_bindings.map((binding) => binding.role)));
   const childOutputRoles = new Set(childProfile.nodes.flatMap((item) => item.expected_outputs.map((output) => output.role)));
   for (const binding of node.input_bindings) {
     if (!childInputRoles.has(binding.role)) diagnostics.push(`Subgraph input role is not consumed by child graph: ${binding.role}`);
+  }
+  const childEntryNode = childProfile.nodes.find((item) => item.node_id === declaration.entry_node_id);
+  const suppliedRoles = new Set(node.input_bindings.map((binding) => binding.role));
+  for (const binding of childEntryNode?.input_bindings ?? []) {
+    if (binding.source === "handoff" && !suppliedRoles.has(binding.role)) diagnostics.push(`Subgraph entry requires an unmapped handoff role: ${binding.role}`);
   }
   for (const output of node.expected_outputs) {
     if (!childOutputRoles.has(output.role)) diagnostics.push(`Subgraph output role is not produced by child graph: ${output.role}`);
@@ -462,11 +651,104 @@ export function validateSubgraphNodeBindings(
   return diagnostics;
 }
 
+function boundChildren(
+  childRuns: readonly GraphChildRunSnapshot[],
+  parentRunId: string,
+  parentNodeId: string,
+  round: number | undefined,
+): GraphChildRunSnapshot[] {
+  return childRuns.filter((child) => child.run.authorization_origin === "parent_run"
+    && child.run.parent_binding?.parent_run_id === parentRunId
+    && child.run.parent_binding.parent_node_id === parentNodeId
+    && child.run.parent_binding.round === round);
+}
+
+function childMatchesDeclaration(
+  child: GraphChildRunSnapshot,
+  declaration: CapabilityGraphProfile["subgraphs"][number],
+): boolean {
+  return child.run.parent_binding?.subgraph_id === declaration.subgraph_id
+    && child.run.profile_id === declaration.profile_id
+    && child.run.profile_version === declaration.profile_version
+    && child.run.entry_id === declaration.entry_id
+    && child.run.entry_node_id === declaration.entry_node_id
+    && child.graph.profile_id === declaration.profile_id
+    && child.graph.profile_version === declaration.profile_version;
+}
+
+function projectCompletedSubgraphs(
+  run: GraphRun,
+  graph: CapabilityGraphProfile,
+  nodes: readonly GraphNodeInstance[],
+  childRuns: readonly GraphChildRunSnapshot[],
+  visited: ReadonlySet<string>,
+): GraphNodeInstance[] {
+  const projected = [...nodes];
+  for (const child of childRuns.filter((candidate) => candidate.run.parent_binding?.parent_run_id === run.run_id)) {
+    if (visited.has(child.run.run_id)) continue;
+    const binding = child.run.parent_binding;
+    if (!binding || instanceFor(projected, binding.parent_node_id, binding.round)) continue;
+    const parentNode = graph.nodes.find((node) => node.node_id === binding.parent_node_id && node.kind === "subgraph");
+    const declaration = graph.subgraphs.find((item) => item.subgraph_id === binding.subgraph_id);
+    if (!parentNode || !declaration || !childMatchesDeclaration(child, declaration)) continue;
+    if (boundChildren(childRuns, run.run_id, binding.parent_node_id, binding.round).length !== 1) continue;
+    const nestedVisited = new Set(visited);
+    nestedVisited.add(child.run.run_id);
+    const childNodes = projectCompletedSubgraphs(child.run, child.graph, child.nodes, childRuns, nestedVisited);
+    if (!graphRunCompletionReady(child.run, child.graph, childNodes)) continue;
+    const requiredRoles = parentNode.expected_outputs.filter((output) => output.required !== false).map((output) => output.role);
+    if (requiredRoles.some((role) => !child.handoff.outputs.some((output) => output.role === role))) continue;
+    projected.push(GraphNodeInstanceSchema.parse({
+      schema_version: "2",
+      node_instance_id: nodeInstanceId(run.run_id, binding.parent_node_id, binding.round),
+      run_id: run.run_id,
+      node_id: binding.parent_node_id,
+      ...(binding.round === undefined ? {} : { round: binding.round }),
+      state: "complete",
+      updated_at: child.handoff.updated_at,
+      outputs: child.handoff.outputs
+        .filter((output) => parentNode.expected_outputs.some((expected) => expected.role === output.role))
+        .map((output) => ({ role: output.role, path: output.path })),
+      gate_attempts: [],
+      gate_overrides: [],
+      decisions: [],
+    }));
+  }
+  return projected;
+}
+
 export function graphRunCompletionReady(run: GraphRun, graph: CapabilityGraphProfile, nodes: readonly GraphNodeInstance[]): boolean {
-  if (run.status === "complete" || run.status === "cancelled") return true;
+  if (run.status === "complete") return true;
+  if (run.status !== "active") return false;
   const template = graph.revision_round_template;
   for (const node of graph.nodes) {
     if (node.multiplicity === "optional") continue;
+    if (node.kind === "gate") {
+      const owned = graph.gates.filter((gate) => gate.owner_node_id === node.node_id);
+      if (owned.length === 0) return false;
+      if (node.multiplicity === "repeatable" && template) {
+        const rounds = nodes
+          .filter((item) => item.node_id === template.revision_node_id && item.state === "complete" && item.round !== undefined)
+          .map((item) => item.round as number);
+        if (rounds.length === 0 || rounds.some((round) => !owned.every((gate) => gateAccepted(nodes, gate, round)))) return false;
+      } else if (!owned.every((gate) => gateAccepted(nodes, gate))) {
+        return false;
+      }
+      continue;
+    }
+    if (node.kind === "decision") {
+      const owned = graph.decisions.filter((decision) => decision.owner_node_id === node.node_id);
+      if (owned.length === 0) return false;
+      if (node.multiplicity === "repeatable" && template && node.node_id === template.review_node_id) {
+        const rounds = nodes
+          .filter((item) => item.node_id === template.revision_node_id && item.state === "complete" && item.round !== undefined)
+          .map((item) => item.round as number);
+        if (rounds.length === 0 || rounds.some((round) => !owned.every((decision) => decisionRecordedForRound(nodes, decision, round)))) return false;
+      } else if (!owned.every((decision) => decisionRecordedForRound(nodes, decision, undefined))) {
+        return false;
+      }
+      continue;
+    }
     if (node.multiplicity === "repeatable") {
       if (template && (node.node_id === template.revision_node_id || node.node_id === template.review_node_id)) {
         if (!templateClosed(graph, nodes)) return false;
@@ -477,12 +759,13 @@ export function graphRunCompletionReady(run: GraphRun, graph: CapabilityGraphPro
     }
     if (!nodes.some((item) => item.node_id === node.node_id && item.state === "complete")) return false;
   }
-  return !hasPendingHumanActions(graph, nodes);
+  return true;
 }
 
 interface RequiredRunRecord {
   run: GraphRun;
   graph: CapabilityGraphProfile;
+  handoff: RunHandoff;
   nodesDirectory: string;
   nodeEntries: GraphNodeScanRecord[];
 }
@@ -491,8 +774,134 @@ function requireRun(index: GraphWorkspaceIndex, runId: string): RequiredRunRecor
   const records = index.runs.filter((item) => item.run?.run_id === runId);
   if (records.length !== 1) throw new GraphRunError(records.length === 0 ? "run_not_found" : "run_ambiguous", `Run selector must resolve exactly once: ${runId}`, records.length === 0 ? "usage" : "conflict");
   const record = records[0];
-  if (!record.run || !record.graph) throw new GraphRunError("run_incomplete", `Run is missing run.yaml or frozen graph: ${runId}`, "domain");
-  return { run: record.run, graph: record.graph, nodesDirectory: record.nodesDirectory, nodeEntries: record.nodeEntries };
+  if (!record.run || !record.graph || !record.handoff) throw new GraphRunError("run_incomplete", `Run is missing run.yaml, frozen graph or handoff: ${runId}`, "domain");
+  if (!record.graphText || sha256(record.graphText) !== record.run.profile_sha256) throw new GraphRunError("run_graph_hash_mismatch", `Frozen graph integrity check failed for run ${runId}.`, "conflict");
+  if (record.graph.profile_id !== record.run.profile_id || record.graph.profile_version !== record.run.profile_version) throw new GraphRunError("run_profile_identity_mismatch", `Frozen graph identity check failed for run ${runId}.`, "conflict");
+  return { run: record.run, graph: record.graph, handoff: record.handoff.frontmatter, nodesDirectory: record.nodesDirectory, nodeEntries: record.nodeEntries };
+}
+
+export function graphChildRunSnapshots(index: GraphWorkspaceIndex): GraphChildRunSnapshot[] {
+  return index.runs.flatMap((record) => record.run && record.graph && record.handoff
+    ? [{
+        run: record.run,
+        graph: record.graph,
+        handoff: record.handoff.frontmatter,
+        nodes: record.nodeEntries.flatMap((entry) => entry.node ? [entry.node] : []),
+      }]
+    : []);
+}
+
+export function resolveGraphNodeInputs(input: {
+  run: GraphRun;
+  graph: CapabilityGraphProfile;
+  handoff: RunHandoff;
+  nodes: readonly GraphNodeInstance[];
+  childRuns?: readonly GraphChildRunSnapshot[];
+  nodeId: string;
+  round?: number;
+  stableSpecPaths?: Readonly<Record<string, string>>;
+}): ResolvedGraphNodeInput[] {
+  const definition = input.graph.nodes.find((node) => node.node_id === input.nodeId);
+  if (!definition) throw new GraphRunError("node_not_found", `Node is not declared by the frozen graph: ${input.nodeId}`, "usage");
+  const projectedNodes = projectCompletedSubgraphs(input.run, input.graph, input.nodes, input.childRuns ?? [], new Set([input.run.run_id]));
+  return definition.input_bindings.map((binding) => {
+    if (binding.source === "parameter") {
+      if (binding.value === undefined) throw new GraphRunError("node_input_unresolved", `Parameter input has no value: ${binding.role}`, "conflict");
+      return { role: binding.role, source: binding.source, value: binding.value };
+    }
+    if (binding.source === "stable_spec") {
+      const stablePath = input.stableSpecPaths?.[binding.role];
+      if (!stablePath) throw new GraphRunError("node_input_unresolved", `Stable-spec input has no bounded path: ${binding.role}`, "conflict");
+      return { role: binding.role, source: binding.source, path: stablePath };
+    }
+    if (binding.source === "handoff") {
+      const handoff = [...input.handoff.inputs, ...input.handoff.outputs].find((entry) => entry.role === binding.role);
+      if (!handoff) throw new GraphRunError("node_input_unresolved", `Run handoff does not provide input: ${binding.role}`, "conflict");
+      return {
+        role: binding.role,
+        source: binding.source,
+        path: handoff.path,
+        ...("source_run_id" in handoff && handoff.source_run_id !== undefined ? { source_run_id: handoff.source_run_id } : {}),
+      };
+    }
+    const candidates = projectedNodes
+      .filter((node) => node.node_id === binding.from_node_id && node.state === "complete")
+      .filter((node) => input.round === undefined || node.round === undefined || node.round === input.round)
+      .sort((left, right) => Date.parse(left.updated_at) - Date.parse(right.updated_at));
+    const output = candidates.at(-1)?.outputs.find((entry) => entry.role === binding.role);
+    if (!output) throw new GraphRunError("node_input_unresolved", `Node output is unavailable for ${binding.role} from ${binding.from_node_id ?? "unknown"}.`, "conflict");
+    return { role: binding.role, source: binding.source, path: output.path, from_node_id: binding.from_node_id };
+  });
+}
+
+function resolveChildHandoffInputs(
+  parentRun: GraphRun,
+  parentHandoff: RunHandoff,
+  parentNodes: readonly GraphNodeInstance[],
+  node: CapabilityGraphProfile["nodes"][number],
+): RunHandoff["inputs"] {
+  return node.input_bindings.flatMap((binding) => {
+    if (binding.source === "stable_spec" || binding.source === "parameter") return [];
+    if (binding.source === "node_output") {
+      const source = parentNodes
+        .filter((candidate) => candidate.node_id === binding.from_node_id && candidate.state === "complete")
+        .sort((left, right) => Date.parse(left.updated_at) - Date.parse(right.updated_at))
+        .at(-1)
+        ?.outputs.find((output) => output.role === binding.role);
+      if (!source) throw new GraphRunError("subgraph_input_missing", `Subgraph input ${binding.role} is not available from node ${binding.from_node_id ?? "unknown"}.`, "conflict");
+      return [{ role: binding.role, type: "node_output", path: source.path, purpose: `Input ${binding.role} inherited from ${binding.from_node_id ?? "parent node"}.`, source_run_id: parentRun.run_id }];
+    }
+    const source = [...parentHandoff.inputs, ...parentHandoff.outputs].find((entry) => entry.role === binding.role);
+    if (!source) throw new GraphRunError("subgraph_input_missing", `Subgraph handoff input is missing: ${binding.role}`, "conflict");
+    return [{
+      role: source.role,
+      type: source.type,
+      path: source.path,
+      purpose: source.purpose,
+      ...(source.format === undefined ? {} : { format: source.format }),
+      ...(source.renderer === undefined ? {} : { renderer: source.renderer }),
+      ...(source.path_kind === undefined ? {} : { path_kind: source.path_kind }),
+      ...(source.entry_path === undefined ? {} : { entry_path: source.entry_path }),
+      ...(source.limits === undefined ? {} : { limits: source.limits }),
+      ...(source.notes === undefined ? {} : { notes: source.notes }),
+      source_run_id: parentRun.run_id,
+    }];
+  });
+}
+
+function resolveChildPlannedOutputs(
+  parentHandoff: RunHandoff,
+  node: CapabilityGraphProfile["nodes"][number],
+): RunHandoff["outputs"] {
+  return node.expected_outputs.flatMap((expected) => {
+    const output = parentHandoff.outputs.find((candidate) => candidate.role === expected.role);
+    if (!output && expected.required !== false) throw new GraphRunError("subgraph_output_unplanned", `Parent handoff does not plan required subgraph output: ${expected.role}`, "conflict");
+    return output ? [output] : [];
+  });
+}
+
+async function writeRunDirectory(
+  workspace: string,
+  directory: string,
+  run: GraphRun,
+  graphText: string,
+  handoff: RunHandoff,
+): Promise<void> {
+  const temporary = path.join(workspace, "runs", `.run-${randomUUID()}.tmp`);
+  try {
+    await mkdir(temporary, { recursive: false });
+    await mkdir(path.join(temporary, "nodes"));
+    await writeFile(path.join(temporary, "run.yaml"), stringify(run), { encoding: "utf8", flag: "wx" });
+    await writeFile(path.join(temporary, "graph.yaml"), graphText, { encoding: "utf8", flag: "wx" });
+    await writeFile(path.join(temporary, "handoff.md"), renderRunHandoff(handoff), { encoding: "utf8", flag: "wx" });
+    await rename(temporary, directory);
+  } catch (error) {
+    await rm(temporary, { recursive: true, force: true }).catch(() => undefined);
+    if ((error as NodeJS.ErrnoException).code === "EEXIST" || (error as NodeJS.ErrnoException).code === "ENOTEMPTY") {
+      throw new GraphRunError("run_create_conflict", `Run directory already exists: ${directory}`, "conflict");
+    }
+    throw error;
+  }
 }
 
 function validateEntrySelection(graph: CapabilityGraphProfile, command: GraphRunStartCommand): void {
@@ -537,6 +946,14 @@ function candidateRounds(run: GraphRun, graph: CapabilityGraphProfile, nodes: re
   if (template && (nodeId === template.revision_node_id || nodeId === template.review_node_id)) {
     return repeatableTemplateRounds(run, graph, nodes, nodeId).filter((round) => instanceFor(nodes, nodeId, round) === undefined);
   }
+  if (template && definition.kind === "gate") {
+    const ownedGates = graph.gates.filter((gate) => gate.owner_node_id === nodeId);
+    return nodes
+      .filter((item) => item.node_id === template.revision_node_id && item.state === "complete" && item.round !== undefined)
+      .map((item) => item.round as number)
+      .filter((round) => ownedGates.some((gate) => !gateAccepted(nodes, gate, round)))
+      .sort((left, right) => left - right);
+  }
   return genericRepeatableRounds(nodes, nodeId).filter((round) => instanceFor(nodes, nodeId, round) === undefined);
 }
 
@@ -546,7 +963,7 @@ function repeatableTemplateRounds(run: GraphRun, graph: CapabilityGraphProfile, 
   const rounds = new Set<number>();
   if (nodeId === template.revision_node_id) {
     if (instanceFor(nodes, nodeId, 1) === undefined) rounds.add(1);
-    for (const review of nodes.filter((item) => item.node_id === template.review_node_id && item.state === "complete" && item.round !== undefined)) {
+    for (const review of nodes.filter((item) => item.node_id === template.review_node_id && item.round !== undefined)) {
       const continueChoice = review.decisions.some((item) => item.decision_id === revisionDecisionId(graph, template.review_node_id) && item.choice === template.continue_option_id);
       if (continueChoice) rounds.add((review.round ?? 0) + 1);
     }
@@ -600,6 +1017,14 @@ function prerequisiteComplete(
   consumerRound: number | undefined,
 ): boolean {
   const prerequisite = graph.nodes.find((item) => item.node_id === prerequisiteNodeId);
+  if (prerequisite?.kind === "gate") {
+    const gates = graph.gates.filter((gate) => gate.owner_node_id === prerequisiteNodeId);
+    return gates.length > 0 && gates.every((gate) => gateAccepted(nodes, gate, controlRound(graph, prerequisiteNodeId, consumerRound)));
+  }
+  if (prerequisite?.kind === "decision") {
+    const decisions = graph.decisions.filter((decision) => decision.owner_node_id === prerequisiteNodeId);
+    return decisions.length > 0 && decisions.every((decision) => decisionRecordedForRound(nodes, decision, controlRound(graph, prerequisiteNodeId, consumerRound)));
+  }
   if (prerequisite?.multiplicity !== "repeatable") {
     return nodes.some((item) => item.node_id === prerequisiteNodeId && item.state === "complete");
   }
@@ -647,32 +1072,32 @@ function requiredDecisions(graph: CapabilityGraphProfile, decisionIds: readonly 
   });
 }
 
-function latestGateAttempt(nodes: readonly GraphNodeInstance[], gate: GraphGate): GraphNodeInstance["gate_attempts"][number] | undefined {
-  const attempts = nodes.filter((item) => item.node_id === gate.owner_node_id)
+function latestGateAttempt(nodes: readonly GraphNodeInstance[], gate: GraphGate, round?: number): GraphNodeInstance["gate_attempts"][number] | undefined {
+  const attempts = nodes.filter((item) => item.node_id === gate.owner_node_id && item.round === round)
     .flatMap((item) => item.gate_attempts.map((attempt) => ({ node: item, attempt })))
     .filter(({ attempt }) => attempt.gate_id === gate.gate_id)
     .sort((left, right) => Date.parse(left.attempt.confirmed_at) - Date.parse(right.attempt.confirmed_at));
   return attempts.at(-1)?.attempt;
 }
 
-function latestGateVerdict(nodes: readonly GraphNodeInstance[], gate: GraphGate): "pass" | "pass_with_conditions" | "fail" | undefined {
-  return latestGateAttempt(nodes, gate)?.verdict;
+function latestGateVerdict(nodes: readonly GraphNodeInstance[], gate: GraphGate, round?: number): "pass" | "pass_with_conditions" | "fail" | undefined {
+  return latestGateAttempt(nodes, gate, round)?.verdict;
 }
 
-function gateAccepted(nodes: readonly GraphNodeInstance[], gate: GraphGate): boolean {
-  const verdict = latestGateVerdict(nodes, gate);
+function gateAccepted(nodes: readonly GraphNodeInstance[], gate: GraphGate, round?: number): boolean {
+  const verdict = latestGateVerdict(nodes, gate, round);
   if (verdict === "pass" || verdict === "pass_with_conditions") return true;
-  const latest = latestGateAttempt(nodes, gate);
+  const latest = latestGateAttempt(nodes, gate, round);
   if (!latest || latest.verdict !== "fail") return false;
-  const owner = nodes.find((item) => item.node_id === gate.owner_node_id);
+  const owner = nodes.find((item) => item.node_id === gate.owner_node_id && item.round === round);
   const override = owner?.gate_overrides?.find((item) => item.gate_id === gate.gate_id);
   return override !== undefined && Date.parse(override.approved_at) >= Date.parse(latest.confirmed_at);
 }
 
-function hasGateOverride(nodes: readonly GraphNodeInstance[], gate: GraphGate): boolean {
-  const latest = latestGateAttempt(nodes, gate);
+function hasGateOverride(nodes: readonly GraphNodeInstance[], gate: GraphGate, round?: number): boolean {
+  const latest = latestGateAttempt(nodes, gate, round);
   if (!latest || latest.verdict !== "fail") return false;
-  return nodes.some((item) => item.node_id === gate.owner_node_id && (item.gate_overrides ?? []).some((override) => override.gate_id === gate.gate_id && Date.parse(override.approved_at) >= Date.parse(latest.confirmed_at)));
+  return nodes.some((item) => item.node_id === gate.owner_node_id && item.round === round && (item.gate_overrides ?? []).some((override) => override.gate_id === gate.gate_id && Date.parse(override.approved_at) >= Date.parse(latest.confirmed_at)));
 }
 
 function decisionRecordedForRound(nodes: readonly GraphNodeInstance[], decision: GraphDecision, round: number | undefined): boolean {
@@ -681,32 +1106,21 @@ function decisionRecordedForRound(nodes: readonly GraphNodeInstance[], decision:
   return candidates.some((owner) => owner.decisions.some((item) => item.decision_id === decision.decision_id));
 }
 
+function controlRound(graph: CapabilityGraphProfile, ownerNodeId: string, consumerRound: number | undefined): number | undefined {
+  const owner = graph.nodes.find((item) => item.node_id === ownerNodeId);
+  return owner?.multiplicity === "repeatable" ? consumerRound : undefined;
+}
+
 function templateClosed(graph: CapabilityGraphProfile, nodes: readonly GraphNodeInstance[]): boolean {
   const template = graph.revision_round_template;
   if (!template) return true;
   const decisionId = revisionDecisionId(graph, template.review_node_id);
   return nodes.some((item) => item.node_id === template.review_node_id
-    && item.state === "complete"
     && item.decisions.some((decision) => decision.decision_id === decisionId && decision.choice === template.exit_option_id));
 }
 
 function revisionDecisionId(graph: CapabilityGraphProfile, reviewNodeId: string): string | undefined {
   return graph.decisions.find((item) => item.owner_node_id === reviewNodeId)?.decision_id;
-}
-
-function hasPendingHumanActions(graph: CapabilityGraphProfile, nodes: readonly GraphNodeInstance[]): boolean {
-  for (const gate of graph.gates) {
-    if (!gateAccepted(nodes, gate)) return true;
-  }
-  for (const decision of graph.decisions) {
-    if (!decisionRecordedForRound(nodes, decision, undefined)) return true;
-  }
-  for (const node of graph.nodes) {
-    const failedGates = requiredGates(graph, node.required_gate_ids)
-      .filter((gate) => latestGateVerdict(nodes, gate) === "fail" && !hasGateOverride(nodes, gate));
-    if (failedGates.length > 0) return true;
-  }
-  return false;
 }
 
 function instanceFor(nodes: readonly GraphNodeInstance[], nodeId: string, round: number | undefined): GraphNodeInstance | undefined {
@@ -771,4 +1185,8 @@ function requiredText(value: string, label: string): string {
   const trimmed = value.trim();
   if (!trimmed) throw new GraphRunError("text_required", `${label} is required.`, "usage");
   return trimmed;
+}
+
+function requireActiveRun(run: GraphRun): void {
+  if (run.status !== "active") throw new GraphRunError("run_not_active", `Run ${run.run_id} is ${run.status} and cannot be mutated.`, "conflict");
 }

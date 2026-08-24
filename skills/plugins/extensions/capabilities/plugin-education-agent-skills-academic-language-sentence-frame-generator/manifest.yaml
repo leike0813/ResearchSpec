@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-academic-language-sentence-frame-generator/SKILL.md
       sha256: e3b0df8c198defcfe145b9a7843eaa828dd26fae94baef6b9e4741cdc2dccaff
-license: Apache-2.0
+license: CC-BY-SA-4.0

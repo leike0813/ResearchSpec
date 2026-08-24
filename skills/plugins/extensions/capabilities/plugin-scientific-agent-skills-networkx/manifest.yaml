@@ -50,23 +50,23 @@ knowledge_refs:
   - knowledge_id: sas-references-algorithms.md
     path: references/algorithms.md
     content_hash: 44cf621daafcf5dee12e6e71bdae19d3e3c99aff3f59013ba5e1db602557c7e3
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-generators.md
     path: references/generators.md
     content_hash: 08daa0828e96ea7e6d456a920d65bdedce267bb93e2fb7ba0ee757b76821e9eb
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-graph-basics.md
     path: references/graph-basics.md
     content_hash: 96ddf0a935866125f9d846ab9e2a1b44f336ae4b95744c9473800ba8f9fc8fc5
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-io.md
     path: references/io.md
     content_hash: 9a2ef4134cdffa27082a2fdf6642c3b804bab8a8c20ad78cd72fae97658eeb6d
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-visualization.md
     path: references/visualization.md
     content_hash: 75b2441897c56194c747972cce8ab26b37f2d64009661f90be0ac975ceb0ce6f
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -83,4 +83,4 @@ provenance:
       sha256: 9a2ef4134cdffa27082a2fdf6642c3b804bab8a8c20ad78cd72fae97658eeb6d
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-networkx/references/visualization.md
       sha256: 75b2441897c56194c747972cce8ab26b37f2d64009661f90be0ac975ceb0ce6f
-license: Apache-2.0
+license: MIT

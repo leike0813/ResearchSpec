@@ -24,7 +24,7 @@ export interface ValidationViolation {
 
 export type ParseResult<T> = { ok: true; value: T } | { ok: false; diagnostic: Diagnostic };
 
-export type CurrentCheckTarget = "all" | "specs" | "profiles" | "subflows" | "changes" | "handoffs" | "tools" | "plugins" | "literature-adapters";
+export type CurrentCheckTarget = "all" | "specs" | "profiles" | "runs" | "changes" | "handoffs" | "tools" | "plugins" | "literature-adapters";
 
 export interface CurrentCheckResult {
   ok: boolean;

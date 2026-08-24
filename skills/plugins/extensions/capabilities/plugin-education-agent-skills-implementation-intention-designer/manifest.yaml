@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-implementation-intention-designer/SKILL.md
       sha256: 9e826ce875d1565b36237fbd19bd53389066d7740695005310b9ca9e4fcba92d
-license: Apache-2.0
+license: CC-BY-SA-4.0

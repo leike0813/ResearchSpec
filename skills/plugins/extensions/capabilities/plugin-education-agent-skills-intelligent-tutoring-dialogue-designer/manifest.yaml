@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-intelligent-tutoring-dialogue-designer/SKILL.md
       sha256: f22dbf2c881c9113aad0f05e4154ebc344ee80a375c5c9312773a94f7f349a32
-license: Apache-2.0
+license: CC-BY-SA-4.0

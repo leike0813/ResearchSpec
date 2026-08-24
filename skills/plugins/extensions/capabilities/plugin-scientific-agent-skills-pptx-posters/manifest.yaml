@@ -48,23 +48,23 @@ knowledge_refs:
   - knowledge_id: sas-assets-poster-html-template.html
     path: assets/poster_html_template.html
     content_hash: 4b58e0efd555e95a7f6377d2e22109b3ede9cbf827909442c662586bacc7b8ed
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-assets-poster-quality-checklist.md
     path: assets/poster_quality_checklist.md
     content_hash: 1f2d89a68410b197f8d656cc29c3b798a7de83328ebf4c9dc042df4d71e67275
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-poster-content-guide.md
     path: references/poster_content_guide.md
     content_hash: 2af1cbfa45878041de15459ccbac49f85f810d045ed5231a011bee5f54641b26
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-poster-design-principles.md
     path: references/poster_design_principles.md
     content_hash: 6c3618133764687a19f30f563805bbf13996f818ba267cfbd5bbc908b9f7102b
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-poster-layout-design.md
     path: references/poster_layout_design.md
     content_hash: f674c0fe352321b9bc0eb2be09d95379714a6b77624689ba100da4898c4f20df
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -81,4 +81,4 @@ provenance:
       sha256: 6c3618133764687a19f30f563805bbf13996f818ba267cfbd5bbc908b9f7102b
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pptx-posters/references/poster_layout_design.md
       sha256: f674c0fe352321b9bc0eb2be09d95379714a6b77624689ba100da4898c4f20df
-license: Apache-2.0
+license: MIT

@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-self-efficacy-builder-sequence/SKILL.md
       sha256: 0dbfd3115cde91a050b8805210239858e916f83d60cdf3763106c0d64f7628b0
-license: Apache-2.0
+license: CC-BY-SA-4.0

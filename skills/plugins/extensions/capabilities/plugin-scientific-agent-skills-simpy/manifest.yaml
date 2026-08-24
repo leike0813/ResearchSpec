@@ -48,31 +48,31 @@ knowledge_refs:
   - knowledge_id: sas-references-events.md
     path: references/events.md
     content_hash: ec53d2242372565fdbbe15c6d85ac65be79558bec589abda9f658851ea2856a7
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-monitoring.md
     path: references/monitoring.md
     content_hash: 115230919df1c97b49a599720e025ac9f7514cf12613b2765e208ed708aad20a
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-process-interaction.md
     path: references/process-interaction.md
     content_hash: 07607eae087b6bd07b83acd76c23135a8376a52c01b06f02f2ebc4e8bd2bf5b5
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-real-time.md
     path: references/real-time.md
     content_hash: 70c08f55ab65c5ff92d2b17023485b42be8a82b2a8139b6437263352b9fb3aa2
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-resources.md
     path: references/resources.md
     content_hash: 3f87b67d8db3bdf7101dfe31f952bf9688fdba3c1b86b5c3a8bec0bfdc5d0e1b
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-scripts-basic-simulation-template.py
     path: scripts/basic_simulation_template.py
     content_hash: 664c2d8427a14f0a9db9e4f9cd3138e1d8f8a83702fa31e99115b6c2d8bd0210
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-scripts-resource-monitor.py
     path: scripts/resource_monitor.py
     content_hash: e069449c87109851e8fe0b6d9e899dfef8c37065e420a6d5f661765e58588b86
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -93,4 +93,4 @@ provenance:
       sha256: 664c2d8427a14f0a9db9e4f9cd3138e1d8f8a83702fa31e99115b6c2d8bd0210
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-simpy/scripts/resource_monitor.py
       sha256: e069449c87109851e8fe0b6d9e899dfef8c37065e420a6d5f661765e58588b86
-license: Apache-2.0
+license: MIT

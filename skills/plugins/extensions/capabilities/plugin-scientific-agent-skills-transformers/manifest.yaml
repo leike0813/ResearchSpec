@@ -47,23 +47,23 @@ knowledge_refs:
   - knowledge_id: sas-references-generation.md
     path: references/generation.md
     content_hash: 80df1a7fa25b0cee201477cc7a6c32e5aa88f16086d3bab6bb57a6c11079ad30
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-models.md
     path: references/models.md
     content_hash: 706c838a02f2b8b1012b82881df222ce7c94dd5f15ca047cbcce7846321ce680
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-pipelines.md
     path: references/pipelines.md
     content_hash: ccc52086a9685a95e9ea0937dfc115606a1359e46331040e96e7facffa518511
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-tokenizers.md
     path: references/tokenizers.md
     content_hash: d2bb6e1ae5c6fbe91446839a4d0bf0fb2145bf4d41835b784e89b72210f95e7d
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-training.md
     path: references/training.md
     content_hash: ab4bc0e691875ba363586f481c378c88972a8dcf8dfc6590417986f1bc840aef
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -80,4 +80,4 @@ provenance:
       sha256: d2bb6e1ae5c6fbe91446839a4d0bf0fb2145bf4d41835b784e89b72210f95e7d
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-transformers/references/training.md
       sha256: ab4bc0e691875ba363586f481c378c88972a8dcf8dfc6590417986f1bc840aef
-license: Apache-2.0
+license: MIT

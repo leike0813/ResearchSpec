@@ -52,31 +52,31 @@ knowledge_refs:
   - knowledge_id: sas-references-api-reference.md
     path: references/api_reference.md
     content_hash: 6d368df0f9368d297c4db06ed0f78f23db9cbb488b986574fdf267cb8ec373c0
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-architecture.md
     path: references/architecture.md
     content_hash: f491698b896af52653b6b54c928d68088ff0f69698305b7fcb97197bb7f4ecd5
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-configuration.md
     path: references/configuration.md
     content_hash: a448271bba6ae082d39d0bbafc5761a1f63b8df48a49932475b59fa774e3ee29
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-examples.md
     path: references/examples.md
     content_hash: b6bc527544e04b7291aa377821733089a724cee32e6e265a54d574dab0404c54
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-scripts-chat-interaction.py
     path: scripts/chat_interaction.py
     content_hash: 64cb5283ea2ea17d00e046b902e93bc768b671f917bb9739aac0104dfaf95119
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-scripts-notebook-management.py
     path: scripts/notebook_management.py
     content_hash: 6939dc1657930eabac310a4068178776860f15fdc6447fc86f1325cced236add
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-scripts-source-ingestion.py
     path: scripts/source_ingestion.py
     content_hash: 96cd97e9512edf5013091607ad6bab3fec132d510446b7a8fb87a9f559b34ade
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -97,4 +97,4 @@ provenance:
       sha256: 6939dc1657930eabac310a4068178776860f15fdc6447fc86f1325cced236add
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/scripts/source_ingestion.py
       sha256: 96cd97e9512edf5013091607ad6bab3fec132d510446b7a8fb87a9f559b34ade
-license: Apache-2.0
+license: MIT

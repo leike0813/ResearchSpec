@@ -41,7 +41,7 @@ export async function runCapabilityValidators(
       continue;
     }
     if (validator.kind === "schema") {
-      results.push({ validator_id: validator.validator_id, status: "pass", detail: "schema validators are resolved when the shared schema registry is loaded" });
+      results.push({ validator_id: validator.validator_id, status: "fail", code: "schema_validator_unresolved", detail: "No executable schema validator is registered for this manifest entry." });
       continue;
     }
     results.push(await runScriptValidator(manifest, packageRoot, validator.validator_id, submission));
@@ -60,7 +60,7 @@ function runPolicyValidator(manifest: CapabilityManifest, validatorId: string, s
     }
     return { validator_id: validatorId, status: "pass" };
   }
-  return { validator_id: validatorId, status: "pass", detail: "engine-enforced policy" };
+  return { validator_id: validatorId, status: "fail", code: "policy_validator_unknown", detail: "The policy validator is not registered by the engine." };
 }
 
 async function runScriptValidator(

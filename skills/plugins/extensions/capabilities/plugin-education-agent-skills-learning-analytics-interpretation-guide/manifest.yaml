@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-learning-analytics-interpretation-guide/SKILL.md
       sha256: 2b06ef37930356e908ee240495a10318de1c81256449769e6777d635f54d50ec
-license: Apache-2.0
+license: CC-BY-SA-4.0

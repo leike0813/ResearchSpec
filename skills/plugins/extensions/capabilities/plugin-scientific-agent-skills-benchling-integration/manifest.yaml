@@ -47,19 +47,19 @@ knowledge_refs:
   - knowledge_id: sas-references-api-endpoints.md
     path: references/api_endpoints.md
     content_hash: 4a5c8565551089485ea6033554b8c8427766b752bf987cafc8d3582c19c47808
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-authentication.md
     path: references/authentication.md
     content_hash: 277a3fffdd9ec7e5c767168ef6b2af040229015f451895e96f57cfa4d2493d39
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-eventbridge.md
     path: references/eventbridge.md
     content_hash: 6e89cfdcc0c150a0bf466630f7d0ea7da3e1734607afdb08f9df5bf00b774606
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-sdk-reference.md
     path: references/sdk_reference.md
     content_hash: 8c382608201505fd448d4cabfc2541a662f892a53e3f78a9de9440d4d7c6a026
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -74,4 +74,4 @@ provenance:
       sha256: 6e89cfdcc0c150a0bf466630f7d0ea7da3e1734607afdb08f9df5bf00b774606
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-benchling-integration/references/sdk_reference.md
       sha256: 8c382608201505fd448d4cabfc2541a662f892a53e3f78a9de9440d4d7c6a026
-license: Apache-2.0
+license: MIT

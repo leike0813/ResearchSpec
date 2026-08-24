@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-interdisciplinary-real-world-connection-mapper/SKILL.md
       sha256: b3d2330f733175b1b32c97e4ab76eda00d1b10539f3db7cb038880b49374b79f
-license: Apache-2.0
+license: CC-BY-SA-4.0

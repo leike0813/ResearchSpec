@@ -115,8 +115,8 @@ export const REVIEW_RESPONSE_GRAPH_PROFILE = {
       prerequisites: ["round"],
       required_gate_ids: [],
       required_decision_ids: [],
-      multiplicity: "one",
-      round_role: null,
+      multiplicity: "repeatable",
+      round_role: "review",
     },
     {
       node_id: "response-coverage-gate",
@@ -126,8 +126,8 @@ export const REVIEW_RESPONSE_GRAPH_PROFILE = {
       prerequisites: ["round"],
       required_gate_ids: [],
       required_decision_ids: [],
-      multiplicity: "one",
-      round_role: null,
+      multiplicity: "repeatable",
+      round_role: "review",
     },
     {
       node_id: "final-assembly-gate",
@@ -137,8 +137,8 @@ export const REVIEW_RESPONSE_GRAPH_PROFILE = {
       prerequisites: ["round"],
       required_gate_ids: [],
       required_decision_ids: [],
-      multiplicity: "one",
-      round_role: null,
+      multiplicity: "repeatable",
+      round_role: "review",
     },
     {
       node_id: "outcome",

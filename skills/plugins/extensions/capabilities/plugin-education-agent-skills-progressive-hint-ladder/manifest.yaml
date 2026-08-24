@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-progressive-hint-ladder/SKILL.md
       sha256: 44f751971df675bb6b36571634c44131df5a8b6b7a3e2182f8c50ee9b8b7e74b
-license: Apache-2.0
+license: CC-BY-SA-4.0

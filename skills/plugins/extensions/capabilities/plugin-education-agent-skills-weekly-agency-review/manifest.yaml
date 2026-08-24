@@ -50,4 +50,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-weekly-agency-review/SKILL.md
       sha256: f8d194c0f69ec755f1e7ca72b3e17b06ee725f7419ee935169f26c571e0c4980
-license: Apache-2.0
+license: CC-BY-SA-4.0

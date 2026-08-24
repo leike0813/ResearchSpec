@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-adaptive-hint-sequence-designer/SKILL.md
       sha256: 6d8581a0b92cff1a7649d23b4f08d79e622d43829d988dfee07decb1109461d5
-license: Apache-2.0
+license: CC-BY-SA-4.0

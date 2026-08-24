@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-backwards-design-unit-planner/SKILL.md
       sha256: 952fc9baf5e40cdc22c444a445e56bc4e05b8d1bddc85463984f82e063d61a56
-license: Apache-2.0
+license: CC-BY-SA-4.0

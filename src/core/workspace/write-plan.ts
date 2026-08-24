@@ -22,6 +22,7 @@ export interface PlannedWrite {
 export interface WritePlan {
   operations: PlannedWrite[];
   readPreconditions?: ReadPrecondition[];
+  ensureDirectories?: string[];
 }
 
 export interface WritePlanExecutionOptions {
@@ -122,6 +123,7 @@ export function planDirectFileEdit(input: {
 export async function executeWritePlan(plan: WritePlan, options: WritePlanExecutionOptions = {}): Promise<void> {
   const actionable = plan.operations.filter((operation) => operation.action === "create" || operation.action === "refresh" || operation.action === "remove-owned" || operation.action === "move");
   const transaction = actionable.map((operation) => ({ operation, temporary: `${operation.path}.researchspec-${randomUUID()}.tmp`, backup: `${operation.path}.researchspec-${randomUUID()}.bak`, hadOriginal: false, committed: false }));
+  const createdDirectories: string[] = [];
   try {
     for (const precondition of plan.readPreconditions ?? []) {
       if (!(await exists(precondition.path)) || await hashPath(precondition.path) !== precondition.expectedHash) {
@@ -129,6 +131,11 @@ export async function executeWritePlan(plan: WritePlan, options: WritePlanExecut
       }
     }
     for (const entry of transaction) await verifyPrecondition(entry.operation);
+    for (const directory of [...new Set(plan.ensureDirectories ?? [])].sort(compareText)) {
+      if (await exists(directory)) continue;
+      await mkdir(directory, { recursive: true });
+      createdDirectories.push(directory);
+    }
     for (const entry of transaction) {
       if (entry.operation.action === "remove-owned" || entry.operation.action === "move") continue;
       if (entry.operation.content === undefined) throw new Error(`Planned write has no content: ${entry.operation.path}`);
@@ -160,6 +167,7 @@ export async function executeWritePlan(plan: WritePlan, options: WritePlanExecut
       if (entry.hadOriginal && await exists(entry.backup)) await rename(entry.backup, entry.operation.path).catch(() => undefined);
       await rm(entry.temporary, { force: true }).catch(() => undefined);
     }
+    for (const directory of [...createdDirectories].reverse()) await rm(directory, { recursive: false, force: true }).catch(() => undefined);
     throw error;
   }
   for (const entry of transaction) if (entry.hadOriginal) await rm(entry.backup, { force: true }).catch(() => undefined);

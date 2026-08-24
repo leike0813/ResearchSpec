@@ -48,4 +48,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-agency-circles-for-systems-action/SKILL.md
       sha256: f034be6f587e3a510a707c6445fde636ca85fdc3bd2dd13fcd8e796b7aa5ec36
-license: Apache-2.0
+license: CC-BY-SA-4.0

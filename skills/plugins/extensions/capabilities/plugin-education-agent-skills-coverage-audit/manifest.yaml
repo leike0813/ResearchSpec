@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-coverage-audit/SKILL.md
       sha256: 80f0eeef93d287f664f3bc0334dcf6f41fb3977786d34c00144da9b69e1d2ea7
-license: Apache-2.0
+license: CC-BY-SA-4.0

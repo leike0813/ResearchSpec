@@ -48,4 +48,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-mental-model-mapper/SKILL.md
       sha256: ae4145adb9a45f14e21a0713d0744c1d023f9e0c0066fbfb28a134ec68d872ac
-license: Apache-2.0
+license: CC-BY-SA-4.0

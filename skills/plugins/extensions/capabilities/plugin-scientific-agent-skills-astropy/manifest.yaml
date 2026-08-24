@@ -47,31 +47,31 @@ knowledge_refs:
   - knowledge_id: sas-references-coordinates.md
     path: references/coordinates.md
     content_hash: 6bba23f1cedf55411293337c0b4158f83d2babe3aaa617e9b2b364a8f4e7bd1a
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-cosmology.md
     path: references/cosmology.md
     content_hash: 311751b8072ce53abcba210b5ebfaac048301ecb7314d164321fba56df93366c
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-fits.md
     path: references/fits.md
     content_hash: aa1771bc8cb75a2f332bb1a9cfc31a859fd7b6e07a6314add673d17111b98838
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-tables.md
     path: references/tables.md
     content_hash: abade45705a4bf6b0a9b27d6693163e26cb53d9a9750f8d57dd9a9ad57caf366
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-time.md
     path: references/time.md
     content_hash: fd7c3a1a922e7b72060fa702d9702239a0b552d34efbe8e1673604a749810f61
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-units.md
     path: references/units.md
     content_hash: ec3d108772f9c0f2242ede6b8499f846d21d53bfc1c255fb3306bdf685139a8e
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-wcs-and-other-modules.md
     path: references/wcs_and_other_modules.md
     content_hash: b955cd3b0c75ae9dce3b24ccea2b78e0eceee6c81b836a30d1f4edf2821eb9fc
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -92,4 +92,4 @@ provenance:
       sha256: ec3d108772f9c0f2242ede6b8499f846d21d53bfc1c255fb3306bdf685139a8e
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-astropy/references/wcs_and_other_modules.md
       sha256: b955cd3b0c75ae9dce3b24ccea2b78e0eceee6c81b836a30d1f4edf2821eb9fc
-license: Apache-2.0
+license: MIT

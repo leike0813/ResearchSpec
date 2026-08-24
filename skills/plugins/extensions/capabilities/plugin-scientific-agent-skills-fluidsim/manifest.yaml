@@ -49,27 +49,27 @@ knowledge_refs:
   - knowledge_id: sas-references-advanced-features.md
     path: references/advanced_features.md
     content_hash: 43409fcaadd5b6b3b2bdf307d204183c5c29b2e91e61b75a1039b9a1486982df
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-installation.md
     path: references/installation.md
     content_hash: a2f971b5a24d489723d3aa36a40f6ce51058ea853f6f034615b9285dfebaadee
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-output-analysis.md
     path: references/output_analysis.md
     content_hash: 88ed758bd4986ea068024884ce3633764535ccfc84af5f7cdb6c3b61ef2a52f9
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-parameters.md
     path: references/parameters.md
     content_hash: 41ae6976c8a950b7cd1a0e3cf8bce2f5c2120ed4cd4bcfb2b2d42899fc2cf701
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-simulation-workflow.md
     path: references/simulation_workflow.md
     content_hash: 38adf5b402e878b8c929cdd94ef014320345140ff0939efb422afe24168e2daa
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-solvers.md
     path: references/solvers.md
     content_hash: 3abe711620b8c463e2916851985ebab1bfbbbacfa9f944e07b1e7d38c2887bb4
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -88,4 +88,4 @@ provenance:
       sha256: 38adf5b402e878b8c929cdd94ef014320345140ff0939efb422afe24168e2daa
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-fluidsim/references/solvers.md
       sha256: 3abe711620b8c463e2916851985ebab1bfbbbacfa9f944e07b1e7d38c2887bb4
-license: Apache-2.0
+license: MIT

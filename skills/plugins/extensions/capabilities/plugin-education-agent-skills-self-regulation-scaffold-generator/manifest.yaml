@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-self-regulation-scaffold-generator/SKILL.md
       sha256: 709ea41163ba836eaf5bd77dab4217a1b65fd0d21b80bf9f5f85b91f33ef0a57
-license: Apache-2.0
+license: CC-BY-SA-4.0

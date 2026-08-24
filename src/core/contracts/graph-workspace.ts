@@ -10,6 +10,7 @@ import {
   StableIdSchema,
 } from "./stable-specs.js";
 import { CapabilityGraphProfileSchema } from "./capability-graph.js";
+import { SafeProjectRelativePathSchema } from "./project-path.js";
 
 export const GRAPH_WORKSPACE_SCHEMA_VERSION = "2" as const;
 
@@ -133,6 +134,13 @@ export const GraphRunSchema = z.strictObject({
   entry_node_id: StableIdSchema,
   status: z.enum(["active", "paused", "blocked", "complete", "cancelled"]),
   started_at: Rfc3339Schema,
+  authorization_origin: z.enum(["human", "parent_run"]),
+  parent_binding: z.strictObject({
+    parent_run_id: StableIdSchema,
+    parent_node_id: StableIdSchema,
+    subgraph_id: StableIdSchema,
+    round: z.number().int().positive().optional(),
+  }).optional(),
   start_confirmation: z.strictObject({
     confirmed_by: NonEmptySchema,
     confirmed_at: Rfc3339Schema,
@@ -140,7 +148,15 @@ export const GraphRunSchema = z.strictObject({
     expected_outputs: z.array(NonEmptySchema),
     formal_gates: z.array(StableIdSchema),
     cost: CostSchema,
-  }),
+  }).optional(),
+}).superRefine((value, context) => {
+  if (value.authorization_origin === "human") {
+    if (!value.start_confirmation) context.addIssue({ code: "custom", path: ["start_confirmation"], message: "Human-authorized runs require start confirmation." });
+    if (value.parent_binding) context.addIssue({ code: "custom", path: ["parent_binding"], message: "Human-authorized runs cannot declare a parent binding." });
+  } else {
+    if (!value.parent_binding) context.addIssue({ code: "custom", path: ["parent_binding"], message: "Parent-authorized runs require a parent binding." });
+    if (value.start_confirmation) context.addIssue({ code: "custom", path: ["start_confirmation"], message: "Parent-authorized runs inherit authorization and cannot declare a second start confirmation." });
+  }
 });
 
 export const GraphNodeInstanceSchema = z.strictObject({
@@ -151,7 +167,7 @@ export const GraphNodeInstanceSchema = z.strictObject({
   state: z.enum(["pending", "eligible", "complete", "blocked", "cancelled", "skipped"]),
   round: z.number().int().positive().optional(),
   updated_at: Rfc3339Schema,
-  outputs: z.array(z.strictObject({ role: NonEmptySchema, path: NonEmptySchema })),
+  outputs: z.array(z.strictObject({ role: NonEmptySchema, path: SafeProjectRelativePathSchema })),
   gate_attempts: z.array(z.strictObject({
     gate_id: StableIdSchema,
     verdict: z.enum(["pass", "pass_with_conditions", "fail"]),
@@ -184,12 +200,12 @@ export const GraphNodeInstanceSchema = z.strictObject({
 const RunHandoffEntrySchema = z.strictObject({
   role: NonEmptySchema,
   type: NonEmptySchema,
-  path: NonEmptySchema,
+  path: SafeProjectRelativePathSchema,
   purpose: NonEmptySchema,
   format: QuartoFormatIdSchema.optional(),
   renderer: z.literal("quarto").optional(),
   path_kind: z.enum(["file", "directory"]).optional(),
-  entry_path: NonEmptySchema.optional(),
+  entry_path: SafeProjectRelativePathSchema.optional(),
   limits: z.array(NonEmptySchema).optional(),
   notes: NonEmptySchema.optional(),
 }).superRefine((value, context) => {

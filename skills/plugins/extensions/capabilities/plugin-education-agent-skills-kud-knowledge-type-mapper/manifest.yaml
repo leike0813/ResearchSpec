@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-kud-knowledge-type-mapper/SKILL.md
       sha256: 785b75716f5c56bf280ed208b7eae96bcd4e3ea879facceb61d034f32af72b0e
-license: Apache-2.0
+license: CC-BY-SA-4.0

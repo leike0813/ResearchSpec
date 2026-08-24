@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-outdoor-learning-sequence-designer/SKILL.md
       sha256: c7d153f4a5f38e09a1d3aeb3c9dc290349b1438f1450cd55535ee7e9b5276955
-license: Apache-2.0
+license: CC-BY-SA-4.0

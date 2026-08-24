@@ -49,31 +49,31 @@ knowledge_refs:
   - knowledge_id: sas-references-algorithms.md
     path: references/algorithms.md
     content_hash: 364effdb558ed7104dcf94b7c4407ca1c34e6b3d7bc36e2b0ea0591f09e73cae
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-callbacks.md
     path: references/callbacks.md
     content_hash: 54b8253ac089f949d4d1da7d19a06bf6e0819415e5f03f7c95294e718c1c1e48
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-custom-environments.md
     path: references/custom_environments.md
     content_hash: 24a30a48fbdbaf7cf226fcd0916bf4ae8c3ec25d1fbeb500c13ccfb78fb5325c
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-vectorized-envs.md
     path: references/vectorized_envs.md
     content_hash: be23ef237442efb1b9ac68f196652beb962bc6c7d2ee94059751cdc65746ab73
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-scripts-custom-env-template.py
     path: scripts/custom_env_template.py
     content_hash: 10d4d2f55fef72b091d65faa409746484fa8ef9472578c6f96de551f2b37512d
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-scripts-evaluate-agent.py
     path: scripts/evaluate_agent.py
     content_hash: 16024c0322e4c70b82dae620fa7481da08a1ea6e10fd36ec203c2c32fa0da464
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-scripts-train-rl-agent.py
     path: scripts/train_rl_agent.py
     content_hash: a233523c6ee778c8931bdf3ae093f1ee8865db63be40f3365328e0e6ec024892
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -94,4 +94,4 @@ provenance:
       sha256: 16024c0322e4c70b82dae620fa7481da08a1ea6e10fd36ec203c2c32fa0da464
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-stable-baselines3/scripts/train_rl_agent.py
       sha256: a233523c6ee778c8931bdf3ae093f1ee8865db63be40f3365328e0e6ec024892
-license: Apache-2.0
+license: MIT

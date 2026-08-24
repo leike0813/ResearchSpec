@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-worked-example-to-problem-solving-transition-designer/SKILL.md
       sha256: 82c7afcfc2576f2003d5370f2716fde4a12c3e7c78d92d691fba467f7fdf06f3
-license: Apache-2.0
+license: CC-BY-SA-4.0

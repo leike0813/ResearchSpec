@@ -41,6 +41,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-aeon",
       "raw_skill_id": "scientific-agent-skills-aeon",
+      "license": "MIT",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -101,6 +102,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-astropy",
       "raw_skill_id": "scientific-agent-skills-astropy",
+      "license": "MIT",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -145,6 +147,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-benchling-integration",
       "raw_skill_id": "scientific-agent-skills-benchling-integration",
+      "license": "MIT",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -177,6 +180,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-cirq",
       "raw_skill_id": "scientific-agent-skills-cirq",
+      "license": "MIT",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -217,6 +221,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-fluidsim",
       "raw_skill_id": "scientific-agent-skills-fluidsim",
+      "license": "MIT",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -257,6 +262,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-generate-image",
       "raw_skill_id": "scientific-agent-skills-generate-image",
+      "license": "MIT",
       "execution_type": "mixed",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -277,6 +283,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-geomaster",
       "raw_skill_id": "scientific-agent-skills-geomaster",
+      "license": "MIT",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -353,6 +360,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-geopandas",
       "raw_skill_id": "scientific-agent-skills-geopandas",
+      "license": "MIT",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -393,6 +401,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-ginkgo-cloud-lab",
       "raw_skill_id": "scientific-agent-skills-ginkgo-cloud-lab",
+      "license": "MIT",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -477,6 +486,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-infographics",
       "raw_skill_id": "scientific-agent-skills-infographics",
+      "license": "MIT",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -505,6 +515,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-labarchive-integration",
       "raw_skill_id": "scientific-agent-skills-labarchive-integration",
+      "license": "MIT",
       "execution_type": "mixed",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -545,6 +556,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-latex-posters",
       "raw_skill_id": "scientific-agent-skills-latex-posters",
+      "license": "MIT",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -601,6 +613,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-liteparse",
       "raw_skill_id": "scientific-agent-skills-liteparse",
+      "license": "MIT",
       "execution_type": "mixed",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -641,6 +654,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-markdown-mermaid-writing",
       "raw_skill_id": "scientific-agent-skills-markdown-mermaid-writing",
+      "license": "MIT",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -801,6 +815,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-markitdown",
       "raw_skill_id": "scientific-agent-skills-markitdown",
+      "license": "MIT",
       "execution_type": "mixed",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -837,6 +852,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-matlab",
       "raw_skill_id": "scientific-agent-skills-matlab",
+      "license": "MIT",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -885,6 +901,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-matplotlib",
       "raw_skill_id": "scientific-agent-skills-matplotlib",
+      "license": "MIT",
       "execution_type": "mixed",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -925,6 +942,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-modal",
       "raw_skill_id": "scientific-agent-skills-modal",
+      "license": "MIT",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -985,6 +1003,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-networkx",
       "raw_skill_id": "scientific-agent-skills-networkx",
+      "license": "MIT",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -1021,6 +1040,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-open-notebook",
       "raw_skill_id": "scientific-agent-skills-open-notebook",
+      "license": "MIT",
       "execution_type": "mixed",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -1065,6 +1085,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-opentrons-integration",
       "raw_skill_id": "scientific-agent-skills-opentrons-integration",
+      "license": "MIT",
       "execution_type": "mixed",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -1097,6 +1118,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-optimize-for-gpu",
       "raw_skill_id": "scientific-agent-skills-optimize-for-gpu",
+      "license": "MIT",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -1161,6 +1183,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-pacsomatic",
       "raw_skill_id": "scientific-agent-skills-pacsomatic",
+      "license": "MIT",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -1193,6 +1216,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-parallel-web",
       "raw_skill_id": "scientific-agent-skills-parallel-web",
+      "license": "MIT",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -1208,6 +1232,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-pennylane",
       "raw_skill_id": "scientific-agent-skills-pennylane",
+      "license": "MIT",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -1252,6 +1277,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-pptx-posters",
       "raw_skill_id": "scientific-agent-skills-pptx-posters",
+      "license": "MIT",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -1288,6 +1314,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-protocolsio-integration",
       "raw_skill_id": "scientific-agent-skills-protocolsio-integration",
+      "license": "MIT",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -1328,6 +1355,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-pufferlib",
       "raw_skill_id": "scientific-agent-skills-pufferlib",
+      "license": "MIT",
       "execution_type": "mixed",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -1372,6 +1400,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-pylabrobot",
       "raw_skill_id": "scientific-agent-skills-pylabrobot",
+      "license": "MIT",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -1412,6 +1441,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-pymatgen",
       "raw_skill_id": "scientific-agent-skills-pymatgen",
+      "license": "MIT",
       "execution_type": "mixed",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -1460,6 +1490,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-pymoo",
       "raw_skill_id": "scientific-agent-skills-pymoo",
+      "license": "MIT",
       "execution_type": "mixed",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -1520,6 +1551,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-pytorch-lightning",
       "raw_skill_id": "scientific-agent-skills-pytorch-lightning",
+      "license": "MIT",
       "execution_type": "mixed",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -1576,6 +1608,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-pyzotero",
       "raw_skill_id": "scientific-agent-skills-pyzotero",
+      "license": "MIT",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -1648,6 +1681,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-qiskit",
       "raw_skill_id": "scientific-agent-skills-qiskit",
+      "license": "MIT",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -1696,6 +1730,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-qutip",
       "raw_skill_id": "scientific-agent-skills-qutip",
+      "license": "MIT",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -1732,6 +1767,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-scientific-schematics",
       "raw_skill_id": "scientific-agent-skills-scientific-schematics",
+      "license": "MIT",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -1752,6 +1788,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-scientific-slides",
       "raw_skill_id": "scientific-agent-skills-scientific-slides",
+      "license": "MIT",
       "execution_type": "mixed",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -1824,6 +1861,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-scientific-visualization",
       "raw_skill_id": "scientific-agent-skills-scientific-visualization",
+      "license": "MIT",
       "execution_type": "mixed",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -1880,6 +1918,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-scikit-learn",
       "raw_skill_id": "scientific-agent-skills-scikit-learn",
+      "license": "MIT",
       "execution_type": "mixed",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -1928,6 +1967,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-seaborn",
       "raw_skill_id": "scientific-agent-skills-seaborn",
+      "license": "MIT",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -1956,6 +1996,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-shap",
       "raw_skill_id": "scientific-agent-skills-shap",
+      "license": "MIT",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -1988,6 +2029,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-simpy",
       "raw_skill_id": "scientific-agent-skills-simpy",
+      "license": "MIT",
       "execution_type": "mixed",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -2032,6 +2074,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-stable-baselines3",
       "raw_skill_id": "scientific-agent-skills-stable-baselines3",
+      "license": "MIT",
       "execution_type": "mixed",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -2076,6 +2119,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-sympy",
       "raw_skill_id": "scientific-agent-skills-sympy",
+      "license": "MIT",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -2112,6 +2156,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-timesfm-forecasting",
       "raw_skill_id": "scientific-agent-skills-timesfm-forecasting",
+      "license": "MIT",
       "execution_type": "mixed",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -2232,6 +2277,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-torch-geometric",
       "raw_skill_id": "scientific-agent-skills-torch-geometric",
+      "license": "MIT",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -2272,6 +2318,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-transformers",
       "raw_skill_id": "scientific-agent-skills-transformers",
+      "license": "MIT",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -2308,6 +2355,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-umap-learn",
       "raw_skill_id": "scientific-agent-skills-umap-learn",
+      "license": "MIT",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -2328,6 +2376,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-venue-templates",
       "raw_skill_id": "scientific-agent-skills-venue-templates",
+      "license": "MIT",
       "execution_type": "mixed",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [

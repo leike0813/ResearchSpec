@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-cognitive-load-analyser/SKILL.md
       sha256: 589f5c76a719b35ec7ac8a0d819c91e83eab2b20ea720736fe89db44efd7b2c6
-license: Apache-2.0
+license: CC-BY-SA-4.0

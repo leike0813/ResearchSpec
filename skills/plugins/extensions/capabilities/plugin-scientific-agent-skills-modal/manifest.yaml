@@ -48,47 +48,47 @@ knowledge_refs:
   - knowledge_id: sas-references-api-reference.md
     path: references/api_reference.md
     content_hash: d18de696ec9f645d8fbedcb7436a5bbfb9d454282708a3cfb31b47be902eff27
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-examples.md
     path: references/examples.md
     content_hash: 257041a086a4b9ad4619efba68819f87034e1c29315d71c09ddf82751d0734ea
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-functions.md
     path: references/functions.md
     content_hash: 52cbbd7fd7707cab44fb9d67206d29948cbe15be99dde783216af7d00073dcf2
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-getting-started.md
     path: references/getting-started.md
     content_hash: 757c29f55343886a441f3365a5a5bc75e9033bbc2bc724f1c8c2d8bc6ac1fa4e
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-gpu.md
     path: references/gpu.md
     content_hash: c06ccf16f6accf9011447e95aec0a7f2cc9d39ecec8ea5aabd5272cc49182760
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-images.md
     path: references/images.md
     content_hash: 46fc6b842d7d90cf7a7d0be3ed8afaa365b0008681a0598ac2d7f3f8cb36b90b
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-resources.md
     path: references/resources.md
     content_hash: f2c5b4f87147fea42a4dae7f1134958904cd727052486517f355a089d31cb7fd
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-scaling.md
     path: references/scaling.md
     content_hash: d047c866a44571c6ca6d7dc8c9c2f040cfe6273a3bcdb147546ce7898a4ec544
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-scheduled-jobs.md
     path: references/scheduled-jobs.md
     content_hash: f3f7a2e92d1b8bad90cd302bd44701d4dd8f3dff274785a196d8395b20f24ba1
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-volumes.md
     path: references/volumes.md
     content_hash: 88a25d1f4e5d15372de23f3b53c570d1b3f26fdde19564674df089cc75180426
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-web-endpoints.md
     path: references/web-endpoints.md
     content_hash: a806cc6582c21e7d9d32372ee68475afb7cce68e799cff46ceb49af37fdb94e2
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -117,4 +117,4 @@ provenance:
       sha256: 88a25d1f4e5d15372de23f3b53c570d1b3f26fdde19564674df089cc75180426
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-modal/references/web-endpoints.md
       sha256: a806cc6582c21e7d9d32372ee68475afb7cce68e799cff46ceb49af37fdb94e2
-license: Apache-2.0
+license: MIT

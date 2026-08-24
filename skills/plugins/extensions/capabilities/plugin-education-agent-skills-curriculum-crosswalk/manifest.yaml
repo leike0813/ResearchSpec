@@ -50,4 +50,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-curriculum-crosswalk/SKILL.md
       sha256: da53d7c193ea55c719d7865ba90e50a02ee5f91fe1585151b9809dc519aa81d5
-license: Apache-2.0
+license: CC-BY-SA-4.0

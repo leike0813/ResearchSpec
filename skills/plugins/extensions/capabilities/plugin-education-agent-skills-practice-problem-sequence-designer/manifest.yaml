@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-practice-problem-sequence-designer/SKILL.md
       sha256: a7e99a5de12fbfa8911fb366eec73db5c9fc5e24a298b8c89825b07979fd99aa
-license: Apache-2.0
+license: CC-BY-SA-4.0

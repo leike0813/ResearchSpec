@@ -47,15 +47,15 @@ knowledge_refs:
   - knowledge_id: sas-references-color-palettes.md
     path: references/color_palettes.md
     content_hash: a195e6a32af06d224a0f4057c14804771f6293677365bbd14032e5f90bddef31
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-design-principles.md
     path: references/design_principles.md
     content_hash: 8eac51fd0b0493c0968c8abe0716b4c34895d0950f8db8d252c2c74f8196abc9
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-infographic-types.md
     path: references/infographic_types.md
     content_hash: f45f97e79fa0962984766b59816182263366180a6b47af65b33df9bb4600c054
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -68,4 +68,4 @@ provenance:
       sha256: 8eac51fd0b0493c0968c8abe0716b4c34895d0950f8db8d252c2c74f8196abc9
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-infographics/references/infographic_types.md
       sha256: f45f97e79fa0962984766b59816182263366180a6b47af65b33df9bb4600c054
-license: Apache-2.0
+license: MIT

@@ -3,9 +3,9 @@
 - upstream: https://github.com/K-Dense-AI/scientific-agent-skills.git
 - revision: `9c9bd2e92af12311ecd0c1a643e0931643f9ea04`
 - upstream content files: 1483
-- upstream tree SHA-256: `473fc1ce60c03142871b8f065e847ffd2bdd201ad9da3bdc77451b33873d9014`
+- upstream tree SHA-256: `27ae2e7d95d42bfa3c57b5fb50995af983c970991beb79d94d785179e53af7c2`
 - immutable audit SHA-256: `9148800006cc3585f7fc9a4533bdfca64e9306bae2bcb9cd6525f3c0d88fe161`
-- advisory vendor bundle SHA-256: `1b90eaa3f91a25c4d8decbc67854012e96d5a252b98a936e3960b5f04d27e157`
+- advisory vendor bundle SHA-256: `c96143dd6adcf2fef2f4ec76226c114dbf255779d2c3eba7cdce810d5d45b467`
 
 ## Upstream Inventory
 

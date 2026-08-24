@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-biophilic-learning-environment-designer/SKILL.md
       sha256: 994d713f1662dba90a9d181b3e3abd2803aee18d6dca05b2425421b2c7ff0a43
-license: Apache-2.0
+license: CC-BY-SA-4.0

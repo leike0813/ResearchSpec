@@ -87,9 +87,9 @@ const definitions: readonly CliCommandDefinition[] = [
   ], ["init", "status", "doctor"]),
   command("status", ["status"], "status", "control-plane", "Show derived schema 2 run/node status", "required", "read", [], ["instructions", "show", "list"]),
   command("instructions", ["instructions"], "instructions <selector>", "control-plane", "Show profile, run, node, Gate, Decision, or change instructions", "required", "read", [], ["status", "start", "advance", "decide"]),
-  command("start", ["start"], "start <profile-id>", "control-plane", "Atomically start one confirmed graph run", "required", "write", [
-    option("input", "--input <start.yaml|json>", "schema 1 semantic Start input", true),
-    option("confirmedBy", "--confirmed-by <name>", "human who confirmed this exact instance", true),
+  command("start", ["start"], "start <profile-id|node-selector>", "control-plane", "Start a confirmed root run or one graph-authorized child run", "required", "write", [
+    option("input", "--input <start.yaml|json>", "schema 2 root Start input"),
+    option("confirmedBy", "--confirmed-by <name>", "human who confirmed this exact root run"),
   ], ["status", "instructions"]),
   command("advance", ["advance"], "advance <node-selector>", "control-plane", "Validate and complete one eligible graph node", "required", "write", [
     option("input", "--input <advance.yaml|json>", "output role submission payload", true),
@@ -110,7 +110,7 @@ const definitions: readonly CliCommandDefinition[] = [
   ], ["pack", "status"]),
   command("pack", ["pack"], "pack", "context", "Create a deterministic bounded schema 2 context bundle", "required", "write", [
     option("output", "--output <zip>", "output ZIP path", true),
-    option("scope", "--scope <scope>", "all, specs, profile, subflows, changes, subflow:<id>, or change:<id>"),
+    option("scope", "--scope <scope>", "all, specs, profiles, runs, changes, run:<id>, or change:<id>"),
   ], ["handoff", "check"]),
   command("propose", ["propose"], "propose <change-id>", "governance", "Create an adaptable project change document package", "required", "write", [
     option("targets", "--targets <specs>", "comma-separated project.md, sources.yaml, claims.yaml, or manuscript.yaml", true),

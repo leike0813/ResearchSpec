@@ -20,6 +20,7 @@
     {
       "capability_id": "plugin-education-agent-skills-academic-language-sentence-frame-generator",
       "raw_skill_id": "education-agent-skills-academic-language-sentence-frame-generator",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -35,6 +36,7 @@
     {
       "capability_id": "plugin-education-agent-skills-adaptive-hint-sequence-designer",
       "raw_skill_id": "education-agent-skills-adaptive-hint-sequence-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -50,6 +52,7 @@
     {
       "capability_id": "plugin-education-agent-skills-agency-circles-for-systems-action",
       "raw_skill_id": "education-agent-skills-agency-circles-for-systems-action",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -65,6 +68,7 @@
     {
       "capability_id": "plugin-education-agent-skills-agency-scaffold-generator",
       "raw_skill_id": "education-agent-skills-agency-scaffold-generator",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -80,6 +84,7 @@
     {
       "capability_id": "plugin-education-agent-skills-ai-claim-checker",
       "raw_skill_id": "education-agent-skills-ai-claim-checker",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -95,6 +100,7 @@
     {
       "capability_id": "plugin-education-agent-skills-ai-expertise-interrogation-designer",
       "raw_skill_id": "education-agent-skills-ai-expertise-interrogation-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -110,6 +116,7 @@
     {
       "capability_id": "plugin-education-agent-skills-ai-facilitated-collaborative-learning-designer",
       "raw_skill_id": "education-agent-skills-ai-facilitated-collaborative-learning-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -125,6 +132,7 @@
     {
       "capability_id": "plugin-education-agent-skills-ai-feedback-design-principles",
       "raw_skill_id": "education-agent-skills-ai-feedback-design-principles",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -140,6 +148,7 @@
     {
       "capability_id": "plugin-education-agent-skills-ai-hallucination-fact-check-protocol",
       "raw_skill_id": "education-agent-skills-ai-hallucination-fact-check-protocol",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -155,6 +164,7 @@
     {
       "capability_id": "plugin-education-agent-skills-ai-learning-boundary-mapper",
       "raw_skill_id": "education-agent-skills-ai-learning-boundary-mapper",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -170,6 +180,7 @@
     {
       "capability_id": "plugin-education-agent-skills-ai-output-critical-audit-designer",
       "raw_skill_id": "education-agent-skills-ai-output-critical-audit-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -185,6 +196,7 @@
     {
       "capability_id": "plugin-education-agent-skills-ai-socratic-dialogue-designer",
       "raw_skill_id": "education-agent-skills-ai-socratic-dialogue-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -200,6 +212,7 @@
     {
       "capability_id": "plugin-education-agent-skills-argument-structure-scaffold-generator",
       "raw_skill_id": "education-agent-skills-argument-structure-scaffold-generator",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -215,6 +228,7 @@
     {
       "capability_id": "plugin-education-agent-skills-aspirational-systems-iceberg",
       "raw_skill_id": "education-agent-skills-aspirational-systems-iceberg",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -230,6 +244,7 @@
     {
       "capability_id": "plugin-education-agent-skills-assessment-validity-checker",
       "raw_skill_id": "education-agent-skills-assessment-validity-checker",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -245,6 +260,7 @@
     {
       "capability_id": "plugin-education-agent-skills-awe-wonder-experience-designer",
       "raw_skill_id": "education-agent-skills-awe-wonder-experience-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -260,6 +276,7 @@
     {
       "capability_id": "plugin-education-agent-skills-backwards-design-unit-planner",
       "raw_skill_id": "education-agent-skills-backwards-design-unit-planner",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -275,6 +292,7 @@
     {
       "capability_id": "plugin-education-agent-skills-belonging-classroom-culture-designer",
       "raw_skill_id": "education-agent-skills-belonging-classroom-culture-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -290,6 +308,7 @@
     {
       "capability_id": "plugin-education-agent-skills-biophilic-learning-environment-designer",
       "raw_skill_id": "education-agent-skills-biophilic-learning-environment-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -305,6 +324,7 @@
     {
       "capability_id": "plugin-education-agent-skills-checking-for-understanding-protocol-designer",
       "raw_skill_id": "education-agent-skills-checking-for-understanding-protocol-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -320,6 +340,7 @@
     {
       "capability_id": "plugin-education-agent-skills-cognitive-load-analyser",
       "raw_skill_id": "education-agent-skills-cognitive-load-analyser",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -335,6 +356,7 @@
     {
       "capability_id": "plugin-education-agent-skills-cognitive-tutoring-architecture-designer",
       "raw_skill_id": "education-agent-skills-cognitive-tutoring-architecture-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -350,6 +372,7 @@
     {
       "capability_id": "plugin-education-agent-skills-competency-unpacker",
       "raw_skill_id": "education-agent-skills-competency-unpacker",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -365,6 +388,7 @@
     {
       "capability_id": "plugin-education-agent-skills-confidence-calibration-check",
       "raw_skill_id": "education-agent-skills-confidence-calibration-check",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -380,6 +404,7 @@
     {
       "capability_id": "plugin-education-agent-skills-coverage-audit",
       "raw_skill_id": "education-agent-skills-coverage-audit",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -395,6 +420,7 @@
     {
       "capability_id": "plugin-education-agent-skills-cpa-sequence-designer",
       "raw_skill_id": "education-agent-skills-cpa-sequence-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -410,6 +436,7 @@
     {
       "capability_id": "plugin-education-agent-skills-criterion-referenced-rubric-generator",
       "raw_skill_id": "education-agent-skills-criterion-referenced-rubric-generator",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -425,6 +452,7 @@
     {
       "capability_id": "plugin-education-agent-skills-critical-thinking-task-designer",
       "raw_skill_id": "education-agent-skills-critical-thinking-task-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -440,6 +468,7 @@
     {
       "capability_id": "plugin-education-agent-skills-cross-cultural-task-validity-checker",
       "raw_skill_id": "education-agent-skills-cross-cultural-task-validity-checker",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -455,6 +484,7 @@
     {
       "capability_id": "plugin-education-agent-skills-culturally-responsive-teaching-designer",
       "raw_skill_id": "education-agent-skills-culturally-responsive-teaching-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -470,6 +500,7 @@
     {
       "capability_id": "plugin-education-agent-skills-curriculum-crosswalk",
       "raw_skill_id": "education-agent-skills-curriculum-crosswalk",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -485,6 +516,7 @@
     {
       "capability_id": "plugin-education-agent-skills-curriculum-knowledge-architecture-designer",
       "raw_skill_id": "education-agent-skills-curriculum-knowledge-architecture-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -500,6 +532,7 @@
     {
       "capability_id": "plugin-education-agent-skills-dialogic-teaching-move-generator",
       "raw_skill_id": "education-agent-skills-dialogic-teaching-move-generator",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -515,6 +548,7 @@
     {
       "capability_id": "plugin-education-agent-skills-differentiation-adapter",
       "raw_skill_id": "education-agent-skills-differentiation-adapter",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -530,6 +564,7 @@
     {
       "capability_id": "plugin-education-agent-skills-digital-worked-example-sequence",
       "raw_skill_id": "education-agent-skills-digital-worked-example-sequence",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -545,6 +580,7 @@
     {
       "capability_id": "plugin-education-agent-skills-disciplinary-ai-literacy-sequence-designer",
       "raw_skill_id": "education-agent-skills-disciplinary-ai-literacy-sequence-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -560,6 +596,7 @@
     {
       "capability_id": "plugin-education-agent-skills-disciplinary-writing-scaffold",
       "raw_skill_id": "education-agent-skills-disciplinary-writing-scaffold",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -575,6 +612,7 @@
     {
       "capability_id": "plugin-education-agent-skills-discipline-specific-critical-thinking-task-designer",
       "raw_skill_id": "education-agent-skills-discipline-specific-critical-thinking-task-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -590,6 +628,7 @@
     {
       "capability_id": "plugin-education-agent-skills-discussion-protocol-selector",
       "raw_skill_id": "education-agent-skills-discussion-protocol-selector",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -605,6 +644,7 @@
     {
       "capability_id": "plugin-education-agent-skills-dual-coding-designer",
       "raw_skill_id": "education-agent-skills-dual-coding-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -620,6 +660,7 @@
     {
       "capability_id": "plugin-education-agent-skills-ecological-inquiry-anchor-designer",
       "raw_skill_id": "education-agent-skills-ecological-inquiry-anchor-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -635,6 +676,7 @@
     {
       "capability_id": "plugin-education-agent-skills-elaborative-interrogation-generator",
       "raw_skill_id": "education-agent-skills-elaborative-interrogation-generator",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -650,6 +692,7 @@
     {
       "capability_id": "plugin-education-agent-skills-emergent-project-design-scaffold",
       "raw_skill_id": "education-agent-skills-emergent-project-design-scaffold",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -665,6 +708,7 @@
     {
       "capability_id": "plugin-education-agent-skills-erroneous-example-designer",
       "raw_skill_id": "education-agent-skills-erroneous-example-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -680,6 +724,7 @@
     {
       "capability_id": "plugin-education-agent-skills-error-analysis-protocol",
       "raw_skill_id": "education-agent-skills-error-analysis-protocol",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -695,6 +740,7 @@
     {
       "capability_id": "plugin-education-agent-skills-experiential-learning-cycle-designer",
       "raw_skill_id": "education-agent-skills-experiential-learning-cycle-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -710,6 +756,7 @@
     {
       "capability_id": "plugin-education-agent-skills-explain-first-interrogator",
       "raw_skill_id": "education-agent-skills-explain-first-interrogator",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -725,6 +772,7 @@
     {
       "capability_id": "plugin-education-agent-skills-explicit-instruction-sequence-builder",
       "raw_skill_id": "education-agent-skills-explicit-instruction-sequence-builder",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -740,6 +788,7 @@
     {
       "capability_id": "plugin-education-agent-skills-fading-manager",
       "raw_skill_id": "education-agent-skills-fading-manager",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -755,6 +804,7 @@
     {
       "capability_id": "plugin-education-agent-skills-feedback-quality-analyser",
       "raw_skill_id": "education-agent-skills-feedback-quality-analyser",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -770,6 +820,7 @@
     {
       "capability_id": "plugin-education-agent-skills-flow-state-condition-designer",
       "raw_skill_id": "education-agent-skills-flow-state-condition-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -785,6 +836,7 @@
     {
       "capability_id": "plugin-education-agent-skills-formative-assessment-loop-designer",
       "raw_skill_id": "education-agent-skills-formative-assessment-loop-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -800,6 +852,7 @@
     {
       "capability_id": "plugin-education-agent-skills-formative-assessment-technique-selector",
       "raw_skill_id": "education-agent-skills-formative-assessment-technique-selector",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -815,6 +868,7 @@
     {
       "capability_id": "plugin-education-agent-skills-gap-analysis-from-student-work",
       "raw_skill_id": "education-agent-skills-gap-analysis-from-student-work",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -830,6 +884,7 @@
     {
       "capability_id": "plugin-education-agent-skills-goal-setting-protocol-designer",
       "raw_skill_id": "education-agent-skills-goal-setting-protocol-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -845,6 +900,7 @@
     {
       "capability_id": "plugin-education-agent-skills-hexagon-complexity-mapper",
       "raw_skill_id": "education-agent-skills-hexagon-complexity-mapper",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -860,6 +916,7 @@
     {
       "capability_id": "plugin-education-agent-skills-hinge-question-designer",
       "raw_skill_id": "education-agent-skills-hinge-question-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -875,6 +932,7 @@
     {
       "capability_id": "plugin-education-agent-skills-implementation-intention-designer",
       "raw_skill_id": "education-agent-skills-implementation-intention-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -890,6 +948,7 @@
     {
       "capability_id": "plugin-education-agent-skills-individual-spacing-algorithm-explainer",
       "raw_skill_id": "education-agent-skills-individual-spacing-algorithm-explainer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -905,6 +964,7 @@
     {
       "capability_id": "plugin-education-agent-skills-instructional-coaching-conversation-guide",
       "raw_skill_id": "education-agent-skills-instructional-coaching-conversation-guide",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -920,6 +980,7 @@
     {
       "capability_id": "plugin-education-agent-skills-intelligent-tutoring-dialogue-designer",
       "raw_skill_id": "education-agent-skills-intelligent-tutoring-dialogue-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -935,6 +996,7 @@
     {
       "capability_id": "plugin-education-agent-skills-interdisciplinary-real-world-connection-mapper",
       "raw_skill_id": "education-agent-skills-interdisciplinary-real-world-connection-mapper",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -950,6 +1012,7 @@
     {
       "capability_id": "plugin-education-agent-skills-interleaving-unit-planner",
       "raw_skill_id": "education-agent-skills-interleaving-unit-planner",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -965,6 +1028,7 @@
     {
       "capability_id": "plugin-education-agent-skills-kud-chart-author",
       "raw_skill_id": "education-agent-skills-kud-chart-author",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -980,6 +1044,7 @@
     {
       "capability_id": "plugin-education-agent-skills-kud-knowledge-type-mapper",
       "raw_skill_id": "education-agent-skills-kud-knowledge-type-mapper",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -995,6 +1060,7 @@
     {
       "capability_id": "plugin-education-agent-skills-ladder-of-inference-reflection",
       "raw_skill_id": "education-agent-skills-ladder-of-inference-reflection",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1010,6 +1076,7 @@
     {
       "capability_id": "plugin-education-agent-skills-language-demand-analyser",
       "raw_skill_id": "education-agent-skills-language-demand-analyser",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1025,6 +1092,7 @@
     {
       "capability_id": "plugin-education-agent-skills-learning-analytics-interpretation-guide",
       "raw_skill_id": "education-agent-skills-learning-analytics-interpretation-guide",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1040,6 +1108,7 @@
     {
       "capability_id": "plugin-education-agent-skills-learning-progression-builder",
       "raw_skill_id": "education-agent-skills-learning-progression-builder",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1055,6 +1124,7 @@
     {
       "capability_id": "plugin-education-agent-skills-lesson-observation-protocol-designer",
       "raw_skill_id": "education-agent-skills-lesson-observation-protocol-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1070,6 +1140,7 @@
     {
       "capability_id": "plugin-education-agent-skills-lesson-opening-designer",
       "raw_skill_id": "education-agent-skills-lesson-opening-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1085,6 +1156,7 @@
     {
       "capability_id": "plugin-education-agent-skills-lesson-study-cycle-designer",
       "raw_skill_id": "education-agent-skills-lesson-study-cycle-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1100,6 +1172,7 @@
     {
       "capability_id": "plugin-education-agent-skills-leverage-and-response-design",
       "raw_skill_id": "education-agent-skills-leverage-and-response-design",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1115,6 +1188,7 @@
     {
       "capability_id": "plugin-education-agent-skills-media-literacy-deconstruction-protocol",
       "raw_skill_id": "education-agent-skills-media-literacy-deconstruction-protocol",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1130,6 +1204,7 @@
     {
       "capability_id": "plugin-education-agent-skills-mental-model-mapper",
       "raw_skill_id": "education-agent-skills-mental-model-mapper",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1145,6 +1220,7 @@
     {
       "capability_id": "plugin-education-agent-skills-metacognitive-monitoring-ai-contexts",
       "raw_skill_id": "education-agent-skills-metacognitive-monitoring-ai-contexts",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1160,6 +1236,7 @@
     {
       "capability_id": "plugin-education-agent-skills-metacognitive-prompt-library",
       "raw_skill_id": "education-agent-skills-metacognitive-prompt-library",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1175,6 +1252,7 @@
     {
       "capability_id": "plugin-education-agent-skills-mixed-age-learning-task-designer",
       "raw_skill_id": "education-agent-skills-mixed-age-learning-task-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1190,6 +1268,7 @@
     {
       "capability_id": "plugin-education-agent-skills-motivation-diagnostic-task-redesign",
       "raw_skill_id": "education-agent-skills-motivation-diagnostic-task-redesign",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1205,6 +1284,7 @@
     {
       "capability_id": "plugin-education-agent-skills-outdoor-learning-sequence-designer",
       "raw_skill_id": "education-agent-skills-outdoor-learning-sequence-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1220,6 +1300,7 @@
     {
       "capability_id": "plugin-education-agent-skills-panel-review",
       "raw_skill_id": "education-agent-skills-panel-review",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1235,6 +1316,7 @@
     {
       "capability_id": "plugin-education-agent-skills-pedagogical-content-knowledge-developer",
       "raw_skill_id": "education-agent-skills-pedagogical-content-knowledge-developer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1250,6 +1332,7 @@
     {
       "capability_id": "plugin-education-agent-skills-perma-based-lesson-designer",
       "raw_skill_id": "education-agent-skills-perma-based-lesson-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1265,6 +1348,7 @@
     {
       "capability_id": "plugin-education-agent-skills-perspective-taking-designer",
       "raw_skill_id": "education-agent-skills-perspective-taking-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1280,6 +1364,7 @@
     {
       "capability_id": "plugin-education-agent-skills-phenomenon-based-unit-anchor",
       "raw_skill_id": "education-agent-skills-phenomenon-based-unit-anchor",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1295,6 +1380,7 @@
     {
       "capability_id": "plugin-education-agent-skills-place-based-inquiry-anchor",
       "raw_skill_id": "education-agent-skills-place-based-inquiry-anchor",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1310,6 +1396,7 @@
     {
       "capability_id": "plugin-education-agent-skills-practice-problem-sequence-designer",
       "raw_skill_id": "education-agent-skills-practice-problem-sequence-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1325,6 +1412,7 @@
     {
       "capability_id": "plugin-education-agent-skills-prepared-environment-designer",
       "raw_skill_id": "education-agent-skills-prepared-environment-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1340,6 +1428,7 @@
     {
       "capability_id": "plugin-education-agent-skills-productive-failure-desirable-difficulty-designer",
       "raw_skill_id": "education-agent-skills-productive-failure-desirable-difficulty-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1355,6 +1444,7 @@
     {
       "capability_id": "plugin-education-agent-skills-productive-failure-protocol",
       "raw_skill_id": "education-agent-skills-productive-failure-protocol",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1370,6 +1460,7 @@
     {
       "capability_id": "plugin-education-agent-skills-professional-development-session-designer",
       "raw_skill_id": "education-agent-skills-professional-development-session-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1385,6 +1476,7 @@
     {
       "capability_id": "plugin-education-agent-skills-progressive-hint-ladder",
       "raw_skill_id": "education-agent-skills-progressive-hint-ladder",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1400,6 +1492,7 @@
     {
       "capability_id": "plugin-education-agent-skills-project-brief-designer",
       "raw_skill_id": "education-agent-skills-project-brief-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1415,6 +1508,7 @@
     {
       "capability_id": "plugin-education-agent-skills-prompt-literacy-sequence-designer",
       "raw_skill_id": "education-agent-skills-prompt-literacy-sequence-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1430,6 +1524,7 @@
     {
       "capability_id": "plugin-education-agent-skills-reading-comprehension-strategy-selector",
       "raw_skill_id": "education-agent-skills-reading-comprehension-strategy-selector",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1445,6 +1540,7 @@
     {
       "capability_id": "plugin-education-agent-skills-reflective-practice-prompt-generator",
       "raw_skill_id": "education-agent-skills-reflective-practice-prompt-generator",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1460,6 +1556,7 @@
     {
       "capability_id": "plugin-education-agent-skills-reggio-documentation-protocol",
       "raw_skill_id": "education-agent-skills-reggio-documentation-protocol",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1475,6 +1572,7 @@
     {
       "capability_id": "plugin-education-agent-skills-restorative-practice-protocol-designer",
       "raw_skill_id": "education-agent-skills-restorative-practice-protocol-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1490,6 +1588,7 @@
     {
       "capability_id": "plugin-education-agent-skills-retrieval-practice-generator",
       "raw_skill_id": "education-agent-skills-retrieval-practice-generator",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1505,6 +1604,7 @@
     {
       "capability_id": "plugin-education-agent-skills-retrieve-first-gate",
       "raw_skill_id": "education-agent-skills-retrieve-first-gate",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1520,6 +1620,7 @@
     {
       "capability_id": "plugin-education-agent-skills-ruler-emotional-literacy-sequence",
       "raw_skill_id": "education-agent-skills-ruler-emotional-literacy-sequence",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1535,6 +1636,7 @@
     {
       "capability_id": "plugin-education-agent-skills-scaffolded-task-modifier",
       "raw_skill_id": "education-agent-skills-scaffolded-task-modifier",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1550,6 +1652,7 @@
     {
       "capability_id": "plugin-education-agent-skills-scope-and-sequence-designer",
       "raw_skill_id": "education-agent-skills-scope-and-sequence-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1565,6 +1668,7 @@
     {
       "capability_id": "plugin-education-agent-skills-self-efficacy-builder-sequence",
       "raw_skill_id": "education-agent-skills-self-efficacy-builder-sequence",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1580,6 +1684,7 @@
     {
       "capability_id": "plugin-education-agent-skills-self-explanation-prompt-designer",
       "raw_skill_id": "education-agent-skills-self-explanation-prompt-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1595,6 +1700,7 @@
     {
       "capability_id": "plugin-education-agent-skills-self-regulation-scaffold-generator",
       "raw_skill_id": "education-agent-skills-self-regulation-scaffold-generator",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1610,6 +1716,7 @@
     {
       "capability_id": "plugin-education-agent-skills-service-learning-project-designer",
       "raw_skill_id": "education-agent-skills-service-learning-project-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1625,6 +1732,7 @@
     {
       "capability_id": "plugin-education-agent-skills-sheltered-instruction-lesson-modifier",
       "raw_skill_id": "education-agent-skills-sheltered-instruction-lesson-modifier",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1640,6 +1748,7 @@
     {
       "capability_id": "plugin-education-agent-skills-socratic-questioning-sequence-generator",
       "raw_skill_id": "education-agent-skills-socratic-questioning-sequence-generator",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1655,6 +1764,7 @@
     {
       "capability_id": "plugin-education-agent-skills-source-credibility-evaluation-protocol",
       "raw_skill_id": "education-agent-skills-source-credibility-evaluation-protocol",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1670,6 +1780,7 @@
     {
       "capability_id": "plugin-education-agent-skills-spaced-practice-scheduler",
       "raw_skill_id": "education-agent-skills-spaced-practice-scheduler",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1685,6 +1796,7 @@
     {
       "capability_id": "plugin-education-agent-skills-srl-session-wrapper",
       "raw_skill_id": "education-agent-skills-srl-session-wrapper",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1700,6 +1812,7 @@
     {
       "capability_id": "plugin-education-agent-skills-stuck-and-error-diagnosis-coach",
       "raw_skill_id": "education-agent-skills-stuck-and-error-diagnosis-coach",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1715,6 +1828,7 @@
     {
       "capability_id": "plugin-education-agent-skills-study-strategy-selector",
       "raw_skill_id": "education-agent-skills-study-strategy-selector",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1730,6 +1844,7 @@
     {
       "capability_id": "plugin-education-agent-skills-systems-awareness-iceberg",
       "raw_skill_id": "education-agent-skills-systems-awareness-iceberg",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1745,6 +1860,7 @@
     {
       "capability_id": "plugin-education-agent-skills-systems-wellbeing-impact-mapper",
       "raw_skill_id": "education-agent-skills-systems-wellbeing-impact-mapper",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1760,6 +1876,7 @@
     {
       "capability_id": "plugin-education-agent-skills-teach-back-evaluator",
       "raw_skill_id": "education-agent-skills-teach-back-evaluator",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1775,6 +1892,7 @@
     {
       "capability_id": "plugin-education-agent-skills-teacher-inquiry-cycle-designer",
       "raw_skill_id": "education-agent-skills-teacher-inquiry-cycle-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1790,6 +1908,7 @@
     {
       "capability_id": "plugin-education-agent-skills-technological-pedagogical-content-knowledge-developer",
       "raw_skill_id": "education-agent-skills-technological-pedagogical-content-knowledge-developer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1805,6 +1924,7 @@
     {
       "capability_id": "plugin-education-agent-skills-text-complexity-analyser",
       "raw_skill_id": "education-agent-skills-text-complexity-analyser",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1820,6 +1940,7 @@
     {
       "capability_id": "plugin-education-agent-skills-think-aloud-script-generator",
       "raw_skill_id": "education-agent-skills-think-aloud-script-generator",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1835,6 +1956,7 @@
     {
       "capability_id": "plugin-education-agent-skills-three-part-lesson-designer",
       "raw_skill_id": "education-agent-skills-three-part-lesson-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1850,6 +1972,7 @@
     {
       "capability_id": "plugin-education-agent-skills-transfer-bridge",
       "raw_skill_id": "education-agent-skills-transfer-bridge",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1865,6 +1988,7 @@
     {
       "capability_id": "plugin-education-agent-skills-trauma-informed-practice-designer",
       "raw_skill_id": "education-agent-skills-trauma-informed-practice-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1880,6 +2004,7 @@
     {
       "capability_id": "plugin-education-agent-skills-ubuntu-collective-knowledge-task-designer",
       "raw_skill_id": "education-agent-skills-ubuntu-collective-knowledge-task-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1895,6 +2020,7 @@
     {
       "capability_id": "plugin-education-agent-skills-udl-barrier-anticipator",
       "raw_skill_id": "education-agent-skills-udl-barrier-anticipator",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1910,6 +2036,7 @@
     {
       "capability_id": "plugin-education-agent-skills-udl-lesson-auditor",
       "raw_skill_id": "education-agent-skills-udl-lesson-auditor",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1925,6 +2052,7 @@
     {
       "capability_id": "plugin-education-agent-skills-udl-options-designer",
       "raw_skill_id": "education-agent-skills-udl-options-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1940,6 +2068,7 @@
     {
       "capability_id": "plugin-education-agent-skills-unassisted-evidence-checkpoint",
       "raw_skill_id": "education-agent-skills-unassisted-evidence-checkpoint",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1955,6 +2084,7 @@
     {
       "capability_id": "plugin-education-agent-skills-uninterrupted-work-cycle-designer",
       "raw_skill_id": "education-agent-skills-uninterrupted-work-cycle-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1970,6 +2100,7 @@
     {
       "capability_id": "plugin-education-agent-skills-variation-theory-task-designer",
       "raw_skill_id": "education-agent-skills-variation-theory-task-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -1985,6 +2116,7 @@
     {
       "capability_id": "plugin-education-agent-skills-vocabulary-tiering-tool",
       "raw_skill_id": "education-agent-skills-vocabulary-tiering-tool",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -2000,6 +2132,7 @@
     {
       "capability_id": "plugin-education-agent-skills-weekly-agency-review",
       "raw_skill_id": "education-agent-skills-weekly-agency-review",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -2015,6 +2148,7 @@
     {
       "capability_id": "plugin-education-agent-skills-wellbeing-learning-connection-mapper",
       "raw_skill_id": "education-agent-skills-wellbeing-learning-connection-mapper",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -2030,6 +2164,7 @@
     {
       "capability_id": "plugin-education-agent-skills-worked-example-fading-designer",
       "raw_skill_id": "education-agent-skills-worked-example-fading-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [
@@ -2045,6 +2180,7 @@
     {
       "capability_id": "plugin-education-agent-skills-worked-example-to-problem-solving-transition-designer",
       "raw_skill_id": "education-agent-skills-worked-example-to-problem-solving-transition-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "validator": "validators/validate_education_brief.py",
       "required_brief_fields": [

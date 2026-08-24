@@ -46,27 +46,27 @@ knowledge_refs:
   - knowledge_id: sas-references-api-reference.md
     path: references/api_reference.md
     content_hash: 9680fe9f2378f8f2e2b75fe3da9890df580c6254067028ca2e78f5fa6e55c304
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-authentication-guide.md
     path: references/authentication_guide.md
     content_hash: 9736d35612b4f89d0d6ef3b148de05e95befb48c2a5d59fe1e39fb0b431d6afb
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-integrations.md
     path: references/integrations.md
     content_hash: 6d7b514173089ef2e291de64c4441b8d1c9ec2a5b9e9a0eb1950842c3bf32717
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-scripts-entry-operations.py
     path: scripts/entry_operations.py
     content_hash: e15516532d740d65b01375c4b7b2eab1832697304a4f4ce9baf8b3c68c66e3e7
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-scripts-notebook-operations.py
     path: scripts/notebook_operations.py
     content_hash: ae836f9c9732d5e1465acb56c110f2e45edbcd7dada2abb36d053825b492e5b7
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-scripts-setup-config.py
     path: scripts/setup_config.py
     content_hash: 0d0b486065f1aed4444c6e4fdaf6e6408dcc6a9592cd39aae423fe3c80b61c17
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -85,4 +85,4 @@ provenance:
       sha256: ae836f9c9732d5e1465acb56c110f2e45edbcd7dada2abb36d053825b492e5b7
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-labarchive-integration/scripts/setup_config.py
       sha256: 0d0b486065f1aed4444c6e4fdaf6e6408dcc6a9592cd39aae423fe3c80b61c17
-license: Apache-2.0
+license: MIT

@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-systems-wellbeing-impact-mapper/SKILL.md
       sha256: 91b6eb4ddac82598b5595d0e7bcf0bd65ba577e507dde883647009c8e509fe5a
-license: Apache-2.0
+license: CC-BY-SA-4.0

@@ -1,7 +1,12 @@
 import path from "node:path";
 
-import { ACADEMIC_PIPELINE_PROFILE } from "../arsu-converter/workflow/academic-pipeline.js";
-import { ACADEMIC_PIPELINE_PROFILE_PROJECTION } from "../arsu-converter/workflow/generate.js";
+import { ACADEMIC_PIPELINE_GRAPH_PROFILE, ACADEMIC_PIPELINE_GRAPH_PROFILE_TEXT } from "../core/graph-profiles/academic-pipeline.js";
+import { ACADEMIC_PAPER_GRAPH_PROFILE, ACADEMIC_PAPER_GRAPH_PROFILE_TEXT } from "../core/graph-profiles/academic-paper.js";
+import { ACADEMIC_PAPER_REVIEWER_GRAPH_PROFILE, ACADEMIC_PAPER_REVIEWER_GRAPH_PROFILE_TEXT } from "../core/graph-profiles/academic-paper-reviewer.js";
+import { MINIMAL_GRAPH_PROFILE, MINIMAL_GRAPH_PROFILE_TEXT } from "../core/graph-profiles/minimal.js";
+import { PAPER_HUMANIZER_GRAPH_PROFILE, PAPER_HUMANIZER_GRAPH_PROFILE_TEXT } from "../core/graph-profiles/paper-humanizer.js";
+import { RESEARCH_MAIN_GRAPH_PROFILE, RESEARCH_MAIN_GRAPH_PROFILE_TEXT } from "../core/graph-profiles/research-main.js";
+import { REVIEW_RESPONSE_GRAPH_PROFILE, REVIEW_RESPONSE_GRAPH_PROFILE_TEXT } from "../core/graph-profiles/review-response.js";
 import type { Diagnostic } from "../core/validation/types.js";
 import { planFile, sha256, type PlannedWrite } from "../core/workspace/write-plan.js";
 import {
@@ -10,6 +15,8 @@ import {
   reconcileLiteratureAdapterInstallations,
 } from "../literature-adapters/index.js";
 import type { LoadedPluginRegistry } from "../plugins/registry.js";
+import { planPluginProjection } from "../plugins/graph-delivery.js";
+import type { DomainResolutionSnapshot } from "./installations.js";
 import { planToolDelivery } from "./delivery.js";
 import type { DeliveryMode } from "./tools.js";
 import { planLegacyToolReconciliation } from "./legacy-reconciliation.js";
@@ -25,6 +32,7 @@ export interface WorkspaceDeliveryPlan {
   installations: ManagedInstallation[];
   literatureAdapterResolutions: LiteratureAdapterResolution[];
   diagnostics: Diagnostic[];
+  pluginResolutions: DomainResolutionSnapshot[];
 }
 
 export async function planWorkspaceDelivery(input: {
@@ -39,6 +47,7 @@ export async function planWorkspaceDelivery(input: {
   force: boolean;
   pluginRegistry?: LoadedPluginRegistry;
   selectedPluginIds?: readonly string[];
+  existingPluginResolutions?: readonly DomainResolutionSnapshot[];
   preserveSkillIds?: readonly string[];
   platform?: NodeJS.Platform;
   architecture?: NodeJS.Architecture;
@@ -47,7 +56,13 @@ export async function planWorkspaceDelivery(input: {
   globalCleanupAuthorized?: boolean;
 }): Promise<WorkspaceDeliveryPlan> {
   const profileDefinitions = [
-    { profile: ACADEMIC_PIPELINE_PROFILE, projection: ACADEMIC_PIPELINE_PROFILE_PROJECTION },
+    { profile: MINIMAL_GRAPH_PROFILE, projection: MINIMAL_GRAPH_PROFILE_TEXT },
+    { profile: RESEARCH_MAIN_GRAPH_PROFILE, projection: RESEARCH_MAIN_GRAPH_PROFILE_TEXT },
+    { profile: ACADEMIC_PAPER_GRAPH_PROFILE, projection: ACADEMIC_PAPER_GRAPH_PROFILE_TEXT },
+    { profile: ACADEMIC_PAPER_REVIEWER_GRAPH_PROFILE, projection: ACADEMIC_PAPER_REVIEWER_GRAPH_PROFILE_TEXT },
+    { profile: ACADEMIC_PIPELINE_GRAPH_PROFILE, projection: ACADEMIC_PIPELINE_GRAPH_PROFILE_TEXT },
+    { profile: PAPER_HUMANIZER_GRAPH_PROFILE, projection: PAPER_HUMANIZER_GRAPH_PROFILE_TEXT },
+    { profile: REVIEW_RESPONSE_GRAPH_PROFILE, projection: REVIEW_RESPONSE_GRAPH_PROFILE_TEXT },
   ] as const;
   const profileOperations: PlannedWrite[] = [];
   const profileInstallations: ManagedInstallation[] = [];
@@ -79,8 +94,6 @@ export async function planWorkspaceDelivery(input: {
     delivery: input.delivery ?? "both",
     existingInstallations: input.existingInstallations,
     force: input.force,
-    pluginRegistry: input.pluginRegistry,
-    selectedPluginIds: input.selectedPluginIds,
   });
   const toolReconciliation = await reconcileAgentToolInstallations({
     projectRoot: input.projectRoot,
@@ -117,6 +130,19 @@ export async function planWorkspaceDelivery(input: {
     existingInstallations: [...toolReconciliation.retainedInstallations, ...toolDelivery.installations],
     desiredInstallations: literatureDelivery.installations,
   });
+  const pluginDelivery = input.pluginRegistry
+    ? await planPluginProjection({
+        projectRoot: input.projectRoot,
+        workspaceRoot: input.workspaceRoot ?? path.join(input.projectRoot, "researchspec"),
+        toolIds: input.toolIds,
+        delivery: input.delivery ?? "both",
+        registry: input.pluginRegistry,
+        selectedDomainIds: input.selectedPluginIds ?? [],
+        existingInstallations: input.existingInstallations,
+        existingResolutions: input.existingPluginResolutions ?? [],
+        force: input.force,
+      })
+    : undefined;
 
   return {
     operations: [
@@ -126,19 +152,24 @@ export async function planWorkspaceDelivery(input: {
       ...legacyReconciliation.operations,
       ...literatureDelivery.operations,
       ...literatureReconciliation.operations,
+      ...(pluginDelivery?.operations ?? []),
     ],
     installations: deduplicateInstallations([
       ...profileInstallations,
       ...literatureReconciliation.retainedInstallations,
       ...literatureDelivery.installations,
+      ...(pluginDelivery?.retainedInstallations ?? []),
+      ...(pluginDelivery?.desiredInstallations ?? []),
     ]),
     literatureAdapterResolutions: literatureDelivery.resolutions,
+    pluginResolutions: [...(pluginDelivery?.resolutions ?? input.existingPluginResolutions ?? [])],
     diagnostics: [
       ...toolDelivery.diagnostics,
       ...toolReconciliation.diagnostics,
       ...legacyReconciliation.diagnostics,
       ...literatureDelivery.diagnostics,
       ...literatureReconciliation.diagnostics,
+      ...(pluginDelivery?.diagnostics ?? []),
     ],
   };
 }

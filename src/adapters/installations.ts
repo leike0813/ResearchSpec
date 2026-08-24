@@ -12,6 +12,7 @@ const Sha256Schema = z.string().regex(/^[a-f0-9]{64}$/);
 export const ManagedInstallationSourceSchema = z.discriminatedUnion("kind", [
   z.strictObject({ kind: z.literal("arsu-skill"), skill_id: IdentifierSchema }),
   z.strictObject({ kind: z.literal("core-skill"), skill_id: IdentifierSchema }),
+  z.strictObject({ kind: z.literal("framework-capability"), capability_id: IdentifierSchema }),
   z.strictObject({ kind: z.literal("companion-skill"), skill_id: IdentifierSchema }),
   z.strictObject({
     kind: z.literal("domain-skill"),
@@ -181,6 +182,8 @@ export function deduplicateInstallations(items: readonly ManagedInstallation[]):
 export function managedSkillId(item: ManagedInstallation): string | undefined {
   return item.source.kind === "arsu-skill" || item.source.kind === "core-skill" || item.source.kind === "companion-skill" || item.source.kind === "domain-skill"
     ? item.source.skill_id
+    : item.source.kind === "framework-capability"
+      ? item.source.capability_id
     : item.source.kind === "literature-adapter" && item.source.component === "skill"
       ? item.source.skill_id
       : undefined;
@@ -222,6 +225,10 @@ export async function reconcileAgentToolInstallations(input: {
 
   for (const installation of input.existingInstallations) {
     if (desiredKeys.has(installationKey(installation))) continue;
+    if (isDomainSkillInstallation(installation) || isPluginCapabilityInstallation(installation) || isPluginProfileInstallation(installation)) {
+      retainedInstallations.push(installation);
+      continue;
+    }
     if (installation.owner !== "agent-tool" || installation.tool_id === null) {
       retainedInstallations.push(installation);
       continue;

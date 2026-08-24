@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-cognitive-tutoring-architecture-designer/SKILL.md
       sha256: fa742dfa40f84654b420eb028dbe058edcf351a56fbf660b5afa3d0752a33d47
-license: Apache-2.0
+license: CC-BY-SA-4.0

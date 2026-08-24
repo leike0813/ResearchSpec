@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-cross-cultural-task-validity-checker/SKILL.md
       sha256: 366fa5a9bda8ad0046238db105343655eeed4243319281a951bc1004aa5f8eb5
-license: Apache-2.0
+license: CC-BY-SA-4.0

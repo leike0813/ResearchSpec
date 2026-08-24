@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-ai-feedback-design-principles/SKILL.md
       sha256: 5b02e1b069b6d1bfcee61a61bc3c0a5ad0866eb10dbbe3cd0f8d08c32b746b7f
-license: Apache-2.0
+license: CC-BY-SA-4.0

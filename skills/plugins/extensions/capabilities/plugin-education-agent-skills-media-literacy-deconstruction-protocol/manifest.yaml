@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-media-literacy-deconstruction-protocol/SKILL.md
       sha256: 3963689ce30354563ca19a7367573a4179e13b5e79c12c78502ff97c3bbda851
-license: Apache-2.0
+license: CC-BY-SA-4.0

@@ -11,6 +11,7 @@ const EXT_ROOT = path.join(ROOT, "skills/plugins/extensions");
 const DOMAIN_CATALOG_PATH = path.join(ROOT, "src/plugins/domain-catalog.json");
 const REGISTRY_PATH = path.join(EXT_ROOT, "registry.json");
 const CATALOG_PATH = path.join(ROOT, "audits/scientific-agent-skills/catalog.json");
+const VENDOR_BUNDLE_PATH = path.join(ROOT, "skills/plugins/vendor-bundles/scientific-agent-skills.json");
 const VALIDATOR_TEMPLATE = path.join(ROOT, "scripts/scientific-agent-skills-validator-template.py");
 const REQUIRED_FIELDS = ["scope", "source_ledger", "method_plan", "work_products", "validation_results", "conclusions"];
 const STANDARD_FILES = new Set(["SKILL.md", "LICENSE", "NOTICE.md"]);
@@ -49,7 +50,7 @@ function skillTitle(body) {
   return heading ? heading.slice(2).trim() : null;
 }
 
-function extensionSkill(extId, rawText, frontmatter, hasScripts, resourceLines) {
+function extensionSkill(extId, rawText, frontmatter, hasScripts, resourceLines, license) {
   const body = skillBody(rawText).trimEnd();
   const title = skillTitle(body) ?? extId;
   const description = frontmatter.description ?? `Reviewed Scientific Agent Skills ${title} workflow for one graph node.`;
@@ -67,7 +68,7 @@ metadata:
   node_kind: producer
   execution_type: ${hasScripts ? "mixed" : "llm"}
   gate_policy: advisory
-  license: MIT
+  license: ${license}
 ---
 
 ${body.trimEnd()}
@@ -165,7 +166,7 @@ override_policy:
 `;
 }
 
-function manifest(extId, title, description, hasScripts, extras, rawSkillSha256) {
+function manifest(extId, title, description, hasScripts, extras, rawSkillSha256, license) {
   const validator = {
     validator_id: "scientific-brief-validator",
     kind: "script",
@@ -214,16 +215,19 @@ function manifest(extId, title, description, hasScripts, extras, rawSkillSha256)
       knowledge_id: extra.knowledgeId,
       path: extra.relativePath,
       content_hash: extra.targetSha256,
-      license: "Apache-2.0",
+      license,
     })),
     gate_policy: "advisory",
     provenance: { origin: "vendor-derived", upstream_sources: upstream },
-    license: "Apache-2.0",
+    license,
   };
   return value;
 }
 
 function generate() {
+  const bundle = json(VENDOR_BUNDLE_PATH);
+  const licenses = new Map(bundle.vendor.skills.map((skill) => [skill.skill_id, skill.license]));
+  if (bundle.vendor.license !== "MIT") throw new Error(`Unexpected Scientific Agent Skills vendor license: ${bundle.vendor.license}`);
   const rawIds = readdirSync(VENDOR_ROOT, { withFileTypes: true })
     .filter((entry) => entry.isDirectory() && entry.name.startsWith("scientific-agent-skills-"))
     .map((entry) => entry.name)
@@ -234,6 +238,8 @@ function generate() {
 
   for (const rawSkillId of rawIds) {
     const extId = extensionId(rawSkillId);
+    const license = licenses.get(rawSkillId);
+    if (license !== "MIT") throw new Error(`Scientific Agent Skills license is missing or inconsistent for ${rawSkillId}`);
     const rawSkillRoot = path.join(VENDOR_ROOT, rawSkillId);
     const packageRoot = path.join(EXT_ROOT, "capabilities", extId);
     mkdirSync(path.join(packageRoot, "validators"), { recursive: true });
@@ -274,12 +280,13 @@ function generate() {
     const title = skillTitle(body) ?? rawSkillId;
     const description = frontmatter.description ?? `Reviewed Scientific Agent Skills ${title} workflow for one graph node.`;
     const resourceLines = copied.map((item) => ({ id: item.knowledgeId, path: item.relativePath }));
-    writeFileSync(path.join(packageRoot, "SKILL.md"), extensionSkill(extId, rawSkillText, frontmatter, hasScripts, resourceLines));
-    writeFileSync(path.join(packageRoot, "manifest.yaml"), `${stringifyYaml(manifest(extId, title, description, hasScripts, copied, sha256(rawSkillText)), { sortKeys: false })}`);
+    writeFileSync(path.join(packageRoot, "SKILL.md"), extensionSkill(extId, rawSkillText, frontmatter, hasScripts, resourceLines, license));
+    writeFileSync(path.join(packageRoot, "manifest.yaml"), `${stringifyYaml(manifest(extId, title, description, hasScripts, copied, sha256(rawSkillText), license), { sortKeys: false })}`);
     writeFileSync(path.join(EXT_ROOT, "profiles", `${extId}.yaml`), profile(extId));
     catalogExtensions.push({
       capability_id: extId,
       raw_skill_id: rawSkillId,
+      license,
       execution_type: hasScripts ? "mixed" : "llm",
       validator: "validators/validate_scientific_brief.py",
       required_brief_fields: REQUIRED_FIELDS,

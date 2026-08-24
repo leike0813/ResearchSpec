@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-differentiation-adapter/SKILL.md
       sha256: c08acb0d50333043f768332f1d3a3fe6522c2fe3e2d2fd32742e49069fcd20a6
-license: Apache-2.0
+license: CC-BY-SA-4.0

@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { readFile } from "node:fs/promises";
+import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -193,7 +193,7 @@ export async function validateCapabilityRegistry(
       }
     }
 
-    const files = [manifestPath, skillPath, ...manifest.knowledge_refs.map((item) => path.join(packageRoot, ...item.path.split("/")))];
+    const files = await walkPackageFiles(packageRoot);
     capabilities.set(entry.capability_id, { entry, manifest, packageRoot, manifestPath, manifestSha256, files });
   }
 
@@ -236,6 +236,20 @@ function uniqueIds(values: readonly string[], label: string, errors: Diagnostic[
 function isSafeRelativePath(value: string): boolean {
   if (value.includes("\\") || value.startsWith("/") || value.includes("\0")) return false;
   return value.split("/").every((segment) => Boolean(segment) && segment !== "." && segment !== "..");
+}
+
+async function walkPackageFiles(root: string): Promise<string[]> {
+  const files: string[] = [];
+  for (const entry of await readdir(root, { withFileTypes: true })) {
+    const target = path.join(root, entry.name);
+    if (entry.isDirectory()) files.push(...await walkPackageFiles(target));
+    else if (entry.isFile()) files.push(target);
+  }
+  return files.sort(compareText);
+}
+
+function compareText(left: string, right: string): number {
+  return left < right ? -1 : left > right ? 1 : 0;
 }
 
 function fatal(code: string, message: string, filePath: string, details?: unknown): Diagnostic {

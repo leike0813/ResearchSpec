@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-scaffolded-task-modifier/SKILL.md
       sha256: cb7b9eca4bb0d3b8c5865f051fc72691377b04d6a4f792647cc0246ce5ae183b
-license: Apache-2.0
+license: CC-BY-SA-4.0

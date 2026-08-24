@@ -48,27 +48,27 @@ knowledge_refs:
   - knowledge_id: sas-references-analytical-equipment.md
     path: references/analytical-equipment.md
     content_hash: b22c5107dcceb62d5e16b2b2cfb4d61bec1f2dcc4252cd56337b134b21ea9ee4
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-hardware-backends.md
     path: references/hardware-backends.md
     content_hash: ae007727fd5b887c090632686fe3f2f53dd7c0493234736b4ceee6548617a5bd
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-liquid-handling.md
     path: references/liquid-handling.md
     content_hash: 71a6f02e2871133318803f3d798d98a7f8b272dba75b6ae5f6a2f3f20bf4ac16
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-material-handling.md
     path: references/material-handling.md
     content_hash: 030aaa791eaccf2e998b7c01e74c573ca4b891ab0e19a1994cd82540e36980fd
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-resources.md
     path: references/resources.md
     content_hash: 2d187c3f65c68acadb4d1ef443243a252ff94fd16877931dc8604415ecfea897
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-visualization.md
     path: references/visualization.md
     content_hash: bda040591f0b0c58889fe6bc4e0a50b54a10e1b9582563b25ae414d4a1c7da51
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -87,4 +87,4 @@ provenance:
       sha256: 2d187c3f65c68acadb4d1ef443243a252ff94fd16877931dc8604415ecfea897
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pylabrobot/references/visualization.md
       sha256: bda040591f0b0c58889fe6bc4e0a50b54a10e1b9582563b25ae414d4a1c7da51
-license: Apache-2.0
+license: MIT

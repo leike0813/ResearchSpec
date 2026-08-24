@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-formative-assessment-technique-selector/SKILL.md
       sha256: 0a4108f43ad08eeb18f7474e58d806b655780010196c96d7a1fa5d616420db80
-license: Apache-2.0
+license: CC-BY-SA-4.0

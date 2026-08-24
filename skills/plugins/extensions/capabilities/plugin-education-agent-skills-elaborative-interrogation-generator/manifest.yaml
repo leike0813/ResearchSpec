@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-elaborative-interrogation-generator/SKILL.md
       sha256: f0b36cb830e4d4109a042c8f038a7e1f057843bd2f7bfac9b3de55c279c80ca9
-license: Apache-2.0
+license: CC-BY-SA-4.0

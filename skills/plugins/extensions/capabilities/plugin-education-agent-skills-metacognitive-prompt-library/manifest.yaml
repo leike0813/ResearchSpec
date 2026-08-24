@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-metacognitive-prompt-library/SKILL.md
       sha256: 3cba0bbc632176d124c15140a34b447279f73cfbfcfb9b267c37008d6858b3c9
-license: Apache-2.0
+license: CC-BY-SA-4.0

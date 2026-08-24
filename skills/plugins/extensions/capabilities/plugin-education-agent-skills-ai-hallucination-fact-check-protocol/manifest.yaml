@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-ai-hallucination-fact-check-protocol/SKILL.md
       sha256: 2a44c3fb6c96d4f50fe77ee81d6e4e0dd33985eaea05d8e7bb5f47df55e805de
-license: Apache-2.0
+license: CC-BY-SA-4.0

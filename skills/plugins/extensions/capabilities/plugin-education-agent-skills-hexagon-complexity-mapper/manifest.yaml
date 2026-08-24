@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-hexagon-complexity-mapper/SKILL.md
       sha256: 9321ad4c60edc47d6e78befcd4af67b2204b4f3eadd630a22e32bc5a06b4c624
-license: Apache-2.0
+license: CC-BY-SA-4.0

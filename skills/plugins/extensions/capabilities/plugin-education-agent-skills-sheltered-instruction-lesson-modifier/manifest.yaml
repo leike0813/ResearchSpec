@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-sheltered-instruction-lesson-modifier/SKILL.md
       sha256: 731fa189c02af5f8c8ab0d4deafee97a5b8ea8e68f25480086695c71cccee311
-license: Apache-2.0
+license: CC-BY-SA-4.0

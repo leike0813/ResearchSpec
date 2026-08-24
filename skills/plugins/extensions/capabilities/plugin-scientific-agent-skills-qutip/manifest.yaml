@@ -48,23 +48,23 @@ knowledge_refs:
   - knowledge_id: sas-references-advanced.md
     path: references/advanced.md
     content_hash: afd329f6c754d8c287277db651e82fa7114d0c50824ce18f01e6fb0797bec2f3
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-analysis.md
     path: references/analysis.md
     content_hash: 87172f2a375ca9caf9daa74f58fc046bab1d77db0baca7b6aba260fb822c20bf
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-core-concepts.md
     path: references/core_concepts.md
     content_hash: 313e2781add21335cb0fc00f4bde2060a4510e0c08c9a1742aeb2ac53db59c96
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-time-evolution.md
     path: references/time_evolution.md
     content_hash: 7c5bca95cb69a61752cc30266c1b1a6f57992a4b63b40e66926d5bf1c8a2ac52
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-visualization.md
     path: references/visualization.md
     content_hash: 962c51c0a617be95700d251b51d140f03cc7e5d8bf1df9ee5e46580409b89564
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -81,4 +81,4 @@ provenance:
       sha256: 7c5bca95cb69a61752cc30266c1b1a6f57992a4b63b40e66926d5bf1c8a2ac52
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qutip/references/visualization.md
       sha256: 962c51c0a617be95700d251b51d140f03cc7e5d8bf1df9ee5e46580409b89564
-license: Apache-2.0
+license: MIT

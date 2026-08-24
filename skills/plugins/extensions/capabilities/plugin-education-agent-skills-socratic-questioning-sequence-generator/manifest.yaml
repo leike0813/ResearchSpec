@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-socratic-questioning-sequence-generator/SKILL.md
       sha256: 528d1a5b60785ac40bb6b6023fa857be9fef10e1e0b755a3b9bbe4a56bbce4a8
-license: Apache-2.0
+license: CC-BY-SA-4.0

@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-individual-spacing-algorithm-explainer/SKILL.md
       sha256: d15a0aeed079434196f5428e9c188616140fef55cb9a8f49815cf16660a43273
-license: Apache-2.0
+license: CC-BY-SA-4.0

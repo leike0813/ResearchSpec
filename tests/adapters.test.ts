@@ -7,6 +7,7 @@ import { COMMAND_WRAPPER_CONTENTS, renderCommand } from "../src/adapters/command
 import { COMPANION_INTENTS, COMPANION_WORKFLOW_IDS, renderCompanionSkill } from "../src/adapters/companion/index.js";
 import { planWorkspaceDelivery } from "../src/adapters/workspace-delivery.js";
 import { TOOL_IDS, TOOLS, detectTools, getTool, parseToolExpression } from "../src/adapters/tools.js";
+import { loadCapabilityRegistry } from "../src/capabilities/registry.js";
 import { CLI_TOP_LEVEL_COMMANDS } from "../src/cli/command-catalog.js";
 import { cleanup, tempProject } from "./helpers/cli.js";
 
@@ -135,8 +136,11 @@ void test("global-only tools are detected only by managed skill files", async ()
 void test("delivery projects the fixed Skill surface and sixteen wrappers by default", async () => {
   const root = await tempProject();
   const previousCodexHome = process.env.CODEX_HOME;
+  const previousHome = process.env.HOME;
   process.env.CODEX_HOME = path.join(root, "codex-home");
+  process.env.HOME = path.join(root, "home");
   try {
+    const capabilityRegistry = await loadCapabilityRegistry();
     const delivery = await planWorkspaceDelivery({
       projectRoot: root,
       toolIds: TOOL_IDS,
@@ -156,15 +160,18 @@ void test("delivery projects the fixed Skill surface and sixteen wrappers by def
       const skillIds = new Set(delivery.installations.flatMap((item) => {
         if (item.tool_id !== toolId) return [];
         if (item.source.kind === "arsu-skill" || item.source.kind === "core-skill" || item.source.kind === "companion-skill" || item.source.kind === "domain-skill") return [item.source.skill_id];
+        if (item.source.kind === "framework-capability") return [item.source.capability_id];
         return item.source.kind === "literature-adapter" && item.source.component === "skill" && item.source.skill_id ? [item.source.skill_id] : [];
       }));
-      assert.equal(skillIds.size, 9, toolId);
+      assert.equal(skillIds.size, 9 + capabilityRegistry.capabilities.size, toolId);
     }
     assert.equal(delivery.installations.some((item) => item.target.path.replaceAll("\\", "/").endsWith("/researchspec-navigate/references/cli-handbook.md")), false);
     assert.equal(delivery.diagnostics.filter((item) => item.code === "commands_not_supported").length, 9);
   } finally {
     if (previousCodexHome === undefined) Reflect.deleteProperty(process.env, "CODEX_HOME");
     else process.env.CODEX_HOME = previousCodexHome;
+    if (previousHome === undefined) Reflect.deleteProperty(process.env, "HOME");
+    else process.env.HOME = previousHome;
     await cleanup(root);
   }
 });

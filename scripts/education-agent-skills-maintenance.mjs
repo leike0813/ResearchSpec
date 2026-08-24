@@ -11,13 +11,14 @@ const CATALOG_PATH = path.join(ROOT, "audits", "education-agent-skills", "catalo
 const AUDIT_README = path.join(ROOT, "audits", "education-agent-skills", "README.md");
 const MAINTENANCE_SKILL = path.join(ROOT, ".agents", "skills", "education-agent-skills-maintenance", "SKILL.md");
 const EXTENSION_REGISTRY_PATH = path.join(ROOT, "skills", "plugins", "extensions", "registry.json");
+const VENDOR_BUNDLE_PATH = path.join(ROOT, "skills", "plugins", "vendor-bundles", "education-agent-skills.json");
 const RECORD_FILES = ["01-analysis.md", "02-ingestion.md", "03-conversion.md", "04-review.md", "05-semantic-review.md"];
 const ANCHOR_CREATED_AT = "2026-08-17T00:00:00+08:00";
 
 let currentAnchor = "";
 
-function sha256(text) { return createHash("sha256").update(text, "utf8").digest("hex"); }
-function fileSha(pathName) { return sha256(readFileSync(pathName, "utf8")); }
+function sha256(value) { return createHash("sha256").update(value).digest("hex"); }
+function fileSha(pathName) { return sha256(readFileSync(pathName)); }
 function json(pathName) { return JSON.parse(readFileSync(pathName, "utf8")); }
 function isIgnored(name) { return name === "__pycache__" || name.endsWith(".pyc"); }
 function hashFileList(files, base) {
@@ -145,6 +146,8 @@ function extensionRegistry() {
 
 function extensionRows() {
   const data = catalog();
+  const bundle = json(VENDOR_BUNDLE_PATH);
+  const licenses = new Map(bundle.vendor.skills.map((skill) => [skill.skill_id, skill.license]));
   const registry = extensionRegistry();
   const registryCapabilities = new Map(registry.capabilities.map((item) => [item.capability_id, item]));
   const registryProfiles = new Map(registry.profiles.map((item) => [item.profile_id, item]));
@@ -167,6 +170,10 @@ function extensionRows() {
     const manifest = parseYaml(manifestText);
     if (manifest.capability_id !== extension.capability_id) throw new Error(`Manifest ID mismatch for ${extension.capability_id}`);
     if (manifest.execution_type !== extension.execution_type) throw new Error(`Execution type mismatch for ${extension.capability_id}`);
+    const expectedLicense = licenses.get(extension.raw_skill_id);
+    if (expectedLicense !== "CC-BY-SA-4.0" || extension.license !== expectedLicense || manifest.license !== expectedLicense || manifest.knowledge_refs.some((item) => item.license !== expectedLicense)) {
+      throw new Error(`License mismatch for ${extension.capability_id}`);
+    }
     const files = [];
     const walk = (dir) => {
       for (const item of readdirSync(dir, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
@@ -209,6 +216,7 @@ function extensionRows() {
     rows.push({
       capability_id: extension.capability_id,
       raw_skill_id: extension.raw_skill_id,
+      license: expectedLicense,
       execution_type: extension.execution_type,
       class: manifest.class,
       node_kind: manifest.node_kind,

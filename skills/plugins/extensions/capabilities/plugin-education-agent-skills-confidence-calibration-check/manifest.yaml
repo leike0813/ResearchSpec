@@ -50,4 +50,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-confidence-calibration-check/SKILL.md
       sha256: a54cf56179ed8f6a28f9fac7c5df1796506522c51afb22e91a1c700b2278889c
-license: Apache-2.0
+license: CC-BY-SA-4.0

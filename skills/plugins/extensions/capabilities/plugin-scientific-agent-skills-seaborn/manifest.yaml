@@ -48,15 +48,15 @@ knowledge_refs:
   - knowledge_id: sas-references-examples.md
     path: references/examples.md
     content_hash: 0bf1279af53b7464824853696fa8e06c1904538eafaf1b9a1b1afc874de5d78b
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-function-reference.md
     path: references/function_reference.md
     content_hash: d6e3098f0e2eee13c4b863b96f530b8937d4477d1d0c6b3cc3e2973d27deca64
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-objects-interface.md
     path: references/objects_interface.md
     content_hash: ab5e4c8ae7309f7842ba5b9dcb7e1a098d64db45ae456c3a41b769f7467a1a5b
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -69,4 +69,4 @@ provenance:
       sha256: d6e3098f0e2eee13c4b863b96f530b8937d4477d1d0c6b3cc3e2973d27deca64
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-seaborn/references/objects_interface.md
       sha256: ab5e4c8ae7309f7842ba5b9dcb7e1a098d64db45ae456c3a41b769f7467a1a5b
-license: Apache-2.0
+license: MIT

@@ -48,27 +48,27 @@ knowledge_refs:
   - knowledge_id: sas-references-custom-datasets.md
     path: references/custom_datasets.md
     content_hash: 48700ef231c9d727f34d5ef4daf5b087fec1238c91e4a2051f51d85137a85f7b
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-explainability.md
     path: references/explainability.md
     content_hash: 1e4dbbc1a6bd08503d04c6570be84f105bb2a3aae7b1a4d67b991d44f86c388b
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-heterogeneous.md
     path: references/heterogeneous.md
     content_hash: 57d19d123de25fc93c4cf03483797089709efd233f9aa36e0c4a72e41eb0ce7a
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-link-prediction.md
     path: references/link_prediction.md
     content_hash: c66a29c15cedcecf7615f691cab14a5871d474aec082ddbb22313d6d9848fcdc
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-message-passing.md
     path: references/message_passing.md
     content_hash: 9a4fa90b74841dc531a576247caa32d158d862951c8a7199543eb180b0241954
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-scaling.md
     path: references/scaling.md
     content_hash: 990b4a8deb097cf028da17a55764e7ec0bd00f1d0db9bb9abd94b8fbda316e7c
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -87,4 +87,4 @@ provenance:
       sha256: 9a4fa90b74841dc531a576247caa32d158d862951c8a7199543eb180b0241954
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-torch-geometric/references/scaling.md
       sha256: 990b4a8deb097cf028da17a55764e7ec0bd00f1d0db9bb9abd94b8fbda316e7c
-license: Apache-2.0
+license: MIT

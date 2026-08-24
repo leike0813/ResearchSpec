@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-reggio-documentation-protocol/SKILL.md
       sha256: 3cd09e0b1e70c203678086eae07b2c0d3b2834f13de56e2c7efe4ff65dfcb232
-license: Apache-2.0
+license: CC-BY-SA-4.0

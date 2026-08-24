@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-lesson-observation-protocol-designer/SKILL.md
       sha256: 374032cb55208b473d1cdfd00bb2d3fa7d70e2233246d95d113dd92c2bc51e29
-license: Apache-2.0
+license: CC-BY-SA-4.0

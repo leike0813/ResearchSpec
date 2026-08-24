@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-pedagogical-content-knowledge-developer/SKILL.md
       sha256: a834fbd53262cd91845460d0916405660e9ece6a1311206a3855b09c925a5ed3
-license: Apache-2.0
+license: CC-BY-SA-4.0

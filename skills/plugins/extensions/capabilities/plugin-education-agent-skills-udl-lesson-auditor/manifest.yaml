@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-udl-lesson-auditor/SKILL.md
       sha256: 5a8072a79c59ffa7de54792f624208709cbde55048f7b6f6e75072ab354cbca5
-license: Apache-2.0
+license: CC-BY-SA-4.0

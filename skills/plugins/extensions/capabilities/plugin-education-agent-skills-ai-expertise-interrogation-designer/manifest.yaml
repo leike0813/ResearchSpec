@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-ai-expertise-interrogation-designer/SKILL.md
       sha256: fe707cbdd576e4708457d186a0c66ec843da947a3c8f384e30e40e74e51974ba
-license: Apache-2.0
+license: CC-BY-SA-4.0

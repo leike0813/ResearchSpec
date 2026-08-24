@@ -48,7 +48,7 @@ knowledge_refs:
   - knowledge_id: sas-references-best-practices.md
     path: references/best_practices.md
     content_hash: e0aff6abab3db84a3635f5393d098e41920667188e0aa861580379a81d597f64
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -57,4 +57,4 @@ provenance:
       sha256: 34d34bfdc26a6f341d8063ce63b171ed4ad0c56df9d0e0d1957e11afa0e47e70
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-schematics/references/best_practices.md
       sha256: e0aff6abab3db84a3635f5393d098e41920667188e0aa861580379a81d597f64
-license: Apache-2.0
+license: MIT

@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-metacognitive-monitoring-ai-contexts/SKILL.md
       sha256: a57f1cf62d2d93e0026db47dcb3ac719e88ec7f373e7f970e94a19b97ea86b98
-license: Apache-2.0
+license: CC-BY-SA-4.0

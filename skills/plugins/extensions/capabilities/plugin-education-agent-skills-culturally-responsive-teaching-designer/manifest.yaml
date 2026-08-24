@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-culturally-responsive-teaching-designer/SKILL.md
       sha256: 033308955315b350fce0e9d53393ecec3e1f846e388a4ddceb699247c63526e3
-license: Apache-2.0
+license: CC-BY-SA-4.0

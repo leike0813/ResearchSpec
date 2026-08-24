@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-explain-first-interrogator/SKILL.md
       sha256: c5f434a974ca63a90b585b9b4433b4f6f351295bc615884868d59ff457cb4b35
-license: Apache-2.0
+license: CC-BY-SA-4.0

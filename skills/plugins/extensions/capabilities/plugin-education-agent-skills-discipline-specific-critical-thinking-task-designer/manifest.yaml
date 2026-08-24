@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-discipline-specific-critical-thinking-task-designer/SKILL.md
       sha256: 09f3a17674efa0ac66a480d63ce27d0dbf58c17dbf19dca2e216859b38dc251b
-license: Apache-2.0
+license: CC-BY-SA-4.0

@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-think-aloud-script-generator/SKILL.md
       sha256: f8d9abafa21bb2d6c7d2f089cc1449bd9ce948c4026e776761d7d9f6dded2da0
-license: Apache-2.0
+license: CC-BY-SA-4.0

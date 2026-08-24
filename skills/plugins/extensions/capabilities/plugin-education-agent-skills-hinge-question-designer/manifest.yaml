@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-hinge-question-designer/SKILL.md
       sha256: 4730273158aa93b8cafc670d86c944867f3e6e99c087b2bab5af9c2d12cebc92
-license: Apache-2.0
+license: CC-BY-SA-4.0

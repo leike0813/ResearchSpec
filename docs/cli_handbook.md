@@ -30,14 +30,13 @@ A valid selector shape does not imply that the action is available in the curren
 
 | Family | Accepted forms |
 | --- | --- |
-| `route` | `route:<skill-id>:<mode>` |
-| `subflow` | `subflow:<instance-id>` |
-| `gate` | `gate:<instance-id>/<gate-id>` |
-| `decision` | `decision:<instance-id>/<decision-id>` |
+| `run` | `run:<run-id>` |
+| `node` | `node:<run-id>/<node-id>[@round]` |
+| `gate` | `gate:<run-id>/<gate-id>[@round]` |
+| `decision` | `decision:<run-id>/<decision-id>[@round]` |
 | `change` | `change:<change-id>` |
-| `handoff` | `handoff:<instance-id>` |
 | `spec` | `spec:project`<br>`spec:sources`<br>`spec:claims`<br>`spec:manuscript` |
-| `profile` | `profile:academic-pipeline` |
+| `profile` | `profile:<profile-id>` |
 | `tool` | `tool:<tool-id>` |
 
 ## Bootstrap
@@ -122,9 +121,9 @@ One exact graph control or inspection selector.
 | --- | --- | --- | --- |
 | `selector` | `profile:... \| run:... \| node:<run>/<node>[@round] \| gate:... \| decision:...` | yes | Current item whose action contract is needed. |
 
-### `researchspec start <profile-id>`
+### `researchspec start <profile-id|node-selector>`
 
-Atomically start one confirmed graph run
+Start a confirmed root run or one graph-authorized child run
 
 - Workspace: `required`
 - Static effect: `write`
@@ -132,29 +131,25 @@ Atomically start one confirmed graph run
 
 | Command option | Required | Purpose |
 | --- | --- | --- |
-| `--input <start.yaml|json>` | yes | schema 1 semantic Start input |
-| `--confirmed-by <name>` | yes | human who confirmed this exact instance |
+| `--input <start.yaml|json>` | no | schema 2 root Start input |
+| `--confirmed-by <name>` | no | human who confirmed this exact root run |
 
 #### Input shape
 
-A YAML or JSON object supplied through --input and validated before control creation.
+A confirmed root profile selector with --input, or an eligible node selector for an inherited child run.
 
 Runtime schema: `GraphRunStartCommandSchema`.
 
 | Field or option | Type | Required | Meaning |
 | --- | --- | --- | --- |
+| `selector` | `<profile-id> \| profile:<profile-id> \| node:<run>/<subgraph>[@round]` | yes | Root profile or exact pending subgraph start. |
 | `schema_version` | `literal "2"` | yes | Graph run command schema. |
-| `confirmed_at` | `RFC 3339 timestamp with offset` | yes | Time of the exact route confirmation. |
+| `confirmed_at` | `RFC 3339 timestamp with offset` | yes | Time of the exact root-run confirmation. |
 | `entry_id` | `stable ID` | yes | Graph entry ID. |
 | `entry_node_id` | `graph node ID` | yes | Confirmed entry node. |
-| `parent` | `{ instance_id, node_id }` | no | Owning parent instance and child node. |
-| `round` | `positive integer` | no | Dynamic round number; requires parent. |
 | `prerequisites` | `non-empty string[]` | yes | Confirmed prerequisites, including an empty array when none apply. |
 | `handoff_inputs` | `HandoffInput[]` | yes | Confirmed input roles; each uses the descriptor fields below plus optional source_instance_id. |
 | `planned_outputs` | `HandoffOutput[]` | yes | Confirmed output roles; each uses the descriptor fields below plus optional intended_consumer. |
-| `manuscript_delivery` | `ManuscriptDelivery` | no | Current manuscript delivery contract when the route consumes it. |
-| `quarto_probe` | `available \| unavailable \| unknown object` | no | Static probe summary with checked_at and version or reason. |
-| `render_consent` | `{ execute: true, confirmed_by, confirmed_at }` | no | Explicit consent for the current render action. |
 | `formal_gates` | `stable ID[]` | yes | Confirmed formal Gate IDs. |
 | `cost` | `{ effort, interaction }` | yes | Non-empty effort and interaction summaries. |
 | `handoff descriptor.role` | `non-empty string` | yes | Unique semantic role within its input or output list. |
@@ -167,13 +162,12 @@ Runtime schema: `GraphRunStartCommandSchema`.
 | `handoff descriptor.entry_path` | `relative .tex path` | no | Required for latex-project. |
 | `handoff descriptor.limits` | `string[]` | no | Known limitations or exclusions. |
 | `handoff descriptor.notes` | `string` | no | Additional role-specific context. |
-| `--confirmed-by` | `non-empty human name` | yes | Human who confirmed this exact instance. |
+| `--confirmed-by` | `non-empty human name` | no | Required only for a root profile selector. |
 
 Constraints:
 
-- profile_entry and parent are mutually exclusive.
-- entry_point is required exactly for a mid-entry pipeline parent and must be declared by that profile entry.
-- round requires parent.
+- Root profile selectors require --input and --confirmed-by.
+- Node selectors inherit the parent run authorization and reject --input and --confirmed-by.
 - handoff input roles and planned output roles must each be unique.
 
 ### `researchspec advance <node-selector>`
@@ -220,7 +214,7 @@ An optional validation target and strictness flag.
 
 | Field or option | Type | Required | Meaning |
 | --- | --- | --- | --- |
-| `target` | `all \| specs \| profiles \| subflows \| changes \| handoffs \| tools \| plugins \| literature-adapters` | no | Validation scope; defaults to all. |
+| `target` | `all \| specs \| profiles \| runs \| changes \| handoffs \| tools \| plugins \| literature-adapters` | no | Validation scope; defaults to all. |
 | `--strict` | `boolean` | no | Treat warnings as failures. |
 
 ### `researchspec list [type]`
@@ -256,7 +250,7 @@ Show one exact profile, run, node, or project change
 
 #### Input shape
 
-One exact stable spec, profile, subflow, Gate, Decision, change, handoff, or tool selector.
+One exact stable spec, profile, run, node, Gate, Decision, change, handoff, or tool selector.
 
 | Field or option | Type | Required | Meaning |
 | --- | --- | --- | --- |
@@ -328,7 +322,7 @@ Create a deterministic bounded schema 2 context bundle
 | Command option | Required | Purpose |
 | --- | --- | --- |
 | `--output <zip>` | yes | output ZIP path |
-| `--scope <scope>` | no | all, specs, profile, subflows, changes, subflow:<id>, or change:<id> |
+| `--scope <scope>` | no | all, specs, profiles, runs, changes, run:<id>, or change:<id> |
 
 #### Input shape
 

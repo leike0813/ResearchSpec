@@ -99,7 +99,7 @@ function registerCommands(program: Command, run: Runner): void {
   registerCliCommand(program, "instructions")
     .action(async (selector: string, _options: Record<string, never>, command: Command) => run("instructions", command, () => handleGraphInstructions(selector, commandContext("instructions", command))));
   registerCliCommand(program, "start")
-    .action(async (profileId: string, options: GraphStartOptions, command: Command) => run("start", command, () => handleGraphStart({ input: options.input, profile: profileId, confirmedBy: options.confirmedBy }, commandContext("start", command))));
+    .action(async (selector: string, options: GraphStartOptions, command: Command) => run("start", command, () => handleGraphStart({ input: options.input, selector, confirmedBy: options.confirmedBy }, commandContext("start", command))));
   registerCliCommand(program, "advance")
     .action(async (selector: string, options: GraphAdvanceOptions, command: Command) => run("advance", command, () => handleGraphAdvance(selector, { input: options.input, actorName: options.actorName }, commandContext("advance", command))));
   registerCliCommand(program, "check")
@@ -170,7 +170,7 @@ function commandContext(command: string, commandObject: Command): CommandContext
 }
 
 const CHECK_TARGETS = new Set<CurrentCheckTarget>([
-  "all", "specs", "profiles", "subflows", "changes", "handoffs", "tools", "plugins", "literature-adapters",
+  "all", "specs", "profiles", "runs", "changes", "handoffs", "tools", "plugins", "literature-adapters",
 ]);
 
 function requireCheckTarget(value: string | undefined): CurrentCheckTarget {

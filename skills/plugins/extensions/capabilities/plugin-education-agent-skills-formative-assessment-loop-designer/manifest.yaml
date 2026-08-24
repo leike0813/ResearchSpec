@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-formative-assessment-loop-designer/SKILL.md
       sha256: f8887028801820482880c74768203ac887f9f7a60477758733d5fb08620486c5
-license: Apache-2.0
+license: CC-BY-SA-4.0

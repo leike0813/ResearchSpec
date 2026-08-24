@@ -10,682 +10,682 @@
     {
       "capability_id": "plugin-education-agent-skills-academic-language-sentence-frame-generator",
       "source_path": "capabilities/plugin-education-agent-skills-academic-language-sentence-frame-generator",
-      "manifest_sha256": "4e2ba2f5e8eef232ab9db98037fd70c5496e584d80474634e867982d80824f9d"
+      "manifest_sha256": "6188e5f46a425694041ff65b39542b5a390ad56d0dd987593f77fb70ea88f8db"
     },
     {
       "capability_id": "plugin-education-agent-skills-adaptive-hint-sequence-designer",
       "source_path": "capabilities/plugin-education-agent-skills-adaptive-hint-sequence-designer",
-      "manifest_sha256": "92157902a5ba17236c24190b714069eea8d89a4d5f1dc37d4b45249c12c2aef0"
+      "manifest_sha256": "54e6519ca1155779eefb293838747d4f4e2896a713e84a72cd8ea341f4819ab0"
     },
     {
       "capability_id": "plugin-education-agent-skills-agency-circles-for-systems-action",
       "source_path": "capabilities/plugin-education-agent-skills-agency-circles-for-systems-action",
-      "manifest_sha256": "3d8aea44880490cd1405ab0cc132afa4469147db7b0afbcf42d2fd96f4a1f1a2"
+      "manifest_sha256": "7e28cbef2620b9f9d7a6b811965b4435362bc897e3ffd847b4405033a0413673"
     },
     {
       "capability_id": "plugin-education-agent-skills-agency-scaffold-generator",
       "source_path": "capabilities/plugin-education-agent-skills-agency-scaffold-generator",
-      "manifest_sha256": "67edfe1579184d149ef99278a723dcda16c4b3347b4f7636ac46334a0db44711"
+      "manifest_sha256": "0cdd782ef5c0bed138d3344a0fd571cfc7dbd18105d650b66c26439ee47e3e7b"
     },
     {
       "capability_id": "plugin-education-agent-skills-ai-claim-checker",
       "source_path": "capabilities/plugin-education-agent-skills-ai-claim-checker",
-      "manifest_sha256": "ecfcec8e7ccfb57a41372b8b1084720a3107b6dcc48b4494c857c6f9c1c35db7"
+      "manifest_sha256": "0d30dd6ddff202fb1e4eed4d61c99c1a4c314c2ab0b520b690f9b28bf124811d"
     },
     {
       "capability_id": "plugin-education-agent-skills-ai-expertise-interrogation-designer",
       "source_path": "capabilities/plugin-education-agent-skills-ai-expertise-interrogation-designer",
-      "manifest_sha256": "be1028f5f02b0eb3a9b9436330350a24a608c3054bba76a45babdcb48440e62c"
+      "manifest_sha256": "e12323a4cef18d8592a904534fe94b96c13fc12e5a46818302aa34f3b04d44af"
     },
     {
       "capability_id": "plugin-education-agent-skills-ai-facilitated-collaborative-learning-designer",
       "source_path": "capabilities/plugin-education-agent-skills-ai-facilitated-collaborative-learning-designer",
-      "manifest_sha256": "509c47ef149ccabe74c9a12a211d5286c7a85495b17608b44749bdadb9edf4de"
+      "manifest_sha256": "fad00063ddb029f1578084299cf5983ecce4ac57edb4e2869f13165f256509d2"
     },
     {
       "capability_id": "plugin-education-agent-skills-ai-feedback-design-principles",
       "source_path": "capabilities/plugin-education-agent-skills-ai-feedback-design-principles",
-      "manifest_sha256": "506a1e3255dfd2071c72ffd3352516afc520e749ac1c9ad677bb25c6b27f5663"
+      "manifest_sha256": "44aab042888ad509bca7bb8d41c261e40be0467a8de831f8f4fbb88e5bf524c2"
     },
     {
       "capability_id": "plugin-education-agent-skills-ai-hallucination-fact-check-protocol",
       "source_path": "capabilities/plugin-education-agent-skills-ai-hallucination-fact-check-protocol",
-      "manifest_sha256": "6897a496a22c463ff0b8a281e4e13feffc3fa003502d968b92937ee9e6b1e13e"
+      "manifest_sha256": "51e68c45af06634439a5cae7a83f25589ca7914b5297d455a4c987b598ec300f"
     },
     {
       "capability_id": "plugin-education-agent-skills-ai-learning-boundary-mapper",
       "source_path": "capabilities/plugin-education-agent-skills-ai-learning-boundary-mapper",
-      "manifest_sha256": "9d61e3277fb80209e7533e74b918a6b79172e57e31f82761ca270541b46da81a"
+      "manifest_sha256": "deddf0930bd2263a22d8b8098e1c842c77876fb8895cea312334b4ec9b584f01"
     },
     {
       "capability_id": "plugin-education-agent-skills-ai-output-critical-audit-designer",
       "source_path": "capabilities/plugin-education-agent-skills-ai-output-critical-audit-designer",
-      "manifest_sha256": "f3f17b289effa68be871c8e132aef1d2c8174ad26e8c4aa6e9b9492a095a86d1"
+      "manifest_sha256": "3ffeefd64851ac46186f52fb1125e2986716c0e8752ba122e7d581a1ae357560"
     },
     {
       "capability_id": "plugin-education-agent-skills-ai-socratic-dialogue-designer",
       "source_path": "capabilities/plugin-education-agent-skills-ai-socratic-dialogue-designer",
-      "manifest_sha256": "5375e7a7365ce858e755b33088e00dfd88117cdb80a95ccdc1a78440624c52d2"
+      "manifest_sha256": "fecd3eb4d45734d646d95e3f2c2c4819c4071be4217c63b10943dc0d5104c677"
     },
     {
       "capability_id": "plugin-education-agent-skills-argument-structure-scaffold-generator",
       "source_path": "capabilities/plugin-education-agent-skills-argument-structure-scaffold-generator",
-      "manifest_sha256": "1c2b8ec4460f120d989a029e1292ec7d7fda4f535260f9a5dce133bac1b63c6e"
+      "manifest_sha256": "8294565de8f6b3e7e6a1ab5a7289ead0ff341b2fb2119f76308986dc8bb298a6"
     },
     {
       "capability_id": "plugin-education-agent-skills-aspirational-systems-iceberg",
       "source_path": "capabilities/plugin-education-agent-skills-aspirational-systems-iceberg",
-      "manifest_sha256": "1f1b6aa8a1ad6ce2dec7446a31109547677cd0d581c4ec4abb404b76cb9ed5d2"
+      "manifest_sha256": "c7431f1ec229c6da93949455fc125d507a0798e02aa8d4bd40048b01f95a1ea8"
     },
     {
       "capability_id": "plugin-education-agent-skills-assessment-validity-checker",
       "source_path": "capabilities/plugin-education-agent-skills-assessment-validity-checker",
-      "manifest_sha256": "1b8b5a57eca28cf243d290d72dc74627c7dff23a26f3c34bcbc7ef811897c24f"
+      "manifest_sha256": "b4127f9f8e1b62bfce522efe062efffe7a6b8b8d4c5269861037312a7a79f0ff"
     },
     {
       "capability_id": "plugin-education-agent-skills-awe-wonder-experience-designer",
       "source_path": "capabilities/plugin-education-agent-skills-awe-wonder-experience-designer",
-      "manifest_sha256": "4ec97db1a62e0f04c9b83a6effd7622c9806733b0f4acedc2de69b7121039e9e"
+      "manifest_sha256": "e0b376e0d69f068c4c04a3440bf1273a04208eac03bc4ac4ab6cb14a26f10494"
     },
     {
       "capability_id": "plugin-education-agent-skills-backwards-design-unit-planner",
       "source_path": "capabilities/plugin-education-agent-skills-backwards-design-unit-planner",
-      "manifest_sha256": "b9c54ffa00777f20a16156808448188a3e96ad12a8a4ff2f28cd4af612960d72"
+      "manifest_sha256": "1aa9c5205f12e1818be7591b87c17f630ef4620d900e4fdb0445bc86daf88696"
     },
     {
       "capability_id": "plugin-education-agent-skills-belonging-classroom-culture-designer",
       "source_path": "capabilities/plugin-education-agent-skills-belonging-classroom-culture-designer",
-      "manifest_sha256": "20f5d964c70a860a9b5897ccbb59af143dbb0cb19239139f51d96b3f2ba01faf"
+      "manifest_sha256": "24425c7a26f64fff91ac4705f502115e4f313985aaff0ee055206047d56e5f56"
     },
     {
       "capability_id": "plugin-education-agent-skills-biophilic-learning-environment-designer",
       "source_path": "capabilities/plugin-education-agent-skills-biophilic-learning-environment-designer",
-      "manifest_sha256": "57b39c11da61e47da93814e6cdc45674855a49769fa1901c1bba9ed293e41358"
+      "manifest_sha256": "16233954b6d61b4591fc365af370a01db1444926226e62478f260130f9551c65"
     },
     {
       "capability_id": "plugin-education-agent-skills-checking-for-understanding-protocol-designer",
       "source_path": "capabilities/plugin-education-agent-skills-checking-for-understanding-protocol-designer",
-      "manifest_sha256": "a19853ba206336ce0782a4acd8b0c4ed576a51dc68f5de5f304b764d0fcd3cbe"
+      "manifest_sha256": "fab4b24725668d5b71f097787a222729125e1d66da3cf08720e7dfd9d92d0468"
     },
     {
       "capability_id": "plugin-education-agent-skills-cognitive-load-analyser",
       "source_path": "capabilities/plugin-education-agent-skills-cognitive-load-analyser",
-      "manifest_sha256": "304cee39fdfa66c0fedaf440924cf3063b51816885d1214d7cc8df2a18df677e"
+      "manifest_sha256": "12446737452fc4f9beb5947cfb6236a4eed9d0236c60eb85866fdc3586d2824d"
     },
     {
       "capability_id": "plugin-education-agent-skills-cognitive-tutoring-architecture-designer",
       "source_path": "capabilities/plugin-education-agent-skills-cognitive-tutoring-architecture-designer",
-      "manifest_sha256": "46750b1f2f351d412a1a04121f6ee4fcc994aa0acd08ea0bfaeb3fc1fa859181"
+      "manifest_sha256": "09aed79e22354c06521572b3ce71617fb60f43e3615bce57f717e96a523bea67"
     },
     {
       "capability_id": "plugin-education-agent-skills-competency-unpacker",
       "source_path": "capabilities/plugin-education-agent-skills-competency-unpacker",
-      "manifest_sha256": "a52c93b96a9878bd5aff4969e16778979864c8e001034c9658164ee7b2fd13cd"
+      "manifest_sha256": "47749a6e7542d9b9047ec75807d7d7afcb1c09d4cf1954c6b37755b916badd82"
     },
     {
       "capability_id": "plugin-education-agent-skills-confidence-calibration-check",
       "source_path": "capabilities/plugin-education-agent-skills-confidence-calibration-check",
-      "manifest_sha256": "54cf0ea27b2da5b9d74f193aa4a1b6072b9f0fe7aadb82bad648bc11bc5e4759"
+      "manifest_sha256": "c77f346e1a24ad323564ac7139a1228b2ba0a4f27180f8ecc14f5d4f37043bc5"
     },
     {
       "capability_id": "plugin-education-agent-skills-coverage-audit",
       "source_path": "capabilities/plugin-education-agent-skills-coverage-audit",
-      "manifest_sha256": "4d10d9ebde38ec3f47d69723b2031fb56a70981a43a46b50c391ddd855a1312d"
+      "manifest_sha256": "3b36a155caf05091394df3808ba2d7c9c5336cbfb94b24d18c6fcbdd48b892d1"
     },
     {
       "capability_id": "plugin-education-agent-skills-cpa-sequence-designer",
       "source_path": "capabilities/plugin-education-agent-skills-cpa-sequence-designer",
-      "manifest_sha256": "5727de85db08f474c6a7c8df77ef91dadec15415993a0b295c40586fe5c822b7"
+      "manifest_sha256": "e6a98ea6fbf269385eacd3f0886ac042555baab6f8ecc294fbd9c7e9b6387a19"
     },
     {
       "capability_id": "plugin-education-agent-skills-criterion-referenced-rubric-generator",
       "source_path": "capabilities/plugin-education-agent-skills-criterion-referenced-rubric-generator",
-      "manifest_sha256": "7920c92ddbd077992153da44a4ca095b12c306ef64f1ee73a689ea7d80959fcb"
+      "manifest_sha256": "70514b268c6096df2de4c35e4b7a21405a386e199939734cdb58fe6c61750d89"
     },
     {
       "capability_id": "plugin-education-agent-skills-critical-thinking-task-designer",
       "source_path": "capabilities/plugin-education-agent-skills-critical-thinking-task-designer",
-      "manifest_sha256": "fb0ac2226b98cb9e6e6599c534230e9bbd4b2a92d1d175fa441baa276a94138d"
+      "manifest_sha256": "9b1c95edb413a8e0fdd18b603072989d96648547a1be0811d7fafc5dd2fa727e"
     },
     {
       "capability_id": "plugin-education-agent-skills-cross-cultural-task-validity-checker",
       "source_path": "capabilities/plugin-education-agent-skills-cross-cultural-task-validity-checker",
-      "manifest_sha256": "6d34106d0d9536a4ee67497f5b9ea7d9fa28b023aaae9a20d69fd0419e557561"
+      "manifest_sha256": "7653a322fc8f37b29a6a093ed297d8701fc562e419797b667bc9d09393e5035b"
     },
     {
       "capability_id": "plugin-education-agent-skills-culturally-responsive-teaching-designer",
       "source_path": "capabilities/plugin-education-agent-skills-culturally-responsive-teaching-designer",
-      "manifest_sha256": "4f1ad32b769ac0387ba10f8778a914128ea6ff8ec818a1211429fc13a4fe337d"
+      "manifest_sha256": "4777cc1329f81cc93b73d3a3d494d85195d7f55bca74626d937f429f5c22bbd8"
     },
     {
       "capability_id": "plugin-education-agent-skills-curriculum-crosswalk",
       "source_path": "capabilities/plugin-education-agent-skills-curriculum-crosswalk",
-      "manifest_sha256": "d47b6114419c1efa9de0c0b4ce421a1874d8f64285453ff4c115b469e28d3827"
+      "manifest_sha256": "29b9ac3f81a47466ec7277464b6db7a3827eba459f3420c6866e3f8cc2bab439"
     },
     {
       "capability_id": "plugin-education-agent-skills-curriculum-knowledge-architecture-designer",
       "source_path": "capabilities/plugin-education-agent-skills-curriculum-knowledge-architecture-designer",
-      "manifest_sha256": "64250c63a60a5effd05015d46afdf881ea20dc5206cb48c2de7756efbb7f271d"
+      "manifest_sha256": "1bd17b04e188c3b0905066ded6051b4771f892a5614d9afe40ad90bfc0c8835e"
     },
     {
       "capability_id": "plugin-education-agent-skills-dialogic-teaching-move-generator",
       "source_path": "capabilities/plugin-education-agent-skills-dialogic-teaching-move-generator",
-      "manifest_sha256": "c7b7ff6b2522097eaa5fbe0cec8d54eecc5249569bcf2db405c47d858dbea7f1"
+      "manifest_sha256": "5e386691f537c3e5a63df71d1ba1b152ec2c63c89635e6a83cdbb4a4fe7c8061"
     },
     {
       "capability_id": "plugin-education-agent-skills-differentiation-adapter",
       "source_path": "capabilities/plugin-education-agent-skills-differentiation-adapter",
-      "manifest_sha256": "30d5ea831d938f810b5e6f049914f961711cb05325690aa85814e280815a6986"
+      "manifest_sha256": "2199604033609c89d56fbe08ae9b214672fdbb557892519f45fad154e4eb66d5"
     },
     {
       "capability_id": "plugin-education-agent-skills-digital-worked-example-sequence",
       "source_path": "capabilities/plugin-education-agent-skills-digital-worked-example-sequence",
-      "manifest_sha256": "8ae4b8f538ecf267d9cd4cb0e1a9fb2d46d14366e8eb4b44f811d377846e46f6"
+      "manifest_sha256": "4787c73f20876bb37df2ad4589e2f8c278a873dae974c86b41e8a94ba98f3030"
     },
     {
       "capability_id": "plugin-education-agent-skills-disciplinary-ai-literacy-sequence-designer",
       "source_path": "capabilities/plugin-education-agent-skills-disciplinary-ai-literacy-sequence-designer",
-      "manifest_sha256": "68bf442c7d3e8bfbde43ec228aaa220307532938608e45fff531f2cd006f5bd1"
+      "manifest_sha256": "433f40ebd2ca9a89dee696cb2311f3eff9dafaa83d58c5784623060bc7db1b4c"
     },
     {
       "capability_id": "plugin-education-agent-skills-disciplinary-writing-scaffold",
       "source_path": "capabilities/plugin-education-agent-skills-disciplinary-writing-scaffold",
-      "manifest_sha256": "0998a8c635f666a07c0028ee3facfc25350971d940574a0e93a007ee794cc329"
+      "manifest_sha256": "5d780c1912b98917158ac3450b009ea412de35e42826efbb621d405bbc64a394"
     },
     {
       "capability_id": "plugin-education-agent-skills-discipline-specific-critical-thinking-task-designer",
       "source_path": "capabilities/plugin-education-agent-skills-discipline-specific-critical-thinking-task-designer",
-      "manifest_sha256": "f62dd8fc443902b9d9b611de66126283e7907ccd553fa97916833cd795792916"
+      "manifest_sha256": "908773fe998e3a5c67aa2014ee606137a21371de5e6cf1d0ec0cd73a036ca9da"
     },
     {
       "capability_id": "plugin-education-agent-skills-discussion-protocol-selector",
       "source_path": "capabilities/plugin-education-agent-skills-discussion-protocol-selector",
-      "manifest_sha256": "60c6d92aed5cc3932f5eeb3ac169bc9d81d6264d048f8053cb4e837c1a2c4b4f"
+      "manifest_sha256": "0726f193d599c15c6cbacf8349409feac707db0025670ecbbaab53556004dd32"
     },
     {
       "capability_id": "plugin-education-agent-skills-dual-coding-designer",
       "source_path": "capabilities/plugin-education-agent-skills-dual-coding-designer",
-      "manifest_sha256": "a1d9e787fb4c692d1c22651e192c9ae6f7e5bb9222626a90ed611d3455380361"
+      "manifest_sha256": "305dbf5396b6769f7d2516f9a9ac294fd83d693bef565bec99f2a32c8704fc0a"
     },
     {
       "capability_id": "plugin-education-agent-skills-ecological-inquiry-anchor-designer",
       "source_path": "capabilities/plugin-education-agent-skills-ecological-inquiry-anchor-designer",
-      "manifest_sha256": "aa3a8a0d62a3bd4a88ef0e213aff5314ad2cdf5f3fb27467edc986e64274e0e8"
+      "manifest_sha256": "9c84cbb0aae3bccde0ccf956a93e067a7a032278a54c2f51c799ab15963eb3f4"
     },
     {
       "capability_id": "plugin-education-agent-skills-elaborative-interrogation-generator",
       "source_path": "capabilities/plugin-education-agent-skills-elaborative-interrogation-generator",
-      "manifest_sha256": "3c3eb27abeb69ea4c9ac178181df05fed30ecd947ce8c0df9402168d6041e8b7"
+      "manifest_sha256": "b937cee68a932e78fcb521bc889d454005d21fd8de9b1ab857ce748a5fd77f82"
     },
     {
       "capability_id": "plugin-education-agent-skills-emergent-project-design-scaffold",
       "source_path": "capabilities/plugin-education-agent-skills-emergent-project-design-scaffold",
-      "manifest_sha256": "46ad4b637fe9f485757a0888630a6299f798b4068bf9bf8b23aedd654e4384f0"
+      "manifest_sha256": "0ff961c1763138c7c0a240856fcf2be318a0b3e784857f74bf57d22e89e9c386"
     },
     {
       "capability_id": "plugin-education-agent-skills-erroneous-example-designer",
       "source_path": "capabilities/plugin-education-agent-skills-erroneous-example-designer",
-      "manifest_sha256": "abe96c0869a77dd3fd9b54a7f5b525d1047e5e0758ba5a295cd86e2ddd4a25ac"
+      "manifest_sha256": "9188db331c6c3ccd4dd96add0d1d8c7db20131c6c67f3c9b8f27c4a62133919d"
     },
     {
       "capability_id": "plugin-education-agent-skills-error-analysis-protocol",
       "source_path": "capabilities/plugin-education-agent-skills-error-analysis-protocol",
-      "manifest_sha256": "1d831d9b9098448e48966fe4ec4c9955d3464fed73c41133a966e5d0e83413a0"
+      "manifest_sha256": "01a67e9b660144727851024b57c5f66bbb6f739783731b96874e3b4b5aba4c2c"
     },
     {
       "capability_id": "plugin-education-agent-skills-experiential-learning-cycle-designer",
       "source_path": "capabilities/plugin-education-agent-skills-experiential-learning-cycle-designer",
-      "manifest_sha256": "f36caa6003305acb0e641b1ff9b4f1fef2181d0c78fe54441113505f079a2a12"
+      "manifest_sha256": "7fe2317b13456ce0e5d1acddd526b987fa690d556852c5b45f2ec08abfd1d5ba"
     },
     {
       "capability_id": "plugin-education-agent-skills-explain-first-interrogator",
       "source_path": "capabilities/plugin-education-agent-skills-explain-first-interrogator",
-      "manifest_sha256": "7b8404f19797edb325c55378d2de991cb84023de3bbf50a4404b7c614021b584"
+      "manifest_sha256": "f850d416fc6a7772b336518a1f450b07e33481e3933560889af485113af98643"
     },
     {
       "capability_id": "plugin-education-agent-skills-explicit-instruction-sequence-builder",
       "source_path": "capabilities/plugin-education-agent-skills-explicit-instruction-sequence-builder",
-      "manifest_sha256": "321f47f40554ea11d19881526c95159f7b63a5ab9b8db776b7abc992d15a1db2"
+      "manifest_sha256": "fab26431ad05e3a66907e413bff135fcb7efbd89cab9635271077e0d60551d96"
     },
     {
       "capability_id": "plugin-education-agent-skills-fading-manager",
       "source_path": "capabilities/plugin-education-agent-skills-fading-manager",
-      "manifest_sha256": "8e1cbfecb6e19b11d1bf7c23faeb88aca2932871a661222613c6fc3e64046bf0"
+      "manifest_sha256": "bf11bdca9ec7459e815e8400550d55bad2597e2dd337d434dd34ccf7bc7ea673"
     },
     {
       "capability_id": "plugin-education-agent-skills-feedback-quality-analyser",
       "source_path": "capabilities/plugin-education-agent-skills-feedback-quality-analyser",
-      "manifest_sha256": "a8ee96d7f1243fbf2d51d0878e78db547bcc040d550651b864ea47c1f7caa3b8"
+      "manifest_sha256": "b7dbe560a8faf0cd4593b6b9df9b045f581277fea5c699f6043f24a4d26938fe"
     },
     {
       "capability_id": "plugin-education-agent-skills-flow-state-condition-designer",
       "source_path": "capabilities/plugin-education-agent-skills-flow-state-condition-designer",
-      "manifest_sha256": "8001925d867a8fa6c34c9c3196d1bf92d71b40866aaf1b3d445a25207288140e"
+      "manifest_sha256": "5f322a0257e7770bb7b7adab34f863af7e1a0c0d2cbd23572ca1c1d1a3fa0105"
     },
     {
       "capability_id": "plugin-education-agent-skills-formative-assessment-loop-designer",
       "source_path": "capabilities/plugin-education-agent-skills-formative-assessment-loop-designer",
-      "manifest_sha256": "f58388e3e31125f8d562d843f8e57c92f87340b5b7ee3a65b8900ebacddff59b"
+      "manifest_sha256": "759fe37b6fe595e205f2792cb7ad9585d4ed98e4e04823e659ee1809bbdf51ce"
     },
     {
       "capability_id": "plugin-education-agent-skills-formative-assessment-technique-selector",
       "source_path": "capabilities/plugin-education-agent-skills-formative-assessment-technique-selector",
-      "manifest_sha256": "59277ad6fd3b7da5a4149687e51e852447bc94fe11daa234ae7eafd59c0a38d8"
+      "manifest_sha256": "07c441d1d90877325b23a15b797a0014cb4d3fb2d8990f651191991b449c4c0c"
     },
     {
       "capability_id": "plugin-education-agent-skills-gap-analysis-from-student-work",
       "source_path": "capabilities/plugin-education-agent-skills-gap-analysis-from-student-work",
-      "manifest_sha256": "e77e17c6e1cecdda4f5399e1758d53eeb6972f228433eecc16278333a67eeffe"
+      "manifest_sha256": "85cd0f5e40eba44eeb1e3ab683ea0900e089dbf8ef30e9a38afb6d8e5710c65b"
     },
     {
       "capability_id": "plugin-education-agent-skills-goal-setting-protocol-designer",
       "source_path": "capabilities/plugin-education-agent-skills-goal-setting-protocol-designer",
-      "manifest_sha256": "3441927b07bcfbf752fa78edb0ae07fe0534385ccd82600227d25ad8fd7b6cae"
+      "manifest_sha256": "975bf09238bd2a69bb90fdb9c0a7b67a64e56dcfa3a6908f032c599e54f5a240"
     },
     {
       "capability_id": "plugin-education-agent-skills-hexagon-complexity-mapper",
       "source_path": "capabilities/plugin-education-agent-skills-hexagon-complexity-mapper",
-      "manifest_sha256": "7cdb2f6086171870f747eb53086de60bbd7f9a5a955bf6ac4555ed801de33c0a"
+      "manifest_sha256": "9ed0f303f70e821f7210aff4332e98311849d4728fa473fd6ed06018eb989d55"
     },
     {
       "capability_id": "plugin-education-agent-skills-hinge-question-designer",
       "source_path": "capabilities/plugin-education-agent-skills-hinge-question-designer",
-      "manifest_sha256": "062b48f8f8e7672e3c2da4b9b4ab63a27bcde331a7422023eaffdd76beadbed5"
+      "manifest_sha256": "137639eaa491526b1666c36f755b481d9e4d1c1330afafe7d710af0a70176810"
     },
     {
       "capability_id": "plugin-education-agent-skills-implementation-intention-designer",
       "source_path": "capabilities/plugin-education-agent-skills-implementation-intention-designer",
-      "manifest_sha256": "75b8d0df41e78dc540a72b0211926127aba14499911d17aa937718ba30d68b90"
+      "manifest_sha256": "c630c3ec49e04187e36391096c5e0efa4f946b4f188357a34c8408eeef67cf9a"
     },
     {
       "capability_id": "plugin-education-agent-skills-individual-spacing-algorithm-explainer",
       "source_path": "capabilities/plugin-education-agent-skills-individual-spacing-algorithm-explainer",
-      "manifest_sha256": "159df1fc78bc93378314a2d567beb4f83306e3539ec65e2c72e92eec14602ae9"
+      "manifest_sha256": "51768517ea5b6c96c1cfd91b5617f08bddaa94d1539b07b3cfaf437fe9592d18"
     },
     {
       "capability_id": "plugin-education-agent-skills-instructional-coaching-conversation-guide",
       "source_path": "capabilities/plugin-education-agent-skills-instructional-coaching-conversation-guide",
-      "manifest_sha256": "181adad749b1412312c3bbda8abd9cf286bb4f7919d02946e79862170e5fd54e"
+      "manifest_sha256": "37877021020abd9fec993984e9a08f89fd9709c5e0f13c16fa68951b0a447fe7"
     },
     {
       "capability_id": "plugin-education-agent-skills-intelligent-tutoring-dialogue-designer",
       "source_path": "capabilities/plugin-education-agent-skills-intelligent-tutoring-dialogue-designer",
-      "manifest_sha256": "dd86f10567e633b00c6a6af0935aa439fea0003c80b14b966f4e2f3ade364c0f"
+      "manifest_sha256": "0c6c4641515be9a4a17e23bf117c4b9fbc21f466b237fb90c281894ea00de144"
     },
     {
       "capability_id": "plugin-education-agent-skills-interdisciplinary-real-world-connection-mapper",
       "source_path": "capabilities/plugin-education-agent-skills-interdisciplinary-real-world-connection-mapper",
-      "manifest_sha256": "171c7a0fb4a45a03c1bc8443c4c8f64ca6540145c82aa29bfb3cf448038c0e9d"
+      "manifest_sha256": "fc5fdbeb504507054b216fdcfed22a1b5067a620019f8400c4e9b8c321d6ade8"
     },
     {
       "capability_id": "plugin-education-agent-skills-interleaving-unit-planner",
       "source_path": "capabilities/plugin-education-agent-skills-interleaving-unit-planner",
-      "manifest_sha256": "29ebc0a57896787534f369aec6889b069ca3f11eaa6d0c783276d33caad30ef8"
+      "manifest_sha256": "99dbc46877f194fae01ba65f57f70948834e07d6cdb816e84c6c87baa09f47a4"
     },
     {
       "capability_id": "plugin-education-agent-skills-kud-chart-author",
       "source_path": "capabilities/plugin-education-agent-skills-kud-chart-author",
-      "manifest_sha256": "35bc716d5542000de07ebd5fca6f79b917a1a04799456d5e6db21cc1ccd07388"
+      "manifest_sha256": "8fb3ff10365d3ea2d7248ff1bf0d33af1bb2bd0bbd6a93ff01cb84ff1ab95a95"
     },
     {
       "capability_id": "plugin-education-agent-skills-kud-knowledge-type-mapper",
       "source_path": "capabilities/plugin-education-agent-skills-kud-knowledge-type-mapper",
-      "manifest_sha256": "a7ed1f5840784aa6acd56761daba6f8e947bac09b37030c19b39ac3f3ebddb44"
+      "manifest_sha256": "ea70a282f9bef2b2de47f419250e1f0f28cb35b89b470a8863b891177a2f5f61"
     },
     {
       "capability_id": "plugin-education-agent-skills-ladder-of-inference-reflection",
       "source_path": "capabilities/plugin-education-agent-skills-ladder-of-inference-reflection",
-      "manifest_sha256": "39ed4c7d78801121186513179b64def39d04ced5be2c1f2494c6889d53581a79"
+      "manifest_sha256": "139377e843432f1ebd0148d2c592f930fff9ae441391be4e2169834fb626777b"
     },
     {
       "capability_id": "plugin-education-agent-skills-language-demand-analyser",
       "source_path": "capabilities/plugin-education-agent-skills-language-demand-analyser",
-      "manifest_sha256": "6ea06c9c40ec42d1a730b50b540c0e3dc47015fdd757d09b9f3e2814f9dc0be3"
+      "manifest_sha256": "d28ac73c25e7f2165aa44c8275f0daac5e8fe307c4457f8a5735d32295cdee65"
     },
     {
       "capability_id": "plugin-education-agent-skills-learning-analytics-interpretation-guide",
       "source_path": "capabilities/plugin-education-agent-skills-learning-analytics-interpretation-guide",
-      "manifest_sha256": "17f3ff4babea7a9833f8107f09c94aaaa33901587de3ebb58e8fe5ed38bfdaf3"
+      "manifest_sha256": "9f1d29c188ef7a46889e3e9e8e18b7b7929372a1b9889da3313265f7eae5b348"
     },
     {
       "capability_id": "plugin-education-agent-skills-learning-progression-builder",
       "source_path": "capabilities/plugin-education-agent-skills-learning-progression-builder",
-      "manifest_sha256": "bacccba6576878b34a559b9fab2c3656bad31214f50869919d7082874c8f5d74"
+      "manifest_sha256": "185c473cf93a9117ed851222592a72e6e0f7acc0346067b5049abd515fc718a7"
     },
     {
       "capability_id": "plugin-education-agent-skills-lesson-observation-protocol-designer",
       "source_path": "capabilities/plugin-education-agent-skills-lesson-observation-protocol-designer",
-      "manifest_sha256": "4dd8edba6ed7e803b9feb69477972b510b8fc29e1a22a5cdf62de77f706db471"
+      "manifest_sha256": "24cf244e07359a8a5c1942d4caabf7873464281e278f1a120452fdb01c71ed2e"
     },
     {
       "capability_id": "plugin-education-agent-skills-lesson-opening-designer",
       "source_path": "capabilities/plugin-education-agent-skills-lesson-opening-designer",
-      "manifest_sha256": "8094076a1ccea6c2ce9c090832bdff271c6de53c7f1f1c091a313ed3222d021c"
+      "manifest_sha256": "f987b1583b8a624316ed85151253a7fd6b7e565529ed9deb997f859055e1f20a"
     },
     {
       "capability_id": "plugin-education-agent-skills-lesson-study-cycle-designer",
       "source_path": "capabilities/plugin-education-agent-skills-lesson-study-cycle-designer",
-      "manifest_sha256": "e069f827d8ba5646005ccd699a506720755b66d0f546e7093be3793f674bae1c"
+      "manifest_sha256": "b3400b5f5a8105d122f77137c33c2a89a7924b7d7507c207551d8a4633b0dfa6"
     },
     {
       "capability_id": "plugin-education-agent-skills-leverage-and-response-design",
       "source_path": "capabilities/plugin-education-agent-skills-leverage-and-response-design",
-      "manifest_sha256": "ee0248c231cc62b0b841d2380cd11cce72bad78ffeed0d1b2661295010b82906"
+      "manifest_sha256": "9994c558f2c930183939aa10c3b7abf690086a6667ba8f93e6e0dbdd8a21171e"
     },
     {
       "capability_id": "plugin-education-agent-skills-media-literacy-deconstruction-protocol",
       "source_path": "capabilities/plugin-education-agent-skills-media-literacy-deconstruction-protocol",
-      "manifest_sha256": "d0175f779bb51c3084c7471f0cad377e932f4cd08a677962b5ecfb8657df8867"
+      "manifest_sha256": "eab6d083069b29fae4a51e054861c6597675c9e345cbc53e2a96062342693da0"
     },
     {
       "capability_id": "plugin-education-agent-skills-mental-model-mapper",
       "source_path": "capabilities/plugin-education-agent-skills-mental-model-mapper",
-      "manifest_sha256": "914fb458b5a3ca102192d3a125f3b89df831ee981774c56372d659731d61e1fa"
+      "manifest_sha256": "d878a7c3cf59bf60df572dc3b375f0ef07d6b17549c120502516d1d371178ff6"
     },
     {
       "capability_id": "plugin-education-agent-skills-metacognitive-monitoring-ai-contexts",
       "source_path": "capabilities/plugin-education-agent-skills-metacognitive-monitoring-ai-contexts",
-      "manifest_sha256": "4206ed3229f7afb7ed489d18b42a672a2435fdbf70695a506e4cda6abaa94283"
+      "manifest_sha256": "93a7a64dd33e04738e1dd9c2ddffaa195a7f76f4330df9ac91671b17525d0cbf"
     },
     {
       "capability_id": "plugin-education-agent-skills-metacognitive-prompt-library",
       "source_path": "capabilities/plugin-education-agent-skills-metacognitive-prompt-library",
-      "manifest_sha256": "599841075fafbcf11de5b13d1715d84855379c02a413956d9f7c5f2f2ea6bd65"
+      "manifest_sha256": "d3436c125933142b5c2d3cd49312e024cabebe0c449819c63e756dad80ca5d94"
     },
     {
       "capability_id": "plugin-education-agent-skills-mixed-age-learning-task-designer",
       "source_path": "capabilities/plugin-education-agent-skills-mixed-age-learning-task-designer",
-      "manifest_sha256": "8a4011d7497348f44dc086054222c0c6afc0f7a680e189b9f5de13a9e8cb78c3"
+      "manifest_sha256": "5e9998af7bd07c3bf1915bdb891a31a8ddf7ec3f18fb04f66d88038b757c0686"
     },
     {
       "capability_id": "plugin-education-agent-skills-motivation-diagnostic-task-redesign",
       "source_path": "capabilities/plugin-education-agent-skills-motivation-diagnostic-task-redesign",
-      "manifest_sha256": "bd64693f1111521cc4517e3d41f3fe86536d73beeeec20e691d7c4f44a704ce9"
+      "manifest_sha256": "d0aad6a238f319833912ea4f49b99036d3c3937eb11fa81fa644599371142272"
     },
     {
       "capability_id": "plugin-education-agent-skills-outdoor-learning-sequence-designer",
       "source_path": "capabilities/plugin-education-agent-skills-outdoor-learning-sequence-designer",
-      "manifest_sha256": "844d52aabe29315a173b78d3c7932f3e0b7d6bf6b97911be3aab3ee1ffc59d7f"
+      "manifest_sha256": "645ce8694a421fa9ccbfd3a0122b23fbbc762d1b18a82c8b71a280939ac7a149"
     },
     {
       "capability_id": "plugin-education-agent-skills-panel-review",
       "source_path": "capabilities/plugin-education-agent-skills-panel-review",
-      "manifest_sha256": "ffeb812f5f790956ae08dd5968f34006b833b68873494f4ea8ee003161e87392"
+      "manifest_sha256": "fd125d642a3294a0f6ec408d63eb7b6ef981c207bc459c76245b0f413d50dc5a"
     },
     {
       "capability_id": "plugin-education-agent-skills-pedagogical-content-knowledge-developer",
       "source_path": "capabilities/plugin-education-agent-skills-pedagogical-content-knowledge-developer",
-      "manifest_sha256": "3a1e7585667a59dbc232b0a6deb79c85d7394184a18c3c98a338e40cff026215"
+      "manifest_sha256": "b67c75fb8d0d21d1223125ecca8036a80faf110f40b14e4e7dcfcdf16cc55797"
     },
     {
       "capability_id": "plugin-education-agent-skills-perma-based-lesson-designer",
       "source_path": "capabilities/plugin-education-agent-skills-perma-based-lesson-designer",
-      "manifest_sha256": "272e268238f945d2e99d4be8e05f329f8d639c8cc7b91fde9ed13b0c567ca2fa"
+      "manifest_sha256": "575e0b416a3106fd923626eb208589ba05396f0da27f65c375f85ad01c0c6313"
     },
     {
       "capability_id": "plugin-education-agent-skills-perspective-taking-designer",
       "source_path": "capabilities/plugin-education-agent-skills-perspective-taking-designer",
-      "manifest_sha256": "3384a001f1d7f7365456960903322f8a843d3286542f7a38ea48220351eb35e5"
+      "manifest_sha256": "045f5738df2e02304254e36a5fe997b24898f1696a87f1f4fe1795b0f5a76705"
     },
     {
       "capability_id": "plugin-education-agent-skills-phenomenon-based-unit-anchor",
       "source_path": "capabilities/plugin-education-agent-skills-phenomenon-based-unit-anchor",
-      "manifest_sha256": "a8d19be31fce8ffacf6a24b7bc90ee76d161645476de231654b1d16f563f4a9a"
+      "manifest_sha256": "a542ff4af27a909ee3bb2a07d3d8670acfb6e1fe3f3f7fe89cc4a5dd689a2847"
     },
     {
       "capability_id": "plugin-education-agent-skills-place-based-inquiry-anchor",
       "source_path": "capabilities/plugin-education-agent-skills-place-based-inquiry-anchor",
-      "manifest_sha256": "960cc1d28d9f63759e772fbcdc33cd020a4e3c974cfef40eb630d3ae63839107"
+      "manifest_sha256": "5c7c38bd936e088f14f694263212b9459160cb815972ae33a6e91eb8d3cee05e"
     },
     {
       "capability_id": "plugin-education-agent-skills-practice-problem-sequence-designer",
       "source_path": "capabilities/plugin-education-agent-skills-practice-problem-sequence-designer",
-      "manifest_sha256": "040b71a0ffaba8553bf12839658f7366f0eaa9a09d901d010a642976eeda78f6"
+      "manifest_sha256": "4ff0a9dd43782eb01f200400bc669a61cd519fc29a47be8273d8a9431703478b"
     },
     {
       "capability_id": "plugin-education-agent-skills-prepared-environment-designer",
       "source_path": "capabilities/plugin-education-agent-skills-prepared-environment-designer",
-      "manifest_sha256": "7d248ef66af0cffcede5559ebe13758eff7ff1370c67d8dfac5074e97ebe36ad"
+      "manifest_sha256": "238da3abb8e2a4ea86a3a7227cb4de9e36aafd82ac50a815cad6ef8ffd858e65"
     },
     {
       "capability_id": "plugin-education-agent-skills-productive-failure-desirable-difficulty-designer",
       "source_path": "capabilities/plugin-education-agent-skills-productive-failure-desirable-difficulty-designer",
-      "manifest_sha256": "d00ba9bfde43899d596bfbd46035d8eec98d43ef9c2f47c7d0668d2ba737ec71"
+      "manifest_sha256": "9930721949681fab27a3cefa7a73f4d9af3b12344dc454b2552d7bffac73cef7"
     },
     {
       "capability_id": "plugin-education-agent-skills-productive-failure-protocol",
       "source_path": "capabilities/plugin-education-agent-skills-productive-failure-protocol",
-      "manifest_sha256": "e2dc9a954a003c53148a497da4d6afed549ad4342ab8b5b8b94f8cec005ebaa1"
+      "manifest_sha256": "d36617e68108e0c68d6e096fe3f19cf4c52bf6c9b67f3bbab3c7a9b4373a4d72"
     },
     {
       "capability_id": "plugin-education-agent-skills-professional-development-session-designer",
       "source_path": "capabilities/plugin-education-agent-skills-professional-development-session-designer",
-      "manifest_sha256": "661ffd30d0b8a673b617078f47cf39d413a61851cf30a13a1d9a6d19296456b6"
+      "manifest_sha256": "1cc1d99631373037bbb68d5cf0c7adf2381759cc7e45fc113a6b76e19b5a30d3"
     },
     {
       "capability_id": "plugin-education-agent-skills-progressive-hint-ladder",
       "source_path": "capabilities/plugin-education-agent-skills-progressive-hint-ladder",
-      "manifest_sha256": "e74df6c91d32cfad1fc53de60bb4801157616160a45e0ee88bd04d2eea633f05"
+      "manifest_sha256": "9f88244620e3172c9ba9094a237afa530a83a2addd7754697b51db8dea286fba"
     },
     {
       "capability_id": "plugin-education-agent-skills-project-brief-designer",
       "source_path": "capabilities/plugin-education-agent-skills-project-brief-designer",
-      "manifest_sha256": "f7d77076fd597ecea1644270e93675817e44adba640ec9fbca92e4d7d37c9739"
+      "manifest_sha256": "799375b125c27207e712f48ab25d5dafa8b603225e361759c3b19e6a0347aaa5"
     },
     {
       "capability_id": "plugin-education-agent-skills-prompt-literacy-sequence-designer",
       "source_path": "capabilities/plugin-education-agent-skills-prompt-literacy-sequence-designer",
-      "manifest_sha256": "22d6a65c55957f61e407bb0cd39ae2f5e662a2316baabda09534b38efe4f42a8"
+      "manifest_sha256": "d8056e2fc24a34ff9bb8e3b408762d5bbef9a6fa2895a61eab705b1a5a3095af"
     },
     {
       "capability_id": "plugin-education-agent-skills-reading-comprehension-strategy-selector",
       "source_path": "capabilities/plugin-education-agent-skills-reading-comprehension-strategy-selector",
-      "manifest_sha256": "23ad52da493222eb2d147daabce9666cbfc7d2c755438e7e36226630b7f85e73"
+      "manifest_sha256": "a1d03e6b37845db16ee874a3a6849282a86e4b802d7ab3207c0472fb92a018bf"
     },
     {
       "capability_id": "plugin-education-agent-skills-reflective-practice-prompt-generator",
       "source_path": "capabilities/plugin-education-agent-skills-reflective-practice-prompt-generator",
-      "manifest_sha256": "b13ae359e6f8e374daf606dde49f741d2838936d039eaa941548e7e0fd184e1a"
+      "manifest_sha256": "611d8817997010e702f7dc3132d187b3cf99ae979f74c1cafa792cc0d45e2030"
     },
     {
       "capability_id": "plugin-education-agent-skills-reggio-documentation-protocol",
       "source_path": "capabilities/plugin-education-agent-skills-reggio-documentation-protocol",
-      "manifest_sha256": "11f714df8dac31e4edbc8fd8d1c6b8d4b53eee4dbba5401f4c8a83fd2765e3fe"
+      "manifest_sha256": "3c93b9ec563d3d9bbeab067122fff79424661a6b92709e1b07ae98fea3817ad6"
     },
     {
       "capability_id": "plugin-education-agent-skills-restorative-practice-protocol-designer",
       "source_path": "capabilities/plugin-education-agent-skills-restorative-practice-protocol-designer",
-      "manifest_sha256": "ef3549e17235434db215b8e6717ff20f77141760af8486a3435b6487a316e12a"
+      "manifest_sha256": "29d5141e95eb0d29a9c71537668370c2df0f1256473a6b0878c918bcd97f4c65"
     },
     {
       "capability_id": "plugin-education-agent-skills-retrieval-practice-generator",
       "source_path": "capabilities/plugin-education-agent-skills-retrieval-practice-generator",
-      "manifest_sha256": "4ef379c7403bd004c100685f81390013cc81725efa533061c9a191afdbbca9df"
+      "manifest_sha256": "7701357dc1ef518620569e68da64574f6ccdaa156664ba8d7c66aea0e58db776"
     },
     {
       "capability_id": "plugin-education-agent-skills-retrieve-first-gate",
       "source_path": "capabilities/plugin-education-agent-skills-retrieve-first-gate",
-      "manifest_sha256": "1e9d042356721085fc733645b212b0c7a4a44e6d409c12fdd49552f454bc7bb3"
+      "manifest_sha256": "7d99072546d2731724e659bbfb32d099244378314353ed8d3714dda0b3dcd709"
     },
     {
       "capability_id": "plugin-education-agent-skills-ruler-emotional-literacy-sequence",
       "source_path": "capabilities/plugin-education-agent-skills-ruler-emotional-literacy-sequence",
-      "manifest_sha256": "5b235dbe8518fa8818d591c1b9afc4f59815def5333019a9b429b7ad21578be3"
+      "manifest_sha256": "faef2ea496436d7677ea290411dc7ad1e6c1665737da791544950572b097c025"
     },
     {
       "capability_id": "plugin-education-agent-skills-scaffolded-task-modifier",
       "source_path": "capabilities/plugin-education-agent-skills-scaffolded-task-modifier",
-      "manifest_sha256": "62ab1284b42e4d30d69af862bfaaa11319b242ecb550141c4e5effc683053471"
+      "manifest_sha256": "e980641604f277743dc7b3288cf2d6614c583df1c332393ca448ec7a13f23755"
     },
     {
       "capability_id": "plugin-education-agent-skills-scope-and-sequence-designer",
       "source_path": "capabilities/plugin-education-agent-skills-scope-and-sequence-designer",
-      "manifest_sha256": "51ea1110f1870ea2651c7e1f763d19a5d30130cdc11501243f43f88fa0b1c496"
+      "manifest_sha256": "9ce56cda69796baafb9d5d1c83a6fa8687b0c0a791f057bd06a5ade3684da68c"
     },
     {
       "capability_id": "plugin-education-agent-skills-self-efficacy-builder-sequence",
       "source_path": "capabilities/plugin-education-agent-skills-self-efficacy-builder-sequence",
-      "manifest_sha256": "c51aa6b3ccb06e5cef94dbe216eac8f740308f1aa79fd73429a31f01032f0753"
+      "manifest_sha256": "895373158242c7874e3b1de33b2cccad2bccdbc3b38c14cf634aa46faf8407cd"
     },
     {
       "capability_id": "plugin-education-agent-skills-self-explanation-prompt-designer",
       "source_path": "capabilities/plugin-education-agent-skills-self-explanation-prompt-designer",
-      "manifest_sha256": "5caec11b43d3d4fc48f756f6383df361f519f755ec37a36165b20a2ca48c4200"
+      "manifest_sha256": "356ab6ba3439af033d33cc8ac73ef7a7c0d7588a9e5823b2238d7a31132c960f"
     },
     {
       "capability_id": "plugin-education-agent-skills-self-regulation-scaffold-generator",
       "source_path": "capabilities/plugin-education-agent-skills-self-regulation-scaffold-generator",
-      "manifest_sha256": "21a8015999ec56e3fe6ba455bc12339b575936bb65a24a9c09341a0fb1efcfa2"
+      "manifest_sha256": "45ee6b5696d2ced70e36d826f0cbd068e19acc39fea6ebf76ded399208f4d8e8"
     },
     {
       "capability_id": "plugin-education-agent-skills-service-learning-project-designer",
       "source_path": "capabilities/plugin-education-agent-skills-service-learning-project-designer",
-      "manifest_sha256": "676b0e9464bde90fc4bf15888c6e6f6546631008d0e1bd19e8afc875a37f7503"
+      "manifest_sha256": "bef349f9c5e1fbc935b59356431a286f756769fefdf3305e944dae120ae04206"
     },
     {
       "capability_id": "plugin-education-agent-skills-sheltered-instruction-lesson-modifier",
       "source_path": "capabilities/plugin-education-agent-skills-sheltered-instruction-lesson-modifier",
-      "manifest_sha256": "f7e2cd9e4627e4595de4abd394310fa1df24b7f3c5fc2e243b05756fd2553217"
+      "manifest_sha256": "af87dd92e9ec82da553cce642681d72fee9dd85105e253e15f41d27014ed9690"
     },
     {
       "capability_id": "plugin-education-agent-skills-socratic-questioning-sequence-generator",
       "source_path": "capabilities/plugin-education-agent-skills-socratic-questioning-sequence-generator",
-      "manifest_sha256": "54cb32fd9df04cffc9c3c3611c96473b41c79ba1022e97065d25a4127b94bc17"
+      "manifest_sha256": "55701479eed02e93138e616f4c794fa0f0aafe5bdacc5a490a0f3493107e7c9b"
     },
     {
       "capability_id": "plugin-education-agent-skills-source-credibility-evaluation-protocol",
       "source_path": "capabilities/plugin-education-agent-skills-source-credibility-evaluation-protocol",
-      "manifest_sha256": "c541d24c933a144ba8079b50419d079d7a1e1360e199649fcb7da01b5acdba22"
+      "manifest_sha256": "8b7562d12a246786178857409d611bed1e8014443ed71306e05ccfa474ae11a0"
     },
     {
       "capability_id": "plugin-education-agent-skills-spaced-practice-scheduler",
       "source_path": "capabilities/plugin-education-agent-skills-spaced-practice-scheduler",
-      "manifest_sha256": "88437839bcca369de1897eb5b81d29433beac5132c6a58024944d2de1f61ba01"
+      "manifest_sha256": "081758ef9399d25d18e5376e95f49cbf70bce19b2faadcd9f85a39e743e4e9c3"
     },
     {
       "capability_id": "plugin-education-agent-skills-srl-session-wrapper",
       "source_path": "capabilities/plugin-education-agent-skills-srl-session-wrapper",
-      "manifest_sha256": "73bcb96ef75b34ca948d85637ffc58080c8fb4794bb8a7b8c32f9f81c098595e"
+      "manifest_sha256": "c6c669bcdc9ffe3f71115cb6b00a7429dcb072cc1138cf323e6e1c833281a14d"
     },
     {
       "capability_id": "plugin-education-agent-skills-stuck-and-error-diagnosis-coach",
       "source_path": "capabilities/plugin-education-agent-skills-stuck-and-error-diagnosis-coach",
-      "manifest_sha256": "a1a959f133a84908a7b3707477d41a2efc7406a87cfe4ba466a24f88f901e7ac"
+      "manifest_sha256": "1f2285d5a3623a668a47e45b5bbd472e3de196ba66e28f8ca420611ddc1e5adb"
     },
     {
       "capability_id": "plugin-education-agent-skills-study-strategy-selector",
       "source_path": "capabilities/plugin-education-agent-skills-study-strategy-selector",
-      "manifest_sha256": "01eb8491573a975a941693c68dc7e732d64bc0d29abf4536a82335cf72f5acdc"
+      "manifest_sha256": "abc70f68f1eb989cd90939d96c4e20e0147ae4512613c751d2ba7ceb3c6165b9"
     },
     {
       "capability_id": "plugin-education-agent-skills-systems-awareness-iceberg",
       "source_path": "capabilities/plugin-education-agent-skills-systems-awareness-iceberg",
-      "manifest_sha256": "e66e0ccf2c1d12621bb8df73eaaf6404551150dcae08630268ec4da116286a35"
+      "manifest_sha256": "4bdcd7659e98d890a3d1154e37acf7807db74c5e4f12dbf6cbe93c1835c3cee8"
     },
     {
       "capability_id": "plugin-education-agent-skills-systems-wellbeing-impact-mapper",
       "source_path": "capabilities/plugin-education-agent-skills-systems-wellbeing-impact-mapper",
-      "manifest_sha256": "d89bd6bfdb48a75f02129e19f634299b0aea96da069f674fc33781d4b5e9806e"
+      "manifest_sha256": "9ee8281d98bb185f573f548833ab492e7bf9763cd44682a5eb531c4f3813353a"
     },
     {
       "capability_id": "plugin-education-agent-skills-teach-back-evaluator",
       "source_path": "capabilities/plugin-education-agent-skills-teach-back-evaluator",
-      "manifest_sha256": "e3412bea4960fe7534873c12dd8d3756a0c76f34d58207a83cdc1744c08c550b"
+      "manifest_sha256": "b5bbe0c8b3eed33e4f39f4580cf58d52c2a8c7988d989d364c1a9c6cfaa31c60"
     },
     {
       "capability_id": "plugin-education-agent-skills-teacher-inquiry-cycle-designer",
       "source_path": "capabilities/plugin-education-agent-skills-teacher-inquiry-cycle-designer",
-      "manifest_sha256": "a5bae1b016a0c8dab717a2be96689b6e2e7023d9e02c91eb11e60d409ad3fc0b"
+      "manifest_sha256": "696f0c1ee4db845717da14b87a3b11a2dc6b1631edc275a131b5cf45cad20cd3"
     },
     {
       "capability_id": "plugin-education-agent-skills-technological-pedagogical-content-knowledge-developer",
       "source_path": "capabilities/plugin-education-agent-skills-technological-pedagogical-content-knowledge-developer",
-      "manifest_sha256": "14ec88f9f8d3fbdd5cc39304db589c23d05f6f58e8bfdd72f5754383203ebbed"
+      "manifest_sha256": "2aeec0d780781775b5c2e44176388baa7e9090d6e4aea803ad57e04a7d12ad2d"
     },
     {
       "capability_id": "plugin-education-agent-skills-text-complexity-analyser",
       "source_path": "capabilities/plugin-education-agent-skills-text-complexity-analyser",
-      "manifest_sha256": "e25ab332e27507677a427731abce4320a9d925cd00c3e9913740ba35d7e54bb0"
+      "manifest_sha256": "19adedf74707f2e854b984944f4bf9f9b3c75a4fd9769cee17dfe47237cdc96d"
     },
     {
       "capability_id": "plugin-education-agent-skills-think-aloud-script-generator",
       "source_path": "capabilities/plugin-education-agent-skills-think-aloud-script-generator",
-      "manifest_sha256": "6f0f10d936a6d68a761a2404db367d7584c5254c7a8dc2209fc820efd71ed297"
+      "manifest_sha256": "ea47d8af9b9c177b46634b16c64532165be329e0f83e131151020932aefdbeae"
     },
     {
       "capability_id": "plugin-education-agent-skills-three-part-lesson-designer",
       "source_path": "capabilities/plugin-education-agent-skills-three-part-lesson-designer",
-      "manifest_sha256": "43888ee204ffc9cf8b665d268b807873a83c72701ca5b3348a4332f3e04d2c8a"
+      "manifest_sha256": "b29607f71200a6fca13b44e9ac3b4745a9af168c299ce3f87b6ebe17837a0fb3"
     },
     {
       "capability_id": "plugin-education-agent-skills-transfer-bridge",
       "source_path": "capabilities/plugin-education-agent-skills-transfer-bridge",
-      "manifest_sha256": "db568db6d91a7b863af0bed3288c5a435d00b79db0f53757abc21ad31b63647a"
+      "manifest_sha256": "1aba6805b67d5469e17b84d2ed87a03a6222b7da803696724d5302ca639ce59b"
     },
     {
       "capability_id": "plugin-education-agent-skills-trauma-informed-practice-designer",
       "source_path": "capabilities/plugin-education-agent-skills-trauma-informed-practice-designer",
-      "manifest_sha256": "05e8a25f3cd561664902a5c992fb88a26ec2bebea111454ee0f28a076a77ae2e"
+      "manifest_sha256": "264e622859aac4c310ec2c00a58f20f50625b31f486843e4906ab46eec4296b6"
     },
     {
       "capability_id": "plugin-education-agent-skills-ubuntu-collective-knowledge-task-designer",
       "source_path": "capabilities/plugin-education-agent-skills-ubuntu-collective-knowledge-task-designer",
-      "manifest_sha256": "4b1eb18dfdacb54903650954d2d05499eba71501212b9dd6a552a2e52e9bec19"
+      "manifest_sha256": "ff11d0a6f94d9789e97389c986b9ec826826c7968b95379ad6eab5d18fae4a21"
     },
     {
       "capability_id": "plugin-education-agent-skills-udl-barrier-anticipator",
       "source_path": "capabilities/plugin-education-agent-skills-udl-barrier-anticipator",
-      "manifest_sha256": "ea5848a84169698c41c6d916e9f6fc0b6f631c5bbbfddb3425dda38f7749ed5b"
+      "manifest_sha256": "33bcbe9150b53dd730a06272ec5ac59b90ddec7b6e4e7fbfe4e5bb9c8beae9a4"
     },
     {
       "capability_id": "plugin-education-agent-skills-udl-lesson-auditor",
       "source_path": "capabilities/plugin-education-agent-skills-udl-lesson-auditor",
-      "manifest_sha256": "963b5baf2196605ed3f12d7aaf6f16099bb57819222d20369bf5071dbbe171f9"
+      "manifest_sha256": "9984786562c3d6278f2c05b4270dfe5736ceeec1159db05cad5f6011fba3e0be"
     },
     {
       "capability_id": "plugin-education-agent-skills-udl-options-designer",
       "source_path": "capabilities/plugin-education-agent-skills-udl-options-designer",
-      "manifest_sha256": "48a1b28090cbd8b1034e0cf23618d220c5665c60d9f1a0388fa30f935f8a0b05"
+      "manifest_sha256": "ff14a8c5da74116f7df6c17a9d605cd0f221b21b1adea7449b0a3f5e5ca09618"
     },
     {
       "capability_id": "plugin-education-agent-skills-unassisted-evidence-checkpoint",
       "source_path": "capabilities/plugin-education-agent-skills-unassisted-evidence-checkpoint",
-      "manifest_sha256": "d73a5ade57a506e353285f88626c6be220854d13aa866f3a849cac2ec90d5562"
+      "manifest_sha256": "651f1321731c04466a75b90a0639ead9e9cab3f2591e0805a2c9d50fffdb8a54"
     },
     {
       "capability_id": "plugin-education-agent-skills-uninterrupted-work-cycle-designer",
       "source_path": "capabilities/plugin-education-agent-skills-uninterrupted-work-cycle-designer",
-      "manifest_sha256": "4d4c119685bef562a3614e80d493bd596abcf97ae461a1c7725e039bedb0f779"
+      "manifest_sha256": "14c5f4802ccb6d4a5eedbaf75d7ffa1fef985c0979fed384b4499b8d538e2753"
     },
     {
       "capability_id": "plugin-education-agent-skills-variation-theory-task-designer",
       "source_path": "capabilities/plugin-education-agent-skills-variation-theory-task-designer",
-      "manifest_sha256": "cbf5aa0eb8118ec6566fbc6b7e6b1ff9386183df31b8ce6984b48cd96a4e9e28"
+      "manifest_sha256": "367970f5e353ddea306dd53ac41c4bf005286994f4753bd36d9614d18b4e3ef4"
     },
     {
       "capability_id": "plugin-education-agent-skills-vocabulary-tiering-tool",
       "source_path": "capabilities/plugin-education-agent-skills-vocabulary-tiering-tool",
-      "manifest_sha256": "de0d75673595c38ed09b28e6ec566f61c9e759495bdbde710784b9ad73ca36f7"
+      "manifest_sha256": "1e6bebce3ef04613315f614c3d4d1ea1f1d505eef78f7793c0709c41d3c9d918"
     },
     {
       "capability_id": "plugin-education-agent-skills-weekly-agency-review",
       "source_path": "capabilities/plugin-education-agent-skills-weekly-agency-review",
-      "manifest_sha256": "5574b9997037ba1c20bb6520336da2a621447b9355af97276310db691681c317"
+      "manifest_sha256": "f31765130dc3fe9eac94668bc39906f0be1e0b3f7a19b0993e1cb78c607308c6"
     },
     {
       "capability_id": "plugin-education-agent-skills-wellbeing-learning-connection-mapper",
       "source_path": "capabilities/plugin-education-agent-skills-wellbeing-learning-connection-mapper",
-      "manifest_sha256": "d8ba4413d8904bbe58057ce0fe9825edc0be8f1b001bde4569930ee5dd8a4db5"
+      "manifest_sha256": "6390a27c1ae74b380aed4b8ec5fc7568779705b1b1cdcfd514be839e69b18075"
     },
     {
       "capability_id": "plugin-education-agent-skills-worked-example-fading-designer",
       "source_path": "capabilities/plugin-education-agent-skills-worked-example-fading-designer",
-      "manifest_sha256": "0e5ad7164026b97ed53bc4a778f40ce5e6da4ff8cfbc5a2d7e5e660c5436ca6b"
+      "manifest_sha256": "af5c51df6de00b3a03e81852634e80f9362bc2e694f8c8ff6ebbc3d45132ec43"
     },
     {
       "capability_id": "plugin-education-agent-skills-worked-example-to-problem-solving-transition-designer",
       "source_path": "capabilities/plugin-education-agent-skills-worked-example-to-problem-solving-transition-designer",
-      "manifest_sha256": "f4f55ceb012b54f7d29a800e756d9297b8bfa5cd7d51ff2e355031e52c710506"
+      "manifest_sha256": "94859c8ff4747702fe11145a71ecbe2c76c398200537ae25fb940836ff4adf32"
     },
     {
       "capability_id": "plugin-financial-company-fundamentals",
@@ -770,247 +770,247 @@
     {
       "capability_id": "plugin-scientific-agent-skills-aeon",
       "source_path": "capabilities/plugin-scientific-agent-skills-aeon",
-      "manifest_sha256": "c9395a2efd8bb1ae7ba475c97cdbc058aecc5d5b94a27998a8325be3bcba6dd1"
+      "manifest_sha256": "29b8621ed2ef11b98d1dc5b035ae364ed0e63067720692998d80ffdb38bee741"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-astropy",
       "source_path": "capabilities/plugin-scientific-agent-skills-astropy",
-      "manifest_sha256": "70d27aeea0da464004dcbf3af0a9d81046ad3a032ed29d8a8e3cd2acb323719f"
+      "manifest_sha256": "d6204ade70d75dc78fe1f7e6fcd0505e8a144c6a1c2131953fe9a3ae23e261b0"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-benchling-integration",
       "source_path": "capabilities/plugin-scientific-agent-skills-benchling-integration",
-      "manifest_sha256": "8da1d35d84313af836febaa1d3cd264409efd3168dd14bdbb497ba39cf5cdc8a"
+      "manifest_sha256": "54f97318b4187da7a501ab3a81a285bf64727e1cb9a7402b7392caa6bafdaea8"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-cirq",
       "source_path": "capabilities/plugin-scientific-agent-skills-cirq",
-      "manifest_sha256": "2fb70e45e6ff0f7acf9fa85f8ede77694b60f7d0d523b976c438eaf7d1f11fd8"
+      "manifest_sha256": "8eea5f441fcabff7b9ac0f663293e6c24ca85b2e136a57af3ee1f10ce70aee89"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-fluidsim",
       "source_path": "capabilities/plugin-scientific-agent-skills-fluidsim",
-      "manifest_sha256": "5f175dea6fed7dad7c52c99f5728719626ab1389b27c0687944fb3a47140bf94"
+      "manifest_sha256": "e1208bda60177a87d9428d9af7e5f4dc0a8fa415b68a9c43ffbdf5a3ca65ddc0"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-generate-image",
       "source_path": "capabilities/plugin-scientific-agent-skills-generate-image",
-      "manifest_sha256": "1cc091098df7e7acca99aebb5b20285bf58c9782a402e851227f03bf28b98192"
+      "manifest_sha256": "9f32fad52659d2ddd94d7275c79f5ac4a91ba193d040378c3b9a2d4768e9b9e6"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-geomaster",
       "source_path": "capabilities/plugin-scientific-agent-skills-geomaster",
-      "manifest_sha256": "dc3199793411076967eae484fba98dbec5bef4c7c9aed091a500afff50c627a7"
+      "manifest_sha256": "07b5f7253b32c5f39bda97b8a3f79791f0cf8fb5466d341209e4043049496538"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-geopandas",
       "source_path": "capabilities/plugin-scientific-agent-skills-geopandas",
-      "manifest_sha256": "18c487cf39e23c989a04f8bf9d68141a2c0467b1b51b7013e48ee39469eb4768"
+      "manifest_sha256": "082b286bad7a674520dac5698f57f2a77c62a20308b2f978eb2c78b0368778e4"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-ginkgo-cloud-lab",
       "source_path": "capabilities/plugin-scientific-agent-skills-ginkgo-cloud-lab",
-      "manifest_sha256": "2c11ebb751e1191fb40336db0017106fd13b1373005ccb778ab2dbfa124fa8ed"
+      "manifest_sha256": "ddd9364fce350276ed9aecb06f7e56f3382e6928e694108ff6aa2071a5fc2a66"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-infographics",
       "source_path": "capabilities/plugin-scientific-agent-skills-infographics",
-      "manifest_sha256": "9692f72e8430bdde178dc06a8a497cef9e309f89185c87752d0e4e6d452c2df2"
+      "manifest_sha256": "295b3b19a92a359f704d1dd041a47860a78936ba73979376a059820a0f3962cd"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-labarchive-integration",
       "source_path": "capabilities/plugin-scientific-agent-skills-labarchive-integration",
-      "manifest_sha256": "8a881f030c0ef7a5c420b08e40dd7ee4b4daad3d0a05add3e6a6c4d4053b8d66"
+      "manifest_sha256": "f534684bb37f5bc1f55f9c0d35aa0d4cf1551d86d15b1920b1c5dc88d568d2ef"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-latex-posters",
       "source_path": "capabilities/plugin-scientific-agent-skills-latex-posters",
-      "manifest_sha256": "a677f453cee04465555ffb891f12da9c0b4e177bc4376a2d6e7b8eaa36bcd302"
+      "manifest_sha256": "afa54de5adf91ae98a6779470b034ae65db11c54a52fda8d786350a4add10eb4"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-liteparse",
       "source_path": "capabilities/plugin-scientific-agent-skills-liteparse",
-      "manifest_sha256": "7e9b741ab665d24284c828d041bdb725f565524bbbf035808ddb6f951d1129c9"
+      "manifest_sha256": "732a23c27d603426c7d72e9623c276dda9798b62846583e8b4d187efb6930be4"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-markdown-mermaid-writing",
       "source_path": "capabilities/plugin-scientific-agent-skills-markdown-mermaid-writing",
-      "manifest_sha256": "80726bdc657389ee0d35a93b5d261f0166a71f8f4a75858e0c680a25315b8d2d"
+      "manifest_sha256": "b636341ce09b2abfb99a6d197be12fadbe4c4c86ec1575156d1a5255f8c41bb9"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-markitdown",
       "source_path": "capabilities/plugin-scientific-agent-skills-markitdown",
-      "manifest_sha256": "d9863642fd112b125395303a5ea9857980b48065ca48f566df8b66e325eeaa96"
+      "manifest_sha256": "756ef2345963079bfb811b089e36ce0adc1062d28af0ce78c1adfcc471c1e4cc"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-matlab",
       "source_path": "capabilities/plugin-scientific-agent-skills-matlab",
-      "manifest_sha256": "35e89e1822baf92fbf6d4be6c57ad915899a2d5ff59290b58d296a2b312004bd"
+      "manifest_sha256": "474cb1a6e7e48ccefd803571859125859ea7c1d3c3b1a8e9022545ea09be1d0e"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-matplotlib",
       "source_path": "capabilities/plugin-scientific-agent-skills-matplotlib",
-      "manifest_sha256": "ffb3f7077884e43f413d58c52e901c1f8f09209b7e055b46b347570869d4e4a0"
+      "manifest_sha256": "ae6e0baabe4d24ef4a2535bd5fddd658a8a99881dc1d85e9c20642e9a490285f"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-modal",
       "source_path": "capabilities/plugin-scientific-agent-skills-modal",
-      "manifest_sha256": "ff8c19642fd131aa74957a8da3010397424c0ea080f194d959560a00c480cc57"
+      "manifest_sha256": "7b984ec9bb6f675ca3922886147bca9423ce6c30da45d4cb3bcdb11ce30af038"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-networkx",
       "source_path": "capabilities/plugin-scientific-agent-skills-networkx",
-      "manifest_sha256": "bd9f53b1b50f7d5815087a8511e795c6ae56b6d02b44572cdb60f2240b0d545f"
+      "manifest_sha256": "c5fc9033eb496016a8269ecf70eae61f3fa69db75245549410c5d7eaf6e4f545"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-open-notebook",
       "source_path": "capabilities/plugin-scientific-agent-skills-open-notebook",
-      "manifest_sha256": "c0ca07729800f3fa740cd3190da7ce33bd9c746caa4cfc696304050bc7de7744"
+      "manifest_sha256": "c2cabb5721847ef73ad25e846841b128ae49b3332d1f852ebb8fbe122c9b5881"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-opentrons-integration",
       "source_path": "capabilities/plugin-scientific-agent-skills-opentrons-integration",
-      "manifest_sha256": "d3e65da93e813c8dd78ee1bda315447a4de75351b3c8dbfe522bf1e680ece363"
+      "manifest_sha256": "ef59c14eba9f13856e8a6476e9f8c9f0f8b53321ab91e8ca4b122b9c290a83b8"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-optimize-for-gpu",
       "source_path": "capabilities/plugin-scientific-agent-skills-optimize-for-gpu",
-      "manifest_sha256": "9c3c9a4c8e88681d604c24bf050bf028f72a58da9badf52b30d76d4b479ac59c"
+      "manifest_sha256": "a41e09eadf8e8802b9351823b99242097d47e90515cbf1d17da8659ecca069b6"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-pacsomatic",
       "source_path": "capabilities/plugin-scientific-agent-skills-pacsomatic",
-      "manifest_sha256": "c3291fd7132ce04d25a38dea0dc536f47d76a11b4bd5141ab0e9b83836ed61a8"
+      "manifest_sha256": "ea504ac5e8c700d311f98e3adb0cf21aee03b0c57dc52d125aecb493fd53aeb6"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-parallel-web",
       "source_path": "capabilities/plugin-scientific-agent-skills-parallel-web",
-      "manifest_sha256": "97f311977f8d64f245f658fefed125ec4f2ab1602b6bce155de65076f39881e5"
+      "manifest_sha256": "a7a8f60dcb8e1c6ef910559fcc2037cc9ef9df4fbec5969620996f5c5aef6d13"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-pennylane",
       "source_path": "capabilities/plugin-scientific-agent-skills-pennylane",
-      "manifest_sha256": "cb9de36a3eb82e6b5740d51ffcffed6ca7afe3a41ac9fd3f5e6c00e310393df7"
+      "manifest_sha256": "f1fdd8671d6a5ab4aaabcfe34e7928f8b33b484bc12ae133d3202b8d6991b50a"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-pptx-posters",
       "source_path": "capabilities/plugin-scientific-agent-skills-pptx-posters",
-      "manifest_sha256": "89c2b00dc22ea5f48dc92f18dece5e75ffaef8ee1426fdec84368ac3d478bf19"
+      "manifest_sha256": "9ac93adf2fa7928768c6a57c803d5abb412fcec7422304a22427f81aefc14d53"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-protocolsio-integration",
       "source_path": "capabilities/plugin-scientific-agent-skills-protocolsio-integration",
-      "manifest_sha256": "b4ef748e82b8d34f47cada1913a077ea873e63a1f9e2a689a5e163faf4972df7"
+      "manifest_sha256": "2f19f1eef020ba357881b2612700cf32c78256ac647bc18d9cdadb2dfb4f3917"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-pufferlib",
       "source_path": "capabilities/plugin-scientific-agent-skills-pufferlib",
-      "manifest_sha256": "ca5320fce58a8013395fe6f841646ead5e61cce8ebb4ec203fae90e853cd67e1"
+      "manifest_sha256": "2a1a69615322a31d49586e364c94cfeb8890f5916c044f726c13dca4002d7063"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-pylabrobot",
       "source_path": "capabilities/plugin-scientific-agent-skills-pylabrobot",
-      "manifest_sha256": "4a0fb4c79a4d7b8765dc14e1d9c507bf5adc728cde1a7b5fabfb585d88d901a8"
+      "manifest_sha256": "596c45f243b7468b5bcb98c2691279f09e45455635d196774b0d3e4ada8ad676"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-pymatgen",
       "source_path": "capabilities/plugin-scientific-agent-skills-pymatgen",
-      "manifest_sha256": "51648537072c70459f92a19f5cce2b48485f14ac6435a2bf017f233fd07bedf3"
+      "manifest_sha256": "8a584cb0791c049cb3ac5e3e68fd030999c0b02794bcbd4af01b0fee44fbcc8b"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-pymoo",
       "source_path": "capabilities/plugin-scientific-agent-skills-pymoo",
-      "manifest_sha256": "44bf9fece66fa47c7732f7eecca87e4003a3f834238bb895112e40df40400e13"
+      "manifest_sha256": "8c7978e4403887df9cfcfc1c374224f35057636bc01b8e69239b5182df3e22d2"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-pytorch-lightning",
       "source_path": "capabilities/plugin-scientific-agent-skills-pytorch-lightning",
-      "manifest_sha256": "79156e5b5baae01e0c77264574bbc6d4a6ab4354cc36b9e1540eb75fd6728c9c"
+      "manifest_sha256": "404cad58cd917dd250e3ffc2f7104c309e649ef7de5da7f2dca1d087779a58e4"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-pyzotero",
       "source_path": "capabilities/plugin-scientific-agent-skills-pyzotero",
-      "manifest_sha256": "f1eb932e136829d69fb91c68c4454ec64cbef7e7f2031c30742be74418944d2b"
+      "manifest_sha256": "2891b9ad77f189d569a204293fb9e0301805d1d424ec40aefa6f905adcda50ba"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-qiskit",
       "source_path": "capabilities/plugin-scientific-agent-skills-qiskit",
-      "manifest_sha256": "2813e82408cd6b2a0acf8c1086a8aa9b0472ef98503d2424de4a8df0995fd85e"
+      "manifest_sha256": "efd9f83cd69a1779d1b111b046de1eb1ae6250a07f81261f10c78822003a90bf"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-qutip",
       "source_path": "capabilities/plugin-scientific-agent-skills-qutip",
-      "manifest_sha256": "69d06a5333e5da881c653bd1368cc2f9043875ec896b6ece1486ee89646f081a"
+      "manifest_sha256": "c4d1fd9cfdd169eb3486add0315c9ea7a40b0f83d5391f43e1e82505bae698a3"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-scientific-schematics",
       "source_path": "capabilities/plugin-scientific-agent-skills-scientific-schematics",
-      "manifest_sha256": "8a71ff7f90df38ec14e44d982e7e60ef63d376faf065734334fab87b45f0aab3"
+      "manifest_sha256": "1d3841d66a76ff725cec1e175e740b02253ecddb01dbcc21f7f41e316e51ac84"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-scientific-slides",
       "source_path": "capabilities/plugin-scientific-agent-skills-scientific-slides",
-      "manifest_sha256": "ae8e3fda793f6eb4e67aae50028dd169351e89f2ab701249a8e02bc11cd8b940"
+      "manifest_sha256": "56f60aba503f6c43a21978b567c5e79983916ae5ee87eabc165c7d442bc4881e"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-scientific-visualization",
       "source_path": "capabilities/plugin-scientific-agent-skills-scientific-visualization",
-      "manifest_sha256": "1510cf456b70862e69e9c1de007350c06188fd2ba0e55250184c4a66b95a5f2e"
+      "manifest_sha256": "e8cda8f25b3857578eab5a61bd96a8eb112f51d58e7afda6ca14562bd8d9c2a7"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-scikit-learn",
       "source_path": "capabilities/plugin-scientific-agent-skills-scikit-learn",
-      "manifest_sha256": "955843d12ba66136b8de7d893366b4b095ef53b3343254d03243df3cddcc5b93"
+      "manifest_sha256": "0cb2d652bc770996f740ca46e40e1b50420ea672b5371ceaa1ac3afb1e39f456"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-seaborn",
       "source_path": "capabilities/plugin-scientific-agent-skills-seaborn",
-      "manifest_sha256": "5264bd085abf5eb920bb1afdd0920d205ff8ff4395ed7346e5e55810a5b20350"
+      "manifest_sha256": "2f8415f010e88976e817a15e38949c0f90f212de8937119f3c118bd5a8d279eb"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-shap",
       "source_path": "capabilities/plugin-scientific-agent-skills-shap",
-      "manifest_sha256": "08131f673d3ee77fac30e3ec20160908cff8aeab147a17f38f0eac6f456b88d7"
+      "manifest_sha256": "10915ff2a5f5e764ef94d33488407f16d635d1bd31baf9c5e620420e02be3340"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-simpy",
       "source_path": "capabilities/plugin-scientific-agent-skills-simpy",
-      "manifest_sha256": "e24ddf64efdb1ee120a8206a9d7a55946bab5fb58fad4a28dc8dd872037c8f58"
+      "manifest_sha256": "377b59c3acf1cffd61967293b8eb7613396ef3002ff39d6a04cfd961dbeb65ff"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-stable-baselines3",
       "source_path": "capabilities/plugin-scientific-agent-skills-stable-baselines3",
-      "manifest_sha256": "87ddcb3c41bb6ad986a1e494446f48a43de7c89060de4897977aec1b0d234244"
+      "manifest_sha256": "b147f0c2d6dd92972913db4a126fc21905f3566b920b669c18877c3550d6dd93"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-sympy",
       "source_path": "capabilities/plugin-scientific-agent-skills-sympy",
-      "manifest_sha256": "7497816aefb41d1bdf5861dcdecda742ec5bec4c8ac377d47003724ad3290cc3"
+      "manifest_sha256": "4e3994c5e13493472f727e93f2cd2d65626db1cd96dbdff6bdae70330780c7e0"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-timesfm-forecasting",
       "source_path": "capabilities/plugin-scientific-agent-skills-timesfm-forecasting",
-      "manifest_sha256": "4e2873bdd285fc558a89be1e389dd733c87ae1b7188acb75e66e8211dd258558"
+      "manifest_sha256": "4de0c117463eb9150da045e0f269b8eb53ae4ca74ffae25cb86798b6c28413d9"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-torch-geometric",
       "source_path": "capabilities/plugin-scientific-agent-skills-torch-geometric",
-      "manifest_sha256": "8a9e19d51dfcf1ffcaba0ddec1e44b5551aafb65b08a163b0d2ba023c9b05a8f"
+      "manifest_sha256": "b25f0153e6f2dbe58fa3e5009256d2d96db9467ddf1636aef4426126f22c03b5"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-transformers",
       "source_path": "capabilities/plugin-scientific-agent-skills-transformers",
-      "manifest_sha256": "695bd75a04a07bc0eb6997f1b74f62abae2bffcab6edf29cbc2c29ae9a9930cd"
+      "manifest_sha256": "66ccaba261bf66cacca33be0d5e34566f1a4efd645da429058b3313c7cd8be7a"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-umap-learn",
       "source_path": "capabilities/plugin-scientific-agent-skills-umap-learn",
-      "manifest_sha256": "e00560bc2918db7e303a88029606f0dc7ba1ebe9a5d890618536dcb406701211"
+      "manifest_sha256": "2a60f1d7fe8674af4efafeac9a008245e96384f66b5b0ff1bf160e34cf9108ce"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-venue-templates",
       "source_path": "capabilities/plugin-scientific-agent-skills-venue-templates",
-      "manifest_sha256": "cfab1f7ea1c2bc509914678ffa07c98ed64a0a6506e59a1d9d7c65ee19342fab"
+      "manifest_sha256": "37315045020d29c1a17c44a5107f58d5eae52d9c5a8e2caeb9334ffbc92e4210"
     },
     {
       "capability_id": "plugin-tooluniverse-acmg-variant-classification",

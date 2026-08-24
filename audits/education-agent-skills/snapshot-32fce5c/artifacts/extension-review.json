@@ -8,6 +8,7 @@
     {
       "capability_id": "plugin-education-agent-skills-academic-language-sentence-frame-generator",
       "raw_skill_id": "education-agent-skills-academic-language-sentence-frame-generator",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -27,15 +28,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "eae1970957977ac373d3d1f1985d4bdbd1a97870413a28103bedcb4912a86654",
+      "package_tree_sha256": "7428b158efaace2ea8515ba411a545a77e2341be386869b817053ea14a94686a",
       "profile_sha256": "4a2273c56fcd9d466eea52ad8fd2f4431c708592b4b45ee9b522e4ee6b1ce25c",
-      "manifest_sha256": "4e2ba2f5e8eef232ab9db98037fd70c5496e584d80474634e867982d80824f9d",
+      "manifest_sha256": "6188e5f46a425694041ff65b39542b5a390ad56d0dd987593f77fb70ea88f8db",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-adaptive-hint-sequence-designer",
       "raw_skill_id": "education-agent-skills-adaptive-hint-sequence-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -55,15 +57,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "82896310d097ceabd95cbad2c27f5692a24830b422a74dbb91fdcbd1986687d0",
+      "package_tree_sha256": "856295ddfd58cf03caccc748127a263f7f3cb268b898387b0aa5de815560b2fa",
       "profile_sha256": "a93feca2e1e53f6fd68d3518c170599d133b0c6d9a3ec520a4ef339715fbc65a",
-      "manifest_sha256": "92157902a5ba17236c24190b714069eea8d89a4d5f1dc37d4b45249c12c2aef0",
+      "manifest_sha256": "54e6519ca1155779eefb293838747d4f4e2896a713e84a72cd8ea341f4819ab0",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-agency-circles-for-systems-action",
       "raw_skill_id": "education-agent-skills-agency-circles-for-systems-action",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -83,15 +86,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "969de58e3e9626e59fabbb5b043608c427f5b11eeb8b9c60746d15b312b6bec3",
+      "package_tree_sha256": "8b466851d128ac3e9461ab9eaa9ab3b358088f81c4b0d31dfff69984ee895fd1",
       "profile_sha256": "46c11ff29dc6ba22b73b12c925a44ed231813b70506d34cd2c60826538defdd1",
-      "manifest_sha256": "3d8aea44880490cd1405ab0cc132afa4469147db7b0afbcf42d2fd96f4a1f1a2",
+      "manifest_sha256": "7e28cbef2620b9f9d7a6b811965b4435362bc897e3ffd847b4405033a0413673",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-agency-scaffold-generator",
       "raw_skill_id": "education-agent-skills-agency-scaffold-generator",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -111,15 +115,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "f667c820cbc683577f082da64881781cfcb9d5a6ecae3672b63832b99c78091e",
+      "package_tree_sha256": "32a8ddee026a83628250259c82a3d779c0f8275c232afb2bdececc1cbf092e17",
       "profile_sha256": "572864532c129dc8b9518bb312b7e7268e7f2a70601afd816723e5446b679678",
-      "manifest_sha256": "67edfe1579184d149ef99278a723dcda16c4b3347b4f7636ac46334a0db44711",
+      "manifest_sha256": "0cdd782ef5c0bed138d3344a0fd571cfc7dbd18105d650b66c26439ee47e3e7b",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-ai-claim-checker",
       "raw_skill_id": "education-agent-skills-ai-claim-checker",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -139,15 +144,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "ab51b16b0c6cc4ff70ae2934ee9ee009b88e9bf93d8b318109bfe9337fb77311",
+      "package_tree_sha256": "27bd0d799dd35fafc78175e1c6f6d4b614673a35841a339d5ec2dd2a3eff383b",
       "profile_sha256": "8d2034401f7d802a2dfba6ce8d78c8535839af02d6da6048af2877a1b8e46719",
-      "manifest_sha256": "ecfcec8e7ccfb57a41372b8b1084720a3107b6dcc48b4494c857c6f9c1c35db7",
+      "manifest_sha256": "0d30dd6ddff202fb1e4eed4d61c99c1a4c314c2ab0b520b690f9b28bf124811d",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-ai-expertise-interrogation-designer",
       "raw_skill_id": "education-agent-skills-ai-expertise-interrogation-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -167,15 +173,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "78e969cff140f08ff96309799631b1cce034227de8d86235cce8e156a87b3f9f",
+      "package_tree_sha256": "9627aee646476ffadddd55453a972f250b1e1b1a61695fca2f802b7258275721",
       "profile_sha256": "fcaf7afaa7d6568c7eb9227b82609be0555046a3337a40e1b3a984fb4c35cdf2",
-      "manifest_sha256": "be1028f5f02b0eb3a9b9436330350a24a608c3054bba76a45babdcb48440e62c",
+      "manifest_sha256": "e12323a4cef18d8592a904534fe94b96c13fc12e5a46818302aa34f3b04d44af",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-ai-facilitated-collaborative-learning-designer",
       "raw_skill_id": "education-agent-skills-ai-facilitated-collaborative-learning-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -195,15 +202,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "1548e7ef00a3d435f1a20d8c717a1b56a87f6a042dc8ab131b3fac81b5a5db39",
+      "package_tree_sha256": "3cab910a0a9aa906fef9345861273f46fda9795a02623a7366f70d1f12fa70d1",
       "profile_sha256": "39a5e403582fd838dffd55bc510c5eb39249a089f9753be087967a6de5bf8b10",
-      "manifest_sha256": "509c47ef149ccabe74c9a12a211d5286c7a85495b17608b44749bdadb9edf4de",
+      "manifest_sha256": "fad00063ddb029f1578084299cf5983ecce4ac57edb4e2869f13165f256509d2",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-ai-feedback-design-principles",
       "raw_skill_id": "education-agent-skills-ai-feedback-design-principles",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -223,15 +231,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "eccce64bfd7e7e46b1dd0f9353ae33e0089feec9a6bf199107be59f2826c0d10",
+      "package_tree_sha256": "d1b25b09569bd611a32c1042936bbc1ba518c366ceea1496a01ad6efabf70266",
       "profile_sha256": "108c4c9e90a04d47236c384e1ac36824b62e8e7a75645a5ff98f9a807255dc39",
-      "manifest_sha256": "506a1e3255dfd2071c72ffd3352516afc520e749ac1c9ad677bb25c6b27f5663",
+      "manifest_sha256": "44aab042888ad509bca7bb8d41c261e40be0467a8de831f8f4fbb88e5bf524c2",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-ai-hallucination-fact-check-protocol",
       "raw_skill_id": "education-agent-skills-ai-hallucination-fact-check-protocol",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -251,15 +260,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "c165d6b2c1b06e01f73ab46213c5f99fd4313345726cd68c02d176c41ae2e1bf",
+      "package_tree_sha256": "4155fbc7585488b9a7ee025a52a9aaa1d8167e90e8af15d8126f4c15b31d8738",
       "profile_sha256": "dcf23ad9b6e71bacc2f485a74bd9c4ae2d3ae40ddf2f675b0ca6add154555720",
-      "manifest_sha256": "6897a496a22c463ff0b8a281e4e13feffc3fa003502d968b92937ee9e6b1e13e",
+      "manifest_sha256": "51e68c45af06634439a5cae7a83f25589ca7914b5297d455a4c987b598ec300f",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-ai-learning-boundary-mapper",
       "raw_skill_id": "education-agent-skills-ai-learning-boundary-mapper",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -279,15 +289,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "64af9088ede5f1a08a94dc1b7b76a1c5d2684d671dc84471dceaabe4ef0392a6",
+      "package_tree_sha256": "d4c205cceeb41d12cebaf27f96aa47085413cb7e39f44b51e7c92137b9b3d607",
       "profile_sha256": "4bc479f451c91f1cc0fd5c0827274fb1d8e8f421b1c2b323f4a826745c534ca0",
-      "manifest_sha256": "9d61e3277fb80209e7533e74b918a6b79172e57e31f82761ca270541b46da81a",
+      "manifest_sha256": "deddf0930bd2263a22d8b8098e1c842c77876fb8895cea312334b4ec9b584f01",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-ai-output-critical-audit-designer",
       "raw_skill_id": "education-agent-skills-ai-output-critical-audit-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -307,15 +318,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "689fa3e96518b39f9cd2aa35d41592471e9c154ccceb76855e21e94204147bc9",
+      "package_tree_sha256": "c3295ba3a8215e67b11f1d44430948cbfadf5562cc649262a05db7576705137a",
       "profile_sha256": "c479b4f7b73f12c0f56cd1e3dc1d2b499689db9b30bf84781623879d4e3ba162",
-      "manifest_sha256": "f3f17b289effa68be871c8e132aef1d2c8174ad26e8c4aa6e9b9492a095a86d1",
+      "manifest_sha256": "3ffeefd64851ac46186f52fb1125e2986716c0e8752ba122e7d581a1ae357560",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-ai-socratic-dialogue-designer",
       "raw_skill_id": "education-agent-skills-ai-socratic-dialogue-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -335,15 +347,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "4604b9ca20e84d6711ee4834d61972bf052b902a4588ad9b4e12d838a03f52a0",
+      "package_tree_sha256": "f21d82ec3c2e7ed335083242c0c38da8244e2f67862e832997470a90b8e2527e",
       "profile_sha256": "87596135c134939e3c5dd11af6ad39a303c9db47dbe078a759a0464fd832bb78",
-      "manifest_sha256": "5375e7a7365ce858e755b33088e00dfd88117cdb80a95ccdc1a78440624c52d2",
+      "manifest_sha256": "fecd3eb4d45734d646d95e3f2c2c4819c4071be4217c63b10943dc0d5104c677",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-argument-structure-scaffold-generator",
       "raw_skill_id": "education-agent-skills-argument-structure-scaffold-generator",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -363,15 +376,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "3d648ebc6a1074df0d4ebb44e06da896451c8f7d281bc721575206368022b23d",
+      "package_tree_sha256": "6a2bb8428bb60a9bc306f9b2ee6255ac887a87eb6cd0e1641c9548eef1c94af0",
       "profile_sha256": "b6b9738931c9a8b417c9dd20ab401133089d4b2b0ba95c00f9a4beaeb086a57f",
-      "manifest_sha256": "1c2b8ec4460f120d989a029e1292ec7d7fda4f535260f9a5dce133bac1b63c6e",
+      "manifest_sha256": "8294565de8f6b3e7e6a1ab5a7289ead0ff341b2fb2119f76308986dc8bb298a6",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-aspirational-systems-iceberg",
       "raw_skill_id": "education-agent-skills-aspirational-systems-iceberg",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -391,15 +405,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "7352080b9d945709d6dedbd6a92adfa05a9cc93d2a820868b1c7f5f5dbe996f8",
+      "package_tree_sha256": "7cce5d260651882955919ca090863758664b9b4da479fe51badd75b94df02678",
       "profile_sha256": "b5671e16d0b41ebe31c441136376214ecfa2cd7218c098644f1d33c98411e9eb",
-      "manifest_sha256": "1f1b6aa8a1ad6ce2dec7446a31109547677cd0d581c4ec4abb404b76cb9ed5d2",
+      "manifest_sha256": "c7431f1ec229c6da93949455fc125d507a0798e02aa8d4bd40048b01f95a1ea8",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-assessment-validity-checker",
       "raw_skill_id": "education-agent-skills-assessment-validity-checker",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -419,15 +434,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "c4248ab7fce3113e867a479865b15806dd7732dafee8b085eb7d550a6ccdebbb",
+      "package_tree_sha256": "b8532a08469f81eb232d090073123a7d80581bd6c28b790334c1b5ac438ca903",
       "profile_sha256": "5692c4ed720b70cdaf861e67bd6a5a9bc3630b2c9a3c08311e7b0c16a4b51fc5",
-      "manifest_sha256": "1b8b5a57eca28cf243d290d72dc74627c7dff23a26f3c34bcbc7ef811897c24f",
+      "manifest_sha256": "b4127f9f8e1b62bfce522efe062efffe7a6b8b8d4c5269861037312a7a79f0ff",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-awe-wonder-experience-designer",
       "raw_skill_id": "education-agent-skills-awe-wonder-experience-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -447,15 +463,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "b511b3f0fdd05087cac67d5dd7e584c840430d52d0785f734778c59f5090c925",
+      "package_tree_sha256": "7b77f5d8fd14e2e9380ab10ab3a8ca1bbc01efa5316e5965126cf8a200d3181e",
       "profile_sha256": "8dadfea5bf54f2aef1d63fc46854bcc02fc4535920e7b18207f42ad7197b0617",
-      "manifest_sha256": "4ec97db1a62e0f04c9b83a6effd7622c9806733b0f4acedc2de69b7121039e9e",
+      "manifest_sha256": "e0b376e0d69f068c4c04a3440bf1273a04208eac03bc4ac4ab6cb14a26f10494",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-backwards-design-unit-planner",
       "raw_skill_id": "education-agent-skills-backwards-design-unit-planner",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -475,15 +492,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "4b04d7112921b7156b9e7acba0047171a8e42c4e616825af037380d6447f63a7",
+      "package_tree_sha256": "f6b4f9ade18f35d8dfadb22fe407634676dd0c85ef96aa12684aebf8175aaa43",
       "profile_sha256": "7eb9597dab22c57fe58c8711022682046786c0ad65f5640a28d204dfc93f5b4c",
-      "manifest_sha256": "b9c54ffa00777f20a16156808448188a3e96ad12a8a4ff2f28cd4af612960d72",
+      "manifest_sha256": "1aa9c5205f12e1818be7591b87c17f630ef4620d900e4fdb0445bc86daf88696",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-belonging-classroom-culture-designer",
       "raw_skill_id": "education-agent-skills-belonging-classroom-culture-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -503,15 +521,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "575b76acf885b221a1b419bfbd6727057f3e6a608513e316c54f752c4df0f2ec",
+      "package_tree_sha256": "4e931e155fcfdd73f4774fd6284284f284ad356d18dc7cde24ef61fb2a3aa91e",
       "profile_sha256": "736766a70925348faa4d3b98be1d281707201a5c50bd72be4d7b8d3b6bb0a84c",
-      "manifest_sha256": "20f5d964c70a860a9b5897ccbb59af143dbb0cb19239139f51d96b3f2ba01faf",
+      "manifest_sha256": "24425c7a26f64fff91ac4705f502115e4f313985aaff0ee055206047d56e5f56",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-biophilic-learning-environment-designer",
       "raw_skill_id": "education-agent-skills-biophilic-learning-environment-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -531,15 +550,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "ad795bc098741adb48c4990b6789427300935211bd49d7da247b49320dde3e5c",
+      "package_tree_sha256": "720669b4df2bd84302a1ce48e7f2dafbc7a875e77d0ecac645e2f3bdd98e1787",
       "profile_sha256": "f00d3302ef4335695e2d1ceb8feba8818f7705fb779734b652d7f6dab5d24d20",
-      "manifest_sha256": "57b39c11da61e47da93814e6cdc45674855a49769fa1901c1bba9ed293e41358",
+      "manifest_sha256": "16233954b6d61b4591fc365af370a01db1444926226e62478f260130f9551c65",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-checking-for-understanding-protocol-designer",
       "raw_skill_id": "education-agent-skills-checking-for-understanding-protocol-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -559,15 +579,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "5dff3f4ea22ce4bec52c2dfed25a488606e217b9f310cb9351b65e5aee366318",
+      "package_tree_sha256": "84e68d838b05bb53bd0984cd76b4fc04ddea9f34e835a2bd1c88cad9d4e0a542",
       "profile_sha256": "6c80a8b7746af756f05068dc37cd26e474dff85caf19a860080592c9c1fedc13",
-      "manifest_sha256": "a19853ba206336ce0782a4acd8b0c4ed576a51dc68f5de5f304b764d0fcd3cbe",
+      "manifest_sha256": "fab4b24725668d5b71f097787a222729125e1d66da3cf08720e7dfd9d92d0468",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-cognitive-load-analyser",
       "raw_skill_id": "education-agent-skills-cognitive-load-analyser",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -587,15 +608,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "dd9af39aadb3e726f2ebd5c01518b461aa261581f31fb5c130e2ecbbb4e1621f",
+      "package_tree_sha256": "ff1739ffe25afdf5a5f5c7d11a571683f77da870523a75270008dd88a1b5ad06",
       "profile_sha256": "ba31e0f19556d018b99343329d98b933827ad0dba7d3567ae9d2876347b4b72e",
-      "manifest_sha256": "304cee39fdfa66c0fedaf440924cf3063b51816885d1214d7cc8df2a18df677e",
+      "manifest_sha256": "12446737452fc4f9beb5947cfb6236a4eed9d0236c60eb85866fdc3586d2824d",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-cognitive-tutoring-architecture-designer",
       "raw_skill_id": "education-agent-skills-cognitive-tutoring-architecture-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -615,15 +637,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "58ee343f0fb4788312031582119f4971093b363e31a7a770dd61edc48fa52ba4",
+      "package_tree_sha256": "3d216235ca457245f52e8aed7fc1c8b22822d10875b21b2faad1f7d34a7102ce",
       "profile_sha256": "9db6201c76e7abd7a039125baba18c3ba979565b6b6a1f4bddb4e9b196bc9076",
-      "manifest_sha256": "46750b1f2f351d412a1a04121f6ee4fcc994aa0acd08ea0bfaeb3fc1fa859181",
+      "manifest_sha256": "09aed79e22354c06521572b3ce71617fb60f43e3615bce57f717e96a523bea67",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-competency-unpacker",
       "raw_skill_id": "education-agent-skills-competency-unpacker",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -643,15 +666,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "0655377981df6c4f15f419ea92c7aff381da2df191a6f8af3860f9b0f37a4f0f",
+      "package_tree_sha256": "bc463bc94c95bcfa90040477c119893d19e59830bcbc58063bdbea99e7b60e54",
       "profile_sha256": "f534ec9ae3a994e646f5f1d5ce0cf759437444ce0cae0c089d6da7ed31c15c75",
-      "manifest_sha256": "a52c93b96a9878bd5aff4969e16778979864c8e001034c9658164ee7b2fd13cd",
+      "manifest_sha256": "47749a6e7542d9b9047ec75807d7d7afcb1c09d4cf1954c6b37755b916badd82",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-confidence-calibration-check",
       "raw_skill_id": "education-agent-skills-confidence-calibration-check",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -671,15 +695,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "38b377c69a338f30dd643b8dbbf5ba0caa6716cc130c87ec947221f5e1c2846a",
+      "package_tree_sha256": "c75a0bb55f907f25097d3f7fb812a6df80bfe82485217409d767a3c695fde90e",
       "profile_sha256": "1db11bdf9c71a743f5f499f85b10fcf2fdfce7a573f9b8987d2042b1958d304c",
-      "manifest_sha256": "54cf0ea27b2da5b9d74f193aa4a1b6072b9f0fe7aadb82bad648bc11bc5e4759",
+      "manifest_sha256": "c77f346e1a24ad323564ac7139a1228b2ba0a4f27180f8ecc14f5d4f37043bc5",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-coverage-audit",
       "raw_skill_id": "education-agent-skills-coverage-audit",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -699,15 +724,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "7dc92d616cfbcd5972db8680ce4815cfa0c5cb71d583e863fa4c1c93597ed522",
+      "package_tree_sha256": "bddc7792a7cfbb3fe8d79ae7c06d65226b5f7ae3b7b2a49994fb41b7564cadb1",
       "profile_sha256": "f126f37b674883aa23e1ff2be2fd340af385fc15bc8c771e3c921c42b543e0fa",
-      "manifest_sha256": "4d10d9ebde38ec3f47d69723b2031fb56a70981a43a46b50c391ddd855a1312d",
+      "manifest_sha256": "3b36a155caf05091394df3808ba2d7c9c5336cbfb94b24d18c6fcbdd48b892d1",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-cpa-sequence-designer",
       "raw_skill_id": "education-agent-skills-cpa-sequence-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -727,15 +753,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "2b9bd6444df3d0838480378be75c2cd6a19b97722a5b2dfe02848e03540c79de",
+      "package_tree_sha256": "1bad8aae3dd0c83fde89fd782ba570c84d2b496fba46da8c3cdd757b994172de",
       "profile_sha256": "d990092c7280d8ba73928dda1d0b5b08b1d22503e70e4872c6947116a263b5cd",
-      "manifest_sha256": "5727de85db08f474c6a7c8df77ef91dadec15415993a0b295c40586fe5c822b7",
+      "manifest_sha256": "e6a98ea6fbf269385eacd3f0886ac042555baab6f8ecc294fbd9c7e9b6387a19",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-criterion-referenced-rubric-generator",
       "raw_skill_id": "education-agent-skills-criterion-referenced-rubric-generator",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -755,15 +782,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "8d42efe3d776fd9f5c44f93fae4083afe939ca6cac645bff475d939b0676093f",
+      "package_tree_sha256": "bb47e2171aa48542e967c089ca808587b646f1a7153773300865e3c10e44cd8d",
       "profile_sha256": "08489e87a7c4149e2de7c35bfc0750137089855e9f1ea7feff662ec1aa32d78f",
-      "manifest_sha256": "7920c92ddbd077992153da44a4ca095b12c306ef64f1ee73a689ea7d80959fcb",
+      "manifest_sha256": "70514b268c6096df2de4c35e4b7a21405a386e199939734cdb58fe6c61750d89",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-critical-thinking-task-designer",
       "raw_skill_id": "education-agent-skills-critical-thinking-task-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -783,15 +811,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "448ceed70a6c977f5e10b4fda28a5fbe7dff9a6fd37e1f36988014fb4bf7f66c",
+      "package_tree_sha256": "89455018ad824de0ab554758d9f20f7e9ca5446d717bd46d386e46de90642401",
       "profile_sha256": "1a92327c7027300f3677eb5048bf4119caf1e1dabd7a100ea568062d45a73c68",
-      "manifest_sha256": "fb0ac2226b98cb9e6e6599c534230e9bbd4b2a92d1d175fa441baa276a94138d",
+      "manifest_sha256": "9b1c95edb413a8e0fdd18b603072989d96648547a1be0811d7fafc5dd2fa727e",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-cross-cultural-task-validity-checker",
       "raw_skill_id": "education-agent-skills-cross-cultural-task-validity-checker",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -811,15 +840,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "d7c585bf9e0563ed84cc0922c00462953102290c62c08d108606cdf144768302",
+      "package_tree_sha256": "247f337bcdb881091c47d7cf86a96fffefa47f277d55849b6fb0ce809465c38e",
       "profile_sha256": "bdee451c2cf3ca325d67d0d878ee56f297bb347ac320e77ad44a2ab217b60448",
-      "manifest_sha256": "6d34106d0d9536a4ee67497f5b9ea7d9fa28b023aaae9a20d69fd0419e557561",
+      "manifest_sha256": "7653a322fc8f37b29a6a093ed297d8701fc562e419797b667bc9d09393e5035b",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-culturally-responsive-teaching-designer",
       "raw_skill_id": "education-agent-skills-culturally-responsive-teaching-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -839,15 +869,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "c7ab1f4d7a75fc7a535f9a24958cc1eda33d23080ffac16bda1531e570fbdc79",
+      "package_tree_sha256": "f51d6153af121af74808c0e3d8f9b91793133c178219ecc871c479aa77a6d591",
       "profile_sha256": "86dc5333c0ad74ec52d2ff6d11676f66ffbf041c0ed864349426d13b4dca901c",
-      "manifest_sha256": "4f1ad32b769ac0387ba10f8778a914128ea6ff8ec818a1211429fc13a4fe337d",
+      "manifest_sha256": "4777cc1329f81cc93b73d3a3d494d85195d7f55bca74626d937f429f5c22bbd8",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-curriculum-crosswalk",
       "raw_skill_id": "education-agent-skills-curriculum-crosswalk",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -867,15 +898,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "41ad54fdc9ac5aecee41a70022eba311e2e6b0e611cd65845ba0363f7d7df4c0",
+      "package_tree_sha256": "8f300b59aa0053a4d444fe3e75bf7be573cb04218acda7d0cda18165a75f123c",
       "profile_sha256": "63c5bd2974ad374756a23b3bf6febe25c1898f9f08e95d33ab06b5cbe0436bd4",
-      "manifest_sha256": "d47b6114419c1efa9de0c0b4ce421a1874d8f64285453ff4c115b469e28d3827",
+      "manifest_sha256": "29b9ac3f81a47466ec7277464b6db7a3827eba459f3420c6866e3f8cc2bab439",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-curriculum-knowledge-architecture-designer",
       "raw_skill_id": "education-agent-skills-curriculum-knowledge-architecture-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -895,15 +927,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "e2702e177eb2485d84a9e62f52ccd8ee454c7417c9cb7ab657719b5f1cc4090d",
+      "package_tree_sha256": "3af6a59b97d7f1876c255926df6079bca32a42db2ccd0125a308d4e6369b1fdc",
       "profile_sha256": "d71b62ed4d2fcf49d3b3901858804480c7b89a13d1b6c2f09a52d9338e2a207b",
-      "manifest_sha256": "64250c63a60a5effd05015d46afdf881ea20dc5206cb48c2de7756efbb7f271d",
+      "manifest_sha256": "1bd17b04e188c3b0905066ded6051b4771f892a5614d9afe40ad90bfc0c8835e",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-dialogic-teaching-move-generator",
       "raw_skill_id": "education-agent-skills-dialogic-teaching-move-generator",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -923,15 +956,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "e4c7d74db1629d600390dc4abca316adc4c774fb9a7b4b0b803442a9c0e1ee38",
+      "package_tree_sha256": "f14b0c55fce0bf2c753cdbd5c8f932345c3a558ecd0f315d6c485429fa72d5a5",
       "profile_sha256": "b2a80b3177693afc6ef645185209ca4012794b0f512b890979256d679c504cd6",
-      "manifest_sha256": "c7b7ff6b2522097eaa5fbe0cec8d54eecc5249569bcf2db405c47d858dbea7f1",
+      "manifest_sha256": "5e386691f537c3e5a63df71d1ba1b152ec2c63c89635e6a83cdbb4a4fe7c8061",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-differentiation-adapter",
       "raw_skill_id": "education-agent-skills-differentiation-adapter",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -951,15 +985,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "4dc4d6ca4a953b3fe4d63f0715cf5c9fd65aa8a3f364ac41aadadb9e5e667256",
+      "package_tree_sha256": "86efc956c6da0ecd7ec34551185934c4ced517cd7d58e50e4a34b47214a7cfcb",
       "profile_sha256": "dde09101bc59144aebbe26d71f1ce6ae796e2700998c5e97d3caa67f53a40101",
-      "manifest_sha256": "30d5ea831d938f810b5e6f049914f961711cb05325690aa85814e280815a6986",
+      "manifest_sha256": "2199604033609c89d56fbe08ae9b214672fdbb557892519f45fad154e4eb66d5",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-digital-worked-example-sequence",
       "raw_skill_id": "education-agent-skills-digital-worked-example-sequence",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -979,15 +1014,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "e44a29439999b24331b38e71c00730dc33ea8d8504e01ce7a1a1b2202eb45e98",
+      "package_tree_sha256": "c71ded32e6e5b0632658ce26c92b418f12e8cc56b966212736c0676f269e9caf",
       "profile_sha256": "f7747f1a2b826d6e5a7c25fccf1adf83c939e93477d95f0f1ce4442033a9192a",
-      "manifest_sha256": "8ae4b8f538ecf267d9cd4cb0e1a9fb2d46d14366e8eb4b44f811d377846e46f6",
+      "manifest_sha256": "4787c73f20876bb37df2ad4589e2f8c278a873dae974c86b41e8a94ba98f3030",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-disciplinary-ai-literacy-sequence-designer",
       "raw_skill_id": "education-agent-skills-disciplinary-ai-literacy-sequence-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1007,15 +1043,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "d38d8b0b0d9b09842640d122c0f763abfadfaa665a6ae70b8d8598da32c4bda8",
+      "package_tree_sha256": "93500d468d72f90b2a4dd0968da397725b01d5e9470f026714fe5254cc8e3bfa",
       "profile_sha256": "ff0cc4edf71914f17a189c381c274d6894a799f518cf810b7bd9d2af2617293e",
-      "manifest_sha256": "68bf442c7d3e8bfbde43ec228aaa220307532938608e45fff531f2cd006f5bd1",
+      "manifest_sha256": "433f40ebd2ca9a89dee696cb2311f3eff9dafaa83d58c5784623060bc7db1b4c",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-disciplinary-writing-scaffold",
       "raw_skill_id": "education-agent-skills-disciplinary-writing-scaffold",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1035,15 +1072,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "d0113a6f971ac6b3fe4af28e360c6831bff211e6f99f380fc870d737db9f7b97",
+      "package_tree_sha256": "81ad74fcd8e91d98098090bc5441ea999ae8f24f02946a3b7bc52399b6c736ad",
       "profile_sha256": "6182b358dd680c573352af99b5591254b93a26ef3742ec80d903d630966d29da",
-      "manifest_sha256": "0998a8c635f666a07c0028ee3facfc25350971d940574a0e93a007ee794cc329",
+      "manifest_sha256": "5d780c1912b98917158ac3450b009ea412de35e42826efbb621d405bbc64a394",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-discipline-specific-critical-thinking-task-designer",
       "raw_skill_id": "education-agent-skills-discipline-specific-critical-thinking-task-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1063,15 +1101,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "b00923493fb838549770da68e57ac740d59a9d2d7e37a360488cc617d6642172",
+      "package_tree_sha256": "1b00c98c99d9f6f07cefef5b4bf8204e6ddc97fc3ab34768343f89333d71ba1b",
       "profile_sha256": "bd65e5f83161218c55643dd4534c8082cf255765790f1ea737f5f4a7f16196ab",
-      "manifest_sha256": "f62dd8fc443902b9d9b611de66126283e7907ccd553fa97916833cd795792916",
+      "manifest_sha256": "908773fe998e3a5c67aa2014ee606137a21371de5e6cf1d0ec0cd73a036ca9da",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-discussion-protocol-selector",
       "raw_skill_id": "education-agent-skills-discussion-protocol-selector",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1091,15 +1130,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "7cf942c7e5ea6a67e48b93a28aa99272ec682cdc4dfd1fc02be2b27f56df643c",
+      "package_tree_sha256": "03210958f504397a40e5644bd299c3ea603959e052b2127c20c45fd18dde70cb",
       "profile_sha256": "53c3a326c8427cde565941d39ae84efbb4978ffbb838850a3030586256911567",
-      "manifest_sha256": "60c6d92aed5cc3932f5eeb3ac169bc9d81d6264d048f8053cb4e837c1a2c4b4f",
+      "manifest_sha256": "0726f193d599c15c6cbacf8349409feac707db0025670ecbbaab53556004dd32",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-dual-coding-designer",
       "raw_skill_id": "education-agent-skills-dual-coding-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1119,15 +1159,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "80afe8e9e7063c760ed46e0cc98e5489c6effe52ba0e1ecf1d34e70de647cd01",
+      "package_tree_sha256": "b9ab0bd8afcc674f60e4e93a5dc66e23a713111aa838ce3ed6c2e276448859e6",
       "profile_sha256": "a6763096c3fdfff68d0395d43e618be3dfed88dd964c90112989bb6c0bf9488d",
-      "manifest_sha256": "a1d9e787fb4c692d1c22651e192c9ae6f7e5bb9222626a90ed611d3455380361",
+      "manifest_sha256": "305dbf5396b6769f7d2516f9a9ac294fd83d693bef565bec99f2a32c8704fc0a",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-ecological-inquiry-anchor-designer",
       "raw_skill_id": "education-agent-skills-ecological-inquiry-anchor-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1147,15 +1188,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "78760ef2db64f09b6c3741d519766f5ebda104cfb054cbcd345c3ef0319c4ed0",
+      "package_tree_sha256": "9e652bf1f57fc3544cdb43b1f03dbdac5f6bd586e15c97303d228fa8f97a3b16",
       "profile_sha256": "7c70522d80553a15371617b86a6eb91ccded0fa27075a3a09f727272f27744aa",
-      "manifest_sha256": "aa3a8a0d62a3bd4a88ef0e213aff5314ad2cdf5f3fb27467edc986e64274e0e8",
+      "manifest_sha256": "9c84cbb0aae3bccde0ccf956a93e067a7a032278a54c2f51c799ab15963eb3f4",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-elaborative-interrogation-generator",
       "raw_skill_id": "education-agent-skills-elaborative-interrogation-generator",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1175,15 +1217,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "6633ab3883a161df1fa51e108625f8715869467c652be8674145251803362505",
+      "package_tree_sha256": "5001d7fe7bda0b9e83b6d43ecba334eebd0df62435021a9a04052daff86713d9",
       "profile_sha256": "0844c3576eddb012900a25aed4f3f1a826d70c3010606ce2ee47265ad7679844",
-      "manifest_sha256": "3c3eb27abeb69ea4c9ac178181df05fed30ecd947ce8c0df9402168d6041e8b7",
+      "manifest_sha256": "b937cee68a932e78fcb521bc889d454005d21fd8de9b1ab857ce748a5fd77f82",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-emergent-project-design-scaffold",
       "raw_skill_id": "education-agent-skills-emergent-project-design-scaffold",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1203,15 +1246,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "fb351ad1a37808c0cb9a1897d0059c7b59837985e471074dde0ef474bbda06b0",
+      "package_tree_sha256": "179e4487f81e0763803b036ea423f4c774e2811ca2715590833608862ab94797",
       "profile_sha256": "27a90ce89781e18736db07afe6f94dad03a08c6fb26cb4ca5c1a501c9bdee1cb",
-      "manifest_sha256": "46ad4b637fe9f485757a0888630a6299f798b4068bf9bf8b23aedd654e4384f0",
+      "manifest_sha256": "0ff961c1763138c7c0a240856fcf2be318a0b3e784857f74bf57d22e89e9c386",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-erroneous-example-designer",
       "raw_skill_id": "education-agent-skills-erroneous-example-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1231,15 +1275,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "3eb9644d4fb1b964c9cf611aff6f5a3ff005e8fffcc79280dcc5b4a2c7ce976d",
+      "package_tree_sha256": "2c9981e0a3f37f360deb50ab8a1c9646d56fc5c993caaa0326bda562d4fb40e6",
       "profile_sha256": "f11abb16206f25ce67d857cd1de4c57665d4bd0348cecdd3dee9a67912913fe4",
-      "manifest_sha256": "abe96c0869a77dd3fd9b54a7f5b525d1047e5e0758ba5a295cd86e2ddd4a25ac",
+      "manifest_sha256": "9188db331c6c3ccd4dd96add0d1d8c7db20131c6c67f3c9b8f27c4a62133919d",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-error-analysis-protocol",
       "raw_skill_id": "education-agent-skills-error-analysis-protocol",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1259,15 +1304,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "d5ba261bab73fec3e304abe2c048c8159e56a7111f2563d6aedf31dbf14bb279",
+      "package_tree_sha256": "b7f77ee4666212b4261ca7daa7f42cc681835657e31642dd4773daa0461942e5",
       "profile_sha256": "122eccd2e9ef31ecfd4aec80a87e37b4feeccb84447e2d42e04a268e272e8fa6",
-      "manifest_sha256": "1d831d9b9098448e48966fe4ec4c9955d3464fed73c41133a966e5d0e83413a0",
+      "manifest_sha256": "01a67e9b660144727851024b57c5f66bbb6f739783731b96874e3b4b5aba4c2c",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-experiential-learning-cycle-designer",
       "raw_skill_id": "education-agent-skills-experiential-learning-cycle-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1287,15 +1333,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "7b2bcd6450657db9fb1f4bf6a3417927de2494db464abc1ddde742ca5b829b6a",
+      "package_tree_sha256": "d96714e583292757f6fecb3301edd7ba9e6d3aeadcc28769b4a359d3b3c7c1aa",
       "profile_sha256": "5d6cbd065c10c92763670bc823041e426e67ebe29e8c71abd0a76dbe8b5189fe",
-      "manifest_sha256": "f36caa6003305acb0e641b1ff9b4f1fef2181d0c78fe54441113505f079a2a12",
+      "manifest_sha256": "7fe2317b13456ce0e5d1acddd526b987fa690d556852c5b45f2ec08abfd1d5ba",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-explain-first-interrogator",
       "raw_skill_id": "education-agent-skills-explain-first-interrogator",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1315,15 +1362,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "78e4d1ef95bc176b027c5a7fbd1240cb8430165a6e6b76b213a0512180313fe9",
+      "package_tree_sha256": "aabeba1b1be171a986744ef0bbfa97f26e5a7670249ad7b95e62a4d7dab165ca",
       "profile_sha256": "b4390377fe486821de32b1068da632470d2b8bb06c823fdff4ee16564519a5fd",
-      "manifest_sha256": "7b8404f19797edb325c55378d2de991cb84023de3bbf50a4404b7c614021b584",
+      "manifest_sha256": "f850d416fc6a7772b336518a1f450b07e33481e3933560889af485113af98643",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-explicit-instruction-sequence-builder",
       "raw_skill_id": "education-agent-skills-explicit-instruction-sequence-builder",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1343,15 +1391,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "1929e2148f634b4701d9dfb3b88a4a754e0edd5fd2787958782659de380ff3e7",
+      "package_tree_sha256": "fb72a18906284d84f6ef14e384fe4129774763fed3d2e4cce355f65d001e4fcc",
       "profile_sha256": "a6ac4c3d8a605eb7b4bf9e5f1979a978e7b9343dbb43761482e35492580c7ca6",
-      "manifest_sha256": "321f47f40554ea11d19881526c95159f7b63a5ab9b8db776b7abc992d15a1db2",
+      "manifest_sha256": "fab26431ad05e3a66907e413bff135fcb7efbd89cab9635271077e0d60551d96",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-fading-manager",
       "raw_skill_id": "education-agent-skills-fading-manager",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1371,15 +1420,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "0060913882501a7e97f861bbf4a3afff71b4e75be82024a93723c50c80fac60e",
+      "package_tree_sha256": "d09860390be5e43367e50ea0a2416cfe6e70fa39ba8dd66629bcaef7cd448163",
       "profile_sha256": "484ced876af3577bf79d58721c20ccf7265ef31da6f9b90effc449bb1a86cab1",
-      "manifest_sha256": "8e1cbfecb6e19b11d1bf7c23faeb88aca2932871a661222613c6fc3e64046bf0",
+      "manifest_sha256": "bf11bdca9ec7459e815e8400550d55bad2597e2dd337d434dd34ccf7bc7ea673",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-feedback-quality-analyser",
       "raw_skill_id": "education-agent-skills-feedback-quality-analyser",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1399,15 +1449,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "50d5ad46d4f36730762768491ad3511c45ea2213d41b4e1b55c0ba5594ab5548",
+      "package_tree_sha256": "f9be417b01fb3ae8e88fd241a344c5e7608e910a9f01b3c9f3e41b853cb93b51",
       "profile_sha256": "a3c098ab1153c1cecb6dddbeefd18ce22d8185fbd2b8c682acc19d65af56f4ce",
-      "manifest_sha256": "a8ee96d7f1243fbf2d51d0878e78db547bcc040d550651b864ea47c1f7caa3b8",
+      "manifest_sha256": "b7dbe560a8faf0cd4593b6b9df9b045f581277fea5c699f6043f24a4d26938fe",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-flow-state-condition-designer",
       "raw_skill_id": "education-agent-skills-flow-state-condition-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1427,15 +1478,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "f380a2b1d5b5bc644d315d99a12faf31d477ba64b30cb2653a9232aada19c1ad",
+      "package_tree_sha256": "86a7ab2615904b6753383f082da083884c93693535c2b4aed5b33eae6677c643",
       "profile_sha256": "1fc0d8cc632a3adc622bcc28a6afaf00a73dcc6ed4ca9e9e5d8472b933fc187d",
-      "manifest_sha256": "8001925d867a8fa6c34c9c3196d1bf92d71b40866aaf1b3d445a25207288140e",
+      "manifest_sha256": "5f322a0257e7770bb7b7adab34f863af7e1a0c0d2cbd23572ca1c1d1a3fa0105",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-formative-assessment-loop-designer",
       "raw_skill_id": "education-agent-skills-formative-assessment-loop-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1455,15 +1507,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "3615958a3ead8f49dc17524fe212a946016139064531db46461424024e6f7f99",
+      "package_tree_sha256": "34a1edf172fe1bd0fc01088ac3528b7243f39ff904874bd1bb899dc005ef4980",
       "profile_sha256": "6497bd1a5223332670480fba1fa8344a9353921babe6cce6c7aa1446a16164b4",
-      "manifest_sha256": "f58388e3e31125f8d562d843f8e57c92f87340b5b7ee3a65b8900ebacddff59b",
+      "manifest_sha256": "759fe37b6fe595e205f2792cb7ad9585d4ed98e4e04823e659ee1809bbdf51ce",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-formative-assessment-technique-selector",
       "raw_skill_id": "education-agent-skills-formative-assessment-technique-selector",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1483,15 +1536,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "c6d32896649a64e6739cbdb83a6ca327bc4d1942ed285b3898d33fff3894729b",
+      "package_tree_sha256": "dae440191e35c125a28d824b8d48d94d6cc55d9b22f94688b590c05ff555ef4d",
       "profile_sha256": "2c2c20341f262ca2ca3e4c30f31b3af32fafd9ad62b4906b2f56210a741dc40c",
-      "manifest_sha256": "59277ad6fd3b7da5a4149687e51e852447bc94fe11daa234ae7eafd59c0a38d8",
+      "manifest_sha256": "07c441d1d90877325b23a15b797a0014cb4d3fb2d8990f651191991b449c4c0c",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-gap-analysis-from-student-work",
       "raw_skill_id": "education-agent-skills-gap-analysis-from-student-work",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1511,15 +1565,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "94d690ae79fecd2518f2832f685e4a52d5072a89f10d4c861c8e1f391083b4bf",
+      "package_tree_sha256": "1bacd79b8c087972ed3162966e5d050ace2dfb60c98ffc509274a5e80bbc0d5d",
       "profile_sha256": "6022a656cf6b58ae2d8d2070991442d6f58bdf8772faded8fb92f70b1a919f9f",
-      "manifest_sha256": "e77e17c6e1cecdda4f5399e1758d53eeb6972f228433eecc16278333a67eeffe",
+      "manifest_sha256": "85cd0f5e40eba44eeb1e3ab683ea0900e089dbf8ef30e9a38afb6d8e5710c65b",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-goal-setting-protocol-designer",
       "raw_skill_id": "education-agent-skills-goal-setting-protocol-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1539,15 +1594,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "d65e8712d2a076b25346f73db17754ec95b4e07c0e4621ae1c6ec22453417c82",
+      "package_tree_sha256": "563d9f49694c2cf4101ee10419825efe4f9639ecf2a811b24464ead4123fc265",
       "profile_sha256": "4e39d86e52ded5cd04fbe48c1ffff05baf6901f1f02095790d0f31dada3ed64c",
-      "manifest_sha256": "3441927b07bcfbf752fa78edb0ae07fe0534385ccd82600227d25ad8fd7b6cae",
+      "manifest_sha256": "975bf09238bd2a69bb90fdb9c0a7b67a64e56dcfa3a6908f032c599e54f5a240",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-hexagon-complexity-mapper",
       "raw_skill_id": "education-agent-skills-hexagon-complexity-mapper",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1567,15 +1623,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "21cbc45e9c6774db11d20fbb4612e2378e16515f67c082a9fbf5750bc2918e6c",
+      "package_tree_sha256": "5f8ebccb88bc60df1ab696925fe9360f521a9a99c51e6cd06a60f1333ef54727",
       "profile_sha256": "7599b6628ee363d5e8afca9ab7613b75ff16dfa15c8a629e279b94a6f0eab20f",
-      "manifest_sha256": "7cdb2f6086171870f747eb53086de60bbd7f9a5a955bf6ac4555ed801de33c0a",
+      "manifest_sha256": "9ed0f303f70e821f7210aff4332e98311849d4728fa473fd6ed06018eb989d55",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-hinge-question-designer",
       "raw_skill_id": "education-agent-skills-hinge-question-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1595,15 +1652,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "53ddb2f42bd21533467be65247a8eb9e9a252f0c5a2c161f31d0f135fb9d36a9",
+      "package_tree_sha256": "c141630cf4dbfc784e54d9a7eb02c3c616edf9fd349892c9226776ffa31f4cc3",
       "profile_sha256": "50024aa5fa60cc706c4041bbef2f9f303b3a9adc24d41509c7686e892622d384",
-      "manifest_sha256": "062b48f8f8e7672e3c2da4b9b4ab63a27bcde331a7422023eaffdd76beadbed5",
+      "manifest_sha256": "137639eaa491526b1666c36f755b481d9e4d1c1330afafe7d710af0a70176810",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-implementation-intention-designer",
       "raw_skill_id": "education-agent-skills-implementation-intention-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1623,15 +1681,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "2cb557d2f4e416d4439ddb3b7f50522246a8b257821f80467b0ffa4cbd8d05e7",
+      "package_tree_sha256": "bcaed98490f1408dc3a5621efe31068124fbe7a667624ba972464ad7d0b782de",
       "profile_sha256": "0a6643ab4fd1c681a24a1334ebca1bea2d2c4d6b3d1665051eca8cfa691a7e3d",
-      "manifest_sha256": "75b8d0df41e78dc540a72b0211926127aba14499911d17aa937718ba30d68b90",
+      "manifest_sha256": "c630c3ec49e04187e36391096c5e0efa4f946b4f188357a34c8408eeef67cf9a",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-individual-spacing-algorithm-explainer",
       "raw_skill_id": "education-agent-skills-individual-spacing-algorithm-explainer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1651,15 +1710,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "4d9b861d3b599e6a346d5abbc68d29de55918a27468ff717f21be2a247e31552",
+      "package_tree_sha256": "fae7567ba354b132fc60eb049aa786f0a932d9ffacfcea3cda6d464a7e42d7f6",
       "profile_sha256": "b7ac51f4ecac3d71dff202a5fb910ed0dad770cdee3cd313db31bf6f34661ea7",
-      "manifest_sha256": "159df1fc78bc93378314a2d567beb4f83306e3539ec65e2c72e92eec14602ae9",
+      "manifest_sha256": "51768517ea5b6c96c1cfd91b5617f08bddaa94d1539b07b3cfaf437fe9592d18",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-instructional-coaching-conversation-guide",
       "raw_skill_id": "education-agent-skills-instructional-coaching-conversation-guide",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1679,15 +1739,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "038dbbff697e4c8a652a57a642d02532cba7a04493d35e4890291c38e2fdbca9",
+      "package_tree_sha256": "0e035e4992b3cb312b7dd846319f032cf274eab0fe4be068583c29e522925c78",
       "profile_sha256": "4ded094c8318b076604bb03703830b04eef85331221344e48f743a82417bad52",
-      "manifest_sha256": "181adad749b1412312c3bbda8abd9cf286bb4f7919d02946e79862170e5fd54e",
+      "manifest_sha256": "37877021020abd9fec993984e9a08f89fd9709c5e0f13c16fa68951b0a447fe7",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-intelligent-tutoring-dialogue-designer",
       "raw_skill_id": "education-agent-skills-intelligent-tutoring-dialogue-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1707,15 +1768,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "bd47d01b9abc23e7387d52ba235a4dce8637c6733c8ca2bde3e72bd123671844",
+      "package_tree_sha256": "f62f264338b90fb994d109b78b1235cf8d73127be31efc11f494e10f82f74cef",
       "profile_sha256": "f16d274e1ea9e0ea03489f50a67db5d78ba72f0b7c8d9c92bf29b19769908ecc",
-      "manifest_sha256": "dd86f10567e633b00c6a6af0935aa439fea0003c80b14b966f4e2f3ade364c0f",
+      "manifest_sha256": "0c6c4641515be9a4a17e23bf117c4b9fbc21f466b237fb90c281894ea00de144",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-interdisciplinary-real-world-connection-mapper",
       "raw_skill_id": "education-agent-skills-interdisciplinary-real-world-connection-mapper",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1735,15 +1797,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "ba27ff40f1d0faee1c80ed063e7d544c0863b610b20d3ec5d3bfcfb084c9635c",
+      "package_tree_sha256": "d098224ed841eb2bca6046ab7779bd594f8af8c7629d414e248ae6f47ffa95cf",
       "profile_sha256": "1208e1f681600a3f502621f65bccf14098030b66651707c209790b0390f65ff9",
-      "manifest_sha256": "171c7a0fb4a45a03c1bc8443c4c8f64ca6540145c82aa29bfb3cf448038c0e9d",
+      "manifest_sha256": "fc5fdbeb504507054b216fdcfed22a1b5067a620019f8400c4e9b8c321d6ade8",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-interleaving-unit-planner",
       "raw_skill_id": "education-agent-skills-interleaving-unit-planner",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1763,15 +1826,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "3504b184240749e952b7ef6e54e4109e89b3ee6021857128d100ff5b11d5e3e2",
+      "package_tree_sha256": "8e0083b413045b6c77db360ec0c49c306dc50a3372abf9cce8fbb77628ef3927",
       "profile_sha256": "6d326022e11f7fe9f67e3def040a3af0ade1226ee2f3e3d32c81c8bfd020fa54",
-      "manifest_sha256": "29ebc0a57896787534f369aec6889b069ca3f11eaa6d0c783276d33caad30ef8",
+      "manifest_sha256": "99dbc46877f194fae01ba65f57f70948834e07d6cdb816e84c6c87baa09f47a4",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-kud-chart-author",
       "raw_skill_id": "education-agent-skills-kud-chart-author",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1791,15 +1855,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "507390208e034d9875c7f39f6b5901e6cc7dd3fe56ea378740e0b2d2ae710b80",
+      "package_tree_sha256": "d8ad613b80a8116b1e059d4de1de1464e65e9dbb3f60d5dd923070c8def22337",
       "profile_sha256": "da9f9005135326fae612b1608b2c23861d3e83c878010d7c0f3a2d0d3f19f6d3",
-      "manifest_sha256": "35bc716d5542000de07ebd5fca6f79b917a1a04799456d5e6db21cc1ccd07388",
+      "manifest_sha256": "8fb3ff10365d3ea2d7248ff1bf0d33af1bb2bd0bbd6a93ff01cb84ff1ab95a95",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-kud-knowledge-type-mapper",
       "raw_skill_id": "education-agent-skills-kud-knowledge-type-mapper",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1819,15 +1884,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "a95a28f9923805bbcd58c449b47ad736b0acc4b38c8aeaaeb5625f2b6b1c90ef",
+      "package_tree_sha256": "7b370ecb9ee61ad83dd93c434b4ab0b7151aafc785fc0615c801c5163fd059c7",
       "profile_sha256": "48657433a81ea066984ffeeb425f9d765853eb4e096b1401fb5e6a1df4b46c8b",
-      "manifest_sha256": "a7ed1f5840784aa6acd56761daba6f8e947bac09b37030c19b39ac3f3ebddb44",
+      "manifest_sha256": "ea70a282f9bef2b2de47f419250e1f0f28cb35b89b470a8863b891177a2f5f61",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-ladder-of-inference-reflection",
       "raw_skill_id": "education-agent-skills-ladder-of-inference-reflection",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1847,15 +1913,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "310ef386487044b94f2f481d397f5e7aae47daaf917cbe4498e59cfc62ba368d",
+      "package_tree_sha256": "5678359fde40991ebcff15f713af0cd8d9ec54f5ba1841f5f64485f5eada899a",
       "profile_sha256": "2f06ee17e539b038033ee9ddc2ee13d344c06392af04d5f5e5a12c30d8c50999",
-      "manifest_sha256": "39ed4c7d78801121186513179b64def39d04ced5be2c1f2494c6889d53581a79",
+      "manifest_sha256": "139377e843432f1ebd0148d2c592f930fff9ae441391be4e2169834fb626777b",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-language-demand-analyser",
       "raw_skill_id": "education-agent-skills-language-demand-analyser",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1875,15 +1942,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "4f9f83fed2f4edae3b36e118ced29ddf461a6f12125d53977c4b5d566f061b2a",
+      "package_tree_sha256": "be75f5344ce16df4cd034903b70ed96942aecf1bfee357edd7b85e0f6d81bb68",
       "profile_sha256": "163ae447eab233846b0dd8a43803e8f8318d91b4c88a261c5683f6b621563d41",
-      "manifest_sha256": "6ea06c9c40ec42d1a730b50b540c0e3dc47015fdd757d09b9f3e2814f9dc0be3",
+      "manifest_sha256": "d28ac73c25e7f2165aa44c8275f0daac5e8fe307c4457f8a5735d32295cdee65",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-learning-analytics-interpretation-guide",
       "raw_skill_id": "education-agent-skills-learning-analytics-interpretation-guide",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1903,15 +1971,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "5813245942be544b99d06b2d42a7045ee52ec5976705b43eca42fa77cb085a0c",
+      "package_tree_sha256": "1af5594289d5f246a56bbffd02747833b247bb0df7fae250a85423f45c07a68f",
       "profile_sha256": "a7185020553e598771bf9887a2b4a21beec02f1cdebf227d8cf148600b0bdd4e",
-      "manifest_sha256": "17f3ff4babea7a9833f8107f09c94aaaa33901587de3ebb58e8fe5ed38bfdaf3",
+      "manifest_sha256": "9f1d29c188ef7a46889e3e9e8e18b7b7929372a1b9889da3313265f7eae5b348",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-learning-progression-builder",
       "raw_skill_id": "education-agent-skills-learning-progression-builder",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1931,15 +2000,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "5f4fc321fc7aa4cee58cf4aebd8a40cfd88a019941f69982d2a2f11ddda24640",
+      "package_tree_sha256": "5e57dd7ed978c86338ec50a809f09bf58b5d85a1a95b2057bd3b916d5300e3bf",
       "profile_sha256": "833e54b04b88c231131ba0c1742bed60e5b74c52f48de26d9d758cdb657cbce7",
-      "manifest_sha256": "bacccba6576878b34a559b9fab2c3656bad31214f50869919d7082874c8f5d74",
+      "manifest_sha256": "185c473cf93a9117ed851222592a72e6e0f7acc0346067b5049abd515fc718a7",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-lesson-observation-protocol-designer",
       "raw_skill_id": "education-agent-skills-lesson-observation-protocol-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1959,15 +2029,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "e870bea5b4a3a85e87966ef1c328c596a713b98e9543cf07b156c5190003d95e",
+      "package_tree_sha256": "f6d96b5fd6c76612e78922ac40388608af2cd7f878743cbf88b86aa391f7f2ba",
       "profile_sha256": "28f296463c577cb49524a9d21e94957c87e27cb589fd482589ae084a277f08a8",
-      "manifest_sha256": "4dd8edba6ed7e803b9feb69477972b510b8fc29e1a22a5cdf62de77f706db471",
+      "manifest_sha256": "24cf244e07359a8a5c1942d4caabf7873464281e278f1a120452fdb01c71ed2e",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-lesson-opening-designer",
       "raw_skill_id": "education-agent-skills-lesson-opening-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -1987,15 +2058,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "d98b9f91fee05d05e9e47c7f22180283a9935d007ec11bcb6a6cd2f525eeab66",
+      "package_tree_sha256": "072cd773f4e31e7685ed9a9fdd2f56c8c313270f26601e91f87bee3dc7453a64",
       "profile_sha256": "d1b99fa2c811eac4835c3c342538b7bd7df8bcd1bddf7a9042a86e4c53856907",
-      "manifest_sha256": "8094076a1ccea6c2ce9c090832bdff271c6de53c7f1f1c091a313ed3222d021c",
+      "manifest_sha256": "f987b1583b8a624316ed85151253a7fd6b7e565529ed9deb997f859055e1f20a",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-lesson-study-cycle-designer",
       "raw_skill_id": "education-agent-skills-lesson-study-cycle-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2015,15 +2087,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "d4123c6a746be10823bd7c8141920831d154e1f24d8d943767452ece6d61c4e6",
+      "package_tree_sha256": "e54fb543b0e2f93e011148c1121147a7fc8c3ccdfd57794cc12cc17c9a3bbc6f",
       "profile_sha256": "589f668cd8887bf4919ff3fd37b3d9142e0ac6b5e29d78e4598081a9931307e0",
-      "manifest_sha256": "e069f827d8ba5646005ccd699a506720755b66d0f546e7093be3793f674bae1c",
+      "manifest_sha256": "b3400b5f5a8105d122f77137c33c2a89a7924b7d7507c207551d8a4633b0dfa6",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-leverage-and-response-design",
       "raw_skill_id": "education-agent-skills-leverage-and-response-design",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2043,15 +2116,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "f1fe3f5edde6c9cc23fcac7c127be593e45a34ed6cfe785fe232b9e4ecf108e8",
+      "package_tree_sha256": "f073ca303be0c088e30e429e4a46da908326286acdebc427735e780a900b898d",
       "profile_sha256": "ce717d042db1cd8183292bbecd4e06b0c7b8813cc3b07b5be0aa19d1b71b0ee6",
-      "manifest_sha256": "ee0248c231cc62b0b841d2380cd11cce72bad78ffeed0d1b2661295010b82906",
+      "manifest_sha256": "9994c558f2c930183939aa10c3b7abf690086a6667ba8f93e6e0dbdd8a21171e",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-media-literacy-deconstruction-protocol",
       "raw_skill_id": "education-agent-skills-media-literacy-deconstruction-protocol",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2071,15 +2145,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "d0289a5b6be617737f16d2c803b341d1cb622e5792ace4be8606b2352c2b20e6",
+      "package_tree_sha256": "b858921019650fac21d20e461e0bf7c774cfa9aa7181776c7a49762fd7da1647",
       "profile_sha256": "b4b32491f222c8602f676a937d4d5051461ce000681eaf9ac70b28540d2eea1a",
-      "manifest_sha256": "d0175f779bb51c3084c7471f0cad377e932f4cd08a677962b5ecfb8657df8867",
+      "manifest_sha256": "eab6d083069b29fae4a51e054861c6597675c9e345cbc53e2a96062342693da0",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-mental-model-mapper",
       "raw_skill_id": "education-agent-skills-mental-model-mapper",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2099,15 +2174,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "02504b2e95f8da6d09d2536d06c9032b5512eebfed2061e867d90f7371320122",
+      "package_tree_sha256": "00d8207c98ebd8ebf10bfdc27495435d05cefa258c70774c0e6c062b1786ecbe",
       "profile_sha256": "ff6199882086767fabc38dd4adb859e9cad36bc1283b28d1c5e356b72aba445a",
-      "manifest_sha256": "914fb458b5a3ca102192d3a125f3b89df831ee981774c56372d659731d61e1fa",
+      "manifest_sha256": "d878a7c3cf59bf60df572dc3b375f0ef07d6b17549c120502516d1d371178ff6",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-metacognitive-monitoring-ai-contexts",
       "raw_skill_id": "education-agent-skills-metacognitive-monitoring-ai-contexts",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2127,15 +2203,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "bf5f1e8089c4662f5445e3ac43601f1594b7a6cd3e95648e4c39852220494752",
+      "package_tree_sha256": "2417e988b4c3e602b930ef8f9f4bbc35d0ec105ff58a8fd4a8e594b5c137375e",
       "profile_sha256": "b991be80c18d28d9500166df00abd89ee0638449cda89cae5a1455df9182e6fa",
-      "manifest_sha256": "4206ed3229f7afb7ed489d18b42a672a2435fdbf70695a506e4cda6abaa94283",
+      "manifest_sha256": "93a7a64dd33e04738e1dd9c2ddffaa195a7f76f4330df9ac91671b17525d0cbf",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-metacognitive-prompt-library",
       "raw_skill_id": "education-agent-skills-metacognitive-prompt-library",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2155,15 +2232,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "068bc5244a8b18c7dd4b0cf0bf42001fb7c9e4087b4e35bbd78d089ddf65d704",
+      "package_tree_sha256": "c0e671092ceefb3e46abe941c5eb58a50d8cd0fc11833c59a1b32d512f6fe33b",
       "profile_sha256": "31b1e484c6c8b610e7c08b5400aa7533bf608ebe5860dce1d7786acc2053f49c",
-      "manifest_sha256": "599841075fafbcf11de5b13d1715d84855379c02a413956d9f7c5f2f2ea6bd65",
+      "manifest_sha256": "d3436c125933142b5c2d3cd49312e024cabebe0c449819c63e756dad80ca5d94",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-mixed-age-learning-task-designer",
       "raw_skill_id": "education-agent-skills-mixed-age-learning-task-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2183,15 +2261,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "30079d09b5616e090675efe235ad3b485cf944ecfa2af23c104659d785fa0cf9",
+      "package_tree_sha256": "eb4b73937e33587ca33a83bdbd61d5aed1e4bf03e257d6077872a16c7608646a",
       "profile_sha256": "77ae8a9ed74b56aa2476de87984c9077ded4bc5d62e90795b328c0454a091126",
-      "manifest_sha256": "8a4011d7497348f44dc086054222c0c6afc0f7a680e189b9f5de13a9e8cb78c3",
+      "manifest_sha256": "5e9998af7bd07c3bf1915bdb891a31a8ddf7ec3f18fb04f66d88038b757c0686",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-motivation-diagnostic-task-redesign",
       "raw_skill_id": "education-agent-skills-motivation-diagnostic-task-redesign",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2211,15 +2290,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "49a98ecfffce32f9849202487fd97c6cd98159c4028b9ff74e8591e41d63d6f4",
+      "package_tree_sha256": "87769278b97909534957a47937b60d2f1e61eada40c16f5d5be36c6ee5349ca5",
       "profile_sha256": "797fb8a9ada03491a6c13f68cc1923835c4d76d509abed987cb3d8f25cffaaf3",
-      "manifest_sha256": "bd64693f1111521cc4517e3d41f3fe86536d73beeeec20e691d7c4f44a704ce9",
+      "manifest_sha256": "d0aad6a238f319833912ea4f49b99036d3c3937eb11fa81fa644599371142272",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-outdoor-learning-sequence-designer",
       "raw_skill_id": "education-agent-skills-outdoor-learning-sequence-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2239,15 +2319,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "fba1bff7c1b3f0fc727c51e5424de1d6abac14467e1ce0ef51db02780733f918",
+      "package_tree_sha256": "f64268850209210763f3a017e220199a08262cd1428a627caefa2255bd39e00b",
       "profile_sha256": "7e59cd99680ab35fb75c75c90514ac3057adda3179a42d51f77e08fa9e4e6811",
-      "manifest_sha256": "844d52aabe29315a173b78d3c7932f3e0b7d6bf6b97911be3aab3ee1ffc59d7f",
+      "manifest_sha256": "645ce8694a421fa9ccbfd3a0122b23fbbc762d1b18a82c8b71a280939ac7a149",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-panel-review",
       "raw_skill_id": "education-agent-skills-panel-review",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2267,15 +2348,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "574064fac7ced53930c0daf31565f601c00bc6e52d68130474223e8646ef57d0",
+      "package_tree_sha256": "77fffa43ad8cf1a5614052acf1c50d2d9f00221626d77e10782e0ec021bdbd09",
       "profile_sha256": "f78c38d4385fd404c5fa9b7d4638d44ebac09d284fe31c2e772d1ef109bcdcc8",
-      "manifest_sha256": "ffeb812f5f790956ae08dd5968f34006b833b68873494f4ea8ee003161e87392",
+      "manifest_sha256": "fd125d642a3294a0f6ec408d63eb7b6ef981c207bc459c76245b0f413d50dc5a",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-pedagogical-content-knowledge-developer",
       "raw_skill_id": "education-agent-skills-pedagogical-content-knowledge-developer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2295,15 +2377,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "a9706f59e7b325a08c68b79d0f4ab95ef48fc94252ae4f7876fd46465ecf6f59",
+      "package_tree_sha256": "47f7ed7619e34d72d6b459e3b164fb457ad09a88c3d613aab22e896cc055ad6e",
       "profile_sha256": "087e96799fc4f84cf54fd31206a114ce8dbb70f34b4653ca3be7567a003064b9",
-      "manifest_sha256": "3a1e7585667a59dbc232b0a6deb79c85d7394184a18c3c98a338e40cff026215",
+      "manifest_sha256": "b67c75fb8d0d21d1223125ecca8036a80faf110f40b14e4e7dcfcdf16cc55797",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-perma-based-lesson-designer",
       "raw_skill_id": "education-agent-skills-perma-based-lesson-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2323,15 +2406,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "af62229d1eb4050a8679359b8ff0d3b77eb76c31b01137042c21dcb1ed63c8d8",
+      "package_tree_sha256": "9c6f72c0b82494c4b34c88cdb4b2a94e8f6705ecaac1e3b644bcc08422141cc6",
       "profile_sha256": "97abdd0467c1e77f7aa2062e69ab2720e18a4a0d83c4b9bd89834461f7070c4a",
-      "manifest_sha256": "272e268238f945d2e99d4be8e05f329f8d639c8cc7b91fde9ed13b0c567ca2fa",
+      "manifest_sha256": "575e0b416a3106fd923626eb208589ba05396f0da27f65c375f85ad01c0c6313",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-perspective-taking-designer",
       "raw_skill_id": "education-agent-skills-perspective-taking-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2351,15 +2435,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "42a936d2285145663ee1eaea3e3cfa6154c0c66badfc0d31d0b87ee8630b8e29",
+      "package_tree_sha256": "f05bef8761edcab0d9d518ceda74102e634426c989bdbb2636caa0a1cb175159",
       "profile_sha256": "e3a4d7d9e56ce50fe3900343b9784833b1f43a720dbee0c33c5d1c158b8c7543",
-      "manifest_sha256": "3384a001f1d7f7365456960903322f8a843d3286542f7a38ea48220351eb35e5",
+      "manifest_sha256": "045f5738df2e02304254e36a5fe997b24898f1696a87f1f4fe1795b0f5a76705",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-phenomenon-based-unit-anchor",
       "raw_skill_id": "education-agent-skills-phenomenon-based-unit-anchor",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2379,15 +2464,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "f60a0cfdb448f6ef08c848f6573c49833cd3a75fe07c387ffebf44e95151b374",
+      "package_tree_sha256": "c9716a653d36010299ebc65357d8c15379b9ab857dc1c92c321d6f0ef85b7fa4",
       "profile_sha256": "e4408df15be10c63ae01d655419257676b30339050c4c91d6a9f7c81579e30c1",
-      "manifest_sha256": "a8d19be31fce8ffacf6a24b7bc90ee76d161645476de231654b1d16f563f4a9a",
+      "manifest_sha256": "a542ff4af27a909ee3bb2a07d3d8670acfb6e1fe3f3f7fe89cc4a5dd689a2847",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-place-based-inquiry-anchor",
       "raw_skill_id": "education-agent-skills-place-based-inquiry-anchor",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2407,15 +2493,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "4058728c8c1a264f094e6efccf70cc0cbd1b307f7b45f515730b94a8daff1b04",
+      "package_tree_sha256": "67737e45f0344a46a0b44eec3d5d7ee124774de9933465acbfc1373ee3ab0870",
       "profile_sha256": "3bd9367e98f6b5b60f81ff9d918e8739fa6c7a6ee93ffa413e12bae1fa58fbb8",
-      "manifest_sha256": "960cc1d28d9f63759e772fbcdc33cd020a4e3c974cfef40eb630d3ae63839107",
+      "manifest_sha256": "5c7c38bd936e088f14f694263212b9459160cb815972ae33a6e91eb8d3cee05e",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-practice-problem-sequence-designer",
       "raw_skill_id": "education-agent-skills-practice-problem-sequence-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2435,15 +2522,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "439ace53b936cd81fd923e88b3ce94c2811e1d639e11c7d114a5559db1dc878a",
+      "package_tree_sha256": "7b2ed66a4a04cafc03b06f62897991d5f025e066a354f2a250122e23fead59b0",
       "profile_sha256": "12800623ce58778f6d53251f1a1f0e29416b08d67564391f84bf5b5091d4325f",
-      "manifest_sha256": "040b71a0ffaba8553bf12839658f7366f0eaa9a09d901d010a642976eeda78f6",
+      "manifest_sha256": "4ff0a9dd43782eb01f200400bc669a61cd519fc29a47be8273d8a9431703478b",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-prepared-environment-designer",
       "raw_skill_id": "education-agent-skills-prepared-environment-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2463,15 +2551,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "435144c39c8d902a1cb1e6f67594fdf8d2c9d8fff79be48bd86d14f8c955d81c",
+      "package_tree_sha256": "fb76f4bcf4b5a98bb555c9efe5982dc286a7c257c7e1c278b5a4007adebc97ec",
       "profile_sha256": "8cd8418710f37f84e2130304b39c91f0e7b55456d8ee66c5e3bf6ada1d4f1d6d",
-      "manifest_sha256": "7d248ef66af0cffcede5559ebe13758eff7ff1370c67d8dfac5074e97ebe36ad",
+      "manifest_sha256": "238da3abb8e2a4ea86a3a7227cb4de9e36aafd82ac50a815cad6ef8ffd858e65",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-productive-failure-desirable-difficulty-designer",
       "raw_skill_id": "education-agent-skills-productive-failure-desirable-difficulty-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2491,15 +2580,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "cb9aa22d1a56eb827d1571cf42caec885b55dddfd5885e126794043400e529e4",
+      "package_tree_sha256": "b7c0ef7c1302c0b79033310b472cf1c1a3c8d15f9263e6b5de44b1fc18e05cab",
       "profile_sha256": "6b972f2571e18f779e49c8c30b05b187532a1202740af8331302296829e7ddfb",
-      "manifest_sha256": "d00ba9bfde43899d596bfbd46035d8eec98d43ef9c2f47c7d0668d2ba737ec71",
+      "manifest_sha256": "9930721949681fab27a3cefa7a73f4d9af3b12344dc454b2552d7bffac73cef7",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-productive-failure-protocol",
       "raw_skill_id": "education-agent-skills-productive-failure-protocol",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2519,15 +2609,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "627428c6c4607e562a6fec27a3dd7dc6ffc715173a53da52421378e688360e7e",
+      "package_tree_sha256": "bb855017c32657c0564b3e68ab994098a28a88b9eef85bfc7757718070385957",
       "profile_sha256": "bd6f63f09cc7f7bc4e6e727147dff4a004754792a03def2c2676af83e711ea46",
-      "manifest_sha256": "e2dc9a954a003c53148a497da4d6afed549ad4342ab8b5b8b94f8cec005ebaa1",
+      "manifest_sha256": "d36617e68108e0c68d6e096fe3f19cf4c52bf6c9b67f3bbab3c7a9b4373a4d72",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-professional-development-session-designer",
       "raw_skill_id": "education-agent-skills-professional-development-session-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2547,15 +2638,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "e0fd99cf682ae408ba00d69d7eb079a814ffc5f4542d35b1eae7320994a5f659",
+      "package_tree_sha256": "493af6bec9ab4d24ec3dcf3dc73e0e782b3daf7ebb08d46f01aa749e8093a0db",
       "profile_sha256": "4b4a016956ece856038c2a3a001f1e8a52d21614117980d1ed3ebe14fefa9dbf",
-      "manifest_sha256": "661ffd30d0b8a673b617078f47cf39d413a61851cf30a13a1d9a6d19296456b6",
+      "manifest_sha256": "1cc1d99631373037bbb68d5cf0c7adf2381759cc7e45fc113a6b76e19b5a30d3",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-progressive-hint-ladder",
       "raw_skill_id": "education-agent-skills-progressive-hint-ladder",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2575,15 +2667,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "b7d48097caa50093590191625a13a66f06a8868f93cf3edf5c2a677b8a9b4e41",
+      "package_tree_sha256": "9b6be2d5997d199e5e422dc8f2ff141a2419f615bfddcce0be8a5844e6ff248d",
       "profile_sha256": "494ead86e6722cf4ee09e7806d869144fc6287eb90062e140041404d7477879e",
-      "manifest_sha256": "e74df6c91d32cfad1fc53de60bb4801157616160a45e0ee88bd04d2eea633f05",
+      "manifest_sha256": "9f88244620e3172c9ba9094a237afa530a83a2addd7754697b51db8dea286fba",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-project-brief-designer",
       "raw_skill_id": "education-agent-skills-project-brief-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2603,15 +2696,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "4e4be019df868ec837f5a0258b87fdbab9b8e3b3c15a637a35750ff976637fe2",
+      "package_tree_sha256": "9e447dda8de0a4c6365e69c4e48dfb1407a28762ba87590a7f12fa2b28719af5",
       "profile_sha256": "ca00f57366e6c3cd592d56ab4733be85d5fc8a9ef758698b7d9fb81c3e30d1d7",
-      "manifest_sha256": "f7d77076fd597ecea1644270e93675817e44adba640ec9fbca92e4d7d37c9739",
+      "manifest_sha256": "799375b125c27207e712f48ab25d5dafa8b603225e361759c3b19e6a0347aaa5",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-prompt-literacy-sequence-designer",
       "raw_skill_id": "education-agent-skills-prompt-literacy-sequence-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2631,15 +2725,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "9feccbd24319d14c4e834af75c6c37fa6666823d85742e65edd0d7f8426e1e0a",
+      "package_tree_sha256": "5118e0081fe533ddcb1e5980cf056e38b579677cf3c83592bea94911cc862f58",
       "profile_sha256": "b17f78b34c0b39e4f71ebe27f4cc93316b593f5f98b08e9353966003fd4b36b1",
-      "manifest_sha256": "22d6a65c55957f61e407bb0cd39ae2f5e662a2316baabda09534b38efe4f42a8",
+      "manifest_sha256": "d8056e2fc24a34ff9bb8e3b408762d5bbef9a6fa2895a61eab705b1a5a3095af",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-reading-comprehension-strategy-selector",
       "raw_skill_id": "education-agent-skills-reading-comprehension-strategy-selector",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2659,15 +2754,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "413a93897019873f8ea809ad2ff97a49296f5dd2fb69233914c68f811760db0a",
+      "package_tree_sha256": "6552c1a95d9dd6c76e44de4d583266e3c7ad8bf563e07934a6b151e6a2762a1a",
       "profile_sha256": "add0b7eabba52684917888d294dd01184b2a01367349f5a3efb7b17890e04255",
-      "manifest_sha256": "23ad52da493222eb2d147daabce9666cbfc7d2c755438e7e36226630b7f85e73",
+      "manifest_sha256": "a1d03e6b37845db16ee874a3a6849282a86e4b802d7ab3207c0472fb92a018bf",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-reflective-practice-prompt-generator",
       "raw_skill_id": "education-agent-skills-reflective-practice-prompt-generator",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2687,15 +2783,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "b1e1b062156cbcb1b577bc3d5f2781e3abd26d0bb09f3c640d968018aee4c77f",
+      "package_tree_sha256": "efe1435ae4bc2c7a3159ab53cfa711a028cf8eb59f8c0113348133b437dfc597",
       "profile_sha256": "e5638e2b6ca03c45440f0a980e87339c4dafd745c3f59b05b1f17db168779d1d",
-      "manifest_sha256": "b13ae359e6f8e374daf606dde49f741d2838936d039eaa941548e7e0fd184e1a",
+      "manifest_sha256": "611d8817997010e702f7dc3132d187b3cf99ae979f74c1cafa792cc0d45e2030",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-reggio-documentation-protocol",
       "raw_skill_id": "education-agent-skills-reggio-documentation-protocol",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2715,15 +2812,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "4de45a1a1ef8638bf16b58bb9dd0b0fc49dbb64d049bbe25900085909e0ab557",
+      "package_tree_sha256": "196a17d1adcc2ee76f3d338f597db995759ab3fde8f37d8854d9c6277cbd13be",
       "profile_sha256": "adae98da37d64ac99182d030eb13e6367da5936e6ea0b8b41a0ef2a67cfb8ee5",
-      "manifest_sha256": "11f714df8dac31e4edbc8fd8d1c6b8d4b53eee4dbba5401f4c8a83fd2765e3fe",
+      "manifest_sha256": "3c93b9ec563d3d9bbeab067122fff79424661a6b92709e1b07ae98fea3817ad6",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-restorative-practice-protocol-designer",
       "raw_skill_id": "education-agent-skills-restorative-practice-protocol-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2743,15 +2841,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "2c37bb692b99696474f4c56d8e37050523b436f473118de53731f5459dd2a991",
+      "package_tree_sha256": "fba42e3c855ce85860bfbb94b79dcef853f426597e46ffc129590791fd6016fb",
       "profile_sha256": "1b435296752666a00297314abaa7f149be4bd1aa84d50490d403e3eadc798900",
-      "manifest_sha256": "ef3549e17235434db215b8e6717ff20f77141760af8486a3435b6487a316e12a",
+      "manifest_sha256": "29d5141e95eb0d29a9c71537668370c2df0f1256473a6b0878c918bcd97f4c65",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-retrieval-practice-generator",
       "raw_skill_id": "education-agent-skills-retrieval-practice-generator",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2771,15 +2870,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "549a83c0079c9bd69cd83225708440a082da8ec8ed865257f918fffa2bc20392",
+      "package_tree_sha256": "824b07fe408c561525ead6d2a88470a8e293de6aa75e38ff5a4482d37d2fac58",
       "profile_sha256": "d32193a43b81d5be344021ec65afdb1539550937b171faaafb0bdb3af885ab3d",
-      "manifest_sha256": "4ef379c7403bd004c100685f81390013cc81725efa533061c9a191afdbbca9df",
+      "manifest_sha256": "7701357dc1ef518620569e68da64574f6ccdaa156664ba8d7c66aea0e58db776",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-retrieve-first-gate",
       "raw_skill_id": "education-agent-skills-retrieve-first-gate",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2799,15 +2899,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "63dc13ff95c5ce3ee7d7a5e204400016b843baff0a8899f9be074b3c36fb006f",
+      "package_tree_sha256": "09b3905c564844832607917378c3b8ecfe7fff0c5da7a9343faa9d056b15773b",
       "profile_sha256": "93662ba8cc0021796460f4ab65c851b4fee4e7492fad791f1d132faf4de633d8",
-      "manifest_sha256": "1e9d042356721085fc733645b212b0c7a4a44e6d409c12fdd49552f454bc7bb3",
+      "manifest_sha256": "7d99072546d2731724e659bbfb32d099244378314353ed8d3714dda0b3dcd709",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-ruler-emotional-literacy-sequence",
       "raw_skill_id": "education-agent-skills-ruler-emotional-literacy-sequence",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2827,15 +2928,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "f9a9e7c7e4d2e6f63e5f566ed331eab1896c647220d929cfa3d168adc3346e22",
+      "package_tree_sha256": "1e0362cb06feed89fb95fe7228771e935b15d2d2e3752d900303ee52b2f7dab2",
       "profile_sha256": "ad58a406e3ef3608750d23de9c7d339419eb3075d41ec718d54ffd532583900e",
-      "manifest_sha256": "5b235dbe8518fa8818d591c1b9afc4f59815def5333019a9b429b7ad21578be3",
+      "manifest_sha256": "faef2ea496436d7677ea290411dc7ad1e6c1665737da791544950572b097c025",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-scaffolded-task-modifier",
       "raw_skill_id": "education-agent-skills-scaffolded-task-modifier",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2855,15 +2957,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "88dfdf69dce1df2d5185b864a89cc4238d7ecd5f3ad22fe85a3130b9a2bf4d83",
+      "package_tree_sha256": "8548ce71df144f2fba0cc0698c5f6eac987feb832ab987000d42965c1d9a0726",
       "profile_sha256": "52d012d2ea0390bc2a25add5612bf1a43edc26540e36bc6f17698b5f34111eaa",
-      "manifest_sha256": "62ab1284b42e4d30d69af862bfaaa11319b242ecb550141c4e5effc683053471",
+      "manifest_sha256": "e980641604f277743dc7b3288cf2d6614c583df1c332393ca448ec7a13f23755",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-scope-and-sequence-designer",
       "raw_skill_id": "education-agent-skills-scope-and-sequence-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2883,15 +2986,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "50306fdc03fa023c17b5111181e558eb576df185389c117293ac8f63fe62c331",
+      "package_tree_sha256": "85a451fac0c1c497dea91923ffc1fa4f2fe37e173ad86cdff7f601ccc480c2eb",
       "profile_sha256": "c6f6a70e2973e949d9919ae384702558da2a92a6b2369b98f3e3bef89b3d321f",
-      "manifest_sha256": "51ea1110f1870ea2651c7e1f763d19a5d30130cdc11501243f43f88fa0b1c496",
+      "manifest_sha256": "9ce56cda69796baafb9d5d1c83a6fa8687b0c0a791f057bd06a5ade3684da68c",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-self-efficacy-builder-sequence",
       "raw_skill_id": "education-agent-skills-self-efficacy-builder-sequence",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2911,15 +3015,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "ebd1fc42fc79c097010ee8ca8530c99c00b9140d783a46261482220a732f69f9",
+      "package_tree_sha256": "40659f8df08f0e661e5f418e4036eabf5a0b5116daaf5ded116c239aabccc6ce",
       "profile_sha256": "cdd38da2ca535c0ca9806add3d91c62eac06ae8bc0fcd410c231d62e6be29f79",
-      "manifest_sha256": "c51aa6b3ccb06e5cef94dbe216eac8f740308f1aa79fd73429a31f01032f0753",
+      "manifest_sha256": "895373158242c7874e3b1de33b2cccad2bccdbc3b38c14cf634aa46faf8407cd",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-self-explanation-prompt-designer",
       "raw_skill_id": "education-agent-skills-self-explanation-prompt-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2939,15 +3044,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "9c7fe7442556b0ebac310ab8187b159eaef10d3f195b69939d07541348a264cb",
+      "package_tree_sha256": "76ed57d87eff495ca93d2f4cf12b12123268ad83bfaa63dd30b5e283dd864214",
       "profile_sha256": "aff726b767e8c53be4e8a62fd877dcb02aa1f8f2b0bc87dab42c246195f6d39b",
-      "manifest_sha256": "5caec11b43d3d4fc48f756f6383df361f519f755ec37a36165b20a2ca48c4200",
+      "manifest_sha256": "356ab6ba3439af033d33cc8ac73ef7a7c0d7588a9e5823b2238d7a31132c960f",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-self-regulation-scaffold-generator",
       "raw_skill_id": "education-agent-skills-self-regulation-scaffold-generator",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2967,15 +3073,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "14e6521ab57c0398d19c0201aca04c6644840b9d5d2a6c72a662b6a7456ab0f7",
+      "package_tree_sha256": "d151f75593a78b258160345cc761a65e9b7dc0ec4d55633db1ec688d73bd3ad0",
       "profile_sha256": "89d2539b3d6df98b385a929e984058d7ebb704e3da7ea37d4ebb95ded7a9083a",
-      "manifest_sha256": "21a8015999ec56e3fe6ba455bc12339b575936bb65a24a9c09341a0fb1efcfa2",
+      "manifest_sha256": "45ee6b5696d2ced70e36d826f0cbd068e19acc39fea6ebf76ded399208f4d8e8",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-service-learning-project-designer",
       "raw_skill_id": "education-agent-skills-service-learning-project-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -2995,15 +3102,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "f2a2409844cbc4f5ce261915a40ebd16f54b6ddca659d28925406c302ffe4270",
+      "package_tree_sha256": "c5f15e1facfe50b9faed0e355df5e0ba00c17f7e8968f016c6a4275f1efc92c9",
       "profile_sha256": "06884b3be35d7fbd4f5e642d0adf94a36783d7b489330ba4f2862bd5b0b342cc",
-      "manifest_sha256": "676b0e9464bde90fc4bf15888c6e6f6546631008d0e1bd19e8afc875a37f7503",
+      "manifest_sha256": "bef349f9c5e1fbc935b59356431a286f756769fefdf3305e944dae120ae04206",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-sheltered-instruction-lesson-modifier",
       "raw_skill_id": "education-agent-skills-sheltered-instruction-lesson-modifier",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3023,15 +3131,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "819c04cd517f617e5505959e1b4a255d172906e0ade18e5823dc162b1988fe93",
+      "package_tree_sha256": "a31af57afe08d89cc2fd7e519ccf3de2e385f854569169bc346acfa5fe2a3d5a",
       "profile_sha256": "857f8e274b62f235af5e9e3bc5902264353b2ee1fa9d7f5fc5d3aa1d69b33740",
-      "manifest_sha256": "f7e2cd9e4627e4595de4abd394310fa1df24b7f3c5fc2e243b05756fd2553217",
+      "manifest_sha256": "af87dd92e9ec82da553cce642681d72fee9dd85105e253e15f41d27014ed9690",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-socratic-questioning-sequence-generator",
       "raw_skill_id": "education-agent-skills-socratic-questioning-sequence-generator",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3051,15 +3160,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "e29cc95f9156cb1763570ef022ed3e75eba4da42372edc393fd4ce5494072cd6",
+      "package_tree_sha256": "936a35bca4b0e1024287ee7045c426ef0b27bd2daa131808bc9aef658a575346",
       "profile_sha256": "24dfb2d443359536f075342772b94bd47ae547ac127d833b3376488ef1c068f8",
-      "manifest_sha256": "54cb32fd9df04cffc9c3c3611c96473b41c79ba1022e97065d25a4127b94bc17",
+      "manifest_sha256": "55701479eed02e93138e616f4c794fa0f0aafe5bdacc5a490a0f3493107e7c9b",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-source-credibility-evaluation-protocol",
       "raw_skill_id": "education-agent-skills-source-credibility-evaluation-protocol",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3079,15 +3189,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "3e9a1d0a73ef6fdf19b806ef64a91aa949998b5b468bb4cbcfc2bf9087c1db1a",
+      "package_tree_sha256": "338e643135056efed71ec158f562029d01128f7cf3df45736c2da87fe218f94c",
       "profile_sha256": "960e228f838d5dd89259fd8fceaa99ced89c2c82031d2ac8383737c1031e00dd",
-      "manifest_sha256": "c541d24c933a144ba8079b50419d079d7a1e1360e199649fcb7da01b5acdba22",
+      "manifest_sha256": "8b7562d12a246786178857409d611bed1e8014443ed71306e05ccfa474ae11a0",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-spaced-practice-scheduler",
       "raw_skill_id": "education-agent-skills-spaced-practice-scheduler",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3107,15 +3218,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "05f565921ec6994aaffd7569f3d1d1761ccc7ec5bcde387be34576e52b0880b8",
+      "package_tree_sha256": "39b1b00788dc7a394ee584c6a7d551d60fcf21d8694e2bbec57b4e433f96dc52",
       "profile_sha256": "d28c6df8e987862d1c26d890df83acde39605e1f92a11834e9d7e2ba6869b285",
-      "manifest_sha256": "88437839bcca369de1897eb5b81d29433beac5132c6a58024944d2de1f61ba01",
+      "manifest_sha256": "081758ef9399d25d18e5376e95f49cbf70bce19b2faadcd9f85a39e743e4e9c3",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-srl-session-wrapper",
       "raw_skill_id": "education-agent-skills-srl-session-wrapper",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3135,15 +3247,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "ac7d42a6d534a2ff801962c820fb0af9886a327ab67a798de8b36de459616289",
+      "package_tree_sha256": "48bed42202488a2cf1a70417f0452a6ca0526ef54466f1ecd8f01822152a4a26",
       "profile_sha256": "c357c9bd37ba1295b0e49c95a7bc4ddac612502b7cbb9bf4bd08b0875b25b988",
-      "manifest_sha256": "73bcb96ef75b34ca948d85637ffc58080c8fb4794bb8a7b8c32f9f81c098595e",
+      "manifest_sha256": "c6c669bcdc9ffe3f71115cb6b00a7429dcb072cc1138cf323e6e1c833281a14d",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-stuck-and-error-diagnosis-coach",
       "raw_skill_id": "education-agent-skills-stuck-and-error-diagnosis-coach",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3163,15 +3276,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "62d1d3cece6ed7d5de62fb431c6e12e1e8b2060e0a3e238cb22e4e85f82b5891",
+      "package_tree_sha256": "386d845ad715b75481ff874baba16609bf595c1de3bba5af18283f166c876f6c",
       "profile_sha256": "fc921575577f4dbb0ecaffab8bdf4683c8f86a849d0b988777a666074aaac121",
-      "manifest_sha256": "a1a959f133a84908a7b3707477d41a2efc7406a87cfe4ba466a24f88f901e7ac",
+      "manifest_sha256": "1f2285d5a3623a668a47e45b5bbd472e3de196ba66e28f8ca420611ddc1e5adb",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-study-strategy-selector",
       "raw_skill_id": "education-agent-skills-study-strategy-selector",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3191,15 +3305,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "dfe1f68c08bc9c7695799ceae05f02d78bfadafde3a364028b2774a5b82795ff",
+      "package_tree_sha256": "8dfbbf8533110a69fa8940e37e38ef00ee2ac54cb9fa1f039cfb2407d66d4a4d",
       "profile_sha256": "1a8e3a008327b3934790b2d9343f061778d5c94e24443645b44e4ff17be4bf9d",
-      "manifest_sha256": "01eb8491573a975a941693c68dc7e732d64bc0d29abf4536a82335cf72f5acdc",
+      "manifest_sha256": "abc70f68f1eb989cd90939d96c4e20e0147ae4512613c751d2ba7ceb3c6165b9",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-systems-awareness-iceberg",
       "raw_skill_id": "education-agent-skills-systems-awareness-iceberg",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3219,15 +3334,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "15fdd129680a717ed6fb833afde464b32ee94caec4d92359a04bd4cc48ff253c",
+      "package_tree_sha256": "07d7a67be32ee0d5c4dbd0fdbd7ea66edc49ac591af41a24679b27dca1bc3787",
       "profile_sha256": "1587e2577299af2a3a19b87076246498ca85719efa1d517081babfffe0b65646",
-      "manifest_sha256": "e66e0ccf2c1d12621bb8df73eaaf6404551150dcae08630268ec4da116286a35",
+      "manifest_sha256": "4bdcd7659e98d890a3d1154e37acf7807db74c5e4f12dbf6cbe93c1835c3cee8",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-systems-wellbeing-impact-mapper",
       "raw_skill_id": "education-agent-skills-systems-wellbeing-impact-mapper",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3247,15 +3363,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "47891d800456e49a280a801fe53dbd0f8a890e07ab56a7b7b171239508eac762",
+      "package_tree_sha256": "a146e800bdc9d7a1057e4d636edfe1bcbf4d636e58afa7195eac18c2dc15cdb3",
       "profile_sha256": "f1bcc99d1df372480e01a6492cb4d756ea673379a9e0efdd09820374d849ed8b",
-      "manifest_sha256": "d89bd6bfdb48a75f02129e19f634299b0aea96da069f674fc33781d4b5e9806e",
+      "manifest_sha256": "9ee8281d98bb185f573f548833ab492e7bf9763cd44682a5eb531c4f3813353a",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-teach-back-evaluator",
       "raw_skill_id": "education-agent-skills-teach-back-evaluator",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3275,15 +3392,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "aeab047b0f05013464c032bafdc7c30090fe00ff526c6890062dfcc2ba8f4b53",
+      "package_tree_sha256": "ac6edc3da59f64aa519d254532d8c6811974b36c029e2f501984e377e4db6088",
       "profile_sha256": "9641f6ae84fd8170e30cb5e5692ee9fa5b4e52828220b4c9842cc4d1155fcb2f",
-      "manifest_sha256": "e3412bea4960fe7534873c12dd8d3756a0c76f34d58207a83cdc1744c08c550b",
+      "manifest_sha256": "b5bbe0c8b3eed33e4f39f4580cf58d52c2a8c7988d989d364c1a9c6cfaa31c60",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-teacher-inquiry-cycle-designer",
       "raw_skill_id": "education-agent-skills-teacher-inquiry-cycle-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3303,15 +3421,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "99adb91e62c01f16d4bad44bb662d4e3f72fbe899675b4e10a1757fcb48cd7b5",
+      "package_tree_sha256": "c8dabec889d440eb77f62ee83f537bd959a941a95161c5899cb636b7caacfcd9",
       "profile_sha256": "5940b17ebdf0afda075f6cea2a91213fab34a42c5bef51911642c5898a66f1ab",
-      "manifest_sha256": "a5bae1b016a0c8dab717a2be96689b6e2e7023d9e02c91eb11e60d409ad3fc0b",
+      "manifest_sha256": "696f0c1ee4db845717da14b87a3b11a2dc6b1631edc275a131b5cf45cad20cd3",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-technological-pedagogical-content-knowledge-developer",
       "raw_skill_id": "education-agent-skills-technological-pedagogical-content-knowledge-developer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3331,15 +3450,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "c26aa2c71603fb78b1454d9149cdc1896ed2534cf1ddbe7139ad6c11e8092491",
+      "package_tree_sha256": "6ef258b0175e7ce2da4390a5c821267c634d0f758e8371086dfc0a2f458ce67f",
       "profile_sha256": "7a250728d9901a9aa386b37df61c4816193c46939dcd017c883b92600aa5c9cb",
-      "manifest_sha256": "14ec88f9f8d3fbdd5cc39304db589c23d05f6f58e8bfdd72f5754383203ebbed",
+      "manifest_sha256": "2aeec0d780781775b5c2e44176388baa7e9090d6e4aea803ad57e04a7d12ad2d",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-text-complexity-analyser",
       "raw_skill_id": "education-agent-skills-text-complexity-analyser",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3359,15 +3479,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "fa0f9990396da0285414d6bb5c5e4379d8071d0de6de0640e6d472a1379a43a9",
+      "package_tree_sha256": "8f9c839597530879b3be5428d41e64024571ad6e800c39c1e92851d644b8dba0",
       "profile_sha256": "1c52e413c987542c7b7d53b88c12d281d44a96b3d3280786e738debbe442ddcc",
-      "manifest_sha256": "e25ab332e27507677a427731abce4320a9d925cd00c3e9913740ba35d7e54bb0",
+      "manifest_sha256": "19adedf74707f2e854b984944f4bf9f9b3c75a4fd9769cee17dfe47237cdc96d",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-think-aloud-script-generator",
       "raw_skill_id": "education-agent-skills-think-aloud-script-generator",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3387,15 +3508,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "cbb15f4d09e8725e3bcef6f94366de5d98ec36db0628c617262aa138ff3ed10c",
+      "package_tree_sha256": "dac8a702ce3b73d6db5b6d5f15c92b47e10a080695b7fe98a315f506bf82bd7f",
       "profile_sha256": "774f44af737838248bf06448d00558732d9c05fe391fdbfdb3a9ea113a49b7a9",
-      "manifest_sha256": "6f0f10d936a6d68a761a2404db367d7584c5254c7a8dc2209fc820efd71ed297",
+      "manifest_sha256": "ea47d8af9b9c177b46634b16c64532165be329e0f83e131151020932aefdbeae",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-three-part-lesson-designer",
       "raw_skill_id": "education-agent-skills-three-part-lesson-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3415,15 +3537,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "5ba5e388b48f463e830a6cffbe14dffadb1204543d5c67a631fa53179661d314",
+      "package_tree_sha256": "99a111f66a1abc87f19fd3bb8397aad90657c0f2b433be70eda3cbfa4d5ee742",
       "profile_sha256": "75470e918f792709450697847c16a12beb3fc5dacaea896bbb3a5c14b569730f",
-      "manifest_sha256": "43888ee204ffc9cf8b665d268b807873a83c72701ca5b3348a4332f3e04d2c8a",
+      "manifest_sha256": "b29607f71200a6fca13b44e9ac3b4745a9af168c299ce3f87b6ebe17837a0fb3",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-transfer-bridge",
       "raw_skill_id": "education-agent-skills-transfer-bridge",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3443,15 +3566,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "d648a91a5073e8f9a3f24d5318a828920d963a748e095a65cf28ae49b6fe9f3f",
+      "package_tree_sha256": "7cc2b7239d7867a4dafa219c924ec6b6e28bcedaf665a2b20f633651a86cc2bb",
       "profile_sha256": "f944a4eb428bbf4065bc5f8dbf1b7653cb0d0789693727818d94974b83cf39e2",
-      "manifest_sha256": "db568db6d91a7b863af0bed3288c5a435d00b79db0f53757abc21ad31b63647a",
+      "manifest_sha256": "1aba6805b67d5469e17b84d2ed87a03a6222b7da803696724d5302ca639ce59b",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-trauma-informed-practice-designer",
       "raw_skill_id": "education-agent-skills-trauma-informed-practice-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3471,15 +3595,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "474d809ed4724f0410c36ee56edf9baa77889389e40afeaaef23d0378188dfe3",
+      "package_tree_sha256": "a259e083028dcc9c1d592eea223ad6a6d78589270bf986836278ea60213871ac",
       "profile_sha256": "ad03816117c51b18d78182e5401c45eb8be7ab75fcbc528aa8d116feff90997d",
-      "manifest_sha256": "05e8a25f3cd561664902a5c992fb88a26ec2bebea111454ee0f28a076a77ae2e",
+      "manifest_sha256": "264e622859aac4c310ec2c00a58f20f50625b31f486843e4906ab46eec4296b6",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-ubuntu-collective-knowledge-task-designer",
       "raw_skill_id": "education-agent-skills-ubuntu-collective-knowledge-task-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3499,15 +3624,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "8172a86e6e3225c090ea6dfae96883afafa6140d39886a9404d60e39eb823a2c",
+      "package_tree_sha256": "4537b8410ce23eae4865b9c8b60217ca0da4aeff699a74951fdfbcf55bee5747",
       "profile_sha256": "a92457310a8c8d9acf13b4bfcbe06f479e54806bb2db48ed9021f75e1c03b9fe",
-      "manifest_sha256": "4b1eb18dfdacb54903650954d2d05499eba71501212b9dd6a552a2e52e9bec19",
+      "manifest_sha256": "ff11d0a6f94d9789e97389c986b9ec826826c7968b95379ad6eab5d18fae4a21",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-udl-barrier-anticipator",
       "raw_skill_id": "education-agent-skills-udl-barrier-anticipator",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3527,15 +3653,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "6e9bebab076488ea81da63e6d64ac860541091d45143c96151fc54eb694cf4b1",
+      "package_tree_sha256": "01166b075cc202291d5b4fba84cbbbfe97ee813c54ed906ba837e407d25e3ce6",
       "profile_sha256": "ddc1d97728d9a06a49b97c1cb2e212822e15712fe2abfc0f46dfcdb5cd610126",
-      "manifest_sha256": "ea5848a84169698c41c6d916e9f6fc0b6f631c5bbbfddb3425dda38f7749ed5b",
+      "manifest_sha256": "33bcbe9150b53dd730a06272ec5ac59b90ddec7b6e4e7fbfe4e5bb9c8beae9a4",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-udl-lesson-auditor",
       "raw_skill_id": "education-agent-skills-udl-lesson-auditor",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3555,15 +3682,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "656ce8cd20610de800681c9b7fb0e08349046e497be904cdfa64891fbd4b8b69",
+      "package_tree_sha256": "13cde535e8869bc36dacf24330460871af2b45516f3e4829897c2dda5b476e98",
       "profile_sha256": "2fe5938cd6b30868bf5f7a17629d8c1df770a69901ab848bb7b7d75ee7f5683b",
-      "manifest_sha256": "963b5baf2196605ed3f12d7aaf6f16099bb57819222d20369bf5071dbbe171f9",
+      "manifest_sha256": "9984786562c3d6278f2c05b4270dfe5736ceeec1159db05cad5f6011fba3e0be",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-udl-options-designer",
       "raw_skill_id": "education-agent-skills-udl-options-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3583,15 +3711,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "706ec574322fd726756a29d398fed82ef5ab3b6c63ef569ed63fe40da7f50ee2",
+      "package_tree_sha256": "2beb4a33b05927aee9c1a25f8e042417ffb28ca5a93bd61ea9a508f5c74de976",
       "profile_sha256": "fa2c777fccd35b7bd0ee0d4a4e8f5ad58a10560048a81e52528ad01c95095371",
-      "manifest_sha256": "48a1b28090cbd8b1034e0cf23618d220c5665c60d9f1a0388fa30f935f8a0b05",
+      "manifest_sha256": "ff14a8c5da74116f7df6c17a9d605cd0f221b21b1adea7449b0a3f5e5ca09618",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-unassisted-evidence-checkpoint",
       "raw_skill_id": "education-agent-skills-unassisted-evidence-checkpoint",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3611,15 +3740,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "f7270a73f233cfeade1a5b1d81cfd5a345f3c41fd0c93c054cfe8856caf02a1b",
+      "package_tree_sha256": "f5be1d0cac492ed2c244ac6d6a8821a287d2c114405bbb7ac2bcad3801e0f5d7",
       "profile_sha256": "838e95c8016c518c1ae3c05bd2e6d3bb5c8e70b40864c91d92f99ccd5c521ef4",
-      "manifest_sha256": "d73a5ade57a506e353285f88626c6be220854d13aa866f3a849cac2ec90d5562",
+      "manifest_sha256": "651f1321731c04466a75b90a0639ead9e9cab3f2591e0805a2c9d50fffdb8a54",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-uninterrupted-work-cycle-designer",
       "raw_skill_id": "education-agent-skills-uninterrupted-work-cycle-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3639,15 +3769,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "136f0663f07e3087c46609ec2d9b2c1447257f91581133d7847f4dde33860000",
+      "package_tree_sha256": "9f770be8348adf7327237652df4a271c5cb084b045576d1f91a0437158acce4f",
       "profile_sha256": "9a1c95a7699f707d5dc725f6e935a666561f017eaa52ab80efba224a369f5e9e",
-      "manifest_sha256": "4d4c119685bef562a3614e80d493bd596abcf97ae461a1c7725e039bedb0f779",
+      "manifest_sha256": "14c5f4802ccb6d4a5eedbaf75d7ffa1fef985c0979fed384b4499b8d538e2753",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-variation-theory-task-designer",
       "raw_skill_id": "education-agent-skills-variation-theory-task-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3667,15 +3798,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "3f0f99fbbf55a2dc71505a69021507b1f6cfc35eefb6d4e42b1556771ca89b16",
+      "package_tree_sha256": "662b483a9db400a3b3d5eca25865072c5271c48d9baf018eaa19d5c5f3124389",
       "profile_sha256": "9f6d1867eef6306ce28f2bd3274bb91500cc39376e0f987b81e378c18c353ce1",
-      "manifest_sha256": "cbf5aa0eb8118ec6566fbc6b7e6b1ff9386183df31b8ce6984b48cd96a4e9e28",
+      "manifest_sha256": "367970f5e353ddea306dd53ac41c4bf005286994f4753bd36d9614d18b4e3ef4",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-vocabulary-tiering-tool",
       "raw_skill_id": "education-agent-skills-vocabulary-tiering-tool",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3695,15 +3827,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "a8e0f203e8f7aab9ffaa22c7a6ed29abdbf38b162641f4ab1c3300e150cbf0b1",
+      "package_tree_sha256": "ce50ec27156d939723f9f1aa8f34a8496b2047e903516427ad7ac22c9d8737c5",
       "profile_sha256": "10ed485c181161b6d394c8366ae07bb5cd8d2c284f96d5c88ddadd76e6ee00d1",
-      "manifest_sha256": "de0d75673595c38ed09b28e6ec566f61c9e759495bdbde710784b9ad73ca36f7",
+      "manifest_sha256": "1e6bebce3ef04613315f614c3d4d1ea1f1d505eef78f7793c0709c41d3c9d918",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-weekly-agency-review",
       "raw_skill_id": "education-agent-skills-weekly-agency-review",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3723,15 +3856,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "551d01b931d48a0f10d6bcd4c917dadec6a2c121ef20f75fe00a9a321d78e45b",
+      "package_tree_sha256": "bbd16dad9bc0575313a852c8312d552c788d9d94bb9ed4ad7025949839470b3f",
       "profile_sha256": "8d83df2125dbf7c9c1f117381e2bc062b647b73df0207eee5583f983a9bedca1",
-      "manifest_sha256": "5574b9997037ba1c20bb6520336da2a621447b9355af97276310db691681c317",
+      "manifest_sha256": "f31765130dc3fe9eac94668bc39906f0be1e0b3f7a19b0993e1cb78c607308c6",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-wellbeing-learning-connection-mapper",
       "raw_skill_id": "education-agent-skills-wellbeing-learning-connection-mapper",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3751,15 +3885,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "5e72d3e0ec03b912440bfa03ac3841b37bd243ed79c649d9bb6a1c9274026d81",
+      "package_tree_sha256": "683c6b1711a881c20b668540ec2b05a0e4f56418a3709e0d584c026cd7ed74c9",
       "profile_sha256": "570a10b531cce81ae8e94525f9ee3a604d5db00f5ca3d06db974eb922b72e782",
-      "manifest_sha256": "d8ba4413d8904bbe58057ce0fe9825edc0be8f1b001bde4569930ee5dd8a4db5",
+      "manifest_sha256": "6390a27c1ae74b380aed4b8ec5fc7568779705b1b1cdcfd514be839e69b18075",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-worked-example-fading-designer",
       "raw_skill_id": "education-agent-skills-worked-example-fading-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3779,15 +3914,16 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "81c379d98bad804c0c4e5a47def9149e1c2de49eec44837684bbb7c06a1cec9e",
+      "package_tree_sha256": "be356709a134f1abdbb98de40353d56d320a496a8e29f6a4a173533077e531fc",
       "profile_sha256": "88a219c8823d6b588e97b3b5a49e3035015781318434d795f67a0d199b00e578",
-      "manifest_sha256": "0e5ad7164026b97ed53bc4a778f40ce5e6da4ff8cfbc5a2d7e5e660c5436ca6b",
+      "manifest_sha256": "af5c51df6de00b3a03e81852634e80f9362bc2e694f8c8ff6ebbc3d45132ec43",
       "files": 3,
       "tool_files": []
     },
     {
       "capability_id": "plugin-education-agent-skills-worked-example-to-problem-solving-transition-designer",
       "raw_skill_id": "education-agent-skills-worked-example-to-problem-solving-transition-designer",
+      "license": "CC-BY-SA-4.0",
       "execution_type": "llm",
       "class": "analysis",
       "node_kind": "producer",
@@ -3807,9 +3943,9 @@
         "conclusions"
       ],
       "required_ok": true,
-      "package_tree_sha256": "eba5ea077e4821adb03bd76516e467805a7fc8fe676eb9ae1821bcb20a8d88a3",
+      "package_tree_sha256": "0bf76b37f0d0ad76e6233de3ebb42401bc9db4d6489736fe6e2882ced5a64202",
       "profile_sha256": "bee0ae3c2757329b05ed19ad0791fdb85f5bd99149011e9fbf26073200e241fd",
-      "manifest_sha256": "f4f55ceb012b54f7d29a800e756d9297b8bfa5cd7d51ff2e355031e52c710506",
+      "manifest_sha256": "94859c8ff4747702fe11145a71ecbe2c76c398200537ae25fb940836ff4adf32",
       "files": 3,
       "tool_files": []
     }

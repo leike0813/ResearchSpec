@@ -48,19 +48,19 @@ knowledge_refs:
   - knowledge_id: sas-references-api-reference.md
     path: references/api_reference.md
     content_hash: b4162502b68085b97c8c1bbcbeff332c95bc1bb2fd53e049a00a11cf41718d86
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-scripts-basic-protocol-template.py
     path: scripts/basic_protocol_template.py
     content_hash: 686fa264c76047d1ad3d0dbed7db9d78039a5ab3ae42ade5528d83dc9874f890
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-scripts-pcr-setup-template.py
     path: scripts/pcr_setup_template.py
     content_hash: fcff6cf747aaff92a16033b67e906b0a3b223b54012fe6b9424dbdb0ff74621e
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-scripts-serial-dilution-template.py
     path: scripts/serial_dilution_template.py
     content_hash: f646b62549474113b999fcafa93a6ac2e64735596ccdb798f8138573a739acf1
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -75,4 +75,4 @@ provenance:
       sha256: fcff6cf747aaff92a16033b67e906b0a3b223b54012fe6b9424dbdb0ff74621e
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-opentrons-integration/scripts/serial_dilution_template.py
       sha256: f646b62549474113b999fcafa93a6ac2e64735596ccdb798f8138573a739acf1
-license: Apache-2.0
+license: MIT

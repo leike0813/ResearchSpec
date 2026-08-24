@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-phenomenon-based-unit-anchor/SKILL.md
       sha256: 45eb49f77507180ec7d36591916a13f38b6c9c97e0099f5de6b8b82a7286699b
-license: Apache-2.0
+license: CC-BY-SA-4.0

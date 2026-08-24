@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-systems-awareness-iceberg/SKILL.md
       sha256: 7a62e0b5106d6839a11f17a4eef60921aa4ee3ede176d33621fdb00eeac6e72e
-license: Apache-2.0
+license: CC-BY-SA-4.0

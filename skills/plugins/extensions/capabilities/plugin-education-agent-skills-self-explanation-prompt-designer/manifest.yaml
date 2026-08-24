@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-self-explanation-prompt-designer/SKILL.md
       sha256: 77c2457dfe879b22fa2c090ab74523ac64a5257ffa02b24b947d924b27a96eb1
-license: Apache-2.0
+license: CC-BY-SA-4.0

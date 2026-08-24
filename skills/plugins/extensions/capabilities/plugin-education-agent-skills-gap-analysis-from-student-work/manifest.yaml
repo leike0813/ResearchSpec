@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-gap-analysis-from-student-work/SKILL.md
       sha256: 9e711771bfc5da0fd935f36575d06467d21584e91594e8c72336f593a6b4d93c
-license: Apache-2.0
+license: CC-BY-SA-4.0

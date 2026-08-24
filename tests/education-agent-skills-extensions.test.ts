@@ -64,7 +64,8 @@ void test("representative Education Agent Skills profiles run through the graph 
     for (const profileId of cases) {
       const startInput = path.join(root, `start-${profileId}.yaml`);
       const advanceInput = path.join(root, `advance-${profileId}.yaml`);
-      const briefPath = path.join(root, `brief-${profileId}.json`);
+      const briefRelative = `brief-${profileId}.json`;
+      const briefPath = path.join(root, briefRelative);
       await writeFile(startInput, stringify({
         schema_version: "2",
         confirmed_at: "2026-08-17T05:00:00+08:00",
@@ -72,7 +73,7 @@ void test("representative Education Agent Skills profiles run through the graph 
         entry_node_id: "research",
         prerequisites: [],
         handoff_inputs: [{ role: "task_request", type: "markdown", path: `task-${profileId}.md`, purpose: profileId }],
-        planned_outputs: [{ role: "research_brief", type: "json", path: briefPath, purpose: `${profileId} brief` }],
+        planned_outputs: [{ role: "research_brief", type: "json", path: briefRelative, purpose: `${profileId} brief` }],
         formal_gates: [],
         cost: { effort: "low", interaction: "single_pass" },
       }), "utf8");
@@ -86,7 +87,7 @@ void test("representative Education Agent Skills profiles run through the graph 
       assert.equal(instructions.ok, true, JSON.stringify(instructions.error));
       assert.equal(instructions.data?.capability.capability_id, profileId);
 
-      await writeFile(advanceInput, stringify({ outputs: [{ role: "research_brief", path: briefPath }] }), "utf8");
+      await writeFile(advanceInput, stringify({ outputs: [{ role: "research_brief", path: briefRelative }] }), "utf8");
       await writeFile(briefPath, JSON.stringify({ scope: "incomplete" }), "utf8");
       const invalid = parseEnvelope(runCli(["advance", `node:${runId}/research`, "--input", advanceInput, "--json"], root));
       assert.equal(invalid.ok, false, `${profileId} invalid advance unexpectedly succeeded`);

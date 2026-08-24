@@ -46,7 +46,7 @@ knowledge_refs:
   - knowledge_id: sas-references-api-reference.md
     path: references/api_reference.md
     content_hash: d06e2ef8d7752c99be4a75209eb81799bb095424966c3204710c4813dbf81b86
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -55,4 +55,4 @@ provenance:
       sha256: b029f53e0985ccea24a9ac15e51aa1163dd328a03efa3006fea439d6d623636e
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-umap-learn/references/api_reference.md
       sha256: d06e2ef8d7752c99be4a75209eb81799bb095424966c3204710c4813dbf81b86
-license: Apache-2.0
+license: MIT

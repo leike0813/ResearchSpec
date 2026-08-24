@@ -50,4 +50,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-udl-options-designer/SKILL.md
       sha256: c6446cd907901592274dd0d0c9f6bc7974d04991b2417e67a3e2efb3aaa217a1
-license: Apache-2.0
+license: CC-BY-SA-4.0

@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-ai-facilitated-collaborative-learning-designer/SKILL.md
       sha256: 97c78e1ef340379cc471f559a65e2d2ce889a24d76f8a66f1cb3b7314756278d
-license: Apache-2.0
+license: CC-BY-SA-4.0

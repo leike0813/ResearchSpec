@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-panel-review/SKILL.md
       sha256: 9167a69ca9cf81dd0aafae02d48ea73e9c2a79b417bf49fd6b7c84494597bc9f
-license: Apache-2.0
+license: CC-BY-SA-4.0

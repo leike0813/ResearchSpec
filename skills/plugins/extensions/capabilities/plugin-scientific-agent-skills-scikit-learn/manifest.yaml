@@ -49,35 +49,35 @@ knowledge_refs:
   - knowledge_id: sas-references-model-evaluation.md
     path: references/model_evaluation.md
     content_hash: 95825afc97206a6588c7fd1f9358e2b130bbbbe6ae5f1032923ee7dbaf6c11e5
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-pipelines-and-composition.md
     path: references/pipelines_and_composition.md
     content_hash: c856b5b21e03b1cf5e4094211a831b69f1ff1d8ecd7b0174ca3a28674aec0033
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-preprocessing.md
     path: references/preprocessing.md
     content_hash: e510e9f984e29162f950500edca082fe8d647c7bdb4ac066c295eb5eead8a2e1
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-quick-reference.md
     path: references/quick_reference.md
     content_hash: c34ef2f24089f22e80a1ca7794b2c089ce9fc07e6286206140c99f56fa30990e
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-supervised-learning.md
     path: references/supervised_learning.md
     content_hash: f257bc6e165777baf81ffdc55c2f6e36bc770a94fb42d3b9b6ed844c3a7f8c83
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-unsupervised-learning.md
     path: references/unsupervised_learning.md
     content_hash: a1f2a140c20e20f20de9c24a3be2ccacece1f192a1745c5f70a0c5e3cb972850
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-scripts-classification-pipeline.py
     path: scripts/classification_pipeline.py
     content_hash: 0879a3643690c4e8245a9e57ebac631751a1178d0b4c31b0bde87ce0c38992d0
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-scripts-clustering-analysis.py
     path: scripts/clustering_analysis.py
     content_hash: aec71c7f1abfbc218eaa7ce000a85a726bef4d7b777038179aa4b44e96ca4d78
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -100,4 +100,4 @@ provenance:
       sha256: 0879a3643690c4e8245a9e57ebac631751a1178d0b4c31b0bde87ce0c38992d0
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scikit-learn/scripts/clustering_analysis.py
       sha256: aec71c7f1abfbc218eaa7ce000a85a726bef4d7b777038179aa4b44e96ca4d78
-license: Apache-2.0
+license: MIT

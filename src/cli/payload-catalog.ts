@@ -45,27 +45,22 @@ export const CLI_PAYLOADS = {
   instructions: payload("selector-options", "One exact graph control or inspection selector.", [
     field("selector", "profile:... | run:... | node:<run>/<node>[@round] | gate:... | decision:...", true, "Current item whose action contract is needed."),
   ]),
-  start: payload("yaml-json", "A YAML or JSON object supplied through --input and validated before control creation.", [
+  start: payload("yaml-json", "A confirmed root profile selector with --input, or an eligible node selector for an inherited child run.", [
+    field("selector", "<profile-id> | profile:<profile-id> | node:<run>/<subgraph>[@round]", true, "Root profile or exact pending subgraph start."),
     field("schema_version", 'literal "2"', true, "Graph run command schema."),
-    field("confirmed_at", "RFC 3339 timestamp with offset", true, "Time of the exact route confirmation."),
+    field("confirmed_at", "RFC 3339 timestamp with offset", true, "Time of the exact root-run confirmation."),
     field("entry_id", "stable ID", true, "Graph entry ID."),
     field("entry_node_id", "graph node ID", true, "Confirmed entry node."),
-    field("parent", "{ instance_id, node_id }", false, "Owning parent instance and child node."),
-    field("round", "positive integer", false, "Dynamic round number; requires parent."),
     field("prerequisites", "non-empty string[]", true, "Confirmed prerequisites, including an empty array when none apply."),
     field("handoff_inputs", "HandoffInput[]", true, "Confirmed input roles; each uses the descriptor fields below plus optional source_instance_id."),
     field("planned_outputs", "HandoffOutput[]", true, "Confirmed output roles; each uses the descriptor fields below plus optional intended_consumer."),
-    field("manuscript_delivery", "ManuscriptDelivery", false, "Current manuscript delivery contract when the route consumes it."),
-    field("quarto_probe", "available | unavailable | unknown object", false, "Static probe summary with checked_at and version or reason."),
-    field("render_consent", "{ execute: true, confirmed_by, confirmed_at }", false, "Explicit consent for the current render action."),
     field("formal_gates", "stable ID[]", true, "Confirmed formal Gate IDs."),
     field("cost", "{ effort, interaction }", true, "Non-empty effort and interaction summaries."),
     ...handoffDescriptor.map((item) => ({ ...item, name: `handoff descriptor.${item.name}` })),
-    field("--confirmed-by", "non-empty human name", true, "Human who confirmed this exact instance."),
+    field("--confirmed-by", "non-empty human name", false, "Required only for a root profile selector."),
   ], [
-    "profile_entry and parent are mutually exclusive.",
-    "entry_point is required exactly for a mid-entry pipeline parent and must be declared by that profile entry.",
-    "round requires parent.",
+    "Root profile selectors require --input and --confirmed-by.",
+    "Node selectors inherit the parent run authorization and reject --input and --confirmed-by.",
     "handoff input roles and planned output roles must each be unique.",
   ], "GraphRunStartCommandSchema"),
   advance: payload("selector-options", "An eligible graph node selector and its output submission.", [
@@ -74,7 +69,7 @@ export const CLI_PAYLOADS = {
     field("--actor-name", "non-empty string", false, "Action executor."),
   ]),
   check: payload("options", "An optional validation target and strictness flag.", [
-    field("target", "all | specs | profiles | subflows | changes | handoffs | tools | plugins | literature-adapters", false, "Validation scope; defaults to all."),
+    field("target", "all | specs | profiles | runs | changes | handoffs | tools | plugins | literature-adapters", false, "Validation scope; defaults to all."),
     field("--strict", "boolean", false, "Treat warnings as failures."),
   ]),
   doctor: none("No command payload. Runs the full current-workspace diagnostic report."),
@@ -83,7 +78,7 @@ export const CLI_PAYLOADS = {
     field("--limit", "integer 1..50", false, "Page size; defaults to 20."),
     field("--cursor", "opaque base64url cursor", false, "Cursor returned by the immediately preceding page for the same unchanged collection."),
   ]),
-  show: payload("selector-options", "One exact stable spec, profile, subflow, Gate, Decision, change, handoff, or tool selector.", [
+  show: payload("selector-options", "One exact stable spec, profile, run, node, Gate, Decision, change, handoff, or tool selector.", [
     field("selector", "profile:... | run:... | node:... | change:...", true, "Exact item to inspect."),
   ]),
   handoff: payload("yaml-json", "Optional YAML or JSON replacement payload supplied through --input; without it the command renders the current handoff.", [

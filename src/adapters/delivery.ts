@@ -1,4 +1,4 @@
-import { lstat, readdir, readFile } from "node:fs/promises";
+import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -12,6 +12,7 @@ import { CORE_SKILL_IDS } from "../core-skills/catalog.js";
 import { MIT_LICENSE_TEXT } from "../licensing.js";
 import { filesForSkill, pluginSkillRoot, resolveDomainSelection, type LoadedPluginRegistry } from "../plugins/registry.js";
 import { installationKey, type ManagedInstallation, type ManagedInstallationSource } from "./installations.js";
+import { loadCapabilityRegistry } from "../capabilities/registry.js";
 
 export interface DeliveryPlan {
   operations: PlannedWrite[];
@@ -42,6 +43,7 @@ export async function planToolDelivery(input: {
   const skillToolIds = selectSkillWriters(selected, delivery);
   const commandToolIds = selected.filter((id) => Boolean(getTool(id)?.command));
   const pluginRegistry = input.pluginRegistry;
+  const capabilityRegistry = await loadCapabilityRegistry();
 
   for (const toolId of selected) {
     const tool = getTool(toolId);
@@ -76,6 +78,16 @@ export async function planToolDelivery(input: {
             tool,
           );
           await addSkill(path.join(skillRoot, "LICENSE"), MIT_LICENSE_TEXT, { kind: "companion-skill", skill_id: intent.skillId }, tool);
+        }
+        for (const registered of capabilityRegistry.capabilities.values()) {
+          for (const sourceFile of registered.files) {
+            await addSkill(
+              path.join(root.root, registered.entry.capability_id, path.relative(registered.packageRoot, sourceFile)),
+              await readFile(sourceFile),
+              { kind: "framework-capability", capability_id: registered.entry.capability_id },
+              tool,
+            );
+          }
         }
         if (pluginRegistry) {
           const resolution = resolveDomainSelection(pluginRegistry, input.selectedPluginIds ?? []);
@@ -128,14 +140,14 @@ export async function planToolDelivery(input: {
 
   async function addPlanned(target: string, manifestPath: string, scope: "project" | "shared-global", content: string | Uint8Array, source: ManagedInstallationSource, toolId: string): Promise<void> {
     const prior = recorded.get(`${scope}:${manifestPath}`);
-    const adoptedHash = prior?.sha256 ?? await existingFileHash(target);
     const operation = await planFile({
       path: target,
       relativePath: manifestPath,
       content,
       scope,
       ownership: "generated",
-      recordedHash: adoptedHash,
+      recordedHash: prior?.sha256,
+      requireRecordedOwnership: prior === undefined,
       force: input.force,
     });
     operations.push(operation);
@@ -154,16 +166,6 @@ export function selectSkillWriters(toolIds: readonly string[], delivery: Deliver
   });
   if (candidates.includes("codex") && candidates.includes("agents")) return candidates.filter((id) => id !== "agents");
   return candidates;
-}
-
-async function existingFileHash(target: string): Promise<string | undefined> {
-  try {
-    const info = await lstat(target);
-    if (!info.isFile() || info.isSymbolicLink()) return undefined;
-    return sha256(await readFile(target));
-  } catch (error) {
-    return (error as NodeJS.ErrnoException).code === "ENOENT" ? undefined : undefined;
-  }
 }
 
 async function walkFiles(root: string): Promise<string[]> {

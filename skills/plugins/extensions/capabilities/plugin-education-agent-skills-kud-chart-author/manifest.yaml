@@ -50,4 +50,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-kud-chart-author/SKILL.md
       sha256: 97e92108361d76e807acb408c475f04d07a810511319883e8a972a0ccfd11251
-license: Apache-2.0
+license: CC-BY-SA-4.0

@@ -50,4 +50,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-criterion-referenced-rubric-generator/SKILL.md
       sha256: f5bb3525c8d40384ebb120670c48ff98281308a1ecdd8bbf670be296ba080514
-license: Apache-2.0
+license: CC-BY-SA-4.0

@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-source-credibility-evaluation-protocol/SKILL.md
       sha256: 31d863cca50fbc66be772dd2e84321f243ce6ba6fcdc44efc2ad810534199628
-license: Apache-2.0
+license: CC-BY-SA-4.0

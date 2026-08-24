@@ -48,27 +48,27 @@ knowledge_refs:
   - knowledge_id: sas-references-building.md
     path: references/building.md
     content_hash: 14c6f9fd8a684b99748801e4219e631d8e9876b7f0ce051e944d337c908f7cba
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-experiments.md
     path: references/experiments.md
     content_hash: 90a490240dfcf75fa6b3a2d94dbd6ab83b869162f9dd1534eae7f9688cab4b9e
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-hardware.md
     path: references/hardware.md
     content_hash: f2fa45c1fb92344d73134de0dc9374acfe3ca69b7a8d038a6b1bb159a165bf34
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-noise.md
     path: references/noise.md
     content_hash: bef62408a68bccbf0c39e6af1b9ac40ef4debbf3ef62e0b620a88a9df9bacca7
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-simulation.md
     path: references/simulation.md
     content_hash: 5653cf1a672fbf21caa24b016e86da6fbde02f25571f13956ddc5637c225c17a
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-transformation.md
     path: references/transformation.md
     content_hash: f77c2709d45cb826e84d0447e3465779245c93c36ed4dbcc806d37ab168b0f89
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -87,4 +87,4 @@ provenance:
       sha256: 5653cf1a672fbf21caa24b016e86da6fbde02f25571f13956ddc5637c225c17a
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-cirq/references/transformation.md
       sha256: f77c2709d45cb826e84d0447e3465779245c93c36ed4dbcc806d37ab168b0f89
-license: Apache-2.0
+license: MIT

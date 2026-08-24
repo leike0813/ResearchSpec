@@ -50,4 +50,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-retrieve-first-gate/SKILL.md
       sha256: adddedb8e3f00c68a49d857e45817eed0a6f4216673e2c9a27eb6097a205a061
-license: Apache-2.0
+license: CC-BY-SA-4.0

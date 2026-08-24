@@ -11,12 +11,21 @@ import {
   recordGraphDecision,
   recordGraphGate,
   startGraphRun,
-  submitGraphNode,
+  submitGraphNode as submitGraphNodeRuntime,
+  type SubmitGraphNodeInput,
   type GraphFrontier,
 } from "../src/core/runtime/graph-run.js";
+
+async function submitGraphNode(input: Omit<SubmitGraphNodeInput, "capabilityRegistry">) {
+  return submitGraphNodeRuntime({
+    ...input,
+    capabilityRegistry: await graphTestCapabilityRegistry(input.index, input.runId),
+  });
+}
 import { loadGraphWorkspaceIndex } from "../src/core/runtime/graph-workspace-index.js";
 import {
   GRAPH_TEXT,
+  graphTestCapabilityRegistry,
   runValue,
   sha256,
   writeBaseWorkspace,

@@ -4,11 +4,14 @@ import { parse as parseYaml } from "yaml";
 
 import {
   evaluateGraphFrontier,
+  graphChildRunSnapshots,
   GraphRunError,
   overrideGraphGate,
   recordGraphDecision,
   recordGraphGate,
+  resolveGraphNodeInputs,
   startGraphRun,
+  startGraphChildRun,
   submitGraphNode,
 } from "../../core/runtime/graph-run.js";
 import { loadGraphWorkspaceIndex } from "../../core/runtime/graph-workspace-index.js";
@@ -21,7 +24,7 @@ import { loadGraphPluginStatusView } from "../../plugins/graph-status.js";
 import { CliError, success, type CommandContext, type CommandResult } from "../types.js";
 
 export type GraphDoctorOptions = Record<string, never>;
-export interface GraphStartOptions { input: string; profile: string; confirmedBy: string }
+export interface GraphStartOptions { input?: string; selector: string; confirmedBy?: string }
 export interface GraphDecideOptions {
   verdict?: "pass" | "pass_with_conditions" | "fail";
   override?: boolean;
@@ -57,7 +60,9 @@ export async function handleGraphStatus(context: CommandContext): Promise<Comman
   const index = await loadGraphWorkspaceIndex(workspace);
   const plugins = await loadGraphPluginStatusView(index);
   const frontierItems: Array<Record<string, unknown>> = [];
+  const childStartItems: Array<Record<string, unknown>> = [];
   const nodesByRun: Record<string, Array<Record<string, unknown>>> = {};
+  const childRuns = graphChildRunSnapshots(index);
   for (const record of index.runs) {
     if (!record.run || !record.graph) continue;
     const nodes = record.nodeEntries.flatMap((entry) => entry.node ? [entry.node] : []);
@@ -68,7 +73,9 @@ export async function handleGraphStatus(context: CommandContext): Promise<Comman
       state: node.state,
       updated_at: node.updated_at,
     }));
-    for (const item of evaluateGraphFrontier(record.run, record.graph, nodes).eligible_nodes) frontierItems.push({ selector: item.selector, run_id: record.run.run_id, node_id: item.node_id, ...(item.round === undefined ? {} : { round: item.round }) });
+    const frontier = evaluateGraphFrontier(record.run, record.graph, nodes, childRuns);
+    for (const item of frontier.eligible_nodes) frontierItems.push({ selector: item.selector, run_id: record.run.run_id, node_id: item.node_id, ...(item.round === undefined ? {} : { round: item.round }) });
+    for (const item of frontier.pending_subgraph_starts) childStartItems.push({ selector: item.selector, run_id: record.run.run_id, node_id: item.node_id, ...(item.round === undefined ? {} : { round: item.round }) });
   }
   const diagnostics = [...index.diagnostics];
   if (!plugins.loadable) {
@@ -86,6 +93,7 @@ export async function handleGraphStatus(context: CommandContext): Promise<Comman
     runs: { total: index.runs.length, active: index.runs.filter((item) => item.run?.status === "active").length },
     nodes: nodesByRun,
     frontier: frontierItems,
+    pending_subgraph_starts: childStartItems,
     plugins,
     diagnostics_summary: { blocking: diagnostics.filter((item) => item.blocking).length, warning: diagnostics.filter((item) => !item.blocking).length },
   };
@@ -137,12 +145,13 @@ export async function handleGraphInstructions(selector: string, context: Command
     const record = index.runs.find((item) => item.run?.run_id === runId);
     if (!record?.run || !record.graph) throw new CliError("run_not_found", `Run not found: ${runId}`, 1);
     const nodes = record.nodeEntries.flatMap((entry) => entry.node ? [entry.node] : []);
-    const frontier = evaluateGraphFrontier(record.run, record.graph, nodes);
+    const frontier = evaluateGraphFrontier(record.run, record.graph, nodes, graphChildRunSnapshots(index));
     return success("instructions", {
       selector,
       kind: "run",
       run: record.run,
       frontier: frontier.eligible_nodes,
+      pending_subgraph_starts: frontier.pending_subgraph_starts,
       pending_gates: frontier.pending_gates,
       pending_decisions: frontier.pending_decisions,
       blockers: frontier.blockers,
@@ -159,8 +168,17 @@ export async function handleGraphInstructions(selector: string, context: Command
     const definition = record.graph.nodes.find((item) => item.node_id === nodeId);
     if (!definition) throw new CliError("node_not_found", `Node not found: ${nodeId}`, 1);
     const nodes = record.nodeEntries.flatMap((entry) => entry.node ? [entry.node] : []);
-    const eligible = evaluateGraphFrontier(record.run, record.graph, nodes).eligible_nodes.some((item) => item.node_id === nodeId && item.round === round);
+    const frontier = evaluateGraphFrontier(record.run, record.graph, nodes, graphChildRunSnapshots(index));
+    const eligible = [...frontier.eligible_nodes, ...frontier.pending_subgraph_starts].some((item) => item.node_id === nodeId && item.round === round);
+    if (!eligible) {
+      const related = frontier.blockers.filter((blocker) => blocker.node_id === nodeId);
+      throw new CliError("node_not_eligible", `Node is not currently eligible: ${nodeId}`, 3, undefined, {
+        selector,
+        blockers: related.length > 0 ? related : [{ code: "prerequisites_unmet", refs: definition.prerequisites }],
+      });
+    }
     let capability: Record<string, unknown> | null = null;
+    const stableSpecPaths: Record<string, string> = {};
     if (definition.kind === "capability" && definition.capability_id !== undefined) {
       const registry = await loadWorkspaceCapabilityRegistry(index);
       const registered = registry.capabilities.get(definition.capability_id);
@@ -179,6 +197,32 @@ export async function handleGraphInstructions(selector: string, context: Command
         knowledge_refs: registered.manifest.knowledge_refs,
         gate_policy: registered.manifest.gate_policy,
       };
+      const stableSpecBySchema: Record<string, string> = {
+        "specs.project": "researchspec/specs/project.md",
+        "specs.sources": "researchspec/specs/sources.yaml",
+        "specs.claims": "researchspec/specs/claims.yaml",
+        "specs.manuscript": "researchspec/specs/manuscript.yaml",
+      };
+      for (const declaredInput of registered.manifest.inputs) {
+        const stablePath = stableSpecBySchema[declaredInput.schema_ref];
+        if (stablePath) stableSpecPaths[declaredInput.role] = stablePath;
+      }
+    }
+    if (!record.handoff) throw new CliError("run_incomplete", `Run handoff is missing: ${runId}`, 1);
+    let resolvedInputs;
+    try {
+      resolvedInputs = resolveGraphNodeInputs({
+        run: record.run,
+        graph: record.graph,
+        handoff: record.handoff.frontmatter,
+        nodes,
+        childRuns: graphChildRunSnapshots(index),
+        nodeId,
+        round,
+        stableSpecPaths,
+      });
+    } catch (error) {
+      throw graphControlCliError(error);
     }
     return success("instructions", {
       selector,
@@ -188,29 +232,31 @@ export async function handleGraphInstructions(selector: string, context: Command
       capability,
       round: round ?? null,
       eligible,
-      required_input_roles: definition.input_bindings,
+      resolved_inputs: resolvedInputs,
       expected_output_roles: definition.expected_outputs,
       required_gate_ids: definition.required_gate_ids,
       required_decision_ids: definition.required_decision_ids,
     }, { stdout: `Node instructions: ${selector}\n` });
   }
-  const gateMatch = /^gate:([^/]+)\/(.+)$/.exec(selector);
+  const gateMatch = /^gate:([^/]+)\/([^@]+)(?:@(\d+))?$/.exec(selector);
   if (gateMatch) {
     const runId = gateMatch[1] ?? "";
     const gateId = gateMatch[2] ?? "";
+    const round = gateMatch[3] === undefined ? undefined : Number(gateMatch[3]);
     const record = index.runs.find((item) => item.run?.run_id === runId);
     const gate = record?.graph?.gates.find((item) => item.gate_id === gateId);
     if (!gate) throw new CliError("gate_not_found", `Gate not found: ${gateId}`, 1);
-    return success("instructions", { selector, kind: "gate", run_id: runId, gate, allowed_actions: ["confirm", "override_failed"] }, { stdout: `Gate instructions: ${selector}\n` });
+    return success("instructions", { selector, kind: "gate", run_id: runId, gate, round: round ?? null, allowed_actions: ["confirm", "override_failed"] }, { stdout: `Gate instructions: ${selector}\n` });
   }
-  const decisionMatch = /^decision:([^/]+)\/(.+)$/.exec(selector);
+  const decisionMatch = /^decision:([^/]+)\/([^@]+)(?:@(\d+))?$/.exec(selector);
   if (decisionMatch) {
     const runId = decisionMatch[1] ?? "";
     const decisionId = decisionMatch[2] ?? "";
+    const round = decisionMatch[3] === undefined ? undefined : Number(decisionMatch[3]);
     const record = index.runs.find((item) => item.run?.run_id === runId);
     const decision = record?.graph?.decisions.find((item) => item.decision_id === decisionId);
     if (!decision) throw new CliError("decision_not_found", `Decision not found: ${decisionId}`, 1);
-    return success("instructions", { selector, kind: "decision", run_id: runId, decision, allowed_actions: ["choose"] }, { stdout: `Decision instructions: ${selector}\n` });
+    return success("instructions", { selector, kind: "decision", run_id: runId, decision, round: round ?? null, allowed_actions: ["choose"] }, { stdout: `Decision instructions: ${selector}\n` });
   }
   throw new CliError("selector_invalid", `Unsupported graph selector: ${selector}`, 2);
 }
@@ -218,11 +264,29 @@ export async function handleGraphInstructions(selector: string, context: Command
 export async function handleGraphStart(options: GraphStartOptions, context: CommandContext): Promise<CommandResult> {
   const workspace = await graphWorkspace(context);
   const index = await loadGraphWorkspaceIndex(workspace);
+  const nodeMatch = /^node:([^/]+)\/([^@]+)(?:@(\d+))?$/.exec(options.selector);
+  if (nodeMatch) {
+    if (options.input || options.confirmedBy) throw new CliError("child_start_options_invalid", "Child-run start inherits parent authorization and does not accept --input or --confirmed-by.", 2);
+    try {
+      const result = await startGraphChildRun({
+        index,
+        parentRunId: nodeMatch[1] ?? "",
+        nodeId: nodeMatch[2] ?? "",
+        ...(nodeMatch[3] === undefined ? {} : { round: Number(nodeMatch[3]) }),
+        startedAt: new Date().toISOString(),
+        dryRun: context.dryRun,
+      });
+      return success("start", { ...result, dry_run: context.dryRun }, { stdout: `${result.status === "already_started" ? "Already started" : context.dryRun ? "Would start" : "Started"} ${result.run_id}.\n` });
+    } catch (error) { throw graphControlCliError(error); }
+  }
+  const profileId = options.selector.startsWith("profile:") ? options.selector.slice("profile:".length) : options.selector;
+  if (!options.input) throw new CliError("input_required", "Root run start requires --input.", 2);
+  if (!options.confirmedBy?.trim()) throw new CliError("confirmation_missing", "Root run start requires --confirmed-by.", 2);
   let command: unknown;
   try { command = parseYaml(await readFile(path.resolve(context.cwd, options.input), "utf8")); }
   catch (error) { throw new CliError("start_input_unreadable", `Cannot read Start input: ${error instanceof Error ? error.message : String(error)}`, 2); }
   try {
-    const profile = index.profiles.get(options.profile);
+    const profile = index.profiles.get(profileId);
     if (profile) {
       const capabilityRegistry = await loadWorkspaceCapabilityRegistry(index);
       const validation = validateGraphAgainstCapabilityRegistry(capabilityRegistry, profile);
@@ -230,7 +294,7 @@ export async function handleGraphStart(options: GraphStartOptions, context: Comm
         throw new CliError("profile_capability_invalid", `Graph profile references unavailable capabilities: ${validation.map((item) => `${item.path}: ${item.message}`).join("; ")}`, 1, undefined, validation);
       }
     }
-    const result = await startGraphRun({ index, profileId: options.profile, command, confirmedBy: options.confirmedBy, dryRun: context.dryRun });
+    const result = await startGraphRun({ index, profileId, command, confirmedBy: options.confirmedBy, dryRun: context.dryRun });
     return success("start", { ...result, dry_run: context.dryRun }, { stdout: `${result.status === "already_started" ? "Already started" : context.dryRun ? "Would start" : "Started"} ${result.run_id}.\n` });
   } catch (error) { throw graphControlCliError(error); }
 }
@@ -240,28 +304,30 @@ export async function handleGraphDecide(selector: string, options: GraphDecideOp
   const index = await loadGraphWorkspaceIndex(workspace);
   const actor = requireActor(options.actorName);
   const now = new Date().toISOString();
-  const gateMatch = /^gate:([^/]+)\/(.+)$/.exec(selector);
+  const gateMatch = /^gate:([^/]+)\/([^@]+)(?:@(\d+))?$/.exec(selector);
   if (gateMatch) {
     const runId = gateMatch[1] ?? "";
     const gateId = gateMatch[2] ?? "";
+    const round = gateMatch[3] === undefined ? undefined : Number(gateMatch[3]);
     try {
       if (options.override) {
         if (options.verdict) throw new CliError("decide_options_invalid", "--override cannot be combined with --verdict.", 2);
-        const node = await overrideGraphGate({ index, runId, gateId, approvedBy: actor, approvedAt: now, reason: options.reason ?? "", dryRun: context.dryRun });
+        const node = await overrideGraphGate({ index, runId, gateId, ...(round === undefined ? {} : { round }), approvedBy: actor, approvedAt: now, reason: options.reason ?? "", dryRun: context.dryRun });
         return success("decide", { selector, action: "gate_override", node, dry_run: context.dryRun }, { stdout: `${context.dryRun ? "Would override" : "Overrode"} ${selector}.\n` });
       }
       if (!options.verdict) throw new CliError("verdict_required", "Gate Decide requires --verdict or --override.", 2);
-      const node = await recordGraphGate({ index, runId, gateId, verdict: options.verdict, confirmedBy: actor, confirmedAt: now, summary: options.reason ?? "", dryRun: context.dryRun });
+      const node = await recordGraphGate({ index, runId, gateId, ...(round === undefined ? {} : { round }), verdict: options.verdict, confirmedBy: actor, confirmedAt: now, summary: options.reason ?? "", dryRun: context.dryRun });
       return success("decide", { selector, action: "gate_attempt", node, dry_run: context.dryRun }, { stdout: `${context.dryRun ? "Would record" : "Recorded"} ${selector}.\n` });
     } catch (error) { throw graphControlCliError(error); }
   }
-  const decisionMatch = /^decision:([^/]+)\/(.+)$/.exec(selector);
+  const decisionMatch = /^decision:([^/]+)\/([^@]+)(?:@(\d+))?$/.exec(selector);
   if (decisionMatch) {
     if (!options.choice) throw new CliError("decision_choice_required", "Decision Decide requires --choice.", 2);
     const runId = decisionMatch[1] ?? "";
     const decisionId = decisionMatch[2] ?? "";
+    const round = decisionMatch[3] === undefined ? undefined : Number(decisionMatch[3]);
     try {
-      const node = await recordGraphDecision({ index, runId, decisionId, choice: options.choice, decidedBy: actor, decidedAt: now, dryRun: context.dryRun });
+      const node = await recordGraphDecision({ index, runId, decisionId, ...(round === undefined ? {} : { round }), choice: options.choice, decidedBy: actor, decidedAt: now, dryRun: context.dryRun });
       return success("decide", { selector, action: "decision_choice", node, dry_run: context.dryRun }, { stdout: `${context.dryRun ? "Would decide" : "Decided"} ${selector}.\n` });
     } catch (error) { throw graphControlCliError(error); }
   }

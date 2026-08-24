@@ -53,63 +53,63 @@ knowledge_refs:
   - knowledge_id: sas-readme.md
     path: README.md
     content_hash: 558f55383ddaee1d82e4467b7f3f2deb3827c88aecbc48f13f0232e88cd6842e
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-advanced-gis.md
     path: references/advanced-gis.md
     content_hash: cba7a139e06687547a99075e23a093f5748cfc909011d5ed789dc06ef7cc4ef3
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-big-data.md
     path: references/big-data.md
     content_hash: d5b2260db23681de496db6e1e599a29d4739109dcd95cf15c885a24038634005
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-code-examples.md
     path: references/code-examples.md
     content_hash: 1946ce4da59a14307fdb41980eef2342d8a110e87edb463c9471505298563551
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-coordinate-systems.md
     path: references/coordinate-systems.md
     content_hash: a5a3ec7310167c1b53a1e2c10a27abfb3e435d4b9a8aeb30fe50e99d0489a69d
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-core-libraries.md
     path: references/core-libraries.md
     content_hash: 58fa8f10ee79a1847f4140a948ae9c7917ecff8e2e7c10c61a1431e181a4ebc0
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-data-sources.md
     path: references/data-sources.md
     content_hash: 5fdcb1f0b5a3484926864b4785d7ea12e42d1d07e610b8dd63512166ff38e907
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-gis-software.md
     path: references/gis-software.md
     content_hash: 1f91e2163fe1db2e9c9cd59377566c3d9210241f89f97670323203a132e6168d
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-industry-applications.md
     path: references/industry-applications.md
     content_hash: cf2819673fd1ebf8edc56adb8ee6854aaaf60302b1e47ac2dbfe04bf7da176a1
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-machine-learning.md
     path: references/machine-learning.md
     content_hash: cd262726b1ff57c83a548ccfd304a9b63699952d5376c08f59774006c5a2b954
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-programming-languages.md
     path: references/programming-languages.md
     content_hash: 9578da560a24f7642d212b77bb745ade0acbf716dd9d3fd915bff02c527cb48f
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-remote-sensing.md
     path: references/remote-sensing.md
     content_hash: b2c730c75c51f763c70639eafebde3e554ce5aedc8c3a5ce00a6c9b1bbb17fcc
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-scientific-domains.md
     path: references/scientific-domains.md
     content_hash: 9e4733e57e993be1584ca95bbc3ac89dc6cc13e625e75cb515531240117fc046
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-specialized-topics.md
     path: references/specialized-topics.md
     content_hash: b0cee8b20dd7920087277e7f3286e7c190355bda210baf38c1b715276051cd81
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-troubleshooting.md
     path: references/troubleshooting.md
     content_hash: 4b9ac3d3c5eac093cd0557eeb209dc208115f18c8555f057b3d369b045731ce1
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -146,4 +146,4 @@ provenance:
       sha256: b0cee8b20dd7920087277e7f3286e7c190355bda210baf38c1b715276051cd81
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geomaster/references/troubleshooting.md
       sha256: 4b9ac3d3c5eac093cd0557eeb209dc208115f18c8555f057b3d369b045731ce1
-license: Apache-2.0
+license: MIT

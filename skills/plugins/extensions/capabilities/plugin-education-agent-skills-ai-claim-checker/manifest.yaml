@@ -50,4 +50,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-ai-claim-checker/SKILL.md
       sha256: 49f5db5ddcdbfb717c25a8dfda75ef5807eeb05623bc8570eab9aa3840b48abb
-license: Apache-2.0
+license: CC-BY-SA-4.0

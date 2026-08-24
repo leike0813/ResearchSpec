@@ -50,19 +50,19 @@ knowledge_refs:
   - knowledge_id: sas-references-explainers.md
     path: references/explainers.md
     content_hash: 2c3ea2706977790aafa13024b876b75bc198886cf75c83cfb29518bf0d5f108f
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-plots.md
     path: references/plots.md
     content_hash: cb1a7392e4592f67a5a231ba33627342e4343876ce715e83eb0fa461ebd3f6ed
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-theory.md
     path: references/theory.md
     content_hash: 7afc74836fa44354799727f22fec89bd6b86b798d6b56bbf0f642c9f87cf1610
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-workflows.md
     path: references/workflows.md
     content_hash: 649baa278103cce7c54be74ce7e97ce82328deb64a5599f74bd0a11d6739e864
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -77,4 +77,4 @@ provenance:
       sha256: 7afc74836fa44354799727f22fec89bd6b86b798d6b56bbf0f642c9f87cf1610
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-shap/references/workflows.md
       sha256: 649baa278103cce7c54be74ce7e97ce82328deb64a5599f74bd0a11d6739e864
-license: Apache-2.0
+license: MIT

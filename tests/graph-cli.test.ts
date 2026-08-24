@@ -68,7 +68,7 @@ void test("graph start, instructions and advance form a CLI node loop", async ()
     const startInput = path.join(root, "start.yaml");
     await writeFile(startInput, stringify(START_INPUT), "utf8");
     const ctx = context({ cwd: root, command: "start" });
-    const started = await handleGraphStart({ input: startInput, profile: "minimal", confirmedBy: "researcher" }, ctx);
+    const started = await handleGraphStart({ input: startInput, selector: "minimal", confirmedBy: "researcher" }, ctx);
     assert.equal(started.ok, true);
     const runId = (started.data as { run_id: string }).run_id;
 

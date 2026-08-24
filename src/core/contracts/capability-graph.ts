@@ -102,6 +102,8 @@ export const GraphSubgraphSchema = z.strictObject({
   subgraph_id: StableIdSchema,
   profile_id: StableIdSchema,
   profile_version: NonEmptySchema,
+  entry_id: StableIdSchema,
+  entry_node_id: StableIdSchema,
 });
 
 export const GraphParallelGroupSchema = z.strictObject({

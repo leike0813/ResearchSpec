@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-cpa-sequence-designer/SKILL.md
       sha256: b5ac128f142f773ab8461847cd1e0a2f2189a95d5a1cd14a891e07787efb2e28
-license: Apache-2.0
+license: CC-BY-SA-4.0

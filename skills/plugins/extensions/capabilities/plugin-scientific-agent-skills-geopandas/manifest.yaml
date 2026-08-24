@@ -52,27 +52,27 @@ knowledge_refs:
   - knowledge_id: sas-references-crs-management.md
     path: references/crs-management.md
     content_hash: 3e78919eef20638352689a2419b28ad7367bbd0f64686f438f3496625db6f48d
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-data-io.md
     path: references/data-io.md
     content_hash: 8bfd8fc74b34e79fd42f31daef06ca582a500469c711371a6eba04cd6f8f59dc
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-data-structures.md
     path: references/data-structures.md
     content_hash: 9cd950173409b04e3c57b40b24e296646931de938ebcc86b8bf6806a97fcaab8
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-geometric-operations.md
     path: references/geometric-operations.md
     content_hash: f9d55230cae612770de98fb873f32d004d06f4e24624541dc9513be229c176f3
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-spatial-analysis.md
     path: references/spatial-analysis.md
     content_hash: 9e846073426fdb00da1f04465036e3c992b5fb3f556f2e264c8db56e1f9e4924
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-visualization.md
     path: references/visualization.md
     content_hash: b84ea68adec0fe229bb46973efc2747de69465f6bcc9ad835d526860bbfeddc4
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -91,4 +91,4 @@ provenance:
       sha256: 9e846073426fdb00da1f04465036e3c992b5fb3f556f2e264c8db56e1f9e4924
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geopandas/references/visualization.md
       sha256: b84ea68adec0fe229bb46973efc2747de69465f6bcc9ad835d526860bbfeddc4
-license: Apache-2.0
+license: MIT

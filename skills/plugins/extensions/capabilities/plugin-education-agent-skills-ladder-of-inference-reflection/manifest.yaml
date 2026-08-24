@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-ladder-of-inference-reflection/SKILL.md
       sha256: ef473781b8e356daa9496a29e8c15e4cf36a27224255a676fd17315d75f4e4b5
-license: Apache-2.0
+license: CC-BY-SA-4.0

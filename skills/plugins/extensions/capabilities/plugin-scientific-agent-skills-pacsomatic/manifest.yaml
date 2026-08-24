@@ -50,19 +50,19 @@ knowledge_refs:
   - knowledge_id: sas-config.yaml
     path: config.yaml
     content_hash: 689203b8480b3a0f5ae2c45f165fd073573053026d16f0f57a02df18a00f5e82
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-agent-playbook.md
     path: references/agent-playbook.md
     content_hash: 6fb51b68ed75d66b66a187fc9484b59bb8449d50a74dce726875b0a710c37b38
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-config-and-output.md
     path: references/config-and-output.md
     content_hash: 12fe249658b2cc42851f8c14f4cc39efdef0105bc38f44aeac9bb8ab12e3307f
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-pacsomatic-guide.md
     path: references/pacsomatic_guide.md
     content_hash: 0393be1cdc3c16710ab550856546aa0d71126ebc577dcddf25bcb28b1a34d139
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -77,4 +77,4 @@ provenance:
       sha256: 12fe249658b2cc42851f8c14f4cc39efdef0105bc38f44aeac9bb8ab12e3307f
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pacsomatic/references/pacsomatic_guide.md
       sha256: 0393be1cdc3c16710ab550856546aa0d71126ebc577dcddf25bcb28b1a34d139
-license: Apache-2.0
+license: MIT

@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-emergent-project-design-scaffold/SKILL.md
       sha256: 161989fc102964cbff76a03f0c6baee0d625d6275682abff52e05af66489e029
-license: Apache-2.0
+license: CC-BY-SA-4.0

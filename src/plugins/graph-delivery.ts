@@ -152,6 +152,7 @@ export async function planPluginProjection(input: PlanPluginProjectionInput): Pr
           scope: root.scope,
           ownership: "generated",
           recordedHash,
+          requireRecordedOwnership: recordedHash === undefined,
           force: input.force,
         });
         operations.push(operation);
@@ -187,6 +188,7 @@ export async function planPluginProjection(input: PlanPluginProjectionInput): Pr
           scope: root.scope,
           ownership: "generated",
           recordedHash,
+          requireRecordedOwnership: recordedHash === undefined,
           force: input.force,
         });
         operations.push(operation);
@@ -220,6 +222,7 @@ export async function planPluginProjection(input: PlanPluginProjectionInput): Pr
       scope: "project",
       ownership: "generated",
       recordedHash,
+      requireRecordedOwnership: recordedHash === undefined,
       force: input.force,
     });
     operations.push(operation);

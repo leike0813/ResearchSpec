@@ -149,9 +149,11 @@ export async function loadGraphWorkspaceIndex(workspace: string): Promise<GraphW
 
   const profileFiles = new Map<string, GraphWorkspaceFile>();
   const profiles = await scanGraphProfiles(workspace, files, diagnostics, profileFiles);
-  const runEntries = await scanRuns(workspace, files, profiles, diagnostics);
+  validateProfileSubgraphs(profiles, profileFiles, diagnostics);
+  const runEntries = await scanRuns(workspace, files, profiles, profileFiles, diagnostics);
   const runs = runEntries.filter((item) => item.run !== undefined && item.graph !== undefined && item.handoff !== undefined);
   addDuplicateIds(runs.flatMap((item) => item.run ? [item.run] : []), (run) => run.run_id, "duplicate_run_id", "runs", diagnostics);
+  validateParentBindings(runs, diagnostics);
   const changes = await scanChanges(workspace, false, files, diagnostics);
   const archivedChanges = await scanChanges(workspace, true, files, diagnostics);
   addDuplicateStrings([...changes, ...archivedChanges].map((item) => item.id), "duplicate_change_id", "changes", diagnostics);
@@ -210,7 +212,57 @@ async function scanGraphProfiles(
   return profiles;
 }
 
-async function scanRuns(workspace: string, files: Map<string, GraphWorkspaceFile>, profiles: ReadonlyMap<string, CapabilityGraphProfile>, diagnostics: Diagnostic[]): Promise<GraphRunScanRecord[]> {
+function validateProfileSubgraphs(
+  profiles: ReadonlyMap<string, CapabilityGraphProfile>,
+  profileFiles: ReadonlyMap<string, GraphWorkspaceFile>,
+  diagnostics: Diagnostic[],
+): void {
+  const edges = new Map<string, string[]>();
+  for (const profile of profiles.values()) {
+    const targets: string[] = [];
+    for (const node of profile.nodes.filter((item) => item.kind === "subgraph" && item.subgraph_id !== undefined)) {
+      const declaration = profile.subgraphs.find((item) => item.subgraph_id === node.subgraph_id);
+      if (!declaration) continue;
+      targets.push(declaration.profile_id);
+      const child = profiles.get(declaration.profile_id);
+      const sourcePath = profileFiles.get(profile.profile_id)?.absolutePath ?? profile.profile_id;
+      if (!child) {
+        diagnostics.push(problem("subgraph_profile_missing", `Subgraph ${declaration.subgraph_id} references missing profile ${declaration.profile_id}.`, sourcePath));
+        continue;
+      }
+      if (child.profile_version !== declaration.profile_version) diagnostics.push(problem("subgraph_profile_version_mismatch", `Subgraph ${declaration.subgraph_id} expects ${declaration.profile_id}@${declaration.profile_version}, found ${child.profile_version}.`, sourcePath));
+      const entry = child.entries.find((item) => item.entry_id === declaration.entry_id);
+      if (!entry) diagnostics.push(problem("subgraph_entry_missing", `Subgraph ${declaration.subgraph_id} references missing entry ${declaration.entry_id}.`, sourcePath));
+      else if (entry.kind === "end-to-end" ? entry.node_id !== declaration.entry_node_id : !entry.entry_points.includes(declaration.entry_node_id)) {
+        diagnostics.push(problem("subgraph_entry_node_invalid", `Subgraph ${declaration.subgraph_id} entry ${declaration.entry_id} does not expose node ${declaration.entry_node_id}.`, sourcePath));
+      }
+    }
+    edges.set(profile.profile_id, targets);
+  }
+  const visiting = new Set<string>();
+  const visited = new Set<string>();
+  const visit = (profileId: string, trail: string[]): void => {
+    if (visiting.has(profileId)) {
+      const cycle = [...trail.slice(trail.indexOf(profileId)), profileId];
+      diagnostics.push(problem("subgraph_profile_cycle", `Subgraph profile cycle is not allowed: ${cycle.join(" -> ")}.`, profileFiles.get(profileId)?.absolutePath ?? profileId));
+      return;
+    }
+    if (visited.has(profileId)) return;
+    visiting.add(profileId);
+    for (const child of edges.get(profileId) ?? []) if (profiles.has(child)) visit(child, [...trail, profileId]);
+    visiting.delete(profileId);
+    visited.add(profileId);
+  };
+  for (const profileId of profiles.keys()) visit(profileId, []);
+}
+
+async function scanRuns(
+  workspace: string,
+  files: Map<string, GraphWorkspaceFile>,
+  profiles: ReadonlyMap<string, CapabilityGraphProfile>,
+  profileFiles: ReadonlyMap<string, GraphWorkspaceFile>,
+  diagnostics: Diagnostic[],
+): Promise<GraphRunScanRecord[]> {
   const root = path.join(workspace, "runs");
   const records: GraphRunScanRecord[] = [];
   for (const entry of await safeReadDirectory(root)) {
@@ -251,7 +303,12 @@ async function scanRuns(workspace: string, files: Map<string, GraphWorkspaceFile
       if (graph.profile_id !== run.profile_id || graph.profile_version !== run.profile_version) diagnostics.push(problem("run_profile_identity_mismatch", "Frozen graph identity does not match run.yaml.", graphPath));
       if (!graph.entries.some((item) => item.entry_id === run.entry_id)) diagnostics.push(problem("run_entry_unknown", `Run entry ${run.entry_id} is not declared by the frozen graph.`, runPath));
       if (!graph.nodes.some((item) => item.node_id === run.entry_node_id)) diagnostics.push(problem("run_entry_node_unknown", `Run entry node ${run.entry_node_id} is not declared by the frozen graph.`, runPath));
-      if (profiles.get(graph.profile_id) === undefined) diagnostics.push(problem("run_profile_missing", `Run references missing graph profile ${graph.profile_id}.`, runPath));
+      if (profiles.get(graph.profile_id) === undefined) diagnostics.push(warning("run_profile_missing", `Current graph profile ${graph.profile_id} is unavailable; the valid frozen run graph remains authoritative.`, runPath));
+      const currentProfile = profiles.get(graph.profile_id);
+      const currentProfileFile = profileFiles.get(graph.profile_id);
+      if (currentProfile && currentProfileFile && (currentProfile.profile_version !== run.profile_version || currentProfileFile.hash !== run.profile_sha256)) {
+        diagnostics.push(warning("run_profile_drift", `Frozen run ${run.run_id} uses ${run.profile_id}@${run.profile_version} with hash ${run.profile_sha256}; the current projection is ${currentProfile.profile_version} with hash ${currentProfileFile.hash}.`, runPath));
+      }
     }
     if (handoffFile) {
       try {
@@ -280,6 +337,34 @@ async function scanRuns(workspace: string, files: Map<string, GraphWorkspaceFile
     });
   }
   return records;
+}
+
+function validateParentBindings(records: readonly GraphRunScanRecord[], diagnostics: Diagnostic[]): void {
+  const byRunId = new Map(records.flatMap((record) => record.run ? [[record.run.run_id, record] as const] : []));
+  const seenBindings = new Map<string, string>();
+  for (const record of records) {
+    const run = record.run;
+    const binding = run?.parent_binding;
+    if (!run || run.authorization_origin !== "parent_run" || !binding) continue;
+    const key = `${binding.parent_run_id}/${binding.parent_node_id}@${String(binding.round ?? "once")}`;
+    const prior = seenBindings.get(key);
+    if (prior) diagnostics.push(problem("child_run_binding_duplicate", `Child runs ${prior} and ${run.run_id} claim the same parent binding ${key}.`, record.runPath));
+    else seenBindings.set(key, run.run_id);
+    const parent = byRunId.get(binding.parent_run_id);
+    if (!parent?.run || !parent.graph) {
+      diagnostics.push(problem("child_run_parent_missing", `Child run ${run.run_id} references missing parent run ${binding.parent_run_id}.`, record.runPath));
+      continue;
+    }
+    const node = parent.graph.nodes.find((item) => item.node_id === binding.parent_node_id);
+    const declaration = parent.graph.subgraphs.find((item) => item.subgraph_id === binding.subgraph_id);
+    if (node?.kind !== "subgraph" || node.subgraph_id !== binding.subgraph_id || !declaration) {
+      diagnostics.push(problem("child_run_parent_binding_invalid", `Child run ${run.run_id} references an invalid parent subgraph binding.`, record.runPath));
+      continue;
+    }
+    if (run.profile_id !== declaration.profile_id || run.profile_version !== declaration.profile_version || run.entry_id !== declaration.entry_id || run.entry_node_id !== declaration.entry_node_id) {
+      diagnostics.push(problem("child_run_profile_binding_mismatch", `Child run ${run.run_id} does not match its parent subgraph declaration.`, record.runPath));
+    }
+  }
 }
 
 async function scanNodes(
@@ -417,7 +502,9 @@ function parseRequired<T>(files: Map<string, GraphWorkspaceFile>, relativePath: 
 
 async function safeReadDirectory(directory: string): Promise<Array<{ name: string; isFile: boolean; isDirectory: boolean; isSymbolicLink: boolean }>> {
   try {
-    return (await readdir(directory, { withFileTypes: true })).map((entry) => ({ name: entry.name, isFile: entry.isFile(), isDirectory: entry.isDirectory(), isSymbolicLink: entry.isSymbolicLink() }));
+    return (await readdir(directory, { withFileTypes: true }))
+      .map((entry) => ({ name: entry.name, isFile: entry.isFile(), isDirectory: entry.isDirectory(), isSymbolicLink: entry.isSymbolicLink() }))
+      .sort((left, right) => left.name.localeCompare(right.name));
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === "ENOENT") return [];
     throw error;
@@ -439,4 +526,8 @@ function addDuplicateStrings(values: readonly string[], code: string, owner: str
 
 function problem(code: string, message: string, filePath: string): Diagnostic {
   return { severity: "error", code, message, path: filePath, blocking: true };
+}
+
+function warning(code: string, message: string, filePath: string): Diagnostic {
+  return { severity: "warning", code, message, path: filePath, blocking: false };
 }

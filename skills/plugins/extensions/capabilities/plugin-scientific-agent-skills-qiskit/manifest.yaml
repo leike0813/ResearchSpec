@@ -49,35 +49,35 @@ knowledge_refs:
   - knowledge_id: sas-references-algorithms.md
     path: references/algorithms.md
     content_hash: 06f48e2a63464b711d37851983ad1d050bcdc003cb8afe70c98c3ce1f01c7b3b
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-backends.md
     path: references/backends.md
     content_hash: e1336784fcdfc487e3ba4a07d1be22061938749e5975c49eae69a96742c6b1c4
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-circuits.md
     path: references/circuits.md
     content_hash: 4708eed5c9ecef6055673c101ef1642e88062f9a987f8b71eafaefa3572d632d
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-patterns.md
     path: references/patterns.md
     content_hash: 02e8359f367dc5618ed7ea5287100e61336eef798e642aaf8074c794de588411
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-primitives.md
     path: references/primitives.md
     content_hash: 6fea9e6ad7ea039e44b05400d48caf80e2b3110364fb6ee545108cc3d2a27c9d
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-setup.md
     path: references/setup.md
     content_hash: deeed00097127b28da39926a777f2b1945957969d2e02852f31efd00e398b897
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-transpilation.md
     path: references/transpilation.md
     content_hash: a30b3f6e66eea9a61716cdd339d4aec1a58437cf6d7fba6915b2b6963fd5eca5
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-visualization.md
     path: references/visualization.md
     content_hash: 612660942719fb14c9d91247ccf8b4ce5c7c980117ef7d8c4955aef053f72c54
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -100,4 +100,4 @@ provenance:
       sha256: a30b3f6e66eea9a61716cdd339d4aec1a58437cf6d7fba6915b2b6963fd5eca5
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qiskit/references/visualization.md
       sha256: 612660942719fb14c9d91247ccf8b4ce5c7c980117ef7d8c4955aef053f72c54
-license: Apache-2.0
+license: MIT

@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-place-based-inquiry-anchor/SKILL.md
       sha256: 47a5aa21c281eaf2e4368a538468e5adb98f41bf09cf1c37eed5bcaaa68bf645
-license: Apache-2.0
+license: CC-BY-SA-4.0

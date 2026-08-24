@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-erroneous-example-designer/SKILL.md
       sha256: 28b8563e09ace9206e38926bb1e4a7a759c5b57c7c98c767376b0748cf6db19a
-license: Apache-2.0
+license: CC-BY-SA-4.0

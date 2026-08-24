@@ -13,13 +13,13 @@ export const ACADEMIC_PIPELINE_GRAPH_PROFILE = {
     { node_id: "research-gate", kind: "gate", input_bindings: [], expected_outputs: [], prerequisites: ["research"], required_gate_ids: [], required_decision_ids: [], multiplicity: "one", round_role: null },
     { node_id: "write", kind: "subgraph", subgraph_id: "academic-paper", input_bindings: [], expected_outputs: [{ role: "manuscript_draft", required: true }], prerequisites: ["research-gate"], required_gate_ids: ["research-gate"], required_decision_ids: [], multiplicity: "one", round_role: null },
     { node_id: "write-gate", kind: "gate", input_bindings: [], expected_outputs: [], prerequisites: ["write"], required_gate_ids: [], required_decision_ids: [], multiplicity: "one", round_role: null },
-    { node_id: "review", kind: "subgraph", subgraph_id: "academic-paper-reviewer", input_bindings: [], expected_outputs: [{ role: "review_synthesis", required: true }], prerequisites: ["write-gate"], required_gate_ids: ["write-gate"], required_decision_ids: [], multiplicity: "one", round_role: null },
+    { node_id: "review", kind: "subgraph", subgraph_id: "academic-paper-reviewer", input_bindings: [{ role: "manuscript_draft", source: "node_output", from_node_id: "write" }], expected_outputs: [{ role: "review_synthesis", required: true }], prerequisites: ["write-gate"], required_gate_ids: ["write-gate"], required_decision_ids: [], multiplicity: "one", round_role: null },
   ],
   parallel_groups: [],
   subgraphs: [
-    { subgraph_id: "research-main", profile_id: "research-main", profile_version: "0.1.0" },
-    { subgraph_id: "academic-paper", profile_id: "academic-paper", profile_version: "0.1.0" },
-    { subgraph_id: "academic-paper-reviewer", profile_id: "academic-paper-reviewer", profile_version: "0.1.0" },
+    { subgraph_id: "research-main", profile_id: "research-main", profile_version: "0.1.0", entry_id: "main", entry_node_id: "research-question" },
+    { subgraph_id: "academic-paper", profile_id: "academic-paper", profile_version: "0.1.0", entry_id: "main", entry_node_id: "intake" },
+    { subgraph_id: "academic-paper-reviewer", profile_id: "academic-paper-reviewer", profile_version: "0.1.0", entry_id: "main", entry_node_id: "panel" },
   ],
   gates: [
     { gate_id: "research-gate", owner_node_id: "research-gate", policy: "required", verdicts: ["pass", "pass_with_conditions", "fail"] },

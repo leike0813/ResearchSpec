@@ -46,23 +46,23 @@ knowledge_refs:
   - knowledge_id: sas-assets-example-usage.md
     path: assets/example_usage.md
     content_hash: 5858f13be9d18d43894215c30093cba0693f85550148ad18552ffad40930c84d
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-api-reference.md
     path: references/api_reference.md
     content_hash: 7ddee94691267927db6378656a60fcbbc46449969ec876f2fbb79817d5d7bfdd
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-file-formats.md
     path: references/file_formats.md
     content_hash: 8af4558784b7fa727d496e79efeecf46aa71c4d4aa3b5ca68dbd9f201abc09aa
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-scripts-batch-convert.py
     path: scripts/batch_convert.py
     content_hash: 3409effe9aae9611fd5249d2b4c09150a945ee1181d1519f59a4811cbf7ba0a3
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-scripts-convert-literature.py
     path: scripts/convert_literature.py
     content_hash: 7023e2f3e915bf2995d72886dd37bf6e4726c8e9a258a09b540ecc150c4e108c
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -79,4 +79,4 @@ provenance:
       sha256: 3409effe9aae9611fd5249d2b4c09150a945ee1181d1519f59a4811cbf7ba0a3
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markitdown/scripts/convert_literature.py
       sha256: 7023e2f3e915bf2995d72886dd37bf6e4726c8e9a258a09b540ecc150c4e108c
-license: Apache-2.0
+license: MIT

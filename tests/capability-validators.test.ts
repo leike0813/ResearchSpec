@@ -83,6 +83,17 @@ void test("network validator failure returns degraded, never pass", async () => 
   } finally { await rm(root, { recursive: true, force: true }); }
 });
 
+void test("unknown policy and unresolved schema validators fail closed", async () => {
+  const root = await packageRoot();
+  try {
+    const submission = { run_id: "run-1", node_id: "rq", submitted_at: "2026-08-15T12:00:00+08:00", outputs: [{ role: "rq_brief", path: "rq.md" }] };
+    const unknownPolicy = manifest({ validator_id: "capability.policy.unknown", kind: "policy", runner: undefined });
+    const unresolvedSchema = manifest({ validator_id: "schema.unknown", kind: "schema", runner: undefined });
+    assert.deepEqual((await runCapabilityValidators(unknownPolicy, root, submission)).results.map((item) => item.code), ["policy_validator_unknown"]);
+    assert.deepEqual((await runCapabilityValidators(unresolvedSchema, root, submission)).results.map((item) => item.code), ["schema_validator_unresolved"]);
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
 void test("submitGraphNode runs declared capability validators from a registry", async () => {
   const workspaceRoot = await mkdtemp(path.join(tmpdir(), "researchspec-validator-run-"));
   const packageBase = await packageRoot();

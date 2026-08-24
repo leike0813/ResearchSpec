@@ -48,43 +48,43 @@ knowledge_refs:
   - knowledge_id: sas-references-best-practices.md
     path: references/best_practices.md
     content_hash: 3172921ba31cd2e59d0d84b533210b852a4f8d651f06f74e2f907d28e11933ef
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-callbacks.md
     path: references/callbacks.md
     content_hash: aa2140e7b684dfe8e3f47752dc4d9b14220a8d4c126f3f38cbbc1b6698466395
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-data-module.md
     path: references/data_module.md
     content_hash: a94cb2aeb0ac6e04d07d05cd8a3f96bb64d0623cfb310dfcc6d2c255b03d86f9
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-distributed-training.md
     path: references/distributed_training.md
     content_hash: 0828867cbfea2483ffbfec2398fa1f35784f62b4832d71a311dc10d7ae1ef9d9
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-lightning-module.md
     path: references/lightning_module.md
     content_hash: 952354340eb7fa6d09fa235392ccd4eb31e023422c45068e8c780f6523363a90
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-logging.md
     path: references/logging.md
     content_hash: 097cd018cdd0d4880dd861bd9405e68df7c392498bb28ad63afbeb9869ae8db1
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-trainer.md
     path: references/trainer.md
     content_hash: d7761218deb392bfac4f373d4238c0595b5094115bd1645ae00bff0940b54887
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-scripts-quick-trainer-setup.py
     path: scripts/quick_trainer_setup.py
     content_hash: a2bf7df7ea87d341b6caa282d16a0970a123ed7b17c7bbcaaf6b6b3df77aec4b
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-scripts-template-datamodule.py
     path: scripts/template_datamodule.py
     content_hash: 82d1601800fa17a80250b640b4df530ebd78bb852316bc75c6441b1d592c80cf
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-scripts-template-lightning-module.py
     path: scripts/template_lightning_module.py
     content_hash: 0337c694bc33f2de5bd93af0221b78d0ffcad3841ca1f540b78eb3a309e9d1c2
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -111,4 +111,4 @@ provenance:
       sha256: 82d1601800fa17a80250b640b4df530ebd78bb852316bc75c6441b1d592c80cf
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/scripts/template_lightning_module.py
       sha256: 0337c694bc33f2de5bd93af0221b78d0ffcad3841ca1f540b78eb3a309e9d1c2
-license: Apache-2.0
+license: MIT

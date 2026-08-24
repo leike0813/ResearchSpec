@@ -47,23 +47,23 @@ knowledge_refs:
   - knowledge_id: sas-references-advanced-topics.md
     path: references/advanced-topics.md
     content_hash: 212b3d0c3b67a45160135a4ff8d9ae89e0064cf1c68adf408a6c2af5c0d82bb9
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-code-generation-printing.md
     path: references/code-generation-printing.md
     content_hash: 046648801a3404b9e883110e24bd4d947381be930c2ef8589fd8ca3414ef81cb
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-core-capabilities.md
     path: references/core-capabilities.md
     content_hash: 9d7b7393e814ef833fdcbb6e63a8a6621f08c123afe39d43c2bd2e131c7782d9
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-matrices-linear-algebra.md
     path: references/matrices-linear-algebra.md
     content_hash: f22d091d2a38957e0e820e859e172b2d535cc1eef4f98d32d4af02962bd9a73c
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-physics-mechanics.md
     path: references/physics-mechanics.md
     content_hash: e5853aa09e9bddc37134afd7469bc86b952edcbd9dd6d8a6ef9c2c24a2e0fbf3
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -80,4 +80,4 @@ provenance:
       sha256: f22d091d2a38957e0e820e859e172b2d535cc1eef4f98d32d4af02962bd9a73c
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-sympy/references/physics-mechanics.md
       sha256: e5853aa09e9bddc37134afd7469bc86b952edcbd9dd6d8a6ef9c2c24a2e0fbf3
-license: Apache-2.0
+license: MIT

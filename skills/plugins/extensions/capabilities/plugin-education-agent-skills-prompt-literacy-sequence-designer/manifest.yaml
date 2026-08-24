@@ -50,4 +50,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-prompt-literacy-sequence-designer/SKILL.md
       sha256: 017a92bee47be5d83c7d92cc3895120ecd2cd938fd26a0d157b622ffa4d2f6a3
-license: Apache-2.0
+license: CC-BY-SA-4.0

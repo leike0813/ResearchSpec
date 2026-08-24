@@ -50,4 +50,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-ai-socratic-dialogue-designer/SKILL.md
       sha256: 9e77c5e595f331ac36b7bf942cdf87535de5d5a1b56141b75c1a3df795814edc
-license: Apache-2.0
+license: CC-BY-SA-4.0

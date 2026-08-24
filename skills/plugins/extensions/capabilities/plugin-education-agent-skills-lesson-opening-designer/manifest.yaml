@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-lesson-opening-designer/SKILL.md
       sha256: 4f75aa6549a52cccf75e2537eaafef7f22730f61ff23c8a603548709e94c76a0
-license: Apache-2.0
+license: CC-BY-SA-4.0

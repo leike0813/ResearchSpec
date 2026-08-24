@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-dual-coding-designer/SKILL.md
       sha256: 5eab2717dbadd6de652c4a65a2cdbc8ae742240432443d9d4058ca611712b44e
-license: Apache-2.0
+license: CC-BY-SA-4.0

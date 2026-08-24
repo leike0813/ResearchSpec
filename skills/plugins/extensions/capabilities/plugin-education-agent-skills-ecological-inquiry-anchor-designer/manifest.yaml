@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-ecological-inquiry-anchor-designer/SKILL.md
       sha256: 83bf0f992b663e77ec8190b68c3898071476f78985d72521da03c8b7b0744768
-license: Apache-2.0
+license: CC-BY-SA-4.0

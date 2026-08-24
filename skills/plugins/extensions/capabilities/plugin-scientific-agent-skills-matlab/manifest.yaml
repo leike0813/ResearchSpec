@@ -50,35 +50,35 @@ knowledge_refs:
   - knowledge_id: sas-references-data-import-export.md
     path: references/data-import-export.md
     content_hash: 6d598e56aa30e143426e294012ed59d1c3b3e6322b3f910a40269ff52eac2ee4
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-executing-scripts.md
     path: references/executing-scripts.md
     content_hash: c9d90ab6a6888f54743818813b97c367b61911b739c030dc0c41f85affbc4195
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-graphics-visualization.md
     path: references/graphics-visualization.md
     content_hash: e4721985ee482a643e9aec015ac3c8648adcf4878369af98aba69a83dc05f9df
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-mathematics.md
     path: references/mathematics.md
     content_hash: 460a3de65dae9c0adbcdfeaf89a71c1b2b2947b6dc08fc1e00d9a1ff9b8dce5c
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-matrices-arrays.md
     path: references/matrices-arrays.md
     content_hash: 7009f40385ea5ead39a1070ed14694b917f9e259b2051c38f617829ab706a943
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-octave-compatibility.md
     path: references/octave-compatibility.md
     content_hash: 851a90612e3f0083eee0ab612eb7bf384f38b5f8459dcb03a7d5f37727b35296
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-programming.md
     path: references/programming.md
     content_hash: 8ee4bc6602be8fa151f715d2ffae550eeed1002dceb60e7a5b5b612ec2ad9623
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-python-integration.md
     path: references/python-integration.md
     content_hash: 1915d531af3c8a428d894c9b74caef4321f1441337b556c0f4e67364af913b12
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -101,4 +101,4 @@ provenance:
       sha256: 8ee4bc6602be8fa151f715d2ffae550eeed1002dceb60e7a5b5b612ec2ad9623
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matlab/references/python-integration.md
       sha256: 1915d531af3c8a428d894c9b74caef4321f1441337b556c0f4e67364af913b12
-license: Apache-2.0
+license: MIT

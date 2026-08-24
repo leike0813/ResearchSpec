@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-variation-theory-task-designer/SKILL.md
       sha256: 6d5b429597027bd4d7745cded53f14201700fb53bc88e60edd7720aac90e0c4b
-license: Apache-2.0
+license: CC-BY-SA-4.0

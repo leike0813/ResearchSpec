@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-ubuntu-collective-knowledge-task-designer/SKILL.md
       sha256: 8791f5579d1e934f9c56b9d380f10bc55c51089ba12a8f813d7861ed9855d56c
-license: Apache-2.0
+license: CC-BY-SA-4.0

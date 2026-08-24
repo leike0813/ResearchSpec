@@ -69,7 +69,8 @@ void test("representative Scientific Agent Skills profiles run through the graph
 
       const startInput = path.join(root, `start-${entry.profile_id}.yaml`);
       const advanceInput = path.join(root, `advance-${entry.profile_id}.yaml`);
-      const briefPath = path.join(root, `brief-${entry.profile_id}.json`);
+      const briefRelative = `brief-${entry.profile_id}.json`;
+      const briefPath = path.join(root, briefRelative);
       await writeFile(startInput, stringify({
         schema_version: "2",
         confirmed_at: "2026-08-17T04:00:00+08:00",
@@ -77,7 +78,7 @@ void test("representative Scientific Agent Skills profiles run through the graph
         entry_node_id: "research",
         prerequisites: [],
         handoff_inputs: [{ role: "task_request", type: "markdown", path: `task-${entry.profile_id}.md`, purpose: entry.profile_id }],
-        planned_outputs: [{ role: "research_brief", type: "json", path: briefPath, purpose: `${entry.profile_id} brief` }],
+        planned_outputs: [{ role: "research_brief", type: "json", path: briefRelative, purpose: `${entry.profile_id} brief` }],
         formal_gates: [],
         cost: { effort: "low", interaction: "single_pass" },
       }), "utf8");
@@ -91,7 +92,7 @@ void test("representative Scientific Agent Skills profiles run through the graph
       assert.equal(instructions.ok, true, JSON.stringify(instructions.error));
       assert.equal(instructions.data?.capability.capability_id, entry.profile_id);
 
-      await writeFile(advanceInput, stringify({ outputs: [{ role: "research_brief", path: briefPath }] }), "utf8");
+      await writeFile(advanceInput, stringify({ outputs: [{ role: "research_brief", path: briefRelative }] }), "utf8");
       await writeFile(briefPath, JSON.stringify({ scope: "incomplete" }), "utf8");
       const invalid = parseEnvelope(runCli(["advance", `node:${runId}/research`, "--input", advanceInput, "--json"], root));
       assert.equal(invalid.ok, false, `${entry.profile_id} invalid advance unexpectedly succeeded`);

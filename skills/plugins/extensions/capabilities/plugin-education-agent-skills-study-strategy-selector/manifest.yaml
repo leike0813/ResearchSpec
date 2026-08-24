@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-study-strategy-selector/SKILL.md
       sha256: 962d0052a15d3f78e38493d627e12a3c61debc224e62ee176621c0b387a99301
-license: Apache-2.0
+license: CC-BY-SA-4.0

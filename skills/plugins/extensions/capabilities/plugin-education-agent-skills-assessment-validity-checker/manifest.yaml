@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-assessment-validity-checker/SKILL.md
       sha256: bf599d02c461406ceb7d26102ae0dc20ab8f67c152eadeca18fe8f952ed83806
-license: Apache-2.0
+license: CC-BY-SA-4.0

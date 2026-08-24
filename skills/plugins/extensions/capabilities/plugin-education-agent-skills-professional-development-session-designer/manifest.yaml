@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-professional-development-session-designer/SKILL.md
       sha256: db27da04c1176b0411ed5b1215e1e3cd7d31c47623d6c11b06cc6ddf9eac5c95
-license: Apache-2.0
+license: CC-BY-SA-4.0

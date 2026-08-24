@@ -1,7 +1,7 @@
 import path from "node:path";
 import { stringify } from "yaml";
 
-import { ACADEMIC_PIPELINE_PROFILE_PROJECTION } from "../../arsu-converter/workflow/generate.js";
+import { ACADEMIC_PIPELINE_GRAPH_PROFILE_TEXT } from "../graph-profiles/academic-pipeline.js";
 
 export type WorkspaceFileKind = "markdown" | "yaml" | "json";
 export type OverwritePolicy = "user" | "generated";
@@ -18,7 +18,7 @@ export type WorkspaceEntry =
   | { kind: "dir"; path: string }
   | { kind: "file"; path: string; content: string; overwritePolicy: OverwritePolicy };
 
-export const REQUIRED_DIRECTORIES = ["profiles", "specs", "changes", "subflows"] as const;
+export const REQUIRED_DIRECTORIES = ["profiles", "specs", "changes", "runs"] as const;
 
 const WORKSPACE_TEMPLATES: readonly WorkspaceTemplateDefinition[] = [
   {
@@ -27,7 +27,7 @@ const WORKSPACE_TEMPLATES: readonly WorkspaceTemplateDefinition[] = [
     overwritePolicy: "user",
     required: true,
     content: stringify({
-      schema_version: "1",
+      schema_version: "2",
       agent_tools: { selected: [], delivery: "skills" },
       literature_adapters: { selected: [] },
       plugins: { selected: [] },
@@ -45,28 +45,28 @@ const WORKSPACE_TEMPLATES: readonly WorkspaceTemplateDefinition[] = [
     kind: "yaml",
     overwritePolicy: "generated",
     required: true,
-    content: ACADEMIC_PIPELINE_PROFILE_PROJECTION,
+    content: ACADEMIC_PIPELINE_GRAPH_PROFILE_TEXT,
   },
   {
     relativePath: "specs/project.md",
     kind: "markdown",
     overwritePolicy: "user",
     required: true,
-    content: `---\nschema_version: "1"\nproject_id: project\nworking_name: null\n---\n\n# Project intent\n\n## Research question\n\n## Scope and boundaries\n\n## Method stance\n\n## Expected contribution\n`,
+    content: `---\nschema_version: "2"\nproject_id: project\n---\n\n# Project intent\n\n## Research question\n\n## Scope and boundaries\n\n## Method stance\n\n## Expected contribution\n`,
   },
   {
     relativePath: "specs/sources.yaml",
     kind: "yaml",
     overwritePolicy: "user",
     required: true,
-    content: stringify({ schema_version: "1", sources: [] }),
+    content: stringify({ schema_version: "2", sources: [] }),
   },
   {
     relativePath: "specs/claims.yaml",
     kind: "yaml",
     overwritePolicy: "user",
     required: true,
-    content: stringify({ schema_version: "1", claims: [] }),
+    content: stringify({ schema_version: "2", claims: [] }),
   },
   {
     relativePath: "specs/manuscript.yaml",
@@ -74,7 +74,7 @@ const WORKSPACE_TEMPLATES: readonly WorkspaceTemplateDefinition[] = [
     overwritePolicy: "user",
     required: true,
     content: stringify({
-      schema_version: "1",
+      schema_version: "2",
       manuscript_id: "manuscript",
       output_type: null,
       working_title: null,

@@ -12,13 +12,24 @@ import {
   evaluateGraphFrontier,
   graphRunCompletionReady,
   recordGraphDecision,
+  startGraphChildRun,
   startGraphRun,
-  submitGraphNode,
+  submitGraphNode as submitGraphNodeRuntime,
+  type SubmitGraphNodeInput,
   validateSubgraphNodeBindings,
   type GraphFrontier,
 } from "../src/core/runtime/graph-run.js";
+
+async function submitGraphNode(input: Omit<SubmitGraphNodeInput, "capabilityRegistry">) {
+  return submitGraphNodeRuntime({
+    ...input,
+    capabilityRegistry: await graphTestCapabilityRegistry(input.index, input.runId),
+  });
+}
 import { loadGraphWorkspaceIndex } from "../src/core/runtime/graph-workspace-index.js";
-import { sha256, writeBaseWorkspace } from "./helpers/graph-workspace.js";
+import { graphTestCapabilityRegistry, sha256, writeBaseWorkspace } from "./helpers/graph-workspace.js";
+import { ACADEMIC_PIPELINE_GRAPH_PROFILE_TEXT } from "../src/core/graph-profiles/academic-pipeline.js";
+import { RESEARCH_MAIN_GRAPH_PROFILE_TEXT } from "../src/core/graph-profiles/research-main.js";
 
 const TIME_0 = "2026-08-15T12:00:00+08:00";
 
@@ -134,7 +145,7 @@ void test("revision round template continues and exits through round-scoped deci
     await submitGraphNode({ index, runId: started.run_id, nodeId: "revision", round: 1, outputs: [{ role: "revised_manuscript", path: "revised-1.md" }], submittedAt: "2026-08-15T12:10:00+08:00" });
     index = await loadGraphWorkspaceIndex(workspace);
     frontier = currentFrontier(index);
-    assert.deepEqual(frontier.pending_decisions, [`decision:${started.run_id}/outcome`]);
+    assert.deepEqual(frontier.pending_decisions, [`decision:${started.run_id}/outcome@1`]);
     assert.equal(frontier.eligible_nodes.length, 0);
 
     await recordGraphDecision({ index, runId: started.run_id, decisionId: "outcome", round: 1, choice: "continue", decidedBy: "researcher", decidedAt: "2026-08-15T12:15:00+08:00" });
@@ -145,7 +156,7 @@ void test("revision round template continues and exits through round-scoped deci
     await submitGraphNode({ index, runId: started.run_id, nodeId: "revision", round: 2, outputs: [{ role: "revised_manuscript", path: "revised-2.md" }], submittedAt: "2026-08-15T12:20:00+08:00" });
     index = await loadGraphWorkspaceIndex(workspace);
     frontier = currentFrontier(index);
-    assert.deepEqual(frontier.pending_decisions, [`decision:${started.run_id}/outcome`]);
+    assert.deepEqual(frontier.pending_decisions, [`decision:${started.run_id}/outcome@2`]);
 
     await recordGraphDecision({ index, runId: started.run_id, decisionId: "outcome", round: 2, choice: "exit", decidedBy: "researcher", decidedAt: "2026-08-15T12:25:00+08:00" });
     index = await loadGraphWorkspaceIndex(workspace);
@@ -241,7 +252,7 @@ void test("subgraph bindings validate parent roles against child profile", () =>
       round_role: null,
     }],
     parallel_groups: [],
-    subgraphs: [{ subgraph_id: "child", profile_id: "child-profile", profile_version: "0.1.0" }],
+    subgraphs: [{ subgraph_id: "child", profile_id: "child-profile", profile_version: "0.1.0", entry_id: "main", entry_node_id: "work" }],
     gates: [],
     decisions: [],
     revision_round_template: null,
@@ -276,6 +287,51 @@ void test("subgraph bindings validate parent roles against child profile", () =>
   assert.ok(validateSubgraphNodeBindings(parent, "sub", undefined).some((item) => item.includes("not projected")));
   const wrongChild = parseCapabilityGraphProfile({ ...child, profile_version: "0.2.0" });
   assert.ok(validateSubgraphNodeBindings(parent, "sub", wrongChild).some((item) => item.includes("identity mismatch")));
+});
+
+void test("eligible subgraph start creates one deterministic parent-bound child run", async () => {
+  const root = await mkdtemp(path.join(tmpdir(), "researchspec-child-run-"));
+  try {
+    const workspace = await writeBaseWorkspace(root);
+    await writeFile(path.join(workspace, "profiles", "academic-pipeline.yaml"), ACADEMIC_PIPELINE_GRAPH_PROFILE_TEXT, "utf8");
+    await writeFile(path.join(workspace, "profiles", "research-main.yaml"), RESEARCH_MAIN_GRAPH_PROFILE_TEXT, "utf8");
+    let index = await loadGraphWorkspaceIndex(workspace);
+    const parent = await startGraphRun({
+      index,
+      profileId: "academic-pipeline",
+      confirmedBy: "researcher",
+      command: {
+        schema_version: "2",
+        confirmed_at: TIME_0,
+        entry_id: "main",
+        entry_node_id: "research",
+        prerequisites: [],
+        handoff_inputs: [],
+        planned_outputs: [
+          { role: "research_report", type: "markdown", path: "report.md", purpose: "research report" },
+          { role: "manuscript_draft", type: "markdown", path: "draft.md", purpose: "draft" },
+          { role: "review_synthesis", type: "markdown", path: "review.md", purpose: "review" },
+        ],
+        formal_gates: ["research-gate", "write-gate"],
+        cost: { effort: "high", interaction: "high" },
+      },
+    });
+    index = await loadGraphWorkspaceIndex(workspace);
+    assert.deepEqual(currentFrontier(index).pending_subgraph_starts.map((item) => item.node_id), ["research"]);
+    const child = await startGraphChildRun({ index, parentRunId: parent.run_id, nodeId: "research", startedAt: "2026-08-15T12:01:00+08:00" });
+    assert.equal(child.run.authorization_origin, "parent_run");
+    assert.deepEqual(child.run.parent_binding, { parent_run_id: parent.run_id, parent_node_id: "research", subgraph_id: "research-main" });
+    assert.equal(child.run.entry_id, "main");
+    assert.equal(child.run.entry_node_id, "research-question");
+    assert.deepEqual(child.handoff.outputs.map((item) => item.role), ["research_report"]);
+    index = await loadGraphWorkspaceIndex(workspace);
+    const duplicate = await startGraphChildRun({ index, parentRunId: parent.run_id, nodeId: "research", startedAt: "2026-08-15T12:02:00+08:00" });
+    assert.equal(duplicate.status, "already_started");
+    assert.equal(duplicate.run_id, child.run_id);
+    assert.equal(index.runs.length, 2);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
 });
 
 void test("run completion requires all one-shot nodes and closed revision template", async () => {

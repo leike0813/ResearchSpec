@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-reflective-practice-prompt-generator/SKILL.md
       sha256: ad0643bfddfb8c2439fa4b21756d04022cbbc34fa5f134c164ddf561c2c466d0
-license: Apache-2.0
+license: CC-BY-SA-4.0

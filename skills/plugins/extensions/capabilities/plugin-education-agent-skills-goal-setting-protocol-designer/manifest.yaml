@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-goal-setting-protocol-designer/SKILL.md
       sha256: fc5e36058b5ce0992b66ca9d5f537b00f713767914bac5b881bcc142ec2e76a2
-license: Apache-2.0
+license: CC-BY-SA-4.0

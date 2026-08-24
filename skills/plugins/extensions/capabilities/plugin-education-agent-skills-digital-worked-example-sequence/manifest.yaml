@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-digital-worked-example-sequence/SKILL.md
       sha256: b6dd3e0e9c9602eaf90a1b6e3488b18c3d2b2bbc8625a85ef7890fe28fd5667e
-license: Apache-2.0
+license: CC-BY-SA-4.0

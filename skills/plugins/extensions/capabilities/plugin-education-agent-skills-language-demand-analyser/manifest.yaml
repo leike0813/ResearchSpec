@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-language-demand-analyser/SKILL.md
       sha256: 7bf1f72d4794c5f58720731ff5417fec3907477df1eb29ace6273bddb3c091f7
-license: Apache-2.0
+license: CC-BY-SA-4.0

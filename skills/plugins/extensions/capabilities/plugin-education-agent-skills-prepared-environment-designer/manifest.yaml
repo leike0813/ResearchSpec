@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-prepared-environment-designer/SKILL.md
       sha256: 17fbfa00c31523ced041e92cb869a77b9fa6a99de2b3b5c6d81778dcbb66e657
-license: Apache-2.0
+license: CC-BY-SA-4.0

@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-service-learning-project-designer/SKILL.md
       sha256: ffd018dae231aa185ed2aaaf212c48f5cc3bbf1be2ce6b3b14121ead17eeec21
-license: Apache-2.0
+license: CC-BY-SA-4.0

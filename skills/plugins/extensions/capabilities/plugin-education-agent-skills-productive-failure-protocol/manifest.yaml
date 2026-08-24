@@ -50,4 +50,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-productive-failure-protocol/SKILL.md
       sha256: 1be46a3d9b0bc212c686779fe838e59b4549147368f65bcb32be31ab3d4d839e
-license: Apache-2.0
+license: CC-BY-SA-4.0

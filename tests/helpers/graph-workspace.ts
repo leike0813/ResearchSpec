@@ -3,6 +3,9 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { stringify } from "yaml";
 
+import { loadCapabilityRegistry, type LoadedCapabilityRegistry } from "../../src/capabilities/registry.js";
+import type { GraphWorkspaceIndex } from "../../src/core/runtime/graph-workspace-index.js";
+
 export function sha256(text: string): string {
   return createHash("sha256").update(text, "utf8").digest("hex");
 }
@@ -60,6 +63,7 @@ export function runValue(): Record<string, unknown> {
     entry_node_id: "rq",
     status: "active",
     started_at: "2026-08-15T12:00:00+08:00",
+    authorization_origin: "human",
     start_confirmation: {
       confirmed_by: "researcher",
       confirmed_at: "2026-08-15T12:00:00+08:00",
@@ -120,4 +124,35 @@ export async function writeRun(workspace: string, run: Record<string, unknown> =
       decisions: [],
     }), "utf8");
   }
+}
+
+export async function graphTestCapabilityRegistry(index: GraphWorkspaceIndex, runId: string): Promise<LoadedCapabilityRegistry> {
+  const loaded = await loadCapabilityRegistry();
+  const graph = index.runs.find((record) => record.run?.run_id === runId)?.graph;
+  if (!graph) return loaded;
+  const capabilities = new Map(loaded.capabilities);
+  for (const node of graph.nodes) {
+    if (node.kind !== "capability" || !node.capability_id) continue;
+    const registered = capabilities.get(node.capability_id);
+    if (!registered) continue;
+    capabilities.set(node.capability_id, {
+      ...registered,
+      manifest: {
+        ...registered.manifest,
+        outputs: node.expected_outputs.map((output) => ({
+          role: output.role,
+          schema_ref: `${output.role}.test`,
+          ...(output.required === undefined ? {} : { required: output.required }),
+        })),
+        validators: [{
+          validator_id: "capability.policy.output_roles",
+          kind: "policy",
+          inputs: [],
+          outputs: node.expected_outputs.map((output) => output.role),
+          error_codes: ["output_roles_invalid"],
+        }],
+      },
+    });
+  }
+  return { ...loaded, capabilities };
 }

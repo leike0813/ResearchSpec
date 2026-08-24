@@ -59,4 +59,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-parallel-web/SKILL.md
       sha256: b0107b255d6d60513e275ba3d8bfd9990711bd57c7fb5113266fcb904f2b016b
-license: Apache-2.0
+license: MIT

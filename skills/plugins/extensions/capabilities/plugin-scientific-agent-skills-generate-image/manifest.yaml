@@ -48,7 +48,7 @@ knowledge_refs:
   - knowledge_id: sas-scripts-generate-image.py
     path: scripts/generate_image.py
     content_hash: f4aee183b7f192cae34813e53f094d2d14f0ca265189343f018b218415b63d9a
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -57,4 +57,4 @@ provenance:
       sha256: 0287947083b8af8439778d4c6f80f4f4d35311067d515db727d18c2429fb31da
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-generate-image/scripts/generate_image.py
       sha256: f4aee183b7f192cae34813e53f094d2d14f0ca265189343f018b218415b63d9a
-license: Apache-2.0
+license: MIT

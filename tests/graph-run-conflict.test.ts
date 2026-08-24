@@ -12,11 +12,19 @@ import {
   overrideGraphGate,
   recordGraphGate,
   startGraphRun,
-  submitGraphNode,
+  submitGraphNode as submitGraphNodeRuntime,
+  type SubmitGraphNodeInput,
   type GraphFrontier,
 } from "../src/core/runtime/graph-run.js";
+
+async function submitGraphNode(input: Omit<SubmitGraphNodeInput, "capabilityRegistry">) {
+  return submitGraphNodeRuntime({
+    ...input,
+    capabilityRegistry: await graphTestCapabilityRegistry(input.index, input.runId),
+  });
+}
 import { loadGraphWorkspaceIndex } from "../src/core/runtime/graph-workspace-index.js";
-import { writeBaseWorkspace } from "./helpers/graph-workspace.js";
+import { graphTestCapabilityRegistry, writeBaseWorkspace } from "./helpers/graph-workspace.js";
 
 const TIME_0 = "2026-08-15T12:00:00+08:00";
 

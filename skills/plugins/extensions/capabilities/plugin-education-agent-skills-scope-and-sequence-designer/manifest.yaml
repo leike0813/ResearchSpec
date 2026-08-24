@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-scope-and-sequence-designer/SKILL.md
       sha256: cbb22a08477e9c81af9e55f7e86a43d6fa63b2900dd5177798854894f39bcd56
-license: Apache-2.0
+license: CC-BY-SA-4.0

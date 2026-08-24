@@ -50,59 +50,59 @@ knowledge_refs:
   - knowledge_id: sas-references-authentication.md
     path: references/authentication.md
     content_hash: 9c14d8f8d68fee3e8ea01c9ceb598449c9f3ef0dd171503b5063fed4dc0a0934
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-cli.md
     path: references/cli.md
     content_hash: 4abbcadd84157ac432c35ab043ce0d11bf874b796ecfeb850100b7799b4b74d5
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-collections.md
     path: references/collections.md
     content_hash: d6b72f9933a4eb5bb2d4aafdf5b4f6daebf4c03d7f0aef0c960cd8d9276e59da
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-error-handling.md
     path: references/error-handling.md
     content_hash: 2be8a65f5ed7f3ade735a9fc6c78cb74ce9e92112bd5df03d52f25f30985fd32
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-exports.md
     path: references/exports.md
     content_hash: 02db73f3d15b4b2de852727816b18d90cd535e431416c2cd8b2c1c4411362124
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-files-attachments.md
     path: references/files-attachments.md
     content_hash: 585b9443d0b836b6c58903769497391b116074e04c9a82a376e8230b8a450d3a
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-full-text.md
     path: references/full-text.md
     content_hash: ee6e5380ff8b902c716582340f4063a9e7468a1eff6ea9c04a5d646a84398a39
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-mcp.md
     path: references/mcp.md
     content_hash: eb9803c1ac9651dc3883e2c4216ed336190627c54286104d50b3c4f2d6f9f9d0
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-pagination.md
     path: references/pagination.md
     content_hash: aefc14d4b1a8d55a41fe53fb5b8bb3093848815d68b18542f316336d2359224a
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-read-api.md
     path: references/read-api.md
     content_hash: 18866a03761653d8aee715f98683849f037be8a97507f08a4a145ce68a5d0e32
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-saved-searches.md
     path: references/saved-searches.md
     content_hash: 1cce1a29d4c9c73b497e26a93e5e21174148bd221dde9bd3df3e2f0e7acc0cb9
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-search-params.md
     path: references/search-params.md
     content_hash: e31834d6ce3bcd55a58a235731b3efc539935f6b4c101cd4c37aae19b0f53756
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-tags.md
     path: references/tags.md
     content_hash: 8b2d2a962d2ce796572fb725e3bdc5ab3f8a20bc749dc3a95ef78a090dfc1adc
-    license: Apache-2.0
+    license: MIT
   - knowledge_id: sas-references-write-api.md
     path: references/write-api.md
     content_hash: 153ab5fffd8f12a9db044d7bb6b58e8a9b948063c2fba154c8fb16c87bfd761f
-    license: Apache-2.0
+    license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
@@ -137,4 +137,4 @@ provenance:
       sha256: 8b2d2a962d2ce796572fb725e3bdc5ab3f8a20bc749dc3a95ef78a090dfc1adc
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/references/write-api.md
       sha256: 153ab5fffd8f12a9db044d7bb6b58e8a9b948063c2fba154c8fb16c87bfd761f
-license: Apache-2.0
+license: MIT

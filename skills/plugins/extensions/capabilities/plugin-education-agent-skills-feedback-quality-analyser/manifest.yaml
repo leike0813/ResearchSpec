@@ -49,4 +49,4 @@ provenance:
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-feedback-quality-analyser/SKILL.md
       sha256: 9940dfb74159471338e68d98176266ea3be64351f564c7c37dc1580ea09b6420
-license: Apache-2.0
+license: CC-BY-SA-4.0

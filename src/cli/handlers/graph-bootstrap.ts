@@ -1,22 +1,14 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { stringify } from "yaml";
 
-import { getTool, parseToolExpression, toolSkillsRoot, toolSupportsSkills, type DeliveryMode } from "../../adapters/tools.js";
-import { MINIMAL_GRAPH_PROFILE_TEXT } from "../../core/graph-profiles/minimal.js";
-import { RESEARCH_MAIN_GRAPH_PROFILE_TEXT } from "../../core/graph-profiles/research-main.js";
-import { ACADEMIC_PAPER_GRAPH_PROFILE_TEXT } from "../../core/graph-profiles/academic-paper.js";
-import { ACADEMIC_PAPER_REVIEWER_GRAPH_PROFILE_TEXT } from "../../core/graph-profiles/academic-paper-reviewer.js";
-import { ACADEMIC_PIPELINE_GRAPH_PROFILE_TEXT } from "../../core/graph-profiles/academic-pipeline.js";
-import { PAPER_HUMANIZER_GRAPH_PROFILE_TEXT } from "../../core/graph-profiles/paper-humanizer.js";
-import { REVIEW_RESPONSE_GRAPH_PROFILE_TEXT } from "../../core/graph-profiles/review-response.js";
+import { parseToolExpression, type DeliveryMode } from "../../adapters/tools.js";
+import { planWorkspaceDelivery } from "../../adapters/workspace-delivery.js";
+import { renderToolInstallationManifest } from "../../adapters/installations.js";
 import { GraphWorkspaceConfigSchema } from "../../core/contracts/graph-workspace.js";
-import { loadCapabilityRegistry } from "../../capabilities/registry.js";
-import { PluginProjectionError, projectWorkspacePlugins } from "../../plugins/graph-delivery.js";
-import { loadPluginExtensionRegistry } from "../../plugins/extensions.js";
-import { domainIsAvailable, loadPluginRegistry } from "../../plugins/registry.js";
+import { loadPluginRegistry } from "../../plugins/registry.js";
 import { inspectGraphWorkspaceFormat, loadGraphWorkspaceIndex } from "../../core/runtime/graph-workspace-index.js";
 import { resolveInitTarget } from "../../core/workspace/layout.js";
+import { executeWritePlan, planDirectFileEdit, planFile, type PlannedWrite } from "../../core/workspace/write-plan.js";
 import { parseLiteratureAdapterExpression } from "../../literature-adapters/index.js";
 import { fileExists } from "../../utils/fs.js";
 import { CliError, success, type CommandContext, type CommandResult } from "../types.js";
@@ -24,61 +16,76 @@ import { CliError, success, type CommandContext, type CommandResult } from "../t
 export interface GraphInitOptions { tools?: string; literatureAdapters?: string; delivery?: DeliveryMode }
 export interface GraphUpdateOptions { tools?: string; literatureAdapters?: string; delivery?: DeliveryMode }
 
-async function projectCapabilitySkills(projectRoot: string, toolIds: readonly string[]): Promise<number> {
-  const registry = await loadCapabilityRegistry();
-  let projected = 0;
-  for (const toolId of toolIds) {
-    const tool = getTool(toolId);
-    if (!tool || !toolSupportsSkills(tool)) continue;
-    const root = toolSkillsRoot(tool, projectRoot).root;
-    for (const registered of registry.capabilities.values()) {
-      for (const source of registered.files) {
-        const relative = path.relative(registered.packageRoot, source);
-        const target = path.join(root, registered.entry.capability_id, relative);
-        await mkdir(path.dirname(target), { recursive: true });
-        await writeFile(target, await readFile(source), "utf8");
-        projected += 1;
-      }
-    }
-  }
-  return projected;
+const PROJECT_SPEC = '---\nschema_version: "2"\nproject_id: project\n---\n\n# Project intent\n\n## Research question\n\n## Scope and boundaries\n\n## Method stance\n\n## Expected contribution\n';
+
+function initialStableSpecs(workspace: string): Array<{ path: string; content: string }> {
+  return [
+    { path: path.join(workspace, "specs/project.md"), content: PROJECT_SPEC },
+    { path: path.join(workspace, "specs/sources.yaml"), content: stringify({ schema_version: "2", sources: [] }) },
+    { path: path.join(workspace, "specs/claims.yaml"), content: stringify({ schema_version: "2", claims: [] }) },
+    { path: path.join(workspace, "specs/manuscript.yaml"), content: stringify({ schema_version: "2", manuscript_id: "manuscript", output_type: null, working_title: null, language: null, audience: null, venue: null, citation_requirements: [], format_requirements: [], delivery: { working_format: null, final_output_format: null }, outline: [] }) },
+  ];
 }
 
-async function writeGraphWorkspace(workspace: string, tools: string[], literatureAdapters: string[], delivery: DeliveryMode): Promise<void> {
-  await mkdir(path.join(workspace, "profiles"), { recursive: true });
-  await mkdir(path.join(workspace, "specs"), { recursive: true });
-  await mkdir(path.join(workspace, "runs"), { recursive: true });
-  await mkdir(path.join(workspace, "changes"), { recursive: true });
-  await writeFile(path.join(workspace, "config.yaml"), stringify({
+async function applyGraphWorkspaceProjection(input: {
+  workspace: string;
+  tools: string[];
+  adapters: string[];
+  delivery: DeliveryMode;
+  selectedPlugins: string[];
+  index?: Awaited<ReturnType<typeof loadGraphWorkspaceIndex>>;
+  context: CommandContext;
+}): Promise<{ projected: number; operations: PlannedWrite[] }> {
+  const projectRoot = path.dirname(input.workspace);
+  const existingInstallations = input.index?.manifest.installations ?? [];
+  const priorTools = input.index?.config.agent_tools.selected ?? [];
+  const pluginRegistry = await loadPluginRegistry();
+  const deliveryPlan = await planWorkspaceDelivery({
+    projectRoot,
+    workspaceRoot: input.workspace,
+    toolIds: input.tools,
+    delivery: input.delivery,
+    selectedToolIds: input.tools,
+    reconciledToolIds: [...new Set([...priorTools, ...input.tools])],
+    selectedLiteratureAdapterIds: input.adapters,
+    existingInstallations,
+    force: input.context.force,
+    pluginRegistry,
+    selectedPluginIds: input.selectedPlugins,
+    existingPluginResolutions: input.index?.manifest.plugin_resolutions ?? [],
+    preserveSkillIds: [],
+    operation: input.index ? "update" : "init",
+  });
+  const blocking = deliveryPlan.diagnostics.filter((diagnostic) => diagnostic.blocking);
+  if (blocking.length > 0 || deliveryPlan.operations.some((operation) => operation.action === "conflict")) {
+    throw new CliError("workspace_projection_conflict", blocking.map((item) => item.message).join("; ") || "Workspace projection contains ownership conflicts.", 3, "Resolve unowned targets or manifest drift before retrying.", deliveryPlan.diagnostics);
+  }
+  const configContent = stringify(GraphWorkspaceConfigSchema.parse({
     schema_version: "2",
-    agent_tools: { selected: tools, delivery },
-    literature_adapters: { selected: literatureAdapters },
-    plugins: { selected: [] },
-  }), "utf8");
-  await writeFile(path.join(workspace, "tool-installation-manifest.json"), `${JSON.stringify({ schema_version: "1", package_version: "0.1.0", plugin_resolutions: [], literature_adapter_resolutions: [], installations: [] }, null, 2)}\n`, "utf8");
-  await writeFile(path.join(workspace, "profiles", "minimal.yaml"), MINIMAL_GRAPH_PROFILE_TEXT, "utf8");
-  await writeFile(path.join(workspace, "profiles", "research-main.yaml"), RESEARCH_MAIN_GRAPH_PROFILE_TEXT, "utf8");
-  await writeFile(path.join(workspace, "profiles", "academic-paper.yaml"), ACADEMIC_PAPER_GRAPH_PROFILE_TEXT, "utf8");
-  await writeFile(path.join(workspace, "profiles", "academic-paper-reviewer.yaml"), ACADEMIC_PAPER_REVIEWER_GRAPH_PROFILE_TEXT, "utf8");
-  await writeFile(path.join(workspace, "profiles", "academic-pipeline.yaml"), ACADEMIC_PIPELINE_GRAPH_PROFILE_TEXT, "utf8");
-  await writeFile(path.join(workspace, "profiles", "paper-humanizer.yaml"), PAPER_HUMANIZER_GRAPH_PROFILE_TEXT, "utf8");
-  await writeFile(path.join(workspace, "profiles", "review-response.yaml"), REVIEW_RESPONSE_GRAPH_PROFILE_TEXT, "utf8");
-  await writeFile(path.join(workspace, "specs", "project.md"), '---\nschema_version: "2"\nproject_id: project\n---\n\n# Project intent\n\n## Research question\n\n## Scope and boundaries\n\n## Method stance\n\n## Expected contribution\n', "utf8");
-  await writeFile(path.join(workspace, "specs", "sources.yaml"), stringify({ schema_version: "2", sources: [] }), "utf8");
-  await writeFile(path.join(workspace, "specs", "claims.yaml"), stringify({ schema_version: "2", claims: [] }), "utf8");
-  await writeFile(path.join(workspace, "specs", "manuscript.yaml"), stringify({
-    schema_version: "2",
-    manuscript_id: "manuscript",
-    output_type: null,
-    working_title: null,
-    language: null,
-    audience: null,
-    venue: null,
-    citation_requirements: [],
-    format_requirements: [],
-    delivery: { working_format: null, final_output_format: null },
-    outline: [],
-  }), "utf8");
+    agent_tools: { selected: input.tools, delivery: input.delivery },
+    literature_adapters: { selected: input.adapters },
+    plugins: { selected: input.selectedPlugins },
+  }));
+  const configPath = path.join(input.workspace, "config.yaml");
+  const projectOperations: PlannedWrite[] = [input.index
+    ? planDirectFileEdit({ path: configPath, relativePath: "researchspec/config.yaml", content: configContent, previousContent: input.index.files.get("config.yaml")?.text, scope: "project", reason: "update graph workspace configuration" })
+    : await planFile({ path: configPath, relativePath: "researchspec/config.yaml", content: configContent, scope: "project", ownership: "user" })];
+  if (!input.index) {
+    for (const file of initialStableSpecs(input.workspace)) projectOperations.push(await planFile({ path: file.path, relativePath: path.relative(projectRoot, file.path).split(path.sep).join("/"), content: file.content, scope: "project", ownership: "user" }));
+  }
+  const manifestPath = path.join(input.workspace, "tool-installation-manifest.json");
+  const manifestContent = renderToolInstallationManifest({
+    package_version: "0.1.0",
+    plugin_resolutions: deliveryPlan.pluginResolutions,
+    literature_adapter_resolutions: deliveryPlan.literatureAdapterResolutions,
+    installations: deliveryPlan.installations,
+  });
+  const manifestOperation = input.index
+    ? planDirectFileEdit({ path: manifestPath, relativePath: "researchspec/tool-installation-manifest.json", content: manifestContent, previousContent: input.index.files.get("tool-installation-manifest.json")?.text, scope: "project", reason: "commit workspace ownership manifest" })
+    : await planFile({ path: manifestPath, relativePath: "researchspec/tool-installation-manifest.json", content: manifestContent, scope: "project", ownership: "generated" });
+  const operations = [...projectOperations, ...deliveryPlan.operations, manifestOperation];
+  if (!input.context.dryRun) await executeWritePlan({ operations, ensureDirectories: [input.workspace, path.join(input.workspace, "profiles"), path.join(input.workspace, "specs"), path.join(input.workspace, "runs"), path.join(input.workspace, "changes")] });
+  return { projected: deliveryPlan.installations.filter((item) => item.source.kind === "framework-capability").length, operations };
 }
 
 export async function handleGraphInit(inputPath: string | undefined, options: GraphInitOptions, context: CommandContext): Promise<CommandResult> {
@@ -95,10 +102,9 @@ export async function handleGraphInit(inputPath: string | undefined, options: Gr
   let literatureAdapters: string[];
   try { literatureAdapters = parseLiteratureAdapterExpression(options.literatureAdapters ?? "none"); }
   catch (error) { throw new CliError("invalid_literature_adapters", error instanceof Error ? error.message : String(error), 2); }
-  if (context.dryRun) return success("init", { workspace, schema_version: "2", dry_run: true, selected_tools: tools, delivery: options.delivery ?? "skills", selected_literature_adapters: literatureAdapters }, { stdout: `Would initialize schema 2 workspace: ${workspace}\n` });
-  await writeGraphWorkspace(workspace, tools, literatureAdapters, options.delivery ?? "skills");
-  const projected = (options.delivery ?? "skills") === "commands" ? 0 : await projectCapabilitySkills(path.dirname(workspace), tools);
-  return success("init", { workspace, schema_version: "2", selected_tools: tools, delivery: options.delivery ?? "skills", selected_literature_adapters: literatureAdapters, selected_plugins: [], projected_capability_files: projected }, { stdout: `ResearchSpec schema 2 workspace initialized: ${workspace}\n` });
+  const delivery = options.delivery ?? "skills";
+  const applied = await applyGraphWorkspaceProjection({ workspace, tools, adapters: literatureAdapters, delivery, selectedPlugins: [], context });
+  return success("init", { workspace, schema_version: "2", dry_run: context.dryRun, selected_tools: tools, delivery, selected_literature_adapters: literatureAdapters, selected_plugins: [], projected_capability_files: applied.projected }, { stdout: `${context.dryRun ? "Would initialize" : "ResearchSpec schema 2 workspace initialized"}: ${workspace}\n` });
 }
 
 async function handleGraphReinit(workspace: string, configured: string[], options: GraphInitOptions, context: CommandContext): Promise<CommandResult> {
@@ -110,17 +116,8 @@ async function handleGraphReinit(workspace: string, configured: string[], option
   catch (error) { throw new CliError("invalid_literature_adapters", error instanceof Error ? error.message : String(error), 2); }
   const index = await loadGraphWorkspaceIndex(workspace);
   const delivery = options.delivery ?? index.config.agent_tools.delivery;
-  let projected = 0;
-  if (!context.dryRun) {
-    projected = delivery === "commands" ? 0 : await projectCapabilitySkills(index.projectRoot, tools);
-    await writeFile(path.join(workspace, "config.yaml"), stringify(GraphWorkspaceConfigSchema.parse({
-      schema_version: "2",
-      agent_tools: { selected: tools, delivery },
-      literature_adapters: { selected: literatureAdapters },
-      plugins: { selected: index.config.plugins.selected },
-    })), "utf8");
-    await synchronizeSelectedPluginProjection(workspace, await loadGraphWorkspaceIndex(workspace), context);
-  }
+  const applied = await applyGraphWorkspaceProjection({ workspace, tools, adapters: literatureAdapters, delivery, selectedPlugins: index.config.plugins.selected, index, context });
+  const projected = applied.projected;
   return success("init", { workspace, schema_version: "2", dry_run: context.dryRun, selected_tools: tools, delivery, selected_literature_adapters: literatureAdapters, previous_tools: configured, projected_capability_files: projected }, { stdout: `${context.dryRun ? "Would reconfigure" : "Reconfigured"} schema 2 workspace: ${workspace}\n` });
 }
 
@@ -134,40 +131,9 @@ export async function handleGraphUpdate(options: GraphUpdateOptions, context: Co
     ? index.config.literature_adapters.selected
     : parseLiteratureAdapterExpression(options.literatureAdapters);
   const delivery = options.delivery ?? index.config.agent_tools.delivery;
-  let projected = 0;
-  if (!context.dryRun) {
-    projected = delivery === "commands" ? 0 : await projectCapabilitySkills(index.projectRoot, tools);
-    await writeFile(path.join(workspace, "config.yaml"), stringify(GraphWorkspaceConfigSchema.parse({
-      schema_version: "2",
-      agent_tools: { selected: tools, delivery },
-      literature_adapters: { selected: adapters },
-      plugins: { selected: index.config.plugins.selected },
-    })), "utf8");
-    await synchronizeSelectedPluginProjection(workspace, await loadGraphWorkspaceIndex(workspace), context);
-  }
+  const applied = await applyGraphWorkspaceProjection({ workspace, tools, adapters, delivery, selectedPlugins: index.config.plugins.selected, index, context });
+  const projected = applied.projected;
   return success("update", { workspace, schema_version: "2", dry_run: context.dryRun, selected_tools: tools, delivery, selected_literature_adapters: adapters, projected_capability_files: projected }, { stdout: `${context.dryRun ? "Would update" : "Updated"} schema 2 workspace: ${workspace}\n` });
-}
-
-async function synchronizeSelectedPluginProjection(workspace: string, index: Awaited<ReturnType<typeof loadGraphWorkspaceIndex>>, context: CommandContext): Promise<void> {
-  try {
-    const pluginRegistry = await loadPluginRegistry();
-    const unavailable = index.config.plugins.selected.filter((domainId) => !domainIsAvailable(pluginRegistry.domains.get(domainId)));
-    if (unavailable.length > 0) throw new CliError("plugin_unavailable", `Plugin unavailable: ${unavailable.join(", ")}`, 1, "Uninstall the unavailable plugin selection before refreshing projections.");
-    const extensions = await loadPluginExtensionRegistry();
-    await projectWorkspacePlugins({
-      workspace,
-      index,
-      registry: pluginRegistry,
-      extensions,
-      selectedDomainIds: index.config.plugins.selected,
-      force: context.force,
-    });
-  } catch (error) {
-    if (error instanceof PluginProjectionError) {
-      throw new CliError("plugin_projection_conflict", error.message, 3, "Resolve the conflicting plugin Skill projection and rerun update.", error.diagnostics);
-    }
-    throw error;
-  }
 }
 
 async function requireGraphWorkspaceForUpdate(context: CommandContext): Promise<string> {
