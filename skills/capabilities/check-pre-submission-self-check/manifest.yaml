@@ -49,6 +49,6 @@ provenance:
     - CAP-M3-07
     - KP-M3-02a
   upstream_sources:
-    - path: docs/ars_extraction/m3-integrity-review/capabilities/07_pre_submission_self_check.md
+    - path: authoring/ars/m3-integrity-review/capabilities/07_pre_submission_self_check.md
       sha256: c80fbbf1537df93c29b4361f8fc4d962191e05b56fd2b481357d44f9fd4be49e
 license: CC BY-NC 4.0

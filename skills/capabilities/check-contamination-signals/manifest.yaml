@@ -49,6 +49,6 @@ provenance:
     - CAP-M5-14
     - KP-M4-03
   upstream_sources:
-    - path: docs/ars_extraction/m5-side-branches/capabilities/14_contamination_signals.py
+    - path: authoring/ars/m5-side-branches/capabilities/14_contamination_signals.py
       sha256: 79a9808662d80efb28e145670a0dedcbdc9558b3dcf2064e2364afe50868f7df
 license: CC BY-NC 4.0

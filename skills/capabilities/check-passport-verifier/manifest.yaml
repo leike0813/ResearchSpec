@@ -49,6 +49,6 @@ provenance:
     - CAP-M5-10
     - KP-M4-03
   upstream_sources:
-    - path: docs/ars_extraction/m5-side-branches/capabilities/10_passport_verifier.py
+    - path: authoring/ars/m5-side-branches/capabilities/10_passport_verifier.py
       sha256: dc353bf6d5edc452130e25182f4de6651cfed1fce621fd00a598ca17646cc9a8
 license: CC BY-NC 4.0

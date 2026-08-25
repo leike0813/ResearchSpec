@@ -37,6 +37,6 @@ provenance:
     - CAP-M1-02
     - KP-M1-01
   upstream_sources:
-    - path: docs/ars_extraction/m1-research/capabilities/02_source_quality_grading.md
+    - path: authoring/ars/m1-research/capabilities/02_source_quality_grading.md
       sha256: 3ffecae526acdde6d28bb8d2a9f5a88f95c00f51338c8f4d4a724ced3f7777bf
 license: CC BY-NC 4.0

@@ -39,6 +39,6 @@ provenance:
     - CAP-M4-02
     - KP-M4-01
   upstream_sources:
-    - path: docs/ars_extraction/m4-revision-finalize/capabilities/02_revision_patching_apply.py
+    - path: authoring/ars/m4-revision-finalize/capabilities/02_revision_patching_apply.py
       sha256: 00b991433fb89ab6b35c4270ce5d9f75c9a7862af014b74a88ebf69bbaf2b4d9
 license: CC BY-NC 4.0

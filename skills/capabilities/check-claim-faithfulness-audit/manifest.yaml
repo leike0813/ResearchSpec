@@ -36,6 +36,6 @@ provenance:
     - CAP-M5-06
     - KP-M5-09
   upstream_sources:
-    - path: docs/ars_extraction/m5-side-branches/capabilities/06_claim_faithfulness_audit.md
+    - path: authoring/ars/m5-side-branches/capabilities/06_claim_faithfulness_audit.md
       sha256: 1b78325420b927095b54157385c38db5cc301501963b5a930e1d75821956b3be
 license: CC BY-NC 4.0

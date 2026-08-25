@@ -36,6 +36,6 @@ provenance:
     - CAP-M5-05
     - KP-M5-08
   upstream_sources:
-    - path: docs/ars_extraction/m5-side-branches/capabilities/05_literature_monitoring.md
+    - path: authoring/ars/m5-side-branches/capabilities/05_literature_monitoring.md
       sha256: 76179537d4be16795bd78d30f88931befc60a2cb564b41a77abf4653694c5aee
 license: CC BY-NC 4.0

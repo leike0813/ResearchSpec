@@ -42,6 +42,6 @@ provenance:
     - KP-M1-02
     - KP-M1-02b
   upstream_sources:
-    - path: docs/ars_extraction/m1-research/capabilities/04_research_question_formulation.md
+    - path: authoring/ars/m1-research/capabilities/04_research_question_formulation.md
       sha256: d5d8df51f7fbe54ddec08ba335346c1c49a5264a1a1b0cd1ef680c026092523e
 license: CC BY-NC 4.0

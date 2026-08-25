@@ -41,6 +41,6 @@ provenance:
     - KP-M3-01
     - KP-M3-09
   upstream_sources:
-    - path: docs/ars_extraction/m3-integrity-review/capabilities/01_reference_integrity_verification.md
+    - path: authoring/ars/m3-integrity-review/capabilities/01_reference_integrity_verification.md
       sha256: d53e1f5ac75aaf81f3cd80fbf88a136a795f2286cd3acb0e54ca82dc2a44c167
 license: CC BY-NC 4.0

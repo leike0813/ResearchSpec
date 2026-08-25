@@ -36,6 +36,6 @@ provenance:
     - CAP-M5-02
     - KP-M5-02
   upstream_sources:
-    - path: docs/ars_extraction/m5-side-branches/capabilities/02_risk_of_bias_assessment.md
+    - path: authoring/ars/m5-side-branches/capabilities/02_risk_of_bias_assessment.md
       sha256: d74aa53f86743efdc4e2b0232f92da674bec54866a45ef7964398eac3475ce41
 license: CC BY-NC 4.0

@@ -16,7 +16,7 @@ node scripts/arsu-maintenance.mjs check <anchor>
 
 `pnpm arsu-maintenance:artifacts` 会统一重新生成：
 
-- `docs/capability-parity-report.json`
+- `artifacts/generated/capability-parity-report.json`
 - `audits/arsu/<anchor>/artifacts/arsu-mode-capability-review.html`
 - `audits/arsu/<anchor>/artifacts/arsu-mode-graph-match-assessment.html`
 - `audits/arsu/<anchor>/artifacts/arsu-mode-gap-semantic-review.html`

@@ -49,6 +49,6 @@ provenance:
     - CAP-M4-05
     - KP-M4-03
   upstream_sources:
-    - path: docs/ars_extraction/m4-revision-finalize/capabilities/05_temporal_verifier.py
+    - path: authoring/ars/m4-revision-finalize/capabilities/05_temporal_verifier.py
       sha256: 54f8727d10eead584b6b90ea77aaa8c2f64d3aa0f5db2df14e78bb4e84a29045
 license: CC BY-NC 4.0

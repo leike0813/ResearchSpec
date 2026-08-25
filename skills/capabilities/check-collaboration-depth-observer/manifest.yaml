@@ -36,6 +36,6 @@ provenance:
     - CAP-M5-08
     - KP-M5-12
   upstream_sources:
-    - path: docs/ars_extraction/m5-side-branches/capabilities/08_collaboration_depth_observer.md
+    - path: authoring/ars/m5-side-branches/capabilities/08_collaboration_depth_observer.md
       sha256: cb7b351696e5f85e80255f4478db047fa0f8819dc9a2b290a09bd836246fc641
 license: CC BY-NC 4.0

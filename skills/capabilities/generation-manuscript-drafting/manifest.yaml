@@ -52,6 +52,6 @@ provenance:
     - KP-M2-03
     - KP-M2-07
   upstream_sources:
-    - path: docs/ars_extraction/m2-writing/capabilities/04_drafting.rr-variant.md
+    - path: authoring/ars/m2-writing/capabilities/04_drafting.rr-variant.md
       sha256: 1d86d6163df5cda7f45a686d16abcd81386560cf03dd8e0b20b992556d233cb7
 license: CC BY-NC 4.0

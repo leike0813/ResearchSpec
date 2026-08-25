@@ -36,6 +36,6 @@ provenance:
     - CAP-M4-04
     - KP-M4-02
   upstream_sources:
-    - path: docs/ars_extraction/m4-revision-finalize/capabilities/04_terminal_policy_gate.submission-gate.md
+    - path: authoring/ars/m4-revision-finalize/capabilities/04_terminal_policy_gate.submission-gate.md
       sha256: b6505eb11ed86164c982d6f4db2b7b4d9504b404642341b841c44fc115a9d160
 license: CC BY-NC 4.0

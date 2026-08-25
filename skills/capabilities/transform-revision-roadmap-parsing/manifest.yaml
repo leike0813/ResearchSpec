@@ -44,6 +44,6 @@ provenance:
     - CAP-M4-01
     - KP-M4-01
   upstream_sources:
-    - path: docs/ars_extraction/m4-revision-finalize/capabilities/01_revision_roadmap_parsing.md
+    - path: authoring/ars/m4-revision-finalize/capabilities/01_revision_roadmap_parsing.md
       sha256: 576b2e07fc4d6fabcb3647a86d78cf01dbe8aeb8bd0516f91c282e95726cdd74
 license: CC BY-NC 4.0

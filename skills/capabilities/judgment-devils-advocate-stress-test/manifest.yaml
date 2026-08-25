@@ -41,6 +41,6 @@ provenance:
     - CAP-M3-05
     - KP-M3-08
   upstream_sources:
-    - path: docs/ars_extraction/m3-integrity-review/capabilities/05_devils_advocate.reviewer-variant.md
+    - path: authoring/ars/m3-integrity-review/capabilities/05_devils_advocate.reviewer-variant.md
       sha256: 1faf3a87101d16cc14e0c2d2e6f5962f670cbcbef04a381c947998497dd166cc
 license: CC BY-NC 4.0

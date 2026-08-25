@@ -36,6 +36,6 @@ provenance:
     - CAP-M2-05
     - KP-M2-02
   upstream_sources:
-    - path: docs/ars_extraction/m2-writing/capabilities/05_abstract_writing.md
+    - path: authoring/ars/m2-writing/capabilities/05_abstract_writing.md
       sha256: 03ce976e44c335c83a86d9ff296954e389c2eef982f3f16fd288aae4212f1edc
 license: CC BY-NC 4.0

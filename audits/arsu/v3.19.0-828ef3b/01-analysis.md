@@ -1,13 +1,13 @@
 # ARSU Anchor Analysis — v3.19.0-828ef3b
 
-- generated: 2026-08-25T05:27:06.652Z
+- generated: 2026-08-25T07:39:23.598Z
 - upstream: https://github.com/Imbad0202/academic-research-skills @ v3.19.0 (828ef3b613b0e8b91830da3328a1e33d4eb5ab4c)
 - maintenance skill SHA-256: `3a3d57eadd2d21e413fc34bfcd9dc928ec961affe7c403cb26cd3f23046f8f61`
 
 ## Upstream Inventory
 
-- total files: 1131
-- tree SHA-256: `09f66063200b825c4546ee8a1644bce9efccfb86290f185a9cee9a02411b1b03`
+- total files: 1121
+- tree SHA-256: `ea01623b69e9ee35f82135675961a3d6cfa6e686fb3c6230e4876034ecebbd81`
 - agents: 39 · references: 90 · templates: 22
 
 | top-level area | files |
@@ -20,7 +20,6 @@
 | .github | 17 |
 | .gitignore | 1 |
 | .gitleaks.toml | 1 |
-| .pytest_cache | 4 |
 | CHANGELOG.md | 1 |
 | CITATION.cff | 1 |
 | CONTRIBUTING.md | 1 |
@@ -49,25 +48,23 @@
 | hooks | 2 |
 | pyproject.toml | 1 |
 | requirements-dev.txt | 1 |
-| scripts | 335 |
+| scripts | 331 |
 | shared | 60 |
-| tests | 307 |
+| tests | 305 |
 | tools | 6 |
 
 | extension | files |
 |---|---|
-| (none) | 11 |
-| .TAG | 1 |
+| (none) | 9 |
 | .bib | 7 |
 | .cff | 1 |
 | .html | 6 |
 | .jq | 5 |
 | .json | 145 |
 | .jsonl | 4 |
-| .md | 461 |
+| .md | 460 |
 | .pdf | 16 |
 | .py | 249 |
-| .pyc | 6 |
 | .sh | 6 |
 | .tex | 2 |
 | .toml | 4 |

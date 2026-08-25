@@ -49,6 +49,6 @@ provenance:
     - CAP-M5-13
     - KP-M4-03
   upstream_sources:
-    - path: docs/ars_extraction/m5-side-branches/capabilities/13_citation_verification_summary.py
+    - path: authoring/ars/m5-side-branches/capabilities/13_citation_verification_summary.py
       sha256: 23a1a1a32b306e3c465b9a3ab5a368c426521772951aab57c2cea0c7c314c06f
 license: CC BY-NC 4.0

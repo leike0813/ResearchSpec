@@ -36,6 +36,6 @@ provenance:
     - CAP-M2-06
     - KP-M2-05
   upstream_sources:
-    - path: docs/ars_extraction/m2-writing/capabilities/06_citation_format_compliance.md
+    - path: authoring/ars/m2-writing/capabilities/06_citation_format_compliance.md
       sha256: c19d59c4a8120510dffa7abd30808750e6f03dd7e26dbc1d548a188145416f36
 license: CC BY-NC 4.0

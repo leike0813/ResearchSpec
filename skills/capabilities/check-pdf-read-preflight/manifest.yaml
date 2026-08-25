@@ -49,6 +49,6 @@ provenance:
     - CAP-M5-12
     - KP-M4-03
   upstream_sources:
-    - path: docs/ars_extraction/m5-side-branches/capabilities/12_pdf_read_preflight.py
+    - path: authoring/ars/m5-side-branches/capabilities/12_pdf_read_preflight.py
       sha256: e4a2431fe2f2525ec755877869a93ee4ff2dd13a44f294d38ceb2e0736b5af16
 license: CC BY-NC 4.0

@@ -5,12 +5,12 @@
     {
       "capability_id": "analysis-evidence-synthesis",
       "source_path": "analysis-evidence-synthesis",
-      "manifest_sha256": "3263c31096f98726c0ed5e9dd7dc25ba3a04a6631d6708c8e03bbbf5c4e8a9fa"
+      "manifest_sha256": "392c9d0fabeb2d25305299bc8aa33a6b25092fd3fe8b27342a47dd4ae65585dc"
     },
     {
       "capability_id": "analysis-meta-analysis",
       "source_path": "analysis-meta-analysis",
-      "manifest_sha256": "2aa082d13c7756c20e6dbb646e3f84471d965d143e5e2ef79282ff4ffbab0b51"
+      "manifest_sha256": "4f85ae0de97524b5bacfe0031636e9aa92aea46ff4fb096d93b8dff7bbc56595"
     },
     {
       "capability_id": "analysis-review-response-manuscript-analysis",
@@ -20,42 +20,42 @@
     {
       "capability_id": "analysis-risk-of-bias-assessment",
       "source_path": "analysis-risk-of-bias-assessment",
-      "manifest_sha256": "1312c91f20279b52d22f7022479dfd3f1c59936d42fc16b946c65e881dbd0dc7"
+      "manifest_sha256": "16e206a3550fb122aadc2c8931cfe8917f5ea3cc68d63e8a1c80e9df847a07a7"
     },
     {
       "capability_id": "check-citation-existence-verification",
       "source_path": "check-citation-existence-verification",
-      "manifest_sha256": "177028f869db911f6308d5872c8f02d28d97c6629e2a75207c505865d155b84b"
+      "manifest_sha256": "d55fa6020cabe7f23b0f98e0a95d18f2295fc1e33b8619b1abf99fb290e3d06d"
     },
     {
       "capability_id": "check-citation-format-compliance",
       "source_path": "check-citation-format-compliance",
-      "manifest_sha256": "45453671f8169467dc7353411dd8e57fbee26cac0c025877b6e723bcbbcdc695"
+      "manifest_sha256": "ca61584a0d094927537a6de7ad77664e9c09d8c09e3c0a7b98a831935e8f75fd"
     },
     {
       "capability_id": "check-citation-verification-summary",
       "source_path": "check-citation-verification-summary",
-      "manifest_sha256": "05473eaaab9f352de019cff6e8c3ebbaf7d40c66f7ede77ad18684d847d4e293"
+      "manifest_sha256": "bf81605aadd3e3f1d6579dbfbaebccbe138d20435804ed279989e823fd6ff669"
     },
     {
       "capability_id": "check-claim-faithfulness-audit",
       "source_path": "check-claim-faithfulness-audit",
-      "manifest_sha256": "311e0372b3769fffcd552ac4182469f2ca6ce82dee889c95d030f7e785cb711a"
+      "manifest_sha256": "1aaeaed8789cefe2cff735c1453e88fb08a7d44f46523e191398b435e1033209"
     },
     {
       "capability_id": "check-collaboration-depth-observer",
       "source_path": "check-collaboration-depth-observer",
-      "manifest_sha256": "cc8fefdfa7cdbefcc7aa59de9195fbff316b25c62ea3e1c80e345bb7a1e03ba5"
+      "manifest_sha256": "4e3a8f82f4b3a7071268c24c90297529ab25e4e25aec310adc602f1fe63f1394"
     },
     {
       "capability_id": "check-compliance-check",
       "source_path": "check-compliance-check",
-      "manifest_sha256": "03bdd8a6848973ba78992d77113a66a01b058130eca47e1bdb515f86b093b4e8"
+      "manifest_sha256": "176799f47000e228e7651e98916357ff85fb163caa845b1bd9a929aa39a8f9dc"
     },
     {
       "capability_id": "check-contamination-signals",
       "source_path": "check-contamination-signals",
-      "manifest_sha256": "bb7491f88bbfe591a021dc37bf79bcb69c7290bc0486fef103a8d1efaa39cafb"
+      "manifest_sha256": "49d23572647bef6b1a4c9bd3bef5cc0d017186ee9503c0ada69c8553f86581eb"
     },
     {
       "capability_id": "check-paper-humanization-review",
@@ -70,62 +70,62 @@
     {
       "capability_id": "check-passport-verifier",
       "source_path": "check-passport-verifier",
-      "manifest_sha256": "0e8c9bc1a705b9a272bf3473e698f2d917266977c9f4f33867da3ea0f0da2a93"
+      "manifest_sha256": "f5279f58832e2fe0c3676135908097c81985e816e28b8ea9fae8f0672c5c2f63"
     },
     {
       "capability_id": "check-pdf-read-preflight",
       "source_path": "check-pdf-read-preflight",
-      "manifest_sha256": "ff660a2b7db6d21f6cc00dc485c42abc148eb6a2888bd81927628cdd0cd5432c"
+      "manifest_sha256": "3745e1cdc250b08dcdadde6fba1c872e2163ce983897b27286a5853974d1df4d"
     },
     {
       "capability_id": "check-pre-submission-self-check",
       "source_path": "check-pre-submission-self-check",
-      "manifest_sha256": "a909b0709c35ec0d450595f12ec927f45f9e359b1b7f506553966d1625052235"
+      "manifest_sha256": "5740ec31471ed236e53a0a88e50ff69527941e822f7ac2bd7fb2b19080e6ab6c"
     },
     {
       "capability_id": "check-reference-integrity-verification",
       "source_path": "check-reference-integrity-verification",
-      "manifest_sha256": "48938a5d8cf214c07f8a407e70d6bb45d4c01b5fa1356020590fc4314c7c5d0a"
+      "manifest_sha256": "39d73e77e3cc61d7b839ec41181def19d02e1d0c14560c64da792f75ffe39526"
     },
     {
       "capability_id": "check-submission-package-verifier",
       "source_path": "check-submission-package-verifier",
-      "manifest_sha256": "6daad7e096816a356a5b34effbc09bc174ca167fe97f2dfd570225f805eb9789"
+      "manifest_sha256": "af6514b39aa2c4b0dc413c29187fc8088889aee49dcb48eba5dbf112e254e63c"
     },
     {
       "capability_id": "check-temporal-integrity-verification",
       "source_path": "check-temporal-integrity-verification",
-      "manifest_sha256": "b24b6efbf32cfcb34477a94159900617adfc41f54c39ee25e7507e9f5f589d5c"
+      "manifest_sha256": "02dda9c3c00758fcac0510ec76dd34cc8c7d61476611a1d5d61ee2c3eb560d2d"
     },
     {
       "capability_id": "check-terminal-policy-gate",
       "source_path": "check-terminal-policy-gate",
-      "manifest_sha256": "92fe90127957a893a010023aada74f440ad21209fe63625a0a526c87bea0a59f"
+      "manifest_sha256": "0bf5b47bf254a8b3f0639b8098732a6c4884c5eccb04d7e899ec913459e3194c"
     },
     {
       "capability_id": "design-argument-blueprint",
       "source_path": "design-argument-blueprint",
-      "manifest_sha256": "814a5a9c6ceea1787157a920b9ff5006fceff2c4a812fd4b9ba4830c4ca5d47c"
+      "manifest_sha256": "854a8df551c35e5f3710d5ea4b1dc4608537fd1fbb65509253903c42a1ef0e23"
     },
     {
       "capability_id": "design-manuscript-structure-design",
       "source_path": "design-manuscript-structure-design",
-      "manifest_sha256": "b7249171166cc1603b2c02aa0bc4d174036feb89a02ff1fe0c8f625e3cd2981f"
+      "manifest_sha256": "98a9783bbf2b7eda162e1e6efc762d98a951e40bb2229b2dfb1d5d1ca1c91fb4"
     },
     {
       "capability_id": "design-methodology-design",
       "source_path": "design-methodology-design",
-      "manifest_sha256": "705b3630e542e801813f04c335c2813e3acbaf588ed40548a7928c0a603be7d0"
+      "manifest_sha256": "88375ac11462cb492d8efee56492fbbcb65f02b3c62b031311dfb8ea2b1ec5db"
     },
     {
       "capability_id": "design-research-question-formulation",
       "source_path": "design-research-question-formulation",
-      "manifest_sha256": "7de2ba5e76662c5ec628a2d291ce336a6b774c4bb731f23c4cb6714982f41ae8"
+      "manifest_sha256": "f55708315799dab3d5111f478288df1ac4647913f7f72159db59a518330eed2d"
     },
     {
       "capability_id": "design-review-panel-config",
       "source_path": "design-review-panel-config",
-      "manifest_sha256": "c1e5c8e6463d368dfc04b6a3660a01fba97884f187ed126553735abec7b896a5"
+      "manifest_sha256": "a3c7dcd54f3d8a149f1e903ab588734ab329d5be8ffe07825c1c1c654436c3c7"
     },
     {
       "capability_id": "design-review-response-intake",
@@ -140,37 +140,37 @@
     {
       "capability_id": "design-writing-intake",
       "source_path": "design-writing-intake",
-      "manifest_sha256": "1ff4f9e4a615a37056ce9c39abc4b68c9b62698be3be2e1074faa0ace525b128"
+      "manifest_sha256": "50011baa65624e6e3d3d7444fae484689e7f1b208391d8f30ff8ddafeb6dc246"
     },
     {
       "capability_id": "discovery-literature-monitoring",
       "source_path": "discovery-literature-monitoring",
-      "manifest_sha256": "608ed89c8ff18044c1ba7e4ba38d6d53136e40dcd7b060e544b5dabe866e401f"
+      "manifest_sha256": "5085f65eba2788f4d7bee313224476bfa5209b27415574d968778c0ef4cee4c2"
     },
     {
       "capability_id": "discovery-literature-search-screening",
       "source_path": "discovery-literature-search-screening",
-      "manifest_sha256": "49583d56158b197f3fb28349524f8376927965a0236b48d6186cd6b3fe2050f2"
+      "manifest_sha256": "308c1c966a5967f22cf34be79bcc80d8e5200d48ec4aefd127c19d0fc565d048"
     },
     {
       "capability_id": "discovery-source-quality-grading",
       "source_path": "discovery-source-quality-grading",
-      "manifest_sha256": "87482b4446b4b2ef01a04b99851aa092dbc8038d7decedad2873416138f1b1c0"
+      "manifest_sha256": "9c3e45ae69c2d6615ca3618cf3558e4bda96135e6e34ff8e7c9076a22a59aad7"
     },
     {
       "capability_id": "generation-abstract-writing",
       "source_path": "generation-abstract-writing",
-      "manifest_sha256": "f6cc154069e615213da47e18cc0bd842884b858b3d205ba9b8aeb6cce57adaf7"
+      "manifest_sha256": "469dcdd4abb8160ed81424b9298a909496d18ed4ce5bba3d71b93d01457a54f5"
     },
     {
       "capability_id": "generation-figure-generation",
       "source_path": "generation-figure-generation",
-      "manifest_sha256": "a7a3c36b79767effd0a759da2c43ec76c629b0ca31a748a9f20837bb0be9ae63"
+      "manifest_sha256": "ac437d6da397cf643996a66b1ba90a46be35091e8a1cc0498e0e7396e3072f47"
     },
     {
       "capability_id": "generation-format-rendering",
       "source_path": "generation-format-rendering",
-      "manifest_sha256": "44a723990680ead2a6f37978c02eca8ba9a28b3e65ae81d93c44b1f9dd66cf9a"
+      "manifest_sha256": "6e17fdbdb7350f0667a60229431cdd78faffb90a15f07e66b88b626ff43dfe73"
     },
     {
       "capability_id": "generation-humanization-reference",
@@ -180,12 +180,12 @@
     {
       "capability_id": "generation-manuscript-drafting",
       "source_path": "generation-manuscript-drafting",
-      "manifest_sha256": "516b74872dab2610df641c7d13fa3218995176d1924cb230e49bcaae4b00c216"
+      "manifest_sha256": "c6147a0e46ed17f632dc952b59adc24b79a799796c96e160854c6387f4a86a2b"
     },
     {
       "capability_id": "generation-report-compilation",
       "source_path": "generation-report-compilation",
-      "manifest_sha256": "74a136f89eede5200a39eeaafb7e520d4eea84651698e4cdb573e87802f831df"
+      "manifest_sha256": "77cc41f581c8af4e0dca08f0247d8db8c8861bebbc3c409848cb84f3b10944bc"
     },
     {
       "capability_id": "generation-review-response-round",
@@ -195,22 +195,22 @@
     {
       "capability_id": "judgment-devils-advocate-stress-test",
       "source_path": "judgment-devils-advocate-stress-test",
-      "manifest_sha256": "1428a211daeea70698834b89dbe7ecf164f99bf3f309046ea0fc31a564d06b4f"
+      "manifest_sha256": "8e1a3626578c837c792dc856e67cafab88618765f3e73445084f81511035a30f"
     },
     {
       "capability_id": "judgment-editorial-judgment",
       "source_path": "judgment-editorial-judgment",
-      "manifest_sha256": "2ad9c73e1f001f073f114f7e3db6f76622326a216a28aa1805bfc1cf6483bbe4"
+      "manifest_sha256": "715dce70dfaff2cae007a907b91b101e34631e5ea0b04d2e8b4595d1c2009b30"
     },
     {
       "capability_id": "judgment-review-synthesis",
       "source_path": "judgment-review-synthesis",
-      "manifest_sha256": "3d446d10e7ed705e4105970a835364db39b99a7daa82e965a35c532950b1cee3"
+      "manifest_sha256": "03d12f06d1141cb46805a06341ac15435db4516cd073e80b217c93592f9526fe"
     },
     {
       "capability_id": "judgment-specialist-review",
       "source_path": "judgment-specialist-review",
-      "manifest_sha256": "60b70f07072ec9693cd733dd2f49fa3aef0d3b3227aa19b784e8268da205be02"
+      "manifest_sha256": "9d1145517a9d4b692f06bd0e5c126dd70d9fcd7d61f539061061fb011625ec96"
     },
     {
       "capability_id": "transform-paper-humanization-revision",
@@ -225,17 +225,17 @@
     {
       "capability_id": "transform-revision-patching",
       "source_path": "transform-revision-patching",
-      "manifest_sha256": "a99241fbaef9eea746655ac8e22354e63446db793ca598682c5f2ca3b4740f0d"
+      "manifest_sha256": "a9edae08d0c80e27ac22c765e38cfdd41e33af8da9d2abacad78b5be5e595ad5"
     },
     {
       "capability_id": "transform-revision-roadmap-parsing",
       "source_path": "transform-revision-roadmap-parsing",
-      "manifest_sha256": "abf850301e3e6d7790cf16c642391f31edbc0abe44e5db4c771beacb6d17db7f"
+      "manifest_sha256": "f20acf746ad9dde09eee9a2e24e010db6b57bf86da8672da3b37435b4f8c72fe"
     },
     {
       "capability_id": "transform-socratic-mentoring",
       "source_path": "transform-socratic-mentoring",
-      "manifest_sha256": "e00fb9912008a6de37c9bc1a14d7134cdd472b6f1522e8245fa844bfda503b99"
+      "manifest_sha256": "ad0a6e783f477487bac677b39c5c2f845ebbd40c509aa9905c149344400c08ab"
     }
   ]
 }

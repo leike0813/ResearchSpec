@@ -46,6 +46,6 @@ provenance:
     - CAP-M3-06
     - KP-M3-06
   upstream_sources:
-    - path: docs/ars_extraction/m3-integrity-review/capabilities/06_review_synthesis.md
+    - path: authoring/ars/m3-integrity-review/capabilities/06_review_synthesis.md
       sha256: 5c348e422c0e77f3f27bc3b7b47c710415913378794cf97194bfce8b901c2087
 license: CC BY-NC 4.0

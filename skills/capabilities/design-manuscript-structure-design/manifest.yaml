@@ -41,6 +41,6 @@ provenance:
     - CAP-M2-02
     - KP-M2-08
   upstream_sources:
-    - path: docs/ars_extraction/m2-writing/capabilities/02_manuscript_structure_design.md
+    - path: authoring/ars/m2-writing/capabilities/02_manuscript_structure_design.md
       sha256: 958afd16c3cad380a40ea1dffbb22370458d5324f2feb882ecfe7cda47f794c1
 license: CC BY-NC 4.0

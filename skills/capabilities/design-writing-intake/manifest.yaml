@@ -36,6 +36,6 @@ provenance:
     - CAP-M2-01
     - KP-M2-06
   upstream_sources:
-    - path: docs/ars_extraction/m2-writing/capabilities/01_writing_intake.md
+    - path: authoring/ars/m2-writing/capabilities/01_writing_intake.md
       sha256: e5f1d2ac137945b680cedb6b38ac4c53eb8b60265a665c47cf4508254241b369
 license: CC BY-NC 4.0

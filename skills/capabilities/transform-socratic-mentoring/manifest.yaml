@@ -41,6 +41,6 @@ provenance:
     - KP-M5-03
     - KP-M5-04
   upstream_sources:
-    - path: docs/ars_extraction/m5-side-branches/capabilities/03_socratic_mentoring.dr-variant.md
+    - path: authoring/ars/m5-side-branches/capabilities/03_socratic_mentoring.dr-variant.md
       sha256: 6d9218971f0787603f0453693af63b2f36c894e4655ccd365aa868bcbd8748c0
 license: CC BY-NC 4.0

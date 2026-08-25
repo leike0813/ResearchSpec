@@ -54,6 +54,6 @@ provenance:
     - KP-M4-02
     - KP-M4-03
   upstream_sources:
-    - path: docs/ars_extraction/m5-side-branches/capabilities/09_submission_package_verifier.py
+    - path: authoring/ars/m5-side-branches/capabilities/09_submission_package_verifier.py
       sha256: b12762172b839d0348d438903ffbf66532f70404a79113eb6ba0ace9c20355bc
 license: CC BY-NC 4.0

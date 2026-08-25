@@ -47,6 +47,6 @@ provenance:
     - KP-M1-03
     - KP-M1-04
   upstream_sources:
-    - path: docs/ars_extraction/m1-research/capabilities/01_literature_search_screening.dr-variant.md
+    - path: authoring/ars/m1-research/capabilities/01_literature_search_screening.dr-variant.md
       sha256: 885ef79f7a37cc03e0fcb9c4a7deecb9bb9f9bbae5b98ce2c7c9e42804e76dea
 license: CC BY-NC 4.0
