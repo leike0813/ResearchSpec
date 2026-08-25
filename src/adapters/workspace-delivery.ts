@@ -1,12 +1,5 @@
 import path from "node:path";
 
-import { ACADEMIC_PIPELINE_GRAPH_PROFILE, ACADEMIC_PIPELINE_GRAPH_PROFILE_TEXT } from "../core/graph-profiles/academic-pipeline.js";
-import { ACADEMIC_PAPER_GRAPH_PROFILE, ACADEMIC_PAPER_GRAPH_PROFILE_TEXT } from "../core/graph-profiles/academic-paper.js";
-import { ACADEMIC_PAPER_REVIEWER_GRAPH_PROFILE, ACADEMIC_PAPER_REVIEWER_GRAPH_PROFILE_TEXT } from "../core/graph-profiles/academic-paper-reviewer.js";
-import { MINIMAL_GRAPH_PROFILE, MINIMAL_GRAPH_PROFILE_TEXT } from "../core/graph-profiles/minimal.js";
-import { PAPER_HUMANIZER_GRAPH_PROFILE, PAPER_HUMANIZER_GRAPH_PROFILE_TEXT } from "../core/graph-profiles/paper-humanizer.js";
-import { RESEARCH_MAIN_GRAPH_PROFILE, RESEARCH_MAIN_GRAPH_PROFILE_TEXT } from "../core/graph-profiles/research-main.js";
-import { REVIEW_RESPONSE_GRAPH_PROFILE, REVIEW_RESPONSE_GRAPH_PROFILE_TEXT } from "../core/graph-profiles/review-response.js";
 import type { Diagnostic } from "../core/validation/types.js";
 import { planFile, sha256, type PlannedWrite } from "../core/workspace/write-plan.js";
 import {
@@ -16,6 +9,7 @@ import {
 } from "../literature-adapters/index.js";
 import type { LoadedPluginRegistry } from "../plugins/registry.js";
 import { planPluginProjection } from "../plugins/graph-delivery.js";
+import { loadGraphProfileRegistry } from "../graph-profiles/registry.js";
 import type { DomainResolutionSnapshot } from "./installations.js";
 import { planToolDelivery } from "./delivery.js";
 import type { DeliveryMode } from "./tools.js";
@@ -55,15 +49,7 @@ export async function planWorkspaceDelivery(input: {
   reconcileLegacy?: boolean;
   globalCleanupAuthorized?: boolean;
 }): Promise<WorkspaceDeliveryPlan> {
-  const profileDefinitions = [
-    { profile: MINIMAL_GRAPH_PROFILE, projection: MINIMAL_GRAPH_PROFILE_TEXT },
-    { profile: RESEARCH_MAIN_GRAPH_PROFILE, projection: RESEARCH_MAIN_GRAPH_PROFILE_TEXT },
-    { profile: ACADEMIC_PAPER_GRAPH_PROFILE, projection: ACADEMIC_PAPER_GRAPH_PROFILE_TEXT },
-    { profile: ACADEMIC_PAPER_REVIEWER_GRAPH_PROFILE, projection: ACADEMIC_PAPER_REVIEWER_GRAPH_PROFILE_TEXT },
-    { profile: ACADEMIC_PIPELINE_GRAPH_PROFILE, projection: ACADEMIC_PIPELINE_GRAPH_PROFILE_TEXT },
-    { profile: PAPER_HUMANIZER_GRAPH_PROFILE, projection: PAPER_HUMANIZER_GRAPH_PROFILE_TEXT },
-    { profile: REVIEW_RESPONSE_GRAPH_PROFILE, projection: REVIEW_RESPONSE_GRAPH_PROFILE_TEXT },
-  ] as const;
+  const profileDefinitions = [...(await loadGraphProfileRegistry()).profiles.values()];
   const profileOperations: PlannedWrite[] = [];
   const profileInstallations: ManagedInstallation[] = [];
   for (const definition of profileDefinitions) {

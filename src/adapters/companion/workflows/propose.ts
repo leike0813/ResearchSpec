@@ -47,7 +47,7 @@ Return the change selector, target specs, created documents, concise current/pro
 
 - Direct editing of change documents remains valid; do not make the CLI their only authoring path.
 - Do not accept, reject, defer, supersede, archive, or apply the change.
-- Do not place subflow status, Gate attempts, transition history, boundary deliverable bytes, or control mutations in a project change.
+- Do not place run/node status, Gate attempts, transition history, boundary deliverable bytes, or workflow-state mutations in a project change.
 
 ## Completion
 

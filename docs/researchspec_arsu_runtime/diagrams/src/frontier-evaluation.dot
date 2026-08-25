@@ -2,7 +2,7 @@ digraph frontier_evaluation {
   graph [label="Current frontier is derived, not stored", labelloc=t, rankdir=LR, fontname="DejaVu Sans"];
   node [shape=box, style="rounded", fontname="DejaVu Sans"];
   profile [label="project profile\nnodes / joins / Gates / transitions"];
-  controls [label="subflow controls\ncheckpoint / Gates / Decisions"];
+  controls [label="frozen runs + nodes\nfrontier / Gates / Decisions"];
   handoffs [label="handoffs\ninput/output roles and paths"];
   specs [label="stable specs"];
   evaluator [shape=component, label="workspace evaluator"];

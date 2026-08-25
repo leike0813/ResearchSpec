@@ -62,7 +62,7 @@ void test("anchor matcher tolerates whitespace changes without line numbers", ()
       keywords: ["phase2"],
     },
     semantic_role: "boundary_deliverable_contract",
-    researchspec_targets: ["researchspec/subflows/<instance>/handoff.md"],
+    researchspec_targets: ["researchspec/runs/<run-id>/handoff.md"],
     replacement_shape: "io_contract_block",
     replacement_scope: {
       start_snippet: "You MAY READ files in `phase1_*/`",
@@ -92,7 +92,7 @@ void test("anchor matcher rejects ambiguous replacement boundaries", () => {
     severity: "required",
     match_hints: { snippets: ["boundary"], keywords: ["phase"] },
     semantic_role: "boundary_deliverable_contract",
-    researchspec_targets: ["researchspec/subflows/<instance>/handoff.md"],
+    researchspec_targets: ["researchspec/runs/<run-id>/handoff.md"],
     replacement_shape: "io_contract_block",
     replacement_scope: { start_snippet: "boundary", end_snippet: "boundary" },
   };
@@ -123,7 +123,7 @@ void test("coverage checks current replacement assets instead of upstream histor
       contract_category: "runtime",
       severity: "required",
       match_hints: { snippets: ["legacy"] },
-      semantic_role: "subflow_control_boundary",
+      semantic_role: "graph_state_boundary",
       researchspec_targets: ["researchspec/subflows/<instance>/control.yaml"],
       replacement_shape: "protocol_block",
       replacement_scope: { start_snippet: "legacy", end_snippet: "legacy" },

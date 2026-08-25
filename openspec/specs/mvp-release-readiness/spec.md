@@ -21,23 +21,24 @@ ResearchSpec SHALL build its npm distribution from a clean production-only TypeS
 
 ### Requirement: Installed Tarball Verification
 
-ResearchSpec SHALL provide a cross-platform release verifier that inspects and exercises a real npm tarball, including the optional literature Adapter and generated independent CLI handbook Skill, in isolated temporary directories.
+ResearchSpec SHALL provide a cross-platform release verifier that derives the fixed Agent surface from packaged ARSU, Companion and capability registries, inspects and exercises a real npm tarball, and verifies the optional literature Adapter in isolated temporary directories.
 
 #### Scenario: Release tarball is verified
 
 - **WHEN** a maintainer runs release verification
-- **THEN** it SHALL pack, validate, install, and execute the installed CLI without running Adapter assets
+- **THEN** it SHALL pack, validate, install and execute the installed CLI without running Adapter or packaged capability assets
 
 #### Scenario: Default installed delivery is smoke tested
 
 - **WHEN** the installed tarball initializes with explicit Codex selection and no Adapter
-- **THEN** the project SHALL receive eleven fixed Skills and no `.zotero-bridge` files
+- **THEN** the project receives four ARSU Skills, five Companion Skills and every packaged capability registry entry
+- **AND** the project receives no `.zotero-bridge` files
 - **AND** the handbook SHALL be `researchspec-cli-handbook/SKILL.md`, not a Navigate reference
 
 #### Scenario: Opted-in Codex delivery is smoke tested
 
 - **WHEN** the installed tarball initializes with Codex and `zotero-library`
-- **THEN** the project SHALL receive eighteen Skills and the current-platform Adapter runtime/profile
+- **THEN** the project receives the registry-derived fixed surface plus seven Adapter Skills and the current-platform Adapter runtime/profile
 - **AND** the installed CLI SHALL expose sixteen top-level commands and pass strict checking
 
 ### Requirement: Supported Release Runtime Matrix
@@ -172,17 +173,31 @@ optional and excluding maintainer-only and unconsumed upstream surfaces.
 - **WHEN** the release verifier packs and installs the npm tarball
 - **THEN** all seven Zotero Adapter Skills, reviewed runtime metadata, profile template, supported runtimes, checksums, release identities, licenses, notices and derivations SHALL be present and valid
 - **AND** global installers, unreviewed agents, vendor checkout, audits, converter sources and test fixtures SHALL be absent
-- **AND** default delivery SHALL expose eleven fixed Skills while explicit selection adds seven Adapter Skills
+- **AND** default delivery SHALL expose the registry-derived fixed base surface while explicit selection adds seven Adapter Skills
 
 ### Requirement: Release Surface And Guidance Are Converged
 
-The release SHALL contain the fixed eleven-Skill surface, optional seven-Skill Zotero surface, sixteen-command CLI, current profiles, and current guidance, with no Navigate-local handbook reference.
+The release SHALL contain the four ARSU Skills, five Companion Skills, every packaged capability registry entry, optional seven-Skill Zotero surface, sixteen-command CLI, current graph profiles and current graph-only guidance.
 
 #### Scenario: Package is verified
 
 - **WHEN** the packed tarball is installed and exercised
 - **THEN** default init SHALL omit Adapter files and explicit opt-in SHALL install them
-- **AND** the independent handbook Skill SHALL match the packaged CLI handbook renderer
+- **AND** no public Skill, wrapper, payload catalog or handbook contains retired runtime selector or state-file guidance
+
+### Requirement: Authored Whitespace Is Checked Without Rewriting Reviewed Bytes
+
+Release verification SHALL reject whitespace errors in authored files while exempting only exact files enumerated as byte-preserved and whose current SHA-256 matches their reviewed registry or catalog evidence. An unverified exemption SHALL fail the gate.
+
+#### Scenario: Authored file has trailing whitespace
+
+- **WHEN** a changed authored text file fails the whitespace check
+- **THEN** release verification fails with the file and location
+
+#### Scenario: Byte-preserved resource has upstream whitespace
+
+- **WHEN** a changed resource is explicitly registered as byte-preserved and its current hash is verified
+- **THEN** the authored-whitespace gate does not require normalization of that resource
 
 ### Requirement: Stable-contract release verification
 Release verification SHALL validate package structure, schemas, hashes, links, licenses, safety boundaries, approved bytes, fixed public interfaces, and generated equality without treating documentation prose or diagram text as executable contracts.

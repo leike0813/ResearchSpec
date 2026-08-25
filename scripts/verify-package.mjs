@@ -15,29 +15,16 @@ const projectDirectory = path.join(temporaryRoot, "project");
 const allToolsProjectDirectory = path.join(temporaryRoot, "all-tools-project");
 const unsupportedProjectDirectory = path.join(temporaryRoot, "unsupported-project");
 const codexHome = path.join(temporaryRoot, "codex-home");
-const expectedBaseSkills = [
-  "academic-paper",
-  "academic-paper-reviewer",
-  "academic-pipeline",
-  "deep-research",
-  "paper-humanizer",
-  "researchspec-decide",
-  "researchspec-cli-handbook",
-  "researchspec-navigate",
-  "researchspec-propose",
-  "researchspec-verify",
-  "review-response",
-];
-const expectedAdapterSkills = [
-  "zotero-bridge-cli",
-  "zotero-library-agent",
-  "zotero-library-curation",
-  "zotero-library-query",
-  "zotero-literature-acquisition",
-  "zotero-literature-analysis",
-  "zotero-research-synthesis",
-];
-const expectedSkills = [...expectedBaseSkills, ...expectedAdapterSkills].sort();
+let expectedArsuSkills = [];
+let expectedCompanionSkills = [];
+let expectedCapabilitySkills = [];
+let expectedBaseSkills = [];
+let expectedAdapterSkills = [];
+let expectedSkills = [];
+let expectedProfiles = [];
+let expectedProjectToolIds = [];
+let expectedProjectSkillWriterIds = [];
+let expectedCommandToolIds = [];
 const expectedCommands = [
   "advance", "archive", "check", "decide", "doctor", "handoff", "init", "instructions", "list",
   "pack", "plugin", "propose", "show", "start", "status", "update",
@@ -63,6 +50,7 @@ const expectedDomains = [
 ].sort();
 
 try {
+  run(process.execPath, ["scripts/check-authored-whitespace.mjs"], packageRoot);
   await verifyRepositoryRuntimeGuidance(packageRoot);
   await Promise.all([
     mkdir(packageDirectory, { recursive: true }),
@@ -75,6 +63,8 @@ try {
 
   const pack = run(npmCommand(), ["pack", "--json", "--pack-destination", packageDirectory], packageRoot);
   const metadata = parsePackMetadata(pack.stdout);
+  const sourceSurface = await loadPackagedSurface(packageRoot);
+  applyExpectedSurface(sourceSurface);
   verifyTarballFiles(metadata.files.map((file) => file.path));
 
   const tarball = path.join(packageDirectory, metadata.filename);
@@ -82,6 +72,9 @@ try {
   run(npmCommand(), ["install", "--ignore-scripts", "--no-audit", "--no-fund", tarball], installDirectory);
 
   const installedPackageRoot = path.join(installDirectory, "node_modules", "researchspec");
+  const installedSurface = await loadPackagedSurface(installedPackageRoot);
+  assert(equal(installedSurface, sourceSurface), "Installed Agent/profile surface registries differ from the packed source surface.");
+  applyExpectedSurface(installedSurface);
   const installedPackage = JSON.parse(await readFile(path.join(installedPackageRoot, "package.json"), "utf8"));
   assert(
     installedPackage.exports?.["./annotation-intake"]?.import === "./dist/src/annotation-intake.js"
@@ -124,24 +117,28 @@ try {
   run(bin, ["init", projectDirectory, "--tools", "codex", "--delivery", "skills", "--literature-adapters", "zotero-library", "--json"], installDirectory, environment);
   const currentWorkspace = path.join(projectDirectory, "researchspec");
   const currentConfig = parseYaml(await readFile(path.join(currentWorkspace, "config.yaml"), "utf8"));
-  const currentProfile = parseYaml(await readFile(path.join(currentWorkspace, "profiles", "academic-pipeline.yaml"), "utf8"));
-  assert(currentConfig?.schema_version === "1", "Installed init did not create schema 1 config.");
+  assert(currentConfig?.schema_version === "2", "Installed init did not create schema 2 config.");
   assert(equal(currentConfig?.literature_adapters?.selected, ["zotero-library"]), "Installed init did not persist the selected literature adapter.");
-  assert(currentProfile?.schema_version === "1" && currentProfile?.profile_id === "academic-pipeline", "Installed init did not project the current academic-pipeline profile.");
-  const humanizerProfile = parseYaml(await readFile(path.join(currentWorkspace, "profiles", "paper-humanizer.yaml"), "utf8"));
-  assert(humanizerProfile?.schema_version === "1" && humanizerProfile?.profile_id === "paper-humanizer", "Installed init did not project the current paper-humanizer profile.");
-  assert(equal((await directoryNames(currentWorkspace)).sort(), ["changes", "profiles", "specs", "subflows"]), "Installed current workspace directory set is invalid.");
+  for (const profileId of expectedProfiles) {
+    const profile = parseYaml(await readFile(path.join(currentWorkspace, "profiles", `${profileId}.yaml`), "utf8"));
+    assert(profile?.schema_version === "2" && profile?.profile_id === profileId, `Installed init did not project current graph profile: ${profileId}`);
+  }
+  assert(equal((await directoryNames(currentWorkspace)).sort(), ["changes", "profiles", "runs", "specs"]), "Installed current workspace directory set is invalid.");
   for (const spec of ["project.md", "sources.yaml", "claims.yaml", "manuscript.yaml"]) {
     await readFile(path.join(currentWorkspace, "specs", spec), "utf8");
   }
-  for (const retiredPath of ["runs", "playbooks", "draft-patches", "artifact-registry.json"]) {
+  for (const retiredPath of ["subflows", "playbooks", "draft-patches", "artifact-registry.json"]) {
     assert(!await pathExists(path.join(currentWorkspace, retiredPath)), `Installed init created retired path: ${retiredPath}`);
   }
   const installedSkills = (await directoryNames(path.join(projectDirectory, ".agents", "skills"))).sort();
   assert(equal(installedSkills, expectedSkills), `Installed Skill surface mismatch: ${installedSkills.join(", ")}`);
-  for (const skill of expectedSkills) {
+  for (const skill of [...expectedArsuSkills, ...expectedCompanionSkills, ...expectedAdapterSkills]) {
     const license = await readFile(path.join(projectDirectory, ".agents", "skills", skill, "LICENSE"), "utf8");
     assert(license.trim().length > 0, `Installed Skill license is empty: ${skill}`);
+  }
+  for (const skill of expectedCapabilitySkills) {
+    const manifest = parseYaml(await readFile(path.join(projectDirectory, ".agents", "skills", skill, "manifest.yaml"), "utf8"));
+    assert(manifest?.capability_id === skill && typeof manifest?.license === "string" && manifest.license.length > 0, `Installed capability metadata is incomplete: ${skill}`);
   }
   await verifyInstalledGuidance(installedPackageRoot, projectDirectory, handbookDigest);
   const adapterRoot = path.join(projectDirectory, ".zotero-bridge");
@@ -164,8 +161,8 @@ try {
   run(bin, ["check", "all", "--strict", "--json"], projectDirectory, environment);
   await verifyInstalledCurrentJourney(bin, projectDirectory, environment);
 
-  run(bin, ["init", allToolsProjectDirectory, "--tools", "all", "--delivery", "both", "--json"], installDirectory, environment);
-  await verifyAllToolDelivery(allToolsProjectDirectory, handbookDigest);
+  run(bin, ["init", allToolsProjectDirectory, "--tools", expectedProjectToolIds.join(","), "--delivery", "both", "--json"], installDirectory, environment);
+  await verifyAllProjectToolDelivery(allToolsProjectDirectory, handbookDigest);
 
   const installedConfigBeforeRemovedOptions = await readFile(path.join(currentWorkspace, "config.yaml"), "utf8");
   runExpectFailure(bin, ["init", projectDirectory, "--tools", "none", "--profile", "strict", "--json"], installDirectory, environment);
@@ -192,8 +189,6 @@ try {
 }
 
 function verifyTarballFiles(files) {
-  const reviewResponseFiles = files.filter((file) => file.startsWith("skills/review-response/") && !file.endsWith("/"));
-  assert(reviewResponseFiles.length >= 49, `Absorbed review-response Skill is incomplete: ${String(reviewResponseFiles.length)} files.`);
   const required = [
     "package.json", "README.md", "CHANGELOG.md", "SECURITY.md", "LICENSE", "NOTICE",
     "LICENSES/MIT.txt", "LICENSES/CC-BY-NC-4.0.txt", "LICENSES/CC-BY-SA-4.0.txt", "LICENSES/Apache-2.0.txt", "LICENSES/AGPL-3.0.txt", "docs/release_process.md",
@@ -201,6 +196,9 @@ function verifyTarballFiles(files) {
     "docs/researchspec_arsu_runtime/README.md", "docs/researchspec_arsu_runtime/core_runtime_model.md", "docs/researchspec_arsu_runtime/runtime_protocols.md",
     "docs/researchspec_arsu_runtime/deep_research_workflow.md", "docs/researchspec_arsu_runtime/academic_paper_workflow.md", "docs/researchspec_arsu_runtime/academic_paper_reviewer_workflow.md", "docs/researchspec_arsu_runtime/academic_pipeline_workflow.md",
     "docs/researchspec_user_usage_rehearsal.md", "docs/researchspec_user_usage_rehearsal/workspace_lifecycle.md", "docs/researchspec_user_usage_rehearsal/deep_research_journeys.md", "docs/researchspec_user_usage_rehearsal/academic_paper_journeys.md", "docs/researchspec_user_usage_rehearsal/academic_paper_reviewer_journeys.md", "docs/researchspec_user_usage_rehearsal/academic_pipeline_journeys.md", "docs/researchspec_user_usage_rehearsal/companion_journeys.md", "docs/researchspec_user_usage_rehearsal/zotero_and_plugin_journeys.md",
+    "skills/arsu/conversion-manifest.json",
+    "skills/arsu/profiles/registry.json",
+    "skills/capabilities/registry.json",
     "literature-adapters/zotero/profile.template.json",
     "literature-adapters/zotero/LICENSE",
     "literature-adapters/zotero/NOTICE.md",
@@ -254,24 +252,13 @@ function verifyTarballFiles(files) {
     "skills/plugins/vendors/education-agent-skills/education-agent-skills-stuck-and-error-diagnosis-coach/LICENSE",
     "skills/plugins/vendors/education-agent-skills/education-agent-skills-stuck-and-error-diagnosis-coach/NOTICE.md",
     "skills/arsu/researchspec-contracts.json", "artifacts/mvp_release_checklist.md", "dist/src/cli/bin.js", "dist/src/annotation-intake.js", "dist/src/annotation-intake.d.ts",
-    "skills/review-response/SKILL.md",
-    "skills/review-response/assets/schema/review-response-schema.yaml",
-    "skills/review-response/assets/runtime/skill-runtime-digest.md",
-    "skills/review-response/assets/templates/render-manifest.yaml",
-    "skills/review-response/assets/localization/messages/en.json",
-    "skills/review-response/assets/localization/messages/zh-CN.json",
-    "skills/review-response/references/workflow-state-machine.md",
-    "skills/review-response/references/stage-1-entry-and-bootstrap.md",
-    "skills/review-response/references/stage-2-manuscript-analysis.md",
-    "skills/review-response/references/stage-3-comment-atomization.md",
-    "skills/review-response/references/stage-4-workboard-planning.md",
-    "skills/review-response/references/stage-5-strategy-and-execution.md",
-    "skills/review-response/references/stage-6-final-review-and-export.md",
-    "skills/review-response/scripts/detect_main_tex.py",
-    "skills/review-response/scripts/export_manuscript_variants.py",
-    "skills/review-response/scripts/runtime_localization.py",
   ];
-  for (const skill of expectedSkills.slice(0, 4)) {
+  for (const skill of expectedArsuSkills) required.push(`skills/arsu/${skill}/SKILL.md`);
+  for (const skill of expectedCapabilitySkills) {
+    required.push(`skills/capabilities/${skill}/SKILL.md`, `skills/capabilities/${skill}/manifest.yaml`);
+  }
+  for (const profile of expectedProfiles) required.push(`skills/arsu/profiles/${profile}.yaml`);
+  for (const skill of expectedArsuSkills) {
     required.push(`skills/arsu/${skill}/SKILL.md`, `skills/arsu/${skill}/LICENSE`, `skills/arsu/${skill}/NOTICE.md`);
   }
   for (const [name, extension] of currentRuntimeDiagrams()) {
@@ -310,6 +297,7 @@ function verifyTarballFiles(files) {
   for (const file of files) {
     assert(allowed.test(file), `Tarball contains a path outside the release allowlist: ${file}`);
     assert(!file.startsWith("playbooks/"), `Tarball contains repository-only playbook material: ${file}`);
+    assert(!file.startsWith("skills/review-response/"), `Tarball contains the retired monolithic review-response Skill: ${file}`);
     assert(file !== "artifacts/researchspec_dogfooding_guide.md", `Tarball contains the retired dogfooding guide: ${file}`);
     assert(!file.startsWith("dist/tests/"), `Tarball contains compiled tests: ${file}`);
     assert(!file.startsWith("tests/fixtures/domain-skill-plugins/"), `Tarball contains plugin test fixtures: ${file}`);
@@ -343,9 +331,9 @@ async function verifyRepositoryRuntimeGuidance(root) {
 
 async function verifyInstalledGuidance(installedPackageRoot, projectRoot, handbookDigest) {
   const contracts = JSON.parse(await readFile(path.join(installedPackageRoot, "skills", "arsu", "researchspec-contracts.json"), "utf8"));
-  assert(contracts.integration_profile === "researchspec-preflight-v10", "Installed ARSU contracts do not use preflight v10.");
-  for (const skill of expectedSkills.slice(0, 4)) {
-    assert(contracts.skill_groups?.[skill]?.profile_id === "researchspec-preflight-v10", `Installed ARSU profile is not v10: ${skill}`);
+  assert(contracts.integration_profile === "researchspec-preflight-v11", "Installed ARSU contracts do not use preflight v11.");
+  for (const skill of expectedArsuSkills) {
+    assert(contracts.skill_groups?.[skill]?.profile_id === "researchspec-preflight-v11", `Installed ARSU profile is not v11: ${skill}`);
   }
   const handbookSkill = await readFile(path.join(projectRoot, ".agents", "skills", "researchspec-cli-handbook", "SKILL.md"), "utf8");
   const packagedHandbook = await readFile(path.join(installedPackageRoot, "docs", "cli_handbook.md"), "utf8");
@@ -400,8 +388,10 @@ async function verifyCurrentPublishedGuidance(installedPackageRoot) {
   }
 }
 
-async function verifyAllToolDelivery(projectRoot, handbookDigest) {
+async function verifyAllProjectToolDelivery(projectRoot, handbookDigest) {
   const manifest = JSON.parse(await readFile(path.join(projectRoot, "researchspec", "tool-installation-manifest.json"), "utf8"));
+  const config = parseYaml(await readFile(path.join(projectRoot, "researchspec", "config.yaml"), "utf8"));
+  assert(equal(config?.agent_tools?.selected, expectedProjectToolIds) && config?.agent_tools?.delivery === "both", "Project-scoped all-tool config differs from the packaged tool catalog.");
   const installations = Array.isArray(manifest.installations) ? manifest.installations : [];
   assert(equal(manifest.literature_adapter_resolutions, []), "Default all-tool init unexpectedly installed a literature adapter.");
   assert(!await pathExists(path.join(projectRoot, ".zotero-bridge")), "Default all-tool init unexpectedly created .zotero-bridge.");
@@ -410,42 +400,97 @@ async function verifyAllToolDelivery(projectRoot, handbookDigest) {
     && item.source.skill_id === "researchspec-cli-handbook"
     && typeof item?.target?.path === "string"
     && item.target.path.replaceAll("\\", "/").endsWith("/researchspec-cli-handbook/SKILL.md"));
-  assert(handbookSkills.length === 36, `Expected 36 CLI handbook Skill projections, found ${String(handbookSkills.length)}.`);
-  assert(new Set(handbookSkills.map((item) => item.tool_id)).size === 36, "CLI handbook Skill projections do not cover all physical Skill writers.");
+  assert(handbookSkills.length === expectedProjectSkillWriterIds.length, `CLI handbook Skill projection count mismatch: ${String(handbookSkills.length)}.`);
+  assert(equal([...new Set(handbookSkills.map((item) => item.tool_id))].sort(), expectedProjectSkillWriterIds), "CLI handbook Skill projections do not cover every project-scoped physical Skill writer.");
   for (const reference of handbookSkills) {
     const absolute = reference.target.scope === "project"
       ? path.join(projectRoot, reference.target.path)
       : reference.target.path;
     const bytes = await readFile(absolute);
     assert(sha256(bytes) === reference.sha256, `CLI handbook Skill bytes differ for ${String(reference.tool_id)}.`);
-    assert(bytes.includes(Buffer.from("SubflowStartCommandSchema", "utf8")), `CLI handbook Skill lacks payload schema detail for ${String(reference.tool_id)}.`);
+    assert(bytes.includes(Buffer.from("GraphRunStartCommandSchema", "utf8")), `CLI handbook Skill lacks graph Start schema detail for ${String(reference.tool_id)}.`);
   }
   assert(handbookDigest.length === 64, "CLI handbook digest is invalid.");
 
   const commandInstallations = installations.filter((item) => item?.source?.kind === "command");
-  assert(commandInstallations.length === 28 * 16, `Expected 448 command-wrapper installations, found ${String(commandInstallations.length)}.`);
+  assert(commandInstallations.length === expectedCommandToolIds.length * expectedCommands.length, `Command-wrapper installation count mismatch: ${String(commandInstallations.length)}.`);
   const commandTools = new Map();
   for (const installation of commandInstallations) {
     const commands = commandTools.get(installation.tool_id) ?? new Set();
     commands.add(installation.source.command_id);
     commandTools.set(installation.tool_id, commands);
   }
-  assert(commandTools.size === 28, `Expected 28 command-capable tools, found ${String(commandTools.size)}.`);
-  for (const [toolId, commands] of commandTools) assert(commands.size === 16, `Command wrapper count differs for ${String(toolId)}.`);
+  assert(equal([...commandTools.keys()].sort(), expectedCommandToolIds), "Command-wrapper installations do not cover the packaged command-capable tool catalog.");
+  for (const [toolId, commands] of commandTools) {
+    assert(equal([...commands].sort(), expectedCommands), `Command wrapper surface differs for ${String(toolId)}.`);
+  }
 
   const baseSkillsByTool = new Map();
   for (const installation of installations) {
     const source = installation?.source;
     const skillId = source?.kind === "arsu-skill" || source?.kind === "core-skill" || source?.kind === "companion-skill"
       ? source.skill_id
-      : undefined;
+      : source?.kind === "framework-capability"
+        ? source.capability_id
+        : undefined;
     if (!skillId || !installation.tool_id) continue;
     const skills = baseSkillsByTool.get(installation.tool_id) ?? new Set();
     skills.add(skillId);
     baseSkillsByTool.set(installation.tool_id, skills);
   }
-  assert(baseSkillsByTool.size === 36, `Expected base Skills for 36 physical Skill writers, found ${String(baseSkillsByTool.size)}.`);
-  for (const [toolId, skills] of baseSkillsByTool) assert(skills.size === 11, `Base Skill count differs for ${String(toolId)}.`);
+  assert(equal([...baseSkillsByTool.keys()].sort(), expectedProjectSkillWriterIds), "Base Skills do not cover every project-scoped physical Skill writer.");
+  for (const [toolId, skills] of baseSkillsByTool) {
+    assert(equal([...skills].sort(), expectedBaseSkills), `Base Skill surface differs for ${String(toolId)}.`);
+  }
+}
+
+async function loadPackagedSurface(root) {
+  const arsuManifest = JSON.parse(await readFile(path.join(root, "skills", "arsu", "conversion-manifest.json"), "utf8"));
+  const capabilityRegistry = JSON.parse(await readFile(path.join(root, "skills", "capabilities", "registry.json"), "utf8"));
+  const profileRegistry = JSON.parse(await readFile(path.join(root, "skills", "arsu", "profiles", "registry.json"), "utf8"));
+  const companionModule = await import(`${pathToFileURL(path.join(root, "dist", "src", "adapters", "companion", "manifest.js")).href}?surface=${Date.now().toString()}`);
+  const adapterModule = await import(`${pathToFileURL(path.join(root, "dist", "src", "literature-adapters", "catalog.js")).href}?surface=${Date.now().toString()}`);
+  const toolModule = await import(`${pathToFileURL(path.join(root, "dist", "src", "adapters", "tools.js")).href}?surface=${Date.now().toString()}`);
+  const deliveryModule = await import(`${pathToFileURL(path.join(root, "dist", "src", "adapters", "delivery.js")).href}?surface=${Date.now().toString()}`);
+  const arsu = uniqueSorted(arsuManifest.generated_groups, "ARSU conversion manifest generated_groups");
+  const companions = uniqueSorted(companionModule.COMPANION_INTENTS?.map((item) => item.skillId), "Companion manifest Skills");
+  const capabilities = uniqueSorted(capabilityRegistry.capabilities?.map((item) => item.capability_id), "capability registry entries");
+  const profiles = uniqueSorted(profileRegistry.profiles?.map((item) => item.profile_id), "profile registry entries");
+  const adapters = uniqueSorted(adapterModule.LITERATURE_ADAPTER_SKILL_IDS, "literature Adapter catalog Skills");
+  const projectTools = uniqueSorted(toolModule.TOOLS?.filter((tool) => !tool.globalSkillsDir).map((tool) => tool.id), "project-scoped tool catalog");
+  const projectSkillWriters = uniqueSorted(deliveryModule.selectSkillWriters?.(projectTools, "both"), "project-scoped Skill writers");
+  const commandTools = uniqueSorted(toolModule.TOOLS?.filter((tool) => !tool.globalSkillsDir && tool.command).map((tool) => tool.id), "project-scoped command-capable tools");
+  return {
+    arsu,
+    companions,
+    capabilities,
+    profiles,
+    adapters,
+    projectTools,
+    projectSkillWriters,
+    commandTools,
+    base: uniqueSorted([...arsu, ...companions, ...capabilities], "registry-derived fixed base Skills"),
+  };
+}
+
+function applyExpectedSurface(surface) {
+  expectedArsuSkills = surface.arsu;
+  expectedCompanionSkills = surface.companions;
+  expectedCapabilitySkills = surface.capabilities;
+  expectedBaseSkills = surface.base;
+  expectedAdapterSkills = surface.adapters;
+  expectedSkills = uniqueSorted([...surface.base, ...surface.adapters], "complete selected Skill surface");
+  expectedProfiles = surface.profiles;
+  expectedProjectToolIds = surface.projectTools;
+  expectedProjectSkillWriterIds = surface.projectSkillWriters;
+  expectedCommandToolIds = surface.commandTools;
+}
+
+function uniqueSorted(value, label) {
+  assert(Array.isArray(value) && value.length > 0 && value.every((item) => typeof item === "string" && item.length > 0), `${label} are missing or invalid.`);
+  const sorted = [...value].sort();
+  assert(new Set(sorted).size === sorted.length, `${label} contain duplicates.`);
+  return sorted;
 }
 
 function markdownRepositoryLinks(markdown) {
@@ -538,64 +583,51 @@ function runExpectFailure(command, args, cwd, env = process.env) {
 }
 
 async function verifyInstalledCurrentJourney(bin, projectDirectory, environment) {
-  const instructions = runJson(bin, ["instructions", "route:deep-research:full", "--json"], projectDirectory, environment).data;
-  assert(instructions?.confirmation_required === true, "Installed route instructions do not require confirmation.");
-  assert(Array.isArray(instructions.formal_gates) && instructions.formal_gates.length > 0, "Installed standalone route exposes no formal Gate.");
-  const boundary = instructions.boundary_outputs?.[0];
-  assert(boundary?.role && boundary?.type && boundary?.purpose, "Installed route exposes no usable boundary output.");
-
-  const output = {
-    role: boundary.role,
-    type: boundary.type,
-    path: `outputs/${boundary.role}.md`,
-    purpose: boundary.purpose,
-    intended_consumer: "user",
-  };
+  const instructions = runJson(bin, ["instructions", "profile:minimal", "--json"], projectDirectory, environment).data;
+  const entry = instructions?.entries?.[0];
+  assert(instructions?.kind === "profile" && entry?.entry_id && entry?.node_id, "Installed profile instructions expose no executable graph entry.");
   const startInputPath = path.join(projectDirectory, "packaged-start.json");
   await writeFile(startInputPath, `${JSON.stringify({
-    schema_version: "1",
+    schema_version: "2",
     confirmed_at: "2026-08-02T12:00:00+08:00",
+    entry_id: entry.entry_id,
+    entry_node_id: entry.node_id,
     prerequisites: [],
     handoff_inputs: [],
-    planned_outputs: [output],
-    formal_gates: instructions.formal_gates,
-    cost: instructions.cost,
+    planned_outputs: [],
+    formal_gates: [],
+    cost: { effort: "bounded release smoke test", interaction: "one root confirmation" },
   }, null, 2)}\n`, "utf8");
   const started = runJson(bin, [
-    "start", "deep-research:full", "--input", startInputPath,
+    "start", "profile:minimal", "--input", startInputPath,
     "--confirmed-by", "Release Verifier", "--json",
   ], projectDirectory, environment).data;
-  assert(started?.status === "started" && started.instance_id, "Installed CLI did not start the standalone subflow.");
+  assert(started?.status === "started" && started.run_id, "Installed CLI did not start the schema 2 graph run.");
 
+  const nodeSelector = `node:${started.run_id}/${entry.node_id}`;
+  const nodeInstructions = runJson(bin, ["instructions", nodeSelector, "--json"], projectDirectory, environment).data;
+  const expectedOutput = nodeInstructions?.expected_output_roles?.[0];
+  assert(nodeInstructions?.kind === "node" && expectedOutput?.role, "Installed node instructions expose no declared output role.");
+  const output = { role: expectedOutput.role, path: `outputs/${expectedOutput.role}.md` };
   const outputPath = path.join(projectDirectory, output.path);
   await mkdir(path.dirname(outputPath), { recursive: true });
-  await writeFile(outputPath, "# Packaged research output\n\nEvidence prepared for the release Gate.\n", "utf8");
+  await writeFile(outputPath, "# Packaged research question brief\n\nA bounded release verification question.\n", "utf8");
+  const advanceInputPath = path.join(projectDirectory, "packaged-advance.json");
+  await writeFile(advanceInputPath, `${JSON.stringify({ outputs: [output] }, null, 2)}\n`, "utf8");
+  runJson(bin, ["advance", nodeSelector, "--input", advanceInputPath, "--actor-name", "release-verifier", "--json"], projectDirectory, environment);
+
   const handoffInputPath = path.join(projectDirectory, "packaged-handoff.json");
   await writeFile(handoffInputPath, `${JSON.stringify({
     inputs: [],
-    outputs: [output],
-    body: "# Packaged handoff\n\nThe external output is ready for human Gate review.\n",
+    outputs: [{ ...output, type: "research-question-brief", purpose: "Release verification boundary output", intended_consumer: "user" }],
+    body: "# Packaged handoff\n\nThe external graph-node output is ready.\n",
   }, null, 2)}\n`, "utf8");
-  runJson(bin, ["handoff", `subflow:${started.instance_id}`, "--input", handoffInputPath, "--json"], projectDirectory, environment);
-
-  for (const gateId of instructions.formal_gates) {
-    runJson(bin, [
-      "decide", `gate:${started.instance_id}/${gateId}`,
-      "--verdict", "pass",
-      "--actor-name", "Release Verifier",
-      "--reason", "The packaged boundary output was reviewed.",
-      "--evidence-role", output.role,
-      "--json",
-    ], projectDirectory, environment);
-  }
-  runJson(bin, [
-    "advance", `subflow:${started.instance_id}`, "--transition", "complete",
-    "--actor-name", "release-verifier", "--json",
-  ], projectDirectory, environment);
+  runJson(bin, ["handoff", `run:${started.run_id}`, "--input", handoffInputPath, "--json"], projectDirectory, environment);
   const status = runJson(bin, ["status", "--json"], projectDirectory, environment).data;
-  assert(status?.subflows?.by_status?.complete === 1, "Installed standalone journey did not reach completion.");
-  assert(!status?.subflows?.active_instances?.items?.some((item) => item.selector === `subflow:${started.instance_id}`), "Installed completed subflow remains active.");
-  runJson(bin, ["show", `handoff:${started.instance_id}`, "--json"], projectDirectory, environment);
+  assert(status?.runs?.total === 1 && status?.nodes?.[started.run_id]?.some((node) => node.node_id === entry.node_id && node.state === "complete"), "Installed graph journey did not persist the completed node.");
+  assert(status?.frontier?.some((item) => item.selector === `node:${started.run_id}/report`), "Installed graph journey did not derive the next frontier node.");
+  runJson(bin, ["show", `run:${started.run_id}`, "--json"], projectDirectory, environment);
+  runJson(bin, ["handoff", `run:${started.run_id}`, "--json"], projectDirectory, environment);
   runJson(bin, ["check", "all", "--strict", "--json"], projectDirectory, environment);
 }
 

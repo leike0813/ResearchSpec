@@ -18,7 +18,7 @@ workflow source 拥有 academic-pipeline graph。
 - `start_confirmation: required`。
 
 Catalog 不声明 artifact ID、固定输出路径或运行状态。实际路径由用户/Agent 选择，并写入 producing
-subflow 的 handoff。
+run handoff。
 
 ## 3. Skill 映射
 
@@ -40,7 +40,7 @@ summary 之间的 nodes、joins、Gates 与 transitions。Child control 的 pare
 ## 5. 权威边界
 
 ARSU producer 可以直接写 stable specs、project change、handoff 和外部语义文件；工作材料保存在
-owning subflow 的 `work/`。它不能手改 control。Formal Gate findings 由 Verify 准备、用户确认，
+项目外的 `work/`。它不能手改 run/node state。Formal Gate findings 由 Verify 准备、用户确认，
 再由 Decide/CLI 写入 owning control；advance 是独立动作。
 
 Provider、plugin、Zotero 与 upstream ARS payload 都是工作输入。它们不能创建 ResearchSpec

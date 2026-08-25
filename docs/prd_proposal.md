@@ -19,10 +19,10 @@ Skill/mode 可直接路由，但必须完成同样的 prerequisite、route summa
 
 ## 3. 核心需求
 
-- 只识别 schema `"1"` current workspace；其它格式零写入拒绝。
+- 只识别 schema `"2"` current workspace；其它格式零写入拒绝。
 - 四份 stable specs 分别拥有 project、sources、claims 和 manuscript facts。
 - converter-owned project profile 拥有 academic-pipeline graph。
-- 每个 subflow control 是该实例唯一运行时 authority。
+- 每个 run 的 frozen graph 和 node instances 是该实例唯一运行时 authority。
 - 每个 handoff 以 role/path 指向 `researchspec/` 外的边界文件。
 - Project change 表达高影响 proposed/current 分离；accepted 不自动应用。
 - 每个 parent、child、branch 和 revision round 独立确认。

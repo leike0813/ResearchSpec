@@ -71,8 +71,8 @@ authority.
 
 Current ResearchSpec owners:
 
-- `researchspec/subflows/<instance>/control.yaml`
-- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
+- `researchspec/runs/<run-id>/handoff.md`
 <!--/rs:STATE-002-->
 
 **Execution flow:**
@@ -338,8 +338,8 @@ Resolve the current graph from `researchspec/profiles/academic-pipeline.yaml`.
 Current ResearchSpec owners:
 
 - `researchspec/profiles/academic-pipeline.yaml`
-- `researchspec/subflows/<instance>/control.yaml`
-- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
+- `researchspec/runs/<run-id>/handoff.md`
 <!--/rs:STATE-003-->
 
 <!--rs:IO-002-->
@@ -348,7 +348,7 @@ Current ResearchSpec owners:
 Replacement scope: `IO-002` for `academic-pipeline`.
 
 In phase-by-phase mode, downstream single-phase agents remain confined to the
-stage selected in `researchspec/subflows/<instance>/control.yaml`. They may read only the
+stage selected in `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`. They may read only the
 contracts and handoff-referenced artifacts required by that stage and may emit only its
 declared output artifacts. The academic-pipeline orchestrator, state-tracking,
 integrity, collaboration-depth, and claim-audit roles retain their documented
@@ -361,8 +361,8 @@ configured workflow and the owning control—not an ARS phase-directory name—d
 which stage may execute.
 
 Enforcement is contract-based: preflight checks
-`researchspec/profiles/academic-pipeline.yaml`, `researchspec/subflows/<instance>/control.yaml`, and
-required entries in `researchspec/subflows/<instance>/handoff.md` before
+`researchspec/profiles/academic-pipeline.yaml`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, and
+required entries in `researchspec/runs/<run-id>/handoff.md` before
 dispatch; the runtime rejects outputs outside the selected stage. Existing
 prompt fences, local verifiers, or tool hooks may report diagnostics but do not
 replace the ResearchSpec boundary.
@@ -370,8 +370,8 @@ replace the ResearchSpec boundary.
 Current ResearchSpec owners:
 
 - `researchspec/profiles/academic-pipeline.yaml`
-- `researchspec/subflows/<instance>/control.yaml`
-- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
+- `researchspec/runs/<run-id>/handoff.md`
 <!--/rs:IO-002-->
 
 ---
@@ -447,10 +447,10 @@ At the end of each revision round, if **delta < 3 points** on the 0-100 rubric A
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -508,10 +508,10 @@ The `collaboration_depth_agent` observes the user's collaboration pattern with t
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -687,10 +687,10 @@ Stage 5: academic-paper (format-convert mode)
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 

@@ -28,7 +28,7 @@ async function render(options) {
   await regularFile(source, "quarto_source_invalid", "Quarto source must be a regular file.");
   if (await exists(output)) fail("quarto_destination_exists", "Output already exists and will not be overwritten.");
   if (options.execute && (!options.consentBy?.trim() || Number.isNaN(Date.parse(options.consentAt ?? "")))) {
-    fail("quarto_render_consent_required", "--execute requires --consent-by and --consent-at for this formatting subflow.");
+    fail("quarto_render_consent_required", "--execute requires --consent-by and --consent-at for this formatting node.");
   }
 
   const availability = await probe();

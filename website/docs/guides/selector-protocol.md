@@ -1,6 +1,6 @@
 ---
 title: Selector Protocol
-description: Address current ResearchSpec routes and owning files with stable selectors
+description: Address current ResearchSpec graph runs and owning files with stable selectors
 ---
 
 # Selector Protocol
@@ -9,14 +9,14 @@ Use `status --json` to discover exact machine IDs, then request `instructions <s
 
 | Selector | Purpose |
 | --- | --- |
-| `route:<skill-id>:<mode>` | Preview a route before confirmation |
-| `subflow:<instance-id>` | Inspect or advance one subflow |
-| `gate:<instance-id>/<gate-id>` | Inspect or decide one formal Gate |
-| `decision:<instance-id>/<decision-id>` | Inspect or record one local Decision |
+| `profile:<profile-id>` | Inspect a graph profile or start a confirmed root run |
+| `run:<run-id>` | Inspect one frozen graph run or its handoff |
+| `node:<run-id>/<node-id>[@round]` | Inspect, start a bound child, or advance one node |
+| `gate:<run-id>/<gate-id>[@round]` | Inspect or decide one formal Gate |
+| `decision:<run-id>/<decision-id>[@round]` | Inspect or record one graph Decision |
 | `change:<change-id>` | Inspect or decide a project change |
-| `handoff:<instance-id>` | Inspect one subflow handoff |
 
-`show` additionally accepts stable-spec, project-profile, and tool selectors. Never infer a selector
+`show` additionally accepts stable-spec and tool selectors. `handoff` accepts `run:<run-id>`. Never infer a selector
 from a directory name, similar filename, or “latest” timestamp when more than one item exists.
 
 Read commands do not modify project files. Mutation commands validate their semantic input against

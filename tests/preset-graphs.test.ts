@@ -3,29 +3,38 @@ import { test } from "node:test";
 
 import { parseCapabilityGraphProfile, findUnreachableGraphNodes } from "../src/core/contracts/capability-graph.js";
 import { loadCapabilityRegistry, validateGraphAgainstCapabilityRegistry } from "../src/capabilities/registry.js";
-import { RESEARCH_MAIN_GRAPH_PROFILE, RESEARCH_MAIN_GRAPH_PROFILE_TEXT } from "../src/core/graph-profiles/research-main.js";
-import { ACADEMIC_PAPER_GRAPH_PROFILE } from "../src/core/graph-profiles/academic-paper.js";
-import { ACADEMIC_PAPER_REVIEWER_GRAPH_PROFILE } from "../src/core/graph-profiles/academic-paper-reviewer.js";
-import { ACADEMIC_PIPELINE_GRAPH_PROFILE } from "../src/core/graph-profiles/academic-pipeline.js";
-import { PAPER_HUMANIZER_GRAPH_PROFILE } from "../src/core/graph-profiles/paper-humanizer.js";
-import { REVIEW_RESPONSE_GRAPH_PROFILE } from "../src/core/graph-profiles/review-response.js";
+import { loadGraphProfileRegistry } from "../src/graph-profiles/registry.js";
+import { buildPresetGraphProfileRegistry } from "../src/arsu-converter/workflow/generate.js";
 
 void test("research-main preset resolves against the bundled capability registry", async () => {
-  const parsed = parseCapabilityGraphProfile(RESEARCH_MAIN_GRAPH_PROFILE);
+  const profiles = await loadGraphProfileRegistry();
+  const parsed = profiles.profiles.get("research-main")?.profile;
+  assert.ok(parsed);
   const registry = await loadCapabilityRegistry();
   assert.deepEqual(validateGraphAgainstCapabilityRegistry(registry, parsed), []);
 });
 
-void test("research-main preset is a valid reachable capability graph", () => {
-  const parsed = parseCapabilityGraphProfile(RESEARCH_MAIN_GRAPH_PROFILE);
+void test("converter-owned preset registry matches the packaged projection deterministically", async () => {
+  const loaded = await loadGraphProfileRegistry();
+  assert.deepEqual(loaded.registry, buildPresetGraphProfileRegistry());
+  assert.deepEqual(buildPresetGraphProfileRegistry(), buildPresetGraphProfileRegistry());
+  assert.equal(loaded.profiles.size, 7);
+});
+
+void test("research-main preset is a valid reachable capability graph", async () => {
+  const registered = (await loadGraphProfileRegistry()).profiles.get("research-main");
+  assert.ok(registered);
+  const parsed = parseCapabilityGraphProfile(registered.profile);
   assert.equal(parsed.profile_id, "research-main");
   assert.equal(parsed.nodes.length, 7);
   assert.deepEqual(findUnreachableGraphNodes(parsed), []);
-  assert.equal(RESEARCH_MAIN_GRAPH_PROFILE_TEXT.length > 0, true);
+  assert.equal(registered.projection.length > 0, true);
 });
 
-void test("research-main preset gate and prerequisites bind the main chain", () => {
-  const graph = parseCapabilityGraphProfile(RESEARCH_MAIN_GRAPH_PROFILE);
+void test("research-main preset gate and prerequisites bind the main chain", async () => {
+  const registered = (await loadGraphProfileRegistry()).profiles.get("research-main");
+  assert.ok(registered);
+  const graph = parseCapabilityGraphProfile(registered.profile);
   const report = graph.nodes.find((item) => item.node_id === "report");
   assert.deepEqual(report?.prerequisites, ["synthesis"]);
   const rqGate = graph.gates.find((item) => item.gate_id === "rq-gate");
@@ -79,8 +88,11 @@ void test("custom graph profiles pass the same validation without engine changes
 
 void test("paper, reviewer, pipeline, humanizer, and review-response presets resolve against the bundled registry", async () => {
   const registry = await loadCapabilityRegistry();
-  for (const profile of [ACADEMIC_PAPER_GRAPH_PROFILE, ACADEMIC_PAPER_REVIEWER_GRAPH_PROFILE, ACADEMIC_PIPELINE_GRAPH_PROFILE, PAPER_HUMANIZER_GRAPH_PROFILE, REVIEW_RESPONSE_GRAPH_PROFILE]) {
-    const parsed = parseCapabilityGraphProfile(profile);
+  const profiles = await loadGraphProfileRegistry();
+  for (const profileId of ["academic-paper", "academic-paper-reviewer", "academic-pipeline", "paper-humanizer", "review-response"]) {
+    const registered = profiles.profiles.get(profileId);
+    assert.ok(registered);
+    const parsed = parseCapabilityGraphProfile(registered.profile);
     assert.deepEqual(findUnreachableGraphNodes(parsed), []);
     assert.deepEqual(validateGraphAgainstCapabilityRegistry(registry, parsed), []);
   }

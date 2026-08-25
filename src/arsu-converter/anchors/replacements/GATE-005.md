@@ -6,9 +6,9 @@ An external Gate report is evidence only. It cannot pass, preserve, override,
 or unlock a ResearchSpec Gate. Use the current profile to identify the owning
 Gate, present a fresh verification recommendation, and require explicit human
 confirmation. Append the resulting attempt—and any separately approved failed-
-Gate override—only to the owning subflow control.
+Gate override—only to the owning run and node state.
 
 Current ResearchSpec owners:
 
 - `researchspec/profiles/academic-pipeline.yaml`
-- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`

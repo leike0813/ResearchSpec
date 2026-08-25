@@ -16,10 +16,10 @@ cannot replace the deterministic checks.
    or abort behavior reported by the checker. Never rewrite a checker verdict or
    accept a malformed candidate by inspection.
 4. Record accepted review and synthesis files as boundary outputs in
-   `researchspec/subflows/<instance>/handoff.md`. A passing checker establishes
+   `researchspec/runs/<run-id>/handoff.md`. A passing checker establishes
    only mechanical self-consistency. It does not confirm a formal ResearchSpec
    Gate; Verify prepares that judgment and only a human-confirmed Decide action
-   records it in `researchspec/subflows/<instance>/control.yaml`.
+   records it in `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`.
 
 The packaged checker closure is exactly:
 

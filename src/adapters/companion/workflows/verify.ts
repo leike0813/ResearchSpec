@@ -10,7 +10,7 @@ Assess whether a defined scope is structurally valid and semantically ready. Ver
 
 ## Use this Skill when
 
-- The user asks whether stable specs, a handoff, a subflow checkpoint, or a project change is coherent and ready.
+- The user asks whether stable specs, a run handoff, a graph node, or a project change is coherent and ready.
 - A formal Gate needs an evidence-linked recommendation before the user decides.
 - Deterministic checks pass but source support, claim limits, manuscript constraints, or boundary outputs may still conflict.
 
@@ -19,7 +19,7 @@ Peer review, copy-editing, literature synthesis, and manuscript revision belong 
 ## Inputs
 
 - The verification scope and readiness criterion.
-- Relevant stable IDs, subflow/Gate selector, handoff roles, and destination or next action.
+- Relevant stable IDs, run/node/Gate selector, handoff roles, and destination or next action.
 - Available boundary evidence at the explicit project-relative paths recorded in the handoff.
 
 ## Workflow
@@ -27,15 +27,15 @@ Peer review, copy-editing, literature synthesis, and manuscript revision belong 
 1. Run the narrowest deterministic check first:
 
 \`\`\`bash
-researchspec check <specs|profiles|subflows|changes|handoffs|tools|plugins|literature-adapters> --json
-researchspec instructions gate:<instance>/<gate> --json
-researchspec show gate:<instance>/<gate> --json
+researchspec check <specs|profiles|runs|changes|handoffs|tools|plugins|literature-adapters> --json
+researchspec instructions gate:<run>/<gate>[@round] --json
+researchspec show gate:<run>/<gate>[@round] --json
 \`\`\`
 
 2. If blocking diagnostics exist, stop semantic scoring and report the owning file and structured diagnostic.
-3. Read only the stable specs, control summary, handoff roles, and external evidence needed for the stated criterion. Check an external path only when the current review consumes that role.
+3. Read only the stable specs, bounded run/node status, handoff roles, and external evidence needed for the stated criterion. Check an external path only when the current review consumes that role.
 4. Separate observation, interpretation, concern, blocker, and unknown. Cite stable IDs and project-relative paths.
-5. For a formal Gate, assess the declared criterion and prepare one recommendation: pass, pass with conditions, or fail. Include evidence, limitations, unresolved conditions, and the consequence of advancing.
+5. For a formal Gate, assess the declared criterion and prepare one recommendation: pass, pass with conditions, or fail. Include evidence, limitations, unresolved conditions, and the consequence of satisfying the Gate.
 6. Present the recommendation to the human. If the human confirms a verdict, route the exact selector, verdict, actor, summary, and evidence role to Decide.
 7. After Decide records the attempt, a targeted show/check may confirm visibility. Verify still does not run Advance.
 
@@ -47,7 +47,7 @@ researchspec show gate:<instance>/<gate> --json
 | Sources and claims | Are support, strength, limits, and wording traceable through stable IDs? |
 | Manuscript contract | Does the structure permit the intended argument without hidden commitments? |
 | Handoff | Are required roles explicit, safe, and suitable for the intended consumer? |
-| Workflow | Are the owning control's Gate, Decision, child, and transition prerequisites satisfied? |
+| Workflow | Are the frozen graph's node, Gate, Decision, child-run, and transition prerequisites satisfied? |
 
 ## Output
 
@@ -56,8 +56,8 @@ Return the scope, deterministic result, evidence-linked findings, blockers and u
 ## Guardrails
 
 - File existence or schema validity alone does not prove academic readiness.
-- Do not modify stable specs, handoffs, external deliverables, project changes, or controls while verifying.
-- Do not strengthen claims, invent missing evidence, confirm a Gate, approve an override, or advance a subflow.
+- Do not modify stable specs, handoffs, external deliverables, project changes, run files, or node instances while verifying.
+- Do not strengthen claims, invent missing evidence, confirm a Gate, approve an override, or advance a node.
 
 ## Completion
 

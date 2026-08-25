@@ -8,5 +8,5 @@ Resolve the current graph from `researchspec/profiles/academic-pipeline.yaml`.
 Current ResearchSpec owners:
 
 - `researchspec/profiles/academic-pipeline.yaml`
-- `researchspec/subflows/<instance>/control.yaml`
-- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
+- `researchspec/runs/<run-id>/handoff.md`

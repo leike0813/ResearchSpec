@@ -12,6 +12,7 @@ const AUDIT_ROOT = path.join(ROOT, "audits", "arsu");
 const EXTRACTION_INDEX = path.join(ROOT, "docs", "ars_extraction", "extraction-index.json");
 const REGISTRY = path.join(ROOT, "skills", "capabilities", "registry.json");
 const PACKAGES = path.join(ROOT, "skills", "capabilities");
+const GRAPH_PROFILES = path.join(ROOT, "skills", "arsu", "profiles");
 const PARITY_REPORT = path.join(ROOT, "docs", "capability-parity-report.json");
 const MAINTENANCE_SKILL = path.join(ROOT, ".agents", "skills", "arsu-maintenance", "SKILL.md");
 
@@ -118,21 +119,22 @@ function capabilityRows() {
 }
 
 function graphProfileRows() {
-  const profiles = [];
-  for (const file of readdirSync(path.join(ROOT, "src", "core", "graph-profiles")).filter((name) => name.endsWith(".ts")).sort()) {
-    const text = readFileSync(path.join(ROOT, "src", "core", "graph-profiles", file), "utf8");
-    const profileId = /profile_id:\s*"([^"]+)"/.exec(text)?.[1] ?? file;
-    const nodes = [...text.matchAll(/\{\s*node_id:\s*"([^"]+)"[\s\S]*?\n\s*\}/g)].map((block) => ({
-      node_id: /node_id:\s*"([^"]+)"/.exec(block[0])?.[1] ?? "?",
-      kind: /kind:\s*"([^"]+)"/.exec(block[0])?.[1] ?? "?",
-      capability_id: /capability_id:\s*"([^"]+)"/.exec(block[0])?.[1] ?? null,
-      subgraph_id: /subgraph_id:\s*"([^"]+)"/.exec(block[0])?.[1] ?? null,
-      prerequisites: /prerequisites:\s*\[([^\]]*)\]/.exec(block[0])?.[1]?.trim() ?? "",
-      required_gate_ids: /required_gate_ids:\s*\[([^\]]*)\]/.exec(block[0])?.[1]?.trim() ?? "",
-    }));
-    profiles.push({ profile_id: profileId, file, nodes });
-  }
-  return profiles;
+  const registry = json(path.join(GRAPH_PROFILES, "registry.json"));
+  return registry.profiles.map((entry) => {
+    const profile = parseYaml(readFileSync(path.join(GRAPH_PROFILES, entry.source_path), "utf8"));
+    return {
+      profile_id: profile.profile_id,
+      file: entry.source_path,
+      nodes: profile.nodes.map((node) => ({
+        node_id: node.node_id,
+        kind: node.kind,
+        capability_id: node.capability_id ?? null,
+        subgraph_id: node.subgraph_id ?? null,
+        prerequisites: node.prerequisites.join(", "),
+        required_gate_ids: node.required_gate_ids.join(", "),
+      })),
+    };
+  });
 }
 
 function parityPackageRows() {

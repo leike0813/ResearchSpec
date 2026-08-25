@@ -23,14 +23,14 @@ patch before creating output. Schema errors, stale hashes, unknown blocks,
 duplicate targets, injected block markers, or incomplete annotation mappings
 leave the selected manuscript and destination unchanged.
 
-Annotation intake normally stays under the owning revision subflow's
+Annotation intake normally stays under the owning revision run's
 `work/annotation-intake/` directory. If an annotation set, patch, revised
-manuscript, response, or report must cross a subflow boundary, write it to an
+manuscript, response, or report must cross a node boundary, write it to an
 ordinary project path outside `researchspec/` and record its role and path in
-that subflow's `handoff.md`.
+that run's `handoff.md`.
 
 Mechanical success does not settle academic adequacy. The revision Gate remains
-human-confirmed in the owning subflow `control.yaml`. Manual editing and
+human-confirmed in the owning run the owning node instance. Manual editing and
 human-confirmed full re-emission remain valid revision paths; the helper is an
 optional safety tool and never mutates control state.
 
@@ -41,6 +41,6 @@ Current ResearchSpec owners:
 
 - `assets/shared/contracts/patch/revision_patch.schema.json`
 - `scripts/apply-revision-patch.mjs`
-- `researchspec/subflows/<instance>/work/annotation-intake/`
-- `researchspec/subflows/<instance>/handoff.md`
-- `researchspec/subflows/<instance>/control.yaml`
+- `work/annotation-intake/`
+- `researchspec/runs/<run-id>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`

@@ -6,12 +6,12 @@ participant "Host Agent" as Agent
 participant "ResearchSpec CLI" as CLI
 participant "deep-research" as ARSU
 database "Project files" as Files
-Agent -> CLI : instructions route:deep-research:<mode>
+Agent -> CLI : instructions profile:research-main
 CLI --> Agent : specs + handoff prerequisites\noutputs + Gates + cost
 Agent -> User : route summary
 User --> Agent : confirm
 Agent -> CLI : start
-CLI -> Files : control.yaml + handoff.md
+CLI -> Files : run.yaml + graph.yaml + handoff.md
 Agent -> ARSU : semantic research task
 ARSU -> Files : external research output
 ARSU -> Files : update owning handoff
@@ -20,5 +20,5 @@ opt formal Gate
   User --> Agent : confirm verdict
   Agent -> CLI : decide gate:<instance>/<gate>
 end
-Agent -> CLI : advance subflow:<instance>
+Agent -> CLI : advance node:<run>/<node>
 @enduml

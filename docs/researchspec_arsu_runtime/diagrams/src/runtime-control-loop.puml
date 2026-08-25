@@ -1,5 +1,5 @@
 @startuml
-title Current subflow control loop
+title Current graph run control loop
 skinparam shadowing false
 actor Human
 participant "Host Agent / Navigate" as Agent
@@ -10,7 +10,7 @@ database "Workspace files" as Files
 Agent -> CLI : status
 CLI -> Files : scan current owners
 CLI --> Agent : active instances + selectors
-Agent -> CLI : instructions route:<skill>:<mode>
+Agent -> CLI : instructions profile:<profile-id>
 CLI --> Agent : prerequisites, outputs, Gates, cost
 Agent -> Human : route summary
 Human --> Agent : confirm exact instance
@@ -25,7 +25,7 @@ opt formal Gate
   Companion -> CLI : decide gate:<instance>/<gate>
   CLI -> Files : append Gate attempt to control
 end
-Agent -> CLI : advance subflow:<instance>
+Agent -> CLI : advance node:<run>/<node>
 CLI -> Files : validate profile + control + handoff
 CLI -> Files : append transition atomically
 CLI --> Agent : current status

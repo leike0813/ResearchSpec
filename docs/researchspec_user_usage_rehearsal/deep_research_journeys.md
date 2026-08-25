@@ -112,7 +112,7 @@ research/urban-heat/literature-review/
 └── synthesis.md
 ```
 
-外部检索与 Zotero 可作为嵌套 provider；它们不创建 child subflow。Producer 在 synthesis 中
+外部检索与 Zotero 可作为嵌套 provider；它们不创建 child run。Producer 在 synthesis 中
 区分测量方法、气候调节因素、证据冲突和空白。Handoff 指向完整 corpus 与 synthesis；
 stable `sources.yaml` 只接收用户接受的来源，`claims.yaml` 只接收经 Gate 后认可的主张。
 

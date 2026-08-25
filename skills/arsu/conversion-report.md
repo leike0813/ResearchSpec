@@ -4,7 +4,7 @@
 - Source: `vendor/ars`
 - Source commit: `828ef3b613b0e8b91830da3328a1e33d4eb5ab4c`
 - Output: `skills/arsu`
-- Generated at: `2026-08-24T05:28:19Z`
+- Generated at: `2026-08-24T13:38:48Z`
 - Validation: pass
 
 ## Source Checkout
@@ -24,7 +24,7 @@
 ## Contract Integration
 
 - Manifest: `researchspec-contracts.json`
-- Profile: `researchspec-preflight-v10`
+- Profile: `researchspec-preflight-v11`
 - Full matrix injection: `false`
 - Anchor replacement profile: `researchspec-anchor-replacement-v4`
 - Anchor replacement coverage: 54/54 replaceable anchors
@@ -42,6 +42,12 @@
 - Mode routes: 25
 - Entry routes: 2
 
+## Preset Graph Profiles
+
+- Registry: `profiles/registry.json`
+- Registry version: `0.1.0`
+- Profiles: 7
+
 ## Anchor Replacement Semantics
 
 - `boundary_deliverable_contract`: 6
@@ -49,16 +55,16 @@
 - `control_decision_record`: 2
 - `gate_policy`: 6
 - `generator_evaluator_contract`: 10
+- `graph_state_boundary`: 9
 - `handoff_projection`: 3
 - `review_handoff_tracking`: 4
 - `revision_patch_protocol`: 4
 - `stable_claim_contract`: 3
 - `stable_source_contract`: 3
-- `subflow_control_boundary`: 9
 
 ## File Summary
 
-- Output files: 511
+- Output files: 519
 - Excluded source files: 529
 - Unclassified source files: 358
 - Risk findings: 1472

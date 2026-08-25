@@ -25,14 +25,14 @@ Replacement scope: `ARTIFACT-002` for `deep-research`.
 - Emit `version_records.yaml` as the citation version-family artifact for preprint → proceedings → journal chains; link any claim relevance to stable ids in `researchspec/specs/claims.yaml`.
 
 Return all three paths, hashes, producer identity, and stage metadata to the
-owning subflow handoff for
-`researchspec/subflows/<instance>/handoff.md`. These are separate immutable
-artifacts; do not store their contents in the owning subflow control, external input, or
+owning run handoff for
+`researchspec/runs/<run-id>/handoff.md`. These are separate immutable
+artifacts; do not store their contents in the owning run and node state, external input, or
 stable specs.
 
 Current ResearchSpec owners:
 
-- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/runs/<run-id>/handoff.md`
 - `researchspec/specs/sources.yaml`
 - `researchspec/specs/claims.yaml`
 <!--/rs:ARTIFACT-002-->

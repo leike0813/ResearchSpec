@@ -138,5 +138,9 @@ export async function handleGraphUpdate(options: GraphUpdateOptions, context: Co
 
 async function requireGraphWorkspaceForUpdate(context: CommandContext): Promise<string> {
   const { requireGraphWorkspace } = await import("../../core/workspace/graph-discover.js");
-  return requireGraphWorkspace(context.cwd, context.workspace);
+  try {
+    return await requireGraphWorkspace(context.cwd, context.workspace);
+  } catch (error) {
+    throw new CliError("workspace_unsupported", error instanceof Error ? error.message : String(error), 1);
+  }
 }

@@ -45,7 +45,7 @@ producer、adapter、library、collection、candidate、effect 与有效期的 `
 缺少授权时只能返回 candidate。该授权不扩展到 Curation；metadata、tag、note、merge、delete
 或 library-wide maintenance 必须单独路由 `zotero-library-curation` 并取得批准。
 
-Adapter 不能直接修改 ResearchSpec stable specs、subflow control、handoff、Gate、Decision 或
+Adapter 不能直接修改 ResearchSpec stable specs、run/node state、handoff、Gate、Decision 或
 transition。Route confirmation、plugin consent 和 Host Bridge readiness 都不等于
 managed-library authorization。
 

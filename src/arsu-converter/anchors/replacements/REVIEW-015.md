@@ -13,5 +13,5 @@ Current ResearchSpec owners:
 
 - `researchspec/changes/<change-id>/change.md`
 - `assets/shared/contracts/patch/revision_patch.schema.json`
-- `researchspec/subflows/<instance>/handoff.md`
-- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/runs/<run-id>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`

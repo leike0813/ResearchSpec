@@ -148,7 +148,7 @@ Runtime schema: `GraphRunStartCommandSchema`.
 | `entry_id` | `stable ID` | yes | Graph entry ID. |
 | `entry_node_id` | `graph node ID` | yes | Confirmed entry node. |
 | `prerequisites` | `non-empty string[]` | yes | Confirmed prerequisites, including an empty array when none apply. |
-| `handoff_inputs` | `HandoffInput[]` | yes | Confirmed input roles; each uses the descriptor fields below plus optional source_instance_id. |
+| `handoff_inputs` | `RunHandoffInputEntry[]` | yes | Confirmed input roles; each uses the descriptor fields below plus optional source_run_id. |
 | `planned_outputs` | `HandoffOutput[]` | yes | Confirmed output roles; each uses the descriptor fields below plus optional intended_consumer. |
 | `formal_gates` | `stable ID[]` | yes | Confirmed formal Gate IDs. |
 | `cost` | `{ effort, interaction }` | yes | Non-empty effort and interaction summaries. |
@@ -288,7 +288,7 @@ Render or replace one directly editable run handoff
 
 Optional YAML or JSON replacement payload supplied through --input; without it the command renders the current handoff.
 
-Runtime schema: `SubflowHandoffInputSchema`.
+Runtime schema: `RunHandoffSchema`.
 
 | Field or option | Type | Required | Meaning |
 | --- | --- | --- | --- |
@@ -372,7 +372,6 @@ Resolve a Gate, Decision, or project change choice
 | `--actor-name <name>` | no | human actor name |
 | `--reason <text>` | no | decision rationale |
 | `--verdict <verdict>` | no | Gate verdict: pass, pass_with_conditions, or fail |
-| `--kind <kind>` | no | local Decision kind: scope, claim, structure, or branch |
 | `--choice <choice>` | no | confirmed local Decision choice |
 | `--override` | no | approve an override of the current failed Gate |
 | `--evidence-role <role>` | no | owning handoff role used as Gate evidence |

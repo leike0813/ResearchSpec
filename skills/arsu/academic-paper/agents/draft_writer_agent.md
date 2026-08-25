@@ -26,7 +26,7 @@ emit a complete manuscript; a normal Phase 6 round emits only
 `researchspec/specs/manuscript.yaml` and `researchspec/specs/claims.yaml`.
 Resolve the exact outline, argument blueprint, bibliography, current manuscript,
 review roadmap, and other permitted upstream artifacts by role and safe path through
-`researchspec/subflows/<instance>/handoff.md`. Do not infer permission from
+`researchspec/runs/<run-id>/handoff.md`. Do not infer permission from
 `phase*_` directory names or consume unregistered downstream output.
 
 **Contract outputs:** produce only the deliverable for this invocation: an
@@ -36,7 +36,7 @@ formatted manuscripts, or another agent's output. Return downstream work to the
 caller.
 
 **Writes allowed:** write the new deliverable file only. Return ordinary
-artifacts to the owning subflow handoff; write manuscript revision
+artifacts to the owning run handoff; write manuscript revision
 operations only to the dedicated draft-patch file. Do not edit stable specs,
 the owning control, handoff, Decisions, or Gates directly. Contract preflight and
 runtime validation enforce this boundary; platform hooks and ARS directory
@@ -46,7 +46,7 @@ Current ResearchSpec owners:
 
 - `researchspec/specs/manuscript.yaml`
 - `researchspec/specs/claims.yaml`
-- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/runs/<run-id>/handoff.md`
 - `assets/shared/contracts/patch/revision_patch.schema.json`
 <!--/rs:IO-001-->
 
@@ -386,18 +386,18 @@ Replacement scope: `REVIEW-012` for `academic-paper`.
 > This block is the authoritative writer-side system-prompt protocol for the
 > `academic-paper full` generator/evaluator split. Resolve the frozen writer
 > contract and the exact handoff-referenced Phase 4a/4b inputs and outputs through
-> `researchspec/subflows/<instance>/handoff.md`. Preserve the paper-blind
+> `researchspec/runs/<run-id>/handoff.md`. Preserve the paper-blind
 > Phase 4a pre-commitment, paper-visible Phase 4b drafting, verbatim system-prompt
 > subsections, data-delimiter rules, and lint checks below. Record an accepted
 > Phase 4a output before Phase 4b consumes it, then record the Phase 4b draft.
 > Return lint or contract failures to the gate helper for
-> `researchspec/subflows/<instance>/control.yaml`; the writer and orchestrator do
+> `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`; the writer and orchestrator do
 > not write the owning handoff or Gate records directly.
 
 Current ResearchSpec owners:
 
-- `researchspec/subflows/<instance>/handoff.md`
-- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/runs/<run-id>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
 <!--/rs:REVIEW-012-->
 
 This block contains the exact text that becomes the **system prompt** for Phase 4a and Phase 4b model calls. The orchestrator MUST NOT mutate the sub-section text; it must include the relevant sub-section verbatim in the system prompt for the corresponding call. User content is supplied per the SKILL.md block's "System prompt vs user content discipline" — the orchestrator places contract JSON, paper metadata, `<phase4a_output>` data delimiter blocks, and upstream artefacts into user content, never into the system prompt.
@@ -510,7 +510,7 @@ make and all author-declared "must not" rules. Reuse stable ids for accepted
 claims. Any new claim, stronger wording, or changed limit must also be proposed
 through `researchspec/changes/<change-id>/change.md`; never edit
 `claims.yaml` from the drafting agent. Record the manifest by role and path in
-`researchspec/subflows/<instance>/handoff.md`. The audit
+`researchspec/runs/<run-id>/handoff.md`. The audit
 agent uses that handoff-referenced pre-commitment for the intended ∩ emitted ∩ supported
 diff in spec §4 step 5 (D6).
 
@@ -518,7 +518,7 @@ Current ResearchSpec owners:
 
 - `researchspec/specs/claims.yaml`
 - `researchspec/changes/<change-id>/change.md`
-- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/runs/<run-id>/handoff.md`
 <!--/rs:CLAIM-001-->
 
 Canonical example (single manifest with one MNC and one claim-level NC):
@@ -649,15 +649,15 @@ You emit the patch; you do not silently apply it or mutate ResearchSpec control.
 The caller may review it, edit the manuscript manually, or invoke
 `node scripts/apply-revision-patch.mjs` with explicit paths. A failed preflight
 produces no output. After revision, expose only the boundary files needed by
-another subflow through the owning `handoff.md`. Formal adequacy remains a
-human-confirmed Gate in the owning `control.yaml`.
+another node through the owning `handoff.md`. Formal adequacy remains a
+human-confirmed Gate in the owning node state.
 
 Current ResearchSpec owners:
 
 - `assets/shared/contracts/patch/revision_patch.schema.json`
 - `scripts/apply-revision-patch.mjs`
-- `researchspec/subflows/<instance>/handoff.md`
-- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/runs/<run-id>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
 <!--/rs:PATCH-002-->
 
 ## Search-Bounded Novelty Claims (#548)

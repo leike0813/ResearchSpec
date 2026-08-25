@@ -8,7 +8,7 @@ import { authorCapabilityPackage } from "../src/arsu-converter/authoring/author.
 import { REVISION_MASTER_AUTHORING_OPTIONS, REVISION_MASTER_AUTHORING_SOURCES } from "../src/arsu-converter/authoring/revision-master-sources.js";
 import { loadCapabilityRegistry, validateGraphAgainstCapabilityRegistry } from "../src/capabilities/registry.js";
 import { parseCapabilityGraphProfile, findUnreachableGraphNodes } from "../src/core/contracts/capability-graph.js";
-import { REVIEW_RESPONSE_GRAPH_PROFILE, REVIEW_RESPONSE_GRAPH_PROFILE_TEXT } from "../src/core/graph-profiles/review-response.js";
+import { REVIEW_RESPONSE_GRAPH_PROFILE, REVIEW_RESPONSE_GRAPH_PROFILE_TEXT } from "../src/arsu-converter/workflow/graph-profiles/review-response.js";
 import {
   evaluateGraphFrontier,
   graphRunCompletionReady,

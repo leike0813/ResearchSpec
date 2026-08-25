@@ -19,7 +19,7 @@ One bounded mechanical application is:
    --output <revised.md-or.qmd>` and add `--report <summary.json>` only when a derived
    diagnostic summary is useful.
 4. On any preflight failure, correct the inputs or revise manually. The helper
-   creates no partial output and never changes a subflow control or handoff.
+   creates no partial output and never changes a run and node state or handoff.
 
 Untouched anchored blocks remain byte-identical under helper application. That
 mechanical guarantee says nothing about whether edited text answers the review.
@@ -28,10 +28,10 @@ ordinary protected manuscript bytes unless an operation explicitly targets the
 containing anchored block; the output keeps the `.qmd` extension.
 The current manuscript, response to reviewers, optional patch/summary, and
 external review material may inform a formal revision Gate, but a human records
-the verdict in the owning subflow `control.yaml`.
+the verdict in the owning run the owning node instance.
 
 Annotation intake material is private under `work/annotation-intake/` by
-default. Cross-subflow patch, manuscript, annotation, response, or report files
+default. Cross-node patch, manuscript, annotation, response, or report files
 must use safe project-relative paths outside `researchspec/` and be listed by
 role in the owning `handoff.md`.
 
@@ -39,6 +39,6 @@ Current ResearchSpec owners:
 
 - `assets/shared/contracts/patch/revision_patch.schema.json`
 - `scripts/apply-revision-patch.mjs`
-- `researchspec/subflows/<instance>/work/annotation-intake/`
-- `researchspec/subflows/<instance>/handoff.md`
-- `researchspec/subflows/<instance>/control.yaml`
+- `work/annotation-intake/`
+- `researchspec/runs/<run-id>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`

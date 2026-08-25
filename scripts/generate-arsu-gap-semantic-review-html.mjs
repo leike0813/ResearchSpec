@@ -99,9 +99,9 @@ const findings = [
     id: "GAP-04",
     mode: "academic-paper-reviewer:full",
     anchor: "Strongest Counter-Argument",
-    title: "DA capability 已存在，但未接线进 reviewer graph profile",
-    verdict: "真实图接线缺口",
-    verdictClass: "wiring",
+    title: "DA capability 与 reviewer graph profile 接线已收敛",
+    verdict: "已关闭",
+    verdictClass: "closed",
     anchorVerdict: "锚点正确：该短语是 DA 报告格式的核心字段",
     upstream: {
       path: "vendor/ars/academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md",
@@ -115,13 +115,13 @@ const findings = [
     converted: {
       points: [
         "judgment-devils-advocate-stress-test 的 SKILL.md 完整保留了 Strongest Counter-Argument 输出块与 DA 边界规则。",
-        "但 src/core/graph-profiles/academic-paper-reviewer.ts 的节点只有 panel → specialist → editorial → synthesis，没有 DA 节点。",
+        "skills/arsu/profiles/academic-paper-reviewer.yaml 已包含与 specialist 并行的 DA 节点以及 synthesis 输入；该历史接线缺口已关闭。",
         "specialist-review 明确声明 R3 不接管 DA；review-synthesis 的 DA-CRITICAL 规则也说明 graph 中应存在 DA 输入。",
       ],
       snippet: "devils-advocate-stress-test/SKILL.md:\n### Strongest Counter-Argument\n[200-300 words ...]",
     },
-    conclusion: "锚点不是假象；能力转换成功，但 graph profile 漏接线。",
-    recommendation: "在 academic-paper-reviewer graph profile 中增加 DA 节点（与 specialist 并行或前置），并把 DA 输出作为 review-synthesis 的必需输入。",
+    conclusion: "锚点不是假象；能力转换和 graph profile 接线均已存在。",
+    recommendation: "保留当前 reviewer profile 的 DA 并行节点与 synthesis 输入约束。",
   },
   {
     id: "GAP-05",

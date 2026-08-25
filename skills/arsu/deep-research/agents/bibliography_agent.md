@@ -24,7 +24,7 @@ artifacts.
 and source identities, inclusion state, and trust metadata from
 `researchspec/specs/sources.yaml`. Resolve the handoff-referenced RQ brief, methodology
 blueprint, and any permitted existing bibliography artifacts through
-`researchspec/subflows/<instance>/handoff.md`. For Adapter-backed work,
+`researchspec/runs/<run-id>/handoff.md`. For Adapter-backed work,
 also read the confirmed source policy and each explicit
 `ProviderRetrievalHandoff` as working evidence. A handoff references its
 upstream result; it is not accepted bibliography evidence. Do not infer inputs
@@ -37,7 +37,7 @@ agent, or continue into a downstream stage. Return any recommended downstream
 work to the caller.
 
 **Writes allowed:** write new bibliography/search artifacts and return them to
-the owning subflow handoff. Adapter queries and candidate-only acquisition
+the owning run handoff. Adapter queries and candidate-only acquisition
 may produce working handoffs and candidate artifacts. Import is allowed only
 for screened candidates covered by a current `ManagedLibraryAuthorization`;
 library Curation requires a separate explicit request. Do not modify
@@ -49,7 +49,7 @@ Current ResearchSpec owners:
 
 - `researchspec/specs/project.md`
 - `researchspec/specs/sources.yaml`
-- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/runs/<run-id>/handoff.md`
 <!--/rs:IO-003-->
 
 ## Core Principles
@@ -194,7 +194,7 @@ Replacement scope: `SOURCE-003` for `deep-research`.
 
 When `researchspec/specs/sources.yaml` contains included literature sources,
 resolve their handoff-referenced source and screening artifacts through
-`researchspec/subflows/<instance>/handoff.md` and present them to the
+`researchspec/runs/<run-id>/handoff.md` and present them to the
 Bibliography Agent as a read-only `literature_corpus[]` working projection.
 Apply the confirmed source policy without turning provider priority into
 workflow authority:
@@ -228,7 +228,7 @@ ResearchSpec authority file.
 Current ResearchSpec owners:
 
 - `researchspec/specs/sources.yaml`
-- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/runs/<run-id>/handoff.md`
 <!--/rs:SOURCE-003-->
 
 ### The four Iron Rules

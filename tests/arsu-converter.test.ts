@@ -57,12 +57,12 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
 
   const deepResearch = await readFile(path.join(root, "skills/arsu/deep-research/SKILL.md"), "utf8");
   assert.match(deepResearch, /researchspec status --json/);
-  assert.match(deepResearch, /researchspec instructions route:/);
-  assert.match(deepResearch, /pipeline parent confirmation never authorizes/);
-  assert.match(deepResearch, /control\.yaml/);
+  assert.match(deepResearch, /researchspec instructions profile:/);
+  assert.match(deepResearch, /bound child runs declared by the frozen graph/);
+  assert.doesNotMatch(deepResearch, /control\.yaml|subflow/);
   assert.match(deepResearch, /handoff\.md/);
   assert.match(deepResearch, /researchspec decide gate:/);
-  assert.match(deepResearch, /researchspec advance subflow:/);
+  assert.match(deepResearch, /researchspec advance node:/);
   assert.match(deepResearch, /Suggest at most three/);
   assert.match(deepResearch, /zotero-library-query/);
   assert.match(deepResearch, /zotero-literature-acquisition/);
@@ -116,6 +116,7 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
       }>;
     };
     routing_catalog: { path: string; catalog_id: string; skill_count: number; mode_route_count: number; entry_route_count: number; sha256: string };
+    profile_registry: { path: string; profile_count: number; sha256: string };
     output_files: Array<{ output_path: string; sha256: string }>;
   };
   assert.equal(manifest.risk_findings.some((item) => item.term === "Claude Code" && !item.blocking), true);
@@ -136,7 +137,7 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
     manifest.anchor_replacements.records.some((item) =>
       item.anchor_id === "STATE-001" &&
       item.anchor_name === "fixture.required.material" &&
-      item.semantic_role === "subflow_control_boundary" &&
+      item.semantic_role === "graph_state_boundary" &&
       item.replacement_body_sha256 && item.before_sha256 && item.after_sha256 &&
       item.marker_id === undefined && item.template_id === undefined),
     true,
@@ -144,7 +145,7 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
   assert.match(deepResearch, /<!--rs:STATE-001-->/);
   assert.match(deepResearch, /<!--\/rs:STATE-001-->\n/);
   assert.doesNotMatch(deepResearch, /ResearchSpec Contract Replacement/);
-  assert.match(deepResearch, /researchspec\/subflows\/<instance>\/control\.yaml/);
+  assert.match(deepResearch, /researchspec\/runs\/<run-id>\/nodes\/<node-instance>\.yaml/);
   const crossSkillDeepResearchPath = path.join(
     root,
     "skills/arsu/academic-paper/references/cross-skill/deep-research/SKILL.md",
@@ -169,6 +170,7 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
   assert.match(anchorReport, /#### After/);
   const conversionReport = await readFile(path.join(root, "skills/arsu/conversion-report.md"), "utf8");
   assert.match(conversionReport, /## Routing Catalog/);
+  assert.match(conversionReport, /## Preset Graph Profiles/);
   assert.match(conversionReport, /Mode routes: 25/);
   await cleanup(root);
 });
@@ -504,8 +506,8 @@ async function makeAnchorAssets(root: string): Promise<void> {
               snippets: ["state tracking via Material Passport", "pipeline_orchestrator_agent"],
               keywords: ["Mode A"],
             },
-            semantic_role: "subflow_control_boundary",
-            researchspec_targets: ["researchspec/subflows/<instance>/control.yaml"],
+            semantic_role: "graph_state_boundary",
+            researchspec_targets: ["researchspec/runs/<run-id>/nodes/<node-instance>.yaml"],
             replacement_shape: "protocol_block",
             replacement_scope: {
               start_snippet: "state tracking via Material Passport",
@@ -524,7 +526,7 @@ async function makeAnchorAssets(root: string): Promise<void> {
               keywords: ["phase2"],
             },
             semantic_role: "boundary_deliverable_contract",
-            researchspec_targets: ["researchspec/subflows/<instance>/handoff.md"],
+            researchspec_targets: ["researchspec/runs/<run-id>/handoff.md"],
             replacement_shape: "io_contract_block",
             replacement_scope: {
               start_snippet: "You MAY READ files in `phase1_*/`",
@@ -553,12 +555,12 @@ async function makeAnchorAssets(root: string): Promise<void> {
   );
   await writeFile(
     path.join(root, "src/arsu-converter/anchors/replacements/STATE-001.md"),
-    "Use `researchspec/subflows/<instance>/control.yaml` as the sole runtime authority.\n",
+    "Use the owning `researchspec/runs/<run-id>/nodes/<node-instance>.yaml` as runtime state.\n",
     "utf8",
   );
   await writeFile(
     path.join(root, "src/arsu-converter/anchors/replacements/IO-001.md"),
-    "Resolve boundary inputs through `researchspec/subflows/<instance>/handoff.md`.\n",
+    "Resolve boundary inputs through `researchspec/runs/<run-id>/handoff.md`.\n",
     "utf8",
   );
 }

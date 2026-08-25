@@ -10,7 +10,7 @@ make and all author-declared "must not" rules. Reuse stable ids for accepted
 claims. Any new claim, stronger wording, or changed limit must also be proposed
 through `researchspec/changes/<change-id>/change.md`; never edit
 `claims.yaml` from the drafting agent. Record the manifest by role and path in
-`researchspec/subflows/<instance>/handoff.md`. The audit
+`researchspec/runs/<run-id>/handoff.md`. The audit
 agent uses that handoff-referenced pre-commitment for the intended ∩ emitted ∩ supported
 diff in spec §4 step 5 (D6).
 
@@ -18,4 +18,4 @@ Current ResearchSpec owners:
 
 - `researchspec/specs/claims.yaml`
 - `researchspec/changes/<change-id>/change.md`
-- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/runs/<run-id>/handoff.md`

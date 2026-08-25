@@ -16,7 +16,7 @@ Replacement scope: `REVIEW-009` for `academic-paper-reviewer`.
 
 A reviewer sprint contract is a frozen, machine-checkable acceptance baseline.
 Resolve the selected template through
-`researchspec/subflows/<instance>/handoff.md`, deep-copy it for permitted
+`researchspec/runs/<run-id>/handoff.md`, deep-copy it for permitted
 runtime fields, and record the instantiated contract before reviewer calls.
 The protocol prevents post-hoc standard rationalization by physically separating
 paper-blind Phase 1 from paper-visible Phase 2.
@@ -43,14 +43,14 @@ For every reviewer required by `panel_size`:
    and abort the round rather than synthesizing a smaller panel.
 7. Pass only the complete handoff-referenced Phase 2 panel to the editorial synthesizer.
 
-The orchestrator returns contract and phase artifacts to the producing subflow
+The orchestrator returns contract and phase artifacts to the producing node
 for handoff recording and returns Gate findings to
-`researchspec/subflows/<instance>/control.yaml`; it does not edit either file.
+`researchspec/runs/<run-id>/nodes/<node-instance>.yaml`; it does not edit either file.
 
 Current ResearchSpec owners:
 
-- `researchspec/subflows/<instance>/handoff.md`
-- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/runs/<run-id>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
 <!--/rs:REVIEW-009-->
 
 ## 3. Contract injection

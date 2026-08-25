@@ -14,6 +14,7 @@ import { ARSU_LICENSE_FILENAME, ARSU_NOTICE_FILENAME } from "./licensing.js";
 import { revisionPatchJsonSchema } from "./revision/contract.js";
 import { ARSU_RUNTIME_POLICY_CATALOG, FORBIDDEN_ACTIVE_GUIDANCE } from "./runtime-policy/catalog.js";
 import type { RuntimePolicyCatalog } from "./runtime-policy/types.js";
+import { GraphProfileRegistryError, loadGraphProfileRegistry } from "../graph-profiles/registry.js";
 
 const LINK_RE = /\[[^\]]+\]\((?<link>[^)#]+)(?:#[^)]+)?\)/g;
 const OPERATIONAL_CODE_PATH_RE = /`(?<path>(?:docs|scripts)\/[A-Za-z0-9_./@+%:-]+)`/g;
@@ -54,6 +55,15 @@ export async function validateArsuOutput(outputRoot: string, runtimePolicyCatalo
       if (JSON.stringify(routingCatalog) !== JSON.stringify(ARSU_ROUTING_CATALOG)) {
         errors.push("routing-catalog.json differs from the canonical converter-owned catalog");
       }
+    }
+  }
+  try {
+    await loadGraphProfileRegistry(path.join(outputRoot, "profiles"));
+  } catch (error) {
+    if (error instanceof GraphProfileRegistryError) {
+      errors.push(...error.diagnostics.map((item) => item.message));
+    } else {
+      errors.push(`Cannot validate preset graph profiles: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 
@@ -112,6 +122,10 @@ export async function validateArsuOutput(outputRoot: string, runtimePolicyCatalo
       || manifest.routing_catalog.mode_route_count !== ARSU_ROUTING_CATALOG.skills.flatMap((skill) => skill.routes).filter((route) => route.route_kind === "mode").length
       || manifest.routing_catalog.entry_route_count !== ARSU_ROUTING_CATALOG.skills.flatMap((skill) => skill.routes).filter((route) => route.route_kind === "entry").length) {
       errors.push("Manifest routing catalog metadata differs from the canonical catalog");
+    }
+    const profileRegistryRecord = manifest.output_files.find((item) => item.output_path === manifest.profile_registry.path);
+    if (!profileRegistryRecord || profileRegistryRecord.sha256 !== manifest.profile_registry.sha256) {
+      errors.push("Manifest profile registry metadata does not match its output-file record");
     }
   }
 
@@ -234,6 +248,7 @@ function validateManifestShape(manifest: ConversionManifest): { errors: string[]
     "risk_findings",
     "contract_integration",
     "routing_catalog",
+    "profile_registry",
     "runtime_policy",
     "validation_summary",
   ] as const;
@@ -412,6 +427,8 @@ async function collectGeneratedFiles(outputRoot: string): Promise<string[]> {
   const files: string[] = ["researchspec-contracts.json", "routing-catalog.json"];
   if (await pathExists(path.join(outputRoot, "anchor-replacement-report.md"))) files.push("anchor-replacement-report.md");
   if (await pathExists(path.join(outputRoot, "runtime-policy-report.md"))) files.push("runtime-policy-report.md");
+  const profileRoot = path.join(outputRoot, "profiles");
+  if (await pathExists(profileRoot)) files.push(...await collectFiles(profileRoot, outputRoot));
   for (const group of DEFAULT_SKILL_GROUPS) {
     const groupRoot = path.join(outputRoot, group);
     if (!(await pathExists(groupRoot))) continue;

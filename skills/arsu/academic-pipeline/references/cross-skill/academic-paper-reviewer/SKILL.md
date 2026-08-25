@@ -179,10 +179,10 @@ User: "Review this paper"
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -221,15 +221,15 @@ boundaries; neither rule overrides the other.
 Phase-by-phase routing requires an explicit user signal. Ambiguous cross-stage
 material must be clarified before dispatch. The configured graph in
 `researchspec/profiles/academic-pipeline.yaml`, the frontier in
-`researchspec/subflows/<instance>/control.yaml`, and handoff-referenced inputs in
-`researchspec/subflows/<instance>/handoff.md` define the permitted read and
+`researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, and handoff-referenced inputs in
+`researchspec/runs/<run-id>/handoff.md` define the permitted read and
 write boundary.
 
 Current ResearchSpec owners:
 
 - `researchspec/profiles/academic-pipeline.yaml`
-- `researchspec/subflows/<instance>/control.yaml`
-- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
+- `researchspec/runs/<run-id>/handoff.md`
 <!--/rs:IO-006-->
 
 ---
@@ -239,10 +239,10 @@ Current ResearchSpec owners:
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -283,7 +283,7 @@ without stripping or normalizing YAML frontmatter, fenced code, cell options,
 cross-references, citations, or other Quarto metadata.
 When the revision producer exposed an ARSU patch, annotation set, or helper
 summary, resolve those files by role and safe project-relative path from the
-producer subflow's `handoff.md`; do not infer them from directory names or
+producer run's `handoff.md`; do not infer them from directory names or
 another authority file.
 
 **Input:** the original Revision Roadmap, revised manuscript, response to
@@ -291,18 +291,18 @@ reviewers when present, prior review material, and any explicitly handed-off
 patch or annotation evidence relevant to the concern.
 
 **Output:** a Verification Review Report at an ordinary project path outside
-`researchspec/`, recorded as an output in this subflow's `handoff.md`. The
+`researchspec/`, recorded as an output in this run's `handoff.md`. The
 reviewer assesses semantic fulfillment independently. Mechanical application or
 annotation disposition never proves that a concern was answered. A human
-records the formal re-review Gate verdict in the owning subflow `control.yaml`.
+records the formal re-review Gate verdict in the owning run the owning node instance.
 
 > See `references/re_review_mode_protocol.md` for the verification rules,
 > output format, and Socratic guidance.
 
 Current ResearchSpec owners:
 
-- `researchspec/subflows/<instance>/handoff.md`
-- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/runs/<run-id>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
 <!--/rs:REVIEW-001-->
 
 ---
@@ -320,10 +320,10 @@ Helps authors understand problems themselves through progressive revelation. EIC
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -360,10 +360,10 @@ The Editorial Decision Letter structure is detailed in `templates/editorial_deci
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -509,19 +509,19 @@ Follows the paper's language. Academic terms remain in English. User can overrid
 Replacement scope: `REVIEW-002` for `academic-paper-reviewer`.
 
 - **Sprint contract.** Resolve the mode-specific frozen contract JSON through
-  `researchspec/subflows/<instance>/handoff.md`, then deep-copy it for permitted
+  `researchspec/runs/<run-id>/handoff.md`, then deep-copy it for permitted
   invocation fields. Preserve `panel_size`, `acceptance_dimensions`, severity
   and cross-reviewer quantifiers, measurement procedure, override ladder, and
   bounded amendments. Return the instantiated contract and each phase output to
-  the producing subflow for handoff recording; send lint, panel-cardinality,
+  the producing node for handoff recording; send lint, panel-cardinality,
   and failure-condition results to the review Gate helper for
-  `researchspec/subflows/<instance>/control.yaml`. The following synthesizer
+  `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`. The following synthesizer
   protocol and mode-specific panel sizes remain unchanged.
 
 Current ResearchSpec owners:
 
-- `researchspec/subflows/<instance>/handoff.md`
-- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/runs/<run-id>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
 <!--/rs:REVIEW-002-->
 <!--rs:REVIEW-016-->
 ### ResearchSpec Current Owner: Deterministic Panel Check
@@ -542,10 +542,10 @@ cannot replace the deterministic checks.
    or abort behavior reported by the checker. Never rewrite a checker verdict or
    accept a malformed candidate by inspection.
 4. Record accepted review and synthesis files as boundary outputs in
-   `researchspec/subflows/<instance>/handoff.md`. A passing checker establishes
+   `researchspec/runs/<run-id>/handoff.md`. A passing checker establishes
    only mechanical self-consistency. It does not confirm a formal ResearchSpec
    Gate; Verify prepares that judgment and only a human-confirmed Decide action
-   records it in `researchspec/subflows/<instance>/control.yaml`.
+   records it in `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`.
 
 The packaged checker closure is exactly:
 
@@ -562,10 +562,10 @@ The packaged checker closure is exactly:
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 

@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { access, writeFile } from "node:fs/promises";
+import { access, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { test } from "node:test";
 
@@ -66,10 +66,16 @@ void test("schema 1 workspaces are rejected by the packaged CLI", async () => {
     const workspace = path.join(root, "researchspec");
     const { mkdir } = await import("node:fs/promises");
     await mkdir(workspace, { recursive: true });
-    await writeFile(path.join(workspace, "config.yaml"), stringify({ schema_version: "1", agent_tools: { selected: [], delivery: "skills" }, literature_adapters: { selected: [] }, plugins: { selected: [] } }), "utf8");
+    const configPath = path.join(workspace, "config.yaml");
+    const config = stringify({ schema_version: "1", agent_tools: { selected: [], delivery: "skills" }, literature_adapters: { selected: [] }, plugins: { selected: [] } });
+    await writeFile(configPath, config, "utf8");
     const status = runCli(["status", "--json"], root);
     assert.notEqual(status.status, 0);
     assert.match(status.stdout, /workspace_unsupported/);
+    const update = runCli(["update", "--tools", "none", "--json"], root);
+    assert.notEqual(update.status, 0);
+    assert.match(update.stdout, /workspace_unsupported/);
+    assert.equal(await readFile(configPath, "utf8"), config);
   } finally {
     await cleanup(root);
   }

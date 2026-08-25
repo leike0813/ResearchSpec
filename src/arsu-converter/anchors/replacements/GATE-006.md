@@ -4,18 +4,18 @@ Replacement scope: `GATE-006` for `shared`.
 
 4. **Traceable handoff:** every boundary file is resolved by its unique role and
    safe project-relative path from
-   `researchspec/subflows/<instance>/handoff.md`. When a producer supersedes a
+   `researchspec/runs/<run-id>/handoff.md`. When a producer supersedes a
    file, it updates the owning handoff entry instead of creating another
    lifecycle authority.
 5. **Failure on missing:** missing required fields or boundary files produce
    `HANDOFF_INCOMPLETE` with the exact gaps; consumers do not proceed partially.
 6. **Producer validation:** the producer validates the payload shape before
-   returning the file to the producing subflow for handoff recording.
+   returning the file to the producing node for handoff recording.
 7. **Consumer validation:** the consumer checks the declared role, path, payload
    shape, and required upstream human-confirmed Gate attempts before use;
    violations request a corrected boundary file rather than an in-place edit.
 8. **Integrity gating:** verification status comes from the Gate attempt in
-   `researchspec/subflows/<instance>/control.yaml`, not from a mutable field in
+   `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, not from a mutable field in
    the boundary file.
 9. **Staleness detection:** when an upstream boundary file changes, dependent
    findings and prior Gate attempts must be recomputed before they authorize a
@@ -32,9 +32,9 @@ Replacement scope: `GATE-006` for `shared`.
 
 The producing Agent writes validated boundary references to the owning handoff
 and returns formal findings to ResearchSpec CLI. The CLI is the only writer for
-Gate, Decision, frontier, and transition mutations in `control.yaml`.
+Gate, Decision, frontier, and transition mutations in the owning node instance.
 
 Current ResearchSpec owners:
 
-- `researchspec/subflows/<instance>/control.yaml`
-- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
+- `researchspec/runs/<run-id>/handoff.md`

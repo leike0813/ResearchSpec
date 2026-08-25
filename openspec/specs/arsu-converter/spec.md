@@ -709,7 +709,7 @@ instructions that configure credentials or directly call model services.
 
 #### Scenario: Alternate-model review is authorized
 
-- **WHEN** an Agent proposes an alternate host model for the current subflow
+- **WHEN** an Agent proposes an alternate host model for the current run/node
 - **THEN** the user SHALL confirm the model, content category, and cost before dispatch
 - **AND** the Agent SHALL minimize and de-anchor the dispatched material
 - **AND** the consent SHALL NOT be persisted as ResearchSpec authority
@@ -928,3 +928,22 @@ origin. A vendor-derived source SHALL use its own extraction index, author manif
 - **WHEN** an authoring source is authored without options
 - **THEN** the engine reads `docs/ars_extraction/extraction-index.json` and records `origin:
   ars-derived`
+
+### Requirement: Generated ARSU Guidance Uses The Graph Protocol Exclusively
+
+The converter SHALL project the current status, instructions, start, decide and advance graph protocol into all four ARSU Skills and SHALL reject generated operational guidance that references retired runtime selectors or state-file authority.
+
+#### Scenario: ARSU output is regenerated
+
+- **WHEN** converter output is validated
+- **THEN** every runtime selector resolves through the current graph CLI catalog
+- **AND** no retired selector family appears in an operational instruction
+
+### Requirement: Preset Profiles Have One Converter-Owned Registry
+
+The converter SHALL emit the preset profile registry and profile files used by bootstrap, cross-validate their capability and entry references, and include them in deterministic idempotence checking.
+
+#### Scenario: Profile source changes
+
+- **WHEN** an authored preset graph changes without regeneration
+- **THEN** converter checking fails instead of allowing core runtime data to mask the drift

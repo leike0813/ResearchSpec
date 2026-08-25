@@ -1,5 +1,6 @@
 import type { ArsuRoutingCatalog } from "./routing/contracts.js";
 import type { SkillDescriptionProjection } from "./routing/projection.js";
+import type { GraphProfileRegistry } from "../graph-profiles/registry.js";
 
 export interface FileRecord {
   path: string;
@@ -143,6 +144,7 @@ export interface ConversionResult {
   inventory: Inventory;
   contract_manifest: ContractIntegrationManifest;
   routing_catalog: ArsuRoutingCatalog;
+  profile_registry: GraphProfileRegistry;
   anchor_replacements: import("./anchors/types.js").AnchorReplacementPlan | null;
   runtime_policy: import("./runtime-policy/types.js").RuntimePolicyPlan;
   validation: ValidationResult | null;
@@ -184,6 +186,13 @@ export interface ConversionManifest {
     skill_count: number;
     mode_route_count: number;
     entry_route_count: number;
+    sha256: string;
+  };
+  profile_registry: {
+    path: "profiles/registry.json";
+    schema_version: "1";
+    registry_version: string;
+    profile_count: number;
     sha256: string;
   };
   anchor_replacements: Omit<import("./anchors/types.js").AnchorReplacementPlan, "spans_by_source">;

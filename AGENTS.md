@@ -125,7 +125,7 @@ never execute or interpret them.
 The public CLI has sixteen top-level commands: `init`, `update`, `status`,
 `instructions`, `start`, `advance`, `check`, `list`, `show`, `handoff`, `pack`,
 `propose`, `decide`, `archive`, `doctor`, and `plugin`. New workspaces use only
-the current schema `"1"` contract. Old or unknown workspaces are reported and
+the current schema `"2"` contract. Old or unknown workspaces are reported and
 left unchanged; ResearchSpec provides no compatibility reader, migration,
 rollback, or semantic repair. The runtime protocol is
 `status -> instructions <selector> -> start/decide/advance -> status`.
@@ -134,13 +134,13 @@ new public command or Companion merely to expose a low-level transaction.
 
 Domain plugins are stable user installation units assembled from project-maintained vendor Skills,
 not third-party runtimes. Vendor and domain are separate many-to-many layers: vendor converters own upstream version, provenance, adaptation, and hard Skill dependencies; domains own fixed reviewed Skill lists. They may assist semantic work but must not own or
-directly modify stable specs, routes, subflow controls, handoffs, Gates,
+directly modify stable specs, graph runs, node state, handoffs, Gates,
 Decisions, or transitions. ResearchSpec distributes static reviewed
 content and never executes plugin scripts or installs their dependencies.
 
 At runtime, Navigate and the active ARSU producer may discover optional domain
 assistance from compact packaged Skill metadata. Suggest at most three domains
-in one batch, keep plugin consent separate from route confirmation, preview the
+in one batch, keep plugin consent separate from root-run confirmation, preview the
 exact install, and require explicit domain IDs plus `--yes` for non-interactive
 execution. Use a newly projected Skill natively when the host has loaded it;
 otherwise use
@@ -579,16 +579,18 @@ researchspec/
       tasks.md         # optional
       delta.yaml       # optional
 
-  subflows/
-    <instance-directory>/
-      control.yaml
+  runs/
+    <run-id>/
+      run.yaml
+      graph.yaml
       handoff.md
-      work/
+      nodes/
+        <node-instance>.yaml
 ```
 
 Boundary deliverables live outside `researchspec/`. Generated profiles and Agent
-tool projections are manifest-owned static content; stable specs, controls,
-handoffs, changes, and subflow work are not generated projections.
+tool projections are manifest-owned static content; stable specs, run records,
+node records, handoffs, and changes are not generated projections.
 
 ## Contract Design Principles
 
@@ -600,7 +602,7 @@ figures, tables, and generated files.
 
 Do not make a draft or review report the source of truth for research intent.
 Keep boundary deliverables outside `researchspec/` and reference them from the
-owning subflow handoff by role, safe project-relative path, purpose, producer,
+owning run handoff by role, safe project-relative path, purpose, producer,
 and intended consumer.
 
 ### 2. Make Claims First-Class
@@ -614,23 +616,22 @@ require a proposed contract change and human decision.
 
 ### 3. Make Human Decisions First-Class
 
-Human decisions are part of the owning control or project change, not chat
+Human decisions are part of the owning node instance or project change, not chat
 residue.
 
 Changing research questions, target output, contribution scope, manuscript
 structure, review-response strategy, or accepted limitations must be represented
-in the relevant subflow control or proposed project change.
+in the relevant graph Decision or proposed project change.
 
 ### 4. Keep Workflow State Separate From Research Specs
 
 The ARSU pipeline stage graph belongs to the ARSU skill pack. ResearchSpec core
-provides generic per-subflow control contracts and must not hard-code one paper
-pipeline. The converter-owned graph is projected to
-`profiles/academic-pipeline.yaml`.
+provides a generic graph runtime and must not hard-code one paper pipeline. The
+converter-owned profile registry is projected under `profiles/`.
 
 ### 5. Gate Progress, Do Not Invent Semantics
 
-Gate logic should check the owning control, blockers, required handoff roles,
+Gate logic should check the frozen graph, owning node, blockers, required handoff roles,
 schema validity, and pending decisions. It should not replace LLM or human
 academic judgment.
 
@@ -650,17 +651,17 @@ explicitly and validated before the change becomes `applied`.
 
 Use this as the default mapping when designing the integration:
 
-- ARSU RQ Brief -> `specs/project.md` plus the producing subflow handoff when an
+- ARSU RQ Brief -> `specs/project.md` plus the producing run handoff when an
   external brief is retained
 - ARSU Bibliography / literature corpus -> `specs/sources.yaml`
 - ARSU Synthesis Report -> external boundary file in a handoff; accepted claims
   go to `specs/claims.yaml`, with a project change when meaning changes materially
 - ARSU Paper Draft -> external boundary file plus `specs/manuscript.yaml`
 - ARSU Integrity Report -> external handoff output plus a human-confirmed Gate
-  attempt in the owning control
+  attempt in the owning node instance
 - ARSU Review Report / Revision Roadmap -> external handoff outputs plus a
   project change when stable research meaning changes
-- ARSU Response to Reviewers -> external handoff output plus owning-control
+- ARSU Response to Reviewers -> external handoff output plus owning-node
   Gate/Decision records where formally required
 - ARSU Material Passport -> ordinary external input only; it is not imported as
   ResearchSpec authority

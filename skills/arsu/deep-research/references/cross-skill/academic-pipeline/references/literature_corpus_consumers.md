@@ -14,7 +14,7 @@ Replacement scope: `SOURCE-002` for `academic-pipeline`.
 This is the contract every literature-reading consumer follows after
 ResearchSpec has projected source records from
 `researchspec/specs/sources.yaml` and resolved associated corpus artifacts
-through `researchspec/subflows/<instance>/handoff.md`. The resulting
+through `researchspec/runs/<run-id>/handoff.md`. The resulting
 read-only `literature_corpus[]` working payload retains citation keys, titles,
 authors, dates, source pointers, inclusion state, and trust metadata required by
 the protocol below. Consumers apply the existing corpus-first,
@@ -25,7 +25,7 @@ handoff.
 Current ResearchSpec owners:
 
 - `researchspec/specs/sources.yaml`
-- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/runs/<run-id>/handoff.md`
 <!--/rs:SOURCE-002-->
 
 The `corpus-first, search-fills-gap` flow has five steps; the four Iron Rules are non-negotiable; the PRE-SCREENED block is the reproducibility surface; failures are surfaced honestly via the `[CORPUS PARSE FAILURE: <cause>]` graceful fallback.

@@ -240,10 +240,10 @@ Based on the decision matrix in `references/editorial_decision_standards.md`:
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -426,10 +426,10 @@ Thank you for submitting your manuscript titled "[Paper Title]" to [Journal Name
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 

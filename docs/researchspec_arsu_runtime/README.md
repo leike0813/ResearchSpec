@@ -1,7 +1,7 @@
 # ResearchSpec 与 ARSU 核心运行模型
 
 本文档组面向维护 ResearchSpec core、ARSU converter 和 Agent guidance 的开发者。当前模型只有
-一套 runtime authority：stable specs、project profile、per-subflow control、handoff 和 project
+一套 runtime authority：stable specs、graph profiles、frozen runs、node instances、handoff 和 project
 change。
 
 ## 阅读顺序

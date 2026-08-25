@@ -4,17 +4,17 @@ Replacement scope: `GATE-002` for `academic-pipeline`.
 
 1. **Resolve the policy.** Read supported submission-package policy values from
    `researchspec/profiles/academic-pipeline.yaml`. Use the latest human-confirmed choice for
-   this run from `researchspec/subflows/<instance>/control.yaml`; absence
+   this run from `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`; absence
    resolves to `advisory`. Always pass the resolved value explicitly to the
    deterministic verifier. The orchestrator selects policy but never
    re-evaluates package findings itself.
 2. **Resolve and verify the package inputs.** Resolve the formatted manuscript,
    figures, tables, supplementary material, venue profile, provenance inputs,
    and prior verifier reports by explicit handoff role and path through
-   `researchspec/subflows/<instance>/handoff.md`. Run the local package
+   `researchspec/runs/<run-id>/handoff.md`. Run the local package
    verifier with the resolved policy and exact input set so its package and
    inputs fingerprints are reproducible. Return the new report to the producing
-   subflow for handoff recording.
+   graph node for handoff recording.
 3. **Gate on structured verifier tokens, never on exit code alone.** Under
    `strict`, `TERMINAL-BLOCK policy=submission_package` starts a formatter repair
    loop bounded to two rounds; after the second failure, stop and surface the
@@ -22,7 +22,7 @@ Replacement scope: `GATE-002` for `academic-pipeline`.
    parsers are not formatter-fixable: ask the scholar to provide the missing
    input or choose advisory policy. Return every pass, warning, incomplete, and
    blocking outcome to the submission-package gate helper for
-   `researchspec/subflows/<instance>/control.yaml`.
+   `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`.
 4. **Preserve the advisory path.** After a report is handoff-referenced, dispatch the
    formatter once in append-only mode to copy package advisories into
    `provenance_summary.md`. This may add the report and advisories section but
@@ -39,10 +39,10 @@ Replacement scope: `GATE-002` for `academic-pipeline`.
    previously granted delivery result across resume or finalization.
 
 The orchestrator returns artifacts, human choices, and Gate findings to their
-owning subflow and CLI; it does not edit the handoff, Decision records, or Gate
+owning run and CLI; it does not edit the handoff, Decision records, or Gate
 attempts directly.
 
 Current ResearchSpec owners:
 
-- `researchspec/subflows/<instance>/control.yaml`
-- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
+- `researchspec/runs/<run-id>/handoff.md`

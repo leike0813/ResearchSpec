@@ -161,7 +161,7 @@ catalog identity rather than define a second public command surface.
   or `researchspec plugin --help` outside a ResearchSpec workspace
 - **THEN** the CLI SHALL render the applicable catalog-backed help without
   attempting workspace discovery or mutation
-- **AND** root help SHALL list each of the seventeen top-level commands exactly
+- **AND** root help SHALL list each of the sixteen top-level commands exactly
   once
 - **AND** plugin help SHALL list only its declared subcommands
 
@@ -179,9 +179,8 @@ catalog identity rather than define a second public command surface.
 
 Usage failures SHALL retain exit code 2 and provide a help target appropriate
 to the invoked root command or plugin subcommand. Invalid runtime-action
-selectors SHALL additionally identify every supported selector family:
-`subflow:`, `obligation:`, `gate:`, `completion:`, `case-action:`, `patch:`,
-`change:`, `work:`, and `transition:`.
+selectors SHALL additionally identify the current profile, run, node, Gate,
+Decision and change selector families.
 
 #### Scenario: Invalid action selector is discoverable across profiles
 
@@ -354,25 +353,25 @@ A bootstrap operation with a blocking tool-delivery or ownership conflict SHALL 
 - **WHEN** a selected projection conflicts during preflight
 - **THEN** the command SHALL return a blocking error and leave all workspace bytes unchanged
 
-### Requirement: Mid-entry instructions expose executable choices
-Instructions for a mid-entry profile route SHALL expose each legal entry point as structured data with its route, prerequisites, required input roles, formal Gates, risks, and cost. The descriptor-owned Start template SHALL include `entry_point`; instructions for routes that do not accept it SHALL omit that field.
+### Requirement: Profile instructions expose executable entries
+Instructions for a graph profile SHALL expose each legal entry as structured data with its entry node, prerequisites, required input roles, formal Gates, risks, and cost. The schema 2 Start template SHALL include the selected `entry_id` and `entry_node_id`.
 
 #### Scenario: Mid-entry instructions are requested
-- **WHEN** a caller requests instructions for `academic-pipeline:mid-entry`
+- **WHEN** a caller requests instructions for `profile:academic-pipeline`
 - **THEN** the packet lists every profile-declared executable entry point with its confirmation context
-- **AND** its Start template identifies `entry_point` as required
+- **AND** its Start template identifies `entry_id` and `entry_node_id` as required
 
 #### Scenario: End-to-end instructions are requested
-- **WHEN** a caller requests instructions for `academic-pipeline:end-to-end`
-- **THEN** the Start template does not offer `entry_point`
+- **WHEN** a caller selects the end-to-end entry
+- **THEN** the Start payload binds that entry and its declared entry node
 
-### Requirement: Workspace checks reject invalid profile checkpoints
-Subflow checking SHALL verify that a profile parent checkpoint names a child or parallel-group checkpoint in its current profile. An invalid checkpoint SHALL produce the stable `subflow_checkpoint_invalid` diagnostic and SHALL NOT be inferred or migrated.
+### Requirement: Workspace checks reject invalid graph bindings
+Run checking SHALL verify frozen graph identity, parent bindings and node identities. An invalid binding SHALL produce a stable structured diagnostic and SHALL NOT be inferred or repaired.
 
 #### Scenario: Legacy synthetic entry parent is checked
-- **WHEN** a current-schema parent control has checkpoint `entry` but the current profile has no such checkpoint
-- **THEN** `check subflows --json` reports `subflow_checkpoint_invalid`
-- **AND** the control remains unchanged
+- **WHEN** a child run names a parent node or graph binding that does not exist
+- **THEN** `check runs --json` reports the invalid binding
+- **AND** the run and node files remain unchanged
 
 ### Requirement: Existing-workspace init has replacement semantics
 
@@ -397,11 +396,12 @@ Subflow checking SHALL verify that a profile parent checkpoint names a child or 
 - **THEN** it fails before displaying configuration selectors or planning writes
 - **AND** all existing bytes remain unchanged
 
-### Requirement: Run And Node Selectors Use Existing Commands
+### Requirement: Public Runtime Selectors Are Graph-Only
 
-The CLI SHALL expose `profile:`, `run:`, `node:`, `gate:` and `decision:` selector families through
-the existing `start`, `instructions`, `advance` and `decide` commands without adding a top-level
-command. The sixteen-command public surface SHALL remain unchanged.
+Runtime discovery and mutation SHALL accept only profile, run, node, Gate and Decision selector
+families, plus change selectors for project governance. The public CLI, payload catalog, handbook and
+generated wrappers SHALL use those selectors through existing commands without adding a top-level
+command.
 
 #### Scenario: Run is started
 
@@ -412,6 +412,38 @@ command. The sixteen-command public surface SHALL remain unchanged.
 
 - **WHEN** a caller requests `instructions node:<run-id>/<node-id>` for a non-current run
 - **THEN** the CLI returns a stable current-run diagnostic and performs no write
+
+#### Scenario: Retired selector is supplied
+
+- **WHEN** a caller supplies a retired runtime selector family
+- **THEN** the CLI returns a catalog-backed usage error with current graph selector families
+
+### Requirement: Subgraph Nodes Start Bound Child Runs
+
+`start node:<parent-run>/<child-profile-node>[@round]` SHALL start or resolve the unique child run declared by an eligible child-profile node. The operation SHALL inherit the confirmed parent authorization, freeze the child profile and return the child run identity and parent binding.
+
+#### Scenario: Pending child is started
+
+- **WHEN** status exposes an eligible pending child-profile start and the Agent invokes its node selector
+- **THEN** the CLI creates or returns the matching child run without another run-level confirmation
+
+### Requirement: Ineligible Node Instructions Return A Blocker
+
+Requesting instructions for an ineligible node SHALL return a stable structured blocker containing the unmet prerequisite identities and SHALL NOT return a successful executable Node Card.
+
+#### Scenario: Node prerequisites are unmet
+
+- **WHEN** instructions are requested for an ineligible node
+- **THEN** machine output reports a stable blocker code and bounded missing prerequisites
+
+### Requirement: CLI File Inputs Use The Safe Path Contract
+
+All graph CLI inputs that identify project files SHALL use the same safe project-relative path contract as runtime handoffs and outputs.
+
+#### Scenario: File payload escapes the project contract
+
+- **WHEN** a start, advance or decision payload contains an unsafe path
+- **THEN** the CLI rejects it before any state mutation
 
 ### Requirement: Node Instructions Expose A Bounded Card
 

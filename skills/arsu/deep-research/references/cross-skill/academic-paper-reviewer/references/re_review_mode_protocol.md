@@ -48,10 +48,10 @@ The re-review judges revisions on the same model family that drove them — an a
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -90,14 +90,14 @@ For each commitment, assign one `fulfillment_status`:
 For a non-fulfilled status, preserve the corresponding rationale. Verify prose,
 citations, figures, tables, methods, and acknowledgments against their actual
 boundary files rather than a framework-managed apply or resolution report. Return
-the verification report through this subflow's `handoff.md`; a human records
-the formal Gate verdict in the owning `control.yaml`.
+the verification report through this run's `handoff.md`; a human records
+the formal Gate verdict in the owning node state.
 
 Current ResearchSpec owners:
 
 - `assets/shared/contracts/patch/revision_patch.schema.json`
-- `researchspec/subflows/<instance>/handoff.md`
-- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/runs/<run-id>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
 <!--/rs:REVIEW-008-->
 
 ### New Issue Detection
@@ -133,10 +133,10 @@ If Re-Review Decision = Major Revision:
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -159,10 +159,10 @@ invalid, disclose the limitation and continue with a single-model result.
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 

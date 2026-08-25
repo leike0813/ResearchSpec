@@ -52,7 +52,7 @@ export const CLI_PAYLOADS = {
     field("entry_id", "stable ID", true, "Graph entry ID."),
     field("entry_node_id", "graph node ID", true, "Confirmed entry node."),
     field("prerequisites", "non-empty string[]", true, "Confirmed prerequisites, including an empty array when none apply."),
-    field("handoff_inputs", "HandoffInput[]", true, "Confirmed input roles; each uses the descriptor fields below plus optional source_instance_id."),
+    field("handoff_inputs", "RunHandoffInputEntry[]", true, "Confirmed input roles; each uses the descriptor fields below plus optional source_run_id."),
     field("planned_outputs", "HandoffOutput[]", true, "Confirmed output roles; each uses the descriptor fields below plus optional intended_consumer."),
     field("formal_gates", "stable ID[]", true, "Confirmed formal Gate IDs."),
     field("cost", "{ effort, interaction }", true, "Non-empty effort and interaction summaries."),
@@ -89,7 +89,7 @@ export const CLI_PAYLOADS = {
   ], [
     "Input roles and output roles must each be unique.",
     "qmd paths end in .qmd; single-file latex paths end in .tex; latex-project requires a directory and .tex entry_path.",
-  ], "SubflowHandoffInputSchema"),
+  ], "RunHandoffSchema"),
   pack: payload("options", "A required ZIP output and an optional bounded context scope.", [
     field("--output", "ZIP path", true, "Destination archive path."),
     field("--scope", "all | specs | profiles | runs | changes", false, "Bundle scope; defaults to all."),

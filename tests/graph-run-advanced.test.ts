@@ -28,8 +28,8 @@ async function submitGraphNode(input: Omit<SubmitGraphNodeInput, "capabilityRegi
 }
 import { loadGraphWorkspaceIndex } from "../src/core/runtime/graph-workspace-index.js";
 import { graphTestCapabilityRegistry, sha256, writeBaseWorkspace } from "./helpers/graph-workspace.js";
-import { ACADEMIC_PIPELINE_GRAPH_PROFILE_TEXT } from "../src/core/graph-profiles/academic-pipeline.js";
-import { RESEARCH_MAIN_GRAPH_PROFILE_TEXT } from "../src/core/graph-profiles/research-main.js";
+import { ACADEMIC_PIPELINE_GRAPH_PROFILE_TEXT } from "../src/arsu-converter/workflow/graph-profiles/academic-pipeline.js";
+import { RESEARCH_MAIN_GRAPH_PROFILE_TEXT } from "../src/arsu-converter/workflow/graph-profiles/research-main.js";
 
 const TIME_0 = "2026-08-15T12:00:00+08:00";
 

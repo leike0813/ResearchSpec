@@ -22,7 +22,7 @@ Each installed companion SHALL be usable from its own `SKILL.md` without a runti
 
 - **WHEN** a companion is rendered
 - **THEN** its `SKILL.md` SHALL contain Mission, When to Use, Do Not Use, Inputs, CLI Examples, Workflow, Decision Table, Failure Recovery, Output Contract, Guardrails, and Completion sections
-- **AND** required common CLI discipline and any catalog-derived route projection SHALL be inlined at build time
+- **AND** required common CLI discipline and any catalog-derived capability guidance SHALL be inlined at build time
 - **AND** it SHALL NOT install companion scripts, state, assets, `agents/openai.yaml`, or `references/cli-discipline.md`
 
 #### Scenario: Near-miss routes to the correct owner
@@ -33,30 +33,30 @@ Each installed companion SHALL be usable from its own `SKILL.md` without a runti
 ### Requirement: Navigate Distinguishes Research And Zotero Tasks
 
 Navigate SHALL classify a request as ResearchSpec/ARSU research or a
-Zotero-bound library task before route confirmation. A broad Zotero request
-SHALL route to `zotero-library-agent`; an already explicit Zotero task MAY route
+Zotero-bound library task before root-run confirmation. A broad Zotero request
+SHALL use `zotero-library-agent`; an already explicit Zotero task MAY go
 directly to the matching task Skill.
 
 #### Scenario: Broad research request needs literature
 
 - **WHEN** the user asks for research whose literature work is one part of an
-  ARSU producer route
-- **THEN** Navigate SHALL retain the ARSU route
+  ARSU producer request
+- **THEN** Navigate SHALL retain the ARSU producer
 - **AND** it SHALL describe Zotero as a nested provider rather than a separate
-  ResearchSpec subflow
+  ResearchSpec run
 
 #### Scenario: User asks to inspect a Zotero collection
 
 - **WHEN** the user's primary intent is a bounded current-library query
-- **THEN** Navigate SHALL route to the Zotero query task through the Adapter
+- **THEN** Navigate SHALL use the Zotero query task through the Adapter
   surface
 - **AND** it SHALL NOT start a ResearchSpec workflow merely to access the
   library
 
 ### Requirement: Navigate Presents Contextual Source Policy
 
-Each literature-bearing route SHALL present a compact source-policy card before
-route confirmation. Full Adapter setup or consent SHALL be requested only when
+Each literature-bearing run entry SHALL present a compact source-policy card before
+root-run confirmation. Full Adapter setup or consent SHALL be requested only when
 first needed, readiness changed, private scope is requested, or library-bound
 or managed-library behavior applies.
 
@@ -69,9 +69,9 @@ or managed-library behavior applies.
 
 #### Scenario: Managed-library mode is proposed
 
-- **WHEN** the route would import accepted literature into a collection
+- **WHEN** the producer would import accepted literature into a collection
 - **THEN** Navigate SHALL request separate run- and collection-bound consent
-- **AND** plugin or route confirmation SHALL NOT imply that consent
+- **AND** plugin or root-run confirmation SHALL NOT imply that consent
 
 ### Requirement: Navigate Provides Progressive CLI Discovery
 
@@ -114,7 +114,7 @@ by `instructions <runtime-selector>` before any workspace-bound action.
 
 ### Requirement: Companions Use Current File Contracts
 Navigate, Propose, Decide and Verify SHALL use stable specs, graph profiles, run/node files, run
-handoffs and project changes without reading or writing removed subflow authorities. Companions SHALL
+handoffs and project changes. Companions SHALL
 NOT reconstruct or guess the workflow frontier from Skill prose.
 
 #### Scenario: Navigate explains current work
@@ -157,3 +157,17 @@ and cost before dispatch and scope the consent to the current run/node instance.
 
 - **WHEN** a child, branch, node or run instance becomes current
 - **THEN** Navigate SHALL obtain a fresh alternate-model confirmation if the producer proposes one
+
+### Requirement: Companion Guidance Exposes Only Graph Runtime Actions
+
+All five Companion Skills SHALL derive resume, navigation, proposal, decision and verification guidance from `status --json` and graph selectors. Their generated instructions SHALL expose only current profile, run, node, Gate, Decision and change actions.
+
+#### Scenario: Companion resumes active work
+
+- **WHEN** a Companion Skill inspects an active graph run
+- **THEN** it directs the Agent to an eligible node, Gate, Decision or pending child-run selector returned by current status
+
+#### Scenario: Generated companion contains retired guidance
+
+- **WHEN** Companion generation or checking finds a retired selector family
+- **THEN** generation validation fails

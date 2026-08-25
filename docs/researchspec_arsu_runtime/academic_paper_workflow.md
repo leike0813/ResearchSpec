@@ -14,7 +14,7 @@ patch 和 output path 执行机械应用。Scope、claim 或 structure 改变先
 默认 no-execute，通过 converter-owned `scripts/render-quarto.mjs` 将一个 `.qmd` 渲染到一个 staging
 目标；独立 execution consent、成功检查和原子交付都完成后才写目标 handoff。
 
-Annotation intake 保存在 revision subflow 的 `work/annotation-intake/`。Raw feedback、normalized
-interpretation 和 patch mapping 必须分离；跨 subflow 使用时才写外部文件并加入 handoff。
+Annotation intake 保存在项目外的 `work/annotation-intake/`。Raw feedback、normalized
+interpretation 和 patch mapping 必须分离；跨 run 使用时在 handoff 中声明路径。
 
 独立学术评审路由到 `academic-paper-reviewer`。Writer 自评不能替代 review Gate。

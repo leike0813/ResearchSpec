@@ -302,8 +302,8 @@ and limits for accepted claims. If compilation introduces a new claim or changes
 claim strength, emit a proposed
 `researchspec/changes/<change-id>/change.md` alongside the manifest
 rather than mutating the stable claim contract. Return the manifest to the
-owning subflow handoff for
-`researchspec/subflows/<instance>/handoff.md`; the audit agent reads this
+owning run handoff for
+`researchspec/runs/<run-id>/handoff.md`; the audit agent reads this
 handoff-referenced baseline for the intended ∩ emitted ∩ supported diff in spec §4 step
 5 (D6).
 
@@ -311,7 +311,7 @@ Current ResearchSpec owners:
 
 - `researchspec/specs/claims.yaml`
 - `researchspec/changes/<change-id>/change.md`
-- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/runs/<run-id>/handoff.md`
 <!--/rs:CLAIM-002-->
 
 Canonical example (single manifest with one MNC and one claim-level NC):

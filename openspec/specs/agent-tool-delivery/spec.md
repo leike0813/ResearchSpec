@@ -250,13 +250,13 @@ Delivery SHALL preserve Adapter role, visibility, capability and hard dependency
 #### Scenario: Command-capable tool and Adapter are selected
 
 - **WHEN** one of the 28 command-capable tools and `zotero-library` are selected
-- **THEN** the tool SHALL receive eighteen Skills and exactly sixteen ResearchSpec wrappers
+- **THEN** the tool SHALL receive the registry-derived fixed base surface plus seven Adapter Skills and exactly sixteen ResearchSpec wrappers
 - **AND** the CLI mechanism SHALL remain available as a Skill dependency rather than another wrapper
 
 #### Scenario: Skills-only tool and Adapter are selected
 
-- **WHEN** ForgeCode, Kimi, or Mistral Vibe and `zotero-library` are selected
-- **THEN** the tool SHALL receive all eighteen selected Skills
+- **WHEN** a Skill-only tool and `zotero-library` are selected
+- **THEN** the tool SHALL receive the registry-derived fixed base surface plus all seven Adapter Skills
 - **AND** command absence SHALL remain a non-blocking diagnostic
 
 ### Requirement: Adapter Runtime Metadata Is Delivered Statically
@@ -289,12 +289,26 @@ ResearchSpec SHALL deliver the generated CLI handbook as the `SKILL.md` of `rese
 - **AND** `--force` MAY refresh the desired generated Skill
 
 ### Requirement: Framework Profile Projection Ownership
-The installation manifest SHALL identify `academic-pipeline.yaml` as a project-level
+The installation manifest SHALL identify every registry-owned graph profile as a project-level
 `framework-profile` projection with its source version and generated content identity.
 
 #### Scenario: Fresh workspace is initialized
 - **WHEN** init projects the current workspace
-- **THEN** the manifest contains exactly one owner record for the project pipeline profile
+- **THEN** the manifest contains one owner record for every projected profile
+
+### Requirement: Core Capability And Profile Projections Share Managed Ownership
+
+The capability packages and graph profiles projected by framework bootstrap SHALL participate in the same desired-file plan, conflict preflight, hash ownership manifest and commit-last behavior as ARSU, Companion, Adapter and plugin delivery.
+
+#### Scenario: Re-init encounters a modified capability Skill
+
+- **WHEN** a previously projected core capability file differs from its recorded bytes
+- **THEN** re-init and update preserve the file and report generated-file drift
+
+#### Scenario: Core projection succeeds
+
+- **WHEN** all desired framework and Agent files pass preflight
+- **THEN** files are committed atomically and the ownership manifest is updated last
 
 ### Requirement: Current Tool Catalog
 The catalog SHALL contain exactly 37 current tools, preserve `windsurf` as an alias for `devin`, and describe legacy Skill roots, global Skill roots, detection paths, and command capability from one source of truth.

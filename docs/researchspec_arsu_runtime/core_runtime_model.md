@@ -7,7 +7,7 @@
 四份 stable specs 拥有研究事实；graph profiles 拥有能力执行图；每个 run 拥有 frozen graph 与 lifecycle；每个 node instance 拥有状态、Gate attempts 和 Decisions；handoff 拥有边界 input/output role/path；project change 拥有尚未应用的高影响更新。
 
 边界论文、报告、review、图表和数据位于 `researchspec/` 外。Private working material 位于 owning
-subflow 的 `work/`，默认不能被其它 subflow 消费。
+项目外的普通 `work/`，需要跨 run 使用时通过 handoff 明确声明。
 
 ## 2. 派生视图
 

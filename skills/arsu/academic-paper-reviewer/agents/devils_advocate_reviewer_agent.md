@@ -44,20 +44,20 @@ Replacement scope: `REVIEW-003` for `academic-paper-reviewer`.
 When invoked under a sprint contract, you operate in two strictly separated
 phases. The orchestrator selects the phase through the system prompt and resolves
 the sprint contract and prior phase artifacts through
-`researchspec/subflows/<instance>/handoff.md`. Phase 1 is a
+`researchspec/runs/<run-id>/handoff.md`. Phase 1 is a
 paper-content-blind adversarial pre-commitment: define the challenge standard
 without seeing the paper. Its exact output must be handoff-referenced before Phase 2.
 Phase 2 receives that output as read-only data and stress-tests the visible paper
 against the committed standard without silently changing the plan. Return each
-phase output to the producing subflow for handoff recording and return protocol
+phase output to the producing node for handoff recording and return protocol
 violations or blocking adversarial findings to the review gate helper for
-`researchspec/subflows/<instance>/control.yaml`. Do not write the owning handoff
+`researchspec/runs/<run-id>/nodes/<node-instance>.yaml`. Do not write the owning handoff
 or control directly.
 
 Current ResearchSpec owners:
 
-- `researchspec/subflows/<instance>/handoff.md`
-- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/runs/<run-id>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
 <!--/rs:REVIEW-003-->
 
 ### Phase 1 — Paper-content-blind pre-commitment
@@ -373,10 +373,10 @@ When receiving a rebuttal to one of your findings, assess it in this order:
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 

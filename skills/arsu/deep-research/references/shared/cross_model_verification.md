@@ -11,7 +11,7 @@ Before dispatch, the main Agent must:
    the independent reviewer;
 2. propose a model that is actually available in the host;
 3. disclose the category of material to be shared and the expected cost; and
-4. obtain consent for this exact subflow instance.
+4. obtain consent for this exact run and node.
 
 The dispatched payload contains only the minimum de-anchored evidence needed for
 the check. It excludes the main Agent's decision, scores, and reasoning. A child,

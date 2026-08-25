@@ -21,11 +21,11 @@ For each commitment, assign one `fulfillment_status`:
 For a non-fulfilled status, preserve the corresponding rationale. Verify prose,
 citations, figures, tables, methods, and acknowledgments against their actual
 boundary files rather than a framework-managed apply or resolution report. Return
-the verification report through this subflow's `handoff.md`; a human records
-the formal Gate verdict in the owning `control.yaml`.
+the verification report through this run's `handoff.md`; a human records
+the formal Gate verdict in the owning node state.
 
 Current ResearchSpec owners:
 
 - `assets/shared/contracts/patch/revision_patch.schema.json`
-- `researchspec/subflows/<instance>/handoff.md`
-- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/runs/<run-id>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`

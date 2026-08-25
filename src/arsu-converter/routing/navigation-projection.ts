@@ -18,7 +18,7 @@ export function renderNavigateRoutingProjection(): string {
   return [
     "## Catalog-Derived Route Reference",
     "",
-    "These route semantics are projected from the canonical ARSU routing catalog. They describe route meaning, not current workspace availability. Pair them with `researchspec status --json` and only offer routes whose `route_ref` is present in the CLI subflow frontier.",
+    "These route semantics are projected from the canonical ARSU routing catalog. They describe capability meaning, not runtime selectors or current workspace availability. Pair them with `researchspec status --json` and only offer work represented by an eligible graph selector.",
     "",
     ...sections,
   ].join("\n\n");

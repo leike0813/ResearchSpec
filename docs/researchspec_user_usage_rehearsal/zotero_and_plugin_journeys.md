@@ -1,14 +1,14 @@
 # Zotero Adapter 与领域插件用户旅程
 
 本文属于 [ResearchSpec 目标态用户使用预演](../researchspec_user_usage_rehearsal.md)。Zotero
-是馆藏事实权威，ResearchSpec 是 subflow 权威；Adapter 与 plugin 都只是有界助手。
+是馆藏事实权威，ResearchSpec 的 frozen graph 与 node state 是运行权威；Adapter 与 plugin 都只是有界助手。
 
 ## 共同边界
 
 - 这些旅程以 workspace 已选择 `zotero-library`、用户已安装 Zotero 与
   [Zotero-Agents](https://github.com/leike0813/zotero-agents) 插件为前提。未选择时 `status`
   报告 `not-selected`，Agent 应先引导用户执行 `update --literature-adapters zotero-library`。
-- Adapter 不启动 subflow、不写 `control.yaml`、不确认 Gate、不更新 stable specs。
+- Adapter 不启动 run、不写 run/node state、不确认 Gate、不更新 stable specs。
 - 查询/分析授权不等于馆藏写入授权；每次 acquisition/curation 的实际写入范围单独确认。
 - Producer 决定如何使用 Adapter 结果，并把接受的研究事实写入自己的交付物或 specs。
 - Adapter readiness 检查可以访问当前配置状态，但 `status`/`check` 不执行二进制、不联系 Zotero。
@@ -17,7 +17,7 @@
 ## 1. `zotero-library-agent`：宽泛馆藏任务路由
 
 用户说：“看看我的 Zotero 里有没有城市绿地降温方面的材料，缺什么也告诉我。”该请求的
-主目标是馆藏任务，Navigate 路由到 `zotero-library-agent`，不启动 ResearchSpec subflow。
+主目标是馆藏任务，Navigate 使用 `zotero-library-agent`，不启动 ResearchSpec run。
 
 Agent 确认 library/profile、允许读取的 collections、是否允许外部发现，以及“告诉我缺什么”
 不包含自动导入。Router 检查 live readiness，然后把任务拆成 query、可能的 acquisition 和
@@ -121,7 +121,7 @@ Research producer 发现环境科学 domain 中有城市热岛测量和绿地分
 - `tool-installation-manifest.json`；
 - 对应 host 的静态 Skill 投影。
 
-它不修改任何 subflow control，不安装第三方 runtime/dependencies，不执行 plugin scripts。
+它不修改任何 run/node state，不安装第三方 runtime/dependencies，不执行 plugin scripts。
 
 ### 使用
 

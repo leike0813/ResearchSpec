@@ -18,7 +18,7 @@ import type { ConversionResult, ValidationResult } from "./types.js";
 import { ArsuConverterError } from "./types.js";
 import { validateArsuOutput } from "./validate.js";
 import { ARSU_ROUTING_CATALOG } from "./routing/catalog.js";
-import { renderAcademicPipelineProfile } from "./workflow/generate.js";
+import { buildPresetGraphProfileRegistry, emitPresetGraphProfiles } from "./workflow/generate.js";
 import { validateArsuWorkflowCatalog } from "./workflow/catalog.js";
 import { listTrackedFiles } from "./git.js";
 
@@ -88,6 +88,8 @@ export async function convertArsu(options: ConvertOptions): Promise<ConversionRe
   const contractManifestHash = await sha256File(path.join(outputRoot, "researchspec-contracts.json"));
   await writeJson(path.join(outputRoot, "routing-catalog.json"), ARSU_ROUTING_CATALOG);
   const routingCatalogHash = await sha256File(path.join(outputRoot, "routing-catalog.json"));
+  const profileRegistry = await emitPresetGraphProfiles(outputRoot);
+  const profileRegistryHash = await sha256File(path.join(outputRoot, "profiles/registry.json"));
 
   const result: ConversionResult = {
     source_root: sourceRoot,
@@ -97,23 +99,24 @@ export async function convertArsu(options: ConvertOptions): Promise<ConversionRe
     inventory,
     contract_manifest: contractManifest,
     routing_catalog: ARSU_ROUTING_CATALOG,
+    profile_registry: profileRegistry,
     anchor_replacements: anchorReplacements,
     runtime_policy: runtimePolicy,
     validation: null,
   };
 
-  await writeConversionOutputs(result, outputRoot, null, contractManifestHash, routingCatalogHash);
+  await writeConversionOutputs(result, outputRoot, null, contractManifestHash, routingCatalogHash, profileRegistryHash);
   const validation = await validateArsuOutput(outputRoot, runtimePolicyCatalog);
   result.validation = validation;
-  await writeConversionOutputs(result, outputRoot, validation, contractManifestHash, routingCatalogHash);
+  await writeConversionOutputs(result, outputRoot, validation, contractManifestHash, routingCatalogHash, profileRegistryHash);
   return result;
 }
 
 export async function checkArsuOutput(repoRoot: string): Promise<ValidationResult> {
   const validation = await validateArsuOutput(path.resolve(repoRoot, GENERATED_OUTPUT_PATH));
   const errors = [...validation.errors, ...validateArsuWorkflowCatalog().map((issue) => `Workflow catalog ${issue}`)];
-  if (renderAcademicPipelineProfile() !== renderAcademicPipelineProfile()) {
-    errors.push("Academic pipeline profile projection is not deterministic");
+  if (JSON.stringify(buildPresetGraphProfileRegistry()) !== JSON.stringify(buildPresetGraphProfileRegistry())) {
+    errors.push("Preset graph profile registry projection is not deterministic");
   }
   return { ok: errors.length === 0, errors: [...new Set(errors)].sort(), warnings: validation.warnings };
 }
@@ -136,12 +139,13 @@ async function writeConversionOutputs(
   validation: ValidationResult | null,
   contractManifestHash: string,
   routingCatalogHash: string,
+  profileRegistryHash: string,
 ): Promise<void> {
   await writeUtf8(path.join(outputRoot, "anchor-replacement-report.md"), buildAnchorReplacementReport(result.anchor_replacements));
   const anchorReplacementReportHash = await sha256File(path.join(outputRoot, "anchor-replacement-report.md"));
   await writeUtf8(path.join(outputRoot, "runtime-policy-report.md"), buildRuntimePolicyReport(result.runtime_policy));
   const runtimePolicyReportHash = await sha256File(path.join(outputRoot, "runtime-policy-report.md"));
-  const manifest = buildManifest(result, validation, contractManifestHash, routingCatalogHash, anchorReplacementReportHash, runtimePolicyReportHash);
+  const manifest = buildManifest(result, validation, contractManifestHash, routingCatalogHash, profileRegistryHash, anchorReplacementReportHash, runtimePolicyReportHash);
   await writeJson(path.join(outputRoot, "conversion-manifest.json"), manifest);
   await writeUtf8(path.join(outputRoot, "conversion-report.md"), buildReport(manifest));
 }
@@ -168,6 +172,7 @@ function dryRunResult(
     },
     contract_manifest: buildContractIntegrationManifest([]),
     routing_catalog: ARSU_ROUTING_CATALOG,
+    profile_registry: buildPresetGraphProfileRegistry(),
     anchor_replacements: anchorReplacements,
     runtime_policy: runtimePolicy,
     validation: { ok: true, errors: [], warnings: [] },

@@ -97,19 +97,19 @@ Round count is per-stage-per-pipeline-run, stored in `compliance_history[].user_
 Replacement scope: `DECISION-002` for `shared`.
 
 > **Enforcement boundary.** Resolve prior accepted compliance overrides for the
-> same subflow and Gate from
-> `researchspec/subflows/<instance>/control.yaml`. Apply the configured
+> same graph node and Gate from
+> `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`. Apply the configured
 > first-, second-, and third-round friction rules, stop for human confirmation,
 > and ask ResearchSpec CLI to record the selected override, rationale, scope,
 > report handoff role and path, and round count only after confirmation. The
 > compliance report remains an ordinary boundary file referenced through
-> `researchspec/subflows/<instance>/handoff.md`; its contents cannot authorize
+> `researchspec/runs/<run-id>/handoff.md`; its contents cannot authorize
 > an override or mutate the owning control.
 
 Current ResearchSpec owners:
 
-- `researchspec/subflows/<instance>/control.yaml`
-- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
+- `researchspec/runs/<run-id>/handoff.md`
 <!--/rs:DECISION-002-->
 
 On any successful override, the agent generates `disclosure_addendum` text and the orchestrator **auto-injects** it into the manuscript's AI disclosure section. The addendum is non-removable — this is the concrete form of the `no detection evasion` iron rule in CONTRIBUTING.md.

@@ -11,5 +11,5 @@ authority.
 
 Current ResearchSpec owners:
 
-- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/runs/<run-id>/handoff.md`
 - `researchspec/specs/sources.yaml`

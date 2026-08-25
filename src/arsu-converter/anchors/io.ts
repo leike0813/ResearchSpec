@@ -90,7 +90,7 @@ function isReplacementScope(value: unknown): boolean {
 
 function isSemanticRole(value: unknown): value is AnchorSemanticRole {
   return typeof value === "string" && [
-    "subflow_control_boundary", "boundary_deliverable_contract", "handoff_projection",
+    "graph_state_boundary", "boundary_deliverable_contract", "handoff_projection",
     "revision_patch_protocol", "gate_policy", "boundary_deliverable_provenance",
     "review_handoff_tracking", "generator_evaluator_contract",
     "stable_claim_contract", "stable_source_contract", "control_decision_record",

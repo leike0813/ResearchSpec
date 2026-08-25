@@ -121,7 +121,6 @@ const definitions: readonly CliCommandDefinition[] = [
     option("actorName", "--actor-name <name>", "human actor name"),
     option("reason", "--reason <text>", "decision rationale"),
     option("verdict", "--verdict <verdict>", "Gate verdict: pass, pass_with_conditions, or fail"),
-    option("kind", "--kind <kind>", "local Decision kind: scope, claim, structure, or branch"),
     option("choice", "--choice <choice>", "confirmed local Decision choice"),
     option("override", "--override", "approve an override of the current failed Gate"),
     option("evidenceRole", "--evidence-role <role>", "owning handoff role used as Gate evidence"),

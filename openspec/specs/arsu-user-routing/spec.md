@@ -1,126 +1,115 @@
 ## Purpose
 
-Define dialogue-first ARSU routing, complete route confirmation, and the converter-owned catalog authority.
+Define dialogue-first ARSU capability selection, graph-entry confirmation and converter-owned semantic catalog authority.
 
 ## Requirements
 
-### Requirement: Dialogue-First ARSU Routing
-ResearchSpec SHALL treat user-Agent dialogue as the entry to academic work and SHALL keep workspace initialization separate from subflow start.
+### Requirement: Dialogue Starts Academic Work
+
+ResearchSpec SHALL treat user-Agent dialogue as the entry to academic work and SHALL keep workspace initialization separate from root-run start.
 
 #### Scenario: Bootstrap does not start work
+
 - **WHEN** a user initializes a ResearchSpec workspace
-- **THEN** the system SHALL prepare workspace contracts and install available Skills
-- **AND** it SHALL NOT select an ARSU mode or start a subflow
+- **THEN** the system prepares workspace contracts and installs selected Skills
+- **AND** it does not select a graph entry or create a run
 
 #### Scenario: Vague goal enters Navigate
-- **WHEN** the request is vague, spans multiple Skills, resumes prior work, asks for state explanation, or asks for context export
-- **THEN** the Agent SHALL route the request through `researchspec-navigate`
 
-#### Scenario: Expert request goes directly to an ARSU Skill
-- **WHEN** the user specifies an unambiguous ARSU Skill or mode
-- **THEN** the Agent SHALL permit direct routing to that Skill and mode
-- **AND** it SHALL still validate prerequisites and request route confirmation
+- **WHEN** a request is vague, spans capabilities, resumes prior work, asks for state explanation or asks for context export
+- **THEN** the Agent uses `researchspec-navigate` and reads current status
 
-### Requirement: Route Summary And Start Authorization
-Before starting any route, Navigate or a directly invoked ARSU Skill SHALL summarize Skill, mode,
-stable-spec prerequisites, handoff input roles, boundary outputs, formal Gates and cost, then obtain a
-confirmation scoped only to that instance.
+#### Scenario: Expert request names a capability
 
-#### Scenario: Route summary is confirmed
-- **WHEN** the user confirms the displayed route summary
-- **THEN** the CLI may create exactly that subflow instance
-- **AND** the confirmation does not authorize future children, branches or rounds
+- **WHEN** the user specifies an unambiguous ARSU capability
+- **THEN** the Agent may invoke that producer directly after the same graph selector and prerequisite checks
 
-### Requirement: Routing Catalog Is The Mapping Authority
-The routing catalog SHALL map supported user intents to route references and semantic
-prerequisites without embedding artifact IDs, registry state or fixed output paths.
+### Requirement: Profile Entry Summary Authorizes One Root Run
 
-#### Scenario: Route instructions are requested
-- **WHEN** Navigate resolves a supported ARSU route
-- **THEN** instructions identify stable-spec and handoff-role prerequisites from the catalog
+Before starting a root run, Navigate or a directly invoked ARSU Skill SHALL summarize the selected profile entry, stable-spec prerequisites, handoff inputs, boundary outputs, formal Gates, Decisions and cost, then obtain confirmation scoped to that root run and its frozen graph.
 
-### Requirement: Routing Distinguishes ARSU And Zotero Entry
+#### Scenario: Entry summary is confirmed
 
-Dialogue routing SHALL distinguish academic research owned by an ARSU producer
-from bounded Zotero library tasks. Adapter use inside an ARSU route SHALL remain
-a nested provider operation rather than a ResearchSpec workflow node.
+- **WHEN** the user confirms the displayed profile entry summary
+- **THEN** the CLI may create exactly one human-authorized root run
+- **AND** nodes and bound child runs declared by its frozen graph inherit that authorization
+- **AND** each declared Gate and Decision still requires separate confirmation
+
+### Requirement: Routing Catalog Describes Capability Meaning
+
+The converter-owned routing catalog SHALL map user intents to ARSU capability and entry meaning without acting as a runtime selector registry. Current availability and the executable frontier SHALL come only from status and graph instructions.
+
+#### Scenario: Capability guidance is requested
+
+- **WHEN** Navigate recognizes a supported ARSU intent
+- **THEN** catalog guidance identifies semantic prerequisites, likely outputs, risk and cost
+- **AND** status and profile instructions provide the executable entry and selector
+
+### Requirement: ARSU And Zotero Entry Remain Distinct
+
+Dialogue classification SHALL distinguish academic research owned by an ARSU producer from bounded Zotero library tasks. Adapter use inside an ARSU run SHALL remain a provider operation rather than graph authority.
 
 #### Scenario: User asks a broad Zotero question
 
 - **WHEN** the primary request spans multiple library operations
-- **THEN** routing SHALL recommend `zotero-library-agent`
-- **AND** the Adapter router SHALL choose task Skills within the confirmed
-  library scope
+- **THEN** the Agent recommends `zotero-library-agent`
+- **AND** the Adapter router chooses task Skills within the confirmed library scope
 
 #### Scenario: User explicitly requests a library query
 
-- **WHEN** the request is already bounded to current Zotero items, notes,
-  attachments, collections or selection
-- **THEN** routing MAY enter `zotero-library-query` directly
-- **AND** it SHALL NOT require an ARSU subflow confirmation
+- **WHEN** the request is bounded to current Zotero items, notes, attachments, collections or selection
+- **THEN** the Agent may use `zotero-library-query` directly
+- **AND** it does not create a ResearchSpec run merely to access the library
 
 #### Scenario: Academic research needs sources
 
-- **WHEN** a confirmed ARSU producer route includes literature work
-- **THEN** the producer SHALL remain the route owner
-- **AND** it MAY call the relevant Zotero task Skills through the
-  provider-handoff boundary
+- **WHEN** a confirmed ARSU run includes literature work
+- **THEN** the ARSU producer remains the owner
+- **AND** it may use relevant Zotero task Skills through the provider boundary
 
 ### Requirement: Source Policy And Library Consent Are Separate
 
-Route confirmation SHALL summarize the source policy and Adapter readiness
-expectation. Managed-library authorization SHALL be a separate confirmation
-bound to the current run and collection.
+The root entry summary SHALL describe source policy and Adapter readiness expectations. Managed-library authorization SHALL be a separate confirmation bound to the current run and collection.
 
 #### Scenario: Ordinary research skips Adapter setup
 
-- **WHEN** the user elects to skip an unchecked Adapter for the current route
-- **THEN** the route MAY continue with disclosed external or user-supplied
-  sources
-- **AND** the skip SHALL NOT become a formal research Decision
+- **WHEN** the user skips an unchecked Adapter for the current run
+- **THEN** the producer may continue with disclosed external or user-supplied sources
+- **AND** the skip does not become a formal graph Decision
 
 #### Scenario: Private collection is required
 
-- **WHEN** the user confirms a library-bound route
-- **THEN** failure to establish live readiness SHALL pause the route
-- **AND** routing SHALL NOT silently change the source policy
+- **WHEN** the user authorizes library-bound work
+- **THEN** failure to establish live readiness pauses that provider operation
+- **AND** the Agent does not silently change the source policy
 
 ### Requirement: Natural-Language CLI Discovery Loads The Handbook Companion
 
-ResearchSpec SHALL load `researchspec-cli-handbook` for any request to use, discover, explain, compare, inspect, troubleshoot, or modify public CLI commands, options, payloads, selector families, status, checks, generated projections, or workspace contracts. When the same request also requires vague workflow routing, resume, explanation, or export, Navigate MAY participate without owning the handbook.
+ResearchSpec SHALL load `researchspec-cli-handbook` for requests to use, discover, explain, inspect, troubleshoot or modify public CLI commands, payloads, selectors, status, checks, projections or workspace contracts. Navigate MAY also participate when the same request requires capability selection, resume, explanation or export.
 
 #### Scenario: User asks for a CLI operation manual
 
-- **WHEN** a user asks about a ResearchSpec command, option, payload, plugin subcommand, selector family, or workspace contract
-- **THEN** the Agent SHALL load `researchspec-cli-handbook`
-- **AND** static guidance SHALL not authorize a runtime write or start academic work
+- **WHEN** a user asks about a command, option, payload, plugin subcommand, selector family or workspace contract
+- **THEN** the Agent loads `researchspec-cli-handbook`
+- **AND** static guidance does not authorize a workspace write or start a run
 
 #### Scenario: CLI discovery becomes a runtime action question
 
-- **WHEN** the request asks what action is currently available in a workspace
-- **THEN** the Agent SHALL read bounded `status`, select a returned frontier item, and obtain its current `instructions` descriptor
-- **AND** handbook text SHALL not replace runtime authorization
+- **WHEN** the request asks what action is currently available
+- **THEN** the Agent reads bounded status, selects a returned graph item and obtains its instructions
+- **AND** handbook text does not replace runtime authorization
 
-#### Scenario: Discovery is requested before workspace initialization
+### Requirement: Alternate-Model Consent Is Run-Node Bound
 
-- **WHEN** a user requests CLI discovery without an existing workspace
-- **THEN** the handbook SHALL explain root, command, or plugin help without requiring initialization
-- **AND** it SHALL offer `init` only when the user asks to prepare a workspace
+Root-run confirmation SHALL NOT authorize alternate-model delegation. Before dispatch, an Agent SHALL separately disclose the host-available model, content category and cost, and obtain consent for the current run/node.
 
-### Requirement: Alternate-Model Consent Is Separate And Instance-Bound
+#### Scenario: Child run or new round becomes current
 
-Route confirmation SHALL NOT authorize alternate-model delegation. An Agent may
-propose a host-available alternate model only after the route is known, and the
-user SHALL separately confirm the model, disclosed content category, and cost
-for that exact subflow instance.
+- **WHEN** a child run or dynamic round needs alternate-model review
+- **THEN** prior consent does not carry forward
+- **AND** the current run/node obtains fresh consent
 
-#### Scenario: Parent route used alternate-model review
+#### Scenario: Consent is recorded in the Agent session
 
-- **WHEN** a child, branch, or dynamic revision round is proposed
-- **THEN** the parent's alternate-model consent SHALL NOT carry forward
-- **AND** the new instance SHALL obtain its own route confirmation and, if needed, its own alternate-model consent
-
-#### Scenario: Consent is recorded
-
-- **WHEN** the user confirms alternate-model delegation in the Agent session
-- **THEN** no stable spec, control, handoff, or model-configuration file SHALL record that consent
+- **WHEN** the user confirms alternate-model delegation
+- **THEN** no stable spec, run, node, handoff or model-configuration file records that consent

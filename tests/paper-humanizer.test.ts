@@ -10,7 +10,7 @@ import { PAPER_HUMANIZER_AUTHORING_OPTIONS, PAPER_HUMANIZER_AUTHORING_SOURCES } 
 import { parseCapabilityGraphProfile, findUnreachableGraphNodes } from "../src/core/contracts/capability-graph.js";
 import { loadCapabilityRegistry, validateGraphAgainstCapabilityRegistry } from "../src/capabilities/registry.js";
 import { PAPER_HUMANIZER_REFERENCE_MODE_SKILL_PATH } from "../src/core-skills/paper-humanizer/reference-mode.js";
-import { PAPER_HUMANIZER_GRAPH_PROFILE, PAPER_HUMANIZER_GRAPH_PROFILE_TEXT } from "../src/core/graph-profiles/paper-humanizer.js";
+import { PAPER_HUMANIZER_GRAPH_PROFILE, PAPER_HUMANIZER_GRAPH_PROFILE_TEXT } from "../src/arsu-converter/workflow/graph-profiles/paper-humanizer.js";
 
 const root = process.cwd();
 

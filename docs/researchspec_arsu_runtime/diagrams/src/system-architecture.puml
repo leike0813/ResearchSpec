@@ -14,7 +14,7 @@ package "Deterministic control plane" {
   component "ResearchSpec CLI\n16 commands" as CLI
   component "Current workspace scanner" as Scanner
 }
-database "Stable specs\nproject profile\nsubflow controls + handoffs\nproject changes" as Files
+database "Stable specs\ngraph profiles\nfrozen runs + nodes + handoffs\nproject changes" as Files
 package "Build time" {
   component "ARSU converter" as Converter
   artifact "routing catalog\nprofile projection\ngenerated Skills" as Projection
@@ -27,7 +27,7 @@ ARSU --> Plugins
 Host --> CLI
 CLI --> Scanner
 Scanner --> Files
-CLI --> Files : atomic owning-control writes
+CLI --> Files : atomic owning-node writes
 ARSU --> Files : specs / changes / handoff
 Converter --> Projection
 Projection ..> ARSU

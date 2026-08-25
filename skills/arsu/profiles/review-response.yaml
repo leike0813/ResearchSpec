@@ -1,0 +1,225 @@
+schema_version: "2"
+profile_id: review-response
+profile_version: 0.1.0
+capability_registry_version: 0.1.0
+entries:
+  - entry_id: full
+    kind: end-to-end
+    node_id: intake
+nodes:
+  - node_id: intake
+    kind: capability
+    capability_id: design-review-response-intake
+    input_bindings:
+      - role: manuscript_source
+        source: handoff
+      - role: review_comments_source
+        source: handoff
+      - role: editor_letter_source
+        source: handoff
+      - role: user_notes
+        source: parameter
+        value: null
+    expected_outputs:
+      - role: review_response_workspace
+        required: true
+      - role: intake_report
+        required: true
+    prerequisites: []
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: manuscript-analysis
+    kind: capability
+    capability_id: analysis-review-response-manuscript-analysis
+    input_bindings:
+      - role: review_response_workspace
+        source: node_output
+        from_node_id: intake
+    expected_outputs:
+      - role: manuscript_structure_summary
+        required: true
+    prerequisites:
+      - intake
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: comment-atomization
+    kind: capability
+    capability_id: transform-review-response-comment-atomization
+    input_bindings:
+      - role: review_response_workspace
+        source: node_output
+        from_node_id: intake
+    expected_outputs:
+      - role: atomic_comment_list
+        required: true
+      - role: comment_coverage_report
+        required: true
+    prerequisites:
+      - manuscript-analysis
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: comment-coverage-gate
+    kind: gate
+    input_bindings: []
+    expected_outputs: []
+    prerequisites:
+      - comment-atomization
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: workboard
+    kind: capability
+    capability_id: design-review-response-workboard-planning
+    input_bindings:
+      - role: review_response_workspace
+        source: node_output
+        from_node_id: intake
+    expected_outputs:
+      - role: review_response_workboard
+        required: true
+    prerequisites:
+      - comment-coverage-gate
+    required_gate_ids:
+      - review-response-comment-coverage
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: strategy-gate
+    kind: gate
+    input_bindings: []
+    expected_outputs: []
+    prerequisites:
+      - workboard
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: round
+    kind: capability
+    capability_id: generation-review-response-round
+    input_bindings:
+      - role: review_response_workspace
+        source: node_output
+        from_node_id: intake
+    expected_outputs:
+      - role: working_manuscript
+        required: true
+      - role: response_markdown
+        required: true
+      - role: response_latex
+        required: true
+      - role: round_summary
+        required: true
+    prerequisites:
+      - strategy-gate
+    required_gate_ids:
+      - review-response-strategy
+    required_decision_ids: []
+    multiplicity: repeatable
+    round_role: revision
+  - node_id: evidence-gate
+    kind: gate
+    input_bindings: []
+    expected_outputs: []
+    prerequisites:
+      - round
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: repeatable
+    round_role: review
+  - node_id: response-coverage-gate
+    kind: gate
+    input_bindings: []
+    expected_outputs: []
+    prerequisites:
+      - round
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: repeatable
+    round_role: review
+  - node_id: final-assembly-gate
+    kind: gate
+    input_bindings: []
+    expected_outputs: []
+    prerequisites:
+      - round
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: repeatable
+    round_role: review
+  - node_id: outcome
+    kind: decision
+    input_bindings: []
+    expected_outputs: []
+    prerequisites:
+      - evidence-gate
+      - response-coverage-gate
+      - final-assembly-gate
+    required_gate_ids:
+      - review-response-evidence
+      - review-response-response-coverage
+      - review-response-final-assembly
+    required_decision_ids: []
+    multiplicity: repeatable
+    round_role: review
+parallel_groups: []
+subgraphs: []
+gates:
+  - gate_id: review-response-comment-coverage
+    owner_node_id: comment-coverage-gate
+    policy: required
+    verdicts:
+      - pass
+      - pass_with_conditions
+      - fail
+  - gate_id: review-response-strategy
+    owner_node_id: strategy-gate
+    policy: required
+    verdicts:
+      - pass
+      - pass_with_conditions
+      - fail
+  - gate_id: review-response-evidence
+    owner_node_id: evidence-gate
+    policy: required
+    verdicts:
+      - pass
+      - pass_with_conditions
+      - fail
+  - gate_id: review-response-response-coverage
+    owner_node_id: response-coverage-gate
+    policy: required
+    verdicts:
+      - pass
+      - pass_with_conditions
+      - fail
+  - gate_id: review-response-final-assembly
+    owner_node_id: final-assembly-gate
+    policy: required
+    verdicts:
+      - pass
+      - pass_with_conditions
+      - fail
+decisions:
+  - decision_id: review-response-outcome
+    owner_node_id: outcome
+    options:
+      - option_id: continue
+        unlocks: []
+      - option_id: complete
+        unlocks: []
+revision_round_template:
+  revision_node_id: round
+  review_node_id: outcome
+  continue_option_id: continue
+  exit_option_id: complete
+override_policy:
+  failed_gate_requires_decision: true
+

@@ -114,7 +114,7 @@ researchspec check all --strict
 researchspec init . --tools codex --literature-adapters zotero-library
 ```
 
-`init` 只创建 schema `"1"` workspace、项目 profile、四份 stable specs 和静态 Agent
+`init` 只创建 schema `"2"` workspace、graph profiles、四份 stable specs 和静态 Agent
 投影，不会启动学术工作。旧或未知 workspace 会被报告为 unsupported，且不会被读取、迁移
 或修改。
 

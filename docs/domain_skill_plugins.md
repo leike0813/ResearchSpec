@@ -2,7 +2,7 @@
 
 ## Purpose and authority
 
-Domain Skill plugins are ResearchSpec-maintained collections of Open Agent Skills. Users select stable domains; upstream vendors are maintainer concerns, not installation products. Plugin Skills may assist semantic research work, but they never own ResearchSpec routes, workflow profiles, stable specs, subflow controls, handoffs, Gates, Decisions, or transitions.
+Domain Skill plugins are ResearchSpec-maintained collections of Open Agent Skills. Users select stable domains; upstream vendors are maintainer concerns, not installation products. Plugin Skills may assist semantic research work, but they never own ResearchSpec graph profiles, stable specs, run/node state, handoffs, Gates, Decisions, or transitions.
 
 User runtime is offline with respect to plugin maintenance. Installation,
 discovery, update, and validation read static assets distributed in the

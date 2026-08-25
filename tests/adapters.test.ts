@@ -93,6 +93,7 @@ void test("companion manifest renders five fixed self-contained Skills", () => {
     const rendered = renderCompanionSkill(intent);
     assert.match(rendered, new RegExp(`^---\\nname: ${intent.skillId}\\n`, "m"));
     assert.doesNotMatch(rendered, /<<|Authoring hint/);
+    assert.doesNotMatch(rendered, /instructions route:|advance subflow:|instructions subflow:|list subflows|researchspec\/subflows|control\.yaml/i);
   }
   const navigate = COMPANION_INTENTS.find((intent) => intent.skillId === "researchspec-navigate");
   assert.ok(navigate);
@@ -100,11 +101,14 @@ void test("companion manifest renders five fixed self-contained Skills", () => {
   assert.match(renderedNavigate, /host's native subagent mechanism/);
   assert.match(renderedNavigate, /content category, and cost/);
   assert.match(renderedNavigate, /child nodes, branches, and revision rounds ask again/);
+  assert.match(renderedNavigate, /instructions profile:<profile-id>/);
+  assert.match(renderedNavigate, /node:<parent-run>\/<subgraph-node>/);
   assert.doesNotMatch(renderedNavigate, /API key|endpoint|curl/i);
   const handbook = COMPANION_INTENTS.find((intent) => intent.skillId === "researchspec-cli-handbook");
   assert.ok(handbook);
   assert.match(handbook.description, /whenever using, invoking, explaining, inspecting, troubleshooting, or modifying ResearchSpec/);
   assert.match(renderCompanionSkill(handbook), /GraphRunStartCommandSchema/);
+  assert.match(renderCompanionSkill(handbook), /RunHandoffSchema/);
 });
 
 void test("Copilot uses its explicit detection paths", async () => {

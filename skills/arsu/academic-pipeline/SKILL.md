@@ -14,23 +14,25 @@ metadata:
     - academic-paper-reviewer
 ---
 
-<!-- researchspec-contract-preflight:v10 -->
+<!-- researchspec-contract-preflight:v11 -->
 <!-- researchspec-literature-adapter:zotero-library:v2 -->
 ## ResearchSpec Contract Preflight
 
 Locate the project researchspec/ workspace and run "researchspec status --json".
-For a new route, request "researchspec instructions route:<skill>:<mode> --json" and
-present its Skill, mode, stable-spec and handoff-role prerequisites, boundary
-outputs, formal Gates, risk, cost, and confirmation scope. Start only after the
-user confirms that one instance. A pipeline parent confirmation never authorizes
-a child, branch, specialist subflow, or later revision round.
+For a new root run, request "researchspec instructions profile:<profile-id> --json"
+and present the selected entry, prerequisites, boundary outputs, formal Gates,
+Decisions, risk, cost, and confirmation scope. Start only after the user confirms
+that exact entry summary. Nodes and bound child runs declared by the frozen graph
+inherit that authorization; every formal Gate and Decision still requires its
+own confirmation, and alternate-model review requires separate current consent.
 
 Read only the route-relevant parts of specs/project.md, specs/sources.yaml,
 specs/claims.yaml, and specs/manuscript.yaml. Pipeline work also reads the
-managed profiles/academic-pipeline.yaml. After start, treat the selected
-subflow's control.yaml as its sole runtime authority and its handoff.md as
-the boundary input/output reference. Do not reconstruct the frontier from Skill
-prose; use directed instructions selectors and the current status view.
+managed profile projection. After start, treat the owning run.yaml, frozen
+graph.yaml, node instance files, and run handoff.md as runtime authority. Do not
+reconstruct the frontier from Skill prose; use selectors returned by status and
+request directed instructions for the eligible node, Gate, Decision, or pending
+child start.
 
 Treat `specs/manuscript.yaml.delivery` as the source-format contract.
 The first manuscript-writing intake resolves `working_format`; a later change
@@ -42,42 +44,42 @@ Record source and target format IDs on handoff entries; a rendered target also
 records `renderer: quarto`.
 
 For QMD writing or resume, run the bounded read-only `quarto --version`
-probe at the timing returned by route instructions and preserve its available,
+probe at the timing returned by node instructions and preserve its available,
 unavailable, or unknown result in the start confirmation. QMD writing may start
 when Quarto is unavailable, but `academic-paper:format-convert` requires an
 available probe and must use `node scripts/render-quarto.mjs` for the single
 confirmed target. The helper defaults to no-execute; code execution requires a
-separate current-subflow consent. Never install Quarto, contact the network,
+separate current-node consent. Never install Quarto, contact the network,
 fall back to Pandoc, overwrite an existing target, or report a successful
 handoff after a partial or failed render.
 
 Pass the paper-humanizer Reference mode entrypoint constraint to the active academic-paper producer; the pipeline does not execute humanization itself.
 Produce semantic files at explicit project-relative paths outside
-researchspec/, then update the owning handoff with unique roles, types,
-purposes, paths, producers or intended consumers, and relevant limits. Do not
+researchspec/, then submit their unique roles, types, purposes, paths, producers
+or intended consumers, and relevant limits through the owning CLI action. Do not
 register, copy, hash-bind, or assign framework IDs to boundary files.
-Only the ResearchSpec CLI may mutate lifecycle state, checkpoints, formal Gates,
-Decisions, overrides, and transitions in control.yaml.
+Only the ResearchSpec CLI may mutate run or node lifecycle state, handoffs,
+formal Gates, Decisions, overrides, and transitions.
 
 For a formal Gate, use researchspec-verify to prepare evidence-linked findings,
 show the proposed verdict and consequences, and obtain explicit human
-confirmation. Record the verdict with "researchspec decide gate:<instance>/<gate>";
-use a separate "researchspec advance subflow:<instance>" only after the owning
-control, profile, directly required child controls, and handoff prerequisites
-permit the transition. A failed-Gate override requires its own human-approved
-Decision and reason in the owning Gate.
+confirmation. Record the verdict with "researchspec decide gate:<run>/<gate>".
+Complete executable work only with "researchspec advance node:<run>/<node>"
+after the eligible Node Card's output and validator requirements are satisfied.
+A failed-Gate override requires its own human approval and reason on the owning
+Gate; confirmations never complete an execution node.
 
 Optional domain Skills are bounded advisory helpers. Suggest at most three
-domains, keep plugin consent separate from route confirmation, preview the exact
+domains, keep plugin consent separate from graph entry confirmation, preview the exact
 domain IDs and resolved Skills, and install only after explicit consent. Invoke a
 projected Skill natively when loaded; otherwise use plugin instructions only
 after selection, availability, projection, and manifest-hash checks. Decline or
-failure leaves the core route and workflow frontier unchanged.
+failure leaves the graph selector, active producer, and workflow frontier unchanged.
 
 For literature work, the active ARSU producer may use an installed
 Zotero task Skill as a bounded provider after a just-in-time readiness check.
 Adapter results remain working evidence and cannot directly modify stable specs,
-subflow controls, Gates, Decisions, transitions, or handoffs. Private or
+run or node state, Gates, Decisions, transitions, or handoffs. Private or
 library-bound work pauses when readiness fails. Acquisition is candidate-only
 without a current bounded authorization, and Curation requires a separate request.
 
@@ -85,7 +87,7 @@ The packaged academic-pipeline/scripts/adapters/zotero.py path is separate: it
 reads only a user-supplied Better BibTeX JSON export, requires a user-provided
 Python 3.11+ environment with PyYAML, and is not a live Zotero fact source.
 
-This generated block uses profile researchspec-preflight-v10 for
+This generated block uses profile researchspec-preflight-v11 for
 academic-pipeline and the current file-based protocol:
 status -> instructions <selector> -> start/decide/advance -> status.
 
@@ -146,8 +148,8 @@ authority.
 
 Current ResearchSpec owners:
 
-- `researchspec/subflows/<instance>/control.yaml`
-- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
+- `researchspec/runs/<run-id>/handoff.md`
 <!--/rs:STATE-002-->
 
 **Execution flow:**
@@ -413,8 +415,8 @@ Resolve the current graph from `researchspec/profiles/academic-pipeline.yaml`.
 Current ResearchSpec owners:
 
 - `researchspec/profiles/academic-pipeline.yaml`
-- `researchspec/subflows/<instance>/control.yaml`
-- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
+- `researchspec/runs/<run-id>/handoff.md`
 <!--/rs:STATE-003-->
 
 <!--rs:IO-002-->
@@ -423,7 +425,7 @@ Current ResearchSpec owners:
 Replacement scope: `IO-002` for `academic-pipeline`.
 
 In phase-by-phase mode, downstream single-phase agents remain confined to the
-stage selected in `researchspec/subflows/<instance>/control.yaml`. They may read only the
+stage selected in `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`. They may read only the
 contracts and handoff-referenced artifacts required by that stage and may emit only its
 declared output artifacts. The academic-pipeline orchestrator, state-tracking,
 integrity, collaboration-depth, and claim-audit roles retain their documented
@@ -436,8 +438,8 @@ configured workflow and the owning control—not an ARS phase-directory name—d
 which stage may execute.
 
 Enforcement is contract-based: preflight checks
-`researchspec/profiles/academic-pipeline.yaml`, `researchspec/subflows/<instance>/control.yaml`, and
-required entries in `researchspec/subflows/<instance>/handoff.md` before
+`researchspec/profiles/academic-pipeline.yaml`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, and
+required entries in `researchspec/runs/<run-id>/handoff.md` before
 dispatch; the runtime rejects outputs outside the selected stage. Existing
 prompt fences, local verifiers, or tool hooks may report diagnostics but do not
 replace the ResearchSpec boundary.
@@ -445,8 +447,8 @@ replace the ResearchSpec boundary.
 Current ResearchSpec owners:
 
 - `researchspec/profiles/academic-pipeline.yaml`
-- `researchspec/subflows/<instance>/control.yaml`
-- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
+- `researchspec/runs/<run-id>/handoff.md`
 <!--/rs:IO-002-->
 
 ---
@@ -522,10 +524,10 @@ At the end of each revision round, if **delta < 3 points** on the 0-100 rubric A
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -583,10 +585,10 @@ The `collaboration_depth_agent` observes the user's collaboration pattern with t
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -762,10 +764,10 @@ Stage 5: academic-paper (format-convert mode)
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 

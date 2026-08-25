@@ -18,7 +18,7 @@ export const SHARED_CLI_GUIDANCE = `## Shared CLI Discipline
 ### Human authority
 
 - Starting a run requires a user-confirmed profile entry summary. Nodes authorized by the frozen graph do not require per-node starts; each formal Gate and Decision still requires its own human confirmation.
-- Plugin consent is separate from run confirmation. A run confirmation does not authorize future child nodes.
+- Plugin consent is separate from run confirmation. A run confirmation does not authorize plugin installation or optional domain work.
 - Alternate-model consent is also separate. Propose only a model the host already exposes through native subagent delegation, and obtain confirmation of the exact model, disclosed content category, and cost for this run or node. Never persist that consent in a stable spec, run state, handoff, or model configuration; child nodes, branches, and revision rounds ask again.
 - Verify may recommend a Gate verdict. Only a human-confirmed Decide action records the formal attempt.
 - Gate confirmation, a branch choice, and node Advance are separate actions. None silently performs another.

@@ -21,7 +21,7 @@ This converter-owned audit is not active Skill guidance. Quoted upstream Before 
 - Source: `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md`
 - Disposition: `adapt`
 - Before SHA-256: `0a0f548c95f5d8b2175acc7c242596b926b59d025280fd4411e854991fbdb0c9`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md`, `deep-research/references/cross-skill/academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md`
 - Rationale: Reviewer role contains alternate-model dispatch instructions.
 
@@ -39,10 +39,10 @@ When `ARS_CROSS_MODEL` is set, do not send the paper automatically. First ask fo
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -59,7 +59,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `academic-paper-reviewer/agents/editorial_synthesizer_agent.md`
 - Disposition: `adapt`
 - Before SHA-256: `980bcbd338a93307f3002b9d63dbb39134ba92fa0d80696c64b67c0cb4d49abf`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-paper-reviewer/agents/editorial_synthesizer_agent.md`
 - Rationale: Synthesizer contains blind alternate-model comparison instructions.
 
@@ -88,10 +88,10 @@ When `ARS_CROSS_MODEL` is not set: no behavioral change.
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -108,7 +108,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `academic-paper-reviewer/agents/editorial_synthesizer_agent.md`
 - Disposition: `adapt`
 - Before SHA-256: `f5690e420953a7f148d6e322715c2185059d3649a902ccbc6afc0c849f186c5f`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-paper-reviewer/agents/editorial_synthesizer_agent.md`
 - Rationale: Synthesizer contains blind alternate-model comparison instructions.
 
@@ -126,10 +126,10 @@ In `reviewer_full` mode only (every non-`reviewer_full` mode OMITS the block per
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -146,7 +146,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `academic-paper-reviewer/references/calibration_mode_protocol.md`
 - Disposition: `adapt`
 - Before SHA-256: `427f97d0d087fe1ed4d54fd998d9154bc235ec20a570b1eebe0ae748834c5476`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-paper/references/cross-skill/academic-paper-reviewer/references/calibration_mode_protocol.md`, `academic-paper-reviewer/references/calibration_mode_protocol.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/references/calibration_mode_protocol.md`, `deep-research/references/cross-skill/academic-paper-reviewer/references/calibration_mode_protocol.md`
 - Rationale: Calibration protocol actively selects independent host models.
 
@@ -162,10 +162,10 @@ invalid, disclose the limitation and continue with a single-model result.
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -182,7 +182,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `academic-paper-reviewer/references/calibration_mode_protocol.md`
 - Disposition: `adapt`
 - Before SHA-256: `c496e9f5cfd80050a6dcffaec472ee2ac8139cfa245e79949fbab515ccf61ef1`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-paper/references/cross-skill/academic-paper-reviewer/references/calibration_mode_protocol.md`, `academic-paper-reviewer/references/calibration_mode_protocol.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/references/calibration_mode_protocol.md`, `deep-research/references/cross-skill/academic-paper-reviewer/references/calibration_mode_protocol.md`
 - Rationale: Calibration protocol actively selects independent host models.
 
@@ -203,10 +203,10 @@ Cross-model: <yes/no, model families used>
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -223,7 +223,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `academic-paper-reviewer/references/calibration_mode_protocol.md`
 - Disposition: `adapt`
 - Before SHA-256: `d0e7db38fd807738341c4019253cf1e06ed4acd23d500e18fe84ca3e898810f2`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-paper/references/cross-skill/academic-paper-reviewer/references/calibration_mode_protocol.md`, `academic-paper-reviewer/references/calibration_mode_protocol.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/references/calibration_mode_protocol.md`, `deep-research/references/cross-skill/academic-paper-reviewer/references/calibration_mode_protocol.md`
 - Rationale: Calibration protocol actively selects independent host models.
 
@@ -244,10 +244,10 @@ invalid, disclose the limitation and continue with a single-model result.
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -264,7 +264,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `academic-paper-reviewer/references/calibration_mode_protocol.md`
 - Disposition: `adapt`
 - Before SHA-256: `c9a089da6cfd192a1a2a6cabc5edfb3434fbbe572381ff0a53f303c6c161e7ea`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-paper/references/cross-skill/academic-paper-reviewer/references/calibration_mode_protocol.md`, `academic-paper-reviewer/references/calibration_mode_protocol.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/references/calibration_mode_protocol.md`, `deep-research/references/cross-skill/academic-paper-reviewer/references/calibration_mode_protocol.md`
 - Rationale: Calibration protocol actively selects independent host models.
 
@@ -284,10 +284,10 @@ invalid, disclose the limitation and continue with a single-model result.
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -304,7 +304,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `academic-paper-reviewer/references/re_review_mode_protocol.md`
 - Disposition: `adapt`
 - Before SHA-256: `2dac18d4d7b60aa69d2268983dde97c3440d10599bfc91194d152a79e8b61c1d`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-paper/references/cross-skill/academic-paper-reviewer/references/re_review_mode_protocol.md`, `academic-paper-reviewer/references/re_review_mode_protocol.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/references/re_review_mode_protocol.md`, `deep-research/references/cross-skill/academic-paper-reviewer/references/re_review_mode_protocol.md`
 - Rationale: Re-review protocol actively dispatches an independent judge.
 
@@ -320,10 +320,10 @@ invalid, disclose the limitation and continue with a single-model result.
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -340,7 +340,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `academic-paper-reviewer/references/re_review_mode_protocol.md`
 - Disposition: `adapt`
 - Before SHA-256: `53835ab3db81c8481c35d2e8490c27c9a10b9990142e4e2043c59d4c6a705c43`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-paper/references/cross-skill/academic-paper-reviewer/references/re_review_mode_protocol.md`, `academic-paper-reviewer/references/re_review_mode_protocol.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/references/re_review_mode_protocol.md`, `deep-research/references/cross-skill/academic-paper-reviewer/references/re_review_mode_protocol.md`
 - Rationale: Re-review protocol actively dispatches an independent judge.
 
@@ -361,10 +361,10 @@ invalid, disclose the limitation and continue with a single-model result.
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -381,7 +381,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `academic-paper-reviewer/references/re_review_mode_protocol.md`
 - Disposition: `adapt`
 - Before SHA-256: `7a596ca076964a825786e2d7206df2df72dc889d092f5ef7ae352a8dd6cb68fd`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-paper/references/cross-skill/academic-paper-reviewer/references/re_review_mode_protocol.md`, `academic-paper-reviewer/references/re_review_mode_protocol.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/references/re_review_mode_protocol.md`, `deep-research/references/cross-skill/academic-paper-reviewer/references/re_review_mode_protocol.md`
 - Rationale: Re-review protocol actively dispatches an independent judge.
 
@@ -402,10 +402,10 @@ Cross-model cell vocabulary (Priority 1 rows only — the pass does not evaluate
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -422,7 +422,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `academic-paper-reviewer/SKILL.md`
 - Disposition: `adapt`
 - Before SHA-256: `87beb5b618949cb38b0126afe5c884958960f0024d2d126db23d30b3e10b5a00`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-paper/references/cross-skill/academic-paper-reviewer/SKILL.md`, `academic-paper-reviewer/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/SKILL.md`, `deep-research/references/cross-skill/academic-paper-reviewer/SKILL.md`
 - Rationale: Entrypoint contains alternate-model reviewer and model-selection instructions.
 
@@ -444,10 +444,10 @@ invalid, disclose the limitation and continue with a single-model result.
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -464,7 +464,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `academic-paper-reviewer/SKILL.md`
 - Disposition: `adapt`
 - Before SHA-256: `931063de105268a1ddfbbfb77664476a61829baddab429af94e2ac4dfbbfcc51`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-paper/references/cross-skill/academic-paper-reviewer/SKILL.md`, `academic-paper-reviewer/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/SKILL.md`, `deep-research/references/cross-skill/academic-paper-reviewer/SKILL.md`
 - Rationale: Entrypoint contains alternate-model reviewer and model-selection instructions.
 
@@ -487,10 +487,10 @@ invalid, disclose the limitation and continue with a single-model result.
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -507,7 +507,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `academic-paper-reviewer/SKILL.md`
 - Disposition: `adapt`
 - Before SHA-256: `aff0b5a5ef637f66c5ee1db0a5cb55e2fbf75718cf84a023e384c7463d8c57c9`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-paper/references/cross-skill/academic-paper-reviewer/SKILL.md`, `academic-paper-reviewer/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/SKILL.md`, `deep-research/references/cross-skill/academic-paper-reviewer/SKILL.md`
 - Rationale: Entrypoint contains alternate-model reviewer and model-selection instructions.
 
@@ -523,10 +523,10 @@ Opt-in mode that measures this reviewer's FNR / FPR / balanced accuracy against 
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -543,7 +543,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `academic-paper-reviewer/SKILL.md`
 - Disposition: `adapt`
 - Before SHA-256: `a911eac3d6d58d3d4367cfceb7a2188f09fbde77ef4d9774a1b09070ce016ebb`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-paper/references/cross-skill/academic-paper-reviewer/SKILL.md`, `academic-paper-reviewer/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/SKILL.md`, `deep-research/references/cross-skill/academic-paper-reviewer/SKILL.md`
 - Rationale: Entrypoint contains alternate-model reviewer and model-selection instructions.
 
@@ -561,10 +561,10 @@ In `full` mode only (the five-seat panel — `methodology-focus` has a two-seat 
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -581,7 +581,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `academic-paper-reviewer/SKILL.md`
 - Disposition: `adapt`
 - Before SHA-256: `1e984ac5a24cb5be9fb31aedfa632d0a9d739da62f94aa335e1c488f8744f76d`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-paper/references/cross-skill/academic-paper-reviewer/SKILL.md`, `academic-paper-reviewer/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/SKILL.md`, `deep-research/references/cross-skill/academic-paper-reviewer/SKILL.md`
 - Rationale: Entrypoint contains alternate-model reviewer and model-selection instructions.
 
@@ -604,10 +604,10 @@ When `ARS_MODEL_TIERING` is set, the dispatching session routes this skill's age
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -624,7 +624,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `academic-paper/SKILL.md`
 - Disposition: `adapt`
 - Before SHA-256: `1e984ac5a24cb5be9fb31aedfa632d0a9d739da62f94aa335e1c488f8744f76d`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-paper/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper/SKILL.md`, `deep-research/references/cross-skill/academic-paper/SKILL.md`
 - Rationale: Entrypoint contains model-selection instructions.
 
@@ -647,10 +647,10 @@ When `ARS_MODEL_TIERING` is set, the dispatching session routes this skill's age
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -667,7 +667,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `academic-pipeline/agents/collaboration_depth_agent.md`
 - Disposition: `adapt`
 - Before SHA-256: `623b3e951c6b282268ba3d6ef46ef59efaf79cd8c48f37d30d612ee05ddb13bf`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-paper/references/cross-skill/academic-pipeline/agents/collaboration_depth_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/collaboration_depth_agent.md`, `academic-pipeline/agents/collaboration_depth_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/collaboration_depth_agent.md`
 - Rationale: Observer contains alternate-model execution instructions.
 
@@ -692,10 +692,10 @@ invalid, disclose the limitation and continue with a single-model result.
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -712,7 +712,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `academic-pipeline/agents/collaboration_depth_agent.md`
 - Disposition: `adapt`
 - Before SHA-256: `e7d0888053389ab85355a468374cfd963d43a17a1a4285e28b90a8c00bedf39d`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-paper/references/cross-skill/academic-pipeline/agents/collaboration_depth_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/collaboration_depth_agent.md`, `academic-pipeline/agents/collaboration_depth_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/collaboration_depth_agent.md`
 - Rationale: Observer contains alternate-model execution instructions.
 
@@ -738,10 +738,10 @@ Note: divergence > 2 points; no silent averaging performed. Original evidence:
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -758,7 +758,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `academic-pipeline/agents/integrity_verification_agent.md`
 - Disposition: `adapt`
 - Before SHA-256: `21bbb7cd078332d5473923a6fde589efd1f3ac6035870308e6ec29c1db27939a`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-paper/references/cross-skill/academic-pipeline/agents/integrity_verification_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/integrity_verification_agent.md`, `academic-pipeline/agents/integrity_verification_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/integrity_verification_agent.md`
 - Rationale: Integrity role contains provider transport instructions.
 
@@ -779,10 +779,10 @@ invalid, disclose the limitation and continue with a single-model result.
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -799,7 +799,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `academic-pipeline/agents/integrity_verification_agent.md`
 - Disposition: `adapt`
 - Before SHA-256: `40aac3f28a0ff2c256df7e3a2575cffdc4d205dd3119de614336b05b4392362a`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-paper/references/cross-skill/academic-pipeline/agents/integrity_verification_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/integrity_verification_agent.md`, `academic-pipeline/agents/integrity_verification_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/integrity_verification_agent.md`
 - Rationale: Integrity role contains provider transport instructions.
 
@@ -824,10 +824,10 @@ See `references/claim_verification_protocol.md` § Sampling Strategy (authority)
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -844,7 +844,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `academic-pipeline/agents/integrity_verification_agent.md`
 - Disposition: `adapt`
 - Before SHA-256: `90f8c8faf1059aea0c03429cf674454993981c11c455ae99a69feee20c6a718a`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-paper/references/cross-skill/academic-pipeline/agents/integrity_verification_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/integrity_verification_agent.md`, `academic-pipeline/agents/integrity_verification_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/integrity_verification_agent.md`
 - Rationale: Integrity role contains provider transport instructions.
 
@@ -876,10 +876,10 @@ When the environment variable `ARS_CROSS_MODEL` is set, this agent enables cross
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -896,7 +896,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `academic-pipeline/agents/integrity_verification_agent.md`
 - Disposition: `adapt`
 - Before SHA-256: `40d7093d33ca32483d797a913770e8c38486550ffc45d9204e34b7c7a78f7913`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-paper/references/cross-skill/academic-pipeline/agents/integrity_verification_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/integrity_verification_agent.md`, `academic-pipeline/agents/integrity_verification_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/integrity_verification_agent.md`
 - Rationale: Integrity role contains provider transport instructions.
 
@@ -912,10 +912,10 @@ invalid, disclose the limitation and continue with a single-model result.
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -932,7 +932,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `academic-pipeline/agents/integrity_verification_agent.md`
 - Disposition: `adapt`
 - Before SHA-256: `e93b7517a7cbd231c8617637fcbe92ee0431605fc57dfedafe7969e1725bfb1c`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-paper/references/cross-skill/academic-pipeline/agents/integrity_verification_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/integrity_verification_agent.md`, `academic-pipeline/agents/integrity_verification_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/integrity_verification_agent.md`
 - Rationale: Integrity role contains provider transport instructions.
 
@@ -955,10 +955,10 @@ invalid, disclose the limitation and continue with a single-model result.
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -975,7 +975,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `academic-pipeline/agents/pipeline_orchestrator_agent.md`
 - Disposition: `adapt`
 - Before SHA-256: `778eb7531cb34a3064a614f7e6b17b0c86c830d2d3501302006784d0c88df2d1`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
 - Rationale: Orchestrator contains provider transport and model-selection instructions.
 
@@ -995,10 +995,10 @@ The cost is multiplicative: a 10-stage pipeline with cross-model enabled produce
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -1015,7 +1015,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `academic-pipeline/agents/pipeline_orchestrator_agent.md`
 - Disposition: `adapt`
 - Before SHA-256: `6c50e3b008b099f8b4981617af3cffe38595ff221ddc88696035727b872984da`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
 - Rationale: Orchestrator contains provider transport and model-selection instructions.
 
@@ -1031,10 +1031,10 @@ invalid, disclose the limitation and continue with a single-model result.
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -1051,7 +1051,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `academic-pipeline/references/claim_audit_calibration_protocol.md`
 - Disposition: `adapt`
 - Before SHA-256: `e7eb1e34894937b1276c9fae69988ef4a0dc018d0efae17be49d9fd39c57b970`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-paper/references/cross-skill/academic-pipeline/references/claim_audit_calibration_protocol.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/references/claim_audit_calibration_protocol.md`, `academic-pipeline/references/claim_audit_calibration_protocol.md`, `deep-research/references/cross-skill/academic-pipeline/references/claim_audit_calibration_protocol.md`
 - Rationale: Calibration procedure contains operator model-selection instructions.
 
@@ -1070,10 +1070,10 @@ invalid, disclose the limitation and continue with a single-model result.
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -1090,7 +1090,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `academic-pipeline/references/process_summary_protocol.md`
 - Disposition: `adapt`
 - Before SHA-256: `7f0dfd7fb31da4a2103bcf4a20fd9757eaede728052a21c201d792ba101df808`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-pipeline/references/process_summary_protocol.md`
 - Rationale: Process summary contains active future-run model advice.
 
@@ -1136,10 +1136,10 @@ invalid, disclose the limitation and continue with a single-model result.
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -1156,7 +1156,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `academic-pipeline/references/process_summary_protocol.md`
 - Disposition: `adapt`
 - Before SHA-256: `8e865e5513ba4f752e5fc22ad236042274dc344cf3ae668867d8977f4e439d00`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-pipeline/references/process_summary_protocol.md`
 - Rationale: Process summary contains active future-run model advice.
 
@@ -1179,10 +1179,10 @@ invalid, disclose the limitation and continue with a single-model result.
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -1199,7 +1199,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `academic-pipeline/references/process_summary_protocol.md`
 - Disposition: `adapt`
 - Before SHA-256: `6e1a6601504ee781638bfd4dde2220d36d936d1f7bc5587ade52fe2c5c3f40d3`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-pipeline/references/process_summary_protocol.md`
 - Rationale: Process summary contains active future-run model advice.
 
@@ -1218,10 +1218,10 @@ invalid, disclose the limitation and continue with a single-model result.
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -1238,7 +1238,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `academic-pipeline/SKILL.md`
 - Disposition: `adapt`
 - Before SHA-256: `320da9c756dbceced75956b1d25206833dc806d2316395a532b2a1259eec20ef`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-paper/references/cross-skill/academic-pipeline/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/SKILL.md`, `academic-pipeline/SKILL.md`, `deep-research/references/cross-skill/academic-pipeline/SKILL.md`
 - Rationale: Entrypoint contains alternate-model observer and model-selection instructions.
 
@@ -1254,10 +1254,10 @@ At pipeline start, estimate token cost based on paper length, mode, and cross-mo
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -1274,7 +1274,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `academic-pipeline/SKILL.md`
 - Disposition: `adapt`
 - Before SHA-256: `9fba358d24c7ddc9847bcbee56dca46c9a96b9c20244b64dcbfd0201fabf7237`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-paper/references/cross-skill/academic-pipeline/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/SKILL.md`, `academic-pipeline/SKILL.md`, `deep-research/references/cross-skill/academic-pipeline/SKILL.md`
 - Rationale: Entrypoint contains alternate-model observer and model-selection instructions.
 
@@ -1290,10 +1290,10 @@ invalid, disclose the limitation and continue with a single-model result.
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -1310,7 +1310,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `academic-pipeline/SKILL.md`
 - Disposition: `adapt`
 - Before SHA-256: `1e984ac5a24cb5be9fb31aedfa632d0a9d739da62f94aa335e1c488f8744f76d`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-paper/references/cross-skill/academic-pipeline/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/SKILL.md`, `academic-pipeline/SKILL.md`, `deep-research/references/cross-skill/academic-pipeline/SKILL.md`
 - Rationale: Entrypoint contains alternate-model observer and model-selection instructions.
 
@@ -1333,10 +1333,10 @@ When `ARS_MODEL_TIERING` is set, the dispatching session routes this skill's age
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -1374,7 +1374,7 @@ SCHEMA_PATH = Path(__file__).resolve().parent.parent / "assets" / "shared" / "sp
 - Source: `deep-research/agents/devils_advocate_agent.md`
 - Disposition: `adapt`
 - Before SHA-256: `d608f5138b2e7ec88c00441ef028dfa5895ea300ad697941f800364f9fb588ca`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `deep-research/agents/devils_advocate_agent.md`
 - Rationale: Research DA contains alternate-model dispatch instructions.
 
@@ -1392,10 +1392,10 @@ When `ARS_CROSS_MODEL` is set, do not send the reviewed material automatically. 
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -1412,7 +1412,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `deep-research/agents/research_architect_agent.md`
 - Disposition: `adapt`
 - Before SHA-256: `3251a208901319dc10b76ca48c3e87a701008a3382458431523f575b5512fa69`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-paper/references/cross-skill/deep-research/agents/research_architect_agent.md`, `academic-paper-reviewer/references/cross-skill/deep-research/agents/research_architect_agent.md`, `academic-pipeline/references/cross-skill/deep-research/agents/research_architect_agent.md`, `deep-research/agents/research_architect_agent.md`
 - Rationale: Design-freeze role contains alternate-model dispatch instructions.
 
@@ -1432,10 +1432,10 @@ invalid, disclose the limitation and continue with a single-model result.
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -1452,7 +1452,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `deep-research/agents/research_architect_agent.md`
 - Disposition: `adapt`
 - Before SHA-256: `af4aacfc50a1de71a27829752a44306ad670191c79f026c5e8d455e06bbc68cc`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-paper/references/cross-skill/deep-research/agents/research_architect_agent.md`, `academic-paper-reviewer/references/cross-skill/deep-research/agents/research_architect_agent.md`, `academic-pipeline/references/cross-skill/deep-research/agents/research_architect_agent.md`, `deep-research/agents/research_architect_agent.md`
 - Rationale: Design-freeze role contains alternate-model dispatch instructions.
 
@@ -1479,10 +1479,10 @@ When `ARS_CROSS_MODEL` is not set: no behavioral change.
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -1499,7 +1499,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `deep-research/SKILL.md`
 - Disposition: `adapt`
 - Before SHA-256: `1e984ac5a24cb5be9fb31aedfa632d0a9d739da62f94aa335e1c488f8744f76d`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-paper/references/cross-skill/deep-research/SKILL.md`, `academic-paper-reviewer/references/cross-skill/deep-research/SKILL.md`, `academic-pipeline/references/cross-skill/deep-research/SKILL.md`, `deep-research/SKILL.md`
 - Rationale: Entrypoint contains model-selection instructions.
 
@@ -1522,10 +1522,10 @@ When `ARS_MODEL_TIERING` is set, the dispatching session routes this skill's age
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -1677,7 +1677,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `shared/agents/compliance_agent.md`
 - Disposition: `adapt`
 - Before SHA-256: `3d04cf6b9cdb6da98f7aedd1cac42f3344430c690fcd5a0a3f956b79ca171fd0`
-- After SHA-256: `532af311355d22c375a382b60c0e30f37a7c0581de9f9d993dd0bce6e6aa9a13`
+- After SHA-256: `d64079293fc52134efd65fb4a0f4dbcefb6185dbe62a9e353e98b9c3330f1efd`
 - Outputs: `academic-paper/references/shared/agents/compliance_agent.md`, `academic-paper-reviewer/references/shared/agents/compliance_agent.md`, `academic-pipeline/references/shared/agents/compliance_agent.md`, `deep-research/references/shared/agents/compliance_agent.md`
 - Rationale: Compliance role hard-codes a host-specific model tier for dispatch.
 
@@ -1693,10 +1693,10 @@ The orchestrator (or standalone skill) passes the input contract via the Agent t
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -1713,7 +1713,7 @@ invalid, disclose the limitation and continue with a single-model result.
 - Source: `shared/cross_model_verification.md`
 - Disposition: `adapt`
 - Before SHA-256: `fb41934d884eef51005ecd79be44b21497bde89263f78f556ec6c9c87a84f5e9`
-- After SHA-256: `f37e1832c40db4dd4349c26de232ba3831403d3defe527576ec67c13f18e73e9`
+- After SHA-256: `2c319e8235ea9ab1191f34c3bd235d6f604fa9677fcaa8352ab351e294a34f7f`
 - Outputs: `academic-paper/references/shared/cross_model_verification.md`, `academic-paper-reviewer/references/shared/cross_model_verification.md`, `academic-pipeline/references/shared/cross_model_verification.md`, `deep-research/references/shared/cross_model_verification.md`
 - Rationale: Provider-specific transport guide is replaced in full.
 
@@ -2307,7 +2307,7 @@ Before dispatch, the main Agent must:
    the independent reviewer;
 2. propose a model that is actually available in the host;
 3. disclose the category of material to be shared and the expected cost; and
-4. obtain consent for this exact subflow instance.
+4. obtain consent for this exact run and node.
 
 The dispatched payload contains only the minimum de-anchored evidence needed for
 the check. It excludes the main Agent's decision, scores, and reasoning. A child,
@@ -2328,7 +2328,7 @@ judgment with an explicit limitation note.
 - Source: `shared/model_tiering.md`
 - Disposition: `adapt`
 - Before SHA-256: `bdcd7472698448521a77f34c7174b4a0f5ae0c5196982611079a555b57f2fd4e`
-- After SHA-256: `8f7345b3e9af16bdace2b0643590ba181cc7d310173ee28455194824e6a9669d`
+- After SHA-256: `756cb8290e2592d24ebac02390eadc47b6f544b2066cd66cea538b3f141e7d9e`
 - Outputs: `academic-paper/references/shared/model_tiering.md`, `academic-paper-reviewer/references/shared/model_tiering.md`, `academic-pipeline/references/shared/model_tiering.md`, `deep-research/references/shared/model_tiering.md`
 - Rationale: Provider-specific model hierarchy is replaced in full.
 
@@ -2431,7 +2431,7 @@ not infer a provider lineup or assign fixed model families to quality tiers.
 An `economy` or `quality-boost` suggestion may be used only when the Agent can
 name a suitable model that the host already exposes through native subagent
 delegation. The user must separately confirm the exact model, the category of
-content to be shared, and the expected cost for the current subflow. Economy
+content to be shared, and the expected cost for the current run and node. Economy
 selection must preserve the role's required capabilities. Quality boost applies
 only to the named judgment surface. Unknown or unavailable selections fall back
 to the current session model with a disclosed note.

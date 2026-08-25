@@ -114,7 +114,7 @@ evidence-quality 与 manuscript-quality Gates，以及 medium/iterative 成本�
 
 从 S6 开始。用户指定期刊模板和最终输出。Navigate 确认最终稿路径、模板、引用样式、图表资源
 与覆盖策略，展示 low/single-pass 路线。格式转换不承担正文修订或事实核查。Markdown 继续沿用
-既有转换路径；QMD 每个 formatting subflow 只确认一个 Quarto target，先只读探测
+既有转换路径；QMD 每个 formatting run/node 只确认一个 Quarto target，先只读探测
 `quarto --version`，默认 no-execute，执行代码必须另行确认 `render_consent`。
 
 ```text

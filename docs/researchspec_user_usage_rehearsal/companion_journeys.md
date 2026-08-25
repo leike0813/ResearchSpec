@@ -29,7 +29,7 @@ checkpoint。唯一原实例且路线未变时直接恢复；多个候选时列�
 
 ### Export：选择 handoff 或 pack
 
-用户要把当前稿件交给协作者时，Navigate 建议维护当前 subflow handoff；用户要给另一个
+用户要把当前稿件交给协作者时，Navigate 建议维护当前 run handoff；用户要给另一个
 Agent 完整 ResearchSpec 上下文时，建议 `pack`。执行前说明输出路径、隐私、外部文件不被
 包含以及覆盖风险。Export 不改变 control，也不把 pack 当作恢复权威。
 
@@ -48,7 +48,7 @@ Agent 完整 ResearchSpec 上下文时，建议 `pack`。执行前说明输出�
 > 证据只支持相关性，把因果 claim 和论文结构一起收窄。
 
 Propose 读取 `project.md`、`claims.yaml`、`manuscript.yaml`、相关 synthesis/fact-check 和当前
-subflow handoff。它说明涉及 claim wording、contribution 与 structure，适合创建可审阅
+run handoff。它说明涉及 claim wording、contribution 与 structure，适合创建可审阅
 change，而不是直接做一次不透明编辑。
 
 用户确认创建后，`researchspec propose` 生成自适应文档包：
@@ -62,7 +62,7 @@ researchspec/changes/narrow-causal-claim/
 
 `change.md` 是主要事实源；跨三个 specs 且存在结构取舍，因此需要 `design.md`；批量更新
 claims 适合用 `delta.yaml` 辅助审阅。Change 初始为 `draft`/`proposed`，不修改 stable specs、
-subflow control 或外部稿件。
+run/node state 或外部稿件。
 
 Propose 运行相关 `check`，再用 `show` 向用户展示 targets、语义 delta、风险、非目标和待决
 问题。用户拒绝创建时不产生目录；证据不足时保留 draft，而不是伪造支持。
@@ -105,8 +105,8 @@ Research child 已输出报告。用户问：“这些证据够不够进入写�
 
 ### 确认 formal Gate
 
-Verify 已给出 evidence-quality verdict。Decide 读取确切 subflow 与 Gate、展示 evidence、限制
-和后果，收集用户的最终结论。`researchspec decide` 只更新 owning `control.yaml`：
+Verify 已给出 evidence-quality verdict。Decide 读取确切 run/node 与 Gate、展示 evidence、限制
+和后果，收集用户的最终结论。`researchspec decide` 只更新 owning node instance：
 
 ```yaml
 gates:

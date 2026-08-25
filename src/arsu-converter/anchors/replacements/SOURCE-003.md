@@ -4,7 +4,7 @@ Replacement scope: `SOURCE-003` for `deep-research`.
 
 When `researchspec/specs/sources.yaml` contains included literature sources,
 resolve their handoff-referenced source and screening artifacts through
-`researchspec/subflows/<instance>/handoff.md` and present them to the
+`researchspec/runs/<run-id>/handoff.md` and present them to the
 Bibliography Agent as a read-only `literature_corpus[]` working projection.
 Apply the confirmed source policy without turning provider priority into
 workflow authority:
@@ -38,4 +38,4 @@ ResearchSpec authority file.
 Current ResearchSpec owners:
 
 - `researchspec/specs/sources.yaml`
-- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/runs/<run-id>/handoff.md`

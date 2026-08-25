@@ -2,28 +2,24 @@
 
 ## 1. 权威与适用范围
 
-本文是用户进入、确认、运行、恢复、验证和结束 ARSU 工作的唯一产品级使用模型。
-架构、CLI、schema、Skill、converter、文档与验收必须与本文一致。更细的目标态旅程见
-`docs/researchspec_user_usage_rehearsal.md` 及其分册。
+本文是用户进入、确认、运行、恢复、验证和结束 ARSU 工作的唯一产品级使用模型。架构、CLI、
+schema、Skill、converter、文档与验收都必须与本文一致。
 
-ResearchSpec 是文件合同与控制面。它不调用 Agent API，不替代用户选择的 Agent，也不接管
+ResearchSpec 是基于文件合同的控制面。它不调用 Agent API，不替代用户选择的 Agent，也不接管
 Zotero、论文文件或其它外部研究材料。
 
 ## 2. 用户可见表面
 
-固定 Agent Skill 基础表面为：
+固定 Agent Skill 基础表面包括：
 
 - 四个 ARSU Skills：`deep-research`、`academic-paper`、
   `academic-paper-reviewer`、`academic-pipeline`；
 - 五个 Companion Skills：`researchspec-navigate`、`researchspec-propose`、
   `researchspec-decide`、`researchspec-verify`、`researchspec-cli-handbook`；
-- 可选的 `zotero-library` Adapter 在用户选择后增加七个 Skills：`zotero-library-agent`、
-  `zotero-library-query`、`zotero-literature-acquisition`、
-  `zotero-literature-analysis`、`zotero-research-synthesis`、
-  `zotero-library-curation`、`zotero-bridge-cli`。它要求 Zotero 已安装
-  [Zotero-Agents](https://github.com/leike0813/zotero-agents) 插件。
+- `skills/capabilities/registry.json` 中登记的全部 capability packages。
 
-可选 domain Skills 只能辅助语义工作，不能增加 Companion、CLI capability 或工作流权威。
+可选的 `zotero-library` Adapter 在用户选择后增加七个 literature Skills。可选 domain Skills 只辅助
+语义工作，不能增加 Companion、CLI capability 或工作流权威。
 
 公开 CLI 固定为十六个顶层命令：
 
@@ -34,38 +30,37 @@ show        handoff     pack        propose
 decide      archive     doctor      plugin
 ```
 
-命令 wrapper 是同一能力在不同 Agent host 的适配，不是独立产品能力。
+命令 wrapper 是同一能力在不同 Agent host 中的适配，不是独立产品能力。
 
 ## 3. Workspace 与文件所有权
 
-`researchspec init` 先选择 Agent tools，再单独选择可选 literature Adapters；Adapter 默认不选。
-在 current workspace 中再次交互运行 `init` 会重新打开这两项选择，当前值默认选中，确认结果
-完整替换原选择；`delivery` 保持不变，domain plugins 仍由 `plugin` 命令管理。非交互调用通过
-`--tools` 和 `--literature-adapters <none|all|ids>` 提交完整选择，省略时保留 current workspace
-中的值。`init` 只准备 workspace 和静态 Agent 投影，不启动学术工作。Fresh workspace：
+`researchspec init` 创建 schema `"2"` workspace、投影已选 Agent 表面和 preset profiles，但不启动
+学术工作。Fresh workspace 的权威布局是：
 
 ```text
 researchspec/
   config.yaml
   tool-installation-manifest.json
   profiles/
-    academic-pipeline.yaml
+    <profile-id>.yaml
   specs/
     project.md
     sources.yaml
     claims.yaml
     manuscript.yaml
   changes/
-  subflows/
+  runs/
 ```
 
-启动实例后才创建：
+根 run 启动后创建：
 
 ```text
-researchspec/subflows/<instance-directory>/
-  control.yaml
+researchspec/runs/<run-id>/
+  run.yaml
+  graph.yaml
   handoff.md
-  work/
+  nodes/
+    <node-instance>.yaml
 ```
 
 所有权固定如下：
@@ -73,223 +68,156 @@ researchspec/subflows/<instance-directory>/
 | 文件 | 唯一职责 |
 | --- | --- |
 | `specs/project.md` | 研究问题、范围、边界、方法立场、贡献和长期约束 |
-| `specs/sources.yaml` | 用户接受的来源记录、identifier、用途范围和限制 |
+| `specs/sources.yaml` | 用户接受的来源、identifier、用途范围和限制 |
 | `specs/claims.yaml` | 稳定 claim、强度、支持来源、范围和限制 |
-| `specs/manuscript.yaml` | 稿件体裁、标题、语言、读者、venue、格式约束、delivery 选择与结构意图 |
-| `profiles/academic-pipeline.yaml` | pipeline graph、并行/join、Gate、branch、transition 和 revision round template |
-| `control.yaml` | 单个 subflow 的状态、checkpoint、Gate attempts、Decision 和 transition |
-| `handoff.md` | 单个 subflow 的边界输入输出 role/path |
-| `changes/<id>/` | 高影响 project change 的提议、决定和应用状态 |
-| `work/` | owning subflow 的私有、非权威运行材料 |
+| `specs/manuscript.yaml` | 稿件体裁、语言、读者、venue、格式和结构意图 |
+| `profiles/<profile-id>.yaml` | 可启动的 capability graph 模板 |
+| `runs/<run-id>/run.yaml` | run 身份、入口、授权来源、父级绑定和生命周期 |
+| `runs/<run-id>/graph.yaml` | 启动时冻结的 graph；该 run 的调度权威 |
+| `runs/<run-id>/nodes/*.yaml` | 节点状态、输出、Gate attempts、overrides 和 Decisions |
+| `runs/<run-id>/handoff.md` | 整个 run 的边界输入输出 role/path |
+| `changes/<id>/` | 高影响 stable-spec change 的提议、决定和应用状态 |
 
-论文、报告、review、图表、数据和其它边界交付物位于 `researchspec/` 外。ResearchSpec 不给它们
-分配 artifact ID，不登记 hash，不复制内容，也不建立生命周期；跨 subflow 使用 handoff 中的
-安全项目相对路径。
+论文、报告、review、图表、数据和其它边界交付物都在 `researchspec/` 外。ResearchSpec 不登记或
+复制这些文件，也不管理它们的生命周期；run handoff 只用安全的项目相对路径引用它们。
 
 ## 4. Stable specs 的日常维护
 
-用户与 Agent 可以直接维护四份 stable specs。早期 workspace 允许 sources、claims 和
-manuscript 内容为空；检查只验证已有字段和引用，不要求编造占位事实。
+用户与 Agent 可以直接维护四份 stable specs。早期 workspace 允许 sources、claims 和 manuscript
+为空；检查只验证已存在的字段和引用，不要求编造占位事实。
 
-普通确认事实可直接写入所属 spec。以下高影响变化先通过 project change：
+普通确认事实可直接写入所属 spec。研究问题、范围、贡献、claim 强度或适用范围、稿件结构或
+关键限制、review-response 策略等高影响变化，先建立 project change。`accepted` 只记录决定；
+stable specs 确实完成修改并通过检查后，change 才能标为 `applied`。
 
-- 研究问题、范围或贡献改变；
-- claim 强度、因果措辞或适用范围改变；
-- 稿件结构、目标输出或关键限制改变；
-- review-response 策略改变研究含义。
-
-首次进入稿件写作 intake 时，用户在 `manuscript.yaml.delivery.working_format` 选择
-`markdown` 或 `qmd`；未选择时两项 delivery 字段均可为 `null`。QMD 还要确认安全的
-`final_output_format` Quarto format ID。已经确认的选择不能静默转换旧稿，后续变更必须通过
-project change。
-
-Project change 的 `accepted` 只记录决定，不自动编辑 specs。实际修改完成并通过校验后，change
-才能标为 `applied`。
+首次进入稿件写作时，用户在 `manuscript.yaml.delivery.working_format` 选择 `markdown` 或 `qmd`。
+QMD 还要确认安全的 `final_output_format` Quarto format ID。已确认选择的后续变更通过 project
+change 完成，不能静默转换旧稿。
 
 ## 5. 从对话进入工作
 
-模糊、跨 Skill、恢复、解释和导出请求先进入 `researchspec-navigate`。用户明确指定 ARSU Skill
-或 mode 时，可以直接路由，但仍必须执行相同的 prerequisite 检查和 route summary。
+模糊、跨 capability、恢复、解释和导出请求先进入 `researchspec-navigate`。明确指定 capability
+时可以直接路由，但仍要读取 `status --json` 和相应 graph selector 的 instructions。
 
-`paper-humanizer` 是独立的 capability graph profile：review 节点只读诊断并产出 revision plan，
-plan Gate 批准后执行 revision，verification 通过后由 `paper-humanizer-acceptance` Decision
-决定接受或返回 revision。该 profile 不属于 `academic-paper` 或 `academic-pipeline` 的动态 child。
+开始根 run 前，Agent 必须展示 profile entry summary，其中包括：
 
-`review-response` 是独立的 capability graph profile：intake、manuscript-analysis、
-comment-atomization、workboard、round 五个节点按顺序执行；comment-coverage 与 strategy Gate
-在进入后续节点前强制人类确认，每个 round 后 evidence、response-coverage、final-assembly
-三个 Gate 与 `review-response-outcome` Decision 控制 continue/complete。
-
-启动前，Agent 必须向用户汇总：
-
-- Skill 与 mode；
-- stable-spec 和 handoff prerequisites；
-- 预期边界输出；
-- formal Gates；
+- 入口、capability 与 prerequisites；
+- 已确认的 handoff inputs 和预期边界 outputs；
+- graph 声明的 formal Gates 与 Decisions；
 - 风险、成本和交互强度。
 
-若稿件格式尚未选择，route summary 必须把选择列为启动前事项。选择 QMD 时，Navigate 或
-`academic-paper` 在首次 intake、写作/恢复和 `academic-paper:format-convert` 前按 instructions
-时机只读执行 `quarto --version`，并区分 `available`、`unavailable`、`unknown`。探测不安装依赖、
-不联网、不写 workspace；确认快照和探测摘要随本轮 start 写入 control，CLI 会拒绝过期快照。
+用户确认这份摘要后，Agent 才能执行 `start profile:<profile-id>`。一次确认只授权一个根 run 及其
+冻结 graph 中声明的节点和绑定 child runs，不能扩展到 graph 外的工作。
 
-只有用户确认后，Agent 才调用 `start`。一次确认只授权一个实例。Pipeline parent、每个 child、
-新 branch 和每轮动态 revision 都分别确认；确认 parent 不会预创建或授权 child。
+## 6. 图授权与 child runs
 
-`academic-pipeline:mid-entry` 的 route instructions 会列出 profile 声明的可执行入口，以及每个
-入口的 child route、前置条件、输入角色、formal Gates、风险和成本。用户必须从
-`research`、`write`、`review`、`revision`、`re-review`、`format`、`final-integrity` 中确认一个
-`entry_point`；这次 parent 确认仍不授权对应 child，child 启动前要再次确认。
+根 run 的 `graph.yaml` 冻结 profile 版本、节点、依赖、并行/join 规则、Gates、Decisions、重复轮次
+和 child profile 绑定。Core 只实现通用图引擎，不硬编码任何研究流程。
 
-## 6. 统一运行协议
+节点进入 eligible 状态后可直接执行。普通执行节点通过 `advance node:<run>/<node>[@round]` 提交
+声明的输出；成功验证后才完成。Gate verdict 和 Decision choice 只满足 graph 条件，不替执行节点
+完成生命周期。
+
+eligible 的 child-profile 节点通过 `start node:<parent-run>/<node>[@round]` 创建或返回唯一绑定的
+child run。child 继承父 graph 的授权，所以不再索取第二次 run-level 确认。它必须记录 typed parent
+binding，只能执行自己冻结 graph 的内容；自己的每个 Gate 和 Decision 仍要单独确认。
+
+`academic-pipeline` 的 end-to-end 与 mid-entry 都由 profile entry 定义。用户在根 entry summary 中
+确认入口，图只暴露相应的首个 eligible 节点；revision 与 re-review 的动态 round 从当前 run 的
+round 1 开始，不继承旧 run 的 Gate、Decision、round 或完成状态。
+
+`paper-humanizer` 与 `review-response` 是独立 profiles，不由 core 或其它 producer 动态拼装。
+
+## 7. 统一运行协议与 selectors
 
 Agent 使用以下协议：
 
 ```text
-status
-  -> instructions <selector>
+status --json
+  -> instructions <selector> --json
   -> start / decide / advance
-  -> status
+  -> status --json
 ```
 
-Selector 使用不可变 machine ID 或稳定业务 ID：
+运行控制只接受稳定 graph selectors：
 
-- `route:<route-ref>`；
-- `subflow:<instance-id>`；
-- `gate:<instance-id>/<gate-id>`；
-- `decision:<instance-id>/<decision-id>`；
-- `change:<change-id>`；
-- `handoff:<instance-id>`。
+- `profile:<profile-id>`；
+- `run:<run-id>`；
+- `node:<run-id>/<node-id>[@round]`；
+- `gate:<run-id>/<gate-id>[@round]`；
+- `decision:<run-id>/<decision-id>[@round]`；
+- `change:<change-id>`。
 
-目录名、文件名相似度和“最近一个”不能作为 machine selector。Status、list、show 和 history 都是
-扫描现有文件得到的只读视图，不保存投影。
-
-## 7. Standalone 与 academic-pipeline
-
-Standalone route 创建一个没有 profile parent 的根 subflow。它可以独立完成，完成后用户仍可
-启动其它工作。
-
-`academic-pipeline` parent 使用项目 profile 调度已确认的 children。Profile 负责：
-
-- end-to-end 初始 checkpoint 与 mid-entry 可执行入口；
-- child dependency、parallel group 和 join policy；
-- formal Gate、branch、transition 和 override policy；
-- 动态 revision、re-review 和退出条件。
-
-Core 不硬编码 ARSU graph。Parent 通过扫描带有自身 parent reference 的 child controls 得到子项
-状态，不保存一份重复 children 列表。
-
-Mid-entry parent 的初始 checkpoint 就是用户确认的 `entry_point`。在 parent 尚未执行 profile
-transition 时，只有该入口 child 可以豁免 profile 内部的上游 child dependency 和 branch unlock；
-它自己的 inputs、formal Gates、成本、稿件快照与文件检查仍然有效。首个 child 完成并推进
-parent 后，完整 dependency、Gate、branch 和动态 round 规则恢复。`revision` 或 `re-review`
-入口从当前 ResearchSpec 实例的 round 1 开始。
-
-Mid-entry 只使用用户明确提供的 stable facts 和 handoff inputs，不导入整体运行快照，也不继承
-旧 Gate、Decision、round 或 completion。
+Inspection 另外接受 `spec:<name>` 和 `tool:<tool-id>`。目录名、文件名相似度和“最近一个”不能充当
+machine selector。`status`、`list` 和 `show` 都是从权威文件即时派生的只读视图。
 
 ## 8. Handoff 与外部文件
 
-每个 subflow 的 `handoff.md` 使用 machine-readable frontmatter 和自由说明。每条 input/output
-至少记录 role、type、path 和 purpose；output 可记录 intended consumer，input 可记录 source
-instance。稿件条目还声明 `format`；QMD 条目路径必须以 `.qmd` 结尾。Quarto 渲染输出声明目标
-format ID 与 `renderer: quarto`，源稿和渲染稿都是 `researchspec/` 外的普通 boundary deliverable。
+每个 run 的 `handoff.md` 包含 machine-readable frontmatter 和自由说明。input/output 至少记录
+role、type、path 和 purpose；output 可记录 intended consumer，input 可记录 source run。稿件条目
+还声明 format。Quarto 渲染输出声明目标 format ID 与 `renderer: quarto`。
 
-路径必须：
-
-- 是项目内的安全相对路径；
-- 位于 `researchspec/` 外；
-- 不依赖相似文件名推断；
-- 在当前动作真正消费该 role 时才检查可读性。
-
-普通 status/check 只校验 handoff 结构。外部文件消失只阻塞当前消费者，不回写生产者历史。
+所有文件路径必须是项目内的安全相对路径，位于 `researchspec/` 外，并在当前动作真正消费该 role
+时才检查可读性。普通 status/check 只验证 handoff 结构；外部文件消失只阻塞当前消费者，不改写
+生产者的历史记录。
 
 ## 9. Gate、Decision 与推进
 
-Agent 或脚本可以准备验证结果，但 formal Gate verdict 必须由人确认。每次 verdict 在 owning
-control 的 Gate 下追加 attempt，保留 confirmer、时间、summary 和可选 handoff evidence。
+Agent 或脚本可以准备验证结果，但每个 formal Gate verdict 都由人确认。`decide gate:...` 把 attempt
+写入 Gate 所属 node instance；`pass`、`pass_with_conditions` 和 `fail` 都不会自动完成节点。
 
-`pass`、`pass_with_conditions` 和 `fail` 都不自动推进 checkpoint。用户确认后，Agent 再调用
-`advance`；CLI 按 profile、直接依赖 children、Gate 和 branch 校验 transition。
+Failed-Gate override 需要独立的人类批准、理由和 Decision identity，也只保存在所属 node instance。
+Graph Decision 同样逐项确认，记录选项后只有对应 branch 会进入 frontier。工具调用、探索过程和
+普通文件写入不进入 Decisions。
 
-Failed-Gate override 必须有独立 Decision ID、批准人、时间和理由，并只保存在该 Gate 下。
-普通 decisions 只记录 scope、claim、structure 和 branch 选择。工具调用、探索过程和普通文件写入
-不进入 decisions 或 transitions。
+## 10. Revision patch、annotation 与格式
 
-## 10. Revision patch 与 annotation intake
+ARSU `revision_patch` schema 是唯一稿件 patch 合同。可选 helper 只接受显式 base、patch、output 和
+可选 report 路径；它先完成全部预检，再原子写出结果。Schema error、未知 block、stale
+`old_hash` 或 annotation mapping 缺失都不能产生部分稿件。
 
-ARSU `revision_patch` schema 是唯一稿件 patch 合同。可选的 Skill-local helper 只接受显式 base、
-patch、output 和可选 report 路径；它先完成全部预检，再原子写出结果。任何 schema error、未知
-block、stale `old_hash` 或 annotation mapping 缺失都不得产生部分稿件。
+Annotation intake 是 `researchspec/` 外的普通工作材料，例如 `work/annotation-intake/`。需要给其它
+run 使用时，在 handoff 中声明相应外部路径。
 
-Annotation intake 默认位于 owning revision subflow 的 `work/annotation-intake/`，保留 stable
-annotation ID、raw feedback、normalized interpretation 和 patch mapping。需要跨边界时，Agent
-生成外部文件并在 handoff 中引用。
-
-Markdown 与 QMD 都是 Markdown-compatible 稿源。QMD 的 YAML frontmatter、代码围栏、cell options、
-引用、交叉引用和其它 Quarto 元数据在 review copy、annotation 和 revision 中保持原样；QMD 渲染
-默认 `no-execute`，代码执行需要独立的当前 formatting subflow `render_consent`。
-
-Mechanical precheck 不是 formal Gate。`revision_completeness` 仍由 Verify 组织判断、用户确认，
-再由 Decide 写入 owning control。
+Markdown 与 QMD 都是 Markdown-compatible 稿源。QMD 的 YAML frontmatter、代码围栏、cell
+options、引用、交叉引用和其它 Quarto 元数据在 review、annotation 和 revision 中保持原样。
+QMD 渲染默认 `no-execute`；代码执行需要针对当前 run/node 的独立 `render_consent`。
 
 ## 11. 异模型复核
 
-异模型复核只使用宿主原生 subagent。默认沿用当前会话模型；Agent 可以从宿主实际可用的模型中
-提议一个异模型，但必须在派发前另行说明模型、将要发送的内容类别和成本，并取得仅对当前 subflow
-有效的确认。Route、Plugin、Adapter、Gate 或 branch confirmation 都不包含这项授权。child、branch
-和 dynamic revision round 如需异模型，必须重新确认。
+异模型复核只使用宿主原生 subagent。派发前，Agent 必须说明实际可用模型、发送的内容类别和成本，
+并取得只对当前 run/node 有效的确认。根 run 授权、Plugin、Adapter、Gate 或 Decision 确认都不包含
+这项授权；child run 和动态 round 需要再次确认。
 
-主 Agent 先冻结自己的结构化判断，只发送完成复核所需的最小、去锚材料。分歧触发针对证据的复核，
-不得投票、平均或自动覆盖主判断。宿主无法派发或返回结构不合格时，披露限制并回退当前会话模型。
-ResearchSpec 不读取模型凭证、不配置 endpoint、不直调模型服务，也不把授权写入 stable spec、control、
-handoff 或模型配置文件。
+主 Agent 先冻结自己的结构化判断，只发送完成复核所需的最少材料。分歧通过证据复核解决，不能投票、
+平均或自动覆盖主判断。ResearchSpec 不读取模型凭证、不配置 endpoint、不调用模型服务，也不保存
+模型授权。
 
 ## 12. Plugin 与 Zotero 边界
 
-Plugin consent 与 route confirmation 分开。一次最多建议三个 domain，preview 显示精确 domain
-IDs；非交互安装要求显式 IDs 和 `--yes`。Plugin 失败或拒绝不改变原 ARSU producer、selector、
-frontier 或 control。
+Plugin consent 与根 run 确认分开。一次最多建议三个 domain，preview 显示精确 IDs；非交互安装要求
+显式 IDs 和 `--yes`。Plugin 失败或拒绝不改变 graph selector、frontier 或 producer 权威。
 
-Zotero status/check 是静态检查，不执行 runner、不联系 Zotero、不读取 credentials。运行时只有
-用户明确授权的 Adapter Skill 可以访问相应 library 或 Host Bridge；Adapter 输出返回 ARSU
-producer，不成为 ResearchSpec workflow authority。
+Zotero status/check 是静态检查，不执行 runner、不联系 Zotero、不读取 credentials。只有用户明确
+授权的 Adapter Skill 可以访问相应 library 或 Host Bridge；Adapter 输出返回 ARSU producer，不会
+取得 ResearchSpec 工作流权威。
 
 ## 13. 恢复、检查与导出
 
-恢复工作时，Navigate 先用 status 找到 machine instance ID，再用 instructions 定向读取当前
-checkpoint。若存在多个可能实例，必须请用户选择，不能靠目录名猜测。
+恢复时，Navigate 先用 status 找到 run ID，再读取 `run:`、`node:`、`gate:` 或 `decision:`
+instructions。存在多个候选时由用户选择，不能根据目录名猜测。
 
-`doctor` 只读诊断 current workspace、损坏 owner 和受管静态投影。它不重建 Gate、Decision、
-control 或 external file，也不执行 repair transaction。
+`doctor` 只读诊断 schema 2 workspace、owner 文件和受管静态投影；它不重建研究事实、run、node、
+Gate、Decision 或外部文件。
 
-`pack` 默认只包含 config、manifest、profile、stable specs、controls、changes 和 handoffs；不
-包含 subflow `work/`，也不复制 handoff 指向的外部文件。
-
-Pipeline 的 accepted review/re-review 分支先进入 `format` child，再进入 `final-integrity`。
-QMD formatting 缺少 Quarto 或探测为 unknown 时保持可写但不可最终转换；formatting child 不覆盖
-既有目标，只有 staging 全部检查成功后才更新成功 handoff。`status`、`check`、`doctor` 和
-`init` 不触发 Quarto 探测。
-
-旧或未知 workspace 会被报告为 unsupported 并保持不变。要重用材料，用户先在框架外保留所需
-文件，再在 fresh workspace 中通过 stable specs 或 handoff 明确引入。
+`pack` 可按 specs、profiles、runs、changes 或单个 owner 生成有界上下文包。它不复制 handoff 指向的
+外部文件。旧或未知 workspace 会被报告为 unsupported 并保持不变。
 
 ## 14. 验收边界
 
-验收使用 fresh packaged CLI 进程完成所有权威 mutation。测试 helper 只能在 instructions 返回的
-外部路径创建 producer 文件，不能直接写 control、Gate、Decision、transition、generated profile
-或隐藏索引。
+验收从真实打包产物启动 fresh CLI 进程完成权威 mutation。测试 helper 只能创建 instructions 声明的
+外部 producer 文件，不能直接写 run、node、Gate、Decision、frozen graph 或生成 profile。
 
-验收必须覆盖：
-
-- fresh init 与 unsupported workspace 零写入拒绝；
-- 四份 stable specs 的直接编辑和高影响 change；
-- standalone 与 pipeline parent/child 独立确认；
-- handoff 跨 subflow 消费和外部路径漂移；
-- Gate challenge、reverify、override、branch 与独立 advance；
-- 动态 revision round；
-- revision helper 的 fail-closed 行为；
-- plugin/Zotero 不取得 control authority；
-- status/list/show/check/doctor 的只读性；
-- pack 排除私有 work 和外部文件字节；
-- 四个 ARSU、两个 Core、五个 Companion、七个 Zotero Skills 与十六命令的一致投影。
+验收至少覆盖 fresh init、根 entry 确认、graph-authorized child run、全部 mid-entry、Gate/Decision、
+failed-Gate override、动态 round、安全路径、外部 handoff 漂移、read-only 命令、context pack、
+Plugin/Zotero 边界，以及 registry-derived Agent 表面的投影。

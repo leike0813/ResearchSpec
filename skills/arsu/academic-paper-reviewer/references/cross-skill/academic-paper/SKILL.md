@@ -153,7 +153,7 @@ academic-paper pipeline runs in 8 phases (Phase 0 intake → 7 formatting). Two 
 
 Replacement scope: `STATE-001` for `academic-paper`.
 
-Resume only from the selected subflow's control and handoff. Read the project
+Resume only from the selected run's frozen graph, node state, and handoff. Read the project
 profile when pipeline graph rules apply, use status and directed instructions to
 derive the current frontier, and let the CLI perform every lifecycle, Gate,
 Decision, override, or transition change. External files may provide explicit
@@ -162,8 +162,8 @@ inputs but never replace current control authority.
 Current ResearchSpec owners:
 
 - `researchspec/profiles/academic-pipeline.yaml`
-- `researchspec/subflows/<instance>/control.yaml`
-- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
+- `researchspec/runs/<run-id>/handoff.md`
 <!--/rs:STATE-001-->
 
 <!--rs:IO-005-->
@@ -184,15 +184,15 @@ work.
 Phase-by-phase routing requires an explicit user signal. Ambiguous cross-stage
 material must be clarified before dispatch. The configured graph in
 `researchspec/profiles/academic-pipeline.yaml`, the frontier in
-`researchspec/subflows/<instance>/control.yaml`, and handoff-referenced inputs in
-`researchspec/subflows/<instance>/handoff.md` define the permitted read and
+`researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, and handoff-referenced inputs in
+`researchspec/runs/<run-id>/handoff.md` define the permitted read and
 write boundary.
 
 Current ResearchSpec owners:
 
 - `researchspec/profiles/academic-pipeline.yaml`
-- `researchspec/subflows/<instance>/control.yaml`
-- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
+- `researchspec/runs/<run-id>/handoff.md`
 <!--/rs:IO-005-->
 
 ## v3.6.6 Generator-Evaluator Contract Protocol
@@ -205,19 +205,19 @@ Replacement scope: `REVIEW-010` for `academic-paper`.
 > This block defines the `academic-paper full` generator/evaluator split. Resolve
 > the frozen `writer_full` and `evaluator_full` contract JSON plus every Phase
 > 4a/4b and 6a/6b artifact through
-> `researchspec/subflows/<instance>/handoff.md`. Preserve the four-call
+> `researchspec/runs/<run-id>/handoff.md`. Preserve the four-call
 > paper-blind/paper-visible separation, mode exclusions, baseline fields, system
 > prompt text, lint rules, and writer/evaluator role distinction described
 > below. Record each accepted phase output before it is consumed downstream;
 > return lint, disagreement, or failure-condition results to the responsible gate
-> helper for `researchspec/subflows/<instance>/control.yaml`. The orchestrator may
+> helper for `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`. The orchestrator may
 > instantiate allowed invocation fields but must not mutate the frozen contract
 > or write the owning handoff or control directly.
 
 Current ResearchSpec owners:
 
-- `researchspec/subflows/<instance>/handoff.md`
-- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/runs/<run-id>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
 <!--/rs:REVIEW-010-->
 >
 > **Applies to `academic-paper full` mode only.** Nine non-full modes (`plan`, `outline-only`, `revision`, `revision-coach`, `abstract-only`, `lit-review`, `format-convert`, `citation-check`, `disclosure`) are byte-equivalent across v3.6.5 → v3.6.6 and do not invoke this protocol. (The later-added `rebuttal-audit` mode is likewise non-full and does not invoke this protocol.) Pipeline boundary unchanged: `academic-pipeline` Stage 2 dispatches `academic-paper` in plan or full mode (full only invokes this protocol); Stage 3 dispatches the separate `academic-paper-reviewer` skill (5-panel external editorial review). The in-pair Phase 6 evaluator under this protocol and the Stage 3 reviewer are different review layers — see design doc §5.1 audit conclusion 2.
@@ -381,20 +381,20 @@ Replacement scope: `REVIEW-011` for `academic-paper`.
 **IRON RULE — advisory integrity boundary:** standalone `rebuttal-audit` may
 reuse comment parsing, but it remains outside Stage 4.5 integrity and produces
 only an advisory response-letter QA artifact. Return the coverage table, gap
-list, tone/evidence risks, and suggestions for the producing subflow to record
+list, tone/evidence risks, and suggestions for the producing node to record
 in
-`researchspec/subflows/<instance>/handoff.md`. It MUST NOT emit verified
+`researchspec/runs/<run-id>/handoff.md`. It MUST NOT emit verified
 commitment status, apply a draft patch, mark a delivery package ready, or
 write ResearchSpec authority files. If its findings imply a change in
 accepted response strategy or claim scope, propose that change and wait for a
 human decision recorded through
-`researchspec/subflows/<instance>/control.yaml`; the audit itself never
+`researchspec/runs/<run-id>/nodes/<node-instance>.yaml`; the audit itself never
 certifies acceptance.
 
 Current ResearchSpec owners:
 
-- `researchspec/subflows/<instance>/handoff.md`
-- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/runs/<run-id>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
 <!--/rs:REVIEW-011-->
 
 **Boundary vs `re-review`:** `academic-paper-reviewer`'s `re-review` mode verifies the **revised manuscript** (did the author's claimed changes actually appear in the paper) and runs inside the pipeline. `rebuttal-audit` verifies the **response letter itself** (does the rebuttal cover every comment, is its tone/evidence sound) and runs standalone, advisory. Different artifacts, different layers.
@@ -429,14 +429,14 @@ patch before creating output. Schema errors, stale hashes, unknown blocks,
 duplicate targets, injected block markers, or incomplete annotation mappings
 leave the selected manuscript and destination unchanged.
 
-Annotation intake normally stays under the owning revision subflow's
+Annotation intake normally stays under the owning revision run's
 `work/annotation-intake/` directory. If an annotation set, patch, revised
-manuscript, response, or report must cross a subflow boundary, write it to an
+manuscript, response, or report must cross a node boundary, write it to an
 ordinary project path outside `researchspec/` and record its role and path in
-that subflow's `handoff.md`.
+that run's `handoff.md`.
 
 Mechanical success does not settle academic adequacy. The revision Gate remains
-human-confirmed in the owning subflow `control.yaml`. Manual editing and
+human-confirmed in the owning run the owning node instance. Manual editing and
 human-confirmed full re-emission remain valid revision paths; the helper is an
 optional safety tool and never mutates control state.
 
@@ -447,9 +447,9 @@ Current ResearchSpec owners:
 
 - `assets/shared/contracts/patch/revision_patch.schema.json`
 - `scripts/apply-revision-patch.mjs`
-- `researchspec/subflows/<instance>/work/annotation-intake/`
-- `researchspec/subflows/<instance>/handoff.md`
-- `researchspec/subflows/<instance>/control.yaml`
+- `work/annotation-intake/`
+- `researchspec/runs/<run-id>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
 <!--/rs:PATCH-001-->
 
 ---
@@ -592,10 +592,10 @@ academic-paper + academic-paper-reviewer -> Peer review -> revision loop
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 

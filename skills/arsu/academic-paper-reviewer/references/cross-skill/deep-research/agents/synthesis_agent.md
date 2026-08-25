@@ -318,7 +318,7 @@ accepted by the contract must retain their stable claim ids; any new claim or
 increase in claim strength must also be proposed through
 `researchspec/changes/<change-id>/change.md`, never written directly
 to `claims.yaml`. Record the manifest by role and path in
-`researchspec/subflows/<instance>/handoff.md`. The audit agent reads that
+`researchspec/runs/<run-id>/handoff.md`. The audit agent reads that
 handoff-referenced pre-commitment to run the three-set diff (intended ∩ emitted ∩
 supported) per spec §4 step 5 (D6).
 
@@ -326,7 +326,7 @@ Current ResearchSpec owners:
 
 - `researchspec/specs/claims.yaml`
 - `researchspec/changes/<change-id>/change.md`
-- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/runs/<run-id>/handoff.md`
 <!--/rs:CLAIM-003-->
 
 Canonical example (single manifest with one MNC and one claim-level NC):

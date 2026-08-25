@@ -6,7 +6,7 @@ Replacement scope: `HANDOFF-003` for `shared`.
 > while ResearchSpec specs, controls, and handoffs are the stable project
 > interfaces. Producers must validate every required payload field, write the
 > boundary file outside `researchspec/`, and record its role and path in
-> `researchspec/subflows/<instance>/handoff.md`. Project research intent,
+> `researchspec/runs/<run-id>/handoff.md`. Project research intent,
 > sources, claims, and manuscript constraints into their corresponding
 > `researchspec/specs/*` files only through accepted contract changes. Missing
 > required fields trigger `HANDOFF_INCOMPLETE`; consumers must not proceed with
@@ -18,4 +18,4 @@ Current ResearchSpec owners:
 - `researchspec/specs/sources.yaml`
 - `researchspec/specs/claims.yaml`
 - `researchspec/specs/manuscript.yaml`
-- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/runs/<run-id>/handoff.md`

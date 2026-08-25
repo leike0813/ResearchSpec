@@ -60,7 +60,7 @@ ResearchSpec SHALL derive Navigate route guidance from the canonical routing cat
 
 - **WHEN** `researchspec-navigate` is rendered
 - **THEN** its Route branch SHALL contain deterministic projections of route IDs, intents, near misses, primary artifacts, prerequisite groups, risk, Gate policy, and coarse cost
-- **AND** current route availability SHALL remain sourced from CLI status and scoped subflow selectors
+- **AND** current availability SHALL remain sourced from CLI status and scoped graph selectors
 
 #### Scenario: Catalog changes update Navigate deterministically
 

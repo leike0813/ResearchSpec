@@ -1,5 +1,5 @@
 ## Purpose
-Define the current file-based protocol by which ARSU Skills enter, run, and compose ResearchSpec subflows.
+Define the current graph-based protocol by which ARSU Skills enter, run, and compose ResearchSpec runs.
 
 ## Requirements
 
@@ -21,26 +21,26 @@ advance their own phase, choose another node or edit run/node state.
 - **WHEN** a Skill instructs the Agent to move to another phase without a graph-derived selector
 - **THEN** the instruction is treated as a Skill defect and the engine frontier remains authoritative
 
-### Requirement: Independent Subflow Confirmation
+### Requirement: Graph Entry And Child Run Authorization
 
-A run entry SHALL require a human-confirmed summary of entry nodes, prerequisites, boundary outputs,
-formal Gates, risks and cost. Nodes authorized by the confirmed frozen graph SHALL NOT require
-additional per-node start confirmations; every formal Gate and branch Decision declared by the graph
-SHALL still require its own human confirmation.
+A root run SHALL require a human-confirmed profile entry summary. Nodes and bound child runs authorized
+by that frozen graph SHALL not require another run-level confirmation, while every declared Gate and
+Decision SHALL retain its own confirmation. A child run SHALL carry a typed parent binding and SHALL
+not expand the authority granted by the parent graph.
 
-#### Scenario: Run entry is confirmed
+#### Scenario: Confirmed parent reaches a child profile
 
-- **WHEN** a user confirms a graph profile entry
-- **THEN** the CLI creates exactly that run and no node starts without graph eligibility
+- **WHEN** an eligible parent child-profile node is started
+- **THEN** exactly one bound child run is created with inherited run authorization
+- **AND** the child still pauses at each of its declared Gates and Decisions
+
+#### Scenario: Child requests undeclared work
+
+- **WHEN** a child attempts to start a node or profile outside its frozen binding
+- **THEN** the request is rejected without changing either run
 
 #### Scenario: Declared Gate is reached
 
-- **WHEN** the run reaches a formal Gate
+- **WHEN** a run reaches a formal Gate
 - **THEN** the frontier exposes the Gate selector and no downstream node is eligible until the human
   confirms a verdict and the graph prerequisites are satisfied
-
-#### Scenario: Pipeline parent is confirmed
-
-- **WHEN** a user confirms a composed or pipeline profile entry
-- **THEN** no node is eligible before its graph prerequisites are satisfied
-- **AND** no Gate, Decision or child node is pre-authorized by the run confirmation

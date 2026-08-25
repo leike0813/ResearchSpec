@@ -10,11 +10,11 @@ Existing project materials are ordinary mid-entry inputs:
    required by the chosen entry point.
 3. Present Skill, mode, inputs, outputs, formal Gates, risk, and cost; start only
    after a fresh human confirmation.
-4. Record the actual input roles and paths in the new subflow handoff.
+4. Record the actual input roles and paths in the new graph node handoff.
 5. Keep all prior Gate, Decision, checkpoint, and completion claims outside the
    new control. They may inform verification but cannot satisfy current rules.
 
 Current ResearchSpec owners:
 
-- `researchspec/subflows/<instance>/control.yaml`
-- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
+- `researchspec/runs/<run-id>/handoff.md`

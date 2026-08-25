@@ -55,14 +55,14 @@ Existing project materials are ordinary mid-entry inputs:
    required by the chosen entry point.
 3. Present Skill, mode, inputs, outputs, formal Gates, risk, and cost; start only
    after a fresh human confirmation.
-4. Record the actual input roles and paths in the new subflow handoff.
+4. Record the actual input roles and paths in the new graph node handoff.
 5. Keep all prior Gate, Decision, checkpoint, and completion claims outside the
    new control. They may inform verification but cannot satisfy current rules.
 
 Current ResearchSpec owners:
 
-- `researchspec/subflows/<instance>/control.yaml`
-- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
+- `researchspec/runs/<run-id>/handoff.md`
 <!--/rs:STATE-005-->
 11. Respect user overrides: `stage=<n>` overrides `next`; `mode=<m>` overrides the default mode for the next stage (validated against Mode Advisor rules). User overrides are recorded on the resume entry's `user_override` field.
 
@@ -165,11 +165,11 @@ SLIM checkpoints never reset. MANDATORY checkpoints co-occur with reset when app
 Replacement scope: `STATE-004` for `academic-pipeline`.
 
 Checkpoint by recording the produced artifacts and advancing only through current ResearchSpec Gate and transition CLI actions. Do not write or append an ARS external input. When an external external input is supplied later, import it as explicit evidence and preserve the original bytes unchanged.
-Checkpoint authority remains in `researchspec/subflows/<instance>/control.yaml`.
+Checkpoint authority remains in `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`.
 
 Current ResearchSpec owners:
 
-- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
 <!--/rs:STATE-004-->
 
 Full protocol: [`../references/passport_as_reset_boundary.md`](../references/passport_as_reset_boundary.md).
@@ -337,10 +337,10 @@ When a sub-skill stage fails or produces unacceptable output:
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -498,8 +498,8 @@ Reference helper: `scripts/slr_lineage.py` `emit(stages, incoming_slr_lineage)`.
 
 Replacement scope: `HANDOFF-001` for `academic-pipeline`.
 
-Record every boundary input and output in the owning subflow's
-`researchspec/subflows/<instance>/handoff.md`. Each entry identifies its role,
+Record every boundary input and output in the owning run's
+`researchspec/runs/<run-id>/handoff.md`. Each entry identifies its role,
 type, safe project-relative path, purpose, producer or intended consumer, and
 relevant limits. The referenced file remains an ordinary project file outside
 `researchspec/`; external metadata may stay in that file but does not become
@@ -512,7 +512,7 @@ external boundary deliverables and are never copied by `pack`.
 
 Place stable research intent, source identity, accepted claims, and manuscript
 structure in their four owning specs. Place formal Gate attempts, Decisions,
-and the active frontier in the owning `control.yaml`. Manuscript revision
+and the active frontier in the owning node state. Manuscript revision
 operations may use the ARSU revision patch contract, but the patch remains a
 stateless boundary file and creates no separate ResearchSpec lifecycle.
 
@@ -522,8 +522,8 @@ Current ResearchSpec owners:
 - `researchspec/specs/sources.yaml`
 - `researchspec/specs/claims.yaml`
 - `researchspec/specs/manuscript.yaml`
-- `researchspec/subflows/<instance>/handoff.md`
-- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/runs/<run-id>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
 - `assets/shared/contracts/patch/revision_patch.schema.json`
 <!--/rs:HANDOFF-001-->
 
@@ -740,10 +740,10 @@ Before applying the 4-cell matrix on `(source_acquired, source_verified_against_
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 
@@ -942,14 +942,14 @@ required boundary deliverables at safe project paths through the child's
 `node scripts/apply-revision-patch.mjs` is an optional stateless application helper.
 Invoke it only with explicit base, patch, output, and optional report paths. It
 validates all operations and annotation mappings before atomically creating the
-destination. It does not read the pipeline profile, mutate `control.yaml` or
+destination. It does not read the pipeline profile, mutate the owning node instance or
 `handoff.md`, or decide whether the revision is academically complete. Manual
 revision remains valid.
 
 Each revision child has its own start confirmation and formal Gates. After the
 producer finishes, the current manuscript and relevant boundary evidence return
 through the handoff. A human records the revision Gate verdict in the owning
-child `control.yaml`; the parent advances only under the profile's declared
+child run state; the parent advances only under the profile's declared
 join and transition rules. Structural re-emission, scope changes, and other
 research choices follow the same explicit confirmation discipline.
 
@@ -957,8 +957,8 @@ Current ResearchSpec owners:
 
 - `assets/shared/contracts/patch/revision_patch.schema.json`
 - `scripts/apply-revision-patch.mjs`
-- `researchspec/subflows/<instance>/handoff.md`
-- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/runs/<run-id>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
 <!--/rs:PATCH-004-->
 
 ---
@@ -978,17 +978,17 @@ Replacement scope: `GATE-002` for `academic-pipeline`.
 
 1. **Resolve the policy.** Read supported submission-package policy values from
    `researchspec/profiles/academic-pipeline.yaml`. Use the latest human-confirmed choice for
-   this run from `researchspec/subflows/<instance>/control.yaml`; absence
+   this run from `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`; absence
    resolves to `advisory`. Always pass the resolved value explicitly to the
    deterministic verifier. The orchestrator selects policy but never
    re-evaluates package findings itself.
 2. **Resolve and verify the package inputs.** Resolve the formatted manuscript,
    figures, tables, supplementary material, venue profile, provenance inputs,
    and prior verifier reports by explicit handoff role and path through
-   `researchspec/subflows/<instance>/handoff.md`. Run the local package
+   `researchspec/runs/<run-id>/handoff.md`. Run the local package
    verifier with the resolved policy and exact input set so its package and
    inputs fingerprints are reproducible. Return the new report to the producing
-   subflow for handoff recording.
+   graph node for handoff recording.
 3. **Gate on structured verifier tokens, never on exit code alone.** Under
    `strict`, `TERMINAL-BLOCK policy=submission_package` starts a formatter repair
    loop bounded to two rounds; after the second failure, stop and surface the
@@ -996,7 +996,7 @@ Replacement scope: `GATE-002` for `academic-pipeline`.
    parsers are not formatter-fixable: ask the scholar to provide the missing
    input or choose advisory policy. Return every pass, warning, incomplete, and
    blocking outcome to the submission-package gate helper for
-   `researchspec/subflows/<instance>/control.yaml`.
+   `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`.
 4. **Preserve the advisory path.** After a report is handoff-referenced, dispatch the
    formatter once in append-only mode to copy package advisories into
    `provenance_summary.md`. This may add the report and advisories section but
@@ -1013,13 +1013,13 @@ Replacement scope: `GATE-002` for `academic-pipeline`.
    previously granted delivery result across resume or finalization.
 
 The orchestrator returns artifacts, human choices, and Gate findings to their
-owning subflow and CLI; it does not edit the handoff, Decision records, or Gate
+owning run and CLI; it does not edit the handoff, Decision records, or Gate
 attempts directly.
 
 Current ResearchSpec owners:
 
-- `researchspec/subflows/<instance>/control.yaml`
-- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
+- `researchspec/runs/<run-id>/handoff.md`
 <!--/rs:GATE-002-->
 
 ---

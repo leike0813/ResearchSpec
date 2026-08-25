@@ -1,6 +1,6 @@
 {
   "schema_version": "1",
-  "integration_profile": "researchspec-preflight-v10",
+  "integration_profile": "researchspec-preflight-v11",
   "source": "vendor/ars",
   "output": "skills/arsu",
   "anchor_replacement": {
@@ -11,122 +11,122 @@
   },
   "skill_groups": {
     "academic-paper": {
-      "profile_id": "researchspec-preflight-v10",
+      "profile_id": "researchspec-preflight-v11",
       "required_contracts": [
         "researchspec/specs/project.md",
         "researchspec/specs/sources.yaml",
         "researchspec/specs/claims.yaml",
         "researchspec/specs/manuscript.yaml",
-        "researchspec/profiles/academic-pipeline.yaml when the selected route is a pipeline entry or child",
-        "the owning researchspec/subflows/<instance>/control.yaml and handoff.md after start"
+        "the selected researchspec/profiles/<profile-id>.yaml projection",
+        "the owning researchspec/runs/<run-id>/run.yaml, graph.yaml, handoff.md and node instance after start"
       ],
       "handoff_reads": [
-        "explicit input roles and safe project-relative paths returned by route or subflow instructions"
+        "resolved input roles and safe project-relative paths returned by the eligible Node Card"
       ],
       "writes_allowed": [
         "boundary deliverables at explicit project-relative paths outside researchspec/",
-        "the owning subflow handoff.md",
+        "handoff updates submitted through the ResearchSpec CLI",
         "researchspec/changes/<change-id>/ documents for proposed high-impact semantic changes",
         "the ARSU revision patch and optional stateless helper output"
       ],
       "mutation_authorities": [
-        "ResearchSpec CLI exclusively mutates control.yaml lifecycle, Gate, Decision, override, and transition state",
-        "the owning Agent or human directly edits handoff.md and project change documents",
+        "ResearchSpec CLI exclusively mutates run, node, handoff, Gate, Decision, override, and transition state",
+        "the owning Agent or human authors boundary files and project change documents",
         "stable specs may be edited directly; high-impact changes should be proposed and reviewed first"
       ],
       "notes": [
         "academic-paper uses the shared current ResearchSpec file-contract preflight.",
-        "Load only route-relevant stable specs, handoff roles, and boundary files into Agent context.",
+        "Load only Node-Card-relevant stable specs, handoff roles, parameters, and boundary files into Agent context.",
         "Use fixed literature Adapter results only as bounded working material owned by the active ARSU producer."
       ],
       "full_matrix_injection": false
     },
     "academic-paper-reviewer": {
-      "profile_id": "researchspec-preflight-v10",
+      "profile_id": "researchspec-preflight-v11",
       "required_contracts": [
         "researchspec/specs/project.md",
         "researchspec/specs/sources.yaml",
         "researchspec/specs/claims.yaml",
         "researchspec/specs/manuscript.yaml",
-        "researchspec/profiles/academic-pipeline.yaml when the selected route is a pipeline entry or child",
-        "the owning researchspec/subflows/<instance>/control.yaml and handoff.md after start"
+        "the selected researchspec/profiles/<profile-id>.yaml projection",
+        "the owning researchspec/runs/<run-id>/run.yaml, graph.yaml, handoff.md and node instance after start"
       ],
       "handoff_reads": [
-        "explicit input roles and safe project-relative paths returned by route or subflow instructions"
+        "resolved input roles and safe project-relative paths returned by the eligible Node Card"
       ],
       "writes_allowed": [
         "boundary deliverables at explicit project-relative paths outside researchspec/",
-        "the owning subflow handoff.md",
+        "handoff updates submitted through the ResearchSpec CLI",
         "researchspec/changes/<change-id>/ documents for proposed high-impact semantic changes"
       ],
       "mutation_authorities": [
-        "ResearchSpec CLI exclusively mutates control.yaml lifecycle, Gate, Decision, override, and transition state",
-        "the owning Agent or human directly edits handoff.md and project change documents",
+        "ResearchSpec CLI exclusively mutates run, node, handoff, Gate, Decision, override, and transition state",
+        "the owning Agent or human authors boundary files and project change documents",
         "stable specs may be edited directly; high-impact changes should be proposed and reviewed first"
       ],
       "notes": [
         "academic-paper-reviewer uses the shared current ResearchSpec file-contract preflight.",
-        "Load only route-relevant stable specs, handoff roles, and boundary files into Agent context.",
+        "Load only Node-Card-relevant stable specs, handoff roles, parameters, and boundary files into Agent context.",
         "Use fixed literature Adapter results only as bounded working material owned by the active ARSU producer."
       ],
       "full_matrix_injection": false
     },
     "academic-pipeline": {
-      "profile_id": "researchspec-preflight-v10",
+      "profile_id": "researchspec-preflight-v11",
       "required_contracts": [
         "researchspec/specs/project.md",
         "researchspec/specs/sources.yaml",
         "researchspec/specs/claims.yaml",
         "researchspec/specs/manuscript.yaml",
-        "researchspec/profiles/academic-pipeline.yaml when the selected route is a pipeline entry or child",
-        "the owning researchspec/subflows/<instance>/control.yaml and handoff.md after start"
+        "the selected researchspec/profiles/<profile-id>.yaml projection",
+        "the owning researchspec/runs/<run-id>/run.yaml, graph.yaml, handoff.md and node instance after start"
       ],
       "handoff_reads": [
-        "explicit input roles and safe project-relative paths returned by route or subflow instructions"
+        "resolved input roles and safe project-relative paths returned by the eligible Node Card"
       ],
       "writes_allowed": [
         "boundary deliverables at explicit project-relative paths outside researchspec/",
-        "the owning subflow handoff.md",
+        "handoff updates submitted through the ResearchSpec CLI",
         "researchspec/changes/<change-id>/ documents for proposed high-impact semantic changes"
       ],
       "mutation_authorities": [
-        "ResearchSpec CLI exclusively mutates control.yaml lifecycle, Gate, Decision, override, and transition state",
-        "the owning Agent or human directly edits handoff.md and project change documents",
+        "ResearchSpec CLI exclusively mutates run, node, handoff, Gate, Decision, override, and transition state",
+        "the owning Agent or human authors boundary files and project change documents",
         "stable specs may be edited directly; high-impact changes should be proposed and reviewed first"
       ],
       "notes": [
         "academic-pipeline uses the shared current ResearchSpec file-contract preflight.",
-        "Load only route-relevant stable specs, handoff roles, and boundary files into Agent context.",
+        "Load only Node-Card-relevant stable specs, handoff roles, parameters, and boundary files into Agent context.",
         "Use fixed literature Adapter results only as bounded working material owned by the active ARSU producer."
       ],
       "full_matrix_injection": false
     },
     "deep-research": {
-      "profile_id": "researchspec-preflight-v10",
+      "profile_id": "researchspec-preflight-v11",
       "required_contracts": [
         "researchspec/specs/project.md",
         "researchspec/specs/sources.yaml",
         "researchspec/specs/claims.yaml",
         "researchspec/specs/manuscript.yaml",
-        "researchspec/profiles/academic-pipeline.yaml when the selected route is a pipeline entry or child",
-        "the owning researchspec/subflows/<instance>/control.yaml and handoff.md after start"
+        "the selected researchspec/profiles/<profile-id>.yaml projection",
+        "the owning researchspec/runs/<run-id>/run.yaml, graph.yaml, handoff.md and node instance after start"
       ],
       "handoff_reads": [
-        "explicit input roles and safe project-relative paths returned by route or subflow instructions"
+        "resolved input roles and safe project-relative paths returned by the eligible Node Card"
       ],
       "writes_allowed": [
         "boundary deliverables at explicit project-relative paths outside researchspec/",
-        "the owning subflow handoff.md",
+        "handoff updates submitted through the ResearchSpec CLI",
         "researchspec/changes/<change-id>/ documents for proposed high-impact semantic changes"
       ],
       "mutation_authorities": [
-        "ResearchSpec CLI exclusively mutates control.yaml lifecycle, Gate, Decision, override, and transition state",
-        "the owning Agent or human directly edits handoff.md and project change documents",
+        "ResearchSpec CLI exclusively mutates run, node, handoff, Gate, Decision, override, and transition state",
+        "the owning Agent or human authors boundary files and project change documents",
         "stable specs may be edited directly; high-impact changes should be proposed and reviewed first"
       ],
       "notes": [
         "deep-research uses the shared current ResearchSpec file-contract preflight.",
-        "Load only route-relevant stable specs, handoff roles, and boundary files into Agent context.",
+        "Load only Node-Card-relevant stable specs, handoff roles, parameters, and boundary files into Agent context.",
         "Use fixed Zotero task Skills through the provider-neutral handoff; Deep Research retains screening and evidence judgment."
       ],
       "full_matrix_injection": false

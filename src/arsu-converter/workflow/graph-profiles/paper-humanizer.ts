@@ -1,6 +1,6 @@
 import { stringify } from "yaml";
 
-import type { CapabilityGraphProfile } from "../contracts/capability-graph.js";
+import type { CapabilityGraphProfile } from "../../../core/contracts/capability-graph.js";
 
 export const PAPER_HUMANIZER_GRAPH_PROFILE = {
   schema_version: "2",

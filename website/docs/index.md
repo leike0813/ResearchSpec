@@ -16,20 +16,19 @@ decisions, and reproducible workflow state.
 - **Initiates research workspaces** with a single `researchspec init` command
 - **Guides agents through structured workflows** — literature acquisition,
   synthesis, drafting, review, and revision
-- **Keeps humans in control** of high-impact decisions through explicit gates
-  and explicit per-subflow Decisions
+- **Keeps humans in control** of high-impact decisions through explicit Gates
+  and graph Decisions
 - **Works with any AI agent** — no platform-specific runtime assumptions
-- **Maintains a reproducible paper trail** — every artifact, decision, and gate
-  verdict is tracked by hash
+- **Maintains reproducible runtime state** — frozen graphs, node outputs and human decisions remain inspectable
 
 ## Core Concepts
 
 | Concept | Description |
 |---------|-------------|
 | **Contract** | A typed file (YAML/JSON/JSONL) that holds structured research intent, claims, sources, and state |
-| **Artifact** | A draft, report, review, or generated file registered by hash and type |
-| **Gate** | A deterministic check that blocks progress until conditions are met (e.g., all required artifacts present) |
-| **Decision** | An explicit human choice recorded in the ledger (e.g., "accept this claim wording") |
+| **Boundary deliverable** | An ordinary project file outside `researchspec/`, referenced by role and safe path |
+| **Gate** | A graph-declared checkpoint whose verdict requires human confirmation |
+| **Decision** | A graph-declared human choice stored in its owning node instance |
 | **Selector** | A runtime action token returned by `researchspec instructions` that tells agents what to do next |
 
 ## Four ARSU Skills
@@ -39,7 +38,7 @@ ResearchSpec integrates four core ARSU skills:
 - **deep-research** — systematic literature discovery, acquisition, and synthesis
 - **academic-paper** — progressive paper drafting from research questions to chapters
 - **academic-paper-reviewer** — structured manuscript review with traceable comments
-- **academic-pipeline** — workflow orchestration across stages (not yet implemented)
+- **academic-pipeline** — graph-profile orchestration across research stages
 
 ## Where to Start
 

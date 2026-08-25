@@ -38,8 +38,8 @@ commands and their current selector and option contracts.
 
 ### Requirement: User-Facing Documentation Content
 Current documentation SHALL describe the hard-cut workspace, stable specs, project profile,
-per-subflow controls, handoffs and project changes without presenting removed runtime behavior as
-supported.
+frozen graph runs, node instances, run handoffs and project changes without presenting retired
+runtime behavior as supported.
 
 #### Scenario: User reads lifecycle guidance
 - **WHEN** documentation describes init, update, resume, verification or export

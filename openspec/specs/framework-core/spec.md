@@ -109,11 +109,11 @@ project changes.
 
 #### Scenario: Old or unknown workspace is encountered
 
-- **WHEN** discovery finds schema `"1"`, subflow controls or another unsupported marker
+- **WHEN** discovery finds an earlier schema or another unsupported marker
 - **THEN** ResearchSpec reports an unsupported workspace without compatibility parsing or writes
 
 ### Requirement: Manuscript specs are structured and independently valid
-The system SHALL parse `specs/manuscript.yaml` as schema `1` with stable manuscript metadata, venue/layout `format_requirements`, outline sections, and a delivery contract containing `working_format: markdown | qmd | null` and `final_output_format: safe Quarto format ID | null`. `format_requirements` SHALL remain independent from format selection. A QMD selection SHALL require a `.qmd` source in manuscript handoffs and a safe non-empty Quarto format ID before final delivery.
+The system SHALL parse `specs/manuscript.yaml` as workspace schema `"2"` with stable manuscript metadata, venue/layout `format_requirements`, outline sections, and a delivery contract containing `working_format: markdown | qmd | null` and `final_output_format: safe Quarto format ID | null`. `format_requirements` SHALL remain independent from format selection. A QMD selection SHALL require a `.qmd` source in manuscript handoffs and a safe non-empty Quarto format ID before final delivery.
 
 #### Scenario: Empty format selection is valid during intake
 - **WHEN** both delivery fields are null
@@ -156,3 +156,27 @@ Agent surface SHALL add a second workflow authority.
 - **WHEN** an Agent edits a projected profile to change an active run
 - **THEN** the active run keeps its frozen graph and status reports the drift without applying the
   edit to the run
+
+### Requirement: Converter-Owned Profiles Are The Projection Source
+
+Preset graph profiles SHALL be authored and generated outside the core runtime and exposed through one validated profile registry. Core bootstrap SHALL consume that registry without embedding a second graph definition.
+
+#### Scenario: Preset graph is projected
+
+- **WHEN** a workspace is initialized or updated
+- **THEN** the projected profile bytes come from the converter-owned registry
+- **AND** the core runtime contains no independently maintained copy of the graph
+
+### Requirement: Framework Projection Is Transactional And Ownership-Aware
+
+Core capability and profile projection SHALL use the same preflight, ownership manifest, current-byte comparison and atomic commit contract as other generated Agent delivery.
+
+#### Scenario: Managed projection has user drift
+
+- **WHEN** init or update encounters a manifest-owned capability or profile whose current bytes differ from the recorded hash
+- **THEN** the operation reports drift and preserves the file unless explicit force authorization applies
+
+#### Scenario: Projection preflight fails
+
+- **WHEN** any planned framework projection conflicts before commit
+- **THEN** no capability, profile or ownership-manifest write is committed

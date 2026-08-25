@@ -7,6 +7,7 @@ import { parse as parseYaml } from "yaml";
 const ROOT = process.cwd();
 const ARS = path.join(ROOT, "vendor", "ars");
 const CAPABILITIES = path.join(ROOT, "skills", "capabilities");
+const PROFILE_ROOT = path.join(ROOT, "skills", "arsu", "profiles");
 const DEFAULT_ANCHOR = process.env.ARSU_ANCHOR ?? "v3.19.0-828ef3b";
 const OUT = process.argv[2] ? path.resolve(process.argv[2]) : path.join(ROOT, "audits", "arsu", DEFAULT_ANCHOR, "artifacts", "arsu-mode-capability-review.html");
 
@@ -522,60 +523,17 @@ const MODE_DEFINITIONS = [
   },
 ];
 
-// ---------- graph profiles (hard-coded from src/core/graph-profiles) ----------
-const GRAPH_PROFILES = {
-  minimal: {
-    title: "minimal", profile_version: "0.1.0",
-    nodes: [
-      { node_id: "rq", kind: "capability", capability_id: "design-research-question-formulation" },
-      { node_id: "report", kind: "capability", capability_id: "generation-report-compilation" },
-    ],
-  },
-  "research-main": {
-    title: "research-main", profile_version: "0.1.0",
-    nodes: [
-      { node_id: "research-question", kind: "capability", capability_id: "design-research-question-formulation" },
-      { node_id: "rq-gate", kind: "gate", gate_id: "rq-gate" },
-      { node_id: "methodology", kind: "capability", capability_id: "design-methodology-design" },
-      { node_id: "literature", kind: "capability", capability_id: "discovery-literature-search-screening" },
-      { node_id: "grading", kind: "capability", capability_id: "discovery-source-quality-grading" },
-      { node_id: "synthesis", kind: "capability", capability_id: "analysis-evidence-synthesis" },
-      { node_id: "report", kind: "capability", capability_id: "generation-report-compilation" },
-    ],
-  },
-  "academic-paper": {
-    title: "academic-paper", profile_version: "0.1.0",
-    nodes: [
-      { node_id: "intake", kind: "capability", capability_id: "design-writing-intake" },
-      { node_id: "structure", kind: "capability", capability_id: "design-manuscript-structure-design" },
-      { node_id: "argument", kind: "capability", capability_id: "design-argument-blueprint" },
-      { node_id: "draft", kind: "capability", capability_id: "generation-manuscript-drafting" },
-      { node_id: "cite-check", kind: "capability", capability_id: "check-citation-format-compliance" },
-      { node_id: "paper-gate", kind: "gate", gate_id: "paper-gate" },
-      { node_id: "abstract", kind: "capability", capability_id: "generation-abstract-writing" },
-    ],
-  },
-  "academic-paper-reviewer": {
-    title: "academic-paper-reviewer", profile_version: "0.1.0",
-    nodes: [
-      { node_id: "panel", kind: "capability", capability_id: "design-review-panel-config" },
-      { node_id: "specialist", kind: "capability", capability_id: "judgment-specialist-review" },
-      { node_id: "da", kind: "capability", capability_id: "judgment-devils-advocate-stress-test" },
-      { node_id: "editorial", kind: "capability", capability_id: "judgment-editorial-judgment" },
-      { node_id: "synthesis", kind: "capability", capability_id: "judgment-review-synthesis" },
-    ],
-  },
-  "academic-pipeline": {
-    title: "academic-pipeline", profile_version: "0.1.0",
-    nodes: [
-      { node_id: "research", kind: "subgraph", subgraph_id: "research-main" },
-      { node_id: "research-gate", kind: "gate", gate_id: "research-gate" },
-      { node_id: "write", kind: "subgraph", subgraph_id: "academic-paper" },
-      { node_id: "write-gate", kind: "gate", gate_id: "write-gate" },
-      { node_id: "review", kind: "subgraph", subgraph_id: "academic-paper-reviewer" },
-    ],
-  },
-};
+// ---------- graph profiles (converter-owned generated registry) ----------
+const profileRegistry = JSON.parse(readFileSync(path.join(PROFILE_ROOT, "registry.json"), "utf8"));
+const GRAPH_PROFILES = Object.fromEntries(profileRegistry.profiles.map((entry) => {
+  const profile = parseYaml(readFileSync(path.join(PROFILE_ROOT, entry.source_path), "utf8"));
+  const gateByOwner = new Map(profile.gates.map((gate) => [gate.owner_node_id, gate.gate_id]));
+  return [profile.profile_id, {
+    title: profile.profile_id,
+    profile_version: profile.profile_version,
+    nodes: profile.nodes.map((node) => ({ ...node, gate_id: gateByOwner.get(node.node_id) })),
+  }];
+}));
 
 // ---------- find actual profile node IDs for a capability ----------
 const capabilityNodeIds = new Map();
@@ -853,7 +811,7 @@ ${skillOrder.map((skill) => `<div class="tab-group"><span class="tab-group-label
 <main>
 ${panels}
 </main>
-<footer>本工件由 <code>scripts/generate-arsu-capability-review-html.mjs</code> 生成。上游内容读取自 <code>vendor/ars</code>；转换节点读取自 <code>skills/capabilities</code>；graph profile 结构读取自 <code>src/core/graph-profiles</code>。Mode 定义以 <code>vendor/ars/MODE_REGISTRY.md</code> 为准。</footer>
+<footer>本工件由 <code>scripts/generate-arsu-capability-review-html.mjs</code> 生成。上游内容读取自 <code>vendor/ars</code>；转换节点读取自 <code>skills/capabilities</code>；graph profile 结构读取自 <code>skills/arsu/profiles/registry.json</code>。Mode 定义以 <code>vendor/ars/MODE_REGISTRY.md</code> 为准。</footer>
 <script>
 const tabs=[...document.querySelectorAll('.tab')];
 const panels=[...document.querySelectorAll('.mode-panel')];

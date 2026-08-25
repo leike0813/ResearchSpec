@@ -17,7 +17,7 @@ Navigate 或 `academic-paper` 在写作 intake、QMD 写作/恢复和 format-con
 `quarto --version`；`status`、`check`、`doctor`、`init` 不探测。Start 保存 delivery snapshot 和
 probe summary，快照漂移时拒绝创建实例。
 
-![一次 subflow 的控制循环](diagrams/rendered/runtime-control-loop.svg)
+![一次 graph run 的控制循环](diagrams/rendered/runtime-control-loop.svg)
 
 ## 2. Boundary files
 
@@ -38,4 +38,4 @@ Project change 的 accepted 与 applied 分开。ARSU revision patch 是外部�
 ## 4. 恢复与失败
 
 新会话从 status 和精确 selector 恢复。外部文件缺失只阻塞消费者。`doctor` 只读报告损坏 owner、
-unsafe path 和 generated drift，不重建研究语义。非 schema `"1"` workspace 保持不变。
+unsafe path 和 generated drift，不重建研究语义。非 schema `"2"` workspace 保持不变。

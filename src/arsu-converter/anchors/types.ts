@@ -4,7 +4,7 @@ export const ANCHOR_ID_PATTERN = /^(STATE|IO|HANDOFF|PATCH|GATE|ARTIFACT|CLAIM|D
 export type AnchorSeverity = "required" | "recommended" | "diagnostic";
 export type AnchorReplacementProfileId = typeof REPLACEMENT_PROFILE_ID;
 export type AnchorSemanticRole =
-  | "subflow_control_boundary"
+  | "graph_state_boundary"
   | "boundary_deliverable_contract"
   | "handoff_projection"
   | "revision_patch_protocol"

@@ -26,7 +26,7 @@ The converter-owned helper SHALL accept one project-external `.qmd` source and o
 - **THEN** Quarto renders in a staging directory with no-execute enabled and the completed output is atomically moved to the confirmed destination
 
 #### Scenario: Execution requires independent consent
-- **WHEN** the caller requests code execution without a render consent naming a confirmer and timestamp for the current formatting subflow
+- **WHEN** the caller requests code execution without a render consent naming a confirmer and timestamp for the current formatting run/node
 - **THEN** rendering fails before invoking Quarto
 
 #### Scenario: Failure preserves existing files

@@ -4,7 +4,7 @@ Replacement scope: `DECISION-001` for `academic-paper`.
 
 - Answer `strict` → record `strict` in the PCR `Citation Verification` row and
   return the scholar's confirmed policy choice to the ResearchSpec decision
-  runtime for `researchspec/subflows/<instance>/control.yaml`. The runtime
+  runtime for `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`. The runtime
   validates that `strict` is a supported option in
   `researchspec/profiles/academic-pipeline.yaml` and exposes the accepted decision to the
   finalizer. This step selects policy; it never evaluates citations.
@@ -16,4 +16,4 @@ Replacement scope: `DECISION-001` for `academic-paper`.
 Current ResearchSpec owners:
 
 - `researchspec/profiles/academic-pipeline.yaml`
-- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`

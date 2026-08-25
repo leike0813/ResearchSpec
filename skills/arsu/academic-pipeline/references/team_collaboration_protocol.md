@@ -47,8 +47,8 @@ Replacement scope: `HANDOFF-002` for `academic-pipeline`.
 
 Current ResearchSpec owners:
 
-- `researchspec/subflows/<instance>/handoff.md`
-- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/runs/<run-id>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
 <!--/rs:HANDOFF-002-->
 
 ### Stage 2 -> Stage 2.5 (Write -> Integrity)

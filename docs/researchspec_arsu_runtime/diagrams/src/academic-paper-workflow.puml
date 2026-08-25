@@ -6,12 +6,12 @@ participant "Host Agent" as Agent
 participant "ResearchSpec CLI" as CLI
 participant "academic-paper" as Paper
 database "Project files" as Files
-Agent -> CLI : instructions route:academic-paper:<mode>
+Agent -> CLI : instructions profile:academic-paper
 CLI --> Agent : specs + handoff inputs\noutputs + Gates + cost
 Agent -> User : confirm exact mode
 User --> Agent : confirm
 Agent -> CLI : start
-CLI -> Files : control.yaml + handoff.md
+CLI -> Files : run.yaml + graph.yaml + handoff.md
 Agent -> Paper : bounded writing or revision
 alt ordinary output
   Paper -> Files : external manuscript output

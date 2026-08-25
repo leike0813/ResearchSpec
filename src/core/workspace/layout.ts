@@ -1,8 +1,6 @@
 import path from "node:path";
 import { stringify } from "yaml";
 
-import { ACADEMIC_PIPELINE_GRAPH_PROFILE_TEXT } from "../graph-profiles/academic-pipeline.js";
-
 export type WorkspaceFileKind = "markdown" | "yaml" | "json";
 export type OverwritePolicy = "user" | "generated";
 
@@ -39,13 +37,6 @@ const WORKSPACE_TEMPLATES: readonly WorkspaceTemplateDefinition[] = [
     overwritePolicy: "generated",
     required: true,
     content: `${JSON.stringify({ schema_version: "1", package_version: "0.1.0", plugin_resolutions: [], literature_adapter_resolutions: [], installations: [] }, null, 2)}\n`,
-  },
-  {
-    relativePath: "profiles/academic-pipeline.yaml",
-    kind: "yaml",
-    overwritePolicy: "generated",
-    required: true,
-    content: ACADEMIC_PIPELINE_GRAPH_PROFILE_TEXT,
   },
   {
     relativePath: "specs/project.md",

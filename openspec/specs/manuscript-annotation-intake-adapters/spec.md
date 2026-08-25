@@ -22,8 +22,8 @@ syntax.
 
 ### Requirement: Mutable Intake Sessions Preserve Working Context
 Free-form intake SHALL preserve raw source material, stable annotation IDs, normalized
-interpretations and patch mappings inside the owning revision subflow's `work/annotation-intake/`
-directory without registry, receipt or frozen-set authority.
+interpretations and patch mappings in an explicit project-relative `work/annotation-intake/`
+directory outside `researchspec/`, without registry, receipt or frozen-set authority.
 
 #### Scenario: Intake is resumed
 - **WHEN** the Agent reopens an existing intake session

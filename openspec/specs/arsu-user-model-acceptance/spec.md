@@ -5,14 +5,14 @@ Define black-box acceptance at the packaged CLI and installed Agent surface.
 
 ### Requirement: Current User Model Acceptance
 
-Packaged CLI journeys SHALL validate the current workspace, sixteen-command
-surface, ten fixed Skills, optional seven-Skill Zotero Adapter and independently
-confirmed subflows.
+Packaged CLI journeys SHALL validate the current schema `"2"` workspace, sixteen-command surface,
+registry-derived fixed Skill surface, optional seven-Skill Zotero Adapter and graph-authorized child runs.
 
 #### Scenario: Fresh default journey is exercised
 
 - **WHEN** acceptance starts from an empty project through the packaged CLI without Adapter selection
 - **THEN** every authoritative mutation SHALL be performed by a fresh CLI process
+- **AND** every graph run and node instance uses only schema `"2"` files and selectors
 - **AND** the workspace SHALL contain no `.zotero-bridge` runtime or Adapter Skill projection
 
 #### Scenario: Fresh Zotero journey is exercised
@@ -46,18 +46,18 @@ The packaged CLI and installed Skills SHALL make format selection part of writin
 - **THEN** `pack` does not copy or register either file
 
 ### Requirement: Packaged mid-entry journeys can start the selected child
-Packaged CLI acceptance SHALL cover every declared academic-pipeline mid-entry point and SHALL prove that a newly confirmed parent exposes only the selected first child and can start that child through a separately confirmed Start.
+Packaged CLI acceptance SHALL cover every declared academic-pipeline mid-entry point and SHALL prove that a confirmed parent exposes only the selected first child-profile node and starts exactly one bound child run without a second run-level confirmation.
 
 #### Scenario: Existing research materials enter at writing
-- **WHEN** a packaged CLI journey confirms `academic-pipeline:mid-entry` with `entry_point: write`
-- **THEN** the parent frontier exposes the writing child without `child_start_blocked`
-- **AND** a separately confirmed writing Start succeeds
+- **WHEN** a packaged CLI journey confirms the academic-pipeline writing entry and starts its eligible child-profile node
+- **THEN** exactly one writing child run is frozen at the declared child entry
+- **AND** the child records the parent run and graph binding
 
 #### Scenario: Every declared entry is exercised
-- **WHEN** acceptance parameterizes the academic-pipeline mid-entry Start over all declared entry points
+- **WHEN** acceptance parameterizes academic-pipeline start over all declared entry points
 - **THEN** each parent begins at the selected checkpoint and exposes only the corresponding first child
 - **AND** revision and re-review entries begin at local round 1
 
 #### Scenario: Existing end-to-end and standalone journeys run
-- **WHEN** the packaged acceptance suite exercises end-to-end, formatting, final-integrity, and standalone routes
-- **THEN** their existing order and Start contracts remain unchanged
+- **WHEN** the packaged acceptance suite exercises end-to-end, formatting, final-integrity and standalone profiles
+- **THEN** all work progresses through current node, Gate, Decision and child-run selectors

@@ -270,7 +270,7 @@ ARS pipeline runs in 6 phases. Two invocation modes:
 
 Replacement scope: `STATE-008` for `deep-research`.
 
-Use `researchspec status` and directed subflow instructions to resume an existing
+Use `researchspec status` and directed graph instructions to resume an existing
 instance from its owning control and handoff. When existing materials require a
 new pipeline entry, select `academic-pipeline:mid-entry`, declare the actual
 handoff input roles, and obtain a separate start confirmation. External metadata
@@ -280,8 +280,8 @@ Current ResearchSpec owners:
 
 - `researchspec/specs/project.md`
 - `researchspec/profiles/academic-pipeline.yaml`
-- `researchspec/subflows/<instance>/control.yaml`
-- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
+- `researchspec/runs/<run-id>/handoff.md`
 <!--/rs:STATE-008-->
 
 <!--rs:IO-004-->
@@ -299,15 +299,15 @@ not authorize either role to extend itself into another stage.
 Phase-by-phase routing requires an explicit user signal. Ambiguous cross-stage
 material must be clarified before dispatch. The configured graph in
 `researchspec/profiles/academic-pipeline.yaml`, the frontier in
-`researchspec/subflows/<instance>/control.yaml`, and handoff-referenced inputs in
-`researchspec/subflows/<instance>/handoff.md` define the permitted read and
+`researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, and handoff-referenced inputs in
+`researchspec/runs/<run-id>/handoff.md` define the permitted read and
 write boundary.
 
 Current ResearchSpec owners:
 
 - `researchspec/profiles/academic-pipeline.yaml`
-- `researchspec/subflows/<instance>/control.yaml`
-- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
+- `researchspec/runs/<run-id>/handoff.md`
 <!--/rs:IO-004-->
 
 ---
@@ -572,10 +572,10 @@ deep-research (systematic-review) + academic-paper -> PRISMA systematic review p
 ### Host-native alternate-model review
 
 Use the current session model by default. If an independent model could improve
-this subflow, the main Agent may propose one model that the host already exposes
+this run and node, the main Agent may propose one model that the host already exposes
 through its native subagent mechanism. Before dispatch, obtain a separate user
 confirmation covering the proposed model, the category of content that will be
-shared, and the expected cost. This consent applies only to the current subflow;
+shared, and the expected cost. This consent applies only to the current run and node;
 every child, branch, and revision round asks again. Do not store the consent in a
 stable spec, control, handoff, or model configuration file.
 

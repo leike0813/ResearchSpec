@@ -6,7 +6,7 @@ participant "Host Agent" as Agent
 participant "ResearchSpec CLI" as CLI
 participant "academic-paper-reviewer" as Reviewer
 database "Project files" as Files
-Agent -> CLI : instructions route:academic-paper-reviewer:<mode>
+Agent -> CLI : instructions profile:academic-paper-reviewer
 CLI --> Agent : manuscript role/path\noutputs + Gates + cost
 Agent -> User : confirm read-only review
 User --> Agent : confirm
@@ -17,5 +17,5 @@ Reviewer -> Files : update owning handoff
 Agent -> User : Verify recommendation
 User --> Agent : confirm Gate verdict
 Agent -> CLI : decide gate:<instance>/<gate>
-Agent -> CLI : advance subflow:<instance>
+Agent -> CLI : advance node:<run>/<node>
 @enduml

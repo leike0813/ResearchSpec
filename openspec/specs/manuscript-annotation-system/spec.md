@@ -13,12 +13,12 @@ registered in a ResearchSpec patch lifecycle.
 - **THEN** it validates every block and mapping before atomically creating the output
 - **AND** failure creates no partial manuscript
 
-### Requirement: Annotation Material Is Subflow-Private By Default
+### Requirement: Annotation Material Is Ordinary Working Material By Default
 Annotation intake SHALL preserve stable IDs, raw feedback, normalized interpretation and patch
-mapping under the owning revision subflow's private work directory.
+mapping in an explicit project-relative working directory outside `researchspec/`.
 
 #### Scenario: Annotation material crosses a boundary
-- **WHEN** another subflow must consume an annotation set
+- **WHEN** another run must consume an annotation set
 - **THEN** the Agent writes an explicit external file and references it through a handoff
 
 ### Requirement: Annotation and revision operations preserve manuscript blocks

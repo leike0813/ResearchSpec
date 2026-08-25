@@ -28,7 +28,7 @@ ResearchSpec 是服务 ARSU 的 Agent-neutral、spec-driven 文件框架。它�
 ```text
 typed contracts
   -> workspace discovery / validation
-  -> subflow control + handoff + project change
+  -> frozen graph run + node state + handoff + project change
   -> CLI handlers and read models
   -> Agent delivery adapters
 
@@ -57,6 +57,6 @@ producer 返回有界辅助材料。
 
 ## 6. 安全与演进
 
-只有 schema `"1"` workspace 可被当前实现读取。旧或未知格式 fail closed 且保持字节不变。
+只有 schema `"2"` workspace 可被当前实现读取。旧或未知格式 fail closed 且保持字节不变。
 ResearchSpec 不提供兼容 reader、migration、rollback 或 semantic repair。新增能力应先明确 DTO、
 schema 和 owner，避免重新引入双重事实源。

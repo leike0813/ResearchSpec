@@ -17,6 +17,7 @@ export function buildManifest(
   validation: ValidationResult | null,
   contractManifestHash: string,
   routingCatalogHash: string,
+  profileRegistryHash: string,
   anchorReplacementReportHash?: string,
   runtimePolicyReportHash?: string,
 ): ConversionManifest {
@@ -54,6 +55,22 @@ export function buildManifest(
     transform_rule: "routing_catalog_projection",
     sha256: routingCatalogHash,
   });
+  outputFiles.push({
+    group: "root",
+    source_path: "generated:preset-graph-profile-registry",
+    output_path: "profiles/registry.json",
+    transform_rule: "preset_graph_profile_registry_projection",
+    sha256: profileRegistryHash,
+  });
+  for (const entry of result.profile_registry.profiles) {
+    outputFiles.push({
+      group: "root",
+      source_path: `researchspec:src/arsu-converter/workflow/graph-profiles/${entry.profile_id}.ts`,
+      output_path: `profiles/${entry.source_path}`,
+      transform_rule: "preset_graph_profile_projection",
+      sha256: entry.profile_sha256,
+    });
+  }
   if (anchorReplacementReportHash) {
     outputFiles.push({
       group: "root",
@@ -125,6 +142,13 @@ export function buildManifest(
       entry_route_count: result.routing_catalog.skills.flatMap((skill) => skill.routes).filter((route) => route.route_kind === "entry").length,
       sha256: routingCatalogHash,
     },
+    profile_registry: {
+      path: "profiles/registry.json",
+      schema_version: result.profile_registry.schema_version,
+      registry_version: result.profile_registry.registry_version,
+      profile_count: result.profile_registry.profiles.length,
+      sha256: profileRegistryHash,
+    },
     anchor_replacements: anchorReplacements,
     runtime_policy: {
       ...serializableRuntimePolicyPlan(result.runtime_policy),
@@ -178,6 +202,12 @@ export function buildReport(manifest: ConversionManifest): string {
     `- Skills: ${String(manifest.routing_catalog.skill_count)}`,
     `- Mode routes: ${String(manifest.routing_catalog.mode_route_count)}`,
     `- Entry routes: ${String(manifest.routing_catalog.entry_route_count)}`,
+    "",
+    "## Preset Graph Profiles",
+    "",
+    `- Registry: \`${manifest.profile_registry.path}\``,
+    `- Registry version: \`${manifest.profile_registry.registry_version}\``,
+    `- Profiles: ${String(manifest.profile_registry.profile_count)}`,
     "",
     "## Anchor Replacement Semantics",
     "",

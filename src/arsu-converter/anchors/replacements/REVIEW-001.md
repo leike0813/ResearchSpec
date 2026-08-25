@@ -9,7 +9,7 @@ without stripping or normalizing YAML frontmatter, fenced code, cell options,
 cross-references, citations, or other Quarto metadata.
 When the revision producer exposed an ARSU patch, annotation set, or helper
 summary, resolve those files by role and safe project-relative path from the
-producer subflow's `handoff.md`; do not infer them from directory names or
+producer run's `handoff.md`; do not infer them from directory names or
 another authority file.
 
 **Input:** the original Revision Roadmap, revised manuscript, response to
@@ -17,15 +17,15 @@ reviewers when present, prior review material, and any explicitly handed-off
 patch or annotation evidence relevant to the concern.
 
 **Output:** a Verification Review Report at an ordinary project path outside
-`researchspec/`, recorded as an output in this subflow's `handoff.md`. The
+`researchspec/`, recorded as an output in this run's `handoff.md`. The
 reviewer assesses semantic fulfillment independently. Mechanical application or
 annotation disposition never proves that a concern was answered. A human
-records the formal re-review Gate verdict in the owning subflow `control.yaml`.
+records the formal re-review Gate verdict in the owning run the owning node instance.
 
 > See `references/re_review_mode_protocol.md` for the verification rules,
 > output format, and Socratic guidance.
 
 Current ResearchSpec owners:
 
-- `researchspec/subflows/<instance>/handoff.md`
-- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/runs/<run-id>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`

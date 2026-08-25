@@ -40,7 +40,7 @@ git diff --check
 
 `release:verify` packs and installs the real tarball in a temporary directory. It verifies eleven fixed
 base Skills, the explicitly selected seven-Skill Zotero Adapter, sixteen top-level commands, sixteen
-wrappers for each of 28 command-capable tools when `delivery` includes commands, selected Zotero runtime metadata, a fresh schema `"1"` workspace, unsupported-workspace zero-write
+wrappers for each of 28 command-capable tools when `delivery` includes commands, selected Zotero runtime metadata, a fresh schema `"2"` workspace, unsupported-workspace zero-write
 behavior, packaged current documentation, and absence of retired public runtime modules.
 
 ## 2. Hosted matrix
@@ -53,7 +53,7 @@ run cannot replace the hosted matrix.
 Use the repository-only playbook in a disposable project and record evidence for standalone resume,
 bounded context export, Gate challenge/reverification/override, and an end-to-end pipeline with at
 least two independently confirmed revision rounds. Do not repair a failed journey by editing
-`control.yaml` or generated profile bytes.
+run/node state or generated profile bytes.
 
 ## 4. Administrative gates
 

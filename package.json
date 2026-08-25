@@ -62,6 +62,7 @@
     "cli:handbook:check": "pnpm build && node scripts/generate-docs.mjs --handbook-only --check",
     "docs:generate": "pnpm build && node scripts/generate-docs.mjs",
     "docs:check": "pnpm build && node scripts/generate-docs.mjs --check",
+    "whitespace:check": "node scripts/check-authored-whitespace.mjs",
     "prepack": "pnpm build",
     "release:verify": "node scripts/verify-package.mjs",
     "arsu:author": "pnpm build && node dist/src/arsu-converter/authoring/cli.js author",

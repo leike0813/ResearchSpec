@@ -15,7 +15,7 @@ Replacement scope: `HANDOFF-003` for `shared`.
 > while ResearchSpec specs, controls, and handoffs are the stable project
 > interfaces. Producers must validate every required payload field, write the
 > boundary file outside `researchspec/`, and record its role and path in
-> `researchspec/subflows/<instance>/handoff.md`. Project research intent,
+> `researchspec/runs/<run-id>/handoff.md`. Project research intent,
 > sources, claims, and manuscript constraints into their corresponding
 > `researchspec/specs/*` files only through accepted contract changes. Missing
 > required fields trigger `HANDOFF_INCOMPLETE`; consumers must not proceed with
@@ -27,7 +27,7 @@ Current ResearchSpec owners:
 - `researchspec/specs/sources.yaml`
 - `researchspec/specs/claims.yaml`
 - `researchspec/specs/manuscript.yaml`
-- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/runs/<run-id>/handoff.md`
 <!--/rs:HANDOFF-003-->
 
 ---
@@ -567,14 +567,14 @@ score_trajectory: {
 Replacement scope: `STATE-009` for `shared`.
 
 Treat any external state bundle as an ordinary immutable input file. Record only
-its current role, type, path, purpose, and limits in the consuming subflow's
+its current role, type, path, purpose, and limits in the consuming run's
 handoff. Do not copy its state fields into the current control or infer a Gate,
 Decision, checkpoint, transition, or completion result from it.
 
 Current ResearchSpec owners:
 
-- `researchspec/subflows/<instance>/control.yaml`
-- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
+- `researchspec/runs/<run-id>/handoff.md`
 <!--/rs:STATE-009-->
 
 ```yaml
@@ -848,8 +848,8 @@ Current ResearchSpec owners:
 
 - `researchspec/changes/<change-id>/change.md`
 - `assets/shared/contracts/patch/revision_patch.schema.json`
-- `researchspec/subflows/<instance>/handoff.md`
-- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/runs/<run-id>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
 <!--/rs:REVIEW-015-->
 
 **Purpose**: Maps every reviewer concern through the full revision cycle — what was raised, what the author claims to have done, where the change is, and whether it was independently verified.
@@ -934,18 +934,18 @@ Replacement scope: `GATE-006` for `shared`.
 
 4. **Traceable handoff:** every boundary file is resolved by its unique role and
    safe project-relative path from
-   `researchspec/subflows/<instance>/handoff.md`. When a producer supersedes a
+   `researchspec/runs/<run-id>/handoff.md`. When a producer supersedes a
    file, it updates the owning handoff entry instead of creating another
    lifecycle authority.
 5. **Failure on missing:** missing required fields or boundary files produce
    `HANDOFF_INCOMPLETE` with the exact gaps; consumers do not proceed partially.
 6. **Producer validation:** the producer validates the payload shape before
-   returning the file to the producing subflow for handoff recording.
+   returning the file to the producing node for handoff recording.
 7. **Consumer validation:** the consumer checks the declared role, path, payload
    shape, and required upstream human-confirmed Gate attempts before use;
    violations request a corrected boundary file rather than an in-place edit.
 8. **Integrity gating:** verification status comes from the Gate attempt in
-   `researchspec/subflows/<instance>/control.yaml`, not from a mutable field in
+   `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, not from a mutable field in
    the boundary file.
 9. **Staleness detection:** when an upstream boundary file changes, dependent
    findings and prior Gate attempts must be recomputed before they authorize a
@@ -962,12 +962,12 @@ Replacement scope: `GATE-006` for `shared`.
 
 The producing Agent writes validated boundary references to the owning handoff
 and returns formal findings to ResearchSpec CLI. The CLI is the only writer for
-Gate, Decision, frontier, and transition mutations in `control.yaml`.
+Gate, Decision, frontier, and transition mutations in the owning node instance.
 
 Current ResearchSpec owners:
 
-- `researchspec/subflows/<instance>/control.yaml`
-- `researchspec/subflows/<instance>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
+- `researchspec/runs/<run-id>/handoff.md`
 <!--/rs:GATE-006-->
 
 ## `data_access_level` (v3.3.2+)

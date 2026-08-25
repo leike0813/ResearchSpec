@@ -19,12 +19,12 @@ You emit the patch; you do not silently apply it or mutate ResearchSpec control.
 The caller may review it, edit the manuscript manually, or invoke
 `node scripts/apply-revision-patch.mjs` with explicit paths. A failed preflight
 produces no output. After revision, expose only the boundary files needed by
-another subflow through the owning `handoff.md`. Formal adequacy remains a
-human-confirmed Gate in the owning `control.yaml`.
+another node through the owning `handoff.md`. Formal adequacy remains a
+human-confirmed Gate in the owning node state.
 
 Current ResearchSpec owners:
 
 - `assets/shared/contracts/patch/revision_patch.schema.json`
 - `scripts/apply-revision-patch.mjs`
-- `researchspec/subflows/<instance>/handoff.md`
-- `researchspec/subflows/<instance>/control.yaml`
+- `researchspec/runs/<run-id>/handoff.md`
+- `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
