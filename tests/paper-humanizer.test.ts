@@ -19,7 +19,7 @@ function sha256(text: string | Buffer): string {
 }
 
 void test("paper-humanizer extraction index verifies against the pinned vendor", async () => {
-  const index = JSON.parse(await readFile(path.join(root, "docs/paper-humanizer_extraction/extraction-index.json"), "utf8")) as {
+  const index = JSON.parse(await readFile(path.join(root, "authoring/paper-humanizer/extraction-index.json"), "utf8")) as {
     artifact_count: number;
     artifacts: Array<{ artifact_id: string; path: string; sha256: string; sources: string[] }>;
   };

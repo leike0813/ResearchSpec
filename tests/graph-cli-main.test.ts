@@ -29,6 +29,7 @@ void test("packaged CLI initializes and runs a schema 2 graph workspace", async 
       confirmed_at: "2026-08-15T12:00:00+08:00",
       entry_id: "main",
       entry_node_id: "rq",
+      route_ref: "deep-research:quick",
       prerequisites: [],
       handoff_inputs: [],
       planned_outputs: [

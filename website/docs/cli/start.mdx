@@ -37,6 +37,8 @@ Runtime schema: `GraphRunStartCommandSchema`.
 | `handoff_inputs` | `RunHandoffInputEntry[]` | yes | Confirmed input roles; each uses the descriptor fields below plus optional source_run_id. |
 | `planned_outputs` | `HandoffOutput[]` | yes | Confirmed output roles; each uses the descriptor fields below plus optional intended_consumer. |
 | `formal_gates` | `stable ID[]` | yes | Confirmed formal Gate IDs. |
+| `route_ref` | `converter-owned route reference` | no | Binds a root start to the confirmed route summary when the profile entry declares one. |
+| `manuscript_delivery` | `ManuscriptDeliveryContext` | no | Child format-run snapshot supplied only when its node requires confirmed QMD/Quarto delivery context. |
 | `cost` | `{ effort, interaction }` | yes | Non-empty effort and interaction summaries. |
 | `handoff descriptor.role` | `non-empty string` | yes | Unique semantic role within its input or output list. |
 | `handoff descriptor.type` | `non-empty string` | yes | Artifact or information type. |
@@ -53,5 +55,5 @@ Runtime schema: `GraphRunStartCommandSchema`.
 Constraints:
 
 - Root profile selectors require --input and --confirmed-by.
-- Node selectors inherit the parent run authorization and reject --input and --confirmed-by.
+- Node selectors inherit the parent run authorization and reject --confirmed-by; a delivery-sensitive child may accept --input.
 - handoff input roles and planned output roles must each be unique.

@@ -1,0 +1,27 @@
+@startuml
+title Academic Pipeline mid-entry
+skinparam shadowing false
+start
+:Read current stable specs and status;
+:Resolve route-bound mid-entry instructions;
+:Present entry node, required inputs, Gates and cost;
+:User confirms one parent run;
+:Freeze graph slice reachable from selected entry;
+if (entry node?) then (research)
+  :Start at research;
+elseif (write)
+  :Require research_report input;
+elseif (review)
+  :Require manuscript_draft input;
+elseif (revision / re-review)
+  :Require manuscript and review roles;
+elseif (format)
+  :Require accepted manuscript and delivery snapshot;
+else (final-integrity)
+  :Require formatted manuscript;
+endif
+:Authorized children start without another run confirmation;
+:Continue until selected slice is complete;
+stop
+@enduml
+

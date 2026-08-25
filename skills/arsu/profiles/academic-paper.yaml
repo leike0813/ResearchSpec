@@ -6,6 +6,11 @@ entries:
   - entry_id: main
     kind: end-to-end
     node_id: intake
+    route_ref: academic-paper:full
+  - entry_id: format
+    kind: end-to-end
+    node_id: format
+    route_ref: academic-paper:format-convert
 nodes:
   - node_id: intake
     kind: capability
@@ -112,6 +117,21 @@ nodes:
     required_decision_ids: []
     multiplicity: one
     round_role: null
+  - node_id: format
+    kind: capability
+    capability_id: generation-format-rendering
+    input_bindings:
+      - role: manuscript_draft
+        source: handoff
+    expected_outputs:
+      - role: formatted_manuscript
+        required: true
+    prerequisites: []
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+    delivery_requirement: quarto_available_for_qmd
 parallel_groups: []
 subgraphs: []
 gates:
@@ -126,4 +146,3 @@ decisions: []
 revision_round_template: null
 override_policy:
   failed_gate_requires_decision: true
-

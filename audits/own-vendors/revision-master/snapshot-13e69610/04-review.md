@@ -28,7 +28,7 @@
 
 | artifact | path | sha256 |
 |---|---|---|
-| parity report | `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/docs/capability-parity-report.json` | `5ac448022152efee89a650083e036a71d84f9d7f14f227b640bd1cfba6995399` |
+| parity report | `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/artifacts/generated/capability-parity-report.json` | `5ac448022152efee89a650083e036a71d84f9d7f14f227b640bd1cfba6995399` |
 | parity package slice | `audits/own-vendors/revision-master/snapshot-13e69610/artifacts/parity-packages.json` | `611b18709d3a0ee5cf80abd7c10f0f2480c4943adb6e066f073cef5226ea7650` |
 
 ## Human Confirmation

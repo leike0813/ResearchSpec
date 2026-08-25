@@ -52,7 +52,7 @@ not call agent APIs or depend on a specific model.
 
 ## Canonical User Usage Model
 
-`docs/arsu_user_usage_model.md` is the canonical source for how users enter,
+`docs/user/usage-model.md` is the canonical source for how users enter,
 confirm, run, resume, verify, and finish ARSU work. Product, architecture, CLI,
 schema, Skill, converter, and workflow changes must preserve that model or update
 it through an explicit OpenSpec change before implementation.
@@ -152,7 +152,7 @@ selector, producer, frontier, and workflow authority unchanged.
 Discipline domains use ANZSRC 2020 Fields of Research Group as their only
 classification standard; Field is audit metadata and never automatic membership.
 ResearchSpec also owns exactly five coarse tool domains documented in
-`docs/domain_taxonomy.md`. The internal catalog pre-creates all 213 discipline
+`docs/developer/domain-taxonomy.md`. The internal catalog pre-creates all 213 discipline
 domains and five tool domains, but empty domains remain hidden from ordinary user
 discovery and installation. A selected domain that becomes empty is unavailable
 recovery state until it is safely uninstalled or repopulated.
@@ -471,7 +471,7 @@ revision-master capability absorption. The immutable audit at
 `audits/revision-master/snapshot-13e69610/` remains historical provenance and
 covers all 48 tracked blob files under `skills/revision-master/` at upstream
 commit `13e69610f216f816f106d1a2a1672eedfa01ac9a`. The new absorption path
-uses `docs/revision-master_extraction/extraction-index.json` and authors five
+uses `authoring/revision-master/extraction-index.json` and authors five
 capability packages (`design-review-response-intake`,
 `analysis-review-response-manuscript-analysis`,
 `transform-review-response-comment-atomization`,
@@ -497,7 +497,7 @@ authoring sources, package script, and one additive catalog entry.
 
 Non-native upstream projects such as HistAgent, FinRobot, and
 Materials-Science-Skills-For-LLM follow
-`docs/non_native_vendor_skill_standard.md`. Its templates are authoring
+`docs/maintainer/non-native-vendor-skill-standard.md`. Its templates are authoring
 scaffolds, not converter prose fragments or a runtime protocol. `references/`
 is optional and contains only substantial context-saving detail; the only copy
 of an execution-critical workflow, constraint, authority boundary, output rule,

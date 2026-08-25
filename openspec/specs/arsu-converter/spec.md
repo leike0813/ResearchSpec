@@ -756,7 +756,7 @@ The ARSU converter SHALL update source rules and anchor replacements so `academi
 ### Requirement: Extraction Artifacts Are Verified Authoring Inputs
 
 The authoring converter SHALL consume the deterministic extraction index derived from
-`docs/ars_extraction/` and SHALL refuse to author a capability package unless every indexed artifact
+`authoring/ars/` and SHALL refuse to author a capability package unless every indexed artifact
 used by that package passes byte-for-byte SHA-256 verification against the pinned `vendor/ars`
 snapshot.
 
@@ -829,7 +829,7 @@ procedure text.
 ### Requirement: Capability Semantic Parity Is Audited Against Extraction Artifacts
 
 The converter toolchain SHALL provide a deterministic capability parity audit that joins each
-capability manifest provenance to `docs/ars_extraction/extraction-index.json` and compares the
+capability manifest provenance to `authoring/ars/extraction-index.json` and compares the
 generated `SKILL.md` against the verified non-knowledge capability artifacts. The audit SHALL emit a
 schema-`"1"` report and SHALL exit non-zero when any threshold fails:
 
@@ -926,7 +926,7 @@ origin. A vendor-derived source SHALL use its own extraction index, author manif
 #### Scenario: ARS authoring defaults are unchanged
 
 - **WHEN** an authoring source is authored without options
-- **THEN** the engine reads `docs/ars_extraction/extraction-index.json` and records `origin:
+- **THEN** the engine reads `authoring/ars/extraction-index.json` and records `origin:
   ars-derived`
 
 ### Requirement: Generated ARSU Guidance Uses The Graph Protocol Exclusively
@@ -947,3 +947,19 @@ The converter SHALL emit the preset profile registry and profile files used by b
 
 - **WHEN** an authored preset graph changes without regeneration
 - **THEN** converter checking fails instead of allowing core runtime data to mask the drift
+
+### Requirement: Capability Authoring Inputs Have A Dedicated Root
+
+Converter-owned extraction indexes, capability prose, knowledge, scripts, templates, schemas, and review notes SHALL live under `authoring/<source>/`. Durable documentation SHALL describe the authoring contract but SHALL NOT contain files consumed as converter authority.
+
+#### Scenario: Capability packages are authored
+
+- **WHEN** a converter resolves an extraction artifact
+- **THEN** it reads the artifact from its declared `authoring/` root
+- **AND** no live converter path resolves through `docs/`
+
+#### Scenario: A generated report is emitted
+
+- **WHEN** parity or review tooling writes a derived report
+- **THEN** the output is placed under `artifacts/generated/`
+- **AND** converter inputs do not depend on that report unless a maintenance catalog explicitly binds it

@@ -67,6 +67,6 @@ provenance:
     - RM-KP-01
     - RM-CAP-06
   upstream_sources:
-    - path: docs/revision-master_extraction/capabilities/stage-5-strategy-and-execution.md
+    - path: authoring/revision-master/capabilities/stage-5-strategy-and-execution.md
       sha256: a0fb3787f5158a824babaf73ec013002603134664656687f48aa9d7475cc2ea0
 license: MIT

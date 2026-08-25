@@ -16,7 +16,6 @@ export const REVIEW_RESPONSE_GRAPH_PROFILE = {
       input_bindings: [
         { role: "manuscript_source", source: "handoff" },
         { role: "review_comments_source", source: "handoff" },
-        { role: "editor_letter_source", source: "handoff" },
         { role: "user_notes", source: "parameter", value: null },
       ],
       expected_outputs: [
@@ -178,4 +177,4 @@ export const REVIEW_RESPONSE_GRAPH_PROFILE = {
   override_policy: { failed_gate_requires_decision: true },
 } as const satisfies CapabilityGraphProfile;
 
-export const REVIEW_RESPONSE_GRAPH_PROFILE_TEXT = `${stringify(REVIEW_RESPONSE_GRAPH_PROFILE)}\n`;
+export const REVIEW_RESPONSE_GRAPH_PROFILE_TEXT = stringify(REVIEW_RESPONSE_GRAPH_PROFILE);

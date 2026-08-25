@@ -22060,56 +22060,56 @@
       "source_path": "researchspec:src/arsu-converter/workflow/graph-profiles/academic-paper-reviewer.ts",
       "output_path": "profiles/academic-paper-reviewer.yaml",
       "transform_rule": "preset_graph_profile_projection",
-      "sha256": "42b4bb922b1ef25cf2ddfefe1ccb2f8f44b7a566d61c75bed2f5a1620c5bfc40"
+      "sha256": "ec9246e795d81212994a11c21ec2e50873d49fc1895ab2b38d669ae111b50e62"
     },
     {
       "group": "root",
       "source_path": "researchspec:src/arsu-converter/workflow/graph-profiles/academic-paper.ts",
       "output_path": "profiles/academic-paper.yaml",
       "transform_rule": "preset_graph_profile_projection",
-      "sha256": "7fe91546213d980ba1327f802b9cf884a33623c8cab3399b1d9dfedb3d1926bf"
+      "sha256": "a97961ba5a1b5bb5040256b8bc0f83ec312939c115503f0204b21b8024c90be0"
     },
     {
       "group": "root",
       "source_path": "researchspec:src/arsu-converter/workflow/graph-profiles/academic-pipeline.ts",
       "output_path": "profiles/academic-pipeline.yaml",
       "transform_rule": "preset_graph_profile_projection",
-      "sha256": "4e3ceaad48f4805a41d7d14ad8a311331cc4c3596ce9cdebfb7770f5cc31716f"
+      "sha256": "ffe44adb34f0035beea4a8bb10b4762f94821b2a4857a482891822c16f429675"
     },
     {
       "group": "root",
       "source_path": "researchspec:src/arsu-converter/workflow/graph-profiles/minimal.ts",
       "output_path": "profiles/minimal.yaml",
       "transform_rule": "preset_graph_profile_projection",
-      "sha256": "b55b5c5be35d723b7ea1781da919457db271e3a0889a7f48b7c9d57287215f4a"
+      "sha256": "cfe34abbffafe86f726cb271bfeff75eeaf78d0f2d6edd2b157780246351a835"
     },
     {
       "group": "root",
       "source_path": "researchspec:src/arsu-converter/workflow/graph-profiles/paper-humanizer.ts",
       "output_path": "profiles/paper-humanizer.yaml",
       "transform_rule": "preset_graph_profile_projection",
-      "sha256": "c384c766676e688937453a2155d154b4926bb6cbd6e458d0b0e16c4f37eb51b3"
+      "sha256": "dd947817223bcfba1104516c60d3c23030349ed7ff96256ab86cc1b585c74223"
     },
     {
       "group": "root",
       "source_path": "generated:preset-graph-profile-registry",
       "output_path": "profiles/registry.json",
       "transform_rule": "preset_graph_profile_registry_projection",
-      "sha256": "8094b51a6d9a8976be3897624105ec31b261cfa20a6dc4d2b20e0fd34d04059b"
+      "sha256": "9c77f0b889b4a2598fe31984b00b1d5722bcdd2f9f29cc83fc80b18e62b76908"
     },
     {
       "group": "root",
       "source_path": "researchspec:src/arsu-converter/workflow/graph-profiles/research-main.ts",
       "output_path": "profiles/research-main.yaml",
       "transform_rule": "preset_graph_profile_projection",
-      "sha256": "e9df63e60608b177fd45b3336655c1f69f60ceb856d919ec1b21523caab2c83f"
+      "sha256": "93dc7e281464acceced78b98f467f90624bb227794625432e45e7bea6a950809"
     },
     {
       "group": "root",
       "source_path": "researchspec:src/arsu-converter/workflow/graph-profiles/review-response.ts",
       "output_path": "profiles/review-response.yaml",
       "transform_rule": "preset_graph_profile_projection",
-      "sha256": "82d758b12b31032b61f73bda611091c76e33f770d6aee2791cb9fd43ac099ced"
+      "sha256": "eed01fd884f726e439ae3a0f3365f939ff9ec0674a2e4b566258a8c3ad859f5f"
     },
     {
       "group": "root",
@@ -39853,7 +39853,7 @@
     "schema_version": "1",
     "registry_version": "0.1.0",
     "profile_count": 7,
-    "sha256": "8094b51a6d9a8976be3897624105ec31b261cfa20a6dc4d2b20e0fd34d04059b"
+    "sha256": "9c77f0b889b4a2598fe31984b00b1d5722bcdd2f9f29cc83fc80b18e62b76908"
   },
   "anchor_replacements": {
     "profile_id": "researchspec-anchor-replacement-v4",

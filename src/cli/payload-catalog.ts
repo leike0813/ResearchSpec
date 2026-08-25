@@ -43,7 +43,7 @@ export const CLI_PAYLOADS = {
   ]),
   status: none("No command payload. Reads the nearest current workspace and returns a bounded snapshot."),
   instructions: payload("selector-options", "One exact graph control or inspection selector.", [
-    field("selector", "profile:... | run:... | node:<run>/<node>[@round] | gate:... | decision:...", true, "Current item whose action contract is needed."),
+    field("selector", "profile:... | run:... | node:<run>/<node>[@round] | gate:... | decision:... | change:...", true, "Current item whose action contract is needed."),
   ]),
   start: payload("yaml-json", "A confirmed root profile selector with --input, or an eligible node selector for an inherited child run.", [
     field("selector", "<profile-id> | profile:<profile-id> | node:<run>/<subgraph>[@round]", true, "Root profile or exact pending subgraph start."),
@@ -55,12 +55,14 @@ export const CLI_PAYLOADS = {
     field("handoff_inputs", "RunHandoffInputEntry[]", true, "Confirmed input roles; each uses the descriptor fields below plus optional source_run_id."),
     field("planned_outputs", "HandoffOutput[]", true, "Confirmed output roles; each uses the descriptor fields below plus optional intended_consumer."),
     field("formal_gates", "stable ID[]", true, "Confirmed formal Gate IDs."),
+    field("route_ref", "converter-owned route reference", false, "Binds a root start to the confirmed route summary when the profile entry declares one."),
+    field("manuscript_delivery", "ManuscriptDeliveryContext", false, "Child format-run snapshot supplied only when its node requires confirmed QMD/Quarto delivery context."),
     field("cost", "{ effort, interaction }", true, "Non-empty effort and interaction summaries."),
     ...handoffDescriptor.map((item) => ({ ...item, name: `handoff descriptor.${item.name}` })),
     field("--confirmed-by", "non-empty human name", false, "Required only for a root profile selector."),
   ], [
     "Root profile selectors require --input and --confirmed-by.",
-    "Node selectors inherit the parent run authorization and reject --input and --confirmed-by.",
+    "Node selectors inherit the parent run authorization and reject --confirmed-by; a delivery-sensitive child may accept --input.",
     "handoff input roles and planned output roles must each be unique.",
   ], "GraphRunStartCommandSchema"),
   advance: payload("selector-options", "An eligible graph node selector and its output submission.", [
@@ -92,7 +94,7 @@ export const CLI_PAYLOADS = {
   ], "RunHandoffSchema"),
   pack: payload("options", "A required ZIP output and an optional bounded context scope.", [
     field("--output", "ZIP path", true, "Destination archive path."),
-    field("--scope", "all | specs | profiles | runs | changes", false, "Bundle scope; defaults to all."),
+    field("--scope", "all | specs | profiles | runs | changes | run:<id> | change:<id>", false, "Bundle scope; defaults to all."),
   ]),
   propose: payload("options", "A safe change ID, target stable specs, and optional supporting documents.", [
     field("change-id", "safe kebab-case ID", true, "New project change directory and selector identity."),

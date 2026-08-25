@@ -52,6 +52,6 @@ provenance:
     - RM-KP-02
     - RM-KP-01
   upstream_sources:
-    - path: docs/revision-master_extraction/capabilities/stage-2-manuscript-analysis.md
+    - path: authoring/revision-master/capabilities/stage-2-manuscript-analysis.md
       sha256: a4cb8861f532cafdab3ac4fdf527bc8e44abbeede95874f1a7704aa32bc7c4d9
 license: MIT

@@ -6,9 +6,9 @@ import { parse } from "yaml";
 
 const ROOT = process.cwd();
 const SKILLS = path.join(ROOT, "skills", "capabilities");
-const ARS_INDEX = JSON.parse(readFileSync(path.join(ROOT, "docs", "ars_extraction", "extraction-index.json"), "utf8"));
-const PAPER_HUMANIZER_INDEX = JSON.parse(readFileSync(path.join(ROOT, "docs", "paper-humanizer_extraction", "extraction-index.json"), "utf8"));
-const REVISION_MASTER_INDEX = JSON.parse(readFileSync(path.join(ROOT, "docs", "revision-master_extraction", "extraction-index.json"), "utf8"));
+const ARS_INDEX = JSON.parse(readFileSync(path.join(ROOT, "authoring", "ars", "extraction-index.json"), "utf8"));
+const PAPER_HUMANIZER_INDEX = JSON.parse(readFileSync(path.join(ROOT, "authoring", "paper-humanizer", "extraction-index.json"), "utf8"));
+const REVISION_MASTER_INDEX = JSON.parse(readFileSync(path.join(ROOT, "authoring", "revision-master", "extraction-index.json"), "utf8"));
 function extractionIndex(provenance = {}) {
   const ids = provenance.extraction_artifact_ids ?? [];
   if (ids.some((id) => id.startsWith("RM-"))) return REVISION_MASTER_INDEX;
@@ -131,7 +131,7 @@ function main() {
     flow_retained: results.filter((r) => r.flow_sections_retained.length > 0).map((r) => ({ capability_id: r.capability_id, headings: r.flow_sections_retained })),
   };
   const output = { schema_version: "1", thresholds: { section_coverage: 0.7, rule_coverage: 0.6, output_format: true, knowledge_coverage: 1, knowledge_refs_referenced: 1 }, summary, packages: results };
-  const outputPath = process.argv.includes("--json") ? process.argv[process.argv.indexOf("--json") + 1] : path.join(ROOT, "docs", "capability-parity-report.json");
+  const outputPath = process.argv.includes("--json") ? process.argv[process.argv.indexOf("--json") + 1] : path.join(ROOT, "artifacts", "generated", "capability-parity-report.json");
   if (outputPath) writeFileSync(outputPath, `${JSON.stringify(output, null, 2)}\n`);
   process.stdout.write(JSON.stringify(summary, null, 2) + "\n");
   const failed = summary.below_section_threshold.length + summary.below_rule_threshold.length + summary.output_missing.length + summary.flow_retained.length + summary.knowledge_below_threshold.length;

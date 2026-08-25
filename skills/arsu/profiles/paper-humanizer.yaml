@@ -149,4 +149,3 @@ revision_round_template:
   exit_option_id: accept
 override_policy:
   failed_gate_requires_decision: true
-

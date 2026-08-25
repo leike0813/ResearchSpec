@@ -8,7 +8,7 @@
       "anchor_id": "v2.9.1-1a31f2d",
       "source_meta": "vendor/paper-humanizer/SOURCE.json",
       "upstream_root": "vendor/paper-humanizer/upstream",
-      "extraction_index": "docs/paper-humanizer_extraction/extraction-index.json",
+      "extraction_index": "authoring/paper-humanizer/extraction-index.json",
       "author_script": "paper-humanizer:author",
       "capability_ids": [
         "generation-humanization-reference",
@@ -23,7 +23,7 @@
       "anchor_id": "snapshot-13e69610",
       "source_meta": "vendor/revision-master/SOURCE.json",
       "upstream_root": "vendor/revision-master/upstream/skills/revision-master",
-      "extraction_index": "docs/revision-master_extraction/extraction-index.json",
+      "extraction_index": "authoring/revision-master/extraction-index.json",
       "author_script": "revision-master:author",
       "capability_ids": [
         "design-review-response-intake",

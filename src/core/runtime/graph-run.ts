@@ -5,6 +5,7 @@ import { stringify } from "yaml";
 
 import {
   GraphNodeInstanceSchema,
+  GraphChildRunStartCommandSchema,
   GraphRunSchema,
   GraphRunStartCommandSchema,
   renderRunHandoff,
@@ -50,6 +51,7 @@ export interface StartGraphChildRunInput {
   nodeId: string;
   round?: number;
   startedAt: string;
+  command?: unknown;
   dryRun?: boolean;
 }
 
@@ -184,6 +186,7 @@ export async function startGraphRun(input: StartGraphRunInput): Promise<StartGra
     status: "active",
     started_at: command.data.confirmed_at,
     authorization_origin: "human",
+    ...(command.data.manuscript_delivery === undefined ? {} : { manuscript_delivery: command.data.manuscript_delivery }),
     start_confirmation: {
       confirmed_by: confirmedBy,
       confirmed_at: command.data.confirmed_at,
@@ -191,6 +194,7 @@ export async function startGraphRun(input: StartGraphRunInput): Promise<StartGra
       expected_outputs: command.data.planned_outputs.map((item) => item.role),
       formal_gates: command.data.formal_gates,
       cost: command.data.cost,
+      ...(command.data.route_ref === undefined ? {} : { route_ref: command.data.route_ref }),
     },
   });
   const handoff = RunHandoffSchema.parse({
@@ -229,6 +233,12 @@ export async function startGraphChildRun(input: StartGraphChildRunInput): Promis
   if (definition.kind !== "subgraph" || !definition.subgraph_id) throw new GraphRunError("node_not_subgraph", `Node does not declare a child graph: ${input.nodeId}`, "usage");
   if (definition.multiplicity === "repeatable" && input.round === undefined) throw new GraphRunError("node_round_required", `Repeatable subgraph start requires a round: ${input.nodeId}`, "usage");
   if (definition.multiplicity !== "repeatable" && input.round !== undefined) throw new GraphRunError("node_round_invalid", `Subgraph ${input.nodeId} is not repeatable.`, "usage");
+  const childCommand = input.command === undefined ? undefined : GraphChildRunStartCommandSchema.safeParse(input.command);
+  if (childCommand && !childCommand.success) throw new GraphRunError("child_run_command_invalid", "Child-run input does not match the child start schema.", "usage", childCommand.error.issues);
+  if (childCommand && definition.delivery_requirement === undefined) throw new GraphRunError("child_start_input_forbidden", `Subgraph ${input.nodeId} does not accept delivery input.`, "usage");
+  const effectiveRun = childCommand?.success
+    ? { ...parent.run, manuscript_delivery: childCommand.data.manuscript_delivery }
+    : parent.run;
 
   const snapshots = graphChildRunSnapshots(input.index);
   const existing = boundChildren(snapshots, input.parentRunId, input.nodeId, input.round);
@@ -243,7 +253,7 @@ export async function startGraphChildRun(input: StartGraphChildRunInput): Promis
     return { status: "already_started", run_id: child.run.run_id, directory: record.directoryPath, run: child.run, handoff: child.handoff };
   }
 
-  const frontier = evaluateGraphFrontier(parent.run, parent.graph, parent.nodeEntries.flatMap((entry) => entry.node ? [entry.node] : []), snapshots);
+  const frontier = evaluateGraphFrontier(effectiveRun, parent.graph, parent.nodeEntries.flatMap((entry) => entry.node ? [entry.node] : []), snapshots);
   if (!frontier.pending_subgraph_starts.some((item) => item.node_id === input.nodeId && item.round === input.round)) {
     throw new GraphRunError("node_not_eligible", `Subgraph node is not currently eligible: ${input.nodeId}`, "conflict", frontier.blockers);
   }
@@ -263,7 +273,8 @@ export async function startGraphChildRun(input: StartGraphChildRunInput): Promis
     subgraph_id: declaration.subgraph_id,
     ...(input.round === undefined ? {} : { round: input.round }),
   };
-  const identityHash = sha256(JSON.stringify({ binding, profile_sha256: childProfileFile.hash, entry_id: declaration.entry_id, entry_node_id: declaration.entry_node_id }));
+  const manuscriptDelivery = childCommand?.success ? childCommand.data.manuscript_delivery : parent.run.manuscript_delivery;
+  const identityHash = sha256(JSON.stringify({ binding, profile_sha256: childProfileFile.hash, entry_id: declaration.entry_id, entry_node_id: declaration.entry_node_id, manuscript_delivery: manuscriptDelivery ?? null }));
   const runId = `run-${identityHash.slice(0, 24)}`;
   const run = GraphRunSchema.parse({
     schema_version: "2",
@@ -277,6 +288,7 @@ export async function startGraphChildRun(input: StartGraphChildRunInput): Promis
     started_at: input.startedAt,
     authorization_origin: "parent_run",
     parent_binding: binding,
+    ...(manuscriptDelivery === undefined ? {} : { manuscript_delivery: manuscriptDelivery }),
   });
   const parentNodes = projectCompletedSubgraphs(
     parent.run,
@@ -325,12 +337,20 @@ export function evaluateGraphFrontier(
   }
 
   const projectedNodes = projectCompletedSubgraphs(run, graph, nodes, childRuns, new Set([run.run_id]));
-  const declaredEntryNodeIds = new Set(graph.entries.flatMap((entry) => entry.kind === "end-to-end" ? [entry.node_id] : entry.entry_points));
+  const selectedNodeIds = selectedGraphNodeIds(run, graph);
   for (const node of graph.nodes) {
-    if (declaredEntryNodeIds.has(node.node_id) && node.node_id !== entryNodeId) continue;
+    if (!selectedNodeIds.has(node.node_id)) continue;
     for (const round of candidateRounds(run, graph, projectedNodes, node.node_id)) {
       const instance = instanceFor(projectedNodes, node.node_id, round);
       if (instance && ["complete", "cancelled", "skipped"].includes(instance.state)) continue;
+
+      if (node.delivery_requirement === "quarto_available_for_qmd"
+        && boundChildren(childRuns, run.run_id, node.node_id, round).length === 0
+        && run.manuscript_delivery?.delivery.working_format === "qmd"
+        && run.manuscript_delivery.quarto_probe?.status !== "available") {
+        blockers.push({ node_id: node.node_id, code: "quarto_unavailable", message: `Subgraph node ${node.node_id} requires an available Quarto probe.`, refs: [`node:${run.run_id}/${node.node_id}`] });
+        continue;
+      }
 
       const failedGates = requiredGates(graph, node.required_gate_ids)
         .filter((gate) => {
@@ -646,7 +666,8 @@ export function validateSubgraphNodeBindings(
     if (binding.source === "handoff" && !suppliedRoles.has(binding.role)) diagnostics.push(`Subgraph entry requires an unmapped handoff role: ${binding.role}`);
   }
   for (const output of node.expected_outputs) {
-    if (!childOutputRoles.has(output.role)) diagnostics.push(`Subgraph output role is not produced by child graph: ${output.role}`);
+    const childRole = output.from_role ?? output.role;
+    if (!childOutputRoles.has(childRole)) diagnostics.push(`Subgraph output role is not produced by child graph: ${childRole}`);
   }
   return diagnostics;
 }
@@ -696,8 +717,8 @@ function projectCompletedSubgraphs(
     nestedVisited.add(child.run.run_id);
     const childNodes = projectCompletedSubgraphs(child.run, child.graph, child.nodes, childRuns, nestedVisited);
     if (!graphRunCompletionReady(child.run, child.graph, childNodes)) continue;
-    const requiredRoles = parentNode.expected_outputs.filter((output) => output.required !== false).map((output) => output.role);
-    if (requiredRoles.some((role) => !child.handoff.outputs.some((output) => output.role === role))) continue;
+    const requiredOutputs = parentNode.expected_outputs.filter((output) => output.required !== false);
+    if (requiredOutputs.some((expected) => !child.handoff.outputs.some((output) => output.role === (expected.from_role ?? expected.role)))) continue;
     projected.push(GraphNodeInstanceSchema.parse({
       schema_version: "2",
       node_instance_id: nodeInstanceId(run.run_id, binding.parent_node_id, binding.round),
@@ -706,9 +727,10 @@ function projectCompletedSubgraphs(
       ...(binding.round === undefined ? {} : { round: binding.round }),
       state: "complete",
       updated_at: child.handoff.updated_at,
-      outputs: child.handoff.outputs
-        .filter((output) => parentNode.expected_outputs.some((expected) => expected.role === output.role))
-        .map((output) => ({ role: output.role, path: output.path })),
+      outputs: parentNode.expected_outputs.flatMap((expected) => {
+        const output = child.handoff.outputs.find((candidate) => candidate.role === (expected.from_role ?? expected.role));
+        return output ? [{ role: expected.role, path: output.path }] : [];
+      }),
       gate_attempts: [],
       gate_overrides: [],
       decisions: [],
@@ -721,7 +743,8 @@ export function graphRunCompletionReady(run: GraphRun, graph: CapabilityGraphPro
   if (run.status === "complete") return true;
   if (run.status !== "active") return false;
   const template = graph.revision_round_template;
-  for (const node of graph.nodes) {
+  const selectedNodeIds = selectedGraphNodeIds(run, graph);
+  for (const node of graph.nodes.filter((item) => selectedNodeIds.has(item.node_id))) {
     if (node.multiplicity === "optional") continue;
     if (node.kind === "gate") {
       const owned = graph.gates.filter((gate) => gate.owner_node_id === node.node_id);
@@ -828,7 +851,7 @@ export function resolveGraphNodeInputs(input: {
       .filter((node) => node.node_id === binding.from_node_id && node.state === "complete")
       .filter((node) => input.round === undefined || node.round === undefined || node.round === input.round)
       .sort((left, right) => Date.parse(left.updated_at) - Date.parse(right.updated_at));
-    const output = candidates.at(-1)?.outputs.find((entry) => entry.role === binding.role);
+    const output = candidates.at(-1)?.outputs.find((entry) => entry.role === (binding.from_role ?? binding.role));
     if (!output) throw new GraphRunError("node_input_unresolved", `Node output is unavailable for ${binding.role} from ${binding.from_node_id ?? "unknown"}.`, "conflict");
     return { role: binding.role, source: binding.source, path: output.path, from_node_id: binding.from_node_id };
   });
@@ -847,11 +870,11 @@ function resolveChildHandoffInputs(
         .filter((candidate) => candidate.node_id === binding.from_node_id && candidate.state === "complete")
         .sort((left, right) => Date.parse(left.updated_at) - Date.parse(right.updated_at))
         .at(-1)
-        ?.outputs.find((output) => output.role === binding.role);
+        ?.outputs.find((output) => output.role === (binding.from_role ?? binding.role));
       if (!source) throw new GraphRunError("subgraph_input_missing", `Subgraph input ${binding.role} is not available from node ${binding.from_node_id ?? "unknown"}.`, "conflict");
       return [{ role: binding.role, type: "node_output", path: source.path, purpose: `Input ${binding.role} inherited from ${binding.from_node_id ?? "parent node"}.`, source_run_id: parentRun.run_id }];
     }
-    const source = [...parentHandoff.inputs, ...parentHandoff.outputs].find((entry) => entry.role === binding.role);
+      const source = [...parentHandoff.inputs, ...parentHandoff.outputs].find((entry) => entry.role === binding.role);
     if (!source) throw new GraphRunError("subgraph_input_missing", `Subgraph handoff input is missing: ${binding.role}`, "conflict");
     return [{
       role: source.role,
@@ -876,7 +899,7 @@ function resolveChildPlannedOutputs(
   return node.expected_outputs.flatMap((expected) => {
     const output = parentHandoff.outputs.find((candidate) => candidate.role === expected.role);
     if (!output && expected.required !== false) throw new GraphRunError("subgraph_output_unplanned", `Parent handoff does not plan required subgraph output: ${expected.role}`, "conflict");
-    return output ? [output] : [];
+    return output ? [{ ...output, role: expected.from_role ?? expected.role }] : [];
   });
 }
 
@@ -913,6 +936,9 @@ function validateEntrySelection(graph: CapabilityGraphProfile, command: GraphRun
   if (entry.kind === "mid-entry" && !entry.entry_points.includes(command.entry_node_id)) {
     throw new GraphRunError("entry_node_invalid", `Mid-entry entry ${entry.entry_id} does not declare node ${command.entry_node_id}.`, "conflict");
   }
+  if (entry.route_ref !== command.route_ref) {
+    throw new GraphRunError("entry_route_mismatch", `Entry ${entry.entry_id} requires route_ref ${entry.route_ref ?? "to be omitted"}.`, "conflict");
+  }
   for (const gateId of command.formal_gates) {
     if (!graph.gates.some((item) => item.gate_id === gateId)) throw new GraphRunError("gate_unknown", `Run confirms unknown Gate: ${gateId}`, "usage");
   }
@@ -945,6 +971,13 @@ function candidateRounds(run: GraphRun, graph: CapabilityGraphProfile, nodes: re
   const template = graph.revision_round_template;
   if (template && (nodeId === template.revision_node_id || nodeId === template.review_node_id)) {
     return repeatableTemplateRounds(run, graph, nodes, nodeId).filter((round) => instanceFor(nodes, nodeId, round) === undefined);
+  }
+  if (template?.review_execution_node_id === nodeId) {
+    return nodes
+      .filter((item) => item.node_id === template.revision_node_id && item.state === "complete" && item.round !== undefined)
+      .map((item) => item.round as number)
+      .filter((round) => instanceFor(nodes, nodeId, round) === undefined)
+      .sort((left, right) => left - right);
   }
   if (template && definition.kind === "gate") {
     const ownedGates = graph.gates.filter((gate) => gate.owner_node_id === nodeId);
@@ -1035,6 +1068,9 @@ function prerequisiteComplete(
     }
     if (consumerNodeId === template.revision_node_id && prerequisiteNodeId === template.review_node_id) {
       return nodes.some((item) => item.node_id === prerequisiteNodeId && item.round === consumerRound - 1 && item.state === "complete");
+    }
+    if (prerequisite?.multiplicity === "repeatable") {
+      return nodes.some((item) => item.node_id === prerequisiteNodeId && item.round === consumerRound && item.state === "complete");
     }
   }
   return nodes.some((item) => item.node_id === prerequisiteNodeId && item.state === "complete");
@@ -1129,6 +1165,25 @@ function instanceFor(nodes: readonly GraphNodeInstance[], nodeId: string, round:
 
 function nodeInstanceId(runId: string, nodeId: string, round: number | undefined): string {
   return round === undefined ? `${runId}.${nodeId}` : `${runId}.${nodeId}.r${String(round)}`;
+}
+
+function selectedGraphNodeIds(run: GraphRun, graph: CapabilityGraphProfile): Set<string> {
+  const selected = new Set<string>([run.entry_node_id]);
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const node of graph.nodes) {
+      if (selected.has(node.node_id)) continue;
+      const followsSelectedNode = node.prerequisites.some((item) => selected.has(item));
+      const unlockedBySelectedDecision = graph.decisions.some((decision) => selected.has(decision.owner_node_id)
+        && decision.options.some((option) => option.unlocks.includes(node.node_id)));
+      if (followsSelectedNode || unlockedBySelectedDecision) {
+        selected.add(node.node_id);
+        changed = true;
+      }
+    }
+  }
+  return selected;
 }
 
 function requireNodeScanEntry(nodeEntries: GraphNodeScanRecord[], nodeId: string, round: number | undefined): GraphNodeScanRecord | undefined {

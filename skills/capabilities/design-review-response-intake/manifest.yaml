@@ -70,6 +70,6 @@ provenance:
     - RM-KP-02
     - RM-KP-01
   upstream_sources:
-    - path: docs/revision-master_extraction/capabilities/stage-1-entry-and-bootstrap.md
+    - path: authoring/revision-master/capabilities/stage-1-entry-and-bootstrap.md
       sha256: 75e4bb7ee303006ac9dd228b36b208720aa615899ba9342ac2ffa7e1ca7dafbc
 license: MIT

@@ -29,6 +29,58 @@ void test("graph list and show inspect profiles and changes", async () => {
   }
 });
 
+void test("profile and change instructions expose bounded executable contracts", async () => {
+  const root = await tempProject();
+  try {
+    init(root);
+    const profile = parseEnvelope<{ entries: Array<{ entry_id: string; entry_node_id: string; route_ref: string }> }>(
+      runCli(["instructions", "profile:academic-pipeline", "--json"], root),
+    );
+    assert.equal(profile.ok, true, JSON.stringify(profile.error));
+    assert.equal(profile.data?.entries.some((entry) => entry.entry_id === "mid-entry" && entry.entry_node_id === "format" && entry.route_ref === "academic-pipeline:mid-entry"), true);
+
+    assert.equal(parseEnvelope(runCli(["propose", "bounded-change", "--targets", "project.md", "--json"], root)).ok, true);
+    const change = parseEnvelope<{ kind: string; allowed_actions: string[] }>(runCli(["instructions", "change:bounded-change", "--json"], root));
+    assert.equal(change.ok, true);
+    assert.equal(change.data?.kind, "change");
+    assert.deepEqual(change.data?.allowed_actions, ["decide"]);
+  } finally {
+    await cleanup(root);
+  }
+});
+
+void test("list cursors are stable, collection-bound, and stale after collection drift", async () => {
+  const root = await tempProject();
+  try {
+    init(root);
+    const first = parseEnvelope<{ items: Array<{ selector: string }>; next_cursor?: string }>(runCli(["list", "profiles", "--limit", "2", "--json"], root));
+    assert.equal(first.ok, true);
+    assert.ok(first.data?.next_cursor);
+    const second = parseEnvelope<{ items: Array<{ selector: string }> }>(runCli(["list", "profiles", "--limit", "2", "--cursor", first.data?.next_cursor ?? "", "--json"], root));
+    assert.equal(second.ok, true);
+    assert.equal(first.data?.items.some((left) => second.data?.items.some((right) => right.selector === left.selector)), false);
+    const mismatch = parseEnvelope(runCli(["list", "runs", "--cursor", first.data?.next_cursor ?? "", "--json"], root));
+    assert.equal(mismatch.ok, false);
+    assert.equal(mismatch.error?.code, "list_cursor_collection_mismatch");
+  } finally {
+    await cleanup(root);
+  }
+});
+
+void test("non-interactive plugin installation requires explicit confirmation", async () => {
+  const root = await tempProject();
+  try {
+    init(root);
+    const result = parseEnvelope(runCli(["plugin", "install", "ecology", "--json"], root));
+    assert.equal(result.ok, false);
+    assert.equal(result.error?.code, "plugin_confirmation_required");
+    const config = await readFile(path.join(root, "researchspec/config.yaml"), "utf8");
+    assert.doesNotMatch(config, /ecology/);
+  } finally {
+    await cleanup(root);
+  }
+});
+
 void test("graph propose, decide and archive manage schema 2 project changes", async () => {
   const root = await tempProject();
   try {
@@ -75,6 +127,7 @@ void test("graph handoff renders a run handoff", async () => {
       confirmed_at: "2026-08-15T12:00:00+08:00",
       entry_id: "main",
       entry_node_id: "rq",
+      route_ref: "deep-research:quick",
       prerequisites: [],
       handoff_inputs: [],
       planned_outputs: [

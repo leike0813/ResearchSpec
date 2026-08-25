@@ -6,17 +6,17 @@
       "byte_preserved": true,
       "sha256": "742cb463e10053c78b6d240892449c4e64bb3fab3d309b364cbefbfa4b36bae6",
       "evidence": {
-        "catalog_path": "docs/revision-master_extraction/extraction-index.json",
+        "catalog_path": "authoring/revision-master/extraction-index.json",
         "artifact_id": "RM-ASSET-26",
         "source_sha256": "742cb463e10053c78b6d240892449c4e64bb3fab3d309b364cbefbfa4b36bae6"
       }
     },
     {
-      "path": "docs/revision-master_extraction/assets/templates/supplement-suggestion-plan.md.j2",
+      "path": "authoring/revision-master/assets/templates/supplement-suggestion-plan.md.j2",
       "byte_preserved": true,
       "sha256": "be20495c47654c84feb7c7b230e2e117c918ae6c4dbdfcdc0d16ac976fe44ee6",
       "evidence": {
-        "catalog_path": "docs/revision-master_extraction/extraction-index.json",
+        "catalog_path": "authoring/revision-master/extraction-index.json",
         "artifact_id": "RM-ASSET-26",
         "source_sha256": "742cb463e10053c78b6d240892449c4e64bb3fab3d309b364cbefbfa4b36bae6"
       }
@@ -26,7 +26,7 @@
       "byte_preserved": true,
       "sha256": "be20495c47654c84feb7c7b230e2e117c918ae6c4dbdfcdc0d16ac976fe44ee6",
       "evidence": {
-        "catalog_path": "docs/revision-master_extraction/extraction-index.json",
+        "catalog_path": "authoring/revision-master/extraction-index.json",
         "artifact_id": "RM-ASSET-26",
         "source_sha256": "742cb463e10053c78b6d240892449c4e64bb3fab3d309b364cbefbfa4b36bae6"
       }
@@ -36,7 +36,7 @@
       "byte_preserved": true,
       "sha256": "be20495c47654c84feb7c7b230e2e117c918ae6c4dbdfcdc0d16ac976fe44ee6",
       "evidence": {
-        "catalog_path": "docs/revision-master_extraction/extraction-index.json",
+        "catalog_path": "authoring/revision-master/extraction-index.json",
         "artifact_id": "RM-ASSET-26",
         "source_sha256": "742cb463e10053c78b6d240892449c4e64bb3fab3d309b364cbefbfa4b36bae6"
       }
@@ -46,7 +46,7 @@
       "byte_preserved": true,
       "sha256": "be20495c47654c84feb7c7b230e2e117c918ae6c4dbdfcdc0d16ac976fe44ee6",
       "evidence": {
-        "catalog_path": "docs/revision-master_extraction/extraction-index.json",
+        "catalog_path": "authoring/revision-master/extraction-index.json",
         "artifact_id": "RM-ASSET-26",
         "source_sha256": "742cb463e10053c78b6d240892449c4e64bb3fab3d309b364cbefbfa4b36bae6"
       }
@@ -56,7 +56,7 @@
       "byte_preserved": true,
       "sha256": "be20495c47654c84feb7c7b230e2e117c918ae6c4dbdfcdc0d16ac976fe44ee6",
       "evidence": {
-        "catalog_path": "docs/revision-master_extraction/extraction-index.json",
+        "catalog_path": "authoring/revision-master/extraction-index.json",
         "artifact_id": "RM-ASSET-26",
         "source_sha256": "742cb463e10053c78b6d240892449c4e64bb3fab3d309b364cbefbfa4b36bae6"
       }
@@ -66,7 +66,7 @@
       "byte_preserved": true,
       "sha256": "be20495c47654c84feb7c7b230e2e117c918ae6c4dbdfcdc0d16ac976fe44ee6",
       "evidence": {
-        "catalog_path": "docs/revision-master_extraction/extraction-index.json",
+        "catalog_path": "authoring/revision-master/extraction-index.json",
         "artifact_id": "RM-ASSET-26",
         "source_sha256": "742cb463e10053c78b6d240892449c4e64bb3fab3d309b364cbefbfa4b36bae6"
       }

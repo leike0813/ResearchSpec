@@ -15,8 +15,6 @@ nodes:
         source: handoff
       - role: review_comments_source
         source: handoff
-      - role: editor_letter_source
-        source: handoff
       - role: user_notes
         source: parameter
         value: null
@@ -222,4 +220,3 @@ revision_round_template:
   exit_option_id: complete
 override_policy:
   failed_gate_requires_decision: true
-

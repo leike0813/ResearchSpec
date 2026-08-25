@@ -25,7 +25,7 @@ if (topLevelCommandIds.length !== 16 || topLevelCommandIds.includes("submit")) {
 if (!siteOnly) {
   outputs.push({
     label: "handbook",
-    filePath: path.join(projectRoot, "docs/cli_handbook.md"),
+    filePath: path.join(projectRoot, "docs/user/cli-handbook.md"),
     content: renderCliHandbook(),
   });
 }

@@ -25,6 +25,7 @@ export const GraphInputBindingSchema = z.strictObject({
   role: StableIdSchema,
   source: GraphInputBindingSourceSchema,
   from_node_id: StableIdSchema.optional(),
+  from_role: StableIdSchema.optional(),
   value: z.union([z.string(), z.number(), z.boolean(), z.null()]).optional(),
 }).superRefine((value, context) => {
   if (value.source === "node_output" && value.from_node_id === undefined) {
@@ -33,10 +34,14 @@ export const GraphInputBindingSchema = z.strictObject({
   if (value.source !== "node_output" && value.from_node_id !== undefined) {
     context.addIssue({ code: "custom", path: ["from_node_id"], message: "from_node_id is only valid for node_output bindings." });
   }
+  if (value.source !== "node_output" && value.from_role !== undefined) {
+    context.addIssue({ code: "custom", path: ["from_role"], message: "from_role is only valid for node_output bindings." });
+  }
 });
 
 export const GraphExpectedOutputSchema = z.strictObject({
   role: StableIdSchema,
+  from_role: StableIdSchema.optional(),
   required: z.boolean().optional(),
 });
 
@@ -45,11 +50,13 @@ export const GraphEntrySchema = z.discriminatedUnion("kind", [
     entry_id: StableIdSchema,
     kind: z.literal("end-to-end"),
     node_id: StableIdSchema,
+    route_ref: NonEmptySchema.optional(),
   }),
   z.strictObject({
     entry_id: StableIdSchema,
     kind: z.literal("mid-entry"),
     entry_points: IdListSchema.min(1),
+    route_ref: NonEmptySchema.optional(),
   }),
 ]);
 
@@ -66,6 +73,7 @@ export const GraphNodeSchema = z.strictObject({
   required_decision_ids: IdListSchema,
   multiplicity: GraphMultiplicitySchema,
   round_role: StableIdSchema.nullable(),
+  delivery_requirement: z.literal("quarto_available_for_qmd").optional(),
 }).superRefine((value, context) => {
   uniqueStrings(value.input_bindings.map((item) => item.role), ["input_bindings"], "input binding role", context);
   uniqueStrings(value.expected_outputs.map((item) => item.role), ["expected_outputs"], "expected output role", context);
@@ -95,6 +103,9 @@ export const GraphNodeSchema = z.strictObject({
   }
   if (value.prerequisites.includes(value.node_id)) {
     context.addIssue({ code: "custom", path: ["prerequisites"], message: "A node cannot depend on itself." });
+  }
+  if (value.kind !== "subgraph" && value.expected_outputs.some((output) => output.from_role !== undefined)) {
+    context.addIssue({ code: "custom", path: ["expected_outputs"], message: "Output role mappings are valid only for subgraph nodes." });
   }
 });
 
@@ -130,6 +141,7 @@ export const GraphDecisionSchema = z.strictObject({
 
 export const GraphRevisionRoundTemplateSchema = z.strictObject({
   revision_node_id: StableIdSchema,
+  review_execution_node_id: StableIdSchema.optional(),
   review_node_id: StableIdSchema,
   continue_option_id: StableIdSchema,
   exit_option_id: StableIdSchema,
@@ -205,6 +217,9 @@ export const CapabilityGraphProfileSchema = z.strictObject({
   const template = value.revision_round_template;
   if (template !== null) {
     ref(template.revision_node_id, nodeIds, ["revision_round_template", "revision_node_id"], "node", context);
+    if (template.review_execution_node_id !== undefined) {
+      ref(template.review_execution_node_id, nodeIds, ["revision_round_template", "review_execution_node_id"], "node", context);
+    }
     ref(template.review_node_id, nodeIds, ["revision_round_template", "review_node_id"], "node", context);
     const reviewDecision = value.decisions.find((item) => item.owner_node_id === template.review_node_id);
     const reviewOptions = new Set(reviewDecision?.options.map((item) => item.option_id) ?? []);

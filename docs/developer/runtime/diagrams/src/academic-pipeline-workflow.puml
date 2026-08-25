@@ -1,0 +1,25 @@
+@startuml
+title Academic Pipeline capability graph
+skinparam shadowing false
+start
+:Confirm route-bound parent entry;
+:Freeze selected graph slice;
+:Start authorized research child;
+:Human confirms research Gate;
+:Start authorized writing child;
+:Human confirms writing Gate;
+:Start authorized review child;
+:Human confirms review Gate;
+repeat
+  :Start authorized revision child;
+  :Start authorized re-review child;
+  :Human chooses round outcome;
+repeat while (continue?) is (yes)
+->accepted;
+:Start authorized format child;
+:Run final integrity capability;
+:Human confirms final integrity Gate;
+:completion_ready;
+stop
+@enduml
+

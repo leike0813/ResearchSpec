@@ -9,11 +9,11 @@ import { parse as parseYaml } from "yaml";
 const ROOT = process.cwd();
 const ARS_DIR = path.join(ROOT, "vendor", "ars");
 const AUDIT_ROOT = path.join(ROOT, "audits", "arsu");
-const EXTRACTION_INDEX = path.join(ROOT, "docs", "ars_extraction", "extraction-index.json");
+const EXTRACTION_INDEX = path.join(ROOT, "authoring", "ars", "extraction-index.json");
 const REGISTRY = path.join(ROOT, "skills", "capabilities", "registry.json");
 const PACKAGES = path.join(ROOT, "skills", "capabilities");
 const GRAPH_PROFILES = path.join(ROOT, "skills", "arsu", "profiles");
-const PARITY_REPORT = path.join(ROOT, "docs", "capability-parity-report.json");
+const PARITY_REPORT = path.join(ROOT, "artifacts", "generated", "capability-parity-report.json");
 const MAINTENANCE_SKILL = path.join(ROOT, ".agents", "skills", "arsu-maintenance", "SKILL.md");
 
 let currentAnchorForRecords = "";

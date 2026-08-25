@@ -21,7 +21,7 @@ interface ExtractionIndex {
 }
 
 void test("extraction index records all 119 verified artifacts", async () => {
-  const index = JSON.parse(await readFile("docs/ars_extraction/extraction-index.json", "utf8")) as ExtractionIndex;
+  const index = JSON.parse(await readFile("authoring/ars/extraction-index.json", "utf8")) as ExtractionIndex;
   assert.equal(index.schema_version, "1");
   assert.equal(index.artifact_count, 119);
   assert.deepEqual(index.verification_summary, { pass: 119 });

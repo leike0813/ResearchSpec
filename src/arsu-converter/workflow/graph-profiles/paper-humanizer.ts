@@ -138,4 +138,4 @@ export const PAPER_HUMANIZER_GRAPH_PROFILE = {
   override_policy: { failed_gate_requires_decision: true },
 } as const satisfies CapabilityGraphProfile;
 
-export const PAPER_HUMANIZER_GRAPH_PROFILE_TEXT = `${stringify(PAPER_HUMANIZER_GRAPH_PROFILE)}\n`;
+export const PAPER_HUMANIZER_GRAPH_PROFILE_TEXT = stringify(PAPER_HUMANIZER_GRAPH_PROFILE);

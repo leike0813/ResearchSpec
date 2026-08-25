@@ -50,6 +50,6 @@ provenance:
     - PH-CAP-03
     - PH-KP-02
   upstream_sources:
-    - path: docs/paper-humanizer_extraction/capabilities/04_revision_execution.md
+    - path: authoring/paper-humanizer/capabilities/04_revision_execution.md
       sha256: 017605fb428a5c40198cd51a82aa399287a508a3c9584ca77fa768bb16ffcbaf
 license: MIT

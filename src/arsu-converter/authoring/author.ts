@@ -82,7 +82,7 @@ function stripExtractionHeader(text: string): string {
 }
 
 export async function authorCapabilityPackage(outputRoot: string, source: CapabilityAuthoringSource, options: AuthoringOptions = {}): Promise<AuthoringResult> {
-  const index = JSON.parse(await readFile(path.resolve(options.extractionIndexPath ?? "docs/ars_extraction/extraction-index.json"), "utf8")) as {
+  const index = JSON.parse(await readFile(path.resolve(options.extractionIndexPath ?? "authoring/ars/extraction-index.json"), "utf8")) as {
     artifacts: Array<{
       artifact_id: string;
       path: string;
@@ -269,4 +269,3 @@ ${procedureText.trim() ? procedureText.trim() : "Perform only the procedure desc
 When finished, submit the declared outputs through \`researchspec advance node:<run>/<node>\`, then consult \`researchspec status\` for the next legal action. Do not choose, start, or advance another node, phase, mode, or run.
 `;
 }
-

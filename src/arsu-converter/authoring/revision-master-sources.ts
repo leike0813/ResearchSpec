@@ -2,7 +2,7 @@ import type { AuthoringPackageAsset, AuthoringKnowledgeSource, CapabilityAuthori
 
 const MIT = "MIT";
 const PROCEDURES = "src/arsu-converter/authoring/procedures/review-response";
-const INDEX = "docs/revision-master_extraction/extraction-index.json";
+const INDEX = "authoring/revision-master/extraction-index.json";
 
 export const REVISION_MASTER_AUTHORING_OPTIONS = {
   extractionIndexPath: INDEX,

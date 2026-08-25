@@ -7,7 +7,7 @@ export const MINIMAL_GRAPH_PROFILE = {
   profile_id: "minimal",
   profile_version: "0.1.0",
   capability_registry_version: "0.1.0",
-  entries: [{ entry_id: "main", kind: "end-to-end", node_id: "rq" }],
+  entries: [{ entry_id: "main", kind: "end-to-end", node_id: "rq", route_ref: "deep-research:quick" }],
   nodes: [
     {
       node_id: "rq",
@@ -42,4 +42,4 @@ export const MINIMAL_GRAPH_PROFILE = {
   override_policy: { failed_gate_requires_decision: true },
 } as const satisfies CapabilityGraphProfile;
 
-export const MINIMAL_GRAPH_PROFILE_TEXT = `${stringify(MINIMAL_GRAPH_PROFILE)}\n`;
+export const MINIMAL_GRAPH_PROFILE_TEXT = stringify(MINIMAL_GRAPH_PROFILE);

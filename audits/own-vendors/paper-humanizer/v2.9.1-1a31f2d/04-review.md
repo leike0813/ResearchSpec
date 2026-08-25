@@ -27,7 +27,7 @@
 
 | artifact | path | sha256 |
 |---|---|---|
-| parity report | `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/docs/capability-parity-report.json` | `5ac448022152efee89a650083e036a71d84f9d7f14f227b640bd1cfba6995399` |
+| parity report | `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/artifacts/generated/capability-parity-report.json` | `5ac448022152efee89a650083e036a71d84f9d7f14f227b640bd1cfba6995399` |
 | parity package slice | `audits/own-vendors/paper-humanizer/v2.9.1-1a31f2d/artifacts/parity-packages.json` | `504f9fc9e43c94c68133df6b1db7f31d293f469f0db551983059dc1055e2c836` |
 
 ## Human Confirmation

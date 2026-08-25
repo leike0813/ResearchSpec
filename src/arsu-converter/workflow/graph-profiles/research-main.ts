@@ -7,7 +7,7 @@ export const RESEARCH_MAIN_GRAPH_PROFILE = {
   profile_id: "research-main",
   profile_version: "0.1.0",
   capability_registry_version: "0.1.0",
-  entries: [{ entry_id: "main", kind: "end-to-end", node_id: "research-question" }],
+  entries: [{ entry_id: "main", kind: "end-to-end", node_id: "research-question", route_ref: "deep-research:full" }],
   nodes: [
     {
       node_id: "research-question",
@@ -104,4 +104,4 @@ export const RESEARCH_MAIN_GRAPH_PROFILE = {
   override_policy: { failed_gate_requires_decision: true },
 } as const satisfies CapabilityGraphProfile;
 
-export const RESEARCH_MAIN_GRAPH_PROFILE_TEXT = `${stringify(RESEARCH_MAIN_GRAPH_PROFILE)}\n`;
+export const RESEARCH_MAIN_GRAPH_PROFILE_TEXT = stringify(RESEARCH_MAIN_GRAPH_PROFILE);

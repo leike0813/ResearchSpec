@@ -12,7 +12,7 @@ const CATALOG_PATH = path.join(AUDIT_ROOT, "catalog.json");
 const MAINTENANCE_SKILL = path.join(ROOT, ".agents", "skills", "own-vendor-maintenance", "SKILL.md");
 const REGISTRY_PATH = path.join(ROOT, "skills", "capabilities", "registry.json");
 const PACKAGES = path.join(ROOT, "skills", "capabilities");
-const PARITY_REPORT_PATH = path.join(ROOT, "docs", "capability-parity-report.json");
+const PARITY_REPORT_PATH = path.join(ROOT, "artifacts", "generated", "capability-parity-report.json");
 const RECORD_FILES = ["01-analysis.md", "02-ingestion.md", "03-conversion.md", "04-review.md", "05-semantic-review.md"];
 
 let currentVendor = null;

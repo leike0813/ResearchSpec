@@ -73,7 +73,7 @@ library。
 
 ### Tier 1：发布签收
 
-Tier 1 对应 `artifacts/mvp_release_checklist.md` 的五项人工证据：
+Tier 1 对应 `artifacts/release/mvp-release-checklist.md` 的五项人工证据：
 
 1. `DF-T1-STANDALONE`：模糊目标经 Navigate 路由并完成 `deep-research:quick`。
 2. `DF-T1-RESUME`：新会话仅根据 profile、control 和 handoff 恢复。

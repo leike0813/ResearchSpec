@@ -1,0 +1,23 @@
+@startuml
+title Dynamic revision round
+skinparam shadowing false
+actor User
+participant "Host Agent" as Agent
+participant "ResearchSpec CLI" as CLI
+participant "review-response child" as Revise
+participant "reviewer child" as ReReview
+database "Run files + handoffs" as Files
+Agent -> CLI : instructions node:.../revision@round
+CLI --> Agent : eligible under frozen graph authorization
+Agent -> CLI : start revision child
+Agent -> Revise : produce revised manuscript and response
+Revise -> Files : external outputs + handoff
+Agent -> CLI : start re-review child
+Agent -> ReReview : verify revised manuscript
+ReReview -> Files : review synthesis + handoff
+Agent -> User : accept or continue?
+User --> Agent : confirmed branch choice
+Agent -> CLI : decide decision:.../revision-outcome@round
+CLI -> Files : record Decision and derive next frontier
+@enduml
+

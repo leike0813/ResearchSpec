@@ -6,6 +6,18 @@ entries:
   - entry_id: main
     kind: end-to-end
     node_id: research
+    route_ref: academic-pipeline:end-to-end
+  - entry_id: mid-entry
+    kind: mid-entry
+    entry_points:
+      - research
+      - write
+      - review
+      - revision
+      - re-review
+      - format
+      - final-integrity
+    route_ref: academic-pipeline:mid-entry
 nodes:
   - node_id: research
     kind: subgraph
@@ -32,7 +44,10 @@ nodes:
   - node_id: write
     kind: subgraph
     subgraph_id: academic-paper
-    input_bindings: []
+    input_bindings:
+      - role: research_report
+        source: node_output
+        from_node_id: research
     expected_outputs:
       - role: manuscript_draft
         required: true
@@ -70,6 +85,113 @@ nodes:
     required_decision_ids: []
     multiplicity: one
     round_role: null
+  - node_id: review-gate
+    kind: gate
+    input_bindings: []
+    expected_outputs: []
+    prerequisites:
+      - review
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: revision
+    kind: subgraph
+    subgraph_id: review-response
+    input_bindings:
+      - role: manuscript_source
+        source: node_output
+        from_node_id: write
+        from_role: manuscript_draft
+      - role: review_comments_source
+        source: node_output
+        from_node_id: review
+        from_role: review_synthesis
+    expected_outputs:
+      - role: manuscript_draft
+        from_role: working_manuscript
+        required: true
+      - role: response_to_reviewers
+        from_role: response_markdown
+        required: true
+    prerequisites:
+      - review-gate
+    required_gate_ids:
+      - review-gate
+    required_decision_ids: []
+    multiplicity: repeatable
+    round_role: revision
+  - node_id: re-review
+    kind: subgraph
+    subgraph_id: academic-paper-re-reviewer
+    input_bindings:
+      - role: manuscript_draft
+        source: node_output
+        from_node_id: revision
+    expected_outputs:
+      - role: review_synthesis
+        required: true
+    prerequisites:
+      - revision
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: repeatable
+    round_role: review
+  - node_id: round-outcome
+    kind: decision
+    input_bindings: []
+    expected_outputs: []
+    prerequisites:
+      - re-review
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: repeatable
+    round_role: review
+  - node_id: format
+    kind: subgraph
+    subgraph_id: academic-paper-format
+    input_bindings:
+      - role: manuscript_draft
+        source: node_output
+        from_node_id: revision
+    expected_outputs:
+      - role: formatted_manuscript
+        required: true
+    prerequisites:
+      - round-outcome
+    required_gate_ids: []
+    required_decision_ids:
+      - revision-outcome
+    multiplicity: one
+    round_role: null
+    delivery_requirement: quarto_available_for_qmd
+  - node_id: final-integrity
+    kind: capability
+    capability_id: check-reference-integrity-verification
+    input_bindings:
+      - role: manuscript_draft
+        source: node_output
+        from_node_id: format
+        from_role: formatted_manuscript
+    expected_outputs:
+      - role: integrity_report
+        required: true
+    prerequisites:
+      - format
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: final-integrity-gate
+    kind: gate
+    input_bindings: []
+    expected_outputs: []
+    prerequisites:
+      - final-integrity
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
 parallel_groups: []
 subgraphs:
   - subgraph_id: research-main
@@ -87,6 +209,21 @@ subgraphs:
     profile_version: 0.1.0
     entry_id: main
     entry_node_id: panel
+  - subgraph_id: review-response
+    profile_id: review-response
+    profile_version: 0.1.0
+    entry_id: full
+    entry_node_id: intake
+  - subgraph_id: academic-paper-re-reviewer
+    profile_id: academic-paper-reviewer
+    profile_version: 0.1.0
+    entry_id: main
+    entry_node_id: panel
+  - subgraph_id: academic-paper-format
+    profile_id: academic-paper
+    profile_version: 0.1.0
+    entry_id: format
+    entry_node_id: format
 gates:
   - gate_id: research-gate
     owner_node_id: research-gate
@@ -102,8 +239,35 @@ gates:
       - pass
       - pass_with_conditions
       - fail
-decisions: []
-revision_round_template: null
+  - gate_id: review-gate
+    owner_node_id: review-gate
+    policy: required
+    verdicts:
+      - pass
+      - pass_with_conditions
+      - fail
+  - gate_id: final-integrity-gate
+    owner_node_id: final-integrity-gate
+    policy: required
+    verdicts:
+      - pass
+      - pass_with_conditions
+      - fail
+decisions:
+  - decision_id: revision-outcome
+    owner_node_id: round-outcome
+    options:
+      - option_id: continue
+        unlocks:
+          - revision
+      - option_id: complete
+        unlocks:
+          - format
+revision_round_template:
+  revision_node_id: revision
+  review_execution_node_id: re-review
+  review_node_id: round-outcome
+  continue_option_id: continue
+  exit_option_id: complete
 override_policy:
   failed_gate_requires_decision: true
-

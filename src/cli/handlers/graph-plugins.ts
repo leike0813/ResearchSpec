@@ -83,6 +83,10 @@ export async function handleGraphPluginShow(pluginId: string, options: { summary
 }
 
 export async function handleGraphPluginInstall(pluginIds: readonly string[], context: CommandContext): Promise<CommandResult> {
+  if (pluginIds.length === 0) throw new CliError("plugin_ids_required", "Plugin installation requires at least one explicit domain ID.", 2);
+  if (!context.interactive && !context.yes) {
+    throw new CliError("plugin_confirmation_required", "Non-interactive plugin installation requires the global --yes flag.", 2);
+  }
   const workspace = await graphWorkspace(context);
   const index = await loadGraphWorkspaceIndex(workspace);
   const registry = await loadPluginRegistry();

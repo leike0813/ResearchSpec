@@ -64,7 +64,7 @@ void test("audits/revision-master/snapshot-13e69610 set hash reproduces from sta
 });
 
 void test("revision-master extraction index verifies against the pinned snapshot", async () => {
-  const index = JSON.parse(await readFile(path.join(root, "docs/revision-master_extraction/extraction-index.json"), "utf8")) as {
+  const index = JSON.parse(await readFile(path.join(root, "authoring/revision-master/extraction-index.json"), "utf8")) as {
     artifact_count: number;
     artifacts: Array<{ artifact_id: string; sha256: string; sources: string[] }>;
   };

@@ -18,6 +18,24 @@ const NonEmptySchema = z.string().trim().min(1);
 const Rfc3339Schema = z.iso.datetime({ offset: true });
 const HexSha256Schema = z.string().regex(/^[0-9a-f]{64}$/, "must be a lowercase SHA-256 hex string");
 
+export const QuartoProbeSummarySchema = z.discriminatedUnion("status", [
+  z.strictObject({ status: z.literal("available"), checked_at: Rfc3339Schema, version: NonEmptySchema }),
+  z.strictObject({ status: z.literal("unavailable"), checked_at: Rfc3339Schema, reason: NonEmptySchema }),
+  z.strictObject({ status: z.literal("unknown"), checked_at: Rfc3339Schema, reason: NonEmptySchema }),
+]);
+
+export const ManuscriptDeliveryContextSchema = z.strictObject({
+  delivery: ManuscriptDeliverySchema,
+  quarto_probe: QuartoProbeSummarySchema.optional(),
+}).superRefine((value, context) => {
+  if (value.delivery.working_format === "qmd" && value.quarto_probe === undefined) {
+    context.addIssue({ code: "custom", path: ["quarto_probe"], message: "QMD delivery requires a Quarto probe summary." });
+  }
+  if (value.delivery.working_format !== "qmd" && value.quarto_probe !== undefined) {
+    context.addIssue({ code: "custom", path: ["quarto_probe"], message: "A Quarto probe summary is valid only for QMD delivery." });
+  }
+});
+
 export const GraphWorkspaceConfigSchema = z.strictObject({
   schema_version: z.literal(GRAPH_WORKSPACE_SCHEMA_VERSION),
   agent_tools: z.strictObject({
@@ -141,6 +159,7 @@ export const GraphRunSchema = z.strictObject({
     subgraph_id: StableIdSchema,
     round: z.number().int().positive().optional(),
   }).optional(),
+  manuscript_delivery: ManuscriptDeliveryContextSchema.optional(),
   start_confirmation: z.strictObject({
     confirmed_by: NonEmptySchema,
     confirmed_at: Rfc3339Schema,
@@ -148,6 +167,7 @@ export const GraphRunSchema = z.strictObject({
     expected_outputs: z.array(NonEmptySchema),
     formal_gates: z.array(StableIdSchema),
     cost: CostSchema,
+    route_ref: NonEmptySchema.optional(),
   }).optional(),
 }).superRefine((value, context) => {
   if (value.authorization_origin === "human") {
@@ -251,11 +271,18 @@ export const GraphRunStartCommandSchema = z.strictObject({
   planned_outputs: z.array(RunHandoffOutputEntrySchema),
   formal_gates: z.array(StableIdSchema),
   cost: CostSchema,
+  route_ref: NonEmptySchema.optional(),
+  manuscript_delivery: ManuscriptDeliveryContextSchema.optional(),
 }).superRefine((value, context) => {
   unique(value.prerequisites, (item) => item, ["prerequisites"], "prerequisite", context);
   unique(value.handoff_inputs, (item) => item.role, ["handoff_inputs"], "input role", context);
   unique(value.planned_outputs, (item) => item.role, ["planned_outputs"], "output role", context);
   unique(value.formal_gates, (item) => item, ["formal_gates"], "Gate", context);
+});
+
+export const GraphChildRunStartCommandSchema = z.strictObject({
+  schema_version: z.literal(GRAPH_WORKSPACE_SCHEMA_VERSION),
+  manuscript_delivery: ManuscriptDeliveryContextSchema,
 });
 
 export function renderRunHandoff(handoff: RunHandoff, body = "\n# Run handoff\n"): string {
@@ -303,4 +330,5 @@ export type RunHandoff = z.infer<typeof RunHandoffSchema>;
 export type RunHandoffInputEntry = z.infer<typeof RunHandoffInputEntrySchema>;
 export type RunHandoffOutputEntry = z.infer<typeof RunHandoffOutputEntrySchema>;
 export type GraphRunStartCommand = z.infer<typeof GraphRunStartCommandSchema>;
+export type GraphChildRunStartCommand = z.infer<typeof GraphChildRunStartCommandSchema>;
 export type FrozenGraphProfile = z.infer<typeof CapabilityGraphProfileSchema>;

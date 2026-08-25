@@ -98,6 +98,8 @@ void test("graph profile instructions expose a start template", async () => {
     const result = await handleGraphInstructions("profile:minimal", context({ cwd: root, command: "instructions" }));
     assert.equal((result.data as { kind: string }).kind, "profile");
     assert.equal((result.data as { start_input: { schema_version: string } }).start_input.schema_version, "2");
+    const entries = (result.data as { entries: Array<{ entry_id: string; entry_node_id: string }> }).entries;
+    assert.deepEqual(entries.map((entry) => [entry.entry_id, entry.entry_node_id]), [["main", "rq"]]);
   } finally {
     await rm(root, { recursive: true, force: true });
   }

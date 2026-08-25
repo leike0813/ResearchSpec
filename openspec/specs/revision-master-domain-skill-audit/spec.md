@@ -82,7 +82,7 @@ or domain entry, a package script that executes upstream code, or a runtime inte
 ### Requirement: Authoring SHALL consume the verified extraction index
 
 The revision-master authoring source set SHALL read
-`docs/revision-master_extraction/extraction-index.json`, author manifest provenance as
+`authoring/revision-master/extraction-index.json`, author manifest provenance as
 `vendor-derived`, and copy declared knowledge, script, schema, localization, and template assets
 from verified extraction artifacts. The package scripts SHALL expose `revision-master:author` and
 SHALL NOT expose the retired `revision-master:{convert,check,idempotence}` scripts.
@@ -97,6 +97,16 @@ SHALL NOT expose the retired `revision-master:{convert,check,idempotence}` scrip
 
 - **WHEN** a packaged `.py` asset is parsed as Python
 - **THEN** the extraction header is absent and the upstream script body is preserved
+
+### Requirement: Revision-Master Extraction Is Authoring Authority
+
+Revision-master capability definitions, knowledge, scripts, schemas, templates, and extraction metadata SHALL be consumed from `authoring/revision-master`. Generated capability packages and the graph profile remain derived production output.
+
+#### Scenario: Revision-response capabilities are regenerated
+
+- **WHEN** the revision-master authoring command runs
+- **THEN** all five capability packages resolve their reviewed inputs from `authoring/revision-master`
+- **AND** no runtime or maintainer path depends on `docs/revision-master_extraction`
 
 ### Requirement: Audit and tests SHALL remain inert
 

@@ -42,12 +42,12 @@ the configured delivery mode is `commands`.
 
 ### Requirement: Complete Companion Skill Delivery
 
-Every selected Skill-capable tool SHALL receive five generated ResearchSpec Companion Skills together with the four ARSU and two Core Skills. The handbook content SHALL be delivered as the `SKILL.md` of `researchspec-cli-handbook`; no Navigate-local `references/cli-handbook.md` file SHALL be generated.
+Every selected Skill-capable tool SHALL receive five generated ResearchSpec Companion Skills together with the four ARSU Skills and all registered capability packages projected for that tool. ResearchSpec SHALL deliver no separate Core Skill group. The handbook content SHALL be delivered as the `SKILL.md` of `researchspec-cli-handbook`; no Navigate-local `references/cli-handbook.md` file SHALL be generated.
 
-#### Scenario: Every tool receives the default ten-Skill surface
+#### Scenario: Every tool receives the fixed base surface
 
 - **WHEN** any registered tool is selected without optional Adapter selection
-- **THEN** it SHALL receive four ARSU, two Core and five Companion Skills
+- **THEN** it SHALL receive four ARSU Skills, five Companion Skills, and the registered capability packages supported by its delivery mode
 - **AND** desired projection counts and files SHALL be derived from their owning catalogs
 
 #### Scenario: Selected Adapter reaches every tool

@@ -30,6 +30,6 @@ provenance:
     - PH-CAP-03
     - PH-CAP-03
   upstream_sources:
-    - path: docs/paper-humanizer_extraction/capabilities/03_reference_taxonomy.md
+    - path: authoring/paper-humanizer/capabilities/03_reference_taxonomy.md
       sha256: 9e89846ed3db75238eb64bda289409e7b0fdff957fce6b77c3685778db2773b5
 license: MIT

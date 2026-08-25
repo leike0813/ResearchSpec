@@ -6,6 +6,7 @@ entries:
   - entry_id: main
     kind: end-to-end
     node_id: research-question
+    route_ref: deep-research:full
 nodes:
   - node_id: research-question
     kind: capability
@@ -131,4 +132,3 @@ decisions: []
 revision_round_template: null
 override_policy:
   failed_gate_requires_decision: true
-

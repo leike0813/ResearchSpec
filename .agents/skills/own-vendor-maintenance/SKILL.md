@@ -15,8 +15,8 @@ description: Maintain user-owned upstream projects absorbed as ResearchSpec capa
 
 | vendor | anchor | extraction | capability packages |
 |---|---|---|---|
-| `paper-humanizer` | `v2.9.1-1a31f2d` | `docs/paper-humanizer_extraction/extraction-index.json` | 4 个核心 capability 包（无 `cap-` 前缀） |
-| `revision-master` | `snapshot-13e69610` | `docs/revision-master_extraction/extraction-index.json` | 5 个核心 capability 包（无 `cap-` 前缀） |
+| `paper-humanizer` | `v2.9.1-1a31f2d` | `authoring/paper-humanizer/extraction-index.json` | 4 个核心 capability 包（无 `cap-` 前缀） |
+| `revision-master` | `snapshot-13e69610` | `authoring/revision-master/extraction-index.json` | 5 个核心 capability 包（无 `cap-` 前缀） |
 
 目录总览：
 

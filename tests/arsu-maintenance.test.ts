@@ -37,7 +37,7 @@ void test("first ARSU anchor records contain full ingestion, conversion and revi
   assert.match(ingestion, /CAP-M1-01/);
   assert.match(ingestion, /KP-M5-33/);
   assert.match(conversion, /analysis-evidence-synthesis/);
-  assert.match(conversion, /academic-paper-reviewer\.ts/);
+  assert.match(conversion, /academic-paper-reviewer\.yaml/);
   assert.match(review, /deep-research:full/);
   assert.match(review, /academic-pipeline:end-to-end/);
 });

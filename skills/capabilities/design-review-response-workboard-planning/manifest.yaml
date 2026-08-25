@@ -52,6 +52,6 @@ provenance:
     - RM-KP-02
     - RM-KP-01
   upstream_sources:
-    - path: docs/revision-master_extraction/capabilities/stage-4-workboard-planning.md
+    - path: authoring/revision-master/capabilities/stage-4-workboard-planning.md
       sha256: 8f9c9b028c326aeae2d6874fd7724cd3c95392dfe8bb192d4fa6add0458dafd5
 license: MIT

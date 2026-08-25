@@ -5,7 +5,7 @@ import path from "node:path";
 import process from "node:process";
 
 const ROOT = process.cwd();
-const EXTRACTION_ROOT = path.join(ROOT, "docs", "ars_extraction");
+const EXTRACTION_ROOT = path.join(ROOT, "authoring", "ars");
 const UPSTREAM_ROOT = path.join(ROOT, "vendor", "ars");
 const OUTPUT = path.join(EXTRACTION_ROOT, "extraction-index.json");
 const DEFAULT_MILESTONES = [
@@ -167,7 +167,7 @@ function buildIndex() {
   return {
     schema_version: "1",
     source: "vendor/ars",
-    extraction_root: "docs/ars_extraction",
+    extraction_root: "authoring/ars",
     milestone_count: milestones.length,
     artifact_count: artifacts.length,
     verification_summary: statuses,

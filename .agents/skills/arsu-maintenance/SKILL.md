@@ -57,7 +57,7 @@ audits/arsu/<anchor>/
    - 增量：`git -C vendor/ars diff <old>..<new> --stat`，并单独检查 `MODE_REGISTRY.md`、四个 `SKILL.md`、`agents/`、`references/`、`templates/`、`shared/`。
 3. 分类影响：
    - Mode 增删改 -> routing catalog、MODE_REGISTRY 锚点、审阅工件 tab 结构。
-   - Agent 指令变化 -> 对应 `docs/ars_extraction/<milestone>/capabilities/*.md` 或新增 extraction artifact。
+   - Agent 指令变化 -> 对应 `authoring/ars/<milestone>/capabilities/*.md` 或新增 extraction artifact。
    - Reference 变化 -> 对应 knowledge pack 或 procedure 语义。
    - Orchestration 变化 -> 仅记录，不得进入 capability `SKILL.md` 的节点内指令。
 4. 将分析写入 `audits/arsu/<anchor>/01-analysis.md`，必须包含：上游身份、diff 摘要、受影响文件清单、受影响 capability/知识包映射、需要用户确认的决策。
@@ -98,7 +98,7 @@ audits/arsu/<anchor>/
    - `pnpm arsu-maintenance:artifacts`
    - 等价于 `pnpm capability:parity` + `pnpm capability:review-html` + `pnpm capability:assessment-html` + `pnpm capability:gap-review-html`
 2. 机器审计确认：
-   - `docs/capability-parity-report.json`：38/38 operational，`below_*`、`output_missing`、`flow_retained` 全部为空。
+   - `artifacts/generated/capability-parity-report.json`：38/38 operational，`below_*`、`output_missing`、`flow_retained` 全部为空。
    - assessment：116 个锚点中 113 preserved + 3 flow，0 gap（或所有缺口均有记录并给出明确决策）。
    - 审阅工件中无旧 dotted capability ID。
 3. **Agent 语义审阅门（不能省略，不能只贴脚本输出）**：

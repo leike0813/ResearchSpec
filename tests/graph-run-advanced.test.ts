@@ -305,6 +305,7 @@ void test("eligible subgraph start creates one deterministic parent-bound child 
         confirmed_at: TIME_0,
         entry_id: "main",
         entry_node_id: "research",
+        route_ref: "academic-pipeline:end-to-end",
         prerequisites: [],
         handoff_inputs: [],
         planned_outputs: [

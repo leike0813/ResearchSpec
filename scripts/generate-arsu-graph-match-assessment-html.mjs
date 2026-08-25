@@ -491,5 +491,6 @@ activate(0);
 </body>
 </html>
 `;
-writeFileSync(OUT, html, "utf8");
-process.stdout.write(`wrote ${OUT} (${Math.round(Buffer.byteLength(html, "utf8") / 1024)} KiB)\n`);
+const normalizedHtml = html.replace(/[ \t]+$/gm, "");
+writeFileSync(OUT, normalizedHtml, "utf8");
+process.stdout.write(`wrote ${OUT} (${Math.round(Buffer.byteLength(normalizedHtml, "utf8") / 1024)} KiB)\n`);

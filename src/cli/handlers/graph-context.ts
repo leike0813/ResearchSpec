@@ -33,10 +33,26 @@ export async function handleGraphList(type: string | undefined, options: GraphLi
   else if (resolved === "changes") items = [...index.changes, ...index.archivedChanges].map((record) => ({ selector: `change:${record.id}`, id: record.id, archived: record.archived, status: record.change.status }));
   else if (resolved === "diagnostics") items = index.diagnostics.map((item) => ({ selector: item.code, code: item.code, severity: item.severity, path: item.path, message: item.message }));
   else throw new CliError("invalid_list_type", `Unknown graph list type: ${resolved}`, 2);
+  items.sort((left, right) => compareText(
+    typeof left.selector === "string" ? left.selector : "",
+    typeof right.selector === "string" ? right.selector : "",
+  ));
   const limit = options.limit === undefined ? 20 : Number(options.limit);
   if (!Number.isInteger(limit) || limit < 1 || limit > 50) throw new CliError("list_limit_invalid", "List limit must be an integer from 1 to 50.", 2);
-  const page = items.slice(0, limit);
-  return success("list", { type: resolved, items: page, total: items.length, truncated: items.length > page.length }, { stdout: page.map((item) => item.selector).join("\n") + (page.length ? "\n" : `No ${resolved}.\n`) });
+  const fingerprint = sha256(JSON.stringify(items));
+  const offset = options.cursor === undefined ? 0 : decodeListCursor(options.cursor, resolved, fingerprint);
+  if (offset > items.length) throw new CliError("list_cursor_stale", "List cursor no longer matches the current collection.", 2);
+  const page = items.slice(offset, offset + limit);
+  const nextOffset = offset + page.length;
+  const nextCursor = nextOffset < items.length ? encodeListCursor({ type: resolved, fingerprint, offset: nextOffset }) : undefined;
+  return success("list", {
+    type: resolved,
+    items: page,
+    total: items.length,
+    offset,
+    truncated: nextCursor !== undefined,
+    ...(nextCursor === undefined ? {} : { next_cursor: nextCursor }),
+  }, { stdout: page.map((item) => item.selector).join("\n") + (page.length ? "\n" : `No ${resolved}.\n`) });
 }
 
 export async function handleGraphShow(selector: string, context: CommandContext): Promise<CommandResult> {
@@ -177,7 +193,39 @@ function selectPackFiles(index: Awaited<ReturnType<typeof loadGraphWorkspaceInde
   if (scope === "profiles") return files.filter((file) => file.relativePath.startsWith("profiles/") && file.relativePath.endsWith(".yaml"));
   if (scope === "runs") return files.filter(run);
   if (scope === "changes") return files.filter(change);
+  if (scope.startsWith("run:")) {
+    const runId = scope.slice("run:".length);
+    const owner = index.runs.find((record) => record.run?.run_id === runId);
+    if (!owner) throw new CliError("run_not_found", `Run not found: ${runId}`, 1);
+    const prefix = `runs/${owner.directoryName}/`;
+    return files.filter((file) => file.relativePath.startsWith(prefix) && run(file));
+  }
+  if (scope.startsWith("change:")) {
+    const changeId = scope.slice("change:".length);
+    const owner = [...index.changes, ...index.archivedChanges].find((record) => record.id === changeId);
+    if (!owner) throw new CliError("change_not_found", `Project change not found: ${changeId}`, 1);
+    const prefix = owner.archived ? `changes/archive/${owner.directoryName}/` : `changes/${owner.directoryName}/`;
+    return files.filter((file) => file.relativePath.startsWith(prefix) && change(file));
+  }
   throw new CliError("pack_scope_invalid", `Unknown graph pack scope: ${scope}`, 2);
+}
+
+interface ListCursorPayload { type: string; fingerprint: string; offset: number }
+
+function encodeListCursor(payload: ListCursorPayload): string {
+  return Buffer.from(JSON.stringify(payload), "utf8").toString("base64url");
+}
+
+function decodeListCursor(cursor: string, type: string, fingerprint: string): number {
+  let payload: unknown;
+  try { payload = JSON.parse(Buffer.from(cursor, "base64url").toString("utf8")); }
+  catch { throw new CliError("list_cursor_invalid", "List cursor is malformed.", 2); }
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) throw new CliError("list_cursor_invalid", "List cursor is malformed.", 2);
+  const value = payload as Partial<ListCursorPayload>;
+  if (value.type !== type) throw new CliError("list_cursor_collection_mismatch", "List cursor belongs to another collection.", 2);
+  if (value.fingerprint !== fingerprint) throw new CliError("list_cursor_stale", "List cursor no longer matches the current collection.", 2);
+  if (!Number.isInteger(value.offset) || (value.offset ?? -1) < 0) throw new CliError("list_cursor_invalid", "List cursor is malformed.", 2);
+  return value.offset as number;
 }
 
 function commaSeparated(value: string): string[] {

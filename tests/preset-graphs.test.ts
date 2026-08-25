@@ -97,3 +97,17 @@ void test("paper, reviewer, pipeline, humanizer, and review-response presets res
     assert.deepEqual(validateGraphAgainstCapabilityRegistry(registry, parsed), []);
   }
 });
+
+void test("academic pipeline exposes every supported entry and the revision-to-delivery tail", async () => {
+  const registered = (await loadGraphProfileRegistry()).profiles.get("academic-pipeline");
+  assert.ok(registered);
+  const graph = parseCapabilityGraphProfile(registered.profile);
+  const midEntry = graph.entries.find((entry) => entry.entry_id === "mid-entry");
+  assert.equal(midEntry?.kind, "mid-entry");
+  assert.deepEqual(midEntry?.kind === "mid-entry" ? midEntry.entry_points : [], [
+    "research", "write", "review", "revision", "re-review", "format", "final-integrity",
+  ]);
+  assert.equal(graph.nodes.find((node) => node.node_id === "format")?.delivery_requirement, "quarto_available_for_qmd");
+  assert.equal(graph.revision_round_template?.review_execution_node_id, "re-review");
+  assert.equal(graph.gates.some((gate) => gate.gate_id === "final-integrity-gate"), true);
+});

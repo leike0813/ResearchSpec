@@ -2,7 +2,7 @@ import type { CapabilityAuthoringSource } from "./author.js";
 
 const MIT = "MIT";
 const PROCEDURES = "src/arsu-converter/authoring/procedures/paper-humanizer";
-const INDEX = "docs/paper-humanizer_extraction/extraction-index.json";
+const INDEX = "authoring/paper-humanizer/extraction-index.json";
 
 export const PAPER_HUMANIZER_AUTHORING_OPTIONS = {
   extractionIndexPath: INDEX,

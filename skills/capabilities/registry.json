@@ -15,7 +15,7 @@
     {
       "capability_id": "analysis-review-response-manuscript-analysis",
       "source_path": "analysis-review-response-manuscript-analysis",
-      "manifest_sha256": "636d11915f2bb05d12217aa72af3d4e2f80721810fefb54c08cf8ba48bbcb3d1"
+      "manifest_sha256": "b08bd884a9b609950e6a486c32245585a8715ac977747d0389032ec235da9130"
     },
     {
       "capability_id": "analysis-risk-of-bias-assessment",
@@ -60,12 +60,12 @@
     {
       "capability_id": "check-paper-humanization-review",
       "source_path": "check-paper-humanization-review",
-      "manifest_sha256": "ef9780d14bb00d0da7c1e28be29beb1a961bbf6f718b54511ce1743de3bc9109"
+      "manifest_sha256": "c0779f5cf35a941993bcf73e8d5ae39564294c820112021803c5906f2032924e"
     },
     {
       "capability_id": "check-paper-humanization-verification",
       "source_path": "check-paper-humanization-verification",
-      "manifest_sha256": "3b395ddb76db8be851bff7135318e96f74aac3c01a5cdeb39427123a0859a744"
+      "manifest_sha256": "608608b5185bd7fed1b88f686685409d3af6b7439c1ae84338fc984138812ffa"
     },
     {
       "capability_id": "check-passport-verifier",
@@ -130,12 +130,12 @@
     {
       "capability_id": "design-review-response-intake",
       "source_path": "design-review-response-intake",
-      "manifest_sha256": "5d630feb1f670e31a4ff467471bbb3f66b75e2f6801fb729dd75cec480d12d66"
+      "manifest_sha256": "c1ed654755dc8ccba8954441c3946bb5f12c6c91dd21093a43eea0c1d6056f39"
     },
     {
       "capability_id": "design-review-response-workboard-planning",
       "source_path": "design-review-response-workboard-planning",
-      "manifest_sha256": "2a185071f9425fb3ddb99258d16b15845e2b669e8c19f8014e74fac073d23b59"
+      "manifest_sha256": "18c82a15ea847d6dcf3e362a4e013d5ee4e08f0180c555eccd6059b775b596d3"
     },
     {
       "capability_id": "design-writing-intake",
@@ -175,7 +175,7 @@
     {
       "capability_id": "generation-humanization-reference",
       "source_path": "generation-humanization-reference",
-      "manifest_sha256": "ce0fe3b3eef6b78229e19b8792283f5d9a942c0831ed4f1d4b43328e404a7d53"
+      "manifest_sha256": "d1e6fba4efb47b7e94902fdb84cbd4f9e8ceea967e1e8dfb81323f72bfce90b5"
     },
     {
       "capability_id": "generation-manuscript-drafting",
@@ -190,7 +190,7 @@
     {
       "capability_id": "generation-review-response-round",
       "source_path": "generation-review-response-round",
-      "manifest_sha256": "9400c053e331177890534ffbf17b99310a3df3a767cdb711ff32f8d5647d1d35"
+      "manifest_sha256": "23f40e80658860a2d6579d6659a0cbd55a5987032bcc87d92394fc059e11da04"
     },
     {
       "capability_id": "judgment-devils-advocate-stress-test",
@@ -215,12 +215,12 @@
     {
       "capability_id": "transform-paper-humanization-revision",
       "source_path": "transform-paper-humanization-revision",
-      "manifest_sha256": "68fb272a60f46fa492bc10554b731e2af33f1cb30ea5eec519bbf2b596bb9aaf"
+      "manifest_sha256": "530ce33b99fe62a28feca10b09d10a520a9f5f95df9473dbdf027f4fd9e7c0d7"
     },
     {
       "capability_id": "transform-review-response-comment-atomization",
       "source_path": "transform-review-response-comment-atomization",
-      "manifest_sha256": "7a4fa94febd73b7c74450729c2fe589d0e4a269429b18859250c303e8526eb01"
+      "manifest_sha256": "ba612aad074f04362bfb6193f17246f7efeb808c6a75e1d7b959602c393ee760"
     },
     {
       "capability_id": "transform-revision-patching",

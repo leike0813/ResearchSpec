@@ -17,6 +17,9 @@ import {
 import { loadGraphWorkspaceIndex } from "../../core/runtime/graph-workspace-index.js";
 import { requireGraphWorkspace } from "../../core/workspace/graph-discover.js";
 import { validateGraphAgainstCapabilityRegistry } from "../../capabilities/registry.js";
+import { getArsuRoute } from "../../arsu-converter/routing/catalog.js";
+import { renderArsuRouteSummary } from "../../arsu-converter/routing/projection.js";
+import type { ArsuRouteDefinition, RouteRef } from "../../arsu-converter/routing/contracts.js";
 import type { CurrentCheckTarget } from "../../core/validation/types.js";
 import { pluginWorkspaceDiagnostics } from "../../plugins/graph-check.js";
 import { loadWorkspaceCapabilityRegistry } from "../../plugins/runtime-capabilities.js";
@@ -61,6 +64,8 @@ export async function handleGraphStatus(context: CommandContext): Promise<Comman
   const plugins = await loadGraphPluginStatusView(index);
   const frontierItems: Array<Record<string, unknown>> = [];
   const childStartItems: Array<Record<string, unknown>> = [];
+  const pendingGateItems: Array<Record<string, unknown>> = [];
+  const pendingDecisionItems: Array<Record<string, unknown>> = [];
   const nodesByRun: Record<string, Array<Record<string, unknown>>> = {};
   const childRuns = graphChildRunSnapshots(index);
   for (const record of index.runs) {
@@ -76,6 +81,8 @@ export async function handleGraphStatus(context: CommandContext): Promise<Comman
     const frontier = evaluateGraphFrontier(record.run, record.graph, nodes, childRuns);
     for (const item of frontier.eligible_nodes) frontierItems.push({ selector: item.selector, run_id: record.run.run_id, node_id: item.node_id, ...(item.round === undefined ? {} : { round: item.round }) });
     for (const item of frontier.pending_subgraph_starts) childStartItems.push({ selector: item.selector, run_id: record.run.run_id, node_id: item.node_id, ...(item.round === undefined ? {} : { round: item.round }) });
+    for (const selector of frontier.pending_gates) pendingGateItems.push({ selector, run_id: record.run.run_id });
+    for (const selector of frontier.pending_decisions) pendingDecisionItems.push({ selector, run_id: record.run.run_id });
   }
   const diagnostics = [...index.diagnostics];
   if (!plugins.loadable) {
@@ -89,11 +96,25 @@ export async function handleGraphStatus(context: CommandContext): Promise<Comman
   const data = {
     schema_version: "2",
     workspace,
+    stable_specs: {
+      project_id: index.project.frontmatter.project_id,
+      sources: index.sources.sources.length,
+      claims: index.claims.claims.length,
+      manuscript_id: index.manuscript.manuscript_id,
+    },
+    agent_tools: {
+      selected: index.config.agent_tools.selected,
+      delivery: index.config.agent_tools.delivery,
+      installations: index.manifest.installations.length,
+    },
+    literature_adapters: { selected: index.config.literature_adapters.selected },
     profiles: [...index.profiles.values()].map((profile) => ({ profile_id: profile.profile_id, profile_version: profile.profile_version })),
     runs: { total: index.runs.length, active: index.runs.filter((item) => item.run?.status === "active").length },
     nodes: nodesByRun,
     frontier: frontierItems,
     pending_subgraph_starts: childStartItems,
+    pending_gates: pendingGateItems,
+    pending_decisions: pendingDecisionItems,
     plugins,
     diagnostics_summary: { blocking: diagnostics.filter((item) => item.blocking).length, warning: diagnostics.filter((item) => !item.blocking).length },
   };
@@ -119,19 +140,57 @@ export async function handleGraphInstructions(selector: string, context: Command
     const profile = index.profiles.get(profileId);
     const source = index.profileFiles.get(profileId);
     if (!profile || !source) throw new CliError("profile_not_found", `Graph profile not found: ${profileId}`, 1);
+    const entryInstructions = profile.entries.flatMap((entry) => {
+      let route: ArsuRouteDefinition | undefined;
+      if (entry.route_ref) {
+        try { route = getArsuRoute(entry.route_ref as RouteRef); }
+        catch {
+          throw new CliError("profile_route_binding_invalid", `Profile entry ${profileId}/${entry.entry_id} references an unknown route: ${entry.route_ref}`, 1);
+        }
+      }
+      const summary = route ? renderArsuRouteSummary(route) : undefined;
+      const entryNodeIds = entry.kind === "end-to-end" ? [entry.node_id] : entry.entry_points;
+      return entryNodeIds.map((entryNodeId) => {
+        const node = profile.nodes.find((item) => item.node_id === entryNodeId);
+        if (!node) throw new CliError("profile_route_binding_invalid", `Profile entry ${profileId}/${entry.entry_id} references an unknown node: ${entryNodeId}`, 1);
+        return {
+          entry_id: entry.entry_id,
+          entry_node_id: entryNodeId,
+          ...(entry.route_ref ? { route_ref: entry.route_ref } : {}),
+          title: route?.title ?? `${profile.profile_id}: ${entry.entry_id}`,
+          prerequisites: summary?.prerequisites ?? (node.input_bindings.length > 0
+            ? `profile inputs: ${node.input_bindings.map((item) => item.role).join(", ")}`
+            : "none"),
+          required_input_roles: node.input_bindings.map((item) => item.role),
+          boundary_outputs: route?.boundary_outputs ?? node.expected_outputs.map((output) => ({
+            role: output.role,
+            type: output.role,
+            purpose: `Profile-declared boundary output ${output.role}.`,
+            structure: "The capability package defines the semantic structure and validation requirements.",
+            validation_profile: "text-artifact" as const,
+          })),
+          expected_output_roles: node.expected_outputs,
+          formal_gates: profile.gates,
+          decisions: profile.decisions,
+          risk_cost: summary?.risk_cost ?? "profile-defined; inspect capability packages before confirmation",
+          confirmation: "root-run confirmation authorizes the frozen graph; each formal Gate and Decision remains separately confirmed",
+        };
+      });
+    });
     return success("instructions", {
       selector,
       kind: "profile",
       profile_id: profile.profile_id,
       profile_version: profile.profile_version,
       capability_registry_version: profile.capability_registry_version,
-      entries: profile.entries,
+      entries: entryInstructions,
       node_count: profile.nodes.length,
       start_input: {
         schema_version: "2",
         confirmed_at: "<rfc3339>",
         entry_id: "<entry-id>",
         entry_node_id: "<entry-node-id>",
+        route_ref: "<route-ref>",
         prerequisites: [],
         handoff_inputs: [],
         planned_outputs: [],
@@ -139,6 +198,21 @@ export async function handleGraphInstructions(selector: string, context: Command
         cost: { effort: "<effort>", interaction: "<interaction>" },
       },
     }, { stdout: `Graph profile instructions: ${profileId}\n` });
+  }
+  if (selector.startsWith("change:")) {
+    const changeId = selector.slice("change:".length);
+    const record = [...index.changes, ...index.archivedChanges].find((item) => item.id === changeId);
+    if (!record) throw new CliError("change_not_found", `Project change not found: ${changeId}`, 1);
+    const pending = ["draft", "proposed"].includes(record.change.status);
+    return success("instructions", {
+      selector,
+      kind: "change",
+      change: record.change,
+      archived: record.archived,
+      documents: ["change.md", ...record.documents.keys()],
+      allowed_actions: record.archived ? [] : pending ? ["decide"] : ["archive"],
+      mutation_authority: "researchspec decide/archive",
+    }, { stdout: `Change instructions: ${changeId}\n` });
   }
   if (selector.startsWith("run:")) {
     const runId = selector.slice("run:".length);
@@ -236,6 +310,15 @@ export async function handleGraphInstructions(selector: string, context: Command
       expected_output_roles: definition.expected_outputs,
       required_gate_ids: definition.required_gate_ids,
       required_decision_ids: definition.required_decision_ids,
+      ...(definition.delivery_requirement ? {
+        child_start_input: {
+          schema_version: "2",
+          manuscript_delivery: {
+            delivery: "<confirmed manuscript delivery contract>",
+            quarto_probe: "<captured Quarto availability snapshot for QMD>",
+          },
+        },
+      } : {}),
     }, { stdout: `Node instructions: ${selector}\n` });
   }
   const gateMatch = /^gate:([^/]+)\/([^@]+)(?:@(\d+))?$/.exec(selector);
@@ -266,13 +349,19 @@ export async function handleGraphStart(options: GraphStartOptions, context: Comm
   const index = await loadGraphWorkspaceIndex(workspace);
   const nodeMatch = /^node:([^/]+)\/([^@]+)(?:@(\d+))?$/.exec(options.selector);
   if (nodeMatch) {
-    if (options.input || options.confirmedBy) throw new CliError("child_start_options_invalid", "Child-run start inherits parent authorization and does not accept --input or --confirmed-by.", 2);
+    if (options.confirmedBy) throw new CliError("child_start_options_invalid", "Child-run start inherits parent authorization and does not accept --confirmed-by.", 2);
+    let command: unknown;
+    if (options.input) {
+      try { command = parseYaml(await readFile(path.resolve(context.cwd, options.input), "utf8")); }
+      catch (error) { throw new CliError("start_input_unreadable", `Cannot read child Start input: ${error instanceof Error ? error.message : String(error)}`, 2); }
+    }
     try {
       const result = await startGraphChildRun({
         index,
         parentRunId: nodeMatch[1] ?? "",
         nodeId: nodeMatch[2] ?? "",
         ...(nodeMatch[3] === undefined ? {} : { round: Number(nodeMatch[3]) }),
+        ...(command === undefined ? {} : { command }),
         startedAt: new Date().toISOString(),
         dryRun: context.dryRun,
       });
@@ -360,7 +449,7 @@ export async function handleGraphAdvance(selector: string, options: GraphAdvance
 export async function handleGraphCheck(strict: boolean, context: CommandContext, target: CurrentCheckTarget = "all"): Promise<CommandResult> {
   const workspace = await graphWorkspace(context);
   const index = await loadGraphWorkspaceIndex(workspace);
-  const diagnostics = [...index.diagnostics];
+  const diagnostics = index.diagnostics.filter((item) => target === "all" || diagnosticMatchesTarget(item.path, target));
   if (target === "all" || target === "plugins") diagnostics.push(...await pluginWorkspaceDiagnostics(index, target === "plugins"));
   const ok = diagnostics.every((item) => !item.blocking && (!strict || item.severity !== "warning"));
   const human = ok
@@ -372,9 +461,24 @@ export async function handleGraphCheck(strict: boolean, context: CommandContext,
 export async function handleGraphDoctor(context: CommandContext): Promise<CommandResult> {
   const workspace = await graphWorkspace(context);
   const index = await loadGraphWorkspaceIndex(workspace);
-  const report = { workspace, healthy: index.diagnostics.length === 0, diagnostics: index.diagnostics };
+  const diagnostics = [...index.diagnostics, ...await pluginWorkspaceDiagnostics(index, true)];
+  const report = { workspace, healthy: diagnostics.every((item) => !item.blocking), diagnostics };
   const human = report.healthy
     ? { stdout: `ResearchSpec Doctor found no graph workspace damage: ${workspace}\n` }
-    : { stderr: `ResearchSpec Doctor found ${String(index.diagnostics.length)} diagnostic(s): ${workspace}\n${index.diagnostics.map((item) => `- [${item.code}] ${item.path ?? ""} ${item.message}`).join("\n")}\n` };
-  return { ...success("doctor", report, human), ok: report.healthy, exitCode: report.healthy ? 0 : 1, diagnostics: index.diagnostics };
+    : { stderr: `ResearchSpec Doctor found ${String(diagnostics.length)} diagnostic(s): ${workspace}\n${diagnostics.map((item) => `- [${item.code}] ${item.path ?? ""} ${item.message}`).join("\n")}\n` };
+  return { ...success("doctor", report, human), ok: report.healthy, exitCode: report.healthy ? 0 : 1, diagnostics };
+}
+
+function diagnosticMatchesTarget(filePath: string | undefined, target: CurrentCheckTarget): boolean {
+  if (!filePath) return true;
+  const normalized = filePath.split(path.sep).join("/");
+  if (target === "specs") return normalized.includes("/specs/");
+  if (target === "profiles") return normalized.includes("/profiles/");
+  if (target === "runs") return normalized.includes("/runs/") && !normalized.endsWith("/handoff.md");
+  if (target === "handoffs") return normalized.endsWith("/handoff.md");
+  if (target === "changes") return normalized.includes("/changes/");
+  if (target === "tools") return normalized.includes("tool-installation-manifest") || normalized.includes("/.agents/") || normalized.includes("/.claude/");
+  if (target === "plugins") return normalized.includes("/plugins/") || normalized.includes("plugin");
+  if (target === "literature-adapters") return normalized.includes("zotero") || normalized.includes("literature");
+  return true;
 }

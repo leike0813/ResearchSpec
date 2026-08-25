@@ -52,6 +52,6 @@ provenance:
     - PH-KP-01
     - PH-KP-02
   upstream_sources:
-    - path: docs/paper-humanizer_extraction/capabilities/05_verification_acceptance.md
+    - path: authoring/paper-humanizer/capabilities/05_verification_acceptance.md
       sha256: 287f18d942311f16159d6470eaaa5714280fd1317abb1278e4bb6573e9f72f88
 license: MIT

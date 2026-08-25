@@ -6,7 +6,7 @@ description: How users interact with ResearchSpec — the canonical usage model
 
 # User Usage Model
 
-This page summarizes the canonical source in `docs/arsu_user_usage_model.md`.
+This page summarizes the canonical source in `docs/user/usage-model.md`.
 
 ## Entry
 

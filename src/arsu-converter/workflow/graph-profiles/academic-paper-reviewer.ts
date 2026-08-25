@@ -7,7 +7,7 @@ export const ACADEMIC_PAPER_REVIEWER_GRAPH_PROFILE = {
   profile_id: "academic-paper-reviewer",
   profile_version: "0.1.0",
   capability_registry_version: "0.1.0",
-  entries: [{ entry_id: "main", kind: "end-to-end", node_id: "panel" }],
+  entries: [{ entry_id: "main", kind: "end-to-end", node_id: "panel", route_ref: "academic-paper-reviewer:full" }],
   nodes: [
     { node_id: "panel", kind: "capability", capability_id: "design-review-panel-config", input_bindings: [{ role: "manuscript_draft", source: "handoff" }], expected_outputs: [{ role: "review_panel_config", required: true }], prerequisites: [], required_gate_ids: [], required_decision_ids: [], multiplicity: "one", round_role: null },
     { node_id: "specialist", kind: "capability", capability_id: "judgment-specialist-review", input_bindings: [{ role: "manuscript_draft", source: "handoff" }, { role: "review_panel_config", source: "node_output", from_node_id: "panel" }], expected_outputs: [{ role: "specialist_review", required: true }], prerequisites: ["panel"], required_gate_ids: [], required_decision_ids: [], multiplicity: "one", round_role: null },
@@ -23,4 +23,4 @@ export const ACADEMIC_PAPER_REVIEWER_GRAPH_PROFILE = {
   override_policy: { failed_gate_requires_decision: true },
 } as const satisfies CapabilityGraphProfile;
 
-export const ACADEMIC_PAPER_REVIEWER_GRAPH_PROFILE_TEXT = `${stringify(ACADEMIC_PAPER_REVIEWER_GRAPH_PROFILE)}\n`;
+export const ACADEMIC_PAPER_REVIEWER_GRAPH_PROFILE_TEXT = stringify(ACADEMIC_PAPER_REVIEWER_GRAPH_PROFILE);

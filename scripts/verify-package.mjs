@@ -191,11 +191,13 @@ try {
 function verifyTarballFiles(files) {
   const required = [
     "package.json", "README.md", "CHANGELOG.md", "SECURITY.md", "LICENSE", "NOTICE",
-    "LICENSES/MIT.txt", "LICENSES/CC-BY-NC-4.0.txt", "LICENSES/CC-BY-SA-4.0.txt", "LICENSES/Apache-2.0.txt", "LICENSES/AGPL-3.0.txt", "docs/release_process.md",
-    "docs/arsu_user_usage_model.md", "docs/cli_handbook.md", "docs/cli_interface_design.md", "docs/domain_skill_plugins.md", "docs/domain_taxonomy.md", "docs/education_agent_skills_vendor_adapter.md", "docs/literature_system_adapters.md", "docs/manuscript_annotation_adapters.md", "docs/finrobot_vendor_adapter.md", "docs/histagent_vendor_adapter.md", "docs/materials_science_skills_vendor_adapter.md", "docs/scientific_agent_skills_vendor_adapter.md", "docs/tooluniverse_vendor_adapter.md",
-    "docs/researchspec_arsu_runtime/README.md", "docs/researchspec_arsu_runtime/core_runtime_model.md", "docs/researchspec_arsu_runtime/runtime_protocols.md",
-    "docs/researchspec_arsu_runtime/deep_research_workflow.md", "docs/researchspec_arsu_runtime/academic_paper_workflow.md", "docs/researchspec_arsu_runtime/academic_paper_reviewer_workflow.md", "docs/researchspec_arsu_runtime/academic_pipeline_workflow.md",
-    "docs/researchspec_user_usage_rehearsal.md", "docs/researchspec_user_usage_rehearsal/workspace_lifecycle.md", "docs/researchspec_user_usage_rehearsal/deep_research_journeys.md", "docs/researchspec_user_usage_rehearsal/academic_paper_journeys.md", "docs/researchspec_user_usage_rehearsal/academic_paper_reviewer_journeys.md", "docs/researchspec_user_usage_rehearsal/academic_pipeline_journeys.md", "docs/researchspec_user_usage_rehearsal/companion_journeys.md", "docs/researchspec_user_usage_rehearsal/zotero_and_plugin_journeys.md",
+    "LICENSES/MIT.txt", "LICENSES/CC-BY-NC-4.0.txt", "LICENSES/CC-BY-SA-4.0.txt", "LICENSES/Apache-2.0.txt", "LICENSES/AGPL-3.0.txt",
+    "docs/README.md", "docs/user/README.md", "docs/user/usage-model.md", "docs/user/cli-handbook.md", "docs/user/literature-adapters.md",
+    "docs/developer/README.md", "docs/developer/architecture.md", "docs/developer/cli-interface.md", "docs/developer/domain-plugins.md", "docs/developer/domain-taxonomy.md", "docs/developer/manuscript-annotations.md",
+    "docs/developer/runtime/README.md", "docs/developer/runtime/core_runtime_model.md", "docs/developer/runtime/runtime_protocols.md",
+    "docs/developer/runtime/deep_research_workflow.md", "docs/developer/runtime/academic_paper_workflow.md", "docs/developer/runtime/academic_paper_reviewer_workflow.md", "docs/developer/runtime/academic_pipeline_workflow.md",
+    "docs/maintainer/README.md", "docs/maintainer/release-process.md", "docs/maintainer/non-native-vendor-skill-standard.md", "docs/maintainer/vendors/README.md",
+    "artifacts/README.md", "artifacts/release/mvp-release-checklist.md",
     "skills/arsu/conversion-manifest.json",
     "skills/arsu/profiles/registry.json",
     "skills/capabilities/registry.json",
@@ -251,7 +253,7 @@ function verifyTarballFiles(files) {
     "skills/plugins/vendors/education-agent-skills/education-agent-skills-stuck-and-error-diagnosis-coach/SKILL.md",
     "skills/plugins/vendors/education-agent-skills/education-agent-skills-stuck-and-error-diagnosis-coach/LICENSE",
     "skills/plugins/vendors/education-agent-skills/education-agent-skills-stuck-and-error-diagnosis-coach/NOTICE.md",
-    "skills/arsu/researchspec-contracts.json", "artifacts/mvp_release_checklist.md", "dist/src/cli/bin.js", "dist/src/annotation-intake.js", "dist/src/annotation-intake.d.ts",
+    "skills/arsu/researchspec-contracts.json", "artifacts/release/mvp-release-checklist.md", "dist/src/cli/bin.js", "dist/src/annotation-intake.js", "dist/src/annotation-intake.d.ts",
   ];
   for (const skill of expectedArsuSkills) required.push(`skills/arsu/${skill}/SKILL.md`);
   for (const skill of expectedCapabilitySkills) {
@@ -263,8 +265,8 @@ function verifyTarballFiles(files) {
   }
   for (const [name, extension] of currentRuntimeDiagrams()) {
     required.push(
-      `docs/researchspec_arsu_runtime/diagrams/src/${name}.${extension}`,
-      `docs/researchspec_arsu_runtime/diagrams/rendered/${name}.svg`,
+      `docs/developer/runtime/diagrams/src/${name}.${extension}`,
+      `docs/developer/runtime/diagrams/rendered/${name}.svg`,
     );
   }
   for (const skill of expectedAdapterSkills) {
@@ -292,7 +294,7 @@ function verifyTarballFiles(files) {
   );
   assert(adapterOpaqueFiles.length === 14, `Tarball Zotero opaque runtime metadata count mismatch: ${String(adapterOpaqueFiles.length)}`);
 
-  const allowed = /^(?:package\.json|README\.md|CHANGELOG\.md|SECURITY\.md|LICENSE|NOTICE|LICENSES\/[^/]+|docs\/(?:release_process|arsu_user_usage_model|cli_handbook|cli_interface_design|domain_skill_plugins|domain_taxonomy|education_agent_skills_vendor_adapter|literature_system_adapters|manuscript_annotation_adapters|finrobot_vendor_adapter|histagent_vendor_adapter|materials_science_skills_vendor_adapter|scientific_agent_skills_vendor_adapter|tooluniverse_vendor_adapter)\.md|docs\/researchspec_arsu_runtime\/.*|docs\/researchspec_user_usage_rehearsal(?:\.md|\/.*)|artifacts\/mvp_release_checklist\.md|dist\/src\/.*\.(?:js|d\.ts)|skills\/.*|literature-adapters\/.*)$/;
+  const allowed = /^(?:package\.json|README\.md|CHANGELOG\.md|SECURITY\.md|LICENSE|NOTICE|LICENSES\/[^/]+|docs\/.*|artifacts\/(?:README\.md|release\/mvp-release-checklist\.md)|dist\/src\/.*\.(?:js|d\.ts)|skills\/.*|literature-adapters\/.*)$/;
   const retired = /^dist\/src\/adapters\/companion\/workflows\/(?:archive|check|context|explore|next|submit)\.js$/;
   for (const file of files) {
     assert(allowed.test(file), `Tarball contains a path outside the release allowlist: ${file}`);
@@ -324,8 +326,8 @@ function verifyTarballFiles(files) {
 
 async function verifyRepositoryRuntimeGuidance(root) {
   for (const [name, extension] of currentRuntimeDiagrams()) {
-    await access(path.join(root, "docs", "researchspec_arsu_runtime", "diagrams", "src", `${name}.${extension}`));
-    await access(path.join(root, "docs", "researchspec_arsu_runtime", "diagrams", "rendered", `${name}.svg`));
+    await access(path.join(root, "docs", "developer", "runtime", "diagrams", "src", `${name}.${extension}`));
+    await access(path.join(root, "docs", "developer", "runtime", "diagrams", "rendered", `${name}.svg`));
   }
 }
 
@@ -336,15 +338,15 @@ async function verifyInstalledGuidance(installedPackageRoot, projectRoot, handbo
     assert(contracts.skill_groups?.[skill]?.profile_id === "researchspec-preflight-v11", `Installed ARSU profile is not v11: ${skill}`);
   }
   const handbookSkill = await readFile(path.join(projectRoot, ".agents", "skills", "researchspec-cli-handbook", "SKILL.md"), "utf8");
-  const packagedHandbook = await readFile(path.join(installedPackageRoot, "docs", "cli_handbook.md"), "utf8");
+  const packagedHandbook = await readFile(path.join(installedPackageRoot, "docs", "user", "cli-handbook.md"), "utf8");
   assert(handbookSkill.includes(packagedHandbook.trim()), "Installed Codex CLI handbook Skill does not contain the packaged handbook.");
   assert(!await pathExists(path.join(projectRoot, ".agents", "skills", "researchspec-navigate", "references", "cli-handbook.md")), "Installed Navigate still contains the retired handbook reference.");
   assert(handbookDigest === sha256(Buffer.from(packagedHandbook, "utf8")), "Packaged handbook digest changed during delivery verification.");
 }
 
 async function verifyPackagedDocumentation(installedPackageRoot, packagedFiles) {
-  const sourceHandbook = await readFile(path.join(packageRoot, "docs", "cli_handbook.md"), "utf8");
-  const packagedHandbook = await readFile(path.join(installedPackageRoot, "docs", "cli_handbook.md"), "utf8");
+  const sourceHandbook = await readFile(path.join(packageRoot, "docs", "user", "cli-handbook.md"), "utf8");
+  const packagedHandbook = await readFile(path.join(installedPackageRoot, "docs", "user", "cli-handbook.md"), "utf8");
   assert(packagedHandbook === sourceHandbook, "Packaged CLI handbook differs from the source-controlled handbook.");
   const handbookModule = await import(pathToFileURL(path.join(installedPackageRoot, "dist", "src", "cli", "handbook.js")).href);
   assert(typeof handbookModule.renderCliHandbook === "function", "Installed package does not export renderCliHandbook.");
@@ -367,19 +369,20 @@ async function verifyCurrentPublishedGuidance(installedPackageRoot) {
   const currentGuidance = [
     "README.md",
     "SECURITY.md",
-    "docs/arsu_user_usage_model.md",
-    "docs/cli_handbook.md",
-    "docs/cli_interface_design.md",
-    "docs/domain_skill_plugins.md",
-    "docs/literature_system_adapters.md",
-    "docs/manuscript_annotation_adapters.md",
-    "docs/researchspec_arsu_runtime/README.md",
-    "docs/researchspec_arsu_runtime/core_runtime_model.md",
-    "docs/researchspec_arsu_runtime/runtime_protocols.md",
-    "docs/researchspec_arsu_runtime/deep_research_workflow.md",
-    "docs/researchspec_arsu_runtime/academic_paper_workflow.md",
-    "docs/researchspec_arsu_runtime/academic_paper_reviewer_workflow.md",
-    "docs/researchspec_arsu_runtime/academic_pipeline_workflow.md",
+    "docs/user/usage-model.md",
+    "docs/user/cli-handbook.md",
+    "docs/user/literature-adapters.md",
+    "docs/developer/architecture.md",
+    "docs/developer/cli-interface.md",
+    "docs/developer/domain-plugins.md",
+    "docs/developer/manuscript-annotations.md",
+    "docs/developer/runtime/README.md",
+    "docs/developer/runtime/core_runtime_model.md",
+    "docs/developer/runtime/runtime_protocols.md",
+    "docs/developer/runtime/deep_research_workflow.md",
+    "docs/developer/runtime/academic_paper_workflow.md",
+    "docs/developer/runtime/academic_paper_reviewer_workflow.md",
+    "docs/developer/runtime/academic_pipeline_workflow.md",
   ];
   const retiredBehavior = /researchspec submit|--migrate-runtime|--profile strict|--expected-plan-sha256|runs\/current|specs\/workflow\.yaml|artifact-registry|decision-ledger|gate-ledger|strict compatibility|adaptive runtime|Material Passport/i;
   for (const relativePath of currentGuidance) {
@@ -585,13 +588,14 @@ function runExpectFailure(command, args, cwd, env = process.env) {
 async function verifyInstalledCurrentJourney(bin, projectDirectory, environment) {
   const instructions = runJson(bin, ["instructions", "profile:minimal", "--json"], projectDirectory, environment).data;
   const entry = instructions?.entries?.[0];
-  assert(instructions?.kind === "profile" && entry?.entry_id && entry?.node_id, "Installed profile instructions expose no executable graph entry.");
+  assert(instructions?.kind === "profile" && entry?.entry_id && entry?.entry_node_id && entry?.route_ref, "Installed profile instructions expose no route-bound graph entry.");
   const startInputPath = path.join(projectDirectory, "packaged-start.json");
   await writeFile(startInputPath, `${JSON.stringify({
     schema_version: "2",
     confirmed_at: "2026-08-02T12:00:00+08:00",
     entry_id: entry.entry_id,
-    entry_node_id: entry.node_id,
+    entry_node_id: entry.entry_node_id,
+    route_ref: entry.route_ref,
     prerequisites: [],
     handoff_inputs: [],
     planned_outputs: [],
@@ -604,7 +608,7 @@ async function verifyInstalledCurrentJourney(bin, projectDirectory, environment)
   ], projectDirectory, environment).data;
   assert(started?.status === "started" && started.run_id, "Installed CLI did not start the schema 2 graph run.");
 
-  const nodeSelector = `node:${started.run_id}/${entry.node_id}`;
+  const nodeSelector = `node:${started.run_id}/${entry.entry_node_id}`;
   const nodeInstructions = runJson(bin, ["instructions", nodeSelector, "--json"], projectDirectory, environment).data;
   const expectedOutput = nodeInstructions?.expected_output_roles?.[0];
   assert(nodeInstructions?.kind === "node" && expectedOutput?.role, "Installed node instructions expose no declared output role.");
@@ -624,7 +628,7 @@ async function verifyInstalledCurrentJourney(bin, projectDirectory, environment)
   }, null, 2)}\n`, "utf8");
   runJson(bin, ["handoff", `run:${started.run_id}`, "--input", handoffInputPath, "--json"], projectDirectory, environment);
   const status = runJson(bin, ["status", "--json"], projectDirectory, environment).data;
-  assert(status?.runs?.total === 1 && status?.nodes?.[started.run_id]?.some((node) => node.node_id === entry.node_id && node.state === "complete"), "Installed graph journey did not persist the completed node.");
+  assert(status?.runs?.total === 1 && status?.nodes?.[started.run_id]?.some((node) => node.node_id === entry.entry_node_id && node.state === "complete"), "Installed graph journey did not persist the completed node.");
   assert(status?.frontier?.some((item) => item.selector === `node:${started.run_id}/report`), "Installed graph journey did not derive the next frontier node.");
   runJson(bin, ["show", `run:${started.run_id}`, "--json"], projectDirectory, environment);
   runJson(bin, ["handoff", `run:${started.run_id}`, "--json"], projectDirectory, environment);

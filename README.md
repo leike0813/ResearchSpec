@@ -36,7 +36,7 @@ Zotero-Agents 是面向 Zotero 文献管理生态的 Agent 自动化框架。Res
 
 交互式 `init` 会在选择 Agent 工具后询问是否安装该 Adapter；非交互使用 `--literature-adapters zotero-library`。它要求用户已安装 Zotero 及 Zotero-Agents 插件。选择后才生成 `.zotero-bridge/` 和七个 Skill 投影；ResearchSpec 不探测、不启动也不安装 Zotero 或插件。Zotero 保持文献数据的唯一权威，ResearchSpec 保持工作流状态的唯一权威。
 
-> **详情参见 [Zotero-Agents 项目](https://github.com/leike0813/zotero-agents) 及 [文献系统适配器文档](docs/literature_system_adapters.md)。**
+> **详情参见 [Zotero-Agents 项目](https://github.com/leike0813/zotero-agents) 及 [文献系统适配器文档](docs/user/literature-adapters.md)。**
 
 ## 吸纳的上游开源项目
 
@@ -124,9 +124,9 @@ researchspec init . --tools codex --literature-adapters zotero-library
 
 ResearchSpec 默认投影经过 authoring converter 生成的 capability Skills（当前 47 个，含 paper-humanizer 四个节点与 review-response 五个节点），并安装五个核心 Companion 工作流与预设 graph profiles：`minimal`、`research-main`、`academic-paper`、`academic-paper-reviewer`、`academic-pipeline`、`paper-humanizer`、`review-response`。
 
-可选的 [Zotero 文献系统 Adapter](docs/literature_system_adapters.md) 会额外安装七个 Skill、项目级 `.zotero-bridge` runtime 和配置模板。`update --literature-adapters none` 可取消选择；未修改的托管文件会被移除，发生 drift 的文件会保留并报告。初始化及状态检查阶段不与 Zotero 通信。
+可选的 [Zotero 文献系统 Adapter](docs/user/literature-adapters.md) 会额外安装七个 Skill、项目级 `.zotero-bridge` runtime 和配置模板。`update --literature-adapters none` 可取消选择；未修改的托管文件会被移除，发生 drift 的文件会保留并报告。初始化及状态检查阶段不与 Zotero 通信。
 
-可选 ResearchSpec 维护的[领域 Skill 插件](docs/domain_skill_plugins.md)可为 workspace 添加经审查的 Open Agent Skills。用户按稳定 domain 选择；维护者 converter 拥有上游出处和 Skill 依赖。学科域遵循 [ANZSRC 2020 FoR 组](docs/domain_taxonomy.md)，Field 代码只用于审计。插件不增加 Companion 或 CLI capability，也不能修改 stable specs、run/node state、handoff、Gate、Decision 或 graph transition。用户拒绝插件或插件不可用时，核心工作不变。
+可选 ResearchSpec 维护的[领域 Skill 插件](docs/developer/domain-plugins.md)可为 workspace 添加经审查的 Open Agent Skills。用户按稳定 domain 选择；维护者 converter 拥有上游出处和 Skill 依赖。学科域遵循 [ANZSRC 2020 FoR 组](docs/developer/domain-taxonomy.md)，Field 代码只用于审计。插件不增加 Companion 或 CLI capability，也不能修改 stable specs、run/node state、handoff、Gate、Decision 或 graph transition。用户拒绝插件或插件不可用时，核心工作不变。
 
 ## 运行时协议
 
@@ -142,7 +142,7 @@ researchspec --help
 ```
 
 前两层提供静态发现，不授权运行时动作。完整命令、选项和 selector 说明见
-[CLI handbook](docs/cli_handbook.md)。当问题涉及当前 workspace 时，Agent 先读取 status，
+[CLI handbook](docs/user/cli-handbook.md)。当问题涉及当前 workspace 时，Agent 先读取 status，
 再请求当前 selector 的 instructions。
 
 Selector family 包括 `profile:`、`run:`、`node:`、`gate:`、`decision:` 和 `change:`。CLI 是 run/node 文件中 Gate、Decision、frontier 和 transition 的唯一写入者；
@@ -166,7 +166,7 @@ researchspec init . --tools codex
 
 ResearchSpec 保持 16 个顶层命令。使用 `researchspec --help` 查看当前命令集合，
 使用 `researchspec <command> --help` 查看具体语法；完整静态参考见
-[CLI handbook](docs/cli_handbook.md)。当前可执行动作及其 payload、确认和执行策略始终以
+[CLI handbook](docs/user/cli-handbook.md)。当前可执行动作及其 payload、确认和执行策略始终以
 workspace 的 `status` 与 `instructions <selector>` 为准。
 
 ## 隐私与安全
@@ -182,19 +182,11 @@ workspace 的 `status` 与 `instructions <selector>` 为准。
 ## 文档
 
 - **文档站**: [https://leike0813.github.io/ResearchSpec/](https://leike0813.github.io/ResearchSpec/) (中文: [zh-Hans](https://leike0813.github.io/ResearchSpec/zh-Hans/))
-- [ARSU 用户使用模型](docs/arsu_user_usage_model.md)
-- [CLI handbook](docs/cli_handbook.md)
-- [CLI 接口设计](docs/cli_interface_design.md)
-- [领域 Skill 插件](docs/domain_skill_plugins.md)
-- [领域分类标准](docs/domain_taxonomy.md)
-- [固定文献系统适配器](docs/literature_system_adapters.md)
-- [Education Agent Skills 厂商适配器](docs/education_agent_skills_vendor_adapter.md)
-- [FinRobot 厂商适配器](docs/finrobot_vendor_adapter.md)
-- [HistAgent 厂商适配器](docs/histagent_vendor_adapter.md)
-- [Materials-Science-Skills-For-LLM 厂商适配器](docs/materials_science_skills_vendor_adapter.md)
-- [Scientific Agent Skills 厂商适配器](docs/scientific_agent_skills_vendor_adapter.md)
-- [ToolUniverse 厂商适配器](docs/tooluniverse_vendor_adapter.md)
-- [发布流程](docs/release_process.md)
+- [文档入口](docs/README.md)
+- [用户使用模型](docs/user/usage-model.md)
+- [CLI handbook](docs/user/cli-handbook.md)
+- [开发者文档](docs/developer/README.md)
+- [维护者文档](docs/maintainer/README.md)
 
 ## 许可证
 
@@ -210,4 +202,4 @@ ResearchSpec 使用混合许可证模型：
 
 ## 发布状态
 
-仓库不含自动发布工作流。仅在[发布检查清单](artifacts/mvp_release_checklist.md)中的技术 Gate、托管 Node/OS 矩阵、管理控制和人工内部试用完成后方可授权标签或 npm 发布。
+仓库不含自动发布工作流。仅在[发布检查清单](artifacts/release/mvp-release-checklist.md)中的技术 Gate、托管 Node/OS 矩阵、管理控制和人工内部试用完成后方可授权标签或 npm 发布。
