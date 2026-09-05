@@ -12,6 +12,7 @@ import { CORE_SKILL_IDS } from "../core-skills/catalog.js";
 import { MIT_LICENSE_TEXT } from "../licensing.js";
 import { filesForSkill, pluginSkillRoot, resolveDomainSelection, type LoadedPluginRegistry } from "../plugins/registry.js";
 import { installationKey, type ManagedInstallation, type ManagedInstallationSource } from "./installations.js";
+import { resolveManagedTarget, validateManagedTarget } from "./managed-target.js";
 import { loadCapabilityRegistry } from "../capabilities/registry.js";
 
 export interface DeliveryPlan {
@@ -34,6 +35,7 @@ export async function planToolDelivery(input: {
   pluginRegistry?: LoadedPluginRegistry;
   selectedPluginIds?: readonly string[];
 }): Promise<DeliveryPlan> {
+  for (const installation of input.existingInstallations) await validateManagedTarget(input.projectRoot, installation);
   const operations: PlannedWrite[] = [];
   const installations: ManagedInstallation[] = [];
   const diagnostics: Diagnostic[] = [];
@@ -140,7 +142,9 @@ export async function planToolDelivery(input: {
 
   async function addPlanned(target: string, manifestPath: string, scope: "project" | "shared-global", content: string | Uint8Array, source: ManagedInstallationSource, toolId: string): Promise<void> {
     const prior = recorded.get(`${scope}:${manifestPath}`);
+    const installation: ManagedInstallation = { owner: "agent-tool", tool_id: toolId, source, target: { scope, path: manifestPath, executable: false }, sha256: sha256(content) };
     const operation = await planFile({
+      boundaryRoot: resolveManagedTarget(input.projectRoot, installation).boundaryRoot,
       path: target,
       relativePath: manifestPath,
       content,
@@ -152,7 +156,7 @@ export async function planToolDelivery(input: {
     });
     operations.push(operation);
     const hash = operation.action === "skip-drift" && prior?.sha256 ? prior.sha256 : sha256(content);
-    if (operation.action !== "conflict") installations.push({ owner: "agent-tool", tool_id: toolId, source, target: { scope, path: manifestPath, executable: false }, sha256: hash });
+    if (operation.action !== "conflict") installations.push({ ...installation, sha256: hash });
   }
 
   function relativeProject(target: string): string { return targetPath(path.relative(input.projectRoot, target)); }

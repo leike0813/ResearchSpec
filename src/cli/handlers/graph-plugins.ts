@@ -5,9 +5,11 @@ import { stringify } from "yaml";
 
 import { selectSkillWriters } from "../../adapters/delivery.js";
 import { getTool, toolSkillsRoot } from "../../adapters/tools.js";
+import { validateManagedTarget } from "../../adapters/managed-target.js";
 import { GraphWorkspaceConfigSchema, type GraphWorkspaceConfig } from "../../core/contracts/graph-workspace.js";
 import { loadGraphWorkspaceIndex } from "../../core/runtime/graph-workspace-index.js";
 import { requireGraphWorkspace } from "../../core/workspace/graph-discover.js";
+import { assertPathWithinRoot } from "../../core/workspace/path-boundary.js";
 import { sha256 } from "../../core/workspace/write-plan.js";
 import { PluginProjectionError, projectWorkspacePlugins, writeWorkspacePluginManifest } from "../../plugins/graph-delivery.js";
 import { loadPluginExtensionRegistry, resolveDomainExtensions, type LoadedPluginExtensionRegistry } from "../../plugins/extensions.js";
@@ -20,6 +22,12 @@ export interface PluginShowOptions { summary?: boolean }
 async function graphWorkspace(context: CommandContext): Promise<string> {
   try { return await requireGraphWorkspace(context.cwd, context.workspace); }
   catch (error) { throw new CliError("workspace_unsupported", error instanceof Error ? error.message : String(error), 1); }
+}
+
+async function loadPluginWorkspaceIndex(workspace: string): Promise<Awaited<ReturnType<typeof loadGraphWorkspaceIndex>>> {
+  const index = await loadGraphWorkspaceIndex(workspace);
+  if (index.manifestStatus === "invalid") throw new CliError("invalid_current_contract", "The installation manifest is invalid; existing files were left unchanged.", 3, undefined, index.diagnostics);
+  return index;
 }
 
 async function loadOptionalPluginExtensions(): Promise<LoadedPluginExtensionRegistry | undefined> {
@@ -48,7 +56,7 @@ export async function handleGraphPluginList(options: { installed?: boolean; summ
   let workspace: string | null = null;
   try {
     workspace = await graphWorkspace(context);
-    const index = await loadGraphWorkspaceIndex(workspace);
+    const index = options.installed ? await loadPluginWorkspaceIndex(workspace) : await loadGraphWorkspaceIndex(workspace);
     selected = index.config.plugins.selected;
   } catch (error) {
     if (options.installed) throw error;
@@ -88,7 +96,7 @@ export async function handleGraphPluginInstall(pluginIds: readonly string[], con
     throw new CliError("plugin_confirmation_required", "Non-interactive plugin installation requires the global --yes flag.", 2);
   }
   const workspace = await graphWorkspace(context);
-  const index = await loadGraphWorkspaceIndex(workspace);
+  const index = await loadPluginWorkspaceIndex(workspace);
   const registry = await loadPluginRegistry();
   const requested = [...new Set(pluginIds)];
   const unavailable = requested.filter((id) => !domainIsAvailable(registry.domains.get(id)));
@@ -120,7 +128,7 @@ export async function handleGraphPluginInstall(pluginIds: readonly string[], con
 
 export async function handleGraphPluginUninstall(pluginIds: readonly string[], context: CommandContext): Promise<CommandResult> {
   const workspace = await graphWorkspace(context);
-  const index = await loadGraphWorkspaceIndex(workspace);
+  const index = await loadPluginWorkspaceIndex(workspace);
   const requested = new Set(pluginIds);
   const missing = [...requested].filter((id) => !index.config.plugins.selected.includes(id));
   if (missing.length) throw new CliError("plugin_not_installed", `Plugin is not installed: ${missing.join(", ")}`, 1);
@@ -152,7 +160,7 @@ export async function handleGraphPluginUninstall(pluginIds: readonly string[], c
 
 export async function handleGraphPluginUpdate(pluginIds: readonly string[], context: CommandContext): Promise<CommandResult> {
   const workspace = await graphWorkspace(context);
-  const index = await loadGraphWorkspaceIndex(workspace);
+  const index = await loadPluginWorkspaceIndex(workspace);
   const selected = pluginIds.length ? pluginIds : index.config.plugins.selected;
   const missing = selected.filter((id) => !index.config.plugins.selected.includes(id));
   if (missing.length) throw new CliError("plugin_not_installed", `Plugin is not installed: ${missing.join(", ")}`, 1);
@@ -181,7 +189,7 @@ export async function handleGraphPluginUpdate(pluginIds: readonly string[], cont
 
 export async function handleGraphPluginInstructions(skillId: string, context: CommandContext): Promise<CommandResult> {
   const workspace = await graphWorkspace(context);
-  const index = await loadGraphWorkspaceIndex(workspace);
+  const index = await loadPluginWorkspaceIndex(workspace);
   const registry = await loadPluginRegistry();
   const registered = registry.skills.get(skillId);
   if (!registered) throw new CliError("plugin_skill_not_found", `Plugin Skill is not registered: ${skillId}`, 1);
@@ -213,6 +221,7 @@ export async function handleGraphPluginInstructions(skillId: string, context: Co
         continue;
       }
       try {
+        await validateManagedTarget(index.projectRoot, installation);
         if (sha256(await readFile(target)) !== installation.sha256) {
           missingFiles.push(`${toolId}:${relativeAsset}`);
           complete = false;
@@ -243,5 +252,6 @@ export async function handleGraphPluginInstructions(skillId: string, context: Co
 
 async function writeConfigSelection(workspace: string, config: GraphWorkspaceConfig, selected: string[], context: CommandContext): Promise<void> {
   if (context.dryRun) return;
+  await assertPathWithinRoot(path.dirname(workspace), path.join(workspace, "config.yaml"));
   await writeFile(path.join(workspace, "config.yaml"), stringify(GraphWorkspaceConfigSchema.parse({ ...config, plugins: { selected } })), "utf8");
 }

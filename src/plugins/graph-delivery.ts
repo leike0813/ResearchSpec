@@ -13,10 +13,12 @@ import {
   type ManagedInstallation,
 } from "../adapters/installations.js";
 import { selectSkillWriters } from "../adapters/delivery.js";
+import { managedTargetDiagnostic, resolveManagedTarget, validateManagedTarget } from "../adapters/managed-target.js";
 import { getTool, toolSkillsRoot, type DeliveryMode } from "../adapters/tools.js";
 import type { GraphWorkspaceIndex } from "../core/runtime/graph-workspace-index.js";
 import type { Diagnostic } from "../core/validation/types.js";
 import { executeWritePlan, planFile, sha256, type PlannedWrite } from "../core/workspace/write-plan.js";
+import { assertPathWithinRoot } from "../core/workspace/path-boundary.js";
 import { loadPluginExtensionRegistry, resolveDomainExtensions, type LoadedPluginExtensionRegistry } from "./extensions.js";
 import { domainIsAvailable, filesForSkill, pluginSkillRoot, resolveDomainSelection, type LoadedPluginRegistry } from "./registry.js";
 
@@ -116,6 +118,12 @@ export function selectedDomainResolutionSnapshots(
 }
 
 export async function planPluginProjection(input: PlanPluginProjectionInput): Promise<PlannedPluginProjection> {
+  for (const installation of input.existingInstallations) {
+    try { await validateManagedTarget(input.projectRoot, installation); }
+    catch (error) {
+      throw new PluginProjectionError([managedTargetDiagnostic(installation, error)]);
+    }
+  }
   const resolution = resolveDomainSelection(input.registry, input.selectedDomainIds);
   const extensions = input.extensions ?? await loadPluginExtensionRegistry();
   const extensionResolution = resolveDomainExtensions(extensions, input.selectedDomainIds);
@@ -145,7 +153,13 @@ export async function planPluginProjection(input: PlanPluginProjectionInput): Pr
         const manifestPath = root.scope === "project" ? targetPath(path.relative(input.projectRoot, target)) : target;
         const recordedHash = existingByKey.get(installationKey({ target: { scope: root.scope, path: manifestPath, executable: false } }))?.sha256;
         const content = await readFile(path.join(sourceRoot, relativeAsset));
+        const installation: ManagedInstallation = {
+          owner: "agent-tool", tool_id: toolId,
+          source: { kind: "domain-skill", vendor_id: registered.vendor.vendor_id, vendor_release: registered.vendor.release, skill_id: skill.skill_id },
+          target: { scope: root.scope, path: manifestPath, executable: false }, sha256: sha256(content),
+        };
         const operation = await planFile({
+          boundaryRoot: resolveManagedTarget(input.projectRoot, installation).boundaryRoot,
           path: target,
           relativePath: manifestPath,
           content,
@@ -157,18 +171,7 @@ export async function planPluginProjection(input: PlanPluginProjectionInput): Pr
         });
         operations.push(operation);
         pushProjectionDiagnostic(diagnostics, operation, "plugin_projection", `Cannot project plugin Skill ${skill.skill_id} for ${toolId}: ${operation.reason}`, `Plugin Skill file has user modifications and was preserved: ${skill.skill_id}`, target, { tool_id: toolId, skill_id: skill.skill_id });
-        desiredInstallations.push({
-          owner: "agent-tool",
-          tool_id: toolId,
-          source: {
-            kind: "domain-skill",
-            vendor_id: registered.vendor.vendor_id,
-            vendor_release: registered.vendor.release,
-            skill_id: skill.skill_id,
-          },
-          target: { scope: root.scope, path: manifestPath, executable: false },
-          sha256: operation.action === "skip-drift" && recordedHash ? recordedHash : sha256(content),
-        });
+        desiredInstallations.push({ ...installation, sha256: operation.action === "skip-drift" && recordedHash ? recordedHash : installation.sha256 });
       }
     }
 
@@ -181,7 +184,13 @@ export async function planPluginProjection(input: PlanPluginProjectionInput): Pr
         const manifestPath = root.scope === "project" ? targetPath(path.relative(input.projectRoot, target)) : target;
         const recordedHash = existingByKey.get(installationKey({ target: { scope: root.scope, path: manifestPath, executable: false } }))?.sha256;
         const content = await readFile(source);
+        const installation: ManagedInstallation = {
+          owner: "agent-tool", tool_id: toolId,
+          source: { kind: "plugin-capability", capability_id: capabilityId, extension_registry_version: extensions.registry.registry_version },
+          target: { scope: root.scope, path: manifestPath, executable: false }, sha256: sha256(content),
+        };
         const operation = await planFile({
+          boundaryRoot: resolveManagedTarget(input.projectRoot, installation).boundaryRoot,
           path: target,
           relativePath: manifestPath,
           content,
@@ -193,17 +202,7 @@ export async function planPluginProjection(input: PlanPluginProjectionInput): Pr
         });
         operations.push(operation);
         pushProjectionDiagnostic(diagnostics, operation, "plugin_extension_projection", `Cannot project plugin capability ${capabilityId} for ${toolId}: ${operation.reason}`, `Plugin capability file has user modifications and was preserved: ${capabilityId}`, target, { tool_id: toolId, capability_id: capabilityId });
-        desiredInstallations.push({
-          owner: "agent-tool",
-          tool_id: toolId,
-          source: {
-            kind: "plugin-capability",
-            capability_id: capabilityId,
-            extension_registry_version: extensions.registry.registry_version,
-          },
-          target: { scope: root.scope, path: manifestPath, executable: false },
-          sha256: operation.action === "skip-drift" && recordedHash ? recordedHash : sha256(content),
-        });
+        desiredInstallations.push({ ...installation, sha256: operation.action === "skip-drift" && recordedHash ? recordedHash : installation.sha256 });
       }
     }
   }
@@ -215,7 +214,13 @@ export async function planPluginProjection(input: PlanPluginProjectionInput): Pr
     const manifestPath = targetPath(path.relative(input.projectRoot, target));
     const recordedHash = existingByKey.get(installationKey({ target: { scope: "project", path: manifestPath, executable: false } }))?.sha256;
     const content = await readFile(registered.sourcePath);
+    const installation: ManagedInstallation = {
+      owner: "framework", tool_id: null,
+      source: { kind: "plugin-profile", profile_id: profileId, profile_version: registered.profile.profile_version },
+      target: { scope: "project", path: manifestPath, executable: false }, sha256: sha256(content),
+    };
     const operation = await planFile({
+      boundaryRoot: resolveManagedTarget(input.projectRoot, installation).boundaryRoot,
       path: target,
       relativePath: manifestPath,
       content,
@@ -227,17 +232,7 @@ export async function planPluginProjection(input: PlanPluginProjectionInput): Pr
     });
     operations.push(operation);
     pushProjectionDiagnostic(diagnostics, operation, "plugin_extension_projection", `Cannot project plugin graph profile ${profileId}: ${operation.reason}`, `Plugin graph profile has user modifications and was preserved: ${profileId}`, target, { profile_id: profileId });
-    desiredInstallations.push({
-      owner: "framework",
-      tool_id: null,
-      source: {
-        kind: "plugin-profile",
-        profile_id: profileId,
-        profile_version: registered.profile.profile_version,
-      },
-      target: { scope: "project", path: manifestPath, executable: false },
-      sha256: operation.action === "skip-drift" && recordedHash ? recordedHash : sha256(content),
-    });
+    desiredInstallations.push({ ...installation, sha256: operation.action === "skip-drift" && recordedHash ? recordedHash : installation.sha256 });
   }
 
   const desiredKeys = new Set(desiredInstallations.map(installationKey));
@@ -264,7 +259,8 @@ export async function planPluginProjection(input: PlanPluginProjectionInput): Pr
       continue;
     }
 
-    const target = path.resolve(input.projectRoot, existing.target.path);
+    const resolved = await validateManagedTarget(input.projectRoot, existing);
+    const target = resolved.path;
     let currentHash: string | undefined;
     try {
       currentHash = sha256(await readFile(target));
@@ -288,6 +284,7 @@ export async function planPluginProjection(input: PlanPluginProjectionInput): Pr
     }
     operations.push({
       action: "remove-owned",
+      boundaryRoot: resolved.boundaryRoot,
       path: target,
       relativePath: existing.target.path,
       scope: "project",
@@ -332,6 +329,7 @@ export async function planWorkspacePluginProjection(
   strictRemoval = false,
   extensions?: LoadedPluginExtensionRegistry,
 ): Promise<PlannedPluginProjection> {
+  if (index.manifestStatus === "invalid") throw new PluginProjectionError(index.diagnostics.filter((item) => item.blocking));
   return planPluginProjection({
     projectRoot: index.projectRoot,
     workspaceRoot: index.workspace,
@@ -352,7 +350,7 @@ export async function projectWorkspacePlugins(input: WorkspacePluginProjectionIn
   const blocking = plan.diagnostics.filter((item) => item.blocking);
   if (blocking.length > 0) throw new PluginProjectionError(blocking);
   if (!input.dryRun) {
-    await executeWritePlan({ operations: plan.operations });
+    await executeWritePlan({ boundaryRoot: input.index.projectRoot, operations: plan.operations });
     await removeEmptyRemovedSkillDirectories(input.index.projectRoot, plan.removedSkillRoots);
     await removeEmptyRemovedCapabilityDirectories(input.index.projectRoot, plan.removedCapabilityRoots);
     if (input.writeManifest !== false) await writePluginManifest(input.workspace, input.index, plan);
@@ -420,6 +418,7 @@ async function removeEmptyProjectionDirectories(
     const projectionId = "skillId" in root ? root.skillId : root.capabilityId;
     const target = path.join(toolSkillsRoot(tool, projectRoot).root, projectionId);
     try {
+      await assertPathWithinRoot(projectRoot, target);
       await rmdir(target);
     } catch (error) {
       const code = (error as NodeJS.ErrnoException).code;
@@ -429,6 +428,7 @@ async function removeEmptyProjectionDirectories(
 }
 
 export async function writeWorkspacePluginManifest(workspace: string, index: GraphWorkspaceIndex, plan: PlannedPluginProjection): Promise<void> {
+  if (index.manifestStatus === "invalid") throw new PluginProjectionError(index.diagnostics.filter((item) => item.blocking));
   const manifest = ToolInstallationManifestSchema.parse({
     ...index.manifest,
     plugin_resolutions: plan.resolutions,
@@ -436,7 +436,12 @@ export async function writeWorkspacePluginManifest(workspace: string, index: Gra
   });
   const manifestPath = path.join(workspace, "tool-installation-manifest.json");
   const temporary = `${manifestPath}.${randomUUID()}.tmp`;
+  for (const installation of manifest.installations) await validateManagedTarget(index.projectRoot, installation);
+  await assertPathWithinRoot(index.projectRoot, manifestPath);
+  await assertPathWithinRoot(index.projectRoot, temporary);
   await writeFile(temporary, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
+  await assertPathWithinRoot(index.projectRoot, manifestPath);
+  await assertPathWithinRoot(index.projectRoot, temporary);
   await rename(temporary, manifestPath);
 }
 

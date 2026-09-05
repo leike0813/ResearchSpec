@@ -709,6 +709,16 @@ Avoid unless clearly justified:
 
 Do not overwrite user content by default.
 
+Managed installation targets must be validated against scope, owner, source
+namespace and the existing tool/catalog destinations before reading ownership
+hashes or planning cleanup. Invalid existing manifests block projection
+mutations; missing manifests are a separate state. Generated write plans carry
+program-derived trusted roots and recheck every descendant path component before
+mutation, including temporary files, backups and rollback. Descendant symlinks
+are blocking even when they point inside the root; the trusted project root
+itself may resolve through a symlink. Hash equality never authorizes a path
+outside its managed namespace, and force does not bypass these boundaries.
+
 For generated skill files:
 
 - safe to create if missing;

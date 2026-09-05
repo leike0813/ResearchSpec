@@ -2,6 +2,8 @@ import { createHash, randomUUID } from "node:crypto";
 import { chmod, lstat, mkdir, readFile, readdir, readlink, rename, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 
+import { assertPathWithinRoot } from "./path-boundary.js";
+
 export type PlannedAction = "create" | "refresh" | "remove-owned" | "move" | "skip-unchanged" | "skip-drift" | "conflict";
 
 export interface PlannedWrite {
@@ -16,6 +18,7 @@ export interface PlannedWrite {
   nextHash?: string;
   previousMode?: number;
   nextMode?: number;
+  boundaryRoot?: string;
   reason: string;
 }
 
@@ -23,6 +26,7 @@ export interface WritePlan {
   operations: PlannedWrite[];
   readPreconditions?: ReadPrecondition[];
   ensureDirectories?: string[];
+  boundaryRoot?: string;
 }
 
 export interface WritePlanExecutionOptions {
@@ -49,18 +53,30 @@ export async function planFile(input: {
   force?: boolean;
   mode?: number;
   requireRecordedOwnership?: boolean;
+  boundaryRoot?: string;
 }): Promise<PlannedWrite> {
-  const existing = await readFileState(input.path);
   const nextHash = sha256(input.content);
+  const nextMode = input.mode === undefined ? undefined : normalizeMode(input.mode);
+  if (input.ownership === "generated" && input.boundaryRoot === undefined) {
+    return { ...input, action: "conflict", nextHash, ...(nextMode === undefined ? {} : { nextMode }), reason: "generated write has no trusted root" };
+  }
+  if (input.boundaryRoot !== undefined) {
+    try {
+      await assertPathWithinRoot(input.boundaryRoot, input.path);
+    }
+    catch (error) {
+      return { ...input, action: "conflict", nextHash, ...(nextMode === undefined ? {} : { nextMode }), reason: error instanceof Error ? error.message : "target is outside trusted root" };
+    }
+  }
+  const existing = await readFileState(input.path);
   if (existing === undefined) {
-    return { ...input, action: "create", nextHash, ...(input.mode === undefined ? {} : { nextMode: normalizeMode(input.mode) }), reason: "target is missing" };
+    return { ...input, action: "create", nextHash, ...(nextMode === undefined ? {} : { nextMode }), reason: "target is missing" };
   }
   if (existing.kind !== "file") {
-    return { ...input, action: "conflict", nextHash, previousMode: existing.mode, ...(input.mode === undefined ? {} : { nextMode: normalizeMode(input.mode) }), reason: `existing target is ${existing.kind}, not a regular file` };
+    return { ...input, action: "conflict", nextHash, previousMode: existing.mode, ...(nextMode === undefined ? {} : { nextMode }), reason: `existing target is ${existing.kind}, not a regular file` };
   }
   const previousHash = sha256(existing.bytes);
   const previousMode = existing.mode;
-  const nextMode = input.mode === undefined ? undefined : normalizeMode(input.mode);
   if (input.requireRecordedOwnership && !input.recordedHash) {
     return { ...input, action: "conflict", previousHash, nextHash, previousMode, ...(nextMode === undefined ? {} : { nextMode }), reason: "existing path is not manifest-owned" };
   }
@@ -93,8 +109,10 @@ export function planDirectFileEdit(input: {
   previousContent?: string | Uint8Array;
   scope?: PlannedWrite["scope"];
   reason: string;
+  boundaryRoot?: string;
 }): PlannedWrite {
   const nextHash = sha256(input.content);
+  const boundary = input.boundaryRoot === undefined ? {} : { boundaryRoot: input.boundaryRoot };
   if (input.previousContent === undefined) {
     return {
       action: "create",
@@ -104,6 +122,7 @@ export function planDirectFileEdit(input: {
       scope: input.scope ?? "workspace",
       ownership: "user",
       nextHash,
+      ...boundary,
       reason: input.reason,
     };
   }
@@ -116,61 +135,141 @@ export function planDirectFileEdit(input: {
     ownership: "user",
     previousHash: sha256(input.previousContent),
     nextHash,
+    ...boundary,
     reason: input.reason,
   };
 }
 
 export async function executeWritePlan(plan: WritePlan, options: WritePlanExecutionOptions = {}): Promise<void> {
   const actionable = plan.operations.filter((operation) => operation.action === "create" || operation.action === "refresh" || operation.action === "remove-owned" || operation.action === "move");
-  const transaction = actionable.map((operation) => ({ operation, temporary: `${operation.path}.researchspec-${randomUUID()}.tmp`, backup: `${operation.path}.researchspec-${randomUUID()}.bak`, hadOriginal: false, committed: false }));
+  const transaction: WriteTransaction[] = actionable.map((operation) => ({ operation, temporary: `${operation.path}.researchspec-${randomUUID()}.tmp`, backup: `${operation.path}.researchspec-${randomUUID()}.bak`, hadOriginal: false, committed: false }));
   const createdDirectories: string[] = [];
   try {
+    const conflict = plan.operations.find((operation) => operation.action === "conflict");
+    if (conflict) throw writeConflict(`Write plan contains a conflict: ${conflict.path}`);
+    await assertPlanBoundaries(plan, transaction);
     for (const precondition of plan.readPreconditions ?? []) {
+      await assertPlanBoundary(plan.boundaryRoot, precondition.path);
       if (!(await exists(precondition.path)) || await hashPath(precondition.path) !== precondition.expectedHash) {
         throw writeConflict(`Read precondition changed (${precondition.reason}): ${precondition.path}`);
       }
     }
-    for (const entry of transaction) await verifyPrecondition(entry.operation);
+    for (const entry of transaction) {
+      await assertTransactionBoundaries(entry);
+      await verifyPrecondition(entry.operation);
+    }
     for (const directory of [...new Set(plan.ensureDirectories ?? [])].sort(compareText)) {
+      await assertPlanBoundary(plan.boundaryRoot, directory);
       if (await exists(directory)) continue;
+      await assertPlanBoundary(plan.boundaryRoot, directory);
       await mkdir(directory, { recursive: true });
       createdDirectories.push(directory);
     }
     for (const entry of transaction) {
       if (entry.operation.action === "remove-owned" || entry.operation.action === "move") continue;
       if (entry.operation.content === undefined) throw new Error(`Planned write has no content: ${entry.operation.path}`);
+      await assertTransactionBoundaries(entry);
       await mkdir(path.dirname(entry.operation.path), { recursive: true });
+      await assertTransactionBoundaries(entry);
       await writeFile(entry.temporary, entry.operation.content);
-      if (entry.operation.nextMode !== undefined) await chmod(entry.temporary, entry.operation.nextMode);
+      if (entry.operation.nextMode !== undefined) {
+        await assertTransactionBoundaries(entry);
+        await chmod(entry.temporary, entry.operation.nextMode);
+      }
     }
     for (const entry of transaction) {
       if (entry.operation.action === "move") {
         if (!entry.operation.sourcePath) throw writeConflict(`Move has no source: ${entry.operation.path}`);
+        await assertTransactionBoundaries(entry);
         await mkdir(path.dirname(entry.operation.path), { recursive: true });
+        await assertTransactionBoundaries(entry);
         await rename(entry.operation.sourcePath, entry.operation.path);
         entry.committed = true;
         continue;
       }
+      await assertTransactionBoundaries(entry);
       entry.hadOriginal = await exists(entry.operation.path);
-      if (entry.hadOriginal) await rename(entry.operation.path, entry.backup);
-      if (entry.operation.action !== "remove-owned") await rename(entry.temporary, entry.operation.path);
+      if (entry.hadOriginal) {
+        await assertTransactionBoundaries(entry);
+        await rename(entry.operation.path, entry.backup);
+      }
+      if (entry.operation.action !== "remove-owned") {
+        await assertTransactionBoundaries(entry);
+        await rename(entry.temporary, entry.operation.path);
+      }
       entry.committed = true;
     }
     await options.validateCommittedState?.();
   } catch (error) {
     for (const entry of [...transaction].reverse()) {
       if (entry.committed && entry.operation.action === "move" && entry.operation.sourcePath) {
-        await rename(entry.operation.path, entry.operation.sourcePath).catch(() => undefined);
+        if (await canMutateTransaction(entry, [entry.operation.path, entry.operation.sourcePath])) {
+          await rename(entry.operation.path, entry.operation.sourcePath).catch(() => undefined);
+        }
         continue;
       }
-      if (entry.committed && entry.operation.action !== "remove-owned") await rm(entry.operation.path, { force: true }).catch(() => undefined);
-      if (entry.hadOriginal && await exists(entry.backup)) await rename(entry.backup, entry.operation.path).catch(() => undefined);
-      await rm(entry.temporary, { force: true }).catch(() => undefined);
+      if (entry.committed && entry.operation.action !== "remove-owned" && await canMutateTransaction(entry, [entry.operation.path])) {
+        await rm(entry.operation.path, { force: true }).catch(() => undefined);
+      }
+      if (entry.hadOriginal && await canMutateTransaction(entry, [entry.backup, entry.operation.path]) && await exists(entry.backup)) {
+        await rename(entry.backup, entry.operation.path).catch(() => undefined);
+      }
+      if (await canMutateTransaction(entry, [entry.temporary])) await rm(entry.temporary, { force: true }).catch(() => undefined);
     }
-    for (const directory of [...createdDirectories].reverse()) await rm(directory, { recursive: false, force: true }).catch(() => undefined);
+    for (const directory of [...createdDirectories].reverse()) {
+      if (await canUseBoundary(plan.boundaryRoot, [directory])) await rm(directory, { recursive: false, force: true }).catch(() => undefined);
+    }
     throw error;
   }
-  for (const entry of transaction) if (entry.hadOriginal) await rm(entry.backup, { force: true }).catch(() => undefined);
+  for (const entry of transaction) {
+    if (entry.hadOriginal && await canMutateTransaction(entry, [entry.backup])) await rm(entry.backup, { force: true }).catch(() => undefined);
+  }
+}
+
+type WriteTransaction = {
+  operation: PlannedWrite;
+  temporary: string;
+  backup: string;
+  hadOriginal: boolean;
+  committed: boolean;
+};
+
+async function assertPlanBoundaries(plan: WritePlan, transaction: WriteTransaction[]): Promise<void> {
+  for (const precondition of plan.readPreconditions ?? []) await assertPlanBoundary(plan.boundaryRoot, precondition.path);
+  for (const directory of plan.ensureDirectories ?? []) await assertPlanBoundary(plan.boundaryRoot, directory);
+  for (const entry of transaction) await assertTransactionBoundaries(entry);
+}
+
+async function assertPlanBoundary(root: string | undefined, target: string): Promise<void> {
+  if (root !== undefined) await assertPathWithinRoot(root, target);
+}
+
+async function assertTransactionBoundaries(entry: WriteTransaction): Promise<void> {
+  const root = entry.operation.boundaryRoot;
+  if (entry.operation.ownership === "generated" && root === undefined) {
+    throw writeConflict(`Generated write has no trusted root: ${entry.operation.path}`);
+  }
+  if (root === undefined) return;
+  await assertPathWithinRoot(root, entry.operation.path);
+  await assertPathWithinRoot(root, entry.temporary);
+  await assertPathWithinRoot(root, entry.backup);
+  if (entry.operation.sourcePath) await assertPathWithinRoot(root, entry.operation.sourcePath);
+}
+
+async function canMutateTransaction(entry: WriteTransaction, targets: string[]): Promise<boolean> {
+  if (entry.operation.ownership === "generated" && entry.operation.boundaryRoot === undefined) return false;
+  return canUseBoundary(entry.operation.boundaryRoot, targets);
+}
+
+async function canUseBoundary(root: string | undefined, targets: string[]): Promise<boolean> {
+  if (root === undefined) return true;
+  try {
+    for (const target of targets) await assertPathWithinRoot(root, target);
+    return true;
+  }
+  catch {
+    return false;
+  }
 }
 
 type FileState = { kind: "file"; bytes: Uint8Array; mode: number } | { kind: "directory" | "symlink" | "other"; mode: number };

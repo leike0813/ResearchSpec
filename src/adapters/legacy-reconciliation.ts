@@ -4,6 +4,8 @@ import path from "node:path";
 
 import type { Diagnostic } from "../core/validation/types.js";
 import { hashPath, sha256, type PlannedWrite } from "../core/workspace/write-plan.js";
+import { assertPathWithinRoot } from "../core/workspace/path-boundary.js";
+import { validateManagedTarget } from "./managed-target.js";
 import { COMMAND_WRAPPER_CONTENTS, renderCommand } from "./command-renderer.js";
 import type { ManagedInstallation } from "./installations.js";
 import { getTool, toolSkillsRoot, type DeliveryMode } from "./tools.js";
@@ -28,8 +30,9 @@ export async function planLegacyToolReconciliation(input: {
   const diagnostics: Diagnostic[] = [];
   const desiredHashes = new Map<string, string>();
   for (const installation of input.existingInstallations ?? []) {
+    const target = await validateManagedTarget(input.projectRoot, installation);
     if (installation.owner !== "agent-tool" || installation.target.scope !== "project" || !installation.sha256) continue;
-    desiredHashes.set(path.resolve(input.projectRoot, installation.target.path), installation.sha256);
+    desiredHashes.set(target.path, installation.sha256);
   }
   for (const item of input.plannedOperations) {
     if (item.nextHash) desiredHashes.set(path.resolve(item.path), item.nextHash);
@@ -43,9 +46,11 @@ export async function planLegacyToolReconciliation(input: {
     const currentRoot = toolSkillsRoot(tool, input.projectRoot).root;
     for (const legacyRoot of tool.legacySkillsDirs) {
       const legacySkillsRoot = path.join(input.projectRoot, legacyRoot, "skills");
+      await assertPathWithinRoot(input.projectRoot, legacySkillsRoot);
       for (const entry of await directories(legacySkillsRoot)) {
         const legacySkill = path.join(legacySkillsRoot, entry);
         const currentSkill = path.join(currentRoot, entry);
+        await assertPathWithinRoot(input.projectRoot, legacySkill);
         const comparison = await compareKnownTree(legacySkill, currentSkill, desiredHashes);
         if (comparison === "unknown") continue;
         if (comparison === "drift") {
@@ -61,6 +66,7 @@ export async function planLegacyToolReconciliation(input: {
         }
         operations.push({
           action: "remove-owned",
+          boundaryRoot: input.projectRoot,
           path: legacySkill,
           relativePath: posix(path.relative(input.projectRoot, legacySkill)),
           scope: "project",
@@ -77,17 +83,20 @@ export async function planLegacyToolReconciliation(input: {
     if (!tool?.command || (input.delivery !== "skills" && selected.has(toolId))) continue;
     for (const content of COMMAND_WRAPPER_CONTENTS) {
       const target = tool.command.path(content.id, input.projectRoot);
+      await assertPathWithinRoot(input.projectRoot, target);
       if (input.plannedOperations.some((item) => item.path === target && item.action === "remove-owned")) continue;
       const exact = await exactFile(target, renderCommand(tool, content));
       if (exact === "drift") {
         diagnostics.push({ severity: "warning", code: "generated_file_drift", message: "An obsolete ResearchSpec command wrapper has local modifications and was preserved.", path: target, blocking: false, details: { tool_id: tool.id } });
       } else if (exact === "clean") {
-        operations.push({ action: "remove-owned", path: target, relativePath: posix(path.relative(input.projectRoot, target)), scope: "project", ownership: "generated", previousHash: await hashPath(target), reason: "remove obsolete ResearchSpec command wrapper" });
+        operations.push({ action: "remove-owned", boundaryRoot: input.projectRoot, path: target, relativePath: posix(path.relative(input.projectRoot, target)), scope: "project", ownership: "generated", previousHash: await hashPath(target), reason: "remove obsolete ResearchSpec command wrapper" });
       }
     }
   }
 
   if (selected.has("codex") && hasCodexReplacement(input.desiredInstallations)) {
+    const codexRoot = path.dirname(codexPromptDir());
+    await assertPathWithinRoot(codexRoot, codexPromptDir());
     const promptCandidates = await legacyCodexPrompts();
     if (promptCandidates.length && !input.globalCleanupAuthorized && input.operation === "update") {
       diagnostics.push({
@@ -99,6 +108,7 @@ export async function planLegacyToolReconciliation(input: {
       });
     } else {
       for (const promptPath of promptCandidates) {
+        await assertPathWithinRoot(codexRoot, promptPath);
         const info = await lstat(promptPath);
         if (!info.isFile() || info.isSymbolicLink()) {
           diagnostics.push({ severity: "warning", code: "legacy_prompt_preserved", message: "A legacy Codex prompt path is not a regular file and was preserved.", path: promptPath, blocking: false });
@@ -106,6 +116,7 @@ export async function planLegacyToolReconciliation(input: {
         }
         operations.push({
           action: "remove-owned",
+          boundaryRoot: codexRoot,
           path: promptPath,
           scope: "shared-global",
           ownership: "generated",

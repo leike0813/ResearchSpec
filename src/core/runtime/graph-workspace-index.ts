@@ -3,6 +3,7 @@ import path from "node:path";
 import { parse as parseYaml } from "yaml";
 
 import { ToolInstallationManifestSchema, type ToolInstallationManifest } from "../../adapters/installations.js";
+import { validateManagedTarget } from "../../adapters/managed-target.js";
 import { CapabilityGraphProfileSchema, type CapabilityGraphProfile } from "../contracts/capability-graph.js";
 import {
   ClaimsSpecV2Schema,
@@ -26,6 +27,7 @@ import {
 } from "../contracts/graph-workspace.js";
 import type { Diagnostic } from "../validation/types.js";
 import { sha256 } from "../workspace/write-plan.js";
+import { assertPathWithinRoot } from "../workspace/path-boundary.js";
 
 const REQUIRED_DIRECTORIES = ["profiles", "specs", "runs", "changes"] as const;
 const REQUIRED_FILES = [
@@ -86,6 +88,7 @@ export interface GraphWorkspaceIndex {
   files: Map<string, GraphWorkspaceFile>;
   config: GraphWorkspaceConfig;
   manifest: ToolInstallationManifest;
+  manifestStatus: "missing" | "valid" | "invalid";
   project: ParsedProjectSpecV2;
   sources: SourcesSpecV2;
   claims: ClaimsSpecV2;
@@ -124,8 +127,22 @@ export async function loadGraphWorkspaceIndex(workspace: string): Promise<GraphW
 
   const config = parseRequired(files, "config.yaml", (text) => GraphWorkspaceConfigSchema.parse(parseYaml(text)), diagnostics)
     ?? GraphWorkspaceConfigSchema.parse({ schema_version: "2", agent_tools: { selected: [], delivery: "skills" }, literature_adapters: { selected: [] }, plugins: { selected: [] } });
-  const manifest = parseRequired(files, "tool-installation-manifest.json", (text) => ToolInstallationManifestSchema.parse(JSON.parse(text) as unknown), diagnostics)
-    ?? ToolInstallationManifestSchema.parse({ schema_version: "1", package_version: "0.1.0", plugin_resolutions: [], literature_adapter_resolutions: [], installations: [] });
+  const manifestPath = path.join(workspace, "tool-installation-manifest.json");
+  const parsedManifest = parseRequired(files, "tool-installation-manifest.json", (text) => ToolInstallationManifestSchema.parse(JSON.parse(text) as unknown), diagnostics);
+  let manifestStatus: GraphWorkspaceIndex["manifestStatus"] = parsedManifest ? "valid"
+    : diagnostics.some((item) => item.path === manifestPath && item.code === "required_file_missing") ? "missing" : "invalid";
+  if (parsedManifest) {
+    for (const installation of parsedManifest.installations) {
+      try { await validateManagedTarget(path.dirname(workspace), installation); }
+      catch (error) {
+        manifestStatus = "invalid";
+        diagnostics.push(problem("invalid_current_contract", error instanceof Error ? error.message : String(error), manifestPath));
+        break;
+      }
+    }
+  }
+  const manifest = manifestStatus === "valid" && parsedManifest ? parsedManifest
+    : ToolInstallationManifestSchema.parse({ schema_version: "1", package_version: "0.1.0", plugin_resolutions: [], literature_adapter_resolutions: [], installations: [] });
   const project = parseRequired(files, "specs/project.md", parseProjectSpecV2, diagnostics)
     ?? parseProjectSpecV2("---\nschema_version: \"2\"\nproject_id: invalid\n---\n");
   const sources = parseRequired(files, "specs/sources.yaml", (text) => SourcesSpecV2Schema.parse(parseYaml(text)), diagnostics)
@@ -164,6 +181,7 @@ export async function loadGraphWorkspaceIndex(workspace: string): Promise<GraphW
     files,
     config,
     manifest,
+    manifestStatus,
     project,
     sources,
     claims,
@@ -456,6 +474,7 @@ async function checkDirectory(workspace: string, relativePath: string, diagnosti
 async function readManagedFile(workspace: string, relativePath: string, diagnostics: Diagnostic[]): Promise<GraphWorkspaceFile | undefined> {
   const absolutePath = path.join(workspace, relativePath);
   try {
+    await assertPathWithinRoot(path.dirname(workspace), absolutePath);
     const info = await lstat(absolutePath);
     if (!info.isFile() || info.isSymbolicLink()) {
       diagnostics.push(problem("managed_file_invalid", "Managed path must be a regular file.", absolutePath));
@@ -464,6 +483,10 @@ async function readManagedFile(workspace: string, relativePath: string, diagnost
     const text = await readFile(absolutePath, "utf8");
     return { relativePath, absolutePath, text, hash: sha256(text) };
   } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "EWRITE_CONFLICT") {
+      diagnostics.push(problem("managed_file_invalid", error instanceof Error ? error.message : String(error), absolutePath));
+      return undefined;
+    }
     if ((error as NodeJS.ErrnoException).code === "ENOENT") {
       diagnostics.push(problem("required_file_missing", "Required file is missing.", absolutePath));
       return undefined;

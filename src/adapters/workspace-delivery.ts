@@ -12,6 +12,7 @@ import { planPluginProjection } from "../plugins/graph-delivery.js";
 import { loadGraphProfileRegistry } from "../graph-profiles/registry.js";
 import type { DomainResolutionSnapshot } from "./installations.js";
 import { planToolDelivery } from "./delivery.js";
+import { resolveManagedTarget, validateManagedTarget } from "./managed-target.js";
 import type { DeliveryMode } from "./tools.js";
 import { planLegacyToolReconciliation } from "./legacy-reconciliation.js";
 import {
@@ -49,6 +50,7 @@ export async function planWorkspaceDelivery(input: {
   reconcileLegacy?: boolean;
   globalCleanupAuthorized?: boolean;
 }): Promise<WorkspaceDeliveryPlan> {
+  for (const installation of input.existingInstallations) await validateManagedTarget(input.projectRoot, installation);
   const profileDefinitions = [...(await loadGraphProfileRegistry()).profiles.values()];
   const profileOperations: PlannedWrite[] = [];
   const profileInstallations: ManagedInstallation[] = [];
@@ -56,7 +58,13 @@ export async function planWorkspaceDelivery(input: {
     const profileAbsolutePath = path.join(input.workspaceRoot ?? path.join(input.projectRoot, "researchspec"), `profiles/${definition.profile.profile_id}.yaml`);
     const profileTarget = path.relative(input.projectRoot, profileAbsolutePath).split(path.sep).join("/");
     const existingProfile = input.existingInstallations.find((item) => item.owner === "framework" && item.target.scope === "project" && item.target.path === profileTarget);
+    const installation: ManagedInstallation = {
+      owner: "framework", tool_id: null,
+      source: { kind: "framework-profile", profile_id: definition.profile.profile_id, profile_version: definition.profile.profile_version },
+      target: { scope: "project", path: profileTarget, executable: false }, sha256: sha256(definition.projection),
+    };
     profileOperations.push(await planFile({
+      boundaryRoot: resolveManagedTarget(input.projectRoot, installation).boundaryRoot,
       path: profileAbsolutePath,
       relativePath: profileTarget,
       content: definition.projection,
@@ -66,13 +74,7 @@ export async function planWorkspaceDelivery(input: {
       requireRecordedOwnership: existingProfile === undefined,
       force: input.force,
     }));
-    profileInstallations.push({
-      owner: "framework",
-      tool_id: null,
-      source: { kind: "framework-profile", profile_id: definition.profile.profile_id, profile_version: definition.profile.profile_version },
-      target: { scope: "project", path: profileTarget, executable: false },
-      sha256: sha256(definition.projection),
-    });
+    profileInstallations.push(installation);
   }
   const toolDelivery = await planToolDelivery({
     projectRoot: input.projectRoot,

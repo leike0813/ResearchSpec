@@ -1,40 +1,42 @@
 import { readFile } from "node:fs/promises";
-import path from "node:path";
 
 import { z } from "zod";
 
+import { isCanonicalAbsolutePath, isSafePathComponent, isSafeRelativePath } from "../core/contracts/project-path.js";
 import type { Diagnostic } from "../core/validation/types.js";
 import { sha256, type PlannedWrite } from "../core/workspace/write-plan.js";
+import { managedTargetDiagnostic, validateManagedTarget } from "./managed-target.js";
 
 const IdentifierSchema = z.string().trim().min(1);
+const PathComponentSchema = IdentifierSchema.refine(isSafePathComponent, "must be a safe path component");
 const Sha256Schema = z.string().regex(/^[a-f0-9]{64}$/);
 
 export const ManagedInstallationSourceSchema = z.discriminatedUnion("kind", [
-  z.strictObject({ kind: z.literal("arsu-skill"), skill_id: IdentifierSchema }),
-  z.strictObject({ kind: z.literal("core-skill"), skill_id: IdentifierSchema }),
-  z.strictObject({ kind: z.literal("framework-capability"), capability_id: IdentifierSchema }),
-  z.strictObject({ kind: z.literal("companion-skill"), skill_id: IdentifierSchema }),
+  z.strictObject({ kind: z.literal("arsu-skill"), skill_id: PathComponentSchema }),
+  z.strictObject({ kind: z.literal("core-skill"), skill_id: PathComponentSchema }),
+  z.strictObject({ kind: z.literal("framework-capability"), capability_id: PathComponentSchema }),
+  z.strictObject({ kind: z.literal("companion-skill"), skill_id: PathComponentSchema }),
   z.strictObject({
     kind: z.literal("domain-skill"),
     vendor_id: IdentifierSchema,
     vendor_release: IdentifierSchema,
-    skill_id: IdentifierSchema,
+    skill_id: PathComponentSchema,
   }),
-  z.strictObject({ kind: z.literal("command"), command_id: IdentifierSchema }),
+  z.strictObject({ kind: z.literal("command"), command_id: PathComponentSchema }),
   z.strictObject({ kind: z.literal("shared-skill-target"), target_id: z.enum(["codex", "agents"]) }),
   z.strictObject({
     kind: z.literal("framework-profile"),
-    profile_id: IdentifierSchema,
+    profile_id: PathComponentSchema,
     profile_version: IdentifierSchema,
   }),
   z.strictObject({
     kind: z.literal("plugin-capability"),
-    capability_id: IdentifierSchema,
+    capability_id: PathComponentSchema,
     extension_registry_version: IdentifierSchema,
   }),
   z.strictObject({
     kind: z.literal("plugin-profile"),
-    profile_id: IdentifierSchema,
+    profile_id: PathComponentSchema,
     profile_version: IdentifierSchema,
   }),
   z.strictObject({
@@ -42,7 +44,7 @@ export const ManagedInstallationSourceSchema = z.discriminatedUnion("kind", [
     adapter_id: IdentifierSchema,
     release_set_id: IdentifierSchema,
     component: z.enum(["skill", "runtime", "profile-template", "windows-shim"]),
-    skill_id: IdentifierSchema.optional(),
+    skill_id: PathComponentSchema.optional(),
     platform: IdentifierSchema.optional(),
   }),
 ]);
@@ -86,6 +88,12 @@ export const ManagedInstallationSchema = z.strictObject({
     if (isPlatformRuntime !== (value.source.platform !== undefined)) {
       context.addIssue({ code: "custom", path: ["source", "platform"], message: "runtime and Windows shim sources require exactly one target platform" });
     }
+  }
+  if (value.target.scope === "project" && !isSafeRelativePath(value.target.path)) {
+    context.addIssue({ code: "custom", path: ["target", "path"], message: "project targets must be safe relative POSIX paths" });
+  }
+  if (value.target.scope === "shared-global" && !isCanonicalAbsolutePath(value.target.path)) {
+    context.addIssue({ code: "custom", path: ["target", "path"], message: "shared-global targets must be canonical absolute paths" });
   }
 });
 
@@ -254,7 +262,15 @@ export async function reconcileAgentToolInstallations(input: {
       continue;
     }
 
-    const target = path.resolve(input.projectRoot, installation.target.path);
+    let managedTarget;
+    try {
+      managedTarget = await validateManagedTarget(input.projectRoot, installation);
+    } catch (error) {
+      retainedInstallations.push(installation);
+      diagnostics.push(managedTargetDiagnostic(installation, error));
+      continue;
+    }
+    const target = managedTarget.path;
     const bytes = await readBytes(target);
     if (bytes === undefined) continue;
     if (sha256(bytes) !== installation.sha256) {
@@ -275,6 +291,7 @@ export async function reconcileAgentToolInstallations(input: {
       relativePath: installation.target.path,
       scope: installation.target.scope,
       ownership: "generated",
+      boundaryRoot: managedTarget.boundaryRoot,
       previousHash: installation.sha256,
       reason: selected ? "remove stale manifest-owned generated file" : "tool was explicitly deselected",
     });

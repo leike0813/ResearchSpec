@@ -36,6 +36,7 @@ async function applyGraphWorkspaceProjection(input: {
   index?: Awaited<ReturnType<typeof loadGraphWorkspaceIndex>>;
   context: CommandContext;
 }): Promise<{ projected: number; operations: PlannedWrite[] }> {
+  if (input.index?.manifestStatus === "invalid") throw new CliError("invalid_current_contract", "The installation manifest is invalid; existing files were left unchanged.", 3, undefined, input.index.diagnostics);
   const projectRoot = path.dirname(input.workspace);
   const existingInstallations = input.index?.manifest.installations ?? [];
   const priorTools = input.index?.config.agent_tools.selected ?? [];
@@ -68,10 +69,10 @@ async function applyGraphWorkspaceProjection(input: {
   }));
   const configPath = path.join(input.workspace, "config.yaml");
   const projectOperations: PlannedWrite[] = [input.index
-    ? planDirectFileEdit({ path: configPath, relativePath: "researchspec/config.yaml", content: configContent, previousContent: input.index.files.get("config.yaml")?.text, scope: "project", reason: "update graph workspace configuration" })
-    : await planFile({ path: configPath, relativePath: "researchspec/config.yaml", content: configContent, scope: "project", ownership: "user" })];
+    ? planDirectFileEdit({ boundaryRoot: projectRoot, path: configPath, relativePath: "researchspec/config.yaml", content: configContent, previousContent: input.index.files.get("config.yaml")?.text, scope: "project", reason: "update graph workspace configuration" })
+    : await planFile({ boundaryRoot: projectRoot, path: configPath, relativePath: "researchspec/config.yaml", content: configContent, scope: "project", ownership: "user" })];
   if (!input.index) {
-    for (const file of initialStableSpecs(input.workspace)) projectOperations.push(await planFile({ path: file.path, relativePath: path.relative(projectRoot, file.path).split(path.sep).join("/"), content: file.content, scope: "project", ownership: "user" }));
+    for (const file of initialStableSpecs(input.workspace)) projectOperations.push(await planFile({ boundaryRoot: projectRoot, path: file.path, relativePath: path.relative(projectRoot, file.path).split(path.sep).join("/"), content: file.content, scope: "project", ownership: "user" }));
   }
   const manifestPath = path.join(input.workspace, "tool-installation-manifest.json");
   const manifestContent = renderToolInstallationManifest({
@@ -81,10 +82,11 @@ async function applyGraphWorkspaceProjection(input: {
     installations: deliveryPlan.installations,
   });
   const manifestOperation = input.index
-    ? planDirectFileEdit({ path: manifestPath, relativePath: "researchspec/tool-installation-manifest.json", content: manifestContent, previousContent: input.index.files.get("tool-installation-manifest.json")?.text, scope: "project", reason: "commit workspace ownership manifest" })
-    : await planFile({ path: manifestPath, relativePath: "researchspec/tool-installation-manifest.json", content: manifestContent, scope: "project", ownership: "generated" });
+    ? planDirectFileEdit({ boundaryRoot: projectRoot, path: manifestPath, relativePath: "researchspec/tool-installation-manifest.json", content: manifestContent, previousContent: input.index.files.get("tool-installation-manifest.json")?.text, scope: "project", reason: "commit workspace ownership manifest" })
+    : await planFile({ boundaryRoot: projectRoot, path: manifestPath, relativePath: "researchspec/tool-installation-manifest.json", content: manifestContent, scope: "project", ownership: "generated" });
   const operations = [...projectOperations, ...deliveryPlan.operations, manifestOperation];
-  if (!input.context.dryRun) await executeWritePlan({ operations, ensureDirectories: [input.workspace, path.join(input.workspace, "profiles"), path.join(input.workspace, "specs"), path.join(input.workspace, "runs"), path.join(input.workspace, "changes")] });
+  if (operations.some((operation) => operation.action === "conflict")) throw new CliError("workspace_projection_conflict", "Workspace files conflict with the projection.", 3);
+  if (!input.context.dryRun) await executeWritePlan({ boundaryRoot: projectRoot, operations, ensureDirectories: [input.workspace, path.join(input.workspace, "profiles"), path.join(input.workspace, "specs"), path.join(input.workspace, "runs"), path.join(input.workspace, "changes")] });
   return { projected: deliveryPlan.installations.filter((item) => item.source.kind === "framework-capability").length, operations };
 }
 

@@ -5,7 +5,7 @@ import path from "node:path";
 import { test } from "node:test";
 
 import { planWorkspaceDelivery } from "../src/adapters/workspace-delivery.js";
-import { executeWritePlan } from "../src/core/workspace/write-plan.js";
+import { executeWritePlan, hashPath } from "../src/core/workspace/write-plan.js";
 import {
   LITERATURE_ADAPTER_CATALOG,
   LiteratureAdapterDefinitionSchema,
@@ -167,7 +167,9 @@ void test("adapter delivery never adopts or overwrites an unowned target", async
     const delivery = await planLiteratureAdapterDelivery({ projectRoot: root, toolIds: [], selectedAdapterIds: ["zotero-library"], existingInstallations: [], force: true, platform: "linux", architecture: "x64" });
     assert.equal(delivery.operations.find((item) => item.path === target)?.action, "conflict");
     assert.equal(delivery.resolutions[0]?.projection_state, "incomplete");
-    await executeWritePlan({ operations: delivery.operations });
+    const before = await hashPath(root);
+    await assert.rejects(executeWritePlan({ operations: delivery.operations }), { code: "EWRITE_CONFLICT" });
+    assert.equal(await hashPath(root), before);
     assert.equal(await readFile(target, "utf8"), "user binary");
   } finally {
     await cleanup(root);

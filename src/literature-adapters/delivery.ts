@@ -8,6 +8,7 @@ import {
   type ManagedInstallationSource,
 } from "../adapters/installations.js";
 import { getTool, toolSkillsRoot } from "../adapters/tools.js";
+import { managedTargetDiagnostic, resolveManagedTarget, validateManagedTarget } from "../adapters/managed-target.js";
 import type { Diagnostic } from "../core/validation/types.js";
 import { planFile, sha256, type PlannedWrite } from "../core/workspace/write-plan.js";
 import { desiredLiteratureAdapters } from "./catalog.js";
@@ -32,6 +33,13 @@ export async function reconcileLiteratureAdapterInstallations(input: {
   const desiredKeys = new Set(input.desiredInstallations.map(installationKey));
 
   for (const installation of input.existingInstallations) {
+    let resolved;
+    try { resolved = await validateManagedTarget(input.projectRoot, installation); }
+    catch (error) {
+      retainedInstallations.push(installation);
+      diagnostics.push(managedTargetDiagnostic(installation, error));
+      continue;
+    }
     if (desiredKeys.has(installationKey(installation))) continue;
     if (installation.source.kind !== "literature-adapter") {
       retainedInstallations.push(installation);
@@ -41,7 +49,7 @@ export async function reconcileLiteratureAdapterInstallations(input: {
       retainedInstallations.push(installation);
       continue;
     }
-    const target = path.resolve(input.projectRoot, installation.target.path);
+    const target = resolved.path;
     let info;
     try {
       info = await lstat(target);
@@ -73,6 +81,7 @@ export async function reconcileLiteratureAdapterInstallations(input: {
     }
     operations.push({
       action: "remove-owned",
+      boundaryRoot: resolved.boundaryRoot,
       path: target,
       relativePath: installation.target.path,
       scope: "project",
@@ -94,6 +103,7 @@ export async function planLiteratureAdapterDelivery(input: {
   platform?: NodeJS.Platform;
   architecture?: NodeJS.Architecture;
 }): Promise<LiteratureAdapterDeliveryPlan> {
+  for (const installation of input.existingInstallations) await validateManagedTarget(input.projectRoot, installation);
   const operations: PlannedWrite[] = [];
   const installations: ManagedInstallation[] = [];
   const resolutions: LiteratureAdapterResolution[] = [];
@@ -232,11 +242,16 @@ export async function planLiteratureAdapterDelivery(input: {
     const scope = value.scope ?? "project";
     const key = `${scope}:${value.manifestPath}`;
     const prior = recorded.get(key);
+    const installation: ManagedInstallation = {
+      owner: value.owner, tool_id: value.toolId, source: value.source,
+      target: { scope, path: value.manifestPath, executable: value.executable }, sha256: sha256(value.content),
+    };
     const operation = await planFile({
+      boundaryRoot: resolveManagedTarget(input.projectRoot, installation).boundaryRoot,
       path: value.target,
       relativePath: value.manifestPath,
       content: value.content,
-      scope: "project",
+      scope,
       ownership: "generated",
       recordedHash: prior?.sha256,
       force: input.force,
@@ -266,13 +281,7 @@ export async function planLiteratureAdapterDelivery(input: {
       });
     }
     const hash = operation.action === "skip-drift" && prior ? prior.sha256 : sha256(value.content);
-    installations.push({
-      owner: value.owner,
-      tool_id: value.toolId,
-      source: value.source,
-      target: { scope, path: value.manifestPath, executable: value.executable },
-      sha256: hash,
-    });
+    installations.push({ ...installation, sha256: hash });
   }
 }
 
