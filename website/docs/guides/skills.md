@@ -38,14 +38,15 @@ Structured manuscript review with traceable comments.
 
 ### academic-pipeline
 
-Workflow orchestration across research stages (not yet fully implemented).
+Coordinates research, writing, review and revision through a frozen capability graph.
 
 - Dispatches between deep-research, academic-paper, and reviewer stages
-- Manages transitions and gate checks
+- Reads the current frontier and produces semantic work; the CLI records graph state
+- Presents each formal Gate and Decision for human confirmation
 
 ## Companion Skills
 
-ResearchSpec also includes four companion Skills that assist with
+ResearchSpec also includes five companion Skills that assist with
 framework-level operations:
 
 | Companion | Purpose |
@@ -54,6 +55,11 @@ framework-level operations:
 | `researchspec-propose` | Create structured contract change proposals |
 | `researchspec-decide` | Guide human decision-making on proposals |
 | `researchspec-verify` | Verify implementation against contracts |
+| `researchspec-cli-handbook` | Read the current CLI commands and input contracts |
+
+The installed base surface also includes every capability package in the bundled
+capability registry. A package marked `operational` has a curated execution
+procedure; this label does not certify the academic quality of a real Agent run.
 
 ## Optional Literature Adapter Skills
 

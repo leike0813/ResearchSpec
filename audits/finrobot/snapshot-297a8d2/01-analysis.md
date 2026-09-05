@@ -3,7 +3,7 @@
 - upstream: https://github.com/AI4Finance-Foundation/FinRobot.git
 - revision: `297a8d28d099be328c8a8eb658b4f782b93f3651`
 - upstream content files: 145
-- upstream tree SHA-256: `1e26384c7038c93d3e5e5fce71f02519de8fd4966f0ba5673c1e54ee6e7831ff`
+- upstream tree SHA-256: `73f57674dfde778776aa89abda65c5254531a716228fe970bd1bd12f6de84b56`
 - immutable audit SHA-256: `6b518a933f036333203276263b94cc5b4bd45a924f426972c4547165c5cbb9c3`
 - advisory vendor bundle SHA-256: `a2824084ede6ff0a2e54e4c1d1066ede7286e221277f58f08ce2a1885363e66f`
 

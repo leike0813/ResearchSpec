@@ -61,7 +61,20 @@ void test("graph status and check/doctor read a fresh schema 2 workspace", async
     const ctx = context({ cwd: root });
     const status = await handleGraphStatus(ctx);
     assert.equal(status.ok, true);
-    assert.equal((status.data as { schema_version: string }).schema_version, "2");
+    const data = status.data as {
+      schema_version: string;
+      plugins: {
+        resolved_capability_ids: string[];
+        resolved_profile_ids: string[];
+        projected_capability_ids: string[];
+        projected_profile_ids: string[];
+      };
+    };
+    assert.equal(data.schema_version, "2");
+    assert.deepEqual(data.plugins.resolved_capability_ids, []);
+    assert.deepEqual(data.plugins.resolved_profile_ids, []);
+    assert.deepEqual(data.plugins.projected_capability_ids, []);
+    assert.deepEqual(data.plugins.projected_profile_ids, []);
     assert.equal((await handleGraphCheck(false, ctx)).ok, true);
     assert.equal((await handleGraphDoctor(ctx)).ok, true);
   } finally {

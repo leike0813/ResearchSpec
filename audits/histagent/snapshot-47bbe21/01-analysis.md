@@ -3,7 +3,7 @@
 - upstream: https://github.com/CharlesQ9/HistAgent
 - revision: `47bbe21dc81618489f5d5929358032883a3fe448`
 - upstream content files: 120
-- upstream tree SHA-256: `ce31c1c55e8cb6756eb77eb582525e4ce03a9b15b7a61852ce3d5141c6ba26bc`
+- upstream tree SHA-256: `41ecb4c211df7322d33084941a33ba834a0eb61129abe9e5701a957e507d7ffe`
 - immutable audit SHA-256: `0f0de44a13204fbbc139ec78b6f9320c4078a786e700f1f5bdcda1688cf36269`
 - advisory vendor bundle SHA-256: `67a2333b593dc1317c84a768b9f33fa381e065783f7918dfeece32f4990d0829`
 

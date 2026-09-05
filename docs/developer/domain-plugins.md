@@ -13,6 +13,10 @@ execution environment and authority.
 
 Domain identity and taxonomy are canonicalized in [ResearchSpec Domain Taxonomy](./domain-taxonomy.md).
 
+Domain selection controls workspace projection. The npm CLI distribution carries the complete
+reviewed offline bundle, including unselected domains and literature Adapter assets; uninstalling
+a domain removes its eligible workspace projections, not assets from the installed CLI package.
+
 ## Vendor and domain layers
 
 The registry separates two many-to-many layers:

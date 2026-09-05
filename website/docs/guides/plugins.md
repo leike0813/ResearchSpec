@@ -14,10 +14,14 @@ vendor Skills organized by ANZSRC 2020 Fields of Research.
 Domain plugins are curated Skill bundles that provide domain-specific research
 assistance. They are:
 
-- **Static and reviewed** — ResearchSpec distributes vetted content, not live scripts
+- **Static and reviewed** — installation copies reviewed content and resources without executing them
 - **Advisory** — they assist semantic work but do not own workflow state
 - **Optional** — install only the domains relevant to your research
 - **Agent-neutral** — no dependency installation or credential setup
+
+Optional selection controls which domains are projected into your workspace.
+Installing the CLI downloads the complete offline bundle, including unselected
+domains and literature Adapter assets.
 
 ## Discovering Plugins
 

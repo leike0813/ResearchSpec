@@ -476,6 +476,12 @@ Six-vendor maintenance must keep converters isolated: each converter stages
 against all published vendors but emits and commits only its own bundle, while a
 source-neutral domain catalog and central assembler own the published registry.
 
+Shared maintenance file identities hash original bytes, including binary resources;
+UTF-8 decoding belongs only to text parsing. Mechanical maintenance helpers are
+shared across vendors while admission, licensing and semantic-review policy remain
+vendor-owned. Refresh affected current maintenance records through the maintenance
+Skill and preserve immutable audits and unchanged reviewed production bytes.
+
 `vendor/revision-master` is the maintainer-only pinned input for the
 revision-master capability absorption. The immutable audit at
 `audits/revision-master/snapshot-13e69610/` remains historical provenance and

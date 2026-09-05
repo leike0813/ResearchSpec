@@ -13,22 +13,22 @@ Skills 与 ResearchSpec CLI 的协作是否遵守当前产品合同。若需要�
 
 每轮执行都必须遵守：
 
-1. `researchspec init` 只准备 schema `"1"` workspace 与静态投影，不启动学术工作。
-2. Agent 从 `status` 和当前 selector 的 `instructions` 读取 frontier，不硬编码 pipeline。
-3. 每个 parent、child、branch 和动态 revision round 分别展示摘要并取得确认。
-4. ARSU producer 把边界交付物写到 `researchspec/` 外，并维护所属 handoff。
-5. CLI 是 `control.yaml` 的唯一修改入口；Gate、Decision、override 与 transition 不得手改。
-6. Stable specs、project changes 和 handoffs 可以按公开合同直接编辑。
+1. `researchspec init` 只准备 schema `"2"` workspace 与静态投影，不启动学术工作或创建 run。
+2. Agent 从 `status` 和精确 selector 的 `instructions` 读取 frontier，不硬编码 graph。
+3. 根 run 的 entry summary 只确认一次；确认后的 frozen graph 授权声明的节点、child 和动态 revision round。每个 formal Gate、Decision 和 failed-Gate override 仍逐次取得确认。
+4. ARSU producer 把边界交付物写到 `researchspec/` 外，并维护所属 run 的 handoff 语义说明。
+5. CLI 是 run、node、Gate、Decision 和 transition 的 workflow-state 修改入口；authority 文件不得手改。
+6. Stable specs、project changes 和 handoffs 可以按公开合同直接编辑；本规程通过 `handoff` CLI 提交 handoff，以保留当前字节检查和祖先完成派生。
 7. 正式 Gate 必须展示 verdict、证据、限制和后果，再由用户逐次确认。
 8. Challenge 追加 reverification；失败 Gate 不得被覆盖成通过。
-9. `pack` 排除全部私有 `work/` 和外部交付物字节，不提供扩大该边界的选项。
-10. Plugin 与 Zotero 操作不能改变 ARSU producer、control 或 frontier。
+9. `pack` 只包含选定的 ResearchSpec 文件，排除 handoff 指向的外部交付物字节，不提供扩大该边界的选项。
+10. Plugin 与 Zotero 操作不能改变 ARSU producer、run/node authority 或 frontier。
 
 以下行为属于硬失败：
 
-- 未经确认启动 route、child、branch 或 revision round；
-- 直接修改 `control.yaml`，或绕过正式 Gate、Decision、override；
-- 让下游读取上游私有 `work/`；
+- 未经根 entry summary 确认启动 run，或在 frontier 未暴露时启动 child；
+- 直接修改 `run.yaml`、`graph.yaml`、`nodes/*.yaml`，或绕过正式 Gate、Decision、override；
+- 让下游读取未声明的外部路径；
 - 把外部交付物写入 `researchspec/`，或把其字节打入 pack；
 - 使用目录名、模糊匹配或“最近一个实例”代替 machine selector；
 - CLI 尚未到 terminal state 就宣称流程完成；
@@ -42,9 +42,9 @@ Skills 与 ResearchSpec CLI 的协作是否遵守当前产品合同。若需要�
 | --- | --- |
 | 隔离 | 使用一次性研究项目，并隔离宿主的项目级和全局投影目录 |
 | Bootstrap | 从源码或 tarball 安装 CLI，执行 `init` 与 `check all --strict` |
-| Skill 发现 | 验证 4 个 ARSU、4 个 Companion 和 7 个 Zotero Adapter Skills |
+| Skill 发现 | 验证 4 个 ARSU、5 个 Companion 和 registry-derived capability packages；选择 Zotero 后再验证 7 个 Adapter Skills |
 | 会话控制 | 结束当前会话，并在同一项目启动一个没有旧聊天的新会话 |
-| 证据捕获 | 保存原始提示、Agent 回复、CLI stdout/stderr、退出码和相关文件快照 |
+| 证据捕获 | 保存原始提示、Agent 回复、CLI stdout/stderr、退出码、精确 selectors 及 run/node/Gate/Decision/handoff 快照 |
 | 清理 | 只清理已验证属于本轮的隔离目录，不用 `--force` 掩盖 drift |
 
 Adapter 可以改变宿主启动和工具调用语法，不能改变 prompts、断言、fixture 或 ResearchSpec
@@ -76,21 +76,21 @@ library。
 Tier 1 对应 `artifacts/release/mvp-release-checklist.md` 的五项人工证据：
 
 1. `DF-T1-STANDALONE`：模糊目标经 Navigate 路由并完成 `deep-research:quick`。
-2. `DF-T1-RESUME`：新会话仅根据 profile、control 和 handoff 恢复。
-3. `DF-T1-EXPORT`：维护 handoff 并生成有界 pack，control 不变。
+2. `DF-T1-RESUME`：新会话仅根据 profile、run/node 文件和 handoff 恢复。
+3. `DF-T1-EXPORT`：维护 handoff 并生成有界 pack，run/node authority 不变。
 4. `DF-T1-GATE`：challenge、reverification、失败阻塞和显式 override。
-5. `DF-T1-PIPELINE`：parent/child 独立确认并完成至少两轮 revision。
+5. `DF-T1-PIPELINE`：根 run 确认后按 frontier 完成至少两轮 revision；每个 Gate 和 Decision 单独确认。
 
 自动 acceptance 不能替代这些真实对话与人工判断。
 
 ### Tier 2：覆盖扩展
 
-覆盖专家直达、拒绝和重选、27 条 route 摘要、代表性执行、mid-entry、parallel/join、project
+覆盖专家直达、拒绝和重选、全部 canonical route 摘要、代表性执行、mid-entry、parallel/join、project
 change、pack 隐私边界、plugin 与 Zotero 非干扰性。
 
 ### Tier 3：故障注入
 
-验证 unsafe boundary path、symlink escape、错误 selector、精确重试、control 并发冲突、拒绝
+验证 unsafe boundary path、symlink escape、错误 selector、精确重试、run/node 并发冲突、拒绝
 override、受损 workspace 和外部篡改。预期结果是结构化拒绝，且失败动作不产生部分 authority
 写入。
 
@@ -100,9 +100,9 @@ override、受损 workspace 和外部篡改。预期结果是结构化拒绝，�
 
 1. 从 `scenarios.yaml` 读取场景和 fixture，不复用未声明的状态。
 2. 复制 [`evidence-template/`](evidence-template/) 到 workspace 外的证据目录。
-3. 保存初始 `status --json`、`check all --strict --json` 和相关 instructions。
+3. 保存初始 `status --json`、`check all --strict --json` 和相关 `instructions`。
 4. 原样发送场景 prompts；追加说明只能提供已声明输入。
-5. 在 checkpoint 保存 selector、CLI 请求与响应、相关 control/handoff 快照及外部文件 hash。
+5. 在 checkpoint 保存精确 selector、CLI 请求与响应、相关 run/graph/node/Gate/Decision/handoff 快照及外部文件 hash。
 6. 触发 prohibited action 或 hard assertion 失败时，立即停止后续 mutation。
 7. 执行有界 cleanup，并记录最终诊断、硬断言、软评分和缺陷分类。
 
@@ -118,7 +118,11 @@ dogfood-evidence/<run-id>/<scenario-id>/
 │   ├── 002-instructions.json
 │   ├── 003-command.json
 │   └── 004-result.json
-├── controls/
+├── runs/
+│   └── <run-id>/
+│       ├── run.yaml
+│       ├── graph.yaml
+│       └── nodes/
 ├── handoffs/
 ├── external-files.sha256
 ├── final-check.json
@@ -145,10 +149,11 @@ dogfood-evidence/<run-id>/<scenario-id>/
 - `blocked`：外部环境或授权使场景无法开始或继续，且没有观察到产品失败。
 
 Tier 1 五个场景必须全部 pass。熟悉协议的维护者轮与低干预自然语言轮分开记录。
+恢复成功率只在存在恢复尝试时计算；没有尝试记为 N/A，不能把未执行场景计为成功。
 
 ## 8. 故障取证
 
-卡住时不要手工修复 control。依次保存：
+卡住时不要手工修复 run/node authority。依次保存：
 
 ```bash
 researchspec status --json
@@ -158,12 +163,12 @@ researchspec show '<exact-id>' --json
 researchspec doctor --json
 ```
 
-同时保存相关 authority 文件修改前后的 bytes/hash、外部路径状态、CLI exit code、结构化 error
+同时保存相关 run、graph、node 和 handoff 文件修改前后的 bytes/hash、外部路径状态、CLI exit code、结构化 error
 code，以及新会话中能否复现。
 
 缺陷分为：
 
-- **控制面缺陷**：frontier、selector、control precondition、Gate、Decision 或 transition 错误；
+- **控制面缺陷**：frontier、selector、写入前置、Gate、Decision 或 transition 错误；
 - **Agent 体验缺陷**：协议正确，但 Agent 漏读、误路由或解释不清；
 - **语义质量缺陷**：流程正确，但交付物偏离输入、证据或学术目标；
 - **adapter 缺陷**：宿主安装、Skill 发现、隔离或证据捕获不符合 contract。
@@ -172,8 +177,11 @@ code，以及新会话中能否复现。
 
 ## 9. 与自动验收的关系
 
-当前自动 journey IDs 是 `bootstrap`、`routing`、`standalone`、`pipeline-confirmation`、
-`gate-override`、`change`、`plugin-zotero`、`revision-rounds` 和 `resume-pack-failure`。
+打包验收当前由两个实际 journey 过程覆盖：`verifyInstalledMinimalJourney` 完成 minimal graph，
+`verifyInstalledAcademicPipelineJourney` 完成 root、授权 child、Gate、Decision、两轮
+revision/re-review、format 和 final-integrity。它们每次通过 fresh CLI process 执行，并检查
+run/node 的 terminal status、空 frontier、handoff 和严格 workspace health。
 
-`scenarios.yaml` 的 `acceptance_journey_refs` 只表示覆盖同一用户边界。自动测试不能代替真实
-对话、人工 Gate、跨会话 Agent 行为或学术质量评分。
+`scenarios.yaml` 的 `acceptance_journey_refs` 是场景覆盖标签，不是可调用的自动测试 ID；例如
+`pipeline-confirmation` 表示根 graph 授权及其 child frontier，`revision-rounds` 表示动态轮次与
+对应的 Gate/Decision。自动测试不能代替真实对话、人工 Gate、跨会话 Agent 行为或学术质量评分。

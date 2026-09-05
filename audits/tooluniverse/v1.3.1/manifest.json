@@ -8,7 +8,7 @@
     "release": "v1.3.1",
     "revision": "9b7ff91ddb45b567cac2fa8ea31b82851e877617",
     "content_file_count": 7365,
-    "tree_sha256": "2b153d96bc164bf5beda22980dacdb2191531e96003abf94d7baab287b6e67e0",
+    "tree_sha256": "86287aea6495c3d8ddec1266d254c4cd054e3e126446ac8b0dc5dcbdf5105ea3",
     "audit_path": "audits/tooluniverse/v1.3.1/skill-audit.json",
     "audit_sha256": "b8edbd5c0892d67fc2db2be9c17cdfd6fec944c6b9ae0888602409d983bcca99",
     "audit_report_path": "audits/tooluniverse/v1.3.1/report.md",
@@ -6765,6 +6765,6 @@
     "catalog_sha256": "ad73514d448896754e96fd2f6a89f0e0b1844379a99a350b3c7476f5d7d6da0d",
     "audit_readme_path": "audits/tooluniverse/README.md",
     "audit_readme_sha256": "5ea920dd9888a8935bbe24d2bcd82ec883694e299437a825bf3708c85919cfac",
-    "record_sha256": "e112c05d5c52ac24427dad3aecc4ff02a996b62bd0ebcd140771c94d480791af"
+    "record_sha256": "7e808fe6063910e8fde3d1d59523e560ec8a6a766527ccceca74aa79648ae5bc"
   }
 }

@@ -21,11 +21,15 @@ results do not satisfy this checklist.
 
 ## Manual dogfooding
 
-- [ ] Quick standalone completed without direct control edits.
-- [ ] New-session resume used status, exact selectors, controls, and handoffs.
+- [ ] Quick standalone completed through public CLI authority mutations.
+- [ ] New-session resume used status, exact selectors, run/graph/node records, and handoffs.
 - [ ] Pack export excluded private work and external deliverable bytes.
 - [ ] Gate challenge, reverification, and explicit override completed.
-- [ ] End-to-end pipeline completed with at least two independently confirmed revision rounds.
+- [ ] End-to-end pipeline completed with at least two revision rounds authorized by the frozen root graph, with each formal Gate and Decision confirmed separately.
+
+Attach human correction counts, resume attempts/successes and the playbook's evidence-quality and
+deliverable-usability scores. Declared `operational` maturity, parity coverage and fixture-based
+technical journeys do not satisfy these manual items.
 
 ## Administrative and legal
 

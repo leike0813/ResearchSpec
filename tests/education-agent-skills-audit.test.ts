@@ -161,7 +161,7 @@ void test("approved ingestion publishes only reviewed static Skills without chan
   assert.deepEqual(registry.vendors.map((vendor) => vendor.vendor_id), ["education-agent-skills", "finrobot", "histagent", "materials-science-skills-for-llm", "scientific-agent-skills", "tooluniverse"]);
   const packageJson = JSON.parse(await readFile(path.resolve("package.json"), "utf8")) as { files: string[]; scripts: Record<string, string> };
   assert.equal(packageJson.files.some((entry) => entry === "vendor" || entry.startsWith("vendor/") || entry === "audits" || entry.startsWith("audits/")), false);
-  assert.ok(packageJson.files.includes("!dist/src/vendor-converters/education-agent-skills"));
+  assert.ok(packageJson.files.includes("!dist/src/vendor-converters"));
   assert.deepEqual(Object.keys(packageJson.scripts).filter((name) => name.startsWith("education-agent-skills:")).sort(compareText), [
     "education-agent-skills:audit",
     "education-agent-skills:audit:check",

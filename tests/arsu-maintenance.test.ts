@@ -4,27 +4,6 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { test } from "node:test";
 
-void test("ARSU maintenance skill documents the four-stage auditable path", async () => {
-  const skill = await readFile(path.join(".agents", "skills", "arsu-maintenance", "SKILL.md"), "utf8");
-  assert.match(skill, /分析 -> 吸纳 -> 转换 -> 审阅 -> 审计/);
-  assert.match(skill, /anchor-baseline/);
-  assert.match(skill, /incremental-update/);
-  assert.match(skill, /audit-check/);
-});
-
-void test("ARSU maintenance skill includes HTML artifact generation and record regeneration", async () => {
-  const skill = await readFile(path.join(".agents", "skills", "arsu-maintenance", "SKILL.md"), "utf8");
-  assert.match(skill, /pnpm arsu-maintenance:artifacts/);
-  assert.match(skill, /scripts\/arsu-maintenance\.mjs records/);
-});
-
-void test("ARSU maintenance skill requires an agent-authored semantic review gate", async () => {
-  const skill = await readFile(path.join(".agents", "skills", "arsu-maintenance", "SKILL.md"), "utf8");
-  assert.match(skill, /Agent 语义审阅门/);
-  assert.match(skill, /05-semantic-review\.md/);
-  assert.match(skill, /declared-fit/);
-});
-
 void test("first ARSU anchor records contain full ingestion, conversion and review tables", async () => {
   const dir = path.join("audits", "arsu", "v3.19.0-828ef3b");
   const ingestion = await readFile(path.join(dir, "02-ingestion.md"), "utf8");

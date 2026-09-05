@@ -3,7 +3,7 @@
 - upstream: https://github.com/mims-harvard/ToolUniverse
 - revision: `9b7ff91ddb45b567cac2fa8ea31b82851e877617`
 - upstream content files: 7365
-- upstream tree SHA-256: `2b153d96bc164bf5beda22980dacdb2191531e96003abf94d7baab287b6e67e0`
+- upstream tree SHA-256: `86287aea6495c3d8ddec1266d254c4cd054e3e126446ac8b0dc5dcbdf5105ea3`
 - immutable audit SHA-256: `b8edbd5c0892d67fc2db2be9c17cdfd6fec944c6b9ae0888602409d983bcca99`
 - advisory vendor bundle SHA-256: `3dc1d511a9b08581b4b7f48e5ef24b607b29eed88ed76e93aac30197feced2ca`
 

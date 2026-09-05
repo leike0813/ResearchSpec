@@ -1,36 +1,29 @@
 #!/usr/bin/env node
 import { execFileSync } from "node:child_process";
-import { createHash } from "node:crypto";
-import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import { parse as parseYaml } from "yaml";
+import {
+  RECORD_FILES,
+  createMaintenanceCommands,
+  esc,
+  fileSha,
+  inlineCode,
+  inventory,
+  isIgnored,
+  json,
+  recordSha,
+  sha256,
+  treeSha,
+} from "./lib/vendor-maintenance.mjs";
 
 const ROOT = process.cwd();
+const ANCHOR_CREATED_AT = "2026-08-17T00:00:00+08:00";
 const CATALOG_PATH = path.join(ROOT, "audits", "finrobot", "catalog.json");
 const AUDIT_README = path.join(ROOT, "audits", "finrobot", "README.md");
 const MAINTENANCE_SKILL = path.join(ROOT, ".agents", "skills", "finrobot-maintenance", "SKILL.md");
 const EXTENSION_REGISTRY_PATH = path.join(ROOT, "skills", "plugins", "extensions", "registry.json");
-const RECORD_FILES = ["01-analysis.md", "02-ingestion.md", "03-conversion.md", "04-review.md", "05-semantic-review.md"];
-const ANCHOR_CREATED_AT = "2026-08-17T00:00:00+08:00";
-
-let currentAnchor = "";
-
-function sha256(text) { return createHash("sha256").update(text, "utf8").digest("hex"); }
-function fileSha(pathName) { return sha256(readFileSync(pathName, "utf8")); }
-function json(pathName) { return JSON.parse(readFileSync(pathName, "utf8")); }
-function isIgnored(name) { return name === "__pycache__" || name.endsWith(".pyc"); }
-function hashFileList(files, base) {
-  return sha256(files.map((file) => `${path.relative(base, file).split(path.sep).join("/")}\0${fileSha(file)}`).join("\n"));
-}
-function gitTrackedFiles(root) {
-  const output = execFileSync("git", ["-C", root, "ls-files", "-z"], { encoding: "utf8" });
-  return output.split("\0").filter(Boolean)
-    .map((item) => path.join(root, item))
-    .filter((item) => { try { return statSync(item).isFile(); } catch { return false; } });
-}
-function esc(text) { return String(text ?? "").replaceAll("|", "\\|").replaceAll("\n", " "); }
-function inlineCode(values) { return values.map((value) => `\`${value}\``).join(" "); }
 
 function catalog() {
   const parsed = json(CATALOG_PATH);
@@ -41,50 +34,6 @@ function catalog() {
 
 function anchorDir(anchorId) { return path.join(ROOT, "audits", "finrobot", anchorId); }
 function artifactDir(anchorId) { return path.join(anchorDir(anchorId), "artifacts"); }
-
-function treeSha(root) {
-  const files = [];
-  const walk = (dir) => {
-    for (const entry of readdirSync(dir, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
-      if (entry.name === ".git" || isIgnored(entry.name)) continue;
-      const target = path.join(dir, entry.name);
-      if (entry.isDirectory()) walk(target);
-      else if (entry.isFile()) files.push(target);
-    }
-  };
-  walk(root);
-  return sha256(files.map((file) => `${path.relative(root, file).split(path.sep).join("/")}\0${fileSha(file)}`).join("\n"));
-}
-
-function inventory(root, trackedOnly = false) {
-  let files = [];
-  const walk = (dir) => {
-    for (const entry of readdirSync(dir, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
-      if (entry.name === ".git" || isIgnored(entry.name)) continue;
-      const target = path.join(dir, entry.name);
-      if (entry.isDirectory()) walk(target);
-      else if (entry.isFile()) files.push(target);
-    }
-  };
-  walk(root);
-  if (trackedOnly) files = gitTrackedFiles(root);
-  const byExt = new Map();
-  const byTop = new Map();
-  for (const file of files) {
-    const rel = path.relative(root, file);
-    const ext = path.extname(file) || "(none)";
-    byExt.set(ext, (byExt.get(ext) ?? 0) + 1);
-    const top = rel.split(path.sep)[0] ?? ".";
-    byTop.set(top, (byTop.get(top) ?? 0) + 1);
-  }
-  return {
-    total: files.length,
-    treeSha: trackedOnly ? hashFileList(files, root) : treeSha(root),
-    files,
-    byExt: Object.fromEntries([...byExt].sort()),
-    byTop: Object.fromEntries([...byTop].sort()),
-  };
-}
 
 function upstreamState() {
   const data = catalog();
@@ -292,16 +241,6 @@ function extensionProfileTreeSha() {
   return sha256(files.map((file) => `${path.basename(file)}\0${fileSha(file)}`).join("\n"));
 }
 
-function recordSha(anchorId) {
-  const values = [];
-  const dir = anchorDir(anchorId);
-  for (const name of RECORD_FILES) {
-    const file = path.join(dir, name);
-    if (existsSync(file)) values.push(`${name}\0${fileSha(file)}`);
-  }
-  return values.length ? sha256(values.join("\n")) : null;
-}
-
 function currentState(anchorId) {
   const data = catalog();
   const upstream = upstreamState();
@@ -360,25 +299,9 @@ function currentState(anchorId) {
       catalog_sha256: fileSha(CATALOG_PATH),
       audit_readme_path: path.relative(ROOT, AUDIT_README),
       audit_readme_sha256: existsSync(AUDIT_README) ? fileSha(AUDIT_README) : null,
-      record_sha256: recordSha(anchorId),
+      record_sha256: recordSha(anchorDir(anchorId), RECORD_FILES),
     },
   };
-}
-
-function syncTools() {
-  const data = catalog();
-  let copied = 0;
-  for (const extension of data.extensions) {
-    for (const tool of extension.tool_files) {
-      const source = path.join(ROOT, tool.source);
-      const target = path.join(ROOT, tool.target);
-      const content = readFileSync(source);
-      mkdirSync(path.dirname(target), { recursive: true });
-      writeFileSync(target, content);
-      copied += 1;
-    }
-  }
-  process.stdout.write(`synced ${copied} FinRobot tool files from ${data.generated_root} to ${data.extension_root}\n`);
 }
 
 function writeRecords(anchorId) {
@@ -544,126 +467,21 @@ ${rows.map((row) => `| \`${row.capability_id}\` | \`${row.package_tree_sha256}\`
   process.stdout.write(`wrote ${dir}/{${Object.keys(records).join(", ")}}${existsSync(semanticReviewPath) ? "; preserved 05-semantic-review.md" : ""}\n`);
 }
 
-function writeReviewArtifact(anchorId) {
-  const state = currentState(anchorId);
-  const dir = artifactDir(anchorId);
-  mkdirSync(dir, { recursive: true });
-  const artifact = {
-    schema_version: "1",
-    vendor_id: state.vendor_id,
-    anchor_id: state.anchor_id,
-    generated: ANCHOR_CREATED_AT,
-    registry_version: state.extension.registry_version,
-    capabilities: state.extension.rows,
-  };
-  writeFileSync(path.join(dir, "extension-review.json"), `${JSON.stringify(artifact, null, 2)}\n`, "utf8");
-  process.stdout.write(`wrote ${path.join(dir, "extension-review.json")}\n`);
-}
-
-function records(anchorId) {
-  currentAnchor = anchorId;
-  writeRecords(anchorId);
-}
-
-function baseline(anchorId) {
-  currentAnchor = anchorId;
-  const semanticReviewPath = path.join(anchorDir(anchorId), "05-semantic-review.md");
-  const semanticText = existsSync(semanticReviewPath) ? readFileSync(semanticReviewPath, "utf8") : "";
-  if (!semanticText.includes("## 结论") || semanticText.includes("[NOT-COMPLETED]")) {
-    throw new Error(`Semantic review is not completed: ${semanticReviewPath}`);
-  }
-  syncTools();
-  writeReviewArtifact(anchorId);
-  writeRecords(anchorId);
-  const state = currentState(anchorId);
-  const dir = anchorDir(anchorId);
-  mkdirSync(dir, { recursive: true });
-  writeFileSync(path.join(dir, "manifest.json"), `${JSON.stringify(state, null, 2)}\n`, "utf8");
-  process.stdout.write(`wrote ${path.join(dir, "manifest.json")}\n`);
-}
-
-function compareValue(pathParts, expected, actual) {
-  return JSON.stringify(expected) === JSON.stringify(actual) ? null : `${pathParts.join(".")}: expected ${JSON.stringify(expected)}, actual ${JSON.stringify(actual)}`;
-}
-
-function check(anchorId) {
-  currentAnchor = anchorId;
-  const manifestPath = path.join(anchorDir(anchorId), "manifest.json");
-  if (!existsSync(manifestPath)) throw new Error(`Missing anchor manifest: ${manifestPath}`);
-  const manifest = json(manifestPath);
-  const state = currentState(anchorId);
-  const problems = [];
-  for (const key of ["release", "revision", "content_file_count", "tree_sha256", "audit_path", "audit_sha256", "audit_report_path", "audit_report_sha256"]) {
-    const issue = compareValue(["upstream", key], manifest.upstream?.[key], state.upstream[key]);
-    if (issue) problems.push(issue);
-  }
-  for (const key of ["file_count", "tree_sha256", "raw_skill_count"]) {
-    const issue = compareValue(["advisory", key], manifest.advisory?.[key], state.advisory[key]);
-    if (issue) problems.push(issue);
-  }
-  for (const key of ["registry_version", "capability_count", "profile_count", "mixed_count", "llm_count", "script_validator_count", "capability_ids", "registry_subset_sha256", "packages_tree_sha256", "profiles_tree_sha256"]) {
-    const issue = compareValue(["extension", key], manifest.extension?.[key], state.extension[key]);
-    if (issue) problems.push(issue);
-  }
-  for (const key of ["artifact_path", "artifact_sha256", "tool_file_count", "tools_byte_identical", "required_fields_bound"]) {
-    if (manifest.review?.[key] !== undefined) {
-      const issue = compareValue(["review", key], manifest.review[key], state.review[key]);
-      if (issue) problems.push(issue);
-    }
-  }
-  for (const key of ["skill_path", "skill_sha256", "catalog_path", "catalog_sha256", "audit_readme_path", "audit_readme_sha256", "record_sha256"]) {
-    if (manifest.maintenance?.[key] !== undefined) {
-      const issue = compareValue(["maintenance", key], manifest.maintenance[key], state.maintenance[key]);
-      if (issue) problems.push(issue);
-    }
-  }
-  if (problems.length > 0) {
-    process.stderr.write(`FAIL finrobot@${anchorId}\n${problems.map((problem) => `- ${problem}`).join("\n")}\n`);
-    process.exitCode = 1;
-  } else {
-    process.stdout.write(`OK finrobot@${anchorId}\n`);
-  }
-}
-
-function artifacts() {
-  const anchorId = currentAnchor || catalog().anchor_id;
-  syncTools();
-  writeReviewArtifact(anchorId);
-  writeRecords(anchorId);
-}
-
-function diff(oldAnchor, newAnchor) {
-  const oldManifest = json(path.join(anchorDir(oldAnchor), "manifest.json"));
-  const newManifest = json(path.join(anchorDir(newAnchor), "manifest.json"));
-  for (const key of ["upstream.revision", "upstream.tree_sha256", "advisory.tree_sha256", "extension.registry_version", "extension.capability_count", "extension.registry_subset_sha256", "extension.packages_tree_sha256", "extension.profiles_tree_sha256"]) {
-    const oldValue = key.split(".").reduce((value, part) => value?.[part], oldManifest);
-    const newValue = key.split(".").reduce((value, part) => value?.[part], newManifest);
-    process.stdout.write(`${key}: ${JSON.stringify(oldValue)} -> ${JSON.stringify(newValue)}\n`);
-  }
-}
-
-function main() {
-  const args = process.argv.slice(2);
-  const command = args[0];
-  const anchor = args[1];
-  const other = args[2];
-  if (command === "artifacts") { artifacts(); return; }
-  if (command === "diff") {
-    if (!anchor || !other) throw new Error("usage: finrobot-maintenance.mjs diff <old-anchor> <new-anchor>");
-    diff(anchor, other);
-    return;
-  }
-  if (!["records", "baseline", "check"].includes(command)) {
-    throw new Error("usage: node scripts/finrobot-maintenance.mjs <artifacts|records|baseline|check|diff> [anchor] [other-anchor]");
-  }
-  const targetAnchor = anchor ?? catalog().anchor_id;
-  if (command === "records") records(targetAnchor);
-  else if (command === "baseline") baseline(targetAnchor);
-  else check(targetAnchor);
-}
+const commands = createMaintenanceCommands({
+  root: ROOT,
+  catalog,
+  anchorDir,
+  artifactDir,
+  currentState,
+  writeRecords,
+  vendorId: "finrobot",
+  vendorLabel: "FinRobot",
+  scriptName: "finrobot-maintenance.mjs",
+  anchorCreatedAt: ANCHOR_CREATED_AT,
+});
 
 try {
-  main();
+  commands.main(process.argv.slice(2));
 } catch (error) {
   process.stderr.write(`${error instanceof Error ? (error.stack ?? error.message) : String(error)}\n`);
   process.exitCode = 1;

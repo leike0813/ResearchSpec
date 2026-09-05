@@ -26,17 +26,16 @@ core ARSU work.
 
 ### Requirement: Batch-Confirmed Agent Installation
 An Agent SHALL install a proposed domain batch only after showing the exact
-hash-bound dry-run impact and receiving explicit human confirmation.
+domain IDs and dry-run impact and receiving explicit human confirmation.
 
 #### Scenario: User confirms a batch
-- **WHEN** the user confirms the displayed domain batch and plan hash
-- **THEN** the Agent SHALL execute the identical non-interactive install with
-  `--expected-plan-sha256` and `--yes`
+- **WHEN** the user confirms the displayed domain batch and installation impact
+- **THEN** the Agent SHALL execute the same exact domain selection non-interactively with `--yes`
 - **AND** it SHALL reload plugin status before using the Skills
 
 #### Scenario: Installation fails
-- **WHEN** the install plan drifts, projection is blocked, or execution fails
-- **THEN** no stale confirmation SHALL be reused
+- **WHEN** the requested domain selection changes, projection is blocked, or execution fails
+- **THEN** no stale confirmation SHALL authorize a different installation batch
 - **AND** the Agent SHALL continue core work without the augmentation
 
 ### Requirement: Nested Advisory Skill Dispatch

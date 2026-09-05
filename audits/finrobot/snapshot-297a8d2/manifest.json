@@ -8,7 +8,7 @@
     "release": "snapshot-297a8d2",
     "revision": "297a8d28d099be328c8a8eb658b4f782b93f3651",
     "content_file_count": 145,
-    "tree_sha256": "1e26384c7038c93d3e5e5fce71f02519de8fd4966f0ba5673c1e54ee6e7831ff",
+    "tree_sha256": "73f57674dfde778776aa89abda65c5254531a716228fe970bd1bd12f6de84b56",
     "audit_path": "audits/finrobot/snapshot-297a8d2/capability-audit.json",
     "audit_sha256": "6b518a933f036333203276263b94cc5b4bd45a924f426972c4547165c5cbb9c3",
     "audit_report_path": "audits/finrobot/snapshot-297a8d2/report.md",
@@ -319,6 +319,6 @@
     "catalog_sha256": "4bca80e553b927eff852bdadafd82939397bc52fa6bc0b97a08bc9113a8a1a17",
     "audit_readme_path": "audits/finrobot/README.md",
     "audit_readme_sha256": "c89af19058d33e4bc9c492f55295f9078c144d85e979b48c4e5576ed0cb9f7b3",
-    "record_sha256": "ff755526a409bad2fd42a3f300c904359ed539137df0b76592ff6b955e888f83"
+    "record_sha256": "70094a35d86888cae9a2f88662bcb7214949d4eb3295c8e533a7b45f0dc8e4e8"
   }
 }

@@ -91,6 +91,19 @@
 
 ## 结论
 
+### 2026-09-05 维护文件身份复核
+
+共享维护脚本将文件 SHA-256 的输入从 UTF-8 解码文本改为原始字节。对相同 pinned Git 文件
+集合重算，120 个文件中 54 个文件的文本 hash 与字节 hash 不同，例如 `Figures/Figure_1.png`。
+原文本树 hash `ce31c1c55e8cb6756eb77eb582525e4ce03a9b15b7a61852ce3d5141c6ba26bc`
+可精确复现；字节树 hash 为
+`41ecb4c211df7322d33084941a33ba834a0eb61129abe9e5701a957e507d7ffe`。
+
+审阅判定：维护身份为 `adapted`，三个能力语义均为 `preserved`。上游、immutable audit/report、
+准入 catalog、raw Skills、能力包、profile 和 registry 未变；
+`git diff -- skills vendor authoring` 为空。未执行上游代码、处理凭证或扩大数据集/图像准入。
+共享流程保留原有审阅门，既有逐能力判定继续适用；只刷新当前 anchor 的派生记录和 manifest。
+
 `declared-fit-with-notes`：三个 extension capability 保留了上游 reviewed 的五层 provenance、
 外部工具 consent、状态权威与安全边界，required brief fields 全部绑定；遗留项均为
 后续 schema 正式化与运行时诊断工作，不构成本锚点语义缺口。

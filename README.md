@@ -59,7 +59,7 @@ ResearchSpec 不是从零构建——它吸纳并整合了多个优秀上游项�
 | **HistAgent** | snapshot-47bbe21 | 3 | 历史研究、遗产档案与博物馆研究 |
 | **Education Agent Skills** | snapshot-32fce5c | 136 | 课程与教学法、教育系统、特殊教育研究 |
 
-所有上游 Skills 均通过不可变审计和独立转换器管道处理；生产准入由人工审查的哈希值绑定。上游代码不直接分发——ResearchSpec 重新创作并维护所有生成的 Skill 文件，保持完整的出处记录和许可证归属。
+上游内容通过不可变审计和独立转换器管道处理，生产准入由经审阅的决策与内容身份约束。不同来源采用保留指令文本、复制已审阅资源或重新创作执行流程的方式；分发内容保留相应出处记录、许可和署名。
 
 ## 环境要求
 
@@ -127,6 +127,8 @@ ResearchSpec 默认投影经过 authoring converter 生成的 capability Skills�
 可选的 [Zotero 文献系统 Adapter](docs/user/literature-adapters.md) 会额外安装七个 Skill、项目级 `.zotero-bridge` runtime 和配置模板。`update --literature-adapters none` 可取消选择；未修改的托管文件会被移除，发生 drift 的文件会保留并报告。初始化及状态检查阶段不与 Zotero 通信。
 
 可选 ResearchSpec 维护的[领域 Skill 插件](docs/developer/domain-plugins.md)可为 workspace 添加经审查的 Open Agent Skills。用户按稳定 domain 选择；维护者 converter 拥有上游出处和 Skill 依赖。学科域遵循 [ANZSRC 2020 FoR 组](docs/developer/domain-taxonomy.md)，Field 代码只用于审计。插件不增加 Companion 或 CLI capability，也不能修改 stable specs、run/node state、handoff、Gate、Decision 或 graph transition。用户拒绝插件或插件不可用时，核心工作不变。
+
+这里的“可选”控制 workspace 投影；安装 CLI 仍会下载包含全部插件和 Adapter 资源的离线包。能力包的 `operational` 是已编写完整执行流程的成熟度声明，内容覆盖由独立 parity 检查验证；真实 Agent 的证据质量和交付可用性仍需单独演练、人工签收。
 
 ## 运行时协议
 

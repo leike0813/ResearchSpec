@@ -8,7 +8,7 @@
     "release": "snapshot-47bbe21",
     "revision": "47bbe21dc81618489f5d5929358032883a3fe448",
     "content_file_count": 120,
-    "tree_sha256": "ce31c1c55e8cb6756eb77eb582525e4ce03a9b15b7a61852ce3d5141c6ba26bc",
+    "tree_sha256": "41ecb4c211df7322d33084941a33ba834a0eb61129abe9e5701a957e507d7ffe",
     "audit_path": "audits/histagent/snapshot-47bbe21/capability-audit.json",
     "audit_sha256": "0f0de44a13204fbbc139ec78b6f9320c4078a786e700f1f5bdcda1688cf36269",
     "audit_report_path": "audits/histagent/snapshot-47bbe21/report.md",
@@ -233,6 +233,6 @@
     "catalog_sha256": "628fb22f57903b22b16e8650d3be3db05c767fe50a6757e792465c5c2aee0e96",
     "audit_readme_path": "audits/histagent/README.md",
     "audit_readme_sha256": "a163bceb29ef352ce49d844b146c92eea8b864ad3b9b49fb771295512c8e82e0",
-    "record_sha256": "8ea7057a9e037017f8ac90f04a38cc02208911d1e2ab920869068c15182372da"
+    "record_sha256": "0af654a55c9a429cc9c4beadf99bbfe9c2d5ef80b8f269571ecc14c2d64644b8"
   }
 }

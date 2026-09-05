@@ -234,6 +234,12 @@ manifest ownership, and projected file hashes without executing plugin resources
 - **THEN** its `plugins` object SHALL distinguish selected domains, available domains, unavailable selections, resolved Skill IDs, and projected domains
 - **AND** plugin status failure SHALL be reported as a non-blocking diagnostic
 
+#### Scenario: No plugin domain is selected
+
+- **WHEN** graph status reads a workspace with no selected plugin domains
+- **THEN** resolved and projected extension capability/profile ID arrays SHALL be empty
+- **AND** the status request SHALL not load extension package resources or profiles
+
 #### Scenario: Check plugins verifies complete projection
 
 - **WHEN** `check plugins` runs on a workspace whose selected-domain closure is fully manifest-owned and hash-clean

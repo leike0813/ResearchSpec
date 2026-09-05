@@ -51,6 +51,11 @@ health. Producer fixtures write external materials through the declared instruct
 changes only through public CLI commands. This does not execute research tools or certify the academic
 quality of those fixtures. Tests using `.test-dist` are compiled-CLI tests, not installed-package tests.
 
+The tarball excludes compiled vendor converters, source audits and evidence-maintenance modules.
+Runtime-referenced ARSU contract modules and reviewed distributable resources remain included.
+Record compressed and unpacked tarball sizes for the release candidate: optional domain and Adapter
+selection controls workspace projection, while installing the CLI downloads the complete offline bundle.
+
 ## 2. Hosted matrix
 
 Ubuntu, macOS, and Windows must pass on Node 22 and Node 24. Checked-in CI has no publish job; a local
@@ -58,10 +63,16 @@ run cannot replace the hosted matrix.
 
 ## 3. Manual dogfooding
 
-Use the repository-only playbook in a disposable project and record evidence for standalone resume,
+Use the repository-only [dogfooding playbook](../../playbooks/dogfooding/README.md) in a disposable project and record evidence for standalone resume,
 bounded context export, Gate challenge/reverification/override, and an end-to-end pipeline with at
 least two revision rounds with their own Gate and Decision confirmations. Do not repair a failed journey by editing
 run/node state or generated profile bytes.
+
+Record human correction counts, resume attempts and successful resumes alongside evidence-discipline
+and artifact-usability scores. Report the recovery rate as successes/attempts, or not applicable if no
+resume was attempted. The manifest's `operational` maturity means a curated execution procedure is
+present; parity reports establish static content coverage. Neither signs off real-Agent academic
+quality. Keep manual checklist items unsigned until the corresponding evidence is reviewed.
 
 ## 4. Administrative gates
 

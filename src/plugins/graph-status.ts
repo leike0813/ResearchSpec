@@ -26,6 +26,16 @@ export async function loadGraphPluginStatusView(index: GraphWorkspaceIndex): Pro
   try {
     const registry = await loadPluginRegistry(undefined, false);
     const summary = pluginStatusSummary(index.config, index.manifest, registry);
+    if (selected.length === 0) {
+      return {
+        loadable: true,
+        ...summary,
+        resolved_capability_ids: [],
+        resolved_profile_ids: [],
+        projected_capability_ids: [],
+        projected_profile_ids: [],
+      };
+    }
     let extensions;
     let resolvedCapabilityIds: string[] = [];
     let resolvedProfileIds: string[] = [];

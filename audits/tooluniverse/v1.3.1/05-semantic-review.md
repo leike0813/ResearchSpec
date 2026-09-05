@@ -86,6 +86,20 @@ capability packages + 一节点 graph profiles：
 
 ## 结论
 
+### 2026-09-05 维护文件身份复核
+
+本轮只修正维护脚本对文件身份的计算：`fileSha` 从 UTF-8 解码后的文本改为原始字节，
+并将共同的 records/baseline/check/diff 流程收敛到 `scripts/lib/vendor-maintenance.mjs`。
+对同一 pinned Git 文件集合重算，7,365 个文件中 56 个文件的文本 hash 与字节 hash 不同，
+例如 `docs/_static/logo.png`。原文本树 hash
+`2b153d96bc164bf5beda22980dacdb2191531e96003abf94d7baab287b6e67e0` 可精确复现；
+字节树 hash 为 `86287aea6495c3d8ddec1266d254c4cd054e3e126446ac8b0dc5dcbdf5105ea3`。
+
+审阅判定：维护身份为 `adapted`，130 个能力语义均为 `preserved`。本轮没有改动上游、
+immutable audit/report、准入 catalog、raw Skills、能力包、profile 或 registry；
+`git diff -- skills vendor authoring` 为空，既有逐能力语义判定继续适用。
+只刷新当前 anchor 的派生分析记录和 manifest，保留本节作为 hash 变化依据。
+
 `declared-fit-with-notes`：130 个 extension capability 一对一保留了 reviewed ToolUniverse
 语义正文、资源路径与领域分配，统一证据 validator 全部绑定；遗留项为后续 schema
 领域化工作，不构成本锚点语义缺口。

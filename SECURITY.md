@@ -16,6 +16,6 @@ Until that channel exists, the package must not be represented as publicly relea
 
 - ResearchSpec is a local file and CLI control plane; it does not call an LLM API or emit telemetry.
 - Installed Agent tools and their model providers are separate trust boundaries.
-- Codex prompts may be written to the shared `$CODEX_HOME/prompts` scope after explicit Codex selection.
-- Context packs exclude registered artifacts by default, but metadata and contract content can still be sensitive.
+- Selecting Codex projects Skills into the project's `.agents/skills/` directory. Other selected tools follow their declared installation scopes, including shared global scopes where applicable.
+- Context packs contain selected research contracts and run records, but exclude private working material and external deliverable bytes. Contract content and handoff metadata can still be sensitive.
 - Manifest hashes detect generated-file drift; they do not establish academic truth or make untrusted content safe.
