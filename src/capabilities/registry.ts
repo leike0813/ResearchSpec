@@ -211,16 +211,52 @@ export function capabilityIds(loaded: LoadedCapabilityRegistry): Set<string> {
   return new Set(loaded.capabilities.keys());
 }
 
+export const STABLE_SPEC_PATHS: Readonly<Record<string, string>> = {
+  "specs.project": "researchspec/specs/project.md",
+  "specs.sources": "researchspec/specs/sources.yaml",
+  "specs.claims": "researchspec/specs/claims.yaml",
+  "specs.manuscript": "researchspec/specs/manuscript.yaml",
+};
+
 export function validateGraphAgainstCapabilityRegistry(
-  loaded: LoadedCapabilityRegistry,
+  loaded: { registry: { registry_version: string }; capabilities: ReadonlyMap<string, { manifest: CapabilityManifest }> },
   profile: CapabilityGraphProfile,
 ): CapabilityGraphDiagnostic[] {
-  const diagnostics = validateGraphCapabilityReferences(profile, capabilityIds(loaded));
+  const diagnostics = validateGraphCapabilityReferences(profile, new Set(loaded.capabilities.keys()));
   if (profile.capability_registry_version !== loaded.registry.registry_version) {
     diagnostics.push({
       path: "capability_registry_version",
       message: `Graph profile expects capability registry ${profile.capability_registry_version}; loaded registry is ${loaded.registry.registry_version}.`,
     });
+  }
+  for (const [nodeIndex, node] of profile.nodes.entries()) {
+    const manifest = node.capability_id === undefined ? undefined : loaded.capabilities.get(node.capability_id)?.manifest;
+    const issue = (code: string, role: string, message: string, bindingIndex?: number) => diagnostics.push({
+      code, node_id: node.node_id, role,
+      path: `nodes.${String(nodeIndex)}.input_bindings${bindingIndex === undefined ? "" : `.${String(bindingIndex)}`}`,
+      message,
+    });
+    for (const declared of manifest?.inputs ?? []) {
+      if (declared.required !== false && !node.input_bindings.some((binding) => binding.role === declared.role)) {
+        issue("node_input_required", declared.role, `Node ${node.node_id} requires input ${declared.role}.`);
+      }
+    }
+    for (const [bindingIndex, binding] of node.input_bindings.entries()) {
+      const declared = manifest?.inputs.find((input) => input.role === binding.role);
+      if (manifest && !declared) issue("node_input_unknown", binding.role, `Node ${node.node_id} binds undeclared input ${binding.role}.`, bindingIndex);
+      if (declared) {
+        const sources = Array.isArray(declared.source_policy) ? declared.source_policy : [declared.source_policy];
+        if (!sources.includes(binding.source)) issue("node_input_source_invalid", binding.role, `Input ${binding.role} does not allow source ${binding.source}.`, bindingIndex);
+        if (binding.source === "stable_spec" && !STABLE_SPEC_PATHS[declared.schema_ref]) issue("node_input_unresolved", binding.role, `Input ${binding.role} has no stable-spec mapping for ${declared.schema_ref}.`, bindingIndex);
+      }
+      if (binding.source === "parameter" && binding.value === undefined) issue("node_input_unresolved", binding.role, `Parameter input ${binding.role} has no value.`, bindingIndex);
+      if (binding.source === "node_output") {
+        const producer = profile.nodes.find((candidate) => candidate.node_id === binding.from_node_id);
+        const sourceRole = binding.from_role ?? binding.role;
+        const output = producer?.expected_outputs.find((candidate) => candidate.role === sourceRole);
+        if (!output) issue("node_input_output_unknown", binding.role, `Input ${binding.role} references unavailable output ${sourceRole} on ${binding.from_node_id ?? "unknown"}.`, bindingIndex);
+      }
+    }
   }
   return diagnostics;
 }

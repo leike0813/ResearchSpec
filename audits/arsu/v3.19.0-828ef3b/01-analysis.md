@@ -1,13 +1,13 @@
 # ARSU Anchor Analysis — v3.19.0-828ef3b
 
-- generated: 2026-08-25T07:39:23.598Z
+- generated: 2026-09-05T13:04:02.026Z
 - upstream: https://github.com/Imbad0202/academic-research-skills @ v3.19.0 (828ef3b613b0e8b91830da3328a1e33d4eb5ab4c)
 - maintenance skill SHA-256: `3a3d57eadd2d21e413fc34bfcd9dc928ec961affe7c403cb26cd3f23046f8f61`
 
 ## Upstream Inventory
 
 - total files: 1121
-- tree SHA-256: `ea01623b69e9ee35f82135675961a3d6cfa6e686fb3c6230e4876034ecebbd81`
+- tree SHA-256: `6d2ae15f6c807b937344a45bdeaed0b03c72dd8563084f92d3d687d6a5027147`
 - agents: 39 · references: 90 · templates: 22
 
 | top-level area | files |

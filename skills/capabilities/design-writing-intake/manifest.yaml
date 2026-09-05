@@ -11,7 +11,7 @@ inputs:
   - role: project_intent
     schema_ref: specs.project
     required: true
-    source_policy: node_output
+    source_policy: stable_spec
 outputs:
   - role: writing_configuration
     schema_ref: writing-configuration.v1

@@ -1,7 +1,7 @@
 # ARSU Anchor Conversion — v3.19.0-828ef3b
 
-- registry SHA-256: `e4722ac6792c3f8116ee8b5883587c7485565df28a646ef390d046f51863ab59`
-- packages tree SHA-256: `ed9780a049e0f451ac4d4d9becfe82d003ae87297a8d9bf1a9636c58dd076c8c`
+- registry SHA-256: `f03600faf3b6157c3cd1bdcbe3d66ef873d020a47af2475616d2ed92f7941651`
+- packages tree SHA-256: `926b06fb0d4f45636852f17b2309d46d8751b4bc610a068db8ec78585f407bf2`
 - capability count: 47 · operational: 47
 
 ## Capability Packages
@@ -29,27 +29,27 @@
 | `check-temporal-integrity-verification` | Temporal Integrity Verification | verification | checker | script | required | operational | 1/1 | 1 | 2 | 4 | `02dda9c3c007` |
 | `check-terminal-policy-gate` | Terminal Policy Gate | verification | checker | llm | required | operational | 1/1 | 1 | 1 | 3 | `0bf5b47bf254` |
 | `design-argument-blueprint` | Argument Blueprint | design | producer | llm | required | operational | 1/1 | 3 | 1 | 5 | `854a8df551c3` |
-| `design-manuscript-structure-design` | Manuscript Structure Design | design | producer | llm | required | operational | 2/1 | 1 | 1 | 3 | `98a9783bbf2b` |
+| `design-manuscript-structure-design` | Manuscript Structure Design | design | producer | llm | required | operational | 2/1 | 1 | 1 | 3 | `e817b36a04e9` |
 | `design-methodology-design` | Methodology Design | design | producer | llm | required | operational | 1/1 | 3 | 1 | 5 | `88375ac11462` |
 | `design-research-question-formulation` | Research Question Formulation | design | producer | llm | required | operational | 1/1 | 2 | 1 | 4 | `f55708315799` |
-| `design-review-panel-config` | Review Panel Configuration | design | producer | llm | required | operational | 1/1 | 2 | 1 | 4 | `a3c7dcd54f3d` |
+| `design-review-panel-config` | Review Panel Configuration | design | producer | llm | required | operational | 1/1 | 2 | 1 | 4 | `7b34e8d66803` |
 | `design-review-response-intake` | Review Response Intake | design | producer | mixed | none | operational | 4/2 | 4 | 1 | 38 | `c1ed654755dc` |
 | `design-review-response-workboard-planning` | Review Response Workboard Planning | design | producer | mixed | required | operational | 1/1 | 4 | 1 | 36 | `18c82a15ea84` |
-| `design-writing-intake` | Writing Intake | design | producer | llm | required | operational | 1/1 | 1 | 1 | 3 | `50011baa6562` |
+| `design-writing-intake` | Writing Intake | design | producer | llm | required | operational | 1/1 | 1 | 1 | 3 | `a47bf41b9f2c` |
 | `discovery-literature-monitoring` | Literature Monitoring | discovery | producer | llm | required | operational | 1/1 | 1 | 1 | 3 | `5085f65eba27` |
 | `discovery-literature-search-screening` | Literature Search And Screening | discovery | producer | llm | required | operational | 2/1 | 2 | 1 | 4 | `308c1c966a59` |
 | `discovery-source-quality-grading` | Source Quality Grading | verification | checker | llm | required | operational | 1/1 | 1 | 1 | 3 | `9c3e45ae69c2` |
 | `generation-abstract-writing` | Abstract Writing | generation | producer | llm | required | operational | 1/1 | 1 | 1 | 3 | `469dcdd4abb8` |
 | `generation-figure-generation` | Figure Generation | generation | producer | llm | required | operational | 1/1 | 2 | 1 | 4 | `ac437d6da397` |
-| `generation-format-rendering` | Format Rendering | generation | producer | mixed | required | operational | 1/1 | 2 | 1 | 4 | `6e17fdbdb735` |
+| `generation-format-rendering` | Format Rendering | generation | producer | mixed | required | operational | 1/1 | 2 | 1 | 4 | `90d7c10a50d9` |
 | `generation-humanization-reference` | Paper Humanizer Reference Mode | generation | observer | llm | none | operational | 0/0 | 1 | 1 | 3 | `d1e6fba4efb4` |
-| `generation-manuscript-drafting` | Manuscript Drafting | generation | producer | llm | required | operational | 2/1 | 3 | 1 | 5 | `c6147a0e46ed` |
+| `generation-manuscript-drafting` | Manuscript Drafting | generation | producer | llm | required | operational | 2/1 | 3 | 1 | 5 | `5404c3e84c1a` |
 | `generation-report-compilation` | Research Report Compilation | generation | producer | llm | required | operational | 2/1 | 2 | 1 | 4 | `77cc41f581c8` |
 | `generation-review-response-round` | Review Response Round | generation | producer | mixed | required | operational | 1/4 | 5 | 1 | 40 | `23f40e806588` |
-| `judgment-devils-advocate-stress-test` | Devil's Advocate Stress Test | judgment | checker | llm | required | operational | 2/1 | 1 | 1 | 3 | `8e1a3626578c` |
-| `judgment-editorial-judgment` | Editorial Judgment | judgment | producer | llm | required | operational | 1/1 | 1 | 1 | 3 | `715dce70dfaf` |
+| `judgment-devils-advocate-stress-test` | Devil's Advocate Stress Test | judgment | checker | llm | required | operational | 2/1 | 1 | 1 | 3 | `9a7931e3a757` |
+| `judgment-editorial-judgment` | Editorial Judgment | judgment | producer | llm | required | operational | 2/1 | 1 | 1 | 3 | `3f63c0cea6a4` |
 | `judgment-review-synthesis` | Review Synthesis | judgment | producer | llm | required | operational | 3/1 | 1 | 1 | 3 | `03d12f06d114` |
-| `judgment-specialist-review` | Specialist Review | judgment | producer | llm | required | operational | 1/1 | 3 | 1 | 5 | `9d1145517a9d` |
+| `judgment-specialist-review` | Specialist Review | judgment | producer | llm | required | operational | 2/1 | 3 | 1 | 5 | `1c501af56070` |
 | `transform-paper-humanization-revision` | Paper Humanization Revision | transformation | producer | mixed | required | operational | 2/2 | 2 | 1 | 5 | `530ce33b99fe` |
 | `transform-review-response-comment-atomization` | Review Response Comment Atomization | transformation | producer | mixed | required | operational | 1/2 | 4 | 1 | 36 | `ba612aad074f` |
 | `transform-revision-patching` | Revision Patching | transformation | checker | mixed | required | operational | 1/2 | 1 | 1 | 3 | `a9edae08d0c8` |
@@ -111,7 +111,11 @@
 | node | kind | capability/subgraph | prerequisites | required gates |
 |---|---|---|---|---|
 | rq | capability | design-research-question-formulation | — | — |
-| report | capability | generation-report-compilation | rq | — |
+| methodology | capability | design-methodology-design | rq | — |
+| literature | capability | discovery-literature-search-screening | methodology | — |
+| grading | capability | discovery-source-quality-grading | literature | — |
+| synthesis | capability | analysis-evidence-synthesis | grading | — |
+| report | capability | generation-report-compilation | synthesis | — |
 
 ### paper-humanizer
 
@@ -133,7 +137,7 @@
 
 | node | kind | capability/subgraph | prerequisites | required gates |
 |---|---|---|---|---|
-| research-question | capability | design-research-question-formulation | — | rq-gate |
+| research-question | capability | design-research-question-formulation | — | — |
 | rq-gate | gate | — | research-question | — |
 | methodology | capability | design-methodology-design | rq-gate | rq-gate |
 | literature | capability | discovery-literature-search-screening | methodology | rq-gate |

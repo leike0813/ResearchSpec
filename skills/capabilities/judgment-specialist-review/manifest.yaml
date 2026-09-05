@@ -11,7 +11,15 @@ inputs:
   - role: manuscript_draft
     schema_ref: manuscript-draft.v1
     required: true
-    source_policy: node_output
+    source_policy:
+      - handoff
+      - node_output
+  - role: review_panel_config
+    schema_ref: review-panel-config.v1
+    required: true
+    source_policy:
+      - handoff
+      - node_output
 outputs:
   - role: specialist_review
     schema_ref: specialist-review.v1
@@ -21,6 +29,7 @@ validators:
     kind: policy
     inputs:
       - manuscript_draft
+      - review_panel_config
     outputs: []
     error_codes:
       - output_roles_invalid

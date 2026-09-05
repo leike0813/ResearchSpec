@@ -27,7 +27,7 @@ export interface AuthoringInputSource {
   role: string;
   schema_ref: string;
   required: boolean;
-  source_policy: "stable_spec" | "handoff" | "node_output" | "parameter";
+  source_policy: CapabilityManifest["inputs"][number]["source_policy"];
 }
 
 export interface AuthoringOutputSource {

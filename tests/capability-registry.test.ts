@@ -303,3 +303,120 @@ void test("graph validation reports unknown capabilities and registry version dr
     await rm(root, { recursive: true, force: true });
   }
 });
+
+function contractGraph(inputBindings: readonly Record<string, unknown>[], upstreamRoles: readonly string[] = []): ReturnType<typeof parseCapabilityGraphProfile> {
+  return parseCapabilityGraphProfile({
+    schema_version: "2",
+    profile_id: "contract-check",
+    profile_version: "0.1.0",
+    capability_registry_version: "0.1.0",
+    entries: [{ entry_id: "main", kind: "end-to-end", node_id: "target" }],
+    nodes: [
+      {
+        node_id: "upstream",
+        kind: "observer",
+        input_bindings: [],
+        expected_outputs: upstreamRoles.map((role) => ({ role, required: true })),
+        prerequisites: [],
+        required_gate_ids: [],
+        required_decision_ids: [],
+        multiplicity: "one",
+        round_role: null,
+      },
+      {
+        node_id: "target",
+        kind: "capability",
+        capability_id: "design-research-question-formulation",
+        input_bindings: inputBindings,
+        expected_outputs: [{ role: "rq_brief", required: true }],
+        prerequisites: ["upstream"],
+        required_gate_ids: [],
+        required_decision_ids: [],
+        multiplicity: "one",
+        round_role: null,
+      },
+    ],
+    parallel_groups: [],
+    subgraphs: [],
+    gates: [],
+    decisions: [],
+    revision_round_template: null,
+    override_policy: { failed_gate_requires_decision: true },
+  });
+}
+
+void test("graph input admission reports each contract violation with node and role", async () => {
+  const root = await tempRoot();
+  try {
+    const cases = [
+      {
+        name: "required role is missing",
+        inputs: [
+          { role: "synthesis_report", schema_ref: "synthesis.v1", source_policy: "node_output" },
+          { role: "methodology_blueprint", schema_ref: "methodology.v1", source_policy: "node_output" },
+        ],
+        bindings: [{ role: "synthesis_report", source: "node_output", from_node_id: "upstream" }],
+        upstreamRoles: ["synthesis_report"],
+        code: "node_input_required",
+        role: "methodology_blueprint",
+      },
+      {
+        name: "bound role is unknown",
+        inputs: [],
+        bindings: [{ role: "unknown_material", source: "handoff" }],
+        upstreamRoles: [],
+        code: "node_input_unknown",
+        role: "unknown_material",
+      },
+      {
+        name: "source is disallowed",
+        inputs: [{ role: "brief", schema_ref: "brief.v1", source_policy: "handoff" }],
+        bindings: [{ role: "brief", source: "stable_spec" }],
+        upstreamRoles: [],
+        code: "node_input_source_invalid",
+        role: "brief",
+      },
+      {
+        name: "producer output role is unknown",
+        inputs: [{ role: "synthesis_report", schema_ref: "synthesis.v1", source_policy: "node_output" }],
+        bindings: [{ role: "synthesis_report", source: "node_output", from_node_id: "upstream", from_role: "missing_output" }],
+        upstreamRoles: ["synthesis_report"],
+        code: "node_input_output_unknown",
+        role: "synthesis_report",
+      },
+    ];
+    for (const item of cases) {
+      const fixture = registryValue({ manifest: manifestValue({ inputs: item.inputs }) });
+      await writeRegistryFixture(root, fixture);
+      const loaded = await validateCapabilityRegistry(fixture.registry, root);
+      const diagnostics = validateGraphAgainstCapabilityRegistry(loaded, contractGraph(item.bindings, item.upstreamRoles));
+      assert.ok(diagnostics.some((diagnostic) => diagnostic.code === item.code && diagnostic.node_id === "target" && diagnostic.role === item.role), item.name);
+    }
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+void test("optional unbound roles and explicit parameter values satisfy input admission", async () => {
+  const root = await tempRoot();
+  try {
+    const fixture = registryValue({ manifest: manifestValue({
+      inputs: [
+        { role: "optional_material", schema_ref: "material.v1", required: false, source_policy: "handoff" },
+        { role: "null_value", schema_ref: "parameter.v1", source_policy: "parameter" },
+        { role: "false_value", schema_ref: "parameter.v1", source_policy: "parameter" },
+        { role: "zero_value", schema_ref: "parameter.v1", source_policy: "parameter" },
+      ],
+    }) });
+    await writeRegistryFixture(root, fixture);
+    const loaded = await validateCapabilityRegistry(fixture.registry, root);
+    const diagnostics = validateGraphAgainstCapabilityRegistry(loaded, contractGraph([
+      { role: "null_value", source: "parameter", value: null },
+      { role: "false_value", source: "parameter", value: false },
+      { role: "zero_value", source: "parameter", value: 0 },
+    ]));
+    assert.deepEqual(diagnostics, []);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});

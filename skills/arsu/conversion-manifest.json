@@ -11,7 +11,7 @@
     "remote_url": "https://github.com/Imbad0202/academic-research-skills",
     "dirty": false
   },
-  "generated_at": "2026-08-24T13:38:48Z",
+  "generated_at": "2026-09-05T13:03:57Z",
   "generated_groups": [
     "academic-paper",
     "academic-paper-reviewer",
@@ -22060,28 +22060,28 @@
       "source_path": "researchspec:src/arsu-converter/workflow/graph-profiles/academic-paper-reviewer.ts",
       "output_path": "profiles/academic-paper-reviewer.yaml",
       "transform_rule": "preset_graph_profile_projection",
-      "sha256": "ec9246e795d81212994a11c21ec2e50873d49fc1895ab2b38d669ae111b50e62"
+      "sha256": "5413f173bb8ab53adf0bef93c91912d7be057b94b32c140eb734e3c2524cb0d0"
     },
     {
       "group": "root",
       "source_path": "researchspec:src/arsu-converter/workflow/graph-profiles/academic-paper.ts",
       "output_path": "profiles/academic-paper.yaml",
       "transform_rule": "preset_graph_profile_projection",
-      "sha256": "a97961ba5a1b5bb5040256b8bc0f83ec312939c115503f0204b21b8024c90be0"
+      "sha256": "8893f6e292ba14cc03e31789222e9df98c12b71563ecfa01e686328f951bd331"
     },
     {
       "group": "root",
       "source_path": "researchspec:src/arsu-converter/workflow/graph-profiles/academic-pipeline.ts",
       "output_path": "profiles/academic-pipeline.yaml",
       "transform_rule": "preset_graph_profile_projection",
-      "sha256": "ffe44adb34f0035beea4a8bb10b4762f94821b2a4857a482891822c16f429675"
+      "sha256": "22018faa9c6cb866d5bb7834c828f54a5aae36f9a1cb2f692d3a6b28e8c13a57"
     },
     {
       "group": "root",
       "source_path": "researchspec:src/arsu-converter/workflow/graph-profiles/minimal.ts",
       "output_path": "profiles/minimal.yaml",
       "transform_rule": "preset_graph_profile_projection",
-      "sha256": "cfe34abbffafe86f726cb271bfeff75eeaf78d0f2d6edd2b157780246351a835"
+      "sha256": "7cffc931763e4769f71f7190e5cf3ad34d152c0f2872cfbc42924ed596e52e6c"
     },
     {
       "group": "root",
@@ -22095,14 +22095,14 @@
       "source_path": "generated:preset-graph-profile-registry",
       "output_path": "profiles/registry.json",
       "transform_rule": "preset_graph_profile_registry_projection",
-      "sha256": "9c77f0b889b4a2598fe31984b00b1d5722bcdd2f9f29cc83fc80b18e62b76908"
+      "sha256": "36aa170ceccc26970d9552d68fd7065b40f3e9aaa2ec9e3edbeb4fd794d2415d"
     },
     {
       "group": "root",
       "source_path": "researchspec:src/arsu-converter/workflow/graph-profiles/research-main.ts",
       "output_path": "profiles/research-main.yaml",
       "transform_rule": "preset_graph_profile_projection",
-      "sha256": "93dc7e281464acceced78b98f467f90624bb227794625432e45e7bea6a950809"
+      "sha256": "1fc09369bffb9b10a2c6279e90dcca0563d32bea04edad291987d32801381a9a"
     },
     {
       "group": "root",
@@ -22123,7 +22123,7 @@
       "source_path": "generated:routing-catalog",
       "output_path": "routing-catalog.json",
       "transform_rule": "routing_catalog_projection",
-      "sha256": "5d02e5f9ab91930f518d938a2be23c6ab2d21d1e6c6cc45a02a615b7b4d37f65"
+      "sha256": "ca748e671dfdc18c374de0a8c6e64f245cc344debf7188cde36c5bcd0f6174cc"
     },
     {
       "group": "root",
@@ -39846,14 +39846,14 @@
     "skill_count": 4,
     "mode_route_count": 25,
     "entry_route_count": 2,
-    "sha256": "5d02e5f9ab91930f518d938a2be23c6ab2d21d1e6c6cc45a02a615b7b4d37f65"
+    "sha256": "ca748e671dfdc18c374de0a8c6e64f245cc344debf7188cde36c5bcd0f6174cc"
   },
   "profile_registry": {
     "path": "profiles/registry.json",
     "schema_version": "1",
     "registry_version": "0.1.0",
     "profile_count": 7,
-    "sha256": "9c77f0b889b4a2598fe31984b00b1d5722bcdd2f9f29cc83fc80b18e62b76908"
+    "sha256": "36aa170ceccc26970d9552d68fd7065b40f3e9aaa2ec9e3edbeb4fd794d2415d"
   },
   "anchor_replacements": {
     "profile_id": "researchspec-anchor-replacement-v4",

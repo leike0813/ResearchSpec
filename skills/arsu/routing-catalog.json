@@ -96,22 +96,50 @@
         },
         {
           "route_ref": "deep-research:quick",
-          "title": "Quick research brief",
+          "title": "Focused research report",
           "intents": [
-            "short research brief with key sources"
+            "complete a focused evidence-grounded research report without a formal Gate"
           ],
           "boundary_outputs": [
             {
-              "role": "research_brief",
-              "type": "research_brief",
-              "purpose": "Research Brief produced by deep-research:quick for an explicit handoff or user delivery.",
+              "role": "rq_brief",
+              "type": "rq_brief",
+              "purpose": "Rq Brief produced by deep-research:quick for an explicit handoff or user delivery.",
               "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
               "validation_profile": "text-artifact"
             },
             {
-              "role": "bibliography",
-              "type": "bibliography",
-              "purpose": "Bibliography produced by deep-research:quick for an explicit handoff or user delivery.",
+              "role": "methodology_blueprint",
+              "type": "methodology_blueprint",
+              "purpose": "Methodology Blueprint produced by deep-research:quick for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "annotated_bibliography",
+              "type": "annotated_bibliography",
+              "purpose": "Annotated Bibliography produced by deep-research:quick for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "graded_sources",
+              "type": "graded_sources",
+              "purpose": "Graded Sources produced by deep-research:quick for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "synthesis_report",
+              "type": "synthesis_report",
+              "purpose": "Synthesis Report produced by deep-research:quick for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "research_report",
+              "type": "research_report",
+              "purpose": "Research Report produced by deep-research:quick for an explicit handoff or user delivery.",
               "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
               "validation_profile": "text-artifact"
             }
@@ -138,14 +166,14 @@
               "fallback_route_refs": []
             }
           ],
-          "risk_level": "low",
+          "risk_level": "medium",
           "gate_policy": {
             "level": "none",
             "gate_kinds": []
           },
           "cost": {
-            "effort": "low",
-            "interaction": "single_pass"
+            "effort": "medium",
+            "interaction": "iterative"
           },
           "start_confirmation": "required",
           "route_kind": "mode",

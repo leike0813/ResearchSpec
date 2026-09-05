@@ -71,6 +71,7 @@ void test("representative Scientific Agent Skills profiles run through the graph
       const advanceInput = path.join(root, `advance-${entry.profile_id}.yaml`);
       const briefRelative = `brief-${entry.profile_id}.json`;
       const briefPath = path.join(root, briefRelative);
+      await writeFile(path.join(root, `task-${entry.profile_id}.md`), "# Research task\n", "utf8");
       await writeFile(startInput, stringify({
         schema_version: "2",
         confirmed_at: "2026-08-17T04:00:00+08:00",

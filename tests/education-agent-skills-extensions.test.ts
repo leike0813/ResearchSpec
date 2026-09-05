@@ -66,6 +66,7 @@ void test("representative Education Agent Skills profiles run through the graph 
       const advanceInput = path.join(root, `advance-${profileId}.yaml`);
       const briefRelative = `brief-${profileId}.json`;
       const briefPath = path.join(root, briefRelative);
+      await writeFile(path.join(root, `task-${profileId}.md`), "# Research task\n", "utf8");
       await writeFile(startInput, stringify({
         schema_version: "2",
         confirmed_at: "2026-08-17T05:00:00+08:00",

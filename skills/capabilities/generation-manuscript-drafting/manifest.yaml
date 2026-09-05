@@ -16,7 +16,9 @@ inputs:
   - role: synthesis_report
     schema_ref: synthesis-report.v1
     required: true
-    source_policy: node_output
+    source_policy:
+      - handoff
+      - node_output
 outputs:
   - role: manuscript_draft
     schema_ref: manuscript-draft.v1

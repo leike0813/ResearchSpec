@@ -127,6 +127,7 @@ void test("plugin graph extensions project and run through the graph engine", as
     await readFile(profilePath, "utf8");
 
     const startInput = path.join(root, "start.yaml");
+    await writeFile(path.join(root, "task.md"), "# Research task\n", "utf8");
     await writeFile(startInput, stringify({
       schema_version: "2",
       confirmed_at: "2026-08-16T12:00:00+08:00",
@@ -174,6 +175,7 @@ void test("script-validated plugin extension capability runs through advance", a
     assert.equal(installed.data?.resolved_capability_ids.includes("plugin-financial-statement-analysis"), true);
 
     const startInput = path.join(root, "start.yaml");
+    await writeFile(path.join(root, "task.md"), "# Research task\n", "utf8");
     await writeFile(startInput, stringify({
       schema_version: "2",
       confirmed_at: "2026-08-16T12:00:00+08:00",
@@ -317,6 +319,7 @@ void test("every FinRobot extension profile runs through the graph engine", asyn
       const advanceInput = path.join(root, `advance-${entry.profile_id}.yaml`);
       const briefRelative = `brief-${entry.profile_id}.json`;
       const briefPath = path.join(root, briefRelative);
+      await writeFile(path.join(root, `task-${entry.profile_id}.md`), "# Research task\n", "utf8");
       await writeFile(startInput, stringify({
         schema_version: "2",
         confirmed_at: "2026-08-17T00:00:00+08:00",
@@ -414,6 +417,7 @@ void test("every HistAgent extension profile runs through the graph engine", asy
       const advanceInput = path.join(root, `advance-${entry.profile_id}.yaml`);
       const briefRelative = `brief-${entry.profile_id}.json`;
       const briefPath = path.join(root, briefRelative);
+      await writeFile(path.join(root, `task-${entry.profile_id}.md`), "# Research task\n", "utf8");
       await writeFile(startInput, stringify({
         schema_version: "2",
         confirmed_at: "2026-08-17T01:00:00+08:00",
@@ -550,6 +554,7 @@ void test("every Materials extension profile runs through the graph engine", asy
       const advanceInput = path.join(root, `advance-${entry.profile_id}.yaml`);
       const briefRelative = `brief-${entry.profile_id}.json`;
       const briefPath = path.join(root, briefRelative);
+      await writeFile(path.join(root, `task-${entry.profile_id}.md`), "# Research task\n", "utf8");
       await writeFile(startInput, stringify({
         schema_version: "2",
         confirmed_at: "2026-08-17T02:00:00+08:00",

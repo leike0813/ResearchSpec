@@ -79,6 +79,12 @@ The locked direction is:
 - Capability graph profiles own nodes, parallel/join policy, Gates, Decisions,
   revision-round templates, and subgraph bindings. Do not hard-code any research
   graph in core.
+- Capability manifests own required input roles and allowed source policies (a
+  source or explicit non-empty source list). Graph admission and consumption use
+  the shared manifest contract; input bindings choose one allowed source and
+  explicit producer-role mappings. Instructions and advance share role resolution;
+  only consumption checks external material readability. Optional unbound roles
+  are allowed; every supplied binding must resolve, including the applicable round.
 - Boundary deliverables are ordinary project files outside `researchspec/`;
   ResearchSpec does not register, hash-bind, copy, or lifecycle-manage them.
 - Every formal Gate requires human confirmation. Failed-Gate overrides and

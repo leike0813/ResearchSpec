@@ -12,7 +12,7 @@ import { validateCapabilityRegistry } from "../src/capabilities/registry.js";
 import type { CapabilityManifest } from "../src/core/contracts/capability-manifest.js";
 import { startGraphRun, submitGraphNode } from "../src/core/runtime/graph-run.js";
 import { loadGraphWorkspaceIndex } from "../src/core/runtime/graph-workspace-index.js";
-import { writeBaseWorkspace } from "./helpers/graph-workspace.js";
+import { graphTestCapabilityRegistryForGraph, writeBaseWorkspace } from "./helpers/graph-workspace.js";
 
 function sha256(text: string): string {
   return createHash("sha256").update(text, "utf8").digest("hex");
@@ -117,6 +117,14 @@ void test("submitGraphNode runs declared capability validators from a registry",
     const loaded = await validateCapabilityRegistry(registry, registryRoot);
 
     let index = await loadGraphWorkspaceIndex(workspace);
+    const graph = index.profiles.get("minimal");
+    assert.ok(graph);
+    const capabilityRegistry = await graphTestCapabilityRegistryForGraph(graph);
+    const registered = loaded.capabilities.get("design-research-question-formulation");
+    assert.ok(registered);
+    const capabilities = new Map(capabilityRegistry.capabilities);
+    capabilities.set(registered.manifest.capability_id, registered);
+    const runtimeRegistry = { ...capabilityRegistry, capabilities };
     const started = await startGraphRun({ index, profileId: "minimal", command: {
       schema_version: "2",
       confirmed_at: "2026-08-15T12:00:00+08:00",
@@ -127,13 +135,13 @@ void test("submitGraphNode runs declared capability validators from a registry",
       planned_outputs: [{ role: "rq_brief", type: "markdown", path: "rq.md", purpose: "rq" }],
       formal_gates: [],
       cost: { effort: "low", interaction: "low" },
-    }, confirmedBy: "researcher" });
+    }, confirmedBy: "researcher", capabilityRegistry: runtimeRegistry });
     index = await loadGraphWorkspaceIndex(workspace);
     await assert.rejects(
-      submitGraphNode({ index, runId: started.run_id, nodeId: "rq", outputs: [{ role: "rq_brief", path: "bad.txt" }], submittedAt: "2026-08-15T12:10:00+08:00", capabilityRegistry: loaded }),
+      submitGraphNode({ index, runId: started.run_id, nodeId: "rq", outputs: [{ role: "rq_brief", path: "bad.txt" }], submittedAt: "2026-08-15T12:10:00+08:00", capabilityRegistry: runtimeRegistry }),
       /Node validators did not pass/,
     );
-    await submitGraphNode({ index, runId: started.run_id, nodeId: "rq", outputs: [{ role: "rq_brief", path: "rq.md" }], submittedAt: "2026-08-15T12:10:00+08:00", capabilityRegistry: loaded });
+    await submitGraphNode({ index, runId: started.run_id, nodeId: "rq", outputs: [{ role: "rq_brief", path: "rq.md" }], submittedAt: "2026-08-15T12:10:00+08:00", capabilityRegistry: runtimeRegistry });
     index = await loadGraphWorkspaceIndex(workspace);
     assert.equal(index.runs[0].nodeEntries[0]?.node?.state, "complete");
   } finally {

@@ -910,7 +910,7 @@
     {
       "capability_id": "judgment-editorial-judgment",
       "maturity": "operational",
-      "skill_lines": 188,
+      "skill_lines": 189,
       "knowledge_refs": 1,
       "knowledge_artifacts": 1,
       "knowledge_coverage": 1,
@@ -956,7 +956,7 @@
     {
       "capability_id": "judgment-specialist-review",
       "maturity": "operational",
-      "skill_lines": 199,
+      "skill_lines": 200,
       "knowledge_refs": 3,
       "knowledge_artifacts": 3,
       "knowledge_coverage": 1,

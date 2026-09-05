@@ -66,6 +66,7 @@ void test("representative ToolUniverse profiles run through the graph engine", a
       const advanceInput = path.join(root, `advance-${entry.profile_id}.yaml`);
       const briefRelative = `brief-${entry.profile_id}.json`;
       const briefPath = path.join(root, briefRelative);
+      await writeFile(path.join(root, `task-${entry.profile_id}.md`), "# Research task\n", "utf8");
       await writeFile(startInput, stringify({
         schema_version: "2",
         confirmed_at: "2026-08-17T03:00:00+08:00",

@@ -17,6 +17,7 @@ import {
 import { loadGraphWorkspaceIndex } from "../../core/runtime/graph-workspace-index.js";
 import { requireGraphWorkspace } from "../../core/workspace/graph-discover.js";
 import { validateGraphAgainstCapabilityRegistry } from "../../capabilities/registry.js";
+import type { CapabilityManifest } from "../../core/contracts/capability-manifest.js";
 import { getArsuRoute } from "../../arsu-converter/routing/catalog.js";
 import { renderArsuRouteSummary } from "../../arsu-converter/routing/projection.js";
 import type { ArsuRouteDefinition, RouteRef } from "../../arsu-converter/routing/contracts.js";
@@ -68,6 +69,7 @@ export async function handleGraphStatus(context: CommandContext): Promise<Comman
   const pendingDecisionItems: Array<Record<string, unknown>> = [];
   const nodesByRun: Record<string, Array<Record<string, unknown>>> = {};
   const childRuns = graphChildRunSnapshots(index);
+  const registry = index.runs.length > 0 ? await loadWorkspaceCapabilityRegistry(index) : undefined;
   for (const record of index.runs) {
     if (!record.run || !record.graph) continue;
     const nodes = record.nodeEntries.flatMap((entry) => entry.node ? [entry.node] : []);
@@ -78,7 +80,8 @@ export async function handleGraphStatus(context: CommandContext): Promise<Comman
       state: node.state,
       updated_at: node.updated_at,
     }));
-    const frontier = evaluateGraphFrontier(record.run, record.graph, nodes, childRuns);
+    const frontier = evaluateGraphFrontier(record.run, record.graph, nodes, childRuns,
+      registry && record.handoff ? { registry, handoff: record.handoff.frontmatter } : undefined);
     for (const item of frontier.eligible_nodes) frontierItems.push({ selector: item.selector, run_id: record.run.run_id, node_id: item.node_id, ...(item.round === undefined ? {} : { round: item.round }) });
     for (const item of frontier.pending_subgraph_starts) childStartItems.push({ selector: item.selector, run_id: record.run.run_id, node_id: item.node_id, ...(item.round === undefined ? {} : { round: item.round }) });
     for (const selector of frontier.pending_gates) pendingGateItems.push({ selector, run_id: record.run.run_id });
@@ -140,6 +143,8 @@ export async function handleGraphInstructions(selector: string, context: Command
     const profile = index.profiles.get(profileId);
     const source = index.profileFiles.get(profileId);
     if (!profile || !source) throw new CliError("profile_not_found", `Graph profile not found: ${profileId}`, 1);
+    const validation = validateGraphAgainstCapabilityRegistry(await loadWorkspaceCapabilityRegistry(index), profile);
+    if (validation.length > 0) throw new CliError("profile_capability_invalid", "Graph capability input contract is invalid.", 1, undefined, validation);
     const entryInstructions = profile.entries.flatMap((entry) => {
       let route: ArsuRouteDefinition | undefined;
       if (entry.route_ref) {
@@ -219,7 +224,9 @@ export async function handleGraphInstructions(selector: string, context: Command
     const record = index.runs.find((item) => item.run?.run_id === runId);
     if (!record?.run || !record.graph) throw new CliError("run_not_found", `Run not found: ${runId}`, 1);
     const nodes = record.nodeEntries.flatMap((entry) => entry.node ? [entry.node] : []);
-    const frontier = evaluateGraphFrontier(record.run, record.graph, nodes, graphChildRunSnapshots(index));
+    const registry = await loadWorkspaceCapabilityRegistry(index);
+    const frontier = evaluateGraphFrontier(record.run, record.graph, nodes, graphChildRunSnapshots(index),
+      record.handoff ? { registry, handoff: record.handoff.frontmatter } : undefined);
     return success("instructions", {
       selector,
       kind: "run",
@@ -242,7 +249,11 @@ export async function handleGraphInstructions(selector: string, context: Command
     const definition = record.graph.nodes.find((item) => item.node_id === nodeId);
     if (!definition) throw new CliError("node_not_found", `Node not found: ${nodeId}`, 1);
     const nodes = record.nodeEntries.flatMap((entry) => entry.node ? [entry.node] : []);
-    const frontier = evaluateGraphFrontier(record.run, record.graph, nodes, graphChildRunSnapshots(index));
+    const registry = await loadWorkspaceCapabilityRegistry(index);
+    const validation = validateGraphAgainstCapabilityRegistry(registry, record.graph);
+    if (validation.length > 0) throw new CliError("profile_capability_invalid", "Graph capability input contract is invalid.", 1, undefined, validation);
+    const frontier = evaluateGraphFrontier(record.run, record.graph, nodes, graphChildRunSnapshots(index),
+      record.handoff ? { registry, handoff: record.handoff.frontmatter } : undefined);
     const eligible = [...frontier.eligible_nodes, ...frontier.pending_subgraph_starts].some((item) => item.node_id === nodeId && item.round === round);
     if (!eligible) {
       const related = frontier.blockers.filter((blocker) => blocker.node_id === nodeId);
@@ -252,11 +263,11 @@ export async function handleGraphInstructions(selector: string, context: Command
       });
     }
     let capability: Record<string, unknown> | null = null;
-    const stableSpecPaths: Record<string, string> = {};
-    if (definition.kind === "capability" && definition.capability_id !== undefined) {
-      const registry = await loadWorkspaceCapabilityRegistry(index);
+    let manifest: CapabilityManifest | undefined;
+    if (definition.capability_id !== undefined) {
       const registered = registry.capabilities.get(definition.capability_id);
       if (!registered) throw new CliError("capability_unknown", `Capability is not registered for this run: ${definition.capability_id}`, 1);
+      manifest = registered.manifest;
       capability = {
         capability_id: registered.manifest.capability_id,
         title: registered.manifest.title,
@@ -271,16 +282,6 @@ export async function handleGraphInstructions(selector: string, context: Command
         knowledge_refs: registered.manifest.knowledge_refs,
         gate_policy: registered.manifest.gate_policy,
       };
-      const stableSpecBySchema: Record<string, string> = {
-        "specs.project": "researchspec/specs/project.md",
-        "specs.sources": "researchspec/specs/sources.yaml",
-        "specs.claims": "researchspec/specs/claims.yaml",
-        "specs.manuscript": "researchspec/specs/manuscript.yaml",
-      };
-      for (const declaredInput of registered.manifest.inputs) {
-        const stablePath = stableSpecBySchema[declaredInput.schema_ref];
-        if (stablePath) stableSpecPaths[declaredInput.role] = stablePath;
-      }
     }
     if (!record.handoff) throw new CliError("run_incomplete", `Run handoff is missing: ${runId}`, 1);
     let resolvedInputs;
@@ -293,7 +294,7 @@ export async function handleGraphInstructions(selector: string, context: Command
         childRuns: graphChildRunSnapshots(index),
         nodeId,
         round,
-        stableSpecPaths,
+        manifest,
       });
     } catch (error) {
       throw graphControlCliError(error);
@@ -358,6 +359,7 @@ export async function handleGraphStart(options: GraphStartOptions, context: Comm
     try {
       const result = await startGraphChildRun({
         index,
+        capabilityRegistry: await loadWorkspaceCapabilityRegistry(index),
         parentRunId: nodeMatch[1] ?? "",
         nodeId: nodeMatch[2] ?? "",
         ...(nodeMatch[3] === undefined ? {} : { round: Number(nodeMatch[3]) }),
@@ -375,15 +377,7 @@ export async function handleGraphStart(options: GraphStartOptions, context: Comm
   try { command = parseYaml(await readFile(path.resolve(context.cwd, options.input), "utf8")); }
   catch (error) { throw new CliError("start_input_unreadable", `Cannot read Start input: ${error instanceof Error ? error.message : String(error)}`, 2); }
   try {
-    const profile = index.profiles.get(profileId);
-    if (profile) {
-      const capabilityRegistry = await loadWorkspaceCapabilityRegistry(index);
-      const validation = validateGraphAgainstCapabilityRegistry(capabilityRegistry, profile);
-      if (validation.length > 0) {
-        throw new CliError("profile_capability_invalid", `Graph profile references unavailable capabilities: ${validation.map((item) => `${item.path}: ${item.message}`).join("; ")}`, 1, undefined, validation);
-      }
-    }
-    const result = await startGraphRun({ index, profileId, command, confirmedBy: options.confirmedBy, dryRun: context.dryRun });
+    const result = await startGraphRun({ index, profileId, command, confirmedBy: options.confirmedBy, dryRun: context.dryRun, capabilityRegistry: await loadWorkspaceCapabilityRegistry(index) });
     return success("start", { ...result, dry_run: context.dryRun }, { stdout: `${result.status === "already_started" ? "Already started" : context.dryRun ? "Would start" : "Started"} ${result.run_id}.\n` });
   } catch (error) { throw graphControlCliError(error); }
 }
@@ -450,6 +444,16 @@ export async function handleGraphCheck(strict: boolean, context: CommandContext,
   const workspace = await graphWorkspace(context);
   const index = await loadGraphWorkspaceIndex(workspace);
   const diagnostics = index.diagnostics.filter((item) => target === "all" || diagnosticMatchesTarget(item.path, target));
+  if (target === "all" || target === "profiles" || target === "runs") {
+    const registry = await loadWorkspaceCapabilityRegistry(index);
+    const graphs = [
+      ...(target === "runs" ? [] : [...index.profiles.entries()].map(([id, graph]) => ({ graph, path: index.profileFiles.get(id)?.absolutePath }))),
+      ...(target === "profiles" ? [] : index.runs.flatMap((run) => run.graph ? [{ graph: run.graph, path: run.graphPath }] : [])),
+    ];
+    for (const entry of graphs) for (const issue of validateGraphAgainstCapabilityRegistry(registry, entry.graph)) {
+      diagnostics.push({ severity: "error", blocking: true, code: issue.code ?? "profile_capability_invalid", message: issue.message, path: entry.path, details: issue });
+    }
+  }
   if (target === "all" || target === "plugins") diagnostics.push(...await pluginWorkspaceDiagnostics(index, target === "plugins"));
   const ok = diagnostics.every((item) => !item.blocking && (!strict || item.severity !== "warning"));
   const human = ok

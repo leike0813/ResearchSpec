@@ -7,13 +7,12 @@ import { parse } from "yaml";
 import { z } from "zod";
 
 import {
-  capabilityIds,
+  validateGraphAgainstCapabilityRegistry,
   loadCapabilityRegistry,
   type LoadedCapabilityRegistry,
 } from "../capabilities/registry.js";
 import {
   CapabilityGraphProfileSchema,
-  validateGraphCapabilityReferences,
   type CapabilityGraphProfile,
 } from "../core/contracts/capability-graph.js";
 import { StableIdSchema } from "../core/contracts/stable-specs.js";
@@ -145,8 +144,8 @@ export async function validateGraphProfileRegistry(
     if (profile.capability_registry_version !== registry.registry.registry_version) {
       errors.push(fatal("graph_profile_capability_registry_version_mismatch", `Graph profile ${entry.profile_id} expects capability registry ${profile.capability_registry_version}; loaded registry is ${registry.registry.registry_version}.`, sourcePath));
     }
-    for (const reference of validateGraphCapabilityReferences(profile, capabilityIds(registry))) {
-      errors.push(fatal("graph_profile_capability_unknown", `Graph profile ${entry.profile_id}: ${reference.message}`, sourcePath, { path: reference.path }));
+    for (const reference of validateGraphAgainstCapabilityRegistry(registry, profile)) {
+      errors.push(fatal(reference.code ?? "graph_profile_capability_unknown", `Graph profile ${entry.profile_id}: ${reference.message}`, sourcePath, reference));
     }
     profiles.set(entry.profile_id, { entry, profile, sourcePath, projection, profileSha256 });
   }

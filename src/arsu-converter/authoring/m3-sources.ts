@@ -30,7 +30,7 @@ export const M3_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     license: CC,
     extraction_artifact_id: "CAP-M3-02",
     knowledge_sources: [{ knowledge_id: "review-criteria", extraction_artifact_id: "KP-M3-02b", output_path: "knowledge/review-criteria.md" }, { knowledge_id: "top-journals", extraction_artifact_id: "KP-M3-10", output_path: "knowledge/top-journals.md" }],
-    inputs: [{ role: "manuscript_draft", schema_ref: "manuscript-draft.v1", required: true, source_policy: "node_output" }],
+    inputs: [{ role: "manuscript_draft", schema_ref: "manuscript-draft.v1", required: true, source_policy: ["handoff", "node_output"] }],
     outputs: [{ role: "review_panel_config", schema_ref: "review-panel-config.v1", required: true }],
   },
   {
@@ -45,7 +45,10 @@ export const M3_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     license: CC,
     extraction_artifact_id: "CAP-M3-03",
     knowledge_sources: [{ knowledge_id: "editorial-decision-standards", extraction_artifact_id: "KP-M3-04", output_path: "knowledge/editorial-decision-standards.md" }],
-    inputs: [{ role: "manuscript_draft", schema_ref: "manuscript-draft.v1", required: true, source_policy: "node_output" }],
+    inputs: [
+      { role: "manuscript_draft", schema_ref: "manuscript-draft.v1", required: true, source_policy: ["handoff", "node_output"] },
+      { role: "review_panel_config", schema_ref: "review-panel-config.v1", required: true, source_policy: ["handoff", "node_output"] },
+    ],
     outputs: [{ role: "editorial_decision", schema_ref: "editorial-decision.v1", required: true }],
   },
   {
@@ -60,7 +63,10 @@ export const M3_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     license: CC,
     extraction_artifact_id: "CAP-M3-04",
     knowledge_sources: [{ knowledge_id: "quality-rubrics", extraction_artifact_id: "KP-M3-02a", output_path: "knowledge/quality-rubrics.md" }, { knowledge_id: "review-criteria", extraction_artifact_id: "KP-M3-02b", output_path: "knowledge/review-criteria.md" }, { knowledge_id: "statistical-reporting", extraction_artifact_id: "KP-M3-03", output_path: "knowledge/statistical-reporting.md" }],
-    inputs: [{ role: "manuscript_draft", schema_ref: "manuscript-draft.v1", required: true, source_policy: "node_output" }],
+    inputs: [
+      { role: "manuscript_draft", schema_ref: "manuscript-draft.v1", required: true, source_policy: ["handoff", "node_output"] },
+      { role: "review_panel_config", schema_ref: "review-panel-config.v1", required: true, source_policy: ["handoff", "node_output"] },
+    ],
     outputs: [{ role: "specialist_review", schema_ref: "specialist-review.v1", required: true }],
   },
   {
@@ -76,8 +82,8 @@ export const M3_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     extraction_artifact_id: "CAP-M3-05",
     knowledge_sources: [{ knowledge_id: "logical-fallacies", extraction_artifact_id: "KP-M3-08", output_path: "knowledge/logical-fallacies.md" }],
     inputs: [
-      { role: "manuscript_draft", schema_ref: "manuscript-draft.v1", required: true, source_policy: "node_output" },
-      { role: "review_panel_config", schema_ref: "review-panel-config.v1", required: false, source_policy: "handoff" },
+      { role: "manuscript_draft", schema_ref: "manuscript-draft.v1", required: true, source_policy: ["handoff", "node_output"] },
+      { role: "review_panel_config", schema_ref: "review-panel-config.v1", required: false, source_policy: ["handoff", "node_output"] },
     ],
     outputs: [{ role: "stress_test_report", schema_ref: "stress-test.v1", required: true }],
   },

@@ -6,25 +6,25 @@
       "profile_id": "academic-paper",
       "profile_version": "0.1.0",
       "source_path": "academic-paper.yaml",
-      "profile_sha256": "a97961ba5a1b5bb5040256b8bc0f83ec312939c115503f0204b21b8024c90be0"
+      "profile_sha256": "8893f6e292ba14cc03e31789222e9df98c12b71563ecfa01e686328f951bd331"
     },
     {
       "profile_id": "academic-paper-reviewer",
       "profile_version": "0.1.0",
       "source_path": "academic-paper-reviewer.yaml",
-      "profile_sha256": "ec9246e795d81212994a11c21ec2e50873d49fc1895ab2b38d669ae111b50e62"
+      "profile_sha256": "5413f173bb8ab53adf0bef93c91912d7be057b94b32c140eb734e3c2524cb0d0"
     },
     {
       "profile_id": "academic-pipeline",
       "profile_version": "0.1.0",
       "source_path": "academic-pipeline.yaml",
-      "profile_sha256": "ffe44adb34f0035beea4a8bb10b4762f94821b2a4857a482891822c16f429675"
+      "profile_sha256": "22018faa9c6cb866d5bb7834c828f54a5aae36f9a1cb2f692d3a6b28e8c13a57"
     },
     {
       "profile_id": "minimal",
       "profile_version": "0.1.0",
       "source_path": "minimal.yaml",
-      "profile_sha256": "cfe34abbffafe86f726cb271bfeff75eeaf78d0f2d6edd2b157780246351a835"
+      "profile_sha256": "7cffc931763e4769f71f7190e5cf3ad34d152c0f2872cfbc42924ed596e52e6c"
     },
     {
       "profile_id": "paper-humanizer",
@@ -36,7 +36,7 @@
       "profile_id": "research-main",
       "profile_version": "0.1.0",
       "source_path": "research-main.yaml",
-      "profile_sha256": "93dc7e281464acceced78b98f467f90624bb227794625432e45e7bea6a950809"
+      "profile_sha256": "1fc09369bffb9b10a2c6279e90dcca0563d32bea04edad291987d32801381a9a"
     },
     {
       "profile_id": "review-response",

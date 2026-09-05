@@ -11,7 +11,9 @@ inputs:
   - role: manuscript_draft
     schema_ref: manuscript-draft.v1
     required: true
-    source_policy: node_output
+    source_policy:
+      - handoff
+      - node_output
 outputs:
   - role: review_panel_config
     schema_ref: review-panel-config.v1

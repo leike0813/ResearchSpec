@@ -62,9 +62,11 @@ nodes:
     kind: capability
     capability_id: judgment-editorial-judgment
     input_bindings:
-      - role: specialist_review
+      - role: manuscript_draft
+        source: handoff
+      - role: review_panel_config
         source: node_output
-        from_node_id: specialist
+        from_node_id: panel
     expected_outputs:
       - role: editorial_decision
         required: true

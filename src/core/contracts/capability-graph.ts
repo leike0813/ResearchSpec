@@ -271,6 +271,9 @@ export function parseCapabilityGraphProfile(value: unknown): CapabilityGraphProf
 export interface CapabilityGraphDiagnostic {
   path: string;
   message: string;
+  code?: string;
+  node_id?: string;
+  role?: string;
 }
 
 export function validateGraphCapabilityReferences(

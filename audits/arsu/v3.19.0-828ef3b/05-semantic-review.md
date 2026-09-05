@@ -45,4 +45,37 @@
 
 ## 结论
 
+### 2026-09-05 输入合同修复复核
+
+本轮复核 `enforce-capability-input-contracts` 修改的八个能力清单与五个预设图。上游 commit
+仍为 `828ef3b`，extraction 切片和知识包原文未修改。已读取本轮生成的三份审阅 HTML；
+parity 仍为 47/47 operational，低于阈值、缺输出和流程残留列表均为空。以下判定以源文和
+节点输入合同为依据，数量检查不替代语义判断。
+
+| 修改对象 | 原文依据与当前承载 | 判定 |
+|---|---|---|
+| Writing intake | `01_writing_intake.md` 的 “Paper Configuration Interview”；配置访谈读取项目意图，`specs.project` 通过 stable_spec 解析 | adapted：修正来源，访谈正文保留 |
+| Structure design | `02_manuscript_structure_design.md` 的 “map evidence to sections” 和 Literature Search Report；结构节点显式消费书目 | preserved：必需书目得到绑定 |
+| Manuscript drafting | `04_drafting.ms-variant.md` 的 “outline and argument blueprint” 与文献材料检查；保留 argument_blueprint，并接入已有必需 synthesis_report | preserved：补齐图合同，不改变写作程序 |
+| Review panel | `02_review_panel_config.md` 的 “Read the complete paper”；稿件允许 handoff 或明确上游输出 | adapted：两种文件交换来源显式化 |
+| Editorial judgment | `03_editorial_judgment.reviewer-variant.md` 的 “Reviewer Configuration Card #1” 和 “Reading the full paper is expected”；绑定稿件与 panel 配置 | preserved：不再把 specialist_review 当作稿件替代 |
+| Specialist review | `04_specialist_review.r3-variant.md` 的 “Reviewer Configuration Card #4”；配置成为必需声明，现有 panel 产出绑定保留 | preserved：清单与已有程序一致 |
+| Devil's advocate | `05_devils_advocate.reviewer-variant.md` 允许读取 paper draft 和提供的 artifacts；保留稿件必需、配置可选，但配置绑定来源必须合法 | adapted：显式允许两种交换来源 |
+| Format rendering | `03_format_rendering.md` 的 “Formats the final manuscript”；独立 format 入口通过 handoff 消费原稿 | adapted：保留独立入口的真实输入来源 |
+
+Research quick/full 的 report 程序始终要求 synthesis 与 methodology，本轮保留该要求。
+Minimal 复用六个研究能力，无 formal Gate；research-main 保留 RQ Gate，由研究问题产出后触发，
+下游 methodology/literature 等待确认，研究问题节点自身不依赖该 Gate。Quick 路由从
+单次简报标注调整为分阶段研究成本，属于用户已确认的图组合调整。Pipeline 显式传递
+annotated_bibliography 与 synthesis_report 到 writing child，不从 report 文本猜测或抽取角色。
+
+逐 mode 复核覆盖 deep-research quick/full、academic-paper full/format-convert、
+academic-paper-reviewer full 和 academic-pipeline end-to-end。评估 HTML 的三个 flow 锚点
+仍由图控制；gap review 中既有 ethics、rebuttal、re-review、passport 等观察延续前述判定，
+本轮未借输入校验改变它们的能力程序或宣称新增语义覆盖。生成 Skill 的 Procedure 正文保留，
+新角色只进入声明的 Inputs，完成后仍返回 ResearchSpec。
+
+本轮结论：declared-fit-with-notes。输入存在、来源与映射是可验证合同，不证明论文质量；
+后者仍由宿主 Agent 和用户负责。
+
 declared-fit-with-notes。首锚点 ARS 语义覆盖达到审阅阈值，所有已知缺口已闭环；paper-humanizer 与 revision-master 均已按同一方法完成 capability 迁移，独立锚点审计在后续变更中归档。上述 notes 是后续增量维护的观察项，不阻塞当前锚点。

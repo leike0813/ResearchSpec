@@ -65,6 +65,26 @@ void test("duplicate role IDs are rejected", () => {
   );
 });
 
+void test("input source policies accept one source or explicit alternatives", () => {
+  for (const sourcePolicy of ["handoff", ["handoff", "node_output"]] as const) {
+    assert.deepEqual(
+      parseCapabilityManifest(manifest({
+        inputs: [{ role: "material", schema_ref: "material.v1", source_policy: sourcePolicy === "handoff" ? sourcePolicy : [...sourcePolicy] }],
+      })).inputs[0]?.source_policy,
+      sourcePolicy,
+    );
+  }
+});
+
+for (const sourcePolicy of [[], ["handoff", "handoff"]] as const) void test(`input source policy rejects ${JSON.stringify(sourcePolicy)}`, () => {
+  assert.throws(
+    () => parseCapabilityManifest(manifest({
+      inputs: [{ role: "material", schema_ref: "material.v1", source_policy: sourcePolicy as never }],
+    })),
+    /at least|unique|Too small/,
+  );
+});
+
 void test("script validators require an explicit runner contract", () => {
   assert.throws(
     () => parseCapabilityManifest(manifest({

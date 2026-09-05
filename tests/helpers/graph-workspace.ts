@@ -4,6 +4,7 @@ import path from "node:path";
 import { stringify } from "yaml";
 
 import { loadCapabilityRegistry, type LoadedCapabilityRegistry } from "../../src/capabilities/registry.js";
+import type { CapabilityGraphProfile } from "../../src/core/contracts/capability-graph.js";
 import type { GraphWorkspaceIndex } from "../../src/core/runtime/graph-workspace-index.js";
 
 export function sha256(text: string): string {
@@ -127,11 +128,18 @@ export async function writeRun(workspace: string, run: Record<string, unknown> =
 }
 
 export async function graphTestCapabilityRegistry(index: GraphWorkspaceIndex, runId: string): Promise<LoadedCapabilityRegistry> {
-  const loaded = await loadCapabilityRegistry();
   const graph = index.runs.find((record) => record.run?.run_id === runId)?.graph;
-  if (!graph) return loaded;
+  return graph ? graphTestCapabilityRegistryForGraph(graph) : loadCapabilityRegistry();
+}
+
+export async function graphTestCapabilityRegistryForGraph(graph: CapabilityGraphProfile): Promise<LoadedCapabilityRegistry> {
+  return graphTestCapabilityRegistryForGraphs(graph);
+}
+
+export async function graphTestCapabilityRegistryForGraphs(...graphs: readonly CapabilityGraphProfile[]): Promise<LoadedCapabilityRegistry> {
+  const loaded = await loadCapabilityRegistry();
   const capabilities = new Map(loaded.capabilities);
-  for (const node of graph.nodes) {
+  for (const graph of graphs) for (const node of graph.nodes) {
     if (node.kind !== "capability" || !node.capability_id) continue;
     const registered = capabilities.get(node.capability_id);
     if (!registered) continue;
@@ -139,6 +147,12 @@ export async function graphTestCapabilityRegistry(index: GraphWorkspaceIndex, ru
       ...registered,
       manifest: {
         ...registered.manifest,
+        inputs: node.input_bindings.map((binding) => ({
+          role: binding.role,
+          schema_ref: binding.source === "stable_spec" ? "specs.project" : `${binding.role}.test`,
+          required: true,
+          source_policy: binding.source,
+        })),
         outputs: node.expected_outputs.map((output) => ({
           role: output.role,
           schema_ref: `${output.role}.test`,

@@ -10114,13 +10114,13 @@ Do NOT report scores to the user. Just fix the issues silently during drafting.
     <div>
       <div class="mode-route">deep-research:quick</div>
       <h2>Quick research brief</h2>
-      <p class="mode-intent">short research brief with key sources</p>
+      <p class="mode-intent">complete a focused evidence-grounded research report without a formal Gate</p>
     </div>
     <div class="mode-facts">
       <div><span>skill</span><code>deep-research</code></div>
-      <div><span>risk</span><code>low</code></div>
+      <div><span>risk</span><code>medium</code></div>
       <div><span>gate</span><code>none</code></div>
-      <div><span>cost</span><code>low / single_pass</code></div>
+      <div><span>cost</span><code>medium / iterative</code></div>
     </div>
   </div>
   <div class="prereq">prerequisites: all_of: stable_spec:specs/project.md<br>all_of: user_input:research_goal</div>
@@ -13189,10 +13189,10 @@ ARS 提取工件（Extraction Artifact）— M1 研究段
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/literature, research-main:literature</span>
+    <span class="node-id">academic-pipeline:research/literature, minimal:literature, research-main:literature</span>
     <span class="cap-id">discovery-literature-search-screening</span>
     <span class="cap-title">Literature Search And Screening</span>
-    <span class="meta">graph node academic-pipeline:research/literature / research-main:literature</span>
+    <span class="meta">graph node academic-pipeline:research/literature / minimal:literature / research-main:literature</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Runs a systematic, reproducible search and screening process and produces an annotated bibliography with PRISMA-style documentation.</div>
@@ -13582,10 +13582,10 @@ When `literature_corpus[]` is non-empty and parses cleanly, the agent enters Ste
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/grading, research-main:grading</span>
+    <span class="node-id">academic-pipeline:research/grading, minimal:grading, research-main:grading</span>
     <span class="cap-id">discovery-source-quality-grading</span>
     <span class="cap-title">Source Quality Grading</span>
-    <span class="meta">graph node academic-pipeline:research/grading / research-main:grading</span>
+    <span class="meta">graph node academic-pipeline:research/grading / minimal:grading / research-main:grading</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Grades each source by evidence level, predatory-journal red flags and conflicts of interest.</div>
@@ -16371,10 +16371,10 @@ Unified definitions to prevent inconsistency across agents.
     <div><strong>Description</strong> Edits and judges the manuscript as a journal editor.</div>
     <div><strong>class / node_kind / execution_type</strong> <code>judgment</code> · <code>producer</code> · <code>llm</code></div>
     <div><strong>maturity</strong> <code>operational</code> · <strong>gate_policy</strong> <code>required</code></div>
-    <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1</div>
+    <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1 · <code>review_panel_config</code> ← review-panel-config.v1</div>
     <div><strong>outputs</strong> <code>editorial_decision</code> → editorial-decision.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 188 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 189 行</summary><pre class="doc-body">---
 name: judgment-editorial-judgment
 description: "Edits and judges the manuscript as a journal editor."
 metadata:
@@ -16392,6 +16392,7 @@ Execute exactly one ResearchSpec capability node.
 ## Inputs
 
 - `manuscript_draft` (manuscript-draft.v1)
+- `review_panel_config` (review-panel-config.v1)
 
 ## Outputs
 
@@ -20794,10 +20795,10 @@ Per-source quality assessment card. Used by the source_verification_agent to sys
       <p class="col-note">左侧上游语义在 capability graph 中的对应节点。每个节点可展开其 SKILL 指令与 knowledge 原文。</p>
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">research-main 的 lit-review 片段。</div><details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/literature, research-main:literature</span>
+    <span class="node-id">academic-pipeline:research/literature, minimal:literature, research-main:literature</span>
     <span class="cap-id">discovery-literature-search-screening</span>
     <span class="cap-title">Literature Search And Screening</span>
-    <span class="meta">graph node academic-pipeline:research/literature / research-main:literature</span>
+    <span class="meta">graph node academic-pipeline:research/literature / minimal:literature / research-main:literature</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Runs a systematic, reproducible search and screening process and produces an annotated bibliography with PRISMA-style documentation.</div>
@@ -21187,10 +21188,10 @@ When `literature_corpus[]` is non-empty and parses cleanly, the agent enters Ste
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/grading, research-main:grading</span>
+    <span class="node-id">academic-pipeline:research/grading, minimal:grading, research-main:grading</span>
     <span class="cap-id">discovery-source-quality-grading</span>
     <span class="cap-title">Source Quality Grading</span>
-    <span class="meta">graph node academic-pipeline:research/grading / research-main:grading</span>
+    <span class="meta">graph node academic-pipeline:research/grading / minimal:grading / research-main:grading</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Grades each source by evidence level, predatory-journal red flags and conflicts of interest.</div>
@@ -21592,10 +21593,10 @@ Not all fields use the same evidence hierarchy. Adjust expectations:
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/synthesis, research-main:synthesis</span>
+    <span class="node-id">academic-pipeline:research/synthesis, minimal:synthesis, research-main:synthesis</span>
     <span class="cap-id">analysis-evidence-synthesis</span>
     <span class="cap-title">Evidence Synthesis</span>
-    <span class="meta">graph node academic-pipeline:research/synthesis / research-main:synthesis</span>
+    <span class="meta">graph node academic-pipeline:research/synthesis / minimal:synthesis / research-main:synthesis</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Synthesizes graded sources into a convergent/divergent evidence map with claim-intent and citation emissions.</div>
@@ -23579,10 +23580,10 @@ Unified definitions to prevent inconsistency across agents.
       <p class="col-note">左侧上游语义在 capability graph 中的对应节点。每个节点可展开其 SKILL 指令与 knowledge 原文。</p>
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">轻量检索 + 验证片段；尚无独立 profile。</div><details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/literature, research-main:literature</span>
+    <span class="node-id">academic-pipeline:research/literature, minimal:literature, research-main:literature</span>
     <span class="cap-id">discovery-literature-search-screening</span>
     <span class="cap-title">Literature Search And Screening</span>
-    <span class="meta">graph node academic-pipeline:research/literature / research-main:literature</span>
+    <span class="meta">graph node academic-pipeline:research/literature / minimal:literature / research-main:literature</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Runs a systematic, reproducible search and screening process and produces an annotated bibliography with PRISMA-style documentation.</div>
@@ -23972,10 +23973,10 @@ When `literature_corpus[]` is non-empty and parses cleanly, the agent enters Ste
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/grading, research-main:grading</span>
+    <span class="node-id">academic-pipeline:research/grading, minimal:grading, research-main:grading</span>
     <span class="cap-id">discovery-source-quality-grading</span>
     <span class="cap-title">Source Quality Grading</span>
-    <span class="meta">graph node academic-pipeline:research/grading / research-main:grading</span>
+    <span class="meta">graph node academic-pipeline:research/grading / minimal:grading / research-main:grading</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Grades each source by evidence level, predatory-journal red flags and conflicts of interest.</div>
@@ -25965,10 +25966,10 @@ Per-source quality assessment card. Used by the source_verification_agent to sys
       <p class="col-note">左侧上游语义在 capability graph 中的对应节点。每个节点可展开其 SKILL 指令与 knowledge 原文。</p>
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">来源核验 + 引用完整性组合；尚无独立 fact-check profile。</div><details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/grading, research-main:grading</span>
+    <span class="node-id">academic-pipeline:research/grading, minimal:grading, research-main:grading</span>
     <span class="cap-id">discovery-source-quality-grading</span>
     <span class="cap-title">Source Quality Grading</span>
-    <span class="meta">graph node academic-pipeline:research/grading / research-main:grading</span>
+    <span class="meta">graph node academic-pipeline:research/grading / minimal:grading / research-main:grading</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Grades each source by evidence level, predatory-journal red flags and conflicts of interest.</div>
@@ -38576,10 +38577,10 @@ ARS 提取工件（Extraction Artifact）— M1 研究段
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/methodology, research-main:methodology</span>
+    <span class="node-id">academic-pipeline:research/methodology, minimal:methodology, research-main:methodology</span>
     <span class="cap-id">design-methodology-design</span>
     <span class="cap-title">Methodology Design</span>
-    <span class="meta">graph node academic-pipeline:research/methodology / research-main:methodology</span>
+    <span class="meta">graph node academic-pipeline:research/methodology / minimal:methodology / research-main:methodology</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Selects a paradigm, methods, data strategy and analysis framework coherent with the confirmed research question.</div>
@@ -39637,10 +39638,10 @@ Publication
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/literature, research-main:literature</span>
+    <span class="node-id">academic-pipeline:research/literature, minimal:literature, research-main:literature</span>
     <span class="cap-id">discovery-literature-search-screening</span>
     <span class="cap-title">Literature Search And Screening</span>
-    <span class="meta">graph node academic-pipeline:research/literature / research-main:literature</span>
+    <span class="meta">graph node academic-pipeline:research/literature / minimal:literature / research-main:literature</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Runs a systematic, reproducible search and screening process and produces an annotated bibliography with PRISMA-style documentation.</div>
@@ -40030,10 +40031,10 @@ When `literature_corpus[]` is non-empty and parses cleanly, the agent enters Ste
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/grading, research-main:grading</span>
+    <span class="node-id">academic-pipeline:research/grading, minimal:grading, research-main:grading</span>
     <span class="cap-id">discovery-source-quality-grading</span>
     <span class="cap-title">Source Quality Grading</span>
-    <span class="meta">graph node academic-pipeline:research/grading / research-main:grading</span>
+    <span class="meta">graph node academic-pipeline:research/grading / minimal:grading / research-main:grading</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Grades each source by evidence level, predatory-journal red flags and conflicts of interest.</div>
@@ -41360,10 +41361,10 @@ User: "Systematic review of [topic]" / "Meta-analysis of [topic]"
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/synthesis, research-main:synthesis</span>
+    <span class="node-id">academic-pipeline:research/synthesis, minimal:synthesis, research-main:synthesis</span>
     <span class="cap-id">analysis-evidence-synthesis</span>
     <span class="cap-title">Evidence Synthesis</span>
-    <span class="meta">graph node academic-pipeline:research/synthesis / research-main:synthesis</span>
+    <span class="meta">graph node academic-pipeline:research/synthesis / minimal:synthesis / research-main:synthesis</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Synthesizes graded sources into a convergent/divergent evidence map with claim-intent and citation emissions.</div>
@@ -69422,10 +69423,10 @@ If samples span many years: weight recent samples more heavily (2x weight for sa
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/literature, research-main:literature</span>
+    <span class="node-id">academic-pipeline:research/literature, minimal:literature, research-main:literature</span>
     <span class="cap-id">discovery-literature-search-screening</span>
     <span class="cap-title">Literature Search And Screening</span>
-    <span class="meta">graph node academic-pipeline:research/literature / research-main:literature</span>
+    <span class="meta">graph node academic-pipeline:research/literature / minimal:literature / research-main:literature</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Runs a systematic, reproducible search and screening process and produces an annotated bibliography with PRISMA-style documentation.</div>
@@ -84041,10 +84042,10 @@ If samples span many years: weight recent samples more heavily (2x weight for sa
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/literature, research-main:literature</span>
+    <span class="node-id">academic-pipeline:research/literature, minimal:literature, research-main:literature</span>
     <span class="cap-id">discovery-literature-search-screening</span>
     <span class="cap-title">Literature Search And Screening</span>
-    <span class="meta">graph node academic-pipeline:research/literature / research-main:literature</span>
+    <span class="meta">graph node academic-pipeline:research/literature / minimal:literature / research-main:literature</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Runs a systematic, reproducible search and screening process and produces an annotated bibliography with PRISMA-style documentation.</div>
@@ -84434,10 +84435,10 @@ When `literature_corpus[]` is non-empty and parses cleanly, the agent enters Ste
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/grading, research-main:grading</span>
+    <span class="node-id">academic-pipeline:research/grading, minimal:grading, research-main:grading</span>
     <span class="cap-id">discovery-source-quality-grading</span>
     <span class="cap-title">Source Quality Grading</span>
-    <span class="meta">graph node academic-pipeline:research/grading / research-main:grading</span>
+    <span class="meta">graph node academic-pipeline:research/grading / minimal:grading / research-main:grading</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Grades each source by evidence level, predatory-journal red flags and conflicts of interest.</div>
@@ -84839,10 +84840,10 @@ Not all fields use the same evidence hierarchy. Adjust expectations:
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/synthesis, research-main:synthesis</span>
+    <span class="node-id">academic-pipeline:research/synthesis, minimal:synthesis, research-main:synthesis</span>
     <span class="cap-id">analysis-evidence-synthesis</span>
     <span class="cap-title">Evidence Synthesis</span>
-    <span class="meta">graph node academic-pipeline:research/synthesis / research-main:synthesis</span>
+    <span class="meta">graph node academic-pipeline:research/synthesis / minimal:synthesis / research-main:synthesis</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Synthesizes graded sources into a convergent/divergent evidence map with claim-intent and citation emissions.</div>
@@ -104623,10 +104624,10 @@ This document is used by `field_analyst_agent` and `eic_agent` as a reference fo
     <div><strong>Description</strong> Reviews methodology, domain depth and interdisciplinary perspective.</div>
     <div><strong>class / node_kind / execution_type</strong> <code>judgment</code> · <code>producer</code> · <code>llm</code></div>
     <div><strong>maturity</strong> <code>operational</code> · <strong>gate_policy</strong> <code>required</code></div>
-    <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1</div>
+    <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1 · <code>review_panel_config</code> ← review-panel-config.v1</div>
     <div><strong>outputs</strong> <code>specialist_review</code> → specialist-review.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 199 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 200 行</summary><pre class="doc-body">---
 name: judgment-specialist-review
 description: "Reviews methodology, domain depth and interdisciplinary perspective."
 metadata:
@@ -104644,6 +104645,7 @@ Execute exactly one ResearchSpec capability node.
 ## Inputs
 
 - `manuscript_draft` (manuscript-draft.v1)
+- `review_panel_config` (review-panel-config.v1)
 
 ## Outputs
 
@@ -106029,10 +106031,10 @@ Reference catalog of logical fallacies commonly encountered in research. Used by
     <div><strong>Description</strong> Edits and judges the manuscript as a journal editor.</div>
     <div><strong>class / node_kind / execution_type</strong> <code>judgment</code> · <code>producer</code> · <code>llm</code></div>
     <div><strong>maturity</strong> <code>operational</code> · <strong>gate_policy</strong> <code>required</code></div>
-    <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1</div>
+    <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1 · <code>review_panel_config</code> ← review-panel-config.v1</div>
     <div><strong>outputs</strong> <code>editorial_decision</code> → editorial-decision.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 188 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 189 行</summary><pre class="doc-body">---
 name: judgment-editorial-judgment
 description: "Edits and judges the manuscript as a journal editor."
 metadata:
@@ -106050,6 +106052,7 @@ Execute exactly one ResearchSpec capability node.
 ## Inputs
 
 - `manuscript_draft` (manuscript-draft.v1)
+- `review_panel_config` (review-panel-config.v1)
 
 ## Outputs
 
@@ -111661,10 +111664,10 @@ Ask in order:
     <div><strong>Description</strong> Edits and judges the manuscript as a journal editor.</div>
     <div><strong>class / node_kind / execution_type</strong> <code>judgment</code> · <code>producer</code> · <code>llm</code></div>
     <div><strong>maturity</strong> <code>operational</code> · <strong>gate_policy</strong> <code>required</code></div>
-    <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1</div>
+    <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1 · <code>review_panel_config</code> ← review-panel-config.v1</div>
     <div><strong>outputs</strong> <code>editorial_decision</code> → editorial-decision.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 188 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 189 行</summary><pre class="doc-body">---
 name: judgment-editorial-judgment
 description: "Edits and judges the manuscript as a journal editor."
 metadata:
@@ -111682,6 +111685,7 @@ Execute exactly one ResearchSpec capability node.
 ## Inputs
 
 - `manuscript_draft` (manuscript-draft.v1)
+- `review_panel_config` (review-panel-config.v1)
 
 ## Outputs
 
@@ -113947,10 +113951,10 @@ Score each dimension 0-100 using the rubrics in `references/quality_rubrics.md`.
     <div><strong>Description</strong> Reviews methodology, domain depth and interdisciplinary perspective.</div>
     <div><strong>class / node_kind / execution_type</strong> <code>judgment</code> · <code>producer</code> · <code>llm</code></div>
     <div><strong>maturity</strong> <code>operational</code> · <strong>gate_policy</strong> <code>required</code></div>
-    <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1</div>
+    <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1 · <code>review_panel_config</code> ← review-panel-config.v1</div>
     <div><strong>outputs</strong> <code>specialist_review</code> → specialist-review.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 199 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 200 行</summary><pre class="doc-body">---
 name: judgment-specialist-review
 description: "Reviews methodology, domain depth and interdisciplinary perspective."
 metadata:
@@ -113968,6 +113972,7 @@ Execute exactly one ResearchSpec capability node.
 ## Inputs
 
 - `manuscript_draft` (manuscript-draft.v1)
+- `review_panel_config` (review-panel-config.v1)
 
 ## Outputs
 
@@ -118684,10 +118689,10 @@ The new S5/C5 (Self-Calibration) signal tracks whether the user's commitments be
     <div><strong>Description</strong> Edits and judges the manuscript as a journal editor.</div>
     <div><strong>class / node_kind / execution_type</strong> <code>judgment</code> · <code>producer</code> · <code>llm</code></div>
     <div><strong>maturity</strong> <code>operational</code> · <strong>gate_policy</strong> <code>required</code></div>
-    <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1</div>
+    <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1 · <code>review_panel_config</code> ← review-panel-config.v1</div>
     <div><strong>outputs</strong> <code>editorial_decision</code> → editorial-decision.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 188 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 189 行</summary><pre class="doc-body">---
 name: judgment-editorial-judgment
 description: "Edits and judges the manuscript as a journal editor."
 metadata:
@@ -118705,6 +118710,7 @@ Execute exactly one ResearchSpec capability node.
 ## Inputs
 
 - `manuscript_draft` (manuscript-draft.v1)
+- `review_panel_config` (review-panel-config.v1)
 
 ## Outputs
 
@@ -119124,10 +119130,10 @@ This document defines the explicit criteria for Accept / Minor Revision / Major 
     <div><strong>Description</strong> Reviews methodology, domain depth and interdisciplinary perspective.</div>
     <div><strong>class / node_kind / execution_type</strong> <code>judgment</code> · <code>producer</code> · <code>llm</code></div>
     <div><strong>maturity</strong> <code>operational</code> · <strong>gate_policy</strong> <code>required</code></div>
-    <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1</div>
+    <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1 · <code>review_panel_config</code> ← review-panel-config.v1</div>
     <div><strong>outputs</strong> <code>specialist_review</code> → specialist-review.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 199 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 200 行</summary><pre class="doc-body">---
 name: judgment-specialist-review
 description: "Reviews methodology, domain depth and interdisciplinary perspective."
 metadata:
@@ -119145,6 +119151,7 @@ Execute exactly one ResearchSpec capability node.
 ## Inputs
 
 - `manuscript_draft` (manuscript-draft.v1)
+- `review_panel_config` (review-panel-config.v1)
 
 ## Outputs
 
@@ -124204,10 +124211,10 @@ Optional dimensions are reported separately and factored into the editorial synt
     <div><strong>Description</strong> Reviews methodology, domain depth and interdisciplinary perspective.</div>
     <div><strong>class / node_kind / execution_type</strong> <code>judgment</code> · <code>producer</code> · <code>llm</code></div>
     <div><strong>maturity</strong> <code>operational</code> · <strong>gate_policy</strong> <code>required</code></div>
-    <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1</div>
+    <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1 · <code>review_panel_config</code> ← review-panel-config.v1</div>
     <div><strong>outputs</strong> <code>specialist_review</code> → specialist-review.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 199 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 200 行</summary><pre class="doc-body">---
 name: judgment-specialist-review
 description: "Reviews methodology, domain depth and interdisciplinary perspective."
 metadata:
@@ -124225,6 +124232,7 @@ Execute exactly one ResearchSpec capability node.
 ## Inputs
 
 - `manuscript_draft` (manuscript-draft.v1)
+- `review_panel_config` (review-panel-config.v1)
 
 ## Outputs
 
@@ -141933,10 +141941,10 @@ This document is used by `field_analyst_agent` and `eic_agent` as a reference fo
     <div><strong>Description</strong> Reviews methodology, domain depth and interdisciplinary perspective.</div>
     <div><strong>class / node_kind / execution_type</strong> <code>judgment</code> · <code>producer</code> · <code>llm</code></div>
     <div><strong>maturity</strong> <code>operational</code> · <strong>gate_policy</strong> <code>required</code></div>
-    <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1</div>
+    <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1 · <code>review_panel_config</code> ← review-panel-config.v1</div>
     <div><strong>outputs</strong> <code>specialist_review</code> → specialist-review.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 199 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 200 行</summary><pre class="doc-body">---
 name: judgment-specialist-review
 description: "Reviews methodology, domain depth and interdisciplinary perspective."
 metadata:
@@ -141954,6 +141962,7 @@ Execute exactly one ResearchSpec capability node.
 ## Inputs
 
 - `manuscript_draft` (manuscript-draft.v1)
+- `review_panel_config` (review-panel-config.v1)
 
 ## Outputs
 
@@ -143339,10 +143348,10 @@ Reference catalog of logical fallacies commonly encountered in research. Used by
     <div><strong>Description</strong> Edits and judges the manuscript as a journal editor.</div>
     <div><strong>class / node_kind / execution_type</strong> <code>judgment</code> · <code>producer</code> · <code>llm</code></div>
     <div><strong>maturity</strong> <code>operational</code> · <strong>gate_policy</strong> <code>required</code></div>
-    <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1</div>
+    <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1 · <code>review_panel_config</code> ← review-panel-config.v1</div>
     <div><strong>outputs</strong> <code>editorial_decision</code> → editorial-decision.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 188 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 189 行</summary><pre class="doc-body">---
 name: judgment-editorial-judgment
 description: "Edits and judges the manuscript as a journal editor."
 metadata:
@@ -143360,6 +143369,7 @@ Execute exactly one ResearchSpec capability node.
 ## Inputs
 
 - `manuscript_draft` (manuscript-draft.v1)
+- `review_panel_config` (review-panel-config.v1)
 
 ## Outputs
 
@@ -164839,10 +164849,10 @@ This document is used by `field_analyst_agent` and `eic_agent` as a reference fo
     <div><strong>Description</strong> Reviews methodology, domain depth and interdisciplinary perspective.</div>
     <div><strong>class / node_kind / execution_type</strong> <code>judgment</code> · <code>producer</code> · <code>llm</code></div>
     <div><strong>maturity</strong> <code>operational</code> · <strong>gate_policy</strong> <code>required</code></div>
-    <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1</div>
+    <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1 · <code>review_panel_config</code> ← review-panel-config.v1</div>
     <div><strong>outputs</strong> <code>specialist_review</code> → specialist-review.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 199 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 200 行</summary><pre class="doc-body">---
 name: judgment-specialist-review
 description: "Reviews methodology, domain depth and interdisciplinary perspective."
 metadata:
@@ -164860,6 +164870,7 @@ Execute exactly one ResearchSpec capability node.
 ## Inputs
 
 - `manuscript_draft` (manuscript-draft.v1)
+- `review_panel_config` (review-panel-config.v1)
 
 ## Outputs
 
@@ -166245,10 +166256,10 @@ Reference catalog of logical fallacies commonly encountered in research. Used by
     <div><strong>Description</strong> Edits and judges the manuscript as a journal editor.</div>
     <div><strong>class / node_kind / execution_type</strong> <code>judgment</code> · <code>producer</code> · <code>llm</code></div>
     <div><strong>maturity</strong> <code>operational</code> · <strong>gate_policy</strong> <code>required</code></div>
-    <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1</div>
+    <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1 · <code>review_panel_config</code> ← review-panel-config.v1</div>
     <div><strong>outputs</strong> <code>editorial_decision</code> → editorial-decision.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 188 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 189 行</summary><pre class="doc-body">---
 name: judgment-editorial-judgment
 description: "Edits and judges the manuscript as a journal editor."
 metadata:
@@ -166266,6 +166277,7 @@ Execute exactly one ResearchSpec capability node.
 ## Inputs
 
 - `manuscript_draft` (manuscript-draft.v1)
+- `review_panel_config` (review-panel-config.v1)
 
 ## Outputs
 

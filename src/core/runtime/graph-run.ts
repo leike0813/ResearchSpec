@@ -20,7 +20,8 @@ import { executeWritePlan, planDirectFileEdit, sha256, type PlannedWrite } from 
 import type { GraphNodeScanRecord, GraphRunScanRecord, GraphWorkspaceIndex } from "./graph-workspace-index.js";
 import { BoundaryPathError, resolveBoundaryPath } from "./boundary-path.js";
 import { runCapabilityValidators } from "../../capabilities/validators.js";
-import type { LoadedCapabilityRegistry } from "../../capabilities/registry.js";
+import { STABLE_SPEC_PATHS, validateGraphAgainstCapabilityRegistry, type LoadedCapabilityRegistry } from "../../capabilities/registry.js";
+import type { CapabilityManifest } from "../contracts/capability-manifest.js";
 
 export class GraphRunError extends Error {
   constructor(readonly code: string, message: string, readonly kind: "usage" | "domain" | "conflict" = "domain", readonly details?: unknown) {
@@ -31,6 +32,7 @@ export class GraphRunError extends Error {
 
 export interface StartGraphRunInput {
   index: GraphWorkspaceIndex;
+  capabilityRegistry: LoadedCapabilityRegistry;
   profileId: string;
   command: unknown;
   confirmedBy: string;
@@ -47,6 +49,7 @@ export interface StartGraphRunResult {
 
 export interface StartGraphChildRunInput {
   index: GraphWorkspaceIndex;
+  capabilityRegistry: LoadedCapabilityRegistry;
   parentRunId: string;
   nodeId: string;
   round?: number;
@@ -92,6 +95,8 @@ export interface ResolvedGraphNodeInput {
   value?: string | number | boolean | null;
   from_node_id?: string;
   source_run_id?: string;
+  path_kind?: "file" | "directory";
+  entry_path?: string;
 }
 
 export interface SubmitGraphNodeInput {
@@ -155,6 +160,7 @@ export async function startGraphRun(input: StartGraphRunInput): Promise<StartGra
   const profileFile = input.index.profileFiles.get(input.profileId);
   if (!profile || !profileFile) throw new GraphRunError("profile_unknown", `Graph profile is not projected in this workspace: ${input.profileId}`, "usage");
 
+  requireGraphInputContract(input.capabilityRegistry, profile);
   validateEntrySelection(profile, command.data);
   validateSubgraphReferences(profile);
 
@@ -228,6 +234,7 @@ export async function startGraphRun(input: StartGraphRunInput): Promise<StartGra
 export async function startGraphChildRun(input: StartGraphChildRunInput): Promise<StartGraphRunResult> {
   const parent = requireRun(input.index, input.parentRunId);
   requireActiveRun(parent.run);
+  requireGraphInputContract(input.capabilityRegistry, parent.graph);
   const definition = parent.graph.nodes.find((node) => node.node_id === input.nodeId);
   if (!definition) throw new GraphRunError("node_unknown", `Node is not declared by the frozen graph: ${input.nodeId}`, "usage");
   if (definition.kind !== "subgraph" || !definition.subgraph_id) throw new GraphRunError("node_not_subgraph", `Node does not declare a child graph: ${input.nodeId}`, "usage");
@@ -266,6 +273,7 @@ export async function startGraphChildRun(input: StartGraphChildRunInput): Promis
   if (!childProfile || !childProfileFile || bindingDiagnostics.length > 0) {
     throw new GraphRunError("subgraph_binding_invalid", `Subgraph binding is invalid: ${bindingDiagnostics.join("; ")}`, "domain", bindingDiagnostics);
   }
+  requireGraphInputContract(input.capabilityRegistry, childProfile);
 
   const binding = {
     parent_run_id: input.parentRunId,
@@ -290,18 +298,15 @@ export async function startGraphChildRun(input: StartGraphChildRunInput): Promis
     parent_binding: binding,
     ...(manuscriptDelivery === undefined ? {} : { manuscript_delivery: manuscriptDelivery }),
   });
-  const parentNodes = projectCompletedSubgraphs(
-    parent.run,
-    parent.graph,
-    parent.nodeEntries.flatMap((entry) => entry.node ? [entry.node] : []),
-    snapshots,
-    new Set([parent.run.run_id]),
-  );
+  const parentInputs = resolveGraphNodeInputs({ run: parent.run, graph: parent.graph,
+    nodes: parent.nodeEntries.flatMap((entry) => entry.node ? [entry.node] : []),
+    childRuns: snapshots, handoff: parent.handoff, nodeId: input.nodeId, round: input.round });
+  await consumeGraphNodeInputs(input.index, parentInputs);
   const handoff = RunHandoffSchema.parse({
     schema_version: "2",
     run_id: runId,
     updated_at: input.startedAt,
-    inputs: resolveChildHandoffInputs(parent.run, parent.handoff, parentNodes, definition),
+    inputs: resolveChildHandoffInputs(parent.run, parent.handoff, parentInputs),
     outputs: resolveChildPlannedOutputs(parent.handoff, definition),
   });
   const directory = path.join(input.index.workspace, "runs", runId);
@@ -316,6 +321,7 @@ export function evaluateGraphFrontier(
   graph: CapabilityGraphProfile,
   nodes: readonly GraphNodeInstance[],
   childRuns: readonly GraphChildRunSnapshot[] = [],
+  inputContext?: { handoff: RunHandoff; registry: LoadedCapabilityRegistry },
 ): GraphFrontier {
   const eligibleNodes: GraphFrontierNode[] = [];
   const pendingSubgraphStarts: GraphFrontierNode[] = [];
@@ -323,6 +329,13 @@ export function evaluateGraphFrontier(
   const pendingDecisions: string[] = [];
   const blockers: GraphFrontierBlock[] = [];
   const entryNodeId = run.entry_node_id;
+  const inputDiagnostics = inputContext ? validateGraphAgainstCapabilityRegistry(inputContext.registry, graph) : [];
+  if (inputDiagnostics.length > 0) {
+    return {
+      eligible_node_ids: [], eligible_nodes: [], pending_subgraph_starts: [], pending_gates: [], pending_decisions: [], completion_ready: false,
+      blockers: inputDiagnostics.map((diagnostic) => ({ node_id: diagnostic.node_id ?? entryNodeId, code: diagnostic.code ?? "profile_capability_invalid", message: diagnostic.message, refs: [diagnostic.path] })),
+    };
+  }
 
   if (run.status !== "active") {
     return {
@@ -389,6 +402,16 @@ export function evaluateGraphFrontier(
         }
         continue;
       }
+      if (inputContext) {
+        try {
+          resolveGraphNodeInputs({ run, graph, nodes, childRuns, handoff: inputContext.handoff, nodeId: node.node_id, round,
+            manifest: node.capability_id ? inputContext.registry.capabilities.get(node.capability_id)?.manifest : undefined });
+        } catch (error) {
+          if (!(error instanceof GraphRunError)) throw error;
+          blockers.push({ node_id: node.node_id, code: error.code, message: error.message, refs: [node.node_id] });
+          continue;
+        }
+      }
       if (node.kind === "subgraph") {
         const children = boundChildren(childRuns, run.run_id, node.node_id, round);
         const selector = round === undefined ? `node:${run.run_id}/${node.node_id}` : `node:${run.run_id}/${node.node_id}@${String(round)}`;
@@ -442,6 +465,7 @@ export async function submitGraphNode(input: SubmitGraphNodeInput): Promise<Subm
   const record = requireRun(input.index, input.runId);
   const { run, graph } = record;
   requireActiveRun(run);
+  requireGraphInputContract(input.capabilityRegistry, graph);
   const definition = graph.nodes.find((item) => item.node_id === input.nodeId);
   if (!definition) throw new GraphRunError("node_unknown", `Node is not declared by the frozen graph: ${input.nodeId}`, "usage");
   if (definition.multiplicity === "repeatable" && input.round === undefined) {
@@ -472,9 +496,16 @@ export async function submitGraphNode(input: SubmitGraphNodeInput): Promise<Subm
   if (definition.kind === "subgraph" || definition.kind === "gate" || definition.kind === "decision") {
     throw new GraphRunError("node_advance_forbidden", `Node kind ${definition.kind} cannot be completed through advance.`, "usage");
   }
-  if (definition.kind === "capability" && definition.capability_id !== undefined) {
+  if (definition.capability_id !== undefined) {
     const registered = input.capabilityRegistry.capabilities.get(definition.capability_id);
     if (!registered) throw new GraphRunError("capability_unknown", `Capability is not registered for this run: ${definition.capability_id}`, "domain");
+    const inputs = resolveGraphNodeInputs({
+      run, graph, handoff: record.handoff, nodes,
+      childRuns: graphChildRunSnapshots(input.index),
+      nodeId: input.nodeId, round: input.round,
+      manifest: registered.manifest,
+    });
+    await consumeGraphNodeInputs(input.index, inputs);
     const validation = await runCapabilityValidators(registered.manifest, registered.packageRoot, {
       run_id: input.runId,
       node_id: input.nodeId,
@@ -820,7 +851,7 @@ export function resolveGraphNodeInputs(input: {
   childRuns?: readonly GraphChildRunSnapshot[];
   nodeId: string;
   round?: number;
-  stableSpecPaths?: Readonly<Record<string, string>>;
+  manifest?: CapabilityManifest;
 }): ResolvedGraphNodeInput[] {
   const definition = input.graph.nodes.find((node) => node.node_id === input.nodeId);
   if (!definition) throw new GraphRunError("node_not_found", `Node is not declared by the frozen graph: ${input.nodeId}`, "usage");
@@ -831,7 +862,8 @@ export function resolveGraphNodeInputs(input: {
       return { role: binding.role, source: binding.source, value: binding.value };
     }
     if (binding.source === "stable_spec") {
-      const stablePath = input.stableSpecPaths?.[binding.role];
+      const schema = input.manifest?.inputs.find((declared) => declared.role === binding.role)?.schema_ref;
+      const stablePath = schema ? STABLE_SPEC_PATHS[schema] : undefined;
       if (!stablePath) throw new GraphRunError("node_input_unresolved", `Stable-spec input has no bounded path: ${binding.role}`, "conflict");
       return { role: binding.role, source: binding.source, path: stablePath };
     }
@@ -842,6 +874,8 @@ export function resolveGraphNodeInputs(input: {
         role: binding.role,
         source: binding.source,
         path: handoff.path,
+        ...(handoff.path_kind === undefined ? {} : { path_kind: handoff.path_kind }),
+        ...(handoff.entry_path === undefined ? {} : { entry_path: handoff.entry_path }),
         ...("source_run_id" in handoff && handoff.source_run_id !== undefined ? { source_run_id: handoff.source_run_id } : {}),
       };
     }
@@ -855,24 +889,46 @@ export function resolveGraphNodeInputs(input: {
   });
 }
 
+function requireGraphInputContract(registry: LoadedCapabilityRegistry, graph: CapabilityGraphProfile): void {
+  if (!registry) throw new GraphRunError("capability_registry_missing", "Graph execution requires a resolved capability registry.", "domain");
+  const diagnostics = validateGraphAgainstCapabilityRegistry(registry, graph);
+  if (diagnostics.length > 0) throw new GraphRunError("profile_capability_invalid", "Graph capability input contract is invalid.", "domain", diagnostics);
+}
+
+async function consumeGraphNodeInputs(index: GraphWorkspaceIndex, inputs: readonly ResolvedGraphNodeInput[]): Promise<void> {
+  for (const input of inputs) {
+    if (input.source === "parameter") continue;
+    if (input.source === "stable_spec") {
+      const relativePath = input.path?.slice("researchspec/".length);
+      if (!relativePath || !index.files.has(relativePath)
+        || index.diagnostics.some((diagnostic) => diagnostic.blocking && diagnostic.path === path.join(index.workspace, relativePath))) {
+        throw new GraphRunError("node_input_unresolved", `Stable specification is unavailable for ${input.role}.`, "conflict", { role: input.role });
+      }
+      continue;
+    }
+    try {
+      await resolveBoundaryPath(index.projectRoot, input.path ?? "", "consume-input", input.path_kind);
+      if (input.path_kind === "directory") {
+        await resolveBoundaryPath(index.projectRoot, `${input.path ?? ""}/${input.entry_path ?? ""}`, "consume-input");
+      }
+    } catch (error) {
+      if (error instanceof BoundaryPathError) throw new GraphRunError(error.code, error.message, "conflict", { role: input.role, path: input.path });
+      throw error;
+    }
+  }
+}
+
 function resolveChildHandoffInputs(
   parentRun: GraphRun,
   parentHandoff: RunHandoff,
-  parentNodes: readonly GraphNodeInstance[],
-  node: CapabilityGraphProfile["nodes"][number],
+  inputs: readonly ResolvedGraphNodeInput[],
 ): RunHandoff["inputs"] {
-  return node.input_bindings.flatMap((binding) => {
+  return inputs.flatMap((binding) => {
     if (binding.source === "stable_spec" || binding.source === "parameter") return [];
     if (binding.source === "node_output") {
-      const source = parentNodes
-        .filter((candidate) => candidate.node_id === binding.from_node_id && candidate.state === "complete")
-        .sort((left, right) => Date.parse(left.updated_at) - Date.parse(right.updated_at))
-        .at(-1)
-        ?.outputs.find((output) => output.role === (binding.from_role ?? binding.role));
-      if (!source) throw new GraphRunError("subgraph_input_missing", `Subgraph input ${binding.role} is not available from node ${binding.from_node_id ?? "unknown"}.`, "conflict");
-      return [{ role: binding.role, type: "node_output", path: source.path, purpose: `Input ${binding.role} inherited from ${binding.from_node_id ?? "parent node"}.`, source_run_id: parentRun.run_id }];
+      return [{ role: binding.role, type: "node_output", path: requiredText(binding.path ?? "", "Resolved input path"), purpose: `Input ${binding.role} inherited from ${binding.from_node_id ?? "parent node"}.`, source_run_id: parentRun.run_id }];
     }
-      const source = [...parentHandoff.inputs, ...parentHandoff.outputs].find((entry) => entry.role === binding.role);
+    const source = [...parentHandoff.inputs, ...parentHandoff.outputs].find((entry) => entry.role === binding.role);
     if (!source) throw new GraphRunError("subgraph_input_missing", `Subgraph handoff input is missing: ${binding.role}`, "conflict");
     return [{
       role: source.role,

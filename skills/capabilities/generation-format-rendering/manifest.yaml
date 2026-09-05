@@ -11,7 +11,9 @@ inputs:
   - role: manuscript_draft
     schema_ref: manuscript-draft.v1
     required: true
-    source_policy: node_output
+    source_policy:
+      - handoff
+      - node_output
 outputs:
   - role: formatted_manuscript
     schema_ref: formatted-manuscript.v1

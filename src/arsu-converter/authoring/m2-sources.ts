@@ -15,7 +15,7 @@ export const M2_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     license: CC,
     extraction_artifact_id: "CAP-M2-01",
     knowledge_sources: [{ knowledge_id: "style-calibration", extraction_artifact_id: "KP-M2-06", output_path: "knowledge/style-calibration.md" }],
-    inputs: [{ role: "project_intent", schema_ref: "specs.project", required: true, source_policy: "node_output" }],
+    inputs: [{ role: "project_intent", schema_ref: "specs.project", required: true, source_policy: "stable_spec" }],
     outputs: [{ role: "writing_configuration", schema_ref: "writing-configuration.v1", required: true }],
   },
   {
@@ -30,7 +30,7 @@ export const M2_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     license: CC,
     extraction_artifact_id: "CAP-M2-02",
     knowledge_sources: [{ knowledge_id: "paper-structure-patterns", extraction_artifact_id: "KP-M2-08", output_path: "knowledge/paper-structure-patterns.md" }],
-    inputs: [{ role: "writing_configuration", schema_ref: "writing-configuration.v1", required: true, source_policy: "node_output" }, { role: "annotated_bibliography", schema_ref: "annotated-bibliography.v1", required: true, source_policy: "node_output" }],
+    inputs: [{ role: "writing_configuration", schema_ref: "writing-configuration.v1", required: true, source_policy: "node_output" }, { role: "annotated_bibliography", schema_ref: "annotated-bibliography.v1", required: true, source_policy: ["handoff", "node_output"] }],
     outputs: [{ role: "paper_outline", schema_ref: "paper-outline.v1", required: true }],
   },
   {
@@ -60,7 +60,7 @@ export const M2_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     license: CC,
     extraction_artifact_id: "CAP-M2-04",
     knowledge_sources: [{ knowledge_id: "academic-writing-style", extraction_artifact_id: "KP-M2-01", output_path: "knowledge/academic-writing-style.md" }, { knowledge_id: "anti-leakage", extraction_artifact_id: "KP-M2-03", output_path: "knowledge/anti-leakage.md" }, { knowledge_id: "writing-quality", extraction_artifact_id: "KP-M2-07", output_path: "knowledge/writing-quality.md" }],
-    inputs: [{ role: "argument_blueprint", schema_ref: "argument-blueprint.v1", required: true, source_policy: "node_output" }, { role: "synthesis_report", schema_ref: "synthesis-report.v1", required: true, source_policy: "node_output" }],
+    inputs: [{ role: "argument_blueprint", schema_ref: "argument-blueprint.v1", required: true, source_policy: "node_output" }, { role: "synthesis_report", schema_ref: "synthesis-report.v1", required: true, source_policy: ["handoff", "node_output"] }],
     outputs: [{ role: "manuscript_draft", schema_ref: "manuscript-draft.v1", required: true }],
   },
   {

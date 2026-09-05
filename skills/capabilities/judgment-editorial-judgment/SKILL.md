@@ -16,6 +16,7 @@ Execute exactly one ResearchSpec capability node.
 ## Inputs
 
 - `manuscript_draft` (manuscript-draft.v1)
+- `review_panel_config` (review-panel-config.v1)
 
 ## Outputs
 

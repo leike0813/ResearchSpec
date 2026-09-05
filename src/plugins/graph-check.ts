@@ -3,8 +3,8 @@ import path from "node:path";
 
 import { selectSkillWriters } from "../adapters/delivery.js";
 import { getTool, toolSkillsRoot } from "../adapters/tools.js";
-import { capabilityIds, loadCapabilityRegistry } from "../capabilities/registry.js";
-import { validateGraphCapabilityReferences } from "../core/contracts/capability-graph.js";
+import { capabilityIds, loadCapabilityRegistry, validateGraphAgainstCapabilityRegistry } from "../capabilities/registry.js";
+import type { CapabilityManifest } from "../core/contracts/capability-manifest.js";
 import type { GraphWorkspaceIndex } from "../core/runtime/graph-workspace-index.js";
 import type { Diagnostic } from "../core/validation/types.js";
 import { sha256 } from "../core/workspace/write-plan.js";
@@ -41,8 +41,10 @@ export async function pluginWorkspaceDiagnostics(index: GraphWorkspaceIndex, alw
   }
 
   const baseCapabilityIds = new Set<string>();
+  let baseRegistry;
   try {
-    for (const capabilityId of capabilityIds(await loadCapabilityRegistry())) baseCapabilityIds.add(capabilityId);
+    baseRegistry = await loadCapabilityRegistry();
+    for (const capabilityId of capabilityIds(baseRegistry)) baseCapabilityIds.add(capabilityId);
   } catch (error) {
     diagnostics.push({
       severity: "error",
@@ -87,15 +89,18 @@ export async function pluginWorkspaceDiagnostics(index: GraphWorkspaceIndex, alw
     for (const profileId of resolvedExtensions.profileIds) {
       const profile = extensions.profiles.get(profileId);
       if (!profile) continue;
-      const references = validateGraphCapabilityReferences(profile.profile, new Set([...baseCapabilityIds, ...extensions.capabilities.keys()]));
+      if (!baseRegistry) continue;
+      const capabilities = new Map<string, { manifest: CapabilityManifest }>(baseRegistry.capabilities);
+      for (const [id, capability] of extensions.capabilities) capabilities.set(id, capability);
+      const references = validateGraphAgainstCapabilityRegistry({ registry: baseRegistry.registry, capabilities }, profile.profile);
       for (const reference of references) {
         diagnostics.push({
           severity: "error",
-          code: "plugin_extension_profile_capability_unknown",
+          code: reference.code ?? "plugin_extension_profile_capability_unknown",
           message: `Plugin extension profile ${profileId}: ${reference.message}`,
           path: profile.sourcePath,
           blocking: true,
-          details: { path: reference.path },
+          details: reference,
         });
       }
     }

@@ -11,7 +11,7 @@ import {
   GraphRunError,
   overrideGraphGate,
   recordGraphGate,
-  startGraphRun,
+  startGraphRun as startGraphRunRuntime,
   submitGraphNode as submitGraphNodeRuntime,
   type SubmitGraphNodeInput,
   type GraphFrontier,
@@ -23,8 +23,13 @@ async function submitGraphNode(input: Omit<SubmitGraphNodeInput, "capabilityRegi
     capabilityRegistry: await graphTestCapabilityRegistry(input.index, input.runId),
   });
 }
+async function startGraphRun(input: Omit<Parameters<typeof startGraphRunRuntime>[0], "capabilityRegistry">) {
+  const graph = input.index.profiles.get(input.profileId);
+  assert.ok(graph);
+  return startGraphRunRuntime({ ...input, capabilityRegistry: await graphTestCapabilityRegistryForGraph(graph) });
+}
 import { loadGraphWorkspaceIndex } from "../src/core/runtime/graph-workspace-index.js";
-import { graphTestCapabilityRegistry, writeBaseWorkspace } from "./helpers/graph-workspace.js";
+import { graphTestCapabilityRegistry, graphTestCapabilityRegistryForGraph, writeBaseWorkspace } from "./helpers/graph-workspace.js";
 
 const TIME_0 = "2026-08-15T12:00:00+08:00";
 
@@ -114,6 +119,7 @@ async function fixture(terminalGate = false): Promise<{ root: string; workspace:
   let index = await loadGraphWorkspaceIndex(workspace);
   const started = await startGraphRun({ index, profileId: "gated", command: startCommand(), confirmedBy: "researcher" });
   index = await loadGraphWorkspaceIndex(workspace);
+  await writeFile(path.join(root, "rq-brief.md"), "rq brief\n", "utf8");
   await submitGraphNode({ index, runId: started.run_id, nodeId: "rq", outputs: [{ role: "rq_brief", path: "rq-brief.md" }], submittedAt: "2026-08-15T12:10:00+08:00" });
   return { root, workspace, runId: started.run_id, cleanup: () => rm(root, { recursive: true, force: true }) };
 }

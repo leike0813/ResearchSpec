@@ -72,7 +72,10 @@ export const CapabilityInputRoleSchema = z.strictObject({
   role: StableIdSchema,
   schema_ref: StableIdSchema,
   required: z.boolean().optional(),
-  source_policy: CapabilityInputSourcePolicySchema.default("handoff"),
+  source_policy: z.union([
+    CapabilityInputSourcePolicySchema,
+    z.array(CapabilityInputSourcePolicySchema).min(1).refine((sources) => new Set(sources).size === sources.length, "Input sources must be unique."),
+  ]).default("handoff"),
 });
 
 export const CapabilityOutputRoleSchema = z.strictObject({
@@ -164,11 +167,6 @@ export const CapabilityManifestSchema = z.strictObject({
       if (!roleIds.has(input) && input !== "*") {
         context.addIssue({ code: "custom", path: ["validators", index, "inputs"], message: `Validator input is not a declared input role: ${input}` });
       }
-    }
-  }
-  for (const [index, input] of value.inputs.entries()) {
-    if (input.source_policy === "node_output" && input.required === false) {
-      context.addIssue({ code: "custom", path: ["inputs", index, "source_policy"], message: "node_output inputs cannot be optional; bind them in the graph instead." });
     }
   }
 });

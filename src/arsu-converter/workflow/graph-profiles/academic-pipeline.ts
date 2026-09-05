@@ -35,7 +35,11 @@ export const ACADEMIC_PIPELINE_GRAPH_PROFILE = {
       kind: "subgraph",
       subgraph_id: "research-main",
       input_bindings: [],
-      expected_outputs: [{ role: "research_report", required: true }],
+      expected_outputs: [
+        { role: "research_report", required: true },
+        { role: "annotated_bibliography", required: true },
+        { role: "synthesis_report", required: true },
+      ],
       prerequisites: [],
       required_gate_ids: [],
       required_decision_ids: [],
@@ -59,7 +63,12 @@ export const ACADEMIC_PIPELINE_GRAPH_PROFILE = {
       subgraph_id: "academic-paper",
       input_bindings: [
         {
-          role: "research_report",
+          role: "annotated_bibliography",
+          source: "node_output",
+          from_node_id: "research",
+        },
+        {
+          role: "synthesis_report",
           source: "node_output",
           from_node_id: "research",
         },

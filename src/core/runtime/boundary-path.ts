@@ -22,6 +22,7 @@ export async function resolveBoundaryPath(
   projectRoot: string,
   requestedPath: string,
   use: BoundaryPathUse = "reference",
+  pathKind: "file" | "directory" = "file",
 ): Promise<BoundaryPath> {
   const trimmed = requestedPath.trim();
   if (!trimmed) throw new BoundaryPathError("boundary_path_empty", "Boundary path must not be empty.");
@@ -56,8 +57,8 @@ export async function resolveBoundaryPath(
       }
       throw error;
     }
-    if (!info.isFile() || info.isSymbolicLink()) {
-      throw new BoundaryPathError("boundary_input_unreadable", `Boundary input must be a regular readable file: ${relativePath}`);
+    if (!(pathKind === "directory" ? info.isDirectory() : info.isFile()) || info.isSymbolicLink()) {
+      throw new BoundaryPathError("boundary_input_unreadable", `Boundary input must be a readable ${pathKind}: ${relativePath}`);
     }
     try {
       await access(absolutePath, constants.R_OK);

@@ -608,28 +608,38 @@ async function verifyInstalledCurrentJourney(bin, projectDirectory, environment)
   ], projectDirectory, environment).data;
   assert(started?.status === "started" && started.run_id, "Installed CLI did not start the schema 2 graph run.");
 
-  const nodeSelector = `node:${started.run_id}/${entry.entry_node_id}`;
-  const nodeInstructions = runJson(bin, ["instructions", nodeSelector, "--json"], projectDirectory, environment).data;
-  const expectedOutput = nodeInstructions?.expected_output_roles?.[0];
-  assert(nodeInstructions?.kind === "node" && expectedOutput?.role, "Installed node instructions expose no declared output role.");
-  const output = { role: expectedOutput.role, path: `outputs/${expectedOutput.role}.md` };
-  const outputPath = path.join(projectDirectory, output.path);
-  await mkdir(path.dirname(outputPath), { recursive: true });
-  await writeFile(outputPath, "# Packaged research question brief\n\nA bounded release verification question.\n", "utf8");
+  const outputs = [];
   const advanceInputPath = path.join(projectDirectory, "packaged-advance.json");
-  await writeFile(advanceInputPath, `${JSON.stringify({ outputs: [output] }, null, 2)}\n`, "utf8");
-  runJson(bin, ["advance", nodeSelector, "--input", advanceInputPath, "--actor-name", "release-verifier", "--json"], projectDirectory, environment);
+  for (const nodeId of ["rq", "methodology", "literature", "grading", "synthesis", "report"]) {
+    const nodeSelector = `node:${started.run_id}/${nodeId}`;
+    const card = runJson(bin, ["instructions", nodeSelector, "--json"], projectDirectory, environment).data;
+    assert(card?.kind === "node" && card.expected_output_roles?.length, "Installed node has no declared outputs.");
+    if (nodeId === "report") {
+      assert(["synthesis_report", "methodology_blueprint"].every((role) => card.resolved_inputs.some((input) => input.role === role && input.path)), "Installed report lacks required inputs.");
+    }
+    const submitted = card.expected_output_roles.map(({ role }) => ({ role, path: `outputs/${role}.md` }));
+    for (const output of submitted) {
+      const outputPath = path.join(projectDirectory, output.path);
+      await mkdir(path.dirname(outputPath), { recursive: true });
+      await writeFile(outputPath, `# ${output.role}\n\nBounded release verification material.\n`, "utf8");
+    }
+    await writeFile(advanceInputPath, `${JSON.stringify({ outputs: submitted }, null, 2)}\n`, "utf8");
+    runJson(bin, ["advance", nodeSelector, "--input", advanceInputPath, "--actor-name", "release-verifier", "--json"], projectDirectory, environment);
+    outputs.push(...submitted);
+  }
 
   const handoffInputPath = path.join(projectDirectory, "packaged-handoff.json");
   await writeFile(handoffInputPath, `${JSON.stringify({
     inputs: [],
-    outputs: [{ ...output, type: "research-question-brief", purpose: "Release verification boundary output", intended_consumer: "user" }],
+    outputs: outputs.map((output) => ({ ...output, type: output.role, purpose: "Release verification boundary output", intended_consumer: "user" })),
     body: "# Packaged handoff\n\nThe external graph-node output is ready.\n",
   }, null, 2)}\n`, "utf8");
   runJson(bin, ["handoff", `run:${started.run_id}`, "--input", handoffInputPath, "--json"], projectDirectory, environment);
   const status = runJson(bin, ["status", "--json"], projectDirectory, environment).data;
   assert(status?.runs?.total === 1 && status?.nodes?.[started.run_id]?.some((node) => node.node_id === entry.entry_node_id && node.state === "complete"), "Installed graph journey did not persist the completed node.");
-  assert(status?.frontier?.some((item) => item.selector === `node:${started.run_id}/report`), "Installed graph journey did not derive the next frontier node.");
+  assert(status?.frontier?.length === 0 && status?.runs?.active === 0, "Installed graph journey did not finish the run.");
+  const completed = runJson(bin, ["instructions", `run:${started.run_id}`, "--json"], projectDirectory, environment).data;
+  assert(completed?.run?.status === "complete", "Installed graph journey did not persist run completion.");
   runJson(bin, ["show", `run:${started.run_id}`, "--json"], projectDirectory, environment);
   runJson(bin, ["handoff", `run:${started.run_id}`, "--json"], projectDirectory, environment);
   runJson(bin, ["check", "all", "--strict", "--json"], projectDirectory, environment);

@@ -17,7 +17,7 @@
 |---|---|---|---|---|---|---|---|
 | `deep-research:full` | Full research | 26 / 6,322 | 1 / 332 | 6 / 3,108 | 100% (6/6) | none | none |
 | `deep-research:quick` | Quick research brief | 11 / 2,435 | 1 / 332 | 4 / 1,643 | 100% (4/4) | none | none |
-| `deep-research:review` | Research text review | 8 / 1,652 | 0 / 0 | 3 / 1,378 | 100% (3/3) | none | none |
+| `deep-research:review` | Research text review | 8 / 1,652 | 0 / 0 | 3 / 1,379 | 100% (3/3) | none | none |
 | `deep-research:lit-review` | Evidence literature review | 12 / 2,599 | 1 / 332 | 3 / 1,187 | 100% (4/4) | none | none |
 | `deep-research:three-way-scan` | WHY/HOW/WHAT scan | 6 / 1,503 | 0 / 0 | 2 / 768 | 100% (4/4) | none | none |
 | `deep-research:fact-check` | Claim fact-check | 6 / 1,191 | 4 / 331 | 2 / 973 | 100% (4/4) | none | none |
@@ -34,14 +34,14 @@
 | `academic-paper:citation-check` | Citation check | 6 / 1,792 | 1 / 368 | 2 / 749 | 100% (4/4) | none | none |
 | `academic-paper:disclosure` | AI disclosure | 8 / 2,407 | 0 / 0 | 2 / 1,498 | 100% (3/3) | none | none |
 | `academic-paper:rebuttal-audit` | Rebuttal audit | 4 / 1,246 | 3 / 595 | 1 / 339 | 100% (4/4) | none | none |
-| `academic-paper-reviewer:full` | Full peer review | 19 / 4,800 | 1 / 16 | 5 / 2,845 | 100% (6/6) | none | none |
+| `academic-paper-reviewer:full` | Full peer review | 19 / 4,800 | 1 / 16 | 5 / 2,847 | 100% (6/6) | none | none |
 | `academic-paper-reviewer:re-review` | Revision re-review | 9 / 2,264 | 0 / 0 | 3 / 1,271 | 100% (4/4) | none | none |
-| `academic-paper-reviewer:quick` | Quick review | 5 / 1,049 | 0 / 0 | 1 / 425 | 100% (3/3) | none | none |
-| `academic-paper-reviewer:methodology-focus` | Methodology-focused review | 7 / 1,792 | 0 / 0 | 1 / 947 | 100% (4/4) | none | none |
-| `academic-paper-reviewer:guided` | Guided review | 12 / 3,062 | 0 / 0 | 3 / 1,996 | 100% (4/4) | none | none |
-| `academic-paper-reviewer:calibration` | Reviewer calibration | 13 / 3,533 | 0 / 0 | 2 / 1,439 | 100% (4/4) | none | none |
-| `academic-pipeline:end-to-end` | End-to-end pipeline | 26 / 8,082 | 1 / 136 | 24 / 17,831 | 80% (4/5) | none | Stage 1 RESEARCH |
-| `academic-pipeline:resume_from_passport` | Resume from passport reset boundary | 9 / 4,501 | 1 / 136 | 26 / 18,199 | 100% (5/5) | none | none |
+| `academic-paper-reviewer:quick` | Quick review | 5 / 1,049 | 0 / 0 | 1 / 426 | 100% (3/3) | none | none |
+| `academic-paper-reviewer:methodology-focus` | Methodology-focused review | 7 / 1,792 | 0 / 0 | 1 / 948 | 100% (4/4) | none | none |
+| `academic-paper-reviewer:guided` | Guided review | 12 / 3,062 | 0 / 0 | 3 / 1,998 | 100% (4/4) | none | none |
+| `academic-paper-reviewer:calibration` | Reviewer calibration | 13 / 3,533 | 0 / 0 | 2 / 1,440 | 100% (4/4) | none | none |
+| `academic-pipeline:end-to-end` | End-to-end pipeline | 26 / 8,082 | 1 / 136 | 24 / 17,833 | 80% (4/5) | none | Stage 1 RESEARCH |
+| `academic-pipeline:resume_from_passport` | Resume from passport reset boundary | 9 / 4,501 | 1 / 136 | 26 / 18,201 | 100% (5/5) | none | none |
 
 ## Per-Package Parity
 
@@ -86,9 +86,9 @@
 | `generation-report-compilation` | 0.952 | 1.000 | 251 | 2 | yes | none |
 | `generation-review-response-round` | 0.800 | 1.000 | 126 | 5 | yes | none |
 | `judgment-devils-advocate-stress-test` | 0.923 | 1.000 | 218 | 1 | yes | none |
-| `judgment-editorial-judgment` | 1.000 | 1.000 | 188 | 1 | yes | none |
+| `judgment-editorial-judgment` | 1.000 | 1.000 | 189 | 1 | yes | none |
 | `judgment-review-synthesis` | 0.960 | 0.818 | 250 | 1 | yes | none |
-| `judgment-specialist-review` | 0.952 | 1.000 | 199 | 3 | yes | none |
+| `judgment-specialist-review` | 0.952 | 1.000 | 200 | 3 | yes | none |
 | `transform-paper-humanization-revision` | 1.000 | 1.000 | 86 | 2 | yes | none |
 | `transform-review-response-comment-atomization` | 1.000 | 1.000 | 109 | 4 | yes | none |
 | `transform-revision-patching` | 1.000 | 1.000 | 73 | 1 | yes | none |
@@ -99,9 +99,9 @@
 
 | artifact | path | sha256 |
 |---|---|---|
-| parity report | `artifacts/generated/capability-parity-report.json` | `5ac448022152efee89a650083e036a71d84f9d7f14f227b640bd1cfba6995399` |
-| mode-capability review HTML | `audits/arsu/v3.19.0-828ef3b/artifacts/arsu-mode-capability-review.html` | `f1b063863b0349f381b68d85362e13040f204fde8277073f1f17229b8c0d0ff9` |
-| graph-match assessment HTML | `audits/arsu/v3.19.0-828ef3b/artifacts/arsu-mode-graph-match-assessment.html` | `5353e0bbb6428b9ea74875894bb64995eaa99143f1217727bfdc6459f33e9788` |
+| parity report | `artifacts/generated/capability-parity-report.json` | `95d4f39c9b0bb22260e0960e022b64d3bebe769c46b0168f6a5a1ec1d68d39e1` |
+| mode-capability review HTML | `audits/arsu/v3.19.0-828ef3b/artifacts/arsu-mode-capability-review.html` | `cd0fca95ab62810ad2281edad07fcd4b346f5ab90018891616b5bde4fcdca6d2` |
+| graph-match assessment HTML | `audits/arsu/v3.19.0-828ef3b/artifacts/arsu-mode-graph-match-assessment.html` | `a2902149f8060a711cb56c7bab596b35207d9e1a373cb5bb425c82c255663aff` |
 | gap semantic review HTML | `audits/arsu/v3.19.0-828ef3b/artifacts/arsu-mode-gap-semantic-review.html` | `6f7394a0f73db7bc2fc738304251528dbb7e6f1ed53405e07e3e6bbc851f760c` |
 
 ## Human Confirmation

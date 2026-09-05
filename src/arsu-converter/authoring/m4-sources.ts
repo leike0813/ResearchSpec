@@ -54,7 +54,7 @@ export const M4_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     license: CC,
     extraction_artifact_id: "CAP-M4-03",
     knowledge_sources: [{ knowledge_id: "latex-template", extraction_artifact_id: "KP-M4-04", output_path: "knowledge/latex-template.md" }, { knowledge_id: "submission-guide", extraction_artifact_id: "KP-M4-05", output_path: "knowledge/submission-guide.md" }],
-    inputs: [{ role: "manuscript_draft", schema_ref: "manuscript-draft.v1", required: true, source_policy: "node_output" }],
+    inputs: [{ role: "manuscript_draft", schema_ref: "manuscript-draft.v1", required: true, source_policy: ["handoff", "node_output"] }],
     outputs: [{ role: "formatted_manuscript", schema_ref: "formatted-manuscript.v1", required: true }],
   },
   {

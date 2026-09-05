@@ -12,10 +12,9 @@ import {
 } from "../core/contracts/capability-manifest.js";
 import {
   CapabilityGraphProfileSchema,
-  validateGraphCapabilityReferences,
   type CapabilityGraphProfile,
 } from "../core/contracts/capability-graph.js";
-import { capabilityIds, loadCapabilityRegistry } from "../capabilities/registry.js";
+import { loadCapabilityRegistry, validateGraphAgainstCapabilityRegistry } from "../capabilities/registry.js";
 import type { Diagnostic } from "../core/validation/types.js";
 
 const PLUGIN_EXTENSION_SCHEMA_VERSION = "1" as const;
@@ -226,18 +225,17 @@ export async function validatePluginExtensionRegistry(
     void index;
   }
 
-  const knownCapabilityIds = new Set(capabilities.keys());
   try {
-    for (const capabilityId of capabilityIds(await loadCapabilityRegistry())) knownCapabilityIds.add(capabilityId);
+    const base = await loadCapabilityRegistry();
+    const combined = new Map<string, { manifest: CapabilityManifest }>(base.capabilities);
+    for (const [id, capability] of capabilities) combined.set(id, capability);
+    for (const registered of profiles.values()) {
+      for (const reference of validateGraphAgainstCapabilityRegistry({ registry: base.registry, capabilities: combined }, registered.profile)) {
+        errors.push(fatal(reference.code ?? "plugin_extension_profile_capability_unknown", `Plugin extension profile ${registered.entry.profile_id}: ${reference.message}`, registered.sourcePath, reference));
+      }
+    }
   } catch (error) {
     errors.push(fatal("capability_registry_unavailable", `Cannot load base capability registry while validating plugin extensions: ${error instanceof Error ? error.message : String(error)}`, registryPath));
-  }
-  for (const [profileIndex, registered] of [...profiles.values()].entries()) {
-    const references = validateGraphCapabilityReferences(registered.profile, knownCapabilityIds);
-    for (const reference of references) {
-      errors.push(fatal("plugin_extension_profile_capability_unknown", `Plugin extension profile ${registered.entry.profile_id}: ${reference.message}`, registered.sourcePath, { path: reference.path }));
-    }
-    void profileIndex;
   }
 
   const domains = new Map<string, PluginDomainAssignment>();

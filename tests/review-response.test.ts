@@ -14,19 +14,25 @@ import {
   graphRunCompletionReady,
   recordGraphDecision,
   recordGraphGate,
-  startGraphRun,
+  startGraphRun as startGraphRunRuntime,
   submitGraphNode as submitGraphNodeRuntime,
   type SubmitGraphNodeInput,
 } from "../src/core/runtime/graph-run.js";
 
 import { loadGraphWorkspaceIndex } from "../src/core/runtime/graph-workspace-index.js";
-import { graphTestCapabilityRegistry, writeBaseWorkspace } from "./helpers/graph-workspace.js";
+import { graphTestCapabilityRegistry, graphTestCapabilityRegistryForGraph, writeBaseWorkspace } from "./helpers/graph-workspace.js";
 
 async function submitGraphNode(input: Omit<SubmitGraphNodeInput, "capabilityRegistry">) {
   return submitGraphNodeRuntime({
     ...input,
     capabilityRegistry: await graphTestCapabilityRegistry(input.index, input.runId),
   });
+}
+
+async function startGraphRun(input: Omit<Parameters<typeof startGraphRunRuntime>[0], "capabilityRegistry">) {
+  const graph = input.index.profiles.get(input.profileId);
+  assert.ok(graph);
+  return startGraphRunRuntime({ ...input, capabilityRegistry: await graphTestCapabilityRegistryForGraph(graph) });
 }
 
 const root = process.cwd();
@@ -74,6 +80,8 @@ void test("review-response graph run continues and completes through round-scope
   const temp = await mkdtemp(path.join(tmpdir(), "researchspec-review-response-"));
   try {
     const workspace = await writeBaseWorkspace(temp);
+    await writeFile(path.join(temp, "manuscript.md"), "manuscript\n", "utf8");
+    await writeFile(path.join(temp, "review-comments.md"), "review comments\n", "utf8");
     await writeFile(path.join(workspace, "profiles", "review-response.yaml"), REVIEW_RESPONSE_GRAPH_PROFILE_TEXT, "utf8");
     let index = await loadGraphWorkspaceIndex(workspace);
     const started = await startGraphRun({
@@ -85,7 +93,10 @@ void test("review-response graph run continues and completes through round-scope
         entry_id: "full",
         entry_node_id: "intake",
         prerequisites: [],
-        handoff_inputs: [],
+        handoff_inputs: [
+          { role: "manuscript_source", type: "file", path: "manuscript.md", purpose: "manuscript under revision" },
+          { role: "review_comments_source", type: "file", path: "review-comments.md", purpose: "review comments" },
+        ],
         planned_outputs: [
           { role: "working_manuscript", type: "file", path: "working.tex", purpose: "working manuscript" },
           { role: "response_markdown", type: "file", path: "response.md", purpose: "response letter" },
@@ -110,7 +121,9 @@ void test("review-response graph run continues and completes through round-scope
     }
     async function submit(nodeId: string, round: number | undefined, roles: string[]) {
       index = await loadGraphWorkspaceIndex(workspace);
-      await submitGraphNode({ index, runId, nodeId, round, outputs: roles.map((role) => ({ role, path: `${nodeId}-${role}.md` })), submittedAt: "2026-08-16T12:05:00+08:00" });
+      const outputs = roles.map((role) => ({ role, path: `${nodeId}-${role}.md` }));
+      await Promise.all(outputs.map((output) => writeFile(path.join(temp, output.path), `${output.role}\n`, "utf8")));
+      await submitGraphNode({ index, runId, nodeId, round, outputs, submittedAt: "2026-08-16T12:05:00+08:00" });
     }
     async function gate(gateId: string, round?: number) {
       index = await loadGraphWorkspaceIndex(workspace);

@@ -136,6 +136,8 @@ handoff，自己的 Gates、Decisions 与其它独立 consent 仍照常处理。
 `review`、`revision`、`re-review`、`format` 或 `final-integrity` 进入；冻结图只投影所选
 入口可达的切片。每个新 run 的 revision/re-review 从 round 1 开始，不继承旧 run 的状态或决定。
 
+`deep-research:quick` 仍完成研究问题、方法、文献、质量分级、证据综合和报告六个节点，只是不设置 formal Gate；`deep-research:full` 在研究问题后保留该 Gate。写作图通过 handoff 接收注释书目和综合报告；pipeline 会把 research child 的同名输出显式交给 write child。
+
 ## 5. Handoff 连接图与真实文件
 
 论文、报告、review、图表和数据都是 `researchspec/` 外的普通项目文件。ResearchSpec 不复制、

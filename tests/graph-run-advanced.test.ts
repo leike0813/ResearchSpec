@@ -13,8 +13,9 @@ import {
   graphRunCompletionReady,
   GraphRunError,
   recordGraphDecision,
-  startGraphChildRun,
-  startGraphRun,
+  resolveGraphNodeInputs,
+  startGraphChildRun as startGraphChildRunRuntime,
+  startGraphRun as startGraphRunRuntime,
   submitGraphNode as submitGraphNodeRuntime,
   type SubmitGraphNodeInput,
   validateSubgraphNodeBindings,
@@ -28,8 +29,24 @@ async function submitGraphNode(input: Omit<SubmitGraphNodeInput, "capabilityRegi
     capabilityRegistry: await graphTestCapabilityRegistry(input.index, input.runId),
   });
 }
+async function startGraphRun(input: Omit<Parameters<typeof startGraphRunRuntime>[0], "capabilityRegistry">) {
+  const graph = input.index.profiles.get(input.profileId);
+  assert.ok(graph);
+  return startGraphRunRuntime({ ...input, capabilityRegistry: await graphTestCapabilityRegistryForGraph(graph) });
+}
+
+async function startGraphChildRun(input: Omit<Parameters<typeof startGraphChildRunRuntime>[0], "capabilityRegistry">) {
+  const parent = input.index.runs.find((record) => record.run?.run_id === input.parentRunId)?.graph;
+  assert.ok(parent);
+  const parentNode = parent.nodes.find((node) => node.node_id === input.nodeId);
+  const child = parentNode?.subgraph_id === undefined
+    ? undefined
+    : input.index.profiles.get(parent.subgraphs.find((binding) => binding.subgraph_id === parentNode.subgraph_id)?.profile_id ?? "");
+  assert.ok(child);
+  return startGraphChildRunRuntime({ ...input, capabilityRegistry: await graphTestCapabilityRegistryForGraphs(parent, child) });
+}
 import { loadGraphWorkspaceIndex } from "../src/core/runtime/graph-workspace-index.js";
-import { GRAPH_PROFILE, graphTestCapabilityRegistry, sha256, writeBaseWorkspace } from "./helpers/graph-workspace.js";
+import { GRAPH_PROFILE, graphTestCapabilityRegistry, graphTestCapabilityRegistryForGraph, graphTestCapabilityRegistryForGraphs, sha256, writeBaseWorkspace } from "./helpers/graph-workspace.js";
 import { ACADEMIC_PIPELINE_GRAPH_PROFILE_TEXT } from "../src/arsu-converter/workflow/graph-profiles/academic-pipeline.js";
 import { RESEARCH_MAIN_GRAPH_PROFILE_TEXT } from "../src/arsu-converter/workflow/graph-profiles/research-main.js";
 
@@ -324,6 +341,8 @@ void test("eligible subgraph start creates one deterministic parent-bound child 
         handoff_inputs: [],
         planned_outputs: [
           { role: "research_report", type: "markdown", path: "report.md", purpose: "research report" },
+          { role: "annotated_bibliography", type: "markdown", path: "bibliography.md", purpose: "annotated bibliography" },
+          { role: "synthesis_report", type: "markdown", path: "synthesis.md", purpose: "evidence synthesis" },
           { role: "manuscript_draft", type: "markdown", path: "draft.md", purpose: "draft" },
           { role: "review_synthesis", type: "markdown", path: "review.md", purpose: "review" },
         ],
@@ -338,7 +357,7 @@ void test("eligible subgraph start creates one deterministic parent-bound child 
     assert.deepEqual(child.run.parent_binding, { parent_run_id: parent.run_id, parent_node_id: "research", subgraph_id: "research-main" });
     assert.equal(child.run.entry_id, "main");
     assert.equal(child.run.entry_node_id, "research-question");
-    assert.deepEqual(child.handoff.outputs.map((item) => item.role), ["research_report"]);
+    assert.deepEqual(child.handoff.outputs.map((item) => item.role), ["research_report", "annotated_bibliography", "synthesis_report"]);
     index = await loadGraphWorkspaceIndex(workspace);
     const duplicate = await startGraphChildRun({ index, parentRunId: parent.run_id, nodeId: "research", startedAt: "2026-08-15T12:02:00+08:00" });
     assert.equal(duplicate.status, "already_started");
@@ -447,6 +466,32 @@ void test("revision rounds use distinct node files and scan without duplicate di
   } finally {
     await rm(root, { recursive: true, force: true });
   }
+});
+
+void test("node-output input resolution honors explicit from_role and the applicable round", () => {
+  const graph = parseCapabilityGraphProfile({
+    ...REVISION_PROFILE,
+    nodes: REVISION_PROFILE.nodes.map((node) => node.node_id === "report" ? {
+      ...node,
+      input_bindings: [{ role: "manuscript", source: "node_output", from_node_id: "revision", from_role: "revised_manuscript" }],
+    } : node),
+  });
+  const inputs = resolveGraphNodeInputs({
+    run: {
+      schema_version: "2", run_id: "run-1", profile_id: graph.profile_id, profile_version: graph.profile_version,
+      profile_sha256: "a".repeat(64), entry_id: "main", entry_node_id: "revision", status: "active",
+      started_at: TIME_0, authorization_origin: "human",
+      start_confirmation: { confirmed_by: "researcher", confirmed_at: TIME_0, prerequisites: [], expected_outputs: [], formal_gates: [], cost: { effort: "low", interaction: "low" } },
+    },
+    graph,
+    handoff: { schema_version: "2", run_id: "run-1", updated_at: TIME_0, inputs: [], outputs: [] },
+    nodes: [
+      { schema_version: "2", node_instance_id: "run-1.revision.r1", run_id: "run-1", node_id: "revision", round: 1, state: "complete", updated_at: "2026-08-15T12:10:00+08:00", outputs: [{ role: "revised_manuscript", path: "round-1.md" }], gate_attempts: [], gate_overrides: [], decisions: [] },
+      { schema_version: "2", node_instance_id: "run-1.revision.r2", run_id: "run-1", node_id: "revision", round: 2, state: "complete", updated_at: "2026-08-15T12:20:00+08:00", outputs: [{ role: "revised_manuscript", path: "round-2.md" }], gate_attempts: [], gate_overrides: [], decisions: [] },
+    ],
+    nodeId: "report",
+  });
+  assert.deepEqual(inputs, [{ role: "manuscript", source: "node_output", path: "round-2.md", from_node_id: "revision" }]);
 });
 
 void test("frozen profile hash is used for run identity", () => {

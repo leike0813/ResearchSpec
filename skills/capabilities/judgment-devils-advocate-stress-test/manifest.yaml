@@ -11,11 +11,15 @@ inputs:
   - role: manuscript_draft
     schema_ref: manuscript-draft.v1
     required: true
-    source_policy: node_output
+    source_policy:
+      - handoff
+      - node_output
   - role: review_panel_config
     schema_ref: review-panel-config.v1
     required: false
-    source_policy: handoff
+    source_policy:
+      - handoff
+      - node_output
 outputs:
   - role: stress_test_report
     schema_ref: stress-test.v1

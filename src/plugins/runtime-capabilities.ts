@@ -7,6 +7,7 @@ export async function loadWorkspaceCapabilityRegistry(
   extensionRegistry?: LoadedPluginExtensionRegistry,
 ): Promise<LoadedCapabilityRegistry> {
   const base = await loadCapabilityRegistry();
+  if (index.config.plugins.selected.length === 0) return base;
   const extensions = extensionRegistry ?? await loadPluginExtensionRegistry();
   const resolved = resolveDomainExtensions(extensions, index.config.plugins.selected);
   const capabilities = new Map<string, RegisteredCapability>(base.capabilities);

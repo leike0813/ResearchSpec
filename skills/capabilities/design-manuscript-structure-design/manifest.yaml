@@ -15,7 +15,9 @@ inputs:
   - role: annotated_bibliography
     schema_ref: annotated-bibliography.v1
     required: true
-    source_policy: node_output
+    source_policy:
+      - handoff
+      - node_output
 outputs:
   - role: paper_outline
     schema_ref: paper-outline.v1
