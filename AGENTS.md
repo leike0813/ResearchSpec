@@ -72,6 +72,10 @@ The locked direction is:
   `run.yaml`, frozen `graph.yaml`, and per-node instance files are runtime
   authority; capability Skills produce semantic files outside `researchspec/`
   and describe exchange in the run `handoff.md`.
+- Legal node/control and handoff mutations persist newly satisfied run completion
+  and affected ancestor completion in the same write plan as the owning record.
+  Reuse graph completion evaluation; inspection stays read-only and parent
+  subgraph node state stays derived.
 - Capability graph profiles own nodes, parallel/join policy, Gates, Decisions,
   revision-round templates, and subgraph bindings. Do not hard-code any research
   graph in core.

@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { test } from "node:test";
@@ -105,10 +105,12 @@ function currentFrontier(index: Awaited<ReturnType<typeof loadGraphWorkspaceInde
   return evaluateGraphFrontier(record.run, record.graph, record.nodeEntries.flatMap((entry) => entry.node ? [entry.node] : []));
 }
 
-async function fixture(): Promise<{ root: string; workspace: string; runId: string; cleanup: () => Promise<void> }> {
+async function fixture(terminalGate = false): Promise<{ root: string; workspace: string; runId: string; cleanup: () => Promise<void> }> {
   const root = await mkdtemp(path.join(tmpdir(), "researchspec-graph-conflict-"));
   const workspace = await writeBaseWorkspace(root);
-  await writeFile(path.join(workspace, "profiles", "gated.yaml"), GATED_TEXT, "utf8");
+  await writeFile(path.join(workspace, "profiles", "gated.yaml"), terminalGate
+    ? stringify({ ...GATED_PROFILE, nodes: GATED_PROFILE.nodes.filter((node) => node.node_id !== "report") })
+    : GATED_TEXT, "utf8");
   let index = await loadGraphWorkspaceIndex(workspace);
   const started = await startGraphRun({ index, profileId: "gated", command: startCommand(), confirmedBy: "researcher" });
   index = await loadGraphWorkspaceIndex(workspace);
@@ -138,6 +140,50 @@ void test("submit rejects a node file that appeared after workspace scan", async
       submitGraphNode({ index, runId, nodeId: "report", outputs: [{ role: "research_report", path: "report.md" }], submittedAt: "2026-08-15T12:25:00+08:00" }),
       /node_create_conflict|Node file appeared/,
     );
+  } finally { await cleanup(); }
+});
+
+for (const override of [false, true]) void test(`terminal Gate ${override ? "override" : "pass"} persists run completion`, async () => {
+  const { workspace, runId, cleanup } = await fixture(true);
+  try {
+    let index = await loadGraphWorkspaceIndex(workspace);
+    const record = index.runs[0];
+    const originalRun = record.runText;
+    const command = { index, runId, gateId: "rq-gate", verdict: "pass" as const, confirmedBy: "researcher", confirmedAt: TIME_0, summary: "Reviewed." };
+    await recordGraphGate({ ...command, dryRun: true });
+    assert.equal(await readFile(record.runPath, "utf8"), originalRun);
+    assert.deepEqual(await readdir(record.nodesDirectory), ["rq.yaml"]);
+    await recordGraphGate({ ...command, verdict: override ? "fail" : "pass" });
+    if (override) {
+      index = await loadGraphWorkspaceIndex(workspace);
+      assert.equal(index.runs[0].run?.status, "active");
+      await overrideGraphGate({ index, runId, gateId: "rq-gate", approvedBy: "researcher", approvedAt: TIME_0, reason: "Accepted limitation." });
+    }
+    index = await loadGraphWorkspaceIndex(workspace);
+    assert.equal(index.runs[0].run?.status, "complete");
+    assert.equal(index.runs[0].nodeEntries.find((entry) => entry.node?.node_id === "rq-gate")?.node?.state, "pending");
+  } finally { await cleanup(); }
+});
+
+for (const driftTarget of ["run", "prerequisite"] as const) void test(`final advance rejects stale ${driftTarget} without partial writes`, async () => {
+  const { workspace, runId, cleanup } = await fixture();
+  try {
+    let index = await loadGraphWorkspaceIndex(workspace);
+    await recordGraphGate({ index, runId, gateId: "rq-gate", verdict: "pass", confirmedBy: "researcher", confirmedAt: TIME_0, summary: "Reviewed." });
+    index = await loadGraphWorkspaceIndex(workspace);
+    const record = index.runs[0];
+    const command = { index, runId, nodeId: "report", outputs: [{ role: "research_report", path: "report.md" }], submittedAt: TIME_0 };
+    await submitGraphNode({ ...command, dryRun: true });
+    assert.equal(await readFile(record.runPath, "utf8"), record.runText);
+    const beforeNodes = await readdir(record.nodesDirectory);
+    const target = driftTarget === "run" ? record.runPath : record.nodeEntries.find((entry) => entry.node?.node_id === "rq")?.filePath;
+    assert.ok(target);
+    const changed = `${await readFile(target, "utf8")}\n# external edit\n`;
+    await writeFile(target, changed, "utf8");
+    await assert.rejects(submitGraphNode(command), (error: unknown) => error instanceof GraphRunError && error.code === "graph_write_conflict");
+    assert.equal(await readFile(target, "utf8"), changed);
+    assert.equal(await readFile(record.runPath, "utf8"), driftTarget === "run" ? changed : record.runText);
+    assert.deepEqual(await readdir(record.nodesDirectory), beforeNodes);
   } finally { await cleanup(); }
 });
 

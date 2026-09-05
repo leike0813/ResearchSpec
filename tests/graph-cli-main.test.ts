@@ -3,11 +3,11 @@ import { access, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { test } from "node:test";
 
-import { stringify } from "yaml";
+import { parse as parseYaml, stringify } from "yaml";
 
 import { cleanup, parseEnvelope, runCli, tempProject } from "./helpers/cli.js";
 
-void test("packaged CLI initializes and runs a schema 2 graph workspace", async () => {
+void test("compiled CLI initializes and completes a schema 2 graph workspace", async () => {
   const root = await tempProject();
   try {
     const initialized = parseEnvelope<{ schema_version: string; workspace: string }>(runCli(["init", root, "--tools", "none", "--json"]));
@@ -53,6 +53,20 @@ void test("packaged CLI initializes and runs a schema 2 graph workspace", async 
     assert.equal(advanced.status, 0);
     const afterAdvance = parseEnvelope<{ frontier: Array<{ selector: string }> }>(runCli(["status", "--json"], root));
     assert.equal(afterAdvance.data?.frontier[0]?.selector, `node:${runId}/report`);
+    await writeFile(advanceInput, stringify({ outputs: [{ role: "research_report", path: "report.md" }] }), "utf8");
+    assert.equal(runCli(["advance", `node:${runId}/report`, "--input", advanceInput, "--json"], root).status, 0);
+    const runPath = path.join(workspace, "runs", runId, "run.yaml");
+    const completedRun = await readFile(runPath, "utf8");
+    assert.equal((parseYaml(completedRun) as { status: string }).status, "complete");
+    const completed = parseEnvelope<{ runs: { active: number }; frontier: unknown[] }>(runCli(["status", "--json"], root));
+    assert.equal(completed.data?.runs.active, 0);
+    assert.deepEqual(completed.data?.frontier, []);
+    const instructions = parseEnvelope<{ completion_ready: boolean }>(runCli(["instructions", `run:${runId}`, "--json"], root));
+    assert.equal(instructions.data?.completion_ready, true);
+    const rejected = parseEnvelope(runCli(["advance", `node:${runId}/report`, "--input", advanceInput, "--json"], root));
+    assert.equal(rejected.error?.code, "run_not_active");
+    assert.equal(await readFile(runPath, "utf8"), completedRun);
+    assert.equal(parseEnvelope(runCli(["check", "all", "--strict", "--json"], root)).ok, true);
     assert.equal(parseEnvelope(runCli(["check", "--json"], root)).ok, true);
     assert.equal(parseEnvelope(runCli(["doctor", "--json"], root)).ok, true);
     assert.ok(workspace);

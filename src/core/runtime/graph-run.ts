@@ -16,8 +16,8 @@ import {
   type RunHandoff,
 } from "../contracts/graph-workspace.js";
 import type { CapabilityGraphProfile, GraphDecision, GraphGate } from "../contracts/capability-graph.js";
-import { sha256 } from "../workspace/write-plan.js";
-import type { GraphNodeScanRecord, GraphWorkspaceIndex } from "./graph-workspace-index.js";
+import { executeWritePlan, planDirectFileEdit, sha256, type PlannedWrite } from "../workspace/write-plan.js";
+import type { GraphNodeScanRecord, GraphRunScanRecord, GraphWorkspaceIndex } from "./graph-workspace-index.js";
 import { BoundaryPathError, resolveBoundaryPath } from "./boundary-path.js";
 import { runCapabilityValidators } from "../../capabilities/validators.js";
 import type { LoadedCapabilityRegistry } from "../../capabilities/registry.js";
@@ -505,7 +505,7 @@ export async function submitGraphNode(input: SubmitGraphNodeInput): Promise<Subm
   });
   if (input.dryRun) return { node, created: existing === undefined, dry_run: true };
 
-  await writeNodeFile(record.nodesDirectory, node, scanEntry);
+  await writeNodeFile(input.index, node, scanEntry);
   return { node, created: existing === undefined, dry_run: false };
 }
 
@@ -545,7 +545,7 @@ export async function recordGraphGate(input: RecordGraphGateInput): Promise<Grap
     gate_overrides: existing?.gate_overrides ?? [],
     decisions: existing?.decisions ?? [],
   });
-  if (!input.dryRun) await writeNodeFile(record.nodesDirectory, node, scanEntry);
+  if (!input.dryRun) await writeNodeFile(input.index, node, scanEntry);
   return node;
 }
 
@@ -585,7 +585,7 @@ export async function recordGraphDecision(input: RecordGraphDecisionInput): Prom
       },
     ],
   });
-  if (!input.dryRun) await writeNodeFile(record.nodesDirectory, node, scanEntry);
+  if (!input.dryRun) await writeNodeFile(input.index, node, scanEntry);
   return node;
 }
 
@@ -632,7 +632,7 @@ export async function overrideGraphGate(input: OverrideGraphGateInput): Promise<
     ],
     decisions: existing?.decisions ?? [],
   });
-  if (!input.dryRun) await writeNodeFile(record.nodesDirectory, node, scanEntry);
+  if (!input.dryRun) await writeNodeFile(input.index, node, scanEntry);
   return node;
 }
 
@@ -785,12 +785,10 @@ export function graphRunCompletionReady(run: GraphRun, graph: CapabilityGraphPro
   return true;
 }
 
-interface RequiredRunRecord {
+interface RequiredRunRecord extends Omit<GraphRunScanRecord, "handoff"> {
   run: GraphRun;
   graph: CapabilityGraphProfile;
   handoff: RunHandoff;
-  nodesDirectory: string;
-  nodeEntries: GraphNodeScanRecord[];
 }
 
 function requireRun(index: GraphWorkspaceIndex, runId: string): RequiredRunRecord {
@@ -800,7 +798,7 @@ function requireRun(index: GraphWorkspaceIndex, runId: string): RequiredRunRecor
   if (!record.run || !record.graph || !record.handoff) throw new GraphRunError("run_incomplete", `Run is missing run.yaml, frozen graph or handoff: ${runId}`, "domain");
   if (!record.graphText || sha256(record.graphText) !== record.run.profile_sha256) throw new GraphRunError("run_graph_hash_mismatch", `Frozen graph integrity check failed for run ${runId}.`, "conflict");
   if (record.graph.profile_id !== record.run.profile_id || record.graph.profile_version !== record.run.profile_version) throw new GraphRunError("run_profile_identity_mismatch", `Frozen graph identity check failed for run ${runId}.`, "conflict");
-  return { run: record.run, graph: record.graph, handoff: record.handoff.frontmatter, nodesDirectory: record.nodesDirectory, nodeEntries: record.nodeEntries };
+  return { ...record, run: record.run, graph: record.graph, handoff: record.handoff.frontmatter };
 }
 
 export function graphChildRunSnapshots(index: GraphWorkspaceIndex): GraphChildRunSnapshot[] {
@@ -1192,7 +1190,8 @@ function requireNodeScanEntry(nodeEntries: GraphNodeScanRecord[], nodeId: string
   return matches[0];
 }
 
-async function writeNodeFile(nodesDirectory: string, node: GraphNodeInstance, scanned: GraphNodeScanRecord | undefined): Promise<void> {
+async function writeNodeFile(index: GraphWorkspaceIndex, node: GraphNodeInstance, scanned: GraphNodeScanRecord | undefined): Promise<void> {
+  const { nodesDirectory } = requireRun(index, node.run_id);
   const fileName = node.round === undefined ? `${node.node_id}.yaml` : `${node.node_id}.round-${String(node.round)}.yaml`;
   const filePath = path.join(nodesDirectory, fileName);
   let currentText: string | undefined;
@@ -1209,29 +1208,85 @@ async function writeNodeFile(nodesDirectory: string, node: GraphNodeInstance, sc
     if (scanned.text !== undefined && currentText !== scanned.text) throw new GraphRunError("node_write_conflict", `Node file changed after workspace scan: ${filePath}`, "conflict");
   }
 
-  const temporary = `${filePath}.${randomUUID()}.tmp`;
-  const backup = `${filePath}.${randomUUID()}.bak`;
-  await mkdir(path.dirname(filePath), { recursive: true });
-  try {
-    await writeFile(temporary, stringify(node), { encoding: "utf8", flag: "wx" });
-    if (currentText !== undefined) await rename(filePath, backup);
-    await rename(temporary, filePath);
-    if (currentText !== undefined) await rm(backup, { force: true });
-  } catch (error) {
-    await rm(temporary, { force: true }).catch(() => undefined);
-    if (currentText !== undefined && !await fileExists(filePath) && await fileExists(backup)) {
-      await rename(backup, filePath).catch(() => undefined);
-    }
-    throw error;
-  }
+  await commitGraphMutation(index, node.run_id, planDirectFileEdit({
+    path: filePath,
+    content: stringify(node),
+    previousContent: scanned?.text,
+    boundaryRoot: index.workspace,
+    reason: "Update the owning graph node",
+  }), { node });
 }
 
-async function fileExists(target: string): Promise<boolean> {
+export async function writeGraphHandoff(index: GraphWorkspaceIndex, handoff: RunHandoff, body: string): Promise<void> {
+  const record = requireRun(index, handoff.run_id);
+  const current = await readFile(record.handoffPath, "utf8").catch(() => undefined);
+  if (current !== record.handoffText) throw new GraphRunError("handoff_write_conflict", "Run handoff changed after workspace scan.", "conflict");
+  await commitGraphMutation(index, handoff.run_id, planDirectFileEdit({
+    path: record.handoffPath,
+    content: renderRunHandoff(handoff, body),
+    previousContent: record.handoffText,
+    boundaryRoot: index.workspace,
+    reason: "Update the run handoff",
+  }), { handoff });
+}
+
+async function commitGraphMutation(
+  index: GraphWorkspaceIndex,
+  runId: string,
+  operation: PlannedWrite,
+  change: { node: GraphNodeInstance } | { handoff: RunHandoff },
+): Promise<void> {
+  const snapshots = graphChildRunSnapshots(index);
+  const candidate = snapshots.find((item) => item.run.run_id === runId);
+  if (!candidate) throw new GraphRunError("run_incomplete", `Run snapshot is unavailable: ${runId}`, "conflict");
+  if ("node" in change) {
+    candidate.nodes = [...candidate.nodes.filter((node) => node.node_id !== change.node.node_id || node.round !== change.node.round), change.node];
+  } else {
+    candidate.handoff = change.handoff;
+  }
+  const operations = [operation];
+  const affected = new Set<string>();
+  let currentId: string | undefined = runId;
+  while (currentId !== undefined) {
+    if (affected.has(currentId)) throw new GraphRunError("run_parent_cycle", "Run parent bindings contain a cycle.", "conflict");
+    affected.add(currentId);
+    const record = requireRun(index, currentId);
+    const snapshot = snapshots.find((item) => item.run.run_id === currentId);
+    if (!snapshot) throw new GraphRunError("run_incomplete", `Run snapshot is unavailable: ${currentId}`, "conflict");
+    if (snapshot.run.status === "active" && evaluateGraphFrontier(snapshot.run, snapshot.graph, snapshot.nodes, snapshots).completion_ready) {
+      snapshot.run = { ...snapshot.run, status: "complete" };
+      operations.push(planDirectFileEdit({
+        path: record.runPath,
+        content: stringify(snapshot.run),
+        previousContent: record.runText,
+        boundaryRoot: index.workspace,
+        reason: "Persist graph run completion",
+      }));
+    }
+    currentId = snapshot.run.parent_binding?.parent_run_id;
+  }
+
+  // Completion can depend on sibling and nested child runs as well as the changed owner.
+  const children = new Map<string, string[]>();
+  for (const { run } of snapshots) {
+    const parentId = run.parent_binding?.parent_run_id;
+    if (parentId !== undefined) children.set(parentId, [...(children.get(parentId) ?? []), run.run_id]);
+  }
+  for (const id of affected) {
+    for (const childId of children.get(id) ?? []) affected.add(childId);
+  }
+  const readPreconditions = index.runs.filter((record) => record.run && affected.has(record.run.run_id)).flatMap((record) => [
+    { path: record.runPath, text: record.runText },
+    { path: record.graphPath, text: record.graphText },
+    { path: record.handoffPath, text: record.handoffText },
+    ...record.nodeEntries.map((entry) => ({ path: entry.filePath, text: entry.text })),
+  ]).flatMap(({ path: filePath, text }) => text === undefined ? [] : [{ path: filePath, expectedHash: sha256(text), reason: "Graph mutation snapshot" }]);
   try {
-    await readFile(target);
-    return true;
+    await executeWritePlan({ operations, readPreconditions, boundaryRoot: index.workspace });
   } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === "ENOENT") return false;
+    if ((error as NodeJS.ErrnoException).code === "EWRITE_CONFLICT") {
+      throw new GraphRunError("graph_write_conflict", error instanceof Error ? error.message : String(error), "conflict");
+    }
     throw error;
   }
 }

@@ -82,7 +82,8 @@ Every node instance SHALL own exactly one state file under its run. Valid states
 #### Scenario: Node completes atomically
 
 - **WHEN** all submitted outputs and validators pass
-- **THEN** exactly the owning node file is atomically updated to `complete`
+- **THEN** the owning node file is updated to `complete`
+- **AND** any resulting run completion is committed in the same write plan
 
 ### Requirement: Deterministic Frontier
 
@@ -150,7 +151,46 @@ advance. A failed-Gate override SHALL be embedded under that Gate with approver,
 #### Scenario: Failed Gate is overridden
 
 - **WHEN** a failed Gate is overridden with a separate human-approved reason
-- **THEN** only the owning node file is atomically updated
+- **THEN** the override is recorded only in the owning node file
+- **AND** any resulting run completion is committed in the same write plan
+
+### Requirement: Run Completion Is Persisted By Legal Mutations
+
+A successful node advance, Gate verdict, failed-Gate override or Decision choice SHALL evaluate
+completion against the candidate state using the frozen graph. When an active run satisfies the
+existing completion conditions, the mutation SHALL persist its status as `complete` in the same
+write plan as the owning record. Gate and Decision records SHALL NOT complete execution nodes.
+The write plan SHALL check the scanned contents of the affected runtime records and completion
+dependencies before writing, and SHALL roll back writes on a handled commit failure. This does not
+provide cross-process crash recovery.
+
+#### Scenario: Final capability or control point completes a run
+
+- **WHEN** the last required capability, Gate, override or Decision is legally satisfied
+- **THEN** a fresh CLI process reads `run.yaml.status: complete`, an empty frontier and no active entry for that run
+- **AND** subsequent execution-state mutations are rejected
+
+#### Scenario: Child completion satisfies its ancestors
+
+- **WHEN** a child mutation completes the child run with the required handoff output mappings
+- **THEN** active ancestors satisfying their frozen graphs are marked complete in the same write plan
+- **AND** parent subgraph node state remains derived rather than written
+
+#### Scenario: Child handoff is completed after execution
+
+- **WHEN** a legal handoff update supplies missing output mappings for an already complete child
+- **THEN** the handoff and any newly complete active ancestors are committed in the same write plan
+- **AND** editing a completed run's handoff does not reopen that run
+
+#### Scenario: Completion submission conflicts or is a dry run
+
+- **WHEN** a completion mutation encounters a stale runtime record or runs with `--dry-run`
+- **THEN** it leaves all run, node and handoff files unchanged
+
+#### Scenario: Inspection remains read-only
+
+- **WHEN** status, instructions or checking reads an active run whose completion conditions are satisfied
+- **THEN** it does not rewrite the persisted lifecycle
 
 ### Requirement: Parallel Groups, Subgraphs And Mid-Entry Nodes
 

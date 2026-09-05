@@ -5,6 +5,7 @@ import { strToU8, zipSync, type Zippable } from "fflate";
 
 import { renderRunHandoff, RunHandoffSchema } from "../../core/contracts/graph-workspace.js";
 import { loadGraphWorkspaceIndex, type GraphWorkspaceFile } from "../../core/runtime/graph-workspace-index.js";
+import { GraphRunError, writeGraphHandoff } from "../../core/runtime/graph-run.js";
 import { requireGraphWorkspace } from "../../core/workspace/graph-discover.js";
 import { sha256 } from "../../core/workspace/write-plan.js";
 import { CliError, success, type CommandContext, type CommandResult } from "../types.js";
@@ -107,11 +108,11 @@ export async function handleGraphHandoff(selector: string, options: GraphHandoff
   const handoff = RunHandoffSchema.parse({ schema_version: "2", run_id: runId, updated_at: new Date().toISOString(), inputs: inputs ?? record.handoff.frontmatter.inputs, outputs: outputs ?? record.handoff.frontmatter.outputs });
   const content = renderRunHandoff(handoff, body ?? record.handoff.body);
   if (context.dryRun) return success("handoff", { selector, path: record.handoffPath, handoff, dry_run: true }, { stdout: content });
-  const current = await readFile(record.handoffPath, "utf8").catch(() => "");
-  if (record.handoffText !== undefined && current !== record.handoffText) throw new CliError("handoff_write_conflict", "Run handoff changed after workspace scan.", 3);
-  const temporary = `${record.handoffPath}.${Math.random().toString(16).slice(2)}.tmp`;
-  await writeFile(temporary, content, "utf8");
-  await rename(temporary, record.handoffPath);
+  try { await writeGraphHandoff(index, handoff, body ?? record.handoff.body); }
+  catch (error) {
+    if (error instanceof GraphRunError) throw new CliError(error.code, error.message, error.kind === "conflict" ? 3 : error.kind === "usage" ? 2 : 1);
+    throw error;
+  }
   return success("handoff", { selector, path: record.handoffPath, handoff }, { stdout: content });
 }
 

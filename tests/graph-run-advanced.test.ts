@@ -11,6 +11,7 @@ import { parseCapabilityGraphProfile } from "../src/core/contracts/capability-gr
 import {
   evaluateGraphFrontier,
   graphRunCompletionReady,
+  GraphRunError,
   recordGraphDecision,
   startGraphChildRun,
   startGraphRun,
@@ -18,6 +19,7 @@ import {
   type SubmitGraphNodeInput,
   validateSubgraphNodeBindings,
   type GraphFrontier,
+  writeGraphHandoff,
 } from "../src/core/runtime/graph-run.js";
 
 async function submitGraphNode(input: Omit<SubmitGraphNodeInput, "capabilityRegistry">) {
@@ -27,7 +29,7 @@ async function submitGraphNode(input: Omit<SubmitGraphNodeInput, "capabilityRegi
   });
 }
 import { loadGraphWorkspaceIndex } from "../src/core/runtime/graph-workspace-index.js";
-import { graphTestCapabilityRegistry, sha256, writeBaseWorkspace } from "./helpers/graph-workspace.js";
+import { GRAPH_PROFILE, graphTestCapabilityRegistry, sha256, writeBaseWorkspace } from "./helpers/graph-workspace.js";
 import { ACADEMIC_PIPELINE_GRAPH_PROFILE_TEXT } from "../src/arsu-converter/workflow/graph-profiles/academic-pipeline.js";
 import { RESEARCH_MAIN_GRAPH_PROFILE_TEXT } from "../src/arsu-converter/workflow/graph-profiles/research-main.js";
 
@@ -129,11 +131,19 @@ async function loadIndexAfterStart(workspace: string, profileId: string, entryNo
   return { index, started };
 }
 
-void test("revision round template continues and exits through round-scoped decisions", async () => {
+for (const terminalDecision of [false, true]) void test(`revision rounds persist completion at the final ${terminalDecision ? "decision" : "capability"}`, async () => {
   const root = await mkdtemp(path.join(tmpdir(), "researchspec-revision-loop-"));
   try {
     const workspace = await writeBaseWorkspace(root);
-    await writeFile(path.join(workspace, "profiles", "revision-loop.yaml"), REVISION_TEXT, "utf8");
+    const profile = terminalDecision ? {
+      ...REVISION_PROFILE,
+      nodes: REVISION_PROFILE.nodes.filter((node) => node.node_id !== "report"),
+      decisions: [{ ...REVISION_PROFILE.decisions[0], options: [
+        { option_id: "continue", unlocks: ["revision"] },
+        { option_id: "exit", unlocks: [] },
+      ] }],
+    } : REVISION_PROFILE;
+    await writeFile(path.join(workspace, "profiles", "revision-loop.yaml"), stringify(profile), "utf8");
     const loaded = await loadIndexAfterStart(workspace, "revision-loop", "revision");
     const { started } = loaded;
     let index = loaded.index;
@@ -152,6 +162,7 @@ void test("revision round template continues and exits through round-scoped deci
     index = await loadGraphWorkspaceIndex(workspace);
     frontier = currentFrontier(index);
     assert.deepEqual(frontier.eligible_nodes.map((item) => `${item.node_id}@${String(item.round ?? 0)}`), ["revision@2"]);
+    assert.equal(index.runs[0].run?.status, "active");
 
     await submitGraphNode({ index, runId: started.run_id, nodeId: "revision", round: 2, outputs: [{ role: "revised_manuscript", path: "revised-2.md" }], submittedAt: "2026-08-15T12:20:00+08:00" });
     index = await loadGraphWorkspaceIndex(workspace);
@@ -161,12 +172,15 @@ void test("revision round template continues and exits through round-scoped deci
     await recordGraphDecision({ index, runId: started.run_id, decisionId: "outcome", round: 2, choice: "exit", decidedBy: "researcher", decidedAt: "2026-08-15T12:25:00+08:00" });
     index = await loadGraphWorkspaceIndex(workspace);
     frontier = currentFrontier(index);
-    assert.deepEqual(frontier.eligible_node_ids, ["report"]);
-
-    await submitGraphNode({ index, runId: started.run_id, nodeId: "report", outputs: [{ role: "research_report", path: "report.md" }], submittedAt: "2026-08-15T12:30:00+08:00" });
+    assert.deepEqual(frontier.eligible_node_ids, terminalDecision ? [] : ["report"]);
+    if (!terminalDecision) {
+      assert.equal(index.runs[0].run?.status, "active");
+      await submitGraphNode({ index, runId: started.run_id, nodeId: "report", outputs: [{ role: "research_report", path: "report.md" }], submittedAt: "2026-08-15T12:30:00+08:00" });
+    }
     index = await loadGraphWorkspaceIndex(workspace);
     const record = index.runs[0];
     assert.ok(record?.run && record.graph);
+    assert.equal(record.run.status, "complete");
     assert.equal(graphRunCompletionReady(record.run, record.graph, record.nodeEntries.flatMap((entry) => entry.node ? [entry.node] : [])), true);
     assert.equal(currentFrontier(index).eligible_node_ids.length, 0);
   } finally {
@@ -330,6 +344,63 @@ void test("eligible subgraph start creates one deterministic parent-bound child 
     assert.equal(duplicate.status, "already_started");
     assert.equal(duplicate.run_id, child.run_id);
     assert.equal(index.runs.length, 2);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+for (const delayedHandoff of [false, true]) void test(`nested subgraphs persist ancestor completion with ${delayedHandoff ? "delayed" : "planned"} handoff outputs`, async () => {
+  const root = await mkdtemp(path.join(tmpdir(), "researchspec-child-completion-"));
+  try {
+    const workspace = await writeBaseWorkspace(root);
+    const leaf = { ...GRAPH_PROFILE, profile_id: "leaf", nodes: [{ ...GRAPH_PROFILE.nodes[0], input_bindings: [] }] };
+    const parents = ["parent", "grandparent"].map((profileId, i) => ({
+      ...GRAPH_PROFILE,
+      profile_id: profileId,
+      entries: [{ entry_id: "main", kind: "end-to-end", node_id: "sub" }],
+      nodes: [{
+        node_id: "sub", kind: "subgraph", subgraph_id: "child", input_bindings: [],
+        expected_outputs: [{ role: "result", from_role: i === 0 ? "rq_brief" : "result", required: true }],
+        prerequisites: [], required_gate_ids: [], required_decision_ids: [], multiplicity: "one", round_role: null,
+      }],
+      subgraphs: [{ subgraph_id: "child", profile_id: i === 0 ? "leaf" : "parent", profile_version: "0.1.0", entry_id: "main", entry_node_id: i === 0 ? "rq" : "sub" }],
+    }));
+    for (const profile of [leaf, ...parents]) await writeFile(path.join(workspace, "profiles", `${profile.profile_id}.yaml`), stringify(profile), "utf8");
+    let index = await loadGraphWorkspaceIndex(workspace);
+    const grandparent = await startGraphRun({ index, profileId: "grandparent", confirmedBy: "researcher", command: {
+      ...startCommand("grandparent", "sub"),
+      planned_outputs: [{ role: "result", type: "markdown", path: "result.md", purpose: "research result" }],
+    } });
+    index = await loadGraphWorkspaceIndex(workspace);
+    const parent = await startGraphChildRun({ index, parentRunId: grandparent.run_id, nodeId: "sub", startedAt: TIME_0 });
+    index = await loadGraphWorkspaceIndex(workspace);
+    const child = await startGraphChildRun({ index, parentRunId: parent.run_id, nodeId: "sub", startedAt: TIME_0 });
+    index = await loadGraphWorkspaceIndex(workspace);
+    if (delayedHandoff) {
+      await writeGraphHandoff(index, { ...child.handoff, outputs: [] }, "Pending result.");
+      index = await loadGraphWorkspaceIndex(workspace);
+    }
+    await submitGraphNode({ index, runId: child.run_id, nodeId: "rq", outputs: [{ role: "rq_brief", path: "result.md" }], submittedAt: TIME_0 });
+    assert.ok(index.runs.every((record) => record.run?.status === "active"));
+    index = await loadGraphWorkspaceIndex(workspace);
+    assert.equal(index.runs.find((record) => record.run?.run_id === child.run_id)?.run?.status, "complete");
+    if (delayedHandoff) {
+      assert.ok(index.runs.filter((record) => record.run?.run_id !== child.run_id).every((record) => record.run?.status === "active"));
+      const ancestor = index.runs.find((record) => record.run?.run_id === grandparent.run_id);
+      assert.ok(ancestor?.runText);
+      await writeFile(ancestor.runPath, `${ancestor.runText}\n# external edit\n`, "utf8");
+      await assert.rejects(writeGraphHandoff(index, child.handoff, "Result ready."), (error: unknown) => error instanceof GraphRunError && error.code === "graph_write_conflict");
+      index = await loadGraphWorkspaceIndex(workspace);
+      assert.deepEqual(index.runs.find((record) => record.run?.run_id === child.run_id)?.handoff?.frontmatter.outputs, []);
+      assert.ok(index.runs.filter((record) => record.run?.run_id !== child.run_id).every((record) => record.run?.status === "active"));
+      await writeGraphHandoff(index, child.handoff, "Result ready.");
+      index = await loadGraphWorkspaceIndex(workspace);
+    }
+    assert.ok(index.runs.every((record) => record.run?.status === "complete"));
+    assert.ok(index.runs.filter((record) => record.run?.run_id !== child.run_id).every((record) => record.nodeEntries.length === 0));
+    await writeGraphHandoff(index, child.handoff, "Updated explanation.");
+    index = await loadGraphWorkspaceIndex(workspace);
+    assert.ok(index.runs.every((record) => record.run?.status === "complete"));
   } finally {
     await rm(root, { recursive: true, force: true });
   }
