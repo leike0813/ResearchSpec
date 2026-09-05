@@ -1131,13 +1131,18 @@ function prerequisiteComplete(
 }
 
 function branchUnlocksForRound(graph: CapabilityGraphProfile, nodes: readonly GraphNodeInstance[], nodeId: string, round: number | undefined): boolean {
+  const template = graph.revision_round_template;
   const options = graph.decisions.flatMap((decision) => decision.options.map((option) => ({ decision, option })))
-    .filter(({ option }) => option.unlocks.includes(nodeId));
+    .filter(({ decision, option }) => option.unlocks.includes(nodeId)
+      && !(template
+        && nodeId === template.revision_node_id
+        && round === 1
+        && decision.owner_node_id === template.review_node_id
+        && option.option_id === template.continue_option_id));
   if (options.length === 0) return true;
   return options.some(({ decision, option }) => {
     const owners = nodes.filter((item) => item.node_id === decision.owner_node_id);
     if (owners.length === 0) return false;
-    const template = graph.revision_round_template;
     const expectedRound = template && nodeId === template.revision_node_id && decision.owner_node_id === template.review_node_id && round !== undefined
       ? round - 1
       : round;

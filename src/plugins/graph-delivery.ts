@@ -1,6 +1,7 @@
-import { randomUUID } from "node:crypto";
-import { readFile, rename, rmdir, writeFile } from "node:fs/promises";
+import { readFile, rmdir } from "node:fs/promises";
 import path from "node:path";
+
+import { stringify } from "yaml";
 
 import {
   deduplicateInstallations,
@@ -15,9 +16,10 @@ import {
 import { selectSkillWriters } from "../adapters/delivery.js";
 import { managedTargetDiagnostic, resolveManagedTarget, validateManagedTarget } from "../adapters/managed-target.js";
 import { getTool, toolSkillsRoot, type DeliveryMode } from "../adapters/tools.js";
+import { GraphWorkspaceConfigSchema } from "../core/contracts/graph-workspace.js";
 import type { GraphWorkspaceIndex } from "../core/runtime/graph-workspace-index.js";
 import type { Diagnostic } from "../core/validation/types.js";
-import { executeWritePlan, planFile, sha256, type PlannedWrite } from "../core/workspace/write-plan.js";
+import { executeWritePlan, planDirectFileEdit, planFile, sha256, type PlannedWrite, type ReadPrecondition, type WritePlan } from "../core/workspace/write-plan.js";
 import { assertPathWithinRoot } from "../core/workspace/path-boundary.js";
 import { loadPluginExtensionRegistry, resolveDomainExtensions, type LoadedPluginExtensionRegistry } from "./extensions.js";
 import { domainIsAvailable, filesForSkill, pluginSkillRoot, resolveDomainSelection, type LoadedPluginRegistry } from "./registry.js";
@@ -33,6 +35,8 @@ export interface PlanPluginProjectionInput {
   existingInstallations: readonly ManagedInstallation[];
   existingResolutions: readonly DomainResolutionSnapshot[];
   force: boolean;
+  /** Limit forced refreshes to this domain selection while projecting the full selection. */
+  forceDomainIds?: readonly string[];
   /** Block the whole transaction when any removal candidate has drifted. */
   strictRemoval?: boolean;
 }
@@ -59,9 +63,15 @@ export interface WorkspacePluginProjectionInput {
   extensions?: LoadedPluginExtensionRegistry;
   selectedDomainIds: readonly string[];
   force: boolean;
+  /** Limit forced refreshes to this domain selection while projecting the full selection. */
+  forceDomainIds?: readonly string[];
   dryRun?: boolean;
-  writeManifest?: boolean;
   strictRemoval?: boolean;
+}
+
+export interface PlannedWorkspacePluginTransaction {
+  projection: PlannedPluginProjection;
+  writePlan: WritePlan;
 }
 
 export interface WorkspacePluginProjectionResult {
@@ -127,6 +137,15 @@ export async function planPluginProjection(input: PlanPluginProjectionInput): Pr
   const resolution = resolveDomainSelection(input.registry, input.selectedDomainIds);
   const extensions = input.extensions ?? await loadPluginExtensionRegistry();
   const extensionResolution = resolveDomainExtensions(extensions, input.selectedDomainIds);
+  const forceResolution = input.forceDomainIds === undefined
+    ? resolution
+    : resolveDomainSelection(input.registry, input.forceDomainIds);
+  const forceSkillIds = new Set(forceResolution.resolvedSkillIds);
+  const forceExtensionResolution = input.forceDomainIds === undefined
+    ? extensionResolution
+    : resolveDomainExtensions(extensions, input.forceDomainIds);
+  const forceCapabilityIds = new Set(forceExtensionResolution.capabilityIds);
+  const forceProfileIds = new Set(forceExtensionResolution.profileIds);
   const skillToolIds = selectSkillWriters(input.toolIds, input.delivery);
   const existingByKey = new Map(input.existingInstallations.map((item) => [installationKey(item), item]));
   const operations: PlannedWrite[] = [];
@@ -167,7 +186,7 @@ export async function planPluginProjection(input: PlanPluginProjectionInput): Pr
           ownership: "generated",
           recordedHash,
           requireRecordedOwnership: recordedHash === undefined,
-          force: input.force,
+          force: input.force && forceSkillIds.has(skill.skill_id),
         });
         operations.push(operation);
         pushProjectionDiagnostic(diagnostics, operation, "plugin_projection", `Cannot project plugin Skill ${skill.skill_id} for ${toolId}: ${operation.reason}`, `Plugin Skill file has user modifications and was preserved: ${skill.skill_id}`, target, { tool_id: toolId, skill_id: skill.skill_id });
@@ -198,7 +217,7 @@ export async function planPluginProjection(input: PlanPluginProjectionInput): Pr
           ownership: "generated",
           recordedHash,
           requireRecordedOwnership: recordedHash === undefined,
-          force: input.force,
+          force: input.force && forceCapabilityIds.has(capabilityId),
         });
         operations.push(operation);
         pushProjectionDiagnostic(diagnostics, operation, "plugin_extension_projection", `Cannot project plugin capability ${capabilityId} for ${toolId}: ${operation.reason}`, `Plugin capability file has user modifications and was preserved: ${capabilityId}`, target, { tool_id: toolId, capability_id: capabilityId });
@@ -228,7 +247,7 @@ export async function planPluginProjection(input: PlanPluginProjectionInput): Pr
       ownership: "generated",
       recordedHash,
       requireRecordedOwnership: recordedHash === undefined,
-      force: input.force,
+      force: input.force && forceProfileIds.has(profileId),
     });
     operations.push(operation);
     pushProjectionDiagnostic(diagnostics, operation, "plugin_extension_projection", `Cannot project plugin graph profile ${profileId}: ${operation.reason}`, `Plugin graph profile has user modifications and was preserved: ${profileId}`, target, { profile_id: profileId });
@@ -328,6 +347,7 @@ export async function planWorkspacePluginProjection(
   force: boolean,
   strictRemoval = false,
   extensions?: LoadedPluginExtensionRegistry,
+  forceDomainIds?: readonly string[],
 ): Promise<PlannedPluginProjection> {
   if (index.manifestStatus === "invalid") throw new PluginProjectionError(index.diagnostics.filter((item) => item.blocking));
   return planPluginProjection({
@@ -341,19 +361,75 @@ export async function planWorkspacePluginProjection(
     existingInstallations: index.manifest.installations,
     existingResolutions: index.manifest.plugin_resolutions,
     force,
+    forceDomainIds,
     strictRemoval,
   });
 }
 
-export async function projectWorkspacePlugins(input: WorkspacePluginProjectionInput): Promise<WorkspacePluginProjectionResult> {
-  const plan = await planWorkspacePluginProjection(input.index, input.registry, input.selectedDomainIds, input.force, input.strictRemoval, input.extensions);
-  const blocking = plan.diagnostics.filter((item) => item.blocking);
+export async function planWorkspacePluginTransaction(input: WorkspacePluginProjectionInput): Promise<PlannedWorkspacePluginTransaction> {
+  const projection = await planWorkspacePluginProjection(input.index, input.registry, input.selectedDomainIds, input.force, input.strictRemoval, input.extensions, input.forceDomainIds);
+  const blocking = projection.diagnostics.filter((item) => item.blocking);
   if (blocking.length > 0) throw new PluginProjectionError(blocking);
+
+  const projectRoot = input.index.projectRoot;
+  const configFile = input.index.files.get("config.yaml");
+  const selected = [...input.selectedDomainIds];
+  const currentSelection = input.index.config.plugins.selected;
+  const selectionUnchanged = selected.length === currentSelection.length && selected.every((domainId, index) => domainId === currentSelection[index]);
+  const configPath = path.join(input.index.workspace, "config.yaml");
+  await assertPathWithinRoot(projectRoot, configPath);
+  const configOperation = planDirectFileEdit({
+    boundaryRoot: projectRoot,
+    path: configPath,
+    relativePath: "researchspec/config.yaml",
+    content: selectionUnchanged
+      ? configFile?.text ?? stringify(input.index.config)
+      : stringify(GraphWorkspaceConfigSchema.parse({ ...input.index.config, plugins: { selected } })),
+    previousContent: configFile?.text,
+    scope: "project",
+    reason: "commit plugin selection",
+  });
+
+  const manifestPath = path.join(input.workspace, "tool-installation-manifest.json");
+  await assertPathWithinRoot(projectRoot, manifestPath);
+  const manifest = ToolInstallationManifestSchema.parse({
+    ...input.index.manifest,
+    plugin_resolutions: projection.resolutions,
+    installations: projection.finalInstallations,
+  });
+  for (const installation of manifest.installations) await validateManagedTarget(projectRoot, installation);
+  const manifestOperation = planDirectFileEdit({
+    boundaryRoot: projectRoot,
+    path: manifestPath,
+    relativePath: "researchspec/tool-installation-manifest.json",
+    content: `${JSON.stringify(manifest, null, 2)}\n`,
+    previousContent: input.index.files.get("tool-installation-manifest.json")?.text,
+    scope: "project",
+    reason: "commit workspace ownership manifest",
+  });
+
+  const readPreconditions: ReadPrecondition[] = [];
+  if (configFile) readPreconditions.push({ path: configFile.absolutePath, expectedHash: configFile.hash, reason: "plugin config snapshot" });
+  const manifestFile = input.index.files.get("tool-installation-manifest.json");
+  if (manifestFile) readPreconditions.push({ path: manifestFile.absolutePath, expectedHash: manifestFile.hash, reason: "plugin manifest snapshot" });
+
+  return {
+    projection,
+    writePlan: {
+      boundaryRoot: projectRoot,
+      operations: [...projection.operations, configOperation, manifestOperation],
+      readPreconditions,
+    },
+  };
+}
+
+export async function projectWorkspacePlugins(input: WorkspacePluginProjectionInput): Promise<WorkspacePluginProjectionResult> {
+  const transaction = await planWorkspacePluginTransaction(input);
+  const plan = transaction.projection;
   if (!input.dryRun) {
-    await executeWritePlan({ boundaryRoot: input.index.projectRoot, operations: plan.operations });
+    await executeWritePlan(transaction.writePlan);
     await removeEmptyRemovedSkillDirectories(input.index.projectRoot, plan.removedSkillRoots);
     await removeEmptyRemovedCapabilityDirectories(input.index.projectRoot, plan.removedCapabilityRoots);
-    if (input.writeManifest !== false) await writePluginManifest(input.workspace, input.index, plan);
   }
   return {
     plan,
@@ -425,28 +501,6 @@ async function removeEmptyProjectionDirectories(
       if (code !== "ENOENT" && code !== "ENOTEMPTY" && code !== "EEXIST") throw error;
     }
   }
-}
-
-export async function writeWorkspacePluginManifest(workspace: string, index: GraphWorkspaceIndex, plan: PlannedPluginProjection): Promise<void> {
-  if (index.manifestStatus === "invalid") throw new PluginProjectionError(index.diagnostics.filter((item) => item.blocking));
-  const manifest = ToolInstallationManifestSchema.parse({
-    ...index.manifest,
-    plugin_resolutions: plan.resolutions,
-    installations: plan.finalInstallations,
-  });
-  const manifestPath = path.join(workspace, "tool-installation-manifest.json");
-  const temporary = `${manifestPath}.${randomUUID()}.tmp`;
-  for (const installation of manifest.installations) await validateManagedTarget(index.projectRoot, installation);
-  await assertPathWithinRoot(index.projectRoot, manifestPath);
-  await assertPathWithinRoot(index.projectRoot, temporary);
-  await writeFile(temporary, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
-  await assertPathWithinRoot(index.projectRoot, manifestPath);
-  await assertPathWithinRoot(index.projectRoot, temporary);
-  await rename(temporary, manifestPath);
-}
-
-async function writePluginManifest(workspace: string, index: GraphWorkspaceIndex, plan: PlannedPluginProjection): Promise<void> {
-  await writeWorkspacePluginManifest(workspace, index, plan);
 }
 
 export function targetPath(value: string): string {

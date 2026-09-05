@@ -1,17 +1,13 @@
 import { readFile } from "node:fs/promises";
-import { writeFile } from "node:fs/promises";
 import path from "node:path";
-import { stringify } from "yaml";
 
 import { selectSkillWriters } from "../../adapters/delivery.js";
 import { getTool, toolSkillsRoot } from "../../adapters/tools.js";
 import { validateManagedTarget } from "../../adapters/managed-target.js";
-import { GraphWorkspaceConfigSchema, type GraphWorkspaceConfig } from "../../core/contracts/graph-workspace.js";
 import { loadGraphWorkspaceIndex } from "../../core/runtime/graph-workspace-index.js";
 import { requireGraphWorkspace } from "../../core/workspace/graph-discover.js";
-import { assertPathWithinRoot } from "../../core/workspace/path-boundary.js";
 import { sha256 } from "../../core/workspace/write-plan.js";
-import { PluginProjectionError, projectWorkspacePlugins, writeWorkspacePluginManifest } from "../../plugins/graph-delivery.js";
+import { PluginProjectionError, projectWorkspacePlugins } from "../../plugins/graph-delivery.js";
 import { loadPluginExtensionRegistry, resolveDomainExtensions, type LoadedPluginExtensionRegistry } from "../../plugins/extensions.js";
 import { domainIsAvailable, filesForSkill, loadPluginRegistry, pluginSkillRoot, resolveDomainSelection } from "../../plugins/registry.js";
 import { CliError, success, type CommandContext, type CommandResult } from "../types.js";
@@ -104,9 +100,7 @@ export async function handleGraphPluginInstall(pluginIds: readonly string[], con
   const selected = [...new Set([...index.config.plugins.selected, ...requested])];
   try {
     const extensions = await loadPluginExtensionRegistry();
-    const projection = await projectWorkspacePlugins({ workspace, index, registry, extensions, selectedDomainIds: selected, force: context.force, dryRun: context.dryRun, writeManifest: false, strictRemoval: true });
-    await writeConfigSelection(workspace, index.config, selected, context);
-    if (!context.dryRun) await writeWorkspacePluginManifest(workspace, index, projection.plan);
+    const projection = await projectWorkspacePlugins({ workspace, index, registry, extensions, selectedDomainIds: selected, force: context.force, dryRun: context.dryRun, strictRemoval: true });
     return success("plugin", {
       action: "install",
       workspace,
@@ -136,9 +130,7 @@ export async function handleGraphPluginUninstall(pluginIds: readonly string[], c
   try {
     const registry = await loadPluginRegistry();
     const extensions = await loadPluginExtensionRegistry();
-    const projection = await projectWorkspacePlugins({ workspace, index, registry, extensions, selectedDomainIds: selected, force: context.force, dryRun: context.dryRun, writeManifest: false, strictRemoval: true });
-    await writeConfigSelection(workspace, index.config, selected, context);
-    if (!context.dryRun) await writeWorkspacePluginManifest(workspace, index, projection.plan);
+    const projection = await projectWorkspacePlugins({ workspace, index, registry, extensions, selectedDomainIds: selected, force: context.force, dryRun: context.dryRun, strictRemoval: true });
     return success("plugin", {
       action: "uninstall",
       workspace,
@@ -161,15 +153,16 @@ export async function handleGraphPluginUninstall(pluginIds: readonly string[], c
 export async function handleGraphPluginUpdate(pluginIds: readonly string[], context: CommandContext): Promise<CommandResult> {
   const workspace = await graphWorkspace(context);
   const index = await loadPluginWorkspaceIndex(workspace);
-  const selected = pluginIds.length ? pluginIds : index.config.plugins.selected;
-  const missing = selected.filter((id) => !index.config.plugins.selected.includes(id));
+  const requested = pluginIds.length ? [...new Set(pluginIds)] : index.config.plugins.selected;
+  const selected = index.config.plugins.selected;
+  const missing = requested.filter((id) => !selected.includes(id));
   if (missing.length) throw new CliError("plugin_not_installed", `Plugin is not installed: ${missing.join(", ")}`, 1);
   try {
     const registry = await loadPluginRegistry();
     const unavailable = selected.filter((id) => !domainIsAvailable(registry.domains.get(id)));
     if (unavailable.length) throw new CliError("plugin_unavailable", `Plugin unavailable: ${unavailable.join(", ")}`, 1);
     const extensions = await loadPluginExtensionRegistry();
-    const projection = await projectWorkspacePlugins({ workspace, index, registry, extensions, selectedDomainIds: selected, force: context.force, dryRun: context.dryRun });
+    const projection = await projectWorkspacePlugins({ workspace, index, registry, extensions, selectedDomainIds: selected, forceDomainIds: pluginIds.length ? requested : undefined, force: context.force, dryRun: context.dryRun });
     return success("plugin", {
       action: "update",
       workspace,
@@ -183,7 +176,7 @@ export async function handleGraphPluginUpdate(pluginIds: readonly string[], cont
         unchanged: projection.unchanged,
       },
       dry_run: context.dryRun,
-    }, { stdout: `${context.dryRun ? "Would update" : "Updated"} ${selected.join(", ") || "no plugins"}.\n` });
+    }, { stdout: `${context.dryRun ? "Would update" : "Updated"} ${requested.join(", ") || "no plugins"}.\n` });
   } catch (error) { throw projectionError(error); }
 }
 
@@ -248,10 +241,4 @@ export async function handleGraphPluginInstructions(skillId: string, context: Co
     resources,
     authority: "advisory",
   }, { stdout: text });
-}
-
-async function writeConfigSelection(workspace: string, config: GraphWorkspaceConfig, selected: string[], context: CommandContext): Promise<void> {
-  if (context.dryRun) return;
-  await assertPathWithinRoot(path.dirname(workspace), path.join(workspace, "config.yaml"));
-  await writeFile(path.join(workspace, "config.yaml"), stringify(GraphWorkspaceConfigSchema.parse({ ...config, plugins: { selected } })), "utf8");
 }

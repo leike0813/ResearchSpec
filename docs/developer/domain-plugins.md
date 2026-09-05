@@ -226,9 +226,16 @@ Install and update are idempotent set reconciliation. Preview reports exact doma
 configured tools, and summarized write impact. Non-interactive installation requires explicit domain IDs
 and `--yes`; interactive installation retains its confirmation prompt. Install without an Agent tool
 saves intent and returns a non-blocking warning. Update blocks when a selected domain is unavailable.
+Updating a subset retains the full selected-domain projection and ownership; `--force` applies only
+to resources resolved by the requested domains, including their shared dependencies.
 Uninstall removes only projections no longer reachable from remaining selections; shared dependencies
 remain. Drift in a file scheduled for deletion blocks the operation, and `--force` never deletes a
-user-modified file. Config and manifest commit after generated operations, with the manifest last.
+user-modified file. Generated operations, config and manifest share one write plan, with config after
+the projections and the manifest last. Commit preflight checks the config and manifest bytes read
+during planning even when their planned content is unchanged. A stale snapshot blocks the operation
+before projection changes; a caught commit failure rolls back all three together while their paths
+remain safe to restore. Empty-directory cleanup follows a successful commit. These checks do not
+provide cross-process locking or cross-file atomicity after power loss or process termination.
 
 `plugin instructions <skill-id>` is a read-only immediate-activation bridge. It succeeds only when the Skill belongs to the current available selected-domain closure and every configured tool has the complete manifest-owned, hash-clean projection. The packet returns the exact packaged `SKILL.md`, its entry hash, resource paths, providing domains, projected tools, and an advisory authority boundary. It never executes bundled resources.
 

@@ -12,6 +12,7 @@ import {
   evaluateGraphFrontier,
   graphRunCompletionReady,
   GraphRunError,
+  recordGraphGate,
   recordGraphDecision,
   resolveGraphNodeInputs,
   startGraphChildRun as startGraphChildRunRuntime,
@@ -152,18 +153,35 @@ for (const terminalDecision of [false, true]) void test(`revision rounds persist
   const root = await mkdtemp(path.join(tmpdir(), "researchspec-revision-loop-"));
   try {
     const workspace = await writeBaseWorkspace(root);
-    const profile = terminalDecision ? {
+    const gatedProfile = {
       ...REVISION_PROFILE,
-      nodes: REVISION_PROFILE.nodes.filter((node) => node.node_id !== "report"),
-      decisions: [{ ...REVISION_PROFILE.decisions[0], options: [
+      entries: [{ entry_id: "main", kind: "end-to-end", node_id: "prepare" }],
+      nodes: [
+        { node_id: "prepare", kind: "capability", capability_id: "design-research-question-formulation", input_bindings: [{ role: "project_intent", source: "stable_spec" }], expected_outputs: [{ role: "rq_brief", required: true }], prerequisites: [], required_gate_ids: [], required_decision_ids: [], multiplicity: "one", round_role: null },
+        { node_id: "prepare-gate", kind: "gate", input_bindings: [], expected_outputs: [], prerequisites: ["prepare"], required_gate_ids: [], required_decision_ids: [], multiplicity: "one", round_role: null },
+        ...REVISION_PROFILE.nodes.map((node) => node.node_id === "revision" ? { ...node, prerequisites: ["prepare-gate"], required_gate_ids: ["prepare-gate"] } : node),
+      ],
+      gates: [{ gate_id: "prepare-gate", owner_node_id: "prepare-gate", policy: "required", verdicts: ["pass", "fail"] }],
+    };
+    const profile = terminalDecision ? {
+      ...gatedProfile,
+      nodes: gatedProfile.nodes.filter((node) => node.node_id !== "report"),
+      decisions: [{ ...gatedProfile.decisions[0], options: [
         { option_id: "continue", unlocks: ["revision"] },
         { option_id: "exit", unlocks: [] },
       ] }],
-    } : REVISION_PROFILE;
+    } : gatedProfile;
     await writeFile(path.join(workspace, "profiles", "revision-loop.yaml"), stringify(profile), "utf8");
-    const loaded = await loadIndexAfterStart(workspace, "revision-loop", "revision");
+    const loaded = await loadIndexAfterStart(workspace, "revision-loop", "prepare");
     const { started } = loaded;
     let index = loaded.index;
+
+    assert.deepEqual(currentFrontier(index).eligible_node_ids, ["prepare"]);
+    await submitGraphNode({ index, runId: started.run_id, nodeId: "prepare", outputs: [{ role: "rq_brief", path: "prepare.md" }], submittedAt: "2026-08-15T12:05:00+08:00" });
+    index = await loadGraphWorkspaceIndex(workspace);
+    assert.deepEqual(currentFrontier(index).pending_gates, [`gate:${started.run_id}/prepare-gate`]);
+    await recordGraphGate({ index, runId: started.run_id, gateId: "prepare-gate", verdict: "pass", confirmedBy: "researcher", confirmedAt: "2026-08-15T12:06:00+08:00", summary: "Prepared." });
+    index = await loadGraphWorkspaceIndex(workspace);
 
     let frontier = currentFrontier(index);
     assert.deepEqual(frontier.eligible_nodes.map((item) => `${item.node_id}@${String(item.round ?? 0)}`), ["revision@1"]);

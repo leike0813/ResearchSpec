@@ -249,7 +249,14 @@ The academic pipeline profile SHALL declare formatting and final-integrity nodes
 Repeatable revision and review nodes SHALL be paired by the profile `revision_round_template`. A
 completed review Decision SHALL select either the next revision round or the declared exit option. No
 graph SHALL express any other implicit loop, and no global maximum round SHALL be introduced by the
-engine.
+engine. The initial revision round SHALL become reachable after its declared prerequisites and
+controls are satisfied, without requiring a preceding-round continue Decision.
+
+#### Scenario: A graph reaches its first revision
+
+- **WHEN** a run starts before revision and satisfies the initial revision node's prerequisites and controls
+- **THEN** revision round 1 SHALL be eligible without a round 0 Decision
+- **AND** round 2 SHALL remain unavailable until the first round's continue Decision
 
 #### Scenario: Continue option is accepted
 

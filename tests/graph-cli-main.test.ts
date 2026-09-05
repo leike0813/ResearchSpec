@@ -7,7 +7,7 @@ import { parse as parseYaml, stringify } from "yaml";
 
 import { cleanup, parseEnvelope, runCli, tempProject } from "./helpers/cli.js";
 
-void test("compiled CLI initializes and completes a schema 2 graph workspace", async () => {
+void test("source-compiled CLI initializes and completes a schema 2 graph workspace", async () => {
   const root = await tempProject();
   try {
     const initialized = parseEnvelope<{ schema_version: string; workspace: string }>(runCli(["init", root, "--tools", "none", "--json"]));
@@ -90,7 +90,7 @@ void test("compiled CLI initializes and completes a schema 2 graph workspace", a
   }
 });
 
-void test("compiled CLI consumes writing handoffs and forwards research child outputs", async () => {
+void test("source-compiled CLI consumes writing handoffs and forwards research child outputs", async () => {
   const root = await tempProject();
   try {
     const initialized = parseEnvelope<{ workspace: string }>(runCli(["init", root, "--tools", "none", "--json"]));
@@ -220,7 +220,7 @@ void test("compiled CLI consumes writing handoffs and forwards research child ou
   }
 });
 
-void test("schema 1 workspaces are rejected by the packaged CLI", async () => {
+void test("source-compiled CLI rejects schema 1 workspaces", async () => {
   const root = await tempProject();
   try {
     const workspace = path.join(root, "researchspec");

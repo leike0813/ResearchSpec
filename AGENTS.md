@@ -729,6 +729,12 @@ are blocking even when they point inside the root; the trusted project root
 itself may resolve through a symlink. Hash equality never authorizes a path
 outside its managed namespace, and force does not bypass these boundaries.
 
+Plugin selection, projections and ownership must share one write plan, with the
+manifest last. Config and manifest read snapshots remain preconditions even when
+their planned content is unchanged. Reuse the existing executor's path safety
+and caught-error rollback; this does not provide cross-file crash atomicity or
+cross-process locking.
+
 For generated skill files:
 
 - safe to create if missing;

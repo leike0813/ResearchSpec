@@ -159,7 +159,8 @@ try {
     : [];
   assert(prompts.length === 0, `Legacy Codex prompts were unexpectedly generated: ${prompts.join(", ")}`);
   run(bin, ["check", "all", "--strict", "--json"], projectDirectory, environment);
-  await verifyInstalledCurrentJourney(bin, projectDirectory, environment);
+  await verifyInstalledMinimalJourney(bin, projectDirectory, environment);
+  await verifyInstalledAcademicPipelineJourney(bin, projectDirectory, environment);
 
   run(bin, ["init", allToolsProjectDirectory, "--tools", expectedProjectToolIds.join(","), "--delivery", "both", "--json"], installDirectory, environment);
   await verifyAllProjectToolDelivery(allToolsProjectDirectory, handbookDigest);
@@ -585,7 +586,7 @@ function runExpectFailure(command, args, cwd, env = process.env) {
   return result;
 }
 
-async function verifyInstalledCurrentJourney(bin, projectDirectory, environment) {
+async function verifyInstalledMinimalJourney(bin, projectDirectory, environment) {
   const instructions = runJson(bin, ["instructions", "profile:minimal", "--json"], projectDirectory, environment).data;
   const entry = instructions?.entries?.[0];
   assert(instructions?.kind === "profile" && entry?.entry_id && entry?.entry_node_id && entry?.route_ref, "Installed profile instructions expose no route-bound graph entry.");
@@ -642,6 +643,178 @@ async function verifyInstalledCurrentJourney(bin, projectDirectory, environment)
   assert(completed?.run?.status === "complete", "Installed graph journey did not persist run completion.");
   runJson(bin, ["show", `run:${started.run_id}`, "--json"], projectDirectory, environment);
   runJson(bin, ["handoff", `run:${started.run_id}`, "--json"], projectDirectory, environment);
+  runJson(bin, ["check", "all", "--strict", "--json"], projectDirectory, environment);
+}
+
+async function verifyInstalledAcademicPipelineJourney(bin, projectDirectory, environment) {
+  const profile = runJson(bin, ["instructions", "profile:academic-pipeline", "--json"], projectDirectory, environment).data;
+  const entry = profile?.entries?.find((item) => item.route_ref === "academic-pipeline:end-to-end");
+  assert(entry?.entry_id && entry.entry_node_id && entry.route_ref, "Installed academic-pipeline instructions expose no end-to-end entry.");
+
+  const pipelineBoundaryOutputs = [
+    ["research_report", "pipeline/research-report.md"],
+    ["annotated_bibliography", "pipeline/bibliography.md"],
+    ["synthesis_report", "pipeline/synthesis.md"],
+    ["manuscript_draft", "pipeline/manuscript.md"],
+    ["review_synthesis", "pipeline/review.md"],
+    ["response_to_reviewers", "pipeline/response-to-reviewers.md"],
+    ["formatted_manuscript", "pipeline/formatted-manuscript.md"],
+    ["integrity_report", "pipeline/integrity.md"],
+  ];
+  const outputPaths = new Map(pipelineBoundaryOutputs);
+  outputPaths.set("working_manuscript", outputPaths.get("manuscript_draft"));
+  outputPaths.set("response_markdown", outputPaths.get("response_to_reviewers"));
+  const startInputPath = path.join(projectDirectory, "packaged-pipeline-start.json");
+  await writeFile(startInputPath, `${JSON.stringify({
+    schema_version: "2",
+    confirmed_at: "2026-09-05T12:00:00+08:00",
+    entry_id: entry.entry_id,
+    entry_node_id: entry.entry_node_id,
+    route_ref: entry.route_ref,
+    prerequisites: [],
+    handoff_inputs: [],
+    planned_outputs: pipelineBoundaryOutputs.map(([role, outputPath]) => ({ role, type: "markdown", path: outputPath, purpose: `Release verification ${role}.` })),
+    formal_gates: ["research-gate", "write-gate", "review-gate", "final-integrity-gate"],
+    cost: { effort: "high", interaction: "long_horizon" },
+  }, null, 2)}\n`, "utf8");
+  const rootRunId = runJson(bin, [
+    "start", "academic-pipeline", "--input", startInputPath,
+    "--confirmed-by", "Release Verifier", "--json",
+  ], projectDirectory, environment).data.run_id;
+  const advanceInputPath = path.join(projectDirectory, "packaged-pipeline-advance.json");
+  let fallbackOutputIndex = 0;
+  const childRunIds = [];
+
+  async function submitNode(runId, nodeId, round) {
+    const nodeSelector = `node:${runId}/${nodeId}${round === undefined ? "" : `@${String(round)}`}`;
+    const card = runJson(bin, ["instructions", nodeSelector, "--json"], projectDirectory, environment).data;
+    assert(card?.kind === "node" && card.expected_output_roles?.length, `Installed pipeline node has no declared outputs: ${nodeSelector}`);
+    for (const input of card.resolved_inputs ?? []) {
+      if (!input.path) continue;
+      const inputPath = path.isAbsolute(input.path) ? input.path : path.join(projectDirectory, input.path);
+      assert(await pathExists(inputPath), `Installed pipeline input from instructions is missing: ${input.role} at ${input.path}`);
+    }
+    const outputs = card.expected_output_roles.map(({ role }) => ({
+      role,
+      path: outputPaths.get(role) ?? `pipeline/internal-${String(fallbackOutputIndex += 1)}-${role}.md`,
+    }));
+    for (const output of outputs) {
+      const outputPath = path.join(projectDirectory, output.path);
+      await mkdir(path.dirname(outputPath), { recursive: true });
+      await writeFile(outputPath, `# ${output.role}\n\nExternal release verification producer material.\n`, "utf8");
+    }
+    await writeFile(advanceInputPath, `${JSON.stringify({ outputs }, null, 2)}\n`, "utf8");
+    runJson(bin, ["advance", nodeSelector, "--input", advanceInputPath, "--actor-name", "release-verifier", "--json"], projectDirectory, environment);
+  }
+
+  function confirmGate(runId, gateId, round) {
+    const selector = `gate:${runId}/${gateId}${round === undefined ? "" : `@${String(round)}`}`;
+    runJson(bin, ["instructions", selector, "--json"], projectDirectory, environment);
+    runJson(bin, ["decide", selector, "--verdict", "pass", "--actor-name", "release-verifier", "--reason", "Release journey confirmation.", "--json"], projectDirectory, environment);
+  }
+
+  function chooseDecision(runId, decisionId, round, choice) {
+    const selector = `decision:${runId}/${decisionId}${round === undefined ? "" : `@${String(round)}`}`;
+    runJson(bin, ["instructions", selector, "--json"], projectDirectory, environment);
+    runJson(bin, ["decide", selector, "--choice", choice, "--actor-name", "release-verifier", "--reason", "Release journey branch confirmation.", "--json"], projectDirectory, environment);
+  }
+
+  async function completeChild(parentNodeId, steps, round) {
+    const selector = `node:${rootRunId}/${parentNodeId}${round === undefined ? "" : `@${String(round)}`}`;
+    const parentCard = runJson(bin, ["instructions", selector, "--json"], projectDirectory, environment).data;
+    assert(parentCard?.kind === "node" && parentCard.node?.kind === "subgraph", `Installed pipeline parent child card is missing: ${selector}`);
+    const recoveredStatus = runJson(bin, ["status", "--json"], projectDirectory, environment).data;
+    assert(recoveredStatus?.runs?.active > 0 && Array.isArray(recoveredStatus?.nodes?.[rootRunId]), `Installed pipeline status did not recover the active parent before child start: ${selector}`);
+    const recoveredRun = runJson(bin, ["instructions", `run:${rootRunId}`, "--json"], projectDirectory, environment).data;
+    assert(recoveredRun?.pending_subgraph_starts?.some((item) => item.selector === selector), `Installed pipeline parent frontier lost child start: ${selector}`);
+    const child = runJson(bin, ["start", selector, "--json"], projectDirectory, environment).data;
+    assert(child?.run_id, `Installed pipeline child did not start: ${selector}`);
+    assert(
+      child.run?.parent_binding?.parent_run_id === rootRunId
+        && child.run.parent_binding.parent_node_id === parentNodeId
+        && child.run.parent_binding.subgraph_id === parentCard.node.subgraph_id
+        && (round === undefined ? child.run.parent_binding.round === undefined : child.run.parent_binding.round === round),
+      `Installed pipeline child binding is invalid: ${selector}`,
+    );
+    childRunIds.push(child.run_id);
+    for (const step of steps) {
+      if (step.kind === "node") await submitNode(child.run_id, step.node_id, step.round);
+      else if (step.kind === "gate") confirmGate(child.run_id, step.gate_id, step.round);
+      else chooseDecision(child.run_id, step.decision_id, step.round, step.choice);
+    }
+    const completed = runJson(bin, ["instructions", `run:${child.run_id}`, "--json"], projectDirectory, environment).data;
+    assert(completed?.run?.status === "complete", `Installed pipeline child did not complete: ${child.run_id}`);
+    return child.run_id;
+  }
+
+  const researchSteps = [
+    { kind: "node", node_id: "research-question" },
+    { kind: "gate", gate_id: "rq-gate" },
+    { kind: "node", node_id: "methodology" },
+    { kind: "node", node_id: "literature" },
+    { kind: "node", node_id: "grading" },
+    { kind: "node", node_id: "synthesis" },
+    { kind: "node", node_id: "report" },
+  ];
+  await completeChild("research", researchSteps);
+  confirmGate(rootRunId, "research-gate");
+
+  await completeChild("write", [
+    ...["intake", "structure", "argument", "draft", "cite-check"].map((node_id) => ({ kind: "node", node_id })),
+    { kind: "gate", gate_id: "paper-gate" },
+    { kind: "node", node_id: "abstract" },
+  ]);
+  confirmGate(rootRunId, "write-gate");
+
+  await completeChild("review", [
+    ...["panel", "specialist", "da", "editorial", "synthesis"].map((node_id) => ({ kind: "node", node_id })),
+  ]);
+  confirmGate(rootRunId, "review-gate");
+
+  const revisionSteps = () => [
+    ...["intake", "manuscript-analysis", "comment-atomization"].map((node_id) => ({ kind: "node", node_id })),
+    { kind: "gate", gate_id: "review-response-comment-coverage" },
+    { kind: "node", node_id: "workboard" },
+    { kind: "gate", gate_id: "review-response-strategy" },
+    { kind: "node", node_id: "round", round: 1 },
+    { kind: "gate", gate_id: "review-response-evidence", round: 1 },
+    { kind: "gate", gate_id: "review-response-response-coverage", round: 1 },
+    { kind: "gate", gate_id: "review-response-final-assembly", round: 1 },
+    { kind: "decision", decision_id: "review-response-outcome", round: 1, choice: "complete" },
+  ];
+  const reviewSteps = ["panel", "specialist", "da", "editorial", "synthesis"].map((node_id) => ({ kind: "node", node_id }));
+  await completeChild("revision", revisionSteps(), 1);
+  await completeChild("re-review", reviewSteps, 1);
+  chooseDecision(rootRunId, "revision-outcome", 1, "continue");
+  const resumed = runJson(bin, ["instructions", `run:${rootRunId}`, "--json"], projectDirectory, environment).data;
+  assert(resumed?.pending_subgraph_starts?.some((item) => item.selector.endsWith("/revision@2")), "Installed pipeline did not recover the second revision frontier.");
+
+  await completeChild("revision", revisionSteps(), 2);
+  await completeChild("re-review", reviewSteps, 2);
+  chooseDecision(rootRunId, "revision-outcome", 2, "complete");
+  await completeChild("format", [{ kind: "node", node_id: "format" }]);
+  await submitNode(rootRunId, "final-integrity");
+  confirmGate(rootRunId, "final-integrity-gate");
+
+  const handoffInputPath = path.join(projectDirectory, "packaged-pipeline-handoff.json");
+  await writeFile(handoffInputPath, `${JSON.stringify({
+    inputs: [],
+    outputs: pipelineBoundaryOutputs.map(([role, outputPath]) => ({ role, type: "markdown", path: outputPath, purpose: "Release verification boundary output.", intended_consumer: "user" })),
+    body: "# Packaged academic pipeline handoff\n\nExternal producer fixtures completed the installed graph journey.\n",
+  }, null, 2)}\n`, "utf8");
+  runJson(bin, ["handoff", `run:${rootRunId}`, "--input", handoffInputPath, "--json"], projectDirectory, environment);
+  const status = runJson(bin, ["status", "--json"], projectDirectory, environment).data;
+  assert(status?.runs?.active === 0 && status?.frontier?.length === 0, "Installed academic pipeline left active runs or frontier nodes.");
+  assert(status?.runs?.total === childRunIds.length + 2, "Installed academic pipeline did not persist the minimal run, root run, and every child run.");
+  assert(childRunIds.every((runId) => Array.isArray(status?.nodes?.[runId])), "Installed academic pipeline status did not recover every child run.");
+  for (const childRunId of childRunIds) {
+    const childInstructions = runJson(bin, ["instructions", `run:${childRunId}`, "--json"], projectDirectory, environment).data;
+    assert(childInstructions?.run?.status === "complete", `Installed academic pipeline child lost persisted completion: ${childRunId}`);
+  }
+  const completed = runJson(bin, ["instructions", `run:${rootRunId}`, "--json"], projectDirectory, environment).data;
+  assert(completed?.run?.status === "complete", "Installed academic pipeline root did not persist completion.");
+  runJson(bin, ["show", `run:${rootRunId}`, "--json"], projectDirectory, environment);
+  runJson(bin, ["handoff", `run:${rootRunId}`, "--json"], projectDirectory, environment);
   runJson(bin, ["check", "all", "--strict", "--json"], projectDirectory, environment);
 }
 

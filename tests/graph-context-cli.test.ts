@@ -1,10 +1,15 @@
 import assert from "node:assert/strict";
-import { appendFile, readFile, writeFile } from "node:fs/promises";
+import { appendFile, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { test } from "node:test";
 
 import { stringify } from "yaml";
 
+import { loadPluginExtensionRegistry } from "../src/plugins/extensions.js";
+import { planWorkspacePluginTransaction } from "../src/plugins/graph-delivery.js";
+import { loadPluginRegistry } from "../src/plugins/registry.js";
+import { loadGraphWorkspaceIndex } from "../src/core/runtime/graph-workspace-index.js";
+import { executeWritePlan } from "../src/core/workspace/write-plan.js";
 import { cleanup, parseEnvelope, runCli, tempProject } from "./helpers/cli.js";
 
 function init(root: string): void {
@@ -258,6 +263,157 @@ void test("plugin install, instructions, and uninstall reconcile graph workspace
     };
     assert.deepEqual(reconciledManifest.plugin_resolutions, []);
     assert.equal(reconciledManifest.installations.some((item) => item.source.kind === "domain-skill"), false);
+  } finally {
+    await cleanup(root);
+  }
+});
+
+void test("plugin transactions reject stale config or manifest snapshots before projection", async () => {
+  const registry = await loadPluginRegistry();
+  const extensions = await loadPluginExtensionRegistry();
+  for (const relativePath of ["config.yaml", "tool-installation-manifest.json"]) {
+    const root = await tempProject();
+    try {
+      const initialized = runCli(["init", root, "--tools", "codex", "--delivery", "skills", "--json"], root);
+      assert.equal(initialized.status, 0, initialized.stderr);
+      const workspace = path.join(root, "researchspec");
+      const installed = runCli(["plugin", "install", "ecology", "--yes", "--json"], root);
+      assert.equal(installed.status, 0, installed.stderr);
+      const index = await loadGraphWorkspaceIndex(workspace);
+      const transaction = await planWorkspacePluginTransaction({
+        workspace,
+        index,
+        registry,
+        extensions,
+        selectedDomainIds: index.config.plugins.selected,
+        force: false,
+      });
+      const configPath = path.join(workspace, "config.yaml");
+      const manifestPath = path.join(workspace, "tool-installation-manifest.json");
+      assert.equal(transaction.writePlan.operations.find((operation) => operation.path === configPath)?.action, "skip-unchanged");
+      assert.equal(transaction.writePlan.operations.find((operation) => operation.path === manifestPath)?.action, "skip-unchanged");
+      const target = path.join(workspace, relativePath);
+      assert.ok(transaction.writePlan.readPreconditions?.some((precondition) => precondition.path === target));
+      const projectedSkillPath = path.join(root, ".agents/skills/tooluniverse-ecology-biodiversity/SKILL.md");
+      const beforeProjection = await readFile(projectedSkillPath, "utf8");
+      await writeFile(target, `${await readFile(target, "utf8")}\n# concurrent edit\n`, "utf8");
+      await assert.rejects(
+        () => executeWritePlan(transaction.writePlan),
+        (error: unknown) => (error as NodeJS.ErrnoException).code === "EWRITE_CONFLICT",
+      );
+      assert.equal(await readFile(projectedSkillPath, "utf8"), beforeProjection);
+      assert.match(await readFile(target, "utf8"), /concurrent edit/);
+    } finally {
+      await cleanup(root);
+    }
+  }
+});
+
+void test("plugin transaction treats a concurrently created missing manifest as a conflict", async () => {
+  const root = await tempProject();
+  try {
+    const initialized = runCli(["init", root, "--tools", "codex", "--delivery", "skills", "--json"], root);
+    assert.equal(initialized.status, 0, initialized.stderr);
+    const workspace = path.join(root, "researchspec");
+    const manifestPath = path.join(workspace, "tool-installation-manifest.json");
+    await rm(manifestPath);
+    const index = await loadGraphWorkspaceIndex(workspace);
+    const transaction = await planWorkspacePluginTransaction({
+      workspace,
+      index,
+      registry: await loadPluginRegistry(),
+      extensions: await loadPluginExtensionRegistry(),
+      selectedDomainIds: ["ecology"],
+      force: false,
+    });
+    await writeFile(manifestPath, "concurrent creator\n", "utf8");
+    await assert.rejects(
+      () => executeWritePlan(transaction.writePlan),
+      (error: unknown) => (error as NodeJS.ErrnoException).code === "EWRITE_CONFLICT",
+    );
+    await assert.rejects(
+      readFile(path.join(root, ".agents/skills/tooluniverse-ecology-biodiversity/SKILL.md"), "utf8"),
+      { code: "ENOENT" },
+    );
+    assert.equal(await readFile(manifestPath, "utf8"), "concurrent creator\n");
+  } finally {
+    await cleanup(root);
+  }
+});
+
+void test("plugin transactions roll back install, uninstall, and update together", async () => {
+  const registry = await loadPluginRegistry();
+  const extensions = await loadPluginExtensionRegistry();
+  for (const mode of ["install", "uninstall", "update"] as const) {
+    const root = await tempProject();
+    try {
+      const initialized = runCli(["init", root, "--tools", "codex", "--delivery", "skills", "--json"], root);
+      assert.equal(initialized.status, 0, initialized.stderr);
+      if (mode !== "install") {
+        const installed = runCli(["plugin", "install", "ecology", "--yes", "--json"], root);
+        assert.equal(installed.status, 0, installed.stderr);
+      }
+      const workspace = path.join(root, "researchspec");
+      const skillPath = path.join(root, ".agents/skills/tooluniverse-ecology-biodiversity/SKILL.md");
+      if (mode === "update") await appendFile(skillPath, "\n<!-- update drift -->\n", "utf8");
+      const configPath = path.join(workspace, "config.yaml");
+      const manifestPath = path.join(workspace, "tool-installation-manifest.json");
+      const beforeConfig = await readFile(configPath, "utf8");
+      const beforeManifest = await readFile(manifestPath, "utf8");
+      const beforeSkill = mode === "install" ? undefined : await readFile(skillPath, "utf8");
+      const index = await loadGraphWorkspaceIndex(workspace);
+      const selected = mode === "install" ? ["ecology"] : mode === "uninstall" ? [] : index.config.plugins.selected;
+      const transaction = await planWorkspacePluginTransaction({
+        workspace,
+        index,
+        registry,
+        extensions,
+        selectedDomainIds: selected,
+        force: mode === "update",
+        strictRemoval: mode === "uninstall",
+      });
+      assert.ok(transaction.writePlan.operations.some((operation) => ["create", "refresh", "remove-owned"].includes(operation.action)), mode);
+      const fault = new Error(`plugin rollback sentinel: ${mode}`);
+      await assert.rejects(
+        () => executeWritePlan(transaction.writePlan, { validateCommittedState: () => Promise.reject(fault) }),
+        (error: unknown) => error === fault,
+      );
+      assert.equal(await readFile(configPath, "utf8"), beforeConfig);
+      assert.equal(await readFile(manifestPath, "utf8"), beforeManifest);
+      if (mode === "install") await assert.rejects(readFile(skillPath, "utf8"), { code: "ENOENT" });
+      else assert.equal(await readFile(skillPath, "utf8"), beforeSkill);
+    } finally {
+      await cleanup(root);
+    }
+  }
+});
+
+void test("plugin update force refreshes only the requested domain projection", async () => {
+  const root = await tempProject();
+  try {
+    const initialized = runCli(["init", root, "--tools", "codex", "--delivery", "skills", "--json"], root);
+    assert.equal(initialized.status, 0, initialized.stderr);
+    const installed = runCli(["plugin", "install", "ecology", "historical-studies", "--yes", "--json"], root);
+    assert.equal(installed.status, 0, installed.stderr);
+
+    const workspace = path.join(root, "researchspec");
+    const ecologyPath = path.join(root, ".agents/skills/tooluniverse-ecology-biodiversity/SKILL.md");
+    const historicalPath = path.join(root, ".agents/skills/histagent-historical-research/SKILL.md");
+    const ecologySource = await readFile(ecologyPath, "utf8");
+    await appendFile(ecologyPath, "\n<!-- ecology drift -->\n", "utf8");
+    const historicalDrift = `${await readFile(historicalPath, "utf8")}\n<!-- historical drift -->\n`;
+    await writeFile(historicalPath, historicalDrift, "utf8");
+    const configBefore = await readFile(path.join(workspace, "config.yaml"), "utf8");
+    const manifestBefore = await readFile(path.join(workspace, "tool-installation-manifest.json"), "utf8");
+
+    const updated = runCli(["plugin", "update", "ecology", "--force", "--json"], root);
+    const updateEnvelope = parseEnvelope<{ selected_plugins: string[] }>(updated);
+    assert.equal(updateEnvelope.ok, true, JSON.stringify(updateEnvelope.error));
+    assert.deepEqual(updateEnvelope.data?.selected_plugins, ["ecology", "historical-studies"]);
+    assert.equal(await readFile(ecologyPath, "utf8"), ecologySource);
+    assert.equal(await readFile(historicalPath, "utf8"), historicalDrift);
+    assert.equal(await readFile(path.join(workspace, "config.yaml"), "utf8"), configBefore);
+    assert.equal(await readFile(path.join(workspace, "tool-installation-manifest.json"), "utf8"), manifestBefore);
   } finally {
     await cleanup(root);
   }

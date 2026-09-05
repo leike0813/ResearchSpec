@@ -38,10 +38,18 @@ openspec validate --specs --strict --no-interactive
 git diff --check
 ```
 
-`release:verify` packs and installs the real tarball in a temporary directory. It verifies eleven fixed
-base Skills, the explicitly selected seven-Skill Zotero Adapter, sixteen top-level commands, sixteen
+`release:verify` packs and installs the real tarball in a temporary directory with installation scripts
+disabled. It verifies the registry-derived fixed base Skills, the explicitly selected seven-Skill Zotero Adapter, sixteen top-level commands, sixteen
 wrappers for each of 28 command-capable tools when `delivery` includes commands, selected Zotero runtime metadata, a fresh schema `"2"` workspace, unsupported-workspace zero-write
 behavior, packaged current documentation, and absence of retired public runtime modules.
+
+The installed CLI completes both the minimal graph and an academic pipeline with research, writing,
+review, two revision/re-review rounds, Markdown formatting and final integrity. Each command starts a
+fresh process; status and instructions recover work at child, Gate and Decision boundaries. Acceptance
+checks persisted root and child completion, no active runs, an empty frontier and strict workspace
+health. Producer fixtures write external materials through the declared instructions; workflow state
+changes only through public CLI commands. This does not execute research tools or certify the academic
+quality of those fixtures. Tests using `.test-dist` are compiled-CLI tests, not installed-package tests.
 
 ## 2. Hosted matrix
 
@@ -52,7 +60,7 @@ run cannot replace the hosted matrix.
 
 Use the repository-only playbook in a disposable project and record evidence for standalone resume,
 bounded context export, Gate challenge/reverification/override, and an end-to-end pipeline with at
-least two independently confirmed revision rounds. Do not repair a failed journey by editing
+least two revision rounds with their own Gate and Decision confirmations. Do not repair a failed journey by editing
 run/node state or generated profile bytes.
 
 ## 4. Administrative gates
